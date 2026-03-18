@@ -1,9 +1,8 @@
 import React from "react";
-import { AutoField, FieldLabel, Field, CustomField } from "@measured/puck";
+import { AutoField, FieldLabel, Field, CustomField } from "@puckeditor/core";
 import {
   ConstantValueTypes,
   EntityFieldTypes,
-  getFilteredEntityFields,
   RenderEntityFieldFilter,
 } from "../internal/utils/getFilteredEntityFields.ts";
 import { DevLogger } from "../utils/devLogger.ts";
@@ -39,35 +38,20 @@ import { KnowledgeGraphIcon } from "./KnowledgeGraphIcon.tsx";
 import { Switch } from "../internal/puck/ui/switch.tsx";
 import { pt } from "../utils/i18n/platform.ts";
 import { useTranslation } from "react-i18next";
-import { StreamFields, YextSchemaField } from "../types/entityFields.ts";
 import { EmbeddedFieldStringInputFromEntity } from "./EmbeddedFieldStringInput.tsx";
-import { ComboboxOption } from "../internal/puck/ui/Combobox.tsx";
 import { DATE_TIME_CONSTANT_CONFIG } from "../internal/puck/components/DateTimeSelector.tsx";
-import { FAQ_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/FAQsSection";
+import { FAQ_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/FAQsSection.tsx";
+import {
+  getFieldsForSelector,
+  type YextEntityField,
+} from "./yextEntityFieldUtils.ts";
+import { type ComboboxOption } from "../internal/types/combobox.ts";
 
 const devLogger = new DevLogger();
 
 type RenderProps = Parameters<CustomField<any>["render"]>[0];
 
-/** Represents data that can either be from the Yext Knowledge Graph or statically defined */
-export type YextEntityField<T> = {
-  /** The api name of the Yext field */
-  field: string;
-  /** The static value of the field */
-  constantValue: T;
-  /** Whether to use the Yext field or the constant value */
-  constantValueEnabled?: boolean;
-  /**
-   * Whether the field can be translated or not.
-   * @ai always omit this property
-   */
-  disallowTranslation?: boolean;
-  /**
-   * Filter the embedded field input to this type.
-   * @ai always omit this property
-   */
-  selectedType?: string;
-};
+export type { YextEntityField } from "./yextEntityFieldUtils.ts";
 
 /**
  * Configuration for the type selector dropdown in the YextEntityFieldSelector.
@@ -302,7 +286,10 @@ export const ConstantValueModeToggler = ({
           </Tooltip>
         </TooltipProvider>
       )}
-      <p className="ve-self-center ve-text-sm ve-text-gray-800 ve-font-semibold">
+      <p
+        className="ve-self-center ve-text-sm ve-font-semibold"
+        style={{ color: "var(--puck-color-grey-04)" }}
+      >
         {showLocale && constantValueEnabled
           ? `${pt(label)} (${locale})`
           : `${pt(label)}`}
@@ -327,25 +314,47 @@ export const ConstantValueInput = <T extends Record<string, any>>({
   value,
   disallowTranslation,
 }: InputProps<T>) => {
-  const constantFieldConfig = returnConstantFieldConfig(
+  const isSingleStringField =
+    filter.types?.includes("type.string") && !filter.includeListsOnly;
+
+  let constantFieldConfig = returnConstantFieldConfig(
     filter.types,
     !!filter.includeListsOnly,
     !!disallowTranslation
   );
+
+  if (!constantFieldConfig && isSingleStringField) {
+    // Support mixed string/rich-text field filters while keeping a plain
+    // text constant input experience for components that opt into both.
+    constantFieldConfig = getConstantConfigFromType(
+      "type.string",
+      false,
+      !!disallowTranslation
+    );
+  }
+
   const { i18n } = useTranslation();
   const locale = i18n.language;
+  const constantValue = value?.constantValue;
+  const localizedConstantValue =
+    typeof constantValue === "string"
+      ? constantValue
+      : constantValue &&
+          typeof constantValue === "object" &&
+          !Array.isArray(constantValue)
+        ? (constantValue[locale] ?? constantValue.defaultValue ?? "")
+        : "";
+  const singleStringInputValue =
+    typeof localizedConstantValue === "string" ? localizedConstantValue : "";
 
   if (!constantFieldConfig) {
     return;
   }
 
-  const isSingleStringField =
-    filter.types?.includes("type.string") && !filter.includeListsOnly;
-
   const fieldEditor = isSingleStringField ? (
     <div className="ve-pt-3">
       <EmbeddedFieldStringInputFromEntity
-        value={value?.constantValue?.[locale] ?? ""}
+        value={singleStringInputValue}
         onChange={(newInputValue) => {
           onChange({
             ...value,
@@ -385,6 +394,7 @@ export const ConstantValueInput = <T extends Record<string, any>>({
   ) : (
     <FieldLabel
       label={constantFieldConfig.label ?? "Value"}
+      el="div"
       className={`ve-inline-block w-full ${
         constantFieldConfig.label ? "ve-pt-3" : ""
       }`}
@@ -392,28 +402,6 @@ export const ConstantValueInput = <T extends Record<string, any>>({
       {fieldEditor}
     </FieldLabel>
   );
-};
-
-export const getFieldsForSelector = (
-  entityFields: StreamFields | null,
-  filter: RenderEntityFieldFilter<any>
-): YextSchemaField[] => {
-  let filteredEntityFields = getFilteredEntityFields(entityFields, filter);
-
-  // If there are no direct children, return the parent field if it is a list
-  if (filter.directChildrenOf && filteredEntityFields.length === 0) {
-    filteredEntityFields = getFilteredEntityFields(entityFields, {
-      allowList: [filter.directChildrenOf],
-      types: filter.types,
-      includeListsOnly: true,
-    });
-  }
-
-  return filteredEntityFields.sort((entityFieldA, entityFieldB) => {
-    const nameA = (entityFieldA.displayName ?? entityFieldA.name).toUpperCase();
-    const nameB = (entityFieldB.displayName ?? entityFieldB.name).toUpperCase();
-    return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
-  });
 };
 
 export const EntityFieldInput = <T extends Record<string, any>>({

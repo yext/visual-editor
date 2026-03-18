@@ -73,5 +73,9 @@ describe("Slugify", () => {
         "valid~[slug]with*various_$_chars日本語123"
       );
     });
+
+    it("should collapse and trim slashes", () => {
+      expect(normalizeSlug("//foo///bar//")).toBe("foo/bar");
+    });
   });
 });

@@ -1,17 +1,14 @@
-import * as React from "react";
 import {
   ComponentConfig,
   ComponentData,
   PuckComponent,
   setDeep,
-} from "@measured/puck";
-import {
-  TeamSectionType,
-  ComponentFields,
-  msg,
-  i18nComponentsInstance,
-  resolveYextEntityField,
-} from "@yext/visual-editor";
+} from "@puckeditor/core";
+import { TeamSectionType } from "../../../types/types.ts";
+import { ComponentFields } from "../../../types/fields.ts";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import {
   cardWrapperFields,
@@ -19,13 +16,49 @@ import {
 } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 import { defaultTeamCardSlotData, TeamCardProps } from "./TeamCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
+import { YextField } from "../../../editor/YextField.tsx";
 
-export type TeamCardsWrapperProps = CardWrapperType<TeamSectionType>;
+export type TeamCardsWrapperProps = CardWrapperType<TeamSectionType> & {
+  styles: {
+    showImage: boolean;
+    showTitle: boolean;
+    showPhone: boolean;
+    showEmail: boolean;
+    showCTA: boolean;
+  };
+};
 
-const teamCardsWrapperFields = cardWrapperFields<TeamCardsWrapperProps>(
-  msg("components.team", "Team"),
-  ComponentFields.TeamSection.type
-);
+const teamCardsWrapperFields = {
+  ...cardWrapperFields<TeamCardsWrapperProps>(
+    msg("components.team", "Team"),
+    ComponentFields.TeamSection.type
+  ),
+  styles: YextField(msg("fields.styles", "Styles"), {
+    type: "object",
+    objectFields: {
+      showImage: YextField(msg("fields.showImage", "Show Image"), {
+        type: "radio",
+        options: "SHOW_HIDE",
+      }),
+      showTitle: YextField(msg("fields.showTitle", "Show Title"), {
+        type: "radio",
+        options: "SHOW_HIDE",
+      }),
+      showPhone: YextField(msg("fields.showPhone", "Show Phone"), {
+        type: "radio",
+        options: "SHOW_HIDE",
+      }),
+      showEmail: YextField(msg("fields.showEmail", "Show Email"), {
+        type: "radio",
+        options: "SHOW_HIDE",
+      }),
+      showCTA: YextField(msg("fields.showCTA", "Show CTA"), {
+        type: "radio",
+        options: "SHOW_HIDE",
+      }),
+    },
+  }),
+};
 
 const TeamCardsWrapperComponent: PuckComponent<TeamCardsWrapperProps> = (
   props
@@ -52,6 +85,13 @@ export const TeamCardsWrapper: ComponentConfig<{
       field: "",
       constantValueEnabled: true,
       constantValue: [],
+    },
+    styles: {
+      showImage: true,
+      showTitle: true,
+      showPhone: true,
+      showEmail: true,
+      showCTA: true,
     },
     slots: {
       CardSlot: [],

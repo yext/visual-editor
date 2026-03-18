@@ -1,37 +1,34 @@
 {
   "name": "@yext/visual-editor",
   "description": "Component library for Yext Pages Visual Editor",
-  "version": "1.0.2",
-  "type": "module",
+  "version": "1.1.0-alpha.6",
   "author": "sumo@yext.com",
   "repository": {
     "type": "git",
     "url": "https://github.com/yext/visual-editor.git"
   },
-  "types": "dist/index.d.ts",
-  "main": "dist/visual-editor.cjs",
-  "module": "dist/visual-editor.js",
-  "sideEffects": false,
+  "sideEffects": [
+    "./dist/style.css"
+  ],
+  "type": "module",
   "files": [
     "dist"
   ],
+  "module": "dist/visual-editor.js",
   "exports": {
     ".": {
-      "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/visual-editor.js"
-      },
-      "require": {
-        "types": "./dist/index.d.cts",
-        "default": "./dist/visual-editor.cjs"
-      }
+      "types": "./dist/index.d.ts",
+      "import": "./dist/visual-editor.js",
+      "default": "./dist/visual-editor.js"
     },
     "./plugin": {
+      "import": "./dist/plugin/plugin.js",
       "default": "./dist/plugin/plugin.js"
     },
     "./style.css": "./dist/style.css",
     "./editor.css": "./dist/editor.css"
   },
+  "types": "dist/index.d.ts",
   "scripts": {
     "build:components": "tsc && vite build",
     "build:plugin": "vite build --config vite.config.plugin.ts",
@@ -49,22 +46,21 @@
     "docs:dev": "vitepress dev .",
     "docs:build": "vitepress build .",
     "docs:preview": "vitepress preview .",
-    "generate-registry": "tsx src/components/registry/build-registry.cts",
-    "build-registry-docs": "pnpm run docs:build && pnpm run generate-registry",
-    "i18n:insert": "pnpm exec tsx scripts/insertI18n.ts",
-    "i18n:insert:dry": "pnpm exec tsx scripts/insertI18n.ts --dry-run",
-    "i18n:scan": "i18next-scanner --config i18next-scanner.config.cjs",
-    "i18n:translate": "pnpm exec tsx scripts/generateTranslations.ts",
-    "i18n:translate:dry": "pnpm exec tsx scripts/generateTranslations.ts --dry-run",
-    "i18n:sort": "pnpm exec tsx scripts/sortTranslations.ts",
-    "i18n:update": "pnpm run i18n:scan && pnpm run i18n:translate && pnpm run i18n:sort",
-    "i18n:check-empty": "pnpm exec tsx scripts/checkEmptyTranslations.ts"
+    "i18n:extract:platform": "i18next-cli extract --config i18next-cli.platform.config.ts --quiet",
+    "i18n:extract:components": "i18next-cli extract --config i18next-cli.components.config.ts --quiet",
+    "i18n:translate:platform": "pnpm exec tsx scripts/generateTranslations.ts --type platform",
+    "i18n:translate:platform:dry": "pnpm exec tsx scripts/generateTranslations.ts --type platform --dry-run",
+    "i18n:propagate:components": "pnpm exec tsx scripts/propagatePlatformToComponents.ts",
+    "i18n:check:interpolation": "pnpm exec tsx scripts/checkInterpolationVariables.ts",
+    "i18n:lint": "i18next-cli lint --config i18next-cli.platform.config.ts --quiet && i18next-cli lint --config i18next-cli.components.config.ts --quiet && pnpm run i18n:check:interpolation",
+    "i18n:update": "pnpm run i18n:extract:platform && pnpm run i18n:extract:components && pnpm run i18n:translate:platform && pnpm run i18n:propagate:components && pnpm run i18n:lint"
   },
   "dependencies": {
-    "@measured/puck": "0.20.2",
+    "@mapbox/maki": "^8.0.0",
     "@microsoft/api-documenter": "^7.26.29",
     "@microsoft/api-extractor": "^7.52.8",
     "@microsoft/api-extractor-model": "^7.30.6",
+    "@puckeditor/core": "0.21.1",
     "@radix-ui/react-accordion": "^1.2.3",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.13",
@@ -84,14 +80,14 @@
     "cmdk": "^1.1.1",
     "dompurify": "^3.2.3",
     "handlebars": "^4.7.8",
-    "i18next": "^25.2.1",
+    "geolib": "^3.3.4",
+    "i18next": "^25.8.4",
     "lucide-react": "^0.414.0",
     "lz-string": "1.5.0",
     "next-themes": "^0.3.0",
     "picocolors": "^1.0.1",
     "prompts": "^2.4.2",
     "pure-react-carousel": "^1.32.0",
-    "react-aria-components": "^1.11.0",
     "react-collapsed": "^4.1.2",
     "react-color": "^2.19.3",
     "react-error-boundary": "^5.0.0",
@@ -110,6 +106,8 @@
     "*.{ts,js,tsx,jsx}": "oxlint --fix --ignore-pattern 'src/vite-plugin/templates/*'"
   },
   "devDependencies": {
+    "@capsizecss/core": "^4.1.3",
+    "@capsizecss/metrics": "^3.6.2",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.3.0",
     "@types/fs-extra": "^11.0.4",
@@ -135,7 +133,7 @@
     "generate-license-file": "^3.5.0",
     "gray-matter": "^4.0.3",
     "husky": "^9.1.4",
-    "i18next-scanner": "^4.6.0",
+    "i18next-cli": "^1.42.0",
     "jest-axe": "^10.0.0",
     "jsdom": "^24.1.1",
     "lint-staged": "^15.2.7",
@@ -147,20 +145,17 @@
     "react-icons": "^5.2.1",
     "semver": "^7.6.3",
     "tailwindcss": "^3.4.6",
-    "ts-morph": "^26.0.0",
-    "ts-node": "^10.9.2",
     "tsup": "8.3.5",
     "typescript": "^5.5.4",
     "uuid": "11.0.3",
-    "vite": "^5.3.5",
+    "vite": "^5.4.21",
     "vitepress": "^1.6.3",
-    "vitest": "^3.2.4",
-    "zod": "^3.23.8"
+    "vitest": "^3.2.4"
   },
   "peerDependencies": {
-    "@yext/pages-components": "1.1.18",
-    "@yext/search-headless-react": "^2.6.0",
-    "@yext/search-ui-react": "^1.11.1",
+    "@yext/pages-components": "^2.0.2",
+    "@yext/search-headless-react": "^2.7.1",
+    "@yext/search-ui-react": "^2.1.0",
     "mapbox-gl": "^2.9.2",
     "react": "^17.0.2 || ^18.2.0",
     "react-dom": "^17.0.2 || ^18.2.0"

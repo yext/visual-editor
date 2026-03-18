@@ -4,24 +4,25 @@ import {
   Field,
   NumberField,
   ObjectField,
-} from "@measured/puck";
+} from "@puckeditor/core";
+import { ThemeOptions } from "../utils/themeConfigOptions.ts";
+import { BasicSelector } from "./BasicSelector.tsx";
 import {
-  ThemeOptions,
-  BasicSelector,
   DynamicOption,
   DynamicOptionsSelector,
   DynamicOptionsSingleSelector,
   DynamicOptionValueTypes,
-  OptionalNumberFieldProps,
-  OptionalNumberField,
-  CodeFieldProps,
-  CodeField,
-  getMaxWidthOptions,
-  msg,
-  TranslatableStringField,
   DynamicOptionsSelectorType,
   DynamicOptionsSingleSelectorType,
-} from "@yext/visual-editor";
+} from "./DynamicOptionsSelector.tsx";
+import {
+  OptionalNumberFieldProps,
+  OptionalNumberField,
+} from "./OptionalNumberField.tsx";
+import { CodeFieldProps, CodeField } from "./CodeField.tsx";
+import { getMaxWidthOptions } from "./MaxWidthSelector.tsx";
+import { msg } from "../utils/i18n/platform.ts";
+import { TranslatableStringField } from "./TranslatableStringField.tsx";
 import {
   RenderYextEntityFieldSelectorProps,
   YextEntityField,
@@ -46,7 +47,8 @@ type radioOptions =
   | "ALIGNMENT"
   | "BODY_VARIANT"
   | "JUSTIFY_CONTENT"
-  | "CTA_VARIANT";
+  | "CTA_VARIANT"
+  | "SHOW_HIDE";
 
 type selectOptions = keyof Omit<typeof ThemeOptions, radioOptions>;
 

@@ -17,6 +17,8 @@ const REPEATED_HYPHEN_CHAR_REPLACEMENT_PATTERN = /(--+)/g;
 // Replacement Pattern for dangling "-" in slug fields.
 const DANGLING_HYPHEN_CHAR_REPLACEMENT_PATTERN =
   /(?<=[\p{L}\p{N}])-+(?=($|\/))/gu;
+const REPEATED_SLASH_REPLACEMENT_PATTERN = /\/+/g;
+const LEADING_OR_TRAILING_SLASH_REPLACEMENT_PATTERN = /^\/+|\/+$/g;
 
 /**
  * Check that the string is a valid slug.
@@ -59,6 +61,11 @@ export const normalizeSlug = (content: string): string => {
   );
   normalized = normalized.replace(DANGLING_HYPHEN_CHAR_REPLACEMENT_PATTERN, "");
   normalized = normalized.replace(ILLEGAL_SLUG_PATTERN, "");
+  normalized = normalized.replace(REPEATED_SLASH_REPLACEMENT_PATTERN, "/");
+  normalized = normalized.replace(
+    LEADING_OR_TRAILING_SLASH_REPLACEMENT_PATTERN,
+    ""
+  );
 
   return normalized;
 };

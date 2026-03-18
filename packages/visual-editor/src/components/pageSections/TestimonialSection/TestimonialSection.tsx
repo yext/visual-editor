@@ -1,19 +1,19 @@
-import * as React from "react";
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import {
   BackgroundStyle,
-  YextField,
-  PageSection,
   backgroundColors,
-  VisibilityWrapper,
-  msg,
-  getAnalyticsScopeHash,
-  HeadingTextProps,
-} from "@yext/visual-editor";
+} from "../../../utils/themeConfigOptions.ts";
+import { YextField } from "../../../editor/YextField.tsx";
+import { PageSection } from "../../atoms/pageSection.tsx";
+import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultTestimonialCardSlotData } from "./TestimonialCard.tsx";
 import { TestimonialCardsWrapperProps } from "./TestimonialCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
+import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 
 export interface TestimonialSectionProps {
   /**
@@ -26,6 +26,12 @@ export interface TestimonialSectionProps {
      * @defaultValue Background Color 2
      */
     backgroundColor?: BackgroundStyle;
+
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
+    showSectionHeading: boolean;
   };
 
   /** @internal */
@@ -55,6 +61,13 @@ const testimonialSectionFields: Fields<TestimonialSectionProps> = {
         {
           type: "select",
           options: "BACKGROUND_COLOR",
+        }
+      ),
+      showSectionHeading: YextField(
+        msg("fields.showSectionHeading", "Show Section Heading"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
         }
       ),
     },
@@ -98,7 +111,9 @@ const TestimonialSectionWrapper: PuckComponent<TestimonialSectionProps> = (
       background={styles?.backgroundColor}
       className="flex flex-col gap-8"
     >
-      <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
+      {styles?.showSectionHeading && (
+        <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
+      )}
       <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
     </PageSection>
   );
@@ -116,6 +131,7 @@ export const TestimonialSection: ComponentConfig<{
   defaultProps: {
     styles: {
       backgroundColor: backgroundColors.background2.value,
+      showSectionHeading: true,
     },
     slots: {
       SectionHeadingSlot: [
@@ -124,10 +140,7 @@ export const TestimonialSection: ComponentConfig<{
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "Featured Testimonials",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: { defaultValue: "Featured Testimonials" },
                 constantValueEnabled: true,
                 field: "",
               },
@@ -152,6 +165,10 @@ export const TestimonialSection: ComponentConfig<{
                 defaultTestimonialCardSlotData(undefined, 2),
               ],
             },
+            styles: {
+              showName: true,
+              showDate: true,
+            },
           } satisfies TestimonialCardsWrapperProps,
         },
       ],
@@ -165,15 +182,20 @@ export const TestimonialSection: ComponentConfig<{
     return forwardHeadingLevel(data, "ContributorNameSlot");
   },
   render: (props) => (
-    <AnalyticsScopeProvider
-      name={`${props.analytics?.scope ?? "testimonialSection"}${getAnalyticsScopeHash(props.id)}`}
+    <ComponentErrorBoundary
+      isEditing={props.puck.isEditing}
+      resetKeys={[props]}
     >
-      <VisibilityWrapper
-        liveVisibility={props.liveVisibility}
-        isEditing={props.puck.isEditing}
+      <AnalyticsScopeProvider
+        name={`${props.analytics?.scope ?? "testimonialSection"}${getAnalyticsScopeHash(props.id)}`}
       >
-        <TestimonialSectionWrapper {...props} />
-      </VisibilityWrapper>
-    </AnalyticsScopeProvider>
+        <VisibilityWrapper
+          liveVisibility={props.liveVisibility}
+          isEditing={props.puck.isEditing}
+        >
+          <TestimonialSectionWrapper {...props} />
+        </VisibilityWrapper>
+      </AnalyticsScopeProvider>
+    </ComponentErrorBoundary>
   ),
 };

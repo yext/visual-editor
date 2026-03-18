@@ -1,34 +1,36 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Field, PuckContext } from "@measured/puck";
+import { Field } from "@puckeditor/core";
 import {
   CardProps,
   Coordinate,
   useCardAnalyticsCallback,
 } from "@yext/search-ui-react";
+import { Background } from "./atoms/background.tsx";
 import {
-  Background,
   backgroundColors,
-  Body,
-  BodyProps,
-  CTA,
-  CTAVariant,
-  Heading,
+  BackgroundStyle,
   HeadingLevel,
-  Image,
-  msg,
-  PhoneAtom,
-  useTemplateProps,
-  resolveComponentData,
-  resolveUrlTemplateOfChild,
-  mergeMeta,
-  HoursStatusAtom,
-  HoursTableAtom,
-  YextField,
+} from "../utils/themeConfigOptions.ts";
+import { Body, BodyProps } from "./atoms/body.tsx";
+import { CTA, CTAVariant } from "./atoms/cta.tsx";
+import { Heading } from "./atoms/heading.tsx";
+import { Image } from "./atoms/image.tsx";
+import { msg, pt } from "../utils/i18n/platform.ts";
+import { PhoneAtom } from "./atoms/phone.tsx";
+import { useTemplateProps } from "../hooks/useDocument.tsx";
+import { resolveComponentData } from "../utils/resolveComponentData.tsx";
+import { HoursStatusAtom } from "./atoms/hoursStatus.tsx";
+import { HoursTableAtom } from "./atoms/hoursTable.tsx";
+import { YextField } from "../editor/YextField.tsx";
+import { ConstantValueModeToggler } from "../editor/YextEntityFieldSelector.tsx";
+import { LOCATOR_IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
+import {
   DynamicOption,
   DynamicOptionsSingleSelectorType,
-  TranslatableString,
-} from "@yext/visual-editor";
+} from "../editor/DynamicOptionsSelector.tsx";
+import { TranslatableString } from "../types/types.ts";
+import { TranslatableAssetImage } from "../types/images.ts";
 import {
   Address,
   AddressType,
@@ -41,6 +43,7 @@ import {
   HoursTableStyleFields,
 } from "./contentBlocks/HoursTable.tsx";
 import { TranslatableStringField } from "../editor/TranslatableStringField.tsx";
+import { getImageUrl } from "./contentBlocks/image/Image.tsx";
 import {
   Accordion,
   AccordionContent,
@@ -53,10 +56,23 @@ import {
   FaRegClock,
   FaRegEnvelope,
 } from "react-icons/fa";
-import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers";
-import { FieldTypeData } from "../internal/types/templateMetadata";
+import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
+import { FieldTypeData } from "../internal/types/templateMetadata.ts";
+import {
+  formatDistance,
+  fromMeters,
+  getPreferredDistanceUnit,
+} from "../utils/i18n/distance.ts";
+import {
+  DEFAULT_ENTITY_TYPE,
+  LocatorEntityType,
+} from "../utils/locatorEntityTypes.ts";
+import { resolveLocatorResultUrl } from "../utils/urls/resolveLocatorResultUrl.ts";
 
 export interface LocatorResultCardProps {
+  /** The entity type this result card applies to. */
+  entityType: LocatorEntityType;
+
   /** Settings for the main heading of the card */
   primaryHeading: {
     /**
@@ -64,14 +80,27 @@ export interface LocatorResultCardProps {
      * @defaultValue "name"
      */
     field: DynamicOptionsSingleSelectorType<string>;
+    /** Static value for the primary heading */
+    constantValue?: TranslatableString;
+    /** Whether to use the static value for the primary heading */
+    constantValueEnabled?: boolean;
     /** The heading level for the primary heading */
     headingLevel: HeadingLevel;
+    /**
+     * The color applied to the primary heading text
+     * @defaultValue inherited from theme
+     */
+    color?: BackgroundStyle;
   };
 
   /** Settings for the secondary heading of the card */
   secondaryHeading: {
     /** The field from the data to use for the secondary heading */
     field: DynamicOptionsSingleSelectorType<string>;
+    /** Static value for the secondary heading */
+    constantValue?: TranslatableString;
+    /** Whether to use the static value for the secondary heading */
+    constantValueEnabled?: boolean;
     /** The variant for the secondary heading */
     variant: BodyProps["variant"];
     /** Whether the secondary heading is visible in live mode */
@@ -82,6 +111,10 @@ export interface LocatorResultCardProps {
   tertiaryHeading: {
     /** The field from the data to use for the tertiary heading */
     field: DynamicOptionsSingleSelectorType<string>;
+    /** Static value for the tertiary heading */
+    constantValue?: TranslatableString;
+    /** Whether to use the static value for the tertiary heading */
+    constantValueEnabled?: boolean;
     /** The variant for the tertiary heading */
     variant: BodyProps["variant"];
     /** Whether the tertiary heading is visible in live mode */
@@ -103,8 +136,21 @@ export interface LocatorResultCardProps {
 
   /** Settings for the address block */
   address: {
+    /**
+     * Whether to include the region in the Address
+     * @defaultValue true
+     */
+    showRegion?: boolean;
+
+    /**
+     * Whether to include the country in the Address
+     * @defaultValue false
+     */
+    showCountry?: boolean;
+
     /** Whether to show the "Get Directions" link */
     showGetDirectionsLink: boolean;
+
     /** Whether the address block is visible in live mode */
     liveVisibility: boolean;
   };
@@ -150,10 +196,16 @@ export interface LocatorResultCardProps {
 
   /** Settings for the primary CTA */
   primaryCTA: {
+    /** Label for the primary CTA */
+    label: TranslatableString;
+    /** Whether the primary CTA link should be normalized before rendering */
+    normalizeLink: boolean;
     /** The variant for the primary CTA */
     variant: CTAVariant;
     /** Whether the primary CTA is visible in live mode */
     liveVisibility: boolean;
+    /** Static URL to use for primary CTA when an entity page URL is not found */
+    link?: TranslatableString;
   };
 
   /** Settings for the secondary CTA */
@@ -162,6 +214,8 @@ export interface LocatorResultCardProps {
     label: TranslatableString;
     /** Template for the secondary CTA link, which can contain entity field references */
     link: TranslatableString;
+    /** Whether the secondary CTA link should be normalized before rendering */
+    normalizeLink: boolean;
     /** The variant for the secondary CTA */
     variant: CTAVariant;
     /** Whether the secondary CTA is visible in live mode */
@@ -172,23 +226,39 @@ export interface LocatorResultCardProps {
   image: {
     /** The field from the data to use for the image */
     field: DynamicOptionsSingleSelectorType<string>;
+    /** Static value for the image */
+    constantValue?: TranslatableAssetImage;
+    /** Whether to use the static value for the image */
+    constantValueEnabled?: boolean;
     /** Whether the image block is visible in live mode */
     liveVisibility: boolean;
   };
 }
 
+export type DistanceDisplayOption =
+  | "distanceFromUser"
+  | "distanceFromSearch"
+  | "hidden";
+
 export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
+  entityType: DEFAULT_ENTITY_TYPE,
   primaryHeading: {
     field: { selection: { value: "name" } },
+    constantValue: "",
+    constantValueEnabled: false,
     headingLevel: 3,
   },
   secondaryHeading: {
     field: { selection: { value: "name" } },
+    constantValue: "",
+    constantValueEnabled: false,
     variant: "base",
     liveVisibility: false,
   },
   tertiaryHeading: {
     field: { selection: { value: "name" } },
+    constantValue: "",
+    constantValueEnabled: false,
     variant: "base",
     liveVisibility: false,
   },
@@ -203,6 +273,8 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
     liveVisibility: true,
   },
   address: {
+    showRegion: true,
+    showCountry: false,
     showGetDirectionsLink: true,
     liveVisibility: true,
   },
@@ -221,17 +293,26 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
     liveVisibility: false,
   },
   primaryCTA: {
+    label: "Visit Page",
+    normalizeLink: true,
     variant: "primary",
     liveVisibility: true,
   },
   secondaryCTA: {
     label: "Call to Action",
     link: "#",
+    normalizeLink: true,
     variant: "secondary",
     liveVisibility: false,
   },
   image: {
     field: { selection: { value: "headshot" } },
+    constantValue: {
+      url: "",
+      height: 0,
+      width: 0,
+    },
+    constantValueEnabled: false,
     liveVisibility: false,
   },
 };
@@ -260,10 +341,35 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
   label: msg("fields.resultCard", "Result Card"),
   type: "object",
   objectFields: {
+    entityType: YextField(msg("fields.entityType", "Entity Type"), {
+      type: "text",
+      visible: false,
+    }),
     primaryHeading: {
       label: msg("fields.primaryHeading", "Primary Heading"),
       type: "object",
       objectFields: {
+        constantValueEnabled: {
+          type: "custom",
+          render: ({ value, onChange }) => (
+            <ConstantValueModeToggler
+              fieldTypeFilter={["type.string"]}
+              constantValueEnabled={value ?? false}
+              toggleConstantValueEnabled={(constantValueEnabled) =>
+                onChange(constantValueEnabled)
+              }
+              label={pt(msg("fields.primaryHeading", "Primary Heading"))}
+              showLocale={true}
+            />
+          ),
+        },
+        constantValue: TranslatableStringField<TranslatableString | undefined>(
+          undefined,
+          undefined,
+          false,
+          true,
+          () => getDisplayFieldOptions("type.string")
+        ),
         field: YextField<DynamicOptionsSingleSelectorType<string>, string>(
           msg("fields.field", "Field"),
           {
@@ -277,12 +383,37 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
           hasSearch: true,
           options: "HEADING_LEVEL",
         }),
+        color: YextField(msg("fields.color", "Color"), {
+          type: "select",
+          options: "SITE_COLOR",
+        }),
       },
     },
     secondaryHeading: {
       label: msg("fields.secondaryHeading", "Secondary Heading"),
       type: "object",
       objectFields: {
+        constantValueEnabled: {
+          type: "custom",
+          render: ({ value, onChange }) => (
+            <ConstantValueModeToggler
+              fieldTypeFilter={["type.string"]}
+              constantValueEnabled={value ?? false}
+              toggleConstantValueEnabled={(constantValueEnabled) =>
+                onChange(constantValueEnabled)
+              }
+              label={pt(msg("fields.secondaryHeading", "Secondary Heading"))}
+              showLocale={true}
+            />
+          ),
+        },
+        constantValue: TranslatableStringField<TranslatableString | undefined>(
+          undefined,
+          undefined,
+          false,
+          true,
+          () => getDisplayFieldOptions("type.string")
+        ),
         field: YextField<DynamicOptionsSingleSelectorType<string>, string>(
           msg("fields.field", "Field"),
           {
@@ -311,6 +442,27 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.tertiaryHeading", "Tertiary Heading"),
       type: "object",
       objectFields: {
+        constantValueEnabled: {
+          type: "custom",
+          render: ({ value, onChange }) => (
+            <ConstantValueModeToggler
+              fieldTypeFilter={["type.string"]}
+              constantValueEnabled={value ?? false}
+              toggleConstantValueEnabled={(constantValueEnabled) =>
+                onChange(constantValueEnabled)
+              }
+              label={pt(msg("fields.tertiaryHeading", "Tertiary Heading"))}
+              showLocale={true}
+            />
+          ),
+        },
+        constantValue: TranslatableStringField<TranslatableString | undefined>(
+          undefined,
+          undefined,
+          false,
+          true,
+          () => getDisplayFieldOptions("type.string")
+        ),
         field: YextField<DynamicOptionsSingleSelectorType<string>, string>(
           msg("fields.field", "Field"),
           {
@@ -374,6 +526,20 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.address", "Address"),
       type: "object",
       objectFields: {
+        showRegion: YextField(msg("fields.showRegion", "Show Region"), {
+          type: "radio",
+          options: [
+            { label: msg("fields.options.yes", "Yes"), value: true },
+            { label: msg("fields.options.no", "No"), value: false },
+          ],
+        }),
+        showCountry: YextField(msg("fields.showCountry", "Show Country"), {
+          type: "radio",
+          options: [
+            { label: msg("fields.options.yes", "Yes"), value: true },
+            { label: msg("fields.options.no", "No"), value: false },
+          ],
+        }),
         showGetDirectionsLink: YextField(
           msg("fields.showGetDirectionsLink", "Show Get Directions Link"),
           {
@@ -495,7 +661,14 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.primaryCTA", "Primary CTA"),
       type: "object",
       objectFields: {
-        variant: YextField(msg("fields.CTAVariant", "CTA Variant"), {
+        label: TranslatableStringField<TranslatableString>(
+          msg("fields.label", "Label"),
+          undefined,
+          false,
+          true,
+          () => getDisplayFieldOptions("type.string")
+        ),
+        variant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
           type: "radio",
           options: "CTA_VARIANT",
         }),
@@ -506,6 +679,23 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
             options: [
               { label: msg("fields.options.show", "Show"), value: true },
               { label: msg("fields.options.hide", "Hide"), value: false },
+            ],
+          }
+        ),
+        link: TranslatableStringField<TranslatableString | undefined>(
+          msg("fields.link", "Link"),
+          undefined,
+          false,
+          true,
+          () => getDisplayFieldOptions("type.string")
+        ),
+        normalizeLink: YextField(
+          msg("fields.normalizeLink", "Normalize Link"),
+          {
+            type: "radio",
+            options: [
+              { label: msg("fields.options.yes", "Yes"), value: true },
+              { label: msg("fields.options.no", "No"), value: false },
             ],
           }
         ),
@@ -529,7 +719,17 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
           true,
           () => getDisplayFieldOptions("type.string")
         ),
-        variant: YextField(msg("fields.CTAVariant", "CTA Variant"), {
+        normalizeLink: YextField(
+          msg("fields.normalizeLink", "Normalize Link"),
+          {
+            type: "radio",
+            options: [
+              { label: msg("fields.options.yes", "Yes"), value: true },
+              { label: msg("fields.options.no", "No"), value: false },
+            ],
+          }
+        ),
+        variant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
           type: "radio",
           options: "CTA_VARIANT",
         }),
@@ -549,6 +749,21 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.image", "Image"),
       type: "object",
       objectFields: {
+        constantValueEnabled: {
+          type: "custom",
+          render: ({ value, onChange }) => (
+            <ConstantValueModeToggler
+              fieldTypeFilter={["type.image"]}
+              constantValueEnabled={value ?? false}
+              toggleConstantValueEnabled={(constantValueEnabled) =>
+                onChange(constantValueEnabled)
+              }
+              label={msg("fields.image", "Image")}
+              showLocale={true}
+            />
+          ),
+        },
+        constantValue: LOCATOR_IMAGE_CONSTANT_CONFIG,
         field: YextField<DynamicOptionsSingleSelectorType<string>, string>(
           msg("fields.field", "Field"),
           {
@@ -591,33 +806,34 @@ export const LocatorResultCard = React.memo(
   ({
     result,
     resultCardProps: props,
-    puck,
+    distanceDisplay = "distanceFromUser",
+    isSelected,
   }: {
     result: CardProps<Location>["result"];
     resultCardProps: LocatorResultCardProps;
-    puck: PuckContext;
+    distanceDisplay?: DistanceDisplayOption;
+    isSelected?: boolean;
   }): React.JSX.Element => {
-    const { document: streamDocument, relativePrefixToRoot } =
-      useTemplateProps();
     const { t, i18n } = useTranslation();
 
     const location = result.rawData;
-    const distance = result.distance;
+    const distance =
+      distanceDisplay === "distanceFromUser"
+        ? result.distance
+        : distanceDisplay === "distanceFromSearch"
+          ? result.distanceFromFilter
+          : undefined;
 
-    const distanceInMiles =
+    const unit = getPreferredDistanceUnit(i18n.language);
+    const unitLabel = unit === "mile" ? "mi" : "km"; // Abbreviations do not need translation
+    const displayDistance =
       typeof distance === "number"
-        ? (distance / 1609.344).toFixed(1)
+        ? `${formatDistance(fromMeters(distance, unit), i18n.language)} ${unitLabel}`
         : undefined;
-    const distanceInKilometers =
-      typeof distance === "number" ? (distance / 1000).toFixed(1) : undefined;
 
     const handleGetDirectionsClick = useCardAnalyticsCallback(
       result,
       "DRIVING_DIRECTIONS"
-    );
-    const handleVisitPageClick = useCardAnalyticsCallback(
-      result,
-      "VIEW_WEBSITE"
     );
     const handleSecondaryCTAClick = useCardAnalyticsCallback(
       result,
@@ -626,12 +842,6 @@ export const LocatorResultCard = React.memo(
     const handlePhoneNumberClick = useCardAnalyticsCallback(
       result,
       "TAP_TO_CALL"
-    );
-
-    const resolvedUrl = resolveUrlTemplateOfChild(
-      mergeMeta(location, streamDocument),
-      relativePrefixToRoot,
-      puck.metadata?.resolveUrlTemplate
     );
 
     const getDirectionsLink: string | undefined = (() => {
@@ -658,9 +868,12 @@ export const LocatorResultCard = React.memo(
       <Background
         background={backgroundColors.background1.value}
         className="container flex flex-row border-b border-gray-300 p-4 md:p-6 lg:p-8 gap-4"
+        style={isSelected ? { backgroundColor: "#F9F9F9" } : undefined}
       >
         <Background
-          background={backgroundColors.background6.value}
+          background={
+            props?.primaryHeading?.color ?? backgroundColors.background6.value
+          }
           className="flex-shrink-0 w-6 h-6 rounded-full font-bold hidden md:flex items-center justify-center text-body-sm-fontSize"
         >
           {result.index}
@@ -669,7 +882,7 @@ export const LocatorResultCard = React.memo(
           <div className="w-full flex flex-col gap-4">
             {/** Heading section */}
             <div className="flex flex-row justify-between items-start gap-6">
-              <div className="flex flex-row items-start gap-6">
+              <div className="flex flex-row items-start gap-6 flex-1 min-w-0">
                 <ImageSection image={props.image} location={location} />
                 <HeadingTextSection
                   primaryHeading={props.primaryHeading}
@@ -678,19 +891,17 @@ export const LocatorResultCard = React.memo(
                   location={location}
                 />
               </div>
-              {typeof distance === "number" && (
+              {displayDistance && (
                 <div
                   className={
-                    "font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize rounded-full hidden lg:flex"
+                    "font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize rounded-full hidden lg:flex min-w-fit"
                   }
                 >
-                  {t("distanceInUnit", `${distanceInMiles} mi`, {
-                    distanceInMiles,
-                    distanceInKilometers,
-                  })}
+                  {displayDistance}
                 </div>
               )}
             </div>
+
             <HoursSection
               location={location}
               result={result}
@@ -710,14 +921,11 @@ export const LocatorResultCard = React.memo(
                       </CardIcon>
                     )}
                     <div className="flex flex-col gap-1 w-full">
-                      <div className="font-body-fontFamily font-body-fontWeight text-body-md-fontSize gap-4">
+                      <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize gap-4">
                         <Address
                           address={location.address}
-                          lines={[
-                            ["line1"],
-                            ["line2"],
-                            ["city", "region", "postalCode"],
-                          ]}
+                          showRegion={props.address.showRegion}
+                          showCountry={props.address.showCountry}
                         />
                       </div>
                       {getDirectionsLink &&
@@ -756,29 +964,19 @@ export const LocatorResultCard = React.memo(
               </div>
             </div>
           </div>
-          {typeof distance === "number" && (
+          {displayDistance && (
             <div
               className={`
               font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize rounded-full flex lg:hidden px-2 py-1 w-fit
               ${backgroundColors.background2.value.bgColor} ${backgroundColors.background2.value.textColor}
               `}
             >
-              {t("distanceInUnit", `${distanceInMiles} mi`, {
-                distanceInMiles,
-                distanceInKilometers,
-              })}
+              {displayDistance}
             </div>
           )}
+          {/** CTA section */}
           <div className="flex flex-col lg:flex-row gap-2 lg:gap-4 w-full items-center md:items-stretch lg:items-center">
-            {props.primaryCTA.liveVisibility && (
-              <CTA
-                link={resolvedUrl}
-                label={t("visitPage", "Visit Page")}
-                variant={props.primaryCTA.variant}
-                onClick={handleVisitPageClick}
-                className="basis-full sm:w-auto justify-center"
-              />
-            )}
+            <PrimaryCTA primaryCTA={props.primaryCTA} result={result} />
             {props.secondaryCTA.liveVisibility && (
               <CTA
                 link={resolveComponentData(
@@ -794,6 +992,7 @@ export const LocatorResultCard = React.memo(
                   ) || t("callToAction", "Call to Action")
                 }
                 variant={props.secondaryCTA.variant}
+                normalizeLink={props.secondaryCTA.normalizeLink}
                 onClick={handleSecondaryCTAClick}
                 className="basis-full sm:w-auto justify-center"
               />
@@ -804,6 +1003,57 @@ export const LocatorResultCard = React.memo(
     );
   }
 );
+
+const PrimaryCTA = (props: {
+  primaryCTA: LocatorResultCardProps["primaryCTA"];
+  result: CardProps<Location>["result"];
+}) => {
+  const { primaryCTA, result } = props;
+  const location = result.rawData;
+  const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
+  const { t, i18n } = useTranslation();
+
+  // Always uses the entity page link if one exists. If not, tries to resolve URL from the static
+  // template in the Link prop, and if that also fails, doesn't render at all.
+  let resolvedUrl = resolveLocatorResultUrl(
+    location,
+    streamDocument,
+    relativePrefixToRoot
+  );
+  if (resolvedUrl === undefined && primaryCTA?.link) {
+    resolvedUrl = resolveComponentData(
+      primaryCTA.link,
+      i18n.language,
+      location
+    );
+  }
+
+  const showPrimaryCta = primaryCTA.liveVisibility && resolvedUrl;
+
+  const handlePrimaryCtaClick = useCardAnalyticsCallback(
+    result,
+    "VIEW_WEBSITE"
+  );
+
+  return (
+    showPrimaryCta && (
+      <CTA
+        link={resolvedUrl}
+        label={
+          resolveComponentData(
+            props.primaryCTA.label,
+            i18n.language,
+            location
+          ) || t("visitPage", "Visit Page")
+        }
+        variant={primaryCTA.variant}
+        normalizeLink={primaryCTA.normalizeLink}
+        onClick={handlePrimaryCtaClick}
+        className="basis-full sm:w-auto justify-center"
+      />
+    )
+  );
+};
 
 const CardIcon: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const colorClasses = `${backgroundColors.background2.value.bgColor} ${backgroundColors.background2.value.textColor}`;
@@ -821,8 +1071,27 @@ const ImageSection = (props: {
   location: Location;
 }) => {
   const { image, location } = props;
+  const { i18n } = useTranslation();
 
-  const fieldId = image.field?.selection?.value;
+  if (image.constantValueEnabled) {
+    const resolvedImage = image.constantValue
+      ? resolveComponentData(image.constantValue, i18n.language, location)
+      : undefined;
+    const imageUrl = getImageUrl(resolvedImage, i18n.language);
+    const showImageSection =
+      !!imageUrl && image.liveVisibility && !!resolvedImage;
+    return (
+      showImageSection && (
+        <Image
+          image={resolvedImage}
+          streamDocumentOverride={location}
+          className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 object-cover rounded-image-borderRadius min-w-fit"
+        />
+      )
+    );
+  }
+
+  const fieldId = getSelectedFieldId(image.field);
   const imageRecord = parseRecordFromLocation(location, fieldId);
   const imageData = {
     url: imageRecord?.url,
@@ -837,7 +1106,8 @@ const ImageSection = (props: {
     showImageSection && (
       <Image
         image={imageData}
-        className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 object-cover rounded-image-borderRadius"
+        streamDocumentOverride={location}
+        className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 object-cover rounded-image-borderRadius min-w-fit"
       />
     )
   );
@@ -850,23 +1120,38 @@ const HeadingTextSection = (props: {
   location: Location;
 }) => {
   const { primaryHeading, secondaryHeading, tertiaryHeading, location } = props;
+  const { i18n } = useTranslation();
 
-  const primaryHeadingText =
-    parseStringFromLocation(location, primaryHeading.field?.selection?.value) ??
-    location.name;
+  const primaryFieldId = getSelectedFieldId(primaryHeading.field);
+  const secondaryFieldId = getSelectedFieldId(secondaryHeading.field);
+  const tertiaryFieldId = getSelectedFieldId(tertiaryHeading.field);
 
-  const secondaryHeadingText = parseStringFromLocation(
+  const primaryHeadingText = resolveText({
+    config: primaryHeading,
     location,
-    secondaryHeading.field?.selection?.value
-  );
-  const tertiaryHeadingText = parseStringFromLocation(
+    language: i18n.language,
+    fieldId: primaryFieldId,
+    fallback: location.name,
+  });
+
+  const secondaryHeadingText = resolveText({
+    config: secondaryHeading,
     location,
-    tertiaryHeading.field?.selection?.value
-  );
+    language: i18n.language,
+    fieldId: secondaryFieldId,
+  });
+
+  const tertiaryHeadingText = resolveText({
+    config: tertiaryHeading,
+    location,
+    language: i18n.language,
+    fieldId: tertiaryFieldId,
+  });
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 flex-1 min-w-0">
       <Heading
+        color={primaryHeading?.color}
         className="font-bold text-palette-primary-dark"
         level={primaryHeading.headingLevel}
       >
@@ -892,7 +1177,7 @@ const HoursSection = (props: {
 }) => {
   const { location, result, hoursProps, showIcons } = props;
 
-  const hoursField = hoursProps.field?.selection?.value;
+  const hoursField = getSelectedFieldId(hoursProps.field);
   const hoursData = parseHoursFromLocation(location, hoursField);
   const showHoursSection = hoursData && hoursProps.liveVisibility;
   return (
@@ -949,7 +1234,7 @@ const PhoneSection = (props: {
   const { phone, handlePhoneNumberClick, location, icons, index } = props;
   const { t } = useTranslation();
 
-  const phoneFieldId = phone.field?.selection?.value;
+  const phoneFieldId = getSelectedFieldId(phone.field);
   const phoneNumber = parseStringFromLocation(location, phoneFieldId);
   const showPhoneNumber = phoneFieldId && phone.liveVisibility && phoneNumber;
   return (
@@ -976,7 +1261,7 @@ const EmailSection = (props: {
 }) => {
   const { email, location, index, icons } = props;
 
-  const emailFieldId = email.field?.selection?.value;
+  const emailFieldId = getSelectedFieldId(email.field);
   const emailAddresses = parseArrayFromLocation(location, emailFieldId);
   const showEmailSection =
     email.liveVisibility &&
@@ -996,6 +1281,7 @@ const EmailSection = (props: {
           link={emailAddresses[0]}
           label={emailAddresses[0]}
           linkType="EMAIL"
+          normalizeLink={false}
           variant="link"
         />
       </div>
@@ -1010,7 +1296,7 @@ const ServicesSection = (props: {
   const { services, location } = props;
   const { t } = useTranslation();
 
-  const fieldId = services.field?.selection?.value;
+  const fieldId = getSelectedFieldId(services.field);
   const servicesList = parseArrayFromLocation(location, fieldId);
   const showServicesSection =
     services.liveVisibility &&
@@ -1027,6 +1313,33 @@ const ServicesSection = (props: {
       </div>
     )
   );
+};
+
+/**
+ * Resolves the text for a text element based on the constant value, field value, and fallback.
+ */
+const resolveText = (params: {
+  config: {
+    constantValue?: TranslatableString;
+    constantValueEnabled?: boolean;
+  };
+  location: Location;
+  language: string;
+  fieldId: string | undefined;
+  fallback?: string;
+}): string | undefined => {
+  const { config, location, language, fieldId, fallback } = params;
+
+  const resolvedConstantValue =
+    config.constantValueEnabled && config.constantValue
+      ? resolveComponentData(config.constantValue, language, location)
+      : undefined;
+  const resolvedText =
+    typeof resolvedConstantValue === "string"
+      ? resolvedConstantValue
+      : parseStringFromLocation(location, fieldId);
+
+  return resolvedText ?? fallback;
 };
 
 /** Parses a string from the given location using the provided field ID. */
@@ -1067,6 +1380,18 @@ const parseHoursFromLocation = (
   hoursFieldId: string | undefined
 ): HoursType | undefined => {
   return resolveProjectedField(location, hoursFieldId) as HoursType;
+};
+
+const getSelectedFieldId = (
+  field: DynamicOptionsSingleSelectorType<string> | string | undefined
+): string | undefined => {
+  if (!field) {
+    return undefined;
+  }
+  if (typeof field === "string") {
+    return field;
+  }
+  return field.selection?.value;
 };
 
 /**

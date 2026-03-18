@@ -1,18 +1,18 @@
+import { useTemplateProps } from "../../hooks/useDocument.tsx";
 import {
-  useTemplateProps,
   backgroundColors,
-  PageSection,
-  msg,
-  YextField,
   BackgroundStyle,
-  Background,
-  HeadingTextProps,
-  BreadcrumbsSectionProps,
-} from "@yext/visual-editor";
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
+} from "../../utils/themeConfigOptions.ts";
+import { PageSection } from "../atoms/pageSection.tsx";
+import { msg } from "../../utils/i18n/platform.ts";
+import { YextField } from "../../editor/YextField.tsx";
+import { Background } from "../atoms/background.tsx";
+import { HeadingTextProps } from "../contentBlocks/HeadingText.tsx";
+import { BreadcrumbsSectionProps } from "../pageSections/Breadcrumbs.tsx";
+import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { DirectoryList } from "./DirectoryWrapper";
-import { isDirectoryGrid } from "../../utils/directory/utils";
+import { DirectoryList } from "./DirectoryWrapper.tsx";
+import { isDirectoryGrid } from "../../utils/directory/utils.ts";
 
 export interface DirectoryStyles {
   /**
@@ -97,9 +97,9 @@ const DirectoryComponent: PuckComponent<DirectoryProps> = ({
       {streamDocument.dm_directoryChildren &&
         !isDirectoryGrid(streamDocument.dm_directoryChildren) && (
           <DirectoryList
+            streamDocument={streamDocument}
             directoryChildren={streamDocument.dm_directoryChildren}
             relativePrefixToRoot={relativePrefixToRoot ?? ""}
-            level={streamDocument?.meta?.entityType?.id}
           />
         )}
     </Background>
@@ -127,12 +127,9 @@ export const Directory: ComponentConfig<{ props: DirectoryProps }> = {
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "[[name]]",
-                  hasLocalizedValue: "true",
-                },
-                constantValueEnabled: true,
-                field: "",
+                constantValue: { defaultValue: "" },
+                constantValueEnabled: false,
+                field: "name",
               },
             },
             styles: { level: 2, align: "center" },
@@ -145,10 +142,7 @@ export const Directory: ComponentConfig<{ props: DirectoryProps }> = {
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: { defaultValue: "" },
                 constantValueEnabled: true,
                 field: "name",
               },
@@ -162,10 +156,7 @@ export const Directory: ComponentConfig<{ props: DirectoryProps }> = {
           type: "BreadcrumbsSlot",
           props: {
             data: {
-              directoryRoot: {
-                en: "Directory Root",
-                hasLocalizedValue: "true",
-              },
+              directoryRoot: { defaultValue: "Directory Root" },
             },
             styles: {
               backgroundColor: backgroundColors.background1.value,

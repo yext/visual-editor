@@ -1,14 +1,15 @@
 export * from "./i18n/index.ts";
 export * from "./schema/index.ts";
 export { fetchLocalesToPathsForEntity } from "./api/fetchLocalesToPathsForEntity.ts";
-export { fetchReviewsForEntity } from "./api/fetchReviewsForEntity.tsx";
 export { applyAnalytics, getAnalyticsScopeHash } from "./applyAnalytics.ts";
 export { applyHeaderScript } from "./applyHeaderScript.ts";
-export { applyTheme, type StreamDocument } from "./applyTheme.ts";
+export { applyCertifiedFacts } from "./applyCertifiedFacts.ts";
+export { applyTheme } from "./applyTheme.ts";
 export { getCanonicalUrl } from "./canonicalUrl.ts";
 export { themeManagerCn, themeManagerTwMergeConfiguration } from "./cn.ts";
 export { filterComponentsFromConfig } from "./filterComponents.ts";
 export { getPageMetadata } from "./getPageMetadata.ts";
+export { normalizeLink } from "./normalizeLink.ts";
 export {
   migrate,
   type Migration,
@@ -17,10 +18,6 @@ export {
 } from "./migrate.ts";
 export { resolveComponentData } from "./resolveComponentData.tsx";
 export { resolveYextEntityField } from "./resolveYextEntityField.ts";
-export {
-  resolveUrlTemplateOfChild,
-  resolvePageSetUrlTemplate,
-} from "./resolveUrlTemplate.ts";
 export {
   createSearchAnalyticsConfig,
   createSearchHeadlessConfig,
@@ -35,6 +32,11 @@ export {
   VisualEditorComponentsContentPath,
 } from "./themeConfigOptions.ts";
 export { type ThemeConfig, themeResolver, deepMerge } from "./themeResolver.ts";
+export { type StreamDocument } from "./types/StreamDocument.ts";
+export {
+  resolveUrlTemplate,
+  resolveUrlTemplateOfChild,
+} from "./urls/resolveUrlTemplate.ts";
 export { VisualEditorProvider } from "./VisualEditorProvider.tsx";
 export {
   constructFontSelectOptions,
@@ -42,6 +44,5 @@ export {
   getFontWeightOptions,
   getFontWeightOverrideOptions,
   type FontRegistry,
-} from "./visualEditorFonts.ts";
+} from "./fonts/visualEditorFonts.ts";
 export { withPropOverrides } from "./withPropOverrides.ts";
-export { mergeMeta } from "./mergeMeta.ts";

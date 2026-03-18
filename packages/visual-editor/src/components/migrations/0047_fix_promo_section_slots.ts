@@ -1,4 +1,4 @@
-import { Migration } from "../../utils/migrate";
+import { Migration } from "../../utils/migrate.ts";
 
 // The original version of migration 30 incorrectly set the field for the slot components.
 // This migration fixes the issue if the field is set incorrectly.

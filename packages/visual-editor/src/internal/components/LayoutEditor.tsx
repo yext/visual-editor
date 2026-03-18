@@ -6,7 +6,7 @@ import {
   Data,
   History,
   AppState,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import { InternalLayoutEditor } from "./InternalLayoutEditor.tsx";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { useLayoutLocalStorage } from "../hooks/layout/useLocalStorage.ts";
@@ -16,13 +16,17 @@ import { useLayoutMessageReceivers } from "../hooks/layout/useMessageReceivers.t
 import { LoadingScreen } from "../puck/components/LoadingScreen.tsx";
 import { ThemeData, ThemeHistory } from "../types/themeData.ts";
 import { ThemeConfig } from "../../utils/themeResolver.ts";
-import { StreamDocument, updateThemeInEditor } from "../../utils/applyTheme.ts";
+import { updateThemeInEditor } from "../../utils/applyTheme.ts";
 import { useThemeLocalStorage } from "../hooks/theme/useLocalStorage.ts";
 import { useCommonMessageSenders } from "../hooks/useMessageSenders.ts";
 import { useProgress } from "../hooks/useProgress.ts";
 import { migrate } from "../../utils/migrate.ts";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
 import { Metadata } from "../../editor/Editor.tsx";
+import { useErrorContext } from "../../contexts/ErrorContext.tsx";
+import { getPublishErrorMessage } from "../../utils/publishErrors.ts";
+import { toast } from "sonner";
+import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 
 const devLogger = new DevLogger();
 
@@ -48,6 +52,8 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     metadata,
     streamDocument,
   } = props;
+
+  const { errorCount, errorSources, errorDetails } = useErrorContext();
 
   const {
     saveLayoutSaveState,
@@ -86,6 +92,10 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
   };
 
   const handlePublish = (data?: any) => {
+    if (errorCount > 0) {
+      toast.error(getPublishErrorMessage(errorSources, errorDetails));
+      return;
+    }
     setLayoutSaveState(undefined);
     publishLayout(data);
   };

@@ -6,18 +6,19 @@ import {
   setDeep,
   Slot,
   WithId,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import {
   BackgroundStyle,
   backgroundColors,
-  PageSection,
-  YextField,
-  VisibilityWrapper,
-  msg,
-  HeadingTextProps,
-} from "@yext/visual-editor";
+} from "../../../utils/themeConfigOptions.ts";
+import { PageSection } from "../../atoms/pageSection.tsx";
+import { YextField } from "../../../editor/YextField.tsx";
+import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { defaultNearbyLocationsCardsProps } from "./NearbyLocationsCardsWrapper";
+import { defaultNearbyLocationsCardsProps } from "./NearbyLocationsCardsWrapper.tsx";
+import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 
 export interface NearbyLocationsSectionProps {
   /**
@@ -30,6 +31,12 @@ export interface NearbyLocationsSectionProps {
      * @defaultValue Background Color 1
      */
     backgroundColor?: BackgroundStyle;
+
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
+    showSectionHeading: boolean;
   };
 
   /** @internal */
@@ -59,6 +66,13 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
         {
           type: "select",
           options: "BACKGROUND_COLOR",
+        }
+      ),
+      showSectionHeading: YextField(
+        msg("fields.showSectionHeading", "Show Section Heading"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
         }
       ),
     },
@@ -154,7 +168,7 @@ const NearbyLocationsComponent: PuckComponent<NearbyLocationsSectionProps> = (
   return (
     <PageSection background={styles?.backgroundColor}>
       <div className="space-y-6">
-        {showHeading && (
+        {showHeading && styles?.showSectionHeading && (
           <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
         )}
         <div ref={cardsWrapperRef}>
@@ -177,6 +191,7 @@ export const NearbyLocationsSection: ComponentConfig<{
   defaultProps: {
     styles: {
       backgroundColor: backgroundColors.background1.value,
+      showSectionHeading: true,
     },
     analytics: {
       scope: "nearbyLocationsSection",
@@ -189,10 +204,7 @@ export const NearbyLocationsSection: ComponentConfig<{
             data: {
               text: {
                 field: "",
-                constantValue: {
-                  en: "Nearby Locations",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: { defaultValue: "Nearby Locations" },
                 constantValueEnabled: true,
               },
             },
@@ -223,15 +235,20 @@ export const NearbyLocationsSection: ComponentConfig<{
     );
   },
   render: (props) => (
-    <AnalyticsScopeProvider
-      name={props.analytics?.scope ?? "nearbyLocationsSection"}
+    <ComponentErrorBoundary
+      isEditing={props.puck.isEditing}
+      resetKeys={[props]}
     >
-      <VisibilityWrapper
-        liveVisibility={props.liveVisibility}
-        isEditing={props.puck.isEditing}
+      <AnalyticsScopeProvider
+        name={props.analytics?.scope ?? "nearbyLocationsSection"}
       >
-        <NearbyLocationsComponent {...props} />
-      </VisibilityWrapper>
-    </AnalyticsScopeProvider>
+        <VisibilityWrapper
+          liveVisibility={props.liveVisibility}
+          isEditing={props.puck.isEditing}
+        >
+          <NearbyLocationsComponent {...props} />
+        </VisibilityWrapper>
+      </AnalyticsScopeProvider>
+    </ComponentErrorBoundary>
   ),
 };

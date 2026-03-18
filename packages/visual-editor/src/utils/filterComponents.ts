@@ -1,4 +1,4 @@
-import { type Config } from "@measured/puck";
+import { type Config } from "@puckeditor/core";
 
 // The components that are disallowed by default.
 const gatedLayoutComponents: string[] = [];

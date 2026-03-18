@@ -4,7 +4,7 @@ import {
   UiState,
   Field,
   FieldLabel,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import { pt } from "../utils/i18n/platform.ts";
 
 export type DynamicOptionValueTypes = string | number | boolean | object;

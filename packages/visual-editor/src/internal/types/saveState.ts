@@ -1,4 +1,4 @@
-import { AppState } from "@measured/puck";
+import { AppState } from "@puckeditor/core";
 
 export type LayoutSaveState = {
   history: AppState;

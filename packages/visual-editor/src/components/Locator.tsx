@@ -1,5 +1,24 @@
-import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields, WithPuckProps } from "@measured/puck";
+import {
+  AutoField,
+  ComponentConfig,
+  FieldLabel,
+  Fields,
+  setDeep,
+  WithPuckProps,
+} from "@puckeditor/core";
+import {
+  FieldValueFilter,
+  FieldValueStaticFilter,
+  FilterSearchResponse,
+  Matcher,
+  NearFilterValue,
+  provideHeadless,
+  Result,
+  SearchHeadlessProvider,
+  SelectableStaticFilter,
+  useSearchActions,
+  useSearchState,
+} from "@yext/search-headless-react";
 import {
   AnalyticsProvider,
   AppliedFilters,
@@ -12,45 +31,15 @@ import {
   OnDragHandler,
   OnSelectParams,
   Pagination,
-  PinComponent,
+  PinComponentProps,
   SearchI18nextProvider,
   VerticalResults,
+  useAnalytics as useSearchAnalytics,
 } from "@yext/search-ui-react";
-import {
-  FilterSearchResponse,
-  FieldValueStaticFilter,
-  Matcher,
-  provideHeadless,
-  Result,
-  NearFilterValue,
-  SearchHeadlessProvider,
-  SelectableStaticFilter,
-  useSearchActions,
-  useSearchState,
-  FieldValueFilter,
-} from "@yext/search-headless-react";
-import React from "react";
-import {
-  BasicSelector,
-  Button,
-  createSearchAnalyticsConfig,
-  createSearchHeadlessConfig,
-  DynamicOption,
-  DynamicOptionsSelectorType,
-  Heading,
-  Location,
-  LocatorResultCard,
-  LocatorResultCardProps,
-  msg,
-  useDocument,
-  YextField,
-} from "@yext/visual-editor";
-import {
-  DEFAULT_LOCATOR_RESULT_CARD_PROPS,
-  LocatorResultCardFields,
-} from "./LocatorResultCard.tsx";
 import mapboxgl, { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
-import { MapPinIcon } from "./MapPinIcon.js";
+import React, { useEffect } from "react";
+import { useCollapse } from "react-collapsed";
+import { useTranslation } from "react-i18next";
 import {
   FaChevronUp,
   FaDotCircle,
@@ -58,51 +47,237 @@ import {
   FaSlidersH,
   FaTimes,
 } from "react-icons/fa";
-import { useCollapse } from "react-collapsed";
-import { getValueFromQueryString } from "../utils/urlQueryString";
+import { BasicSelector } from "../editor/BasicSelector.tsx";
+import {
+  DynamicOption,
+  DynamicOptionsSelectorType,
+} from "../editor/DynamicOptionsSelector.tsx";
+import { YextField } from "../editor/YextField.tsx";
+import { useDocument } from "../hooks/useDocument.tsx";
+import { Button } from "./atoms/button.tsx";
+import { TranslatableString } from "../types/types.ts";
+import {
+  getPreferredDistanceUnit,
+  toMeters,
+  toMiles,
+} from "../utils/i18n/distance.ts";
+import { msg, pt } from "../utils/i18n/platform.ts";
+import { resolveComponentData } from "../utils/resolveComponentData.tsx";
+import {
+  createSearchAnalyticsConfig,
+  createSearchHeadlessConfig,
+} from "../utils/searchHeadlessConfig.ts";
+import {
+  BackgroundStyle,
+  backgroundColors,
+} from "../utils/themeConfigOptions.ts";
+import {
+  LocatorConfig,
+  StreamDocument,
+} from "../utils/types/StreamDocument.ts";
+import { getValueFromQueryString } from "../utils/urlQueryString.tsx";
+import { Body } from "./atoms/body.tsx";
+import { Heading } from "./atoms/heading.tsx";
+import {
+  DEFAULT_LOCATOR_RESULT_CARD_PROPS,
+  DistanceDisplayOption,
+  Location,
+  LocatorResultCard,
+  LocatorResultCardFields,
+  LocatorResultCardProps,
+} from "./LocatorResultCard.tsx";
+import { MapPinIcon } from "./MapPinIcon.js";
+import { useAnalytics } from "@yext/pages-components";
+import {
+  DEFAULT_ENTITY_TYPE,
+  LocatorEntityType,
+  isLocatorEntityType,
+  getLocatorEntityTypeSourceMap,
+  getEntityTypeLabel,
+} from "../utils/locatorEntityTypes.ts";
 
 const RESULTS_LIMIT = 20;
 const LOCATION_FIELD = "builtin.location";
 const COUNTRY_CODE_FIELD = "address.countryCode";
-const DEFAULT_ENTITY_TYPE = "location";
 const DEFAULT_MAP_CENTER: [number, number] = [-74.005371, 40.741611]; // New York City ([lng, lat])
-const DEFAULT_RADIUS_MILES = 25;
+const DEFAULT_RADIUS = 25;
 const HOURS_FIELD = "builtin.hours";
-const MILES_TO_METERS = 1609.34;
 const INITIAL_LOCATION_KEY = "initialLocation";
+const DEFAULT_TITLE = "Find a Location";
+const DEFAULT_DISTANCE_DISPLAY = "distanceFromUser";
+const DEFAULT_LOCATION_STYLE = {
+  pinIcon: { type: "none" },
+  pinColor: backgroundColors.background6.value,
+};
 
-const getEntityType = (entityTypeEnvVar?: string) => {
-  const entityDocument: any = useDocument();
-  if (!entityDocument._pageset && entityTypeEnvVar) {
-    return entityDocument._env?.[entityTypeEnvVar] || DEFAULT_ENTITY_TYPE;
+const getLocatorConfigFromPageSet = (pageSet?: string): LocatorConfig => {
+  if (!pageSet) {
+    return {};
   }
 
   try {
-    const entityType = JSON.parse(entityDocument._pageset).typeConfig
-      .locatorConfig.entityType;
-    return entityType || DEFAULT_ENTITY_TYPE;
+    return JSON.parse(pageSet)?.typeConfig?.locatorConfig ?? {};
   } catch {
-    return DEFAULT_ENTITY_TYPE;
+    console.error("Failed to parse locator config from page set");
+    return {};
   }
 };
 
-function getFacetFieldOptions(entityType: string): DynamicOption<string>[] {
-  let filterOptions: DynamicOption<string>[] = [];
+const translateDistanceUnit = (
+  t: (key: string, options?: Record<string, unknown>) => string,
+  unit: "mile" | "kilometer",
+  count: number
+) => {
+  if (unit === "mile") {
+    return t("mile", { count, defaultValue: "mile" });
+  }
+
+  return t("kilometer", { count, defaultValue: "kilometer" });
+};
+
+const makiIconModules = import.meta.glob(
+  "../../node_modules/@mapbox/maki/icons/*.svg",
+  {
+    eager: true,
+    import: "default",
+  }
+) as Record<string, string>;
+
+const makiIconEntries = Object.entries(makiIconModules).map(([path, icon]) => {
+  const name = path.split("/").pop()?.replace(".svg", "") || path;
+  return [name, icon];
+});
+
+const makiIconMap: Record<string, string> = Object.fromEntries(makiIconEntries);
+
+const formatMakiIconLabel = (name: string) =>
+  name.replace(/[-_]/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+
+const makiIconOptions = makiIconEntries.map(([name, icon]) => ({
+  label: formatMakiIconLabel(name),
+  value: name,
+  icon,
+}));
+
+const DEFAULT_MAKI_ICON_NAME = makiIconOptions[0]?.value;
+
+const ResultCardPropsField = ({
+  value,
+  onChange,
+}: {
+  value?: LocatorResultCardProps;
+  onChange: (value: LocatorResultCardProps) => void;
+}) => {
+  const streamDocument = useDocument();
+  const entityTypeSourceMap = getLocatorEntityTypeSourceMap();
+  const entityTypeScopes = React.useMemo(() => {
+    const locatorConfig = getLocatorConfigFromPageSet(streamDocument?._pageset);
+    return locatorConfig.entityTypeScope ?? [];
+  }, [streamDocument]);
+
+  /**
+   * Builds the field schema for the result card editor, including:
+   * - Conditionally removing the primary CTA section when entity scope is not attached to a page set.
+   * - Toggling constant value vs. field selector visibility per section.
+   */
+  const resultCardFields = React.useMemo(() => {
+    if (!value?.entityType) {
+      return LocatorResultCardFields;
+    }
+    let fields = LocatorResultCardFields;
+    const entityTypeHasSourcePageSet = !!entityTypeSourceMap[value.entityType];
+    const scopeExistsForEntityType =
+      entityTypeScopes.find(
+        (scope) => scope.entityType === value.entityType
+      ) !== undefined;
+
+    fields = setDeep(
+      fields,
+      `objectFields.primaryCTA.objectFields.link.visible`,
+      !entityTypeHasSourcePageSet && scopeExistsForEntityType
+    );
+
+    // For each section, show either the field selector or the constant value editor.
+    const constantValueFieldConfigs = [
+      {
+        key: "primaryHeading",
+        enabled: value.primaryHeading?.constantValueEnabled ?? false,
+      },
+      {
+        key: "secondaryHeading",
+        enabled: value.secondaryHeading?.constantValueEnabled ?? false,
+      },
+      {
+        key: "tertiaryHeading",
+        enabled: value.tertiaryHeading?.constantValueEnabled ?? false,
+      },
+      {
+        key: "image",
+        enabled: value.image?.constantValueEnabled ?? false,
+      },
+    ];
+
+    constantValueFieldConfigs.forEach(({ key, enabled }) => {
+      fields = setDeep(
+        fields,
+        `objectFields.${key}.objectFields.field.visible`,
+        !enabled
+      );
+      fields = setDeep(
+        fields,
+        `objectFields.${key}.objectFields.constantValue.visible`,
+        enabled
+      );
+    });
+
+    return fields;
+  }, [entityTypeSourceMap, entityTypeScopes, value]);
+
+  return (
+    <AutoField
+      field={resultCardFields}
+      value={value ?? DEFAULT_LOCATOR_RESULT_CARD_PROPS}
+      onChange={onChange}
+    />
+  );
+};
+
+function getFacetFieldOptions(
+  entityTypes: LocatorEntityType[]
+): DynamicOption<string>[] {
+  const facetFields: DynamicOption<string>[] = [];
+  const addedValues: Set<string> = new Set<string>();
+  entityTypes.forEach((entityType) =>
+    getFacetFieldOptionsForEntityType(entityType).forEach((option) => {
+      if (option?.value && !addedValues.has(option.value)) {
+        facetFields.push(option);
+        addedValues.add(option.value);
+      }
+    })
+  );
+  return facetFields.sort((a, b) => a.label.localeCompare(b.label));
+}
+
+function getFacetFieldOptionsForEntityType(
+  entityType: LocatorEntityType
+): DynamicOption<string>[] {
+  let filterOptions: DynamicOption<string>[] = [
+    {
+      label: msg("fields.options.facets.city", "City"),
+      value: "address.city",
+    },
+    {
+      label: msg("fields.options.facets.postalCode", "Postal Code"),
+      value: "address.postalCode",
+    },
+    {
+      label: msg("fields.options.facets.region", "Region"),
+      value: "address.region",
+    },
+  ];
   switch (entityType) {
     case "location":
-      filterOptions = [
-        {
-          label: msg("fields.options.facets.city", "City"),
-          value: "address.city",
-        },
-        {
-          label: msg("fields.options.facets.postalCode", "Postal Code"),
-          value: "address.postalCode",
-        },
-        {
-          label: msg("fields.options.facets.region", "Region"),
-          value: "address.region",
-        },
+      filterOptions = filterOptions.concat(
         {
           label: msg("fields.options.facets.associations", "Associations"),
           value: "associations",
@@ -134,23 +309,11 @@ function getFacetFieldOptions(entityType: string): DynamicOption<string>[] {
         {
           label: msg("fields.options.facets.specialties", "Specialties"),
           value: "specialities",
-        },
-      ];
+        }
+      );
       break;
     case "restaurant":
-      filterOptions = [
-        {
-          label: msg("fields.options.facets.city", "City"),
-          value: "address.city",
-        },
-        {
-          label: msg("fields.options.facets.postalCode", "Postal Code"),
-          value: "address.postalCode",
-        },
-        {
-          label: msg("fields.options.facets.region", "Region"),
-          value: "address.region",
-        },
+      filterOptions = filterOptions.concat(
         {
           label: msg(
             "fields.options.facets.acceptsReservations",
@@ -204,23 +367,11 @@ function getFacetFieldOptions(entityType: string): DynamicOption<string>[] {
         {
           label: msg("fields.options.facets.specialties", "Specialties"),
           value: "specialities",
-        },
-      ];
+        }
+      );
       break;
     case "healthcareFacility":
-      filterOptions = [
-        {
-          label: msg("fields.options.facets.city", "City"),
-          value: "address.city",
-        },
-        {
-          label: msg("fields.options.facets.postalCode", "Postal Code"),
-          value: "address.postalCode",
-        },
-        {
-          label: msg("fields.options.facets.region", "Region"),
-          value: "address.region",
-        },
+      filterOptions = filterOptions.concat(
         {
           label: msg(
             "fields.options.facets.acceptingNewPatients",
@@ -249,23 +400,11 @@ function getFacetFieldOptions(entityType: string): DynamicOption<string>[] {
         {
           label: msg("fields.options.facets.services", "Services"),
           value: "services",
-        },
-      ];
+        }
+      );
       break;
     case "healthcareProfessional":
-      filterOptions = [
-        {
-          label: msg("fields.options.facets.city", "City"),
-          value: "address.city",
-        },
-        {
-          label: msg("fields.options.facets.postalCode", "Postal Code"),
-          value: "address.postalCode",
-        },
-        {
-          label: msg("fields.options.facets.region", "Region"),
-          value: "address.region",
-        },
+      filterOptions = filterOptions.concat(
         {
           label: msg(
             "fields.options.facets.acceptingNewPatients",
@@ -325,23 +464,11 @@ function getFacetFieldOptions(entityType: string): DynamicOption<string>[] {
         {
           label: msg("fields.options.facets.services", "Services"),
           value: "services",
-        },
-      ];
+        }
+      );
       break;
     case "hotel":
-      filterOptions = [
-        {
-          label: msg("fields.options.facets.city", "City"),
-          value: "address.city",
-        },
-        {
-          label: msg("fields.options.facets.postalCode", "Postal Code"),
-          value: "address.postalCode",
-        },
-        {
-          label: msg("fields.options.facets.region", "Region"),
-          value: "address.region",
-        },
+      filterOptions = filterOptions.concat(
         { label: msg("fields.options.facets.bar", "Bar"), value: "bar" },
         {
           label: msg("fields.options.facets.catsAllowed", "Cats Allowed"),
@@ -355,23 +482,11 @@ function getFacetFieldOptions(entityType: string): DynamicOption<string>[] {
           label: msg("fields.options.facets.parking", "Parking"),
           value: "parking",
         },
-        { label: msg("fields.options.facets.pools", "Pools"), value: "pools" },
-      ];
+        { label: msg("fields.options.facets.pools", "Pools"), value: "pools" }
+      );
       break;
     case "financialProfessional":
-      filterOptions = [
-        {
-          label: msg("fields.options.facets.city", "City"),
-          value: "address.city",
-        },
-        {
-          label: msg("fields.options.facets.postalCode", "Postal Code"),
-          value: "address.postalCode",
-        },
-        {
-          label: msg("fields.options.facets.region", "Region"),
-          value: "address.region",
-        },
+      filterOptions = filterOptions.concat(
         {
           label: msg("fields.options.facets.certifications", "Certifications"),
           value: "certifications",
@@ -398,13 +513,13 @@ function getFacetFieldOptions(entityType: string): DynamicOption<string>[] {
             "Years of Experience"
           ),
           value: "yearsOfExperience",
-        },
-      ];
+        }
+      );
       break;
     default:
-      filterOptions = [];
+      break;
   }
-  return filterOptions.sort((a, b) => a.label.localeCompare(b.label));
+  return filterOptions;
 }
 
 export interface LocatorProps {
@@ -413,6 +528,24 @@ export interface LocatorProps {
    * @defaultValue 'mapbox://styles/mapbox/streets-v12'
    */
   mapStyle?: string;
+
+  /**
+   * Props to customize the locator map pin styles.
+   * Controls map pin appearance depending on the result's entity type.
+   * The number of entries is locked to the locator entity types for the page set.
+   */
+  locationStyles: Array<{
+    /** The entity type this style applies to. */
+    entityType: LocatorEntityType;
+    /** Whether to render an icon in the pin. */
+    pinIcon?: {
+      type: "none" | "icon";
+      /** Defaults to the first available Maki icon when type is 'icon'. */
+      iconName?: string;
+    };
+    /** The color applied to the pin. */
+    pinColor?: BackgroundStyle;
+  }>;
 
   /**
    * Configuration for the filters available in the locator search experience.
@@ -440,12 +573,30 @@ export interface LocatorProps {
     latitude: string;
     longitude: string;
   };
-
+  /**
+   * Configuration for the locator page heading.
+   * Allows customizing the title text and its color.
+   */
+  pageHeading?: {
+    /** The title displayed at the top of the locator page. */
+    title: TranslatableString;
+    /**
+     * The color applied to the locator page title.
+     * @defaultValue inherited from theme
+     */
+    color?: BackgroundStyle;
+  };
   /**
    * Props to customize the locator result card component.
-   * Controls which fields are displayed and their styling.
+   * Controls which fields are displayed and their styling depending on the result's entity type.
+   * The number of entries is locked to the locator entity types for the page set.
    */
-  resultCard: LocatorResultCardProps;
+  resultCard: Array<{
+    /** Props to customize the locator result card component. */
+    props: LocatorResultCardProps;
+  }>;
+  /** Controls which distance value to display on each locator result card. */
+  distanceDisplay?: DistanceDisplayOption;
 }
 
 const locatorFields: Fields<LocatorProps> = {
@@ -478,6 +629,84 @@ const locatorFields: Fields<LocatorProps> = {
       },
     ],
   }),
+  locationStyles: YextField<LocatorProps["locationStyles"]>(
+    msg("fields.pinStyles", "Location styles"),
+    {
+      type: "array",
+      getItemSummary: (item) => getEntityTypeLabel(item.entityType),
+      arrayFields: {
+        entityType: YextField(msg("fields.entityType", "Entity Type"), {
+          type: "text",
+          visible: false,
+        }),
+        pinIcon: {
+          type: "custom",
+          render: ({ value, onChange }) => {
+            const selectedType = value?.type ?? "none";
+            return (
+              <div className="flex flex-col gap-3">
+                <FieldLabel label={pt("fields.pinIcon", "Pin Icon")}>
+                  <AutoField
+                    field={YextField<"none" | "icon">(
+                      msg("fields.pinIcon", "Pin Icon"),
+                      {
+                        type: "select",
+                        options: [
+                          {
+                            label: msg("fields.options.none", "None"),
+                            value: "none",
+                          },
+                          {
+                            label: msg("fields.options.icon", "Icon"),
+                            value: "icon",
+                          },
+                        ],
+                      }
+                    )}
+                    value={selectedType}
+                    onChange={(type) =>
+                      onChange({
+                        type,
+                        iconName:
+                          type === "icon"
+                            ? (value?.iconName ?? DEFAULT_MAKI_ICON_NAME)
+                            : value?.iconName,
+                      })
+                    }
+                  />
+                </FieldLabel>
+                {selectedType === "icon" && (
+                  <AutoField
+                    field={YextField<string | undefined>(
+                      msg("fields.icon", "Icon"),
+                      {
+                        type: "select",
+                        hasSearch: true,
+                        options: makiIconOptions,
+                      }
+                    )}
+                    value={value?.iconName}
+                    onChange={(iconName) =>
+                      onChange({ type: "icon", iconName })
+                    }
+                  />
+                )}
+              </div>
+            );
+          },
+        },
+        pinColor: YextField(msg("fields.pinColor", "Pin Color"), {
+          type: "select",
+          options: "BACKGROUND_COLOR",
+        }),
+      },
+      defaultItemProps: {
+        entityType: DEFAULT_ENTITY_TYPE,
+        pinIcon: { type: "none" },
+        pinColor: backgroundColors.background6.value,
+      },
+    }
+  ),
   filters: {
     label: msg("fields.filters", "Filters"),
     type: "object",
@@ -508,8 +737,10 @@ const locatorFields: Fields<LocatorProps> = {
           type: "dynamicSelect",
           dropdownLabel: msg("fields.field", "Field"),
           getOptions: () => {
-            const entityType = getEntityType();
-            return getFacetFieldOptions(entityType);
+            const entityTypeSourceMap = getLocatorEntityTypeSourceMap();
+            const entityTypes =
+              Object.keys(entityTypeSourceMap).filter(isLocatorEntityType);
+            return getFacetFieldOptions(entityTypes);
           },
           placeholderOptionLabel: msg(
             "fields.options.selectAField",
@@ -533,7 +764,60 @@ const locatorFields: Fields<LocatorProps> = {
       },
     }
   ),
-  resultCard: LocatorResultCardFields,
+  pageHeading: YextField(msg("fields.pageHeading", "Page Heading"), {
+    type: "object",
+    objectFields: {
+      title: YextField(msg("fields.title", "Title"), {
+        type: "translatableString",
+        filter: { types: ["type.string"] },
+      }),
+      color: YextField(msg("fields.color", "Color"), {
+        type: "select",
+        options: "SITE_COLOR",
+      }),
+    },
+  }),
+  resultCard: YextField<LocatorProps["resultCard"]>(
+    msg("fields.resultCard", "Result Card"),
+    {
+      type: "array",
+      getItemSummary: (item) => getEntityTypeLabel(item.props.entityType),
+      arrayFields: {
+        props: {
+          type: "custom",
+          render: ({ value, onChange }) => (
+            <ResultCardPropsField value={value} onChange={onChange} />
+          ),
+        },
+      },
+      defaultItemProps: {
+        props: DEFAULT_LOCATOR_RESULT_CARD_PROPS,
+      },
+    }
+  ),
+  distanceDisplay: YextField(
+    msg("fields.distanceDisplay", "Distance Display"),
+    {
+      type: "select",
+      options: [
+        {
+          label: msg("fields.options.distanceFromUser", "Distance from User"),
+          value: "distanceFromUser",
+        },
+        {
+          label: msg(
+            "fields.options.distanceFromSearch",
+            "Distance from Search"
+          ),
+          value: "distanceFromSearch",
+        },
+        {
+          label: msg("fields.options.hidden", "Hidden"),
+          value: "hidden",
+        },
+      ],
+    }
+  ),
 };
 
 /**
@@ -541,14 +825,121 @@ const locatorFields: Fields<LocatorProps> = {
  */
 export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
   fields: locatorFields,
+  /**
+   * Locks array lengths for `locationStyles` and `resultCard` to the current
+   * locator entity types so each entity type has exactly one entry.
+   */
+  resolveFields: (_data, params) => {
+    const entityDocument = params.metadata?.streamDocument;
+    const entityTypeSourceMap = entityDocument
+      ? getLocatorEntityTypeSourceMap(entityDocument)
+      : { [DEFAULT_ENTITY_TYPE]: undefined };
+    const entityTypes = Object.keys(
+      entityTypeSourceMap
+    ) as (keyof typeof entityTypeSourceMap)[];
+    const entityTypeCount = entityTypes.length;
+
+    let updatedFields: Fields<LocatorProps> = { ...locatorFields };
+    updatedFields = setDeep(
+      updatedFields,
+      "locationStyles.min",
+      entityTypeCount
+    );
+    updatedFields = setDeep(
+      updatedFields,
+      "locationStyles.max",
+      entityTypeCount
+    );
+    updatedFields = setDeep(updatedFields, "resultCard.min", entityTypeCount);
+    updatedFields = setDeep(updatedFields, "resultCard.max", entityTypeCount);
+
+    return updatedFields;
+  },
   defaultProps: {
+    locationStyles: [],
+    resultCard: [],
     filters: {
       openNowButton: false,
       showDistanceOptions: false,
     },
-    resultCard: DEFAULT_LOCATOR_RESULT_CARD_PROPS,
+    pageHeading: {
+      title: { defaultValue: DEFAULT_TITLE },
+    },
+    distanceDisplay: DEFAULT_DISTANCE_DISPLAY,
   },
   label: msg("components.locator", "Locator"),
+  /**
+   * Reconciles `props.locationStyles` and `props.resultCard` so
+   * each list has exactly one entry per current locator entity type.
+   * Missing or mismatched entries are rebuilt from existing
+   * values and backfilled with defaults.
+   */
+  resolveData: (data, params) => {
+    const entityDocument = params.metadata?.streamDocument;
+    const entityTypeSourceMap = entityDocument
+      ? getLocatorEntityTypeSourceMap(entityDocument)
+      : { [DEFAULT_ENTITY_TYPE]: undefined };
+    const entityTypes = Object.keys(
+      entityTypeSourceMap
+    ) as (keyof typeof entityTypeSourceMap)[];
+
+    const previousLocationStyles = data.props.locationStyles ?? [];
+    const previousResultCard = data.props.resultCard ?? [];
+    const hasSameEntityTypes = (currentEntityTypes: string[]) =>
+      currentEntityTypes.length === entityTypes.length &&
+      entityTypes.every((entityType) =>
+        currentEntityTypes.includes(entityType)
+      );
+
+    const locationStylesByEntityType = new globalThis.Map(
+      previousLocationStyles
+        .filter((item) => !!item.entityType)
+        .map((item) => [item.entityType, item] as const)
+    );
+    const resultCardsByEntityType = new globalThis.Map(
+      previousResultCard
+        .filter((item) => !!item?.props?.entityType)
+        .map((item) => [item.props.entityType, item] as const)
+    );
+
+    const previouslocationStyleEntityTypes = previousLocationStyles.map(
+      (item) => item.entityType
+    );
+    const previousresultCardEntityTypes = previousResultCard.map(
+      (item) => item.props?.entityType
+    );
+
+    const shouldReconcileLocationStyles =
+      previousLocationStyles.length === 0 ||
+      !hasSameEntityTypes(previouslocationStyleEntityTypes);
+    const shouldReconcileResultCards =
+      previousResultCard.length === 0 ||
+      !hasSameEntityTypes(previousresultCardEntityTypes);
+
+    if (shouldReconcileLocationStyles) {
+      const newLocationStyles = entityTypes.map((entityType) => ({
+        ...DEFAULT_LOCATION_STYLE,
+        ...locationStylesByEntityType.get(entityType),
+        entityType,
+      }));
+      data = setDeep(data, "props.locationStyles", newLocationStyles);
+    }
+
+    if (shouldReconcileResultCards) {
+      const newResultCards = entityTypes.map((entityType) => {
+        const existing = resultCardsByEntityType.get(entityType);
+        return {
+          props: {
+            ...(existing?.props ?? DEFAULT_LOCATOR_RESULT_CARD_PROPS),
+            entityType,
+          },
+        };
+      });
+      data = setDeep(data, "props.resultCard", newResultCards);
+    }
+
+    return data;
+  },
   render: (props) => <LocatorWrapper {...props} />,
 };
 
@@ -580,7 +971,7 @@ const LocatorWrapper = (props: WithPuckProps<LocatorProps>) => {
   return (
     <SearchHeadlessProvider searcher={searcher}>
       <SearchI18nextProvider searcher={searcher}>
-        <AnalyticsProvider {...(searchAnalyticsConfig as any)}>
+        <AnalyticsProvider {...searchAnalyticsConfig}>
           <LocatorInternal {...props} />
         </AnalyticsProvider>
       </SearchI18nextProvider>
@@ -592,14 +983,34 @@ type SearchState = "not started" | "loading" | "complete";
 
 const LocatorInternal = ({
   mapStyle,
+  locationStyles,
   filters: { openNowButton, showDistanceOptions, facetFields },
   mapStartingLocation,
-  resultCard: resultCardProps,
-  puck,
-}: WithPuckProps<LocatorProps>) => {
-  const { t } = useTranslation();
-  const entityType = getEntityType(puck.metadata?.entityTypeEnvVar);
+  resultCard: resultCardConfigs,
+  distanceDisplay,
+  pageHeading,
+}: LocatorProps) => {
+  // Adds a unified enableYextAnalytics to the window for both Pages and Search
+  // analytics. Typically used during consent banner implementation.
+  const searchAnalytics = useSearchAnalytics();
+  const pagesAnalytics = useAnalytics();
+  useEffect(() => {
+    (window as any).enableYextAnalytics = () => {
+      searchAnalytics?.optIn();
+      pagesAnalytics?.optIn();
+    };
+
+    return () => {
+      delete (window as any).enableYextAnalytics;
+    };
+  }, [searchAnalytics, pagesAnalytics]);
+
+  const { t, i18n } = useTranslation();
+  const preferredUnit = getPreferredDistanceUnit(i18n.language);
   const streamDocument = useDocument();
+  const entityTypeSourceMap = getLocatorEntityTypeSourceMap(streamDocument);
+  const entityTypes =
+    Object.keys(entityTypeSourceMap).filter(isLocatorEntityType);
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
   );
@@ -627,8 +1038,11 @@ const LocatorInternal = ({
   const [showSearchAreaButton, setShowSearchAreaButton] = React.useState(false);
   const [mapCenter, setMapCenter] = React.useState<LngLat | undefined>();
   const [mapBounds, setMapBounds] = React.useState<LngLatBounds | undefined>();
-  /** Explicit filter radius selected by the user */
-  const [selectedDistanceMiles, setSelectedDistanceMiles] = React.useState<
+  /** Explicit filter radius selected by the user, in meters */
+  const [selectedDistanceMeters, setSelectedDistanceMeters] = React.useState<
+    number | null
+  >(null);
+  const [selectedDistanceOption, setSelectedDistanceOption] = React.useState<
     number | null
   >(null);
   /** Radius of last location near filter returned by the filter search API */
@@ -713,8 +1127,8 @@ const LocatorInternal = ({
         apiFilterRadius.current = nearFilterValue.radius;
         // only overwrite radius from filter if display options are enabled
         const radius =
-          showDistanceOptions && selectedDistanceMiles
-            ? selectedDistanceMiles * MILES_TO_METERS
+          showDistanceOptions && selectedDistanceMeters
+            ? selectedDistanceMeters
             : nearFilterValue.radius;
         locationFilter = buildNearLocationFilterFromPrevious(
           nearFilterValue,
@@ -759,8 +1173,20 @@ const LocatorInternal = ({
     }
   }, [searchLoading, searchState]);
 
+  React.useEffect(() => {
+    if (selectedDistanceOption === null) {
+      setSelectedDistanceMeters(null);
+      return;
+    }
+    setSelectedDistanceMeters(toMeters(selectedDistanceOption, preferredUnit));
+  }, [preferredUnit, selectedDistanceOption]);
+
   const resultsRef = React.useRef<Array<HTMLDivElement | null>>([]);
   const resultsContainer = React.useRef<HTMLDivElement>(null);
+  // Tracks the selected pin index to highlight the corresponding result card.
+  const [selectedResultIndex, setSelectedResultIndex] = React.useState<
+    number | null
+  >(null);
 
   const setResultsRef = React.useCallback((index: number) => {
     if (!resultsRef?.current) return null;
@@ -770,6 +1196,9 @@ const LocatorInternal = ({
   const scrollToResult = React.useCallback(
     (result: Result | undefined) => {
       if (result) {
+        if (typeof result.index === "number") {
+          setSelectedResultIndex(result.index);
+        }
         let scrollPos = 0;
         // the search results that are listed above this result
         const previousResultsRef = resultsRef.current.filter(
@@ -787,6 +1216,8 @@ const LocatorInternal = ({
           top: scrollPos,
           behavior: "smooth",
         });
+      } else {
+        setSelectedResultIndex(null);
       }
     },
     [resultsContainer]
@@ -798,32 +1229,99 @@ const LocatorInternal = ({
     } as MarkerOptions;
   }, []);
 
+  const getResultCardProps = React.useCallback(
+    (entityType?: LocatorEntityType) => {
+      const existingConfig = (resultCardConfigs ?? []).find(
+        (item) => item.props.entityType === entityType
+      );
+      if (existingConfig) {
+        return existingConfig.props;
+      }
+      return DEFAULT_LOCATOR_RESULT_CARD_PROPS;
+    },
+    [resultCardConfigs]
+  );
+
   const CardComponent = React.useCallback(
-    (result: CardProps<Location>) => (
-      <LocatorResultCard
-        {...result}
-        puck={puck}
-        resultCardProps={resultCardProps}
-      />
-    ),
-    [puck, resultCardProps]
+    (result: CardProps<Location>) => {
+      let resultCardProps = DEFAULT_LOCATOR_RESULT_CARD_PROPS;
+      const resultEntityType = result.result.entityType;
+      if (resultEntityType && isLocatorEntityType(resultEntityType)) {
+        resultCardProps = getResultCardProps(resultEntityType);
+      } else {
+        console.warn(
+          "Unexpected entityType from search result: ",
+          resultEntityType
+        );
+      }
+      return (
+        <LocatorResultCard
+          {...result}
+          resultCardProps={resultCardProps}
+          isSelected={result.result.index === selectedResultIndex}
+          distanceDisplay={distanceDisplay}
+        />
+      );
+    },
+    [
+      distanceDisplay,
+      getResultCardProps,
+      entityTypeSourceMap,
+      selectedResultIndex,
+    ]
   );
 
   const [userLocationRetrieved, setUserLocationRetrieved] =
     React.useState<boolean>(false);
-  const [mapProps, setMapProps] = React.useState<MapProps>({
-    mapStyle,
-    onDragHandler: handleDrag,
-    scrollToResult: scrollToResult,
-    markerOptionsOverride: markerOptionsOverride,
-  });
+
+  const locationStylesConfig = React.useMemo(() => {
+    const config: Record<string, { color?: BackgroundStyle; icon?: string }> =
+      {};
+    (locationStyles ?? []).forEach((locationStyle) => {
+      const entityType = locationStyle.entityType;
+      if (!entityType) return;
+      const iconValue =
+        locationStyle.pinIcon?.type === "icon"
+          ? locationStyle.pinIcon.iconName
+          : undefined;
+      config[entityType] = {
+        color: locationStyle.pinColor,
+        icon:
+          typeof iconValue === "string" ? makiIconMap[iconValue] : undefined,
+      };
+    });
+    return config;
+  }, [locationStyles]);
+
+  const [centerCoords, setCenterCoords] = React.useState<
+    [number, number] | undefined
+  >();
+
+  const mapProps = React.useMemo(
+    () => ({
+      mapStyle,
+      centerCoords,
+      onDragHandler: handleDrag,
+      scrollToResult: scrollToResult,
+      markerOptionsOverride: markerOptionsOverride,
+      locationStyleConfig: locationStylesConfig,
+    }),
+    [
+      centerCoords,
+      handleDrag,
+      mapStyle,
+      markerOptionsOverride,
+      scrollToResult,
+      locationStylesConfig,
+    ]
+  );
 
   React.useEffect(() => {
     const resolveLocationAndSearch = async () => {
       const radius =
-        showDistanceOptions && selectedDistanceMiles
-          ? selectedDistanceMiles * MILES_TO_METERS
-          : DEFAULT_RADIUS_MILES * MILES_TO_METERS;
+        showDistanceOptions && selectedDistanceMeters
+          ? selectedDistanceMeters
+          : toMeters(DEFAULT_RADIUS, preferredUnit);
       // default location filter to NYC
       let initialLocationFilter = buildNearLocationFilterFromCoords(
         DEFAULT_MAP_CENTER[1],
@@ -847,7 +1345,7 @@ const LocatorInternal = ({
             filterValue.lat,
           ];
           if (areValidCoordinates(centerCoords[1], centerCoords[0])) {
-            setMapProps((prev) => ({ ...prev, centerCoords }));
+            setCenterCoords(centerCoords);
             setMapCenter(mapboxgl.LngLat.convert(centerCoords));
           }
         }
@@ -860,7 +1358,7 @@ const LocatorInternal = ({
           .executeFilterSearch(queryParam, false, [
             {
               fieldApiName: LOCATION_FIELD,
-              entityType: entityType,
+              entityType: entityTypes[0] ?? DEFAULT_ENTITY_TYPE,
               fetchEntities: false,
             },
           ])
@@ -1009,21 +1507,26 @@ const LocatorInternal = ({
     previousOffset.current = currentOffset;
   }, [currentOffset]);
 
-  const handleDistanceClick = (distanceMiles: number) => {
+  const handleDistanceClick = (
+    distance: number,
+    distanceUnit: "mile" | "kilometer"
+  ) => {
     const existingFilters = searchFilters.static || [];
     let updatedFilters: SelectableStaticFilter[];
-    if (distanceMiles === selectedDistanceMiles) {
-      setSelectedDistanceMiles(null);
+    const distanceInMeters = toMeters(distance, distanceUnit);
+    if (selectedDistanceOption === distance) {
+      setSelectedDistanceMeters(null);
+      setSelectedDistanceOption(null);
       // revert to API radius (or default if none was found) if user clicks the same distance again
       updatedFilters = updateRadiusInNearFiltersOnLocationField(
         existingFilters,
-        apiFilterRadius.current ?? DEFAULT_RADIUS_MILES * MILES_TO_METERS
+        apiFilterRadius.current ?? toMeters(DEFAULT_RADIUS, preferredUnit)
       );
     } else {
-      setSelectedDistanceMiles(distanceMiles);
+      setSelectedDistanceOption(distance);
       updatedFilters = updateRadiusInNearFiltersOnLocationField(
         existingFilters,
-        distanceMiles * MILES_TO_METERS
+        distanceInMeters
       );
     }
     searchActions.setStaticFilters(updatedFilters);
@@ -1036,7 +1539,7 @@ const LocatorInternal = ({
     // revert to API radius (or default if none was found)
     const partiallyUpdatedFilters = updateRadiusInNearFiltersOnLocationField(
       existingFilters,
-      apiFilterRadius.current ?? DEFAULT_RADIUS_MILES * MILES_TO_METERS
+      apiFilterRadius.current ?? toMeters(DEFAULT_RADIUS, preferredUnit)
     );
     const updatedFilters = deselectOpenNowFilters(partiallyUpdatedFilters);
 
@@ -1047,7 +1550,8 @@ const LocatorInternal = ({
     // Execute search to update AppliedFilters components
     searchActions.setOffset(0);
     executeSearch(searchActions);
-    setSelectedDistanceMiles(null);
+    setSelectedDistanceMeters(null);
+    setSelectedDistanceOption(null);
   };
 
   // If something else causes the filters to update, check if the hours filter is still present
@@ -1075,6 +1579,16 @@ const LocatorInternal = ({
   const hasFilterModalToggle =
     openNowButton || showDistanceOptions || hasFacetOptions;
   const [showFilterModal, setShowFilterModal] = React.useState(false);
+  const resolvedHeading =
+    (pageHeading?.title &&
+      resolveComponentData(pageHeading.title, i18n.language, streamDocument)) ||
+    t("findALocation", "Find a Location");
+
+  const requireMapOptIn: boolean = streamDocument.__?.visualEditorConfig
+    ? JSON.parse(streamDocument.__?.visualEditorConfig)?.requireMapOptIn
+    : false;
+  // If no opt-in is required, the map is already enabled.
+  const [mapEnabled, setMapEnabled] = React.useState(!requireMapOptIn);
 
   return (
     <div className="components flex h-screen w-screen mx-auto">
@@ -1084,23 +1598,36 @@ const LocatorInternal = ({
         id="locatorLeftDiv"
       >
         <div className="px-8 py-6 gap-4 flex flex-col">
-          <Heading level={3}>{t("findALocation", "Find a Location")}</Heading>
+          <Heading level={1} color={pageHeading?.color}>
+            {resolvedHeading}
+          </Heading>
           <FilterSearch
             searchFields={[
-              { fieldApiName: LOCATION_FIELD, entityType: entityType },
+              {
+                fieldApiName: LOCATION_FIELD,
+                entityType: entityTypes[0] ?? DEFAULT_ENTITY_TYPE, // only use a single entity type to avoid duplicate results
+              },
             ]}
             onSelect={(params) => handleFilterSelect(params)}
             placeholder={t("searchHere", "Search here...")}
             ariaLabel={t("searchDropdownHere", "Search Dropdown Input")}
             customCssClasses={{
-              focusedOption: "bg-gray-200 hover:bg-gray-200",
+              filterSearchContainer: "font-body-fontFamily",
+              focusedOption: "bg-gray-200 hover:bg-gray-200 block",
               option: "hover:bg-gray-100 px-4 py-3",
-              inputElement: "rounded-md p-4 h-11",
-              currentLocationButton: "h-7 w-7 text-palette-primary-dark",
+              inputElement:
+                "rounded-md p-4 h-11 font-body-fontFamily font-body-fontWeight text-body-fontSize",
+              currentLocationButton:
+                "h-7 w-7 font-body-fontFamily font-body-fontWeight text-body-fontSize text-palette-primary-dark",
+              label:
+                "font-body-fontFamily font-body-fontWeight text-body-fontSize text-palette-primary-dark",
             }}
             showCurrentLocationButton={userLocationRetrieved}
             geolocationProps={{
-              radius: DEFAULT_RADIUS_MILES, // this component uses miles, not meters
+              radius:
+                preferredUnit === "mile"
+                  ? DEFAULT_RADIUS
+                  : toMiles(DEFAULT_RADIUS), // this component uses miles, not meters
             }}
           />
         </div>
@@ -1110,12 +1637,12 @@ const LocatorInternal = ({
               <ResultsCountSummary
                 searchState={searchState}
                 resultCount={resultCount}
-                selectedDistanceMiles={selectedDistanceMiles}
+                selectedDistanceOption={selectedDistanceOption}
                 filterDisplayName={filterDisplayName}
               />
               {hasFilterModalToggle && (
                 <button
-                  className="inline-flex justify-between items-center gap-2 font-bold text-body-sm-fontSize bg-white text-palette-primary-dark"
+                  className="inline-flex justify-between items-center gap-2 bg-white text-palette-primary-dark font-bold font-body-fontFamily text-body-sm-fontSize"
                   onClick={() => setShowFilterModal((prev) => !prev)}
                 >
                   {t("filter", "Filter")}
@@ -1127,7 +1654,8 @@ const LocatorInternal = ({
               <AppliedFilters
                 hiddenFields={[LOCATION_FIELD, COUNTRY_CODE_FIELD]}
                 customCssClasses={{
-                  removableFilter: "text-md font-normal mt-2 mb-0",
+                  removableFilter:
+                    "text-md font-normal mt-2 mb-0 font-body-fontFamily",
                   clearAllButton: "hidden",
                   appliedFiltersContainer: "mt-0 mb-0",
                 }}
@@ -1158,7 +1686,7 @@ const LocatorInternal = ({
             isOpenNowSelected={isOpenNowSelected}
             handleOpenNowClick={handleOpenNowClick}
             showDistanceOptions={showDistanceOptions}
-            selectedDistanceMiles={selectedDistanceMiles}
+            selectedDistanceOption={selectedDistanceOption}
             handleDistanceClick={handleDistanceClick}
             handleCloseModalClick={() => setShowFilterModal(false)}
             handleClearFiltersClick={handleClearFiltersClick}
@@ -1168,14 +1696,37 @@ const LocatorInternal = ({
 
       {/* Right Section: Map. Hidden for small screens */}
       <div id="locatorMapDiv" className="md:flex-1 md:flex hidden relative">
-        <Map {...mapProps} />
+        {mapEnabled && <Map {...mapProps} />}
+        {!mapEnabled && (
+          <div className="flex items-center justify-center w-full h-full bg-gray-100">
+            <div className="p-6">
+              <Body
+                className="text-gray-700 font-bold text-center"
+                variant="lg"
+              >
+                {t(
+                  "mapRequiresOptIn",
+                  "This map can only be displayed if cookies are enabled"
+                )}
+              </Body>
+              <div className="flex justify-center p-2">
+                <Button
+                  onClick={() => setMapEnabled(true)}
+                  className="py-2 px-4 basis-full sm:w-auto justify-center"
+                >
+                  {t("enableCookies", "Enable Cookies")}
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
         {showSearchAreaButton && (
-          <div className="absolute bottom-10 left-0 right-0 flex justify-center">
+          <div className="absolute top-10 left-0 right-0 flex justify-center">
             <Button
               onClick={handleSearchAreaClick}
               className="py-2 px-4 shadow-xl"
             >
-              {t("searchThisArea", "Search This Area")}
+              <Body>{t("searchThisArea", "Search This Area")}</Body>
             </Button>
           </div>
         )}
@@ -1187,67 +1738,69 @@ const LocatorInternal = ({
 interface ResultsCountSummaryProps {
   searchState: SearchState;
   resultCount: number;
-  selectedDistanceMiles: number | null;
+  selectedDistanceOption: number | null;
   filterDisplayName?: string;
 }
 
 const ResultsCountSummary = (props: ResultsCountSummaryProps) => {
-  const { searchState, resultCount, selectedDistanceMiles, filterDisplayName } =
-    props;
-  const { t } = useTranslation();
+  const {
+    searchState,
+    resultCount,
+    selectedDistanceOption,
+    filterDisplayName,
+  } = props;
+  const { t, i18n } = useTranslation();
 
   if (resultCount === 0) {
     if (searchState === "not started") {
       return (
-        <div>
+        <Body>
           {t(
             "useOurLocatorToFindALocationNearYou",
             "Use our locator to find a location near you"
           )}
-        </div>
+        </Body>
       );
     } else if (searchState === "complete") {
       return (
-        <div>
+        <Body>
           {t("noResultsFoundForThisArea", "No results found for this area")}
-        </div>
+        </Body>
       );
     } else {
-      return <div></div>;
+      return <div />;
     }
   } else {
     if (filterDisplayName) {
-      if (selectedDistanceMiles) {
+      if (selectedDistanceOption) {
+        const unit = getPreferredDistanceUnit(i18n.language);
         return (
-          <div>
-            {t(
-              "locationsWithinDistanceOf",
-              '{{count}} locations within {{distance}} miles of "{{name}}"',
-              {
-                count: resultCount,
-                distance: selectedDistanceMiles,
-                name: filterDisplayName,
-              }
-            )}
-          </div>
+          <Body>
+            {t("locationsWithinDistanceOf", {
+              count: resultCount,
+              distance: selectedDistanceOption,
+              unit: translateDistanceUnit(t, unit, selectedDistanceOption),
+              name: filterDisplayName,
+            })}
+          </Body>
         );
       } else {
         return (
-          <div>
-            {t("locationsNear", '{{count}} locations near "{{name}}"', {
+          <Body>
+            {t("locationsNear", {
               count: resultCount,
               name: filterDisplayName,
             })}
-          </div>
+          </Body>
         );
       }
     } else {
       return (
-        <div>
-          {t("locationWithCount", "{{count}} locations", {
+        <Body>
+          {t("locationWithCount", {
             count: resultCount,
           })}
-        </div>
+        </Body>
       );
     }
   }
@@ -1259,6 +1812,10 @@ interface MapProps {
   onDragHandler?: OnDragHandler;
   scrollToResult?: (result: Result | undefined) => void;
   markerOptionsOverride?: (selected: boolean) => MarkerOptions;
+  locationStyleConfig?: Record<
+    string,
+    { color?: BackgroundStyle; icon?: string }
+  >;
 }
 
 const Map: React.FC<MapProps> = ({
@@ -1267,8 +1824,10 @@ const Map: React.FC<MapProps> = ({
   onDragHandler,
   scrollToResult,
   markerOptionsOverride,
+  locationStyleConfig,
 }) => {
   const { t } = useTranslation();
+  const entityDocument: StreamDocument = useDocument();
 
   const documentIsUndefined = typeof document === "undefined";
   const iframe = documentIsUndefined
@@ -1280,7 +1839,31 @@ const Map: React.FC<MapProps> = ({
     : ((iframe?.contentDocument || document)?.getElementById(
         "locatorMapDiv"
       ) as HTMLDivElement | null);
-  const mapPadding = getMapboxMapPadding(locatorMapDiv);
+
+  const mapPadding = React.useMemo(
+    () => getMapboxMapPadding(locatorMapDiv),
+    [locatorMapDiv]
+  );
+  const mapboxOptions = React.useMemo(
+    () => ({
+      center: centerCoords,
+      fitBoundsOptions: { padding: mapPadding },
+      ...(mapStyle ? { style: mapStyle } : {}),
+    }),
+    [centerCoords, mapPadding, mapStyle]
+  );
+  const PinComponent = React.useMemo(
+    () =>
+      function PinComponent<T>(pinProps: PinComponentProps<T>) {
+        return (
+          <LocatorMapPin
+            {...pinProps}
+            locationStyleConfig={locationStyleConfig}
+          />
+        );
+      },
+    [locationStyleConfig]
+  );
 
   // During page generation we don't exist in a browser context
   //@ts-expect-error MapboxGL is not loaded in the iframe content window
@@ -1289,15 +1872,14 @@ const Map: React.FC<MapProps> = ({
     return (
       <div className="flex items-center justify-center w-full h-full">
         <div className="border border-gray-300 rounded-lg p-6 bg-white shadow-md">
-          <span className="text-gray-700 text-lg font-medium font-body-fontFamily">
+          <Body className="text-gray-700" variant="lg">
             {t("loadingMap", "Loading Map...")}
-          </span>
+          </Body>
         </div>
       </div>
     );
   }
 
-  const entityDocument: any = useDocument();
   let mapboxApiKey = entityDocument._env?.YEXT_MAPBOX_API_KEY;
   if (
     iframe?.contentDocument &&
@@ -1310,13 +1892,9 @@ const Map: React.FC<MapProps> = ({
   return (
     <MapboxMap
       mapboxAccessToken={mapboxApiKey || ""}
-      mapboxOptions={{
-        center: centerCoords,
-        fitBoundsOptions: { padding: mapPadding },
-        ...(mapStyle ? { style: mapStyle } : {}),
-      }}
+      mapboxOptions={mapboxOptions}
       onDrag={onDragHandler}
-      PinComponent={LocatorMapPin}
+      PinComponent={PinComponent}
       iframeWindow={iframe?.contentWindow ?? undefined}
       allowUpdates={!!iframe?.contentDocument}
       onPinClick={scrollToResult}
@@ -1325,31 +1903,26 @@ const Map: React.FC<MapProps> = ({
   );
 };
 
-const LocatorMapPin: PinComponent<Record<string, unknown>> = (props) => {
-  const { result, selected } = props;
+type LocatorMapPinProps<T> = PinComponentProps<T> & {
+  locationStyleConfig?: Record<
+    string,
+    { color?: BackgroundStyle; icon?: string }
+  >;
+};
 
-  const { width, height, color } = React.useMemo(() => {
-    return selected
-      ? {
-          // zoomed in pin stylings
-          height: "61.5px",
-          width: "40.5px",
-          color: "text-palette-secondary-dark",
-        }
-      : {
-          // default pin stylings
-          height: "41px",
-          width: "27px",
-          color: "text-palette-primary-dark",
-        };
-  }, [selected]);
+const LocatorMapPin = <T,>(props: LocatorMapPinProps<T>) => {
+  const { result, selected, locationStyleConfig } = props;
+  const entityType = result.entityType;
+  const entityLocationStyle = entityType
+    ? locationStyleConfig?.[entityType]
+    : undefined;
 
   return (
     <MapPinIcon
-      height={height}
-      width={width}
-      color={color}
+      color={entityLocationStyle?.color}
       resultIndex={result.index}
+      icon={entityLocationStyle?.icon}
+      selected={selected}
     />
   );
 };
@@ -1359,10 +1932,13 @@ interface FilterModalProps {
   showOpenNowOption: boolean; // whether to show the Open Now filter option
   isOpenNowSelected: boolean; // whether the Open Now filter is currently selected by the user
   showDistanceOptions: boolean; // whether to show the Distance filter option
-  selectedDistanceMiles: number | null;
+  selectedDistanceOption: number | null;
   handleCloseModalClick: () => void;
   handleOpenNowClick: (selected: boolean) => void;
-  handleDistanceClick: (distance: number) => void;
+  handleDistanceClick: (
+    distance: number,
+    distanceUnit: "mile" | "kilometer"
+  ) => void;
   handleClearFiltersClick: () => void;
 }
 
@@ -1372,7 +1948,7 @@ const FilterModal = (props: FilterModalProps) => {
     showOpenNowOption,
     isOpenNowSelected,
     showDistanceOptions,
-    selectedDistanceMiles,
+    selectedDistanceOption,
     handleCloseModalClick,
     handleOpenNowClick,
     handleDistanceClick,
@@ -1388,9 +1964,9 @@ const FilterModal = (props: FilterModalProps) => {
       ref={popupRef}
     >
       <div className="inline-flex justify-between items-center px-6 py-4 gap-4">
-        <div className="font-bold">
+        <Body className="font-bold">
           {t("refineYourSearch", "Refine Your Search")}
-        </div>
+        </Body>
         <button
           className="text-palette-primary-dark"
           onClick={handleCloseModalClick}
@@ -1418,23 +1994,23 @@ const FilterModal = (props: FilterModalProps) => {
           {showDistanceOptions && (
             <DistanceFilter
               onChange={handleDistanceClick}
-              selectedDistanceMiles={selectedDistanceMiles}
+              selectedDistanceOption={selectedDistanceOption}
             />
           )}
           <Facets
             customCssClasses={{
               divider: "bg-white",
-              titleLabel: "font-bold text-md",
+              titleLabel: "font-bold text-md font-body-fontFamily",
               optionInput: "h-4 w-4 accent-palette-primary-dark",
-              optionLabel: "text-md",
-              option: "space-x-4",
+              optionLabel: "text-md font-body-fontFamily font-body-fontWeight",
+              option: "space-x-4 font-body-fontFamily",
             }}
           />
         </div>
       </div>
       <div className="border-y border-gray-300 justify-center align-middle">
         <button
-          className="w-full py-4 text-center font-bold text-palette-primary-dark"
+          className="w-full py-4 text-center text-palette-primary-dark font-bold font-body-fontFamily text-body-fontSize"
           onClick={handleClearFiltersClick}
         >
           {t("clearAll", "Clear All")}
@@ -1463,10 +2039,10 @@ const OpenNowFilter = (props: OpenNowFilterProps) => {
   return (
     <div className="flex flex-col gap-4">
       <button
-        className="w-full flex justify-between items-center"
+        className="w-full flex justify-between items-center font-bold font-body-fontFamily text-body-fontSize"
         {...getToggleProps()}
       >
-        <div className="font-bold">{t("hours", "Hours")}</div>
+        {t("hours", "Hours")}
         <FaChevronUp className={iconClassName} />
       </button>
       <div className="flex flex-row gap-1" {...getCollapseProps()}>
@@ -1481,7 +2057,9 @@ const OpenNowFilter = (props: OpenNowFilterProps) => {
             }
             onChange={() => onChange(!isSelected)}
           />
-          <label htmlFor={openNowCheckBoxId}>{t("openNow", "Open Now")}</label>
+          <label htmlFor={openNowCheckBoxId}>
+            <Body>{t("openNow", "Open Now")}</Body>
+          </label>
         </div>
       </div>
     </div>
@@ -1489,53 +2067,54 @@ const OpenNowFilter = (props: OpenNowFilterProps) => {
 };
 
 interface DistanceFilterProps {
-  onChange: (distance: number) => void;
-  selectedDistanceMiles: number | null;
+  onChange: (distance: number, unit: "mile" | "kilometer") => void;
+  selectedDistanceOption: number | null;
 }
 
 const DistanceFilter = (props: DistanceFilterProps) => {
-  const { selectedDistanceMiles, onChange } = props;
-  const { t } = useTranslation();
+  const { selectedDistanceOption, onChange } = props;
+  const { t, i18n } = useTranslation();
   const { isExpanded, getToggleProps, getCollapseProps } = useCollapse({
     defaultExpanded: true,
   });
   const iconClassName = isExpanded
     ? "w-3 text-gray-400"
     : "w-3 text-gray-400 transform rotate-180";
-  const distanceOptionsMiles = [5, 10, 25, 50];
+  const distanceOptions = [5, 10, 25, 50];
+  const unit = getPreferredDistanceUnit(i18n.language);
 
   return (
     <div className="flex flex-col gap-4">
       <button
-        className="w-full flex justify-between items-center"
+        className="w-full flex justify-between items-center font-bold font-body-fontFamily text-body-fontSize"
         {...getToggleProps()}
       >
-        <div className="font-bold">{t("distance", "Distance")}</div>
+        {t("distance", "Distance")}
         <FaChevronUp className={iconClassName} />
       </button>
       <div {...getCollapseProps()}>
-        {distanceOptionsMiles.map((distanceMiles) => (
+        {distanceOptions.map((distanceOption) => (
           <div
             className="flex flex-row gap-4 items-center"
-            id={`distanceOption-${distanceMiles}`}
-            key={distanceMiles}
+            id={`distanceOption-${distanceOption}`}
+            key={distanceOption}
           >
             <button
               className="inline-flex bg-white"
-              onClick={() => onChange(distanceMiles)}
-              aria-label={`${t("selectDistanceLessThan", "Select distance less than")} ${distanceMiles} ${t("miles", "miles")}`}
+              onClick={() => onChange(distanceOption, unit)}
+              aria-label={`${t("selectDistanceLessThan", "Select distance less than")} ${distanceOption} ${translateDistanceUnit(t, unit, distanceOption)}`}
             >
               <div className="text-palette-primary-dark">
-                {selectedDistanceMiles === distanceMiles ? (
+                {selectedDistanceOption === distanceOption ? (
                   <FaDotCircle />
                 ) : (
                   <FaRegCircle />
                 )}
               </div>
             </button>
-            <div className="inline-flex">
-              {`< ${distanceMiles} ${t("miles", "miles")}`}
-            </div>
+            <Body className="inline-flex">
+              {`< ${distanceOption} ${translateDistanceUnit(t, unit, distanceOption)}`}
+            </Body>
           </div>
         ))}
       </div>
@@ -1629,7 +2208,7 @@ function buildNearLocationFilterFromPrevious(
 function buildNearLocationFilterFromCoords(
   lat: number,
   lng: number,
-  radius?: number,
+  radius: number,
   displayName?: string
 ): SelectableStaticFilter {
   return {
@@ -1641,7 +2220,7 @@ function buildNearLocationFilterFromCoords(
       value: {
         lat,
         lng,
-        radius: radius ?? DEFAULT_RADIUS_MILES * MILES_TO_METERS,
+        radius,
       },
       matcher: Matcher.Near,
     },

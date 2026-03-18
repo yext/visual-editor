@@ -20,13 +20,13 @@ export default defineConfig(() => ({
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),
       name: "visual-editor",
-      formats: ["es", "cjs"] as LibraryFormats[], // typescript is unhappy without this forced type definition
+      formats: ["es"] as LibraryFormats[], // typescript is unhappy without this forced type definition
     },
     rollupOptions: {
       external: [
         "react",
         "react-dom",
-        "@measured/puck",
+        "@puckeditor/core",
         "uuid",
         "@yext/pages-components",
         "mapbox-gl",
@@ -54,8 +54,6 @@ export default defineConfig(() => ({
       COMPONENT_TESTS_MAPBOX_API_KEY: "dummy",
       COMPONENT_TESTS_SEARCH_API_KEY:
         process.env.COMPONENT_TESTS_SEARCH_API_KEY,
-      COMPONENT_TESTS_REVIEWS_APP_API_KEY:
-        process.env.COMPONENT_TESTS_REVIEWS_APP_API_KEY,
       COMPONENT_TESTS_MAPBOX_STATIC_MAP_KEY:
         process.env.COMPONENT_TESTS_MAPBOX_STATIC_MAP_KEY,
     },
@@ -82,7 +80,7 @@ const dts = (): Plugin => ({
       return;
     }
 
-    exec("tsup src/index.ts --format esm,cjs --dts-only", (err) => {
+    exec("tsup src/index.ts --format esm --dts-only", (err) => {
       if (err) {
         throw new Error("Failed to generate declaration files");
       }

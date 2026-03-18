@@ -12,13 +12,17 @@ import {
   FieldLabel,
   createUsePuck,
   resolveAllData,
-} from "@measured/puck";
+  blocksPlugin,
+  outlinePlugin,
+} from "@puckeditor/core";
 import React from "react";
 import { useState, useRef, useCallback } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityTooltipsProvider } from "../../editor/EntityField.tsx";
 import { LayoutSaveState } from "../types/saveState.ts";
 import { LayoutHeader } from "../puck/components/LayoutHeader.tsx";
+import { MetaTitleField } from "../puck/components/meta-title/MetaTitleField.tsx";
+import { ValidationReporters } from "../puck/components/ValidationReporters.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
 import { YextEntityFieldSelector } from "../../editor/YextEntityFieldSelector.tsx";
 import { loadMapboxIntoIframe } from "../utils/loadMapboxIntoIframe.tsx";
@@ -29,13 +33,16 @@ import { v4 as uuidv4 } from "uuid";
 import { Metadata } from "../../editor/Editor.tsx";
 import { AdvancedSettings } from "./AdvancedSettings.tsx";
 import { cn } from "../../utils/cn.ts";
-import { removeDuplicateImageActionBars } from "../utils/removeDuplicateImageActionBars.ts";
+import { removeDuplicateActionBars } from "../utils/removeDuplicateActionBars.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
+import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
+const blocks = blocksPlugin();
+const outline = outlinePlugin();
 
 // Advanced Settings link configuration
 const createAdvancedSettingsLink = () => ({
@@ -106,6 +113,7 @@ export const InternalLayoutEditor = ({
   const historyIndex = useRef<number>(0);
   const { i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
+  const { errorCount, errorSources, errorDetails } = useErrorContext();
 
   /**
    * When the Puck history changes save it to localStorage and send a message
@@ -163,7 +171,12 @@ export const InternalLayoutEditor = ({
         }
       }
     },
-    [templateMetadata, buildVisualConfigLocalStorageKey, layoutSaveState]
+    [
+      templateMetadata,
+      buildVisualConfigLocalStorageKey,
+      layoutSaveState,
+      saveLayoutSaveState,
+    ]
   );
 
   const handleClearLocalChanges = () => {
@@ -227,12 +240,7 @@ export const InternalLayoutEditor = ({
       root: {
         ...puckConfig.root,
         fields: {
-          title: YextEntityFieldSelector<any, string>({
-            label: msg("fields.metaTitle", "Meta Title"),
-            filter: {
-              types: ["type.string"],
-            },
-          }),
+          title: MetaTitleField(),
           description: YextEntityFieldSelector<any, string>({
             label: msg("fields.metaDescription", "Meta Description"),
             filter: {
@@ -271,6 +279,7 @@ export const InternalLayoutEditor = ({
         const resolveData = async () => {
           devLogger.logFunc("reloadDataOnDocumentChange");
           const { appState, config, dispatch } = getPuck();
+          const dataSnapshot = structuredClone(appState.data);
 
           const resolvedData = await resolveAllData(appState.data, config, {
             streamDocument,
@@ -278,7 +287,7 @@ export const InternalLayoutEditor = ({
 
           devLogger.logData("RESOLVED_LAYOUT_DATA", resolvedData);
 
-          if (isDeepEqual(appState.data, resolvedData)) {
+          if (isDeepEqual(dataSnapshot, resolvedData)) {
             devLogger.log(
               "reloadDataOnDocumentChange - no layout changes detected"
             );
@@ -294,6 +303,16 @@ export const InternalLayoutEditor = ({
       return <>{props.children}</>;
     },
     [streamDocument]
+  );
+
+  const puckOverride = React.useCallback(
+    (props: { children: React.ReactNode }) => (
+      <>
+        <ValidationReporters />
+        {reloadDataOnDocumentChange(props)}
+      </>
+    ),
+    [reloadDataOnDocumentChange]
   );
 
   // Prevent setPointerCapture errors by wrapping the native method, this is a workaround for a bug in the Puck library where the pointer gets stuck in a drag state when it is no longer active.
@@ -387,6 +406,7 @@ export const InternalLayoutEditor = ({
         data={{}} // we use puckInitialHistory instead
         initialHistory={puckInitialHistory}
         onChange={change}
+        plugins={[{ ...blocks, label: pt("sections", "Sections") }, outline]}
         overrides={{
           fields: fieldsOverride,
           header: () => (
@@ -397,6 +417,9 @@ export const InternalLayoutEditor = ({
               onPublishLayout={handlePublishLayout}
               onSendLayoutForApproval={handleSendLayoutForApproval}
               localDev={localDev}
+              hasErrors={errorCount > 0}
+              errorSources={errorSources}
+              errorDetails={errorDetails}
             />
           ),
           iframe: loadMapboxIntoIframe,
@@ -409,16 +432,14 @@ export const InternalLayoutEditor = ({
             text: TranslatePuckFieldLabels,
             textarea: TranslatePuckFieldLabels,
           },
-          actionBar: ({ children, label }) => {
+          actionBar: ({ children, label, parentAction }) => {
             const getPuck = useGetPuck();
             const { appState } = getPuck();
             const itemSelectorState = usePuck(
               (s) => s.appState.ui.itemSelector
             );
 
-            React.useEffect(removeDuplicateImageActionBars, [
-              itemSelectorState,
-            ]);
+            React.useEffect(removeDuplicateActionBars, [itemSelectorState]);
 
             const isAdvancedSettingsSelected =
               appState?.ui?.itemSelector &&
@@ -557,7 +578,11 @@ export const InternalLayoutEditor = ({
             );
 
             return (
-              <ActionBar label={label}>
+              <ActionBar>
+                <ActionBar.Group>
+                  {parentAction}
+                  {label && <ActionBar.Label label={label} />}
+                </ActionBar.Group>
                 <ActionBar.Group>
                   {additionalActions}
                   {children}
@@ -569,7 +594,7 @@ export const InternalLayoutEditor = ({
           fieldLabel: ({ icon, children, ...rest }) => (
             <FieldLabel {...rest}>{children}</FieldLabel>
           ),
-          puck: reloadDataOnDocumentChange,
+          puck: puckOverride,
         }}
         metadata={metadata}
       />

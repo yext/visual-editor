@@ -3,7 +3,7 @@ import React, { ErrorInfo, useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { LoadingScreen } from "../internal/puck/components/LoadingScreen.tsx";
 import { Toaster } from "../internal/puck/ui/Toaster.tsx";
-import { type Config } from "@measured/puck";
+import { type Config } from "@puckeditor/core";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
 import { DevLogger } from "../utils/devLogger.ts";
 import { ThemeConfig } from "../utils/themeResolver.ts";
@@ -16,15 +16,22 @@ import { LayoutEditor } from "../internal/components/LayoutEditor.tsx";
 import { ThemeEditor } from "../internal/components/ThemeEditor.tsx";
 import { useCommonMessageSenders } from "../internal/hooks/useMessageSenders.ts";
 import { useProgress } from "../internal/hooks/useProgress.ts";
-import { i18nPlatformInstance } from "../utils/i18n/platform.ts";
-import { StreamDocument } from "../utils/applyTheme.ts";
+import {
+  i18nPlatformInstance,
+  loadPlatformTranslations,
+} from "../utils/i18n/platform.ts";
+import { StreamDocument } from "../utils/types/StreamDocument.ts";
 import {
   createDefaultThemeConfig,
   defaultThemeConfig,
-} from "../components/DefaultThemeConfig";
-import { defaultFonts, loadFontsIntoDOM } from "../utils/visualEditorFonts.ts";
+} from "../components/DefaultThemeConfig.ts";
+import {
+  defaultFonts,
+  loadFontsIntoDOM,
+} from "../utils/fonts/visualEditorFonts.ts";
 import { migrate } from "../utils/migrate.ts";
 import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
+import { ErrorProvider } from "../contexts/ErrorContext.tsx";
 
 const devLogger = new DevLogger();
 
@@ -44,7 +51,11 @@ export interface Metadata {
     relativePrefixToRoot: string
   ) => string;
   // The stream document for the current page
-  streamDocument?: any;
+  streamDocument?: StreamDocument;
+}
+
+declare module "@puckeditor/core" {
+  export interface PuckMetadata extends Metadata {}
 }
 
 export type EditorProps = {
@@ -90,7 +101,7 @@ export const Editor = ({
 
   const logError = (error: Error, info: ErrorInfo) => {
     sendError({
-      payload: { error, info },
+      payload: { error, info, type: "editor" },
     });
   };
 
@@ -145,9 +156,31 @@ export const Editor = ({
   }, [templateMetadata?.isDevMode, devPageSets]);
 
   useEffect(() => {
-    if (templateMetadata?.platformLocale) {
-      i18nPlatformInstance.changeLanguage(templateMetadata?.platformLocale);
-    }
+    let isCurrent = true;
+
+    const handlePlatformLocaleChange = async () => {
+      if (templateMetadata?.platformLocale) {
+        const expectedLocale = templateMetadata.platformLocale;
+        try {
+          await loadPlatformTranslations(expectedLocale);
+          // Additional check to avoid race conditions when locale changes quickly
+          if (
+            isCurrent &&
+            templateMetadata?.platformLocale === expectedLocale
+          ) {
+            i18nPlatformInstance.changeLanguage(expectedLocale);
+          }
+        } catch (error) {
+          console.error("Failed to load platform translations:", error);
+        }
+      }
+    };
+
+    handlePlatformLocaleChange();
+
+    return () => {
+      isCurrent = false;
+    };
   }, [templateMetadata?.platformLocale]);
 
   const { isLoading, progress } = useProgress({
@@ -174,41 +207,43 @@ export const Editor = ({
     : undefined;
 
   return (
-    <TemplateMetadataContext.Provider value={templateMetadata!}>
-      <ErrorBoundary fallback={<></>} onError={logError}>
-        {!isLoading ? (
-          templateMetadata?.isThemeMode || forceThemeMode ? (
-            <ThemeEditor
-              puckConfig={puckConfig!}
-              templateMetadata={templateMetadata!}
-              layoutData={migratedData!}
-              themeData={themeData!}
-              themeConfig={finalThemeConfig}
-              localDev={!!localDev}
-              metadata={{ ...metadata, streamDocument: document }}
-            />
+    <ErrorProvider>
+      <TemplateMetadataContext.Provider value={templateMetadata!}>
+        <ErrorBoundary fallback={<></>} onError={logError}>
+          {!isLoading ? (
+            templateMetadata?.isThemeMode || forceThemeMode ? (
+              <ThemeEditor
+                puckConfig={puckConfig!}
+                templateMetadata={templateMetadata!}
+                layoutData={migratedData!}
+                themeData={themeData!}
+                themeConfig={finalThemeConfig}
+                localDev={!!localDev}
+                metadata={{ ...metadata, streamDocument: document }}
+              />
+            ) : (
+              <LayoutEditor
+                puckConfig={puckConfig!}
+                templateMetadata={templateMetadata!}
+                layoutData={migratedData!}
+                themeData={themeData!}
+                themeConfig={finalThemeConfig}
+                localDev={!!localDev}
+                metadata={{ ...metadata, streamDocument: document }}
+                streamDocument={document}
+              />
+            )
           ) : (
-            <LayoutEditor
-              puckConfig={puckConfig!}
-              templateMetadata={templateMetadata!}
-              layoutData={migratedData!}
-              themeData={themeData!}
-              themeConfig={finalThemeConfig}
-              localDev={!!localDev}
-              metadata={{ ...metadata, streamDocument: document }}
-              streamDocument={document}
-            />
-          )
-        ) : (
-          parentLoaded && (
-            <LoadingScreen
-              progress={progress}
-              platformLanguageIsSet={!!templateMetadata?.platformLocale}
-            />
-          )
-        )}
-        <Toaster closeButton richColors />
-      </ErrorBoundary>
-    </TemplateMetadataContext.Provider>
+            parentLoaded && (
+              <LoadingScreen
+                progress={progress}
+                platformLanguageIsSet={!!templateMetadata?.platformLocale}
+              />
+            )
+          )}
+          <Toaster closeButton richColors />
+        </ErrorBoundary>
+      </TemplateMetadataContext.Provider>
+    </ErrorProvider>
   );
 };

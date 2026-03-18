@@ -6,12 +6,23 @@ import { ThemeConfig } from "../../../utils/themeResolver.ts";
 import { updateThemeInEditor } from "../../../utils/applyTheme.ts";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
-import { InitialHistory, useGetPuck } from "@measured/puck";
+import { InitialHistory, createUsePuck, useGetPuck } from "@puckeditor/core";
 import { ThemeData, ThemeHistories } from "../../types/themeData.ts";
 import { RotateCcw, RotateCw } from "lucide-react";
 import { Separator } from "@radix-ui/react-separator";
 import { LocalDevOverrideButtons } from "./LayoutHeader.tsx";
 import { pt } from "../../../utils/i18n/platform.ts";
+import { HeadDeployStatus } from "../../types/templateMetadata.ts";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/Tooltip.tsx";
+import { getPublishTooltipMessageFromHeadDeployStatus } from "../../utils/getPublishTooltipMessageFromHeadDeployStatus.ts";
+
+const SIDEBAR_HIDE_STYLE_ID = "yext-theme-hide-sidebar-breadcrumbs";
+const usePuck = createUsePuck();
 
 type ThemeHeaderProps = {
   onPublishTheme: () => Promise<void>;
@@ -25,6 +36,7 @@ type ThemeHeaderProps = {
   setClearLocalChangesModalOpen: (newValue: boolean) => void;
   totalEntityCount: number;
   localDev: boolean;
+  headDeployStatus: HeadDeployStatus;
 };
 
 export const ThemeHeader = (props: ThemeHeaderProps) => {
@@ -40,11 +52,13 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
     setClearLocalChangesModalOpen,
     totalEntityCount,
     localDev,
+    headDeployStatus,
   } = props;
 
   const getPuck = useGetPuck();
-
+  const previewMode = usePuck((s) => s.appState.ui.previewMode);
   useEffect(() => {
+    // Initialize Puck history and set preview mode to "interactive" on mount
     const {
       dispatch,
       history: { setHistories },
@@ -60,33 +74,37 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
   }, [puckInitialHistory]);
 
   useEffect(() => {
-    // Hide the components list and fields list titles
-    const fieldListTitle = document.querySelector<HTMLElement>(
-      "[class*='PuckLayout-rightSideBar'] > div[class*='SidebarSection--noBorderTop'] > div[class*='SidebarSection-title']"
-    );
-    if (fieldListTitle) {
-      fieldListTitle.style.display = "none";
-    }
-    const puckPreview =
-      document.querySelector<HTMLIFrameElement>("#preview-frame");
-    if (
-      puckPreview?.contentDocument?.head &&
-      !puckPreview?.contentDocument.getElementById(
-        "yext-preview-disable-pointer-events"
-      )
-    ) {
-      // add this style to preview iFrame to prevent clicking or hover effects.
-      const style = puckPreview.contentDocument.createElement("style");
-      style.id = "yext-preview-disable-pointer-events";
+    // Prevents the "Page" / breadcrumb from appearing over the right sidebar
+    if (!document.getElementById(SIDEBAR_HIDE_STYLE_ID)) {
+      const style = document.createElement("style");
+      style.id = SIDEBAR_HIDE_STYLE_ID;
       style.innerHTML = `
-        * {
-          cursor: default !important;
-          pointer-events: none !important;
+        [class*='SidebarSection-breadcrumbs'] {
+          display: none !important;
+        }
+        [class*='SidebarSection-title'] {
+          display: none !important;
         }
       `;
-      puckPreview.contentDocument.head.appendChild(style);
+      document.head.appendChild(style);
     }
+
+    return () => {
+      document.getElementById(SIDEBAR_HIDE_STYLE_ID)?.remove();
+    };
   }, []);
+
+  useEffect(() => {
+    // Keep theme mode in interactive preview so links/buttons are hoverable
+    // and Puck component selection is disabled.
+    if (previewMode !== "interactive") {
+      const { dispatch } = getPuck();
+      dispatch({
+        type: "setUi",
+        ui: { previewMode: "interactive" },
+      });
+    }
+  }, [previewMode, getPuck]);
 
   const canUndo = (): boolean => {
     if (!themeHistories) {
@@ -129,6 +147,12 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
       ui: { leftSideBarVisible: false },
     });
   }, []);
+
+  const publishDisabled =
+    themeHistories?.histories?.length === 1 || headDeployStatus !== "ACTIVE";
+
+  const publishTooltipMessage =
+    getPublishTooltipMessageFromHeadDeployStatus(headDeployStatus);
 
   return (
     <header className="puck-header">
@@ -187,18 +211,37 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
           }}
         />
         {!isDevMode && (
-          <Button
-            variant="secondary"
-            disabled={themeHistories?.histories?.length === 1}
-            onClick={async () => {
-              await onPublishTheme();
-            }}
-          >
-            {
-              // TODO: translation concatenation
-              `${pt("update", "Update")} ${totalEntityCount} ${totalEntityCount === 1 ? pt("page", "Page") : pt("pages", "Pages")}`
-            }
-          </Button>
+          <TooltipProvider delayDuration={0}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span
+                  tabIndex={publishDisabled ? 0 : -1}
+                  className={publishDisabled ? "ve-cursor-not-allowed" : ""}
+                  role={publishDisabled ? "button" : undefined}
+                  aria-disabled={publishDisabled || undefined}
+                >
+                  <Button
+                    variant="secondary"
+                    disabled={publishDisabled}
+                    onClick={async () => {
+                      await onPublishTheme();
+                    }}
+                    className={publishDisabled ? "ve-pointer-events-none" : ""}
+                  >
+                    {
+                      // TODO: translation concatenation
+                      `${pt("update", "Update")} ${totalEntityCount} ${totalEntityCount === 1 ? pt("page", "Page") : pt("pages", "Pages")}`
+                    }
+                  </Button>
+                </span>
+              </TooltipTrigger>
+              {publishTooltipMessage && (
+                <TooltipContent className="ve-max-w-[320px] ve-whitespace-pre-line ve-text-left">
+                  <p>{publishTooltipMessage}</p>
+                </TooltipContent>
+              )}
+            </Tooltip>
+          </TooltipProvider>
         )}
       </div>
     </header>

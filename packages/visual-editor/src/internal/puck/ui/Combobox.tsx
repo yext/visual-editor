@@ -13,27 +13,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover.tsx";
 import { pt } from "../../../utils/i18n/platform.ts";
 import { convertComputedStyleColorToHex } from "../../../utils/colors.ts";
-
-export type ComboboxOption = {
-  label: string;
-  value: any;
-  color?: string; // ex. "bg-palette-primary-light"
-};
-
-export type ComboboxOptionGroup = {
-  title?: string;
-  description?: string;
-  options: ComboboxOption[];
-};
-
-type ComboboxProps = {
-  selectedOption: ComboboxOption;
-  onChange: (value: string) => void;
-  optionGroups: Array<ComboboxOptionGroup>;
-  disabled?: boolean;
-  disableSearch?: boolean;
-  customTrigger?: React.ReactNode;
-};
+import { ComboboxProps } from "../../types/combobox.ts";
 
 export const Combobox = ({
   selectedOption,
@@ -59,6 +39,14 @@ export const Combobox = ({
           >
             {selectedOption ? (
               <div className="ve-flex ve-items-center">
+                {selectedOption.icon && (
+                  <img
+                    src={selectedOption.icon}
+                    alt=""
+                    aria-hidden="true"
+                    className="ve-w-4 ve-h-4 ve-mr-2"
+                  />
+                )}
                 <ColorIndicator color={selectedOption.color} />
                 <div
                   className="ve-pr-2 ve-truncate ve-text-left"
@@ -128,6 +116,14 @@ export const Combobox = ({
                           color={option.color}
                           setHexValue={setColorHexValue}
                         />
+                        {option.icon && (
+                          <img
+                            src={option.icon}
+                            alt=""
+                            aria-hidden="true"
+                            className="ve-w-4 ve-h-4 ve-mr-2"
+                          />
+                        )}
                         <div className="ve-flex ve-flex-col ve-gap-0.5">
                           {option.label}
                           {colorHexValue && (

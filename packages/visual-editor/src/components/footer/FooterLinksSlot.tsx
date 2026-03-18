@@ -1,17 +1,20 @@
 import * as React from "react";
-import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import {
-  YextField,
-  msg,
-  pt,
-  useDocument,
-  resolveComponentData,
-  CTA,
-  TranslatableCTA,
-  i18nComponentsInstance,
-} from "@yext/visual-editor";
+  ComponentConfig,
+  Fields,
+  PuckComponent,
+  setDeep,
+} from "@puckeditor/core";
+import { YextField } from "../../editor/YextField.tsx";
+import { msg, pt } from "../../utils/i18n/platform.ts";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { CTA } from "../atoms/cta.tsx";
+import { TranslatableCTA } from "../../types/types.ts";
+import { i18nComponentsInstance } from "../../utils/i18n/components.ts";
 import { useTranslation } from "react-i18next";
 import { defaultLink, defaultLinks } from "./ExpandedFooter.tsx";
+import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
 
 export interface FooterLinksSlotProps {
   data: {
@@ -22,7 +25,7 @@ export interface FooterLinksSlotProps {
   /** @internal */
   eventNamePrefix?: string;
   /** @internal */
-  alignment?: "left" | "right";
+  alignment?: "left" | "center" | "right";
 }
 
 const FooterLinksSlotInternal: PuckComponent<FooterLinksSlotProps> = (
@@ -42,14 +45,25 @@ const FooterLinksSlotInternal: PuckComponent<FooterLinksSlotProps> = (
     return puck.isEditing ? <div className="h-10 min-w-[100px]" /> : <></>;
   }
 
-  const secondaryItemsAlignment =
-    variant === "secondary" && alignment === "right"
-      ? "md:justify-end"
-      : "md:justify-start";
+  let secondaryItemsAlignment: string | undefined;
+
+  if (variant === "secondary") {
+    switch (alignment) {
+      case "right":
+        secondaryItemsAlignment = "md:justify-end";
+        break;
+      case "center":
+        secondaryItemsAlignment = "md:justify-center";
+        break;
+      default:
+        secondaryItemsAlignment = "md:justify-start";
+        break;
+    }
+  }
 
   return (
     <div
-      className={`${
+      className={`${puck.isEditing ? "min-h-[30px]" : ""} ${
         variant === "secondary"
           ? `gap-5 flex flex-col md:flex-row w-full ${secondaryItemsAlignment}`
           : "w-full grid grid-cols-1 md:grid-cols-5 gap-6"
@@ -70,6 +84,7 @@ const FooterLinksSlotInternal: PuckComponent<FooterLinksSlotProps> = (
 
         return (
           <CTA
+            openInNewTab={linkData.openInNewTab}
             key={index}
             variant={
               variant === "primary"
@@ -80,11 +95,23 @@ const FooterLinksSlotInternal: PuckComponent<FooterLinksSlotProps> = (
             label={label}
             linkType={linkData.linkType}
             link={link}
+            normalizeLink={
+              isNonNormalizableLinkType(linkData.linkType)
+                ? false
+                : (linkData.normalizeLink ?? true)
+            }
             className={`justify-center block break-words whitespace-normal`}
           />
         );
       })}
     </div>
+  );
+};
+
+const shouldShowNormalizeLinkField = (links?: TranslatableCTA[]) => {
+  return (
+    !links?.length ||
+    links.some((link) => !isNonNormalizableLinkType(link?.linkType))
   );
 };
 
@@ -109,11 +136,11 @@ const footerLinksSlotFields: Fields<FooterLinksSlotProps> = {
               { label: msg("fields.options.url", "URL"), value: "URL" },
               {
                 label: msg("fields.options.phone", "Phone"),
-                value: "Phone",
+                value: "PHONE",
               },
               {
                 label: msg("fields.options.email", "Email"),
-                value: "Email",
+                value: "EMAIL",
               },
             ],
           }),
@@ -124,6 +151,26 @@ const footerLinksSlotFields: Fields<FooterLinksSlotProps> = {
           link: YextField(msg("fields.link", "Link"), {
             type: "text",
           }),
+          normalizeLink: YextField(
+            msg("fields.normalizeLink", "Normalize Link"),
+            {
+              type: "radio",
+              options: [
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
+              ],
+            }
+          ),
+          openInNewTab: YextField(
+            msg("fields.openInNewTab", "Open in new tab"),
+            {
+              type: "radio",
+              options: [
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
+              ],
+            }
+          ),
         },
         defaultItemProps: defaultLink,
         getItemSummary: (item: any, index?: number) => {
@@ -151,6 +198,7 @@ const footerLinksSlotFields: Fields<FooterLinksSlotProps> = {
     type: "radio",
     options: [
       { label: "Left", value: "left" },
+      { label: "Center", value: "center" },
       { label: "Right", value: "right" },
     ],
     visible: false,
@@ -161,6 +209,12 @@ export const FooterLinksSlot: ComponentConfig<{ props: FooterLinksSlotProps }> =
   {
     label: msg("components.footerLinksSlot", "Links"),
     fields: footerLinksSlotFields,
+    resolveFields: (data) =>
+      setDeep(
+        footerLinksSlotFields,
+        "data.objectFields.links.arrayFields.normalizeLink.visible",
+        shouldShowNormalizeLinkField(data.props.data.links)
+      ),
     defaultProps: defaultFooterLinkProps,
     render: (props) => <FooterLinksSlotInternal {...props} />,
   };

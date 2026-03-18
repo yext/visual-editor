@@ -6,25 +6,75 @@ import {
   delay,
   transformTests,
 } from "../../testing/componentTests.setup.ts";
-import {
-  act,
-  render as reactRender,
-  screen,
-  waitFor,
-} from "@testing-library/react";
-import {
-  migrate,
-  migrationRegistry,
-  ReviewsSection,
-  VisualEditorProvider,
-  SlotsCategoryComponents,
-} from "@yext/visual-editor";
-import { Render, Config, resolveAllData } from "@measured/puck";
+import { act, render as reactRender } from "@testing-library/react";
+import { migrate } from "../../../utils/migrate.ts";
+import { migrationRegistry } from "../../migrations/migrationRegistry.ts";
+import { ReviewsSection } from "./ReviewsSection.tsx";
+import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
+import { SlotsCategoryComponents } from "../../categories/SlotsCategory.tsx";
+import { injectTranslations } from "../../../utils/i18n/components.ts";
+import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 
 const interactionsDelay = 750;
 
-// Based on reviews data from https://www.yext.com/s/70452/entity/edit3?entityIds=25897322
+const testDocument = {
+  // Based on reviews data from https://www.yext.com/s/70452/entity/edit3?entityIds=25897322
+  ref_reviewsAgg: [
+    {
+      averageRating: 3.7142856,
+      publisher: "FIRSTPARTY",
+      reviewCount: 7,
+      topReviews: [
+        {
+          authorName: "Kyle B",
+          content: "Decent Castle",
+          rating: 3,
+          reviewDate: "2025-06-30T01:17:29.641Z",
+          reviewId: 1534364531,
+        },
+        {
+          authorName: "Kyle A",
+          content: "Pretty good castle",
+          rating: 4,
+          reviewDate: "2025-06-30T01:17:12.023Z",
+          reviewId: 1534364511,
+        },
+        {
+          authorName: "Kyle C",
+          content: "This was an awesome castle!",
+          rating: 5,
+          reviewDate: "2025-06-30T01:18:12.715Z",
+          reviewId: 1534364564,
+        },
+        {
+          authorName: "Kyle G",
+          content:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+          rating: 4,
+          reviewDate: "2025-06-27T03:38:17.297Z",
+          reviewId: 1533706271,
+        },
+        {
+          authorName: "Bamboo Man",
+          content: "Pretty good bamboo castle",
+          rating: 4,
+          reviewDate: "2025-06-22T04:01:49.024Z",
+          reviewId: 1532737374,
+        },
+        {
+          authorName: "Kyle E",
+          content: "Fine castle",
+          rating: 4,
+          reviewDate: "2025-01-01T01:17:12.023Z",
+          reviewId: 1534364512,
+        },
+      ],
+    },
+  ],
+  locale: "en",
+};
+
 const tests: ComponentTest[] = [
   {
     name: "default props with empty document",
@@ -36,23 +86,7 @@ const tests: ComponentTest[] = [
   },
   {
     name: "default props with document data",
-    document: {
-      businessId: 70452,
-      _env: {
-        YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY: import.meta.env
-          .COMPONENT_TESTS_REVIEWS_APP_API_KEY,
-      },
-      uid: 25897322,
-      ref_reviewsAgg: [
-        {
-          averageRating: 3.7142856,
-          publisher: "FIRSTPARTY",
-          reviewCount: 7,
-        },
-      ],
-      _yext: { contentDeliveryAPIDomain: "https://cdn.yextapis.com" },
-      locale: "en",
-    },
+    document: testDocument,
     props: {
       ...ReviewsSection.defaultProps,
     },
@@ -66,75 +100,8 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "version 10 props with empty document",
-    document: {},
-    props: {
-      backgroundColor: {
-        bgColor: "bg-palette-primary-dark",
-        textColor: "text-white",
-      },
-      analytics: {
-        scope: "reviewsSection",
-      },
-    },
-    version: 10,
-  },
-  {
-    name: "version 10 props with document data",
-    document: {
-      businessId: 70452,
-      _env: {
-        YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY: import.meta.env
-          .COMPONENT_TESTS_REVIEWS_APP_API_KEY,
-      },
-      uid: 25897322,
-      ref_reviewsAgg: [
-        {
-          averageRating: 3.7142856,
-          publisher: "FIRSTPARTY",
-          reviewCount: 7,
-        },
-      ],
-      _yext: { contentDeliveryAPIDomain: "https://cdn.yextapis.com" },
-      locale: "en",
-    },
-    props: {
-      backgroundColor: {
-        bgColor: "bg-palette-primary-dark",
-        textColor: "text-white",
-      },
-      analytics: {
-        scope: "reviewsSection",
-      },
-    },
-    version: 10,
-    interactions: async (page) => {
-      const expandButton = page.getByText("Show More");
-      await act(async () => {
-        await expandButton.click();
-      });
-      await delay(interactionsDelay);
-    },
-  },
-  {
     name: "version 10 props with French locale",
-    document: {
-      businessId: 70452,
-      _env: {
-        YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY: import.meta.env
-          .COMPONENT_TESTS_REVIEWS_APP_API_KEY,
-      },
-      uid: 25897322,
-      ref_reviewsAgg: [
-        {
-          averageRating: 3.7142856,
-          publisher: "FIRSTPARTY",
-          reviewCount: 7,
-        },
-      ],
-      _yext: { contentDeliveryAPIDomain: "https://cdn.yextapis.com" },
-      locale: "fr",
-    },
+    document: { ...testDocument, locale: "fr" },
     props: {
       backgroundColor: {
         bgColor: "bg-palette-primary-dark",
@@ -216,23 +183,7 @@ const tests: ComponentTest[] = [
   },
   {
     name: "version 39 props with document data",
-    document: {
-      businessId: 70452,
-      _env: {
-        YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY: import.meta.env
-          .COMPONENT_TESTS_REVIEWS_APP_API_KEY,
-      },
-      uid: 25897322,
-      ref_reviewsAgg: [
-        {
-          averageRating: 3.7142856,
-          publisher: "FIRSTPARTY",
-          reviewCount: 7,
-        },
-      ],
-      _yext: { contentDeliveryAPIDomain: "https://cdn.yextapis.com" },
-      locale: "en",
-    },
+    document: testDocument,
     props: {
       styles: {
         backgroundColor: {
@@ -342,18 +293,15 @@ describe("ReviewsSection", async () => {
         streamDocument: document,
       });
 
+      const translations = await injectTranslations(document);
+
       const { container } = reactRender(
-        <VisualEditorProvider templateProps={{ document }}>
+        <VisualEditorProvider templateProps={{ document, translations }}>
           <Render config={puckConfig} data={data} />
         </VisualEditorProvider>
       );
 
       await page.viewport(width, height);
-      if (!name.includes("empty document")) {
-        await waitFor(() => {
-          screen.getAllByText("Kyle D");
-        });
-      }
 
       await expect(
         `ReviewsSection/[${viewportName}] ${name}`

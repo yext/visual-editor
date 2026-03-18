@@ -1,21 +1,23 @@
 import * as React from "react";
-import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import {
-  YextField,
-  msg,
-  pt,
-  useDocument,
-  resolveComponentData,
-  TranslatableString,
-  TranslatableCTA,
-  YextEntityField,
-  CTA,
-  Body,
-  i18nComponentsInstance,
-  useBackground,
-} from "@yext/visual-editor";
+  ComponentConfig,
+  Fields,
+  PuckComponent,
+  setDeep,
+} from "@puckeditor/core";
+import { YextField } from "../../editor/YextField.tsx";
+import { msg, pt } from "../../utils/i18n/platform.ts";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { TranslatableString, TranslatableCTA } from "../../types/types.ts";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { CTA } from "../atoms/cta.tsx";
+import { Body } from "../atoms/body.tsx";
+import { i18nComponentsInstance } from "../../utils/i18n/components.ts";
+import { useBackground } from "../../hooks/useBackground.tsx";
 import { useTranslation } from "react-i18next";
 import { defaultLink, defaultLinks } from "./ExpandedFooter.tsx";
+import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
 
 export interface FooterExpandedLinkSectionSlotProps {
   data: {
@@ -61,12 +63,18 @@ const FooterExpandedLinkSectionSlotInternal: PuckComponent<
 
               return (
                 <CTA
+                  openInNewTab={linkData.openInNewTab}
                   key={index}
                   variant="headerFooterMainLink"
                   eventName={`cta.expandedFooter.${index}-Link-${index + 1}`}
                   label={linkLabel}
                   linkType={linkData.linkType}
                   link={link}
+                  normalizeLink={
+                    isNonNormalizableLinkType(linkData.linkType)
+                      ? false
+                      : (linkData.normalizeLink ?? true)
+                  }
                   className="justify-center md:justify-start block break-words whitespace-normal"
                 />
               );
@@ -82,12 +90,19 @@ const defaultFooterExpandedLinkSectionProps: FooterExpandedLinkSectionSlotProps 
     data: {
       label: {
         field: "",
-        constantValue: { en: "Footer Label", hasLocalizedValue: "true" },
+        constantValue: { defaultValue: "Footer Label" },
         constantValueEnabled: true,
       },
       links: defaultLinks,
     },
   };
+
+const shouldShowNormalizeLinkField = (links?: TranslatableCTA[]) => {
+  return (
+    !links?.length ||
+    links.some((link) => !isNonNormalizableLinkType(link?.linkType))
+  );
+};
 
 const footerExpandedLinkSectionSlotFields: Fields<FooterExpandedLinkSectionSlotProps> =
   {
@@ -105,8 +120,8 @@ const footerExpandedLinkSectionSlotFields: Fields<FooterExpandedLinkSectionSlotP
               type: "radio",
               options: [
                 { label: msg("fields.options.url", "URL"), value: "URL" },
-                { label: msg("fields.options.phone", "Phone"), value: "Phone" },
-                { label: msg("fields.options.email", "Email"), value: "Email" },
+                { label: msg("fields.options.phone", "Phone"), value: "PHONE" },
+                { label: msg("fields.options.email", "Email"), value: "EMAIL" },
               ],
             }),
             label: YextField(msg("fields.label", "Label"), {
@@ -116,6 +131,26 @@ const footerExpandedLinkSectionSlotFields: Fields<FooterExpandedLinkSectionSlotP
             link: YextField(msg("fields.link", "Link"), {
               type: "text",
             }),
+            normalizeLink: YextField(
+              msg("fields.normalizeLink", "Normalize Link"),
+              {
+                type: "radio",
+                options: [
+                  { label: msg("fields.options.yes", "Yes"), value: true },
+                  { label: msg("fields.options.no", "No"), value: false },
+                ],
+              }
+            ),
+            openInNewTab: YextField(
+              msg("fields.openInNewTab", "Open in new tab"),
+              {
+                type: "radio",
+                options: [
+                  { label: msg("fields.options.yes", "Yes"), value: true },
+                  { label: msg("fields.options.no", "No"), value: false },
+                ],
+              }
+            ),
           },
           defaultItemProps: defaultLink,
           getItemSummary: (item: any, index?: number) => {
@@ -143,6 +178,12 @@ export const FooterExpandedLinkSectionSlot: ComponentConfig<{
     "Expanded Link Section"
   ),
   fields: footerExpandedLinkSectionSlotFields,
+  resolveFields: (data) =>
+    setDeep(
+      footerExpandedLinkSectionSlotFields,
+      "data.objectFields.links.arrayFields.normalizeLink.visible",
+      shouldShowNormalizeLinkField(data.props.data.links)
+    ),
   defaultProps: defaultFooterExpandedLinkSectionProps,
   render: (props) => <FooterExpandedLinkSectionSlotInternal {...props} />,
 };

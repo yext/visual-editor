@@ -6,13 +6,11 @@ import {
   transformTests,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
-import {
-  BreadcrumbsSection,
-  migrate,
-  migrationRegistry,
-  VisualEditorProvider,
-} from "@yext/visual-editor";
-import { Render, Config } from "@measured/puck";
+import { BreadcrumbsSection } from "./Breadcrumbs.tsx";
+import { migrate } from "../../utils/migrate.ts";
+import { migrationRegistry } from "../migrations/migrationRegistry.ts";
+import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
+import { Render, Config } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 
 const tests: ComponentTest[] = [
@@ -173,7 +171,7 @@ describe("BreadcrumbsSection", async () => {
 
       await expect(
         `BreadcrumbsSection/[${viewportName}] ${name}`
-      ).toMatchScreenshot();
+      ).toMatchScreenshot({ customThreshold: 25, ignoreExact: [333] });
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 

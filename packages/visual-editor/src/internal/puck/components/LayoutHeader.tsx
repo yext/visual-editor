@@ -1,9 +1,20 @@
 import React from "react";
-import { createUsePuck, Data, useGetPuck, type History } from "@measured/puck";
+import {
+  createUsePuck,
+  Data,
+  useGetPuck,
+  type History,
+} from "@puckeditor/core";
 import { RotateCcw, RotateCw } from "lucide-react";
 import { useEffect } from "react";
 import { Separator } from "@radix-ui/react-separator";
 import { Button } from "../ui/button.tsx";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/Tooltip.tsx";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { EntityFieldsToggle } from "../ui/EntityFieldsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
@@ -13,14 +24,24 @@ import "../ui/puck.css";
 import "../../../editor/index.css";
 import { migrate } from "../../../utils/migrate.ts";
 import { migrationRegistry } from "../../../components/migrations/migrationRegistry.ts";
-import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
+import {
+  i18nComponentsInstance,
+  loadComponentTranslations,
+} from "../../../utils/i18n/components.ts";
 import {
   i18nPlatformInstance,
   usePlatformTranslation,
   pt,
+  loadPlatformTranslations,
 } from "../../../utils/i18n/platform.ts";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { DevLogger } from "../../../utils/devLogger.ts";
+import {
+  type ErrorDetail,
+  type ErrorSource,
+} from "../../../contexts/ErrorContext.tsx";
+import { getPublishErrorMessage } from "../../../utils/publishErrors.ts";
+import { getPublishTooltipMessageFromHeadDeployStatus } from "../../utils/getPublishTooltipMessageFromHeadDeployStatus.ts";
 
 const usePuck = createUsePuck();
 const devLogger = new DevLogger();
@@ -32,6 +53,9 @@ type LayoutHeaderProps = {
   onPublishLayout: (data: Data) => Promise<void>;
   onSendLayoutForApproval: (data: Data, comment: string) => void;
   localDev: boolean;
+  hasErrors: boolean;
+  errorSources: ErrorSource[];
+  errorDetails: Partial<Record<ErrorSource, ErrorDetail>>;
 };
 
 export const LayoutHeader = (props: LayoutHeaderProps) => {
@@ -42,6 +66,9 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
     onPublishLayout,
     onSendLayoutForApproval,
     localDev,
+    hasErrors,
+    errorSources,
+    errorDetails,
   } = props;
   const streamDocument = useDocument();
 
@@ -97,6 +124,16 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
       ]);
     }
   };
+
+  const publishDisabled =
+    histories.length === 1 ||
+    hasErrors ||
+    templateMetadata.headDeployStatus !== "ACTIVE";
+  const publishTooltipMessage =
+    (hasErrors ?? getPublishErrorMessage(errorSources, errorDetails)) ||
+    getPublishTooltipMessageFromHeadDeployStatus(
+      templateMetadata.headDeployStatus
+    );
 
   return (
     <>
@@ -233,13 +270,34 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
             }}
           />
           {!templateMetadata.isDevMode && (
-            <Button
-              variant="secondary"
-              disabled={histories.length === 1}
-              onClick={onButtonClick}
-            >
-              {buttonText}
-            </Button>
+            <TooltipProvider delayDuration={0}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span
+                    tabIndex={publishDisabled ? 0 : -1}
+                    className={publishDisabled ? "ve-cursor-not-allowed" : ""}
+                    role={publishDisabled ? "button" : undefined}
+                    aria-disabled={publishDisabled || undefined}
+                  >
+                    <Button
+                      variant="secondary"
+                      disabled={publishDisabled}
+                      onClick={onButtonClick}
+                      className={
+                        publishDisabled ? "ve-pointer-events-none" : ""
+                      }
+                    >
+                      {buttonText}
+                    </Button>
+                  </span>
+                </TooltipTrigger>
+                {publishTooltipMessage && (
+                  <TooltipContent className="ve-max-w-[320px] ve-whitespace-pre-line ve-text-left">
+                    <p>{publishTooltipMessage}</p>
+                  </TooltipContent>
+                )}
+              </Tooltip>
+            </TooltipProvider>
           )}
         </div>
       </header>
@@ -288,9 +346,10 @@ export const LocalDevOverrideButtons = () => {
         Set Layout Data
       </Button>
       <Button
-        onClick={() => {
-          const locale = prompt("Enter components locale:");
-          i18nComponentsInstance.changeLanguage(locale ?? "en");
+        onClick={async () => {
+          const locale = prompt("Enter components locale:") || "en";
+          await loadComponentTranslations(locale);
+          i18nComponentsInstance.changeLanguage(locale);
         }}
         variant="outline"
         className="ve-ml-4"
@@ -298,9 +357,10 @@ export const LocalDevOverrideButtons = () => {
         Set Components Locale
       </Button>
       <Button
-        onClick={() => {
-          const locale = prompt("Enter platform locale:");
-          i18nPlatformInstance.changeLanguage(locale ?? "en");
+        onClick={async () => {
+          const locale = prompt("Enter platform locale:") || "en";
+          await loadPlatformTranslations(locale);
+          i18nPlatformInstance.changeLanguage(locale);
         }}
         variant="outline"
         className="ve-ml-4"
@@ -338,10 +398,13 @@ const translatePuckSidebars = () => {
   );
   if (componentCategoryTitles?.length) {
     componentCategoryTitles.forEach((title) => {
-      if (title.innerText === "PAGE SECTIONS") {
-        title.innerText = pt("categories.pageSections", "PAGE SECTIONS");
+      if (title.innerText === "STANDARD SECTIONS") {
+        title.innerText = pt(
+          "categories.standardSections",
+          "Standard Sections"
+        ).toUpperCase();
       } else if (title.innerText === "OTHER") {
-        title.innerText = pt("categories.other", "OTHER");
+        title.innerText = pt("categories.other", "Other").toUpperCase();
       }
     });
   }

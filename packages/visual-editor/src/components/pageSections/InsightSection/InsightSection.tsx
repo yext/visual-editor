@@ -1,17 +1,17 @@
-import * as React from "react";
 import {
   BackgroundStyle,
-  YextField,
-  PageSection,
   backgroundColors,
-  VisibilityWrapper,
-  msg,
-  getAnalyticsScopeHash,
-  HeadingTextProps,
-} from "@yext/visual-editor";
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
+} from "../../../utils/themeConfigOptions.ts";
+import { YextField } from "../../../editor/YextField.tsx";
+import { PageSection } from "../../atoms/pageSection.tsx";
+import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
+import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
+import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { defaultInsightCardSlotData } from "./InsightCard.tsx";
 import { InsightCardsWrapperProps } from "./InsightCardsWrapper.tsx";
 
@@ -26,6 +26,12 @@ export interface InsightSectionProps {
      * @defaultValue Background Color 2
      */
     backgroundColor?: BackgroundStyle;
+
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
+    showSectionHeading: boolean;
   };
 
   slots: {
@@ -54,6 +60,13 @@ const insightSectionFields: Fields<InsightSectionProps> = {
         {
           type: "select",
           options: "BACKGROUND_COLOR",
+        }
+      ),
+      showSectionHeading: YextField(
+        msg("fields.showSectionHeading", "Show Section Heading"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
         }
       ),
     },
@@ -95,7 +108,9 @@ const InsightSectionComponent: PuckComponent<InsightSectionProps> = (props) => {
       background={styles?.backgroundColor}
       className="flex flex-col gap-8"
     >
-      <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
+      {styles.showSectionHeading && (
+        <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
+      )}
       <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
     </PageSection>
   );
@@ -111,6 +126,7 @@ export const InsightSection: ComponentConfig<{ props: InsightSectionProps }> = {
   defaultProps: {
     styles: {
       backgroundColor: backgroundColors.background2.value,
+      showSectionHeading: true,
     },
     slots: {
       SectionHeadingSlot: [
@@ -120,10 +136,7 @@ export const InsightSection: ComponentConfig<{ props: InsightSectionProps }> = {
             data: {
               text: {
                 field: "",
-                constantValue: {
-                  en: "Insights",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: { defaultValue: "Insights" },
                 constantValueEnabled: true,
               },
             },
@@ -142,6 +155,13 @@ export const InsightSection: ComponentConfig<{ props: InsightSectionProps }> = {
               field: "",
               constantValueEnabled: true,
               constantValue: [{}, {}, {}], // leave ids blank to auto-generate
+            },
+            styles: {
+              showImage: true,
+              showCategory: true,
+              showPublishTime: true,
+              showDescription: true,
+              showCTA: true,
             },
             slots: {
               CardSlot: [
@@ -164,16 +184,21 @@ export const InsightSection: ComponentConfig<{ props: InsightSectionProps }> = {
   },
   render: (props) => {
     return (
-      <AnalyticsScopeProvider
-        name={`${props.analytics?.scope ?? "insightsSection"}${getAnalyticsScopeHash(props.id)}`}
+      <ComponentErrorBoundary
+        isEditing={props.puck.isEditing}
+        resetKeys={[props]}
       >
-        <VisibilityWrapper
-          liveVisibility={props.liveVisibility}
-          isEditing={props.puck.isEditing}
+        <AnalyticsScopeProvider
+          name={`${props.analytics?.scope ?? "insightsSection"}${getAnalyticsScopeHash(props.id)}`}
         >
-          <InsightSectionComponent {...props} />
-        </VisibilityWrapper>
-      </AnalyticsScopeProvider>
+          <VisibilityWrapper
+            liveVisibility={props.liveVisibility}
+            isEditing={props.puck.isEditing}
+          >
+            <InsightSectionComponent {...props} />
+          </VisibilityWrapper>
+        </AnalyticsScopeProvider>
+      </ComponentErrorBoundary>
     );
   },
 };

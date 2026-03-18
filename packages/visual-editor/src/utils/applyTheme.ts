@@ -13,29 +13,15 @@ import {
   type FontRegistry,
   type FontLinkData,
   generateCustomFontLinkData,
-} from "./visualEditorFonts.ts";
+} from "./fonts/visualEditorFonts.ts";
+import {
+  buildFontPreloadTags,
+  getCustomFontPreloads,
+} from "../internal/utils/customFontPreloads.ts";
 import { ThemeConfig } from "./themeResolver.ts";
 import { getContrastingColor } from "./colors.ts";
-
-export type StreamDocument = {
-  [key: string]: any;
-  locale?: string;
-  meta?: {
-    locale?: string;
-    entityType?: {
-      id?: string;
-    };
-  };
-  __?: {
-    layout?: string;
-    theme?: string;
-    codeTemplate?: string;
-    name?: string;
-    visualEditorConfig?: string;
-    isPrimaryLocale?: boolean;
-    entityPageSetUrlTemplates?: string;
-  };
-};
+import fontFallbackTransformations from "./fonts/fontFallbackTransformations.json" with { type: "json" };
+import { StreamDocument } from "./types/StreamDocument.ts";
 
 export const THEME_STYLE_TAG_ID = "visual-editor-theme";
 export const PUCK_PREVIEW_IFRAME_ID = "preview-frame";
@@ -65,6 +51,7 @@ export const applyTheme = (
 
   // Load only fonts that are actually used in the theme
   let fontLinkData: FontLinkData[];
+  const fallbackFontFaceDefinitions: string[] = [];
   if (!overrides) {
     // No theme overrides, use only Open Sans (the default font)
     fontLinkData = generateGoogleFontLinkData({
@@ -92,12 +79,29 @@ export const applyTheme = (
       ...generateCustomFontLinkData(inUseCustomFonts, relativePrefixToRoot),
       ...fontLinkData,
     ];
+
+    // For each in-use Google Font, look up the corresponding fallback fonts and add to the head
+    Object.keys(inUseGoogleFonts).forEach((fontFamily) => {
+      if (fontFamily in fontFallbackTransformations) {
+        fallbackFontFaceDefinitions.push(
+          (fontFallbackTransformations as Record<string, string[]>)[
+            fontFamily
+          ].join("\n")
+        );
+      }
+    });
   }
 
   const fontLinkTags = fontLinkDataToHTML(fontLinkData);
 
   if (Object.keys(themeConfig).length > 0) {
-    return `${base ?? ""}${fontLinkTags}<style id="${THEME_STYLE_TAG_ID}" type="text/css">${internalApplyTheme(overrides ?? {}, themeConfig)}</style>`;
+    const customFontPreloads = getCustomFontPreloads(overrides);
+    const preloadTags = buildFontPreloadTags(
+      customFontPreloads,
+      relativePrefixToRoot
+    );
+
+    return `${base ?? ""}${preloadTags}${fontLinkTags}<style type="text/css">${fallbackFontFaceDefinitions.join("\n")}</style><style id="${THEME_STYLE_TAG_ID}" type="text/css">${internalApplyTheme(overrides ?? {}, themeConfig)}</style>`;
   }
   return base ?? "";
 };
@@ -127,6 +131,7 @@ const internalApplyTheme = (
   return (
     `.components{` +
     Object.entries(themeValuesToApply)
+      .filter(([key]) => key.startsWith("--"))
       .map(([key, value]) => `${key}:${value} !important`)
       .join(";") +
     "}"

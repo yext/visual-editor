@@ -5,9 +5,9 @@ import {
   DefaultRootProps,
   migrate as migratePuck,
   walkTree,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import { migrationRegistry as commonMigrationRegistry } from "../components/migrations/migrationRegistry.ts";
-import { StreamDocument } from "./applyTheme.ts";
+import { StreamDocument } from "./types/StreamDocument.ts";
 
 export type MigrationAction =
   | {
@@ -64,7 +64,10 @@ export const migrate = (
         if (!data.root.props) {
           data.root.props = {};
         }
-        data.root.props = migrationAction.propTransformation(data.root.props);
+        data.root.props = migrationAction.propTransformation(
+          data.root.props,
+          streamDocument
+        );
         return;
       }
 

@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as TogglePrimitive from "@radix-ui/react-toggle";
-import { themeManagerCn } from "@yext/visual-editor";
+import { themeManagerCn } from "../../utils/cn.ts";
 
 function Toggle({
   className,
@@ -10,7 +10,7 @@ function Toggle({
     <TogglePrimitive.Root
       data-slot="toggle"
       style={{
-        // @ts-expect-error ts(2322) the css variable here resolves to a valid enum value
+        // @ts-ignore: the css variable here resolves to a valid enum value
         textTransform: "var(--textTransform-button-textTransform)",
       }}
       className={themeManagerCn(

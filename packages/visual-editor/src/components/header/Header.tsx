@@ -6,20 +6,17 @@ import {
   ComplexImageType,
   useAnalytics,
 } from "@yext/pages-components";
-import { ComponentConfig, Fields } from "@measured/puck";
-import {
-  CTA,
-  EntityField,
-  useDocument,
-  MaybeLink,
-  PageSection,
-  backgroundColors,
-  Background,
-  YextField,
-  Image,
-  msg,
-  pt,
-} from "@yext/visual-editor";
+import { ComponentConfig, Fields } from "@puckeditor/core";
+import { CTA } from "../atoms/cta.tsx";
+import { EntityField } from "../../editor/EntityField.tsx";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { MaybeLink } from "../atoms/maybeLink.tsx";
+import { PageSection } from "../atoms/pageSection.tsx";
+import { backgroundColors } from "../../utils/themeConfigOptions.ts";
+import { Background } from "../atoms/background.tsx";
+import { YextField } from "../../editor/YextField.tsx";
+import { Image } from "../atoms/image.tsx";
+import { msg, pt } from "../../utils/i18n/platform.ts";
 import { FaTimes, FaBars } from "react-icons/fa";
 import {
   LanguageDropdown,
@@ -249,6 +246,7 @@ const HeaderLinks = (props: { links: CTAType[] }) => {
                 label={item.label}
                 link={item.link}
                 linkType={item.linkType}
+                normalizeLink={false}
                 variant="link"
                 eventName={`link${idx}`}
                 alwaysHideCaret={true}
@@ -287,6 +285,7 @@ const HeaderMobileMenu = (props: HeaderMobileMenuProps) => {
                   link={item.link}
                   label={item.label}
                   linkType={item.linkType}
+                  normalizeLink={false}
                   variant="link"
                   eventName={`mobilelink${idx}`}
                 />

@@ -1,13 +1,11 @@
 import * as React from "react";
-import { ComponentConfig, PuckComponent } from "@measured/puck";
-import {
-  YextField,
-  msg,
-  useDocument,
-  resolveComponentData,
-  TranslatableString,
-  Body,
-} from "@yext/visual-editor";
+import { ComponentConfig, PuckComponent } from "@puckeditor/core";
+import { YextField } from "../../editor/YextField.tsx";
+import { msg } from "../../utils/i18n/platform.ts";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { TranslatableString } from "../../types/types.ts";
+import { Body } from "../atoms/body.tsx";
 import { useTranslation } from "react-i18next";
 
 export interface CopyrightMessageSlotProps {
@@ -15,7 +13,7 @@ export interface CopyrightMessageSlotProps {
     text: TranslatableString;
   };
   /** @internal */
-  alignment?: "left" | "right";
+  alignment?: "left" | "center" | "right";
 }
 
 const CopyrightMessageSlotInternal: PuckComponent<CopyrightMessageSlotProps> = (
@@ -31,15 +29,22 @@ const CopyrightMessageSlotInternal: PuckComponent<CopyrightMessageSlotProps> = (
     streamDocument
   );
 
+  let alignmentStyle = ["text-center"];
+  switch (alignment) {
+    case "left": {
+      alignmentStyle.push("md:text-left");
+      break;
+    }
+    case "right": {
+      alignmentStyle.push("md:text-right");
+      break;
+    }
+    default:
+      break;
+  }
+
   return resolvedText ? (
-    <Body
-      variant="xs"
-      className={
-        alignment === "right"
-          ? "text-center md:text-right"
-          : "text-center md:text-left"
-      }
-    >
+    <Body variant="xs" className={alignmentStyle.join(" ")}>
       {resolvedText}
     </Body>
   ) : puck.isEditing ? (
@@ -51,10 +56,7 @@ const CopyrightMessageSlotInternal: PuckComponent<CopyrightMessageSlotProps> = (
 
 export const defaultCopyrightMessageSlotProps: CopyrightMessageSlotProps = {
   data: {
-    text: {
-      en: "",
-      hasLocalizedValue: "true",
-    },
+    text: { defaultValue: "" },
   },
 };
 

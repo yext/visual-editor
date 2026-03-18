@@ -1,14 +1,30 @@
-import { Fields } from "@measured/puck";
-import { YextField, msg } from "@yext/visual-editor";
+import { Fields } from "@puckeditor/core";
+import { YextField } from "../../../editor/YextField.tsx";
+import { msg } from "../../../utils/i18n/platform.ts";
 
 /** Props for displaying an image */
 export interface ImageStylingProps {
   /** The aspect ratio of the image */
   aspectRatio: number;
   width?: number;
+  imageConstrain?: "fill" | "fixed";
 }
 
 export const ImageStylingFields: Fields<ImageStylingProps> = {
+  imageConstrain: YextField(msg("fields.imageConstrain", "Image Constrain"), {
+    type: "radio",
+    options: [
+      {
+        label: msg("fields.options.fillContainer", "Fill Container"),
+        value: "fill",
+      },
+      {
+        label: msg("fields.options.fixedWidth", "Fixed Width"),
+        value: "fixed",
+      },
+    ],
+    visible: false,
+  }),
   width: YextField(msg("fields.options.width", "Width"), {
     type: "number",
     min: 0,

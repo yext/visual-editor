@@ -6,29 +6,30 @@ import {
   Slot,
   WithId,
   setDeep,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import {
   BackgroundStyle,
-  YextField,
-  Background,
   backgroundColors,
-  EventStruct,
-  msg,
-  ImageWrapperProps,
-  HeadingTextProps,
-  BodyTextProps,
-  CTAWrapperProps,
-  TimestampProps,
-  deepMerge,
-  ImgSizesByBreakpoint,
-  resolveYextEntityField,
-  i18nComponentsInstance,
-  resolveComponentData,
-} from "@yext/visual-editor";
+} from "../../../utils/themeConfigOptions.ts";
+import { YextField } from "../../../editor/YextField.tsx";
+import { Background } from "../../atoms/background.tsx";
+import { EventStruct } from "../../../types/types.ts";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { ImageWrapperProps } from "../../contentBlocks/image/Image.tsx";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
+import { BodyTextProps } from "../../contentBlocks/BodyText.tsx";
+import { CTAWrapperProps } from "../../contentBlocks/CtaWrapper.tsx";
+import { TimestampProps } from "../../contentBlocks/Timestamp.tsx";
+import { deepMerge } from "../../../utils/themeResolver.ts";
+import { ImgSizesByBreakpoint } from "../../atoms/image.tsx";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
+import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
-import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
+import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
+import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
 
 const defaultEvent = {
   image: {
@@ -36,16 +37,15 @@ const defaultEvent = {
     height: 360,
     width: 640,
   },
-  title: { en: "Event Title", hasLocalizedValue: "true" },
+  title: { defaultValue: "Event Title" },
   dateTime: "2022-12-12T14:00:00",
   description: {
-    en: getDefaultRTF(
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."
+    defaultValue: getDefaultRTF(
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
     ),
-    hasLocalizedValue: "true",
   },
   cta: {
-    label: { en: "Learn More", hasLocalizedValue: "true" },
+    label: { defaultValue: "Learn More" },
     link: "#",
     linkType: "URL",
     ctaType: "textAndLink",
@@ -84,6 +84,7 @@ export const defaultEventCardSlotData = (
                     }),
                     width: 640,
                     height: 360,
+                    alternateText: "Event Image",
                   },
                   constantValueEnabled: true,
                 },
@@ -166,6 +167,9 @@ export const defaultEventCardSlotData = (
             props: {
               ...(id && { id: `${id}-cta` }),
               data: {
+                actionType: "link",
+                normalizeLink: true,
+                buttonText: { defaultValue: "Button" },
                 entityField: {
                   field: "",
                   constantValue: defaultEvent.cta,
@@ -201,6 +205,7 @@ export type EventCardProps = {
     /** Whether to truncate the event description text */
     truncateDescription: boolean;
   };
+
   /** @internal */
   slots: {
     ImageSlot: Slot;
@@ -210,13 +215,21 @@ export type EventCardProps = {
     CTASlot: Slot;
   };
 
-  /** @internal */
+  /** @internal data from parent component */
   parentData?: {
     field: string;
     event: EventStruct;
   };
 
-  /** @internal */
+  /** @internal styles from parent component */
+  parentStyles?: {
+    showImage: boolean;
+    showDateTime: boolean;
+    showDescription: boolean;
+    showCTA: boolean;
+  };
+
+  /** @internal*/
   conditionalRender?: {
     image?: boolean;
     title: boolean;
@@ -266,7 +279,7 @@ const eventCardFields: Fields<EventCardProps> = {
 };
 
 const EventCardComponent: PuckComponent<EventCardProps> = (props) => {
-  const { styles, slots, puck, conditionalRender } = props;
+  const { styles, slots, puck, conditionalRender, parentStyles } = props;
 
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
     cardStyles: EventCardProps["styles"];
@@ -277,12 +290,18 @@ const EventCardComponent: PuckComponent<EventCardProps> = (props) => {
     props.id
   );
 
-  const showImage = Boolean(conditionalRender?.image || puck.isEditing);
+  const showImage =
+    parentStyles?.showImage &&
+    Boolean(conditionalRender?.image || puck.isEditing);
   const showTitle = Boolean(conditionalRender?.title || puck.isEditing);
-  const showDateTime = Boolean(conditionalRender?.dateTime || puck.isEditing);
+  const showDateTime =
+    parentStyles?.showDateTime &&
+    Boolean(conditionalRender?.dateTime || puck.isEditing);
   const showDescription =
-    Boolean(conditionalRender?.description) || puck.isEditing;
-  const showCTA = Boolean(conditionalRender?.cta || puck.isEditing);
+    parentStyles?.showDescription &&
+    (Boolean(conditionalRender?.description) || puck.isEditing);
+  const showCTA =
+    parentStyles?.showCTA && Boolean(conditionalRender?.cta || puck.isEditing);
 
   // sharedCardProps useEffect
   // When the context changes, dispatch an update to sync the changes to puck
@@ -322,9 +341,10 @@ const EventCardComponent: PuckComponent<EventCardProps> = (props) => {
       ];
       if (key === "DescriptionSlot") {
         newSlotData.DescriptionSlot[0].props.parentStyles = {
-          className: sharedCardProps.cardStyles.truncateDescription
-            ? "md:line-clamp-2"
-            : undefined,
+          className:
+            sharedCardProps.cardStyles.truncateDescription !== false
+              ? "md:line-clamp-2"
+              : undefined,
         };
       }
     });
@@ -436,15 +456,22 @@ export const EventCard: ComponentConfig<{ props: EventCardProps }> = {
       | WithId<CTAWrapperProps>
       | undefined;
 
+    const resolvedImage = imageSlotProps?.parentData
+      ? imageSlotProps.parentData.image
+      : imageSlotProps
+        ? resolveYextEntityField(
+            params.metadata.streamDocument,
+            imageSlotProps.data.image,
+            i18nComponentsInstance.language || "en"
+          )
+        : undefined;
+
     const showImage = Boolean(
-      imageSlotProps?.parentData
-        ? imageSlotProps.parentData.image
-        : imageSlotProps &&
-            (imageSlotProps?.data.image.field ||
-              ("url" in imageSlotProps.data.image.constantValue &&
-                imageSlotProps.data.image.constantValue.url) ||
-              ("image" in imageSlotProps.data.image.constantValue &&
-                imageSlotProps.data.image.constantValue.image.url))
+      (resolvedImage as any)?.url ||
+        (resolvedImage as any)?.image?.url ||
+        ((resolvedImage as any)?.hasLocalizedValue &&
+          (resolvedImage as any)?.[i18nComponentsInstance.language || "en"]
+            ?.url)
     );
     const showDescription = Boolean(
       descriptionSlotProps &&
@@ -521,8 +548,17 @@ export const EventCard: ComponentConfig<{ props: EventCardProps }> = {
     updatedData = setDeep(
       updatedData,
       "props.slots.DescriptionSlot[0].props.parentStyles.className",
-      data.props.styles.truncateDescription ? "md:line-clamp-2" : undefined
+      data.props.styles.truncateDescription !== false
+        ? "md:line-clamp-2"
+        : undefined
     );
+
+    updatedData = syncParentStyles(params, updatedData, [
+      "showImage",
+      "showDateTime",
+      "showDescription",
+      "showCTA",
+    ]);
 
     // Set parentData for all slots if parentData is provided
     if (data.props.parentData) {

@@ -1,15 +1,12 @@
 import React from "react";
 import { describe, it, expect, expectTypeOf, vi } from "vitest";
-import { resolveComponentData } from "./resolveComponentData";
-import {
-  TranslatableRichText,
-  TranslatableString,
-  YextEntityField,
-} from "@yext/visual-editor";
+import { resolveComponentData } from "./resolveComponentData.tsx";
+import { TranslatableRichText, TranslatableString } from "../types/types.ts";
+import { YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
 
 // Mock the MaybeRTF component to inspect its props
-vi.mock("@yext/visual-editor", () => ({
-  ...vi.importActual("@yext/visual-editor"),
+vi.mock("../components/atoms/maybeRTF", () => ({
+  ...vi.importActual("../components/atoms/maybeRTF"),
   MaybeRTF: (props: any) => <div data-testid="MaybeRTF" {...props} />,
 }));
 
@@ -270,12 +267,40 @@ describe("resolveComponentData", () => {
       expect(resolveComponentData(data, "fr")).toBe("");
     });
 
+    it("falls back to defaultValue when locale is missing from a TranslatableString", () => {
+      const data: TranslatableString = { defaultValue: "Hi" };
+      expect(resolveComponentData(data, "fr", mockDocument)).toBe("Hi");
+    });
+
     it("returns an empty string if the locale is missing from a TranslatableRichText", () => {
       const data: TranslatableRichText = {
         hasLocalizedValue: "true",
         en: { html: "Hi" },
       };
       expect(resolveComponentData(data, "fr", mockDocument)).toBe("");
+    });
+
+    it("falls back to defaultValue when locale is missing from a TranslatableRichText", () => {
+      const data: TranslatableRichText = {
+        defaultValue: { html: "<p>Hi</p>" },
+      };
+      const result = resolveComponentData(data, "fr", mockDocument);
+      expect(React.isValidElement(result)).toBe(true);
+    });
+
+    it("resolves object defaultValue containers to their payload", () => {
+      const data = {
+        defaultValue: {
+          url: "https://example.com/image.jpg",
+          width: 100,
+          height: 100,
+        },
+      };
+      expect(resolveComponentData(data, "fr", mockDocument)).toEqual({
+        url: "https://example.com/image.jpg",
+        width: 100,
+        height: 100,
+      });
     });
 
     it("handles a null value from the document gracefully", () => {
@@ -328,5 +353,45 @@ describe("resolveComponentData", () => {
         expect(element.props.className).toContain(customClass);
       }
     });
+  });
+});
+
+describe("resolveComponentData plain text output", () => {
+  it("resolves rich text values into plain text", () => {
+    const field: YextEntityField<TranslatableRichText> = {
+      constantValueEnabled: true,
+      field: "",
+      constantValue: {
+        hasLocalizedValue: "true",
+        en: {
+          html: "<p>Location: <strong>[[c_location]]</strong></p>",
+        },
+      },
+    };
+
+    expect(
+      resolveComponentData(field, "en", mockDocument, { output: "plainText" })
+    ).toBe("Location: New York");
+  });
+
+  it("supports direct rich text values", () => {
+    const value: TranslatableRichText = {
+      hasLocalizedValue: "true",
+      en: {
+        html: "<p>Plain <em>text</em> value</p>",
+      },
+    };
+
+    expect(
+      resolveComponentData(value, "en", mockDocument, { output: "plainText" })
+    ).toBe("Plain text value");
+  });
+
+  it("returns an empty string for missing values", () => {
+    expect(
+      resolveComponentData(undefined as any, "en", mockDocument, {
+        output: "plainText",
+      })
+    ).toBe("");
   });
 });

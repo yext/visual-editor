@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
-import { applyTheme, StreamDocument } from "./applyTheme.ts";
+import { applyTheme } from "./applyTheme.ts";
 import { ThemeConfig } from "./themeResolver.ts";
+import { StreamDocument } from "./types/StreamDocument.ts";
 
 describe("buildCssOverridesStyle", () => {
   it("should generate correct CSS with one override in c_theme", () => {
@@ -86,8 +87,11 @@ describe("buildCssOverridesStyle", () => {
       siteId: 123,
       __: {
         theme: JSON.stringify({
-          "--fontFamily-button-fontFamily": "'Adamina', serif",
-          "--fontFamily-h2-fontFamily": "'Yext Custom', serif",
+          "--fontFamily-button-fontFamily":
+            "'Adamina', 'Adamina Fallback', serif",
+          "--fontFamily-h2-fontFamily":
+            "'Yext Custom', 'Yext Custom Fallback', serif",
+          __customFontPreloads: ["/y-fonts/yextcustom-bold.woff2"],
         }),
       },
     };
@@ -95,20 +99,42 @@ describe("buildCssOverridesStyle", () => {
     const result = applyTheme(streamDocument, "./", themeConfig);
 
     expect(result).toBe(
-      '<link href="./y-fonts/yextcustom.css" rel="stylesheet">\n' +
+      '<link rel="preload" href="/y-fonts/yextcustom-bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">\n' +
+        '<link href="./y-fonts/yextcustom.css" rel="stylesheet">\n' +
         '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
         '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">\n' +
         '<link href="https://fonts.googleapis.com/css2?family=Adamina:wght@400&display=swap" rel="stylesheet">' +
+        '<style type="text/css">@font-face {\n  font-family: "Adamina Fallback";\n  src: local(\'Georgia\');\n  ' +
+        "ascent-override: 100.1884%;\n  descent-override: 27.1032%;\n  size-adjust: 106.9985%;\n  font-weight: 400;\n  font-style: regular;\n}</style>" +
         '<style id="visual-editor-theme" type="text/css">.components{' +
         "--colors-palette-text:black !important;" +
         "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
         "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
         "--borderRadius-border-lg:8px !important;" +
         "--borderRadius-border-sm:4px !important;" +
-        "--fontFamily-button-fontFamily:'Adamina', serif !important;" +
-        "--fontFamily-h2-fontFamily:'Yext Custom', serif !important" +
+        "--fontFamily-button-fontFamily:'Adamina', 'Adamina Fallback', serif !important;" +
+        "--fontFamily-h2-fontFamily:'Yext Custom', 'Yext Custom Fallback', serif !important" +
         "}</style>"
     );
+  });
+
+  it("should not include non-css keys in the theme style tag", () => {
+    const streamDocument: StreamDocument = {
+      siteId: 123,
+      __: {
+        theme: JSON.stringify({
+          "--fontFamily-h1-fontFamily": "'Roboto', sans-serif",
+          __customFontPreloads: ["./y-fonts/roboto-regular.woff2"],
+        }),
+      },
+    };
+
+    const result = applyTheme(streamDocument, "./", themeConfig);
+
+    expect(result).toContain(
+      '<link rel="preload" href="./y-fonts/roboto-regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">'
+    );
+    expect(result).not.toContain("__customFontPreloads");
   });
 
   it("should return the base string unmodified when themeConfig is empty", () => {

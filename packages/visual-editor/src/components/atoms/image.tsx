@@ -4,35 +4,82 @@ import {
   Image as ImageComponent,
   ImageType,
 } from "@yext/pages-components";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { themeManagerCn } from "../../utils/cn.ts";
+import { useDocument } from "../../hooks/useDocument.tsx";
 import {
-  resolveComponentData,
-  themeManagerCn,
-  useDocument,
   AssetImageType,
-  TranslatableString,
-} from "@yext/visual-editor";
+  isLocalizedAssetImage,
+  resolveLocalizedAssetImage,
+  TranslatableAssetImage,
+} from "../../types/images.ts";
+import { TranslatableString } from "../../types/types.ts";
 import { useTranslation } from "react-i18next";
+import { StreamDocument } from "../../utils/types/StreamDocument.ts";
+import { getThemeValue } from "../../utils/getThemeValue.ts";
 
 export interface ImageProps {
-  image: ImageType | ComplexImageType | AssetImageType;
+  image: ImageType | ComplexImageType | TranslatableAssetImage;
   aspectRatio?: number;
   width?: number;
   className?: string;
   /** sizes attribute of the underlying img tag */
   sizes?: string;
   loading?: "lazy" | "eager";
+  /**
+   * Entity data used to resolve embedded fields.
+   * Defaults to the stream document if not provided.
+   */
+  streamDocumentOverride?: Record<string, any>;
+  style?: React.CSSProperties;
 }
 
+export const getImageAltText = (
+  image: ImageType | ComplexImageType | AssetImageType | undefined,
+  locale: string,
+  streamDocument: StreamDocument | Record<string, any>
+): string | undefined => {
+  if (!image) {
+    return undefined;
+  }
+
+  let altTextField: string | TranslatableString | undefined = undefined;
+  if (isComplexImageType(image)) {
+    altTextField = image.image.alternateText;
+  } else if (image?.alternateText) {
+    altTextField = image.alternateText;
+  }
+
+  return typeof altTextField === "object"
+    ? resolveComponentData(altTextField, locale, streamDocument)
+    : altTextField;
+};
+
 export const Image: React.FC<ImageProps> = ({
-  image,
+  image: rawImage,
   aspectRatio,
   width,
   className,
   sizes,
   loading = "lazy",
+  streamDocumentOverride,
+  style,
 }) => {
   const { i18n } = useTranslation();
-  const streamDocument = useDocument();
+  const streamDocument: StreamDocument | Record<string, any> =
+    streamDocumentOverride ?? useDocument();
+
+  const image = React.useMemo(() => {
+    if (rawImage && isLocalizedAssetImage(rawImage)) {
+      return resolveLocalizedAssetImage(rawImage, i18n.language);
+    }
+    return rawImage as ImageType | ComplexImageType | AssetImageType;
+  }, [rawImage, i18n.language]);
+
+  if (!image) {
+    return null;
+  }
+
   // Calculate height based on width and aspect ratio if width is provided
   const calculatedHeight =
     width && aspectRatio ? width / aspectRatio : undefined;
@@ -42,17 +89,7 @@ export const Image: React.FC<ImageProps> = ({
     ? `overflow-hidden` // No w-full when width is specified
     : `overflow-hidden w-full`; // Use w-full when no width specified
 
-  let altTextField: string | TranslatableString | undefined = undefined;
-  if (isComplexImageType(image)) {
-    altTextField = image.image.alternateText;
-  } else if (image?.alternateText) {
-    altTextField = image.alternateText;
-  }
-
-  const altText =
-    typeof altTextField === "object"
-      ? resolveComponentData(altTextField, i18n.language, streamDocument)
-      : altTextField;
+  const altText = getImageAltText(image, i18n.language, streamDocument);
 
   return (
     <div
@@ -67,6 +104,7 @@ export const Image: React.FC<ImageProps> = ({
           className="object-cover w-full h-full"
           imgOverrides={{ sizes }}
           loading={loading}
+          style={style}
         />
       ) : !!width && !!calculatedHeight ? (
         <ImageComponent
@@ -77,6 +115,7 @@ export const Image: React.FC<ImageProps> = ({
           className="object-cover"
           imgOverrides={{ sizes }}
           loading={loading}
+          style={style}
         />
       ) : (
         <img
@@ -84,6 +123,7 @@ export const Image: React.FC<ImageProps> = ({
           alt={altText}
           className="object-cover w-full h-full"
           loading={loading}
+          style={style}
         />
       )}
     </div>
@@ -119,37 +159,12 @@ export const imgSizesHelper = (
 ): string => {
   const streamDocument = useDocument();
 
-  let maxWidth = undefined;
-
-  // Get the page section max width from the CSS variables (editor)
-  // or the published theme (live page)
-  try {
-    if (
-      typeof window !== "undefined" &&
-      document?.getElementById("preview-frame")
-    ) {
-      const previewFrame = document.getElementById(
-        "preview-frame"
-      ) as HTMLIFrameElement;
-      const el =
-        previewFrame?.contentDocument?.getElementsByClassName(
-          "components"
-        )?.[0];
-
-      if (el) {
-        maxWidth = window
-          .getComputedStyle(el)
-          ?.getPropertyValue("--maxWidth-pageSection-contentWidth")
-          ?.replace("!important", "");
-      }
-    } else if (streamDocument?.__?.theme) {
-      maxWidth =
-        JSON.parse(streamDocument.__.theme)?.[
-          "--maxWidth-pageSection-contentWidth"
-        ] ?? "1024px";
-    }
-  } catch {
-    // use fallback max width
+  let maxWidth = getThemeValue(
+    "--maxWidth-pageSection-contentWidth",
+    streamDocument
+  );
+  if (!maxWidth && streamDocument?.__?.theme) {
+    maxWidth = "1024px";
   }
 
   const updatedBreakpointSizes = Object.fromEntries(

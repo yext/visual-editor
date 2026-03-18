@@ -1,15 +1,14 @@
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { ComponentConfig, Fields, Slot, PuckComponent } from "@measured/puck";
+import { ComponentConfig, Fields, Slot, PuckComponent } from "@puckeditor/core";
 import {
   backgroundColors,
-  msg,
-  YextField,
   BackgroundStyle,
-  PageSection,
-  Background,
-  PageSectionProps,
-  themeManagerCn,
-} from "@yext/visual-editor";
+} from "../../utils/themeConfigOptions.ts";
+import { msg } from "../../utils/i18n/platform.ts";
+import { YextField } from "../../editor/YextField.tsx";
+import { Background } from "../atoms/background.tsx";
+import { PageSection, PageSectionProps } from "../atoms/pageSection.tsx";
+import { themeManagerCn } from "../../utils/cn.ts";
 import { defaultCopyrightMessageSlotProps } from "./CopyrightMessageSlot.tsx";
 
 const PLACEHOLDER_LOGO_IMAGE: string =
@@ -17,11 +16,10 @@ const PLACEHOLDER_LOGO_IMAGE: string =
 
 export const defaultLink = {
   linkType: "URL" as const,
-  label: {
-    en: "Footer Link",
-    hasLocalizedValue: "true" as const,
-  },
+  label: { defaultValue: "Footer Link" },
   link: "#",
+  normalizeLink: true,
+  openInNewTab: false,
 };
 
 export const defaultLinks = [
@@ -58,7 +56,7 @@ export interface ExpandedFooterStyles {
   /** Styling for the primary footer bar. */
   primaryFooter: {
     backgroundColor?: BackgroundStyle;
-    linksAlignment: "left" | "right";
+    linksPosition: "left" | "right";
   };
   /** The maximum width of the footer. */
   maxWidth: PageSectionProps["maxWidth"];
@@ -133,8 +131,8 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
               options: "BACKGROUND_COLOR",
             }
           ),
-          linksAlignment: YextField(
-            msg("fields.linksAlignment", "Links Alignment"),
+          linksPosition: YextField(
+            msg("fields.linksPosition", "Links Position"),
             {
               type: "radio",
               options: [
@@ -193,7 +191,7 @@ const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = ({
   const { primaryFooter } = data;
   const { primaryFooter: primaryFooterStyle, maxWidth } = styles;
   const { expandedFooter } = primaryFooter;
-  const { linksAlignment: primaryLinksAlignment, backgroundColor } =
+  const { linksPosition: primaryLinksAlignment, backgroundColor } =
     primaryFooterStyle;
 
   return (
@@ -322,7 +320,7 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
                   url: PLACEHOLDER_LOGO_IMAGE,
                   height: 100,
                   width: 100,
-                  alternateText: { en: "Logo", hasLocalizedValue: "true" },
+                  alternateText: { defaultValue: "Logo" },
                 },
                 constantValueEnabled: true,
               },
@@ -383,19 +381,19 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
             data: {
               sections: [
                 {
-                  label: { en: "Footer Label", hasLocalizedValue: "true" },
+                  label: { defaultValue: "Footer Label" },
                   links: defaultLinks,
                 },
                 {
-                  label: { en: "Footer Label", hasLocalizedValue: "true" },
+                  label: { defaultValue: "Footer Label" },
                   links: defaultLinks,
                 },
                 {
-                  label: { en: "Footer Label", hasLocalizedValue: "true" },
+                  label: { defaultValue: "Footer Label" },
                   links: defaultLinks,
                 },
                 {
-                  label: { en: "Footer Label", hasLocalizedValue: "true" },
+                  label: { defaultValue: "Footer Label" },
                   links: defaultLinks,
                 },
               ],
@@ -412,7 +410,7 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
             },
             styles: {
               backgroundColor: backgroundColors.background2.value,
-              linksAlignment: "left",
+              linksPosition: "left",
             },
             maxWidth: "theme",
             slots: {
@@ -443,7 +441,7 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
     styles: {
       primaryFooter: {
         backgroundColor: backgroundColors.background6.value,
-        linksAlignment: "right",
+        linksPosition: "right",
       },
       maxWidth: "theme",
     },

@@ -1,6 +1,9 @@
 import * as React from "react";
-import { ComponentConfig, PuckComponent } from "@measured/puck";
-import { YextField, msg, CTA } from "@yext/visual-editor";
+import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { YextField } from "../../editor/YextField.tsx";
+import { msg } from "../../utils/i18n/platform.ts";
+import { CTA } from "../atoms/cta.tsx";
+import { useBackground } from "../../hooks/useBackground.tsx";
 import { useTranslation } from "react-i18next";
 import {
   FaFacebook,
@@ -11,7 +14,7 @@ import {
   FaTiktok,
 } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-import { validPatterns } from "./ExpandedFooter";
+import { validPatterns } from "./ExpandedFooter.tsx";
 
 export interface FooterSocialLinksSlotProps {
   data: {
@@ -23,56 +26,105 @@ export interface FooterSocialLinksSlotProps {
     tiktokLink: string;
     youtubeLink: string;
   };
+  styles?: {
+    filledBackground?: boolean;
+    mobileAlignment?: "left" | "center";
+  };
 }
+
+type socialLink = {
+  url: string;
+  icon: React.ComponentType<{ className?: string }>;
+  pattern: RegExp;
+  label: string;
+  ariaLabel: string;
+};
+
+export const FooterSocialLinksSlotFields: Fields<FooterSocialLinksSlotProps> = {
+  data: YextField(msg("fields.data", "Data"), {
+    type: "object",
+    objectFields: {
+      xLink: YextField(msg("fields.xLink", "X Link"), {
+        type: "text",
+      }),
+      facebookLink: YextField(msg("fields.facebookLink", "Facebook Link"), {
+        type: "text",
+      }),
+      instagramLink: YextField(msg("fields.instagramLink", "Instagram Link"), {
+        type: "text",
+      }),
+      linkedInLink: YextField(msg("fields.linkedInLink", "LinkedIn Link"), {
+        type: "text",
+      }),
+      pinterestLink: YextField(msg("fields.pinterestLink", "Pinterest Link"), {
+        type: "text",
+      }),
+      tiktokLink: YextField(msg("fields.tiktokLink", "TikTok Link"), {
+        type: "text",
+      }),
+      youtubeLink: YextField(msg("fields.youtubeLink", "YouTube Link"), {
+        type: "text",
+      }),
+    },
+  }),
+};
 
 const FooterSocialLinksSlotInternal: PuckComponent<
   FooterSocialLinksSlotProps
 > = (props) => {
-  const { data, puck } = props;
+  const { data, styles, puck } = props;
   const { t } = useTranslation();
+  const background = useBackground();
 
-  const links = [
+  const links: socialLink[] = [
     {
       url: data.xLink,
       icon: FaXTwitter,
       pattern: validPatterns.xLink,
       label: "X (Twitter)",
+      ariaLabel: t("socialLinks.xLink", "Follow us on X (Twitter)"),
     },
     {
       url: data.facebookLink,
       icon: FaFacebook,
       pattern: validPatterns.facebookLink,
       label: "Facebook",
+      ariaLabel: t("socialLinks.facebook", "Follow us on Facebook"),
     },
     {
       url: data.instagramLink,
       icon: FaInstagram,
       pattern: validPatterns.instagramLink,
       label: "Instagram",
+      ariaLabel: t("socialLinks.instagram", "Follow us on Instagram"),
     },
     {
       url: data.pinterestLink,
       icon: FaPinterest,
       pattern: validPatterns.pinterestLink,
       label: "Pinterest",
+      ariaLabel: t("socialLinks.pinterest", "Follow us on Pinterest"),
     },
     {
       url: data.linkedInLink,
       icon: FaLinkedinIn,
       pattern: validPatterns.linkedInLink,
       label: "LinkedIn",
+      ariaLabel: t("socialLinks.linkedIn", "Follow us on LinkedIn"),
     },
     {
       url: data.youtubeLink,
       icon: FaYoutube,
       pattern: validPatterns.youtubeLink,
       label: "YouTube",
+      ariaLabel: t("socialLinks.youtube", "Subscribe to our YouTube channel"),
     },
     {
       url: data.tiktokLink,
       icon: FaTiktok,
       pattern: validPatterns.tiktokLink,
       label: "TikTok",
+      ariaLabel: t("socialLinks.tiktok", "Follow us on TikTok"),
     },
   ];
 
@@ -86,19 +138,30 @@ const FooterSocialLinksSlotInternal: PuckComponent<
   }
 
   return (
-    <div className="flex gap-6 items-center justify-center md:justify-start">
+    <div
+      className={`flex flex-wrap gap-6 items-center ${styles?.mobileAlignment === "left" ? "justify-start" : "justify-center"} md:justify-start`}
+    >
       {validLinks.map((link, index) => {
         const Icon = link.icon;
-        const iconElement = <Icon className="h-6 w-6 md:h-5 md:w-5" />;
+        const iconElement = styles?.filledBackground ? (
+          <div
+            className={`flex h-12 w-12 items-center justify-center rounded-full ${background?.isDarkBackground ? "bg-white text-palette-primary-dark" : "bg-palette-primary-dark text-white"}`}
+          >
+            <Icon className="h-6 w-6" />
+          </div>
+        ) : (
+          <Icon className="h-6 w-6 md:h-5 md:w-5" />
+        );
         return (
           <CTA
             key={index}
             label={iconElement}
             link={link.url}
             linkType="URL"
+            normalizeLink={false}
             variant="link"
             eventName={`socialLink.${link.label.toLowerCase()}`}
-            ariaLabel={`${link.label} ${t("link", "link")}`}
+            ariaLabel={link.ariaLabel}
             alwaysHideCaret
             className="block break-words whitespace-normal"
           />
@@ -112,40 +175,7 @@ export const FooterSocialLinksSlot: ComponentConfig<{
   props: FooterSocialLinksSlotProps;
 }> = {
   label: msg("components.footerSocialLinksSlot", "Social Links"),
-  fields: {
-    data: YextField(msg("fields.data", "Data"), {
-      type: "object",
-      objectFields: {
-        xLink: YextField(msg("fields.xLink", "X Link"), {
-          type: "text",
-        }),
-        facebookLink: YextField(msg("fields.facebookLink", "Facebook Link"), {
-          type: "text",
-        }),
-        instagramLink: YextField(
-          msg("fields.instagramLink", "Instagram Link"),
-          {
-            type: "text",
-          }
-        ),
-        linkedInLink: YextField(msg("fields.linkedInLink", "LinkedIn Link"), {
-          type: "text",
-        }),
-        pinterestLink: YextField(
-          msg("fields.pinterestLink", "Pinterest Link"),
-          {
-            type: "text",
-          }
-        ),
-        tiktokLink: YextField(msg("fields.tiktokLink", "TikTok Link"), {
-          type: "text",
-        }),
-        youtubeLink: YextField(msg("fields.youtubeLink", "YouTube Link"), {
-          type: "text",
-        }),
-      },
-    }),
-  },
+  fields: FooterSocialLinksSlotFields,
   defaultProps: {
     data: {
       xLink: "",

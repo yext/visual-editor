@@ -1,16 +1,16 @@
-import * as React from "react";
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import {
   BackgroundStyle,
-  YextField,
-  PageSection,
   backgroundColors,
-  VisibilityWrapper,
-  msg,
-  getAnalyticsScopeHash,
-} from "@yext/visual-editor";
+} from "../../../utils/themeConfigOptions.ts";
+import { YextField } from "../../../editor/YextField.tsx";
+import { PageSection } from "../../atoms/pageSection.tsx";
+import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultEventCardSlotData } from "./EventCard.tsx";
+import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { EventCardsWrapperProps } from "./EventCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 
@@ -25,6 +25,12 @@ export interface EventSectionProps {
      * @defaultValue Background Color 3
      */
     backgroundColor?: BackgroundStyle;
+
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
+    showSectionHeading: boolean;
   };
 
   /** @internal */
@@ -54,6 +60,13 @@ const eventSectionFields: Fields<EventSectionProps> = {
         {
           type: "select",
           options: "BACKGROUND_COLOR",
+        }
+      ),
+      showSectionHeading: YextField(
+        msg("fields.showSectionHeading", "Show Section Heading"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
         }
       ),
     },
@@ -95,7 +108,9 @@ const EventSectionWrapper: PuckComponent<EventSectionProps> = (props) => {
       background={styles?.backgroundColor}
       className="flex flex-col gap-8"
     >
-      <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
+      {styles.showSectionHeading && (
+        <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
+      )}
       <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
     </PageSection>
   );
@@ -111,6 +126,7 @@ export const EventSection: ComponentConfig<{ props: EventSectionProps }> = {
   defaultProps: {
     styles: {
       backgroundColor: backgroundColors.background3.value,
+      showSectionHeading: true,
     },
     slots: {
       SectionHeadingSlot: [
@@ -119,10 +135,7 @@ export const EventSection: ComponentConfig<{ props: EventSectionProps }> = {
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "Upcoming Events",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: { defaultValue: "Upcoming Events" },
                 constantValueEnabled: true,
                 field: "",
               },
@@ -139,6 +152,12 @@ export const EventSection: ComponentConfig<{ props: EventSectionProps }> = {
               field: "",
               constantValueEnabled: true,
               constantValue: [{}, {}, {}], // leave ids blank to auto-generate
+            },
+            styles: {
+              showImage: true,
+              showDateTime: true,
+              showDescription: true,
+              showCTA: true,
             },
             slots: {
               CardSlot: [
@@ -160,15 +179,20 @@ export const EventSection: ComponentConfig<{ props: EventSectionProps }> = {
     return forwardHeadingLevel(data, "TitleSlot");
   },
   render: (props) => (
-    <AnalyticsScopeProvider
-      name={`${props.analytics?.scope ?? "eventsSection"}${getAnalyticsScopeHash(props.id)}`}
+    <ComponentErrorBoundary
+      isEditing={props.puck.isEditing}
+      resetKeys={[props]}
     >
-      <VisibilityWrapper
-        liveVisibility={props.liveVisibility}
-        isEditing={props.puck.isEditing}
+      <AnalyticsScopeProvider
+        name={`${props.analytics?.scope ?? "eventsSection"}${getAnalyticsScopeHash(props.id)}`}
       >
-        <EventSectionWrapper {...props} />
-      </VisibilityWrapper>
-    </AnalyticsScopeProvider>
+        <VisibilityWrapper
+          liveVisibility={props.liveVisibility}
+          isEditing={props.puck.isEditing}
+        >
+          <EventSectionWrapper {...props} />
+        </VisibilityWrapper>
+      </AnalyticsScopeProvider>
+    </ComponentErrorBoundary>
   ),
 };

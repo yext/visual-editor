@@ -1,7 +1,6 @@
 // Inspired by https://github.com/rottitime/react-hook-window-message-event
 
 import {
-  RefObject,
   useState,
   useRef,
   useCallback,
@@ -39,6 +38,33 @@ export type EventHandler = (
   payload: Payload
 ) => unknown;
 
+/**
+ * Checks if an origin matches any of the target origins, or matches the optimizelocation.com pattern.
+ * @param origin - The origin to check (e.g., "https://subdomain.optimizelocation.com")
+ * @returns true if the origin matches any target origin or matches *.optimizelocation.com pattern
+ */
+export const isOriginAllowed = (origin: string): boolean => {
+  // Check for exact match in TARGET_ORIGINS
+  if (TARGET_ORIGINS.includes(origin)) {
+    return true;
+  }
+
+  // Check if origin matches *.optimizelocation.com pattern
+  try {
+    const url = new URL(origin);
+    if (
+      url.hostname.endsWith(".optimizelocation.com") ||
+      url.hostname === "optimizelocation.com"
+    ) {
+      return true;
+    }
+  } catch {
+    // Invalid origin URL, no match
+  }
+
+  return false;
+};
+
 export const TARGET_ORIGINS = [
   "http://localhost",
   "https://dev.yext.com",
@@ -54,42 +80,6 @@ const postMessage = (
   target: MessageEvent["source"],
   origin = "*"
 ) => target?.postMessage(data, { targetOrigin: origin });
-
-/**
- * A hook that allows sending a postMessage from a parent window to an iframe. Additionally,
- * it listens for a response from the iframe (two way communication) to update its status.
- * @param messageName - The message name to listen on
- * @param targetOrigins - The origin urls the message can be posted to and received from
- * @param iframeRef - A MutableRefObject to send postMessages to - usually an iFrame
- */
-export const useSendMessageToIFrame = (
-  messageName: string,
-  targetOrigins: string[],
-  iframeRef: RefObject<HTMLIFrameElement>
-) => {
-  const [status, setStatus] = useState<MessageStatus>("pending");
-
-  useListenAndRespondMessage(
-    messageName,
-    targetOrigins,
-    statusSetter(setStatus)
-  );
-
-  const sendToIFrame = (data?: PostMessage) => {
-    if (iframeRef.current) {
-      setStatus("pending");
-      for (const targetOrigin of targetOrigins) {
-        postMessage(
-          { ...data, type: messageName },
-          iframeRef.current.contentWindow,
-          targetOrigin
-        );
-      }
-    }
-  };
-
-  return { sendToIFrame, status };
-};
 
 /**
  * A hook that allows sending a postMessage from an iframe to its parent window. Additionally,
@@ -114,7 +104,8 @@ export const useSendMessageToParent = (
       throw new Error("Parent window has closed");
     }
     setStatus("pending");
-    for (const targetOrigin of targetOrigins) {
+    const originsToUse = getOriginsForSending(targetOrigins);
+    for (const targetOrigin of originsToUse) {
       postMessage({ ...data, type: messageName }, window.parent, targetOrigin);
     }
   };
@@ -124,7 +115,7 @@ export const useSendMessageToParent = (
 
 /**
  * A hook to receive a postMessage request, either in a parent window or an iframe. It is
- * the receiving end for both {@link useSendMessageToIFrame} and {@link useSendMessageToParent}.
+ * the receiving end for {@link useSendMessageToParent}.
  * The eventHandler if fired when a message is received, which contains a payload and callback
  * function. The receiver can choose to do something with the payload as well as send a
  * status and payload back to the publisher.
@@ -161,6 +152,80 @@ export const useReceiveMessage = (
   );
 };
 
+// Track the parent window's origin when we receive messages from it
+// This allows us to send messages back to *.optimizelocation.com subdomains
+// that aren't explicitly in TARGET_ORIGINS
+let trackedParentOrigin: string | null = null;
+
+/**
+ * Tracks the parent window's origin when a message is received.
+ * This allows us to send messages back to origins that match the pattern
+ * (like *.optimizelocation.com) even if they're not in TARGET_ORIGINS.
+ */
+const trackParentOrigin = (origin: string) => {
+  if (isOriginAllowed(origin) && !TARGET_ORIGINS.includes(origin)) {
+    trackedParentOrigin = origin;
+  }
+};
+
+// Set up a global listener to track the parent origin from ANY message
+// This ensures we capture the origin even before specific message listeners are set up
+let globalOriginTrackerInitialized = false;
+const initializeGlobalOriginTracker = () => {
+  if (globalOriginTrackerInitialized || typeof window === "undefined") {
+    return;
+  }
+  globalOriginTrackerInitialized = true;
+
+  const globalTracker = ({ origin, data }: MessageEvent) => {
+    // Ignore React Dev Tools messages
+    if (data?.source?.startsWith("react-devtools")) {
+      return;
+    }
+    // Track any valid origin, even if we haven't set up specific message listeners yet
+    trackParentOrigin(origin);
+  };
+
+  window.addEventListener("message", globalTracker);
+};
+
+/**
+ * Gets the list of origins to use when sending messages.
+ * Includes TARGET_ORIGINS plus any tracked parent origin.
+ * Also tries to infer the parent origin from document.referrer if not yet tracked.
+ */
+const getOriginsForSending = (targetOrigins: string[]): string[] => {
+  // Initialize the global tracker to ensure we capture the parent origin early
+  initializeGlobalOriginTracker();
+
+  const origins = [...targetOrigins];
+
+  // If we haven't tracked the parent origin yet, try to infer it from document.referrer
+  if (
+    !trackedParentOrigin &&
+    typeof document !== "undefined" &&
+    document.referrer
+  ) {
+    try {
+      const referrerUrl = new URL(document.referrer);
+      const referrerOrigin = referrerUrl.origin;
+      if (
+        isOriginAllowed(referrerOrigin) &&
+        !origins.includes(referrerOrigin)
+      ) {
+        trackedParentOrigin = referrerOrigin;
+      }
+    } catch {
+      // Invalid referrer URL, ignore
+    }
+  }
+
+  if (trackedParentOrigin && !origins.includes(trackedParentOrigin)) {
+    origins.push(trackedParentOrigin);
+  }
+  return origins;
+};
+
 /**
  * An internal hook which listens for a specific message type. When a message is received,
  * the event handler is called with the message payload and a function to send a message back
@@ -189,9 +254,12 @@ const useListenAndRespondMessage = (
       if (data?.source?.startsWith("react-devtools")) {
         return;
       }
-      if (!targetOrigins.includes(origin)) {
+      if (!isOriginAllowed(origin)) {
         return;
       }
+
+      // Track the parent origin if it's not in TARGET_ORIGINS
+      trackParentOrigin(origin);
 
       const { type }: ReceivePayloadInternal = data;
       if (type === messageName) {
@@ -201,7 +269,7 @@ const useListenAndRespondMessage = (
         callback(data, origin, source);
       }
     },
-    [messageName, targetOrigins, setSource, setOrigin, callback]
+    [messageName, setSource, setOrigin, callback]
   );
 
   useEffect(() => {
@@ -213,7 +281,7 @@ const useListenAndRespondMessage = (
 /**
  * Sets a status based on the incoming message's status.
  * @param setStatus - A React useState hook for setting the status of the
- * original postMessage coming from the parent window or iframe.
+ * original postMessage coming from the parent window.
  */
 const statusSetter = (setStatus: Dispatch<SetStateAction<MessageStatus>>) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

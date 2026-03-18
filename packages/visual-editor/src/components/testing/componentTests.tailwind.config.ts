@@ -1,9 +1,6 @@
-import { type Config } from "tailwindcss";
-import {
-  themeResolver,
-  defaultThemeTailwindExtensions,
-} from "@yext/visual-editor";
+import { themeResolver } from "../../utils/themeResolver.ts";
 import { defaultThemeConfig } from "../DefaultThemeConfig.ts";
+import { defaultThemeTailwindExtensions } from "../../utils/themeConfigOptions.ts";
 
 // This Tailwind Config applies Theme Editor styles to our components
 // during playwright testing
@@ -13,4 +10,4 @@ export default {
     extend: themeResolver(defaultThemeTailwindExtensions, defaultThemeConfig),
   },
   plugins: [],
-} satisfies Config;
+};

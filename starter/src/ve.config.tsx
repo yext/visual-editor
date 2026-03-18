@@ -1,4 +1,4 @@
-import { type Config } from "@measured/puck";
+import { type Config } from "@puckeditor/core";
 import "@yext/visual-editor/style.css";
 import "./index.css";
 import {

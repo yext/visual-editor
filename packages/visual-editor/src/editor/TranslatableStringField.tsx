@@ -1,6 +1,6 @@
 import { TranslatableString } from "../types/types.ts";
 import { MsgString, pt } from "../utils/i18n/platform.ts";
-import { CustomField, FieldLabel } from "@measured/puck";
+import { CustomField, FieldLabel } from "@puckeditor/core";
 import { resolveComponentData } from "../utils/resolveComponentData.tsx";
 import React from "react";
 import { useTranslation } from "react-i18next";
@@ -10,9 +10,9 @@ import {
   EmbeddedFieldStringInputFromOptions,
 } from "./EmbeddedFieldStringInput.tsx";
 import { Button } from "../internal/puck/ui/button.tsx";
-import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
-import { TemplateMetadata } from "../internal/types/templateMetadata.ts";
 import { DynamicOption } from "./DynamicOptionsSelector.tsx";
+import { useDocument } from "../hooks/useDocument.tsx";
+import { getPageSetLocales } from "../utils/pageSetLocales.ts";
 
 /**
  * Generates a translatable string config
@@ -37,34 +37,33 @@ export function TranslatableStringField<
       const { i18n } = useTranslation();
       const locale = i18n.language;
       const resolvedValue = value && resolveComponentData(value, locale);
-      const templateMetadata: TemplateMetadata = useTemplateMetadata();
+      const streamDocument = useDocument();
 
-      const applyAllButton = showApplyAllOption ? (
-        <Button
-          size="sm"
-          variant="small_link"
-          onClick={() => {
-            const valueByLocale: TranslatableString = {
-              hasLocalizedValue: "true",
-              ...templateMetadata.locales.reduce(
-                (acc, locale) => {
-                  acc[locale] = resolvedValue;
-                  return acc;
-                },
-                {} as Record<string, string>
-              ),
-            };
-            onChange(valueByLocale as T);
-          }}
-          className={"ve-px-0 ve-h-auto"}
-        >
-          {label
-            ? pt("applyAllWithLabel", "Apply {{fieldLabel}} to All Locales", {
-                fieldLabel: pt(label),
-              })
-            : pt("applyAll", "Apply to All Locales")}
-        </Button>
-      ) : null;
+      const locales = getPageSetLocales(streamDocument);
+
+      const applyAllButton =
+        showApplyAllOption && locales.length > 1 ? (
+          <Button
+            size="sm"
+            variant="small_link"
+            onClick={() => {
+              const valueByLocale: TranslatableString = {
+                hasLocalizedValue: "true",
+                ...locales.reduce(
+                  (acc, locale) => {
+                    acc[locale] = resolvedValue;
+                    return acc;
+                  },
+                  {} as Record<string, string>
+                ),
+              };
+              onChange(valueByLocale as T);
+            }}
+            className={"ve-px-0 ve-h-auto"}
+          >
+            {pt("applyAll", "Apply to all locales")}
+          </Button>
+        ) : null;
 
       const fieldEditor = (
         <>

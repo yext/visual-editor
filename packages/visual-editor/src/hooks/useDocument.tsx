@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StreamDocument } from "../utils/applyTheme";
+import { StreamDocument } from "../utils/types/StreamDocument.ts";
 
 const TemplatePropsContext = React.createContext<any | undefined>(undefined);
 

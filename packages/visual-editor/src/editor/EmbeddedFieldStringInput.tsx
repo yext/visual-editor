@@ -1,11 +1,9 @@
 import React from "react";
-import { useDocument, useEntityFields } from "../hooks";
-import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields";
+import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
 import {
   getFieldsForSelector,
-  YextEntityField,
-} from "./YextEntityFieldSelector";
-import { pt, resolveComponentData } from "../utils";
+  type YextEntityField,
+} from "./yextEntityFieldUtils.ts";
 import {
   Command,
   CommandEmpty,
@@ -21,6 +19,10 @@ import {
 } from "../internal/puck/ui/Popover.tsx";
 import { SquarePlus } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { pt } from "../utils/i18n/platform.ts";
+import { resolveComponentData } from "../utils/resolveComponentData.tsx";
+import { useEntityFields } from "../hooks/useEntityFields.tsx";
+import { useDocument } from "../hooks/useDocument.tsx";
 
 /**
  * A debounced string input that allows embedding entity fields via a popover selector.
@@ -89,19 +91,22 @@ export const EmbeddedFieldStringInputFromOptions = ({
     null
   );
   const [inputValue, setInputValue] = React.useState(value);
+  const [prevPropValue, setPrevPropValue] = React.useState(value);
+
+  if (value !== prevPropValue) {
+    setPrevPropValue(value);
+    setInputValue(value);
+  }
 
   const inputValueRef = React.useRef(inputValue);
   const onChangeRef = React.useRef(onChange);
   const valueRef = React.useRef(value);
 
-  inputValueRef.current = inputValue;
-  onChangeRef.current = onChange;
-  valueRef.current = value;
-
-  // Update local state if the prop value changes from outside
-  React.useEffect(() => {
-    setInputValue(value);
-  }, [value]);
+  if (value === prevPropValue) {
+    inputValueRef.current = inputValue;
+    onChangeRef.current = onChange;
+    valueRef.current = value;
+  }
 
   // Debounce the call to the parent onChange handler
   React.useEffect(() => {

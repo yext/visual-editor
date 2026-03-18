@@ -1,19 +1,23 @@
 import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { AnalyticsScopeProvider, CTA as CTAType } from "@yext/pages-components";
-import { ComponentConfig, Fields, WithId, WithPuckProps } from "@measured/puck";
 import {
-  Body,
-  EntityField,
-  useDocument,
-  CTA,
+  ComponentConfig,
+  Fields,
+  WithId,
+  WithPuckProps,
+} from "@puckeditor/core";
+import { Body } from "../atoms/body.tsx";
+import { EntityField } from "../../editor/EntityField.tsx";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { CTA } from "../atoms/cta.tsx";
+import {
   type BackgroundStyle,
   backgroundColors,
-  PageSection,
-  YextField,
-  msg,
-  pt,
-} from "@yext/visual-editor";
+} from "../../utils/themeConfigOptions.ts";
+import { PageSection } from "../atoms/pageSection.tsx";
+import { YextField } from "../../editor/YextField.tsx";
+import { msg, pt } from "../../utils/i18n/platform.ts";
 import {
   FaFacebook,
   FaInstagram,
@@ -28,6 +32,7 @@ type socialLink = {
   name: string;
   link: string;
   label: any;
+  ariaLabel: string;
   prefix?: string;
 };
 
@@ -92,43 +97,53 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
 
   const links = streamDocument?._site?.footer?.links ?? [];
   const copyrightMessage = streamDocument?._site?.copyrightMessage;
+
+  const { t } = useTranslation();
+
   const socialLinks: socialLink[] = [
     {
       name: "facebook",
       link: streamDocument?._site?.facebookPageUrl,
       label: <FaFacebook className="w-5 h-5 mr-4" />,
+      ariaLabel: t("socialLinks.facebook", "Follow us on Facebook"),
     },
     {
       name: "instagram",
       prefix: "//www.instagram.com/",
       link: streamDocument?._site?.instagramHandle,
       label: <FaInstagram className="w-5 h-5 mr-4" />,
+      ariaLabel: t("socialLinks.instagram", "Follow us on Instagram"),
     },
     {
       name: "youtube",
       link: streamDocument?._site?.youTubeChannelUrl,
       label: <FaYoutube className="w-5 h-5 mr-4" />,
+      ariaLabel: t("socialLinks.youtube", "Subscribe to our YouTube channel"),
     },
     {
       name: "linkedIn",
       link: streamDocument?._site?.linkedInUrl,
       label: <FaLinkedinIn className="w-5 h-5 mr-4" />,
+      ariaLabel: t("socialLinks.linkedIn", "Follow us on LinkedIn"),
     },
     {
       name: "twitter",
       prefix: "//www.twitter.com/",
       link: streamDocument?._site?.twitterHandle,
       label: <FaTwitter className="w-5 h-5 mr-4" />,
+      ariaLabel: t("socialLinks.xLink", "Follow us on X (Twitter)"),
     },
     {
       name: "pinterest",
       link: streamDocument?._site?.pinterestUrl,
       label: <FaPinterest className="w-5 h-5 mr-4" />,
+      ariaLabel: t("socialLinks.pinterest", "Follow us on Pinterest"),
     },
     {
       name: "tiktok",
       link: streamDocument?._site?.tikTokUrl,
       label: <FaTiktok className="w-5 h-5 mr-4" />,
+      ariaLabel: t("socialLinks.tiktok", "Follow us on TikTok"),
     },
   ].filter((link) => link.link);
 
@@ -183,6 +198,7 @@ const FooterLinks = (props: { links: CTAType[] }) => {
               link={item.link}
               label={item.label}
               linkType={item.linkType}
+              normalizeLink={false}
               eventName={`link${idx}`}
               variant="link"
               alwaysHideCaret={true}
@@ -195,7 +211,6 @@ const FooterLinks = (props: { links: CTAType[] }) => {
 };
 
 const FooterSocialIcons = ({ socialLinks }: { socialLinks: socialLink[] }) => {
-  const { t } = useTranslation();
   return (
     <div className="flex flex-row items-center justify-center sm:justify-end pb-4">
       {socialLinks.map((socialLink: socialLink, idx: number) =>
@@ -204,11 +219,11 @@ const FooterSocialIcons = ({ socialLinks }: { socialLinks: socialLink[] }) => {
             key={idx}
             label={socialLink.label}
             link={`${socialLink.prefix ?? ""}${socialLink.link}`}
+            normalizeLink={false}
             variant={"link"}
             eventName={`socialLink${idx}`}
             alwaysHideCaret={true}
-            // TODO: translation concatenation
-            ariaLabel={socialLink.label + " " + t("link", "link")}
+            ariaLabel={socialLink.ariaLabel}
           />
         ) : null
       )}

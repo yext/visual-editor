@@ -1,22 +1,31 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { useQuery } from "@tanstack/react-query";
 import {
   backgroundColors,
   BackgroundStyle,
-  Body,
   HeadingLevel,
+} from "../../../utils/themeConfigOptions.ts";
+import { Body } from "../../atoms/body.tsx";
+import {
   msg,
   pt,
-  resolveComponentData,
-  useDocument,
-  YextField,
-} from "@yext/visual-editor";
-import { parseDocument, fetchNearbyLocations } from "./utils";
-import { NearbyLocationCard } from "./NearbyLocationCard";
-import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers";
+  usePlatformTranslation,
+} from "../../../utils/i18n/platform.ts";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+import { useDocument } from "../../../hooks/useDocument.tsx";
+import { YextField } from "../../../editor/YextField.tsx";
+import {
+  formatDistance,
+  getPreferredDistanceUnit,
+  toKilometers,
+} from "../../../utils/i18n/distance.ts";
+import { parseDocument, fetchNearbyLocations } from "./utils.ts";
+import { NearbyLocationCard } from "./NearbyLocationCard.tsx";
+import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers.ts";
 import { MapPinOff } from "lucide-react";
+import { updateFields } from "../HeroSection.tsx";
 
 export type NearbyLocationCardsWrapperProps = {
   /** The search parameters for finding nearby locations. */
@@ -41,7 +50,23 @@ export type NearbyLocationCardsWrapperProps = {
 
     /** The heading level for the card title. */
     headingLevel?: HeadingLevel;
+    /**
+     * The color applied to the card title
+     * @defaultValue inherited from theme
+     */
+    color?: BackgroundStyle;
+    /** Styling for the hours display on each card. */
+    hours: {
+      /** Whether to display the current status ("Open Now" or "Closed") */
+      showCurrentStatus: boolean;
+      timeFormat?: "12h" | "24h";
+      /** How to format the days of the week (short:Mon, long:Monday) */
+      dayOfWeekFormat?: "short" | "long";
+      /** Whether to include the day of the week */
+      showDayNames?: boolean;
+    };
 
+    /** Styling for the phone display on each card. */
     phone: {
       /**
        * The display format for phone numbers on the cards.
@@ -56,16 +81,32 @@ export type NearbyLocationCardsWrapperProps = {
       phoneNumberLink: boolean;
     };
 
-    /** Styling for the hours display on each card. */
-    hours: {
-      /** Whether to display the current status ("Open Now" or "Closed") */
-      showCurrentStatus: boolean;
-      timeFormat?: "12h" | "24h";
-      /** How to format the days of the week (short:Mon, long:Monday) */
-      dayOfWeekFormat?: "short" | "long";
-      /** Whether to include the day of the week */
-      showDayNames?: boolean;
+    /** Styling for the address on each card */
+    address?: {
+      /** Whether to include the region in the Address */
+      showRegion: boolean;
+
+      /** Whether to include the country in the Address */
+      showCountry: boolean;
     };
+
+    /**
+     * Whether to show the location's hours on the card.
+     * @defaultValue true
+     */
+    showHours: boolean;
+
+    /**
+     * Whether to show the location's phone on the card.
+     * @defaultValue true
+     */
+    showPhone: boolean;
+
+    /**
+     * Whether to show the location's address on the card.
+     * @defaultValue true
+     */
+    showAddress: boolean;
   };
 
   /** @internal */
@@ -88,7 +129,7 @@ const nearbyLocationCardsWrapperFields: Fields<NearbyLocationCardsWrapperProps> 
         }),
       },
     }),
-    styles: YextField(msg("fields.styles", "styles"), {
+    styles: YextField(msg("fields.styles", "Styles"), {
       type: "object",
       objectFields: {
         backgroundColor: YextField(
@@ -103,27 +144,9 @@ const nearbyLocationCardsWrapperFields: Fields<NearbyLocationCardsWrapperProps> 
           hasSearch: true,
           options: "HEADING_LEVEL",
         }),
-        phone: YextField(msg("fields.phone", "Phone"), {
-          type: "object",
-          objectFields: {
-            phoneNumberFormat: YextField(
-              msg("fields.phoneNumberFormat", "Phone Number Format"),
-              {
-                type: "radio",
-                options: "PHONE_OPTIONS",
-              }
-            ),
-            phoneNumberLink: YextField(
-              msg("fields.includePhoneHyperlink", "Include Phone Hyperlink"),
-              {
-                type: "radio",
-                options: [
-                  { label: msg("fields.options.yes", "Yes"), value: true },
-                  { label: msg("fields.options.no", "No"), value: false },
-                ],
-              }
-            ),
-          },
+        color: YextField(msg("fields.cardTitleColor", "Card Title Color"), {
+          type: "select",
+          options: "SITE_COLOR",
         }),
         hours: YextField(msg("fields.hours", "Hours"), {
           type: "object",
@@ -178,6 +201,59 @@ const nearbyLocationCardsWrapperFields: Fields<NearbyLocationCardsWrapperProps> 
               }
             ),
           },
+        }),
+        phone: YextField(msg("fields.phone", "Phone"), {
+          type: "object",
+          objectFields: {
+            phoneNumberFormat: YextField(
+              msg("fields.phoneNumberFormat", "Phone Number Format"),
+              {
+                type: "radio",
+                options: "PHONE_OPTIONS",
+              }
+            ),
+            phoneNumberLink: YextField(
+              msg("fields.includePhoneHyperlink", "Include Phone Hyperlink"),
+              {
+                type: "radio",
+                options: [
+                  { label: msg("fields.options.yes", "Yes"), value: true },
+                  { label: msg("fields.options.no", "No"), value: false },
+                ],
+              }
+            ),
+          },
+        }),
+        address: YextField(msg("fields.address", "Address"), {
+          type: "object",
+          objectFields: {
+            showRegion: YextField(msg("fields.showRegion", "Show Region"), {
+              type: "radio",
+              options: [
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
+              ],
+            }),
+            showCountry: YextField(msg("fields.showCountry", "Show Country"), {
+              type: "radio",
+              options: [
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
+              ],
+            }),
+          },
+        }),
+        showHours: YextField(msg("fields.showHours", "Show Hours"), {
+          type: "radio",
+          options: "SHOW_HIDE",
+        }),
+        showPhone: YextField(msg("fields.showPhone", "Show Phone"), {
+          type: "radio",
+          options: "SHOW_HIDE",
+        }),
+        showAddress: YextField(msg("fields.showAddress", "Show Address"), {
+          type: "radio",
+          options: "SHOW_HIDE",
         }),
       },
     }),
@@ -329,6 +405,13 @@ export const defaultNearbyLocationsCardsProps: NearbyLocationCardsWrapperProps =
         phoneNumberFormat: "domestic",
         phoneNumberLink: true,
       },
+      address: {
+        showRegion: true,
+        showCountry: false,
+      },
+      showHours: true,
+      showPhone: true,
+      showAddress: true,
     },
   };
 
@@ -338,6 +421,23 @@ export const NearbyLocationCardsWrapper: ComponentConfig<{
   label: msg("slots.nearbyLocationCards", "Nearby Location Cards"),
   fields: nearbyLocationCardsWrapperFields,
   defaultProps: defaultNearbyLocationsCardsProps,
+  resolveFields: (data) => {
+    let fields = nearbyLocationCardsWrapperFields;
+
+    if (!data.props.styles.showHours) {
+      fields = updateFields(fields, ["styles.hours.visible"], false);
+    }
+
+    if (!data.props.styles.showPhone) {
+      fields = updateFields(fields, ["styles.phone.visible"], false);
+    }
+
+    if (!data.props.styles.showAddress) {
+      fields = updateFields(fields, ["styles.address.visible"], false);
+    }
+
+    return fields;
+  },
   render: (props) => <NearbyLocationCardsWrapperComponent {...props} />,
 };
 
@@ -348,6 +448,15 @@ const NearbyLocationsEmptyState: React.FC<{
   const templateMetadata = useTemplateMetadata();
   const entityTypeDisplayName =
     templateMetadata?.entityTypeDisplayName?.toLowerCase();
+
+  const { i18n } = usePlatformTranslation();
+
+  const unit = getPreferredDistanceUnit(i18n.language);
+  const distance =
+    unit === "mile" ? (radius ?? 10) : toKilometers(radius ?? 10);
+  const formattedDistance = Number(
+    formatDistance(distance, i18n.language, 0, 0)
+  );
 
   return (
     <div
@@ -368,16 +477,13 @@ const NearbyLocationsEmptyState: React.FC<{
           )}
         </Body>
         <Body variant="base" className="text-gray-500 font-normal">
-          {pt(
-            "nearbyLocationsEmptyState",
-            "No {{entityType}} within {{radius}} miles",
-            {
-              entityType: entityTypeDisplayName
-                ? entityTypeDisplayName
-                : "entity",
-              radius: radius ?? 10,
-            }
-          )}
+          {pt("nearbyLocationsEmptyState", {
+            entityType: entityTypeDisplayName
+              ? entityTypeDisplayName
+              : "entity",
+            radius: formattedDistance,
+            unit: pt(unit, { count: formattedDistance }),
+          })}
         </Body>
       </div>
     </div>

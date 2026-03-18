@@ -3,27 +3,31 @@ import {
   Fields,
   PuckComponent,
   setDeep,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 import {
   AssetImageType,
-  EntityField,
+  isLocalizedAssetImage,
+  resolveLocalizedAssetImage,
+  TranslatableAssetImage,
+} from "../../../types/images.ts";
+import { EntityField } from "../../../editor/EntityField.tsx";
+import {
   Image,
   ImgSizesByBreakpoint,
-  MaybeLink,
-  TranslatableString,
-  YextEntityField,
-  YextField,
   imgSizesHelper,
-  msg,
-  pt,
-  resolveComponentData,
-  resolveDataFromParent,
-  useDocument,
-} from "@yext/visual-editor";
+} from "../../atoms/image.tsx";
+import { MaybeLink } from "../../atoms/maybeLink.tsx";
+import { TranslatableString } from "../../../types/types.ts";
+import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
+import { YextField } from "../../../editor/YextField.tsx";
+import { msg, pt } from "../../../utils/i18n/platform.ts";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+import { resolveDataFromParent } from "../../../editor/ParentData.tsx";
+import { useDocument } from "../../../hooks/useDocument.tsx";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { EmptyImageState } from "./EmptyImageState";
+import { EmptyImageState } from "./EmptyImageState.tsx";
 import { ImageStylingFields, ImageStylingProps } from "./styling.ts";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
@@ -33,7 +37,9 @@ const LINK_REGEX_VALIDATION = /^(https?:\/\/[^\s]+|\/[^\s]*|#[^\s]*)$/;
 export interface ImageWrapperProps {
   data: {
     /** The image to display. */
-    image: YextEntityField<ImageType | ComplexImageType | AssetImageType>;
+    image: YextEntityField<
+      ImageType | ComplexImageType | TranslatableAssetImage
+    >;
     link?: TranslatableString;
   };
 
@@ -43,7 +49,7 @@ export interface ImageWrapperProps {
   /** @internal Controlled data from the parent section. */
   parentData?: {
     field: string;
-    image: ImageType | ComplexImageType | AssetImageType | undefined;
+    image: ImageType | ComplexImageType | TranslatableAssetImage | undefined;
   };
 
   /** Additional CSS classes to apply to the image. */
@@ -52,21 +58,24 @@ export interface ImageWrapperProps {
   sizes?: ImgSizesByBreakpoint;
 
   hideWidthProp?: boolean;
+
+  /** @internal If true, shows the imageConstrain prop. */
+  showImageConstrain?: boolean;
 }
 
 export const ImageWrapperFields: Fields<ImageWrapperProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      image: YextField<any, ImageType | ComplexImageType | AssetImageType>(
-        msg("fields.options.image", "Image"),
-        {
-          type: "entityField",
-          filter: {
-            types: ["type.image"],
-          },
-        }
-      ),
+      image: YextField<
+        any,
+        ImageType | ComplexImageType | TranslatableAssetImage
+      >(msg("fields.options.image", "Image"), {
+        type: "entityField",
+        filter: {
+          types: ["type.image"],
+        },
+      }),
       link: YextField(msg("fields.link", "Link"), {
         type: "translatableString",
       }),
@@ -78,6 +87,36 @@ export const ImageWrapperFields: Fields<ImageWrapperProps> = {
       ...ImageStylingFields,
     },
   }),
+  showImageConstrain: YextField(
+    msg("fields.showImageConstrain", "Show Image Constrain"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.show", "Show"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: false },
+      ],
+      visible: false,
+    }
+  ),
+};
+
+export const getImageUrl = (
+  image: ImageType | ComplexImageType | TranslatableAssetImage | undefined,
+  locale: string
+): string | undefined => {
+  if (!image) {
+    return undefined;
+  }
+
+  if (isLocalizedAssetImage(image)) {
+    return resolveLocalizedAssetImage(image, locale)?.url;
+  }
+
+  if ("image" in image) {
+    return image.image?.url;
+  }
+
+  return image.url;
 };
 
 const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
@@ -94,6 +133,7 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
         : "maxWidth / 2",
     },
     hideWidthProp,
+    showImageConstrain = false,
   } = props;
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
@@ -103,28 +143,14 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
       : resolveComponentData(data.image, i18n.language, streamDocument);
   }, [parentData, data.image, i18n.language, streamDocument]);
 
-  const getImageUrl = (
-    image: ImageType | ComplexImageType | AssetImageType | undefined
-  ): string | undefined => {
-    if (!image) {
-      return undefined;
-    }
-
-    if ("image" in image) {
-      return image.image?.url;
-    }
-
-    return image.url;
-  };
-
-  const imageUrl = getImageUrl(resolvedImage);
+  const imageUrl = getImageUrl(resolvedImage, i18n.language);
   const isEmpty =
     !resolvedImage ||
     !imageUrl ||
     (typeof imageUrl === "string" && imageUrl.trim() === "");
 
   const inputLink = resolveComponentData(
-    data.link ?? { en: DEFAULT_LINK, hasLocalizedValue: "true" as const },
+    data.link ?? { defaultValue: DEFAULT_LINK },
     i18n.language,
     streamDocument
   );
@@ -182,7 +208,12 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
           <Image
             image={resolvedImage}
             aspectRatio={styles.aspectRatio}
-            width={hideWidthProp ? undefined : styles.width}
+            width={
+              hideWidthProp ||
+              (showImageConstrain && styles.imageConstrain === "fill")
+                ? undefined
+                : styles.width
+            }
             className={
               className || "max-w-full rounded-image-borderRadius w-full h-full"
             }
@@ -205,7 +236,7 @@ export const imageDefaultProps = {
       },
       constantValueEnabled: true,
     },
-    link: { en: DEFAULT_LINK, hasLocalizedValue: "true" as const },
+    link: { defaultValue: DEFAULT_LINK },
   },
   styles: {
     aspectRatio: 1.78,
@@ -220,17 +251,29 @@ export const ImageWrapper: ComponentConfig<{ props: ImageWrapperProps }> = {
   fields: ImageWrapperFields,
   defaultProps: imageDefaultProps,
   resolveFields: (data, params) => {
-    const fields = resolveDataFromParent(ImageWrapperFields, data);
+    let fields = resolveDataFromParent(ImageWrapperFields, data);
     const parentType = params.parent?.type;
 
-    if (data.props.hideWidthProp) {
-      return setDeep(fields, "styles.objectFields.width.visible", false);
+    if (
+      data.props.hideWidthProp ||
+      data.props.styles.imageConstrain === "fill"
+    ) {
+      fields = setDeep(fields, "styles.objectFields.width.visible", false);
+    } else {
+      fields = setDeep(fields, "styles.objectFields.width.visible", true);
     }
+
+    fields = setDeep(
+      fields,
+      "styles.objectFields.imageConstrain.visible",
+      !!data.props.showImageConstrain
+    );
+
     if (parentType !== "PrimaryHeaderSlot") {
       return setDeep(fields, "data.objectFields.link.visible", false);
     }
 
-    return setDeep(fields, "styles.objectFields.width.visible", true);
+    return fields;
   },
   render: (props) => <ImageWrapperComponent {...props} />,
 };

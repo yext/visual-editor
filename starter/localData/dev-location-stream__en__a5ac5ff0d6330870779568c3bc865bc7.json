@@ -454,7 +454,7 @@
       "linkType": "PHONE"
     },
     "description": {
-      "html": "<p dir=\"ltr\" style=\"font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;\"><span style=\"color: #59359a;\">Our out-of-this-world </span><b><strong style=\"font-weight: bold; color: #59359a;\">burgers</strong></b><span style=\"color: #59359a;\"> and</span><b><strong style=\"font-weight: bold; color: #59359a;\"> fresh salads</strong></b><span style=\"color: #59359a;\"> are a flavor journey you won&#39;t forget. Explore a galaxy of taste, where every ingredient composes a symphony of flavors. Come visit us for a stellar dining experience!</span></p>"
+      "html": "<p dir=\"ltr\" style=\"font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;\"><span>Our out-of-this-world </span><b><strong style=\"font-weight: bold;\">burgers</strong></b><span> and</span><b><strong style=\"font-weight: bold;\"> fresh salads</strong></b><span> are a flavor journey you won&#39;t forget. Explore a galaxy of taste, where every ingredient composes a symphony of flavors. Come visit us for a stellar dining experience!</span></p>"
     },
     "image": {
       "height": 2048,

@@ -1,6 +1,6 @@
 import { ImageType, CTA as CTAType } from "@yext/pages-components";
-import { AssetImageType } from "./images";
-import { AssetVideo } from "./videos";
+import { AssetImageType } from "./images.ts";
+import { AssetVideo } from "./videos.ts";
 
 /**
  * A pages-components CTA with a translatable label and link
@@ -10,6 +10,9 @@ export type TranslatableCTA = Omit<CTAType, "label" | "link"> & {
   label: TranslatableString;
   /** The link the for the CTA */
   link: TranslatableString;
+  /** Whether the link should be normalized before rendering */
+  normalizeLink?: boolean;
+  openInNewTab?: boolean;
 };
 
 /** Enhanced CTA options */
@@ -24,13 +27,26 @@ export type EnhancedTranslatableCTA = TranslatableCTA & {
   ctaType?: "textAndLink" | "getDirections" | "presetImage";
 };
 
+/** Preset delivery logo options */
+export const FOOD_DELIVERY_SERVICES = [
+  "deliveroo",
+  "doordash",
+  "grubhub",
+  "skip-the-dishes",
+  "postmates",
+  "uber-eats",
+  "ezcater",
+] as const;
+
+export type FoodDeliveryServiceType = (typeof FOOD_DELIVERY_SERVICES)[number];
+
 /** Preset image types for CTA buttons - app store or food delivery logos */
 export type PresetImageType =
   | "app-store"
   | "google-play"
   | "galaxy-store"
   | "app-gallery"
-  | "uber-eats";
+  | FoodDeliveryServiceType;
 
 /** Data for the HeroSection */
 export type HeroSectionType = {
@@ -72,8 +88,18 @@ export type ProductStruct = {
    * @ai Always use ImageType
    */
   image?: ImageType | AssetImageType;
+  /**
+   * The product's brow text above the title/name
+   * @ai This should not be more than a few words
+   */
+  brow?: TranslatableString | TranslatableRichText;
   /** The product's name */
   name?: TranslatableString;
+  /**
+   * The product's price
+   * @ai This should not be more than a few words
+   */
+  price?: TranslatableString | TranslatableRichText;
   /** The product's description */
   description?: TranslatableRichText;
   /**
@@ -188,8 +214,9 @@ export type PersonStruct = {
 
 /** Represents a translatable string. The key is the locale (en, es, fr), and the value is the localized string. */
 type LocalizedValues = {
-  hasLocalizedValue: "true";
-} & Record<string, string>;
+  hasLocalizedValue?: "true";
+  defaultValue?: string;
+} & Record<string, string | undefined>;
 
 /**
  * A string that can be translated for different locales.
@@ -203,7 +230,10 @@ export type TranslatableString = string | LocalizedValues;
  */
 export type TranslatableRichText =
   | (string | RichText)
-  | Record<string, string | RichText>;
+  | ({
+      hasLocalizedValue?: "true";
+      defaultValue?: string | RichText;
+    } & Record<string, string | RichText | undefined>);
 
 /**
  * A rich text object with HTML and JSON (LexicalRichText) representations.

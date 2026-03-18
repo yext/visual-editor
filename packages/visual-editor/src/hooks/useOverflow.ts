@@ -4,11 +4,13 @@ import * as React from "react";
  * A hook that detects when a child element overflows its parent container.
  * @param containerRef A React ref attached to the parent container element.
  * @param contentRef A React ref attached to the child/content element to measure.
+ * @param containerAdjustment An optional number to subtract from the container's width for overflow calculation
  * @returns `true` if the child element is overflowing its parent.
  */
 export const useOverflow = (
   containerRef: React.RefObject<HTMLElement>,
-  contentRef: React.RefObject<HTMLElement>
+  contentRef: React.RefObject<HTMLElement>,
+  containerAdjustment: number = 0
 ): boolean => {
   const [isOverflowing, setIsOverflowing] = React.useState(false);
 
@@ -21,7 +23,11 @@ export const useOverflow = (
     }
 
     const observer = new ResizeObserver(() => {
-      const hasOverflow = content.scrollWidth > container.clientWidth;
+      const adjustedWidth = Math.max(
+        0,
+        container.clientWidth - containerAdjustment
+      );
+      const hasOverflow = content.scrollWidth > adjustedWidth;
       setIsOverflowing(hasOverflow);
     });
 
@@ -30,7 +36,7 @@ export const useOverflow = (
     observer.observe(content);
 
     return () => observer.disconnect();
-  }, [containerRef, contentRef]);
+  }, [containerRef, contentRef, containerAdjustment]);
 
   return isOverflowing;
 };

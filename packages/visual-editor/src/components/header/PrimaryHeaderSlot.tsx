@@ -1,23 +1,37 @@
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
+import {
+  ComponentConfig,
+  Fields,
+  PuckComponent,
+  registerOverlayPortal,
+  Slot,
+  SlotComponent,
+} from "@puckeditor/core";
 import {
   backgroundColors,
   BackgroundStyle,
-  CTAWrapperProps,
-  EnhancedTranslatableCTA,
-  ImageWrapperProps,
-  msg,
-  PageSection,
-  PageSectionProps,
-  resolveComponentData,
-  TranslatableCTA,
-  useOverflow,
-  YextEntityField,
-  YextField,
-} from "@yext/visual-editor";
+} from "../../utils/themeConfigOptions.ts";
+import { CTAWrapperProps } from "../contentBlocks/CtaWrapper.tsx";
+import { EnhancedTranslatableCTA, TranslatableCTA } from "../../types/types.ts";
+import { ImageWrapperProps } from "../contentBlocks/image/Image.tsx";
+import { msg } from "../../utils/i18n/platform.ts";
+import { PageSection, PageSectionProps } from "../atoms/pageSection.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { useOverflow } from "../../hooks/useOverflow.ts";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { YextField } from "../../editor/YextField.tsx";
+import { usePreviewWindow } from "../../hooks/usePreviewWindow.ts";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { FaBars, FaTimes } from "react-icons/fa";
-import { defaultHeaderLinkProps, HeaderLinksProps } from "./HeaderLinks";
+import { defaultHeaderLinkProps, HeaderLinksProps } from "./HeaderLinks.tsx";
+import {
+  HeaderLinksDisplayModeProvider,
+  useExpandedHeaderMenu,
+} from "./ExpandedHeaderMenuContext.tsx";
+import { getHeaderViewport } from "./viewport.ts";
+import { SlidePanel } from "./SlidePanel.tsx";
+
+const HAMBURGER_RESERVE_PX = 48;
 
 export interface PrimaryHeaderSlotProps {
   styles: {
@@ -34,6 +48,7 @@ export interface PrimaryHeaderSlotProps {
   conditionalRender?: {
     navContent: boolean;
     CTAs: boolean;
+    hasLogoImage?: boolean;
   };
 
   /** @internal */
@@ -78,6 +93,30 @@ const primaryHeaderSlotFields: Fields<PrimaryHeaderSlotProps> = {
   },
 };
 
+type CTAContainerProps = {
+  showCTAs: boolean;
+  showHamburger: boolean;
+  PrimaryCTASlot: SlotComponent;
+  SecondaryCTASlot: SlotComponent;
+};
+
+const CTAContainer: React.FC<CTAContainerProps> = (props) => {
+  const { showCTAs, PrimaryCTASlot, SecondaryCTASlot, showHamburger } = props;
+
+  if (!showCTAs) {
+    return null;
+  }
+
+  return (
+    <div
+      className={`flex flex-col md:flex-row gap-4 md:gap-2 md:items-center ${showHamburger ? "mr-8" : ""}`}
+    >
+      <PrimaryCTASlot style={{ height: "auto" }} />
+      <SecondaryCTASlot style={{ height: "auto" }} />
+    </div>
+  );
+};
+
 const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
   styles,
   slots,
@@ -86,43 +125,169 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
   puck,
 }) => {
   const { t } = useTranslation();
+  const previewWindow = usePreviewWindow();
+  const menuContext = useExpandedHeaderMenu();
 
-  const [isMobileMenuOpen, setMobileMenuOpen] = React.useState<boolean>(false);
-
+  const headerRef = React.useRef<HTMLDivElement>(null);
   const containerRef = React.useRef<HTMLDivElement>(null);
   const contentRef = React.useRef<HTMLDivElement>(null);
-  const showHamburger = useOverflow(containerRef, contentRef);
+  const hamburgerButtonRef = React.useRef<HTMLButtonElement>(null);
+
+  const [isMobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const [layout, setLayout] = React.useState({
+    viewportWidth: previewWindow?.innerWidth ?? 1024,
+    panelTop: 0,
+    panelHeight: 0,
+  });
+
+  const handleCloseMenu = React.useCallback(() => {
+    setMobileMenuOpen(false);
+  }, []);
 
   const showCTAs = puck.isEditing || conditionalRender?.CTAs;
   const showNavContent = puck.isEditing || conditionalRender?.navContent;
+  const { isTablet, isDesktop } = getHeaderViewport(layout.viewportWidth);
 
-  const LogoSlot = <slots.LogoSlot style={{ height: "auto", width: "auto" }} />;
-
-  const navContent = (
-    <>
-      <slots.LinksSlot style={{ height: "auto" }} />
-      {showCTAs && (
-        <div className="flex flex-col md:flex-row gap-4 md:gap-2 md:items-center">
-          <slots.PrimaryCTASlot style={{ height: "auto" }} />
-          <slots.SecondaryCTASlot style={{ height: "auto" }} />
-        </div>
-      )}
-    </>
+  const primaryOverflow = useOverflow(
+    containerRef,
+    contentRef,
+    showNavContent ? HAMBURGER_RESERVE_PX : 0
   );
+
+  const primaryHasCollapsedLinks =
+    menuContext?.primaryHasCollapsedLinks ?? false;
+  const secondaryOverflow = menuContext?.secondaryOverflow ?? false;
+  const showHamburger =
+    primaryOverflow || primaryHasCollapsedLinks || secondaryOverflow;
+  const hasExtraMargin =
+    showHamburger && (isDesktop || isTablet) && !primaryOverflow && !showCTAs;
+
+  // Handles resizing, scrolling, and panel positioning in one place.
+  React.useLayoutEffect(() => {
+    const win = previewWindow || window;
+    const header = headerRef.current;
+    if (!header) {
+      return;
+    }
+
+    const updateLayout = () => {
+      const rect = header.getBoundingClientRect();
+      setLayout({
+        viewportWidth: rect.width || win.innerWidth,
+        panelTop: rect.bottom,
+        panelHeight: Math.max(0, win.innerHeight - rect.bottom),
+      });
+    };
+
+    const resizeObserver = new ResizeObserver(updateLayout);
+    resizeObserver.observe(header);
+    win.addEventListener("resize", updateLayout);
+    win.addEventListener("scroll", updateLayout, { passive: true });
+
+    updateLayout();
+
+    return () => {
+      resizeObserver.disconnect();
+      win.removeEventListener("resize", updateLayout);
+      win.removeEventListener("scroll", updateLayout);
+    };
+  }, [previewWindow, isMobileMenuOpen]); // Re-sync when menu opens to ensure panel snaps to header
+
+  // Puck portal registration for the hamburger button
+  React.useEffect(
+    () => registerOverlayPortal(hamburgerButtonRef.current),
+    [hamburgerButtonRef.current]
+  );
+
+  // Sync overflow state with parent context
+  React.useEffect(() => {
+    menuContext?.setPrimaryOverflow(primaryOverflow);
+    return () => menuContext?.setPrimaryOverflow(false);
+  }, [menuContext, primaryOverflow]);
+
+  // Auto-close menu when overflow disappears
+  React.useEffect(() => {
+    if (
+      puck.isEditing &&
+      !showHamburger &&
+      isMobileMenuOpen &&
+      layout.viewportWidth > 360
+    ) {
+      setMobileMenuOpen(false);
+    }
+  }, [puck.isEditing, showHamburger, isMobileMenuOpen, layout.viewportWidth]);
+
+  const LogoSlot = (
+    <div
+      className="flex-shrink-0"
+      style={{
+        minHeight: conditionalRender?.hasLogoImage ? undefined : "100px",
+      }}
+    >
+      <slots.LogoSlot style={{ height: "auto", width: "auto" }} />
+    </div>
+  );
+
+  // Header links rendered inline within the header bar.
+  const NavContent = (
+    <HeaderLinksDisplayModeProvider value="inline">
+      <slots.LinksSlot style={{ height: "auto" }} />
+    </HeaderLinksDisplayModeProvider>
+  );
+
+  const renderMenuContent = (variant: "mobile" | "tablet" | "desktop") => {
+    const showCtasInMenu = variant === "mobile";
+    const showSecondaryInMenu = variant === "mobile" || secondaryOverflow;
+
+    return (
+      <>
+        <PageSection
+          verticalPadding={"sm"}
+          background={styles.backgroundColor}
+          maxWidth={parentValues?.maxWidth}
+        >
+          <HeaderLinksDisplayModeProvider value="menu">
+            <slots.LinksSlot style={{ height: "auto" }} />
+          </HeaderLinksDisplayModeProvider>
+        </PageSection>
+
+        {/* Secondary Header (Menu) */}
+        {parentValues && (
+          <HeaderLinksDisplayModeProvider value="menu">
+            <div className={showSecondaryInMenu ? "flex" : "flex md:hidden"}>
+              <parentValues.SecondaryHeaderSlot
+                style={{ height: "auto", width: "100%" }}
+              />
+            </div>
+          </HeaderLinksDisplayModeProvider>
+        )}
+
+        {showCTAs && showCtasInMenu && (
+          <PageSection
+            verticalPadding={"sm"}
+            background={styles.backgroundColor}
+            maxWidth={parentValues?.maxWidth}
+          >
+            <div className={`flex flex-col gap-4`}>
+              <slots.PrimaryCTASlot style={{ height: "auto" }} />
+              <slots.SecondaryCTASlot style={{ height: "auto" }} />
+            </div>
+          </PageSection>
+        )}
+      </>
+    );
+  };
 
   return (
     <>
-      <div className="flex flex-col">
+      <div className="flex flex-col" ref={headerRef}>
         <PageSection
           maxWidth={parentValues?.maxWidth}
           verticalPadding={"header"}
           background={styles.backgroundColor}
           className="flex flex-row justify-between w-full items-center gap-8"
         >
-          {/* Mobile logo */}
-          <div className="block md:hidden">{LogoSlot}</div>
-          {/* Desktop logo */}
-          <div className="hidden md:block">{LogoSlot}</div>
+          <div className="block">{LogoSlot}</div>
           {/* Desktop Navigation & Mobile Hamburger */}
           {showNavContent && (
             <div
@@ -133,24 +298,32 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
               {/* Its width is our source of truth. */}
               <div
                 ref={contentRef}
-                className="flex items-center gap-8 invisible h-0"
+                className="flex items-center gap-8 h-0 opacity-0 pointer-events-none absolute top-0 left-[-9999px] invisible"
+                aria-hidden="true"
               >
-                {navContent}
+                <div>{NavContent}</div>
+                <CTAContainer
+                  showCTAs={!!showCTAs}
+                  showHamburger={showHamburger}
+                  PrimaryCTASlot={slots.PrimaryCTASlot}
+                  SecondaryCTASlot={slots.SecondaryCTASlot}
+                />
               </div>
 
               {/* 2. The "Render" Div: Conditionally shown or hidden based on the measurement. */}
-              <div
-                className={`hidden md:flex items-center gap-8 absolute ${
-                  showHamburger
-                    ? "opacity-0 pointer-events-none"
-                    : "opacity-100 pointer-events-auto"
-                }`}
-              >
-                {navContent}
+              <div className="hidden md:flex items-center gap-8">
+                {!primaryOverflow && <div>{NavContent}</div>}
+                <CTAContainer
+                  showCTAs={!!showCTAs}
+                  showHamburger={showHamburger}
+                  PrimaryCTASlot={slots.PrimaryCTASlot}
+                  SecondaryCTASlot={slots.SecondaryCTASlot}
+                />
               </div>
 
               {/* Hamburger Button - Shown when nav overflows or on small screens */}
               <button
+                ref={hamburgerButtonRef}
                 onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
                 aria-label={
                   isMobileMenuOpen
@@ -159,7 +332,8 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
                 }
                 aria-expanded={isMobileMenuOpen}
                 aria-controls="mobile-menu"
-                className={`text-xl z-10 ${showHamburger ? "md:block" : "md:hidden"}`}
+                className={`text-xl z-10 ${showHamburger ? "md:block" : "md:hidden"} 
+                ${hasExtraMargin ? "ml-8" : ""}`}
               >
                 {isMobileMenuOpen ? (
                   <FaTimes size="1.5rem" />
@@ -176,42 +350,28 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
       {isMobileMenuOpen && (
         <div
           id="mobile-menu"
-          className={`transition-all duration-300 ease-in-out ${
+          className={`absolute left-0 top-full w-full z-50 transition-all duration-300 ease-in-out md:hidden lg:block ${
             isMobileMenuOpen
               ? "max-h-[1000px] opacity-100"
               : "max-h-0 opacity-0 overflow-hidden"
           }`}
         >
-          {/* ... Mobile menu sections remain the same ... */}
-          <PageSection
-            verticalPadding={"sm"}
-            background={styles.backgroundColor}
-            maxWidth={parentValues?.maxWidth}
+          {renderMenuContent(isDesktop ? "desktop" : "mobile")}
+        </div>
+      )}
+
+      {/* Tablet slide-out menu */}
+      {isTablet && (
+        <div className="hidden md:block lg:hidden">
+          <SlidePanel
+            isOpen={isMobileMenuOpen}
+            onClose={handleCloseMenu}
+            top={layout.panelTop}
+            height={layout.panelHeight}
+            previewWindow={previewWindow}
           >
-            <slots.LinksSlot style={{ height: "auto" }} />
-          </PageSection>
-
-          {/* Secondary Header (Mobile menu) */}
-          {parentValues && (
-            <div className="flex md:hidden">
-              <parentValues.SecondaryHeaderSlot
-                style={{ height: "auto", width: "100%" }}
-              />
-            </div>
-          )}
-
-          {showCTAs && (
-            <PageSection
-              verticalPadding={"sm"}
-              background={styles.backgroundColor}
-              maxWidth={parentValues?.maxWidth}
-            >
-              <div className="flex flex-col md:flex-row gap-4 md:gap-2 md:items-center">
-                <slots.PrimaryCTASlot style={{ height: "auto" }} />
-                <slots.SecondaryCTASlot style={{ height: "auto" }} />
-              </div>
-            </PageSection>
-          )}
+            {renderMenuContent("tablet")}
+          </SlidePanel>
         </div>
       )}
     </>
@@ -263,11 +423,14 @@ export const defaultPrimaryHeaderProps: PrimaryHeaderSlotProps = {
         props: {
           data: {
             show: true,
+            actionType: "link",
+            normalizeLink: true,
+            buttonText: { defaultValue: "Button" },
             entityField: {
               field: "",
               constantValue: {
-                label: { en: "Call to Action", hasLocalizedValue: "true" },
-                link: "#",
+                label: { defaultValue: "Call to Action" },
+                link: { defaultValue: "#" },
                 linkType: "URL",
                 ctaType: "textAndLink",
               },
@@ -288,11 +451,14 @@ export const defaultPrimaryHeaderProps: PrimaryHeaderSlotProps = {
         props: {
           data: {
             show: true,
+            actionType: "link",
+            normalizeLink: true,
+            buttonText: { defaultValue: "Button" },
             entityField: {
               field: "",
               constantValue: {
-                label: { en: "Call to Action", hasLocalizedValue: "true" },
-                link: "#",
+                label: { defaultValue: "Call to Action" },
+                link: { defaultValue: "#" },
                 linkType: "URL",
                 ctaType: "textAndLink",
               },
@@ -322,6 +488,15 @@ export const PrimaryHeaderSlot: ComponentConfig<{
     if (!streamDocument || !locale) {
       return data;
     }
+
+    const logoSlotItem = data.props.slots.LogoSlot?.[0];
+
+    const hasLogoImage =
+      logoSlotItem?.type === "ImageSlot" &&
+      !!(
+        logoSlotItem?.props?.data?.image?.constantValue ||
+        logoSlotItem?.props?.data?.image?.field
+      );
 
     // Check if PrimaryCTA has data to display
     const primaryCTA = resolveComponentData(
@@ -366,6 +541,7 @@ export const PrimaryHeaderSlot: ComponentConfig<{
         conditionalRender: {
           navContent: showNavContent,
           CTAs: showPrimaryCTA || showSecondaryCTA,
+          hasLogoImage,
         },
       },
     };

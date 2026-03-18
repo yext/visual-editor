@@ -1,4 +1,4 @@
-import { StreamDocument } from "../applyTheme";
+import { StreamDocument } from "../types/StreamDocument.ts";
 
 /**
  * isValidDirectoryParents returns true if the array from dm_directoryParents
@@ -112,6 +112,7 @@ const primaryCategoryToLocalBusinessSubtype: Record<string, string> = {
   "Consumer Electronics": "Store",
   Contractors: "HomeAndConstructionBusiness",
   "Financial Services": "FinancialService",
+  "Food & Dining": "FoodEstablishment",
   Government: "GovernmentOffice",
   "Health & Medicine": "MedicalBusiness",
   "Home & Garden": "Store",

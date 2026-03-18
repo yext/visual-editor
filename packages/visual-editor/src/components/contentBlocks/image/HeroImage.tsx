@@ -1,24 +1,25 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, PuckComponent } from "@measured/puck";
+import { ComponentConfig, PuckComponent } from "@puckeditor/core";
+import { useDocument } from "../../../hooks/useDocument.tsx";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+import { EntityField } from "../../../editor/EntityField.tsx";
+import { Image, imgSizesHelper } from "../../atoms/image.tsx";
+import { msg, pt } from "../../../utils/i18n/platform.ts";
 import {
-  useDocument,
-  resolveComponentData,
-  EntityField,
-  Image,
-  msg,
-  pt,
-  imgSizesHelper,
   AssetImageType,
-} from "@yext/visual-editor";
+  isLocalizedAssetImage,
+  resolveLocalizedAssetImage,
+  TranslatableAssetImage,
+} from "../../../types/images.ts";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
-import { updateFields } from "../../pageSections/HeroSection";
+import { updateFields } from "../../pageSections/HeroSection.tsx";
 import {
   imageDefaultProps,
   ImageWrapperFields,
   ImageWrapperProps,
 } from "./Image.tsx";
-import { EmptyImageState } from "./EmptyImageState";
+import { EmptyImageState } from "./EmptyImageState.tsx";
 
 export interface HeroImageProps extends ImageWrapperProps {
   /** @internal from the parent Hero Section Component */
@@ -36,11 +37,16 @@ const HeroImageComponent: PuckComponent<HeroImageProps> = (props) => {
   );
 
   const getImageUrl = (
-    image: ImageType | ComplexImageType | AssetImageType | undefined
+    image: ImageType | ComplexImageType | TranslatableAssetImage | undefined
   ): string | undefined => {
     if (!image) {
       return undefined;
     }
+
+    if (isLocalizedAssetImage(image)) {
+      return resolveLocalizedAssetImage(image, i18n.language)?.url;
+    }
+
     if ("image" in image) {
       return image.image?.url;
     }

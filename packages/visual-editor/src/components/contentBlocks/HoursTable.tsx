@@ -1,18 +1,15 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { DayOfWeekNames, HoursType } from "@yext/pages-components";
 import "@yext/pages-components/style.css";
-import {
-  EntityField,
-  HoursTableAtom,
-  resolveComponentData,
-  useDocument,
-  YextEntityField,
-  YextField,
-  msg,
-  pt,
-  Body,
-} from "@yext/visual-editor";
+import { EntityField } from "../../editor/EntityField.tsx";
+import { HoursTableAtom } from "../atoms/hoursTable.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { YextField } from "../../editor/YextField.tsx";
+import { msg, pt } from "../../utils/i18n/platform.ts";
+import { Body } from "../atoms/body.tsx";
 
 /** Props for the HoursTable component. */
 export interface HoursTableProps {
@@ -67,7 +64,7 @@ export const HoursTableStyleFields = {
     }
   ),
   showAdditionalHoursText: YextField<boolean>(
-    msg("fields.options.showAdditionalHoursText", "Show additional hours text"),
+    msg("fields.options.showAdditionalHoursText", "Show Additional Hours Text"),
     {
       type: "radio",
       options: [
@@ -78,7 +75,7 @@ export const HoursTableStyleFields = {
   ),
 };
 
-const hoursTableFields: Fields<HoursTableProps> = {
+export const hoursTableFields: Fields<HoursTableProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
@@ -89,16 +86,19 @@ const hoursTableFields: Fields<HoursTableProps> = {
     type: "object",
     objectFields: {
       ...HoursTableStyleFields,
-      alignment: YextField(msg("fields.alignCard", "Align card"), {
-        type: "radio",
-        options: [
-          { label: msg("fields.options.left", "Left"), value: "items-start" },
-          {
-            label: msg("fields.options.center", "Center"),
-            value: "items-center",
-          },
-        ],
-      }),
+      alignment: YextField(
+        msg("fields.contentAlignment", "Content Alignment"),
+        {
+          type: "radio",
+          options: [
+            { label: msg("fields.options.left", "Left"), value: "items-start" },
+            {
+              label: msg("fields.options.center", "Center"),
+              value: "items-center",
+            },
+          ],
+        }
+      ),
     },
   }),
 };

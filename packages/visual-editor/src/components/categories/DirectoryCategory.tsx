@@ -1,4 +1,4 @@
-import { Directory, DirectoryProps } from "../directory/Directory";
+import { Directory, DirectoryProps } from "../directory/Directory.tsx";
 
 export interface DirectoryCategoryProps {
   Directory: DirectoryProps;

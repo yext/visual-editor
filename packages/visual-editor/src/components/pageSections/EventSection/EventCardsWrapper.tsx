@@ -1,17 +1,14 @@
-import * as React from "react";
 import {
   ComponentConfig,
   ComponentData,
   PuckComponent,
   setDeep,
-} from "@measured/puck";
-import {
-  EventSectionType,
-  ComponentFields,
-  msg,
-  i18nComponentsInstance,
-  resolveYextEntityField,
-} from "@yext/visual-editor";
+} from "@puckeditor/core";
+import { EventSectionType } from "../../../types/types.ts";
+import { ComponentFields } from "../../../types/fields.ts";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import {
   cardWrapperFields,
@@ -19,13 +16,47 @@ import {
 } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 import { defaultEventCardSlotData, EventCardProps } from "./EventCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
+import { YextField } from "../../../editor/YextField.tsx";
 
-export type EventCardsWrapperProps = CardWrapperType<EventSectionType>;
+export type EventCardsWrapperProps = CardWrapperType<EventSectionType> & {
+  styles: {
+    showImage: boolean;
+    showDateTime: boolean;
+    showDescription: boolean;
+    showCTA: boolean;
+  };
+};
 
-const eventCardsWrapperFields = cardWrapperFields<EventCardsWrapperProps>(
-  msg("components.events", "Events"),
-  ComponentFields.EventSection.type
-);
+const eventCardsWrapperFields = {
+  ...cardWrapperFields<EventCardsWrapperProps>(
+    msg("components.events", "Events"),
+    ComponentFields.EventSection.type
+  ),
+  styles: YextField(msg("fields.styles", "Styles"), {
+    type: "object",
+    objectFields: {
+      showImage: YextField(msg("fields.showImage", "Show Image"), {
+        type: "radio",
+        options: "SHOW_HIDE",
+      }),
+      showDateTime: YextField(msg("fields.showDateTime", "Show Date & Time"), {
+        type: "radio",
+        options: "SHOW_HIDE",
+      }),
+      showDescription: YextField(
+        msg("fields.showDescription", "Show Description"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
+        }
+      ),
+      showCTA: YextField(msg("fields.showCTA", "Show CTA"), {
+        type: "radio",
+        options: "SHOW_HIDE",
+      }),
+    },
+  }),
+};
 
 const EventCardsWrapperComponent: PuckComponent<EventCardsWrapperProps> = (
   props
@@ -49,6 +80,12 @@ export const EventCardsWrapper: ComponentConfig<{
       constantValue: [{}, {}, {}],
       constantValueEnabled: true,
       field: "",
+    },
+    styles: {
+      showImage: true,
+      showDateTime: true,
+      showDescription: true,
+      showCTA: true,
     },
     slots: {
       CardSlot: [],

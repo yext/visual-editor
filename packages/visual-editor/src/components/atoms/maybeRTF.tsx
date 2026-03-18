@@ -1,5 +1,5 @@
-import { LexicalRichText } from "@yext/pages-components";
-import { Body, BodyProps, RichText, useBackground } from "@yext/visual-editor";
+import { Body, BodyProps } from "./body.tsx";
+import { RichText } from "../../types/types.ts";
 import "./maybeRTF.css";
 
 export interface MaybeRTFProps extends Record<string, any> {
@@ -12,8 +12,6 @@ export const MaybeRTF = ({
   bodyVariant = "base",
   ...props
 }: MaybeRTFProps) => {
-  const background = useBackground();
-
   if (!data) {
     return <></>;
   }
@@ -32,13 +30,9 @@ export const MaybeRTF = ({
         <div
           {...props}
           dangerouslySetInnerHTML={{ __html: data.html }}
-          className={`rtf-theme ${background?.isDarkBackground ? "rtf-dark-background" : "rtf-light-background"} ${bodyVariant !== "base" && `rtf-body-${bodyVariant}`}`}
+          className={`rtf-theme rtf-wrapper ${bodyVariant !== "base" ? `rtf-body-${bodyVariant}` : ""}`}
         />
       );
-    }
-
-    if ("json" in data && data.json) {
-      return <LexicalRichText serializedAST={JSON.stringify(data.json)} />;
     }
   }
 

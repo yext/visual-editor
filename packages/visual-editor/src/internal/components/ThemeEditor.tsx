@@ -5,7 +5,7 @@ import {
   Data,
   History,
   AppState,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { useThemeLocalStorage } from "../hooks/theme/useLocalStorage.ts";
 import { DevLogger } from "../../utils/devLogger.ts";

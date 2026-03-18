@@ -1,5 +1,5 @@
 import React from "react";
-import { CustomField, FieldLabel, AutoField } from "@measured/puck";
+import { CustomField, FieldLabel, AutoField } from "@puckeditor/core";
 
 export type OptionalNumberFieldProps = {
   fieldLabel: string;

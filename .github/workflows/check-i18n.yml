@@ -15,8 +15,8 @@ jobs:
         uses: pnpm/action-setup@v4.0.0
       - run: pnpm i --ignore-scripts
 
-      - name: Run i18n scan
-        run: pnpm run i18n:scan
+      - name: Run i18n update
+        run: pnpm run i18n:update
 
       - name: Push changes
         id: push-changes
@@ -35,5 +35,5 @@ jobs:
           script: |
             core.setFailed('i18n changes were made. A new commit with autofixes was pushed.')
 
-      - name: Check for empty translation strings
-        run: pnpm run i18n:check-empty # This will fail the workflow if it exits with a non-zero code
+      - name: Lint i18n files
+        run: pnpm run i18n:lint

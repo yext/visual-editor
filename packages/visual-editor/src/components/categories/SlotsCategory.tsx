@@ -1,4 +1,8 @@
 import { Address, AddressProps } from "../contentBlocks/Address.tsx";
+import {
+  AboutSectionDetailsColumn,
+  AboutSectionDetailsColumnProps,
+} from "../pageSections/AboutSection/AboutSectionDetailsColumn.tsx";
 import { BodyTextProps, BodyText } from "../contentBlocks/BodyText.tsx";
 import { CTAWrapperProps, CTAWrapper } from "../contentBlocks/CtaWrapper.tsx";
 import {
@@ -13,6 +17,7 @@ import {
 import { Video, VideoProps } from "../contentBlocks/Video.tsx";
 import { TextList, TextListProps } from "../contentBlocks/TextList.tsx";
 import { PhoneListProps, PhoneList } from "../contentBlocks/PhoneList.tsx";
+import { Text, TextProps } from "../contentBlocks/Text.tsx";
 import {
   ProductCardsWrapper,
   ProductCardsWrapperProps,
@@ -55,11 +60,7 @@ import {
   PhotoGalleryWrapperProps,
   PhotoGalleryWrapper,
 } from "../pageSections/PhotoGallerySection/PhotoGalleryWrapper.tsx";
-import {
-  FAQsWrapperSlot,
-  FAQsWrapperSlotProps,
-} from "../pageSections/FAQsSection/FAQsWrapperSlot.tsx";
-import { FAQSlot, FAQSlotProps } from "../pageSections/FAQsSection/FAQSlot.tsx";
+import { FAQCard, FAQCardProps } from "../pageSections/FAQsSection/FAQCard.tsx";
 import {
   TeamCardsWrapper,
   TeamCardsWrapperProps,
@@ -133,6 +134,7 @@ import { HeaderLinks, HeaderLinksProps } from "../header/HeaderLinks.tsx";
 
 export interface SlotsCategoryProps {
   AddressSlot: AddressProps;
+  AboutSectionDetailsColumn: AboutSectionDetailsColumnProps;
   BreadcrumbsSlot: BreadcrumbsSectionProps;
   BodyTextSlot: BodyTextProps;
   CopyrightMessageSlot: CopyrightMessageSlotProps;
@@ -142,8 +144,7 @@ export interface SlotsCategoryProps {
   EmailsSlot: EmailsProps;
   EventCard: EventCardProps;
   EventCardsWrapper: EventCardsWrapperProps;
-  FAQsWrapperSlot: FAQsWrapperSlotProps;
-  FAQSlot: FAQSlotProps;
+  FAQCard: FAQCardProps;
   FooterExpandedLinkSectionSlot: FooterExpandedLinkSectionSlotProps;
   FooterExpandedLinksWrapper: FooterExpandedLinksWrapperProps;
   FooterLinksSlot: FooterLinksSlotProps;
@@ -172,6 +173,7 @@ export interface SlotsCategoryProps {
   TestimonialCard: TestimonialCardProps;
   TestimonialCardsWrapper: TestimonialCardsWrapperProps;
   TextListSlot: TextListProps;
+  TextSlot: TextProps;
   Timestamp: TimestampProps;
   VideoSlot: VideoProps;
 }
@@ -193,6 +195,10 @@ const ExpandedHeaderComponents = {
 };
 
 export const SlotsCategoryComponents = {
+  AboutSectionDetailsColumn: {
+    ...AboutSectionDetailsColumn,
+    permissions: lockedPermissions,
+  },
   AddressSlot: { ...Address, permissions: lockedPermissions },
   BodyTextSlot: { ...BodyText, permissions: lockedPermissions },
   BreadcrumbsSlot: { ...BreadcrumbsSection, permissions: lockedPermissions },
@@ -207,8 +213,7 @@ export const SlotsCategoryComponents = {
   EventCard: { ...EventCard, permissions: lockedPermissions },
   EventCardsWrapper: { ...EventCardsWrapper, permissions: lockedPermissions },
   ...ExpandedHeaderComponents,
-  FAQsWrapperSlot: { ...FAQsWrapperSlot, permissions: lockedPermissions },
-  FAQSlot: { ...FAQSlot, permissions: lockedPermissions },
+  FAQCard: { ...FAQCard, permissions: lockedPermissions },
   FooterExpandedLinkSectionSlot: {
     ...FooterExpandedLinkSectionSlot,
     permissions: lockedPermissions,
@@ -264,6 +269,7 @@ export const SlotsCategoryComponents = {
     permissions: lockedPermissions,
   },
   TextListSlot: { ...TextList, permissions: lockedPermissions },
+  TextSlot: { ...Text, permissions: lockedPermissions },
   Timestamp: { ...Timestamp, permissions: lockedPermissions },
   VideoSlot: { ...Video, permissions: lockedPermissions },
 };

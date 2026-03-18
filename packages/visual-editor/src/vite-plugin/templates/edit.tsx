@@ -20,7 +20,7 @@ import {
   TemplateRenderProps,
   GetHeadConfig,
 } from "@yext/pages";
-import { type Config } from "@measured/puck";
+import { type Config } from "@puckeditor/core";
 import tailwindConfig from "../../tailwind.config";
 
 const componentRegistry: Record<string, Config<any>> = {
@@ -42,6 +42,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
   document,
 }): HeadConfig => {
   return {
+    title: "Editor",
     other: fullStorySnippet + applyTheme(document, "./", defaultThemeConfig),
   };
 };

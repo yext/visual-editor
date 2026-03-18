@@ -1,5 +1,5 @@
 import { assert, describe, it } from "vitest";
-import { resolveSchemaJson, resolveSchemaString } from "./resolveSchema";
+import { resolveSchemaJson, resolveSchemaString } from "./resolveSchema.ts";
 
 describe("resolveSchemaString", () => {
   const document = {

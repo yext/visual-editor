@@ -1,4 +1,10 @@
-import { Puck, Config, InitialHistory, FieldLabel } from "@measured/puck";
+import {
+  Puck,
+  Config,
+  InitialHistory,
+  FieldLabel,
+  legacySideBarPlugin,
+} from "@puckeditor/core";
 import React, { useCallback, useEffect, useRef } from "react";
 import { useState } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
@@ -13,8 +19,11 @@ import { v4 as uuidv4 } from "uuid";
 import { ThemeHistories, ThemeHistory } from "../types/themeData.ts";
 import * as lzstring from "lz-string";
 import { Metadata } from "../../editor/Editor.tsx";
+import { createPreviewFrameLinkBlocker } from "../utils/previewFrameLinkBlocker.ts";
 
 const devLogger = new DevLogger();
+// Used because we want the sidebar to be hidden
+const legacySidebar = legacySideBarPlugin();
 
 type InternalThemeEditorProps = {
   puckConfig: Config;
@@ -62,6 +71,11 @@ export const InternalThemeEditor = ({
   useEffect(() => {
     themeHistoriesRef.current = themeHistories;
   }, [themeHistories]);
+
+  useEffect(() => {
+    // In theme mode, links should still be hoverable but never navigate.
+    return createPreviewFrameLinkBlocker();
+  }, []);
 
   const handlePublishTheme = async () => {
     devLogger.logFunc("saveThemeData");
@@ -151,6 +165,7 @@ export const InternalThemeEditor = ({
         themeHistoriesRef={themeHistoriesRef}
         themeConfig={themeConfig}
         onThemeChange={handleThemeChange}
+        customFonts={templateMetadata.customFonts}
       />
     );
   }, []);
@@ -167,8 +182,9 @@ export const InternalThemeEditor = ({
           duplicate: false,
           delete: false,
           insert: false,
-          edit: false,
+          edit: true,
         }}
+        plugins={[legacySidebar]}
         overrides={{
           header: () => (
             <ThemeHeader
@@ -183,6 +199,7 @@ export const InternalThemeEditor = ({
               setClearLocalChangesModalOpen={setClearLocalChangesModalOpen}
               totalEntityCount={templateMetadata.totalEntityCount}
               localDev={localDev}
+              headDeployStatus={templateMetadata.headDeployStatus}
             />
           ),
           actionBar: () => <></>,

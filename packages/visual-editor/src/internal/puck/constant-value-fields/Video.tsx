@@ -1,13 +1,13 @@
 import * as React from "react";
-import { CustomField, FieldLabel } from "@measured/puck";
+import { CustomField, FieldLabel } from "@puckeditor/core";
 import {
   TARGET_ORIGINS,
   useReceiveMessage,
   useSendMessageToParent,
-} from "../../hooks/useMessage";
-import { Button } from "../ui/button";
-import { AssetVideo } from "../../../types/videos";
-import { pt } from "../../../utils/i18n/platform";
+} from "../../hooks/useMessage.ts";
+import { Button } from "../ui/button.tsx";
+import { AssetVideo } from "../../../types/videos.ts";
+import { pt } from "../../../utils/i18n/platform.ts";
 
 type VideoPayload = {
   id: string;

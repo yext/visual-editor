@@ -1,4 +1,4 @@
-import { CustomField, FieldLabel } from "@measured/puck";
+import { CustomField, FieldLabel } from "@puckeditor/core";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 import "../ui/puck.css";

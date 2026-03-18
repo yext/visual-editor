@@ -1,18 +1,15 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields } from "@measured/puck";
-import {
-  useDocument,
-  resolveComponentData,
-  EntityField,
-  YextEntityField,
-  PhoneAtom,
-  msg,
-  pt,
-  YextField,
-  TranslatableString,
-  backgroundColors,
-  resolveDataFromParent,
-} from "@yext/visual-editor";
+import { ComponentConfig, Fields } from "@puckeditor/core";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { EntityField } from "../../editor/EntityField.tsx";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { PhoneAtom } from "../atoms/phone.tsx";
+import { msg, pt } from "../../utils/i18n/platform.ts";
+import { YextField } from "../../editor/YextField.tsx";
+import { TranslatableString } from "../../types/types.ts";
+import { backgroundColors } from "../../utils/themeConfigOptions.ts";
+import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 
 /** The props for the Phone component */
 export interface PhoneProps {
@@ -73,6 +70,10 @@ export const PhoneStyleFields = {
       ],
     }
   ),
+  includeIcon: YextField(msg("fields.showIcon", "Show Icon"), {
+    type: "radio",
+    options: "SHOW_HIDE",
+  }),
 };
 
 export const defaultPhoneDataProps: PhoneProps["data"] = {
@@ -80,13 +81,10 @@ export const defaultPhoneDataProps: PhoneProps["data"] = {
     field: "mainPhone",
     constantValue: "",
   },
-  label: {
-    en: "Phone",
-    hasLocalizedValue: "true",
-  },
+  label: { defaultValue: "Phone" },
 };
 
-const PhoneFields: Fields<PhoneProps> = {
+export const PhoneFields: Fields<PhoneProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: PhoneDataFields,
@@ -137,6 +135,7 @@ export const Phone: ComponentConfig<{ props: PhoneProps }> = {
     styles: {
       phoneFormat: "domestic",
       includePhoneHyperlink: true,
+      includeIcon: true,
     },
   },
   resolveFields: (data) => resolveDataFromParent(PhoneFields, data),

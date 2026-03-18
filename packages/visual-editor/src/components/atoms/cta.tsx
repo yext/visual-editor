@@ -3,26 +3,37 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, LinkType } from "@yext/pages-components";
 import { Button, ButtonProps } from "./button.js";
-import {
-  BackgroundStyle,
-  themeManagerCn,
-  useBackground,
-  useDocument,
-} from "@yext/visual-editor";
-import { FaAngleRight } from "react-icons/fa";
+import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
+import { normalizeLink } from "../../utils/normalizeLink.ts";
+import { themeManagerCn } from "../../utils/cn.ts";
+import { useBackground } from "../../hooks/useBackground.tsx";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { FaAngleRight, FaExternalLinkAlt } from "react-icons/fa";
 import { getDirections } from "@yext/pages-components";
-import { PresetImageType } from "../../types/types";
-import { presetImageIcons } from "../../utils/presetImageIcons";
+import { PresetImageType, FOOD_DELIVERY_SERVICES } from "../../types/types.ts";
+import { presetImageIcons } from "../../utils/presetImageIcons.tsx";
+import { normalizeThemeColor } from "../../utils/normalizeThemeColor.js";
+
+const LINK_TEXT_TRANSFORM_CSS_VAR =
+  "var(--textTransform-link-textTransform)" as React.CSSProperties["textTransform"];
+const BUTTON_TEXT_TRANSFORM_CSS_VAR =
+  "var(--textTransform-button-textTransform)" as React.CSSProperties["textTransform"];
 
 export type CTAProps = {
   // Core props
   label: React.ReactNode;
   ctaType?: "textAndLink" | "getDirections" | "presetImage";
+  actionType?: "link" | "button";
 
   // ctaType specific props
   link?: string;
   linkType?: LinkType;
+  normalizeLink: boolean;
   presetImageType?: PresetImageType;
+
+  // button actionType specific props
+  id?: string;
+  dataAttributes?: Record<`data-${string}`, string>;
 
   // Styling and behavior props
   variant?: ButtonProps["variant"];
@@ -31,9 +42,17 @@ export type CTAProps = {
   target?: "_self" | "_blank" | "_parent" | "_top";
   alwaysHideCaret?: boolean;
   ariaLabel?: string;
-  onClick?: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
+  onClick?: (
+    event: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement, MouseEvent>
+  ) => void;
   disabled?: boolean;
   color?: BackgroundStyle;
+  openInNewTab?: boolean;
+  /**
+   * When true and variant is "link", applies vertical padding (py-3) to the CTA.
+   * @defaultValue false
+   */
+  setPadding?: boolean;
 };
 
 /**
@@ -47,6 +66,35 @@ export type CTAProps = {
  */
 export type CTAVariant = ButtonProps["variant"];
 
+const presetImageTypeToName = (presetImageType: PresetImageType) => {
+  switch (presetImageType) {
+    case "app-store":
+      return "App Store";
+    case "google-play":
+      return "Google Play";
+    case "galaxy-store":
+      return "Galaxy Store";
+    case "app-gallery":
+      return "App Gallery";
+    case "deliveroo":
+      return "Deliveroo";
+    case "doordash":
+      return "DoorDash";
+    case "grubhub":
+      return "Grubhub";
+    case "skip-the-dishes":
+      return "Skip The Dishes";
+    case "postmates":
+      return "Postmates";
+    case "uber-eats":
+      return "Uber Eats";
+    case "ezcater":
+      return "ezCater";
+    default:
+      return presetImageType;
+  }
+};
+
 // useResolvedCtaProps resolves the CTA props based on the current context and ctaType
 const useResolvedCtaProps = (props: CTAProps) => {
   const {
@@ -55,11 +103,17 @@ const useResolvedCtaProps = (props: CTAProps) => {
     className,
     alwaysHideCaret,
     ariaLabel,
+    normalizeLink: shouldNormalizeLink,
   } = props;
   const { t } = useTranslation();
   const streamDocument = useDocument();
+  const background = useBackground();
 
   const resolvedDynamicProps = useMemo(() => {
+    const resolvedLink = shouldNormalizeLink
+      ? normalizeLink(props.link, props.linkType)
+      : (props.link ?? "");
+
     switch (ctaType) {
       case "getDirections": {
         const listings = streamDocument.ref_listings ?? [];
@@ -80,7 +134,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
         // Prefer hardcoded link, then listings link, then coordinate link
         // User settable link props should not be used for get directions
         return {
-          link: props.link || listingsLink || coordinateLink || "#",
+          link: resolvedLink || listingsLink || coordinateLink || "#",
           linkType: "DRIVING_DIRECTIONS" as const,
           label: props.label || t("getDirections", "Get Directions"),
           ariaLabel: ariaLabel || t("getDirections", "Get Directions"),
@@ -90,27 +144,46 @@ const useResolvedCtaProps = (props: CTAProps) => {
         if (!props.presetImageType) {
           return null;
         }
+
+        let label = presetImageIcons[props.presetImageType];
+
+        if (
+          props.presetImageType &&
+          (FOOD_DELIVERY_SERVICES as readonly string[]).includes(
+            props.presetImageType
+          ) &&
+          React.isValidElement(label)
+        ) {
+          const buttonBackgroundColor = background?.isDarkBackground
+            ? "#FFFFFF"
+            : "#F9F9F9";
+
+          label = React.cloneElement(label as React.ReactElement, {
+            backgroundColor: buttonBackgroundColor,
+          });
+        }
+
         return {
-          link: props.link || "#",
+          link: resolvedLink || "#",
           linkType: props.linkType ?? "URL",
-          label: presetImageIcons[props.presetImageType],
+          label,
           ariaLabel:
             ariaLabel ||
             t("buttonWithIcon", `Button with {{presetImageType}} icon`, {
-              presetImageType: props.presetImageType,
+              presetImageType: presetImageTypeToName(props.presetImageType),
             }),
         };
 
       case "textAndLink":
       default:
         return {
-          link: props.link || "#",
+          link: resolvedLink || "#",
           linkType: props.linkType ?? "URL",
           label: props.label,
           ariaLabel: ariaLabel ?? "",
         };
     }
-  }, [props, streamDocument]);
+  }, [props, streamDocument, background, shouldNormalizeLink, ariaLabel, t]);
 
   if (!resolvedDynamicProps) {
     return null;
@@ -130,9 +203,13 @@ const useResolvedCtaProps = (props: CTAProps) => {
     {
       // Let preset images determine their natural size - no forced width constraints
       "w-fit h-[51px] items-center justify-center": ctaType === "presetImage",
-      // Special handling for Uber Eats to give it more visual prominence
+      // Special handling for food delivery services to give them more visual prominence
       "!w-auto":
-        ctaType === "presetImage" && props.presetImageType === "uber-eats",
+        ctaType === "presetImage" &&
+        props.presetImageType &&
+        (FOOD_DELIVERY_SERVICES as readonly string[]).includes(
+          props.presetImageType
+        ),
     },
     className
   );
@@ -154,14 +231,20 @@ export const CTA = (props: CTAProps) => {
     onClick,
     disabled = false,
     color,
+    openInNewTab = false,
+    setPadding = false,
+    actionType = "link",
+    id,
+    dataAttributes,
   } = props;
 
+  const { t } = useTranslation();
   const resolvedProps = useResolvedCtaProps(props);
+  const isButton = actionType === "button";
   const isDarkBG = useBackground()?.isDarkBackground;
-
   const dynamicStyle: React.CSSProperties = (() => {
-    const bg = normalize(color?.bgColor);
-    const textColor = normalize(color?.textColor);
+    const bg = normalizeThemeColor(color?.bgColor);
+    const textColor = normalizeThemeColor(color?.textColor);
     const border = bg && `var(--colors-${bg})`;
 
     if (variant === "primary") {
@@ -176,6 +259,15 @@ export const CTA = (props: CTAProps) => {
       return {
         borderColor: border,
         color: border,
+      };
+    }
+
+    if (
+      variant === "headerFooterMainLink" ||
+      variant === "headerFooterSecondaryLink"
+    ) {
+      return {
+        color: bg && `var(--colors-${bg})`,
       };
     }
 
@@ -216,7 +308,7 @@ export const CTA = (props: CTAProps) => {
               variant === "directoryLink"
                 ? undefined
                 : showCaret
-                  ? "inline-block"
+                  ? "var(--display-link-caret)"
                   : "none",
           }}
         />
@@ -227,6 +319,7 @@ export const CTA = (props: CTAProps) => {
   if (disabled) {
     return (
       <Button
+        type="button"
         className={buttonClassName}
         variant={buttonVariant}
         onClick={(e) => {
@@ -241,7 +334,46 @@ export const CTA = (props: CTAProps) => {
           e.preventDefault();
           e.stopPropagation();
         }}
-        style={disabledStyle}
+        style={{
+          ...disabledStyle,
+          textTransform: buttonVariant?.toLowerCase().includes("link")
+            ? LINK_TEXT_TRANSFORM_CSS_VAR
+            : BUTTON_TEXT_TRANSFORM_CSS_VAR,
+        }}
+      >
+        {linkContent}
+      </Button>
+    );
+  }
+
+  const computedAriaLabel = isButton
+    ? ariaLabel || undefined
+    : openInNewTab && ariaLabel && ariaLabel.trim() !== ""
+      ? t("aria.opensInNewTab", "{{label}} (opens in a new tab)", {
+          label: ariaLabel,
+        })
+      : ariaLabel || undefined;
+
+  const linkPadding: ButtonProps["linkPadding"] =
+    buttonVariant === "link" && setPadding ? "yOnly" : "none";
+
+  if (isButton) {
+    return (
+      <Button
+        id={id}
+        type="button"
+        style={{
+          ...(ctaType !== "presetImage" ? dynamicStyle : undefined),
+          textTransform: buttonVariant?.toLowerCase().includes("link")
+            ? LINK_TEXT_TRANSFORM_CSS_VAR
+            : BUTTON_TEXT_TRANSFORM_CSS_VAR,
+        }}
+        className={buttonClassName}
+        variant={buttonVariant}
+        linkPadding={linkPadding}
+        aria-label={computedAriaLabel}
+        onClick={onClick}
+        {...dataAttributes}
       >
         {linkContent}
       </Button>
@@ -254,24 +386,31 @@ export const CTA = (props: CTAProps) => {
       asChild
       className={buttonClassName}
       variant={buttonVariant}
+      linkPadding={linkPadding}
     >
       <Link
-        cta={{ link, linkType }}
+        cta={{ link: link || "#", linkType }}
         eventName={eventName}
-        target={target}
-        aria-label={ariaLabel || undefined}
+        target={openInNewTab ? "_blank" : target}
+        aria-label={computedAriaLabel}
+        rel={openInNewTab ? "noopener noreferrer" : undefined}
         onClick={onClick}
+        // textTransform has to be applied via styles because there is no custom tailwind utility
+        style={{
+          // @ts-ignore: the css variable here resolves to a valid enum value
+          textTransform: buttonVariant?.toLowerCase().includes("link")
+            ? LINK_TEXT_TRANSFORM_CSS_VAR
+            : BUTTON_TEXT_TRANSFORM_CSS_VAR,
+        }}
       >
         {linkContent}
+        {openInNewTab && (
+          <FaExternalLinkAlt
+            aria-hidden="true"
+            className="inline-block ml-1 w-3 h-3 align-middle relative -top-px"
+          />
+        )}
       </Link>
     </Button>
   );
 };
-
-// Extracts the name of a theme color from a tailwind bg- or text- class
-const normalize = (token?: string) =>
-  token?.startsWith("bg-")
-    ? token.substring(3)
-    : token?.startsWith("text-")
-      ? token.substring(5)
-      : token;

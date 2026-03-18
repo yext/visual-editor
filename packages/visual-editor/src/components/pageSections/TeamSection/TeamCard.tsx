@@ -6,36 +6,36 @@ import {
   Slot,
   WithId,
   setDeep,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import {
   BackgroundStyle,
-  YextField,
-  Background,
   backgroundColors,
-  PersonStruct,
-  msg,
-  ImageWrapperProps,
-  HeadingTextProps,
-  BodyTextProps,
-  CTAWrapperProps,
-  deepMerge,
-  ImgSizesByBreakpoint,
-  resolveYextEntityField,
-  i18nComponentsInstance,
-  EmailsProps,
-  PhoneListProps,
-} from "@yext/visual-editor";
+} from "../../../utils/themeConfigOptions.ts";
+import { YextField } from "../../../editor/YextField.tsx";
+import { Background } from "../../atoms/background.tsx";
+import { PersonStruct } from "../../../types/types.ts";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { ImageWrapperProps } from "../../contentBlocks/image/Image.tsx";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
+import { CTAWrapperProps } from "../../contentBlocks/CtaWrapper.tsx";
+import { deepMerge } from "../../../utils/themeResolver.ts";
+import { ImgSizesByBreakpoint } from "../../atoms/image.tsx";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
+import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
+import { EmailsProps } from "../../contentBlocks/Emails.tsx";
+import { PhoneListProps } from "../../contentBlocks/PhoneList.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
-import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
+import { TextProps } from "../../contentBlocks/Text.tsx";
+import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
 
 const defaultPerson = {
-  name: { en: "First Last", hasLocalizedValue: "true" },
-  title: { en: getDefaultRTF("Associate Agent"), hasLocalizedValue: "true" },
+  name: { defaultValue: "First Last" },
+  title: { defaultValue: "Associate Agent" },
   phoneNumber: "+12027706619",
   email: "jkelley@[company].com",
   cta: {
-    label: { en: "Visit Profile", hasLocalizedValue: "true" },
+    label: { defaultValue: "Visit Profile" },
     link: "#",
     linkType: "URL",
     ctaType: "textAndLink",
@@ -45,6 +45,7 @@ const defaultPerson = {
     url: "https://a.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/196x196.jpg",
     height: 80,
     width: 80,
+    alternateText: "Headshot Image",
   },
 } satisfies PersonStruct;
 
@@ -104,7 +105,7 @@ export const defaultTeamCardSlotData = (
         ],
         TitleSlot: [
           {
-            type: "BodyTextSlot",
+            type: "TextSlot",
             props: {
               ...(id && { id: `${id}-title` }),
               data: {
@@ -116,8 +117,9 @@ export const defaultTeamCardSlotData = (
               },
               styles: {
                 variant: "base",
+                fontStyle: "regular",
               },
-            } satisfies BodyTextProps,
+            } satisfies TextProps,
           },
         ],
         PhoneSlot: [
@@ -133,10 +135,7 @@ export const defaultTeamCardSlotData = (
                       constantValue: defaultPerson.phoneNumber,
                       constantValueEnabled: true,
                     },
-                    label: {
-                      en: "",
-                      hasLocalizedValue: "true",
-                    },
+                    label: { defaultValue: "" },
                   },
                 ],
               },
@@ -173,6 +172,9 @@ export const defaultTeamCardSlotData = (
             props: {
               ...(id && { id: `${id}-cta` }),
               data: {
+                actionType: "link",
+                normalizeLink: true,
+                buttonText: { defaultValue: "Button" },
                 entityField: {
                   field: "",
                   constantValue: defaultPerson.cta,
@@ -206,6 +208,7 @@ export type TeamCardProps = {
     /** The background color of each team card */
     backgroundColor?: BackgroundStyle;
   };
+
   /** @internal */
   slots: {
     ImageSlot: Slot;
@@ -220,6 +223,15 @@ export type TeamCardProps = {
   parentData?: {
     field: string;
     person: PersonStruct;
+  };
+
+  /** @internal */
+  parentStyles?: {
+    showImage: boolean;
+    showTitle: boolean;
+    showPhone: boolean;
+    showEmail: boolean;
+    showCTA: boolean;
   };
 
   /** @internal */
@@ -264,7 +276,7 @@ const teamCardFields: Fields<TeamCardProps> = {
 };
 
 const TeamCardComponent: PuckComponent<TeamCardProps> = (props) => {
-  const { styles, slots, puck, conditionalRender } = props;
+  const { styles, slots, puck, conditionalRender, parentStyles } = props;
 
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
     cardStyles: TeamCardProps["styles"];
@@ -276,10 +288,24 @@ const TeamCardComponent: PuckComponent<TeamCardProps> = (props) => {
   );
 
   const showName = Boolean(conditionalRender?.name || puck.isEditing);
-  const showTitle = Boolean(conditionalRender?.title || puck.isEditing);
-  const showPhone = Boolean(conditionalRender?.phone || puck.isEditing);
-  const showEmail = Boolean(conditionalRender?.email || puck.isEditing);
-  const showCta = Boolean(conditionalRender?.cta || puck.isEditing);
+  const showTitle =
+    parentStyles?.showTitle &&
+    Boolean(conditionalRender?.title || puck.isEditing);
+  const showPhone =
+    parentStyles?.showPhone &&
+    Boolean(conditionalRender?.phone || puck.isEditing);
+  const showEmail =
+    parentStyles?.showEmail &&
+    Boolean(conditionalRender?.email || puck.isEditing);
+  const showCta =
+    parentStyles?.showCTA && Boolean(conditionalRender?.cta || puck.isEditing);
+
+  const showImage =
+    parentStyles?.showImage && (conditionalRender?.image || puck.isEditing);
+
+  const showTopSection = showImage || showName || showTitle;
+
+  const showBottomSection = showPhone || showEmail || showCta;
 
   // sharedCardProps useEffect
   // When the context changes, dispatch an update to sync the changes to puck
@@ -367,39 +393,47 @@ const TeamCardComponent: PuckComponent<TeamCardProps> = (props) => {
       ref={puck.dragRef}
       className="flex flex-col rounded-lg overflow-hidden border bg-white h-full"
     >
-      <Background
-        background={styles.backgroundColor}
-        className="flex p-8 gap-6"
-      >
-        <div className="w-20 h-20 flex-shrink-0 rounded-full overflow-hidden">
-          <slots.ImageSlot style={{ height: "auto" }} allow={[]} />
-        </div>
-        <div className="flex flex-col justify-center gap-1">
-          {showName && <slots.NameSlot style={{ height: "auto" }} allow={[]} />}
-          {showTitle && (
-            <slots.TitleSlot style={{ height: "auto" }} allow={[]} />
-          )}
-        </div>
-      </Background>
-      <hr className="border" />
-      <Background
-        background={backgroundColors.background1.value}
-        className="flex flex-grow p-8"
-      >
-        <div className="flex flex-col flex-grow gap-4">
-          {showPhone && (
-            <slots.PhoneSlot style={{ height: "auto" }} allow={[]} />
-          )}
-          {showEmail && (
-            <slots.EmailSlot style={{ height: "auto" }} allow={[]} />
-          )}
-          {showCta && (
-            <div className="mt-auto w-full md:w-auto">
-              <slots.CTASlot style={{ height: "auto" }} allow={[]} />
+      {showTopSection && (
+        <Background
+          background={styles.backgroundColor}
+          className="flex p-8 gap-6"
+        >
+          {showImage && (
+            <div className="w-20 h-20 flex-shrink-0 rounded-full overflow-hidden">
+              <slots.ImageSlot style={{ height: "auto" }} allow={[]} />
             </div>
           )}
-        </div>
-      </Background>
+          <div className="flex flex-col justify-center gap-1">
+            {showName && (
+              <slots.NameSlot style={{ height: "auto" }} allow={[]} />
+            )}
+            {showTitle && (
+              <slots.TitleSlot style={{ height: "auto" }} allow={[]} />
+            )}
+          </div>
+        </Background>
+      )}
+      {showTopSection && showBottomSection && <hr className="border" />}
+      {showBottomSection && (
+        <Background
+          background={backgroundColors.background1.value}
+          className="flex flex-grow p-8"
+        >
+          <div className="flex flex-col flex-grow gap-4">
+            {showPhone && (
+              <slots.PhoneSlot style={{ height: "auto" }} allow={[]} />
+            )}
+            {showEmail && (
+              <slots.EmailSlot style={{ height: "auto" }} allow={[]} />
+            )}
+            {showCta && (
+              <div className="mt-auto w-full md:w-auto">
+                <slots.CTASlot style={{ height: "auto" }} allow={[]} />
+              </div>
+            )}
+          </div>
+        </Background>
+      )}
     </div>
   );
 };
@@ -433,7 +467,7 @@ export const TeamCard: ComponentConfig<{ props: TeamCardProps }> = {
       | WithId<HeadingTextProps>
       | undefined;
     const titleSlotProps = data.props.slots.TitleSlot?.[0]?.props as
-      | WithId<BodyTextProps>
+      | WithId<TextProps>
       | undefined;
     const phoneSlotProps = data.props.slots.PhoneSlot?.[0]?.props as
       | WithId<any>
@@ -450,10 +484,14 @@ export const TeamCard: ComponentConfig<{ props: TeamCardProps }> = {
         imageSlotProps?.parentData?.image ||
         (imageSlotProps &&
           (imageSlotProps?.data.image.field ||
-            ("url" in imageSlotProps.data.image.constantValue &&
+            (imageSlotProps.data.image.constantValue &&
+              "hasLocalizedValue" in imageSlotProps.data.image.constantValue) ||
+            (imageSlotProps.data.image.constantValue &&
+              "url" in imageSlotProps.data.image.constantValue &&
               imageSlotProps.data.image.constantValue.url) ||
-            ("image" in imageSlotProps.data.image.constantValue &&
-              imageSlotProps.data.image.constantValue.image.url)))
+            (imageSlotProps.data.image.constantValue &&
+              "image" in imageSlotProps.data.image.constantValue &&
+              imageSlotProps.data.image.constantValue.image?.url)))
     );
     const showName = Boolean(
       person?.name ||
@@ -467,7 +505,7 @@ export const TeamCard: ComponentConfig<{ props: TeamCardProps }> = {
     );
     const showTitle = Boolean(
       person?.title ||
-        titleSlotProps?.parentData?.richText ||
+        titleSlotProps?.parentData?.text ||
         (titleSlotProps &&
           resolveYextEntityField(
             params.metadata.streamDocument,
@@ -547,6 +585,14 @@ export const TeamCard: ComponentConfig<{ props: TeamCardProps }> = {
       `card${data.props.index}-email`
     );
 
+    updatedData = syncParentStyles(params, updatedData, [
+      "showImage",
+      "showTitle",
+      "showPhone",
+      "showEmail",
+      "showCTA",
+    ]);
+
     // Set parentData for all slots if parentData is provided
     if (data.props.parentData) {
       const person = data.props.parentData.person;
@@ -573,8 +619,8 @@ export const TeamCard: ComponentConfig<{ props: TeamCardProps }> = {
         "props.slots.TitleSlot[0].props.parentData",
         {
           field: field,
-          richText: person.title,
-        } satisfies BodyTextProps["parentData"]
+          text: person.title,
+        } satisfies TextProps["parentData"]
       );
       updatedData = setDeep(
         updatedData,
@@ -584,15 +630,8 @@ export const TeamCard: ComponentConfig<{ props: TeamCardProps }> = {
           phoneNumbers: person.phoneNumber
             ? [
                 {
-                  number: {
-                    field: field,
-                    constantValue: person.phoneNumber,
-                    constantValueEnabled: true,
-                  },
-                  label: {
-                    en: "Phone",
-                    hasLocalizedValue: "true",
-                  },
+                  number: person.phoneNumber,
+                  label: "",
                 },
               ]
             : [],

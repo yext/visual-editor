@@ -1,27 +1,25 @@
 import { useTranslation } from "react-i18next";
 import * as React from "react";
-import {
-  YextEntityField,
-  resolveComponentData,
-  useDocument,
-  PageSection,
-  YextField,
-  VisibilityWrapper,
-  EntityField,
-  TranslatableRichText,
-  msg,
-  pt,
-  Body,
-  getDefaultRTF,
-} from "@yext/visual-editor";
-import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { PageSection } from "../atoms/pageSection.tsx";
+import { YextField } from "../../editor/YextField.tsx";
+import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
+import { EntityField } from "../../editor/EntityField.tsx";
+import { TranslatableRichText } from "../../types/types.ts";
+import { msg, pt } from "../../utils/i18n/platform.ts";
+import { Body } from "../atoms/body.tsx";
+import { getDefaultRTF } from "../../editor/TranslatableRichTextField.tsx";
+import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import {
   backgroundColors,
   BackgroundStyle,
 } from "../../utils/themeConfigOptions.js";
 import { CircleSlash2 } from "lucide-react";
-import { useTemplateMetadata } from "../../internal/hooks/useMessageReceivers";
-import { resolveYextEntityField } from "../../utils/resolveYextEntityField";
+import { useTemplateMetadata } from "../../internal/hooks/useMessageReceivers.ts";
+import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
+import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 
 export interface BannerData {
   /**
@@ -37,6 +35,13 @@ export interface BannerStyles {
    * @defaultValue Background Color 6
    */
   backgroundColor?: BackgroundStyle;
+
+  /**
+   * Optional text color for the banner text.
+   * If not set, it will default to a color that contrasts with the background color.
+   */
+  textColor?: BackgroundStyle;
+
   /**
    * The horizontal alignment of the text.
    * @defaultValue center
@@ -92,6 +97,10 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
+      textColor: YextField(msg("fields.textColor", "Text Color"), {
+        type: "select",
+        options: "SITE_COLOR",
+      }),
       textAlignment: YextField(msg("fields.textAlignment", "Text Alignment"), {
         type: "radio",
         options: "ALIGNMENT",
@@ -121,12 +130,6 @@ function isRichTextEmpty(value: any): boolean {
     if ("html" in value) {
       return !value.html || value.html.trim() === "";
     }
-    if ("json" in value) {
-      return (
-        !value.json ||
-        (typeof value.json === "string" && value.json.trim() === "")
-      );
-    }
   }
   return false;
 }
@@ -147,7 +150,9 @@ const BannerComponent: PuckComponent<BannerSectionProps> = ({
     : undefined;
   const isEmpty = isMappedField && isRichTextEmpty(rawValue);
 
-  const resolvedText = resolveComponentData(data.text, locale, streamDocument);
+  const resolvedText = resolveComponentData(data.text, locale, streamDocument, {
+    color: styles.textColor,
+  });
 
   const justifyClass = {
     left: "justify-start",
@@ -225,10 +230,7 @@ export const defaultBannerProps: BannerSectionProps = {
   data: {
     text: {
       field: "",
-      constantValue: {
-        en: getDefaultRTF("Banner Text"),
-        hasLocalizedValue: "true",
-      },
+      constantValue: { defaultValue: getDefaultRTF("Banner Text") },
       constantValueEnabled: true,
     },
   },
@@ -249,12 +251,17 @@ export const BannerSection: ComponentConfig<{ props: BannerSectionProps }> = {
   fields: bannerSectionFields,
   defaultProps: defaultBannerProps,
   render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
+    <ComponentErrorBoundary
       isEditing={props.puck.isEditing}
-      iconSize="md"
+      resetKeys={[props]}
     >
-      <BannerComponent {...props} />
-    </VisibilityWrapper>
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+        iconSize="md"
+      >
+        <BannerComponent {...props} />
+      </VisibilityWrapper>
+    </ComponentErrorBoundary>
   ),
 };

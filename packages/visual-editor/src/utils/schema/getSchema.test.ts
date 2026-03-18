@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getSchema } from "./getSchema";
+import { getSchema } from "./getSchema.ts";
 
 describe("getSchema - entity pages", () => {
   it("returns resolved schema markup for a location and no directory/reviews", async () => {

@@ -1,17 +1,14 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { HoursType } from "@yext/pages-components";
-import {
-  useDocument,
-  resolveComponentData,
-  EntityField,
-  YextEntityField,
-  YextField,
-  msg,
-  pt,
-  HoursStatusAtom,
-  resolveDataFromParent,
-} from "@yext/visual-editor";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { EntityField } from "../../editor/EntityField.tsx";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { YextField } from "../../editor/YextField.tsx";
+import { msg, pt } from "../../utils/i18n/platform.ts";
+import { HoursStatusAtom } from "../atoms/hoursStatus.tsx";
+import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 
 export interface HoursStatusProps {
   data: {
@@ -30,6 +27,8 @@ export interface HoursStatusProps {
     showDayNames?: boolean;
     /** Additional class names to apply to the underlying component */
     className?: string;
+    /** The body size variant */
+    bodyVariant?: "lg" | "base" | "sm";
   };
 
   /** @internal */
@@ -40,7 +39,7 @@ export interface HoursStatusProps {
   };
 }
 
-const hoursStatusWrapperFields: Fields<HoursStatusProps> = {
+export const hoursStatusWrapperFields: Fields<HoursStatusProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
@@ -119,6 +118,7 @@ const HoursStatusWrapper: PuckComponent<HoursStatusProps> = ({
         showDayNames={styles.showDayNames}
         timeFormat={styles.timeFormat}
         dayOfWeekFormat={styles.dayOfWeekFormat}
+        bodyVariant={styles.bodyVariant}
       />
     </EntityField>
   ) : puck.isEditing ? (

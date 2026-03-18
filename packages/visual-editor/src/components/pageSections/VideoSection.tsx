@@ -1,12 +1,13 @@
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import {
   backgroundColors,
   BackgroundStyle,
-  msg,
-  PageSection,
-  VisibilityWrapper,
-  YextField,
-} from "@yext/visual-editor";
+} from "../../utils/themeConfigOptions.ts";
+import { msg } from "../../utils/i18n/platform.ts";
+import { PageSection } from "../atoms/pageSection.tsx";
+import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
+import { YextField } from "../../editor/YextField.tsx";
+import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 
 export interface VideoSectionProps {
   /**
@@ -97,10 +98,7 @@ export const VideoSection: ComponentConfig<{
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: { defaultValue: "" },
                 constantValueEnabled: true,
                 field: "",
               },
@@ -123,11 +121,16 @@ export const VideoSection: ComponentConfig<{
     liveVisibility: true,
   },
   render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
+    <ComponentErrorBoundary
       isEditing={props.puck.isEditing}
+      resetKeys={[props]}
     >
-      <VideoSectionComponent {...props} />
-    </VisibilityWrapper>
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+      >
+        <VideoSectionComponent {...props} />
+      </VisibilityWrapper>
+    </ComponentErrorBoundary>
   ),
 };

@@ -46,6 +46,26 @@ import { fixRootMetaFieldsMigration } from "./0044_fix_root_meta_fields.ts";
 import { schemaUpdates } from "./0045_schema_updates.ts";
 import { mergeStickyAndFixedHeader } from "./0046_merge_sticky_and_fixed_header.ts";
 import { fixPromoSectionSlots } from "./0047_fix_promo_section_slots.ts";
+import { translatableCTAImageMigration } from "./0048_translatable_cta_image.ts";
+import { simplifyFaqSection } from "./0049_simplify_faq_section.ts";
+import { promoVariants } from "./0050_promo_variants.ts";
+import { updateLinksAlignmentMigration } from "./0051_update_link_align_prop.ts";
+import { addDefaultLocatorAndDirectoryMetaFields } from "./0052_add_default_locator_and_directory_meta_fields.ts";
+import { photoGalleryVariant } from "./0053_photo_gallery_variant.ts";
+import { productVariants } from "./0054_product_variants.ts";
+import { headerLinksUpdate } from "./0055_header_link_updates.ts";
+import { emptyTitleFix } from "./0056_empty_title_fix.ts";
+import { ctaActionTypeDefaults } from "./0057_cta_action_type_defaults.ts";
+import { fixDirectoryTitleBindingAndSlotifyAddress } from "./0058_dynamic_directory_title_binding_and_slotify_address.ts";
+import { addShowHideOptions } from "./0059_show_hide_options.ts";
+import { addDefaultLocatorPageTitle } from "./0060_add_default_locator_title.ts";
+import { expandedHeaderLinks } from "./0061_expanded_header_links.ts";
+import { addLocatorPrimaryCtaLabel } from "./0062_add_locator_primary_cta_label.ts";
+import { textAtomUpdates } from "./0063_text_atom_updates.ts";
+import { locatorStaticContentToggles } from "./0064_locator_static_content_toggles.ts";
+import { locatorDistanceDisplay } from "./0065_locator_distance_display.ts";
+import { normalizeLocatorResultCard } from "./0066_normalize_locator_result_card.ts";
+import { ctaNormalizeLinkDefault } from "./0067_cta_normalize_link_default.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -100,4 +120,24 @@ export const migrationRegistry: MigrationRegistry = [
   schemaUpdates,
   mergeStickyAndFixedHeader,
   fixPromoSectionSlots,
+  translatableCTAImageMigration,
+  simplifyFaqSection,
+  promoVariants,
+  updateLinksAlignmentMigration,
+  addDefaultLocatorAndDirectoryMetaFields,
+  photoGalleryVariant,
+  productVariants,
+  headerLinksUpdate,
+  emptyTitleFix,
+  ctaActionTypeDefaults,
+  fixDirectoryTitleBindingAndSlotifyAddress,
+  addShowHideOptions,
+  addDefaultLocatorPageTitle,
+  expandedHeaderLinks,
+  addLocatorPrimaryCtaLabel,
+  textAtomUpdates,
+  locatorStaticContentToggles,
+  locatorDistanceDisplay,
+  normalizeLocatorResultCard,
+  ctaNormalizeLinkDefault,
 ];

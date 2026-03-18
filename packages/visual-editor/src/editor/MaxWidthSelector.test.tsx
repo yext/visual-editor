@@ -1,5 +1,5 @@
-import { ThemeOptions } from "../utils/themeConfigOptions";
-import { filterMaxWidths } from "./MaxWidthSelector";
+import { ThemeOptions } from "../utils/themeConfigOptions.ts";
+import { filterMaxWidths } from "./MaxWidthSelector.tsx";
 
 describe("filterMaxWidths", () => {
   it("filters maxWidth options correctly", () => {

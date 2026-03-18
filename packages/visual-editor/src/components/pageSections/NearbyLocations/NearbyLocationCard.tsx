@@ -1,18 +1,18 @@
 import React from "react";
-import { PuckContext } from "@measured/puck";
+import { PuckContext } from "@puckeditor/core";
 import { HoursType, AddressType, Address } from "@yext/pages-components";
+import { Background } from "../../atoms/background.tsx";
+import { Heading } from "../../atoms/heading.tsx";
+import { HeadingLevel } from "../../../utils/themeConfigOptions.ts";
+import { HoursStatusAtom } from "../../atoms/hoursStatus.tsx";
+import { MaybeLink } from "../../atoms/maybeLink.tsx";
+import { PhoneAtom } from "../../atoms/phone.tsx";
+import { useTemplateProps } from "../../../hooks/useDocument.tsx";
+import { NearbyLocationCardsWrapperProps } from "./NearbyLocationsCardsWrapper.tsx";
 import {
-  Background,
-  Heading,
-  HeadingLevel,
-  HoursStatusAtom,
-  MaybeLink,
   mergeMeta,
-  PhoneAtom,
-  resolvePageSetUrlTemplate,
-  useTemplateProps,
-} from "@yext/visual-editor";
-import { NearbyLocationCardsWrapperProps } from "./NearbyLocationsCardsWrapper";
+  resolveUrlTemplate,
+} from "../../../utils/urls/resolveUrlTemplate.ts";
 
 /** A single card for the Nearby Locations Section */
 type NearbyLocationCardProps = {
@@ -46,7 +46,7 @@ type NearbyLocationCardProps = {
 export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
   props
 ) => {
-  const { locationData, styles, cardNumber, puck, sectionHeadingLevel } = props;
+  const { locationData, styles, cardNumber, sectionHeadingLevel } = props;
 
   if (!locationData) {
     return <></>;
@@ -56,11 +56,13 @@ export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
 
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
 
-  const resolvedUrl = resolvePageSetUrlTemplate(
+  const resolvedUrl = resolveUrlTemplate(
     mergeMeta(locationData, streamDocument),
-    relativePrefixToRoot,
-    puck.metadata?.resolveUrlTemplate
+    relativePrefixToRoot ?? ""
   );
+
+  const showPhone = styles.showPhone && mainPhone;
+  const showAddress = styles.showAddress && address;
 
   return (
     <Background
@@ -75,6 +77,7 @@ export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
         href={resolvedUrl}
       >
         <Heading
+          color={styles?.color}
           level={styles.headingLevel ?? 4}
           semanticLevelOverride={
             sectionHeadingLevel
@@ -87,8 +90,10 @@ export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
           {name}
         </Heading>
       </MaybeLink>
-      {hours && (
-        <div className="mb-2 font-semibold font-body-fontFamily text-body-fontSize">
+      {styles.showHours && hours && (
+        <div
+          className={`font-semibold font-body-fontFamily text-body-fontSize ${showPhone || showAddress ? "mb-2" : ""}`}
+        >
           <HoursStatusAtom
             hours={hours}
             className="h-full"
@@ -100,7 +105,7 @@ export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
           />
         </div>
       )}
-      {mainPhone && (
+      {showPhone && (
         <PhoneAtom
           eventName={`phone${cardNumber}`}
           phoneNumber={mainPhone}
@@ -109,15 +114,12 @@ export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
           includeIcon={false}
         />
       )}
-      {address && (
+      {showAddress && (
         <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
           <Address
             address={address}
-            lines={[
-              ["line1"],
-              ["line2"],
-              ["city", ",", "region", "postalCode"],
-            ]}
+            showRegion={styles.address?.showRegion ?? true}
+            showCountry={styles.address?.showCountry ?? false}
           />
         </div>
       )}

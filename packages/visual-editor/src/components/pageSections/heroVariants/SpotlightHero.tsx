@@ -1,14 +1,16 @@
 import { useTranslation } from "react-i18next";
-import {
-  PageSection,
-  useDocument,
-  Background,
-  resolveYextEntityField,
-} from "@yext/visual-editor";
+import { PageSection } from "../../atoms/pageSection.tsx";
+import { useDocument } from "../../../hooks/useDocument.tsx";
+import { Background } from "../../atoms/background.tsx";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
 import { getImageUrl } from "@yext/pages-components";
-import { HeroVariantProps } from "../HeroSection";
-import { HeroContent, heroContentParentCn } from "./HeroContent";
-import { PuckComponent } from "@measured/puck";
+import { HeroVariantProps } from "../HeroSection.tsx";
+import { HeroContent, heroContentParentCn } from "./HeroContent.tsx";
+import { PuckComponent } from "@puckeditor/core";
+import {
+  isLocalizedAssetImage,
+  resolveLocalizedAssetImage,
+} from "../../../types/images.ts";
 
 export const SpotlightHero: PuckComponent<HeroVariantProps> = (props) => {
   const { data, styles } = props;
@@ -22,12 +24,17 @@ export const SpotlightHero: PuckComponent<HeroVariantProps> = (props) => {
     locale
   );
 
+  const localizedImage =
+    resolvedBackgroundImage && isLocalizedAssetImage(resolvedBackgroundImage)
+      ? resolveLocalizedAssetImage(resolvedBackgroundImage, locale)
+      : resolvedBackgroundImage;
+
   return (
     <div
       className="bg-no-repeat bg-center bg-cover"
       style={{
-        backgroundImage: resolvedBackgroundImage?.url
-          ? `url(${getImageUrl(resolvedBackgroundImage.url, resolvedBackgroundImage.width, resolvedBackgroundImage.height)})`
+        backgroundImage: localizedImage?.url
+          ? `url(${getImageUrl(localizedImage.url, localizedImage.width, localizedImage.height)})`
           : undefined,
         backgroundSize: "cover",
         backgroundPosition: "center",

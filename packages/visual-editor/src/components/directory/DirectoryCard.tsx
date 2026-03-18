@@ -1,23 +1,22 @@
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
+import React from "react";
+import { YextField } from "../../editor/YextField.tsx";
+import { useCardContext } from "../../hooks/useCardContext.tsx";
+import { useTemplateProps } from "../../hooks/useDocument.tsx";
+import { useGetCardSlots } from "../../hooks/useGetCardSlots.tsx";
+import { msg } from "../../utils/i18n/platform.ts";
 import {
-  Background,
-  HeadingTextProps,
-  MaybeLink,
-  useTemplateProps,
-  YextField,
-  msg,
   backgroundColors,
   BackgroundStyle,
-  HoursStatusProps,
-  PhoneProps,
-  deepMerge,
-} from "@yext/visual-editor";
-import { Address } from "@yext/pages-components";
-import { mergeMeta } from "../../utils/mergeMeta";
-import { resolveUrlTemplateOfChild } from "../../utils/resolveUrlTemplate";
-import { useCardContext } from "../../hooks/useCardContext";
-import { useGetCardSlots } from "../../hooks/useGetCardSlots";
-import React from "react";
+} from "../../utils/themeConfigOptions.ts";
+import { deepMerge } from "../../utils/themeResolver.ts";
+import { resolveUrlTemplateOfChild } from "../../utils/urls/resolveUrlTemplate.ts";
+import { Background } from "../atoms/background.tsx";
+import { MaybeLink } from "../atoms/maybeLink.tsx";
+import { AddressProps } from "../contentBlocks/Address.tsx";
+import { HeadingTextProps } from "../contentBlocks/HeadingText.tsx";
+import { HoursStatusProps } from "../contentBlocks/HoursStatus.tsx";
+import { PhoneProps } from "../contentBlocks/Phone.tsx";
 
 export const defaultDirectoryCardSlotData = (
   id: string,
@@ -57,6 +56,43 @@ export const defaultDirectoryCardSlotData = (
               text: profile["name"],
             },
           } satisfies HeadingTextProps,
+        },
+      ],
+      AddressSlot: [
+        {
+          type: "AddressSlot",
+          props: {
+            ...(id && { id: `${id}-address` }),
+            data: {
+              address: {
+                field: "",
+                constantValue: {
+                  line1: "",
+                  city: "",
+                  postalCode: "",
+                  countryCode: "",
+                },
+              },
+            },
+            styles: {
+              showRegion:
+                existingSlots?.AddressSlot?.[0]?.props?.styles?.showRegion ??
+                true,
+              showCountry:
+                existingSlots?.AddressSlot?.[0]?.props?.styles?.showCountry ??
+                true,
+              showGetDirectionsLink:
+                existingSlots?.AddressSlot?.[0]?.props?.styles
+                  ?.showGetDirectionsLink ?? false,
+              ctaVariant:
+                existingSlots?.AddressSlot?.[0]?.props?.styles?.ctaVariant ??
+                "link",
+            },
+            parentData: {
+              field: "profile.address",
+              address: profile["address"],
+            },
+          } satisfies AddressProps,
         },
       ],
       PhoneSlot: [
@@ -143,6 +179,7 @@ export type DirectoryCardProps = {
   /** @internal */
   slots: {
     HeadingSlot: Slot;
+    AddressSlot: Slot;
     PhoneSlot: Slot;
     HoursSlot: Slot;
   };
@@ -162,9 +199,9 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
 
   const resolvedUrl = parentData
     ? resolveUrlTemplateOfChild(
-        mergeMeta(parentData.profile, streamDocument),
-        relativePrefixToRoot,
-        puck.metadata?.resolveUrlTemplate
+        parentData.profile,
+        streamDocument,
+        relativePrefixToRoot
       )
     : undefined;
 
@@ -200,6 +237,7 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
       HeadingSlot: [],
       PhoneSlot: [],
       HoursSlot: [],
+      AddressSlot: [],
     };
     Object.entries(slotProps).forEach(([key, value]) => {
       newSlotData[key as keyof DirectoryCardProps["slots"]] = [
@@ -277,10 +315,7 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
       )}
       {parentData?.profile?.address && (
         <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
-          <Address
-            address={parentData?.profile?.address}
-            lines={[["line1"], ["line2"], ["city", "region", "postalCode"]]}
-          />
+          <slots.AddressSlot style={{ height: "auto" }} />
         </div>
       )}
     </Background>
@@ -304,6 +339,7 @@ const directoryCardFields: Fields<DirectoryCardProps> = {
     type: "object",
     objectFields: {
       HeadingSlot: { type: "slot" },
+      AddressSlot: { type: "slot" },
       PhoneSlot: { type: "slot" },
       HoursSlot: { type: "slot" },
     },
@@ -324,6 +360,7 @@ export const DirectoryCard: ComponentConfig<{
       HeadingSlot: [],
       PhoneSlot: [],
       HoursSlot: [],
+      AddressSlot: [],
     },
   },
   render: (props) => <DirectoryCardComponent {...props} />,

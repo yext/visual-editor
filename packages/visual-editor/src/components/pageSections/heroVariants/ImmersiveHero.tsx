@@ -1,14 +1,16 @@
-import {
-  backgroundColors,
-  PageSection,
-  resolveYextEntityField,
-  useDocument,
-} from "@yext/visual-editor";
-import { HeroVariantProps } from "../HeroSection";
-import { HeroContent, heroContentParentCn } from "./HeroContent";
+import { backgroundColors } from "../../../utils/themeConfigOptions.ts";
+import { PageSection } from "../../atoms/pageSection.tsx";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
+import { useDocument } from "../../../hooks/useDocument.tsx";
+import { HeroVariantProps } from "../HeroSection.tsx";
+import { HeroContent, heroContentParentCn } from "./HeroContent.tsx";
 import { useTranslation } from "react-i18next";
 import { getImageUrl } from "@yext/pages-components";
-import { PuckComponent } from "@measured/puck";
+import { PuckComponent } from "@puckeditor/core";
+import {
+  isLocalizedAssetImage,
+  resolveLocalizedAssetImage,
+} from "../../../types/images.ts";
 
 export const ImmersiveHero: PuckComponent<HeroVariantProps> = (props) => {
   const { data, styles } = props;
@@ -21,20 +23,25 @@ export const ImmersiveHero: PuckComponent<HeroVariantProps> = (props) => {
     locale
   );
 
+  const localizedImage =
+    resolvedBackgroundImage && isLocalizedAssetImage(resolvedBackgroundImage)
+      ? resolveLocalizedAssetImage(resolvedBackgroundImage, locale)
+      : resolvedBackgroundImage;
+
   return (
     <div
       style={{
-        backgroundImage: resolvedBackgroundImage?.url
-          ? `url(${getImageUrl(resolvedBackgroundImage.url, resolvedBackgroundImage.width, resolvedBackgroundImage.height)})`
+        backgroundImage: localizedImage?.url
+          ? `url(${getImageUrl(localizedImage.url, localizedImage.width, localizedImage.height)})`
           : undefined,
       }}
       className="bg-no-repeat bg-center bg-cover"
     >
       <PageSection
         background={
-          resolvedBackgroundImage?.url
+          localizedImage?.url
             ? {
-                bgColor: "bg-[#00000080]",
+                bgColor: "bg-[#00000099]",
                 textColor: "text-white",
                 isDarkBackground: true,
               }

@@ -6,33 +6,33 @@ import {
   Slot,
   WithId,
   setDeep,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import {
   BackgroundStyle,
-  YextField,
-  Background,
   backgroundColors,
-  TestimonialStruct,
-  msg,
-  HeadingTextProps,
-  BodyTextProps,
-  deepMerge,
-  resolveYextEntityField,
-  i18nComponentsInstance,
-  getDefaultRTF,
-  TimestampProps,
-} from "@yext/visual-editor";
+} from "../../../utils/themeConfigOptions.ts";
+import { YextField } from "../../../editor/YextField.tsx";
+import { Background } from "../../atoms/background.tsx";
+import { TestimonialStruct } from "../../../types/types.ts";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
+import { BodyTextProps } from "../../contentBlocks/BodyText.tsx";
+import { deepMerge } from "../../../utils/themeResolver.ts";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
+import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
+import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
+import { TimestampProps } from "../../contentBlocks/Timestamp.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
+import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
 
 const defaultTestimonial = {
   description: {
-    en: getDefaultRTF(
+    defaultValue: getDefaultRTF(
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
     ),
-    hasLocalizedValue: "true",
   },
-  contributorName: { en: "Name", hasLocalizedValue: "true" },
+  contributorName: { defaultValue: "Name" },
   contributionDate: "2022-08-02T14:00:00",
 } satisfies TestimonialStruct;
 
@@ -131,6 +131,7 @@ export type TestimonialCardProps = {
     /** The background color of each testimonial card */
     backgroundColor?: BackgroundStyle;
   };
+
   /** @internal */
   slots: {
     DescriptionSlot: Slot;
@@ -145,10 +146,16 @@ export type TestimonialCardProps = {
   };
 
   /** @internal */
+  parentStyles?: {
+    showName: boolean;
+    showDate: boolean;
+  };
+
+  /** @internal */
   conditionalRender?: {
     description: boolean;
     contributorName: boolean;
-    contributionDate?: boolean;
+    contributionDate: boolean;
   };
 
   /** @internal */
@@ -182,7 +189,7 @@ const testimonialCardFields: Fields<TestimonialCardProps> = {
 const TestimonialCardComponent: PuckComponent<TestimonialCardProps> = (
   props
 ) => {
-  const { styles, slots, puck, conditionalRender } = props;
+  const { styles, slots, puck, conditionalRender, parentStyles } = props;
 
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
     cardStyles: TestimonialCardProps["styles"];
@@ -195,12 +202,12 @@ const TestimonialCardComponent: PuckComponent<TestimonialCardProps> = (
   const showDescription = Boolean(
     conditionalRender?.description || puck.isEditing
   );
-  const showContributorName = Boolean(
-    conditionalRender?.contributorName || puck.isEditing
-  );
-  const showContributionDate = Boolean(
-    conditionalRender?.contributionDate || puck.isEditing
-  );
+  const showContributorName =
+    parentStyles?.showName &&
+    Boolean(conditionalRender?.contributorName || puck.isEditing);
+  const showContributionDate =
+    parentStyles?.showDate &&
+    Boolean(conditionalRender?.contributionDate || puck.isEditing);
 
   // sharedCardProps useEffect
   // When the context changes, dispatch an update to sync the changes to puck
@@ -293,16 +300,24 @@ const TestimonialCardComponent: PuckComponent<TestimonialCardProps> = (
           <slots.DescriptionSlot style={{ height: "auto" }} allow={[]} />
         )}
       </Background>
-      <Background background={styles.backgroundColor} className="p-8">
-        <div className="flex flex-col gap-1">
-          {showContributorName && (
-            <slots.ContributorNameSlot style={{ height: "auto" }} allow={[]} />
-          )}
-          {showContributionDate && (
-            <slots.ContributionDateSlot style={{ height: "auto" }} allow={[]} />
-          )}
-        </div>
-      </Background>
+      {(showContributorName || showContributionDate) && (
+        <Background background={styles.backgroundColor} className="p-8">
+          <div className="flex flex-col gap-1">
+            {showContributorName && (
+              <slots.ContributorNameSlot
+                style={{ height: "auto" }}
+                allow={[]}
+              />
+            )}
+            {showContributionDate && (
+              <slots.ContributionDateSlot
+                style={{ height: "auto" }}
+                allow={[]}
+              />
+            )}
+          </div>
+        </Background>
+      )}
     </div>
   );
 };
@@ -372,6 +387,13 @@ export const TestimonialCard: ComponentConfig<{ props: TestimonialCardProps }> =
           },
         } satisfies TestimonialCardProps,
       };
+
+      updatedData = syncParentStyles(params, updatedData, [
+        "showName",
+        "showDate",
+        "showHeading",
+        "showIcon",
+      ]);
 
       // Set parentData for all slots if parentData is provided
       if (data.props.parentData) {

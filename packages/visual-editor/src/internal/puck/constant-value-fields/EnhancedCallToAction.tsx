@@ -1,4 +1,4 @@
-import { AutoField, CustomField, Field, FieldLabel } from "@measured/puck";
+import { AutoField, CustomField, FieldLabel } from "@puckeditor/core";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import {
   EnhancedTranslatableCTA,
@@ -7,7 +7,7 @@ import {
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { linkTypeOptions } from "./CallToAction.tsx";
 import { useMemo } from "react";
-import { YextEntityField } from "@yext/visual-editor";
+import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 
 export const ctaTypeOptions = () => {
   return [
@@ -24,11 +24,6 @@ export const ctaTypeOptions = () => {
       value: "presetImage",
     },
   ];
-};
-
-export const ctaTypeToEntityFieldType = {
-  textAndLink: "type.cta",
-  presetImage: "type.cta",
 };
 
 /**
@@ -60,6 +55,15 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
         );
       }, []);
 
+      const linkField = useMemo(() => {
+        return TranslatableStringField<TranslatableString>(
+          msg("fields.link", "Link"),
+          { types: ["type.string"] },
+          true,
+          false
+        );
+      }, []);
+
       const showLabel = value?.ctaType !== "presetImage";
       const showLinkFields = value?.ctaType !== "getDirections";
 
@@ -77,16 +81,14 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
                   const updatedValue = { ...value, ctaType: newValue };
                   // Set defaults based on CTA type
                   if (newValue === "presetImage") {
-                    updatedValue.label = { en: "", hasLocalizedValue: "true" };
+                    updatedValue.label = { defaultValue: "" };
                   } else if (newValue === "getDirections") {
                     updatedValue.label = updatedValue?.label || {
-                      en: "Get Directions",
-                      hasLocalizedValue: "true",
+                      defaultValue: "Get Directions",
                     };
                   } else if (newValue === "textAndLink") {
                     updatedValue.label = updatedValue?.label || {
-                      en: "Learn More",
-                      hasLocalizedValue: "true",
+                      defaultValue: "Learn More",
                     };
                     updatedValue.link = updatedValue?.link || "#";
                     updatedValue.linkType = updatedValue?.linkType || "URL";
@@ -108,15 +110,13 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
           {showLinkFields && (
             <>
               <div className="ve-mb-3">
-                <FieldLabel label={pt("fields.link", "Link")}>
-                  <AutoField
-                    field={{ type: "text" }}
-                    value={value?.link || ""}
-                    onChange={(newValue) =>
-                      onChange({ ...value, link: newValue })
-                    }
-                  />
-                </FieldLabel>
+                <AutoField
+                  field={linkField}
+                  value={value?.link || ""}
+                  onChange={(newValue) =>
+                    onChange({ ...value, link: newValue })
+                  }
+                />
               </div>
               <div className="ve-mb-3">
                 <FieldLabel label={pt("fields.linkType", "Link Type")}>
@@ -138,108 +138,3 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
       );
     },
   };
-
-export const enhancedTranslatableCTAFields =
-  (): Field<EnhancedTranslatableCTA> => {
-    const labelField = TranslatableStringField<any>(
-      msg("fields.label", "Label"),
-      { types: ["type.string"] }
-    );
-    return {
-      type: "object",
-      label: pt("fields.callToAction", "Call To Action"),
-      objectFields: {
-        label: labelField,
-        link: {
-          label: pt("fields.link", "Link"),
-          type: "text",
-        },
-        linkType: {
-          label: pt("fields.linkType", "Link Type"),
-          type: "select",
-          options: linkTypeOptions(),
-        },
-        ctaType: {
-          label: pt("fields.ctaType", "CTA Type"),
-          type: "select",
-          options: ctaTypeOptions(),
-        },
-      },
-    };
-  };
-
-// Restricted CTA fields for page sections that should only show "Text & Link" options
-export const restrictedTranslatableCTAFields =
-  (): Field<EnhancedTranslatableCTA> => {
-    const labelField = TranslatableStringField<any>(
-      msg("fields.label", "Label"),
-      { types: ["type.string"] }
-    );
-    return {
-      type: "object",
-      label: pt("fields.callToAction", "Call To Action"),
-      objectFields: {
-        label: labelField,
-        link: {
-          label: pt("fields.link", "Link"),
-          type: "text",
-        },
-        linkType: {
-          label: pt("fields.linkType", "Link Type"),
-          type: "select",
-          options: linkTypeOptions(),
-        },
-        // Note: ctaType is not included here, so it will default to "textAndLink"
-        // and cannot be changed in the editor
-      },
-    };
-  };
-
-// Restricted constant config for components that should only use textAndLink CTA type
-export const LINK_ONLY_CTA_CONFIG: CustomField<EnhancedTranslatableCTA> = {
-  type: "custom",
-  render: ({ onChange, value }) => {
-    const labelField = TranslatableStringField<any>(
-      msg("fields.label", "Label"),
-      {
-        types: ["type.string"],
-      }
-    );
-    return (
-      <div className={"ve-mt-3"}>
-        <div className="ve-mb-3">
-          <FieldLabel label={pt("fields.callToAction", "Call To Action")}>
-            <AutoField
-              field={labelField}
-              value={value?.label}
-              onChange={(newValue) => onChange({ ...value, label: newValue })}
-            />
-          </FieldLabel>
-        </div>
-        <div className="ve-mb-3">
-          <FieldLabel label={pt("fields.link", "Link")}>
-            <AutoField
-              field={{ type: "text" }}
-              value={value?.link || ""}
-              onChange={(newValue) => onChange({ ...value, link: newValue })}
-            />
-          </FieldLabel>
-        </div>
-        <div className="ve-mb-3">
-          <FieldLabel label={pt("fields.linkType", "Link Type")}>
-            <AutoField
-              field={{
-                type: "select",
-                options: linkTypeOptions(),
-              }}
-              value={value?.linkType || "URL"}
-              onChange={(newValue) =>
-                onChange({ ...value, linkType: newValue })
-              }
-            />
-          </FieldLabel>
-        </div>
-      </div>
-    );
-  },
-};

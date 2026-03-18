@@ -439,9 +439,12 @@ export const devTemplateStream = {
           name: "c_exampleProducts",
           fullObject: true,
         },
-
         {
           name: "c_examplePromo",
+          fullObject: true,
+        },
+        {
+          name: "c_emptyPromo",
           fullObject: true,
         },
         {
@@ -986,6 +989,128 @@ export const devTemplateStream = {
           definition: {
             name: "c_examplePromo",
             registryId: "location.custom.1000152098.examplepromo.0",
+            typeRegistryId: "type.promo_section",
+            type: { objectType: "OBJECT_TYPE_DEFAULT" },
+          },
+          children: {
+            fields: [
+              {
+                name: "image",
+                definition: {
+                  name: "image",
+                  typeRegistryId: "type.image",
+                  type: { objectType: "OBJECT_TYPE_IMAGE" },
+                },
+                children: {
+                  fields: [
+                    {
+                      name: "url",
+                      definition: {
+                        name: "url",
+                        type: { stringType: "STRING_TYPE_URL" },
+                      },
+                    },
+                    {
+                      name: "alternateText",
+                      definition: {
+                        name: "alternateText",
+                        type: { stringType: "STRING_TYPE_MULTILINE" },
+                      },
+                    },
+                    {
+                      name: "width",
+                      definition: {
+                        name: "width",
+                        type: { numberType: "NUMBER_TYPE_INT" },
+                      },
+                    },
+                    {
+                      name: "height",
+                      definition: {
+                        name: "height",
+                        type: { numberType: "NUMBER_TYPE_INT" },
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                name: "title",
+                definition: {
+                  name: "title",
+                  typeRegistryId: "type.string",
+                  type: { stringType: "STRING_TYPE_DEFAULT" },
+                },
+              },
+              {
+                name: "description",
+                definition: {
+                  name: "description",
+                  typeRegistryId: "type.rich_text_v2",
+                  type: { objectType: "OBJECT_TYPE_RICH_TEXT" },
+                },
+                children: {
+                  fields: [
+                    {
+                      name: "html",
+                      definition: {
+                        name: "html",
+                        type: { stringType: "STRING_TYPE_HTML" },
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                name: "cta",
+                definition: {
+                  name: "cta",
+                  typeRegistryId: "type.cta",
+                  type: { objectType: "OBJECT_TYPE_DEFAULT" },
+                },
+                children: {
+                  fields: [
+                    {
+                      name: "label",
+                      definition: {
+                        name: "label",
+                        typeRegistryId: "type.string",
+                        type: { stringType: "STRING_TYPE_DEFAULT" },
+                      },
+                    },
+                    {
+                      name: "linkType",
+                      definition: {
+                        name: "linkType",
+                        typeRegistryId: "type.option",
+                        type: { stringType: "STRING_TYPE_OPTION" },
+                        options: [
+                          { textValue: "OTHER", displayName: "Other" },
+                          { textValue: "URL", displayName: "URL" },
+                          { textValue: "PHONE", displayName: "Phone" },
+                          { textValue: "EMAIL", displayName: "Email" },
+                        ],
+                      },
+                    },
+                    {
+                      name: "link",
+                      definition: {
+                        name: "link",
+                        typeRegistryId: "type.string",
+                        type: { stringType: "STRING_TYPE_DEFAULT" },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+        {
+          name: "c_emptyPromo",
+          definition: {
+            name: "c_emptyPromo",
+            registryId: "location.custom.1000152098.emptypromo.0",
             typeRegistryId: "type.promo_section",
             type: { objectType: "OBJECT_TYPE_DEFAULT" },
           },

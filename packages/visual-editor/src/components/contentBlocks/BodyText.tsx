@@ -1,20 +1,17 @@
 import { useTranslation } from "react-i18next";
 import * as React from "react";
-import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
-import {
-  BodyProps,
-  useDocument,
-  resolveComponentData,
-  EntityField,
-  YextEntityField,
-  YextField,
-  pt,
-  msg,
-  TranslatableRichText,
-  useBackground,
-  resolveDataFromParent,
-  Body,
-} from "@yext/visual-editor";
+import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { BodyProps, Body } from "../atoms/body.tsx";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { EntityField } from "../../editor/EntityField.tsx";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { YextField } from "../../editor/YextField.tsx";
+import { pt, msg } from "../../utils/i18n/platform.ts";
+import { TranslatableRichText } from "../../types/types.ts";
+import { useBackground } from "../../hooks/useBackground.tsx";
+import { resolveDataFromParent } from "../../editor/ParentData.tsx";
+import { BackgroundStyle } from "../../index.ts";
 
 export type BodyTextProps = {
   data: {
@@ -25,6 +22,9 @@ export type BodyTextProps = {
   styles: {
     /** The size of the body text. */
     variant: BodyProps["variant"];
+
+    /** The color of the body text. */
+    color?: BackgroundStyle;
   };
 
   /**
@@ -60,6 +60,10 @@ const bodyTextFields: Fields<BodyTextProps> = {
         type: "radio",
         options: "BODY_VARIANT",
       }),
+      color: YextField(msg("fields.color", "Color"), {
+        type: "select",
+        options: "SITE_COLOR",
+      }),
     },
   }),
 };
@@ -77,19 +81,23 @@ const BodyTextComponent: PuckComponent<BodyTextProps> = (props) => {
         variant: styles.variant,
         isDarkBackground: background?.isDarkBackground,
         className: props.parentStyles?.className,
+        color: styles.color,
       })
     : undefined;
 
-  return resolvedData ? (
+  return React.isValidElement(resolvedData) ||
+    typeof resolvedData === "string" ? (
     <EntityField
       displayName={pt("body", "Body")}
       fieldId={parentData ? parentData.field : data.text.field}
       constantValueEnabled={data.text.constantValueEnabled}
     >
-      {React.isValidElement(resolvedData) ? (
-        resolvedData
+      {typeof resolvedData === "string" ? (
+        <Body variant={styles.variant} color={styles.color}>
+          {resolvedData}
+        </Body>
       ) : (
-        <Body variant={styles.variant}>{resolvedData}</Body>
+        resolvedData
       )}
     </EntityField>
   ) : puck.isEditing ? (
@@ -100,17 +108,14 @@ const BodyTextComponent: PuckComponent<BodyTextProps> = (props) => {
 };
 
 export const BodyText: ComponentConfig<{ props: BodyTextProps }> = {
-  label: msg("components.bodyText", "Body Text"),
+  label: msg("components.richText", "Rich Text"),
   fields: bodyTextFields,
   resolveFields: (data) => resolveDataFromParent(bodyTextFields, data),
   defaultProps: {
     data: {
       text: {
         field: "",
-        constantValue: {
-          en: "Text",
-          hasLocalizedValue: "true",
-        },
+        constantValue: { defaultValue: "Text" },
         constantValueEnabled: true,
       },
     },

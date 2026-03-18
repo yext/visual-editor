@@ -6,11 +6,14 @@ import {
   PuckComponent,
   setDeep,
   Slot,
-} from "@measured/puck";
-import { msg, YextField, PageSectionProps } from "@yext/visual-editor";
+} from "@puckeditor/core";
+import { msg } from "../../utils/i18n/platform.ts";
+import { YextField } from "../../editor/YextField.tsx";
+import { PageSectionProps } from "../atoms/pageSection.tsx";
 import { cva } from "class-variance-authority";
 import { defaultPrimaryHeaderProps } from "./PrimaryHeaderSlot.tsx";
 import { defaultSecondaryHeaderProps } from "./SecondaryHeaderSlot.tsx";
+import { ExpandedHeaderMenuProvider } from "./ExpandedHeaderMenuContext.tsx";
 
 export const headerWrapper = cva("flex flex-col", {
   variants: {
@@ -103,7 +106,7 @@ const ExpandedHeaderWrapper: PuckComponent<ExpandedHeaderProps> = ({
   slots,
 }) => {
   return (
-    <>
+    <ExpandedHeaderMenuProvider>
       <div className={headerWrapper({ position: styles.headerPosition })}>
         {/* Secondary Header (Top Bar) */}
         <div className="hidden md:flex">
@@ -113,9 +116,11 @@ const ExpandedHeaderWrapper: PuckComponent<ExpandedHeaderProps> = ({
         </div>
 
         {/* Primary Header w/ nav bar */}
-        <slots.PrimaryHeaderSlot style={{ height: "auto" }} />
+        <slots.PrimaryHeaderSlot
+          style={{ height: "auto", position: "relative" }}
+        />
       </div>
-    </>
+    </ExpandedHeaderMenuProvider>
   );
 };
 

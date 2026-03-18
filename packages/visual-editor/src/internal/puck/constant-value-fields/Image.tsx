@@ -1,18 +1,32 @@
 import * as React from "react";
-import { AutoField, CustomField, FieldLabel } from "@measured/puck";
+import { AutoField, CustomField, FieldLabel } from "@puckeditor/core";
 import { useTranslation } from "react-i18next";
 import {
   TARGET_ORIGINS,
   useReceiveMessage,
   useSendMessageToParent,
-} from "../../hooks/useMessage";
-import { Button } from "../ui/button";
-import { ImageContentData, AssetImageType } from "../../../types/images";
-import { useDocument } from "../../../hooks/useDocument";
-import { TranslatableStringField } from "../../../editor/TranslatableStringField";
-import { resolveComponentData } from "../../../utils/resolveComponentData";
-import { TranslatableString } from "../../../types/types";
-import { msg, pt } from "../../../utils/i18n/platform";
+} from "../../hooks/useMessage.ts";
+import { Button } from "../ui/button.tsx";
+import {
+  ImageContentData,
+  TranslatableAssetImage,
+  AssetImageType,
+  LocalizedAssetImage,
+  isLocalizedAssetImage,
+  resolveLocalizedAssetImage,
+} from "../../../types/images.ts";
+import { useDocument } from "../../../hooks/useDocument.tsx";
+import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+import { TranslatableString } from "../../../types/types.ts";
+import { msg, pt } from "../../../utils/i18n/platform.ts";
+import {
+  FieldTypeData,
+  TemplateMetadata,
+} from "../../types/templateMetadata.ts";
+import { DynamicOption } from "../../../editor/DynamicOptionsSelector.tsx";
+import { useTemplateMetadata } from "../../hooks/useMessageReceivers.ts";
+import { getPageSetLocales } from "../../../utils/pageSetLocales.ts";
 
 export type ImagePayload = {
   id: string;
@@ -20,11 +34,47 @@ export type ImagePayload = {
   locale: string;
 };
 
-export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
+const buildLocatorDisplayOptions = (
+  locatorDisplayFields?: Record<string, FieldTypeData>
+): DynamicOption<string>[] => {
+  if (!locatorDisplayFields) {
+    return [];
+  }
+
+  return Object.keys(locatorDisplayFields)
+    .filter((key) => locatorDisplayFields[key]?.field_type_id === "type.string")
+    .map((key) => {
+      const fieldData = locatorDisplayFields[key];
+      return {
+        label: fieldData.field_name,
+        value: key,
+      };
+    });
+};
+
+const createImageConstantConfig = (options?: {
+  getAltTextOptions?: (
+    templateMetadata: TemplateMetadata
+  ) => DynamicOption<string>[];
+}): CustomField<TranslatableAssetImage | undefined> => ({
   type: "custom",
   render: ({ onChange, value, field }) => {
     const { i18n } = useTranslation();
     const streamDocument = useDocument();
+    const templateMetadata: TemplateMetadata = useTemplateMetadata();
+    const locale = i18n.language;
+
+    const locales = getPageSetLocales(streamDocument);
+
+    const localizedContainer = React.useMemo<LocalizedAssetImage | undefined>(
+      () => (isLocalizedAssetImage(value) ? value : undefined),
+      [value]
+    );
+
+    const resolvedValue = React.useMemo<AssetImageType | undefined>(() => {
+      return resolveLocalizedAssetImage(value, locale);
+    }, [value, locale]);
+
     const [pendingMessageId, setPendingMessageId] = React.useState<
       string | undefined
     >();
@@ -46,7 +96,7 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
           if (!imageData) {
             return;
           }
-          onChange({
+          const newValue = {
             alternateText: imagePayload.value.altText
               ? {
                   [imagePayload.locale]: imagePayload.value.altText,
@@ -57,7 +107,13 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
             height: imageData.dimension?.height ?? 0,
             width: imageData.dimension?.width ?? 0,
             assetImage: payload.value,
-          });
+          };
+
+          onChange({
+            ...localizedContainer,
+            [locale]: newValue,
+            hasLocalizedValue: "true",
+          } as TranslatableAssetImage);
         }
       }
     );
@@ -72,12 +128,17 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
         if (!userInput) {
           return;
         }
-        onChange({
-          alternateText: value?.alternateText ?? "",
+        const newValue = {
+          alternateText: resolvedValue?.alternateText ?? "",
           url: userInput,
           height: 1,
           width: 1,
-        });
+        };
+        onChange({
+          ...localizedContainer,
+          [locale]: newValue,
+          hasLocalizedValue: "true",
+        } as TranslatableAssetImage);
       } else {
         /** Instructs Storm to open the image asset selector drawer */
         const messageId = `ImageAsset-${Date.now()}`;
@@ -85,7 +146,7 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
         openImageAssetSelector({
           payload: {
             type: "ImageAsset",
-            value: value,
+            value: resolvedValue,
             id: messageId,
           },
         });
@@ -96,23 +157,39 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
       e.stopPropagation();
       e.preventDefault();
 
-      onChange({
-        alternateText: value?.alternateText ?? "",
+      const newValue = {
+        alternateText: resolvedValue?.alternateText ?? "",
         url: "",
         height: 0,
         width: 0,
-      });
+      };
+
+      onChange({
+        ...localizedContainer,
+        [locale]: newValue,
+        hasLocalizedValue: "true",
+      } as TranslatableAssetImage);
     };
 
+    const altTextOptions = options?.getAltTextOptions?.(templateMetadata);
     const altTextField = React.useMemo(() => {
+      if (altTextOptions) {
+        return TranslatableStringField<TranslatableString | undefined>(
+          msg("altText", "Alt Text"),
+          undefined,
+          false,
+          true,
+          () => altTextOptions
+        );
+      }
       return TranslatableStringField<TranslatableString | undefined>(
         msg("altText", "Alt Text"),
         { types: ["type.string"] }
       );
-    }, []);
+    }, [altTextOptions]);
 
     const altText = resolveComponentData(
-      value?.alternateText ?? "",
+      resolvedValue?.alternateText ?? "",
       i18n.language,
       streamDocument
     );
@@ -133,10 +210,10 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
               className="ve-absolute ve-inset-0 ve-z-10 ve-hidden"
               onClick={(e) => e.stopPropagation()}
             />
-            {value?.url ? (
+            {resolvedValue?.url ? (
               <>
                 <img
-                  src={value.url}
+                  src={resolvedValue.url}
                   alt={altText}
                   className="ve-w-full ve-min-h-[126px] ve-max-h-[200px] ve-object-cover ve-rounded-md ve-transition ve-duration-300 group-hover:ve-brightness-75"
                 />
@@ -171,15 +248,68 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
           </div>
         </FieldLabel>
 
+        {locales.length > 1 && (
+          <Button
+            size="sm"
+            variant="small_link"
+            onClick={() => {
+              if (!resolvedValue) {
+                return;
+              }
+
+              const valueByLocale = {
+                hasLocalizedValue: "true",
+                ...locales.reduce(
+                  (acc, l) => {
+                    const existingLocaleData = (
+                      localizedContainer as
+                        | Record<string, AssetImageType | undefined>
+                        | undefined
+                    )?.[l];
+
+                    acc[l] = {
+                      ...resolvedValue,
+                      alternateText: existingLocaleData?.alternateText,
+                    };
+                    return acc;
+                  },
+                  {} as Record<string, any>
+                ),
+              };
+              onChange(valueByLocale as TranslatableAssetImage);
+            }}
+            className={"ve-px-0 ve-pb-4 ve-h-auto"}
+          >
+            {pt("applyAll", "Apply to all locales")}
+          </Button>
+        )}
+
         {/* Alt Text Field */}
         <AutoField
           field={altTextField}
-          value={value?.alternateText}
-          onChange={(newValue) =>
-            onChange(value ? { ...value, alternateText: newValue } : undefined)
-          }
+          value={resolvedValue?.alternateText}
+          onChange={(newValue) => {
+            const updatedImage = resolvedValue
+              ? { ...resolvedValue, alternateText: newValue }
+              : undefined;
+            onChange({
+              ...localizedContainer,
+              [locale]: updatedImage,
+              hasLocalizedValue: "true",
+            } as TranslatableAssetImage);
+          }}
         />
       </>
     );
   },
+});
+
+export const IMAGE_CONSTANT_CONFIG = createImageConstantConfig();
+
+export const LOCATOR_IMAGE_CONSTANT_CONFIG = {
+  ...createImageConstantConfig({
+    getAltTextOptions: (templateMetadata: TemplateMetadata) =>
+      buildLocatorDisplayOptions(templateMetadata?.locatorDisplayFields),
+  }),
+  label: msg("fields.image", "Image"),
 };

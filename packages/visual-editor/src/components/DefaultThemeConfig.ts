@@ -1,12 +1,12 @@
+import { ThemeConfig } from "../utils/themeResolver.ts";
 import {
-  ThemeConfig,
   defaultFonts,
   FontRegistry,
   getFontWeightOptions,
-  ThemeOptions,
-  msg,
   constructFontSelectOptions,
-} from "@yext/visual-editor";
+} from "../utils/fonts/visualEditorFonts.ts";
+import { ThemeOptions } from "../utils/themeConfigOptions.ts";
+import { msg } from "../utils/i18n/platform.ts";
 
 export function createDefaultThemeConfig(
   customFonts: FontRegistry = {}
@@ -15,7 +15,17 @@ export function createDefaultThemeConfig(
     ...defaultFonts,
     ...customFonts,
   };
-  const fontOptions = constructFontSelectOptions(fonts);
+  const fontOptions = [
+    ...constructFontSelectOptions(customFonts),
+    ...constructFontSelectOptions(defaultFonts).filter(
+      (option) => !(option.label in customFonts)
+    ),
+  ];
+  const defaultHeaderFontOption = {
+    label: msg("theme.defaultFont", "Default font"),
+    value: "var(--fontFamily-headers-defaultFont)",
+  };
+  const headerFontOptions = [defaultHeaderFontOption, ...fontOptions];
   const fontWeightOptions = (fontVariable?: string) => {
     return () =>
       getFontWeightOptions({
@@ -25,6 +35,18 @@ export function createDefaultThemeConfig(
   };
 
   return {
+    headers: {
+      label: msg("theme.headers", "Headers"),
+      styles: {
+        defaultFont: {
+          label: msg("theme.defaultFont", "Default font"),
+          type: "select",
+          plugin: "fontFamily",
+          options: fontOptions,
+          default: "'Open Sans', 'Open Sans Fallback', sans-serif",
+        },
+      },
+    },
     palette: {
       label: msg("theme.colors.colors", "Colors"),
       styles: {
@@ -61,8 +83,8 @@ export function createDefaultThemeConfig(
           label: msg("theme.font", "Font"),
           type: "select",
           plugin: "fontFamily",
-          options: fontOptions,
-          default: "'Open Sans', sans-serif",
+          options: headerFontOptions,
+          default: defaultHeaderFontOption.value,
         },
         fontSize: {
           label: msg("theme.fontSize", "Font Size"),
@@ -94,8 +116,8 @@ export function createDefaultThemeConfig(
           label: msg("theme.font", "Font"),
           type: "select",
           plugin: "fontFamily",
-          options: fontOptions,
-          default: "'Open Sans', sans-serif",
+          options: headerFontOptions,
+          default: defaultHeaderFontOption.value,
         },
         fontSize: {
           label: msg("theme.fontSize", "Font Size"),
@@ -127,8 +149,8 @@ export function createDefaultThemeConfig(
           label: msg("theme.font", "Font"),
           type: "select",
           plugin: "fontFamily",
-          options: fontOptions,
-          default: "'Open Sans', sans-serif",
+          options: headerFontOptions,
+          default: defaultHeaderFontOption.value,
         },
         fontSize: {
           label: msg("theme.fontSize", "Font Size"),
@@ -160,8 +182,8 @@ export function createDefaultThemeConfig(
           label: msg("theme.font", "Font"),
           type: "select",
           plugin: "fontFamily",
-          options: fontOptions,
-          default: "'Open Sans', sans-serif",
+          options: headerFontOptions,
+          default: defaultHeaderFontOption.value,
         },
         fontSize: {
           label: msg("theme.fontSize", "Font Size"),
@@ -193,8 +215,8 @@ export function createDefaultThemeConfig(
           label: msg("theme.font", "Font"),
           type: "select",
           plugin: "fontFamily",
-          options: fontOptions,
-          default: "'Open Sans', sans-serif",
+          options: headerFontOptions,
+          default: defaultHeaderFontOption.value,
         },
         fontSize: {
           label: msg("theme.fontSize", "Font Size"),
@@ -226,8 +248,8 @@ export function createDefaultThemeConfig(
           label: msg("theme.font", "Font"),
           type: "select",
           plugin: "fontFamily",
-          options: fontOptions,
-          default: "'Open Sans', sans-serif",
+          options: headerFontOptions,
+          default: defaultHeaderFontOption.value,
         },
         fontSize: {
           label: msg("theme.fontSize", "Font Size"),
@@ -260,7 +282,7 @@ export function createDefaultThemeConfig(
           type: "select",
           plugin: "fontFamily",
           options: fontOptions,
-          default: "'Open Sans', sans-serif",
+          default: "'Open Sans', 'Open Sans Fallback', sans-serif",
         },
         fontSize: {
           label: msg("theme.fontSize", "Font Size"),
@@ -312,7 +334,7 @@ export function createDefaultThemeConfig(
           type: "select",
           plugin: "fontFamily",
           options: fontOptions,
-          default: "'Open Sans', sans-serif",
+          default: "'Open Sans', 'Open Sans Fallback', sans-serif",
         },
         fontSize: {
           label: msg("theme.fontSize", "Font Size"),
@@ -359,7 +381,7 @@ export function createDefaultThemeConfig(
           type: "select",
           plugin: "fontFamily",
           options: fontOptions,
-          default: "'Open Sans', sans-serif",
+          default: "'Open Sans', 'Open Sans Fallback', sans-serif",
         },
         fontSize: {
           label: msg("theme.fontSize", "Font Size"),

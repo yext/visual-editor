@@ -7,13 +7,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../atoms/dropdown.tsx";
-import {
-  Background,
-  BackgroundStyle,
-  Body,
-  fetchLocalesToPathsForEntity,
-  useDocument,
-} from "@yext/visual-editor";
+import { Background } from "../atoms/background.tsx";
+import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
+import { Body } from "../atoms/body.tsx";
+import { fetchLocalesToPathsForEntity } from "../../utils/api/fetchLocalesToPathsForEntity.ts";
+import { useDocument } from "../../hooks/useDocument.tsx";
 import {
   Accordion,
   AccordionContent,
@@ -121,7 +119,10 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
             </div>
             <ChevronDown />
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-40 rounded p-0">
+          <DropdownMenuContent
+            align="end"
+            className="w-40 rounded p-0 hidden md:block"
+          >
             {(status === "COMPLETE" || status === "ERROR") &&
               Object.entries(validLocalesToPaths).map(([locale, path]) => (
                 <DropdownMenuItem
@@ -146,7 +147,7 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
           onValueChange={(value) => handleOpenChange(!!value)}
         >
           <AccordionItem value="language-selector">
-            <AccordionTrigger className="group flex w-full items-center justify-between text-body-sm-fontSize font-medium text-gray-900 px-4 py-6 md:pb-4 ">
+            <AccordionTrigger className="group flex w-full items-center justify-between text-body-sm-fontSize font-medium text-gray-900 py-6 md:pb-4 ">
               <div className="flex items-center gap-2">
                 <Globe className="w-4 h-4" />
                 <Body variant="xs">{getLanguageName(selected)}</Body>

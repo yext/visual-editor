@@ -1,4 +1,4 @@
-import { AutoField, Button, CustomField, IconButton } from "@measured/puck";
+import { AutoField, Button, CustomField, IconButton } from "@puckeditor/core";
 import { Plus as PlusIcon, Trash2 as TrashIcon } from "lucide-react";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { RichText, TranslatableRichText } from "../../../types/types.ts";
@@ -7,6 +7,19 @@ import { usePlatformTranslation } from "../../../utils/i18n/platform.ts";
 import { useState } from "react";
 
 const TEXT_LIST_BUTTON_COLOR: string = "#969696";
+const getFocusableChild = (
+  fieldsDiv: HTMLElement,
+  itemIndex: number
+): HTMLElement | null => {
+  const fieldContainer = fieldsDiv.children.item(itemIndex);
+  if (!fieldContainer) {
+    return null;
+  }
+
+  return fieldContainer.querySelector<HTMLElement>(
+    'input, textarea, [contenteditable="true"], [tabindex]:not([tabindex="-1"])'
+  );
+};
 
 export const TEXT_LIST_CONSTANT_CONFIG: CustomField<string[]> = {
   type: "custom",
@@ -15,10 +28,13 @@ export const TEXT_LIST_CONSTANT_CONFIG: CustomField<string[]> = {
     const { t: pt } = usePlatformTranslation();
 
     const updateItem = (index: number, value: string) => {
-      const updatedItems = [...localItems];
-      updatedItems[index] = value;
-      setLocalItems(updatedItems);
-      onChange(updatedItems);
+      setLocalItems((currentItems) => {
+        const updatedItems = [...currentItems];
+        updatedItems[index] = value;
+        onChange(updatedItems);
+
+        return updatedItems;
+      });
     };
 
     const removeItem = (index: number) => {
@@ -40,9 +56,7 @@ export const TEXT_LIST_CONSTANT_CONFIG: CustomField<string[]> = {
         const fieldsDiv = document.getElementById(id);
         if (fieldsDiv) {
           const observer = new MutationObserver(() => {
-            const newField = document.getElementById(
-              `${id}-value-${currentLength}`
-            );
+            const newField = getFocusableChild(fieldsDiv, currentLength);
             if (newField) {
               observer.disconnect();
               newField.focus();
@@ -75,7 +89,6 @@ export const TEXT_LIST_CONSTANT_CONFIG: CustomField<string[]> = {
             <span style={{ color: TEXT_LIST_BUTTON_COLOR }}>
               <IconButton
                 onClick={() => removeItem(index)}
-                variant="secondary"
                 title={pt("deleteItem", "Delete Item")}
                 type="button"
               >
@@ -114,21 +127,28 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
       locale: string,
       localeValue: string | RichText
     ) => {
-      const newItems = [...localItems];
-      const currentItem = newItems[index];
-      newItems[index] =
-        typeof currentItem === "object" && !Array.isArray(currentItem)
-          ? { ...currentItem, [locale]: localeValue, hasLocalizedValue: "true" }
-          : { [locale]: localeValue, hasLocalizedValue: "true" };
-      setLocalItems(newItems);
-      onChange(newItems);
+      setLocalItems((currentItems) => {
+        const newItems = [...currentItems];
+        const currentItem = newItems[index];
+        newItems[index] =
+          typeof currentItem === "object" && !Array.isArray(currentItem)
+            ? {
+                ...currentItem,
+                [locale]: localeValue,
+                hasLocalizedValue: "true",
+              }
+            : { [locale]: localeValue, hasLocalizedValue: "true" };
+
+        onChange(newItems);
+        return newItems;
+      });
     };
 
     const addItem = (e?: MouseEvent) => {
       e?.preventDefault();
       const newItems = [
         ...localItems,
-        { [locale]: "", hasLocalizedValue: "true" },
+        { [locale]: "", hasLocalizedValue: "true" as const },
       ];
       setLocalItems(newItems);
       onChange(newItems);
@@ -147,9 +167,7 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
         const fieldsDiv = document.getElementById(id);
         if (fieldsDiv) {
           const observer = new MutationObserver(() => {
-            const newField = document.getElementById(
-              `${id}-value-${currentLength}`
-            );
+            const newField = getFocusableChild(fieldsDiv, currentLength);
             if (newField) {
               observer.disconnect();
               newField.focus();
@@ -171,17 +189,18 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
             key={index}
             className="ve-border ve-rounded ve-p-3 ve-mb-3 ve-flex ve-gap-2"
           >
-            <AutoField
-              key={locale}
-              field={{ type: "text" }}
-              id={`${id}-value-${index}`}
-              value={getDisplayValue(item, locale)}
-              onChange={(val) => updateItem(index, locale, val)}
-            />
+            <div className="ve-grow">
+              <AutoField
+                key={locale}
+                field={{ type: "text" }}
+                id={`${id}-value-${index}`}
+                value={getDisplayValue(item, locale)}
+                onChange={(val) => updateItem(index, locale, val)}
+              />
+            </div>
             <div className="ve-flex ve-justify-end">
               <IconButton
                 onClick={() => removeItem(index)}
-                variant="secondary"
                 title={pt("deleteItem", "Delete Item")}
                 type="button"
               >

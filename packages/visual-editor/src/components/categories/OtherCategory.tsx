@@ -1,9 +1,15 @@
 import {
   CustomCodeSectionProps,
   CustomCodeSection,
-} from "../CustomCodeSection";
-import { ExpandedFooterProps, ExpandedFooter } from "../footer";
-import { ExpandedHeaderProps, ExpandedHeader } from "../header";
+} from "../CustomCodeSection.tsx";
+import {
+  ExpandedFooterProps,
+  ExpandedFooter,
+} from "../footer/ExpandedFooter.tsx";
+import {
+  ExpandedHeaderProps,
+  ExpandedHeader,
+} from "../header/ExpandedHeader.tsx";
 
 export interface OtherCategoryProps {
   ExpandedHeader: ExpandedHeaderProps;

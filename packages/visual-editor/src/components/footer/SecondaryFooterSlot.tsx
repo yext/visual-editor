@@ -1,22 +1,16 @@
 import * as React from "react";
-import { ComponentConfig, Fields, Slot, PuckComponent } from "@measured/puck";
-import {
-  YextField,
-  msg,
-  BackgroundStyle,
-  PageSection,
-  PageSectionProps,
-} from "@yext/visual-editor";
-import { useTranslation } from "react-i18next";
+import { ComponentConfig, Fields, Slot, PuckComponent } from "@puckeditor/core";
+import { YextField } from "../../editor/YextField.tsx";
+import { msg, pt } from "../../utils/i18n/platform.ts";
+import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
+import { PageSection, PageSectionProps } from "../atoms/pageSection.tsx";
 import { defaultCopyrightMessageSlotProps } from "./CopyrightMessageSlot.tsx";
 
 const defaultLink = {
   linkType: "URL" as const,
-  label: {
-    en: "Footer Link",
-    hasLocalizedValue: "true" as const,
-  },
+  label: { defaultValue: "Footer Link" },
   link: "#",
+  openInNewTab: false,
 };
 
 const defaultLinks = [
@@ -43,7 +37,7 @@ export interface SecondaryFooterSlotProps {
    */
   styles: {
     backgroundColor?: BackgroundStyle;
-    linksAlignment: "left" | "right";
+    linksPosition: "left" | "center" | "right";
   };
 
   /** @internal */
@@ -80,26 +74,29 @@ const secondaryFooterSlotFields: Fields<SecondaryFooterSlotProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      linksAlignment: YextField(
-        msg("fields.linksAlignment", "Links Alignment"),
-        {
-          type: "radio",
-          options: [
-            {
-              label: msg("fields.options.left", "Left", {
-                context: "direction",
-              }),
-              value: "left",
-            },
-            {
-              label: msg("fields.options.right", "Right", {
-                context: "direction",
-              }),
-              value: "right",
-            },
-          ],
-        }
-      ),
+      linksPosition: YextField(msg("fields.linksPosition", "Links Position"), {
+        type: "radio",
+        options: [
+          {
+            label: msg("fields.options.left", "Left", {
+              context: "direction",
+            }),
+            value: "left",
+          },
+          {
+            label: msg("fields.options.center", "Center", {
+              context: "direction",
+            }),
+            value: "center",
+          },
+          {
+            label: msg("fields.options.right", "Right", {
+              context: "direction",
+            }),
+            value: "right",
+          },
+        ],
+      }),
     },
   }),
   slots: {
@@ -125,7 +122,6 @@ const SecondaryFooterSlotWrapper: PuckComponent<SecondaryFooterSlotProps> = ({
 }) => {
   const { show } = data;
   const { backgroundColor } = styles;
-  const { t } = useTranslation();
 
   // In edit mode, show minimal clickable placeholder when hidden
   if (puck.isEditing && !show) {
@@ -135,7 +131,7 @@ const SecondaryFooterSlotWrapper: PuckComponent<SecondaryFooterSlotProps> = ({
         className="border-2 border-dashed border-gray-400 bg-gray-100 p-4 opacity-50 min-h-[60px] flex items-center justify-center cursor-pointer"
       >
         <p className="text-sm text-gray-600">
-          {t(
+          {pt(
             "secondaryFooter.hiddenOnLivePage",
             "Secondary Footer (Hidden on live page)"
           )}
@@ -176,7 +172,7 @@ export const SecondaryFooterSlot: ComponentConfig<{
       show: true,
     },
     styles: {
-      linksAlignment: "left",
+      linksPosition: "left",
     },
     slots: {
       SecondaryLinksWrapperSlot: [
@@ -226,7 +222,7 @@ export const SecondaryFooterSlot: ComponentConfig<{
 
     // Pass alignment to SecondaryLinksWrapperSlot based on parent styles
     const secondaryLinksAlignment =
-      data?.props?.styles?.linksAlignment || "left";
+      data?.props?.styles?.linksPosition ?? "left";
 
     if (
       data?.props?.slots?.SecondaryLinksWrapperSlot &&

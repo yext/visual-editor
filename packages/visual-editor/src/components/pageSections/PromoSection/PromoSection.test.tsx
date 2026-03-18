@@ -1,0 +1,2059 @@
+import * as React from "react";
+import { describe, it, expect } from "vitest";
+import {
+  axe,
+  ComponentTest,
+  delay,
+  logSuppressedWcagViolations,
+  transformTests,
+} from "../../testing/componentTests.setup.ts";
+import { render as reactRender, waitFor } from "@testing-library/react";
+import { PromoSection } from "./PromoSection.tsx";
+import { migrate } from "../../../utils/migrate.ts";
+import { migrationRegistry } from "../../migrations/migrationRegistry.ts";
+import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
+import { SlotsCategoryComponents } from "../../categories/SlotsCategory.tsx";
+import { Render, Config, resolveAllData } from "@puckeditor/core";
+import { page } from "@vitest/browser/context";
+
+const promoData = {
+  cta: {
+    label: "Call to Order",
+    link: "+18005551010",
+    linkType: "PHONE",
+  },
+  description: {
+    html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Our out-of-this-world </span><b><strong style="font-weight: bold;">burgers</strong></b><span> and</span><b><strong style="font-weight: bold;"> fresh salads</strong></b><span> are a flavor journey you won&#39;t forget. Explore a galaxy of taste, where every ingredient composes a symphony of flavors. Come visit us for a stellar dining experience!</span></p>',
+  },
+  image: {
+    height: 2048,
+    thumbnails: [
+      {
+        height: 2048,
+        url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/2048x2048.jpg",
+        width: 2048,
+      },
+      {
+        height: 1900,
+        url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/1900x1900.jpg",
+        width: 1900,
+      },
+      {
+        height: 619,
+        url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/619x619.jpg",
+        width: 619,
+      },
+      {
+        height: 450,
+        url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/450x450.jpg",
+        width: 450,
+      },
+      {
+        height: 196,
+        url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/196x196.jpg",
+        width: 196,
+      },
+    ],
+    url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/2048x2048.jpg",
+    width: 2048,
+  },
+  title: "Taste the universe!",
+};
+
+const version59Props = {
+  data: {
+    promo: {
+      field: "",
+      constantValue: {},
+      constantValueEnabled: true,
+    },
+    media: "image",
+    backgroundImage: {
+      field: "",
+      constantValue: {
+        url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=310&width=550&fit=max",
+        width: 550,
+        height: 310,
+      },
+      constantValueEnabled: true,
+    },
+  },
+  styles: {
+    variant: "classic",
+    backgroundColor: {
+      bgColor: "bg-white",
+      textColor: "text-black",
+    },
+    desktopImagePosition: "left",
+    mobileImagePosition: "top",
+    containerAlignment: "left",
+    imageHeight: 500,
+    showMedia: true,
+    showHeading: true,
+    showDescription: true,
+    showCTA: true,
+  },
+  slots: {
+    HeadingSlot: [
+      {
+        type: "HeadingTextSlot",
+        props: {
+          id: "HeadingTextSlot-dd6b1d6f-a447-45a7-8968-82d06e71abb9",
+          data: {
+            text: {
+              field: "",
+              constantValue: {
+                en: "Featured Promotion",
+                hasLocalizedValue: "true",
+              },
+              constantValueEnabled: true,
+            },
+          },
+          styles: {
+            level: 2,
+            align: "left",
+          },
+        },
+      },
+    ],
+    DescriptionSlot: [
+      {
+        type: "BodyTextSlot",
+        props: {
+          id: "BodyTextSlot-5fed969b-86c8-4a0b-9c02-3060f5e6a43b",
+          data: {
+            text: {
+              field: "",
+              constantValue: {
+                en: {
+                  json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                  html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters</span></p>',
+                },
+                hasLocalizedValue: "true",
+              },
+              constantValueEnabled: true,
+            },
+          },
+          styles: {
+            variant: "base",
+          },
+          parentStyles: {
+            className: "text-left",
+          },
+        },
+      },
+    ],
+    VideoSlot: [
+      {
+        type: "VideoSlot",
+        props: {
+          id: "VideoSlot-e0e945fb-5cb4-4a5c-b5a8-0e0a0d4ed174",
+          data: {},
+        },
+      },
+    ],
+    ImageSlot: [
+      {
+        type: "ImageSlot",
+        props: {
+          id: "ImageSlot-7e5fc723-874b-444d-bdcf-13bb689d3027",
+          data: {
+            image: {
+              field: "",
+              constantValue: {
+                url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                width: 640,
+                height: 360,
+              },
+              constantValueEnabled: true,
+            },
+          },
+          styles: {
+            aspectRatio: 1.78,
+            width: 640,
+          },
+          sizes: {
+            base: "calc(100vw - 32px)",
+            md: "min(width, 450px)",
+            lg: "width",
+          },
+          className:
+            "min-w-full lg:min-w-none max-w-full lg:max-w-none rounded-image-borderRadius",
+        },
+      },
+    ],
+    CTASlot: [
+      {
+        type: "CTASlot",
+        props: {
+          id: "CTASlot-7c1a6fdd-e049-423b-b6de-de24b93d2c78",
+          data: {
+            entityField: {
+              field: "",
+              constantValue: {
+                label: "Learn More",
+                link: "#",
+                linkType: "URL",
+                ctaType: "textAndLink",
+              },
+              selectedType: "textAndLink",
+            },
+          },
+          styles: {
+            variant: "primary",
+            presetImage: "app-store",
+          },
+          eventName: "cta",
+        },
+      },
+    ],
+  },
+  analytics: {
+    scope: "promoSection",
+  },
+  liveVisibility: true,
+};
+
+const tests: ComponentTest[] = [
+  {
+    name: "default props with empty document",
+    document: {},
+    props: { ...PromoSection.defaultProps },
+    version: migrationRegistry.length,
+  },
+  {
+    name: "default props with document data",
+    document: { c_promo: promoData },
+    props: { ...PromoSection.defaultProps },
+    version: migrationRegistry.length,
+  },
+  {
+    name: "[classic] version 50 props with constant values and image",
+    document: {},
+    props: {
+      data: {
+        promo: { field: "", constantValue: {}, constantValueEnabled: true },
+        media: "image",
+        backgroundImage: {
+          field: ".image",
+          constantValue: {
+            url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+            width: 640,
+            height: 360,
+          },
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        variant: "classic",
+        backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+        desktopImagePosition: "left",
+        mobileImagePosition: "top",
+        containerAlignment: "center",
+        imageHeight: 500,
+      },
+      slots: {
+        HeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-0152ed7a-53e9-405f-b733-cf045e7acc48",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: "Featured Promotion",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { level: 2, align: "center" },
+            },
+          },
+        ],
+        DescriptionSlot: [
+          {
+            type: "BodyTextSlot",
+            props: {
+              id: "BodyTextSlot-85de20ab-6f63-4576-b017-4c7cd1d2e82c",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: {
+                      json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters</span></p>',
+                    },
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { variant: "base" },
+              parentStyles: { className: "text-center" },
+            },
+          },
+        ],
+        VideoSlot: [
+          {
+            type: "VideoSlot",
+            props: {
+              id: "VideoSlot-27b06de4-8d3f-4fcc-ab31-110754ea2aaa",
+              data: {},
+            },
+          },
+        ],
+        ImageSlot: [
+          {
+            type: "ImageSlot",
+            props: {
+              id: "ImageSlot-efee8504-6c1a-4481-b521-32800bf21845",
+              data: {
+                image: {
+                  field: "",
+                  constantValue: {
+                    en: {
+                      url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=310&width=550&fit=max",
+                      width: 550,
+                      height: 310,
+                    },
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { aspectRatio: 1.78, width: 550 },
+              sizes: {
+                base: "calc(100vw - 32px)",
+                md: "min(width, 450px)",
+                lg: "width",
+              },
+            },
+          },
+        ],
+        CTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-eb10b039-9dde-49d8-a45b-dba04a62b2fb",
+              data: {
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: "Learn More",
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "textAndLink",
+                  },
+                  selectedType: "textAndLink",
+                },
+              },
+              styles: { variant: "primary", presetImage: "app-store" },
+              eventName: "cta",
+            },
+          },
+        ],
+      },
+      analytics: { scope: "promoSection" },
+      liveVisibility: true,
+      id: "PromoSection-562d56de-f919-45b8-abbc-64fc7de0e75a",
+    },
+    version: 50,
+  },
+  {
+    name: "[classic] version 50 with constant values and video",
+    document: {},
+    props: {
+      data: {
+        promo: { field: "", constantValue: {}, constantValueEnabled: true },
+        media: "video",
+        backgroundImage: {
+          field: ".image",
+          constantValue: {
+            url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+            width: 640,
+            height: 360,
+          },
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        variant: "classic",
+        backgroundColor: {
+          bgColor: "bg-palette-primary-dark",
+          textColor: "text-white",
+        },
+        desktopImagePosition: "right",
+        mobileImagePosition: "bottom",
+        containerAlignment: "left",
+        imageHeight: 500,
+      },
+      slots: {
+        HeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-0152ed7a-53e9-405f-b733-cf045e7acc48",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: "Featured Promotion",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { level: 2, align: "center" },
+            },
+          },
+        ],
+        DescriptionSlot: [
+          {
+            type: "BodyTextSlot",
+            props: {
+              id: "BodyTextSlot-85de20ab-6f63-4576-b017-4c7cd1d2e82c",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: {
+                      json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters</span></p>',
+                    },
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { variant: "base" },
+              parentStyles: { className: "text-left" },
+            },
+          },
+        ],
+        VideoSlot: [
+          {
+            type: "VideoSlot",
+            props: {
+              id: "VideoSlot-27b06de4-8d3f-4fcc-ab31-110754ea2aaa",
+              data: {
+                assetVideo: {
+                  name: "Local asset",
+                  id: "0",
+                  video: {
+                    url: "https://youtube.com/test",
+                    thumbnail: "https://img.youtube.com/vi//hqdefault.jpg",
+                    id: "",
+                    title: "Local Video",
+                    duration: "0:00",
+                    embeddedUrl: "https://www.youtube.com/embed/",
+                  },
+                },
+              },
+            },
+          },
+        ],
+        ImageSlot: [
+          {
+            type: "ImageSlot",
+            props: {
+              id: "ImageSlot-efee8504-6c1a-4481-b521-32800bf21845",
+              data: {
+                image: {
+                  field: "",
+                  constantValue: {
+                    en: {
+                      url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                      width: 640,
+                      height: 360,
+                    },
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { aspectRatio: 1.78, width: 640 },
+              sizes: {
+                base: "calc(100vw - 32px)",
+                md: "min(width, 450px)",
+                lg: "width",
+              },
+            },
+          },
+        ],
+        CTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-eb10b039-9dde-49d8-a45b-dba04a62b2fb",
+              data: {
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: "Learn More",
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "textAndLink",
+                  },
+                  selectedType: "textAndLink",
+                },
+              },
+              styles: { variant: "primary", presetImage: "app-store" },
+              eventName: "cta",
+            },
+          },
+        ],
+      },
+      analytics: { scope: "promoSection" },
+      liveVisibility: true,
+      id: "PromoSection-562d56de-f919-45b8-abbc-64fc7de0e75a",
+    },
+    version: 50,
+  },
+  {
+    name: "[classic] version 50 with entity values",
+    document: { c_examplePromo: promoData },
+    props: {
+      data: {
+        promo: {
+          field: "c_examplePromo",
+          constantValue: {},
+          constantValueEnabled: false,
+        },
+        media: "image",
+        backgroundImage: {
+          field: "c_examplePromo.image",
+          constantValue: {
+            url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+            width: 640,
+            height: 360,
+          },
+          constantValueEnabled: false,
+        },
+      },
+      styles: {
+        variant: "classic",
+        backgroundColor: {
+          bgColor: "bg-palette-secondary-light",
+          textColor: "text-black",
+        },
+        desktopImagePosition: "left",
+        mobileImagePosition: "bottom",
+        containerAlignment: "left",
+        imageHeight: 500,
+      },
+      slots: {
+        HeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-416a952b-23da-48db-a03d-020f44b13937",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: "Featured Promotion",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { level: 1, align: "left" },
+              parentData: {
+                text: "Taste the universe!",
+                field: "c_examplePromo",
+              },
+            },
+          },
+        ],
+        DescriptionSlot: [
+          {
+            type: "BodyTextSlot",
+            props: {
+              id: "BodyTextSlot-ed913c97-a573-4125-a074-19234d2b58d9",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: {
+                      json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters</span></p>',
+                    },
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { variant: "sm" },
+              parentStyles: { className: "text-left" },
+              parentData: {
+                richText: {
+                  html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Our out-of-this-world </span><b><strong style="font-weight: bold;">burgers</strong></b><span> and</span><b><strong style="font-weight: bold;"> fresh salads</strong></b><span> are a flavor journey you won&#39;t forget. Explore a galaxy of taste, where every ingredient composes a symphony of flavors. Come visit us for a stellar dining experience!</span></p>',
+                },
+                field: "c_examplePromo",
+              },
+            },
+          },
+        ],
+        VideoSlot: [
+          {
+            type: "VideoSlot",
+            props: {
+              id: "VideoSlot-178fd136-01f1-476b-9d91-cf76c9938457",
+              data: {},
+            },
+          },
+        ],
+        ImageSlot: [
+          {
+            type: "ImageSlot",
+            props: {
+              id: "ImageSlot-5e99983b-5050-416d-b286-5e6116ee231e",
+              data: {
+                image: {
+                  field: "",
+                  constantValue: {
+                    en: {
+                      url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=310&width=550&fit=max",
+                      width: 550,
+                      height: 310,
+                    },
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { aspectRatio: 1, width: 550 },
+              sizes: {
+                base: "calc(100vw - 32px)",
+                md: "min(width, 450px)",
+                lg: "width",
+              },
+              parentData: {
+                image: {
+                  height: 2048,
+                  thumbnails: [
+                    {
+                      height: 2048,
+                      url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/2048x2048.jpg",
+                      width: 2048,
+                    },
+                    {
+                      height: 1900,
+                      url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/1900x1900.jpg",
+                      width: 1900,
+                    },
+                    {
+                      height: 619,
+                      url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/619x619.jpg",
+                      width: 619,
+                    },
+                    {
+                      height: 450,
+                      url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/450x450.jpg",
+                      width: 450,
+                    },
+                    {
+                      height: 196,
+                      url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/196x196.jpg",
+                      width: 196,
+                    },
+                  ],
+                  url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/2048x2048.jpg",
+                  width: 2048,
+                },
+                field: "c_examplePromo",
+              },
+            },
+          },
+        ],
+        CTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-cb3bcc8d-f08b-4c70-b77a-f73e5fcc7e20",
+              data: {
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: "Learn More",
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "textAndLink",
+                  },
+                  selectedType: "textAndLink",
+                },
+              },
+              styles: { variant: "secondary", presetImage: "app-store" },
+              eventName: "cta",
+              parentData: {
+                cta: {
+                  label: "Call to Order",
+                  link: "+18005551010",
+                  linkType: "PHONE",
+                },
+                field: "c_examplePromo",
+              },
+            },
+          },
+        ],
+      },
+      analytics: { scope: "promoSection" },
+      liveVisibility: true,
+      id: "PromoSection-25075125-341e-44eb-9037-8eb65042a29a",
+    },
+    version: 50,
+  },
+  {
+    name: "[immersive] version 50 with entity values",
+    document: { c_examplePromo: promoData },
+    version: 50,
+    props: {
+      data: {
+        promo: {
+          field: "c_examplePromo",
+          constantValue: {},
+          constantValueEnabled: false,
+        },
+        media: "image",
+        backgroundImage: {
+          field: "c_examplePromo.image",
+          constantValue: {
+            url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+            width: 640,
+            height: 360,
+          },
+          constantValueEnabled: false,
+        },
+      },
+      styles: {
+        variant: "immersive",
+        backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+        desktopImagePosition: "left",
+        mobileImagePosition: "top",
+        containerAlignment: "left",
+        imageHeight: 200,
+      },
+      slots: {
+        HeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-63489350-7281-407f-b342-26db1844a4fe",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: "Featured Promotion",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { level: 2, align: "left" },
+              parentData: {
+                text: "Taste the universe!",
+                field: "c_examplePromo",
+              },
+            },
+          },
+        ],
+        DescriptionSlot: [
+          {
+            type: "BodyTextSlot",
+            props: {
+              id: "BodyTextSlot-9d841810-2300-4b7e-9d68-f978f4332a43",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: {
+                      json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters</span></p>',
+                    },
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { variant: "base" },
+              parentStyles: { className: "text-left" },
+              parentData: {
+                richText: {
+                  html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Our out-of-this-world </span><b><strong style="font-weight: bold;">burgers</strong></b><span> and</span><b><strong style="font-weight: bold;"> fresh salads</strong></b><span> are a flavor journey you won&#39;t forget. Explore a galaxy of taste, where every ingredient composes a symphony of flavors. Come visit us for a stellar dining experience!</span></p>',
+                },
+                field: "c_examplePromo",
+              },
+            },
+          },
+        ],
+        VideoSlot: [
+          {
+            type: "VideoSlot",
+            props: {
+              id: "VideoSlot-35e57669-c21b-4849-ab9a-af39348c84cd",
+              data: {},
+            },
+          },
+        ],
+        ImageSlot: [
+          {
+            type: "ImageSlot",
+            props: {
+              id: "ImageSlot-98197597-c075-4c9a-ae90-185e4bca6f0b",
+              data: {
+                image: {
+                  field: "",
+                  constantValue: {
+                    en: {
+                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                      width: 640,
+                      height: 360,
+                    },
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { aspectRatio: 1.78, width: 640 },
+              sizes: {
+                base: "calc(100vw - 32px)",
+                md: "min(width, 450px)",
+                lg: "width",
+              },
+              parentData: {
+                image: {
+                  height: 2048,
+                  thumbnails: [
+                    {
+                      height: 2048,
+                      url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/2048x2048.jpg",
+                      width: 2048,
+                    },
+                    {
+                      height: 1900,
+                      url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/1900x1900.jpg",
+                      width: 1900,
+                    },
+                    {
+                      height: 619,
+                      url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/619x619.jpg",
+                      width: 619,
+                    },
+                    {
+                      height: 450,
+                      url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/450x450.jpg",
+                      width: 450,
+                    },
+                    {
+                      height: 196,
+                      url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/196x196.jpg",
+                      width: 196,
+                    },
+                  ],
+                  url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/2048x2048.jpg",
+                  width: 2048,
+                },
+                field: "c_examplePromo",
+              },
+            },
+          },
+        ],
+        CTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-48b2fcae-6810-4ec8-805f-312b7f299e17",
+              data: {
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: "Learn More",
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "textAndLink",
+                  },
+                  selectedType: "textAndLink",
+                },
+              },
+              styles: { variant: "link", presetImage: "app-store" },
+              eventName: "cta",
+              parentData: {
+                cta: {
+                  label: "Call to Order",
+                  link: "+18005551010",
+                  linkType: "PHONE",
+                },
+                field: "c_examplePromo",
+              },
+            },
+          },
+        ],
+      },
+      analytics: { scope: "promoSection" },
+      liveVisibility: true,
+      id: "PromoSection-8dba6990-38a9-4f9b-ba10-7a6bfd0c5a21",
+    },
+  },
+  {
+    name: "[immersive] version 50 with constant values",
+    document: {},
+    version: 50,
+    props: {
+      data: {
+        promo: {
+          field: "c_examplePromo",
+          constantValue: {},
+          constantValueEnabled: true,
+        },
+        media: "image",
+        backgroundImage: {
+          field: "c_examplePromo.image",
+          constantValue: {
+            url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+            width: 640,
+            height: 360,
+          },
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        variant: "immersive",
+        backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+        desktopImagePosition: "left",
+        mobileImagePosition: "top",
+        containerAlignment: "center",
+        imageHeight: 500,
+      },
+      slots: {
+        HeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-63489350-7281-407f-b342-26db1844a4fe",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: "Featured Promotion",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { level: 2, align: "center" },
+            },
+          },
+        ],
+        DescriptionSlot: [
+          {
+            type: "BodyTextSlot",
+            props: {
+              id: "BodyTextSlot-9d841810-2300-4b7e-9d68-f978f4332a43",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: {
+                      json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters</span></p>',
+                    },
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { variant: "base" },
+              parentStyles: { className: "text-center" },
+            },
+          },
+        ],
+        VideoSlot: [
+          {
+            type: "VideoSlot",
+            props: {
+              id: "VideoSlot-35e57669-c21b-4849-ab9a-af39348c84cd",
+              data: {},
+            },
+          },
+        ],
+        ImageSlot: [
+          {
+            type: "ImageSlot",
+            props: {
+              id: "ImageSlot-98197597-c075-4c9a-ae90-185e4bca6f0b",
+              data: {
+                image: {
+                  field: "",
+                  constantValue: {
+                    en: {
+                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                      width: 640,
+                      height: 360,
+                    },
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { aspectRatio: 1.78, width: 640 },
+              sizes: {
+                base: "calc(100vw - 32px)",
+                md: "min(width, 450px)",
+                lg: "width",
+              },
+            },
+          },
+        ],
+        CTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-48b2fcae-6810-4ec8-805f-312b7f299e17",
+              data: {
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: { en: "", hasLocalizedValue: "true" },
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "presetImage",
+                  },
+                  selectedType: "presetImage",
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { variant: "secondary", presetImage: "app-store" },
+              eventName: "cta",
+            },
+          },
+        ],
+      },
+      analytics: { scope: "promoSection" },
+      liveVisibility: true,
+      id: "PromoSection-8dba6990-38a9-4f9b-ba10-7a6bfd0c5a21",
+    },
+  },
+  {
+    name: "[spotlight] version 50 with constant values",
+    document: {},
+    version: 50,
+    props: {
+      data: {
+        promo: {
+          field: "c_examplePromo",
+          constantValue: {},
+          constantValueEnabled: true,
+        },
+        media: "image",
+        backgroundImage: {
+          field: "c_examplePromo.image",
+          constantValue: {
+            url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+            width: 640,
+            height: 360,
+          },
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        variant: "spotlight",
+        backgroundColor: {
+          bgColor: "bg-palette-secondary-dark",
+          textColor: "text-white",
+        },
+        desktopImagePosition: "left",
+        mobileImagePosition: "top",
+        containerAlignment: "right",
+        imageHeight: 400,
+      },
+      slots: {
+        HeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-63489350-7281-407f-b342-26db1844a4fe",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: "Featured Promotion",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { level: 6, align: "right" },
+            },
+          },
+        ],
+        DescriptionSlot: [
+          {
+            type: "BodyTextSlot",
+            props: {
+              id: "BodyTextSlot-9d841810-2300-4b7e-9d68-f978f4332a43",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: {
+                      json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters</span></p>',
+                    },
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { variant: "base" },
+              parentStyles: { className: "text-right" },
+            },
+          },
+        ],
+        VideoSlot: [
+          {
+            type: "VideoSlot",
+            props: {
+              id: "VideoSlot-35e57669-c21b-4849-ab9a-af39348c84cd",
+              data: {},
+            },
+          },
+        ],
+        ImageSlot: [
+          {
+            type: "ImageSlot",
+            props: {
+              id: "ImageSlot-98197597-c075-4c9a-ae90-185e4bca6f0b",
+              data: {
+                image: {
+                  field: "",
+                  constantValue: {
+                    en: {
+                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                      width: 640,
+                      height: 360,
+                    },
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { aspectRatio: 1.78, width: 640 },
+              sizes: {
+                base: "calc(100vw - 32px)",
+                md: "min(width, 450px)",
+                lg: "width",
+              },
+            },
+          },
+        ],
+        CTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-48b2fcae-6810-4ec8-805f-312b7f299e17",
+              data: {
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: { en: "Click Here", hasLocalizedValue: "true" },
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "textAndLink",
+                  },
+                  selectedType: "presetImage",
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { variant: "primary", presetImage: "app-store" },
+              eventName: "cta",
+            },
+          },
+        ],
+      },
+      analytics: { scope: "promoSection" },
+      liveVisibility: true,
+      id: "PromoSection-8dba6990-38a9-4f9b-ba10-7a6bfd0c5a21",
+    },
+  },
+  {
+    name: "[spotlight] version 50 with entity values",
+    document: { c_examplePromo: promoData },
+    version: 50,
+    props: {
+      data: {
+        promo: {
+          field: "c_examplePromo",
+          constantValue: {},
+          constantValueEnabled: false,
+        },
+        media: "image",
+        backgroundImage: {
+          field: "c_examplePromo.image",
+          constantValue: {
+            url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+            width: 640,
+            height: 360,
+          },
+          constantValueEnabled: false,
+        },
+      },
+      styles: {
+        variant: "spotlight",
+        backgroundColor: {
+          bgColor: "bg-palette-tertiary-light",
+          textColor: "text-black",
+        },
+        desktopImagePosition: "left",
+        mobileImagePosition: "top",
+        containerAlignment: "left",
+        imageHeight: 400,
+      },
+      slots: {
+        HeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-63489350-7281-407f-b342-26db1844a4fe",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: "Featured Promotion",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { level: 3, align: "left" },
+              parentData: {
+                text: "Taste the universe!",
+                field: "c_examplePromo",
+              },
+            },
+          },
+        ],
+        DescriptionSlot: [
+          {
+            type: "BodyTextSlot",
+            props: {
+              id: "BodyTextSlot-9d841810-2300-4b7e-9d68-f978f4332a43",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: {
+                      json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters</span></p>',
+                    },
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { variant: "lg" },
+              parentStyles: { className: "text-left" },
+              parentData: {
+                richText: {
+                  html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Our out-of-this-world </span><b><strong style="font-weight: bold;">burgers</strong></b><span> and</span><b><strong style="font-weight: bold;"> fresh salads</strong></b><span> are a flavor journey you won&#39;t forget. Explore a galaxy of taste, where every ingredient composes a symphony of flavors. Come visit us for a stellar dining experience!</span></p>',
+                },
+                field: "c_examplePromo",
+              },
+            },
+          },
+        ],
+        VideoSlot: [
+          {
+            type: "VideoSlot",
+            props: {
+              id: "VideoSlot-35e57669-c21b-4849-ab9a-af39348c84cd",
+              data: {},
+            },
+          },
+        ],
+        ImageSlot: [
+          {
+            type: "ImageSlot",
+            props: {
+              id: "ImageSlot-98197597-c075-4c9a-ae90-185e4bca6f0b",
+              data: {
+                image: {
+                  field: "",
+                  constantValue: {
+                    en: {
+                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                      width: 640,
+                      height: 360,
+                    },
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { aspectRatio: 1.78, width: 640 },
+              sizes: {
+                base: "calc(100vw - 32px)",
+                md: "min(width, 450px)",
+                lg: "width",
+              },
+              parentData: {
+                image: {
+                  height: 2048,
+                  thumbnails: [
+                    {
+                      height: 2048,
+                      url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/2048x2048.jpg",
+                      width: 2048,
+                    },
+                    {
+                      height: 1900,
+                      url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/1900x1900.jpg",
+                      width: 1900,
+                    },
+                    {
+                      height: 619,
+                      url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/619x619.jpg",
+                      width: 619,
+                    },
+                    {
+                      height: 450,
+                      url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/450x450.jpg",
+                      width: 450,
+                    },
+                    {
+                      height: 196,
+                      url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/196x196.jpg",
+                      width: 196,
+                    },
+                  ],
+                  url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/2048x2048.jpg",
+                  width: 2048,
+                },
+                field: "c_examplePromo",
+              },
+            },
+          },
+        ],
+        CTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-48b2fcae-6810-4ec8-805f-312b7f299e17",
+              data: {
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: { en: "Click Here", hasLocalizedValue: "true" },
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "textAndLink",
+                  },
+                  selectedType: "presetImage",
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { variant: "secondary", presetImage: "app-store" },
+              eventName: "cta",
+              parentData: {
+                cta: {
+                  label: "Call to Order",
+                  link: "+18005551010",
+                  linkType: "PHONE",
+                },
+                field: "c_examplePromo",
+              },
+            },
+          },
+        ],
+      },
+      analytics: { scope: "promoSection" },
+      liveVisibility: true,
+      id: "PromoSection-8dba6990-38a9-4f9b-ba10-7a6bfd0c5a21",
+    },
+  },
+  {
+    name: "[compact] version 50 with entity values",
+    document: { c_examplePromo: promoData },
+    version: 50,
+    includeXLViewport: true,
+    props: {
+      data: {
+        promo: {
+          field: "c_examplePromo",
+          constantValue: {},
+          constantValueEnabled: false,
+        },
+        media: "image",
+        backgroundImage: {
+          field: "c_examplePromo.image",
+          constantValue: {
+            url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+            width: 640,
+            height: 360,
+          },
+          constantValueEnabled: false,
+        },
+      },
+      styles: {
+        variant: "compact",
+        backgroundColor: {
+          bgColor: "bg-palette-tertiary",
+          textColor: "text-palette-tertiary-contrast",
+        },
+        desktopImagePosition: "left",
+        mobileImagePosition: "top",
+        containerAlignment: "left",
+        imageHeight: 400,
+      },
+      slots: {
+        HeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-63489350-7281-407f-b342-26db1844a4fe",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: "Featured Promotion",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { level: 3, align: "left" },
+              parentData: {
+                text: "Taste the universe!",
+                field: "c_examplePromo",
+              },
+            },
+          },
+        ],
+        DescriptionSlot: [
+          {
+            type: "BodyTextSlot",
+            props: {
+              id: "BodyTextSlot-9d841810-2300-4b7e-9d68-f978f4332a43",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: {
+                      json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters</span></p>',
+                    },
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { variant: "lg" },
+              parentStyles: { className: "text-left" },
+              parentData: {
+                richText: {
+                  html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Our out-of-this-world </span><b><strong style="font-weight: bold;">burgers</strong></b><span> and</span><b><strong style="font-weight: bold;"> fresh salads</strong></b><span> are a flavor journey you won&#39;t forget. Explore a galaxy of taste, where every ingredient composes a symphony of flavors. Come visit us for a stellar dining experience!</span></p>',
+                },
+                field: "c_examplePromo",
+              },
+            },
+          },
+        ],
+        VideoSlot: [
+          {
+            type: "VideoSlot",
+            props: {
+              id: "VideoSlot-35e57669-c21b-4849-ab9a-af39348c84cd",
+              data: {},
+              className: "h-full",
+            },
+          },
+        ],
+        ImageSlot: [
+          {
+            type: "ImageSlot",
+            props: {
+              id: "ImageSlot-98197597-c075-4c9a-ae90-185e4bca6f0b",
+              data: {
+                image: {
+                  field: "",
+                  constantValue: {
+                    en: {
+                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=310&width=550&fit=max",
+                      width: 550,
+                      height: 310,
+                    },
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { aspectRatio: 1.78, width: 550 },
+              sizes: {
+                base: "calc(100vw - 32px)",
+                md: "min(width, 450px)",
+                lg: "width",
+              },
+              className: "w-full h-full mr-auto",
+              parentData: {
+                image: {
+                  height: 2048,
+                  thumbnails: [
+                    {
+                      height: 2048,
+                      url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/2048x2048.jpg",
+                      width: 2048,
+                    },
+                    {
+                      height: 1900,
+                      url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/1900x1900.jpg",
+                      width: 1900,
+                    },
+                    {
+                      height: 619,
+                      url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/619x619.jpg",
+                      width: 619,
+                    },
+                    {
+                      height: 450,
+                      url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/450x450.jpg",
+                      width: 450,
+                    },
+                    {
+                      height: 196,
+                      url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/196x196.jpg",
+                      width: 196,
+                    },
+                  ],
+                  url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/2048x2048.jpg",
+                  width: 2048,
+                },
+                field: "c_examplePromo",
+              },
+            },
+          },
+        ],
+        CTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-48b2fcae-6810-4ec8-805f-312b7f299e17",
+              data: {
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: { en: "Click Here", hasLocalizedValue: "true" },
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "textAndLink",
+                  },
+                  selectedType: "presetImage",
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { variant: "secondary", presetImage: "app-store" },
+              eventName: "cta",
+              parentData: {
+                cta: {
+                  label: "Call to Order",
+                  link: "+18005551010",
+                  linkType: "PHONE",
+                },
+                field: "c_examplePromo",
+              },
+            },
+          },
+        ],
+      },
+      analytics: { scope: "promoSection" },
+      liveVisibility: true,
+      id: "PromoSection-8dba6990-38a9-4f9b-ba10-7a6bfd0c5a21",
+    },
+  },
+  {
+    name: "[compact] version 50 with constant values and image",
+    document: {},
+    version: 50,
+    props: {
+      data: {
+        promo: {
+          field: "c_examplePromo",
+          constantValue: {},
+          constantValueEnabled: true,
+        },
+        media: "image",
+        backgroundImage: {
+          field: "c_examplePromo.image",
+          constantValue: {
+            url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+            width: 640,
+            height: 360,
+          },
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        variant: "compact",
+        backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+        desktopImagePosition: "right",
+        mobileImagePosition: "top",
+        containerAlignment: "center",
+        imageHeight: 400,
+      },
+      slots: {
+        HeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-63489350-7281-407f-b342-26db1844a4fe",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: "Featured Promotion",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { level: 3, align: "left" },
+            },
+          },
+        ],
+        DescriptionSlot: [
+          {
+            type: "BodyTextSlot",
+            props: {
+              id: "BodyTextSlot-9d841810-2300-4b7e-9d68-f978f4332a43",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: {
+                      json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters</span></p>',
+                    },
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { variant: "base" },
+              parentStyles: { className: "text-center" },
+            },
+          },
+        ],
+        VideoSlot: [
+          {
+            type: "VideoSlot",
+            props: {
+              id: "VideoSlot-35e57669-c21b-4849-ab9a-af39348c84cd",
+              data: {},
+              className: "h-full",
+            },
+          },
+        ],
+        ImageSlot: [
+          {
+            type: "ImageSlot",
+            props: {
+              id: "ImageSlot-98197597-c075-4c9a-ae90-185e4bca6f0b",
+              data: {
+                image: {
+                  field: "",
+                  constantValue: {
+                    en: {
+                      alternateText: "",
+                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=310&width=550&fit=max",
+                      width: 550,
+                      height: 310,
+                    },
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { aspectRatio: 1.78, width: 550 },
+              sizes: {
+                base: "calc(100vw - 32px)",
+                md: "min(width, 450px)",
+                lg: "width",
+              },
+              className: "w-full h-full ml-auto",
+            },
+          },
+        ],
+        CTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-48b2fcae-6810-4ec8-805f-312b7f299e17",
+              data: {
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: { en: "Click Here", hasLocalizedValue: "true" },
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "textAndLink",
+                  },
+                  selectedType: "presetImage",
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { variant: "primary", presetImage: "app-store" },
+              eventName: "cta",
+            },
+          },
+        ],
+      },
+      analytics: { scope: "promoSection" },
+      liveVisibility: true,
+      id: "PromoSection-8dba6990-38a9-4f9b-ba10-7a6bfd0c5a21",
+    },
+  },
+  {
+    name: "[compact] version 50 with constant values and video",
+    document: {},
+    version: 50,
+    props: {
+      data: {
+        promo: {
+          field: "c_examplePromo",
+          constantValue: {},
+          constantValueEnabled: true,
+        },
+        media: "video",
+        backgroundImage: {
+          field: "c_examplePromo.image",
+          constantValue: {
+            url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+            width: 640,
+            height: 360,
+          },
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        variant: "compact",
+        backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+        desktopImagePosition: "left",
+        mobileImagePosition: "bottom",
+        containerAlignment: "left",
+        imageHeight: 400,
+      },
+      slots: {
+        HeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-63489350-7281-407f-b342-26db1844a4fe",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: "Featured Promotion",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { level: 3, align: "left" },
+            },
+          },
+        ],
+        DescriptionSlot: [
+          {
+            type: "BodyTextSlot",
+            props: {
+              id: "BodyTextSlot-9d841810-2300-4b7e-9d68-f978f4332a43",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: {
+                      json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters</span></p>',
+                    },
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { variant: "base" },
+              parentStyles: { className: "text-left" },
+            },
+          },
+        ],
+        VideoSlot: [
+          {
+            type: "VideoSlot",
+            props: {
+              id: "VideoSlot-35e57669-c21b-4849-ab9a-af39348c84cd",
+              data: {
+                assetVideo: {
+                  name: "Local asset",
+                  id: "0",
+                  video: {
+                    url: "https://youtube.com/test",
+                    thumbnail: "https://img.youtube.com/vi//hqdefault.jpg",
+                    id: "",
+                    title: "Local Video",
+                    duration: "0:00",
+                    embeddedUrl: "https://www.youtube.com/embed/",
+                  },
+                },
+              },
+              className: "h-full",
+            },
+          },
+        ],
+        ImageSlot: [
+          {
+            type: "ImageSlot",
+            props: {
+              id: "ImageSlot-98197597-c075-4c9a-ae90-185e4bca6f0b",
+              data: {
+                image: {
+                  field: "",
+                  constantValue: {
+                    en: {
+                      alternateText: "",
+                      url: "",
+                      height: 1,
+                      width: 1,
+                    },
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { aspectRatio: 1.78, width: 640 },
+              sizes: {
+                base: "calc(100vw - 32px)",
+                md: "min(width, 450px)",
+                lg: "width",
+              },
+              className: "w-full h-full mr-auto",
+            },
+          },
+        ],
+        CTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-48b2fcae-6810-4ec8-805f-312b7f299e17",
+              data: {
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: { en: "", hasLocalizedValue: "true" },
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "presetImage",
+                  },
+                  selectedType: "presetImage",
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { variant: "primary", presetImage: "doordash" },
+              eventName: "cta",
+            },
+          },
+        ],
+      },
+      analytics: { scope: "promoSection" },
+      liveVisibility: true,
+      id: "PromoSection-8dba6990-38a9-4f9b-ba10-7a6bfd0c5a21",
+    },
+  },
+  {
+    name: "[classic] version 59 with showMedia, showCTA false",
+    document: { locale: "en" },
+    props: {
+      ...version59Props,
+      styles: {
+        ...version59Props.styles,
+        showMedia: false,
+        showCTA: false,
+      },
+    },
+    version: 59,
+  },
+  {
+    name: "[immersive] version 59 with showHeading, showDescription false",
+    document: { locale: "en" },
+    props: {
+      ...version59Props,
+      styles: {
+        ...version59Props.styles,
+        variant: "immersive",
+        showHeading: false,
+        showDescription: false,
+      },
+    },
+    version: 59,
+  },
+  {
+    name: "[compact] version 59 with showHeading, showDescription, showMedia false",
+    document: { locale: "en" },
+    props: {
+      ...version59Props,
+      styles: {
+        ...version59Props.styles,
+        variant: "compact",
+        showHeading: false,
+        showDescription: false,
+        showMedia: false,
+      },
+    },
+    version: 59,
+  },
+  {
+    name: "[spotlight] version 59 with showHeading, showDescription, showCTA false",
+    document: { locale: "en" },
+    props: {
+      ...version59Props,
+      styles: {
+        ...version59Props.styles,
+        variant: "spotlight",
+        showHeading: false,
+        showDescription: false,
+        showCTA: false,
+      },
+    },
+    version: 59,
+  },
+];
+
+const BRAND_COLOR_BG_ALLOWLIST = new Set([
+  "bg-palette-primary",
+  "bg-palette-primary-dark",
+  "bg-palette-secondary",
+  "bg-palette-secondary-dark",
+  "bg-palette-tertiary",
+  "bg-palette-tertiary-dark",
+  "bg-palette-quaternary",
+  "bg-palette-quaternary-dark",
+]);
+
+const isBrandColorTest = (props: any) => {
+  const bg = props?.styles?.backgroundColor?.bgColor;
+  return typeof bg === "string" && BRAND_COLOR_BG_ALLOWLIST.has(bg);
+};
+
+describe("PromoSection", async () => {
+  const puckConfig: Config = {
+    components: { PromoSection, ...SlotsCategoryComponents },
+    root: {
+      render: ({ children }: { children: React.ReactNode }) => {
+        return <>{children}</>;
+      },
+    },
+  };
+  it.each(transformTests(tests))(
+    "$viewport.name $name",
+    async ({
+      document,
+      name,
+      props,
+      interactions,
+      version,
+      viewport: { width, height, name: viewportName },
+    }) => {
+      const data = migrate(
+        {
+          root: {
+            props: {
+              version,
+            },
+          },
+          content: [
+            {
+              type: "PromoSection",
+              props: props,
+            },
+          ],
+        },
+        migrationRegistry,
+        puckConfig,
+        document
+      );
+
+      const resolvedData = await resolveAllData(data, puckConfig, {
+        streamDocument: document,
+      });
+
+      const { container } = reactRender(
+        <VisualEditorProvider templateProps={{ document }}>
+          <Render
+            config={puckConfig}
+            data={resolvedData}
+            metadata={{ streamDocument: document }}
+          />
+        </VisualEditorProvider>
+      );
+
+      await page.viewport(width, height);
+
+      // Wait for img tags to load
+      const images = Array.from(container.querySelectorAll("img"));
+      await waitFor(() => {
+        expect(images.every((i) => i.complete)).toBe(true);
+      });
+
+      // Wait for Youtube iframe to load
+      if (props?.data?.media === "video") {
+        await delay(1000);
+      }
+
+      // Wait for background images to load
+      if (name.includes("[immersive]") || name.includes("spotlight")) {
+        await waitFor(async () => {
+          const banner = container.querySelector(".bg-no-repeat");
+          if (!banner) {
+            return true;
+          }
+          const bgImage = window.getComputedStyle(banner).backgroundImage;
+          const url = bgImage.match(/url\(["']?([^"']+)["']?\)/)?.[1];
+
+          if (!url) {
+            return true;
+          }
+
+          const isLoaded = await new Promise((resolve) => {
+            const img = new Image();
+            img.src = url;
+            img.onload = () => resolve(true);
+            img.onerror = () => resolve(false);
+          });
+
+          expect(isLoaded).toBe(true);
+        });
+      }
+
+      await expect(`PromoSection/[${viewportName}] ${name}`).toMatchScreenshot({
+        customThreshold: 10,
+      });
+      const results = await axe(container);
+      if (isBrandColorTest(props) && results.violations.length) {
+        logSuppressedWcagViolations(results);
+      } else {
+        expect(results).toHaveNoViolations();
+      }
+
+      if (interactions) {
+        await interactions(page);
+        await expect(
+          `PromoSection/[${viewportName}] ${name} (after interactions)`
+        ).toMatchScreenshot({ customThreshold: 10 });
+        const results = await axe(container);
+        if (isBrandColorTest(props) && results.violations.length) {
+          logSuppressedWcagViolations(results);
+        } else {
+          expect(results).toHaveNoViolations();
+        }
+      }
+    }
+  );
+});

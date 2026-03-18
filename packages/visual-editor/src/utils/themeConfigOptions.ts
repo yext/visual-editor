@@ -1,8 +1,53 @@
-import { ComboboxOptionGroup } from "../internal/puck/ui/Combobox.tsx";
-import { fontSizeOptions } from "../editor/FontSizeSelector.tsx";
-import { spacingOptions } from "../editor/SpacingSelector.tsx";
-import { msg } from "./i18n/platform.ts";
+import { ComboboxOptionGroup } from "../internal/types/combobox.ts";
+import { msg, pt } from "./i18n/platform.ts";
 import { PresetImageType } from "../types/types.ts";
+
+export const spacingOptions = [
+  { label: "0", value: "0", px: "0" },
+  { label: "0.5", value: "0.5", px: "2" },
+  { label: "1", value: "1", px: "4" },
+  { label: "1.5", value: "1.5", px: "6" },
+  { label: "2", value: "2", px: "8" },
+  { label: "2.5", value: "2.5", px: "10" },
+  { label: "3", value: "3", px: "12" },
+  { label: "3.5", value: "3.5", px: "14" },
+  { label: "4", value: "4", px: "16" },
+  { label: "5", value: "5", px: "20" },
+  { label: "6", value: "6", px: "24" },
+  { label: "7", value: "7", px: "28" },
+  { label: "8", value: "8", px: "32" },
+  { label: "9", value: "9", px: "36" },
+  { label: "10", value: "10", px: "40" },
+  { label: "11", value: "11", px: "44" },
+  { label: "12", value: "12", px: "48" },
+  { label: "14", value: "14", px: "56" },
+  { label: "16", value: "16", px: "64" },
+  { label: "20", value: "20", px: "80" },
+  { label: "24", value: "24", px: "96" },
+];
+
+export const fontSizeOptions = (includeLargeSizes = true) => {
+  const fontSizeOptions = [
+    { label: "XS", value: "xs", px: "12" },
+    { label: "SM", value: "sm", px: "14" },
+    { label: pt("base", "Base"), value: "base", px: "16" },
+    { label: "LG", value: "lg", px: "18" },
+    { label: "XL", value: "xl", px: "20" },
+    { label: "2XL", value: "2xl", px: "24" },
+    { label: "3XL", value: "3xl", px: "32" },
+    { label: "4XL", value: "4xl", px: "40" },
+  ];
+  const largeFontSizeOptions = [
+    { label: "5XL", value: "5xl", px: "48" },
+    { label: "6XL", value: "6xl", px: "60" },
+    { label: "7XL", value: "7xl", px: "72" },
+    { label: "8XL", value: "8xl", px: "96" },
+    { label: "9XL", value: "9xl", px: "128" },
+  ];
+  return includeLargeSizes
+    ? [...fontSizeOptions, ...largeFontSizeOptions]
+    : fontSizeOptions;
+};
 
 const getFontSizeOptions = (includeLargeSizes = true) => {
   return fontSizeOptions(includeLargeSizes).map((option) => {
@@ -162,29 +207,32 @@ const backgroundColorOptions: ComboboxOptionGroup[] = [
 
 export const siteColorOptions: ComboboxOptionGroup[] = [
   {
-    title: msg("siteColors", "Site Colors"),
+    title: msg("recommendedColor", "Recommended Color"),
+    description: msg(
+      "theme.colors.recommendedColorDescription",
+      "Optimize color contrast for accessibility by using the dynamic default."
+    ),
     options: [
       {
         label: msg("default", "Default"),
         value: undefined,
-        color: backgroundColors.color1.value.bgColor,
+        color: undefined,
       },
-      ...Object.entries(backgroundColors)
-        .filter(([key]) => key.startsWith("color"))
-        .map(([key, { label, value }]) => {
-          if (key.includes("color")) {
-            return {
-              label,
-              value: {
-                bgColor: value.bgColor.replace("bg-", ""),
-                textColor: value.textColor.replace("text-", ""),
-              },
-              color: value.bgColor,
-            };
-          }
-        })
-        .filter((o) => !!o),
     ],
+  },
+  {
+    title: msg("siteColors", "Site Colors"),
+    options: Object.entries(backgroundColors)
+      .map(([key, { label, value }]) => {
+        if (key.includes("color")) {
+          return {
+            label,
+            value,
+            color: value.bgColor,
+          };
+        }
+      })
+      .filter((o) => !!o),
   },
 ];
 
@@ -312,20 +360,29 @@ const presetImageTypeOptions: {
   label: string;
   value: PresetImageType;
 }[] = [
-  { label: msg("presetImages.appStore", "App Store"), value: "app-store" },
   {
-    label: msg("presetImages.googlePlay", "Google Play"),
+    label: "App Store",
+    value: "app-store",
+  },
+  {
+    label: "Google Play",
     value: "google-play",
   },
   {
-    label: msg("presetImages.galaxyStore", "Galaxy Store"),
+    label: "Galaxy Store",
     value: "galaxy-store",
   },
   {
-    label: msg("presetImages.appGallery", "App Gallery"),
+    label: "App Gallery",
     value: "app-gallery",
   },
-  { label: msg("presetImages.uberEats", "Uber Eats"), value: "uber-eats" },
+  { label: "Deliveroo", value: "deliveroo" },
+  { label: "DoorDash", value: "doordash" },
+  { label: "Grubhub", value: "grubhub" },
+  { label: "Skip The Dishes", value: "skip-the-dishes" },
+  { label: "Postmates", value: "postmates" },
+  { label: "Uber Eats", value: "uber-eats" },
+  { label: "ezCater", value: "ezcater" },
 ];
 
 const alignmentOptions = [
@@ -343,6 +400,17 @@ const alignmentOptions = [
   },
 ];
 
+const verticalPositionOptions = [
+  {
+    label: msg("fields.options.top", "Top", { context: "direction" }),
+    value: "top",
+  },
+  {
+    label: msg("fields.options.bottom", "Bottom", { context: "direction" }),
+    value: "bottom",
+  },
+];
+
 const justifyContentOptions = [
   { label: msg("fields.options.start", "Start"), value: "start" },
   { label: msg("fields.options.center", "Center"), value: "center" },
@@ -350,6 +418,12 @@ const justifyContentOptions = [
 ];
 
 const bodyVariantOptions = [
+  {
+    label: msg("fields.options.extraSmall", "Extra Small", {
+      context: "text size",
+    }),
+    value: "xs",
+  },
   {
     label: msg("fields.options.small", "Small", { context: "text size" }),
     value: "sm",
@@ -413,6 +487,11 @@ const maxWidthOptions = [
   },
 ];
 
+const showHideOptions = [
+  { label: msg("fields.options.show", "Show"), value: true },
+  { label: msg("fields.options.hide", "Hide"), value: false },
+];
+
 export const ThemeOptions = {
   HEADING_LEVEL: headingLevelOptions,
   TEXT_TRANSFORM: textTransformOptions,
@@ -422,6 +501,7 @@ export const ThemeOptions = {
   CTA_VARIANT: ctaVariantOptions,
   PRESET_IMAGE: presetImageTypeOptions,
   ALIGNMENT: alignmentOptions,
+  VERTICAL_POSITION: verticalPositionOptions,
   JUSTIFY_CONTENT: justifyContentOptions,
   BODY_VARIANT: bodyVariantOptions,
   BUTTON_BORDER_RADIUS: buttonBorderRadiusOptions,
@@ -431,6 +511,7 @@ export const ThemeOptions = {
   HOURS_OPTIONS: hoursOptions,
   PHONE_OPTIONS: phoneOptions,
   MAX_WIDTH: maxWidthOptions,
+  SHOW_HIDE: showHideOptions,
 };
 
 // Content path for applying tailwind config to visual-editor components

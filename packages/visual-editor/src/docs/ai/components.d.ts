@@ -13,8 +13,7 @@ import {
   Fields,
   ComponentData,
   Slot,
-  PuckContext,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import {
   ImageType,
   CTA as CTA$1,
@@ -30,6 +29,7 @@ import {
 import { VariantProps } from "class-variance-authority";
 
 interface PageSectionCategoryProps {
+  AboutSection: AboutSectionProps;
   BannerSection: BannerSectionProps;
   BreadcrumbsSection: BreadcrumbsSectionProps;
   CoreInfoSection: CoreInfoSectionProps;
@@ -40,6 +40,7 @@ interface PageSectionCategoryProps {
   NearbyLocationsSection: NearbyLocationsSectionProps;
   PhotoGallerySection: PhotoGallerySectionProps;
   ProductSection: ProductSectionProps;
+  ProfessionalHeroSection: ProfessionalHeroSectionProps;
   PromoSection: PromoSectionProps;
   ReviewsSection: ReviewsSectionProps;
   StaticMapSection: StaticMapSectionProps;
@@ -99,6 +100,36 @@ interface ExpandedFooterProps {
    * @internal */
   ignoreLocaleWarning?: string[];
 }
+
+type AboutSectionProps = {
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: {
+    /**
+     * The background color of the section.
+     * @defaultValue Background Color 2
+     */
+    backgroundColor?: BackgroundStyle;
+    /**
+     * If 'true', the sidebar with additional details is shown; if 'false', it's hidden.
+     * @defaultValue true
+     */
+    showDetailsColumn: boolean;
+  };
+  /** @internal */
+  slots: {
+    SectionHeadingSlot: Slot;
+    DescriptionSlot: Slot;
+    SidebarSlot: Slot;
+  };
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
+  liveVisibility: boolean;
+};
 
 interface BannerSectionProps {
   /**
@@ -194,6 +225,11 @@ interface EventSectionProps {
      * @defaultValue Background Color 3
      */
     backgroundColor?: BackgroundStyle;
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
+    showSectionHeading: boolean;
   };
   /** @internal */
   slots: {
@@ -212,6 +248,11 @@ interface EventSectionProps {
 }
 
 interface FAQSectionProps {
+  data: Omit<YextEntityField<FAQSectionType>, "constantValue"> & {
+    constantValue: {
+      id?: string;
+    }[];
+  };
   /**
    * This object contains properties for customizing the component's appearance.
    * @propCategory Style Props
@@ -219,7 +260,7 @@ interface FAQSectionProps {
   styles: FAQStyles;
   slots: {
     HeadingSlot: Slot;
-    FAQsWrapperSlot: Slot;
+    CardSlot: Slot;
   };
   /** @internal */
   analytics: {
@@ -277,6 +318,11 @@ interface InsightSectionProps {
      * @defaultValue Background Color 2
      */
     backgroundColor?: BackgroundStyle;
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
+    showSectionHeading: boolean;
   };
   slots: {
     SectionHeadingSlot: Slot;
@@ -304,6 +350,11 @@ interface NearbyLocationsSectionProps {
      * @defaultValue Background Color 1
      */
     backgroundColor?: BackgroundStyle;
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
+    showSectionHeading: boolean;
   };
   /** @internal */
   analytics: {
@@ -350,6 +401,16 @@ interface ProductSectionProps {
      * @defaultValue Background Color 2
      */
     backgroundColor?: BackgroundStyle;
+    /**
+     * The variant of the product cards.
+     * @defaultValue Immersive
+     */
+    cardVariant?: ProductSectionVariant;
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
+    showSectionHeading: boolean;
   };
   slots: {
     SectionHeadingSlot: Slot;
@@ -364,6 +425,41 @@ interface ProductSectionProps {
    * @defaultValue true
    */
   liveVisibility: boolean;
+}
+
+interface ProfessionalHeroSectionProps {
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: ProfessionalHeroStyles;
+  /** @internal */
+  slots: {
+    ImageSlot: Slot;
+    BusinessNameSlot: Slot;
+    CredentialsSlot: Slot;
+    ProfessionalNameSlot: Slot;
+    ProfessionalTitleSlot: Slot;
+    SubtitleSlot: Slot;
+    AddressSlot: Slot;
+    PrimaryCTASlot: Slot;
+    SecondaryCTASlot: Slot;
+    PhoneSlot: Slot;
+    EmailSlot: Slot;
+  };
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
+  liveVisibility?: boolean;
+  /** @internal */
+  conditionalRender?: {
+    isRightColumnVisible?: boolean;
+  };
+  /** @internal */
+  analytics: {
+    scope?: string;
+  };
 }
 
 interface PromoSectionProps {
@@ -407,6 +503,11 @@ interface ReviewsSectionProps {
      * @defaultValue Background Color 1
      */
     backgroundColor?: BackgroundStyle;
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
+    showSectionHeading: boolean;
   };
   /** @internal */
   slots: {
@@ -452,6 +553,11 @@ interface TeamSectionProps {
      * @defaultValue Background Color 3
      */
     backgroundColor?: BackgroundStyle;
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
+    showSectionHeading: boolean;
   };
   /** @internal */
   slots: {
@@ -480,6 +586,11 @@ interface TestimonialSectionProps {
      * @defaultValue Background Color 2
      */
     backgroundColor?: BackgroundStyle;
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
+    showSectionHeading: boolean;
   };
   /** @internal */
   slots: {
@@ -543,55 +654,10 @@ interface ExpandedFooterStyles {
   /** Styling for the primary footer bar. */
   primaryFooter: {
     backgroundColor?: BackgroundStyle;
-    linksAlignment: "left" | "right";
+    linksPosition: "left" | "right";
   };
   /** The maximum width of the footer. */
   maxWidth: PageSectionProps["maxWidth"];
-}
-
-interface BannerData {
-  /**
-   * The rich text to display. It can be linked to a Yext entity field or set as a constant value.
-   * @defaultValue "Banner Text" (constant)
-   */
-  text: YextEntityField<TranslatableRichText>;
-}
-
-interface BannerStyles {
-  /**
-   * The background color of the section.
-   * @defaultValue Background Color 6
-   */
-  backgroundColor?: BackgroundStyle;
-  /**
-   * The horizontal alignment of the text.
-   * @defaultValue center
-   */
-  textAlignment: "left" | "right" | "center";
-}
-
-interface BreadcrumbsData {
-  /**
-   * The display label for the first link in the breadcrumb trail (the top-level directory page).
-   * @defaultValue "Directory Root"
-   */
-  directoryRoot: TranslatableString;
-}
-
-interface BreadcrumbsStyles {
-  /**
-   * The background color of the section.
-   * @defaultValue Background Color 1
-   */
-  backgroundColor?: BackgroundStyle;
-}
-
-interface CoreInfoStyles {
-  /**
-   * The background color of the section.
-   * @defaultValue `Background Color 1`
-   */
-  backgroundColor?: BackgroundStyle;
 }
 
 /**
@@ -614,16 +680,108 @@ type BackgroundStyle = {
   isDarkBackground?: boolean;
 };
 
+interface BannerData {
+  /**
+   * The rich text to display. It can be linked to a Yext entity field or set as a constant value.
+   * @defaultValue "Banner Text" (constant)
+   */
+  text: YextEntityField<TranslatableRichText>;
+}
+
+interface BannerStyles {
+  /**
+   * The background color of the section.
+   * @defaultValue Background Color 6
+   */
+  backgroundColor?: BackgroundStyle;
+  /**
+   * Optional text color for the banner text.
+   * If not set, it will default to a color that contrasts with the background color.
+   */
+  textColor?: BackgroundStyle;
+  /**
+   * The horizontal alignment of the text.
+   * @defaultValue center
+   */
+  textAlignment: "left" | "right" | "center";
+}
+
+interface BreadcrumbsData {
+  /**
+   * The display label for the first link in the breadcrumb trail (the top-level directory page).
+   * @defaultValue "Directory Root"
+   */
+  directoryRoot: TranslatableString;
+  /**
+   * The display label for the last link in the breadcrumb trail (the current page).
+   * @defaultValue Name
+   */
+  currentPage?: YextEntityField<TranslatableString>;
+}
+
+interface BreadcrumbsStyles {
+  /**
+   * The background color of the section.
+   * @defaultValue Background Color 1
+   */
+  backgroundColor?: BackgroundStyle;
+  /**
+   * Whether to show the current page's link in the breadcrumb trail (last link).
+   * @defaultValue true
+   */
+  showCurrentPage?: boolean;
+}
+
+interface CoreInfoStyles {
+  /**
+   * The background color of the section.
+   * @defaultValue `Background Color 1`
+   */
+  backgroundColor?: BackgroundStyle;
+}
+
+/** Represents data that can either be from the Yext Knowledge Graph or statically defined */
+type YextEntityField<T> = {
+  /** The api name of the Yext field */
+  field: string;
+  /** The static value of the field */
+  constantValue: T;
+  /** Whether to use the Yext field or the constant value */
+  constantValueEnabled?: boolean;
+  /**
+   * Whether the field can be translated or not.
+   * @ai always omit this property
+   */
+  disallowTranslation?: boolean;
+  /**
+   * Filter the embedded field input to this type.
+   * @ai always omit this property
+   */
+  selectedType?: string;
+};
+
+/** Data for the FAQSection */
+type FAQSectionType = {
+  faqs: Array<FAQStruct>;
+};
+
 interface FAQStyles {
   /**
    * The background color of the section.
    * @defaultValue Background Color 3
    */
   backgroundColor?: BackgroundStyle;
+  /**
+   * Whether to show the section heading.
+   * @defaultValue true
+   */
+  showSectionHeading: boolean;
 }
 
 interface HeroData {
-  backgroundImage: YextEntityField<ImageType | AssetImageType>;
+  backgroundImage: YextEntityField<
+    ImageType | AssetImageType | TranslatableAssetImage
+  >;
 }
 
 interface HeroStyles {
@@ -639,19 +797,9 @@ interface HeroStyles {
    */
   backgroundColor?: BackgroundStyle;
   /**
-   * If 'true', displays the entity's average review rating.
-   * @defaultValue true
-   */
-  showAverageReview: boolean;
-  /**
-   * Whether to show the hero image (classic and compact variant).
-   * @defaultValue true
-   */
-  showImage: boolean;
-  /**
    * Image Height for the hero image with Immersive or Spotlight variant
    * Minimum height: content height + Page Section Top/Bottom Padding
-   * @default 500px
+   * @defaultValue 500px
    */
   imageHeight?: number;
   /**
@@ -674,6 +822,41 @@ interface HeroStyles {
    * @defaultValue top
    */
   mobileImagePosition: "bottom" | "top";
+  /**
+   * Whether to show the business name.
+   * @defaultValue true
+   */
+  showBusinessName: boolean;
+  /**
+   * Whether to show the geomodifier.
+   * @defaultValue true
+   */
+  showGeomodifier: boolean;
+  /**
+   * Whether to show the hours status.
+   * @defaultValue true
+   */
+  showHoursStatus: boolean;
+  /**
+   * If 'true', displays the entity's average review rating.
+   * @defaultValue true
+   */
+  showAverageReview: boolean;
+  /**
+   * Whether to show the primary CTA.
+   * @defaultValue true
+   */
+  showPrimaryCTA: boolean;
+  /**
+   * Whether to show the secondary CTA.
+   * @defaultValue true
+   */
+  showSecondaryCTA: boolean;
+  /**
+   * Whether to show the hero image (classic and compact variant).
+   * @defaultValue true
+   */
+  showImage: boolean;
 }
 
 interface PhotoGalleryStyles {
@@ -682,6 +865,91 @@ interface PhotoGalleryStyles {
    * @defaultValue Background Color 1
    */
   backgroundColor?: BackgroundStyle;
+  /**
+   * The layout style for displaying images in the gallery.
+   * @defaultValue "gallery"
+   */
+  variant: "gallery" | "carousel";
+  /**
+   * Whether to show the section heading
+   * @defaultValue true
+   */
+  showSectionHeading: boolean;
+}
+
+type ProductSectionVariant = "immersive" | "classic" | "minimal";
+
+interface ProfessionalHeroStyles {
+  /**
+   * The background color for the section.
+   * @defaultValue Background Color 1
+   */
+  backgroundColor?: BackgroundStyle;
+  /**
+   * If 'true', displays the entity's average review rating.
+   * @defaultValue true
+   */
+  showAverageReview: boolean;
+  /**
+   * Whether to show the hero image.
+   * @defaultValue true
+   */
+  showImage: boolean;
+  /**
+   * Positions the image to the left or right of the hero content on desktop.
+   * @defaultValue left
+   */
+  desktopImagePosition: "left" | "right";
+  /**
+   * Positions the image to the top or bottom of the hero content on mobile.
+   * @defaultValue top
+   */
+  mobileImagePosition: "bottom" | "top";
+  /**
+   * Whether to show the credentials slot.
+   * @defaultValue true
+   */
+  showCredentials?: boolean;
+  /**
+   * Whether to show the subtitle slot.
+   * @defaultValue true
+   */
+  showSubtitle?: boolean;
+  /**
+   * Whether to show the business name slot.
+   * @defaultValue true
+   */
+  showBusinessName?: boolean;
+  /**
+   * Whether to show the professional title slot.
+   * @defaultValue true
+   */
+  showProfessionalTitle?: boolean;
+  /**
+   * Whether to show the address slot.
+   * @defaultValue true
+   */
+  showAddress?: boolean;
+  /**
+   * Whether to show the primary CTA slot.
+   * @defaultValue true
+   */
+  showPrimaryCTA?: boolean;
+  /**
+   * Whether to show the secondary CTA slot.
+   * @defaultValue true
+   */
+  showSecondaryCTA?: boolean;
+  /**
+   * Whether to show the phone slot.
+   * @defaultValue true
+   */
+  showPhone?: boolean;
+  /**
+   * Whether to show the email slot.
+   * @defaultValue true
+   */
+  showEmail?: boolean;
 }
 
 interface PromoData {
@@ -695,19 +963,67 @@ interface PromoData {
    * @defaultValue 'image'
    */
   media: "image" | "video";
+  /**
+   * The background image used by the immersive and spotlight variants.
+   * @defaultValue Placeholder image.
+   */
+  backgroundImage: YextEntityField<
+    ImageType | AssetImageType | TranslatableAssetImage
+  >;
 }
 
 interface PromoStyles {
+  /**
+   * The visual variant for the promo section.
+   * @defaultValue classic
+   */
+  variant: "classic" | "immersive" | "spotlight" | "compact";
   /**
    * The background color for the entire section.
    * @defaultValue Background Color 1
    */
   backgroundColor?: BackgroundStyle;
   /**
-   * Positions the image to the left or right of the text content.
-   * @defaultValue 'left'
+   * Positions the media to the left or right of the promo content on desktop (classic and compact variants).
+   * @defaultValue right
    */
-  orientation: "left" | "right";
+  desktopImagePosition: "left" | "right";
+  /**
+   * Positions the media to the top or bottom of the promo content on mobile (classic and compact variants).
+   * @defaultValue top
+   */
+  mobileImagePosition: "top" | "bottom";
+  /**
+   * Text content position and alignment.
+   * @defaultValue left
+   */
+  containerAlignment: "left" | "center" | "right";
+  /**
+   * Image Height for the promo image with Immersive or Spotlight variant
+   * Minimum height: content height + Page Section Top/Bottom Padding
+   * @defaultValue 500px
+   */
+  imageHeight: number;
+  /**
+   * Whether to show the media content, either image or video.
+   * @defaultValue true
+   */
+  showMedia: boolean;
+  /**
+   * Whether to show the heading text.
+   * @defaultValue true
+   */
+  showHeading: boolean;
+  /**
+   * Whether to show the description text.
+   * @defaultValue true
+   */
+  showDescription: boolean;
+  /**
+   * Whether to show the CTA.
+   * @defaultValue true
+   */
+  showCTA: boolean;
 }
 
 interface StaticMapData {
@@ -741,33 +1057,16 @@ interface PageSectionProps
   outerStyle?: React.CSSProperties;
 }
 
-/** Represents data that can either be from the Yext Knowledge Graph or statically defined */
-type YextEntityField<T> = {
-  /** The api name of the Yext field */
-  field: string;
-  /** The static value of the field */
-  constantValue: T;
-  /** Whether to use the Yext field or the constant value */
-  constantValueEnabled?: boolean;
-  /**
-   * Whether the field can be translated or not.
-   * @ai always omit this property
-   */
-  disallowTranslation?: boolean;
-  /**
-   * Filter the embedded field input to this type.
-   * @ai always omit this property
-   */
-  selectedType?: string;
-};
-
 /**
  * Rich text that can be translated for different locales.
  * @ai This should always be Record<string, RichText>
  */
 type TranslatableRichText =
   | (string | RichText)
-  | Record<string, string | RichText>;
+  | ({
+      hasLocalizedValue?: "true";
+      defaultValue?: string | RichText;
+    } & Record<string, string | RichText | undefined>);
 
 /**
  * A string that can be translated for different locales.
@@ -775,10 +1074,20 @@ type TranslatableRichText =
  */
 type TranslatableString = string | LocalizedValues;
 
+/** An individual FAQ */
+type FAQStruct = {
+  /** The question (always visible on the page) */
+  question: TranslatableString | TranslatableRichText;
+  /** The answer (visible when the question is clicked) */
+  answer: TranslatableRichText;
+};
+
 type AssetImageType = Omit<ImageType, "alternateText"> & {
   alternateText?: TranslatableString;
   assetImage?: ImageContentData;
 };
+
+type TranslatableAssetImage = AssetImageType | LocalizedAssetImage;
 
 /** Data for the PromoSection */
 type PromoSectionType = {
@@ -807,8 +1116,9 @@ type RichText = {
 
 /** Represents a translatable string. The key is the locale (en, es, fr), and the value is the localized string. */
 type LocalizedValues = {
-  hasLocalizedValue: "true";
-} & Record<string, string>;
+  hasLocalizedValue?: "true";
+  defaultValue?: string;
+} & Record<string, string | undefined>;
 
 /** Describes the data corresponding to a piece of image content. */
 type ImageContentData = {
@@ -819,6 +1129,13 @@ type ImageContentData = {
   transformations?: ImageTransformations;
   sourceUrl?: string;
   altText?: string;
+};
+
+type LocalizedAssetImage = {
+  hasLocalizedValue?: "true";
+  defaultValue?: AssetImageType;
+} & {
+  [locale: string]: AssetImageType | undefined;
 };
 
 type AssetVideo = {
@@ -877,6 +1194,9 @@ type TranslatableCTA = Omit<CTA$1, "label" | "link"> & {
   label: TranslatableString;
   /** The link the for the CTA */
   link: TranslatableString;
+  /** Whether the link should be normalized before rendering */
+  normalizeLink?: boolean;
+  openInNewTab?: boolean;
 };
 
 /** Describes the dimensions of an image. */

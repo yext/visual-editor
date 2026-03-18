@@ -1,27 +1,28 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import { AddressType, AnalyticsScopeProvider } from "@yext/pages-components";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import {
-  YextEntityField,
   BackgroundStyle,
-  PageSection,
   backgroundColors,
-  YextField,
-  VisibilityWrapper,
-  msg,
-  getAnalyticsScopeHash,
-  resolveComponentData,
-  TranslatableString,
-  HeadingTextProps,
-  HoursTableProps,
-  TextListProps,
-  EmailsProps,
-  AddressProps,
-} from "@yext/visual-editor";
+} from "../../utils/themeConfigOptions.ts";
+import { PageSection } from "../atoms/pageSection.tsx";
+import { YextField } from "../../editor/YextField.tsx";
+import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
+import { msg } from "../../utils/i18n/platform.ts";
+import { getAnalyticsScopeHash } from "../../utils/applyAnalytics.ts";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { TranslatableString } from "../../types/types.ts";
+import { HeadingTextProps } from "../contentBlocks/HeadingText.tsx";
+import { HoursTableProps } from "../contentBlocks/HoursTable.tsx";
+import { TextListProps } from "../contentBlocks/TextList.tsx";
+import { EmailsProps } from "../contentBlocks/Emails.tsx";
+import { AddressProps } from "../contentBlocks/Address.tsx";
 import {
   PhoneListProps,
   resolvePhoneNumbers,
-} from "../contentBlocks/PhoneList";
+} from "../contentBlocks/PhoneList.tsx";
+import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 
 export interface CoreInfoStyles {
   /**
@@ -200,10 +201,7 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
             props: {
               data: {
                 text: {
-                  constantValue: {
-                    en: "Information",
-                    hasLocalizedValue: "true",
-                  },
+                  constantValue: { defaultValue: "Information" },
                   constantValueEnabled: true,
                   field: "",
                 },
@@ -245,10 +243,7 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
                       field: "mainPhone",
                       constantValue: "",
                     },
-                    label: {
-                      en: "Phone",
-                      hasLocalizedValue: "true",
-                    },
+                    label: { defaultValue: "Phone" },
                   },
                 ],
               },
@@ -281,10 +276,7 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
             props: {
               data: {
                 text: {
-                  constantValue: {
-                    en: "Hours",
-                    hasLocalizedValue: "true",
-                  },
+                  constantValue: { defaultValue: "Hours" },
                   constantValueEnabled: true,
                   field: "",
                 },
@@ -318,10 +310,7 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
             props: {
               data: {
                 text: {
-                  constantValue: {
-                    en: "Services",
-                    hasLocalizedValue: "true",
-                  },
+                  constantValue: { defaultValue: "Services" },
                   constantValueEnabled: true,
                   field: "",
                 },
@@ -428,15 +417,20 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
       };
     },
     render: (props) => (
-      <AnalyticsScopeProvider
-        name={`${props.analytics?.scope ?? "coreInfoSection"}${getAnalyticsScopeHash(props.id)}`}
+      <ComponentErrorBoundary
+        isEditing={props.puck.isEditing}
+        resetKeys={[props]}
       >
-        <VisibilityWrapper
-          liveVisibility={props.liveVisibility}
-          isEditing={props.puck.isEditing}
+        <AnalyticsScopeProvider
+          name={`${props.analytics?.scope ?? "coreInfoSection"}${getAnalyticsScopeHash(props.id)}`}
         >
-          <CoreInfoSectionWrapper {...props} />
-        </VisibilityWrapper>
-      </AnalyticsScopeProvider>
+          <VisibilityWrapper
+            liveVisibility={props.liveVisibility}
+            isEditing={props.puck.isEditing}
+          >
+            <CoreInfoSectionWrapper {...props} />
+          </VisibilityWrapper>
+        </AnalyticsScopeProvider>
+      </ComponentErrorBoundary>
     ),
   };

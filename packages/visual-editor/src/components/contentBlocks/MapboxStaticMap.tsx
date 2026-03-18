@@ -1,20 +1,23 @@
 import { useTranslation } from "react-i18next";
 import { Coordinate } from "@yext/pages-components";
+import { EntityField } from "../../editor/EntityField.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { YextField } from "../../editor/YextField.tsx";
+import { msg, pt } from "../../utils/i18n/platform.ts";
+import { themeManagerCn } from "../../utils/cn.ts";
+import { Body } from "../atoms/body.tsx";
 import {
-  EntityField,
-  resolveComponentData,
-  useDocument,
-  YextEntityField,
-  YextField,
-  msg,
-  pt,
-  themeManagerCn,
-  Body,
-} from "@yext/visual-editor";
-import { ComponentConfig, Field, Fields, PuckComponent } from "@measured/puck";
-import { StreamDocument } from "../../utils/applyTheme";
+  ComponentConfig,
+  Field,
+  Fields,
+  PuckComponent,
+} from "@puckeditor/core";
+import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import mapboxLogo from "../assets/mapbox-logo-black.svg";
 import { Map } from "lucide-react";
+import { getThemeValue } from "../../utils/getThemeValue.ts";
 
 export type MapboxStaticProps = {
   apiKey: string;
@@ -62,23 +65,11 @@ const mapboxFields: Fields<MapboxStaticProps> = {
 };
 
 const getPrimaryColor = (streamDocument: StreamDocument) => {
-  if (streamDocument?.__?.theme) {
-    return (
-      JSON.parse(streamDocument?.__?.theme)
-        ?.["--colors-palette-primary"]?.trim()
-        ?.replace("#", "") ?? "000000"
-    );
-  } else {
-    const iframe = window.document?.querySelector("iframe");
-    const componentElement =
-      iframe?.contentDocument?.querySelector(".components");
-    return componentElement
-      ? getComputedStyle(componentElement)
-          ?.getPropertyValue("--colors-palette-primary")
-          ?.trim()
-          ?.replace("#", "")
-      : "000000";
-  }
+  return (
+    getThemeValue("--colors-palette-primary", streamDocument)
+      ?.replace("#", "")
+      ?.trim() ?? "000000"
+  );
 };
 
 export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
@@ -91,7 +82,7 @@ export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
   const { t, i18n } = useTranslation();
   const streamDocument = useDocument<any>();
 
-  const coordinate = resolveComponentData(
+  const coordinate = resolveComponentData<Coordinate>(
     coordinateField,
     i18n.language,
     streamDocument

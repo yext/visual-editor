@@ -1,19 +1,22 @@
 import * as React from "react";
 import {
   BackgroundStyle,
-  YextField,
   backgroundColors,
-  msg,
-  Background,
-  CTAWrapperProps,
-  BodyTextProps,
-  HeadingTextProps,
-  ImageWrapperProps,
-  ProductStruct,
-  deepMerge,
-  getDefaultRTF,
-  ImgSizesByBreakpoint,
-} from "@yext/visual-editor";
+} from "../../../utils/themeConfigOptions.ts";
+import { YextField } from "../../../editor/YextField.tsx";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { Background } from "../../atoms/background.tsx";
+import { CTAWrapperProps } from "../../contentBlocks/CtaWrapper.tsx";
+import { BodyTextProps } from "../../contentBlocks/BodyText.tsx";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
+import { ImageWrapperProps } from "../../contentBlocks/image/Image.tsx";
+import { ProductStruct } from "../../../types/types.ts";
+import { deepMerge } from "../../../utils/themeResolver.ts";
+import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
+import { ImgSizesByBreakpoint } from "../../atoms/image.tsx";
+import { themeManagerCn } from "../../../utils/cn.ts";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
+import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import {
   ComponentConfig,
   Fields,
@@ -21,10 +24,13 @@ import {
   setDeep,
   Slot,
   WithId,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
-import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
+import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
+import { TextProps } from "../../contentBlocks/Text.tsx";
+import { ProductSectionVariant } from "./ProductSection.tsx";
+import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
 
 const defaultProduct = {
   image: {
@@ -32,19 +38,16 @@ const defaultProduct = {
     height: 360,
     width: 640,
   },
-  name: { en: "Product Name", hasLocalizedValue: "true" },
-  category: {
-    en: getDefaultRTF("Category, Pricing, etc"),
-    hasLocalizedValue: "true",
-  },
+  brow: { defaultValue: "Category" },
+  name: { defaultValue: "Product Name" },
+  price: { defaultValue: "$123.00" },
   description: {
-    en: getDefaultRTF(
+    defaultValue: getDefaultRTF(
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
     ),
-    hasLocalizedValue: "true",
   },
   cta: {
-    label: { en: "Learn More", hasLocalizedValue: "true" },
+    label: { defaultValue: "Learn More" },
     link: "#",
     linkType: "URL",
     ctaType: "textAndLink",
@@ -88,8 +91,28 @@ export const defaultProductCardSlotData = (
               styles: {
                 aspectRatio: 1.78,
                 width: 640,
+                imageConstrain: "fill",
               },
             } satisfies ImageWrapperProps,
+          },
+        ],
+        BrowSlot: [
+          {
+            type: "TextSlot",
+            props: {
+              ...(id && { id: `${id}-brow` }),
+              data: {
+                text: {
+                  field: "",
+                  constantValue: defaultProduct.brow,
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                variant: "sm",
+                fontStyle: "bold",
+              },
+            } satisfies TextProps,
           },
         ],
         TitleSlot: [
@@ -111,22 +134,23 @@ export const defaultProductCardSlotData = (
             } satisfies HeadingTextProps,
           },
         ],
-        CategorySlot: [
+        PriceSlot: [
           {
-            type: "BodyTextSlot",
+            type: "TextSlot",
             props: {
-              ...(id && { id: `${id}-category` }),
+              ...(id && { id: `${id}-price` }),
               data: {
                 text: {
                   field: "",
-                  constantValue: defaultProduct.category,
+                  constantValue: defaultProduct.price,
                   constantValueEnabled: true,
                 },
               },
               styles: {
                 variant: "base",
+                fontStyle: "bold",
               },
-            } satisfies BodyTextProps,
+            } satisfies TextProps,
           },
         ],
         DescriptionSlot: [
@@ -153,6 +177,9 @@ export const defaultProductCardSlotData = (
             props: {
               ...(id && { id: `${id}-cta` }),
               data: {
+                actionType: "link",
+                normalizeLink: true,
+                buttonText: { defaultValue: "Button" },
                 entityField: {
                   field: "",
                   constantValue: defaultProduct.cta,
@@ -160,7 +187,7 @@ export const defaultProductCardSlotData = (
                 },
               },
               styles: {
-                variant: "primary",
+                variant: "secondary",
                 presetImage: "app-store",
               },
             } satisfies CTAWrapperProps,
@@ -190,8 +217,9 @@ export type ProductCardProps = {
   /** @internal */
   slots: {
     ImageSlot: Slot;
+    BrowSlot: Slot;
     TitleSlot: Slot;
-    CategorySlot: Slot;
+    PriceSlot: Slot;
     DescriptionSlot: Slot;
     CTASlot: Slot;
   };
@@ -203,8 +231,28 @@ export type ProductCardProps = {
   };
 
   /** @internal */
+  parentStyles?: {
+    variant: ProductSectionVariant;
+    showImage: boolean;
+    showBrow: boolean;
+    showTitle: boolean;
+    showPrice: boolean;
+    showDescription: boolean;
+    showCTA: boolean;
+  };
+
+  /** @internal */
   conditionalRender?: {
-    category?: boolean;
+    price?: boolean;
+    brow?: boolean;
+    description?: boolean;
+    cta?: boolean;
+  };
+
+  /** @internal */
+  imageStyles?: {
+    aspectRatio?: number;
+    width?: number;
   };
 
   /** @internal */
@@ -228,8 +276,9 @@ const ProductCardFields: Fields<ProductCardProps> = {
     type: "object",
     objectFields: {
       ImageSlot: { type: "slot" },
+      BrowSlot: { type: "slot" },
       TitleSlot: { type: "slot" },
-      CategorySlot: { type: "slot" },
+      PriceSlot: { type: "slot" },
       DescriptionSlot: { type: "slot" },
       CTASlot: { type: "slot" },
     },
@@ -238,11 +287,13 @@ const ProductCardFields: Fields<ProductCardProps> = {
 };
 
 const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
-  const { styles, puck, conditionalRender, slots } = props;
+  const { styles, puck, conditionalRender, slots, parentStyles } = props;
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
     cardBackground: BackgroundStyle | undefined;
     slotStyles: Record<string, ProductCardProps["styles"]>;
   }>();
+
+  const variant = props.parentStyles?.variant ?? "immersive";
 
   const { slotStyles, getPuck, slotProps } = useGetCardSlots<ProductCardProps>(
     props.id
@@ -271,8 +322,9 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
 
     const newSlotData: ProductCardProps["slots"] = {
       ImageSlot: [],
+      BrowSlot: [],
       TitleSlot: [],
-      CategorySlot: [],
+      PriceSlot: [],
       DescriptionSlot: [],
       CTASlot: [],
     };
@@ -330,31 +382,63 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
     });
   }, [styles, slotStyles]);
 
+  const hasPrice =
+    parentStyles?.showPrice && (conditionalRender?.price || puck.isEditing);
+  const hasDescription =
+    parentStyles?.showDescription &&
+    (conditionalRender?.description || puck.isEditing);
+  const hasCTA =
+    parentStyles?.showCTA && (conditionalRender?.cta || puck.isEditing);
+  const hasBrow =
+    parentStyles?.showBrow && (conditionalRender?.brow || puck.isEditing);
+  const bottomPadding = hasCTA ? "pb-8" : "pb-4";
+
   return (
     <Background
-      className="flex flex-col rounded-lg overflow-hidden border h-full"
-      background={styles.backgroundColor}
+      className={themeManagerCn(
+        "flex flex-col h-full",
+        variant !== "minimal" && "rounded-lg overflow-hidden border"
+      )}
+      background={variant === "minimal" ? undefined : styles.backgroundColor}
       ref={puck.dragRef}
     >
-      <slots.ImageSlot
-        style={{ height: "fit-content" }}
-        className="sm:min-h-[200px]"
-        allow={[]}
-      />
-      <div className="p-8 gap-8 flex flex-col">
-        <div className="gap-4 flex flex-col flex-grow">
-          <slots.TitleSlot style={{ height: "auto" }} allow={[]} />
-          {conditionalRender?.category && (
-            <Background
-              background={backgroundColors.background5.value}
-              className="py-2 px-4 rounded w-fit"
-            >
-              <slots.CategorySlot style={{ height: "auto" }} allow={[]} />
-            </Background>
-          )}
-          <slots.DescriptionSlot style={{ height: "auto" }} allow={[]} />
+      {parentStyles?.showImage && (
+        <div className={variant === "classic" ? "px-8 pt-8" : ""}>
+          <div className={"w-full"}>
+            <slots.ImageSlot style={{ height: "fit-content" }} allow={[]} />
+          </div>
         </div>
-        <slots.CTASlot style={{ height: "auto" }} allow={[]} />
+      )}
+      <div
+        className={themeManagerCn(
+          "flex flex-col flex-grow gap-4 pt-4",
+          variant !== "minimal" && bottomPadding,
+          variant !== "minimal" && "px-8"
+        )}
+      >
+        <div className="gap-4 flex flex-col flex-grow">
+          {(hasBrow || parentStyles?.showTitle) && (
+            <div className="flex flex-col">
+              {hasBrow && (
+                <slots.BrowSlot style={{ height: "auto" }} allow={[]} />
+              )}
+
+              {parentStyles?.showTitle && (
+                <slots.TitleSlot style={{ height: "auto" }} allow={[]} />
+              )}
+            </div>
+          )}
+          {hasPrice && (
+            <div className="flex gap-4 border-l-2 border-primary-200 pl-4 items-center">
+              <slots.PriceSlot style={{ height: "auto" }} allow={[]} />
+            </div>
+          )}
+
+          {hasDescription && (
+            <slots.DescriptionSlot style={{ height: "auto" }} allow={[]} />
+          )}
+        </div>
+        {hasCTA && <slots.CTASlot style={{ height: "auto" }} allow={[]} />}
       </div>
     </Background>
   );
@@ -364,25 +448,101 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
   label: msg("slots.productCard", "Product Card"),
   fields: ProductCardFields,
   inline: true,
-  resolveData: (data) => {
-    const categorySlotProps = data.props.slots.CategorySlot?.[0]?.props as
-      | WithId<BodyTextProps>
+  resolveData: (data, params) => {
+    const priceSlotProps = data.props.slots.PriceSlot?.[0]?.props as
+      | WithId<TextProps>
       | undefined;
-    const showCategory = Boolean(
-      categorySlotProps?.parentData
-        ? categorySlotProps.parentData.richText
-        : categorySlotProps?.data.text
-    );
+
+    const resolvedPrice =
+      data.props.parentData?.product.price ??
+      priceSlotProps?.parentData?.text ??
+      (priceSlotProps
+        ? resolveYextEntityField(
+            params.metadata.streamDocument,
+            priceSlotProps?.data?.text,
+            i18nComponentsInstance.language || "en"
+          )
+        : undefined);
+    const showPrice = Boolean(resolvedPrice);
+
+    const browSlotProps = data.props.slots.BrowSlot?.[0]?.props as
+      | WithId<TextProps>
+      | undefined;
+
+    const resolvedBrow =
+      data.props.parentData?.product.brow ??
+      browSlotProps?.parentData?.text ??
+      (browSlotProps
+        ? resolveYextEntityField(
+            params.metadata.streamDocument,
+            browSlotProps?.data?.text,
+            i18nComponentsInstance.language || "en"
+          )
+        : undefined);
+    const showBrow = Boolean(resolvedBrow);
+
+    const descriptionSlotProps = data.props.slots.DescriptionSlot?.[0]
+      ?.props as WithId<BodyTextProps> | undefined;
+
+    const resolvedDescription =
+      data.props.parentData?.product.description ??
+      descriptionSlotProps?.parentData?.richText ??
+      (descriptionSlotProps
+        ? resolveYextEntityField(
+            params.metadata.streamDocument,
+            descriptionSlotProps?.data?.text,
+            i18nComponentsInstance.language || "en"
+          )
+        : undefined);
+    const showDescription = Boolean(resolvedDescription);
+
+    const ctaSlotProps = data.props.slots.CTASlot?.[0]?.props as
+      | WithId<CTAWrapperProps>
+      | undefined;
+    const resolvedCTA = data.props.parentData
+      ? (data.props.parentData.product.cta ?? ctaSlotProps?.parentData?.cta)
+      : (ctaSlotProps?.parentData?.cta ??
+        (ctaSlotProps
+          ? resolveYextEntityField(
+              params.metadata.streamDocument,
+              ctaSlotProps?.data?.entityField,
+              i18nComponentsInstance.language || "en"
+            )
+          : undefined));
+    const showCTA = Boolean(resolvedCTA);
+
+    const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as
+      | (WithId<ImageWrapperProps> & {
+          styles?: { aspectRatio?: number; width?: number };
+        })
+      | undefined;
 
     let updatedData = {
       ...data,
       props: {
         ...data.props,
         conditionalRender: {
-          category: showCategory,
+          price: showPrice,
+          brow: showBrow,
+          description: showDescription,
+          cta: showCTA,
+        },
+        imageStyles: {
+          aspectRatio: imageSlotProps?.styles?.aspectRatio,
+          width: imageSlotProps?.styles?.width,
         },
       } satisfies ProductCardProps,
     };
+
+    updatedData = syncParentStyles(params, updatedData, [
+      "variant",
+      "showImage",
+      "showBrow",
+      "showTitle",
+      "showPrice",
+      "showDescription",
+      "showCTA",
+    ]);
 
     // Set the image's sizes attribute
     updatedData = setDeep(updatedData, "props.slots.ImageSlot[0].props.sizes", {
@@ -420,11 +580,19 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
       );
       updatedData = setDeep(
         updatedData,
-        "props.slots.CategorySlot[0].props.parentData",
+        "props.slots.BrowSlot[0].props.parentData",
         {
           field: field,
-          richText: product.category,
-        } satisfies BodyTextProps["parentData"]
+          text: product.brow ?? product.category, // will already be resolved
+        } satisfies TextProps["parentData"]
+      );
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.PriceSlot[0].props.parentData",
+        {
+          field: field,
+          text: product.price,
+        } satisfies TextProps["parentData"]
       );
       updatedData = setDeep(
         updatedData,
@@ -457,7 +625,12 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
       );
       updatedData = setDeep(
         updatedData,
-        "props.slots.CategorySlot[0].props.parentData",
+        "props.slots.BrowSlot[0].props.parentData",
+        undefined
+      );
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.PriceSlot[0].props.parentData",
         undefined
       );
       updatedData = setDeep(
@@ -480,8 +653,9 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
     },
     slots: {
       ImageSlot: [],
+      BrowSlot: [],
       TitleSlot: [],
-      CategorySlot: [],
+      PriceSlot: [],
       DescriptionSlot: [],
       CTASlot: [],
     },

@@ -1,29 +1,29 @@
 import { useTranslation } from "react-i18next";
 import {
   ComponentConfig,
+  ComponentData,
+  DefaultComponentProps,
   Fields,
   PuckComponent,
   setDeep,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import {
   AddressType,
   getDirections,
   Address as RenderAddress,
 } from "@yext/pages-components";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { EntityField } from "../../editor/EntityField.tsx";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { CTA, CTAVariant } from "../atoms/cta.tsx";
+import { pt, msg } from "../../utils/i18n/platform.ts";
+import { YextField } from "../../editor/YextField.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import {
-  useDocument,
-  EntityField,
-  YextEntityField,
-  CTA,
-  pt,
-  YextField,
-  msg,
-  resolveComponentData,
-  CTAVariant,
   BackgroundStyle,
-  resolveDataFromParent,
   backgroundColors,
-} from "@yext/visual-editor";
+} from "../../utils/themeConfigOptions.ts";
+import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 
 /** Props for the Address component */
 export interface AddressProps {
@@ -33,10 +33,24 @@ export interface AddressProps {
   };
 
   styles: {
+    /**
+     * Whether to include the region in the Address
+     * @defaultValue true
+     */
+    showRegion?: boolean;
+
+    /**
+     * Whether to include the country in the Address
+     * @defaultValue false
+     */
+    showCountry?: boolean;
+
     /** Whether to include a "Get Directions" CTA to Google Maps */
     showGetDirectionsLink: boolean;
+
     /** The variant of the get directions button */
     ctaVariant: CTAVariant;
+
     color?: BackgroundStyle;
   };
 
@@ -58,6 +72,20 @@ export const AddressDataField = YextField<any, AddressType>(
 
 // Address style fields used in Address and CoreInfoSection
 export const AddressStyleFields: Fields<AddressProps["styles"]> = {
+  showRegion: YextField(msg("fields.showRegion", "Show Region"), {
+    type: "radio",
+    options: [
+      { label: msg("fields.options.yes", "Yes"), value: true },
+      { label: msg("fields.options.no", "No"), value: false },
+    ],
+  }),
+  showCountry: YextField(msg("fields.showCountry", "Show Country"), {
+    type: "radio",
+    options: [
+      { label: msg("fields.options.yes", "Yes"), value: true },
+      { label: msg("fields.options.no", "No"), value: false },
+    ],
+  }),
   showGetDirectionsLink: YextField<boolean>(
     msg("fields.showGetDirectionsLink", "Show Get Directions Link"),
     {
@@ -78,7 +106,7 @@ export const AddressStyleFields: Fields<AddressProps["styles"]> = {
   }),
 };
 
-const addressFields: Fields<AddressProps> = {
+export const addressFields: Fields<AddressProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
@@ -142,17 +170,20 @@ const AddressComponent: PuckComponent<AddressProps> = (props) => {
       >
         <RenderAddress
           address={address}
-          lines={[["line1"], ["line2"], ["city", ",", "region", "postalCode"]]}
+          showRegion={styles.showRegion}
+          showCountry={styles.showCountry}
         />
       </EntityField>
       {(useAddressLink ? !!addressLink : !!listingsLink) &&
         styles.showGetDirectionsLink && (
           <CTA
+            setPadding={true}
             ctaType="getDirections"
             eventName={`getDirections`}
             link={useAddressLink ? addressLink : listingsLink}
             label={t("getDirections", "Get Directions")}
             linkType="DRIVING_DIRECTIONS"
+            normalizeLink={false}
             target="_blank"
             variant={styles.ctaVariant}
             color={resolvedColor}
@@ -164,6 +195,30 @@ const AddressComponent: PuckComponent<AddressProps> = (props) => {
   ) : (
     <></>
   );
+};
+
+export const resolveAddressFields = (
+  data: Omit<
+    ComponentData<AddressProps, string, Record<string, DefaultComponentProps>>,
+    "type"
+  >
+) => {
+  const updatedFields = resolveDataFromParent(addressFields, data);
+  const showGetDirectionsLink = data.props.styles.showGetDirectionsLink;
+  setDeep(
+    updatedFields,
+    "styles.objectFields.ctaVariant.visible",
+    showGetDirectionsLink
+  );
+  const ctaVariant = data.props.styles.ctaVariant;
+  const showColor = ctaVariant === "primary" || ctaVariant === "secondary";
+  setDeep(
+    updatedFields,
+    "styles.objectFields.color.visible",
+    showGetDirectionsLink && showColor
+  );
+
+  return updatedFields;
 };
 
 export const Address: ComponentConfig<{
@@ -185,18 +240,13 @@ export const Address: ComponentConfig<{
       },
     },
     styles: {
+      showRegion: true,
+      showCountry: false,
       showGetDirectionsLink: true,
       ctaVariant: "link",
       color: backgroundColors.color1.value,
     },
   },
-  resolveFields(data) {
-    const updatedFields = resolveDataFromParent(addressFields, data);
-    const ctaVariant = data.props.styles.ctaVariant;
-    const showColor = ctaVariant === "primary" || ctaVariant === "secondary";
-    setDeep(updatedFields, "styles.objectFields.color.visible", showColor);
-
-    return updatedFields;
-  },
+  resolveFields: resolveAddressFields,
   render: (props) => <AddressComponent {...props} />,
 };

@@ -1,19 +1,28 @@
-import * as React from "react";
 import {
   BackgroundStyle,
-  YextField,
-  PageSection,
   backgroundColors,
-  VisibilityWrapper,
-  msg,
-  getAnalyticsScopeHash,
-  HeadingTextProps,
-} from "@yext/visual-editor";
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
+} from "../../../utils/themeConfigOptions.ts";
+import { YextField } from "../../../editor/YextField.tsx";
+import { PageSection } from "../../atoms/pageSection.tsx";
+import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
+import {
+  ComponentConfig,
+  Fields,
+  PuckComponent,
+  Slot,
+  setDeep,
+} from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultProductCardSlotData } from "./ProductCard.tsx";
 import { ProductCardsWrapperProps } from "./ProductCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
+import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+
+export type ProductSectionVariant = "immersive" | "classic" | "minimal";
+export type ProductSectionImageConstrain = "fill" | "fixed";
 
 export interface ProductSectionProps {
   /**
@@ -26,6 +35,18 @@ export interface ProductSectionProps {
      * @defaultValue Background Color 2
      */
     backgroundColor?: BackgroundStyle;
+
+    /**
+     * The variant of the product cards.
+     * @defaultValue Immersive
+     */
+    cardVariant?: ProductSectionVariant;
+
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
+    showSectionHeading: boolean;
   };
 
   slots: {
@@ -54,6 +75,24 @@ const productSectionFields: Fields<ProductSectionProps> = {
         {
           type: "select",
           options: "BACKGROUND_COLOR",
+        }
+      ),
+      cardVariant: YextField(msg("fields.cardVariant", "Card Variant"), {
+        type: "select",
+        options: [
+          {
+            label: msg("fields.options.immersive", "Immersive"),
+            value: "immersive",
+          },
+          { label: msg("fields.options.classic", "Classic"), value: "classic" },
+          { label: msg("fields.options.minimal", "Minimal"), value: "minimal" },
+        ],
+      }),
+      showSectionHeading: YextField(
+        msg("fields.showSectionHeading", "Show Section Heading"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
         }
       ),
     },
@@ -95,7 +134,9 @@ const ProductSectionComponent: PuckComponent<ProductSectionProps> = (props) => {
       background={styles?.backgroundColor}
       className="flex flex-col gap-8"
     >
-      <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
+      {styles.showSectionHeading && (
+        <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
+      )}
       <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
     </PageSection>
   );
@@ -111,6 +152,8 @@ export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
   defaultProps: {
     styles: {
       backgroundColor: backgroundColors.background2.value,
+      cardVariant: "immersive",
+      showSectionHeading: true,
     },
     slots: {
       SectionHeadingSlot: [
@@ -120,10 +163,7 @@ export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
             data: {
               text: {
                 field: "",
-                constantValue: {
-                  en: "Featured Products",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: { defaultValue: "Featured Products" },
                 constantValueEnabled: true,
               },
             },
@@ -143,6 +183,14 @@ export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
               constantValueEnabled: true,
               constantValue: [{}, {}, {}], // leave ids blank to auto-generate
             },
+            styles: {
+              showImage: true,
+              showBrow: true,
+              showTitle: true,
+              showPrice: true,
+              showDescription: true,
+              showCTA: true,
+            },
             slots: {
               CardSlot: [
                 defaultProductCardSlotData(),
@@ -160,20 +208,68 @@ export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
     liveVisibility: true,
   },
   resolveData: (data) => {
-    return forwardHeadingLevel(data, "TitleSlot");
+    let updatedData = forwardHeadingLevel(data, "TitleSlot");
+
+    if (
+      data.props.slots.CardsWrapperSlot?.[0]?.props.styles?.variant !==
+      data.props.styles.cardVariant
+    ) {
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.CardsWrapperSlot[0].props.styles.variant",
+        updatedData.props.styles.cardVariant
+      );
+    }
+
+    const isImmersive = updatedData.props.styles.cardVariant === "immersive";
+    const showImageConstrain = !isImmersive;
+
+    const cards =
+      updatedData.props.slots.CardsWrapperSlot?.[0]?.props?.slots?.CardSlot;
+
+    if (cards) {
+      cards.forEach((_: any, i: number) => {
+        updatedData = setDeep(
+          updatedData,
+          `props.slots.CardsWrapperSlot[0].props.slots.CardSlot[${i}].props.slots.ImageSlot[0].props.showImageConstrain`,
+          showImageConstrain
+        );
+
+        if (isImmersive) {
+          updatedData = setDeep(
+            updatedData,
+            `props.slots.CardsWrapperSlot[0].props.slots.CardSlot[${i}].props.slots.ImageSlot[0].props.hideWidthProp`,
+            true
+          );
+        } else {
+          updatedData = setDeep(
+            updatedData,
+            `props.slots.CardsWrapperSlot[0].props.slots.CardSlot[${i}].props.slots.ImageSlot[0].props.hideWidthProp`,
+            false
+          );
+        }
+      });
+    }
+
+    return updatedData;
   },
   render: (props) => {
     return (
-      <AnalyticsScopeProvider
-        name={`${props.analytics?.scope ?? "productsSection"}${getAnalyticsScopeHash(props.id)}`}
+      <ComponentErrorBoundary
+        isEditing={props.puck.isEditing}
+        resetKeys={[props]}
       >
-        <VisibilityWrapper
-          liveVisibility={props.liveVisibility}
-          isEditing={props.puck.isEditing}
+        <AnalyticsScopeProvider
+          name={`${props.analytics?.scope ?? "productsSection"}${getAnalyticsScopeHash(props.id)}`}
         >
-          <ProductSectionComponent {...props} />
-        </VisibilityWrapper>
-      </AnalyticsScopeProvider>
+          <VisibilityWrapper
+            liveVisibility={props.liveVisibility}
+            isEditing={props.puck.isEditing}
+          >
+            <ProductSectionComponent {...props} />
+          </VisibilityWrapper>
+        </AnalyticsScopeProvider>
+      </ComponentErrorBoundary>
     );
   },
 };

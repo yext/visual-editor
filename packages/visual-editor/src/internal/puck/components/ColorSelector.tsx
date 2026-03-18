@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CustomField, FieldLabel } from "@measured/puck";
+import { CustomField, FieldLabel } from "@puckeditor/core";
 import { Color, ColorResult, SketchPicker } from "react-color";
 
 type RenderProps = Parameters<CustomField<any>["render"]>[0];

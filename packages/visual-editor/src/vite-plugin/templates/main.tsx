@@ -11,22 +11,24 @@ import {
   TagType,
   TransformProps,
 } from "@yext/pages";
-import { Render, resolveAllData } from "@measured/puck";
+import { Render, resolveAllData } from "@puckeditor/core";
 import {
   applyTheme,
   VisualEditorProvider,
   getPageMetadata,
   applyAnalytics,
   applyHeaderScript,
+  applyCertifiedFacts,
   migrate,
   migrationRegistry,
   filterComponentsFromConfig,
-  resolvePageSetUrlTemplate,
   defaultThemeConfig,
   mainConfig,
   getSchema,
+  injectTranslations,
   getCanonicalUrl,
   GTMBody,
+  resolveUrlTemplate,
 } from "@yext/visual-editor";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
 
@@ -90,6 +92,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
       applyHeaderScript(document),
       applyTheme(document, relativePrefixToRoot, defaultThemeConfig),
       SchemaWrapper(schema),
+      applyCertifiedFacts(document),
     ].join("\n"),
   };
 };
@@ -98,37 +101,62 @@ export const getPath: GetPath<TemplateProps> = ({
   document,
   relativePrefixToRoot,
 }) => {
-  return resolvePageSetUrlTemplate(document, relativePrefixToRoot);
+  return resolveUrlTemplate(document, relativePrefixToRoot);
 };
 
 export const transformProps: TransformProps<TemplateProps> = async (props) => {
   const { document } = props;
+
   const migratedData = migrate(
     JSON.parse(document.__.layout),
     migrationRegistry,
     mainConfig,
     document
   );
-  const updatedData = await resolveAllData(migratedData, mainConfig, {
+  const resolvedPuckData = await resolveAllData(migratedData, mainConfig, {
     streamDocument: document,
   });
+  document.__.layout = JSON.stringify(resolvedPuckData);
 
-  return { ...props, data: updatedData };
+  const translations = await injectTranslations(document);
+
+  return { ...props, document, translations };
 };
 
 const Location: Template<TemplateRenderProps> = (props) => {
-  const { document, data } = props;
+  const { document } = props;
+
+  const layoutString = document.__.layout;
+  let data: any = {};
+  try {
+    data = JSON.parse(layoutString);
+  } catch (e) {
+    console.error("Failed to parse layout JSON:", e);
+  }
+
   const filteredConfig = filterComponentsFromConfig(
     mainConfig,
     document?._additionalLayoutComponents,
     document?._additionalLayoutCategories
   );
 
+  let requireAnalyticsOptIn = false;
+  if (document.__?.visualEditorConfig) {
+    try {
+      requireAnalyticsOptIn =
+        JSON.parse(document.__.visualEditorConfig)?.requireAnalyticsOptIn ??
+        false;
+    } catch (e) {
+      console.error("Failed to parse visualEditorConfig JSON:", e);
+    }
+  }
+
   return (
     <AnalyticsProvider
       apiKey={document?._env?.YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY}
       templateData={props}
       currency="USD"
+      requireOptIn={requireAnalyticsOptIn}
     >
       <VisualEditorProvider templateProps={props}>
         <GTMBody>

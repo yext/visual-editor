@@ -1,19 +1,19 @@
-import * as React from "react";
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import {
   BackgroundStyle,
-  YextField,
-  PageSection,
   backgroundColors,
-  VisibilityWrapper,
-  msg,
-  getAnalyticsScopeHash,
-  HeadingTextProps,
-} from "@yext/visual-editor";
+} from "../../../utils/themeConfigOptions.ts";
+import { YextField } from "../../../editor/YextField.tsx";
+import { PageSection } from "../../atoms/pageSection.tsx";
+import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultTeamCardSlotData } from "./TeamCard.tsx";
 import { TeamCardsWrapperProps } from "./TeamCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
+import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 
 export interface TeamSectionProps {
   /**
@@ -26,6 +26,12 @@ export interface TeamSectionProps {
      * @defaultValue Background Color 3
      */
     backgroundColor?: BackgroundStyle;
+
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
+    showSectionHeading: boolean;
   };
 
   /** @internal */
@@ -55,6 +61,13 @@ const teamSectionFields: Fields<TeamSectionProps> = {
         {
           type: "select",
           options: "BACKGROUND_COLOR",
+        }
+      ),
+      showSectionHeading: YextField(
+        msg("fields.showSectionHeading", "Show Section Heading"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
         }
       ),
     },
@@ -96,7 +109,9 @@ const TeamSectionWrapper: PuckComponent<TeamSectionProps> = (props) => {
       background={styles?.backgroundColor}
       className="flex flex-col gap-8"
     >
-      <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
+      {styles.showSectionHeading && (
+        <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
+      )}
       <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
     </PageSection>
   );
@@ -112,6 +127,7 @@ export const TeamSection: ComponentConfig<{ props: TeamSectionProps }> = {
   defaultProps: {
     styles: {
       backgroundColor: backgroundColors.background3.value,
+      showSectionHeading: true,
     },
     slots: {
       SectionHeadingSlot: [
@@ -120,10 +136,7 @@ export const TeamSection: ComponentConfig<{ props: TeamSectionProps }> = {
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "Meet Our Team",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: { defaultValue: "Meet Our Team" },
                 constantValueEnabled: true,
                 field: "",
               },
@@ -140,6 +153,13 @@ export const TeamSection: ComponentConfig<{ props: TeamSectionProps }> = {
               field: "",
               constantValueEnabled: true,
               constantValue: [{}, {}, {}], // leave ids blank to auto-generate
+            },
+            styles: {
+              showImage: true,
+              showTitle: true,
+              showPhone: true,
+              showEmail: true,
+              showCTA: true,
             },
             slots: {
               CardSlot: [
@@ -161,15 +181,20 @@ export const TeamSection: ComponentConfig<{ props: TeamSectionProps }> = {
     return forwardHeadingLevel(data, "TitleSlot");
   },
   render: (props) => (
-    <AnalyticsScopeProvider
-      name={`${props.analytics?.scope ?? "teamSection"}${getAnalyticsScopeHash(props.id)}`}
+    <ComponentErrorBoundary
+      isEditing={props.puck.isEditing}
+      resetKeys={[props]}
     >
-      <VisibilityWrapper
-        liveVisibility={props.liveVisibility}
-        isEditing={props.puck.isEditing}
+      <AnalyticsScopeProvider
+        name={`${props.analytics?.scope ?? "teamSection"}${getAnalyticsScopeHash(props.id)}`}
       >
-        <TeamSectionWrapper {...props} />
-      </VisibilityWrapper>
-    </AnalyticsScopeProvider>
+        <VisibilityWrapper
+          liveVisibility={props.liveVisibility}
+          isEditing={props.puck.isEditing}
+        >
+          <TeamSectionWrapper {...props} />
+        </VisibilityWrapper>
+      </AnalyticsScopeProvider>
+    </ComponentErrorBoundary>
   ),
 };

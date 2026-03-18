@@ -1,4 +1,8 @@
 export {
+  AboutSection,
+  type AboutSectionProps,
+} from "./AboutSection/AboutSection.tsx";
+export {
   BannerSection,
   type BannerSectionProps,
   type BannerData,
@@ -54,7 +58,7 @@ export {
   type PromoSectionProps,
   type PromoData,
   type PromoStyles,
-} from "./PromoSection.tsx";
+} from "./PromoSection/PromoSection.tsx";
 export {
   ProductSection,
   type ProductSectionProps,
@@ -77,3 +81,8 @@ export {
   type TestimonialSectionProps,
 } from "./TestimonialSection/TestimonialSection.tsx";
 export { VideoSection, type VideoSectionProps } from "./VideoSection.tsx";
+export {
+  ProfessionalHeroSection,
+  type ProfessionalHeroSectionProps,
+  type ProfessionalHeroStyles,
+} from "./ProfessionalHeroSection.tsx";

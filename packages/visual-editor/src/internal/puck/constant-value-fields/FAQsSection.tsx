@@ -1,4 +1,4 @@
-import { Field } from "@measured/puck";
+import { Field } from "@puckeditor/core";
 import { pt } from "../../../utils/i18n/platform.ts";
 
 export const FAQ_SECTION_CONSTANT_CONFIG: Field<any> = {

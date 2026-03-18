@@ -1,6 +1,8 @@
 import * as React from "react";
 import { FaRegStar, FaStar, FaStarHalf, FaStarHalfAlt } from "react-icons/fa";
-import { Body, themeManagerCn, useBackground } from "@yext/visual-editor";
+import { Body } from "./body.tsx";
+import { themeManagerCn } from "../../utils/cn.ts";
+import { useBackground } from "../../hooks/useBackground.tsx";
 import { useTranslation } from "react-i18next";
 
 export type AggregateRating = {
@@ -46,11 +48,9 @@ export const ReviewStars = (props: ReviewStarsProps) => {
       </div>
       {reviewCount && (
         <Body className="ml-1">
-          {/* TODO: update script to handle plurals */}(
-          {t("totalReviews", `${reviewCount} reviews`, {
+          {t("totalReviews", {
             count: reviewCount,
           })}
-          )
         </Body>
       )}
     </div>

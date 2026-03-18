@@ -3,6 +3,7 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
+  logSuppressedWcagViolations,
   transformTests,
 } from "./testing/componentTests.setup.ts";
 import {
@@ -11,15 +12,15 @@ import {
   screen,
   waitFor,
 } from "@testing-library/react";
-import {
-  migrate,
-  migrationRegistry,
-  VisualEditorProvider,
-  LocatorComponent,
-} from "@yext/visual-editor";
-import { Render, Config } from "@measured/puck";
+import { injectTranslations } from "../utils/i18n/components.ts";
+import { migrate } from "../utils/migrate.ts";
+import { migrationRegistry } from "./migrations/migrationRegistry.ts";
+import { VisualEditorProvider } from "../utils/VisualEditorProvider.tsx";
+import { LocatorComponent } from "./Locator.tsx";
+import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
-import mapboxPackageJson from "mapbox-gl/package.json";
+import mapboxPackageJson from "mapbox-gl/package.json" with { type: "json" };
+import { backgroundColors } from "../utils/themeConfigOptions.ts";
 
 // Uses the content endpoint from
 // https://www.yext.com/s/4174974/yextsites/155048/editor#pageSetId=locations
@@ -67,6 +68,79 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
   },
   {
+    name: "latest version multi-pageset default props",
+    document: {
+      locale: "en",
+      businessId: "4174974",
+      __: {
+        isPrimaryLocale: true,
+        locatorSourcePageSets: JSON.stringify({
+          "accounts/4174974/sites/163770/pagesets/locations": {
+            pathInfo: {
+              template:
+                "locations/[[address.region]]/[[address.city]]/[[address.line1]]",
+              primaryLocale: "en",
+              includeLocalePrefixForPrimaryLocale: false,
+            },
+            entityType: "location",
+            savedFilter: "1415752775",
+            internalSavedSearchId: 262225,
+          },
+          "accounts/4174974/sites/163770/pagesets/restaurants": {
+            pathInfo: {
+              template:
+                "restaurants/[[address.region]]/[[address.city]]/[[address.line1]]",
+              primaryLocale: "en",
+              includeLocalePrefixForPrimaryLocale: false,
+            },
+            entityType: "restaurant",
+            savedFilter: "1491716705",
+            internalSavedSearchId: 276295,
+          },
+          "accounts/4174974/sites/163770/pagesets/atms": {
+            pathInfo: {
+              template:
+                "atms/[[address.region]]/[[address.city]]/[[address.line1]]",
+              primaryLocale: "en",
+              includeLocalePrefixForPrimaryLocale: false,
+            },
+            entityType: "atm",
+          },
+        }),
+      },
+      _env: {
+        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
+          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
+        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
+        YEXT_CLOUD_REGION: "US",
+        YEXT_ENVIRONMENT: "PROD",
+        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
+        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
+      },
+      _pageset: JSON.stringify({
+        type: "LOCATOR",
+        typeConfig: {
+          locatorConfig: {
+            experienceKey: "locator-41",
+            sources: [
+              "accounts/4174974/sites/163770/pagesets/locations",
+              "accounts/4174974/sites/163770/pagesets/restaurants",
+              "accounts/4174974/sites/163770/pagesets/atms",
+            ],
+            entityTypeScope: [
+              {
+                entityType: "financialProfessional",
+                savedFilter: "1491722104",
+              },
+            ],
+          },
+        },
+      }),
+    },
+    props: { ...LocatorComponent.defaultProps },
+    version: migrationRegistry.length,
+  },
+  {
     name: "latest version non-default props",
     document: {
       locale: "en",
@@ -101,108 +175,99 @@ const tests: ComponentTest[] = [
     },
     props: {
       mapStyle: "mapbox://styles/mapbox/dark-v11",
+      locationStyles: [
+        {
+          entityType: "location",
+          pinIcon: {
+            type: "none",
+          },
+          pinColor: backgroundColors.background6.value,
+        },
+      ],
+      distanceDisplay: "distanceFromSearch",
       filters: {
         openNowButton: true,
         showDistanceOptions: true,
       },
-      resultCard: {
-        primaryHeading: {
-          field: "name",
-          headingLevel: 5,
-        },
-        secondaryHeading: {
-          field: "name",
-          variant: "base",
-          liveVisibility: false,
-        },
-        tertiaryHeading: {
-          field: "name",
-          variant: "base",
-          liveVisibility: false,
-        },
-        icons: true,
-        hours: {
-          table: {
-            startOfWeek: "monday",
-            collapseDays: true,
-            showAdditionalHoursText: false,
+      resultCard: [
+        {
+          props: {
+            entityType: "location",
+            primaryHeading: {
+              field: "name",
+              constantValue: { en: "", hasLocalizedValue: "true" },
+              constantValueEnabled: false,
+              headingLevel: 5,
+            },
+            secondaryHeading: {
+              field: "name",
+              constantValue: { en: "", hasLocalizedValue: "true" },
+              constantValueEnabled: false,
+              variant: "base",
+              liveVisibility: false,
+            },
+            tertiaryHeading: {
+              field: "name",
+              constantValue: { en: "", hasLocalizedValue: "true" },
+              constantValueEnabled: false,
+              variant: "base",
+              liveVisibility: false,
+            },
+            icons: true,
+            hours: {
+              table: {
+                startOfWeek: "monday",
+                collapseDays: true,
+                showAdditionalHoursText: false,
+              },
+              liveVisibility: true,
+            },
+            address: {
+              showGetDirectionsLink: true,
+              liveVisibility: true,
+            },
+            phone: {
+              field: "mainPhone",
+              phoneFormat: "domestic",
+              includePhoneHyperlink: true,
+              liveVisibility: false,
+            },
+            email: {
+              field: "emails",
+              liveVisibility: false,
+            },
+            services: {
+              field: "services",
+              liveVisibility: false,
+            },
+            primaryCTA: {
+              label: "Visit Page",
+              variant: "primary",
+              liveVisibility: true,
+            },
+            secondaryCTA: {
+              label: "Call to Action",
+              link: "https://www.yext.com",
+              variant: "secondary",
+              liveVisibility: true,
+            },
+            image: {
+              field: "headshot",
+              constantValue: {
+                en: { url: "", height: 0, width: 0 },
+                hasLocalizedValue: "true",
+              },
+              constantValueEnabled: false,
+              liveVisibility: false,
+            },
           },
-          liveVisibility: true,
         },
-        address: {
-          showGetDirectionsLink: true,
-          liveVisibility: true,
-        },
-        phone: {
-          field: "mainPhone",
-          phoneFormat: "domestic",
-          includePhoneHyperlink: true,
-          liveVisibility: false,
-        },
-        email: {
-          field: "emails",
-          liveVisibility: false,
-        },
-        services: {
-          field: "services",
-          liveVisibility: false,
-        },
-        primaryCTA: {
-          variant: "primary",
-          liveVisibility: true,
-        },
-        secondaryCTA: {
-          label: "Call to Action",
-          link: "https://www.yext.com",
-          variant: "secondary",
-          liveVisibility: true,
-        },
-        image: {
-          field: "headshot",
-          liveVisibility: false,
-        },
-      },
+      ],
     },
     version: migrationRegistry.length,
   },
   {
-    name: "version 10 default props",
-    document: {
-      locale: "en",
-      businessId: "4174974",
-      __: {
-        isPrimaryLocale: true,
-      },
-      _env: {
-        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
-          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
-        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
-        YEXT_CLOUD_REGION: "US",
-        YEXT_ENVIRONMENT: "PROD",
-        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
-        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
-      },
-      _pageset: JSON.stringify({
-        type: "LOCATOR",
-        typeConfig: {
-          locatorConfig: {
-            source: "accounts/4174974/sites/155048/pagesets/locations",
-            experienceKey: "locator-41",
-            entityType: "location",
-          },
-        },
-        config: {
-          urlTemplate: {
-            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
-          },
-        },
-      }),
-    },
-    props: {},
-    version: 10,
-  },
-  {
-    name: "version 10 non-default props",
+    name: "version 24 with filters",
     document: {
       locale: "en",
       businessId: "4174974",
@@ -235,206 +300,9 @@ const tests: ComponentTest[] = [
       }),
     },
     props: {
-      mapStyle: "mapbox://styles/mapbox/dark-v11",
-    },
-    version: 10,
-  },
-  {
-    name: "version 21 default props",
-    document: {
-      locale: "en",
-      businessId: "4174974",
-      __: {
-        isPrimaryLocale: true,
-      },
-      _env: {
-        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
-          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
-        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
-        YEXT_CLOUD_REGION: "US",
-        YEXT_ENVIRONMENT: "PROD",
-        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
-        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
-      },
-      _pageset: JSON.stringify({
-        type: "LOCATOR",
-        typeConfig: {
-          locatorConfig: {
-            source: "accounts/4174974/sites/155048/pagesets/locations",
-            experienceKey: "locator-41",
-            entityType: "location",
-          },
-        },
-        config: {
-          urlTemplate: {
-            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
-          },
-        },
-      }),
-    },
-    props: {},
-    version: 21,
-  },
-  {
-    name: "version 21 non-default props",
-    document: {
-      locale: "en",
-      businessId: "4174974",
-      __: {
-        isPrimaryLocale: true,
-      },
-      _env: {
-        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
-          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
-        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
-        YEXT_CLOUD_REGION: "US",
-        YEXT_ENVIRONMENT: "PROD",
-        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
-        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
-      },
-      _pageset: JSON.stringify({
-        type: "LOCATOR",
-        typeConfig: {
-          locatorConfig: {
-            source: "accounts/4174974/sites/155048/pagesets/locations",
-            experienceKey: "locator-41",
-            entityType: "location",
-          },
-        },
-        config: {
-          urlTemplate: {
-            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
-          },
-        },
-      }),
-    },
-    props: {
-      mapStyle: "mapbox://styles/mapbox/dark-v11",
-      openNowButton: true,
-    },
-    version: 21,
-  },
-  {
-    name: "version 22 default props",
-    document: {
-      locale: "en",
-      businessId: "4174974",
-      __: {
-        isPrimaryLocale: true,
-      },
-      _env: {
-        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
-          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
-        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
-        YEXT_CLOUD_REGION: "US",
-        YEXT_ENVIRONMENT: "PROD",
-        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
-        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
-      },
-      _pageset: JSON.stringify({
-        type: "LOCATOR",
-        typeConfig: {
-          locatorConfig: {
-            source: "accounts/4174974/sites/155048/pagesets/locations",
-            experienceKey: "locator-41",
-            entityType: "location",
-          },
-        },
-        config: {
-          urlTemplate: {
-            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
-          },
-        },
-      }),
-    },
-    props: {
-      filters: {
-        openNowButton: false,
-        showDistanceOptions: false,
-      },
-    },
-    version: 22,
-  },
-  {
-    name: "version 22 non-default props",
-    document: {
-      locale: "en",
-      businessId: "4174974",
-      __: {
-        isPrimaryLocale: true,
-      },
-      _env: {
-        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
-          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
-        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
-        YEXT_CLOUD_REGION: "US",
-        YEXT_ENVIRONMENT: "PROD",
-        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
-        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
-      },
-      _pageset: JSON.stringify({
-        type: "LOCATOR",
-        typeConfig: {
-          locatorConfig: {
-            source: "accounts/4174974/sites/155048/pagesets/locations",
-            experienceKey: "locator-41",
-            entityType: "location",
-          },
-        },
-        config: {
-          urlTemplate: {
-            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
-          },
-        },
-      }),
-    },
-    props: {
-      mapStyle: "mapbox://styles/mapbox/dark-v11",
       filters: {
         openNowButton: true,
         showDistanceOptions: true,
-        facetFields: ["address.city", "address.region", "services"],
-      },
-    },
-    version: 22,
-  },
-  {
-    name: "version 24 default props",
-    document: {
-      locale: "en",
-      businessId: "4174974",
-      __: {
-        isPrimaryLocale: true,
-      },
-      _env: {
-        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
-          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
-        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
-        YEXT_CLOUD_REGION: "US",
-        YEXT_ENVIRONMENT: "PROD",
-        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
-        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
-      },
-      _pageset: JSON.stringify({
-        type: "LOCATOR",
-        typeConfig: {
-          locatorConfig: {
-            source: "accounts/4174974/sites/155048/pagesets/locations",
-            experienceKey: "locator-41",
-            entityType: "location",
-          },
-        },
-        config: {
-          urlTemplate: {
-            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
-          },
-        },
-      }),
-    },
-    props: {
-      filters: {
-        openNowButton: false,
-        showDistanceOptions: false,
       },
       resultCard: {
         primaryHeading: {
@@ -494,7 +362,548 @@ const tests: ComponentTest[] = [
         },
       },
     },
+    interactions: async (page) => {
+      const filterButton = page.getByText("Filter");
+      await act(async () => {
+        await filterButton.click();
+      });
+    },
     version: 24,
+  },
+  {
+    name: "version 60 custom heading",
+    document: {
+      locale: "en",
+      businessId: "4174974",
+      __: {
+        isPrimaryLocale: true,
+      },
+      _env: {
+        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
+          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
+        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
+        YEXT_CLOUD_REGION: "US",
+        YEXT_ENVIRONMENT: "PROD",
+        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
+        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
+      },
+      _pageset: JSON.stringify({
+        type: "LOCATOR",
+        typeConfig: {
+          locatorConfig: {
+            source: "accounts/4174974/sites/155048/pagesets/locations",
+            experienceKey: "locator-41",
+            entityType: "location",
+          },
+        },
+        config: {
+          urlTemplate: {
+            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+          },
+        },
+      }),
+    },
+    props: {
+      filters: {
+        openNowButton: false,
+        showDistanceOptions: false,
+      },
+      pageHeading: {
+        title: { en: "Custom Heading", hasLocalizedValue: "true" },
+      },
+      resultCard: {
+        primaryHeading: {
+          field: "name",
+          headingLevel: 3,
+        },
+        secondaryHeading: {
+          field: "name",
+          variant: "base",
+          liveVisibility: false,
+        },
+        tertiaryHeading: {
+          field: "name",
+          variant: "base",
+          liveVisibility: false,
+        },
+        icons: true,
+        hours: {
+          table: {
+            startOfWeek: "today",
+            collapseDays: false,
+            showAdditionalHoursText: false,
+          },
+          liveVisibility: true,
+        },
+        address: {
+          showGetDirectionsLink: true,
+          liveVisibility: true,
+        },
+        phone: {
+          field: "mainPhone",
+          phoneFormat: "domestic",
+          includePhoneHyperlink: true,
+          liveVisibility: true,
+        },
+        email: {
+          field: "emails",
+          liveVisibility: false,
+        },
+        services: {
+          field: "services",
+          liveVisibility: false,
+        },
+        primaryCTA: {
+          variant: "primary",
+          liveVisibility: true,
+        },
+        secondaryCTA: {
+          label: "Call to Action",
+          link: "#",
+          variant: "secondary",
+          liveVisibility: false,
+        },
+        image: {
+          field: "headshot",
+          liveVisibility: false,
+        },
+      },
+    },
+    version: 60,
+  },
+  {
+    name: "version 60 custom heading with site color 2",
+    document: {
+      locale: "en",
+      businessId: "4174974",
+      __: {
+        isPrimaryLocale: true,
+      },
+      _env: {
+        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
+          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
+        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
+        YEXT_CLOUD_REGION: "US",
+        YEXT_ENVIRONMENT: "PROD",
+        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
+        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
+      },
+      _pageset: JSON.stringify({
+        type: "LOCATOR",
+        typeConfig: {
+          locatorConfig: {
+            source: "accounts/4174974/sites/155048/pagesets/locations",
+            experienceKey: "locator-41",
+            entityType: "location",
+          },
+        },
+        config: {
+          urlTemplate: {
+            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+          },
+        },
+      }),
+    },
+    props: {
+      filters: {
+        openNowButton: false,
+        showDistanceOptions: false,
+      },
+      pageHeading: {
+        title: { en: "Custom Heading", hasLocalizedValue: "true" },
+        color: backgroundColors.color2.value,
+      },
+      resultCard: {
+        primaryHeading: {
+          field: "name",
+          headingLevel: 3,
+        },
+        secondaryHeading: {
+          field: "name",
+          variant: "base",
+          liveVisibility: false,
+        },
+        tertiaryHeading: {
+          field: "name",
+          variant: "base",
+          liveVisibility: false,
+        },
+        icons: true,
+        hours: {
+          table: {
+            startOfWeek: "today",
+            collapseDays: false,
+            showAdditionalHoursText: false,
+          },
+          liveVisibility: true,
+        },
+        address: {
+          showGetDirectionsLink: true,
+          liveVisibility: true,
+        },
+        phone: {
+          field: "mainPhone",
+          phoneFormat: "domestic",
+          includePhoneHyperlink: true,
+          liveVisibility: true,
+        },
+        email: {
+          field: "emails",
+          liveVisibility: false,
+        },
+        services: {
+          field: "services",
+          liveVisibility: false,
+        },
+        primaryCTA: {
+          variant: "primary",
+          liveVisibility: true,
+        },
+        secondaryCTA: {
+          label: "Call to Action",
+          link: "#",
+          variant: "secondary",
+          liveVisibility: false,
+        },
+        image: {
+          field: "headshot",
+          liveVisibility: false,
+        },
+      },
+    },
+    version: 60,
+  },
+  {
+    name: "version 60 custom title and result cards with site color 3",
+    document: {
+      locale: "en",
+      businessId: "4174974",
+      __: {
+        isPrimaryLocale: true,
+      },
+      _env: {
+        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
+          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
+        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
+        YEXT_CLOUD_REGION: "US",
+        YEXT_ENVIRONMENT: "PROD",
+        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
+        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
+      },
+      _pageset: JSON.stringify({
+        type: "LOCATOR",
+        typeConfig: {
+          locatorConfig: {
+            source: "accounts/4174974/sites/155048/pagesets/locations",
+            experienceKey: "locator-41",
+            entityType: "location",
+          },
+        },
+        config: {
+          urlTemplate: {
+            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+          },
+        },
+      }),
+    },
+    props: {
+      filters: {
+        openNowButton: false,
+        showDistanceOptions: false,
+      },
+      pageHeading: {
+        title: { en: "Custom Heading", hasLocalizedValue: "true" },
+      },
+      resultCard: {
+        primaryHeading: {
+          field: "name",
+          headingLevel: 3,
+          color: backgroundColors.color3.value,
+        },
+        secondaryHeading: {
+          field: "name",
+          variant: "base",
+          liveVisibility: false,
+        },
+        tertiaryHeading: {
+          field: "name",
+          variant: "base",
+          liveVisibility: false,
+        },
+        icons: true,
+        hours: {
+          table: {
+            startOfWeek: "today",
+            collapseDays: false,
+            showAdditionalHoursText: false,
+          },
+          liveVisibility: true,
+        },
+        address: {
+          showGetDirectionsLink: true,
+          liveVisibility: true,
+        },
+        phone: {
+          field: "mainPhone",
+          phoneFormat: "domestic",
+          includePhoneHyperlink: true,
+          liveVisibility: true,
+        },
+        email: {
+          field: "emails",
+          liveVisibility: false,
+        },
+        services: {
+          field: "services",
+          liveVisibility: false,
+        },
+        primaryCTA: {
+          variant: "primary",
+          liveVisibility: true,
+        },
+        secondaryCTA: {
+          label: "Call to Action",
+          link: "#",
+          variant: "secondary",
+          liveVisibility: false,
+        },
+        image: {
+          field: "headshot",
+          liveVisibility: false,
+        },
+      },
+    },
+    version: 60,
+  },
+  {
+    name: "version 64 static headings",
+    document: {
+      locale: "en",
+      businessId: "4174974",
+      __: {
+        isPrimaryLocale: true,
+      },
+      _env: {
+        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
+          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
+        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
+        YEXT_CLOUD_REGION: "US",
+        YEXT_ENVIRONMENT: "PROD",
+        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
+        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
+      },
+      _pageset: JSON.stringify({
+        type: "LOCATOR",
+        typeConfig: {
+          locatorConfig: {
+            source: "accounts/4174974/sites/155048/pagesets/locations",
+            experienceKey: "locator-41",
+            entityType: "location",
+          },
+        },
+        config: {
+          urlTemplate: {
+            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+          },
+        },
+      }),
+    },
+    props: {
+      filters: {
+        openNowButton: false,
+        showDistanceOptions: false,
+      },
+      resultCard: {
+        primaryHeading: {
+          field: "name",
+          constantValue: { en: "", hasLocalizedValue: "true" },
+          constantValueEnabled: false,
+          headingLevel: 3,
+        },
+        secondaryHeading: {
+          field: "name",
+          constantValue: {
+            en: "Secondary Static",
+            hasLocalizedValue: "true",
+          },
+          constantValueEnabled: true,
+          variant: "base",
+          liveVisibility: true,
+        },
+        tertiaryHeading: {
+          field: "name",
+          constantValue: { en: "Tertiary Static", hasLocalizedValue: "true" },
+          constantValueEnabled: true,
+          variant: "base",
+          liveVisibility: true,
+        },
+        icons: true,
+        hours: {
+          table: {
+            startOfWeek: "today",
+            collapseDays: false,
+            showAdditionalHoursText: false,
+          },
+          liveVisibility: true,
+        },
+        address: {
+          showGetDirectionsLink: true,
+          liveVisibility: true,
+        },
+        phone: {
+          field: "mainPhone",
+          phoneFormat: "domestic",
+          includePhoneHyperlink: true,
+          liveVisibility: true,
+        },
+        email: {
+          field: "emails",
+          liveVisibility: false,
+        },
+        services: {
+          field: "services",
+          liveVisibility: false,
+        },
+        primaryCTA: {
+          variant: "primary",
+          liveVisibility: true,
+        },
+        secondaryCTA: {
+          label: "Call to Action",
+          link: "#",
+          variant: "secondary",
+          liveVisibility: false,
+        },
+        image: {
+          field: "headshot",
+          constantValue: {
+            en: { url: "", height: 0, width: 0 },
+            hasLocalizedValue: "true",
+          },
+          constantValueEnabled: false,
+          liveVisibility: false,
+        },
+      },
+    },
+    interactions: async (page) => {
+      await expect
+        .element(page.getByText("Secondary Static").first())
+        .toBeVisible();
+    },
+    version: 64,
+  },
+  {
+    name: "version 64 static image",
+    document: {
+      locale: "en",
+      businessId: "4174974",
+      __: {
+        isPrimaryLocale: true,
+      },
+      _env: {
+        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
+          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
+        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
+        YEXT_CLOUD_REGION: "US",
+        YEXT_ENVIRONMENT: "PROD",
+        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
+        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
+      },
+      _pageset: JSON.stringify({
+        type: "LOCATOR",
+        typeConfig: {
+          locatorConfig: {
+            source: "accounts/4174974/sites/155048/pagesets/locations",
+            experienceKey: "locator-41",
+            entityType: "location",
+          },
+        },
+        config: {
+          urlTemplate: {
+            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+          },
+        },
+      }),
+    },
+    props: {
+      filters: {
+        openNowButton: false,
+        showDistanceOptions: false,
+      },
+      resultCard: {
+        primaryHeading: {
+          field: "name",
+          constantValue: { en: "", hasLocalizedValue: "true" },
+          constantValueEnabled: false,
+          headingLevel: 3,
+        },
+        secondaryHeading: {
+          field: "name",
+          constantValue: { en: "", hasLocalizedValue: "true" },
+          constantValueEnabled: false,
+          variant: "base",
+          liveVisibility: false,
+        },
+        tertiaryHeading: {
+          field: "name",
+          constantValue: { en: "", hasLocalizedValue: "true" },
+          constantValueEnabled: false,
+          variant: "base",
+          liveVisibility: false,
+        },
+        icons: true,
+        hours: {
+          table: {
+            startOfWeek: "today",
+            collapseDays: false,
+            showAdditionalHoursText: false,
+          },
+          liveVisibility: true,
+        },
+        address: {
+          showGetDirectionsLink: true,
+          liveVisibility: true,
+        },
+        phone: {
+          field: "mainPhone",
+          phoneFormat: "domestic",
+          includePhoneHyperlink: true,
+          liveVisibility: true,
+        },
+        email: {
+          field: "emails",
+          liveVisibility: false,
+        },
+        services: {
+          field: "services",
+          liveVisibility: false,
+        },
+        primaryCTA: {
+          variant: "primary",
+          liveVisibility: true,
+        },
+        secondaryCTA: {
+          label: "Call to Action",
+          link: "#",
+          variant: "secondary",
+          liveVisibility: false,
+        },
+        image: {
+          field: "headshot",
+          constantValue: {
+            en: {
+              url: "https://placehold.co/80x80",
+              height: 80,
+              width: 80,
+            },
+            hasLocalizedValue: "true",
+          },
+          constantValueEnabled: true,
+          liveVisibility: true,
+        },
+      },
+    },
+    version: 64,
   },
 ];
 
@@ -519,7 +928,7 @@ describe("Locator", async () => {
       version,
       viewport: { width, height, name: viewportName },
     }) => {
-      const data = migrate(
+      let data = migrate(
         {
           root: {
             props: {
@@ -538,6 +947,12 @@ describe("Locator", async () => {
         document
       );
 
+      data = await resolveAllData(data, puckConfig, {
+        streamDocument: document,
+      });
+
+      const translations = await injectTranslations(document);
+
       const { container } = reactRender(
         <>
           <script
@@ -549,7 +964,7 @@ describe("Locator", async () => {
             rel="stylesheet"
             href={`https://api.mapbox.com/mapbox-gl-js/v${mapboxPackageJson.version}/mapbox-gl.css`}
           />
-          <VisualEditorProvider templateProps={{ document }}>
+          <VisualEditorProvider templateProps={{ document, translations }}>
             <Render config={puckConfig} data={data} />
           </VisualEditorProvider>
         </>
@@ -568,36 +983,44 @@ describe("Locator", async () => {
         });
       }
 
-      // Hide the distance to each location because it is based on the test runner's IP address
-      await act(async () => {
-        const allDivs = container.querySelectorAll("div");
-        allDivs.forEach((div) => {
-          if (div.textContent?.includes("mi") && !div.children.length) {
-            div.style.backgroundColor = "black";
-            div.style.width = "8em";
-          }
+      const hideDistance = async () => {
+        await act(async () => {
+          // Hide the distance to each location because it is based on the test runner's IP address
+          const allDivs = container.querySelectorAll("div");
+          allDivs.forEach((div) => {
+            if (div.textContent?.includes("mi") && !div.children.length) {
+              div.style.backgroundColor = "black";
+              div.style.width = "8em";
+            }
+          });
+
+          // Hide the map makers because they can appear in different spots
+          const allMarkers =
+            container.querySelectorAll<HTMLDivElement>(".mapboxgl-marker");
+          allMarkers.forEach((marker) => {
+            marker.style.opacity = "0";
+          });
         });
-      });
+      };
+
+      await hideDistance();
 
       await expect(`Locator/[${viewportName}] ${name}`).toMatchScreenshot({
         customThreshold: screenshotThreshold,
       });
       const results = await axe(container);
-      if (results.violations.length) {
-        console.error("WCAG Violations:", results.violations);
-      }
+      logSuppressedWcagViolations(results);
       // TODO: Re-enable WCAG test
       // expect(results).toHaveNoViolations()
 
       if (interactions) {
         await interactions(page);
+        await hideDistance();
         await expect(
           `Locator/[${viewportName}] ${name} (after interactions)`
         ).toMatchScreenshot({ customThreshold: screenshotThreshold });
         const results = await axe(container);
-        if (results.violations.length) {
-          console.error("WCAG Violations:", results.violations);
-        }
+        logSuppressedWcagViolations(results);
       }
     }
   );

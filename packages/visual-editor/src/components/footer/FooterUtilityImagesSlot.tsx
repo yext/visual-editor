@@ -1,17 +1,14 @@
 import * as React from "react";
-import { ComponentConfig, PuckComponent } from "@measured/puck";
-import {
-  YextField,
-  AssetImageType,
-  msg,
-  pt,
-  MaybeLink,
-  Image,
-  useDocument,
-  resolveComponentData,
-} from "@yext/visual-editor";
+import { ComponentConfig, PuckComponent } from "@puckeditor/core";
+import { YextField } from "../../editor/YextField.tsx";
+import { AssetImageType } from "../../types/images.ts";
+import { msg, pt } from "../../utils/i18n/platform.ts";
+import { MaybeLink } from "../atoms/maybeLink.tsx";
+import { Image } from "../atoms/image.tsx";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { useTranslation } from "react-i18next";
-import { ImageStylingFields } from "../contentBlocks/image/styling";
+import { ImageStylingFields } from "../contentBlocks/image/styling.ts";
 
 export interface FooterUtilityImagesSlotProps {
   data: {
@@ -35,9 +32,28 @@ const FooterUtilityImagesSlotInternal: PuckComponent<
   const aspectRatio = styles.aspectRatio || 1;
 
   // Filter to only valid images with URLs
-  const validImages = (data.utilityImages || []).filter(
-    (item) => item.image?.url
-  );
+  const validImages = (data.utilityImages || [])
+    .map(
+      (item: { image?: AssetImageType; url?: string; linkTarget?: string }) => {
+        if (item.image) {
+          return item;
+        }
+        if (item.url) {
+          return {
+            image: {
+              url: item.url,
+            } as AssetImageType,
+            linkTarget: item.linkTarget,
+          };
+        }
+        return item;
+      }
+    )
+    .filter(
+      (item): item is { image: AssetImageType; linkTarget?: string } =>
+        !!item.image?.url ||
+        (typeof item.image === "object" && "hasLocalizedValue" in item.image)
+    );
 
   if (validImages.length === 0) {
     return puck.isEditing ? <div className="h-10 min-w-[100px]" /> : <></>;

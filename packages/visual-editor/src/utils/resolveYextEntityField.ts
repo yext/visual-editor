@@ -1,4 +1,4 @@
-import { YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
+import { type YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
 
 export const embeddedFieldRegex = /\[\[([a-zA-Z0-9._]+)\]\]/g;
 
@@ -110,34 +110,62 @@ export const resolveEmbeddedFieldsRecursively = (
   }
 
   // First, check if the object itself is a translatable shape that needs resolution.
-  if (data.hasLocalizedValue === "true") {
-    if (locale && data[locale]) {
+  if (data.hasLocalizedValue === "true" || "defaultValue" in data) {
+    if (locale) {
+      const localeValue = data[locale];
+      const usesDefaultValue = localeValue === undefined;
+      const localizedValue = usesDefaultValue ? data.defaultValue : localeValue;
       // Handle TranslatableString
-      if (typeof data[locale] === "string") {
+      if (typeof localizedValue === "string") {
         const resolvedString = resolveEmbeddedFieldsInString(
-          data[locale],
+          localizedValue,
           streamDocument,
           locale
         );
+        if ("defaultValue" in data && usesDefaultValue) {
+          return { ...data, defaultValue: resolvedString };
+        }
         return { ...data, [locale]: resolvedString };
       }
 
       // Handle TranslatableRichText
       if (
-        typeof data[locale] === "object" &&
-        data[locale] !== null &&
-        typeof data[locale].html === "string"
+        typeof localizedValue === "object" &&
+        localizedValue !== null &&
+        typeof localizedValue.html === "string"
       ) {
         const resolvedHtml = resolveEmbeddedFieldsInString(
-          data[locale].html,
+          localizedValue.html,
           streamDocument,
           locale
         );
+        if ("defaultValue" in data && usesDefaultValue) {
+          return {
+            ...data,
+            defaultValue: { ...localizedValue, html: resolvedHtml },
+          };
+        }
         return {
           ...data,
-          [locale]: { ...data[locale], html: resolvedHtml },
+          [locale]: { ...localizedValue, html: resolvedHtml },
         };
       }
+
+      // Preserve non-text default containers (e.g. localized image values)
+      // by resolving nested embedded fields recursively.
+      if (localizedValue !== undefined && localizedValue !== null) {
+        const resolvedNonTextValue = resolveEmbeddedFieldsRecursively(
+          localizedValue,
+          streamDocument,
+          locale
+        );
+        if ("defaultValue" in data && usesDefaultValue) {
+          return { ...data, defaultValue: resolvedNonTextValue };
+        }
+        return { ...data, [locale]: resolvedNonTextValue };
+      }
+
+      return data.hasLocalizedValue === "true" ? "" : data;
     } else {
       // If it's a translatable string but missing the locale,
       // we return an empty string.

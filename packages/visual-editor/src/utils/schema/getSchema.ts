@@ -1,4 +1,4 @@
-import { StreamDocument } from "../applyTheme.ts";
+import { StreamDocument } from "../types/StreamDocument.ts";
 import { resolveSchemaJson, resolveSchemaString } from "./resolveSchema.ts";
 import { getDefaultSchema } from "./defaultSchemas.ts";
 import { getLocalBusinessSubtype, removeEmptyValues } from "./helpers.ts";

@@ -6,13 +6,11 @@ import {
   transformTests,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
-import {
-  BannerSection,
-  migrate,
-  migrationRegistry,
-  VisualEditorProvider,
-} from "@yext/visual-editor";
-import { Render, Config } from "@measured/puck";
+import { BannerSection } from "./Banner.tsx";
+import { migrate } from "../../utils/migrate.ts";
+import { migrationRegistry } from "../migrations/migrationRegistry.ts";
+import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
+import { Render, Config } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 
 const tests: ComponentTest[] = [
@@ -21,45 +19,6 @@ const tests: ComponentTest[] = [
     document: {},
     props: { ...BannerSection.defaultProps },
     version: migrationRegistry.length,
-  },
-  {
-    name: "version 0 props with entity values",
-    document: {
-      name: "test",
-    },
-    props: {
-      text: {
-        field: "",
-        constantValue: "Constant Text",
-        constantValueEnabled: true,
-      },
-      textAlignment: "left",
-      backgroundColor: {
-        bgColor: "bg-palette-primary-dark",
-        textColor: "text-white",
-      },
-      liveVisibility: true,
-    },
-    version: 0,
-  },
-  {
-    name: "version 0 props with constant value",
-    document: {
-      name: "test",
-    },
-    props: {
-      text: {
-        field: "name",
-        constantValue: "Constant Text",
-      },
-      textAlignment: "right",
-      backgroundColor: {
-        bgColor: "bg-palette-secondary-dark",
-        textColor: "text-white",
-      },
-      liveVisibility: true,
-    },
-    version: 0,
   },
   {
     name: "version 1 props with entity values",

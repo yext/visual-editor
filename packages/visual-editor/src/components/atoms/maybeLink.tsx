@@ -1,5 +1,5 @@
 import * as React from "react";
-import { CTAVariant, CTA } from "@yext/visual-editor";
+import { CTAVariant, CTA } from "./cta.tsx";
 
 export type MaybeLinkProps = {
   href?: string;
@@ -30,6 +30,7 @@ export const MaybeLink = (props: MaybeLinkProps) => {
         link={href}
         label={children}
         linkType="URL"
+        normalizeLink={false}
         eventName={eventName}
         variant={variant}
         className={className}

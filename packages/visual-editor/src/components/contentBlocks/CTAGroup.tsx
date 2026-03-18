@@ -1,14 +1,16 @@
-import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import {
-  BackgroundStyle,
-  CTA,
-  PresetImageType,
-  YextField,
-  msg,
-  pt,
-  resolveComponentData,
-  useDocument,
-} from "@yext/visual-editor";
+  ComponentConfig,
+  Fields,
+  PuckComponent,
+  setDeep,
+} from "@puckeditor/core";
+import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
+import { CTA } from "../atoms/cta.tsx";
+import { PresetImageType } from "../../types/types.ts";
+import { YextField } from "../../editor/YextField.tsx";
+import { msg, pt } from "../../utils/i18n/platform.ts";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { useDocument } from "../../hooks/useDocument.tsx";
 import { useTranslation } from "react-i18next";
 import {
   ctaTypeOptions,
@@ -16,12 +18,15 @@ import {
 } from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
 import { CTAVariant } from "../atoms/cta.tsx";
 import { CTAWrapperProps } from "./CtaWrapper.tsx";
+import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
 
 // TODO: re-enable CTA Group
 
 type BasicCTAProps = {
   /** The CTA entity field or static value */
   entityField: CTAWrapperProps["data"]["entityField"];
+  /** Whether CTA links should be normalized before rendering */
+  normalizeLink: boolean;
   /** The visual style of the CTA. */
   variant: CTAVariant;
   /** The image to use if the CTA is set to preset image */
@@ -39,6 +44,7 @@ const defaultButton: BasicCTAProps = {
       link: "#",
     },
   },
+  normalizeLink: true,
   variant: "primary",
   presetImage: "app-store",
 };
@@ -68,6 +74,13 @@ const ctaGroupFields: Fields<CTAGroupProps> = {
           },
         },
       }),
+      normalizeLink: YextField(msg("fields.normalizeLink", "Normalize Link"), {
+        type: "radio",
+        options: [
+          { label: msg("fields.options.yes", "Yes"), value: true },
+          { label: msg("fields.options.no", "No"), value: false },
+        ],
+      }),
       variant: YextField(msg("fields.variant", "Variant"), {
         type: "radio",
         options: "CTA_VARIANT",
@@ -81,7 +94,7 @@ const ctaGroupFields: Fields<CTAGroupProps> = {
         options: "SITE_COLOR",
       }),
     },
-    getItemSummary: (_, i) => pt("CTA", "CTA") + " " + ((i ?? 0) + 1),
+    getItemSummary: (_, i) => pt("cta", "CTA") + " " + ((i ?? 0) + 1),
   }),
 };
 
@@ -126,6 +139,7 @@ const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
               }
             >
               <CTA
+                setPadding={true}
                 label={resolvedLabel}
                 link={
                   ctaType === "getDirections"
@@ -133,6 +147,7 @@ const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
                     : resolveComponentData(cta.link, locale, streamDocument)
                 }
                 linkType={cta.linkType}
+                normalizeLink={button.normalizeLink}
                 variant={button.variant}
                 ctaType={ctaType}
                 presetImageType={button.presetImage}
@@ -150,6 +165,27 @@ const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
 export const CTAGroup: ComponentConfig<{ props: CTAGroupProps }> = {
   label: msg("components.ctaGroup", "CTA Group"),
   fields: ctaGroupFields,
+  resolveFields: (data) => {
+    const updatedFields = ctaGroupFields;
+    // show normalize link field if any of the linkTypes are normalizable (not PHONE or EMAIL)
+    const showNormalizeLinkField = !data.props.buttons?.length
+      ? true
+      : data.props.buttons.some((button) => {
+          const linkType = button.entityField.constantValueEnabled
+            ? button.entityField.constantValue?.linkType
+            : undefined;
+
+          return !isNonNormalizableLinkType(linkType);
+        });
+
+    setDeep(
+      updatedFields,
+      "buttons.arrayFields.normalizeLink.visible",
+      showNormalizeLinkField
+    );
+
+    return updatedFields;
+  },
   defaultProps: {
     buttons: [defaultButton, defaultButton],
   },

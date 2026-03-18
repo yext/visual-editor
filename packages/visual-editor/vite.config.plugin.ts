@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig, LibraryFormats } from "vite";
 import path from "node:path";
 
 export default defineConfig(() => ({
@@ -10,7 +10,7 @@ export default defineConfig(() => ({
         plugin: path.resolve(__dirname, "src/vite-plugin/index.ts"),
       },
       name: "visual-editor-vite-plugin",
-      formats: ["es", "cjs"] as ["es", "cjs"], // TypeScript fix
+      formats: ["es"] as LibraryFormats[], // typescript is unhappy without this forced type definition
     },
     target: "node18",
     tsconfig: path.resolve(__dirname, "tsconfig.plugin.json"),

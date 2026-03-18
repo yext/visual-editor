@@ -1,19 +1,19 @@
 import * as React from "react";
-import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { EntityField } from "../../editor/EntityField.tsx";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { Heading, HeadingProps } from "../atoms/heading.tsx";
+import { YextField } from "../../editor/YextField.tsx";
+import { TranslatableString } from "../../types/types.ts";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { pt, msg } from "../../utils/i18n/platform.ts";
 import {
-  useDocument,
-  EntityField,
-  YextEntityField,
-  Heading,
-  HeadingProps,
-  YextField,
-  TranslatableString,
-  resolveComponentData,
-  pt,
-  msg,
   ThemeOptions,
   HeadingLevel,
-} from "@yext/visual-editor";
+  BackgroundStyle,
+} from "../../utils/themeConfigOptions.ts";
+import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import { useTranslation } from "react-i18next";
 
 export type HeadingTextProps = {
@@ -30,6 +30,7 @@ export type HeadingTextProps = {
     align: "left" | "center" | "right";
     /** Optional override to render a different HTML tag instead of the one based on the level */
     semanticLevelOverride?: HeadingLevel | "span";
+    color?: BackgroundStyle;
   };
 
   /** @internal Controlled data from the parent section */
@@ -67,7 +68,7 @@ const HeadingTextWrapper: PuckComponent<HeadingTextProps> = (props) => {
   return resolvedHeadingText ? (
     <div className={`flex ${justifyClass}`}>
       <EntityField
-        displayName={pt("Heading", "Heading") + " " + styles.level}
+        displayName={pt("heading", "Heading") + " " + styles.level}
         fieldId={parentData ? parentData.field : data.text.field}
         constantValueEnabled={!parentData && data.text.constantValueEnabled}
       >
@@ -75,6 +76,7 @@ const HeadingTextWrapper: PuckComponent<HeadingTextProps> = (props) => {
           level={styles.level}
           className={alignClass}
           semanticLevelOverride={styles.semanticLevelOverride}
+          color={styles.color}
         >
           {resolvedHeadingText}
         </Heading>
@@ -113,6 +115,10 @@ const headingTextFields: Fields<HeadingTextProps> = {
         type: "radio",
         options: ThemeOptions.ALIGNMENT,
       }),
+      color: YextField(msg("fields.color", "Color"), {
+        type: "select",
+        options: "SITE_COLOR",
+      }),
     },
   },
 };
@@ -120,36 +126,12 @@ const headingTextFields: Fields<HeadingTextProps> = {
 export const HeadingText: ComponentConfig<{ props: HeadingTextProps }> = {
   label: msg("components.headingText", "Heading Text"),
   fields: headingTextFields,
-  resolveFields: (data) => {
-    if (data.props.parentData) {
-      return {
-        ...headingTextFields,
-        data: {
-          label: msg("fields.data", "Data"),
-          type: "object",
-          objectFields: {
-            info: {
-              type: "custom",
-              render: () => (
-                <p style={{ fontSize: "var(--puck-font-size-xxs)" }}>
-                  Data is inherited from the parent section.
-                </p>
-              ),
-            },
-          },
-        },
-      } as any;
-    }
-    return headingTextFields;
-  },
+  resolveFields: (data) => resolveDataFromParent(headingTextFields, data),
   defaultProps: {
     data: {
       text: {
         field: "",
-        constantValue: {
-          en: "Text",
-          hasLocalizedValue: "true",
-        },
+        constantValue: { defaultValue: "Text" },
         constantValueEnabled: true,
       },
     },

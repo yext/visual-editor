@@ -1,8 +1,8 @@
-import { Migration } from "../../utils/migrate";
-import { resolveYextEntityField } from "../../utils/resolveYextEntityField";
-import { ProductSectionType } from "../../types/types";
-import { YextEntityField } from "../../editor/YextEntityFieldSelector";
-import { resolveComponentData } from "../../utils/resolveComponentData";
+import { Migration } from "../../utils/migrate.ts";
+import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
+import { ProductSectionType } from "../../types/types.ts";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 
 export const productSectionSlots: Migration = {
   ProductSection: {

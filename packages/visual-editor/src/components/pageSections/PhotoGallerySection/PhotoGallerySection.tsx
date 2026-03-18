@@ -1,18 +1,25 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
+import {
+  ComponentConfig,
+  Fields,
+  PuckComponent,
+  setDeep,
+  Slot,
+} from "@puckeditor/core";
 import "pure-react-carousel/dist/react-carousel.es.css";
 import {
   backgroundColors,
   BackgroundStyle,
-  PageSection,
-  YextField,
-  VisibilityWrapper,
-  msg,
-  HeadingTextProps,
-} from "@yext/visual-editor";
+} from "../../../utils/themeConfigOptions.ts";
+import { PageSection } from "../../atoms/pageSection.tsx";
+import { YextField } from "../../../editor/YextField.tsx";
+import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 import { AssetImageType } from "../../../types/images.ts";
 import { PhotoGalleryWrapperProps } from "./PhotoGalleryWrapper.tsx";
-import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
+import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
+import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 
 // Generate 3 random placeholder images for the gallery
 export const PLACEHOLDER: AssetImageType = {
@@ -30,6 +37,18 @@ export interface PhotoGalleryStyles {
    * @defaultValue Background Color 1
    */
   backgroundColor?: BackgroundStyle;
+
+  /**
+   * The layout style for displaying images in the gallery.
+   * @defaultValue "gallery"
+   */
+  variant: "gallery" | "carousel";
+
+  /**
+   * Whether to show the section heading
+   * @defaultValue true
+   */
+  showSectionHeading: boolean;
 }
 
 export interface PhotoGallerySectionProps {
@@ -61,6 +80,23 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
         {
           type: "select",
           options: "BACKGROUND_COLOR",
+        }
+      ),
+      variant: YextField(msg("fields.variant", "Variant"), {
+        type: "select",
+        options: [
+          { label: msg("fields.options.gallery", "Gallery"), value: "gallery" },
+          {
+            label: msg("fields.options.carousel", "Carousel"),
+            value: "carousel",
+          },
+        ],
+      }),
+      showSectionHeading: YextField(
+        msg("fields.showSectionHeading", "Show Section Heading"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
         }
       ),
     },
@@ -97,7 +133,9 @@ const PhotoGallerySectionComponent: PuckComponent<PhotoGallerySectionProps> = ({
       background={styles.backgroundColor}
       className="flex flex-col gap-8"
     >
-      <slots.HeadingSlot style={{ height: "auto" }} allow={[]} />
+      {styles.showSectionHeading && (
+        <slots.HeadingSlot style={{ height: "auto" }} allow={[]} />
+      )}
       <slots.PhotoGalleryWrapper style={{ height: "auto" }} allow={[]} />
     </PageSection>
   );
@@ -114,7 +152,9 @@ export const PhotoGallerySection: ComponentConfig<{
   fields: photoGallerySectionFields,
   defaultProps: {
     styles: {
+      variant: "gallery",
       backgroundColor: backgroundColors.background1.value,
+      showSectionHeading: true,
     },
     slots: {
       HeadingSlot: [
@@ -124,10 +164,7 @@ export const PhotoGallerySection: ComponentConfig<{
             data: {
               text: {
                 field: "",
-                constantValue: {
-                  en: "Gallery",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: { defaultValue: "Gallery" },
                 constantValueEnabled: true,
               },
             },
@@ -187,6 +224,10 @@ export const PhotoGallerySection: ComponentConfig<{
               image: {
                 aspectRatio: 1.78,
               },
+              carouselImageCount: 1,
+            },
+            parentData: {
+              variant: "gallery",
             },
           } satisfies PhotoGalleryWrapperProps,
         },
@@ -194,12 +235,31 @@ export const PhotoGallerySection: ComponentConfig<{
     },
     liveVisibility: true,
   },
+  resolveData(data) {
+    if (
+      data.props.slots.PhotoGalleryWrapper[0]?.props.parentData?.variant ===
+      data.props.styles.variant
+    ) {
+      return data;
+    }
+
+    return setDeep(
+      data,
+      "props.slots.PhotoGalleryWrapper[0].props.parentData.variant",
+      data.props.styles.variant
+    );
+  },
   render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
+    <ComponentErrorBoundary
       isEditing={props.puck.isEditing}
+      resetKeys={[props]}
     >
-      <PhotoGallerySectionComponent {...props} />
-    </VisibilityWrapper>
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+      >
+        <PhotoGallerySectionComponent {...props} />
+      </VisibilityWrapper>
+    </ComponentErrorBoundary>
   ),
 };

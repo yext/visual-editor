@@ -6,14 +6,12 @@ import {
   transformTests,
 } from "../../testing/componentTests.setup.ts";
 import { render as reactRender, waitFor } from "@testing-library/react";
-import {
-  PhotoGallerySection,
-  migrate,
-  migrationRegistry,
-  VisualEditorProvider,
-  SlotsCategoryComponents,
-} from "@yext/visual-editor";
-import { Render, Config } from "@measured/puck";
+import { PhotoGallerySection } from "./PhotoGallerySection.tsx";
+import { migrate } from "../../../utils/migrate.ts";
+import { migrationRegistry } from "../../migrations/migrationRegistry.ts";
+import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
+import { SlotsCategoryComponents } from "../../categories/SlotsCategory.tsx";
+import { Render, Config } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 
 const photoGalleryData = [
@@ -169,229 +167,30 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
   },
   {
-    name: "version 0 props with entity values",
-    document: { photoGallery: photoGalleryData, name: "Test Name" },
+    name: "version 53 gallery variant with mixed locale images",
+    document: {},
     props: {
       styles: {
         backgroundColor: {
-          bgColor: "bg-palette-primary-dark",
-          textColor: "text-white",
-        },
-      },
-      sectionHeading: {
-        text: {
-          field: "name",
-          constantValue: "Gallery",
-          constantValueEnabled: false,
-          constantValueOverride: {},
-        },
-        level: 2,
-      },
-      images: {
-        images: {
-          field: "photoGallery",
-          constantValue: [
-            {
-              height: 570,
-              width: 1000,
-              url: "https://placehold.co/1000x570/png",
-            },
-            {
-              height: 570,
-              width: 1000,
-              url: "https://placehold.co/1000x570/png",
-            },
-            {
-              height: 570,
-              width: 1000,
-              url: "https://placehold.co/1000x570/png",
-            },
-          ],
-          constantValueEnabled: false,
-          constantValueOverride: {},
-        },
-        imageStyle: {
-          layout: "auto",
-          height: 570,
-          width: 1000,
-          aspectRatio: 1.25,
-        },
-      },
-      liveVisibility: true,
-    },
-    version: 0,
-  },
-  {
-    name: "version 0 props with constant value",
-    document: { photoGallery: photoGalleryData },
-    props: {
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-palette-primary-light",
+          bgColor: "bg-white",
           textColor: "text-black",
         },
-      },
-      sectionHeading: {
-        text: {
-          field: "name",
-          constantValue: "Gallery",
-          constantValueEnabled: true,
-        },
-        level: 5,
-      },
-      images: {
-        images: {
-          field: "photoGallery",
-          constantValue: [
-            {
-              height: 570,
-              width: 1000,
-              url: "https://placehold.co/1000x570/png",
-            },
-            {
-              height: 570,
-              width: 1000,
-              url: "https://placehold.co/1000x570/png",
-            },
-            {
-              height: 570,
-              width: 1000,
-              url: "https://placehold.co/1000x570/png",
-            },
-          ],
-          constantValueEnabled: true,
-        },
-        imageStyle: {
-          layout: "fixed",
-          height: 50,
-          width: 50,
-          aspectRatio: 1.25,
-        },
-      },
-      liveVisibility: true,
-    },
-    version: 0,
-  },
-  {
-    name: "version 1 props with entity values",
-    document: { photoGallery: photoGalleryData, name: "Test Name" },
-    props: {
-      data: {
-        heading: {
-          constantValue: "Gallery",
-          constantValueEnabled: false,
-          constantValueOverride: {},
-          field: "name",
-        },
-        images: {
-          constantValue: [
-            {
-              height: 570,
-              url: "https://placehold.co/1000x570/png",
-              width: 1000,
-            },
-            {
-              height: 570,
-              url: "https://placehold.co/1000x570/png",
-              width: 1000,
-            },
-            {
-              height: 570,
-              url: "https://placehold.co/1000x570/png",
-              width: 1000,
-            },
-          ],
-          constantValueEnabled: false,
-          constantValueOverride: {},
-          field: "photoGallery",
-        },
-      },
-      liveVisibility: true,
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-palette-primary-dark",
-          textColor: "text-white",
-        },
-        headingLevel: 2,
-        imageStyle: {
-          aspectRatio: 1.25,
-          height: 570,
-          layout: "auto",
-          width: 1000,
-        },
-      },
-    },
-    version: 1,
-  },
-  {
-    name: "version 1 props with constant value",
-    document: { photoGallery: photoGalleryData },
-    props: {
-      data: {
-        heading: {
-          constantValue: "Gallery",
-          constantValueEnabled: true,
-          field: "name",
-        },
-        images: {
-          constantValue: [
-            {
-              height: 570,
-              url: "https://placehold.co/1000x570/png",
-              width: 1000,
-            },
-            {
-              height: 570,
-              url: "https://placehold.co/1000x570/png",
-              width: 1000,
-            },
-            {
-              height: 570,
-              url: "https://placehold.co/1000x570/png",
-              width: 1000,
-            },
-          ],
-          constantValueEnabled: true,
-          field: "photoGallery",
-        },
-      },
-      liveVisibility: true,
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-palette-primary-light",
-          textColor: "text-black",
-        },
-        headingLevel: 5,
-        imageStyle: {
-          aspectRatio: 1.25,
-          height: 50,
-          layout: "fixed",
-          width: 50,
-        },
-      },
-    },
-    version: 1,
-  },
-  {
-    name: "version 38 props with entity values",
-    document: { photoGallery: photoGalleryData, name: "Test Name" },
-    props: {
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-palette-primary-dark",
-          textColor: "text-white",
-        },
+        variant: "gallery",
       },
       slots: {
         HeadingSlot: [
           {
             type: "HeadingTextSlot",
             props: {
+              id: "HeadingTextSlot-3c58d37f-7f1d-46ad-8938-e72ac3013b39",
               data: {
                 text: {
-                  field: "name",
-                  constantValue: "Gallery",
-                  constantValueEnabled: false,
+                  field: "",
+                  constantValue: {
+                    en: "Gallery",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
                 },
               },
               styles: {
@@ -405,51 +204,94 @@ const tests: ComponentTest[] = [
           {
             type: "PhotoGalleryWrapper",
             props: {
+              id: "PhotoGalleryWrapper-96ee4ed8-d5f7-451a-ac90-8657c4526c42",
               data: {
                 images: {
-                  field: "photoGallery",
-                  constantValue: [],
-                  constantValueEnabled: false,
+                  field: "",
+                  constantValue: [
+                    {
+                      assetImage: {
+                        en: {
+                          alternateText: "",
+                          url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
+                          height: 1,
+                          width: 1,
+                        },
+                        hasLocalizedValue: "true",
+                      },
+                    },
+                    {
+                      assetImage: {
+                        es: {
+                          alternateText: "",
+                          url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
+                          height: 1,
+                          width: 1,
+                        },
+                        hasLocalizedValue: "true",
+                      },
+                    },
+                    {
+                      assetImage: {
+                        url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
+                        width: 1000,
+                        height: 570,
+                        assetImage: {
+                          name: "Placeholder",
+                        },
+                      },
+                    },
+                  ],
+                  constantValueEnabled: true,
                 },
               },
               styles: {
                 image: {
-                  aspectRatio: 1.25,
-                  width: 1000,
+                  aspectRatio: 1.78,
                 },
+                carouselImageCount: 1,
+              },
+              parentData: {
+                variant: "gallery",
               },
             },
           },
         ],
       },
       liveVisibility: true,
+      id: "PhotoGallerySection-c8c122c3-2493-449b-a399-9f36a3372fed",
     },
-    version: 38,
+    version: 53,
   },
   {
-    name: "version 38 props with constant value",
+    name: "version 53 gallery variant with 1 image",
     document: {},
     props: {
       styles: {
         backgroundColor: {
-          bgColor: "bg-palette-primary-light",
+          bgColor: "bg-white",
           textColor: "text-black",
         },
+        variant: "gallery",
       },
       slots: {
         HeadingSlot: [
           {
             type: "HeadingTextSlot",
             props: {
+              id: "HeadingTextSlot-3c58d37f-7f1d-46ad-8938-e72ac3013b39",
               data: {
                 text: {
                   field: "",
-                  constantValue: "Gallery Slots",
+                  constantValue: {
+                    en: "Gallery",
+                    hasLocalizedValue: "true",
+                  },
                   constantValueEnabled: true,
                 },
               },
               styles: {
-                level: 5,
+                level: 2,
                 align: "left",
               },
             },
@@ -459,24 +301,21 @@ const tests: ComponentTest[] = [
           {
             type: "PhotoGalleryWrapper",
             props: {
+              id: "PhotoGalleryWrapper-96ee4ed8-d5f7-451a-ac90-8657c4526c42",
               data: {
                 images: {
-                  field: "photoGallery",
+                  field: "",
                   constantValue: [
                     {
-                      height: 570,
-                      url: "https://placehold.co/1000x570/png",
-                      width: 1000,
-                    },
-                    {
-                      height: 570,
-                      url: "https://placehold.co/1000x570/png",
-                      width: 1000,
-                    },
-                    {
-                      height: 570,
-                      url: "https://placehold.co/1000x570/png",
-                      width: 1000,
+                      assetImage: {
+                        en: {
+                          alternateText: "",
+                          url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
+                          height: 1,
+                          width: 1,
+                        },
+                        hasLocalizedValue: "true",
+                      },
                     },
                   ],
                   constantValueEnabled: true,
@@ -484,8 +323,340 @@ const tests: ComponentTest[] = [
               },
               styles: {
                 image: {
-                  aspectRatio: 1.25,
-                  width: 1000,
+                  aspectRatio: 1.78,
+                },
+                carouselImageCount: 1,
+              },
+              parentData: {
+                variant: "gallery",
+              },
+            },
+          },
+        ],
+      },
+      liveVisibility: true,
+      id: "PhotoGallerySection-c8c122c3-2493-449b-a399-9f36a3372fed",
+    },
+    version: 53,
+  },
+  {
+    name: "version 53 carousel variant with carouselImageCount 1",
+    document: {},
+    props: {
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-white",
+          textColor: "text-black",
+        },
+        variant: "carousel",
+      },
+      slots: {
+        HeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-3c58d37f-7f1d-46ad-8938-e72ac3013b39",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: "Gallery",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                level: 2,
+                align: "left",
+              },
+            },
+          },
+        ],
+        PhotoGalleryWrapper: [
+          {
+            type: "PhotoGalleryWrapper",
+            props: {
+              id: "PhotoGalleryWrapper-96ee4ed8-d5f7-451a-ac90-8657c4526c42",
+              data: {
+                images: {
+                  field: "",
+                  constantValue: [
+                    {
+                      assetImage: {
+                        en: {
+                          alternateText: "",
+                          url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
+                          height: 1,
+                          width: 1,
+                        },
+                        hasLocalizedValue: "true",
+                      },
+                    },
+                    {
+                      assetImage: {
+                        en: {
+                          alternateText: "",
+                          url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
+                          height: 1,
+                          width: 1,
+                        },
+                        hasLocalizedValue: "true",
+                      },
+                    },
+                    {
+                      assetImage: {
+                        url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
+                        width: 1000,
+                        height: 570,
+                        assetImage: {
+                          name: "Placeholder",
+                        },
+                      },
+                    },
+                  ],
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                image: {
+                  aspectRatio: 1.78,
+                },
+                carouselImageCount: 1,
+              },
+              parentData: {
+                variant: "carousel",
+              },
+            },
+          },
+        ],
+      },
+      liveVisibility: true,
+      id: "PhotoGallerySection-c8c122c3-2493-449b-a399-9f36a3372fed",
+    },
+    version: 53,
+  },
+  {
+    name: "version 53 carousel variant with carouselImageCount 2",
+    document: {},
+    props: {
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-white",
+          textColor: "text-black",
+        },
+        variant: "carousel",
+      },
+      slots: {
+        HeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-3c58d37f-7f1d-46ad-8938-e72ac3013b39",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: "Gallery",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                level: 2,
+                align: "left",
+              },
+            },
+          },
+        ],
+        PhotoGalleryWrapper: [
+          {
+            type: "PhotoGalleryWrapper",
+            props: {
+              id: "PhotoGalleryWrapper-96ee4ed8-d5f7-451a-ac90-8657c4526c42",
+              data: {
+                images: {
+                  field: "",
+                  constantValue: [
+                    {
+                      assetImage: {
+                        en: {
+                          alternateText: "",
+                          url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
+                          height: 1,
+                          width: 1,
+                        },
+                        hasLocalizedValue: "true",
+                      },
+                    },
+                    {
+                      assetImage: {
+                        en: {
+                          alternateText: "",
+                          url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
+                          height: 1,
+                          width: 1,
+                        },
+                        hasLocalizedValue: "true",
+                      },
+                    },
+                    {
+                      assetImage: {
+                        url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
+                        width: 1000,
+                        height: 570,
+                        assetImage: {
+                          name: "Placeholder",
+                        },
+                      },
+                    },
+                  ],
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                image: {
+                  aspectRatio: 1.78,
+                },
+                carouselImageCount: 2,
+              },
+              parentData: {
+                variant: "carousel",
+              },
+            },
+          },
+        ],
+      },
+      liveVisibility: true,
+      id: "PhotoGallerySection-c8c122c3-2493-449b-a399-9f36a3372fed",
+    },
+    version: 53,
+  },
+  {
+    name: "version 53 carousel variant with carouselImageCount 3",
+    document: {},
+    props: {
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-white",
+          textColor: "text-black",
+        },
+        variant: "carousel",
+      },
+      slots: {
+        HeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-3c58d37f-7f1d-46ad-8938-e72ac3013b39",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: "Gallery",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                level: 2,
+                align: "left",
+              },
+            },
+          },
+        ],
+        PhotoGalleryWrapper: [
+          {
+            type: "PhotoGalleryWrapper",
+            props: {
+              id: "PhotoGalleryWrapper-96ee4ed8-d5f7-451a-ac90-8657c4526c42",
+              data: {
+                images: {
+                  field: "",
+                  constantValue: [
+                    {
+                      assetImage: {
+                        en: {
+                          alternateText: "",
+                          url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
+                          height: 1,
+                          width: 1,
+                        },
+                        hasLocalizedValue: "true",
+                      },
+                    },
+                    {
+                      assetImage: {
+                        en: {
+                          alternateText: "",
+                          url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
+                          height: 1,
+                          width: 1,
+                        },
+                        hasLocalizedValue: "true",
+                      },
+                    },
+                    {
+                      assetImage: {
+                        url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
+                        width: 1000,
+                        height: 570,
+                        assetImage: {
+                          name: "Placeholder",
+                        },
+                      },
+                    },
+                  ],
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                image: {
+                  aspectRatio: 1.78,
+                },
+                carouselImageCount: 3,
+              },
+              parentData: {
+                variant: "carousel",
+              },
+            },
+          },
+        ],
+      },
+      liveVisibility: true,
+      id: "PhotoGallerySection-c8c122c3-2493-449b-a399-9f36a3372fed",
+    },
+    version: 53,
+  },
+  {
+    name: "version 59 with showSectionHeading false",
+    document: {},
+    props: {
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-white",
+          textColor: "text-black",
+        },
+        variant: "gallery",
+        showSectionHeading: false,
+      },
+      slots: {
+        PhotoGalleryWrapper: [
+          {
+            type: "PhotoGalleryWrapper",
+            props: {
+              data: {
+                images: {
+                  field: "",
+                  constantValue: photoGalleryData,
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                image: {
+                  aspectRatio: 1.78,
                 },
               },
             },
@@ -494,7 +665,7 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 38,
+    version: 59,
   },
 ];
 
@@ -546,8 +717,16 @@ describe("PhotoGallerySection", async () => {
       await page.viewport(width, height);
       const images = Array.from(container.querySelectorAll("img"));
       await waitFor(() => {
-        // The gallery only loads the first image
-        expect(images[0].complete).toBe(true);
+        if (data.content[0].props.styles?.variant === "gallery") {
+          expect(images.every((i) => i.complete)).toBe(true);
+        } else {
+          const imagesPerSlide =
+            data.content[0].props.slots?.PhotoGalleryWrapper[0].props.styles
+              ?.carouselImageCount ?? 1;
+          expect(images.slice(0, imagesPerSlide).every((i) => i.complete)).toBe(
+            true
+          );
+        }
       });
 
       await expect(

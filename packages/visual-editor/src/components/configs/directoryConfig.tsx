@@ -1,25 +1,27 @@
-import { Config, DropZone } from "@measured/puck";
+import { Config, DropZone } from "@puckeditor/core";
 import {
   DeprecatedCategory,
   DeprecatedCategoryComponents,
   type DeprecatedCategoryProps,
-} from "../categories/DeprecatedCategory";
+} from "../categories/DeprecatedCategory.tsx";
 import {
   DirectoryCategory,
   DirectoryCategoryComponents,
   type DirectoryCategoryProps,
-} from "../categories/DirectoryCategory";
+} from "../categories/DirectoryCategory.tsx";
 import {
   OtherCategory,
   OtherCategoryComponents,
   type OtherCategoryProps,
-} from "../categories/OtherCategory";
-import { BannerSection, BannerSectionProps } from "../pageSections/Banner";
+} from "../categories/OtherCategory.tsx";
+import { BannerSection, BannerSectionProps } from "../pageSections/Banner.tsx";
 import {
   SlotsCategory,
   SlotsCategoryComponents,
   SlotsCategoryProps,
-} from "../categories/SlotsCategory";
+} from "../categories/SlotsCategory.tsx";
+import { resolveDirectoryRootProps } from "../../utils/getPageMetadata.ts";
+import { pt } from "../../utils/i18n/platform.ts";
 
 export interface DirectoryConfigProps
   extends DirectoryCategoryProps,
@@ -40,7 +42,7 @@ export const directoryConfig: Config<DirectoryConfigProps> = {
   },
   categories: {
     pageSections: {
-      title: "Page Sections",
+      title: pt("categories.standardSections", "Standard Sections"),
       components: [...DirectoryCategory, "BannerSection"],
     },
     slots: {
@@ -58,6 +60,15 @@ export const directoryConfig: Config<DirectoryConfigProps> = {
   },
 
   root: {
+    resolveData: (data, params) => {
+      return {
+        ...data,
+        props: resolveDirectoryRootProps(
+          data.props ?? {},
+          params.metadata?.streamDocument ?? {}
+        ),
+      };
+    },
     render: () => {
       return (
         <DropZone

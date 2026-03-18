@@ -4,34 +4,38 @@ import {
   Fields,
   setDeep,
   Slot,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import { AnalyticsScopeProvider, ImageType } from "@yext/pages-components";
 import {
   backgroundColors,
   BackgroundStyle,
-  YextField,
-  VisibilityWrapper,
-  msg,
-  getAnalyticsScopeHash,
-  YextEntityField,
-  AssetImageType,
-  themeManagerCn,
-  CTAVariant,
   HeadingLevel,
-  HeadingTextProps,
-  HoursStatusProps,
-  ImageWrapperProps,
-  CTAWrapperProps,
-  resolveComponentData,
-} from "@yext/visual-editor";
+  ThemeOptions,
+} from "../../utils/themeConfigOptions.ts";
+import { YextField } from "../../editor/YextField.tsx";
+import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
+import { msg } from "../../utils/i18n/platform.ts";
+import { getAnalyticsScopeHash } from "../../utils/applyAnalytics.ts";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { themeManagerCn } from "../../utils/cn.ts";
+import { CTAVariant } from "../atoms/cta.tsx";
+import { HeadingTextProps } from "../contentBlocks/HeadingText.tsx";
+import { HoursStatusProps } from "../contentBlocks/HoursStatus.tsx";
+import { ImageWrapperProps } from "../contentBlocks/image/Image.tsx";
+import { CTAWrapperProps } from "../contentBlocks/CtaWrapper.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { TranslatableAssetImage, AssetImageType } from "../../types/images.ts";
 import { ClassicHero } from "./heroVariants/ClassicHero.js";
 import { CompactHero } from "./heroVariants/CompactHero.js";
 import { SpotlightHero } from "./heroVariants/SpotlightHero.js";
 import { ImmersiveHero } from "./heroVariants/ImmersiveHero.js";
-import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders";
+import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders.ts";
+import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 
 export interface HeroData {
-  backgroundImage: YextEntityField<ImageType | AssetImageType>;
+  backgroundImage: YextEntityField<
+    ImageType | AssetImageType | TranslatableAssetImage
+  >;
 }
 
 export interface HeroStyles {
@@ -49,21 +53,9 @@ export interface HeroStyles {
   backgroundColor?: BackgroundStyle;
 
   /**
-   * If 'true', displays the entity's average review rating.
-   * @defaultValue true
-   */
-  showAverageReview: boolean;
-
-  /**
-   * Whether to show the hero image (classic and compact variant).
-   * @defaultValue true
-   */
-  showImage: boolean;
-
-  /**
    * Image Height for the hero image with Immersive or Spotlight variant
    * Minimum height: content height + Page Section Top/Bottom Padding
-   * @default 500px
+   * @defaultValue 500px
    */
   imageHeight?: number;
 
@@ -90,6 +82,48 @@ export interface HeroStyles {
    * @defaultValue top
    */
   mobileImagePosition: "bottom" | "top";
+
+  /**
+   * Whether to show the business name.
+   * @defaultValue true
+   */
+  showBusinessName: boolean;
+
+  /**
+   * Whether to show the geomodifier.
+   * @defaultValue true
+   */
+  showGeomodifier: boolean;
+
+  /**
+   * Whether to show the hours status.
+   * @defaultValue true
+   */
+  showHoursStatus: boolean;
+
+  /**
+   * If 'true', displays the entity's average review rating.
+   * @defaultValue true
+   */
+  showAverageReview: boolean;
+
+  /**
+   * Whether to show the primary CTA.
+   * @defaultValue true
+   */
+  showPrimaryCTA: boolean;
+
+  /**
+   * Whether to show the secondary CTA.
+   * @defaultValue true
+   */
+  showSecondaryCTA: boolean;
+
+  /**
+   * Whether to show the hero image (classic and compact variant).
+   * @defaultValue true
+   */
+  showImage: boolean;
 }
 
 export interface HeroSectionProps {
@@ -182,29 +216,6 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      showAverageReview: YextField(
-        msg("fields.showAverageReview", "Show Average Review"),
-        {
-          type: "radio",
-          options: [
-            { label: msg("fields.options.show", "Show"), value: true },
-            { label: msg("fields.options.hide", "Hide"), value: false },
-          ],
-        }
-      ),
-      showImage: YextField(msg("fields.showImage", "Show Image"), {
-        type: "radio",
-        options: [
-          {
-            label: msg("fields.options.true", "True"),
-            value: true,
-          },
-          {
-            label: msg("fields.options.false", "False"),
-            value: false,
-          },
-        ],
-      }),
       imageHeight: YextField(msg("fields.imageHeight", "Image Height"), {
         type: "number",
         min: 0,
@@ -273,18 +284,55 @@ const heroSectionFields: Fields<HeroSectionProps> = {
         msg("fields.mobileImagePosition", "Mobile Image Position"),
         {
           type: "radio",
-          options: [
-            {
-              label: msg("fields.options.top", "Top"),
-              value: "top",
-            },
-            {
-              label: msg("fields.options.bottom", "Bottom"),
-              value: "bottom",
-            },
-          ],
+          options: ThemeOptions.VERTICAL_POSITION,
         }
       ),
+      showBusinessName: YextField(
+        msg("fields.showBusinessName", "Show Business Name"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
+        }
+      ),
+      showGeomodifier: YextField(
+        msg("fields.showGeomodifier", "Show Geomodifier"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
+        }
+      ),
+      showHoursStatus: YextField(
+        msg("fields.showHoursStatus", "Show Hours Status"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
+        }
+      ),
+      showAverageReview: YextField(
+        msg("fields.showAverageReview", "Show Average Review"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
+        }
+      ),
+      showPrimaryCTA: YextField(
+        msg("fields.showPrimaryCTA", "Show Primary CTA"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
+        }
+      ),
+      showSecondaryCTA: YextField(
+        msg("fields.showSecondaryCTA", "Show Secondary CTA"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
+        }
+      ),
+      showImage: YextField(msg("fields.showImage", "Show Image"), {
+        type: "radio",
+        options: "SHOW_HIDE",
+      }),
     },
   }),
   slots: {
@@ -338,13 +386,18 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
     styles: {
       variant: "classic",
       backgroundColor: backgroundColors.background1.value,
-      showAverageReview: true,
-      showImage: true,
       imageHeight: 500,
       desktopImagePosition: "right",
       desktopContainerPosition: "left",
       mobileContentAlignment: "left",
       mobileImagePosition: "bottom",
+      showBusinessName: true,
+      showGeomodifier: true,
+      showHoursStatus: true,
+      showAverageReview: true,
+      showPrimaryCTA: true,
+      showSecondaryCTA: true,
+      showImage: true,
     },
     slots: {
       BusinessNameSlot: [
@@ -353,10 +406,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "Business Name",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: { defaultValue: "Business Name" },
                 constantValueEnabled: true,
                 field: "",
               },
@@ -371,10 +421,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "Geomodifier",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: { defaultValue: "Geomodifier" },
                 constantValueEnabled: true,
                 field: "",
               },
@@ -431,14 +478,14 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           type: "CTASlot",
           props: {
             data: {
+              actionType: "link",
+              normalizeLink: true,
+              buttonText: { defaultValue: "Button" },
               entityField: {
                 field: "",
                 constantValue: {
-                  label: {
-                    en: "Call To Action",
-                    hasLocalizedValue: "true",
-                  },
-                  link: "#",
+                  label: { defaultValue: "Call To Action" },
+                  link: { defaultValue: "#" },
                   linkType: "URL",
                   ctaType: "textAndLink",
                 },
@@ -457,14 +504,14 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           type: "CTASlot",
           props: {
             data: {
+              actionType: "link",
+              normalizeLink: true,
+              buttonText: { defaultValue: "Button" },
               entityField: {
                 field: "",
                 constantValue: {
-                  label: {
-                    en: "Learn More",
-                    hasLocalizedValue: "true",
-                  },
-                  link: "#",
+                  label: { defaultValue: "Learn More" },
+                  link: { defaultValue: "#" },
                   linkType: "URL",
                   ctaType: "textAndLink",
                 },
@@ -532,7 +579,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           data,
           "props.slots.ImageSlot[0].props.className",
           themeManagerCn(
-            "w-full sm:w-fit h-full",
+            "w-full h-full",
             data.props.styles.desktopImagePosition === "left"
               ? "mr-auto"
               : "ml-auto"
@@ -640,16 +687,21 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
     }
 
     return (
-      <AnalyticsScopeProvider
-        name={`${props.analytics?.scope ?? "heroSection"}${getAnalyticsScopeHash(props.id)}`}
+      <ComponentErrorBoundary
+        isEditing={props.puck.isEditing}
+        resetKeys={[props]}
       >
-        <VisibilityWrapper
-          liveVisibility={!!props.liveVisibility}
-          isEditing={props.puck.isEditing}
+        <AnalyticsScopeProvider
+          name={`${props.analytics?.scope ?? "heroSection"}${getAnalyticsScopeHash(props.id)}`}
         >
-          {HeroVariant}
-        </VisibilityWrapper>
-      </AnalyticsScopeProvider>
+          <VisibilityWrapper
+            liveVisibility={!!props.liveVisibility}
+            isEditing={props.puck.isEditing}
+          >
+            {HeroVariant}
+          </VisibilityWrapper>
+        </AnalyticsScopeProvider>
+      </ComponentErrorBoundary>
     );
   },
 };
@@ -661,12 +713,16 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
  */
 export const updateFields = <T extends DefaultComponentProps>(
   obj: Record<string, any>,
-  paths: string[],
+  paths: (string | undefined)[],
   value: any
 ): Fields<T> => {
   const newObj = { ...obj };
 
   for (const path of paths) {
+    if (!path) {
+      continue;
+    }
+
     const keys = path.split(".");
     let current = newObj;
 
