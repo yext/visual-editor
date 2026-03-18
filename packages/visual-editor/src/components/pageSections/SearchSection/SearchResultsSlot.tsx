@@ -286,7 +286,9 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
                       runSearch(nextVertical, committedSearchTerm);
                   }}
                   className={`px-5 pt-1.5 pb-3 tracking-[1.1px] mb-0 hover:cursor-pointer ${
-                    isActive ? "border-b-2 border-black" : ""
+                    isActive
+                      ? "border-b-2 text-palette-primary-dark border-palette-primary-dark"
+                      : ""
                   }`}
                 >
                   {item.label}
