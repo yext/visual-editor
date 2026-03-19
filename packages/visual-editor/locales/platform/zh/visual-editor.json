@@ -290,8 +290,8 @@
     "mobileContentAlignment": "移动内容对齐",
     "mobileImagePosition": "移动图像位置",
     "mobileMediaPosition": "移动媒体定位",
-    "normalizeLink": "规范化链接",
     "none": "没有任何",
+    "normalizeLink": "规范化链接",
     "openInNewTab": "在新选项卡中打开",
     "options": {
       "address": "地址",

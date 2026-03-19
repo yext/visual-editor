@@ -290,8 +290,8 @@
     "mobileContentAlignment": "Mobiilisisällön kohdistus",
     "mobileImagePosition": "Mobiili kuvan sijainti",
     "mobileMediaPosition": "Mobiilimedian asema",
-    "normalizeLink": "Normalisoi linkki",
     "none": "Ei mitään",
+    "normalizeLink": "Normalisoi linkki",
     "openInNewTab": "Avaa uudessa välilehdessä",
     "options": {
       "address": "Osoite",

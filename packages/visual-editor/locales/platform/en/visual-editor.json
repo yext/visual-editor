@@ -290,8 +290,8 @@
     "mobileContentAlignment": "Mobile Content Alignment",
     "mobileImagePosition": "Mobile Image Position",
     "mobileMediaPosition": "Mobile Media Position",
-    "normalizeLink": "Normalize Link",
     "none": "None",
+    "normalizeLink": "Normalize Link",
     "openInNewTab": "Open in new tab",
     "options": {
       "address": "Address",
