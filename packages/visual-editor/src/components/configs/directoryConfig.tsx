@@ -24,8 +24,7 @@ import { resolveDirectoryRootProps } from "../../utils/getPageMetadata.ts";
 import { pt } from "../../utils/i18n/platform.ts";
 
 export interface DirectoryConfigProps
-  extends
-    DirectoryCategoryProps,
+  extends DirectoryCategoryProps,
     SlotsCategoryProps,
     DeprecatedCategoryProps,
     OtherCategoryProps {
