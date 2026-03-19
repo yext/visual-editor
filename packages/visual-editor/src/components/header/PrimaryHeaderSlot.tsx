@@ -424,6 +424,7 @@ export const defaultPrimaryHeaderProps: PrimaryHeaderSlotProps = {
           data: {
             show: true,
             actionType: "link",
+            normalizeLink: true,
             buttonText: { defaultValue: "Button" },
             entityField: {
               field: "",
@@ -451,6 +452,7 @@ export const defaultPrimaryHeaderProps: PrimaryHeaderSlotProps = {
           data: {
             show: true,
             actionType: "link",
+            normalizeLink: true,
             buttonText: { defaultValue: "Button" },
             entityField: {
               field: "",

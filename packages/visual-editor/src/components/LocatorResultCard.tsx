@@ -136,8 +136,21 @@ export interface LocatorResultCardProps {
 
   /** Settings for the address block */
   address: {
+    /**
+     * Whether to include the region in the Address
+     * @defaultValue true
+     */
+    showRegion?: boolean;
+
+    /**
+     * Whether to include the country in the Address
+     * @defaultValue false
+     */
+    showCountry?: boolean;
+
     /** Whether to show the "Get Directions" link */
     showGetDirectionsLink: boolean;
+
     /** Whether the address block is visible in live mode */
     liveVisibility: boolean;
   };
@@ -185,6 +198,8 @@ export interface LocatorResultCardProps {
   primaryCTA: {
     /** Label for the primary CTA */
     label: TranslatableString;
+    /** Whether the primary CTA link should be normalized before rendering */
+    normalizeLink: boolean;
     /** The variant for the primary CTA */
     variant: CTAVariant;
     /** Whether the primary CTA is visible in live mode */
@@ -199,6 +214,8 @@ export interface LocatorResultCardProps {
     label: TranslatableString;
     /** Template for the secondary CTA link, which can contain entity field references */
     link: TranslatableString;
+    /** Whether the secondary CTA link should be normalized before rendering */
+    normalizeLink: boolean;
     /** The variant for the secondary CTA */
     variant: CTAVariant;
     /** Whether the secondary CTA is visible in live mode */
@@ -256,6 +273,8 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
     liveVisibility: true,
   },
   address: {
+    showRegion: true,
+    showCountry: false,
     showGetDirectionsLink: true,
     liveVisibility: true,
   },
@@ -275,12 +294,14 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
   },
   primaryCTA: {
     label: "Visit Page",
+    normalizeLink: true,
     variant: "primary",
     liveVisibility: true,
   },
   secondaryCTA: {
     label: "Call to Action",
     link: "#",
+    normalizeLink: true,
     variant: "secondary",
     liveVisibility: false,
   },
@@ -505,6 +526,20 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.address", "Address"),
       type: "object",
       objectFields: {
+        showRegion: YextField(msg("fields.showRegion", "Show Region"), {
+          type: "radio",
+          options: [
+            { label: msg("fields.options.yes", "Yes"), value: true },
+            { label: msg("fields.options.no", "No"), value: false },
+          ],
+        }),
+        showCountry: YextField(msg("fields.showCountry", "Show Country"), {
+          type: "radio",
+          options: [
+            { label: msg("fields.options.yes", "Yes"), value: true },
+            { label: msg("fields.options.no", "No"), value: false },
+          ],
+        }),
         showGetDirectionsLink: YextField(
           msg("fields.showGetDirectionsLink", "Show Get Directions Link"),
           {
@@ -654,6 +689,16 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
           true,
           () => getDisplayFieldOptions("type.string")
         ),
+        normalizeLink: YextField(
+          msg("fields.normalizeLink", "Normalize Link"),
+          {
+            type: "radio",
+            options: [
+              { label: msg("fields.options.yes", "Yes"), value: true },
+              { label: msg("fields.options.no", "No"), value: false },
+            ],
+          }
+        ),
       },
     },
     secondaryCTA: {
@@ -673,6 +718,16 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
           false,
           true,
           () => getDisplayFieldOptions("type.string")
+        ),
+        normalizeLink: YextField(
+          msg("fields.normalizeLink", "Normalize Link"),
+          {
+            type: "radio",
+            options: [
+              { label: msg("fields.options.yes", "Yes"), value: true },
+              { label: msg("fields.options.no", "No"), value: false },
+            ],
+          }
         ),
         variant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
           type: "radio",
@@ -867,7 +922,11 @@ export const LocatorResultCard = React.memo(
                     )}
                     <div className="flex flex-col gap-1 w-full">
                       <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize gap-4">
-                        <Address address={location.address} />
+                        <Address
+                          address={location.address}
+                          showRegion={props.address.showRegion}
+                          showCountry={props.address.showCountry}
+                        />
                       </div>
                       {getDirectionsLink &&
                         props.address.showGetDirectionsLink && (
@@ -933,6 +992,7 @@ export const LocatorResultCard = React.memo(
                   ) || t("callToAction", "Call to Action")
                 }
                 variant={props.secondaryCTA.variant}
+                normalizeLink={props.secondaryCTA.normalizeLink}
                 onClick={handleSecondaryCTAClick}
                 className="basis-full sm:w-auto justify-center"
               />
@@ -987,6 +1047,7 @@ const PrimaryCTA = (props: {
           ) || t("visitPage", "Visit Page")
         }
         variant={primaryCTA.variant}
+        normalizeLink={primaryCTA.normalizeLink}
         onClick={handlePrimaryCtaClick}
         className="basis-full sm:w-auto justify-center"
       />
@@ -1220,6 +1281,7 @@ const EmailSection = (props: {
           link={emailAddresses[0]}
           label={emailAddresses[0]}
           linkType="EMAIL"
+          normalizeLink={false}
           variant="link"
         />
       </div>

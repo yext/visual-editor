@@ -749,6 +749,11 @@ interface BreadcrumbsData {
    * @defaultValue "Directory Root"
    */
   directoryRoot: TranslatableString;
+  /**
+   * The display label for the last link in the breadcrumb trail (the current page).
+   * @defaultValue Name
+   */
+  currentPage?: YextEntityField<TranslatableString>;
 }
 
 interface BreadcrumbsStyles {
@@ -757,6 +762,11 @@ interface BreadcrumbsStyles {
    * @defaultValue Background Color 1
    */
   backgroundColor?: BackgroundStyle;
+  /**
+   * Whether to show the current page's link in the breadcrumb trail (last link).
+   * @defaultValue true
+   */
+  showCurrentPage?: boolean;
 }
 
 interface CoreInfoStyles {
@@ -1081,8 +1091,7 @@ interface StaticMapStyles {
 }
 
 interface PageSectionProps
-  extends
-    VariantProps<typeof maxWidthVariants>,
+  extends VariantProps<typeof maxWidthVariants>,
     React.HTMLAttributes<HTMLDivElement> {
   background?: BackgroundStyle;
   verticalPadding?: VariantProps<typeof pageSectionVariants>["verticalPadding"];
@@ -1222,6 +1231,8 @@ type TranslatableCTA = Omit<CTA$1, "label" | "link"> & {
   label: TranslatableString;
   /** The link the for the CTA */
   link: TranslatableString;
+  /** Whether the link should be normalized before rendering */
+  normalizeLink?: boolean;
   openInNewTab?: boolean;
 };
 
