@@ -11,7 +11,7 @@ import {
   TagType,
   TransformProps,
 } from "@yext/pages";
-import { Render, resolveAllData } from "@puckeditor/core";
+import { Config, Render, resolveAllData } from "@puckeditor/core";
 import {
   applyTheme,
   VisualEditorProvider,
@@ -26,6 +26,8 @@ import {
   resolveUrlTemplate,
 } from "@yext/visual-editor";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
+
+const baseConfig: Config = {};
 
 export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
   data: TemplateRenderProps
@@ -104,7 +106,7 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
 
   const resolvedPuckData = await resolveAllData(
     JSON.parse(document.__.layout),
-    TEMPLATE_CONFIG,
+    baseConfig,
     {
       streamDocument: document,
     }
@@ -116,7 +118,7 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
   return { ...props, document, translations };
 };
 
-const Location: Template<TemplateRenderProps> = (props) => {
+const Base: Template<TemplateRenderProps> = (props) => {
   const { document } = props;
 
   const layoutString = document.__.layout;
@@ -147,7 +149,7 @@ const Location: Template<TemplateRenderProps> = (props) => {
     >
       <VisualEditorProvider templateProps={props}>
         <Render
-          config={TEMPLATE_CONFIG}
+          config={baseConfig}
           data={data}
           metadata={{ streamDocument: document }}
         />
@@ -156,4 +158,4 @@ const Location: Template<TemplateRenderProps> = (props) => {
   );
 };
 
-export default Location;
+export default Base;

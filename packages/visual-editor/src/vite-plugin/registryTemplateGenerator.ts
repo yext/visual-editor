@@ -1,3 +1,11 @@
+/**
+ * Registry template generation overview:
+ * 1. Discover template directories under `src/registry` and find component overrides.
+ * 2. Generate one `config.tsx` file per registry template from the discovered components.
+ * 3. Generate `src/templates/<template>.tsx` only for templates that have component overrides.
+ * 4. Update `src/templates/edit.tsx` so the editor can resolve generated template configs.
+ * 5. Merge `defaultLayout.json` into `.template-manifest.json` for each registry template.
+ */
 import path from "node:path";
 import fs from "fs-extra";
 
@@ -32,6 +40,7 @@ type CollectedItem = {
 const VALID_EXTENSIONS = new Set([".tsx", ".ts", ".jsx", ".js"]);
 const PRESERVED_EDIT_REGISTRY_KEYS = new Set(["directory", "locator"]);
 
+/** Convert a filename or path fragment into PascalCase for generated identifiers. */
 const toPascalCase = (value: string): string => {
   return value
     .replace(/\.[^/.]+$/, "")
@@ -43,6 +52,7 @@ const toPascalCase = (value: string): string => {
     .join("");
 };
 
+/** Convert a filename or path fragment into camelCase for local variable names. */
 const toCamelCase = (value: string): string => {
   const pascalValue = toPascalCase(value);
   if (!pascalValue) {
@@ -52,6 +62,7 @@ const toCamelCase = (value: string): string => {
   return pascalValue[0].toLowerCase() + pascalValue.slice(1);
 };
 
+/** Guard against empty derived identifiers so generation fails loudly and early. */
 const requireNonEmpty = (value: string, errorMessage: string): string => {
   if (!value) {
     throw new Error(errorMessage);
@@ -60,10 +71,12 @@ const requireNonEmpty = (value: string, errorMessage: string): string => {
   return value;
 };
 
+/** Normalize paths to POSIX separators so generated imports are portable. */
 const toPosixPath = (value: string): string => {
   return value.split(path.sep).join(path.posix.sep);
 };
 
+/** Build the registry, config, template, and layout paths for a template name. */
 const getTemplatePaths = (
   rootDir: string,
   templateName: string
@@ -79,6 +92,7 @@ const getTemplatePaths = (
   };
 };
 
+/** Recursively collect source files from a component directory. */
 const walkDirectory = (directory: string): string[] => {
   if (!fs.existsSync(directory)) {
     return [];
@@ -100,6 +114,7 @@ const walkDirectory = (directory: string): string[] => {
     .sort((a, b) => a.localeCompare(b));
 };
 
+/** List all registry template directory names under `src/registry`. */
 const getTemplateNames = (rootDir: string): string[] => {
   const registryDir = path.join(rootDir, "src", "registry");
   if (!fs.existsSync(registryDir)) {
@@ -113,6 +128,7 @@ const getTemplateNames = (rootDir: string): string[] => {
     .sort((a, b) => a.localeCompare(b));
 };
 
+/** Determine whether a template should get a generated template file override. */
 const hasTemplateComponentOverride = (
   rootDir: string,
   templateName: string
@@ -122,6 +138,7 @@ const hasTemplateComponentOverride = (
   );
 };
 
+/** Collect and uniquely name all generated component imports for one template. */
 const collectTemplateComponents = (
   rootDir: string,
   templateName: string
@@ -175,6 +192,7 @@ const collectTemplateComponents = (
   );
 };
 
+/** Build the exported config symbol name for a generated registry config file. */
 const getTemplateConfigExportName = (templateName: string): string => {
   return `${requireNonEmpty(
     toPascalCase(templateName),
@@ -182,6 +200,7 @@ const getTemplateConfigExportName = (templateName: string): string => {
   )}Config`;
 };
 
+/** Build the local identifier used when a generated config is imported into `edit.tsx`. */
 const getEditConfigIdentifier = (templateName: string): string => {
   return `${requireNonEmpty(
     toCamelCase(templateName),
@@ -189,6 +208,7 @@ const getEditConfigIdentifier = (templateName: string): string => {
   )}Config`;
 };
 
+/** Render a string-to-identifier map into TypeScript object literal source. */
 const renderIdentifierMap = (value: Record<string, string>): string => {
   return [
     "{",
@@ -199,6 +219,7 @@ const renderIdentifierMap = (value: Record<string, string>): string => {
   ].join("\n");
 };
 
+/** Build the full `config.tsx` source for one registry template. */
 const buildConfigSource = (
   rootDir: string,
   items: CollectedItem[],
@@ -262,6 +283,7 @@ const buildConfigSource = (
     .join("\n");
 };
 
+/** Render a template file by adapting the shared base template to one registry config. */
 const buildTemplateSource = (
   baseSource: string,
   templateName: string,
@@ -273,40 +295,71 @@ const buildTemplateSource = (
     `Could not derive a template component name from ${templateName}`
   );
 
-  if (!baseSource.includes("TEMPLATE_CONFIG")) {
-    throw new Error(
-      "Could not find TEMPLATE_CONFIG placeholder in generated base template"
-    );
-  }
-
-  let renderedSource = baseSource.replace(
-    /\bTEMPLATE_CONFIG\b/g,
-    configExportName
-  );
   const importAnchor =
     'import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";';
-  if (!renderedSource.includes(importAnchor)) {
+  if (!baseSource.includes(importAnchor)) {
     throw new Error(
       "Could not find config import anchor in generated base template"
     );
   }
 
-  renderedSource = renderedSource.replace(
+  let renderedSource = baseSource.replace(
     importAnchor,
     `${importAnchor}\nimport { ${configExportName} } from "${configImportPath}";`
   );
-  renderedSource = renderedSource.replace(
-    /const\s+Location\s*:/,
-    `const ${templateComponentName}:`
-  );
-  renderedSource = renderedSource.replace(
-    /export default Location;/,
-    `export default ${templateComponentName};`
-  );
+
+  if (renderedSource.includes("TEMPLATE_CONFIG")) {
+    renderedSource = renderedSource.replace(
+      /\bTEMPLATE_CONFIG\b/g,
+      configExportName
+    );
+  } else if (renderedSource.includes("baseConfig")) {
+    renderedSource = renderedSource.replace(
+      'import { Config, Render, resolveAllData } from "@puckeditor/core";',
+      'import { Render, resolveAllData } from "@puckeditor/core";'
+    );
+    renderedSource = renderedSource.replace(
+      /\nconst baseConfig: Config = \{\};\n/,
+      "\n"
+    );
+    renderedSource = renderedSource.replace(
+      /\bbaseConfig\b/g,
+      configExportName
+    );
+  } else {
+    throw new Error(
+      "Could not find TEMPLATE_CONFIG or baseConfig in generated base template"
+    );
+  }
+
+  if (renderedSource.includes("const Location:")) {
+    renderedSource = renderedSource.replace(
+      /const\s+Location\s*:/,
+      `const ${templateComponentName}:`
+    );
+    renderedSource = renderedSource.replace(
+      /export default Location;/,
+      `export default ${templateComponentName};`
+    );
+  } else if (renderedSource.includes("const Base:")) {
+    renderedSource = renderedSource.replace(
+      /const\s+Base\s*:/,
+      `const ${templateComponentName}:`
+    );
+    renderedSource = renderedSource.replace(
+      /export default Base;/,
+      `export default ${templateComponentName};`
+    );
+  } else {
+    throw new Error(
+      "Could not find template component placeholder in generated base template"
+    );
+  }
 
   return renderedSource;
 };
 
+/** Patch `src/templates/edit.tsx` so the editor knows about generated template configs. */
 const updateEditTemplate = (
   rootDir: string,
   templateNames: string[],
@@ -389,6 +442,7 @@ const updateEditTemplate = (
   fs.writeFileSync(editTemplatePath, editSource);
 };
 
+/** Merge registry `defaultLayout.json` files into `.template-manifest.json`. */
 const updateTemplateManifest = (
   rootDir: string,
   templateNames: string[]
@@ -443,6 +497,7 @@ const updateTemplateManifest = (
   }
 };
 
+/** Generate config files, optional template overrides, manifest entries, and edit wiring. */
 export const generateRegistryTemplateFiles = ({
   rootDir,
   generatedBaseTemplateSource,
