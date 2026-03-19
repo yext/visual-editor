@@ -1,3 +1,35 @@
+#### 1.1.0-alpha.6 (2026-03-12)
+
+##### Chores
+
+- expose image style prop ([#1081](https://github.com/yext/visual-editor/pull/1081)) ([4ec56ff8](https://github.com/yext/visual-editor/commit/4ec56ff8d74f39ebacca973e5557284d6a17f150))
+- upgrade vite ([#1080](https://github.com/yext/visual-editor/pull/1080)) ([2ba60210](https://github.com/yext/visual-editor/commit/2ba6021074136cc8690184ea026a7a6a39016187))
+
+##### New Features
+
+- show hide address data ([#1079](https://github.com/yext/visual-editor/pull/1079)) ([2d716027](https://github.com/yext/visual-editor/commit/2d716027373e6499af7fde10920bdc7545b0eb35))
+- allow static primary CTA url templates in locator result cards ([#1072](https://github.com/yext/visual-editor/pull/1072)) ([0ace80a0](https://github.com/yext/visual-editor/commit/0ace80a0ff2240268ec5bd1d792317054546c095))
+- set defaultValue data for constantValues ([#1077](https://github.com/yext/visual-editor/pull/1077)) ([3fa23f79](https://github.com/yext/visual-editor/commit/3fa23f7961796c8ef3534af88d2fdbad75d8e979))
+- customized result styles per entity type ([#1058](https://github.com/yext/visual-editor/pull/1058)) ([5f02efe2](https://github.com/yext/visual-editor/commit/5f02efe2f2bbee445b777cabc9d02bb2ad931c35))
+- distance setting for locators ([#1076](https://github.com/yext/visual-editor/pull/1076)) ([53ec5ede](https://github.com/yext/visual-editor/commit/53ec5ede7cd9c749ccdafc1d3ace2d8dd9549e38))
+- support multiple source entity page sets in locator CTAs ([#1063](https://github.com/yext/visual-editor/pull/1063)) ([21bf1560](https://github.com/yext/visual-editor/commit/21bf156084181553119adccd9ff4097c53ed334f))
+- show "Update Page" tooltips instantly ([#1074](https://github.com/yext/visual-editor/pull/1074)) ([60588eac](https://github.com/yext/visual-editor/commit/60588eac6bbac508843affcc355059d65fc91693))
+- handle head deploy state ([#1066](https://github.com/yext/visual-editor/pull/1066)) ([a980cfcc](https://github.com/yext/visual-editor/commit/a980cfcc269dcdc8c0e8034d49a32c7e2a8c5de7))
+
+##### Bug Fixes
+
+- remove legacy Locator resultCard from defaultLayoutData ([#1086](https://github.com/yext/visual-editor/pull/1086)) ([933fe20f](https://github.com/yext/visual-editor/commit/933fe20fbeaf464868e87c34b4c83a969b4a0e8d))
+- add FoodEstablishment schema type ([#1088](https://github.com/yext/visual-editor/pull/1088)) ([791fa9f9](https://github.com/yext/visual-editor/commit/791fa9f919d53bfba5fbc68f3422fc5734eabc60))
+- directory link adhering to theme ([#1078](https://github.com/yext/visual-editor/pull/1078)) ([af06466a](https://github.com/yext/visual-editor/commit/af06466a67bd8cb59ade462358ba7f051df17b67))
+- prevent user from exiting interactive mode while in Theme mode and hide sidebar breadcrumbs ([#1073](https://github.com/yext/visual-editor/pull/1073)) ([7b08ecd3](https://github.com/yext/visual-editor/commit/7b08ecd368d13b0519d97a8d0dd1e8dad4b3a4e7))
+- empty body text and directory grid resolve data ([#1071](https://github.com/yext/visual-editor/pull/1071)) ([2f6a59bf](https://github.com/yext/visual-editor/commit/2f6a59bf1ca3e50a4fceb44ee742d979f7548f00))
+- locator result card address format ([#1067](https://github.com/yext/visual-editor/pull/1067)) ([1cf28b2c](https://github.com/yext/visual-editor/commit/1cf28b2cfb5f75239951babac8ff4736e9be223b))
+
+##### Other Changes
+
+- distance setting for locators ([#1076](https://github.com/yext/visual-editor/pull/1076))" ([9975c001](https://github.com/yext/visual-editor/commit/9975c0011ae27d1e9e5824927bcca143c04a3e01))
+- distance setting for locators ([#1076](https://github.com/yext/visual-editor/pull/1076))" ([2ba64074](https://github.com/yext/visual-editor/commit/2ba6407444b3d1695f7564787bec329894225e63))
+
 #### 1.1.0-alpha.5 (2026-02-25)
 
 ##### Bug Fixes

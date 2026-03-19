@@ -1,8 +1,11 @@
 import { Migration } from "../../utils/migrate.ts";
-import { LocatorResultCardProps } from "../LocatorResultCard.tsx";
+import {
+  getLocatorEntityTypeSourceMap,
+  isLocatorEntityType,
+} from "../../utils/locatorEntityTypes.ts";
 
 const DEFAULT_ENTITY_TYPE = "location";
-const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
+const DEFAULT_LOCATOR_RESULT_CARD_PROPS = {
   entityType: DEFAULT_ENTITY_TYPE,
   primaryHeading: {
     field: { selection: { value: "name" } },
@@ -75,45 +78,31 @@ const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
   },
 };
 
-const normalizeResultCardItem = (item: Record<string, any>) => {
-  const itemEntityType = item?.props?.entityType ?? DEFAULT_ENTITY_TYPE;
-  const rawProps = item?.props ?? item ?? {};
-
-  return {
-    props: {
-      ...DEFAULT_LOCATOR_RESULT_CARD_PROPS,
-      ...rawProps,
-      entityType: itemEntityType,
-    },
-  };
-};
-
 export const normalizeLocatorResultCard: Migration = {
   Locator: {
     action: "updated",
-    propTransformation: (props) => {
+    propTransformation: (props, streamDocument) => {
       const currentResultCard = props.resultCard;
-
-      if (Array.isArray(currentResultCard)) {
-        return {
-          ...props,
-          resultCard: currentResultCard.map((item) =>
-            normalizeResultCardItem(item)
-          ),
-        };
-      }
-
-      if (
-        !currentResultCard ||
-        typeof currentResultCard !== "object" ||
-        Object.keys(currentResultCard).length === 0
-      ) {
+      if (typeof currentResultCard !== "object") {
         return props;
       }
 
+      // only apply migration if resultCard has legacy shape
+      const entityTypeSourceMap = getLocatorEntityTypeSourceMap(streamDocument);
+      const entityTypes =
+        Object.keys(entityTypeSourceMap).filter(isLocatorEntityType);
+
       return {
         ...props,
-        resultCard: [normalizeResultCardItem(currentResultCard)],
+        resultCard: [
+          {
+            props: {
+              ...DEFAULT_LOCATOR_RESULT_CARD_PROPS,
+              ...currentResultCard,
+              entityType: entityTypes[0] ?? DEFAULT_ENTITY_TYPE,
+            },
+          },
+        ],
       };
     },
   },

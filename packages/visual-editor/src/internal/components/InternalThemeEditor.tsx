@@ -19,6 +19,7 @@ import { v4 as uuidv4 } from "uuid";
 import { ThemeHistories, ThemeHistory } from "../types/themeData.ts";
 import * as lzstring from "lz-string";
 import { Metadata } from "../../editor/Editor.tsx";
+import { createPreviewFrameLinkBlocker } from "../utils/previewFrameLinkBlocker.ts";
 
 const devLogger = new DevLogger();
 // Used because we want the sidebar to be hidden
@@ -70,6 +71,11 @@ export const InternalThemeEditor = ({
   useEffect(() => {
     themeHistoriesRef.current = themeHistories;
   }, [themeHistories]);
+
+  useEffect(() => {
+    // In theme mode, links should still be hoverable but never navigate.
+    return createPreviewFrameLinkBlocker();
+  }, []);
 
   const handlePublishTheme = async () => {
     devLogger.logFunc("saveThemeData");

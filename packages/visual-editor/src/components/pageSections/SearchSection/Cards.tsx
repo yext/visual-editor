@@ -100,12 +100,14 @@ const Cards = ({
               label={t("visitPage", "Visit Page")}
               variant={"primary"}
               className="!w-52 justify-center"
+              normalizeLink={true}
             />
             <CTA
               link={getDirections(result.rawData.address)}
               label={t("getDirections", "Get Directions")}
               variant={"primary"}
               className="!w-52 justify-center"
+              normalizeLink={true}
             />
           </div>
         </div>
@@ -127,6 +129,7 @@ const Cards = ({
               label={t("learnMore", "Learn more")}
               variant={"primary"}
               className="!w-52 justify-center"
+              normalizeLink={true}
             />
           </div>
         </div>
@@ -152,6 +155,7 @@ const Cards = ({
                   label={t("learnMore", "Learn more")}
                   variant={"primary"}
                   className="!w-52 justify-center"
+                  normalizeLink={true}
                 />
               </div>
             </div>

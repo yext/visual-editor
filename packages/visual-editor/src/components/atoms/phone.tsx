@@ -46,6 +46,7 @@ export const PhoneAtom = (props: PhoneAtomProps) => {
           link={phoneNumberLink}
           label={formattedPhoneNumber}
           linkType="PHONE"
+          normalizeLink={false}
           variant="link"
           eventName={props.eventName}
           onClick={props.onClick}
