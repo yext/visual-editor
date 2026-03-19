@@ -26,7 +26,7 @@ import {
   migrate,
   migrationRegistry,
   resolveUrlTemplate,
-} from "@yext/visual-editor";
+} from "@yext/visual-editor/runtime";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
 import mapboxPackageJson from "mapbox-gl/package.json";
 

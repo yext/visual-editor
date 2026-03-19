@@ -11,7 +11,7 @@ import {
   usePlatformBridgeDocument,
   usePlatformBridgeEntityFields,
   VisualEditorProvider,
-} from "@yext/visual-editor";
+} from "@yext/visual-editor/editor";
 import {
   GetPath,
   TemplateProps,

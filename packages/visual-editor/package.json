@@ -21,6 +21,16 @@
       "import": "./dist/visual-editor.js",
       "default": "./dist/visual-editor.js"
     },
+    "./runtime": {
+      "types": "./dist/runtime.d.ts",
+      "import": "./dist/runtime.js",
+      "default": "./dist/runtime.js"
+    },
+    "./editor": {
+      "types": "./dist/editor.d.ts",
+      "import": "./dist/editor.js",
+      "default": "./dist/editor.js"
+    },
     "./plugin": {
       "import": "./dist/plugin/plugin.js",
       "default": "./dist/plugin/plugin.js"
@@ -30,7 +40,7 @@
   },
   "types": "dist/index.d.ts",
   "scripts": {
-    "build:components": "tsc && vite build",
+    "build:components": "tsc && vite build && vite build --config vite.config.styles.ts",
     "build:plugin": "vite build --config vite.config.plugin.ts",
     "build": "pnpm run build:components && pnpm run build:plugin",
     "test": "pnpm run test:editor && pnpm run test:components",

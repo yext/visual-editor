@@ -26,7 +26,7 @@ import {
   injectTranslations,
   getCanonicalUrl,
   resolveUrlTemplate,
-} from "@yext/visual-editor";
+} from "@yext/visual-editor/runtime";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
 
 export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (

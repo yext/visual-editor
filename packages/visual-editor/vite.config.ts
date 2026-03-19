@@ -18,9 +18,15 @@ export default defineConfig(() => ({
   build: {
     cssCodeSplit: true,
     lib: {
-      entry: path.resolve(__dirname, "src/index.ts"),
+      entry: {
+        index: path.resolve(__dirname, "src/index.ts"),
+        runtime: path.resolve(__dirname, "src/runtime.ts"),
+        editor: path.resolve(__dirname, "src/editor.ts"),
+      },
       name: "visual-editor",
       formats: ["es"] as LibraryFormats[], // typescript is unhappy without this forced type definition
+      fileName: (_format, entryName) =>
+        entryName === "index" ? "visual-editor.js" : `${entryName}.js`,
     },
     rollupOptions: {
       external: [
@@ -38,10 +44,6 @@ export default defineConfig(() => ({
           react: "React",
           "react-dom": "ReactDOM",
         },
-      },
-      input: {
-        editor: path.resolve(__dirname, "src/index.ts"),
-        style: path.resolve(__dirname, "src/components/styles.css"),
       },
     },
   },
@@ -80,11 +82,14 @@ const dts = (): Plugin => ({
       return;
     }
 
-    exec("tsup src/index.ts --format esm --dts-only", (err) => {
-      if (err) {
-        throw new Error("Failed to generate declaration files");
+    exec(
+      "tsup src/index.ts src/runtime.ts src/editor.ts --format esm --dts-only",
+      (err) => {
+        if (err) {
+          throw new Error("Failed to generate declaration files");
+        }
       }
-    });
+    );
   },
 });
 
