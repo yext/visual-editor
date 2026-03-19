@@ -62,11 +62,6 @@ type CollectedItem = {
 const VALID_EXTENSIONS = new Set([".tsx", ".ts", ".jsx", ".js"]);
 const PRESERVED_EDIT_REGISTRY_KEYS = new Set(["directory", "locator"]);
 
-/**
- * Converts a file or path-like string to PascalCase.
- * @param {string} value
- * @returns {string}
- */
 const toPascalCase = (value: string): string => {
   return value
     .replace(/\.[^/.]+$/, "")
@@ -78,11 +73,6 @@ const toPascalCase = (value: string): string => {
     .join("");
 };
 
-/**
- * Converts a file or path-like string to camelCase.
- * @param {string} value
- * @returns {string}
- */
 const toCamelCase = (value: string): string => {
   const pascalValue = toPascalCase(value);
   if (!pascalValue) {
@@ -92,12 +82,6 @@ const toCamelCase = (value: string): string => {
   return pascalValue[0].toLowerCase() + pascalValue.slice(1);
 };
 
-/**
- * Throws when a derived identifier is empty.
- * @param {string} value
- * @param {string} errorMessage
- * @returns {string}
- */
 const requireNonEmpty = (value: string, errorMessage: string): string => {
   if (!value) {
     throw new Error(errorMessage);
@@ -106,21 +90,10 @@ const requireNonEmpty = (value: string, errorMessage: string): string => {
   return value;
 };
 
-/**
- * Normalizes a path to POSIX separators.
- * @param {string} value
- * @returns {string}
- */
 const toPosixPath = (value: string): string => {
   return value.split(path.sep).join(path.posix.sep);
 };
 
-/**
- * Builds the filesystem paths for a template registry.
- * @param {string} rootDir
- * @param {string} templateName
- * @returns {TemplatePaths}
- */
 const getTemplatePaths = (
   rootDir: string,
   templateName: string
@@ -136,11 +109,6 @@ const getTemplatePaths = (
   };
 };
 
-/**
- * Recursively walks a directory and returns source files that match supported extensions.
- * @param {string} directory
- * @returns {string[]}
- */
 const walkDirectory = (directory: string): string[] => {
   if (!fs.existsSync(directory)) {
     return [];
@@ -162,11 +130,6 @@ const walkDirectory = (directory: string): string[] => {
     .sort((a, b) => a.localeCompare(b));
 };
 
-/**
- * Lists template names from `src/registry`.
- * @param {string} rootDir
- * @returns {string[]}
- */
 const getTemplateNames = (rootDir: string): string[] => {
   const registryDir = path.join(rootDir, "src", "registry");
   if (!fs.existsSync(registryDir)) {
@@ -180,12 +143,6 @@ const getTemplateNames = (rootDir: string): string[] => {
     .sort((a, b) => a.localeCompare(b));
 };
 
-/**
- * Checks whether a template should get a generated template file override.
- * @param {string} rootDir
- * @param {string} templateName
- * @returns {boolean}
- */
 const hasTemplateComponentOverride = (
   rootDir: string,
   templateName: string
@@ -255,11 +212,6 @@ const collectTemplateComponents = (
   );
 };
 
-/**
- * Builds the exported config symbol name for a template config file.
- * @param {string} templateName
- * @returns {string}
- */
 const getTemplateConfigExportName = (templateName: string): string => {
   return `${requireNonEmpty(
     toPascalCase(templateName),
@@ -267,11 +219,6 @@ const getTemplateConfigExportName = (templateName: string): string => {
   )}Config`;
 };
 
-/**
- * Builds the local config identifier used in `edit.tsx`.
- * @param {string} templateName
- * @returns {string}
- */
 const getEditConfigIdentifier = (templateName: string): string => {
   return `${requireNonEmpty(
     toCamelCase(templateName),
@@ -279,11 +226,6 @@ const getEditConfigIdentifier = (templateName: string): string => {
   )}Config`;
 };
 
-/**
- * Renders a string-keyed object of identifier references into TypeScript source.
- * @param {Record<string, string>} value
- * @returns {string}
- */
 const renderIdentifierMap = (value: Record<string, string>): string => {
   return [
     "{",
