@@ -65,7 +65,7 @@ import { textAtomUpdates } from "./0063_text_atom_updates.ts";
 import { locatorStaticContentToggles } from "./0064_locator_static_content_toggles.ts";
 import { locatorDistanceDisplay } from "./0065_locator_distance_display.ts";
 import { normalizeLocatorResultCard } from "./0066_normalize_locator_result_card.ts";
-import { renameSearchWithSlots } from "./0067_rename_search_component.ts";
+
 // To add a migration:
 // Create a new file in this directory that exports a Migration
 // Import it in this file and add it to this array.
@@ -138,5 +138,4 @@ export const migrationRegistry: MigrationRegistry = [
   locatorStaticContentToggles,
   locatorDistanceDisplay,
   normalizeLocatorResultCard,
-  renameSearchWithSlots,
 ];
