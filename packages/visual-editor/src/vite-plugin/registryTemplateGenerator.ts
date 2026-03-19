@@ -8,11 +8,11 @@
  * 2) Generate one config per template.
  *    - Scan template-specific components from `src/registry/<template>/components`.
  *    - Emit `src/registry/<template>/config.tsx`.
+ *    - Ignore registry templates that do not contain any component source files.
  *
- * 3) Materialize template files for component overrides.
+ * 3) Materialize template files for discovered registry templates.
  *    - Use the plugin's internal `base.tsx` source as the shared base template.
- *    - Emit `src/templates/<template>.tsx` only when
- *      `src/registry/<template>/components` exists.
+ *    - Emit `src/templates/<template>.tsx` for each registry template that has components.
  *    - Insert the matching `src/registry/<template>/config.tsx` import.
  *    - Adapt `baseConfig` and rename the exported `Base` component to match the
  *      template name.
@@ -25,7 +25,7 @@
  * 5) Update editor wiring.
  *    - Patch `src/templates/edit.tsx`.
  *    - Import each generated config into `componentRegistry`.
- *    - Ensure `componentRegistry` points each overridden template name to its
+ *    - Ensure `componentRegistry` points each generated template name to its
  *      config while preserving existing `directory` and `locator` entries.
  */
 import path from "node:path";
@@ -57,6 +57,12 @@ type CollectedItem = {
   exportName: string;
   componentName: string;
   fileRelativeToRoot: string;
+};
+
+type CollectedTemplate = {
+  templateName: string;
+  templatePaths: TemplatePaths;
+  items: CollectedItem[];
 };
 
 const VALID_EXTENSIONS = new Set([".tsx", ".ts", ".jsx", ".js"]);
@@ -141,15 +147,6 @@ const getTemplateNames = (rootDir: string): string[] => {
     .filter((entry) => entry.isDirectory())
     .map((entry) => entry.name)
     .sort((a, b) => a.localeCompare(b));
-};
-
-const hasTemplateComponentOverride = (
-  rootDir: string,
-  templateName: string
-): boolean => {
-  return fs.existsSync(
-    getTemplatePaths(rootDir, templateName).componentsDirectory
-  );
 };
 
 /**
@@ -376,13 +373,10 @@ const buildTemplateSource = (
 /**
  * Updates `src/templates/edit.tsx` to import each generated config and register it.
  * @param {string} rootDir
- * @param {string[]} overriddenTemplateNames
+ * @param {string[]} templateNames
  * @returns {void}
  */
-const updateEditTemplate = (
-  rootDir: string,
-  overriddenTemplateNames: string[]
-): void => {
+const updateEditTemplate = (rootDir: string, templateNames: string[]): void => {
   const editTemplatePath = path.join(rootDir, "src", "templates", "edit.tsx");
   if (!fs.existsSync(editTemplatePath)) {
     return;
@@ -402,7 +396,7 @@ const updateEditTemplate = (
     ""
   );
 
-  const generatedImports = overriddenTemplateNames.map((templateName) => {
+  const generatedImports = templateNames.map((templateName) => {
     const templatePaths = getTemplatePaths(rootDir, templateName);
     const moduleSpecifier = toPosixPath(
       path
@@ -438,13 +432,13 @@ const updateEditTemplate = (
             return (
               propertyName &&
               PRESERVED_EDIT_REGISTRY_KEYS.has(propertyName) &&
-              !overriddenTemplateNames.includes(propertyName)
+              !templateNames.includes(propertyName)
             );
           }) ?? [];
 
       const registryEntries = [
         ...existingRegistryEntries,
-        ...overriddenTemplateNames.map((templateName) => {
+        ...templateNames.map((templateName) => {
           return `"${templateName}": ${getEditConfigIdentifier(templateName)},`;
         }),
       ];
@@ -538,17 +532,25 @@ export const generateRegistryTemplateFiles = ({
   rootDir: string;
   generatedBaseTemplateSource: string;
 }): void => {
-  const templateNames = getTemplateNames(rootDir);
-  const overriddenTemplateNames = templateNames.filter((templateName) => {
-    return hasTemplateComponentOverride(rootDir, templateName);
-  });
-  if (!templateNames.length && !overriddenTemplateNames.length) {
+  const collectedTemplates: CollectedTemplate[] = getTemplateNames(rootDir)
+    .map((templateName) => {
+      return {
+        templateName,
+        templatePaths: getTemplatePaths(rootDir, templateName),
+        items: collectTemplateComponents(rootDir, templateName),
+      };
+    })
+    .filter(({ items }) => items.length > 0);
+
+  if (!collectedTemplates.length) {
     return;
   }
 
-  for (const templateName of templateNames) {
-    const templatePaths = getTemplatePaths(rootDir, templateName);
-    const items = collectTemplateComponents(rootDir, templateName);
+  const templateNames = collectedTemplates.map(
+    ({ templateName }) => templateName
+  );
+
+  for (const { templateName, templatePaths, items } of collectedTemplates) {
     const configSource = buildConfigSource(
       rootDir,
       items,
@@ -558,28 +560,26 @@ export const generateRegistryTemplateFiles = ({
     fs.ensureDirSync(path.dirname(templatePaths.configPath));
     fs.writeFileSync(templatePaths.configPath, configSource);
 
-    if (overriddenTemplateNames.includes(templateName)) {
-      const configImportPath = toPosixPath(
-        path
-          .relative(
-            path.dirname(templatePaths.templatePath),
-            templatePaths.configPath
-          )
-          .replace(/\.[^/.]+$/, "")
-      );
-      const templateSource = buildTemplateSource(
-        generatedBaseTemplateSource,
-        templateName,
-        configImportPath.startsWith(".")
-          ? configImportPath
-          : `./${configImportPath}`,
-        getTemplateConfigExportName(templateName)
-      );
-      fs.ensureDirSync(path.dirname(templatePaths.templatePath));
-      fs.writeFileSync(templatePaths.templatePath, templateSource);
-    }
+    const configImportPath = toPosixPath(
+      path
+        .relative(
+          path.dirname(templatePaths.templatePath),
+          templatePaths.configPath
+        )
+        .replace(/\.[^/.]+$/, "")
+    );
+    const templateSource = buildTemplateSource(
+      generatedBaseTemplateSource,
+      templateName,
+      configImportPath.startsWith(".")
+        ? configImportPath
+        : `./${configImportPath}`,
+      getTemplateConfigExportName(templateName)
+    );
+    fs.ensureDirSync(path.dirname(templatePaths.templatePath));
+    fs.writeFileSync(templatePaths.templatePath, templateSource);
   }
 
   updateTemplateManifest(rootDir, templateNames);
-  updateEditTemplate(rootDir, overriddenTemplateNames);
+  updateEditTemplate(rootDir, templateNames);
 };
