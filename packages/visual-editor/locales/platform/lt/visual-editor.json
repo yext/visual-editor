@@ -111,7 +111,7 @@
     "richText": "Turtingas tekstas",
     "searchBarSlot": "Paieškos juostos lizdas",
     "SearchResultsSlot": "Paieškos rezultatų lizdas",
-    "searchWithSlots": "Ieškokite su Slots",
+    "searchSection": "Paieškos skyrius",
     "secondaryFooter": "Antrinė poraštė",
     "secondaryHeader": "Antrinė antraštė",
     "staticMapSection": "Statinio žemėlapio skyrius",
@@ -545,6 +545,7 @@
   "kilometer_many": "kilometrų",
   "kilometer_other": "kilometrų",
   "knowledgeGraphContent": "Žinių grafiko turinys",
+  "learnMore": "Sužinokite daugiau",
   "link": "nuoroda",
   "linkTypes": {
     "clickToWebsite": "Spustelėkite svetainę",

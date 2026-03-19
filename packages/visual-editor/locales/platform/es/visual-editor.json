@@ -111,7 +111,7 @@
     "richText": "Texto enriquecido",
     "searchBarSlot": "Ranura de la barra de búsqueda",
     "SearchResultsSlot": "Ranura de resultados de búsqueda",
-    "searchWithSlots": "Buscar con ranuras",
+    "searchSection": "Sección de búsqueda",
     "secondaryFooter": "Pie de página secundario",
     "secondaryHeader": "Encabezado secundario",
     "staticMapSection": "Sección de mapa estático",
@@ -544,6 +544,7 @@
   "kilometer_many": "kilómetros",
   "kilometer_other": "kilómetros",
   "knowledgeGraphContent": "Contenido del gráfico de conocimiento",
+  "learnMore": "Más información",
   "link": "enlace",
   "linkTypes": {
     "clickToWebsite": "Haga clic en el sitio web",

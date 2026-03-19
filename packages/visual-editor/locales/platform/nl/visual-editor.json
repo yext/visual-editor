@@ -111,7 +111,7 @@
     "richText": "Rijke tekst",
     "searchBarSlot": "Zoekbalkslot",
     "SearchResultsSlot": "Zoekresultaten Slot",
-    "searchWithSlots": "Zoeken met slots",
+    "searchSection": "Zoek sectie",
     "secondaryFooter": "Secundaire voettekst",
     "secondaryHeader": "Secundaire kop",
     "staticMapSection": "Statische kaartsectie",
@@ -543,6 +543,7 @@
   "kilometer_one": "kilometer",
   "kilometer_other": "kilometers",
   "knowledgeGraphContent": "Kennisgrafiekinhoud",
+  "learnMore": "Meer informatie",
   "link": "link",
   "linkTypes": {
     "clickToWebsite": "Klik op de website",

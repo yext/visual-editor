@@ -111,7 +111,7 @@
     "richText": "Text bogat",
     "searchBarSlot": "Slot pentru bara de căutare",
     "SearchResultsSlot": "Slot pentru rezultatele căutării",
-    "searchWithSlots": "Căutați cu sloturi",
+    "searchSection": "Secțiunea de căutare",
     "secondaryFooter": "Subsol secundar",
     "secondaryHeader": "Antet secundar",
     "staticMapSection": "Secțiunea hărții statice",
@@ -544,6 +544,7 @@
   "kilometer_few": "kilometri",
   "kilometer_other": "kilometri",
   "knowledgeGraphContent": "Conținut grafic de cunoștințe",
+  "learnMore": "Află mai multe",
   "link": "legătură",
   "linkTypes": {
     "clickToWebsite": "Faceți clic pe site -ul web",

@@ -111,7 +111,7 @@
     "richText": "Rich Text",
     "searchBarSlot": "SearchBar Slot",
     "SearchResultsSlot": "Søgeresultater Slot",
-    "searchWithSlots": "Søg med Slots",
+    "searchSection": "Søg sektion",
     "secondaryFooter": "Sekundær sidefod",
     "secondaryHeader": "Sekundær overskrift",
     "staticMapSection": "Statisk kortafsnit",
@@ -543,6 +543,7 @@
   "kilometer_one": "kilometer",
   "kilometer_other": "kilometer",
   "knowledgeGraphContent": "Videngrafindhold",
+  "learnMore": "Få flere oplysninger",
   "link": "forbindelse",
   "linkTypes": {
     "clickToWebsite": "Klik på webstedet",

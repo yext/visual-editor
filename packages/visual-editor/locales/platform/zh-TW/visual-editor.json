@@ -111,7 +111,7 @@
     "richText": "富文本",
     "searchBarSlot": "搜尋欄插槽",
     "SearchResultsSlot": "搜尋結果槽",
-    "searchWithSlots": "老虎機搜尋",
+    "searchSection": "搜尋部分",
     "secondaryFooter": "二級頁腳",
     "secondaryHeader": "二級標頭",
     "staticMapSection": "靜態地圖部分",
@@ -543,6 +543,7 @@
   "kilometer_one": "公里",
   "kilometer_other": "公里",
   "knowledgeGraphContent": "知識圖內容",
+  "learnMore": "了解更多",
   "link": "鏈接",
   "linkTypes": {
     "clickToWebsite": "單擊網站",

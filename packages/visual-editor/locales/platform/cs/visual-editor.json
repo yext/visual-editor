@@ -111,7 +111,7 @@
     "richText": "RTF",
     "searchBarSlot": "Slot pro vyhledávací lištu",
     "SearchResultsSlot": "Slot výsledků vyhledávání",
-    "searchWithSlots": "Vyhledávání pomocí slotů",
+    "searchSection": "Sekce vyhledávání",
     "secondaryFooter": "Sekundární zápatí",
     "secondaryHeader": "Sekundární záhlaví",
     "staticMapSection": "Sekce statické mapy",
@@ -545,6 +545,7 @@
   "kilometer_many": "kilometrů",
   "kilometer_other": "kilometrů",
   "knowledgeGraphContent": "Obsah grafu znalostí",
+  "learnMore": "Zjistěte více",
   "link": "odkaz",
   "linkTypes": {
     "clickToWebsite": "Klikněte na web",

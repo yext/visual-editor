@@ -111,7 +111,7 @@
     "richText": "Gazdag szöveg",
     "searchBarSlot": "SearchBar Slot",
     "SearchResultsSlot": "Keresési eredmények Slot",
-    "searchWithSlots": "Keresés a Slots segítségével",
+    "searchSection": "Keresés szakasz",
     "secondaryFooter": "Másodlagos lábléc",
     "secondaryHeader": "Másodlagos fejléc",
     "staticMapSection": "Statikus térképszakasz",
@@ -543,6 +543,7 @@
   "kilometer_one": "kilométer",
   "kilometer_other": "kilométer",
   "knowledgeGraphContent": "Tudás grafikon tartalma",
+  "learnMore": "További információ",
   "link": "link",
   "linkTypes": {
     "clickToWebsite": "Kattintson a weboldalra",
