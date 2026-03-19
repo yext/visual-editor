@@ -28,6 +28,8 @@ import { DynamicOption } from "../../../editor/DynamicOptionsSelector.tsx";
 import { useTemplateMetadata } from "../../hooks/useMessageReceivers.ts";
 import { getPageSetLocales } from "../../../utils/pageSetLocales.ts";
 
+const pendingMessageIdsByFieldId = new Map<string, string>();
+
 export type ImagePayload = {
   id: string;
   value: ImageContentData;
@@ -58,7 +60,7 @@ const createImageConstantConfig = (options?: {
   ) => DynamicOption<string>[];
 }): CustomField<TranslatableAssetImage | undefined> => ({
   type: "custom",
-  render: ({ onChange, value, field }) => {
+  render: ({ onChange, value, field, id }) => {
     const { i18n } = useTranslation();
     const streamDocument = useDocument();
     const templateMetadata: TemplateMetadata = useTemplateMetadata();
@@ -75,10 +77,6 @@ const createImageConstantConfig = (options?: {
       return resolveLocalizedAssetImage(value, locale);
     }, [value, locale]);
 
-    const [pendingMessageId, setPendingMessageId] = React.useState<
-      string | undefined
-    >();
-
     const { sendToParent: openImageAssetSelector } = useSendMessageToParent(
       "constantValueEditorOpened",
       TARGET_ORIGINS
@@ -89,10 +87,12 @@ const createImageConstantConfig = (options?: {
       TARGET_ORIGINS,
       (_, payload) => {
         const imagePayload = payload as ImagePayload;
+        const pendingMessageId = pendingMessageIdsByFieldId.get(id);
         if (pendingMessageId && pendingMessageId === imagePayload.id) {
           const imageData =
             imagePayload.value.transformedImage ??
             imagePayload.value.originalImage;
+          pendingMessageIdsByFieldId.delete(id);
           if (!imageData) {
             return;
           }
@@ -139,10 +139,11 @@ const createImageConstantConfig = (options?: {
           [locale]: newValue,
           hasLocalizedValue: "true",
         } as TranslatableAssetImage);
+        pendingMessageIdsByFieldId.delete(id);
       } else {
         /** Instructs Storm to open the image asset selector drawer */
         const messageId = `ImageAsset-${Date.now()}`;
-        setPendingMessageId(messageId);
+        pendingMessageIdsByFieldId.set(id, messageId);
         openImageAssetSelector({
           payload: {
             type: "ImageAsset",

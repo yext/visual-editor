@@ -20,6 +20,7 @@ import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { useTranslation } from "react-i18next";
+import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
 import {
   ctaTypeOptions,
   getCTAType,
@@ -31,6 +32,8 @@ export interface CTAWrapperProps {
     show?: boolean;
     /** Whether CTA renders as a link or a button */
     actionType?: "link" | "button";
+    /** Whether CTA links should be normalized before rendering */
+    normalizeLink: boolean;
     /** The call to action to display */
     entityField: YextEntityField<EnhancedTranslatableCTA>;
     /** Static text for the button label */
@@ -105,6 +108,14 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
             textAndLink: "type.cta",
           },
         },
+      }),
+      normalizeLink: YextField(msg("fields.normalizeLink", "Normalize Link"), {
+        type: "radio",
+        options: [
+          { label: msg("fields.options.yes", "Yes"), value: true },
+          { label: msg("fields.options.no", "No"), value: false },
+        ],
+        visible: false,
       }),
       buttonText: YextField(msg("fields.buttonText", "Button Text"), {
         type: "translatableString",
@@ -258,6 +269,7 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
       id={data.customId}
       ariaLabel={actionType === "button" ? resolvedAriaLabel : undefined}
       dataAttributes={dataAttributeProps}
+      normalizeLink={data.normalizeLink}
     />
   );
 
@@ -288,6 +300,7 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
   defaultProps: {
     data: {
       actionType: "link",
+      normalizeLink: true,
       entityField: {
         field: "",
         constantValue: {
@@ -313,8 +326,13 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
     const ctaVariant = data.props.styles.variant;
     const actionType = data.props.data.actionType ?? "link";
     const ctaType = getCTAType(data.props.data.entityField).ctaType;
+    const constantLinkType = data.props.data.entityField.constantValueEnabled
+      ? data.props.data.entityField.constantValue?.linkType
+      : undefined;
     const effectiveCtaType = actionType === "button" ? "textAndLink" : ctaType;
     const showButtonFields = actionType === "button";
+    const showNormalizeLinkField =
+      !showButtonFields && !isNonNormalizableLinkType(constantLinkType);
 
     if (effectiveCtaType === "presetImage") {
       setDeep(updatedFields, "styles.objectFields.variant.visible", false);
@@ -336,10 +354,19 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
       effectiveCtaType !== "presetImage";
     setDeep(updatedFields, "styles.objectFields.color.visible", showColor);
 
+    if (data.props.parentData) {
+      return updatedFields;
+    }
+
     setDeep(
       updatedFields,
       "data.objectFields.entityField.visible",
       !showButtonFields
+    );
+    setDeep(
+      updatedFields,
+      "data.objectFields.normalizeLink.visible",
+      showNormalizeLinkField
     );
     setDeep(
       updatedFields,

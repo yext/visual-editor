@@ -12,6 +12,8 @@ import {
 } from "../../../internal/hooks/useMessage.ts";
 import { ImagePayload } from "../../../internal/puck/constant-value-fields/Image.tsx";
 
+const pendingMessageIdsByFieldId = new Map<string, string>();
+
 interface EmptyImageStateProps {
   isEmpty: boolean;
   isEditing: boolean;
@@ -43,10 +45,6 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
     TARGET_ORIGINS
   );
 
-  const [pendingMessageId, setPendingMessageId] = React.useState<
-    string | undefined
-  >();
-
   // Listen for image selection response
   useReceiveMessage(
     "constantValueEditorClosed",
@@ -54,6 +52,7 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
     React.useCallback(
       (_, payload) => {
         const imagePayload = payload as ImagePayload;
+        const pendingMessageId = pendingMessageIdsByFieldId.get(fieldId);
         if (
           pendingMessageId &&
           pendingMessageId === imagePayload.id &&
@@ -62,6 +61,7 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
           const imageData =
             imagePayload.value.transformedImage ??
             imagePayload.value.originalImage;
+          pendingMessageIdsByFieldId.delete(fieldId);
           if (!imageData) {
             return;
           }
@@ -79,7 +79,7 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
           } as AssetImageType);
         }
       },
-      [pendingMessageId, onImageSelected]
+      [onImageSelected]
     )
   );
 
@@ -97,10 +97,11 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
             width: 1,
             alternateText: "",
           } as AssetImageType);
+          pendingMessageIdsByFieldId.delete(fieldId);
         }
       } else {
         const messageId = `ImageAsset-${Date.now()}`;
-        setPendingMessageId(messageId);
+        pendingMessageIdsByFieldId.set(fieldId, messageId);
         openImageAssetSelector({
           payload: {
             type: "ImageAsset",
@@ -117,6 +118,7 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
     constantValue,
     openImageAssetSelector,
     onImageSelected,
+    fieldId,
   ]);
 
   if (!isEmpty || !isEditing) {

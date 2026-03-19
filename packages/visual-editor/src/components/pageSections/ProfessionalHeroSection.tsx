@@ -667,6 +667,7 @@ export const ProfessionalHeroSection: ComponentConfig<{
           props: {
             data: {
               actionType: "link",
+              normalizeLink: true,
               buttonText: { defaultValue: "Button" },
               entityField: {
                 field: "",
@@ -691,6 +692,7 @@ export const ProfessionalHeroSection: ComponentConfig<{
           props: {
             data: {
               actionType: "link",
+              normalizeLink: true,
               buttonText: { defaultValue: "Button" },
               entityField: {
                 field: "",

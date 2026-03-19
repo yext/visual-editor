@@ -10,8 +10,11 @@ const LOCATOR_ENTITY_TYPES = [
   "location",
   "healthcareProfessional",
   "healthcareFacility",
+  "event",
+  "atm",
   "restaurant",
   "hotel",
+  "providerFacility",
   "financialProfessional",
 ] as const;
 
@@ -90,10 +93,16 @@ export const getEntityTypeLabel = (entityType: LocatorEntityType) => {
       return pt("healthcareProfessionals", "Healthcare Professionals");
     case "healthcareFacility":
       return pt("healthcareFacilities", "Healthcare Facilities");
+    case "event":
+      return pt("events", "Events");
+    case "atm":
+      return pt("atms", "ATMs");
     case "restaurant":
       return pt("restaurants", "Restaurants");
     case "hotel":
       return pt("hotels", "Hotels");
+    case "providerFacility":
+      return pt("providerFacilities", "Provider Facilities");
     case "financialProfessional":
       return pt("financialProfessionals", "Financial Professionals");
     default:

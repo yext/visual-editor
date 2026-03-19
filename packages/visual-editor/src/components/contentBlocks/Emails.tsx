@@ -114,6 +114,7 @@ const EmailsComponent: PuckComponent<EmailsProps> = (props) => {
               link={email}
               label={email}
               linkType="EMAIL"
+              normalizeLink={false}
               variant="link"
               alwaysHideCaret={true}
             />

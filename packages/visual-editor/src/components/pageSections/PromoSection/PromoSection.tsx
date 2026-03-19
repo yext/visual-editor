@@ -425,6 +425,7 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
           props: {
             data: {
               actionType: "link",
+              normalizeLink: true,
               buttonText: { defaultValue: "Button" },
               entityField: {
                 field: "",

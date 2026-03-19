@@ -18,6 +18,7 @@ import {
 import { defaultDirectoryCardSlotData } from "./DirectoryCard.tsx";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import { resolveDirectoryListChildren } from "../../utils/urls/resolveDirectoryListChildren.ts";
+import { getThemeValue } from "../../utils/getThemeValue.ts";
 
 export type DirectoryGridProps = {
   slots: {
@@ -46,6 +47,11 @@ export const DirectoryList = ({
   relativePrefixToRoot: string;
 }) => {
   const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
+  const linkTextTransformValue = (
+    getThemeValue("--textTransform-link-textTransform", streamDocument) ?? ""
+  ).toLowerCase();
+  const shouldTitleCase =
+    linkTextTransformValue === "none" || linkTextTransformValue === "normal";
 
   return (
     <PageSection
@@ -81,7 +87,15 @@ export const DirectoryList = ({
                     : childSlug
                 }
               >
-                <Body>{label}</Body>
+                <Body
+                  style={{
+                    textTransform: shouldTitleCase
+                      ? ("capitalize" as React.CSSProperties["textTransform"])
+                      : ("var(--textTransform-link-textTransform)" as React.CSSProperties["textTransform"]),
+                  }}
+                >
+                  {label}
+                </Body>
               </MaybeLink>
             </li>
           );

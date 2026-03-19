@@ -33,6 +33,7 @@ const GetDirectionsComponent = ({ variant, color }: GetDirectionsProps) => {
       eventName={`getDirections`}
       label={t("getDirections", "Get Directions")}
       linkType={"DRIVING_DIRECTIONS"}
+      normalizeLink={false}
       target="_blank"
       variant={variant}
       color={color}
