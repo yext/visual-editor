@@ -138,7 +138,7 @@ importers:
         version: 5.85.5(react@18.3.1)
       "@yext/pages-components":
         specifier: ^2.0.0
-        version: 2.0.0(lexical@0.38.2)(mapbox-gl@2.15.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 2.0.0(lexical@0.38.2)(mapbox-gl@3.20.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       "@yext/search-headless-react":
         specifier: ^2.7.1
         version: 2.7.1(encoding@0.1.13)(react@18.3.1)
@@ -173,8 +173,8 @@ importers:
         specifier: 1.5.0
         version: 1.5.0
       mapbox-gl:
-        specifier: ^2.9.2
-        version: 2.15.0
+        specifier: ^3.20.0
+        version: 3.20.0
       next-themes:
         specifier: ^0.3.0
         version: 0.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -334,7 +334,7 @@ importers:
         version: 7.7.2
       tailwindcss:
         specifier: ^3.4.6
-        version: 3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2))
+        version: 3.4.17(ts-node@10.9.2(@swc/core@1.15.11(@swc/helpers@0.5.17))(@types/node@20.19.11)(typescript@5.9.2))
       tsup:
         specifier: 8.3.5
         version: 8.3.5(@microsoft/api-extractor@7.52.11(@types/node@20.19.11))(@swc/core@1.15.11(@swc/helpers@0.5.17))(jiti@2.6.1)(postcss@8.5.6)(tsx@4.20.4)(typescript@5.9.2)(yaml@2.8.2)
@@ -406,7 +406,7 @@ importers:
         version: 2.6.0(encoding@0.1.13)(react@18.3.1)
       "@yext/search-ui-react":
         specifier: ^2.1.0
-        version: 2.1.0(@types/react@18.3.24)(@yext/search-headless-react@2.6.0(encoding@0.1.13)(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))(typescript@5.9.2)
+        version: 2.1.0(@types/react@18.3.24)(@yext/search-headless-react@2.6.0(encoding@0.1.13)(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.15.11(@swc/helpers@0.5.17))(@types/node@20.19.11)(typescript@5.9.2)))(typescript@5.9.2)
       "@yext/visual-editor":
         specifier: workspace:*
         version: link:../packages/visual-editor
@@ -452,7 +452,7 @@ importers:
     devDependencies:
       "@tailwindcss/typography":
         specifier: ^0.5.13
-        version: 0.5.16(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))
+        version: 0.5.16(tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.15.11(@swc/helpers@0.5.17))(@types/node@20.19.11)(typescript@5.9.2)))
       "@types/react":
         specifier: ^18.2.77
         version: 18.3.24
@@ -482,7 +482,7 @@ importers:
         version: 0.4.1(prettier@3.6.2)
       tailwindcss:
         specifier: ^3.3.0
-        version: 3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2))
+        version: 3.4.17(ts-node@10.9.2(@swc/core@1.15.11(@swc/helpers@0.5.17))(@types/node@20.19.11)(typescript@5.9.2))
       typescript:
         specifier: ^5.3.3
         version: 5.9.2
@@ -2119,10 +2119,22 @@ packages:
         integrity: sha512-HP6XvfNIzfoMVfyGjBckjiAOQK9WfX0ywdLubuPMPv+Vqf5fj0uCbgBQYpiqcWZT6cbyyRnTSXDheT1ugvF6UQ==,
       }
 
+  "@mapbox/mapbox-gl-supported@3.0.0":
+    resolution:
+      {
+        integrity: sha512-2XghOwu16ZwPJLOFVuIOaLbN0iKMn867evzXFyf0P22dqugezfJwLmdanAgU25ITvz1TvOfVP4jsDImlDJzcWg==,
+      }
+
   "@mapbox/point-geometry@0.1.0":
     resolution:
       {
         integrity: sha512-6j56HdLTwWGO0fJPlrZtdU/B13q8Uwmo18Ck2GnGgN9PCFyKTZ3UbXeEdRFh18i9XQ92eH2VdtpJHpBD3aripQ==,
+      }
+
+  "@mapbox/point-geometry@1.1.0":
+    resolution:
+      {
+        integrity: sha512-YGcBz1cg4ATXDCM/71L9xveh4dynfGmcLDqufR+nQQy3fKwsAZsWd/x4621/6uJaeB9mwOHE6hPeDgXz9uViUQ==,
       }
 
   "@mapbox/tiny-sdf@2.0.7":
@@ -2141,6 +2153,12 @@ packages:
     resolution:
       {
         integrity: sha512-MCEddb8u44/xfQ3oD+Srl/tNcQoqTw3goGk2oLsrFxOTc3dUp+kAnby3PvAeeBYSMSjSPD1nd1AJA6W49WnoUw==,
+      }
+
+  "@mapbox/vector-tile@2.0.4":
+    resolution:
+      {
+        integrity: sha512-AkOLcbgGTdXScosBWwmmD7cDlvOjkg/DetGva26pIRiZPdeJYjYKarIlb4uxVzi6bwHO6EWH82eZ5Nuv4T5DUg==,
       }
 
   "@mapbox/whoots-js@3.1.0":
@@ -3158,7 +3176,7 @@ packages:
       }
     engines: { node: ">=14.0.0" }
     peerDependencies:
-      rollup: 4.59.0
+      rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
     peerDependenciesMeta:
       rollup:
         optional: true
@@ -4071,6 +4089,12 @@ packages:
         integrity: sha512-yTbItCNreRooED33qjunPthRcSjERP1r4MqCZc7wv0u2sUkzTFp45tgUfS5+r7FrZPdmCCNflLhVSP/o+SemsQ==,
       }
 
+  "@types/geojson-vt@3.2.5":
+    resolution:
+      {
+        integrity: sha512-qDO7wqtprzlpe8FfQ//ClPV9xiuoh2nkIgiouIptON9w5jvD/fA4szvP9GBlDVdJ5dldAl0kX/sy3URbWwLx0g==,
+      }
+
   "@types/geojson@7946.0.16":
     resolution:
       {
@@ -4191,6 +4215,12 @@ packages:
         integrity: sha512-kUNnecmtkunAoQ3CnjmMkzNU/gtxG8guhi+Fk2U/kOpIKjIMKnXGp4IJCgQJrXSgMsWYimYG4TGjz/UzbGEBTw==,
       }
 
+  "@types/pbf@3.0.5":
+    resolution:
+      {
+        integrity: sha512-j3pOPiEcWZ34R6a6mN07mUkM4o4Lwf6hPNt8eilOeZhTFbxFXmKhvXl9Y28jotFPaI1bpPDJsbCprUoNke6OrA==,
+      }
+
   "@types/pixelmatch@5.2.6":
     resolution:
       {
@@ -4255,6 +4285,12 @@ packages:
     resolution:
       {
         integrity: sha512-9aEbYZ3TbYMznPdcdr3SmIrLXwC/AKZXQeCf9Pgao5CKb8CyHuEX5jzWPTkvregvhRJHcpRO6BFoGW9ycaOkYw==,
+      }
+
+  "@types/supercluster@7.1.3":
+    resolution:
+      {
+        integrity: sha512-Z0pOY34GDFl3Q6hUFYf3HkTwKEE02e7QgtJppBt+beEAxnyOpJua+voGFvxINBHa06GwLFFym7gRPY2SiKIfIA==,
       }
 
   "@types/trusted-types@2.0.7":
@@ -5304,6 +5340,12 @@ packages:
         integrity: sha512-PsezH1rqdV9VvyNhxxOW32/d75r01NY7TQCmOqomRo15ZSOKbpTFVsfjghxo6JloQUCGnH4k1LGu0R4yCLlWQQ==,
       }
 
+  cheap-ruler@4.0.0:
+    resolution:
+      {
+        integrity: sha512-0BJa8f4t141BYKQyn9NSQt1PguFQXMXwZiA5shfoaBYHAb2fFk2RAX+tiWMoQU+Agtzt3mdt0JtuyshAXqZ+Vw==,
+      }
+
   check-error@2.1.1:
     resolution:
       {
@@ -5952,6 +5994,12 @@ packages:
         integrity: sha512-/pjZsA1b4RPHbeWZQn66SWS8nZZWLQQ23oE3Eam7aroEFGEvwKAsJfZ9ytiEMycfzXWpca4FA9QIOehf7PocBQ==,
       }
 
+  earcut@3.0.2:
+    resolution:
+      {
+        integrity: sha512-X7hshQbLyMJ/3RPhyObLARM2sNxxmRALLKx1+NVFFnQ9gKzmCrxm9+uLIAdBcvc8FNLpctqlQ2V6AE92Ol9UDQ==,
+      }
+
   eastasianwidth@0.2.0:
     resolution:
       {
@@ -6466,6 +6514,12 @@ packages:
     resolution:
       {
         integrity: sha512-EvGQQi/zPrDA6zr6BnJD/YhwAkBP8nnJ9emh3EnHQKVMfg/MRVtPbMYdgVy/IaEmn4UfagD2a6fafPDL5hbtwg==,
+      }
+
+  geojson-vt@4.0.2:
+    resolution:
+      {
+        integrity: sha512-AV9ROqlNqoZEIJGfm1ncNjEXfkz2hdFlZf0qkVfmkwdKa8vj7H16YUOT81rJw1rdFhyEDlN2Tds91p/glzbl5A==,
       }
 
   geolib@3.3.4:
@@ -7778,6 +7832,12 @@ packages:
         integrity: sha512-fjv+aYrd5TIHiL7wRa+W7KjtUqKWziJMZUkK5hm8TvJ3OLeNPx4NmW/DgfYhd/jHej8wWL+QJBDbdMMAKvNC0A==,
       }
 
+  mapbox-gl@3.20.0:
+    resolution:
+      {
+        integrity: sha512-+rVQkf6ymUlAEJiQBZy0OiamJvQN4Uk15mRHI98PRUSmRS40GOoLJyEZEG39LEUtvmzc7qGh+4ygZfJ//O5VnQ==,
+      }
+
   mark.js@8.11.1:
     resolution:
       {
@@ -7795,6 +7855,12 @@ packages:
     resolution:
       {
         integrity: sha512-Ezda85ToJUBhM6WGaG6veasyym+Tbs3cMAw/ZhOPqXiYsr0jgocBV3j3nx+4lk47plLlIqjwuTm/ywVI+zjJ/A==,
+      }
+
+  martinez-polygon-clipping@0.8.1:
+    resolution:
+      {
+        integrity: sha512-9PLLMzMPI6ihHox4Ns6LpVBLpRc7sbhULybZ/wyaY8sY3ECNe2+hxm1hA2/9bEEpRrdpjoeduBuZLg2aq1cSIQ==,
       }
 
   material-colors@1.2.6:
@@ -8736,6 +8802,13 @@ packages:
       }
     hasBin: true
 
+  pbf@4.0.1:
+    resolution:
+      {
+        integrity: sha512-SuLdBvS42z33m8ejRbInMapQe8n0D3vN/Xd5fmWM3tufNgRQFBpaW2YVJxQZV4iPNqb0vEFvssMEo5w9c6BTIA==,
+      }
+    hasBin: true
+
   pbkdf2@3.1.3:
     resolution:
       {
@@ -9351,6 +9424,12 @@ packages:
         integrity: sha512-RKJ22hX8mHe3Y6wH/N3wCM6BWtjaxIyyUIkpHOvfFnxdI4yD4tBXEBKSbriGujF6jnSVkJrffuo6vxACiSSxIw==,
       }
 
+  quickselect@3.0.0:
+    resolution:
+      {
+        integrity: sha512-XdjUArbK4Bm5fLLvlm5KpTFOiOThgfWWI4axAZDWg4E/0mKdZyI9tNEfds27qCi1ze/vwTR16kvmmGhRra3c2g==,
+      }
+
   randombytes@2.1.0:
     resolution:
       {
@@ -9847,6 +9926,12 @@ packages:
         integrity: sha512-ii4iagi25WusVoiC4B4lq7pbXfAp3D9v5CwfkY33vffw2+pkDjY1D8GaN7spsxvCSx8dkPqOZCEZyfxcmJG2IA==,
       }
 
+  robust-predicates@2.0.4:
+    resolution:
+      {
+        integrity: sha512-l4NwboJM74Ilm4VKfbAtFeGq7aEjWL+5kVFcmgFA2MrdnQWx9iE/tUGvxY5HyMI7o/WpSIUFLbC5fbeaHgSCYg==,
+      }
+
   rollup@4.59.0:
     resolution:
       {
@@ -10229,6 +10314,12 @@ packages:
       }
     engines: { node: ">=0.10.0" }
 
+  splaytree@0.1.4:
+    resolution:
+      {
+        integrity: sha512-D50hKrjZgBzqD3FT2Ek53f2dcDLAQT8SSGrzj3vidNH5ISRgceeGVJ2dQIthKOuayqFXfFjXheHNo4bbt9LhRQ==,
+      }
+
   split-on-first@3.0.0:
     resolution:
       {
@@ -10567,6 +10658,12 @@ packages:
     resolution:
       {
         integrity: sha512-ppJZNDuKGgxzkHihX8v9v9G5f+18gzaTfrukGrq6ueg0lmH4nqVnA2IPG0AEH3jKEk2GRJCUhDoqpoiw3PHLBA==,
+      }
+
+  tinyqueue@3.0.0:
+    resolution:
+      {
+        integrity: sha512-gRa9gwYU3ECmQYv3lslts5hxuIa90veaEcxDYuu3QGOIAEM2mOZkVHp48ANJuu1CURtRdHKUBY5Lm1tHV+sD4g==,
       }
 
   tinyrainbow@2.0.0:
@@ -12565,7 +12662,11 @@ snapshots:
 
   "@mapbox/mapbox-gl-supported@2.0.1": {}
 
+  "@mapbox/mapbox-gl-supported@3.0.0": {}
+
   "@mapbox/point-geometry@0.1.0": {}
+
+  "@mapbox/point-geometry@1.1.0": {}
 
   "@mapbox/tiny-sdf@2.0.7": {}
 
@@ -12574,6 +12675,12 @@ snapshots:
   "@mapbox/vector-tile@1.3.1":
     dependencies:
       "@mapbox/point-geometry": 0.1.0
+
+  "@mapbox/vector-tile@2.0.4":
+    dependencies:
+      "@mapbox/point-geometry": 1.1.0
+      "@types/geojson": 7946.0.16
+      pbf: 4.0.1
 
   "@mapbox/whoots-js@3.1.0": {}
 
@@ -13716,22 +13823,22 @@ snapshots:
     dependencies:
       "@swc/counter": 0.1.3
 
-  "@tailwindcss/forms@0.5.10(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))":
+  "@tailwindcss/forms@0.5.10(tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.15.11(@swc/helpers@0.5.17))(@types/node@20.19.11)(typescript@5.9.2)))":
     dependencies:
       mini-svg-data-uri: 1.4.4
-      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2))
+      tailwindcss: 3.4.17(ts-node@10.9.2(@swc/core@1.15.11(@swc/helpers@0.5.17))(@types/node@20.19.11)(typescript@5.9.2))
 
-  "@tailwindcss/line-clamp@0.4.4(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))":
+  "@tailwindcss/line-clamp@0.4.4(tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.15.11(@swc/helpers@0.5.17))(@types/node@20.19.11)(typescript@5.9.2)))":
     dependencies:
-      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2))
+      tailwindcss: 3.4.17(ts-node@10.9.2(@swc/core@1.15.11(@swc/helpers@0.5.17))(@types/node@20.19.11)(typescript@5.9.2))
 
-  "@tailwindcss/typography@0.5.16(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))":
+  "@tailwindcss/typography@0.5.16(tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.15.11(@swc/helpers@0.5.17))(@types/node@20.19.11)(typescript@5.9.2)))":
     dependencies:
       lodash.castarray: 4.4.0
       lodash.isplainobject: 4.0.6
       lodash.merge: 4.6.2
       postcss-selector-parser: 6.0.10
-      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2))
+      tailwindcss: 3.4.17(ts-node@10.9.2(@swc/core@1.15.11(@swc/helpers@0.5.17))(@types/node@20.19.11)(typescript@5.9.2))
 
   "@tanstack/query-core@5.85.5": {}
 
@@ -13973,6 +14080,10 @@ snapshots:
       "@types/jsonfile": 6.1.4
       "@types/node": 20.19.11
 
+  "@types/geojson-vt@3.2.5":
+    dependencies:
+      "@types/geojson": 7946.0.16
+
   "@types/geojson@7946.0.16": {}
 
   "@types/hast@2.3.10":
@@ -14041,6 +14152,8 @@ snapshots:
 
   "@types/parse5@5.0.3": {}
 
+  "@types/pbf@3.0.5": {}
+
   "@types/pixelmatch@5.2.6":
     dependencies:
       "@types/node": 20.19.11
@@ -14077,6 +14190,10 @@ snapshots:
   "@types/semver@7.7.0": {}
 
   "@types/stack-utils@2.0.3": {}
+
+  "@types/supercluster@7.1.3":
+    dependencies:
+      "@types/geojson": 7946.0.16
 
   "@types/trusted-types@2.0.7":
     optional: true
@@ -14331,6 +14448,17 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
+  "@yext/pages-components@2.0.0(lexical@0.38.2)(mapbox-gl@3.20.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)":
+    dependencies:
+      "@yext/analytics": 1.1.0
+      browser-or-node: 3.0.0
+      classnames: 2.5.1
+      lexical: 0.38.2
+      luxon: 3.7.2
+      mapbox-gl: 3.20.0
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
   "@yext/pages@1.2.9(@algolia/client-search@5.35.0)(@types/node@20.19.11)(@types/react@18.3.24)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)(typescript@5.9.2)(vite@5.4.21(@types/node@20.19.11))":
     dependencies:
       ansi-to-html: 0.7.2
@@ -14441,12 +14569,12 @@ snapshots:
       - react
       - react-redux
 
-  "@yext/search-ui-react@2.1.0(@types/react@18.3.24)(@yext/search-headless-react@2.6.0(encoding@0.1.13)(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))(typescript@5.9.2)":
+  "@yext/search-ui-react@2.1.0(@types/react@18.3.24)(@yext/search-headless-react@2.6.0(encoding@0.1.13)(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.15.11(@swc/helpers@0.5.17))(@types/node@20.19.11)(typescript@5.9.2)))(typescript@5.9.2)":
     dependencies:
       "@restart/ui": 1.9.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      "@tailwindcss/forms": 0.5.10(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))
-      "@tailwindcss/line-clamp": 0.4.4(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))
-      "@tailwindcss/typography": 0.5.16(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))
+      "@tailwindcss/forms": 0.5.10(tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.15.11(@swc/helpers@0.5.17))(@types/node@20.19.11)(typescript@5.9.2)))
+      "@tailwindcss/line-clamp": 0.4.4(tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.15.11(@swc/helpers@0.5.17))(@types/node@20.19.11)(typescript@5.9.2)))
+      "@tailwindcss/typography": 0.5.16(tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.15.11(@swc/helpers@0.5.17))(@types/node@20.19.11)(typescript@5.9.2)))
       "@yext/analytics": 1.1.0
       "@yext/search-headless-react": 2.6.0(encoding@0.1.13)(react@18.3.1)
       classnames: 2.5.1
@@ -14476,9 +14604,9 @@ snapshots:
   "@yext/search-ui-react@2.1.0(@types/react@18.3.24)(@yext/search-headless-react@2.7.1(encoding@0.1.13)(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.15.11(@swc/helpers@0.5.17))(@types/node@20.19.11)(typescript@5.9.2)))(typescript@5.9.2)":
     dependencies:
       "@restart/ui": 1.9.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      "@tailwindcss/forms": 0.5.10(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))
-      "@tailwindcss/line-clamp": 0.4.4(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))
-      "@tailwindcss/typography": 0.5.16(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))
+      "@tailwindcss/forms": 0.5.10(tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.15.11(@swc/helpers@0.5.17))(@types/node@20.19.11)(typescript@5.9.2)))
+      "@tailwindcss/line-clamp": 0.4.4(tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.15.11(@swc/helpers@0.5.17))(@types/node@20.19.11)(typescript@5.9.2)))
+      "@tailwindcss/typography": 0.5.16(tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.15.11(@swc/helpers@0.5.17))(@types/node@20.19.11)(typescript@5.9.2)))
       "@yext/analytics": 1.1.0
       "@yext/search-headless-react": 2.7.1(encoding@0.1.13)(react@18.3.1)
       classnames: 2.5.1
@@ -14869,6 +14997,8 @@ snapshots:
 
   chardet@2.1.1: {}
 
+  cheap-ruler@4.0.0: {}
+
   check-error@2.1.1: {}
 
   chokidar@3.6.0:
@@ -15198,6 +15328,8 @@ snapshots:
       gopd: 1.2.0
 
   earcut@2.2.4: {}
+
+  earcut@3.0.2: {}
 
   eastasianwidth@0.2.0: {}
 
@@ -15592,6 +15724,8 @@ snapshots:
   gensync@1.0.0-beta.2: {}
 
   geojson-vt@3.2.1: {}
+
+  geojson-vt@4.0.2: {}
 
   geolib@3.3.4: {}
 
@@ -16401,6 +16535,33 @@ snapshots:
       tinyqueue: 2.0.3
       vt-pbf: 3.1.3
 
+  mapbox-gl@3.20.0:
+    dependencies:
+      "@mapbox/jsonlint-lines-primitives": 2.0.2
+      "@mapbox/mapbox-gl-supported": 3.0.0
+      "@mapbox/point-geometry": 1.1.0
+      "@mapbox/tiny-sdf": 2.0.7
+      "@mapbox/unitbezier": 0.0.1
+      "@mapbox/vector-tile": 2.0.4
+      "@types/geojson": 7946.0.16
+      "@types/geojson-vt": 3.2.5
+      "@types/pbf": 3.0.5
+      "@types/supercluster": 7.1.3
+      cheap-ruler: 4.0.0
+      csscolorparser: 1.0.3
+      earcut: 3.0.2
+      geojson-vt: 4.0.2
+      gl-matrix: 3.4.4
+      grid-index: 1.1.0
+      kdbush: 4.0.2
+      martinez-polygon-clipping: 0.8.1
+      murmurhash-js: 1.0.0
+      pbf: 4.0.1
+      potpack: 2.1.0
+      quickselect: 3.0.0
+      supercluster: 8.0.1
+      tinyqueue: 3.0.0
+
   mark.js@8.11.1: {}
 
   markdown-it@14.1.0:
@@ -16415,6 +16576,12 @@ snapshots:
   markdown-table@2.0.0:
     dependencies:
       repeat-string: 1.6.1
+
+  martinez-polygon-clipping@0.8.1:
+    dependencies:
+      robust-predicates: 2.0.4
+      splaytree: 0.1.4
+      tinyqueue: 3.0.0
 
   material-colors@1.2.6: {}
 
@@ -17080,6 +17247,10 @@ snapshots:
       ieee754: 1.2.1
       resolve-protobuf-schema: 2.1.0
 
+  pbf@4.0.1:
+    dependencies:
+      resolve-protobuf-schema: 2.1.0
+
   pbkdf2@3.1.3:
     dependencies:
       create-hash: 1.1.3
@@ -17151,7 +17322,7 @@ snapshots:
       camelcase-css: 2.0.1
       postcss: 8.5.6
 
-  postcss-load-config@4.0.2(postcss@8.5.6)(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)):
+  postcss-load-config@4.0.2(postcss@8.5.6)(ts-node@10.9.2(@swc/core@1.15.11(@swc/helpers@0.5.17))(@types/node@20.19.11)(typescript@5.9.2)):
     dependencies:
       lilconfig: 3.1.3
       yaml: 2.8.1
@@ -17435,6 +17606,8 @@ snapshots:
   quick-lru@7.1.0: {}
 
   quickselect@2.0.0: {}
+
+  quickselect@3.0.0: {}
 
   randombytes@2.1.0:
     dependencies:
@@ -17760,6 +17933,8 @@ snapshots:
       hash-base: 3.0.5
       inherits: 2.0.4
 
+  robust-predicates@2.0.4: {}
+
   rollup@4.59.0:
     dependencies:
       "@types/estree": 1.0.8
@@ -18033,6 +18208,8 @@ snapshots:
 
   speakingurl@14.0.1: {}
 
+  splaytree@0.1.4: {}
+
   split-on-first@3.0.0: {}
 
   sprintf-js@1.0.3: {}
@@ -18167,7 +18344,7 @@ snapshots:
 
   tailwind-merge@2.6.0: {}
 
-  tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)):
+  tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.15.11(@swc/helpers@0.5.17))(@types/node@20.19.11)(typescript@5.9.2)):
     dependencies:
       "@alloc/quick-lru": 5.2.0
       arg: 5.0.2
@@ -18186,7 +18363,7 @@ snapshots:
       postcss: 8.5.6
       postcss-import: 15.1.0(postcss@8.5.6)
       postcss-js: 4.0.1(postcss@8.5.6)
-      postcss-load-config: 4.0.2(postcss@8.5.6)(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2))
+      postcss-load-config: 4.0.2(postcss@8.5.6)(ts-node@10.9.2(@swc/core@1.15.11(@swc/helpers@0.5.17))(@types/node@20.19.11)(typescript@5.9.2))
       postcss-nested: 6.2.0(postcss@8.5.6)
       postcss-selector-parser: 6.1.2
       resolve: 1.22.10
@@ -18240,6 +18417,8 @@ snapshots:
   tinypool@1.1.1: {}
 
   tinyqueue@2.0.3: {}
+
+  tinyqueue@3.0.0: {}
 
   tinyrainbow@2.0.0: {}
 
