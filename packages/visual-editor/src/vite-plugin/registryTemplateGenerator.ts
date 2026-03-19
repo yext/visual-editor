@@ -1,35 +1,41 @@
 /**
  * High-level overview:
  *
- * 1) Discover templates from `src/registry/*`.
- *    - Each subdirectory under `src/registry` is treated as a template name.
- *    - Example: `src/registry/main` -> template name `main`.
+ * 1) Discover templates from `<starter>/src/registry/*`.
+ *    - Each subdirectory under `<starter>/src/registry` is treated as a
+ *      template name.
+ *    - Example: `<starter>/src/registry/main` -> template name `main`.
  *
  * 2) Generate one config per template.
- *    - Scan template-specific components from `src/registry/<template>/components`.
- *    - Emit `src/registry/<template>/config.tsx`.
+ *    - Scan template-specific components from
+ *      `<starter>/src/registry/<template>/components`.
+ *    - Emit `<starter>/src/registry/<template>/config.tsx`.
  *    - Ignore registry templates that do not contain any component source files.
  *
  * 3) Materialize template files for discovered registry templates.
  *    - Use the plugin's internal `base.tsx` source as the shared base template.
- *    - Emit `src/templates/<template>.tsx` for each registry template that has components.
- *    - Insert the matching `src/registry/<template>/config.tsx` import.
+ *    - Emit `<starter>/src/templates/<template>.tsx` for each registry
+ *      template that has components.
+ *    - Insert the matching `<starter>/src/registry/<template>/config.tsx`
+ *      import.
  *    - Adapt `baseConfig` and rename the exported `Base` component to match the
  *      template name.
  *
- * 4) Update `.template-manifest.json`.
- *    - Read `src/registry/<template>/defaultLayout.json` when present.
+ * 4) Update `<starter>/.template-manifest.json`.
+ *    - Read `<starter>/src/registry/<template>/defaultLayout.json` when
+ *      present.
  *    - Write that JSON into the matching template's `defaultLayoutData`.
  *    - Create a manifest entry when a registry template is missing.
  *
  * 5) Update editor wiring.
- *    - Patch `src/templates/edit.tsx`.
+ *    - Patch `<starter>/src/templates/edit.tsx`.
  *    - Import each generated config into `componentRegistry`.
  *    - Ensure `componentRegistry` points each generated template name to its
  *      config while preserving existing `directory` and `locator` entries.
  */
 import path from "node:path";
 import fs from "fs-extra";
+import { Project, QuoteKind, SyntaxKind, type SourceFile } from "ts-morph";
 
 type TemplateManifestEntry = {
   name: string;
@@ -65,8 +71,20 @@ type CollectedTemplate = {
   items: CollectedItem[];
 };
 
+type ImportDefinition = string | { name: string; alias?: string };
+
+type InsertNamedImportOptions = {
+  moduleSpecifier: string;
+  namedImports: ImportDefinition[];
+};
+
 const VALID_EXTENSIONS = new Set([".tsx", ".ts", ".jsx", ".js"]);
 const PRESERVED_EDIT_REGISTRY_KEYS = new Set(["directory", "locator"]);
+const AST_PROJECT = new Project({
+  manipulationSettings: {
+    quoteKind: QuoteKind.Double,
+  },
+});
 
 const toPascalCase = (value: string): string => {
   return value
@@ -304,6 +322,138 @@ const buildConfigSource = (
     .join("\n");
 };
 
+const getAstSourceFile = (filePath: string): SourceFile => {
+  AST_PROJECT.getSourceFile(filePath)?.forget();
+  return AST_PROJECT.addSourceFileAtPath(filePath);
+};
+
+const removeNamedImports = (
+  sourceFile: SourceFile,
+  moduleSpecifier: string,
+  namesToRemove: string[]
+): void => {
+  const declaration = sourceFile.getImportDeclarations().find((item) => {
+    return item.getModuleSpecifierValue() === moduleSpecifier;
+  });
+  if (!declaration) {
+    return;
+  }
+
+  for (const namedImport of declaration.getNamedImports()) {
+    if (namesToRemove.includes(namedImport.getName())) {
+      namedImport.remove();
+    }
+  }
+
+  if (
+    declaration.getNamedImports().length === 0 &&
+    !declaration.getDefaultImport() &&
+    !declaration.getNamespaceImport()
+  ) {
+    declaration.remove();
+  }
+};
+
+const removeGeneratedConfigImports = (sourceFile: SourceFile): void => {
+  for (const declaration of sourceFile.getImportDeclarations()) {
+    const moduleSpecifier = declaration.getModuleSpecifierValue();
+    if (
+      moduleSpecifier === "../config" ||
+      moduleSpecifier === "./config" ||
+      moduleSpecifier.endsWith("/config")
+    ) {
+      declaration.remove();
+    }
+  }
+};
+
+const insertNamedImport = (
+  sourceFile: SourceFile,
+  options: InsertNamedImportOptions
+): void => {
+  const pagesComponentsImport = sourceFile
+    .getImportDeclarations()
+    .find((item) => {
+      return item.getModuleSpecifierValue() === "@yext/pages-components";
+    });
+
+  if (pagesComponentsImport) {
+    sourceFile.insertImportDeclaration(
+      pagesComponentsImport.getChildIndex() + 1,
+      {
+        namedImports: options.namedImports,
+        moduleSpecifier: options.moduleSpecifier,
+      }
+    );
+    return;
+  }
+
+  sourceFile.addImportDeclaration({
+    namedImports: options.namedImports,
+    moduleSpecifier: options.moduleSpecifier,
+  });
+};
+
+const ensureSideEffectImport = (
+  sourceFile: SourceFile,
+  moduleSpecifier: string
+): void => {
+  const exists = sourceFile.getImportDeclarations().some((item) => {
+    return item.getModuleSpecifierValue() === moduleSpecifier;
+  });
+  if (!exists) {
+    sourceFile.insertImportDeclaration(0, {
+      moduleSpecifier,
+    });
+  }
+};
+
+const setEditComponentRegistry = (
+  sourceFile: SourceFile,
+  templateNames: string[]
+): void => {
+  const declaration = sourceFile.getVariableDeclaration("componentRegistry");
+  if (!declaration) {
+    return;
+  }
+
+  const initializer = declaration.getInitializerIfKind(
+    SyntaxKind.ObjectLiteralExpression
+  );
+  if (!initializer) {
+    const registryEntries = templateNames
+      .map((templateName) => {
+        return `  "${templateName}": ${getEditConfigIdentifier(templateName)},`;
+      })
+      .join("\n");
+    declaration.setInitializer(`{
+${registryEntries}
+}`);
+    return;
+  }
+
+  for (const property of initializer.getProperties()) {
+    const propertyAssignment = property.asKind(SyntaxKind.PropertyAssignment);
+    if (!propertyAssignment) {
+      continue;
+    }
+
+    const propertyName = propertyAssignment.getName();
+    if (PRESERVED_EDIT_REGISTRY_KEYS.has(propertyName)) {
+      continue;
+    }
+
+    propertyAssignment.remove();
+  }
+
+  for (const templateName of templateNames) {
+    initializer.addPropertyAssignment({
+      name: `"${templateName}"`,
+      initializer: getEditConfigIdentifier(templateName),
+    });
+  }
+};
+
 /**
  * Renders a template file from the plugin's internal base template by inserting
  * the registry config import, replacing `baseConfig`, and renaming the exported
@@ -324,50 +474,74 @@ const buildTemplateSource = (
     toPascalCase(templateName),
     `Could not derive a template component name from ${templateName}`
   );
-
-  const importAnchor =
-    'import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";';
-  if (!baseSource.includes(importAnchor)) {
-    throw new Error(
-      "Could not find config import anchor in generated base template"
-    );
-  }
-
-  let renderedSource = baseSource.replace(
-    importAnchor,
-    `${importAnchor}\nimport { ${configExportName} } from "${configImportPath}";`
+  const sourceFilePath = path.join(
+    process.cwd(),
+    "__generated_template_source__.tsx"
   );
+  AST_PROJECT.getSourceFile(sourceFilePath)?.forget();
 
-  if (!renderedSource.includes("baseConfig")) {
+  const sourceFile = AST_PROJECT.createSourceFile(sourceFilePath, baseSource, {
+    overwrite: true,
+  });
+
+  insertNamedImport(sourceFile, {
+    namedImports: [configExportName],
+    moduleSpecifier: configImportPath,
+  });
+  removeNamedImports(sourceFile, "@puckeditor/core", ["Config"]);
+
+  const baseConfigDeclaration = sourceFile.getVariableDeclaration("baseConfig");
+  if (!baseConfigDeclaration) {
+    sourceFile.forget();
     throw new Error("Could not find baseConfig in generated base template");
   }
 
-  renderedSource = renderedSource.replace(
-    'import { Config, Render, resolveAllData } from "@puckeditor/core";',
-    'import { Render, resolveAllData } from "@puckeditor/core";'
-  );
-  renderedSource = renderedSource.replace(
-    /\nconst baseConfig: Config = \{\};\n/,
-    "\n"
-  );
-  renderedSource = renderedSource.replace(/\bbaseConfig\b/g, configExportName);
+  for (const referenceNode of baseConfigDeclaration.findReferencesAsNodes()) {
+    if (
+      referenceNode.getStart() ===
+      baseConfigDeclaration.getNameNode().getStart()
+    ) {
+      continue;
+    }
 
-  if (!renderedSource.includes("const Base:")) {
+    referenceNode.replaceWithText(configExportName);
+  }
+
+  const baseConfigStatement = baseConfigDeclaration.getFirstAncestorByKind(
+    SyntaxKind.VariableStatement
+  );
+  if (!baseConfigStatement) {
+    sourceFile.forget();
+    throw new Error(
+      "Could not find baseConfig declaration in generated base template"
+    );
+  }
+  baseConfigStatement.remove();
+
+  const baseDeclaration = sourceFile.getVariableDeclaration("Base");
+  if (!baseDeclaration) {
+    sourceFile.forget();
     throw new Error(
       "Could not find Base component placeholder in generated base template"
     );
   }
+  baseDeclaration.rename(templateComponentName);
 
-  renderedSource = renderedSource.replace(
-    /const\s+Base\s*:/,
-    `const ${templateComponentName}:`
-  );
-  renderedSource = renderedSource.replace(
-    /export default Base;/,
-    `export default ${templateComponentName};`
-  );
+  const exportAssignment = sourceFile.getExportAssignment((assignment) => {
+    return !assignment.isExportEquals();
+  });
+  if (!exportAssignment) {
+    sourceFile.forget();
+    throw new Error(
+      "Could not find default export placeholder in generated base template"
+    );
+  }
+  exportAssignment.setExpression(templateComponentName);
 
-  return renderedSource;
+  sourceFile.formatText();
+  const renderedTemplateSource = sourceFile.getFullText();
+  sourceFile.forget();
+  return renderedTemplateSource;
 };
 
 /**
@@ -382,21 +556,14 @@ const updateEditTemplate = (rootDir: string, templateNames: string[]): void => {
     return;
   }
 
-  let editSource = fs.readFileSync(editTemplatePath, "utf8");
+  const originalSource = fs.readFileSync(editTemplatePath, "utf8");
+  const sourceFile = getAstSourceFile(editTemplatePath);
 
-  if (!editSource.includes('import "@yext/visual-editor/editor.css";')) {
-    editSource = `import "@yext/visual-editor/editor.css";\n${editSource}`;
-  }
-  if (!editSource.includes('import "../index.css";')) {
-    editSource = `import "../index.css";\n${editSource}`;
-  }
+  removeGeneratedConfigImports(sourceFile);
+  ensureSideEffectImport(sourceFile, "@yext/visual-editor/editor.css");
+  ensureSideEffectImport(sourceFile, "../index.css");
 
-  editSource = editSource.replace(
-    /^import\s+\{[^}]+\}\s+from\s+"(?:\.\.\/)?(?:registry\/[^"]+\/config|\.\/config|[^"]+\/config)";\n/gm,
-    ""
-  );
-
-  const generatedImports = templateNames.map((templateName) => {
+  for (const templateName of templateNames) {
     const templatePaths = getTemplatePaths(rootDir, templateName);
     const moduleSpecifier = toPosixPath(
       path
@@ -404,54 +571,28 @@ const updateEditTemplate = (rootDir: string, templateNames: string[]): void => {
         .replace(/\.[^/.]+$/, "")
     );
 
-    return `import { ${getTemplateConfigExportName(templateName)} as ${getEditConfigIdentifier(
-      templateName
-    )} } from "${moduleSpecifier.startsWith(".") ? moduleSpecifier : `./${moduleSpecifier}`}";`;
-  });
-
-  const configImportAnchor = 'import { type Config } from "@puckeditor/core";';
-  if (editSource.includes(configImportAnchor)) {
-    editSource = editSource.replace(
-      configImportAnchor,
-      [configImportAnchor, ...generatedImports].filter(Boolean).join("\n")
-    );
-  } else if (generatedImports.length) {
-    editSource = `${generatedImports.join("\n")}\n${editSource}`;
+    insertNamedImport(sourceFile, {
+      namedImports: [
+        {
+          name: getTemplateConfigExportName(templateName),
+          alias: getEditConfigIdentifier(templateName),
+        },
+      ],
+      moduleSpecifier: moduleSpecifier.startsWith(".")
+        ? moduleSpecifier
+        : `./${moduleSpecifier}`,
+    });
   }
 
-  editSource = editSource.replace(
-    /const componentRegistry: Record<string, Config<any>> = \{[\s\S]*?\n\};/,
-    (_match) => {
-      const existingRegistryEntries =
-        /const componentRegistry: Record<string, Config<any>> = \{\n([\s\S]*?)\n\};/
-          .exec(_match)?.[1]
-          .split("\n")
-          .map((line) => line.trim())
-          .filter((line) => {
-            const propertyName = line.match(/^"?([A-Za-z0-9_-]+)"?\s*:/)?.[1];
-            return (
-              propertyName &&
-              PRESERVED_EDIT_REGISTRY_KEYS.has(propertyName) &&
-              !templateNames.includes(propertyName)
-            );
-          }) ?? [];
+  setEditComponentRegistry(sourceFile, templateNames);
 
-      const registryEntries = [
-        ...existingRegistryEntries,
-        ...templateNames.map((templateName) => {
-          return `"${templateName}": ${getEditConfigIdentifier(templateName)},`;
-        }),
-      ];
+  sourceFile.formatText();
+  const updatedSource = sourceFile.getFullText();
+  sourceFile.forget();
 
-      const body = registryEntries.length
-        ? `\n  ${registryEntries.join("\n  ")}\n`
-        : "\n";
-
-      return `const componentRegistry: Record<string, Config<any>> = {${body}};`;
-    }
-  );
-
-  fs.writeFileSync(editTemplatePath, editSource);
+  if (updatedSource !== originalSource) {
+    fs.writeFileSync(editTemplatePath, updatedSource);
+  }
 };
 
 /**
