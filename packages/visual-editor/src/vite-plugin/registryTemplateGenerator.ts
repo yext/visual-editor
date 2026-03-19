@@ -118,6 +118,32 @@ const toPosixPath = (value: string): string => {
   return value.split(path.sep).join(path.posix.sep);
 };
 
+const toErrorMessage = (error: unknown): string => {
+  return error instanceof Error ? error.message : String(error);
+};
+
+const readUtf8File = (filePath: string, description: string): string => {
+  try {
+    return fs.readFileSync(filePath, "utf8");
+  } catch (error) {
+    throw new Error(
+      `Failed to read ${description} at ${filePath}: ${toErrorMessage(error)}`
+    );
+  }
+};
+
+const readJsonFile = <T>(filePath: string, description: string): T => {
+  const source = readUtf8File(filePath, description);
+
+  try {
+    return JSON.parse(source) as T;
+  } catch (error) {
+    throw new Error(
+      `Failed to parse ${description} at ${filePath}: ${toErrorMessage(error)}`
+    );
+  }
+};
+
 const getTemplatePaths = (
   rootDir: string,
   templateName: string
@@ -138,7 +164,15 @@ const walkDirectory = (directory: string): string[] => {
     return [];
   }
 
-  const entries = fs.readdirSync(directory, { withFileTypes: true });
+  let entries: fs.Dirent[];
+  try {
+    entries = fs.readdirSync(directory, { withFileTypes: true });
+  } catch (error) {
+    throw new Error(
+      `Failed to read registry directory at ${directory}: ${toErrorMessage(error)}`
+    );
+  }
+
   return entries
     .flatMap((entry) => {
       const absolutePath = path.join(directory, entry.name);
@@ -160,8 +194,16 @@ const getTemplateNames = (rootDir: string): string[] => {
     return [];
   }
 
-  return fs
-    .readdirSync(registryDir, { withFileTypes: true })
+  let entries: fs.Dirent[];
+  try {
+    entries = fs.readdirSync(registryDir, { withFileTypes: true });
+  } catch (error) {
+    throw new Error(
+      `Failed to read registry directory at ${registryDir}: ${toErrorMessage(error)}`
+    );
+  }
+
+  return entries
     .filter((entry) => entry.isDirectory())
     .map((entry) => entry.name)
     .sort((a, b) => a.localeCompare(b));
@@ -324,7 +366,13 @@ const buildConfigSource = (
 
 const getAstSourceFile = (filePath: string): SourceFile => {
   AST_PROJECT.getSourceFile(filePath)?.forget();
-  return AST_PROJECT.addSourceFileAtPath(filePath);
+  try {
+    return AST_PROJECT.addSourceFileAtPath(filePath);
+  } catch (error) {
+    throw new Error(
+      `Failed to read TypeScript source at ${filePath}: ${toErrorMessage(error)}`
+    );
+  }
 };
 
 const removeNamedImports = (
@@ -556,7 +604,7 @@ const updateEditTemplate = (rootDir: string, templateNames: string[]): void => {
     return;
   }
 
-  const originalSource = fs.readFileSync(editTemplatePath, "utf8");
+  const originalSource = readUtf8File(editTemplatePath, "edit template source");
   const sourceFile = getAstSourceFile(editTemplatePath);
 
   removeGeneratedConfigImports(sourceFile);
@@ -609,7 +657,7 @@ const updateTemplateManifest = (
 ): void => {
   const manifestPath = path.join(rootDir, ".template-manifest.json");
   const manifest: ManifestFile = fs.existsSync(manifestPath)
-    ? JSON.parse(fs.readFileSync(manifestPath, "utf8"))
+    ? readJsonFile<ManifestFile>(manifestPath, "template manifest JSON")
     : { templates: [] };
 
   if (!Array.isArray(manifest.templates)) {
@@ -624,8 +672,9 @@ const updateTemplateManifest = (
       continue;
     }
 
-    const defaultLayoutData = JSON.parse(
-      fs.readFileSync(defaultLayoutPath, "utf8")
+    const defaultLayoutData = readJsonFile<unknown>(
+      defaultLayoutPath,
+      `default layout JSON for template "${templateName}"`
     );
     const existingEntry = manifest.templates.find(
       (template) => template.name === templateName
