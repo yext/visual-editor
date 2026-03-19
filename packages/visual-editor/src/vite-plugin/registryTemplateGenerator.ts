@@ -1,10 +1,32 @@
 /**
- * Registry template generation overview:
- * 1. Discover template directories under `src/registry` and find component overrides.
- * 2. Generate one `config.tsx` file per registry template from the discovered components.
- * 3. Generate `src/templates/<template>.tsx` only for templates that have component overrides.
- * 4. Update `src/templates/edit.tsx` so the editor can resolve generated template configs.
- * 5. Merge `defaultLayout.json` into `.template-manifest.json` for each registry template.
+ * High-level overview:
+ *
+ * 1) Discover templates from `src/registry/*`.
+ *    - Each subdirectory under `src/registry` is treated as a template name.
+ *    - Example: `src/registry/main` -> template name `main`.
+ *
+ * 2) Generate one config per template.
+ *    - Scan template-specific components from `src/registry/<template>/components`.
+ *    - Emit `src/registry/<template>/config.tsx`.
+ *
+ * 3) Materialize template files for component overrides.
+ *    - Use the plugin's internal `base.tsx` source as the shared base template.
+ *    - Emit `src/templates/<template>.tsx` only when
+ *      `src/registry/<template>/components` exists.
+ *    - Insert the matching `src/registry/<template>/config.tsx` import.
+ *    - Adapt either `TEMPLATE_CONFIG` or `baseConfig`, and rename the exported
+ *      template component to match the template name.
+ *
+ * 4) Update `.template-manifest.json`.
+ *    - Read `src/registry/<template>/defaultLayout.json` when present.
+ *    - Write that JSON into the matching template's `defaultLayoutData`.
+ *    - Create a manifest entry when a registry template is missing.
+ *
+ * 5) Update editor wiring.
+ *    - Patch `src/templates/edit.tsx`.
+ *    - Import each generated config into `componentRegistry`.
+ *    - Ensure `componentRegistry` points each overridden template name to its
+ *      config while preserving existing `directory` and `locator` entries.
  */
 import path from "node:path";
 import fs from "fs-extra";
@@ -40,7 +62,11 @@ type CollectedItem = {
 const VALID_EXTENSIONS = new Set([".tsx", ".ts", ".jsx", ".js"]);
 const PRESERVED_EDIT_REGISTRY_KEYS = new Set(["directory", "locator"]);
 
-/** Convert a filename or path fragment into PascalCase for generated identifiers. */
+/**
+ * Converts a file or path-like string to PascalCase.
+ * @param {string} value
+ * @returns {string}
+ */
 const toPascalCase = (value: string): string => {
   return value
     .replace(/\.[^/.]+$/, "")
@@ -52,7 +78,11 @@ const toPascalCase = (value: string): string => {
     .join("");
 };
 
-/** Convert a filename or path fragment into camelCase for local variable names. */
+/**
+ * Converts a file or path-like string to camelCase.
+ * @param {string} value
+ * @returns {string}
+ */
 const toCamelCase = (value: string): string => {
   const pascalValue = toPascalCase(value);
   if (!pascalValue) {
@@ -62,7 +92,12 @@ const toCamelCase = (value: string): string => {
   return pascalValue[0].toLowerCase() + pascalValue.slice(1);
 };
 
-/** Guard against empty derived identifiers so generation fails loudly and early. */
+/**
+ * Throws when a derived identifier is empty.
+ * @param {string} value
+ * @param {string} errorMessage
+ * @returns {string}
+ */
 const requireNonEmpty = (value: string, errorMessage: string): string => {
   if (!value) {
     throw new Error(errorMessage);
@@ -71,12 +106,21 @@ const requireNonEmpty = (value: string, errorMessage: string): string => {
   return value;
 };
 
-/** Normalize paths to POSIX separators so generated imports are portable. */
+/**
+ * Normalizes a path to POSIX separators.
+ * @param {string} value
+ * @returns {string}
+ */
 const toPosixPath = (value: string): string => {
   return value.split(path.sep).join(path.posix.sep);
 };
 
-/** Build the registry, config, template, and layout paths for a template name. */
+/**
+ * Builds the filesystem paths for a template registry.
+ * @param {string} rootDir
+ * @param {string} templateName
+ * @returns {TemplatePaths}
+ */
 const getTemplatePaths = (
   rootDir: string,
   templateName: string
@@ -92,7 +136,11 @@ const getTemplatePaths = (
   };
 };
 
-/** Recursively collect source files from a component directory. */
+/**
+ * Recursively walks a directory and returns source files that match supported extensions.
+ * @param {string} directory
+ * @returns {string[]}
+ */
 const walkDirectory = (directory: string): string[] => {
   if (!fs.existsSync(directory)) {
     return [];
@@ -114,7 +162,11 @@ const walkDirectory = (directory: string): string[] => {
     .sort((a, b) => a.localeCompare(b));
 };
 
-/** List all registry template directory names under `src/registry`. */
+/**
+ * Lists template names from `src/registry`.
+ * @param {string} rootDir
+ * @returns {string[]}
+ */
 const getTemplateNames = (rootDir: string): string[] => {
   const registryDir = path.join(rootDir, "src", "registry");
   if (!fs.existsSync(registryDir)) {
@@ -128,7 +180,12 @@ const getTemplateNames = (rootDir: string): string[] => {
     .sort((a, b) => a.localeCompare(b));
 };
 
-/** Determine whether a template should get a generated template file override. */
+/**
+ * Checks whether a template should get a generated template file override.
+ * @param {string} rootDir
+ * @param {string} templateName
+ * @returns {boolean}
+ */
 const hasTemplateComponentOverride = (
   rootDir: string,
   templateName: string
@@ -138,7 +195,13 @@ const hasTemplateComponentOverride = (
   );
 };
 
-/** Collect and uniquely name all generated component imports for one template. */
+/**
+ * Collects template-specific components for a template config while keeping
+ * generated identifiers unique within one config file.
+ * @param {string} rootDir
+ * @param {string} templateName
+ * @returns {CollectedItem[]}
+ */
 const collectTemplateComponents = (
   rootDir: string,
   templateName: string
@@ -192,7 +255,11 @@ const collectTemplateComponents = (
   );
 };
 
-/** Build the exported config symbol name for a generated registry config file. */
+/**
+ * Builds the exported config symbol name for a template config file.
+ * @param {string} templateName
+ * @returns {string}
+ */
 const getTemplateConfigExportName = (templateName: string): string => {
   return `${requireNonEmpty(
     toPascalCase(templateName),
@@ -200,7 +267,11 @@ const getTemplateConfigExportName = (templateName: string): string => {
   )}Config`;
 };
 
-/** Build the local identifier used when a generated config is imported into `edit.tsx`. */
+/**
+ * Builds the local config identifier used in `edit.tsx`.
+ * @param {string} templateName
+ * @returns {string}
+ */
 const getEditConfigIdentifier = (templateName: string): string => {
   return `${requireNonEmpty(
     toCamelCase(templateName),
@@ -208,7 +279,11 @@ const getEditConfigIdentifier = (templateName: string): string => {
   )}Config`;
 };
 
-/** Render a string-to-identifier map into TypeScript object literal source. */
+/**
+ * Renders a string-keyed object of identifier references into TypeScript source.
+ * @param {Record<string, string>} value
+ * @returns {string}
+ */
 const renderIdentifierMap = (value: Record<string, string>): string => {
   return [
     "{",
@@ -219,7 +294,14 @@ const renderIdentifierMap = (value: Record<string, string>): string => {
   ].join("\n");
 };
 
-/** Build the full `config.tsx` source for one registry template. */
+/**
+ * Creates the TypeScript source for a generated Puck config.
+ * @param {string} rootDir
+ * @param {CollectedItem[]} items
+ * @param {string} outputFilePath
+ * @param {string} templateName
+ * @returns {string}
+ */
 const buildConfigSource = (
   rootDir: string,
   items: CollectedItem[],
@@ -283,7 +365,16 @@ const buildConfigSource = (
     .join("\n");
 };
 
-/** Render a template file by adapting the shared base template to one registry config. */
+/**
+ * Renders a template file from the plugin's internal base template by inserting
+ * the registry config import, adapting the config reference, and renaming the
+ * exported component.
+ * @param {string} baseSource
+ * @param {string} templateName
+ * @param {string} configImportPath
+ * @param {string} configExportName
+ * @returns {string}
+ */
 const buildTemplateSource = (
   baseSource: string,
   templateName: string,
@@ -359,7 +450,13 @@ const buildTemplateSource = (
   return renderedSource;
 };
 
-/** Patch `src/templates/edit.tsx` so the editor knows about generated template configs. */
+/**
+ * Updates `src/templates/edit.tsx` to import each generated config and register it.
+ * @param {string} rootDir
+ * @param {string[]} templateNames
+ * @param {string[]} overriddenTemplateNames
+ * @returns {void}
+ */
 const updateEditTemplate = (
   rootDir: string,
   templateNames: string[],
@@ -442,7 +539,14 @@ const updateEditTemplate = (
   fs.writeFileSync(editTemplatePath, editSource);
 };
 
-/** Merge registry `defaultLayout.json` files into `.template-manifest.json`. */
+/**
+ * Updates `.template-manifest.json` so matching template entries use
+ * `src/registry/<template>/defaultLayout.json` as `defaultLayoutData`,
+ * creating manifest entries when they are missing.
+ * @param {string} rootDir
+ * @param {string[]} templateNames
+ * @returns {void}
+ */
 const updateTemplateManifest = (
   rootDir: string,
   templateNames: string[]
@@ -497,7 +601,15 @@ const updateTemplateManifest = (
   }
 };
 
-/** Generate config files, optional template overrides, manifest entries, and edit wiring. */
+/**
+ * Generates all template configs, optional template overrides, matching
+ * `.template-manifest.json` entries, and `edit.tsx` registry wiring.
+ * @param {{
+ *   rootDir: string,
+ *   generatedBaseTemplateSource: string
+ * }} options
+ * @returns {void}
+ */
 export const generateRegistryTemplateFiles = ({
   rootDir,
   generatedBaseTemplateSource,
