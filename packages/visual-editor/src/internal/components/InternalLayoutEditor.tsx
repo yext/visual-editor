@@ -280,7 +280,6 @@ export const InternalLayoutEditor = ({
         const resolveData = async () => {
           devLogger.logFunc("reloadDataOnDocumentChange");
           const { appState, config, dispatch } = getPuck();
-          const dataSnapshot = structuredClone(appState.data);
 
           // Clone Puck data to ensure entity fields get updated on entity selection
           const dataToResolve = clonePuckResolveData(appState.data);
@@ -291,7 +290,7 @@ export const InternalLayoutEditor = ({
 
           devLogger.logData("RESOLVED_LAYOUT_DATA", resolvedData);
 
-          if (isDeepEqual(dataSnapshot, resolvedData)) {
+          if (isDeepEqual(appState.data, resolvedData)) {
             devLogger.log(
               "reloadDataOnDocumentChange - no layout changes detected"
             );
