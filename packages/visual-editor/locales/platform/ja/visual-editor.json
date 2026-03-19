@@ -290,8 +290,8 @@
     "mobileContentAlignment": "モバイルコンテンツアライメント",
     "mobileImagePosition": "モバイルイメージの位置",
     "mobileMediaPosition": "モバイルメディアのポジション",
-    "normalizeLink": "リンクの正規化",
     "none": "なし",
+    "normalizeLink": "リンクの正規化",
     "openInNewTab": "新しいタブで開く",
     "options": {
       "address": "住所",

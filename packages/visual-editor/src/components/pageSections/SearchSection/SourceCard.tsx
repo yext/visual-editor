@@ -1,5 +1,6 @@
 import { CitationProps } from "@yext/search-ui-react";
 import { useTranslation } from "react-i18next";
+import { CTA } from "../../atoms/cta.tsx";
 
 interface RawData {
   landingPageUrl?: string;
@@ -16,7 +17,13 @@ const SourceCard = (props: CitationProps) => {
   return (
     <div className="border px-5 py-2.5 rounded-md">
       {link ? (
-        <a href={link}>{name}</a>
+        <CTA
+          link={link}
+          label={name}
+          variant={"primary"}
+          className="!w-52 justify-center"
+          normalizeLink={true}
+        />
       ) : (
         <p>
           {name}{" "}
