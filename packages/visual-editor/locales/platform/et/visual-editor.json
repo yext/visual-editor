@@ -111,7 +111,7 @@
     "richText": "Rikastekst",
     "searchBarSlot": "Otsinguriba pesa",
     "SearchResultsSlot": "Otsingutulemuste pesa",
-    "searchWithSlots": "Otsige teenindusaegadega",
+    "searchSection": "Otsi jaotis",
     "secondaryFooter": "Teisene jalus",
     "secondaryHeader": "Sekundaarne päis",
     "staticMapSection": "Staatiline kaardiosa",
@@ -543,6 +543,7 @@
   "kilometer_one": "kilomeeter",
   "kilometer_other": "kilomeetrit",
   "knowledgeGraphContent": "Teadmiste graafi sisu",
+  "learnMore": "Lisateavet",
   "link": "link",
   "linkTypes": {
     "clickToWebsite": "Klõpsake veebisaidil",

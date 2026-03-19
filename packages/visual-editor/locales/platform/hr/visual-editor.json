@@ -111,7 +111,7 @@
     "richText": "Obogaćeni tekst",
     "searchBarSlot": "Traka za pretraživanje utor",
     "SearchResultsSlot": "Utor za rezultate pretraživanja",
-    "searchWithSlots": "Pretraživanje s utorima",
+    "searchSection": "Odjeljak za pretraživanje",
     "secondaryFooter": "Sekundarno podnožje",
     "secondaryHeader": "Sekundarno zaglavlje",
     "staticMapSection": "Odjeljak statičke karte",
@@ -544,6 +544,7 @@
   "kilometer_few": "kilometra",
   "kilometer_other": "kilometara",
   "knowledgeGraphContent": "Sadržaj grafikona znanja",
+  "learnMore": "Saznajte više",
   "link": "link",
   "linkTypes": {
     "clickToWebsite": "Kliknite na web mjesto",

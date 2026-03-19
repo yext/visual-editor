@@ -111,7 +111,7 @@
     "richText": "Muotoiltu teksti",
     "searchBarSlot": "Hakupalkin paikka",
     "SearchResultsSlot": "Hakutulosten paikka",
-    "searchWithSlots": "Hae Slotsilla",
+    "searchSection": "Haku-osio",
     "secondaryFooter": "Toissijainen alatunniste",
     "secondaryHeader": "Toissijainen otsikko",
     "staticMapSection": "Staattinen karttaosa",
@@ -543,6 +543,7 @@
   "kilometer_one": "kilometri",
   "kilometer_other": "kilometriä",
   "knowledgeGraphContent": "Tietokaavion sisältö",
+  "learnMore": "Lue lisää",
   "link": "linkki",
   "linkTypes": {
     "clickToWebsite": "Napsauta verkkosivustoa",

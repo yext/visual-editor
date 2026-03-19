@@ -111,7 +111,7 @@
     "richText": "リッチテキスト",
     "searchBarSlot": "サーチバースロット",
     "SearchResultsSlot": "検索結果スロット",
-    "searchWithSlots": "スロットで検索",
+    "searchSection": "検索セクション",
     "secondaryFooter": "セカンダリフッター",
     "secondaryHeader": "二次ヘッダー",
     "staticMapSection": "静的マップセクション",
@@ -543,6 +543,7 @@
   "kilometer_one": "キロメートル",
   "kilometer_other": "キロメートル",
   "knowledgeGraphContent": "ナレッジグラフコンテンツ",
+  "learnMore": "もっと詳しく知る",
   "link": "リンク",
   "linkTypes": {
     "clickToWebsite": "Webサイトをクリックしてください",

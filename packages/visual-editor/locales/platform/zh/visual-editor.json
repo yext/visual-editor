@@ -111,7 +111,7 @@
     "richText": "富文本",
     "searchBarSlot": "搜索栏插槽",
     "SearchResultsSlot": "搜索结果槽",
-    "searchWithSlots": "老虎机搜索",
+    "searchSection": "搜寻部分",
     "secondaryFooter": "二级页脚",
     "secondaryHeader": "二级标头",
     "staticMapSection": "静态地图部分",
@@ -543,6 +543,7 @@
   "kilometer_one": "公里",
   "kilometer_other": "公里",
   "knowledgeGraphContent": "知识图内容",
+  "learnMore": "了解更多",
   "link": "关联",
   "linkTypes": {
     "clickToWebsite": "单击网站",

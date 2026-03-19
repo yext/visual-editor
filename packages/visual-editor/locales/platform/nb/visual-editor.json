@@ -111,7 +111,7 @@
     "richText": "Rik tekst",
     "searchBarSlot": "SearchBar-spor",
     "SearchResultsSlot": "Spor for søkeresultater",
-    "searchWithSlots": "Søk med spilleautomater",
+    "searchSection": "Søkedel",
     "secondaryFooter": "Sekundær bunntekst",
     "secondaryHeader": "Sekundær overskrift",
     "staticMapSection": "Statisk kartseksjon",
@@ -543,6 +543,7 @@
   "kilometer_one": "kilometer",
   "kilometer_other": "kilometer",
   "knowledgeGraphContent": "Kunnskapsgrafinnhold",
+  "learnMore": "Lær mer",
   "link": "lenke",
   "linkTypes": {
     "clickToWebsite": "Klikk til nettstedet",

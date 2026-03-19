@@ -111,7 +111,7 @@
     "richText": "Texte enrichi",
     "searchBarSlot": "Emplacement de la barre de recherche",
     "SearchResultsSlot": "Emplacement des résultats de recherche",
-    "searchWithSlots": "Rechercher avec des machines à sous",
+    "searchSection": "Section de recherche",
     "secondaryFooter": "Pied de page secondaire",
     "secondaryHeader": "En-tête secondaire",
     "staticMapSection": "Section de carte statique",
@@ -544,6 +544,7 @@
   "kilometer_many": "kilomètres",
   "kilometer_other": "kilomètres",
   "knowledgeGraphContent": "Contenu du graphique de connaissances",
+  "learnMore": "Apprendre encore plus",
   "link": "lien",
   "linkTypes": {
     "clickToWebsite": "Cliquez sur le site Web",

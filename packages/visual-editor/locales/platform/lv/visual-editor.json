@@ -111,7 +111,7 @@
     "richText": "Bagātināts teksts",
     "searchBarSlot": "SearchBar Slot",
     "SearchResultsSlot": "Meklēšanas rezultātu slots",
-    "searchWithSlots": "Meklēt ar slotiem",
+    "searchSection": "Meklēšanas sadaļa",
     "secondaryFooter": "Sekundārā kājene",
     "secondaryHeader": "Sekundārā galvene",
     "staticMapSection": "Statiskās kartes sadaļa",
@@ -544,6 +544,7 @@
   "kilometer_one": "kilometrs",
   "kilometer_other": "kilometri",
   "knowledgeGraphContent": "Zināšanu grafika saturs",
+  "learnMore": "Uzziniet vairāk",
   "link": "saite",
   "linkTypes": {
     "clickToWebsite": "Noklikšķiniet uz vietni",

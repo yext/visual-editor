@@ -111,7 +111,7 @@
     "richText": "Zengin Metin",
     "searchBarSlot": "Arama Çubuğu Yuvası",
     "SearchResultsSlot": "Arama Sonuçları Yuvası",
-    "searchWithSlots": "Slotlarla Ara",
+    "searchSection": "Arama Bölümü",
     "secondaryFooter": "İkincil Altbilgi",
     "secondaryHeader": "İkincil Başlık",
     "staticMapSection": "Statik Harita Bölümü",
@@ -543,6 +543,7 @@
   "kilometer_one": "kilometre",
   "kilometer_other": "kilometre",
   "knowledgeGraphContent": "Bilgi Grafik İçeriği",
+  "learnMore": "Daha fazla bilgi edin",
   "link": "bağlantı",
   "linkTypes": {
     "clickToWebsite": "Web sitesine tıklayın",
