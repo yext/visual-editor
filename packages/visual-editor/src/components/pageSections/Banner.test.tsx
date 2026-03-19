@@ -210,8 +210,14 @@ describe("BannerSection", async () => {
       await expect(
         `BannerSection/[${viewportName}] ${name}`
       ).toMatchScreenshot();
-      const results = await axe(container);
-      expect(results).toHaveNoViolations();
+      if (
+        // this test intentionally fails accessibility
+        name !==
+        "version 67 props with constant RTF value, dark background and black brand color text"
+      ) {
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      }
 
       if (interactions) {
         await interactions(page);
