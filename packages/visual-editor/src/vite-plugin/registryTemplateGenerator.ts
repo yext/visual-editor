@@ -14,8 +14,8 @@
  *    - Emit `src/templates/<template>.tsx` only when
  *      `src/registry/<template>/components` exists.
  *    - Insert the matching `src/registry/<template>/config.tsx` import.
- *    - Adapt either `TEMPLATE_CONFIG` or `baseConfig`, and rename the exported
- *      template component to match the template name.
+ *    - Adapt `baseConfig` and rename the exported `Base` component to match the
+ *      template name.
  *
  * 4) Update `.template-manifest.json`.
  *    - Read `src/registry/<template>/defaultLayout.json` when present.
@@ -367,8 +367,8 @@ const buildConfigSource = (
 
 /**
  * Renders a template file from the plugin's internal base template by inserting
- * the registry config import, adapting the config reference, and renaming the
- * exported component.
+ * the registry config import, replacing `baseConfig`, and renaming the exported
+ * `Base` component.
  * @param {string} baseSource
  * @param {string} templateName
  * @param {string} configImportPath
@@ -399,53 +399,34 @@ const buildTemplateSource = (
     `${importAnchor}\nimport { ${configExportName} } from "${configImportPath}";`
   );
 
-  if (renderedSource.includes("TEMPLATE_CONFIG")) {
-    renderedSource = renderedSource.replace(
-      /\bTEMPLATE_CONFIG\b/g,
-      configExportName
-    );
-  } else if (renderedSource.includes("baseConfig")) {
-    renderedSource = renderedSource.replace(
-      'import { Config, Render, resolveAllData } from "@puckeditor/core";',
-      'import { Render, resolveAllData } from "@puckeditor/core";'
-    );
-    renderedSource = renderedSource.replace(
-      /\nconst baseConfig: Config = \{\};\n/,
-      "\n"
-    );
-    renderedSource = renderedSource.replace(
-      /\bbaseConfig\b/g,
-      configExportName
-    );
-  } else {
+  if (!renderedSource.includes("baseConfig")) {
+    throw new Error("Could not find baseConfig in generated base template");
+  }
+
+  renderedSource = renderedSource.replace(
+    'import { Config, Render, resolveAllData } from "@puckeditor/core";',
+    'import { Render, resolveAllData } from "@puckeditor/core";'
+  );
+  renderedSource = renderedSource.replace(
+    /\nconst baseConfig: Config = \{\};\n/,
+    "\n"
+  );
+  renderedSource = renderedSource.replace(/\bbaseConfig\b/g, configExportName);
+
+  if (!renderedSource.includes("const Base:")) {
     throw new Error(
-      "Could not find TEMPLATE_CONFIG or baseConfig in generated base template"
+      "Could not find Base component placeholder in generated base template"
     );
   }
 
-  if (renderedSource.includes("const Location:")) {
-    renderedSource = renderedSource.replace(
-      /const\s+Location\s*:/,
-      `const ${templateComponentName}:`
-    );
-    renderedSource = renderedSource.replace(
-      /export default Location;/,
-      `export default ${templateComponentName};`
-    );
-  } else if (renderedSource.includes("const Base:")) {
-    renderedSource = renderedSource.replace(
-      /const\s+Base\s*:/,
-      `const ${templateComponentName}:`
-    );
-    renderedSource = renderedSource.replace(
-      /export default Base;/,
-      `export default ${templateComponentName};`
-    );
-  } else {
-    throw new Error(
-      "Could not find template component placeholder in generated base template"
-    );
-  }
+  renderedSource = renderedSource.replace(
+    /const\s+Base\s*:/,
+    `const ${templateComponentName}:`
+  );
+  renderedSource = renderedSource.replace(
+    /export default Base;/,
+    `export default ${templateComponentName};`
+  );
 
   return renderedSource;
 };
@@ -453,13 +434,11 @@ const buildTemplateSource = (
 /**
  * Updates `src/templates/edit.tsx` to import each generated config and register it.
  * @param {string} rootDir
- * @param {string[]} templateNames
  * @param {string[]} overriddenTemplateNames
  * @returns {void}
  */
 const updateEditTemplate = (
   rootDir: string,
-  templateNames: string[],
   overriddenTemplateNames: string[]
 ): void => {
   const editTemplatePath = path.join(rootDir, "src", "templates", "edit.tsx");
@@ -660,5 +639,5 @@ export const generateRegistryTemplateFiles = ({
   }
 
   updateTemplateManifest(rootDir, templateNames);
-  updateEditTemplate(rootDir, templateNames, overriddenTemplateNames);
+  updateEditTemplate(rootDir, overriddenTemplateNames);
 };
