@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { useDocument } from "@yext/visual-editor";
+import { useDocument } from "../hooks/useDocument.tsx";
 
 const GTM_ID_REGEX = /^GTM-[A-Z0-9]+$/;
 
