@@ -30,7 +30,6 @@ export const applyAnalytics = (document: Record<string, any>) => {
   }
 
   // Google Analytics 4 (GA4)
-  // Note that this does not yet exist in platform. Adding for future support.
   const googleAnalyticsId = visualEditorConfig?.googleAnalyticsId;
 
   if (googleAnalyticsId && GA4_ID_REGEX.test(googleAnalyticsId)) {
