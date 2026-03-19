@@ -94,8 +94,10 @@
     .text-white & {
       color: white !important;
     }
-    /* non-default text color => use directly */
-    .rtf-theme[style*="color:"] & {
+  }
+  /* non-default text color on .rtf-theme => use directly for links */
+  &[style*="color:"] {
+    a {
       color: inherit !important;
     }
   }
