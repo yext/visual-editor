@@ -124,7 +124,7 @@ const tests: ComponentTest[] = [
     version: 67,
   },
   {
-    name: "version 67 props with constant RTF value and dark background",
+    name: "version 67 props with constant RTF value, dark background and black brand color text",
     document: {
       name: "Galaxy Grill",
     },
