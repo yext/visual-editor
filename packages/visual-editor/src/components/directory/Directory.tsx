@@ -157,9 +157,15 @@ export const Directory: ComponentConfig<{ props: DirectoryProps }> = {
           props: {
             data: {
               directoryRoot: { defaultValue: "Directory Root" },
+              currentPage: {
+                constantValue: { defaultValue: "[[name]]" },
+                field: "name",
+                constantValueEnabled: false,
+              },
             },
             styles: {
               backgroundColor: backgroundColors.background1.value,
+              showCurrentPage: true,
             },
             analytics: {
               scope: "directory",
