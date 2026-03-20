@@ -28,7 +28,7 @@ export interface BreadcrumbsData {
    * The display label for the last link in the breadcrumb trail (the current page).
    * @defaultValue Name
    */
-  currentPage?: YextEntityField<TranslatableString>;
+  currentPage: YextEntityField<TranslatableString>;
 }
 
 export interface BreadcrumbsStyles {
@@ -42,7 +42,7 @@ export interface BreadcrumbsStyles {
    * Whether to show the current page's link in the breadcrumb trail (last link).
    * @defaultValue true
    */
-  showCurrentPage?: boolean;
+  showCurrentPage: boolean;
 }
 
 /**
@@ -157,14 +157,15 @@ export const BreadcrumbsComponent = ({
     streamDocument
   );
   const currentPage = resolveComponentData(
-    data.currentPage ?? "[[name]]",
+    data.currentPage,
     i18n.language,
     streamDocument
   );
-  const showCurrentPage = styles?.showCurrentPage !== false;
   const breadcrumbsToRender = breadcrumbs
     .map((breadcrumb, index) => ({ ...breadcrumb, index }))
-    .filter(({ index }) => showCurrentPage || index < breadcrumbs.length - 1);
+    .filter(
+      ({ index }) => styles.showCurrentPage || index < breadcrumbs.length - 1
+    );
 
   if (!breadcrumbsToRender.length) {
     return null;
