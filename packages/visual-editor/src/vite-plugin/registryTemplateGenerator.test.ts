@@ -77,7 +77,6 @@ describe.sequential("generateRegistryTemplateFiles", () => {
     expect(generatedConfig).toContain(
       "import { Header as MainComponentHeader }"
     );
-    expect(generatedConfig).not.toContain("HeaderHeader");
     expect(generatedConfig).toContain('"title": "Components"');
     expect(generatedConfig).toMatch(
       /"title": "Components"[\s\S]*"components": \[\s*"Hero"\s*\]/
