@@ -4484,6 +4484,11 @@ const directoryDefaultLayout = {
                 id: "BreadcrumbsSlot-13dba298-abd1-4f75-a7e9-b19779a4fc5b",
                 data: {
                   directoryRoot: { defaultValue: "Directory Root" },
+                  currentPage: {
+                    constantValue: { defaultValue: "[[name]]" },
+                    field: "name",
+                    constantValueEnabled: false,
+                  },
                 },
                 styles: {
                   backgroundColor: {
