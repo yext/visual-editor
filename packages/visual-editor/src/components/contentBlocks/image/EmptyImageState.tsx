@@ -12,7 +12,7 @@ import {
 } from "../../../internal/hooks/useMessage.ts";
 import { ImagePayload } from "../../../internal/puck/constant-value-fields/Image.tsx";
 
-const pendingMessageIdsByFieldId = new Map<string, string>();
+let pendingMessageId: string | undefined;
 
 interface EmptyImageStateProps {
   isEmpty: boolean;
@@ -52,7 +52,6 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
     React.useCallback(
       (_, payload) => {
         const imagePayload = payload as ImagePayload;
-        const pendingMessageId = pendingMessageIdsByFieldId.get(fieldId);
         if (
           pendingMessageId &&
           pendingMessageId === imagePayload.id &&
@@ -61,7 +60,7 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
           const imageData =
             imagePayload.value.transformedImage ??
             imagePayload.value.originalImage;
-          pendingMessageIdsByFieldId.delete(fieldId);
+          pendingMessageId = undefined;
           if (!imageData) {
             return;
           }
@@ -97,11 +96,11 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
             width: 1,
             alternateText: "",
           } as AssetImageType);
-          pendingMessageIdsByFieldId.delete(fieldId);
+          pendingMessageId = undefined;
         }
       } else {
         const messageId = `ImageAsset-${Date.now()}`;
-        pendingMessageIdsByFieldId.set(fieldId, messageId);
+        pendingMessageId = messageId;
         openImageAssetSelector({
           payload: {
             type: "ImageAsset",

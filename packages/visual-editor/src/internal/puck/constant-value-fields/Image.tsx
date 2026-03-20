@@ -28,7 +28,7 @@ import { DynamicOption } from "../../../editor/DynamicOptionsSelector.tsx";
 import { useTemplateMetadata } from "../../hooks/useMessageReceivers.ts";
 import { getPageSetLocales } from "../../../utils/pageSetLocales.ts";
 
-const pendingMessageIdsByFieldId = new Map<string, string>();
+let pendingMessageId: string | undefined;
 
 export type ImagePayload = {
   id: string;
@@ -60,7 +60,7 @@ const createImageConstantConfig = (options?: {
   ) => DynamicOption<string>[];
 }): CustomField<TranslatableAssetImage | undefined> => ({
   type: "custom",
-  render: ({ onChange, value, field, id }) => {
+  render: ({ onChange, value, field }) => {
     const { i18n } = useTranslation();
     const streamDocument = useDocument();
     const templateMetadata: TemplateMetadata = useTemplateMetadata();
@@ -87,12 +87,11 @@ const createImageConstantConfig = (options?: {
       TARGET_ORIGINS,
       (_, payload) => {
         const imagePayload = payload as ImagePayload;
-        const pendingMessageId = pendingMessageIdsByFieldId.get(id);
         if (pendingMessageId && pendingMessageId === imagePayload.id) {
           const imageData =
             imagePayload.value.transformedImage ??
             imagePayload.value.originalImage;
-          pendingMessageIdsByFieldId.delete(id);
+          pendingMessageId = undefined;
           if (!imageData) {
             return;
           }
@@ -139,11 +138,11 @@ const createImageConstantConfig = (options?: {
           [locale]: newValue,
           hasLocalizedValue: "true",
         } as TranslatableAssetImage);
-        pendingMessageIdsByFieldId.delete(id);
+        pendingMessageId = undefined;
       } else {
         /** Instructs Storm to open the image asset selector drawer */
         const messageId = `ImageAsset-${Date.now()}`;
-        pendingMessageIdsByFieldId.set(id, messageId);
+        pendingMessageId = messageId;
         openImageAssetSelector({
           payload: {
             type: "ImageAsset",

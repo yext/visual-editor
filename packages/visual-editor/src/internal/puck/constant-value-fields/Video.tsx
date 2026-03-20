@@ -9,7 +9,7 @@ import { Button } from "../ui/button.tsx";
 import { AssetVideo } from "../../../types/videos.ts";
 import { pt } from "../../../utils/i18n/platform.ts";
 
-const pendingMessageIdsByFieldId = new Map<string, string>();
+let pendingMessageId: string | undefined;
 
 type VideoPayload = {
   id: string;
@@ -19,7 +19,7 @@ type VideoPayload = {
 
 export const VIDEO_CONSTANT_CONFIG: CustomField<AssetVideo | undefined> = {
   type: "custom",
-  render: ({ onChange, value, field, id }) => {
+  render: ({ onChange, value, field }) => {
     const { sendToParent: openVideoAssetSelector } = useSendMessageToParent(
       "constantValueEditorOpened",
       TARGET_ORIGINS
@@ -30,9 +30,8 @@ export const VIDEO_CONSTANT_CONFIG: CustomField<AssetVideo | undefined> = {
       TARGET_ORIGINS,
       (_, payload) => {
         const videoPayload = payload as VideoPayload;
-        const pendingMessageId = pendingMessageIdsByFieldId.get(id);
         if (pendingMessageId && pendingMessageId === videoPayload.id) {
-          pendingMessageIdsByFieldId.delete(id);
+          pendingMessageId = undefined;
           if (!videoPayload?.value) {
             return;
           }
@@ -68,11 +67,11 @@ export const VIDEO_CONSTANT_CONFIG: CustomField<AssetVideo | undefined> = {
             embeddedUrl: `https://www.youtube.com/embed/${videoId}`,
           },
         });
-        pendingMessageIdsByFieldId.delete(id);
+        pendingMessageId = undefined;
       } else {
         /** Instructs Storm to open the video asset selector drawer */
         const messageId = `VideoAsset-${Date.now()}`;
-        pendingMessageIdsByFieldId.set(id, messageId);
+        pendingMessageId = messageId;
         openVideoAssetSelector({
           payload: {
             type: "VideoAsset",
