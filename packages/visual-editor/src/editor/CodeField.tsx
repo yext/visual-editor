@@ -7,7 +7,9 @@ import {
 } from "../internal/hooks/useMessage.ts";
 import { pt } from "../utils/i18n/platform.ts";
 
-let pendingMessageId: string | undefined;
+let pendingCodeSession:
+  | { messageId: string; apply: (payload: any) => void }
+  | undefined;
 
 export type codeLanguageOptions =
   | "html"
@@ -41,16 +43,21 @@ export const CodeField = ({
         "constantValueEditorClosed",
         TARGET_ORIGINS,
         (_, payload) => {
-          if (pendingMessageId && pendingMessageId === payload?.id) {
-            onChange(payload.value);
-            pendingMessageId = undefined;
+          const session = pendingCodeSession;
+          if (!session || session.messageId !== payload?.id) {
+            return;
           }
+          pendingCodeSession = undefined;
+          session.apply(payload);
         }
       );
 
       const handleClick = () => {
         const messageId = `CodeBlock-${Date.now()}`;
-        pendingMessageId = messageId;
+        pendingCodeSession = {
+          messageId,
+          apply: (payload) => onChange(payload.value),
+        };
 
         openConstantValueEditor({
           payload: {
@@ -68,7 +75,9 @@ export const CodeField = ({
         ) {
           const userInput = prompt("Enter Code:");
           onChange(userInput ?? "");
-          pendingMessageId = undefined;
+          if (pendingCodeSession?.messageId === messageId) {
+            pendingCodeSession = undefined;
+          }
         }
       };
 

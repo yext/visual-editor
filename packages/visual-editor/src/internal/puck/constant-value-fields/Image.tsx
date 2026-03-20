@@ -28,13 +28,15 @@ import { DynamicOption } from "../../../editor/DynamicOptionsSelector.tsx";
 import { useTemplateMetadata } from "../../hooks/useMessageReceivers.ts";
 import { getPageSetLocales } from "../../../utils/pageSetLocales.ts";
 
-let pendingMessageId: string | undefined;
-
 export type ImagePayload = {
   id: string;
   value: ImageContentData;
   locale: string;
 };
+
+let pendingImageSession:
+  | { messageId: string; apply: (payload: ImagePayload) => void }
+  | undefined;
 
 const buildLocatorDisplayOptions = (
   locatorDisplayFields?: Record<string, FieldTypeData>
@@ -87,32 +89,10 @@ const createImageConstantConfig = (options?: {
       TARGET_ORIGINS,
       (_, payload) => {
         const imagePayload = payload as ImagePayload;
-        if (pendingMessageId && pendingMessageId === imagePayload.id) {
-          const imageData =
-            imagePayload.value.transformedImage ??
-            imagePayload.value.originalImage;
-          pendingMessageId = undefined;
-          if (!imageData) {
-            return;
-          }
-          const newValue = {
-            alternateText: imagePayload.value.altText
-              ? {
-                  [imagePayload.locale]: imagePayload.value.altText,
-                  hasLocalizedValue: "true",
-                }
-              : "",
-            url: imageData.url,
-            height: imageData.dimension?.height ?? 0,
-            width: imageData.dimension?.width ?? 0,
-            assetImage: payload.value,
-          };
-
-          onChange({
-            ...localizedContainer,
-            [locale]: newValue,
-            hasLocalizedValue: "true",
-          } as TranslatableAssetImage);
+        if (pendingImageSession?.messageId === imagePayload?.id) {
+          const { apply } = pendingImageSession;
+          pendingImageSession = undefined;
+          apply(imagePayload);
         }
       }
     );
@@ -138,11 +118,39 @@ const createImageConstantConfig = (options?: {
           [locale]: newValue,
           hasLocalizedValue: "true",
         } as TranslatableAssetImage);
-        pendingMessageId = undefined;
+        pendingImageSession = undefined;
       } else {
         /** Instructs Storm to open the image asset selector drawer */
         const messageId = `ImageAsset-${Date.now()}`;
-        pendingMessageId = messageId;
+        pendingImageSession = {
+          messageId,
+          apply: (imagePayload) => {
+            const imageData =
+              imagePayload.value.transformedImage ??
+              imagePayload.value.originalImage;
+            if (!imageData) {
+              return;
+            }
+            const newValue = {
+              alternateText: imagePayload.value.altText
+                ? {
+                    [imagePayload.locale]: imagePayload.value.altText,
+                    hasLocalizedValue: "true",
+                  }
+                : "",
+              url: imageData.url,
+              height: imageData.dimension?.height ?? 0,
+              width: imageData.dimension?.width ?? 0,
+              assetImage: imagePayload.value,
+            };
+
+            onChange({
+              ...localizedContainer,
+              [locale]: newValue,
+              hasLocalizedValue: "true",
+            } as TranslatableAssetImage);
+          },
+        };
         openImageAssetSelector({
           payload: {
             type: "ImageAsset",

@@ -10,7 +10,9 @@ import {
 } from "../hooks/useMessage.ts";
 import { getSchemaTemplate } from "../../utils/schema/defaultSchemas.ts";
 
-let pendingMessageId: string | undefined;
+let pendingSchemaMarkupSession:
+  | { messageId: string; apply: (payload: any) => void }
+  | undefined;
 
 export interface AdvancedSettingsProps {
   /**
@@ -38,10 +40,12 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
       "constantValueEditorClosed",
       TARGET_ORIGINS,
       (_, payload) => {
-        if (pendingMessageId && pendingMessageId === payload?.id) {
-          onChange(String(payload.value || ""));
-          pendingMessageId = undefined;
+        const session = pendingSchemaMarkupSession;
+        if (!session || session.messageId !== payload?.id) {
+          return;
         }
+        pendingSchemaMarkupSession = undefined;
+        session.apply(payload);
       }
     );
 
@@ -68,7 +72,10 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
       } else {
         /** Instructs Storm to open the schema markup drawer */
         const messageId = `SchemaMarkup-${Date.now()}`;
-        pendingMessageId = messageId;
+        pendingSchemaMarkupSession = {
+          messageId,
+          apply: (payload) => onChange(String(payload.value || "")),
+        };
 
         const payload = {
           type: "SchemaMarkup",
