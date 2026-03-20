@@ -105,12 +105,20 @@ export const generateRegistryTemplateFiles = ({
   // 1) Discover templates from `<starter>/src/registry/*`.
   const collectedTemplates: CollectedTemplate[] = getTemplateNames(rootDir)
     .map((templateName) => {
+      if (PRESERVED_EDIT_REGISTRY_KEYS.has(templateName)) {
+        console.warn(
+          `Skipping registry template "${templateName}" because it conflicts with a reserved componentRegistry key`
+        );
+        return null;
+      }
+
       return {
         templateName,
         templatePaths: getTemplatePaths(rootDir, templateName),
         items: collectTemplateComponents(rootDir, templateName),
       };
     })
+    .filter((template): template is CollectedTemplate => template !== null)
     .filter(({ items }) => items.length > 0);
 
   if (!collectedTemplates.length) {
