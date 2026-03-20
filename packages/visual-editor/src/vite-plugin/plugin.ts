@@ -7,6 +7,7 @@ import directoryTemplate from "./templates/directory.tsx?raw";
 import locatorTemplate from "./templates/locator.tsx?raw";
 import { ComponentField } from "../types/fields.ts";
 import { defaultLayoutData } from "./defaultLayoutData.ts";
+import { generateRegistryTemplateFiles } from "./registryTemplateGenerator.ts";
 
 type TemplateManifestEntry = {
   name: string;
@@ -30,10 +31,6 @@ type VirtualFile = {
  * It also defines entries that will be used to generate the template-manifest.json
  */
 const virtualFiles: VirtualFile[] = [
-  {
-    filepath: "temp/base.tsx",
-    content: baseTemplate,
-  },
   {
     filepath: "src/templates/directory.tsx",
     content: directoryTemplate,
@@ -132,6 +129,10 @@ export const yextVisualEditorPlugin = (): Plugin => {
     },
     buildStart() {
       generateFiles();
+      generateRegistryTemplateFiles({
+        rootDir: process.cwd(),
+        generatedBaseTemplateSource: baseTemplate,
+      });
     },
     buildEnd() {
       if (isBuildMode) {
