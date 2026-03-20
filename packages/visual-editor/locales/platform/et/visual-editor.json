@@ -156,8 +156,10 @@
   "expandedMenu": "Laiendatud menüü",
   "failedToCopyLayout": "Paigutuse kopeerimine ebaõnnestus.",
   "failedToPasteComponentInvalidData": "Kleepimine ebaõnnestus: komponendi andmed on kehtetud.",
+  "failedToPasteComponentPermissionDenied": "Kleepimine ebaõnnestus: juurdepääs lõikelauale on blokeeritud. Lubage kleepimisload ja proovige uuesti.",
   "failedToPasteLayout": "Paigutuse kleepimine ebaõnnestus.",
   "failedToPasteLayoutInvalidData": "Kleepimine ebaõnnestus: küljenduse andmed on kehtetud.",
+  "failedToPasteLayoutPermissionDenied": "Kleepimine ebaõnnestus: juurdepääs lõikelauale on blokeeritud. Lubage kleepimisload ja proovige uuesti.",
   "faq": "KKK",
   "fields": {
     "actionType": "Toimingu tüüp",

@@ -156,8 +156,10 @@
   "expandedMenu": "Kibővített menü",
   "failedToCopyLayout": "Nem sikerült másolni az elrendezést.",
   "failedToPasteComponentInvalidData": "Nem sikerült beilleszteni: Érvénytelen összetevőadatok.",
+  "failedToPasteComponentPermissionDenied": "Nem sikerült beilleszteni: A vágólaphoz való hozzáférés le van tiltva. Engedélyezze a beillesztési engedélyeket, és próbálja újra.",
   "failedToPasteLayout": "Nem sikerült beilleszteni az elrendezést.",
   "failedToPasteLayoutInvalidData": "Nem sikerült beilleszteni: Érvénytelen elrendezési adatok.",
+  "failedToPasteLayoutPermissionDenied": "Nem sikerült beilleszteni: A vágólaphoz való hozzáférés le van tiltva. Engedélyezze a beillesztési engedélyeket, és próbálja újra.",
   "faq": "GYIK",
   "fields": {
     "actionType": "Akció típusa",

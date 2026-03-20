@@ -156,8 +156,10 @@
   "expandedMenu": "Menu développé",
   "failedToCopyLayout": "Échec de la copie de la mise en page.",
   "failedToPasteComponentInvalidData": "Échec du collage : données de composant non valides.",
+  "failedToPasteComponentPermissionDenied": "Échec du collage : l'accès au Presse-papiers est bloqué. Activez les autorisations de collage et réessayez.",
   "failedToPasteLayout": "Échec du collage de la mise en page.",
   "failedToPasteLayoutInvalidData": "Échec du collage : données de mise en page non valides.",
+  "failedToPasteLayoutPermissionDenied": "Échec du collage : l'accès au Presse-papiers est bloqué. Activez les autorisations de collage et réessayez.",
   "faq": "FAQ",
   "fields": {
     "actionType": "Type d'action",

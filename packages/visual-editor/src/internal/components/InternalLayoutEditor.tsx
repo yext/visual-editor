@@ -550,7 +550,20 @@ export const InternalLayoutEditor = ({
                   destinationIndex: appState.ui.itemSelector.index,
                   data: newData,
                 });
-              } catch (_) {
+              } catch (err) {
+                if (
+                  err instanceof DOMException &&
+                  err.name === "NotAllowedError"
+                ) {
+                  alert(
+                    pt(
+                      "failedToPasteComponentPermissionDenied",
+                      "Failed to paste: Clipboard access is blocked. Enable paste permissions and try again."
+                    )
+                  );
+                  return;
+                }
+
                 alert(
                   pt(
                     "failedToPasteComponentInvalidData",

@@ -156,8 +156,10 @@
   "expandedMenu": "Paplašināta izvēlne",
   "failedToCopyLayout": "Neizdevās kopēt izkārtojumu.",
   "failedToPasteComponentInvalidData": "Neizdevās ielīmēt: nederīgi komponenta dati.",
+  "failedToPasteComponentPermissionDenied": "Neizdevās ielīmēt: piekļuve starpliktuvei ir bloķēta. Iespējojiet ielīmēšanas atļaujas un mēģiniet vēlreiz.",
   "failedToPasteLayout": "Neizdevās ielīmēt izkārtojumu.",
   "failedToPasteLayoutInvalidData": "Neizdevās ielīmēt: nederīgi izkārtojuma dati.",
+  "failedToPasteLayoutPermissionDenied": "Neizdevās ielīmēt: piekļuve starpliktuvei ir bloķēta. Iespējojiet ielīmēšanas atļaujas un mēģiniet vēlreiz.",
   "faq": "FAQ",
   "fields": {
     "actionType": "Darbības veids",
