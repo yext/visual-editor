@@ -156,8 +156,10 @@
   "expandedMenu": "Expanded menu",
   "failedToCopyLayout": "Failed to copy layout.",
   "failedToPasteComponentInvalidData": "Failed to paste: Invalid component data.",
+  "failedToPasteComponentPermissionDenied": "Failed to paste: Clipboard access is blocked. Enable paste permissions and try again.",
   "failedToPasteLayout": "Failed to paste layout.",
   "failedToPasteLayoutInvalidData": "Failed to paste: Invalid layout data.",
+  "failedToPasteLayoutPermissionDenied": "Failed to paste: Clipboard access is blocked. Enable paste permissions and try again.",
   "faq": "FAQ",
   "fields": {
     "actionType": "Action Type",

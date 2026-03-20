@@ -156,8 +156,10 @@
   "expandedMenu": "Menu expandido",
   "failedToCopyLayout": "Falha ao copiar o layout.",
   "failedToPasteComponentInvalidData": "Falha ao colar: dados de componente inválidos.",
+  "failedToPasteComponentPermissionDenied": "Falha ao colar: o acesso à área de transferência está bloqueado. Ative as permissões de colagem e tente novamente.",
   "failedToPasteLayout": "Falha ao colar o layout.",
   "failedToPasteLayoutInvalidData": "Falha ao colar: dados de layout inválidos.",
+  "failedToPasteLayoutPermissionDenied": "Falha ao colar: o acesso à área de transferência está bloqueado. Ative as permissões de colagem e tente novamente.",
   "faq": "Perguntas frequentes",
   "fields": {
     "actionType": "Tipo de ação",
