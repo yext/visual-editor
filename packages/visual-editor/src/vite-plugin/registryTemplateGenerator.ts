@@ -86,50 +86,84 @@ const AST_PROJECT = new Project({
   },
 });
 
-const getTemplatePaths = (
-  rootDir: string,
-  templateName: string
-): TemplatePaths => {
-  const registryDirectory = path.join(rootDir, "src", "registry", templateName);
-  return {
-    templateName,
-    registryDirectory,
-    componentsDirectory: path.join(registryDirectory, "components"),
-    defaultLayoutPath: path.join(registryDirectory, "defaultLayout.json"),
-    configPath: path.join(registryDirectory, "config.tsx"),
-    templatePath: path.join(rootDir, "src", "templates", `${templateName}.tsx`),
-  };
-};
-
-const walkDirectory = (directory: string): string[] => {
-  if (!fs.existsSync(directory)) {
-    return [];
-  }
-
-  let entries: fs.Dirent[];
-  try {
-    entries = fs.readdirSync(directory, { withFileTypes: true });
-  } catch (error) {
-    throw new Error(
-      `Failed to read registry directory at ${directory}: ${toErrorMessage(error)}`
-    );
-  }
-
-  return entries
-    .flatMap((entry) => {
-      const absolutePath = path.join(directory, entry.name);
-      if (entry.isDirectory()) {
-        return walkDirectory(absolutePath);
-      }
-      if (!entry.isFile() || !VALID_EXTENSIONS.has(path.extname(entry.name))) {
-        return [];
-      }
-
-      return [absolutePath];
+/**
+ * Generates all template configs, generated template.tsx files, matching
+ * `.template-manifest.json` entries, and `edit.tsx` registry wiring for
+ * registry templates that contain component files.
+ * @param {{
+ *   rootDir: string,
+ *   generatedBaseTemplateSource: string
+ * }} options
+ * @returns {void}
+ */
+export const generateRegistryTemplateFiles = ({
+  rootDir,
+  generatedBaseTemplateSource,
+}: {
+  rootDir: string;
+  generatedBaseTemplateSource: string;
+}): void => {
+  // 1) Discover templates from `<starter>/src/registry/*`.
+  const collectedTemplates: CollectedTemplate[] = getTemplateNames(rootDir)
+    .map((templateName) => {
+      return {
+        templateName,
+        templatePaths: getTemplatePaths(rootDir, templateName),
+        items: collectTemplateComponents(rootDir, templateName),
+      };
     })
-    .sort((a, b) => a.localeCompare(b));
+    .filter(({ items }) => items.length > 0);
+
+  if (!collectedTemplates.length) {
+    return;
+  }
+
+  const templateNames = collectedTemplates.map(
+    ({ templateName }) => templateName
+  );
+
+  for (const { templateName, templatePaths, items } of collectedTemplates) {
+    // 2) Build the config source for this template.
+    const configSource = buildConfigSource(
+      rootDir,
+      items,
+      templatePaths.configPath,
+      templateName
+    );
+    fs.ensureDirSync(path.dirname(templatePaths.configPath));
+    fs.writeFileSync(templatePaths.configPath, configSource);
+
+    const configImportPath = toPosixPath(
+      path
+        .relative(
+          path.dirname(templatePaths.templatePath),
+          templatePaths.configPath
+        )
+        .replace(/\.[^/.]+$/, "")
+    );
+    // 3) Build the template.tsx file for this template.
+    const templateSource = buildTemplateSource(
+      generatedBaseTemplateSource,
+      templateName,
+      configImportPath.startsWith(".")
+        ? configImportPath
+        : `./${configImportPath}`,
+      getTemplateConfigExportName(templateName)
+    );
+    fs.ensureDirSync(path.dirname(templatePaths.templatePath));
+    fs.writeFileSync(templatePaths.templatePath, templateSource);
+  }
+
+  // 4) Update `<starter>/.template-manifest.json`.
+  updateTemplateManifest(rootDir, templateNames);
+
+  // 5) Update editor wiring.
+  updateEditTemplate(rootDir, templateNames);
 };
 
+/**
+ * 1) Discover templates from `<starter>/src/registry/*`.
+ */
 const getTemplateNames = (rootDir: string): string[] => {
   const registryDir = path.join(rootDir, "src", "registry");
   if (!fs.existsSync(registryDir)) {
@@ -152,8 +186,8 @@ const getTemplateNames = (rootDir: string): string[] => {
 };
 
 /**
- * Collects template-specific components for a template config while keeping
- * generated identifiers unique within one config file.
+ * Collects template-specific components for a template config and throws when
+ * two component files normalize to the same generated component name.
  * @param {string} rootDir
  * @param {string} templateName
  * @returns {CollectedItem[]}
@@ -167,10 +201,9 @@ const collectTemplateComponents = (
     toPascalCase(templateName),
     `Could not derive a template key from ${templateName}`
   );
-  const usedImportNames = new Set<string>();
-  const usedComponentNames = new Set<string>();
+  const componentNameToSourcePath = new Map<string, string>();
 
-  return walkDirectory(templatePaths.componentsDirectory).map(
+  return discoverComponents(templatePaths.componentsDirectory).map(
     (absolutePath) => {
       const fileRelativeToRoot = toPosixPath(
         path.relative(rootDir, absolutePath)
@@ -184,25 +217,17 @@ const collectTemplateComponents = (
         `Could not derive a component name from ${fileRelativeToRoot}`
       );
 
-      let componentName = baseName;
-      let componentNameSuffix = 2;
-      while (usedComponentNames.has(componentName)) {
-        componentName = `${baseName}${componentNameSuffix}`;
-        componentNameSuffix += 1;
+      const componentName = baseName;
+      const existingSourcePath = componentNameToSourcePath.get(componentName);
+      if (existingSourcePath) {
+        throw new Error(
+          `Component name collision in template "${templateName}": ${existingSourcePath} and ${fileRelativeToRoot} both normalize to "${componentName}"`
+        );
       }
-      usedComponentNames.add(componentName);
-
-      const importBase = `${templateKey}Component${baseName}`;
-      let importName = importBase;
-      let importNameSuffix = 2;
-      while (usedImportNames.has(importName)) {
-        importName = `${importBase}${importNameSuffix}`;
-        importNameSuffix += 1;
-      }
-      usedImportNames.add(importName);
+      componentNameToSourcePath.set(componentName, fileRelativeToRoot);
 
       return {
-        importName,
+        importName: `${templateKey}Component${componentName}`,
         exportName: baseName,
         componentName,
         fileRelativeToRoot,
@@ -212,6 +237,8 @@ const collectTemplateComponents = (
 };
 
 /**
+ * 2) Generates template.tsx file using the provided components.
+ *
  * Creates the TypeScript source for a generated Puck config.
  * @param {string} rootDir
  * @param {CollectedItem[]} items
@@ -283,6 +310,8 @@ const buildConfigSource = (
 };
 
 /**
+ * 3) Materialize template files for discovered registry templates.
+ *
  * Renders a template file from the plugin's internal base template by inserting
  * the registry config import, replacing `baseConfig`, and renaming the exported
  * `Base` component.
@@ -373,58 +402,8 @@ const buildTemplateSource = (
 };
 
 /**
- * Updates `<starter>/src/templates/edit.tsx` to import each generated config
- * and register it.
- * @param {string} rootDir
- * @param {string[]} templateNames
- * @returns {void}
- */
-const updateEditTemplate = (rootDir: string, templateNames: string[]): void => {
-  const editTemplatePath = path.join(rootDir, "src", "templates", "edit.tsx");
-  if (!fs.existsSync(editTemplatePath)) {
-    return;
-  }
-
-  const originalSource = readUtf8File(editTemplatePath, "edit template source");
-  const sourceFile = getAstSourceFile(editTemplatePath);
-
-  removeGeneratedConfigImports(sourceFile);
-  ensureSideEffectImport(sourceFile, "@yext/visual-editor/editor.css");
-  ensureSideEffectImport(sourceFile, "../index.css");
-
-  for (const templateName of templateNames) {
-    const templatePaths = getTemplatePaths(rootDir, templateName);
-    const moduleSpecifier = toPosixPath(
-      path
-        .relative(path.dirname(editTemplatePath), templatePaths.configPath)
-        .replace(/\.[^/.]+$/, "")
-    );
-
-    insertNamedImport(sourceFile, {
-      namedImports: [
-        {
-          name: getTemplateConfigExportName(templateName),
-          alias: getEditConfigIdentifier(templateName),
-        },
-      ],
-      moduleSpecifier: moduleSpecifier.startsWith(".")
-        ? moduleSpecifier
-        : `./${moduleSpecifier}`,
-    });
-  }
-
-  setEditComponentRegistry(sourceFile, templateNames);
-
-  sourceFile.formatText();
-  const updatedSource = sourceFile.getFullText();
-  sourceFile.forget();
-
-  if (updatedSource !== originalSource) {
-    fs.writeFileSync(editTemplatePath, updatedSource);
-  }
-};
-
-/**
+ * 4) Update `<starter>/.template-manifest.json`.
+ *
  * Updates `<starter>/.template-manifest.json` so matching template entries use
  * `<starter>/src/registry/<template>/defaultLayout.json` as
  * `defaultLayoutData`, creating manifest entries when they are missing.
@@ -488,72 +467,107 @@ const updateTemplateManifest = (
 };
 
 /**
- * Generates all template configs, generated template files, matching
- * `.template-manifest.json` entries, and `edit.tsx` registry wiring for
- * registry templates that contain component files.
- * @param {{
- *   rootDir: string,
- *   generatedBaseTemplateSource: string
- * }} options
+ * 5) Update editor wiring.
+ *
+ * Updates `<starter>/src/templates/edit.tsx` to import each generated config
+ * and register it.
+ * @param {string} rootDir
+ * @param {string[]} templateNames
  * @returns {void}
  */
-export const generateRegistryTemplateFiles = ({
-  rootDir,
-  generatedBaseTemplateSource,
-}: {
-  rootDir: string;
-  generatedBaseTemplateSource: string;
-}): void => {
-  const collectedTemplates: CollectedTemplate[] = getTemplateNames(rootDir)
-    .map((templateName) => {
-      return {
-        templateName,
-        templatePaths: getTemplatePaths(rootDir, templateName),
-        items: collectTemplateComponents(rootDir, templateName),
-      };
-    })
-    .filter(({ items }) => items.length > 0);
-
-  if (!collectedTemplates.length) {
+const updateEditTemplate = (rootDir: string, templateNames: string[]): void => {
+  const editTemplatePath = path.join(rootDir, "src", "templates", "edit.tsx");
+  if (!fs.existsSync(editTemplatePath)) {
     return;
   }
 
-  const templateNames = collectedTemplates.map(
-    ({ templateName }) => templateName
-  );
+  const originalSource = readUtf8File(editTemplatePath, "edit template source");
+  const sourceFile = getAstSourceFile(editTemplatePath);
 
-  for (const { templateName, templatePaths, items } of collectedTemplates) {
-    const configSource = buildConfigSource(
-      rootDir,
-      items,
-      templatePaths.configPath,
-      templateName
-    );
-    fs.ensureDirSync(path.dirname(templatePaths.configPath));
-    fs.writeFileSync(templatePaths.configPath, configSource);
+  removeGeneratedConfigImports(sourceFile);
+  ensureSideEffectImport(sourceFile, "@yext/visual-editor/editor.css");
+  ensureSideEffectImport(sourceFile, "../index.css");
 
-    const configImportPath = toPosixPath(
+  for (const templateName of templateNames) {
+    const templatePaths = getTemplatePaths(rootDir, templateName);
+    const moduleSpecifier = toPosixPath(
       path
-        .relative(
-          path.dirname(templatePaths.templatePath),
-          templatePaths.configPath
-        )
+        .relative(path.dirname(editTemplatePath), templatePaths.configPath)
         .replace(/\.[^/.]+$/, "")
     );
-    const templateSource = buildTemplateSource(
-      generatedBaseTemplateSource,
-      templateName,
-      configImportPath.startsWith(".")
-        ? configImportPath
-        : `./${configImportPath}`,
-      getTemplateConfigExportName(templateName)
-    );
-    fs.ensureDirSync(path.dirname(templatePaths.templatePath));
-    fs.writeFileSync(templatePaths.templatePath, templateSource);
+
+    insertNamedImport(sourceFile, {
+      namedImports: [
+        {
+          name: getTemplateConfigExportName(templateName),
+          alias: getEditConfigIdentifier(templateName),
+        },
+      ],
+      moduleSpecifier: moduleSpecifier.startsWith(".")
+        ? moduleSpecifier
+        : `./${moduleSpecifier}`,
+    });
   }
 
-  updateTemplateManifest(rootDir, templateNames);
-  updateEditTemplate(rootDir, templateNames);
+  setEditComponentRegistry(sourceFile, templateNames);
+
+  sourceFile.formatText();
+  const updatedSource = sourceFile.getFullText();
+  sourceFile.forget();
+
+  if (updatedSource !== originalSource) {
+    fs.writeFileSync(editTemplatePath, updatedSource);
+  }
+};
+
+/**
+ * Discovers templates from src/registry and returns an object containing the template name and relevant paths.
+ */
+const getTemplatePaths = (
+  rootDir: string,
+  templateName: string
+): TemplatePaths => {
+  const registryDirectory = path.join(rootDir, "src", "registry", templateName);
+  return {
+    templateName,
+    registryDirectory,
+    componentsDirectory: path.join(registryDirectory, "components"),
+    defaultLayoutPath: path.join(registryDirectory, "defaultLayout.json"),
+    configPath: path.join(registryDirectory, "config.tsx"),
+    templatePath: path.join(rootDir, "src", "templates", `${templateName}.tsx`),
+  };
+};
+
+/**
+ * discoverComponents walks through a directory recursively to discover the components paths.
+ */
+const discoverComponents = (directory: string): string[] => {
+  if (!fs.existsSync(directory)) {
+    return [];
+  }
+
+  let entries: fs.Dirent[];
+  try {
+    entries = fs.readdirSync(directory, { withFileTypes: true });
+  } catch (error) {
+    throw new Error(
+      `Failed to read registry directory at ${directory}: ${toErrorMessage(error)}`
+    );
+  }
+
+  return entries
+    .flatMap((entry) => {
+      const absolutePath = path.join(directory, entry.name);
+      if (entry.isDirectory()) {
+        return discoverComponents(absolutePath);
+      }
+      if (!entry.isFile() || !VALID_EXTENSIONS.has(path.extname(entry.name))) {
+        return [];
+      }
+
+      return [absolutePath];
+    })
+    .sort((a, b) => a.localeCompare(b));
 };
 
 function getTemplateConfigExportName(templateName: string): string {
