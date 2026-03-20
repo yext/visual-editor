@@ -86,64 +86,6 @@ const AST_PROJECT = new Project({
   },
 });
 
-const toPascalCase = (value: string): string => {
-  return value
-    .replace(/\.[^/.]+$/, "")
-    .split(/[^a-zA-Z0-9]+/)
-    .filter(Boolean)
-    .map((segment) => {
-      return segment[0].toUpperCase() + segment.slice(1);
-    })
-    .join("");
-};
-
-const toCamelCase = (value: string): string => {
-  const pascalValue = toPascalCase(value);
-  if (!pascalValue) {
-    return "";
-  }
-
-  return pascalValue[0].toLowerCase() + pascalValue.slice(1);
-};
-
-const requireNonEmpty = (value: string, errorMessage: string): string => {
-  if (!value) {
-    throw new Error(errorMessage);
-  }
-
-  return value;
-};
-
-const toPosixPath = (value: string): string => {
-  return value.split(path.sep).join(path.posix.sep);
-};
-
-const toErrorMessage = (error: unknown): string => {
-  return error instanceof Error ? error.message : String(error);
-};
-
-const readUtf8File = (filePath: string, description: string): string => {
-  try {
-    return fs.readFileSync(filePath, "utf8");
-  } catch (error) {
-    throw new Error(
-      `Failed to read ${description} at ${filePath}: ${toErrorMessage(error)}`
-    );
-  }
-};
-
-const readJsonFile = <T>(filePath: string, description: string): T => {
-  const source = readUtf8File(filePath, description);
-
-  try {
-    return JSON.parse(source) as T;
-  } catch (error) {
-    throw new Error(
-      `Failed to parse ${description} at ${filePath}: ${toErrorMessage(error)}`
-    );
-  }
-};
-
 const getTemplatePaths = (
   rootDir: string,
   templateName: string
@@ -269,30 +211,6 @@ const collectTemplateComponents = (
   );
 };
 
-const getTemplateConfigExportName = (templateName: string): string => {
-  return `${requireNonEmpty(
-    toPascalCase(templateName),
-    `Could not derive a config export name from ${templateName}`
-  )}Config`;
-};
-
-const getEditConfigIdentifier = (templateName: string): string => {
-  return `${requireNonEmpty(
-    toCamelCase(templateName),
-    `Could not derive an edit config identifier from ${templateName}`
-  )}Config`;
-};
-
-const renderIdentifierMap = (value: Record<string, string>): string => {
-  return [
-    "{",
-    ...Object.entries(value).map(([key, identifier]) => {
-      return `    ${JSON.stringify(key)}: ${identifier},`;
-    }),
-    "  }",
-  ].join("\n");
-};
-
 /**
  * Creates the TypeScript source for a generated Puck config.
  * @param {string} rootDir
@@ -362,144 +280,6 @@ const buildConfigSource = (
   ]
     .filter(Boolean)
     .join("\n");
-};
-
-const getAstSourceFile = (filePath: string): SourceFile => {
-  AST_PROJECT.getSourceFile(filePath)?.forget();
-  try {
-    return AST_PROJECT.addSourceFileAtPath(filePath);
-  } catch (error) {
-    throw new Error(
-      `Failed to read TypeScript source at ${filePath}: ${toErrorMessage(error)}`
-    );
-  }
-};
-
-const removeNamedImports = (
-  sourceFile: SourceFile,
-  moduleSpecifier: string,
-  namesToRemove: string[]
-): void => {
-  const declaration = sourceFile.getImportDeclarations().find((item) => {
-    return item.getModuleSpecifierValue() === moduleSpecifier;
-  });
-  if (!declaration) {
-    return;
-  }
-
-  for (const namedImport of declaration.getNamedImports()) {
-    if (namesToRemove.includes(namedImport.getName())) {
-      namedImport.remove();
-    }
-  }
-
-  if (
-    declaration.getNamedImports().length === 0 &&
-    !declaration.getDefaultImport() &&
-    !declaration.getNamespaceImport()
-  ) {
-    declaration.remove();
-  }
-};
-
-const removeGeneratedConfigImports = (sourceFile: SourceFile): void => {
-  for (const declaration of sourceFile.getImportDeclarations()) {
-    const moduleSpecifier = declaration.getModuleSpecifierValue();
-    if (
-      moduleSpecifier === "../config" ||
-      moduleSpecifier === "./config" ||
-      moduleSpecifier.endsWith("/config")
-    ) {
-      declaration.remove();
-    }
-  }
-};
-
-const insertNamedImport = (
-  sourceFile: SourceFile,
-  options: InsertNamedImportOptions
-): void => {
-  const pagesComponentsImport = sourceFile
-    .getImportDeclarations()
-    .find((item) => {
-      return item.getModuleSpecifierValue() === "@yext/pages-components";
-    });
-
-  if (pagesComponentsImport) {
-    sourceFile.insertImportDeclaration(
-      pagesComponentsImport.getChildIndex() + 1,
-      {
-        namedImports: options.namedImports,
-        moduleSpecifier: options.moduleSpecifier,
-      }
-    );
-    return;
-  }
-
-  sourceFile.addImportDeclaration({
-    namedImports: options.namedImports,
-    moduleSpecifier: options.moduleSpecifier,
-  });
-};
-
-const ensureSideEffectImport = (
-  sourceFile: SourceFile,
-  moduleSpecifier: string
-): void => {
-  const exists = sourceFile.getImportDeclarations().some((item) => {
-    return item.getModuleSpecifierValue() === moduleSpecifier;
-  });
-  if (!exists) {
-    sourceFile.insertImportDeclaration(0, {
-      moduleSpecifier,
-    });
-  }
-};
-
-const setEditComponentRegistry = (
-  sourceFile: SourceFile,
-  templateNames: string[]
-): void => {
-  const declaration = sourceFile.getVariableDeclaration("componentRegistry");
-  if (!declaration) {
-    return;
-  }
-
-  const initializer = declaration.getInitializerIfKind(
-    SyntaxKind.ObjectLiteralExpression
-  );
-  if (!initializer) {
-    const registryEntries = templateNames
-      .map((templateName) => {
-        return `  "${templateName}": ${getEditConfigIdentifier(templateName)},`;
-      })
-      .join("\n");
-    declaration.setInitializer(`{
-${registryEntries}
-}`);
-    return;
-  }
-
-  for (const property of initializer.getProperties()) {
-    const propertyAssignment = property.asKind(SyntaxKind.PropertyAssignment);
-    if (!propertyAssignment) {
-      continue;
-    }
-
-    const propertyName = propertyAssignment.getName();
-    if (PRESERVED_EDIT_REGISTRY_KEYS.has(propertyName)) {
-      continue;
-    }
-
-    propertyAssignment.remove();
-  }
-
-  for (const templateName of templateNames) {
-    initializer.addPropertyAssignment({
-      name: `"${templateName}"`,
-      initializer: getEditConfigIdentifier(templateName),
-    });
-  }
 };
 
 /**
@@ -593,7 +373,8 @@ const buildTemplateSource = (
 };
 
 /**
- * Updates `src/templates/edit.tsx` to import each generated config and register it.
+ * Updates `<starter>/src/templates/edit.tsx` to import each generated config
+ * and register it.
  * @param {string} rootDir
  * @param {string[]} templateNames
  * @returns {void}
@@ -644,9 +425,9 @@ const updateEditTemplate = (rootDir: string, templateNames: string[]): void => {
 };
 
 /**
- * Updates `.template-manifest.json` so matching template entries use
- * `src/registry/<template>/defaultLayout.json` as `defaultLayoutData`,
- * creating manifest entries when they are missing.
+ * Updates `<starter>/.template-manifest.json` so matching template entries use
+ * `<starter>/src/registry/<template>/defaultLayout.json` as
+ * `defaultLayoutData`, creating manifest entries when they are missing.
  * @param {string} rootDir
  * @param {string[]} templateNames
  * @returns {void}
@@ -707,8 +488,9 @@ const updateTemplateManifest = (
 };
 
 /**
- * Generates all template configs, optional template overrides, matching
- * `.template-manifest.json` entries, and `edit.tsx` registry wiring.
+ * Generates all template configs, generated template files, matching
+ * `.template-manifest.json` entries, and `edit.tsx` registry wiring for
+ * registry templates that contain component files.
  * @param {{
  *   rootDir: string,
  *   generatedBaseTemplateSource: string
@@ -773,3 +555,223 @@ export const generateRegistryTemplateFiles = ({
   updateTemplateManifest(rootDir, templateNames);
   updateEditTemplate(rootDir, templateNames);
 };
+
+function getTemplateConfigExportName(templateName: string): string {
+  return `${requireNonEmpty(
+    toPascalCase(templateName),
+    `Could not derive a config export name from ${templateName}`
+  )}Config`;
+}
+
+function getEditConfigIdentifier(templateName: string): string {
+  return `${requireNonEmpty(
+    toCamelCase(templateName),
+    `Could not derive an edit config identifier from ${templateName}`
+  )}Config`;
+}
+
+function renderIdentifierMap(value: Record<string, string>): string {
+  return [
+    "{",
+    ...Object.entries(value).map(([key, identifier]) => {
+      return `    ${JSON.stringify(key)}: ${identifier},`;
+    }),
+    "  }",
+  ].join("\n");
+}
+
+function getAstSourceFile(filePath: string): SourceFile {
+  AST_PROJECT.getSourceFile(filePath)?.forget();
+  try {
+    return AST_PROJECT.addSourceFileAtPath(filePath);
+  } catch (error) {
+    throw new Error(
+      `Failed to read TypeScript source at ${filePath}: ${toErrorMessage(error)}`
+    );
+  }
+}
+
+function removeNamedImports(
+  sourceFile: SourceFile,
+  moduleSpecifier: string,
+  namesToRemove: string[]
+): void {
+  const declaration = sourceFile.getImportDeclarations().find((item) => {
+    return item.getModuleSpecifierValue() === moduleSpecifier;
+  });
+  if (!declaration) {
+    return;
+  }
+
+  for (const namedImport of declaration.getNamedImports()) {
+    if (namesToRemove.includes(namedImport.getName())) {
+      namedImport.remove();
+    }
+  }
+
+  if (
+    declaration.getNamedImports().length === 0 &&
+    !declaration.getDefaultImport() &&
+    !declaration.getNamespaceImport()
+  ) {
+    declaration.remove();
+  }
+}
+
+function removeGeneratedConfigImports(sourceFile: SourceFile): void {
+  for (const declaration of sourceFile.getImportDeclarations()) {
+    const moduleSpecifier = declaration.getModuleSpecifierValue();
+    if (
+      moduleSpecifier === "../config" ||
+      moduleSpecifier === "./config" ||
+      moduleSpecifier.endsWith("/config")
+    ) {
+      declaration.remove();
+    }
+  }
+}
+
+function insertNamedImport(
+  sourceFile: SourceFile,
+  options: InsertNamedImportOptions
+): void {
+  const pagesComponentsImport = sourceFile
+    .getImportDeclarations()
+    .find((item) => {
+      return item.getModuleSpecifierValue() === "@yext/pages-components";
+    });
+
+  if (pagesComponentsImport) {
+    sourceFile.insertImportDeclaration(
+      pagesComponentsImport.getChildIndex() + 1,
+      {
+        namedImports: options.namedImports,
+        moduleSpecifier: options.moduleSpecifier,
+      }
+    );
+    return;
+  }
+
+  sourceFile.addImportDeclaration({
+    namedImports: options.namedImports,
+    moduleSpecifier: options.moduleSpecifier,
+  });
+}
+
+function ensureSideEffectImport(
+  sourceFile: SourceFile,
+  moduleSpecifier: string
+): void {
+  const exists = sourceFile.getImportDeclarations().some((item) => {
+    return item.getModuleSpecifierValue() === moduleSpecifier;
+  });
+  if (!exists) {
+    sourceFile.insertImportDeclaration(0, {
+      moduleSpecifier,
+    });
+  }
+}
+
+function setEditComponentRegistry(
+  sourceFile: SourceFile,
+  templateNames: string[]
+): void {
+  const declaration = sourceFile.getVariableDeclaration("componentRegistry");
+  if (!declaration) {
+    return;
+  }
+
+  const initializer = declaration.getInitializerIfKind(
+    SyntaxKind.ObjectLiteralExpression
+  );
+  if (!initializer) {
+    const registryEntries = templateNames
+      .map((templateName) => {
+        return `  "${templateName}": ${getEditConfigIdentifier(templateName)},`;
+      })
+      .join("\n");
+    declaration.setInitializer(`{
+${registryEntries}
+}`);
+    return;
+  }
+
+  for (const property of initializer.getProperties()) {
+    const propertyAssignment = property.asKind(SyntaxKind.PropertyAssignment);
+    if (!propertyAssignment) {
+      continue;
+    }
+
+    const propertyName = propertyAssignment.getName();
+    if (PRESERVED_EDIT_REGISTRY_KEYS.has(propertyName)) {
+      continue;
+    }
+
+    propertyAssignment.remove();
+  }
+
+  for (const templateName of templateNames) {
+    initializer.addPropertyAssignment({
+      name: `"${templateName}"`,
+      initializer: getEditConfigIdentifier(templateName),
+    });
+  }
+}
+
+function toPascalCase(value: string): string {
+  return value
+    .replace(/\.[^/.]+$/, "")
+    .split(/[^a-zA-Z0-9]+/)
+    .filter(Boolean)
+    .map((segment) => {
+      return segment[0].toUpperCase() + segment.slice(1);
+    })
+    .join("");
+}
+
+function toCamelCase(value: string): string {
+  const pascalValue = toPascalCase(value);
+  if (!pascalValue) {
+    return "";
+  }
+
+  return pascalValue[0].toLowerCase() + pascalValue.slice(1);
+}
+
+function requireNonEmpty(value: string, errorMessage: string): string {
+  if (!value) {
+    throw new Error(errorMessage);
+  }
+
+  return value;
+}
+
+function toPosixPath(value: string): string {
+  return value.split(path.sep).join(path.posix.sep);
+}
+
+function toErrorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
+}
+
+function readUtf8File(filePath: string, description: string): string {
+  try {
+    return fs.readFileSync(filePath, "utf8");
+  } catch (error) {
+    throw new Error(
+      `Failed to read ${description} at ${filePath}: ${toErrorMessage(error)}`
+    );
+  }
+}
+
+function readJsonFile<T>(filePath: string, description: string): T {
+  const source = readUtf8File(filePath, description);
+
+  try {
+    return JSON.parse(source) as T;
+  } catch (error) {
+    throw new Error(
+      `Failed to parse ${description} at ${filePath}: ${toErrorMessage(error)}`
+    );
+  }
+}
