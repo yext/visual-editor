@@ -1,25 +1,14 @@
+import os from "node:os";
 import path from "node:path";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import fs from "fs-extra";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   DEFAULT_LAYOUT,
   generateRegistryTemplateFiles,
 } from "./registryTemplateGenerator.js";
 
-const PACKAGE_ROOT = path.resolve(
-  path.dirname(fileURLToPath(import.meta.url)),
-  "..",
-  ".."
-);
-const FIXTURE_ROOT = path.join(
-  PACKAGE_ROOT,
-  "test-fixtures",
-  "registryTemplateGenerator"
-);
-const FIXTURE_SEED_ROOT = path.join(FIXTURE_ROOT, "seed");
-const FIXTURE_WORKSPACE_ROOT = path.join(FIXTURE_ROOT, "workspace");
 const TEMPLATES_DIRECTORY = path.join(
   path.dirname(fileURLToPath(import.meta.url)),
   "templates"
@@ -41,18 +30,21 @@ const LOCATOR_TEMPLATE_SOURCE = readFileSync(
   "utf8"
 );
 
-beforeEach(() => {
-  prepareFixtureWorkspace();
-});
+const tempRoots: string[] = [];
 
 afterEach(() => {
   vi.restoreAllMocks();
-  resetFixtureWorkspace();
+  while (tempRoots.length > 0) {
+    const rootDir = tempRoots.pop();
+    if (rootDir) {
+      fs.removeSync(rootDir);
+    }
+  }
 });
 
 describe.sequential("generateRegistryTemplateFiles", () => {
   it("generates registry config, template, manifest fallback, and edit wiring", () => {
-    const rootDir = getFixtureWorkspaceRoot();
+    const rootDir = createStarterFixture();
     writeRegistryComponent(
       rootDir,
       "main",
@@ -128,7 +120,7 @@ describe.sequential("generateRegistryTemplateFiles", () => {
   });
 
   it("prunes stale generated outputs but preserves built-in templates", () => {
-    const rootDir = getFixtureWorkspaceRoot();
+    const rootDir = createStarterFixture();
     const componentPath = writeRegistryComponent(
       rootDir,
       "main",
@@ -169,7 +161,7 @@ describe.sequential("generateRegistryTemplateFiles", () => {
   });
 
   it("refuses to overwrite a hand-authored template file", () => {
-    const rootDir = getFixtureWorkspaceRoot();
+    const rootDir = createStarterFixture();
     writeRegistryComponent(
       rootDir,
       "main",
@@ -196,7 +188,7 @@ describe.sequential("generateRegistryTemplateFiles", () => {
   });
 
   it("rejects template names that do not normalize to valid identifiers", () => {
-    const rootDir = getFixtureWorkspaceRoot();
+    const rootDir = createStarterFixture();
     writeRegistryComponent(
       rootDir,
       "404",
@@ -210,7 +202,7 @@ describe.sequential("generateRegistryTemplateFiles", () => {
   });
 
   it("rejects component paths that do not normalize to valid identifiers", () => {
-    const rootDir = getFixtureWorkspaceRoot();
+    const rootDir = createStarterFixture();
     writeRegistryComponent(rootDir, "main", "404.tsx");
 
     expect(() => runGenerator(rootDir)).toThrowError(
@@ -219,7 +211,7 @@ describe.sequential("generateRegistryTemplateFiles", () => {
   });
 
   it("throws when nested folders create duplicate component names", () => {
-    const rootDir = getFixtureWorkspaceRoot();
+    const rootDir = createStarterFixture();
     writeRegistryComponent(
       rootDir,
       "main",
@@ -239,7 +231,7 @@ describe.sequential("generateRegistryTemplateFiles", () => {
   });
 
   it("skips reserved registry template names", () => {
-    const rootDir = getFixtureWorkspaceRoot();
+    const rootDir = createStarterFixture();
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     writeRegistryComponent(
       rootDir,
@@ -274,31 +266,33 @@ function runGenerator(rootDir: string): void {
   });
 }
 
-function getFixtureWorkspaceRoot(): string {
-  return FIXTURE_WORKSPACE_ROOT;
-}
+function createStarterFixture(): string {
+  const rootDir = fs.mkdtempSync(
+    path.join(os.tmpdir(), "visual-editor-registry-generator-")
+  );
+  tempRoots.push(rootDir);
 
-function prepareFixtureWorkspace(): void {
-  resetFixtureWorkspace();
-
-  fs.ensureDirSync(path.join(FIXTURE_WORKSPACE_ROOT, "src", "templates"));
+  fs.ensureDirSync(path.join(rootDir, "src", "registry"));
+  fs.ensureDirSync(path.join(rootDir, "src", "templates"));
+  fs.writeFileSync(path.join(rootDir, "src", "index.css"), "");
   fs.writeFileSync(
-    path.join(FIXTURE_WORKSPACE_ROOT, "src", "templates", "edit.tsx"),
+    path.join(rootDir, ".template-manifest.json"),
+    `${JSON.stringify({ templates: [] }, null, 2)}\n`
+  );
+  fs.writeFileSync(
+    path.join(rootDir, "src", "templates", "edit.tsx"),
     EDIT_TEMPLATE_SOURCE
   );
   fs.writeFileSync(
-    path.join(FIXTURE_WORKSPACE_ROOT, "src", "templates", "directory.tsx"),
+    path.join(rootDir, "src", "templates", "directory.tsx"),
     DIRECTORY_TEMPLATE_SOURCE
   );
   fs.writeFileSync(
-    path.join(FIXTURE_WORKSPACE_ROOT, "src", "templates", "locator.tsx"),
+    path.join(rootDir, "src", "templates", "locator.tsx"),
     LOCATOR_TEMPLATE_SOURCE
   );
-}
 
-function resetFixtureWorkspace(): void {
-  fs.removeSync(FIXTURE_WORKSPACE_ROOT);
-  fs.copySync(FIXTURE_SEED_ROOT, FIXTURE_WORKSPACE_ROOT);
+  return rootDir;
 }
 
 function writeRegistryComponent(
