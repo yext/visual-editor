@@ -94,7 +94,6 @@ const AST_PROJECT = new Project({
  *   rootDir: string,
  *   generatedBaseTemplateSource: string
  * }} options
- * @returns {void}
  */
 export const generateRegistryTemplateFiles = ({
   rootDir,
@@ -186,11 +185,8 @@ const getTemplateNames = (rootDir: string): string[] => {
 };
 
 /**
- * Collects template-specific components for a template config and throws when
- * two component files normalize to the same generated component name.
- * @param {string} rootDir
- * @param {string} templateName
- * @returns {CollectedItem[]}
+ * 2) Collect template-specific components and reject normalized name
+ * collisions before config generation.
  */
 const collectTemplateComponents = (
   rootDir: string,
@@ -237,14 +233,7 @@ const collectTemplateComponents = (
 };
 
 /**
- * 2) Generates template.tsx file using the provided components.
- *
- * Creates the TypeScript source for a generated Puck config.
- * @param {string} rootDir
- * @param {CollectedItem[]} items
- * @param {string} outputFilePath
- * @param {string} templateName
- * @returns {string}
+ * 2) Generate `<starter>/src/registry/<template>/config.tsx`.
  */
 const buildConfigSource = (
   rootDir: string,
@@ -310,16 +299,8 @@ const buildConfigSource = (
 };
 
 /**
- * 3) Materialize template files for discovered registry templates.
- *
- * Renders a template file from the plugin's internal base template by inserting
- * the registry config import, replacing `baseConfig`, and renaming the exported
- * `Base` component.
- * @param {string} baseSource
- * @param {string} templateName
- * @param {string} configImportPath
- * @param {string} configExportName
- * @returns {string}
+ * 3) Materialize `<starter>/src/templates/<template>.tsx` from the internal
+ * base template.
  */
 const buildTemplateSource = (
   baseSource: string,
@@ -402,14 +383,8 @@ const buildTemplateSource = (
 };
 
 /**
- * 4) Update `<starter>/.template-manifest.json`.
- *
- * Updates `<starter>/.template-manifest.json` so matching template entries use
- * `<starter>/src/registry/<template>/defaultLayout.json` as
- * `defaultLayoutData`, creating manifest entries when they are missing.
- * @param {string} rootDir
- * @param {string[]} templateNames
- * @returns {void}
+ * 4) Update `<starter>/.template-manifest.json` from any matching
+ * `defaultLayout.json` files.
  */
 const updateTemplateManifest = (
   rootDir: string,
@@ -467,13 +442,8 @@ const updateTemplateManifest = (
 };
 
 /**
- * 5) Update editor wiring.
- *
- * Updates `<starter>/src/templates/edit.tsx` to import each generated config
- * and register it.
- * @param {string} rootDir
- * @param {string[]} templateNames
- * @returns {void}
+ * 5) Update `<starter>/src/templates/edit.tsx` to import and register each
+ * generated config.
  */
 const updateEditTemplate = (rootDir: string, templateNames: string[]): void => {
   const editTemplatePath = path.join(rootDir, "src", "templates", "edit.tsx");
@@ -521,7 +491,7 @@ const updateEditTemplate = (rootDir: string, templateNames: string[]): void => {
 };
 
 /**
- * Discovers templates from src/registry and returns an object containing the template name and relevant paths.
+ * Builds the `<starter>` paths associated with one registry template.
  */
 const getTemplatePaths = (
   rootDir: string,
@@ -539,7 +509,8 @@ const getTemplatePaths = (
 };
 
 /**
- * discoverComponents walks through a directory recursively to discover the components paths.
+ * Recursively returns supported component source files under a template's
+ * `components` directory.
  */
 const discoverComponents = (directory: string): string[] => {
   if (!fs.existsSync(directory)) {
@@ -570,29 +541,8 @@ const discoverComponents = (directory: string): string[] => {
     .sort((a, b) => a.localeCompare(b));
 };
 
-function getTemplateConfigExportName(templateName: string): string {
-  return `${requireNonEmpty(
-    toPascalCase(templateName),
-    `Could not derive a config export name from ${templateName}`
-  )}Config`;
-}
-
-function getEditConfigIdentifier(templateName: string): string {
-  return `${requireNonEmpty(
-    toCamelCase(templateName),
-    `Could not derive an edit config identifier from ${templateName}`
-  )}Config`;
-}
-
-function renderIdentifierMap(value: Record<string, string>): string {
-  return [
-    "{",
-    ...Object.entries(value).map(([key, identifier]) => {
-      return `    ${JSON.stringify(key)}: ${identifier},`;
-    }),
-    "  }",
-  ].join("\n");
-}
+// AST helpers used by steps 3 and 5 when generating template source files and
+// patching `<starter>/src/templates/edit.tsx`.
 
 function getAstSourceFile(filePath: string): SourceFile {
   AST_PROJECT.getSourceFile(filePath)?.forget();
@@ -730,6 +680,30 @@ ${registryEntries}
       initializer: getEditConfigIdentifier(templateName),
     });
   }
+}
+
+function getTemplateConfigExportName(templateName: string): string {
+  return `${requireNonEmpty(
+    toPascalCase(templateName),
+    `Could not derive a config export name from ${templateName}`
+  )}Config`;
+}
+
+function getEditConfigIdentifier(templateName: string): string {
+  return `${requireNonEmpty(
+    toCamelCase(templateName),
+    `Could not derive an edit config identifier from ${templateName}`
+  )}Config`;
+}
+
+function renderIdentifierMap(value: Record<string, string>): string {
+  return [
+    "{",
+    ...Object.entries(value).map(([key, identifier]) => {
+      return `    ${JSON.stringify(key)}: ${identifier},`;
+    }),
+    "  }",
+  ].join("\n");
 }
 
 function toPascalCase(value: string): string {
