@@ -19,6 +19,10 @@ const transformBreadcrumbProps = (props: any) => {
         constantValueEnabled: false,
       },
     },
+    styles: {
+      ...props.styles,
+      showCurrentPage: true,
+    },
   };
 };
 
