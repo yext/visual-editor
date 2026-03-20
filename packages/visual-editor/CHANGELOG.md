@@ -1,3 +1,14 @@
+#### 1.1.0-alpha.8 (2026-03-20)
+
+##### Chores
+
+- better clipboard error message and cleanup local data ([#1113](https://github.com/yext/visual-editor/pull/1113)) ([14f8f75d](https://github.com/yext/visual-editor/commit/14f8f75d6e6baa46f9e42f9145a895045b6a6375))
+
+##### Bug Fixes
+
+- add migration for breadcrumbs currentPage prop ([#1111](https://github.com/yext/visual-editor/pull/1111)) ([d0c023b9](https://github.com/yext/visual-editor/commit/d0c023b9480329240bcbc0c94edb52da22e62779))
+- immersive promo image ([#1112](https://github.com/yext/visual-editor/pull/1112)) ([3207fb5a](https://github.com/yext/visual-editor/commit/3207fb5a8051ebc57e46769ae03e478cbcf6a8a6))
+
 #### 1.1.0-alpha.7 (2026-03-19)
 
 ##### Chores
