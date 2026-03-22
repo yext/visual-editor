@@ -161,8 +161,10 @@
   "expandedMenu": "Utvidet meny",
   "failedToCopyLayout": "Kunne ikke kopiere layout.",
   "failedToPasteComponentInvalidData": "Kunne ikke lime inn: Ugyldige komponentdata.",
+  "failedToPasteComponentPermissionDenied": "Kunne ikke lime inn: Utklippstavletilgang er blokkert. Aktiver lim inn tillatelser og prøv igjen.",
   "failedToPasteLayout": "Kunne ikke lime inn layout.",
   "failedToPasteLayoutInvalidData": "Kunne ikke lime inn: Ugyldige layoutdata.",
+  "failedToPasteLayoutPermissionDenied": "Kunne ikke lime inn: Utklippstavletilgang er blokkert. Aktiver lim inn tillatelser og prøv igjen.",
   "faq": "FAQ",
   "fields": {
     "actionType": "Handlingstype",

@@ -161,8 +161,10 @@
   "expandedMenu": "Uitgebreid menu",
   "failedToCopyLayout": "Kan de lay-out niet kopiëren.",
   "failedToPasteComponentInvalidData": "Kan niet plakken: ongeldige componentgegevens.",
+  "failedToPasteComponentPermissionDenied": "Kan niet plakken: toegang tot het klembord is geblokkeerd. Schakel plakmachtigingen in en probeer het opnieuw.",
   "failedToPasteLayout": "Kan de lay-out niet plakken.",
   "failedToPasteLayoutInvalidData": "Kan niet plakken: ongeldige lay-outgegevens.",
+  "failedToPasteLayoutPermissionDenied": "Kan niet plakken: toegang tot het klembord is geblokkeerd. Schakel plakmachtigingen in en probeer het opnieuw.",
   "faq": "FAQ",
   "fields": {
     "actionType": "Actietype",

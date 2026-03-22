@@ -206,7 +206,20 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
                   type: "setData",
                   data: migratedPastedData,
                 });
-              } catch {
+              } catch (err) {
+                if (
+                  err instanceof DOMException &&
+                  err.name === "NotAllowedError"
+                ) {
+                  alert(
+                    pt(
+                      "failedToPasteLayoutPermissionDenied",
+                      "Failed to paste: Clipboard access is blocked. Enable paste permissions and try again."
+                    )
+                  );
+                  return;
+                }
+
                 alert(pt("failedToPasteLayout", "Failed to paste layout."));
                 return;
               }

@@ -161,8 +161,10 @@
   "expandedMenu": "Menú ampliado",
   "failedToCopyLayout": "No se pudo copiar el diseño.",
   "failedToPasteComponentInvalidData": "No se pudo pegar: datos del componente no válidos.",
+  "failedToPasteComponentPermissionDenied": "No se pudo pegar: el acceso al portapapeles está bloqueado. Habilite los permisos para pegar y vuelva a intentarlo.",
   "failedToPasteLayout": "No se pudo pegar el diseño.",
   "failedToPasteLayoutInvalidData": "No se pudo pegar: datos de diseño no válidos.",
+  "failedToPasteLayoutPermissionDenied": "No se pudo pegar: el acceso al portapapeles está bloqueado. Habilite los permisos para pegar y vuelva a intentarlo.",
   "faq": "Preguntas frecuentes",
   "fields": {
     "actionType": "Tipo de acción",

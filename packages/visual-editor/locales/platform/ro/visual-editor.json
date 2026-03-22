@@ -161,8 +161,10 @@
   "expandedMenu": "Meniu extins",
   "failedToCopyLayout": "Nu s-a putut copia aspectul.",
   "failedToPasteComponentInvalidData": "Lipirea eșuată: date ale componentelor nevalide.",
+  "failedToPasteComponentPermissionDenied": "Lipirea eșuată: accesul la Clipboard este blocat. Activați permisiunile de inserare și încercați din nou.",
   "failedToPasteLayout": "Nu s-a inserat aspectul.",
   "failedToPasteLayoutInvalidData": "Lipirea eșuată: date de aspect nevalide.",
+  "failedToPasteLayoutPermissionDenied": "Lipirea eșuată: accesul la Clipboard este blocat. Activați permisiunile de inserare și încercați din nou.",
   "faq": "FAQ",
   "fields": {
     "actionType": "Tip de acțiune",

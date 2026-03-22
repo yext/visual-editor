@@ -753,7 +753,7 @@ interface BreadcrumbsData {
    * The display label for the last link in the breadcrumb trail (the current page).
    * @defaultValue Name
    */
-  currentPage?: YextEntityField<TranslatableString>;
+  currentPage: YextEntityField<TranslatableString>;
 }
 
 interface BreadcrumbsStyles {
@@ -766,7 +766,7 @@ interface BreadcrumbsStyles {
    * Whether to show the current page's link in the breadcrumb trail (last link).
    * @defaultValue true
    */
-  showCurrentPage?: boolean;
+  showCurrentPage: boolean;
 }
 
 interface CoreInfoStyles {

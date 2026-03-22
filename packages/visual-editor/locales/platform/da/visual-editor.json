@@ -161,8 +161,10 @@
   "expandedMenu": "Udvidet menu",
   "failedToCopyLayout": "Kunne ikke kopiere layout.",
   "failedToPasteComponentInvalidData": "Kunne ikke indsætte: Ugyldige komponentdata.",
+  "failedToPasteComponentPermissionDenied": "Kunne ikke indsætte: Udklipsholderadgang er blokeret. Aktiver indsættilladelser, og prøv igen.",
   "failedToPasteLayout": "Layoutet kunne ikke indsættes.",
   "failedToPasteLayoutInvalidData": "Kunne ikke indsætte: Ugyldige layoutdata.",
+  "failedToPasteLayoutPermissionDenied": "Kunne ikke indsætte: Udklipsholderadgang er blokeret. Aktiver indsættilladelser, og prøv igen.",
   "faq": "FAQ",
   "fields": {
     "actionType": "Handlingstype",

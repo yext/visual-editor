@@ -38,6 +38,7 @@ import { useDocument } from "../../hooks/useDocument.tsx";
 import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
+import { clonePuckResolveData } from "../utils/clonePuckResolveData.ts";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -279,15 +280,17 @@ export const InternalLayoutEditor = ({
         const resolveData = async () => {
           devLogger.logFunc("reloadDataOnDocumentChange");
           const { appState, config, dispatch } = getPuck();
-          const dataSnapshot = structuredClone(appState.data);
 
-          const resolvedData = await resolveAllData(appState.data, config, {
+          // Clone Puck data to ensure entity fields get updated on entity selection
+          const dataToResolve = clonePuckResolveData(appState.data);
+
+          const resolvedData = await resolveAllData(dataToResolve, config, {
             streamDocument,
           });
 
           devLogger.logData("RESOLVED_LAYOUT_DATA", resolvedData);
 
-          if (isDeepEqual(dataSnapshot, resolvedData)) {
+          if (isDeepEqual(appState.data, resolvedData)) {
             devLogger.log(
               "reloadDataOnDocumentChange - no layout changes detected"
             );
@@ -547,7 +550,20 @@ export const InternalLayoutEditor = ({
                   destinationIndex: appState.ui.itemSelector.index,
                   data: newData,
                 });
-              } catch (_) {
+              } catch (err) {
+                if (
+                  err instanceof DOMException &&
+                  err.name === "NotAllowedError"
+                ) {
+                  alert(
+                    pt(
+                      "failedToPasteComponentPermissionDenied",
+                      "Failed to paste: Clipboard access is blocked. Enable paste permissions and try again."
+                    )
+                  );
+                  return;
+                }
+
                 alert(
                   pt(
                     "failedToPasteComponentInvalidData",

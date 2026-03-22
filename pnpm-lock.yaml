@@ -137,7 +137,7 @@ importers:
         specifier: ^5.71.5
         version: 5.85.5(react@18.3.1)
       "@yext/pages-components":
-        specifier: ^2.0.2
+        specifier: 2.0.2
         version: 2.0.2(lexical@0.38.2)(mapbox-gl@2.15.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       "@yext/search-headless-react":
         specifier: ^2.7.1
@@ -466,7 +466,7 @@ importers:
         specifier: 1.2.9
         version: 1.2.9(@algolia/client-search@5.35.0)(@types/node@20.19.11)(@types/react@18.3.24)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)(typescript@5.9.2)(vite@5.4.21(@types/node@20.19.11))
       "@yext/pages-components":
-        specifier: ^2.0.2
+        specifier: 2.0.2
         version: 2.0.2(lexical@0.38.2)(mapbox-gl@2.15.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       autoprefixer:
         specifier: ^10.4.8

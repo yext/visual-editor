@@ -25,6 +25,7 @@ import {
   getCanonicalUrl,
   migrate,
   migrationRegistry,
+  GTMBody,
   resolveUrlTemplate,
 } from "@yext/visual-editor";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
@@ -160,11 +161,13 @@ const Locator: Template<TemplateRenderProps> = (props) => {
         requireOptIn={requireAnalyticsOptIn}
       >
         <VisualEditorProvider templateProps={props}>
-          <Render
-            config={locatorConfig}
-            data={data}
-            metadata={{ streamDocument: document }}
-          />
+          <GTMBody>
+            <Render
+              config={locatorConfig}
+              data={data}
+              metadata={{ streamDocument: document }}
+            />
+          </GTMBody>
         </VisualEditorProvider>
       </AnalyticsProvider>
     </>
