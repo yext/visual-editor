@@ -161,8 +161,10 @@
   "expandedMenu": "Genişletilmiş menü",
   "failedToCopyLayout": "Düzen kopyalanamadı.",
   "failedToPasteComponentInvalidData": "Yapıştırılamadı: Geçersiz bileşen verileri.",
+  "failedToPasteComponentPermissionDenied": "Yapıştırılamadı: Pano erişimi engellendi. Yapıştırma izinlerini etkinleştirip tekrar deneyin.",
   "failedToPasteLayout": "Düzen yapıştırılamadı.",
   "failedToPasteLayoutInvalidData": "Yapıştırılamadı: Geçersiz düzen verileri.",
+  "failedToPasteLayoutPermissionDenied": "Yapıştırılamadı: Pano erişimi engellendi. Yapıştırma izinlerini etkinleştirip tekrar deneyin.",
   "faq": "SSS",
   "fields": {
     "actionType": "Eylem Türü",

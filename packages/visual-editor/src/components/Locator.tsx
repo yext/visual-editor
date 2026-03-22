@@ -990,7 +990,7 @@ const LocatorInternal = ({
   distanceDisplay,
   pageHeading,
 }: LocatorProps) => {
-  // Adds a unified enableYextAnalytics to the window for both Pages and Search
+  // Adds unified [enable|disable]YextAnalytics to the window for both Pages and Search
   // analytics. Typically used during consent banner implementation.
   const searchAnalytics = useSearchAnalytics();
   const pagesAnalytics = useAnalytics();
@@ -999,9 +999,14 @@ const LocatorInternal = ({
       searchAnalytics?.optIn();
       pagesAnalytics?.optIn();
     };
+    (window as any).disableYextAnalytics = () => {
+      searchAnalytics?.optOut();
+      pagesAnalytics?.optOut();
+    };
 
     return () => {
       delete (window as any).enableYextAnalytics;
+      delete (window as any).disableYextAnalytics;
     };
   }, [searchAnalytics, pagesAnalytics]);
 
@@ -1589,6 +1594,16 @@ const LocatorInternal = ({
     : false;
   // If no opt-in is required, the map is already enabled.
   const [mapEnabled, setMapEnabled] = React.useState(!requireMapOptIn);
+  // Adds unified [enable|disable]Map functions to the window.
+  useEffect(() => {
+    (window as any).enableMap = () => setMapEnabled(true);
+    (window as any).disableMap = () => setMapEnabled(false);
+
+    return () => {
+      delete (window as any).enableMap;
+      delete (window as any).disableMap;
+    };
+  }, []);
 
   return (
     <div className="components flex h-screen w-screen mx-auto">

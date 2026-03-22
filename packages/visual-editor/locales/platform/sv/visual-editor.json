@@ -161,8 +161,10 @@
   "expandedMenu": "Utökad meny",
   "failedToCopyLayout": "Det gick inte att kopiera layouten.",
   "failedToPasteComponentInvalidData": "Det gick inte att klistra in: Ogiltig komponentdata.",
+  "failedToPasteComponentPermissionDenied": "Det gick inte att klistra in: Urklippsåtkomst är blockerad. Aktivera inklistringsbehörigheter och försök igen.",
   "failedToPasteLayout": "Det gick inte att klistra in layouten.",
   "failedToPasteLayoutInvalidData": "Det gick inte att klistra in: Ogiltig layoutdata.",
+  "failedToPasteLayoutPermissionDenied": "Det gick inte att klistra in: Urklippsåtkomst är blockerad. Aktivera inklistringsbehörigheter och försök igen.",
   "faq": "Vanliga frågor",
   "fields": {
     "actionType": "Åtgärdstyp",

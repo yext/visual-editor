@@ -161,8 +161,10 @@
   "expandedMenu": "Išplėstas meniu",
   "failedToCopyLayout": "Nepavyko nukopijuoti išdėstymo.",
   "failedToPasteComponentInvalidData": "Nepavyko įklijuoti: neteisingi komponento duomenys.",
+  "failedToPasteComponentPermissionDenied": "Nepavyko įklijuoti: prieiga prie iškarpinės užblokuota. Įgalinkite įklijavimo leidimus ir bandykite dar kartą.",
   "failedToPasteLayout": "Nepavyko įklijuoti išdėstymo.",
   "failedToPasteLayoutInvalidData": "Nepavyko įklijuoti: neteisingi išdėstymo duomenys.",
+  "failedToPasteLayoutPermissionDenied": "Nepavyko įklijuoti: prieiga prie iškarpinės užblokuota. Įgalinkite įklijavimo leidimus ir bandykite dar kartą.",
   "faq": "DUK",
   "fields": {
     "actionType": "Veiksmo tipas",

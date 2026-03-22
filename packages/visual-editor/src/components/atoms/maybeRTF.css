@@ -86,11 +86,20 @@
     font-weight: var(--fontWeight-link-fontWeight) !important;
     line-height: 1.5 !important;
     text-decoration: underline !important;
-    color: hsl(
-      from var(--colors-palette-primary) h s 20
-    ) !important; /* palette-primary-dark */
     text-transform: var(--textTransform-link-textTransform) !important;
     letter-spacing: var(--letterSpacing-link-letterSpacing) !important;
+    /* default text color + light background => palette-primary-dark */
+    color: hsl(from var(--colors-palette-primary) h s 20) !important;
+    /* default text color + dark background => white */
+    .text-white & {
+      color: white !important;
+    }
+  }
+  /* non-default text color on .rtf-theme => use directly for links */
+  &[style*="color:"] {
+    a {
+      color: inherit !important;
+    }
   }
   a:hover {
     text-decoration: none !important;

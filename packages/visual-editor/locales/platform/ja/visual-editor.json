@@ -161,8 +161,10 @@
   "expandedMenu": "拡張メニュー",
   "failedToCopyLayout": "レイアウトのコピーに失敗しました。",
   "failedToPasteComponentInvalidData": "貼り付けに失敗しました: コンポーネント データが無効です。",
+  "failedToPasteComponentPermissionDenied": "貼り付けに失敗しました: クリップボードへのアクセスがブロックされています。貼り付け権限を有効にして、再試行してください。",
   "failedToPasteLayout": "レイアウトの貼り付けに失敗しました。",
   "failedToPasteLayoutInvalidData": "貼り付けに失敗しました: 無効なレイアウト データです。",
+  "failedToPasteLayoutPermissionDenied": "貼り付けに失敗しました: クリップボードへのアクセスがブロックされています。貼り付け権限を有効にして、再試行してください。",
   "faq": "よくある質問",
   "fields": {
     "actionType": "アクションの種類",

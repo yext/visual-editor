@@ -161,8 +161,10 @@
   "expandedMenu": "Erweitertes Menü",
   "failedToCopyLayout": "Layout konnte nicht kopiert werden.",
   "failedToPasteComponentInvalidData": "Einfügen fehlgeschlagen: Ungültige Komponentendaten.",
+  "failedToPasteComponentPermissionDenied": "Einfügen fehlgeschlagen: Der Zugriff auf die Zwischenablage ist blockiert. Aktivieren Sie die Einfügeberechtigungen und versuchen Sie es erneut.",
   "failedToPasteLayout": "Das Layout konnte nicht eingefügt werden.",
   "failedToPasteLayoutInvalidData": "Einfügen fehlgeschlagen: Ungültige Layoutdaten.",
+  "failedToPasteLayoutPermissionDenied": "Einfügen fehlgeschlagen: Der Zugriff auf die Zwischenablage ist blockiert. Aktivieren Sie die Einfügeberechtigungen und versuchen Sie es erneut.",
   "faq": "FAQ",
   "fields": {
     "actionType": "Aktionstyp",
