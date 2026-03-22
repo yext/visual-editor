@@ -26,6 +26,7 @@ import {
 } from "./defaultPropsAndTypes.ts";
 import "./search.css";
 import { buildSearchConfigFromDocument } from "./searchConfig.ts";
+import "mapbox-gl/dist/mapbox-gl.css";
 
 export interface SearchComponentProps {
   styles: {
