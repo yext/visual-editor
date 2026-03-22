@@ -39,7 +39,6 @@ const SearchResultsSlotFields: Fields<SearchResultsSlotProps> = {
           universalLimit: 5,
           verticalLimit: 5,
           pageType: "vertical",
-          enableGenerativeDirectAnswer: false,
         },
         arrayFields: {
           label: YextField(msg("fields.label", "Label"), { type: "text" }),
@@ -90,18 +89,6 @@ const SearchResultsSlotFields: Fields<SearchResultsSlotProps> = {
         },
         getItemSummary: (item) => item?.label || "Vertical",
       },
-    },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
-    type: "object",
-    objectFields: {
-      enableGenerativeDirectAnswer: YextField(
-        msg("fields.enableGenerativeDirectAnswer", "Generative Direct Answer"),
-        {
-          type: "radio",
-          options: "SHOW_HIDE",
-        }
-      ),
     },
   }),
 };
@@ -393,7 +380,9 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
         />
       ) : (
         <UniversalResultsSection
-          enableGDA={props.styles?.enableGenerativeDirectAnswer ?? true}
+          enableGDA={
+            currentVerticalConfig?.enableGenerativeDirectAnswer ?? true
+          }
           searchTerm={committedSearchTerm}
           gdaLoading={gdaLoading}
           verticalConfigMap={verticalConfigMap}

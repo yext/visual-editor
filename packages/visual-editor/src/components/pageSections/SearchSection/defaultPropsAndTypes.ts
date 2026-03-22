@@ -29,7 +29,6 @@ export interface VerticalConfigProps {
 }
 export interface SearchResultsSlotProps {
   data: { verticals: VerticalConfigProps[] };
-  styles: { enableGenerativeDirectAnswer: boolean };
 }
 
 export const defaultSearchResultsProps: SearchResultsSlotProps = {
@@ -45,9 +44,6 @@ export const defaultSearchResultsProps: SearchResultsSlotProps = {
         enableGenerativeDirectAnswer: false,
       },
     ],
-  },
-  styles: {
-    enableGenerativeDirectAnswer: false,
   },
 };
 

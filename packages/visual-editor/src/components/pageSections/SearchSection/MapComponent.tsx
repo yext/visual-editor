@@ -5,7 +5,6 @@ import {
   MapboxMap,
   PinComponent,
 } from "@yext/search-ui-react";
-import "mapbox-gl/dist/mapbox-gl.css";
 import { useTranslation } from "react-i18next";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { backgroundColors, StreamDocument } from "../../../utils/index.ts";

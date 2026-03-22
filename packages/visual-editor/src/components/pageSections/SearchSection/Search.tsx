@@ -26,7 +26,6 @@ import {
 } from "./defaultPropsAndTypes.ts";
 import "./search.css";
 import { buildSearchConfigFromDocument } from "./searchConfig.ts";
-import "mapbox-gl/dist/mapbox-gl.css";
 
 export interface SearchComponentProps {
   styles: {
@@ -188,12 +187,13 @@ export const SearchComponent: ComponentConfig<{
           props: {
             data: {
               verticals: [
-                { label: "All", pageType: "universal" },
+                {
+                  label: "All",
+                  pageType: "universal",
+                  enableGenerativeDirectAnswer: false,
+                },
                 defaultSearchResultsProps.data.verticals[0],
               ],
-            },
-            styles: {
-              enableGenerativeDirectAnswer: false,
             },
           } satisfies SearchResultsSlotProps,
         },
