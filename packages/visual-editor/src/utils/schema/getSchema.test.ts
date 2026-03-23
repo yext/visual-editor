@@ -58,7 +58,7 @@ describe("getSchema - entity pages", () => {
               props: {
                 schemaMarkup: `{
                 "@type": "[[primaryCategory]]",
-                "@id": "https://[[siteDomain]]/[[uid]]#[[primaryCategory]]",
+                "@id": "https://[[siteDomain]]/#[[uid]]-[[primaryCategory]]",
                 "url": "https://[[siteDomain]]/[[path]]",
                 "name": "[[name]]"
               }`,
@@ -156,13 +156,13 @@ describe("getSchema - entity pages", () => {
       "@graph": [
         {
           "@type": "LocalBusiness",
-          "@id": "https://yext.com/123#LocalBusiness",
+          "@id": "https://yext.com/#123-LocalBusiness",
           url: "https://yext.com/us/va/123-main-street",
           name: "Test Name",
         },
         {
           "@type": "BreadcrumbList",
-          "@id": "https://yext.com/123#breadcrumbs",
+          "@id": "https://yext.com/#123-breadcrumbs",
           "@context": "https://schema.org",
           itemListElement: [
             {
@@ -199,11 +199,11 @@ describe("getSchema - entity pages", () => {
         },
         {
           "@type": "AggregateRating",
-          "@id": "https://yext.com/123#aggregaterating",
+          "@id": "https://yext.com/#123-aggregaterating",
           ratingValue: "3.7142856",
           reviewCount: "7",
           itemReviewed: {
-            "@id": "https://yext.com/123#LocalBusiness",
+            "@id": "https://yext.com/#123-LocalBusiness",
           },
         },
       ],
@@ -314,14 +314,14 @@ describe("getSchema - entity pages", () => {
       "@graph": [
         {
           "@context": "https://schema.org",
-          "@id": "123#LocalBusiness",
+          "@id": "#123-LocalBusiness",
           "@type": "LocalBusiness",
           name: "Test Name",
           url: "/us/va/123-main-street",
         },
         {
           "@context": "https://schema.org",
-          "@id": "123#breadcrumbs",
+          "@id": "#123-breadcrumbs",
           "@type": "BreadcrumbList",
           itemListElement: [
             {
@@ -357,10 +357,10 @@ describe("getSchema - entity pages", () => {
           ],
         },
         {
-          "@id": "123#aggregaterating",
+          "@id": "#123-aggregaterating",
           "@type": "AggregateRating",
           itemReviewed: {
-            "@id": "123#LocalBusiness",
+            "@id": "#123-LocalBusiness",
           },
           ratingValue: "3.7142856",
           reviewCount: "7",
@@ -427,7 +427,7 @@ describe("getSchema - entity pages", () => {
       "@graph": [
         {
           "@context": "https://schema.org",
-          "@id": "https://yext.com/123#AutomotiveBusiness",
+          "@id": "https://yext.com/#123-AutomotiveBusiness",
           url: "https://yext.com/us/va/123-main-street",
           "@type": "AutomotiveBusiness",
           name: "Test Name",
@@ -587,7 +587,7 @@ describe("getSchema - directory pages", () => {
       "@graph": [
         {
           "@context": "https://schema.org",
-          "@id": "https://yext.com/999#collectionpage",
+          "@id": "https://yext.com/#999-collectionpage",
           url: "https://yext.com/us/ny/nyc",
           "@type": "CollectionPage",
           name: "New York City",
@@ -668,7 +668,7 @@ describe("getSchema - directory pages", () => {
         {
           "@type": "BreadcrumbList",
           "@context": "https://schema.org",
-          "@id": "https://yext.com/999#breadcrumbs",
+          "@id": "https://yext.com/#999-breadcrumbs",
           itemListElement: [
             {
               "@type": "ListItem",
@@ -804,7 +804,7 @@ describe("getSchema - directory pages", () => {
       "@graph": [
         {
           "@context": "https://schema.org",
-          "@id": "999#collectionpage",
+          "@id": "#999-collectionpage",
           url: "/us/ny/nyc",
           "@type": "CollectionPage",
           name: "New York City",
@@ -885,7 +885,7 @@ describe("getSchema - directory pages", () => {
         {
           "@type": "BreadcrumbList",
           "@context": "https://schema.org",
-          "@id": "999#breadcrumbs",
+          "@id": "#999-breadcrumbs",
           itemListElement: [
             {
               "@type": "ListItem",
@@ -954,7 +954,7 @@ describe("getSchema - directory pages", () => {
       "@graph": [
         {
           "@context": "https://schema.org",
-          "@id": "https://yext.com/1000#collectionpage",
+          "@id": "https://yext.com/#1000-collectionpage",
           url: "https://yext.com/index.html",
           "@type": "CollectionPage",
           name: "Test Root",
@@ -985,7 +985,7 @@ describe("getSchema - directory pages", () => {
         {
           "@type": "BreadcrumbList",
           "@context": "https://schema.org",
-          "@id": "https://yext.com/1000#breadcrumbs",
+          "@id": "https://yext.com/#1000-breadcrumbs",
           itemListElement: [
             {
               "@type": "ListItem",
@@ -1035,7 +1035,7 @@ describe("getSchema - directory pages", () => {
       "@graph": [
         {
           "@context": "https://schema.org",
-          "@id": "1000#collectionpage",
+          "@id": "#1000-collectionpage",
           url: "/index.html",
           "@type": "CollectionPage",
           name: "Test Root",
@@ -1066,7 +1066,7 @@ describe("getSchema - directory pages", () => {
         {
           "@type": "BreadcrumbList",
           "@context": "https://schema.org",
-          "@id": "1000#breadcrumbs",
+          "@id": "#1000-breadcrumbs",
           itemListElement: [
             {
               "@type": "ListItem",
@@ -1110,7 +1110,7 @@ describe("getSchema - locator pages", () => {
       "@graph": [
         {
           "@context": "https://schema.org",
-          "@id": "https://yext.com/2000#webpage",
+          "@id": "https://yext.com/#2000-webpage",
           url: "https://yext.com/locator",
           "@type": "WebPage",
           name: "Test Locator",
@@ -1146,7 +1146,7 @@ describe("getSchema - locator pages", () => {
       "@graph": [
         {
           "@context": "https://schema.org",
-          "@id": "2000#webpage",
+          "@id": "#2000-webpage",
           url: "/en/locator",
           "@type": "WebPage",
           name: "Test Locator",

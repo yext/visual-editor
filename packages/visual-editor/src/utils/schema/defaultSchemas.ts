@@ -34,7 +34,7 @@ export const getSchemaTemplate = (streamDocument: StreamDocument): string => {
 const LOCAL_BUSINESS_SCHEMA = `{
   "@context": "https://schema.org",
   "@type": "[[primaryCategory]]",
-  "@id": "https://[[siteDomain]]/[[uid]]#[[primaryCategory]]",
+  "@id": "https://[[siteDomain]]/#[[uid]]-[[primaryCategory]]",
   "url": "https://[[siteDomain]]/[[path]]",
   "name": "[[name]]",
   "address": {
@@ -58,7 +58,7 @@ const LOCAL_BUSINESS_SCHEMA = `{
 const DIRECTORY_SCHEMA = `{
   "@context": "https://schema.org",
   "@type": "CollectionPage",
-  "@id": "https://[[siteDomain]]/[[uid]]#collectionpage",
+  "@id": "https://[[siteDomain]]/#[[uid]]-collectionpage",
   "url": "https://[[siteDomain]]/[[path]]",
   "name": "[[name]]",
   "mainEntity": {
@@ -72,7 +72,7 @@ const DIRECTORY_SCHEMA = `{
 const LOCATOR_SCHEMA = `{
   "@context": "https://schema.org",
   "@type": "WebPage",
-  "@id": "https://[[siteDomain]]/[[uid]]#webpage",
+  "@id": "https://[[siteDomain]]/#[[uid]]-webpage",
   "url": "https://[[siteDomain]]/[[path]]",
   "name": "[[name]]"
 }`
@@ -82,7 +82,7 @@ const LOCATOR_SCHEMA = `{
 const FALLBACK_SCHEMA = `{
   "@context": "https://schema.org",
   "@type": "Thing",
-  "@id": "https://[[siteDomain]]/[[uid]]#thing",
+  "@id": "https://[[siteDomain]]/#[[uid]]-thing",
   "url": "https://[[siteDomain]]/[[path]]",
   "name": "[[name]]",
   "description": "[[description]]"
