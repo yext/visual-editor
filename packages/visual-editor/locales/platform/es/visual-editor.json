@@ -255,6 +255,7 @@
     "latitude": "Latitud",
     "limit": "Límite",
     "link": "Enlace",
+    "linkColor": "Color del enlace",
     "linkedInLink": "LinkedIn Link",
     "linkLabel": "Etiqueta de enlace",
     "links": "Campo de golf",

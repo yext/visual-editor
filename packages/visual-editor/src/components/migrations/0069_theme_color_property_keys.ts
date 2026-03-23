@@ -13,9 +13,11 @@ const stripPrefix = (value: unknown, prefix: string): string | undefined => {
 };
 
 const hasLegacyThemeColorKeys = (value: Record<string, unknown>): boolean => {
-  return (
-    "bgColor" in value || "textColor" in value || "isDarkBackground" in value
-  );
+  const hasLegacyColorString =
+    typeof value.bgColor === "string" || typeof value.textColor === "string";
+  const hasLegacyDarkFlag = typeof value.isDarkBackground === "boolean";
+
+  return hasLegacyColorString || hasLegacyDarkFlag;
 };
 
 const migrateLegacyThemeColor = (

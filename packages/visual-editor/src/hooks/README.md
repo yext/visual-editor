@@ -133,23 +133,23 @@ const ChildComponent = () => {
 const MyComponent = () => {
   return (
     // section automatically applies the background color and sets the context
-    <Section background={{bgColor: "bg-white", textColor:"text-black"}}>
-      <Section background={{bgColor: "bg-blue", textColor:"text-red"}}>
-        <ChildComponent /> // prints '{bgColor: "bg-blue", textColor:"text-red"}'
+    <Section background={{selectedColor: "white", contrastingColor:"black"}}>
+      <Section background={{selectedColor: "blue", contrastingColor:"red"}}>
+        <ChildComponent /> // prints '{selectedColor: "blue", contrastingColor:"red"}'
       </Section>
-      <ChildComponent /> // prints '{bgColor: "bg-white", textColor:"text-black"}'
+      <ChildComponent /> // prints '{selectedColor: "white", contrastingColor:"black"}'
 
       // If applying a background color via a div or other element,
       // you should set the background context manually
-      <BackgroundProvider value={{bgColor: "bg-green", textColor:"text-purple"}}>
+      <BackgroundProvider value={{selectedColor: "green", contrastingColor:"purple"}}>
         <div style={{backgroundColor: "green", color: "purple"}}>
-          <ChildComponent /> // prints '{bgColor: "bg-green", textColor:"text-purple"}'
+          <ChildComponent /> // prints '{selectedColor: "green", contrastingColor:"purple"}'
         </div>
       </BackgroundProvider>
 
       <div style={{backgroundColor: "orange", color: "gray"}}>
           // the context was not set for this div, so useBackground will return the parent's value
-          <ChildComponent /> // prints '{bgColor: "bg-white", textColor:"text-black"}'
+          <ChildComponent /> // prints '{selectedColor: "white", contrastingColor:"black"}'
       </div>
     </Section>
   )
