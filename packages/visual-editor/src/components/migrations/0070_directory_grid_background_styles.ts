@@ -30,7 +30,9 @@ const transformDirectoryProps = (
     styles: {
       ...oldProps.styles,
       listBackgroundColor:
-        oldProps.backgroundColor ?? backgroundColors.background1.value,
+        oldProps.styles?.backgroundColor ??
+        oldProps.backgroundColor ??
+        backgroundColors.background1.value,
     },
   };
 };

@@ -140,7 +140,10 @@ export const Directory: ComponentConfig<{ props: DirectoryProps }> = {
   label: msg("components.directory", "Directory"),
   fields: directoryFields,
   resolveFields: (data, params) => {
-    if (isDirectoryGrid(params.metadata.streamDocument?.dm_directoryChildren)) {
+    if (
+      params.metadata.streamDocument?.dm_directoryChildren &&
+      isDirectoryGrid(params.metadata.streamDocument.dm_directoryChildren)
+    ) {
       return setDeep(
         directoryFields,
         "styles.objectFields.listBackgroundColor.visible",
