@@ -382,7 +382,7 @@ describe("resolveSchemaJson", () => {
     const schema = {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      "@id": "https://[[siteDomain]]/[[uid]]#collectionpage",
+      "@id": "https://[[siteDomain]]/#[[uid]]-collectionpage",
       url: "https://[[siteDomain]]/[[path]]",
       name: "[[name]]",
       mainEntity: {
@@ -423,7 +423,7 @@ describe("resolveSchemaJson", () => {
     assert.deepEqual(resolvedSchema, {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      "@id": "https://yext.com/1#collectionpage",
+      "@id": "https://yext.com/#1-collectionpage",
       url: "https://yext.com/en/ca",
       name: "Directory Country",
       mainEntity: {
@@ -456,7 +456,7 @@ describe("resolveSchemaJson", () => {
     const schema = {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      "@id": "https://[[siteDomain]]/[[uid]]#collectionpage",
+      "@id": "https://[[siteDomain]]/#[[uid]]-collectionpage",
       url: "https://[[siteDomain]]/[[path]]",
       name: "[[name]]",
       mainEntity: {
@@ -558,7 +558,7 @@ describe("resolveSchemaJson", () => {
     assert.deepEqual(resolvedSchema, {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      "@id": "https://yext.com/2#collectionpage",
+      "@id": "https://yext.com/#2-collectionpage",
       url: "https://yext.com/en/us/va/arlington",
       name: "Directory City",
       mainEntity: {
@@ -607,7 +607,7 @@ describe("resolveSchemaJson", () => {
     const schema = {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      "@id": "https://[[siteDomain]]/[[uid]]#collectionpage",
+      "@id": "https://[[siteDomain]]/#[[uid]]-collectionpage",
       url: "https://[[siteDomain]]/[[path]]",
       name: "[[name]]",
       mainEntity: {
@@ -714,7 +714,7 @@ describe("resolveSchemaJson", () => {
     assert.deepEqual(resolvedSchema, {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      "@id": "3#collectionpage",
+      "@id": "#3-collectionpage",
       url: "/en/us/va/arlington",
       name: "Directory City",
       mainEntity: {
