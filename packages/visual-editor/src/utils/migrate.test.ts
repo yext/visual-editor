@@ -52,21 +52,22 @@ describe("migrate", () => {
   });
 
   it("updates top-level schemaMarkup @id to the new anchor format", async () => {
-    const migratedData = migrate(
-      {
-        root: {
-          props: {
-            version: 0,
-            schemaMarkup: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Thing",
-              "@id": "https://[[siteDomain]]/[[uid]]#customtag",
-            }),
-          },
+    const data = {
+      root: {
+        props: {
+          version: 0,
+          schemaMarkup: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Thing",
+            "@id": "https://[[siteDomain]]/[[uid]]#customtag",
+          }),
         },
-        content: [],
-        zones: {},
       },
+      content: [],
+      zones: {},
+    } as any;
+    const migratedData = migrate(
+      data,
       [updateSchemaIdAnchorFormat],
       {
         components: {},
@@ -74,7 +75,7 @@ describe("migrate", () => {
       {}
     );
 
-    expect(migratedData.root.props?.schemaMarkup).toBe(
+    expect((migratedData.root.props as Record<string, any>)?.schemaMarkup).toBe(
       JSON.stringify({
         "@context": "https://schema.org",
         "@type": "Thing",
@@ -89,17 +90,18 @@ describe("migrate", () => {
       "@type": "Thing",
       "@id": "https://example.com/custom-id",
     });
-    const migratedData = migrate(
-      {
-        root: {
-          props: {
-            version: 0,
-            schemaMarkup,
-          },
+    const data = {
+      root: {
+        props: {
+          version: 0,
+          schemaMarkup,
         },
-        content: [],
-        zones: {},
       },
+      content: [],
+      zones: {},
+    } as any;
+    const migratedData = migrate(
+      data,
       [updateSchemaIdAnchorFormat],
       {
         components: {},
@@ -107,7 +109,9 @@ describe("migrate", () => {
       {}
     );
 
-    expect(migratedData.root.props?.schemaMarkup).toBe(schemaMarkup);
+    expect((migratedData.root.props as Record<string, any>)?.schemaMarkup).toBe(
+      schemaMarkup
+    );
   });
 });
 
