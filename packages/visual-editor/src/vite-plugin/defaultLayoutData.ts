@@ -4516,6 +4516,7 @@ const directoryDefaultLayout = {
       props: {
         styles: {
           backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+          listBackgroundColor: { bgColor: "bg-white", textColor: "text-black" },
         },
         slots: {
           TitleSlot: [
