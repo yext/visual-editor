@@ -11,13 +11,15 @@ import {
   SearchBarHeightProps,
   SearchBarRoundedProps,
   SearchBarWidthProps,
+  SearchResultsSlotProps,
   VerticalConfigProps,
 } from "./defaultPropsAndTypes.ts";
 import { renderEntityPreviews } from "./searchVisualAutoComplete.tsx";
 import React from "react";
 
 export const buildVerticalConfigMap = (
-  verticals: VerticalConfigProps[]
+  verticals: VerticalConfigProps[],
+  ctaStyles: SearchResultsSlotProps["styles"]["ctaStyles"]
 ): VerticalConfigMap<Record<string, DefaultRawDataType>> => {
   return verticals.reduce(
     (acc, v) => {
@@ -44,6 +46,7 @@ export const buildVerticalConfigMap = (
             cardType={cardType}
             layout={layoutType}
             index={props.result.index}
+            ctaStyles={ctaStyles}
           />
         ),
       };

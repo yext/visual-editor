@@ -168,6 +168,7 @@
   "faq": "FAQ",
   "fields": {
     "actionType": "Typ akcji",
+    "activeVerticalColor": "Aktywny kolor pionowy",
     "address": "Adres",
     "align": "Wyrównywać",
     "alignContent": "Wyrównaj zawartość",
@@ -205,6 +206,7 @@
     "css": "CSS",
     "cta": "CTA",
     "ctaField": "Pole CTA",
+    "ctaStyles": "Style wezwania do działania",
     "ctaType": "Typ CTA",
     "ctaVariant": "Wariant CTA",
     "currentPageLinkLabel": "Bieżąca etykieta łącza do strony",

@@ -168,6 +168,7 @@
   "faq": "GYIK",
   "fields": {
     "actionType": "Akció típusa",
+    "activeVerticalColor": "Aktív függőleges szín",
     "address": "Cím",
     "align": "Igazítás",
     "alignContent": "Tartalom igazítása",
@@ -205,6 +206,7 @@
     "css": "CSS",
     "cta": "CTA",
     "ctaField": "CTA mező",
+    "ctaStyles": "CTA stílusok",
     "ctaType": "CTA -típus",
     "ctaVariant": "CTA -változat",
     "currentPageLinkLabel": "Jelenlegi oldalhivatkozás címke",

@@ -42,6 +42,7 @@ export type CTAProps = {
   target?: "_self" | "_blank" | "_parent" | "_top";
   alwaysHideCaret?: boolean;
   ariaLabel?: string;
+  textColor?: BackgroundStyle;
   onClick?: (
     event: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement, MouseEvent>
   ) => void;
@@ -236,6 +237,7 @@ export const CTA = (props: CTAProps) => {
     actionType = "link",
     id,
     dataAttributes,
+    textColor: overrideTextColor,
   } = props;
 
   const { t } = useTranslation();
@@ -244,7 +246,9 @@ export const CTA = (props: CTAProps) => {
   const isDarkBG = useBackground()?.isDarkBackground;
   const dynamicStyle: React.CSSProperties = (() => {
     const bg = normalizeThemeColor(color?.bgColor);
-    const textColor = normalizeThemeColor(color?.textColor);
+    const textColor = normalizeThemeColor(
+      overrideTextColor ? overrideTextColor.bgColor : color?.textColor
+    );
     const border = bg && `var(--colors-${bg})`;
 
     if (variant === "primary") {

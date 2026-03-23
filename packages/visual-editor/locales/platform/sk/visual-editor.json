@@ -168,6 +168,7 @@
   "faq": "Často",
   "fields": {
     "actionType": "Typ akcie",
+    "activeVerticalColor": "Aktívna vertikálna farba",
     "address": "Adresa",
     "align": "Zarovnať",
     "alignContent": "Zarovnať obsah",
@@ -205,6 +206,7 @@
     "css": "CSS",
     "cta": "CTA",
     "ctaField": "Poľa CTA",
+    "ctaStyles": "Štýly CTA",
     "ctaType": "CTA",
     "ctaVariant": "Variant CTA",
     "currentPageLinkLabel": "Menovka odkazu na aktuálnu stránku",

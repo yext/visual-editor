@@ -168,6 +168,7 @@
   "faq": "FAQ",
   "fields": {
     "actionType": "Darbības veids",
+    "activeVerticalColor": "Aktīvā vertikālā krāsa",
     "address": "Adrese",
     "align": "Izlīdzināt",
     "alignContent": "Saskaņot saturu",
@@ -205,6 +206,7 @@
     "css": "CSS",
     "cta": "CTA",
     "ctaField": "CTA lauks",
+    "ctaStyles": "CTA stili",
     "ctaType": "CTA tips",
     "ctaVariant": "CTA variants",
     "currentPageLinkLabel": "Pašreizējās lapas saites etiķete",

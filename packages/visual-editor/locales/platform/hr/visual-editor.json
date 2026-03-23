@@ -168,6 +168,7 @@
   "faq": "FAQ",
   "fields": {
     "actionType": "Vrsta akcije",
+    "activeVerticalColor": "Aktivna okomita boja",
     "address": "Adresa",
     "align": "Poravnajte",
     "alignContent": "Uskladite sadržaj",
@@ -205,6 +206,7 @@
     "css": "CSS",
     "cta": "CTA",
     "ctaField": "CTA polje",
+    "ctaStyles": "CTA stilovi",
     "ctaType": "CTA tip",
     "ctaVariant": "CTA varijanta",
     "currentPageLinkLabel": "Trenutna oznaka veze stranice",

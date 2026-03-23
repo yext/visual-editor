@@ -168,6 +168,7 @@
   "faq": "Faq",
   "fields": {
     "actionType": "Toimintotyyppi",
+    "activeVerticalColor": "Aktiivinen pystyväri",
     "address": "Osoite",
     "align": "Kohdista",
     "alignContent": "Tasaa sisältö",
@@ -205,6 +206,7 @@
     "css": "CSS",
     "cta": "CTA",
     "ctaField": "CTA -kenttä",
+    "ctaStyles": "CTA-tyylit",
     "ctaType": "CTA -tyyppi",
     "ctaVariant": "CTA -variantti",
     "currentPageLinkLabel": "Nykyisen sivun linkin etiketti",

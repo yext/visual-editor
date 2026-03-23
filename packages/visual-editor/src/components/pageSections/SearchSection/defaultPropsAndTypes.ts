@@ -1,3 +1,4 @@
+import { BackgroundStyle } from "../../../utils/themeConfigOptions.ts";
 import { SearchBarSlotProps } from "./SearchBarSlot.tsx";
 
 export type VerticalLayout = "Grid" | "Flex" | "Map";
@@ -29,6 +30,13 @@ export interface VerticalConfigProps {
 }
 export interface SearchResultsSlotProps {
   data: { verticals: VerticalConfigProps[] };
+  styles: {
+    ctaStyles?: {
+      background?: BackgroundStyle;
+      textColor?: BackgroundStyle;
+    };
+    activeVerticalColor?: { color?: BackgroundStyle };
+  };
 }
 
 export const defaultSearchResultsProps: SearchResultsSlotProps = {
@@ -45,6 +53,7 @@ export const defaultSearchResultsProps: SearchResultsSlotProps = {
       },
     ],
   },
+  styles: { ctaStyles: undefined, activeVerticalColor: undefined },
 };
 
 export const defaultSearchData: SearchBarSlotProps = {

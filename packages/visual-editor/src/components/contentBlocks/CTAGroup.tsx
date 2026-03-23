@@ -32,6 +32,7 @@ type BasicCTAProps = {
   /** The image to use if the CTA is set to preset image */
   presetImage?: PresetImageType;
   color?: BackgroundStyle;
+  textColor?: BackgroundStyle;
 };
 
 const defaultButton: BasicCTAProps = {
@@ -90,6 +91,10 @@ const ctaGroupFields: Fields<CTAGroupProps> = {
         options: "PRESET_IMAGE",
       }),
       color: YextField(msg("fields.color", "Color"), {
+        type: "select",
+        options: "SITE_COLOR",
+      }),
+      textColor: YextField(msg("fields.textColor", "Text Color"), {
         type: "select",
         options: "SITE_COLOR",
       }),
@@ -153,6 +158,7 @@ const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
                 presetImageType={button.presetImage}
                 className="truncate w-full"
                 color={button.color}
+                textColor={button.textColor}
               />
             </div>
           )

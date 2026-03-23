@@ -13,7 +13,10 @@ import { Body } from "../../atoms/body.tsx";
 import Cards from "./Cards.tsx";
 import { MapComponent } from "./MapComponent.tsx";
 import SourceCard from "./SourceCard.tsx";
-import { VerticalConfigProps } from "./defaultPropsAndTypes.ts";
+import {
+  SearchResultsSlotProps,
+  VerticalConfigProps,
+} from "./defaultPropsAndTypes.ts";
 
 interface VerticalResultsSectionProps {
   verticalKey: string;
@@ -24,6 +27,7 @@ interface VerticalResultsSectionProps {
   enableGDA: boolean;
   searchTerm?: string;
   gdaLoading: boolean;
+  ctaStyles?: SearchResultsSlotProps["styles"]["ctaStyles"];
 }
 
 export const VerticalResultsSection = ({
@@ -35,6 +39,7 @@ export const VerticalResultsSection = ({
   enableGDA,
   searchTerm,
   gdaLoading,
+  ctaStyles,
 }: VerticalResultsSectionProps) => {
   const popupRef = React.useRef<HTMLDivElement>(null);
   const [showFilterModal, setShowFilterModal] = React.useState(false);
@@ -86,6 +91,7 @@ export const VerticalResultsSection = ({
                       verticals.find((v) => v.verticalKey === verticalKey)
                         ?.cardType
                     }
+                    ctaStyles={ctaStyles}
                   />
                 )}
               />
@@ -197,6 +203,7 @@ export const VerticalResultsSection = ({
                 cardType={
                   verticals.find((v) => v.verticalKey === verticalKey)?.cardType
                 }
+                ctaStyles={ctaStyles}
               />
             )}
           />

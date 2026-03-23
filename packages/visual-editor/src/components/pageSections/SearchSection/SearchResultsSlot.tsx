@@ -23,6 +23,7 @@ import {
   useSearchUrlParams,
 } from "./utils.tsx";
 import { VerticalResultsSection } from "./VerticalResultsSection.tsx";
+import { normalizeThemeColor } from "../../../utils/normalizeThemeColor.ts";
 
 const SearchResultsSlotFields: Fields<SearchResultsSlotProps> = {
   data: YextField(msg("fields.data", "Data"), {
@@ -92,6 +93,36 @@ const SearchResultsSlotFields: Fields<SearchResultsSlotProps> = {
       },
     },
   }),
+  styles: {
+    type: "object",
+    label: msg("fields.styles", "Styles"),
+    objectFields: {
+      ctaStyles: {
+        type: "object",
+        label: msg("fields.ctaStyles", "CTA Styles"),
+        objectFields: {
+          background: YextField(msg("fields.color", "Color"), {
+            type: "select",
+            options: "SITE_COLOR",
+          }),
+          textColor: YextField(msg("fields.textColor", "Text Color"), {
+            type: "select",
+            options: "SITE_COLOR",
+          }),
+        },
+      },
+      activeVerticalColor: {
+        type: "object",
+        label: msg("fields.activeVerticalColor", "Active Vertical Color"),
+        objectFields: {
+          color: YextField(msg("fields.color", "Color"), {
+            type: "select",
+            options: "SITE_COLOR",
+          }),
+        },
+      },
+    },
+  },
 };
 
 const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
@@ -99,6 +130,7 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
 ) => {
   const {
     data: { verticals },
+    styles,
     puck,
   } = props;
   const puckStore = useOptionalPuckStore();
@@ -147,8 +179,8 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
   });
 
   const verticalConfigMap = React.useMemo(
-    () => buildVerticalConfigMap(verticals),
-    [verticals]
+    () => buildVerticalConfigMap(verticals, styles?.ctaStyles),
+    [verticals, styles?.ctaStyles]
   );
 
   const universalLimit = React.useMemo(
@@ -160,6 +192,7 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
     if (!resolvedVerticalKey) return undefined;
     return verticals.find((v) => v.verticalKey === resolvedVerticalKey);
   }, [verticals, resolvedVerticalKey]);
+
   const runSearch = React.useCallback(
     (nextVerticalKey: string | null, query: string) => {
       if (!isValidVerticalConfig(verticals)) {
@@ -279,10 +312,22 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
                       runSearch(nextVertical, committedSearchTerm);
                   }}
                   className={`px-5 pt-1.5 pb-3 tracking-[1.1px] mb-0 hover:cursor-pointer ${
-                    isActive
-                      ? "border-b-2 text-palette-primary-dark border-palette-primary-dark"
-                      : ""
+                    isActive ? "border-b-2 " : ""
                   }`}
+                  style={
+                    isActive
+                      ? {
+                          color:
+                            `var(--colors-${normalizeThemeColor(
+                              styles?.activeVerticalColor?.color?.bgColor
+                            )})` || `text-palette-primary-dark `,
+                          borderColor:
+                            `var(--colors-${normalizeThemeColor(
+                              styles?.activeVerticalColor?.color?.bgColor
+                            )})` || `border-palette-primary-dark`,
+                        }
+                      : undefined
+                  }
                 >
                   {item.label}
                 </a>
@@ -311,6 +356,7 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
           }
           searchTerm={committedSearchTerm}
           gdaLoading={gdaLoading}
+          ctaStyles={styles.ctaStyles}
         />
       ) : (
         <UniversalResultsSection

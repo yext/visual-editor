@@ -14,6 +14,7 @@ import { PhoneAtom } from "../../atoms/phone.tsx";
 import {
   CardTypeProp,
   FLEX_LAYOUT_CLASSES,
+  SearchResultsSlotProps,
   UNIT_LABEL,
   VerticalLayout,
 } from "./defaultPropsAndTypes.ts";
@@ -25,13 +26,16 @@ interface CardsProps extends CardProps<any> {
   layout?: VerticalLayout;
   isVertical?: boolean;
   index?: number;
+  ctaStyles?: SearchResultsSlotProps["styles"]["ctaStyles"];
 }
+
 const Cards = ({
   result,
   cardType = "Standard",
   layout,
   isVertical = false,
   index = 0,
+  ctaStyles,
 }: CardsProps) => {
   const name = result.rawData.question || result.rawData.name;
   const { t } = useTranslation();
@@ -96,6 +100,8 @@ const Cards = ({
             className={`${FLEX_LAYOUT_CLASSES} gap-2 ${isVertical ? `items-start` : `items-end`}`}
           >
             <CTA
+              color={ctaStyles?.background}
+              textColor={ctaStyles?.textColor}
               link={result.rawData.slug}
               label={t("visitPage", "Visit Page")}
               variant={"primary"}
@@ -103,6 +109,8 @@ const Cards = ({
               normalizeLink={true}
             />
             <CTA
+              color={ctaStyles?.background}
+              textColor={ctaStyles?.textColor}
               link={getDirections(result.rawData.address)}
               label={t("getDirections", "Get Directions")}
               variant={"primary"}
@@ -125,6 +133,8 @@ const Cards = ({
 
           <div className="ml-auto mr-0 flex">
             <CTA
+              color={ctaStyles?.background}
+              textColor={ctaStyles?.textColor}
               link={result.rawData.slug}
               label={t("learnMore", "Learn more")}
               variant={"primary"}
@@ -151,6 +161,8 @@ const Cards = ({
 
               <div className="flex">
                 <CTA
+                  color={ctaStyles?.background}
+                  textColor={ctaStyles?.textColor}
                   link={result.rawData.slug}
                   label={t("learnMore", "Learn more")}
                   variant={"primary"}

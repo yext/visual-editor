@@ -168,6 +168,7 @@
   "faq": "Vanliga frågor",
   "fields": {
     "actionType": "Åtgärdstyp",
+    "activeVerticalColor": "Aktiv vertikal färg",
     "address": "Adress",
     "align": "Justera",
     "alignContent": "Justera innehåll",
@@ -205,6 +206,7 @@
     "css": "CSS",
     "cta": "Cta",
     "ctaField": "CTA -fält",
+    "ctaStyles": "CTA-stilar",
     "ctaType": "CTA -typ",
     "ctaVariant": "CTA -variant",
     "currentPageLinkLabel": "Aktuell sidalänketikett",

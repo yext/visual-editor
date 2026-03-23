@@ -168,6 +168,7 @@
   "faq": "FAQ",
   "fields": {
     "actionType": "Actietype",
+    "activeVerticalColor": "Actieve verticale kleur",
     "address": "Adres",
     "align": "Uitlijnen",
     "alignContent": "Inhoud uitlijnen",
@@ -205,6 +206,7 @@
     "css": "CSS",
     "cta": "CTA",
     "ctaField": "CTA -veld",
+    "ctaStyles": "CTA-stijlen",
     "ctaType": "CTA -type",
     "ctaVariant": "CTA -variant",
     "currentPageLinkLabel": "Huidige paginalinklabel",

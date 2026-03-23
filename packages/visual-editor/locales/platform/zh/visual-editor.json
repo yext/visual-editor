@@ -168,6 +168,7 @@
   "faq": "常问问题",
   "fields": {
     "actionType": "动作类型",
+    "activeVerticalColor": "活动垂直颜色",
     "address": "地址",
     "align": "对齐",
     "alignContent": "对齐内容",
@@ -205,6 +206,7 @@
     "css": "CSS",
     "cta": "CTA",
     "ctaField": "CTA字段",
+    "ctaStyles": "CTA 样式",
     "ctaType": "CTA类型",
     "ctaVariant": "CTA变体",
     "currentPageLinkLabel": "当前页面链接标签",

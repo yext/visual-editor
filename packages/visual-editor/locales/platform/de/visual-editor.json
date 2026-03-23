@@ -168,6 +168,7 @@
   "faq": "FAQ",
   "fields": {
     "actionType": "Aktionstyp",
+    "activeVerticalColor": "Aktive vertikale Farbe",
     "address": "Adresse",
     "align": "Ausrichten",
     "alignContent": "Inhalte ausrichten",
@@ -205,6 +206,7 @@
     "css": "CSS",
     "cta": "CTA",
     "ctaField": "CTA-Feld",
+    "ctaStyles": "CTA-Stile",
     "ctaType": "CTA-Typ",
     "ctaVariant": "CTA-Variante",
     "currentPageLinkLabel": "Aktuelles Link-Label der Seite",

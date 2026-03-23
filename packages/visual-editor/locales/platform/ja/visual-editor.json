@@ -168,6 +168,7 @@
   "faq": "よくある質問",
   "fields": {
     "actionType": "アクションの種類",
+    "activeVerticalColor": "アクティブな垂直色",
     "address": "住所",
     "align": "整列",
     "alignContent": "コンテンツの整列",
@@ -205,6 +206,7 @@
     "css": "CSS",
     "cta": "CTA",
     "ctaField": "CTAフィールド",
+    "ctaStyles": "CTA スタイル",
     "ctaType": "CTAタイプ",
     "ctaVariant": "CTAバリアント",
     "currentPageLinkLabel": "現在のページのリンクラベル",

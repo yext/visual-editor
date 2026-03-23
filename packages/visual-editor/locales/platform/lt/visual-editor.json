@@ -168,6 +168,7 @@
   "faq": "DUK",
   "fields": {
     "actionType": "Veiksmo tipas",
+    "activeVerticalColor": "Aktyvi vertikali spalva",
     "address": "Adresas",
     "align": "Lygiuoti",
     "alignContent": "Sulygiuoti turinį",
@@ -205,6 +206,7 @@
     "css": "CSS",
     "cta": "CTA",
     "ctaField": "CTA laukas",
+    "ctaStyles": "CTA stiliai",
     "ctaType": "CTA tipas",
     "ctaVariant": "CTA variantas",
     "currentPageLinkLabel": "Dabartinio puslapio nuorodos etiketė",

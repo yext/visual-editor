@@ -168,6 +168,7 @@
   "faq": "FAQ",
   "fields": {
     "actionType": "Tip de acțiune",
+    "activeVerticalColor": "Culoare verticală activă",
     "address": "Adresa",
     "align": "Alinia",
     "alignContent": "Aliniați conținutul",
@@ -205,6 +206,7 @@
     "css": "CSS",
     "cta": "CTA",
     "ctaField": "Câmp CTA",
+    "ctaStyles": "Stiluri CTA",
     "ctaType": "Tip CTA",
     "ctaVariant": "Varianta CTA",
     "currentPageLinkLabel": "Eticheta de link la pagina curentă",

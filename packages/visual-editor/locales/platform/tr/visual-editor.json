@@ -168,6 +168,7 @@
   "faq": "SSS",
   "fields": {
     "actionType": "Eylem Türü",
+    "activeVerticalColor": "Aktif Dikey Renk",
     "address": "Adres",
     "align": "Hizala",
     "alignContent": "İçeriği Hizala",
@@ -205,6 +206,7 @@
     "css": "CSS",
     "cta": "CTA",
     "ctaField": "CTA alanı",
+    "ctaStyles": "CTA Stilleri",
     "ctaType": "CTA Tipi",
     "ctaVariant": "CTA varyantı",
     "currentPageLinkLabel": "Geçerli Sayfa Bağlantı Etiketi",
