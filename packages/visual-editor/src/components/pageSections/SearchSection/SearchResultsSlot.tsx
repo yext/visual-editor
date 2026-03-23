@@ -101,11 +101,29 @@ const SearchResultsSlotFields: Fields<SearchResultsSlotProps> = {
         type: "object",
         label: msg("fields.ctaStyles", "CTA Styles"),
         objectFields: {
-          background: YextField(msg("fields.color", "Color"), {
+          background: YextField(
+            msg("fields.backgroundColor", "Background Color"),
+            {
+              type: "select",
+              options: "SITE_COLOR",
+            }
+          ),
+          textColor: YextField(msg("fields.textColor", "Text Color"), {
             type: "select",
             options: "SITE_COLOR",
           }),
-          textColor: YextField(msg("fields.textColor", "Text Color"), {
+        },
+      },
+      headingStyles: {
+        type: "object",
+        label: msg("fields.headingStyles", "Heading Styles"),
+        objectFields: {
+          headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
+            type: "select",
+            hasSearch: true,
+            options: "HEADING_LEVEL",
+          }),
+          color: YextField(msg("fields.color", "Color"), {
             type: "select",
             options: "SITE_COLOR",
           }),
@@ -179,8 +197,13 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
   });
 
   const verticalConfigMap = React.useMemo(
-    () => buildVerticalConfigMap(verticals, styles?.ctaStyles),
-    [verticals, styles?.ctaStyles]
+    () =>
+      buildVerticalConfigMap(
+        verticals,
+        styles?.ctaStyles,
+        styles.headingStyles
+      ),
+    [verticals, styles]
   );
 
   const universalLimit = React.useMemo(
@@ -357,6 +380,7 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
           searchTerm={committedSearchTerm}
           gdaLoading={gdaLoading}
           ctaStyles={styles.ctaStyles}
+          headingStyles={styles.headingStyles}
         />
       ) : (
         <UniversalResultsSection

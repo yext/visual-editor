@@ -7,6 +7,7 @@ import {
 import Cards from "./Cards.tsx";
 import { LayoutSection } from "./LayoutSections.tsx";
 import {
+  HeadingStyles,
   SearchBarAlignProps,
   SearchBarHeightProps,
   SearchBarRoundedProps,
@@ -19,7 +20,8 @@ import React from "react";
 
 export const buildVerticalConfigMap = (
   verticals: VerticalConfigProps[],
-  ctaStyles: SearchCtaStyles | undefined
+  ctaStyles: SearchCtaStyles | undefined,
+  headingStyles: HeadingStyles | undefined
 ): VerticalConfigMap<Record<string, DefaultRawDataType>> => {
   return verticals.reduce(
     (acc, v) => {
@@ -47,6 +49,7 @@ export const buildVerticalConfigMap = (
             layout={layoutType}
             index={props.result.index}
             ctaStyles={ctaStyles}
+            headingStyles={headingStyles}
           />
         ),
       };

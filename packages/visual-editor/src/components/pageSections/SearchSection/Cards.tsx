@@ -14,12 +14,14 @@ import { PhoneAtom } from "../../atoms/phone.tsx";
 import {
   CardTypeProp,
   FLEX_LAYOUT_CLASSES,
+  HeadingStyles,
   SearchCtaStyles,
   UNIT_LABEL,
   VerticalLayout,
 } from "./defaultPropsAndTypes.ts";
 import { Background } from "../../atoms/background.tsx";
 import { backgroundColors } from "../../../utils/themeConfigOptions.ts";
+import { Heading } from "../../atoms/heading.tsx";
 
 interface CardsProps extends CardProps<any> {
   cardType?: CardTypeProp;
@@ -27,6 +29,7 @@ interface CardsProps extends CardProps<any> {
   isVertical?: boolean;
   index?: number;
   ctaStyles?: SearchCtaStyles;
+  headingStyles?: HeadingStyles;
 }
 
 const Cards = ({
@@ -36,6 +39,7 @@ const Cards = ({
   isVertical = false,
   index = 0,
   ctaStyles,
+  headingStyles,
 }: CardsProps) => {
   const name = result.rawData.question || result.rawData.name;
   const { t } = useTranslation();
@@ -126,7 +130,13 @@ const Cards = ({
       <div
         className={`${FLEX_LAYOUT_CLASSES} justify-center text-[#382e2c] gap-2`}
       >
-        <h3 className="text-lg font-semibold">{name ?? "name"}</h3>
+        <Heading
+          color={headingStyles?.color}
+          className="font-bold text-palette-primary-dark"
+          level={headingStyles?.headingLevel ?? 3}
+        >
+          {name ?? "name"}
+        </Heading>
 
         <div className="w-full flex space-between">
           <MaybeRTF data={description} />
@@ -150,9 +160,13 @@ const Cards = ({
       <Accordion className="w-full">
         <AccordionItem key={`result-${result.index}`} className="px-5 py-2.5">
           <AccordionTrigger className="justify-between w-full">
-            <h3 className="text-lg font-semibold">
+            <Heading
+              color={headingStyles?.color}
+              className="font-bold text-palette-primary-dark"
+              level={headingStyles?.headingLevel ?? 3}
+            >
               {(result.rawData?.name as any) ?? "name"}
-            </h3>
+            </Heading>
           </AccordionTrigger>
 
           <AccordionContent className="w-full">

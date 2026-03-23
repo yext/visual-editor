@@ -14,6 +14,7 @@ import Cards from "./Cards.tsx";
 import { MapComponent } from "./MapComponent.tsx";
 import SourceCard from "./SourceCard.tsx";
 import {
+  HeadingStyles,
   SearchCtaStyles,
   VerticalConfigProps,
 } from "./defaultPropsAndTypes.ts";
@@ -28,6 +29,7 @@ interface VerticalResultsSectionProps {
   searchTerm?: string;
   gdaLoading: boolean;
   ctaStyles?: SearchCtaStyles;
+  headingStyles?: HeadingStyles;
 }
 
 export const VerticalResultsSection = ({
@@ -40,6 +42,7 @@ export const VerticalResultsSection = ({
   searchTerm,
   gdaLoading,
   ctaStyles,
+  headingStyles,
 }: VerticalResultsSectionProps) => {
   const popupRef = React.useRef<HTMLDivElement>(null);
   const [showFilterModal, setShowFilterModal] = React.useState(false);
@@ -92,6 +95,7 @@ export const VerticalResultsSection = ({
                         ?.cardType
                     }
                     ctaStyles={ctaStyles}
+                    headingStyles={headingStyles}
                   />
                 )}
               />
@@ -204,6 +208,7 @@ export const VerticalResultsSection = ({
                   verticals.find((v) => v.verticalKey === verticalKey)?.cardType
                 }
                 ctaStyles={ctaStyles}
+                headingStyles={headingStyles}
               />
             )}
           />
