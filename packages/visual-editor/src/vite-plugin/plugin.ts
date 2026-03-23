@@ -5,6 +5,7 @@ import mainTemplate from "./templates/main.tsx?raw";
 import editTemplate from "./templates/edit.tsx?raw";
 import directoryTemplate from "./templates/directory.tsx?raw";
 import locatorTemplate from "./templates/locator.tsx?raw";
+import sizeDebugTemplate from "./templates/sizeDebug.ts?raw";
 import { ComponentField, ComponentFields } from "../types/fields.ts";
 import { defaultLayoutData } from "./defaultLayoutData.ts";
 
@@ -79,6 +80,10 @@ const virtualFiles: VirtualFile[] = [
   {
     filepath: "src/templates/edit.tsx",
     content: editTemplate,
+  },
+  {
+    filepath: "src/templates/sizeDebug.ts",
+    content: sizeDebugTemplate,
   },
 ];
 
