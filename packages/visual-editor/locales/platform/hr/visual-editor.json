@@ -156,8 +156,10 @@
   "expandedMenu": "Prošireni izbornik",
   "failedToCopyLayout": "Kopiranje izgleda nije uspjelo.",
   "failedToPasteComponentInvalidData": "Nije uspjelo lijepljenje: nevažeći podaci komponente.",
+  "failedToPasteComponentPermissionDenied": "Lijepljenje nije uspjelo: pristup međuspremniku je blokiran. Omogućite dopuštenja za lijepljenje i pokušajte ponovno.",
   "failedToPasteLayout": "Nije uspjelo lijepljenje izgleda.",
   "failedToPasteLayoutInvalidData": "Nije uspjelo lijepljenje: nevažeći podaci o izgledu.",
+  "failedToPasteLayoutPermissionDenied": "Lijepljenje nije uspjelo: pristup međuspremniku je blokiran. Omogućite dopuštenja za lijepljenje i pokušajte ponovno.",
   "faq": "FAQ",
   "fields": {
     "actionType": "Vrsta akcije",

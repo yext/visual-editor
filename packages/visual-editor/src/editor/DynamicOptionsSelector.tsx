@@ -1,10 +1,4 @@
-import {
-  ArrayField,
-  AutoField,
-  UiState,
-  Field,
-  FieldLabel,
-} from "@puckeditor/core";
+import { ArrayField, AutoField, UiState, Field } from "@puckeditor/core";
 import { pt } from "../utils/i18n/platform.ts";
 
 export type DynamicOptionValueTypes = string | number | boolean | object;
@@ -53,18 +47,28 @@ export const DynamicOptionsSelector = <T extends DynamicOptionValueTypes>(
     render: ({
       value,
       onChange,
+      id,
+      readOnly,
     }: {
       value: DynamicOptionsSelectorType<T> | undefined;
       onChange: (
         value: DynamicOptionsSelectorType<T> | undefined,
         uiState?: Partial<UiState>
       ) => void;
+      id?: string;
+      readOnly?: boolean;
     }) => {
       const allOptions = props.getOptions();
       const selectedValues = value?.selections ?? [];
+
       return (
-        <FieldLabel label={pt(props.label)}>
+        <div className="ve-pt-3">
+          <div className="ve-mb-2 ve-text-sm ve-font-medium ve-leading-none">
+            {pt(props.label)}
+          </div>
           <AutoField
+            id={id ? `${id}_selections` : undefined}
+            readOnly={readOnly}
             field={DynamicOptionsArrayField(
               allOptions,
               props.dropdownLabel,
@@ -72,10 +76,13 @@ export const DynamicOptionsSelector = <T extends DynamicOptionValueTypes>(
             )}
             value={selectedValues}
             onChange={(newValue, uiState) =>
-              onChange({ selections: newValue }, uiState)
+              onChange(
+                newValue.length > 0 ? { selections: newValue } : undefined,
+                uiState
+              )
             }
           />
-        </FieldLabel>
+        </div>
       );
     },
   };
@@ -93,18 +100,27 @@ export const DynamicOptionsSingleSelector = <T extends DynamicOptionValueTypes>(
     render: ({
       value,
       onChange,
+      id,
+      readOnly,
     }: {
       value: DynamicOptionsSingleSelectorType<T> | undefined;
       onChange: (
         value: DynamicOptionsSingleSelectorType<T> | undefined,
         uiState?: Partial<UiState>
       ) => void;
+      id?: string;
+      readOnly?: boolean;
     }) => {
       const allOptions = props.getOptions();
       const selectedValue = value?.selection ?? { value: undefined };
       return (
-        <FieldLabel label={pt(props.label)}>
+        <div className="ve-pt-3">
+          <div className="ve-mb-2 ve-text-sm ve-font-medium ve-leading-none">
+            {pt(props.label)}
+          </div>
           <AutoField
+            id={id ? `${id}_selection` : undefined}
+            readOnly={readOnly}
             field={DynamicOptionsSingleSelectField(
               allOptions,
               props.dropdownLabel,
@@ -112,10 +128,15 @@ export const DynamicOptionsSingleSelector = <T extends DynamicOptionValueTypes>(
             )}
             value={selectedValue.value}
             onChange={(newValue, uiState) =>
-              onChange({ selection: { value: newValue } }, uiState)
+              onChange(
+                newValue !== undefined
+                  ? { selection: { value: newValue } }
+                  : undefined,
+                uiState
+              )
             }
           />
-        </FieldLabel>
+        </div>
       );
     },
   };
@@ -125,7 +146,7 @@ const DynamicOptionsSingleSelectField = <T extends DynamicOptionValueTypes>(
   options: DynamicOption<T>[],
   dropdownLabel: string,
   placeholderOptionLabel?: string
-): Field<DynamicOptionSelection<T> | undefined> => {
+): Field<T | undefined> => {
   const dropdownOptions = options.map((opt) => ({
     label: opt.label,
     value: opt.value,

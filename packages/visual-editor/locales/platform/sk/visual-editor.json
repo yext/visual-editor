@@ -156,8 +156,10 @@
   "expandedMenu": "Rozšírené menu",
   "failedToCopyLayout": "Kopírovanie rozloženia zlyhalo.",
   "failedToPasteComponentInvalidData": "Prilepenie zlyhalo: Neplatné údaje komponentu.",
+  "failedToPasteComponentPermissionDenied": "Prilepenie zlyhalo: Prístup do schránky je zablokovaný. Povoľte povolenia na prilepenie a skúste to znova.",
   "failedToPasteLayout": "Prilepenie rozloženia zlyhalo.",
   "failedToPasteLayoutInvalidData": "Prilepenie zlyhalo: Neplatné údaje rozloženia.",
+  "failedToPasteLayoutPermissionDenied": "Prilepenie zlyhalo: Prístup do schránky je zablokovaný. Povoľte povolenia na prilepenie a skúste to znova.",
   "faq": "Často",
   "fields": {
     "actionType": "Typ akcie",

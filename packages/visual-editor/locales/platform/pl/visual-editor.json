@@ -156,8 +156,10 @@
   "expandedMenu": "Rozbudowane menu",
   "failedToCopyLayout": "Nie udało się skopiować układu.",
   "failedToPasteComponentInvalidData": "Nie udało się wkleić: nieprawidłowe dane komponentu.",
+  "failedToPasteComponentPermissionDenied": "Nie udało się wkleić: dostęp do schowka jest zablokowany. Włącz uprawnienia do wklejania i spróbuj ponownie.",
   "failedToPasteLayout": "Nie udało się wkleić układu.",
   "failedToPasteLayoutInvalidData": "Nie udało się wkleić: nieprawidłowe dane układu.",
+  "failedToPasteLayoutPermissionDenied": "Nie udało się wkleić: dostęp do schowka jest zablokowany. Włącz uprawnienia do wklejania i spróbuj ponownie.",
   "faq": "FAQ",
   "fields": {
     "actionType": "Typ akcji",

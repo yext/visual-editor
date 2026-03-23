@@ -156,8 +156,10 @@
   "expandedMenu": "Laajennettu valikko",
   "failedToCopyLayout": "Asettelun kopioiminen epäonnistui.",
   "failedToPasteComponentInvalidData": "Liitäminen epäonnistui: virheelliset komponenttitiedot.",
+  "failedToPasteComponentPermissionDenied": "Liitäminen epäonnistui: Leikepöydän käyttö on estetty. Ota liittämisoikeudet käyttöön ja yritä uudelleen.",
   "failedToPasteLayout": "Asettelun liittäminen epäonnistui.",
   "failedToPasteLayoutInvalidData": "Liitäminen epäonnistui: Virheelliset asettelutiedot.",
+  "failedToPasteLayoutPermissionDenied": "Liitäminen epäonnistui: Leikepöydän käyttö on estetty. Ota liittämisoikeudet käyttöön ja yritä uudelleen.",
   "faq": "Faq",
   "fields": {
     "actionType": "Toimintotyyppi",

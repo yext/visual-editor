@@ -160,6 +160,12 @@ const BannerComponent: PuckComponent<BannerSectionProps> = ({
     right: "justify-end",
   }[styles.textAlignment];
 
+  const textAlignClass = {
+    left: "text-left",
+    center: "text-center",
+    right: "text-end",
+  }[styles.textAlignment];
+
   // Show empty state in editor mode when mapped field is empty
   if (isMappedField && isEmpty) {
     if (puck.isEditing) {
@@ -213,7 +219,7 @@ const BannerComponent: PuckComponent<BannerSectionProps> = ({
     <PageSection
       background={styles.backgroundColor}
       verticalPadding="sm"
-      className={`flex ${justifyClass} items-center`}
+      className={`flex ${justifyClass} ${textAlignClass} items-center`}
     >
       <EntityField
         displayName={pt("fields.bannerText", "Banner Text")}

@@ -267,17 +267,14 @@ describe("getPageMetadata", () => {
               title: {
                 field: "",
                 constantValue: {
-                  en: "PLACEHOLDER",
-                  hasLocalizedValue: "true",
+                  defaultValue: "PLACEHOLDER",
                 },
                 constantValueEnabled: true,
               },
               description: {
                 field: "description",
                 constantValue: {
-                  en: "PLACEHOLDER",
-                  es: "",
-                  hasLocalizedValue: "true",
+                  defaultValue: "PLACEHOLDER",
                 },
                 constantValueEnabled: true,
               },
