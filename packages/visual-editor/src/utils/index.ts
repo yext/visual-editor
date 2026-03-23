@@ -30,6 +30,7 @@ export {
   type ThemeColor,
   type HeadingLevel,
   VisualEditorComponentsContentPath,
+  VisualEditorThemeClassSafelist,
 } from "./themeConfigOptions.ts";
 export { type ThemeConfig, themeResolver, deepMerge } from "./themeResolver.ts";
 export { type StreamDocument } from "./types/StreamDocument.ts";

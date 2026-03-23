@@ -1,5 +1,4 @@
 import * as React from "react";
-import { normalizeThemeColor } from "../utils/colors.ts";
 import { ThemeColor } from "../utils/themeConfigOptions.ts";
 
 const resolveCssVarColor = (
@@ -68,9 +67,8 @@ export const MapPinIcon = ({
   const centerY = 13.5;
   const iconSize = 14;
 
-  // Theme tokens derived from tailwind class names (e.g., bg-palette-primary-light -> palette-primary-light)
-  const backgroundToken = normalizeThemeColor(color?.bgColor);
-  const textToken = normalizeThemeColor(color?.textColor);
+  const backgroundToken = color?.selectedColor;
+  const textToken = color?.contrastingColor;
   const svgRef = React.useRef<SVGSVGElement>(null);
   const [contrastColor, setContrastColor] = React.useState<string | undefined>(
     undefined

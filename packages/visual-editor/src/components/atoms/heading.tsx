@@ -2,7 +2,7 @@ import { ThemeColor, HeadingLevel } from "../../utils/themeConfigOptions.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
-import { getInlineStyleForTextColor } from "../../utils/colors.ts";
+import { getTextColorClass } from "../../utils/colors.ts";
 
 // Define the variants for the heading component
 export const headingVariants = cva("components", {
@@ -93,8 +93,7 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
       JSX.IntrinsicElements,
       "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "span"
     >;
-
-    const dynamicStyle = getInlineStyleForTextColor(color);
+    const textColorClass = getTextColorClass(color);
 
     return (
       <Tag
@@ -104,13 +103,13 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
             weight,
             level,
           }),
+          textColorClass,
           Tag === "span" && "block",
           className
         )}
         style={{
           // @ts-ignore: the css variable here resolves to a valid enum value
           textTransform: `var(--textTransform-h${level}-textTransform)`,
-          ...dynamicStyle,
           ...style,
         }}
         ref={ref}

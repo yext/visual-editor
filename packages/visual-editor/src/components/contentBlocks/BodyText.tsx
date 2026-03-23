@@ -79,7 +79,7 @@ const BodyTextComponent: PuckComponent<BodyTextProps> = (props) => {
   const resolvedData = sourceData
     ? resolveComponentData(sourceData, i18n.language, streamDocument, {
         variant: styles.variant,
-        isDarkBackground: background?.isDarkBackground,
+        isDarkBackground: background?.isDarkColor,
         className: props.parentStyles?.className,
         color: styles.color,
       })

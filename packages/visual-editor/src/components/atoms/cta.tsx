@@ -12,7 +12,7 @@ import { FaAngleRight, FaExternalLinkAlt } from "react-icons/fa";
 import { getDirections } from "@yext/pages-components";
 import { PresetImageType, FOOD_DELIVERY_SERVICES } from "../../types/types.ts";
 import { presetImageIcons } from "../../utils/presetImageIcons.tsx";
-import { resolveCssVarFromThemeColor } from "../../utils/colors.js";
+import { getTextColorClass } from "../../utils/colors.ts";
 
 const LINK_TEXT_TRANSFORM_CSS_VAR =
   "var(--textTransform-link-textTransform)" as React.CSSProperties["textTransform"];
@@ -158,7 +158,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
           ) &&
           React.isValidElement(label)
         ) {
-          const buttonBackgroundColor = background?.isDarkBackground
+          const buttonBackgroundColor = background?.isDarkColor
             ? "#FFFFFF"
             : "#F9F9F9";
 
@@ -245,10 +245,18 @@ export const CTA = (props: CTAProps) => {
   const { t } = useTranslation();
   const resolvedProps = useResolvedCtaProps(props);
   const isButton = actionType === "button";
-  const isDarkBG = useBackground()?.isDarkBackground;
+  const isDarkBackground = useBackground()?.isDarkColor;
   const dynamicStyle: React.CSSProperties = (() => {
-    const bg = resolveCssVarFromThemeColor(color?.bgColor);
-    const textColor = resolveCssVarFromThemeColor(color?.textColor);
+    const selectedTextColorClass = getTextColorClass(color);
+    const selectedColorToken = selectedTextColorClass?.startsWith("text-")
+      ? selectedTextColorClass.slice("text-".length)
+      : undefined;
+    const bg = selectedColorToken
+      ? `var(--colors-${selectedColorToken})`
+      : undefined;
+    const textColor = color?.contrastingColor
+      ? `var(--colors-${color.contrastingColor})`
+      : undefined;
     const border = bg;
 
     if (variant === "primary") {
@@ -259,7 +267,7 @@ export const CTA = (props: CTAProps) => {
       };
     }
 
-    if (variant === "secondary" && !isDarkBG) {
+    if (variant === "secondary" && !isDarkBackground) {
       return {
         borderColor: border,
         color: border,

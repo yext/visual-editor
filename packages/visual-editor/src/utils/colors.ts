@@ -1,4 +1,3 @@
-import { type CSSProperties } from "react";
 import { type ThemeColor } from "./themeConfigOptions.ts";
 
 /**
@@ -180,46 +179,28 @@ export const getContrastingColor = (
 };
 
 /**
- * Extracts the name of a theme color from a tailwind bg- or text- class
- * @param token A string of the form bg-[[color]] or text-[[color]]
- * @returns the extracted color, or undefined if cannot parse
- **/
-export const normalizeThemeColor = (token?: string): string | undefined => {
-  if (!token) {
+ * Resolves ThemeColor classes for background contexts.
+ * @param color a ThemeColor object
+ * @returns a class string containing the selected background class and contrasting text class.
+ */
+export const getBackgroundColorClasses = (color?: ThemeColor): string => {
+  return [
+    color?.selectedColor ? `bg-${color.selectedColor}` : undefined,
+    color?.contrastingColor ? `text-${color.contrastingColor}` : undefined,
+  ]
+    .filter((value): value is string => !!value)
+    .join(" ");
+};
+
+/**
+ * Resolves ThemeColor class for text contexts.
+ * @param color a ThemeColor object
+ * @returns the selected text color class, if present.
+ */
+export const getTextColorClass = (color?: ThemeColor): string | undefined => {
+  if (!color?.selectedColor) {
     return undefined;
   }
 
-  if (token.startsWith("bg-")) {
-    return token.replace("bg-", "") || undefined;
-  }
-
-  if (token.startsWith("text-")) {
-    return token.replace("text-", "") || undefined;
-  }
-
-  return undefined;
-};
-
-/**
- * Resolves a tailwind color class (e.g. bg-palette-primary) to a theme CSS var.
- * @param token A string of the form bg-[[color]] or text-[[color]]
- * @returns A css var of the form var(--colors-[[color]]), or undefined if cannot parse
- */
-export const resolveCssVarFromThemeColor = (
-  token?: string
-): string | undefined => {
-  const normalizedColor = normalizeThemeColor(token);
-  return normalizedColor ? `var(--colors-${normalizedColor})` : undefined;
-};
-
-/**
- * Resolves a ThemeColor to an inline `color` style.
- * @param color a ThemeColor object
- * @returns an inline style object with the `color` property set based on the input's `bgColor` property.
- */
-export const getInlineStyleForTextColor = (
-  color?: ThemeColor
-): CSSProperties | undefined => {
-  const resolvedColor = resolveCssVarFromThemeColor(color?.bgColor);
-  return resolvedColor ? { color: resolvedColor } : undefined;
+  return `text-${color.selectedColor}`;
 };

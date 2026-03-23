@@ -5,9 +5,8 @@ import {
   luminanceFromRGB,
   isColorContrastWcagCompliant,
   convertComputedStyleColorToHex,
-  normalizeThemeColor,
-  resolveCssVarFromThemeColor,
-  getInlineStyleForTextColor,
+  getBackgroundColorClasses,
+  getTextColorClass,
 } from "./colors.ts";
 
 describe("getContrastingColor", () => {
@@ -137,58 +136,32 @@ describe("isColorContrastWcagCompliant", () => {
   });
 });
 
-describe("normalizeThemeColor", () => {
-  it("returns undefined when token is undefined", () => {
-    expect(normalizeThemeColor(undefined)).toBeUndefined();
-  });
-
-  it("returns undefined when token is empty string", () => {
-    expect(normalizeThemeColor("")).toBeUndefined();
-  });
-
-  it("strips bg- prefix", () => {
-    expect(normalizeThemeColor("bg-palette-primary-dark")).toBe(
-      "palette-primary-dark"
-    );
-  });
-
-  it("strips text- prefix", () => {
-    expect(normalizeThemeColor("text-white")).toBe("white");
-  });
-
-  it("returns undefined for unsupported prefixes", () => {
-    expect(normalizeThemeColor("border-red-500")).toBeUndefined();
-  });
-
-  it("returns undefined when prefix exists but value is empty", () => {
-    expect(normalizeThemeColor("bg-")).toBeUndefined();
-    expect(normalizeThemeColor("text-")).toBeUndefined();
-  });
-});
-
-describe("resolveCssVarFromThemeColor", () => {
-  it("returns a theme css var when token is valid", () => {
-    expect(resolveCssVarFromThemeColor("bg-palette-primary-dark")).toBe(
-      "var(--colors-palette-primary-dark)"
-    );
-  });
-
-  it("returns undefined when token is invalid", () => {
-    expect(resolveCssVarFromThemeColor("border-red-500")).toBeUndefined();
-  });
-});
-
-describe("getInlineStyleForTextColor", () => {
-  it("returns a style object when bgColor is valid", () => {
+describe("getBackgroundColorClasses", () => {
+  it("returns background and contrasting classes from stored tokens", () => {
     expect(
-      getInlineStyleForTextColor({
-        bgColor: "bg-white",
-        textColor: "text-black",
+      getBackgroundColorClasses({
+        selectedColor: "palette-primary-light",
+        contrastingColor: "black",
       })
-    ).toEqual({ color: "var(--colors-white)" });
+    ).toBe("bg-palette-primary-light text-black");
   });
 
-  it("returns undefined when bgColor is missing", () => {
-    expect(getInlineStyleForTextColor(undefined)).toBeUndefined();
+  it("returns an empty string when color is undefined", () => {
+    expect(getBackgroundColorClasses(undefined)).toBe("");
+  });
+});
+
+describe("getTextColorClass", () => {
+  it("returns text class from selected color token", () => {
+    expect(
+      getTextColorClass({
+        selectedColor: "palette-primary",
+        contrastingColor: "white",
+      })
+    ).toBe("text-palette-primary");
+  });
+
+  it("returns undefined when color is undefined", () => {
+    expect(getTextColorClass(undefined)).toBeUndefined();
   });
 });

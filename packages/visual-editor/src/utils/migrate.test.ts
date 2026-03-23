@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { Migration, MigrationRegistry, migrate } from "./migrate.ts";
 import { addIdToSchema } from "../components/migrations/0023_add_id_to_schema.ts";
+import { themeColorPropertyKeyMigration } from "../components/migrations/0069_theme_color_property_keys.ts";
 
 describe("migrate", () => {
   it("successfully applies a migration", async () => {
@@ -48,6 +49,105 @@ describe("migrate", () => {
     );
 
     expect(migratedData).toEqual(exampleBasicDataAfter);
+  });
+
+  it("recursively migrates legacy ThemeColor keys across all component props", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+          },
+        },
+        content: [
+          {
+            type: "ComponentA",
+            props: {
+              styles: {
+                backgroundColor: {
+                  bgColor: "bg-white",
+                  textColor: "text-black",
+                  isDarkBackground: false,
+                },
+              },
+              cards: [
+                {
+                  answerColor: {
+                    bgColor: "bg-palette-primary-dark",
+                    textColor: "text-white",
+                  },
+                },
+              ],
+            },
+          },
+          {
+            type: "ComponentB",
+            props: {
+              slotProps: {
+                child: {
+                  linkColor: {
+                    bgColor: "bg-palette-secondary",
+                    textColor: "text-palette-secondary-contrast",
+                    isDarkBackground: true,
+                  },
+                },
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [themeColorPropertyKeyMigration],
+      {
+        components: {},
+      },
+      {}
+    );
+
+    expect(migratedData).toEqual({
+      root: {
+        props: {
+          version: 1,
+        },
+      },
+      content: [
+        {
+          type: "ComponentA",
+          props: {
+            styles: {
+              backgroundColor: {
+                selectedColor: "white",
+                contrastingColor: "black",
+                isDarkColor: false,
+              },
+            },
+            cards: [
+              {
+                answerColor: {
+                  selectedColor: "palette-primary-dark",
+                  contrastingColor: "white",
+                },
+              },
+            ],
+          },
+        },
+        {
+          type: "ComponentB",
+          props: {
+            slotProps: {
+              child: {
+                linkColor: {
+                  selectedColor: "palette-secondary",
+                  contrastingColor: "palette-secondary-contrast",
+                  isDarkColor: true,
+                },
+              },
+            },
+          },
+        },
+      ],
+      zones: {},
+    });
   });
 });
 
@@ -98,8 +198,8 @@ const exampleDataBefore = {
         },
         textAlignment: "center",
         backgroundColor: {
-          bgColor: "bg-palette-primary-dark",
-          textColor: "text-white",
+          selectedColor: "palette-primary-dark",
+          contrastingColor: "white",
         },
         liveVisibility: true,
         id: "BannerSection-4e3cf9a3-d987-4cae-a0cb-db48d270414f",
@@ -110,7 +210,10 @@ const exampleDataBefore = {
       props: {
         styles: {
           headingLevel: 3,
-          backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+          backgroundColor: {
+            selectedColor: "white",
+            contrastingColor: "black",
+          },
         },
         address: {
           headingText: {
@@ -203,7 +306,10 @@ const exampleDataBefore = {
           },
         },
         styles: {
-          backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+          backgroundColor: {
+            selectedColor: "white",
+            contrastingColor: "black",
+          },
           imageOrientation: "right",
           businessNameLevel: 3,
           localGeoModifierLevel: 1,
@@ -235,8 +341,8 @@ const exampleDataAfter = {
         },
         textAlignment: "center",
         backgroundColor: {
-          bgColor: "bg-palette-primary-dark",
-          textColor: "text-white",
+          selectedColor: "palette-primary-dark",
+          contrastingColor: "white",
         },
         liveVisibility: true,
         id: "BannerSection-4e3cf9a3-d987-4cae-a0cb-db48d270414f",
@@ -279,7 +385,10 @@ const exampleDataAfter = {
           },
         },
         styles: {
-          backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+          backgroundColor: {
+            selectedColor: "white",
+            contrastingColor: "black",
+          },
           imageOrientation: "right",
           businessNameLevel: 3,
           localGeoModifierLevel: 1,

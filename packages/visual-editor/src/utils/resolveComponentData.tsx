@@ -18,7 +18,7 @@ import {
   richTextToPlainText,
 } from "./plainText.ts";
 import { ThemeColor } from "./themeConfigOptions.ts";
-import { getInlineStyleForTextColor } from "./colors.ts";
+import { getTextColorClass } from "./colors.ts";
 
 type ResolveComponentDataOptions = {
   variant?: BodyProps["variant"];
@@ -109,14 +109,12 @@ export function resolveComponentData<T>(
     if (options?.className) {
       rtfClass += ` ${options.className}`;
     }
+    const textColorClass = getTextColorClass(options?.color);
+    if (textColorClass) {
+      rtfClass += ` ${textColorClass}`;
+    }
 
-    const rtfStyle = getInlineStyleForTextColor(options?.color);
-
-    return (
-      <div className={rtfClass} style={rtfStyle}>
-        {resolved}
-      </div>
-    );
+    return <div className={rtfClass}>{resolved}</div>;
   }
 
   return resolved;

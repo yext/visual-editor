@@ -160,7 +160,8 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
     if (
       sharedCardProps.questionVariant === styles.questionVariant &&
       sharedCardProps.answerVariant === styles.answerVariant &&
-      sharedCardProps.answerColor?.bgColor === styles.answerColor?.bgColor
+      sharedCardProps.answerColor?.selectedColor ===
+        styles.answerColor?.selectedColor
     ) {
       return;
     }
@@ -192,7 +193,7 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
   }, [
     sharedCardProps?.answerVariant,
     sharedCardProps?.questionVariant,
-    sharedCardProps?.answerColor?.bgColor,
+    sharedCardProps?.answerColor?.selectedColor,
   ]);
 
   // When the card's shared props change, update the context
@@ -204,7 +205,8 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
     if (
       sharedCardProps?.questionVariant === styles.questionVariant &&
       sharedCardProps?.answerVariant === styles.answerVariant &&
-      sharedCardProps?.answerColor?.bgColor === styles.answerColor?.bgColor
+      sharedCardProps?.answerColor?.selectedColor ===
+        styles.answerColor?.selectedColor
     ) {
       return;
     }
@@ -227,7 +229,7 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
   const resolvedAnswer = sourceAnswer
     ? resolveComponentData(sourceAnswer, i18n.language, streamDocument, {
         variant: styles.answerVariant,
-        isDarkBackground: background?.isDarkBackground,
+        isDarkBackground: background?.isDarkColor,
         color: styles.answerColor,
       })
     : undefined;

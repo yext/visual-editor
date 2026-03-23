@@ -7,6 +7,7 @@ import { BackgroundProvider } from "../../hooks/useBackground.tsx";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { getThemeValue } from "../../utils/getThemeValue.ts";
+import { getBackgroundColorClasses } from "../../utils/colors.ts";
 
 export interface BackgroundProps extends React.HTMLAttributes<HTMLDivElement> {
   background?: ThemeColor;
@@ -22,18 +23,18 @@ export const Background = React.forwardRef<HTMLDivElement, BackgroundProps>(
     const backgroundValue: Required<ThemeColor> = React.useMemo(() => {
       // Our built-in backgrounds are always light or dark
       if (
-        selectedBackground.textColor === "text-white" ||
-        selectedBackground.textColor === "text-black"
+        selectedBackground.contrastingColor === "white" ||
+        selectedBackground.contrastingColor === "black"
       ) {
         return {
-          bgColor: selectedBackground.bgColor,
-          textColor: selectedBackground.textColor,
-          isDarkBackground: selectedBackground.textColor === "text-white",
+          selectedColor: selectedBackground.selectedColor,
+          contrastingColor: selectedBackground.contrastingColor,
+          isDarkColor: selectedBackground.contrastingColor === "white",
         };
       }
 
       // of the form `palette-x`
-      const paletteColor = selectedBackground.bgColor.replace("bg-", "");
+      const paletteColor = selectedBackground.selectedColor;
       // of the form `--colors-palette-x-contrast`
       const paletteColorContrastCSSVariable = `--colors-${paletteColor}-contrast`;
 
@@ -43,36 +44,36 @@ export const Background = React.forwardRef<HTMLDivElement, BackgroundProps>(
       );
       if (contrastColor) {
         return {
-          bgColor: selectedBackground.bgColor,
-          textColor: selectedBackground.textColor,
-          isDarkBackground: contrastColor.toUpperCase() === "#FFFFFF",
+          selectedColor: selectedBackground.selectedColor,
+          contrastingColor: selectedBackground.contrastingColor,
+          isDarkColor: contrastColor.toUpperCase() === "#FFFFFF",
         };
       }
 
       // Handle color palette defaults and fallback.
-      let isDarkBackground;
+      let isDarkColor;
       switch (paletteColorContrastCSSVariable) {
         case "--colors-palette-primary-contrast":
-          isDarkBackground = true;
+          isDarkColor = true;
           break;
         case "--colors-palette-secondary-contrast":
-          isDarkBackground = true;
+          isDarkColor = true;
           break;
         case "--colors-palette-tertiary-contrast":
-          isDarkBackground = false;
+          isDarkColor = false;
           break;
         case "--colors-palette-quaternary-contrast":
-          isDarkBackground = true;
+          isDarkColor = true;
           break;
         default:
-          isDarkBackground = false;
+          isDarkColor = false;
           break;
       }
 
       return {
-        bgColor: selectedBackground.bgColor,
-        textColor: selectedBackground.textColor,
-        isDarkBackground,
+        selectedColor: selectedBackground.selectedColor,
+        contrastingColor: selectedBackground.contrastingColor,
+        isDarkColor,
       };
     }, [selectedBackground, streamDocument]);
 
@@ -81,8 +82,7 @@ export const Background = React.forwardRef<HTMLDivElement, BackgroundProps>(
         <Component
           className={themeManagerCn(
             "components",
-            background?.bgColor,
-            background?.textColor,
+            getBackgroundColorClasses(background),
             className
           )}
           ref={ref}

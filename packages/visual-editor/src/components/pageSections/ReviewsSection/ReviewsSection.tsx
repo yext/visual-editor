@@ -445,7 +445,7 @@ const PageScroller: React.FC<PageScrollerProps> = ({
     return <></>;
   }
 
-  const selectableButtonClasses = `cursor-pointer ${background?.isDarkBackground ? "text-white" : "text-palette-primary-dark"}`;
+  const selectableButtonClasses = `cursor-pointer ${background?.isDarkColor ? "text-white" : "text-palette-primary-dark"}`;
   const disabledButtonClasses = "opacity-50 cursor-default";
   return (
     <Body className="flex flex-row justify-center items-center gap-5">

@@ -11,7 +11,6 @@ import { TranslatableRichText, TranslatableString } from "../../types/types.ts";
 import { useTranslation } from "react-i18next";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import { ThemeColor } from "../../utils/themeConfigOptions.ts";
-import { getInlineStyleForTextColor } from "../../utils/colors.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
 
 export type TextProps = {
@@ -100,8 +99,6 @@ const TextComponent: PuckComponent<TextProps> = (props) => {
       })
     : "";
 
-  const dynamicStyle = getInlineStyleForTextColor(styles.color);
-
   return resolvedData ? (
     <EntityField
       displayName={pt("text", "Text")}
@@ -110,11 +107,11 @@ const TextComponent: PuckComponent<TextProps> = (props) => {
     >
       <Body
         variant={styles.variant}
+        color={styles.color}
         className={themeManagerCn(
           fontStyleToClassName[styles.fontStyle],
           parentStyles?.className
         )}
-        style={dynamicStyle}
       >
         {resolvedData}
       </Body>
