@@ -22,13 +22,13 @@ import { isDirectoryGrid } from "../../utils/directory/utils.ts";
 
 export interface DirectoryStyles {
   /**
-   * The main background color for the directory page heading area.
+   * The background color for the directory page heading area.
    * @defaultValue Background Color 1
    */
   backgroundColor: BackgroundStyle;
 
   /*
-   * The main background color for the directory page heading area.
+   * The background color for the directory list area.
    * @defaultValue Background Color 1
    */
   listBackgroundColor: BackgroundStyle;
