@@ -68,31 +68,36 @@ const getSpacingOptions = () => {
 };
 
 /**
- * Applies a theme color as the background of a page section
- * @ai This value MUST be one of the following
- * { bgColor: "bg-white", textColor: "text-black" }
- * { bgColor: "bg-palette-primary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-secondary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-tertiary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-quaternary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-primary-dark", textColor: "text-white", isDarkBackground: true }
- * { bgColor: "bg-palette-secondary-dark", textColor: "text-white", isDarkBackground: true }
+ * An object representing a color based on the theme specified by the user.
  */
-export type BackgroundStyle = {
-  /** The tailwind background color class */
+export type ThemeColor = {
+  /**
+   * A tailwind class name of the form bg-[[color]].
+   * This represents the color chosen by the user.
+   * When used in a backgroundColor field, this is the background color.
+   * When used in a textColor field, this is the text color.
+   */
   bgColor: string;
-  /** The tailwind text color class */
+  /**
+   * A tailwind class name of the form text-[[color]].
+   * This represents the contrasting color paired with the color chosen by the user.
+   * When used in a backgroundColor field, this is the text color.
+   * When used in a textColor field, this is unused.
+   */
   textColor: string;
-  /** Whether the background color is dark (for adjusting other styles based on background) */
+  /**
+   * Whether the user-selected color (the bgColor property) is dark (for adjusting other styles based on background).
+   */
   isDarkBackground?: boolean;
 };
 
-type BackgroundOption = {
-  label: string;
-  value: BackgroundStyle;
-};
-
-export const backgroundColors: Record<string, BackgroundOption> = {
+export const backgroundColors: Record<
+  string,
+  {
+    label: string;
+    value: ThemeColor;
+  }
+> = {
   background1: {
     label: msg("theme.bg.bg1", "Background 1"),
     value: { bgColor: "bg-white", textColor: "text-black" },

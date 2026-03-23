@@ -2,7 +2,7 @@ import * as React from "react";
 import { ComponentConfig, Fields, Slot, PuckComponent } from "@puckeditor/core";
 import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
-import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
+import { ThemeColor } from "../../utils/themeConfigOptions.ts";
 import { PageSection, PageSectionProps } from "../atoms/pageSection.tsx";
 import { defaultCopyrightMessageSlotProps } from "./CopyrightMessageSlot.tsx";
 
@@ -36,7 +36,7 @@ export interface SecondaryFooterSlotProps {
    * @propCategory Style Props
    */
   styles: {
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
     linksPosition: "left" | "center" | "right";
   };
 

@@ -1,6 +1,6 @@
 import * as React from "react";
-import { normalizeThemeColor } from "../utils/normalizeThemeColor.ts";
-import { BackgroundStyle } from "../utils/themeConfigOptions.ts";
+import { normalizeThemeColor } from "../utils/colors.ts";
+import { ThemeColor } from "../utils/themeConfigOptions.ts";
 
 const resolveCssVarColor = (
   element: Element,
@@ -55,7 +55,7 @@ export const MapPinIcon = ({
   icon,
   selected,
 }: {
-  color?: BackgroundStyle;
+  color?: ThemeColor;
   resultIndex?: number;
   icon?: string;
   selected?: boolean;

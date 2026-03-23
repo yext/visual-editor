@@ -1,7 +1,7 @@
 import { useTemplateProps } from "../../hooks/useDocument.tsx";
 import {
   backgroundColors,
-  BackgroundStyle,
+  ThemeColor,
 } from "../../utils/themeConfigOptions.ts";
 import { PageSection } from "../atoms/pageSection.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
@@ -19,7 +19,7 @@ export interface DirectoryStyles {
    * The main background color for the directory page content.
    * @defaultValue Background Color 1
    */
-  backgroundColor?: BackgroundStyle;
+  backgroundColor?: ThemeColor;
 }
 
 export interface DirectoryProps {

@@ -17,14 +17,14 @@ import {
   isRichText,
   richTextToPlainText,
 } from "./plainText.ts";
-import { BackgroundStyle } from "./themeConfigOptions.ts";
-import { normalizeThemeColor } from "./normalizeThemeColor.ts";
+import { ThemeColor } from "./themeConfigOptions.ts";
+import { getInlineStyleForTextColor } from "./colors.ts";
 
 type ResolveComponentDataOptions = {
   variant?: BodyProps["variant"];
   isDarkBackground?: boolean;
   className?: string;
-  color?: BackgroundStyle;
+  color?: ThemeColor;
   output?: "render" | "plainText";
 };
 
@@ -110,11 +110,7 @@ export function resolveComponentData<T>(
       rtfClass += ` ${options.className}`;
     }
 
-    const rtfStyle = options?.color?.bgColor
-      ? {
-          color: `var(--colors-${normalizeThemeColor(options.color.bgColor)})`,
-        }
-      : undefined;
+    const rtfStyle = getInlineStyleForTextColor(options?.color);
 
     return (
       <div className={rtfClass} style={rtfStyle}>

@@ -2,12 +2,12 @@ import { CircleSlash2 } from "lucide-react";
 import { PageSection } from "../../atoms/pageSection.tsx";
 import { Body } from "../../atoms/body.tsx";
 import { pt } from "../../../utils/i18n/platform.ts";
-import { BackgroundStyle } from "../../../utils/themeConfigOptions.ts";
+import { ThemeColor } from "../../../utils/themeConfigOptions.ts";
 import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers.ts";
 
 export const PromoEmptyState: React.FC<{
   isEditing: boolean;
-  backgroundStyle: BackgroundStyle | undefined;
+  backgroundStyle: ThemeColor | undefined;
 }> = (props) => {
   const { isEditing, backgroundStyle } = props;
 

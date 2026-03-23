@@ -149,7 +149,6 @@ export const PhoneListComponent: PuckComponent<PhoneListProps> = (props) => {
 export const PhoneList: ComponentConfig<{ props: PhoneListProps }> = {
   label: msg("components.phoneList", "Phone List"),
   fields: phoneListFields,
-  resolveFields: (data) => resolveDataFromParent(phoneListFields, data),
   defaultProps: {
     data: {
       phoneNumbers: [],
@@ -160,5 +159,6 @@ export const PhoneList: ComponentConfig<{ props: PhoneListProps }> = {
       includeIcon: true,
     },
   },
+  resolveFields: (data) => resolveDataFromParent(phoneListFields, data),
   render: (props) => <PhoneListComponent {...props} />,
 };

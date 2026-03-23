@@ -5,6 +5,9 @@ import {
   luminanceFromRGB,
   isColorContrastWcagCompliant,
   convertComputedStyleColorToHex,
+  normalizeThemeColor,
+  resolveCssVarFromThemeColor,
+  getInlineStyleForTextColor,
 } from "./colors.ts";
 
 describe("getContrastingColor", () => {
@@ -131,5 +134,61 @@ describe("isColorContrastWcagCompliant", () => {
       isColorContrastWcagCompliant([10000, 67, 112], [229, 154, 154], 12, 400)
     ).toBe(false);
     expect(isColorContrastWcagCompliant([], [], 12, 400)).toBe(false);
+  });
+});
+
+describe("normalizeThemeColor", () => {
+  it("returns undefined when token is undefined", () => {
+    expect(normalizeThemeColor(undefined)).toBeUndefined();
+  });
+
+  it("returns undefined when token is empty string", () => {
+    expect(normalizeThemeColor("")).toBeUndefined();
+  });
+
+  it("strips bg- prefix", () => {
+    expect(normalizeThemeColor("bg-palette-primary-dark")).toBe(
+      "palette-primary-dark"
+    );
+  });
+
+  it("strips text- prefix", () => {
+    expect(normalizeThemeColor("text-white")).toBe("white");
+  });
+
+  it("returns undefined for unsupported prefixes", () => {
+    expect(normalizeThemeColor("border-red-500")).toBeUndefined();
+  });
+
+  it("returns undefined when prefix exists but value is empty", () => {
+    expect(normalizeThemeColor("bg-")).toBeUndefined();
+    expect(normalizeThemeColor("text-")).toBeUndefined();
+  });
+});
+
+describe("resolveCssVarFromThemeColor", () => {
+  it("returns a theme css var when token is valid", () => {
+    expect(resolveCssVarFromThemeColor("bg-palette-primary-dark")).toBe(
+      "var(--colors-palette-primary-dark)"
+    );
+  });
+
+  it("returns undefined when token is invalid", () => {
+    expect(resolveCssVarFromThemeColor("border-red-500")).toBeUndefined();
+  });
+});
+
+describe("getInlineStyleForTextColor", () => {
+  it("returns a style object when bgColor is valid", () => {
+    expect(
+      getInlineStyleForTextColor({
+        bgColor: "bg-white",
+        textColor: "text-black",
+      })
+    ).toEqual({ color: "var(--colors-white)" });
+  });
+
+  it("returns undefined when bgColor is missing", () => {
+    expect(getInlineStyleForTextColor(undefined)).toBeUndefined();
   });
 });

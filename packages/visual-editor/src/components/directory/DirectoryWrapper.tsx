@@ -5,7 +5,10 @@ import {
   setDeep,
   Slot,
 } from "@puckeditor/core";
-import { backgroundColors } from "../../utils/themeConfigOptions.ts";
+import {
+  backgroundColors,
+  ThemeColor,
+} from "../../utils/themeConfigOptions.ts";
 import { Body } from "../atoms/body.tsx";
 import { MaybeLink } from "../atoms/maybeLink.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
@@ -30,6 +33,7 @@ export const DirectoryList = ({
   streamDocument,
   directoryChildren,
   relativePrefixToRoot,
+  linkColor,
 }: {
   streamDocument: StreamDocument;
   directoryChildren: {
@@ -45,6 +49,7 @@ export const DirectoryList = ({
     dm_addressRegionDisplayName?: string;
   }[];
   relativePrefixToRoot: string;
+  linkColor?: ThemeColor;
 }) => {
   const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
   const linkTextTransformValue = (
@@ -81,6 +86,7 @@ export const DirectoryList = ({
               <MaybeLink
                 eventName={`child${idx}`}
                 variant="directoryLink"
+                color={linkColor}
                 href={
                   relativePrefixToRoot
                     ? relativePrefixToRoot + childSlug

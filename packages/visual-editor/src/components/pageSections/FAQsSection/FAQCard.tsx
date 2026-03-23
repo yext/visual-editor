@@ -23,7 +23,7 @@ import { useAnalytics } from "@yext/pages-components";
 import { useTranslation } from "react-i18next";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
-import { BackgroundStyle } from "../../../utils/themeConfigOptions.ts";
+import { ThemeColor } from "../../../utils/themeConfigOptions.ts";
 
 const defaultFAQ = {
   question: { defaultValue: "Question Lorem ipsum dolor sit amet?" },
@@ -39,7 +39,7 @@ export const defaultFAQCardData = (
   index?: number,
   questionVariant?: BodyProps["variant"],
   answerVariant?: BodyProps["variant"],
-  answerColor?: BackgroundStyle
+  answerColor?: ThemeColor
 ) => ({
   type: "FAQCard",
   props: {
@@ -75,7 +75,7 @@ export type FAQCardProps = {
   styles: {
     questionVariant: BodyProps["variant"];
     answerVariant: BodyProps["variant"];
-    answerColor?: BackgroundStyle;
+    answerColor?: ThemeColor;
   };
 
   /** @internal */
@@ -146,7 +146,7 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
     questionVariant: BodyProps["variant"];
     answerVariant: BodyProps["variant"];
-    answerColor?: BackgroundStyle;
+    answerColor?: ThemeColor;
   }>();
 
   const { getPuck } = useGetCardSlots<FAQCardProps>(props.id);

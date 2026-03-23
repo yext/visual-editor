@@ -67,10 +67,7 @@ import {
   createSearchAnalyticsConfig,
   createSearchHeadlessConfig,
 } from "../utils/searchHeadlessConfig.ts";
-import {
-  BackgroundStyle,
-  backgroundColors,
-} from "../utils/themeConfigOptions.ts";
+import { ThemeColor, backgroundColors } from "../utils/themeConfigOptions.ts";
 import {
   LocatorConfig,
   StreamDocument,
@@ -544,7 +541,7 @@ export interface LocatorProps {
       iconName?: string;
     };
     /** The color applied to the pin. */
-    pinColor?: BackgroundStyle;
+    pinColor?: ThemeColor;
   }>;
 
   /**
@@ -584,7 +581,7 @@ export interface LocatorProps {
      * The color applied to the locator page title.
      * @defaultValue inherited from theme
      */
-    color?: BackgroundStyle;
+    color?: ThemeColor;
   };
   /**
    * Props to customize the locator result card component.
@@ -1280,8 +1277,7 @@ const LocatorInternal = ({
     React.useState<boolean>(false);
 
   const locationStylesConfig = React.useMemo(() => {
-    const config: Record<string, { color?: BackgroundStyle; icon?: string }> =
-      {};
+    const config: Record<string, { color?: ThemeColor; icon?: string }> = {};
     (locationStyles ?? []).forEach((locationStyle) => {
       const entityType = locationStyle.entityType;
       if (!entityType) return;
@@ -1827,10 +1823,7 @@ interface MapProps {
   onDragHandler?: OnDragHandler;
   scrollToResult?: (result: Result | undefined) => void;
   markerOptionsOverride?: (selected: boolean) => MarkerOptions;
-  locationStyleConfig?: Record<
-    string,
-    { color?: BackgroundStyle; icon?: string }
-  >;
+  locationStyleConfig?: Record<string, { color?: ThemeColor; icon?: string }>;
 }
 
 const Map: React.FC<MapProps> = ({
@@ -1919,10 +1912,7 @@ const Map: React.FC<MapProps> = ({
 };
 
 type LocatorMapPinProps<T> = PinComponentProps<T> & {
-  locationStyleConfig?: Record<
-    string,
-    { color?: BackgroundStyle; icon?: string }
-  >;
+  locationStyleConfig?: Record<string, { color?: ThemeColor; icon?: string }>;
 };
 
 const LocatorMapPin = <T,>(props: LocatorMapPinProps<T>) => {

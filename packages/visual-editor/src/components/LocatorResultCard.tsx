@@ -9,7 +9,7 @@ import {
 import { Background } from "./atoms/background.tsx";
 import {
   backgroundColors,
-  BackgroundStyle,
+  ThemeColor,
   HeadingLevel,
 } from "../utils/themeConfigOptions.ts";
 import { Body, BodyProps } from "./atoms/body.tsx";
@@ -90,7 +90,7 @@ export interface LocatorResultCardProps {
      * The color applied to the primary heading text
      * @defaultValue inherited from theme
      */
-    color?: BackgroundStyle;
+    color?: ThemeColor;
   };
 
   /** Settings for the secondary heading of the card */

@@ -2,7 +2,7 @@ import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { ComponentConfig, Fields, Slot, PuckComponent } from "@puckeditor/core";
 import {
   backgroundColors,
-  BackgroundStyle,
+  ThemeColor,
 } from "../../utils/themeConfigOptions.ts";
 import { msg } from "../../utils/i18n/platform.ts";
 import { YextField } from "../../editor/YextField.tsx";
@@ -55,7 +55,7 @@ export interface ExpandedFooterData {
 export interface ExpandedFooterStyles {
   /** Styling for the primary footer bar. */
   primaryFooter: {
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
     linksPosition: "left" | "right";
   };
   /** The maximum width of the footer. */

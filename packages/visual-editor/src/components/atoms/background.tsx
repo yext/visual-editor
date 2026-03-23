@@ -1,6 +1,6 @@
 import * as React from "react";
 import {
-  BackgroundStyle,
+  ThemeColor,
   backgroundColors,
 } from "../../utils/themeConfigOptions.ts";
 import { BackgroundProvider } from "../../hooks/useBackground.tsx";
@@ -9,7 +9,7 @@ import { useDocument } from "../../hooks/useDocument.tsx";
 import { getThemeValue } from "../../utils/getThemeValue.ts";
 
 export interface BackgroundProps extends React.HTMLAttributes<HTMLDivElement> {
-  background?: BackgroundStyle;
+  background?: ThemeColor;
   as?: "div" | "section" | "nav" | "header" | "footer" | "main" | "aside";
 }
 
@@ -19,7 +19,7 @@ export const Background = React.forwardRef<HTMLDivElement, BackgroundProps>(
     const Component = as ?? "div";
     const selectedBackground = background ?? backgroundColors.background1.value;
 
-    const backgroundValue: Required<BackgroundStyle> = React.useMemo(() => {
+    const backgroundValue: Required<ThemeColor> = React.useMemo(() => {
       // Our built-in backgrounds are always light or dark
       if (
         selectedBackground.textColor === "text-white" ||

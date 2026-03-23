@@ -1,7 +1,7 @@
 import React, { createContext, ReactNode, useContext } from "react";
-import { BackgroundStyle } from "../utils/themeConfigOptions.ts";
+import { ThemeColor } from "../utils/themeConfigOptions.ts";
 
-const BackgroundContext = createContext<Required<BackgroundStyle> | undefined>(
+const BackgroundContext = createContext<Required<ThemeColor> | undefined>(
   undefined
 );
 
@@ -19,7 +19,7 @@ export const BackgroundProvider = ({
   value,
 }: {
   children: ReactNode;
-  value: Required<BackgroundStyle>;
+  value: Required<ThemeColor>;
 }) => {
   return (
     <BackgroundContext.Provider value={value}>

@@ -116,7 +116,7 @@ A React hook that returns entityFields available to your TemplateConfig's stream
 
 ## useBackground and BackgroundProvider
 
-A React hook that returns the active BackgroundStyle for a given component. It is scoped, so `useBackground` will return the most specific
+A React hook that returns the active background theme color for a given component. It is scoped, so `useBackground` will return the most specific
 background to a component if there are multiple in the hierarchy. Background context is automatically set
 set by `<Section>`. If a component sets the background color without using `<Section>`, then `BackgroundProvider` must be used.
 

@@ -27,7 +27,7 @@ export {
   backgroundColors,
   defaultThemeTailwindExtensions,
   ThemeOptions,
-  type BackgroundStyle,
+  type ThemeColor,
   type HeadingLevel,
   VisualEditorComponentsContentPath,
 } from "./themeConfigOptions.ts";

@@ -1,11 +1,8 @@
-import {
-  BackgroundStyle,
-  HeadingLevel,
-} from "../../utils/themeConfigOptions.ts";
+import { ThemeColor, HeadingLevel } from "../../utils/themeConfigOptions.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
-import { normalizeThemeColor } from "../../utils/normalizeThemeColor.ts";
+import { getInlineStyleForTextColor } from "../../utils/colors.ts";
 
 // Define the variants for the heading component
 export const headingVariants = cva("components", {
@@ -69,7 +66,7 @@ export interface HeadingProps
     VariantProps<typeof headingVariants> {
   level: HeadingLevel;
   semanticLevelOverride?: HeadingLevel | "span";
-  color?: BackgroundStyle;
+  color?: ThemeColor;
 }
 
 export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
@@ -97,9 +94,7 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
       "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "span"
     >;
 
-    const dynamicStyle = color?.bgColor
-      ? { color: `var(--colors-${normalizeThemeColor(color.bgColor)})` }
-      : undefined;
+    const dynamicStyle = getInlineStyleForTextColor(color);
 
     return (
       <Tag

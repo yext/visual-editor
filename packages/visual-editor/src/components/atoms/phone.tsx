@@ -2,16 +2,17 @@ import { FaPhone } from "react-icons/fa";
 import { CTA } from "./cta.tsx";
 import { Body } from "./body.tsx";
 import { parsePhoneNumber } from "awesome-phonenumber";
-import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
+import { ThemeColor } from "../../utils/themeConfigOptions.ts";
 
 export type PhoneAtomProps = {
   phoneNumber: string;
   label?: string;
   eventName?: string;
-  backgroundColor?: BackgroundStyle;
+  backgroundColor?: ThemeColor;
   format: "domestic" | "international" | undefined;
   includeHyperlink: boolean;
   includeIcon: boolean;
+  linkColor?: ThemeColor;
   onClick?: () => void;
 };
 
@@ -49,6 +50,7 @@ export const PhoneAtom = (props: PhoneAtomProps) => {
           normalizeLink={false}
           variant="link"
           eventName={props.eventName}
+          color={props.linkColor}
           onClick={props.onClick}
           alwaysHideCaret={true}
         />

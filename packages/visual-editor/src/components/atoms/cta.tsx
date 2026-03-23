@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, LinkType } from "@yext/pages-components";
 import { Button, ButtonProps } from "./button.js";
-import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
+import { ThemeColor } from "../../utils/themeConfigOptions.ts";
 import { normalizeLink } from "../../utils/normalizeLink.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { useBackground } from "../../hooks/useBackground.tsx";
@@ -12,7 +12,7 @@ import { FaAngleRight, FaExternalLinkAlt } from "react-icons/fa";
 import { getDirections } from "@yext/pages-components";
 import { PresetImageType, FOOD_DELIVERY_SERVICES } from "../../types/types.ts";
 import { presetImageIcons } from "../../utils/presetImageIcons.tsx";
-import { normalizeThemeColor } from "../../utils/normalizeThemeColor.js";
+import { resolveCssVarFromThemeColor } from "../../utils/colors.js";
 
 const LINK_TEXT_TRANSFORM_CSS_VAR =
   "var(--textTransform-link-textTransform)" as React.CSSProperties["textTransform"];
@@ -46,7 +46,7 @@ export type CTAProps = {
     event: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement, MouseEvent>
   ) => void;
   disabled?: boolean;
-  color?: BackgroundStyle;
+  color?: ThemeColor;
   openInNewTab?: boolean;
   /**
    * When true and variant is "link", applies vertical padding (py-3) to the CTA.
@@ -65,6 +65,10 @@ export type CTAProps = {
  * "headerFooterSecondaryLink": a text link style optimized for secondary links in the header and footer.
  */
 export type CTAVariant = ButtonProps["variant"];
+
+/** Returns whether a CTA variant supports user-configurable color overrides. */
+export const isCtaVariantWithColor = (variant?: CTAVariant): boolean =>
+  variant === "primary" || variant === "secondary" || variant === "link";
 
 const presetImageTypeToName = (presetImageType: PresetImageType) => {
   switch (presetImageType) {
@@ -243,14 +247,14 @@ export const CTA = (props: CTAProps) => {
   const isButton = actionType === "button";
   const isDarkBG = useBackground()?.isDarkBackground;
   const dynamicStyle: React.CSSProperties = (() => {
-    const bg = normalizeThemeColor(color?.bgColor);
-    const textColor = normalizeThemeColor(color?.textColor);
-    const border = bg && `var(--colors-${bg})`;
+    const bg = resolveCssVarFromThemeColor(color?.bgColor);
+    const textColor = resolveCssVarFromThemeColor(color?.textColor);
+    const border = bg;
 
     if (variant === "primary") {
       return {
-        backgroundColor: bg && `var(--colors-${bg})`,
-        color: textColor && `var(--colors-${textColor})`,
+        backgroundColor: bg,
+        color: textColor,
         borderColor: border,
       };
     }
@@ -263,11 +267,13 @@ export const CTA = (props: CTAProps) => {
     }
 
     if (
+      variant === "link" ||
+      variant === "directoryLink" ||
       variant === "headerFooterMainLink" ||
       variant === "headerFooterSecondaryLink"
     ) {
       return {
-        color: bg && `var(--colors-${bg})`,
+        color: bg,
       };
     }
 

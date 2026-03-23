@@ -1,3 +1,6 @@
+import { type CSSProperties } from "react";
+import { type ThemeColor } from "./themeConfigOptions.ts";
+
 /**
  * hexToRGB converts a hex color to rgb
  * @param H hex string beginning with '#'
@@ -174,4 +177,49 @@ export const getContrastingColor = (
 
   // If neither is sufficiently contrasting, or there was an error, fallback to black
   return `#000000`;
+};
+
+/**
+ * Extracts the name of a theme color from a tailwind bg- or text- class
+ * @param token A string of the form bg-[[color]] or text-[[color]]
+ * @returns the extracted color, or undefined if cannot parse
+ **/
+export const normalizeThemeColor = (token?: string): string | undefined => {
+  if (!token) {
+    return undefined;
+  }
+
+  if (token.startsWith("bg-")) {
+    return token.replace("bg-", "") || undefined;
+  }
+
+  if (token.startsWith("text-")) {
+    return token.replace("text-", "") || undefined;
+  }
+
+  return undefined;
+};
+
+/**
+ * Resolves a tailwind color class (e.g. bg-palette-primary) to a theme CSS var.
+ * @param token A string of the form bg-[[color]] or text-[[color]]
+ * @returns A css var of the form var(--colors-[[color]]), or undefined if cannot parse
+ */
+export const resolveCssVarFromThemeColor = (
+  token?: string
+): string | undefined => {
+  const normalizedColor = normalizeThemeColor(token);
+  return normalizedColor ? `var(--colors-${normalizedColor})` : undefined;
+};
+
+/**
+ * Resolves a ThemeColor to an inline `color` style.
+ * @param color a ThemeColor object
+ * @returns an inline style object with the `color` property set based on the input's `bgColor` property.
+ */
+export const getInlineStyleForTextColor = (
+  color?: ThemeColor
+): CSSProperties | undefined => {
+  const resolvedColor = resolveCssVarFromThemeColor(color?.bgColor);
+  return resolvedColor ? { color: resolvedColor } : undefined;
 };
