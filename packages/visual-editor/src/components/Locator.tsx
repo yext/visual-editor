@@ -110,6 +110,21 @@ const DEFAULT_LOCATION_STYLE = {
   pinColor: backgroundColors.background6.value,
 };
 
+const getConfiguredMapCenterOrDefault = (mapStartingLocation?: {
+  latitude: string;
+  longitude: string;
+}): [number, number] => {
+  if (mapStartingLocation?.latitude && mapStartingLocation.longitude) {
+    try {
+      return parseMapStartingLocation(mapStartingLocation);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  return DEFAULT_MAP_CENTER;
+};
+
 const getLocatorConfigFromPageSet = (pageSet?: string): LocatorConfig => {
   if (!pageSet) {
     return {};
@@ -981,6 +996,20 @@ const LocatorWrapper = (props: WithPuckProps<LocatorProps>) => {
 
 type SearchState = "not started" | "loading" | "complete";
 
+const LoadingMapPlaceholder = () => {
+  const { t } = useTranslation();
+
+  return (
+    <div className="flex items-center justify-center w-full h-full">
+      <div className="border border-gray-300 rounded-lg p-6 bg-white shadow-md">
+        <Body className="text-gray-700" variant="lg">
+          {t("loadingMap", "Loading Map...")}
+        </Body>
+      </div>
+    </div>
+  );
+};
+
 const LocatorInternal = ({
   mapStyle,
   locationStyles,
@@ -1298,9 +1327,14 @@ const LocatorInternal = ({
     return config;
   }, [locationStyles]);
 
-  const [centerCoords, setCenterCoords] = React.useState<
-    [number, number] | undefined
-  >();
+  const initialMapCenter = React.useMemo(
+    () => getConfiguredMapCenterOrDefault(mapStartingLocation),
+    [mapStartingLocation]
+  );
+  const [centerCoords, setCenterCoords] =
+    React.useState<[number, number]>(initialMapCenter);
+  const [isInitialMapLocationResolved, setIsInitialMapLocationResolved] =
+    React.useState(false);
 
   const mapProps = React.useMemo(
     () => ({
@@ -1322,15 +1356,21 @@ const LocatorInternal = ({
   );
 
   React.useEffect(() => {
+    let isCancelled = false;
+
     const resolveLocationAndSearch = async () => {
+      setIsInitialMapLocationResolved(false);
+      setCenterCoords(initialMapCenter);
+      setMapCenter(mapboxgl.LngLat.convert(initialMapCenter));
+
       const radius =
         showDistanceOptions && selectedDistanceMeters
           ? selectedDistanceMeters
           : toMeters(DEFAULT_RADIUS, preferredUnit);
-      // default location filter to NYC
+      // default location filter to configured starting location or NYC
       let initialLocationFilter = buildNearLocationFilterFromCoords(
-        DEFAULT_MAP_CENTER[1],
-        DEFAULT_MAP_CENTER[0],
+        initialMapCenter[1],
+        initialMapCenter[0],
         radius
       );
       const doSearch = () => {
@@ -1349,10 +1389,16 @@ const LocatorInternal = ({
             filterValue.lng,
             filterValue.lat,
           ];
-          if (areValidCoordinates(centerCoords[1], centerCoords[0])) {
+          if (
+            !isCancelled &&
+            areValidCoordinates(centerCoords[1], centerCoords[0])
+          ) {
             setCenterCoords(centerCoords);
             setMapCenter(mapboxgl.LngLat.convert(centerCoords));
           }
+        }
+        if (!isCancelled) {
+          setIsInitialMapLocationResolved(true);
         }
       };
 
@@ -1451,28 +1497,22 @@ const LocatorInternal = ({
           );
         }
       } catch {
-        // 3. Fall back to mapStartingLocation prop
-        try {
-          if (mapStartingLocation?.latitude && mapStartingLocation.longitude) {
-            const centerCoords = parseMapStartingLocation(mapStartingLocation);
-            initialLocationFilter = buildNearLocationFilterFromCoords(
-              centerCoords[1],
-              centerCoords[0],
-              radius
-            );
-          }
-        } catch (e) {
-          console.error(e);
-        }
-      } finally {
-        doSearch();
+        // Fall back to the configured starting location or default center.
       }
+
+      doSearch();
     };
 
-    resolveLocationAndSearch().catch((e) =>
-      console.error("Failed perform search:", e)
-    );
-  }, [searchActions, mapStartingLocation, initialLocationParam]);
+    resolveLocationAndSearch().catch((e) => {
+      if (!isCancelled) {
+        setIsInitialMapLocationResolved(true);
+      }
+      console.error("Failed perform search:", e);
+    });
+    return () => {
+      isCancelled = true;
+    };
+  }, [initialLocationParam, initialMapCenter, searchActions]);
 
   const handleOpenNowClick = (selected: boolean) => {
     if (selected === isOpenNowSelected) {
@@ -1711,7 +1751,10 @@ const LocatorInternal = ({
 
       {/* Right Section: Map. Hidden for small screens */}
       <div id="locatorMapDiv" className="md:flex-1 md:flex hidden relative">
-        {mapEnabled && <Map {...mapProps} />}
+        {mapEnabled && isInitialMapLocationResolved && <Map {...mapProps} />}
+        {mapEnabled && !isInitialMapLocationResolved && (
+          <LoadingMapPlaceholder />
+        )}
         {!mapEnabled && (
           <div className="flex items-center justify-center w-full h-full bg-gray-100">
             <div className="p-6">
@@ -1841,7 +1884,6 @@ const Map: React.FC<MapProps> = ({
   markerOptionsOverride,
   locationStyleConfig,
 }) => {
-  const { t } = useTranslation();
   const entityDocument: StreamDocument = useDocument();
 
   const documentIsUndefined = typeof document === "undefined";
@@ -1884,15 +1926,7 @@ const Map: React.FC<MapProps> = ({
   //@ts-expect-error MapboxGL is not loaded in the iframe content window
   if (iframe?.contentDocument && !iframe.contentWindow?.mapboxgl) {
     // We are in an iframe, and mapboxgl is not loaded in yet
-    return (
-      <div className="flex items-center justify-center w-full h-full">
-        <div className="border border-gray-300 rounded-lg p-6 bg-white shadow-md">
-          <Body className="text-gray-700" variant="lg">
-            {t("loadingMap", "Loading Map...")}
-          </Body>
-        </div>
-      </div>
-    );
+    return <LoadingMapPlaceholder />;
   }
 
   let mapboxApiKey = entityDocument._env?.YEXT_MAPBOX_API_KEY;
