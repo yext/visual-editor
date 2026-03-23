@@ -1,7 +1,7 @@
 const mainDefaultLayout = {
   root: {
     props: {
-      version: 68,
+      version: 70,
       title: {
         field: "name",
         constantValue: "",
@@ -4201,7 +4201,7 @@ const mainDefaultLayout = {
 const directoryDefaultLayout = {
   root: {
     props: {
-      version: 68,
+      version: 70,
       title: {
         field: "",
         constantValue: { defaultValue: "PLACEHOLDER" },
@@ -4580,6 +4580,12 @@ const directoryDefaultLayout = {
               type: "DirectoryGrid",
               props: {
                 id: "DirectoryGrid-dab8e202-600a-47da-b5c7-971df3f504fb",
+                styles: {
+                  backgroundColor: {
+                    bgColor: "bg-white",
+                    textColor: "text-black",
+                  },
+                },
                 slots: { CardSlot: [] },
               },
             },

@@ -19,7 +19,7 @@ export interface DirectoryStyles {
    * The main background color for the directory page content.
    * @defaultValue Background Color 1
    */
-  backgroundColor?: BackgroundStyle;
+  backgroundColor: BackgroundStyle;
 }
 
 export interface DirectoryProps {
@@ -100,6 +100,7 @@ const DirectoryComponent: PuckComponent<DirectoryProps> = ({
             streamDocument={streamDocument}
             directoryChildren={streamDocument.dm_directoryChildren}
             relativePrefixToRoot={relativePrefixToRoot ?? ""}
+            backgroundColor={styles.backgroundColor}
           />
         )}
     </Background>
@@ -178,6 +179,7 @@ export const Directory: ComponentConfig<{ props: DirectoryProps }> = {
         {
           type: "DirectoryGrid",
           props: {
+            backgroundColor: backgroundColors.background1.value,
             slots: {
               CardSlot: [],
             },
