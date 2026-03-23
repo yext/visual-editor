@@ -14,7 +14,7 @@ import Cards from "./Cards.tsx";
 import { MapComponent } from "./MapComponent.tsx";
 import SourceCard from "./SourceCard.tsx";
 import {
-  SearchResultsSlotProps,
+  SearchCtaStyles,
   VerticalConfigProps,
 } from "./defaultPropsAndTypes.ts";
 
@@ -27,7 +27,7 @@ interface VerticalResultsSectionProps {
   enableGDA: boolean;
   searchTerm?: string;
   gdaLoading: boolean;
-  ctaStyles?: SearchResultsSlotProps["styles"]["ctaStyles"];
+  ctaStyles?: SearchCtaStyles;
 }
 
 export const VerticalResultsSection = ({

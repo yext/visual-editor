@@ -14,7 +14,7 @@ import { PhoneAtom } from "../../atoms/phone.tsx";
 import {
   CardTypeProp,
   FLEX_LAYOUT_CLASSES,
-  SearchResultsSlotProps,
+  SearchCtaStyles,
   UNIT_LABEL,
   VerticalLayout,
 } from "./defaultPropsAndTypes.ts";
@@ -26,7 +26,7 @@ interface CardsProps extends CardProps<any> {
   layout?: VerticalLayout;
   isVertical?: boolean;
   index?: number;
-  ctaStyles?: SearchResultsSlotProps["styles"]["ctaStyles"];
+  ctaStyles?: SearchCtaStyles;
 }
 
 const Cards = ({

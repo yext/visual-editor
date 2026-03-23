@@ -28,13 +28,16 @@ export interface VerticalConfigProps {
   cardType?: CardTypeProp;
   enableGenerativeDirectAnswer?: boolean;
 }
+
+export interface SearchCtaStyles {
+  background?: BackgroundStyle;
+  textColor?: BackgroundStyle;
+}
+
 export interface SearchResultsSlotProps {
   data: { verticals: VerticalConfigProps[] };
   styles: {
-    ctaStyles?: {
-      background?: BackgroundStyle;
-      textColor?: BackgroundStyle;
-    };
+    ctaStyles?: SearchCtaStyles;
     activeVerticalColor?: { color?: BackgroundStyle };
   };
 }
