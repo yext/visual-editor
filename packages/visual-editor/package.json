@@ -33,6 +33,8 @@
     "build:components": "tsc && vite build",
     "build:plugin": "vite build --config vite.config.plugin.ts",
     "build": "pnpm run build:components && pnpm run build:plugin",
+    "memory:profile": "tsx scripts/memoryProfile.ts profile",
+    "memory:compare": "tsx scripts/memoryProfile.ts compare",
     "test": "pnpm run test:editor && pnpm run test:components",
     "test:editor": "vitest run --exclude './src/components/**/*.test.tsx' --browser.enabled false",
     "test:components": "vitest run ./src/components/**",
