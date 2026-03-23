@@ -5,16 +5,13 @@ const stripPrefix = (value: unknown, prefix: string): string | undefined => {
     return undefined;
   }
 
-  if (!value) {
-    return undefined;
-  }
-
-  return value.startsWith(prefix) ? value.slice(prefix.length) : value;
+  return value.startsWith(prefix) ? value.slice(prefix.length) : undefined;
 };
 
 const hasLegacyThemeColorKeys = (value: Record<string, unknown>): boolean => {
   const hasLegacyColorString =
-    typeof value.bgColor === "string" || typeof value.textColor === "string";
+    stripPrefix(value.bgColor, "bg-") !== undefined ||
+    stripPrefix(value.textColor, "text-") !== undefined;
   const hasLegacyDarkFlag = typeof value.isDarkBackground === "boolean";
 
   return hasLegacyColorString || hasLegacyDarkFlag;

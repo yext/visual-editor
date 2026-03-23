@@ -125,6 +125,7 @@ export const backgroundColors: Record<
     value: {
       selectedColor: "palette-primary-dark",
       contrastingColor: "white",
+      isDarkColor: true,
     },
   },
   background7: {
@@ -132,6 +133,7 @@ export const backgroundColors: Record<
     value: {
       selectedColor: "palette-secondary-dark",
       contrastingColor: "white",
+      isDarkColor: true,
     },
   },
   color1: {

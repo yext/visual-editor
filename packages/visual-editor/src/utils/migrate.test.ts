@@ -51,7 +51,7 @@ describe("migrate", () => {
     expect(migratedData).toEqual(exampleBasicDataAfter);
   });
 
-  it("recursively migrates legacy ThemeColor keys while preserving non-legacy textColor containers", async () => {
+  it("recursively migrates legacy ThemeColor keys while preserving non-legacy textColor values", async () => {
     const migratedData = migrate(
       {
         root: {
@@ -105,6 +105,16 @@ describe("migrate", () => {
                 textColor: {
                   bgColor: "bg-palette-primary",
                   textColor: "text-palette-primary-contrast",
+                },
+              },
+            },
+          },
+          {
+            type: "ComponentC",
+            props: {
+              styles: {
+                cta: {
+                  textColor: "palette-primary-contrast",
                 },
               },
             },
@@ -171,6 +181,16 @@ describe("migrate", () => {
               textColor: {
                 selectedColor: "palette-primary",
                 contrastingColor: "palette-primary-contrast",
+              },
+            },
+          },
+        },
+        {
+          type: "ComponentC",
+          props: {
+            styles: {
+              cta: {
+                textColor: "palette-primary-contrast",
               },
             },
           },

@@ -248,7 +248,7 @@ describe("BannerSection", async () => {
         `BannerSection/[${viewportName}] ${name}`
       ).toMatchScreenshot();
       if (
-        // these tests intentionally fails accessibility
+        // these tests intentionally fails accessibility by using user-override text colors that may not meet contrast standards
         ![
           "version 67 props with constant RTF value, dark background and black brand color text",
           "version 69 props",

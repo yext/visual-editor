@@ -41,7 +41,7 @@ export const ImmersivePromo: PuckComponent<PromoVariantProps> = (props) => {
         background={
           localizedImage?.url
             ? {
-                selectedColor: "[#00000099]", // keep in sync VisualEditorThemeClassSafelist
+                selectedColor: "[#00000099]", // keep in sync with VisualEditorThemeClassSafelist
                 contrastingColor: "white",
                 isDarkColor: true,
               }
