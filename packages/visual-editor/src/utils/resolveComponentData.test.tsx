@@ -353,6 +353,28 @@ describe("resolveComponentData", () => {
         expect(element.props.className).toContain(customClass);
       }
     });
+
+    it("applies explicit rich text color via inline style when provided", () => {
+      const data: TranslatableRichText = {
+        hasLocalizedValue: "true",
+        en: { html: "Hello <a href='https://yext.com'>World</a>" },
+      };
+      const result = resolveComponentData(data, "en", mockDocument, {
+        color: {
+          selectedColor: "palette-quaternary",
+          contrastingColor: "palette-quaternary-contrast",
+        },
+      });
+      expect(React.isValidElement(result)).toBe(true);
+      if (React.isValidElement(result)) {
+        const element = result as React.ReactElement<{
+          style?: React.CSSProperties;
+        }>;
+        expect(element.props.style?.color).toBe(
+          "var(--colors-palette-quaternary)"
+        );
+      }
+    });
   });
 });
 

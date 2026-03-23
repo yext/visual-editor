@@ -6,6 +6,7 @@ import {
   isColorContrastWcagCompliant,
   convertComputedStyleColorToHex,
   getBackgroundColorClasses,
+  getThemeColorCssValue,
   getTextColorClass,
 } from "./colors.ts";
 
@@ -163,5 +164,35 @@ describe("getTextColorClass", () => {
 
   it("returns undefined when color is undefined", () => {
     expect(getTextColorClass(undefined)).toBeUndefined();
+  });
+});
+
+describe("getThemeColorCssValue", () => {
+  it("returns direct css variables for base palette tokens", () => {
+    expect(getThemeColorCssValue("palette-primary")).toBe(
+      "var(--colors-palette-primary)"
+    );
+    expect(getThemeColorCssValue("palette-quaternary-contrast")).toBe(
+      "var(--colors-palette-quaternary-contrast)"
+    );
+  });
+
+  it("resolves derived light/dark palette tokens", () => {
+    expect(getThemeColorCssValue("palette-primary-light")).toBe(
+      "hsl(from var(--colors-palette-primary) h s 98)"
+    );
+    expect(getThemeColorCssValue("palette-secondary-dark")).toBe(
+      "hsl(from var(--colors-palette-secondary) h s 20)"
+    );
+  });
+
+  it("supports white/black and bracketed custom values", () => {
+    expect(getThemeColorCssValue("white")).toBe("white");
+    expect(getThemeColorCssValue("black")).toBe("black");
+    expect(getThemeColorCssValue("[#00000099]")).toBe("#00000099");
+  });
+
+  it("returns undefined for empty values", () => {
+    expect(getThemeColorCssValue(undefined)).toBeUndefined();
   });
 });

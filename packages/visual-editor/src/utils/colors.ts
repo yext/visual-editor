@@ -179,6 +179,38 @@ export const getContrastingColor = (
 };
 
 /**
+ * Resolves a ThemeColor token to a concrete CSS color value.
+ * Supports base palette/contrast tokens, derived dark/light palette tokens,
+ * literal white/black, and bracketed custom colors.
+ */
+export const getThemeColorCssValue = (
+  colorToken?: string
+): string | undefined => {
+  if (!colorToken) {
+    return undefined;
+  }
+
+  if (colorToken === "white" || colorToken === "black") {
+    return colorToken;
+  }
+
+  if (colorToken.startsWith("[") && colorToken.endsWith("]")) {
+    return colorToken.slice(1, -1);
+  }
+
+  const paletteMatch = colorToken.match(
+    /^palette-(primary|secondary|tertiary|quaternary)-(light|dark)$/
+  );
+  if (paletteMatch) {
+    const [, palette, tone] = paletteMatch;
+    const lightness = tone === "light" ? "98" : "20";
+    return `hsl(from var(--colors-palette-${palette}) h s ${lightness})`;
+  }
+
+  return `var(--colors-${colorToken})`;
+};
+
+/**
  * Resolves ThemeColor classes for background contexts.
  * @param color a ThemeColor object
  * @returns a class string containing the selected background class and contrasting text class.

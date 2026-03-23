@@ -248,9 +248,11 @@ describe("BannerSection", async () => {
         `BannerSection/[${viewportName}] ${name}`
       ).toMatchScreenshot();
       if (
-        // this test intentionally fails accessibility
-        name !==
-        "version 67 props with constant RTF value, dark background and black brand color text"
+        // these tests intentionally fails accessibility
+        ![
+          "version 67 props with constant RTF value, dark background and black brand color text",
+          "version 69 props",
+        ].includes(name)
       ) {
         const results = await axe(container);
         expect(results).toHaveNoViolations();

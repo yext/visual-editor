@@ -12,7 +12,7 @@ import { FaAngleRight, FaExternalLinkAlt } from "react-icons/fa";
 import { getDirections } from "@yext/pages-components";
 import { PresetImageType, FOOD_DELIVERY_SERVICES } from "../../types/types.ts";
 import { presetImageIcons } from "../../utils/presetImageIcons.tsx";
-import { getTextColorClass } from "../../utils/colors.ts";
+import { getThemeColorCssValue } from "../../utils/colors.ts";
 
 const LINK_TEXT_TRANSFORM_CSS_VAR =
   "var(--textTransform-link-textTransform)" as React.CSSProperties["textTransform"];
@@ -247,16 +247,8 @@ export const CTA = (props: CTAProps) => {
   const isButton = actionType === "button";
   const isDarkBackground = useBackground()?.isDarkColor;
   const dynamicStyle: React.CSSProperties = (() => {
-    const selectedTextColorClass = getTextColorClass(color);
-    const selectedColorToken = selectedTextColorClass?.startsWith("text-")
-      ? selectedTextColorClass.slice("text-".length)
-      : undefined;
-    const bg = selectedColorToken
-      ? `var(--colors-${selectedColorToken})`
-      : undefined;
-    const textColor = color?.contrastingColor
-      ? `var(--colors-${color.contrastingColor})`
-      : undefined;
+    const bg = getThemeColorCssValue(color?.selectedColor);
+    const textColor = getThemeColorCssValue(color?.contrastingColor);
     const border = bg;
 
     if (variant === "primary") {
@@ -411,6 +403,7 @@ export const CTA = (props: CTAProps) => {
         onClick={onClick}
         // textTransform has to be applied via styles because there is no custom tailwind utility
         style={{
+          ...(ctaType !== "presetImage" ? dynamicStyle : undefined),
           // @ts-ignore: the css variable here resolves to a valid enum value
           textTransform: buttonVariant?.toLowerCase().includes("link")
             ? LINK_TEXT_TRANSFORM_CSS_VAR
