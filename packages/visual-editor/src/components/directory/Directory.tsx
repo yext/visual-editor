@@ -179,7 +179,9 @@ export const Directory: ComponentConfig<{ props: DirectoryProps }> = {
         {
           type: "DirectoryGrid",
           props: {
-            backgroundColor: backgroundColors.background1.value,
+            styles: {
+              backgroundColor: backgroundColors.background1.value,
+            },
             slots: {
               CardSlot: [],
             },
