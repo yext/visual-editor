@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { Migration, MigrationRegistry, migrate } from "./migrate.ts";
 import { addIdToSchema } from "../components/migrations/0023_add_id_to_schema.ts";
+import { updateSchemaIdAnchorFormat } from "../components/migrations/0069_update_schema_id_anchor_format.ts";
 
 describe("migrate", () => {
   it("successfully applies a migration", async () => {
@@ -48,6 +49,65 @@ describe("migrate", () => {
     );
 
     expect(migratedData).toEqual(exampleBasicDataAfter);
+  });
+
+  it("updates top-level schemaMarkup @id to the new anchor format", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+            schemaMarkup: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Thing",
+              "@id": "https://[[siteDomain]]/[[uid]]#customtag",
+            }),
+          },
+        },
+        content: [],
+        zones: {},
+      },
+      [updateSchemaIdAnchorFormat],
+      {
+        components: {},
+      },
+      {}
+    );
+
+    expect(migratedData.root.props?.schemaMarkup).toBe(
+      JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Thing",
+        "@id": "https://[[siteDomain]]/#[[uid]]-customtag",
+      })
+    );
+  });
+
+  it("does not rewrite unrelated custom schemaMarkup @id values", async () => {
+    const schemaMarkup = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Thing",
+      "@id": "https://example.com/custom-id",
+    });
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+            schemaMarkup,
+          },
+        },
+        content: [],
+        zones: {},
+      },
+      [updateSchemaIdAnchorFormat],
+      {
+        components: {},
+      },
+      {}
+    );
+
+    expect(migratedData.root.props?.schemaMarkup).toBe(schemaMarkup);
   });
 });
 
