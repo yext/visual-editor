@@ -5,12 +5,12 @@ import {
   setDeep,
   Slot,
 } from "@puckeditor/core";
-import { backgroundColors } from "../../utils/themeConfigOptions.ts";
 import { Body } from "../atoms/body.tsx";
 import { MaybeLink } from "../atoms/maybeLink.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import { PageSection } from "../atoms/pageSection.tsx";
 import { CardContextProvider } from "../../hooks/useCardContext.tsx";
+import { useBackground } from "../../hooks/useBackground.tsx";
 import {
   isDirectoryGrid,
   sortAlphabetically,
@@ -46,6 +46,7 @@ export const DirectoryList = ({
   }[];
   relativePrefixToRoot: string;
 }) => {
+  const background = useBackground();
   const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
   const linkTextTransformValue = (
     getThemeValue("--textTransform-link-textTransform", streamDocument) ?? ""
@@ -54,10 +55,7 @@ export const DirectoryList = ({
     linkTextTransformValue === "none" || linkTextTransformValue === "normal";
 
   return (
-    <PageSection
-      verticalPadding="sm"
-      background={backgroundColors.background1.value}
-    >
+    <PageSection verticalPadding="sm" background={background}>
       <ul className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1">
         {sortedDirectoryChildren.map((child, idx) => {
           const childSlug = resolveDirectoryListChildren(streamDocument, child);
@@ -117,12 +115,13 @@ const directoryGridFields: Fields<DirectoryGridProps> = {
 
 const DirectoryGridWrapper: PuckComponent<DirectoryGridProps> = (props) => {
   const { slots } = props;
+  const background = useBackground();
 
   return (
     <CardContextProvider>
       <PageSection
         verticalPadding="sm"
-        background={backgroundColors.background1.value}
+        background={background}
         className={"flex min-h-0 min-w-0 mx-auto"}
       >
         <slots.CardSlot
