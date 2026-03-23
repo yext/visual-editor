@@ -1,7 +1,7 @@
 import { Migration } from "../../utils/migrate.ts";
 import { backgroundColors } from "../../utils/themeConfigOptions.ts";
 
-const transformDirectoryGridProps = (
+const setDefaultDirectoryGridBackgroundColor = (
   oldProps: { id: string } & Record<string, any>
 ) => {
   if (oldProps.styles?.backgroundColor) {
@@ -12,13 +12,12 @@ const transformDirectoryGridProps = (
     ...oldProps,
     styles: {
       ...oldProps.styles,
-      backgroundColor:
-        oldProps.backgroundColor ?? backgroundColors.background1.value,
+      backgroundColor: backgroundColors.background1.value,
     },
   };
 };
 
-const transformDirectoryProps = (
+const setDefaultDirectoryListBackgroundColor = (
   oldProps: { id: string } & Record<string, any>
 ) => {
   if (oldProps.styles?.listBackgroundColor) {
@@ -29,10 +28,7 @@ const transformDirectoryProps = (
     ...oldProps,
     styles: {
       ...oldProps.styles,
-      listBackgroundColor:
-        oldProps.styles?.backgroundColor ??
-        oldProps.backgroundColor ??
-        backgroundColors.background1.value,
+      listBackgroundColor: backgroundColors.background1.value,
     },
   };
 };
@@ -40,10 +36,10 @@ const transformDirectoryProps = (
 export const directoryGridBackgroundStyles: Migration = {
   DirectoryGrid: {
     action: "updated",
-    propTransformation: transformDirectoryGridProps,
+    propTransformation: setDefaultDirectoryGridBackgroundColor,
   },
   Directory: {
     action: "updated",
-    propTransformation: transformDirectoryProps,
+    propTransformation: setDefaultDirectoryListBackgroundColor,
   },
 };
