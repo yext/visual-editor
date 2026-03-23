@@ -82,7 +82,7 @@ const virtualFiles: VirtualFile[] = [
     content: editTemplate,
   },
   {
-    filepath: "src/templates/sizeDebug.ts",
+    filepath: "src/sizeDebug.ts",
     content: sizeDebugTemplate,
   },
 ];
@@ -90,6 +90,12 @@ const virtualFiles: VirtualFile[] = [
 export const yextVisualEditorPlugin = (): Plugin => {
   let isBuildMode = false;
   const filesToCleanup: string[] = [];
+  const legacyVirtualFiles: VirtualFile[] = [
+    {
+      filepath: "src/templates/sizeDebug.ts",
+      content: sizeDebugTemplate,
+    },
+  ];
 
   /**
    * generateFiles generates the template files and .temlpate-manifest.json file
@@ -99,6 +105,18 @@ export const yextVisualEditorPlugin = (): Plugin => {
    * Created files will be marked for deletion on buildEnd
    */
   const generateFiles = () => {
+    legacyVirtualFiles.forEach((virtualFile: VirtualFile) => {
+      const filePath = path.join(process.cwd(), virtualFile.filepath);
+      if (!fs.existsSync(filePath)) {
+        return;
+      }
+
+      const currentContents = fs.readFileSync(filePath, "utf8");
+      if (currentContents === virtualFile.content) {
+        fs.rmSync(filePath, { force: true });
+      }
+    });
+
     // Create a structure to store the manifest data
     const manifest: {
       templates: TemplateManifestEntry[];
