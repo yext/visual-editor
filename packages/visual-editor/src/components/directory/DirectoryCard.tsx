@@ -2,7 +2,10 @@ import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import React from "react";
 import { YextField } from "../../editor/YextField.tsx";
 import { useCardContext } from "../../hooks/useCardContext.tsx";
-import { useTemplateProps } from "../../hooks/useDocument.tsx";
+import {
+  TemplatePropsContext,
+  useTemplateProps,
+} from "../../hooks/useDocument.tsx";
 import { useGetCardSlots } from "../../hooks/useGetCardSlots.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import {
@@ -10,18 +13,27 @@ import {
   BackgroundStyle,
 } from "../../utils/themeConfigOptions.ts";
 import { deepMerge } from "../../utils/themeResolver.ts";
-import { resolveUrlTemplateOfChild } from "../../utils/urls/resolveUrlTemplate.ts";
+import {
+  mergeMeta,
+  resolveUrlTemplateOfChild,
+} from "../../utils/urls/resolveUrlTemplate.ts";
 import { Background } from "../atoms/background.tsx";
 import { MaybeLink } from "../atoms/maybeLink.tsx";
 import { AddressProps } from "../contentBlocks/Address.tsx";
 import { HeadingTextProps } from "../contentBlocks/HeadingText.tsx";
 import { HoursStatusProps } from "../contentBlocks/HoursStatus.tsx";
 import { PhoneProps } from "../contentBlocks/Phone.tsx";
+import {
+  DirectoryChildReference,
+  getSortedDirectoryChildren,
+  resolveDirectoryChildFromReference,
+  useDirectoryChildren,
+} from "./directoryChildReference.tsx";
 
 export const defaultDirectoryCardSlotData = (
   id: string,
   index: number,
-  profile: any,
+  childRef: DirectoryChildReference,
   existingCardStyle?: DirectoryCardProps["styles"],
   existingSlots?: DirectoryCardProps["slots"]
 ) => ({
@@ -43,7 +55,7 @@ export const defaultDirectoryCardSlotData = (
             data: {
               text: {
                 constantValue: "",
-                field: "",
+                field: "name",
               },
             },
             styles: {
@@ -53,7 +65,6 @@ export const defaultDirectoryCardSlotData = (
             },
             parentData: {
               field: "profile.name",
-              text: profile["name"],
             },
           } satisfies HeadingTextProps,
         },
@@ -65,7 +76,7 @@ export const defaultDirectoryCardSlotData = (
             ...(id && { id: `${id}-address` }),
             data: {
               address: {
-                field: "",
+                field: "address",
                 constantValue: {
                   line1: "",
                   city: "",
@@ -90,7 +101,6 @@ export const defaultDirectoryCardSlotData = (
             },
             parentData: {
               field: "profile.address",
-              address: profile["address"],
             },
           } satisfies AddressProps,
         },
@@ -103,7 +113,7 @@ export const defaultDirectoryCardSlotData = (
             data: {
               number: {
                 constantValue: "",
-                field: "",
+                field: "mainPhone",
               },
               label: {
                 constantValue: "",
@@ -124,7 +134,6 @@ export const defaultDirectoryCardSlotData = (
             },
             parentData: {
               field: "profile.mainPhone",
-              phoneNumber: profile["mainPhone"],
             },
           } satisfies PhoneProps,
         },
@@ -137,7 +146,7 @@ export const defaultDirectoryCardSlotData = (
             data: {
               hours: {
                 constantValue: {},
-                field: "",
+                field: "hours",
               },
             },
             styles: {
@@ -156,15 +165,13 @@ export const defaultDirectoryCardSlotData = (
             },
             parentData: {
               field: "profile.hours",
-              hours: profile["hours"],
-              timezone: profile["timezone"],
             },
           } satisfies HoursStatusProps,
         },
       ],
     },
     parentData: {
-      profile,
+      childRef,
     },
   },
 });
@@ -186,7 +193,7 @@ export type DirectoryCardProps = {
 
   /** @internal */
   parentData?: {
-    profile: any;
+    childRef: DirectoryChildReference;
   };
 
   /** @internal */
@@ -196,13 +203,41 @@ export type DirectoryCardProps = {
 const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
   const { styles, slots, parentData, index, puck } = props;
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
+  const directoryChildrenFromContext = useDirectoryChildren();
+  const sortedDirectoryChildren = React.useMemo(
+    () =>
+      directoryChildrenFromContext.length
+        ? directoryChildrenFromContext
+        : getSortedDirectoryChildren(streamDocument.dm_directoryChildren),
+    [directoryChildrenFromContext, streamDocument.dm_directoryChildren]
+  );
+  const profile = React.useMemo(
+    () =>
+      resolveDirectoryChildFromReference(
+        sortedDirectoryChildren,
+        parentData?.childRef
+      ),
+    [parentData?.childRef, sortedDirectoryChildren]
+  );
+  const childDocumentContext = React.useMemo(
+    () =>
+      profile
+        ? {
+            document: {
+              ...streamDocument,
+              ...mergeMeta(profile, streamDocument),
+            },
+            relativePrefixToRoot,
+          }
+        : {
+            document: streamDocument,
+            relativePrefixToRoot,
+          },
+    [profile, relativePrefixToRoot, streamDocument]
+  );
 
-  const resolvedUrl = parentData
-    ? resolveUrlTemplateOfChild(
-        parentData.profile,
-        streamDocument,
-        relativePrefixToRoot
-      )
+  const resolvedUrl = profile
+    ? resolveUrlTemplateOfChild(profile, streamDocument, relativePrefixToRoot)
     : undefined;
 
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
@@ -296,28 +331,26 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
       className="h-full flex flex-col p-8 border border-gray-400 rounded gap-4"
       background={styles.backgroundColor}
     >
-      <div className="mb-2 max-w-full w-full">
-        <MaybeLink
-          eventName={`link${index}`}
-          alwaysHideCaret={true}
-          className="text-wrap break-words block w-full"
-          href={resolvedUrl}
-          disabled={puck.isEditing}
-        >
-          <slots.HeadingSlot style={{ height: "auto" }} />
-        </MaybeLink>
-      </div>
-      {parentData?.profile?.hours && (
-        <slots.HoursSlot style={{ height: "auto" }} />
-      )}
-      {parentData?.profile?.mainPhone && (
-        <slots.PhoneSlot style={{ height: "auto" }} />
-      )}
-      {parentData?.profile?.address && (
-        <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
-          <slots.AddressSlot style={{ height: "auto" }} />
+      <TemplatePropsContext.Provider value={childDocumentContext}>
+        <div className="mb-2 max-w-full w-full">
+          <MaybeLink
+            eventName={`link${index}`}
+            alwaysHideCaret={true}
+            className="text-wrap break-words block w-full"
+            href={resolvedUrl}
+            disabled={puck.isEditing}
+          >
+            <slots.HeadingSlot style={{ height: "auto" }} />
+          </MaybeLink>
         </div>
-      )}
+        {profile?.hours && <slots.HoursSlot style={{ height: "auto" }} />}
+        {profile?.mainPhone && <slots.PhoneSlot style={{ height: "auto" }} />}
+        {profile?.address && (
+          <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
+            <slots.AddressSlot style={{ height: "auto" }} />
+          </div>
+        )}
+      </TemplatePropsContext.Provider>
     </Background>
   );
 };
