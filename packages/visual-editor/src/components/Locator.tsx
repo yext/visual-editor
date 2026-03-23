@@ -879,9 +879,11 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
     const entityTypeSourceMap = entityDocument
       ? getLocatorEntityTypeSourceMap(entityDocument)
       : { [DEFAULT_ENTITY_TYPE]: undefined };
+    console.log("entityDocument:", entityDocument, entityTypeSourceMap);
     const entityTypes = Object.keys(
       entityTypeSourceMap
     ) as (keyof typeof entityTypeSourceMap)[];
+    console.log("entityTypes:", entityTypes);
 
     const previousLocationStyles = data.props.locationStyles ?? [];
     const previousResultCard = data.props.resultCard ?? [];

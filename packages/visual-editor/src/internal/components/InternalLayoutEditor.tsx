@@ -289,7 +289,8 @@ export const InternalLayoutEditor = ({
           });
 
           devLogger.logData("RESOLVED_LAYOUT_DATA", resolvedData);
-
+          console.log("appState.data:", appState.data);
+          console.log("Resolved Data:", resolvedData);
           if (isDeepEqual(appState.data, resolvedData)) {
             devLogger.log(
               "reloadDataOnDocumentChange - no layout changes detected"
