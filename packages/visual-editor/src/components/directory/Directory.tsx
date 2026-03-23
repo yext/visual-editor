@@ -27,7 +27,7 @@ export interface DirectoryStyles {
    */
   backgroundColor: BackgroundStyle;
 
-  /*
+  /**
    * The background color for the directory list area.
    * @defaultValue Background Color 1
    */
