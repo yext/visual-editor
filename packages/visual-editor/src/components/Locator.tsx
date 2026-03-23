@@ -27,7 +27,9 @@ import {
   Facets,
   FilterSearch,
   getUserLocation,
+  Coordinate,
   MapboxMap,
+  MapMarkerOptions,
   OnDragHandler,
   OnSelectParams,
   Pagination,
@@ -36,7 +38,6 @@ import {
   VerticalResults,
   useAnalytics as useSearchAnalytics,
 } from "@yext/search-ui-react";
-import mapboxgl, { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
 import React, { useEffect } from "react";
 import { useCollapse } from "react-collapsed";
 import { useTranslation } from "react-i18next";
@@ -99,7 +100,10 @@ import {
 const RESULTS_LIMIT = 20;
 const LOCATION_FIELD = "builtin.location";
 const COUNTRY_CODE_FIELD = "address.countryCode";
-const DEFAULT_MAP_CENTER: [number, number] = [-74.005371, 40.741611]; // New York City ([lng, lat])
+const DEFAULT_MAP_CENTER: Coordinate = {
+  latitude: 40.741611,
+  longitude: -74.005371,
+}; // New York City
 const DEFAULT_RADIUS = 25;
 const HOURS_FIELD = "builtin.hours";
 const INITIAL_LOCATION_KEY = "initialLocation";
@@ -1041,8 +1045,8 @@ const LocatorInternal = ({
   }
 
   const [showSearchAreaButton, setShowSearchAreaButton] = React.useState(false);
-  const [mapCenter, setMapCenter] = React.useState<LngLat | undefined>();
-  const [mapBounds, setMapBounds] = React.useState<LngLatBounds | undefined>();
+  const [mapCenter, setMapCenter] = React.useState<Coordinate | undefined>();
+  const [mapRadius, setMapRadius] = React.useState<number | undefined>();
   /** Explicit filter radius selected by the user, in meters */
   const [selectedDistanceMeters, setSelectedDistanceMeters] = React.useState<
     number | null
@@ -1053,9 +1057,12 @@ const LocatorInternal = ({
   /** Radius of last location near filter returned by the filter search API */
   const apiFilterRadius = React.useRef<number | null>(null);
 
-  const handleDrag: OnDragHandler = (center: LngLat, bounds: LngLatBounds) => {
-    setMapCenter(center);
-    setMapBounds(bounds);
+  const handleDrag: OnDragHandler = (center, bounds) => {
+    setMapCenter({
+      latitude: center.latitude,
+      longitude: center.longitude,
+    });
+    setMapRadius(center.distanceTo(bounds.getNorthEast()));
     setShowSearchAreaButton(true);
   };
 
@@ -1075,7 +1082,7 @@ const LocatorInternal = ({
   );
 
   const handleSearchAreaClick = () => {
-    if (mapCenter && mapBounds) {
+    if (mapCenter && mapRadius) {
       searchActions.setOffset(0);
       const locationFilter: SelectableStaticFilter = {
         selected: true,
@@ -1084,9 +1091,9 @@ const LocatorInternal = ({
           kind: "fieldValue",
           fieldId: "builtin.location",
           value: {
-            lat: mapCenter.lat,
-            lng: mapCenter.lng,
-            radius: mapBounds.getNorthEast().distanceTo(mapCenter),
+            lat: mapCenter.latitude,
+            lng: mapCenter.longitude,
+            radius: mapRadius,
             name: t("customSearchArea", "Custom Search Area"),
           },
           matcher: Matcher.Near,
@@ -1161,9 +1168,11 @@ const LocatorInternal = ({
       nearFilterValue?.lng &&
       areValidCoordinates(nearFilterValue.lat, nearFilterValue.lng)
     ) {
-      setMapCenter(
-        new mapboxgl.LngLat(nearFilterValue.lng, nearFilterValue.lat)
-      );
+      setMapCenter({
+        latitude: nearFilterValue.lat,
+        longitude: nearFilterValue.lng,
+      });
+      setMapRadius(nearFilterValue.radius);
     }
   };
 
@@ -1199,7 +1208,7 @@ const LocatorInternal = ({
   }, []);
 
   const scrollToResult = React.useCallback(
-    (result: Result | undefined) => {
+    (result: Result<Location> | undefined) => {
       if (result) {
         if (typeof result.index === "number") {
           setSelectedResultIndex(result.index);
@@ -1228,11 +1237,14 @@ const LocatorInternal = ({
     [resultsContainer]
   );
 
-  const markerOptionsOverride = React.useCallback((selected: boolean) => {
-    return {
-      offset: new mapboxgl.Point(0, selected ? -21 : -14),
-    } as MarkerOptions;
-  }, []);
+  const markerOptionsOverride = React.useCallback(
+    (selected: boolean): MapMarkerOptions => {
+      return {
+        offset: (selected ? [0, -21] : [0, -14]) as [number, number],
+      };
+    },
+    []
+  );
 
   const getResultCardProps = React.useCallback(
     (entityType?: LocatorEntityType) => {
@@ -1299,7 +1311,7 @@ const LocatorInternal = ({
   }, [locationStyles]);
 
   const [centerCoords, setCenterCoords] = React.useState<
-    [number, number] | undefined
+    Coordinate | undefined
   >();
 
   const mapProps = React.useMemo(
@@ -1329,8 +1341,8 @@ const LocatorInternal = ({
           : toMeters(DEFAULT_RADIUS, preferredUnit);
       // default location filter to NYC
       let initialLocationFilter = buildNearLocationFilterFromCoords(
-        DEFAULT_MAP_CENTER[1],
-        DEFAULT_MAP_CENTER[0],
+        DEFAULT_MAP_CENTER.latitude,
+        DEFAULT_MAP_CENTER.longitude,
         radius
       );
       const doSearch = () => {
@@ -1345,13 +1357,16 @@ const LocatorInternal = ({
         ) {
           const filterValue = initialLocationFilter.filter
             .value as NearFilterValue;
-          const centerCoords: [number, number] = [
-            filterValue.lng,
-            filterValue.lat,
-          ];
-          if (areValidCoordinates(centerCoords[1], centerCoords[0])) {
+          const centerCoords: Coordinate = {
+            latitude: filterValue.lat,
+            longitude: filterValue.lng,
+          };
+          if (
+            areValidCoordinates(centerCoords.latitude, centerCoords.longitude)
+          ) {
             setCenterCoords(centerCoords);
-            setMapCenter(mapboxgl.LngLat.convert(centerCoords));
+            setMapCenter(centerCoords);
+            setMapRadius(filterValue.radius);
           }
         }
       };
@@ -1456,10 +1471,11 @@ const LocatorInternal = ({
           if (mapStartingLocation?.latitude && mapStartingLocation.longitude) {
             const centerCoords = parseMapStartingLocation(mapStartingLocation);
             initialLocationFilter = buildNearLocationFilterFromCoords(
-              centerCoords[1],
-              centerCoords[0],
+              centerCoords.latitude,
+              centerCoords.longitude,
               radius
             );
+            setCenterCoords(centerCoords);
           }
         } catch (e) {
           console.error(e);
@@ -1823,10 +1839,10 @@ const ResultsCountSummary = (props: ResultsCountSummaryProps) => {
 
 interface MapProps {
   mapStyle?: string;
-  centerCoords?: [number, number];
+  centerCoords?: Coordinate;
   onDragHandler?: OnDragHandler;
-  scrollToResult?: (result: Result | undefined) => void;
-  markerOptionsOverride?: (selected: boolean) => MarkerOptions;
+  scrollToResult?: (result: Result<Location> | undefined) => void;
+  markerOptionsOverride?: (selected: boolean) => MapMarkerOptions;
   locationStyleConfig?: Record<
     string,
     { color?: BackgroundStyle; icon?: string }
@@ -2156,7 +2172,7 @@ const getMapboxMapPadding = (divElement: HTMLDivElement | null) => {
 const parseMapStartingLocation = (mapStartingLocation: {
   latitude: string;
   longitude: string;
-}): [number, number] => {
+}): Coordinate => {
   const lat = parseFloat(mapStartingLocation.latitude);
   const lng = parseFloat(mapStartingLocation.longitude);
 
@@ -2171,7 +2187,10 @@ const parseMapStartingLocation = (mapStartingLocation: {
     throw new Error(err.join("\n"));
   }
 
-  return [lng, lat];
+  return {
+    latitude: lat,
+    longitude: lng,
+  };
 };
 
 /**
