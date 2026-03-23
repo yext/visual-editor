@@ -618,8 +618,6 @@
   "promoMedia": "Promootiomedia",
   "providerFacilities": "Palveluntarjoajan toimipaikat",
   "publishBlocked": {
-    "deploymentFailed": "Julkaiseminen on poistettu käytöstä, koska viimeisin käyttöönotto epäonnistui. Korjaa ongelmat ja yritä uudelleen",
-    "deploymentInactive": "Julkaiseminen on poistettu käytöstä, koska käyttöönotto ei ole aktiivinen",
     "deploymentInProgress": "Päivitys on poistettu käytöstä, kun käyttöönotto on käynnissä"
   },
   "publishError": {

@@ -618,8 +618,6 @@
   "promoMedia": "Promo media",
   "providerFacilities": "Leverantörsanläggningar",
   "publishBlocked": {
-    "deploymentFailed": "Publicera är inaktiverat eftersom den senaste distributionen misslyckades. Åtgärda problemen och försök igen",
-    "deploymentInactive": "Publicera är inaktiverat eftersom distributionen är inaktiv",
     "deploymentInProgress": "Uppdateringen är inaktiverad medan distributionen pågår"
   },
   "publishError": {

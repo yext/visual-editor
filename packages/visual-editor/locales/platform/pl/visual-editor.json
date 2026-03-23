@@ -628,8 +628,6 @@
   "promoMedia": "Media promocyjne",
   "providerFacilities": "Placówki dostawcy",
   "publishBlocked": {
-    "deploymentFailed": "Publikowanie jest wyłączone, ponieważ najnowsze wdrożenie nie powiodło się. Rozwiąż problemy i spróbuj ponownie",
-    "deploymentInactive": "Publikowanie jest wyłączone, ponieważ wdrożenie jest nieaktywne",
     "deploymentInProgress": "Aktualizacja jest wyłączona w trakcie wdrażania"
   },
   "publishError": {

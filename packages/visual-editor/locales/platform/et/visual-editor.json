@@ -618,8 +618,6 @@
   "promoMedia": "Promo meedia",
   "providerFacilities": "Teenusepakkuja asutused",
   "publishBlocked": {
-    "deploymentFailed": "Avaldamine on keelatud, kuna viimane juurutus ebaõnnestus. Parandage probleemid ja proovige uuesti",
-    "deploymentInactive": "Avaldamine on keelatud, kuna juurutus on passiivne",
     "deploymentInProgress": "Värskendus on juurutamise ajal keelatud"
   },
   "publishError": {

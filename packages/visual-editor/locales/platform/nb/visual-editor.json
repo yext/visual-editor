@@ -618,8 +618,6 @@
   "promoMedia": "Promo Media",
   "providerFacilities": "Leverandørfasiliteter",
   "publishBlocked": {
-    "deploymentFailed": "Publisering er deaktivert fordi den siste distribusjonen mislyktes. Løs problemene og prøv igjen",
-    "deploymentInactive": "Publisering er deaktivert fordi distribusjonen er inaktiv",
     "deploymentInProgress": "Oppdatering er deaktivert mens distribusjon pågår"
   },
   "publishError": {

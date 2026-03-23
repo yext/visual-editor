@@ -621,8 +621,6 @@
   "promoMedia": "Promo Media",
   "providerFacilities": "Pakalpojumu sniedzēja iestādes",
   "publishBlocked": {
-    "deploymentFailed": "Publicēšana ir atspējota, jo pēdējā izvietošana neizdevās. Lūdzu, novērsiet problēmas un mēģiniet vēlreiz",
-    "deploymentInactive": "Publicēšana ir atspējota, jo izvietošana ir neaktīva",
     "deploymentInProgress": "Atjaunināšana ir atspējota, kamēr notiek izvietošana"
   },
   "publishError": {
