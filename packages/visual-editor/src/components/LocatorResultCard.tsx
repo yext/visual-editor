@@ -1153,7 +1153,7 @@ const HeadingTextSection = (props: {
     <div className="flex flex-col gap-2 flex-1 min-w-0">
       <Heading
         color={primaryHeading?.color}
-        className="font-bold text-palette-primary-dark"
+        className={`font-bold ${primaryHeading?.color ? "" : "text-palette-primary-dark"}`}
         level={primaryHeading.headingLevel}
       >
         {primaryHeadingText}

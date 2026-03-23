@@ -926,7 +926,7 @@ const tests: ComponentTest[] = [
                 styles: {
                   variant: "link",
                   presetImage: "app-store",
-                  color: backgroundColors.color4.value,
+                  color: backgroundColors.color2.value,
                 },
                 id: "CTAWrapper-dafb4772-bdd5-4fa3-9c4f-317bd5ee7a0b",
               },
@@ -1047,7 +1047,7 @@ const tests: ComponentTest[] = [
                     },
                     variant: "link",
                     presetImage: "app-store",
-                    color: backgroundColors.color4.value,
+                    color: backgroundColors.color2.value,
                   },
                   {
                     entityField: {
