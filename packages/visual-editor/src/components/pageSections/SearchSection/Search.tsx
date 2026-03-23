@@ -187,11 +187,7 @@ export const SearchComponent: ComponentConfig<{
           props: {
             data: {
               verticals: [
-                {
-                  label: "All",
-                  pageType: "universal",
-                  enableGenerativeDirectAnswer: false,
-                },
+                { label: "All", pageType: "universal" },
                 defaultSearchResultsProps.data.verticals[0],
               ],
             },

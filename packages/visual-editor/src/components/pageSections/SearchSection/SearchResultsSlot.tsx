@@ -39,6 +39,7 @@ const SearchResultsSlotFields: Fields<SearchResultsSlotProps> = {
           universalLimit: 5,
           verticalLimit: 5,
           pageType: "vertical",
+          enableGenerativeDirectAnswer: false,
         },
         arrayFields: {
           label: YextField(msg("fields.label", "Label"), { type: "text" }),
@@ -115,8 +116,6 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
 
   const { t } = useTranslation();
   const searchActions = useSearchActions();
-
-  // New code start
   const hasUniversalTab = React.useMemo(
     () => verticals.some((v) => v.pageType === "universal"),
     [verticals]
@@ -128,34 +127,15 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
       )?.verticalKey ?? null
     );
   }, [verticals]);
-  // New code end
-
-  // Old code start (doc3)
-  // const [verticalKey, setVerticalKey] = useState<string | null>(null);
-  // Old code end
-
-  // New code start (doc1)
   const [verticalKey, setVerticalKey] = useState<string | null>(() =>
     hasUniversalTab ? null : firstVerticalKey
   );
-  // New code end
-
   const committedSearchTerm = useSearchState((s) => s.query.input ?? "");
   const activeVerticalKey = useSearchState(
     (s: any) => s.vertical?.verticalKey ?? null
   );
-
-  // Old code start (doc3)
-  // const searchType = useSearchState((s: any) => s.meta?.searchType ?? null);
-  // const isUniversalActive = searchType
-  //   ? searchType === "universal"
-  //   : activeVerticalKey == null;
-  // Old code end
-
-  // New code start (doc1)
   const resolvedVerticalKey = verticalKey ?? activeVerticalKey;
   const isUniversalActive = resolvedVerticalKey == null;
-  // New code end
 
   const gdaLoading = useSearchState(
     (s) => s.generativeDirectAnswer.isLoading ?? false
@@ -176,23 +156,10 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
     [verticals]
   );
 
-  // Old code start (doc3)
-  // const currentVerticalConfig = React.useMemo(() => {
-  //   if (!activeVerticalKey) return undefined;
-  //   return verticals.find((v) => v.verticalKey === activeVerticalKey);
-  // }, [verticals, activeVerticalKey]);
-  // Old code end
-
-  // New code start (doc1)
   const currentVerticalConfig = React.useMemo(() => {
     if (!resolvedVerticalKey) return undefined;
     return verticals.find((v) => v.verticalKey === resolvedVerticalKey);
   }, [verticals, resolvedVerticalKey]);
-  // New code end
-
-  // Old code start (doc3) - firstVerticalKey was defined here inline in the effect
-  // New code end - now hoisted above as useMemo (see top of component)
-
   const runSearch = React.useCallback(
     (nextVerticalKey: string | null, query: string) => {
       if (!isValidVerticalConfig(verticals)) {
@@ -230,10 +197,6 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
     if (!verticals?.length) return;
     const { vertical, searchTerm } = urlParams;
 
-    // Old code start (doc3) - hasUniversalTab was computed inline here
-    // const hasUniversalTab = verticals.some((v) => v.pageType === "universal");
-    // Old code end
-
     const validVertical =
       vertical && verticals.some((v) => v.verticalKey === vertical);
     const nextVertical = validVertical
@@ -244,13 +207,9 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
 
     setVerticalKey(nextVertical);
     runSearch(nextVertical, searchTerm);
-
-    // New code start (suggested fix: sync URL when defaulting to first vertical)
     if (!validVertical && !hasUniversalTab && firstVerticalKey) {
       updateSearchUrl({ vertical: firstVerticalKey, searchTerm });
     }
-    // New code end
-
     hasInitialized.current = true;
   }, [verticals, urlParams, firstVerticalKey]);
 
@@ -340,31 +299,6 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
         </div>
       </div>
 
-      {/* Old code start (doc3) */}
-      {/* {!isUniversalActive && activeVerticalKey ? (
-        <VerticalResultsSection
-          verticalKey={activeVerticalKey}
-          verticals={verticals}
-          currentVerticalConfig={currentVerticalConfig}
-          puck={puck}
-          facetsLength={facetsLength}
-          enableGDA={
-            currentVerticalConfig?.enableGenerativeDirectAnswer ?? false
-          }
-          searchTerm={committedSearchTerm}
-          gdaLoading={gdaLoading}
-        />
-      ) : (
-        <UniversalResultsSection
-          enableGDA={props.styles?.enableGenerativeDirectAnswer ?? true}
-          searchTerm={committedSearchTerm}
-          gdaLoading={gdaLoading}
-          verticalConfigMap={verticalConfigMap}
-        />
-      )} */}
-      {/* Old code end */}
-
-      {/* New code start (doc1) */}
       {!isUniversalActive && resolvedVerticalKey ? (
         <VerticalResultsSection
           verticalKey={resolvedVerticalKey}
@@ -388,7 +322,6 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
           verticalConfigMap={verticalConfigMap}
         />
       )}
-      {/* New code end */}
     </div>
   );
 };

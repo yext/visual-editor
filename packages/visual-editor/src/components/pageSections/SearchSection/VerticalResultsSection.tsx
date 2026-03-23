@@ -95,8 +95,6 @@ export const VerticalResultsSection = ({
                   customCssClasses={{
                     selectedLabel:
                       "bg-palette-primary text-palette-primary-contrast border-palette-primary",
-                    leftIconContainer: "!-rotate-90",
-                    rightIconContainer: "!rotate-90",
                   }}
                 />
               </div>
@@ -208,8 +206,6 @@ export const VerticalResultsSection = ({
               customCssClasses={{
                 selectedLabel:
                   "bg-palette-primary text-palette-primary-contrast border-palette-primary",
-                leftIconContainer: "!-rotate-90",
-                rightIconContainer: "!rotate-90",
               }}
             />
           </div>
