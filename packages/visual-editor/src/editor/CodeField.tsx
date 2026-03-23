@@ -7,7 +7,9 @@ import {
 } from "../internal/hooks/useMessage.ts";
 import { pt } from "../utils/i18n/platform.ts";
 
-const pendingMessageIdsByFieldId = new Map<string, string>();
+let pendingCodeSession:
+  | { messageId: string; apply: (payload: any) => void }
+  | undefined;
 
 export type codeLanguageOptions =
   | "html"
@@ -31,7 +33,7 @@ export const CodeField = ({
 }: CodeFieldProps): CustomField<number | string> => {
   return {
     type: "custom",
-    render: ({ onChange, value, id }) => {
+    render: ({ onChange, value }) => {
       const { sendToParent: openConstantValueEditor } = useSendMessageToParent(
         "constantValueEditorOpened",
         TARGET_ORIGINS
@@ -41,17 +43,21 @@ export const CodeField = ({
         "constantValueEditorClosed",
         TARGET_ORIGINS,
         (_, payload) => {
-          const pendingMessageId = pendingMessageIdsByFieldId.get(id);
-          if (pendingMessageId && pendingMessageId === payload?.id) {
-            onChange(payload.value);
-            pendingMessageIdsByFieldId.delete(id);
+          const session = pendingCodeSession;
+          if (!session || session.messageId !== payload?.id) {
+            return;
           }
+          pendingCodeSession = undefined;
+          session.apply(payload);
         }
       );
 
       const handleClick = () => {
         const messageId = `CodeBlock-${Date.now()}`;
-        pendingMessageIdsByFieldId.set(id, messageId);
+        pendingCodeSession = {
+          messageId,
+          apply: (payload) => onChange(payload.value),
+        };
 
         openConstantValueEditor({
           payload: {
@@ -69,7 +75,9 @@ export const CodeField = ({
         ) {
           const userInput = prompt("Enter Code:");
           onChange(userInput ?? "");
-          pendingMessageIdsByFieldId.delete(id);
+          if (pendingCodeSession?.messageId === messageId) {
+            pendingCodeSession = undefined;
+          }
         }
       };
 
