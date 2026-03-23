@@ -68,7 +68,7 @@ export const defaultSearchResultsProps: SearchResultsSlotProps = {
   styles: {
     ctaStyles: undefined,
     activeVerticalColor: undefined,
-    headingStyles: undefined,
+    headingStyles: { headingLevel: 3 },
   },
 };
 

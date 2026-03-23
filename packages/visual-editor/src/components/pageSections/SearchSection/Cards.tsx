@@ -68,7 +68,13 @@ const Cards = ({
             >
               {nIndex}
             </Background>
-            <h3 className="text-xl font-semibold">{name}</h3>
+            <Heading
+              color={headingStyles?.color}
+              className="font-bold text-palette-primary-dark"
+              level={headingStyles?.headingLevel ?? 3}
+            >
+              {name ?? "name"}
+            </Heading>
           </div>
           {displayDistance && (
             <div className="font-light">{displayDistance} </div>
