@@ -1,3 +1,11 @@
+#### 1.1.1 (2026-03-24)
+
+##### Bug Fixes
+
+- directory backgrounds ([#1118](https://github.com/yext/visual-editor/pull/1118)) ([2b9f5e91](https://github.com/yext/visual-editor/commit/2b9f5e91df34e49d3414c658f1127b618cb0a910))
+- schema for google crawling ([#1119](https://github.com/yext/visual-editor/pull/1119)) ([ea5c656c](https://github.com/yext/visual-editor/commit/ea5c656ca70bc2ca32eb961dae69106a8b8c3b0d))
+- constant value editor tab switching part 2 ([#1114](https://github.com/yext/visual-editor/pull/1114)) ([67b954bc](https://github.com/yext/visual-editor/commit/67b954bc2d58dc5cfab4e0456a8903d4553f9a32))
+
 #### 1.1.0 (2026-03-20)
 
 #### 1.1.0-alpha.8 (2026-03-20)
