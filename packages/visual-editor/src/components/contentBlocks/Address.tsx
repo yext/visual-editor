@@ -15,12 +15,12 @@ import {
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
-import { CTA, CTAVariant } from "../atoms/cta.tsx";
+import { CTA, CTAVariant, isCtaVariantWithColor } from "../atoms/cta.tsx";
 import { pt, msg } from "../../utils/i18n/platform.ts";
 import { YextField } from "../../editor/YextField.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import {
-  BackgroundStyle,
+  ThemeColor,
   backgroundColors,
 } from "../../utils/themeConfigOptions.ts";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
@@ -51,7 +51,7 @@ export interface AddressProps {
     /** The variant of the get directions button */
     ctaVariant: CTAVariant;
 
-    color?: BackgroundStyle;
+    color?: ThemeColor;
   };
 
   /** @internal */
@@ -100,7 +100,7 @@ export const AddressStyleFields: Fields<AddressProps["styles"]> = {
     type: "radio",
     options: "CTA_VARIANT",
   }),
-  color: YextField(msg("fields.color", "Color"), {
+  color: YextField(msg("fields.linkColor", "Link Color"), {
     type: "select",
     options: "SITE_COLOR",
   }),
@@ -211,7 +211,7 @@ export const resolveAddressFields = (
     showGetDirectionsLink
   );
   const ctaVariant = data.props.styles.ctaVariant;
-  const showColor = ctaVariant === "primary" || ctaVariant === "secondary";
+  const showColor = isCtaVariantWithColor(ctaVariant);
   setDeep(
     updatedFields,
     "styles.objectFields.color.visible",

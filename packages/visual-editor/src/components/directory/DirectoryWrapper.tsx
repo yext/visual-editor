@@ -5,7 +5,11 @@ import {
   setDeep,
   Slot,
 } from "@puckeditor/core";
-import { backgroundColors } from "../../utils/themeConfigOptions.ts";
+import { YextField } from "../../editor/YextField.tsx";
+import {
+  backgroundColors,
+  ThemeColor,
+} from "../../utils/themeConfigOptions.ts";
 import { Body } from "../atoms/body.tsx";
 import { MaybeLink } from "../atoms/maybeLink.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
@@ -21,6 +25,9 @@ import { resolveDirectoryListChildren } from "../../utils/urls/resolveDirectoryL
 import { getThemeValue } from "../../utils/getThemeValue.ts";
 
 export type DirectoryGridProps = {
+  styles: {
+    backgroundColor?: ThemeColor;
+  };
   slots: {
     CardSlot: Slot;
   };
@@ -30,6 +37,7 @@ export const DirectoryList = ({
   streamDocument,
   directoryChildren,
   relativePrefixToRoot,
+  backgroundColor,
 }: {
   streamDocument: StreamDocument;
   directoryChildren: {
@@ -45,6 +53,7 @@ export const DirectoryList = ({
     dm_addressRegionDisplayName?: string;
   }[];
   relativePrefixToRoot: string;
+  backgroundColor: ThemeColor;
 }) => {
   const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
   const linkTextTransformValue = (
@@ -54,10 +63,7 @@ export const DirectoryList = ({
     linkTextTransformValue === "none" || linkTextTransformValue === "normal";
 
   return (
-    <PageSection
-      verticalPadding="sm"
-      background={backgroundColors.background1.value}
-    >
+    <PageSection verticalPadding="sm" background={backgroundColor}>
       <ul className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1">
         {sortedDirectoryChildren.map((child, idx) => {
           const childSlug = resolveDirectoryListChildren(streamDocument, child);
@@ -106,6 +112,18 @@ export const DirectoryList = ({
 };
 
 const directoryGridFields: Fields<DirectoryGridProps> = {
+  styles: YextField(msg("fields.styles", "Styles"), {
+    type: "object",
+    objectFields: {
+      backgroundColor: YextField(
+        msg("fields.backgroundColor", "Background Color"),
+        {
+          type: "select",
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+    },
+  }),
   slots: {
     type: "object",
     objectFields: {
@@ -116,13 +134,13 @@ const directoryGridFields: Fields<DirectoryGridProps> = {
 };
 
 const DirectoryGridWrapper: PuckComponent<DirectoryGridProps> = (props) => {
-  const { slots } = props;
+  const { slots, styles } = props;
 
   return (
     <CardContextProvider>
       <PageSection
         verticalPadding="sm"
-        background={backgroundColors.background1.value}
+        background={styles.backgroundColor}
         className={"flex min-h-0 min-w-0 mx-auto"}
       >
         <slots.CardSlot
@@ -141,6 +159,9 @@ export const DirectoryGrid: ComponentConfig<{
   label: msg("components.directoryGrid", "Directory Grid"),
   fields: directoryGridFields,
   defaultProps: {
+    styles: {
+      backgroundColor: backgroundColors.background1.value,
+    },
     slots: {
       CardSlot: [],
     },

@@ -8,7 +8,7 @@ import {
 } from "@puckeditor/core";
 import {
   backgroundColors,
-  BackgroundStyle,
+  ThemeColor,
   HeadingLevel,
 } from "../../../utils/themeConfigOptions.ts";
 import { BodyTextProps } from "../../contentBlocks/BodyText.tsx";
@@ -43,7 +43,7 @@ export type AboutSectionProps = {
      * The background color of the section.
      * @defaultValue Background Color 2
      */
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
 
     /**
      * If 'true', the sidebar with additional details is shown; if 'false', it's hidden.
