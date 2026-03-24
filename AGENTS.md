@@ -4,6 +4,7 @@
 
 - Use `Id` instead of `ID` for all variable and property names.
 - This applies to code identifiers such as variables, properties, parameters, functions, and types.
+- Examples: use `customerId`, `siteId`, `getEntityId`, and `type EntityIdMap = ...`; do not use `customerID`, `siteID`, `getEntityID`, or `type EntityIDMap = ...`.
 
 ## Local Workflow
 
@@ -31,6 +32,6 @@
 
 ## Migrations
 
-- For component schema, prop, or registered-component changes, check whether a migration is required.
+- Add a migration when a component is renamed, when component props change, when component fields or field options change in a way that could invalidate existing saved data, or when removing a component and existing layouts still need to be handled.
 - If a migration is needed, add a new migration file and append it to `packages/visual-editor/src/components/migrations/migrationRegistry.ts`.
 - Existing migrations are append-only and immutable. Do not rewrite or repurpose old migration files; add a new migration instead.
