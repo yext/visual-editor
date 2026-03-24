@@ -7,6 +7,10 @@ import directoryTemplate from "./templates/directory.tsx?raw";
 import locatorTemplate from "./templates/locator.tsx?raw";
 import { ComponentField } from "../types/fields.ts";
 import { defaultLayoutData } from "./defaultLayoutData.ts";
+import {
+  getEditorPathFromTemplateNames,
+  injectEditorPath,
+} from "./editorRoute.ts";
 import { generateRegistryTemplateFiles } from "./registryTemplateGenerator.ts";
 
 type TemplateManifestEntry = {
@@ -24,13 +28,7 @@ type VirtualFile = {
   templateManifestEntry?: TemplateManifestEntry;
 };
 
-/**
- * virtualFiles defines the template files that are to be generated and inserted into
- * the repo during buildStart
- *
- * It also defines entries that will be used to generate the template-manifest.json
- */
-const virtualFiles: VirtualFile[] = [
+const templateVirtualFiles: VirtualFile[] = [
   {
     filepath: "src/templates/directory.tsx",
     content: directoryTemplate,
@@ -56,9 +54,27 @@ const virtualFiles: VirtualFile[] = [
       defaultLayoutData: defaultLayoutData.locator,
     },
   },
+];
+
+const editorPath = getEditorPathFromTemplateNames(
+  templateVirtualFiles.flatMap((virtualFile) =>
+    virtualFile.templateManifestEntry
+      ? [virtualFile.templateManifestEntry.name]
+      : []
+  )
+);
+
+/**
+ * virtualFiles defines the template files that are to be generated and inserted into
+ * the repo during buildStart
+ *
+ * It also defines entries that will be used to generate the template-manifest.json
+ */
+const virtualFiles: VirtualFile[] = [
+  ...templateVirtualFiles,
   {
     filepath: "src/templates/edit.tsx",
-    content: editTemplate,
+    content: injectEditorPath(editTemplate, editorPath),
   },
 ];
 

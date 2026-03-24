@@ -107,6 +107,7 @@ describe.sequential("generateRegistryTemplateFiles", () => {
       'import { MainConfig as mainConfig } from "../registry/main/config";'
     );
     expect(updatedEditTemplate).toContain('"main": mainConfig');
+    expect(updatedEditTemplate).toContain('const editPath = "edit";');
 
     expect(
       fs.existsSync(path.join(rootDir, "src", "templates", "edit.tsx"))
@@ -155,9 +156,30 @@ describe.sequential("generateRegistryTemplateFiles", () => {
     );
     expect(updatedEditTemplate).not.toContain("mainConfig");
     expect(updatedEditTemplate).not.toContain('"main"');
+    expect(updatedEditTemplate).toContain('const editPath = "edit";');
 
     const manifest = readManifest(rootDir);
     expect(manifest.templates).toEqual([]);
+  });
+
+  it("uses a template-scoped route when no legacy templates are available", () => {
+    const rootDir = createStarterFixture({ includeBuiltInTemplates: false });
+    writeRegistryComponent(
+      rootDir,
+      "custom-template",
+      "Hero.tsx",
+      "export const Hero = {};\n"
+    );
+
+    runGenerator(rootDir);
+
+    const updatedEditTemplate = fs.readFileSync(
+      path.join(rootDir, "src", "templates", "edit.tsx"),
+      "utf8"
+    );
+    expect(updatedEditTemplate).toContain(
+      'const editPath = "edit/custom-template";'
+    );
   });
 
   it("refuses to overwrite a hand-authored template file", () => {
@@ -266,11 +288,14 @@ function runGenerator(rootDir: string): void {
   });
 }
 
-function createStarterFixture(): string {
+function createStarterFixture(options?: {
+  includeBuiltInTemplates?: boolean;
+}): string {
   const rootDir = fs.mkdtempSync(
     path.join(os.tmpdir(), "visual-editor-registry-generator-")
   );
   tempRoots.push(rootDir);
+  const includeBuiltInTemplates = options?.includeBuiltInTemplates ?? true;
 
   fs.ensureDirSync(path.join(rootDir, "src", "registry"));
   fs.ensureDirSync(path.join(rootDir, "src", "templates"));
@@ -283,14 +308,16 @@ function createStarterFixture(): string {
     path.join(rootDir, "src", "templates", "edit.tsx"),
     EDIT_TEMPLATE_SOURCE
   );
-  fs.writeFileSync(
-    path.join(rootDir, "src", "templates", "directory.tsx"),
-    DIRECTORY_TEMPLATE_SOURCE
-  );
-  fs.writeFileSync(
-    path.join(rootDir, "src", "templates", "locator.tsx"),
-    LOCATOR_TEMPLATE_SOURCE
-  );
+  if (includeBuiltInTemplates) {
+    fs.writeFileSync(
+      path.join(rootDir, "src", "templates", "directory.tsx"),
+      DIRECTORY_TEMPLATE_SOURCE
+    );
+    fs.writeFileSync(
+      path.join(rootDir, "src", "templates", "locator.tsx"),
+      LOCATOR_TEMPLATE_SOURCE
+    );
+  }
 
   return rootDir;
 }
