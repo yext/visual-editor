@@ -176,6 +176,17 @@ export const generateRegistryTemplateFiles = ({
   updateEditTemplate(rootDir, templateNames, availableTemplateNames);
 };
 
+export const getCollectedRegistryTemplateNames = (
+  rootDir: string
+): string[] => {
+  return getTemplateNames(rootDir)
+    .filter((templateName) => !PRESERVED_EDIT_REGISTRY_KEYS.has(templateName))
+    .filter(
+      (templateName) =>
+        collectTemplateComponents(rootDir, templateName).length > 0
+    );
+};
+
 /**
  * 1) Discover templates from `<starter>/src/registry/*`.
  */

@@ -2,6 +2,7 @@ const LEGACY_EDITOR_TEMPLATE_NAMES = new Set(["main"]);
 const SHARED_EDITOR_TEMPLATE_NAMES = new Set(["directory", "locator"]);
 
 export const EDIT_PATH_PLACEHOLDER = "__YEXT_VISUAL_EDITOR_PATH__";
+const EDIT_PATH_DECLARATION_PATTERN = /const editPath = ".*?";/;
 
 export const getEditorPathFromTemplateNames = (
   templateNames: string[]
@@ -15,7 +16,7 @@ export const getEditorPathFromTemplateNames = (
       LEGACY_EDITOR_TEMPLATE_NAMES.has(templateName)
     )
   ) {
-    return "edit";
+    return "testedit";
   }
 
   const customTemplateNames = uniqueTemplateNames.filter(
@@ -23,7 +24,7 @@ export const getEditorPathFromTemplateNames = (
   );
 
   if (customTemplateNames.length === 0) {
-    return "edit";
+    return "testedit";
   }
 
   if (customTemplateNames.length !== 1) {
@@ -33,7 +34,7 @@ export const getEditorPathFromTemplateNames = (
     );
   }
 
-  return `edit/${customTemplateNames[0]}`;
+  return `testedit/${customTemplateNames[0]}`;
 };
 
 export const injectEditorPath = (
@@ -41,7 +42,14 @@ export const injectEditorPath = (
   editorPath: string
 ): string => {
   if (!templateContent.includes(EDIT_PATH_PLACEHOLDER)) {
-    throw new Error("Unable to inject editor path: placeholder not found");
+    if (!EDIT_PATH_DECLARATION_PATTERN.test(templateContent)) {
+      throw new Error("Unable to inject editor path: placeholder not found");
+    }
+
+    return templateContent.replace(
+      EDIT_PATH_DECLARATION_PATTERN,
+      `const editPath = "${editorPath}";`
+    );
   }
 
   return templateContent.replace(EDIT_PATH_PLACEHOLDER, editorPath);
