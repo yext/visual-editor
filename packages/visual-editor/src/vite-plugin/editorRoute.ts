@@ -1,4 +1,4 @@
-const LEGACY_EDITOR_TEMPLATE_NAMES = new Set(["main", "directory", "locator"]);
+const LEGACY_EDITOR_TEMPLATE_NAMES = new Set(["main"]);
 
 export const EDIT_PATH_PLACEHOLDER = "__YEXT_VISUAL_EDITOR_PATH__";
 
