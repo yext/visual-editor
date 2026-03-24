@@ -39,6 +39,11 @@ export interface BreadcrumbsStyles {
   backgroundColor?: ThemeColor;
 
   /**
+   * The link color of breadcrumbs.
+   */
+  linkColor?: ThemeColor;
+
+  /**
    * Whether to show the current page's link in the breadcrumb trail (last link).
    * @defaultValue true
    */
@@ -105,6 +110,10 @@ const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
+      linkColor: YextField(msg("fields.linkColor", "Link Color"), {
+        type: "select",
+        options: "SITE_COLOR",
+      }),
       showCurrentPage: YextField(
         msg(
           "fields.showCurrentPagesLinkLabel",
@@ -210,6 +219,7 @@ export const BreadcrumbsComponent = ({
                 eventName={`link${index}`}
                 href={isCurrentPage ? "" : href}
                 className="inline text-body-sm-fontSize font-link-fontWeight font-link-fontFamily whitespace-normal break-words"
+                color={styles?.linkColor}
                 alwaysHideCaret
               >
                 {label}

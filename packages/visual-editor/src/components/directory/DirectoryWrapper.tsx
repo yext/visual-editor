@@ -38,6 +38,7 @@ export const DirectoryList = ({
   directoryChildren,
   relativePrefixToRoot,
   backgroundColor,
+  linkColor,
 }: {
   streamDocument: StreamDocument;
   directoryChildren: {
@@ -54,6 +55,7 @@ export const DirectoryList = ({
   }[];
   relativePrefixToRoot: string;
   backgroundColor: ThemeColor;
+  linkColor?: ThemeColor;
 }) => {
   const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
   const linkTextTransformValue = (
@@ -87,6 +89,7 @@ export const DirectoryList = ({
               <MaybeLink
                 eventName={`child${idx}`}
                 variant="directoryLink"
+                color={linkColor}
                 href={
                   relativePrefixToRoot
                     ? relativePrefixToRoot + childSlug

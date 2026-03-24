@@ -1824,6 +1824,240 @@ const tests: ComponentTest[] = [
     },
     version: 71,
   },
+  {
+    name: "[classic] version 71 props with site color overrides",
+    document: {
+      locale: "en",
+      name: "name",
+      address: {
+        city: "city",
+      },
+      hours: testHours,
+      ref_reviewsAgg: [
+        {
+          averageRating: 4.1,
+          publisher: "FIRSTPARTY",
+          reviewCount: 26,
+        },
+      ],
+    },
+    props: {
+      data: {
+        backgroundImage: {
+          field: "",
+          constantValue: {
+            url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+            width: 640,
+            height: 360,
+          },
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        variant: "classic",
+        backgroundColor: {
+          selectedColor: "white",
+          contrastingColor: "black",
+        },
+        imageHeight: 500,
+        desktopImagePosition: "right",
+        desktopContainerPosition: "left",
+        mobileContentAlignment: "left",
+        mobileImagePosition: "bottom",
+        showBusinessName: true,
+        showGeomodifier: true,
+        showHoursStatus: true,
+        showAverageReview: true,
+        showPrimaryCTA: true,
+        showSecondaryCTA: true,
+        showImage: true,
+        reviewStarsColor: {
+          selectedColor: "palette-secondary",
+          contrastingColor: "palette-secondary-contrast",
+        },
+      },
+      slots: {
+        BusinessNameSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-357c54f4-52ad-419c-b014-29914c0ac92e",
+              data: {
+                text: {
+                  constantValue: {
+                    defaultValue: "Business Name",
+                  },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: {
+                level: 3,
+                align: "left",
+                semanticLevelOverride: 2,
+              },
+            },
+          },
+        ],
+        GeomodifierSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-eabbd7eb-4cdd-4561-9879-e8c8efc15024",
+              data: {
+                text: {
+                  constantValue: {
+                    defaultValue: "Geomodifier",
+                  },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: {
+                level: 1,
+                align: "left",
+                color: {
+                  selectedColor: "palette-primary",
+                  contrastingColor: "palette-primary-contrast",
+                },
+              },
+            },
+          },
+        ],
+        HoursStatusSlot: [
+          {
+            type: "HoursStatusSlot",
+            props: {
+              id: "HoursStatusSlot-d38d57a7-4227-4248-adc1-1728c06e26e1",
+              data: {
+                hours: {
+                  field: "hours",
+                  constantValue: {},
+                },
+              },
+              styles: {
+                dayOfWeekFormat: "long",
+                showDayNames: true,
+                showCurrentStatus: true,
+              },
+            },
+          },
+        ],
+        ImageSlot: [
+          {
+            type: "HeroImageSlot",
+            props: {
+              id: "HeroImageSlot-c94b3215-e930-4f73-8b45-602ce8cbe63b",
+              data: {
+                image: {
+                  field: "",
+                  constantValue: {
+                    url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                    width: 640,
+                    height: 360,
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                aspectRatio: 1.78,
+                width: 490,
+              },
+              variant: "classic",
+              className:
+                "mx-auto max-w-full md:max-w-[350px] lg:max-w-[calc(min(calc(100vw-1.5rem),var(--maxWidth-pageSection-contentWidth))-350px)] rounded-image-borderRadius",
+            },
+          },
+        ],
+        PrimaryCTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-6742dd7d-b794-4a7a-89b2-b3f233c581f8",
+              data: {
+                actionType: "link",
+                normalizeLink: true,
+                buttonText: {
+                  defaultValue: "Button",
+                },
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: {
+                      defaultValue: "Call To Action",
+                    },
+                    link: {
+                      defaultValue: "#",
+                    },
+                    linkType: "URL",
+                    ctaType: "textAndLink",
+                  },
+                },
+              },
+              eventName: "primaryCta",
+              styles: {
+                variant: "primary",
+                presetImage: "app-store",
+                color: {
+                  selectedColor: "palette-quaternary",
+                  contrastingColor: "palette-quaternary-contrast",
+                },
+              },
+              parentStyles: {},
+            },
+          },
+        ],
+        SecondaryCTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-d9de6467-3f14-45e0-a255-e78ed3d95044",
+              data: {
+                actionType: "link",
+                normalizeLink: true,
+                buttonText: {
+                  defaultValue: "Button",
+                },
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: {
+                      defaultValue: "Learn More",
+                    },
+                    link: {
+                      defaultValue: "#",
+                    },
+                    linkType: "URL",
+                    ctaType: "textAndLink",
+                  },
+                  selectedType: "textAndLink",
+                },
+              },
+              styles: {
+                variant: "link",
+                presetImage: "app-store",
+                color: {
+                  selectedColor: "palette-primary",
+                  contrastingColor: "palette-primary-contrast",
+                },
+              },
+              eventName: "secondaryCta",
+              parentStyles: {},
+            },
+          },
+        ],
+      },
+      analytics: {
+        scope: "heroSection",
+      },
+      liveVisibility: true,
+      id: "HeroSection-20b1578c-3d17-494d-9add-1578fa70c59b",
+      conditionalRender: {
+        hours: true,
+      },
+    },
+    version: 71,
+  },
 ];
 
 const BRAND_COLOR_BG_ALLOWLIST = new Set([

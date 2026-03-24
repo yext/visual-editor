@@ -67,6 +67,7 @@ import {
   createSearchAnalyticsConfig,
   createSearchHeadlessConfig,
 } from "../utils/searchHeadlessConfig.ts";
+import { getThemeColorCssValue } from "../utils/colors.ts";
 import { ThemeColor, backgroundColors } from "../utils/themeConfigOptions.ts";
 import {
   LocatorConfig,
@@ -559,6 +560,8 @@ export interface LocatorProps {
      * @defaultValue false
      */
     showDistanceOptions: boolean;
+    /** Accent color for filter button and icons. */
+    accentColor?: ThemeColor;
     /** Which fields are facetable in the search experience */
     facetFields?: DynamicOptionsSelectorType<string>;
   };
@@ -728,6 +731,10 @@ const locatorFields: Fields<LocatorProps> = {
           ],
         }
       ),
+      accentColor: YextField(msg("fields.accentColor", "Accent Color"), {
+        type: "select",
+        options: "SITE_COLOR",
+      }),
       facetFields: YextField<DynamicOptionsSelectorType<string>, string>(
         msg("fields.dynamicFilters", "Dynamic Filters"),
         {
@@ -981,7 +988,7 @@ type SearchState = "not started" | "loading" | "complete";
 const LocatorInternal = ({
   mapStyle,
   locationStyles,
-  filters: { openNowButton, showDistanceOptions, facetFields },
+  filters: { openNowButton, showDistanceOptions, accentColor, facetFields },
   mapStartingLocation,
   resultCard: resultCardConfigs,
   distanceDisplay,
@@ -1579,6 +1586,9 @@ const LocatorInternal = ({
     ).length > 0;
   const hasFilterModalToggle =
     openNowButton || showDistanceOptions || hasFacetOptions;
+  const filterAccentColorCssVariable =
+    getThemeColorCssValue(accentColor?.selectedColor) ??
+    "var(--colors-palette-primary-dark)";
   const [showFilterModal, setShowFilterModal] = React.useState(false);
   const resolvedHeading =
     (pageHeading?.title &&
@@ -1653,7 +1663,8 @@ const LocatorInternal = ({
               />
               {hasFilterModalToggle && (
                 <button
-                  className="inline-flex justify-between items-center gap-2 bg-white text-palette-primary-dark font-bold font-body-fontFamily text-body-sm-fontSize"
+                  className="inline-flex justify-between items-center gap-2 bg-white font-bold font-body-fontFamily text-body-sm-fontSize"
+                  style={{ color: filterAccentColorCssVariable }}
                   onClick={() => setShowFilterModal((prev) => !prev)}
                 >
                   {t("filter", "Filter")}
@@ -1701,6 +1712,7 @@ const LocatorInternal = ({
             handleDistanceClick={handleDistanceClick}
             handleCloseModalClick={() => setShowFilterModal(false)}
             handleClearFiltersClick={handleClearFiltersClick}
+            accentColorCssValue={filterAccentColorCssVariable}
           />
         </div>
       </div>
@@ -1945,6 +1957,7 @@ interface FilterModalProps {
     distanceUnit: "mile" | "kilometer"
   ) => void;
   handleClearFiltersClick: () => void;
+  accentColorCssValue: string;
 }
 
 const FilterModal = (props: FilterModalProps) => {
@@ -1958,6 +1971,7 @@ const FilterModal = (props: FilterModalProps) => {
     handleOpenNowClick,
     handleDistanceClick,
     handleClearFiltersClick,
+    accentColorCssValue,
   } = props;
   const { t } = useTranslation();
   const popupRef = React.useRef<HTMLDivElement>(null);
@@ -1966,6 +1980,11 @@ const FilterModal = (props: FilterModalProps) => {
     <div
       id="popup"
       className="absolute md:top-4 -top-20 z-50 md:w-80 w-full flex flex-col bg-white md:left-full md:ml-2 rounded-md shadow-lg max-h-[calc(100%-2rem)]"
+      style={
+        {
+          "--locator-filter-accent-color": accentColorCssValue,
+        } as React.CSSProperties
+      }
       ref={popupRef}
     >
       <div className="inline-flex justify-between items-center px-6 py-4 gap-4">
@@ -1973,7 +1992,7 @@ const FilterModal = (props: FilterModalProps) => {
           {t("refineYourSearch", "Refine Your Search")}
         </Body>
         <button
-          className="text-palette-primary-dark"
+          style={{ color: accentColorCssValue }}
           onClick={handleCloseModalClick}
         >
           <FaTimes />
@@ -2000,13 +2019,15 @@ const FilterModal = (props: FilterModalProps) => {
             <DistanceFilter
               onChange={handleDistanceClick}
               selectedDistanceOption={selectedDistanceOption}
+              accentColorCssValue={accentColorCssValue}
             />
           )}
           <Facets
             customCssClasses={{
               divider: "bg-white",
               titleLabel: "font-bold text-md font-body-fontFamily",
-              optionInput: "h-4 w-4 accent-palette-primary-dark",
+              optionInput:
+                "h-4 w-4 [accent-color:var(--locator-filter-accent-color)]",
               optionLabel: "text-md font-body-fontFamily font-body-fontWeight",
               option: "space-x-4 font-body-fontFamily",
             }}
@@ -2015,7 +2036,8 @@ const FilterModal = (props: FilterModalProps) => {
       </div>
       <div className="border-y border-gray-300 justify-center align-middle">
         <button
-          className="w-full py-4 text-center text-palette-primary-dark font-bold font-body-fontFamily text-body-fontSize"
+          className="w-full py-4 text-center font-bold font-body-fontFamily text-body-fontSize"
+          style={{ color: accentColorCssValue }}
           onClick={handleClearFiltersClick}
         >
           {t("clearAll", "Clear All")}
@@ -2058,7 +2080,7 @@ const OpenNowFilter = (props: OpenNowFilterProps) => {
             checked={isSelected}
             className={
               "w-4 h-4 form-checkbox cursor-pointer border border-gray-300" +
-              " rounded-sm text-primary focus:ring-primary accent-palette-primary-dark"
+              " rounded-sm text-primary focus:ring-primary [accent-color:var(--locator-filter-accent-color)]"
             }
             onChange={() => onChange(!isSelected)}
           />
@@ -2074,10 +2096,11 @@ const OpenNowFilter = (props: OpenNowFilterProps) => {
 interface DistanceFilterProps {
   onChange: (distance: number, unit: "mile" | "kilometer") => void;
   selectedDistanceOption: number | null;
+  accentColorCssValue: string;
 }
 
 const DistanceFilter = (props: DistanceFilterProps) => {
-  const { selectedDistanceOption, onChange } = props;
+  const { selectedDistanceOption, onChange, accentColorCssValue } = props;
   const { t, i18n } = useTranslation();
   const { isExpanded, getToggleProps, getCollapseProps } = useCollapse({
     defaultExpanded: true,
@@ -2109,7 +2132,7 @@ const DistanceFilter = (props: DistanceFilterProps) => {
               onClick={() => onChange(distanceOption, unit)}
               aria-label={`${t("selectDistanceLessThan", "Select distance less than")} ${distanceOption} ${translateDistanceUnit(t, unit, distanceOption)}`}
             >
-              <div className="text-palette-primary-dark">
+              <div style={{ color: accentColorCssValue }}>
                 {selectedDistanceOption === distanceOption ? (
                   <FaDotCircle />
                 ) : (

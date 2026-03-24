@@ -32,6 +32,11 @@ export interface DirectoryStyles {
    * @defaultValue Background Color 1
    */
   listBackgroundColor: ThemeColor;
+
+  /**
+   * The color of links in the directory list layout.
+   */
+  linkColor?: ThemeColor;
 }
 
 export interface DirectoryProps {
@@ -76,6 +81,10 @@ const directoryFields: Fields<DirectoryProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
+      linkColor: YextField(msg("fields.linkColor", "Link Color"), {
+        type: "select",
+        options: "SITE_COLOR",
+      }),
     },
   }),
   slots: {
@@ -122,6 +131,7 @@ const DirectoryComponent: PuckComponent<DirectoryProps> = ({
             streamDocument={streamDocument}
             directoryChildren={streamDocument.dm_directoryChildren}
             relativePrefixToRoot={relativePrefixToRoot ?? ""}
+            linkColor={styles.linkColor}
             backgroundColor={styles.listBackgroundColor}
           />
         )}
