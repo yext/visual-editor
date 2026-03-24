@@ -9,7 +9,7 @@ import {
 import { Background } from "./atoms/background.tsx";
 import {
   backgroundColors,
-  BackgroundStyle,
+  ThemeColor,
   HeadingLevel,
 } from "../utils/themeConfigOptions.ts";
 import { Body, BodyProps } from "./atoms/body.tsx";
@@ -68,6 +68,7 @@ import {
   LocatorEntityType,
 } from "../utils/locatorEntityTypes.ts";
 import { resolveLocatorResultUrl } from "../utils/urls/resolveLocatorResultUrl.ts";
+import { getBackgroundColorClasses } from "../utils/colors.ts";
 
 export interface LocatorResultCardProps {
   /** The entity type this result card applies to. */
@@ -90,7 +91,7 @@ export interface LocatorResultCardProps {
      * The color applied to the primary heading text
      * @defaultValue inherited from theme
      */
-    color?: BackgroundStyle;
+    color?: ThemeColor;
   };
 
   /** Settings for the secondary heading of the card */
@@ -968,8 +969,7 @@ export const LocatorResultCard = React.memo(
             <div
               className={`
               font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize rounded-full flex lg:hidden px-2 py-1 w-fit
-              ${backgroundColors.background2.value.bgColor} ${backgroundColors.background2.value.textColor}
-              `}
+              ${getBackgroundColorClasses(backgroundColors.background2.value)}`}
             >
               {displayDistance}
             </div>
@@ -1056,10 +1056,11 @@ const PrimaryCTA = (props: {
 };
 
 const CardIcon: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const colorClasses = `${backgroundColors.background2.value.bgColor} ${backgroundColors.background2.value.textColor}`;
   return (
     <div
-      className={`h-10 w-10 flex justify-center rounded-full items-center ${colorClasses}`}
+      className={`h-10 w-10 flex justify-center rounded-full items-center ${getBackgroundColorClasses(
+        backgroundColors.background2.value
+      )}`}
     >
       {children}
     </div>
@@ -1152,7 +1153,7 @@ const HeadingTextSection = (props: {
     <div className="flex flex-col gap-2 flex-1 min-w-0">
       <Heading
         color={primaryHeading?.color}
-        className="font-bold text-palette-primary-dark"
+        className={`font-bold ${primaryHeading?.color ? "" : "text-palette-primary-dark"}`}
         level={primaryHeading.headingLevel}
       >
         {primaryHeadingText}

@@ -142,6 +142,7 @@ export const defaultAboutSectionProps: Omit<DetailSection["content"], "type"> =
       styles: {
         phoneFormat: "domestic",
         includePhoneHyperlink: false,
+        includeIcon: true,
       },
     },
     emails: {
@@ -154,6 +155,7 @@ export const defaultAboutSectionProps: Omit<DetailSection["content"], "type"> =
       },
       styles: {
         listLength: 1,
+        showIcon: true,
       },
     },
     textList: {

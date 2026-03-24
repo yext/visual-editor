@@ -2,7 +2,7 @@ import React from "react";
 import { ComponentConfig, Fields, Slot, PuckComponent } from "@puckeditor/core";
 import {
   backgroundColors,
-  BackgroundStyle,
+  ThemeColor,
   ThemeOptions,
 } from "../../utils/themeConfigOptions.ts";
 import { YextField } from "../../editor/YextField.tsx";
@@ -30,7 +30,7 @@ export interface ProfessionalHeroStyles {
    * The background color for the section.
    * @defaultValue Background Color 1
    */
-  backgroundColor?: BackgroundStyle;
+  backgroundColor?: ThemeColor;
 
   /**
    * If 'true', displays the entity's average review rating.

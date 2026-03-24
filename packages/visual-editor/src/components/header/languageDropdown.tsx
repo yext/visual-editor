@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "../atoms/dropdown.tsx";
 import { Background } from "../atoms/background.tsx";
-import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
+import { ThemeColor } from "../../utils/themeConfigOptions.ts";
 import { Body } from "../atoms/body.tsx";
 import { fetchLocalesToPathsForEntity } from "../../utils/api/fetchLocalesToPathsForEntity.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
@@ -28,7 +28,7 @@ export interface LanguageDropdownProps {
   contentDeliveryAPIDomain: string;
   locales: string[];
   currentLocale: string;
-  background?: BackgroundStyle;
+  background?: ThemeColor;
 }
 
 export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({

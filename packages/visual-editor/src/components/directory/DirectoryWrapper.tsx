@@ -8,7 +8,7 @@ import {
 import { YextField } from "../../editor/YextField.tsx";
 import {
   backgroundColors,
-  BackgroundStyle,
+  ThemeColor,
 } from "../../utils/themeConfigOptions.ts";
 import { Body } from "../atoms/body.tsx";
 import { MaybeLink } from "../atoms/maybeLink.tsx";
@@ -26,7 +26,7 @@ import { getThemeValue } from "../../utils/getThemeValue.ts";
 
 export type DirectoryGridProps = {
   styles: {
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
   };
   slots: {
     CardSlot: Slot;
@@ -53,7 +53,7 @@ export const DirectoryList = ({
     dm_addressRegionDisplayName?: string;
   }[];
   relativePrefixToRoot: string;
-  backgroundColor: BackgroundStyle;
+  backgroundColor: ThemeColor;
 }) => {
   const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
   const linkTextTransformValue = (

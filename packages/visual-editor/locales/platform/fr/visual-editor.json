@@ -257,6 +257,7 @@
     "latitude": "Latitude",
     "limit": "Limite",
     "link": "Lien",
+    "linkColor": "Couleur du lien",
     "linkedInLink": "Lien linkedin",
     "linkLabel": "Libellé du lien",
     "links": "Links",

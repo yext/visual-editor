@@ -11,7 +11,7 @@ import { pt, msg } from "../../utils/i18n/platform.ts";
 import { TranslatableRichText } from "../../types/types.ts";
 import { useBackground } from "../../hooks/useBackground.tsx";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
-import { BackgroundStyle } from "../../index.ts";
+import { ThemeColor } from "../../utils/themeConfigOptions.ts";
 
 export type BodyTextProps = {
   data: {
@@ -24,7 +24,7 @@ export type BodyTextProps = {
     variant: BodyProps["variant"];
 
     /** The color of the body text. */
-    color?: BackgroundStyle;
+    color?: ThemeColor;
   };
 
   /**
@@ -79,7 +79,7 @@ const BodyTextComponent: PuckComponent<BodyTextProps> = (props) => {
   const resolvedData = sourceData
     ? resolveComponentData(sourceData, i18n.language, streamDocument, {
         variant: styles.variant,
-        isDarkBackground: background?.isDarkBackground,
+        isDarkBackground: background?.isDarkColor,
         className: props.parentStyles?.className,
         color: styles.color,
       })

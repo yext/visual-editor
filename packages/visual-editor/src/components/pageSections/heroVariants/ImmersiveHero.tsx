@@ -41,9 +41,9 @@ export const ImmersiveHero: PuckComponent<HeroVariantProps> = (props) => {
         background={
           localizedImage?.url
             ? {
-                bgColor: "bg-[#00000099]",
-                textColor: "text-white",
-                isDarkBackground: true,
+                selectedColor: "[#00000099]", // keep in sync with VisualEditorThemeClassSafelist
+                contrastingColor: "white",
+                isDarkColor: true,
               }
             : backgroundColors.background1.value
         }

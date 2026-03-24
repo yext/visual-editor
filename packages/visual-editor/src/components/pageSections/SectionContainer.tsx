@@ -2,7 +2,7 @@ import * as React from "react";
 import { PageSection } from "../atoms/pageSection.tsx";
 import { Heading, HeadingProps } from "../atoms/heading.tsx";
 import {
-  BackgroundStyle,
+  ThemeColor,
   ThemeOptions,
   backgroundColors,
 } from "../../utils/themeConfigOptions.ts";
@@ -20,7 +20,7 @@ import { useTranslation } from "react-i18next";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 
 export type SectionContainerProps = {
-  background?: BackgroundStyle;
+  background?: ThemeColor;
   sectionHeading: {
     text: YextEntityField<TranslatableString>;
     level: HeadingProps["level"];

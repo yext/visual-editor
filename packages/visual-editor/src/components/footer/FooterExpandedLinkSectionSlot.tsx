@@ -35,7 +35,7 @@ const FooterExpandedLinkSectionSlotInternal: PuckComponent<
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
   const background = useBackground();
-  const isDarkBackground = background?.isDarkBackground ?? false;
+  const isDarkBackground = background?.isDarkColor ?? false;
 
   const label = resolveComponentData(data.label, i18n.language, streamDocument);
   const links = data.links;

@@ -1,6 +1,6 @@
 import {
   backgroundColors,
-  BackgroundStyle,
+  ThemeColor,
 } from "../../utils/themeConfigOptions.ts";
 import { msg } from "../../utils/i18n/platform.ts";
 import { PageSection } from "../atoms/pageSection.tsx";
@@ -26,7 +26,7 @@ export interface StaticMapStyles {
    * The background color of the section.
    * @defaultValue Background Color 1
    */
-  backgroundColor?: BackgroundStyle;
+  backgroundColor?: ThemeColor;
 
   /**
    * The style of the map to be displayed.

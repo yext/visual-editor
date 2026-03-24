@@ -8,7 +8,7 @@ import {
 } from "@puckeditor/core";
 import {
   backgroundColors,
-  BackgroundStyle,
+  ThemeColor,
 } from "../../../utils/themeConfigOptions.ts";
 import { PageSection } from "../../atoms/pageSection.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
@@ -31,7 +31,7 @@ export interface FAQStyles {
    * The background color of the section.
    * @defaultValue Background Color 3
    */
-  backgroundColor?: BackgroundStyle;
+  backgroundColor?: ThemeColor;
 
   /**
    * Whether to show the section heading.

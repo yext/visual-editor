@@ -7,7 +7,7 @@ import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import { TranslatableString } from "../../types/types.ts";
 import {
-  BackgroundStyle,
+  ThemeColor,
   backgroundColors,
 } from "../../utils/themeConfigOptions.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
@@ -36,7 +36,7 @@ export interface BreadcrumbsStyles {
    * The background color of the section.
    * @defaultValue Background Color 1
    */
-  backgroundColor?: BackgroundStyle;
+  backgroundColor?: ThemeColor;
 
   /**
    * Whether to show the current page's link in the breadcrumb trail (last link).

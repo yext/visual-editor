@@ -9,7 +9,7 @@ import {
 import "pure-react-carousel/dist/react-carousel.es.css";
 import {
   backgroundColors,
-  BackgroundStyle,
+  ThemeColor,
 } from "../../../utils/themeConfigOptions.ts";
 import { PageSection } from "../../atoms/pageSection.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
@@ -36,7 +36,7 @@ export interface PhotoGalleryStyles {
    * The background color for the entire section, selected from the theme.
    * @defaultValue Background Color 1
    */
-  backgroundColor?: BackgroundStyle;
+  backgroundColor?: ThemeColor;
 
   /**
    * The layout style for displaying images in the gallery.

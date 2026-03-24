@@ -1932,9 +1932,7 @@ const BRAND_COLOR_BG_ALLOWLIST = new Set([
   "bg-palette-secondary",
   "bg-palette-secondary-dark",
   "bg-palette-tertiary",
-  "bg-palette-tertiary-dark",
   "bg-palette-quaternary",
-  "bg-palette-quaternary-dark",
 ]);
 
 const isBrandColorTest = (props: any) => {
