@@ -830,6 +830,8 @@ export const LocatorResultCard = React.memo(
     const { t, i18n } = useTranslation();
 
     const location = result.rawData;
+    const resolvedLinkColor =
+      props.accentColor ?? backgroundColors.background6.value;
     const distance =
       distanceDisplay === "distanceFromUser"
         ? result.distance
@@ -949,8 +951,7 @@ export const LocatorResultCard = React.memo(
                             onClick={handleGetDirectionsClick}
                             className={themeManagerCn(
                               "components h-fit items-center w-fit underline gap-2 decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing flex font-bold",
-                              getTextColorClass(props.accentColor) ??
-                                "text-palette-primary-dark"
+                              getTextColorClass(resolvedLinkColor)
                             )}
                           >
                             {t("getDirections", "Get Directions")}
@@ -1273,7 +1274,7 @@ const PhoneSection = (props: {
         phoneNumber={phoneNumber}
         includeHyperlink={phone.includePhoneHyperlink}
         includeIcon={icons}
-        linkColor={accentColor}
+        linkColor={accentColor ?? backgroundColors.background6.value}
         onClick={handlePhoneNumberClick}
       />
     )
@@ -1311,6 +1312,7 @@ const EmailSection = (props: {
           linkType="EMAIL"
           normalizeLink={false}
           variant="link"
+          color={accentColor ?? backgroundColors.background6.value}
         />
       </div>
     )
