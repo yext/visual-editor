@@ -222,7 +222,7 @@ interface CustomBreadcrumbsProps {
     directoryRoot: TranslatableString;
   };
   styles: {
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
   };
   analytics: {
     scope?: string;
@@ -235,7 +235,7 @@ interface CustomDirectoryProps {
     HeadingSlot: Slot;
   };
   styles: {
-    backgroundColor: BackgroundStyle;
+    backgroundColor: ThemeColor;
   };
 }
 
@@ -659,7 +659,7 @@ interface VideoSectionProps {
 interface SearchComponentProps {
   styles: {
     showSearchResultsSection: boolean;
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
   };
   /** @internal */
   slots: {

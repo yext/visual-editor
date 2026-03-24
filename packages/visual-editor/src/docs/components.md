@@ -155,7 +155,7 @@ Additional CSS classes to apply to the CTA.
 | :---------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------ | :------ |
 | `className` | `string`                                                                                                                                                                                                                                                                                                 | Additional CSS classes to apply to the CTA. |         |
 | `data`      | `{ show?: boolean; actionType?: "link" \| "button"; normalizeLink: boolean; entityField: YextEntityField<EnhancedTranslatableCTA>; buttonText?: TranslatableString; customId?: string; customClass?: string; dataAttributes?: Array<{ key: string; value: string; }>; ariaLabel?: TranslatableString; }` |                                             |         |
-| `styles`    | `{ variant: CTAVariant; presetImage?: PresetImageType; color?: ThemeColor; textColor?: BackgroundStyle; }`                                                                                                                                                                                               |                                             |         |
+| `styles`    | `{ variant: CTAVariant; presetImage?: PresetImageType; color?: ThemeColor; textColor?: ThemeColor; }`                                                                                                                                                                                                    |                                             |         |
 
 ---
 
@@ -781,9 +781,9 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 #### Other Props
 
-| Prop     | Type                                                                        | Description | Default |
-| :------- | :-------------------------------------------------------------------------- | :---------- | :------ |
-| `styles` | `{ showSearchResultsSection: boolean; backgroundColor?: BackgroundStyle; }` |             |         |
+| Prop     | Type                                                                   | Description | Default |
+| :------- | :--------------------------------------------------------------------- | :---------- | :------ |
+| `styles` | `{ showSearchResultsSection: boolean; backgroundColor?: ThemeColor; }` |             |         |
 
 ---
 
