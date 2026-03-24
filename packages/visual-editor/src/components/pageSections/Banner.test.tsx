@@ -160,7 +160,7 @@ const tests: ComponentTest[] = [
     version: 67,
   },
   {
-    name: "version 69 props",
+    name: "version 71 props",
     document: {},
     props: {
       data: {
@@ -194,7 +194,7 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
       ignoreLocaleWarning: ["data.text"],
     },
-    version: 69,
+    version: 71,
   },
 ];
 
@@ -251,7 +251,7 @@ describe("BannerSection", async () => {
         // these tests intentionally fails accessibility by using user-override text colors that may not meet contrast standards
         ![
           "version 67 props with constant RTF value, dark background and black brand color text",
-          "version 69 props",
+          "version 71 props",
         ].includes(name)
       ) {
         const results = await axe(container);

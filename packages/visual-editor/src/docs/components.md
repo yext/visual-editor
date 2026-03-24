@@ -192,9 +192,10 @@ The Directory Page component serves as a navigational hub, displaying a list of 
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type         | Description                                               | Default              |
-| :----------------------- | :----------- | :-------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor` | `ThemeColor` | The main background color for the directory page content. | `Background Color 1` |
+| Prop                         | Type              | Description                                               | Default              |
+| :--------------------------- | :---------------- | :-------------------------------------------------------- | :------------------- |
+| `styles.backgroundColor`     | `BackgroundStyle` | The background color for the directory page heading area. | `Background Color 1` |
+| `styles.listBackgroundColor` | `BackgroundStyle` | The background color for the directory list area.         | `Background Color 1` |
 
 ---
 

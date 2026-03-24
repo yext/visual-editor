@@ -1591,7 +1591,7 @@ const tests: ComponentTest[] = [
     version: 59,
   },
   {
-    name: "[classic] version 69 props",
+    name: "[classic] version 71 props",
     document: {
       locale: "en",
       name: "name",
@@ -1822,7 +1822,7 @@ const tests: ComponentTest[] = [
         hours: true,
       },
     },
-    version: 69,
+    version: 71,
   },
 ];
 

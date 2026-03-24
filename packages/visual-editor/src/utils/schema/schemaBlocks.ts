@@ -27,8 +27,8 @@ export const getBreadcrumbsSchema = (
         "@type": "BreadcrumbList",
         "@context": "https://schema.org",
         "@id": data.document.siteDomain
-          ? `https://${data.document.siteDomain}/${data.document.uid}#breadcrumbs`
-          : `${data.document.uid}#breadcrumbs`,
+          ? `https://${data.document.siteDomain}/#${data.document.uid}-breadcrumbs`
+          : `#${data.document.uid}-breadcrumbs`,
         itemListElement: [
           fillBreadcrumbsItem(1, data.document.name, currentPageUrl),
         ],
@@ -64,8 +64,8 @@ export const getBreadcrumbsSchema = (
     "@type": "BreadcrumbList",
     "@context": "https://schema.org",
     "@id": data.document.siteDomain
-      ? `https://${data.document.siteDomain}/${data.document.uid}#breadcrumbs`
-      : `${data.document.uid}#breadcrumbs`,
+      ? `https://${data.document.siteDomain}/#${data.document.uid}-breadcrumbs`
+      : `#${data.document.uid}-breadcrumbs`,
     itemListElement: breadcrumbItems,
   };
 };
@@ -101,8 +101,8 @@ export const getAggregateRatingSchemaBlock = (
       return {
         "@type": "AggregateRating",
         "@id": document.siteDomain
-          ? `https://${document.siteDomain}/${document.uid}#aggregaterating`
-          : `${document.uid}#aggregaterating`,
+          ? `https://${document.siteDomain}/#${document.uid}-aggregaterating`
+          : `#${document.uid}-aggregaterating`,
         ratingValue: review.averageRating.toString(),
         reviewCount: review.reviewCount.toString(),
         itemReviewed: {

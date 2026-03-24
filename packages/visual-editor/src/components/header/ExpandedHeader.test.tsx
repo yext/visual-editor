@@ -2295,7 +2295,7 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "version 69 props",
+    name: "version 71 props",
     document: {},
     props: {
       styles: {
@@ -2621,7 +2621,7 @@ const tests: ComponentTest[] = [
       id: "ExpandedHeader-3b9fc1be-57fe-490a-97b1-646f0fa9eb33",
       ignoreLocaleWarning: [],
     },
-    version: 69,
+    version: 71,
     interactions: async (page) => {
       await clickMenuIfVisible(page);
     },

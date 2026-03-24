@@ -5,15 +5,7 @@ const BackgroundContext = createContext<Required<ThemeColor> | undefined>(
   undefined
 );
 
-export const useBackground = () => {
-  const value = useContext(BackgroundContext);
-  if (!value) {
-    throw new Error(
-      "useBackgroundContext must be used within BackgroundProvider"
-    );
-  }
-  return value;
-};
+export const useBackground = () => useContext(BackgroundContext);
 
 export const BackgroundProvider = ({
   children,
