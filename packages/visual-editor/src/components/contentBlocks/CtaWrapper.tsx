@@ -4,8 +4,8 @@ import {
   PuckComponent,
   setDeep,
 } from "@puckeditor/core";
-import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
-import { CTA, CTAVariant } from "../atoms/cta.tsx";
+import { ThemeColor } from "../../utils/themeConfigOptions.ts";
+import { CTA, CTAVariant, isCtaVariantWithColor } from "../atoms/cta.tsx";
 import {
   EnhancedTranslatableCTA,
   PresetImageType,
@@ -53,8 +53,8 @@ export interface CTAWrapperProps {
     variant: CTAVariant;
     /** The image to use if the CTA is set to preset image */
     presetImage?: PresetImageType;
-    color?: BackgroundStyle;
-    textColor?: BackgroundStyle;
+    color?: ThemeColor;
+    textColor?: ThemeColor;
   };
 
   /** Additional CSS classes to apply to the CTA. */
@@ -356,8 +356,7 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
     }
 
     const showColor =
-      (ctaVariant === "primary" || ctaVariant === "secondary") &&
-      effectiveCtaType !== "presetImage";
+      isCtaVariantWithColor(ctaVariant) && effectiveCtaType !== "presetImage";
     setDeep(updatedFields, "styles.objectFields.color.visible", showColor);
 
     const showTextColor = ctaVariant === "primary";

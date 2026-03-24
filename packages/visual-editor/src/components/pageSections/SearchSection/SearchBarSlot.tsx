@@ -28,8 +28,6 @@ import {
   getHeight,
   getRounded,
   getWidth,
-  readInitialUrlParams,
-  updateSearchUrl,
 } from "./utils.tsx";
 
 type BrowserSpeechRecognition = {
@@ -228,21 +226,19 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
   const handleTranscript = React.useCallback(
     (transcript: string) => {
       const searchTerm = transcript.trim();
-      const { vertical } = readInitialUrlParams();
+      const url = new URL(
+        showResults
+          ? window.location.href
+          : `${window.location.origin}/search.html`
+      );
 
-      if (!showResults) {
-        const target = `/search.html${
-          searchTerm ? `?searchTerm=${encodeURIComponent(searchTerm)}` : ""
-        }`;
-        window.location.href = target;
-        return;
+      if (searchTerm) {
+        url.searchParams.set("searchTerm", searchTerm);
+      } else {
+        url.searchParams.delete("searchTerm");
       }
 
-      updateSearchUrl({
-        vertical,
-        searchTerm,
-      });
-      window.dispatchEvent(new PopStateEvent("popstate"));
+      window.location.assign(url.toString());
     },
     [showResults]
   );

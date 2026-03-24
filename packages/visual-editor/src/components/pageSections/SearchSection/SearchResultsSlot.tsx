@@ -23,7 +23,7 @@ import {
   useSearchUrlParams,
 } from "./utils.tsx";
 import { VerticalResultsSection } from "./VerticalResultsSection.tsx";
-import { normalizeThemeColor } from "../../../utils/normalizeThemeColor.ts";
+import { getThemeColorCssValue } from "../../../utils/colors.ts";
 
 const SearchResultsSlotFields: Fields<SearchResultsSlotProps> = {
   data: YextField(msg("fields.data", "Data"), {
@@ -320,9 +320,10 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
               item.pageType === "universal"
                 ? verticalKey === null
                 : item.verticalKey === verticalKey;
-            const activeColor = styles?.activeVerticalColor?.color?.bgColor;
+            const activeColor =
+              styles?.activeVerticalColor?.color?.contrastingColor;
             const activeColorValue = activeColor
-              ? `var(--colors-${normalizeThemeColor(activeColor)})`
+              ? `var(--colors-${getThemeColorCssValue(activeColor)})`
               : undefined;
 
             return (

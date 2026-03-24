@@ -1,7 +1,4 @@
-import {
-  BackgroundStyle,
-  HeadingLevel,
-} from "../../../utils/themeConfigOptions.ts";
+import { HeadingLevel, ThemeColor } from "../../../utils/themeConfigOptions.ts";
 import { SearchBarSlotProps } from "./SearchBarSlot.tsx";
 
 export type VerticalLayout = "Grid" | "Flex" | "Map";
@@ -33,20 +30,20 @@ export interface VerticalConfigProps {
 }
 
 export interface SearchCtaStyles {
-  background?: BackgroundStyle;
-  textColor?: BackgroundStyle;
+  background?: ThemeColor;
+  textColor?: ThemeColor;
 }
 
 export interface HeadingStyles {
   headingLevel: HeadingLevel;
-  color?: BackgroundStyle;
+  color?: ThemeColor;
 }
 
 export interface SearchResultsSlotProps {
   data: { verticals: VerticalConfigProps[] };
   styles: {
     ctaStyles?: SearchCtaStyles;
-    activeVerticalColor?: { color?: BackgroundStyle };
+    activeVerticalColor?: { color?: ThemeColor };
     headingStyles?: HeadingStyles;
   };
 }

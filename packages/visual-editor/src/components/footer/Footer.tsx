@@ -12,7 +12,7 @@ import { EntityField } from "../../editor/EntityField.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { CTA } from "../atoms/cta.tsx";
 import {
-  type BackgroundStyle,
+  type ThemeColor,
   backgroundColors,
 } from "../../utils/themeConfigOptions.ts";
 import { PageSection } from "../atoms/pageSection.tsx";
@@ -41,7 +41,7 @@ export interface FooterProps {
    * The background color for the entire footer section.
    * @defaultValue Background Color 1
    */
-  backgroundColor?: BackgroundStyle;
+  backgroundColor?: ThemeColor;
 
   /** @internal */
   analytics: {

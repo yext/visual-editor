@@ -2,7 +2,7 @@ import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import { YextField } from "../../editor/YextField.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import {
-  BackgroundStyle,
+  ThemeColor,
   backgroundColors,
 } from "../../utils/themeConfigOptions.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
@@ -27,7 +27,7 @@ export interface SecondaryHeaderSlotProps {
   };
 
   styles: {
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
   };
 
   parentStyles?: {

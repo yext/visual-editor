@@ -17,14 +17,14 @@ import {
   isRichText,
   richTextToPlainText,
 } from "./plainText.ts";
-import { BackgroundStyle } from "./themeConfigOptions.ts";
-import { normalizeThemeColor } from "./normalizeThemeColor.ts";
+import { ThemeColor } from "./themeConfigOptions.ts";
+import { getThemeColorCssValue } from "./colors.ts";
 
 type ResolveComponentDataOptions = {
   variant?: BodyProps["variant"];
   isDarkBackground?: boolean;
   className?: string;
-  color?: BackgroundStyle;
+  color?: ThemeColor;
   output?: "render" | "plainText";
 };
 
@@ -109,15 +109,13 @@ export function resolveComponentData<T>(
     if (options?.className) {
       rtfClass += ` ${options.className}`;
     }
-
-    const rtfStyle = options?.color?.bgColor
-      ? {
-          color: `var(--colors-${normalizeThemeColor(options.color.bgColor)})`,
-        }
-      : undefined;
+    const rtfColor = getThemeColorCssValue(options?.color?.selectedColor);
 
     return (
-      <div className={rtfClass} style={rtfStyle}>
+      <div
+        className={rtfClass}
+        style={rtfColor ? { color: rtfColor } : undefined}
+      >
         {resolved}
       </div>
     );

@@ -137,7 +137,7 @@ const FooterExpandedLinksWrapperInternal: PuckComponent<
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
   const background = useBackground();
-  const isDarkBackground = background?.isDarkBackground ?? false;
+  const isDarkBackground = background?.isDarkColor ?? false;
 
   const sections = data.sections || [];
   const labelColorClass = isDarkBackground ? "text-white" : "text-black";

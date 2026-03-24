@@ -2,26 +2,24 @@ import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import { useCallback, useEffect, useState } from "react";
 import { YextField } from "../../../editor/YextField.tsx";
 import { useTemplateProps } from "../../../hooks/useDocument.tsx";
-import {
-  backgroundColors,
-  BackgroundStyle,
-  msg,
-  pt,
-  themeManagerCn,
-} from "../../../utils/index.ts";
+import { msg, pt, themeManagerCn } from "../../../utils/index.ts";
 import { Background } from "../../atoms/background.tsx";
 import { Body } from "../../atoms/body.tsx";
 import { MaybeLink } from "../../atoms/maybeLink.tsx";
 import { PageSection } from "../../atoms/pageSection.tsx";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 import { fetchData } from "./utils.ts";
+import {
+  backgroundColors,
+  ThemeColor,
+} from "../../../utils/themeConfigOptions.ts";
 
 export interface CustomDirectoryProps {
   slots: {
     HeadingSlot: Slot;
   };
   styles: {
-    backgroundColor: BackgroundStyle;
+    backgroundColor: ThemeColor;
   };
 }
 

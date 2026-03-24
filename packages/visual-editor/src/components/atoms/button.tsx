@@ -105,7 +105,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={themeManagerCn(
           buttonVariants({
             variant,
-            hasDarkBackground: background?.isDarkBackground,
+            hasDarkBackground: background?.isDarkColor,
             linkPadding,
           }),
           className

@@ -19,7 +19,7 @@ export type ReviewStarsProps = {
 export const ReviewStars = (props: ReviewStarsProps) => {
   const { averageRating, reviewCount, className } = props;
   const background = useBackground();
-  const hasDarkBackground = background?.isDarkBackground;
+  const hasDarkBackground = background?.isDarkColor;
   const roundedAverageRating = Math.round(averageRating * 10) / 10;
   const HalfStar = hasDarkBackground ? FaStarHalf : FaStarHalfAlt;
   const starColor = hasDarkBackground

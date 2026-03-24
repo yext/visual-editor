@@ -4,7 +4,7 @@ import {
   PuckComponent,
   setDeep,
 } from "@puckeditor/core";
-import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
+import { ThemeColor } from "../../utils/themeConfigOptions.ts";
 import { CTA } from "../atoms/cta.tsx";
 import { PresetImageType } from "../../types/types.ts";
 import { YextField } from "../../editor/YextField.tsx";
@@ -31,8 +31,8 @@ type BasicCTAProps = {
   variant: CTAVariant;
   /** The image to use if the CTA is set to preset image */
   presetImage?: PresetImageType;
-  color?: BackgroundStyle;
-  textColor?: BackgroundStyle;
+  color?: ThemeColor;
+  textColor?: ThemeColor;
 };
 
 const defaultButton: BasicCTAProps = {

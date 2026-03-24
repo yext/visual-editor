@@ -1,5 +1,5 @@
 import {
-  BackgroundStyle,
+  ThemeColor,
   backgroundColors,
 } from "../../../utils/themeConfigOptions.ts";
 import { YextField } from "../../../editor/YextField.tsx";
@@ -34,7 +34,7 @@ export interface ProductSectionProps {
      * The background color for the entire section.
      * @defaultValue Background Color 2
      */
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
 
     /**
      * The variant of the product cards.

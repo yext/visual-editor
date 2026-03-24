@@ -10,7 +10,7 @@ import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { resolveComponentData, themeManagerCn } from "../../../utils/index.ts";
 import {
   backgroundColors,
-  BackgroundStyle,
+  ThemeColor,
 } from "../../../utils/themeConfigOptions.ts";
 import { Body } from "../../atoms/body.tsx";
 import { MaybeLink } from "../../atoms/maybeLink.tsx";
@@ -29,7 +29,7 @@ export interface CustomBreadcrumbsProps {
     directoryRoot: TranslatableString;
   };
   styles: {
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
   };
   analytics: {
     scope?: string;

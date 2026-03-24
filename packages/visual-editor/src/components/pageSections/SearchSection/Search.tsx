@@ -15,7 +15,6 @@ import { YextField } from "../../../editor/YextField.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { themeManagerCn } from "../../../utils/cn.ts";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
-import { BackgroundStyle } from "../../../utils/themeConfigOptions.ts";
 import { Body } from "../../atoms/body.tsx";
 import { PageSection } from "../../atoms/pageSection.tsx";
 import { SearchBarSlotProps } from "./SearchBarSlot.tsx";
@@ -26,11 +25,12 @@ import {
 } from "./defaultPropsAndTypes.ts";
 import "./search.css";
 import { buildSearchConfigFromDocument } from "./searchConfig.ts";
+import { ThemeColor } from "../../../utils/themeConfigOptions.ts";
 
 export interface SearchComponentProps {
   styles: {
     showSearchResultsSection: boolean;
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
   };
   /** @internal */
   slots: {

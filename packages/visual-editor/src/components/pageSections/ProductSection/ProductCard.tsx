@@ -1,6 +1,6 @@
 import * as React from "react";
 import {
-  BackgroundStyle,
+  ThemeColor,
   backgroundColors,
 } from "../../../utils/themeConfigOptions.ts";
 import { YextField } from "../../../editor/YextField.tsx";
@@ -57,7 +57,7 @@ const defaultProduct = {
 export const defaultProductCardSlotData = (
   id?: string,
   index?: number,
-  backgroundColor?: BackgroundStyle,
+  backgroundColor?: ThemeColor,
   sharedSlotStyles?: Record<string, any>
 ) => {
   const cardData = {
@@ -211,7 +211,7 @@ export type ProductCardProps = {
     /** The background color of each individual card
      * @defaultValue Background Color 1
      */
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
   };
 
   /** @internal */
@@ -289,7 +289,7 @@ const ProductCardFields: Fields<ProductCardProps> = {
 const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
   const { styles, puck, conditionalRender, slots, parentStyles } = props;
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
-    cardBackground: BackgroundStyle | undefined;
+    cardBackground: ThemeColor | undefined;
     slotStyles: Record<string, ProductCardProps["styles"]>;
   }>();
 

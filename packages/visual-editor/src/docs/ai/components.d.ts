@@ -114,7 +114,7 @@ type AboutSectionProps = {
      * The background color of the section.
      * @defaultValue Background Color 2
      */
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
     /**
      * If 'true', the sidebar with additional details is shown; if 'false', it's hidden.
      * @defaultValue true
@@ -249,7 +249,7 @@ interface EventSectionProps {
      * The background color of the section.
      * @defaultValue Background Color 3
      */
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
     /**
      * Whether to show the section heading.
      * @defaultValue true
@@ -342,7 +342,7 @@ interface InsightSectionProps {
      * The background color for the entire section.
      * @defaultValue Background Color 2
      */
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
     /**
      * Whether to show the section heading.
      * @defaultValue true
@@ -374,7 +374,7 @@ interface NearbyLocationsSectionProps {
      * The background color for the entire section.
      * @defaultValue Background Color 1
      */
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
     /**
      * Whether to show the section heading.
      * @defaultValue true
@@ -425,7 +425,7 @@ interface ProductSectionProps {
      * The background color for the entire section.
      * @defaultValue Background Color 2
      */
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
     /**
      * The variant of the product cards.
      * @defaultValue Immersive
@@ -527,7 +527,7 @@ interface ReviewsSectionProps {
      * The background color of the section.
      * @defaultValue Background Color 1
      */
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
     /**
      * Whether to show the section heading.
      * @defaultValue true
@@ -577,7 +577,7 @@ interface TeamSectionProps {
      * The background color of the section.
      * @defaultValue Background Color 3
      */
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
     /**
      * Whether to show the section heading.
      * @defaultValue true
@@ -610,7 +610,7 @@ interface TestimonialSectionProps {
      * The background color of the section.
      * @defaultValue Background Color 2
      */
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
     /**
      * Whether to show the section heading.
      * @defaultValue true
@@ -643,7 +643,7 @@ interface VideoSectionProps {
      * The background color for the entire section, selected from the theme.
      * @defaultValue Background Color 1
      */
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
   };
   slots: {
     SectionHeadingSlot: Slot;
@@ -690,7 +690,7 @@ interface ExpandedFooterData {
 interface ExpandedFooterStyles {
   /** Styling for the primary footer bar. */
   primaryFooter: {
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
     linksPosition: "left" | "right";
   };
   /** The maximum width of the footer. */
@@ -698,23 +698,17 @@ interface ExpandedFooterStyles {
 }
 
 /**
- * Applies a theme color as the background of a page section
- * @ai This value MUST be one of the following
- * { bgColor: "bg-white", textColor: "text-black" }
- * { bgColor: "bg-palette-primary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-secondary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-tertiary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-quaternary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-primary-dark", textColor: "text-white", isDarkBackground: true }
- * { bgColor: "bg-palette-secondary-dark", textColor: "text-white", isDarkBackground: true }
+ * An object representing a color based on the theme specified by the user.
  */
-type BackgroundStyle = {
-  /** The tailwind background color class */
-  bgColor: string;
-  /** The tailwind text color class */
-  textColor: string;
-  /** Whether the background color is dark (for adjusting other styles based on background) */
-  isDarkBackground?: boolean;
+type ThemeColor = {
+  /** The theme color token selected by the user. */
+  selectedColor: string;
+  /** The theme color token that contrasts with the selectedColor. */
+  contrastingColor: string;
+  /**
+   * Whether the user-selected color is dark.
+   */
+  isDarkColor?: boolean;
 };
 
 interface BannerData {
@@ -730,12 +724,12 @@ interface BannerStyles {
    * The background color of the section.
    * @defaultValue Background Color 6
    */
-  backgroundColor?: BackgroundStyle;
+  backgroundColor?: ThemeColor;
   /**
    * Optional text color for the banner text.
    * If not set, it will default to a color that contrasts with the background color.
    */
-  textColor?: BackgroundStyle;
+  textColor?: ThemeColor;
   /**
    * The horizontal alignment of the text.
    * @defaultValue center
@@ -761,7 +755,7 @@ interface BreadcrumbsStyles {
    * The background color of the section.
    * @defaultValue Background Color 1
    */
-  backgroundColor?: BackgroundStyle;
+  backgroundColor?: ThemeColor;
   /**
    * Whether to show the current page's link in the breadcrumb trail (last link).
    * @defaultValue true
@@ -774,7 +768,7 @@ interface CoreInfoStyles {
    * The background color of the section.
    * @defaultValue `Background Color 1`
    */
-  backgroundColor?: BackgroundStyle;
+  backgroundColor?: ThemeColor;
 }
 
 /**
@@ -791,15 +785,9 @@ type YextEntityField<T> = {
   constantValue: T;
   /** Whether to use the Yext field or the constant value */
   constantValueEnabled?: boolean;
-  /**
-   * Whether the field can be translated or not.
-   * @ai always omit this property
-   */
+  /** Whether the field can be translated or not. */
   disallowTranslation?: boolean;
-  /**
-   * Filter the embedded field input to this type.
-   * @ai always omit this property
-   */
+  /** Filter the embedded field input to this type. */
   selectedType?: string;
 };
 
@@ -813,7 +801,7 @@ interface FAQStyles {
    * The background color of the section.
    * @defaultValue Background Color 3
    */
-  backgroundColor?: BackgroundStyle;
+  backgroundColor?: ThemeColor;
   /**
    * Whether to show the section heading.
    * @defaultValue true
@@ -838,7 +826,7 @@ interface HeroStyles {
    * The background color for the featured content (spotlight variant).
    * @defaultValue Background Color 1
    */
-  backgroundColor?: BackgroundStyle;
+  backgroundColor?: ThemeColor;
   /**
    * Image Height for the hero image with Immersive or Spotlight variant
    * Minimum height: content height + Page Section Top/Bottom Padding
@@ -907,7 +895,7 @@ interface PhotoGalleryStyles {
    * The background color for the entire section, selected from the theme.
    * @defaultValue Background Color 1
    */
-  backgroundColor?: BackgroundStyle;
+  backgroundColor?: ThemeColor;
   /**
    * The layout style for displaying images in the gallery.
    * @defaultValue "gallery"
@@ -927,7 +915,7 @@ interface ProfessionalHeroStyles {
    * The background color for the section.
    * @defaultValue Background Color 1
    */
-  backgroundColor?: BackgroundStyle;
+  backgroundColor?: ThemeColor;
   /**
    * If 'true', displays the entity's average review rating.
    * @defaultValue true
@@ -1025,7 +1013,7 @@ interface PromoStyles {
    * The background color for the entire section.
    * @defaultValue Background Color 1
    */
-  backgroundColor?: BackgroundStyle;
+  backgroundColor?: ThemeColor;
   /**
    * Positions the media to the left or right of the promo content on desktop (classic and compact variants).
    * @defaultValue right
@@ -1082,7 +1070,7 @@ interface StaticMapStyles {
    * The background color of the section.
    * @defaultValue Background Color 1
    */
-  backgroundColor?: BackgroundStyle;
+  backgroundColor?: ThemeColor;
   /**
    * The style of the map to be displayed.
    * @defaultValue Default (streets-v12)
@@ -1093,7 +1081,7 @@ interface StaticMapStyles {
 interface PageSectionProps
   extends VariantProps<typeof maxWidthVariants>,
     React.HTMLAttributes<HTMLDivElement> {
-  background?: BackgroundStyle;
+  background?: ThemeColor;
   verticalPadding?: VariantProps<typeof pageSectionVariants>["verticalPadding"];
   as?: "div" | "section" | "nav" | "header" | "footer" | "main" | "aside";
   outerClassName?: string;

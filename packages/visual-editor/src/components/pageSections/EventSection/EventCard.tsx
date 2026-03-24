@@ -8,7 +8,7 @@ import {
   setDeep,
 } from "@puckeditor/core";
 import {
-  BackgroundStyle,
+  ThemeColor,
   backgroundColors,
 } from "../../../utils/themeConfigOptions.ts";
 import { YextField } from "../../../editor/YextField.tsx";
@@ -55,7 +55,7 @@ const defaultEvent = {
 export const defaultEventCardSlotData = (
   id?: string,
   index?: number,
-  backgroundColor?: BackgroundStyle,
+  backgroundColor?: ThemeColor,
   truncateDescription?: boolean,
   sharedSlotStyles?: Record<string, any>
 ) => {
@@ -201,7 +201,7 @@ export type EventCardProps = {
   /** Styling for all the cards. */
   styles: {
     /** The background color of each event card */
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
     /** Whether to truncate the event description text */
     truncateDescription: boolean;
   };

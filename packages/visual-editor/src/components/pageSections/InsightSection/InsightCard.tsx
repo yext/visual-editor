@@ -1,6 +1,6 @@
 import * as React from "react";
 import {
-  BackgroundStyle,
+  ThemeColor,
   backgroundColors,
 } from "../../../utils/themeConfigOptions.ts";
 import { YextField } from "../../../editor/YextField.tsx";
@@ -53,7 +53,7 @@ const defaultInsight = {
 export const defaultInsightCardSlotData = (
   id?: string,
   index?: number,
-  backgroundColor?: BackgroundStyle,
+  backgroundColor?: ThemeColor,
   sharedSlotStyles?: Record<string, any>
 ) => {
   const cardData = {
@@ -218,7 +218,7 @@ export type InsightCardProps = {
   /** Styling for all the cards. */
   styles: {
     /** The background color of each insight card */
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
   };
 
   /** @internal */
@@ -286,7 +286,7 @@ const insightCardFields: Fields<InsightCardProps> = {
 const InsightCardComponent: PuckComponent<InsightCardProps> = (props) => {
   const { styles, slots, puck, conditionalRender, parentStyles } = props;
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
-    cardBackground: BackgroundStyle | undefined;
+    cardBackground: ThemeColor | undefined;
     slotStyles: Record<string, InsightCardProps["styles"]>;
   }>();
 

@@ -12,15 +12,9 @@ export type YextEntityField<T> = {
   constantValue: T;
   /** Whether to use the Yext field or the constant value */
   constantValueEnabled?: boolean;
-  /**
-   * Whether the field can be translated or not.
-   * @ai always omit this property
-   */
+  /** Whether the field can be translated or not. */
   disallowTranslation?: boolean;
-  /**
-   * Filter the embedded field input to this type.
-   * @ai always omit this property
-   */
+  /** Filter the embedded field input to this type. */
   selectedType?: string;
 };
 
