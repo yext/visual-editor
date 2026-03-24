@@ -107,6 +107,7 @@ describe.sequential("generateRegistryTemplateFiles", () => {
       'import { MainConfig as mainConfig } from "../registry/main/config";'
     );
     expect(updatedEditTemplate).toContain('"main": mainConfig');
+    expect(updatedEditTemplate).toContain('const editPath = "edit";');
 
     expect(
       fs.existsSync(path.join(rootDir, "src", "templates", "edit.tsx"))
@@ -155,9 +156,28 @@ describe.sequential("generateRegistryTemplateFiles", () => {
     );
     expect(updatedEditTemplate).not.toContain("mainConfig");
     expect(updatedEditTemplate).not.toContain('"main"');
+    expect(updatedEditTemplate).toContain('const editPath = "edit";');
 
     const manifest = readManifest(rootDir);
     expect(manifest.templates).toEqual([]);
+  });
+
+  it("uses a template-scoped route when a single custom template is available alongside shared templates", () => {
+    const rootDir = createStarterFixture();
+    writeRegistryComponent(
+      rootDir,
+      "dunkin",
+      "Hero.tsx",
+      "export const Hero = {};\n"
+    );
+
+    runGenerator(rootDir);
+
+    const updatedEditTemplate = fs.readFileSync(
+      path.join(rootDir, "src", "templates", "edit.tsx"),
+      "utf8"
+    );
+    expect(updatedEditTemplate).toContain('const editPath = "edit/dunkin";');
   });
 
   it("refuses to overwrite a hand-authored template file", () => {

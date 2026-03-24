@@ -1,11 +1,14 @@
 const LEGACY_EDITOR_TEMPLATE_NAMES = new Set(["main"]);
+const SHARED_EDITOR_TEMPLATE_NAMES = new Set(["directory", "locator"]);
 
 export const EDIT_PATH_PLACEHOLDER = "__YEXT_VISUAL_EDITOR_PATH__";
 
 export const getEditorPathFromTemplateNames = (
   templateNames: string[]
 ): string => {
-  const uniqueTemplateNames = [...new Set(templateNames)];
+  const uniqueTemplateNames = [...new Set(templateNames)].filter(
+    (templateName) => templateName !== "edit"
+  );
 
   if (
     uniqueTemplateNames.some((templateName) =>
@@ -15,14 +18,22 @@ export const getEditorPathFromTemplateNames = (
     return "edit";
   }
 
-  if (uniqueTemplateNames.length !== 1) {
+  const customTemplateNames = uniqueTemplateNames.filter(
+    (templateName) => !SHARED_EDITOR_TEMPLATE_NAMES.has(templateName)
+  );
+
+  if (customTemplateNames.length === 0) {
+    return "edit";
+  }
+
+  if (customTemplateNames.length !== 1) {
     throw new Error(
       "Unable to determine editor path: expected exactly one non-legacy template, " +
-        `received ${uniqueTemplateNames.length} (${uniqueTemplateNames.join(", ") || "none"})`
+        `received ${customTemplateNames.length} (${customTemplateNames.join(", ") || "none"})`
     );
   }
 
-  return `edit/${uniqueTemplateNames[0]}`;
+  return `edit/${customTemplateNames[0]}`;
 };
 
 export const injectEditorPath = (

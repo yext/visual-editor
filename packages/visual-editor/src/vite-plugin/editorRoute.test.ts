@@ -9,6 +9,12 @@ describe("getEditorPathFromTemplateNames", () => {
     expect(getEditorPathFromTemplateNames(["main"])).toBe("edit");
   });
 
+  it("uses the shared route when only shared templates are available", () => {
+    expect(getEditorPathFromTemplateNames(["directory", "locator"])).toBe(
+      "edit"
+    );
+  });
+
   it("uses the legacy route when a legacy template is mixed with custom templates", () => {
     expect(getEditorPathFromTemplateNames(["main", "custom-template"])).toBe(
       "edit"
@@ -21,9 +27,24 @@ describe("getEditorPathFromTemplateNames", () => {
     );
   });
 
+  it("uses a template-scoped route for a single custom template mixed with shared templates", () => {
+    expect(
+      getEditorPathFromTemplateNames([
+        "custom-template",
+        "directory",
+        "locator",
+      ])
+    ).toBe("edit/custom-template");
+  });
+
   it("throws when there are multiple non-legacy templates", () => {
     expect(() =>
-      getEditorPathFromTemplateNames(["custom-a", "custom-b"])
+      getEditorPathFromTemplateNames([
+        "custom-a",
+        "custom-b",
+        "directory",
+        "locator",
+      ])
     ).toThrow("expected exactly one non-legacy template");
   });
 });
