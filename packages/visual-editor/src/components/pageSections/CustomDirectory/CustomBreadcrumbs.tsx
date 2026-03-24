@@ -191,7 +191,18 @@ const CustomBreadcrumbsComponent = ({
   }, [fetchBreadcrumbs]);
 
   if (!fetchedBreadcrumbs?.length) {
-    return <PageSection></PageSection>;
+    return (
+      <PageSection
+        as="nav"
+        verticalPadding="sm"
+        background={styles.backgroundColor}
+        aria-label="breadcrumb-loading"
+      >
+        <div className="animate-pulse">
+          <div className="h-5 w-48 bg-gray-200 rounded" />
+        </div>
+      </PageSection>
+    );
   }
 
   return (

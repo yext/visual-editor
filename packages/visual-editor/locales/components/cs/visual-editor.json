@@ -30,6 +30,7 @@
   "filter": "Filtr",
   "findALocation": "Najděte polohu",
   "friday": "pátek",
+  "generatingAIAnswer": "Generování odpovědi AI...",
   "getDirections": "Získejte pokyny",
   "heroBanner": "Hrdinový banner",
   "heroHeader": "Hlavní záhlaví",
@@ -45,7 +46,6 @@
   "learnMore": "Zjistěte více",
   "loadingMap": "Načítání mapy ...",
   "loadingNearbyLocations": "Načítání nedalekých míst ...",
-  "loadingResults": "Načítání výsledků...",
   "locationWithCount_few": "{{count}} míst",
   "locationWithCount_many": "{{count}} míst",
   "locationWithCount_one": "{{count}} umístění",
@@ -107,6 +107,7 @@
     "xLink": "Sledujte nás na X (Twitter)",
     "youtube": "Přihlaste se k odběru našeho kanálu YouTube"
   },
+  "sources": "Zdroje",
   "staticMapEmptyStateAddApiKey": "Chcete-li zobrazit náhled mapy, přidejte klíč API",
   "sunday": "neděle",
   "temporarilyClosed": "Dočasně uzavřeno",
@@ -118,5 +119,6 @@
   "tuesday": "úterý",
   "useOurLocatorToFindALocationNearYou": "Pomocí našeho lokátoru najdete místo ve vašem okolí",
   "visitPage": "Navštivte stránku",
+  "voiceSearch": "Hlasové vyhledávání",
   "wednesday": "středa"
 }

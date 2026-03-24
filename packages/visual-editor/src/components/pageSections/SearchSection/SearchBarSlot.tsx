@@ -6,6 +6,7 @@ import {
 } from "@puckeditor/core";
 import { SearchBar } from "@yext/search-ui-react";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { FaMicrophone } from "react-icons/fa";
 import { resolveDataFromParent } from "../../../editor/ParentData.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
@@ -201,6 +202,7 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
     enabled: isTypingEffect,
     locale: document.locale,
   });
+  const { t } = useTranslation();
   const entityPreviewSearcher = useEntityPreviewSearcher(document);
   const showResults = parentData?.showSearchResultsSection ?? false;
   const visualAutocompleteConfig = React.useMemo(() => {
@@ -312,7 +314,7 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
           <button
             type="button"
             onClick={handleVoiceSearch}
-            aria-label="Voice search"
+            aria-label={t("voiceSearch", "Voice Search")}
             className={`${
               showIcon ? "right-14" : "right-4"
             } absolute inset-y-0 z-50 flex items-center justify-center text-palette-primary-dark`}

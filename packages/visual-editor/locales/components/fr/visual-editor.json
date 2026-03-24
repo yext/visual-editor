@@ -30,6 +30,7 @@
   "filter": "Filtre",
   "findALocation": "Trouver un emplacement",
   "friday": "Vendredi",
+  "generatingAIAnswer": "Génération d'une réponse IA...",
   "getDirections": "Obtenir des itinéraires",
   "heroBanner": "Bannière de héros",
   "heroHeader": "En-tête principal",
@@ -44,7 +45,6 @@
   "learnMore": "Apprendre encore plus",
   "loadingMap": "Chargement de la carte ...",
   "loadingNearbyLocations": "Chargement des emplacements à proximité ...",
-  "loadingResults": "Chargement des résultats...",
   "locationWithCount_many": "{{count}} emplacements",
   "locationWithCount_one": "{{count}} emplacement",
   "locationWithCount_other": "{{count}} emplacements",
@@ -102,6 +102,7 @@
     "xLink": "Suivez-nous sur X (Twitter)",
     "youtube": "Abonnez-vous à notre chaîne YouTube"
   },
+  "sources": "Sources",
   "staticMapEmptyStateAddApiKey": "Ajoutez une clé API pour prévisualiser votre carte",
   "sunday": "Dimanche",
   "temporarilyClosed": "Temporairement fermé",
@@ -112,5 +113,6 @@
   "tuesday": "Mardi",
   "useOurLocatorToFindALocationNearYou": "Utilisez notre localisateur pour trouver un emplacement près de chez vous",
   "visitPage": "Page de visite",
+  "voiceSearch": "Recherche vocale",
   "wednesday": "Mercredi"
 }

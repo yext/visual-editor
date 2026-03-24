@@ -30,6 +30,7 @@
   "filter": "Szűrő",
   "findALocation": "Keressen egy helyet",
   "friday": "péntek",
+  "generatingAIAnswer": "AI-válasz generálása...",
   "getDirections": "Szerezzen útmutatásokat",
   "heroBanner": "Hős szalaghirdetés",
   "heroHeader": "Hős fejléc",
@@ -43,7 +44,6 @@
   "learnMore": "További információ",
   "loadingMap": "Betöltési térkép ...",
   "loadingNearbyLocations": "A közeli helyek betöltése ...",
-  "loadingResults": "Eredmények betöltése...",
   "locationWithCount_one": "{{count}} hely",
   "locationWithCount_other": "{{count}} helyek",
   "locationsNear_one": "{{count}} hely közelében \"{{name}}\"",
@@ -97,6 +97,7 @@
     "xLink": "Kövess minket az X-en (Twitter)",
     "youtube": "Iratkozz fel YouTube csatornánkra"
   },
+  "sources": "Források",
   "staticMapEmptyStateAddApiKey": "Adjon hozzá egy API-kulcsot a térkép előnézetéhez",
   "sunday": "vasárnap",
   "temporarilyClosed": "Ideiglenesen bezárt",
@@ -106,5 +107,6 @@
   "tuesday": "kedd",
   "useOurLocatorToFindALocationNearYou": "Használja a lokátorunkat, hogy találjon egy helyet a közelben",
   "visitPage": "Látogasson el az oldalra",
+  "voiceSearch": "Hangalapú keresés",
   "wednesday": "szerda"
 }

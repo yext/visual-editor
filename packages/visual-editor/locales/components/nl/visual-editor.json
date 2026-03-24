@@ -30,6 +30,7 @@
   "filter": "Filter",
   "findALocation": "Vind een locatie",
   "friday": "Vrijdag",
+  "generatingAIAnswer": "AI-antwoord genereren...",
   "getDirections": "Routebeschrijving",
   "heroBanner": "Heldenbanner",
   "heroHeader": "Held koptekst",
@@ -43,7 +44,6 @@
   "learnMore": "Meer informatie",
   "loadingMap": "Kaart laden ...",
   "loadingNearbyLocations": "Nabijgelegen locaties laden ...",
-  "loadingResults": "Resultaten laden...",
   "locationWithCount_one": "{{count}} locatie",
   "locationWithCount_other": "{{count}} locaties",
   "locationsNear_one": "{{count}} locatie nabij \"{{name}}\"",
@@ -97,6 +97,7 @@
     "xLink": "Volg ons op X (Twitter)",
     "youtube": "Abonneer je op ons YouTube-kanaal"
   },
+  "sources": "Bronnen",
   "staticMapEmptyStateAddApiKey": "Voeg een API-sleutel toe om een ​​voorbeeld van uw kaart te bekijken",
   "sunday": "Zondag",
   "temporarilyClosed": "Tijdelijk gesloten",
@@ -106,5 +107,6 @@
   "tuesday": "Dinsdag",
   "useOurLocatorToFindALocationNearYou": "Gebruik onze locator om een ​​locatie bij u in de buurt te vinden",
   "visitPage": "Bezoek pagina",
+  "voiceSearch": "Gesproken zoekopdracht",
   "wednesday": "Woensdag"
 }

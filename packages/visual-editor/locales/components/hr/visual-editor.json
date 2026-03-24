@@ -30,6 +30,7 @@
   "filter": "Filter",
   "findALocation": "Pronađite lokaciju",
   "friday": "petak",
+  "generatingAIAnswer": "Generiranje AI odgovora...",
   "getDirections": "Dobiti upute",
   "heroBanner": "Baner",
   "heroHeader": "Heroj zaglavlje",
@@ -44,7 +45,6 @@
   "learnMore": "Saznajte više",
   "loadingMap": "Učitavanje karte ...",
   "loadingNearbyLocations": "Učitavanje lokacija u blizini ...",
-  "loadingResults": "Učitavanje rezultata...",
   "locationWithCount_few": "{{count}} lokacije",
   "locationWithCount_one": "{{count}} lokacija",
   "locationWithCount_other": "{{count}} lokacija",
@@ -102,6 +102,7 @@
     "xLink": "Pratite nas na X (Twitter)",
     "youtube": "Pretplatite se na naš YouTube kanal"
   },
+  "sources": "Izvori",
   "staticMapEmptyStateAddApiKey": "Dodajte API ključ za pregled svoje karte",
   "sunday": "nedjelja",
   "temporarilyClosed": "Privremeno zatvoren",
@@ -112,5 +113,6 @@
   "tuesday": "utorak",
   "useOurLocatorToFindALocationNearYou": "Upotrijebite naš lokator da biste pronašli lokaciju u vašoj blizini",
   "visitPage": "Stranica za posjetu",
+  "voiceSearch": "Glasovno pretraživanje",
   "wednesday": "srijeda"
 }

@@ -30,6 +30,7 @@
   "filter": "Filtre",
   "findALocation": "Bir Konum Bul",
   "friday": "Cuma",
+  "generatingAIAnswer": "Yapay zeka yanıtı oluşturuluyor...",
   "getDirections": "Yol tarifi alın",
   "heroBanner": "Kahraman afiş",
   "heroHeader": "Kahraman başlığı",
@@ -43,7 +44,6 @@
   "learnMore": "Daha fazla bilgi edin",
   "loadingMap": "Yükleme haritası ...",
   "loadingNearbyLocations": "Yakındaki yerleri yükleme ...",
-  "loadingResults": "Sonuçlar Yükleniyor...",
   "locationWithCount_one": "{{count}} Konum",
   "locationWithCount_other": "{{count}} konumlar",
   "locationsNear_one": "{{count}} konum \"{{name}}\" yakınında yer",
@@ -97,6 +97,7 @@
     "xLink": "Bizi X'te takip edin (Twitter)",
     "youtube": "YouTube kanalımıza abone olun"
   },
+  "sources": "Kaynaklar",
   "staticMapEmptyStateAddApiKey": "Haritanızı önizlemek için bir API anahtarı ekleyin",
   "sunday": "Pazar",
   "temporarilyClosed": "Geçici olarak kapalı",
@@ -106,5 +107,6 @@
   "tuesday": "Salı",
   "useOurLocatorToFindALocationNearYou": "Yakınınızdaki bir yer bulmak için bulucumuzu kullanın",
   "visitPage": "Sayfayı Ziyaret Edin",
+  "voiceSearch": "Sesli Arama",
   "wednesday": "Çarşamba"
 }

@@ -30,6 +30,7 @@
   "filter": "篩選",
   "findALocation": "找到一個位置",
   "friday": "星期五",
+  "generatingAIAnswer": "正在生成 AI 答案...",
   "getDirections": "獲取指示",
   "heroBanner": "英雄橫幅",
   "heroHeader": "英雄頭",
@@ -43,7 +44,6 @@
   "learnMore": "了解更多",
   "loadingMap": "加載地圖...",
   "loadingNearbyLocations": "在附近的位置加載...",
-  "loadingResults": "加載結果...",
   "locationWithCount_one": "{{count}} 個位置",
   "locationWithCount_other": "{{count}} 個位置",
   "locationsNear_one": "“{{name}}”附近有 {{count}} 個位置",
@@ -97,6 +97,7 @@
     "xLink": "在 X (Twitter) 上關注我們",
     "youtube": "訂閱我們的 YouTube 頻道"
   },
+  "sources": "來源",
   "staticMapEmptyStateAddApiKey": "添加 API 密鑰以預覽地圖",
   "sunday": "星期日",
   "temporarilyClosed": "暫時關閉",
@@ -106,5 +107,6 @@
   "tuesday": "週二",
   "useOurLocatorToFindALocationNearYou": "使用我們的定位器找到您附近的位置",
   "visitPage": "訪問頁面",
+  "voiceSearch": "語音搜尋",
   "wednesday": "週三"
 }

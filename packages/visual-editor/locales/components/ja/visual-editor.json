@@ -30,6 +30,7 @@
   "filter": "フィルター",
   "findALocation": "場所を見つけます",
   "friday": "金曜日",
+  "generatingAIAnswer": "AI 回答を生成中...",
   "getDirections": "道順を取得します",
   "heroBanner": "ヒーローバナー",
   "heroHeader": "ヒーローヘッダー",
@@ -43,7 +44,6 @@
   "learnMore": "もっと詳しく知る",
   "loadingMap": "マップの読み込み...",
   "loadingNearbyLocations": "近くの場所を読み込む...",
-  "loadingResults": "結果を読み込んでいます...",
   "locationWithCount_one": "{{count}} 件の場所",
   "locationWithCount_other": "{{count}} 件の場所",
   "locationsNear_one": "「{{name}}」付近の {{count}} 件の場所",
@@ -97,6 +97,7 @@
     "xLink": "X (Twitter) でフォローしてください",
     "youtube": "YouTube チャンネルを購読してください"
   },
+  "sources": "情報源",
   "staticMapEmptyStateAddApiKey": "API キーを追加してマップをプレビューする",
   "sunday": "日曜日",
   "temporarilyClosed": "一時休業中",
@@ -106,5 +107,6 @@
   "tuesday": "火曜日",
   "useOurLocatorToFindALocationNearYou": "ロケーターを使用して、お近くの場所を見つけてください",
   "visitPage": "ページにアクセスしてください",
+  "voiceSearch": "音声検索",
   "wednesday": "水曜日"
 }

@@ -30,6 +30,7 @@
   "filter": "Filter",
   "findALocation": "Finn et sted",
   "friday": "fredag",
+  "generatingAIAnswer": "Genererer AI-svar...",
   "getDirections": "Få veibeskrivelse",
   "heroBanner": "Heltebanner",
   "heroHeader": "Hero Header",
@@ -43,7 +44,6 @@
   "learnMore": "Lær mer",
   "loadingMap": "Laster inn kart ...",
   "loadingNearbyLocations": "Laster inn nærliggende steder ...",
-  "loadingResults": "Laster inn resultater...",
   "locationWithCount_one": "{{count}} plassering",
   "locationWithCount_other": "{{count}} lokasjoner",
   "locationsNear_one": "{{count}} plassering i nærheten \"{{name}}\"",
@@ -97,6 +97,7 @@
     "xLink": "Følg oss på X (Twitter)",
     "youtube": "Abonner på vår YouTube-kanal"
   },
+  "sources": "Kilder",
   "staticMapEmptyStateAddApiKey": "Legg til en API-nøkkel for å forhåndsvise kartet ditt",
   "sunday": "søndag",
   "temporarilyClosed": "Midlertidig stengt",
@@ -106,5 +107,6 @@
   "tuesday": "tirsdag",
   "useOurLocatorToFindALocationNearYou": "Bruk vår lokaliserer for å finne et sted i nærheten",
   "visitPage": "Besøk side",
+  "voiceSearch": "Talesøk",
   "wednesday": "onsdag"
 }

@@ -1,6 +1,5 @@
 import {
   Facets,
-  GenerativeDirectAnswer,
   Geolocation,
   Pagination,
   ResultsCount,
@@ -11,13 +10,13 @@ import { useTranslation } from "react-i18next";
 import { FaSlidersH, FaTimes } from "react-icons/fa";
 import { Body } from "../../atoms/body.tsx";
 import Cards from "./Cards.tsx";
-import { MapComponent } from "./MapComponent.tsx";
-import SourceCard from "./SourceCard.tsx";
 import {
   HeadingStyles,
   SearchCtaStyles,
   VerticalConfigProps,
 } from "./defaultPropsAndTypes.ts";
+import GDAResponse from "./GDAResponse.tsx";
+import { MapComponent } from "./MapComponent.tsx";
 
 interface VerticalResultsSectionProps {
   verticalKey: string;
@@ -50,113 +49,103 @@ export const VerticalResultsSection = ({
 
   if (currentVerticalConfig?.layout === "Map") {
     return (
-      <div className="components flex h-screen w-full mx-auto gap-2">
-        <div className="relative h-screen w-full md:w-2/4 flex flex-col ">
-          <div className="relative flex-1 flex flex-col min-h-0">
-            <div className="p-4 text-body-fontSize border-y border-gray-300 inline-block">
-              <div className="flex flex-row justify-between">
-                <ResultsCount
-                  customCssClasses={{ resultsCountContainer: "!-mb-4" }}
-                />
-                <button
-                  className="inline-flex justify-between items-center gap-2 bg-white text-palette-primary-dark font-bold font-body-fontFamily text-body-sm-fontSize"
-                  onClick={() => setShowFilterModal((prev) => !prev)}
-                >
-                  {t("filter", "Filter")}
-                  {<FaSlidersH />}
-                </button>
-              </div>
-            </div>
-            <div id="innerDiv" className="overflow-y-auto flex flex-col">
-              {enableGDA && !!searchTerm && (
-                <>
-                  {gdaLoading && (
-                    <section className="p-6 my-8 border border-gray-200 rounded-lg shadow-sm centered-container">
-                      {t("loadingResults", "Loading Results...")}
-                    </section>
-                  )}
-                  <GenerativeDirectAnswer
-                    CitationCard={SourceCard}
-                    customCssClasses={{ container: "my-4", divider: "!py-5" }}
+      <div className="components flex flex-col w-full mx-auto gap-2">
+        {enableGDA && !!searchTerm && <GDAResponse loading={gdaLoading} />}
+        <div className="  flex h-screen w-full mx-auto gap-2">
+          <div className="relative h-screen w-full md:w-2/4 flex flex-col ">
+            <div className="relative flex-1 flex flex-col min-h-0">
+              <div className="p-4 text-body-fontSize border-y border-gray-300 inline-block">
+                <div className="flex flex-row justify-between">
+                  <ResultsCount
+                    customCssClasses={{ resultsCountContainer: "!-mb-4" }}
                   />
-                </>
-              )}
-              <VerticalResults
-                customCssClasses={{
-                  verticalResultsContainer:
-                    "flex flex-col border rounded-md divide-y divide-gray-300",
-                }}
-                CardComponent={(props) => (
-                  <Cards
-                    isVertical={true}
-                    layout="Map"
-                    {...props}
-                    cardType={
-                      verticals.find((v) => v.verticalKey === verticalKey)
-                        ?.cardType
-                    }
-                    ctaStyles={ctaStyles}
-                    headingStyles={headingStyles}
-                  />
-                )}
-              />
-              <div className=" border-gray-300 pt-4">
-                <Pagination
-                  paginateAllOnNoResults={true}
-                  customCssClasses={{
-                    selectedLabel:
-                      "bg-palette-primary text-palette-primary-contrast border-palette-primary",
-                  }}
-                />
-              </div>
-              <Geolocation />
-            </div>
-            {Boolean(facetsLength) && showFilterModal && (
-              <div
-                id="popup"
-                className="absolute md:top-4 -top-20 z-50 md:w-80 w-full flex flex-col bg-white md:left-full md:ml-2 rounded-md shadow-lg max-h-[calc(100%-2rem)]"
-                ref={popupRef}
-              >
-                <div className="inline-flex justify-between items-center px-6 py-4 gap-4">
-                  <Body className="font-bold">
-                    {t("refineYourSearch", "Refine Your Search")}
-                  </Body>
                   <button
-                    className="text-palette-primary-dark"
-                    onClick={() => setShowFilterModal(false)}
+                    className="inline-flex justify-between items-center gap-2 bg-white text-palette-primary-dark font-bold font-body-fontFamily text-body-sm-fontSize"
+                    onClick={() => setShowFilterModal((prev) => !prev)}
                   >
-                    <FaTimes />
+                    {t("filter", "Filter")}
+                    {<FaSlidersH />}
                   </button>
                 </div>
-
-                <div className="flex flex-col p-6 gap-6 overflow-y-auto">
-                  <div className="flex flex-col gap-8">
-                    <Facets
-                      customCssClasses={{
-                        divider: "bg-white",
-                        titleLabel: "font-bold text-md font-body-fontFamily",
-                        optionInput: "h-4 w-4 accent-palette-primary-dark",
-                        optionLabel:
-                          "text-md font-body-fontFamily font-body-fontWeight",
-                        option: "space-x-4 font-body-fontFamily",
-                      }}
+              </div>
+              <div id="innerDiv" className="overflow-y-auto flex flex-col">
+                <VerticalResults
+                  customCssClasses={{
+                    verticalResultsContainer:
+                      "flex flex-col border rounded-md divide-y divide-gray-300",
+                  }}
+                  CardComponent={(props) => (
+                    <Cards
+                      isVertical={true}
+                      layout="Map"
+                      {...props}
+                      cardType={
+                        verticals.find((v) => v.verticalKey === verticalKey)
+                          ?.cardType
+                      }
+                      ctaStyles={ctaStyles}
+                      headingStyles={headingStyles}
                     />
+                  )}
+                />
+                <div className=" border-gray-300 pt-4">
+                  <Pagination
+                    paginateAllOnNoResults={true}
+                    customCssClasses={{
+                      selectedLabel:
+                        "bg-palette-primary text-palette-primary-contrast border-palette-primary",
+                    }}
+                  />
+                </div>
+                <Geolocation />
+              </div>
+              {Boolean(facetsLength) && showFilterModal && (
+                <div
+                  id="popup"
+                  className="absolute md:top-4 -top-20 z-50 md:w-80 w-full flex flex-col bg-white md:left-full md:ml-2 rounded-md shadow-lg max-h-[calc(100%-2rem)]"
+                  ref={popupRef}
+                >
+                  <div className="inline-flex justify-between items-center px-6 py-4 gap-4">
+                    <Body className="font-bold">
+                      {t("refineYourSearch", "Refine Your Search")}
+                    </Body>
+                    <button
+                      className="text-palette-primary-dark"
+                      onClick={() => setShowFilterModal(false)}
+                    >
+                      <FaTimes />
+                    </button>
+                  </div>
+
+                  <div className="flex flex-col p-6 gap-6 overflow-y-auto">
+                    <div className="flex flex-col gap-8">
+                      <Facets
+                        customCssClasses={{
+                          divider: "bg-white",
+                          titleLabel: "font-bold text-md font-body-fontFamily",
+                          optionInput: "h-4 w-4 accent-palette-primary-dark",
+                          optionLabel:
+                            "text-md font-body-fontFamily font-body-fontWeight",
+                          option: "space-x-4 font-body-fontFamily",
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="border-y border-gray-300 justify-center align-middle">
+                    <button
+                      className="w-full py-4 text-center text-palette-primary-dark font-bold font-body-fontFamily text-body-fontSize"
+                      onClick={() => {}}
+                    >
+                      {t("clearAll", "Clear All")}
+                    </button>
                   </div>
                 </div>
-                <div className="border-y border-gray-300 justify-center align-middle">
-                  <button
-                    className="w-full py-4 text-center text-palette-primary-dark font-bold font-body-fontFamily text-body-fontSize"
-                    onClick={() => {}}
-                  >
-                    {t("clearAll", "Clear All")}
-                  </button>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        </div>
-        <div className="md:flex-1 md:flex hidden relative">
-          <MapComponent />
+          <div className="md:flex-1 md:flex hidden relative">
+            <MapComponent />
+          </div>
         </div>
       </div>
     );
@@ -175,6 +164,8 @@ export const VerticalResultsSection = ({
         />
       </div>
       <div className="flex-grow">
+        {enableGDA && !!searchTerm && <GDAResponse loading={gdaLoading} />}
+
         <div className="text-body-fontSize inline-block w-full pl-4">
           <div className="flex flex-row justify-between">
             <ResultsCount
@@ -183,19 +174,6 @@ export const VerticalResultsSection = ({
           </div>
         </div>
         <div className="flex-flex-col">
-          {enableGDA && !!searchTerm && (
-            <>
-              {gdaLoading && (
-                <section className="p-6 my-8 border border-gray-200 rounded-lg shadow-sm centered-container">
-                  {t("loadingResults", "Loading Results...")}
-                </section>
-              )}
-              <GenerativeDirectAnswer
-                CitationCard={SourceCard}
-                customCssClasses={{ container: "my-4", divider: "!py-5" }}
-              />
-            </>
-          )}
           <VerticalResults
             customCssClasses={{
               verticalResultsContainer:

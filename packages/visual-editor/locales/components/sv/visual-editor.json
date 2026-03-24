@@ -30,6 +30,7 @@
   "filter": "Filtrera",
   "findALocation": "Hitta en plats",
   "friday": "Fredag",
+  "generatingAIAnswer": "Genererar AI-svar...",
   "getDirections": "Få vägbeskrivning",
   "heroBanner": "Hjältebanner",
   "heroHeader": "Hjältrubrik",
@@ -43,7 +44,6 @@
   "learnMore": "Läs mer",
   "loadingMap": "Laddar karta ...",
   "loadingNearbyLocations": "Laddar närliggande platser ...",
-  "loadingResults": "Laddar resultat...",
   "locationWithCount_one": "{{count}} Plats",
   "locationWithCount_other": "{{count}} Platser",
   "locationsNear_one": "{{count}} Plats nära \"{{name}}\"",
@@ -97,6 +97,7 @@
     "xLink": "Följ oss på X (Twitter)",
     "youtube": "Prenumerera på vår YouTube-kanal"
   },
+  "sources": "Källor",
   "staticMapEmptyStateAddApiKey": "Lägg till en API-nyckel för att förhandsgranska din karta",
   "sunday": "Söndag",
   "temporarilyClosed": "Tillfälligt stängd",
@@ -106,5 +107,6 @@
   "tuesday": "Tisdag",
   "useOurLocatorToFindALocationNearYou": "Använd vår lokalisering för att hitta en plats nära dig",
   "visitPage": "Besöka sidan",
+  "voiceSearch": "Röstsökning",
   "wednesday": "Onsdag"
 }

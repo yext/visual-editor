@@ -30,6 +30,7 @@
   "filter": "Filtra",
   "findALocation": "Găsiți o locație",
   "friday": "vineri",
+  "generatingAIAnswer": "Se generează răspunsul AI...",
   "getDirections": "Obțineți indicații",
   "heroBanner": "Banner erou",
   "heroHeader": "Antet erou",
@@ -44,7 +45,6 @@
   "learnMore": "Află mai multe",
   "loadingMap": "Harta de încărcare ...",
   "loadingNearbyLocations": "Încărcarea locațiilor din apropiere ...",
-  "loadingResults": "Se încarcă rezultatele...",
   "locationWithCount_few": "{{count}} locații",
   "locationWithCount_one": "{{count}} locație",
   "locationWithCount_other": "{{count}} locații",
@@ -102,6 +102,7 @@
     "xLink": "Urmărește-ne pe X (Twitter)",
     "youtube": "Abonați-vă la canalul nostru YouTube"
   },
+  "sources": "Surse",
   "staticMapEmptyStateAddApiKey": "Adăugați o cheie API pentru a vă previzualiza harta",
   "sunday": "duminică",
   "temporarilyClosed": "Închis temporar",
@@ -112,5 +113,6 @@
   "tuesday": "marţi",
   "useOurLocatorToFindALocationNearYou": "Folosiți localizatorul nostru pentru a găsi o locație lângă dvs.",
   "visitPage": "Vizitați pagina",
+  "voiceSearch": "Căutare vocală",
   "wednesday": "miercuri"
 }

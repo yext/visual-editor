@@ -15,13 +15,13 @@ const SourceCard = (props: CitationProps) => {
   const name = props.searchResult?.name;
   const { t } = useTranslation();
   return (
-    <div className="border px-5 py-2.5 rounded-md">
+    <div className="px-5 py-2.5 rounded-md">
       {link ? (
         <CTA
           link={link}
           label={name}
           variant={"primary"}
-          className="!w-52 justify-center"
+          className="!w-fit justify-center text-xs"
           normalizeLink={true}
         />
       ) : (

@@ -30,6 +30,7 @@
   "filter": "筛选",
   "findALocation": "找到一个位置",
   "friday": "星期五",
+  "generatingAIAnswer": "正在生成 AI 答案...",
   "getDirections": "获取指示",
   "heroBanner": "英雄横幅",
   "heroHeader": "英雄头",
@@ -43,7 +44,6 @@
   "learnMore": "了解更多",
   "loadingMap": "加载地图...",
   "loadingNearbyLocations": "在附近的位置加载...",
-  "loadingResults": "加载结果...",
   "locationWithCount_one": "{{count}} 个位置",
   "locationWithCount_other": "{{count}} 个位置",
   "locationsNear_one": "“{{name}}”附近有 {{count}} 个位置",
@@ -97,6 +97,7 @@
     "xLink": "在 X (Twitter) 上关注我们",
     "youtube": "订阅我们的 YouTube 频道"
   },
+  "sources": "来源",
   "staticMapEmptyStateAddApiKey": "添加 API 密钥以预览地图",
   "sunday": "星期日",
   "temporarilyClosed": "暂时关闭",
@@ -106,5 +107,6 @@
   "tuesday": "周二",
   "useOurLocatorToFindALocationNearYou": "使用我们的定位器找到您附近的位置",
   "visitPage": "访问页面",
+  "voiceSearch": "语音搜索",
   "wednesday": "周三"
 }

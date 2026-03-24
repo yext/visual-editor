@@ -30,6 +30,7 @@
   "filter": "Filter",
   "findALocation": "Find a Location",
   "friday": "Friday",
+  "generatingAIAnswer": "Generating AI Answer...",
   "getDirections": "Get Directions",
   "heroBanner": "Hero Banner",
   "heroHeader": "Hero Header",
@@ -43,7 +44,6 @@
   "learnMore": "Learn more",
   "loadingMap": "Loading Map...",
   "loadingNearbyLocations": "Loading nearby locations...",
-  "loadingResults": "Loading Results...",
   "locationWithCount_one": "{{count}} location",
   "locationWithCount_other": "{{count}} locations",
   "locationsNear_one": "{{count}} location near \"{{name}}\"",
@@ -97,6 +97,7 @@
     "xLink": "Follow us on X (Twitter)",
     "youtube": "Subscribe to our YouTube channel"
   },
+  "sources": "Sources",
   "staticMapEmptyStateAddApiKey": "Add an API key to preview your map",
   "sunday": "Sunday",
   "temporarilyClosed": "Temporarily Closed",
@@ -106,5 +107,6 @@
   "tuesday": "Tuesday",
   "useOurLocatorToFindALocationNearYou": "Use our locator to find a location near you",
   "visitPage": "Visit Page",
+  "voiceSearch": "Voice Search",
   "wednesday": "Wednesday"
 }

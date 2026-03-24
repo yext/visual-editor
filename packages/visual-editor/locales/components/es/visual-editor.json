@@ -30,6 +30,7 @@
   "filter": "Filtrar",
   "findALocation": "Encuentra una ubicación",
   "friday": "Viernes",
+  "generatingAIAnswer": "Generando respuesta de IA...",
   "getDirections": "Obtener instrucciones",
   "heroBanner": "Estandarte",
   "heroHeader": "Encabezado de héroe",
@@ -44,7 +45,6 @@
   "learnMore": "Más información",
   "loadingMap": "Mapa de carga ...",
   "loadingNearbyLocations": "Cargando ubicaciones cercanas ...",
-  "loadingResults": "Cargando resultados...",
   "locationWithCount_many": "{{count}} ubicaciones",
   "locationWithCount_one": "{{count}} ubicación",
   "locationWithCount_other": "{{count}} ubicaciones",
@@ -102,6 +102,7 @@
     "xLink": "Síguenos en X (Twitter)",
     "youtube": "Suscríbete a nuestro canal de YouTube"
   },
+  "sources": "Fuentes",
   "staticMapEmptyStateAddApiKey": "Agregue una clave API para obtener una vista previa de su mapa",
   "sunday": "Domingo",
   "temporarilyClosed": "Temporalmente cerrado",
@@ -112,5 +113,6 @@
   "tuesday": "Martes",
   "useOurLocatorToFindALocationNearYou": "Use nuestro localizador para encontrar una ubicación cerca de usted",
   "visitPage": "Visitar la página",
+  "voiceSearch": "Búsqueda por voz",
   "wednesday": "Miércoles"
 }

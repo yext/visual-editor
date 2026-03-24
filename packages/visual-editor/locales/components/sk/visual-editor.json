@@ -30,6 +30,7 @@
   "filter": "Filter",
   "findALocation": "Nájdite miesto",
   "friday": "Piatok",
+  "generatingAIAnswer": "Generuje sa odpoveď AI...",
   "getDirections": "Získajte pokyny",
   "heroBanner": "Hlavný banner",
   "heroHeader": "Hlavná hlavička",
@@ -45,7 +46,6 @@
   "learnMore": "Zistite viac",
   "loadingMap": "Načítava mapa ...",
   "loadingNearbyLocations": "Načítavanie miest v okolí ...",
-  "loadingResults": "Načítavajú sa výsledky...",
   "locationWithCount_few": "{{count}} miest",
   "locationWithCount_many": "{{count}} miest",
   "locationWithCount_one": "{{count}} lokácia",
@@ -107,6 +107,7 @@
     "xLink": "Sledujte nás na X (Twitter)",
     "youtube": "Prihláste sa na odber nášho kanála YouTube"
   },
+  "sources": "Zdroje",
   "staticMapEmptyStateAddApiKey": "Ak chcete zobraziť ukážku mapy, pridajte kľúč API",
   "sunday": "Nedeľa",
   "temporarilyClosed": "Dočasne zatvorené",
@@ -118,5 +119,6 @@
   "tuesday": "Utorok",
   "useOurLocatorToFindALocationNearYou": "Pomocou nášho vyhľadávača nájdete miesto vo vašom okolí",
   "visitPage": "Navštíviť stránku",
+  "voiceSearch": "Hlasové vyhľadávanie",
   "wednesday": "Streda"
 }

@@ -30,6 +30,7 @@
   "filter": "Suodata",
   "findALocation": "Etsi sijainti",
   "friday": "perjantai",
+  "generatingAIAnswer": "Luodaan tekoälyvastausta...",
   "getDirections": "Hanki reittiohjeet",
   "heroBanner": "Sankari",
   "heroHeader": "Sankari -otsikko",
@@ -43,7 +44,6 @@
   "learnMore": "Lue lisää",
   "loadingMap": "Latauskartta ...",
   "loadingNearbyLocations": "Lataaminen lähellä olevia paikkoja ...",
-  "loadingResults": "Ladataan tuloksia...",
   "locationWithCount_one": "{{count}} sijainti",
   "locationWithCount_other": "{{count}} sijaintia",
   "locationsNear_one": "{{count}} sijainti lähellä \"{{name}}\"",
@@ -97,6 +97,7 @@
     "xLink": "Seuraa meitä X:ssä (Twitter)",
     "youtube": "Tilaa YouTube-kanavamme"
   },
+  "sources": "Lähteet",
   "staticMapEmptyStateAddApiKey": "Lisää API-avain esikatsellaksesi karttaasi",
   "sunday": "sunnuntai",
   "temporarilyClosed": "Väliaikaisesti suljettu",
@@ -106,5 +107,6 @@
   "tuesday": "tiistai",
   "useOurLocatorToFindALocationNearYou": "Löydä lähelläsi sijaintipaikka",
   "visitPage": "Vieraile sivussa",
+  "voiceSearch": "Äänihaku",
   "wednesday": "keskiviikko"
 }

@@ -30,6 +30,7 @@
   "filter": "Filtrs",
   "findALocation": "Atrodiet atrašanās vietu",
   "friday": "Piektdiena",
+  "generatingAIAnswer": "Notiek AI atbildes ģenerēšana...",
   "getDirections": "Saņemt norādes",
   "heroBanner": "Varoņu reklāmkarogs",
   "heroHeader": "Varoņu galva",
@@ -43,7 +44,6 @@
   "learnMore": "Uzziniet vairāk",
   "loadingMap": "Kartes ielāde ...",
   "loadingNearbyLocations": "Iekraušana tuvējo vietu ...",
-  "loadingResults": "Notiek rezultātu ielāde...",
   "locationWithCount_one": "{{count}} atrašanās vieta",
   "locationWithCount_other": "{{count}} vietas",
   "locationWithCount_zero": "{{count}} atrašanās vietas",
@@ -100,6 +100,7 @@
     "xLink": "Sekojiet mums X (Twitter)",
     "youtube": "Abonējiet mūsu YouTube kanālu"
   },
+  "sources": "Avoti",
   "staticMapEmptyStateAddApiKey": "Pievienojiet API atslēgu, lai priekšskatītu karti",
   "sunday": "Svētdiena",
   "temporarilyClosed": "Īslaicīgi slēgts",
@@ -110,5 +111,6 @@
   "tuesday": "Otrdiena",
   "useOurLocatorToFindALocationNearYou": "Izmantojiet mūsu lokatoru, lai atrastu atrašanās vietu netālu no jums",
   "visitPage": "Apmeklējuma lapa",
+  "voiceSearch": "Balss meklēšana",
   "wednesday": "Trešdiena"
 }
