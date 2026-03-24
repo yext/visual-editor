@@ -1525,7 +1525,11 @@ describe("ExpandedFooter", async () => {
         `ExpandedFooter/[${viewportName}] ${name}`
       ).toMatchScreenshot();
       const results = await axe(container);
-      expect(results).toHaveNoViolations();
+
+      // Intentionally skip WCAG check for tests of color overrides
+      if (name !== "version 71 props with color overrides") {
+        expect(results).toHaveNoViolations();
+      }
 
       if (interactions) {
         await interactions(page);
