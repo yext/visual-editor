@@ -8,7 +8,7 @@ import {
 import { AnalyticsScopeProvider, ImageType } from "@yext/pages-components";
 import {
   backgroundColors,
-  BackgroundStyle,
+  ThemeColor,
   HeadingLevel,
   ThemeOptions,
 } from "../../utils/themeConfigOptions.ts";
@@ -50,7 +50,7 @@ export interface HeroStyles {
    * The background color for the featured content (spotlight variant).
    * @defaultValue Background Color 1
    */
-  backgroundColor?: BackgroundStyle;
+  backgroundColor?: ThemeColor;
 
   /**
    * Image Height for the hero image with Immersive or Spotlight variant

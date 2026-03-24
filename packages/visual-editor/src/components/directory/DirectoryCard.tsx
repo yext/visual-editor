@@ -10,7 +10,7 @@ import { useGetCardSlots } from "../../hooks/useGetCardSlots.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import {
   backgroundColors,
-  BackgroundStyle,
+  ThemeColor,
 } from "../../utils/themeConfigOptions.ts";
 import { deepMerge } from "../../utils/themeResolver.ts";
 import {
@@ -180,7 +180,7 @@ export type DirectoryCardProps = {
   /** Styling for all the cards. */
   styles: {
     /** The background color of each directory card */
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
   };
 
   /** @internal */

@@ -1,6 +1,6 @@
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import {
-  BackgroundStyle,
+  ThemeColor,
   backgroundColors,
 } from "../../../utils/themeConfigOptions.ts";
 import { YextField } from "../../../editor/YextField.tsx";
@@ -25,7 +25,7 @@ export interface TestimonialSectionProps {
      * The background color of the section.
      * @defaultValue Background Color 2
      */
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
 
     /**
      * Whether to show the section heading.

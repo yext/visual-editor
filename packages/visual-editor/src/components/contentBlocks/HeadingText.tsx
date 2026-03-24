@@ -11,7 +11,7 @@ import { pt, msg } from "../../utils/i18n/platform.ts";
 import {
   ThemeOptions,
   HeadingLevel,
-  BackgroundStyle,
+  ThemeColor,
 } from "../../utils/themeConfigOptions.ts";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import { useTranslation } from "react-i18next";
@@ -30,7 +30,7 @@ export type HeadingTextProps = {
     align: "left" | "center" | "right";
     /** Optional override to render a different HTML tag instead of the one based on the level */
     semanticLevelOverride?: HeadingLevel | "span";
-    color?: BackgroundStyle;
+    color?: ThemeColor;
   };
 
   /** @internal Controlled data from the parent section */

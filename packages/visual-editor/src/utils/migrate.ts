@@ -71,11 +71,22 @@ export const migrate = (
         return;
       }
 
+      const appliesToAllComponents = componentName === "*";
       data = walkTree(data, config, (content) => {
         switch (migrationAction.action) {
           case "removed":
+            if (appliesToAllComponents) {
+              throw new Error(
+                "Cannot apply remove migration to all components."
+              );
+            }
             return content.filter((c) => c.type !== componentName);
           case "renamed":
+            if (appliesToAllComponents) {
+              throw new Error(
+                "Cannot apply rename migration to all components."
+              );
+            }
             return content.map((c) => {
               return {
                 ...c,
@@ -85,7 +96,7 @@ export const migrate = (
             });
           case "updated":
             return content.map((c) => {
-              if (c.type !== componentName) {
+              if (!appliesToAllComponents && c.type !== componentName) {
                 return c;
               }
               return {

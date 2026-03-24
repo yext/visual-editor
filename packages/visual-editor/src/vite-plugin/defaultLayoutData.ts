@@ -30,8 +30,8 @@ const mainDefaultLayout = {
                 id: "PrimaryHeaderSlot-326efc21-4048-437b-844c-9fad6adf6b10",
                 styles: {
                   backgroundColor: {
-                    bgColor: "bg-white",
-                    textColor: "text-black",
+                    selectedColor: "white",
+                    contrastingColor: "black",
                   },
                 },
                 slots: {
@@ -174,8 +174,8 @@ const mainDefaultLayout = {
                         },
                         styles: {
                           backgroundColor: {
-                            bgColor: "bg-palette-primary-light",
-                            textColor: "text-black",
+                            selectedColor: "palette-primary-light",
+                            contrastingColor: "black",
                           },
                         },
                         slots: {
@@ -248,8 +248,8 @@ const mainDefaultLayout = {
                 },
                 styles: {
                   backgroundColor: {
-                    bgColor: "bg-palette-primary-light",
-                    textColor: "text-black",
+                    selectedColor: "palette-primary-light",
+                    contrastingColor: "black",
                   },
                 },
                 slots: {
@@ -327,8 +327,8 @@ const mainDefaultLayout = {
         },
         styles: {
           backgroundColor: {
-            bgColor: "bg-palette-primary-dark",
-            textColor: "text-white",
+            selectedColor: "palette-primary-dark",
+            contrastingColor: "white",
           },
           textAlignment: "center",
         },
@@ -350,8 +350,8 @@ const mainDefaultLayout = {
         },
         styles: {
           backgroundColor: {
-            bgColor: "bg-white",
-            textColor: "text-black",
+            selectedColor: "white",
+            contrastingColor: "black",
           },
           showCurrentPage: true,
         },
@@ -381,8 +381,8 @@ const mainDefaultLayout = {
         styles: {
           variant: "classic",
           backgroundColor: {
-            bgColor: "bg-white",
-            textColor: "text-black",
+            selectedColor: "white",
+            contrastingColor: "black",
           },
           showAverageReview: true,
           showImage: true,
@@ -565,8 +565,8 @@ const mainDefaultLayout = {
       props: {
         styles: {
           backgroundColor: {
-            bgColor: "bg-white",
-            textColor: "text-black",
+            selectedColor: "white",
+            contrastingColor: "black",
           },
         },
         slots: {
@@ -759,8 +759,8 @@ const mainDefaultLayout = {
         },
         styles: {
           backgroundColor: {
-            bgColor: "bg-white",
-            textColor: "text-black",
+            selectedColor: "white",
+            contrastingColor: "black",
           },
           variant: "classic",
           desktopImagePosition: "left",
@@ -904,8 +904,8 @@ const mainDefaultLayout = {
       props: {
         styles: {
           backgroundColor: {
-            bgColor: "bg-palette-primary-light",
-            textColor: "text-black",
+            selectedColor: "palette-primary-light",
+            contrastingColor: "black",
           },
           cardVariant: "immersive",
           showSectionHeading: true,
@@ -967,8 +967,8 @@ const mainDefaultLayout = {
                         index: 0,
                         styles: {
                           backgroundColor: {
-                            bgColor: "bg-white",
-                            textColor: "text-black",
+                            selectedColor: "white",
+                            contrastingColor: "black",
                           },
                         },
                         slots: {
@@ -1139,8 +1139,8 @@ const mainDefaultLayout = {
                         index: 1,
                         styles: {
                           backgroundColor: {
-                            bgColor: "bg-white",
-                            textColor: "text-black",
+                            selectedColor: "white",
+                            contrastingColor: "black",
                           },
                         },
                         slots: {
@@ -1311,8 +1311,8 @@ const mainDefaultLayout = {
                         index: 2,
                         styles: {
                           backgroundColor: {
-                            bgColor: "bg-white",
-                            textColor: "text-black",
+                            selectedColor: "white",
+                            contrastingColor: "black",
                           },
                         },
                         slots: {
@@ -1494,8 +1494,8 @@ const mainDefaultLayout = {
       props: {
         styles: {
           backgroundColor: {
-            bgColor: "bg-palette-primary-light",
-            textColor: "text-black",
+            selectedColor: "palette-primary-light",
+            contrastingColor: "black",
           },
           showSectionHeading: true,
         },
@@ -1552,8 +1552,8 @@ const mainDefaultLayout = {
                         index: 0,
                         styles: {
                           backgroundColor: {
-                            bgColor: "bg-white",
-                            textColor: "text-black",
+                            selectedColor: "white",
+                            contrastingColor: "black",
                           },
                         },
                         slots: {
@@ -1637,8 +1637,8 @@ const mainDefaultLayout = {
                         index: 1,
                         styles: {
                           backgroundColor: {
-                            bgColor: "bg-white",
-                            textColor: "text-black",
+                            selectedColor: "white",
+                            contrastingColor: "black",
                           },
                         },
                         slots: {
@@ -1722,8 +1722,8 @@ const mainDefaultLayout = {
                         index: 2,
                         styles: {
                           backgroundColor: {
-                            bgColor: "bg-white",
-                            textColor: "text-black",
+                            selectedColor: "white",
+                            contrastingColor: "black",
                           },
                         },
                         slots: {
@@ -1823,8 +1823,8 @@ const mainDefaultLayout = {
         liveVisibility: true,
         styles: {
           backgroundColor: {
-            bgColor: "bg-palette-primary-light",
-            textColor: "text-black",
+            selectedColor: "palette-primary-light",
+            contrastingColor: "black",
           },
           showSectionHeading: true,
         },
@@ -1965,8 +1965,8 @@ const mainDefaultLayout = {
       props: {
         styles: {
           backgroundColor: {
-            bgColor: "bg-palette-secondary-light",
-            textColor: "text-black",
+            selectedColor: "palette-secondary-light",
+            contrastingColor: "black",
           },
           showSectionHeading: true,
         },
@@ -2026,8 +2026,8 @@ const mainDefaultLayout = {
                         index: 0,
                         styles: {
                           backgroundColor: {
-                            bgColor: "bg-white",
-                            textColor: "text-black",
+                            selectedColor: "white",
+                            contrastingColor: "black",
                           },
                         },
                         slots: {
@@ -2199,8 +2199,8 @@ const mainDefaultLayout = {
                         index: 1,
                         styles: {
                           backgroundColor: {
-                            bgColor: "bg-white",
-                            textColor: "text-black",
+                            selectedColor: "white",
+                            contrastingColor: "black",
                           },
                         },
                         slots: {
@@ -2372,8 +2372,8 @@ const mainDefaultLayout = {
                         index: 2,
                         styles: {
                           backgroundColor: {
-                            bgColor: "bg-white",
-                            textColor: "text-black",
+                            selectedColor: "white",
+                            contrastingColor: "black",
                           },
                         },
                         slots: {
@@ -2556,8 +2556,8 @@ const mainDefaultLayout = {
       props: {
         styles: {
           backgroundColor: {
-            bgColor: "bg-palette-primary-light",
-            textColor: "text-black",
+            selectedColor: "palette-primary-light",
+            contrastingColor: "black",
           },
           showSectionHeading: true,
         },
@@ -2616,8 +2616,8 @@ const mainDefaultLayout = {
                         id: "InsightCard-1",
                         styles: {
                           backgroundColor: {
-                            bgColor: "bg-white",
-                            textColor: "text-black",
+                            selectedColor: "white",
+                            contrastingColor: "black",
                           },
                         },
                         conditionalRender: {
@@ -2783,8 +2783,8 @@ const mainDefaultLayout = {
                         id: "InsightCard-2",
                         styles: {
                           backgroundColor: {
-                            bgColor: "bg-white",
-                            textColor: "text-black",
+                            selectedColor: "white",
+                            contrastingColor: "black",
                           },
                         },
                         conditionalRender: {
@@ -2950,8 +2950,8 @@ const mainDefaultLayout = {
                         id: "InsightCard-3",
                         styles: {
                           backgroundColor: {
-                            bgColor: "bg-white",
-                            textColor: "text-black",
+                            selectedColor: "white",
+                            contrastingColor: "black",
                           },
                         },
                         conditionalRender: {
@@ -3130,8 +3130,8 @@ const mainDefaultLayout = {
         styles: {
           variant: "gallery",
           backgroundColor: {
-            bgColor: "bg-white",
-            textColor: "text-black",
+            selectedColor: "white",
+            contrastingColor: "black",
           },
           showSectionHeading: true,
         },
@@ -3220,8 +3220,8 @@ const mainDefaultLayout = {
       props: {
         styles: {
           backgroundColor: {
-            bgColor: "bg-palette-secondary-light",
-            textColor: "text-black",
+            selectedColor: "palette-secondary-light",
+            contrastingColor: "black",
           },
           showSectionHeading: true,
         },
@@ -3280,8 +3280,8 @@ const mainDefaultLayout = {
                         index: 0,
                         styles: {
                           backgroundColor: {
-                            bgColor: "bg-white",
-                            textColor: "text-black",
+                            selectedColor: "white",
+                            contrastingColor: "black",
                           },
                           truncateDescription: true,
                         },
@@ -3438,8 +3438,8 @@ const mainDefaultLayout = {
                         index: 1,
                         styles: {
                           backgroundColor: {
-                            bgColor: "bg-white",
-                            textColor: "text-black",
+                            selectedColor: "white",
+                            contrastingColor: "black",
                           },
                           truncateDescription: true,
                         },
@@ -3596,8 +3596,8 @@ const mainDefaultLayout = {
                         index: 2,
                         styles: {
                           backgroundColor: {
-                            bgColor: "bg-white",
-                            textColor: "text-black",
+                            selectedColor: "white",
+                            contrastingColor: "black",
                           },
                           truncateDescription: true,
                         },
@@ -3765,8 +3765,8 @@ const mainDefaultLayout = {
       props: {
         styles: {
           backgroundColor: {
-            bgColor: "bg-white",
-            textColor: "text-black",
+            selectedColor: "white",
+            contrastingColor: "black",
           },
           showSectionHeading: true,
         },
@@ -3804,8 +3804,8 @@ const mainDefaultLayout = {
                 },
                 styles: {
                   backgroundColor: {
-                    bgColor: "bg-white",
-                    textColor: "text-black",
+                    selectedColor: "white",
+                    contrastingColor: "black",
                   },
                   headingLevel: 3,
                   hours: {
@@ -4168,8 +4168,8 @@ const mainDefaultLayout = {
                 ignoreLocaleWarning: [],
                 styles: {
                   backgroundColor: {
-                    bgColor: "bg-palette-primary-light",
-                    textColor: "text-black",
+                    selectedColor: "palette-primary-light",
+                    contrastingColor: "black",
                   },
                   linksPosition: "left",
                 },
@@ -4185,8 +4185,8 @@ const mainDefaultLayout = {
         styles: {
           primaryFooter: {
             backgroundColor: {
-              bgColor: "bg-palette-primary-dark",
-              textColor: "text-white",
+              selectedColor: "palette-primary-dark",
+              contrastingColor: "white",
             },
             linksPosition: "right",
           },
@@ -4231,8 +4231,8 @@ const directoryDefaultLayout = {
                 id: "PrimaryHeaderSlot-326efc21-4048-437b-844c-9fad6adf6b10",
                 styles: {
                   backgroundColor: {
-                    bgColor: "bg-white",
-                    textColor: "text-black",
+                    selectedColor: "white",
+                    contrastingColor: "black",
                   },
                 },
                 slots: {
@@ -4375,8 +4375,8 @@ const directoryDefaultLayout = {
                         },
                         styles: {
                           backgroundColor: {
-                            bgColor: "bg-palette-primary-light",
-                            textColor: "text-black",
+                            selectedColor: "palette-primary-light",
+                            contrastingColor: "black",
                           },
                         },
                         slots: {
@@ -4449,8 +4449,8 @@ const directoryDefaultLayout = {
                 },
                 styles: {
                   backgroundColor: {
-                    bgColor: "bg-palette-primary-light",
-                    textColor: "text-black",
+                    selectedColor: "palette-primary-light",
+                    contrastingColor: "black",
                   },
                 },
                 slots: {
@@ -4515,8 +4515,14 @@ const directoryDefaultLayout = {
       type: "Directory",
       props: {
         styles: {
-          backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
-          listBackgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+          backgroundColor: {
+            selectedColor: "white",
+            contrastingColor: "black",
+          },
+          listBackgroundColor: {
+            selectedColor: "white",
+            contrastingColor: "black",
+          },
         },
         slots: {
           TitleSlot: [
@@ -4566,8 +4572,8 @@ const directoryDefaultLayout = {
                 },
                 styles: {
                   backgroundColor: {
-                    bgColor: "bg-white",
-                    textColor: "text-black",
+                    selectedColor: "white",
+                    contrastingColor: "black",
                   },
                   showCurrentPage: true,
                 },
@@ -4583,8 +4589,8 @@ const directoryDefaultLayout = {
                 id: "DirectoryGrid-dab8e202-600a-47da-b5c7-971df3f504fb",
                 styles: {
                   backgroundColor: {
-                    bgColor: "bg-white",
-                    textColor: "text-black",
+                    selectedColor: "white",
+                    contrastingColor: "black",
                   },
                 },
                 slots: { CardSlot: [] },
@@ -4878,8 +4884,8 @@ const directoryDefaultLayout = {
                 data: { show: true },
                 styles: {
                   backgroundColor: {
-                    bgColor: "bg-palette-primary-light",
-                    textColor: "text-black",
+                    selectedColor: "palette-primary-light",
+                    contrastingColor: "black",
                   },
                   linksPosition: "left",
                 },
@@ -4954,8 +4960,8 @@ const directoryDefaultLayout = {
         styles: {
           primaryFooter: {
             backgroundColor: {
-              bgColor: "bg-palette-primary-dark",
-              textColor: "text-white",
+              selectedColor: "palette-primary-dark",
+              contrastingColor: "white",
             },
             linksPosition: "right",
           },

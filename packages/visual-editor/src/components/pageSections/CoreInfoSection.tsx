@@ -3,7 +3,7 @@ import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import { AddressType, AnalyticsScopeProvider } from "@yext/pages-components";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import {
-  BackgroundStyle,
+  ThemeColor,
   backgroundColors,
 } from "../../utils/themeConfigOptions.ts";
 import { PageSection } from "../atoms/pageSection.tsx";
@@ -29,7 +29,7 @@ export interface CoreInfoStyles {
    * The background color of the section.
    * @defaultValue `Background Color 1`
    */
-  backgroundColor?: BackgroundStyle;
+  backgroundColor?: ThemeColor;
 }
 
 export interface CoreInfoSectionProps {

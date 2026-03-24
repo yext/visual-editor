@@ -4,7 +4,7 @@ import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import * as React from "react";
 import {
   backgroundColors,
-  type BackgroundStyle,
+  type ThemeColor,
 } from "../../../utils/themeConfigOptions.ts";
 import { Body } from "../../atoms/body.tsx";
 import { Button } from "../../../internal/puck/ui/button.tsx";
@@ -58,7 +58,7 @@ export interface ReviewsSectionProps {
      * The background color of the section.
      * @defaultValue Background Color 1
      */
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
 
     /**
      * Whether to show the section heading.
@@ -85,7 +85,7 @@ export interface ReviewsSectionProps {
 }
 
 /** @internal */
-const ReviewsEmptyState: React.FC<{ backgroundColor: BackgroundStyle }> = ({
+const ReviewsEmptyState: React.FC<{ backgroundColor: ThemeColor }> = ({
   backgroundColor,
 }) => {
   const templateMetadata = useTemplateMetadata();
@@ -445,7 +445,7 @@ const PageScroller: React.FC<PageScrollerProps> = ({
     return <></>;
   }
 
-  const selectableButtonClasses = `cursor-pointer ${background?.isDarkBackground ? "text-white" : "text-palette-primary-dark"}`;
+  const selectableButtonClasses = `cursor-pointer ${background?.isDarkColor ? "text-white" : "text-palette-primary-dark"}`;
   const disabledButtonClasses = "opacity-50 cursor-default";
   return (
     <Body className="flex flex-row justify-center items-center gap-5">

@@ -69,6 +69,7 @@ import { ctaNormalizeLinkDefault } from "./0067_cta_normalize_link_default.ts";
 import { directoryBreadcrumbCurrentPage } from "./0068_directory_breadcrumb_current_page.ts";
 import { updateSchemaIdAnchorFormat } from "./0069_update_schema_id_anchor_format.ts";
 import { directoryGridBackgroundStyles } from "./0070_directory_grid_background_styles.ts";
+import { themeColorPropertyKeyMigration } from "./0071_theme_color_property_keys.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -146,4 +147,5 @@ export const migrationRegistry: MigrationRegistry = [
   directoryBreadcrumbCurrentPage,
   updateSchemaIdAnchorFormat,
   directoryGridBackgroundStyles,
+  themeColorPropertyKeyMigration,
 ];

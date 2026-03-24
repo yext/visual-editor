@@ -257,6 +257,7 @@
     "latitude": "Zeměpisná šířka",
     "limit": "Omezit",
     "link": "Odkaz",
+    "linkColor": "Barva odkazu",
     "linkedInLink": "LinkedIn Link",
     "linkLabel": "Štítek odkazu",
     "links": "Odkazy",
