@@ -12,7 +12,10 @@ import { MaybeLink } from "../atoms/maybeLink.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import { PageSection } from "../atoms/pageSection.tsx";
 import { CardContextProvider } from "../../hooks/useCardContext.tsx";
-import { isDirectoryGrid } from "../../utils/directory/utils.ts";
+import {
+  isDirectoryGrid,
+  sortAlphabetically,
+} from "../../utils/directory/utils.ts";
 import { defaultDirectoryCardSlotData } from "./DirectoryCard.tsx";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import { resolveDirectoryListChildren } from "../../utils/urls/resolveDirectoryListChildren.ts";
@@ -51,7 +54,9 @@ export const DirectoryList = ({
   }[];
   relativePrefixToRoot: string;
 }) => {
-  const sortedDirectoryChildren = getSortedDirectoryChildren(directoryChildren);
+  const sortedDirectoryChildren = Array.isArray(directoryChildren)
+    ? sortAlphabetically([...directoryChildren], "name")
+    : [];
   const linkTextTransformValue = (
     getThemeValue("--textTransform-link-textTransform", streamDocument) ?? ""
   ).toLowerCase();
