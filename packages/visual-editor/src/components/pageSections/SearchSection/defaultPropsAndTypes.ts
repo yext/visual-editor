@@ -7,7 +7,7 @@ import { SearchBarSlotProps } from "./SearchBarSlot.tsx";
 export type VerticalLayout = "Grid" | "Flex" | "Map";
 export type CardTypeProp = "Standard" | "Accordion";
 export type SearchBarHeightProps = "base" | "large" | "extraLarge";
-export type SearchBarWidthProps = "quarter" | "half" | "full";
+export type SearchBarWidthProps = "small" | "half" | "full";
 export type SearchBarAlignProps = "left" | "center" | "right";
 export type SearchBarRoundedProps =
   | "none"

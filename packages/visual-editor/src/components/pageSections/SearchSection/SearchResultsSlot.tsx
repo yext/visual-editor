@@ -99,7 +99,7 @@ const SearchResultsSlotFields: Fields<SearchResultsSlotProps> = {
     objectFields: {
       ctaStyles: {
         type: "object",
-        label: msg("fields.ctaStyles", "CTA Styles"),
+        label: msg("fields.buttonStyles", "Button Styles"),
         objectFields: {
           background: YextField(
             msg("fields.backgroundColor", "Background Color"),
@@ -320,6 +320,10 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
               item.pageType === "universal"
                 ? verticalKey === null
                 : item.verticalKey === verticalKey;
+            const activeColor = styles?.activeVerticalColor?.color?.bgColor;
+            const activeColorValue = activeColor
+              ? `var(--colors-${normalizeThemeColor(activeColor)})`
+              : undefined;
 
             return (
               <li key={`${item.verticalKey ?? "no-key"}:${item.label}:${idx}`}>
@@ -340,14 +344,8 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
                   style={
                     isActive
                       ? {
-                          color:
-                            `var(--colors-${normalizeThemeColor(
-                              styles?.activeVerticalColor?.color?.bgColor
-                            )})` || `text-palette-primary-dark `,
-                          borderColor:
-                            `var(--colors-${normalizeThemeColor(
-                              styles?.activeVerticalColor?.color?.bgColor
-                            )})` || `border-palette-primary-dark`,
+                          color: activeColorValue,
+                          borderColor: activeColorValue,
                         }
                       : undefined
                   }

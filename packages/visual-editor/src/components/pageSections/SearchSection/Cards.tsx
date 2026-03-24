@@ -164,7 +164,7 @@ const Cards = ({
   } else {
     content = (
       <Accordion className="w-full">
-        <AccordionItem key={`result-${result.index}`} className="px-5 py-2.5">
+        <AccordionItem key={`result-${result.index}`}>
           <AccordionTrigger className="justify-between w-full">
             <Heading
               color={headingStyles?.color}

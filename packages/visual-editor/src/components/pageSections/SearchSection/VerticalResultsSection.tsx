@@ -47,6 +47,7 @@ export const VerticalResultsSection = ({
   const popupRef = React.useRef<HTMLDivElement>(null);
   const [showFilterModal, setShowFilterModal] = React.useState(false);
   const { t } = useTranslation();
+
   if (currentVerticalConfig?.layout === "Map") {
     return (
       <div className="components flex h-screen w-full mx-auto gap-2">

@@ -27,7 +27,35 @@ import {
   getHeight,
   getRounded,
   getWidth,
+  readInitialUrlParams,
+  updateSearchUrl,
 } from "./utils.tsx";
+
+type BrowserSpeechRecognition = {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onresult: ((event: SpeechRecognitionEventLike) => void) | null;
+  onerror: (() => void) | null;
+  onend: (() => void) | null;
+  start: () => void;
+  stop: () => void;
+};
+
+type SpeechRecognitionEventLike = {
+  results: ArrayLike<
+    ArrayLike<{
+      transcript: string;
+    }>
+  >;
+};
+
+declare global {
+  interface Window {
+    SpeechRecognition?: new () => BrowserSpeechRecognition;
+    webkitSpeechRecognition?: new () => BrowserSpeechRecognition;
+  }
+}
 
 export interface SearchBarSlotProps {
   styles: {
@@ -130,8 +158,8 @@ const searchBarSlotFields: Fields<SearchBarSlotProps> = {
         type: "radio",
         options: [
           {
-            label: msg("fields.quarter", "Quarter"),
-            value: "quarter",
+            label: msg("fields.small", "Small"),
+            value: "small",
           },
           {
             label: msg("fields.half", "Half"),
@@ -192,29 +220,117 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
   const layoutClasses = !showResults
     ? `${getWidth(width)} ${getAlignment(align)}`
     : "w-full";
+  const recognitionRef = React.useRef<BrowserSpeechRecognition | null>(null);
+  const [isListening, setIsListening] = React.useState(false);
+
+  const handleTranscript = React.useCallback(
+    (transcript: string) => {
+      const searchTerm = transcript.trim();
+      const { vertical } = readInitialUrlParams();
+
+      if (!showResults) {
+        const target = `/search.html${
+          searchTerm ? `?searchTerm=${encodeURIComponent(searchTerm)}` : ""
+        }`;
+        window.location.href = target;
+        return;
+      }
+
+      updateSearchUrl({
+        vertical,
+        searchTerm,
+      });
+      window.dispatchEvent(new PopStateEvent("popstate"));
+    },
+    [showResults]
+  );
+
+  const handleVoiceSearch = React.useCallback(() => {
+    if (typeof window === "undefined") return;
+
+    const SpeechRecognitionConstructor =
+      window.SpeechRecognition ?? window.webkitSpeechRecognition;
+
+    if (!SpeechRecognitionConstructor) return;
+
+    if (isListening) {
+      recognitionRef.current?.stop();
+      return;
+    }
+
+    const recognition = new SpeechRecognitionConstructor();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = document.locale || "en";
+    recognition.onresult = (event) => {
+      const transcript = Array.from(event.results)
+        .flatMap((result) => Array.from(result))
+        .map((result) => result.transcript)
+        .join(" ");
+
+      handleTranscript(transcript);
+    };
+    recognition.onerror = () => {
+      setIsListening(false);
+      recognitionRef.current = null;
+    };
+    recognition.onend = () => {
+      setIsListening(false);
+      recognitionRef.current = null;
+    };
+
+    recognitionRef.current = recognition;
+    setIsListening(true);
+    recognition.start();
+  }, [document.locale, handleTranscript, isListening]);
+
+  React.useEffect(() => {
+    return () => {
+      recognitionRef.current?.stop();
+      recognitionRef.current = null;
+    };
+  }, []);
 
   return (
     <div
-      className={`relative w-full flex my-2 items-center ${heightClass} ${puck.isEditing ? "pt-4" : ""}`}
+      className={`relative w-full flex my-2 items-center ${puck.isEditing ? "pt-4" : ""}`}
     >
-      <SearchBar
-        visualAutocompleteConfig={visualAutocompleteConfig}
-        placeholder={isTypingEffect ? placeholder : "Search here...."}
-        customCssClasses={{
-          searchBarContainer: `h-16 ${getRounded(rounded)} !mb-0 relative ${
-            isTypingEffect ? "isTypingEffect" : ""
-          } ${layoutClasses}`,
-          searchButtonContainer: `${voiceSearch ? `ml-14 my-auto` : showIcon ? `` : `none`}`,
-          searchButton: `${showIcon ? `h-8 w-8` : ``}`,
-          inputElement: `text-lg h-12 outline-none focus:outline-none focus:ring-0 focus:border-none px-5 py-2.5 rounded-[inherit]`,
-          icon: `text-palette-primary-dark `,
-        }}
-      />
-      {voiceSearch && (
-        <FaMicrophone
-          className={`h-6 w-6 right-14 ml-auto absolute top-1/2 z-50  -translate-y-1/2`}
+      <div className={`relative ${layoutClasses} ${heightClass} `}>
+        <SearchBar
+          visualAutocompleteConfig={visualAutocompleteConfig}
+          placeholder={isTypingEffect ? placeholder : "Search here...."}
+          customCssClasses={{
+            searchBarContainer: `h-16 ${getRounded(rounded)} !mb-0 relative ${
+              isTypingEffect ? "isTypingEffect" : ""
+            } w-full`,
+            searchButtonContainer: `${voiceSearch ? `ml-14 my-auto` : showIcon ? `` : `hidden`}`,
+            searchButton: `${showIcon ? `h-8 w-8 text-palette-primary-dark` : `hidden`}`,
+            inputElement: `text-lg h-12 outline-none focus:outline-none focus:ring-0 focus:border-none px-5 py-2.5 rounded-[inherit]`,
+          }}
         />
-      )}
+        {voiceSearch && (
+          <button
+            type="button"
+            onClick={handleVoiceSearch}
+            aria-label="Voice search"
+            className={`${
+              showIcon ? "right-14" : "right-4"
+            } absolute inset-y-0 z-50 flex items-center justify-center text-palette-primary-dark`}
+          >
+            {isListening && (
+              <>
+                <span className="absolute h-8 w-8 rounded-full bg-palette-primary/20 animate-ping" />
+                <span className="absolute h-10 w-10 rounded-full bg-palette-primary/10 animate-pulse" />
+              </>
+            )}
+            <FaMicrophone
+              className={`relative h-6 w-6 ${
+                isListening ? "opacity-100 text-palette-primary" : "opacity-80"
+              }`}
+            />
+          </button>
+        )}
+      </div>
     </div>
   );
 };

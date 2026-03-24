@@ -215,10 +215,10 @@ export const getRounded = (val: SearchBarRoundedProps) => {
 
 export const getWidth = (val: SearchBarWidthProps) => {
   switch (val) {
-    case "quarter":
-      return "w-3/4";
-    case "half":
+    case "small":
       return "w-1/2";
+    case "half":
+      return "w-3/4";
     default:
       return "w-full";
   }

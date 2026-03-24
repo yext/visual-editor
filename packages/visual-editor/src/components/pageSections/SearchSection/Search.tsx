@@ -191,9 +191,7 @@ export const SearchComponent: ComponentConfig<{
                 defaultSearchResultsProps.data.verticals[0],
               ],
             },
-            styles: {
-              ctaStyles: undefined,
-            },
+            styles: defaultSearchResultsProps.styles,
           } satisfies SearchResultsSlotProps,
         },
       ],
