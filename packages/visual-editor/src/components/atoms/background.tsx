@@ -62,7 +62,7 @@ export const Background = React.forwardRef<HTMLDivElement, BackgroundProps>(
           isDarkBackground = false;
           break;
         case "--colors-palette-quaternary-contrast":
-          isDarkBackground = true;
+          isDarkBackground = false;
           break;
         default:
           isDarkBackground = false;
