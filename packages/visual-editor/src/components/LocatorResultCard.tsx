@@ -271,7 +271,6 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
     liveVisibility: false,
   },
   icons: true,
-  accentColor: backgroundColors.background2.value,
   hours: {
     field: { selection: { value: "hours" } },
     table: {
