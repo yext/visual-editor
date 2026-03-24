@@ -33,12 +33,10 @@
  *    - Import each generated config into `componentRegistry`.
  *    - Ensure `componentRegistry` points each generated template name to its
  *      config while preserving existing `directory` and `locator` entries.
- *    - Keep `editPath` aligned with the available template names.
  */
 import path from "node:path";
 import fs from "fs-extra";
 import { Project, QuoteKind, SyntaxKind, type SourceFile } from "ts-morph";
-import { getEditorPathFromTemplateNames } from "./editorRoute.ts";
 
 type TemplateManifestEntry = {
   name: string;
@@ -170,10 +168,10 @@ export const generateRegistryTemplateFiles = ({
   );
 
   // 4) Update `<starter>/.template-manifest.json`.
-  const availableTemplateNames = updateTemplateManifest(rootDir, templateNames);
+  updateTemplateManifest(rootDir, templateNames);
 
   // 5) Update editor wiring.
-  updateEditTemplate(rootDir, templateNames, availableTemplateNames);
+  updateEditTemplate(rootDir, templateNames);
 };
 
 /**
@@ -454,7 +452,7 @@ const buildTemplateSource = (
 const updateTemplateManifest = (
   rootDir: string,
   templateNames: string[]
-): string[] => {
+): void => {
   const manifestPath = path.join(rootDir, ".template-manifest.json");
   const manifest: ManifestFile = fs.existsSync(manifestPath)
     ? readJsonFile<ManifestFile>(manifestPath, "template manifest JSON")
@@ -516,22 +514,13 @@ const updateTemplateManifest = (
   if (updated) {
     fs.writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
   }
-
-  return getAvailableTemplateNames(
-    rootDir,
-    manifest.templates.map((template) => template.name)
-  );
 };
 
 /**
  * 5) Update `<starter>/src/templates/edit.tsx` to import and register each
  * generated config.
  */
-const updateEditTemplate = (
-  rootDir: string,
-  templateNames: string[],
-  availableTemplateNames: string[]
-): void => {
+const updateEditTemplate = (rootDir: string, templateNames: string[]): void => {
   const editTemplatePath = path.join(rootDir, "src", "templates", "edit.tsx");
   if (!fs.existsSync(editTemplatePath)) {
     return;
@@ -566,7 +555,6 @@ const updateEditTemplate = (
   }
 
   setEditComponentRegistry(sourceFile, templateNames);
-  setEditPath(sourceFile, availableTemplateNames);
 
   const updatedSource = sourceFile.getFullText();
   sourceFile.forget();
@@ -875,32 +863,6 @@ ${registryEntries}
       initializer: getEditConfigIdentifier(templateName),
     });
   }
-}
-
-function setEditPath(sourceFile: SourceFile, templateNames: string[]): void {
-  const declaration = sourceFile.getVariableDeclaration("editPath");
-  if (!declaration) {
-    return;
-  }
-
-  declaration.setInitializer(
-    JSON.stringify(getEditorPathFromTemplateNames(templateNames))
-  );
-}
-
-function getAvailableTemplateNames(
-  rootDir: string,
-  manifestTemplateNames: string[]
-): string[] {
-  const builtInTemplateNames = [...PRESERVED_EDIT_REGISTRY_KEYS].filter(
-    (templateName) => {
-      return fs.existsSync(
-        path.join(rootDir, "src", "templates", `${templateName}.tsx`)
-      );
-    }
-  );
-
-  return [...new Set([...builtInTemplateNames, ...manifestTemplateNames])];
 }
 
 function getTemplateConfigExportName(templateName: string): string {
