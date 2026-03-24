@@ -154,9 +154,14 @@ export const Directory: ComponentConfig<{ props: DirectoryProps }> = {
       params.metadata.streamDocument?.dm_directoryChildren &&
       isDirectoryGrid(params.metadata.streamDocument.dm_directoryChildren)
     ) {
-      return setDeep(
+      const updatedFields = setDeep(
         directoryFields,
         "styles.objectFields.listBackgroundColor.visible",
+        false
+      );
+      return setDeep(
+        updatedFields,
+        "styles.objectFields.linkColor.visible",
         false
       );
     }

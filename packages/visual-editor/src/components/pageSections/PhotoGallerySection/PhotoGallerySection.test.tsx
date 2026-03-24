@@ -668,7 +668,7 @@ const tests: ComponentTest[] = [
     version: 59,
   },
   {
-    name: "version 53 carousels with accent color override",
+    name: "version 71 carousels with accent color override",
     document: {},
     props: {
       styles: {

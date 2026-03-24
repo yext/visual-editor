@@ -3,10 +3,7 @@ import { PuckContext } from "@puckeditor/core";
 import { HoursType, AddressType, Address } from "@yext/pages-components";
 import { Background } from "../../atoms/background.tsx";
 import { Heading } from "../../atoms/heading.tsx";
-import {
-  HeadingLevel,
-  backgroundColors,
-} from "../../../utils/themeConfigOptions.ts";
+import { HeadingLevel } from "../../../utils/themeConfigOptions.ts";
 import { HoursStatusAtom } from "../../atoms/hoursStatus.tsx";
 import { MaybeLink } from "../../atoms/maybeLink.tsx";
 import { PhoneAtom } from "../../atoms/phone.tsx";
@@ -111,9 +108,6 @@ export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
       {showPhone && (
         <PhoneAtom
           eventName={`phone${cardNumber}`}
-          backgroundColor={
-            styles?.phone?.color ?? backgroundColors.background2.value
-          }
           phoneNumber={mainPhone}
           format={styles?.phone?.phoneNumberFormat}
           includeHyperlink={styles?.phone?.phoneNumberLink}
