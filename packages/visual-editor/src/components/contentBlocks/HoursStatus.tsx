@@ -103,6 +103,7 @@ const HoursStatusWrapper: PuckComponent<HoursStatusProps> = ({
   const hours =
     parentData?.hours ??
     resolveComponentData(data.hours, i18n.language, streamDocument);
+  const timezone = parentData?.timezone ?? streamDocument.timezone;
 
   return hours ? (
     <EntityField
@@ -112,7 +113,7 @@ const HoursStatusWrapper: PuckComponent<HoursStatusProps> = ({
     >
       <HoursStatusAtom
         hours={hours}
-        timezone={parentData?.timezone}
+        timezone={timezone}
         className={styles.className}
         showCurrentStatus={styles.showCurrentStatus}
         showDayNames={styles.showDayNames}
