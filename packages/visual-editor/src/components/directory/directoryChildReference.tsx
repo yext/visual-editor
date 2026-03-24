@@ -9,30 +9,32 @@ export type DirectoryChildReference = {
   childId?: string;
 };
 
-type DirectoryChildProfile = Record<string, any>;
+type DirectoryChild = {
+  id?: string;
+  name?: string;
+  [key: string]: any;
+};
 
-const DirectoryChildrenContext = React.createContext<DirectoryChildProfile[]>(
-  []
-);
+const DirectoryChildrenContext = React.createContext<DirectoryChild[]>([]);
 
 export const DirectoryChildrenProvider = ({
   children,
   directoryChildren,
 }: {
   children: React.ReactNode;
-  directoryChildren: DirectoryChildProfile[];
+  directoryChildren: DirectoryChild[];
 }) => (
   <DirectoryChildrenContext.Provider value={directoryChildren}>
     {children}
   </DirectoryChildrenContext.Provider>
 );
 
-export const useDirectoryChildren = (): DirectoryChildProfile[] =>
+export const useDirectoryChildren = (): DirectoryChild[] =>
   React.useContext(DirectoryChildrenContext);
 
 export const getSortedDirectoryChildren = (
   directoryChildren: unknown
-): DirectoryChildProfile[] => {
+): DirectoryChild[] => {
   if (
     !Array.isArray(directoryChildren) ||
     !isDirectoryGrid(directoryChildren)
@@ -40,11 +42,11 @@ export const getSortedDirectoryChildren = (
     return [];
   }
 
-  return sortAlphabetically(directoryChildren, "name");
+  return sortAlphabetically([...directoryChildren], "name");
 };
 
 export const createDirectoryChildReference = (
-  child: DirectoryChildProfile | undefined,
+  child: DirectoryChild | undefined,
   childIndex: number
 ): DirectoryChildReference => ({
   childIndex,
@@ -53,7 +55,7 @@ export const createDirectoryChildReference = (
 
 export const matchesDirectoryChildReference = (
   childReference: DirectoryChildReference | undefined,
-  child: DirectoryChildProfile | undefined,
+  child: DirectoryChild | undefined,
   childIndex: number
 ): boolean => {
   if (!childReference || childReference.childIndex !== childIndex) {
@@ -68,9 +70,9 @@ export const matchesDirectoryChildReference = (
 };
 
 export const resolveDirectoryChildFromReference = (
-  directoryChildren: DirectoryChildProfile[],
+  directoryChildren: DirectoryChild[],
   childReference: DirectoryChildReference | undefined
-): DirectoryChildProfile | undefined => {
+): DirectoryChild | undefined => {
   if (!childReference) {
     return undefined;
   }

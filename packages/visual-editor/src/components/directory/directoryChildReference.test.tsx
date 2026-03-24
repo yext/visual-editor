@@ -1,8 +1,8 @@
 import React from "react";
 import { describe, expect, it } from "vitest";
 import { Config, resolveAllData } from "@puckeditor/core";
-import { Directory } from "../../components/directory/Directory.tsx";
-import { SlotsCategoryComponents } from "../../components/categories/SlotsCategory.tsx";
+import { Directory } from "./Directory.tsx";
+import { SlotsCategoryComponents } from "../categories/SlotsCategory.tsx";
 
 const cityDocument = {
   locale: "en",
@@ -76,7 +76,7 @@ const directoryProps = {
   },
 };
 
-describe("resolveDirectoryCardReferences", () => {
+describe("directoryChildReference", () => {
   it("stores directory cards as child references and keeps slot bindings field-based", async () => {
     const puckConfig: Config = {
       components: { Directory, ...SlotsCategoryComponents },

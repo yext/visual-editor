@@ -63,9 +63,10 @@ export const DirectoryList = ({
   relativePrefixToRoot: string;
   backgroundColor: ThemeColor;
 }) => {
-  const sortedDirectoryChildren = Array.isArray(directoryChildren)
-    ? sortAlphabetically([...directoryChildren], "name")
-    : [];
+  const sortedDirectoryChildren = sortAlphabetically(
+    [...directoryChildren],
+    "name"
+  );
   const linkTextTransformValue = (
     getThemeValue("--textTransform-link-textTransform", streamDocument) ?? ""
   ).toLowerCase();

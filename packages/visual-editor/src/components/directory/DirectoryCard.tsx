@@ -211,7 +211,7 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
         : getSortedDirectoryChildren(streamDocument.dm_directoryChildren),
     [directoryChildrenFromContext, streamDocument.dm_directoryChildren]
   );
-  const profile = React.useMemo(
+  const resolvedChild = React.useMemo(
     () =>
       resolveDirectoryChildFromReference(
         sortedDirectoryChildren,
@@ -219,13 +219,15 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
       ),
     [parentData?.childRef, sortedDirectoryChildren]
   );
+  // Give nested slots a child-scoped document context instead of duplicating
+  // child values into each slot's parentData.
   const childDocumentContext = React.useMemo(
     () =>
-      profile
+      resolvedChild
         ? {
             document: {
               ...streamDocument,
-              ...mergeMeta(profile, streamDocument),
+              ...mergeMeta(resolvedChild, streamDocument),
             },
             relativePrefixToRoot,
           }
@@ -233,11 +235,15 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
             document: streamDocument,
             relativePrefixToRoot,
           },
-    [profile, relativePrefixToRoot, streamDocument]
+    [resolvedChild, relativePrefixToRoot, streamDocument]
   );
 
-  const resolvedUrl = profile
-    ? resolveUrlTemplateOfChild(profile, streamDocument, relativePrefixToRoot)
+  const resolvedUrl = resolvedChild
+    ? resolveUrlTemplateOfChild(
+        resolvedChild,
+        streamDocument,
+        relativePrefixToRoot
+      )
     : undefined;
 
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
@@ -343,9 +349,11 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
             <slots.HeadingSlot style={{ height: "auto" }} />
           </MaybeLink>
         </div>
-        {profile?.hours && <slots.HoursSlot style={{ height: "auto" }} />}
-        {profile?.mainPhone && <slots.PhoneSlot style={{ height: "auto" }} />}
-        {profile?.address && (
+        {resolvedChild?.hours && <slots.HoursSlot style={{ height: "auto" }} />}
+        {resolvedChild?.mainPhone && (
+          <slots.PhoneSlot style={{ height: "auto" }} />
+        )}
+        {resolvedChild?.address && (
           <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
             <slots.AddressSlot style={{ height: "auto" }} />
           </div>
