@@ -35,11 +35,11 @@ export const getPath: GetPath<TemplateProps> = () => {
     "Determined template editor editPath (using `edit/my-template` instead):",
     editPath
   );
-  return "edit/my-template";
+  return "edit/sweetgreen";
 };
 
 export const config: TemplateConfig = {
-  name: "edit-my-template",
+  name: "edit-sweetgreen",
 };
 
 export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
