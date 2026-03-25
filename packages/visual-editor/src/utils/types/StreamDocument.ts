@@ -36,7 +36,7 @@ export type LocatorConfig = {
   experienceKey?: string;
   entityType?: string; // deprecated
   savedFilter?: string; // deprecated
-  entityTypeScopes?: EntityTypeScope[];
+  entityTypeScope?: EntityTypeScope[];
   [key: string]: any; // allow any other fields
 };
 

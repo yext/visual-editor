@@ -1,7 +1,7 @@
 const mainDefaultLayout = {
   root: {
     props: {
-      version: 63,
+      version: 70,
       title: {
         field: "name",
         constantValue: "",
@@ -71,18 +71,21 @@ const mainDefaultLayout = {
                               linkType: "URL",
                               label: { defaultValue: "Header Link" },
                               link: "#",
+                              normalizeLink: true,
                               openInNewTab: false,
                             },
                             {
                               linkType: "URL",
                               label: { defaultValue: "Header Link" },
                               link: "#",
+                              normalizeLink: true,
                               openInNewTab: false,
                             },
                             {
                               linkType: "URL",
                               label: { defaultValue: "Header Link" },
                               link: "#",
+                              normalizeLink: true,
                               openInNewTab: false,
                             },
                           ],
@@ -107,6 +110,7 @@ const mainDefaultLayout = {
                         data: {
                           show: true,
                           actionType: "link",
+                          normalizeLink: true,
                           buttonText: { defaultValue: "Button" },
                           entityField: {
                             field: "",
@@ -135,6 +139,7 @@ const mainDefaultLayout = {
                         data: {
                           show: true,
                           actionType: "link",
+                          normalizeLink: true,
                           buttonText: { defaultValue: "Button" },
                           entityField: {
                             field: "",
@@ -185,18 +190,21 @@ const mainDefaultLayout = {
                                       linkType: "URL",
                                       label: { defaultValue: "Header Link" },
                                       link: "#",
+                                      normalizeLink: true,
                                       openInNewTab: false,
                                     },
                                     {
                                       linkType: "URL",
                                       label: { defaultValue: "Header Link" },
                                       link: "#",
+                                      normalizeLink: true,
                                       openInNewTab: false,
                                     },
                                     {
                                       linkType: "URL",
                                       label: { defaultValue: "Header Link" },
                                       link: "#",
+                                      normalizeLink: true,
                                       openInNewTab: false,
                                     },
                                   ],
@@ -256,18 +264,21 @@ const mainDefaultLayout = {
                               linkType: "URL",
                               label: { defaultValue: "Header Link" },
                               link: "#",
+                              normalizeLink: true,
                               openInNewTab: false,
                             },
                             {
                               linkType: "URL",
                               label: { defaultValue: "Header Link" },
                               link: "#",
+                              normalizeLink: true,
                               openInNewTab: false,
                             },
                             {
                               linkType: "URL",
                               label: { defaultValue: "Header Link" },
                               link: "#",
+                              normalizeLink: true,
                               openInNewTab: false,
                             },
                           ],
@@ -331,12 +342,18 @@ const mainDefaultLayout = {
       props: {
         data: {
           directoryRoot: { defaultValue: "Directory Root" },
+          currentPage: {
+            constantValue: { defaultValue: "[[name]]" },
+            field: "name",
+            constantValueEnabled: false,
+          },
         },
         styles: {
           backgroundColor: {
             bgColor: "bg-white",
             textColor: "text-black",
           },
+          showCurrentPage: true,
         },
         analytics: {
           scope: "breadcrumbs",
@@ -474,6 +491,7 @@ const mainDefaultLayout = {
                 id: "CTASlot-46811f58-2779-4c49-a871-26cf27454544",
                 data: {
                   actionType: "link",
+                  normalizeLink: true,
                   buttonText: { defaultValue: "Button" },
                   customId: "",
                   customClass: "",
@@ -505,6 +523,7 @@ const mainDefaultLayout = {
                 id: "CTASlot-633345f6-c438-400b-bdf7-92dce47746bc",
                 data: {
                   actionType: "link",
+                  normalizeLink: true,
                   buttonText: { defaultValue: "Button" },
                   customId: "",
                   customClass: "",
@@ -587,6 +606,8 @@ const mainDefaultLayout = {
                   },
                 },
                 styles: {
+                  showRegion: true,
+                  showCountry: false,
                   showGetDirectionsLink: true,
                   ctaVariant: "link",
                 },
@@ -842,6 +863,7 @@ const mainDefaultLayout = {
                 id: "CTASlot-e8531a98-b8ff-4ce1-a299-11fc085eb6c3",
                 data: {
                   actionType: "link",
+                  normalizeLink: true,
                   buttonText: { defaultValue: "Button" },
                   customId: "",
                   customClass: "",
@@ -1032,6 +1054,7 @@ const mainDefaultLayout = {
                                 id: "ProductCard-4ddddc07-d36d-4ed3-90e8-1ca3ca2e8447-cta",
                                 data: {
                                   actionType: "link",
+                                  normalizeLink: true,
                                   buttonText: { defaultValue: "Button" },
                                   customId: "",
                                   customClass: "",
@@ -1203,6 +1226,7 @@ const mainDefaultLayout = {
                                 id: "ProductCard-996096bf-bc44-4827-ab79-21e9106abf53-cta",
                                 data: {
                                   actionType: "link",
+                                  normalizeLink: true,
                                   buttonText: { defaultValue: "Button" },
                                   customId: "",
                                   customClass: "",
@@ -1374,6 +1398,7 @@ const mainDefaultLayout = {
                                 id: "ProductCard-a7549442-809c-489f-9f73-4cd5c6038f51-cta",
                                 data: {
                                   actionType: "link",
+                                  normalizeLink: true,
                                   buttonText: { defaultValue: "Button" },
                                   customId: "",
                                   customClass: "",
@@ -2131,6 +2156,7 @@ const mainDefaultLayout = {
                                 id: "CTASlot-84f00400-c27d-4cd7-aa28-a1632694b359",
                                 data: {
                                   actionType: "link",
+                                  normalizeLink: true,
                                   buttonText: { defaultValue: "Button" },
                                   customId: "",
                                   customClass: "",
@@ -2303,6 +2329,7 @@ const mainDefaultLayout = {
                                 id: "CTASlot-2f5fcbf5-5f6f-4f18-814d-30b6de491d0a",
                                 data: {
                                   actionType: "link",
+                                  normalizeLink: true,
                                   buttonText: { defaultValue: "Button" },
                                   customId: "",
                                   customClass: "",
@@ -2475,6 +2502,7 @@ const mainDefaultLayout = {
                                 id: "CTASlot-569564d0-a69a-44f6-b528-d0aacdc875e5",
                                 data: {
                                   actionType: "link",
+                                  normalizeLink: true,
                                   buttonText: { defaultValue: "Button" },
                                   customId: "",
                                   customClass: "",
@@ -2721,6 +2749,7 @@ const mainDefaultLayout = {
                                 id: "InsightCard-1-cta",
                                 data: {
                                   actionType: "link",
+                                  normalizeLink: true,
                                   buttonText: { defaultValue: "Button" },
                                   customId: "",
                                   customClass: "",
@@ -2887,6 +2916,7 @@ const mainDefaultLayout = {
                                 id: "InsightCard-2-cta",
                                 data: {
                                   actionType: "link",
+                                  normalizeLink: true,
                                   buttonText: { defaultValue: "Button" },
                                   customId: "",
                                   customClass: "",
@@ -3053,6 +3083,7 @@ const mainDefaultLayout = {
                                 id: "InsightCard-3-cta",
                                 data: {
                                   actionType: "link",
+                                  normalizeLink: true,
                                   buttonText: { defaultValue: "Button" },
                                   customId: "",
                                   customClass: "",
@@ -3365,6 +3396,7 @@ const mainDefaultLayout = {
                                 id: "EventCard-92abd8ca-550c-4aee-92d9-4140b4ef53ad-cta",
                                 data: {
                                   actionType: "link",
+                                  normalizeLink: true,
                                   buttonText: { defaultValue: "Button" },
                                   customId: "",
                                   customClass: "",
@@ -3522,6 +3554,7 @@ const mainDefaultLayout = {
                                 id: "EventCard-b1fd4377-76db-433e-9803-ea5ae0d9f996-cta",
                                 data: {
                                   actionType: "link",
+                                  normalizeLink: true,
                                   buttonText: { defaultValue: "Button" },
                                   customId: "",
                                   customClass: "",
@@ -3679,6 +3712,7 @@ const mainDefaultLayout = {
                                 id: "EventCard-90968d53-5878-4459-b3dc-0b9b75e028ea-cta",
                                 data: {
                                   actionType: "link",
+                                  normalizeLink: true,
                                   buttonText: { defaultValue: "Button" },
                                   customId: "",
                                   customClass: "",
@@ -3784,6 +3818,10 @@ const mainDefaultLayout = {
                     phoneNumberFormat: "domestic",
                     phoneNumberLink: true,
                   },
+                  address: {
+                    showRegion: true,
+                    showCountry: false,
+                  },
                   showHours: true,
                   showPhone: true,
                   showAddress: true,
@@ -3873,27 +3911,32 @@ const mainDefaultLayout = {
                     {
                       linkType: "URL",
                       label: { defaultValue: "Footer Link" },
-                      link: { defaultValue: "#" },
+                      link: "#",
+                      normalizeLink: true,
                     },
                     {
                       linkType: "URL",
                       label: { defaultValue: "Footer Link" },
-                      link: { defaultValue: "#" },
+                      link: "#",
+                      normalizeLink: true,
                     },
                     {
                       linkType: "URL",
                       label: { defaultValue: "Footer Link" },
-                      link: { defaultValue: "#" },
+                      link: "#",
+                      normalizeLink: true,
                     },
                     {
                       linkType: "URL",
                       label: { defaultValue: "Footer Link" },
-                      link: { defaultValue: "#" },
+                      link: "#",
+                      normalizeLink: true,
                     },
                     {
                       linkType: "URL",
                       label: { defaultValue: "Footer Link" },
-                      link: { defaultValue: "#" },
+                      link: "#",
+                      normalizeLink: true,
                     },
                   ],
                 },
@@ -3916,56 +3959,31 @@ const mainDefaultLayout = {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
+                          normalizeLink: true,
                         },
                         {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
+                          normalizeLink: true,
                         },
                         {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
+                          normalizeLink: true,
                         },
                         {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
+                          normalizeLink: true,
                         },
                         {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
-                        },
-                      ],
-                    },
-                    {
-                      label: { defaultValue: "Footer Label" },
-                      links: [
-                        {
-                          linkType: "URL",
-                          label: { defaultValue: "Footer Link" },
-                          link: "#",
-                        },
-                        {
-                          linkType: "URL",
-                          label: { defaultValue: "Footer Link" },
-                          link: "#",
-                        },
-                        {
-                          linkType: "URL",
-                          label: { defaultValue: "Footer Link" },
-                          link: "#",
-                        },
-                        {
-                          linkType: "URL",
-                          label: { defaultValue: "Footer Link" },
-                          link: "#",
-                        },
-                        {
-                          linkType: "URL",
-                          label: { defaultValue: "Footer Link" },
-                          link: "#",
+                          normalizeLink: true,
                         },
                       ],
                     },
@@ -3976,26 +3994,31 @@ const mainDefaultLayout = {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
+                          normalizeLink: true,
                         },
                         {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
+                          normalizeLink: true,
                         },
                         {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
+                          normalizeLink: true,
                         },
                         {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
+                          normalizeLink: true,
                         },
                         {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
+                          normalizeLink: true,
                         },
                       ],
                     },
@@ -4006,26 +4029,66 @@ const mainDefaultLayout = {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
+                          normalizeLink: true,
                         },
                         {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
+                          normalizeLink: true,
                         },
                         {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
+                          normalizeLink: true,
                         },
                         {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
+                          normalizeLink: true,
                         },
                         {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
+                          normalizeLink: true,
+                        },
+                      ],
+                    },
+                    {
+                      label: { defaultValue: "Footer Label" },
+                      links: [
+                        {
+                          linkType: "URL",
+                          label: { defaultValue: "Footer Link" },
+                          link: "#",
+                          normalizeLink: true,
+                        },
+                        {
+                          linkType: "URL",
+                          label: { defaultValue: "Footer Link" },
+                          link: "#",
+                          normalizeLink: true,
+                        },
+                        {
+                          linkType: "URL",
+                          label: { defaultValue: "Footer Link" },
+                          link: "#",
+                          normalizeLink: true,
+                        },
+                        {
+                          linkType: "URL",
+                          label: { defaultValue: "Footer Link" },
+                          link: "#",
+                          normalizeLink: true,
+                        },
+                        {
+                          linkType: "URL",
+                          label: { defaultValue: "Footer Link" },
+                          link: "#",
+                          normalizeLink: true,
                         },
                       ],
                     },
@@ -4055,26 +4118,31 @@ const mainDefaultLayout = {
                               linkType: "URL",
                               label: { defaultValue: "Footer Link" },
                               link: "#",
+                              normalizeLink: true,
                             },
                             {
                               linkType: "URL",
                               label: { defaultValue: "Footer Link" },
                               link: "#",
+                              normalizeLink: true,
                             },
                             {
                               linkType: "URL",
                               label: { defaultValue: "Footer Link" },
                               link: "#",
+                              normalizeLink: true,
                             },
                             {
                               linkType: "URL",
                               label: { defaultValue: "Footer Link" },
                               link: "#",
+                              normalizeLink: true,
                             },
                             {
                               linkType: "URL",
                               label: { defaultValue: "Footer Link" },
                               link: "#",
+                              normalizeLink: true,
                             },
                           ],
                         },
@@ -4133,7 +4201,7 @@ const mainDefaultLayout = {
 const directoryDefaultLayout = {
   root: {
     props: {
-      version: 63,
+      version: 70,
       title: {
         field: "",
         constantValue: { defaultValue: "PLACEHOLDER" },
@@ -4204,18 +4272,21 @@ const directoryDefaultLayout = {
                               linkType: "URL",
                               label: { defaultValue: "Header Link" },
                               link: "#",
+                              normalizeLink: true,
                               openInNewTab: false,
                             },
                             {
                               linkType: "URL",
                               label: { defaultValue: "Header Link" },
                               link: "#",
+                              normalizeLink: true,
                               openInNewTab: false,
                             },
                             {
                               linkType: "URL",
                               label: { defaultValue: "Header Link" },
                               link: "#",
+                              normalizeLink: true,
                               openInNewTab: false,
                             },
                           ],
@@ -4240,6 +4311,7 @@ const directoryDefaultLayout = {
                         data: {
                           show: true,
                           actionType: "link",
+                          normalizeLink: true,
                           buttonText: { defaultValue: "Button" },
                           entityField: {
                             field: "",
@@ -4268,6 +4340,7 @@ const directoryDefaultLayout = {
                         data: {
                           show: true,
                           actionType: "link",
+                          normalizeLink: true,
                           buttonText: { defaultValue: "Button" },
                           entityField: {
                             field: "",
@@ -4318,18 +4391,21 @@ const directoryDefaultLayout = {
                                       linkType: "URL",
                                       label: { defaultValue: "Header Link" },
                                       link: "#",
+                                      normalizeLink: true,
                                       openInNewTab: false,
                                     },
                                     {
                                       linkType: "URL",
                                       label: { defaultValue: "Header Link" },
                                       link: "#",
+                                      normalizeLink: true,
                                       openInNewTab: false,
                                     },
                                     {
                                       linkType: "URL",
                                       label: { defaultValue: "Header Link" },
                                       link: "#",
+                                      normalizeLink: true,
                                       openInNewTab: false,
                                     },
                                   ],
@@ -4389,18 +4465,21 @@ const directoryDefaultLayout = {
                               linkType: "URL",
                               label: { defaultValue: "Header Link" },
                               link: "#",
+                              normalizeLink: true,
                               openInNewTab: false,
                             },
                             {
                               linkType: "URL",
                               label: { defaultValue: "Header Link" },
                               link: "#",
+                              normalizeLink: true,
                               openInNewTab: false,
                             },
                             {
                               linkType: "URL",
                               label: { defaultValue: "Header Link" },
                               link: "#",
+                              normalizeLink: true,
                               openInNewTab: false,
                             },
                           ],
@@ -4437,6 +4516,7 @@ const directoryDefaultLayout = {
       props: {
         styles: {
           backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+          listBackgroundColor: { bgColor: "bg-white", textColor: "text-black" },
         },
         slots: {
           TitleSlot: [
@@ -4478,12 +4558,18 @@ const directoryDefaultLayout = {
                 id: "BreadcrumbsSlot-13dba298-abd1-4f75-a7e9-b19779a4fc5b",
                 data: {
                   directoryRoot: { defaultValue: "Directory Root" },
+                  currentPage: {
+                    constantValue: { defaultValue: "[[name]]" },
+                    field: "name",
+                    constantValueEnabled: false,
+                  },
                 },
                 styles: {
                   backgroundColor: {
                     bgColor: "bg-white",
                     textColor: "text-black",
                   },
+                  showCurrentPage: true,
                 },
                 analytics: { scope: "directory" },
                 liveVisibility: true,
@@ -4495,6 +4581,12 @@ const directoryDefaultLayout = {
               type: "DirectoryGrid",
               props: {
                 id: "DirectoryGrid-dab8e202-600a-47da-b5c7-971df3f504fb",
+                styles: {
+                  backgroundColor: {
+                    bgColor: "bg-white",
+                    textColor: "text-black",
+                  },
+                },
                 slots: { CardSlot: [] },
               },
             },
@@ -4568,30 +4660,35 @@ const directoryDefaultLayout = {
                       linkType: "URL",
                       label: { defaultValue: "Footer Link" },
                       link: "#",
+                      normalizeLink: true,
                       openInNewTab: false,
                     },
                     {
                       linkType: "URL",
                       label: { defaultValue: "Footer Link" },
                       link: "#",
+                      normalizeLink: true,
                       openInNewTab: false,
                     },
                     {
                       linkType: "URL",
                       label: { defaultValue: "Footer Link" },
                       link: "#",
+                      normalizeLink: true,
                       openInNewTab: false,
                     },
                     {
                       linkType: "URL",
                       label: { defaultValue: "Footer Link" },
                       link: "#",
+                      normalizeLink: true,
                       openInNewTab: false,
                     },
                     {
                       linkType: "URL",
                       label: { defaultValue: "Footer Link" },
                       link: "#",
+                      normalizeLink: true,
                       openInNewTab: false,
                     },
                   ],
@@ -4615,65 +4712,35 @@ const directoryDefaultLayout = {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
+                          normalizeLink: true,
                           openInNewTab: false,
                         },
                         {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
+                          normalizeLink: true,
                           openInNewTab: false,
                         },
                         {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
+                          normalizeLink: true,
                           openInNewTab: false,
                         },
                         {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
+                          normalizeLink: true,
                           openInNewTab: false,
                         },
                         {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
-                          openInNewTab: false,
-                        },
-                      ],
-                    },
-                    {
-                      label: { defaultValue: "Footer Label" },
-                      links: [
-                        {
-                          linkType: "URL",
-                          label: { defaultValue: "Footer Link" },
-                          link: "#",
-                          openInNewTab: false,
-                        },
-                        {
-                          linkType: "URL",
-                          label: { defaultValue: "Footer Link" },
-                          link: "#",
-                          openInNewTab: false,
-                        },
-                        {
-                          linkType: "URL",
-                          label: { defaultValue: "Footer Link" },
-                          link: "#",
-                          openInNewTab: false,
-                        },
-                        {
-                          linkType: "URL",
-                          label: { defaultValue: "Footer Link" },
-                          link: "#",
-                          openInNewTab: false,
-                        },
-                        {
-                          linkType: "URL",
-                          label: { defaultValue: "Footer Link" },
-                          link: "#",
+                          normalizeLink: true,
                           openInNewTab: false,
                         },
                       ],
@@ -4685,30 +4752,35 @@ const directoryDefaultLayout = {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
+                          normalizeLink: true,
                           openInNewTab: false,
                         },
                         {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
+                          normalizeLink: true,
                           openInNewTab: false,
                         },
                         {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
+                          normalizeLink: true,
                           openInNewTab: false,
                         },
                         {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
+                          normalizeLink: true,
                           openInNewTab: false,
                         },
                         {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
+                          normalizeLink: true,
                           openInNewTab: false,
                         },
                       ],
@@ -4720,30 +4792,75 @@ const directoryDefaultLayout = {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
+                          normalizeLink: true,
                           openInNewTab: false,
                         },
                         {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
+                          normalizeLink: true,
                           openInNewTab: false,
                         },
                         {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
+                          normalizeLink: true,
                           openInNewTab: false,
                         },
                         {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
+                          normalizeLink: true,
                           openInNewTab: false,
                         },
                         {
                           linkType: "URL",
                           label: { defaultValue: "Footer Link" },
                           link: "#",
+                          normalizeLink: true,
+                          openInNewTab: false,
+                        },
+                      ],
+                    },
+                    {
+                      label: { defaultValue: "Footer Label" },
+                      links: [
+                        {
+                          linkType: "URL",
+                          label: { defaultValue: "Footer Link" },
+                          link: "#",
+                          normalizeLink: true,
+                          openInNewTab: false,
+                        },
+                        {
+                          linkType: "URL",
+                          label: { defaultValue: "Footer Link" },
+                          link: "#",
+                          normalizeLink: true,
+                          openInNewTab: false,
+                        },
+                        {
+                          linkType: "URL",
+                          label: { defaultValue: "Footer Link" },
+                          link: "#",
+                          normalizeLink: true,
+                          openInNewTab: false,
+                        },
+                        {
+                          linkType: "URL",
+                          label: { defaultValue: "Footer Link" },
+                          link: "#",
+                          normalizeLink: true,
+                          openInNewTab: false,
+                        },
+                        {
+                          linkType: "URL",
+                          label: { defaultValue: "Footer Link" },
+                          link: "#",
+                          normalizeLink: true,
                           openInNewTab: false,
                         },
                       ],
@@ -4779,30 +4896,35 @@ const directoryDefaultLayout = {
                               linkType: "URL",
                               label: { defaultValue: "Footer Link" },
                               link: "#",
+                              normalizeLink: true,
                               openInNewTab: false,
                             },
                             {
                               linkType: "URL",
                               label: { defaultValue: "Footer Link" },
                               link: "#",
+                              normalizeLink: true,
                               openInNewTab: false,
                             },
                             {
                               linkType: "URL",
                               label: { defaultValue: "Footer Link" },
                               link: "#",
+                              normalizeLink: true,
                               openInNewTab: false,
                             },
                             {
                               linkType: "URL",
                               label: { defaultValue: "Footer Link" },
                               link: "#",
+                              normalizeLink: true,
                               openInNewTab: false,
                             },
                             {
                               linkType: "URL",
                               label: { defaultValue: "Footer Link" },
                               link: "#",
+                              normalizeLink: true,
                               openInNewTab: false,
                             },
                           ],
@@ -4851,7 +4973,7 @@ const directoryDefaultLayout = {
 const locatorDefaultLayout = {
   root: {
     props: {
-      version: 63,
+      version: 66,
       title: {
         field: "",
         constantValue: { defaultValue: "Find Locations" },
@@ -4873,71 +4995,10 @@ const locatorDefaultLayout = {
         },
         id: "Locator-2ae506f4-a3ee-46ea-b5f9-e4c3236243a7",
         mapStyle: "mapbox://styles/mapbox/streets-v12",
+        locationStyles: [],
         filters: { openNowButton: false, showDistanceOptions: false },
-        resultCard: {
-          primaryHeading: {
-            field: { selection: { value: "name" } },
-            constantValue: "",
-            constantValueEnabled: false,
-            headingLevel: 3,
-          },
-          secondaryHeading: {
-            field: { selection: { value: "name" } },
-            constantValue: "",
-            constantValueEnabled: false,
-            variant: "base",
-            liveVisibility: false,
-          },
-          tertiaryHeading: {
-            field: { selection: { value: "name" } },
-            constantValue: "",
-            constantValueEnabled: false,
-            variant: "base",
-            liveVisibility: false,
-          },
-          icons: false,
-          hours: {
-            field: { selection: { value: "hours" } },
-            table: {
-              startOfWeek: "today",
-              collapseDays: false,
-              showAdditionalHoursText: false,
-            },
-            liveVisibility: true,
-          },
-          address: { showGetDirectionsLink: true, liveVisibility: true },
-          phone: {
-            field: { selection: { value: "mainPhone" } },
-            phoneFormat: "domestic",
-            includePhoneHyperlink: true,
-            liveVisibility: true,
-          },
-          email: {
-            field: { selection: { value: "emails" } },
-            liveVisibility: false,
-          },
-          services: {
-            field: { selection: { value: "services" } },
-            liveVisibility: false,
-          },
-          primaryCTA: {
-            label: "Visit Page",
-            variant: "primary",
-            liveVisibility: true,
-          },
-          secondaryCTA: {
-            label: "Call to Action",
-            link: "#",
-            variant: "secondary",
-            liveVisibility: false,
-          },
-          image: {
-            field: { selection: { value: "headshot" } },
-            constantValue: { url: "", height: 0, width: 0 },
-            constantValueEnabled: false,
-            liveVisibility: false,
-          },
-        },
+        resultCard: [],
+        distanceDisplay: "distanceFromUser",
       },
     },
   ],

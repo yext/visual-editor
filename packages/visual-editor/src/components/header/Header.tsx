@@ -246,6 +246,7 @@ const HeaderLinks = (props: { links: CTAType[] }) => {
                 label={item.label}
                 link={item.link}
                 linkType={item.linkType}
+                normalizeLink={false}
                 variant="link"
                 eventName={`link${idx}`}
                 alwaysHideCaret={true}
@@ -284,6 +285,7 @@ const HeaderMobileMenu = (props: HeaderMobileMenuProps) => {
                   link={item.link}
                   label={item.label}
                   linkType={item.linkType}
+                  normalizeLink={false}
                   variant="link"
                   eventName={`mobilelink${idx}`}
                 />

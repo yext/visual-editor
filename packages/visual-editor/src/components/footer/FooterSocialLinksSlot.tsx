@@ -158,6 +158,7 @@ const FooterSocialLinksSlotInternal: PuckComponent<
             label={iconElement}
             link={link.url}
             linkType="URL"
+            normalizeLink={false}
             variant="link"
             eventName={`socialLink.${link.label.toLowerCase()}`}
             ariaLabel={link.ariaLabel}

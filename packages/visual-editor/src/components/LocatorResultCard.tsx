@@ -65,13 +65,13 @@ import {
 } from "../utils/i18n/distance.ts";
 import {
   DEFAULT_ENTITY_TYPE,
-  EntityType,
+  LocatorEntityType,
 } from "../utils/locatorEntityTypes.ts";
 import { resolveLocatorResultUrl } from "../utils/urls/resolveLocatorResultUrl.ts";
 
 export interface LocatorResultCardProps {
   /** The entity type this result card applies to. */
-  entityType: EntityType;
+  entityType: LocatorEntityType;
 
   /** Settings for the main heading of the card */
   primaryHeading: {
@@ -136,8 +136,21 @@ export interface LocatorResultCardProps {
 
   /** Settings for the address block */
   address: {
+    /**
+     * Whether to include the region in the Address
+     * @defaultValue true
+     */
+    showRegion?: boolean;
+
+    /**
+     * Whether to include the country in the Address
+     * @defaultValue false
+     */
+    showCountry?: boolean;
+
     /** Whether to show the "Get Directions" link */
     showGetDirectionsLink: boolean;
+
     /** Whether the address block is visible in live mode */
     liveVisibility: boolean;
   };
@@ -185,10 +198,14 @@ export interface LocatorResultCardProps {
   primaryCTA: {
     /** Label for the primary CTA */
     label: TranslatableString;
+    /** Whether the primary CTA link should be normalized before rendering */
+    normalizeLink: boolean;
     /** The variant for the primary CTA */
     variant: CTAVariant;
     /** Whether the primary CTA is visible in live mode */
     liveVisibility: boolean;
+    /** Static URL to use for primary CTA when an entity page URL is not found */
+    link?: TranslatableString;
   };
 
   /** Settings for the secondary CTA */
@@ -197,6 +214,8 @@ export interface LocatorResultCardProps {
     label: TranslatableString;
     /** Template for the secondary CTA link, which can contain entity field references */
     link: TranslatableString;
+    /** Whether the secondary CTA link should be normalized before rendering */
+    normalizeLink: boolean;
     /** The variant for the secondary CTA */
     variant: CTAVariant;
     /** Whether the secondary CTA is visible in live mode */
@@ -254,6 +273,8 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
     liveVisibility: true,
   },
   address: {
+    showRegion: true,
+    showCountry: false,
     showGetDirectionsLink: true,
     liveVisibility: true,
   },
@@ -273,12 +294,14 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
   },
   primaryCTA: {
     label: "Visit Page",
+    normalizeLink: true,
     variant: "primary",
     liveVisibility: true,
   },
   secondaryCTA: {
     label: "Call to Action",
     link: "#",
+    normalizeLink: true,
     variant: "secondary",
     liveVisibility: false,
   },
@@ -503,6 +526,20 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.address", "Address"),
       type: "object",
       objectFields: {
+        showRegion: YextField(msg("fields.showRegion", "Show Region"), {
+          type: "radio",
+          options: [
+            { label: msg("fields.options.yes", "Yes"), value: true },
+            { label: msg("fields.options.no", "No"), value: false },
+          ],
+        }),
+        showCountry: YextField(msg("fields.showCountry", "Show Country"), {
+          type: "radio",
+          options: [
+            { label: msg("fields.options.yes", "Yes"), value: true },
+            { label: msg("fields.options.no", "No"), value: false },
+          ],
+        }),
         showGetDirectionsLink: YextField(
           msg("fields.showGetDirectionsLink", "Show Get Directions Link"),
           {
@@ -645,6 +682,23 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
             ],
           }
         ),
+        link: TranslatableStringField<TranslatableString | undefined>(
+          msg("fields.link", "Link"),
+          undefined,
+          false,
+          true,
+          () => getDisplayFieldOptions("type.string")
+        ),
+        normalizeLink: YextField(
+          msg("fields.normalizeLink", "Normalize Link"),
+          {
+            type: "radio",
+            options: [
+              { label: msg("fields.options.yes", "Yes"), value: true },
+              { label: msg("fields.options.no", "No"), value: false },
+            ],
+          }
+        ),
       },
     },
     secondaryCTA: {
@@ -664,6 +718,16 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
           false,
           true,
           () => getDisplayFieldOptions("type.string")
+        ),
+        normalizeLink: YextField(
+          msg("fields.normalizeLink", "Normalize Link"),
+          {
+            type: "radio",
+            options: [
+              { label: msg("fields.options.yes", "Yes"), value: true },
+              { label: msg("fields.options.no", "No"), value: false },
+            ],
+          }
         ),
         variant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
           type: "radio",
@@ -744,16 +808,12 @@ export const LocatorResultCard = React.memo(
     resultCardProps: props,
     distanceDisplay = "distanceFromUser",
     isSelected,
-    showPrimaryCta,
   }: {
     result: CardProps<Location>["result"];
     resultCardProps: LocatorResultCardProps;
     distanceDisplay?: DistanceDisplayOption;
     isSelected?: boolean;
-    showPrimaryCta?: boolean;
   }): React.JSX.Element => {
-    const { document: streamDocument, relativePrefixToRoot } =
-      useTemplateProps();
     const { t, i18n } = useTranslation();
 
     const location = result.rawData;
@@ -775,10 +835,6 @@ export const LocatorResultCard = React.memo(
       result,
       "DRIVING_DIRECTIONS"
     );
-    const handleVisitPageClick = useCardAnalyticsCallback(
-      result,
-      "VIEW_WEBSITE"
-    );
     const handleSecondaryCTAClick = useCardAnalyticsCallback(
       result,
       "CTA_CLICK"
@@ -786,12 +842,6 @@ export const LocatorResultCard = React.memo(
     const handlePhoneNumberClick = useCardAnalyticsCallback(
       result,
       "TAP_TO_CALL"
-    );
-
-    const resolvedUrl = resolveLocatorResultUrl(
-      location,
-      streamDocument,
-      relativePrefixToRoot
     );
 
     const getDirectionsLink: string | undefined = (() => {
@@ -872,7 +922,11 @@ export const LocatorResultCard = React.memo(
                     )}
                     <div className="flex flex-col gap-1 w-full">
                       <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize gap-4">
-                        <Address address={location.address} />
+                        <Address
+                          address={location.address}
+                          showRegion={props.address.showRegion}
+                          showCountry={props.address.showCountry}
+                        />
                       </div>
                       {getDirectionsLink &&
                         props.address.showGetDirectionsLink && (
@@ -920,22 +974,9 @@ export const LocatorResultCard = React.memo(
               {displayDistance}
             </div>
           )}
+          {/** CTA section */}
           <div className="flex flex-col lg:flex-row gap-2 lg:gap-4 w-full items-center md:items-stretch lg:items-center">
-            {showPrimaryCta && resolvedUrl && (
-              <CTA
-                link={resolvedUrl}
-                label={
-                  resolveComponentData(
-                    props.primaryCTA.label,
-                    i18n.language,
-                    location
-                  ) || t("visitPage", "Visit Page")
-                }
-                variant={props.primaryCTA.variant}
-                onClick={handleVisitPageClick}
-                className="basis-full sm:w-auto justify-center"
-              />
-            )}
+            <PrimaryCTA primaryCTA={props.primaryCTA} result={result} />
             {props.secondaryCTA.liveVisibility && (
               <CTA
                 link={resolveComponentData(
@@ -951,6 +992,7 @@ export const LocatorResultCard = React.memo(
                   ) || t("callToAction", "Call to Action")
                 }
                 variant={props.secondaryCTA.variant}
+                normalizeLink={props.secondaryCTA.normalizeLink}
                 onClick={handleSecondaryCTAClick}
                 className="basis-full sm:w-auto justify-center"
               />
@@ -961,6 +1003,57 @@ export const LocatorResultCard = React.memo(
     );
   }
 );
+
+const PrimaryCTA = (props: {
+  primaryCTA: LocatorResultCardProps["primaryCTA"];
+  result: CardProps<Location>["result"];
+}) => {
+  const { primaryCTA, result } = props;
+  const location = result.rawData;
+  const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
+  const { t, i18n } = useTranslation();
+
+  // Always uses the entity page link if one exists. If not, tries to resolve URL from the static
+  // template in the Link prop, and if that also fails, doesn't render at all.
+  let resolvedUrl = resolveLocatorResultUrl(
+    location,
+    streamDocument,
+    relativePrefixToRoot
+  );
+  if (resolvedUrl === undefined && primaryCTA?.link) {
+    resolvedUrl = resolveComponentData(
+      primaryCTA.link,
+      i18n.language,
+      location
+    );
+  }
+
+  const showPrimaryCta = primaryCTA.liveVisibility && resolvedUrl;
+
+  const handlePrimaryCtaClick = useCardAnalyticsCallback(
+    result,
+    "VIEW_WEBSITE"
+  );
+
+  return (
+    showPrimaryCta && (
+      <CTA
+        link={resolvedUrl}
+        label={
+          resolveComponentData(
+            props.primaryCTA.label,
+            i18n.language,
+            location
+          ) || t("visitPage", "Visit Page")
+        }
+        variant={primaryCTA.variant}
+        normalizeLink={primaryCTA.normalizeLink}
+        onClick={handlePrimaryCtaClick}
+        className="basis-full sm:w-auto justify-center"
+      />
+    )
+  );
+};
 
 const CardIcon: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const colorClasses = `${backgroundColors.background2.value.bgColor} ${backgroundColors.background2.value.textColor}`;
@@ -1188,6 +1281,7 @@ const EmailSection = (props: {
           link={emailAddresses[0]}
           label={emailAddresses[0]}
           linkType="EMAIL"
+          normalizeLink={false}
           variant="link"
         />
       </div>

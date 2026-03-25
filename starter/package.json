@@ -57,7 +57,7 @@
     "@types/react-dom": "^18.2.25",
     "@vitejs/plugin-react": "^4.2.1",
     "@yext/pages": "1.2.9",
-    "@yext/pages-components": "^2.0.0",
+    "@yext/pages-components": "2.0.2",
     "@yext/visual-editor": "workspace:*",
     "playwright": "^1.55.1",
     "autoprefixer": "^10.4.8",
