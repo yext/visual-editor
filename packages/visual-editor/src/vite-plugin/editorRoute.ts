@@ -7,6 +7,11 @@ const EDIT_PATH_DECLARATION_PATTERN = /const editPath = ".*?";/;
 export const getEditorPathFromTemplateNames = (
   templateNames: string[]
 ): string => {
+  console.log(
+    "Determining template editor path from template names:",
+    templateNames
+  );
+
   const uniqueTemplateNames = [...new Set(templateNames)].filter(
     (templateName) => templateName !== "edit"
   );
