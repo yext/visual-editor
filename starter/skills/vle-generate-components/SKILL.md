@@ -1,6 +1,6 @@
 ---
 name: vle-generate-components
-description: Generate Visual Editor components from a reference URL by capturing page artifacts with Playwright and translating them into Puck sections.
+description: Generate Visual Editor components from a reference URL or local HTML directory by capturing page artifacts with Playwright and translating them into Puck sections.
 ---
 
 # VLE Generate Components
@@ -16,7 +16,9 @@ The goal is to transform a reference page into Puck Components using captured HT
 Required:
 
 - `templateName`: template slug (kebab case), Often a client name (example: `galaxy-grill`)
-- `url`: fully qualified URL to capture
+- exactly one source input:
+  - `url`: fully qualified URL to capture
+  - `sourceDir`: path to a directory that contains at least one HTML file (`index.html`, `page.html`, or any `*.html`)
 
 ## Restrictions
 
@@ -38,14 +40,22 @@ Required:
 
 ## Workflow
 
-1. Capture Step: Open the URL and save page artifacts
+1. Input Normalization and Capture Step: Produce captured artifacts from either input type
 
-- Run the capture script:
-  - `pnpm run capture-page-artifacts <templateName> <url>`
-  - If the site serves a bot challenge, rerun with `pnpm run capture-page-artifacts --manual-on-block <templateName> <url>`.
-    This opens a headed browser, lets the user manually complete the challenge or load the destination page,
-    then resumes capture after terminal confirmation.
-- The capture output is written to:
+- If input is `url`:
+  - Run:
+    - `pnpm run capture-page-artifacts <templateName> <url>`
+  - If the site serves a bot challenge, rerun with:
+    - `pnpm run capture-page-artifacts --manual-on-block <templateName> <url>`
+    - This opens a headed browser, lets the user manually complete the challenge or load the destination page,
+      then resumes capture after terminal confirmation.
+- If input is `sourceDir`:
+  - Resolve HTML entrypoint from `sourceDir` in this order: `index.html`, `page.html`, then first `*.html` (alphabetical).
+  - Convert the resolved HTML file to a `file://` URL.
+  - Run the same capture script against that local file URL:
+    - `pnpm run capture-page-artifacts <templateName> <fileUrl>`
+  - If local rendering requires manual interaction, rerun with `--manual-on-block`.
+- The normalized capture output is written to:
   - `starter/src/registry/<templateName>/.captured-artifact/`
 - Required capture artifacts:
   - `page.html`: rendered HTML
@@ -53,7 +63,7 @@ Required:
   - `screenshot.png`: full-page screenshot
   - `manifest.json`: metadata and capture summary
 - Screenshot is required by default for visual parity.
-- When `--manual-on-block` is used, treat the user-loaded page as the capture source of truth after the challenge is cleared.
+- When `--manual-on-block` is used, treat the user-loaded page as the capture source of truth after blocking/challenge is cleared.
 
 2. Plan Step: Analyze full captured artifacts to plan the Puck Components that will be created
 

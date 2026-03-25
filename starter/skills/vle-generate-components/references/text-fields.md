@@ -106,7 +106,7 @@ return (
 ## defaultProps Rules
 
 - `defaultProps` for each text object field must be set from the captured HTML/screenshot artifacts.
-- The text content from the HTML should be placed in `constantValue.en`. `constantValueEnabled` should be true.
+- The text content from the HTML should be placed in `constantValue.defaultValue`. `constantValueEnabled` should be true.
 - Copy visible values as closely as possible (text content, size, color, weight).
 - Do not include `\n` in the defaultProps. If the text should break lines, use CSS.
 
@@ -116,7 +116,7 @@ Example:
 {
   heading: {
     text: {
-      constantValue: {en: "Value from HTML", hasLocalizedValue: "true"},
+      constantValue: {defaultValue: "Value from HTML", hasLocalizedValue: "true"},
       field: "",
       constantValueEnabled: true,
     },

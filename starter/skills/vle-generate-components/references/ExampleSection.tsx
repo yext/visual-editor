@@ -157,7 +157,7 @@ export const ExampleSection: ComponentConfig<ExampleSectionProps> = {
       text: {
         field: "",
         constantValue: {
-          en: "Banner Text from Input HTML",
+          defaultValue: "Banner Text from Input HTML",
           hasLocalizedValue: "true",
         },
         constantValueEnabled: true,

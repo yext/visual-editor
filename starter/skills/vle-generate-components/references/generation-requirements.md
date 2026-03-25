@@ -44,6 +44,7 @@ starter/src/registry/<template>/
 - ALWAYS use `Address`, `HoursTable`, `HoursStatus`, and `Link` from `@yext/pages-components` when rendering
   any address, hours, ctas, or links. However, they MUST be augmented with CSS/classes to match
   the captured page artifacts
+- Images should be based on a url or svg. They should not use a `file://` url.
 
 ## Puck Section Component Responsibilities
 
