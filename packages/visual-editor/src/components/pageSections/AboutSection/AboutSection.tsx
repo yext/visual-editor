@@ -11,6 +11,7 @@ import {
   ThemeColor,
   HeadingLevel,
 } from "../../../utils/themeConfigOptions.ts";
+import { getThemeColorCssValue } from "../../../utils/colors.ts";
 import { BodyTextProps } from "../../contentBlocks/BodyText.tsx";
 import { Button } from "../../atoms/button.tsx";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
@@ -46,6 +47,11 @@ export type AboutSectionProps = {
     backgroundColor?: ThemeColor;
 
     /**
+     * The read more/read less button color.
+     */
+    readMoreButtonColor?: ThemeColor;
+
+    /**
      * If 'true', the sidebar with additional details is shown; if 'false', it's hidden.
      * @defaultValue true
      */
@@ -74,6 +80,13 @@ const aboutSectionFields: Fields<AboutSectionProps> = {
         {
           type: "select",
           options: "BACKGROUND_COLOR",
+        }
+      ),
+      readMoreButtonColor: YextField(
+        msg("fields.readMoreButtonColor", "Read More Button Color"),
+        {
+          type: "select",
+          options: "SITE_COLOR",
         }
       ),
       showDetailsColumn: YextField(
@@ -119,7 +132,9 @@ const AboutComponent: PuckComponent<AboutSectionProps> = (props) => {
   const [isDescriptionOverflown, setIsDescriptionOverflown] =
     React.useState(false);
   const descriptionSlotRef = React.useRef<HTMLDivElement>(null);
-
+  const readMoreButtonColor = getThemeColorCssValue(
+    styles?.readMoreButtonColor?.selectedColor
+  );
   // Only show expand/collapse button if the description content is truncated
   React.useLayoutEffect(() => {
     if (!descriptionSlotRef.current) {
@@ -165,6 +180,9 @@ const AboutComponent: PuckComponent<AboutSectionProps> = (props) => {
           <Button
             variant="link"
             className="visible lg:hidden font-body-fontFamily font-bold text-body-fontSize no-underline cursor-pointer inline-flex items-center gap-2"
+            style={
+              readMoreButtonColor ? { color: readMoreButtonColor } : undefined
+            }
             onClick={() => setExpanded((prev) => !prev)}
             aria-expanded={expanded}
           >

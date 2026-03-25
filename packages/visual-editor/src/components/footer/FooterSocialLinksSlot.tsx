@@ -5,6 +5,8 @@ import { msg } from "../../utils/i18n/platform.ts";
 import { CTA } from "../atoms/cta.tsx";
 import { useBackground } from "../../hooks/useBackground.tsx";
 import { useTranslation } from "react-i18next";
+import { ThemeColor } from "../../utils/themeConfigOptions.ts";
+import { getThemeColorCssValue } from "../../utils/colors.ts";
 import {
   FaFacebook,
   FaInstagram,
@@ -29,6 +31,7 @@ export interface FooterSocialLinksSlotProps {
   styles?: {
     filledBackground?: boolean;
     mobileAlignment?: "left" | "center";
+    iconColor?: ThemeColor;
   };
 }
 
@@ -64,6 +67,15 @@ export const FooterSocialLinksSlotFields: Fields<FooterSocialLinksSlotProps> = {
       }),
       youtubeLink: YextField(msg("fields.youtubeLink", "YouTube Link"), {
         type: "text",
+      }),
+    },
+  }),
+  styles: YextField(msg("fields.styles", "Styles"), {
+    type: "object",
+    objectFields: {
+      iconColor: YextField(msg("fields.iconColor", "Icon Color"), {
+        type: "select",
+        options: "SITE_COLOR",
       }),
     },
   }),
@@ -143,9 +155,13 @@ const FooterSocialLinksSlotInternal: PuckComponent<
     >
       {validLinks.map((link, index) => {
         const Icon = link.icon;
+        const filledIconColor = getThemeColorCssValue(
+          styles?.iconColor?.selectedColor
+        );
         const iconElement = styles?.filledBackground ? (
           <div
             className={`flex h-12 w-12 items-center justify-center rounded-full ${background?.isDarkColor ? "bg-white text-palette-primary-dark" : "bg-palette-primary-dark text-white"}`}
+            style={filledIconColor ? { color: filledIconColor } : undefined}
           >
             <Icon className="h-6 w-6" />
           </div>
@@ -164,6 +180,7 @@ const FooterSocialLinksSlotInternal: PuckComponent<
             ariaLabel={link.ariaLabel}
             alwaysHideCaret
             className="block break-words whitespace-normal"
+            color={styles?.iconColor}
           />
         );
       })}

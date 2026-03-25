@@ -18,11 +18,16 @@ import { useBackground } from "../../hooks/useBackground.tsx";
 import { useTranslation } from "react-i18next";
 import { defaultLink, defaultLinks } from "./ExpandedFooter.tsx";
 import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
+import { ThemeColor } from "../../utils/themeConfigOptions.ts";
 
 export interface FooterExpandedLinkSectionSlotProps {
   data: {
     label: YextEntityField<TranslatableString>;
     links: TranslatableCTA[];
+  };
+  styles?: {
+    /** Color applied to section label and links. */
+    color?: ThemeColor;
   };
   /** @internal */
   index?: number;
@@ -31,7 +36,7 @@ export interface FooterExpandedLinkSectionSlotProps {
 const FooterExpandedLinkSectionSlotInternal: PuckComponent<
   FooterExpandedLinkSectionSlotProps
 > = (props) => {
-  const { data, puck } = props;
+  const { data, styles, puck } = props;
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
   const background = useBackground();
@@ -40,13 +45,16 @@ const FooterExpandedLinkSectionSlotInternal: PuckComponent<
   const label = resolveComponentData(data.label, i18n.language, streamDocument);
   const links = data.links;
 
-  const textColorClass = isDarkBackground
-    ? "text-white"
-    : "text-palette-primary-dark";
+  const defaultColor: ThemeColor = isDarkBackground
+    ? { selectedColor: "white", contrastingColor: "black" }
+    : { selectedColor: "palette-primary-dark", contrastingColor: "white" };
+  const resolvedColor = styles?.color ?? defaultColor;
 
   return (
     <div className="flex flex-col gap-6">
-      <Body className={`break-words ${textColorClass}`}>{label}</Body>
+      <Body className="break-words" color={resolvedColor}>
+        {label}
+      </Body>
       <div className="flex flex-col gap-4">
         {links && links.length > 0
           ? links.map((linkData, index) => {
@@ -76,6 +84,7 @@ const FooterExpandedLinkSectionSlotInternal: PuckComponent<
                       : (linkData.normalizeLink ?? true)
                   }
                   className="justify-center md:justify-start block break-words whitespace-normal"
+                  color={resolvedColor}
                 />
               );
             })
@@ -161,6 +170,15 @@ const footerExpandedLinkSectionSlotFields: Fields<FooterExpandedLinkSectionSlotP
                 : item.label?.[locale];
             return label || pt("link", "Link") + " " + ((index ?? 0) + 1);
           },
+        }),
+      },
+    }),
+    styles: YextField(msg("fields.styles", "Styles"), {
+      type: "object",
+      objectFields: {
+        color: YextField(msg("fields.color", "Color"), {
+          type: "select",
+          options: "SITE_COLOR",
         }),
       },
     }),

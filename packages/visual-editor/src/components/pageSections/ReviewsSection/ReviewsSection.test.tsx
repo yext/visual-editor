@@ -249,6 +249,64 @@ const tests: ComponentTest[] = [
       await delay(interactionsDelay);
     },
   },
+  {
+    name: "version 71 props with color overrides",
+    document: testDocument,
+    props: {
+      styles: {
+        backgroundColor: {
+          selectedColor: "white",
+          contrastingColor: "black",
+        },
+        showSectionHeading: true,
+        accentColor: {
+          selectedColor: "palette-tertiary",
+          contrastingColor: "palette-tertiary-contrast",
+        },
+      },
+      slots: {
+        SectionHeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-78777621-8259-499b-a280-41dd6cebd7e5",
+              data: {
+                text: {
+                  constantValue: {
+                    en: "Recent Reviews",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: {
+                level: 1,
+                align: "center",
+                color: {
+                  selectedColor: "palette-secondary",
+                  contrastingColor: "palette-secondary-contrast",
+                },
+              },
+            },
+          },
+        ],
+      },
+      analytics: {
+        scope: "reviewsSection",
+      },
+      liveVisibility: true,
+      id: "ReviewsSection-7c569bac-38f2-459a-96c2-cf0e4b848060",
+    },
+    version: 71,
+    interactions: async (page) => {
+      const expandButton = page.getByText("Show more");
+      await act(async () => {
+        await expandButton.click();
+      });
+      await delay(interactionsDelay);
+    },
+  },
 ];
 
 describe("ReviewsSection", async () => {
@@ -306,16 +364,23 @@ describe("ReviewsSection", async () => {
       await expect(
         `ReviewsSection/[${viewportName}] ${name}`
       ).toMatchScreenshot();
-      const results = await axe(container);
-      expect(results).toHaveNoViolations();
+
+      // skip test cases that intentional fail WCAG
+      if (!name.includes("with color overrides")) {
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      }
 
       if (interactions) {
         await interactions(page);
         await expect(
           `ReviewsSection/[${viewportName}] ${name} (after interactions)`
         ).toMatchScreenshot();
-        const results = await axe(container);
-        expect(results).toHaveNoViolations();
+
+        if (!name.includes("with color overrides")) {
+          const results = await axe(container);
+          expect(results).toHaveNoViolations();
+        }
       }
     }
   );

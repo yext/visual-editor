@@ -108,6 +108,11 @@ export interface HeroStyles {
   showAverageReview: boolean;
 
   /**
+   * The color applied to review stars when average review is shown.
+   */
+  reviewStarsColor?: ThemeColor;
+
+  /**
    * Whether to show the primary CTA.
    * @defaultValue true
    */
@@ -313,6 +318,13 @@ const heroSectionFields: Fields<HeroSectionProps> = {
         {
           type: "radio",
           options: "SHOW_HIDE",
+        }
+      ),
+      reviewStarsColor: YextField(
+        msg("fields.reviewStarsColor", "Review Stars Color"),
+        {
+          type: "select",
+          options: "SITE_COLOR",
         }
       ),
       showPrimaryCTA: YextField(

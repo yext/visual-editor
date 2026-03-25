@@ -39,6 +39,11 @@ export interface ProfessionalHeroStyles {
   showAverageReview: boolean;
 
   /**
+   * The color applied to review stars when average review is shown.
+   */
+  reviewStarsColor?: ThemeColor;
+
+  /**
    * Whether to show the hero image.
    * @defaultValue true
    */
@@ -233,6 +238,7 @@ const ProfessionalHero: PuckComponent<ProfessionalHeroSectionProps> = (
               <ReviewStars
                 averageRating={averageRating}
                 reviewCount={reviewCount}
+                color={styles.reviewStarsColor}
                 className="justify-start"
               />
             )}
@@ -392,6 +398,13 @@ const professionalHeroSectionFields: Fields<ProfessionalHeroSectionProps> = {
               value: false,
             },
           ],
+        }
+      ),
+      reviewStarsColor: YextField(
+        msg("fields.reviewStarsColor", "Review Stars Color"),
+        {
+          type: "select",
+          options: "SITE_COLOR",
         }
       ),
       showAddress: YextField(msg("fields.showAddress", "Show Address"), {

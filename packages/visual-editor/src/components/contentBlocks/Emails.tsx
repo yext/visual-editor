@@ -9,7 +9,10 @@ import { YextField } from "../../editor/YextField.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { Background } from "../atoms/background.tsx";
-import { backgroundColors } from "../../utils/themeConfigOptions.ts";
+import {
+  ThemeColor,
+  backgroundColors,
+} from "../../utils/themeConfigOptions.ts";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import { updateFields } from "../pageSections/HeroSection.tsx";
 
@@ -21,6 +24,8 @@ export interface EmailsProps {
   styles?: {
     listLength?: number;
     showIcon?: boolean;
+    /** The color applied to both the email icon background and the email link. */
+    color?: ThemeColor;
   };
 
   /** @internal Event name to be used for click analytics */
@@ -61,6 +66,10 @@ export const EmailsFields: Fields<EmailsProps> = {
       showIcon: YextField(msg("fields.showIcon", "Show Icon"), {
         type: "radio",
         options: "SHOW_HIDE",
+      }),
+      color: YextField(msg("fields.color", "Color"), {
+        type: "select",
+        options: "SITE_COLOR",
       }),
     },
   }),
@@ -103,7 +112,7 @@ const EmailsComponent: PuckComponent<EmailsProps> = (props) => {
           <li key={index} className={`flex items-center gap-3`}>
             {showEmailIcon && (
               <Background
-                background={backgroundColors.background2.value}
+                background={styles?.color ?? backgroundColors.background2.value}
                 className={`h-10 w-10 flex justify-center rounded-full items-center`}
               >
                 <FaRegEnvelope className="w-4 h-4" />
@@ -116,6 +125,7 @@ const EmailsComponent: PuckComponent<EmailsProps> = (props) => {
               linkType="EMAIL"
               normalizeLink={false}
               variant="link"
+              color={styles?.color}
               alwaysHideCaret={true}
             />
           </li>

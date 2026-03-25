@@ -15,11 +15,13 @@ import { i18nComponentsInstance } from "../../utils/i18n/components.ts";
 import { useTranslation } from "react-i18next";
 import { defaultLink, defaultLinks } from "./ExpandedFooter.tsx";
 import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
+import { ThemeColor } from "../../utils/themeConfigOptions.ts";
 
 export interface FooterLinksSlotProps {
   data: {
     links: TranslatableCTA[];
   };
+  color?: ThemeColor;
   /** @internal */
   variant?: "primary" | "secondary";
   /** @internal */
@@ -33,6 +35,7 @@ const FooterLinksSlotInternal: PuckComponent<FooterLinksSlotProps> = (
 ) => {
   const {
     data,
+    color,
     variant = "primary",
     eventNamePrefix = "footer",
     alignment = "left",
@@ -101,6 +104,7 @@ const FooterLinksSlotInternal: PuckComponent<FooterLinksSlotProps> = (
                 : (linkData.normalizeLink ?? true)
             }
             className={`justify-center block break-words whitespace-normal`}
+            color={color}
           />
         );
       })}
@@ -181,6 +185,10 @@ const footerLinksSlotFields: Fields<FooterLinksSlotProps> = {
         },
       }),
     },
+  }),
+  color: YextField(msg("fields.color", "Color"), {
+    type: "select",
+    options: "SITE_COLOR",
   }),
   variant: {
     type: "radio",

@@ -64,6 +64,7 @@ export const HeroContent: PuckComponent<HeroVariantProps> = ({
             <ReviewStars
               averageRating={averageRating}
               reviewCount={reviewCount}
+              color={styles.reviewStarsColor}
               className={themeManagerCn(
                 styles.mobileContentAlignment === "left"
                   ? "justify-start"
