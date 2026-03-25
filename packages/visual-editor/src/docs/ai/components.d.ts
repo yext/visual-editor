@@ -655,6 +655,17 @@ interface ExpandedFooterData {
      * expandedFooter: true uses multiple columns of expandedFooterLinks.
      */
     expandedFooter: boolean;
+    /** Whether to show the logo in the primary footer. */
+    showLogo: boolean;
+    /** Whether to show social links in the primary footer. */
+    showSocialLinks: boolean;
+    /** Whether to show utility images in the primary footer. */
+    showUtilityImages: boolean;
+  };
+  /** Content for the secondary footer bar. */
+  secondaryFooter: {
+    /** Whether to show the secondary footer. */
+    show: boolean;
   };
 }
 
@@ -663,6 +674,8 @@ interface ExpandedFooterStyles {
   primaryFooter: {
     backgroundColor?: ThemeColor;
     linksPosition: "left" | "right";
+    desktopContentAlignment: "left" | "center" | "right";
+    mobileContentAlignment: "left" | "center" | "right";
   };
   /** The maximum width of the footer. */
   maxWidth: PageSectionProps["maxWidth"];
