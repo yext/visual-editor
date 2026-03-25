@@ -32,14 +32,14 @@ const editPath = "__YEXT_VISUAL_EDITOR_PATH__";
 // Editor path is injected at generation time based on the available templates.
 export const getPath: GetPath<TemplateProps> = () => {
   console.log(
-    "Determined template editor editPath (using `hardcodededitpath` instead):",
+    "Determined template editor editPath (using `edit/my-template` instead):",
     editPath
   );
-  return "hardcodededitpath";
+  return "edit/my-template";
 };
 
 export const config: TemplateConfig = {
-  name: "edit",
+  name: "edit-my-template",
 };
 
 export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
