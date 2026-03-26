@@ -15,8 +15,7 @@ import {
   blocksPlugin,
   outlinePlugin,
 } from "@puckeditor/core";
-import React from "react";
-import { useState, useRef, useCallback } from "react";
+import React, { useRef, useCallback } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityTooltipsProvider } from "../../editor/EntityField.tsx";
 import { LayoutSaveState } from "../types/saveState.ts";
@@ -81,7 +80,6 @@ const createAdvancedSettingsLink = () => ({
 type InternalLayoutEditorProps = {
   puckConfig: Config;
   puckInitialHistory: InitialHistory | undefined;
-  isLoading: boolean;
   clearHistory: () => void;
   templateMetadata: TemplateMetadata;
   layoutSaveState: LayoutSaveState | undefined;
@@ -98,7 +96,6 @@ type InternalLayoutEditorProps = {
 export const InternalLayoutEditor = ({
   puckConfig,
   puckInitialHistory,
-  isLoading,
   clearHistory,
   templateMetadata,
   layoutSaveState,
@@ -110,7 +107,6 @@ export const InternalLayoutEditor = ({
   localDev,
   metadata,
 }: InternalLayoutEditorProps) => {
-  const [canEdit, setCanEdit] = useState<boolean>(false); // helps sync puck preview and save state
   const historyIndex = useRef<number>(0);
   const { i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
@@ -198,16 +194,6 @@ export const InternalLayoutEditor = ({
         comment: comment,
       },
     });
-  };
-
-  const change = async () => {
-    if (isLoading) {
-      return;
-    }
-    if (!canEdit) {
-      setCanEdit(true);
-      return;
-    }
   };
 
   const translatedPuckConfigWithRootFields = React.useMemo(() => {
@@ -408,7 +394,6 @@ export const InternalLayoutEditor = ({
         config={translatedPuckConfigWithRootFields}
         data={{}} // we use puckInitialHistory instead
         initialHistory={puckInitialHistory}
-        onChange={change}
         plugins={[{ ...blocks, label: pt("sections", "Sections") }, outline]}
         overrides={{
           fields: fieldsOverride,
