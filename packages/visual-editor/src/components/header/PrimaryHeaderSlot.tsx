@@ -8,7 +8,7 @@ import {
 } from "@puckeditor/core";
 import {
   backgroundColors,
-  BackgroundStyle,
+  ThemeColor,
 } from "../../utils/themeConfigOptions.ts";
 import { CTAWrapperProps } from "../contentBlocks/CtaWrapper.tsx";
 import { EnhancedTranslatableCTA, TranslatableCTA } from "../../types/types.ts";
@@ -35,7 +35,7 @@ const HAMBURGER_RESERVE_PX = 48;
 
 export interface PrimaryHeaderSlotProps {
   styles: {
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
   };
 
   /** @internal values that come from the parent ExpandedHeader */

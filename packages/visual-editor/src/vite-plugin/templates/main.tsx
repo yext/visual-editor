@@ -27,6 +27,7 @@ import {
   getSchema,
   injectTranslations,
   getCanonicalUrl,
+  GTMBody,
   resolveUrlTemplate,
 } from "@yext/visual-editor";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
@@ -158,11 +159,13 @@ const Location: Template<TemplateRenderProps> = (props) => {
       requireOptIn={requireAnalyticsOptIn}
     >
       <VisualEditorProvider templateProps={props}>
-        <Render
-          config={filteredConfig}
-          data={data}
-          metadata={{ streamDocument: document }}
-        />
+        <GTMBody>
+          <Render
+            config={filteredConfig}
+            data={data}
+            metadata={{ streamDocument: document }}
+          />
+        </GTMBody>
       </VisualEditorProvider>
     </AnalyticsProvider>
   );

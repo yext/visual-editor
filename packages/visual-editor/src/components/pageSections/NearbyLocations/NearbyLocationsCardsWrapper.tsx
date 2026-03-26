@@ -4,7 +4,7 @@ import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { useQuery } from "@tanstack/react-query";
 import {
   backgroundColors,
-  BackgroundStyle,
+  ThemeColor,
   HeadingLevel,
 } from "../../../utils/themeConfigOptions.ts";
 import { Body } from "../../atoms/body.tsx";
@@ -46,7 +46,7 @@ export type NearbyLocationCardsWrapperProps = {
   /** Styling for the individual location cards. */
   styles: {
     /** The card background color. */
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
 
     /** The heading level for the card title. */
     headingLevel?: HeadingLevel;
@@ -54,7 +54,7 @@ export type NearbyLocationCardsWrapperProps = {
      * The color applied to the card title
      * @defaultValue inherited from theme
      */
-    color?: BackgroundStyle;
+    color?: ThemeColor;
     /** Styling for the hours display on each card. */
     hours: {
       /** Whether to display the current status ("Open Now" or "Closed") */
@@ -79,6 +79,11 @@ export type NearbyLocationCardsWrapperProps = {
        * @defaultValue false
        */
       phoneNumberLink: boolean;
+
+      /**
+       * The color applied to phone links (and icon if enabled) on each card.
+       */
+      color?: ThemeColor;
     };
 
     /** Styling for the address on each card */
@@ -222,6 +227,10 @@ const nearbyLocationCardsWrapperFields: Fields<NearbyLocationCardsWrapperProps> 
                 ],
               }
             ),
+            color: YextField(msg("fields.color", "Color"), {
+              type: "select",
+              options: "SITE_COLOR",
+            }),
           },
         }),
         address: YextField(msg("fields.address", "Address"), {

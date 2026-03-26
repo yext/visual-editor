@@ -14,7 +14,7 @@ import { getDefaultRTF } from "../../editor/TranslatableRichTextField.tsx";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import {
   backgroundColors,
-  BackgroundStyle,
+  ThemeColor,
 } from "../../utils/themeConfigOptions.js";
 import { CircleSlash2 } from "lucide-react";
 import { useTemplateMetadata } from "../../internal/hooks/useMessageReceivers.ts";
@@ -34,13 +34,13 @@ export interface BannerStyles {
    * The background color of the section.
    * @defaultValue Background Color 6
    */
-  backgroundColor?: BackgroundStyle;
+  backgroundColor?: ThemeColor;
 
   /**
    * Optional text color for the banner text.
    * If not set, it will default to a color that contrasts with the background color.
    */
-  textColor?: BackgroundStyle;
+  textColor?: ThemeColor;
 
   /**
    * The horizontal alignment of the text.
@@ -160,6 +160,12 @@ const BannerComponent: PuckComponent<BannerSectionProps> = ({
     right: "justify-end",
   }[styles.textAlignment];
 
+  const textAlignClass = {
+    left: "text-left",
+    center: "text-center",
+    right: "text-end",
+  }[styles.textAlignment];
+
   // Show empty state in editor mode when mapped field is empty
   if (isMappedField && isEmpty) {
     if (puck.isEditing) {
@@ -213,7 +219,7 @@ const BannerComponent: PuckComponent<BannerSectionProps> = ({
     <PageSection
       background={styles.backgroundColor}
       verticalPadding="sm"
-      className={`flex ${justifyClass} items-center`}
+      className={`flex ${justifyClass} ${textAlignClass} items-center`}
     >
       <EntityField
         displayName={pt("fields.bannerText", "Banner Text")}

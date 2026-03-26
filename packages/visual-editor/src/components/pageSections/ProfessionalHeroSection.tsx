@@ -2,7 +2,7 @@ import React from "react";
 import { ComponentConfig, Fields, Slot, PuckComponent } from "@puckeditor/core";
 import {
   backgroundColors,
-  BackgroundStyle,
+  ThemeColor,
   ThemeOptions,
 } from "../../utils/themeConfigOptions.ts";
 import { YextField } from "../../editor/YextField.tsx";
@@ -30,13 +30,18 @@ export interface ProfessionalHeroStyles {
    * The background color for the section.
    * @defaultValue Background Color 1
    */
-  backgroundColor?: BackgroundStyle;
+  backgroundColor?: ThemeColor;
 
   /**
    * If 'true', displays the entity's average review rating.
    * @defaultValue true
    */
   showAverageReview: boolean;
+
+  /**
+   * The color applied to review stars when average review is shown.
+   */
+  reviewStarsColor?: ThemeColor;
 
   /**
    * Whether to show the hero image.
@@ -233,6 +238,7 @@ const ProfessionalHero: PuckComponent<ProfessionalHeroSectionProps> = (
               <ReviewStars
                 averageRating={averageRating}
                 reviewCount={reviewCount}
+                color={styles.reviewStarsColor}
                 className="justify-start"
               />
             )}
@@ -392,6 +398,13 @@ const professionalHeroSectionFields: Fields<ProfessionalHeroSectionProps> = {
               value: false,
             },
           ],
+        }
+      ),
+      reviewStarsColor: YextField(
+        msg("fields.reviewStarsColor", "Review Stars Color"),
+        {
+          type: "select",
+          options: "SITE_COLOR",
         }
       ),
       showAddress: YextField(msg("fields.showAddress", "Show Address"), {

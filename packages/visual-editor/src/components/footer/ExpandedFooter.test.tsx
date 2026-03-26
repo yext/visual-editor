@@ -1272,6 +1272,173 @@ const tests: ComponentTest[] = [
     },
     version: 51,
   },
+  {
+    name: "version 71 props with color overrides",
+    document: {},
+    props: {
+      data: {
+        primaryFooter: {
+          expandedFooter: false,
+        },
+      },
+      slots: {
+        LogoSlot: [
+          {
+            type: "FooterLogoSlot",
+            props: {
+              id: "FooterLogoSlot-e621dc94-a3ff-4846-a23f-c793440b6c69",
+              data: {
+                image: {
+                  field: "",
+                  constantValue: {
+                    url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
+                    height: 100,
+                    width: 100,
+                    alternateText: {
+                      defaultValue: "Logo",
+                    },
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                width: 100,
+                aspectRatio: 1,
+              },
+            },
+          },
+        ],
+        SocialLinksSlot: [
+          {
+            type: "FooterSocialLinksSlot",
+            props: {
+              id: "FooterSocialLinksSlot-4397ea9d-bb3d-48e9-a608-0251eff97525",
+              data: {
+                xLink: "",
+                facebookLink: "",
+                instagramLink: "https://instagram.com/yext",
+                linkedInLink: "",
+                pinterestLink: "",
+                tiktokLink: "https://tiktok.com/yext",
+                youtubeLink: "",
+              },
+              styles: {
+                iconColor: {
+                  selectedColor: "palette-quaternary",
+                  contrastingColor: "palette-quaternary-contrast",
+                },
+              },
+            },
+          },
+        ],
+        UtilityImagesSlot: [
+          {
+            type: "FooterUtilityImagesSlot",
+            props: {
+              id: "FooterUtilityImagesSlot-b6953f68-3801-47b0-8550-40d881bc4354",
+              data: {
+                utilityImages: [],
+              },
+              styles: {
+                width: 0,
+                aspectRatio: 1,
+              },
+            },
+          },
+        ],
+        PrimaryLinksWrapperSlot: [
+          {
+            type: "FooterLinksSlot",
+            props: {
+              id: "FooterLinksSlot-bf17b472-5c3b-49aa-ad8e-1a59377168b5",
+              data: {
+                links: testFooterLinks,
+              },
+              variant: "primary",
+              eventNamePrefix: "primary",
+              color: {
+                selectedColor: "palette-primary",
+                contrastingColor: "palette-primary-contrast",
+              },
+            },
+          },
+        ],
+        ExpandedLinksWrapperSlot: [],
+        SecondaryFooterSlot: [
+          {
+            type: "SecondaryFooterSlot",
+            props: {
+              id: "SecondaryFooterSlot-e836fe93-221d-4e4d-9dae-ffefc0cd63cc",
+              data: {
+                show: true,
+              },
+              styles: {
+                backgroundColor: {
+                  selectedColor: "palette-primary-light",
+                  contrastingColor: "black",
+                },
+                linksPosition: "left",
+              },
+              maxWidth: "theme",
+              slots: {
+                SecondaryLinksWrapperSlot: [
+                  {
+                    type: "FooterLinksSlot",
+                    props: {
+                      id: "FooterLinksSlot-0a8b14c2-d14b-4dcd-b6ec-eba94fa55625",
+                      data: {
+                        links: testFooterLinks,
+                      },
+                      variant: "secondary",
+                      eventNamePrefix: "secondary",
+                      alignment: "left",
+                      color: {
+                        selectedColor: "palette-secondary",
+                        contrastingColor: "palette-secondary-contrast",
+                      },
+                    },
+                  },
+                ],
+                CopyrightSlot: [
+                  {
+                    type: "CopyrightMessageSlot",
+                    props: {
+                      id: "CopyrightMessageSlot-1bb649f3-3343-40e7-b1aa-076d1918a277",
+                      data: {
+                        text: {
+                          defaultValue: "",
+                          en: "Copyright 2026",
+                          hasLocalizedValue: "true",
+                        },
+                      },
+                      alignment: "left",
+                    },
+                  },
+                ],
+              },
+              ignoreLocaleWarning: [],
+            },
+          },
+        ],
+      },
+      styles: {
+        primaryFooter: {
+          backgroundColor: {
+            selectedColor: "palette-primary-light",
+            contrastingColor: "black",
+          },
+          linksPosition: "right",
+        },
+        maxWidth: "theme",
+      },
+      analytics: {
+        scope: "expandedFooter",
+      },
+      id: "ExpandedFooter-190ea081-2f4e-488d-bbd7-34155cd64516",
+      ignoreLocaleWarning: ["slots.ExpandedLinksWrapperSlot"],
+    },
+    version: 71,
+  },
 ];
 
 const socialLinkTestCases = [
@@ -1358,7 +1525,11 @@ describe("ExpandedFooter", async () => {
         `ExpandedFooter/[${viewportName}] ${name}`
       ).toMatchScreenshot();
       const results = await axe(container);
-      expect(results).toHaveNoViolations();
+
+      // Intentionally skip WCAG check for tests of color overrides
+      if (name !== "version 71 props with color overrides") {
+        expect(results).toHaveNoViolations();
+      }
 
       if (interactions) {
         await interactions(page);

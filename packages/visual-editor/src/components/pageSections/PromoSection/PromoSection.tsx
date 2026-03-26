@@ -2,7 +2,7 @@ import { ComponentConfig, Fields, setDeep, Slot } from "@puckeditor/core";
 import { PromoSectionType } from "../../../types/types.ts";
 import {
   backgroundColors,
-  BackgroundStyle,
+  ThemeColor,
   ThemeOptions,
 } from "../../../utils/themeConfigOptions.ts";
 import { YextField } from "../../../editor/YextField.tsx";
@@ -72,7 +72,7 @@ export interface PromoStyles {
    * The background color for the entire section.
    * @defaultValue Background Color 1
    */
-  backgroundColor?: BackgroundStyle;
+  backgroundColor?: ThemeColor;
 
   /**
    * Positions the media to the left or right of the promo content on desktop (classic and compact variants).
@@ -560,13 +560,6 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
         "props.slots.ImageSlot[0].props.parentData",
         undefined
       );
-      updatedData = setDeep(updatedData, "props.data.backgroundImage", {
-        field: data.props?.data?.promo.field
-          ? data.props?.data?.promo.field + ".image"
-          : "",
-        constantValue: data.props.data?.backgroundImage?.constantValue,
-        constantValueEnabled: true,
-      } satisfies PromoData["backgroundImage"]);
 
       return { ...updatedData, readOnly: { [mediaSubfield]: false } };
     }

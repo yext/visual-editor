@@ -7,7 +7,7 @@ import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import { TranslatableString } from "../../types/types.ts";
 import {
-  BackgroundStyle,
+  ThemeColor,
   backgroundColors,
 } from "../../utils/themeConfigOptions.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
@@ -28,7 +28,7 @@ export interface BreadcrumbsData {
    * The display label for the last link in the breadcrumb trail (the current page).
    * @defaultValue Name
    */
-  currentPage?: YextEntityField<TranslatableString>;
+  currentPage: YextEntityField<TranslatableString>;
 }
 
 export interface BreadcrumbsStyles {
@@ -36,13 +36,18 @@ export interface BreadcrumbsStyles {
    * The background color of the section.
    * @defaultValue Background Color 1
    */
-  backgroundColor?: BackgroundStyle;
+  backgroundColor?: ThemeColor;
+
+  /**
+   * The link color of breadcrumbs.
+   */
+  linkColor?: ThemeColor;
 
   /**
    * Whether to show the current page's link in the breadcrumb trail (last link).
    * @defaultValue true
    */
-  showCurrentPage?: boolean;
+  showCurrentPage: boolean;
 }
 
 /**
@@ -105,6 +110,10 @@ const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
+      linkColor: YextField(msg("fields.linkColor", "Link Color"), {
+        type: "select",
+        options: "SITE_COLOR",
+      }),
       showCurrentPage: YextField(
         msg(
           "fields.showCurrentPagesLinkLabel",
@@ -157,14 +166,15 @@ export const BreadcrumbsComponent = ({
     streamDocument
   );
   const currentPage = resolveComponentData(
-    data.currentPage ?? "[[name]]",
+    data.currentPage,
     i18n.language,
     streamDocument
   );
-  const showCurrentPage = styles?.showCurrentPage !== false;
   const breadcrumbsToRender = breadcrumbs
     .map((breadcrumb, index) => ({ ...breadcrumb, index }))
-    .filter(({ index }) => showCurrentPage || index < breadcrumbs.length - 1);
+    .filter(
+      ({ index }) => styles.showCurrentPage || index < breadcrumbs.length - 1
+    );
 
   if (!breadcrumbsToRender.length) {
     return null;
@@ -209,6 +219,7 @@ export const BreadcrumbsComponent = ({
                 eventName={`link${index}`}
                 href={isCurrentPage ? "" : href}
                 className="inline text-body-sm-fontSize font-link-fontWeight font-link-fontFamily whitespace-normal break-words"
+                color={styles?.linkColor}
                 alwaysHideCaret
               >
                 {label}

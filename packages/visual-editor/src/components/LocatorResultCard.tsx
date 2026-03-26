@@ -9,7 +9,7 @@ import {
 import { Background } from "./atoms/background.tsx";
 import {
   backgroundColors,
-  BackgroundStyle,
+  ThemeColor,
   HeadingLevel,
 } from "../utils/themeConfigOptions.ts";
 import { Body, BodyProps } from "./atoms/body.tsx";
@@ -68,6 +68,11 @@ import {
   LocatorEntityType,
 } from "../utils/locatorEntityTypes.ts";
 import { resolveLocatorResultUrl } from "../utils/urls/resolveLocatorResultUrl.ts";
+import {
+  getBackgroundColorClasses,
+  getTextColorClass,
+} from "../utils/colors.ts";
+import { themeManagerCn } from "../utils/cn.ts";
 
 export interface LocatorResultCardProps {
   /** The entity type this result card applies to. */
@@ -90,7 +95,7 @@ export interface LocatorResultCardProps {
      * The color applied to the primary heading text
      * @defaultValue inherited from theme
      */
-    color?: BackgroundStyle;
+    color?: ThemeColor;
   };
 
   /** Settings for the secondary heading of the card */
@@ -123,6 +128,9 @@ export interface LocatorResultCardProps {
 
   /** Whether to show icons for certain fields */
   icons: boolean;
+
+  /** The accent color used for icon backgrounds and contact/action links. */
+  accentColor?: ThemeColor;
 
   /** Settings for the hours block */
   hours: {
@@ -494,6 +502,10 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
         { label: msg("fields.options.hide", "Hide"), value: false },
       ],
     }),
+    accentColor: YextField(msg("fields.accentColor", "Accent Color"), {
+      type: "select",
+      options: "SITE_COLOR",
+    }),
     hours: {
       label: msg("fields.hours", "Hours"),
       type: "object",
@@ -817,6 +829,10 @@ export const LocatorResultCard = React.memo(
     const { t, i18n } = useTranslation();
 
     const location = result.rawData;
+    const resolvedAccentBackgroundColor =
+      props.accentColor ?? backgroundColors.background2.value;
+    const resolvedAccentLinkColor =
+      props.accentColor ?? backgroundColors.background6.value;
     const distance =
       distanceDisplay === "distanceFromUser"
         ? result.distance
@@ -907,6 +923,7 @@ export const LocatorResultCard = React.memo(
               result={result}
               hoursProps={props.hours}
               showIcons={props.icons}
+              accentColor={resolvedAccentBackgroundColor}
             />
 
             {/** Core Info section */}
@@ -916,7 +933,7 @@ export const LocatorResultCard = React.memo(
                 {location.address && props.address.liveVisibility && (
                   <div className="flex flex-row items-start gap-2">
                     {props.icons && (
-                      <CardIcon>
+                      <CardIcon backgroundColor={resolvedAccentBackgroundColor}>
                         <FaMapMarkerAlt className="w-4 h-4" />
                       </CardIcon>
                     )}
@@ -933,7 +950,10 @@ export const LocatorResultCard = React.memo(
                           <a
                             href={getDirectionsLink}
                             onClick={handleGetDirectionsClick}
-                            className="components h-fit items-center w-fit underline gap-2 decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing flex font-bold text-palette-primary-dark"
+                            className={themeManagerCn(
+                              "components h-fit items-center w-fit underline gap-2 decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing flex font-bold",
+                              getTextColorClass(resolvedAccentLinkColor)
+                            )}
                           >
                             {t("getDirections", "Get Directions")}
                             <FaAngleRight size={"12px"} />
@@ -947,12 +967,16 @@ export const LocatorResultCard = React.memo(
                   handlePhoneNumberClick={handlePhoneNumberClick}
                   location={location}
                   icons={props.icons}
+                  backgroundColor={resolvedAccentBackgroundColor}
+                  linkColor={resolvedAccentLinkColor}
                 />
                 <EmailSection
                   email={props.email}
                   location={location}
                   icons={props.icons}
                   index={result.index}
+                  iconBackgroundColor={resolvedAccentBackgroundColor}
+                  linkColor={resolvedAccentLinkColor}
                 />
               </div>
               {/** Secondary Info Section */}
@@ -968,8 +992,7 @@ export const LocatorResultCard = React.memo(
             <div
               className={`
               font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize rounded-full flex lg:hidden px-2 py-1 w-fit
-              ${backgroundColors.background2.value.bgColor} ${backgroundColors.background2.value.textColor}
-              `}
+              ${getBackgroundColorClasses(backgroundColors.background2.value)}`}
             >
               {displayDistance}
             </div>
@@ -1055,11 +1078,15 @@ const PrimaryCTA = (props: {
   );
 };
 
-const CardIcon: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const colorClasses = `${backgroundColors.background2.value.bgColor} ${backgroundColors.background2.value.textColor}`;
+const CardIcon: React.FC<{
+  children: React.ReactNode;
+  backgroundColor?: ThemeColor;
+}> = ({ children, backgroundColor }) => {
   return (
     <div
-      className={`h-10 w-10 flex justify-center rounded-full items-center ${colorClasses}`}
+      className={`h-10 w-10 flex justify-center rounded-full items-center ${getBackgroundColorClasses(
+        backgroundColor ?? backgroundColors.background2.value
+      )}`}
     >
       {children}
     </div>
@@ -1152,7 +1179,7 @@ const HeadingTextSection = (props: {
     <div className="flex flex-col gap-2 flex-1 min-w-0">
       <Heading
         color={primaryHeading?.color}
-        className="font-bold text-palette-primary-dark"
+        className={`font-bold ${primaryHeading?.color ? "" : "text-palette-primary-dark"}`}
         level={primaryHeading.headingLevel}
       >
         {primaryHeadingText}
@@ -1174,8 +1201,9 @@ const HoursSection = (props: {
   result: CardProps<Location>["result"];
   hoursProps: LocatorResultCardProps["hours"];
   showIcons: boolean;
+  accentColor?: ThemeColor;
 }) => {
-  const { location, result, hoursProps, showIcons } = props;
+  const { location, result, hoursProps, showIcons, accentColor } = props;
 
   const hoursField = getSelectedFieldId(hoursProps.field);
   const hoursData = parseHoursFromLocation(location, hoursField);
@@ -1188,7 +1216,7 @@ const HoursSection = (props: {
             <AccordionTrigger className="justify-start">
               <div className="flex flex-row items-center gap-2">
                 {showIcons && (
-                  <CardIcon>
+                  <CardIcon backgroundColor={accentColor}>
                     <FaRegClock className="w-4 h-4" />
                   </CardIcon>
                 )}
@@ -1230,8 +1258,18 @@ const PhoneSection = (props: {
   location: Location;
   icons: boolean;
   index?: number;
+  backgroundColor: ThemeColor;
+  linkColor: ThemeColor;
 }) => {
-  const { phone, handlePhoneNumberClick, location, icons, index } = props;
+  const {
+    phone,
+    handlePhoneNumberClick,
+    location,
+    icons,
+    index,
+    backgroundColor,
+    linkColor,
+  } = props;
   const { t } = useTranslation();
 
   const phoneFieldId = getSelectedFieldId(phone.field);
@@ -1240,13 +1278,14 @@ const PhoneSection = (props: {
   return (
     showPhoneNumber && (
       <PhoneAtom
-        backgroundColor={backgroundColors.background2.value}
+        backgroundColor={backgroundColor}
         eventName={`phone${index}`}
         label={t("phone", "Phone")}
         format={phone.phoneFormat}
         phoneNumber={phoneNumber}
         includeHyperlink={phone.includePhoneHyperlink}
         includeIcon={icons}
+        linkColor={linkColor}
         onClick={handlePhoneNumberClick}
       />
     )
@@ -1258,8 +1297,11 @@ const EmailSection = (props: {
   location: Location;
   icons: boolean;
   index?: number;
+  iconBackgroundColor: ThemeColor;
+  linkColor: ThemeColor;
 }) => {
-  const { email, location, index, icons } = props;
+  const { email, location, index, icons, iconBackgroundColor, linkColor } =
+    props;
 
   const emailFieldId = getSelectedFieldId(email.field);
   const emailAddresses = parseArrayFromLocation(location, emailFieldId);
@@ -1272,7 +1314,7 @@ const EmailSection = (props: {
     showEmailSection && (
       <div className="flex flex-row items-center gap-2">
         {icons && (
-          <CardIcon>
+          <CardIcon backgroundColor={iconBackgroundColor}>
             <FaRegEnvelope className="w-4 h-4" />
           </CardIcon>
         )}
@@ -1283,6 +1325,7 @@ const EmailSection = (props: {
           linkType="EMAIL"
           normalizeLink={false}
           variant="link"
+          color={linkColor}
         />
       </div>
     )

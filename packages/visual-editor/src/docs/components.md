@@ -11,10 +11,10 @@ Props for the Address component
 
 #### Other Props
 
-| Prop     | Type                                                                                                                                | Description | Default |
-| :------- | :---------------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
-| `data`   | `{ address: YextEntityField<AddressType>; }`                                                                                        |             |         |
-| `styles` | `{ showRegion?: boolean; showCountry?: boolean; showGetDirectionsLink: boolean; ctaVariant: CTAVariant; color?: BackgroundStyle; }` |             |         |
+| Prop     | Type                                                                                                                           | Description | Default |
+| :------- | :----------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ address: YextEntityField<AddressType>; }`                                                                                   |             |         |
+| `styles` | `{ showRegion?: boolean; showCountry?: boolean; showGetDirectionsLink: boolean; ctaVariant: CTAVariant; color?: ThemeColor; }` |             |         |
 
 ---
 
@@ -40,9 +40,9 @@ This object contains properties for customizing the component's appearance.
 
 | Prop                     | Type                            | Description                                                                                                               | Default              |
 | :----------------------- | :------------------------------ | :------------------------------------------------------------------------------------------------------------------------ | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle`               | The background color of the section.                                                                                      | `Background Color 6` |
+| `styles.backgroundColor` | `ThemeColor`                    | The background color of the section.                                                                                      | `Background Color 6` |
 | `styles.textAlignment`   | `"left" \| "right" \| "center"` | The horizontal alignment of the text.                                                                                     | `center`             |
-| `styles.textColor`       | `BackgroundStyle`               | Optional text color for the banner text. If not set, it will default to a color that contrasts with the background color. |                      |
+| `styles.textColor`       | `ThemeColor`                    | Optional text color for the banner text. If not set, it will default to a color that contrasts with the background color. |                      |
 
 #### Other Props
 
@@ -77,10 +77,11 @@ This object contains the content used by the component.
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type              | Description                                                                  | Default              |
-| :----------------------- | :---------------- | :--------------------------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle` | The background color of the section.                                         | `Background Color 1` |
-| `styles.showCurrentPage` | `boolean`         | Whether to show the current page's link in the breadcrumb trail (last link). | `true`               |
+| Prop                     | Type         | Description                                                                  | Default              |
+| :----------------------- | :----------- | :--------------------------------------------------------------------------- | :------------------- |
+| `styles.backgroundColor` | `ThemeColor` | The background color of the section.                                         | `Background Color 1` |
+| `styles.linkColor`       | `ThemeColor` | The link color of breadcrumbs.                                               |                      |
+| `styles.showCurrentPage` | `boolean`    | Whether to show the current page's link in the breadcrumb trail (last link). | `true`               |
 
 #### Other Props
 
@@ -116,9 +117,9 @@ The Core Info Section is a comprehensive component designed to display essential
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type              | Description                          | Default |
-| :----------------------- | :---------------- | :----------------------------------- | :------ |
-| `styles.backgroundColor` | `BackgroundStyle` | The background color of the section. |         |
+| Prop                     | Type         | Description                          | Default |
+| :----------------------- | :----------- | :----------------------------------- | :------ |
+| `styles.backgroundColor` | `ThemeColor` | The background color of the section. |         |
 
 #### Other Props
 
@@ -155,7 +156,7 @@ Additional CSS classes to apply to the CTA.
 | :---------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------ | :------ |
 | `className` | `string`                                                                                                                                                                                                                                                                                                 | Additional CSS classes to apply to the CTA. |         |
 | `data`      | `{ show?: boolean; actionType?: "link" \| "button"; normalizeLink: boolean; entityField: YextEntityField<EnhancedTranslatableCTA>; buttonText?: TranslatableString; customId?: string; customClass?: string; dataAttributes?: Array<{ key: string; value: string; }>; ariaLabel?: TranslatableString; }` |                                             |         |
-| `styles`    | `{ variant: CTAVariant; presetImage?: PresetImageType; color?: BackgroundStyle; }`                                                                                                                                                                                                                       |                                             |         |
+| `styles`    | `{ variant: CTAVariant; presetImage?: PresetImageType; color?: ThemeColor; }`                                                                                                                                                                                                                            |                                             |         |
 
 ---
 
@@ -192,9 +193,11 @@ The Directory Page component serves as a navigational hub, displaying a list of 
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type              | Description                                               | Default              |
-| :----------------------- | :---------------- | :-------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle` | The main background color for the directory page content. | `Background Color 1` |
+| Prop                         | Type         | Description                                               | Default              |
+| :--------------------------- | :----------- | :-------------------------------------------------------- | :------------------- |
+| `styles.backgroundColor`     | `ThemeColor` | The background color for the directory page heading area. | `Background Color 1` |
+| `styles.linkColor`           | `ThemeColor` | The color of links in the directory list layout.          |                      |
+| `styles.listBackgroundColor` | `ThemeColor` | The background color for the directory list area.         | `Background Color 1` |
 
 ---
 
@@ -204,10 +207,10 @@ This object contains properties for customizing the component's appearance.
 
 #### Other Props
 
-| Prop     | Type                                           | Description | Default |
-| :------- | :--------------------------------------------- | :---------- | :------ |
-| `data`   | `{ list: YextEntityField<string[]>; }`         |             |         |
-| `styles` | `{ listLength?: number; showIcon?: boolean; }` |             |         |
+| Prop     | Type                                                               | Description | Default |
+| :------- | :----------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ list: YextEntityField<string[]>; }`                             |             |         |
+| `styles` | `{ listLength?: number; showIcon?: boolean; color?: ThemeColor; }` |             |         |
 
 ---
 
@@ -223,9 +226,9 @@ The Events Section component is designed to display a curated list of events. It
 
 This object contains properties for customizing the component's appearance.
 
-| Prop     | Type                                                                  | Description                                                                 | Default |
-| :------- | :-------------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
-| `styles` | `{ backgroundColor?: BackgroundStyle; showSectionHeading: boolean; }` | This object contains properties for customizing the component's appearance. |         |
+| Prop     | Type                                                             | Description                                                                 | Default |
+| :------- | :--------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: ThemeColor; showSectionHeading: boolean; }` | This object contains properties for customizing the component's appearance. |         |
 
 #### Other Props
 
@@ -257,10 +260,10 @@ This object contains all the content for both footer tiers.
 
 This object contains properties for customizing the appearance of both footer tiers.
 
-| Prop                   | Type                                                                       | Description                         | Default |
-| :--------------------- | :------------------------------------------------------------------------- | :---------------------------------- | :------ |
-| `styles.maxWidth`      | `PageSectionProps["maxWidth"]`                                             | The maximum width of the footer.    |         |
-| `styles.primaryFooter` | `{ backgroundColor?: BackgroundStyle; linksPosition: "left" \| "right"; }` | Styling for the primary footer bar. |         |
+| Prop                   | Type                                                                  | Description                         | Default |
+| :--------------------- | :-------------------------------------------------------------------- | :---------------------------------- | :------ |
+| `styles.maxWidth`      | `PageSectionProps["maxWidth"]`                                        | The maximum width of the footer.    |         |
+| `styles.primaryFooter` | `{ backgroundColor?: ThemeColor; linksPosition: "left" \| "right"; }` | Styling for the primary footer bar. |         |
 
 ---
 
@@ -293,10 +296,10 @@ The FAQ Section component displays a list of questions and answers in an organiz
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                        | Type              | Description                          | Default              |
-| :-------------------------- | :---------------- | :----------------------------------- | :------------------- |
-| `styles.backgroundColor`    | `BackgroundStyle` | The background color of the section. | `Background Color 3` |
-| `styles.showSectionHeading` | `boolean`         | Whether to show the section heading. | `true`               |
+| Prop                        | Type         | Description                          | Default              |
+| :-------------------------- | :----------- | :----------------------------------- | :------------------- |
+| `styles.backgroundColor`    | `ThemeColor` | The background color of the section. | `Background Color 3` |
+| `styles.showSectionHeading` | `boolean`    | Whether to show the section heading. | `true`               |
 
 #### Other Props
 
@@ -318,9 +321,9 @@ The Footer appears at the bottom of the page. It serves as a container for secon
 
 The background color for the entire footer section.
 
-| Prop              | Type              | Description                                         | Default              |
-| :---------------- | :---------------- | :-------------------------------------------------- | :------------------- |
-| `backgroundColor` | `BackgroundStyle` | The background color for the entire footer section. | `Background Color 1` |
+| Prop              | Type         | Description                                         | Default              |
+| :---------------- | :----------- | :-------------------------------------------------- | :------------------- |
+| `backgroundColor` | `ThemeColor` | The background color for the entire footer section. | `Background Color 1` |
 
 ---
 
@@ -330,9 +333,10 @@ The background color for the entire footer section.
 
 #### Other Props
 
-| Prop   | Type                                                                        | Description | Default |
-| :----- | :-------------------------------------------------------------------------- | :---------- | :------ |
-| `data` | `{ label: YextEntityField<TranslatableString>; links: TranslatableCTA[]; }` |             |         |
+| Prop     | Type                                                                        | Description | Default |
+| :------- | :-------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ label: YextEntityField<TranslatableString>; links: TranslatableCTA[]; }` |             |         |
+| `styles` | `{ color?: ThemeColor; }`                                                   |             |         |
 
 ---
 
@@ -342,9 +346,10 @@ The background color for the entire footer section.
 
 #### Other Props
 
-| Prop   | Type                                                                        | Description | Default |
-| :----- | :-------------------------------------------------------------------------- | :---------- | :------ |
-| `data` | `{ sections: { label: TranslatableString; links: TranslatableCTA[]; }[]; }` |             |         |
+| Prop     | Type                                                                        | Description | Default |
+| :------- | :-------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ sections: { label: TranslatableString; links: TranslatableCTA[]; }[]; }` |             |         |
+| `styles` | `{ color?: ThemeColor; }`                                                   |             |         |
 
 ---
 
@@ -354,9 +359,10 @@ The background color for the entire footer section.
 
 #### Other Props
 
-| Prop   | Type                            | Description | Default |
-| :----- | :------------------------------ | :---------- | :------ |
-| `data` | `{ links: TranslatableCTA[]; }` |             |         |
+| Prop    | Type                            | Description | Default |
+| :------ | :------------------------------ | :---------- | :------ |
+| `color` | `ThemeColor`                    |             |         |
+| `data`  | `{ links: TranslatableCTA[]; }` |             |         |
 
 ---
 
@@ -382,7 +388,7 @@ The background color for the entire footer section.
 | Prop     | Type                                                                                                                                                    | Description | Default |
 | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------ | :---------- | :------ |
 | `data`   | `{ xLink: string; facebookLink: string; instagramLink: string; linkedInLink: string; pinterestLink: string; tiktokLink: string; youtubeLink: string; }` |             |         |
-| `styles` | `{ filledBackground?: boolean; mobileAlignment?: "left" \| "center"; }`                                                                                 |             |         |
+| `styles` | `{ filledBackground?: boolean; mobileAlignment?: "left" \| "center"; iconColor?: ThemeColor; }`                                                         |             |         |
 
 ---
 
@@ -436,12 +442,13 @@ This object contains properties for customizing the component's appearance.
 
 | Prop                              | Type                                                   | Description                                                                                                                                    | Default              |
 | :-------------------------------- | :----------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor`          | `BackgroundStyle`                                      | The background color for the entire section (classic and compact variants). The background color for the featured content (spotlight variant). | `Background Color 1` |
+| `styles.backgroundColor`          | `ThemeColor`                                           | The background color for the entire section (classic and compact variants). The background color for the featured content (spotlight variant). | `Background Color 1` |
 | `styles.desktopContainerPosition` | `"left" \| "center"`                                   | Container position on desktop (spotlight and immersive variants).                                                                              | `left`               |
 | `styles.desktopImagePosition`     | `"left" \| "right"`                                    | Positions the image to the left or right of the hero content on desktop (classic and compact variants).                                        | `right`              |
 | `styles.imageHeight`              | `number`                                               | Image Height for the hero image with Immersive or Spotlight variant Minimum height: content height + Page Section Top/Bottom Padding           | `500px`              |
 | `styles.mobileContentAlignment`   | `"left" \| "center"`                                   | Content alignment for mobile viewports.                                                                                                        | `left`               |
 | `styles.mobileImagePosition`      | `"bottom" \| "top"`                                    | Positions the image to the top or bottom of the hero content on mobile (classic and compact variants).                                         | `top`                |
+| `styles.reviewStarsColor`         | `ThemeColor`                                           | The color applied to review stars when average review is shown.                                                                                |                      |
 | `styles.showAverageReview`        | `boolean`                                              | If 'true', displays the entity's average review rating.                                                                                        | `true`               |
 | `styles.showBusinessName`         | `boolean`                                              | Whether to show the business name.                                                                                                             | `true`               |
 | `styles.showGeomodifier`          | `boolean`                                              | Whether to show the geomodifier.                                                                                                               | `true`               |
@@ -520,9 +527,9 @@ The Insight Section is used to display a curated list of content such as article
 
 This object contains properties for customizing the component's appearance.
 
-| Prop     | Type                                                                  | Description                                                                 | Default |
-| :------- | :-------------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
-| `styles` | `{ backgroundColor?: BackgroundStyle; showSectionHeading: boolean; }` | This object contains properties for customizing the component's appearance. |         |
+| Prop     | Type                                                             | Description                                                                 | Default |
+| :------- | :--------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: ThemeColor; showSectionHeading: boolean; }` | This object contains properties for customizing the component's appearance. |         |
 
 #### Other Props
 
@@ -545,15 +552,15 @@ Available on Locator templates.
 
 Controls which distance value to display on each locator result card.
 
-| Prop                  | Type                                                                                                                              | Description                                                                                                                                                                                                                      | Default                                |
-| :-------------------- | :-------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------- |
-| `distanceDisplay`     | `DistanceDisplayOption`                                                                                                           | Controls which distance value to display on each locator result card.                                                                                                                                                            |                                        |
-| `filters`             | `{ openNowButton: boolean; showDistanceOptions: boolean; facetFields?: DynamicOptionsSelectorType<string>; }`                     | Configuration for the filters available in the locator search experience.                                                                                                                                                        |                                        |
-| `locationStyles`      | `Array<{ entityType: LocatorEntityType; pinIcon?: { type: "none" \| "icon"; iconName?: string; }; pinColor?: BackgroundStyle; }>` | Props to customize the locator map pin styles. Controls map pin appearance depending on the result's entity type. The number of entries is locked to the locator entity types for the page set.                                  |                                        |
-| `mapStartingLocation` | `{ latitude: string; longitude: string; }`                                                                                        | The starting location for the map.                                                                                                                                                                                               |                                        |
-| `mapStyle`            | `string`                                                                                                                          | The visual theme for the map tiles, chosen from a predefined list of Mapbox styles.                                                                                                                                              | `'mapbox://styles/mapbox/streets-v12'` |
-| `pageHeading`         | `{ title: TranslatableString; color?: BackgroundStyle; }`                                                                         | Configuration for the locator page heading. Allows customizing the title text and its color.                                                                                                                                     |                                        |
-| `resultCard`          | `Array<{ props: LocatorResultCardProps; }>`                                                                                       | Props to customize the locator result card component. Controls which fields are displayed and their styling depending on the result's entity type. The number of entries is locked to the locator entity types for the page set. |                                        |
+| Prop                  | Type                                                                                                                                    | Description                                                                                                                                                                                                                      | Default                                |
+| :-------------------- | :-------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------- |
+| `distanceDisplay`     | `DistanceDisplayOption`                                                                                                                 | Controls which distance value to display on each locator result card.                                                                                                                                                            |                                        |
+| `filters`             | `{ openNowButton: boolean; showDistanceOptions: boolean; accentColor?: ThemeColor; facetFields?: DynamicOptionsSelectorType<string>; }` | Configuration for the filters available in the locator search experience.                                                                                                                                                        |                                        |
+| `locationStyles`      | `Array<{ entityType: LocatorEntityType; pinIcon?: { type: "none" \| "icon"; iconName?: string; }; pinColor?: ThemeColor; }>`            | Props to customize the locator map pin styles. Controls map pin appearance depending on the result's entity type. The number of entries is locked to the locator entity types for the page set.                                  |                                        |
+| `mapStartingLocation` | `{ latitude: string; longitude: string; }`                                                                                              | The starting location for the map.                                                                                                                                                                                               |                                        |
+| `mapStyle`            | `string`                                                                                                                                | The visual theme for the map tiles, chosen from a predefined list of Mapbox styles.                                                                                                                                              | `'mapbox://styles/mapbox/streets-v12'` |
+| `pageHeading`         | `{ title: TranslatableString; color?: ThemeColor; }`                                                                                    | Configuration for the locator page heading. Allows customizing the title text and its color.                                                                                                                                     |                                        |
+| `resultCard`          | `Array<{ props: LocatorResultCardProps; }>`                                                                                             | Props to customize the locator result card component. Controls which fields are displayed and their styling depending on the result's entity type. The number of entries is locked to the locator entity types for the page set. |                                        |
 
 ---
 
@@ -569,9 +576,9 @@ The Nearby Locations Section dynamically finds and displays a list of business l
 
 This object contains extensive properties for customizing the component's appearance.
 
-| Prop     | Type                                                                  | Description                                                                           | Default |
-| :------- | :-------------------------------------------------------------------- | :------------------------------------------------------------------------------------ | :------ |
-| `styles` | `{ backgroundColor?: BackgroundStyle; showSectionHeading: boolean; }` | This object contains extensive properties for customizing the component's appearance. |         |
+| Prop     | Type                                                             | Description                                                                           | Default |
+| :------- | :--------------------------------------------------------------- | :------------------------------------------------------------------------------------ | :------ |
+| `styles` | `{ backgroundColor?: ThemeColor; showSectionHeading: boolean; }` | This object contains extensive properties for customizing the component's appearance. |         |
 
 #### Other Props
 
@@ -591,10 +598,10 @@ The props for the Phone component
 
 #### Other Props
 
-| Prop     | Type                                                                                                     | Description | Default |
-| :------- | :------------------------------------------------------------------------------------------------------- | :---------- | :------ |
-| `data`   | `{ number: YextEntityField<string>; label: TranslatableString; }`                                        |             |         |
-| `styles` | `{ phoneFormat: "domestic" \| "international"; includePhoneHyperlink: boolean; includeIcon?: boolean; }` |             |         |
+| Prop     | Type                                                                                                                         | Description | Default |
+| :------- | :--------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ number: YextEntityField<string>; label: TranslatableString; }`                                                            |             |         |
+| `styles` | `{ phoneFormat: "domestic" \| "international"; includePhoneHyperlink: boolean; includeIcon?: boolean; color?: ThemeColor; }` |             |         |
 
 ---
 
@@ -625,7 +632,7 @@ This object contains properties for customizing the component's appearance.
 
 | Prop                        | Type                      | Description                                                           | Default              |
 | :-------------------------- | :------------------------ | :-------------------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor`    | `BackgroundStyle`         | The background color for the entire section, selected from the theme. | `Background Color 1` |
+| `styles.backgroundColor`    | `ThemeColor`              | The background color for the entire section, selected from the theme. | `Background Color 1` |
 | `styles.showSectionHeading` | `boolean`                 | Whether to show the section heading                                   | `true`               |
 | `styles.variant`            | `"gallery" \| "carousel"` | The layout style for displaying images in the gallery.                | `"gallery"`          |
 
@@ -651,9 +658,9 @@ The Product Section is used to display a curated list of products in a dedicated
 
 This object contains properties for customizing the component's appearance.
 
-| Prop     | Type                                                                                                       | Description                                                                 | Default |
-| :------- | :--------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
-| `styles` | `{ backgroundColor?: BackgroundStyle; cardVariant?: ProductSectionVariant; showSectionHeading: boolean; }` | This object contains properties for customizing the component's appearance. |         |
+| Prop     | Type                                                                                                  | Description                                                                 | Default |
+| :------- | :---------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: ThemeColor; cardVariant?: ProductSectionVariant; showSectionHeading: boolean; }` | This object contains properties for customizing the component's appearance. |         |
 
 #### Other Props
 
@@ -678,9 +685,10 @@ This object contains properties for customizing the component's appearance.
 
 | Prop                           | Type                | Description                                                              | Default              |
 | :----------------------------- | :------------------ | :----------------------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor`       | `BackgroundStyle`   | The background color for the section.                                    | `Background Color 1` |
+| `styles.backgroundColor`       | `ThemeColor`        | The background color for the section.                                    | `Background Color 1` |
 | `styles.desktopImagePosition`  | `"left" \| "right"` | Positions the image to the left or right of the hero content on desktop. | `left`               |
 | `styles.mobileImagePosition`   | `"bottom" \| "top"` | Positions the image to the top or bottom of the hero content on mobile.  | `top`                |
+| `styles.reviewStarsColor`      | `ThemeColor`        | The color applied to review stars when average review is shown.          |                      |
 | `styles.showAddress`           | `boolean`           | Whether to show the address slot.                                        | `true`               |
 | `styles.showAverageReview`     | `boolean`           | If 'true', displays the entity's average review rating.                  | `true`               |
 | `styles.showBusinessName`      | `boolean`           | Whether to show the business name slot.                                  | `true`               |
@@ -727,7 +735,7 @@ This object contains properties for customizing the component's appearance.
 
 | Prop                          | Type                                                   | Description                                                                                                                           | Default              |
 | :---------------------------- | :----------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ | :------------------- |
-| `styles.backgroundColor`      | `BackgroundStyle`                                      | The background color for the entire section.                                                                                          | `Background Color 1` |
+| `styles.backgroundColor`      | `ThemeColor`                                           | The background color for the entire section.                                                                                          | `Background Color 1` |
 | `styles.containerAlignment`   | `"left" \| "center" \| "right"`                        | Text content position and alignment.                                                                                                  | `left`               |
 | `styles.desktopImagePosition` | `"left" \| "right"`                                    | Positions the media to the left or right of the promo content on desktop (classic and compact variants).                              | `right`              |
 | `styles.imageHeight`          | `number`                                               | Image Height for the promo image with Immersive or Spotlight variant Minimum height: content height + Page Section Top/Bottom Padding | `500px`              |
@@ -760,9 +768,9 @@ The Reviews Section displays customer reviews fetched dynamically from the Yext 
 
 This object contains properties for customizing the component's appearance.
 
-| Prop     | Type                                                                  | Description                                                                 | Default |
-| :------- | :-------------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
-| `styles` | `{ backgroundColor?: BackgroundStyle; showSectionHeading: boolean; }` | This object contains properties for customizing the component's appearance. |         |
+| Prop     | Type                                                                                       | Description                                                                 | Default |
+| :------- | :----------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: ThemeColor; accentColor?: ThemeColor; showSectionHeading: boolean; }` | This object contains properties for customizing the component's appearance. |         |
 
 #### Other Props
 
@@ -792,9 +800,9 @@ Data configuration for the secondary footer.
 
 Styling configuration for the secondary footer.
 
-| Prop     | Type                                                                                   | Description                                     | Default |
-| :------- | :------------------------------------------------------------------------------------- | :---------------------------------------------- | :------ |
-| `styles` | `{ backgroundColor?: BackgroundStyle; linksPosition: "left" \| "center" \| "right"; }` | Styling configuration for the secondary footer. |         |
+| Prop     | Type                                                                              | Description                                     | Default |
+| :------- | :-------------------------------------------------------------------------------- | :---------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: ThemeColor; linksPosition: "left" \| "center" \| "right"; }` | Styling configuration for the secondary footer. |         |
 
 ---
 
@@ -818,10 +826,10 @@ This object contains the configuration needed to generate the map.
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type              | Description                           | Default                 |
-| :----------------------- | :---------------- | :------------------------------------ | :---------------------- |
-| `styles.backgroundColor` | `BackgroundStyle` | The background color of the section.  | `Background Color 1`    |
-| `styles.mapStyle`        | `string`          | The style of the map to be displayed. | `Default (streets-v12)` |
+| Prop                     | Type         | Description                           | Default                 |
+| :----------------------- | :----------- | :------------------------------------ | :---------------------- |
+| `styles.backgroundColor` | `ThemeColor` | The background color of the section.  | `Background Color 1`    |
+| `styles.mapStyle`        | `string`     | The style of the map to be displayed. | `Default (streets-v12)` |
 
 #### Other Props
 
@@ -845,9 +853,9 @@ The Team Section is designed to showcase a list of people, such as employees, ex
 
 This object contains properties for customizing the component's appearance.
 
-| Prop     | Type                                                                  | Description                                                                 | Default |
-| :------- | :-------------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
-| `styles` | `{ backgroundColor?: BackgroundStyle; showSectionHeading: boolean; }` | This object contains properties for customizing the component's appearance. |         |
+| Prop     | Type                                                             | Description                                                                 | Default |
+| :------- | :--------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: ThemeColor; showSectionHeading: boolean; }` | This object contains properties for customizing the component's appearance. |         |
 
 #### Other Props
 
@@ -871,9 +879,9 @@ The Testimonial Section is used to display a list of customer testimonials or re
 
 This object contains properties for customizing the component's appearance.
 
-| Prop     | Type                                                                  | Description                                                                 | Default |
-| :------- | :-------------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
-| `styles` | `{ backgroundColor?: BackgroundStyle; showSectionHeading: boolean; }` | This object contains properties for customizing the component's appearance. |         |
+| Prop     | Type                                                             | Description                                                                 | Default |
+| :------- | :--------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: ThemeColor; showSectionHeading: boolean; }` | This object contains properties for customizing the component's appearance. |         |
 
 #### Other Props
 
@@ -910,9 +918,9 @@ The Video Section is used to display an embedded YouTube video. Available on Loc
 
 This object contains properties for customizing the component's appearance.
 
-| Prop     | Type                                     | Description                                                                 | Default |
-| :------- | :--------------------------------------- | :-------------------------------------------------------------------------- | :------ |
-| `styles` | `{ backgroundColor?: BackgroundStyle; }` | This object contains properties for customizing the component's appearance. |         |
+| Prop     | Type                                | Description                                                                 | Default |
+| :------- | :---------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: ThemeColor; }` | This object contains properties for customizing the component's appearance. |         |
 
 #### Other Props
 

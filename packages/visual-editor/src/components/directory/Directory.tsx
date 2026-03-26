@@ -1,7 +1,7 @@
 import { useTemplateProps } from "../../hooks/useDocument.tsx";
 import {
   backgroundColors,
-  BackgroundStyle,
+  ThemeColor,
 } from "../../utils/themeConfigOptions.ts";
 import { PageSection } from "../atoms/pageSection.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
@@ -9,17 +9,34 @@ import { YextField } from "../../editor/YextField.tsx";
 import { Background } from "../atoms/background.tsx";
 import { HeadingTextProps } from "../contentBlocks/HeadingText.tsx";
 import { BreadcrumbsSectionProps } from "../pageSections/Breadcrumbs.tsx";
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
+import {
+  ComponentConfig,
+  Fields,
+  PuckComponent,
+  setDeep,
+  Slot,
+} from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { DirectoryList } from "./DirectoryWrapper.tsx";
 import { isDirectoryGrid } from "../../utils/directory/utils.ts";
 
 export interface DirectoryStyles {
   /**
-   * The main background color for the directory page content.
+   * The background color for the directory page heading area.
    * @defaultValue Background Color 1
    */
-  backgroundColor?: BackgroundStyle;
+  backgroundColor: ThemeColor;
+
+  /**
+   * The background color for the directory list area.
+   * @defaultValue Background Color 1
+   */
+  listBackgroundColor: ThemeColor;
+
+  /**
+   * The color of links in the directory list layout.
+   */
+  linkColor?: ThemeColor;
 }
 
 export interface DirectoryProps {
@@ -48,12 +65,26 @@ const directoryFields: Fields<DirectoryProps> = {
     type: "object",
     objectFields: {
       backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
+        msg("fields.headingBackgroundColor", "Heading Background Color"),
         {
           type: "select",
           options: "BACKGROUND_COLOR",
         }
       ),
+      listBackgroundColor: YextField(
+        msg(
+          "fields.directoryListBackgroundColor",
+          "Directory List Background Color"
+        ),
+        {
+          type: "select",
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      linkColor: YextField(msg("fields.linkColor", "Link Color"), {
+        type: "select",
+        options: "SITE_COLOR",
+      }),
     },
   }),
   slots: {
@@ -100,6 +131,8 @@ const DirectoryComponent: PuckComponent<DirectoryProps> = ({
             streamDocument={streamDocument}
             directoryChildren={streamDocument.dm_directoryChildren}
             relativePrefixToRoot={relativePrefixToRoot ?? ""}
+            linkColor={styles.linkColor}
+            backgroundColor={styles.listBackgroundColor}
           />
         )}
     </Background>
@@ -116,9 +149,28 @@ const DirectoryComponent: PuckComponent<DirectoryProps> = ({
 export const Directory: ComponentConfig<{ props: DirectoryProps }> = {
   label: msg("components.directory", "Directory"),
   fields: directoryFields,
+  resolveFields: (data, params) => {
+    if (
+      params.metadata.streamDocument?.dm_directoryChildren &&
+      isDirectoryGrid(params.metadata.streamDocument.dm_directoryChildren)
+    ) {
+      const updatedFields = setDeep(
+        directoryFields,
+        "styles.objectFields.listBackgroundColor.visible",
+        false
+      );
+      return setDeep(
+        updatedFields,
+        "styles.objectFields.linkColor.visible",
+        false
+      );
+    }
+    return directoryFields;
+  },
   defaultProps: {
     styles: {
       backgroundColor: backgroundColors.background1.value,
+      listBackgroundColor: backgroundColors.background1.value,
     },
     slots: {
       TitleSlot: [
@@ -157,9 +209,15 @@ export const Directory: ComponentConfig<{ props: DirectoryProps }> = {
           props: {
             data: {
               directoryRoot: { defaultValue: "Directory Root" },
+              currentPage: {
+                constantValue: { defaultValue: "[[name]]" },
+                field: "name",
+                constantValueEnabled: false,
+              },
             },
             styles: {
               backgroundColor: backgroundColors.background1.value,
+              showCurrentPage: true,
             },
             analytics: {
               scope: "directory",
@@ -172,6 +230,9 @@ export const Directory: ComponentConfig<{ props: DirectoryProps }> = {
         {
           type: "DirectoryGrid",
           props: {
+            styles: {
+              backgroundColor: backgroundColors.background1.value,
+            },
             slots: {
               CardSlot: [],
             },

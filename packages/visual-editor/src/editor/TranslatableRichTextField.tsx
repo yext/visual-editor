@@ -10,7 +10,9 @@ import {
 } from "../internal/hooks/useMessage.ts";
 import { useTranslation } from "react-i18next";
 
-const pendingMessageIdsByFieldId = new Map<string, string>();
+let pendingRichTextSession:
+  | { messageId: string; apply: (payload: any) => void }
+  | undefined;
 
 /**
  * Generates a translatableRichText field config
@@ -21,7 +23,7 @@ export function TranslatableRichTextField<
 >(label?: MsgString): CustomField<T> {
   return {
     type: "custom",
-    render: ({ onChange, value, id }) => {
+    render: ({ onChange, value }) => {
       const { i18n } = useTranslation();
       const locale = i18n.language;
       const resolvedValue = value && resolveComponentData(value, locale);
@@ -36,17 +38,21 @@ export function TranslatableRichTextField<
         "constantValueEditorClosed",
         TARGET_ORIGINS,
         (_, payload) => {
-          const pendingMessageId = pendingMessageIdsByFieldId.get(id);
-          if (pendingMessageId && pendingMessageId === payload?.id) {
-            handleNewValue(payload.value, payload.locale);
-            pendingMessageIdsByFieldId.delete(id);
+          const session = pendingRichTextSession;
+          if (!session || session.messageId !== payload?.id) {
+            return;
           }
+          pendingRichTextSession = undefined;
+          session.apply(payload);
         }
       );
 
       const handleClick = () => {
         const messageId = `RichText-${Date.now()}`;
-        pendingMessageIdsByFieldId.set(id, messageId);
+        pendingRichTextSession = {
+          messageId,
+          apply: (payload) => handleNewValue(payload.value, payload.locale),
+        };
         const valueForCurrentLocale =
           typeof value === "object" && value !== null && !Array.isArray(value)
             ? ((value as Record<string, any>)[locale] ??
@@ -73,7 +79,9 @@ export function TranslatableRichTextField<
         ) {
           const userInput = prompt("Enter Rich Text (HTML):");
           handleNewValue({ json: "", html: userInput ?? "" }, locale);
-          pendingMessageIdsByFieldId.delete(id);
+          if (pendingRichTextSession?.messageId === messageId) {
+            pendingRichTextSession = undefined;
+          }
         }
       };
 

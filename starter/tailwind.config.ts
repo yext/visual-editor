@@ -4,6 +4,7 @@ import {
   defaultThemeTailwindExtensions,
   defaultThemeConfig,
   VisualEditorComponentsContentPath,
+  VisualEditorThemeClassSafelist,
 } from "@yext/visual-editor";
 
 export default {
@@ -11,6 +12,7 @@ export default {
     "./src/**/*.{html,js,jsx,ts,tsx}",
     VisualEditorComponentsContentPath,
   ],
+  safelist: VisualEditorThemeClassSafelist,
   theme: {
     extend: themeResolver(defaultThemeTailwindExtensions, defaultThemeConfig),
   },
