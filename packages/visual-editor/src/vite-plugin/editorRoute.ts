@@ -2,16 +2,22 @@ const LEGACY_EDITOR_TEMPLATE_NAMES = new Set(["main"]);
 const SHARED_EDITOR_TEMPLATE_NAMES = new Set(["directory", "locator"]);
 
 export const EDIT_PATH_PLACEHOLDER = "__YEXT_VISUAL_EDITOR_PATH__";
+export const EDIT_TEMPLATE_NAME_PLACEHOLDER =
+  "__YEXT_VISUAL_EDITOR_TEMPLATE_NAME__";
 const EDIT_PATH_DECLARATION_PATTERN = /const editPath = ".*?";/;
+const EDIT_TEMPLATE_NAME_DECLARATION_PATTERN =
+  /const editTemplateName = ".*?";/;
+const EDIT_CONFIG_NAME_PROPERTY_PATTERN =
+  /(export const config:\s*TemplateConfig\s*=\s*\{[\s\S]*?\bname:\s*)(".*?"|editTemplateName)(,)/;
 
-export const getEditorPathFromTemplateNames = (
+type EditorTemplateInfo = {
+  path: string;
+  configName: string;
+};
+
+const getCustomTemplateNameFromTemplateNames = (
   templateNames: string[]
-): string => {
-  console.log(
-    "Determining template editor path from template names:",
-    templateNames
-  );
-
+): string | null => {
   const uniqueTemplateNames = [...new Set(templateNames)].filter(
     (templateName) => templateName !== "edit"
   );
@@ -21,7 +27,7 @@ export const getEditorPathFromTemplateNames = (
       LEGACY_EDITOR_TEMPLATE_NAMES.has(templateName)
     )
   ) {
-    return "testedit";
+    return null;
   }
 
   const customTemplateNames = uniqueTemplateNames.filter(
@@ -29,7 +35,7 @@ export const getEditorPathFromTemplateNames = (
   );
 
   if (customTemplateNames.length === 0) {
-    return "testedit";
+    return null;
   }
 
   if (customTemplateNames.length !== 1) {
@@ -39,23 +45,82 @@ export const getEditorPathFromTemplateNames = (
     );
   }
 
-  return `testedit/${customTemplateNames[0]}`;
+  return customTemplateNames[0];
 };
 
-export const injectEditorPath = (
-  templateContent: string,
-  editorPath: string
-): string => {
-  if (!templateContent.includes(EDIT_PATH_PLACEHOLDER)) {
-    if (!EDIT_PATH_DECLARATION_PATTERN.test(templateContent)) {
-      throw new Error("Unable to inject editor path: placeholder not found");
-    }
+export const getEditorTemplateInfoFromTemplateNames = (
+  templateNames: string[]
+): EditorTemplateInfo => {
+  const customTemplateName =
+    getCustomTemplateNameFromTemplateNames(templateNames);
 
-    return templateContent.replace(
+  if (!customTemplateName) {
+    return {
+      path: "edit",
+      configName: "edit",
+    };
+  }
+
+  return {
+    path: `edit/${customTemplateName}`,
+    configName: `edit-${customTemplateName}`,
+  };
+};
+
+export const getEditorPathFromTemplateNames = (
+  templateNames: string[]
+): string => {
+  return getEditorTemplateInfoFromTemplateNames(templateNames).path;
+};
+
+export const getEditorConfigNameFromTemplateNames = (
+  templateNames: string[]
+): string => {
+  return getEditorTemplateInfoFromTemplateNames(templateNames).configName;
+};
+
+export const injectEditorTemplateInfo = (
+  templateContent: string,
+  editorTemplateInfo: EditorTemplateInfo
+): string => {
+  let updatedContent = templateContent;
+
+  if (updatedContent.includes(EDIT_PATH_PLACEHOLDER)) {
+    updatedContent = updatedContent.replace(
+      EDIT_PATH_PLACEHOLDER,
+      editorTemplateInfo.path
+    );
+  } else if (EDIT_PATH_DECLARATION_PATTERN.test(updatedContent)) {
+    updatedContent = updatedContent.replace(
       EDIT_PATH_DECLARATION_PATTERN,
-      `const editPath = "${editorPath}";`
+      `const editPath = "${editorTemplateInfo.path}";`
+    );
+  } else {
+    throw new Error("Unable to inject editor path: placeholder not found");
+  }
+
+  if (updatedContent.includes(EDIT_TEMPLATE_NAME_PLACEHOLDER)) {
+    return updatedContent.replace(
+      EDIT_TEMPLATE_NAME_PLACEHOLDER,
+      editorTemplateInfo.configName
     );
   }
 
-  return templateContent.replace(EDIT_PATH_PLACEHOLDER, editorPath);
+  if (EDIT_TEMPLATE_NAME_DECLARATION_PATTERN.test(updatedContent)) {
+    return updatedContent.replace(
+      EDIT_TEMPLATE_NAME_DECLARATION_PATTERN,
+      `const editTemplateName = "${editorTemplateInfo.configName}";`
+    );
+  }
+
+  if (!EDIT_CONFIG_NAME_PROPERTY_PATTERN.test(updatedContent)) {
+    throw new Error(
+      "Unable to inject edit template name: placeholder not found"
+    );
+  }
+
+  return updatedContent.replace(
+    EDIT_CONFIG_NAME_PROPERTY_PATTERN,
+    `$1"${editorTemplateInfo.configName}"$3`
+  );
 };

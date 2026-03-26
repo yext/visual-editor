@@ -12,8 +12,8 @@ import {
   getCollectedRegistryTemplateNames,
 } from "./registryTemplateGenerator.ts";
 import {
-  getEditorPathFromTemplateNames,
-  injectEditorPath,
+  getEditorTemplateInfoFromTemplateNames,
+  injectEditorTemplateInfo,
 } from "./editorRoute.ts";
 
 type TemplateManifestEntry = {
@@ -124,11 +124,16 @@ export const yextVisualEditorPlugin = (): Plugin => {
       ),
       ...getCollectedRegistryTemplateNames(rootDir),
     ];
-    const editorPath = getEditorPathFromTemplateNames(availableTemplateNames);
+    const editorTemplateInfo = getEditorTemplateInfoFromTemplateNames(
+      availableTemplateNames
+    );
     fs.mkdirSync(path.dirname(editorTemplatePath), { recursive: true });
     if (fs.existsSync(editorTemplatePath)) {
       const existingContent = fs.readFileSync(editorTemplatePath, "utf8");
-      const updatedContent = injectEditorPath(existingContent, editorPath);
+      const updatedContent = injectEditorTemplateInfo(
+        existingContent,
+        editorTemplateInfo
+      );
       if (existingContent !== updatedContent) {
         fs.writeFileSync(editorTemplatePath, updatedContent);
       }
@@ -136,7 +141,7 @@ export const yextVisualEditorPlugin = (): Plugin => {
       filesToCleanup.push(editorTemplatePath);
       fs.writeFileSync(
         editorTemplatePath,
-        injectEditorPath(editTemplate, editorPath)
+        injectEditorTemplateInfo(editTemplate, editorTemplateInfo)
       );
     }
 

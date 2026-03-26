@@ -38,7 +38,10 @@
 import path from "node:path";
 import fs from "fs-extra";
 import { Project, QuoteKind, SyntaxKind, type SourceFile } from "ts-morph";
-import { getEditorPathFromTemplateNames } from "./editorRoute.ts";
+import {
+  getEditorConfigNameFromTemplateNames,
+  getEditorPathFromTemplateNames,
+} from "./editorRoute.ts";
 
 type TemplateManifestEntry = {
   name: string;
@@ -578,6 +581,7 @@ const updateEditTemplate = (
 
   setEditComponentRegistry(sourceFile, templateNames);
   setEditPath(sourceFile, availableTemplateNames);
+  setEditConfigName(sourceFile, availableTemplateNames);
 
   const updatedSource = sourceFile.getFullText();
   sourceFile.forget();
@@ -897,6 +901,49 @@ function setEditPath(sourceFile: SourceFile, templateNames: string[]): void {
   declaration.setInitializer(
     JSON.stringify(getEditorPathFromTemplateNames(templateNames))
   );
+}
+
+function setEditConfigName(
+  sourceFile: SourceFile,
+  templateNames: string[]
+): void {
+  const configName = getEditorConfigNameFromTemplateNames(templateNames);
+  const declaration = sourceFile.getVariableDeclaration("editTemplateName");
+
+  if (declaration) {
+    declaration.setInitializer(JSON.stringify(configName));
+    return;
+  }
+
+  const configDeclaration = sourceFile.getVariableDeclaration("config");
+  if (!configDeclaration) {
+    return;
+  }
+
+  const initializer = configDeclaration.getInitializerIfKind(
+    SyntaxKind.ObjectLiteralExpression
+  );
+  if (!initializer) {
+    return;
+  }
+
+  const existingProperty = initializer
+    .getProperties()
+    .find((property) => {
+      const propertyAssignment = property.asKind(SyntaxKind.PropertyAssignment);
+      return propertyAssignment?.getName() === "name";
+    })
+    ?.asKind(SyntaxKind.PropertyAssignment);
+
+  if (existingProperty) {
+    existingProperty.setInitializer(JSON.stringify(configName));
+    return;
+  }
+
+  initializer.addPropertyAssignment({
+    name: "name",
+    initializer: JSON.stringify(configName),
+  });
 }
 
 function getAvailableTemplateNames(

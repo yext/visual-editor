@@ -108,6 +108,7 @@ describe.sequential("generateRegistryTemplateFiles", () => {
     );
     expect(updatedEditTemplate).toContain('"main": mainConfig');
     expect(updatedEditTemplate).toContain('const editPath = "edit";');
+    expect(updatedEditTemplate).toContain('const editTemplateName = "edit";');
 
     expect(
       fs.existsSync(path.join(rootDir, "src", "templates", "edit.tsx"))
@@ -157,6 +158,7 @@ describe.sequential("generateRegistryTemplateFiles", () => {
     expect(updatedEditTemplate).not.toContain("mainConfig");
     expect(updatedEditTemplate).not.toContain('"main"');
     expect(updatedEditTemplate).toContain('const editPath = "edit";');
+    expect(updatedEditTemplate).toContain('const editTemplateName = "edit";');
 
     const manifest = readManifest(rootDir);
     expect(manifest.templates).toEqual([]);
@@ -178,6 +180,9 @@ describe.sequential("generateRegistryTemplateFiles", () => {
       "utf8"
     );
     expect(updatedEditTemplate).toContain('const editPath = "edit/dunkin";');
+    expect(updatedEditTemplate).toContain(
+      'const editTemplateName = "edit-dunkin";'
+    );
   });
 
   it("refuses to overwrite a hand-authored template file", () => {

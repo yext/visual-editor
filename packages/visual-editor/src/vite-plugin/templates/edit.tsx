@@ -28,18 +28,15 @@ const componentRegistry: Record<string, Config<any>> = {
 };
 
 const editPath = "__YEXT_VISUAL_EDITOR_PATH__";
+const editTemplateName = "__YEXT_VISUAL_EDITOR_TEMPLATE_NAME__";
 
 // Editor path is injected at generation time based on the available templates.
 export const getPath: GetPath<TemplateProps> = () => {
-  console.log(
-    "Determined template editor editPath (using `edit/my-template` instead):",
-    editPath
-  );
-  return "edit/sweetgreen";
+  return editPath;
 };
 
 export const config: TemplateConfig = {
-  name: "edit-sweetgreen",
+  name: editTemplateName,
 };
 
 export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
