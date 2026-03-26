@@ -292,7 +292,6 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     <InternalLayoutEditor
       puckConfig={puckConfig}
       puckInitialHistory={puckInitialHistory}
-      isLoading={isLoading}
       clearHistory={clearHistory}
       templateMetadata={templateMetadata}
       layoutSaveState={layoutSaveState}

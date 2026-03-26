@@ -6,8 +6,9 @@ import {
   backgroundColors,
   type ThemeColor,
 } from "../../../utils/themeConfigOptions.ts";
+import { getThemeColorCssValue } from "../../../utils/colors.ts";
 import { Body } from "../../atoms/body.tsx";
-import { Button } from "../../../internal/puck/ui/button.tsx";
+import { Button } from "../../atoms/button.tsx";
 import { getAggregateRating, ReviewStars } from "../../atoms/reviewStars.tsx";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
@@ -59,6 +60,11 @@ export interface ReviewsSectionProps {
      * @defaultValue Background Color 1
      */
     backgroundColor?: ThemeColor;
+
+    /**
+     * Accent color used for show more/show less and pagination controls.
+     */
+    accentColor?: ThemeColor;
 
     /**
      * Whether to show the section heading.
@@ -136,6 +142,10 @@ const reviewsFields: Fields<ReviewsSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
+      accentColor: YextField(msg("fields.accentColor", "Accent Color"), {
+        type: "select",
+        options: "SITE_COLOR",
+      }),
       showSectionHeading: YextField(
         msg("fields.showSectionHeading", "Show Section Heading"),
         {
@@ -213,13 +223,19 @@ const ReviewsSectionInternal: PuckComponent<ReviewsSectionProps> = (props) => {
         <ReviewsHeader
           averageRating={averageRating}
           reviewCount={reviewCount}
+          accentColor={styles?.accentColor}
         />
       </div>
-      <ReviewsList reviews={reviewsPage} streamDocument={streamDocument} />
+      <ReviewsList
+        reviews={reviewsPage}
+        streamDocument={streamDocument}
+        accentColor={styles?.accentColor}
+      />
       <PageScroller
         numberOfReviews={reviews?.length ?? 0}
         currentPageNumber={currentPageNumber}
         setPageNumber={setCurrentPageNumber}
+        accentColor={styles?.accentColor}
       />
     </PageSection>
   );
@@ -228,13 +244,18 @@ const ReviewsSectionInternal: PuckComponent<ReviewsSectionProps> = (props) => {
 interface ReviewsHeaderProps {
   averageRating: number;
   reviewCount: number;
+  accentColor?: ThemeColor;
 }
 
 const ReviewsHeader: React.FC<ReviewsHeaderProps> = (props) => {
-  const { averageRating, reviewCount } = props;
+  const { averageRating, reviewCount, accentColor } = props;
   return (
     <div className="flex flex-row gap-3 items-center justify-center">
-      <ReviewStars averageRating={averageRating} reviewCount={reviewCount} />
+      <ReviewStars
+        averageRating={averageRating}
+        reviewCount={reviewCount}
+        color={accentColor}
+      />
     </div>
   );
 };
@@ -242,7 +263,8 @@ const ReviewsHeader: React.FC<ReviewsHeaderProps> = (props) => {
 const ReviewsList: React.FC<{
   reviews: Review[];
   streamDocument: StreamDocument;
-}> = ({ reviews, streamDocument }) => {
+  accentColor?: ThemeColor;
+}> = ({ reviews, streamDocument, accentColor }) => {
   return (
     <div className="flex flex-col gap-4">
       {reviews.map((review, index) => (
@@ -251,6 +273,7 @@ const ReviewsList: React.FC<{
           index={index}
           review={review}
           streamDocument={streamDocument}
+          accentColor={accentColor}
         />
       ))}
     </div>
@@ -261,7 +284,8 @@ const Review: React.FC<{
   review: Review;
   index: number;
   streamDocument: StreamDocument;
-}> = ({ review, index, streamDocument }) => {
+  accentColor?: ThemeColor;
+}> = ({ review, index, streamDocument, accentColor }) => {
   const authorData: AuthorWithDateProps = {
     author: review.authorName,
     date: review.reviewDate,
@@ -270,6 +294,7 @@ const Review: React.FC<{
     rating: review.rating,
     ...(review.content && { content: review.content }),
     index,
+    accentColor,
   };
 
   let businessResponseData: BusinessResponseProps | undefined = undefined;
@@ -282,6 +307,7 @@ const Review: React.FC<{
       content: businessResponseContent,
       date: businessResponseDate,
       index,
+      accentColor,
     };
   }
 
@@ -330,14 +356,18 @@ interface ReviewContentProps {
   rating: number;
   content?: string;
   index: number;
+  accentColor?: ThemeColor;
 }
 
 const ReviewContent: React.FC<ReviewContentProps> = ({
   rating,
   content,
   index,
+  accentColor,
 }) => {
-  const reviewStars = <ReviewStars averageRating={rating} />;
+  const reviewStars = (
+    <ReviewStars averageRating={rating} color={accentColor} />
+  );
   if (!content) {
     return <div className="flex flex-col gap-2">{reviewStars}</div>;
   }
@@ -345,6 +375,7 @@ const ReviewContent: React.FC<ReviewContentProps> = ({
     content: content,
     preContentElement: reviewStars,
     analyticsName: `review${index}`,
+    accentColor,
   };
   return <ExpandableContent {...expandableContentData} />;
 };
@@ -354,6 +385,7 @@ interface BusinessResponseProps {
   content: string;
   date: string;
   index: number;
+  accentColor?: ThemeColor;
 }
 
 const BusinessResponse: React.FC<BusinessResponseProps> = ({
@@ -361,6 +393,7 @@ const BusinessResponse: React.FC<BusinessResponseProps> = ({
   content,
   date,
   index,
+  accentColor,
 }) => {
   const { t } = useTranslation();
   const authorData: AuthorWithDateProps = {
@@ -375,6 +408,7 @@ const BusinessResponse: React.FC<BusinessResponseProps> = ({
     content: content,
     preContentElement: authorWithDate,
     analyticsName: `businessResponse${index}`,
+    accentColor,
   };
   return <ExpandableContent {...expandableContentData} />;
 };
@@ -383,12 +417,14 @@ interface ExpandableContentProps {
   content: string;
   preContentElement?: React.ReactNode;
   analyticsName: string;
+  accentColor?: ThemeColor;
 }
 
 const ExpandableContent: React.FC<ExpandableContentProps> = ({
   content,
   preContentElement,
   analyticsName,
+  accentColor,
 }) => {
   const [expanded, setExpanded] = React.useState(false);
   const [isTruncated, setIsTruncated] = React.useState(false);
@@ -420,6 +456,7 @@ const ExpandableContent: React.FC<ExpandableContentProps> = ({
           expanded={expanded}
           setExpanded={setExpanded}
           analyticsName={analyticsName}
+          accentColor={accentColor}
         />
       )}
     </div>
@@ -430,12 +467,14 @@ interface PageScrollerProps {
   numberOfReviews: number;
   currentPageNumber: number;
   setPageNumber: (newPageNumber: number) => void;
+  accentColor?: ThemeColor;
 }
 
 const PageScroller: React.FC<PageScrollerProps> = ({
   numberOfReviews,
   currentPageNumber,
   setPageNumber,
+  accentColor,
 }) => {
   const analytics = useAnalytics();
   const background = useBackground();
@@ -445,12 +484,17 @@ const PageScroller: React.FC<PageScrollerProps> = ({
     return <></>;
   }
 
-  const selectableButtonClasses = `cursor-pointer ${background?.isDarkColor ? "text-white" : "text-palette-primary-dark"}`;
+  const accentColorValue = getThemeColorCssValue(accentColor?.selectedColor);
+  const selectableButtonClasses = `cursor-pointer ${accentColorValue ? "" : background?.isDarkColor ? "text-white" : "text-palette-primary-dark"}`;
   const disabledButtonClasses = "opacity-50 cursor-default";
+  const selectableButtonStyle = accentColorValue
+    ? { color: accentColorValue }
+    : undefined;
   return (
     <Body className="flex flex-row justify-center items-center gap-5">
       <FaArrowLeft
         className={`${currentPageNumber === 0 ? disabledButtonClasses : selectableButtonClasses}`}
+        style={currentPageNumber === 0 ? undefined : selectableButtonStyle}
         data-ya-action={analytics?.getDebugEnabled() ? "PAGINATE" : undefined}
         data-ya-eventname={
           analytics?.getDebugEnabled() ? "previousPage" : undefined
@@ -464,6 +508,9 @@ const PageScroller: React.FC<PageScrollerProps> = ({
       />
       <FaArrowRight
         className={`${currentPageNumber === numPages - 1 ? disabledButtonClasses : selectableButtonClasses}`}
+        style={
+          currentPageNumber === numPages - 1 ? undefined : selectableButtonStyle
+        }
         data-ya-action={analytics?.getDebugEnabled() ? "PAGINATE" : undefined}
         data-ya-eventname={
           analytics?.getDebugEnabled() ? "nextPage" : undefined
@@ -483,12 +530,18 @@ const ShowMoreButton: React.FC<{
   expanded: boolean;
   setExpanded: (expanded: boolean) => void;
   analyticsName: string;
-}> = ({ expanded, setExpanded, analyticsName }) => {
+  accentColor?: ThemeColor;
+}> = ({ expanded, setExpanded, analyticsName, accentColor }) => {
   const { t } = useTranslation();
   const analytics = useAnalytics();
+  const accentColorValue = getThemeColorCssValue(accentColor?.selectedColor);
+  const accentColorStyle = accentColorValue
+    ? { color: accentColorValue }
+    : undefined;
   return (
     <Button
       className="font-body-fontFamily text-body-fontSize underline cursor-pointer inline-flex items-center gap-2"
+      style={accentColorStyle}
       onClick={() => {
         expanded // the existing state before toggling
           ? analytics?.track({

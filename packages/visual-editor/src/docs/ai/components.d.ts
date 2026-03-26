@@ -113,6 +113,10 @@ type AboutSectionProps = {
      */
     backgroundColor?: ThemeColor;
     /**
+     * The read more/read less button color.
+     */
+    readMoreButtonColor?: ThemeColor;
+    /**
      * If 'true', the sidebar with additional details is shown; if 'false', it's hidden.
      * @defaultValue true
      */
@@ -504,6 +508,10 @@ interface ReviewsSectionProps {
      */
     backgroundColor?: ThemeColor;
     /**
+     * Accent color used for show more/show less and pagination controls.
+     */
+    accentColor?: ThemeColor;
+    /**
      * Whether to show the section heading.
      * @defaultValue true
      */
@@ -720,6 +728,10 @@ interface BreadcrumbsStyles {
    */
   backgroundColor?: ThemeColor;
   /**
+   * The link color of breadcrumbs.
+   */
+  linkColor?: ThemeColor;
+  /**
    * Whether to show the current page's link in the breadcrumb trail (last link).
    * @defaultValue true
    */
@@ -831,6 +843,10 @@ interface HeroStyles {
    */
   showAverageReview: boolean;
   /**
+   * The color applied to review stars when average review is shown.
+   */
+  reviewStarsColor?: ThemeColor;
+  /**
    * Whether to show the primary CTA.
    * @defaultValue true
    */
@@ -878,6 +894,10 @@ interface ProfessionalHeroStyles {
    * @defaultValue true
    */
   showAverageReview: boolean;
+  /**
+   * The color applied to review stars when average review is shown.
+   */
+  reviewStarsColor?: ThemeColor;
   /**
    * Whether to show the hero image.
    * @defaultValue true
