@@ -1849,7 +1849,7 @@ interface MapProps {
   mapStyle?: string;
   centerCoords?: Coordinate;
   onDragHandler?: OnDragHandler;
-  scrollToResult?: (result: Result | undefined) => void;
+  scrollToResult?: (result: Result<Location> | undefined) => void;
   markerOptionsOverride?: (selected: boolean) => MapMarkerOptions;
   locationStyleConfig?: Record<string, { color?: ThemeColor; icon?: string }>;
 }
