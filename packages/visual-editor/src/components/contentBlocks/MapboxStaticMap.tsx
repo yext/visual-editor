@@ -17,6 +17,7 @@ import {
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import mapboxLogo from "../assets/mapbox-logo-black.svg";
 import { Map } from "lucide-react";
+import { getThemeValue } from "../../utils/getThemeValue.ts";
 
 export type MapboxStaticProps = {
   apiKey: string;
@@ -64,23 +65,11 @@ const mapboxFields: Fields<MapboxStaticProps> = {
 };
 
 const getPrimaryColor = (streamDocument: StreamDocument) => {
-  if (streamDocument?.__?.theme) {
-    return (
-      JSON.parse(streamDocument?.__?.theme)
-        ?.["--colors-palette-primary"]?.trim()
-        ?.replace("#", "") ?? "000000"
-    );
-  } else {
-    const iframe = window.document?.querySelector("iframe");
-    const componentElement =
-      iframe?.contentDocument?.querySelector(".components");
-    return componentElement
-      ? getComputedStyle(componentElement)
-          ?.getPropertyValue("--colors-palette-primary")
-          ?.trim()
-          ?.replace("#", "")
-      : "000000";
-  }
+  return (
+    getThemeValue("--colors-palette-primary", streamDocument)
+      ?.replace("#", "")
+      ?.trim() ?? "000000"
+  );
 };
 
 export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({

@@ -11,10 +11,11 @@ import {
   backgroundColors,
 } from "../../utils/themeConfigOptions.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
-import { ComponentConfig, Fields } from "@puckeditor/core";
+import { ComponentConfig, Fields, setDeep } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 import { resolveBreadcrumbs } from "../../utils/urls/resolveBreadcrumbs.ts";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 
 export interface BreadcrumbsData {
   /**
@@ -22,6 +23,12 @@ export interface BreadcrumbsData {
    * @defaultValue "Directory Root"
    */
   directoryRoot: TranslatableString;
+
+  /**
+   * The display label for the last link in the breadcrumb trail (the current page).
+   * @defaultValue Name
+   */
+  currentPage: YextEntityField<TranslatableString>;
 }
 
 export interface BreadcrumbsStyles {
@@ -30,6 +37,12 @@ export interface BreadcrumbsStyles {
    * @defaultValue Background Color 1
    */
   backgroundColor?: BackgroundStyle;
+
+  /**
+   * Whether to show the current page's link in the breadcrumb trail (last link).
+   * @defaultValue true
+   */
+  showCurrentPage: boolean;
 }
 
 /**
@@ -73,6 +86,13 @@ const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
           filter: { types: ["type.string"] },
         }
       ),
+      currentPage: YextField(
+        msg("fields.currentPageLinkLabel", "Current Page Link Label"),
+        {
+          type: "entityField",
+          filter: { types: ["type.string"] },
+        }
+      ),
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {
@@ -83,6 +103,16 @@ const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
         {
           type: "select",
           options: "BACKGROUND_COLOR",
+        }
+      ),
+      showCurrentPage: YextField(
+        msg(
+          "fields.showCurrentPagesLinkLabel",
+          "Show Current Page's Link Label"
+        ),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
         }
       ),
     },
@@ -126,9 +156,19 @@ export const BreadcrumbsComponent = ({
     i18n.language,
     streamDocument
   );
+  const currentPage = resolveComponentData(
+    data.currentPage,
+    i18n.language,
+    streamDocument
+  );
+  const breadcrumbsToRender = breadcrumbs
+    .map((breadcrumb, index) => ({ ...breadcrumb, index }))
+    .filter(
+      ({ index }) => styles.showCurrentPage || index < breadcrumbs.length - 1
+    );
 
-  if (!breadcrumbs?.length) {
-    return <PageSection></PageSection>;
+  if (!breadcrumbsToRender.length) {
+    return null;
   }
 
   return (
@@ -139,15 +179,24 @@ export const BreadcrumbsComponent = ({
       background={styles?.backgroundColor}
     >
       <ol className="inline p-0 m-0 list-none">
-        {breadcrumbs.map(({ name, slug }, idx) => {
-          const isRoot = idx === 0;
-          const isLast = idx === breadcrumbs.length - 1;
+        {breadcrumbsToRender.map(({ name, slug, index }) => {
+          const isRoot = index === 0;
+          const isCurrentPage = index === breadcrumbs.length - 1;
+          // Root pages have a single breadcrumb, so the first and last crumb are the same item.
+          const isRootPage = isRoot && isCurrentPage;
           const href = relativePrefixToRoot
             ? relativePrefixToRoot + slug
             : slug;
+          let label = name;
+          if (isCurrentPage && currentPage) {
+            label = currentPage;
+          }
+          if ((isRootPage || isRoot) && directoryRoot) {
+            label = directoryRoot;
+          }
 
           return (
-            <li key={idx} className="contents whitespace-normal break-words">
+            <li key={index} className="contents whitespace-normal break-words">
               {!isRoot && (
                 <span className="mx-2" aria-hidden>
                   {separator}
@@ -158,12 +207,12 @@ export const BreadcrumbsComponent = ({
               <wbr />
 
               <MaybeLink
-                eventName={`link${idx}`}
-                href={isLast ? "" : href}
+                eventName={`link${index}`}
+                href={isCurrentPage ? "" : href}
                 className="inline text-body-sm-fontSize font-link-fontWeight font-link-fontFamily whitespace-normal break-words"
                 alwaysHideCaret
               >
-                {isRoot && directoryRoot ? directoryRoot : name}
+                {label}
               </MaybeLink>
             </li>
           );
@@ -182,12 +231,32 @@ export const BreadcrumbsSection: ComponentConfig<{
 }> = {
   label: msg("components.breadcrumbs", "Breadcrumbs"),
   fields: breadcrumbsSectionFields,
+  resolveFields: (_data, params) => {
+    const streamDocument = params.metadata?.streamDocument;
+    if (!streamDocument) {
+      return breadcrumbsSectionFields;
+    }
+
+    // On root pages there is only one breadcrumb, so "currentPage" duplicates "directoryRoot".
+    const breadcrumbCount = resolveBreadcrumbs(streamDocument).length;
+    return setDeep(
+      breadcrumbsSectionFields,
+      "data.objectFields.currentPage.visible",
+      breadcrumbCount !== 1
+    );
+  },
   defaultProps: {
     data: {
       directoryRoot: { defaultValue: "Directory Root" },
+      currentPage: {
+        constantValue: { defaultValue: "[[name]]" },
+        field: "name",
+        constantValueEnabled: false,
+      },
     },
     styles: {
       backgroundColor: backgroundColors.background1.value,
+      showCurrentPage: true,
     },
     analytics: {
       scope: "breadcrumbs",

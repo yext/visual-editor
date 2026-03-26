@@ -479,6 +479,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           props: {
             data: {
               actionType: "link",
+              normalizeLink: true,
               buttonText: { defaultValue: "Button" },
               entityField: {
                 field: "",
@@ -504,6 +505,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           props: {
             data: {
               actionType: "link",
+              normalizeLink: true,
               buttonText: { defaultValue: "Button" },
               entityField: {
                 field: "",

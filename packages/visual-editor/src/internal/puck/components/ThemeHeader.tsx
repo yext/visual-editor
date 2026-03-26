@@ -6,7 +6,7 @@ import { ThemeConfig } from "../../../utils/themeResolver.ts";
 import { updateThemeInEditor } from "../../../utils/applyTheme.ts";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
-import { InitialHistory, useGetPuck } from "@puckeditor/core";
+import { InitialHistory, createUsePuck, useGetPuck } from "@puckeditor/core";
 import { ThemeData, ThemeHistories } from "../../types/themeData.ts";
 import { RotateCcw, RotateCw } from "lucide-react";
 import { Separator } from "@radix-ui/react-separator";
@@ -20,6 +20,9 @@ import {
   TooltipTrigger,
 } from "../ui/Tooltip.tsx";
 import { getPublishTooltipMessageFromHeadDeployStatus } from "../../utils/getPublishTooltipMessageFromHeadDeployStatus.ts";
+
+const SIDEBAR_HIDE_STYLE_ID = "yext-theme-hide-sidebar-breadcrumbs";
+const usePuck = createUsePuck();
 
 type ThemeHeaderProps = {
   onPublishTheme: () => Promise<void>;
@@ -53,8 +56,9 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
   } = props;
 
   const getPuck = useGetPuck();
-
+  const previewMode = usePuck((s) => s.appState.ui.previewMode);
   useEffect(() => {
+    // Initialize Puck history and set preview mode to "interactive" on mount
     const {
       dispatch,
       history: { setHistories },
@@ -70,33 +74,37 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
   }, [puckInitialHistory]);
 
   useEffect(() => {
-    // Hide the components list and fields list titles
-    const fieldListTitle = document.querySelector<HTMLElement>(
-      "[class*='PuckLayout-rightSideBar'] > div[class*='SidebarSection--noBorderTop'] > div[class*='SidebarSection-title']"
-    );
-    if (fieldListTitle) {
-      fieldListTitle.style.display = "none";
-    }
-    const puckPreview =
-      document.querySelector<HTMLIFrameElement>("#preview-frame");
-    if (
-      puckPreview?.contentDocument?.head &&
-      !puckPreview?.contentDocument.getElementById(
-        "yext-preview-disable-pointer-events"
-      )
-    ) {
-      // add this style to preview iFrame to prevent clicking or hover effects.
-      const style = puckPreview.contentDocument.createElement("style");
-      style.id = "yext-preview-disable-pointer-events";
+    // Prevents the "Page" / breadcrumb from appearing over the right sidebar
+    if (!document.getElementById(SIDEBAR_HIDE_STYLE_ID)) {
+      const style = document.createElement("style");
+      style.id = SIDEBAR_HIDE_STYLE_ID;
       style.innerHTML = `
-        * {
-          cursor: default !important;
-          pointer-events: none !important;
+        [class*='SidebarSection-breadcrumbs'] {
+          display: none !important;
+        }
+        [class*='SidebarSection-title'] {
+          display: none !important;
         }
       `;
-      puckPreview.contentDocument.head.appendChild(style);
+      document.head.appendChild(style);
     }
+
+    return () => {
+      document.getElementById(SIDEBAR_HIDE_STYLE_ID)?.remove();
+    };
   }, []);
+
+  useEffect(() => {
+    // Keep theme mode in interactive preview so links/buttons are hoverable
+    // and Puck component selection is disabled.
+    if (previewMode !== "interactive") {
+      const { dispatch } = getPuck();
+      dispatch({
+        type: "setUi",
+        ui: { previewMode: "interactive" },
+      });
+    }
+  }, [previewMode, getPuck]);
 
   const canUndo = (): boolean => {
     if (!themeHistories) {

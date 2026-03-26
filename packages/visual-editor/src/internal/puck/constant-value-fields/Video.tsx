@@ -15,13 +15,13 @@ type VideoPayload = {
   locale: string;
 };
 
+let pendingVideoSession:
+  | { messageId: string; apply: (payload: VideoPayload) => void }
+  | undefined;
+
 export const VIDEO_CONSTANT_CONFIG: CustomField<AssetVideo | undefined> = {
   type: "custom",
   render: ({ onChange, value, field }) => {
-    const [pendingMessageId, setPendingMessageId] = React.useState<
-      string | undefined
-    >();
-
     const { sendToParent: openVideoAssetSelector } = useSendMessageToParent(
       "constantValueEditorOpened",
       TARGET_ORIGINS
@@ -32,12 +32,10 @@ export const VIDEO_CONSTANT_CONFIG: CustomField<AssetVideo | undefined> = {
       TARGET_ORIGINS,
       (_, payload) => {
         const videoPayload = payload as VideoPayload;
-        if (pendingMessageId && pendingMessageId === videoPayload.id) {
-          if (!videoPayload?.value) {
-            return;
-          }
-
-          onChange(videoPayload.value);
+        if (pendingVideoSession?.messageId === videoPayload?.id) {
+          const { apply } = pendingVideoSession;
+          pendingVideoSession = undefined;
+          apply(videoPayload);
         }
       }
     );
@@ -54,24 +52,33 @@ export const VIDEO_CONSTANT_CONFIG: CustomField<AssetVideo | undefined> = {
         }
         const url = new URL(userInput);
         const searchParams = new URLSearchParams(url.search);
-        const id = searchParams.get("v") ?? "";
+        const videoId = searchParams.get("v") ?? "";
 
         onChange({
           name: "Local asset",
           id: "0",
           video: {
             url: userInput,
-            thumbnail: `https://img.youtube.com/vi/${id}/hqdefault.jpg`,
-            id: id,
+            thumbnail: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
+            id: videoId,
             title: "Local Video",
             duration: "0:00",
-            embeddedUrl: `https://www.youtube.com/embed/${id}`,
+            embeddedUrl: `https://www.youtube.com/embed/${videoId}`,
           },
         });
       } else {
         /** Instructs Storm to open the video asset selector drawer */
         const messageId = `VideoAsset-${Date.now()}`;
-        setPendingMessageId(messageId);
+        pendingVideoSession = {
+          messageId,
+          apply: (videoPayload) => {
+            if (!videoPayload?.value) {
+              return;
+            }
+
+            onChange(videoPayload.value);
+          },
+        };
         openVideoAssetSelector({
           payload: {
             type: "VideoAsset",

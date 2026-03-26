@@ -198,6 +198,7 @@ const FooterLinks = (props: { links: CTAType[] }) => {
               link={item.link}
               label={item.label}
               linkType={item.linkType}
+              normalizeLink={false}
               eventName={`link${idx}`}
               variant="link"
               alwaysHideCaret={true}
@@ -218,6 +219,7 @@ const FooterSocialIcons = ({ socialLinks }: { socialLinks: socialLink[] }) => {
             key={idx}
             label={socialLink.label}
             link={`${socialLink.prefix ?? ""}${socialLink.link}`}
+            normalizeLink={false}
             variant={"link"}
             eventName={`socialLink${idx}`}
             alwaysHideCaret={true}
