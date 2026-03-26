@@ -5,6 +5,10 @@ export const EDIT_PATH_PLACEHOLDER = "__YEXT_VISUAL_EDITOR_PATH__";
 export const EDIT_TEMPLATE_NAME_PLACEHOLDER =
   "__YEXT_VISUAL_EDITOR_TEMPLATE_NAME__";
 const EDIT_PATH_DECLARATION_PATTERN = /const editPath = ".*?";/;
+const LEGACY_GET_PATH_BLOCK_PATTERN =
+  /export const getPath:\s*GetPath<TemplateProps>\s*=\s*\(\)\s*=>\s*\{\s*return\s+(".*?");\s*\};/;
+const LEGACY_GET_PATH_EXPRESSION_PATTERN =
+  /export const getPath:\s*GetPath<TemplateProps>\s*=\s*\(\)\s*=>\s*(".*?");/;
 const EDIT_TEMPLATE_NAME_DECLARATION_PATTERN =
   /const editTemplateName = ".*?";/;
 const EDIT_CONFIG_NAME_PROPERTY_PATTERN =
@@ -96,7 +100,14 @@ export const injectEditorTemplateInfo = (
       `const editPath = "${editorTemplateInfo.path}";`
     );
   } else {
-    throw new Error("Unable to inject editor path: placeholder not found");
+    const migratedLegacyGetPath = migrateLegacyGetPath(
+      updatedContent,
+      editorTemplateInfo.path
+    );
+    if (!migratedLegacyGetPath) {
+      throw new Error("Unable to inject editor path: placeholder not found");
+    }
+    updatedContent = migratedLegacyGetPath;
   }
 
   if (updatedContent.includes(EDIT_TEMPLATE_NAME_PLACEHOLDER)) {
@@ -123,4 +134,33 @@ export const injectEditorTemplateInfo = (
     EDIT_CONFIG_NAME_PROPERTY_PATTERN,
     `$1"${editorTemplateInfo.configName}"$3`
   );
+};
+
+const migrateLegacyGetPath = (
+  templateContent: string,
+  editorPath: string
+): string | null => {
+  if (LEGACY_GET_PATH_BLOCK_PATTERN.test(templateContent)) {
+    return templateContent.replace(
+      LEGACY_GET_PATH_BLOCK_PATTERN,
+      `const editPath = "${editorPath}";
+
+export const getPath: GetPath<TemplateProps> = () => {
+  return editPath;
+};`
+    );
+  }
+
+  if (LEGACY_GET_PATH_EXPRESSION_PATTERN.test(templateContent)) {
+    return templateContent.replace(
+      LEGACY_GET_PATH_EXPRESSION_PATTERN,
+      `const editPath = "${editorPath}";
+
+export const getPath: GetPath<TemplateProps> = () => {
+  return editPath;
+};`
+    );
+  }
+
+  return null;
 };

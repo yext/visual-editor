@@ -185,6 +185,29 @@ describe.sequential("generateRegistryTemplateFiles", () => {
     );
   });
 
+  it("treats an on-disk main.tsx as available even when it is not in the manifest", () => {
+    const rootDir = createStarterFixture();
+    fs.writeFileSync(
+      path.join(rootDir, "src", "templates", "main.tsx"),
+      "export default function Main() { return null; }\n"
+    );
+    writeRegistryComponent(
+      rootDir,
+      "dunkin",
+      "Hero.tsx",
+      "export const Hero = {};\n"
+    );
+
+    runGenerator(rootDir);
+
+    const updatedEditTemplate = fs.readFileSync(
+      path.join(rootDir, "src", "templates", "edit.tsx"),
+      "utf8"
+    );
+    expect(updatedEditTemplate).toContain('const editPath = "edit";');
+    expect(updatedEditTemplate).toContain('const editTemplateName = "edit";');
+  });
+
   it("refuses to overwrite a hand-authored template file", () => {
     const rootDir = createStarterFixture();
     writeRegistryComponent(

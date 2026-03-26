@@ -950,6 +950,11 @@ function getAvailableTemplateNames(
   rootDir: string,
   manifestTemplateNames: string[]
 ): string[] {
+  const mainTemplateNames = fs.existsSync(
+    path.join(rootDir, "src", "templates", "main.tsx")
+  )
+    ? ["main"]
+    : [];
   const builtInTemplateNames = [...PRESERVED_EDIT_REGISTRY_KEYS].filter(
     (templateName) => {
       return fs.existsSync(
@@ -958,7 +963,13 @@ function getAvailableTemplateNames(
     }
   );
 
-  return [...new Set([...builtInTemplateNames, ...manifestTemplateNames])];
+  return [
+    ...new Set([
+      ...mainTemplateNames,
+      ...builtInTemplateNames,
+      ...manifestTemplateNames,
+    ]),
+  ];
 }
 
 function getTemplateConfigExportName(templateName: string): string {

@@ -124,4 +124,30 @@ export const config: TemplateConfig = {
   name: "edit-dunkin",
 };`);
   });
+
+  it("migrates a legacy getPath block to the editPath declaration form", () => {
+    expect(
+      injectEditorTemplateInfo(
+        `export const getPath: GetPath<TemplateProps> = () => {
+  return "edit";
+};
+
+export const config: TemplateConfig = {
+  name: "edit",
+};`,
+        {
+          path: "edit/dunkin",
+          configName: "edit-dunkin",
+        }
+      )
+    ).toBe(`const editPath = "edit/dunkin";
+
+export const getPath: GetPath<TemplateProps> = () => {
+  return editPath;
+};
+
+export const config: TemplateConfig = {
+  name: "edit-dunkin",
+};`);
+  });
 });
