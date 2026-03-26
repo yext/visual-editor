@@ -425,6 +425,7 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
           props: {
             data: {
               actionType: "link",
+              normalizeLink: true,
               buttonText: { defaultValue: "Button" },
               entityField: {
                 field: "",
@@ -559,13 +560,6 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
         "props.slots.ImageSlot[0].props.parentData",
         undefined
       );
-      updatedData = setDeep(updatedData, "props.data.backgroundImage", {
-        field: data.props?.data?.promo.field
-          ? data.props?.data?.promo.field + ".image"
-          : "",
-        constantValue: data.props.data?.backgroundImage?.constantValue,
-        constantValueEnabled: true,
-      } satisfies PromoData["backgroundImage"]);
 
       return { ...updatedData, readOnly: { [mediaSubfield]: false } };
     }

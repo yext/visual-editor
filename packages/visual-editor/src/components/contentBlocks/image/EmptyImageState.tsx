@@ -12,6 +12,10 @@ import {
 } from "../../../internal/hooks/useMessage.ts";
 import { ImagePayload } from "../../../internal/puck/constant-value-fields/Image.tsx";
 
+let pendingEmptyImageSession:
+  | { messageId: string; apply: (payload: ImagePayload) => void }
+  | undefined;
+
 interface EmptyImageStateProps {
   isEmpty: boolean;
   isEditing: boolean;
@@ -43,44 +47,18 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
     TARGET_ORIGINS
   );
 
-  const [pendingMessageId, setPendingMessageId] = React.useState<
-    string | undefined
-  >();
-
   // Listen for image selection response
   useReceiveMessage(
     "constantValueEditorClosed",
     TARGET_ORIGINS,
-    React.useCallback(
-      (_, payload) => {
-        const imagePayload = payload as ImagePayload;
-        if (
-          pendingMessageId &&
-          pendingMessageId === imagePayload.id &&
-          onImageSelected
-        ) {
-          const imageData =
-            imagePayload.value.transformedImage ??
-            imagePayload.value.originalImage;
-          if (!imageData) {
-            return;
-          }
-          onImageSelected({
-            alternateText: imagePayload.value.altText
-              ? {
-                  [imagePayload.locale]: imagePayload.value.altText,
-                  hasLocalizedValue: "true",
-                }
-              : "",
-            url: imageData.url,
-            height: imageData.dimension?.height ?? 0,
-            width: imageData.dimension?.width ?? 0,
-            assetImage: payload.value,
-          } as AssetImageType);
-        }
-      },
-      [pendingMessageId, onImageSelected]
-    )
+    (_, payload) => {
+      const imagePayload = payload as ImagePayload;
+      if (pendingEmptyImageSession?.messageId === imagePayload?.id) {
+        const { apply } = pendingEmptyImageSession;
+        pendingEmptyImageSession = undefined;
+        apply(imagePayload);
+      }
+    }
   );
 
   const handleImageSelection = React.useCallback(() => {
@@ -100,7 +78,34 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
         }
       } else {
         const messageId = `ImageAsset-${Date.now()}`;
-        setPendingMessageId(messageId);
+        pendingEmptyImageSession = {
+          messageId,
+          apply: (imagePayload) => {
+            if (!onImageSelected) {
+              return;
+            }
+
+            const imageData =
+              imagePayload.value.transformedImage ??
+              imagePayload.value.originalImage;
+            if (!imageData) {
+              return;
+            }
+
+            onImageSelected({
+              alternateText: imagePayload.value.altText
+                ? {
+                    [imagePayload.locale]: imagePayload.value.altText,
+                    hasLocalizedValue: "true",
+                  }
+                : "",
+              url: imageData.url,
+              height: imageData.dimension?.height ?? 0,
+              width: imageData.dimension?.width ?? 0,
+              assetImage: imagePayload.value,
+            } as AssetImageType);
+          },
+        };
         openImageAssetSelector({
           payload: {
             type: "ImageAsset",
@@ -117,6 +122,7 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
     constantValue,
     openImageAssetSelector,
     onImageSelected,
+    fieldId,
   ]);
 
   if (!isEmpty || !isEditing) {

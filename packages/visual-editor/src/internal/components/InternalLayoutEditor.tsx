@@ -15,8 +15,7 @@ import {
   blocksPlugin,
   outlinePlugin,
 } from "@puckeditor/core";
-import React from "react";
-import { useState, useRef, useCallback } from "react";
+import React, { useRef, useCallback } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityTooltipsProvider } from "../../editor/EntityField.tsx";
 import { LayoutSaveState } from "../types/saveState.ts";
@@ -38,6 +37,7 @@ import { useDocument } from "../../hooks/useDocument.tsx";
 import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
+import { clonePuckResolveData } from "../utils/clonePuckResolveData.ts";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -80,7 +80,6 @@ const createAdvancedSettingsLink = () => ({
 type InternalLayoutEditorProps = {
   puckConfig: Config;
   puckInitialHistory: InitialHistory | undefined;
-  isLoading: boolean;
   clearHistory: () => void;
   templateMetadata: TemplateMetadata;
   layoutSaveState: LayoutSaveState | undefined;
@@ -97,7 +96,6 @@ type InternalLayoutEditorProps = {
 export const InternalLayoutEditor = ({
   puckConfig,
   puckInitialHistory,
-  isLoading,
   clearHistory,
   templateMetadata,
   layoutSaveState,
@@ -109,7 +107,6 @@ export const InternalLayoutEditor = ({
   localDev,
   metadata,
 }: InternalLayoutEditorProps) => {
-  const [canEdit, setCanEdit] = useState<boolean>(false); // helps sync puck preview and save state
   const historyIndex = useRef<number>(0);
   const { i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
@@ -199,16 +196,6 @@ export const InternalLayoutEditor = ({
     });
   };
 
-  const change = async () => {
-    if (isLoading) {
-      return;
-    }
-    if (!canEdit) {
-      setCanEdit(true);
-      return;
-    }
-  };
-
   const translatedPuckConfigWithRootFields = React.useMemo(() => {
     const translatedComponents: Config["components"] = {};
     Object.entries(puckConfig.components).forEach(
@@ -280,7 +267,10 @@ export const InternalLayoutEditor = ({
           devLogger.logFunc("reloadDataOnDocumentChange");
           const { appState, config, dispatch } = getPuck();
 
-          const resolvedData = await resolveAllData(appState.data, config, {
+          // Clone Puck data to ensure entity fields get updated on entity selection
+          const dataToResolve = clonePuckResolveData(appState.data);
+
+          const resolvedData = await resolveAllData(dataToResolve, config, {
             streamDocument,
           });
 
@@ -404,7 +394,6 @@ export const InternalLayoutEditor = ({
         config={translatedPuckConfigWithRootFields}
         data={{}} // we use puckInitialHistory instead
         initialHistory={puckInitialHistory}
-        onChange={change}
         plugins={[{ ...blocks, label: pt("sections", "Sections") }, outline]}
         overrides={{
           fields: fieldsOverride,
@@ -546,7 +535,20 @@ export const InternalLayoutEditor = ({
                   destinationIndex: appState.ui.itemSelector.index,
                   data: newData,
                 });
-              } catch (_) {
+              } catch (err) {
+                if (
+                  err instanceof DOMException &&
+                  err.name === "NotAllowedError"
+                ) {
+                  alert(
+                    pt(
+                      "failedToPasteComponentPermissionDenied",
+                      "Failed to paste: Clipboard access is blocked. Enable paste permissions and try again."
+                    )
+                  );
+                  return;
+                }
+
                 alert(
                   pt(
                     "failedToPasteComponentInvalidData",

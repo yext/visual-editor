@@ -185,6 +185,7 @@ export const defaultInsightCardSlotData = (
               ...(id && { id: `${id}-cta` }),
               data: {
                 actionType: "link",
+                normalizeLink: true,
                 buttonText: { defaultValue: "Button" },
                 entityField: {
                   field: "",

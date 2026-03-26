@@ -14,6 +14,11 @@ import { PresetImageType, FOOD_DELIVERY_SERVICES } from "../../types/types.ts";
 import { presetImageIcons } from "../../utils/presetImageIcons.tsx";
 import { normalizeThemeColor } from "../../utils/normalizeThemeColor.js";
 
+const LINK_TEXT_TRANSFORM_CSS_VAR =
+  "var(--textTransform-link-textTransform)" as React.CSSProperties["textTransform"];
+const BUTTON_TEXT_TRANSFORM_CSS_VAR =
+  "var(--textTransform-button-textTransform)" as React.CSSProperties["textTransform"];
+
 export type CTAProps = {
   // Core props
   label: React.ReactNode;
@@ -23,6 +28,7 @@ export type CTAProps = {
   // ctaType specific props
   link?: string;
   linkType?: LinkType;
+  normalizeLink: boolean;
   presetImageType?: PresetImageType;
 
   // button actionType specific props
@@ -97,12 +103,17 @@ const useResolvedCtaProps = (props: CTAProps) => {
     className,
     alwaysHideCaret,
     ariaLabel,
+    normalizeLink: shouldNormalizeLink,
   } = props;
   const { t } = useTranslation();
   const streamDocument = useDocument();
   const background = useBackground();
 
   const resolvedDynamicProps = useMemo(() => {
+    const resolvedLink = shouldNormalizeLink
+      ? normalizeLink(props.link, props.linkType)
+      : (props.link ?? "");
+
     switch (ctaType) {
       case "getDirections": {
         const listings = streamDocument.ref_listings ?? [];
@@ -123,8 +134,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
         // Prefer hardcoded link, then listings link, then coordinate link
         // User settable link props should not be used for get directions
         return {
-          link:
-            normalizeLink(props.link) || listingsLink || coordinateLink || "#",
+          link: resolvedLink || listingsLink || coordinateLink || "#",
           linkType: "DRIVING_DIRECTIONS" as const,
           label: props.label || t("getDirections", "Get Directions"),
           ariaLabel: ariaLabel || t("getDirections", "Get Directions"),
@@ -154,7 +164,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
         }
 
         return {
-          link: normalizeLink(props.link, props.linkType) || "#",
+          link: resolvedLink || "#",
           linkType: props.linkType ?? "URL",
           label,
           ariaLabel:
@@ -167,13 +177,13 @@ const useResolvedCtaProps = (props: CTAProps) => {
       case "textAndLink":
       default:
         return {
-          link: normalizeLink(props.link, props.linkType) || "#",
+          link: resolvedLink || "#",
           linkType: props.linkType ?? "URL",
           label: props.label,
           ariaLabel: ariaLabel ?? "",
         };
     }
-  }, [props, streamDocument, background]);
+  }, [props, streamDocument, background, shouldNormalizeLink, ariaLabel, t]);
 
   if (!resolvedDynamicProps) {
     return null;
@@ -327,8 +337,8 @@ export const CTA = (props: CTAProps) => {
         style={{
           ...disabledStyle,
           textTransform: buttonVariant?.toLowerCase().includes("link")
-            ? ("var(--textTransform-link-textTransform)" as React.CSSProperties["textTransform"])
-            : ("var(--textTransform-button-textTransform)" as React.CSSProperties["textTransform"]),
+            ? LINK_TEXT_TRANSFORM_CSS_VAR
+            : BUTTON_TEXT_TRANSFORM_CSS_VAR,
         }}
       >
         {linkContent}
@@ -355,8 +365,8 @@ export const CTA = (props: CTAProps) => {
         style={{
           ...(ctaType !== "presetImage" ? dynamicStyle : undefined),
           textTransform: buttonVariant?.toLowerCase().includes("link")
-            ? ("var(--textTransform-link-textTransform)" as React.CSSProperties["textTransform"])
-            : ("var(--textTransform-button-textTransform)" as React.CSSProperties["textTransform"]),
+            ? LINK_TEXT_TRANSFORM_CSS_VAR
+            : BUTTON_TEXT_TRANSFORM_CSS_VAR,
         }}
         className={buttonClassName}
         variant={buttonVariant}
@@ -389,8 +399,8 @@ export const CTA = (props: CTAProps) => {
         style={{
           // @ts-ignore: the css variable here resolves to a valid enum value
           textTransform: buttonVariant?.toLowerCase().includes("link")
-            ? "var(--textTransform-link-textTransform)"
-            : "var(--textTransform-button-textTransform)",
+            ? LINK_TEXT_TRANSFORM_CSS_VAR
+            : BUTTON_TEXT_TRANSFORM_CSS_VAR,
         }}
       >
         {linkContent}

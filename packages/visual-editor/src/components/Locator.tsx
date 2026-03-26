@@ -261,22 +261,23 @@ function getFacetFieldOptions(
 function getFacetFieldOptionsForEntityType(
   entityType: LocatorEntityType
 ): DynamicOption<string>[] {
-  let filterOptions: DynamicOption<string>[] = [];
+  let filterOptions: DynamicOption<string>[] = [
+    {
+      label: msg("fields.options.facets.city", "City"),
+      value: "address.city",
+    },
+    {
+      label: msg("fields.options.facets.postalCode", "Postal Code"),
+      value: "address.postalCode",
+    },
+    {
+      label: msg("fields.options.facets.region", "Region"),
+      value: "address.region",
+    },
+  ];
   switch (entityType) {
     case "location":
-      filterOptions = [
-        {
-          label: msg("fields.options.facets.city", "City"),
-          value: "address.city",
-        },
-        {
-          label: msg("fields.options.facets.postalCode", "Postal Code"),
-          value: "address.postalCode",
-        },
-        {
-          label: msg("fields.options.facets.region", "Region"),
-          value: "address.region",
-        },
+      filterOptions = filterOptions.concat(
         {
           label: msg("fields.options.facets.associations", "Associations"),
           value: "associations",
@@ -308,23 +309,11 @@ function getFacetFieldOptionsForEntityType(
         {
           label: msg("fields.options.facets.specialties", "Specialties"),
           value: "specialities",
-        },
-      ];
+        }
+      );
       break;
     case "restaurant":
-      filterOptions = [
-        {
-          label: msg("fields.options.facets.city", "City"),
-          value: "address.city",
-        },
-        {
-          label: msg("fields.options.facets.postalCode", "Postal Code"),
-          value: "address.postalCode",
-        },
-        {
-          label: msg("fields.options.facets.region", "Region"),
-          value: "address.region",
-        },
+      filterOptions = filterOptions.concat(
         {
           label: msg(
             "fields.options.facets.acceptsReservations",
@@ -378,23 +367,11 @@ function getFacetFieldOptionsForEntityType(
         {
           label: msg("fields.options.facets.specialties", "Specialties"),
           value: "specialities",
-        },
-      ];
+        }
+      );
       break;
     case "healthcareFacility":
-      filterOptions = [
-        {
-          label: msg("fields.options.facets.city", "City"),
-          value: "address.city",
-        },
-        {
-          label: msg("fields.options.facets.postalCode", "Postal Code"),
-          value: "address.postalCode",
-        },
-        {
-          label: msg("fields.options.facets.region", "Region"),
-          value: "address.region",
-        },
+      filterOptions = filterOptions.concat(
         {
           label: msg(
             "fields.options.facets.acceptingNewPatients",
@@ -423,23 +400,11 @@ function getFacetFieldOptionsForEntityType(
         {
           label: msg("fields.options.facets.services", "Services"),
           value: "services",
-        },
-      ];
+        }
+      );
       break;
     case "healthcareProfessional":
-      filterOptions = [
-        {
-          label: msg("fields.options.facets.city", "City"),
-          value: "address.city",
-        },
-        {
-          label: msg("fields.options.facets.postalCode", "Postal Code"),
-          value: "address.postalCode",
-        },
-        {
-          label: msg("fields.options.facets.region", "Region"),
-          value: "address.region",
-        },
+      filterOptions = filterOptions.concat(
         {
           label: msg(
             "fields.options.facets.acceptingNewPatients",
@@ -499,23 +464,11 @@ function getFacetFieldOptionsForEntityType(
         {
           label: msg("fields.options.facets.services", "Services"),
           value: "services",
-        },
-      ];
+        }
+      );
       break;
     case "hotel":
-      filterOptions = [
-        {
-          label: msg("fields.options.facets.city", "City"),
-          value: "address.city",
-        },
-        {
-          label: msg("fields.options.facets.postalCode", "Postal Code"),
-          value: "address.postalCode",
-        },
-        {
-          label: msg("fields.options.facets.region", "Region"),
-          value: "address.region",
-        },
+      filterOptions = filterOptions.concat(
         { label: msg("fields.options.facets.bar", "Bar"), value: "bar" },
         {
           label: msg("fields.options.facets.catsAllowed", "Cats Allowed"),
@@ -529,23 +482,11 @@ function getFacetFieldOptionsForEntityType(
           label: msg("fields.options.facets.parking", "Parking"),
           value: "parking",
         },
-        { label: msg("fields.options.facets.pools", "Pools"), value: "pools" },
-      ];
+        { label: msg("fields.options.facets.pools", "Pools"), value: "pools" }
+      );
       break;
     case "financialProfessional":
-      filterOptions = [
-        {
-          label: msg("fields.options.facets.city", "City"),
-          value: "address.city",
-        },
-        {
-          label: msg("fields.options.facets.postalCode", "Postal Code"),
-          value: "address.postalCode",
-        },
-        {
-          label: msg("fields.options.facets.region", "Region"),
-          value: "address.region",
-        },
+      filterOptions = filterOptions.concat(
         {
           label: msg("fields.options.facets.certifications", "Certifications"),
           value: "certifications",
@@ -572,11 +513,11 @@ function getFacetFieldOptionsForEntityType(
             "Years of Experience"
           ),
           value: "yearsOfExperience",
-        },
-      ];
+        }
+      );
       break;
     default:
-      filterOptions = [];
+      break;
   }
   return filterOptions;
 }
@@ -1049,7 +990,7 @@ const LocatorInternal = ({
   distanceDisplay,
   pageHeading,
 }: LocatorProps) => {
-  // Adds a unified enableYextAnalytics to the window for both Pages and Search
+  // Adds unified [enable|disable]YextAnalytics to the window for both Pages and Search
   // analytics. Typically used during consent banner implementation.
   const searchAnalytics = useSearchAnalytics();
   const pagesAnalytics = useAnalytics();
@@ -1058,9 +999,14 @@ const LocatorInternal = ({
       searchAnalytics?.optIn();
       pagesAnalytics?.optIn();
     };
+    (window as any).disableYextAnalytics = () => {
+      searchAnalytics?.optOut();
+      pagesAnalytics?.optOut();
+    };
 
     return () => {
       delete (window as any).enableYextAnalytics;
+      delete (window as any).disableYextAnalytics;
     };
   }, [searchAnalytics, pagesAnalytics]);
 
@@ -1648,6 +1594,16 @@ const LocatorInternal = ({
     : false;
   // If no opt-in is required, the map is already enabled.
   const [mapEnabled, setMapEnabled] = React.useState(!requireMapOptIn);
+  // Adds unified [enable|disable]Map functions to the window.
+  useEffect(() => {
+    (window as any).enableMap = () => setMapEnabled(true);
+    (window as any).disableMap = () => setMapEnabled(false);
+
+    return () => {
+      delete (window as any).enableMap;
+      delete (window as any).disableMap;
+    };
+  }, []);
 
   return (
     <div className="components flex h-screen w-screen mx-auto">
@@ -1911,6 +1867,18 @@ const Map: React.FC<MapProps> = ({
     }),
     [centerCoords, mapPadding, mapStyle]
   );
+  const PinComponent = React.useMemo(
+    () =>
+      function PinComponent<T>(pinProps: PinComponentProps<T>) {
+        return (
+          <LocatorMapPin
+            {...pinProps}
+            locationStyleConfig={locationStyleConfig}
+          />
+        );
+      },
+    [locationStyleConfig]
+  );
 
   // During page generation we don't exist in a browser context
   //@ts-expect-error MapboxGL is not loaded in the iframe content window
@@ -1941,12 +1909,7 @@ const Map: React.FC<MapProps> = ({
       mapboxAccessToken={mapboxApiKey || ""}
       mapboxOptions={mapboxOptions}
       onDrag={onDragHandler}
-      PinComponent={(pinProps) => (
-        <LocatorMapPin
-          {...pinProps}
-          locationStyleConfig={locationStyleConfig}
-        />
-      )}
+      PinComponent={PinComponent}
       iframeWindow={iframe?.contentWindow ?? undefined}
       allowUpdates={!!iframe?.contentDocument}
       onPinClick={scrollToResult}

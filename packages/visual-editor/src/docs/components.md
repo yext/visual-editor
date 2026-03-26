@@ -11,10 +11,10 @@ Props for the Address component
 
 #### Other Props
 
-| Prop     | Type                                                                                   | Description | Default |
-| :------- | :------------------------------------------------------------------------------------- | :---------- | :------ |
-| `data`   | `{ address: YextEntityField<AddressType>; }`                                           |             |         |
-| `styles` | `{ showGetDirectionsLink: boolean; ctaVariant: CTAVariant; color?: BackgroundStyle; }` |             |         |
+| Prop     | Type                                                                                                                                | Description | Default |
+| :------- | :---------------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ address: YextEntityField<AddressType>; }`                                                                                        |             |         |
+| `styles` | `{ showRegion?: boolean; showCountry?: boolean; showGetDirectionsLink: boolean; ctaVariant: CTAVariant; color?: BackgroundStyle; }` |             |         |
 
 ---
 
@@ -68,17 +68,19 @@ Defines the complete set of properties for the BreadcrumbsSection component.
 
 This object contains the content used by the component.
 
-| Prop                 | Type                 | Description                                                                                  | Default            |
-| :------------------- | :------------------- | :------------------------------------------------------------------------------------------- | :----------------- |
-| `data.directoryRoot` | `TranslatableString` | The display label for the first link in the breadcrumb trail (the top-level directory page). | `"Directory Root"` |
+| Prop                 | Type                                  | Description                                                                                  | Default            |
+| :------------------- | :------------------------------------ | :------------------------------------------------------------------------------------------- | :----------------- |
+| `data.currentPage`   | `YextEntityField<TranslatableString>` | The display label for the last link in the breadcrumb trail (the current page).              | `Name`             |
+| `data.directoryRoot` | `TranslatableString`                  | The display label for the first link in the breadcrumb trail (the top-level directory page). | `"Directory Root"` |
 
 #### Style Props
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type              | Description                          | Default              |
-| :----------------------- | :---------------- | :----------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle` | The background color of the section. | `Background Color 1` |
+| Prop                     | Type              | Description                                                                  | Default              |
+| :----------------------- | :---------------- | :--------------------------------------------------------------------------- | :------------------- |
+| `styles.backgroundColor` | `BackgroundStyle` | The background color of the section.                                         | `Background Color 1` |
+| `styles.showCurrentPage` | `boolean`         | Whether to show the current page's link in the breadcrumb trail (last link). | `true`               |
 
 #### Other Props
 
@@ -149,11 +151,11 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 Additional CSS classes to apply to the CTA.
 
-| Prop        | Type                                                                                                                                                                                                                                                                             | Description                                 | Default |
-| :---------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------ | :------ |
-| `className` | `string`                                                                                                                                                                                                                                                                         | Additional CSS classes to apply to the CTA. |         |
-| `data`      | `{ show?: boolean; actionType?: "link" \| "button"; entityField: YextEntityField<EnhancedTranslatableCTA>; buttonText?: TranslatableString; customId?: string; customClass?: string; dataAttributes?: Array<{ key: string; value: string; }>; ariaLabel?: TranslatableString; }` |                                             |         |
-| `styles`    | `{ variant: CTAVariant; presetImage?: PresetImageType; color?: BackgroundStyle; }`                                                                                                                                                                                               |                                             |         |
+| Prop        | Type                                                                                                                                                                                                                                                                                                     | Description                                 | Default |
+| :---------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------ | :------ |
+| `className` | `string`                                                                                                                                                                                                                                                                                                 | Additional CSS classes to apply to the CTA. |         |
+| `data`      | `{ show?: boolean; actionType?: "link" \| "button"; normalizeLink: boolean; entityField: YextEntityField<EnhancedTranslatableCTA>; buttonText?: TranslatableString; customId?: string; customClass?: string; dataAttributes?: Array<{ key: string; value: string; }>; ariaLabel?: TranslatableString; }` |                                             |         |
+| `styles`    | `{ variant: CTAVariant; presetImage?: PresetImageType; color?: BackgroundStyle; }`                                                                                                                                                                                                                       |                                             |         |
 
 ---
 
@@ -190,9 +192,10 @@ The Directory Page component serves as a navigational hub, displaying a list of 
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type              | Description                                               | Default              |
-| :----------------------- | :---------------- | :-------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle` | The main background color for the directory page content. | `Background Color 1` |
+| Prop                         | Type              | Description                                               | Default              |
+| :--------------------------- | :---------------- | :-------------------------------------------------------- | :------------------- |
+| `styles.backgroundColor`     | `BackgroundStyle` | The background color for the directory page heading area. | `Background Color 1` |
+| `styles.listBackgroundColor` | `BackgroundStyle` | The background color for the directory list area.         | `Background Color 1` |
 
 ---
 
