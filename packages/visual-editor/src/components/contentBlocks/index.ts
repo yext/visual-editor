@@ -15,3 +15,5 @@ export { TextList, type TextListProps } from "./TextList.tsx";
 export { Text, type TextProps } from "./Text.tsx";
 export { Timestamp, type TimestampProps } from "./Timestamp.tsx";
 export { Video, type VideoProps } from "./Video.tsx";
+export { Searchbar } from "./search/Searchbar.tsx";
+export { type SearchbarProps } from "./search/defaultPropsAndTypes.ts";

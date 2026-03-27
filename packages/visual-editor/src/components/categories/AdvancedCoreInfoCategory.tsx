@@ -28,6 +28,8 @@ import { Phone, PhoneProps } from "../contentBlocks/Phone.tsx";
 import { TextList, TextListProps } from "../contentBlocks/TextList.tsx";
 import { CTAGroup, CTAGroupProps } from "../contentBlocks/CTAGroup.tsx";
 import { Text, TextProps } from "../contentBlocks/Text.tsx";
+import { SearchbarProps } from "../contentBlocks/search/defaultPropsAndTypes.ts";
+import { Searchbar } from "../contentBlocks/search/Searchbar.tsx";
 
 export interface AdvancedCoreInfoCategoryProps {
   Grid: GridProps;
@@ -45,6 +47,7 @@ export interface AdvancedCoreInfoCategoryProps {
   Phone: PhoneProps;
   TextList: TextListProps;
   Text: TextProps;
+  Searchbar: SearchbarProps;
 }
 
 export const AdvancedCoreInfoCategoryComponents = {
@@ -61,6 +64,7 @@ export const AdvancedCoreInfoCategoryComponents = {
   ImageWrapper,
   MapboxStaticMap,
   Phone,
+  Searchbar,
   TextList,
   Text,
 };

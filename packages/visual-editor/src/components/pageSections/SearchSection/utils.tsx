@@ -1,22 +1,13 @@
-import { UniversalLimit, VerticalResults } from "@yext/search-headless-react";
-import {
-  DefaultRawDataType,
-  FocusedItemData,
-  VerticalConfigMap,
-} from "@yext/search-ui-react";
+import { UniversalLimit } from "@yext/search-headless-react";
+import { DefaultRawDataType, VerticalConfigMap } from "@yext/search-ui-react";
+import React from "react";
 import Cards from "./Cards.tsx";
 import { LayoutSection } from "./LayoutSections.tsx";
 import {
   HeadingStyles,
-  SearchBarAlignProps,
-  SearchBarHeightProps,
-  SearchBarRoundedProps,
-  SearchBarWidthProps,
   SearchCtaStyles,
   VerticalConfigProps,
 } from "./defaultPropsAndTypes.ts";
-import { renderEntityPreviews } from "./searchVisualAutoComplete.tsx";
-import React from "react";
 
 export const buildVerticalConfigMap = (
   verticals: VerticalConfigProps[],
@@ -99,47 +90,6 @@ export const isValidVerticalConfig = (verticals: any[]): boolean => {
   );
 };
 
-export const createPreviews = (verticalKey: string) => {
-  return (
-    autocompleteLoading: boolean,
-    verticalKeyToResults: Record<string, VerticalResults>,
-    dropdownItemProps: {
-      onClick: (
-        value: string,
-        _index: number,
-        itemData?: FocusedItemData
-      ) => void;
-      ariaLabel: (value: string) => string;
-    }
-  ) => {
-    return renderEntityPreviews(
-      verticalKey,
-      autocompleteLoading,
-      verticalKeyToResults,
-      dropdownItemProps
-    );
-  };
-};
-
-export const createVisualAutocompleteConfig = (
-  enable: boolean,
-  verticalKey: string,
-  limit: number,
-  entityPreviewSearcher: any
-) => {
-  if (!enable || !verticalKey || limit < 1 || !entityPreviewSearcher) {
-    return undefined;
-  }
-
-  return {
-    entityPreviewSearcher,
-    includedVerticals: [verticalKey],
-    renderEntityPreviews: createPreviews(verticalKey),
-    universalLimit: { [verticalKey]: limit },
-    entityPreviewsDebouncingTime: 300,
-  };
-};
-
 export const updateSearchUrl = (params: {
   vertical?: string | null;
   searchTerm?: string | null;
@@ -193,55 +143,4 @@ export const readInitialUrlParams = (): {
     vertical: url.searchParams.get("vertical"),
     searchTerm: url.searchParams.get("searchTerm") ?? "",
   };
-};
-
-export const getRounded = (val: SearchBarRoundedProps) => {
-  switch (val) {
-    case "small":
-      return "[&>div]:rounded-sm";
-    case "medium":
-      return "[&>div]:rounded-md";
-
-    case "large":
-      return "[&>div]:rounded-xl";
-
-    case "pill":
-      return "[&>div]:rounded-3xl";
-
-    default:
-      return "[&>div]:rounded-none";
-  }
-};
-
-export const getWidth = (val: SearchBarWidthProps) => {
-  switch (val) {
-    case "small":
-      return "w-1/2";
-    case "half":
-      return "w-3/4";
-    default:
-      return "w-full";
-  }
-};
-
-export const getHeight = (val: SearchBarHeightProps) => {
-  switch (val) {
-    case "large":
-      return "h-24";
-    case "extraLarge":
-      return "h-48";
-    default:
-      return "h-14";
-  }
-};
-
-export const getAlignment = (val: SearchBarAlignProps) => {
-  switch (val) {
-    case "center":
-      return "mx-auto";
-    case "right":
-      return "ml-auto mr-0";
-    default:
-      return "ml-0 mr-auto";
-  }
 };

@@ -11,23 +11,18 @@ import { FaMicrophone } from "react-icons/fa";
 import { resolveDataFromParent } from "../../../editor/ParentData.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
-import { msg } from "../../../utils/i18n/platform.ts";
+import { msg } from "../../../utils/index.ts";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
-import {
-  defaultSearchData,
-  SearchBarAlignProps,
-  SearchBarHeightProps,
-  SearchBarRoundedProps,
-  SearchBarWidthProps,
-} from "./defaultPropsAndTypes.ts";
-import { useEntityPreviewSearcher } from "./searchConfig.ts";
-import { useTypingEffect } from "./useTypeEffect.ts";
+import { defaultSearchData, SearchbarProps } from "./defaultPropsAndTypes.ts";
+
 import {
   createVisualAutocompleteConfig,
   getAlignment,
   getHeight,
   getRounded,
   getWidth,
+  useEntityPreviewSearcher,
+  useTypingEffect,
 } from "./utils.tsx";
 
 type BrowserSpeechRecognition = {
@@ -56,25 +51,7 @@ declare global {
   }
 }
 
-export interface SearchBarSlotProps {
-  styles: {
-    showIcon: boolean;
-    voiceSearch: boolean;
-    isTypingEffect: boolean;
-    enableVisualAutoComplete: boolean;
-    visualAutoCompleteVerticalKey?: string;
-    limit?: number;
-    height?: SearchBarHeightProps;
-    width?: SearchBarWidthProps;
-    align?: SearchBarAlignProps;
-    rounded: SearchBarRoundedProps;
-  };
-  parentData?: {
-    showSearchResultsSection: boolean;
-  };
-}
-
-const searchBarSlotFields: Fields<SearchBarSlotProps> = {
+const searchbarFieldFields: Fields<SearchbarProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
@@ -178,7 +155,7 @@ const searchBarSlotFields: Fields<SearchBarSlotProps> = {
   }),
 };
 
-const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
+const SearchbarFieldInternal: PuckComponent<SearchbarProps> = ({
   styles: {
     showIcon,
     voiceSearch,
@@ -333,12 +310,14 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
   );
 };
 
-export const SearchBarSlot: ComponentConfig<{ props: SearchBarSlotProps }> = {
-  label: msg("components.searchBarSlot", "SearchBar Slot"),
-  fields: searchBarSlotFields,
+export const Searchbar: ComponentConfig<{
+  props: SearchbarProps;
+}> = {
+  label: msg("components.searchbar", "Searchbar"),
+  fields: searchbarFieldFields,
   defaultProps: defaultSearchData,
   resolveFields: (data) => {
-    const updatedFields = resolveDataFromParent(searchBarSlotFields, data);
+    const updatedFields = resolveDataFromParent(searchbarFieldFields, data);
     const isVisualAutoEnabled = !!data?.props?.styles?.enableVisualAutoComplete;
     setDeep(
       updatedFields,
@@ -374,5 +353,5 @@ export const SearchBarSlot: ComponentConfig<{ props: SearchBarSlotProps }> = {
     setDeep(updatedFields, "data", false);
     return updatedFields;
   },
-  render: (props) => <SearchBarSlotInternal {...props} />,
+  render: (props) => <SearchbarFieldInternal {...props} />,
 };

@@ -1,5 +1,4 @@
 import { HeadingLevel, ThemeColor } from "../../../utils/themeConfigOptions.ts";
-import { SearchBarSlotProps } from "./SearchBarSlot.tsx";
 
 export type VerticalLayout = "Grid" | "Flex" | "Map";
 export type CardTypeProp = "Standard" | "Accordion";
@@ -66,19 +65,5 @@ export const defaultSearchResultsProps: SearchResultsSlotProps = {
     ctaStyles: undefined,
     activeVerticalColor: undefined,
     headingStyles: { headingLevel: 3 },
-  },
-};
-
-export const defaultSearchData: SearchBarSlotProps = {
-  styles: {
-    showIcon: false,
-    voiceSearch: false,
-    isTypingEffect: false,
-    enableVisualAutoComplete: false,
-    limit: 3,
-    height: "base",
-    width: "full",
-    rounded: "none",
-    align: "left",
   },
 };

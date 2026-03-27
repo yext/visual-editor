@@ -1,10 +1,8 @@
 import {
   CloudRegion,
   Environment,
-  provideHeadless,
   SearchConfig,
 } from "@yext/search-headless-react";
-import React from "react";
 
 export const buildSearchConfigFromDocument = (document: any): SearchConfig => {
   return {
@@ -15,19 +13,4 @@ export const buildSearchConfigFromDocument = (document: any): SearchConfig => {
     cloudRegion: CloudRegion.US,
     environment: Environment.PROD,
   };
-};
-
-export const useEntityPreviewSearcher = (document: any) => {
-  return React.useMemo(() => {
-    const config = buildSearchConfigFromDocument(document);
-
-    if (!config.apiKey || !config.experienceKey) {
-      return undefined;
-    }
-
-    return provideHeadless({
-      ...config,
-      headlessId: "entity-preview-searcher",
-    });
-  }, [document]);
 };

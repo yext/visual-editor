@@ -17,15 +17,14 @@ import { themeManagerCn } from "../../../utils/cn.ts";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { Body } from "../../atoms/body.tsx";
 import { PageSection } from "../../atoms/pageSection.tsx";
-import { SearchBarSlotProps } from "./SearchBarSlot.tsx";
 import {
-  defaultSearchData,
   defaultSearchResultsProps,
   SearchResultsSlotProps,
 } from "./defaultPropsAndTypes.ts";
 import "./search.css";
 import { buildSearchConfigFromDocument } from "./searchConfig.ts";
 import { ThemeColor } from "../../../utils/themeConfigOptions.ts";
+import { SearchbarProps } from "../../contentBlocks/search/defaultPropsAndTypes.ts";
 
 export interface SearchComponentProps {
   styles: {
@@ -38,6 +37,19 @@ export interface SearchComponentProps {
     SearchResultsSlot: Slot;
   };
 }
+export const defaultSearchData: SearchbarProps = {
+  styles: {
+    showIcon: false,
+    voiceSearch: false,
+    isTypingEffect: false,
+    enableVisualAutoComplete: false,
+    limit: 3,
+    height: "base",
+    width: "full",
+    rounded: "none",
+    align: "left",
+  },
+};
 
 const searchFields: Fields<SearchComponentProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
@@ -178,7 +190,7 @@ export const SearchComponent: ComponentConfig<{
             parentData: {
               showSearchResultsSection: false,
             },
-          } satisfies SearchBarSlotProps,
+          } satisfies SearchbarProps,
         },
       ],
       SearchResultsSlot: [

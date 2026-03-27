@@ -115,10 +115,7 @@ import {
   ProductCardsWrapper,
   ProductCardsWrapperProps,
 } from "../pageSections/ProductSection/ProductCardsWrapper.tsx";
-import {
-  SearchBarSlot,
-  SearchBarSlotProps,
-} from "../pageSections/SearchSection/SearchBarSlot.tsx";
+
 import { SearchResultsSlot } from "../pageSections/SearchSection/SearchResultsSlot.tsx";
 import {
   TeamCard,
@@ -137,6 +134,8 @@ import {
   TestimonialCardsWrapperProps,
 } from "../pageSections/TestimonialSection/TestimonialCardsWrapper.tsx";
 import { SearchResultsSlotProps } from "../pageSections/SearchSection/defaultPropsAndTypes.ts";
+import { SearchbarProps } from "../contentBlocks/search/defaultPropsAndTypes.ts";
+import { Searchbar } from "../contentBlocks/search/Searchbar.tsx";
 
 export interface SlotsCategoryProps {
   AddressSlot: AddressProps;
@@ -172,7 +171,7 @@ export interface SlotsCategoryProps {
   PrimaryHeaderSlot: PrimaryHeaderSlotProps;
   ProductCardsWrapper: ProductCardsWrapperProps;
   ProductCard: ProductCardProps;
-  SearchBarSlot: SearchBarSlotProps;
+  SearchBarSlot: SearchbarProps;
   SearchResultsSlot: SearchResultsSlotProps;
   SecondaryFooterSlot: SecondaryFooterSlotProps;
   SecondaryHeaderSlot: SecondaryHeaderSlotProps;
@@ -265,7 +264,7 @@ export const SlotsCategoryComponents = {
     permissions: lockedPermissions,
   },
   ProductCard: { ...ProductCard, permissions: lockedPermissions },
-  SearchBarSlot: { ...SearchBarSlot, permissions: lockedPermissions },
+  SearchBarSlot: { ...Searchbar, permissions: lockedPermissions },
   SearchResultsSlot: { ...SearchResultsSlot, permissions: lockedPermissions },
   SecondaryFooterSlot: {
     ...SecondaryFooterSlot,
