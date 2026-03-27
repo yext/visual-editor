@@ -156,7 +156,7 @@ const expandedLinksWrapperAlignment = cva("w-full flex", {
 });
 
 const expandedLinksContainerAlignment = cva(
-  "grid grid-cols-1 gap-6 md:w-full md:[grid-template-columns:repeat(var(--expanded-footer-section-columns),minmax(0,1fr))]",
+  "grid grid-cols-1 gap-6 md:w-fit md:[grid-template-columns:repeat(var(--expanded-footer-section-columns),minmax(var(--expanded-footer-section-width),var(--expanded-footer-section-width)))]",
   {
     variants: {
       desktopContentAlignment: {
@@ -271,6 +271,7 @@ const FooterExpandedLinksWrapperInternal: PuckComponent<
         style={
           {
             "--expanded-footer-section-columns": desktopSectionColumns,
+            "--expanded-footer-section-width": "12rem",
           } as React.CSSProperties
         }
       >
