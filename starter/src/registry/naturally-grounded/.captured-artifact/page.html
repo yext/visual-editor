@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Field &amp; Root Market | Health Foods Grocery in Burlington, VT
+    </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&amp;family=Work+Sans:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --forest: #1d4b33;
+        --leaf: #5a8d4e;
+        --sage: #edf4ea;
+        --cream: #f8f4ec;
+        --ink: #1f2a24;
+        --muted: #607164;
+        --line: #d8e2d8;
+        --white: #ffffff;
+        --radius-sm: 10px;
+        --radius-lg: 22px;
+        --space-4: 4px;
+        --space-8: 8px;
+        --space-12: 12px;
+        --space-16: 16px;
+        --space-20: 20px;
+        --space-24: 24px;
+        --space-32: 32px;
+        --space-40: 40px;
+        --space-48: 48px;
+        --space-56: 56px;
+        --space-72: 72px;
+        --page: 1120px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: "Work Sans", sans-serif;
+        font-size: 1rem;
+        line-height: 1.55;
+        color: var(--ink);
+        background: var(--white);
+      }
+      h1,
+      h2,
+      h3,
+      p,
+      ul {
+        margin: 0;
+      }
+      h1,
+      h2 {
+        font-family: "Libre Baskerville", serif;
+        line-height: 1.02;
+        letter-spacing: -0.03em;
+      }
+      a {
+        color: var(--forest);
+      }
+      a:focus-visible,
+      button:focus-visible,
+      summary:focus-visible {
+        outline: 3px solid #111;
+        outline-offset: 3px;
+      }
+      .skip-link {
+        position: absolute;
+        left: 16px;
+        top: 16px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: #111;
+        color: #fff;
+        text-decoration: none;
+        transform: translateY(-180%);
+      }
+      .skip-link:focus-visible {
+        transform: translateY(0);
+      }
+      .header-shell,
+      .footer-shell {
+        width: 100%;
+        background: var(--white);
+      }
+      .header-shell {
+        border-bottom: 1px solid var(--line);
+      }
+      .footer-shell {
+        border-top: 1px solid var(--line);
+        margin-top: var(--space-72);
+      }
+      .inner {
+        max-width: var(--page);
+        margin: 0 auto;
+        padding: 0 var(--space-24);
+      }
+      .header-row,
+      .footer-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-24);
+        flex-wrap: wrap;
+      }
+      .header-row {
+        padding: var(--space-20) 0;
+      }
+      .brand-lockup,
+      .footer-brand {
+        display: flex;
+        align-items: center;
+        gap: var(--space-12);
+      }
+      .logo {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        background: var(--forest);
+        color: #fff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+      }
+      .brand-name {
+        color: var(--ink);
+        text-decoration: none;
+        font-weight: 800;
+      }
+      nav {
+        display: flex;
+        align-items: center;
+        gap: var(--space-20);
+        flex-wrap: wrap;
+      }
+      nav a {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+        color: var(--ink);
+      }
+      .button {
+        min-height: 46px;
+        padding: 0 18px;
+        border-radius: 999px;
+        border: 2px solid var(--forest);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-weight: 700;
+        color: var(--forest);
+        background: transparent;
+      }
+      .button-solid {
+        background: var(--forest);
+        color: #fff;
+      }
+      main {
+        display: grid;
+        row-gap: var(--space-48);
+      }
+      main .hero,
+      main .section {
+        width: 100%;
+        max-width: var(--page);
+        margin: 0 auto;
+        padding: 0 var(--space-24);
+      }
+      .hero {
+        padding-top: var(--space-48);
+        padding-bottom: var(--space-32);
+      }
+      .hero-band {
+        min-height: 420px;
+        border-radius: 30px;
+        overflow: hidden;
+        background:
+          linear-gradient(rgba(18, 36, 24, 0.24), rgba(18, 36, 24, 0.24)),
+          url("https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1600&q=80")
+            center / cover;
+        display: flex;
+        align-items: center;
+        padding: var(--space-20);
+      }
+      .hero-card {
+        max-width: 520px;
+        background: rgba(255, 255, 255, 0.92);
+        border-radius: 26px;
+        padding: var(--space-24);
+        display: grid;
+        gap: var(--space-16);
+        box-shadow: 0 18px 40px rgba(17, 24, 39, 0.12);
+      }
+      .hero h1 {
+        font-size: clamp(3rem, 5.6vw, 5rem);
+        color: var(--forest);
+      }
+      .hero-location {
+        font-size: 1.24rem;
+        font-weight: 800;
+        color: var(--leaf);
+      }
+      .hero-status {
+        color: var(--muted);
+      }
+      .cta-row {
+        display: flex;
+        gap: var(--space-12);
+        flex-wrap: wrap;
+      }
+      .section {
+        padding-top: var(--space-56);
+        padding-bottom: var(--space-24);
+      }
+      .banner {
+        border-radius: 18px;
+        background: var(--sage);
+        padding: 14px var(--space-20);
+        display: flex;
+        justify-content: space-between;
+        gap: var(--space-16);
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .section-heading {
+        margin-bottom: var(--space-24);
+      }
+      .section-heading h2 {
+        font-size: 2.5rem;
+        color: var(--forest);
+      }
+      .core-info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1.15fr;
+        gap: var(--space-24);
+        padding-top: var(--space-8);
+      }
+      .core-block {
+        display: grid;
+        gap: var(--space-12);
+      }
+      .core-block h3,
+      .about-columns h3,
+      .card h3,
+      .nearby-card h3 {
+        font-family: "Work Sans", sans-serif;
+        font-size: 1.06rem;
+        font-weight: 800;
+      }
+      .services-list {
+        padding-left: 18px;
+        display: grid;
+        gap: var(--space-8);
+      }
+      .about-columns {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--space-24);
+        background: var(--cream);
+        border-radius: 28px;
+        padding: var(--space-32);
+      }
+      .cards-grid,
+      .nearby-grid,
+      .reviews-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--space-20);
+      }
+      .card,
+      .nearby-card,
+      .review-card {
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: #fff;
+        overflow: hidden;
+        display: grid;
+      }
+      .card-art {
+        min-height: 180px;
+        max-height: 180px;
+        border-bottom: 1px solid var(--line);
+        background: var(--sage);
+        overflow: hidden;
+      }
+      .card-art img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+      }
+      .card-body,
+      .nearby-card-body,
+      .review-card-body {
+        display: grid;
+        gap: var(--space-16);
+        padding: var(--space-24);
+      }
+      .promo {
+        max-width: 720px;
+        margin: 0 auto;
+        text-align: center;
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        padding: var(--space-32);
+        background: var(--sage);
+        display: grid;
+        gap: var(--space-16);
+        justify-items: center;
+      }
+      .review-score {
+        font-size: 2.4rem;
+        color: var(--forest);
+        font-weight: 800;
+      }
+      .social {
+        display: flex;
+        gap: var(--space-12);
+        flex-wrap: wrap;
+      }
+      .social a {
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        text-decoration: none;
+        color: var(--forest);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      @media (max-width: 920px) {
+        .core-info-grid,
+        .about-columns,
+        .cards-grid,
+        .nearby-grid,
+        .reviews-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <header class="header-shell">
+      <div class="inner">
+        <div class="header-row">
+          <div class="brand-lockup">
+            <div class="logo" aria-hidden="true">F</div>
+            <a href="#" class="brand-name">Field &amp; Root Market</a>
+          </div>
+          <nav aria-label="Primary navigation">
+            <a href="#">Departments</a>
+            <a href="#">Weekly picks</a>
+            <a href="#">Nearby stores</a>
+            <a href="#" class="button">Order pickup</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+    <main id="main-content">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-band">
+          <div class="hero-card">
+            <h1 id="hero-title">Field &amp; Root Market</h1>
+            <p class="hero-location">Burlington, VT</p>
+            <p class="hero-status">
+              A neighborhood health foods grocery with practical everyday
+              staples, local produce, refill-friendly household goods, and
+              lower-waste shopping options.
+            </p>
+            <div class="cta-row">
+              <a href="#" class="button button-solid">Shop this store</a>
+              <a href="#" class="button">Get directions</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-label="Store update">
+        <div class="banner">
+          <p>
+            Bring a reusable jar or container on Tuesdays for bulk refill
+            discounts.
+          </p>
+          <a href="#">See store policies</a>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="info-title">
+        <div class="section-heading">
+          <h2 id="info-title">Core information</h2>
+        </div>
+        <div class="core-info-grid">
+          <div class="core-block">
+            <h3>Visit</h3>
+            <p>12 River Street</p>
+            <p>Burlington, VT 05401</p>
+            <p><a href="#">Get directions</a></p>
+          </div>
+          <div class="core-block">
+            <h3>Talk with the store</h3>
+            <p><a href="tel:+18025550166">(802) 555-0166</a></p>
+            <p>
+              <a href="mailto:hello@fieldandrootmarket.com"
+                >hello@fieldandrootmarket.com</a
+              >
+            </p>
+            <p>Mon-Sun: 8:00 AM - 8:00 PM</p>
+          </div>
+          <div class="core-block">
+            <h3>What you can find here</h3>
+            <ul class="services-list">
+              <li>Organic produce and pantry staples</li>
+              <li>Bulk bins and refillable household basics</li>
+              <li>Prepared foods with plant-forward options</li>
+              <li>Local dairy, eggs, and seasonal goods</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="about-title">
+        <div class="section-heading">
+          <h2 id="about-title">What makes this store feel different</h2>
+        </div>
+        <div class="about-columns">
+          <div>
+            <h3>Food first</h3>
+            <p>
+              Built around practical health-food shopping, not just specialty
+              splurges.
+            </p>
+          </div>
+          <div>
+            <h3>Lower-waste habits</h3>
+            <p>
+              Bulk sections, refill options, and product curation that helps cut
+              packaging where it matters.
+            </p>
+          </div>
+          <div>
+            <h3>Local sourcing</h3>
+            <p>
+              Regional makers and seasonal relationships are visible throughout
+              the store, especially produce and prepared foods.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="departments-title">
+        <div class="section-heading">
+          <h2 id="departments-title">Featured departments</h2>
+        </div>
+        <div class="cards-grid">
+          <article class="card">
+            <div class="card-art" aria-hidden="true">
+              <img
+                src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+                alt=""
+              />
+            </div>
+            <div class="card-body">
+              <h3>Produce and fresh greens</h3>
+              <p>
+                Seasonal fruit, regional vegetables, salad essentials, and easy
+                weeknight staples.
+              </p>
+              <a
+                href="#"
+                aria-label="Explore produce and greens at Field and Root Market"
+                >Explore produce</a
+              >
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-art" aria-hidden="true">
+              <img
+                src="https://images.unsplash.com/photo-1516684732162-798a0062be99?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+                alt=""
+              />
+            </div>
+            <div class="card-body">
+              <h3>Bulk pantry and refill shelves</h3>
+              <p>
+                Beans, grains, nuts, baking basics, and household refills for
+                shoppers who want lower-packaging routines.
+              </p>
+              <a
+                href="#"
+                aria-label="Explore bulk pantry and refill shelves at Field and Root Market"
+                >Explore bulk pantry</a
+              >
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-art" aria-hidden="true">
+              <img
+                src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+                alt=""
+              />
+            </div>
+            <div class="card-body">
+              <h3>Prepared foods and grab-and-go</h3>
+              <p>
+                Plant-forward lunches, soups, salads, snacks, and simple meal
+                helpers for the week ahead.
+              </p>
+              <a
+                href="#"
+                aria-label="Explore prepared foods at Field and Root Market"
+                >Explore prepared foods</a
+              >
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="promo-title">
+        <div class="promo">
+          <h2 id="promo-title">
+            Weekly harvest picks and lower-waste pantry deals
+          </h2>
+          <p>
+            Use the Burlington store page to see what is in season, what is
+            local right now, and where refill discounts are currently
+            highlighted.
+          </p>
+          <a href="#" class="button button-solid">See this week's picks</a>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="nearby-title">
+        <div class="section-heading">
+          <h2 id="nearby-title">Nearby locations</h2>
+        </div>
+        <div class="nearby-grid">
+          <article class="nearby-card">
+            <div class="nearby-card-body">
+              <h3>Field &amp; Root Market</h3>
+              <p>South Burlington, VT</p>
+              <p>Open until 8:00 PM</p>
+              <a
+                href="#"
+                aria-label="View the South Burlington Field and Root Market"
+                >View store</a
+              >
+            </div>
+          </article>
+          <article class="nearby-card">
+            <div class="nearby-card-body">
+              <h3>Field &amp; Root Market</h3>
+              <p>Essex Junction, VT</p>
+              <p>Open until 8:00 PM</p>
+              <a
+                href="#"
+                aria-label="View the Essex Junction Field and Root Market"
+                >View store</a
+              >
+            </div>
+          </article>
+          <article class="nearby-card">
+            <div class="nearby-card-body">
+              <h3>Field &amp; Root Market</h3>
+              <p>Williston, VT</p>
+              <p>Open until 9:00 PM</p>
+              <a href="#" aria-label="View the Williston Field and Root Market"
+                >View store</a
+              >
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="reviews-title">
+        <div class="section-heading">
+          <h2 id="reviews-title">Store reviews</h2>
+        </div>
+        <div class="reviews-grid">
+          <article class="review-card">
+            <div class="review-card-body">
+              <p class="review-score">4.8</p>
+              <p>
+                Average local rating for selection, produce freshness, and
+                helpful staff.
+              </p>
+            </div>
+          </article>
+          <article class="review-card">
+            <div class="review-card-body">
+              <h3>Easy to shop every week</h3>
+              <p>
+                "It feels values-driven without making everyday grocery shopping
+                harder or more expensive than it needs to be."
+              </p>
+            </div>
+          </article>
+          <article class="review-card">
+            <div class="review-card-body">
+              <h3>Practical sustainability</h3>
+              <p>
+                "The refill area and local staples make it easier to build small
+                habits that actually stick."
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+    <footer class="footer-shell">
+      <div class="inner footer-row" style="padding: 24px">
+        <div class="footer-brand">
+          <div class="logo" aria-hidden="true">F</div>
+          <div>
+            <strong>Field &amp; Root Market</strong>
+            <p>Burlington health foods grocery</p>
+          </div>
+        </div>
+        <nav aria-label="Footer navigation">
+          <a href="#">Departments</a>
+          <a href="#">Locations</a>
+          <a href="#">Contact</a>
+        </nav>
+        <div class="social" aria-label="Social media links">
+          <a href="#" aria-label="Field and Root Market on Instagram">ig</a>
+          <a href="#" aria-label="Field and Root Market on Facebook">f</a>
+          <a href="#" aria-label="Field and Root Market on TikTok">tt</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

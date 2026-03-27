@@ -1,0 +1,955 @@
+{
+  "root": {
+    "props": {
+      "title": {
+        "field": "name",
+        "constantValue": "Naturally Grounded Pages",
+        "constantValueEnabled": false
+      },
+      "description": {
+        "field": "description",
+        "constantValue": "",
+        "constantValueEnabled": false
+      }
+    }
+  },
+  "content": [
+    {
+      "type": "NaturallyGroundedHeaderSection",
+      "props": {
+        "id": "NaturallyGroundedHeaderSection-89ba237d-933c-4540-94f1-8c08db022bca",
+        "brand": {
+          "label": "Field & Root Market",
+          "link": "#"
+        },
+        "navigationLinks": [
+          {
+            "label": "Departments",
+            "link": "#"
+          },
+          {
+            "label": "Weekly picks",
+            "link": "#"
+          },
+          {
+            "label": "Nearby stores",
+            "link": "#"
+          },
+          {
+            "label": "Order pickup",
+            "link": "#"
+          }
+        ]
+      }
+    },
+    {
+      "type": "NaturallyGroundedHeroSection",
+      "props": {
+        "id": "NaturallyGroundedHeroSection-06326a3e-573a-44e4-8f2e-cf80e0f11824",
+        "backgroundImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1600&q=80",
+            "width": 1600,
+            "height": 1067
+          },
+          "constantValueEnabled": true
+        },
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Field & Root Market",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 80,
+          "fontColor": "#1d4b33",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "location": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Burlington, VT",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 20,
+          "fontColor": "#5a8d4e",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "description": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "A neighborhood health foods grocery with practical everyday staples, local produce, refill-friendly household goods, and lower-waste shopping options.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#607164",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "primaryCta": {
+          "label": "Shop this store",
+          "link": "#"
+        },
+        "secondaryCta": {
+          "label": "Get directions",
+          "link": "#"
+        }
+      }
+    },
+    {
+      "type": "NaturallyGroundedStoreUpdateBannerSection",
+      "props": {
+        "id": "NaturallyGroundedStoreUpdateBannerSection-50bfcaba-f9b3-499d-88b8-8524a4f876cf",
+        "announcement": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Bring a reusable jar or container on Tuesdays for bulk refill discounts.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#1f2a24",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "policyLink": {
+          "label": "See store policies",
+          "link": "#"
+        }
+      }
+    },
+    {
+      "type": "NaturallyGroundedCoreInfoSection",
+      "props": {
+        "id": "NaturallyGroundedCoreInfoSection-4e3391db-4b11-4d6e-ac7c-f15ccb42b1a8",
+        "title": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Core information",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 40,
+          "fontColor": "#1d4b33",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "visitHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Visit",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 17,
+          "fontColor": "#1f2a24",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "contactHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Talk with the store",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 17,
+          "fontColor": "#1f2a24",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "offeringsHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "What you can find here",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 17,
+          "fontColor": "#1f2a24",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "emailLink": {
+          "label": "hello@fieldandrootmarket.com",
+          "link": "mailto:hello@fieldandrootmarket.com"
+        },
+        "directionsLink": {
+          "label": "Get directions",
+          "link": "#"
+        },
+        "offeringItems": [
+          {
+            "copy": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Organic produce and pantry staples",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1f2a24",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "copy": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Bulk bins and refillable household basics",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1f2a24",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "copy": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Prepared foods with plant-forward options",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1f2a24",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "copy": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Local dairy, eggs, and seasonal goods",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1f2a24",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "NaturallyGroundedAboutSection",
+      "props": {
+        "id": "NaturallyGroundedAboutSection-12504670-6ac7-4a4b-b754-83cedd9177a2",
+        "title": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "What makes this store feel different",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 40,
+          "fontColor": "#1d4b33",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "items": [
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Food first",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#1f2a24",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "body": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Built around practical health-food shopping, not just specialty splurges.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1f2a24",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Lower-waste habits",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#1f2a24",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "body": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Bulk sections, refill options, and product curation that helps cut packaging where it matters.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1f2a24",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Local sourcing",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#1f2a24",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "body": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Regional makers and seasonal relationships are visible throughout the store, especially produce and prepared foods.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1f2a24",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "NaturallyGroundedFeaturedDepartmentsSection",
+      "props": {
+        "id": "NaturallyGroundedFeaturedDepartmentsSection-8e396614-109e-4b45-a830-13f06bda498e",
+        "title": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Featured departments",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 40,
+          "fontColor": "#1d4b33",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "items": [
+          {
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=1200&q=80",
+                "width": 1200,
+                "height": 800
+              },
+              "constantValueEnabled": true
+            },
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Produce and fresh greens",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#1f2a24",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "body": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Seasonal fruit, regional vegetables, salad essentials, and easy weeknight staples.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1f2a24",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "Explore produce",
+              "link": "#"
+            }
+          },
+          {
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://images.unsplash.com/photo-1516684732162-798a0062be99?auto=format&fit=crop&w=1200&q=80",
+                "width": 1200,
+                "height": 800
+              },
+              "constantValueEnabled": true
+            },
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Bulk pantry and refill shelves",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#1f2a24",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "body": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Beans, grains, nuts, baking basics, and household refills for shoppers who want lower-packaging routines.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1f2a24",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "Explore bulk pantry",
+              "link": "#"
+            }
+          },
+          {
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1200&q=80",
+                "width": 1200,
+                "height": 800
+              },
+              "constantValueEnabled": true
+            },
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Prepared foods and grab-and-go",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#1f2a24",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "body": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Plant-forward lunches, soups, salads, snacks, and simple meal helpers for the week ahead.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1f2a24",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "Explore prepared foods",
+              "link": "#"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "NaturallyGroundedPromoSection",
+      "props": {
+        "id": "NaturallyGroundedPromoSection-6d7f065f-e8de-48c5-bab6-2e51003f05c7",
+        "title": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Weekly harvest picks and lower-waste pantry deals",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#1d4b33",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "body": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Use the Burlington store page to see what is in season, what is local right now, and where refill discounts are currently highlighted.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#1f2a24",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "cta": {
+          "label": "See this week's picks",
+          "link": "#"
+        }
+      }
+    },
+    {
+      "type": "NaturallyGroundedNearbyLocationsSection",
+      "props": {
+        "id": "NaturallyGroundedNearbyLocationsSection-c10ae7ae-4b8c-4f30-8e74-0a365c54e77a",
+        "title": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Nearby locations",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 40,
+          "fontColor": "#1d4b33",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "items": [
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Field & Root Market",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#1f2a24",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "location": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "South Burlington, VT",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1f2a24",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "status": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Open until 8:00 PM",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1f2a24",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "View store",
+              "link": "#"
+            }
+          },
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Field & Root Market",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#1f2a24",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "location": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Essex Junction, VT",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1f2a24",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "status": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Open until 8:00 PM",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1f2a24",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "View store",
+              "link": "#"
+            }
+          },
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Field & Root Market",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#1f2a24",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "location": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Williston, VT",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1f2a24",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "status": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Open until 9:00 PM",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1f2a24",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "View store",
+              "link": "#"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "NaturallyGroundedReviewsSection",
+      "props": {
+        "id": "NaturallyGroundedReviewsSection-e61953d5-08fd-4331-a71b-5bad415265a3",
+        "title": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Store reviews",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 40,
+          "fontColor": "#1d4b33",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "items": [
+          {
+            "score": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "4.8",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 38,
+              "fontColor": "#1d4b33",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#1f2a24",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "body": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Average local rating for selection, produce freshness, and helpful staff.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1f2a24",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "score": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 38,
+              "fontColor": "#1d4b33",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Easy to shop every week",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#1f2a24",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "body": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "\"It feels values-driven without making everyday grocery shopping harder or more expensive than it needs to be.\"",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1f2a24",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "score": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 38,
+              "fontColor": "#1d4b33",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Practical sustainability",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#1f2a24",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "body": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "\"The refill area and local staples make it easier to build small habits that actually stick.\"",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1f2a24",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "NaturallyGroundedFooterSection",
+      "props": {
+        "id": "NaturallyGroundedFooterSection-dc4c0f66-d8b7-48dc-a267-9fb4735268c6",
+        "brandTitle": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Field & Root Market",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 14,
+          "fontColor": "#1f2a24",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "descriptor": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Burlington health foods grocery",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 12,
+          "fontColor": "#1f2a24",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "navigationLinks": [
+          {
+            "label": "Departments",
+            "link": "#"
+          },
+          {
+            "label": "Locations",
+            "link": "#"
+          },
+          {
+            "label": "Contact",
+            "link": "#"
+          }
+        ],
+        "socialLinks": [
+          {
+            "label": "ig",
+            "link": "#"
+          },
+          {
+            "label": "f",
+            "link": "#"
+          },
+          {
+            "label": "tt",
+            "link": "#"
+          }
+        ]
+      }
+    }
+  ],
+  "zones": {}
+}

@@ -1,0 +1,637 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Northline Outfitters | Outdoor Gear in Bend, OR</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&amp;family=Public+Sans:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --charcoal: #181715;
+        --clay: #ad5f2d;
+        --sand: #f2ede3;
+        --pine: #37513b;
+        --line: #d3c8b6;
+        --muted: #6d665b;
+        --white: #fffdf8;
+        --r-sm: 2px;
+        --r-lg: 8px;
+        --s-4: 4px;
+        --s-8: 8px;
+        --s-12: 12px;
+        --s-16: 16px;
+        --s-20: 20px;
+        --s-24: 24px;
+        --s-32: 32px;
+        --s-40: 40px;
+        --s-48: 48px;
+        --s-56: 56px;
+        --page: 1024px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: "Public Sans", sans-serif;
+        font-size: 1em;
+        line-height: 1.5;
+        color: var(--charcoal);
+        background: var(--white);
+      }
+      h1,
+      h2,
+      h3,
+      p,
+      ul {
+        margin: 0;
+      }
+      h1,
+      h2 {
+        font-family: "Archivo Black", sans-serif;
+        letter-spacing: -0.03em;
+        line-height: 0.95;
+      }
+      a {
+        color: var(--clay);
+      }
+      a:focus-visible,
+      summary:focus-visible {
+        outline: 3px solid var(--charcoal);
+        outline-offset: 3px;
+      }
+      .skip-link {
+        position: absolute;
+        left: 16px;
+        top: 16px;
+        transform: translateY(-180%);
+        background: var(--charcoal);
+        color: var(--white);
+        padding: 10px 14px;
+        text-decoration: none;
+        border-radius: 999px;
+      }
+      .skip-link:focus-visible {
+        transform: translateY(0);
+      }
+      .header-shell,
+      .footer-shell {
+        width: 100%;
+        background: var(--charcoal);
+        color: var(--white);
+      }
+      .footer-shell {
+        margin-top: 64px;
+        border-top: 1px solid rgba(255, 255, 255, 0.15);
+      }
+      .inner {
+        max-width: var(--page);
+        margin: 0 auto;
+        padding: 0 var(--s-24);
+      }
+      .header-row,
+      .footer-row,
+      .utility-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--s-24);
+        flex-wrap: wrap;
+      }
+      .utility-row {
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        font-size: 0.92rem;
+        color: rgba(255, 255, 255, 0.76);
+      }
+      .header-row {
+        padding: 18px 0;
+      }
+      .brand-lockup,
+      .footer-brand {
+        display: flex;
+        align-items: center;
+        gap: var(--s-12);
+      }
+      .logo {
+        width: 42px;
+        height: 42px;
+        border-radius: var(--r-sm);
+        border: 2px solid var(--white);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+      }
+      nav {
+        display: flex;
+        align-items: center;
+        gap: var(--s-20);
+        flex-wrap: wrap;
+      }
+      nav a {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+        color: inherit;
+      }
+      .button {
+        min-height: 46px;
+        padding: 0 18px;
+        border-radius: 999px;
+        border: 2px solid var(--clay);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-weight: 800;
+        color: var(--clay);
+        background: transparent;
+      }
+      .button-solid {
+        background: var(--clay);
+        color: var(--white);
+      }
+      main {
+        display: grid;
+        row-gap: 48px;
+      }
+      main > section {
+        width: 100%;
+        max-width: var(--page);
+        margin: 12px auto;
+        padding: 0 var(--s-24);
+      }
+      .hero {
+        padding-top: 40px;
+        padding-bottom: 24px;
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: var(--s-32);
+        align-items: center;
+      }
+      .hero-copy {
+        display: grid;
+        gap: var(--s-16);
+      }
+      .hero h1 {
+        font-size: clamp(3.2rem, 6vw, 5.5rem);
+        color: var(--charcoal);
+      }
+      .hero-location {
+        color: var(--pine);
+        font-weight: 800;
+        font-size: 1.2rem;
+      }
+      .hero-status {
+        color: var(--muted);
+        max-width: 38ch;
+      }
+      .cta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--s-12);
+      }
+      .hero-media {
+        min-height: 430px;
+        aspect-ratio: 4 / 5;
+        overflow: hidden;
+        border-radius: var(--r-lg);
+        border: 1px solid var(--line);
+      }
+      .hero-media img,
+      .promo-media img,
+      .card-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .hero-media img {
+        object-position: center 38%;
+      }
+      .section-heading {
+        margin-bottom: 24px;
+      }
+      .section-heading h2 {
+        font-size: 2.25rem;
+      }
+      .core-info-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--s-24);
+        padding-top: var(--s-8);
+      }
+      .core-block {
+        display: grid;
+        gap: var(--s-12);
+        min-width: 0;
+      }
+      .core-block a,
+      .core-block p {
+        min-width: 0;
+      }
+      .info-link {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: inline-block;
+        max-width: 100%;
+      }
+      .banner {
+        background: var(--sand);
+        border: 1px solid var(--line);
+        border-radius: var(--r-sm);
+        padding: 14px 18px;
+        display: flex;
+        justify-content: space-between;
+        gap: var(--s-16);
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .cards-grid,
+      .nearby-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--s-20);
+      }
+      .card,
+      .nearby-card {
+        border: 1px solid var(--line);
+        border-radius: var(--r-lg);
+        overflow: hidden;
+        background: var(--white);
+        display: grid;
+      }
+      .card-media {
+        min-height: 180px;
+        max-height: 180px;
+        overflow: hidden;
+      }
+      .card-body,
+      .nearby-body {
+        padding: var(--s-20);
+        display: grid;
+        gap: var(--s-16);
+      }
+      .card h3,
+      .nearby-card h3 {
+        font-family: "Public Sans", sans-serif;
+        font-size: 1.08rem;
+        font-weight: 800;
+      }
+      .promo {
+        display: grid;
+        grid-template-columns: 0.92fr 1.08fr;
+        gap: var(--s-24);
+        align-items: center;
+        background: var(--sand);
+        border: 1px solid var(--line);
+        border-radius: var(--r-lg);
+        padding: var(--s-24);
+      }
+      .promo-media {
+        min-height: 260px;
+        overflow: hidden;
+        border-radius: var(--r-lg);
+      }
+      .promo-copy {
+        display: grid;
+        gap: var(--s-16);
+      }
+      details {
+        border: 1px solid var(--line);
+        border-radius: var(--r-sm);
+        padding: var(--s-20);
+        background: var(--white);
+      }
+      summary {
+        list-style: none;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        gap: var(--s-16);
+        font-weight: 800;
+      }
+      summary::-webkit-details-marker {
+        display: none;
+      }
+      summary::after {
+        content: "+";
+      }
+      details[open] summary::after {
+        content: "−";
+      }
+      details p {
+        margin-top: var(--s-12);
+        color: var(--muted);
+      }
+      .faq-list {
+        display: grid;
+        gap: var(--s-16);
+      }
+      .social {
+        display: flex;
+        gap: var(--s-12);
+        flex-wrap: wrap;
+      }
+      .social a {
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.24);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: var(--white);
+      }
+      @media (max-width: 900px) {
+        .hero,
+        .core-info-grid,
+        .cards-grid,
+        .nearby-grid,
+        .promo {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <header class="header-shell">
+      <div class="inner">
+        <div class="utility-row">
+          <nav aria-label="Utility navigation">
+            <a href="#">Classes</a>
+            <a href="#">Repairs</a>
+          </nav>
+          <div>Season opener gear clinic this Saturday</div>
+        </div>
+        <div class="header-row">
+          <div class="brand-lockup">
+            <div class="logo" aria-hidden="true">N</div>
+            <a
+              href="#"
+              style="text-decoration: none; color: inherit; font-weight: 800"
+              >Northline Outfitters</a
+            >
+          </div>
+          <nav aria-label="Primary navigation">
+            <a href="#">Camping</a>
+            <a href="#">Footwear</a>
+            <a href="#">Snow</a>
+            <a href="#" class="button button-solid">Visit store</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+    <main id="main-content">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <h1 id="hero-title">Northline Outfitters</h1>
+          <p class="hero-location">Bend, OR</p>
+          <p class="hero-status">
+            A local gear shop for mountain weather, trail weekends, and durable
+            equipment you can actually use hard.
+          </p>
+          <div class="cta-row">
+            <a href="#" class="button button-solid">Get directions</a>
+            <a href="#" class="button">See store events</a>
+          </div>
+        </div>
+        <div class="hero-media" aria-hidden="true">
+          <img
+            src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&amp;fit=crop&amp;w=1400&amp;q=80"
+            alt=""
+          />
+        </div>
+      </section>
+
+      <section aria-labelledby="info-title">
+        <div class="section-heading">
+          <h2 id="info-title">Core information</h2>
+        </div>
+        <div class="core-info-grid">
+          <div class="core-block">
+            <h3>Visit</h3>
+            <p>728 Timber Avenue</p>
+            <p>Bend, OR 97701</p>
+            <a href="#" class="info-link">Get directions to this store</a>
+          </div>
+          <div class="core-block">
+            <h3>Talk with the floor team</h3>
+            <a href="tel:+15415550122" class="info-link">(541) 555-0122</a>
+            <a href="mailto:gear@northlineoutfitters.com" class="info-link"
+              >gear@northlineoutfitters.com</a
+            >
+            <p>Boot fitting, layering help, and seasonal recommendations</p>
+          </div>
+          <div class="core-block">
+            <h3>Hours</h3>
+            <p>Mon-Sat: 9:00 AM - 7:00 PM</p>
+            <p>Sun: 10:00 AM - 5:00 PM</p>
+            <p>Repair desk closes one hour before store close</p>
+          </div>
+        </div>
+      </section>
+
+      <section aria-label="Store banner">
+        <div class="banner">
+          <p>
+            Pack fittings and trail-ready layering checklists available at the
+            service desk this week.
+          </p>
+          <a href="#">See what to bring</a>
+        </div>
+      </section>
+
+      <section aria-labelledby="departments-title">
+        <div class="section-heading">
+          <h2 id="departments-title">Featured departments</h2>
+        </div>
+        <div class="cards-grid">
+          <article class="card">
+            <div class="card-media" aria-hidden="true">
+              <img
+                src="https://images.unsplash.com/photo-1522163182402-834f871fd851?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+                alt=""
+              />
+            </div>
+            <div class="card-body">
+              <h3>Trail footwear</h3>
+              <p>
+                Boots, hikers, and running shoes chosen for rocky ground, wet
+                weather, and long weekends.
+              </p>
+              <a
+                href="#"
+                aria-label="Explore trail footwear at Northline Outfitters"
+                >Explore footwear</a
+              >
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-media" aria-hidden="true">
+              <img
+                src="https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+                alt=""
+              />
+            </div>
+            <div class="card-body">
+              <h3>Camp kitchen and shelter</h3>
+              <p>
+                Tents, stoves, camp lighting, and practical car-camping setups
+                for fast departures.
+              </p>
+              <a
+                href="#"
+                aria-label="Explore camp kitchen and shelter at Northline Outfitters"
+                >Explore camp gear</a
+              >
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-media" aria-hidden="true">
+              <img
+                src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+                alt=""
+              />
+            </div>
+            <div class="card-body">
+              <h3>Cold-weather layers</h3>
+              <p>
+                Insulated jackets, base layers, and gloves that hold up through
+                shoulder season and snow days.
+              </p>
+              <a
+                href="#"
+                aria-label="Explore cold-weather layers at Northline Outfitters"
+                >Explore layers</a
+              >
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section aria-labelledby="faq-title">
+        <div class="section-heading">
+          <h2 id="faq-title">Store FAQs</h2>
+        </div>
+        <div class="faq-list">
+          <details>
+            <summary>Do you offer pack fittings in store?</summary>
+            <p>
+              Yes. Staff can help fit daypacks and overnight packs during store
+              hours, with longer appointments on weekday evenings.
+            </p>
+          </details>
+          <details>
+            <summary>Can I bring in gear for basic repair?</summary>
+            <p>
+              Yes. Zipper, buckle, and binding assessments start at the service
+              desk, and the team can explain what can be fixed in house.
+            </p>
+          </details>
+          <details>
+            <summary>Do you stock seasonal snow gear year-round?</summary>
+            <p>
+              Snow hardware is most complete during the winter season, but
+              essentials and outerwear remain available longer depending on
+              demand.
+            </p>
+          </details>
+        </div>
+      </section>
+
+      <section aria-labelledby="promo-title">
+        <div class="promo">
+          <div class="promo-media" aria-hidden="true">
+            <img
+              src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+              alt=""
+            />
+          </div>
+          <div class="promo-copy">
+            <div class="section-heading" style="margin-bottom: 0">
+              <h2 id="promo-title">Weekend route picks from the staff board</h2>
+            </div>
+            <p>
+              Each Friday, the team posts current trail, campground, and weather
+              notes for nearby routes so shoppers can leave the store with a
+              usable plan.
+            </p>
+            <a href="#" class="button">See this weekend's board</a>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="nearby-title">
+        <div class="section-heading">
+          <h2 id="nearby-title">Nearby locations</h2>
+        </div>
+        <div class="nearby-grid">
+          <article class="nearby-card">
+            <div class="nearby-body">
+              <h3>Northline Outfitters</h3>
+              <p>Redmond, OR</p>
+              <p>Open until 6:00 PM</p>
+              <a href="#" aria-label="View the Redmond Northline Outfitters"
+                >View store</a
+              >
+            </div>
+          </article>
+          <article class="nearby-card">
+            <div class="nearby-body">
+              <h3>Northline Outfitters</h3>
+              <p>Sisters, OR</p>
+              <p>Open until 6:00 PM</p>
+              <a href="#" aria-label="View the Sisters Northline Outfitters"
+                >View store</a
+              >
+            </div>
+          </article>
+          <article class="nearby-card">
+            <div class="nearby-body">
+              <h3>Northline Outfitters</h3>
+              <p>Eugene, OR</p>
+              <p>Open until 7:00 PM</p>
+              <a href="#" aria-label="View the Eugene Northline Outfitters"
+                >View store</a
+              >
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+    <footer class="footer-shell">
+      <div class="inner footer-row" style="padding: 24px 24px 28px">
+        <div class="footer-brand">
+          <div class="logo" aria-hidden="true">N</div>
+          <div>
+            <strong>Northline Outfitters</strong>
+            <p style="color: rgba(255, 255, 255, 0.7)">
+              Bend outdoor gear store
+            </p>
+          </div>
+        </div>
+        <nav aria-label="Footer navigation">
+          <a href="#">Departments</a>
+          <a href="#">Classes</a>
+          <a href="#">Locations</a>
+        </nav>
+        <div class="social" aria-label="Social media links">
+          <a href="#" aria-label="Northline Outfitters on Instagram">ig</a>
+          <a href="#" aria-label="Northline Outfitters on Facebook">f</a>
+          <a href="#" aria-label="Northline Outfitters on YouTube">yt</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

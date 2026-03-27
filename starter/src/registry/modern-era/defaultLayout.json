@@ -1,0 +1,862 @@
+{
+  "root": {
+    "props": {
+      "title": {
+        "field": "name",
+        "constantValue": "Modern Era Pages",
+        "constantValueEnabled": false
+      },
+      "description": {
+        "field": "description",
+        "constantValue": "",
+        "constantValueEnabled": false
+      }
+    }
+  },
+  "content": [
+    {
+      "type": "ModernEraHeaderSection",
+      "props": {
+        "id": "ModernEraHeaderSection-d02debaa-e62b-4b47-924d-26e1d5fed83b",
+        "utilityMessage": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Retirement planning appointments available this week",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 15,
+          "fontColor": "#5d6b7b",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "brandName": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Bluehaven Bank",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#1b2430",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "utilityLinks": [
+          {
+            "label": "Client support",
+            "link": "#"
+          },
+          {
+            "label": "Workshops",
+            "link": "#"
+          }
+        ],
+        "primaryLinks": [
+          {
+            "label": "Retirement",
+            "link": "#",
+            "isButton": false,
+            "isSolid": false
+          },
+          {
+            "label": "Advisors",
+            "link": "#",
+            "isButton": false,
+            "isSolid": false
+          },
+          {
+            "label": "Locations",
+            "link": "#",
+            "isButton": false,
+            "isSolid": false
+          },
+          {
+            "label": "FAQs",
+            "link": "#",
+            "isButton": false,
+            "isSolid": false
+          },
+          {
+            "label": "Book a consult",
+            "link": "#",
+            "isButton": true,
+            "isSolid": false
+          }
+        ]
+      }
+    },
+    {
+      "type": "ModernEraHeroSection",
+      "props": {
+        "id": "ModernEraHeroSection-0a165ad3-f1cd-430e-b737-61290d17721a",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Bluehaven Bank",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 90,
+          "fontColor": "#19324d",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "location": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Portland, ME",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 21,
+          "fontColor": "#2a6cb0",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "description": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Contemporary retirement planning for people who want clear next steps, a calmer timeline, and a local advisor who can explain the numbers in plain language.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#5d6b7b",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "primaryCta": {
+          "label": "Start retirement planning",
+          "link": "#"
+        },
+        "secondaryCta": {
+          "label": "Visit this branch",
+          "link": "#"
+        },
+        "heroImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://images.unsplash.com/photo-1579621970795-87facc2f976d?auto=format&fit=crop&w=1200&q=80",
+            "width": 1200,
+            "height": 900
+          },
+          "constantValueEnabled": true
+        }
+      }
+    },
+    {
+      "type": "ModernEraCoreInfoSection",
+      "props": {
+        "id": "ModernEraCoreInfoSection-2c5c95b8-f23a-4adf-b9e0-0ee073692016",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Core information",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 42,
+          "fontColor": "#19324d",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "visitHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Visit",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#1b2430",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "contactHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Talk with us",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#1b2430",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "hoursHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Hours",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#1b2430",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "directionsCta": {
+          "label": "Get directions to this branch",
+          "link": "#"
+        },
+        "emailCta": {
+          "label": "retirement@bluehavenbank.com",
+          "link": "mailto:retirement@bluehavenbank.com"
+        },
+        "contactSupportingText": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Retirement desk and branch support",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#1b2430",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        }
+      }
+    },
+    {
+      "type": "ModernEraAboutSection",
+      "props": {
+        "id": "ModernEraAboutSection-2a7a57c7-3071-44be-8981-615fb0dabd01",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Retirement planning that feels current, not intimidating",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 42,
+          "fontColor": "#19324d",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "bullets": [
+          {
+            "copy": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Start with where you are now, not where you think you should already be.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1b2430",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "copy": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Build a plan around income, timing, lifestyle goals, and the pace that feels realistic.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1b2430",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "copy": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Meet in person with a local advisor, then keep things moving with simple digital follow-up.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1b2430",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "ModernEraRetirementPathsSection",
+      "props": {
+        "id": "ModernEraRetirementPathsSection-7c46fc0f-a6ec-45d2-bf4c-2978ae9a1865",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Retirement paths",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 42,
+          "fontColor": "#19324d",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "cards": [
+          {
+            "eyebrow": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Starting early",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 13,
+              "fontColor": "#2a6cb0",
+              "fontWeight": 800,
+              "textTransform": "uppercase"
+            },
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Build the habit before the math gets complicated",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 18,
+              "fontColor": "#1b2430",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Designed for people in their 20s, 30s, and 40s who want to start contributing consistently and understand what matters first.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1b2430",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "Learn more",
+              "link": "#"
+            }
+          },
+          {
+            "eyebrow": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Catching up",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 13,
+              "fontColor": "#2a6cb0",
+              "fontWeight": 800,
+              "textTransform": "uppercase"
+            },
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Make the next ten years work harder",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 18,
+              "fontColor": "#1b2430",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Useful for households that want a focused catch-up strategy, clearer account coordination, and better visibility into future income.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1b2430",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "Learn more",
+              "link": "#"
+            }
+          },
+          {
+            "eyebrow": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Already retiring",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 13,
+              "fontColor": "#2a6cb0",
+              "fontWeight": 800,
+              "textTransform": "uppercase"
+            },
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Turn savings into a confident monthly plan",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 18,
+              "fontColor": "#1b2430",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Built for clients who are close to retirement and want help sequencing withdrawals, reviewing benefits, and planning for flexibility.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1b2430",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "Learn more",
+              "link": "#"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "ModernEraWorkshopPromoSection",
+      "props": {
+        "id": "ModernEraWorkshopPromoSection-298c90cb-4cdc-459f-9048-665b3686b331",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Retirement readiness sessions every Thursday evening",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 42,
+          "fontColor": "#ffffff",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "description": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Join a free in-branch workshop on timing, rollover decisions, healthcare planning, and how to turn a rough goal into a working plan.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#ffffff",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "primaryCta": {
+          "label": "Reserve a seat",
+          "link": "#"
+        },
+        "secondaryCta": {
+          "label": "See upcoming sessions",
+          "link": "#"
+        },
+        "promoImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=1200&q=80",
+            "width": 1200,
+            "height": 900
+          },
+          "constantValueEnabled": true
+        }
+      }
+    },
+    {
+      "type": "ModernEraClientReviewsSection",
+      "props": {
+        "id": "ModernEraClientReviewsSection-766287f6-b0c5-4870-a9e4-4a11d4c3a0a4",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Client reviews",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 42,
+          "fontColor": "#19324d",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "cards": [
+          {
+            "score": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "4.9",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 42,
+              "fontColor": "#19324d",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 18,
+              "fontColor": "#1b2430",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Average branch rating from local retirement-planning clients.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1b2430",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "score": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 42,
+              "fontColor": "#19324d",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Clear and patient",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 18,
+              "fontColor": "#1b2430",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "\"They translated a confusing retirement picture into a plan I could actually follow.\"",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1b2430",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "score": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 42,
+              "fontColor": "#19324d",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Modern without feeling remote",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 18,
+              "fontColor": "#1b2430",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "\"I still wanted a local advisor, but I liked being able to keep momentum between meetings.\"",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1b2430",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "ModernEraFaqSection",
+      "props": {
+        "id": "ModernEraFaqSection-bff8f151-8742-45fb-abeb-2e7124edc93e",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Retirement planning FAQs",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 42,
+          "fontColor": "#19324d",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "items": [
+          {
+            "question": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Do I need a large portfolio before meeting with an advisor?",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1b2430",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "answer": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "No. This branch works with people who are just getting organized as well as clients who are already close to retirement.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#5d6b7b",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "question": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Can I bring accounts from other institutions to the first meeting?",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1b2430",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "answer": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Yes. Bring statements or a simple list of balances and we can use that to frame the first conversation.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#5d6b7b",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "question": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Are evening retirement appointments available?",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1b2430",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "answer": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Yes. A limited set of evening appointments and workshop slots are available during the week.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#5d6b7b",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "ModernEraFooterSection",
+      "props": {
+        "id": "ModernEraFooterSection-c748b5ca-eb58-4f94-a3c8-388a43092855",
+        "brandName": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Bluehaven Bank",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#1b2430",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "tagline": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Portland retirement planning branch",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#1b2430",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "navLinks": [
+          {
+            "label": "Retirement",
+            "link": "#"
+          },
+          {
+            "label": "Locations",
+            "link": "#"
+          },
+          {
+            "label": "Contact",
+            "link": "#"
+          }
+        ],
+        "socialLinks": [
+          {
+            "label": "in",
+            "link": "#",
+            "ariaLabel": "Bluehaven on LinkedIn"
+          },
+          {
+            "label": "f",
+            "link": "#",
+            "ariaLabel": "Bluehaven on Facebook"
+          },
+          {
+            "label": "ig",
+            "link": "#",
+            "ariaLabel": "Bluehaven on Instagram"
+          }
+        ]
+      }
+    }
+  ],
+  "zones": {}
+}

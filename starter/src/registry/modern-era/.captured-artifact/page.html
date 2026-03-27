@@ -1,0 +1,705 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bluehaven Bank | Retirement Planning in Portland, ME</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --navy: #19324d;
+        --blue: #2a6cb0;
+        --mist: #eef5fb;
+        --sand: #f7f2ea;
+        --gold: #c7a35b;
+        --ink: #1b2430;
+        --muted: #5d6b7b;
+        --line: #d7e2ec;
+        --white: #ffffff;
+        --radius-sm: 8px;
+        --radius-lg: 18px;
+        --space-4: 4px;
+        --space-8: 8px;
+        --space-12: 12px;
+        --space-16: 16px;
+        --space-20: 20px;
+        --space-24: 24px;
+        --space-32: 32px;
+        --space-40: 40px;
+        --space-48: 48px;
+        --space-56: 56px;
+        --space-72: 72px;
+        --page: 1120px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        font-family: "Manrope", sans-serif;
+        font-size: 1rem;
+        line-height: 1.55;
+        color: var(--ink);
+        background: var(--white);
+      }
+
+      h1,
+      h2,
+      h3,
+      p,
+      ul {
+        margin: 0;
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-family: "DM Serif Display", serif;
+        line-height: 0.98;
+        letter-spacing: -0.03em;
+      }
+
+      a {
+        color: var(--blue);
+      }
+
+      a:focus-visible,
+      button:focus-visible,
+      summary:focus-visible {
+        outline: 3px solid #111;
+        outline-offset: 3px;
+      }
+
+      .skip-link {
+        position: absolute;
+        left: var(--space-16);
+        top: var(--space-16);
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: #111;
+        color: #fff;
+        text-decoration: none;
+        transform: translateY(-180%);
+      }
+
+      .skip-link:focus-visible {
+        transform: translateY(0);
+      }
+
+      .header-shell,
+      .footer-shell {
+        width: 100%;
+        border-bottom: 1px solid var(--line);
+        background: var(--white);
+      }
+
+      .footer-shell {
+        border-top: 1px solid var(--line);
+        border-bottom: 0;
+        margin-top: var(--space-72);
+      }
+
+      .inner {
+        max-width: var(--page);
+        margin: 0 auto;
+        padding: 0 var(--space-24);
+      }
+
+      .utility-row,
+      .header-row,
+      .footer-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-24);
+        flex-wrap: wrap;
+      }
+
+      .utility-row {
+        padding: 10px 0;
+        font-size: 0.92rem;
+        color: var(--muted);
+      }
+
+      .header-row {
+        padding: var(--space-20) 0;
+      }
+
+      .brand-lockup,
+      .footer-brand {
+        display: flex;
+        align-items: center;
+        gap: var(--space-12);
+        min-width: 0;
+      }
+
+      .logo {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--navy);
+        color: var(--white);
+        font-weight: 800;
+        flex: 0 0 auto;
+      }
+
+      .brand-name,
+      .footer-brand strong {
+        color: var(--ink);
+        text-decoration: none;
+        font-weight: 800;
+      }
+
+      nav {
+        display: flex;
+        align-items: center;
+        gap: var(--space-20);
+        flex-wrap: wrap;
+      }
+
+      nav a {
+        color: var(--ink);
+        text-decoration: none;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .button {
+        min-height: 46px;
+        padding: 0 18px;
+        border-radius: 999px;
+        border: 2px solid var(--blue);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-weight: 700;
+        color: var(--blue);
+        background: transparent;
+      }
+
+      .button-solid {
+        background: var(--blue);
+        color: var(--white);
+      }
+
+      main {
+        display: grid;
+        row-gap: var(--space-48);
+      }
+
+      main .section,
+      .hero {
+        width: 100%;
+        max-width: var(--page);
+        margin: 0 auto;
+        padding: 0 var(--space-24);
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.05fr) minmax(320px, 460px);
+        gap: var(--space-40);
+        align-items: center;
+        padding-top: var(--space-48);
+        padding-bottom: var(--space-32);
+      }
+
+      .hero-copy {
+        display: grid;
+        gap: var(--space-16);
+      }
+
+      .hero h1 {
+        font-size: clamp(3.1rem, 6vw, 5.6rem);
+        color: var(--navy);
+      }
+      .hero-location {
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: var(--blue);
+      }
+      .hero-status {
+        color: var(--muted);
+        max-width: 40ch;
+      }
+      .cta-row {
+        display: flex;
+        gap: var(--space-12);
+        flex-wrap: wrap;
+      }
+
+      .hero-art,
+      .promo-art {
+        overflow: hidden;
+        border: 1px solid var(--line);
+      }
+
+      .hero-art {
+        min-height: 420px;
+        border-radius: var(--radius-lg);
+        background: linear-gradient(180deg, #f5f7fb 0%, #e6eef8 100%);
+      }
+
+      .hero-art img,
+      .promo-art img,
+      .card-art img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+      }
+
+      .section {
+        padding-top: var(--space-56);
+        padding-bottom: var(--space-24);
+      }
+
+      .section-heading {
+        margin-bottom: var(--space-24);
+      }
+
+      .section-heading h2 {
+        font-size: 2.6rem;
+        color: var(--navy);
+      }
+
+      .core-info-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--space-24);
+        padding-top: var(--space-8);
+      }
+
+      .core-block {
+        display: grid;
+        gap: var(--space-12);
+      }
+
+      .core-block h3,
+      .about-column h3 {
+        font-size: 1.15rem;
+        font-family: "Manrope", sans-serif;
+        font-weight: 800;
+        letter-spacing: 0;
+      }
+
+      .about {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: var(--space-32);
+        align-items: start;
+        background: var(--mist);
+        border-radius: var(--radius-lg);
+        padding: var(--space-32);
+      }
+
+      .about-list {
+        display: grid;
+        gap: var(--space-16);
+        padding-left: 18px;
+      }
+
+      .cards-grid,
+      .reviews-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--space-20);
+      }
+
+      .card,
+      .review-card {
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        background: var(--white);
+        padding: var(--space-24);
+        display: grid;
+        gap: var(--space-16);
+      }
+
+      .card .eyebrow {
+        color: var(--blue);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.8rem;
+        font-weight: 800;
+      }
+
+      .promo {
+        border-radius: 26px;
+        overflow: hidden;
+        background: linear-gradient(135deg, #163350 0%, #2a6cb0 100%);
+        color: var(--white);
+        padding: var(--space-32);
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: var(--space-24);
+        align-items: center;
+      }
+
+      .promo h2 {
+        color: var(--white);
+      }
+      .promo-copy {
+        display: grid;
+        gap: var(--space-16);
+      }
+      .promo-copy .button {
+        border-color: #fff;
+        color: #fff;
+      }
+      .promo-copy .button-solid {
+        background: #fff;
+        color: var(--navy);
+      }
+
+      .promo-art {
+        min-height: 260px;
+        border-radius: 24px;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+      }
+
+      .faq-list {
+        display: grid;
+        gap: var(--space-16);
+      }
+
+      details {
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: var(--space-20);
+        background: var(--white);
+      }
+
+      summary {
+        cursor: pointer;
+        list-style: none;
+        font-weight: 800;
+        display: flex;
+        justify-content: space-between;
+        gap: var(--space-16);
+      }
+
+      summary::-webkit-details-marker {
+        display: none;
+      }
+      summary::after {
+        content: "+";
+      }
+      details[open] summary::after {
+        content: "-";
+      }
+      details p {
+        margin-top: var(--space-12);
+        color: var(--muted);
+        max-width: 70ch;
+      }
+
+      .review-score {
+        font-size: 2.6rem;
+        color: var(--navy);
+      }
+
+      .social {
+        display: flex;
+        gap: var(--space-12);
+        flex-wrap: wrap;
+      }
+
+      .social a {
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--navy);
+        text-decoration: none;
+      }
+
+      @media (max-width: 920px) {
+        .hero,
+        .about,
+        .promo,
+        .core-info-grid,
+        .cards-grid,
+        .reviews-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <header class="header-shell">
+      <div class="inner">
+        <div class="utility-row">
+          <nav aria-label="Utility navigation">
+            <a href="#">Client support</a>
+            <a href="#">Workshops</a>
+          </nav>
+          <div>Retirement planning appointments available this week</div>
+        </div>
+        <div class="header-row">
+          <div class="brand-lockup">
+            <div class="logo" aria-hidden="true">B</div>
+            <a href="#" class="brand-name">Bluehaven Bank</a>
+          </div>
+          <nav aria-label="Primary navigation">
+            <a href="#">Retirement</a>
+            <a href="#">Advisors</a>
+            <a href="#">Locations</a>
+            <a href="#">FAQs</a>
+            <a href="#" class="button">Book a consult</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <h1 id="hero-title">Bluehaven Bank</h1>
+          <p class="hero-location">Portland, ME</p>
+          <p class="hero-status">
+            Contemporary retirement planning for people who want clear next
+            steps, a calmer timeline, and a local advisor who can explain the
+            numbers in plain language.
+          </p>
+          <div class="cta-row">
+            <a href="#" class="button button-solid"
+              >Start retirement planning</a
+            >
+            <a href="#" class="button">Visit this branch</a>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <img
+            src="https://images.unsplash.com/photo-1579621970795-87facc2f976d?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+            alt=""
+          />
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="info-title">
+        <div class="section-heading">
+          <h2 id="info-title">Core information</h2>
+        </div>
+        <div class="core-info-grid">
+          <div class="core-block">
+            <h3>Visit</h3>
+            <p>85 Market Street</p>
+            <p>Portland, ME 04101</p>
+            <p><a href="#">Get directions to this branch</a></p>
+          </div>
+          <div class="core-block">
+            <h3>Talk with us</h3>
+            <p><a href="tel:+12075550121">(207) 555-0121</a></p>
+            <p>
+              <a href="mailto:retirement@bluehavenbank.com"
+                >retirement@bluehavenbank.com</a
+              >
+            </p>
+            <p>Retirement desk and branch support</p>
+          </div>
+          <div class="core-block">
+            <h3>Hours</h3>
+            <p>Mon-Fri: 9:00 AM - 6:00 PM</p>
+            <p>Sat: 10:00 AM - 1:00 PM</p>
+            <p>Private planning appointments by request</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="about-title">
+        <div class="about">
+          <div class="section-heading">
+            <h2 id="about-title">
+              Retirement planning that feels current, not intimidating
+            </h2>
+          </div>
+          <ul class="about-list">
+            <li>
+              Start with where you are now, not where you think you should
+              already be.
+            </li>
+            <li>
+              Build a plan around income, timing, lifestyle goals, and the pace
+              that feels realistic.
+            </li>
+            <li>
+              Meet in person with a local advisor, then keep things moving with
+              simple digital follow-up.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="paths-title">
+        <div class="section-heading">
+          <h2 id="paths-title">Retirement paths</h2>
+        </div>
+        <div class="cards-grid">
+          <article class="card">
+            <p class="eyebrow">Starting early</p>
+            <h3>Build the habit before the math gets complicated</h3>
+            <p>
+              Designed for people in their 20s, 30s, and 40s who want to start
+              contributing consistently and understand what matters first.
+            </p>
+            <a href="#" aria-label="Learn more about early retirement planning"
+              >Learn more</a
+            >
+          </article>
+          <article class="card">
+            <p class="eyebrow">Catching up</p>
+            <h3>Make the next ten years work harder</h3>
+            <p>
+              Useful for households that want a focused catch-up strategy,
+              clearer account coordination, and better visibility into future
+              income.
+            </p>
+            <a
+              href="#"
+              aria-label="Learn more about catch-up retirement planning"
+              >Learn more</a
+            >
+          </article>
+          <article class="card">
+            <p class="eyebrow">Already retiring</p>
+            <h3>Turn savings into a confident monthly plan</h3>
+            <p>
+              Built for clients who are close to retirement and want help
+              sequencing withdrawals, reviewing benefits, and planning for
+              flexibility.
+            </p>
+            <a href="#" aria-label="Learn more about near-retirement planning"
+              >Learn more</a
+            >
+          </article>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="promo-title">
+        <div class="promo">
+          <div class="promo-copy">
+            <h2 id="promo-title">
+              Retirement readiness sessions every Thursday evening
+            </h2>
+            <p>
+              Join a free in-branch workshop on timing, rollover decisions,
+              healthcare planning, and how to turn a rough goal into a working
+              plan.
+            </p>
+            <div class="cta-row">
+              <a href="#" class="button button-solid">Reserve a seat</a>
+              <a href="#" class="button">See upcoming sessions</a>
+            </div>
+          </div>
+          <div class="promo-art" aria-hidden="true">
+            <img
+              src="https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+              alt=""
+            />
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="reviews-title">
+        <div class="section-heading">
+          <h2 id="reviews-title">Client reviews</h2>
+        </div>
+        <div class="reviews-grid">
+          <article class="review-card">
+            <p class="review-score">4.9</p>
+            <p>Average branch rating from local retirement-planning clients.</p>
+          </article>
+          <article class="review-card">
+            <h3>Clear and patient</h3>
+            <p>
+              "They translated a confusing retirement picture into a plan I
+              could actually follow."
+            </p>
+          </article>
+          <article class="review-card">
+            <h3>Modern without feeling remote</h3>
+            <p>
+              "I still wanted a local advisor, but I liked being able to keep
+              momentum between meetings."
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="faq-title">
+        <div class="section-heading">
+          <h2 id="faq-title">Retirement planning FAQs</h2>
+        </div>
+        <div class="faq-list">
+          <details>
+            <summary>
+              Do I need a large portfolio before meeting with an advisor?
+            </summary>
+            <p>
+              No. This branch works with people who are just getting organized
+              as well as clients who are already close to retirement.
+            </p>
+          </details>
+          <details>
+            <summary>
+              Can I bring accounts from other institutions to the first meeting?
+            </summary>
+            <p>
+              Yes. Bring statements or a simple list of balances and we can use
+              that to frame the first conversation.
+            </p>
+          </details>
+          <details>
+            <summary>Are evening retirement appointments available?</summary>
+            <p>
+              Yes. A limited set of evening appointments and workshop slots are
+              available during the week.
+            </p>
+          </details>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer-shell">
+      <div class="inner footer-row" style="padding: 24px">
+        <div class="footer-brand">
+          <div class="logo" aria-hidden="true">B</div>
+          <div>
+            <strong>Bluehaven Bank</strong>
+            <p>Portland retirement planning branch</p>
+          </div>
+        </div>
+        <nav aria-label="Footer navigation">
+          <a href="#">Retirement</a>
+          <a href="#">Locations</a>
+          <a href="#">Contact</a>
+        </nav>
+        <div class="social" aria-label="Social media links">
+          <a href="#" aria-label="Bluehaven on LinkedIn">in</a>
+          <a href="#" aria-label="Bluehaven on Facebook">f</a>
+          <a href="#" aria-label="Bluehaven on Instagram">ig</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

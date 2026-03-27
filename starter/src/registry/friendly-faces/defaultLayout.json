@@ -1,0 +1,728 @@
+{
+  "root": {
+    "props": {
+      "title": {
+        "field": "name",
+        "constantValue": "Friendly Faces Pages",
+        "constantValueEnabled": false
+      },
+      "description": {
+        "field": "description",
+        "constantValue": "",
+        "constantValueEnabled": false
+      }
+    }
+  },
+  "content": [
+    {
+      "type": "FriendlyFacesHeaderSection",
+      "props": {
+        "id": "FriendlyFacesHeaderSection-5dd8156f-16cb-4540-8607-054e3d657039",
+        "skipLink": {
+          "label": "Skip to main content",
+          "link": "#main-content"
+        },
+        "primaryLinks": [
+          {
+            "label": "Services",
+            "link": "#"
+          },
+          {
+            "label": "New patients",
+            "link": "#"
+          }
+        ],
+        "brandLink": {
+          "initial": "M",
+          "name": "Maple Grove Pediatrics",
+          "link": "#"
+        },
+        "actionLinks": [
+          {
+            "label": "Forms",
+            "link": "#",
+            "variant": "plain"
+          },
+          {
+            "label": "Book a visit",
+            "link": "#",
+            "variant": "pill"
+          }
+        ]
+      }
+    },
+    {
+      "type": "FriendlyFacesHeroSection",
+      "props": {
+        "id": "FriendlyFacesHeroSection-4417d751-5bf5-4874-99a0-0b5b5e33db89",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Maple Grove Pediatrics",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 80,
+          "fontColor": "#17313d",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "location": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Cary, NC",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 20,
+          "fontColor": "#0f7c82",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "description": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "A reassuring neighborhood practice for infants, kids, and teens, with same-day sick visits, preventive care, and parent-friendly communication.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#5f7380",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "primaryCta": {
+          "label": "Book a well visit",
+          "link": "#",
+          "variant": "solid"
+        },
+        "secondaryCta": {
+          "label": "Meet the care team",
+          "link": "#",
+          "variant": "outline"
+        },
+        "heroImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=1400&q=80",
+            "width": 1400,
+            "height": 933
+          },
+          "constantValueEnabled": true
+        }
+      }
+    },
+    {
+      "type": "FriendlyFacesCoreInfoSection",
+      "props": {
+        "id": "FriendlyFacesCoreInfoSection-912b49d5-f221-4388-88c9-a2d6ca70aaef",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Core information",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 38,
+          "fontColor": "#17313d",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "visitHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Visit",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 17,
+          "fontColor": "#17313d",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "callHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Call",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 17,
+          "fontColor": "#17313d",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "hoursHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Hours",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 17,
+          "fontColor": "#17313d",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "servicesHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Services",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 17,
+          "fontColor": "#17313d",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "directionsLink": {
+          "label": "Get directions",
+          "link": "#"
+        },
+        "emailLink": {
+          "label": "hello@maplegrovepediatrics.com",
+          "link": "mailto:hello@maplegrovepediatrics.com"
+        },
+        "services": [
+          {
+            "name": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Well visits",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#17313d",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "name": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Vaccines",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#17313d",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "name": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Same-day sick care",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#17313d",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "FriendlyFacesAboutSection",
+      "props": {
+        "id": "FriendlyFacesAboutSection-d81a5a7e-3b7a-4b3a-a626-4e49b6305478",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Care that feels calm for kids and clear for parents",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 38,
+          "fontColor": "#17313d",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "eyebrow": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "What families can expect",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 17,
+          "fontColor": "#17313d",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "body": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Visits start with practical guidance, space for questions, and a care team that explains what is happening and what happens next without rushing.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#17313d",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        }
+      }
+    },
+    {
+      "type": "FriendlyFacesServicesSection",
+      "props": {
+        "id": "FriendlyFacesServicesSection-fdd21011-722d-4c9f-aba8-5bb1bb83b4dc",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Care services",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 38,
+          "fontColor": "#17313d",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "cards": [
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Infant and toddler visits",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#17313d",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Routine checkups, feeding conversations, growth tracking, and developmental screenings for the earliest years.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#5f7380",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "School-age support",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#17313d",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Annual wellness visits, sports forms, vaccine review, and guidance for common school-year illnesses.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#5f7380",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Teen visits",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#17313d",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Private conversation time, preventive care, and practical support as health needs become more independent.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#5f7380",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "FriendlyFacesPromoSection",
+      "props": {
+        "id": "FriendlyFacesPromoSection-d8e1b139-cb94-41dc-aa9c-eff31d39e062",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Same-day sick visits that feel organized, not chaotic",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 38,
+          "fontColor": "#17313d",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "body": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Families can call ahead in the morning for coughs, fevers, sore throats, and other urgent needs that should be seen the same day.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#5f7380",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "cta": {
+          "label": "Request a same-day visit",
+          "link": "#"
+        },
+        "image": {
+          "field": "",
+          "constantValue": {
+            "url": "https://images.unsplash.com/photo-1666214280391-8ff5bd3c0bf0?auto=format&fit=crop&w=1200&q=80",
+            "width": 1200,
+            "height": 900
+          },
+          "constantValueEnabled": true
+        }
+      }
+    },
+    {
+      "type": "FriendlyFacesReviewsSection",
+      "props": {
+        "id": "FriendlyFacesReviewsSection-2d4ce6ef-ff7b-48ef-b811-e8bf606aae38",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Parent reviews",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 38,
+          "fontColor": "#17313d",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "score": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "4.9",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 40,
+          "fontColor": "#0f7c82",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "scoreBody": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Average family rating for clarity, warmth, and follow-up.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#17313d",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "reviewCards": [
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Gentle and practical",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#17313d",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "quote": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "\"The visit felt calm from the waiting room through checkout, and I left knowing exactly what to watch for at home.\"",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#5f7380",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Easy for new parents",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#17313d",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "quote": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "\"They answer questions without making you feel rushed or embarrassed for asking.\"",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#5f7380",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "FriendlyFacesFaqSection",
+      "props": {
+        "id": "FriendlyFacesFaqSection-72325a65-a6d5-4aa7-b40a-a4910f108313",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Pediatric visit FAQs",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 38,
+          "fontColor": "#17313d",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "items": [
+          {
+            "question": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Do you offer same-day appointments for sick children?",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#17313d",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "answer": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Yes. Families can call in the morning for same-day scheduling when clinically appropriate.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#5f7380",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "question": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Can I complete forms before our first appointment?",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#17313d",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "answer": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Yes. New-patient paperwork and intake details can be completed before your visit to keep check-in simple.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#5f7380",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "question": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Do teens have private conversation time with clinicians?",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#17313d",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "answer": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Yes. When age-appropriate, part of the visit can be structured to support more independent healthcare conversations.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#5f7380",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "FriendlyFacesFooterSection",
+      "props": {
+        "id": "FriendlyFacesFooterSection-58432a4f-4339-4c86-b8ca-4400ddf92ac3",
+        "brandLink": {
+          "initial": "M",
+          "name": "Maple Grove Pediatrics",
+          "link": "#"
+        },
+        "footerLinks": [
+          {
+            "label": "Services",
+            "link": "#"
+          },
+          {
+            "label": "New patients",
+            "link": "#"
+          },
+          {
+            "label": "Contact",
+            "link": "#"
+          }
+        ],
+        "socialLinks": [
+          {
+            "label": "f",
+            "link": "#",
+            "ariaLabel": "Maple Grove Pediatrics on Facebook"
+          },
+          {
+            "label": "ig",
+            "link": "#",
+            "ariaLabel": "Maple Grove Pediatrics on Instagram"
+          },
+          {
+            "label": "yt",
+            "link": "#",
+            "ariaLabel": "Maple Grove Pediatrics on YouTube"
+          }
+        ]
+      }
+    }
+  ],
+  "zones": {}
+}

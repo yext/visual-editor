@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Maple Grove Pediatrics | Pediatrician in Cary, NC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&amp;family=Nunito:wght@400;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --teal: #0f7c82;
+        --sky: #4ea9de;
+        --mint: #edf9f8;
+        --peach: #fff2ea;
+        --ink: #17313d;
+        --muted: #5f7380;
+        --line: #d5e8ea;
+        --white: #ffffff;
+        --radius-sm: 18px;
+        --radius-lg: 32px;
+        --space-4: 4px;
+        --space-8: 8px;
+        --space-12: 12px;
+        --space-16: 16px;
+        --space-20: 20px;
+        --space-24: 24px;
+        --space-32: 32px;
+        --space-40: 40px;
+        --space-48: 48px;
+        --space-56: 56px;
+        --space-72: 72px;
+        --page: 1100px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: "Nunito", sans-serif;
+        font-size: 1rem;
+        line-height: 1.6;
+        color: var(--ink);
+        background: var(--white);
+      }
+      h1,
+      h2,
+      h3,
+      p,
+      ul {
+        margin: 0;
+      }
+      h1,
+      h2 {
+        font-family: "Fraunces", serif;
+        line-height: 1.02;
+        letter-spacing: -0.03em;
+      }
+      a {
+        color: var(--teal);
+      }
+      a:focus-visible,
+      button:focus-visible,
+      summary:focus-visible {
+        outline: 3px solid #111;
+        outline-offset: 3px;
+      }
+      .skip-link {
+        position: absolute;
+        left: 16px;
+        top: 16px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: #111;
+        color: #fff;
+        text-decoration: none;
+        transform: translateY(-180%);
+      }
+      .skip-link:focus-visible {
+        transform: translateY(0);
+      }
+      .header-shell,
+      .footer-shell {
+        width: 100%;
+        background: var(--white);
+      }
+      .footer-shell {
+        border-top: 1px solid var(--line);
+        margin-top: var(--space-72);
+      }
+      .inner {
+        max-width: var(--page);
+        margin: 0 auto;
+        padding: 0 var(--space-24);
+      }
+      .header-row,
+      .footer-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-24);
+        flex-wrap: wrap;
+      }
+      .header-row {
+        padding: var(--space-24) 0;
+      }
+      .brand-center {
+        display: flex;
+        align-items: center;
+        gap: var(--space-12);
+        text-decoration: none;
+        color: var(--ink);
+        font-weight: 800;
+      }
+      .logo {
+        width: 42px;
+        height: 42px;
+        border-radius: 999px;
+        background: var(--teal);
+        color: #fff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+      }
+      nav {
+        display: flex;
+        align-items: center;
+        gap: var(--space-20);
+        flex-wrap: wrap;
+      }
+      nav a {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+        color: var(--ink);
+      }
+      .button {
+        min-height: 46px;
+        padding: 0 18px;
+        border-radius: 999px;
+        border: 2px solid var(--teal);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-weight: 800;
+        color: var(--teal);
+      }
+      .button-solid {
+        background: var(--teal);
+        color: #fff;
+      }
+      main {
+        display: grid;
+        row-gap: var(--space-48);
+      }
+      main .hero,
+      main .section {
+        width: 100%;
+        max-width: var(--page);
+        margin: 0 auto;
+        padding: 0 var(--space-24);
+      }
+      .hero {
+        padding-top: var(--space-48);
+        padding-bottom: var(--space-32);
+        text-align: center;
+      }
+      .hero-panel {
+        background: linear-gradient(180deg, var(--mint) 0%, #ffffff 100%);
+        border: 1px solid var(--line);
+        border-radius: 32px;
+        padding: var(--space-40);
+        display: grid;
+        gap: var(--space-20);
+        justify-items: center;
+      }
+      .hero h1 {
+        font-size: clamp(3rem, 6vw, 5rem);
+        color: var(--ink);
+      }
+      .hero-location {
+        font-size: 1.28rem;
+        font-weight: 800;
+        color: var(--teal);
+      }
+      .hero-status {
+        max-width: 52ch;
+        color: var(--muted);
+      }
+      .hero-art,
+      .promo-art {
+        overflow: hidden;
+        background: #fff;
+        border: 1px solid var(--line);
+      }
+      .hero-art {
+        width: min(100%, 720px);
+        min-height: 220px;
+        border-radius: 28px;
+      }
+      .hero-art img,
+      .promo-art img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+      }
+      .cta-row {
+        display: flex;
+        gap: var(--space-12);
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .section {
+        padding-top: var(--space-56);
+        padding-bottom: var(--space-24);
+      }
+      .section-heading {
+        margin-bottom: var(--space-24);
+      }
+      .section-heading h2 {
+        font-size: 2.4rem;
+        color: var(--ink);
+      }
+      .core-info-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: var(--space-24);
+        padding-top: var(--space-8);
+      }
+      .core-block {
+        display: grid;
+        gap: var(--space-12);
+        min-width: 0;
+      }
+      .core-block h3,
+      .about-columns h3,
+      .card h3 {
+        font-family: "Nunito", sans-serif;
+        font-size: 1.05rem;
+        font-weight: 800;
+      }
+      .core-block a,
+      .core-block p {
+        min-width: 0;
+      }
+      .icon-line {
+        display: flex;
+        align-items: center;
+        gap: var(--space-12);
+        min-width: 0;
+      }
+      .icon-line a {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: inline-block;
+      }
+      .icon-badge {
+        width: 36px;
+        height: 36px;
+        border-radius: 999px;
+        background: var(--mint);
+        color: var(--teal);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        flex: 0 0 auto;
+      }
+      .about-columns {
+        background: var(--peach);
+        border-radius: 28px;
+        padding: var(--space-32);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-32);
+        align-items: start;
+      }
+      .cards-grid,
+      .reviews-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--space-20);
+      }
+      .card,
+      .review-card {
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: #fff;
+        padding: var(--space-24);
+        display: grid;
+        gap: var(--space-16);
+      }
+      .card-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+        background: var(--mint);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--teal);
+        font-weight: 800;
+      }
+      .promo {
+        display: grid;
+        grid-template-columns: 360px 1fr;
+        gap: var(--space-24);
+        align-items: center;
+        border-radius: 28px;
+        background: var(--mint);
+        padding: var(--space-24);
+        border: 1px solid var(--line);
+      }
+      .promo-copy {
+        display: grid;
+        gap: var(--space-16);
+      }
+      .promo-art {
+        min-height: 280px;
+        border-radius: 24px;
+        overflow: hidden;
+        background: #fff;
+        border: 1px solid var(--line);
+      }
+      .review-score {
+        font-size: 2.5rem;
+        color: var(--teal);
+        font-weight: 800;
+      }
+      details {
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: var(--space-20);
+        background: #fff;
+      }
+      summary {
+        cursor: pointer;
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+        gap: var(--space-16);
+        font-weight: 800;
+      }
+      summary::-webkit-details-marker {
+        display: none;
+      }
+      summary::after {
+        content: "+";
+      }
+      details[open] summary::after {
+        content: "-";
+      }
+      details p {
+        margin-top: var(--space-12);
+        color: var(--muted);
+      }
+      .faq-list {
+        display: grid;
+        gap: var(--space-16);
+      }
+      .social {
+        display: flex;
+        gap: var(--space-12);
+        flex-wrap: wrap;
+      }
+      .social a {
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: var(--teal);
+      }
+      @media (max-width: 920px) {
+        .core-info-grid,
+        .about-columns,
+        .cards-grid,
+        .reviews-grid,
+        .promo {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <header class="header-shell">
+      <div class="inner">
+        <div class="header-row">
+          <nav aria-label="Primary navigation">
+            <a href="#">Services</a>
+            <a href="#">New patients</a>
+          </nav>
+          <a href="#" class="brand-center">
+            <span class="logo" aria-hidden="true">M</span>
+            <span>Maple Grove Pediatrics</span>
+          </a>
+          <nav aria-label="Header actions">
+            <a href="#">Forms</a>
+            <a href="#" class="button">Book a visit</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+    <main id="main-content">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-panel">
+          <h1 id="hero-title">Maple Grove Pediatrics</h1>
+          <p class="hero-location">Cary, NC</p>
+          <p class="hero-status">
+            A reassuring neighborhood practice for infants, kids, and teens,
+            with same-day sick visits, preventive care, and parent-friendly
+            communication.
+          </p>
+          <div class="cta-row">
+            <a href="#" class="button button-solid">Book a well visit</a>
+            <a href="#" class="button">Meet the care team</a>
+          </div>
+          <div class="hero-art" aria-hidden="true">
+            <img
+              src="https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&amp;fit=crop&amp;w=1400&amp;q=80"
+              alt=""
+            />
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="info-title">
+        <div class="section-heading">
+          <h2 id="info-title">Core information</h2>
+        </div>
+        <div class="core-info-grid">
+          <div class="core-block">
+            <h3>Visit</h3>
+            <p>214 Greenway Lane</p>
+            <p>Cary, NC 27511</p>
+            <p><a href="#">Get directions</a></p>
+          </div>
+          <div class="core-block">
+            <h3>Call</h3>
+            <div class="icon-line">
+              <span class="icon-badge" aria-hidden="true">P</span
+              ><a href="tel:+19195550134">(919) 555-0134</a>
+            </div>
+            <div class="icon-line">
+              <span class="icon-badge" aria-hidden="true">E</span
+              ><a href="mailto:hello@maplegrovepediatrics.com"
+                >hello@maplegrovepediatrics.com</a
+              >
+            </div>
+          </div>
+          <div class="core-block">
+            <h3>Hours</h3>
+            <p>Mon-Fri: 8:00 AM - 5:30 PM</p>
+            <p>Sat sick clinic: 9:00 AM - 12:00 PM</p>
+          </div>
+          <div class="core-block">
+            <h3>Services</h3>
+            <p>Well visits</p>
+            <p>Vaccines</p>
+            <p>Same-day sick care</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="about-title">
+        <div class="about-columns">
+          <div class="section-heading">
+            <h2 id="about-title">
+              Care that feels calm for kids and clear for parents
+            </h2>
+          </div>
+          <div>
+            <h3>What families can expect</h3>
+            <p>
+              Visits start with practical guidance, space for questions, and a
+              care team that explains what is happening and what happens next
+              without rushing.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="services-title">
+        <div class="section-heading">
+          <h2 id="services-title">Care services</h2>
+        </div>
+        <div class="cards-grid">
+          <article class="card">
+            <span class="card-icon" aria-hidden="true">1</span>
+            <h3>Infant and toddler visits</h3>
+            <p>
+              Routine checkups, feeding conversations, growth tracking, and
+              developmental screenings for the earliest years.
+            </p>
+          </article>
+          <article class="card">
+            <span class="card-icon" aria-hidden="true">2</span>
+            <h3>School-age support</h3>
+            <p>
+              Annual wellness visits, sports forms, vaccine review, and guidance
+              for common school-year illnesses.
+            </p>
+          </article>
+          <article class="card">
+            <span class="card-icon" aria-hidden="true">3</span>
+            <h3>Teen visits</h3>
+            <p>
+              Private conversation time, preventive care, and practical support
+              as health needs become more independent.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="promo-title">
+        <div class="promo">
+          <div class="promo-art" aria-hidden="true">
+            <img
+              src="https://images.unsplash.com/photo-1666214280391-8ff5bd3c0bf0?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+              alt=""
+            />
+          </div>
+          <div class="promo-copy">
+            <h2 id="promo-title">
+              Same-day sick visits that feel organized, not chaotic
+            </h2>
+            <p>
+              Families can call ahead in the morning for coughs, fevers, sore
+              throats, and other urgent needs that should be seen the same day.
+            </p>
+            <div class="cta-row" style="justify-content: flex-start">
+              <a href="#" class="button button-solid"
+                >Request a same-day visit</a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="reviews-title">
+        <div class="section-heading">
+          <h2 id="reviews-title">Parent reviews</h2>
+        </div>
+        <div class="reviews-grid">
+          <article class="review-card">
+            <p class="review-score">4.9</p>
+            <p>Average family rating for clarity, warmth, and follow-up.</p>
+          </article>
+          <article class="review-card">
+            <h3>Gentle and practical</h3>
+            <p>
+              "The visit felt calm from the waiting room through checkout, and I
+              left knowing exactly what to watch for at home."
+            </p>
+          </article>
+          <article class="review-card">
+            <h3>Easy for new parents</h3>
+            <p>
+              "They answer questions without making you feel rushed or
+              embarrassed for asking."
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="faq-title">
+        <div class="section-heading">
+          <h2 id="faq-title">Pediatric visit FAQs</h2>
+        </div>
+        <div class="faq-list">
+          <details>
+            <summary>
+              Do you offer same-day appointments for sick children?
+            </summary>
+            <p>
+              Yes. Families can call in the morning for same-day scheduling when
+              clinically appropriate.
+            </p>
+          </details>
+          <details>
+            <summary>
+              Can I complete forms before our first appointment?
+            </summary>
+            <p>
+              Yes. New-patient paperwork and intake details can be completed
+              before your visit to keep check-in simple.
+            </p>
+          </details>
+          <details>
+            <summary>
+              Do teens have private conversation time with clinicians?
+            </summary>
+            <p>
+              Yes. When age-appropriate, part of the visit can be structured to
+              support more independent healthcare conversations.
+            </p>
+          </details>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer-shell">
+      <div class="inner footer-row" style="padding: 24px">
+        <div class="brand-center" style="text-decoration: none">
+          <span class="logo" aria-hidden="true">M</span>
+          <span>Maple Grove Pediatrics</span>
+        </div>
+        <nav aria-label="Footer navigation">
+          <a href="#">Services</a>
+          <a href="#">New patients</a>
+          <a href="#">Contact</a>
+        </nav>
+        <div class="social" aria-label="Social media links">
+          <a href="#" aria-label="Maple Grove Pediatrics on Facebook">f</a>
+          <a href="#" aria-label="Maple Grove Pediatrics on Instagram">ig</a>
+          <a href="#" aria-label="Maple Grove Pediatrics on YouTube">yt</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

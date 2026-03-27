@@ -1,0 +1,838 @@
+{
+  "root": {
+    "props": {
+      "title": {
+        "field": "name",
+        "constantValue": "Rugged Utility Pages",
+        "constantValueEnabled": false
+      },
+      "description": {
+        "field": "description",
+        "constantValue": "",
+        "constantValueEnabled": false
+      }
+    }
+  },
+  "content": [
+    {
+      "type": "RuggedUtilityHeaderSection",
+      "props": {
+        "id": "RuggedUtilityHeaderSection-0b3de62f-6b3a-4896-a740-30361e5e3c53",
+        "logoLetter": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "N",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#fffdf8",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "brandName": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Northline Outfitters",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 14,
+          "fontColor": "#fffdf8",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "brandLink": {
+          "label": "Northline Outfitters",
+          "link": "#"
+        },
+        "utilityAnnouncement": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Season opener gear clinic this Saturday",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 15,
+          "fontColor": "rgba(255,255,255,.76)",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "utilityLinks": [
+          {
+            "label": "Classes",
+            "link": "#"
+          },
+          {
+            "label": "Repairs",
+            "link": "#"
+          }
+        ],
+        "primaryLinks": [
+          {
+            "label": "Camping",
+            "link": "#"
+          },
+          {
+            "label": "Footwear",
+            "link": "#"
+          },
+          {
+            "label": "Snow",
+            "link": "#"
+          },
+          {
+            "label": "Visit store",
+            "link": "#"
+          }
+        ]
+      }
+    },
+    {
+      "type": "RuggedUtilityHeroSection",
+      "props": {
+        "id": "RuggedUtilityHeroSection-416782cb-5dac-41df-ac19-97dc96019e13",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Northline Outfitters",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 88,
+          "fontColor": "#181715",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "location": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Bend, OR",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 19,
+          "fontColor": "#37513b",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "description": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "A local gear shop for mountain weather, trail weekends, and durable equipment you can actually use hard.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#6d665b",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "primaryCta": {
+          "label": "Get directions",
+          "link": "#"
+        },
+        "secondaryCta": {
+          "label": "See store events",
+          "link": "#"
+        },
+        "heroImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1400&q=80",
+            "width": 1400,
+            "height": 1750
+          },
+          "constantValueEnabled": true
+        }
+      }
+    },
+    {
+      "type": "RuggedUtilityCoreInfoSection",
+      "props": {
+        "id": "RuggedUtilityCoreInfoSection-1206a909-c8c7-4690-80d4-052eb29e8143",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Core information",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 36,
+          "fontColor": "#181715",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "visitHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Visit",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 17,
+          "fontColor": "#181715",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "visitCta": {
+          "label": "Get directions to this store",
+          "link": "#"
+        },
+        "contactHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Talk with the floor team",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 17,
+          "fontColor": "#181715",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "emailCta": {
+          "label": "gear@northlineoutfitters.com",
+          "link": "mailto:gear@northlineoutfitters.com"
+        },
+        "contactDetails": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Boot fitting, layering help, and seasonal recommendations",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 14,
+          "fontColor": "#6d665b",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "hoursHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Hours",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 17,
+          "fontColor": "#181715",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "hoursNote": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Repair desk closes one hour before store close",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 14,
+          "fontColor": "#6d665b",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        }
+      }
+    },
+    {
+      "type": "RuggedUtilityStoreBannerSection",
+      "props": {
+        "id": "RuggedUtilityStoreBannerSection-5c761a6d-a709-49cc-82c2-d8f3b0cd6bb2",
+        "message": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Pack fittings and trail-ready layering checklists available at the service desk this week.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#181715",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "cta": {
+          "label": "See what to bring",
+          "link": "#"
+        }
+      }
+    },
+    {
+      "type": "RuggedUtilityFeaturedDepartmentsSection",
+      "props": {
+        "id": "RuggedUtilityFeaturedDepartmentsSection-21739027-11e9-40d7-b518-6136783740c0",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Featured departments",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 36,
+          "fontColor": "#181715",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "cards": [
+          {
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://images.unsplash.com/photo-1522163182402-834f871fd851?auto=format&fit=crop&w=1200&q=80",
+                "width": 1200,
+                "height": 800
+              },
+              "constantValueEnabled": true
+            },
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Trail footwear",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#181715",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Boots, hikers, and running shoes chosen for rocky ground, wet weather, and long weekends.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 14,
+              "fontColor": "#6d665b",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "Explore footwear",
+              "link": "#"
+            }
+          },
+          {
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=1200&q=80",
+                "width": 1200,
+                "height": 800
+              },
+              "constantValueEnabled": true
+            },
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Camp kitchen and shelter",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#181715",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Tents, stoves, camp lighting, and practical car-camping setups for fast departures.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 14,
+              "fontColor": "#6d665b",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "Explore camp gear",
+              "link": "#"
+            }
+          },
+          {
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
+                "width": 1200,
+                "height": 800
+              },
+              "constantValueEnabled": true
+            },
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Cold-weather layers",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#181715",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Insulated jackets, base layers, and gloves that hold up through shoulder season and snow days.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 14,
+              "fontColor": "#6d665b",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "Explore layers",
+              "link": "#"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "RuggedUtilityFaqSection",
+      "props": {
+        "id": "RuggedUtilityFaqSection-54ff09dd-b621-4815-a799-a10046ca4e51",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Store FAQs",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 36,
+          "fontColor": "#181715",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "faqs": [
+          {
+            "question": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Do you offer pack fittings in store?",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#181715",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "answer": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Yes. Staff can help fit daypacks and overnight packs during store hours, with longer appointments on weekday evenings.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 15,
+              "fontColor": "#6d665b",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "question": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Can I bring in gear for basic repair?",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#181715",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "answer": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Yes. Zipper, buckle, and binding assessments start at the service desk, and the team can explain what can be fixed in house.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 15,
+              "fontColor": "#6d665b",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "question": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Do you stock seasonal snow gear year-round?",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#181715",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "answer": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Snow hardware is most complete during the winter season, but essentials and outerwear remain available longer depending on demand.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 15,
+              "fontColor": "#6d665b",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "RuggedUtilityRouteBoardPromoSection",
+      "props": {
+        "id": "RuggedUtilityRouteBoardPromoSection-38f9105d-c30a-481b-b4b1-e50046f2652e",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Weekend route picks from the staff board",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 36,
+          "fontColor": "#181715",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "body": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Each Friday, the team posts current trail, campground, and weather notes for nearby routes so shoppers can leave the store with a usable plan.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#6d665b",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "cta": {
+          "label": "See this weekend's board",
+          "link": "#"
+        },
+        "promoImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200&q=80",
+            "width": 1200,
+            "height": 800
+          },
+          "constantValueEnabled": true
+        }
+      }
+    },
+    {
+      "type": "RuggedUtilityNearbyLocationsSection",
+      "props": {
+        "id": "RuggedUtilityNearbyLocationsSection-9ab52f73-88fa-4b6c-8cb1-a48516026914",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Nearby locations",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 36,
+          "fontColor": "#181715",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "locations": [
+          {
+            "name": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Northline Outfitters",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#181715",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "place": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Redmond, OR",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 15,
+              "fontColor": "#6d665b",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "hours": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Open until 6:00 PM",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 15,
+              "fontColor": "#6d665b",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "View store",
+              "link": "#"
+            }
+          },
+          {
+            "name": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Northline Outfitters",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#181715",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "place": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Sisters, OR",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 15,
+              "fontColor": "#6d665b",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "hours": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Open until 6:00 PM",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 15,
+              "fontColor": "#6d665b",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "View store",
+              "link": "#"
+            }
+          },
+          {
+            "name": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Northline Outfitters",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#181715",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "place": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Eugene, OR",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 15,
+              "fontColor": "#6d665b",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "hours": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Open until 7:00 PM",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 15,
+              "fontColor": "#6d665b",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "View store",
+              "link": "#"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "RuggedUtilityFooterSection",
+      "props": {
+        "id": "RuggedUtilityFooterSection-1f8d5873-0fa2-42d2-b8fa-d053bc59a4c4",
+        "logoLetter": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "N",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#fffdf8",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "brandName": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Northline Outfitters",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 14,
+          "fontColor": "#fffdf8",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "tagline": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Bend outdoor gear store",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 14,
+          "fontColor": "rgba(255,255,255,.7)",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "footerLinks": [
+          {
+            "label": "Departments",
+            "link": "#"
+          },
+          {
+            "label": "Classes",
+            "link": "#"
+          },
+          {
+            "label": "Locations",
+            "link": "#"
+          }
+        ],
+        "socialLinks": [
+          {
+            "label": "ig",
+            "link": "#"
+          },
+          {
+            "label": "f",
+            "link": "#"
+          },
+          {
+            "label": "yt",
+            "link": "#"
+          }
+        ]
+      }
+    }
+  ],
+  "zones": {}
+}
