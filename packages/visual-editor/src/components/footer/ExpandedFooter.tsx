@@ -438,18 +438,20 @@ const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = (props) => {
         {shouldRenderMobileBottomContent && (
           <div
             className={themeManagerCn(
-              "order-3 lg:hidden flex flex-col gap-6 md:gap-6 [&:not(:has(img,a,svg))]:gap-0",
+              "order-3 lg:hidden flex flex-col",
               contentAlignmentClasses
             )}
           >
             {showSocialLinks && (
               <slots.SocialLinksSlot
+                className="mt-6 empty:mt-0"
                 style={{ height: "auto", maxWidth: "max-content" }}
                 allow={[]}
               />
             )}
             {showUtilityImages && (
               <slots.UtilityImagesSlot
+                className="mt-6 empty:mt-0"
                 style={{ height: "auto", maxWidth: "max-content" }}
                 allow={[]}
               />

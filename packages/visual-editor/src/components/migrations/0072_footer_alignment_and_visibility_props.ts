@@ -72,6 +72,40 @@ const migrateExpandedFooterSecondaryFooterShow = (
   const slotShow = secondaryFooterSlot?.data?.show;
   const primaryFooter = props.data?.primaryFooter;
   const primaryFooterStyles = props.styles?.primaryFooter;
+  const desktopContentAlignment =
+    primaryFooterStyles?.desktopContentAlignment ?? "left";
+  const defaultMobileContentAlignment = primaryFooter?.expandedFooter
+    ? "center"
+    : "left";
+  const mobileContentAlignment =
+    primaryFooterStyles?.mobileContentAlignment ??
+    defaultMobileContentAlignment;
+
+  const migratedPrimaryLinksWrapperSlot = Array.isArray(
+    props.slots?.PrimaryLinksWrapperSlot
+  )
+    ? props.slots.PrimaryLinksWrapperSlot.map((slot: Record<string, any>) => ({
+        ...slot,
+        props: {
+          ...slot.props,
+          desktopContentAlignment,
+          mobileContentAlignment,
+        },
+      }))
+    : props.slots?.PrimaryLinksWrapperSlot;
+
+  const migratedExpandedLinksWrapperSlot = Array.isArray(
+    props.slots?.ExpandedLinksWrapperSlot
+  )
+    ? props.slots.ExpandedLinksWrapperSlot.map((slot: Record<string, any>) => ({
+        ...slot,
+        props: {
+          ...slot.props,
+          desktopContentAlignment,
+          mobileContentAlignment,
+        },
+      }))
+    : props.slots?.ExpandedLinksWrapperSlot;
 
   return {
     ...props,
@@ -92,11 +126,14 @@ const migrateExpandedFooterSecondaryFooterShow = (
       ...props.styles,
       primaryFooter: {
         ...primaryFooterStyles,
-        desktopContentAlignment:
-          primaryFooterStyles?.desktopContentAlignment ?? "left",
-        mobileContentAlignment:
-          primaryFooterStyles?.mobileContentAlignment ?? "left",
+        desktopContentAlignment,
+        mobileContentAlignment,
       },
+    },
+    slots: {
+      ...props.slots,
+      PrimaryLinksWrapperSlot: migratedPrimaryLinksWrapperSlot,
+      ExpandedLinksWrapperSlot: migratedExpandedLinksWrapperSlot,
     },
   };
 };
