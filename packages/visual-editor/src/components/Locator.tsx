@@ -2010,6 +2010,7 @@ const FilterModal = (props: FilterModalProps) => {
         <button
           style={{ color: accentColorCssValue }}
           onClick={handleCloseModalClick}
+          aria-label={t("close", "Close")}
         >
           <FaTimes />
         </button>
