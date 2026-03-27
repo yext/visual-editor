@@ -34,7 +34,34 @@ export interface FooterLinksSlotProps {
 }
 
 const primaryFooterLinksSlotContainer = cva(
-  "w-full flex flex-col gap-6 md:flex-row md:flex-wrap",
+  "w-full grid grid-cols-1 gap-6 md:grid-cols-5",
+  {
+    variants: {
+      isEditing: {
+        true: "min-h-[30px]",
+        false: "",
+      },
+      desktopContentAlignment: {
+        left: "md:justify-items-start",
+        center: "md:justify-items-center",
+        right: "md:justify-items-end",
+      },
+      mobileContentAlignment: {
+        left: "justify-items-start",
+        center: "justify-items-center",
+        right: "justify-items-end",
+      },
+    },
+    defaultVariants: {
+      isEditing: false,
+      desktopContentAlignment: "left",
+      mobileContentAlignment: "left",
+    },
+  }
+);
+
+const secondaryFooterLinksSlotContainer = cva(
+  "w-full flex flex-col md:flex-row md:flex-wrap gap-5",
   {
     variants: {
       isEditing: {
@@ -50,33 +77,6 @@ const primaryFooterLinksSlotContainer = cva(
         left: "items-start",
         center: "items-center",
         right: "items-end",
-      },
-    },
-    defaultVariants: {
-      isEditing: false,
-      desktopContentAlignment: "left",
-      mobileContentAlignment: "left",
-    },
-  }
-);
-
-const secondaryFooterLinksSlotContainer = cva(
-  "w-full flex flex-row flex-wrap gap-5",
-  {
-    variants: {
-      isEditing: {
-        true: "min-h-[30px]",
-        false: "",
-      },
-      desktopContentAlignment: {
-        left: "md:justify-start",
-        center: "md:justify-center",
-        right: "md:justify-end",
-      },
-      mobileContentAlignment: {
-        left: "justify-start",
-        center: "justify-center",
-        right: "justify-end",
       },
     },
     defaultVariants: {

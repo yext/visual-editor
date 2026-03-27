@@ -387,7 +387,7 @@ const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = (props) => {
         {shouldRenderSideContent && (
           <div
             className={themeManagerCn(
-              "hidden lg:flex flex-col gap-6 md:gap-6",
+              "hidden lg:flex flex-col",
               sideContentDesktopOrderClass,
               contentAlignmentClasses
             )}
@@ -400,13 +400,21 @@ const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = (props) => {
             )}
             {showSocialLinks && (
               <slots.SocialLinksSlot
-                style={{ height: "auto", maxWidth: "max-content" }}
+                className="mt-6 empty:mt-0"
+                style={{
+                  height: "auto",
+                  maxWidth: "max-content",
+                }}
                 allow={[]}
               />
             )}
             {showUtilityImages && (
               <slots.UtilityImagesSlot
-                style={{ height: "auto", maxWidth: "max-content" }}
+                className="mt-6 empty:mt-0"
+                style={{
+                  height: "auto",
+                  maxWidth: "max-content",
+                }}
                 allow={[]}
               />
             )}
@@ -430,7 +438,7 @@ const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = (props) => {
         {shouldRenderMobileBottomContent && (
           <div
             className={themeManagerCn(
-              "order-3 lg:hidden flex flex-col gap-6 md:gap-6",
+              "order-3 lg:hidden flex flex-col gap-6 md:gap-6 [&:not(:has(img,a,svg))]:gap-0",
               contentAlignmentClasses
             )}
           >

@@ -156,7 +156,7 @@ const expandedLinksWrapperAlignment = cva("w-full flex", {
 });
 
 const expandedLinksContainerAlignment = cva(
-  "grid grid-cols-1 gap-6 md:w-fit md:[grid-template-columns:repeat(var(--expanded-footer-section-columns),minmax(0,max-content))]",
+  "grid grid-cols-1 gap-6 md:w-full md:[grid-template-columns:repeat(var(--expanded-footer-section-columns),minmax(0,1fr))]",
   {
     variants: {
       desktopContentAlignment: {
@@ -243,10 +243,17 @@ const FooterExpandedLinksWrapperInternal: PuckComponent<
   const isDarkBackground = background?.isDarkColor ?? false;
 
   const sections = data.sections || [];
-  const defaultColor = isDarkBackground
+  const defaultLabelColor = isDarkBackground
     ? ({ selectedColor: "white", contrastingColor: "black" } as ThemeColor)
     : ({ selectedColor: "black", contrastingColor: "white" } as ThemeColor);
-  const resolvedColor = styles?.color ?? defaultColor;
+  const defaultLinkColor = isDarkBackground
+    ? ({ selectedColor: "white", contrastingColor: "black" } as ThemeColor)
+    : ({
+        selectedColor: "palette-primary-dark",
+        contrastingColor: "white",
+      } as ThemeColor);
+  const resolvedLabelColor = styles?.color ?? defaultLabelColor;
+  const resolvedLinkColor = styles?.color ?? defaultLinkColor;
   const desktopSectionColumns = Math.max(1, Math.min(sections.length, 4));
 
   return (
@@ -285,7 +292,7 @@ const FooterExpandedLinksWrapperInternal: PuckComponent<
             >
               <Body
                 className="break-words font-link-fontWeight font-body-fontFamily font-body-fontWeight"
-                color={resolvedColor}
+                color={resolvedLabelColor}
               >
                 {label}
               </Body>
@@ -322,7 +329,7 @@ const FooterExpandedLinksWrapperInternal: PuckComponent<
                           mobileContentAlignment,
                         })
                       )}
-                      color={resolvedColor}
+                      color={resolvedLinkColor}
                     />
                   );
                 })}
