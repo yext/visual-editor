@@ -374,7 +374,7 @@ const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = (props) => {
         {showLogo && (
           <div
             className={themeManagerCn(
-              "order-1 lg:hidden flex flex-col gap-6 md:gap-6",
+              "order-1 md:hidden flex flex-col gap-6 md:gap-6",
               contentAlignmentClasses
             )}
           >
@@ -387,7 +387,7 @@ const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = (props) => {
         {shouldRenderSideContent && (
           <div
             className={themeManagerCn(
-              "hidden lg:flex flex-col",
+              "hidden md:flex flex-col",
               sideContentDesktopOrderClass,
               contentAlignmentClasses
             )}
@@ -438,7 +438,7 @@ const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = (props) => {
         {shouldRenderMobileBottomContent && (
           <div
             className={themeManagerCn(
-              "order-3 lg:hidden flex flex-col",
+              "order-3 md:hidden flex flex-col",
               contentAlignmentClasses
             )}
           >
