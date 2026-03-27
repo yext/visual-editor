@@ -1,0 +1,20 @@
+{
+  "templateName": "formal-finder",
+  "requestedUrl": "file:///Users/blife/Downloads/Elisabeth%202/cpa-local-formal-v1.html",
+  "finalUrl": "file:///Users/blife/Downloads/Elisabeth%202/cpa-local-formal-v1.html",
+  "title": "Harbor Ledger CPA | Certified Public Accountant in Hartford, CT",
+  "capturedAtIso": "2026-03-27T14:06:46.346Z",
+  "captureMode": "headless",
+  "botChallengeDetected": false,
+  "manualInterventionUsed": false,
+  "viewport": {
+    "width": 1440,
+    "height": 2400
+  },
+  "files": {
+    "html": "page.html",
+    "screenshot": "screenshot.png",
+    "cssCombined": "combined.css"
+  },
+  "skippedStylesheets": []
+}

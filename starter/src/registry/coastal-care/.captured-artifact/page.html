@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Harbor Animal Clinic | Veterinary Care in Newport, RI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&amp;family=Public+Sans:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #183347;
+        --sea: #2d6f83;
+        --foam: #eef6f7;
+        --sand: #f8f2e9;
+        --line: #d7e3e7;
+        --muted: #5f7684;
+        --white: #ffffff;
+        --r-sm: 12px;
+        --r-lg: 24px;
+        --s-4: 4px;
+        --s-8: 8px;
+        --s-12: 12px;
+        --s-16: 16px;
+        --s-20: 20px;
+        --s-24: 24px;
+        --s-32: 32px;
+        --s-40: 40px;
+        --page: 1024px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: "Public Sans", sans-serif;
+        font-size: 1em;
+        line-height: 1.55;
+        color: var(--ink);
+        background: var(--white);
+      }
+      h1,
+      h2,
+      h3,
+      p,
+      ul {
+        margin: 0;
+      }
+      h1,
+      h2 {
+        font-family: "DM Serif Display", serif;
+        line-height: 1;
+      }
+      a {
+        color: var(--sea);
+      }
+      a:focus-visible,
+      summary:focus-visible {
+        outline: 3px solid var(--ink);
+        outline-offset: 3px;
+      }
+      .skip-link {
+        position: absolute;
+        left: 16px;
+        top: 16px;
+        transform: translateY(-180%);
+        background: var(--ink);
+        color: var(--white);
+        padding: 10px 14px;
+        text-decoration: none;
+        border-radius: 999px;
+      }
+      .skip-link:focus-visible {
+        transform: translateY(0);
+      }
+      .header-shell,
+      .footer-shell {
+        width: 100%;
+        background: var(--white);
+      }
+      .header-shell {
+        margin-bottom: 24px;
+      }
+      .footer-shell {
+        margin-top: 24px;
+        border-top: 1px solid var(--line);
+      }
+      .inner {
+        max-width: var(--page);
+        margin: 0 auto;
+        padding: 0 var(--s-24);
+      }
+      .header-row,
+      .footer-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--s-24);
+        flex-wrap: wrap;
+      }
+      .header-row {
+        padding: 22px 0;
+      }
+      .brand-lockup {
+        display: flex;
+        align-items: center;
+        gap: var(--s-12);
+      }
+      .logo {
+        width: 42px;
+        height: 42px;
+        border-radius: 999px;
+        background: var(--sea);
+        color: var(--white);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+      }
+      nav {
+        display: flex;
+        align-items: center;
+        gap: var(--s-20);
+        flex-wrap: wrap;
+      }
+      nav a {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+        color: inherit;
+      }
+      .button {
+        min-height: 46px;
+        padding: 0 18px;
+        border-radius: 999px;
+        border: 2px solid var(--sea);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-weight: 700;
+        color: var(--sea);
+        background: transparent;
+      }
+      .button-solid {
+        background: var(--sea);
+        color: var(--white);
+      }
+      main > section {
+        max-width: var(--page);
+        margin: 0 auto;
+        padding: 24px var(--s-24);
+        width: 100%;
+      }
+      .hero-strip {
+        max-width: none;
+        padding: 0;
+        background:
+          linear-gradient(rgba(16, 37, 50, 0.45), rgba(16, 37, 50, 0.45)),
+          url("https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&w=1600&q=80")
+            center 35% / cover no-repeat;
+      }
+      .hero-inner {
+        max-width: var(--page);
+        margin: 0 auto;
+        padding: 56px var(--s-24) 48px;
+        min-height: 430px;
+        display: grid;
+        align-content: end;
+      }
+      .hero-card {
+        max-width: 560px;
+        background: rgba(255, 255, 255, 0.92);
+        color: var(--ink);
+        border-radius: var(--r-lg);
+        padding: var(--s-32);
+        display: grid;
+        gap: var(--s-16);
+      }
+      .hero h1 {
+        font-size: clamp(3rem, 6vw, 5rem);
+      }
+      .hero-location {
+        color: var(--sea);
+        font-weight: 800;
+        font-size: 1.1rem;
+      }
+      .hero-status {
+        color: var(--muted);
+        max-width: 42ch;
+      }
+      .cta-row {
+        display: flex;
+        gap: var(--s-12);
+        flex-wrap: wrap;
+      }
+      .section-heading {
+        margin-bottom: 24px;
+      }
+      .section-heading h2 {
+        font-size: 2.2rem;
+      }
+      .core-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: var(--s-24);
+        padding-top: var(--s-8);
+      }
+      .core-block {
+        display: grid;
+        gap: var(--s-12);
+        min-width: 0;
+      }
+      .core-block a,
+      .core-block p {
+        min-width: 0;
+      }
+      .info-link {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: inline-block;
+      }
+      .about {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: var(--s-32);
+        align-items: start;
+        background: var(--foam);
+        border-radius: var(--r-lg);
+        padding: var(--s-32);
+      }
+      .about ul {
+        padding-left: 18px;
+        display: grid;
+        gap: var(--s-16);
+      }
+      .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--s-20);
+      }
+      .card {
+        border: 1px solid var(--line);
+        border-radius: var(--r-lg);
+        overflow: hidden;
+        background: var(--white);
+        display: grid;
+      }
+      .card img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        display: block;
+      }
+      .card-body {
+        padding: var(--s-20);
+        display: grid;
+        gap: var(--s-16);
+      }
+      .card h3 {
+        font-size: 1.15rem;
+        font-weight: 800;
+      }
+      .reviews {
+        display: grid;
+        grid-template-columns: 0.9fr 1.05fr 1.05fr;
+        gap: var(--s-20);
+      }
+      .review-summary,
+      .review-card {
+        border: 1px solid var(--line);
+        border-radius: var(--r-lg);
+        background: var(--white);
+        padding: var(--s-24);
+        display: grid;
+        gap: var(--s-16);
+      }
+      .review-score {
+        color: var(--sea);
+        font-size: 2.8rem;
+        font-weight: 800;
+      }
+      details {
+        border-top: 1px solid var(--line);
+        padding: var(--s-20) 0;
+      }
+      summary {
+        cursor: pointer;
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+        gap: var(--s-16);
+        font-weight: 700;
+      }
+      summary::-webkit-details-marker {
+        display: none;
+      }
+      summary::after {
+        content: "+";
+      }
+      details[open] summary::after {
+        content: "−";
+      }
+      details p {
+        margin-top: var(--s-12);
+        color: var(--muted);
+      }
+      .faq-list {
+        border-bottom: 1px solid var(--line);
+      }
+      .social {
+        display: flex;
+        gap: var(--s-12);
+        flex-wrap: wrap;
+      }
+      .social a {
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: var(--sea);
+      }
+      @media (max-width: 900px) {
+        .core-grid,
+        .about,
+        .cards-grid,
+        .reviews {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <header class="header-shell">
+      <div class="inner">
+        <div class="header-row">
+          <div class="brand-lockup">
+            <div class="logo" aria-hidden="true">H</div>
+            <a
+              href="#"
+              style="text-decoration: none; color: inherit; font-weight: 800"
+              >Harbor Animal Clinic</a
+            >
+          </div>
+          <nav aria-label="Primary navigation">
+            <a href="#">Services</a>
+            <a href="#">New clients</a>
+            <a href="#">Care team</a>
+            <a href="#" class="button button-solid">Book appointment</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+    <main id="main-content">
+      <section class="hero hero-strip" aria-labelledby="hero-title">
+        <div class="hero-inner">
+          <div class="hero-card">
+            <h1 id="hero-title">Harbor Animal Clinic</h1>
+            <p class="hero-location">Newport, RI</p>
+            <p class="hero-status">
+              A neighborhood veterinary clinic for checkups, same-week sick
+              visits, and preventive care that feels calm for both pets and
+              people.
+            </p>
+            <div class="cta-row">
+              <a href="#" class="button button-solid">Book appointment</a>
+              <a href="#" class="button">Get directions</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="info-title">
+        <div class="section-heading">
+          <h2 id="info-title">Core information</h2>
+        </div>
+        <div class="core-grid">
+          <div class="core-block">
+            <h3>Visit</h3>
+            <p>18 Seaview Avenue</p>
+            <p>Newport, RI 02840</p>
+            <a href="#" class="info-link">Get directions to this clinic</a>
+          </div>
+          <div class="core-block">
+            <h3>Call</h3>
+            <a href="tel:+14015550182" class="info-link">(401) 555-0182</a>
+            <a href="mailto:hello@harboranimalclinic.com" class="info-link"
+              >hello@harboranimalclinic.com</a
+            >
+          </div>
+          <div class="core-block">
+            <h3>Hours</h3>
+            <p>Mon-Fri: 8:00 AM - 6:00 PM</p>
+            <p>Sat: 9:00 AM - 1:00 PM</p>
+          </div>
+          <div class="core-block">
+            <h3>Care focus</h3>
+            <p>Wellness visits</p>
+            <p>Dental care</p>
+            <p>Puppy and kitten plans</p>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="about-title">
+        <div class="about">
+          <div>
+            <div class="section-heading" style="margin-bottom: 0">
+              <h2 id="about-title">
+                Care that keeps the visit clear and low-stress
+              </h2>
+            </div>
+          </div>
+          <ul>
+            <li>
+              Appointments are paced so clients have time to ask questions
+              before they leave.
+            </li>
+            <li>
+              Preventive care, diagnostics, and follow-up planning stay
+              coordinated in one local office.
+            </li>
+            <li>
+              New client visits include practical care guidance rather than a
+              rushed handoff.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section aria-labelledby="services-title">
+        <div class="section-heading">
+          <h2 id="services-title">Services</h2>
+        </div>
+        <div class="cards-grid">
+          <article class="card">
+            <img
+              src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+              alt=""
+            />
+            <div class="card-body">
+              <h3>Preventive visits</h3>
+              <p>
+                Routine wellness exams, vaccines, and seasonal preventive plans.
+              </p>
+              <a href="#" class="button">See details</a>
+            </div>
+          </article>
+          <article class="card">
+            <img
+              src="https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+              alt=""
+            />
+            <div class="card-body">
+              <h3>Same-week care</h3>
+              <p>
+                Reserved scheduling space for sudden symptoms and urgent
+                follow-up needs.
+              </p>
+              <a href="#" class="button">See details</a>
+            </div>
+          </article>
+          <article class="card">
+            <img
+              src="https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+              alt=""
+            />
+            <div class="card-body">
+              <h3>Dental and long-term care</h3>
+              <p>
+                Oral health support and treatment plans for pets who need
+                ongoing attention.
+              </p>
+              <a href="#" class="button">See details</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section aria-labelledby="reviews-title">
+        <div class="section-heading">
+          <h2 id="reviews-title">Client reviews</h2>
+        </div>
+        <div class="reviews">
+          <div class="review-summary">
+            <p class="review-score">4.9</p>
+            <p>
+              Average local review rating from pet owners who value calmer
+              visits, clear instructions, and consistent follow-up.
+            </p>
+          </div>
+          <article class="review-card">
+            <p>
+              “The office feels organized without being stiff, and we always
+              leave knowing what the next step is.”
+            </p>
+            <p><strong>Pet owner</strong><br />Wellness care</p>
+          </article>
+          <article class="review-card">
+            <p>
+              “They made a nervous first visit much easier and explained the
+              care plan in a way that felt practical.”
+            </p>
+            <p><strong>Pet owner</strong><br />New client visit</p>
+          </article>
+        </div>
+      </section>
+
+      <section aria-labelledby="faq-title">
+        <div class="section-heading">
+          <h2 id="faq-title">FAQs</h2>
+        </div>
+        <div class="faq-list">
+          <details>
+            <summary>Do you accept new clients?</summary>
+            <p>
+              Yes. New client appointments are kept available throughout the
+              month for preventive and ongoing care.
+            </p>
+          </details>
+          <details>
+            <summary>Can I book a sick visit quickly?</summary>
+            <p>
+              The clinic keeps some same-week appointment capacity for pets who
+              need to be seen sooner.
+            </p>
+          </details>
+          <details>
+            <summary>What should I bring to the first visit?</summary>
+            <p>
+              Bring any recent records, medication details, and a short history
+              of symptoms or behavior changes if relevant.
+            </p>
+          </details>
+        </div>
+      </section>
+    </main>
+    <footer class="footer-shell">
+      <div class="inner footer-row" style="padding: 24px 24px 28px">
+        <div class="footer-brand">
+          <div class="logo" aria-hidden="true">H</div>
+          <div>
+            <strong>Harbor Animal Clinic</strong>
+            <p style="color: var(--muted)">Newport, RI</p>
+          </div>
+        </div>
+        <nav aria-label="Footer navigation">
+          <a href="#">Services</a>
+          <a href="#">New clients</a>
+          <a href="#">Contact</a>
+        </nav>
+        <div class="social" aria-label="Social media links">
+          <a href="#" aria-label="Instagram">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              <rect
+                x="3"
+                y="3"
+                width="18"
+                height="18"
+                rx="5"
+                stroke="currentColor"
+                stroke-width="2"
+              ></rect>
+              <circle
+                cx="12"
+                cy="12"
+                r="4"
+                stroke="currentColor"
+                stroke-width="2"
+              ></circle>
+              <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"></circle>
+            </svg>
+          </a>
+          <a href="#" aria-label="Facebook">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                d="M13.5 21v-8h2.7l.4-3h-3.1V8.1c0-.9.3-1.6 1.7-1.6H17V3.8c-.3 0-1.2-.1-2.4-.1-2.4 0-4.1 1.5-4.1 4.2V10H7.8v3h2.7v8h3z"
+              ></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

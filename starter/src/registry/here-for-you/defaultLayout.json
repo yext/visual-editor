@@ -1,0 +1,525 @@
+{
+  "root": {
+    "props": {
+      "title": {
+        "field": "name",
+        "constantValue": "Here For You Pages",
+        "constantValueEnabled": false
+      },
+      "description": {
+        "field": "description",
+        "constantValue": "",
+        "constantValueEnabled": false
+      }
+    }
+  },
+  "content": [
+    {
+      "type": "HereForYouHeaderSection",
+      "props": {
+        "id": "HereForYouHeaderSection-3f9ff48c-25fb-4bcb-a7e4-4fa6469901e5",
+        "brandLabel": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Harbor Physical Therapy",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#203446",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "brandLink": "#",
+        "navLinks": [
+          {
+            "label": "Conditions",
+            "link": "#",
+            "isPrimary": false
+          },
+          {
+            "label": "New patients",
+            "link": "#",
+            "isPrimary": false
+          },
+          {
+            "label": "Insurance",
+            "link": "#",
+            "isPrimary": false
+          },
+          {
+            "label": "Request evaluation",
+            "link": "#",
+            "isPrimary": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "HereForYouHeroSection",
+      "props": {
+        "id": "HereForYouHeroSection-8bd84056-21d1-42d3-ba25-578b32bce8a8",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Harbor Physical Therapy",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 80,
+          "fontColor": "#203446",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "location": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Providence, RI",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#2d8a87",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "status": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "A supportive neighborhood clinic for recovery, strength rebuilding, and return-to-daily-life treatment plans that feel clear from day one.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#667685",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "heroImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1400&q=80"
+          },
+          "constantValueEnabled": true
+        },
+        "ctas": [
+          {
+            "label": "Request evaluation",
+            "link": "#",
+            "isPrimary": true
+          },
+          {
+            "label": "Get directions",
+            "link": "#",
+            "isPrimary": false
+          }
+        ]
+      }
+    },
+    {
+      "type": "HereForYouCoreInfoSection",
+      "props": {
+        "id": "HereForYouCoreInfoSection-949d1b11-3f62-4876-bf9a-8a24a0e54b87",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Core information",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 35,
+          "fontColor": "#203446",
+          "fontWeight": 600,
+          "textTransform": "normal"
+        },
+        "visitHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Visit",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 20,
+          "fontColor": "#203446",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "directionsCta": {
+          "label": "Get directions to this clinic",
+          "link": "#"
+        },
+        "callHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Call",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 20,
+          "fontColor": "#203446",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "emailCta": {
+          "label": "hello@harborpt.com",
+          "link": "mailto:hello@harborpt.com"
+        },
+        "hoursHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Hours",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 20,
+          "fontColor": "#203446",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "focusHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Focus areas",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 20,
+          "fontColor": "#203446",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "focusItems": [
+          {
+            "copy": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Post-op recovery",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#203446",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "copy": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Back and neck pain",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#203446",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "copy": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Return-to-sport plans",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#203446",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "HereForYouAboutSection",
+      "props": {
+        "id": "HereForYouAboutSection-3dca0032-f58d-4a7e-a4ef-464d030fe439",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Recovery plans that stay practical and personal",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 35,
+          "fontColor": "#203446",
+          "fontWeight": 600,
+          "textTransform": "normal"
+        },
+        "bulletItems": [
+          {
+            "copy": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Start with a clear evaluation and a plan that explains what improvement should look like week by week.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#203446",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "copy": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Balance hands-on treatment, guided exercise, and everyday movement strategies that fit real schedules.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#203446",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "copy": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Adjust treatment as progress changes rather than locking every patient into the same sequence.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#203446",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "HereForYouPromoSection",
+      "props": {
+        "id": "HereForYouPromoSection-cb857da7-c88a-4f30-bab5-e7b7b04111fd",
+        "image": {
+          "field": "",
+          "constantValue": {
+            "url": "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=1200&q=80"
+          },
+          "constantValueEnabled": true
+        },
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "New patient evaluations available within the week",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 35,
+          "fontColor": "#203446",
+          "fontWeight": 600,
+          "textTransform": "normal"
+        },
+        "body": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "The clinic keeps room in the schedule for patients who need to get started quickly after surgery, injury, or a sudden pain flare-up.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#203446",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "cta": {
+          "label": "See intake steps",
+          "link": "#"
+        }
+      }
+    },
+    {
+      "type": "HereForYouReviewsSection",
+      "props": {
+        "id": "HereForYouReviewsSection-8d93fd8c-5ef2-4071-ad04-e9e69433a94c",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Patient reviews",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 35,
+          "fontColor": "#203446",
+          "fontWeight": 600,
+          "textTransform": "normal"
+        },
+        "score": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "4.9",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 45,
+          "fontColor": "#2d8a87",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "summary": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Average local rating for clarity, friendliness, and treatment progress.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#203446",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "reviewCards": [
+          {
+            "quote": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "\"The pace felt realistic and encouraging. I always understood what we were working on and why.\"",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#203446",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "quote": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "\"It never felt generic. The plan changed as I got stronger instead of just repeating the same set every visit.\"",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#203446",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "HereForYouFooterSection",
+      "props": {
+        "id": "HereForYouFooterSection-62c013c6-86a7-4a8f-9a00-16959f2c5803",
+        "brandLabel": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Harbor Physical Therapy",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#203446",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "descriptor": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Providence physical therapy clinic",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#667685",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "navLinks": [
+          {
+            "label": "Conditions",
+            "link": "#"
+          },
+          {
+            "label": "New patients",
+            "link": "#"
+          },
+          {
+            "label": "Contact",
+            "link": "#"
+          }
+        ],
+        "socialLinks": [
+          {
+            "iconText": "f",
+            "link": "#",
+            "ariaLabel": "Harbor Physical Therapy on Facebook"
+          },
+          {
+            "iconText": "ig",
+            "link": "#",
+            "ariaLabel": "Harbor Physical Therapy on Instagram"
+          },
+          {
+            "iconText": "in",
+            "link": "#",
+            "ariaLabel": "Harbor Physical Therapy on LinkedIn"
+          }
+        ]
+      }
+    }
+  ],
+  "zones": {}
+}

@@ -1,0 +1,771 @@
+{
+  "root": {
+    "props": {
+      "title": {
+        "field": "name",
+        "constantValue": "Coastal Care Pages",
+        "constantValueEnabled": false
+      },
+      "description": {
+        "field": "description",
+        "constantValue": "",
+        "constantValueEnabled": false
+      }
+    }
+  },
+  "content": [
+    {
+      "type": "CoastalCareHeaderSection",
+      "props": {
+        "id": "CoastalCareHeaderSection-71bedca3-cece-4658-8b71-a8d061ca4eaf",
+        "brandLink": {
+          "label": "Harbor Animal Clinic",
+          "link": "#"
+        },
+        "navigationLinks": [
+          {
+            "label": "Services",
+            "link": "#",
+            "variant": "text"
+          },
+          {
+            "label": "New clients",
+            "link": "#",
+            "variant": "text"
+          },
+          {
+            "label": "Care team",
+            "link": "#",
+            "variant": "text"
+          },
+          {
+            "label": "Book appointment",
+            "link": "#",
+            "variant": "solid"
+          }
+        ]
+      }
+    },
+    {
+      "type": "CoastalCareHeroSection",
+      "props": {
+        "id": "CoastalCareHeroSection-4b21cfe2-0ca7-4890-9464-5a24be6833ab",
+        "backgroundImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&w=1600&q=80",
+            "width": 1600,
+            "height": 1067
+          },
+          "constantValueEnabled": true
+        },
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Harbor Animal Clinic",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 80,
+          "fontColor": "#183347",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "location": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Newport, RI",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#2d6f83",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "status": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "A neighborhood veterinary clinic for checkups, same-week sick visits, and preventive care that feels calm for both pets and people.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#5f7684",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "primaryCta": {
+          "label": "Book appointment",
+          "link": "#"
+        },
+        "secondaryCta": {
+          "label": "Get directions",
+          "link": "#"
+        }
+      }
+    },
+    {
+      "type": "CoastalCareCoreInfoSection",
+      "props": {
+        "id": "CoastalCareCoreInfoSection-a648fe75-5c99-4667-b2f3-fb79a7ec03ed",
+        "sectionHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Core information",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 35,
+          "fontColor": "#183347",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "visitHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Visit",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#183347",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "callHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Call",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#183347",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "hoursHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Hours",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#183347",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "focusHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Care focus",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#183347",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "directionsCta": {
+          "label": "Get directions to this clinic",
+          "link": "#"
+        },
+        "emailCta": {
+          "label": "hello@harboranimalclinic.com",
+          "link": "mailto:hello@harboranimalclinic.com"
+        },
+        "careFocusItems": [
+          {
+            "text": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Wellness visits",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#183347",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "text": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Dental care",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#183347",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "text": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Puppy and kitten plans",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#183347",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "CoastalCareAboutSection",
+      "props": {
+        "id": "CoastalCareAboutSection-ad48c9bd-546b-4b58-bdfd-166c2d5a2c83",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Care that keeps the visit clear and low-stress",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 35,
+          "fontColor": "#183347",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "bulletItems": [
+          {
+            "text": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Appointments are paced so clients have time to ask questions before they leave.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#183347",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "text": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Preventive care, diagnostics, and follow-up planning stay coordinated in one local office.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#183347",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "text": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "New client visits include practical care guidance rather than a rushed handoff.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#183347",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "CoastalCareServicesSection",
+      "props": {
+        "id": "CoastalCareServicesSection-268d99f5-8dbb-486f-bc69-67980151f755",
+        "sectionHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Services",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 35,
+          "fontColor": "#183347",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "services": [
+          {
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=1200&q=80",
+                "width": 1200,
+                "height": 800
+              },
+              "constantValueEnabled": true
+            },
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Preventive visits",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 18,
+              "fontColor": "#183347",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Routine wellness exams, vaccines, and seasonal preventive plans.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#5f7684",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "See details",
+              "link": "#"
+            }
+          },
+          {
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&fit=crop&w=1200&q=80",
+                "width": 1200,
+                "height": 800
+              },
+              "constantValueEnabled": true
+            },
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Same-week care",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 18,
+              "fontColor": "#183347",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Reserved scheduling space for sudden symptoms and urgent follow-up needs.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#5f7684",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "See details",
+              "link": "#"
+            }
+          },
+          {
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=1200&q=80",
+                "width": 1200,
+                "height": 800
+              },
+              "constantValueEnabled": true
+            },
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Dental and long-term care",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 18,
+              "fontColor": "#183347",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Oral health support and treatment plans for pets who need ongoing attention.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#5f7684",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "See details",
+              "link": "#"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "CoastalCareReviewsSection",
+      "props": {
+        "id": "CoastalCareReviewsSection-70948c0a-eecc-4797-b1cd-7340ec6cb963",
+        "sectionHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Client reviews",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 35,
+          "fontColor": "#183347",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "score": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "4.9",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 45,
+          "fontColor": "#2d6f83",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "summary": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Average local review rating from pet owners who value calmer visits, clear instructions, and consistent follow-up.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#5f7684",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "reviews": [
+          {
+            "quote": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "“The office feels organized without being stiff, and we always leave knowing what the next step is.”",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#183347",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "author": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Pet owner",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#183347",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "context": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Wellness care",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#183347",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "quote": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "“They made a nervous first visit much easier and explained the care plan in a way that felt practical.”",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#183347",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "author": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Pet owner",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#183347",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "context": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "New client visit",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#183347",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "CoastalCareFaqSection",
+      "props": {
+        "id": "CoastalCareFaqSection-2a404422-8a7a-4137-b292-d3c4b96709ea",
+        "sectionHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "FAQs",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 35,
+          "fontColor": "#183347",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "faqs": [
+          {
+            "question": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Do you accept new clients?",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#183347",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "answer": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Yes. New client appointments are kept available throughout the month for preventive and ongoing care.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#5f7684",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "question": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Can I book a sick visit quickly?",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#183347",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "answer": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "The clinic keeps some same-week appointment capacity for pets who need to be seen sooner.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#5f7684",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "question": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "What should I bring to the first visit?",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#183347",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "answer": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Bring any recent records, medication details, and a short history of symptoms or behavior changes if relevant.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#5f7684",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "CoastalCareFooterSection",
+      "props": {
+        "id": "CoastalCareFooterSection-109c4fb2-79ab-42d6-929d-58c1edef0093",
+        "brandLink": {
+          "label": "Harbor Animal Clinic",
+          "link": "#"
+        },
+        "location": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Newport, RI",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 14,
+          "fontColor": "#5f7684",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "navigationLinks": [
+          {
+            "label": "Services",
+            "link": "#"
+          },
+          {
+            "label": "New clients",
+            "link": "#"
+          },
+          {
+            "label": "Contact",
+            "link": "#"
+          }
+        ],
+        "socialLinks": [
+          {
+            "label": "Instagram",
+            "link": "#",
+            "icon": "instagram"
+          },
+          {
+            "label": "Facebook",
+            "link": "#",
+            "icon": "facebook"
+          }
+        ]
+      }
+    }
+  ],
+  "zones": {}
+}

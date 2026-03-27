@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stillpoint Wellness Studio | Yoga and Recovery in Seattle, WA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #101418;
+        --stone: #5f666d;
+        --fog: #f4f5f6;
+        --linen: #ece6df;
+        --blue: #7f96ac;
+        --line: #d9dde1;
+        --white: #ffffff;
+        --r-sm: 0px;
+        --r-lg: 4px;
+        --s-4: 4px;
+        --s-8: 8px;
+        --s-12: 12px;
+        --s-16: 16px;
+        --s-20: 20px;
+        --s-24: 24px;
+        --s-32: 32px;
+        --s-40: 40px;
+        --s-48: 48px;
+        --page: 1024px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: "Inter", sans-serif;
+        font-size: 1em;
+        line-height: 1.55;
+        color: var(--ink);
+        background: var(--white);
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+      h1,
+      h2 {
+        font-family: "Cormorant Garamond", serif;
+        line-height: 0.94;
+        letter-spacing: -0.03em;
+      }
+      a {
+        color: var(--ink);
+      }
+      a:focus-visible,
+      summary:focus-visible {
+        outline: 3px solid var(--ink);
+        outline-offset: 3px;
+      }
+      .skip-link {
+        position: absolute;
+        left: 16px;
+        top: 16px;
+        transform: translateY(-180%);
+        background: var(--ink);
+        color: var(--white);
+        padding: 10px 14px;
+        text-decoration: none;
+        border-radius: 999px;
+      }
+      .skip-link:focus-visible {
+        transform: translateY(0);
+      }
+      .header-shell,
+      .footer-shell {
+        width: 100%;
+        background: var(--white);
+        border-bottom: 1px solid var(--line);
+      }
+      .footer-shell {
+        border-top: 1px solid var(--line);
+        border-bottom: 0;
+        margin-top: 64px;
+      }
+      .inner {
+        max-width: var(--page);
+        margin: 0 auto;
+        padding: 0 var(--s-24);
+      }
+      .header-row,
+      .footer-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--s-24);
+        flex-wrap: wrap;
+      }
+      .header-row {
+        padding: 22px 0;
+      }
+      .brand-lockup,
+      .footer-brand {
+        display: flex;
+        align-items: center;
+        gap: var(--s-12);
+      }
+      .logo {
+        width: 38px;
+        height: 38px;
+        border: 1px solid var(--ink);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+      }
+      nav {
+        display: flex;
+        gap: var(--s-20);
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      nav a {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+        color: inherit;
+      }
+      .button {
+        min-height: 46px;
+        padding: 0 18px;
+        border: 1px solid var(--ink);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-weight: 600;
+        color: var(--ink);
+        background: transparent;
+      }
+      .button-solid {
+        background: var(--ink);
+        color: var(--white);
+      }
+      main {
+        display: grid;
+        row-gap: 48px;
+      }
+      main > section {
+        width: 100%;
+        max-width: var(--page);
+        margin: 12px auto;
+        padding: 0 var(--s-24);
+      }
+      .hero {
+        padding-top: 40px;
+        padding-bottom: 24px;
+        display: grid;
+        grid-template-columns: 0.92fr 1.08fr;
+        gap: var(--s-32);
+        align-items: stretch;
+      }
+      .hero-media {
+        min-height: 430px;
+        overflow: hidden;
+        border-radius: var(--r-lg);
+      }
+      .hero-media img,
+      .gallery-card img,
+      .promo-background img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .hero-copy {
+        background: var(--fog);
+        border: 1px solid var(--line);
+        padding: var(--s-32);
+        display: grid;
+        align-content: center;
+        gap: var(--s-16);
+      }
+      .hero h1 {
+        font-size: clamp(3rem, 6vw, 5rem);
+      }
+      .hero-location {
+        color: var(--blue);
+        font-weight: 700;
+        font-size: 1.15rem;
+      }
+      .hero-status {
+        color: var(--stone);
+        max-width: 40ch;
+      }
+      .cta-row {
+        display: flex;
+        gap: var(--s-12);
+        flex-wrap: wrap;
+      }
+      .section-heading {
+        margin-bottom: 24px;
+      }
+      .section-heading h2 {
+        font-size: 2.35rem;
+      }
+      .core-info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1.1fr;
+        gap: var(--s-24);
+        padding-top: var(--s-8);
+      }
+      .core-block {
+        display: grid;
+        gap: var(--s-12);
+        min-width: 0;
+      }
+      .core-block a,
+      .core-block p {
+        min-width: 0;
+      }
+      .info-link {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: inline-block;
+        max-width: 100%;
+      }
+      .gallery-grid {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr 0.85fr;
+        gap: var(--s-20);
+      }
+      .gallery-card {
+        min-height: 280px;
+        overflow: hidden;
+        border-radius: var(--r-lg);
+        background: var(--fog);
+      }
+      .promo-background {
+        position: relative;
+        min-height: 360px;
+        overflow: hidden;
+        border-radius: var(--r-lg);
+        background: var(--ink);
+      }
+      .promo-background img {
+        position: absolute;
+        inset: 0;
+      }
+      .promo-overlay {
+        position: relative;
+        z-index: 1;
+        max-width: 460px;
+        margin: 32px;
+        background: rgba(255, 255, 255, 0.92);
+        padding: var(--s-24);
+        display: grid;
+        gap: var(--s-16);
+        border-radius: var(--r-lg);
+      }
+      .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--s-20);
+      }
+      .card {
+        border-top: 1px solid var(--ink);
+        padding-top: var(--s-16);
+        display: grid;
+        gap: var(--s-12);
+      }
+      .card h3 {
+        font-family: "Inter", sans-serif;
+        font-size: 1.05rem;
+        font-weight: 700;
+      }
+      details {
+        border-top: 1px solid var(--line);
+        padding: var(--s-20) 0;
+      }
+      summary {
+        list-style: none;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        gap: var(--s-16);
+        font-weight: 700;
+      }
+      summary::-webkit-details-marker {
+        display: none;
+      }
+      summary::after {
+        content: "+";
+      }
+      details[open] summary::after {
+        content: "−";
+      }
+      details p {
+        margin-top: var(--s-12);
+        color: var(--stone);
+        max-width: 65ch;
+      }
+      .faq-list {
+        border-bottom: 1px solid var(--line);
+      }
+      .social {
+        display: flex;
+        gap: var(--s-12);
+        flex-wrap: wrap;
+      }
+      .social a {
+        width: 40px;
+        height: 40px;
+        border: 1px solid var(--line);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: var(--ink);
+      }
+      @media (max-width: 900px) {
+        .hero,
+        .core-info-grid,
+        .gallery-grid,
+        .cards-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <header class="header-shell">
+      <div class="inner">
+        <div class="header-row">
+          <div class="brand-lockup">
+            <div class="logo" aria-hidden="true">S</div>
+            <a
+              href="#"
+              style="text-decoration: none; color: inherit; font-weight: 700"
+              >Stillpoint Wellness Studio</a
+            >
+          </div>
+          <nav aria-label="Primary navigation">
+            <a href="#">Classes</a>
+            <a href="#">Memberships</a>
+            <a href="#">Visit</a>
+            <a href="#" class="button">Book a class</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+    <main id="main-content">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-media" aria-hidden="true">
+          <img
+            src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&amp;fit=crop&amp;w=1400&amp;q=80"
+            alt=""
+          />
+        </div>
+        <div class="hero-copy">
+          <h1 id="hero-title">Stillpoint Wellness Studio</h1>
+          <p class="hero-location">Seattle, WA</p>
+          <p class="hero-status">
+            A quiet urban studio for yoga, breathwork, and recovery sessions,
+            with a pace that feels calm from the first step in.
+          </p>
+          <div class="cta-row">
+            <a href="#" class="button button-solid">Book a class</a>
+            <a href="#" class="button">See today's schedule</a>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="info-title">
+        <div class="section-heading">
+          <h2 id="info-title">Core information</h2>
+        </div>
+        <div class="core-info-grid">
+          <div class="core-block">
+            <h3>Visit</h3>
+            <p>58 Cedar Street</p>
+            <p>Seattle, WA 98109</p>
+            <a href="#" class="info-link">Get directions to the studio</a>
+          </div>
+          <div class="core-block">
+            <h3>Connect</h3>
+            <a href="tel:+12065550144" class="info-link">(206) 555-0144</a>
+            <a href="mailto:hello@stillpointstudio.com" class="info-link"
+              >hello@stillpointstudio.com</a
+            >
+          </div>
+          <div class="core-block">
+            <h3>Hours</h3>
+            <p>Daily: 6:00 AM - 8:30 PM</p>
+            <p>Front desk support starts 30 minutes before the first class</p>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="gallery-title">
+        <div class="section-heading">
+          <h2 id="gallery-title">Studio atmosphere</h2>
+        </div>
+        <div class="gallery-grid">
+          <div class="gallery-card" aria-hidden="true">
+            <img
+              src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+              alt=""
+            />
+          </div>
+          <div class="gallery-card" aria-hidden="true">
+            <img
+              src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+              alt=""
+            />
+          </div>
+          <div class="gallery-card" aria-hidden="true">
+            <img
+              src="https://images.unsplash.com/photo-1510894347713-fc3ed6fdf539?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+              alt=""
+            />
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="promo-title">
+        <div class="promo-background">
+          <img
+            src="https://images.unsplash.com/photo-1545389336-cf090694435e?auto=format&amp;fit=crop&amp;w=1600&amp;q=80"
+            alt=""
+          />
+          <div class="promo-overlay">
+            <div class="section-heading" style="margin-bottom: 0">
+              <h2 id="promo-title">
+                Evening reset classes with slower pacing and longer holds
+              </h2>
+            </div>
+            <p>
+              Weeknight sessions are designed for people coming straight from
+              work who want to unwind without stepping into a fast, high-energy
+              room.
+            </p>
+            <a href="#" class="button">See evening classes</a>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="offers-title">
+        <div class="section-heading">
+          <h2 id="offers-title">Ways to begin</h2>
+        </div>
+        <div class="cards-grid">
+          <article class="card">
+            <h3>Intro month</h3>
+            <p>
+              Start with a flexible month of classes so you can try morning,
+              lunch, and evening times before committing.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Small group recovery</h3>
+            <p>
+              Gentler sessions for mobility, breathwork, and decompression after
+              high-stress weeks or travel.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Private guidance</h3>
+            <p>
+              One-on-one sessions for people who want a quieter beginning before
+              joining group classes.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section aria-labelledby="faq-title">
+        <div class="section-heading">
+          <h2 id="faq-title">Studio FAQs</h2>
+        </div>
+        <div class="faq-list">
+          <details>
+            <summary>Is the studio beginner friendly?</summary>
+            <p>
+              Yes. Classes are clearly labeled by pace and intensity, and front
+              desk staff can help you choose a calm starting point.
+            </p>
+          </details>
+          <details>
+            <summary>Do I need to bring my own mat?</summary>
+            <p>
+              No. Mats and basic props are available at the studio, though
+              members are welcome to bring their own setup.
+            </p>
+          </details>
+          <details>
+            <summary>Can I book a first class online?</summary>
+            <p>
+              Yes. The schedule supports online booking, and confirmation emails
+              include arrival notes and studio etiquette details.
+            </p>
+          </details>
+        </div>
+      </section>
+    </main>
+    <footer class="footer-shell">
+      <div class="inner footer-row" style="padding: 24px 24px 28px">
+        <div class="footer-brand">
+          <div class="logo" aria-hidden="true">S</div>
+          <div>
+            <strong>Stillpoint Wellness Studio</strong>
+            <p style="color: var(--stone)">Seattle yoga and recovery studio</p>
+          </div>
+        </div>
+        <nav aria-label="Footer navigation">
+          <a href="#">Classes</a>
+          <a href="#">Memberships</a>
+          <a href="#">Contact</a>
+        </nav>
+        <div class="social" aria-label="Social media links">
+          <a href="#" aria-label="Stillpoint Wellness Studio on Instagram"
+            >ig</a
+          >
+          <a href="#" aria-label="Stillpoint Wellness Studio on TikTok">tt</a>
+          <a href="#" aria-label="Stillpoint Wellness Studio on YouTube">yt</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

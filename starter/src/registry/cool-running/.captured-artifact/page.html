@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CityPoint ATM | Cash Access in Charlotte, NC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #14202c;
+        --slate: #5e6d7b;
+        --line: #dbe2ea;
+        --panel: #f4f8fb;
+        --accent: #1677c9;
+        --accent-2: #0e446d;
+        --white: #ffffff;
+        --r-sm: 6px;
+        --r-lg: 14px;
+        --s-4: 4px;
+        --s-8: 8px;
+        --s-12: 12px;
+        --s-16: 16px;
+        --s-20: 20px;
+        --s-24: 24px;
+        --s-32: 32px;
+        --s-40: 40px;
+        --s-48: 48px;
+        --page: 1024px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: "IBM Plex Sans", sans-serif;
+        font-size: 1em;
+        line-height: 1.5;
+        color: var(--ink);
+        background: var(--white);
+      }
+      h1,
+      h2,
+      h3,
+      p,
+      ul {
+        margin: 0;
+      }
+      h1,
+      h2 {
+        font-family: "Space Grotesk", sans-serif;
+        line-height: 0.98;
+        letter-spacing: -0.03em;
+      }
+      a {
+        color: var(--accent);
+      }
+      a:focus-visible,
+      summary:focus-visible {
+        outline: 3px solid var(--ink);
+        outline-offset: 3px;
+      }
+      .skip-link {
+        position: absolute;
+        left: 16px;
+        top: 16px;
+        transform: translateY(-180%);
+        background: var(--ink);
+        color: var(--white);
+        padding: 10px 14px;
+        text-decoration: none;
+        border-radius: 999px;
+      }
+      .skip-link:focus-visible {
+        transform: translateY(0);
+      }
+      .header-shell,
+      .footer-shell {
+        width: 100%;
+        background: var(--white);
+        border-bottom: 1px solid var(--line);
+      }
+      .header-shell {
+        margin-bottom: var(--s-24);
+      }
+      .footer-shell {
+        border-top: 1px solid var(--line);
+        border-bottom: 0;
+        margin-top: 64px;
+        padding-top: var(--s-24);
+      }
+      .inner {
+        max-width: var(--page);
+        margin: 0 auto;
+        padding: 0 var(--s-24);
+      }
+      .utility-row,
+      .header-row,
+      .footer-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--s-24);
+        flex-wrap: wrap;
+      }
+      .utility-row {
+        padding: 10px 0;
+        font-size: 0.92rem;
+        color: var(--slate);
+      }
+      .header-row {
+        padding: 18px 0;
+      }
+      .brand-lockup,
+      .footer-brand {
+        display: flex;
+        align-items: center;
+        gap: var(--s-12);
+      }
+      .logo {
+        width: 40px;
+        height: 40px;
+        border-radius: var(--r-sm);
+        background: var(--accent-2);
+        color: var(--white);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+      }
+      nav {
+        display: flex;
+        align-items: center;
+        gap: var(--s-20);
+        flex-wrap: wrap;
+      }
+      nav a {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        color: inherit;
+        text-decoration: none;
+      }
+      .button {
+        min-height: 46px;
+        padding: 0 18px;
+        border-radius: 999px;
+        border: 2px solid var(--accent);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-weight: 700;
+        color: var(--accent);
+        background: transparent;
+      }
+      .button-solid {
+        background: var(--accent);
+        color: var(--white);
+      }
+      main {
+        display: block;
+      }
+      main > section {
+        width: 100%;
+        max-width: var(--page);
+        margin: 0 auto;
+        padding: 0 var(--s-24);
+      }
+      .major-section {
+        padding-top: var(--s-24);
+        padding-bottom: var(--s-24);
+      }
+      .hero {
+        padding-top: 24px;
+        padding-bottom: 24px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: var(--r-lg);
+        display: grid;
+        gap: var(--s-20);
+      }
+      .hero h1 {
+        font-size: clamp(2.8rem, 6vw, 4.5rem);
+      }
+      .hero-location {
+        color: var(--accent-2);
+        font-weight: 700;
+        font-size: 1.15rem;
+      }
+      .hero-status {
+        color: var(--slate);
+        max-width: 42ch;
+      }
+      .cta-row {
+        display: flex;
+        gap: var(--s-12);
+        flex-wrap: wrap;
+      }
+      .section-heading {
+        margin-bottom: 24px;
+      }
+      .section-heading h2 {
+        font-size: 2rem;
+      }
+      .core-info-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--s-24);
+        padding-top: var(--s-8);
+      }
+      .core-block {
+        display: grid;
+        gap: var(--s-12);
+        min-width: 0;
+      }
+      .core-block a,
+      .core-block p {
+        min-width: 0;
+      }
+      .info-link {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: inline-block;
+        max-width: 100%;
+      }
+      .cards-grid,
+      .nearby-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--s-20);
+      }
+      .card,
+      .nearby-card {
+        border: 1px solid var(--line);
+        border-radius: var(--r-lg);
+        padding: var(--s-20);
+        display: grid;
+        gap: var(--s-16);
+        background: var(--white);
+      }
+      .card h3,
+      .nearby-card h3 {
+        font-family: "IBM Plex Sans", sans-serif;
+        font-size: 1.02rem;
+        font-weight: 700;
+      }
+      .section-dark {
+        background: var(--accent-2);
+        border: 1px solid #0a3657;
+        padding-top: var(--s-24);
+        padding-bottom: var(--s-24);
+        color: var(--white);
+        max-width: none;
+        width: 100%;
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .section-dark .section-inner {
+        max-width: var(--page);
+        margin: 0 auto;
+        padding: 0 var(--s-24);
+      }
+      .section-dark .section-heading h2,
+      .section-dark h3,
+      .section-dark p,
+      .section-dark a,
+      .section-dark summary {
+        color: var(--white);
+      }
+      .section-dark .card,
+      .section-dark .nearby-card,
+      .section-dark details {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.18);
+      }
+      .section-dark .button {
+        border-color: var(--white);
+        color: var(--white);
+      }
+      .section-dark .button-solid {
+        background: var(--white);
+        color: var(--accent-2);
+      }
+      .banner {
+        display: flex;
+        justify-content: space-between;
+        gap: var(--s-16);
+        align-items: center;
+        flex-wrap: wrap;
+        background: #eef6fd;
+        border: 1px solid var(--line);
+        border-radius: var(--r-sm);
+        padding: 12px 16px;
+        margin-top: var(--s-24);
+        margin-bottom: var(--s-24);
+      }
+      details {
+        border: 1px solid var(--line);
+        border-radius: var(--r-sm);
+        padding: var(--s-20);
+        background: var(--white);
+      }
+      summary {
+        list-style: none;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        gap: var(--s-16);
+        font-weight: 700;
+      }
+      summary::-webkit-details-marker {
+        display: none;
+      }
+      summary::after {
+        content: "+";
+      }
+      details[open] summary::after {
+        content: "−";
+      }
+      details p {
+        margin-top: var(--s-12);
+        color: var(--slate);
+      }
+      .faq-list {
+        display: grid;
+        gap: var(--s-16);
+      }
+      .social {
+        display: flex;
+        gap: var(--s-12);
+        flex-wrap: wrap;
+      }
+      .social a {
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: var(--accent-2);
+      }
+      @media (max-width: 900px) {
+        .core-info-grid,
+        .cards-grid,
+        .nearby-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <header class="header-shell">
+      <div class="inner">
+        <div class="utility-row">
+          <nav aria-label="Utility navigation">
+            <a href="#">Nearby branches</a>
+            <a href="#">Support</a>
+          </nav>
+          <div>Drive-up ATM with 24/7 access</div>
+        </div>
+        <div class="header-row">
+          <div class="brand-lockup">
+            <div class="logo" aria-hidden="true">C</div>
+            <a
+              href="#"
+              style="text-decoration: none; color: inherit; font-weight: 700"
+              >CityPoint ATM</a
+            >
+          </div>
+          <nav aria-label="Primary navigation">
+            <a href="#">Services</a>
+            <a href="#">Accessibility</a>
+            <a href="#">Nearby ATMs</a>
+            <a href="#" class="button">Get directions</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+    <main id="main-content">
+      <section class="hero major-section" aria-labelledby="hero-title">
+        <h1 id="hero-title">CityPoint ATM</h1>
+        <p class="hero-location">Charlotte, NC</p>
+        <p class="hero-status">
+          A straightforward cash-access location with drive-up access,
+          after-hours lighting, and quick links for directions, nearby branch
+          support, and deposit availability.
+        </p>
+        <div class="cta-row">
+          <a href="#" class="button button-solid">Get directions</a>
+          <a href="#" class="button">Nearby branch support</a>
+        </div>
+      </section>
+
+      <section class="major-section" aria-labelledby="info-title">
+        <div class="section-heading">
+          <h2 id="info-title">Core information</h2>
+        </div>
+        <div class="core-info-grid">
+          <div class="core-block">
+            <h3>Location</h3>
+            <p>410 Trade Street</p>
+            <p>Charlotte, NC 28202</p>
+            <a href="#" class="info-link">Get directions to this ATM</a>
+          </div>
+          <div class="core-block">
+            <h3>Support</h3>
+            <a href="tel:+17045550188" class="info-link">(704) 555-0188</a>
+            <a href="mailto:support@citypointbank.com" class="info-link"
+              >support@citypointbank.com</a
+            >
+            <p>Customer help for card or access questions</p>
+          </div>
+          <div class="core-block">
+            <h3>Availability</h3>
+            <p>ATM access: 24/7</p>
+            <p>Drive-up lane: 24/7</p>
+            <p>Cash deposit availability varies by card type</p>
+          </div>
+        </div>
+      </section>
+
+      <section aria-label="ATM update">
+        <div class="banner">
+          <p>
+            This machine supports cash withdrawal, balance checks, and
+            card-based deposits.
+          </p>
+          <a href="#">See supported transactions</a>
+        </div>
+      </section>
+
+      <section
+        class="section-dark major-section"
+        aria-labelledby="services-title"
+      >
+        <div class="section-inner">
+          <div class="section-heading">
+            <h2 id="services-title">ATM details</h2>
+          </div>
+          <div class="cards-grid">
+            <article class="card">
+              <h3>Drive-up access</h3>
+              <p>
+                Designed for quick stop access with clear lane markings and
+                after-hours visibility.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Card and mobile wallet support</h3>
+              <p>
+                Tap-enabled entry and card-based withdrawals for faster access
+                at the machine.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Nearby assistance</h3>
+              <p>
+                Branch support is available nearby if you need additional help
+                with account questions.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="section-dark major-section"
+        aria-labelledby="nearby-title"
+      >
+        <div class="section-inner">
+          <div class="section-heading">
+            <h2 id="nearby-title">Nearby locations</h2>
+          </div>
+          <div class="nearby-grid">
+            <article class="nearby-card">
+              <h3>CityPoint Branch</h3>
+              <p>Tryon Street, Charlotte</p>
+              <p>Open until 5:00 PM</p>
+              <a href="#" aria-label="View the Tryon Street CityPoint Branch"
+                >View branch</a
+              >
+            </article>
+            <article class="nearby-card">
+              <h3>CityPoint ATM</h3>
+              <p>South End, Charlotte</p>
+              <p>24/7 access</p>
+              <a href="#" aria-label="View the South End CityPoint ATM"
+                >View ATM</a
+              >
+            </article>
+            <article class="nearby-card">
+              <h3>CityPoint ATM</h3>
+              <p>Uptown East, Charlotte</p>
+              <p>24/7 access</p>
+              <a href="#" aria-label="View the Uptown East CityPoint ATM"
+                >View ATM</a
+              >
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-dark major-section" aria-labelledby="faq-title">
+        <div class="section-inner">
+          <div class="section-heading">
+            <h2 id="faq-title">ATM FAQs</h2>
+          </div>
+          <div class="faq-list">
+            <details>
+              <summary>Is this ATM open at all hours?</summary>
+              <p>
+                Yes. The machine is available 24 hours a day, including
+                overnight access.
+              </p>
+            </details>
+            <details>
+              <summary>Can I make a deposit here?</summary>
+              <p>
+                Yes, deposit support is available for eligible cards and account
+                types.
+              </p>
+            </details>
+            <details>
+              <summary>
+                What if the machine cannot complete my transaction?
+              </summary>
+              <p>
+                Use the listed support number or visit a nearby branch for
+                immediate assistance.
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="footer-shell">
+      <div class="inner footer-row" style="padding: 24px 24px 28px">
+        <div class="footer-brand">
+          <div class="logo" aria-hidden="true">C</div>
+          <div>
+            <strong>CityPoint ATM</strong>
+            <p style="color: var(--slate)">Charlotte cash access location</p>
+          </div>
+        </div>
+        <nav aria-label="Footer navigation">
+          <a href="#">Services</a>
+          <a href="#">Accessibility</a>
+          <a href="#">Support</a>
+        </nav>
+        <div class="social" aria-label="Social media links">
+          <a href="#" aria-label="CityPoint on Facebook">f</a>
+          <a href="#" aria-label="CityPoint on LinkedIn">in</a>
+          <a href="#" aria-label="CityPoint on X">x</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

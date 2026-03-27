@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Harbor Physical Therapy | Physical Therapy in Providence, RI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #203446;
+        --teal: #2d8a87;
+        --mist: #edf8f7;
+        --sand: #f7f2ea;
+        --line: #d7e7e6;
+        --muted: #667685;
+        --white: #ffffff;
+        --r-sm: 16px;
+        --r-lg: 28px;
+        --s-4: 4px;
+        --s-8: 8px;
+        --s-12: 12px;
+        --s-16: 16px;
+        --s-20: 20px;
+        --s-24: 24px;
+        --s-32: 32px;
+        --s-40: 40px;
+        --s-48: 48px;
+        --page: 1024px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: "Manrope", sans-serif;
+        font-size: 1em;
+        line-height: 1.55;
+        color: var(--ink);
+        background: var(--white);
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+      h1,
+      h2 {
+        font-family: "Fraunces", serif;
+        line-height: 1.02;
+        letter-spacing: -0.03em;
+      }
+      a {
+        color: var(--teal);
+      }
+      a:focus-visible,
+      summary:focus-visible {
+        outline: 3px solid var(--ink);
+        outline-offset: 3px;
+      }
+      .skip-link {
+        position: absolute;
+        left: 16px;
+        top: 16px;
+        transform: translateY(-180%);
+        background: var(--ink);
+        color: var(--white);
+        padding: 10px 14px;
+        text-decoration: none;
+        border-radius: 999px;
+      }
+      .skip-link:focus-visible {
+        transform: translateY(0);
+      }
+      .header-shell,
+      .footer-shell {
+        width: 100%;
+        background: var(--white);
+      }
+      .footer-shell {
+        border-top: 1px solid var(--line);
+        margin-top: 64px;
+      }
+      .inner {
+        max-width: var(--page);
+        margin: 0 auto;
+        padding: 0 var(--s-24);
+      }
+      .header-row,
+      .footer-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--s-24);
+        flex-wrap: wrap;
+      }
+      .header-row {
+        padding: 24px 0;
+      }
+      .brand-lockup,
+      .footer-brand {
+        display: flex;
+        align-items: center;
+        gap: var(--s-12);
+      }
+      .logo {
+        width: 42px;
+        height: 42px;
+        border-radius: 999px;
+        background: var(--teal);
+        color: var(--white);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+      }
+      nav {
+        display: flex;
+        align-items: center;
+        gap: var(--s-20);
+        flex-wrap: wrap;
+      }
+      nav a {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+        color: inherit;
+      }
+      .button {
+        min-height: 46px;
+        padding: 0 18px;
+        border-radius: 999px;
+        border: 2px solid var(--teal);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-weight: 700;
+        color: var(--teal);
+        background: transparent;
+      }
+      .button-solid {
+        background: var(--teal);
+        color: var(--white);
+      }
+      main {
+        display: grid;
+        row-gap: 48px;
+      }
+      main > section {
+        width: 100%;
+        max-width: var(--page);
+        margin: 12px auto;
+        padding: 0 var(--s-24);
+      }
+      .section-strip {
+        max-width: none;
+        margin: 12px 0;
+        padding: 24px 0;
+        width: 100%;
+      }
+      .section-strip .section-inner {
+        max-width: var(--page);
+        margin: 0 auto;
+        padding: 0 var(--s-24);
+      }
+      .section-strip-mist {
+        background: var(--mist);
+      }
+      .section-strip-sand {
+        background: var(--sand);
+      }
+      .hero {
+        padding-top: 36px;
+        padding-bottom: 24px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--s-32);
+        align-items: center;
+      }
+      .hero-copy {
+        display: grid;
+        gap: var(--s-16);
+      }
+      .hero h1 {
+        font-size: clamp(3rem, 6vw, 5rem);
+      }
+      .hero-location {
+        color: var(--teal);
+        font-weight: 800;
+        font-size: 1.15rem;
+      }
+      .hero-status {
+        color: var(--muted);
+        max-width: 42ch;
+      }
+      .cta-row {
+        display: flex;
+        gap: var(--s-12);
+        flex-wrap: wrap;
+      }
+      .hero-photo {
+        min-height: 420px;
+        aspect-ratio: 4 / 5;
+        overflow: hidden;
+        border-radius: var(--r-lg);
+        border: 1px solid var(--line);
+      }
+      .hero-photo img,
+      .promo-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .hero-photo img {
+        object-position: 58% 38%;
+      }
+      .section-heading {
+        margin-bottom: 24px;
+      }
+      .section-heading h2 {
+        font-size: 2.2rem;
+      }
+      .core-info-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: var(--s-24);
+        padding-top: var(--s-8);
+      }
+      .core-block {
+        display: grid;
+        gap: var(--s-12);
+        min-width: 0;
+      }
+      .core-block a,
+      .core-block p {
+        min-width: 0;
+      }
+      .info-link {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: inline-block;
+        max-width: 100%;
+      }
+      .about {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: var(--s-32);
+        padding: var(--s-32) 0;
+        align-items: start;
+      }
+      .about-list {
+        display: grid;
+        gap: var(--s-16);
+        padding-left: 18px;
+      }
+      .promo {
+        display: grid;
+        grid-template-columns: 340px 1fr;
+        gap: var(--s-24);
+        align-items: center;
+        padding: var(--s-24) 0;
+      }
+      .promo-photo {
+        min-height: 260px;
+        overflow: hidden;
+        border-radius: var(--r-sm);
+      }
+      .promo-copy {
+        display: grid;
+        gap: var(--s-16);
+      }
+      .reviews {
+        display: grid;
+        grid-template-columns: 0.95fr 1.05fr 1.05fr;
+        gap: var(--s-20);
+      }
+      .review-summary,
+      .review-card {
+        border: 1px solid var(--line);
+        border-radius: var(--r-lg);
+        padding: var(--s-24);
+        display: grid;
+        gap: var(--s-16);
+        background: var(--white);
+      }
+      .review-score {
+        font-size: 2.8rem;
+        color: var(--teal);
+        font-weight: 800;
+      }
+      .social {
+        display: flex;
+        gap: var(--s-12);
+        flex-wrap: wrap;
+      }
+      .social a {
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: var(--teal);
+      }
+      @media (max-width: 900px) {
+        .hero,
+        .core-info-grid,
+        .about,
+        .promo,
+        .reviews {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <header class="header-shell">
+      <div class="inner">
+        <div class="header-row">
+          <div class="brand-lockup">
+            <div class="logo" aria-hidden="true">H</div>
+            <a
+              href="#"
+              style="text-decoration: none; color: inherit; font-weight: 800"
+              >Harbor Physical Therapy</a
+            >
+          </div>
+          <nav aria-label="Primary navigation">
+            <a href="#">Conditions</a>
+            <a href="#">New patients</a>
+            <a href="#">Insurance</a>
+            <a href="#" class="button button-solid">Request evaluation</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+    <main id="main-content">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <h1 id="hero-title">Harbor Physical Therapy</h1>
+          <p class="hero-location">Providence, RI</p>
+          <p class="hero-status">
+            A supportive neighborhood clinic for recovery, strength rebuilding,
+            and return-to-daily-life treatment plans that feel clear from day
+            one.
+          </p>
+          <div class="cta-row">
+            <a href="#" class="button button-solid">Request evaluation</a>
+            <a href="#" class="button">Get directions</a>
+          </div>
+        </div>
+        <div class="hero-photo" aria-hidden="true">
+          <img
+            src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&amp;fit=crop&amp;w=1400&amp;q=80"
+            alt=""
+          />
+        </div>
+      </section>
+
+      <section aria-labelledby="info-title">
+        <div class="section-heading">
+          <h2 id="info-title">Core information</h2>
+        </div>
+        <div class="core-info-grid">
+          <div class="core-block">
+            <h3>Visit</h3>
+            <p>62 Harbor View Road</p>
+            <p>Providence, RI 02903</p>
+            <a href="#" class="info-link">Get directions to this clinic</a>
+          </div>
+          <div class="core-block">
+            <h3>Call</h3>
+            <a href="tel:+14015550161" class="info-link">(401) 555-0161</a>
+            <a href="mailto:hello@harborpt.com" class="info-link"
+              >hello@harborpt.com</a
+            >
+          </div>
+          <div class="core-block">
+            <h3>Hours</h3>
+            <p>Mon-Thu: 7:00 AM - 6:00 PM</p>
+            <p>Fri: 7:00 AM - 4:00 PM</p>
+          </div>
+          <div class="core-block">
+            <h3>Focus areas</h3>
+            <p>Post-op recovery</p>
+            <p>Back and neck pain</p>
+            <p>Return-to-sport plans</p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="section-strip section-strip-mist"
+        aria-labelledby="about-title"
+      >
+        <div class="section-inner">
+          <div class="about">
+            <div class="section-heading" style="margin-bottom: 0">
+              <h2 id="about-title">
+                Recovery plans that stay practical and personal
+              </h2>
+            </div>
+            <ul class="about-list">
+              <li>
+                Start with a clear evaluation and a plan that explains what
+                improvement should look like week by week.
+              </li>
+              <li>
+                Balance hands-on treatment, guided exercise, and everyday
+                movement strategies that fit real schedules.
+              </li>
+              <li>
+                Adjust treatment as progress changes rather than locking every
+                patient into the same sequence.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="section-strip section-strip-sand"
+        aria-labelledby="promo-title"
+      >
+        <div class="section-inner">
+          <div class="promo">
+            <div class="promo-photo" aria-hidden="true">
+              <img
+                src="https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+                alt=""
+              />
+            </div>
+            <div class="promo-copy">
+              <div class="section-heading" style="margin-bottom: 0">
+                <h2 id="promo-title">
+                  New patient evaluations available within the week
+                </h2>
+              </div>
+              <p>
+                The clinic keeps room in the schedule for patients who need to
+                get started quickly after surgery, injury, or a sudden pain
+                flare-up.
+              </p>
+              <a href="#" class="button">See intake steps</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="reviews-title">
+        <div class="section-heading">
+          <h2 id="reviews-title">Patient reviews</h2>
+        </div>
+        <div class="reviews">
+          <article class="review-summary">
+            <p class="review-score">4.9</p>
+            <p>
+              Average local rating for clarity, friendliness, and treatment
+              progress.
+            </p>
+          </article>
+          <article class="review-card">
+            <p>
+              "The pace felt realistic and encouraging. I always understood what
+              we were working on and why."
+            </p>
+          </article>
+          <article class="review-card">
+            <p>
+              "It never felt generic. The plan changed as I got stronger instead
+              of just repeating the same set every visit."
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+    <footer class="footer-shell">
+      <div class="inner footer-row" style="padding: 24px 24px 28px">
+        <div class="footer-brand">
+          <div class="logo" aria-hidden="true">H</div>
+          <div>
+            <strong>Harbor Physical Therapy</strong>
+            <p style="color: var(--muted)">
+              Providence physical therapy clinic
+            </p>
+          </div>
+        </div>
+        <nav aria-label="Footer navigation">
+          <a href="#">Conditions</a>
+          <a href="#">New patients</a>
+          <a href="#">Contact</a>
+        </nav>
+        <div class="social" aria-label="Social media links">
+          <a href="#" aria-label="Harbor Physical Therapy on Facebook">f</a>
+          <a href="#" aria-label="Harbor Physical Therapy on Instagram">ig</a>
+          <a href="#" aria-label="Harbor Physical Therapy on LinkedIn">in</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

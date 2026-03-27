@@ -1,0 +1,757 @@
+{
+  "root": {
+    "props": {
+      "title": {
+        "field": "name",
+        "constantValue": "Cool Running Pages",
+        "constantValueEnabled": false
+      },
+      "description": {
+        "field": "description",
+        "constantValue": "",
+        "constantValueEnabled": false
+      }
+    }
+  },
+  "content": [
+    {
+      "type": "CoolRunningHeaderSection",
+      "props": {
+        "id": "CoolRunningHeaderSection-fff964e3-327a-4610-8d2f-a0f102b6d530",
+        "logoMark": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "C",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 14,
+          "fontColor": "#ffffff",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "brandLink": {
+          "label": "CityPoint ATM",
+          "link": "#"
+        },
+        "utilityMessage": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Drive-up ATM with 24/7 access",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 15,
+          "fontColor": "#5e6d7b",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "utilityLinks": [
+          {
+            "label": "Nearby branches",
+            "link": "#"
+          },
+          {
+            "label": "Support",
+            "link": "#"
+          }
+        ],
+        "primaryLinks": [
+          {
+            "label": "Services",
+            "link": "#",
+            "isButton": false,
+            "isSolid": false
+          },
+          {
+            "label": "Accessibility",
+            "link": "#",
+            "isButton": false,
+            "isSolid": false
+          },
+          {
+            "label": "Nearby ATMs",
+            "link": "#",
+            "isButton": false,
+            "isSolid": false
+          },
+          {
+            "label": "Get directions",
+            "link": "#",
+            "isButton": true,
+            "isSolid": false
+          }
+        ]
+      }
+    },
+    {
+      "type": "CoolRunningHeroSection",
+      "props": {
+        "id": "CoolRunningHeroSection-12f8f622-92c6-4b1b-8df7-6d5c464cb6da",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "CityPoint ATM",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 72,
+          "fontColor": "#14202c",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "location": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Charlotte, NC",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#0e446d",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "description": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "A straightforward cash-access location with drive-up access, after-hours lighting, and quick links for directions, nearby branch support, and deposit availability.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#5e6d7b",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "primaryCta": {
+          "label": "Get directions",
+          "link": "#"
+        },
+        "secondaryCta": {
+          "label": "Nearby branch support",
+          "link": "#"
+        }
+      }
+    },
+    {
+      "type": "CoolRunningCoreInfoSection",
+      "props": {
+        "id": "CoolRunningCoreInfoSection-62174664-ceda-438e-89ab-911d800eb7a4",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Core information",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 32,
+          "fontColor": "#14202c",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "locationHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Location",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#14202c",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "supportHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Support",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#14202c",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "availabilityHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Availability",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#14202c",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "directionsCta": {
+          "label": "Get directions to this ATM",
+          "link": "#"
+        },
+        "supportEmailCta": {
+          "label": "support@citypointbank.com",
+          "link": "mailto:support@citypointbank.com"
+        },
+        "supportDescription": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Customer help for card or access questions",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#14202c",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "driveUpAvailability": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Drive-up lane: 24/7",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#14202c",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "depositAvailability": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Cash deposit availability varies by card type",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#14202c",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        }
+      }
+    },
+    {
+      "type": "CoolRunningUpdateBannerSection",
+      "props": {
+        "id": "CoolRunningUpdateBannerSection-57022cc2-00ea-4edc-a072-3d1ddd5829e4",
+        "message": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "This machine supports cash withdrawal, balance checks, and card-based deposits.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#14202c",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "cta": {
+          "label": "See supported transactions",
+          "link": "#"
+        }
+      }
+    },
+    {
+      "type": "CoolRunningDetailsSection",
+      "props": {
+        "id": "CoolRunningDetailsSection-0aa78090-cf11-42e6-9ab0-59e261905945",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "ATM details",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 32,
+          "fontColor": "#ffffff",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "cards": [
+          {
+            "heading": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Drive-up access",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#ffffff",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "body": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Designed for quick stop access with clear lane markings and after-hours visibility.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#ffffff",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "heading": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Card and mobile wallet support",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#ffffff",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "body": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Tap-enabled entry and card-based withdrawals for faster access at the machine.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#ffffff",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "heading": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Nearby assistance",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#ffffff",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "body": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Branch support is available nearby if you need additional help with account questions.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#ffffff",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "CoolRunningNearbyLocationsSection",
+      "props": {
+        "id": "CoolRunningNearbyLocationsSection-0c271bf5-4a3b-4954-99b5-e00443fdece8",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Nearby locations",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 32,
+          "fontColor": "#ffffff",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "locations": [
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "CityPoint Branch",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#ffffff",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "locality": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Tryon Street, Charlotte",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#ffffff",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "status": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Open until 5:00 PM",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#ffffff",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "View branch",
+              "link": "#"
+            }
+          },
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "CityPoint ATM",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#ffffff",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "locality": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "South End, Charlotte",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#ffffff",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "status": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "24/7 access",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#ffffff",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "View ATM",
+              "link": "#"
+            }
+          },
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "CityPoint ATM",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#ffffff",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "locality": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Uptown East, Charlotte",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#ffffff",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "status": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "24/7 access",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#ffffff",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "View ATM",
+              "link": "#"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "CoolRunningFaqSection",
+      "props": {
+        "id": "CoolRunningFaqSection-4d4ec9bd-f495-4576-b2fa-f9c1afcc977c",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "ATM FAQs",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 32,
+          "fontColor": "#ffffff",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "faqs": [
+          {
+            "question": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Is this ATM open at all hours?",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#ffffff",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "answer": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Yes. The machine is available 24 hours a day, including overnight access.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#ffffff",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "isOpen": false
+          },
+          {
+            "question": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Can I make a deposit here?",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#ffffff",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "answer": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Yes, deposit support is available for eligible cards and account types.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#ffffff",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "isOpen": false
+          },
+          {
+            "question": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "What if the machine cannot complete my transaction?",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#ffffff",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "answer": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Use the listed support number or visit a nearby branch for immediate assistance.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#ffffff",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "isOpen": false
+          }
+        ]
+      }
+    },
+    {
+      "type": "CoolRunningFooterSection",
+      "props": {
+        "id": "CoolRunningFooterSection-523c5a57-b88b-4201-aac6-6187c452032a",
+        "logoMark": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "C",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 14,
+          "fontColor": "#ffffff",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "brandName": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "CityPoint ATM",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 14,
+          "fontColor": "#14202c",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "tagline": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Charlotte cash access location",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#5e6d7b",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "footerLinks": [
+          {
+            "label": "Services",
+            "link": "#"
+          },
+          {
+            "label": "Accessibility",
+            "link": "#"
+          },
+          {
+            "label": "Support",
+            "link": "#"
+          }
+        ],
+        "socialLinks": [
+          {
+            "label": "f",
+            "link": "#",
+            "ariaLabel": "CityPoint on Facebook"
+          },
+          {
+            "label": "in",
+            "link": "#",
+            "ariaLabel": "CityPoint on LinkedIn"
+          },
+          {
+            "label": "x",
+            "link": "#",
+            "ariaLabel": "CityPoint on X"
+          }
+        ]
+      }
+    }
+  ],
+  "zones": {}
+}

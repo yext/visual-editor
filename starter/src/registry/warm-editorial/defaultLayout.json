@@ -1,0 +1,687 @@
+{
+  "root": {
+    "props": {
+      "title": {
+        "field": "name",
+        "constantValue": "Warm Editorial Pages",
+        "constantValueEnabled": false
+      },
+      "description": {
+        "field": "description",
+        "constantValue": "",
+        "constantValueEnabled": false
+      }
+    }
+  },
+  "content": [
+    {
+      "type": "WarmEditorialHeaderSection",
+      "props": {
+        "id": "WarmEditorialHeaderSection-466be0c6-c9f9-4e7c-a1ad-957c76526ea6",
+        "logoLetter": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "N",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#ffffff",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "brandLink": {
+          "label": "North Common Bakehouse",
+          "link": "#"
+        },
+        "navLinks": [
+          {
+            "label": "Menu",
+            "link": "#",
+            "variant": "plain"
+          },
+          {
+            "label": "Preorders",
+            "link": "#",
+            "variant": "plain"
+          },
+          {
+            "label": "Hours",
+            "link": "#",
+            "variant": "plain"
+          },
+          {
+            "label": "Order online",
+            "link": "#",
+            "variant": "solid"
+          }
+        ]
+      }
+    },
+    {
+      "type": "WarmEditorialAnnouncementSection",
+      "props": {
+        "id": "WarmEditorialAnnouncementSection-b85119fb-09a2-4a45-b497-3205b729e54f",
+        "message": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Weekend pastry boxes and same-day pickup available while quantities last.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#2b211d",
+          "fontWeight": 500,
+          "textTransform": "normal"
+        },
+        "cta": {
+          "label": "See preorder options",
+          "link": "#"
+        }
+      }
+    },
+    {
+      "type": "WarmEditorialHeroSection",
+      "props": {
+        "id": "WarmEditorialHeroSection-1792f1db-9800-44ad-b466-c649afeb94c3",
+        "heroImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://images.unsplash.com/photo-1517433670267-08bbd4be890f?auto=format&fit=crop&w=1600&q=80",
+            "width": 1600,
+            "height": 1067
+          },
+          "constantValueEnabled": true
+        },
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "North Common Bakehouse",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 53,
+          "fontColor": "#2b211d",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "location": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Burlington, VT",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 17,
+          "fontColor": "#a55739",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "description": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "A modern neighborhood bakery with slow-fermented breads, seasonal pastries, and a menu built for quick pickup as well as slower weekend visits.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#726156",
+          "fontWeight": 500,
+          "textTransform": "normal"
+        },
+        "primaryCta": {
+          "label": "Order online",
+          "link": "#"
+        },
+        "secondaryCta": {
+          "label": "Get directions",
+          "link": "#"
+        }
+      }
+    },
+    {
+      "type": "WarmEditorialCoreInfoSection",
+      "props": {
+        "id": "WarmEditorialCoreInfoSection-7518a6ef-ccfe-4cdc-8251-a4426c740857",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Core information",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 34,
+          "fontColor": "#2b211d",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "visitTitle": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Visit",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#2b211d",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "visitCta": {
+          "label": "Get directions to this bakehouse",
+          "link": "#"
+        },
+        "callTitle": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Call",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#2b211d",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "emailLink": {
+          "label": "hello@northcommonbakehouse.com",
+          "link": "mailto:hello@northcommonbakehouse.com"
+        },
+        "hoursTitle": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Hours",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#2b211d",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "hoursNote": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Preorders available before pickup windows close",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#2b211d",
+          "fontWeight": 500,
+          "textTransform": "normal"
+        }
+      }
+    },
+    {
+      "type": "WarmEditorialFeaturedPicksSection",
+      "props": {
+        "id": "WarmEditorialFeaturedPicksSection-21874591-67f1-4767-8482-81387ce87c46",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Bakeshop picks",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 34,
+          "fontColor": "#2b211d",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "picks": [
+          {
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1200&q=80",
+                "width": 1200,
+                "height": 800
+              },
+              "constantValueEnabled": true
+            },
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Morning pastry case",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 19,
+              "fontColor": "#2b211d",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Croissants, buns, and laminated seasonal specials that rotate through the week.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#2b211d",
+              "fontWeight": 500,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "View menu",
+              "link": "#"
+            }
+          },
+          {
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://images.unsplash.com/photo-1483695028939-5bb13f8648b0?auto=format&fit=crop&w=1200&q=80",
+                "width": 1200,
+                "height": 800
+              },
+              "constantValueEnabled": true
+            },
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Loaves and house bread",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 19,
+              "fontColor": "#2b211d",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Slow-fermented breads for pickup, table service, and regular neighborhood orders.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#2b211d",
+              "fontWeight": 500,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "View menu",
+              "link": "#"
+            }
+          },
+          {
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://images.unsplash.com/photo-1517433670267-08bbd4be890f?auto=format&fit=crop&w=1200&q=80",
+                "width": 1200,
+                "height": 800
+              },
+              "constantValueEnabled": true
+            },
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Preorder cakes and boxes",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 19,
+              "fontColor": "#2b211d",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Celebration desserts, weekend pastry assortments, and pickup-ready bundles.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#2b211d",
+              "fontWeight": 500,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "View menu",
+              "link": "#"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "WarmEditorialAboutSection",
+      "props": {
+        "id": "WarmEditorialAboutSection-1a983737-a38e-4b1e-bd26-6cb0d2d26f23",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Made for regulars, quick pickups, and weekend treats",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 34,
+          "fontColor": "#2b211d",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "items": [
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Fresh all day",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#2b211d",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Small-batch production keeps the menu feeling lively instead of overbuilt.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#2b211d",
+              "fontWeight": 500,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Fast to navigate",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#2b211d",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Clear menu groupings and pickup information make the page useful when people are already on the way.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#2b211d",
+              "fontWeight": 500,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Good for repeats",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#2b211d",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Seasonal specials rotate, but the everyday favorites stay easy to find and reorder.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#2b211d",
+              "fontWeight": 500,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "WarmEditorialFaqSection",
+      "props": {
+        "id": "WarmEditorialFaqSection-b26d9c5a-5c39-43f1-a20f-f79aae14eb9b",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "FAQs",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 34,
+          "fontColor": "#2b211d",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "faqs": [
+          {
+            "question": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Do you accept same-day preorders?",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#2b211d",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "answer": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Yes for select pastry boxes and whole-item pickups, depending on availability and the current day’s production window.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#726156",
+              "fontWeight": 500,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "question": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Do you have seating?",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#2b211d",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "answer": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "The bakery is designed for quick neighborhood visits, with a small amount of seating and a stronger grab-and-go rhythm.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#726156",
+              "fontWeight": 500,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "question": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Are seasonal items posted online?",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#2b211d",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "answer": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Yes. Rotating items appear with the current menu, pickup timing, and any preorder notes that apply.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#726156",
+              "fontWeight": 500,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "WarmEditorialFooterSection",
+      "props": {
+        "id": "WarmEditorialFooterSection-669cd5e8-bbe6-412d-972e-5ad19aad4fcc",
+        "logoLetter": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "N",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#ffffff",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "brandName": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "North Common Bakehouse",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#2b211d",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "location": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Burlington, VT",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#726156",
+          "fontWeight": 500,
+          "textTransform": "normal"
+        },
+        "navLinks": [
+          {
+            "label": "Menu",
+            "link": "#"
+          },
+          {
+            "label": "Preorders",
+            "link": "#"
+          },
+          {
+            "label": "Contact",
+            "link": "#"
+          }
+        ],
+        "socialLinks": [
+          {
+            "label": "Instagram",
+            "link": "#",
+            "icon": "instagram"
+          },
+          {
+            "label": "Facebook",
+            "link": "#",
+            "icon": "facebook"
+          }
+        ]
+      }
+    }
+  ],
+  "zones": {}
+}

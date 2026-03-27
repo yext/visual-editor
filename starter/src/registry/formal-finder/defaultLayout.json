@@ -1,0 +1,709 @@
+{
+  "root": {
+    "props": {
+      "title": {
+        "field": "name",
+        "constantValue": "Formal Finder Pages",
+        "constantValueEnabled": false
+      },
+      "description": {
+        "field": "description",
+        "constantValue": "",
+        "constantValueEnabled": false
+      }
+    }
+  },
+  "content": [
+    {
+      "type": "FormalFinderHeaderSection",
+      "props": {
+        "id": "FormalFinderHeaderSection-fd720105-4f45-422d-bfe9-f307f1c9b3b0",
+        "brandMark": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "H",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#ffffff",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "homeLink": {
+          "label": "Harbor Ledger CPA",
+          "link": "#"
+        },
+        "navLinks": [
+          {
+            "label": "Services",
+            "link": "#",
+            "variant": "plain"
+          },
+          {
+            "label": "Industries",
+            "link": "#",
+            "variant": "plain"
+          },
+          {
+            "label": "Contact",
+            "link": "#",
+            "variant": "plain"
+          },
+          {
+            "label": "Schedule consultation",
+            "link": "#",
+            "variant": "solid"
+          }
+        ]
+      }
+    },
+    {
+      "type": "FormalFinderHeroSection",
+      "props": {
+        "id": "FormalFinderHeroSection-61cdf017-d752-47a3-8b63-758b0c2055c1",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Harbor Ledger CPA",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 48,
+          "fontColor": "#ffffff",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "location": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Hartford, CT",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#c8d5ea",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "description": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "A local accounting office for tax planning, business reporting, and year-round financial organization with a more direct, less noisy client experience.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#dbe2ec",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "ctas": [
+          {
+            "label": "Schedule consultation",
+            "link": "#",
+            "variant": "solid"
+          },
+          {
+            "label": "Get directions",
+            "link": "#",
+            "variant": "outline"
+          }
+        ]
+      }
+    },
+    {
+      "type": "FormalFinderCoreInfoSection",
+      "props": {
+        "id": "FormalFinderCoreInfoSection-303a1137-4eee-467c-8d60-ef0171e8c6b1",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Core information",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 32,
+          "fontColor": "#1a2230",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "visitHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Visit",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 17,
+          "fontColor": "#1a2230",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "callHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Call",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 17,
+          "fontColor": "#1a2230",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "hoursHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Hours",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 17,
+          "fontColor": "#1a2230",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "directionsLink": {
+          "label": "Get directions to this office",
+          "link": "#"
+        },
+        "emailLink": {
+          "label": "hello@harborledgercpa.com",
+          "link": "mailto:hello@harborledgercpa.com"
+        },
+        "hoursNote": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Tax season appointments available by request",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#1a2230",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        }
+      }
+    },
+    {
+      "type": "FormalFinderAboutSection",
+      "props": {
+        "id": "FormalFinderAboutSection-741d2600-f041-4bc7-8a22-9958e9530bb7",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Built for clients who want steadiness and clarity",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 32,
+          "fontColor": "#1a2230",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "items": [
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Tax planning",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#1a2230",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "body": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Forward-looking guidance instead of a once-a-year scramble.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1a2230",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Business reporting",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#1a2230",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "body": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Clear monthly and quarterly structure for owners who need better visibility.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1a2230",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Responsive communication",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#1a2230",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "body": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Direct answers and practical next steps without adding unnecessary complexity.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1a2230",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "FormalFinderServicesSection",
+      "props": {
+        "id": "FormalFinderServicesSection-2abcf9ef-707a-4934-b913-cbc36bb91d5c",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Services",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 32,
+          "fontColor": "#1a2230",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "items": [
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Individual tax support",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#1a2230",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "body": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Planning and filing support for households that want more than a one-time transaction.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1a2230",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Small business accounting",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#1a2230",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "body": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Ongoing reporting and review for business owners who need cleaner systems and steadier oversight.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1a2230",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Advisory conversations",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#1a2230",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "body": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Direct meetings for tax questions, entity decisions, and financial organization ahead of key deadlines.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1a2230",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "FormalFinderReviewsSection",
+      "props": {
+        "id": "FormalFinderReviewsSection-6a7a32c4-a15e-46c1-9b8e-ff062ea5764e",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Client reviews",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 32,
+          "fontColor": "#1a2230",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "summaryScore": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "4.8",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 45,
+          "fontColor": "#27354a",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "summaryBody": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Average client rating for clarity, responsiveness, and planning support.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#1a2230",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "quotes": [
+          {
+            "quote": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "\"The office is organized, direct, and much easier to work with than the larger firms we had tried before.\"",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1a2230",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "quote": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "\"What stood out most was how practical the advice felt. We left every meeting with a clear list of next steps.\"",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1a2230",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "FormalFinderFaqSection",
+      "props": {
+        "id": "FormalFinderFaqSection-0ee77006-c0ee-4473-abae-a91e6f363ed3",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Common questions",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 32,
+          "fontColor": "#1a2230",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "items": [
+          {
+            "question": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Do you work with both individuals and small businesses?",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1a2230",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "answer": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Yes. The office supports both households and owner-operated businesses.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#6a7381",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "question": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Can I schedule a planning conversation before tax season?",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1a2230",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "answer": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Yes. Clients can book planning meetings throughout the year rather than waiting for filing season.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#6a7381",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "question": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Do you offer recurring accounting support?",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#1a2230",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "answer": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Yes. Ongoing reporting and review options are available for clients who need year-round support.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#6a7381",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "FormalFinderFooterSection",
+      "props": {
+        "id": "FormalFinderFooterSection-539bb1a9-4eed-4478-9344-c0c8ae32f3c3",
+        "brandMark": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "H",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#ffffff",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "brandTitle": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Harbor Ledger CPA",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#1a2230",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "brandSubtitle": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Hartford accounting office",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#6a7381",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "navLinks": [
+          {
+            "label": "Services",
+            "link": "#",
+            "ariaLabel": ""
+          },
+          {
+            "label": "Industries",
+            "link": "#",
+            "ariaLabel": ""
+          },
+          {
+            "label": "Contact",
+            "link": "#",
+            "ariaLabel": ""
+          }
+        ],
+        "socialLinks": [
+          {
+            "label": "in",
+            "link": "#",
+            "ariaLabel": "Harbor Ledger CPA on LinkedIn"
+          },
+          {
+            "label": "f",
+            "link": "#",
+            "ariaLabel": "Harbor Ledger CPA on Facebook"
+          },
+          {
+            "label": "x",
+            "link": "#",
+            "ariaLabel": "Harbor Ledger CPA on X"
+          }
+        ]
+      }
+    }
+  ],
+  "zones": {}
+}

@@ -1,0 +1,590 @@
+{
+  "root": {
+    "props": {
+      "title": {
+        "field": "name",
+        "constantValue": "Wellness Retreat Pages",
+        "constantValueEnabled": false
+      },
+      "description": {
+        "field": "description",
+        "constantValue": "",
+        "constantValueEnabled": false
+      }
+    }
+  },
+  "content": [
+    {
+      "type": "WellnessRetreatHeaderSection",
+      "props": {
+        "id": "WellnessRetreatHeaderSection-86b5a7f7-a31a-4a78-a277-54537d92742c",
+        "brandLink": {
+          "label": "Stillpoint Wellness Studio",
+          "link": "#"
+        },
+        "navigationLinks": [
+          {
+            "label": "Classes",
+            "link": "#"
+          },
+          {
+            "label": "Memberships",
+            "link": "#"
+          },
+          {
+            "label": "Visit",
+            "link": "#"
+          }
+        ],
+        "cta": {
+          "label": "Book a class",
+          "link": "#"
+        }
+      }
+    },
+    {
+      "type": "WellnessRetreatHeroSection",
+      "props": {
+        "id": "WellnessRetreatHeroSection-696bff37-06e2-4f89-9513-b17fa80b9e47",
+        "heroImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1400&q=80",
+            "width": 1400,
+            "height": 933
+          },
+          "constantValueEnabled": true
+        },
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Stillpoint Wellness Studio",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 80,
+          "fontColor": "#101418",
+          "fontWeight": 600,
+          "textTransform": "normal"
+        },
+        "location": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Seattle, WA",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#7f96ac",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "description": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "A quiet urban studio for yoga, breathwork, and recovery sessions, with a pace that feels calm from the first step in.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#5f666d",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "primaryCta": {
+          "label": "Book a class",
+          "link": "#"
+        },
+        "secondaryCta": {
+          "label": "See today's schedule",
+          "link": "#"
+        }
+      }
+    },
+    {
+      "type": "WellnessRetreatCoreInfoSection",
+      "props": {
+        "id": "WellnessRetreatCoreInfoSection-7de817ad-e719-4d47-8bf6-f78d2bfa6d91",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Core information",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 38,
+          "fontColor": "#101418",
+          "fontWeight": 600,
+          "textTransform": "normal"
+        },
+        "visitHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Visit",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#101418",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "connectHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Connect",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#101418",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "hoursHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Hours",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#101418",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "directionsLink": {
+          "label": "Get directions to the studio",
+          "link": "#"
+        },
+        "emailLink": {
+          "label": "hello@stillpointstudio.com",
+          "link": "mailto:hello@stillpointstudio.com"
+        },
+        "supportText": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Front desk support starts 30 minutes before the first class",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#5f666d",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        }
+      }
+    },
+    {
+      "type": "WellnessRetreatGallerySection",
+      "props": {
+        "id": "WellnessRetreatGallerySection-55d2b66f-ca0e-4663-b93c-735c8e6fb45b",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Studio atmosphere",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 38,
+          "fontColor": "#101418",
+          "fontWeight": 600,
+          "textTransform": "normal"
+        },
+        "images": [
+          {
+            "altText": "Sunlit yoga studio moment",
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1200&q=80",
+                "width": 1200,
+                "height": 800
+              },
+              "constantValueEnabled": true
+            }
+          },
+          {
+            "altText": "Yoga pose in warm light",
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1200&q=80",
+                "width": 1200,
+                "height": 800
+              },
+              "constantValueEnabled": true
+            }
+          },
+          {
+            "altText": "Quiet seating corner in the studio",
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://images.unsplash.com/photo-1510894347713-fc3ed6fdf539?auto=format&fit=crop&w=1200&q=80",
+                "width": 1200,
+                "height": 800
+              },
+              "constantValueEnabled": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "WellnessRetreatPromoSection",
+      "props": {
+        "id": "WellnessRetreatPromoSection-ac3e561a-96ed-4062-ae2f-f874205b471b",
+        "backgroundImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://images.unsplash.com/photo-1545389336-cf090694435e?auto=format&fit=crop&w=1600&q=80",
+            "width": 1600,
+            "height": 900
+          },
+          "constantValueEnabled": true
+        },
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Evening reset classes with slower pacing and longer holds",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 38,
+          "fontColor": "#101418",
+          "fontWeight": 600,
+          "textTransform": "normal"
+        },
+        "description": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Weeknight sessions are designed for people coming straight from work who want to unwind without stepping into a fast, high-energy room.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#101418",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "cta": {
+          "label": "See evening classes",
+          "link": "#"
+        }
+      }
+    },
+    {
+      "type": "WellnessRetreatOffersSection",
+      "props": {
+        "id": "WellnessRetreatOffersSection-64e22767-e59b-414b-b5c6-5a83440446e3",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Ways to begin",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 38,
+          "fontColor": "#101418",
+          "fontWeight": 600,
+          "textTransform": "normal"
+        },
+        "offers": [
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Intro month",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#101418",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Start with a flexible month of classes so you can try morning, lunch, and evening times before committing.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#101418",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Small group recovery",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#101418",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Gentler sessions for mobility, breathwork, and decompression after high-stress weeks or travel.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#101418",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Private guidance",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#101418",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "One-on-one sessions for people who want a quieter beginning before joining group classes.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#101418",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "WellnessRetreatFaqSection",
+      "props": {
+        "id": "WellnessRetreatFaqSection-b0abba7e-10ac-4f43-9c4c-4ba5706a42fc",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Studio FAQs",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 38,
+          "fontColor": "#101418",
+          "fontWeight": 600,
+          "textTransform": "normal"
+        },
+        "items": [
+          {
+            "question": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Is the studio beginner friendly?",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#101418",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "answer": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Yes. Classes are clearly labeled by pace and intensity, and front desk staff can help you choose a calm starting point.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#5f666d",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "question": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Do I need to bring my own mat?",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#101418",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "answer": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "No. Mats and basic props are available at the studio, though members are welcome to bring their own setup.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#5f666d",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "question": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Can I book a first class online?",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#101418",
+              "fontWeight": 700,
+              "textTransform": "normal"
+            },
+            "answer": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Yes. The schedule supports online booking, and confirmation emails include arrival notes and studio etiquette details.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#5f666d",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "WellnessRetreatFooterSection",
+      "props": {
+        "id": "WellnessRetreatFooterSection-9e80243e-81da-4afe-bad1-29d607b4b6f2",
+        "brandName": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Stillpoint Wellness Studio",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#101418",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "descriptor": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Seattle yoga and recovery studio",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#5f666d",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "navigationLinks": [
+          {
+            "label": "Classes",
+            "link": "#"
+          },
+          {
+            "label": "Memberships",
+            "link": "#"
+          },
+          {
+            "label": "Contact",
+            "link": "#"
+          }
+        ],
+        "socialLinks": [
+          {
+            "label": "ig",
+            "link": "#",
+            "ariaLabel": "Stillpoint Wellness Studio on Instagram"
+          },
+          {
+            "label": "tt",
+            "link": "#",
+            "ariaLabel": "Stillpoint Wellness Studio on TikTok"
+          },
+          {
+            "label": "yt",
+            "link": "#",
+            "ariaLabel": "Stillpoint Wellness Studio on YouTube"
+          }
+        ]
+      }
+    }
+  ],
+  "zones": {}
+}

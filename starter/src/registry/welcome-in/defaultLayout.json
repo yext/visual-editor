@@ -1,0 +1,692 @@
+{
+  "root": {
+    "props": {
+      "title": {
+        "field": "name",
+        "constantValue": "Welcome In Pages",
+        "constantValueEnabled": false
+      },
+      "description": {
+        "field": "description",
+        "constantValue": "",
+        "constantValueEnabled": false
+      }
+    }
+  },
+  "content": [
+    {
+      "type": "WelcomeInHeaderSection",
+      "props": {
+        "id": "WelcomeInHeaderSection-8e6b0f01-8407-4f34-82b4-05dd3eeefbd9",
+        "logoLetter": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "J",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 20,
+          "fontColor": "#fffdfb",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "brandLink": {
+          "label": "Juniper Story House",
+          "link": "#"
+        },
+        "navigationLinks": [
+          {
+            "label": "Books by age",
+            "link": "#",
+            "variant": "text"
+          },
+          {
+            "label": "Events",
+            "link": "#",
+            "variant": "text"
+          },
+          {
+            "label": "Gift cards",
+            "link": "#",
+            "variant": "text"
+          },
+          {
+            "label": "Visit shop",
+            "link": "#",
+            "variant": "solid"
+          }
+        ]
+      }
+    },
+    {
+      "type": "WelcomeInHeroSection",
+      "props": {
+        "id": "WelcomeInHeroSection-5a50f054-d7d6-44db-995c-c73c6c82a2db",
+        "title": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Juniper Story House",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 80,
+          "fontColor": "#24324d",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "location": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Ann Arbor, MI",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 19,
+          "fontColor": "#db5d7d",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "description": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "A neighborhood children's bookshop with storytime corners, staff picks by reading level, and plenty of room for grown-ups to find gifts without feeling rushed.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#647089",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "ctas": [
+          {
+            "label": "Get directions",
+            "link": "#",
+            "variant": "solid"
+          },
+          {
+            "label": "See upcoming storytimes",
+            "link": "#",
+            "variant": "outline"
+          }
+        ],
+        "heroImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1400&q=80",
+            "width": 1400,
+            "height": 900
+          },
+          "constantValueEnabled": true
+        }
+      }
+    },
+    {
+      "type": "WelcomeInCoreInfoSection",
+      "props": {
+        "id": "WelcomeInCoreInfoSection-daae595e-d6af-4cfe-9927-d7babdb9c722",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Core information",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 35,
+          "fontColor": "#24324d",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "visitHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Visit",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 17,
+          "fontColor": "#24324d",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "callHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Call",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 17,
+          "fontColor": "#24324d",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "hoursHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Hours",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 17,
+          "fontColor": "#24324d",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "notesHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Good to know",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 17,
+          "fontColor": "#24324d",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "directionsCta": {
+          "label": "Get directions to the shop",
+          "link": "#"
+        },
+        "emailCta": {
+          "label": "hello@juniperstoryhouse.com",
+          "link": "mailto:hello@juniperstoryhouse.com"
+        },
+        "notes": [
+          {
+            "text": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Weekly storytime",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#24324d",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "text": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Gift wrap at checkout",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#24324d",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "text": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Teacher discount available",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#24324d",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "WelcomeInAboutSection",
+      "props": {
+        "id": "WelcomeInAboutSection-dfe1103e-abf4-43fc-acd2-39e5cf51b03f",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "A shop built around browsing together",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 35,
+          "fontColor": "#24324d",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "items": [
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "By age and interest",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#24324d",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Sections are grouped so families can find picture books, first chapter books, and read-aloud picks quickly.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#24324d",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Staff favorites",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#24324d",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Handwritten notes and seasonal tables help turn a gift search into something more personal.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#24324d",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Events that feel welcoming",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#24324d",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Storytimes, author visits, and quiet after-school browsing hours are part of the regular rhythm.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#24324d",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "WelcomeInFeaturedShelvesSection",
+      "props": {
+        "id": "WelcomeInFeaturedShelvesSection-1ec1a1e7-769e-440b-9176-a0d3dc85e367",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Featured shelves",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 35,
+          "fontColor": "#24324d",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "cards": [
+          {
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=1200&q=80",
+                "width": 1200,
+                "height": 800
+              },
+              "constantValueEnabled": true
+            },
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Picture books and read-aloud picks",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#24324d",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Bright favorites, new releases, and bedtime standouts for families who read together often.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#24324d",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "Browse picture books",
+              "link": "#"
+            }
+          },
+          {
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=1200&q=80",
+                "width": 1200,
+                "height": 800
+              },
+              "constantValueEnabled": true
+            },
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Gift-ready bundles",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#24324d",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Curated birthday picks, teacher gifts, and easy grab-and-go stacks for last-minute celebrations.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#24324d",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "Browse gift bundles",
+              "link": "#"
+            }
+          },
+          {
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1200&q=80",
+                "width": 1200,
+                "height": 800
+              },
+              "constantValueEnabled": true
+            },
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Early reader favorites",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 17,
+              "fontColor": "#24324d",
+              "fontWeight": 800,
+              "textTransform": "normal"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Friendly chapter books, graphic readers, and series starters for kids building confidence on their own.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#24324d",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "Browse early readers",
+              "link": "#"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "WelcomeInReviewsSection",
+      "props": {
+        "id": "WelcomeInReviewsSection-7a9eb9a2-f853-41d4-ab5c-d1b2f4ab89c5",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Reader reviews",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 35,
+          "fontColor": "#24324d",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "score": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "4.9",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 48,
+          "fontColor": "#db5d7d",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "summary": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Average rating from local families and gift shoppers.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#24324d",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "reviews": [
+          {
+            "quote": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "\"The staff recommendations are so useful when you need something thoughtful without already knowing the catalog.\"",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#24324d",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "quote": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "\"It feels playful without being chaotic, and the events calendar actually makes you want to come back.\"",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#24324d",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "WelcomeInFooterSection",
+      "props": {
+        "id": "WelcomeInFooterSection-d8a20fbb-242a-4cd8-83fd-5e70ce89e86d",
+        "logoLetter": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "J",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 20,
+          "fontColor": "#fffdfb",
+          "fontWeight": 800,
+          "textTransform": "normal"
+        },
+        "brandTitle": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Juniper Story House",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#24324d",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "tagline": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Ann Arbor children's bookshop",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#647089",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "navigationLinks": [
+          {
+            "label": "Books by age",
+            "link": "#"
+          },
+          {
+            "label": "Events",
+            "link": "#"
+          },
+          {
+            "label": "Contact",
+            "link": "#"
+          }
+        ],
+        "socialLinks": [
+          {
+            "label": "ig",
+            "link": "#",
+            "ariaLabel": "Juniper Story House on Instagram"
+          },
+          {
+            "label": "f",
+            "link": "#",
+            "ariaLabel": "Juniper Story House on Facebook"
+          },
+          {
+            "label": "tt",
+            "link": "#",
+            "ariaLabel": "Juniper Story House on TikTok"
+          }
+        ]
+      }
+    }
+  ],
+  "zones": {}
+}

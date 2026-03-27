@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Juniper Story House | Children's Bookshop in Ann Arbor, MI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&amp;family=Atkinson+Hyperlegible+Next:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --berry: #db5d7d;
+        --sun: #f5b545;
+        --sky: #7fc7f2;
+        --ink: #24324d;
+        --muted: #647089;
+        --line: #d9dced;
+        --white: #fffdfb;
+        --panel: #fff6ea;
+        --r-sm: 18px;
+        --r-lg: 34px;
+        --s-4: 4px;
+        --s-8: 8px;
+        --s-12: 12px;
+        --s-16: 16px;
+        --s-20: 20px;
+        --s-24: 24px;
+        --s-32: 32px;
+        --s-40: 40px;
+        --s-48: 48px;
+        --page: 1024px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: "Atkinson Hyperlegible Next", sans-serif;
+        font-size: 1em;
+        line-height: 1.55;
+        color: var(--ink);
+        background: var(--white);
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+      h1,
+      h2 {
+        font-family: "Baloo 2", sans-serif;
+        line-height: 0.95;
+        letter-spacing: -0.03em;
+      }
+      a {
+        color: var(--berry);
+      }
+      a:focus-visible,
+      summary:focus-visible {
+        outline: 3px solid var(--ink);
+        outline-offset: 3px;
+      }
+      .skip-link {
+        position: absolute;
+        left: 16px;
+        top: 16px;
+        transform: translateY(-180%);
+        background: var(--ink);
+        color: var(--white);
+        padding: 10px 14px;
+        text-decoration: none;
+        border-radius: 999px;
+      }
+      .skip-link:focus-visible {
+        transform: translateY(0);
+      }
+      .header-shell,
+      .footer-shell {
+        width: 100%;
+        background: var(--white);
+      }
+      .header-shell {
+        border-bottom: 1px solid var(--line);
+      }
+      .footer-shell {
+        border-top: 1px solid var(--line);
+        margin-top: 64px;
+      }
+      .inner {
+        max-width: var(--page);
+        margin: 0 auto;
+        padding: 0 var(--s-24);
+      }
+      .header-row,
+      .footer-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--s-24);
+        flex-wrap: wrap;
+      }
+      .header-row {
+        padding: 22px 0;
+      }
+      .brand-lockup,
+      .footer-brand {
+        display: flex;
+        align-items: center;
+        gap: var(--s-12);
+      }
+      .logo {
+        width: 42px;
+        height: 42px;
+        border-radius: 999px;
+        background: var(--berry);
+        color: var(--white);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+      }
+      nav {
+        display: flex;
+        gap: var(--s-20);
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      nav a {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+        color: var(--ink);
+      }
+      .button {
+        min-height: 46px;
+        padding: 0 18px;
+        border-radius: 999px;
+        border: 2px solid var(--berry);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-weight: 700;
+        color: var(--berry);
+        background: transparent;
+      }
+      .button-solid {
+        background: var(--berry);
+        color: var(--white);
+      }
+      main {
+        display: grid;
+        row-gap: 48px;
+      }
+      main > section {
+        width: 100%;
+        max-width: var(--page);
+        margin: 12px auto;
+        padding: 0 var(--s-24);
+      }
+      .hero {
+        padding-top: 40px;
+        padding-bottom: 20px;
+      }
+      .hero-panel {
+        background: var(--panel);
+        border: 1px solid #f1dfc5;
+        border-radius: var(--r-lg);
+        padding: var(--s-32);
+        display: grid;
+        gap: var(--s-24);
+        justify-items: center;
+        text-align: center;
+      }
+      .hero h1 {
+        font-size: clamp(3rem, 6vw, 5rem);
+      }
+      .hero-location {
+        color: var(--berry);
+        font-weight: 800;
+        font-size: 1.2rem;
+      }
+      .hero-status {
+        color: var(--muted);
+        max-width: 44ch;
+      }
+      .hero-media {
+        width: min(100%, 720px);
+        min-height: 220px;
+        border-radius: var(--r-lg);
+        overflow: hidden;
+        border: 1px solid var(--line);
+      }
+      .hero-media img,
+      .card-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .cta-row {
+        display: flex;
+        gap: var(--s-12);
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .section-heading {
+        margin-bottom: 24px;
+        text-align: center;
+      }
+      .section-heading h2 {
+        font-size: 2.2rem;
+      }
+      .core-info-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: var(--s-24);
+        padding-top: var(--s-8);
+      }
+      .core-block {
+        display: grid;
+        gap: var(--s-12);
+        min-width: 0;
+      }
+      .core-block a,
+      .core-block p {
+        min-width: 0;
+      }
+      .info-link {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: inline-block;
+        max-width: 100%;
+      }
+      .about {
+        background: #f1f8ff;
+        border: 1px solid #d8ebfb;
+        border-radius: var(--r-lg);
+        padding: var(--s-32);
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--s-24);
+      }
+      .about h3 {
+        font-family: "Atkinson Hyperlegible Next", sans-serif;
+        font-size: 1.05rem;
+        font-weight: 800;
+      }
+      .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--s-20);
+      }
+      .card {
+        border: 1px solid var(--line);
+        border-radius: var(--r-lg);
+        overflow: hidden;
+        background: var(--white);
+        display: grid;
+      }
+      .card-media {
+        min-height: 180px;
+        max-height: 180px;
+        overflow: hidden;
+      }
+      .card-body {
+        padding: var(--s-20);
+        display: grid;
+        gap: var(--s-16);
+      }
+      .card h3 {
+        font-family: "Atkinson Hyperlegible Next", sans-serif;
+        font-size: 1.08rem;
+        font-weight: 800;
+      }
+      .reviews {
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr 1.1fr;
+        gap: var(--s-20);
+      }
+      .review-summary,
+      .review-card {
+        border: 1px solid var(--line);
+        border-radius: var(--r-lg);
+        background: var(--white);
+        padding: var(--s-24);
+        display: grid;
+        gap: var(--s-16);
+      }
+      .review-summary {
+        justify-items: center;
+        text-align: center;
+        background: var(--panel);
+      }
+      .review-score {
+        font-size: 3rem;
+        color: var(--berry);
+        font-weight: 800;
+      }
+      .social {
+        display: flex;
+        gap: var(--s-12);
+        flex-wrap: wrap;
+      }
+      .social a {
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: var(--berry);
+      }
+      @media (max-width: 900px) {
+        .core-info-grid,
+        .about,
+        .cards-grid,
+        .reviews {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <header class="header-shell">
+      <div class="inner">
+        <div class="header-row">
+          <div class="brand-lockup">
+            <div class="logo" aria-hidden="true">J</div>
+            <a
+              href="#"
+              style="text-decoration: none; color: inherit; font-weight: 800"
+              >Juniper Story House</a
+            >
+          </div>
+          <nav aria-label="Primary navigation">
+            <a href="#">Books by age</a>
+            <a href="#">Events</a>
+            <a href="#">Gift cards</a>
+            <a href="#" class="button button-solid">Visit shop</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+    <main id="main-content">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-panel">
+          <h1 id="hero-title">Juniper Story House</h1>
+          <p class="hero-location">Ann Arbor, MI</p>
+          <p class="hero-status">
+            A neighborhood children's bookshop with storytime corners, staff
+            picks by reading level, and plenty of room for grown-ups to find
+            gifts without feeling rushed.
+          </p>
+          <div class="cta-row">
+            <a href="#" class="button button-solid">Get directions</a>
+            <a href="#" class="button">See upcoming storytimes</a>
+          </div>
+          <div class="hero-media" aria-hidden="true">
+            <img
+              src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&amp;fit=crop&amp;w=1400&amp;q=80"
+              alt=""
+            />
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="info-title">
+        <div class="section-heading">
+          <h2 id="info-title">Core information</h2>
+        </div>
+        <div class="core-info-grid">
+          <div class="core-block">
+            <h3>Visit</h3>
+            <p>114 Lantern Street</p>
+            <p>Ann Arbor, MI 48104</p>
+            <a href="#" class="info-link">Get directions to the shop</a>
+          </div>
+          <div class="core-block">
+            <h3>Call</h3>
+            <a href="tel:+17345550151" class="info-link">(734) 555-0151</a>
+            <a href="mailto:hello@juniperstoryhouse.com" class="info-link"
+              >hello@juniperstoryhouse.com</a
+            >
+          </div>
+          <div class="core-block">
+            <h3>Hours</h3>
+            <p>Mon-Sat: 10:00 AM - 7:00 PM</p>
+            <p>Sun: 11:00 AM - 5:00 PM</p>
+          </div>
+          <div class="core-block">
+            <h3>Good to know</h3>
+            <p>Weekly storytime</p>
+            <p>Gift wrap at checkout</p>
+            <p>Teacher discount available</p>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="about-title">
+        <div class="section-heading">
+          <h2 id="about-title">A shop built around browsing together</h2>
+        </div>
+        <div class="about">
+          <div>
+            <h3>By age and interest</h3>
+            <p>
+              Sections are grouped so families can find picture books, first
+              chapter books, and read-aloud picks quickly.
+            </p>
+          </div>
+          <div>
+            <h3>Staff favorites</h3>
+            <p>
+              Handwritten notes and seasonal tables help turn a gift search into
+              something more personal.
+            </p>
+          </div>
+          <div>
+            <h3>Events that feel welcoming</h3>
+            <p>
+              Storytimes, author visits, and quiet after-school browsing hours
+              are part of the regular rhythm.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="features-title">
+        <div class="section-heading">
+          <h2 id="features-title">Featured shelves</h2>
+        </div>
+        <div class="cards-grid">
+          <article class="card">
+            <div class="card-media" aria-hidden="true">
+              <img
+                src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+                alt=""
+              />
+            </div>
+            <div class="card-body">
+              <h3>Picture books and read-aloud picks</h3>
+              <p>
+                Bright favorites, new releases, and bedtime standouts for
+                families who read together often.
+              </p>
+              <a href="#" aria-label="Browse picture books and read-aloud picks"
+                >Browse picture books</a
+              >
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-media" aria-hidden="true">
+              <img
+                src="https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+                alt=""
+              />
+            </div>
+            <div class="card-body">
+              <h3>Gift-ready bundles</h3>
+              <p>
+                Curated birthday picks, teacher gifts, and easy grab-and-go
+                stacks for last-minute celebrations.
+              </p>
+              <a href="#" aria-label="Browse gift-ready book bundles"
+                >Browse gift bundles</a
+              >
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-media" aria-hidden="true">
+              <img
+                src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+                alt=""
+              />
+            </div>
+            <div class="card-body">
+              <h3>Early reader favorites</h3>
+              <p>
+                Friendly chapter books, graphic readers, and series starters for
+                kids building confidence on their own.
+              </p>
+              <a href="#" aria-label="Browse early reader favorites"
+                >Browse early readers</a
+              >
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section aria-labelledby="reviews-title">
+        <div class="section-heading">
+          <h2 id="reviews-title">Reader reviews</h2>
+        </div>
+        <div class="reviews">
+          <article class="review-summary">
+            <p class="review-score">4.9</p>
+            <p>Average rating from local families and gift shoppers.</p>
+          </article>
+          <article class="review-card">
+            <p>
+              "The staff recommendations are so useful when you need something
+              thoughtful without already knowing the catalog."
+            </p>
+          </article>
+          <article class="review-card">
+            <p>
+              "It feels playful without being chaotic, and the events calendar
+              actually makes you want to come back."
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+    <footer class="footer-shell">
+      <div class="inner footer-row" style="padding: 24px 24px 28px">
+        <div class="footer-brand">
+          <div class="logo" aria-hidden="true">J</div>
+          <div>
+            <strong>Juniper Story House</strong>
+            <p style="color: var(--muted)">Ann Arbor children's bookshop</p>
+          </div>
+        </div>
+        <nav aria-label="Footer navigation">
+          <a href="#">Books by age</a>
+          <a href="#">Events</a>
+          <a href="#">Contact</a>
+        </nav>
+        <div class="social" aria-label="Social media links">
+          <a href="#" aria-label="Juniper Story House on Instagram">ig</a>
+          <a href="#" aria-label="Juniper Story House on Facebook">f</a>
+          <a href="#" aria-label="Juniper Story House on TikTok">tt</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

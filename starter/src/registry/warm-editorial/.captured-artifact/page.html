@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>North Common Bakehouse | Bakery in Burlington, VT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&amp;family=Newsreader:opsz,wght@6..72,500;6..72,700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #2b211d;
+        --brick: #a55739;
+        --butter: #f4e1bc;
+        --cream: #fffaf3;
+        --line: #eadbcb;
+        --muted: #726156;
+        --white: #ffffff;
+        --r-sm: 4px;
+        --r-lg: 8px;
+        --s-4: 4px;
+        --s-8: 8px;
+        --s-12: 12px;
+        --s-16: 16px;
+        --s-20: 20px;
+        --s-24: 24px;
+        --s-32: 32px;
+        --s-40: 40px;
+        --page: 1024px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 1em;
+        line-height: 1.5;
+        color: var(--ink);
+        background: var(--cream);
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+      h1,
+      h2 {
+        font-family: "Newsreader", serif;
+        line-height: 0.98;
+      }
+      a {
+        color: var(--brick);
+      }
+      a:focus-visible,
+      summary:focus-visible {
+        outline: 3px solid var(--ink);
+        outline-offset: 3px;
+      }
+      .skip-link {
+        position: absolute;
+        left: 16px;
+        top: 16px;
+        transform: translateY(-180%);
+        background: var(--ink);
+        color: var(--white);
+        padding: 10px 14px;
+        text-decoration: none;
+        border-radius: 999px;
+      }
+      .skip-link:focus-visible {
+        transform: translateY(0);
+      }
+      .header-shell,
+      .footer-shell {
+        width: 100%;
+        background: var(--cream);
+      }
+      .header-shell {
+        margin-bottom: 24px;
+      }
+      .footer-shell {
+        margin-top: 24px;
+        border-top: 1px solid var(--line);
+      }
+      .inner {
+        max-width: var(--page);
+        margin: 0 auto;
+        padding: 0 var(--s-24);
+      }
+      .header-row,
+      .footer-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--s-24);
+        flex-wrap: wrap;
+      }
+      .header-row {
+        padding: 20px 0;
+      }
+      .brand-lockup {
+        display: flex;
+        align-items: center;
+        gap: var(--s-12);
+      }
+      .logo {
+        width: 42px;
+        height: 42px;
+        border-radius: var(--r-sm);
+        background: var(--brick);
+        color: var(--white);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+      }
+      nav {
+        display: flex;
+        gap: var(--s-20);
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      nav a {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+        color: inherit;
+      }
+      .button {
+        min-height: 46px;
+        padding: 0 18px;
+        border-radius: 999px;
+        border: 2px solid var(--brick);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-weight: 700;
+        color: var(--brick);
+        background: transparent;
+      }
+      .button-solid {
+        background: var(--brick);
+        color: var(--white);
+      }
+      main > section {
+        max-width: var(--page);
+        width: 100%;
+        margin: 0 auto;
+        padding: 24px var(--s-24);
+      }
+      .hero-strip {
+        max-width: none;
+        padding: 0;
+        background:
+          linear-gradient(rgba(39, 23, 16, 0.4), rgba(39, 23, 16, 0.4)),
+          url("https://images.unsplash.com/photo-1517433670267-08bbd4be890f?auto=format&fit=crop&w=1600&q=80")
+            center 48% / cover no-repeat;
+      }
+      .hero-inner {
+        max-width: var(--page);
+        margin: 0 auto;
+        min-height: 460px;
+        padding: 64px var(--s-24) 44px;
+        display: grid;
+        justify-items: center;
+        align-content: center;
+      }
+      .hero-card {
+        max-width: 620px;
+        background: rgba(255, 250, 243, 0.92);
+        border: 1px solid rgba(234, 219, 203, 0.95);
+        padding: var(--s-32);
+        border-radius: var(--r-lg);
+        text-align: center;
+        display: grid;
+        gap: var(--s-16);
+      }
+      .hero h1 {
+        font-size: clamp(3.3rem, 7vw, 5.6rem);
+      }
+      .hero-location {
+        color: var(--brick);
+        font-weight: 700;
+        font-size: 1.05rem;
+      }
+      .hero-status {
+        color: var(--muted);
+        max-width: 44ch;
+        margin: 0 auto;
+      }
+      .cta-row {
+        display: flex;
+        justify-content: center;
+        gap: var(--s-12);
+        flex-wrap: wrap;
+      }
+      .section-heading {
+        margin-bottom: 24px;
+      }
+      .section-heading h2 {
+        font-size: 2.1rem;
+      }
+      .core-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--s-24);
+        padding-top: var(--s-8);
+      }
+      .core-block {
+        display: grid;
+        gap: var(--s-12);
+        min-width: 0;
+      }
+      .core-block a,
+      .core-block p {
+        min-width: 0;
+      }
+      .info-link {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: inline-block;
+      }
+      .banner {
+        margin: 24px auto;
+        max-width: var(--page);
+        padding: 0 var(--s-24);
+      }
+      .banner-bar {
+        background: var(--butter);
+        border: 1px solid #e7c98c;
+        border-radius: var(--r-sm);
+        padding: 14px 18px;
+        display: flex;
+        justify-content: space-between;
+        gap: var(--s-16);
+        flex-wrap: wrap;
+      }
+      .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--s-20);
+      }
+      .card {
+        background: var(--white);
+        border: 1px solid var(--line);
+        border-radius: var(--r-lg);
+        overflow: hidden;
+        display: grid;
+      }
+      .card img {
+        width: 100%;
+        height: 210px;
+        object-fit: cover;
+        display: block;
+      }
+      .card-body {
+        padding: var(--s-20);
+        display: grid;
+        gap: var(--s-16);
+      }
+      .card h3 {
+        font-size: 1.2rem;
+        font-weight: 700;
+      }
+      .about {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--s-24);
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+        padding: var(--s-24) 0;
+      }
+      .about h3 {
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: var(--s-8);
+      }
+      details {
+        border-top: 1px solid var(--line);
+        padding: var(--s-20) 0;
+      }
+      summary {
+        cursor: pointer;
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+        gap: var(--s-16);
+        font-weight: 700;
+      }
+      summary::-webkit-details-marker {
+        display: none;
+      }
+      summary::after {
+        content: "+";
+      }
+      details[open] summary::after {
+        content: "−";
+      }
+      details p {
+        margin-top: var(--s-12);
+        color: var(--muted);
+      }
+      .faq-list {
+        border-bottom: 1px solid var(--line);
+      }
+      .social {
+        display: flex;
+        gap: var(--s-12);
+        flex-wrap: wrap;
+      }
+      .social a {
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: var(--brick);
+      }
+      @media (max-width: 900px) {
+        .core-grid,
+        .cards-grid,
+        .about {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <header class="header-shell">
+      <div class="inner">
+        <div class="header-row">
+          <div class="brand-lockup">
+            <div class="logo" aria-hidden="true">N</div>
+            <a
+              href="#"
+              style="text-decoration: none; color: inherit; font-weight: 700"
+              >North Common Bakehouse</a
+            >
+          </div>
+          <nav aria-label="Primary navigation">
+            <a href="#">Menu</a>
+            <a href="#">Preorders</a>
+            <a href="#">Hours</a>
+            <a href="#" class="button button-solid">Order online</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <div class="banner">
+      <div class="banner-bar">
+        <p>
+          Weekend pastry boxes and same-day pickup available while quantities
+          last.
+        </p>
+        <a href="#">See preorder options</a>
+      </div>
+    </div>
+
+    <main id="main-content">
+      <section class="hero hero-strip" aria-labelledby="hero-title">
+        <div class="hero-inner">
+          <div class="hero-card">
+            <h1 id="hero-title">North Common Bakehouse</h1>
+            <p class="hero-location">Burlington, VT</p>
+            <p class="hero-status">
+              A modern neighborhood bakery with slow-fermented breads, seasonal
+              pastries, and a menu built for quick pickup as well as slower
+              weekend visits.
+            </p>
+            <div class="cta-row">
+              <a href="#" class="button button-solid">Order online</a>
+              <a href="#" class="button">Get directions</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="info-title">
+        <div class="section-heading">
+          <h2 id="info-title">Core information</h2>
+        </div>
+        <div class="core-grid">
+          <div class="core-block">
+            <h3>Visit</h3>
+            <p>64 Winooski Street</p>
+            <p>Burlington, VT 05401</p>
+            <a href="#" class="info-link">Get directions to this bakehouse</a>
+          </div>
+          <div class="core-block">
+            <h3>Call</h3>
+            <a href="tel:+18025550129" class="info-link">(802) 555-0129</a>
+            <a href="mailto:hello@northcommonbakehouse.com" class="info-link"
+              >hello@northcommonbakehouse.com</a
+            >
+          </div>
+          <div class="core-block">
+            <h3>Hours</h3>
+            <p>Tue-Sun: 7:00 AM - 3:00 PM</p>
+            <p>Preorders available before pickup windows close</p>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="menu-title">
+        <div class="section-heading">
+          <h2 id="menu-title">Bakeshop picks</h2>
+        </div>
+        <div class="cards-grid">
+          <article class="card">
+            <img
+              src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+              alt=""
+            />
+            <div class="card-body">
+              <h3>Morning pastry case</h3>
+              <p>
+                Croissants, buns, and laminated seasonal specials that rotate
+                through the week.
+              </p>
+              <a href="#" class="button">View menu</a>
+            </div>
+          </article>
+          <article class="card">
+            <img
+              src="https://images.unsplash.com/photo-1483695028939-5bb13f8648b0?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+              alt=""
+            />
+            <div class="card-body">
+              <h3>Loaves and house bread</h3>
+              <p>
+                Slow-fermented breads for pickup, table service, and regular
+                neighborhood orders.
+              </p>
+              <a href="#" class="button">View menu</a>
+            </div>
+          </article>
+          <article class="card">
+            <img
+              src="https://images.unsplash.com/photo-1517433670267-08bbd4be890f?auto=format&amp;fit=crop&amp;w=1200&amp;q=80"
+              alt=""
+            />
+            <div class="card-body">
+              <h3>Preorder cakes and boxes</h3>
+              <p>
+                Celebration desserts, weekend pastry assortments, and
+                pickup-ready bundles.
+              </p>
+              <a href="#" class="button">View menu</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section aria-labelledby="about-title">
+        <div class="section-heading">
+          <h2 id="about-title">
+            Made for regulars, quick pickups, and weekend treats
+          </h2>
+        </div>
+        <div class="about">
+          <div>
+            <h3>Fresh all day</h3>
+            <p>
+              Small-batch production keeps the menu feeling lively instead of
+              overbuilt.
+            </p>
+          </div>
+          <div>
+            <h3>Fast to navigate</h3>
+            <p>
+              Clear menu groupings and pickup information make the page useful
+              when people are already on the way.
+            </p>
+          </div>
+          <div>
+            <h3>Good for repeats</h3>
+            <p>
+              Seasonal specials rotate, but the everyday favorites stay easy to
+              find and reorder.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="faq-title">
+        <div class="section-heading">
+          <h2 id="faq-title">FAQs</h2>
+        </div>
+        <div class="faq-list">
+          <details>
+            <summary>Do you accept same-day preorders?</summary>
+            <p>
+              Yes for select pastry boxes and whole-item pickups, depending on
+              availability and the current day’s production window.
+            </p>
+          </details>
+          <details>
+            <summary>Do you have seating?</summary>
+            <p>
+              The bakery is designed for quick neighborhood visits, with a small
+              amount of seating and a stronger grab-and-go rhythm.
+            </p>
+          </details>
+          <details>
+            <summary>Are seasonal items posted online?</summary>
+            <p>
+              Yes. Rotating items appear with the current menu, pickup timing,
+              and any preorder notes that apply.
+            </p>
+          </details>
+        </div>
+      </section>
+    </main>
+    <footer class="footer-shell">
+      <div class="inner footer-row" style="padding: 24px 24px 28px">
+        <div class="brand-lockup">
+          <div class="logo" aria-hidden="true">N</div>
+          <div>
+            <strong>North Common Bakehouse</strong>
+            <p style="color: var(--muted)">Burlington, VT</p>
+          </div>
+        </div>
+        <nav aria-label="Footer navigation">
+          <a href="#">Menu</a>
+          <a href="#">Preorders</a>
+          <a href="#">Contact</a>
+        </nav>
+        <div class="social" aria-label="Social media links">
+          <a href="#" aria-label="Instagram">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              <rect
+                x="3"
+                y="3"
+                width="18"
+                height="18"
+                rx="5"
+                stroke="currentColor"
+                stroke-width="2"
+              ></rect>
+              <circle
+                cx="12"
+                cy="12"
+                r="4"
+                stroke="currentColor"
+                stroke-width="2"
+              ></circle>
+              <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"></circle>
+            </svg>
+          </a>
+          <a href="#" aria-label="Facebook">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                d="M13.5 21v-8h2.7l.4-3h-3.1V8.1c0-.9.3-1.6 1.7-1.6H17V3.8c-.3 0-1.2-.1-2.4-.1-2.4 0-4.1 1.5-4.1 4.2V10H7.8v3h2.7v8h3z"
+              ></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
