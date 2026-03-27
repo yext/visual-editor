@@ -12,6 +12,7 @@ import {
   TRANSLATABLE_RICH_TEXT_CONSTANT_CONFIG,
   TRANSLATABLE_STRING_CONSTANT_CONFIG,
 } from "../internal/puck/constant-value-fields/Text.tsx";
+import { HOURS_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Hours.tsx";
 import {
   TEXT_LIST_CONSTANT_CONFIG,
   TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG,
@@ -83,6 +84,7 @@ export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
 export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.string": TRANSLATABLE_STRING_CONSTANT_CONFIG,
   "type.rich_text_v2": TRANSLATABLE_RICH_TEXT_CONSTANT_CONFIG,
+  "type.hours": HOURS_CONSTANT_CONFIG,
   "type.phone": PHONE_CONSTANT_CONFIG,
   "type.image": IMAGE_CONSTANT_CONFIG,
   "type.cta": ENHANCED_CTA_CONSTANT_CONFIG,
