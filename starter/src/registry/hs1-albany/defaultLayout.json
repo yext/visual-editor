@@ -1,0 +1,540 @@
+{
+  "root": {
+    "props": {
+      "title": {
+        "field": "name",
+        "constantValue": "Hs1 Albany Pages",
+        "constantValueEnabled": false
+      },
+      "description": {
+        "field": "description",
+        "constantValue": "",
+        "constantValueEnabled": false
+      }
+    }
+  },
+  "content": [
+    {
+      "type": "Hs1AlbanyHeaderSection",
+      "props": {
+        "id": "Hs1AlbanyHeaderSection-1f540667-7852-464b-b78a-c5c4ebaa877d",
+        "logoImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://cdcssl.ibsrv.net/ibimg/smb/450x292_80/webmgr/1o/u/o/brooklyn/sunnysmileslogo.png.webp?60c03c38fcebb177765418932264c8d5",
+            "width": 450,
+            "height": 292
+          },
+          "constantValueEnabled": true
+        },
+        "logo": {
+          "label": "Sunny Smiles",
+          "link": "https://www.ofc-albany.com"
+        },
+        "primaryLinks": [
+          {
+            "label": "Home",
+            "link": "https://www.ofc-albany.com"
+          },
+          {
+            "label": "Staff",
+            "link": "https://www.ofc-albany.com/staff"
+          },
+          {
+            "label": "Office",
+            "link": "https://www.ofc-albany.com/our-locations"
+          },
+          {
+            "label": "Services",
+            "link": "https://www.ofc-albany.com/dental-services"
+          },
+          {
+            "label": "New Patients",
+            "link": "https://www.ofc-albany.com/new-patients"
+          }
+        ],
+        "moreTrigger": {
+          "label": "More",
+          "link": "#"
+        },
+        "moreLinks": [
+          {
+            "label": "Contact Us",
+            "link": "https://www.ofc-albany.com/contact"
+          },
+          {
+            "label": "Appointment Request",
+            "link": "https://www.ofc-albany.com/appointment"
+          },
+          {
+            "label": "Testimonials",
+            "link": "https://www.ofc-albany.com/testimonials"
+          },
+          {
+            "label": "Smile Gallery",
+            "link": "https://www.ofc-albany.com/gallery"
+          },
+          {
+            "label": "Blog",
+            "link": "https://www.ofc-albany.com/blog"
+          }
+        ],
+        "patientEducation": {
+          "label": "Patient Education",
+          "link": "https://www.ofc-albany.com/articles/premium_education",
+          "items": [
+            {
+              "label": "Educational Videos",
+              "link": "https://www.ofc-albany.com/articles/premium_education/category/47361"
+            },
+            {
+              "label": "Cosmetic & General Dentistry",
+              "link": "https://www.ofc-albany.com/articles/premium_education/category/47362"
+            },
+            {
+              "label": "Emergency Care",
+              "link": "https://www.ofc-albany.com/articles/premium_education/category/47363"
+            },
+            {
+              "label": "Endodontics",
+              "link": "https://www.ofc-albany.com/articles/premium_education/category/47364"
+            },
+            {
+              "label": "Implant Dentistry",
+              "link": "https://www.ofc-albany.com/articles/premium_education/category/47365"
+            },
+            {
+              "label": "Oral Health",
+              "link": "https://www.ofc-albany.com/articles/premium_education/category/47366"
+            },
+            {
+              "label": "Oral Hygiene",
+              "link": "https://www.ofc-albany.com/articles/premium_education/category/47367"
+            },
+            {
+              "label": "Oral Surgery",
+              "link": "https://www.ofc-albany.com/articles/premium_education/category/47368"
+            },
+            {
+              "label": "Orthodontics",
+              "link": "https://www.ofc-albany.com/articles/premium_education/category/47369"
+            },
+            {
+              "label": "Pediatric Dentistry",
+              "link": "https://www.ofc-albany.com/articles/premium_education/category/47370"
+            },
+            {
+              "label": "Periodontal Therapy",
+              "link": "https://www.ofc-albany.com/articles/premium_education/category/47371"
+            },
+            {
+              "label": "Technology",
+              "link": "https://www.ofc-albany.com/articles/premium_education/category/47372"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Hs1AlbanyHeroSection",
+      "props": {
+        "id": "Hs1AlbanyHeroSection-88a0d420-fab2-428a-8dc9-da8049d3e4cf",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "BUILD A BRIGHTER SMILE",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 30,
+          "fontColor": "#7b7b7b",
+          "fontWeight": 400,
+          "textTransform": "uppercase"
+        },
+        "subtitle": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Love your smile",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#d3a335",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "cta": {
+          "label": "Learn More",
+          "link": "#"
+        },
+        "heroImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://cdcssl.ibsrv.net/ibimg/smb/3000x1997_80/webmgr/1o/u/o/Slideshow-XLRG/51046904351_77fdc7bb33_5k.jpg.webp?b464ff6ce4ad3b56caa90d82fcf610d8",
+            "width": 3000,
+            "height": 1997
+          },
+          "constantValueEnabled": true
+        }
+      }
+    },
+    {
+      "type": "Hs1AlbanyServicesSection",
+      "props": {
+        "id": "Hs1AlbanyServicesSection-e8727aed-a6f1-4280-9649-f6678d8e1582",
+        "cards": [
+          {
+            "title": {
+              "label": "General Dentistry",
+              "link": "https://www.ofc-albany.com/dental-services"
+            },
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://cdcssl.ibsrv.net/ibimg/smb/767x511_80/webmgr/1o/u/o/Callouts-LRG/50953800921_4eb88794af_k.jpg.webp?92f0e12a819db83dfd6fbfbdf24a72c1",
+                "width": 767,
+                "height": 511
+              },
+              "constantValueEnabled": true
+            }
+          },
+          {
+            "title": {
+              "label": "Orthodontics",
+              "link": "https://www.ofc-albany.com/dental-services"
+            },
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://cdcssl.ibsrv.net/ibimg/smb/767x511_80/webmgr/1o/u/o/Callouts-LRG/51252077283_abf09d8040_k.jpg.webp?a90db7574dfcb4aa7099afd15d5615c0",
+                "width": 767,
+                "height": 511
+              },
+              "constantValueEnabled": true
+            }
+          },
+          {
+            "title": {
+              "label": "Cosmetic Dentistry",
+              "link": "https://www.ofc-albany.com/contact"
+            },
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://cdcssl.ibsrv.net/ibimg/smb/767x511_80/webmgr/1o/u/o/Callouts-LRG/48799307661_6d64d077e0_k.jpg.webp?38117236c475292e996719f4e87e34a6",
+                "width": 767,
+                "height": 511
+              },
+              "constantValueEnabled": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Hs1AlbanyWelcomeSection",
+      "props": {
+        "id": "Hs1AlbanyWelcomeSection-3f69686c-73dc-4d0a-a87a-dcae9077d3d2",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "WELCOME TO OUR PRACTICE",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#7b7b7b",
+          "fontWeight": 400,
+          "textTransform": "uppercase"
+        },
+        "subtitle": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Welcome to Sunny Smiles Dental, Your Dentist in Downers Grove, IL",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 22,
+          "fontColor": "#d3a335",
+          "fontWeight": 300,
+          "textTransform": "normal"
+        },
+        "body": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Welcome! The dental professionals at Sunny Smiles Dental are pleased to welcome you to our practice. We want patients to be informed decision makers and fully understand any health issues they face, our web site also provides you with background about our, staff, office hours, insurance policies, appointment procedures, maps, directions to our office in and other useful information. We know how hectic life can be and are committed to making our practice convenient and accessible. And we want you to feel confident that when you choose , you're working with doctors and other professionals who are qualified, experienced and caring.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 14,
+          "fontColor": "#7a7a7a",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "cta": {
+          "label": "Read More",
+          "link": "https://www.ofc-albany.com/testimonials"
+        },
+        "image": {
+          "field": "",
+          "constantValue": {
+            "url": "https://cdcssl.ibsrv.net/ibimg/smb/3000x2002_80/webmgr/1o/u/o/Callouts-LRG/35812201360_9e7a4b0655_6k.jpg.webp?4db324ffd83d659463716cf0925f427e",
+            "width": 3000,
+            "height": 2002
+          },
+          "constantValueEnabled": true
+        }
+      }
+    },
+    {
+      "type": "Hs1AlbanySignupFormSection",
+      "props": {
+        "id": "Hs1AlbanySignupFormSection-fff55fee-9a48-4619-bf51-03d7065d7237",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "SIGN UP TODAY FOR SPECIAL DISCOUNTS",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#ffffff",
+          "fontWeight": 400,
+          "textTransform": "uppercase"
+        }
+      }
+    },
+    {
+      "type": "Hs1AlbanyTestimonialsSection",
+      "props": {
+        "id": "Hs1AlbanyTestimonialsSection-7eb91899-6685-450c-87e7-9a14b9fa0e20",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "WHAT OUR PATIENTS SAY ABOUT US",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#ffffff",
+          "fontWeight": 400,
+          "textTransform": "uppercase"
+        },
+        "quotes": [
+          {
+            "quote": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "en": "Visiting Sunny Smiles Dental gives my family and me more reasons to smile.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 22,
+              "fontColor": "#4a4a4a",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "quote": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "en": "Dr. Anderson provided me with excellent care when I needed it the most.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 22,
+              "fontColor": "#4a4a4a",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "quote": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "en": "I'm confident in bringing my entire family to Sunny Smiles Dental!",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 22,
+              "fontColor": "#4a4a4a",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Hs1AlbanyHoursSection",
+      "props": {
+        "id": "Hs1AlbanyHoursSection-953f4439-37ef-4cdc-adec-9a644eeea1cc",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "HOURS OF OPERATION",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#6f6f6f",
+          "fontWeight": 400,
+          "textTransform": "uppercase"
+        },
+        "subtitle": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Summer Hours",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#d3a335",
+          "fontWeight": 300,
+          "textTransform": "normal"
+        },
+        "hours": {
+          "field": "hours",
+          "constantValue": {},
+          "constantValueEnabled": false
+        }
+      }
+    },
+    {
+      "type": "Hs1AlbanyLocationSection",
+      "props": {
+        "id": "Hs1AlbanyLocationSection-53ded3ca-04a9-4ab0-aaf9-40836ae01929",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "OUR LOCATION",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#6f6f6f",
+          "fontWeight": 400,
+          "textTransform": "uppercase"
+        },
+        "subtitle": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Find us on the map",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 22,
+          "fontColor": "#d3a335",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        }
+      }
+    },
+    {
+      "type": "Hs1AlbanyContactFormSection",
+      "props": {
+        "id": "Hs1AlbanyContactFormSection-54bf4334-a55b-454a-865a-47150f3dc61b",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "CONTACT US TODAY",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#ffffff",
+          "fontWeight": 400,
+          "textTransform": "uppercase"
+        }
+      }
+    },
+    {
+      "type": "Hs1AlbanyFooterSection",
+      "props": {
+        "id": "Hs1AlbanyFooterSection-387d615e-d382-45c4-a7b5-ea080269cdf0",
+        "logoImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://cdcssl.ibsrv.net/ibimg/smb/120x78_80/webmgr/1o/u/o/brooklyn/sunnysmileslogo.png.webp?60c03c38fcebb177765418932264c8d5",
+            "width": 120,
+            "height": 78
+          },
+          "constantValueEnabled": true
+        },
+        "logo": {
+          "label": "Sunny Smiles",
+          "link": "https://www.ofc-albany.com"
+        },
+        "socialLinks": [
+          {
+            "label": "Facebook",
+            "link": "https://www.facebook.com/Anderson-Optometry-363713737059041/",
+            "icon": "facebook"
+          },
+          {
+            "label": "Twitter",
+            "link": "https://twitter.com/InternetMatrix",
+            "icon": "twitter"
+          },
+          {
+            "label": "Youtube",
+            "link": "https://www.youtube.com/user/webmarketingimatrix",
+            "icon": "youtube"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Hs1AlbanyCopyrightSection",
+      "props": {
+        "id": "Hs1AlbanyCopyrightSection-87acf3dc-89d8-43af-bd1c-14759887d27c",
+        "links": [
+          {
+            "label": "Copyright © 2026 MH Sub I, LLC dba Officite",
+            "link": "//www.henryscheinone.com/products/officite"
+          },
+          {
+            "label": "Admin Log In",
+            "link": "https://secure.officite.com"
+          },
+          {
+            "label": "Site Map",
+            "link": "https://www.ofc-albany.com/sitemap"
+          }
+        ]
+      }
+    }
+  ],
+  "zones": {}
+}
