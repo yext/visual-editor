@@ -92,6 +92,24 @@ const editTemplateName = "${EDIT_TEMPLATE_NAME_PLACEHOLDER}";`,
     ).toBe('const editPath = "edit";\nconst editTemplateName = "edit";');
   });
 
+  it("replaces all occurrences of both placeholders", () => {
+    expect(
+      injectEditorTemplateInfo(
+        `const editPath = "${EDIT_PATH_PLACEHOLDER}";
+const duplicateEditPath = "${EDIT_PATH_PLACEHOLDER}";
+const editTemplateName = "${EDIT_TEMPLATE_NAME_PLACEHOLDER}";
+const duplicateEditTemplateName = "${EDIT_TEMPLATE_NAME_PLACEHOLDER}";`,
+        {
+          path: "edit/dunkin",
+          configName: "edit-dunkin",
+        }
+      )
+    ).toBe(`const editPath = "edit/dunkin";
+const duplicateEditPath = "edit/dunkin";
+const editTemplateName = "edit-dunkin";
+const duplicateEditTemplateName = "edit-dunkin";`);
+  });
+
   it("throws when the path placeholder is missing", () => {
     expect(() =>
       injectEditorTemplateInfo('const editPath = "edit";', {

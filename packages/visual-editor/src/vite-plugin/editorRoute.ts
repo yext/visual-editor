@@ -66,8 +66,11 @@ export const injectEditorTemplateInfo = (
     }
 
     return templateContent
-      .replace(EDIT_PATH_PLACEHOLDER, editorTemplateInfo.path)
-      .replace(EDIT_TEMPLATE_NAME_PLACEHOLDER, editorTemplateInfo.configName);
+      .replaceAll(EDIT_PATH_PLACEHOLDER, editorTemplateInfo.path)
+      .replaceAll(
+        EDIT_TEMPLATE_NAME_PLACEHOLDER,
+        editorTemplateInfo.configName
+      );
   }
 
   throw new Error("Unable to inject editor path: placeholder not found");
