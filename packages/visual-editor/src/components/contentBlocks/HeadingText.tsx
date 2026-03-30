@@ -36,7 +36,7 @@ export type HeadingTextProps = {
   /** @internal Controlled data from the parent section */
   parentData?: {
     field: string;
-    text: string | undefined;
+    text?: string;
   };
 };
 
@@ -61,9 +61,9 @@ const HeadingTextWrapper: PuckComponent<HeadingTextProps> = (props) => {
       }[styles.align]
     : "text-left";
 
-  const resolvedHeadingText = parentData
-    ? parentData?.text
-    : resolveComponentData(data.text, i18n.language, streamDocument);
+  const resolvedHeadingText =
+    parentData?.text ??
+    resolveComponentData(data.text, i18n.language, streamDocument);
 
   return resolvedHeadingText ? (
     <div className={`flex ${justifyClass}`}>
