@@ -353,7 +353,7 @@ const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = (props) => {
             )}
             {showSocialLinks && (
               <slots.SocialLinksSlot
-                className="mt-6 empty:mt-0"
+                className="mt-6 first:mt-0 empty:mt-0"
                 style={{
                   height: "auto",
                   maxWidth: "max-content",
@@ -363,7 +363,7 @@ const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = (props) => {
             )}
             {showUtilityImages && (
               <slots.UtilityImagesSlot
-                className="mt-6 empty:mt-0"
+                className="mt-6 first:mt-0 empty:mt-0"
                 style={{
                   height: "auto",
                   maxWidth: "max-content",
@@ -563,7 +563,8 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
                     },
                     variant: "secondary",
                     eventNamePrefix: "secondary",
-                    alignment: "left",
+                    desktopContentAlignment: "left",
+                    mobileContentAlignment: "left",
                   },
                 },
               ],
