@@ -2075,7 +2075,20 @@ const tests: ComponentTest[] = [
               },
               maxWidth: "theme",
               slots: {
-                SecondaryLinksWrapperSlot: testFooterLinks,
+                SecondaryLinksWrapperSlot: [
+                  {
+                    type: "FooterLinksSlot",
+                    props: {
+                      data: {
+                        links: testFooterLinks,
+                      },
+                      variant: "secondary",
+                      eventNamePrefix: "secondary",
+                      desktopContentAlignment: "right",
+                      mobileContentAlignment: "right",
+                    },
+                  },
+                ],
                 CopyrightSlot: [
                   {
                     type: "CopyrightMessageSlot",
