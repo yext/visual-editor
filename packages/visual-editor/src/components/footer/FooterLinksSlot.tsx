@@ -5,6 +5,7 @@ import {
   PuckComponent,
   setDeep,
 } from "@puckeditor/core";
+import { cva } from "class-variance-authority";
 import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
@@ -27,8 +28,131 @@ export interface FooterLinksSlotProps {
   /** @internal */
   eventNamePrefix?: string;
   /** @internal */
-  alignment?: "left" | "center" | "right";
+  desktopContentAlignment?: "left" | "center" | "right";
+  /** @internal */
+  mobileContentAlignment?: "left" | "center" | "right";
 }
+
+const primaryFooterLinksSlotContainer = cva(
+  "w-full grid grid-cols-1 gap-6 md:grid-cols-5",
+  {
+    variants: {
+      isEditing: {
+        true: "min-h-[30px]",
+        false: "",
+      },
+      desktopContentAlignment: {
+        left: "md:justify-items-start",
+        center: "md:justify-items-center",
+        right: "md:justify-items-end",
+      },
+      mobileContentAlignment: {
+        left: "justify-items-start",
+        center: "justify-items-center",
+        right: "justify-items-end",
+      },
+    },
+    defaultVariants: {
+      isEditing: false,
+      desktopContentAlignment: "left",
+      mobileContentAlignment: "left",
+    },
+  }
+);
+
+const secondaryFooterLinksSlotContainer = cva(
+  "w-full flex flex-col md:flex-row md:flex-wrap gap-5",
+  {
+    variants: {
+      isEditing: {
+        true: "min-h-[30px]",
+        false: "",
+      },
+      desktopContentAlignment: {
+        left: "md:justify-start",
+        center: "md:justify-center",
+        right: "md:justify-end",
+      },
+      mobileContentAlignment: {
+        left: "items-start",
+        center: "items-center",
+        right: "items-end",
+      },
+    },
+    defaultVariants: {
+      isEditing: false,
+      desktopContentAlignment: "left",
+      mobileContentAlignment: "left",
+    },
+  }
+);
+
+const primaryLinkClassName = cva("block break-words whitespace-normal", {
+  variants: {
+    desktopContentAlignment: {
+      left: "md:text-left",
+      center: "md:text-center",
+      right: "md:text-right",
+    },
+    mobileContentAlignment: {
+      left: "text-left",
+      center: "text-center",
+      right: "text-right",
+    },
+  },
+  defaultVariants: {
+    desktopContentAlignment: "left",
+    mobileContentAlignment: "left",
+  },
+  compoundVariants: [
+    {
+      desktopContentAlignment: "left",
+      className: "md:justify-start",
+    },
+    {
+      desktopContentAlignment: "center",
+      className: "md:justify-center",
+    },
+    {
+      desktopContentAlignment: "right",
+      className: "md:justify-end",
+    },
+    {
+      mobileContentAlignment: "left",
+      className: "justify-start",
+    },
+    {
+      mobileContentAlignment: "center",
+      className: "justify-center",
+    },
+    {
+      mobileContentAlignment: "right",
+      className: "justify-end",
+    },
+  ],
+});
+
+const secondaryLinkClassName = cva(
+  "flex-none max-w-full break-words whitespace-normal",
+  {
+    variants: {
+      desktopContentAlignment: {
+        left: "md:text-left",
+        center: "md:text-center",
+        right: "md:text-right",
+      },
+      mobileContentAlignment: {
+        left: "text-left",
+        center: "text-center",
+        right: "text-right",
+      },
+    },
+    defaultVariants: {
+      desktopContentAlignment: "left",
+      mobileContentAlignment: "left",
+    },
+  }
+);
 
 const FooterLinksSlotInternal: PuckComponent<FooterLinksSlotProps> = (
   props
@@ -38,7 +162,8 @@ const FooterLinksSlotInternal: PuckComponent<FooterLinksSlotProps> = (
     color,
     variant = "primary",
     eventNamePrefix = "footer",
-    alignment = "left",
+    desktopContentAlignment = "left",
+    mobileContentAlignment = "left",
     puck,
   } = props;
   const streamDocument = useDocument();
@@ -48,66 +173,71 @@ const FooterLinksSlotInternal: PuckComponent<FooterLinksSlotProps> = (
     return puck.isEditing ? <div className="h-10 min-w-[100px]" /> : <></>;
   }
 
-  let secondaryItemsAlignment: string | undefined;
+  const links = data.links.map((linkData, index) => {
+    const label = resolveComponentData(
+      linkData.label,
+      i18n.language,
+      streamDocument
+    );
 
-  if (variant === "secondary") {
-    switch (alignment) {
-      case "right":
-        secondaryItemsAlignment = "md:justify-end";
-        break;
-      case "center":
-        secondaryItemsAlignment = "md:justify-center";
-        break;
-      default:
-        secondaryItemsAlignment = "md:justify-start";
-        break;
-    }
+    const link = resolveComponentData(
+      linkData.link,
+      i18n.language,
+      streamDocument
+    );
+
+    return (
+      <CTA
+        key={index}
+        link={link}
+        label={label}
+        linkType={linkData.linkType}
+        variant={
+          variant === "primary"
+            ? "headerFooterMainLink"
+            : "headerFooterSecondaryLink"
+        }
+        openInNewTab={linkData.openInNewTab}
+        normalizeLink={
+          isNonNormalizableLinkType(linkData.linkType)
+            ? false
+            : (linkData.normalizeLink ?? true)
+        }
+        color={color}
+        eventName={`cta.${eventNamePrefix}.${index}-Link-${index + 1}`}
+        className={(variant === "primary"
+          ? primaryLinkClassName
+          : secondaryLinkClassName)({
+          desktopContentAlignment,
+          mobileContentAlignment,
+        })}
+      />
+    );
+  });
+
+  if (variant === "primary") {
+    return (
+      <div
+        className={primaryFooterLinksSlotContainer({
+          isEditing: puck.isEditing,
+          desktopContentAlignment,
+          mobileContentAlignment,
+        })}
+      >
+        {links}
+      </div>
+    );
   }
 
   return (
     <div
-      className={`${puck.isEditing ? "min-h-[30px]" : ""} ${
-        variant === "secondary"
-          ? `gap-5 flex flex-col md:flex-row w-full ${secondaryItemsAlignment}`
-          : "w-full grid grid-cols-1 md:grid-cols-5 gap-6"
-      }`}
-    >
-      {data.links.map((linkData, index) => {
-        const label = resolveComponentData(
-          linkData.label,
-          i18n.language,
-          streamDocument
-        );
-
-        const link = resolveComponentData(
-          linkData.link,
-          i18n.language,
-          streamDocument
-        );
-
-        return (
-          <CTA
-            openInNewTab={linkData.openInNewTab}
-            key={index}
-            variant={
-              variant === "primary"
-                ? "headerFooterMainLink"
-                : "headerFooterSecondaryLink"
-            }
-            eventName={`cta.${eventNamePrefix}.${index}-Link-${index + 1}`}
-            label={label}
-            linkType={linkData.linkType}
-            link={link}
-            normalizeLink={
-              isNonNormalizableLinkType(linkData.linkType)
-                ? false
-                : (linkData.normalizeLink ?? true)
-            }
-            className={`justify-center block break-words whitespace-normal`}
-            color={color}
-          />
-        );
+      className={secondaryFooterLinksSlotContainer({
+        isEditing: puck.isEditing,
+        desktopContentAlignment,
+        mobileContentAlignment,
       })}
+    >
+      {links}
     </div>
   );
 };
@@ -124,7 +254,8 @@ const defaultFooterLinkProps: FooterLinksSlotProps = {
     links: defaultLinks,
   },
   variant: "primary",
-  alignment: "left",
+  desktopContentAlignment: "left",
+  mobileContentAlignment: "left",
 };
 
 const footerLinksSlotFields: Fields<FooterLinksSlotProps> = {
@@ -200,15 +331,6 @@ const footerLinksSlotFields: Fields<FooterLinksSlotProps> = {
   },
   eventNamePrefix: {
     type: "text",
-    visible: false,
-  },
-  alignment: {
-    type: "radio",
-    options: [
-      { label: "Left", value: "left" },
-      { label: "Center", value: "center" },
-      { label: "Right", value: "right" },
-    ],
     visible: false,
   },
 };

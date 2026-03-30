@@ -242,7 +242,7 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ## ExpandedFooter
 
-The Expanded Footer is a comprehensive, two-tiered site-wide component for large websites. It includes a primary footer area for a logo, social media links, and utility images, and features two distinct layouts: a standard link list or an "expanded" multi-column mega-footer. It also includes an optional secondary sub-footer for copyright notices and legal links. Avalible on Location templates.
+The Expanded Footer is a comprehensive, two-tiered site-wide component for large websites. It includes a primary footer area for a logo, social media links, and utility images, and features two distinct layouts: a standard link list or an "expanded" multi-column mega-footer. It also includes an optional secondary sub-footer for copyright notices and legal links.
 
 ![Preview of the ExpandedFooter component](../components/testing/screenshots/ExpandedFooter/%5Bdesktop%5D%20default%20props.png)
 
@@ -252,18 +252,19 @@ The Expanded Footer is a comprehensive, two-tiered site-wide component for large
 
 This object contains all the content for both footer tiers.
 
-| Prop                 | Type                           | Description                         | Default |
-| :------------------- | :----------------------------- | :---------------------------------- | :------ |
-| `data.primaryFooter` | `{ expandedFooter: boolean; }` | Content for the primary footer bar. |         |
+| Prop                   | Type                                                                                                    | Description                           | Default |
+| :--------------------- | :------------------------------------------------------------------------------------------------------ | :------------------------------------ | :------ |
+| `data.primaryFooter`   | `{ expandedFooter: boolean; showLogo: boolean; showSocialLinks: boolean; showUtilityImages: boolean; }` | Content for the primary footer bar.   |         |
+| `data.secondaryFooter` | `{ show: boolean; }`                                                                                    | Content for the secondary footer bar. |         |
 
 #### Style Props
 
 This object contains properties for customizing the appearance of both footer tiers.
 
-| Prop                   | Type                                                                  | Description                         | Default |
-| :--------------------- | :-------------------------------------------------------------------- | :---------------------------------- | :------ |
-| `styles.maxWidth`      | `PageSectionProps["maxWidth"]`                                        | The maximum width of the footer.    |         |
-| `styles.primaryFooter` | `{ backgroundColor?: ThemeColor; linksPosition: "left" \| "right"; }` | Styling for the primary footer bar. |         |
+| Prop                   | Type                                                                                                                                                                                 | Description                         | Default |
+| :--------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------- | :------ |
+| `styles.maxWidth`      | `PageSectionProps["maxWidth"]`                                                                                                                                                       | The maximum width of the footer.    |         |
+| `styles.primaryFooter` | `{ backgroundColor?: ThemeColor; linksPosition: "left" \| "right"; desktopContentAlignment: "left" \| "center" \| "right"; mobileContentAlignment: "left" \| "center" \| "right"; }` | Styling for the primary footer bar. |         |
 
 ---
 
@@ -788,21 +789,13 @@ The Secondary Footer Slot is a sub-section of the Expanded Footer that contains 
 
 ### Props
 
-#### Data Props
-
-Data configuration for the secondary footer.
-
-| Prop   | Type                 | Description                                  | Default |
-| :----- | :------------------- | :------------------------------------------- | :------ |
-| `data` | `{ show: boolean; }` | Data configuration for the secondary footer. |         |
-
 #### Style Props
 
 Styling configuration for the secondary footer.
 
-| Prop     | Type                                                                              | Description                                     | Default |
-| :------- | :-------------------------------------------------------------------------------- | :---------------------------------------------- | :------ |
-| `styles` | `{ backgroundColor?: ThemeColor; linksPosition: "left" \| "center" \| "right"; }` | Styling configuration for the secondary footer. |         |
+| Prop     | Type                                                                                                                                                                   | Description                                     | Default |
+| :------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: ThemeColor; desktopContentAlignment: "left" \| "center" \| "right"; mobileContentAlignment: "left" \| "center" \| "right"; showLinks: boolean; }` | Styling configuration for the secondary footer. |         |
 
 ---
 

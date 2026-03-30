@@ -1,7 +1,7 @@
 const mainDefaultLayout = {
   root: {
     props: {
-      version: 70,
+      version: 72,
       title: {
         field: "name",
         constantValue: "",
@@ -3840,6 +3840,12 @@ const mainDefaultLayout = {
         data: {
           primaryFooter: {
             expandedFooter: false,
+            showLogo: true,
+            showSocialLinks: true,
+            showUtilityImages: true,
+          },
+          secondaryFooter: {
+            show: true,
           },
         },
         slots: {
@@ -4102,9 +4108,6 @@ const mainDefaultLayout = {
               type: "SecondaryFooterSlot",
               props: {
                 id: "SecondaryFooterSlot-014d0906-830d-40ae-bb74-dcbc1188ae73",
-                data: {
-                  show: true,
-                },
                 maxWidth: "theme",
                 slots: {
                   SecondaryLinksWrapperSlot: [
@@ -4148,7 +4151,8 @@ const mainDefaultLayout = {
                         },
                         variant: "secondary",
                         eventNamePrefix: "secondary",
-                        alignment: "left",
+                        desktopContentAlignment: "left",
+                        mobileContentAlignment: "left",
                       },
                     },
                   ],
@@ -4160,7 +4164,8 @@ const mainDefaultLayout = {
                         data: {
                           text: { defaultValue: "" },
                         },
-                        alignment: "left",
+                        desktopContentAlignment: "left",
+                        mobileContentAlignment: "left",
                       },
                     },
                   ],
@@ -4171,7 +4176,9 @@ const mainDefaultLayout = {
                     selectedColor: "palette-primary-light",
                     contrastingColor: "black",
                   },
-                  linksPosition: "left",
+                  desktopContentAlignment: "left",
+                  mobileContentAlignment: "left",
+                  showLinks: true,
                 },
               },
             },
@@ -4189,6 +4196,8 @@ const mainDefaultLayout = {
               contrastingColor: "white",
             },
             linksPosition: "right",
+            desktopContentAlignment: "left",
+            mobileContentAlignment: "left",
           },
           maxWidth: "theme",
         },
@@ -4201,7 +4210,7 @@ const mainDefaultLayout = {
 const directoryDefaultLayout = {
   root: {
     props: {
-      version: 70,
+      version: 72,
       title: {
         field: "",
         constantValue: { defaultValue: "PLACEHOLDER" },
@@ -4605,7 +4614,15 @@ const directoryDefaultLayout = {
     {
       type: "ExpandedFooter",
       props: {
-        data: { primaryFooter: { expandedFooter: false } },
+        data: {
+          primaryFooter: {
+            expandedFooter: false,
+            showLogo: true,
+            showSocialLinks: true,
+            showUtilityImages: true,
+          },
+          secondaryFooter: { show: true },
+        },
         slots: {
           LogoSlot: [
             {
@@ -4881,13 +4898,14 @@ const directoryDefaultLayout = {
               type: "SecondaryFooterSlot",
               props: {
                 id: "SecondaryFooterSlot-337d3a64-afe3-4f12-9026-e416d2c5d83c",
-                data: { show: true },
                 styles: {
                   backgroundColor: {
                     selectedColor: "palette-primary-light",
                     contrastingColor: "black",
                   },
-                  linksPosition: "left",
+                  desktopContentAlignment: "left",
+                  mobileContentAlignment: "left",
+                  showLinks: true,
                 },
                 maxWidth: "theme",
                 slots: {
@@ -4937,7 +4955,8 @@ const directoryDefaultLayout = {
                         },
                         variant: "secondary",
                         eventNamePrefix: "secondary",
-                        alignment: "left",
+                        desktopContentAlignment: "left",
+                        mobileContentAlignment: "left",
                       },
                     },
                   ],
@@ -4947,7 +4966,8 @@ const directoryDefaultLayout = {
                       props: {
                         id: "CopyrightMessageSlot-65eda140-da7c-4ad5-9bb7-f017a433277b",
                         data: { text: { defaultValue: "" } },
-                        alignment: "left",
+                        desktopContentAlignment: "left",
+                        mobileContentAlignment: "left",
                       },
                     },
                   ],
@@ -4964,6 +4984,8 @@ const directoryDefaultLayout = {
               contrastingColor: "white",
             },
             linksPosition: "right",
+            desktopContentAlignment: "left",
+            mobileContentAlignment: "left",
           },
           maxWidth: "theme",
         },
