@@ -37,7 +37,7 @@ export interface PhoneProps {
   /** @internal */
   parentData?: {
     field: string;
-    phoneNumber: string;
+    phoneNumber?: string;
   };
 }
 
@@ -107,9 +107,9 @@ export const PhoneFields: Fields<PhoneProps> = {
 const PhoneComponent = ({ data, styles, parentData }: PhoneProps) => {
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
-  const resolvedPhone = parentData
-    ? parentData.phoneNumber
-    : resolveComponentData(data.number, i18n.language, streamDocument);
+  const resolvedPhone =
+    parentData?.phoneNumber ??
+    resolveComponentData(data.number, i18n.language, streamDocument);
 
   if (!resolvedPhone) {
     return;
