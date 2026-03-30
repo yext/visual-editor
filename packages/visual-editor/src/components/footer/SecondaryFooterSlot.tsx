@@ -65,66 +65,19 @@ const secondaryFooterSlotFields: Fields<SecondaryFooterSlotProps> = {
         msg("fields.desktopContentAlignment", "Desktop Content Alignment"),
         {
           type: "radio",
-          options: [
-            {
-              label: msg("fields.options.left", "Left", {
-                context: "direction",
-              }),
-              value: "left",
-            },
-            {
-              label: msg("fields.options.center", "Center", {
-                context: "direction",
-              }),
-              value: "center",
-            },
-            {
-              label: msg("fields.options.right", "Right", {
-                context: "direction",
-              }),
-              value: "right",
-            },
-          ],
+          options: "ALIGNMENT",
         }
       ),
       mobileContentAlignment: YextField(
         msg("fields.mobileContentAlignment", "Mobile Content Alignment"),
         {
           type: "radio",
-          options: [
-            {
-              label: msg("fields.options.left", "Left", {
-                context: "direction",
-              }),
-              value: "left",
-            },
-            {
-              label: msg("fields.options.center", "Center", {
-                context: "direction",
-              }),
-              value: "center",
-            },
-            {
-              label: msg("fields.options.right", "Right", {
-                context: "direction",
-              }),
-              value: "right",
-            },
-          ],
+          options: "ALIGNMENT",
         }
       ),
       showLinks: YextField(msg("fields.showLinks", "Show Links"), {
         type: "radio",
-        options: [
-          {
-            label: msg("fields.options.show", "Show"),
-            value: true,
-          },
-          {
-            label: msg("fields.options.hide", "Hide"),
-            value: false,
-          },
-        ],
+        options: "SHOW_HIDE",
       }),
     },
   }),

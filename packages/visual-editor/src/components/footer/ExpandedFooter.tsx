@@ -162,29 +162,20 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
           ),
           showLogo: YextField(msg("fields.showLogo", "Show Logo"), {
             type: "radio",
-            options: [
-              { label: msg("fields.options.yes", "Yes"), value: true },
-              { label: msg("fields.options.no", "No"), value: false },
-            ],
+            options: "SHOW_HIDE",
           }),
           showSocialLinks: YextField(
             msg("fields.showSocialLinks", "Show Social Links"),
             {
               type: "radio",
-              options: [
-                { label: msg("fields.options.yes", "Yes"), value: true },
-                { label: msg("fields.options.no", "No"), value: false },
-              ],
+              options: "SHOW_HIDE",
             }
           ),
           showUtilityImages: YextField(
             msg("fields.showUtilityImages", "Show Utility Images"),
             {
               type: "radio",
-              options: [
-                { label: msg("fields.options.yes", "Yes"), value: true },
-                { label: msg("fields.options.no", "No"), value: false },
-              ],
+              options: "SHOW_HIDE",
             }
           ),
         },
@@ -247,52 +238,14 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
             msg("fields.desktopContentAlignment", "Desktop Content Alignment"),
             {
               type: "radio",
-              options: [
-                {
-                  label: msg("fields.options.left", "Left", {
-                    context: "direction",
-                  }),
-                  value: "left",
-                },
-                {
-                  label: msg("fields.options.center", "Center", {
-                    context: "direction",
-                  }),
-                  value: "center",
-                },
-                {
-                  label: msg("fields.options.right", "Right", {
-                    context: "direction",
-                  }),
-                  value: "right",
-                },
-              ],
+              options: "ALIGNMENT",
             }
           ),
           mobileContentAlignment: YextField(
             msg("fields.mobileContentAlignment", "Mobile Content Alignment"),
             {
               type: "radio",
-              options: [
-                {
-                  label: msg("fields.options.left", "Left", {
-                    context: "direction",
-                  }),
-                  value: "left",
-                },
-                {
-                  label: msg("fields.options.center", "Center", {
-                    context: "direction",
-                  }),
-                  value: "center",
-                },
-                {
-                  label: msg("fields.options.right", "Right", {
-                    context: "direction",
-                  }),
-                  value: "right",
-                },
-              ],
+              options: "ALIGNMENT",
             }
           ),
           // Logo and utility image styles are controlled within their respective slots
@@ -471,8 +424,9 @@ const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = (props) => {
 };
 
 /**
- * The Expanded Footer is a comprehensive, two-tiered site-wide component for large websites. It includes a primary footer area for a logo, social media links, and utility images, and features two distinct layouts: a standard link list or an "expanded" multi-column mega-footer. It also includes an optional secondary sub-footer for copyright notices and legal links.
- * Available on Location templates.
+ * The Expanded Footer is a comprehensive, two-tiered site-wide component for large websites.
+ * It includes a primary footer area for a logo, social media links, and utility images, and features two distinct layouts: a standard link list or an "expanded" multi-column mega-footer.
+ * It also includes an optional secondary sub-footer for copyright notices and legal links.
  */
 export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
   label: msg("components.expandedFooter", "Expanded Footer"),
