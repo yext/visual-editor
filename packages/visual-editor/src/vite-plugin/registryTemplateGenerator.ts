@@ -38,10 +38,7 @@
 import path from "node:path";
 import fs from "fs-extra";
 import { Project, QuoteKind, SyntaxKind, type SourceFile } from "ts-morph";
-import {
-  getEditorConfigNameFromTemplateNames,
-  getEditorPathFromTemplateNames,
-} from "./editorRoute.ts";
+import { getEditorTemplateInfoFromTemplateNames } from "./editorRoute.ts";
 
 type TemplateManifestEntry = {
   name: string;
@@ -899,7 +896,7 @@ function setEditPath(sourceFile: SourceFile, templateNames: string[]): void {
   }
 
   declaration.setInitializer(
-    JSON.stringify(getEditorPathFromTemplateNames(templateNames))
+    JSON.stringify(getEditorTemplateInfoFromTemplateNames(templateNames).path)
   );
 }
 
@@ -907,7 +904,8 @@ function setEditConfigName(
   sourceFile: SourceFile,
   templateNames: string[]
 ): void {
-  const configName = getEditorConfigNameFromTemplateNames(templateNames);
+  const configName =
+    getEditorTemplateInfoFromTemplateNames(templateNames).configName;
   const declaration = sourceFile.getVariableDeclaration("editTemplateName");
 
   if (declaration) {

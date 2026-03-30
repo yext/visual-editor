@@ -1,48 +1,61 @@
 import {
   EDIT_PATH_PLACEHOLDER,
   EDIT_TEMPLATE_NAME_PLACEHOLDER,
-  getEditorConfigNameFromTemplateNames,
   getEditorTemplateInfoFromTemplateNames,
-  getEditorPathFromTemplateNames,
   injectEditorTemplateInfo,
 } from "./editorRoute.ts";
 
-describe("getEditorPathFromTemplateNames", () => {
+describe("getEditorTemplateInfoFromTemplateNames", () => {
   it("uses the legacy route when main is available", () => {
-    expect(getEditorPathFromTemplateNames(["main"])).toBe("edit");
+    expect(getEditorTemplateInfoFromTemplateNames(["main"])).toEqual({
+      path: "edit",
+      configName: "edit",
+    });
   });
 
   it("uses the shared route when only shared templates are available", () => {
-    expect(getEditorPathFromTemplateNames(["directory", "locator"])).toBe(
-      "edit"
-    );
+    expect(
+      getEditorTemplateInfoFromTemplateNames(["directory", "locator"])
+    ).toEqual({
+      path: "edit",
+      configName: "edit",
+    });
   });
 
   it("uses the legacy route when a legacy template is mixed with custom templates", () => {
-    expect(getEditorPathFromTemplateNames(["main", "custom-template"])).toBe(
-      "edit"
-    );
+    expect(
+      getEditorTemplateInfoFromTemplateNames(["main", "custom-template"])
+    ).toEqual({
+      path: "edit",
+      configName: "edit",
+    });
   });
 
   it("uses a template-scoped route for a single non-legacy template", () => {
-    expect(getEditorPathFromTemplateNames(["custom-template"])).toBe(
-      "edit/custom-template"
+    expect(getEditorTemplateInfoFromTemplateNames(["custom-template"])).toEqual(
+      {
+        path: "edit/custom-template",
+        configName: "edit-custom-template",
+      }
     );
   });
 
   it("uses a template-scoped route for a single custom template mixed with shared templates", () => {
     expect(
-      getEditorPathFromTemplateNames([
+      getEditorTemplateInfoFromTemplateNames([
         "custom-template",
         "directory",
         "locator",
       ])
-    ).toBe("edit/custom-template");
+    ).toEqual({
+      path: "edit/custom-template",
+      configName: "edit-custom-template",
+    });
   });
 
   it("throws when there are multiple non-legacy templates", () => {
     expect(() =>
-      getEditorPathFromTemplateNames([
+      getEditorTemplateInfoFromTemplateNames([
         "custom-a",
         "custom-b",
         "directory",
@@ -50,21 +63,7 @@ describe("getEditorPathFromTemplateNames", () => {
       ])
     ).toThrow("expected exactly one non-legacy template");
   });
-});
 
-describe("getEditorConfigNameFromTemplateNames", () => {
-  it("uses the legacy config name when main is available", () => {
-    expect(getEditorConfigNameFromTemplateNames(["main"])).toBe("edit");
-  });
-
-  it("uses a template-scoped config name for a single custom template", () => {
-    expect(getEditorConfigNameFromTemplateNames(["dunkin"])).toBe(
-      "edit-dunkin"
-    );
-  });
-});
-
-describe("getEditorTemplateInfoFromTemplateNames", () => {
   it("returns the matching path and config name", () => {
     expect(
       getEditorTemplateInfoFromTemplateNames([
@@ -93,61 +92,25 @@ const editTemplateName = "${EDIT_TEMPLATE_NAME_PLACEHOLDER}";`,
     ).toBe('const editPath = "edit";\nconst editTemplateName = "edit";');
   });
 
-  it("replaces existing path and template-name assignments", () => {
-    expect(
-      injectEditorTemplateInfo(
-        'const editPath = "edit";\nconst editTemplateName = "edit";',
-        {
-          path: "edit/dunkin",
-          configName: "edit-dunkin",
-        }
-      )
-    ).toBe(
-      'const editPath = "edit/dunkin";\nconst editTemplateName = "edit-dunkin";'
-    );
+  it("throws when the path placeholder is missing", () => {
+    expect(() =>
+      injectEditorTemplateInfo('const editPath = "edit";', {
+        path: "edit/dunkin",
+        configName: "edit-dunkin",
+      })
+    ).toThrow("Unable to inject editor path: placeholder not found");
   });
 
-  it("replaces an existing config.name string when editTemplateName is not present", () => {
-    expect(
+  it("throws when the template name placeholder is missing", () => {
+    expect(() =>
       injectEditorTemplateInfo(
-        `const editPath = "edit";
-export const config: TemplateConfig = {
-  name: "edit",
-};`,
+        `const editPath = "${EDIT_PATH_PLACEHOLDER}";
+const editTemplateName = "edit";`,
         {
           path: "edit/dunkin",
           configName: "edit-dunkin",
         }
       )
-    ).toBe(`const editPath = "edit/dunkin";
-export const config: TemplateConfig = {
-  name: "edit-dunkin",
-};`);
-  });
-
-  it("migrates a legacy getPath block to the editPath declaration form", () => {
-    expect(
-      injectEditorTemplateInfo(
-        `export const getPath: GetPath<TemplateProps> = () => {
-  return "edit";
-};
-
-export const config: TemplateConfig = {
-  name: "edit",
-};`,
-        {
-          path: "edit/dunkin",
-          configName: "edit-dunkin",
-        }
-      )
-    ).toBe(`const editPath = "edit/dunkin";
-
-export const getPath: GetPath<TemplateProps> = () => {
-  return editPath;
-};
-
-export const config: TemplateConfig = {
-  name: "edit-dunkin",
-};`);
+    ).toThrow("Unable to inject edit template name: placeholder not found");
   });
 });
