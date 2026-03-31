@@ -17,7 +17,7 @@
   "closeMenu": "Menü schließen",
   "closed": "Geschlossen",
   "closesAtTime": "Schließt um {{time}} Uhr",
-  "closesAtTimeWeek": "Schließt um {{time}} Uhr am {{dayOfWeek}}",
+  "closesAtTimeWeek": "Schließt am {{dayOfWeek}} um {{time}} Uhr",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "Utility-Bilder {{number}}"
@@ -34,7 +34,7 @@
   "getDirections": "Route planen",
   "heroBanner": "Hero-Banner",
   "heroHeader": "Hero-Header",
-  "heroImage": "Hero-Bild",
+  "heroImage": "Hero Image",
   "hours": "Öffnungszeiten",
   "hoursSection": "Öffnungszeiten Modul",
   "informationSection": "Informations-Modul",
@@ -62,7 +62,7 @@
   "openMenu": "Menü öffnen",
   "openNow": "Jetzt offen",
   "opensAtTime": "Öffnet um {{time}} Uhr",
-  "opensAtTimeWeek": "Öffnet um {{time}} Uhr am {{dayOfWeek}}",
+  "opensAtTimeWeek": "Öffnet am {{dayOfWeek}} um {{time}} Uhr",
   "phone": "Telefon",
   "photoGallerySection": "Fotogalerie-Modul",
   "primaryHeaderLinks": "Primäre Header-Links",
