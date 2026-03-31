@@ -1,6 +1,6 @@
 import Handlebars from "handlebars";
-import { StreamDocument } from "../utils/types/StreamDocument.ts";
-import { normalizeSlug } from "../utils/slugifier.ts";
+import { StreamDocument } from "../../utils/types/StreamDocument.ts";
+import { normalizeSlug } from "../../utils/slugifier.ts";
 
 let customCodeHandlebarsHelpersRegistered = false;
 
@@ -66,7 +66,13 @@ export const processHandlebarsTemplate = (
       registerCustomCodeHandlebarsHelpers();
       const template = Handlebars.compile(html);
       return template(data);
-    } catch {
+    } catch (err) {
+      const templateIdentifier =
+        data.__?.name || data.slug || data.id || "unknown-template";
+      console.error("Handlebars template render failed", {
+        error: err,
+        templateIdentifier,
+      });
       return html;
     }
   }

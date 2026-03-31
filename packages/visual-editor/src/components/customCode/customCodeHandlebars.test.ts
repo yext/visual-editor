@@ -1,7 +1,11 @@
-import { describe, expect, it } from "vitest";
+import Handlebars from "handlebars";
+import { describe, expect, it, vi } from "vitest";
 import { processHandlebarsTemplate } from "./customCodeHandlebars.ts";
 
 const document = {
+  __: {
+    name: "dev-location",
+  },
   id: "store-123",
   name: "Main Lobby",
   c_internalStoreCode: "1",
@@ -15,6 +19,14 @@ const document = {
 };
 
 describe("CustomCodeSection Handlebars helpers", () => {
+  it("when html contains no Handlebars syntax then it returns the original html", () => {
+    const plainHtml = `<div><p>Plain HTML content</p></div>`;
+
+    const renderedHtml = processHandlebarsTemplate(plainHtml, document);
+
+    expect(renderedHtml).toBe(plainHtml);
+  });
+
   it("when slugify receives mixed literal and field arguments then it returns a single normalized slug", () => {
     const renderedHtml = processHandlebarsTemplate(
       `<a href="https://locations.wingstop.com/{{slugify "wingstop-" c_internalStoreCode "-" address.city "-" address.region "-" address.postalCode "/flavors"}}">Explore</a>`,
@@ -73,5 +85,43 @@ describe("CustomCodeSection Handlebars helpers", () => {
     );
 
     expect(renderedHtml).toContain('href="/locations/tx/highland-village"');
+  });
+
+  it("when Handlebars rendering fails then it logs the error and returns the original html", () => {
+    const consoleErrorSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => undefined);
+    const invalidHtml = `<span>{{#if name}}</span>`;
+
+    const renderedHtml = processHandlebarsTemplate(invalidHtml, document);
+
+    expect(renderedHtml).toBe(invalidHtml);
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      "Handlebars template render failed",
+      expect.objectContaining({
+        templateIdentifier: "dev-location",
+      })
+    );
+
+    consoleErrorSpy.mockRestore();
+  });
+
+  it("when Handlebars compile throws then it returns the original html", () => {
+    const consoleErrorSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => undefined);
+    const compileSpy = vi
+      .spyOn(Handlebars, "compile")
+      .mockImplementation(() => {
+        throw new Error("compile failed");
+      });
+    const templateHtml = `<span>{{name}}</span>`;
+
+    const renderedHtml = processHandlebarsTemplate(templateHtml, document);
+
+    expect(renderedHtml).toBe(templateHtml);
+
+    compileSpy.mockRestore();
+    consoleErrorSpy.mockRestore();
   });
 });
