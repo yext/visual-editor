@@ -166,58 +166,6 @@ The CustomCodeSection component allows you to add custom HTML, CSS, and JavaScri
 
 ![Preview of the CustomCodeSection component](../components/testing/screenshots/CustomCodeSection/%5Bdesktop%5D%20default%20props%20with%20empty%20document.png)
 
-### Handlebars in HTML
-
-The `html` field supports [Handlebars](https://handlebarsjs.com/) expressions that resolve against the current document.
-
-- Use `{{fieldName}}` for raw field values, such as `{{name}}` or `{{address.city}}`.
-- Use `{{slugify ...}}` to create a normalized slug from one or more fields and string literals.
-- Use `{{slugifyPath ...}}` to create a slash-separated path from one or more fields and string literals.
-
-Examples
-
-Input:
-
-```html
-<a href="/{{slug}}">View Page</a>
-```
-
-Output:
-
-```html
-<a href="/us/va/arlington">View Page</a>
-```
-
-Input:
-
-```html
-<a href="https://example.com/{{slugify name "-" id}}">
-  View Details
-</a>
-```
-
-Output:
-
-```html
-<a href="https://example.com/main-lobby-store-123"> View Details </a>
-```
-
-Input:
-
-```html
-<a href="https://example.com/{{slugifyPath "locations" address.region address.city id}}">
-  View Location
-</a>
-```
-
-Output:
-
-```html
-<a href="https://example.com/locations/tx/highland-village/store-123">
-  View Location
-</a>
-```
-
 ### Props
 
 #### Other Props
