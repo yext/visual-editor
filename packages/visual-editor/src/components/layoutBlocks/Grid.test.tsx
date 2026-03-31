@@ -2100,6 +2100,46 @@ const tests: ComponentTest[] = [
     },
     version: 61,
   },
+  {
+    name: "version 61 - single column heading right aligned",
+    document: {
+      locale: "en",
+    },
+    props: {
+      columns: 1,
+      slots: [
+        {
+          Column: [
+            {
+              type: "HeadingText",
+              props: {
+                id: "HeadingText-right-aligned-single-column",
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: "Short Heading",
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: {
+                  level: 2,
+                  align: "right",
+                },
+              },
+            },
+          ],
+        },
+      ],
+      backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+      liveVisibility: true,
+      analytics: { scope: "gridSection" },
+      align: "right",
+    },
+    version: 61,
+  },
 ];
 
 describe("Grid", async () => {
