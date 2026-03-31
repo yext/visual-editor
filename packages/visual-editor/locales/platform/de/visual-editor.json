@@ -574,7 +574,7 @@
   "openMenu": "Menü öffnen",
   "openNow": "Jetzt offen",
   "opensAtTime": "Öffnet um {{time}} Uhr",
-  "opensAtTimeWeek": "Öffnet um {{time}} Uhr am {{dayOfWeek}}",
+  "opensAtTimeWeek": "Öffnet am {{dayOfWeek}} um {{time}} Uhr",
   "optional": "Optional",
   "outline": "Outline",
   "page": "Seite",
