@@ -161,8 +161,8 @@ importers:
         specifier: ^3.3.4
         version: 3.3.4
       handlebars:
-        specifier: ^4.7.8
-        version: 4.7.8
+        specifier: ^4.7.9
+        version: 4.7.9
       i18next:
         specifier: ^25.8.4
         version: 25.8.7(typescript@5.9.2)
@@ -6607,10 +6607,10 @@ packages:
         integrity: sha512-HZRwumpOGUrHyxO5bqKZL0B0GlUpwtCAzZ42sgxUPniu33R1LSFH5yrIcBCHjkctCAh3mtWKcKd9J4vDDdeVHA==,
       }
 
-  handlebars@4.7.8:
+  handlebars@4.7.9:
     resolution:
       {
-        integrity: sha512-vafaFqs8MZkRrSX7sFVUdo3ap/eNiLnb4IakshzvP56X5Nr1iGKAIqdX6tMlm6HcNRIkr6AxO5jFEoJzzpT8aQ==,
+        integrity: sha512-4E71E0rpOaQuJR2A3xDZ+GM1HyWYv1clR58tC8emQNeQe3RH7MAzSbat+V0wG78LQBo6m6bzSG/L4pBuCsgnUQ==,
       }
     engines: { node: ">=0.4.7" }
     hasBin: true
@@ -15674,7 +15674,7 @@ snapshots:
 
   grid-index@1.1.0: {}
 
-  handlebars@4.7.8:
+  handlebars@4.7.9:
     dependencies:
       minimist: 1.2.8
       neo-async: 2.6.2
