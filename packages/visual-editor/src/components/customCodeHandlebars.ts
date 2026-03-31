@@ -41,13 +41,17 @@ export const registerCustomCodeHandlebarsHelpers = () => {
 };
 
 /**
- * Renders CustomCodeSection HTML with Handlebars when template syntax is present.
+ * Compiles and renders a Handlebars template string with the provided data if Handlebars syntax is detected.
  *
- * The template receives the current stream document as its data context and can
- * use the helpers registered by `registerCustomCodeHandlebarsHelpers`.
+ * If the HTML string contains Handlebars expressions (e.g., {{name}}), this function will compile and render
+ * the template using the given data (typically the stream document). If compilation or rendering fails, or if
+ * no Handlebars expressions are present, the original HTML string is returned.
  *
- * If compilation fails, the original HTML is returned unchanged so custom code
- * continues to render as raw markup instead of failing the whole section.
+ * The template can use the helpers registered by `registerCustomCodeHandlebarsHelpers`.
+ *
+ * @param html - The HTML string, possibly containing Handlebars template syntax.
+ * @param data - The data object to use for template rendering (e.g., streamDocument).
+ * @returns The processed HTML string with Handlebars expressions replaced, or the original HTML if not applicable.
  */
 export const processHandlebarsTemplate = (
   html: string,
