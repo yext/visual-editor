@@ -66,7 +66,7 @@ const HeadingTextWrapper: PuckComponent<HeadingTextProps> = (props) => {
     resolveComponentData(data.text, i18n.language, streamDocument);
 
   return resolvedHeadingText ? (
-    <div className={`flex ${justifyClass}`}>
+    <div className={`flex w-full ${justifyClass}`}>
       <EntityField
         displayName={pt("heading", "Heading") + " " + styles.level}
         fieldId={parentData ? parentData.field : data.text.field}
