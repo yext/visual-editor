@@ -89,7 +89,7 @@ describe("CustomCodeSection Handlebars helpers", () => {
 
   it("when Handlebars rendering fails then it logs the error and returns the original html", () => {
     const consoleErrorSpy = vi
-      .spyOn(console, "error")
+      .spyOn(console, "warn")
       .mockImplementation(() => undefined);
     const invalidHtml = `<span>{{#if name}}</span>`;
 

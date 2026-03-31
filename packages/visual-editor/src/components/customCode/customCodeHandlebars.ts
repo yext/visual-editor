@@ -69,10 +69,13 @@ export const processHandlebarsTemplate = (
     } catch (err) {
       const templateIdentifier =
         data.__?.name || data.slug || data.id || "unknown-template";
-      console.error("Handlebars template render failed", {
-        error: err,
-        templateIdentifier,
-      });
+      console.warn(
+        "Handlebars template render failed, falling back to raw HTML",
+        {
+          error: err,
+          templateIdentifier,
+        }
+      );
       return html;
     }
   }
