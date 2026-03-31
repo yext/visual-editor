@@ -97,7 +97,7 @@ describe("CustomCodeSection Handlebars helpers", () => {
 
     expect(renderedHtml).toBe(invalidHtml);
     expect(consoleErrorSpy).toHaveBeenCalledWith(
-      "Handlebars template render failed",
+      "Handlebars template render failed, falling back to raw HTML",
       expect.objectContaining({
         templateIdentifier: "dev-location",
       })
