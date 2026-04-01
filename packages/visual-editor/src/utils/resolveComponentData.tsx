@@ -276,8 +276,7 @@ function isYextEntityField(value: any): value is YextEntityField<unknown> {
   return (
     typeof value === "object" &&
     value !== null &&
-    "field" in value &&
-    "constantValue" in value
+    ("field" in value || "constantValue" in value)
   );
 }
 

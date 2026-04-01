@@ -424,14 +424,13 @@ export const InternalLayoutEditor = ({
             const getPuck = useGetPuck();
             const { appState } = getPuck();
             const itemSelectorState = usePuck(
-              (s) => s.appState.ui.itemSelector
+              (s) => s.appState?.ui?.itemSelector ?? null
             );
 
             React.useEffect(removeDuplicateActionBars, [itemSelectorState]);
 
             const isAdvancedSettingsSelected =
-              appState?.ui?.itemSelector &&
-              appState.ui.itemSelector.zone === "root:advanced";
+              appState?.ui?.itemSelector?.zone === "root:advanced";
 
             if (isAdvancedSettingsSelected) {
               return <></>;
@@ -439,14 +438,13 @@ export const InternalLayoutEditor = ({
 
             const copyToClipboard = () => {
               const { appState, getItemBySelector } = getPuck();
+              const itemSelector = appState?.ui?.itemSelector;
 
-              if (!appState.ui.itemSelector) {
+              if (!itemSelector) {
                 return;
               }
 
-              const selectedComponent = getItemBySelector(
-                appState.ui.itemSelector
-              );
+              const selectedComponent = getItemBySelector(itemSelector);
               navigator.clipboard.writeText(
                 JSON.stringify(selectedComponent, null, 2)
               );
@@ -454,17 +452,15 @@ export const InternalLayoutEditor = ({
 
             const pasteFromClipboard = async () => {
               const { appState, dispatch, getItemBySelector } = getPuck();
+              const itemSelector = appState?.ui?.itemSelector;
 
-              if (
-                !appState?.ui?.itemSelector?.zone ||
-                appState?.ui?.itemSelector?.index === undefined
-              ) {
+              if (!itemSelector?.zone || itemSelector.index === undefined) {
                 return;
               }
 
               const selectedComponent = getItemBySelector({
-                index: appState.ui.itemSelector?.index,
-                zone: appState.ui.itemSelector?.zone,
+                index: itemSelector.index,
+                zone: itemSelector.zone,
               });
 
               if (!selectedComponent) {
@@ -531,8 +527,8 @@ export const InternalLayoutEditor = ({
                 devLogger.logData("PASTED_DATA", newData);
                 dispatch({
                   type: "replace",
-                  destinationZone: appState.ui.itemSelector.zone,
-                  destinationIndex: appState.ui.itemSelector.index,
+                  destinationZone: itemSelector.zone,
+                  destinationIndex: itemSelector.index,
                   data: newData,
                 });
               } catch (err) {

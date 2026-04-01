@@ -16,8 +16,12 @@ export const UIButtonsToggle = (props: UIButtonsToggleProps) => {
   const { showLeft } = props;
   const getPuck = useGetPuck();
 
-  const leftSideBarVisible = usePuck((s) => s.appState.ui.leftSideBarVisible);
-  const rightSideBarVisible = usePuck((s) => s.appState.ui.rightSideBarVisible);
+  const leftSideBarVisible = usePuck(
+    (s) => s.appState?.ui?.leftSideBarVisible ?? false
+  );
+  const rightSideBarVisible = usePuck(
+    (s) => s.appState?.ui?.rightSideBarVisible ?? false
+  );
 
   const toggleSidebars = useCallback(
     (sidebar: "left" | "right") => {
