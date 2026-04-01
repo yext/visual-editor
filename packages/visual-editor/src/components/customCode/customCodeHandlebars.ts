@@ -7,11 +7,7 @@ let customCodeHandlebarsHelpersRegistered = false;
 /**
  * Registers Handlebars helpers that are available in CustomCodeSection HTML.
  *
- * `slugify` joins its arguments in order and normalizes the resulting string,
- * which makes it a good fit for single slugs or mixed constant + field output.
- *
- * `slugifyPath` normalizes each argument as a path segment, omits empty segments,
- * and joins the result with `/`, which makes it useful for authoring URL paths.
+ * `slugify` joins its arguments in order and normalizes the resulting string.
  */
 export const registerCustomCodeHandlebarsHelpers = () => {
   if (customCodeHandlebarsHelpersRegistered) {
@@ -25,16 +21,6 @@ export const registerCustomCodeHandlebarsHelpers = () => {
       .join("");
 
     return normalizeSlug(content);
-  });
-
-  Handlebars.registerHelper("slugifyPath", (...args: unknown[]) => {
-    const values = args.slice(0, -1);
-    const normalizedSegments = values
-      .map((value) => (value == null ? "" : normalizeSlug(String(value))))
-      .flatMap((value) => value.split("/"))
-      .filter(Boolean);
-
-    return normalizedSegments.join("/");
   });
 
   customCodeHandlebarsHelpersRegistered = true;

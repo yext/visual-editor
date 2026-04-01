@@ -38,9 +38,9 @@ describe("CustomCodeSection Handlebars helpers", () => {
     );
   });
 
-  it("when slugifyPath receives path segments then it joins normalized segments with slashes", () => {
+  it("when slugify receives path segments and separators then it returns a normalized path", () => {
     const renderedHtml = processHandlebarsTemplate(
-      `<a href="/{{slugifyPath "locations" address.region address.city name}}">View Location</a>`,
+      `<a href="/{{slugify "locations/" address.region "/" address.city "/" name}}">View Location</a>`,
       document
     );
 
@@ -67,9 +67,9 @@ describe("CustomCodeSection Handlebars helpers", () => {
     expect(renderedHtml).toContain("<span>store-123</span>");
   });
 
-  it("when slugifyPath receives a mix of constants and fields then it builds a normalized nested path", () => {
+  it("when slugify receives a mix of constants and fields then it builds a normalized nested path", () => {
     const renderedHtml = processHandlebarsTemplate(
-      `<a href="/{{slugifyPath "categories" c_category address.city}}">View Category</a>`,
+      `<a href="/{{slugify "categories/" c_category "/" address.city}}">View Category</a>`,
       document
     );
 
@@ -78,9 +78,9 @@ describe("CustomCodeSection Handlebars helpers", () => {
     );
   });
 
-  it("when slugifyPath receives empty segments then it omits them from the output path", () => {
+  it("when slugify receives empty segments then it omits them from the output path", () => {
     const renderedHtml = processHandlebarsTemplate(
-      `<a href="/{{slugifyPath "locations" c_optionalSegment address.region address.city}}">View Location</a>`,
+      `<a href="/{{slugify "locations/" c_optionalSegment address.region "/" address.city}}">View Location</a>`,
       document
     );
 
