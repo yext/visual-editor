@@ -95,9 +95,14 @@ export const useCommonMessageReceivers = (
   useReceiveMessage("getTemplateMetadata", TARGET_ORIGINS, (send, payload) => {
     const puckConfig = componentRegistry[payload.templateId];
     if (!puckConfig) {
-      throw new Error(
-        `Could not find config for template: templateId=${payload.templateId}`
-      );
+      send({
+        status: "error",
+        payload: {
+          message: "Could not find config for template",
+          templateId: payload.templateId,
+        },
+      });
+      return;
     }
     setPuckConfig(puckConfig);
     const templateMetadata = payload as TemplateMetadata;
