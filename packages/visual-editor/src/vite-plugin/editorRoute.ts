@@ -47,7 +47,7 @@ export const getEditorTemplateInfoFromTemplateNames = (
     );
   }
 
-  const [customTemplateName] = customTemplateNames;
+  const customTemplateName = customTemplateNames[0];
   return {
     path: `edit/${customTemplateName}`,
     configName: `edit-${customTemplateName}`,
