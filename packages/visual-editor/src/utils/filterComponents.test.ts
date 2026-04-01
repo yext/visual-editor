@@ -3,15 +3,15 @@ import { filterComponentsFromConfig } from "./filterComponents.ts";
 import { mainConfig } from "../components/configs/mainConfig.tsx";
 
 describe("filterComponentsFromConfig", () => {
-  it("filters gated components and categories when no feature flags are enabled", () => {
+  it("keeps advanced core info available when no feature flags are enabled", () => {
     const config = filterComponentsFromConfig(mainConfig);
 
     // Test component registry
     expect(Object.keys(config.components)).toContain("BannerSection");
     expect(Object.keys(config.components)).toContain("ExpandedHeader");
-    expect(Object.keys(config.components)).not.toContain("Grid");
-    expect(Object.keys(config.components)).not.toContain("BodyText");
-    expect(Object.keys(config.components)).not.toContain("Text");
+    expect(Object.keys(config.components)).toContain("Grid");
+    expect(Object.keys(config.components)).toContain("BodyText");
+    expect(Object.keys(config.components)).toContain("Text");
     expect(Object.keys(config.components)).toContain("CustomCodeSection");
 
     // Test list of categories
@@ -20,17 +20,19 @@ describe("filterComponentsFromConfig", () => {
     expect(Object.keys(config.categories ?? {})).toContain(
       "deprecatedComponents"
     );
-    expect(Object.keys(config.categories ?? {})).not.toContain(
-      "coreInformation"
-    );
+    expect(Object.keys(config.categories ?? {})).toContain("coreInformation");
 
     // Test component visibility within categories
     expect(config.categories?.other?.components).toContain("ExpandedHeader");
-    expect(config.categories?.coreInformation?.components).toBeUndefined();
+    expect(config.categories?.coreInformation?.components).toContain("Grid");
+    expect(config.categories?.coreInformation?.components).toContain(
+      "BodyText"
+    );
+    expect(config.categories?.coreInformation?.components).toContain("Text");
     expect(config.categories?.other?.components).toContain("CustomCodeSection");
   });
 
-  it("filters components and categories correctly when the advanced core info section flag is enabled", () => {
+  it("keeps the same components when the advanced core info section flag is enabled", () => {
     const config = filterComponentsFromConfig(
       mainConfig,
       [],

@@ -4,7 +4,7 @@ import { type Config } from "@puckeditor/core";
 const gatedLayoutComponents: string[] = [];
 
 // The categories that are disallowed by default.
-const gatedLayoutCategories: string[] = ["coreInformation"];
+const gatedLayoutCategories: string[] = [];
 
 /**
  * Filters out gated layout components and categories from a Puck configuration object.
