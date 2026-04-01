@@ -14,7 +14,7 @@ const document = {
     region: "TX",
     postalCode: "75077",
   },
-  c_category: "Chicken Wings",
+  c_category: "Donut Shop",
   c_optionalSegment: "",
 };
 
@@ -74,7 +74,7 @@ describe("CustomCodeSection Handlebars helpers", () => {
     );
 
     expect(renderedHtml).toContain(
-      'href="/categories/chicken-wings/highland-village"'
+      'href="/categories/donut-shop/highland-village"'
     );
   });
 
@@ -88,7 +88,7 @@ describe("CustomCodeSection Handlebars helpers", () => {
   });
 
   it("when Handlebars rendering fails then it logs the error and returns the original html", () => {
-    const consoleErrorSpy = vi
+    const consoleWarnSpy = vi
       .spyOn(console, "warn")
       .mockImplementation(() => undefined);
     const invalidHtml = `<span>{{#if name}}</span>`;
@@ -96,19 +96,19 @@ describe("CustomCodeSection Handlebars helpers", () => {
     const renderedHtml = processHandlebarsTemplate(invalidHtml, document);
 
     expect(renderedHtml).toBe(invalidHtml);
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
       "Handlebars template render failed, falling back to raw HTML",
       expect.objectContaining({
         templateIdentifier: "dev-location",
       })
     );
 
-    consoleErrorSpy.mockRestore();
+    consoleWarnSpy.mockRestore();
   });
 
   it("when Handlebars compile throws then it returns the original html", () => {
-    const consoleErrorSpy = vi
-      .spyOn(console, "error")
+    const consoleWarnSpy = vi
+      .spyOn(console, "warn")
       .mockImplementation(() => undefined);
     const compileSpy = vi
       .spyOn(Handlebars, "compile")
@@ -122,6 +122,6 @@ describe("CustomCodeSection Handlebars helpers", () => {
     expect(renderedHtml).toBe(templateHtml);
 
     compileSpy.mockRestore();
-    consoleErrorSpy.mockRestore();
+    consoleWarnSpy.mockRestore();
   });
 });
