@@ -247,6 +247,7 @@
     "icons": "Icônes",
     "image": "Image",
     "imageConstrain": "Contrainte d'image",
+    "imageFillType": "Type de remplissage de l'image",
     "imageHeight": "Hauteur de l'image",
     "images": "Images",
     "includePhoneHyperlink": "Inclure l'hyperlien de téléphone",
@@ -342,7 +343,9 @@
         "specialties": "Spécialités",
         "yearsOfExperience": "Années d'expérience"
       },
+      "fill": "Remplir",
       "fillContainer": "Remplir le conteneur",
+      "fit": "Ajuster",
       "fixed": "Fixé",
       "fixedWidth": "Largeur fixe",
       "friday": "Vendredi",

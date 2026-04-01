@@ -247,6 +247,7 @@
     "icons": "Simgeler",
     "image": "İmaj",
     "imageConstrain": "Görüntü Kısıtlaması",
+    "imageFillType": "Görüntü Doldurma Türü",
     "imageHeight": "Görüntü Yüksekliği",
     "images": "Görüntüler",
     "includePhoneHyperlink": "Telefon Köprüsü Ekle",
@@ -342,7 +343,9 @@
         "specialties": "Uzmanlıklar",
         "yearsOfExperience": "Yılların Deneyimi"
       },
+      "fill": "Doldurmak",
       "fillContainer": "Kabı Doldur",
+      "fit": "Yerleştirmek",
       "fixed": "Sabit",
       "fixedWidth": "Sabit Genişlik",
       "friday": "Cuma",

@@ -247,6 +247,7 @@
     "icons": "Ikoonid",
     "image": "Pilt",
     "imageConstrain": "Pildi piiramine",
+    "imageFillType": "Pildi täitmise tüüp",
     "imageHeight": "Pildi kõrgus",
     "images": "Pildid",
     "includePhoneHyperlink": "Lisage telefoni hüperlink",
@@ -342,7 +343,9 @@
         "specialties": "Erialad",
         "yearsOfExperience": "Aastatepikkune kogemus"
       },
+      "fill": "Täida",
       "fillContainer": "Täida konteiner",
+      "fit": "Sobivad",
       "fixed": "Fikseeritud",
       "fixedWidth": "Fikseeritud laius",
       "friday": "Reede",

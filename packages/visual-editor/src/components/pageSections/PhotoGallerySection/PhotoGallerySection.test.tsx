@@ -766,6 +766,102 @@ const tests: ComponentTest[] = [
     },
     version: 71,
   },
+  {
+    name: "version 71 carousel variant with imageFillType fit and vertical image",
+    document: {},
+    props: {
+      styles: {
+        variant: "carousel",
+        backgroundColor: {
+          bgColor: "bg-white",
+          textColor: "text-black",
+        },
+        showSectionHeading: true,
+      },
+      slots: {
+        HeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-3f85a3fa-4a71-4cfc-88e6-dbc51f9a7791",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    defaultValue: "Gallery",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                level: 2,
+                align: "left",
+              },
+            },
+          },
+        ],
+        PhotoGalleryWrapper: [
+          {
+            type: "PhotoGalleryWrapper",
+            props: {
+              id: "PhotoGalleryWrapper-9a1ab825-4059-4ca1-abaf-011c30ba3733",
+              data: {
+                images: {
+                  field: "",
+                  constantValue: [
+                    {
+                      assetImage: {
+                        url: "https://placehold.co/200x800.png",
+                        width: 200,
+                        height: 800,
+                        assetImage: {
+                          name: "Vertical Placeholder",
+                        },
+                      },
+                    },
+                    {
+                      assetImage: {
+                        url: "https://placehold.co/1000x570.png",
+                        width: 1000,
+                        height: 570,
+                        assetImage: {
+                          name: "Horizontal Placeholder 1",
+                        },
+                      },
+                    },
+                    {
+                      assetImage: {
+                        url: "https://placehold.co/1000x570.png?text=Slide+3",
+                        width: 1000,
+                        height: 570,
+                        assetImage: {
+                          name: "Horizontal Placeholder 2",
+                        },
+                      },
+                    },
+                  ],
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                image: {
+                  aspectRatio: 1.78,
+                },
+                imageFillType: "fit",
+                carouselImageCount: 1,
+              },
+              parentData: {
+                variant: "carousel",
+              },
+            },
+          },
+        ],
+      },
+      liveVisibility: true,
+      id: "PhotoGallerySection-329fca65-e47f-4168-bdc2-af6b77a771a5",
+    },
+    version: 71,
+  },
 ];
 
 describe("PhotoGallerySection", async () => {

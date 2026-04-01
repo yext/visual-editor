@@ -247,6 +247,7 @@
     "icons": "Ikoner",
     "image": "Bild",
     "imageConstrain": "Bildbegränsning",
+    "imageFillType": "Bildfyllningstyp",
     "imageHeight": "Bildhöjd",
     "images": "Bilder",
     "includePhoneHyperlink": "Inkludera telefonhyperlänk",
@@ -342,7 +343,9 @@
         "specialties": "Specialiteter",
         "yearsOfExperience": "År av erfarenhet"
       },
+      "fill": "Fylla",
       "fillContainer": "Fyll behållare",
+      "fit": "Färdig",
       "fixed": "Fast",
       "fixedWidth": "Fast bredd",
       "friday": "Fredag",

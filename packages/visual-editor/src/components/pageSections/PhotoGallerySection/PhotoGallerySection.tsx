@@ -224,6 +224,7 @@ export const PhotoGallerySection: ComponentConfig<{
               image: {
                 aspectRatio: 1.78,
               },
+              imageFillType: "fill",
               carouselImageCount: 1,
             },
             parentData: {

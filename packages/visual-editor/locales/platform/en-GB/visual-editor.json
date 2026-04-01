@@ -247,6 +247,7 @@
     "icons": "Icons",
     "image": "Image",
     "imageConstrain": "Image Constrain",
+    "imageFillType": "Image Fill Type",
     "imageHeight": "Image Height",
     "images": "Images",
     "includePhoneHyperlink": "Include Phone Hyperlink",
@@ -342,7 +343,9 @@
         "specialties": "Specialties",
         "yearsOfExperience": "Years of Experience"
       },
+      "fill": "Fill",
       "fillContainer": "Fill Container",
+      "fit": "Fit",
       "fixed": "Fixed",
       "fixedWidth": "Fixed Width",
       "friday": "Friday",

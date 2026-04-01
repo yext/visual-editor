@@ -247,6 +247,7 @@
     "icons": "ikony",
     "image": "Obraz",
     "imageConstrain": "Omezení obrázku",
+    "imageFillType": "Typ výplně obrázku",
     "imageHeight": "Výška obrázku",
     "images": "Obrázky",
     "includePhoneHyperlink": "Zahrňte hypertextový odkaz na telefon",
@@ -342,7 +343,9 @@
         "specialties": "Speciality",
         "yearsOfExperience": "Léta zkušeností"
       },
+      "fill": "Vyplnit",
       "fillContainer": "Naplňte nádobu",
+      "fit": "Fit",
       "fixed": "Opravené",
       "fixedWidth": "Pevná šířka",
       "friday": "pátek",

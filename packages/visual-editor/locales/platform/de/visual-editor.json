@@ -247,6 +247,7 @@
     "icons": "Icons",
     "image": "Bild",
     "imageConstrain": "Bildbegrenzung",
+    "imageFillType": "Bildfülltyp",
     "imageHeight": "Bildhöhe",
     "images": "Bilder",
     "includePhoneHyperlink": "Telefonhyperlink anzeigen",
@@ -342,7 +343,9 @@
         "specialties": "Fachgebiete",
         "yearsOfExperience": "Berufserfahrung (Jahre)"
       },
+      "fill": "Füllen",
       "fillContainer": "An Container anpassen",
+      "fit": "Fit",
       "fixed": "Fixiert",
       "fixedWidth": "Feste Breite",
       "friday": "Freitag",

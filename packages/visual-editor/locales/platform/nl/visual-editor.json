@@ -247,6 +247,7 @@
     "icons": "Pictogrammen",
     "image": "Afbeelding",
     "imageConstrain": "Beeldbeperking",
+    "imageFillType": "Type afbeeldingsvulling",
     "imageHeight": "Afbeeldingshoogte",
     "images": "Beelden",
     "includePhoneHyperlink": "Telefoonhyperlink opnemen",
@@ -342,7 +343,9 @@
         "specialties": "Specialiteiten",
         "yearsOfExperience": "Jarenlange ervaring"
       },
+      "fill": "Vullen",
       "fillContainer": "Vul container",
+      "fit": "Fit",
       "fixed": "Vast",
       "fixedWidth": "Vaste breedte",
       "friday": "Vrijdag",
