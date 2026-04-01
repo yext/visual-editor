@@ -21,7 +21,6 @@ import {
   applyCertifiedFacts,
   migrate,
   migrationRegistry,
-  filterComponentsFromConfig,
   defaultThemeConfig,
   mainConfig,
   getSchema,
@@ -134,12 +133,6 @@ const Location: Template<TemplateRenderProps> = (props) => {
     console.error("Failed to parse layout JSON:", e);
   }
 
-  const filteredConfig = filterComponentsFromConfig(
-    mainConfig,
-    document?._additionalLayoutComponents,
-    document?._additionalLayoutCategories
-  );
-
   let requireAnalyticsOptIn = false;
   if (document.__?.visualEditorConfig) {
     try {
@@ -161,7 +154,7 @@ const Location: Template<TemplateRenderProps> = (props) => {
       <VisualEditorProvider templateProps={props}>
         <GTMBody>
           <Render
-            config={filteredConfig}
+            config={mainConfig}
             data={data}
             metadata={{ streamDocument: document }}
           />

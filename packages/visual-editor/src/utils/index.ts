@@ -7,7 +7,6 @@ export { applyCertifiedFacts } from "./applyCertifiedFacts.ts";
 export { applyTheme } from "./applyTheme.ts";
 export { getCanonicalUrl } from "./canonicalUrl.ts";
 export { themeManagerCn, themeManagerTwMergeConfiguration } from "./cn.ts";
-export { filterComponentsFromConfig } from "./filterComponents.ts";
 export { getPageMetadata } from "./getPageMetadata.ts";
 export { normalizeLink } from "./normalizeLink.ts";
 export {
