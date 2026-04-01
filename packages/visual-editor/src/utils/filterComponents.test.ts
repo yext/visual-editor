@@ -3,7 +3,7 @@ import { filterComponentsFromConfig } from "./filterComponents.ts";
 import { mainConfig } from "../components/configs/mainConfig.tsx";
 
 describe("filterComponentsFromConfig", () => {
-  it("keeps advanced core info available when no feature flags are enabled", () => {
+  it("includes core information components in the default config", () => {
     const config = filterComponentsFromConfig(mainConfig);
 
     // Test component registry
@@ -32,7 +32,7 @@ describe("filterComponentsFromConfig", () => {
     expect(config.categories?.other?.components).toContain("CustomCodeSection");
   });
 
-  it("keeps the same components when the advanced core info section flag is enabled", () => {
+  it("includes core information components when the category is explicitly enabled", () => {
     const config = filterComponentsFromConfig(
       mainConfig,
       [],
