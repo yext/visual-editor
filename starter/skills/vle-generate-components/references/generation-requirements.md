@@ -6,6 +6,7 @@ Use this contract for every generated component.
 
 - Match sections visually as close as possible to 1:1 with the source page (match CSS, layouts, fonts, colors, border-radius, etc.)
 - Always match font families, font sizes, font colors, font weight, and background colors 1:1 with the source page
+- Treat each section's outer shell as responsible for ambient background color and vertical spacing so there are no unintended white seams between adjacent sections.
 - Always add a Google font equivalent as the fallback for any non-web safe fonts (for example: `'Template Specific Font', 'Open Sans', sans-serif`)
 - Everything needed for each component must be contained in a single file (excluding npm imports)
 - Use plain JSX elements and Tailwind utility classes for layout and styling.
@@ -72,11 +73,15 @@ In each `starter/src/registry/<template>/components/ExampleSection.tsx`:
 
 - Hours should always use streamDocument.hours
 - Address should always use streamDocument.address
+- Phone should use the stream document value and render in a properly formatted human-readable form.
 - FAQ/Q&A sections should keep interaction behavior such as show/hide.
 - Hero/promo sections should use plain JSX full-bleed shell wrappers when source parity expects media to reach section edges
   (for example: outer container classes like `px-0`, content wrapper classes like `max-w-none`).
+- When source parity requires media to fill its container, apply sizing to both the media element and its wrapper so cards and hero images truly render full-height/full-width with cover behavior.
 - Call To Action and Links should always pair with actionable href/link/CTA data, not just plain text spans.
 - Render `Link` from `@yext/pages-components` with visible child text or child markup, not as a self-closing element.
+- Preserve source vertical and horizontal alignment behavior for multi-column blocks
+- Preserve source list-marker visibility for bullets
 - Headers and Footers:
   - You should implement mega menus or hidden content if found in the captured HTML
   - Use nested arrays in Puck (`ArrayField`) for navigational links.

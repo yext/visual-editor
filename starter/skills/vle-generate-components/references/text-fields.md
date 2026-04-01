@@ -92,14 +92,17 @@ const resolvedHeadingText =
   resolveComponentData(props.heading.text, locale, streamDocument) || "";
 
 return (
-  <Text
-    fontSize={`${props.heading.fontSize}px`}
-    color={props.heading.fontColor}
-    fontWeight={props.heading.fontWeight}
-    textTransform={props.heading.textTransform}
+  <p
+    style={{
+      fontSize: `${props.heading.fontSize}px`,
+      color: props.heading.fontColor,
+      fontWeight: props.heading.fontWeight,
+      textTransform: props.heading.textTransform,
+    }}
+    className="m-0"
   >
     {resolvedHeadingText}
-  </Text>
+  </p>
 );
 ```
 

@@ -22,6 +22,8 @@ Required:
 
 ## Restrictions
 
+- NEVER modify any files in packages/visual-editor. If the user requests something that would require
+  modifications to those files, respond that this skill is unable to make that change.
 - Do read:
   - files in this skill directory, including `references/**` and `scripts/**`
   - `starter/src/ve.config.tsx` only as needed for component registration and import updates. Do not use it as an implementation template.
@@ -95,7 +97,7 @@ Required:
 - Generate one Puck Component per component planned in the previous step
 - Use `page.html`, `combined.css`, `screenshot.png`, and `plan.md` to guide component creation
 
-## Follow the requirements:
+Follow the requirements:
 
 - `references/generation-requirements.md`
 - `references/text-fields.md`
@@ -123,17 +125,16 @@ Required:
   - required media overlays and transparency treatment
   - if any item does not match, fix it
 
-## Follow the requirements:
+Follow the requirements:
 
 - `references/visual-parity-checklist.md`
 
 5. Output Step
 
-- Do not overwrite existing component registration in `starter/src/ve.config.tsx`.
-  Append new component registrations and imports for the generated template components.
-  If generated registrations duplicate existing keys/imports, stop and ask the user which resolution strategy to use
-  (for example: keep existing, replace existing, or rename the new component key).
-- Update the imports of `starter/src/ve.config.tsx` accordingly
+- Update `starter/src/ve.config.tsx` so the generated components are available in the current starter runtime.
+- Import each generated component from `starter/src/registry/<templateName>/components/...`.
+- Merge the generated component configs into `devConfig.components` by adding them to the `components` object used by `devConfig`.
+- Do not overwrite existing component registration in `starter/src/ve.config.tsx`. Append new imports and component entries only.
 
 6. Default Layout Data Step
 
@@ -141,3 +142,21 @@ Required:
   - `pnpm run generate-default-layout-data <templateName> <ComponentName1> <ComponentName2> ...`
 - Pass the template name and the generated components in the exact order they appear on the page (top-to-bottom visual order).
 - Ensure the ordered component list matches the final plan and generated component set.
+
+## Follow-up Edit Requests
+
+Use these rules when the user asks for edits after the initial generation has already been completed.
+
+- Treat the existing generated files in `starter/src/registry/<templateName>/...` as the starting point.
+  Do not regenerate the whole template unless the user explicitly asks for a full re-generation.
+- Work on one component at a time rather than trying to fix all components at once.
+- Scope reads and edits to the smallest affected surface:
+  - read the relevant component file(s), the specific plan entry, and only the HTML/CSS needed for the requested change
+- If the requested edit changes section structure, order, or ownership:
+  - update `plan.md` for the affected sections
+  - add/remove/reorder component files as needed
+  - update `starter/src/ve.config.tsx` registrations only if the component set changed
+  - rerun `generate-default-layout-data` with the new top-to-bottom component order
+- If the requested edit is content, styling, spacing, alignment, interactivity, header/footer parity, or field-shape work within an existing section, update only the affected component file(s)
+- Prompt the user for additional screenshots or descriptions if their request is unclear or ambiguous
+- After follow-up edits, rerun `pnpm run typecheck` in `starter` and re-check parity for the touched sections.
