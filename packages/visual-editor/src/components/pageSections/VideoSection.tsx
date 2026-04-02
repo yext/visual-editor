@@ -1,7 +1,7 @@
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import {
   backgroundColors,
-  BackgroundStyle,
+  ThemeColor,
 } from "../../utils/themeConfigOptions.ts";
 import { msg } from "../../utils/i18n/platform.ts";
 import { PageSection } from "../atoms/pageSection.tsx";
@@ -19,7 +19,7 @@ export interface VideoSectionProps {
      * The background color for the entire section, selected from the theme.
      * @defaultValue Background Color 1
      */
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
   };
 
   slots: {

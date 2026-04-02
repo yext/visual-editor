@@ -8,7 +8,10 @@ import { PhoneAtom } from "../atoms/phone.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { YextField } from "../../editor/YextField.tsx";
 import { TranslatableString } from "../../types/types.ts";
-import { backgroundColors } from "../../utils/themeConfigOptions.ts";
+import {
+  ThemeColor,
+  backgroundColors,
+} from "../../utils/themeConfigOptions.ts";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 
 /** The props for the Phone component */
@@ -27,12 +30,14 @@ export interface PhoneProps {
     includePhoneHyperlink: boolean;
     /** Whether to include the phone icon, defaults to true */
     includeIcon?: boolean;
+    /** The color applied to both the phone icon background and the phone link. */
+    color?: ThemeColor;
   };
 
   /** @internal */
   parentData?: {
     field: string;
-    phoneNumber: string;
+    phoneNumber?: string;
   };
 }
 
@@ -74,6 +79,10 @@ export const PhoneStyleFields = {
     type: "radio",
     options: "SHOW_HIDE",
   }),
+  color: YextField(msg("fields.color", "Color"), {
+    type: "select",
+    options: "SITE_COLOR",
+  }),
 };
 
 export const defaultPhoneDataProps: PhoneProps["data"] = {
@@ -98,9 +107,9 @@ export const PhoneFields: Fields<PhoneProps> = {
 const PhoneComponent = ({ data, styles, parentData }: PhoneProps) => {
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
-  const resolvedPhone = parentData
-    ? parentData.phoneNumber
-    : resolveComponentData(data.number, i18n.language, streamDocument);
+  const resolvedPhone =
+    parentData?.phoneNumber ??
+    resolveComponentData(data.number, i18n.language, streamDocument);
 
   if (!resolvedPhone) {
     return;
@@ -115,13 +124,14 @@ const PhoneComponent = ({ data, styles, parentData }: PhoneProps) => {
       constantValueEnabled={!parentData && data.number.constantValueEnabled}
     >
       <PhoneAtom
-        backgroundColor={backgroundColors.background2.value}
+        backgroundColor={styles.color ?? backgroundColors.background2.value}
         eventName={`phone`}
         format={styles.phoneFormat}
         label={resolveComponentData(data.label, i18n.language, streamDocument)}
         phoneNumber={resolvedPhone}
         includeHyperlink={styles.includePhoneHyperlink}
         includeIcon={styles.includeIcon ?? true}
+        linkColor={styles.color}
       />
     </EntityField>
   );

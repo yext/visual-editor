@@ -1,5 +1,6 @@
 import * as React from "react";
 import { ComponentConfig, PuckComponent } from "@puckeditor/core";
+import { cva } from "class-variance-authority";
 import { YextField } from "../../editor/YextField.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
@@ -13,13 +14,39 @@ export interface CopyrightMessageSlotProps {
     text: TranslatableString;
   };
   /** @internal */
-  alignment?: "left" | "center" | "right";
+  desktopContentAlignment?: "left" | "center" | "right";
+  /** @internal */
+  mobileContentAlignment?: "left" | "center" | "right";
 }
+
+const copyrightAlignment = cva("", {
+  variants: {
+    desktopContentAlignment: {
+      left: "md:text-left",
+      center: "md:text-center",
+      right: "md:text-right",
+    },
+    mobileContentAlignment: {
+      left: "text-left",
+      center: "text-center",
+      right: "text-right",
+    },
+  },
+  defaultVariants: {
+    desktopContentAlignment: "left",
+    mobileContentAlignment: "left",
+  },
+});
 
 const CopyrightMessageSlotInternal: PuckComponent<CopyrightMessageSlotProps> = (
   props
 ) => {
-  const { data, puck, alignment = "left" } = props;
+  const {
+    data,
+    puck,
+    desktopContentAlignment = "left",
+    mobileContentAlignment = "left",
+  } = props;
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
 
@@ -29,22 +56,14 @@ const CopyrightMessageSlotInternal: PuckComponent<CopyrightMessageSlotProps> = (
     streamDocument
   );
 
-  let alignmentStyle = ["text-center"];
-  switch (alignment) {
-    case "left": {
-      alignmentStyle.push("md:text-left");
-      break;
-    }
-    case "right": {
-      alignmentStyle.push("md:text-right");
-      break;
-    }
-    default:
-      break;
-  }
-
   return resolvedText ? (
-    <Body variant="xs" className={alignmentStyle.join(" ")}>
+    <Body
+      variant="xs"
+      className={copyrightAlignment({
+        desktopContentAlignment,
+        mobileContentAlignment,
+      })}
+    >
       {resolvedText}
     </Body>
   ) : puck.isEditing ? (
@@ -58,6 +77,8 @@ export const defaultCopyrightMessageSlotProps: CopyrightMessageSlotProps = {
   data: {
     text: { defaultValue: "" },
   },
+  desktopContentAlignment: "left",
+  mobileContentAlignment: "left",
 };
 
 export const CopyrightMessageSlot: ComponentConfig<{

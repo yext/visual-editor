@@ -2,16 +2,18 @@ import { FaPhone } from "react-icons/fa";
 import { CTA } from "./cta.tsx";
 import { Body } from "./body.tsx";
 import { parsePhoneNumber } from "awesome-phonenumber";
-import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
+import { ThemeColor } from "../../utils/themeConfigOptions.ts";
+import { getBackgroundColorClasses } from "../../utils/colors.ts";
 
 export type PhoneAtomProps = {
   phoneNumber: string;
   label?: string;
   eventName?: string;
-  backgroundColor?: BackgroundStyle;
+  backgroundColor?: ThemeColor;
   format: "domestic" | "international" | undefined;
   includeHyperlink: boolean;
   includeIcon: boolean;
+  linkColor?: ThemeColor;
   onClick?: () => void;
 };
 
@@ -33,7 +35,9 @@ export const PhoneAtom = (props: PhoneAtomProps) => {
       {props.includeIcon &&
         (props.backgroundColor ? (
           <div
-            className={`h-10 w-10 flex justify-center rounded-full items-center ${props.backgroundColor.bgColor} ${props.backgroundColor.textColor}`}
+            className={`h-10 w-10 flex justify-center rounded-full items-center ${getBackgroundColorClasses(
+              props.backgroundColor
+            )}`}
           >
             <FaPhone className="w-4 h-4" />
           </div>
@@ -49,6 +53,7 @@ export const PhoneAtom = (props: PhoneAtomProps) => {
           normalizeLink={false}
           variant="link"
           eventName={props.eventName}
+          color={props.linkColor}
           onClick={props.onClick}
           alwaysHideCaret={true}
         />

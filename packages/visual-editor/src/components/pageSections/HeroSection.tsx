@@ -8,7 +8,7 @@ import {
 import { AnalyticsScopeProvider, ImageType } from "@yext/pages-components";
 import {
   backgroundColors,
-  BackgroundStyle,
+  ThemeColor,
   HeadingLevel,
   ThemeOptions,
 } from "../../utils/themeConfigOptions.ts";
@@ -50,7 +50,7 @@ export interface HeroStyles {
    * The background color for the featured content (spotlight variant).
    * @defaultValue Background Color 1
    */
-  backgroundColor?: BackgroundStyle;
+  backgroundColor?: ThemeColor;
 
   /**
    * Image Height for the hero image with Immersive or Spotlight variant
@@ -106,6 +106,11 @@ export interface HeroStyles {
    * @defaultValue true
    */
   showAverageReview: boolean;
+
+  /**
+   * The color applied to review stars when average review is shown.
+   */
+  reviewStarsColor?: ThemeColor;
 
   /**
    * Whether to show the primary CTA.
@@ -313,6 +318,13 @@ const heroSectionFields: Fields<HeroSectionProps> = {
         {
           type: "radio",
           options: "SHOW_HIDE",
+        }
+      ),
+      reviewStarsColor: YextField(
+        msg("fields.reviewStarsColor", "Review Stars Color"),
+        {
+          type: "select",
+          options: "SITE_COLOR",
         }
       ),
       showPrimaryCTA: YextField(
