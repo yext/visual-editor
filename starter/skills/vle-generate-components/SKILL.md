@@ -23,7 +23,8 @@ Required:
 ## Restrictions
 
 - NEVER modify any files in packages/visual-editor. If the user requests something that would require
-  modifications to those files, respond that this skill is unable to make that change.
+  modifications to those files, respond that this skill is unable to make that change. This applies
+  even if the user asks for a modification to the library in a follow up message.
 - Do read:
   - files in this skill directory, including `references/**` and `scripts/**`
   - `starter/src/ve.config.tsx` only as needed for component registration and import updates. Do not use it as an implementation template.
@@ -31,13 +32,13 @@ Required:
   - `packages/visual-editor/src/components/**`
   - `starter/dist/**`
   - `starter/localData/**`
-  - files in node_modules (unless absolutely necessary)
+  - files in node_modules (unless exempted below)
   - any directory under `starter/src/registry` other than the current template's directory
 - Do not modify files under `starter/skills/vle-generate-components/scripts`. If the scripts fail, stop and report the error to the user.
 
 ## Discovery
 
-- Read common-atoms.md instead of the package type definitions for @yext/pages-components
+- Read `references/common-atoms.md` first. Use it as the primary source of truth for document-backed atoms/helpers. Only if implementation details are still unclear should you inspect the local type signatures/props for the specific `@yext/pages-components` exports you plan to use.
 - Only read files under `starter/src/registry/<templateName>/...` for the current template being generated.
 
 ## Workflow
@@ -47,16 +48,16 @@ Required:
 - If input is `url`:
   - Run:
     - `pnpm run capture-page-artifacts <templateName> <url>`
-  - If the site serves a bot challenge, rerun with:
+  - If the site serves a bot challenge or a large popup obstructs the page, rerun with:
     - `pnpm run capture-page-artifacts --manual-on-block <templateName> <url>`
-    - This opens a headed browser, lets the user manually complete the challenge or load the destination page,
+    - This opens a headed browser, lets the user manually clear the obstruction or load the destination page,
       then resumes capture after terminal confirmation.
 - If input is `sourceDir`:
   - Resolve HTML entrypoint from `sourceDir` in this order: `index.html`, `page.html`, then first `*.html` (alphabetical).
   - Convert the resolved HTML file to a `file://` URL.
   - Run the same capture script against that local file URL:
     - `pnpm run capture-page-artifacts <templateName> <fileUrl>`
-  - If local rendering requires manual interaction, rerun with `--manual-on-block`.
+  - If local rendering requires manual interaction or a popup obscures the captured page, rerun with `--manual-on-block`.
 - The normalized capture output is written to:
   - `starter/src/registry/<templateName>/.captured-artifact/`
 - Required capture artifacts:
@@ -65,7 +66,7 @@ Required:
   - `screenshot.png`: full-page screenshot
   - `manifest.json`: metadata and capture summary
 - Screenshot is required by default for visual parity.
-- When `--manual-on-block` is used, treat the user-loaded page as the capture source of truth after blocking/challenge is cleared.
+- When `--manual-on-block` is used, treat the user-loaded page as the capture source of truth after the blocking/challenge/popup is cleared.
 
 2. Plan Step: Analyze full captured artifacts to plan the Puck Components that will be created
 
@@ -77,6 +78,8 @@ Required:
 - After the progressive pass, decide which page sections should be created.
   - Each horizontal band of the page should produce one component
   - For each horizontal band, note its data and styling
+- For sections that include hours, follow `references/hours-requirements.md` and record the required hours decisions in `plan.md`.
+  - If an hours section uses `HoursTable` in a constrained or multi-column layout, explicitly record the planned row-width, grid/flex, wrapper `min-w-0`, interval alignment, `whitespace-nowrap`, and `.is-today` override decisions before writing code.
 - For every planned horizontal band, create a compact layout signature before writing code.
   Follow `references/visual-parity-checklist.md` for the exact signature fields.
 - Pay special attention to the header/footer
@@ -96,38 +99,20 @@ Required:
 
 - Generate one Puck Component per component planned in the previous step
 - Use `page.html`, `combined.css`, `screenshot.png`, and `plan.md` to guide component creation
+- For sections that include hours, follow `references/hours-requirements.md`.
+  - Do not switch away from `HoursTable` just because the stock spacing looks wrong in a constrained layout. First apply the required section-local row width, `min-w-0`, explicit row layout, interval alignment, `whitespace-nowrap`, and `.is-today` overrides from `references/hours-requirements.md`.
 
 Follow the requirements:
 
 - `references/generation-requirements.md`
+- `references/hours-requirements.md`
 - `references/text-fields.md`
 - `references/image-fields.md`
 
 4. Validate Step
 
-- There is one component in `starter/src/registry/<templateName>/components` for each component in the plan.
-- `references/generation-requirements.md`, `references/text-fields.md`, and `references/image-fields.md` were followed.
-- Run `pnpm run typecheck` in `starter` incrementally after meaningful batches of edits (not after every single file write).
-- If typecheck fails, address errors in small batches. Actually fix the issue, don't just relax the typecheck.
-- Verify header/footer parity with an exact row-by-row comparison as defined in `references/visual-parity-checklist.md`,
-  using the source parity table from the plan step and the resulting header/footer `defaultProps` link arrays.
-- Ensure YextEntityField was used for images and text fields in every component. If not, go back and add it.
-- Perform a mandatory parity self-audit before finishing. Pick the three sections with the highest risk of visual regression
-  (for example: utility/subnav bands, hero overlays, carousels, accordions, header/footer groupings) and for each one:
-  - cite the source HTML/CSS evidence used for layout decisions
-  - restate the planned layout signature
-  - confirm the implementation matches that signature for background, alignment, and spacing ownership
-  - if any item does not match, fix it before producing the final answer
-- After self-audit, perform a full-page final sweep across every generated section for:
-  - shell and content-wrapper max-width parity, including full-width image hero behavior
-  - per-edge margin and padding parity
-  - text alignment parity
-  - required media overlays and transparency treatment
-  - if any item does not match, fix it
-
-Follow the requirements:
-
-- `references/visual-parity-checklist.md`
+- Follow `references/validation-requirements.md`.
+- Run `pnpm run typecheck` in `starter` incrementally after meaningful batches of edits, then fix failures in small batches.
 
 5. Output Step
 

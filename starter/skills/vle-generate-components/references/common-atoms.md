@@ -19,8 +19,22 @@ export function ExampleDocumentRead() {
 
 ## `<HoursTable />` from `@yext/pages-components`
 
-Use `streamDocument.hours` directly for schedule tables.
-Only specify the startOfWeek (string) and collapseDays (boolean) props.
+Use `streamDocument.hours` directly when the source is fundamentally a normal day-and-interval table.
+Prefer `HoursTable` when you can match the source with stock props and section-local CSS instead of rewriting the entire hours block.
+The main override surface is `dayOfWeekNames`, `startOfWeek`, `collapseDays`, `intervalStringsBuilderFn`, and `className`.
+`HoursTable` does not need to be replaced just to fix copy, spacing, bolding, borders, row width, or "today" styling.
+If stock table CSS causes width or spacing issues, keep `HoursTable` and fix the layout with section-local wrapper classes such as grid/flex row sizing, `min-w-0`, and `is-today` styling.
+When `HoursTable` is used in narrow or multi-column layouts, always inspect spacing. The stock CSS gives rows a fixed width and bolds `.is-today`, which can cause overlap and visual mismatches. Before switching to custom hours markup, add section-local `className` overrides for row width, row layout, `min-w-0`, interval alignment, and `.is-today`.
+`HoursTable` has stock layout CSS that is hostile to constrained or multi-column layouts. In the library stylesheet, `.HoursTable-row` is a flex row with a fixed width and `.is-today` is bold by default. In side-by-side tables or narrow containers this often causes overlap, bad spacing, or unwanted emphasis. Do not treat these as reasons to abandon `HoursTable`. First fix them with section-local `className` overrides.
+Before going custom for a stock-style day-and-interval table, try these fixes in order:
+
+- force each `HoursTable` column wrapper to `min-w-0`
+- override `.HoursTable-row` to `width: 100%`
+- prefer an explicit two-column row layout in tight spaces such as `grid-cols-[dayWidth_minmax(0,1fr)]`
+- set `min-w-0` on `.HoursTable-row` and `.HoursTable-intervals`
+- right-align `.HoursTable-intervals` when the source does
+- use `whitespace-nowrap` on `.HoursTable-interval` when the source keeps intervals on one line
+- override `.is-today` when the source does not bold the current day
 
 ```tsx
 import { useDocument } from "@yext/visual-editor";
@@ -36,8 +50,121 @@ export const ExampleHoursTable = () => {
   return (
     <HoursTable
       hours={streamDocument.hours}
-      startOfWeek="today"
+      dayOfWeekNames={{
+        monday: "Mon:",
+        tuesday: "Tue:",
+        wednesday: "Wed:",
+        thursday: "Thu:",
+        friday: "Fri:",
+        saturday: "Sat:",
+        sunday: "Sun:",
+      }}
+      startOfWeek="monday"
       collapseDays={false}
+      intervalStringsBuilderFn={(day, timeOptions) =>
+        day.intervals.length === 0
+          ? ["Closed"]
+          : day.intervals.map(
+              (interval) =>
+                `${interval.getStartTime("en", timeOptions)} - ${interval.getEndTime("en", timeOptions)}`,
+            )
+      }
+      timeOptions={{ hour12: true }}
+      className="hours-table w-full min-w-0 text-sm [&_.HoursTable-row]:grid [&_.HoursTable-row]:w-full [&_.HoursTable-row]:min-w-0 [&_.HoursTable-row]:grid-cols-[52px_minmax(0,1fr)] [&_.HoursTable-row]:gap-x-4 [&_.HoursTable-day]:font-semibold [&_.HoursTable-intervals]:min-w-0 [&_.HoursTable-intervals]:text-right [&_.HoursTable-interval]:whitespace-nowrap"
+    />
+  );
+};
+```
+
+## `<HoursStatus />` from `@yext/pages-components`
+
+Use for compact open/closed state and next transition messaging when the source design includes a live status line.
+Drive it directly from `streamDocument.hours`; prefer passing `streamDocument.timezone` so status is calculated in the business timezone.
+Prefer the stock template override props when the source needs different wording or markup but still follows the same status pattern.
+The supported override hooks are `currentTemplate`, `separatorTemplate`, `futureTemplate`, `timeTemplate`, `dayOfWeekTemplate`, and `statusTemplate`.
+Use these to change copy, separators, bolding, inline markup, and day/time formatting before considering custom status logic.
+Stock `HoursStatus` can be rendered directly. Only add a two-pass/client-only pattern if you introduce custom render-time time logic such as `DateTime.now()`. Do not guess the business timezone from the renderer environment.
+
+```tsx
+import { useDocument } from "@yext/visual-editor";
+import { HoursStatus } from "@yext/pages-components";
+
+export const ExampleHoursStatus = () => {
+  const streamDocument = useDocument();
+
+  if (!streamDocument.hours) {
+    return null;
+  }
+
+  return (
+    <HoursStatus
+      hours={streamDocument.hours}
+      timezone={streamDocument.timezone}
+      currentTemplate={(status) => {
+        const isOpen24Hours = status.currentInterval?.is24h?.() ?? false;
+        const isIndefinitelyClosed = !status.futureInterval;
+
+        return (
+          <span className="font-semibold">
+            {isOpen24Hours
+              ? "Open 24 Hours"
+              : isIndefinitelyClosed
+                ? "Temporarily Closed"
+                : status.isOpen
+                  ? "Open now"
+                  : "Closed now"}
+          </span>
+        );
+      }}
+      separatorTemplate={(status) => {
+        const isOpen24Hours = status.currentInterval?.is24h?.() ?? false;
+        const isIndefinitelyClosed = !status.futureInterval;
+
+        return isOpen24Hours || isIndefinitelyClosed ? null : (
+          <span className="mx-2">|</span>
+        );
+      }}
+      futureTemplate={(status) => {
+        const isOpen24Hours = status.currentInterval?.is24h?.() ?? false;
+        const isIndefinitelyClosed = !status.futureInterval;
+
+        if (isOpen24Hours || isIndefinitelyClosed) {
+          return null;
+        }
+
+        return status.isOpen ? <span>Closes at </span> : <span>Opens at </span>;
+      }}
+      timeTemplate={(status) => {
+        const isOpen24Hours = status.currentInterval?.is24h?.() ?? false;
+        const interval = status.isOpen
+          ? status.currentInterval
+          : status.futureInterval;
+
+        if (isOpen24Hours || !interval) {
+          return null;
+        }
+
+        return (
+          <span>
+            {status.isOpen
+              ? interval.getEndTime("en", status.timeOptions)
+              : interval.getStartTime("en", status.timeOptions)}
+          </span>
+        );
+      }}
+      dayOfWeekTemplate={(status) => {
+        const isOpen24Hours = status.currentInterval?.is24h?.() ?? false;
+        const interval = status.isOpen
+          ? status.currentInterval
+          : status.futureInterval;
+
+        if (isOpen24Hours || !interval) {
+          return null;
+        }
+
+        const date = status.isOpen ? interval.end : interval.start;
+        return <span className="ml-1">{date?.toFormat("cccc")}</span>;
+      }}
     />
   );
 };
@@ -59,30 +186,6 @@ export const ExampleAddress = () => {
   }
 
   return <Address address={streamDocument.address} />;
-};
-```
-
-## `<HoursStatus />` from `@yext/pages-components`
-
-Use for compact open/closed state and next transition messaging. Drive it directly from `streamDocument.hours`; pass timezone when available for correct status calculation.
-
-```tsx
-import { useDocument } from "@yext/visual-editor";
-import { HoursStatus } from "@yext/pages-components";
-
-export const ExampleHoursStatus = () => {
-  const streamDocument = useDocument();
-
-  if (!streamDocument.hours) {
-    return null;
-  }
-
-  return (
-    <HoursStatus
-      hours={streamDocument.hours}
-      timezone={streamDocument.timezone}
-    />
-  );
 };
 ```
 

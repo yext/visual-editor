@@ -42,9 +42,9 @@ starter/src/registry/<template>/
 - Prefer `@yext/visual-editor`, `@yext/pages-components`, and `@puckeditor/core`, plus plain React/JSX and Tailwind classes.
 - Do not introduce another UI library for generated components unless the user explicitly requests it.
 - Do not add or use dependencies outside the existing `package.json`.
-- ALWAYS use `Address`, `HoursTable`, `HoursStatus`, and `Link` from `@yext/pages-components` when rendering
-  any address, hours, ctas, or links. However, they MUST be augmented with CSS/classes to match
-  the captured page artifacts
+- ALWAYS use `Address` and `Link` from `@yext/pages-components` for addresses and real links/CTAs, not UI toggles.
+- Hours must always source from `streamDocument.hours`.
+- Follow `references/hours-requirements.md` for hours planning, rendering, parity, and timezone/SSR rules.
 - Images should be based on a url or svg. They should not use a `file://` url.
 
 ## Puck Section Component Responsibilities
@@ -71,7 +71,6 @@ In each `starter/src/registry/<template>/components/ExampleSection.tsx`:
 
 ## Specialty Component Behaviors
 
-- Hours should always use streamDocument.hours
 - Address should always use streamDocument.address
 - Phone should use the stream document value and render in a properly formatted human-readable form.
 - FAQ/Q&A sections should keep interaction behavior such as show/hide.
@@ -98,4 +97,10 @@ In each `starter/src/registry/<template>/components/ExampleSection.tsx`:
 
 See `references/ExampleSection.tsx` for an example section starter.
 It is a non-authoritative demo only.
-When conflicts exist, rules in `*.md` files (especially `generation-requirements.md`, `text-fields.md`, and `image-fields.md`) take precedence.
+When conflicts exist, rules in `*.md` files take precedence, especially:
+
+- `generation-requirements.md`
+- `hours-requirements.md`
+- `validation-requirements.md`
+- `text-fields.md`
+- `image-fields.md`
