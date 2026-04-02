@@ -27,7 +27,9 @@ import {
   Facets,
   FilterSearch,
   getUserLocation,
+  Coordinate,
   MapboxMap,
+  MapMarkerOptions,
   OnDragHandler,
   OnSelectParams,
   Pagination,
@@ -36,7 +38,6 @@ import {
   VerticalResults,
   useAnalytics as useSearchAnalytics,
 } from "@yext/search-ui-react";
-import mapboxgl, { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
 import React, { useEffect } from "react";
 import { useCollapse } from "react-collapsed";
 import { useTranslation } from "react-i18next";
@@ -67,6 +68,7 @@ import {
   createSearchAnalyticsConfig,
   createSearchHeadlessConfig,
 } from "../utils/searchHeadlessConfig.ts";
+import { getThemeColorCssValue } from "../utils/colors.ts";
 import { ThemeColor, backgroundColors } from "../utils/themeConfigOptions.ts";
 import {
   LocatorConfig,
@@ -96,7 +98,10 @@ import {
 const RESULTS_LIMIT = 20;
 const LOCATION_FIELD = "builtin.location";
 const COUNTRY_CODE_FIELD = "address.countryCode";
-const DEFAULT_MAP_CENTER: [number, number] = [-74.005371, 40.741611]; // New York City ([lng, lat])
+const DEFAULT_MAP_CENTER: Coordinate = {
+  latitude: 40.741611,
+  longitude: -74.005371,
+}; // New York City
 const DEFAULT_RADIUS = 25;
 const HOURS_FIELD = "builtin.hours";
 const INITIAL_LOCATION_KEY = "initialLocation";
@@ -105,6 +110,21 @@ const DEFAULT_DISTANCE_DISPLAY = "distanceFromUser";
 const DEFAULT_LOCATION_STYLE = {
   pinIcon: { type: "none" },
   pinColor: backgroundColors.background6.value,
+};
+
+const getConfiguredMapCenterOrDefault = (mapStartingLocation?: {
+  latitude: string;
+  longitude: string;
+}): Coordinate => {
+  if (mapStartingLocation?.latitude && mapStartingLocation.longitude) {
+    try {
+      return parseMapStartingLocation(mapStartingLocation);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  return DEFAULT_MAP_CENTER;
 };
 
 const getLocatorConfigFromPageSet = (pageSet?: string): LocatorConfig => {
@@ -559,6 +579,8 @@ export interface LocatorProps {
      * @defaultValue false
      */
     showDistanceOptions: boolean;
+    /** Accent color for filter button and icons. */
+    accentColor?: ThemeColor;
     /** Which fields are facetable in the search experience */
     facetFields?: DynamicOptionsSelectorType<string>;
   };
@@ -728,6 +750,10 @@ const locatorFields: Fields<LocatorProps> = {
           ],
         }
       ),
+      accentColor: YextField(msg("fields.accentColor", "Accent Color"), {
+        type: "select",
+        options: "SITE_COLOR",
+      }),
       facetFields: YextField<DynamicOptionsSelectorType<string>, string>(
         msg("fields.dynamicFilters", "Dynamic Filters"),
         {
@@ -978,10 +1004,24 @@ const LocatorWrapper = (props: WithPuckProps<LocatorProps>) => {
 
 type SearchState = "not started" | "loading" | "complete";
 
+const LoadingMapPlaceholder = () => {
+  const { t } = useTranslation();
+
+  return (
+    <div className="flex items-center justify-center w-full h-full">
+      <div className="border border-gray-300 rounded-lg p-6 bg-white shadow-md">
+        <Body className="text-gray-700" variant="lg">
+          {t("loadingMap", "Loading Map...")}
+        </Body>
+      </div>
+    </div>
+  );
+};
+
 const LocatorInternal = ({
   mapStyle,
   locationStyles,
-  filters: { openNowButton, showDistanceOptions, facetFields },
+  filters: { openNowButton, showDistanceOptions, accentColor, facetFields },
   mapStartingLocation,
   resultCard: resultCardConfigs,
   distanceDisplay,
@@ -1038,8 +1078,8 @@ const LocatorInternal = ({
   }
 
   const [showSearchAreaButton, setShowSearchAreaButton] = React.useState(false);
-  const [mapCenter, setMapCenter] = React.useState<LngLat | undefined>();
-  const [mapBounds, setMapBounds] = React.useState<LngLatBounds | undefined>();
+  const [mapCenter, setMapCenter] = React.useState<Coordinate | undefined>();
+  const [mapRadius, setMapRadius] = React.useState<number | undefined>();
   /** Explicit filter radius selected by the user, in meters */
   const [selectedDistanceMeters, setSelectedDistanceMeters] = React.useState<
     number | null
@@ -1050,9 +1090,12 @@ const LocatorInternal = ({
   /** Radius of last location near filter returned by the filter search API */
   const apiFilterRadius = React.useRef<number | null>(null);
 
-  const handleDrag: OnDragHandler = (center: LngLat, bounds: LngLatBounds) => {
-    setMapCenter(center);
-    setMapBounds(bounds);
+  const handleDrag: OnDragHandler = (center, bounds) => {
+    setMapCenter({
+      latitude: center.latitude,
+      longitude: center.longitude,
+    });
+    setMapRadius(center.distanceTo(bounds.getNorthEast()));
     setShowSearchAreaButton(true);
   };
 
@@ -1072,7 +1115,7 @@ const LocatorInternal = ({
   );
 
   const handleSearchAreaClick = () => {
-    if (mapCenter && mapBounds) {
+    if (mapCenter && mapRadius) {
       searchActions.setOffset(0);
       const locationFilter: SelectableStaticFilter = {
         selected: true,
@@ -1081,9 +1124,9 @@ const LocatorInternal = ({
           kind: "fieldValue",
           fieldId: "builtin.location",
           value: {
-            lat: mapCenter.lat,
-            lng: mapCenter.lng,
-            radius: mapBounds.getNorthEast().distanceTo(mapCenter),
+            lat: mapCenter.latitude,
+            lng: mapCenter.longitude,
+            radius: mapRadius,
             name: t("customSearchArea", "Custom Search Area"),
           },
           matcher: Matcher.Near,
@@ -1158,9 +1201,11 @@ const LocatorInternal = ({
       nearFilterValue?.lng &&
       areValidCoordinates(nearFilterValue.lat, nearFilterValue.lng)
     ) {
-      setMapCenter(
-        new mapboxgl.LngLat(nearFilterValue.lng, nearFilterValue.lat)
-      );
+      setMapCenter({
+        latitude: nearFilterValue.lat,
+        longitude: nearFilterValue.lng,
+      });
+      setMapRadius(nearFilterValue.radius);
     }
   };
 
@@ -1196,7 +1241,7 @@ const LocatorInternal = ({
   }, []);
 
   const scrollToResult = React.useCallback(
-    (result: Result | undefined) => {
+    (result: Result<Location> | undefined) => {
       if (result) {
         if (typeof result.index === "number") {
           setSelectedResultIndex(result.index);
@@ -1225,11 +1270,14 @@ const LocatorInternal = ({
     [resultsContainer]
   );
 
-  const markerOptionsOverride = React.useCallback((selected: boolean) => {
-    return {
-      offset: new mapboxgl.Point(0, selected ? -21 : -14),
-    } as MarkerOptions;
-  }, []);
+  const markerOptionsOverride = React.useCallback(
+    (selected: boolean): MapMarkerOptions => {
+      return {
+        offset: (selected ? [0, -21] : [0, -14]) as [number, number],
+      };
+    },
+    []
+  );
 
   const getResultCardProps = React.useCallback(
     (entityType?: LocatorEntityType) => {
@@ -1294,9 +1342,14 @@ const LocatorInternal = ({
     return config;
   }, [locationStyles]);
 
-  const [centerCoords, setCenterCoords] = React.useState<
-    [number, number] | undefined
-  >();
+  const initialMapCenter = React.useMemo(
+    () => getConfiguredMapCenterOrDefault(mapStartingLocation),
+    [mapStartingLocation]
+  );
+  const [centerCoords, setCenterCoords] =
+    React.useState<Coordinate>(initialMapCenter);
+  const [isInitialMapLocationResolved, setIsInitialMapLocationResolved] =
+    React.useState(false);
 
   const mapProps = React.useMemo(
     () => ({
@@ -1318,15 +1371,21 @@ const LocatorInternal = ({
   );
 
   React.useEffect(() => {
+    let isCancelled = false;
+
     const resolveLocationAndSearch = async () => {
+      setIsInitialMapLocationResolved(false);
+      setCenterCoords(initialMapCenter);
+      setMapCenter(initialMapCenter);
+
       const radius =
         showDistanceOptions && selectedDistanceMeters
           ? selectedDistanceMeters
           : toMeters(DEFAULT_RADIUS, preferredUnit);
-      // default location filter to NYC
+      // default location filter to configured starting location or NYC
       let initialLocationFilter = buildNearLocationFilterFromCoords(
-        DEFAULT_MAP_CENTER[1],
-        DEFAULT_MAP_CENTER[0],
+        initialMapCenter.latitude,
+        initialMapCenter.longitude,
         radius
       );
       const doSearch = () => {
@@ -1341,14 +1400,21 @@ const LocatorInternal = ({
         ) {
           const filterValue = initialLocationFilter.filter
             .value as NearFilterValue;
-          const centerCoords: [number, number] = [
-            filterValue.lng,
-            filterValue.lat,
-          ];
-          if (areValidCoordinates(centerCoords[1], centerCoords[0])) {
+          const centerCoords: Coordinate = {
+            longitude: filterValue.lng,
+            latitude: filterValue.lat,
+          };
+          if (
+            !isCancelled &&
+            areValidCoordinates(centerCoords.latitude, centerCoords.longitude)
+          ) {
             setCenterCoords(centerCoords);
-            setMapCenter(mapboxgl.LngLat.convert(centerCoords));
+            setMapCenter(centerCoords);
+            setMapRadius(filterValue.radius);
           }
+        }
+        if (!isCancelled) {
+          setIsInitialMapLocationResolved(true);
         }
       };
 
@@ -1447,28 +1513,22 @@ const LocatorInternal = ({
           );
         }
       } catch {
-        // 3. Fall back to mapStartingLocation prop
-        try {
-          if (mapStartingLocation?.latitude && mapStartingLocation.longitude) {
-            const centerCoords = parseMapStartingLocation(mapStartingLocation);
-            initialLocationFilter = buildNearLocationFilterFromCoords(
-              centerCoords[1],
-              centerCoords[0],
-              radius
-            );
-          }
-        } catch (e) {
-          console.error(e);
-        }
-      } finally {
-        doSearch();
+        // Fall back to the configured starting location or default center.
       }
+
+      doSearch();
     };
 
-    resolveLocationAndSearch().catch((e) =>
-      console.error("Failed perform search:", e)
-    );
-  }, [searchActions, mapStartingLocation, initialLocationParam]);
+    resolveLocationAndSearch().catch((e) => {
+      if (!isCancelled) {
+        setIsInitialMapLocationResolved(true);
+      }
+      console.error("Failed perform search:", e);
+    });
+    return () => {
+      isCancelled = true;
+    };
+  }, [initialLocationParam, initialMapCenter, searchActions]);
 
   const handleOpenNowClick = (selected: boolean) => {
     if (selected === isOpenNowSelected) {
@@ -1579,6 +1639,9 @@ const LocatorInternal = ({
     ).length > 0;
   const hasFilterModalToggle =
     openNowButton || showDistanceOptions || hasFacetOptions;
+  const filterAccentColorCssVariable =
+    getThemeColorCssValue(accentColor?.selectedColor) ??
+    "var(--colors-palette-primary-dark)";
   const [showFilterModal, setShowFilterModal] = React.useState(false);
   const resolvedHeading =
     (pageHeading?.title &&
@@ -1653,7 +1716,8 @@ const LocatorInternal = ({
               />
               {hasFilterModalToggle && (
                 <button
-                  className="inline-flex justify-between items-center gap-2 bg-white text-palette-primary-dark font-bold font-body-fontFamily text-body-sm-fontSize"
+                  className="inline-flex justify-between items-center gap-2 bg-white font-bold font-body-fontFamily text-body-sm-fontSize"
+                  style={{ color: filterAccentColorCssVariable }}
                   onClick={() => setShowFilterModal((prev) => !prev)}
                 >
                   {t("filter", "Filter")}
@@ -1701,13 +1765,17 @@ const LocatorInternal = ({
             handleDistanceClick={handleDistanceClick}
             handleCloseModalClick={() => setShowFilterModal(false)}
             handleClearFiltersClick={handleClearFiltersClick}
+            accentColorCssValue={filterAccentColorCssVariable}
           />
         </div>
       </div>
 
       {/* Right Section: Map. Hidden for small screens */}
       <div id="locatorMapDiv" className="md:flex-1 md:flex hidden relative">
-        {mapEnabled && <Map {...mapProps} />}
+        {mapEnabled && isInitialMapLocationResolved && <Map {...mapProps} />}
+        {mapEnabled && !isInitialMapLocationResolved && (
+          <LoadingMapPlaceholder />
+        )}
         {!mapEnabled && (
           <div className="flex items-center justify-center w-full h-full bg-gray-100">
             <div className="p-6">
@@ -1819,10 +1887,10 @@ const ResultsCountSummary = (props: ResultsCountSummaryProps) => {
 
 interface MapProps {
   mapStyle?: string;
-  centerCoords?: [number, number];
+  centerCoords?: Coordinate;
   onDragHandler?: OnDragHandler;
-  scrollToResult?: (result: Result | undefined) => void;
-  markerOptionsOverride?: (selected: boolean) => MarkerOptions;
+  scrollToResult?: (result: Result<Location> | undefined) => void;
+  markerOptionsOverride?: (selected: boolean) => MapMarkerOptions;
   locationStyleConfig?: Record<string, { color?: ThemeColor; icon?: string }>;
 }
 
@@ -1834,7 +1902,6 @@ const Map: React.FC<MapProps> = ({
   markerOptionsOverride,
   locationStyleConfig,
 }) => {
-  const { t } = useTranslation();
   const entityDocument: StreamDocument = useDocument();
 
   const documentIsUndefined = typeof document === "undefined";
@@ -1877,15 +1944,7 @@ const Map: React.FC<MapProps> = ({
   //@ts-expect-error MapboxGL is not loaded in the iframe content window
   if (iframe?.contentDocument && !iframe.contentWindow?.mapboxgl) {
     // We are in an iframe, and mapboxgl is not loaded in yet
-    return (
-      <div className="flex items-center justify-center w-full h-full">
-        <div className="border border-gray-300 rounded-lg p-6 bg-white shadow-md">
-          <Body className="text-gray-700" variant="lg">
-            {t("loadingMap", "Loading Map...")}
-          </Body>
-        </div>
-      </div>
-    );
+    return <LoadingMapPlaceholder />;
   }
 
   let mapboxApiKey = entityDocument._env?.YEXT_MAPBOX_API_KEY;
@@ -1945,6 +2004,7 @@ interface FilterModalProps {
     distanceUnit: "mile" | "kilometer"
   ) => void;
   handleClearFiltersClick: () => void;
+  accentColorCssValue: string;
 }
 
 const FilterModal = (props: FilterModalProps) => {
@@ -1958,6 +2018,7 @@ const FilterModal = (props: FilterModalProps) => {
     handleOpenNowClick,
     handleDistanceClick,
     handleClearFiltersClick,
+    accentColorCssValue,
   } = props;
   const { t } = useTranslation();
   const popupRef = React.useRef<HTMLDivElement>(null);
@@ -1966,6 +2027,11 @@ const FilterModal = (props: FilterModalProps) => {
     <div
       id="popup"
       className="absolute md:top-4 -top-20 z-50 md:w-80 w-full flex flex-col bg-white md:left-full md:ml-2 rounded-md shadow-lg max-h-[calc(100%-2rem)]"
+      style={
+        {
+          "--locator-filter-accent-color": accentColorCssValue,
+        } as React.CSSProperties
+      }
       ref={popupRef}
     >
       <div className="inline-flex justify-between items-center px-6 py-4 gap-4">
@@ -1973,8 +2039,9 @@ const FilterModal = (props: FilterModalProps) => {
           {t("refineYourSearch", "Refine Your Search")}
         </Body>
         <button
-          className="text-palette-primary-dark"
+          style={{ color: accentColorCssValue }}
           onClick={handleCloseModalClick}
+          aria-label={t("close", "Close")}
         >
           <FaTimes />
         </button>
@@ -2000,13 +2067,15 @@ const FilterModal = (props: FilterModalProps) => {
             <DistanceFilter
               onChange={handleDistanceClick}
               selectedDistanceOption={selectedDistanceOption}
+              accentColorCssValue={accentColorCssValue}
             />
           )}
           <Facets
             customCssClasses={{
               divider: "bg-white",
               titleLabel: "font-bold text-md font-body-fontFamily",
-              optionInput: "h-4 w-4 accent-palette-primary-dark",
+              optionInput:
+                "h-4 w-4 [accent-color:var(--locator-filter-accent-color)]",
               optionLabel: "text-md font-body-fontFamily font-body-fontWeight",
               option: "space-x-4 font-body-fontFamily",
             }}
@@ -2015,7 +2084,8 @@ const FilterModal = (props: FilterModalProps) => {
       </div>
       <div className="border-y border-gray-300 justify-center align-middle">
         <button
-          className="w-full py-4 text-center text-palette-primary-dark font-bold font-body-fontFamily text-body-fontSize"
+          className="w-full py-4 text-center font-bold font-body-fontFamily text-body-fontSize"
+          style={{ color: accentColorCssValue }}
           onClick={handleClearFiltersClick}
         >
           {t("clearAll", "Clear All")}
@@ -2058,7 +2128,7 @@ const OpenNowFilter = (props: OpenNowFilterProps) => {
             checked={isSelected}
             className={
               "w-4 h-4 form-checkbox cursor-pointer border border-gray-300" +
-              " rounded-sm text-primary focus:ring-primary accent-palette-primary-dark"
+              " rounded-sm text-primary focus:ring-primary [accent-color:var(--locator-filter-accent-color)]"
             }
             onChange={() => onChange(!isSelected)}
           />
@@ -2074,10 +2144,11 @@ const OpenNowFilter = (props: OpenNowFilterProps) => {
 interface DistanceFilterProps {
   onChange: (distance: number, unit: "mile" | "kilometer") => void;
   selectedDistanceOption: number | null;
+  accentColorCssValue: string;
 }
 
 const DistanceFilter = (props: DistanceFilterProps) => {
-  const { selectedDistanceOption, onChange } = props;
+  const { selectedDistanceOption, onChange, accentColorCssValue } = props;
   const { t, i18n } = useTranslation();
   const { isExpanded, getToggleProps, getCollapseProps } = useCollapse({
     defaultExpanded: true,
@@ -2109,7 +2180,7 @@ const DistanceFilter = (props: DistanceFilterProps) => {
               onClick={() => onChange(distanceOption, unit)}
               aria-label={`${t("selectDistanceLessThan", "Select distance less than")} ${distanceOption} ${translateDistanceUnit(t, unit, distanceOption)}`}
             >
-              <div className="text-palette-primary-dark">
+              <div style={{ color: accentColorCssValue }}>
                 {selectedDistanceOption === distanceOption ? (
                   <FaDotCircle />
                 ) : (
@@ -2146,7 +2217,7 @@ const getMapboxMapPadding = (divElement: HTMLDivElement | null) => {
 const parseMapStartingLocation = (mapStartingLocation: {
   latitude: string;
   longitude: string;
-}): [number, number] => {
+}): Coordinate => {
   const lat = parseFloat(mapStartingLocation.latitude);
   const lng = parseFloat(mapStartingLocation.longitude);
 
@@ -2161,7 +2232,10 @@ const parseMapStartingLocation = (mapStartingLocation: {
     throw new Error(err.join("\n"));
   }
 
-  return [lng, lat];
+  return {
+    latitude: lat,
+    longitude: lng,
+  };
 };
 
 /**

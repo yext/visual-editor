@@ -39,6 +39,11 @@ export interface ProfessionalHeroStyles {
   showAverageReview: boolean;
 
   /**
+   * The color applied to review stars when average review is shown.
+   */
+  reviewStarsColor?: ThemeColor;
+
+  /**
    * Whether to show the hero image.
    * @defaultValue true
    */
@@ -197,7 +202,7 @@ const ProfessionalHero: PuckComponent<ProfessionalHeroSectionProps> = (
             <div
               className={`${
                 styles.showCredentials ? "w-full lg:w-1/2" : "w-full"
-              } text-center lg:text-left [&_div]:justify-center lg:[&_div]:justify-start`}
+              } text-center lg:text-left`}
             >
               <slots.ProfessionalNameSlot
                 style={{ height: "auto" }}
@@ -205,13 +210,13 @@ const ProfessionalHero: PuckComponent<ProfessionalHeroSectionProps> = (
               />
             </div>
             {styles.showCredentials && (
-              <div className="w-full lg:w-1/2 text-center lg:text-left [&_div]:justify-center lg:[&_div]:justify-start">
+              <div className="w-full lg:w-1/2 text-center lg:text-left">
                 <slots.CredentialsSlot style={{ height: "auto" }} allow={[]} />
               </div>
             )}
           </div>
           {styles.showProfessionalTitle && (
-            <div className="text-center lg:text-left [&_div]:justify-center lg:[&_div]:justify-start">
+            <div className="text-center lg:text-left">
               <slots.ProfessionalTitleSlot
                 style={{ height: "auto" }}
                 allow={[]}
@@ -219,7 +224,7 @@ const ProfessionalHero: PuckComponent<ProfessionalHeroSectionProps> = (
             </div>
           )}
           {styles.showSubtitle && (
-            <div className="[&_p]:font-bold text-center lg:text-left [&_div]:justify-center lg:[&_div]:justify-start">
+            <div className="[&_p]:font-bold text-center lg:text-left">
               <slots.SubtitleSlot style={{ height: "auto" }} allow={[]} />
             </div>
           )}
@@ -233,6 +238,7 @@ const ProfessionalHero: PuckComponent<ProfessionalHeroSectionProps> = (
               <ReviewStars
                 averageRating={averageRating}
                 reviewCount={reviewCount}
+                color={styles.reviewStarsColor}
                 className="justify-start"
               />
             )}
@@ -392,6 +398,13 @@ const professionalHeroSectionFields: Fields<ProfessionalHeroSectionProps> = {
               value: false,
             },
           ],
+        }
+      ),
+      reviewStarsColor: YextField(
+        msg("fields.reviewStarsColor", "Review Stars Color"),
+        {
+          type: "select",
+          options: "SITE_COLOR",
         }
       ),
       showAddress: YextField(msg("fields.showAddress", "Show Address"), {

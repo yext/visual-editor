@@ -1,3 +1,4 @@
+import React from "react";
 import {
   ComponentConfig,
   Fields,
@@ -23,6 +24,13 @@ import { defaultDirectoryCardSlotData } from "./DirectoryCard.tsx";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import { resolveDirectoryListChildren } from "../../utils/urls/resolveDirectoryListChildren.ts";
 import { getThemeValue } from "../../utils/getThemeValue.ts";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import {
+  createDirectoryChildReference,
+  DirectoryChildrenProvider,
+  getSortedDirectoryChildren,
+  matchesDirectoryChildReference,
+} from "./directoryChildReference.tsx";
 
 export type DirectoryGridProps = {
   styles: {
@@ -38,6 +46,7 @@ export const DirectoryList = ({
   directoryChildren,
   relativePrefixToRoot,
   backgroundColor,
+  linkColor,
 }: {
   streamDocument: StreamDocument;
   directoryChildren: {
@@ -54,8 +63,12 @@ export const DirectoryList = ({
   }[];
   relativePrefixToRoot: string;
   backgroundColor: ThemeColor;
+  linkColor?: ThemeColor;
 }) => {
-  const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
+  const sortedDirectoryChildren = sortAlphabetically(
+    [...directoryChildren],
+    "name"
+  );
   const linkTextTransformValue = (
     getThemeValue("--textTransform-link-textTransform", streamDocument) ?? ""
   ).toLowerCase();
@@ -87,6 +100,7 @@ export const DirectoryList = ({
               <MaybeLink
                 eventName={`child${idx}`}
                 variant="directoryLink"
+                color={linkColor}
                 href={
                   relativePrefixToRoot
                     ? relativePrefixToRoot + childSlug
@@ -134,22 +148,29 @@ const directoryGridFields: Fields<DirectoryGridProps> = {
 };
 
 const DirectoryGridWrapper: PuckComponent<DirectoryGridProps> = (props) => {
-  const { slots, styles } = props;
+  const { styles, slots } = props;
+  const streamDocument = useDocument<StreamDocument>();
+  const sortedDirectoryChildren = React.useMemo(
+    () => getSortedDirectoryChildren(streamDocument.dm_directoryChildren),
+    [streamDocument.dm_directoryChildren]
+  );
 
   return (
-    <CardContextProvider>
-      <PageSection
-        verticalPadding="sm"
-        background={styles.backgroundColor}
-        className={"flex min-h-0 min-w-0 mx-auto"}
-      >
-        <slots.CardSlot
-          className="flex min-h-0 min-w-0 mx-auto flex-col sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8"
-          allow={[]}
-          style={{ height: "auto" }}
-        />
-      </PageSection>
-    </CardContextProvider>
+    <DirectoryChildrenProvider directoryChildren={sortedDirectoryChildren}>
+      <CardContextProvider>
+        <PageSection
+          verticalPadding="sm"
+          background={styles.backgroundColor}
+          className={"flex min-h-0 min-w-0 mx-auto"}
+        >
+          <slots.CardSlot
+            className="flex min-h-0 min-w-0 mx-auto flex-col sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8"
+            allow={[]}
+            style={{ height: "auto" }}
+          />
+        </PageSection>
+      </CardContextProvider>
+    </DirectoryChildrenProvider>
   );
 };
 
@@ -176,9 +197,8 @@ export const DirectoryGrid: ComponentConfig<{
       return data;
     }
 
-    const sortedDirectoryChildren = sortAlphabetically(
-      streamDocument.dm_directoryChildren,
-      "name"
+    const sortedDirectoryChildren = getSortedDirectoryChildren(
+      streamDocument.dm_directoryChildren
     );
 
     const requiredLength = sortedDirectoryChildren?.length ?? 0;
@@ -186,9 +206,12 @@ export const DirectoryGrid: ComponentConfig<{
     // If the current CardSlots match the directory children
     // and length is correct, return data with no changes
     if (
-      data.props.slots.CardSlot.map(
-        (card, i) =>
-          card.props.parentData?.profile === sortedDirectoryChildren[i]
+      data.props.slots.CardSlot.map((card, i) =>
+        matchesDirectoryChildReference(
+          card.props.parentData?.childRef,
+          sortedDirectoryChildren[i],
+          i
+        )
       ).every((match) => match) &&
       data.props.slots.CardSlot.length === requiredLength
     ) {
@@ -202,7 +225,7 @@ export const DirectoryGrid: ComponentConfig<{
         defaultDirectoryCardSlotData(
           `DirectoryCard-${crypto.randomUUID()}`,
           i,
-          sortedDirectoryChildren[i],
+          createDirectoryChildReference(sortedDirectoryChildren[i], i),
           data.props.slots?.CardSlot?.[0]?.props.styles,
           data.props.slots?.CardSlot?.[0]?.props.slots
         )

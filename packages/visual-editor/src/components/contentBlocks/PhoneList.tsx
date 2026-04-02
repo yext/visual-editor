@@ -125,12 +125,15 @@ export const PhoneListComponent: PuckComponent<PhoneListProps> = (props) => {
                 <div className="flex gap-2 items-center">
                   <PhoneAtom
                     eventName={`${props.eventName || "phone"}${idx}`}
-                    backgroundColor={backgroundColors.background2.value}
+                    backgroundColor={
+                      styles.color ?? backgroundColors.background2.value
+                    }
                     label={phone.label}
                     phoneNumber={phone.number}
                     format={styles.phoneFormat}
                     includeHyperlink={styles.includePhoneHyperlink}
                     includeIcon={styles.includeIcon ?? true}
+                    linkColor={styles.color}
                   />
                 </div>
               </div>

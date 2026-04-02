@@ -1,5 +1,6 @@
 import * as React from "react";
 import { ComponentConfig, PuckComponent } from "@puckeditor/core";
+import { cva } from "class-variance-authority";
 import { YextField } from "../../editor/YextField.tsx";
 import { AssetImageType } from "../../types/images.ts";
 import { msg, pt } from "../../utils/i18n/platform.ts";
@@ -18,12 +19,41 @@ export interface FooterUtilityImagesSlotProps {
     width?: number;
     aspectRatio?: number;
   };
+  /** @internal */
+  desktopContentAlignment?: "left" | "center" | "right";
+  /** @internal */
+  mobileContentAlignment?: "left" | "center" | "right";
 }
+
+const utilityImagesContainer = cva("flex flex-wrap gap-8", {
+  variants: {
+    desktopContentAlignment: {
+      left: "md:justify-start",
+      center: "md:justify-center",
+      right: "md:justify-end",
+    },
+    mobileContentAlignment: {
+      left: "justify-start",
+      center: "justify-center",
+      right: "justify-end",
+    },
+  },
+  defaultVariants: {
+    desktopContentAlignment: "left",
+    mobileContentAlignment: "left",
+  },
+});
 
 const FooterUtilityImagesSlotInternal: PuckComponent<
   FooterUtilityImagesSlotProps
 > = (props) => {
-  const { data, styles, puck } = props;
+  const {
+    data,
+    styles,
+    desktopContentAlignment = "left",
+    mobileContentAlignment = "left",
+    puck,
+  } = props;
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
   const streamDocument = useDocument();
@@ -60,7 +90,12 @@ const FooterUtilityImagesSlotInternal: PuckComponent<
   }
 
   return (
-    <div className="flex gap-0 md:grid md:grid-cols-3 md:gap-8">
+    <div
+      className={utilityImagesContainer({
+        desktopContentAlignment,
+        mobileContentAlignment,
+      })}
+    >
       {validImages.map((item, index) => {
         const imgElement = (
           <Image
@@ -149,6 +184,8 @@ export const FooterUtilityImagesSlot: ComponentConfig<{
       width: 0,
       aspectRatio: 1,
     },
+    desktopContentAlignment: "left",
+    mobileContentAlignment: "left",
   },
   render: (props) => <FooterUtilityImagesSlotInternal {...props} />,
 };

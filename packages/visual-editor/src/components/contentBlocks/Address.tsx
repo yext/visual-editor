@@ -57,7 +57,7 @@ export interface AddressProps {
   /** @internal */
   parentData?: {
     field: string;
-    address: AddressType;
+    address?: AddressType;
   };
 }
 
@@ -125,13 +125,13 @@ const AddressComponent: PuckComponent<AddressProps> = (props) => {
   const streamDocument = useDocument();
 
   const resolvedColor = styles.color;
-  const address = parentData
-    ? parentData.address
-    : (resolveComponentData(
-        data.address,
-        i18n.language,
-        streamDocument
-      ) as unknown as AddressType | undefined);
+  const address =
+    parentData?.address ??
+    (resolveComponentData(
+      data.address,
+      i18n.language,
+      streamDocument
+    ) as unknown as AddressType | undefined);
 
   const listings = streamDocument.ref_listings ?? [];
   const listingsLink = getDirections(

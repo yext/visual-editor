@@ -31,14 +31,13 @@ export interface BodyProps
 
 export const Body = React.forwardRef<HTMLParagraphElement, BodyProps>(
   ({ className, variant, color, style, ...props }, ref) => {
-    const textColorClass = getTextColorClass(color);
     return (
       <p
         className={themeManagerCn(
           bodyVariants({
             variant,
           }),
-          textColorClass,
+          getTextColorClass(color),
           className
         )}
         style={{

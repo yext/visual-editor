@@ -1,8 +1,8 @@
 import {
-  Config,
   Data,
   DefaultComponentProps,
   DefaultRootProps,
+  Config,
   Field,
   ComponentConfig,
   CustomField,
@@ -115,6 +115,10 @@ type AboutSectionProps = {
      * @defaultValue Background Color 2
      */
     backgroundColor?: ThemeColor;
+    /**
+     * The read more/read less button color.
+     */
+    readMoreButtonColor?: ThemeColor;
     /**
      * If 'true', the sidebar with additional details is shown; if 'false', it's hidden.
      * @defaultValue true
@@ -529,6 +533,10 @@ interface ReviewsSectionProps {
      */
     backgroundColor?: ThemeColor;
     /**
+     * Accent color used for show more/show less and pagination controls.
+     */
+    accentColor?: ThemeColor;
+    /**
      * Whether to show the section heading.
      * @defaultValue true
      */
@@ -684,6 +692,17 @@ interface ExpandedFooterData {
      * expandedFooter: true uses multiple columns of expandedFooterLinks.
      */
     expandedFooter: boolean;
+    /** Whether to show the logo in the primary footer. */
+    showLogo: boolean;
+    /** Whether to show social links in the primary footer. */
+    showSocialLinks: boolean;
+    /** Whether to show utility images in the primary footer. */
+    showUtilityImages: boolean;
+  };
+  /** Content for the secondary footer bar. */
+  secondaryFooter: {
+    /** Whether to show the secondary footer. */
+    show: boolean;
   };
 }
 
@@ -692,6 +711,8 @@ interface ExpandedFooterStyles {
   primaryFooter: {
     backgroundColor?: ThemeColor;
     linksPosition: "left" | "right";
+    desktopContentAlignment: "left" | "center" | "right";
+    mobileContentAlignment: "left" | "center" | "right";
   };
   /** The maximum width of the footer. */
   maxWidth: PageSectionProps["maxWidth"];
@@ -756,6 +777,10 @@ interface BreadcrumbsStyles {
    * @defaultValue Background Color 1
    */
   backgroundColor?: ThemeColor;
+  /**
+   * The link color of breadcrumbs.
+   */
+  linkColor?: ThemeColor;
   /**
    * Whether to show the current page's link in the breadcrumb trail (last link).
    * @defaultValue true
@@ -874,6 +899,10 @@ interface HeroStyles {
    */
   showAverageReview: boolean;
   /**
+   * The color applied to review stars when average review is shown.
+   */
+  reviewStarsColor?: ThemeColor;
+  /**
    * Whether to show the primary CTA.
    * @defaultValue true
    */
@@ -921,6 +950,10 @@ interface ProfessionalHeroStyles {
    * @defaultValue true
    */
   showAverageReview: boolean;
+  /**
+   * The color applied to review stars when average review is shown.
+   */
+  reviewStarsColor?: ThemeColor;
   /**
    * Whether to show the hero image.
    * @defaultValue true

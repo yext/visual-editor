@@ -12,6 +12,7 @@ import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+import { getThemeColorCssValue } from "../../../utils/colors.ts";
 import {
   AssetImageType,
   isLocalizedAssetImage,
@@ -22,6 +23,7 @@ import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { PLACEHOLDER } from "./PhotoGallerySection.tsx";
 import React, { cloneElement } from "react";
 import { useTranslation } from "react-i18next";
+import { ThemeColor } from "../../../utils/themeConfigOptions.ts";
 import {
   CarouselProvider,
   Slider,
@@ -51,6 +53,15 @@ export interface PhotoGalleryWrapperProps {
   styles: {
     /** Styling options for the gallery images, such as aspect ratio. */
     image: ImageStylingProps;
+
+    /**
+     * Determines whether carousel images should fill or fit within the frame.
+     * @defaultValue "fill"
+     */
+    imageFillType?: "fill" | "fit";
+
+    /** Accent color used for carousel arrows and slide indicators. */
+    accentColor?: ThemeColor;
 
     /**
      * Number of images to show in carousel variant at once, either 1, 2, or 3.
@@ -91,6 +102,18 @@ const photoGalleryWrapperFields: Fields<PhotoGalleryWrapperProps> = {
         type: "object",
         objectFields: ImageStylingFields,
       }),
+      imageFillType: YextField(msg("fields.imageFillType", "Image Fill Type"), {
+        type: "select",
+        options: [
+          { label: msg("fields.options.fill", "Fill"), value: "fill" },
+          { label: msg("fields.options.fit", "Fit"), value: "fit" },
+        ],
+        visible: false,
+      }),
+      accentColor: YextField(msg("fields.accentColor", "Accent Color"), {
+        type: "select",
+        options: "SITE_COLOR",
+      }),
       carouselImageCount: YextField(
         msg("fields.carouselImageCount", "Carousel Image Count"),
         {
@@ -110,17 +133,23 @@ const photoGalleryWrapperFields: Fields<PhotoGalleryWrapperProps> = {
 interface DynamicChildColorsProps {
   children: React.ReactElement;
   category: "arrow" | "slide";
+  accentColor?: ThemeColor;
 }
 
 const DynamicChildColors = ({
   children,
   category,
+  accentColor,
 }: DynamicChildColorsProps) => {
   const background = useBackground();
   const hasDarkBackground = background?.isDarkColor;
+  const accentColorValue = getThemeColorCssValue(accentColor?.selectedColor);
 
-  const dynamicClasses =
-    category === "slide"
+  const dynamicClasses = accentColorValue
+    ? category === "slide"
+      ? "enabled:bg-[var(--accent-color)] disabled:bg-gray-400"
+      : "enabled:text-[var(--accent-color)] disabled:text-gray-400"
+    : category === "slide"
       ? hasDarkBackground
         ? "bg-white disabled:bg-gray-400"
         : "bg-palette-primary-dark disabled:bg-gray-400"
@@ -128,8 +157,18 @@ const DynamicChildColors = ({
         ? "text-white disabled:text-gray-400"
         : "text-palette-primary-dark disabled:text-gray-400";
 
+  const dynamicStyle = accentColorValue
+    ? ({
+        "--accent-color": accentColorValue,
+      } as React.CSSProperties)
+    : undefined;
+
   return cloneElement(children, {
     className: themeManagerCn(children.props.className, dynamicClasses),
+    style: {
+      ...children.props.style,
+      ...dynamicStyle,
+    },
   });
 };
 
@@ -148,6 +187,7 @@ type GalleryRenderProps = {
   isEditing: boolean;
   imagesFieldId: string;
   constantValueEnabled?: boolean;
+  accentColor?: ThemeColor;
 };
 
 const EmptyImage = ({ imageData }: { imageData: ResolvedGalleryImage }) => {
@@ -184,11 +224,13 @@ const DesktopImageItem = ({
   isEditing,
   sizes,
   constrainToParent = false,
+  imageFillType = "fill",
 }: {
   imageData: ResolvedGalleryImage;
   isEditing: boolean;
   sizes: string;
   constrainToParent?: boolean;
+  imageFillType?: "fill" | "fit";
 }) => {
   if (imageData.isEmpty && isEditing) {
     return <EmptyImage imageData={imageData} />;
@@ -204,6 +246,7 @@ const DesktopImageItem = ({
         constrainToParent && "w-full h-auto object-contain max-w-full"
       )}
       sizes={sizes}
+      style={{ objectFit: imageFillType === "fit" ? "contain" : "cover" }}
     />
   );
 
@@ -224,9 +267,11 @@ const DesktopImageItem = ({
 const MobileImageItem = ({
   imageData,
   isEditing,
+  imageFillType = "fill",
 }: {
   imageData: ResolvedGalleryImage;
   isEditing: boolean;
+  imageFillType?: "fill" | "fit";
 }) => {
   if (imageData.isEmpty && isEditing) {
     return <EmptyImage imageData={imageData} />;
@@ -245,6 +290,7 @@ const MobileImageItem = ({
         aspectRatio={imageData.aspectRatio}
         className="w-full h-auto object-contain"
         sizes={`100vw`}
+        style={{ objectFit: imageFillType === "fit" ? "contain" : "cover" }}
       />
     </div>
   );
@@ -257,12 +303,17 @@ const DesktopCarousel = ({
   isEditing,
   imagesFieldId,
   constantValueEnabled,
-}: GalleryRenderProps & { carouselImageCount: number }) => {
+  accentColor,
+  imageFillType = "fill",
+}: GalleryRenderProps & {
+  carouselImageCount: number;
+  imageFillType?: "fill" | "fit";
+}) => {
   const hasCarouselGap = carouselImageCount > 1;
   return (
     <div className="hidden md:flex justify-center w-full">
       <div className="flex items-center justify-center max-w-full gap-2">
-        <DynamicChildColors category="arrow">
+        <DynamicChildColors category="arrow" accentColor={accentColor}>
           <ButtonBack className="my-auto pointer-events-auto w-8 h-8 sm:w-10 sm:h-10 disabled:cursor-default">
             <FaArrowLeft className="h-10 w-fit" />
           </ButtonBack>
@@ -294,6 +345,7 @@ const DesktopCarousel = ({
                         isEditing={isEditing}
                         sizes={`min(${imageWidth}px, calc((100vw - 6rem) / ${carouselImageCount}))`}
                         constrainToParent
+                        imageFillType={imageFillType}
                       />
                     </div>
                   </Slide>
@@ -311,7 +363,10 @@ const DesktopCarousel = ({
                     key={idx}
                     className="flex flex-1 min-w-6 max-w-16 justify-center"
                   >
-                    <DynamicChildColors category="slide">
+                    <DynamicChildColors
+                      category="slide"
+                      accentColor={accentColor}
+                    >
                       <Dot
                         slide={idx}
                         className={`text-center w-full h-1.5 rounded-full disabled:cursor-default ${afterStyles}`}
@@ -322,7 +377,7 @@ const DesktopCarousel = ({
               })}
           </div>
         </div>
-        <DynamicChildColors category="arrow">
+        <DynamicChildColors category="arrow" accentColor={accentColor}>
           <ButtonNext className="pointer-events-auto w-8 h-8 sm:w-10 sm:h-10 disabled:cursor-default my-auto">
             <FaArrowRight className="h-10 w-fit" />
           </ButtonNext>
@@ -337,7 +392,9 @@ const MobileCarousel = ({
   isEditing,
   imagesFieldId,
   constantValueEnabled,
-}: GalleryRenderProps) => {
+  accentColor,
+  imageFillType = "fill",
+}: GalleryRenderProps & { imageFillType?: "fill" | "fit" }) => {
   return (
     <div className="flex flex-col gap-y-8 items-center justify-center md:hidden w-full">
       <EntityField
@@ -354,6 +411,7 @@ const MobileCarousel = ({
                   <MobileImageItem
                     imageData={imageData}
                     isEditing={isEditing}
+                    imageFillType={imageFillType}
                   />
                 </div>
               </Slide>
@@ -362,14 +420,18 @@ const MobileCarousel = ({
         </Slider>
       </EntityField>
       <div className="flex justify-between items-center px-4 gap-6 w-full">
-        <DynamicChildColors category="arrow">
+        <DynamicChildColors category="arrow" accentColor={accentColor}>
           <ButtonBack className="pointer-events-auto w-8 h-8 disabled:cursor-default">
             <FaArrowLeft className="h-6 w-fit" />
           </ButtonBack>
         </DynamicChildColors>
         <div className="flex gap-2 justify-center flex-grow w-full">
           {allImages.map((_, idx) => (
-            <DynamicChildColors category="slide" key={idx}>
+            <DynamicChildColors
+              category="slide"
+              key={idx}
+              accentColor={accentColor}
+            >
               <Dot
                 slide={idx}
                 className="h-1.5 w-full rounded-full disabled:cursor-default"
@@ -377,7 +439,7 @@ const MobileCarousel = ({
             </DynamicChildColors>
           ))}
         </div>
-        <DynamicChildColors category="arrow">
+        <DynamicChildColors category="arrow" accentColor={accentColor}>
           <ButtonNext className="pointer-events-auto w-8 h-8 disabled:cursor-default">
             <FaArrowRight className="h-6 w-fit" />
           </ButtonNext>
@@ -436,18 +498,21 @@ export const PhotoGalleryWrapper: ComponentConfig<{
       image: {
         aspectRatio: 1.78,
       },
+      imageFillType: "fill",
       carouselImageCount: 1,
     },
   },
   resolveFields: (data) => {
-    if (data.props.parentData?.variant === "carousel") {
-      return updateFields(
-        photoGalleryWrapperFields,
-        ["styles.objectFields.carouselImageCount.visible"],
-        true
-      );
-    }
-    return photoGalleryWrapperFields;
+    const isCarousel = data.props.parentData?.variant === "carousel";
+    return updateFields(
+      photoGalleryWrapperFields,
+      [
+        "styles.objectFields.carouselImageCount.visible",
+        "styles.objectFields.imageFillType.visible",
+        "styles.objectFields.accentColor.visible",
+      ],
+      isCarousel
+    );
   },
   render: (props) => <PhotoGalleryWrapperComponent {...props} />,
 };
@@ -540,6 +605,7 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
     isEditing,
     imagesFieldId: data.images.field,
     constantValueEnabled: data.images.constantValueEnabled,
+    accentColor: styles.accentColor,
   };
 
   // Update visibleSlides based on container width
@@ -582,8 +648,12 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
             <DesktopCarousel
               {...sharedRenderProps}
               carouselImageCount={styles.carouselImageCount}
+              imageFillType={styles.imageFillType ?? "fill"}
             />
-            <MobileCarousel {...sharedRenderProps} />
+            <MobileCarousel
+              {...sharedRenderProps}
+              imageFillType={styles.imageFillType ?? "fill"}
+            />
           </CarouselProvider>
         )
       ) : puck?.isEditing ? (

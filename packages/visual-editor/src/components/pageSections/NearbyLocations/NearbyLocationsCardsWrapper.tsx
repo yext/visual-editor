@@ -79,6 +79,11 @@ export type NearbyLocationCardsWrapperProps = {
        * @defaultValue false
        */
       phoneNumberLink: boolean;
+
+      /**
+       * The color applied to phone links (and icon if enabled) on each card.
+       */
+      color?: ThemeColor;
     };
 
     /** Styling for the address on each card */
@@ -222,6 +227,10 @@ const nearbyLocationCardsWrapperFields: Fields<NearbyLocationCardsWrapperProps> 
                 ],
               }
             ),
+            color: YextField(msg("fields.color", "Color"), {
+              type: "select",
+              options: "SITE_COLOR",
+            }),
           },
         }),
         address: YextField(msg("fields.address", "Address"), {

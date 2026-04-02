@@ -80,6 +80,7 @@ This object contains properties for customizing the component's appearance.
 | Prop                     | Type         | Description                                                                  | Default              |
 | :----------------------- | :----------- | :--------------------------------------------------------------------------- | :------------------- |
 | `styles.backgroundColor` | `ThemeColor` | The background color of the section.                                         | `Background Color 1` |
+| `styles.linkColor`       | `ThemeColor` | The link color of breadcrumbs.                                               |                      |
 | `styles.showCurrentPage` | `boolean`    | Whether to show the current page's link in the breadcrumb trail (last link). | `true`               |
 
 #### Other Props
@@ -195,6 +196,7 @@ This object contains properties for customizing the component's appearance.
 | Prop                         | Type         | Description                                               | Default              |
 | :--------------------------- | :----------- | :-------------------------------------------------------- | :------------------- |
 | `styles.backgroundColor`     | `ThemeColor` | The background color for the directory page heading area. | `Background Color 1` |
+| `styles.linkColor`           | `ThemeColor` | The color of links in the directory list layout.          |                      |
 | `styles.listBackgroundColor` | `ThemeColor` | The background color for the directory list area.         | `Background Color 1` |
 
 ---
@@ -205,10 +207,10 @@ This object contains properties for customizing the component's appearance.
 
 #### Other Props
 
-| Prop     | Type                                           | Description | Default |
-| :------- | :--------------------------------------------- | :---------- | :------ |
-| `data`   | `{ list: YextEntityField<string[]>; }`         |             |         |
-| `styles` | `{ listLength?: number; showIcon?: boolean; }` |             |         |
+| Prop     | Type                                                               | Description | Default |
+| :------- | :----------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ list: YextEntityField<string[]>; }`                             |             |         |
+| `styles` | `{ listLength?: number; showIcon?: boolean; color?: ThemeColor; }` |             |         |
 
 ---
 
@@ -240,7 +242,7 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ## ExpandedFooter
 
-The Expanded Footer is a comprehensive, two-tiered site-wide component for large websites. It includes a primary footer area for a logo, social media links, and utility images, and features two distinct layouts: a standard link list or an "expanded" multi-column mega-footer. It also includes an optional secondary sub-footer for copyright notices and legal links. Avalible on Location templates.
+The Expanded Footer is a comprehensive, two-tiered site-wide component for large websites. It includes a primary footer area for a logo, social media links, and utility images, and features two distinct layouts: a standard link list or an "expanded" multi-column mega-footer. It also includes an optional secondary sub-footer for copyright notices and legal links.
 
 ![Preview of the ExpandedFooter component](../components/testing/screenshots/ExpandedFooter/%5Bdesktop%5D%20default%20props.png)
 
@@ -250,18 +252,19 @@ The Expanded Footer is a comprehensive, two-tiered site-wide component for large
 
 This object contains all the content for both footer tiers.
 
-| Prop                 | Type                           | Description                         | Default |
-| :------------------- | :----------------------------- | :---------------------------------- | :------ |
-| `data.primaryFooter` | `{ expandedFooter: boolean; }` | Content for the primary footer bar. |         |
+| Prop                   | Type                                                                                                    | Description                           | Default |
+| :--------------------- | :------------------------------------------------------------------------------------------------------ | :------------------------------------ | :------ |
+| `data.primaryFooter`   | `{ expandedFooter: boolean; showLogo: boolean; showSocialLinks: boolean; showUtilityImages: boolean; }` | Content for the primary footer bar.   |         |
+| `data.secondaryFooter` | `{ show: boolean; }`                                                                                    | Content for the secondary footer bar. |         |
 
 #### Style Props
 
 This object contains properties for customizing the appearance of both footer tiers.
 
-| Prop                   | Type                                                                  | Description                         | Default |
-| :--------------------- | :-------------------------------------------------------------------- | :---------------------------------- | :------ |
-| `styles.maxWidth`      | `PageSectionProps["maxWidth"]`                                        | The maximum width of the footer.    |         |
-| `styles.primaryFooter` | `{ backgroundColor?: ThemeColor; linksPosition: "left" \| "right"; }` | Styling for the primary footer bar. |         |
+| Prop                   | Type                                                                                                                                                                                 | Description                         | Default |
+| :--------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------- | :------ |
+| `styles.maxWidth`      | `PageSectionProps["maxWidth"]`                                                                                                                                                       | The maximum width of the footer.    |         |
+| `styles.primaryFooter` | `{ backgroundColor?: ThemeColor; linksPosition: "left" \| "right"; desktopContentAlignment: "left" \| "center" \| "right"; mobileContentAlignment: "left" \| "center" \| "right"; }` | Styling for the primary footer bar. |         |
 
 ---
 
@@ -331,9 +334,10 @@ The background color for the entire footer section.
 
 #### Other Props
 
-| Prop   | Type                                                                        | Description | Default |
-| :----- | :-------------------------------------------------------------------------- | :---------- | :------ |
-| `data` | `{ label: YextEntityField<TranslatableString>; links: TranslatableCTA[]; }` |             |         |
+| Prop     | Type                                                                        | Description | Default |
+| :------- | :-------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ label: YextEntityField<TranslatableString>; links: TranslatableCTA[]; }` |             |         |
+| `styles` | `{ color?: ThemeColor; }`                                                   |             |         |
 
 ---
 
@@ -343,9 +347,10 @@ The background color for the entire footer section.
 
 #### Other Props
 
-| Prop   | Type                                                                        | Description | Default |
-| :----- | :-------------------------------------------------------------------------- | :---------- | :------ |
-| `data` | `{ sections: { label: TranslatableString; links: TranslatableCTA[]; }[]; }` |             |         |
+| Prop     | Type                                                                        | Description | Default |
+| :------- | :-------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ sections: { label: TranslatableString; links: TranslatableCTA[]; }[]; }` |             |         |
+| `styles` | `{ color?: ThemeColor; }`                                                   |             |         |
 
 ---
 
@@ -355,9 +360,10 @@ The background color for the entire footer section.
 
 #### Other Props
 
-| Prop   | Type                            | Description | Default |
-| :----- | :------------------------------ | :---------- | :------ |
-| `data` | `{ links: TranslatableCTA[]; }` |             |         |
+| Prop    | Type                            | Description | Default |
+| :------ | :------------------------------ | :---------- | :------ |
+| `color` | `ThemeColor`                    |             |         |
+| `data`  | `{ links: TranslatableCTA[]; }` |             |         |
 
 ---
 
@@ -383,7 +389,7 @@ The background color for the entire footer section.
 | Prop     | Type                                                                                                                                                    | Description | Default |
 | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------ | :---------- | :------ |
 | `data`   | `{ xLink: string; facebookLink: string; instagramLink: string; linkedInLink: string; pinterestLink: string; tiktokLink: string; youtubeLink: string; }` |             |         |
-| `styles` | `{ filledBackground?: boolean; mobileAlignment?: "left" \| "center"; }`                                                                                 |             |         |
+| `styles` | `{ filledBackground?: boolean; mobileAlignment?: "left" \| "center"; iconColor?: ThemeColor; }`                                                         |             |         |
 
 ---
 
@@ -443,6 +449,7 @@ This object contains properties for customizing the component's appearance.
 | `styles.imageHeight`              | `number`                                               | Image Height for the hero image with Immersive or Spotlight variant Minimum height: content height + Page Section Top/Bottom Padding           | `500px`              |
 | `styles.mobileContentAlignment`   | `"left" \| "center"`                                   | Content alignment for mobile viewports.                                                                                                        | `left`               |
 | `styles.mobileImagePosition`      | `"bottom" \| "top"`                                    | Positions the image to the top or bottom of the hero content on mobile (classic and compact variants).                                         | `top`                |
+| `styles.reviewStarsColor`         | `ThemeColor`                                           | The color applied to review stars when average review is shown.                                                                                |                      |
 | `styles.showAverageReview`        | `boolean`                                              | If 'true', displays the entity's average review rating.                                                                                        | `true`               |
 | `styles.showBusinessName`         | `boolean`                                              | Whether to show the business name.                                                                                                             | `true`               |
 | `styles.showGeomodifier`          | `boolean`                                              | Whether to show the geomodifier.                                                                                                               | `true`               |
@@ -546,15 +553,15 @@ Available on Locator templates.
 
 Controls which distance value to display on each locator result card.
 
-| Prop                  | Type                                                                                                                         | Description                                                                                                                                                                                                                      | Default                                |
-| :-------------------- | :--------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------- |
-| `distanceDisplay`     | `DistanceDisplayOption`                                                                                                      | Controls which distance value to display on each locator result card.                                                                                                                                                            |                                        |
-| `filters`             | `{ openNowButton: boolean; showDistanceOptions: boolean; facetFields?: DynamicOptionsSelectorType<string>; }`                | Configuration for the filters available in the locator search experience.                                                                                                                                                        |                                        |
-| `locationStyles`      | `Array<{ entityType: LocatorEntityType; pinIcon?: { type: "none" \| "icon"; iconName?: string; }; pinColor?: ThemeColor; }>` | Props to customize the locator map pin styles. Controls map pin appearance depending on the result's entity type. The number of entries is locked to the locator entity types for the page set.                                  |                                        |
-| `mapStartingLocation` | `{ latitude: string; longitude: string; }`                                                                                   | The starting location for the map.                                                                                                                                                                                               |                                        |
-| `mapStyle`            | `string`                                                                                                                     | The visual theme for the map tiles, chosen from a predefined list of Mapbox styles.                                                                                                                                              | `'mapbox://styles/mapbox/streets-v12'` |
-| `pageHeading`         | `{ title: TranslatableString; color?: ThemeColor; }`                                                                         | Configuration for the locator page heading. Allows customizing the title text and its color.                                                                                                                                     |                                        |
-| `resultCard`          | `Array<{ props: LocatorResultCardProps; }>`                                                                                  | Props to customize the locator result card component. Controls which fields are displayed and their styling depending on the result's entity type. The number of entries is locked to the locator entity types for the page set. |                                        |
+| Prop                  | Type                                                                                                                                    | Description                                                                                                                                                                                                                      | Default                                |
+| :-------------------- | :-------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------- |
+| `distanceDisplay`     | `DistanceDisplayOption`                                                                                                                 | Controls which distance value to display on each locator result card.                                                                                                                                                            |                                        |
+| `filters`             | `{ openNowButton: boolean; showDistanceOptions: boolean; accentColor?: ThemeColor; facetFields?: DynamicOptionsSelectorType<string>; }` | Configuration for the filters available in the locator search experience.                                                                                                                                                        |                                        |
+| `locationStyles`      | `Array<{ entityType: LocatorEntityType; pinIcon?: { type: "none" \| "icon"; iconName?: string; }; pinColor?: ThemeColor; }>`            | Props to customize the locator map pin styles. Controls map pin appearance depending on the result's entity type. The number of entries is locked to the locator entity types for the page set.                                  |                                        |
+| `mapStartingLocation` | `{ latitude: string; longitude: string; }`                                                                                              | The starting location for the map.                                                                                                                                                                                               |                                        |
+| `mapStyle`            | `string`                                                                                                                                | The visual theme for the map tiles, chosen from a predefined list of Mapbox styles.                                                                                                                                              | `'mapbox://styles/mapbox/streets-v12'` |
+| `pageHeading`         | `{ title: TranslatableString; color?: ThemeColor; }`                                                                                    | Configuration for the locator page heading. Allows customizing the title text and its color.                                                                                                                                     |                                        |
+| `resultCard`          | `Array<{ props: LocatorResultCardProps; }>`                                                                                             | Props to customize the locator result card component. Controls which fields are displayed and their styling depending on the result's entity type. The number of entries is locked to the locator entity types for the page set. |                                        |
 
 ---
 
@@ -592,10 +599,10 @@ The props for the Phone component
 
 #### Other Props
 
-| Prop     | Type                                                                                                     | Description | Default |
-| :------- | :------------------------------------------------------------------------------------------------------- | :---------- | :------ |
-| `data`   | `{ number: YextEntityField<string>; label: TranslatableString; }`                                        |             |         |
-| `styles` | `{ phoneFormat: "domestic" \| "international"; includePhoneHyperlink: boolean; includeIcon?: boolean; }` |             |         |
+| Prop     | Type                                                                                                                         | Description | Default |
+| :------- | :--------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ number: YextEntityField<string>; label: TranslatableString; }`                                                            |             |         |
+| `styles` | `{ phoneFormat: "domestic" \| "international"; includePhoneHyperlink: boolean; includeIcon?: boolean; color?: ThemeColor; }` |             |         |
 
 ---
 
@@ -682,6 +689,7 @@ This object contains properties for customizing the component's appearance.
 | `styles.backgroundColor`       | `ThemeColor`        | The background color for the section.                                    | `Background Color 1` |
 | `styles.desktopImagePosition`  | `"left" \| "right"` | Positions the image to the left or right of the hero content on desktop. | `left`               |
 | `styles.mobileImagePosition`   | `"bottom" \| "top"` | Positions the image to the top or bottom of the hero content on mobile.  | `top`                |
+| `styles.reviewStarsColor`      | `ThemeColor`        | The color applied to review stars when average review is shown.          |                      |
 | `styles.showAddress`           | `boolean`           | Whether to show the address slot.                                        | `true`               |
 | `styles.showAverageReview`     | `boolean`           | If 'true', displays the entity's average review rating.                  | `true`               |
 | `styles.showBusinessName`      | `boolean`           | Whether to show the business name slot.                                  | `true`               |
@@ -761,9 +769,9 @@ The Reviews Section displays customer reviews fetched dynamically from the Yext 
 
 This object contains properties for customizing the component's appearance.
 
-| Prop     | Type                                                             | Description                                                                 | Default |
-| :------- | :--------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
-| `styles` | `{ backgroundColor?: ThemeColor; showSectionHeading: boolean; }` | This object contains properties for customizing the component's appearance. |         |
+| Prop     | Type                                                                                       | Description                                                                 | Default |
+| :------- | :----------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: ThemeColor; accentColor?: ThemeColor; showSectionHeading: boolean; }` | This object contains properties for customizing the component's appearance. |         |
 
 #### Other Props
 
@@ -793,21 +801,13 @@ The Secondary Footer Slot is a sub-section of the Expanded Footer that contains 
 
 ### Props
 
-#### Data Props
-
-Data configuration for the secondary footer.
-
-| Prop   | Type                 | Description                                  | Default |
-| :----- | :------------------- | :------------------------------------------- | :------ |
-| `data` | `{ show: boolean; }` | Data configuration for the secondary footer. |         |
-
 #### Style Props
 
 Styling configuration for the secondary footer.
 
-| Prop     | Type                                                                              | Description                                     | Default |
-| :------- | :-------------------------------------------------------------------------------- | :---------------------------------------------- | :------ |
-| `styles` | `{ backgroundColor?: ThemeColor; linksPosition: "left" \| "center" \| "right"; }` | Styling configuration for the secondary footer. |         |
+| Prop     | Type                                                                                                                                                                   | Description                                     | Default |
+| :------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: ThemeColor; desktopContentAlignment: "left" \| "center" \| "right"; mobileContentAlignment: "left" \| "center" \| "right"; showLinks: boolean; }` | Styling configuration for the secondary footer. |         |
 
 ---
 

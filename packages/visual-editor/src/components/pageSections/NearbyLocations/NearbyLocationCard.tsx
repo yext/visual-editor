@@ -112,6 +112,7 @@ export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
           format={styles?.phone?.phoneNumberFormat}
           includeHyperlink={styles?.phone?.phoneNumberLink}
           includeIcon={false}
+          linkColor={styles?.phone?.color}
         />
       )}
       {showAddress && (
