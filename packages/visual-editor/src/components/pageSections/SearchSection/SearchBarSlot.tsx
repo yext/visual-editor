@@ -223,25 +223,21 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
   const recognitionRef = React.useRef<BrowserSpeechRecognition | null>(null);
   const [isListening, setIsListening] = React.useState(false);
 
-  const handleTranscript = React.useCallback(
-    (transcript: string) => {
-      const searchTerm = transcript.trim();
-      const url = new URL(
-        showResults
-          ? window.location.href
-          : `${window.location.origin}/search.html`
-      );
+  const handleTranscript = React.useCallback((transcript: string) => {
+    if (typeof window === "undefined") return;
 
-      if (searchTerm) {
-        url.searchParams.set("searchTerm", searchTerm);
-      } else {
-        url.searchParams.delete("searchTerm");
-      }
+    const url = new URL(window.location.href);
+    const searchTerm = transcript.trim();
 
-      window.location.assign(url.toString());
-    },
-    [showResults]
-  );
+    if (searchTerm) {
+      url.searchParams.set("searchTerm", searchTerm);
+    } else {
+      url.searchParams.delete("searchTerm");
+    }
+
+    window.history.pushState({}, "", url.toString());
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }, []);
 
   const handleVoiceSearch = React.useCallback(() => {
     if (typeof window === "undefined") return;
@@ -289,12 +285,32 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
     };
   }, []);
 
+  const handleSearch = React.useCallback(
+    ({ query: nextQuery }: { query?: string; verticalKey?: string }) => {
+      if (typeof window === "undefined") return;
+
+      const url = new URL(window.location.href);
+
+      if (nextQuery?.trim()) {
+        url.searchParams.set("searchTerm", nextQuery.trim());
+      } else {
+        url.searchParams.delete("searchTerm");
+      }
+
+      console.log("🔍 URL will update to:", url.toString()); // ← temp log
+      window.history.pushState({}, "", url.toString());
+      window.dispatchEvent(new PopStateEvent("popstate"));
+    },
+    []
+  );
+
   return (
     <div
       className={`relative w-full flex my-2 items-center ${puck.isEditing ? "pt-4" : ""}`}
     >
       <div className={`relative ${layoutClasses} ${heightClass} `}>
         <SearchBar
+          onSearch={handleSearch}
           visualAutocompleteConfig={visualAutocompleteConfig}
           placeholder={isTypingEffect ? placeholder : "Search here...."}
           customCssClasses={{

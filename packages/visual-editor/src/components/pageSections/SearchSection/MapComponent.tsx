@@ -120,7 +120,10 @@ export const MapComponent = ({
       iframeWindow={iframe?.contentWindow ?? undefined}
       allowUpdates
       mapboxOptions={{
-        center: [first.longitude, first.latitude],
+        center: {
+          latitude: first.latitude,
+          longitude: first.longitude,
+        },
         zoom: 10,
         style: "mapbox://styles/mapbox/streets-v12",
       }}
