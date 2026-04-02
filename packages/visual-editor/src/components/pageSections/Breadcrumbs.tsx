@@ -7,7 +7,7 @@ import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import { TranslatableString } from "../../types/types.ts";
 import {
-  BackgroundStyle,
+  ThemeColor,
   backgroundColors,
 } from "../../utils/themeConfigOptions.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
@@ -36,7 +36,12 @@ export interface BreadcrumbsStyles {
    * The background color of the section.
    * @defaultValue Background Color 1
    */
-  backgroundColor?: BackgroundStyle;
+  backgroundColor?: ThemeColor;
+
+  /**
+   * The link color of breadcrumbs.
+   */
+  linkColor?: ThemeColor;
 
   /**
    * Whether to show the current page's link in the breadcrumb trail (last link).
@@ -105,6 +110,10 @@ const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
+      linkColor: YextField(msg("fields.linkColor", "Link Color"), {
+        type: "select",
+        options: "SITE_COLOR",
+      }),
       showCurrentPage: YextField(
         msg(
           "fields.showCurrentPagesLinkLabel",
@@ -210,6 +219,7 @@ export const BreadcrumbsComponent = ({
                 eventName={`link${index}`}
                 href={isCurrentPage ? "" : href}
                 className="inline text-body-sm-fontSize font-link-fontWeight font-link-fontFamily whitespace-normal break-words"
+                color={styles?.linkColor}
                 alwaysHideCaret
               >
                 {label}

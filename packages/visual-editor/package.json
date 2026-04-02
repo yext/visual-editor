@@ -1,7 +1,7 @@
 {
   "name": "@yext/visual-editor",
   "description": "Component library for Yext Pages Visual Editor",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "author": "sumo@yext.com",
   "repository": {
     "type": "git",
@@ -35,6 +35,7 @@
     "build": "pnpm run build:components && pnpm run build:plugin",
     "test": "pnpm run test:editor && pnpm run test:components",
     "test:editor": "vitest run --exclude './src/components/**/*.test.tsx' --browser.enabled false",
+    "test:plugin": "vitest run ./src/vite-plugin --browser.enabled false",
     "test:components": "vitest run ./src/components/**",
     "test:components:local": "./scripts/localScreenshots.sh",
     "prettier": "prettier --write --cache .",
@@ -56,7 +57,7 @@
     "i18n:update": "pnpm run i18n:extract:platform && pnpm run i18n:extract:components && pnpm run i18n:translate:platform && pnpm run i18n:propagate:components && pnpm run i18n:lint"
   },
   "dependencies": {
-    "@mapbox/maki": "^8.0.0",
+    "@mapbox/maki": "^8.2.0",
     "@microsoft/api-documenter": "^7.26.29",
     "@microsoft/api-extractor": "^7.52.8",
     "@microsoft/api-extractor-model": "^7.30.6",
@@ -79,7 +80,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "dompurify": "^3.2.3",
-    "handlebars": "^4.7.8",
+    "handlebars": "^4.7.9",
     "geolib": "^3.3.4",
     "i18next": "^25.8.4",
     "lucide-react": "^0.414.0",
@@ -95,6 +96,7 @@
     "react-international-phone": "^4.6.0",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.4.0",
+    "ts-morph": "^22.0.0",
     "tsx": "^4.16.3"
   },
   "engines": {
@@ -112,7 +114,6 @@
     "@testing-library/react": "^16.3.0",
     "@types/fs-extra": "^11.0.4",
     "@types/jest-axe": "^3.5.9",
-    "@types/mapbox-gl": "^2.7.5",
     "@types/minimist": "^1.2.5",
     "@types/node": "^20.14.11",
     "@types/pixelmatch": "^5.2.6",
@@ -153,10 +154,10 @@
     "vitest": "^3.2.4"
   },
   "peerDependencies": {
-    "@yext/pages-components": "2.0.2",
+    "@yext/pages-components": "^2.1.0",
     "@yext/search-headless-react": "^2.7.1",
-    "@yext/search-ui-react": "^2.1.0",
-    "mapbox-gl": "^2.9.2",
+    "@yext/search-ui-react": "^3.0.0",
+    "mapbox-gl": "^3.20.0",
     "react": "^17.0.2 || ^18.2.0",
     "react-dom": "^17.0.2 || ^18.2.0"
   }

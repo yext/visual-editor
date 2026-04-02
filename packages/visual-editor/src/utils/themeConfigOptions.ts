@@ -68,103 +68,98 @@ const getSpacingOptions = () => {
 };
 
 /**
- * Applies a theme color as the background of a page section
- * @ai This value MUST be one of the following
- * { bgColor: "bg-white", textColor: "text-black" }
- * { bgColor: "bg-palette-primary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-secondary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-tertiary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-quaternary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-primary-dark", textColor: "text-white", isDarkBackground: true }
- * { bgColor: "bg-palette-secondary-dark", textColor: "text-white", isDarkBackground: true }
+ * An object representing a color based on the theme specified by the user.
  */
-export type BackgroundStyle = {
-  /** The tailwind background color class */
-  bgColor: string;
-  /** The tailwind text color class */
-  textColor: string;
-  /** Whether the background color is dark (for adjusting other styles based on background) */
-  isDarkBackground?: boolean;
+export type ThemeColor = {
+  /** The theme color token selected by the user. */
+  selectedColor: string;
+  /** The theme color token that contrasts with the selectedColor. */
+  contrastingColor: string;
+  /**
+   * Whether the user-selected color is dark.
+   */
+  isDarkColor?: boolean;
 };
 
-type BackgroundOption = {
-  label: string;
-  value: BackgroundStyle;
-};
-
-export const backgroundColors: Record<string, BackgroundOption> = {
+export const backgroundColors: Record<
+  string,
+  {
+    label: string;
+    value: ThemeColor;
+  }
+> = {
   background1: {
     label: msg("theme.bg.bg1", "Background 1"),
-    value: { bgColor: "bg-white", textColor: "text-black" },
+    value: { selectedColor: "white", contrastingColor: "black" },
   },
   background2: {
     label: msg("theme.bg.bg2", "Background 2"),
     value: {
-      bgColor: "bg-palette-primary-light",
-      textColor: "text-black",
+      selectedColor: "palette-primary-light",
+      contrastingColor: "black",
     },
   },
   background3: {
     label: msg("theme.bg.bg3", "Background 3"),
     value: {
-      bgColor: "bg-palette-secondary-light",
-      textColor: "text-black",
+      selectedColor: "palette-secondary-light",
+      contrastingColor: "black",
     },
   },
   background4: {
     label: msg("theme.bg.bg4", "Background 4"),
     value: {
-      bgColor: "bg-palette-tertiary-light",
-      textColor: "text-black",
+      selectedColor: "palette-tertiary-light",
+      contrastingColor: "black",
     },
   },
   background5: {
     label: msg("theme.bg.bg5", "Background 5"),
     value: {
-      bgColor: "bg-palette-quaternary-light",
-      textColor: "text-black",
+      selectedColor: "palette-quaternary-light",
+      contrastingColor: "black",
     },
   },
   background6: {
     label: msg("theme.bg.bg6", "Background 6"),
     value: {
-      bgColor: "bg-palette-primary-dark",
-      textColor: "text-white",
+      selectedColor: "palette-primary-dark",
+      contrastingColor: "white",
     },
   },
   background7: {
     label: msg("theme.bg.bg7", "Background 7"),
     value: {
-      bgColor: "bg-palette-secondary-dark",
-      textColor: "text-white",
+      selectedColor: "palette-secondary-dark",
+      contrastingColor: "white",
     },
   },
   color1: {
     label: msg("theme.bg.color1", "Color 1"),
     value: {
-      bgColor: "bg-palette-primary",
-      textColor: "text-palette-primary-contrast",
+      selectedColor: "palette-primary",
+      contrastingColor: "palette-primary-contrast",
     },
   },
   color2: {
     label: msg("theme.bg.color2", "Color 2"),
     value: {
-      bgColor: "bg-palette-secondary",
-      textColor: "text-palette-secondary-contrast",
+      selectedColor: "palette-secondary",
+      contrastingColor: "palette-secondary-contrast",
     },
   },
   color3: {
     label: msg("theme.bg.color3", "Color 3"),
     value: {
-      bgColor: "bg-palette-tertiary",
-      textColor: "text-palette-tertiary-contrast",
+      selectedColor: "palette-tertiary",
+      contrastingColor: "palette-tertiary-contrast",
     },
   },
   color4: {
     label: msg("theme.bg.color4", "Color 4"),
     value: {
-      bgColor: "bg-palette-quaternary",
-      textColor: "text-palette-quaternary-contrast",
+      selectedColor: "palette-quaternary",
+      contrastingColor: "palette-quaternary-contrast",
     },
   },
 };
@@ -183,7 +178,7 @@ const backgroundColorOptions: ComboboxOptionGroup[] = [
           return {
             label,
             value,
-            color: value.bgColor,
+            color: `bg-${value.selectedColor}`,
           };
         }
       })
@@ -197,7 +192,7 @@ const backgroundColorOptions: ComboboxOptionGroup[] = [
           return {
             label,
             value,
-            color: value.bgColor,
+            color: `bg-${value.selectedColor}`,
           };
         }
       })
@@ -228,7 +223,7 @@ export const siteColorOptions: ComboboxOptionGroup[] = [
           return {
             label,
             value,
-            color: value.bgColor,
+            color: `bg-${value.selectedColor}`,
           };
         }
       })
@@ -513,6 +508,44 @@ export const ThemeOptions = {
   MAX_WIDTH: maxWidthOptions,
   SHOW_HIDE: showHideOptions,
 };
+
+// Static class safelist so Tailwind content scanning always includes
+// the theme classes generated dynamically at runtime.
+export const VisualEditorThemeClassSafelist = [
+  "bg-white",
+  "bg-black",
+  "bg-palette-primary-light",
+  "bg-palette-secondary-light",
+  "bg-palette-tertiary-light",
+  "bg-palette-quaternary-light",
+  "bg-palette-primary-dark",
+  "bg-palette-secondary-dark",
+  "bg-palette-primary",
+  "bg-palette-secondary",
+  "bg-palette-tertiary",
+  "bg-palette-quaternary",
+  "bg-palette-primary-contrast",
+  "bg-palette-secondary-contrast",
+  "bg-palette-tertiary-contrast",
+  "bg-palette-quaternary-contrast",
+  "text-white",
+  "text-black",
+  "text-palette-primary-light",
+  "text-palette-secondary-light",
+  "text-palette-tertiary-light",
+  "text-palette-quaternary-light",
+  "text-palette-primary-dark",
+  "text-palette-secondary-dark",
+  "text-palette-primary",
+  "text-palette-secondary",
+  "text-palette-tertiary",
+  "text-palette-quaternary",
+  "text-palette-primary-contrast",
+  "text-palette-secondary-contrast",
+  "text-palette-tertiary-contrast",
+  "text-palette-quaternary-contrast",
+  "bg-[#00000099]",
+];
 
 // Content path for applying tailwind config to visual-editor components
 export const VisualEditorComponentsContentPath =

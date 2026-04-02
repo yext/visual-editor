@@ -1,6 +1,9 @@
 import { themeResolver } from "../../utils/themeResolver.ts";
 import { defaultThemeConfig } from "../DefaultThemeConfig.ts";
-import { defaultThemeTailwindExtensions } from "../../utils/themeConfigOptions.ts";
+import {
+  defaultThemeTailwindExtensions,
+  VisualEditorThemeClassSafelist,
+} from "../../utils/themeConfigOptions.ts";
 
 // This Tailwind Config applies Theme Editor styles to our components
 // during playwright testing
@@ -9,5 +12,6 @@ export default {
   theme: {
     extend: themeResolver(defaultThemeTailwindExtensions, defaultThemeConfig),
   },
+  safelist: VisualEditorThemeClassSafelist,
   plugins: [],
 };

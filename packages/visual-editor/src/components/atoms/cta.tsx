@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, LinkType } from "@yext/pages-components";
 import { Button, ButtonProps } from "./button.js";
-import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
+import { ThemeColor } from "../../utils/themeConfigOptions.ts";
 import { normalizeLink } from "../../utils/normalizeLink.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { useBackground } from "../../hooks/useBackground.tsx";
@@ -12,7 +12,7 @@ import { FaAngleRight, FaExternalLinkAlt } from "react-icons/fa";
 import { getDirections } from "@yext/pages-components";
 import { PresetImageType, FOOD_DELIVERY_SERVICES } from "../../types/types.ts";
 import { presetImageIcons } from "../../utils/presetImageIcons.tsx";
-import { normalizeThemeColor } from "../../utils/normalizeThemeColor.js";
+import { getThemeColorCssValue } from "../../utils/colors.ts";
 
 const LINK_TEXT_TRANSFORM_CSS_VAR =
   "var(--textTransform-link-textTransform)" as React.CSSProperties["textTransform"];
@@ -46,7 +46,7 @@ export type CTAProps = {
     event: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement, MouseEvent>
   ) => void;
   disabled?: boolean;
-  color?: BackgroundStyle;
+  color?: ThemeColor;
   openInNewTab?: boolean;
   /**
    * When true and variant is "link", applies vertical padding (py-3) to the CTA.
@@ -65,6 +65,10 @@ export type CTAProps = {
  * "headerFooterSecondaryLink": a text link style optimized for secondary links in the header and footer.
  */
 export type CTAVariant = ButtonProps["variant"];
+
+/** Returns whether a CTA variant supports user-configurable color overrides. */
+export const isCtaVariantWithColor = (variant?: CTAVariant): boolean =>
+  variant === "primary" || variant === "secondary" || variant === "link";
 
 const presetImageTypeToName = (presetImageType: PresetImageType) => {
   switch (presetImageType) {
@@ -154,7 +158,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
           ) &&
           React.isValidElement(label)
         ) {
-          const buttonBackgroundColor = background?.isDarkBackground
+          const buttonBackgroundColor = background?.isDarkColor
             ? "#FFFFFF"
             : "#F9F9F9";
 
@@ -241,21 +245,21 @@ export const CTA = (props: CTAProps) => {
   const { t } = useTranslation();
   const resolvedProps = useResolvedCtaProps(props);
   const isButton = actionType === "button";
-  const isDarkBG = useBackground()?.isDarkBackground;
+  const isDarkBackground = useBackground()?.isDarkColor;
   const dynamicStyle: React.CSSProperties = (() => {
-    const bg = normalizeThemeColor(color?.bgColor);
-    const textColor = normalizeThemeColor(color?.textColor);
-    const border = bg && `var(--colors-${bg})`;
+    const bg = getThemeColorCssValue(color?.selectedColor);
+    const textColor = getThemeColorCssValue(color?.contrastingColor);
+    const border = bg;
 
     if (variant === "primary") {
       return {
-        backgroundColor: bg && `var(--colors-${bg})`,
-        color: textColor && `var(--colors-${textColor})`,
+        backgroundColor: bg,
+        color: textColor,
         borderColor: border,
       };
     }
 
-    if (variant === "secondary" && !isDarkBG) {
+    if (variant === "secondary" && !isDarkBackground) {
       return {
         borderColor: border,
         color: border,
@@ -263,11 +267,13 @@ export const CTA = (props: CTAProps) => {
     }
 
     if (
+      variant === "link" ||
+      variant === "directoryLink" ||
       variant === "headerFooterMainLink" ||
       variant === "headerFooterSecondaryLink"
     ) {
       return {
-        color: bg && `var(--colors-${bg})`,
+        color: bg,
       };
     }
 
@@ -397,6 +403,7 @@ export const CTA = (props: CTAProps) => {
         onClick={onClick}
         // textTransform has to be applied via styles because there is no custom tailwind utility
         style={{
+          ...(ctaType !== "presetImage" ? dynamicStyle : undefined),
           // @ts-ignore: the css variable here resolves to a valid enum value
           textTransform: buttonVariant?.toLowerCase().includes("link")
             ? LINK_TEXT_TRANSFORM_CSS_VAR

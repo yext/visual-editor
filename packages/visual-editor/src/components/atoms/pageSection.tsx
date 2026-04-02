@@ -1,6 +1,6 @@
 import * as React from "react";
 import { themeManagerCn } from "../../utils/cn.ts";
-import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
+import { ThemeColor } from "../../utils/themeConfigOptions.ts";
 import { Background } from "./background.tsx";
 import { cva, VariantProps } from "class-variance-authority";
 
@@ -40,7 +40,7 @@ const maxWidthVariants = cva("mx-auto", {
 export interface PageSectionProps
   extends VariantProps<typeof maxWidthVariants>,
     React.HTMLAttributes<HTMLDivElement> {
-  background?: BackgroundStyle;
+  background?: ThemeColor;
   verticalPadding?: VariantProps<typeof pageSectionVariants>["verticalPadding"];
   as?: "div" | "section" | "nav" | "header" | "footer" | "main" | "aside";
   outerClassName?: string;

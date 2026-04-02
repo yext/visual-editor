@@ -1,3 +1,32 @@
+#### 1.2.0 (2026-04-01)
+
+##### Chores
+
+- enable AdvancedCoreInfo components for all accounts ([#1135](https://github.com/yext/visual-editor/pull/1135)) ([d89baadd](https://github.com/yext/visual-editor/commit/d89baaddea41ef8590b2db83285810e8f5e72619))
+- upgrade happy-dom to ^20.8.8 with pnpm override ([#1134](https://github.com/yext/visual-editor/pull/1134)) ([542a4221](https://github.com/yext/visual-editor/commit/542a4221941e2ede2131787a01fa1a042dfd7078))
+- upgrade handlebars to 4.7.9 ([#1133](https://github.com/yext/visual-editor/pull/1133)) ([cab3f93c](https://github.com/yext/visual-editor/commit/cab3f93c17f01ef82a94e07c3e504b6bde1fe4dc))
+- update German translations ([#1131](https://github.com/yext/visual-editor/pull/1131)) ([35c08097](https://github.com/yext/visual-editor/commit/35c080979d2dfb2dde6d16bd095bdf3c377c828e))
+- mapbox-gl, search-ui-react, pages-components upgrade ([#1126](https://github.com/yext/visual-editor/pull/1126)) ([97149259](https://github.com/yext/visual-editor/commit/97149259aab2658ee84660278b2ad056eed0c938))
+- add AGENTS.md for codex ([#1123](https://github.com/yext/visual-editor/pull/1123)) ([e4e227fc](https://github.com/yext/visual-editor/commit/e4e227fc41e0bbb8cdf76897f7e359d3317eb69a))
+
+##### New Features
+
+- add code template helpers ([#1132](https://github.com/yext/visual-editor/pull/1132)) ([2f013cab](https://github.com/yext/visual-editor/commit/2f013cab95135bd929e5272ac301ec0d2ed55f71))
+- footer prop enhancement ([#1125](https://github.com/yext/visual-editor/pull/1125)) ([4d50ca33](https://github.com/yext/visual-editor/commit/4d50ca33e3bd253de7e8602a4a743b0c7f21e6c4))
+- more site color fields ([#1124](https://github.com/yext/visual-editor/pull/1124)) ([b373d78b](https://github.com/yext/visual-editor/commit/b373d78b48686d1d60935d2917cffc6ad963b83d))
+
+##### Bug Fixes
+
+- alignment in Grid and Professional Hero Section ([#1130](https://github.com/yext/visual-editor/pull/1130)) ([0b3c91b3](https://github.com/yext/visual-editor/commit/0b3c91b3d1a80844e3f29a574d5347d3bbfa9d5a))
+- add aria label to close filters button ([#1129](https://github.com/yext/visual-editor/pull/1129)) ([6863e624](https://github.com/yext/visual-editor/commit/6863e62474b8e4173bbacf70d11a0060074bf123))
+- reduce memory usage in Directory PageSets ([#1121](https://github.com/yext/visual-editor/pull/1121)) ([4829ec12](https://github.com/yext/visual-editor/commit/4829ec12e5a4b68e4fae50d34ca32b0eafb4c8f2))
+- locator initial location rendering ([#1120](https://github.com/yext/visual-editor/pull/1120)) ([c76aa4d7](https://github.com/yext/visual-editor/commit/c76aa4d7bf6c9b4cff77abab5d81e5beb8324bdc))
+- lost field focus after first edit ([#1127](https://github.com/yext/visual-editor/pull/1127)) ([8afc10b1](https://github.com/yext/visual-editor/commit/8afc10b15d6bf288ed6b27ac27137f245912d727))
+
+##### Refactors
+
+- theme color objects ([#1117](https://github.com/yext/visual-editor/pull/1117)) ([accd37bb](https://github.com/yext/visual-editor/commit/accd37bbad725d12acefd742591ecdc9246a8ff1))
+
 #### 1.1.1 (2026-03-24)
 
 ##### Bug Fixes

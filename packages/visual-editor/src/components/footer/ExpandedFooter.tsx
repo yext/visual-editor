@@ -1,8 +1,15 @@
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { ComponentConfig, Fields, Slot, PuckComponent } from "@puckeditor/core";
+import {
+  ComponentConfig,
+  Fields,
+  Slot,
+  PuckComponent,
+  setDeep,
+} from "@puckeditor/core";
+import { cva } from "class-variance-authority";
 import {
   backgroundColors,
-  BackgroundStyle,
+  ThemeColor,
 } from "../../utils/themeConfigOptions.ts";
 import { msg } from "../../utils/i18n/platform.ts";
 import { YextField } from "../../editor/YextField.tsx";
@@ -10,6 +17,13 @@ import { Background } from "../atoms/background.tsx";
 import { PageSection, PageSectionProps } from "../atoms/pageSection.tsx";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { defaultCopyrightMessageSlotProps } from "./CopyrightMessageSlot.tsx";
+import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
+import { FooterLogoSlotProps } from "./FooterLogoSlot.tsx";
+import { FooterSocialLinksSlotProps } from "./FooterSocialLinksSlot.tsx";
+import { FooterUtilityImagesSlotProps } from "./FooterUtilityImagesSlot.tsx";
+import { FooterLinksSlotProps } from "./FooterLinksSlot.tsx";
+import { FooterExpandedLinksWrapperProps } from "./FooterExpandedLinksWrapper.tsx";
+import { SecondaryFooterSlotProps } from "./SecondaryFooterSlot.tsx";
 
 const PLACEHOLDER_LOGO_IMAGE: string =
   "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg";
@@ -40,6 +54,25 @@ export const validPatterns: Record<string, RegExp> = {
   tiktokLink: /^https:\/\/(www\.)?tiktok\.com\/.+/,
 };
 
+const sideContentAlignment = cva("", {
+  variants: {
+    desktopContentAlignment: {
+      left: "md:items-start",
+      center: "md:items-center",
+      right: "md:items-end",
+    },
+    mobileContentAlignment: {
+      left: "items-start",
+      center: "items-center",
+      right: "items-end",
+    },
+  },
+  defaultVariants: {
+    desktopContentAlignment: "left",
+    mobileContentAlignment: "left",
+  },
+});
+
 export interface ExpandedFooterData {
   /** Content for the primary footer bar. */
   primaryFooter: {
@@ -49,14 +82,28 @@ export interface ExpandedFooterData {
      * expandedFooter: true uses multiple columns of expandedFooterLinks.
      */
     expandedFooter: boolean;
+    /** Whether to show the logo in the primary footer. */
+    showLogo: boolean;
+    /** Whether to show social links in the primary footer. */
+    showSocialLinks: boolean;
+    /** Whether to show utility images in the primary footer. */
+    showUtilityImages: boolean;
+  };
+
+  /** Content for the secondary footer bar. */
+  secondaryFooter: {
+    /** Whether to show the secondary footer. */
+    show: boolean;
   };
 }
 
 export interface ExpandedFooterStyles {
   /** Styling for the primary footer bar. */
   primaryFooter: {
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
     linksPosition: "left" | "right";
+    desktopContentAlignment: "left" | "center" | "right";
+    mobileContentAlignment: "left" | "center" | "right";
   };
   /** The maximum width of the footer. */
   maxWidth: PageSectionProps["maxWidth"];
@@ -113,8 +160,44 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
               ],
             }
           ),
+          showLogo: YextField(msg("fields.showLogo", "Show Logo"), {
+            type: "radio",
+            options: "SHOW_HIDE",
+          }),
+          showSocialLinks: YextField(
+            msg("fields.showSocialLinks", "Show Social Links"),
+            {
+              type: "radio",
+              options: "SHOW_HIDE",
+            }
+          ),
+          showUtilityImages: YextField(
+            msg("fields.showUtilityImages", "Show Utility Images"),
+            {
+              type: "radio",
+              options: "SHOW_HIDE",
+            }
+          ),
         },
       }),
+      secondaryFooter: YextField(
+        msg("fields.secondaryFooter", "Secondary Footer"),
+        {
+          type: "object",
+          objectFields: {
+            show: YextField(
+              msg("fields.visibleOnLivePage", "Visible on Live Page"),
+              {
+                type: "radio",
+                options: [
+                  { label: msg("fields.options.yes", "Yes"), value: true },
+                  { label: msg("fields.options.no", "No"), value: false },
+                ],
+              }
+            ),
+          },
+        }
+      ),
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {
@@ -132,7 +215,7 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
             }
           ),
           linksPosition: YextField(
-            msg("fields.linksPosition", "Links Position"),
+            msg("fields.desktopLinkPosition", "Desktop Link Position"),
             {
               type: "radio",
               options: [
@@ -149,6 +232,20 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
                   value: "right",
                 },
               ],
+            }
+          ),
+          desktopContentAlignment: YextField(
+            msg("fields.desktopContentAlignment", "Desktop Content Alignment"),
+            {
+              type: "radio",
+              options: "ALIGNMENT",
+            }
+          ),
+          mobileContentAlignment: YextField(
+            msg("fields.mobileContentAlignment", "Mobile Content Alignment"),
+            {
+              type: "radio",
+              options: "ALIGNMENT",
             }
           ),
           // Logo and utility image styles are controlled within their respective slots
@@ -182,122 +279,154 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
   }),
 };
 
-const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = ({
-  data,
-  styles,
-  slots,
-  puck,
-}) => {
-  const { primaryFooter } = data;
-  const { primaryFooter: primaryFooterStyle, maxWidth } = styles;
-  const { expandedFooter } = primaryFooter;
-  const { linksPosition: primaryLinksAlignment, backgroundColor } =
-    primaryFooterStyle;
+const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = (props) => {
+  const {
+    data: {
+      primaryFooter: {
+        expandedFooter,
+        showLogo = true,
+        showSocialLinks = true,
+        showUtilityImages = true,
+      },
+      secondaryFooter: { show: secondaryFooterVisibleOnLivePage },
+    },
+    styles: {
+      primaryFooter: {
+        linksPosition: primaryLinksAlignment,
+        backgroundColor,
+        desktopContentAlignment = "left",
+        mobileContentAlignment = "left",
+      },
+      maxWidth,
+    },
+    slots,
+    puck,
+  } = props;
+
+  const shouldRenderSideContent =
+    showLogo || showSocialLinks || showUtilityImages;
+  const shouldRenderMobileBottomContent = showSocialLinks || showUtilityImages;
+  const linksDesktopOrderClass =
+    primaryLinksAlignment === "left" ? "lg:order-1" : "lg:order-2";
+  const sideContentDesktopOrderClass =
+    primaryLinksAlignment === "left" ? "lg:order-2" : "lg:order-1";
+  const contentAlignmentClasses = sideContentAlignment({
+    desktopContentAlignment,
+    mobileContentAlignment,
+  });
 
   return (
     <Background className="mt-auto" ref={puck.dragRef} as="footer">
       {/* Primary footer section. */}
       <PageSection
-        verticalPadding={"footer"}
+        verticalPadding="footer"
         background={backgroundColor}
         maxWidth={maxWidth}
-        className={`flex flex-col md:flex-row md:justify-start w-full md:items-start gap-6 md:gap-8`}
+        className="flex flex-col lg:flex-row lg:justify-start w-full lg:items-start gap-6 md:gap-8"
       >
-        {/* Render in different order based on alignment */}
-        {primaryLinksAlignment === "left" ? (
-          <>
-            {/* LEFT ALIGNED: Links first, then slots */}
-            {expandedFooter ? (
-              <slots.ExpandedLinksWrapperSlot
-                style={{ height: "auto", flex: 1 }}
-                allow={[]}
-              />
-            ) : (
-              <slots.PrimaryLinksWrapperSlot
-                style={{ height: "auto", flex: 1 }}
-                allow={[]}
-              />
+        {showLogo && (
+          <div
+            className={themeManagerCn(
+              "order-1 md:hidden flex flex-col gap-6 md:gap-6",
+              contentAlignmentClasses
             )}
-            <div className="flex flex-col gap-6 md:gap-6 items-start">
-              <slots.LogoSlot
-                style={{ height: "auto", maxWidth: "max-content" }}
-                allow={[]}
-              />
-              <div
-                className={themeManagerCn(
-                  "hidden md:flex flex-col gap-6 items-start",
-                  puck.isEditing ? "" : ""
-                )}
-              >
-                <slots.SocialLinksSlot
-                  style={{ height: "auto", maxWidth: "max-content" }}
-                  allow={[]}
-                />
-                <slots.UtilityImagesSlot
-                  style={{ height: "auto", maxWidth: "max-content" }}
-                  allow={[]}
-                />
-              </div>
-            </div>
-          </>
-        ) : (
-          <>
-            {/* RIGHT ALIGNED (default): Slots first, then links */}
-            <div className="flex flex-col gap-6 md:gap-6 items-start">
-              <slots.LogoSlot
-                style={{ height: "auto", maxWidth: "max-content" }}
-                allow={[]}
-              />
-              <div
-                className={themeManagerCn(
-                  "hidden md:flex flex-col gap-6 items-start",
-                  puck.isEditing ? "" : ""
-                )}
-              >
-                <slots.SocialLinksSlot
-                  style={{ height: "auto", maxWidth: "max-content" }}
-                  allow={[]}
-                />
-                <slots.UtilityImagesSlot
-                  style={{ height: "auto", maxWidth: "max-content" }}
-                  allow={[]}
-                />
-              </div>
-            </div>
-            {expandedFooter ? (
-              <slots.ExpandedLinksWrapperSlot
-                style={{ height: "auto", flex: 1 }}
-                allow={[]}
-              />
-            ) : (
-              <slots.PrimaryLinksWrapperSlot
-                style={{ height: "auto", flex: 1 }}
-                allow={[]}
-              />
-            )}
-          </>
+          >
+            <slots.LogoSlot
+              style={{ height: "auto", maxWidth: "max-content" }}
+              allow={[]}
+            />
+          </div>
         )}
-        {/** Mobile footer icons and utility images */}
-        <div className="md:hidden flex flex-col gap-6 items-center [&:not(:has(img,a,svg))]:hidden">
-          <slots.SocialLinksSlot
-            style={{ height: "auto", maxWidth: "max-content" }}
-            allow={[]}
-          />
-          <slots.UtilityImagesSlot
-            style={{ height: "auto", maxWidth: "max-content" }}
-            allow={[]}
-          />
+        {shouldRenderSideContent && (
+          <div
+            className={themeManagerCn(
+              "hidden md:flex flex-col",
+              sideContentDesktopOrderClass,
+              contentAlignmentClasses
+            )}
+          >
+            {showLogo && (
+              <slots.LogoSlot
+                style={{ height: "auto", maxWidth: "max-content" }}
+                allow={[]}
+              />
+            )}
+            {showSocialLinks && (
+              <slots.SocialLinksSlot
+                className="mt-6 first:mt-0 empty:mt-0"
+                style={{
+                  height: "auto",
+                  maxWidth: "max-content",
+                }}
+                allow={[]}
+              />
+            )}
+            {showUtilityImages && (
+              <slots.UtilityImagesSlot
+                className="mt-6 first:mt-0 empty:mt-0"
+                style={{
+                  height: "auto",
+                  maxWidth: "max-content",
+                }}
+                allow={[]}
+              />
+            )}
+          </div>
+        )}
+        <div
+          className={themeManagerCn("order-2 flex-1", linksDesktopOrderClass)}
+        >
+          {expandedFooter ? (
+            <slots.ExpandedLinksWrapperSlot
+              style={{ height: "auto", flex: 1 }}
+              allow={[]}
+            />
+          ) : (
+            <slots.PrimaryLinksWrapperSlot
+              style={{ height: "auto", flex: 1 }}
+              allow={[]}
+            />
+          )}
         </div>
+        {shouldRenderMobileBottomContent && (
+          <div
+            className={themeManagerCn(
+              "order-3 md:hidden flex flex-col",
+              contentAlignmentClasses
+            )}
+          >
+            {showSocialLinks && (
+              <slots.SocialLinksSlot
+                className="mt-6 empty:mt-0"
+                style={{ height: "auto", maxWidth: "max-content" }}
+                allow={[]}
+              />
+            )}
+            {showUtilityImages && (
+              <slots.UtilityImagesSlot
+                className="mt-6 empty:mt-0"
+                style={{ height: "auto", maxWidth: "max-content" }}
+                allow={[]}
+              />
+            )}
+          </div>
+        )}
       </PageSection>
       {/* Secondary footer section */}
-      <slots.SecondaryFooterSlot style={{ height: "auto" }} allow={[]} />
+      <VisibilityWrapper
+        liveVisibility={secondaryFooterVisibleOnLivePage}
+        isEditing={puck.isEditing}
+      >
+        <slots.SecondaryFooterSlot style={{ height: "auto" }} allow={[]} />
+      </VisibilityWrapper>
     </Background>
   );
 };
 
 /**
- * The Expanded Footer is a comprehensive, two-tiered site-wide component for large websites. It includes a primary footer area for a logo, social media links, and utility images, and features two distinct layouts: a standard link list or an "expanded" multi-column mega-footer. It also includes an optional secondary sub-footer for copyright notices and legal links.
- * Avalible on Location templates.
+ * The Expanded Footer is a comprehensive, two-tiered site-wide component for large websites.
+ * It includes a primary footer area for a logo, social media links, and utility images, and features two distinct layouts: a standard link list or an "expanded" multi-column mega-footer.
+ * It also includes an optional secondary sub-footer for copyright notices and legal links.
  */
 export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
   label: msg("components.expandedFooter", "Expanded Footer"),
@@ -306,6 +435,12 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
     data: {
       primaryFooter: {
         expandedFooter: false,
+        showLogo: true,
+        showSocialLinks: true,
+        showUtilityImages: true,
+      },
+      secondaryFooter: {
+        show: true,
       },
     },
     slots: {
@@ -329,7 +464,7 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
               width: 100,
               aspectRatio: 1,
             },
-          },
+          } satisfies FooterLogoSlotProps,
         },
       ],
       SocialLinksSlot: [
@@ -345,7 +480,7 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
               tiktokLink: "",
               youtubeLink: "",
             },
-          },
+          } satisfies FooterSocialLinksSlotProps,
         },
       ],
       UtilityImagesSlot: [
@@ -359,7 +494,9 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
               width: 0,
               aspectRatio: 1,
             },
-          },
+            desktopContentAlignment: "left",
+            mobileContentAlignment: "left",
+          } satisfies FooterUtilityImagesSlotProps,
         },
       ],
       PrimaryLinksWrapperSlot: [
@@ -371,7 +508,9 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
             },
             variant: "primary",
             eventNamePrefix: "primary",
-          },
+            desktopContentAlignment: "left",
+            mobileContentAlignment: "left",
+          } satisfies FooterLinksSlotProps,
         },
       ],
       ExpandedLinksWrapperSlot: [
@@ -398,19 +537,20 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
                 },
               ],
             },
-          },
+            desktopContentAlignment: "left",
+            mobileContentAlignment: "left",
+          } satisfies FooterExpandedLinksWrapperProps,
         },
       ],
       SecondaryFooterSlot: [
         {
           type: "SecondaryFooterSlot",
           props: {
-            data: {
-              show: true,
-            },
             styles: {
               backgroundColor: backgroundColors.background2.value,
-              linksPosition: "left",
+              desktopContentAlignment: "left",
+              mobileContentAlignment: "left",
+              showLinks: true,
             },
             maxWidth: "theme",
             slots: {
@@ -423,7 +563,8 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
                     },
                     variant: "secondary",
                     eventNamePrefix: "secondary",
-                    alignment: "left",
+                    desktopContentAlignment: "left",
+                    mobileContentAlignment: "left",
                   },
                 },
               ],
@@ -434,7 +575,7 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
                 },
               ],
             },
-          },
+          } satisfies SecondaryFooterSlotProps,
         },
       ],
     },
@@ -442,6 +583,8 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
       primaryFooter: {
         backgroundColor: backgroundColors.background6.value,
         linksPosition: "right",
+        desktopContentAlignment: "left",
+        mobileContentAlignment: "left",
       },
       maxWidth: "theme",
     },
@@ -450,6 +593,7 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
     },
   },
   resolveData: async (data) => {
+    let updatedData = { ...data };
     const hiddenProps: string[] = [];
 
     // Track hidden fields based on expandedFooter toggle
@@ -459,31 +603,79 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
       hiddenProps.push("slots.ExpandedLinksWrapperSlot");
     }
 
+    if (data.props.data.primaryFooter.showLogo === false) {
+      hiddenProps.push("slots.LogoSlot");
+    }
+    if (data.props.data.primaryFooter.showSocialLinks === false) {
+      hiddenProps.push("slots.SocialLinksSlot");
+    }
+    if (data.props.data.primaryFooter.showUtilityImages === false) {
+      hiddenProps.push("slots.UtilityImagesSlot");
+    }
+
     // Check if secondary footer is hidden
-    const secondaryFooterSlot = data?.props?.slots?.SecondaryFooterSlot?.[0];
-    if (secondaryFooterSlot?.props?.data?.show === false) {
+    if (data.props.data.secondaryFooter.show === false) {
       hiddenProps.push("slots.SecondaryFooterSlot");
     }
 
     // Pass maxWidth to SecondaryFooterSlot
+    if (updatedData.props.slots?.PrimaryLinksWrapperSlot?.[0]?.props) {
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.PrimaryLinksWrapperSlot[0].props.desktopContentAlignment",
+        updatedData.props.styles.primaryFooter.desktopContentAlignment
+      );
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.PrimaryLinksWrapperSlot[0].props.mobileContentAlignment",
+        updatedData.props.styles.primaryFooter.mobileContentAlignment
+      );
+    }
+
+    if (updatedData.props.slots?.ExpandedLinksWrapperSlot?.[0]?.props) {
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.ExpandedLinksWrapperSlot[0].props.desktopContentAlignment",
+        updatedData.props.styles.primaryFooter.desktopContentAlignment
+      );
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.ExpandedLinksWrapperSlot[0].props.mobileContentAlignment",
+        updatedData.props.styles.primaryFooter.mobileContentAlignment
+      );
+    }
+
+    if (updatedData.props.slots?.UtilityImagesSlot?.[0]?.props) {
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.UtilityImagesSlot[0].props.desktopContentAlignment",
+        updatedData.props.styles.primaryFooter.desktopContentAlignment
+      );
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.UtilityImagesSlot[0].props.mobileContentAlignment",
+        updatedData.props.styles.primaryFooter.mobileContentAlignment
+      );
+    }
+
     if (
-      data?.props?.slots?.SecondaryFooterSlot &&
-      Array.isArray(data.props.slots.SecondaryFooterSlot)
+      updatedData?.props?.slots?.SecondaryFooterSlot &&
+      Array.isArray(updatedData.props.slots.SecondaryFooterSlot)
     ) {
-      data.props.slots.SecondaryFooterSlot =
-        data.props.slots.SecondaryFooterSlot.map((slot: any) => ({
+      updatedData.props.slots.SecondaryFooterSlot =
+        updatedData.props.slots.SecondaryFooterSlot.map((slot: any) => ({
           ...slot,
           props: {
             ...slot.props,
-            maxWidth: data.props.styles.maxWidth || "theme",
+            maxWidth: updatedData.props.styles.maxWidth || "theme",
           },
         }));
     }
 
     return {
-      ...data,
+      ...updatedData,
       props: {
-        ...data.props,
+        ...updatedData.props,
         ignoreLocaleWarning: hiddenProps,
       },
     };
