@@ -6,6 +6,7 @@
   },
   "_pageset": "{\"config\":{\"urlTemplate\":{\"primary\":\"[[address.region]]/[[address.city]]/[[address.line1]]\"}}}",
   "_favicon": "https://www.yext.com/favicon.ico",
+  "timezone": "America/New_York",
   "dm_directoryParents_63590_locations": [
     { "name": "Locations Directory", "slug": "en/index.html" },
     {
