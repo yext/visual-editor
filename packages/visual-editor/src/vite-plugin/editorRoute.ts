@@ -58,20 +58,17 @@ export const injectEditorTemplateInfo = (
   templateContent: string,
   editorTemplateInfo: EditorTemplateInfo
 ): string => {
-  if (templateContent.includes(EDIT_PATH_PLACEHOLDER)) {
-    if (!templateContent.includes(EDIT_TEMPLATE_NAME_PLACEHOLDER)) {
-      throw new Error(
-        "Unable to inject edit template name: placeholder not found"
-      );
-    }
-
-    return templateContent
-      .replaceAll(EDIT_PATH_PLACEHOLDER, editorTemplateInfo.path)
-      .replaceAll(
-        EDIT_TEMPLATE_NAME_PLACEHOLDER,
-        editorTemplateInfo.configName
-      );
+  if (!templateContent.includes(EDIT_PATH_PLACEHOLDER)) {
+    throw new Error("Unable to inject editor path: placeholder not found");
   }
 
-  throw new Error("Unable to inject editor path: placeholder not found");
+  if (!templateContent.includes(EDIT_TEMPLATE_NAME_PLACEHOLDER)) {
+    throw new Error(
+      "Unable to inject edit template name: placeholder not found"
+    );
+  }
+
+  return templateContent
+    .replaceAll(EDIT_PATH_PLACEHOLDER, editorTemplateInfo.path)
+    .replaceAll(EDIT_TEMPLATE_NAME_PLACEHOLDER, editorTemplateInfo.configName);
 };
