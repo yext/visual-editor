@@ -47,6 +47,10 @@
   "closeMenu": "Lukk meny",
   "closesAtTime": "Stenger kl. {{time}}",
   "closesAtTimeWeek": "Stenger kl. {{time}} {{dayOfWeek}}",
+  "colorPicker": {
+    "close": "Lukk fargevelgeren",
+    "open": "Åpne fargevelgeren"
+  },
   "componentErrorBoundary": {
     "error": "Feil",
     "message": "Kan ikke gjengi denne delen. Prøv å oppdatere komponentbiblioteket."

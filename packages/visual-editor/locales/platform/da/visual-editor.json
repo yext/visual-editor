@@ -47,6 +47,10 @@
   "closeMenu": "Luk menu",
   "closesAtTime": "Lukker kl. {{time}}",
   "closesAtTimeWeek": "Lukker kl. {{time}} {{dayOfWeek}}",
+  "colorPicker": {
+    "close": "Luk farvevælgeren",
+    "open": "Åbn farvevælgeren"
+  },
   "componentErrorBoundary": {
     "error": "Fejl",
     "message": "Kan ikke gengive denne sektion. Prøv at opdatere dit komponentbibliotek."

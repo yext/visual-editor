@@ -47,6 +47,10 @@
   "closeMenu": "Uždaryti meniu",
   "closesAtTime": "Uždaroma {{time}}",
   "closesAtTimeWeek": "Uždaroma {{time}} {{dayOfWeek}}",
+  "colorPicker": {
+    "close": "Uždarykite spalvų parinkiklį",
+    "open": "Atidarykite spalvų rinkiklį"
+  },
   "componentErrorBoundary": {
     "error": "Klaida",
     "message": "Nepavyko pateikti šios skilties. Pabandykite atnaujinti komponentų biblioteką."

@@ -47,6 +47,10 @@
   "closeMenu": "Menü schließen",
   "closesAtTime": "Schließt um {{time}} Uhr",
   "closesAtTimeWeek": "Schließt am {{dayOfWeek}} um {{time}} Uhr",
+  "colorPicker": {
+    "close": "Farbauswahl schließen",
+    "open": "Farbauswahl öffnen"
+  },
   "componentErrorBoundary": {
     "error": "Fehler",
     "message": "Dieses Modul kann nicht gerendert werden. Versuchen Sie, Ihre Komponentenbibliothek zu aktualisieren."

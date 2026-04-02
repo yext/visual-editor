@@ -47,6 +47,10 @@
   "closeMenu": "メニューを閉じます",
   "closesAtTime": "{{time}}に閉まります",
   "closesAtTimeWeek": "{{time}} {{dayOfWeek}} に閉店",
+  "colorPicker": {
+    "close": "カラーピッカーを閉じる",
+    "open": "カラーピッカーを開く"
+  },
   "componentErrorBoundary": {
     "error": "エラー",
     "message": "このセクションをレンダリングできません。コンポーネント ライブラリを更新してみてください。"

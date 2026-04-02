@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { CustomField, FieldLabel } from "@puckeditor/core";
 import { Color, ColorResult, SketchPicker } from "react-color";
+import { pt } from "../../../utils/i18n/platform.ts";
 
 type RenderProps = Parameters<CustomField<any>["render"]>[0];
 
@@ -34,7 +35,9 @@ export const ColorSelector = ({ field, value, onChange }: RenderProps) => {
       >
         <button
           type="button"
-          aria-label={field.label || "Open color picker"}
+          aria-label={
+            field.label || pt("colorPicker.open", "Open color picker")
+          }
           style={fieldStyles.swatch}
           onClick={() => {
             if (isOpen) {
@@ -56,7 +59,7 @@ export const ColorSelector = ({ field, value, onChange }: RenderProps) => {
           >
             <button
               type="button"
-              aria-label="Close color picker"
+              aria-label={pt("colorPicker.close", "Close color picker")}
               style={fieldStyles.cover}
               onClick={() => setIsOpen(false)}
             />

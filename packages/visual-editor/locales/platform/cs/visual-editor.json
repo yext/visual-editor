@@ -47,6 +47,10 @@
   "closeMenu": "Zavřít menu",
   "closesAtTime": "Zavírá v {{time}}",
   "closesAtTimeWeek": "Zavírá v {{time}} {{dayOfWeek}}",
+  "colorPicker": {
+    "close": "Zavřete výběr barvy",
+    "open": "Otevřete výběr barvy"
+  },
   "componentErrorBoundary": {
     "error": "Chyba",
     "message": "Tuto sekci nelze vykreslit. Zkuste aktualizovat knihovnu komponent."

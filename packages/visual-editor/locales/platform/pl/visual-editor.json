@@ -47,6 +47,10 @@
   "closeMenu": "Zamknij menu",
   "closesAtTime": "Zamyka się o {{time}}",
   "closesAtTimeWeek": "Zamyka się o {{time}} {{dayOfWeek}}",
+  "colorPicker": {
+    "close": "Zamknij selektor kolorów",
+    "open": "Otwórz selektor kolorów"
+  },
   "componentErrorBoundary": {
     "error": "Błąd",
     "message": "Nie można wyrenderować tej sekcji. Spróbuj zaktualizować bibliotekę komponentów."

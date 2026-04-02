@@ -47,6 +47,10 @@
   "closeMenu": "Sulgemenüü",
   "closesAtTime": "Suletakse {{time}}",
   "closesAtTimeWeek": "Suletakse kell {{time}} {{dayOfWeek}}",
+  "colorPicker": {
+    "close": "Sulgege värvivalija",
+    "open": "Ava värvivalija"
+  },
   "componentErrorBoundary": {
     "error": "Viga",
     "message": "Seda jaotist ei saa renderdada. Proovige oma komponentide teeki värskendada."
