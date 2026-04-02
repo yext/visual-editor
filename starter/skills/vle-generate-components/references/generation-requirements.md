@@ -43,7 +43,7 @@ starter/src/registry/<template>/
 - Do not introduce another UI library for generated components unless the user explicitly requests it.
 - Do not add or use dependencies outside the existing `package.json`.
 - ALWAYS use `Address` and `Link` from `@yext/pages-components` for addresses and real links/CTAs, not UI toggles.
-- Hours must always source from `streamDocument.hours`.
+- Hours must always use a `YextEntityField<HoursType>` prop backed by an entity field selector, with default props `{ field: "hours", constantValue: {} }`.
 - Follow `references/hours-requirements.md` for hours planning, rendering, parity, and timezone/SSR rules.
 - Images should be based on a url or svg. They should not use a `file://` url.
 
@@ -61,12 +61,17 @@ In each `starter/src/registry/<template>/components/ExampleSection.tsx`:
 
 - Any text on the page should follow `references/text-fields.md`
 - Any image on the page should follow `references/image-fields.md`.
+- The contracts in `references/text-fields.md`, `references/image-fields.md`, and `references/hours-requirements.md` are required output shapes, not optional examples.
+- If one of those references explains a field shape for content in the section, generate that full Puck field shape in the component.
+- Do not hardcode values in render/CSS when those values belong in the explained Puck field shape.
+- In particular, do not reduce text fields to only the `text` selector while hardcoding font size, color, weight, or text transform. Those must be created as Puck subfields exactly as described in `references/text-fields.md`.
 - Every Puck field must have a Title Cased label (for example: `Heading Text`).
 - Any links on the page should be an object field with Label and Link (href) subfields.
 - Repeated items (for example FAQs, cards, header links, footer links) must use an `ArrayField` in Puck and render with `.map(...)` in the component render function.
 - All ArrayFields should have a defaultItemProps for adding new items to the array in the editor.
 - For repeated item arrays, `defaultProps` must initialize the array length to match the number of items present in `page.html`/`screenshot.png`.
-- Hours, Phone, and Address should never be fields. Use the stream document.
+- Hours should always be an entity field selector, not hardcoded output.
+- Phone and Address should never be fields. Use the stream document.
 - Do not create any style-control fields other than those listed in `text-fields.md` and `image-fields.md`.
 
 ## Specialty Component Behaviors

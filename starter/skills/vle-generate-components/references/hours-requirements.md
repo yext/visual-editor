@@ -22,7 +22,36 @@ Use this contract for every section that renders hours.
 
 ## Rendering Requirements
 
-- Hours must always render from `streamDocument.hours`. Never hardcode hours text copied from the captured HTML, CSS, or plan into component output.
+- Hours must never be hardcoded. Model every hours input as a prop with type `YextEntityField<HoursType>`.
+- Define the Puck field with:
+
+```tsx
+YextEntityFieldSelector<any, HoursType>({
+  label: "Hours",
+  filter: {
+    types: ["type.hours"],
+  },
+}),
+```
+
+- Default the hours prop to:
+
+```tsx
+{
+  field: "hours",
+  constantValue: {},
+}
+```
+
+- In the render function, resolve hours with:
+
+```tsx
+const streamDocument = useDocument();
+const locale = streamDocument.locale ?? "en";
+const hours = resolveComponentData(data.hours, locale, streamDocument);
+```
+
+- Pass the resolved `hours` value to `HoursTable` or `HoursStatus`. Never hardcode hours text copied from the captured HTML, CSS, or plan into component output.
 - Choose the simplest rendering path that matches the source artifacts:
   - use `HoursStatus` when the source already uses a compact live-status pattern
   - use `HoursTable` when the source is close to stock day-and-interval rows
@@ -51,7 +80,7 @@ Use this contract for every section that renders hours.
 
 ## Timezone And SSR Rules
 
-- Stock `HoursStatus` and `HoursTable` can be rendered directly. Do not add extra two-pass handling unless you introduce custom render-time time logic outside those components.
+- Stock `HoursStatus` and `HoursTable` can be rendered directly after resolving the hours field. Do not add extra two-pass handling unless you introduce custom render-time time logic outside those components.
 - If the section should be SSR-stable, do not add custom `DateTime.now()` logic.
 - If custom live logic is required beyond the stock hours components, use `streamDocument.timezone`, use a two-pass render, and compute against `const now = DateTime.now().setZone(streamDocument.timezone)`.
 - `DateTime.now()` in render is disallowed unless the implementation is explicitly two-pass and hydration-safe.

@@ -109,6 +109,12 @@ Follow the requirements:
 - `references/text-fields.md`
 - `references/image-fields.md`
 
+These reference contracts are mandatory implementation requirements, not optional examples:
+
+- If a page element is covered by one of the explained Puck field contracts, create that Puck field in the generated component.
+- Do not hardcode values in JSX/CSS when the corresponding field contract says those values belong in Puck fields.
+- In particular, if text fields are used, create the full text object shape from `references/text-fields.md`; if image fields are used, create the field shape from `references/image-fields.md`; if hours are present, create the hours entity field from `references/hours-requirements.md`.
+
 4. Validate Step
 
 - Follow `references/validation-requirements.md`.

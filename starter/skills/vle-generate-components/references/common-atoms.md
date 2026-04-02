@@ -5,7 +5,7 @@ Quick reference for LLM generation when building VLE components that use documen
 ## `useDocument` from `@yext/visual-editor`
 
 Use this hook inside components to read the current stream entity document, which contains data about the location
-This is the single source of truth for `hours`, `address`, and `mainPhone` data.
+This is the single source of truth for `address` and `mainPhone` data. Hours should be resolved from a `YextEntityField<HoursType>` prop against the current stream document.
 
 ```tsx
 import { useDocument } from "@yext/visual-editor";
@@ -19,7 +19,7 @@ export function ExampleDocumentRead() {
 
 ## `<HoursTable />` from `@yext/pages-components`
 
-Use `streamDocument.hours` directly when the source is fundamentally a normal day-and-interval table.
+Use a `YextEntityField<HoursType>` prop resolved against the stream document when the source is fundamentally a normal day-and-interval table.
 Prefer `HoursTable` when you can match the source with stock props and section-local CSS instead of rewriting the entire hours block.
 The main override surface is `dayOfWeekNames`, `startOfWeek`, `collapseDays`, `intervalStringsBuilderFn`, and `className`.
 `HoursTable` does not need to be replaced just to fix copy, spacing, bolding, borders, row width, or "today" styling.
@@ -37,19 +37,47 @@ Before going custom for a stock-style day-and-interval table, try these fixes in
 - override `.is-today` when the source does not bold the current day
 
 ```tsx
-import { useDocument } from "@yext/visual-editor";
-import { HoursTable } from "@yext/pages-components";
+import {
+  resolveComponentData,
+  useDocument,
+  YextEntityField,
+  YextEntityFieldSelector,
+} from "@yext/visual-editor";
+import { HoursTable, HoursType } from "@yext/pages-components";
 
-export const ExampleHoursTable = () => {
+type ExampleHoursTableProps = {
+  data: {
+    hours: YextEntityField<HoursType>;
+  };
+};
+
+export const ExampleHoursTableFields = {
+  data: {
+    label: "Data",
+    type: "object",
+    objectFields: {
+      hours: YextEntityFieldSelector<any, HoursType>({
+        label: "Hours",
+        filter: {
+          types: ["type.hours"],
+        },
+      }),
+    },
+  },
+};
+
+export const ExampleHoursTable = ({ data }: ExampleHoursTableProps) => {
   const streamDocument = useDocument();
+  const locale = streamDocument.locale ?? "en";
+  const hours = resolveComponentData(data.hours, locale, streamDocument);
 
-  if (!streamDocument.hours) {
+  if (!hours) {
     return null;
   }
 
   return (
     <HoursTable
-      hours={streamDocument.hours}
+      hours={hours}
       dayOfWeekNames={{
         monday: "Mon:",
         tuesday: "Tue:",
@@ -74,31 +102,68 @@ export const ExampleHoursTable = () => {
     />
   );
 };
+
+export const ExampleHoursTableDefaultProps = {
+  data: {
+    hours: {
+      field: "hours",
+      constantValue: {},
+    },
+  },
+};
 ```
 
 ## `<HoursStatus />` from `@yext/pages-components`
 
 Use for compact open/closed state and next transition messaging when the source design includes a live status line.
-Drive it directly from `streamDocument.hours`; prefer passing `streamDocument.timezone` so status is calculated in the business timezone.
+Drive it from a resolved `YextEntityField<HoursType>` value; prefer passing `streamDocument.timezone` so status is calculated in the business timezone.
 Prefer the stock template override props when the source needs different wording or markup but still follows the same status pattern.
 The supported override hooks are `currentTemplate`, `separatorTemplate`, `futureTemplate`, `timeTemplate`, `dayOfWeekTemplate`, and `statusTemplate`.
 Use these to change copy, separators, bolding, inline markup, and day/time formatting before considering custom status logic.
 Stock `HoursStatus` can be rendered directly. Only add a two-pass/client-only pattern if you introduce custom render-time time logic such as `DateTime.now()`. Do not guess the business timezone from the renderer environment.
 
 ```tsx
-import { useDocument } from "@yext/visual-editor";
-import { HoursStatus } from "@yext/pages-components";
+import {
+  resolveComponentData,
+  useDocument,
+  YextEntityField,
+  YextEntityFieldSelector,
+} from "@yext/visual-editor";
+import { HoursStatus, HoursType } from "@yext/pages-components";
 
-export const ExampleHoursStatus = () => {
+type ExampleHoursStatusProps = {
+  data: {
+    hours: YextEntityField<HoursType>;
+  };
+};
+
+export const ExampleHoursStatusFields = {
+  data: {
+    label: "Data",
+    type: "object",
+    objectFields: {
+      hours: YextEntityFieldSelector<any, HoursType>({
+        label: "Hours",
+        filter: {
+          types: ["type.hours"],
+        },
+      }),
+    },
+  },
+};
+
+export const ExampleHoursStatus = ({ data }: ExampleHoursStatusProps) => {
   const streamDocument = useDocument();
+  const locale = streamDocument.locale ?? "en";
+  const hours = resolveComponentData(data.hours, locale, streamDocument);
 
-  if (!streamDocument.hours) {
+  if (!hours) {
     return null;
   }
 
   return (
     <HoursStatus
-      hours={streamDocument.hours}
+      hours={hours}
       timezone={streamDocument.timezone}
       currentTemplate={(status) => {
         const isOpen24Hours = status.currentInterval?.is24h?.() ?? false;
@@ -167,6 +232,15 @@ export const ExampleHoursStatus = () => {
       }}
     />
   );
+};
+
+export const ExampleHoursStatusDefaultProps = {
+  data: {
+    hours: {
+      field: "hours",
+      constantValue: {},
+    },
+  },
 };
 ```
 

@@ -3,6 +3,8 @@
 - Use this rule for **every text prop/field** in generated Puck components.
 - Do not use for links/CTAs.
 - Use this for all heading text and body text.
+- This is a required field contract, not an example. When a text prop is editable in Puck, you must create the full object shape below.
+- Do not create only the `text` selector and then hardcode `fontSize`, `fontColor`, `fontWeight`, or `textTransform` in render. Those values must exist as Puck subfields exactly as defined here.
 
 ## Required Shape
 

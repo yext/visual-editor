@@ -12,9 +12,16 @@ import {
   YextEntityFieldSelector,
   Image,
 } from "@yext/visual-editor";
-import { Link, ImageType, ComplexImageType } from "@yext/pages-components";
+import {
+  HoursTable,
+  HoursType,
+  Link,
+  ImageType,
+  ComplexImageType,
+} from "@yext/pages-components";
 
 export type ExampleSectionProps = {
+  hours: YextEntityField<HoursType>;
   logoImage: YextEntityField<
     ImageType | ComplexImageType | TranslatableAssetImage
   >;
@@ -23,7 +30,7 @@ export type ExampleSectionProps = {
     fontSize: number;
     fontColor: string; // hex color
     fontWeight: 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
-    textTransform: "normal" | "uppercase" | "lowercase" | "capitalize";
+    textTransform: "none" | "uppercase" | "lowercase" | "capitalize";
   };
   cta: {
     label: string;
@@ -32,6 +39,12 @@ export type ExampleSectionProps = {
 };
 
 const ExampleSectionFields: Fields<ExampleSectionProps> = {
+  hours: YextEntityFieldSelector<any, HoursType>({
+    label: "Hours",
+    filter: {
+      types: ["type.hours"],
+    },
+  }),
   logoImage: YextEntityFieldSelector<
     any,
     ImageType | ComplexImageType | TranslatableAssetImage
@@ -72,7 +85,7 @@ const ExampleSectionFields: Fields<ExampleSectionProps> = {
         label: "Text Transform",
         type: "select",
         options: [
-          { label: "Normal", value: "normal" },
+          { label: "Normal", value: "none" },
           { label: "Uppercase", value: "uppercase" },
           { label: "Lowercase", value: "lowercase" },
           { label: "Capitalize", value: "capitalize" },
@@ -107,6 +120,8 @@ export const ExampleSectionComponent: PuckComponent<ExampleSectionProps> = (
   );
   // stop image resolution step
 
+  const hours = resolveComponentData(props.hours, locale, streamDocument);
+
   // Start text resolution step - do this for each text field
   const resolvedBannerText: string =
     resolveComponentData(props.bannerText.text, locale, streamDocument) || "";
@@ -115,6 +130,7 @@ export const ExampleSectionComponent: PuckComponent<ExampleSectionProps> = (
   return (
     <section className="bg-white">
       {resolvedLogoImage && <Image image={resolvedLogoImage} />}
+      {hours && <HoursTable hours={hours} />}
       <div className="rounded-2xl bg-white/15">
         <p
           style={{
@@ -144,6 +160,10 @@ export const ExampleSection: ComponentConfig<ExampleSectionProps> = {
   label: "Example Section",
   fields: ExampleSectionFields,
   defaultProps: {
+    hours: {
+      field: "hours",
+      constantValue: {},
+    },
     logoImage: {
       field: "",
       constantValue: {

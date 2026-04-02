@@ -3,6 +3,7 @@
 - Use this rule for **every image prop/field** in generated Puck components.
 - Keep image props limited to:
   - `YextEntityField<ImageType | ComplexImageType | TranslatableAssetImage>`
+- This is a required field contract, not an example. If an image is explained as a Puck field, create the image field instead of hardcoding the asset URL in render.
 
 ## Required Shape
 
