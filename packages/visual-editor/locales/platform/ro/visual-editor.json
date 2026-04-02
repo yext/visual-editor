@@ -247,6 +247,7 @@
     "icons": "Pictograme",
     "image": "Imagine",
     "imageConstrain": "Constrângere imagine",
+    "imageFillType": "Tip de umplere a imaginii",
     "imageHeight": "Înălțimea imaginii",
     "images": "Imagini",
     "includePhoneHyperlink": "Includeți hyperlink -ul telefonului",
@@ -342,7 +343,9 @@
         "specialties": "Specialități",
         "yearsOfExperience": "Ani de experiență"
       },
+      "fill": "Umple",
       "fillContainer": "Umpleți containerul",
+      "fit": "Fit",
       "fixed": "Fix",
       "fixedWidth": "Lățime fixă",
       "friday": "vineri",

@@ -247,6 +247,7 @@
     "icons": "Ikonas",
     "image": "Attēls",
     "imageConstrain": "Attēla ierobežojums",
+    "imageFillType": "Attēla aizpildījuma veids",
     "imageHeight": "Attēla augstums",
     "images": "Attēli",
     "includePhoneHyperlink": "Iekļaujiet tālruņa hipersaiti",
@@ -342,7 +343,9 @@
         "specialties": "Specialitātes",
         "yearsOfExperience": "Gadu pieredze"
       },
+      "fill": "Aizpildiet",
       "fillContainer": "Aizpildiet konteineru",
+      "fit": "Fit",
       "fixed": "Fiksēts",
       "fixedWidth": "Fiksēts platums",
       "friday": "Piektdiena",

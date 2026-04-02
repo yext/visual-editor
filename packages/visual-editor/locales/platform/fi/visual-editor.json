@@ -247,6 +247,7 @@
     "icons": "Kuvakkeet",
     "image": "Kuva",
     "imageConstrain": "Kuvarajoitus",
+    "imageFillType": "Kuvan täyttötyyppi",
     "imageHeight": "Kuvan korkeus",
     "images": "Kuvat",
     "includePhoneHyperlink": "Sisällytä puhelimen hyperlinkki",
@@ -342,7 +343,9 @@
         "specialties": "Erikoisuudet",
         "yearsOfExperience": "Vuosien kokemus"
       },
+      "fill": "Täyttää",
       "fillContainer": "Täytä säiliö",
+      "fit": "Sopiva",
       "fixed": "Kiinteä",
       "fixedWidth": "Kiinteä leveys",
       "friday": "perjantai",

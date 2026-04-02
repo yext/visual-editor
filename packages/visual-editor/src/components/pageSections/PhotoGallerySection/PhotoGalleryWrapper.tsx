@@ -54,6 +54,12 @@ export interface PhotoGalleryWrapperProps {
     /** Styling options for the gallery images, such as aspect ratio. */
     image: ImageStylingProps;
 
+    /**
+     * Determines whether carousel images should fill or fit within the frame.
+     * @defaultValue "fill"
+     */
+    imageFillType?: "fill" | "fit";
+
     /** Accent color used for carousel arrows and slide indicators. */
     accentColor?: ThemeColor;
 
@@ -95,6 +101,14 @@ const photoGalleryWrapperFields: Fields<PhotoGalleryWrapperProps> = {
       image: YextField(msg("fields.image", "Image"), {
         type: "object",
         objectFields: ImageStylingFields,
+      }),
+      imageFillType: YextField(msg("fields.imageFillType", "Image Fill Type"), {
+        type: "select",
+        options: [
+          { label: msg("fields.options.fill", "Fill"), value: "fill" },
+          { label: msg("fields.options.fit", "Fit"), value: "fit" },
+        ],
+        visible: false,
       }),
       accentColor: YextField(msg("fields.accentColor", "Accent Color"), {
         type: "select",
@@ -210,11 +224,13 @@ const DesktopImageItem = ({
   isEditing,
   sizes,
   constrainToParent = false,
+  imageFillType = "fill",
 }: {
   imageData: ResolvedGalleryImage;
   isEditing: boolean;
   sizes: string;
   constrainToParent?: boolean;
+  imageFillType?: "fill" | "fit";
 }) => {
   if (imageData.isEmpty && isEditing) {
     return <EmptyImage imageData={imageData} />;
@@ -230,6 +246,7 @@ const DesktopImageItem = ({
         constrainToParent && "w-full h-auto object-contain max-w-full"
       )}
       sizes={sizes}
+      style={{ objectFit: imageFillType === "fit" ? "contain" : "cover" }}
     />
   );
 
@@ -250,9 +267,11 @@ const DesktopImageItem = ({
 const MobileImageItem = ({
   imageData,
   isEditing,
+  imageFillType = "fill",
 }: {
   imageData: ResolvedGalleryImage;
   isEditing: boolean;
+  imageFillType?: "fill" | "fit";
 }) => {
   if (imageData.isEmpty && isEditing) {
     return <EmptyImage imageData={imageData} />;
@@ -271,6 +290,7 @@ const MobileImageItem = ({
         aspectRatio={imageData.aspectRatio}
         className="w-full h-auto object-contain"
         sizes={`100vw`}
+        style={{ objectFit: imageFillType === "fit" ? "contain" : "cover" }}
       />
     </div>
   );
@@ -284,7 +304,11 @@ const DesktopCarousel = ({
   imagesFieldId,
   constantValueEnabled,
   accentColor,
-}: GalleryRenderProps & { carouselImageCount: number }) => {
+  imageFillType = "fill",
+}: GalleryRenderProps & {
+  carouselImageCount: number;
+  imageFillType?: "fill" | "fit";
+}) => {
   const hasCarouselGap = carouselImageCount > 1;
   return (
     <div className="hidden md:flex justify-center w-full">
@@ -321,6 +345,7 @@ const DesktopCarousel = ({
                         isEditing={isEditing}
                         sizes={`min(${imageWidth}px, calc((100vw - 6rem) / ${carouselImageCount}))`}
                         constrainToParent
+                        imageFillType={imageFillType}
                       />
                     </div>
                   </Slide>
@@ -368,7 +393,8 @@ const MobileCarousel = ({
   imagesFieldId,
   constantValueEnabled,
   accentColor,
-}: GalleryRenderProps) => {
+  imageFillType = "fill",
+}: GalleryRenderProps & { imageFillType?: "fill" | "fit" }) => {
   return (
     <div className="flex flex-col gap-y-8 items-center justify-center md:hidden w-full">
       <EntityField
@@ -385,6 +411,7 @@ const MobileCarousel = ({
                   <MobileImageItem
                     imageData={imageData}
                     isEditing={isEditing}
+                    imageFillType={imageFillType}
                   />
                 </div>
               </Slide>
@@ -471,6 +498,7 @@ export const PhotoGalleryWrapper: ComponentConfig<{
       image: {
         aspectRatio: 1.78,
       },
+      imageFillType: "fill",
       carouselImageCount: 1,
     },
   },
@@ -480,6 +508,7 @@ export const PhotoGalleryWrapper: ComponentConfig<{
       photoGalleryWrapperFields,
       [
         "styles.objectFields.carouselImageCount.visible",
+        "styles.objectFields.imageFillType.visible",
         "styles.objectFields.accentColor.visible",
       ],
       isCarousel
@@ -619,8 +648,12 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
             <DesktopCarousel
               {...sharedRenderProps}
               carouselImageCount={styles.carouselImageCount}
+              imageFillType={styles.imageFillType ?? "fill"}
             />
-            <MobileCarousel {...sharedRenderProps} />
+            <MobileCarousel
+              {...sharedRenderProps}
+              imageFillType={styles.imageFillType ?? "fill"}
+            />
           </CarouselProvider>
         )
       ) : puck?.isEditing ? (

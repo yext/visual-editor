@@ -247,6 +247,7 @@
     "icons": "图标",
     "image": "图像",
     "imageConstrain": "图像约束",
+    "imageFillType": "图像填充类型",
     "imageHeight": "图像高度",
     "images": "图像",
     "includePhoneHyperlink": "包括电话超链接",
@@ -342,7 +343,9 @@
         "specialties": "特产",
         "yearsOfExperience": "多年经验"
       },
+      "fill": "充满",
       "fillContainer": "填充容器",
+      "fit": "合身",
       "fixed": "固定的",
       "fixedWidth": "固定宽度",
       "friday": "星期五",

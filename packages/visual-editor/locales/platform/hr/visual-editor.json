@@ -247,6 +247,7 @@
     "icons": "Ikone",
     "image": "Slika",
     "imageConstrain": "Ograničenje slike",
+    "imageFillType": "Vrsta ispune slike",
     "imageHeight": "Visina slike",
     "images": "Slika",
     "includePhoneHyperlink": "Uključite hipervezu telefona",
@@ -342,7 +343,9 @@
         "specialties": "Specijaliteti",
         "yearsOfExperience": "Godine iskustva"
       },
+      "fill": "Ispunite",
       "fillContainer": "Napunite spremnik",
+      "fit": "Fit",
       "fixed": "Fiksni",
       "fixedWidth": "Fiksna širina",
       "friday": "petak",

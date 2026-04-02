@@ -247,6 +247,7 @@
     "icons": "Ikonok",
     "image": "Kép",
     "imageConstrain": "Képkorlátozás",
+    "imageFillType": "Képkitöltés típusa",
     "imageHeight": "Kép magassága",
     "images": "Képek",
     "includePhoneHyperlink": "Tartalmazza a telefon hiperhivatkozását",
@@ -342,7 +343,9 @@
         "specialties": "Specialitások",
         "yearsOfExperience": "Több éves tapasztalat"
       },
+      "fill": "Töltse ki",
       "fillContainer": "Töltse ki a tartályt",
+      "fit": "Fit",
       "fixed": "Rögzített",
       "fixedWidth": "Fix szélesség",
       "friday": "péntek",

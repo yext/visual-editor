@@ -247,6 +247,7 @@
     "icons": "Ikoner",
     "image": "Billede",
     "imageConstrain": "Billedbegrænsning",
+    "imageFillType": "Billedfyldtype",
     "imageHeight": "Billedhøjde",
     "images": "Billeder",
     "includePhoneHyperlink": "Medtag telefonhyperlink",
@@ -342,7 +343,9 @@
         "specialties": "Specialiteter",
         "yearsOfExperience": "Års erfaring"
       },
+      "fill": "Fylde",
       "fillContainer": "Fyld beholderen",
+      "fit": "Passe",
       "fixed": "Fast",
       "fixedWidth": "Fast bredde",
       "friday": "fredag",

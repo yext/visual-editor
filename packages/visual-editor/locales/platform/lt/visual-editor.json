@@ -247,6 +247,7 @@
     "icons": "Piktogramos",
     "image": "Vaizdas",
     "imageConstrain": "Vaizdo apribojimas",
+    "imageFillType": "Vaizdo užpildymo tipas",
     "imageHeight": "Vaizdo aukštis",
     "images": "Vaizdai",
     "includePhoneHyperlink": "Įtraukite telefono hipersaitą",
@@ -342,7 +343,9 @@
         "specialties": "Specialybės",
         "yearsOfExperience": "Ilgametė patirtis"
       },
+      "fill": "Užpildykite",
       "fillContainer": "Užpildykite konteinerį",
+      "fit": "Tinka",
       "fixed": "Fiksuota",
       "fixedWidth": "Fiksuotas plotis",
       "friday": "Penktadienis",
