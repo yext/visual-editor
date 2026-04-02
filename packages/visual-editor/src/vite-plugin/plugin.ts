@@ -7,7 +7,14 @@ import directoryTemplate from "./templates/directory.tsx?raw";
 import locatorTemplate from "./templates/locator.tsx?raw";
 import { ComponentField } from "../types/fields.ts";
 import { defaultLayoutData } from "./defaultLayoutData.ts";
-import { generateRegistryTemplateFiles } from "./registryTemplateGenerator.ts";
+import {
+  generateRegistryTemplateFiles,
+  getCollectedRegistryTemplateNames,
+} from "./registryTemplateGenerator.ts";
+import {
+  getEditorTemplateInfoFromTemplateNames,
+  injectEditorTemplateInfo,
+} from "./editorRoute.ts";
 
 type TemplateManifestEntry = {
   name: string;
@@ -66,14 +73,69 @@ export const yextVisualEditorPlugin = (): Plugin => {
   let isBuildMode = false;
   const filesToCleanup: string[] = [];
 
+  // Keeps the generated edit template aligned with the editor route metadata
+  // for the templates available in the current repo.
+  const syncGeneratedEditTemplate = (rootDir: string) => {
+    const editorTemplatePath = path.join(
+      rootDir,
+      "src",
+      "templates",
+      "edit.tsx"
+    );
+    const availableTemplateNames = [
+      ...(fs.existsSync(path.join(rootDir, "src", "templates", "main.tsx"))
+        ? ["main"]
+        : []),
+      ...virtualFiles.flatMap((virtualFile) =>
+        virtualFile.templateManifestEntry
+          ? [virtualFile.templateManifestEntry.name]
+          : []
+      ),
+      ...getCollectedRegistryTemplateNames(rootDir),
+    ];
+    const editorTemplateInfo = getEditorTemplateInfoFromTemplateNames(
+      availableTemplateNames
+    );
+
+    fs.mkdirSync(path.dirname(editorTemplatePath), { recursive: true });
+    const editorTemplateExists = fs.existsSync(editorTemplatePath);
+    const sourceContent = editorTemplateExists
+      ? fs.readFileSync(editorTemplatePath, "utf8")
+      : editTemplate;
+    // Inject the generated edit route metadata so custom templates resolve to
+    // their template-scoped `/edit/<template>` path when needed.
+    const updatedContent = injectEditorTemplateInfo(
+      sourceContent,
+      editorTemplateInfo
+    );
+
+    if (editorTemplateExists) {
+      if (sourceContent !== updatedContent) {
+        fs.writeFileSync(editorTemplatePath, updatedContent);
+      }
+      return;
+    }
+
+    filesToCleanup.push(editorTemplatePath);
+    fs.writeFileSync(editorTemplatePath, updatedContent);
+  };
+
   /**
    * generateFiles generates the template files and .temlpate-manifest.json file
+   *
+   * Overview:
+   * 1. Ensure the built-in virtual template files exist on disk.
+   * 2. Collect manifest entries for the generated template manifest.
+   * 3. Sync the generated edit template with the resolved editor route metadata.
+   * 4. Write the .template-manifest.json file when it does not already exist.
    *
    * Does not overwrite files that already exists
    *
    * Created files will be marked for deletion on buildEnd
    */
   const generateFiles = () => {
+    const rootDir = process.cwd();
+
     // Create a structure to store the manifest data
     const manifest: {
       templates: TemplateManifestEntry[];
@@ -81,7 +143,7 @@ export const yextVisualEditorPlugin = (): Plugin => {
 
     // Iterate over each template definition
     virtualFiles.forEach((virtualFile: VirtualFile) => {
-      const filePath = path.join(process.cwd(), virtualFile.filepath);
+      const filePath = path.join(rootDir, virtualFile.filepath);
 
       // Ensure the directory exists
       fs.mkdirSync(path.dirname(filePath), { recursive: true });
@@ -98,7 +160,9 @@ export const yextVisualEditorPlugin = (): Plugin => {
       }
     });
 
-    const manifestPath = path.join(process.cwd(), ".template-manifest.json");
+    syncGeneratedEditTemplate(rootDir);
+
+    const manifestPath = path.join(rootDir, ".template-manifest.json");
     if (!fs.existsSync(manifestPath)) {
       // Write the manifest to the .template-manifest.json file
       fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
