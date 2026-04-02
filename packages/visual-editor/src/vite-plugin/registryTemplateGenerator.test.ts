@@ -107,8 +107,6 @@ describe.sequential("generateRegistryTemplateFiles", () => {
       'import { MainConfig as mainConfig } from "../registry/main/config";'
     );
     expect(updatedEditTemplate).toContain('"main": mainConfig');
-    expect(updatedEditTemplate).toContain('const editPath = "edit";');
-    expect(updatedEditTemplate).toContain('const editTemplateName = "edit";');
 
     expect(
       fs.existsSync(path.join(rootDir, "src", "templates", "edit.tsx"))
@@ -157,14 +155,12 @@ describe.sequential("generateRegistryTemplateFiles", () => {
     );
     expect(updatedEditTemplate).not.toContain("mainConfig");
     expect(updatedEditTemplate).not.toContain('"main"');
-    expect(updatedEditTemplate).toContain('const editPath = "edit";');
-    expect(updatedEditTemplate).toContain('const editTemplateName = "edit";');
 
     const manifest = readManifest(rootDir);
     expect(manifest.templates).toEqual([]);
   });
 
-  it("uses a template-scoped route when a single custom template is available alongside shared templates", () => {
+  it("wires a single custom template into the edit component registry", () => {
     const rootDir = createStarterFixture();
     writeRegistryComponent(
       rootDir,
@@ -179,13 +175,13 @@ describe.sequential("generateRegistryTemplateFiles", () => {
       path.join(rootDir, "src", "templates", "edit.tsx"),
       "utf8"
     );
-    expect(updatedEditTemplate).toContain('const editPath = "edit/dunkin";');
     expect(updatedEditTemplate).toContain(
-      'const editTemplateName = "edit-dunkin";'
+      'import { DunkinConfig as dunkinConfig } from "../registry/dunkin/config";'
     );
+    expect(updatedEditTemplate).toContain('"dunkin": dunkinConfig');
   });
 
-  it("treats an on-disk main.tsx as available even when it is not in the manifest", () => {
+  it("still wires local custom templates when a hand-authored main template exists on disk", () => {
     const rootDir = createStarterFixture();
     fs.writeFileSync(
       path.join(rootDir, "src", "templates", "main.tsx"),
@@ -204,8 +200,10 @@ describe.sequential("generateRegistryTemplateFiles", () => {
       path.join(rootDir, "src", "templates", "edit.tsx"),
       "utf8"
     );
-    expect(updatedEditTemplate).toContain('const editPath = "edit";');
-    expect(updatedEditTemplate).toContain('const editTemplateName = "edit";');
+    expect(updatedEditTemplate).toContain(
+      'import { DunkinConfig as dunkinConfig } from "../registry/dunkin/config";'
+    );
+    expect(updatedEditTemplate).toContain('"dunkin": dunkinConfig');
   });
 
   it("refuses to overwrite a hand-authored template file", () => {

@@ -38,7 +38,7 @@
 import path from "node:path";
 import fs from "fs-extra";
 import { Project, QuoteKind, SyntaxKind, type SourceFile } from "ts-morph";
-import { getEditorTemplateInfoFromTemplateNames } from "./editorRoute.ts";
+import { isManagedEditorTemplateFileName } from "./editorRoute.ts";
 
 type TemplateManifestEntry = {
   name: string;
@@ -97,6 +97,18 @@ const AST_PROJECT = new Project({
     quoteKind: QuoteKind.Double,
   },
 });
+
+const writeFileIfChanged = (filePath: string, content: string): boolean => {
+  if (fs.existsSync(filePath)) {
+    const existingContent = fs.readFileSync(filePath, "utf8");
+    if (existingContent === content) {
+      return false;
+    }
+  }
+
+  fs.writeFileSync(filePath, content);
+  return true;
+};
 
 export const DEFAULT_LAYOUT = {
   root: {
@@ -170,10 +182,10 @@ export const generateRegistryTemplateFiles = ({
   );
 
   // 4) Update `<starter>/.template-manifest.json`.
-  const availableTemplateNames = updateTemplateManifest(rootDir, templateNames);
+  updateTemplateManifest(rootDir, templateNames);
 
   // 5) Update editor wiring.
-  updateEditTemplate(rootDir, templateNames, availableTemplateNames);
+  updateEditTemplates(rootDir, templateNames);
 };
 
 export const getCollectedRegistryTemplateNames = (
@@ -233,7 +245,7 @@ const syncGeneratedRegistryFiles = (
       templateName
     );
     fs.ensureDirSync(path.dirname(templatePaths.configPath));
-    fs.writeFileSync(templatePaths.configPath, configSource);
+    writeFileIfChanged(templatePaths.configPath, configSource);
 
     // 3) Materialize `<starter>/src/templates/<template>.tsx` from the internal base template.
     const configImportPath = toPosixPath(
@@ -257,7 +269,7 @@ const syncGeneratedRegistryFiles = (
       templateName,
       templatePaths.templatePath
     );
-    fs.writeFileSync(templatePaths.templatePath, templateSource);
+    writeFileIfChanged(templatePaths.templatePath, templateSource);
   }
 
   pruneStaleGeneratedTemplateFiles(rootDir, activeTemplateNames);
@@ -525,7 +537,7 @@ const updateTemplateManifest = (
   }
 
   if (updated) {
-    fs.writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+    writeFileIfChanged(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
   }
 
   return getAvailableTemplateNames(
@@ -538,53 +550,74 @@ const updateTemplateManifest = (
  * 5) Update `<starter>/src/templates/edit.tsx` to import and register each
  * generated config.
  */
-const updateEditTemplate = (
+const updateEditTemplates = (
   rootDir: string,
-  templateNames: string[],
-  availableTemplateNames: string[]
+  templateNames: string[]
 ): void => {
-  const editTemplatePath = path.join(rootDir, "src", "templates", "edit.tsx");
-  if (!fs.existsSync(editTemplatePath)) {
+  const templatesDirectory = path.join(rootDir, "src", "templates");
+  if (!fs.existsSync(templatesDirectory)) {
     return;
   }
 
-  const originalSource = readUtf8File(editTemplatePath, "edit template source");
-  const sourceFile = getAstSourceFile(editTemplatePath);
+  for (const entry of fs.readdirSync(templatesDirectory, {
+    withFileTypes: true,
+  })) {
+    if (!entry.isFile() || path.extname(entry.name) !== ".tsx") {
+      continue;
+    }
 
-  removeGeneratedConfigImports(sourceFile);
-  ensureSideEffectImport(sourceFile, "@yext/visual-editor/editor.css");
-  ensureSideEffectImport(sourceFile, "../index.css");
+    const templateName = entry.name.replace(/\.tsx$/, "");
+    if (!isManagedEditorTemplateFileName(templateName)) {
+      continue;
+    }
 
-  for (const templateName of templateNames) {
-    const templatePaths = getTemplatePaths(rootDir, templateName);
-    const moduleSpecifier = toPosixPath(
-      path
-        .relative(path.dirname(editTemplatePath), templatePaths.configPath)
-        .replace(/\.[^/.]+$/, "")
+    const editTemplatePath = path.join(templatesDirectory, entry.name);
+    const originalSource = readUtf8File(
+      editTemplatePath,
+      "edit template source"
     );
+    const sourceFile = getAstSourceFile(editTemplatePath);
 
-    insertNamedImport(sourceFile, {
-      namedImports: [
-        {
-          name: getTemplateConfigExportName(templateName),
-          alias: getEditConfigIdentifier(templateName),
-        },
-      ],
-      moduleSpecifier: moduleSpecifier.startsWith(".")
-        ? moduleSpecifier
-        : `./${moduleSpecifier}`,
-    });
-  }
+    const componentRegistryDeclaration =
+      sourceFile.getVariableDeclaration("componentRegistry");
+    if (!componentRegistryDeclaration) {
+      sourceFile.forget();
+      continue;
+    }
 
-  setEditComponentRegistry(sourceFile, templateNames);
-  setEditPath(sourceFile, availableTemplateNames);
-  setEditConfigName(sourceFile, availableTemplateNames);
+    removeGeneratedConfigImports(sourceFile);
+    ensureSideEffectImport(sourceFile, "@yext/visual-editor/editor.css");
+    ensureSideEffectImport(sourceFile, "../index.css");
 
-  const updatedSource = sourceFile.getFullText();
-  sourceFile.forget();
+    for (const templateName of templateNames) {
+      const templatePaths = getTemplatePaths(rootDir, templateName);
+      const moduleSpecifier = toPosixPath(
+        path
+          .relative(path.dirname(editTemplatePath), templatePaths.configPath)
+          .replace(/\.[^/.]+$/, "")
+      );
 
-  if (updatedSource !== originalSource) {
-    fs.writeFileSync(editTemplatePath, updatedSource);
+      insertNamedImport(sourceFile, {
+        namedImports: [
+          {
+            name: getTemplateConfigExportName(templateName),
+            alias: getEditConfigIdentifier(templateName),
+          },
+        ],
+        moduleSpecifier: moduleSpecifier.startsWith(".")
+          ? moduleSpecifier
+          : `./${moduleSpecifier}`,
+      });
+    }
+
+    setEditComponentRegistry(sourceFile, templateNames);
+
+    const updatedSource = sourceFile.getFullText();
+    sourceFile.forget();
+
+    if (updatedSource !== originalSource) {
+      writeFileIfChanged(editTemplatePath, updatedSource);
+    }
   }
 };
 
@@ -667,9 +700,13 @@ const pruneStaleGeneratedTemplateFiles = (
     }
 
     const templateName = entry.name.replace(/\.tsx$/, "");
+    if (activeTemplateNames.has(templateName)) {
+      continue;
+    }
+
     if (
-      activeTemplateNames.has(templateName) ||
-      PROTECTED_TEMPLATE_FILE_NAMES.has(templateName)
+      PROTECTED_TEMPLATE_FILE_NAMES.has(templateName) ||
+      isManagedEditorTemplateFileName(templateName)
     ) {
       continue;
     }
@@ -887,61 +924,6 @@ ${registryEntries}
       initializer: getEditConfigIdentifier(templateName),
     });
   }
-}
-
-function setEditPath(sourceFile: SourceFile, templateNames: string[]): void {
-  const declaration = sourceFile.getVariableDeclaration("editPath");
-  if (!declaration) {
-    return;
-  }
-
-  declaration.setInitializer(
-    JSON.stringify(getEditorTemplateInfoFromTemplateNames(templateNames).path)
-  );
-}
-
-function setEditConfigName(
-  sourceFile: SourceFile,
-  templateNames: string[]
-): void {
-  const configName =
-    getEditorTemplateInfoFromTemplateNames(templateNames).configName;
-  const declaration = sourceFile.getVariableDeclaration("editTemplateName");
-
-  if (declaration) {
-    declaration.setInitializer(JSON.stringify(configName));
-    return;
-  }
-
-  const configDeclaration = sourceFile.getVariableDeclaration("config");
-  if (!configDeclaration) {
-    return;
-  }
-
-  const initializer = configDeclaration.getInitializerIfKind(
-    SyntaxKind.ObjectLiteralExpression
-  );
-  if (!initializer) {
-    return;
-  }
-
-  const existingProperty = initializer
-    .getProperties()
-    .find((property) => {
-      const propertyAssignment = property.asKind(SyntaxKind.PropertyAssignment);
-      return propertyAssignment?.getName() === "name";
-    })
-    ?.asKind(SyntaxKind.PropertyAssignment);
-
-  if (existingProperty) {
-    existingProperty.setInitializer(JSON.stringify(configName));
-    return;
-  }
-
-  initializer.addPropertyAssignment({
-    name: "name",
-    initializer: JSON.stringify(configName),
-  });
 }
 
 function getAvailableTemplateNames(

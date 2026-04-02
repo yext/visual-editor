@@ -15,6 +15,113 @@ import { filterComponentsFromConfig } from "../../utils/filterComponents.ts";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 
 const devLogger = new DevLogger();
+const SHARED_TEMPLATE_IDS = new Set(["directory", "locator"]);
+
+type ResolvedTemplateConfig = {
+  resolvedTemplateId: string;
+  puckConfig: Config<any>;
+  usedPathOverride: boolean;
+  usedFallback: boolean;
+};
+
+const getLocalTemplateIdFromPathname = (
+  pathname: string | undefined,
+  availableTemplateIds: Iterable<string>
+): string | null => {
+  if (!pathname) {
+    return null;
+  }
+
+  const match = pathname.replace(/\/+$/, "").match(/^\/edit\/([^/]+)$/);
+  if (!match) {
+    return null;
+  }
+
+  const templateId = decodeURIComponent(match[1]);
+  return new Set(availableTemplateIds).has(templateId) ? templateId : null;
+};
+
+const getSingleCustomTemplateId = (
+  templateIds: Iterable<string>
+): string | null => {
+  const customTemplateIds = [...new Set(templateIds)]
+    .filter((templateId) => !SHARED_TEMPLATE_IDS.has(templateId))
+    .sort((left, right) => left.localeCompare(right));
+
+  return customTemplateIds.length === 1 ? customTemplateIds[0] : null;
+};
+
+export const resolveTemplateConfig = ({
+  requestedTemplateId,
+  componentRegistry,
+  isDevMode,
+  currentPathname,
+}: {
+  requestedTemplateId: string;
+  componentRegistry: Record<string, Config<any>>;
+  isDevMode: boolean;
+  currentPathname?: string;
+}): ResolvedTemplateConfig => {
+  const routeTemplateId = isDevMode
+    ? getLocalTemplateIdFromPathname(
+        currentPathname,
+        Object.keys(componentRegistry)
+      )
+    : null;
+  if (routeTemplateId) {
+    return {
+      resolvedTemplateId: routeTemplateId,
+      puckConfig: componentRegistry[routeTemplateId],
+      usedPathOverride: true,
+      usedFallback: false,
+    };
+  }
+
+  const directConfig = componentRegistry[requestedTemplateId];
+  if (directConfig) {
+    return {
+      resolvedTemplateId: requestedTemplateId,
+      puckConfig: directConfig,
+      usedPathOverride: false,
+      usedFallback: false,
+    };
+  }
+
+  if (!isDevMode || requestedTemplateId !== "main") {
+    throw new Error(
+      `Could not find config for template: templateId=${requestedTemplateId}`
+    );
+  }
+
+  const fallbackTemplateId = getSingleCustomTemplateId(
+    Object.keys(componentRegistry)
+  );
+  if (!fallbackTemplateId) {
+    const fallbackTemplateIds = Object.keys(componentRegistry).filter(
+      (templateId) => !SHARED_TEMPLATE_IDS.has(templateId)
+    );
+    throw new Error(
+      "Could not find config for template: " +
+        `templateId=${requestedTemplateId}. ` +
+        "Platform dev mode can only fall back when exactly one non-shared local template exists, " +
+        `received ${fallbackTemplateIds.length} (${fallbackTemplateIds.join(", ") || "none"})`
+    );
+  }
+
+  const fallbackConfig = componentRegistry[fallbackTemplateId];
+  if (!fallbackConfig) {
+    throw new Error(
+      `Could not find config for fallback template: templateId=${fallbackTemplateId}`
+    );
+  }
+
+  return {
+    resolvedTemplateId: fallbackTemplateId,
+    puckConfig: fallbackConfig,
+    usedPathOverride: false,
+    usedFallback: true,
+  };
+};
 
 export const useCommonMessageReceivers = (
   componentRegistry: Record<string, Config<any>>,
@@ -94,21 +201,44 @@ export const useCommonMessageReceivers = (
   }
 
   useReceiveMessage("getTemplateMetadata", TARGET_ORIGINS, (send, payload) => {
-    let puckConfig = componentRegistry[payload.templateId];
-    if (puckConfig) {
-      puckConfig = filterComponentsFromConfig(
-        puckConfig,
-        payload.additionalLayoutComponents,
-        payload.additionalLayoutCategories
-      );
-    } else {
-      throw new Error(
-        `Could not find config for template: templateId=${payload.templateId}`
+    const {
+      resolvedTemplateId,
+      puckConfig: resolvedPuckConfig,
+      usedPathOverride,
+      usedFallback,
+    } = resolveTemplateConfig({
+      requestedTemplateId: payload.templateId,
+      componentRegistry,
+      isDevMode: !!payload.isDevMode,
+      currentPathname:
+        typeof window !== "undefined" ? window.location.pathname : undefined,
+    });
+
+    let puckConfig = resolvedPuckConfig;
+    if (usedPathOverride) {
+      console.warn(
+        "Using local editor route template during platform dev mode: " +
+          `requested templateId=${payload.templateId}, resolved templateId=${resolvedTemplateId}`
       );
     }
+    if (usedFallback) {
+      console.warn(
+        "Falling back to local template config during platform dev mode: " +
+          `requested templateId=${payload.templateId}, resolved templateId=${resolvedTemplateId}`
+      );
+    }
+
+    puckConfig = filterComponentsFromConfig(
+      puckConfig,
+      payload.additionalLayoutComponents,
+      payload.additionalLayoutCategories
+    );
     setPuckConfig(puckConfig);
-    const templateMetadata = payload as TemplateMetadata;
-    setTemplateMetadata(payload as TemplateMetadata);
+    const templateMetadata = {
+      ...(payload as TemplateMetadata),
+      templateId: resolvedTemplateId,
+    };
+    setTemplateMetadata(templateMetadata);
     devLogger.enable(templateMetadata.isxYextDebug);
     devLogger.logData("TEMPLATE_METADATA", templateMetadata);
     devLogger.logData("PUCK_CONFIG", puckConfig);
