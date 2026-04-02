@@ -1,11 +1,11 @@
 buildConfiguration:
-  buildCommand: npm run build
+  buildCommand: pnpm run build
   installDependenciesStep:
-    command: npm install
+    command: npm install -g pnpm && pnpm install --ignore-scripts --frozen-lockfile
     requiredFiles:
       - package.json
-      - package-lock.json
-      - .npmrc
+      - ../pnpm-lock.yaml
+      - ../pnpm-workspace.yaml
 livePreviewConfiguration:
   setupCommand: ":"
 # authentication:
