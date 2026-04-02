@@ -47,6 +47,10 @@
   "closeMenu": "Fermer le menu",
   "closesAtTime": "Ferme à {{time}}",
   "closesAtTimeWeek": "Ferme à {{time}} {{dayOfWeek}}",
+  "colorPicker": {
+    "close": "Fermer le sélecteur de couleurs",
+    "open": "Ouvrir le sélecteur de couleurs"
+  },
   "componentErrorBoundary": {
     "error": "Erreur",
     "message": "Impossible de restituer cette section. Essayez de mettre à jour votre bibliothèque de composants."

@@ -47,6 +47,10 @@
   "closeMenu": "关闭菜单",
   "closesAtTime": "于 {{time}} 关闭",
   "closesAtTimeWeek": "于 {{time}} {{dayOfWeek}} 关闭",
+  "colorPicker": {
+    "close": "关闭颜色选择器",
+    "open": "打开颜色选择器"
+  },
   "componentErrorBoundary": {
     "error": "错误",
     "message": "无法渲染此部分。尝试更新您的组件库。"

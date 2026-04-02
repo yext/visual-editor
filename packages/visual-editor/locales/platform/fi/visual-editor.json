@@ -47,6 +47,10 @@
   "closeMenu": "Sulje valikko",
   "closesAtTime": "Suljetaan {{time}}",
   "closesAtTimeWeek": "Suljetaan klo {{time}} {{dayOfWeek}}",
+  "colorPicker": {
+    "close": "Sulje värivalitsin",
+    "open": "Avaa värivalitsin"
+  },
   "componentErrorBoundary": {
     "error": "Virhe",
     "message": "Tätä osiota ei voi renderöidä. Yritä päivittää komponenttikirjastosi."

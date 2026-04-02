@@ -47,6 +47,10 @@
   "closeMenu": "Închideți meniul",
   "closesAtTime": "Se închide la {{time}}",
   "closesAtTimeWeek": "Se închide la {{time}} {{dayOfWeek}}",
+  "colorPicker": {
+    "close": "Închideți selectorul de culori",
+    "open": "Deschideți selectorul de culori"
+  },
   "componentErrorBoundary": {
     "error": "Eroare",
     "message": "Nu se poate reda această secțiune. Încercați să vă actualizați biblioteca de componente."
