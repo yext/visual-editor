@@ -123,7 +123,7 @@ const CustomCodeSectionWrapper = ({
       const script = document.createElement("script");
       script.id = scriptTagId;
       script.type = "text/javascript";
-      script.innerHTML = processedJavascript;
+      script.text = processedJavascript;
       containerRef.current.appendChild(script);
     }
   }, [processedJavascript]);
