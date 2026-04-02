@@ -34,8 +34,8 @@ export interface HoursStatusProps {
   /** @internal */
   parentData?: {
     field: string;
-    hours: HoursType;
-    timezone: string;
+    hours?: HoursType;
+    timezone?: string;
   };
 }
 
@@ -100,9 +100,10 @@ const HoursStatusWrapper: PuckComponent<HoursStatusProps> = ({
 }) => {
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
-  const hours = parentData
-    ? parentData.hours
-    : resolveComponentData(data.hours, i18n.language, streamDocument);
+  const hours =
+    parentData?.hours ??
+    resolveComponentData(data.hours, i18n.language, streamDocument);
+  const timezone = parentData?.timezone ?? streamDocument.timezone;
 
   return hours ? (
     <EntityField
@@ -112,7 +113,7 @@ const HoursStatusWrapper: PuckComponent<HoursStatusProps> = ({
     >
       <HoursStatusAtom
         hours={hours}
-        timezone={parentData?.timezone}
+        timezone={timezone}
         className={styles.className}
         showCurrentStatus={styles.showCurrentStatus}
         showDayNames={styles.showDayNames}

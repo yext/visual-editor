@@ -5,6 +5,9 @@ import {
   luminanceFromRGB,
   isColorContrastWcagCompliant,
   convertComputedStyleColorToHex,
+  getBackgroundColorClasses,
+  getThemeColorCssValue,
+  getTextColorClass,
 } from "./colors.ts";
 
 describe("getContrastingColor", () => {
@@ -131,5 +134,65 @@ describe("isColorContrastWcagCompliant", () => {
       isColorContrastWcagCompliant([10000, 67, 112], [229, 154, 154], 12, 400)
     ).toBe(false);
     expect(isColorContrastWcagCompliant([], [], 12, 400)).toBe(false);
+  });
+});
+
+describe("getBackgroundColorClasses", () => {
+  it("returns background and contrasting classes from stored tokens", () => {
+    expect(
+      getBackgroundColorClasses({
+        selectedColor: "palette-primary-light",
+        contrastingColor: "black",
+      })
+    ).toBe("bg-palette-primary-light text-black");
+  });
+
+  it("returns an empty string when color is undefined", () => {
+    expect(getBackgroundColorClasses(undefined)).toBe("");
+  });
+});
+
+describe("getTextColorClass", () => {
+  it("returns text class from selected color token", () => {
+    expect(
+      getTextColorClass({
+        selectedColor: "palette-primary",
+        contrastingColor: "white",
+      })
+    ).toBe("text-palette-primary");
+  });
+
+  it("returns undefined when color is undefined", () => {
+    expect(getTextColorClass(undefined)).toBeUndefined();
+  });
+});
+
+describe("getThemeColorCssValue", () => {
+  it("returns direct css variables for base palette tokens", () => {
+    expect(getThemeColorCssValue("palette-primary")).toBe(
+      "var(--colors-palette-primary)"
+    );
+    expect(getThemeColorCssValue("palette-quaternary-contrast")).toBe(
+      "var(--colors-palette-quaternary-contrast)"
+    );
+  });
+
+  it("resolves derived light/dark palette tokens", () => {
+    expect(getThemeColorCssValue("palette-primary-light")).toBe(
+      "hsl(from var(--colors-palette-primary) h s 98)"
+    );
+    expect(getThemeColorCssValue("palette-secondary-dark")).toBe(
+      "hsl(from var(--colors-palette-secondary) h s 20)"
+    );
+  });
+
+  it("supports white/black and bracketed custom values", () => {
+    expect(getThemeColorCssValue("white")).toBe("white");
+    expect(getThemeColorCssValue("black")).toBe("black");
+    expect(getThemeColorCssValue("[#00000099]")).toBe("#00000099");
+  });
+
+  it("returns undefined for empty values", () => {
+    expect(getThemeColorCssValue(undefined)).toBeUndefined();
   });
 });

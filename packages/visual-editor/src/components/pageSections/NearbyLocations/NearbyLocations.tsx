@@ -8,7 +8,7 @@ import {
   WithId,
 } from "@puckeditor/core";
 import {
-  BackgroundStyle,
+  ThemeColor,
   backgroundColors,
 } from "../../../utils/themeConfigOptions.ts";
 import { PageSection } from "../../atoms/pageSection.tsx";
@@ -30,7 +30,7 @@ export interface NearbyLocationsSectionProps {
      * The background color for the entire section.
      * @defaultValue Background Color 1
      */
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
 
     /**
      * Whether to show the section heading.

@@ -1,7 +1,7 @@
 import {
   CustomCodeSectionProps,
   CustomCodeSection,
-} from "../CustomCodeSection.tsx";
+} from "../customCode/CustomCodeSection.tsx";
 import {
   ExpandedFooterProps,
   ExpandedFooter,

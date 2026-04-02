@@ -1,7 +1,7 @@
 import { useTemplateProps } from "../../hooks/useDocument.tsx";
 import {
   backgroundColors,
-  BackgroundStyle,
+  ThemeColor,
 } from "../../utils/themeConfigOptions.ts";
 import { PageSection } from "../atoms/pageSection.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
@@ -25,13 +25,18 @@ export interface DirectoryStyles {
    * The background color for the directory page heading area.
    * @defaultValue Background Color 1
    */
-  backgroundColor: BackgroundStyle;
+  backgroundColor: ThemeColor;
 
   /**
    * The background color for the directory list area.
    * @defaultValue Background Color 1
    */
-  listBackgroundColor: BackgroundStyle;
+  listBackgroundColor: ThemeColor;
+
+  /**
+   * The color of links in the directory list layout.
+   */
+  linkColor?: ThemeColor;
 }
 
 export interface DirectoryProps {
@@ -76,6 +81,10 @@ const directoryFields: Fields<DirectoryProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
+      linkColor: YextField(msg("fields.linkColor", "Link Color"), {
+        type: "select",
+        options: "SITE_COLOR",
+      }),
     },
   }),
   slots: {
@@ -122,6 +131,7 @@ const DirectoryComponent: PuckComponent<DirectoryProps> = ({
             streamDocument={streamDocument}
             directoryChildren={streamDocument.dm_directoryChildren}
             relativePrefixToRoot={relativePrefixToRoot ?? ""}
+            linkColor={styles.linkColor}
             backgroundColor={styles.listBackgroundColor}
           />
         )}
@@ -144,9 +154,14 @@ export const Directory: ComponentConfig<{ props: DirectoryProps }> = {
       params.metadata.streamDocument?.dm_directoryChildren &&
       isDirectoryGrid(params.metadata.streamDocument.dm_directoryChildren)
     ) {
-      return setDeep(
+      const updatedFields = setDeep(
         directoryFields,
         "styles.objectFields.listBackgroundColor.visible",
+        false
+      );
+      return setDeep(
+        updatedFields,
+        "styles.objectFields.linkColor.visible",
         false
       );
     }

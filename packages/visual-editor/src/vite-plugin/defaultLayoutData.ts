@@ -1,7 +1,7 @@
 const directoryDefaultLayout = {
   root: {
     props: {
-      version: 70,
+      version: 72,
       title: {
         field: "",
         constantValue: { defaultValue: "PLACEHOLDER" },
@@ -31,8 +31,8 @@ const directoryDefaultLayout = {
                 id: "PrimaryHeaderSlot-326efc21-4048-437b-844c-9fad6adf6b10",
                 styles: {
                   backgroundColor: {
-                    bgColor: "bg-white",
-                    textColor: "text-black",
+                    selectedColor: "white",
+                    contrastingColor: "black",
                   },
                 },
                 slots: {
@@ -175,8 +175,8 @@ const directoryDefaultLayout = {
                         },
                         styles: {
                           backgroundColor: {
-                            bgColor: "bg-palette-primary-light",
-                            textColor: "text-black",
+                            selectedColor: "palette-primary-light",
+                            contrastingColor: "black",
                           },
                         },
                         slots: {
@@ -249,8 +249,8 @@ const directoryDefaultLayout = {
                 },
                 styles: {
                   backgroundColor: {
-                    bgColor: "bg-palette-primary-light",
-                    textColor: "text-black",
+                    selectedColor: "palette-primary-light",
+                    contrastingColor: "black",
                   },
                 },
                 slots: {
@@ -315,8 +315,14 @@ const directoryDefaultLayout = {
       type: "Directory",
       props: {
         styles: {
-          backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
-          listBackgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+          backgroundColor: {
+            selectedColor: "white",
+            contrastingColor: "black",
+          },
+          listBackgroundColor: {
+            selectedColor: "white",
+            contrastingColor: "black",
+          },
         },
         slots: {
           TitleSlot: [
@@ -366,8 +372,8 @@ const directoryDefaultLayout = {
                 },
                 styles: {
                   backgroundColor: {
-                    bgColor: "bg-white",
-                    textColor: "text-black",
+                    selectedColor: "white",
+                    contrastingColor: "black",
                   },
                   showCurrentPage: true,
                 },
@@ -383,8 +389,8 @@ const directoryDefaultLayout = {
                 id: "DirectoryGrid-dab8e202-600a-47da-b5c7-971df3f504fb",
                 styles: {
                   backgroundColor: {
-                    bgColor: "bg-white",
-                    textColor: "text-black",
+                    selectedColor: "white",
+                    contrastingColor: "black",
                   },
                 },
                 slots: { CardSlot: [] },
@@ -399,7 +405,15 @@ const directoryDefaultLayout = {
     {
       type: "ExpandedFooter",
       props: {
-        data: { primaryFooter: { expandedFooter: false } },
+        data: {
+          primaryFooter: {
+            expandedFooter: false,
+            showLogo: true,
+            showSocialLinks: true,
+            showUtilityImages: true,
+          },
+          secondaryFooter: { show: true },
+        },
         slots: {
           LogoSlot: [
             {
@@ -675,13 +689,14 @@ const directoryDefaultLayout = {
               type: "SecondaryFooterSlot",
               props: {
                 id: "SecondaryFooterSlot-337d3a64-afe3-4f12-9026-e416d2c5d83c",
-                data: { show: true },
                 styles: {
                   backgroundColor: {
-                    bgColor: "bg-palette-primary-light",
-                    textColor: "text-black",
+                    selectedColor: "palette-primary-light",
+                    contrastingColor: "black",
                   },
-                  linksPosition: "left",
+                  desktopContentAlignment: "left",
+                  mobileContentAlignment: "left",
+                  showLinks: true,
                 },
                 maxWidth: "theme",
                 slots: {
@@ -731,7 +746,8 @@ const directoryDefaultLayout = {
                         },
                         variant: "secondary",
                         eventNamePrefix: "secondary",
-                        alignment: "left",
+                        desktopContentAlignment: "left",
+                        mobileContentAlignment: "left",
                       },
                     },
                   ],
@@ -741,7 +757,8 @@ const directoryDefaultLayout = {
                       props: {
                         id: "CopyrightMessageSlot-65eda140-da7c-4ad5-9bb7-f017a433277b",
                         data: { text: { defaultValue: "" } },
-                        alignment: "left",
+                        desktopContentAlignment: "left",
+                        mobileContentAlignment: "left",
                       },
                     },
                   ],
@@ -754,10 +771,12 @@ const directoryDefaultLayout = {
         styles: {
           primaryFooter: {
             backgroundColor: {
-              bgColor: "bg-palette-primary-dark",
-              textColor: "text-white",
+              selectedColor: "palette-primary-dark",
+              contrastingColor: "white",
             },
             linksPosition: "right",
+            desktopContentAlignment: "left",
+            mobileContentAlignment: "left",
           },
           maxWidth: "theme",
         },

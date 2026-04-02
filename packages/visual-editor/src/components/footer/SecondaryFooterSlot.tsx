@@ -1,8 +1,14 @@
 import * as React from "react";
-import { ComponentConfig, Fields, Slot, PuckComponent } from "@puckeditor/core";
+import {
+  ComponentConfig,
+  Fields,
+  Slot,
+  PuckComponent,
+  setDeep,
+} from "@puckeditor/core";
 import { YextField } from "../../editor/YextField.tsx";
-import { msg, pt } from "../../utils/i18n/platform.ts";
-import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
+import { msg } from "../../utils/i18n/platform.ts";
+import { ThemeColor } from "../../utils/themeConfigOptions.ts";
 import { PageSection, PageSectionProps } from "../atoms/pageSection.tsx";
 import { defaultCopyrightMessageSlotProps } from "./CopyrightMessageSlot.tsx";
 
@@ -23,21 +29,14 @@ const defaultLinks = [
 
 export interface SecondaryFooterSlotProps {
   /**
-   * Data configuration for the secondary footer.
-   * @propCategory Data Props
-   */
-  data: {
-    /** Whether to hide or show the secondary footer */
-    show: boolean;
-  };
-
-  /**
    * Styling configuration for the secondary footer.
    * @propCategory Style Props
    */
   styles: {
-    backgroundColor?: BackgroundStyle;
-    linksPosition: "left" | "center" | "right";
+    backgroundColor?: ThemeColor;
+    desktopContentAlignment: "left" | "center" | "right";
+    mobileContentAlignment: "left" | "center" | "right";
+    showLinks: boolean;
   };
 
   /** @internal */
@@ -51,18 +50,6 @@ export interface SecondaryFooterSlotProps {
 }
 
 const secondaryFooterSlotFields: Fields<SecondaryFooterSlotProps> = {
-  data: YextField(msg("fields.data", "Data"), {
-    type: "object",
-    objectFields: {
-      show: YextField(msg("fields.show", "Show"), {
-        type: "radio",
-        options: [
-          { label: msg("fields.options.yes", "Yes"), value: true },
-          { label: msg("fields.options.no", "No"), value: false },
-        ],
-      }),
-    },
-  }),
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
@@ -74,28 +61,23 @@ const secondaryFooterSlotFields: Fields<SecondaryFooterSlotProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      linksPosition: YextField(msg("fields.linksPosition", "Links Position"), {
+      desktopContentAlignment: YextField(
+        msg("fields.desktopContentAlignment", "Desktop Content Alignment"),
+        {
+          type: "radio",
+          options: "ALIGNMENT",
+        }
+      ),
+      mobileContentAlignment: YextField(
+        msg("fields.mobileContentAlignment", "Mobile Content Alignment"),
+        {
+          type: "radio",
+          options: "ALIGNMENT",
+        }
+      ),
+      showLinks: YextField(msg("fields.showLinks", "Show Links"), {
         type: "radio",
-        options: [
-          {
-            label: msg("fields.options.left", "Left", {
-              context: "direction",
-            }),
-            value: "left",
-          },
-          {
-            label: msg("fields.options.center", "Center", {
-              context: "direction",
-            }),
-            value: "center",
-          },
-          {
-            label: msg("fields.options.right", "Right", {
-              context: "direction",
-            }),
-            value: "right",
-          },
-        ],
+        options: "SHOW_HIDE",
       }),
     },
   }),
@@ -114,36 +96,12 @@ const secondaryFooterSlotFields: Fields<SecondaryFooterSlotProps> = {
 };
 
 const SecondaryFooterSlotWrapper: PuckComponent<SecondaryFooterSlotProps> = ({
-  data,
   styles,
   slots,
   maxWidth = "theme",
   puck,
 }) => {
-  const { show } = data;
   const { backgroundColor } = styles;
-
-  // In edit mode, show minimal clickable placeholder when hidden
-  if (puck.isEditing && !show) {
-    return (
-      <div
-        ref={puck.dragRef}
-        className="border-2 border-dashed border-gray-400 bg-gray-100 p-4 opacity-50 min-h-[60px] flex items-center justify-center cursor-pointer"
-      >
-        <p className="text-sm text-gray-600">
-          {pt(
-            "secondaryFooter.hiddenOnLivePage",
-            "Secondary Footer (Hidden on live page)"
-          )}
-        </p>
-      </div>
-    );
-  }
-
-  // If not shown and not editing, return nothing
-  if (!show) {
-    return <></>;
-  }
 
   return (
     <PageSection
@@ -153,7 +111,12 @@ const SecondaryFooterSlotWrapper: PuckComponent<SecondaryFooterSlotProps> = ({
       maxWidth={maxWidth}
       className={`flex flex-col gap-5`}
     >
-      <slots.SecondaryLinksWrapperSlot style={{ height: "auto" }} allow={[]} />
+      {styles.showLinks && (
+        <slots.SecondaryLinksWrapperSlot
+          style={{ height: "auto" }}
+          allow={[]}
+        />
+      )}
       <slots.CopyrightSlot style={{ height: "auto" }} allow={[]} />
     </PageSection>
   );
@@ -168,11 +131,10 @@ export const SecondaryFooterSlot: ComponentConfig<{
   label: msg("components.secondaryFooter", "Secondary Footer"),
   fields: secondaryFooterSlotFields,
   defaultProps: {
-    data: {
-      show: true,
-    },
     styles: {
-      linksPosition: "left",
+      desktopContentAlignment: "left",
+      mobileContentAlignment: "left",
+      showLinks: true,
     },
     slots: {
       SecondaryLinksWrapperSlot: [
@@ -184,7 +146,8 @@ export const SecondaryFooterSlot: ComponentConfig<{
             },
             variant: "secondary",
             eventNamePrefix: "secondary",
-            alignment: "left",
+            desktopContentAlignment: "left",
+            mobileContentAlignment: "left",
           },
         },
       ],
@@ -196,71 +159,38 @@ export const SecondaryFooterSlot: ComponentConfig<{
       ],
     },
   },
-  resolveFields: (_data, { fields }) => {
-    const showSecondaryFooter = _data.props.data.show;
-
-    if (!showSecondaryFooter) {
-      // Hide styles when secondary footer is not shown
-      return {
-        ...fields,
-        styles: {
-          ...fields.styles,
-          visible: false,
-        },
-      };
-    }
-
-    return fields;
-  },
   resolveData: async (data) => {
-    const hiddenProps: string[] = [];
-
-    // Track hidden fields for locale warnings
-    if (!data.props.data?.show) {
-      hiddenProps.push("data");
-    }
+    let updatedData = { ...data };
 
     // Pass alignment to SecondaryLinksWrapperSlot based on parent styles
-    const secondaryLinksAlignment =
-      data?.props?.styles?.linksPosition ?? "left";
-
-    if (
-      data?.props?.slots?.SecondaryLinksWrapperSlot &&
-      Array.isArray(data.props.slots.SecondaryLinksWrapperSlot)
-    ) {
-      data.props.slots.SecondaryLinksWrapperSlot =
-        data.props.slots.SecondaryLinksWrapperSlot.map((slot: any) => ({
-          ...slot,
-          props: {
-            ...slot.props,
-            alignment: secondaryLinksAlignment,
-          },
-        }));
-    }
-
-    // Pass alignment to CopyrightSlot based on parent styles
-    if (
-      data?.props?.slots?.CopyrightSlot &&
-      Array.isArray(data.props.slots.CopyrightSlot)
-    ) {
-      data.props.slots.CopyrightSlot = data.props.slots.CopyrightSlot.map(
-        (slot: any) => ({
-          ...slot,
-          props: {
-            ...slot.props,
-            alignment: secondaryLinksAlignment,
-          },
-        })
+    if (data.props.slots?.SecondaryLinksWrapperSlot?.[0]?.props) {
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.SecondaryLinksWrapperSlot[0].props.desktopContentAlignment",
+        data.props.styles.desktopContentAlignment
+      );
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.SecondaryLinksWrapperSlot[0].props.mobileContentAlignment",
+        data.props.styles.mobileContentAlignment
       );
     }
 
-    return {
-      ...data,
-      props: {
-        ...data.props,
-        ignoreLocaleWarning: hiddenProps,
-      },
-    };
+    // Pass alignment to CopyrightSlot based on parent styles
+    if (data.props.slots?.CopyrightSlot?.[0]?.props) {
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.CopyrightSlot[0].props.desktopContentAlignment",
+        data.props.styles.desktopContentAlignment
+      );
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.CopyrightSlot[0].props.mobileContentAlignment",
+        data.props.styles.mobileContentAlignment
+      );
+    }
+
+    return updatedData;
   },
   inline: true,
   render: (props) => <SecondaryFooterSlotWrapper {...props} />,
