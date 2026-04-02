@@ -218,8 +218,6 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
 
   const runSearch = React.useCallback(
     (nextVerticalKey: string | null, query: string) => {
-      console.log("🚀 runSearch called with:", { nextVerticalKey, query }); // ← temp log
-
       if (!isValidVerticalConfig(verticals)) {
         return;
       }

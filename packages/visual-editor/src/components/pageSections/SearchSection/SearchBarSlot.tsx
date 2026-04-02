@@ -297,7 +297,6 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
         url.searchParams.delete("searchTerm");
       }
 
-      console.log("🔍 URL will update to:", url.toString()); // ← temp log
       window.history.pushState({}, "", url.toString());
       window.dispatchEvent(new PopStateEvent("popstate"));
     },
