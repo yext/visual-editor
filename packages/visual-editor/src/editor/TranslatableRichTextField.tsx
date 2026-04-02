@@ -14,6 +14,13 @@ let pendingRichTextSession:
   | { messageId: string; apply: (payload: any) => void }
   | undefined;
 
+const shouldUseStandaloneLocalPrompt = (): boolean => {
+  return (
+    window.parent === window ||
+    window.location.href.includes("http://localhost:5173/dev-location")
+  );
+};
+
 /**
  * Generates a translatableRichText field config
  * @param label optional label. Takes in a value from msg
@@ -63,6 +70,15 @@ export function TranslatableRichTextField<
           ? valueForCurrentLocale?.json
           : valueForCurrentLocale;
 
+        if (shouldUseStandaloneLocalPrompt()) {
+          const userInput = prompt("Enter Rich Text (HTML):");
+          handleNewValue({ json: "", html: userInput ?? "" }, locale);
+          if (pendingRichTextSession?.messageId === messageId) {
+            pendingRichTextSession = undefined;
+          }
+          return;
+        }
+
         openConstantValueEditor({
           payload: {
             type: "RichTextValue", // type: "RichText" is being used in artifact 0.0.8
@@ -72,17 +88,6 @@ export function TranslatableRichTextField<
             locale: locale,
           },
         });
-
-        /** Handles local development testing outside of storm */
-        if (
-          window.location.href.includes("http://localhost:5173/dev-location")
-        ) {
-          const userInput = prompt("Enter Rich Text (HTML):");
-          handleNewValue({ json: "", html: userInput ?? "" }, locale);
-          if (pendingRichTextSession?.messageId === messageId) {
-            pendingRichTextSession = undefined;
-          }
-        }
       };
 
       const handleNewValue = (newValue: RichText, localeToUpdate: string) => {

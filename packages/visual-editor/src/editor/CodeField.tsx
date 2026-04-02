@@ -11,6 +11,13 @@ let pendingCodeSession:
   | { messageId: string; apply: (payload: any) => void }
   | undefined;
 
+const shouldUseStandaloneLocalPrompt = (): boolean => {
+  return (
+    window.parent === window ||
+    window.location.href.includes("http://localhost:5173/dev-location")
+  );
+};
+
 export type codeLanguageOptions =
   | "html"
   | "css"
@@ -59,6 +66,15 @@ export const CodeField = ({
           apply: (payload) => onChange(payload.value),
         };
 
+        if (shouldUseStandaloneLocalPrompt()) {
+          const userInput = prompt("Enter Code:");
+          onChange(userInput ?? "");
+          if (pendingCodeSession?.messageId === messageId) {
+            pendingCodeSession = undefined;
+          }
+          return;
+        }
+
         openConstantValueEditor({
           payload: {
             type: "Code",
@@ -68,17 +84,6 @@ export const CodeField = ({
             codeLanguage: codeLanguage,
           },
         });
-
-        /** Handles local development testing outside of storm */
-        if (
-          window.location.href.includes("http://localhost:5173/dev-location")
-        ) {
-          const userInput = prompt("Enter Code:");
-          onChange(userInput ?? "");
-          if (pendingCodeSession?.messageId === messageId) {
-            pendingCodeSession = undefined;
-          }
-        }
       };
 
       return (

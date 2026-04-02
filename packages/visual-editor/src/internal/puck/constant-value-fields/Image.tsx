@@ -38,6 +38,13 @@ let pendingImageSession:
   | { messageId: string; apply: (payload: ImagePayload) => void }
   | undefined;
 
+const shouldUseStandaloneLocalImagePrompt = (): boolean => {
+  return (
+    window.parent === window ||
+    window.location.href.includes("http://localhost:5173/dev-location")
+  );
+};
+
 const buildLocatorDisplayOptions = (
   locatorDisplayFields?: Record<string, FieldTypeData>
 ): DynamicOption<string>[] => {
@@ -102,7 +109,7 @@ const createImageConstantConfig = (options?: {
       e.preventDefault();
 
       /** Handles local development testing outside of Storm */
-      if (window.location.href.includes("http://localhost:5173/dev-location")) {
+      if (shouldUseStandaloneLocalImagePrompt()) {
         const userInput = prompt("Enter Image URL:");
         if (!userInput) {
           return;

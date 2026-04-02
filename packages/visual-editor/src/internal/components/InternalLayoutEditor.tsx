@@ -89,6 +89,7 @@ type InternalLayoutEditorProps = {
   sendDevSaveStateData: (data: any) => void;
   buildVisualConfigLocalStorageKey: () => string;
   localDev: boolean;
+  showLocalDevOverrideButtons: boolean;
   metadata?: Metadata;
 };
 
@@ -105,6 +106,7 @@ export const InternalLayoutEditor = ({
   sendDevSaveStateData,
   buildVisualConfigLocalStorageKey,
   localDev,
+  showLocalDevOverrideButtons,
   metadata,
 }: InternalLayoutEditorProps) => {
   const historyIndex = useRef<number>(0);
@@ -405,6 +407,7 @@ export const InternalLayoutEditor = ({
               onPublishLayout={handlePublishLayout}
               onSendLayoutForApproval={handleSendLayoutForApproval}
               localDev={localDev}
+              showLocalDevOverrideButtons={showLocalDevOverrideButtons}
               hasErrors={errorCount > 0}
               errorSources={errorSources}
               errorDetails={errorDetails}

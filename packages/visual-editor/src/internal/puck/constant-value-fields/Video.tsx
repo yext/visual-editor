@@ -19,6 +19,13 @@ let pendingVideoSession:
   | { messageId: string; apply: (payload: VideoPayload) => void }
   | undefined;
 
+const shouldUseStandaloneLocalPrompt = (): boolean => {
+  return (
+    window.parent === window ||
+    window.location.href.includes("http://localhost:5173/dev-location")
+  );
+};
+
 export const VIDEO_CONSTANT_CONFIG: CustomField<AssetVideo | undefined> = {
   type: "custom",
   render: ({ onChange, value, field }) => {
@@ -45,7 +52,7 @@ export const VIDEO_CONSTANT_CONFIG: CustomField<AssetVideo | undefined> = {
       e.preventDefault();
 
       /** Handles local development testing outside of Storm */
-      if (window.location.href.includes("http://localhost:5173/dev-location")) {
+      if (shouldUseStandaloneLocalPrompt()) {
         const userInput = prompt("Enter Video URL:");
         if (!userInput) {
           return;

@@ -14,6 +14,13 @@ let pendingSchemaMarkupSession:
   | { messageId: string; apply: (payload: any) => void }
   | undefined;
 
+const shouldUseStandaloneLocalPrompt = (): boolean => {
+  return (
+    window.parent === window ||
+    window.location.href.includes("http://localhost:5173/dev-location")
+  );
+};
+
 export interface AdvancedSettingsProps {
   /**
    * Schema markup configuration for the page.
@@ -64,7 +71,7 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
       e.preventDefault();
 
       /** Handles local development testing outside of Storm */
-      if (window.location.href.includes("http://localhost:5173/dev-location")) {
+      if (shouldUseStandaloneLocalPrompt()) {
         const userInput = prompt("Enter Schema Markup:", schema);
         if (userInput !== null) {
           onChange(userInput);

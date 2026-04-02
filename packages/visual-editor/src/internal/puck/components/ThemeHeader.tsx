@@ -36,6 +36,7 @@ type ThemeHeaderProps = {
   setClearLocalChangesModalOpen: (newValue: boolean) => void;
   totalEntityCount: number;
   localDev: boolean;
+  showLocalDevOverrideButtons: boolean;
   headDeployStatus: HeadDeployStatus;
 };
 
@@ -52,6 +53,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
     setClearLocalChangesModalOpen,
     totalEntityCount,
     localDev,
+    showLocalDevOverrideButtons,
     headDeployStatus,
   } = props;
 
@@ -159,7 +161,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
       <div className="header-left">
         <UIButtonsToggle showLeft={false} />
       </div>
-      {localDev && <LocalDevOverrideButtons />}
+      {localDev && showLocalDevOverrideButtons && <LocalDevOverrideButtons />}
       <div className="header-center"></div>
       <div className="actions">
         <Button

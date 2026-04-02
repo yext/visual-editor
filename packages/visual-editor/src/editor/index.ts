@@ -1,4 +1,5 @@
 export { type Metadata, Editor } from "./Editor.tsx";
+export { type LocalDevOptions } from "../internal/types/templateMetadata.ts";
 export { EntityField } from "./EntityField.tsx";
 export {
   YextEntityFieldSelector,

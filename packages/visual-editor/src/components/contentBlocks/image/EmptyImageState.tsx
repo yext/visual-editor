@@ -16,6 +16,13 @@ let pendingEmptyImageSession:
   | { messageId: string; apply: (payload: ImagePayload) => void }
   | undefined;
 
+const shouldUseStandaloneLocalImagePrompt = (): boolean => {
+  return (
+    window.parent === window ||
+    window.location.href.includes("http://localhost:5173")
+  );
+};
+
 interface EmptyImageStateProps {
   isEmpty: boolean;
   isEditing: boolean;
@@ -63,7 +70,7 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
 
   const handleImageSelection = React.useCallback(() => {
     if (!hasParentData && constantValueEnabled && isEditing) {
-      if (window.location.href.includes("http://localhost:5173")) {
+      if (shouldUseStandaloneLocalImagePrompt()) {
         const userInput = prompt("Enter Image URL:");
         if (!userInput) {
           return;
