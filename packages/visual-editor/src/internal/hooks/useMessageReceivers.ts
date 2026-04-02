@@ -213,7 +213,7 @@ export const useCommonMessageReceivers = (
         typeof window !== "undefined" ? window.location.pathname : undefined,
     });
 
-    let puckConfig = resolvedPuckConfig;
+    const puckConfig = resolvedPuckConfig;
     if (usedPathOverride) {
       console.warn(
         "Using local editor route template during platform dev mode: " +
@@ -226,12 +226,6 @@ export const useCommonMessageReceivers = (
           `requested templateId=${payload.templateId}, resolved templateId=${resolvedTemplateId}`
       );
     }
-
-    puckConfig = filterComponentsFromConfig(
-      puckConfig,
-      payload.additionalLayoutComponents,
-      payload.additionalLayoutCategories
-    );
     setPuckConfig(puckConfig);
     const templateMetadata = {
       ...(payload as TemplateMetadata),
