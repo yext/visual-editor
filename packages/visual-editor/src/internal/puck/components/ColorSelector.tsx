@@ -1,34 +1,73 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CustomField, FieldLabel } from "@puckeditor/core";
 import { Color, ColorResult, SketchPicker } from "react-color";
+import { pt } from "../../../utils/i18n/platform.ts";
 
 type RenderProps = Parameters<CustomField<any>["render"]>[0];
 
 export const ColorSelector = ({ field, value, onChange }: RenderProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [draftColor, setDraftColor] = useState<Color>(value);
 
-  const fieldStyles = colorPickerStyles(value);
+  useEffect(() => {
+    setDraftColor(value);
+  }, [value]);
+
+  const handlePickerChange = (colorResult: ColorResult) => {
+    setDraftColor(colorResult.hex);
+  };
+
+  const handlePickerChangeComplete = (colorResult: ColorResult) => {
+    const nextColor = colorResult.hex;
+    setDraftColor(nextColor);
+    if (nextColor !== value) {
+      onChange(nextColor);
+    }
+  };
+
+  const fieldStyles = colorPickerStyles(draftColor);
   return (
     <>
       <FieldLabel
         label={field.label || "Label is undefined"}
-        className="ve-mt-2.5"
+        el="div"
+        className="ve-relative ve-mt-2.5"
       >
-        <div
+        <button
+          type="button"
+          aria-label={
+            field.label || pt("colorPicker.open", "Open color picker")
+          }
           style={fieldStyles.swatch}
-          onClick={() => setIsOpen((current) => !current)}
+          onClick={() => {
+            if (isOpen) {
+              setIsOpen(false);
+              return;
+            }
+
+            setIsOpen(true);
+          }}
         >
           <div style={fieldStyles.color} />
-        </div>
+        </button>
         {isOpen && (
-          <div style={fieldStyles.popover}>
-            <div style={fieldStyles.cover} onClick={() => setIsOpen(false)} />
+          <div
+            style={fieldStyles.popover}
+            onClick={(event) => event.stopPropagation()}
+            onPointerDown={(event) => event.stopPropagation()}
+            onPointerUp={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              aria-label={pt("colorPicker.close", "Close color picker")}
+              style={fieldStyles.cover}
+              onClick={() => setIsOpen(false)}
+            />
             <SketchPicker
               disableAlpha={true}
-              color={value}
-              onChange={(colorResult: ColorResult) => {
-                onChange(colorResult.hex);
-              }}
+              color={draftColor}
+              onChange={handlePickerChange}
+              onChangeComplete={handlePickerChangeComplete}
             />
           </div>
         )}
@@ -48,10 +87,12 @@ const colorPickerStyles = (color: Color) => {
     swatch: {
       padding: "5px",
       background: "#fff",
+      border: "none",
       borderRadius: "1px",
       boxShadow: "0 0 0 1px rgba(0,0,0,.1)",
       display: "inline-block",
       cursor: "pointer",
+      lineHeight: 0,
     } as React.CSSProperties,
     popover: {
       position: "absolute",
@@ -63,6 +104,10 @@ const colorPickerStyles = (color: Color) => {
       right: "0px",
       bottom: "0px",
       left: "0px",
+      border: "none",
+      background: "transparent",
+      padding: "0px",
+      cursor: "default",
     } as React.CSSProperties,
   };
 };

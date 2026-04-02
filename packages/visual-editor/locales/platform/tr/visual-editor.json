@@ -47,6 +47,10 @@
   "closeMenu": "Kapat Menüsü",
   "closesAtTime": "{{time}} itibarıyla kapanıyor",
   "closesAtTimeWeek": "{{time}} {{dayOfWeek}} itibarıyla kapanıyor",
+  "colorPicker": {
+    "close": "Renk seçiciyi kapat",
+    "open": "Renk seçiciyi aç"
+  },
   "componentErrorBoundary": {
     "error": "Hata",
     "message": "Bu bölüm oluşturulamıyor. Bileşen kitaplığınızı güncellemeyi deneyin."

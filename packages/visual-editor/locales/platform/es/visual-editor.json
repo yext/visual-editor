@@ -47,6 +47,10 @@
   "closeMenu": "Menú cerrado",
   "closesAtTime": "Cierra a las {{time}}",
   "closesAtTimeWeek": "Cierra a las {{time}} {{dayOfWeek}}",
+  "colorPicker": {
+    "close": "Cerrar selector de color",
+    "open": "Abrir selector de color"
+  },
   "componentErrorBoundary": {
     "error": "Error",
     "message": "No se puede renderizar esta sección. Intente actualizar su biblioteca de componentes."

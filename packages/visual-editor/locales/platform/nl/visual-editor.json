@@ -47,6 +47,10 @@
   "closeMenu": "Sluit het menu",
   "closesAtTime": "Sluit om {{time}}",
   "closesAtTimeWeek": "Sluit om {{time}} {{dayOfWeek}}",
+  "colorPicker": {
+    "close": "Sluit de kleurkiezer",
+    "open": "Kleurkiezer openen"
+  },
   "componentErrorBoundary": {
     "error": "Fout",
     "message": "Kan deze sectie niet weergeven. Probeer uw componentenbibliotheek bij te werken."

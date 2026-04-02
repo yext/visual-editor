@@ -47,6 +47,10 @@
   "closeMenu": "Zárja be a menüt",
   "closesAtTime": "Zárás: {{time}}",
   "closesAtTimeWeek": "Zárás: {{time}} {{dayOfWeek}}",
+  "colorPicker": {
+    "close": "Zárja be a színválasztót",
+    "open": "Nyissa meg a színválasztót"
+  },
   "componentErrorBoundary": {
     "error": "Hiba",
     "message": "Ez a szakasz nem jeleníthető meg. Próbálja meg frissíteni az összetevőkönyvtárat."

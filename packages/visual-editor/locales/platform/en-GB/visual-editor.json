@@ -47,6 +47,10 @@
   "closeMenu": "Close menu",
   "closesAtTime": "Closes at {{time}}",
   "closesAtTimeWeek": "Closes at {{time}} {{dayOfWeek}}",
+  "colorPicker": {
+    "close": "Close color picker",
+    "open": "Open color picker"
+  },
   "componentErrorBoundary": {
     "error": "Error",
     "message": "Can't render this section. Try updating your component library."

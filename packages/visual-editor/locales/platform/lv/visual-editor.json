@@ -47,6 +47,10 @@
   "closeMenu": "Aizvērt ēdienkarti",
   "closesAtTime": "Tiek slēgts plkst. {{time}}",
   "closesAtTimeWeek": "Tiek slēgts plkst. {{time}} {{dayOfWeek}}",
+  "colorPicker": {
+    "close": "Aizvērt krāsu atlasītāju",
+    "open": "Atveriet krāsu atlasītāju"
+  },
   "componentErrorBoundary": {
     "error": "Kļūda",
     "message": "Nevar atveidot šo sadaļu. Mēģiniet atjaunināt savu komponentu bibliotēku."
