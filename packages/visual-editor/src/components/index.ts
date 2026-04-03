@@ -20,7 +20,7 @@ export {
 export {
   CustomCodeSection,
   type CustomCodeSectionProps,
-} from "./CustomCodeSection.tsx";
+} from "./customCode/CustomCodeSection.tsx";
 export {
   defaultThemeConfig,
   createDefaultThemeConfig,

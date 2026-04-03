@@ -86,6 +86,94 @@ const tests: ComponentTest[] = [
     },
     version: 51,
   },
+  {
+    name: "version 51 - right heading alignments with data",
+    document: testDocument,
+    props: {
+      ...defaultProps,
+      styles: {
+        ...defaultProps.styles,
+        showImage: false,
+      },
+      slots: {
+        ...defaultProps.slots,
+        CredentialsSlot: [
+          {
+            ...defaultProps.slots.CredentialsSlot[0],
+            props: {
+              ...defaultProps.slots.CredentialsSlot[0].props,
+              data: {
+                ...defaultProps.slots.CredentialsSlot[0].props.data,
+                text: {
+                  ...defaultProps.slots.CredentialsSlot[0].props.data.text,
+                  constantValue: {
+                    en: "MD, PhD",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: {
+                ...defaultProps.slots.CredentialsSlot[0].props.styles,
+                align: "right",
+              },
+            },
+          },
+        ],
+        ProfessionalNameSlot: [
+          {
+            ...defaultProps.slots.ProfessionalNameSlot[0],
+            props: {
+              ...defaultProps.slots.ProfessionalNameSlot[0].props,
+              data: {
+                ...defaultProps.slots.ProfessionalNameSlot[0].props.data,
+                text: {
+                  ...defaultProps.slots.ProfessionalNameSlot[0].props.data.text,
+                  constantValue: {
+                    en: "Dr. Jane Doe",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: {
+                ...defaultProps.slots.ProfessionalNameSlot[0].props.styles,
+                align: "right",
+              },
+            },
+          },
+        ],
+        ProfessionalTitleSlot: [
+          {
+            ...defaultProps.slots.ProfessionalTitleSlot[0],
+            props: {
+              ...defaultProps.slots.ProfessionalTitleSlot[0].props,
+              data: {
+                ...defaultProps.slots.ProfessionalTitleSlot[0].props.data,
+                text: {
+                  ...defaultProps.slots.ProfessionalTitleSlot[0].props.data
+                    .text,
+                  constantValue: {
+                    en: "Clinical Director",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: {
+                ...defaultProps.slots.ProfessionalTitleSlot[0].props.styles,
+                align: "right",
+              },
+            },
+          },
+        ],
+      },
+    },
+    version: 51,
+  },
 ];
 
 describe("ProfessionalHeroSection", () => {

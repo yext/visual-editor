@@ -247,10 +247,6 @@ const Edit: () => JSX.Element = () => {
 // Example using the main.tsx template
 const Location: Template<TemplateRenderProps> = (props) => {
   const { document } = props;
-  const filteredConfig = filterComponentsFromConfig(
-    mainConfig,
-    document?._additionalLayoutComponents
-  );
 
   return (
     <AnalyticsProvider
@@ -260,7 +256,7 @@ const Location: Template<TemplateRenderProps> = (props) => {
     >
       <VisualEditorProvider templateProps={props}>
         <Render
-          config={filteredConfig}
+          config={mainConfig}
           data={migrate(
             JSON.parse(document.__.layout),
             migrationRegistry,

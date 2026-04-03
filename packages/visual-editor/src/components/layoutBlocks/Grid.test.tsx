@@ -926,7 +926,7 @@ const tests: ComponentTest[] = [
                 styles: {
                   variant: "link",
                   presetImage: "app-store",
-                  color: backgroundColors.color4.value,
+                  color: backgroundColors.color1.value,
                 },
                 id: "CTAWrapper-dafb4772-bdd5-4fa3-9c4f-317bd5ee7a0b",
               },
@@ -1047,7 +1047,7 @@ const tests: ComponentTest[] = [
                     },
                     variant: "link",
                     presetImage: "app-store",
-                    color: backgroundColors.color4.value,
+                    color: backgroundColors.color1.value,
                   },
                   {
                     entityField: {
@@ -1201,7 +1201,7 @@ const tests: ComponentTest[] = [
                 styles: {
                   variant: "link",
                   presetImage: "app-store",
-                  color: backgroundColors.color4.value,
+                  color: backgroundColors.color1.value,
                 },
                 id: "CTAWrapper-dafb4772-bdd5-4fa3-9c4f-317bd5ee7a0b",
               },
@@ -1322,7 +1322,7 @@ const tests: ComponentTest[] = [
                     },
                     variant: "link",
                     presetImage: "app-store",
-                    color: backgroundColors.color4.value,
+                    color: backgroundColors.color1.value,
                   },
                   {
                     entityField: {
@@ -2097,6 +2097,46 @@ const tests: ComponentTest[] = [
       backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
       liveVisibility: true,
       analytics: { scope: "gridSection" },
+    },
+    version: 61,
+  },
+  {
+    name: "version 61 - single column heading right aligned",
+    document: {
+      locale: "en",
+    },
+    props: {
+      columns: 1,
+      slots: [
+        {
+          Column: [
+            {
+              type: "HeadingText",
+              props: {
+                id: "HeadingText-right-aligned-single-column",
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: "Short Heading",
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: {
+                  level: 2,
+                  align: "right",
+                },
+              },
+            },
+          ],
+        },
+      ],
+      backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+      liveVisibility: true,
+      analytics: { scope: "gridSection" },
+      align: "right",
     },
     version: 61,
   },

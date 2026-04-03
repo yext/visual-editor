@@ -27,13 +27,16 @@ const componentRegistry: Record<string, Config<any>> = {
   locator: locatorConfig,
 };
 
-// Editor is available at /edit
+const editPath = "__YEXT_VISUAL_EDITOR_PATH__";
+const editTemplateName = "__YEXT_VISUAL_EDITOR_TEMPLATE_NAME__";
+
+// Editor path is injected at generation time based on the available templates.
 export const getPath: GetPath<TemplateProps> = () => {
-  return "edit";
+  return editPath;
 };
 
 export const config: TemplateConfig = {
-  name: "edit",
+  name: editTemplateName,
 };
 
 export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({

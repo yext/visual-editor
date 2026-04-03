@@ -1,8 +1,8 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { themeManagerCn } from "../../utils/cn.ts";
-import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
-import { normalizeThemeColor } from "../../utils/normalizeThemeColor.ts";
+import { ThemeColor } from "../../utils/themeConfigOptions.ts";
+import { getTextColorClass } from "../../utils/colors.ts";
 
 // Define the variants for the body component
 export const bodyVariants = cva(
@@ -26,27 +26,23 @@ export const bodyVariants = cva(
 export interface BodyProps
   extends Omit<React.HTMLAttributes<HTMLParagraphElement>, "color">,
     VariantProps<typeof bodyVariants> {
-  color?: BackgroundStyle;
+  color?: ThemeColor;
 }
 
 export const Body = React.forwardRef<HTMLParagraphElement, BodyProps>(
   ({ className, variant, color, style, ...props }, ref) => {
-    const dynamicStyle = color?.bgColor
-      ? { color: `var(--colors-${normalizeThemeColor(color.bgColor)})` }
-      : undefined;
     return (
       <p
         className={themeManagerCn(
           bodyVariants({
             variant,
-            className,
           }),
+          getTextColorClass(color),
           className
         )}
         style={{
           // @ts-ignore: the css variable here resolves to a valid enum value
           textTransform: `var(--textTransform-body-textTransform)`,
-          ...dynamicStyle,
           ...style,
         }}
         ref={ref}

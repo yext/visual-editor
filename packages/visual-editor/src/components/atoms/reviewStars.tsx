@@ -4,6 +4,8 @@ import { Body } from "./body.tsx";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { useBackground } from "../../hooks/useBackground.tsx";
 import { useTranslation } from "react-i18next";
+import { ThemeColor } from "../../utils/themeConfigOptions.ts";
+import { getThemeColorCssValue } from "../../utils/colors.ts";
 
 export type AggregateRating = {
   averageRating: number;
@@ -14,14 +16,16 @@ export type ReviewStarsProps = {
   averageRating: number;
   reviewCount?: number;
   className?: string;
+  color?: ThemeColor;
 };
 
 export const ReviewStars = (props: ReviewStarsProps) => {
-  const { averageRating, reviewCount, className } = props;
+  const { averageRating, reviewCount, className, color } = props;
   const background = useBackground();
-  const hasDarkBackground = background?.isDarkBackground;
+  const hasDarkBackground = background?.isDarkColor;
   const roundedAverageRating = Math.round(averageRating * 10) / 10;
   const HalfStar = hasDarkBackground ? FaStarHalf : FaStarHalfAlt;
+  const starColorValue = getThemeColorCssValue(color?.selectedColor);
   const starColor = hasDarkBackground
     ? "text-white"
     : "text-palette-primary-dark";
@@ -30,7 +34,10 @@ export const ReviewStars = (props: ReviewStarsProps) => {
   return (
     <div className={themeManagerCn("flex items-center gap-3", className)}>
       <Body className="font-bold">{roundedAverageRating}</Body>
-      <div className={`flex items-center gap-0.5 ${starColor}`}>
+      <div
+        className={`flex items-center gap-0.5 ${starColorValue ? "" : starColor}`}
+        style={starColorValue ? { color: starColorValue } : undefined}
+      >
         {Array.from({ length: 5 })
           .fill(null)
           .map((_, i) =>

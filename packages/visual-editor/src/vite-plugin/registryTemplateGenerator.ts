@@ -33,10 +33,12 @@
  *    - Import each generated config into `componentRegistry`.
  *    - Ensure `componentRegistry` points each generated template name to its
  *      config while preserving existing `directory` and `locator` entries.
+ *    - Set `editPath` using the final available template set.
  */
 import path from "node:path";
 import fs from "fs-extra";
 import { Project, QuoteKind, SyntaxKind, type SourceFile } from "ts-morph";
+import { getEditorTemplateInfoFromTemplateNames } from "./editorRoute.ts";
 
 type TemplateManifestEntry = {
   name: string;
@@ -157,10 +159,10 @@ export const generateRegistryTemplateFiles = ({
   );
 
   // 4) Update `<starter>/.template-manifest.json`.
-  updateTemplateManifest(rootDir, templateNames);
+  const availableTemplateNames = updateTemplateManifest(rootDir, templateNames);
 
   // 5) Update editor wiring.
-  updateEditorTemplates(rootDir, templateNames);
+  updateEditTemplate(rootDir, templateNames, availableTemplateNames);
 };
 
 export const getGeneratedRegistryTemplateNames = (
@@ -169,6 +171,12 @@ export const getGeneratedRegistryTemplateNames = (
   return collectGeneratedTemplates(rootDir).map(({ templateName }) => {
     return templateName;
   });
+};
+
+export const getCollectedRegistryTemplateNames = (
+  rootDir: string
+): string[] => {
+  return getGeneratedRegistryTemplateNames(rootDir);
 };
 
 export const buildEditorTemplateSource = ({
@@ -521,7 +529,7 @@ const buildTemplateSource = (
 const updateTemplateManifest = (
   rootDir: string,
   templateNames: string[]
-): void => {
+): string[] => {
   const manifestPath = path.join(rootDir, ".template-manifest.json");
   const manifest: ManifestFile = fs.existsSync(manifestPath)
     ? readJsonFile<ManifestFile>(manifestPath, "template manifest JSON")
@@ -583,41 +591,51 @@ const updateTemplateManifest = (
   if (updated) {
     writeFileIfChanged(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
   }
+
+  return getAvailableTemplateNames(
+    rootDir,
+    manifest.templates.map((template) => template.name)
+  );
 };
 
 /**
  * 5) Update editor templates to import and register each
  * generated config.
  */
-const updateEditorTemplates = (
+const updateEditTemplate = (
   rootDir: string,
-  templateNames: string[]
+  templateNames: string[],
+  availableTemplateNames: string[]
 ): void => {
-  for (const templateFileName of ["edit.tsx"]) {
-    const templatePath = path.join(
-      rootDir,
-      "src",
-      "templates",
-      templateFileName
-    );
-    if (!fs.existsSync(templatePath)) {
-      continue;
-    }
+  const editTemplatePath = path.join(rootDir, "src", "templates", "edit.tsx");
+  if (!fs.existsSync(editTemplatePath)) {
+    return;
+  }
 
-    const originalSource = readUtf8File(
-      templatePath,
-      `${templateFileName} template source`
-    );
-    const updatedSource = buildEditorTemplateSource({
-      rootDir,
-      templatePath,
-      templateSource: originalSource,
-      templateNames,
-    });
-
-    if (updatedSource !== originalSource) {
-      writeFileIfChanged(templatePath, updatedSource);
+  const originalSource = readUtf8File(editTemplatePath, "edit template source");
+  const registryWiredSource = buildEditorTemplateSource({
+    rootDir,
+    templatePath: editTemplatePath,
+    templateSource: originalSource,
+    templateNames,
+  });
+  AST_PROJECT.getSourceFile(editTemplatePath)?.forget();
+  const sourceFile = AST_PROJECT.createSourceFile(
+    editTemplatePath,
+    registryWiredSource,
+    {
+      overwrite: true,
     }
+  );
+  setEditComponentRegistry(sourceFile, templateNames);
+  setEditPath(sourceFile, availableTemplateNames);
+  setEditConfigName(sourceFile, availableTemplateNames);
+
+  const updatedSource = sourceFile.getFullText();
+  sourceFile.forget();
+
+  if (updatedSource !== originalSource) {
+    fs.writeFileSync(editTemplatePath, updatedSource);
   }
 };
 
@@ -918,6 +936,87 @@ ${registryEntries}
       initializer: getEditConfigIdentifier(templateName),
     });
   }
+}
+
+function setEditPath(sourceFile: SourceFile, templateNames: string[]): void {
+  const declaration = sourceFile.getVariableDeclaration("editPath");
+  if (!declaration) {
+    return;
+  }
+
+  declaration.setInitializer(
+    JSON.stringify(getEditorTemplateInfoFromTemplateNames(templateNames).path)
+  );
+}
+
+function setEditConfigName(
+  sourceFile: SourceFile,
+  templateNames: string[]
+): void {
+  const configName =
+    getEditorTemplateInfoFromTemplateNames(templateNames).configName;
+  const declaration = sourceFile.getVariableDeclaration("editTemplateName");
+
+  if (declaration) {
+    declaration.setInitializer(JSON.stringify(configName));
+    return;
+  }
+
+  const configDeclaration = sourceFile.getVariableDeclaration("config");
+  if (!configDeclaration) {
+    return;
+  }
+
+  const initializer = configDeclaration.getInitializerIfKind(
+    SyntaxKind.ObjectLiteralExpression
+  );
+  if (!initializer) {
+    return;
+  }
+
+  const existingProperty = initializer
+    .getProperties()
+    .find((property) => {
+      const propertyAssignment = property.asKind(SyntaxKind.PropertyAssignment);
+      return propertyAssignment?.getName() === "name";
+    })
+    ?.asKind(SyntaxKind.PropertyAssignment);
+
+  if (existingProperty) {
+    existingProperty.setInitializer(JSON.stringify(configName));
+    return;
+  }
+
+  initializer.addPropertyAssignment({
+    name: "name",
+    initializer: JSON.stringify(configName),
+  });
+}
+
+function getAvailableTemplateNames(
+  rootDir: string,
+  manifestTemplateNames: string[]
+): string[] {
+  const mainTemplateNames = fs.existsSync(
+    path.join(rootDir, "src", "templates", "main.tsx")
+  )
+    ? ["main"]
+    : [];
+  const builtInTemplateNames = [...PRESERVED_EDIT_REGISTRY_KEYS].filter(
+    (templateName) => {
+      return fs.existsSync(
+        path.join(rootDir, "src", "templates", `${templateName}.tsx`)
+      );
+    }
+  );
+
+  return [
+    ...new Set([
+      ...mainTemplateNames,
+      ...builtInTemplateNames,
+      ...manifestTemplateNames,
+    ]),
+  ];
 }
 
 function getTemplateConfigExportName(templateName: string): string {

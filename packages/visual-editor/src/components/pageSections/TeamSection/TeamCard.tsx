@@ -8,7 +8,7 @@ import {
   setDeep,
 } from "@puckeditor/core";
 import {
-  BackgroundStyle,
+  ThemeColor,
   backgroundColors,
 } from "../../../utils/themeConfigOptions.ts";
 import { YextField } from "../../../editor/YextField.tsx";
@@ -52,7 +52,7 @@ const defaultPerson = {
 export const defaultTeamCardSlotData = (
   id?: string,
   index?: number,
-  backgroundColor?: BackgroundStyle,
+  backgroundColor?: ThemeColor,
   sharedSlotStyles?: Record<string, any>
 ) => {
   const cardData = {
@@ -206,7 +206,7 @@ export type TeamCardProps = {
   /** Styling for all the cards. */
   styles: {
     /** The background color of each team card */
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
   };
 
   /** @internal */

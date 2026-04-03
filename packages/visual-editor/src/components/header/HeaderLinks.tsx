@@ -24,7 +24,7 @@ import {
   useHeaderLinksDisplayMode,
 } from "./ExpandedHeaderMenuContext.tsx";
 import { getHeaderViewport } from "./viewport.ts";
-import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
+import { ThemeColor } from "../../utils/themeConfigOptions.ts";
 import { BodyProps } from "../atoms/body.tsx";
 import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
 
@@ -48,7 +48,7 @@ export type HeaderLinksProps = {
     /**
      * The color of the header links
      */
-    color?: BackgroundStyle;
+    color?: ThemeColor;
 
     /**
      * The weight of the header links

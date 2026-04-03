@@ -8,7 +8,7 @@ import {
   setDeep,
 } from "@puckeditor/core";
 import {
-  BackgroundStyle,
+  ThemeColor,
   backgroundColors,
 } from "../../../utils/themeConfigOptions.ts";
 import { YextField } from "../../../editor/YextField.tsx";
@@ -39,7 +39,7 @@ const defaultTestimonial = {
 export const defaultTestimonialCardSlotData = (
   id?: string,
   index?: number,
-  backgroundColor?: BackgroundStyle,
+  backgroundColor?: ThemeColor,
   sharedSlotStyles?: Record<string, any>
 ) => {
   const cardData = {
@@ -129,7 +129,7 @@ export type TestimonialCardProps = {
   /** Styling for all the cards. */
   styles: {
     /** The background color of each testimonial card */
-    backgroundColor?: BackgroundStyle;
+    backgroundColor?: ThemeColor;
   };
 
   /** @internal */
