@@ -223,21 +223,31 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
   const recognitionRef = React.useRef<BrowserSpeechRecognition | null>(null);
   const [isListening, setIsListening] = React.useState(false);
 
-  const handleTranscript = React.useCallback((transcript: string) => {
-    if (typeof window === "undefined") return;
+  const handleTranscript = React.useCallback(
+    (transcript: string) => {
+      if (typeof window === "undefined") return;
 
-    const url = new URL(window.location.href);
-    const searchTerm = transcript.trim();
+      const searchTerm = transcript.trim();
 
-    if (searchTerm) {
-      url.searchParams.set("searchTerm", searchTerm);
-    } else {
-      url.searchParams.delete("searchTerm");
-    }
+      if (!showResults) {
+        const searchPageUrl = new URL("/search.html", window.location.origin);
+        if (searchTerm)
+          searchPageUrl.searchParams.set("searchTerm", searchTerm);
+        window.location.href = searchPageUrl.toString();
+        return;
+      }
 
-    window.history.pushState({}, "", url.toString());
-    window.dispatchEvent(new PopStateEvent("popstate"));
-  }, []);
+      const url = new URL(window.location.href);
+      if (searchTerm) {
+        url.searchParams.set("searchTerm", searchTerm);
+      } else {
+        url.searchParams.delete("searchTerm");
+      }
+      window.history.pushState({}, "", url.toString());
+      window.dispatchEvent(new PopStateEvent("popstate"));
+    },
+    [showResults]
+  );
 
   const handleVoiceSearch = React.useCallback(() => {
     if (typeof window === "undefined") return;
@@ -289,18 +299,24 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
     ({ query: nextQuery }: { query?: string; verticalKey?: string }) => {
       if (typeof window === "undefined") return;
 
-      const url = new URL(window.location.href);
+      if (!showResults) {
+        const searchPageUrl = new URL("/search.html", window.location.origin);
+        if (nextQuery?.trim())
+          searchPageUrl.searchParams.set("searchTerm", nextQuery.trim());
+        window.location.href = searchPageUrl.toString();
+        return;
+      }
 
+      const url = new URL(window.location.href);
       if (nextQuery?.trim()) {
         url.searchParams.set("searchTerm", nextQuery.trim());
       } else {
         url.searchParams.delete("searchTerm");
       }
-
       window.history.pushState({}, "", url.toString());
       window.dispatchEvent(new PopStateEvent("popstate"));
     },
-    []
+    [showResults]
   );
 
   return (
