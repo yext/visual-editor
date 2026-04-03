@@ -51,11 +51,14 @@ const baseLocationStream = {
   filter: { entityTypes: ["location"] },
   fields: [
     "id",
+    "uid",
+    "meta",
+    "slug",
     "name",
     "address",
     "hours",
-    // "dm_directoryParents.name",
-    // "dm_directoryChildren.name",
+    "mainPhone",
+    "timezone",
   ],
   localization: {
     locales: ["en"],
@@ -74,11 +77,25 @@ const config = {
         $id: "local-editor-main-stream",
       },
     },
+    directory: {
+      // stream: {
+      //   filter: { entityTypes: ["ce_city", "ce_region", "ce_state", "ce_root"] },
+      //   $id: "local-editor-directory-stream",
+      //   fields: [
+      //     "dm_directoryParents.name",
+      //     "dm_directoryParents.slug",
+      //     "dm_directoryChildren.name",
+      //     "dm_directoryChildren.address",
+      //     "dm_directoryChildren.slug",
+      //   ],
+      // },
+    },
     locator: {
-      stream: {
-        ...baseLocationStream,
-        $id: "local-editor-locator-stream",
-      },
+      // stream: {
+      //   $id: "local-editor-locator-stream",
+      //   filter: { entityTypes: ["locator"] },
+      //   fields: [],
+      // },
     },
   },
 } satisfies LocalEditorConfig;
@@ -87,6 +104,7 @@ export default config;
 ```
 
 Each template can point at its own stream. That is the key difference from the legacy single-stream setup.
+`directory` and `locator` start as commented examples in the generated scaffold, so they stay opt-in until you uncomment their `stream` block.
 
 ## Generate Snapshot Data
 

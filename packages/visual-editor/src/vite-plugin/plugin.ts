@@ -18,6 +18,8 @@ import {
   buildLocalEditorDataTemplatePath,
   buildLocalEditorDataTemplateSource,
   buildLocalEditorTemplateSource,
+  type LocalEditorDocumentResponse,
+  type LocalEditorManifestResponse,
   DEFAULT_LOCAL_EDITOR_STREAM_CONFIG_PATH,
   ensureLocalEditorStreamConfig,
   getLocalEditorDocument,
@@ -49,6 +51,17 @@ type LocalEditorOptions = {
   enabled?: boolean;
   route?: string;
   streamConfigPath?: string;
+};
+
+type JsonResponseWriter = {
+  setHeader: (name: string, value: string) => void;
+  end: (chunk?: string) => void;
+  statusCode: number;
+};
+
+type LocalEditorRequestContext = {
+  requestUrl: URL;
+  streamConfigPath: string;
 };
 
 export type VisualEditorPluginOptions = {
@@ -351,50 +364,29 @@ export const yextVisualEditorPlugin = (
             return;
           }
 
-          const requestUrl = new URL(request.url, "http://localhost");
-          const streamConfigPath = await resolveLocalEditorStreamConfigPath(
-            process.cwd(),
-            localEditorOptions?.streamConfigPath
+          const context = await buildLocalEditorRequestContext(
+            request.url,
+            localEditorOptions
           );
 
-          if (
-            requestUrl.pathname === `${LOCAL_EDITOR_API_BASE_PATH}/manifest`
-          ) {
-            response.setHeader("Content-Type", "application/json");
-            response.end(
-              JSON.stringify(
-                await getLocalEditorManifest(process.cwd(), streamConfigPath)
-              )
-            );
+          if (isLocalEditorManifestRequest(context.requestUrl)) {
+            await sendLocalEditorManifestResponse(response, context);
             return;
           }
 
-          if (
-            requestUrl.pathname === `${LOCAL_EDITOR_API_BASE_PATH}/document`
-          ) {
-            response.setHeader("Content-Type", "application/json");
-            response.end(
-              JSON.stringify(
-                await getLocalEditorDocument(
-                  process.cwd(),
-                  streamConfigPath,
-                  requestUrl.searchParams.get("templateId") ?? undefined,
-                  requestUrl.searchParams.get("entityId") ?? undefined,
-                  requestUrl.searchParams.get("locale") ?? undefined
-                )
-              )
-            );
+          if (isLocalEditorDocumentRequest(context.requestUrl)) {
+            await sendLocalEditorDocumentResponse(response, context);
             return;
           }
 
           next();
         })().catch((error) => {
-          response.statusCode = 500;
-          response.setHeader("Content-Type", "application/json");
-          response.end(
-            JSON.stringify({
+          sendJsonResponse(
+            response,
+            {
               error: error instanceof Error ? error.message : String(error),
-            })
+            },
+            500
           );
         });
       });
@@ -405,6 +397,62 @@ export const yextVisualEditorPlugin = (
       }
     },
   };
+};
+
+const buildLocalEditorRequestContext = async (
+  requestUrl: string,
+  localEditorOptions?: LocalEditorOptions
+): Promise<LocalEditorRequestContext> => {
+  return {
+    requestUrl: new URL(requestUrl, "http://localhost"),
+    streamConfigPath: await resolveLocalEditorStreamConfigPath(
+      process.cwd(),
+      localEditorOptions?.streamConfigPath
+    ),
+  };
+};
+
+const isLocalEditorManifestRequest = (requestUrl: URL): boolean => {
+  return requestUrl.pathname === `${LOCAL_EDITOR_API_BASE_PATH}/manifest`;
+};
+
+const isLocalEditorDocumentRequest = (requestUrl: URL): boolean => {
+  return requestUrl.pathname === `${LOCAL_EDITOR_API_BASE_PATH}/document`;
+};
+
+const sendLocalEditorManifestResponse = async (
+  response: JsonResponseWriter,
+  context: LocalEditorRequestContext
+): Promise<void> => {
+  const payload: LocalEditorManifestResponse = await getLocalEditorManifest(
+    process.cwd(),
+    context.streamConfigPath
+  );
+  sendJsonResponse(response, payload);
+};
+
+const sendLocalEditorDocumentResponse = async (
+  response: JsonResponseWriter,
+  context: LocalEditorRequestContext
+): Promise<void> => {
+  const payload: LocalEditorDocumentResponse = await getLocalEditorDocument(
+    process.cwd(),
+    context.streamConfigPath,
+    context.requestUrl.searchParams.get("templateId") ?? undefined,
+    context.requestUrl.searchParams.get("entityId") ?? undefined,
+    context.requestUrl.searchParams.get("locale") ?? undefined
+  );
+  sendJsonResponse(response, payload);
+};
+
+const sendJsonResponse = (
+  response: JsonResponseWriter,
+  payload: unknown,
+  statusCode = 200
+) => {
+  response.statusCode = statusCode;
+  response.setHeader("Content-Type", "application/json");
+  response.end(JSON.stringify(payload));
 };
 
 const writeFileIfChanged = (filePath: string, contents: string) => {

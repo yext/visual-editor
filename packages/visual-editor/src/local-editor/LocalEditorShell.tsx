@@ -37,6 +37,15 @@ type LocalEditorDocumentResponse = {
   diagnostics: string[];
 };
 
+type LocalEditorSelection = {
+  supportedTemplateIds: string[];
+  activeEntities: LocalEditorEntity[];
+  selectedTemplateId: string;
+  selectedTemplateDefaults?: LocalEditorTemplateDefaults;
+  selectedEntity?: LocalEditorEntity;
+  selectedLocale: string;
+};
+
 type LocalEditorShellProps = {
   apiBasePath: string;
   routePath: string;
@@ -113,136 +122,32 @@ export const LocalEditorShell = ({
     };
   }, [apiBasePath]);
 
-  const supportedTemplateIds = React.useMemo(() => {
-    const availableTemplateIds = new Set(Object.keys(componentRegistry));
-    return (manifest?.templates ?? []).filter((templateId) => {
-      return availableTemplateIds.has(templateId);
-    });
-  }, [componentRegistry, manifest?.templates]);
-
   const searchParams = React.useMemo(() => {
     return new URLSearchParams(locationSearch);
   }, [locationSearch]);
 
-  const selectedTemplateId = React.useMemo(() => {
-    if (!supportedTemplateIds.length) {
-      return "";
-    }
-
-    return (
-      pickPreferredValue(
-        supportedTemplateIds,
-        searchParams.get("templateId"),
-        manifest?.defaults.templateId
-      ) ?? ""
-    );
-  }, [manifest?.defaults.templateId, searchParams, supportedTemplateIds]);
-
-  const selectedEntity = React.useMemo(() => {
-    const availableEntities = selectedTemplateId
-      ? (manifest?.entitiesByTemplate[selectedTemplateId] ?? [])
-      : [];
-    if (!availableEntities.length) {
-      return undefined;
-    }
-
-    const templateDefaults = selectedTemplateId
-      ? manifest?.templateDefaults[selectedTemplateId]
-      : undefined;
-    return (
-      pickPreferredEntity(
-        availableEntities,
-        searchParams.get("entityId"),
-        templateDefaults?.entityId,
-        manifest?.defaults.entityId
-      ) ?? availableEntities[0]
-    );
-  }, [manifest, searchParams, selectedTemplateId]);
-
-  const selectedTemplateDefaults = React.useMemo(() => {
-    if (!selectedTemplateId) {
-      return undefined;
-    }
-
-    return manifest?.templateDefaults[selectedTemplateId];
-  }, [manifest?.templateDefaults, selectedTemplateId]);
-
-  const activeEntities = React.useMemo(() => {
-    if (!selectedTemplateId) {
-      return [];
-    }
-
-    return manifest?.entitiesByTemplate[selectedTemplateId] ?? [];
-  }, [manifest?.entitiesByTemplate, selectedTemplateId]);
-
-  const selectedLocale = React.useMemo(() => {
-    if (!selectedEntity?.locales.length) {
-      return "";
-    }
-
-    return (
-      pickPreferredValue(
-        selectedEntity.locales,
-        searchParams.get("locale"),
-        selectedTemplateDefaults?.locale,
-        manifest?.defaults.locale
-      ) ?? ""
-    );
-  }, [
-    manifest?.defaults.locale,
-    searchParams,
+  const {
+    supportedTemplateIds,
+    activeEntities,
+    selectedTemplateId,
+    selectedTemplateDefaults,
     selectedEntity,
-    selectedTemplateDefaults?.locale,
-  ]);
+    selectedLocale,
+  } = React.useMemo(() => {
+    return buildLocalEditorSelection(manifest, componentRegistry, searchParams);
+  }, [componentRegistry, manifest, searchParams]);
 
   React.useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    if (!selectedTemplateId) {
-      return;
-    }
-
-    const nextSearchParams = new URLSearchParams(window.location.search);
-    nextSearchParams.set("templateId", selectedTemplateId);
-
-    if (selectedEntity?.entityId) {
-      nextSearchParams.set("entityId", selectedEntity.entityId);
-    } else {
-      nextSearchParams.delete("entityId");
-    }
-
-    if (selectedLocale) {
-      nextSearchParams.set("locale", selectedLocale);
-    } else {
-      nextSearchParams.delete("locale");
-    }
-
-    const nextRelativePath =
-      nextSearchParams.toString().length > 0
-        ? `${window.location.pathname}?${nextSearchParams.toString()}`
-        : window.location.pathname;
-
-    if (
-      nextRelativePath !==
-      `${window.location.pathname}${window.location.search}`
-    ) {
-      window.history.replaceState({}, "", nextRelativePath);
-    }
+    syncSelectionToUrl(selectedTemplateId, selectedEntity, selectedLocale);
   }, [selectedEntity?.entityId, selectedLocale, selectedTemplateId]);
 
   const documentRequestPath = React.useMemo(() => {
-    if (!selectedTemplateId || !selectedEntity?.entityId || !selectedLocale) {
-      return null;
-    }
-
-    const documentParams = new URLSearchParams({
+    return buildLocalEditorDocumentRequestPath({
+      apiBasePath,
       templateId: selectedTemplateId,
-      entityId: selectedEntity.entityId,
+      entityId: selectedEntity?.entityId,
       locale: selectedLocale,
     });
-    return `${apiBasePath}/document?${documentParams.toString()}`;
   }, [
     apiBasePath,
     selectedEntity?.entityId,
@@ -313,21 +218,12 @@ export const LocalEditorShell = ({
   const shouldRenderEditorFrame =
     isDocumentLoading || (!!documentResponse?.document && !!selectedTemplateId);
   const editorLocalDevOptions = React.useMemo(() => {
-    if (!selectedTemplateId) {
-      return undefined;
-    }
-
-    return {
-      templateId: selectedTemplateId,
-      entityId: selectedEntity?.entityId,
-      locale: selectedLocale,
-      locales: selectedEntity?.locales ?? [],
-      layoutScopeKey: `${selectedTemplateId}:${selectedLocale}`,
-      initialLayoutData: selectedTemplateDefaults?.defaultLayoutData as
-        | Record<string, unknown>
-        | undefined,
-      showOverrideButtons: false,
-    };
+    return buildEditorLocalDevOptions({
+      selectedTemplateId,
+      selectedEntity,
+      selectedLocale,
+      selectedTemplateDefaults,
+    });
   }, [
     selectedEntity,
     selectedLocale,
@@ -472,6 +368,149 @@ const updateSearchParam = (key: string, value: string) => {
     `${window.location.pathname}?${searchParams.toString()}`
   );
   window.dispatchEvent(new PopStateEvent("popstate"));
+};
+
+const buildLocalEditorSelection = (
+  manifest: LocalEditorManifestResponse | null,
+  componentRegistry: Record<string, Config<any>>,
+  searchParams: URLSearchParams
+): LocalEditorSelection => {
+  const supportedTemplateIds = getSupportedTemplateIds(
+    manifest,
+    componentRegistry
+  );
+  const selectedTemplateId =
+    pickPreferredValue(
+      supportedTemplateIds,
+      searchParams.get("templateId"),
+      manifest?.defaults.templateId
+    ) ?? "";
+  const selectedTemplateDefaults = selectedTemplateId
+    ? manifest?.templateDefaults[selectedTemplateId]
+    : undefined;
+  const activeEntities = selectedTemplateId
+    ? (manifest?.entitiesByTemplate[selectedTemplateId] ?? [])
+    : [];
+  const selectedEntity =
+    pickPreferredEntity(
+      activeEntities,
+      searchParams.get("entityId"),
+      selectedTemplateDefaults?.entityId,
+      manifest?.defaults.entityId
+    ) ?? activeEntities[0];
+  const selectedLocale =
+    pickPreferredValue(
+      selectedEntity?.locales ?? [],
+      searchParams.get("locale"),
+      selectedTemplateDefaults?.locale,
+      manifest?.defaults.locale
+    ) ?? "";
+
+  return {
+    supportedTemplateIds,
+    activeEntities,
+    selectedTemplateId,
+    selectedTemplateDefaults,
+    selectedEntity,
+    selectedLocale,
+  };
+};
+
+const getSupportedTemplateIds = (
+  manifest: LocalEditorManifestResponse | null,
+  componentRegistry: Record<string, Config<any>>
+): string[] => {
+  const availableTemplateIds = new Set(Object.keys(componentRegistry));
+  return (manifest?.templates ?? []).filter((templateId) => {
+    return availableTemplateIds.has(templateId);
+  });
+};
+
+const syncSelectionToUrl = (
+  selectedTemplateId: string,
+  selectedEntity: LocalEditorEntity | undefined,
+  selectedLocale: string
+) => {
+  if (typeof window === "undefined" || !selectedTemplateId) {
+    return;
+  }
+
+  const nextSearchParams = new URLSearchParams(window.location.search);
+  nextSearchParams.set("templateId", selectedTemplateId);
+
+  if (selectedEntity?.entityId) {
+    nextSearchParams.set("entityId", selectedEntity.entityId);
+  } else {
+    nextSearchParams.delete("entityId");
+  }
+
+  if (selectedLocale) {
+    nextSearchParams.set("locale", selectedLocale);
+  } else {
+    nextSearchParams.delete("locale");
+  }
+
+  const nextRelativePath =
+    nextSearchParams.toString().length > 0
+      ? `${window.location.pathname}?${nextSearchParams.toString()}`
+      : window.location.pathname;
+
+  if (
+    nextRelativePath !== `${window.location.pathname}${window.location.search}`
+  ) {
+    window.history.replaceState({}, "", nextRelativePath);
+  }
+};
+
+const buildLocalEditorDocumentRequestPath = ({
+  apiBasePath,
+  templateId,
+  entityId,
+  locale,
+}: {
+  apiBasePath: string;
+  templateId: string;
+  entityId?: string;
+  locale: string;
+}): string | null => {
+  if (!templateId || !entityId || !locale) {
+    return null;
+  }
+
+  const documentParams = new URLSearchParams({
+    templateId,
+    entityId,
+    locale,
+  });
+  return `${apiBasePath}/document?${documentParams.toString()}`;
+};
+
+const buildEditorLocalDevOptions = ({
+  selectedTemplateId,
+  selectedEntity,
+  selectedLocale,
+  selectedTemplateDefaults,
+}: {
+  selectedTemplateId: string;
+  selectedEntity?: LocalEditorEntity;
+  selectedLocale: string;
+  selectedTemplateDefaults?: LocalEditorTemplateDefaults;
+}) => {
+  if (!selectedTemplateId) {
+    return undefined;
+  }
+
+  return {
+    templateId: selectedTemplateId,
+    entityId: selectedEntity?.entityId,
+    locale: selectedLocale,
+    locales: selectedEntity?.locales ?? [],
+    layoutScopeKey: `${selectedTemplateId}:${selectedLocale}`,
+    initialLayoutData: selectedTemplateDefaults?.defaultLayoutData as
+      | Record<string, unknown>
+      | undefined,
+    showOverrideButtons: false,
+  };
 };
 
 const pickPreferredValue = (

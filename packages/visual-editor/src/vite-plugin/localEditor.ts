@@ -3,6 +3,7 @@ import { pathToFileURL } from "node:url";
 import fs from "fs-extra";
 import { tsImport } from "tsx/esm/api";
 import { YextSchemaField } from "../types/entityFields.ts";
+import { buildLocalEditorScaffoldSource } from "./localEditorScaffold.ts";
 
 export const DEFAULT_LOCAL_EDITOR_ROUTE = "/local-editor";
 export const DEFAULT_LOCAL_EDITOR_STREAM_CONFIG_PATH = "stream.config.ts";
@@ -539,62 +540,128 @@ const buildResolvedTemplateConfigs = (
   templateManifestEntries: TemplateManifestEntry[],
   streamConfig: SupportedLocalEditorConfig
 ): ResolvedLocalEditorConfig => {
-  const manifestTemplates = templateManifestEntries.map((templateEntry) => {
-    return templateEntry.name;
-  });
-  const templateEntryMap = new Map(
-    templateManifestEntries.map((templateEntry) => {
-      return [templateEntry.name, templateEntry];
-    })
-  );
-
   if (
     isTemplateAwareLocalEditorConfig(streamConfig) &&
     streamConfig.templates
   ) {
-    const orderedTemplateIds = [
-      ...manifestTemplates.filter((templateId) => {
-        return !!streamConfig.templates?.[templateId];
-      }),
-      ...Object.keys(streamConfig.templates).filter((templateId) => {
-        return !manifestTemplates.includes(templateId);
-      }),
-    ];
-
-    const activeTemplateConfigs = orderedTemplateIds.flatMap((templateId) => {
-      const templateConfig = streamConfig.templates?.[templateId] ?? {};
-      if (!templateConfig.stream) {
-        return [];
-      }
-
-      return [
-        {
-          templateId,
-          dataTemplateName: buildLocalEditorDataTemplateName(templateId),
-          defaults: {
-            entityId: templateConfig.defaults?.entityId,
-            locale:
-              templateConfig.defaults?.locale ?? streamConfig.defaults?.locale,
-          },
-          stream: templateConfig.stream,
-          defaultLayoutData: normalizeDefaultLayoutData(
-            templateEntryMap.get(templateId)?.defaultLayoutData
-          ),
-        },
-      ];
-    });
-
-    return {
-      defaults: {
-        templateId: streamConfig.defaults?.templateId,
-        entityId: streamConfig.defaults?.entityId,
-        locale: streamConfig.defaults?.locale,
-      },
-      templates: activeTemplateConfigs,
-    };
+    return buildTemplateAwareResolvedConfig(
+      templateManifestEntries,
+      streamConfig
+    );
   }
 
-  const legacyStreamConfig = streamConfig as LegacyLocalEditorConfig;
+  return buildLegacyResolvedConfig(
+    templateManifestEntries,
+    streamConfig as LegacyLocalEditorConfig
+  );
+};
+
+const loadLocalEditorConfig = async (
+  absoluteStreamConfigPath: string
+): Promise<SupportedLocalEditorConfig> => {
+  const extension = path.extname(absoluteStreamConfigPath);
+  if (extension === ".json") {
+    return loadJsonLocalEditorConfig(absoluteStreamConfigPath);
+  }
+
+  return loadTypeScriptLocalEditorConfig(absoluteStreamConfigPath);
+};
+
+const loadJsonLocalEditorConfig = (
+  absoluteStreamConfigPath: string
+): SupportedLocalEditorConfig => {
+  return readJsonFile<SupportedLocalEditorConfig>(
+    absoluteStreamConfigPath,
+    "local editor stream config"
+  );
+};
+
+const loadTypeScriptLocalEditorConfig = async (
+  absoluteStreamConfigPath: string
+): Promise<SupportedLocalEditorConfig> => {
+  const cacheBypassPath = buildLocalEditorConfigCacheBypassPath(
+    absoluteStreamConfigPath
+  );
+  fs.copyFileSync(absoluteStreamConfigPath, cacheBypassPath);
+
+  try {
+    const importedModule = await tsImport(
+      pathToFileURL(cacheBypassPath).href,
+      import.meta.url
+    );
+    return validateLoadedLocalEditorConfig(
+      absoluteStreamConfigPath,
+      unwrapDefaultExport(importedModule)
+    );
+  } finally {
+    fs.removeSync(cacheBypassPath);
+  }
+};
+
+const validateLoadedLocalEditorConfig = (
+  absoluteStreamConfigPath: string,
+  loadedConfig: unknown
+): SupportedLocalEditorConfig => {
+  if (!loadedConfig || typeof loadedConfig !== "object") {
+    throw new Error(
+      `Failed to parse local editor stream config at ${path.relative(process.cwd(), absoluteStreamConfigPath)}: expected a default-exported object`
+    );
+  }
+
+  return loadedConfig as SupportedLocalEditorConfig;
+};
+
+const buildTemplateAwareResolvedConfig = (
+  templateManifestEntries: TemplateManifestEntry[],
+  streamConfig: LocalEditorConfig
+): ResolvedLocalEditorConfig => {
+  const manifestTemplates = getManifestTemplateIds(templateManifestEntries);
+  const templateEntryMap = createTemplateEntryMap(templateManifestEntries);
+  const orderedTemplateIds = [
+    ...manifestTemplates.filter((templateId) => {
+      return !!streamConfig.templates?.[templateId];
+    }),
+    ...Object.keys(streamConfig.templates ?? {}).filter((templateId) => {
+      return !manifestTemplates.includes(templateId);
+    }),
+  ];
+
+  const activeTemplateConfigs = orderedTemplateIds.flatMap((templateId) => {
+    const templateConfig = streamConfig.templates?.[templateId] ?? {};
+    if (!templateConfig.stream) {
+      return [];
+    }
+
+    return [
+      buildResolvedTemplateConfig({
+        templateId,
+        defaults: {
+          entityId: templateConfig.defaults?.entityId,
+          locale:
+            templateConfig.defaults?.locale ?? streamConfig.defaults?.locale,
+        },
+        stream: templateConfig.stream,
+        templateEntryMap,
+      }),
+    ];
+  });
+
+  return {
+    defaults: {
+      templateId: streamConfig.defaults?.templateId,
+      entityId: streamConfig.defaults?.entityId,
+      locale: streamConfig.defaults?.locale,
+    },
+    templates: activeTemplateConfigs,
+  };
+};
+
+const buildLegacyResolvedConfig = (
+  templateManifestEntries: TemplateManifestEntry[],
+  legacyStreamConfig: LegacyLocalEditorConfig
+): ResolvedLocalEditorConfig => {
+  const manifestTemplates = getManifestTemplateIds(templateManifestEntries);
+  const templateEntryMap = createTemplateEntryMap(templateManifestEntries);
   const legacyTemplateIds = (
     legacyStreamConfig.templateIds?.length
       ? legacyStreamConfig.templateIds
@@ -610,47 +677,57 @@ const buildResolvedTemplateConfigs = (
       locale: legacyStreamConfig.defaults?.locale,
     },
     templates: legacyTemplateIds.map((templateId) => {
-      return {
+      return buildResolvedTemplateConfig({
         templateId,
-        dataTemplateName: buildLocalEditorDataTemplateName(templateId),
         defaults: {
           entityId: legacyStreamConfig.defaults?.entityId,
           locale: legacyStreamConfig.defaults?.locale,
         },
         stream: legacyStreamConfig.stream,
-        defaultLayoutData: normalizeDefaultLayoutData(
-          templateEntryMap.get(templateId)?.defaultLayoutData
-        ),
-      };
+        templateEntryMap,
+      });
     }),
   };
 };
 
-const loadLocalEditorConfig = async (
-  absoluteStreamConfigPath: string
-): Promise<SupportedLocalEditorConfig> => {
-  const extension = path.extname(absoluteStreamConfigPath);
-  if (extension === ".json") {
-    return readJsonFile<SupportedLocalEditorConfig>(
-      absoluteStreamConfigPath,
-      "local editor stream config"
-    );
-  }
+const buildResolvedTemplateConfig = ({
+  templateId,
+  defaults,
+  stream,
+  templateEntryMap,
+}: {
+  templateId: string;
+  defaults: Omit<LocalEditorDefaults, "templateId">;
+  stream?: LocalEditorStreamDefinition;
+  templateEntryMap: Map<string, TemplateManifestEntry>;
+}): ResolvedLocalEditorTemplateConfig => {
+  return {
+    templateId,
+    dataTemplateName: buildLocalEditorDataTemplateName(templateId),
+    defaults,
+    stream,
+    defaultLayoutData: normalizeDefaultLayoutData(
+      templateEntryMap.get(templateId)?.defaultLayoutData
+    ),
+  };
+};
 
-  const importedModule = await tsImport(
-    pathToFileURL(absoluteStreamConfigPath).href,
-    import.meta.url
+const getManifestTemplateIds = (
+  templateManifestEntries: TemplateManifestEntry[]
+): string[] => {
+  return templateManifestEntries.map((templateEntry) => {
+    return templateEntry.name;
+  });
+};
+
+const createTemplateEntryMap = (
+  templateManifestEntries: TemplateManifestEntry[]
+): Map<string, TemplateManifestEntry> => {
+  return new Map(
+    templateManifestEntries.map((templateEntry) => {
+      return [templateEntry.name, templateEntry];
+    })
   );
-  const loadedConfig = unwrapDefaultExport(
-    importedModule
-  ) as SupportedLocalEditorConfig;
-  if (!loadedConfig || typeof loadedConfig !== "object") {
-    throw new Error(
-      `Failed to parse local editor stream config at ${path.relative(process.cwd(), absoluteStreamConfigPath)}: expected a default-exported object`
-    );
-  }
-
-  return loadedConfig;
 };
 
 const readTemplateManifestEntries = (
@@ -801,91 +878,6 @@ const buildEntityOptionsForTemplate = (
   return Array.from(entityMap.values()).sort((left, right) => {
     return left.displayName.localeCompare(right.displayName);
   });
-};
-
-const buildLocalEditorScaffoldSource = (rootDir: string): string => {
-  const templateManifestEntries = readTemplateManifestEntries(rootDir, []);
-  const discoveredTemplateIds = (
-    templateManifestEntries.length
-      ? templateManifestEntries.map((templateEntry) => templateEntry.name)
-      : ["directory", "locator"]
-  ).filter((templateId, index, values) => {
-    return values.indexOf(templateId) === index;
-  });
-  const templateIds = [
-    ...["directory", "locator"].filter((templateId) => {
-      return discoveredTemplateIds.includes(templateId);
-    }),
-    ...discoveredTemplateIds.filter((templateId) => {
-      return !["directory", "locator"].includes(templateId);
-    }),
-  ];
-  const defaultTemplateId = templateIds.includes("directory")
-    ? "directory"
-    : (templateIds[0] ?? "directory");
-
-  const templateBlocks = templateIds
-    .map((templateId) => {
-      if (templateId === "directory" || templateId === "locator") {
-        return [
-          `    ${JSON.stringify(templateId)}: {`,
-          "      // stream: {",
-          `      //   $id: "local-editor-${templateId.replace(/[^a-zA-Z0-9]+/g, "-").toLowerCase()}-stream",`,
-          "      // },",
-          "    },",
-        ].join("\n");
-      }
-
-      return [
-        `    ${JSON.stringify(templateId)}: {`,
-        "      stream: {",
-        `        ...baseLocationStream,`,
-        `        $id: "local-editor-${templateId.replace(/[^a-zA-Z0-9]+/g, "-").toLowerCase()}-stream",`,
-        "      },",
-        "    },",
-      ].join("\n");
-    })
-    .join("\n");
-
-  return `${[
-    'import type { LocalEditorConfig } from "@yext/visual-editor/plugin";',
-    "",
-    "const baseLocationStream = {",
-    '  filter: { entityTypes: ["location"] },',
-    "  fields: [",
-    '    "id",',
-    '    "uid",',
-    '    "meta",',
-    '    "slug",',
-    '    "name",',
-    '    "address",',
-    '    "hours",',
-    '    "mainPhone",',
-    '    "timezone",',
-    '    // "dm_directoryParents.name",',
-    '    // "dm_directoryParents.slug",',
-    '    // "dm_directoryChildren.name",',
-    '    // "dm_directoryChildren.address",',
-    '    // "dm_directoryChildren.slug",',
-    "  ],",
-    "  localization: {",
-    '    locales: ["en"],',
-    "  },",
-    "};",
-    "",
-    "const config = {",
-    "  defaults: {",
-    `    templateId: ${JSON.stringify(defaultTemplateId)},`,
-    '    locale: "en",',
-    "  },",
-    "  templates: {",
-    templateBlocks,
-    "  },",
-    "} satisfies LocalEditorConfig;",
-    "",
-    "export default config;",
-    "",
-  ].join("\n")}`;
 };
 
 type MutableFieldNode = {
@@ -1104,16 +1096,38 @@ const isTemplateAwareLocalEditorConfig = (
 const unwrapDefaultExport = (value: unknown): unknown => {
   let currentValue = value;
 
-  while (
-    currentValue &&
-    typeof currentValue === "object" &&
-    "default" in currentValue &&
-    Object.keys(currentValue).length === 1
-  ) {
+  while (isModuleWrapper(currentValue)) {
     currentValue = (currentValue as { default: unknown }).default;
   }
 
   return currentValue;
+};
+
+const isModuleWrapper = (
+  value: unknown
+): value is { default: unknown; __esModule?: boolean } => {
+  if (!value || typeof value !== "object" || !("default" in value)) {
+    return false;
+  }
+
+  return Object.keys(value).every((key) => {
+    return key === "default" || key === "__esModule";
+  });
+};
+
+const buildLocalEditorConfigCacheBypassPath = (
+  absoluteStreamConfigPath: string
+): string => {
+  const extension = path.extname(absoluteStreamConfigPath);
+  const baseName = path.basename(absoluteStreamConfigPath, extension);
+  const cacheBypassSuffix = `${Date.now()}-${Math.random()
+    .toString(36)
+    .slice(2, 10)}`;
+
+  return path.join(
+    path.dirname(absoluteStreamConfigPath),
+    `.${baseName}.local-editor.${cacheBypassSuffix}${extension}`
+  );
 };
 
 const normalizeDefaultLayoutData = (defaultLayoutData: unknown): unknown => {

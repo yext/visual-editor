@@ -247,9 +247,68 @@ describe.sequential("localEditor plugin support", () => {
     expect(scaffoldSource).toContain(
       '//   $id: "local-editor-directory-stream",'
     );
+    expect(scaffoldSource).toContain('//     "dm_directoryParents.name",');
+    expect(scaffoldSource).toContain('//     "dm_directoryChildren.slug",');
     expect(scaffoldSource).toContain('"locator": {');
     expect(scaffoldSource).toContain(
       '//   $id: "local-editor-locator-stream",'
+    );
+  });
+
+  it("scaffolds non-special templates as active streams", async () => {
+    const rootDir = createPluginFixture();
+    fs.writeFileSync(
+      path.join(rootDir, ".template-manifest.json"),
+      JSON.stringify(
+        {
+          templates: [
+            {
+              name: "directory",
+              description: "Directory",
+              exampleSiteUrl: "",
+              layoutRequired: true,
+            },
+            {
+              name: "locator",
+              description: "Locator",
+              exampleSiteUrl: "",
+              layoutRequired: true,
+            },
+            {
+              name: "main",
+              description: "Main",
+              exampleSiteUrl: "",
+              layoutRequired: true,
+            },
+          ],
+        },
+        null,
+        2
+      )
+    );
+
+    process.chdir(rootDir);
+
+    const plugin = yextVisualEditorPlugin({
+      localEditor: {
+        enabled: true,
+      },
+    });
+
+    invokeConfigHook(plugin, { command: "serve", mode: "development" });
+    await invokeBuildStartHook(plugin);
+
+    const scaffoldSource = fs.readFileSync(
+      path.join(rootDir, DEFAULT_LOCAL_EDITOR_STREAM_CONFIG_PATH),
+      "utf8"
+    );
+    expect(scaffoldSource).toContain(
+      [
+        '    "main": {',
+        "      stream: {",
+        "        ...baseLocationStream,",
+        '        $id: "local-editor-main-stream",',
+      ].join("\n")
     );
   });
 
@@ -512,6 +571,39 @@ describe("localEditor data helpers", () => {
         expect.stringContaining("missing.json"),
       ])
     );
+  });
+
+  it("reloads stream.config.ts changes without restarting the dev server", async () => {
+    const rootDir = createLocalDataFixture();
+    const streamConfigPath = path.join(
+      rootDir,
+      DEFAULT_LOCAL_EDITOR_STREAM_CONFIG_PATH
+    );
+
+    const initialManifest = await getLocalEditorManifest(rootDir);
+    expect(initialManifest.templates).toEqual(["main", "locator"]);
+
+    fs.writeFileSync(
+      streamConfigPath,
+      [
+        "export default {",
+        "  defaults: {",
+        '    templateId: "locator",',
+        '    locale: "en",',
+        "  },",
+        "  templates: {",
+        '    locator: { stream: { $id: "locator-stream", fields: ["name"] } },',
+        "  },",
+        "};",
+        "",
+      ].join("\n")
+    );
+    const updatedTimestamp = new Date(Date.now() + 1000);
+    fs.utimesSync(streamConfigPath, updatedTimestamp, updatedTimestamp);
+
+    const updatedManifest = await getLocalEditorManifest(rootDir);
+    expect(updatedManifest.templates).toEqual(["locator"]);
+    expect(updatedManifest.defaults.templateId).toBe("locator");
   });
 
   it("infers nested field structures from snapshot data", () => {
