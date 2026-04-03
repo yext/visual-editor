@@ -43,6 +43,42 @@ afterEach(() => {
 });
 
 describe.sequential("generateRegistryTemplateFiles", () => {
+  it("restores fallback main for an otherwise-empty starter", () => {
+    const rootDir = createStarterFixture();
+
+    runGenerator(rootDir);
+
+    expect(
+      fs.existsSync(path.join(rootDir, "src", "templates", "main.tsx"))
+    ).toBe(true);
+
+    const generatedTemplate = fs.readFileSync(
+      path.join(rootDir, "src", "templates", "main.tsx"),
+      "utf8"
+    );
+    expect(generatedTemplate).toContain('from "@yext/visual-editor";');
+    expect(generatedTemplate).toContain("mainConfig");
+    expect(generatedTemplate).toContain(
+      "const Main: Template<TemplateRenderProps>"
+    );
+    expect(generatedTemplate).toContain("config={mainConfig}");
+
+    const updatedEditTemplate = fs.readFileSync(
+      path.join(rootDir, "src", "templates", "edit.tsx"),
+      "utf8"
+    );
+    expect(updatedEditTemplate).toContain("mainConfig,");
+    expect(updatedEditTemplate).toContain('"main": mainConfig');
+
+    const manifest = readManifest(rootDir);
+    expect(manifest.templates).toEqual([
+      expect.objectContaining({
+        name: "main",
+        defaultLayoutData: DEFAULT_LAYOUT,
+      }),
+    ]);
+  });
+
   it("generates registry config, template, manifest fallback, and edit wiring", () => {
     const rootDir = createStarterFixture();
     writeRegistryComponent(
@@ -119,7 +155,7 @@ describe.sequential("generateRegistryTemplateFiles", () => {
     ).toBe(true);
   });
 
-  it("prunes stale generated outputs but preserves built-in templates", () => {
+  it("falls back to package main after explicit registry main is removed", () => {
     const rootDir = createStarterFixture();
     const componentPath = writeRegistryComponent(
       rootDir,
@@ -135,7 +171,7 @@ describe.sequential("generateRegistryTemplateFiles", () => {
 
     expect(
       fs.existsSync(path.join(rootDir, "src", "templates", "main.tsx"))
-    ).toBe(false);
+    ).toBe(true);
     expect(
       fs.existsSync(path.join(rootDir, "src", "registry", "main", "config.tsx"))
     ).toBe(false);
@@ -153,14 +189,19 @@ describe.sequential("generateRegistryTemplateFiles", () => {
       path.join(rootDir, "src", "templates", "edit.tsx"),
       "utf8"
     );
-    expect(updatedEditTemplate).not.toContain("mainConfig");
-    expect(updatedEditTemplate).not.toContain('"main"');
+    expect(updatedEditTemplate).toContain("mainConfig,");
+    expect(updatedEditTemplate).toContain('"main": mainConfig');
 
     const manifest = readManifest(rootDir);
-    expect(manifest.templates).toEqual([]);
+    expect(manifest.templates).toEqual([
+      expect.objectContaining({
+        name: "main",
+        defaultLayoutData: DEFAULT_LAYOUT,
+      }),
+    ]);
   });
 
-  it("wires a single custom template into the edit component registry", () => {
+  it("suppresses fallback main when a custom template exists", () => {
     const rootDir = createStarterFixture();
     writeRegistryComponent(
       rootDir,
@@ -175,13 +216,25 @@ describe.sequential("generateRegistryTemplateFiles", () => {
       path.join(rootDir, "src", "templates", "edit.tsx"),
       "utf8"
     );
+    expect(
+      fs.existsSync(path.join(rootDir, "src", "templates", "main.tsx"))
+    ).toBe(false);
     expect(updatedEditTemplate).toContain(
       'import { DemoShopConfig as demoShopConfig } from "../registry/demo-shop/config";'
     );
     expect(updatedEditTemplate).toContain('"demo-shop": demoShopConfig');
+    expect(updatedEditTemplate).not.toContain('"main": mainConfig');
+
+    const manifest = readManifest(rootDir);
+    expect(manifest.templates).toEqual([
+      expect.objectContaining({
+        name: "demo-shop",
+        defaultLayoutData: DEFAULT_LAYOUT,
+      }),
+    ]);
   });
 
-  it("still wires local custom templates when a hand-authored main template exists on disk", () => {
+  it("keeps explicit hand-authored main when custom templates exist", () => {
     const rootDir = createStarterFixture();
     fs.writeFileSync(
       path.join(rootDir, "src", "templates", "main.tsx"),
@@ -200,6 +253,8 @@ describe.sequential("generateRegistryTemplateFiles", () => {
       path.join(rootDir, "src", "templates", "edit.tsx"),
       "utf8"
     );
+    expect(updatedEditTemplate).toContain("mainConfig,");
+    expect(updatedEditTemplate).toContain('"main": mainConfig');
     expect(updatedEditTemplate).toContain(
       'import { DemoShopConfig as demoShopConfig } from "../registry/demo-shop/config";'
     );

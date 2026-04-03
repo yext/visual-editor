@@ -16,7 +16,7 @@ import {
   getCustomEditorTemplateIds,
   getLocalTemplateIdFromEditorPath,
   getSingleCustomTemplateId,
-} from "../../vite-plugin/editorRoute.ts";
+} from "../../vite-plugin/editorDevMode.ts";
 
 const devLogger = new DevLogger();
 
