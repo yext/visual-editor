@@ -1,16 +1,16 @@
 import {
-  EDIT_ENTRY_MODE_PLACEHOLDER,
-  EDIT_ENTRY_TEMPLATE_IDS_BASE64_PLACEHOLDER,
-  EDIT_COMPAT_TARGET_PATH_PLACEHOLDER,
+  EDIT_DEV_ENTRY_MODE_PLACEHOLDER,
+  EDIT_DEV_ENTRY_TEMPLATE_IDS_BASE64_PLACEHOLDER,
+  EDIT_DEV_ENTRY_TARGET_PATH_PLACEHOLDER,
   EDIT_PATH_PLACEHOLDER,
   EDIT_TEMPLATE_NAME_PLACEHOLDER,
-  getEditorCompatTemplateInfoFromTemplateNames,
+  getEditorDevEntryTemplateInfoFromTemplateNames,
   getEditorTemplateInfosFromTemplateNames,
   getLocalTemplateIdFromEditorPath,
   getEditorTemplateInfoFromTemplateNames,
   getEditorTemplateFilePath,
   isManagedEditorTemplateFileName,
-  injectEditorCompatTemplateInfo,
+  injectEditorDevEntryTemplateInfo,
   injectEditorTemplateInfo,
 } from "./editorRoute.ts";
 
@@ -178,16 +178,16 @@ const editTemplateName = "edit";`,
   });
 });
 
-describe("getEditorCompatTemplateInfoFromTemplateNames", () => {
-  it("does not create a compatibility route when the real route is edit", () => {
+describe("getEditorDevEntryTemplateInfoFromTemplateNames", () => {
+  it("does not create a dev entry page when the real route is edit", () => {
     expect(
-      getEditorCompatTemplateInfoFromTemplateNames(["main", "directory"])
+      getEditorDevEntryTemplateInfoFromTemplateNames(["main", "directory"])
     ).toBeNull();
   });
 
-  it("creates a compatibility route for a single custom template", () => {
+  it("creates an entry page for a single custom template", () => {
     expect(
-      getEditorCompatTemplateInfoFromTemplateNames(["dunkin", "directory"])
+      getEditorDevEntryTemplateInfoFromTemplateNames(["dunkin", "directory"])
     ).toEqual({
       path: "edit",
       configName: "edit",
@@ -199,7 +199,7 @@ describe("getEditorCompatTemplateInfoFromTemplateNames", () => {
 
   it("creates a chooser entry page for multiple custom templates", () => {
     expect(
-      getEditorCompatTemplateInfoFromTemplateNames([
+      getEditorDevEntryTemplateInfoFromTemplateNames([
         "dunkin",
         "baskin",
         "directory",
@@ -213,12 +213,12 @@ describe("getEditorCompatTemplateInfoFromTemplateNames", () => {
   });
 });
 
-describe("injectEditorCompatTemplateInfo", () => {
+describe("injectEditorDevEntryTemplateInfo", () => {
   it("replaces the entry page placeholders", () => {
-    const injected = injectEditorCompatTemplateInfo(
-      `const entryMode = "${EDIT_ENTRY_MODE_PLACEHOLDER}";
-const redirectPath = "${EDIT_COMPAT_TARGET_PATH_PLACEHOLDER}";
-const templateIds = "${EDIT_ENTRY_TEMPLATE_IDS_BASE64_PLACEHOLDER}";`,
+    const injected = injectEditorDevEntryTemplateInfo(
+      `const entryMode = "${EDIT_DEV_ENTRY_MODE_PLACEHOLDER}";
+const redirectPath = "${EDIT_DEV_ENTRY_TARGET_PATH_PLACEHOLDER}";
+const templateIds = "${EDIT_DEV_ENTRY_TEMPLATE_IDS_BASE64_PLACEHOLDER}";`,
       {
         path: "edit",
         configName: "edit",
@@ -229,13 +229,15 @@ const templateIds = "${EDIT_ENTRY_TEMPLATE_IDS_BASE64_PLACEHOLDER}";`,
     );
     expect(injected).toContain('const entryMode = "redirect";');
     expect(injected).toContain('const redirectPath = "edit/dunkin";');
-    expect(injected).not.toContain(EDIT_ENTRY_TEMPLATE_IDS_BASE64_PLACEHOLDER);
+    expect(injected).not.toContain(
+      EDIT_DEV_ENTRY_TEMPLATE_IDS_BASE64_PLACEHOLDER
+    );
   });
 
   it("throws when an entry page placeholder is missing", () => {
     expect(() =>
-      injectEditorCompatTemplateInfo(
-        `const redirectPath = "${EDIT_COMPAT_TARGET_PATH_PLACEHOLDER}";`,
+      injectEditorDevEntryTemplateInfo(
+        `const redirectPath = "${EDIT_DEV_ENTRY_TARGET_PATH_PLACEHOLDER}";`,
         {
           path: "edit",
           configName: "edit",
@@ -245,7 +247,7 @@ const templateIds = "${EDIT_ENTRY_TEMPLATE_IDS_BASE64_PLACEHOLDER}";`,
         }
       )
     ).toThrow(
-      "Unable to inject edit entry template info: placeholder not found"
+      "Unable to inject edit dev entry template info: placeholder not found"
     );
   });
 });

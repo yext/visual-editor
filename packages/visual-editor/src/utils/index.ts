@@ -45,4 +45,5 @@ export {
   getFontWeightOverrideOptions,
   type FontRegistry,
 } from "./fonts/visualEditorFonts.ts";
+export { msg, pt, usePlatformTranslation } from "./i18n/platform.ts";
 export { withPropOverrides } from "./withPropOverrides.ts";

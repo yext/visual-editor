@@ -4,11 +4,12 @@ const SHARED_EDITOR_TEMPLATE_NAMES = new Set(["directory", "locator"]);
 export const EDIT_PATH_PLACEHOLDER = "__YEXT_VISUAL_EDITOR_PATH__";
 export const EDIT_TEMPLATE_NAME_PLACEHOLDER =
   "__YEXT_VISUAL_EDITOR_TEMPLATE_NAME__";
-export const EDIT_ENTRY_MODE_PLACEHOLDER = "__YEXT_VISUAL_EDITOR_ENTRY_MODE__";
-export const EDIT_COMPAT_TARGET_PATH_PLACEHOLDER =
-  "__YEXT_VISUAL_EDITOR_COMPAT_TARGET_PATH__";
-export const EDIT_ENTRY_TEMPLATE_IDS_BASE64_PLACEHOLDER =
-  "__YEXT_VISUAL_EDITOR_ENTRY_TEMPLATE_IDS_BASE64__";
+export const EDIT_DEV_ENTRY_MODE_PLACEHOLDER =
+  "__YEXT_VISUAL_EDITOR_DEV_ENTRY_MODE__";
+export const EDIT_DEV_ENTRY_TARGET_PATH_PLACEHOLDER =
+  "__YEXT_VISUAL_EDITOR_DEV_ENTRY_TARGET_PATH__";
+export const EDIT_DEV_ENTRY_TEMPLATE_IDS_BASE64_PLACEHOLDER =
+  "__YEXT_VISUAL_EDITOR_DEV_ENTRY_TEMPLATE_IDS_BASE64__";
 
 export type EditorTemplateInfo = {
   path: string;
@@ -16,7 +17,7 @@ export type EditorTemplateInfo = {
   templateId?: string;
 };
 
-type EditorCompatTemplateInfo = {
+export type EditorDevEntryTemplateInfo = {
   path: string;
   configName: string;
   entryMode: "redirect" | "chooser";
@@ -40,6 +41,13 @@ const getCustomTemplateNames = (templateNames: string[]): string[] => {
     .sort((left, right) => left.localeCompare(right));
 };
 
+/**
+ * Returns the editor pages that should exist for the current starter repo.
+ *
+ * When `main` exists, the editor keeps the legacy `/edit` route. When `main`
+ * is absent, each custom template gets its own real editor page at
+ * `/edit/{templateId}`.
+ */
 export const getEditorTemplateInfosFromTemplateNames = (
   templateNames: string[]
 ): EditorTemplateInfo[] => {
@@ -74,6 +82,10 @@ export const getEditorTemplateInfosFromTemplateNames = (
   }));
 };
 
+/**
+ * Preserves the older single-route helper for callers that expect exactly one
+ * real editor page. This is mainly useful for tests and legacy call sites.
+ */
 export const getEditorTemplateInfoFromTemplateNames = (
   templateNames: string[]
 ): EditorTemplateInfo => {
@@ -90,6 +102,10 @@ export const getEditorTemplateInfoFromTemplateNames = (
   );
 };
 
+/**
+ * Injects the resolved editor path and config name into the generated editor
+ * template source.
+ */
 export const injectEditorTemplateInfo = (
   templateContent: string,
   editorTemplateInfo: EditorTemplateInfo
@@ -109,9 +125,16 @@ export const injectEditorTemplateInfo = (
     .replaceAll(EDIT_TEMPLATE_NAME_PLACEHOLDER, editorTemplateInfo.configName);
 };
 
-export const getEditorCompatTemplateInfoFromTemplateNames = (
+/**
+ * Returns the dev-only `/edit` entry-page behavior for repos that do not have
+ * a local `main` template.
+ *
+ * The entry page either redirects to the only custom editor page or renders a
+ * chooser when multiple custom templates are available.
+ */
+export const getEditorDevEntryTemplateInfoFromTemplateNames = (
   templateNames: string[]
-): EditorCompatTemplateInfo | null => {
+): EditorDevEntryTemplateInfo | null => {
   const normalizedTemplateNames = getNormalizedTemplateNames(templateNames);
   const hasLegacyTemplate = normalizedTemplateNames.some((templateName) =>
     LEGACY_EDITOR_TEMPLATE_NAMES.has(templateName)
@@ -143,30 +166,36 @@ export const getEditorCompatTemplateInfoFromTemplateNames = (
   };
 };
 
-export const injectEditorCompatTemplateInfo = (
+/**
+ * Injects the dev entry-page behavior into the generated `/edit` entry page.
+ */
+export const injectEditorDevEntryTemplateInfo = (
   templateContent: string,
-  editorCompatTemplateInfo: EditorCompatTemplateInfo
+  editorDevEntryTemplateInfo: EditorDevEntryTemplateInfo
 ): string => {
   if (
-    !templateContent.includes(EDIT_COMPAT_TARGET_PATH_PLACEHOLDER) ||
-    !templateContent.includes(EDIT_ENTRY_MODE_PLACEHOLDER) ||
-    !templateContent.includes(EDIT_ENTRY_TEMPLATE_IDS_BASE64_PLACEHOLDER)
+    !templateContent.includes(EDIT_DEV_ENTRY_TARGET_PATH_PLACEHOLDER) ||
+    !templateContent.includes(EDIT_DEV_ENTRY_MODE_PLACEHOLDER) ||
+    !templateContent.includes(EDIT_DEV_ENTRY_TEMPLATE_IDS_BASE64_PLACEHOLDER)
   ) {
     throw new Error(
-      "Unable to inject edit entry template info: placeholder not found"
+      "Unable to inject edit dev entry template info: placeholder not found"
     );
   }
 
   return templateContent
     .replaceAll(
-      EDIT_COMPAT_TARGET_PATH_PLACEHOLDER,
-      editorCompatTemplateInfo.redirectTargetPath ?? ""
+      EDIT_DEV_ENTRY_TARGET_PATH_PLACEHOLDER,
+      editorDevEntryTemplateInfo.redirectTargetPath ?? ""
     )
-    .replaceAll(EDIT_ENTRY_MODE_PLACEHOLDER, editorCompatTemplateInfo.entryMode)
     .replaceAll(
-      EDIT_ENTRY_TEMPLATE_IDS_BASE64_PLACEHOLDER,
+      EDIT_DEV_ENTRY_MODE_PLACEHOLDER,
+      editorDevEntryTemplateInfo.entryMode
+    )
+    .replaceAll(
+      EDIT_DEV_ENTRY_TEMPLATE_IDS_BASE64_PLACEHOLDER,
       Buffer.from(
-        JSON.stringify(editorCompatTemplateInfo.templateIds),
+        JSON.stringify(editorDevEntryTemplateInfo.templateIds),
         "utf8"
       ).toString("base64")
     );
@@ -186,6 +215,10 @@ export const isManagedEditorTemplateFileName = (templateFileName: string) => {
   return templateFileName === "edit" || templateFileName.startsWith("edit-");
 };
 
+/**
+ * Resolves `/edit/{templateId}` back to a local template id when that template
+ * exists in the current repo.
+ */
 export const getLocalTemplateIdFromEditorPath = (
   pathname: string | undefined,
   availableTemplateIds: Iterable<string>
@@ -194,6 +227,8 @@ export const getLocalTemplateIdFromEditorPath = (
     return null;
   }
 
+  // Trim trailing slashes, then capture the single path segment after `/edit/`
+  // so `/edit/dunkin` matches while `/edit` and `/edit/dunkin/extra` do not.
   const match = pathname.replace(/\/+$/, "").match(/^\/edit\/([^/]+)$/);
   if (!match) {
     return null;
@@ -203,6 +238,10 @@ export const getLocalTemplateIdFromEditorPath = (
   return new Set(availableTemplateIds).has(templateId) ? templateId : null;
 };
 
+/**
+ * Returns the only custom template id when exactly one non-shared template is
+ * available. Shared templates such as `directory` and `locator` are excluded.
+ */
 export const getSingleCustomTemplateId = (
   templateIds: Iterable<string>
 ): string | null => {

@@ -12,9 +12,13 @@ import { ThemeData } from "../types/themeData.ts";
 import { migrate } from "../../utils/migrate.ts";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
+import {
+  getCustomEditorTemplateIds,
+  getLocalTemplateIdFromEditorPath,
+  getSingleCustomTemplateId,
+} from "../../vite-plugin/editorRoute.ts";
 
 const devLogger = new DevLogger();
-const SHARED_TEMPLATE_IDS = new Set(["directory", "locator"]);
 
 type ResolvedTemplateConfig = {
   resolvedTemplateId: string;
@@ -23,33 +27,13 @@ type ResolvedTemplateConfig = {
   usedFallback: boolean;
 };
 
-const getLocalTemplateIdFromPathname = (
-  pathname: string | undefined,
-  availableTemplateIds: Iterable<string>
-): string | null => {
-  if (!pathname) {
-    return null;
-  }
-
-  const match = pathname.replace(/\/+$/, "").match(/^\/edit\/([^/]+)$/);
-  if (!match) {
-    return null;
-  }
-
-  const templateId = decodeURIComponent(match[1]);
-  return new Set(availableTemplateIds).has(templateId) ? templateId : null;
-};
-
-const getSingleCustomTemplateId = (
-  templateIds: Iterable<string>
-): string | null => {
-  const customTemplateIds = [...new Set(templateIds)]
-    .filter((templateId) => !SHARED_TEMPLATE_IDS.has(templateId))
-    .sort((left, right) => left.localeCompare(right));
-
-  return customTemplateIds.length === 1 ? customTemplateIds[0] : null;
-};
-
+/**
+ * Resolves the local template config that the editor should use.
+ *
+ * In platform dev mode the local route wins over platform metadata so a repo
+ * with custom-only templates can still open the correct local editor page even
+ * when the platform payload still refers to `main`.
+ */
 export const resolveTemplateConfig = ({
   requestedTemplateId,
   componentRegistry,
@@ -62,7 +46,7 @@ export const resolveTemplateConfig = ({
   currentPathname?: string;
 }): ResolvedTemplateConfig => {
   const routeTemplateId = isDevMode
-    ? getLocalTemplateIdFromPathname(
+    ? getLocalTemplateIdFromEditorPath(
         currentPathname,
         Object.keys(componentRegistry)
       )
@@ -96,8 +80,8 @@ export const resolveTemplateConfig = ({
     Object.keys(componentRegistry)
   );
   if (!fallbackTemplateId) {
-    const fallbackTemplateIds = Object.keys(componentRegistry).filter(
-      (templateId) => !SHARED_TEMPLATE_IDS.has(templateId)
+    const fallbackTemplateIds = getCustomEditorTemplateIds(
+      Object.keys(componentRegistry)
     );
     throw new Error(
       "Could not find config for template: " +
@@ -199,6 +183,11 @@ export const useCommonMessageReceivers = (
     };
   }
 
+  /**
+   * Receives the platform metadata that identifies which template the editor
+   * should use, then rewrites that identity when platform dev mode is pointed
+   * at a local custom-template editor route.
+   */
   useReceiveMessage("getTemplateMetadata", TARGET_ORIGINS, (send, payload) => {
     const {
       resolvedTemplateId,
