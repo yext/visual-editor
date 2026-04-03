@@ -27,21 +27,21 @@ describe("getEditorTemplateInfosFromTemplateNames", () => {
   it("uses one editor route per custom template when main is absent", () => {
     expect(
       getEditorTemplateInfosFromTemplateNames([
-        "baskin",
-        "dunkin",
+        "sample-store",
+        "demo-shop",
         "directory",
         "locator",
       ])
     ).toEqual([
       {
-        templateId: "baskin",
-        path: "edit/baskin",
-        configName: "edit-baskin",
+        templateId: "demo-shop",
+        path: "edit/demo-shop",
+        configName: "edit-demo-shop",
       },
       {
-        templateId: "dunkin",
-        path: "edit/dunkin",
-        configName: "edit-dunkin",
+        templateId: "sample-store",
+        path: "edit/sample-store",
+        configName: "edit-sample-store",
       },
     ]);
   });
@@ -111,14 +111,14 @@ describe("getEditorTemplateInfoFromTemplateNames", () => {
   it("returns the matching path and config name", () => {
     expect(
       getEditorTemplateInfoFromTemplateNames([
-        "sweetgreen",
+        "test-market",
         "directory",
         "locator",
       ])
     ).toEqual({
-      templateId: "sweetgreen",
-      path: "edit/sweetgreen",
-      configName: "edit-sweetgreen",
+      templateId: "test-market",
+      path: "edit/test-market",
+      configName: "edit-test-market",
     });
   });
 });
@@ -145,21 +145,21 @@ const duplicateEditPath = "${EDIT_PATH_PLACEHOLDER}";
 const editTemplateName = "${EDIT_TEMPLATE_NAME_PLACEHOLDER}";
 const duplicateEditTemplateName = "${EDIT_TEMPLATE_NAME_PLACEHOLDER}";`,
         {
-          path: "edit/dunkin",
-          configName: "edit-dunkin",
+          path: "edit/demo-shop",
+          configName: "edit-demo-shop",
         }
       )
-    ).toBe(`const editPath = "edit/dunkin";
-const duplicateEditPath = "edit/dunkin";
-const editTemplateName = "edit-dunkin";
-const duplicateEditTemplateName = "edit-dunkin";`);
+    ).toBe(`const editPath = "edit/demo-shop";
+const duplicateEditPath = "edit/demo-shop";
+const editTemplateName = "edit-demo-shop";
+const duplicateEditTemplateName = "edit-demo-shop";`);
   });
 
   it("throws when the path placeholder is missing", () => {
     expect(() =>
       injectEditorTemplateInfo('const editPath = "edit";', {
-        path: "edit/dunkin",
-        configName: "edit-dunkin",
+        path: "edit/demo-shop",
+        configName: "edit-demo-shop",
       })
     ).toThrow("Unable to inject editor path: placeholder not found");
   });
@@ -170,8 +170,8 @@ const duplicateEditTemplateName = "edit-dunkin";`);
         `const editPath = "${EDIT_PATH_PLACEHOLDER}";
 const editTemplateName = "edit";`,
         {
-          path: "edit/dunkin",
-          configName: "edit-dunkin",
+          path: "edit/demo-shop",
+          configName: "edit-demo-shop",
         }
       )
     ).toThrow("Unable to inject edit template name: placeholder not found");
@@ -187,28 +187,28 @@ describe("getEditorDevEntryTemplateInfoFromTemplateNames", () => {
 
   it("creates an entry page for a single custom template", () => {
     expect(
-      getEditorDevEntryTemplateInfoFromTemplateNames(["dunkin", "directory"])
+      getEditorDevEntryTemplateInfoFromTemplateNames(["demo-shop", "directory"])
     ).toEqual({
       path: "edit",
       configName: "edit",
       entryMode: "redirect",
-      redirectTargetPath: "edit/dunkin",
-      templateIds: ["dunkin"],
+      redirectTargetPath: "edit/demo-shop",
+      templateIds: ["demo-shop"],
     });
   });
 
   it("creates a chooser entry page for multiple custom templates", () => {
     expect(
       getEditorDevEntryTemplateInfoFromTemplateNames([
-        "dunkin",
-        "baskin",
+        "demo-shop",
+        "sample-store",
         "directory",
       ])
     ).toEqual({
       path: "edit",
       configName: "edit",
       entryMode: "chooser",
-      templateIds: ["baskin", "dunkin"],
+      templateIds: ["demo-shop", "sample-store"],
     });
   });
 });
@@ -223,12 +223,12 @@ const templateIds = "${EDIT_DEV_ENTRY_TEMPLATE_IDS_BASE64_PLACEHOLDER}";`,
         path: "edit",
         configName: "edit",
         entryMode: "redirect",
-        redirectTargetPath: "edit/dunkin",
-        templateIds: ["dunkin", "baskin"],
+        redirectTargetPath: "edit/demo-shop",
+        templateIds: ["demo-shop", "sample-store"],
       }
     );
     expect(injected).toContain('const entryMode = "redirect";');
-    expect(injected).toContain('const redirectPath = "edit/dunkin";');
+    expect(injected).toContain('const redirectPath = "edit/demo-shop";');
     expect(injected).not.toContain(
       EDIT_DEV_ENTRY_TEMPLATE_IDS_BASE64_PLACEHOLDER
     );
@@ -242,8 +242,8 @@ const templateIds = "${EDIT_DEV_ENTRY_TEMPLATE_IDS_BASE64_PLACEHOLDER}";`,
           path: "edit",
           configName: "edit",
           entryMode: "redirect",
-          redirectTargetPath: "edit/dunkin",
-          templateIds: ["dunkin"],
+          redirectTargetPath: "edit/demo-shop",
+          templateIds: ["demo-shop"],
         }
       )
     ).toThrow(
@@ -262,16 +262,16 @@ describe("editor template files", () => {
     ).toBe("src/templates/edit.tsx");
     expect(
       getEditorTemplateFilePath({
-        path: "edit/dunkin",
-        configName: "edit-dunkin",
-        templateId: "dunkin",
+        path: "edit/demo-shop",
+        configName: "edit-demo-shop",
+        templateId: "demo-shop",
       })
-    ).toBe("src/templates/edit-dunkin.tsx");
+    ).toBe("src/templates/edit-demo-shop.tsx");
   });
 
   it("recognizes managed edit template file names", () => {
     expect(isManagedEditorTemplateFileName("edit")).toBe(true);
-    expect(isManagedEditorTemplateFileName("edit-dunkin")).toBe(true);
+    expect(isManagedEditorTemplateFileName("edit-demo-shop")).toBe(true);
     expect(isManagedEditorTemplateFileName("directory")).toBe(false);
   });
 });
@@ -279,13 +279,19 @@ describe("editor template files", () => {
 describe("getLocalTemplateIdFromEditorPath", () => {
   it("extracts a local template id from an editor pathname", () => {
     expect(
-      getLocalTemplateIdFromEditorPath("/edit/dunkin", ["dunkin", "baskin"])
-    ).toBe("dunkin");
+      getLocalTemplateIdFromEditorPath("/edit/demo-shop", [
+        "demo-shop",
+        "sample-store",
+      ])
+    ).toBe("demo-shop");
   });
 
   it("returns null when the local template does not exist", () => {
     expect(
-      getLocalTemplateIdFromEditorPath("/edit/ghost", ["dunkin", "baskin"])
+      getLocalTemplateIdFromEditorPath("/edit/ghost", [
+        "demo-shop",
+        "sample-store",
+      ])
     ).toBeNull();
   });
 });

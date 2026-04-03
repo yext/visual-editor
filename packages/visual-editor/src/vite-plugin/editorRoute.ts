@@ -228,7 +228,7 @@ export const getLocalTemplateIdFromEditorPath = (
   }
 
   // Trim trailing slashes, then capture the single path segment after `/edit/`
-  // so `/edit/dunkin` matches while `/edit` and `/edit/dunkin/extra` do not.
+  // so `/edit/demo-shop` matches while `/edit` and `/edit/demo-shop/extra` do not.
   const match = pathname.replace(/\/+$/, "").match(/^\/edit\/([^/]+)$/);
   if (!match) {
     return null;

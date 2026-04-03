@@ -164,7 +164,7 @@ describe.sequential("generateRegistryTemplateFiles", () => {
     const rootDir = createStarterFixture();
     writeRegistryComponent(
       rootDir,
-      "dunkin",
+      "demo-shop",
       "Hero.tsx",
       "export const Hero = {};\n"
     );
@@ -176,9 +176,9 @@ describe.sequential("generateRegistryTemplateFiles", () => {
       "utf8"
     );
     expect(updatedEditTemplate).toContain(
-      'import { DunkinConfig as dunkinConfig } from "../registry/dunkin/config";'
+      'import { DemoShopConfig as demoShopConfig } from "../registry/demo-shop/config";'
     );
-    expect(updatedEditTemplate).toContain('"dunkin": dunkinConfig');
+    expect(updatedEditTemplate).toContain('"demo-shop": demoShopConfig');
   });
 
   it("still wires local custom templates when a hand-authored main template exists on disk", () => {
@@ -189,7 +189,7 @@ describe.sequential("generateRegistryTemplateFiles", () => {
     );
     writeRegistryComponent(
       rootDir,
-      "dunkin",
+      "demo-shop",
       "Hero.tsx",
       "export const Hero = {};\n"
     );
@@ -201,9 +201,9 @@ describe.sequential("generateRegistryTemplateFiles", () => {
       "utf8"
     );
     expect(updatedEditTemplate).toContain(
-      'import { DunkinConfig as dunkinConfig } from "../registry/dunkin/config";'
+      'import { DemoShopConfig as demoShopConfig } from "../registry/demo-shop/config";'
     );
-    expect(updatedEditTemplate).toContain('"dunkin": dunkinConfig');
+    expect(updatedEditTemplate).toContain('"demo-shop": demoShopConfig');
   });
 
   it("refuses to overwrite a hand-authored template file", () => {
