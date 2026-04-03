@@ -8,9 +8,6 @@ import {
 } from "@yext/visual-editor";
 import { Link } from "@yext/pages-components";
 
-const capturedMapImageUrl = new URL("../assets/map-crop.png", import.meta.url)
-  .href;
-
 type StyledTextProps = {
   text: YextEntityField<TranslatableString>;
   fontSize: number;
@@ -23,6 +20,30 @@ export type Hs1AlbanyLocationSectionProps = {
   heading: StyledTextProps;
   subtitle: StyledTextProps;
 };
+
+const mapTileUrls = [
+  "https://maps.google.com/maps/vt?pb=!1m5!1m4!1i15!2i8370!3i12183!4i256!2m3!1e0!2sm!3i772536204!3m13!2sen-US!3sUS!5e18!12m5!1e68!2m2!1sset!2sRoadmap!4e2!12m3!1e37!2m1!1ssmartmaps!4e0!5m1!1e3!23i46991212!23i47054750!23i47083502&key=AIzaSyCPi18lG_rd7of67jBJsJxGESX-KiXqcj4&token=56293",
+  "https://maps.google.com/maps/vt?pb=!1m5!1m4!1i15!2i8371!3i12183!4i256!2m3!1e0!2sm!3i772536204!3m13!2sen-US!3sUS!5e18!12m5!1e68!2m2!1sset!2sRoadmap!4e2!12m3!1e37!2m1!1ssmartmaps!4e0!5m1!1e3!23i46991212!23i47054750!23i47083502&key=AIzaSyCPi18lG_rd7of67jBJsJxGESX-KiXqcj4&token=21693",
+  "https://maps.google.com/maps/vt?pb=!1m5!1m4!1i15!2i8372!3i12183!4i256!2m3!1e0!2sm!3i772536204!3m13!2sen-US!3sUS!5e18!12m5!1e68!2m2!1sset!2sRoadmap!4e2!12m3!1e37!2m1!1ssmartmaps!4e0!5m1!1e3!23i46991212!23i47054750!23i47083502&key=AIzaSyCPi18lG_rd7of67jBJsJxGESX-KiXqcj4&token=118164",
+  "https://maps.google.com/maps/vt?pb=!1m5!1m4!1i15!2i8373!3i12183!4i256!2m3!1e0!2sm!3i772535988!3m13!2sen-US!3sUS!5e18!12m5!1e68!2m2!1sset!2sRoadmap!4e2!12m3!1e37!2m1!1ssmartmaps!4e0!5m1!1e3!23i46991212!23i47054750!23i47083502&key=AIzaSyCPi18lG_rd7of67jBJsJxGESX-KiXqcj4&token=95558",
+  "https://maps.google.com/maps/vt?pb=!1m5!1m4!1i15!2i8374!3i12183!4i256!2m3!1e0!2sm!3i772535988!3m13!2sen-US!3sUS!5e18!12m5!1e68!2m2!1sset!2sRoadmap!4e2!12m3!1e37!2m1!1ssmartmaps!4e0!5m1!1e3!23i46991212!23i47054750!23i47083502&key=AIzaSyCPi18lG_rd7of67jBJsJxGESX-KiXqcj4&token=60958",
+  "https://maps.google.com/maps/vt?pb=!1m5!1m4!1i15!2i8375!3i12183!4i256!2m3!1e0!2sm!3i772536204!3m13!2sen-US!3sUS!5e18!12m5!1e68!2m2!1sset!2sRoadmap!4e2!12m3!1e37!2m1!1ssmartmaps!4e0!5m1!1e3!23i46991212!23i47054750!23i47083502&key=AIzaSyCPi18lG_rd7of67jBJsJxGESX-KiXqcj4&token=14364",
+  "https://maps.google.com/maps/vt?pb=!1m5!1m4!1i15!2i8370!3i12184!4i256!2m3!1e0!2sm!3i772536204!3m13!2sen-US!3sUS!5e18!12m5!1e68!2m2!1sset!2sRoadmap!4e2!12m3!1e37!2m1!1ssmartmaps!4e0!5m1!1e3!23i46991212!23i47054750!23i47083502&key=AIzaSyCPi18lG_rd7of67jBJsJxGESX-KiXqcj4&token=103773",
+  "https://maps.google.com/maps/vt?pb=!1m5!1m4!1i15!2i8371!3i12184!4i256!2m3!1e0!2sm!3i772536204!3m13!2sen-US!3sUS!5e18!12m5!1e68!2m2!1sset!2sRoadmap!4e2!12m3!1e37!2m1!1ssmartmaps!4e0!5m1!1e3!23i46991212!23i47054750!23i47083502&key=AIzaSyCPi18lG_rd7of67jBJsJxGESX-KiXqcj4&token=69173",
+  "https://maps.google.com/maps/vt?pb=!1m5!1m4!1i15!2i8372!3i12184!4i256!2m3!1e0!2sm!3i772536204!3m13!2sen-US!3sUS!5e18!12m5!1e68!2m2!1sset!2sRoadmap!4e2!12m3!1e37!2m1!1ssmartmaps!4e0!5m1!1e3!23i46991212!23i47054750!23i47083502&key=AIzaSyCPi18lG_rd7of67jBJsJxGESX-KiXqcj4&token=34573",
+  "https://maps.google.com/maps/vt?pb=!1m5!1m4!1i15!2i8373!3i12184!4i256!2m3!1e0!2sm!3i772535988!3m13!2sen-US!3sUS!5e18!12m5!1e68!2m2!1sset!2sRoadmap!4e2!12m3!1e37!2m1!1ssmartmaps!4e0!5m1!1e3!23i46991212!23i47054750!23i47083502&key=AIzaSyCPi18lG_rd7of67jBJsJxGESX-KiXqcj4&token=11967",
+  "https://maps.google.com/maps/vt?pb=!1m5!1m4!1i15!2i8374!3i12184!4i256!2m3!1e0!2sm!3i772535988!3m13!2sen-US!3sUS!5e18!12m5!1e68!2m2!1sset!2sRoadmap!4e2!12m3!1e37!2m1!1ssmartmaps!4e0!5m1!1e3!23i46991212!23i47054750!23i47083502&key=AIzaSyCPi18lG_rd7of67jBJsJxGESX-KiXqcj4&token=108438",
+  "https://maps.google.com/maps/vt?pb=!1m5!1m4!1i15!2i8375!3i12184!4i256!2m3!1e0!2sm!3i772536204!3m13!2sen-US!3sUS!5e18!12m5!1e68!2m2!1sset!2sRoadmap!4e2!12m3!1e37!2m1!1ssmartmaps!4e0!5m1!1e3!23i46991212!23i47054750!23i47083502&key=AIzaSyCPi18lG_rd7of67jBJsJxGESX-KiXqcj4&token=61844",
+  "https://maps.google.com/maps/vt?pb=!1m5!1m4!1i15!2i8370!3i12185!4i256!2m3!1e0!2sm!3i772536204!3m13!2sen-US!3sUS!5e18!12m5!1e68!2m2!1sset!2sRoadmap!4e2!12m3!1e37!2m1!1ssmartmaps!4e0!5m1!1e3!23i46991212!23i47054750!23i47083502&key=AIzaSyCPi18lG_rd7of67jBJsJxGESX-KiXqcj4&token=20182",
+  "https://maps.google.com/maps/vt?pb=!1m5!1m4!1i15!2i8371!3i12185!4i256!2m3!1e0!2sm!3i772536204!3m13!2sen-US!3sUS!5e18!12m5!1e68!2m2!1sset!2sRoadmap!4e2!12m3!1e37!2m1!1ssmartmaps!4e0!5m1!1e3!23i46991212!23i47054750!23i47083502&key=AIzaSyCPi18lG_rd7of67jBJsJxGESX-KiXqcj4&token=116653",
+  "https://maps.google.com/maps/vt?pb=!1m5!1m4!1i15!2i8372!3i12185!4i256!2m3!1e0!2sm!3i772536204!3m13!2sen-US!3sUS!5e18!12m5!1e68!2m2!1sset!2sRoadmap!4e2!12m3!1e37!2m1!1ssmartmaps!4e0!5m1!1e3!23i46991212!23i47054750!23i47083502&key=AIzaSyCPi18lG_rd7of67jBJsJxGESX-KiXqcj4&token=82053",
+  "https://maps.google.com/maps/vt?pb=!1m5!1m4!1i15!2i8373!3i12185!4i256!2m3!1e0!2sm!3i772536204!3m13!2sen-US!3sUS!5e18!12m5!1e68!2m2!1sset!2sRoadmap!4e2!12m3!1e37!2m1!1ssmartmaps!4e0!5m1!1e3!23i46991212!23i47054750!23i47083502&key=AIzaSyCPi18lG_rd7of67jBJsJxGESX-KiXqcj4&token=47453",
+  "https://maps.google.com/maps/vt?pb=!1m5!1m4!1i15!2i8374!3i12185!4i256!2m3!1e0!2sm!3i772536204!3m13!2sen-US!3sUS!5e18!12m5!1e68!2m2!1sset!2sRoadmap!4e2!12m3!1e37!2m1!1ssmartmaps!4e0!5m1!1e3!23i46991212!23i47054750!23i47083502&key=AIzaSyCPi18lG_rd7of67jBJsJxGESX-KiXqcj4&token=12853",
+  "https://maps.google.com/maps/vt?pb=!1m5!1m4!1i15!2i8375!3i12185!4i256!2m3!1e0!2sm!3i772536204!3m13!2sen-US!3sUS!5e18!12m5!1e68!2m2!1sset!2sRoadmap!4e2!12m3!1e37!2m1!1ssmartmaps!4e0!5m1!1e3!23i46991212!23i47054750!23i47083502&key=AIzaSyCPi18lG_rd7of67jBJsJxGESX-KiXqcj4&token=109324",
+] as const;
+
+const mapPinUrl =
+  "https://maps.gstatic.com/mapfiles/api-3/images/spotlight-poi3.png";
 
 const textField = (label: string) => ({
   label,
@@ -166,11 +187,22 @@ export const Hs1AlbanyLocationSectionComponent: PuckComponent<
             </div>
           </div>
         </div>
-        <div className="min-h-[420px] bg-[#ece9e3]">
+        <div className="relative min-h-[420px] overflow-hidden bg-[#ece9e3]">
+          <div className="grid h-full min-h-[420px] grid-cols-6 grid-rows-3">
+            {mapTileUrls.map((tileUrl, index) => (
+              <img
+                key={tileUrl}
+                src={tileUrl}
+                alt=""
+                className="h-full w-full object-cover"
+                loading={index < 6 ? "eager" : "lazy"}
+              />
+            ))}
+          </div>
           <img
-            src={capturedMapImageUrl}
+            src={mapPinUrl}
             alt=""
-            className="h-full min-h-[420px] w-full object-cover"
+            className="pointer-events-none absolute left-1/2 top-1/2 h-[38px] w-[27px] -translate-x-1/2 -translate-y-[78%]"
           />
         </div>
       </div>

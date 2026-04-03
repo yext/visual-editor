@@ -10,9 +10,6 @@ import {
 } from "@yext/visual-editor";
 import { ComplexImageType, ImageType, Link } from "@yext/pages-components";
 
-const capturedHeroImageUrl = new URL("../assets/hero-crop.png", import.meta.url)
-  .href;
-
 type StyledTextProps = {
   text: YextEntityField<TranslatableString>;
   fontSize: number;
@@ -104,6 +101,24 @@ const toCssTextTransform = (
   value: StyledTextProps["textTransform"],
 ): CSSProperties["textTransform"] => (value === "normal" ? undefined : value);
 
+const getImageUrl = (
+  image: ImageType | ComplexImageType | TranslatableAssetImage | undefined,
+): string | undefined => {
+  if (!image) {
+    return undefined;
+  }
+
+  if ("url" in image && typeof image.url === "string") {
+    return image.url;
+  }
+
+  if ("image" in image && image.image && typeof image.image.url === "string") {
+    return image.image.url;
+  }
+
+  return undefined;
+};
+
 const Hs1AlbanyHeroSectionFields: Fields<Hs1AlbanyHeroSectionProps> = {
   heading: styledTextField("Heading"),
   subtitle: styledTextField("Subtitle"),
@@ -140,8 +155,9 @@ export const Hs1AlbanyHeroSectionComponent: PuckComponent<
     locale,
     streamDocument,
   );
-  void resolvedHeroImage;
-  const heroImageUrl = capturedHeroImageUrl;
+  const heroImageUrl =
+    getImageUrl(resolvedHeroImage) ??
+    "https://cdcssl.ibsrv.net/ibimg/smb/3000x1997_80/webmgr/1o/u/o/Slideshow-XLRG/51046904351_77fdc7bb33_5k.jpg.webp?b464ff6ce4ad3b56caa90d82fcf610d8";
 
   return (
     <section className="bg-white">

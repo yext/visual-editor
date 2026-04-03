@@ -59,7 +59,7 @@
           "name": "Services"
         },
         "name": "Galaxy Grill",
-        "openingHours": ["Mo-Su 10:00-22:00"]
+        "openingHours": ["Mo- 10:00-22:00"]
       },
       {
         "@context": "https://schema.org",
@@ -794,19 +794,12 @@
         }
       ]
     },
-    "monday": {
-      "openIntervals": [
-        {
-          "end": "22:00",
-          "start": "10:00"
-        }
-      ]
-    },
+    "monday": {},
     "saturday": {
       "openIntervals": [
         {
-          "end": "22:00",
-          "start": "10:00"
+          "end": "20:00",
+          "start": "3:00"
         }
       ]
     },
