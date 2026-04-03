@@ -64,7 +64,7 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
 
   const handleImageSelection = React.useCallback(() => {
     if (!hasParentData && constantValueEnabled && isEditing) {
-      if (shouldUseStandaloneLocalPrompt("")) {
+      if (shouldUseStandaloneLocalPrompt()) {
         const userInput = prompt("Enter Image URL:");
         if (!userInput) {
           return;

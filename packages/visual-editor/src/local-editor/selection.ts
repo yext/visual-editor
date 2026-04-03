@@ -27,6 +27,9 @@ export const buildLocalEditorSelection = (
   componentRegistry: Record<string, Config<any>>,
   searchParams: URLSearchParams
 ): LocalEditorSelection => {
+  // Query params win when valid; otherwise fall back to manifest defaults and
+  // finally the first available option so the shell always lands on one stable
+  // selection.
   const supportedTemplateIds = getSupportedTemplateIds(
     manifest,
     componentRegistry
@@ -137,6 +140,8 @@ export const buildEditorLocalDevOptions = ({
     return undefined;
   }
 
+  // Keep draft state scoped by template + locale so entity switches reuse the
+  // same local draft but changing template or locale starts a new one.
   return {
     templateId: selectedTemplateId,
     entityId: selectedEntity?.entityId,

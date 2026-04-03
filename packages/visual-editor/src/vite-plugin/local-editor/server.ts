@@ -25,6 +25,8 @@ export const createLocalEditorRequestHandler = (
     requestUrl: string,
     response: JsonResponseWriter
   ): Promise<boolean> => {
+    // Return whether this request belonged to the local-editor API so the Vite
+    // plugin can fall through to the rest of the middleware stack when needed.
     const context = await buildLocalEditorRequestContext(
       requestUrl,
       localEditorOptions
@@ -49,6 +51,7 @@ export const sendJsonResponse = (
   payload: unknown,
   statusCode = 200
 ) => {
+  // The local-editor API is intentionally tiny and JSON-only.
   response.statusCode = statusCode;
   response.setHeader("Content-Type", "application/json");
   response.end(JSON.stringify(payload));

@@ -19,6 +19,8 @@ export const getLocalEditorManifest = async (
   rootDir: string,
   streamConfigPath = DEFAULT_LOCAL_EDITOR_STREAM_CONFIG_PATH
 ): Promise<LocalEditorManifestResponse> => {
+  // Normalize the raw local snapshot state into one manifest payload the shell
+  // can use to seed its first template/entity/locale selection.
   const context = await getLocalEditorContext(rootDir, streamConfigPath);
   const selectedTemplateId =
     context.defaults.templateId ?? context.templates[0];
@@ -57,6 +59,8 @@ export const getLocalEditorDocument = async (
   entityId?: string,
   locale?: string
 ): Promise<LocalEditorDocumentResponse> => {
+  // The document endpoint follows the same fallback order as the manifest so a
+  // partially specified request still resolves to a deterministic snapshot.
   const context = await getLocalEditorContext(rootDir, streamConfigPath);
   const selectedTemplateId =
     templateId ?? context.defaults.templateId ?? context.templates[0];
@@ -119,6 +123,8 @@ const getLocalEditorContext = async (
   rootDir: string,
   streamConfigPath = DEFAULT_LOCAL_EDITOR_STREAM_CONFIG_PATH
 ): Promise<LocalEditorContext> => {
+  // Build one cached view of local-editor state so manifest and document
+  // responses share the same template/default/snapshot interpretation.
   const diagnostics: string[] = [];
   const localDataPath = path.join(rootDir, "localData");
   const templateManifestEntries = readTemplateManifestEntries(
