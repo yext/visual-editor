@@ -1,3 +1,18 @@
+#### 1.2.1 (2026-04-03)
+
+##### Chores
+
+- fix innerHtml vulnerability in CustomCode component ([#1141](https://github.com/yext/visual-editor/pull/1141)) ([8e5eeb18](https://github.com/yext/visual-editor/commit/8e5eeb1861d9ead1243002175afa86635d3894c6))
+
+##### New Features
+
+- additional style options for Photo Gallery ([#1136](https://github.com/yext/visual-editor/pull/1136)) ([0ba74935](https://github.com/yext/visual-editor/commit/0ba74935935cd017e9c2020117665d7a6bf86f8b))
+
+##### Bug Fixes
+
+- debounce color picker ([#1139](https://github.com/yext/visual-editor/pull/1139)) ([9ed648e6](https://github.com/yext/visual-editor/commit/9ed648e641f18b7cb40406069413cdbab45db9d5))
+- ensure breadcrumbs are readable ([#1137](https://github.com/yext/visual-editor/pull/1137)) ([b0e3fc2c](https://github.com/yext/visual-editor/commit/b0e3fc2c32866b8085280080cd028d23924e63cf))
+
 #### 1.2.0-alpha.1 (2026-04-01)
 
 ##### Chores
