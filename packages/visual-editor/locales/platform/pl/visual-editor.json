@@ -711,6 +711,11 @@
     "defaultFont": "Domyślna czcionka",
     "font": "Chrzcielnica",
     "fontSize": "Rozmiar czcionki",
+    "fontStyle": {
+      "fontStyle": "Styl czcionki",
+      "italic": "italski",
+      "normal": "Normalna"
+    },
     "fontWeight": {
       "fontWeight": "Waga czcionki"
     },

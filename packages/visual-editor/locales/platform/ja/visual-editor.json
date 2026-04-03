@@ -701,6 +701,11 @@
     "defaultFont": "デフォルトのフォント",
     "font": "フォント",
     "fontSize": "フォントサイズ",
+    "fontStyle": {
+      "fontStyle": "フォントスタイル",
+      "italic": "イタリック",
+      "normal": "普通"
+    },
     "fontWeight": {
       "fontWeight": "フォント重量"
     },

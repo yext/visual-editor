@@ -701,6 +701,11 @@
     "defaultFont": "Oletusfontti",
     "font": "Fontti",
     "fontSize": "Fontin koko",
+    "fontStyle": {
+      "fontStyle": "Fonttityyli",
+      "italic": "Kursiivi",
+      "normal": "Normaali"
+    },
     "fontWeight": {
       "fontWeight": "Fonttipaino"
     },

@@ -701,6 +701,11 @@
     "defaultFont": "Varsayılan yazı tipi",
     "font": "Yazı tipi",
     "fontSize": "Yazı tipi boyutu",
+    "fontStyle": {
+      "fontStyle": "Yazı Tipi Stili",
+      "italic": "İtalik",
+      "normal": "Normal"
+    },
     "fontWeight": {
       "fontWeight": "Yazı tipi ağırlığı"
     },

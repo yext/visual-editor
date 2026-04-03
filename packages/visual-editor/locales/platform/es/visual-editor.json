@@ -706,6 +706,11 @@
     "defaultFont": "Fuente predeterminada",
     "font": "Fuente",
     "fontSize": "Tamaño de fuente",
+    "fontStyle": {
+      "fontStyle": "Estilo de fuente",
+      "italic": "Itálico",
+      "normal": "Normal"
+    },
     "fontWeight": {
       "fontWeight": "Peso de la fuente"
     },

@@ -701,6 +701,11 @@
     "defaultFont": "Standard font",
     "font": "Font",
     "fontSize": "Fontstørrelse",
+    "fontStyle": {
+      "fontStyle": "Skriftstil",
+      "italic": "Kursiv",
+      "normal": "Normal"
+    },
     "fontWeight": {
       "fontWeight": "Fontvekt"
     },

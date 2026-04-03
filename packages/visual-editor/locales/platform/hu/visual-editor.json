@@ -701,6 +701,11 @@
     "defaultFont": "Alapértelmezett betűtípus",
     "font": "Betűtípus",
     "fontSize": "Betűkészlet",
+    "fontStyle": {
+      "fontStyle": "Betűstílus",
+      "italic": "Dőlt",
+      "normal": "Normál"
+    },
     "fontWeight": {
       "fontWeight": "Betűtípus súlya"
     },

@@ -701,6 +701,11 @@
     "defaultFont": "Standardteckensnitt",
     "font": "Font",
     "fontSize": "Fontstorlek",
+    "fontStyle": {
+      "fontStyle": "Typsnittsstil",
+      "italic": "Kursiv",
+      "normal": "Normal"
+    },
     "fontWeight": {
       "fontWeight": "Teckensnittsvikt"
     },

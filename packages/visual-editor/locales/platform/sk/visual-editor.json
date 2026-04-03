@@ -711,6 +711,11 @@
     "defaultFont": "Predvolené písmo",
     "font": "Písmo",
     "fontSize": "Veľkosť písma",
+    "fontStyle": {
+      "fontStyle": "Štýl písma",
+      "italic": "kurzíva",
+      "normal": "Normálne"
+    },
     "fontWeight": {
       "fontWeight": "Váha"
     },

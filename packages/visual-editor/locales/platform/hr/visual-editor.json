@@ -706,6 +706,11 @@
     "defaultFont": "Zadani font",
     "font": "Font",
     "fontSize": "Veličina fonta",
+    "fontStyle": {
+      "fontStyle": "Stil fonta",
+      "italic": "kurziv",
+      "normal": "Normalan"
+    },
     "fontWeight": {
       "fontWeight": "Težina fonta"
     },
