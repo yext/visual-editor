@@ -193,9 +193,20 @@ const defaultWeightOptions = [
   { label: msg("theme.fontWeight.black", "Black (900)"), value: "900" },
 ];
 
+const defaultFontStyleOptions = [
+  { label: msg("theme.fontStyle.normal", "Normal"), value: "normal" },
+  { label: msg("theme.fontStyle.italic", "Italic"), value: "italic" },
+];
+
 type getFontWeightParams = {
   fontCssVariable?: string;
   weightOptions?: StyleSelectOption[];
+  fontList?: FontRegistry;
+};
+
+type getFontStyleParams = {
+  fontCssVariable?: string;
+  styleOptions?: StyleSelectOption[];
   fontList?: FontRegistry;
 };
 
@@ -224,6 +235,26 @@ export const getFontWeightOptions = (options: getFontWeightParams) => {
   }
 
   return filterFontWeights(styleElement, options);
+};
+
+export const getFontStyleOptions = (options: getFontStyleParams) => {
+  const { fontCssVariable, styleOptions = defaultFontStyleOptions } = options;
+  if (!fontCssVariable || typeof window === "undefined") {
+    return styleOptions;
+  }
+
+  const iframe = document.getElementById(
+    PUCK_PREVIEW_IFRAME_ID
+  ) as HTMLIFrameElement;
+  const styleElement = iframe?.contentDocument?.getElementById(
+    THEME_STYLE_TAG_ID
+  ) as HTMLStyleElement;
+
+  if (!styleElement) {
+    return defaultFontStyleOptions;
+  }
+
+  return filterFontStyles(styleElement, options);
 };
 
 /*
@@ -274,36 +305,7 @@ const filterFontWeights = (
     fontList = defaultFonts,
   }: getFontWeightParams
 ) => {
-  // get the font name from css variable in the style tag
-  const styleContent = styleElement.textContent || styleElement.innerHTML;
-  const regex = new RegExp( // matches Arial in "'Arial', sans-serif"
-    `${fontCssVariable}:\\s*(['"]?([^',\\s]+(?:\\s+[^',\\s]+)*)['"]?)(?:,|\\s|;|$)`,
-    "i"
-  );
-  let fontName = styleContent.match(regex)?.[2];
-
-  // Support "Default font" reference by resolving var(--fontFamily-headers-defaultFont).
-  if (fontName?.startsWith("var(")) {
-    const variableMatch = fontName.match(variableFontRegex);
-    if (variableMatch?.[1]) {
-      const variableName = variableMatch[1];
-      // Escape regex special characters to prevent ReDoS from malformed CSS
-      const escapedVariableName = variableName.replace(
-        /[.*+?^${}()|[\]\\]/g,
-        "\\$&"
-      );
-      const variableRegex = new RegExp(
-        `${escapedVariableName}:\\s*([^;]+)`,
-        "i"
-      );
-      const variableValue = styleContent.match(variableRegex)?.[1];
-      if (variableValue) {
-        const cleanedValue = variableValue.replace(/!important/g, "").trim();
-        const firstFont = cleanedValue.split(",")[0];
-        fontName = firstFont.trim().replace(/^['"]|['"]$/g, "");
-      }
-    }
-  }
+  const fontName = getFontNameFromStyleElement(styleElement, fontCssVariable);
 
   if (!fontName || !fontList[fontName]) {
     return weightOptions;
@@ -322,6 +324,65 @@ const filterFontWeights = (
         Number(weight.value) >= font.minWeight
     );
   }
+};
+
+const filterFontStyles = (
+  styleElement: HTMLStyleElement,
+  {
+    fontCssVariable,
+    styleOptions = defaultFontStyleOptions,
+    fontList = defaultFonts,
+  }: getFontStyleParams
+) => {
+  const fontName = getFontNameFromStyleElement(styleElement, fontCssVariable);
+
+  if (!fontName || !fontList[fontName]) {
+    return styleOptions;
+  }
+
+  const font = fontList[fontName];
+  return font.italics
+    ? styleOptions
+    : styleOptions.filter((style) => style.value === "normal");
+};
+
+const getFontNameFromStyleElement = (
+  styleElement: HTMLStyleElement,
+  fontCssVariable?: string
+) => {
+  if (!fontCssVariable) {
+    return undefined;
+  }
+
+  const styleContent = styleElement.textContent || styleElement.innerHTML;
+  const regex = new RegExp(
+    `${fontCssVariable}:\\s*(['"]?([^',\\s]+(?:\\s+[^',\\s]+)*)['"]?)(?:,|\\s|;|$)`,
+    "i"
+  );
+  let fontName = styleContent.match(regex)?.[2];
+
+  if (fontName?.startsWith("var(")) {
+    const variableMatch = fontName.match(variableFontRegex);
+    if (variableMatch?.[1]) {
+      const variableName = variableMatch[1];
+      const escapedVariableName = variableName.replace(
+        /[.*+?^${}()|[\]\\]/g,
+        "\\$&"
+      );
+      const variableRegex = new RegExp(
+        `${escapedVariableName}:\\s*([^;]+)`,
+        "i"
+      );
+      const variableValue = styleContent.match(variableRegex)?.[1];
+      if (variableValue) {
+        const cleanedValue = variableValue.replace(/!important/g, "").trim();
+        const firstFont = cleanedValue.split(",")[0];
+        fontName = firstFont.trim().replace(/^['"]|['"]$/g, "");
+      }
+    }
+  }
+
+  return fontName;
 };
 
 // Returns FontRegistry only containing fonts used in ThemeData

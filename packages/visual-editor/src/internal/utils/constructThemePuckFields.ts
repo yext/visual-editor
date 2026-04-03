@@ -8,6 +8,7 @@ import { CoreStyle, ThemeConfigSection } from "../../utils/themeResolver.ts";
 import { ColorSelector } from "../puck/components/ColorSelector.tsx";
 import { ThemeData } from "../types/themeData.ts";
 import { FontSelector } from "../puck/components/FontSelector.tsx";
+import { FontStyleSelector } from "../puck/components/FontStyleSelector.tsx";
 import { FontWeightSelector } from "../puck/components/FontWeightSelector.tsx";
 
 type RenderProps = Parameters<CustomField<any>["render"]>[0];
@@ -87,6 +88,19 @@ export const convertStyleToPuckField = (
           options: optionsFactory,
           render: ({ onChange, value }: RenderProps) =>
             FontWeightSelector({
+              label: t(style.label),
+              options: optionsFactory,
+              value,
+              onChange,
+            }),
+        } as CustomField<string>;
+      } else if (plugin === "fontStyle") {
+        return {
+          label: t(style.label),
+          type: "custom",
+          options: optionsFactory,
+          render: ({ onChange, value }: RenderProps) =>
+            FontStyleSelector({
               label: t(style.label),
               options: optionsFactory,
               value,

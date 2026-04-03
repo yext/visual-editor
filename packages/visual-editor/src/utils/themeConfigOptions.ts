@@ -308,6 +308,11 @@ const textTransformOptions = [
   },
 ];
 
+const fontStyleOptions = [
+  { label: msg("theme.fontStyle.normal", "Normal"), value: "normal" },
+  { label: msg("theme.fontStyle.italic", "Italic"), value: "italic" },
+];
+
 type BorderRadiusOption = {
   label: string;
   value: string;
@@ -490,6 +495,7 @@ const showHideOptions = [
 export const ThemeOptions = {
   HEADING_LEVEL: headingLevelOptions,
   TEXT_TRANSFORM: textTransformOptions,
+  FONT_STYLE: fontStyleOptions,
   LETTER_SPACING: letterSpacingOptions,
   BACKGROUND_COLOR: backgroundColorOptions,
   SITE_COLOR: siteColorOptions,
