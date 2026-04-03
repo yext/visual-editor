@@ -1,0 +1,488 @@
+{
+  "root": {
+    "props": {
+      "title": {
+        "field": "name",
+        "constantValue": "Hs1 Carmel Pages",
+        "constantValueEnabled": false
+      },
+      "description": {
+        "field": "description",
+        "constantValue": "",
+        "constantValueEnabled": false
+      }
+    }
+  },
+  "content": [
+    {
+      "type": "Hs1CarmelHeaderSection",
+      "props": {
+        "id": "Hs1CarmelHeaderSection-ab29bb3b-99af-4fcb-b705-bfcf54ac123c",
+        "logoImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://cdcssl.ibsrv.net/ibimg/smb/150x97_80/webmgr/1s/a/7/whitetoothlandscapelogo_20221028_2105.png.webp?7551f5345c2547b3047da04163ae0cfc",
+            "width": 150,
+            "height": 97
+          },
+          "constantValueEnabled": true
+        },
+        "logo": {
+          "label": "Round Valley Dental Center",
+          "link": "https://www.ofc-carmel.com"
+        },
+        "logoTitle": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Round Valley",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 14,
+          "fontColor": "#FFFFFF",
+          "fontWeight": 700,
+          "textTransform": "uppercase"
+        },
+        "logoCaption": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Dental Center",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 12,
+          "fontColor": "#FFFFFF",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "primaryLinks": [
+          {
+            "label": "Home",
+            "link": "https://www.ofc-carmel.com"
+          },
+          {
+            "label": "About",
+            "link": "https://www.ofc-carmel.com/our-locations"
+          },
+          {
+            "label": "New Patients",
+            "link": "https://www.ofc-carmel.com/new-patients"
+          },
+          {
+            "label": "Dental Services",
+            "link": "https://www.ofc-carmel.com/dental-services"
+          },
+          {
+            "label": "Testimonials",
+            "link": "https://www.ofc-carmel.com/testimonials"
+          },
+          {
+            "label": "Contact",
+            "link": "https://www.ofc-carmel.com/contact"
+          }
+        ],
+        "aboutLinks": [
+          {
+            "label": "Dental Staff",
+            "link": "https://www.ofc-carmel.com/staff"
+          }
+        ],
+        "contactLinks": [
+          {
+            "label": "Appointment Request",
+            "link": "https://www.ofc-carmel.com/appointment"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Hs1CarmelHeroSection",
+      "props": {
+        "id": "Hs1CarmelHeroSection-eb7086b6-0ce3-4ffe-86b3-02a576c6b6f4",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "We Are Here For You!",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 40,
+          "fontColor": "#FFFFFF",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "subtitle": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Providing top-of-the-line quality preventive, cosmetic, and restorative dental care is vital to us. Our team is highly experienced and skilled in what they do.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#FFFFFF",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "primaryCta": {
+          "label": "Make an Appointment",
+          "link": "https://www.ofc-carmel.com/appointment"
+        },
+        "secondaryCta": {
+          "label": "Appointment Request",
+          "link": "https://www.ofc-carmel.com/contact"
+        },
+        "heroImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://cdcssl.ibsrv.net/ibimg/smb/2048x1152_80/webmgr/1s/a/7/Sample-Images/51966333832_8f1d4a063b_k_20221028_2053.jpg.webp?90d13dd0a5e31eb81727027dee5863b0",
+            "width": 2048,
+            "height": 1152
+          },
+          "constantValueEnabled": true
+        }
+      }
+    },
+    {
+      "type": "Hs1CarmelQuickLinksSection",
+      "props": {
+        "id": "Hs1CarmelQuickLinksSection-5f79e4fb-4c57-49f7-a871-8828294543c1",
+        "cards": [
+          {
+            "title": "Meet The Doctor",
+            "link": "https://www.ofc-carmel.com/staff",
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://cdcssl.ibsrv.net/ibimg/smb/2048x1367_80/webmgr/1s/a/7/Sample-Images/52099170678_ab9962ff94_k.jpg.webp?b33a79cbbdca0e7301f0aad01d65cb33",
+                "width": 2048,
+                "height": 1367
+              },
+              "constantValueEnabled": true
+            }
+          },
+          {
+            "title": "Meet The Team",
+            "link": "https://www.ofc-carmel.com/staff",
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://cdcssl.ibsrv.net/ibimg/smb/2048x1385_80/webmgr/1s/a/7/Sample-Images/51874984177_ecbe0db1a4_k.jpg.webp?6d7581a21f9172a49e0a79928589b133",
+                "width": 2048,
+                "height": 1385
+              },
+              "constantValueEnabled": true
+            }
+          },
+          {
+            "title": "Our Office",
+            "link": "https://www.ofc-carmel.com/our-locations",
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://cdcssl.ibsrv.net/ibimg/smb/2048x1367_80/webmgr/1s/a/7/Sample-Images/52387318393_008419d7e0_k.jpg.webp?245679b6a08e141b79cd1adb05b548eb",
+                "width": 2048,
+                "height": 1367
+              },
+              "constantValueEnabled": true
+            }
+          },
+          {
+            "title": "Schedule An Appointment",
+            "link": "https://www.ofc-carmel.com/appointment",
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://cdcssl.ibsrv.net/ibimg/smb/2048x1366_80/webmgr/1s/a/7/Sample-Images/52249268666_e0b46b5dc0_k.jpg.webp?929286131b8f7c37c456389d7e35712e",
+                "width": 2048,
+                "height": 1366
+              },
+              "constantValueEnabled": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Hs1CarmelWelcomeSection",
+      "props": {
+        "id": "Hs1CarmelWelcomeSection-bdfdebde-2453-43f8-b901-e46615a47194",
+        "image": {
+          "field": "",
+          "constantValue": {
+            "url": "https://cdcssl.ibsrv.net/ibimg/smb/2047x1365_80/webmgr/1s/a/7/Sample-Images/52098118932_713490c296_k.jpg.webp?5c70f574b4dc675b359b82e70e6d374a",
+            "width": 2047,
+            "height": 1365
+          },
+          "constantValueEnabled": true
+        },
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Welcome to Our Practice",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 34,
+          "fontColor": "#04364E",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "body": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Welcome! The dental professionals at Round Valley Dental Center are pleased to welcome you to our practice. We want all our patients to be informed decision makers and fully understand any oral health issues they face.\n\nOur web site also provides you with background about our staff, office hours, insurance policies, appointment procedures, maps, directions, and other useful information.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#4A4A4A",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "cta": {
+          "label": "Read More",
+          "link": "https://www.ofc-carmel.com/testimonials"
+        }
+      }
+    },
+    {
+      "type": "Hs1CarmelServicesSection",
+      "props": {
+        "id": "Hs1CarmelServicesSection-e0cc76eb-98e2-4114-83fe-fc0da3ea1c1e",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "How can we help you?",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 34,
+          "fontColor": "#FFFFFF",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "cards": [
+          {
+            "title": "General Dentistry",
+            "description": "Dentistry encompasses array of services and procedures with a common goal: to help you preserve your natural teeth, ensure your oral health, and keep you looking and feeling great.",
+            "link": "https://www.ofc-carmel.com/articles/general/502398-general-dentistry"
+          },
+          {
+            "title": "Teeth Whitening",
+            "description": "Whitening procedures have effectively restored the smile of people with stained, dull, or discolored teeth.",
+            "link": "https://www.ofc-carmel.com/articles/general/502439-teeth-whitening"
+          },
+          {
+            "title": "Fillings",
+            "description": "Learn about restorative filling options and how to treat cavities before they become larger oral health issues.",
+            "link": "https://www.ofc-carmel.com/articles/general/502392-fillings"
+          },
+          {
+            "title": "Dental Implants",
+            "description": "Before development of dental implants, dentures were the only alternative to replacing a missing tooth or teeth.",
+            "link": "https://www.ofc-carmel.com/articles/general/502402-implants"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Hs1CarmelContactFormSection",
+      "props": {
+        "id": "Hs1CarmelContactFormSection-5adeafdf-5d6a-4306-9497-5052e87b0f83",
+        "backgroundImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://cdcssl.ibsrv.net/ibimg/smb/2048x1367_80/webmgr/1s/a/7/Sample-Images/52387318393_008419d7e0_k.jpg.webp?245679b6a08e141b79cd1adb05b548eb",
+            "width": 2048,
+            "height": 1367
+          },
+          "constantValueEnabled": true
+        },
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Send Us A Message",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 32,
+          "fontColor": "#FFFFFF",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "body": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Questions about treatment, scheduling, or your next visit? Reach out and our team will help you get started.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#FFFFFF",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "cta": {
+          "label": "Contact Us",
+          "link": "https://www.ofc-carmel.com/contact"
+        }
+      }
+    },
+    {
+      "type": "Hs1CarmelLocationSection",
+      "props": {
+        "id": "Hs1CarmelLocationSection-79147a79-3d15-4eb3-a4d2-aa2243a0a252",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Our Location",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 32,
+          "fontColor": "#04364E",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "directionsCta": {
+          "label": "Driving Directions",
+          "link": ""
+        }
+      }
+    },
+    {
+      "type": "Hs1CarmelFooterSection",
+      "props": {
+        "id": "Hs1CarmelFooterSection-79a7c89c-bdf6-4bff-97c6-1a19b6f75982",
+        "backgroundImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://cdcssl.ibsrv.net/ibimg/smb/2048x1367_80/webmgr/1s/a/7/Sample-Images/52387318393_008419d7e0_k.jpg.webp?245679b6a08e141b79cd1adb05b548eb",
+            "width": 2048,
+            "height": 1367
+          },
+          "constantValueEnabled": true
+        },
+        "logoImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://cdcssl.ibsrv.net/ibimg/smb/250x162_80/webmgr/1s/a/7/whitetoothlandscapelogo.png.webp?1d33287e932278238b61732c96feb9fc",
+            "width": 250,
+            "height": 162
+          },
+          "constantValueEnabled": true
+        },
+        "logoTitle": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Round Valley Dental Center",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 14,
+          "fontColor": "#FFFFFF",
+          "fontWeight": 700,
+          "textTransform": "uppercase"
+        },
+        "socialHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Stay Connected",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 26,
+          "fontColor": "#FFFFFF",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "socialSubtitle": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Follow us today for exclusive promotions",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#FFFFFF",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "socialLinks": [
+          {
+            "label": "blog",
+            "link": "https://www.blog.com",
+            "icon": "rss"
+          },
+          {
+            "label": "Instagram",
+            "link": "//instagram.com/",
+            "icon": "instagram"
+          },
+          {
+            "label": "Youtube",
+            "link": "{SOCM.icon4pagelink}",
+            "icon": "youtube"
+          },
+          {
+            "label": "Facebook",
+            "link": "{SOCM.icon1pagelink}",
+            "icon": "facebook"
+          },
+          {
+            "label": "Twitter",
+            "link": "{SOCM.icon2pagelink}",
+            "icon": "twitter"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Hs1CarmelCopyrightSection",
+      "props": {
+        "id": "Hs1CarmelCopyrightSection-a8d47400-4fe6-44c9-812e-964b8ef9081f",
+        "links": [
+          {
+            "label": "Copyright © 2026 MH Sub I, LLC dba Officite",
+            "link": "//www.henryscheinone.com/products/officite"
+          },
+          {
+            "label": "Admin Log In",
+            "link": "https://secure.officite.com"
+          },
+          {
+            "label": "Site Map",
+            "link": "https://www.ofc-carmel.com/sitemap"
+          }
+        ]
+      }
+    }
+  ],
+  "zones": {}
+}

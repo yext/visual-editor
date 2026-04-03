@@ -1,0 +1,1065 @@
+{
+  "root": {
+    "props": {
+      "title": {
+        "field": "name",
+        "constantValue": "Hs1 Chicago Pages",
+        "constantValueEnabled": false
+      },
+      "description": {
+        "field": "description",
+        "constantValue": "",
+        "constantValueEnabled": false
+      }
+    }
+  },
+  "content": [
+    {
+      "type": "Hs1ChicagoHeaderSection",
+      "props": {
+        "id": "Hs1ChicagoHeaderSection-9152206a-3917-47cc-95f8-a5754f034070",
+        "logoImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://cdcssl.ibsrv.net/ibimg/smb/350x204_80/webmgr/1o/q/x/northsidedentallogo.png.webp?9767ec738ac88e2dc881cf48d0b128d5",
+            "width": 350,
+            "height": 204
+          },
+          "constantValueEnabled": true
+        },
+        "logoLink": "https://www.ofc-chicago.com",
+        "phoneCta": {
+          "label": "(877) 393-3348",
+          "link": "tel:(877) 393-3348"
+        },
+        "socialLinks": [
+          {
+            "label": "Youtube",
+            "link": "",
+            "symbol": "Y"
+          },
+          {
+            "label": "Facebook",
+            "link": "",
+            "symbol": "F"
+          },
+          {
+            "label": "Twitter",
+            "link": "",
+            "symbol": "T"
+          }
+        ],
+        "navigationLinks": [
+          {
+            "label": "Home",
+            "link": "https://www.ofc-chicago.com"
+          },
+          {
+            "label": "Staff",
+            "link": "https://www.ofc-chicago.com/staff"
+          },
+          {
+            "label": "Office",
+            "link": "https://www.ofc-chicago.com/our-locations"
+          },
+          {
+            "label": "Services",
+            "link": "https://www.ofc-chicago.com/dental-services"
+          },
+          {
+            "label": "New Patients",
+            "link": "https://www.ofc-chicago.com/new-patients"
+          },
+          {
+            "label": "Contact Us",
+            "link": "https://www.ofc-chicago.com/contact"
+          },
+          {
+            "label": "Appointment Request",
+            "link": "https://www.ofc-chicago.com/appointment"
+          },
+          {
+            "label": "Testimonials",
+            "link": "https://www.ofc-chicago.com/testimonials"
+          },
+          {
+            "label": "Test Videos",
+            "link": "https://www.ofc-chicago.com/test-videos"
+          }
+        ],
+        "educationMenu": {
+          "label": "Patient Education",
+          "link": "https://www.ofc-chicago.com/articles/premium_education",
+          "subLinks": [
+            {
+              "label": "Educational Videos",
+              "link": "https://www.ofc-chicago.com/articles/premium_education/category/47361"
+            },
+            {
+              "label": "Cosmetic & General Dentistry",
+              "link": "https://www.ofc-chicago.com/articles/premium_education/category/47362"
+            },
+            {
+              "label": "Emergency Care",
+              "link": "https://www.ofc-chicago.com/articles/premium_education/category/47363"
+            },
+            {
+              "label": "Endodontics",
+              "link": "https://www.ofc-chicago.com/articles/premium_education/category/47364"
+            },
+            {
+              "label": "Implant Dentistry",
+              "link": "https://www.ofc-chicago.com/articles/premium_education/category/47365"
+            },
+            {
+              "label": "Oral Health",
+              "link": "https://www.ofc-chicago.com/articles/premium_education/category/47366"
+            },
+            {
+              "label": "Oral Hygiene",
+              "link": "https://www.ofc-chicago.com/articles/premium_education/category/47367"
+            },
+            {
+              "label": "Oral Surgery",
+              "link": "https://www.ofc-chicago.com/articles/premium_education/category/47368"
+            },
+            {
+              "label": "Orthodontics",
+              "link": "https://www.ofc-chicago.com/articles/premium_education/category/47369"
+            },
+            {
+              "label": "Pediatric Dentistry",
+              "link": "https://www.ofc-chicago.com/articles/premium_education/category/47370"
+            },
+            {
+              "label": "Periodontal Therapy",
+              "link": "https://www.ofc-chicago.com/articles/premium_education/category/47371"
+            },
+            {
+              "label": "Technology",
+              "link": "https://www.ofc-chicago.com/articles/premium_education/category/47372"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Hs1ChicagoHeroSection",
+      "props": {
+        "id": "Hs1ChicagoHeroSection-f2b3ce17-b330-401e-8962-a9c36c2602ef",
+        "slides": [
+          {
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://cdcssl.ibsrv.net/ibimg/smb/436x400_80/webmgr/1o/q/x/chicago/slider_1.jpg.webp?2e09dc0eebc1490158f26396354403a7",
+                "width": 436,
+                "height": 400
+              },
+              "constantValueEnabled": true
+            },
+            "altText": "Dentist showing patient xray",
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "en": "Healthy Mouth",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 36,
+              "fontColor": "#ffffff",
+              "fontWeight": 500,
+              "textTransform": "uppercase"
+            },
+            "caption": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "en": "Happy Life",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 18,
+              "fontColor": "#ffffff",
+              "fontWeight": 300,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "Make an Appointment",
+              "link": "https://www.ofc-chicago.com/appointment"
+            }
+          },
+          {
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://cdcssl.ibsrv.net/ibimg/smb/436x400_80/webmgr/1o/q/x/chicago/slider_2.jpg.webp?0744d2a79f8e268ba5ae003468cf2aed",
+                "width": 436,
+                "height": 400
+              },
+              "constantValueEnabled": true
+            },
+            "altText": "Family brushing teeth together",
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "en": "Changing Lives",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 36,
+              "fontColor": "#ffffff",
+              "fontWeight": 500,
+              "textTransform": "uppercase"
+            },
+            "caption": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "en": "One Smile at a time",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 18,
+              "fontColor": "#ffffff",
+              "fontWeight": 300,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "Make an Appointment",
+              "link": "https://www.ofc-chicago.com/appointment"
+            }
+          },
+          {
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://cdcssl.ibsrv.net/ibimg/smb/436x400_80/webmgr/1o/q/x/chicago/slider_3.jpg.webp?58f726f0b5d6ed2774f5a4b0b612943c",
+                "width": 436,
+                "height": 400
+              },
+              "constantValueEnabled": true
+            },
+            "altText": "Couple hugging",
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "en": "Discover your smile",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 36,
+              "fontColor": "#ffffff",
+              "fontWeight": 500,
+              "textTransform": "normal"
+            },
+            "caption": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "en": "Today!",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 18,
+              "fontColor": "#ffffff",
+              "fontWeight": 300,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "Make an Appointment",
+              "link": "https://www.ofc-chicago.com/appointment"
+            }
+          },
+          {
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://cdcssl.ibsrv.net/ibimg/smb/436x400_80/webmgr/1o/q/x/chicago/slider_4.jpg.webp?283a04eb0591ce258e98ebef6ec5c2e9",
+                "width": 436,
+                "height": 400
+              },
+              "constantValueEnabled": true
+            },
+            "altText": "Couple hugging",
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "en": "Care for Your Smile",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 36,
+              "fontColor": "#ffffff",
+              "fontWeight": 500,
+              "textTransform": "uppercase"
+            },
+            "caption": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "en": "and Let it Brighten Your Day!",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 18,
+              "fontColor": "#ffffff",
+              "fontWeight": 300,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "Make an Appointment",
+              "link": "https://www.ofc-chicago.com/appointment"
+            }
+          }
+        ],
+        "activeSlideIndex": 1
+      }
+    },
+    {
+      "type": "Hs1ChicagoWelcomeSection",
+      "props": {
+        "id": "Hs1ChicagoWelcomeSection-23ca71de-34ba-4d39-b1f3-4753b6da5f81",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Welcome to Our Practice",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#1f1a19",
+          "fontWeight": 500,
+          "textTransform": "uppercase"
+        },
+        "subheading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Welcome to Northside Dental, Your Dentist in Downers Grove, IL",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 26,
+          "fontColor": "#1f1a19",
+          "fontWeight": 300,
+          "textTransform": "normal"
+        },
+        "paragraphs": [
+          {
+            "body": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "en": "Welcome! The dental professionals at Northside Dental are pleased to welcome you to our practice. We want all our patients to be informed decision makers and fully understand any health issues you face.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 15,
+              "fontColor": "#5b5554",
+              "fontWeight": 300,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "body": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "en": "Our web site also provides background about our staff, office hours, insurance policies, appointment procedures, maps and directions. We know how hectic life can be and are committed to making our practice convenient and accessible.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 15,
+              "fontColor": "#5b5554",
+              "fontWeight": 300,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "body": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "en": "Please take a few moments to look through this site to get a better feel for Northside Dental's capabilities and services. Thank you.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 15,
+              "fontColor": "#5b5554",
+              "fontWeight": 300,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Hs1ChicagoOfferSection",
+      "props": {
+        "id": "Hs1ChicagoOfferSection-43176461-121b-490e-9ea4-dffb46d3df8f",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Exclusive Offer",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#ffffff",
+          "fontWeight": 500,
+          "textTransform": "uppercase"
+        },
+        "caption": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Sign up to receive special offers and discounts",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#ffffff",
+          "fontWeight": 300,
+          "textTransform": "normal"
+        },
+        "fields": [
+          {
+            "placeholder": "Enter your name (Required)",
+            "inputType": "text"
+          },
+          {
+            "placeholder": "Enter email (Required)",
+            "inputType": "email"
+          },
+          {
+            "placeholder": "(XXX)XXX-XXXX (Required)",
+            "inputType": "tel"
+          }
+        ],
+        "disclaimer": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Please do not submit any Protected Health Information (PHI).",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 14,
+          "fontColor": "#ffffff",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "submitLabel": "Submit"
+      }
+    },
+    {
+      "type": "Hs1ChicagoFeaturedServicesSection",
+      "props": {
+        "id": "Hs1ChicagoFeaturedServicesSection-02fb3ec1-c0a1-405a-afaa-f7824ba89d51",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Featured Services",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#1f1a19",
+          "fontWeight": 500,
+          "textTransform": "uppercase"
+        },
+        "caption": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Click to find out more",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#3f3a39",
+          "fontWeight": 300,
+          "textTransform": "normal"
+        },
+        "cards": [
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "en": "General Dentistry",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 22,
+              "fontColor": "#000000",
+              "fontWeight": 500,
+              "textTransform": "uppercase"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "en": "Dentistry encompasses array of services and procedures with a common goal: to help you preserve your natural teeth, ensure your oral health, and keep you looking and feeling great.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 15,
+              "fontColor": "#4b4644",
+              "fontWeight": 300,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "Learn More",
+              "link": "https://www.ofc-chicago.com/articles/dear_doctor/category/47362"
+            }
+          },
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "en": "Teeth Whitening",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 22,
+              "fontColor": "#000000",
+              "fontWeight": 500,
+              "textTransform": "uppercase"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "en": "Whitening procedures have effectively restored the smile of people with stained, dull, or discolored teeth.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 15,
+              "fontColor": "#4b4644",
+              "fontWeight": 300,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "Learn More",
+              "link": "https://www.ofc-chicago.com/articles/dear_doctor/509349-teeth-whitening"
+            }
+          },
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "en": "Fillings",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 22,
+              "fontColor": "#000000",
+              "fontWeight": 500,
+              "textTransform": "uppercase"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "en": "Frequently asked questions: are dental amalgams safe? Is it possible to have an allergic reaction to amalgam?",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 15,
+              "fontColor": "#4b4644",
+              "fontWeight": 300,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "Learn More",
+              "link": "https://www.ofc-chicago.com/articles/dear_doctor/509277-fillings"
+            }
+          },
+          {
+            "title": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "en": "Dental Implants",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 22,
+              "fontColor": "#000000",
+              "fontWeight": 500,
+              "textTransform": "uppercase"
+            },
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "en": "Before development of dental implants, dentures were the only alternative to replacing a missing tooth or teeth.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 15,
+              "fontColor": "#4b4644",
+              "fontWeight": 300,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "Learn More",
+              "link": "https://www.ofc-chicago.com/articles/dear_doctor/category/47365"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Hs1ChicagoStaffSection",
+      "props": {
+        "id": "Hs1ChicagoStaffSection-c77436ff-fdef-4576-9980-7c3b9d4485b9",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Meet Our Staff",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#1f1a19",
+          "fontWeight": 500,
+          "textTransform": "uppercase"
+        },
+        "caption": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Learn Who We Are",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#3f3a39",
+          "fontWeight": 300,
+          "textTransform": "normal"
+        },
+        "activeMemberIndex": 0,
+        "members": [
+          {
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://cdcssl.ibsrv.net/ibimg/smb/250x250_80/webmgr/1o/q/x/stockdrimg.jpg.webp?e9b3f2b5a722ce16d21f85611f2a4722",
+                "width": 250,
+                "height": 250
+              },
+              "constantValueEnabled": true
+            },
+            "name": "Dr. John Smith",
+            "suffix": "DDS",
+            "role": "Doctor",
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "en": "Dr. John Smith was born and raised in Minnesota. He received his degree from the University of Minnesota in 1990. He practiced in Minneapolis for ten years and enjoys spending time with his family, traveling, and reading.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 15,
+              "fontColor": "#4b4644",
+              "fontWeight": 300,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "Read More",
+              "link": "https://www.ofc-chicago.com/staff"
+            }
+          },
+          {
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://cdcssl.ibsrv.net/ibimg/smb/250x250_80/webmgr/1o/q/x/drpicstock.jpg.webp?0e673d692af0c35756c1b81cbd2799cb",
+                "width": 250,
+                "height": 250
+              },
+              "constantValueEnabled": true
+            },
+            "name": "Dr. Sarah Green",
+            "suffix": "DDS",
+            "role": "Doctor",
+            "description": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "en": "Dr. Sarah Green's practice philosophy is based on extreme excellence. When not working with her patients she enjoys baking and watching movies.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 15,
+              "fontColor": "#4b4644",
+              "fontWeight": 300,
+              "textTransform": "normal"
+            },
+            "cta": {
+              "label": "",
+              "link": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Hs1ChicagoTestimonialsSection",
+      "props": {
+        "id": "Hs1ChicagoTestimonialsSection-643c9693-0278-44a3-bff7-51b28b1bb040",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Testimonials",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#ffffff",
+          "fontWeight": 500,
+          "textTransform": "uppercase"
+        },
+        "caption": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "What Our Patients Say About Us",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#ffffff",
+          "fontWeight": 300,
+          "textTransform": "normal"
+        },
+        "activeItemIndex": 0,
+        "items": [
+          {
+            "quote": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "en": "Visiting Northside Dental gives my family and me more reasons to smile.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 18,
+              "fontColor": "#3f3a39",
+              "fontWeight": 300,
+              "textTransform": "normal"
+            },
+            "source": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "en": "The Johnson Family",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 15,
+              "fontColor": "#3f3a39",
+              "fontWeight": 500,
+              "textTransform": "uppercase"
+            }
+          },
+          {
+            "quote": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "en": "Dr. Smith provided me with excellent care when I needed it the most.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 18,
+              "fontColor": "#3f3a39",
+              "fontWeight": 300,
+              "textTransform": "normal"
+            },
+            "source": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "en": "Jennifer R.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 15,
+              "fontColor": "#3f3a39",
+              "fontWeight": 500,
+              "textTransform": "uppercase"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Hs1ChicagoContactFormSection",
+      "props": {
+        "id": "Hs1ChicagoContactFormSection-e418ab64-7e04-4246-bd7c-346bb68c32b1",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Contact Us",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#ffffff",
+          "fontWeight": 500,
+          "textTransform": "uppercase"
+        },
+        "caption": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Sign up to receive our updates",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#ffffff",
+          "fontWeight": 300,
+          "textTransform": "normal"
+        },
+        "fields": [
+          {
+            "placeholder": "Enter your name (Required)",
+            "inputType": "text"
+          },
+          {
+            "placeholder": "Enter email (Required)",
+            "inputType": "email"
+          },
+          {
+            "placeholder": "(XXX)XXX-XXXX (Required)",
+            "inputType": "tel"
+          },
+          {
+            "placeholder": "Notes to the Doctor",
+            "inputType": "textarea"
+          }
+        ],
+        "disclaimer": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Please do not submit any Protected Health Information (PHI).",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 14,
+          "fontColor": "#ffffff",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "submitLabel": "Submit"
+      }
+    },
+    {
+      "type": "Hs1ChicagoLocationHoursSection",
+      "props": {
+        "id": "Hs1ChicagoLocationHoursSection-17b263ce-de92-4d3b-bb6f-9efa66d686fc",
+        "mapHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Our Location",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#1f1a19",
+          "fontWeight": 500,
+          "textTransform": "uppercase"
+        },
+        "mapCaption": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Find us on the map",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#3f3a39",
+          "fontWeight": 300,
+          "textTransform": "normal"
+        },
+        "hoursHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Hours of Operation",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#1f1a19",
+          "fontWeight": 500,
+          "textTransform": "uppercase"
+        },
+        "hoursCaption": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Our Regular Schedule",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#3f3a39",
+          "fontWeight": 300,
+          "textTransform": "normal"
+        }
+      }
+    },
+    {
+      "type": "Hs1ChicagoInsuranceSection",
+      "props": {
+        "id": "Hs1ChicagoInsuranceSection-26802673-a6df-4ab5-bcb9-56de0deffa59",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Accepted Dental Plans & Insurance",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#1f1a19",
+          "fontWeight": 500,
+          "textTransform": "uppercase"
+        },
+        "logos": [
+          {
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://cdcssl.ibsrv.net/ibimg/smb/135x135_80/webmgr/1o/q/x/_SHARED/Health_Logo1.png.webp?9d9b3c2d92fd1d9a59b4cc84811d8218",
+                "width": 135,
+                "height": 135
+              },
+              "constantValueEnabled": true
+            }
+          },
+          {
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://cdcssl.ibsrv.net/ibimg/smb/135x135_80/webmgr/1o/q/x/_SHARED/Health_Logo2.png.webp?0f63072bad5cca0403dba10a0ac2ae24",
+                "width": 135,
+                "height": 135
+              },
+              "constantValueEnabled": true
+            }
+          },
+          {
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://cdcssl.ibsrv.net/ibimg/smb/135x135_80/webmgr/1o/q/x/_SHARED/Health_Logo3.png.webp?381eccc06e1014fe1377637d625aa995",
+                "width": 135,
+                "height": 135
+              },
+              "constantValueEnabled": true
+            }
+          },
+          {
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://cdcssl.ibsrv.net/ibimg/smb/135x135_80/webmgr/1o/q/x/_SHARED/Health_Logo4.png.webp?4a8df823b854aef6ba213978fe03e36a",
+                "width": 135,
+                "height": 135
+              },
+              "constantValueEnabled": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Hs1ChicagoCopyrightSection",
+      "props": {
+        "id": "Hs1ChicagoCopyrightSection-f092e091-4234-40a3-bc50-d20fee75e645",
+        "links": [
+          {
+            "label": "Copyright © 2026 MH Sub I, LLC dba Officite.",
+            "link": "//www.henryscheinone.com/products/officite"
+          },
+          {
+            "label": "Admin Log In",
+            "link": "https://secure.officite.com"
+          },
+          {
+            "label": "Site Map",
+            "link": "https://www.ofc-chicago.com/sitemap"
+          }
+        ]
+      }
+    }
+  ],
+  "zones": {}
+}

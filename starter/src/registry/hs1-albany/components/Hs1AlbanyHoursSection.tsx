@@ -4,7 +4,6 @@ import {
   resolveComponentData,
   TranslatableString,
   useDocument,
-  useEntityFields,
   YextEntityField,
   YextEntityFieldSelector,
 } from "@yext/visual-editor";
@@ -83,30 +82,6 @@ const formatHoursForDay = (day?: HoursDay): string => {
     .join(", ");
 };
 
-const normalizeHoursFieldName = (
-  fieldName: string,
-  availableDisplayNames?: Record<string, string>,
-): string => {
-  const trimmedFieldName = fieldName.trim();
-
-  if (!trimmedFieldName) {
-    return "hours";
-  }
-
-  const lowercaseFieldName = trimmedFieldName.toLowerCase();
-  if (lowercaseFieldName === "hours") {
-    return "hours";
-  }
-
-  const matchingEntry = Object.entries(availableDisplayNames ?? {}).find(
-    ([apiName, displayName]) =>
-      apiName.toLowerCase() === lowercaseFieldName ||
-      displayName.toLowerCase() === lowercaseFieldName,
-  );
-
-  return matchingEntry?.[0] ?? trimmedFieldName;
-};
-
 const textField = (label: string) => ({
   label,
   type: "object" as const,
@@ -181,21 +156,16 @@ export const Hs1AlbanyHoursSectionComponent: PuckComponent<
     locale?: string;
     hours?: HoursData;
   };
-  const entityFields = useEntityFields();
   const locale = streamDocument.locale ?? "en";
   const heading =
     resolveComponentData(props.heading.text, locale, streamDocument) || "";
   const subtitle =
     resolveComponentData(props.subtitle.text, locale, streamDocument) || "";
-  const normalizedFieldName = normalizeHoursFieldName(
-    props.hours.field,
-    entityFields?.displayNames,
-  );
   const hoursBinding = props.hours.constantValueEnabled
     ? props.hours
     : {
         ...props.hours,
-        field: normalizedFieldName,
+        field: props.hours.field?.trim() || "hours",
       };
   const resolvedHours = resolveComponentData(
     hoursBinding,
