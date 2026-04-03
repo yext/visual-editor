@@ -27,6 +27,7 @@ import {
 import { DynamicOption } from "../../../editor/DynamicOptionsSelector.tsx";
 import { useTemplateMetadata } from "../../hooks/useMessageReceivers.ts";
 import { getPageSetLocales } from "../../../utils/pageSetLocales.ts";
+import { shouldUseStandaloneLocalPrompt } from "../../utils/shouldUseStandaloneLocalPrompt.ts";
 
 export type ImagePayload = {
   id: string;
@@ -37,13 +38,6 @@ export type ImagePayload = {
 let pendingImageSession:
   | { messageId: string; apply: (payload: ImagePayload) => void }
   | undefined;
-
-const shouldUseStandaloneLocalImagePrompt = (): boolean => {
-  return (
-    window.parent === window ||
-    window.location.href.includes("http://localhost:5173/dev-location")
-  );
-};
 
 const buildLocatorDisplayOptions = (
   locatorDisplayFields?: Record<string, FieldTypeData>
@@ -109,7 +103,7 @@ const createImageConstantConfig = (options?: {
       e.preventDefault();
 
       /** Handles local development testing outside of Storm */
-      if (shouldUseStandaloneLocalImagePrompt()) {
+      if (shouldUseStandaloneLocalPrompt()) {
         const userInput = prompt("Enter Image URL:");
         if (!userInput) {
           return;

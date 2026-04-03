@@ -32,7 +32,7 @@ import {
 import { migrate } from "../utils/migrate.ts";
 import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";
-import { LocalDevOptions } from "../internal/types/templateMetadata.ts";
+import { LocalDevOptions } from "./types.ts";
 
 const devLogger = new DevLogger();
 

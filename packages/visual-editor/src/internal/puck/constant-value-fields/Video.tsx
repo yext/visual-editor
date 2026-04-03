@@ -7,6 +7,7 @@ import {
 } from "../../hooks/useMessage.ts";
 import { Button } from "../ui/button.tsx";
 import { AssetVideo } from "../../../types/videos.ts";
+import { shouldUseStandaloneLocalPrompt } from "../../utils/shouldUseStandaloneLocalPrompt.ts";
 import { pt } from "../../../utils/i18n/platform.ts";
 
 type VideoPayload = {
@@ -18,13 +19,6 @@ type VideoPayload = {
 let pendingVideoSession:
   | { messageId: string; apply: (payload: VideoPayload) => void }
   | undefined;
-
-const shouldUseStandaloneLocalPrompt = (): boolean => {
-  return (
-    window.parent === window ||
-    window.location.href.includes("http://localhost:5173/dev-location")
-  );
-};
 
 export const VIDEO_CONSTANT_CONFIG: CustomField<AssetVideo | undefined> = {
   type: "custom",

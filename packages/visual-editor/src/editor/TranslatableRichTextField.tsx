@@ -8,18 +8,12 @@ import {
   useReceiveMessage,
   useSendMessageToParent,
 } from "../internal/hooks/useMessage.ts";
+import { shouldUseStandaloneLocalPrompt } from "../internal/utils/shouldUseStandaloneLocalPrompt.ts";
 import { useTranslation } from "react-i18next";
 
 let pendingRichTextSession:
   | { messageId: string; apply: (payload: any) => void }
   | undefined;
-
-const shouldUseStandaloneLocalPrompt = (): boolean => {
-  return (
-    window.parent === window ||
-    window.location.href.includes("http://localhost:5173/dev-location")
-  );
-};
 
 /**
  * Generates a translatableRichText field config

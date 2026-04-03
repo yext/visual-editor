@@ -5,18 +5,12 @@ import {
   useReceiveMessage,
   useSendMessageToParent,
 } from "../internal/hooks/useMessage.ts";
+import { shouldUseStandaloneLocalPrompt } from "../internal/utils/shouldUseStandaloneLocalPrompt.ts";
 import { pt } from "../utils/i18n/platform.ts";
 
 let pendingCodeSession:
   | { messageId: string; apply: (payload: any) => void }
   | undefined;
-
-const shouldUseStandaloneLocalPrompt = (): boolean => {
-  return (
-    window.parent === window ||
-    window.location.href.includes("http://localhost:5173/dev-location")
-  );
-};
 
 export type codeLanguageOptions =
   | "html"

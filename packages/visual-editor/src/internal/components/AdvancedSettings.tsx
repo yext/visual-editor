@@ -8,18 +8,12 @@ import {
   useReceiveMessage,
   TARGET_ORIGINS,
 } from "../hooks/useMessage.ts";
+import { shouldUseStandaloneLocalPrompt } from "../utils/shouldUseStandaloneLocalPrompt.ts";
 import { getSchemaTemplate } from "../../utils/schema/defaultSchemas.ts";
 
 let pendingSchemaMarkupSession:
   | { messageId: string; apply: (payload: any) => void }
   | undefined;
-
-const shouldUseStandaloneLocalPrompt = (): boolean => {
-  return (
-    window.parent === window ||
-    window.location.href.includes("http://localhost:5173/dev-location")
-  );
-};
 
 export interface AdvancedSettingsProps {
   /**

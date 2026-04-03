@@ -18,23 +18,18 @@ import {
   getEditorTemplateInfoFromTemplateNames,
   injectEditorTemplateInfo,
 } from "./editorRoute.ts";
+import { createLocalEditorArtifactsManager } from "./local-editor/artifacts.ts";
+import { resolveLocalEditorStreamConfigPath } from "./local-editor/config.ts";
 import {
-  buildLocalEditorDataTemplatePath,
-  buildLocalEditorDataTemplateSource,
-  buildLocalEditorTemplateSource,
-  type LocalEditorDocumentResponse,
-  type LocalEditorManifestResponse,
-  DEFAULT_LOCAL_EDITOR_STREAM_CONFIG_PATH,
   ensureLocalEditorStreamConfig,
-  getLocalEditorDocument,
-  getLocalEditorManifest,
-  isGeneratedLocalEditorTemplate,
-  LEGACY_LOCAL_EDITOR_DATA_TEMPLATE_PATH,
-  LOCAL_EDITOR_API_BASE_PATH,
-  LOCAL_EDITOR_DATA_TEMPLATE_PREFIX,
   normalizeLocalEditorRoute,
-  resolveLocalEditorStreamConfigPath,
-} from "./localEditor.ts";
+  writeFileIfChanged,
+} from "./local-editor/generatedFiles.ts";
+import {
+  createLocalEditorRequestHandler,
+  sendJsonResponse,
+} from "./local-editor/server.ts";
+import type { LocalEditorOptions } from "./local-editor/types.ts";
 
 type TemplateManifestEntry = {
   name: string;
@@ -49,23 +44,6 @@ type VirtualFile = {
   filepath: string;
   content: any;
   templateManifestEntry?: TemplateManifestEntry;
-};
-
-type LocalEditorOptions = {
-  enabled?: boolean;
-  route?: string;
-  streamConfigPath?: string;
-};
-
-type JsonResponseWriter = {
-  setHeader: (name: string, value: string) => void;
-  end: (chunk?: string) => void;
-  statusCode: number;
-};
-
-type LocalEditorRequestContext = {
-  requestUrl: URL;
-  streamConfigPath: string;
 };
 
 export type VisualEditorPluginOptions = {
@@ -107,17 +85,23 @@ export const yextVisualEditorPlugin = (
 ): Plugin => {
   let isBuildMode = false;
   let isServeMode = false;
-  let resolvedLocalEditorStreamConfigPath =
-    options.localEditor?.streamConfigPath ??
-    DEFAULT_LOCAL_EDITOR_STREAM_CONFIG_PATH;
   const filesToCleanup: string[] = [];
   const localEditorOptions = options.localEditor;
   const localEditorRoute = normalizeLocalEditorRoute(localEditorOptions?.route);
+  const handleLocalEditorRequest =
+    createLocalEditorRequestHandler(localEditorOptions);
   const trackGeneratedFile = (filePath: string) => {
     if (!filesToCleanup.includes(filePath)) {
       filesToCleanup.push(filePath);
     }
   };
+  const localEditorArtifacts = createLocalEditorArtifactsManager({
+    localEditorOptions,
+    localEditorRoute,
+    localEditorTemplateSource: localEditorTemplate,
+    localEditorDataTemplateSource: localEditorDataTemplate,
+    trackGeneratedFile,
+  });
 
   /**
    * generateFiles generates the template files and .temlpate-manifest.json file
@@ -146,7 +130,6 @@ export const yextVisualEditorPlugin = (
       ...registryTemplateNames,
     ]);
 
-    // Create a structure to store the manifest data
     const manifest: {
       templates: TemplateManifestEntry[];
     } = { templates: [] };
@@ -191,158 +174,13 @@ export const yextVisualEditorPlugin = (
     });
   };
 
-  const cleanupGeneratedLocalEditorArtifacts = () => {
-    cleanupLocalEditorTemplate();
-    cleanupLocalEditorDataTemplates();
-  };
-
-  const cleanupServeArtifacts = () => {
-    cleanupGeneratedLocalEditorArtifacts();
-    cleanupFiles();
-  };
-
-  const syncLocalEditorTemplate = (registryTemplateNames: string[]) => {
-    const templatePath = path.join(
-      process.cwd(),
-      "src",
-      "templates",
-      "local-editor.tsx"
-    );
-    let nextTemplateSource = buildLocalEditorTemplateSource(
-      localEditorTemplate,
-      localEditorRoute
-    );
-    nextTemplateSource = buildEditorTemplateSource({
-      rootDir: process.cwd(),
-      templatePath,
-      templateSource: nextTemplateSource,
-      templateNames: registryTemplateNames,
-    });
-
-    fs.mkdirSync(path.dirname(templatePath), { recursive: true });
-
-    if (
-      fs.existsSync(templatePath) &&
-      !isGeneratedLocalEditorTemplate(templatePath)
-    ) {
-      throw new Error(
-        `Refusing to overwrite hand-authored local editor template at ${templatePath}`
-      );
-    }
-
-    writeFileIfChanged(templatePath, nextTemplateSource);
-    trackGeneratedFile(templatePath);
-  };
-
-  const cleanupLocalEditorTemplate = () => {
-    const templatePath = path.join(
-      process.cwd(),
-      "src",
-      "templates",
-      "local-editor.tsx"
-    );
-    if (isGeneratedLocalEditorTemplate(templatePath)) {
-      fs.rmSync(templatePath, { force: true });
-    }
-  };
-
-  const syncLocalEditorDataTemplates = async () => {
-    const manifest = await getLocalEditorManifest(
-      process.cwd(),
-      resolvedLocalEditorStreamConfigPath
-    );
-    const activeTemplatePaths = new Set<string>();
-
-    for (const templateId of manifest.templates) {
-      const templatePath = path.join(
-        process.cwd(),
-        buildLocalEditorDataTemplatePath(templateId)
-      );
-      const streamConfigImportPath = path
-        .relative(
-          path.dirname(templatePath),
-          path.join(process.cwd(), resolvedLocalEditorStreamConfigPath)
-        )
-        .split(path.sep)
-        .join("/");
-      const nextTemplateSource = buildLocalEditorDataTemplateSource(
-        localEditorDataTemplate,
-        streamConfigImportPath.startsWith(".")
-          ? streamConfigImportPath
-          : `./${streamConfigImportPath}`,
-        templateId
-      );
-
-      fs.mkdirSync(path.dirname(templatePath), { recursive: true });
-
-      if (
-        fs.existsSync(templatePath) &&
-        !isGeneratedLocalEditorTemplate(templatePath)
-      ) {
-        throw new Error(
-          `Refusing to overwrite hand-authored local editor data template at ${templatePath}`
-        );
-      }
-
-      writeFileIfChanged(templatePath, nextTemplateSource);
-      activeTemplatePaths.add(templatePath);
-    }
-
-    cleanupLocalEditorDataTemplates(activeTemplatePaths);
-  };
-
-  const cleanupLocalEditorDataTemplates = (
-    activeTemplatePaths?: Set<string>
-  ) => {
-    const templatesDirectory = path.join(process.cwd(), "src", "templates");
-    if (!fs.existsSync(templatesDirectory)) {
-      return;
-    }
-
-    for (const entry of fs.readdirSync(templatesDirectory, {
-      withFileTypes: true,
-    })) {
-      if (!entry.isFile()) {
-        continue;
-      }
-
-      if (
-        !entry.name.startsWith(LOCAL_EDITOR_DATA_TEMPLATE_PREFIX) ||
-        path.extname(entry.name) !== ".tsx"
-      ) {
-        continue;
-      }
-
-      const templatePath = path.join(templatesDirectory, entry.name);
-      if (
-        activeTemplatePaths?.has(templatePath) ||
-        !isGeneratedLocalEditorTemplate(templatePath)
-      ) {
-        continue;
-      }
-
-      fs.rmSync(templatePath, { force: true });
-    }
-
-    const legacyTemplatePath = path.join(
-      process.cwd(),
-      LEGACY_LOCAL_EDITOR_DATA_TEMPLATE_PATH
-    );
-    if (
-      (!activeTemplatePaths || !activeTemplatePaths.has(legacyTemplatePath)) &&
-      isGeneratedLocalEditorTemplate(legacyTemplatePath)
-    ) {
-      fs.rmSync(legacyTemplatePath, { force: true });
-    }
-  };
-
   process.on("SIGINT", () => {
-    cleanupServeArtifacts();
+    localEditorArtifacts.cleanupServeArtifacts(cleanupFiles);
     process.nextTick(() => process.exit(0));
   });
 
   process.on("SIGTERM", () => {
-    cleanupServeArtifacts();
+    localEditorArtifacts.cleanupServeArtifacts(cleanupFiles);
     process.nextTick(() => process.exit(0));
   });
 
@@ -354,7 +192,7 @@ export const yextVisualEditorPlugin = (
     },
     async buildStart() {
       if (isBuildMode || !localEditorOptions?.enabled) {
-        cleanupGeneratedLocalEditorArtifacts();
+        localEditorArtifacts.cleanupGeneratedLocalEditorArtifacts();
       }
 
       const registryTemplateNames = getGeneratedRegistryTemplateNames(
@@ -368,20 +206,25 @@ export const yextVisualEditorPlugin = (
       });
 
       if (!isBuildMode && localEditorOptions?.enabled) {
-        resolvedLocalEditorStreamConfigPath =
+        const resolvedLocalEditorStreamConfigPath =
           await resolveLocalEditorStreamConfigPath(
             process.cwd(),
             localEditorOptions?.streamConfigPath
           );
+        localEditorArtifacts.setResolvedLocalEditorStreamConfigPath(
+          resolvedLocalEditorStreamConfigPath
+        );
         await ensureLocalEditorStreamConfig(
           process.cwd(),
           resolvedLocalEditorStreamConfigPath
         );
-        await syncLocalEditorDataTemplates();
+        await localEditorArtifacts.syncLocalEditorDataTemplates();
       }
 
       if (isServeMode && localEditorOptions?.enabled) {
-        syncLocalEditorTemplate(registryTemplateNames);
+        localEditorArtifacts.syncLocalEditorTemplate({
+          registryTemplateNames,
+        });
       }
     },
     configureServer(server) {
@@ -389,40 +232,31 @@ export const yextVisualEditorPlugin = (
         return;
       }
 
-      server.httpServer?.once("close", cleanupServeArtifacts);
+      server.httpServer?.once("close", () => {
+        localEditorArtifacts.cleanupServeArtifacts(cleanupFiles);
+      });
 
       server.middlewares.use((request, response, next) => {
-        void (async () => {
-          if (!request.url) {
-            next();
-            return;
-          }
-
-          const context = await buildLocalEditorRequestContext(
-            request.url,
-            localEditorOptions
-          );
-
-          if (isLocalEditorManifestRequest(context.requestUrl)) {
-            await sendLocalEditorManifestResponse(response, context);
-            return;
-          }
-
-          if (isLocalEditorDocumentRequest(context.requestUrl)) {
-            await sendLocalEditorDocumentResponse(response, context);
-            return;
-          }
-
+        if (!request.url) {
           next();
-        })().catch((error) => {
-          sendJsonResponse(
-            response,
-            {
-              error: error instanceof Error ? error.message : String(error),
-            },
-            500
-          );
-        });
+          return;
+        }
+
+        void handleLocalEditorRequest(request.url, response)
+          .then((handled) => {
+            if (!handled) {
+              next();
+            }
+          })
+          .catch((error) => {
+            sendJsonResponse(
+              response,
+              {
+                error: error instanceof Error ? error.message : String(error),
+              },
+              500
+            );
+          });
       });
     },
     buildEnd() {
@@ -431,71 +265,4 @@ export const yextVisualEditorPlugin = (
       }
     },
   };
-};
-
-const buildLocalEditorRequestContext = async (
-  requestUrl: string,
-  localEditorOptions?: LocalEditorOptions
-): Promise<LocalEditorRequestContext> => {
-  return {
-    requestUrl: new URL(requestUrl, "http://localhost"),
-    streamConfigPath: await resolveLocalEditorStreamConfigPath(
-      process.cwd(),
-      localEditorOptions?.streamConfigPath
-    ),
-  };
-};
-
-const isLocalEditorManifestRequest = (requestUrl: URL): boolean => {
-  return requestUrl.pathname === `${LOCAL_EDITOR_API_BASE_PATH}/manifest`;
-};
-
-const isLocalEditorDocumentRequest = (requestUrl: URL): boolean => {
-  return requestUrl.pathname === `${LOCAL_EDITOR_API_BASE_PATH}/document`;
-};
-
-const sendLocalEditorManifestResponse = async (
-  response: JsonResponseWriter,
-  context: LocalEditorRequestContext
-): Promise<void> => {
-  const payload: LocalEditorManifestResponse = await getLocalEditorManifest(
-    process.cwd(),
-    context.streamConfigPath
-  );
-  sendJsonResponse(response, payload);
-};
-
-const sendLocalEditorDocumentResponse = async (
-  response: JsonResponseWriter,
-  context: LocalEditorRequestContext
-): Promise<void> => {
-  const payload: LocalEditorDocumentResponse = await getLocalEditorDocument(
-    process.cwd(),
-    context.streamConfigPath,
-    context.requestUrl.searchParams.get("templateId") ?? undefined,
-    context.requestUrl.searchParams.get("entityId") ?? undefined,
-    context.requestUrl.searchParams.get("locale") ?? undefined
-  );
-  sendJsonResponse(response, payload);
-};
-
-const sendJsonResponse = (
-  response: JsonResponseWriter,
-  payload: unknown,
-  statusCode = 200
-) => {
-  response.statusCode = statusCode;
-  response.setHeader("Content-Type", "application/json");
-  response.end(JSON.stringify(payload));
-};
-
-const writeFileIfChanged = (filePath: string, contents: string) => {
-  if (
-    fs.existsSync(filePath) &&
-    fs.readFileSync(filePath, "utf8") === contents
-  ) {
-    return;
-  }
-
-  fs.writeFileSync(filePath, contents);
 };

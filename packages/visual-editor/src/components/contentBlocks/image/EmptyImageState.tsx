@@ -11,17 +11,11 @@ import {
   useReceiveMessage,
 } from "../../../internal/hooks/useMessage.ts";
 import { ImagePayload } from "../../../internal/puck/constant-value-fields/Image.tsx";
+import { shouldUseStandaloneLocalPrompt } from "../../../internal/utils/shouldUseStandaloneLocalPrompt.ts";
 
 let pendingEmptyImageSession:
   | { messageId: string; apply: (payload: ImagePayload) => void }
   | undefined;
-
-const shouldUseStandaloneLocalImagePrompt = (): boolean => {
-  return (
-    window.parent === window ||
-    window.location.href.includes("http://localhost:5173")
-  );
-};
 
 interface EmptyImageStateProps {
   isEmpty: boolean;
@@ -70,7 +64,7 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
 
   const handleImageSelection = React.useCallback(() => {
     if (!hasParentData && constantValueEnabled && isEditing) {
-      if (shouldUseStandaloneLocalImagePrompt()) {
+      if (shouldUseStandaloneLocalPrompt("")) {
         const userInput = prompt("Enter Image URL:");
         if (!userInput) {
           return;

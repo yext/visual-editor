@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { TARGET_ORIGINS, useReceiveMessage } from "./useMessage.ts";
 import {
   generateTemplateMetadata,
-  LocalDevOptions,
   TemplateMetadata,
 } from "../types/templateMetadata.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
@@ -13,6 +12,7 @@ import { ThemeData } from "../types/themeData.ts";
 import { migrate } from "../../utils/migrate.ts";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
+import type { LocalDevOptions } from "../../editor/types.ts";
 
 const devLogger = new DevLogger();
 

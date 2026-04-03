@@ -1,5 +1,6 @@
 import { FontRegistry } from "../../utils/fonts/visualEditorFonts.ts";
 import DOMPurify from "dompurify";
+import type { LocalDevOptions } from "../../editor/types.ts";
 
 export type HeadDeployStatus = "RUNNING" | "INACTIVE" | "FAILED" | "ACTIVE";
 
@@ -23,16 +24,6 @@ export type TemplateMetadata = {
   locatorDisplayFields?: Record<string, FieldTypeData>;
   customFonts?: FontRegistry;
   headDeployStatus: HeadDeployStatus;
-};
-
-export type LocalDevOptions = {
-  templateId?: string;
-  entityId?: string | number;
-  locale?: string;
-  locales?: string[];
-  layoutScopeKey?: string;
-  initialLayoutData?: Record<string, unknown>;
-  showOverrideButtons?: boolean;
 };
 
 export type FieldTypeData = {
