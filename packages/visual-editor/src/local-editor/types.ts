@@ -1,6 +1,5 @@
 import type { Config } from "@puckeditor/core";
 import type { TailwindConfig, ThemeConfig } from "../utils/themeResolver.ts";
-import type { LocalDevOptions } from "../editor/types.ts";
 import type {
   LocalEditorDocumentResponse,
   LocalEditorEntityOption,
@@ -8,17 +7,11 @@ import type {
   LocalEditorTemplateDefaults,
 } from "../vite-plugin/local-editor/types.ts";
 
-export type { LocalEditorDocumentResponse, LocalEditorManifestResponse };
-
-export type LocalEditorEntity = LocalEditorEntityOption;
-
-export type LocalEditorSelection = {
-  supportedTemplateIds: string[];
-  activeEntities: LocalEditorEntity[];
-  selectedTemplateId: string;
-  selectedTemplateDefaults?: LocalEditorTemplateDefaults;
-  selectedEntity?: LocalEditorEntity;
-  selectedLocale: string;
+export type {
+  LocalEditorDocumentResponse,
+  LocalEditorEntityOption,
+  LocalEditorManifestResponse,
+  LocalEditorTemplateDefaults,
 };
 
 export type LocalEditorShellProps = {
@@ -31,11 +24,7 @@ export type LocalEditorShellProps = {
 
 export type BuildEditorLocalDevOptionsArgs = {
   selectedTemplateId: string;
-  selectedEntity?: LocalEditorEntity;
+  selectedEntity?: LocalEditorEntityOption;
   selectedLocale: string;
   selectedTemplateDefaults?: LocalEditorTemplateDefaults;
 };
-
-export type BuildEditorLocalDevOptions = (
-  args: BuildEditorLocalDevOptionsArgs
-) => LocalDevOptions | undefined;

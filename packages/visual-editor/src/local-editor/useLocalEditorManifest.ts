@@ -1,6 +1,5 @@
 import React from "react";
 import type { LocalEditorManifestResponse } from "./types.ts";
-import { toErrorMessage } from "./utils.ts";
 
 export const useLocalEditorManifest = (apiBasePath: string) => {
   const [manifest, setManifest] =
@@ -26,7 +25,9 @@ export const useLocalEditorManifest = (apiBasePath: string) => {
         }
       } catch (error) {
         if (isCurrent) {
-          setManifestError(toErrorMessage(error));
+          setManifestError(
+            error instanceof Error ? error.message : String(error)
+          );
         }
       } finally {
         if (isCurrent) {

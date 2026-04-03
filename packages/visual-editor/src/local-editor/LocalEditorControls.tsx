@@ -1,9 +1,9 @@
 import React from "react";
 import { shellStyles } from "./styles.ts";
-import type { LocalEditorEntity } from "./types.ts";
+import type { LocalEditorEntityOption } from "./types.ts";
 
 type LocalEditorControlsProps = {
-  activeEntities: LocalEditorEntity[];
+  activeEntities: LocalEditorEntityOption[];
   activeTemplateOptions: string[];
   controlsDisabled: boolean;
   selectedEntityId?: string;

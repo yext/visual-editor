@@ -208,8 +208,6 @@ export const createLocalEditorArtifactsManager = ({
   return {
     cleanupGeneratedLocalEditorArtifacts,
     cleanupServeArtifacts,
-    getResolvedLocalEditorStreamConfigPath: () =>
-      resolvedLocalEditorStreamConfigPath,
     setResolvedLocalEditorStreamConfigPath: (nextPath: string) => {
       resolvedLocalEditorStreamConfigPath = nextPath;
     },

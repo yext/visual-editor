@@ -1,6 +1,5 @@
 import React from "react";
 import type { LocalEditorDocumentResponse } from "./types.ts";
-import { toErrorMessage } from "./utils.ts";
 
 export const useLocalEditorDocument = (documentRequestPath: string | null) => {
   const [documentResponse, setDocumentResponse] =
@@ -34,7 +33,9 @@ export const useLocalEditorDocument = (documentRequestPath: string | null) => {
         }
       } catch (error) {
         if (isCurrent) {
-          setDocumentError(toErrorMessage(error));
+          setDocumentError(
+            error instanceof Error ? error.message : String(error)
+          );
         }
       } finally {
         if (isCurrent) {

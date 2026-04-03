@@ -1,11 +1,19 @@
 import type { Config } from "@puckeditor/core";
 import type { LocalDevOptions } from "../editor/types.ts";
 import type {
-  LocalEditorEntity,
+  LocalEditorEntityOption,
   LocalEditorManifestResponse,
-  LocalEditorSelection,
   BuildEditorLocalDevOptionsArgs,
 } from "./types.ts";
+
+type SelectionResult = {
+  supportedTemplateIds: string[];
+  activeEntities: LocalEditorEntityOption[];
+  selectedTemplateId: string;
+  selectedTemplateDefaults?: BuildEditorLocalDevOptionsArgs["selectedTemplateDefaults"];
+  selectedEntity?: LocalEditorEntityOption;
+  selectedLocale: string;
+};
 
 export const updateSearchParam = (key: string, value: string) => {
   if (typeof window === "undefined") {
@@ -26,7 +34,7 @@ export const buildLocalEditorSelection = (
   manifest: LocalEditorManifestResponse | null,
   componentRegistry: Record<string, Config<any>>,
   searchParams: URLSearchParams
-): LocalEditorSelection => {
+): SelectionResult => {
   // Query params win when valid; otherwise fall back to manifest defaults and
   // finally the first available option so the shell always lands on one stable
   // selection.
@@ -73,7 +81,7 @@ export const buildLocalEditorSelection = (
 
 export const syncSelectionToUrl = (
   selectedTemplateId: string,
-  selectedEntity: LocalEditorEntity | undefined,
+  selectedEntity: LocalEditorEntityOption | undefined,
   selectedLocale: string
 ) => {
   if (typeof window === "undefined" || !selectedTemplateId) {
@@ -180,9 +188,9 @@ const pickPreferredValue = (
 };
 
 const pickPreferredEntity = (
-  entities: LocalEditorEntity[],
+  entities: LocalEditorEntityOption[],
   ...entityIds: Array<string | null | undefined>
-): LocalEditorEntity | undefined => {
+): LocalEditorEntityOption | undefined => {
   for (const entityId of entityIds) {
     const matchingEntity = entities.find((entity) => {
       return entity.entityId === entityId;
