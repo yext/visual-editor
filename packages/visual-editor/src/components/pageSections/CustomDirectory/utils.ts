@@ -1,7 +1,7 @@
 interface fetchDataProps {
   endpoint: string;
   apiKey: string;
-  entityIds?: string;
+  entityIds?: string | string[];
 }
 
 export const fetchData = async ({

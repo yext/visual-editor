@@ -171,7 +171,7 @@ const Cards = ({
               className="font-bold text-palette-primary-dark"
               level={headingStyles?.headingLevel ?? 3}
             >
-              {(result.rawData?.name as any) ?? "name"}
+              {name ?? "name"}
             </Heading>
           </AccordionTrigger>
 

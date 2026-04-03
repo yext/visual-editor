@@ -149,7 +149,11 @@ const SearchWrapper: PuckComponent<SearchComponentProps> = ({
   return (
     <SearchHeadlessProvider searcher={searcher}>
       <SearchI18nextProvider searcher={searcher}>
-        <PageSection ref={puck.dragRef} background={backgroundColor}>
+        <PageSection
+          ref={puck.dragRef}
+          background={backgroundColor}
+          className="search-section"
+        >
           <slots.SearchBarSlot style={{ height: "auto" }} allow={[]} />
           {showSearchResultsSection && (
             <slots.SearchResultsSlot style={{ height: "auto" }} allow={[]} />

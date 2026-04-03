@@ -103,7 +103,11 @@ const CustomDirectory: PuckComponent<CustomDirectoryProps> = ({
 
   useEffect(() => {
     const childIds = streamDocument?.dm_childEntityIds;
-    if (childIds?.length) fetchEntities(childIds);
+    if (childIds?.length) {
+      void fetchEntities(childIds);
+    } else {
+      setEntities([]);
+    }
   }, [streamDocument?.dm_childEntityIds, fetchEntities]);
 
   return (

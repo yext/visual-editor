@@ -38,8 +38,8 @@ export const LayoutSection = ({
       <div
         className={`${layoutClasses} w-full border divide-gray-300 rounded-b-md divide-y`}
       >
-        {results.map((result, index) => (
-          <CardComponent key={index} result={result} />
+        {results.map((result) => (
+          <CardComponent key={result.id} result={result} />
         ))}
       </div>
     </div>

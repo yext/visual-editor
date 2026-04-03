@@ -353,14 +353,14 @@ export const SearchBarSlot: ComponentConfig<{ props: SearchBarSlotProps }> = {
   fields: searchBarSlotFields,
   defaultProps: defaultSearchData,
   resolveFields: (data) => {
-    const updatedFields = resolveDataFromParent(searchBarSlotFields, data);
+    let updatedFields = resolveDataFromParent(searchBarSlotFields, data);
     const isVisualAutoEnabled = !!data?.props?.styles?.enableVisualAutoComplete;
-    setDeep(
+    updatedFields = setDeep(
       updatedFields,
       "styles.objectFields.visualAutoCompleteVerticalKey.visible",
       isVisualAutoEnabled
     );
-    setDeep(
+    updatedFields = setDeep(
       updatedFields,
       "styles.objectFields.limit.visible",
       isVisualAutoEnabled
@@ -371,22 +371,22 @@ export const SearchBarSlot: ComponentConfig<{ props: SearchBarSlotProps }> = {
 
     const showLayoutControls = !showResults;
 
-    setDeep(
+    updatedFields = setDeep(
       updatedFields,
       "styles.objectFields.height.visible",
       showLayoutControls
     );
-    setDeep(
+    updatedFields = setDeep(
       updatedFields,
       "styles.objectFields.width.visible",
       showLayoutControls
     );
-    setDeep(
+    updatedFields = setDeep(
       updatedFields,
       "styles.objectFields.align.visible",
       showLayoutControls
     );
-    setDeep(updatedFields, "data", false);
+    updatedFields = setDeep(updatedFields, "data", false);
     return updatedFields;
   },
   render: (props) => <SearchBarSlotInternal {...props} />,
