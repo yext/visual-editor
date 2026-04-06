@@ -8,9 +8,6 @@ import type {
 
 export const DEFAULT_LOCAL_EDITOR_ROUTE = "/local-editor";
 export const DEFAULT_LOCAL_EDITOR_STREAM_CONFIG_PATH = "stream.config.ts";
-export const DEFAULT_LOCAL_EDITOR_STREAM_PATH = "stream.ts";
-export const LEGACY_LOCAL_EDITOR_STREAM_CONFIG_PATH =
-  "local-editor/stream.json";
 export const LOCAL_EDITOR_API_BASE_PATH = "/__yext_visual_editor/local-editor";
 export const LOCAL_EDITOR_DATA_TEMPLATE_PREFIX = "local-editor-data-";
 export const LEGACY_LOCAL_EDITOR_DATA_TEMPLATE_PATH =

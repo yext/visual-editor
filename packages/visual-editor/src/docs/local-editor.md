@@ -37,8 +37,6 @@ The default fake editor route is `/local-editor`.
 When local editor support is enabled, the plugin looks for config in this order:
 
 1. `stream.config.ts`
-2. `stream.ts`
-3. `local-editor/stream.json`
 
 If no config exists, the plugin scaffolds a root `stream.config.ts`.
 
@@ -55,10 +53,28 @@ const baseLocationStream = {
     "meta",
     "slug",
     "name",
-    "address",
     "hours",
+    "dineInHours",
+    "driveThroughHours",
+    "address",
+    "yextDisplayCoordinate",
+    // "c_productSection.sectionTitle",
+    // "c_productSection.linkedProducts.name",
+    // "c_productSection.linkedProducts.c_productPromo",
+    // "c_productSection.linkedProducts.c_description",
+    // "c_productSection.linkedProducts.c_coverPhoto",
+    // "c_productSection.linkedProducts.c_productCTA",
+    // "c_hero",
+    // "c_faqSection.linkedFAQs.question",
+    // "c_faqSection.linkedFAQs.answerV2",
+    // "dm_directoryParents_defaultdirectory.slug",
+    // "dm_directoryParents_defaultdirectory.name",
+    "additionalHoursText",
     "mainPhone",
-    "timezone",
+    "emails",
+    "services",
+    // "c_deliveryPromo",
+    "ref_listings",
   ],
   localization: {
     locales: ["en"],
@@ -103,7 +119,7 @@ const config = {
 export default config;
 ```
 
-Each template can point at its own stream. That is the key difference from the legacy single-stream setup.
+Each template can point at its own stream.
 `directory` and `locator` start as commented examples in the generated scaffold, so they stay opt-in until you uncomment their `stream` block.
 
 ## Generate Snapshot Data
@@ -149,14 +165,3 @@ When local editor support is enabled in dev mode, the plugin may generate:
 - `.template-manifest.json`
 
 Generated files are content-aware. If the generated contents do not change, the plugin skips rewriting the file to reduce unnecessary Vite reloads.
-
-## Migrating from `local-editor/stream.json`
-
-Legacy JSON config still works when explicitly referenced, but the recommended path is to move to root `stream.config.ts`.
-
-Migration steps:
-
-1. Move the shared `defaults` block to the root config.
-2. Split the old `stream` block into `templates[templateId].stream`.
-3. Re-run `yext pages generate-test-data`.
-4. Remove the old `local-editor/stream.json` after your starter is using the root config successfully.

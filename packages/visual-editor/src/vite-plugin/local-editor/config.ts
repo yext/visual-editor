@@ -11,12 +11,10 @@ import type {
   SupportedLocalEditorConfig,
   TemplateManifestEntry,
 } from "./types.ts";
-import { readJsonFile, toErrorMessage } from "./utils.ts";
+import { toErrorMessage } from "./utils.ts";
 
 import {
   DEFAULT_LOCAL_EDITOR_STREAM_CONFIG_PATH,
-  DEFAULT_LOCAL_EDITOR_STREAM_PATH,
-  LEGACY_LOCAL_EDITOR_STREAM_CONFIG_PATH,
   toAbsoluteLocalEditorPath,
 } from "./generatedFiles.ts";
 
@@ -28,11 +26,7 @@ export const resolveLocalEditorStreamConfigPath = async (
     return configuredPath;
   }
 
-  for (const candidatePath of [
-    DEFAULT_LOCAL_EDITOR_STREAM_CONFIG_PATH,
-    DEFAULT_LOCAL_EDITOR_STREAM_PATH,
-    LEGACY_LOCAL_EDITOR_STREAM_CONFIG_PATH,
-  ]) {
+  for (const candidatePath of [DEFAULT_LOCAL_EDITOR_STREAM_CONFIG_PATH]) {
     if (fs.existsSync(path.join(rootDir, candidatePath))) {
       return candidatePath;
     }
@@ -109,21 +103,13 @@ const buildResolvedTemplateConfigs = (
 const loadLocalEditorConfig = async (
   absoluteStreamConfigPath: string
 ): Promise<SupportedLocalEditorConfig> => {
-  const extension = path.extname(absoluteStreamConfigPath);
-  if (extension === ".json") {
-    return loadJsonLocalEditorConfig(absoluteStreamConfigPath);
+  if (path.extname(absoluteStreamConfigPath) === ".json") {
+    throw new Error(
+      `Unsupported local editor config at ${path.relative(process.cwd(), absoluteStreamConfigPath)}: move JSON config into a TypeScript file such as ${DEFAULT_LOCAL_EDITOR_STREAM_CONFIG_PATH}`
+    );
   }
 
   return loadTypeScriptLocalEditorConfig(absoluteStreamConfigPath);
-};
-
-const loadJsonLocalEditorConfig = (
-  absoluteStreamConfigPath: string
-): SupportedLocalEditorConfig => {
-  return readJsonFile<SupportedLocalEditorConfig>(
-    absoluteStreamConfigPath,
-    "local editor stream config"
-  );
 };
 
 const loadTypeScriptLocalEditorConfig = async (

@@ -321,7 +321,7 @@ describe.sequential("generateRegistryTemplateFiles", () => {
     runGenerator(rootDir);
 
     expect(warnSpy).toHaveBeenCalledWith(
-      'Skipping registry template "directory" because it conflicts with a reserved componentRegistry key'
+      'Skipping registry template "directory" because it conflicts with a reserved template name'
     );
     expect(
       fs.existsSync(

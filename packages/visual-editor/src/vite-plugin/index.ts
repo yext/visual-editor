@@ -7,4 +7,4 @@ export type {
   LocalEditorPagesStream,
   LocalEditorStreamDefinition,
   LocalEditorTemplateConfig,
-} from "./localEditor.ts";
+} from "./local-editor/types.ts";
