@@ -1,5 +1,4 @@
 import React from "react";
-import { shellStyles } from "./styles.ts";
 
 type LocalEditorNoticeProps = {
   title: string;
@@ -15,10 +14,19 @@ export const LocalEditorNotice = ({
   return (
     <div
       style={{
-        ...shellStyles.notice,
+        borderRadius: "12px",
+        padding: "12px 14px",
+        marginBottom: "12px",
+        border: "1px solid transparent",
         ...(tone === "error"
-          ? shellStyles.errorNotice
-          : shellStyles.warningNotice),
+          ? {
+              background: "#fff1f0",
+              borderColor: "#f2a8a2",
+            }
+          : {
+              background: "#fff8e8",
+              borderColor: "#f4d58d",
+            }),
       }}
     >
       <strong>{title}</strong>

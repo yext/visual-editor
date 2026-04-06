@@ -1,5 +1,4 @@
 import React from "react";
-import { shellStyles } from "./styles.ts";
 import type { LocalEditorEntityOption } from "./types.ts";
 
 type LocalEditorControlsProps = {
@@ -30,7 +29,14 @@ export const LocalEditorControls = ({
   });
 
   return (
-    <div style={shellStyles.controls}>
+    <div
+      style={{
+        display: "grid",
+        gap: "12px",
+        gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+        marginBottom: "16px",
+      }}
+    >
       <ControlGroup label="Template">
         <select
           value={selectedTemplateId}
@@ -87,8 +93,8 @@ const ControlGroup = ({
   children,
 }: React.PropsWithChildren<{ label: string }>) => {
   return (
-    <label style={shellStyles.controlGroup}>
-      <span style={shellStyles.controlLabel}>{label}</span>
+    <label style={{ display: "grid", gap: "6px", fontSize: "14px" }}>
+      <span style={{ fontWeight: 600 }}>{label}</span>
       {children}
     </label>
   );

@@ -10,7 +10,6 @@ import {
   syncSelectionToUrl,
   updateSearchParam,
 } from "./selection.ts";
-import { shellStyles } from "./styles.ts";
 import type { LocalEditorShellProps } from "./types.ts";
 import { useLocalEditorDocument } from "./useLocalEditorDocument.ts";
 import { useLocalEditorManifest } from "./useLocalEditorManifest.ts";
@@ -112,15 +111,39 @@ export const LocalEditorShell = ({
   ]);
 
   return (
-    <div style={shellStyles.page}>
-      <div style={shellStyles.header}>
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "linear-gradient(180deg, #f7f4ec 0%, #ffffff 100%)",
+        color: "#1d1d1f",
+        padding: "24px",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          gap: "16px",
+          alignItems: "flex-start",
+          marginBottom: "16px",
+        }}
+      >
         <div>
-          <h1 style={shellStyles.title}>Local Editor</h1>
-          <p style={shellStyles.subtitle}>
+          <h1 style={{ margin: 0, fontSize: "28px" }}>Local Editor</h1>
+          <p style={{ margin: "8px 0 0", color: "#555" }}>
             Switch templates, entities, and locales against local snapshot data.
           </p>
         </div>
-        <code style={shellStyles.route}>{routePath}</code>
+        <code
+          style={{
+            background: "#111",
+            color: "#fff",
+            padding: "6px 10px",
+            borderRadius: "999px",
+          }}
+        >
+          {routePath}
+        </code>
       </div>
 
       <LocalEditorControls
@@ -185,9 +208,33 @@ export const LocalEditorShell = ({
       )}
 
       {shouldRenderEditorFrame && (
-        <div style={shellStyles.editorFrame}>
+        <div
+          style={{
+            position: "relative",
+            background: "#fff",
+            borderRadius: "16px",
+            border: "1px solid #e7dfd1",
+            overflow: "hidden",
+            minHeight: "720px",
+          }}
+        >
           {isDocumentLoading && (
-            <div style={shellStyles.loadingOverlay}>Loading document…</div>
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "rgba(255, 255, 255, 0.72)",
+                backdropFilter: "blur(2px)",
+                zIndex: 1,
+                fontWeight: 600,
+                color: "#5f5b52",
+              }}
+            >
+              Loading document…
+            </div>
           )}
           {documentResponse?.document && selectedTemplateId && (
             <VisualEditorProvider
