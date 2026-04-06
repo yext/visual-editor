@@ -50,6 +50,12 @@ export type VisualEditorPluginOptions = {
   localEditor?: LocalEditorOptions;
 };
 
+/**
+ * virtualFiles defines the template files that are to be generated and inserted into
+ * the repo during buildStart
+ *
+ * It also defines entries that will be used to generate the template-manifest.json
+ */
 const virtualFiles: VirtualFile[] = [
   {
     filepath: "src/templates/directory.tsx",
@@ -61,6 +67,8 @@ const virtualFiles: VirtualFile[] = [
       exampleSiteUrl: "",
       layoutRequired: true,
       defaultLayoutData: defaultLayoutData.directory,
+      // no componentFields are defined because this is handled in the back-end for the dynamically
+      // generated DM fields
     },
   },
   {
@@ -130,12 +138,16 @@ export const yextVisualEditorPlugin = (
       ...registryTemplateNames,
     ]);
 
+    // Create a structure to store the manifest data
     const manifest: {
       templates: TemplateManifestEntry[];
     } = { templates: [] };
 
+    // Iterate over each template definition
     virtualFiles.forEach((virtualFile: VirtualFile) => {
       const filePath = path.join(rootDir, virtualFile.filepath);
+
+      // Ensure the directory exists
       fs.mkdirSync(path.dirname(filePath), { recursive: true });
 
       let nextContents = virtualFile.content;
@@ -163,6 +175,7 @@ export const yextVisualEditorPlugin = (
         writeFileIfChanged(filePath, nextContents);
       }
 
+      // populate template-manifest object
       if (virtualFile.templateManifestEntry) {
         manifest.templates.push(virtualFile.templateManifestEntry);
       }
@@ -170,6 +183,7 @@ export const yextVisualEditorPlugin = (
 
     const manifestPath = path.join(rootDir, ".template-manifest.json");
     if (!fs.existsSync(manifestPath)) {
+      // Write the manifest to the .template-manifest.json file
       writeFileIfChanged(manifestPath, JSON.stringify(manifest, null, 2));
     }
   };
@@ -180,6 +194,7 @@ export const yextVisualEditorPlugin = (
     });
   };
 
+  // cleanup on interruption (ctrl + C)
   process.on("SIGINT", () => {
     localEditorArtifacts.cleanupServeArtifacts(cleanupFiles);
     process.nextTick(() => process.exit(0));
