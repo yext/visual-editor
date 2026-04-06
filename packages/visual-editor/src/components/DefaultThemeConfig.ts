@@ -109,7 +109,7 @@ export function createDefaultThemeConfig(
           default: "700",
         },
         fontStyle: {
-          label: msg("theme.fontStyle.fontStyle", "Font Style"),
+          label: msg("fields.fontStyle", "Font Style"),
           type: "select",
           plugin: "fontStyle",
           options: fontStyleOptions("--fontFamily-h1-fontFamily"),
@@ -149,7 +149,7 @@ export function createDefaultThemeConfig(
           default: "700",
         },
         fontStyle: {
-          label: msg("theme.fontStyle.fontStyle", "Font Style"),
+          label: msg("fields.fontStyle", "Font Style"),
           type: "select",
           plugin: "fontStyle",
           options: fontStyleOptions("--fontFamily-h2-fontFamily"),
@@ -189,7 +189,7 @@ export function createDefaultThemeConfig(
           default: "700",
         },
         fontStyle: {
-          label: msg("theme.fontStyle.fontStyle", "Font Style"),
+          label: msg("fields.fontStyle", "Font Style"),
           type: "select",
           plugin: "fontStyle",
           options: fontStyleOptions("--fontFamily-h3-fontFamily"),
@@ -229,7 +229,7 @@ export function createDefaultThemeConfig(
           default: "700",
         },
         fontStyle: {
-          label: msg("theme.fontStyle.fontStyle", "Font Style"),
+          label: msg("fields.fontStyle", "Font Style"),
           type: "select",
           plugin: "fontStyle",
           options: fontStyleOptions("--fontFamily-h4-fontFamily"),
@@ -269,7 +269,7 @@ export function createDefaultThemeConfig(
           default: "700",
         },
         fontStyle: {
-          label: msg("theme.fontStyle.fontStyle", "Font Style"),
+          label: msg("fields.fontStyle", "Font Style"),
           type: "select",
           plugin: "fontStyle",
           options: fontStyleOptions("--fontFamily-h5-fontFamily"),
@@ -309,7 +309,7 @@ export function createDefaultThemeConfig(
           default: "700",
         },
         fontStyle: {
-          label: msg("theme.fontStyle.fontStyle", "Font Style"),
+          label: msg("fields.fontStyle", "Font Style"),
           type: "select",
           plugin: "fontStyle",
           options: fontStyleOptions("--fontFamily-h6-fontFamily"),
@@ -349,7 +349,7 @@ export function createDefaultThemeConfig(
           default: "400",
         },
         fontStyle: {
-          label: msg("theme.fontStyle.fontStyle", "Font Style"),
+          label: msg("fields.fontStyle", "Font Style"),
           type: "select",
           plugin: "fontStyle",
           options: fontStyleOptions("--fontFamily-body-fontFamily"),
@@ -408,7 +408,7 @@ export function createDefaultThemeConfig(
           default: "400",
         },
         fontStyle: {
-          label: msg("theme.fontStyle.fontStyle", "Font Style"),
+          label: msg("fields.fontStyle", "Font Style"),
           type: "select",
           plugin: "fontStyle",
           options: fontStyleOptions("--fontFamily-button-fontFamily"),
@@ -462,7 +462,7 @@ export function createDefaultThemeConfig(
           default: "400",
         },
         fontStyle: {
-          label: msg("theme.fontStyle.fontStyle", "Font Style"),
+          label: msg("fields.fontStyle", "Font Style"),
           type: "select",
           plugin: "fontStyle",
           options: fontStyleOptions("--fontFamily-link-fontFamily"),

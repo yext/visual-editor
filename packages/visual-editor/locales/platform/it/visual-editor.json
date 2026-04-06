@@ -706,11 +706,6 @@
     "defaultFont": "Carattere predefinito",
     "font": "Font",
     "fontSize": "Dimensione del carattere",
-    "fontStyle": {
-      "fontStyle": "Stile carattere",
-      "italic": "Corsivo",
-      "normal": "Normale"
-    },
     "fontWeight": {
       "fontWeight": "Peso del carattere"
     },

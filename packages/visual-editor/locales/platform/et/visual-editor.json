@@ -701,11 +701,6 @@
     "defaultFont": "Vaikimisi font",
     "font": "Font",
     "fontSize": "Fondi suurus",
-    "fontStyle": {
-      "fontStyle": "Fondi stiil",
-      "italic": "Kursiiv",
-      "normal": "Tavaline"
-    },
     "fontWeight": {
       "fontWeight": "Fondi kaal"
     },

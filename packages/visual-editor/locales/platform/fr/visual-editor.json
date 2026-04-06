@@ -706,11 +706,6 @@
     "defaultFont": "Police par défaut",
     "font": "Fonte",
     "fontSize": "Taille de la police",
-    "fontStyle": {
-      "fontStyle": "Style de police",
-      "italic": "Italique",
-      "normal": "Normale"
-    },
     "fontWeight": {
       "fontWeight": "Poids de la police"
     },

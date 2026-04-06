@@ -711,11 +711,6 @@
     "defaultFont": "Výchozí písmo",
     "font": "Písmo",
     "fontSize": "Velikost písma",
-    "fontStyle": {
-      "fontStyle": "Styl písma",
-      "italic": "kurzíva",
-      "normal": "Normální"
-    },
     "fontWeight": {
       "fontWeight": "Hmotnost písma"
     },

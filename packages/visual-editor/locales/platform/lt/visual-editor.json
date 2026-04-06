@@ -711,11 +711,6 @@
     "defaultFont": "Numatytasis šriftas",
     "font": "Šriftas",
     "fontSize": "Šrifto dydis",
-    "fontStyle": {
-      "fontStyle": "Šrifto stilius",
-      "italic": "Kursyvas",
-      "normal": "Normalus"
-    },
     "fontWeight": {
       "fontWeight": "Šrifto svoris"
     },

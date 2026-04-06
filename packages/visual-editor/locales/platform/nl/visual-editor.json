@@ -701,11 +701,6 @@
     "defaultFont": "Standaardlettertype",
     "font": "Lettertype",
     "fontSize": "Lettergrootte",
-    "fontStyle": {
-      "fontStyle": "Lettertypestijl",
-      "italic": "Cursief",
-      "normal": "Normaal"
-    },
     "fontWeight": {
       "fontWeight": "Lettergewicht"
     },

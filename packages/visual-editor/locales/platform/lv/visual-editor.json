@@ -704,11 +704,6 @@
     "defaultFont": "Noklusējuma fonts",
     "font": "Fonts",
     "fontSize": "Fonta lielums",
-    "fontStyle": {
-      "fontStyle": "Fonta stils",
-      "italic": "Kursīvs",
-      "normal": "Normāls"
-    },
     "fontWeight": {
       "fontWeight": "Fonta svars"
     },

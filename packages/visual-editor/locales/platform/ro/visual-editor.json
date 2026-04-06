@@ -706,11 +706,6 @@
     "defaultFont": "Font implicit",
     "font": "Font",
     "fontSize": "Dimensiunea fontului",
-    "fontStyle": {
-      "fontStyle": "Stilul fontului",
-      "italic": "Cursiv",
-      "normal": "Normal"
-    },
     "fontWeight": {
       "fontWeight": "Greutatea fontului"
     },

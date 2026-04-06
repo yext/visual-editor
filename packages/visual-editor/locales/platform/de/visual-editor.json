@@ -701,11 +701,6 @@
     "defaultFont": "Standardschriftart",
     "font": "Schriftart",
     "fontSize": "Schriftgröße",
-    "fontStyle": {
-      "fontStyle": "Schriftstil",
-      "italic": "Kursiv",
-      "normal": "Normal"
-    },
     "fontWeight": {
       "fontWeight": "Schriftgewicht"
     },

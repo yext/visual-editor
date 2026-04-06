@@ -701,11 +701,6 @@
     "defaultFont": "預設字體",
     "font": "字體",
     "fontSize": "字體大小",
-    "fontStyle": {
-      "fontStyle": "字體樣式",
-      "italic": "斜體",
-      "normal": "普通的"
-    },
     "fontWeight": {
       "fontWeight": "字體重量"
     },

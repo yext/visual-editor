@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { FieldLabel } from "@puckeditor/core";
 import { StyleSelectOption } from "../../../utils/themeResolver.ts";
 import {
-  PUCK_PREVIEW_IFRAME_ID as PUCK_PREVIEW_IFRAME_Id,
-  THEME_STYLE_TAG_ID as THEME_STYLE_TAG_Id,
+  PUCK_PREVIEW_IFRAME_ID,
+  THEME_STYLE_TAG_ID,
 } from "../../../utils/applyTheme.ts";
 import "../ui/puck.css";
 
@@ -54,12 +54,12 @@ export const FontStyleSelector = ({
 
     const attachStyleObserver = () => {
       const iframe = document.getElementById(
-        PUCK_PREVIEW_IFRAME_Id
+        PUCK_PREVIEW_IFRAME_ID
       ) as HTMLIFrameElement | null;
       const iframeDocument =
         iframe?.contentDocument ?? iframe?.contentWindow?.document ?? null;
       const styleTag = iframeDocument?.getElementById(
-        THEME_STYLE_TAG_Id
+        THEME_STYLE_TAG_ID
       ) as HTMLStyleElement | null;
 
       if (styleTag) {

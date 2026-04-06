@@ -701,11 +701,6 @@
     "defaultFont": "Default font",
     "font": "Font",
     "fontSize": "Font Size",
-    "fontStyle": {
-      "fontStyle": "Font Style",
-      "italic": "Italic",
-      "normal": "Normal"
-    },
     "fontWeight": {
       "fontWeight": "Font Weight"
     },
