@@ -34,8 +34,8 @@ The default fake editor route is `/local-editor`.
 
 ## Root `stream.config.ts`
 
-When local editor support is enabled, the plugin uses root `stream.config.ts`.
-If that file does not exist, the plugin scaffolds it for you.
+By default, local editor uses root `stream.config.ts`.
+If that file does not exist, the plugin scaffolds it for you in dev mode.
 
 Example:
 
@@ -117,7 +117,7 @@ export default config;
 ```
 
 Each template can point at its own stream.
-`directory` and `locator` start as commented examples in the generated scaffold, so they stay opt-in until you uncomment their `stream` block.
+If `directory` or `locator` exist in your template manifest, the scaffold includes them as commented examples so they stay opt-in until you uncomment their `stream` block.
 
 ## Generate Snapshot Data
 
@@ -128,7 +128,7 @@ npm run dev
 yext pages generate-test-data
 ```
 
-The plugin generates one hidden local-editor data template per configured template:
+The plugin generates one hidden local-editor data template per configured template. For example:
 
 - `src/templates/local-editor-data-main.tsx`
 - `src/templates/local-editor-data-locator.tsx`
