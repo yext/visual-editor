@@ -258,9 +258,12 @@ const getTemplateNames = (rootDir: string): string[] => {
 const collectGeneratedTemplates = (rootDir: string): CollectedTemplate[] => {
   return getTemplateNames(rootDir)
     .map((templateName) => {
-      if (PRESERVED_EDIT_REGISTRY_KEYS.has(templateName)) {
+      if (
+        PRESERVED_EDIT_REGISTRY_KEYS.has(templateName) ||
+        isProtectedGeneratedTemplateFileName(templateName)
+      ) {
         console.warn(
-          `Skipping registry template "${templateName}" because it conflicts with a reserved componentRegistry key`
+          `Skipping registry template "${templateName}" because it conflicts with a reserved template name`
         );
         return null;
       }

@@ -25,7 +25,7 @@ export const updateSearchParam = (key: string, value: string) => {
   window.history.replaceState(
     {},
     "",
-    `${window.location.pathname}?${searchParams.toString()}`
+    `${window.location.pathname}?${searchParams.toString()}${window.location.hash}`
   );
   window.dispatchEvent(new PopStateEvent("popstate"));
 };
@@ -105,8 +105,8 @@ export const syncSelectionToUrl = (
 
   const nextRelativePath =
     nextSearchParams.toString().length > 0
-      ? `${window.location.pathname}?${nextSearchParams.toString()}`
-      : window.location.pathname;
+      ? `${window.location.pathname}?${nextSearchParams.toString()}${window.location.hash}`
+      : `${window.location.pathname}${window.location.hash}`;
 
   if (
     nextRelativePath !== `${window.location.pathname}${window.location.search}`

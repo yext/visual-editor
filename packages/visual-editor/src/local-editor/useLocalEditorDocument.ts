@@ -20,6 +20,7 @@ export const useLocalEditorDocument = (documentRequestPath: string | null) => {
 
       setIsDocumentLoading(true);
       setDocumentError(null);
+      setDocumentResponse(null);
 
       try {
         const response = await fetch(documentRequestPath);

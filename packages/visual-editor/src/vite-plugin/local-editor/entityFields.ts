@@ -42,18 +42,30 @@ export const inferEntityFields = (
 
 const inferFieldNode = (name: string, value: unknown): MutableFieldNode => {
   if (Array.isArray(value)) {
-    const sampleValue = value.find(
-      (item) => item !== null && item !== undefined
+    const objectItems = value.filter(
+      (item): item is Record<string, unknown> => {
+        return isPlainObject(item);
+      }
     );
-    if (isPlainObject(sampleValue)) {
+    if (objectItems.length > 0) {
+      const children = new Map<string, MutableFieldNode>();
+      for (const objectItem of objectItems) {
+        for (const childNode of inferObjectChildren(objectItem).values()) {
+          mergeFieldNode(children, childNode);
+        }
+      }
+
       return {
         name,
         isList: true,
         typeRegistryId: "type.object",
-        children: inferObjectChildren(sampleValue),
+        children,
       };
     }
 
+    const sampleValue = value.find(
+      (item) => item !== null && item !== undefined
+    );
     return {
       name,
       isList: true,

@@ -10,6 +10,7 @@ import {
   isGeneratedLocalEditorTemplate,
   LEGACY_LOCAL_EDITOR_DATA_TEMPLATE_PATH,
   LOCAL_EDITOR_DATA_TEMPLATE_PREFIX,
+  toAbsoluteLocalEditorPath,
   writeFileIfChanged,
 } from "./generatedFiles.ts";
 import type { LocalEditorOptions } from "./types.ts";
@@ -108,7 +109,10 @@ export const createLocalEditorArtifactsManager = ({
       const streamConfigImportPath = path
         .relative(
           path.dirname(templatePath),
-          path.join(rootDir, resolvedLocalEditorStreamConfigPath)
+          toAbsoluteLocalEditorPath(
+            rootDir,
+            resolvedLocalEditorStreamConfigPath
+          )
         )
         .split(path.sep)
         .join("/");

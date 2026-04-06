@@ -198,10 +198,17 @@ const readTemplateManifestEntries = (
     return [];
   }
 
-  const manifest = readJsonFile<TemplateManifestFile>(
-    manifestPath,
-    "template manifest"
-  );
+  let manifest: TemplateManifestFile;
+  try {
+    manifest = readJsonFile<TemplateManifestFile>(
+      manifestPath,
+      "template manifest"
+    );
+  } catch (error) {
+    diagnostics.push(toErrorMessage(error));
+    return [];
+  }
+
   return (manifest.templates ?? []).map((templateEntry) => {
     return {
       name: templateEntry.name,

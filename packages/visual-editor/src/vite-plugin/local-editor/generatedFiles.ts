@@ -57,6 +57,13 @@ export const buildLocalEditorDataTemplatePath = (
   );
 };
 
+export const toAbsoluteLocalEditorPath = (
+  rootDir: string,
+  filePath: string
+): string => {
+  return path.isAbsolute(filePath) ? filePath : path.join(rootDir, filePath);
+};
+
 export const buildLocalEditorTemplateSource = (
   templateSource: string,
   route: string
@@ -123,7 +130,10 @@ export const ensureLocalEditorStreamConfig = async (
   rootDir: string,
   streamConfigPath: string
 ): Promise<void> => {
-  const absoluteStreamConfigPath = path.join(rootDir, streamConfigPath);
+  const absoluteStreamConfigPath = toAbsoluteLocalEditorPath(
+    rootDir,
+    streamConfigPath
+  );
   if (fs.existsSync(absoluteStreamConfigPath)) {
     return;
   }

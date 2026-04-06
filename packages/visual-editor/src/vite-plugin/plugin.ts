@@ -138,23 +138,31 @@ export const yextVisualEditorPlugin = (
       const filePath = path.join(rootDir, virtualFile.filepath);
       fs.mkdirSync(path.dirname(filePath), { recursive: true });
 
-      if (!fs.existsSync(filePath)) {
-        let nextContents = virtualFile.content;
-        if (virtualFile.filepath === "src/templates/edit.tsx") {
-          nextContents = buildEditorTemplateSource({
-            rootDir,
-            templatePath: filePath,
-            templateSource: nextContents,
-            templateNames: registryTemplateNames,
-          });
-          nextContents = injectEditorTemplateInfo(
-            nextContents,
-            editorTemplateInfo
-          );
-        }
+      let nextContents = virtualFile.content;
+      if (virtualFile.filepath === "src/templates/edit.tsx") {
+        nextContents = buildEditorTemplateSource({
+          rootDir,
+          templatePath: filePath,
+          templateSource: fs.existsSync(filePath)
+            ? fs.readFileSync(filePath, "utf8")
+            : nextContents,
+          templateNames: registryTemplateNames,
+        });
+        nextContents = injectEditorTemplateInfo(
+          nextContents,
+          editorTemplateInfo
+        );
+      }
 
-        writeFileIfChanged(filePath, nextContents);
+      if (!fs.existsSync(filePath)) {
         trackGeneratedFile(filePath);
+      }
+
+      if (
+        !fs.existsSync(filePath) ||
+        virtualFile.filepath === "src/templates/edit.tsx"
+      ) {
+        writeFileIfChanged(filePath, nextContents);
       }
 
       if (virtualFile.templateManifestEntry) {

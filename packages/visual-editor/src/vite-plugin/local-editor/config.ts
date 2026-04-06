@@ -17,6 +17,7 @@ import {
   DEFAULT_LOCAL_EDITOR_STREAM_CONFIG_PATH,
   DEFAULT_LOCAL_EDITOR_STREAM_PATH,
   LEGACY_LOCAL_EDITOR_STREAM_CONFIG_PATH,
+  toAbsoluteLocalEditorPath,
 } from "./generatedFiles.ts";
 
 export const resolveLocalEditorStreamConfigPath = async (
@@ -46,7 +47,10 @@ export const readResolvedTemplateConfigs = async (
   templateManifestEntries: TemplateManifestEntry[],
   diagnostics: string[]
 ): Promise<ResolvedLocalEditorConfig> => {
-  const absoluteStreamConfigPath = path.join(rootDir, streamConfigPath);
+  const absoluteStreamConfigPath = toAbsoluteLocalEditorPath(
+    rootDir,
+    streamConfigPath
+  );
   if (!fs.existsSync(absoluteStreamConfigPath)) {
     diagnostics.push(
       `Missing local editor config at ${path.relative(process.cwd(), absoluteStreamConfigPath)}. Create this file to configure templates and snapshot defaults.`
