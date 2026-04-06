@@ -23,6 +23,7 @@ import {
   getEditorDevEntryTemplateInfoFromTemplateNames,
   injectEditorDevEntryTemplateInfo,
 } from "./editorDevMode.ts";
+import { writeFileIfChanged } from "./writeFileIfChanged.ts";
 
 type TemplateManifestEntry = {
   name: string;
@@ -111,18 +112,6 @@ const registerCleanupSignalHandlers = () => {
   cleanupSignalHandlersRegistered = true;
 };
 
-const writeFileIfChanged = (filePath: string, content: string): boolean => {
-  if (fs.existsSync(filePath)) {
-    const existingContent = fs.readFileSync(filePath, "utf8");
-    if (existingContent === content) {
-      return false;
-    }
-  }
-
-  fs.writeFileSync(filePath, content);
-  return true;
-};
-
 export const yextVisualEditorPlugin = (): Plugin => {
   let isBuildMode = false;
   const filesToCleanup: string[] = [];
@@ -170,7 +159,7 @@ export const yextVisualEditorPlugin = (): Plugin => {
             staticPage: {},
           },
           _site: {},
-          businessId: 1000167251,
+          businessId: 0,
           locale: GENERATED_EDIT_LOCAL_DATA_LOCALE,
           meta: {
             locale: GENERATED_EDIT_LOCAL_DATA_LOCALE,

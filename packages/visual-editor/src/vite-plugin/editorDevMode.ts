@@ -1,6 +1,7 @@
 import {
   getCustomEditorTemplateIds,
   getCustomEditorTemplateNames,
+  isLegacyEditorTemplateId,
   isSharedEditorTemplateId,
 } from "./editorTemplateNames.ts";
 
@@ -122,7 +123,11 @@ export const getSingleCustomTemplateId = (
   templateIds: Iterable<string>
 ): string | null => {
   const customTemplateIds = [...new Set(templateIds)]
-    .filter((templateId) => !isSharedEditorTemplateId(templateId))
+    .filter(
+      (templateId) =>
+        !isLegacyEditorTemplateId(templateId) &&
+        !isSharedEditorTemplateId(templateId)
+    )
     .sort((left, right) => left.localeCompare(right));
 
   return customTemplateIds.length === 1 ? customTemplateIds[0] : null;

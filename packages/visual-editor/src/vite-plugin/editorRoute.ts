@@ -92,10 +92,6 @@ export const injectEditorTemplateInfo = (
 export const getEditorTemplateFilePath = (
   editorTemplateInfo: EditorTemplateInfo
 ): string => {
-  if (editorTemplateInfo.configName === "edit") {
-    return "src/templates/edit.tsx";
-  }
-
   return `src/templates/${editorTemplateInfo.configName}.tsx`;
 };
 

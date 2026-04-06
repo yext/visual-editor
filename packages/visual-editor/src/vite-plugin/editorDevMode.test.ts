@@ -110,6 +110,10 @@ describe("custom template helpers", () => {
     ).toBe("demo-shop");
   });
 
+  it("does not treat main as a custom template id", () => {
+    expect(getSingleCustomTemplateId(["main", "directory"])).toBeNull();
+  });
+
   it("returns null when multiple custom template ids exist", () => {
     expect(
       getSingleCustomTemplateId(["demo-shop", "sample-store", "directory"])

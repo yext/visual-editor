@@ -40,6 +40,7 @@ import fs from "fs-extra";
 import { Project, QuoteKind, SyntaxKind, type SourceFile } from "ts-morph";
 import { isManagedEditorTemplateFileName } from "./editorRoute.ts";
 import { getEffectiveEditorTemplateNames } from "./editorTemplateNames.ts";
+import { writeFileIfChanged } from "./writeFileIfChanged.ts";
 
 type TemplateManifestEntry = {
   name: string;
@@ -98,18 +99,6 @@ const AST_PROJECT = new Project({
     quoteKind: QuoteKind.Double,
   },
 });
-
-const writeFileIfChanged = (filePath: string, content: string): boolean => {
-  if (fs.existsSync(filePath)) {
-    const existingContent = fs.readFileSync(filePath, "utf8");
-    if (existingContent === content) {
-      return false;
-    }
-  }
-
-  fs.writeFileSync(filePath, content);
-  return true;
-};
 
 export const DEFAULT_LAYOUT = {
   root: {
@@ -245,6 +234,8 @@ const syncGeneratedRegistryFiles = (
   const activeTemplateNames = new Set(
     collectedTemplates.map(({ templateName }) => templateName)
   );
+  // Config files are keyed by the same template names as activeTemplateNames,
+  // so we intentionally derive this separate set from collectedTemplates too.
   const activeConfigTemplateNames = new Set(
     collectedTemplates.map(({ templateName }) => templateName)
   );

@@ -14,11 +14,7 @@ const getNormalizedTemplateNames = (
   );
 };
 
-/**
- * Returns only repo-defined custom template names, excluding built-in shared
- * templates and the legacy `main` template.
- */
-export const getCustomEditorTemplateNames = (
+const normalizeAndFilterTemplates = (
   templateNames: Iterable<string>
 ): string[] => {
   return getNormalizedTemplateNames(templateNames)
@@ -28,6 +24,16 @@ export const getCustomEditorTemplateNames = (
         !SHARED_EDITOR_TEMPLATE_NAMES.has(templateName)
     )
     .sort((left, right) => left.localeCompare(right));
+};
+
+/**
+ * Returns only repo-defined custom template names, excluding built-in shared
+ * templates and the legacy `main` template.
+ */
+export const getCustomEditorTemplateNames = (
+  templateNames: Iterable<string>
+): string[] => {
+  return normalizeAndFilterTemplates(templateNames);
 };
 
 /**
@@ -72,11 +78,5 @@ export const isLegacyEditorTemplateId = (templateId: string): boolean => {
 export const getCustomEditorTemplateIds = (
   templateIds: Iterable<string>
 ): string[] => {
-  return [...new Set(templateIds)]
-    .filter(
-      (templateId) =>
-        !isLegacyEditorTemplateId(templateId) &&
-        !isSharedEditorTemplateId(templateId)
-    )
-    .sort((left, right) => left.localeCompare(right));
+  return normalizeAndFilterTemplates(templateIds);
 };
