@@ -34,13 +34,10 @@ The default fake editor route is `/local-editor`.
 
 ## Root `stream.config.ts`
 
-When local editor support is enabled, the plugin looks for config in this order:
+When local editor support is enabled, the plugin uses root `stream.config.ts`.
+If that file does not exist, the plugin scaffolds it for you.
 
-1. `stream.config.ts`
-
-If no config exists, the plugin scaffolds a root `stream.config.ts`.
-
-The preferred format is:
+Example:
 
 ```ts
 import type { LocalEditorConfig } from "@yext/visual-editor/plugin";
