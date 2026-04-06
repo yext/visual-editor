@@ -273,13 +273,16 @@ describe("constructGoogleFontLinkTags", () => {
 });
 
 describe("getFontStyleOptions", () => {
+  const createPreviewIframe = () => {
+    document.body.replaceChildren();
+    const iframe = document.createElement("iframe");
+    iframe.id = "preview-frame";
+    document.body.appendChild(iframe);
+    return iframe;
+  };
+
   it("returns both options when the selected font supports italics", () => {
-    document.body.innerHTML = `
-      <iframe id="preview-frame"></iframe>
-    `;
-    const iframe = document.getElementById(
-      "preview-frame"
-    ) as HTMLIFrameElement;
+    const iframe = createPreviewIframe();
     const iframeDocument = iframe.contentDocument!;
     const styleTag = iframeDocument.createElement("style");
     styleTag.id = "visual-editor-theme";
@@ -296,12 +299,7 @@ describe("getFontStyleOptions", () => {
   });
 
   it("filters italic out when the selected font does not support italics", () => {
-    document.body.innerHTML = `
-      <iframe id="preview-frame"></iframe>
-    `;
-    const iframe = document.getElementById(
-      "preview-frame"
-    ) as HTMLIFrameElement;
+    const iframe = createPreviewIframe();
     const iframeDocument = iframe.contentDocument!;
     const styleTag = iframeDocument.createElement("style");
     styleTag.id = "visual-editor-theme";
@@ -318,9 +316,7 @@ describe("getFontStyleOptions", () => {
   });
 
   it("preserves caller-provided styleOptions before the theme style tag loads", () => {
-    document.body.innerHTML = `
-      <iframe id="preview-frame"></iframe>
-    `;
+    createPreviewIframe();
 
     expect(
       getFontStyleOptions({
