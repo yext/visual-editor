@@ -107,10 +107,9 @@ export const syncSelectionToUrl = (
     nextSearchParams.toString().length > 0
       ? `${window.location.pathname}?${nextSearchParams.toString()}${window.location.hash}`
       : `${window.location.pathname}${window.location.hash}`;
+  const currentRelativePath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
 
-  if (
-    nextRelativePath !== `${window.location.pathname}${window.location.search}`
-  ) {
+  if (nextRelativePath !== currentRelativePath) {
     window.history.replaceState({}, "", nextRelativePath);
   }
 };

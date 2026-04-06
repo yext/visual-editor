@@ -39,6 +39,7 @@ import path from "node:path";
 import fs from "fs-extra";
 import { Project, QuoteKind, SyntaxKind, type SourceFile } from "ts-morph";
 import { getEditorTemplateInfoFromTemplateNames } from "./editorRoute.ts";
+import { toErrorMessage, writeFileIfChanged } from "./local-editor/utils.ts";
 
 type TemplateManifestEntry = {
   name: string;
@@ -1155,10 +1156,6 @@ function toPosixPath(value: string): string {
   return value.split(path.sep).join(path.posix.sep);
 }
 
-function toErrorMessage(error: unknown): string {
-  return error instanceof Error ? error.message : String(error);
-}
-
 function readUtf8File(filePath: string, description: string): string {
   try {
     return fs.readFileSync(filePath, "utf8");
@@ -1179,15 +1176,4 @@ function readJsonFile<T>(filePath: string, description: string): T {
       `Failed to parse ${description} at ${filePath}: ${toErrorMessage(error)}`
     );
   }
-}
-
-function writeFileIfChanged(filePath: string, contents: string): void {
-  if (
-    fs.existsSync(filePath) &&
-    fs.readFileSync(filePath, "utf8") === contents
-  ) {
-    return;
-  }
-
-  fs.writeFileSync(filePath, contents);
 }

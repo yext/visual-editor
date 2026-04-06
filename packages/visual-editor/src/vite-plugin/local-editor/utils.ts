@@ -20,3 +20,17 @@ export const readJsonFile = <T>(filePath: string, description: string): T => {
 export const toErrorMessage = (error: unknown): string => {
   return error instanceof Error ? error.message : String(error);
 };
+
+export const writeFileIfChanged = (
+  filePath: string,
+  contents: string
+): void => {
+  if (
+    fs.existsSync(filePath) &&
+    fs.readFileSync(filePath, "utf8") === contents
+  ) {
+    return;
+  }
+
+  fs.writeFileSync(filePath, contents);
+};

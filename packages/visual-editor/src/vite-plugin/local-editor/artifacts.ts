@@ -11,9 +11,9 @@ import {
   LEGACY_LOCAL_EDITOR_DATA_TEMPLATE_PATH,
   LOCAL_EDITOR_DATA_TEMPLATE_PREFIX,
   toAbsoluteLocalEditorPath,
-  writeFileIfChanged,
 } from "./generatedFiles.ts";
 import type { LocalEditorOptions } from "./types.ts";
+import { writeFileIfChanged } from "./utils.ts";
 
 type CreateLocalEditorArtifactsManagerOptions = {
   localEditorOptions?: LocalEditorOptions;

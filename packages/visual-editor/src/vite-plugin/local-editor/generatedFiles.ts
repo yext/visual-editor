@@ -145,14 +145,3 @@ export const ensureLocalEditorStreamConfig = async (
     buildLocalEditorScaffoldSource(rootDir)
   );
 };
-
-export const writeFileIfChanged = (filePath: string, contents: string) => {
-  if (
-    fs.existsSync(filePath) &&
-    fs.readFileSync(filePath, "utf8") === contents
-  ) {
-    return;
-  }
-
-  fs.writeFileSync(filePath, contents);
-};

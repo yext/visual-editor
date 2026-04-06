@@ -198,13 +198,13 @@ const buildLegacyResolvedConfig = (
 ): ResolvedLocalEditorConfig => {
   const manifestTemplates = getManifestTemplateIds(templateManifestEntries);
   const templateEntryMap = createTemplateEntryMap(templateManifestEntries);
-  const legacyTemplateIds = (
-    legacyStreamConfig.templateIds?.length
-      ? legacyStreamConfig.templateIds
-      : manifestTemplates
-  ).filter((templateId, index, values) => {
-    return values.indexOf(templateId) === index;
-  });
+  const legacyTemplateIds = Array.from(
+    new Set(
+      legacyStreamConfig.templateIds?.length
+        ? legacyStreamConfig.templateIds
+        : manifestTemplates
+    )
+  );
 
   return {
     defaults: {

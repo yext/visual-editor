@@ -23,13 +23,13 @@ import { resolveLocalEditorStreamConfigPath } from "./local-editor/config.ts";
 import {
   ensureLocalEditorStreamConfig,
   normalizeLocalEditorRoute,
-  writeFileIfChanged,
 } from "./local-editor/generatedFiles.ts";
 import {
   createLocalEditorRequestHandler,
   sendJsonResponse,
 } from "./local-editor/server.ts";
 import type { LocalEditorOptions } from "./local-editor/types.ts";
+import { writeFileIfChanged } from "./local-editor/utils.ts";
 
 type TemplateManifestEntry = {
   name: string;
