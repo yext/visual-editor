@@ -521,6 +521,7 @@
   "fontSizeDefaultLabel": "Täitmata jätmine",
   "friday": "Reede",
   "getDirections": "Hankige juhiseid",
+  "getDirectionsForLocation": "Hankige juhised {{address}}",
   "heading": "Pealkiri",
   "healthcareFacilities": "Tervishoiuasutused",
   "healthcareProfessionals": "Tervishoiutöötajad",
@@ -621,7 +622,6 @@
   "saturday": "Laupäev",
   "schemaMarkup": "Skeemi märgistus",
   "search": "Otsima",
-  "searchDropdownHere": "Otsi rippseandist",
   "searchHere": "Otsige siit ...",
   "searchThisArea": "Otsige sellest piirkonnast",
   "secondaryHeaderHiddenOnLivePage": "Sekundaarne päis (reaalajas lehel peidetud)",
@@ -636,6 +636,8 @@
   "showLabels": "Näita silte",
   "showLess": "Näitama vähem",
   "showMore": "Näidata veel",
+  "showPinDetails": "Kuva nööpnõela {{number}} üksikasjad",
+  "showPinDetailsDefault": "Kuva nööpnõela üksikasjad",
   "siteColors": "Saidi värvid",
   "slots": {
     "directoryCard": "Kataloogikaart",
@@ -742,5 +744,6 @@
   "utilityImage": "Kasulik pilt",
   "videoThumbnail": "Video pisipilt",
   "visitPage": "Külastage leht",
+  "visitPageForName": "Külastage lehte {{name}} jaoks",
   "wednesday": "Kolmapäev"
 }

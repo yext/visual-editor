@@ -521,6 +521,7 @@
   "fontSizeDefaultLabel": "Domyślny",
   "friday": "Piątek",
   "getDirections": "Uzyskaj wskazówki",
+  "getDirectionsForLocation": "Uzyskaj wskazówki dojazdu do {{address}}",
   "heading": "Nagłówek",
   "healthcareFacilities": "Placówki opieki zdrowotnej",
   "healthcareProfessionals": "Pracownicy służby zdrowia",
@@ -631,7 +632,6 @@
   "saturday": "Sobota",
   "schemaMarkup": "Znacznik schematu",
   "search": "Szukaj",
-  "searchDropdownHere": "Wyszukaj wejście rozwijane",
   "searchHere": "Wyszukaj tutaj ...",
   "searchThisArea": "Przeszukaj ten obszar",
   "secondaryHeaderHiddenOnLivePage": "Nagłówek dodatkowy (ukryty na aktywnej stronie)",
@@ -646,6 +646,8 @@
   "showLabels": "Pokaż etykiety",
   "showLess": "Pokaż mniej",
   "showMore": "Pokaż więcej",
+  "showPinDetails": "Pokaż szczegóły pinu {{number}}",
+  "showPinDetailsDefault": "Pokaż szczegóły pinu",
   "siteColors": "Kolory strony",
   "slots": {
     "directoryCard": "Karta katalogowa",
@@ -754,5 +756,6 @@
   "utilityImage": "Obraz użytkowy",
   "videoThumbnail": "Miniatura wideo",
   "visitPage": "Odwiedź stronę",
+  "visitPageForName": "Odwiedź stronę dla {{name}}",
   "wednesday": "Środa"
 }

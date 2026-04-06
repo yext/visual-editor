@@ -521,6 +521,7 @@
   "fontSizeDefaultLabel": "Numatytasis",
   "friday": "Penktadienis",
   "getDirections": "Gaukite nurodymus",
+  "getDirectionsForLocation": "Gaukite nuorodas į {{address}}",
   "heading": "Antraštė",
   "healthcareFacilities": "Sveikatos priežiūros įstaigos",
   "healthcareProfessionals": "Sveikatos priežiūros specialistai",
@@ -631,7 +632,6 @@
   "saturday": "Šeštadienis",
   "schemaMarkup": "Schemos žymėjimas",
   "search": "Ieškoti",
-  "searchDropdownHere": "Paieškos išskleidžiamasis įvestis",
   "searchHere": "Ieškokite čia ...",
   "searchThisArea": "Ieškokite šioje srityje",
   "secondaryHeaderHiddenOnLivePage": "Antrinė antraštė (paslėpta tiesioginiame puslapyje)",
@@ -646,6 +646,8 @@
   "showLabels": "Rodyti etiketes",
   "showLess": "Parodyk mažiau",
   "showMore": "Parodyk daugiau",
+  "showPinDetails": "Rodyti smeigtuko {{number}} informaciją",
+  "showPinDetailsDefault": "Rodyti smeigtuko informaciją",
   "siteColors": "Svetainės spalvos",
   "slots": {
     "directoryCard": "Katalogo kortelė",
@@ -754,5 +756,6 @@
   "utilityImage": "Naudingumo vaizdas",
   "videoThumbnail": "Vaizdo įrašo miniatiūra",
   "visitPage": "Apsilankykite puslapyje",
+  "visitPageForName": "Apsilankykite puslapyje {{name}}",
   "wednesday": "Trečiadienis"
 }

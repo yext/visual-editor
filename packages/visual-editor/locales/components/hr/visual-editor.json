@@ -32,6 +32,7 @@
   "findALocation": "Pronađite lokaciju",
   "friday": "petak",
   "getDirections": "Dobiti upute",
+  "getDirectionsForLocation": "Preuzmite upute za {{address}}",
   "heroBanner": "Baner",
   "heroHeader": "Heroj zaglavlje",
   "heroImage": "Herojska slika",
@@ -80,7 +81,6 @@
   "reopenDate": "Ponovno otvaranje datuma",
   "responseFrom": "Odgovor od {{businessName}}",
   "saturday": "subota",
-  "searchDropdownHere": "Pretražite unos pada",
   "searchHere": "Pretražite ovdje ...",
   "searchThisArea": "Pretražite ovo područje",
   "secondaryHeaderLinks": "Veze sekundarnog zaglavlja",
@@ -90,6 +90,8 @@
   "servicesSection": "Odjeljak za usluge",
   "showLess": "Pokazati manje",
   "showMore": "Pokažite više",
+  "showPinDetails": "Prikaži detalje pribadače {{number}}",
+  "showPinDetailsDefault": "Prikaži detalje pribadače",
   "socialLinks": {
     "facebook": "Pratite nas na Facebooku",
     "instagram": "Pratite nas na Instagramu",
@@ -108,5 +110,6 @@
   "tuesday": "utorak",
   "useOurLocatorToFindALocationNearYou": "Upotrijebite naš lokator da biste pronašli lokaciju u vašoj blizini",
   "visitPage": "Stranica za posjetu",
+  "visitPageForName": "Posjetite stranicu za {{name}}",
   "wednesday": "srijeda"
 }

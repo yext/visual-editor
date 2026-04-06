@@ -521,6 +521,7 @@
   "fontSizeDefaultLabel": "Predvolený",
   "friday": "Piatok",
   "getDirections": "Získajte pokyny",
+  "getDirectionsForLocation": "Získať trasu pre {{address}}",
   "heading": "Nadpis",
   "healthcareFacilities": "Zdravotnícke zariadenia",
   "healthcareProfessionals": "Zdravotníci",
@@ -631,7 +632,6 @@
   "saturday": "Sobota",
   "schemaMarkup": "Označenie schémy",
   "search": "Hľadať",
-  "searchDropdownHere": "Vyhľadajte rozbaľovací vstup",
   "searchHere": "Vyhľadajte tu ...",
   "searchThisArea": "Hľadať túto oblasť",
   "secondaryHeaderHiddenOnLivePage": "Sekundárna hlavička (skrytá na aktívnej stránke)",
@@ -646,6 +646,8 @@
   "showLabels": "Ukazovať štítky",
   "showLess": "Vykazovať menej",
   "showMore": "Ukázať viac",
+  "showPinDetails": "Zobraziť podrobnosti špendlíka {{number}}",
+  "showPinDetailsDefault": "Zobraziť podrobnosti špendlíka",
   "siteColors": "Farby stránok",
   "slots": {
     "directoryCard": "Karta adresára",
@@ -754,5 +756,6 @@
   "utilityImage": "Úžitkový obrázok",
   "videoThumbnail": "Video",
   "visitPage": "Navštíviť stránku",
+  "visitPageForName": "Navštíviť stránku pre {{name}}",
   "wednesday": "Streda"
 }

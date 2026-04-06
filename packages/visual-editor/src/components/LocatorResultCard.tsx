@@ -950,6 +950,10 @@ export const LocatorResultCard = React.memo(
                           <a
                             href={getDirectionsLink}
                             onClick={handleGetDirectionsClick}
+                            aria-label={t("getDirectionsForLocation", {
+                              address: location.address.line1,
+                              defaultValue: "Get Directions for {{address}}",
+                            })}
                             className={themeManagerCn(
                               "components h-fit items-center w-fit underline gap-2 decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing flex font-bold",
                               getTextColorClass(resolvedAccentLinkColor)
@@ -999,7 +1003,11 @@ export const LocatorResultCard = React.memo(
           )}
           {/** CTA section */}
           <div className="flex flex-col lg:flex-row gap-2 lg:gap-4 w-full items-center md:items-stretch lg:items-center">
-            <PrimaryCTA primaryCTA={props.primaryCTA} result={result} />
+            <PrimaryCTA
+              primaryCTA={props.primaryCTA}
+              primaryHeading={props.primaryHeading}
+              result={result}
+            />
             {props.secondaryCTA.liveVisibility && (
               <CTA
                 link={resolveComponentData(
@@ -1029,12 +1037,22 @@ export const LocatorResultCard = React.memo(
 
 const PrimaryCTA = (props: {
   primaryCTA: LocatorResultCardProps["primaryCTA"];
+  primaryHeading: LocatorResultCardProps["primaryHeading"];
   result: CardProps<Location>["result"];
 }) => {
-  const { primaryCTA, result } = props;
+  const { primaryCTA, primaryHeading, result } = props;
   const location = result.rawData;
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
   const { t, i18n } = useTranslation();
+
+  const primaryFieldId = getSelectedFieldId(primaryHeading.field);
+  const primaryHeadingText = resolveText({
+    config: primaryHeading,
+    location,
+    language: i18n.language,
+    fieldId: primaryFieldId,
+    fallback: location.name,
+  });
 
   // Always uses the entity page link if one exists. If not, tries to resolve URL from the static
   // template in the Link prop, and if that also fails, doesn't render at all.
@@ -1069,6 +1087,10 @@ const PrimaryCTA = (props: {
             location
           ) || t("visitPage", "Visit Page")
         }
+        ariaLabel={t("visitPageForName", {
+          name: primaryHeadingText,
+          defaultValue: "Visit Page for {{name}}",
+        })}
         variant={primaryCTA.variant}
         normalizeLink={primaryCTA.normalizeLink}
         onClick={handlePrimaryCtaClick}
