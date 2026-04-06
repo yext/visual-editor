@@ -143,9 +143,7 @@ export const yextVisualEditorPlugin = (
         nextContents = buildEditorTemplateSource({
           rootDir,
           templatePath: filePath,
-          templateSource: fs.existsSync(filePath)
-            ? fs.readFileSync(filePath, "utf8")
-            : nextContents,
+          templateSource: virtualFile.content,
           templateNames: registryTemplateNames,
         });
         nextContents = injectEditorTemplateInfo(
