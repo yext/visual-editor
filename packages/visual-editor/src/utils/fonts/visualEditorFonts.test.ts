@@ -316,4 +316,24 @@ describe("getFontStyleOptions", () => {
       })
     ).toMatchObject([{ value: "normal" }]);
   });
+
+  it("preserves caller-provided styleOptions before the theme style tag loads", () => {
+    document.body.innerHTML = `
+      <iframe id="preview-frame"></iframe>
+    `;
+
+    expect(
+      getFontStyleOptions({
+        fontCssVariable: "--fontFamily-body-fontFamily",
+        fontList: defaultFonts,
+        styleOptions: [
+          { label: "Italic First", value: "italic" },
+          { label: "Normal Second", value: "normal" },
+        ],
+      })
+    ).toEqual([
+      { label: "Italic First", value: "italic" },
+      { label: "Normal Second", value: "normal" },
+    ]);
+  });
 });

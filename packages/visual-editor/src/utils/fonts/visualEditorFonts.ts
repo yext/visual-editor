@@ -251,7 +251,7 @@ export const getFontStyleOptions = (options: getFontStyleParams) => {
   ) as HTMLStyleElement;
 
   if (!styleElement) {
-    return defaultFontStyleOptions;
+    return styleOptions;
   }
 
   return filterFontStyles(styleElement, options);

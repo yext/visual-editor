@@ -56,7 +56,9 @@ export const FontStyleSelector = ({
       const iframe = document.getElementById(
         PUCK_PREVIEW_IFRAME_ID
       ) as HTMLIFrameElement | null;
-      const styleTag = iframe?.contentDocument?.getElementById(
+      const iframeDocument =
+        iframe?.contentDocument ?? iframe?.contentWindow?.document ?? null;
+      const styleTag = iframeDocument?.getElementById(
         THEME_STYLE_TAG_ID
       ) as HTMLStyleElement | null;
 
@@ -75,15 +77,14 @@ export const FontStyleSelector = ({
         return;
       }
 
-      if (!iframeObserver) {
-        iframeObserver = new MutationObserver(() => {
-          attachStyleObserver();
-        });
-        iframeObserver.observe(document, {
-          childList: true,
-          subtree: true,
-        });
-      }
+      iframeObserver?.disconnect();
+      iframeObserver = new MutationObserver(() => {
+        attachStyleObserver();
+      });
+      iframeObserver.observe(iframeDocument ?? document, {
+        childList: true,
+        subtree: true,
+      });
     };
 
     attachStyleObserver();
