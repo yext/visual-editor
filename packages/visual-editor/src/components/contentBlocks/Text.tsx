@@ -69,7 +69,7 @@ const textFields: Fields<TextProps> = {
       fontStyle: YextField(msg("fields.fontStyle", "Font Style"), {
         type: "radio",
         options: [
-          { label: msg("fields.options.regular", "Regular"), value: "regular" },
+          { label: msg("fields.options.regular", "Normal"), value: "regular" },
           { label: msg("fields.options.bold", "Bold"), value: "bold" },
           { label: msg("fields.options.italic", "Italic"), value: "italic" },
         ],

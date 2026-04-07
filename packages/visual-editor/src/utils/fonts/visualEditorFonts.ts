@@ -194,7 +194,7 @@ const defaultWeightOptions = [
 ];
 
 const defaultFontStyleOptions = [
-  { label: msg("fields.options.regular", "Regular"), value: "normal" },
+  { label: msg("fields.options.regular", "Normal"), value: "normal" },
   { label: msg("fields.options.italic", "Italic"), value: "italic" },
 ];
 

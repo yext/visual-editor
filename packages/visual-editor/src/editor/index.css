@@ -1,4 +1,5 @@
 @import "@puckeditor/core/no-external.css";
+@import "../components/atoms/fontStyle.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
