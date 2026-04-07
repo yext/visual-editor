@@ -2,8 +2,6 @@ import type { YextSchemaField } from "../../types/entityFields.ts";
 
 export type LocalEditorOptions = {
   enabled?: boolean;
-  route?: string;
-  streamConfigPath?: string;
 };
 
 export type LocalEditorDefaults = {
@@ -51,16 +49,6 @@ export type LocalEditorConfig = {
   defaults?: LocalEditorDefaults;
   templates?: Record<string, LocalEditorTemplateConfig>;
 };
-
-export type LegacyLocalEditorConfig = {
-  templateIds?: string[];
-  defaults?: LocalEditorDefaults;
-  stream?: LocalEditorStreamDefinition;
-};
-
-export type SupportedLocalEditorConfig =
-  | LocalEditorConfig
-  | LegacyLocalEditorConfig;
 
 export type TemplateManifestEntry = {
   name: string;

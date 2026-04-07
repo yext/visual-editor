@@ -15,13 +15,19 @@ import type {
 } from "./types.ts";
 import { readJsonFile, toErrorMessage } from "./utils.ts";
 
+/**
+ * Builds the manifest payload consumed by the `/local-editor` shell.
+ *
+ * The manifest exposes the available templates, entity options by template,
+ * template-specific defaults, and one effective default selection resolved from
+ * template defaults, global defaults, and the first available snapshot data.
+ */
 export const getLocalEditorManifest = async (
-  rootDir: string,
-  streamConfigPath = DEFAULT_LOCAL_EDITOR_STREAM_CONFIG_PATH
+  rootDir: string
 ): Promise<LocalEditorManifestResponse> => {
   // Normalize the raw local snapshot state into one manifest payload the shell
   // can use to seed its first template/entity/locale selection.
-  const context = await getLocalEditorContext(rootDir, streamConfigPath);
+  const context = await getLocalEditorContext(rootDir);
   const selectedTemplateId =
     context.defaults.templateId ?? context.templates[0];
   const selectedTemplateDefaults = selectedTemplateId
@@ -54,14 +60,13 @@ export const getLocalEditorManifest = async (
 
 export const getLocalEditorDocument = async (
   rootDir: string,
-  streamConfigPath: string,
   templateId?: string,
   entityId?: string,
   locale?: string
 ): Promise<LocalEditorDocumentResponse> => {
   // The document endpoint follows the same fallback order as the manifest so a
   // partially specified request still resolves to a deterministic snapshot.
-  const context = await getLocalEditorContext(rootDir, streamConfigPath);
+  const context = await getLocalEditorContext(rootDir);
   const selectedTemplateId =
     templateId ?? context.defaults.templateId ?? context.templates[0];
   const entityOptions = selectedTemplateId
@@ -119,9 +124,16 @@ export const getLocalEditorDocument = async (
   };
 };
 
+/**
+ * Builds the normalized local-editor context shared by manifest and document
+ * responses.
+ *
+ * This merges template manifest metadata, resolved `stream.config.ts` entries,
+ * indexed local snapshot documents, and derived entity/template defaults into
+ * one consistent view of local-editor state.
+ */
 const getLocalEditorContext = async (
-  rootDir: string,
-  streamConfigPath = DEFAULT_LOCAL_EDITOR_STREAM_CONFIG_PATH
+  rootDir: string
 ): Promise<LocalEditorContext> => {
   // Build one cached view of local-editor state so manifest and document
   // responses share the same template/default/snapshot interpretation.
@@ -133,7 +145,6 @@ const getLocalEditorContext = async (
   );
   const resolvedConfig = await readResolvedTemplateConfigs(
     rootDir,
-    streamConfigPath,
     templateManifestEntries,
     diagnostics
   );
@@ -171,7 +182,7 @@ const getLocalEditorContext = async (
 
   return {
     diagnostics,
-    streamConfigPath,
+    streamConfigPath: DEFAULT_LOCAL_EDITOR_STREAM_CONFIG_PATH,
     localDataPath: "localData",
     templates,
     defaults: {
@@ -217,6 +228,14 @@ const readTemplateManifestEntries = (
   });
 };
 
+/**
+ * Indexes local-editor snapshot documents from `localData/mapping.json`.
+ *
+ * Each configured template resolves through its generated data-template key in
+ * the mapping file. Referenced snapshot files are validated, parsed, and
+ * converted into template/entity/locale index entries while recoverable issues
+ * are added to diagnostics.
+ */
 const readLocalEditorDocuments = (
   localDataPath: string,
   templateConfigs: ResolvedLocalEditorTemplateConfig[],
@@ -310,6 +329,13 @@ const buildEntitiesByTemplate = (
   );
 };
 
+/**
+ * Collapses per-locale snapshot entries into the entity options shown in the
+ * local-editor shell for one template.
+ *
+ * Entities are deduped by id, locale lists are accumulated and sorted, and the
+ * final options are sorted by display name for a stable dropdown order.
+ */
 const buildEntityOptionsForTemplate = (
   templateId: string,
   documents: LocalEditorDocumentIndexEntry[]

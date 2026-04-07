@@ -10,6 +10,13 @@ type MutableFieldNode = {
   children: Map<string, MutableFieldNode>;
 };
 
+/**
+ * Infers stream-field schema data from a local-editor snapshot document.
+ *
+ * This gives the local-editor shell enough entity-field metadata to power
+ * field selectors and embedded-field pickers without platform stream schema
+ * data.
+ */
 export const inferEntityFields = (
   document: Record<string, unknown>,
   stream?: LocalEditorStreamDefinition

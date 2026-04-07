@@ -33,7 +33,6 @@ type LocalEditorStreamConfig = {
       stream?: LocalEditorStreamDefinition;
     }
   >;
-  stream?: LocalEditorStreamDefinition;
 };
 
 const localEditorTemplateId = "__LOCAL_EDITOR_TEMPLATE_ID__";
@@ -63,10 +62,9 @@ const normalizeLocalEditorPagesStream = (
   };
 };
 
-const templateStreamConfig =
-  (localEditorStreamConfigJson as LocalEditorStreamConfig).templates?.[
-    localEditorTemplateId
-  ]?.stream ?? (localEditorStreamConfigJson as LocalEditorStreamConfig).stream;
+const templateStreamConfig = (
+  localEditorStreamConfigJson as LocalEditorStreamConfig
+).templates?.[localEditorTemplateId]?.stream;
 
 const localEditorStreamConfig =
   normalizeLocalEditorPagesStream(templateStreamConfig);

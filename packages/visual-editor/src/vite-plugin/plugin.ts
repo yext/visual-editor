@@ -19,13 +19,9 @@ import {
   injectEditorTemplateInfo,
 } from "./editorRoute.ts";
 import { createLocalEditorArtifactsManager } from "./local-editor/artifacts.ts";
-import { resolveLocalEditorStreamConfigPath } from "./local-editor/config.ts";
+import { ensureLocalEditorStreamConfig } from "./local-editor/generatedFiles.ts";
 import {
-  ensureLocalEditorStreamConfig,
-  normalizeLocalEditorRoute,
-} from "./local-editor/generatedFiles.ts";
-import {
-  createLocalEditorRequestHandler,
+  handleLocalEditorRequest,
   sendJsonResponse,
 } from "./local-editor/server.ts";
 import type { LocalEditorOptions } from "./local-editor/types.ts";
@@ -95,17 +91,12 @@ export const yextVisualEditorPlugin = (
   let isServeMode = false;
   const filesToCleanup: string[] = [];
   const localEditorOptions = options.localEditor;
-  const localEditorRoute = normalizeLocalEditorRoute(localEditorOptions?.route);
-  const handleLocalEditorRequest =
-    createLocalEditorRequestHandler(localEditorOptions);
   const trackGeneratedFile = (filePath: string) => {
     if (!filesToCleanup.includes(filePath)) {
       filesToCleanup.push(filePath);
     }
   };
   const localEditorArtifacts = createLocalEditorArtifactsManager({
-    localEditorOptions,
-    localEditorRoute,
     localEditorTemplateSource: localEditorTemplate,
     localEditorDataTemplateSource: localEditorDataTemplate,
     trackGeneratedFile,
@@ -227,18 +218,7 @@ export const yextVisualEditorPlugin = (
       });
 
       if (!isBuildMode && localEditorOptions?.enabled) {
-        const resolvedLocalEditorStreamConfigPath =
-          await resolveLocalEditorStreamConfigPath(
-            process.cwd(),
-            localEditorOptions?.streamConfigPath
-          );
-        localEditorArtifacts.setResolvedLocalEditorStreamConfigPath(
-          resolvedLocalEditorStreamConfigPath
-        );
-        await ensureLocalEditorStreamConfig(
-          process.cwd(),
-          resolvedLocalEditorStreamConfigPath
-        );
+        await ensureLocalEditorStreamConfig(process.cwd());
         await localEditorArtifacts.syncLocalEditorDataTemplates();
       }
 

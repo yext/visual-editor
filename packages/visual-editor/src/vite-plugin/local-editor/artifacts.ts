@@ -5,38 +5,29 @@ import { getLocalEditorManifest } from "./data.ts";
 import {
   buildLocalEditorDataTemplatePath,
   buildLocalEditorDataTemplateSource,
-  buildLocalEditorTemplateSource,
   DEFAULT_LOCAL_EDITOR_STREAM_CONFIG_PATH,
   isGeneratedLocalEditorTemplate,
   LEGACY_LOCAL_EDITOR_DATA_TEMPLATE_PATH,
   LOCAL_EDITOR_DATA_TEMPLATE_PREFIX,
   toAbsoluteLocalEditorPath,
 } from "./generatedFiles.ts";
-import type { LocalEditorOptions } from "./types.ts";
 import { writeFileIfChanged } from "./utils.ts";
 
 type CreateLocalEditorArtifactsManagerOptions = {
-  localEditorOptions?: LocalEditorOptions;
-  localEditorRoute: string;
   localEditorTemplateSource: string;
   localEditorDataTemplateSource: string;
   trackGeneratedFile: (filePath: string) => void;
 };
 
+/**
+ * Creates the generation and cleanup lifecycle for local-editor shell and
+ * data-template artifacts.
+ */
 export const createLocalEditorArtifactsManager = ({
-  localEditorOptions,
-  localEditorRoute,
   localEditorTemplateSource,
   localEditorDataTemplateSource,
   trackGeneratedFile,
 }: CreateLocalEditorArtifactsManagerOptions) => {
-  // The dev server can switch configs without restarting, so the resolved path
-  // needs to live with the artifact lifecycle instead of being recomputed at
-  // each call site.
-  let resolvedLocalEditorStreamConfigPath =
-    localEditorOptions?.streamConfigPath ??
-    DEFAULT_LOCAL_EDITOR_STREAM_CONFIG_PATH;
-
   const syncLocalEditorTemplate = ({
     rootDir = process.cwd(),
     registryTemplateNames,
@@ -50,10 +41,7 @@ export const createLocalEditorArtifactsManager = ({
       "templates",
       "local-editor.tsx"
     );
-    let nextTemplateSource = buildLocalEditorTemplateSource(
-      localEditorTemplateSource,
-      localEditorRoute
-    );
+    let nextTemplateSource = localEditorTemplateSource;
     nextTemplateSource = buildEditorTemplateSource({
       rootDir,
       templatePath,
@@ -93,12 +81,7 @@ export const createLocalEditorArtifactsManager = ({
   }: {
     rootDir?: string;
   } = {}) => {
-    // Data templates mirror the currently configured local-editor templates so
-    // Pages test-data generation only emits snapshots for active streams.
-    const manifest = await getLocalEditorManifest(
-      rootDir,
-      resolvedLocalEditorStreamConfigPath
-    );
+    const manifest = await getLocalEditorManifest(rootDir);
     const activeTemplatePaths = new Set<string>();
 
     for (const templateId of manifest.templates) {
@@ -111,7 +94,7 @@ export const createLocalEditorArtifactsManager = ({
           path.dirname(templatePath),
           toAbsoluteLocalEditorPath(
             rootDir,
-            resolvedLocalEditorStreamConfigPath
+            DEFAULT_LOCAL_EDITOR_STREAM_CONFIG_PATH
           )
         )
         .split(path.sep)
@@ -212,9 +195,6 @@ export const createLocalEditorArtifactsManager = ({
   return {
     cleanupGeneratedLocalEditorArtifacts,
     cleanupServeArtifacts,
-    setResolvedLocalEditorStreamConfigPath: (nextPath: string) => {
-      resolvedLocalEditorStreamConfigPath = nextPath;
-    },
     syncLocalEditorDataTemplates,
     syncLocalEditorTemplate,
   };

@@ -140,7 +140,7 @@ Those generated templates let `yext pages generate-test-data` fetch the right en
 
 The `/local-editor` shell:
 
-- lists only templates that exist in both the generated template manifest and the component registry
+- lists only templates that exist in both the generated template manifest and under src/templates/
 - filters the Entity dropdown to the currently selected template
 - derives Locale options from the selected template and entity
 - reads the selected template's default layout from `.template-manifest.json`

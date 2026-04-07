@@ -18,16 +18,15 @@ import {
   locatorConfig,
 } from "@yext/visual-editor";
 import tailwindConfig from "../../tailwind.config";
+import { DEFAULT_LOCAL_EDITOR_ROUTE } from "../local-editor/generatedFiles.ts";
 
 const componentRegistry: Record<string, Config<any>> = {
   directory: directoryConfig,
   locator: locatorConfig,
 };
 
-const localEditorPath = "__LOCAL_EDITOR_ROUTE__";
-
 export const getPath: GetPath<TemplateProps> = () => {
-  return localEditorPath;
+  return DEFAULT_LOCAL_EDITOR_ROUTE.slice(1);
 };
 
 export const config: TemplateConfig = {
@@ -46,7 +45,7 @@ const LocalEditor: Template<TemplateRenderProps> = () => {
   return (
     <LocalEditorShell
       apiBasePath="/__yext_visual_editor/local-editor"
-      routePath={localEditorPath}
+      routePath={DEFAULT_LOCAL_EDITOR_ROUTE}
       componentRegistry={componentRegistry}
       tailwindConfig={tailwindConfig}
       themeConfig={defaultThemeConfig}
