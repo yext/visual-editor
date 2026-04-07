@@ -5,7 +5,7 @@ outline: deep
 
 # Local Editor Testing
 
-The Vite plugin can generate a fake `/local-editor` shell for local Pages testing. The shell lets you switch between templates, entities, and locales while using snapshot data generated from your own Yext account.
+The Vite plugin can generate an editor shell at `/local-editor` for local Pages testing. The shell lets you switch between templates, entities, and locales while using snapshot data generated from your own Yext account.
 
 ## Enable the Plugin
 
@@ -29,8 +29,6 @@ export default defineConfig({
   ],
 });
 ```
-
-The default fake editor route is `/local-editor`.
 
 ## Root `stream.config.ts`
 
@@ -56,14 +54,7 @@ const baseLocationStream = {
     "address",
     "yextDisplayCoordinate",
     // "c_productSection.sectionTitle",
-    // "c_productSection.linkedProducts.name",
-    // "c_productSection.linkedProducts.c_productPromo",
-    // "c_productSection.linkedProducts.c_description",
-    // "c_productSection.linkedProducts.c_coverPhoto",
-    // "c_productSection.linkedProducts.c_productCTA",
     // "c_hero",
-    // "c_faqSection.linkedFAQs.question",
-    // "c_faqSection.linkedFAQs.answerV2",
     // "dm_directoryParents_defaultdirectory.slug",
     // "dm_directoryParents_defaultdirectory.name",
     "additionalHoursText",
@@ -136,7 +127,7 @@ The plugin generates one hidden local-editor data template per configured templa
 
 Those generated templates let `yext pages generate-test-data` fetch the right entity pool for each template.
 
-## Fake Shell Behavior
+## Editor Shell Behavior
 
 The `/local-editor` shell:
 
