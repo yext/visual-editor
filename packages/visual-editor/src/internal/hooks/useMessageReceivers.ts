@@ -12,13 +12,15 @@ import { ThemeData } from "../types/themeData.ts";
 import { migrate } from "../../utils/migrate.ts";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
+import type { LocalDevOptions } from "../../editor/types.ts";
 
 const devLogger = new DevLogger();
 
 export const useCommonMessageReceivers = (
   componentRegistry: Record<string, Config<any>>,
   localDev: boolean,
-  streamDocument: StreamDocument
+  streamDocument: StreamDocument,
+  localDevOptions?: LocalDevOptions
 ) => {
   const { iFrameLoaded } = useCommonMessageSenders();
 
@@ -42,7 +44,7 @@ export const useCommonMessageReceivers = (
   // in localDev mode, return default data and mark all data as fetched
   useEffect(() => {
     if (localDev) {
-      const devMetadata = generateTemplateMetadata();
+      const devMetadata = generateTemplateMetadata(localDevOptions);
       setTemplateMetadata(devMetadata);
 
       const puckConfig = componentRegistry[devMetadata.templateId];
@@ -56,7 +58,7 @@ export const useCommonMessageReceivers = (
       // applies current migration version to empty data
       setLayoutData(
         migrate(
-          {
+          (localDevOptions?.initialLayoutData as Data | undefined) ?? {
             root: {},
             content: [],
             zones: {},
@@ -71,6 +73,8 @@ export const useCommonMessageReceivers = (
       setThemeDataFetched(true);
     }
   }, [
+    componentRegistry,
+    localDevOptions,
     localDev,
     setTemplateMetadata,
     setPuckConfig,
@@ -78,6 +82,7 @@ export const useCommonMessageReceivers = (
     setLayoutDataFetched,
     setThemeData,
     setThemeDataFetched,
+    streamDocument,
   ]);
 
   // return default data for localDev mode

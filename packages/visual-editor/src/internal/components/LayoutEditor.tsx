@@ -37,6 +37,7 @@ type LayoutEditorProps = {
   themeData: ThemeData;
   themeConfig: ThemeConfig | undefined;
   localDev: boolean;
+  showLocalDevOverrideButtons: boolean;
   metadata?: Metadata;
   streamDocument: StreamDocument;
 };
@@ -49,6 +50,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     themeData,
     themeConfig,
     localDev,
+    showLocalDevOverrideButtons,
     metadata,
     streamDocument,
   } = props;
@@ -301,6 +303,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       sendDevSaveStateData={sendDevLayoutSaveStateData}
       buildVisualConfigLocalStorageKey={buildVisualConfigLocalStorageKey}
       localDev={localDev}
+      showLocalDevOverrideButtons={showLocalDevOverrideButtons}
       metadata={metadata}
     />
   ) : (

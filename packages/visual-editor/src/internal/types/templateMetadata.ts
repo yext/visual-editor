@@ -1,5 +1,6 @@
 import { FontRegistry } from "../../utils/fonts/visualEditorFonts.ts";
 import DOMPurify from "dompurify";
+import type { LocalDevOptions } from "../../editor/types.ts";
 
 export type HeadDeployStatus = "RUNNING" | "INACTIVE" | "FAILED" | "ACTIVE";
 
@@ -32,13 +33,31 @@ export type FieldTypeData = {
   field_type_id: string;
 };
 
-export function generateTemplateMetadata(): TemplateMetadata {
-  const cleanString = DOMPurify.sanitize(window.location.href).split("?")[0];
+export function generateTemplateMetadata(
+  localDevOptions?: LocalDevOptions
+): TemplateMetadata {
+  const cleanString = DOMPurify.sanitize(window.location.href);
+  const entityId = localDevOptions?.entityId
+    ? hashCode(String(localDevOptions.entityId))
+    : hashCode(cleanString);
+  const templateId = localDevOptions?.templateId ?? "dev";
+  const locale = localDevOptions?.locale ?? "en";
+  const layoutScopeKey =
+    localDevOptions?.layoutScopeKey ??
+    JSON.stringify({
+      templateId,
+      entityId: localDevOptions?.entityId ?? cleanString,
+      locale,
+    });
+  const locales = localDevOptions?.locales?.length
+    ? localDevOptions.locales
+    : ["en", "es", "fr"];
+
   return {
     siteId: 1337,
-    templateId: "dev",
-    entityId: hashCode(cleanString),
-    layoutId: hashCode(cleanString),
+    templateId,
+    entityId,
+    layoutId: hashCode(layoutScopeKey),
     assignment: "ALL",
     isDevMode: true,
     isxYextDebug: true,
@@ -47,8 +66,8 @@ export function generateTemplateMetadata(): TemplateMetadata {
     entityCount: 0,
     totalEntityCount: 0,
     entityTypeDisplayName: "Entity",
-    platformLocale: "en",
-    locales: ["en", "es", "fr"],
+    platformLocale: locale,
+    locales,
     layoutTaskApprovals: false,
     headDeployStatus: "ACTIVE",
     locatorDisplayFields: {

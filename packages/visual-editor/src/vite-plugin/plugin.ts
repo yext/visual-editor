@@ -5,16 +5,27 @@ import baseTemplate from "./templates/base.tsx?raw";
 import editTemplate from "./templates/edit.tsx?raw";
 import directoryTemplate from "./templates/directory.tsx?raw";
 import locatorTemplate from "./templates/locator.tsx?raw";
+import localEditorTemplate from "./templates/local-editor.tsx?raw";
+import localEditorDataTemplate from "./templates/local-editor-data.tsx?raw";
 import { ComponentField } from "../types/fields.ts";
 import { defaultLayoutData } from "./defaultLayoutData.ts";
 import {
+  buildEditorTemplateSource,
   generateRegistryTemplateFiles,
-  getCollectedRegistryTemplateNames,
+  getGeneratedRegistryTemplateNames,
 } from "./registryTemplateGenerator.ts";
 import {
   getEditorTemplateInfoFromTemplateNames,
   injectEditorTemplateInfo,
 } from "./editorRoute.ts";
+import { createLocalEditorArtifactsManager } from "./local-editor/artifacts.ts";
+import { ensureLocalEditorStreamConfig } from "./local-editor/generatedFiles.ts";
+import {
+  handleLocalEditorRequest,
+  sendJsonResponse,
+} from "./local-editor/server.ts";
+import type { LocalEditorOptions } from "./local-editor/types.ts";
+import { writeFileIfChanged } from "./local-editor/utils.ts";
 
 type TemplateManifestEntry = {
   name: string;
@@ -29,6 +40,10 @@ type VirtualFile = {
   filepath: string;
   content: any;
   templateManifestEntry?: TemplateManifestEntry;
+};
+
+export type VisualEditorPluginOptions = {
+  localEditor?: LocalEditorOptions;
 };
 
 /**
@@ -69,56 +84,23 @@ const virtualFiles: VirtualFile[] = [
   },
 ];
 
-export const yextVisualEditorPlugin = (): Plugin => {
+export const yextVisualEditorPlugin = (
+  options: VisualEditorPluginOptions = {}
+): Plugin => {
   let isBuildMode = false;
+  let isServeMode = false;
   const filesToCleanup: string[] = [];
-
-  // Keeps the generated edit template aligned with the editor route metadata
-  // for the templates available in the current repo.
-  const syncGeneratedEditTemplate = (rootDir: string) => {
-    const editorTemplatePath = path.join(
-      rootDir,
-      "src",
-      "templates",
-      "edit.tsx"
-    );
-    const availableTemplateNames = [
-      ...(fs.existsSync(path.join(rootDir, "src", "templates", "main.tsx"))
-        ? ["main"]
-        : []),
-      ...virtualFiles.flatMap((virtualFile) =>
-        virtualFile.templateManifestEntry
-          ? [virtualFile.templateManifestEntry.name]
-          : []
-      ),
-      ...getCollectedRegistryTemplateNames(rootDir),
-    ];
-    const editorTemplateInfo = getEditorTemplateInfoFromTemplateNames(
-      availableTemplateNames
-    );
-
-    fs.mkdirSync(path.dirname(editorTemplatePath), { recursive: true });
-    const editorTemplateExists = fs.existsSync(editorTemplatePath);
-    const sourceContent = editorTemplateExists
-      ? fs.readFileSync(editorTemplatePath, "utf8")
-      : editTemplate;
-    // Inject the generated edit route metadata so custom templates resolve to
-    // their template-scoped `/edit/<template>` path when needed.
-    const updatedContent = injectEditorTemplateInfo(
-      sourceContent,
-      editorTemplateInfo
-    );
-
-    if (editorTemplateExists) {
-      if (sourceContent !== updatedContent) {
-        fs.writeFileSync(editorTemplatePath, updatedContent);
-      }
-      return;
+  const localEditorOptions = options.localEditor;
+  const trackGeneratedFile = (filePath: string) => {
+    if (!filesToCleanup.includes(filePath)) {
+      filesToCleanup.push(filePath);
     }
-
-    filesToCleanup.push(editorTemplatePath);
-    fs.writeFileSync(editorTemplatePath, updatedContent);
   };
+  const localEditorArtifacts = createLocalEditorArtifactsManager({
+    localEditorTemplateSource: localEditorTemplate,
+    localEditorDataTemplateSource: localEditorDataTemplate,
+    trackGeneratedFile,
+  });
 
   /**
    * generateFiles generates the template files and .temlpate-manifest.json file
@@ -133,8 +115,19 @@ export const yextVisualEditorPlugin = (): Plugin => {
    *
    * Created files will be marked for deletion on buildEnd
    */
-  const generateFiles = () => {
+  const generateFiles = (registryTemplateNames: string[]) => {
     const rootDir = process.cwd();
+    const editorTemplateInfo = getEditorTemplateInfoFromTemplateNames([
+      ...(fs.existsSync(path.join(rootDir, "src", "templates", "main.tsx"))
+        ? ["main"]
+        : []),
+      ...virtualFiles.flatMap((virtualFile) =>
+        virtualFile.templateManifestEntry
+          ? [virtualFile.templateManifestEntry.name]
+          : []
+      ),
+      ...registryTemplateNames,
+    ]);
 
     // Create a structure to store the manifest data
     const manifest: {
@@ -148,10 +141,29 @@ export const yextVisualEditorPlugin = (): Plugin => {
       // Ensure the directory exists
       fs.mkdirSync(path.dirname(filePath), { recursive: true });
 
-      // Write the content to the file if it doesn't already exist
+      let nextContents = virtualFile.content;
+      if (virtualFile.filepath === "src/templates/edit.tsx") {
+        nextContents = buildEditorTemplateSource({
+          rootDir,
+          templatePath: filePath,
+          templateSource: virtualFile.content,
+          templateNames: registryTemplateNames,
+        });
+        nextContents = injectEditorTemplateInfo(
+          nextContents,
+          editorTemplateInfo
+        );
+      }
+
       if (!fs.existsSync(filePath)) {
-        filesToCleanup.push(filePath);
-        fs.writeFileSync(filePath, virtualFile.content);
+        trackGeneratedFile(filePath);
+      }
+
+      if (
+        !fs.existsSync(filePath) ||
+        virtualFile.filepath === "src/templates/edit.tsx"
+      ) {
+        writeFileIfChanged(filePath, nextContents);
       }
 
       // populate template-manifest object
@@ -160,12 +172,10 @@ export const yextVisualEditorPlugin = (): Plugin => {
       }
     });
 
-    syncGeneratedEditTemplate(rootDir);
-
     const manifestPath = path.join(rootDir, ".template-manifest.json");
     if (!fs.existsSync(manifestPath)) {
       // Write the manifest to the .template-manifest.json file
-      fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
+      writeFileIfChanged(manifestPath, JSON.stringify(manifest, null, 2));
     }
   };
 
@@ -177,12 +187,12 @@ export const yextVisualEditorPlugin = (): Plugin => {
 
   // cleanup on interruption (ctrl + C)
   process.on("SIGINT", () => {
-    cleanupFiles();
+    localEditorArtifacts.cleanupServeArtifacts(cleanupFiles);
     process.nextTick(() => process.exit(0));
   });
 
   process.on("SIGTERM", () => {
-    cleanupFiles();
+    localEditorArtifacts.cleanupServeArtifacts(cleanupFiles);
     process.nextTick(() => process.exit(0));
   });
 
@@ -190,12 +200,64 @@ export const yextVisualEditorPlugin = (): Plugin => {
     name: "vite-plugin-yext-visual-editor",
     config(_, { command }) {
       isBuildMode = command === "build";
+      isServeMode = command === "serve";
     },
-    buildStart() {
-      generateFiles();
+    async buildStart() {
+      if (isBuildMode || !localEditorOptions?.enabled) {
+        localEditorArtifacts.cleanupGeneratedLocalEditorArtifacts();
+      }
+
+      const registryTemplateNames = getGeneratedRegistryTemplateNames(
+        process.cwd()
+      );
+
+      generateFiles(registryTemplateNames);
       generateRegistryTemplateFiles({
         rootDir: process.cwd(),
         generatedBaseTemplateSource: baseTemplate,
+      });
+
+      if (!isBuildMode && localEditorOptions?.enabled) {
+        await ensureLocalEditorStreamConfig(process.cwd());
+        await localEditorArtifacts.syncLocalEditorDataTemplates();
+      }
+
+      if (isServeMode && localEditorOptions?.enabled) {
+        localEditorArtifacts.syncLocalEditorTemplate({
+          registryTemplateNames,
+        });
+      }
+    },
+    configureServer(server) {
+      if (!localEditorOptions?.enabled) {
+        return;
+      }
+
+      server.httpServer?.once("close", () => {
+        localEditorArtifacts.cleanupServeArtifacts(cleanupFiles);
+      });
+
+      server.middlewares.use((request, response, next) => {
+        if (!request.url) {
+          next();
+          return;
+        }
+
+        void handleLocalEditorRequest(request.url, response)
+          .then((handled) => {
+            if (!handled) {
+              next();
+            }
+          })
+          .catch((error) => {
+            sendJsonResponse(
+              response,
+              {
+                error: error instanceof Error ? error.message : String(error),
+              },
+              500
+            );
+          });
       });
     },
     buildEnd() {
