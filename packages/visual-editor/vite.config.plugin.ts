@@ -1,5 +1,21 @@
 import { defineConfig, LibraryFormats } from "vite";
+import { builtinModules } from "node:module";
 import path from "node:path";
+
+const nodeBuiltins = new Set(
+  builtinModules.flatMap((moduleName) => {
+    return moduleName.startsWith("node:")
+      ? [moduleName, moduleName.replace(/^node:/, "")]
+      : [moduleName, `node:${moduleName}`];
+  })
+);
+
+const pluginRuntimeExternalPackages = new Set([
+  "fs-extra",
+  "ts-morph",
+  "tsx",
+  "tsx/esm/api",
+]);
 
 export default defineConfig(() => ({
   build: {
@@ -15,7 +31,11 @@ export default defineConfig(() => ({
     target: "node18",
     tsconfig: path.resolve(__dirname, "tsconfig.plugin.json"),
     rollupOptions: {
-      external: ["node:path", "fs-extra", "ts-morph"],
+      external: (source) => {
+        return (
+          nodeBuiltins.has(source) || pluginRuntimeExternalPackages.has(source)
+        );
+      },
     },
   },
 }));

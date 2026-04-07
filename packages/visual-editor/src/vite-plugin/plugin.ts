@@ -4,6 +4,8 @@ import { Plugin } from "vite";
 import baseTemplate from "./templates/base.tsx?raw";
 import directoryTemplate from "./templates/directory.tsx?raw";
 import locatorTemplate from "./templates/locator.tsx?raw";
+import localEditorTemplate from "./templates/local-editor.tsx?raw";
+import localEditorDataTemplate from "./templates/local-editor-data.tsx?raw";
 import { ComponentField } from "../types/fields.ts";
 import { defaultLayoutData } from "./defaultLayoutData.ts";
 import {
@@ -14,6 +16,14 @@ import { createGeneratedFileCleanupTracker } from "./generatedFileCleanup.ts";
 import { getEffectiveEditorTemplateNames } from "./editorTemplateNames.ts";
 import { syncGeneratedEditorFiles } from "./generatedEditorFiles.ts";
 import { hasExplicitLocalMainTemplate } from "./generatedTemplateFiles.ts";
+import { createLocalEditorArtifactsManager } from "./local-editor/artifacts.ts";
+import { ensureLocalEditorStreamConfig } from "./local-editor/generatedFiles.ts";
+import {
+  handleLocalEditorRequest,
+  sendJsonResponse,
+} from "./local-editor/server.ts";
+import type { LocalEditorOptions } from "./local-editor/types.ts";
+import { writeFileIfChanged } from "./writeFileIfChanged.ts";
 
 type TemplateManifestEntry = {
   name: string;
@@ -28,6 +38,10 @@ type VirtualFile = {
   filepath: string;
   content: any;
   templateManifestEntry?: TemplateManifestEntry;
+};
+
+export type VisualEditorPluginOptions = {
+  localEditor?: LocalEditorOptions;
 };
 
 /**
@@ -64,9 +78,18 @@ const virtualFiles: VirtualFile[] = [
   },
 ];
 
-export const yextVisualEditorPlugin = (): Plugin => {
+export const yextVisualEditorPlugin = (
+  options: VisualEditorPluginOptions = {}
+): Plugin => {
   let isBuildMode = false;
   const generatedFileCleanup = createGeneratedFileCleanupTracker();
+  let isServeMode = false;
+  const localEditorOptions = options.localEditor;
+  const localEditorArtifacts = createLocalEditorArtifactsManager({
+    localEditorTemplateSource: localEditorTemplate,
+    localEditorDataTemplateSource: localEditorDataTemplate,
+    trackGeneratedFile: generatedFileCleanup.track,
+  });
 
   /**
    * generateFiles generates the template files and .temlpate-manifest.json file
@@ -82,7 +105,7 @@ export const yextVisualEditorPlugin = (): Plugin => {
    *
    * Created files will be marked for deletion on buildEnd
    */
-  const generateFiles = () => {
+  const generateFiles = (registryTemplateNames: string[]) => {
     const rootDir = process.cwd();
 
     // Create a structure to store the manifest data
@@ -97,7 +120,6 @@ export const yextVisualEditorPlugin = (): Plugin => {
       // Ensure the directory exists
       fs.mkdirSync(path.dirname(filePath), { recursive: true });
 
-      // Write the content to the file if it doesn't already exist
       if (!fs.existsSync(filePath)) {
         generatedFileCleanup.track(filePath);
         fs.writeFileSync(filePath, virtualFile.content);
@@ -111,7 +133,7 @@ export const yextVisualEditorPlugin = (): Plugin => {
 
     const explicitLocalTemplateNames = [
       ...(hasExplicitLocalMainTemplate(rootDir) ? ["main"] : []),
-      ...getCollectedRegistryTemplateNames(rootDir),
+      ...registryTemplateNames,
     ];
     const { templateNames: availableTemplateNames } =
       getEffectiveEditorTemplateNames(explicitLocalTemplateNames);
@@ -121,11 +143,10 @@ export const yextVisualEditorPlugin = (): Plugin => {
       isBuildMode,
       trackFileForCleanup: generatedFileCleanup.track,
     });
-
     const manifestPath = path.join(rootDir, ".template-manifest.json");
     if (!fs.existsSync(manifestPath)) {
       // Write the manifest to the .template-manifest.json file
-      fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
+      writeFileIfChanged(manifestPath, JSON.stringify(manifest, null, 2));
     }
   };
 
@@ -133,16 +154,78 @@ export const yextVisualEditorPlugin = (): Plugin => {
     generatedFileCleanup.cleanup();
   };
 
+  // cleanup on interruption (ctrl + C)
+  process.on("SIGINT", () => {
+    localEditorArtifacts.cleanupServeArtifacts(cleanupFiles);
+    process.nextTick(() => process.exit(0));
+  });
+
+  process.on("SIGTERM", () => {
+    localEditorArtifacts.cleanupServeArtifacts(cleanupFiles);
+    process.nextTick(() => process.exit(0));
+  });
   return {
     name: "vite-plugin-yext-visual-editor",
     config(_, { command }) {
       isBuildMode = command === "build";
+      isServeMode = command === "serve";
     },
-    buildStart() {
-      generateFiles();
+    async buildStart() {
+      if (isBuildMode || !localEditorOptions?.enabled) {
+        localEditorArtifacts.cleanupGeneratedLocalEditorArtifacts();
+      }
+
+      const registryTemplateNames = getCollectedRegistryTemplateNames(
+        process.cwd()
+      );
+
+      generateFiles(registryTemplateNames);
       generateRegistryTemplateFiles({
         rootDir: process.cwd(),
         generatedBaseTemplateSource: baseTemplate,
+      });
+
+      if (!isBuildMode && localEditorOptions?.enabled) {
+        await ensureLocalEditorStreamConfig(process.cwd());
+        await localEditorArtifacts.syncLocalEditorDataTemplates();
+      }
+
+      if (isServeMode && localEditorOptions?.enabled) {
+        localEditorArtifacts.syncLocalEditorTemplate({
+          registryTemplateNames,
+        });
+      }
+    },
+    configureServer(server) {
+      if (!localEditorOptions?.enabled) {
+        return;
+      }
+
+      server.httpServer?.once("close", () => {
+        localEditorArtifacts.cleanupServeArtifacts(cleanupFiles);
+      });
+
+      server.middlewares.use((request, response, next) => {
+        if (!request.url) {
+          next();
+          return;
+        }
+
+        void handleLocalEditorRequest(request.url, response)
+          .then((handled) => {
+            if (!handled) {
+              next();
+            }
+          })
+          .catch((error) => {
+            sendJsonResponse(
+              response,
+              {
+                error: error instanceof Error ? error.message : String(error),
+              },
+              500
+            );
+          });
       });
     },
     buildEnd() {

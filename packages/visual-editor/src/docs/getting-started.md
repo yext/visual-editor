@@ -50,6 +50,8 @@ Now that the Puck component is created we need to make it available for users.
 
 The easiest way to develop your component is to add your component to the local starter in the visual-editor library.
 
+For the local Pages testing flow with the fake editor shell and template-aware snapshot data, see [Local Editor Testing](./local-editor.md).
+
 ### Prerequisites
 
 1. Node 20

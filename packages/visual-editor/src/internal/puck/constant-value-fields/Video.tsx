@@ -7,6 +7,7 @@ import {
 } from "../../hooks/useMessage.ts";
 import { Button } from "../ui/button.tsx";
 import { AssetVideo } from "../../../types/videos.ts";
+import { shouldUseStandaloneLocalPrompt } from "../../utils/shouldUseStandaloneLocalPrompt.ts";
 import { pt } from "../../../utils/i18n/platform.ts";
 
 type VideoPayload = {
@@ -45,7 +46,7 @@ export const VIDEO_CONSTANT_CONFIG: CustomField<AssetVideo | undefined> = {
       e.preventDefault();
 
       /** Handles local development testing outside of Storm */
-      if (window.location.href.includes("http://localhost:5173/dev-location")) {
+      if (shouldUseStandaloneLocalPrompt()) {
         const userInput = prompt("Enter Video URL:");
         if (!userInput) {
           return;

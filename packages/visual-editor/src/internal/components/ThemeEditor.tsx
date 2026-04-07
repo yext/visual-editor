@@ -31,6 +31,7 @@ type ThemeEditorProps = {
   themeData: ThemeData;
   themeConfig: ThemeConfig | undefined;
   localDev: boolean;
+  showLocalDevOverrideButtons: boolean;
   metadata?: Metadata;
 };
 
@@ -42,6 +43,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     themeData,
     themeConfig,
     localDev,
+    showLocalDevOverrideButtons,
     metadata,
   } = props;
 
@@ -282,6 +284,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       sendDevThemeSaveStateData={sendDevThemeSaveStateData}
       buildThemeLocalStorageKey={buildThemeLocalStorageKey}
       localDev={localDev}
+      showLocalDevOverrideButtons={showLocalDevOverrideButtons}
       metadata={metadata}
     />
   ) : (
