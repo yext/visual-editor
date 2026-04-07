@@ -521,6 +521,7 @@
   "fontSizeDefaultLabel": "Implicit",
   "friday": "vineri",
   "getDirections": "Obțineți indicații",
+  "getDirectionsForLocation": "Obțineți indicații pentru {{address}}",
   "heading": "Titlu",
   "healthcareFacilities": "Facilități de sănătate",
   "healthcareProfessionals": "Profesioniştii din domeniul sănătăţii",
@@ -626,7 +627,6 @@
   "saturday": "sâmbătă",
   "schemaMarkup": "Schema Markup",
   "search": "Căutare",
-  "searchDropdownHere": "Căutați intrarea derulantă",
   "searchHere": "Căutați aici ...",
   "searchThisArea": "Căutați în această zonă",
   "secondaryHeaderHiddenOnLivePage": "Antet secundar (ascuns pe pagina live)",
@@ -641,6 +641,8 @@
   "showLabels": "Arată etichete",
   "showLess": "Arată mai puțin",
   "showMore": "Arată mai mult",
+  "showPinDetails": "Afișați detaliile codului {{number}}",
+  "showPinDetailsDefault": "Afișați detaliile codului",
   "siteColors": "Culorile site -ului",
   "slots": {
     "directoryCard": "Card de director",
@@ -748,5 +750,6 @@
   "utilityImage": "Imagine de utilitate",
   "videoThumbnail": "Miniatură video",
   "visitPage": "Vizitați pagina",
+  "visitPageForName": "Vizitați pagina pentru {{name}}",
   "wednesday": "miercuri"
 }

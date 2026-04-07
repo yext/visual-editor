@@ -521,6 +521,7 @@
   "fontSizeDefaultLabel": "Por defecto",
   "friday": "Viernes",
   "getDirections": "Obtener instrucciones",
+  "getDirectionsForLocation": "Obtener indicaciones para {{address}}",
   "heading": "Título",
   "healthcareFacilities": "Instalaciones sanitarias",
   "healthcareProfessionals": "Profesionales de la salud",
@@ -626,7 +627,6 @@
   "saturday": "Sábado",
   "schemaMarkup": "Marcado de esquema",
   "search": "Buscar",
-  "searchDropdownHere": "Entrada desplegable de búsqueda",
   "searchHere": "Buscar aquí ...",
   "searchThisArea": "Busca esta área",
   "secondaryHeaderHiddenOnLivePage": "Encabezado secundario (oculto en la página activa)",
@@ -641,6 +641,8 @@
   "showLabels": "Espectáculo de etiquetas",
   "showLess": "Mostrar menos",
   "showMore": "Mostrar más",
+  "showPinDetails": "Mostrar detalles del pin {{number}}",
+  "showPinDetailsDefault": "Mostrar detalles del pin",
   "siteColors": "Colores del sitio",
   "slots": {
     "directoryCard": "Tarjeta de directorio",
@@ -748,5 +750,6 @@
   "utilityImage": "Imagen de utilidad",
   "videoThumbnail": "Miniatura de video",
   "visitPage": "Visitar la página",
+  "visitPageForName": "Visitar la página de {{name}}",
   "wednesday": "Miércoles"
 }

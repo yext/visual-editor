@@ -32,6 +32,7 @@
   "findALocation": "Hitta en plats",
   "friday": "Fredag",
   "getDirections": "Få vägbeskrivning",
+  "getDirectionsForLocation": "Få vägbeskrivningar för {{address}}",
   "heroBanner": "Hjältebanner",
   "heroHeader": "Hjältrubrik",
   "heroImage": "Hjältebild",
@@ -75,7 +76,6 @@
   "reopenDate": "Öppna datum igen",
   "responseFrom": "Svar från {{businessName}}",
   "saturday": "Lördag",
-  "searchDropdownHere": "Sökrullningsingång",
   "searchHere": "Sök här ...",
   "searchThisArea": "Sök på detta område",
   "secondaryHeaderLinks": "Sekundära rubriklänkar",
@@ -85,6 +85,8 @@
   "servicesSection": "Serviceavdelning",
   "showLess": "Visa mindre",
   "showMore": "Visa mer",
+  "showPinDetails": "Visa pin {{number}} detaljer",
+  "showPinDetailsDefault": "Visa pindetaljer",
   "socialLinks": {
     "facebook": "Följ oss på Facebook",
     "instagram": "Följ oss på Instagram",
@@ -102,5 +104,6 @@
   "tuesday": "Tisdag",
   "useOurLocatorToFindALocationNearYou": "Använd vår lokalisering för att hitta en plats nära dig",
   "visitPage": "Besöka sidan",
+  "visitPageForName": "Besök sidan för {{name}}",
   "wednesday": "Onsdag"
 }

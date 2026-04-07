@@ -32,6 +32,7 @@
   "findALocation": "Nájdite miesto",
   "friday": "Piatok",
   "getDirections": "Získajte pokyny",
+  "getDirectionsForLocation": "Získať trasu pre {{address}}",
   "heroBanner": "Hlavný banner",
   "heroHeader": "Hlavná hlavička",
   "heroImage": "Obraz",
@@ -85,7 +86,6 @@
   "reopenDate": "Dátum znovuotvorenia",
   "responseFrom": "Odpoveď od {{businessName}}",
   "saturday": "Sobota",
-  "searchDropdownHere": "Vyhľadajte rozbaľovací vstup",
   "searchHere": "Vyhľadajte tu ...",
   "searchThisArea": "Hľadať túto oblasť",
   "secondaryHeaderLinks": "Sekundárne odkazy hlavičky",
@@ -95,6 +95,8 @@
   "servicesSection": "Sekcia",
   "showLess": "Vykazovať menej",
   "showMore": "Ukázať viac",
+  "showPinDetails": "Zobraziť podrobnosti špendlíka {{number}}",
+  "showPinDetailsDefault": "Zobraziť podrobnosti špendlíka",
   "socialLinks": {
     "facebook": "Sledujte nás na Facebooku",
     "instagram": "Sledujte nás na Instagrame",
@@ -114,5 +116,6 @@
   "tuesday": "Utorok",
   "useOurLocatorToFindALocationNearYou": "Pomocou nášho vyhľadávača nájdete miesto vo vašom okolí",
   "visitPage": "Navštíviť stránku",
+  "visitPageForName": "Navštíviť stránku pre {{name}}",
   "wednesday": "Streda"
 }

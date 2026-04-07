@@ -521,6 +521,7 @@
   "fontSizeDefaultLabel": "預設",
   "friday": "星期五",
   "getDirections": "獲取指示",
+  "getDirectionsForLocation": "取得 {{address}} 的路線",
   "heading": "標題",
   "healthcareFacilities": "醫療設施",
   "healthcareProfessionals": "醫療保健專業人員",
@@ -621,7 +622,6 @@
   "saturday": "週六",
   "schemaMarkup": "模式標記",
   "search": "搜尋",
-  "searchDropdownHere": "搜索下拉輸入",
   "searchHere": "在這裡搜索...",
   "searchThisArea": "搜索此區域",
   "secondaryHeaderHiddenOnLivePage": "輔助標題（隱藏在實時頁面上）",
@@ -636,6 +636,8 @@
   "showLabels": "顯示標籤",
   "showLess": "少顯示",
   "showMore": "顯示更多",
+  "showPinDetails": "顯示引腳 {{number}} 詳細信息",
+  "showPinDetailsDefault": "顯示引腳詳細信息",
   "siteColors": "站點顏色",
   "slots": {
     "directoryCard": "名錄卡",
@@ -742,5 +744,6 @@
   "utilityImage": "實用圖像",
   "videoThumbnail": "視頻縮略圖",
   "visitPage": "訪問頁面",
+  "visitPageForName": "造訪 {{name}} 頁面",
   "wednesday": "週三"
 }

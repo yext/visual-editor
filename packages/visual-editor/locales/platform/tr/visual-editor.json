@@ -521,6 +521,7 @@
   "fontSizeDefaultLabel": "Varsayılan",
   "friday": "Cuma",
   "getDirections": "Yol tarifi alın",
+  "getDirectionsForLocation": "{{address}} için Yol Tarifi Alın",
   "heading": "Başlık",
   "healthcareFacilities": "Sağlık Tesisleri",
   "healthcareProfessionals": "Sağlık Profesyonelleri",
@@ -621,7 +622,6 @@
   "saturday": "Cumartesi",
   "schemaMarkup": "Şema işaretlemesi",
   "search": "Aramak",
-  "searchDropdownHere": "Arama açılır girişi",
   "searchHere": "Burada ara ...",
   "searchThisArea": "Bu alanı arayın",
   "secondaryHeaderHiddenOnLivePage": "İkincil Başlık (Yayınlanan sayfada gizli)",
@@ -636,6 +636,8 @@
   "showLabels": "Etiketleri Göster",
   "showLess": "Daha az göster",
   "showMore": "Daha Fazla Göster",
+  "showPinDetails": "{{number}} pin ayrıntılarını göster",
+  "showPinDetailsDefault": "Pin ayrıntılarını göster",
   "siteColors": "Site Renkleri",
   "slots": {
     "directoryCard": "Rehber Kartı",
@@ -742,5 +744,6 @@
   "utilityImage": "Yardımcı Resim",
   "videoThumbnail": "Video küçük resim",
   "visitPage": "Sayfayı Ziyaret Edin",
+  "visitPageForName": "{{name}} Sayfasını Ziyaret Edin",
   "wednesday": "Çarşamba"
 }

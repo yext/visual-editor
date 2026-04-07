@@ -521,6 +521,7 @@
   "fontSizeDefaultLabel": "Standard",
   "friday": "Fredag",
   "getDirections": "Få vägbeskrivning",
+  "getDirectionsForLocation": "Få vägbeskrivningar för {{address}}",
   "heading": "Rubrik",
   "healthcareFacilities": "Sjukvårdsinrättningar",
   "healthcareProfessionals": "Vårdpersonal",
@@ -621,7 +622,6 @@
   "saturday": "Lördag",
   "schemaMarkup": "Schematmarkering",
   "search": "Söka",
-  "searchDropdownHere": "Sökrullningsingång",
   "searchHere": "Sök här ...",
   "searchThisArea": "Sök på detta område",
   "secondaryHeaderHiddenOnLivePage": "Sekundär sidhuvud (dold på livesida)",
@@ -636,6 +636,8 @@
   "showLabels": "Visa etiketter",
   "showLess": "Visa mindre",
   "showMore": "Visa mer",
+  "showPinDetails": "Visa pin {{number}} detaljer",
+  "showPinDetailsDefault": "Visa pindetaljer",
   "siteColors": "Platsfärger",
   "slots": {
     "directoryCard": "Katalogkort",
@@ -742,5 +744,6 @@
   "utilityImage": "Verktygsbild",
   "videoThumbnail": "Videotumsstil",
   "visitPage": "Besöka sidan",
+  "visitPageForName": "Besök sidan för {{name}}",
   "wednesday": "Onsdag"
 }
