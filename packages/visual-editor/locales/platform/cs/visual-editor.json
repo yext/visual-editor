@@ -521,6 +521,7 @@
   "fontSizeDefaultLabel": "Výchozí",
   "friday": "pátek",
   "getDirections": "Získejte pokyny",
+  "getDirectionsForLocation": "Získat trasu pro {{address}}",
   "heading": "Záhlaví",
   "healthcareFacilities": "Zdravotnická zařízení",
   "healthcareProfessionals": "Zdravotníci",
@@ -631,7 +632,6 @@
   "saturday": "sobota",
   "schemaMarkup": "Označení schématu",
   "search": "Vyhledávání",
-  "searchDropdownHere": "Rozbalovací vstup pro vyhledávání",
   "searchHere": "Hledejte zde ...",
   "searchThisArea": "Prohledejte tuto oblast",
   "secondaryHeaderHiddenOnLivePage": "Sekundární záhlaví (skryté na aktivní stránce)",
@@ -646,6 +646,8 @@
   "showLabels": "Zobrazit štítky",
   "showLess": "Ukázat méně",
   "showMore": "Ukázat více",
+  "showPinDetails": "Zobrazit podrobnosti pinu {{number}}",
+  "showPinDetailsDefault": "Zobrazit podrobnosti špendlíku",
   "siteColors": "Barvy webu",
   "slots": {
     "directoryCard": "Karta adresáře",
@@ -754,5 +756,6 @@
   "utilityImage": "Užitkový obrázek",
   "videoThumbnail": "Video miniatura",
   "visitPage": "Navštivte stránku",
+  "visitPageForName": "Navštivte stránku pro {{name}}",
   "wednesday": "středa"
 }

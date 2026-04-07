@@ -521,6 +521,7 @@
   "fontSizeDefaultLabel": "Nepildīt",
   "friday": "Piektdiena",
   "getDirections": "Saņemt norādes",
+  "getDirectionsForLocation": "Saņemiet norādes uz {{address}}",
   "heading": "Virsraksts",
   "healthcareFacilities": "Veselības aprūpes iestādes",
   "healthcareProfessionals": "Veselības aprūpes speciālisti",
@@ -624,7 +625,6 @@
   "saturday": "Sestdiena",
   "schemaMarkup": "Shēmas uzcenojums",
   "search": "Meklēšana",
-  "searchDropdownHere": "Meklēt nolaižamās ieejas",
   "searchHere": "Meklēt šeit ...",
   "searchThisArea": "Meklējiet šo apgabalu",
   "secondaryHeaderHiddenOnLivePage": "Sekundārā galvene (paslēpta tiešsaistes lapā)",
@@ -639,6 +639,8 @@
   "showLabels": "Izrādes etiķetes",
   "showLess": "Rādīt mazāk",
   "showMore": "Parādīt vairāk",
+  "showPinDetails": "Rādīt spraudītes {{number}} informāciju",
+  "showPinDetailsDefault": "Rādīt spraudītes informāciju",
   "siteColors": "Vietnes krāsas",
   "slots": {
     "directoryCard": "Direktoriju karte",
@@ -746,5 +748,6 @@
   "utilityImage": "Lietderības attēls",
   "videoThumbnail": "Video sīktēls",
   "visitPage": "Apmeklējuma lapa",
+  "visitPageForName": "Apmeklējiet lapu {{name}}",
   "wednesday": "Trešdiena"
 }

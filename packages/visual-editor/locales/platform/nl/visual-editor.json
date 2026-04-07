@@ -521,6 +521,7 @@
   "fontSizeDefaultLabel": "Standaard",
   "friday": "Vrijdag",
   "getDirections": "Routebeschrijving",
+  "getDirectionsForLocation": "Routebeschrijving opvragen voor {{address}}",
   "heading": "Rubriek",
   "healthcareFacilities": "Gezondheidszorgfaciliteiten",
   "healthcareProfessionals": "Beroepsbeoefenaren in de gezondheidszorg",
@@ -621,7 +622,6 @@
   "saturday": "Zaterdag",
   "schemaMarkup": "Schema -aanmelding",
   "search": "Zoekopdracht",
-  "searchDropdownHere": "Zoek de vervolgkeuzeveld",
   "searchHere": "Zoek hier ...",
   "searchThisArea": "Zoek dit gebied",
   "secondaryHeaderHiddenOnLivePage": "Secundaire koptekst (verborgen op livepagina)",
@@ -636,6 +636,8 @@
   "showLabels": "Toon labels",
   "showLess": "Minder laten zien",
   "showMore": "Laat meer zien",
+  "showPinDetails": "Toon pin {{number}} details",
+  "showPinDetailsDefault": "Toon pingegevens",
   "siteColors": "Sitekleuren",
   "slots": {
     "directoryCard": "Adresboekkaart",
@@ -742,5 +744,6 @@
   "utilityImage": "Utility-afbeelding",
   "videoThumbnail": "Video -miniatuur",
   "visitPage": "Bezoek pagina",
+  "visitPageForName": "Bezoek pagina voor {{name}}",
   "wednesday": "Woensdag"
 }

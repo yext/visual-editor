@@ -32,6 +32,7 @@
   "findALocation": "Finde einen Standort",
   "friday": "Freitag",
   "getDirections": "Route planen",
+  "getDirectionsForLocation": "Wegbeschreibung für {{address}} abrufen",
   "heroBanner": "Hero-Banner",
   "heroHeader": "Hero-Header",
   "heroImage": "Hero Image",
@@ -75,7 +76,6 @@
   "reopenDate": "Wiedereröffnungsdatum",
   "responseFrom": "Antwort von {{businessName}}",
   "saturday": "Samstag",
-  "searchDropdownHere": "Suchfeld für Optionen",
   "searchHere": "Hier suchen...",
   "searchThisArea": "In diesem Bereich suchen",
   "secondaryHeaderLinks": "Sekundäre Header-Links",
@@ -85,6 +85,8 @@
   "servicesSection": "Leistungen-Modul",
   "showLess": "Weniger anzeigen",
   "showMore": "Mehr anzeigen",
+  "showPinDetails": "Details zu Pin {{number}} anzeigen",
+  "showPinDetailsDefault": "Pin-Details anzeigen",
   "socialLinks": {
     "facebook": "Folgen Sie uns auf Facebook",
     "instagram": "Folgen Sie uns auf Instagram",
@@ -102,5 +104,6 @@
   "tuesday": "Dienstag",
   "useOurLocatorToFindALocationNearYou": "Nutze unseren Locator, um einen Ort in deine Nähe zu finden",
   "visitPage": "Standortseite aufrufen",
+  "visitPageForName": "Besuchsseite für {{name}}",
   "wednesday": "Mittwoch"
 }

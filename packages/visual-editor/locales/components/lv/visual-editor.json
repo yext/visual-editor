@@ -32,6 +32,7 @@
   "findALocation": "Atrodiet atrašanās vietu",
   "friday": "Piektdiena",
   "getDirections": "Saņemt norādes",
+  "getDirectionsForLocation": "Saņemiet norādes uz {{address}}",
   "heroBanner": "Varoņu reklāmkarogs",
   "heroHeader": "Varoņu galva",
   "heroImage": "Varoņa attēls",
@@ -78,7 +79,6 @@
   "reopenDate": "Atkārtoti atvērt datumu",
   "responseFrom": "Atbilde no {{businessName}}",
   "saturday": "Sestdiena",
-  "searchDropdownHere": "Meklēt nolaižamās ieejas",
   "searchHere": "Meklēt šeit ...",
   "searchThisArea": "Meklējiet šo apgabalu",
   "secondaryHeaderLinks": "Sekundārās galvenes saites",
@@ -88,6 +88,8 @@
   "servicesSection": "Pakalpojumu nodaļa",
   "showLess": "Rādīt mazāk",
   "showMore": "Parādīt vairāk",
+  "showPinDetails": "Rādīt spraudītes {{number}} informāciju",
+  "showPinDetailsDefault": "Rādīt spraudītes informāciju",
   "socialLinks": {
     "facebook": "Sekojiet mums Facebook",
     "instagram": "Sekojiet mums Instagram",
@@ -106,5 +108,6 @@
   "tuesday": "Otrdiena",
   "useOurLocatorToFindALocationNearYou": "Izmantojiet mūsu lokatoru, lai atrastu atrašanās vietu netālu no jums",
   "visitPage": "Apmeklējuma lapa",
+  "visitPageForName": "Apmeklējiet lapu {{name}}",
   "wednesday": "Trešdiena"
 }
