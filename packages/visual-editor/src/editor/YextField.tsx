@@ -263,6 +263,7 @@ export function YextField<T, U>(
     return {
       type: "code",
       label: fieldName,
+      visible: config.visible,
       codeLanguage: config.codeLanguage,
     };
   }
