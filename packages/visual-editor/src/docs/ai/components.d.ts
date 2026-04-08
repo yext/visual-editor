@@ -10,6 +10,7 @@ import {
   BaseField,
   ObjectField,
   NumberField,
+  FieldProps,
   Fields,
   ComponentData,
   Slot,

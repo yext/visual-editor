@@ -543,28 +543,6 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ---
 
-## LocatorComponent
-
-Available on Locator templates.
-
-### Props
-
-#### Other Props
-
-Controls which distance value to display on each locator result card.
-
-| Prop                  | Type                                                                                                                                    | Description                                                                                                                                                                                                                      | Default                                |
-| :-------------------- | :-------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------- |
-| `distanceDisplay`     | `DistanceDisplayOption`                                                                                                                 | Controls which distance value to display on each locator result card.                                                                                                                                                            |                                        |
-| `filters`             | `{ openNowButton: boolean; showDistanceOptions: boolean; accentColor?: ThemeColor; facetFields?: DynamicOptionsSelectorType<string>; }` | Configuration for the filters available in the locator search experience.                                                                                                                                                        |                                        |
-| `locationStyles`      | `Array<{ entityType: LocatorEntityType; pinIcon?: { type: "none" \| "icon"; iconName?: string; }; pinColor?: ThemeColor; }>`            | Props to customize the locator map pin styles. Controls map pin appearance depending on the result's entity type. The number of entries is locked to the locator entity types for the page set.                                  |                                        |
-| `mapStartingLocation` | `{ latitude: string; longitude: string; }`                                                                                              | The starting location for the map.                                                                                                                                                                                               |                                        |
-| `mapStyle`            | `string`                                                                                                                                | The visual theme for the map tiles, chosen from a predefined list of Mapbox styles.                                                                                                                                              | `'mapbox://styles/mapbox/streets-v12'` |
-| `pageHeading`         | `{ title: TranslatableString; color?: ThemeColor; }`                                                                                    | Configuration for the locator page heading. Allows customizing the title text and its color.                                                                                                                                     |                                        |
-| `resultCard`          | `Array<{ props: LocatorResultCardProps; }>`                                                                                             | Props to customize the locator result card component. Controls which fields are displayed and their styling depending on the result's entity type. The number of entries is locked to the locator entity types for the page set. |                                        |
-
----
-
 ## NearbyLocationsSection
 
 The Nearby Locations Section dynamically finds and displays a list of business locations within a specified radius of a central point. It's a powerful tool for helping users discover other relevant locations, rendering each result as a detailed card with contact information and business hours. Available on Location templates.
