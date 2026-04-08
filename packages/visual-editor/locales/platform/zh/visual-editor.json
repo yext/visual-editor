@@ -47,6 +47,10 @@
   "closeMenu": "关闭菜单",
   "closesAtTime": "于 {{time}} 关闭",
   "closesAtTimeWeek": "于 {{time}} {{dayOfWeek}} 关闭",
+  "colorPicker": {
+    "close": "关闭颜色选择器",
+    "open": "打开颜色选择器"
+  },
   "componentErrorBoundary": {
     "error": "错误",
     "message": "无法渲染此部分。尝试更新您的组件库。"
@@ -552,6 +556,7 @@
   "friday": "星期五",
   "generatingAIAnswer": "正在生成 AI 答案...",
   "getDirections": "获取指示",
+  "getDirectionsForLocation": "获取 {{address}} 的路线",
   "heading": "标题",
   "healthcareFacilities": "医疗设施",
   "healthcareProfessionals": "医疗保健专业人员",
@@ -657,7 +662,6 @@
   "saturday": "周六",
   "schemaMarkup": "模式标记",
   "search": "搜索",
-  "searchDropdownHere": "搜索下拉输入",
   "searchHere": "在这里搜索...",
   "searchThisArea": "搜索此区域",
   "secondaryHeaderHiddenOnLivePage": "辅助标题（隐藏在实时页面上）",
@@ -672,6 +676,8 @@
   "showLabels": "显示标签",
   "showLess": "少显示",
   "showMore": "显示更多",
+  "showPinDetails": "显示引脚 {{number}} 详细信息",
+  "showPinDetailsDefault": "显示引脚详细信息",
   "siteColors": "站点颜色",
   "slots": {
     "directoryCard": "名录卡",
@@ -779,6 +785,7 @@
   "utilityImage": "实用图像",
   "videoThumbnail": "视频缩略图",
   "visitPage": "访问页面",
+  "visitPageForName": "访问 {{name}} 页面",
   "voiceSearch": "语音搜索",
   "wednesday": "周三"
 }

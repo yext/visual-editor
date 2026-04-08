@@ -47,6 +47,10 @@
   "closeMenu": "Sulje valikko",
   "closesAtTime": "Suljetaan {{time}}",
   "closesAtTimeWeek": "Suljetaan klo {{time}} {{dayOfWeek}}",
+  "colorPicker": {
+    "close": "Sulje värivalitsin",
+    "open": "Avaa värivalitsin"
+  },
   "componentErrorBoundary": {
     "error": "Virhe",
     "message": "Tätä osiota ei voi renderöidä. Yritä päivittää komponenttikirjastosi."
@@ -552,6 +556,7 @@
   "friday": "perjantai",
   "generatingAIAnswer": "Luodaan tekoälyvastausta...",
   "getDirections": "Hanki reittiohjeet",
+  "getDirectionsForLocation": "Hanki reittiohjeet kohteeseen {{address}}",
   "heading": "Otsikko",
   "healthcareFacilities": "Terveydenhuollon palvelut",
   "healthcareProfessionals": "Terveydenhuollon ammattilaiset",
@@ -657,7 +662,6 @@
   "saturday": "lauantai",
   "schemaMarkup": "Kaavio",
   "search": "Haku",
-  "searchDropdownHere": "Haku avattavasta tulosta",
   "searchHere": "Etsi täältä ...",
   "searchThisArea": "Etsi tätä aluetta",
   "secondaryHeaderHiddenOnLivePage": "Toissijainen otsikko (piilotettu live-sivulla)",
@@ -672,6 +676,8 @@
   "showLabels": "Näyttötarrat",
   "showLess": "Näytä vähemmän",
   "showMore": "Näytä enemmän",
+  "showPinDetails": "Näytä pin {{number}} tiedot",
+  "showPinDetailsDefault": "Näytä merkin tiedot",
   "siteColors": "Sivuston värit",
   "slots": {
     "directoryCard": "Hakemistokortti",
@@ -779,6 +785,7 @@
   "utilityImage": "Hyödyllinen kuva",
   "videoThumbnail": "Videon pikkukuva",
   "visitPage": "Vieraile sivussa",
+  "visitPageForName": "Siirry sivulle {{name}}",
   "voiceSearch": "Äänihaku",
   "wednesday": "keskiviikko"
 }

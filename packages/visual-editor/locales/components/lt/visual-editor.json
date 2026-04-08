@@ -33,6 +33,7 @@
   "friday": "Penktadienis",
   "generatingAIAnswer": "Generuojamas AI atsakymas...",
   "getDirections": "Gaukite nurodymus",
+  "getDirectionsForLocation": "Gaukite nuorodas į {{address}}",
   "heroBanner": "Herojaus antraštė",
   "heroHeader": "Herojaus antraštė",
   "heroImage": "Herojaus įvaizdis",
@@ -89,7 +90,6 @@
   "reopenDate": "Atnaujinti datą",
   "responseFrom": "Atsakymas iš {{businessName}}",
   "saturday": "Šeštadienis",
-  "searchDropdownHere": "Paieškos išskleidžiamasis įvestis",
   "searchHere": "Ieškokite čia ...",
   "searchThisArea": "Ieškokite šioje srityje",
   "secondaryHeaderLinks": "Antrinės antraštės nuorodos",
@@ -99,6 +99,8 @@
   "servicesSection": "Paslaugų skyrius",
   "showLess": "Parodyk mažiau",
   "showMore": "Parodyk daugiau",
+  "showPinDetails": "Rodyti smeigtuko {{number}} informaciją",
+  "showPinDetailsDefault": "Rodyti smeigtuko informaciją",
   "socialLinks": {
     "facebook": "Sekite mus Facebook",
     "instagram": "Sekite mus Instagram",
@@ -120,6 +122,7 @@
   "tuesday": "Antradienis",
   "useOurLocatorToFindALocationNearYou": "Naudokite mūsų ieškiklį, kad rastumėte vietą šalia jūsų",
   "visitPage": "Apsilankykite puslapyje",
+  "visitPageForName": "Apsilankykite puslapyje {{name}}",
   "voiceSearch": "Balso paieška",
   "wednesday": "Trečiadienis"
 }

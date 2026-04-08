@@ -47,6 +47,10 @@
   "closeMenu": "Zavrieť menu",
   "closesAtTime": "Zatvára sa o {{time}}",
   "closesAtTimeWeek": "Zatvára sa o {{time}} {{dayOfWeek}}",
+  "colorPicker": {
+    "close": "Zavrieť výber farieb",
+    "open": "Otvorte výber farieb"
+  },
   "componentErrorBoundary": {
     "error": "Chyba",
     "message": "Túto sekciu nie je možné vykresliť. Skúste aktualizovať knižnicu komponentov."
@@ -552,6 +556,7 @@
   "friday": "Piatok",
   "generatingAIAnswer": "Generuje sa odpoveď AI...",
   "getDirections": "Získajte pokyny",
+  "getDirectionsForLocation": "Získať trasu pre {{address}}",
   "heading": "Nadpis",
   "healthcareFacilities": "Zdravotnícke zariadenia",
   "healthcareProfessionals": "Zdravotníci",
@@ -667,7 +672,6 @@
   "saturday": "Sobota",
   "schemaMarkup": "Označenie schémy",
   "search": "Hľadať",
-  "searchDropdownHere": "Vyhľadajte rozbaľovací vstup",
   "searchHere": "Vyhľadajte tu ...",
   "searchThisArea": "Hľadať túto oblasť",
   "secondaryHeaderHiddenOnLivePage": "Sekundárna hlavička (skrytá na aktívnej stránke)",
@@ -682,6 +686,8 @@
   "showLabels": "Ukazovať štítky",
   "showLess": "Vykazovať menej",
   "showMore": "Ukázať viac",
+  "showPinDetails": "Zobraziť podrobnosti špendlíka {{number}}",
+  "showPinDetailsDefault": "Zobraziť podrobnosti špendlíka",
   "siteColors": "Farby stránok",
   "slots": {
     "directoryCard": "Karta adresára",
@@ -791,6 +797,7 @@
   "utilityImage": "Úžitkový obrázok",
   "videoThumbnail": "Video",
   "visitPage": "Navštíviť stránku",
+  "visitPageForName": "Navštíviť stránku pre {{name}}",
   "voiceSearch": "Hlasové vyhľadávanie",
   "wednesday": "Streda"
 }

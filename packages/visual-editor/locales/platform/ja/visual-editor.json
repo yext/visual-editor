@@ -47,6 +47,10 @@
   "closeMenu": "メニューを閉じます",
   "closesAtTime": "{{time}}に閉まります",
   "closesAtTimeWeek": "{{time}} {{dayOfWeek}} に閉店",
+  "colorPicker": {
+    "close": "カラーピッカーを閉じる",
+    "open": "カラーピッカーを開く"
+  },
   "componentErrorBoundary": {
     "error": "エラー",
     "message": "このセクションをレンダリングできません。コンポーネント ライブラリを更新してみてください。"
@@ -552,6 +556,7 @@
   "friday": "金曜日",
   "generatingAIAnswer": "AI 回答を生成中...",
   "getDirections": "道順を取得します",
+  "getDirectionsForLocation": "{{address}} への行き方を調べる",
   "heading": "見出し",
   "healthcareFacilities": "医療施設",
   "healthcareProfessionals": "医療従事者",
@@ -657,7 +662,6 @@
   "saturday": "土曜日",
   "schemaMarkup": "スキーママークアップ",
   "search": "検索",
-  "searchDropdownHere": "ドロップダウン入力を検索します",
   "searchHere": "ここで検索してください...",
   "searchThisArea": "このエリアを検索します",
   "secondaryHeaderHiddenOnLivePage": "セカンダリヘッダー (ライブページでは非表示)",
@@ -672,6 +676,8 @@
   "showLabels": "ラベルを表示します",
   "showLess": "少なく表示します",
   "showMore": "もっと見せてください",
+  "showPinDetails": "ピン {{number}} の詳細を表示",
+  "showPinDetailsDefault": "ピンの詳細を表示",
   "siteColors": "サイトの色",
   "slots": {
     "directoryCard": "ディレクトリカード",
@@ -779,6 +785,7 @@
   "utilityImage": "ユーティリティイメージ",
   "videoThumbnail": "ビデオサムネイル",
   "visitPage": "ページにアクセスしてください",
+  "visitPageForName": "{{name}} のページにアクセスしてください",
   "voiceSearch": "音声検索",
   "wednesday": "水曜日"
 }

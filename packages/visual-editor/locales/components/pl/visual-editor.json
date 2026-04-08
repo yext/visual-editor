@@ -33,6 +33,7 @@
   "friday": "Piątek",
   "generatingAIAnswer": "Generowanie odpowiedzi AI...",
   "getDirections": "Uzyskaj wskazówki",
+  "getDirectionsForLocation": "Uzyskaj wskazówki dojazdu do {{address}}",
   "heroBanner": "Banner bohatera",
   "heroHeader": "Nagłówek bohatera",
   "heroImage": "Obraz bohatera",
@@ -89,7 +90,6 @@
   "reopenDate": "Data ponownego otwarcia",
   "responseFrom": "Odpowiedź od {{businessName}}",
   "saturday": "Sobota",
-  "searchDropdownHere": "Wyszukaj wejście rozwijane",
   "searchHere": "Wyszukaj tutaj ...",
   "searchThisArea": "Przeszukaj ten obszar",
   "secondaryHeaderLinks": "Dodatkowe linki nagłówkowe",
@@ -99,6 +99,8 @@
   "servicesSection": "Sekcja usług",
   "showLess": "Pokaż mniej",
   "showMore": "Pokaż więcej",
+  "showPinDetails": "Pokaż szczegóły pinu {{number}}",
+  "showPinDetailsDefault": "Pokaż szczegóły pinu",
   "socialLinks": {
     "facebook": "Śledź nas na Facebooku",
     "instagram": "Śledź nas na Instagramie",
@@ -120,6 +122,7 @@
   "tuesday": "Wtorek",
   "useOurLocatorToFindALocationNearYou": "Użyj naszego lokalizatora, aby znaleźć lokalizację w pobliżu",
   "visitPage": "Odwiedź stronę",
+  "visitPageForName": "Odwiedź stronę dla {{name}}",
   "voiceSearch": "Wyszukiwanie głosowe",
   "wednesday": "Środa"
 }

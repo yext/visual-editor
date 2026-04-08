@@ -47,6 +47,10 @@
   "closeMenu": "Luk menu",
   "closesAtTime": "Lukker kl. {{time}}",
   "closesAtTimeWeek": "Lukker kl. {{time}} {{dayOfWeek}}",
+  "colorPicker": {
+    "close": "Luk farvevælgeren",
+    "open": "Åbn farvevælgeren"
+  },
   "componentErrorBoundary": {
     "error": "Fejl",
     "message": "Kan ikke gengive denne sektion. Prøv at opdatere dit komponentbibliotek."
@@ -552,6 +556,7 @@
   "friday": "fredag",
   "generatingAIAnswer": "Genererer AI-svar...",
   "getDirections": "Få rutevejledning",
+  "getDirectionsForLocation": "Få rutevejledning til {{address}}",
   "heading": "Overskrift",
   "healthcareFacilities": "Sundhedsfaciliteter",
   "healthcareProfessionals": "Sundhedspersonale",
@@ -657,7 +662,6 @@
   "saturday": "lørdag",
   "schemaMarkup": "Skema markering",
   "search": "Søge",
-  "searchDropdownHere": "Søg rullelinjet",
   "searchHere": "Søg her ...",
   "searchThisArea": "Søg i dette område",
   "secondaryHeaderHiddenOnLivePage": "Sekundær overskrift (skjult på live-side)",
@@ -672,6 +676,8 @@
   "showLabels": "Vis etiketter",
   "showLess": "Vis mindre",
   "showMore": "Vis mere",
+  "showPinDetails": "Vis pin {{number}} detaljer",
+  "showPinDetailsDefault": "Vis pindetaljer",
   "siteColors": "Webstedsfarver",
   "slots": {
     "directoryCard": "Vejviserkort",
@@ -779,6 +785,7 @@
   "utilityImage": "Brugsbillede",
   "videoThumbnail": "Video -miniaturebillede",
   "visitPage": "Besøg side",
+  "visitPageForName": "Besøg siden for {{name}}",
   "voiceSearch": "Stemmesøgning",
   "wednesday": "onsdag"
 }

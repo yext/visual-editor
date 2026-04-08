@@ -33,6 +33,7 @@
   "friday": "Cuma",
   "generatingAIAnswer": "Yapay zeka yanıtı oluşturuluyor...",
   "getDirections": "Yol tarifi alın",
+  "getDirectionsForLocation": "{{address}} için Yol Tarifi Alın",
   "heroBanner": "Kahraman afiş",
   "heroHeader": "Kahraman başlığı",
   "heroImage": "Kahraman görüntüsü",
@@ -79,7 +80,6 @@
   "reopenDate": "Tarihi Yeniden Aç",
   "responseFrom": "{{businessName}} 'dan yanıt",
   "saturday": "Cumartesi",
-  "searchDropdownHere": "Arama açılır girişi",
   "searchHere": "Burada ara ...",
   "searchThisArea": "Bu alanı arayın",
   "secondaryHeaderLinks": "İkincil Başlık Bağlantıları",
@@ -89,6 +89,8 @@
   "servicesSection": "Hizmetler Bölümü",
   "showLess": "Daha az göster",
   "showMore": "Daha Fazla Göster",
+  "showPinDetails": "{{number}} pin ayrıntılarını göster",
+  "showPinDetailsDefault": "Pin ayrıntılarını göster",
   "socialLinks": {
     "facebook": "Bizi Facebook'ta takip edin",
     "instagram": "Bizi Instagram'da takip edin",
@@ -108,6 +110,7 @@
   "tuesday": "Salı",
   "useOurLocatorToFindALocationNearYou": "Yakınınızdaki bir yer bulmak için bulucumuzu kullanın",
   "visitPage": "Sayfayı Ziyaret Edin",
+  "visitPageForName": "{{name}} Sayfasını Ziyaret Edin",
   "voiceSearch": "Sesli Arama",
   "wednesday": "Çarşamba"
 }

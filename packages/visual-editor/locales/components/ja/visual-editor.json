@@ -33,6 +33,7 @@
   "friday": "金曜日",
   "generatingAIAnswer": "AI 回答を生成中...",
   "getDirections": "道順を取得します",
+  "getDirectionsForLocation": "{{address}} への行き方を調べる",
   "heroBanner": "ヒーローバナー",
   "heroHeader": "ヒーローヘッダー",
   "heroImage": "ヒーローイメージ",
@@ -79,7 +80,6 @@
   "reopenDate": "日付を再開します",
   "responseFrom": "{{businessName}}からの応答",
   "saturday": "土曜日",
-  "searchDropdownHere": "ドロップダウン入力を検索します",
   "searchHere": "ここで検索してください...",
   "searchThisArea": "このエリアを検索します",
   "secondaryHeaderLinks": "セカンダリヘッダーリンク",
@@ -89,6 +89,8 @@
   "servicesSection": "サービスセクション",
   "showLess": "少なく表示します",
   "showMore": "もっと見せてください",
+  "showPinDetails": "ピン {{number}} の詳細を表示",
+  "showPinDetailsDefault": "ピンの詳細を表示",
   "socialLinks": {
     "facebook": "Facebook でフォローしてください",
     "instagram": "Instagram でフォローしてください",
@@ -108,6 +110,7 @@
   "tuesday": "火曜日",
   "useOurLocatorToFindALocationNearYou": "ロケーターを使用して、お近くの場所を見つけてください",
   "visitPage": "ページにアクセスしてください",
+  "visitPageForName": "{{name}} のページにアクセスしてください",
   "voiceSearch": "音声検索",
   "wednesday": "水曜日"
 }

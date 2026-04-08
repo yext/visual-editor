@@ -33,6 +33,7 @@
   "friday": "星期五",
   "generatingAIAnswer": "正在生成 AI 答案...",
   "getDirections": "获取指示",
+  "getDirectionsForLocation": "获取 {{address}} 的路线",
   "heroBanner": "英雄横幅",
   "heroHeader": "英雄头",
   "heroImage": "英雄形象",
@@ -79,7 +80,6 @@
   "reopenDate": "重新开放日期",
   "responseFrom": "{{businessName}}的响应",
   "saturday": "周六",
-  "searchDropdownHere": "搜索下拉输入",
   "searchHere": "在这里搜索...",
   "searchThisArea": "搜索此区域",
   "secondaryHeaderLinks": "二级标题链接",
@@ -89,6 +89,8 @@
   "servicesSection": "服务部分",
   "showLess": "少显示",
   "showMore": "显示更多",
+  "showPinDetails": "显示引脚 {{number}} 详细信息",
+  "showPinDetailsDefault": "显示引脚详细信息",
   "socialLinks": {
     "facebook": "在 Facebook 上关注我们",
     "instagram": "在 Instagram 上关注我们",
@@ -108,6 +110,7 @@
   "tuesday": "周二",
   "useOurLocatorToFindALocationNearYou": "使用我们的定位器找到您附近的位置",
   "visitPage": "访问页面",
+  "visitPageForName": "访问 {{name}} 页面",
   "voiceSearch": "语音搜索",
   "wednesday": "周三"
 }

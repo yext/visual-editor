@@ -47,6 +47,10 @@
   "closeMenu": "Zatvori izbornik",
   "closesAtTime": "Zatvara se u {{time}}",
   "closesAtTimeWeek": "Zatvara se u {{time}} {{dayOfWeek}}",
+  "colorPicker": {
+    "close": "Zatvori birač boja",
+    "open": "Otvori birač boja"
+  },
   "componentErrorBoundary": {
     "error": "Greška",
     "message": "Nije moguće prikazati ovaj odjeljak. Pokušajte ažurirati biblioteku komponenti."
@@ -552,6 +556,7 @@
   "friday": "petak",
   "generatingAIAnswer": "Generiranje AI odgovora...",
   "getDirections": "Dobiti upute",
+  "getDirectionsForLocation": "Preuzmite upute za {{address}}",
   "heading": "Naslov",
   "healthcareFacilities": "Zdravstvene ustanove",
   "healthcareProfessionals": "Zdravstveni radnici",
@@ -662,7 +667,6 @@
   "saturday": "subota",
   "schemaMarkup": "Oznaka sheme",
   "search": "Pretraživanje",
-  "searchDropdownHere": "Pretražite unos pada",
   "searchHere": "Pretražite ovdje ...",
   "searchThisArea": "Pretražite ovo područje",
   "secondaryHeaderHiddenOnLivePage": "Sekundarno zaglavlje (skriveno na stranici uživo)",
@@ -677,6 +681,8 @@
   "showLabels": "Prikaži naljepnice",
   "showLess": "Pokazati manje",
   "showMore": "Pokažite više",
+  "showPinDetails": "Prikaži detalje pribadače {{number}}",
+  "showPinDetailsDefault": "Prikaži detalje pribadače",
   "siteColors": "Boje mjesta",
   "slots": {
     "directoryCard": "Kartica imenika",
@@ -785,6 +791,7 @@
   "utilityImage": "Korisna slika",
   "videoThumbnail": "Video sličica",
   "visitPage": "Stranica za posjetu",
+  "visitPageForName": "Posjetite stranicu za {{name}}",
   "voiceSearch": "Glasovno pretraživanje",
   "wednesday": "srijeda"
 }

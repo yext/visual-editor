@@ -47,6 +47,10 @@
   "closeMenu": "Menü schließen",
   "closesAtTime": "Schließt um {{time}} Uhr",
   "closesAtTimeWeek": "Schließt am {{dayOfWeek}} um {{time}} Uhr",
+  "colorPicker": {
+    "close": "Farbauswahl schließen",
+    "open": "Farbauswahl öffnen"
+  },
   "componentErrorBoundary": {
     "error": "Fehler",
     "message": "Dieses Modul kann nicht gerendert werden. Versuchen Sie, Ihre Komponentenbibliothek zu aktualisieren."
@@ -552,6 +556,7 @@
   "friday": "Freitag",
   "generatingAIAnswer": "KI-Antwort wird generiert...",
   "getDirections": "Route planen",
+  "getDirectionsForLocation": "Wegbeschreibung für {{address}} abrufen",
   "heading": "Überschrift",
   "healthcareFacilities": "Gesundheitseinrichtungen",
   "healthcareProfessionals": "Fachkräfte im Gesundheitswesen",
@@ -657,7 +662,6 @@
   "saturday": "Samstag",
   "schemaMarkup": "Schema Markup",
   "search": "Suchen",
-  "searchDropdownHere": "Suchfeld für Optionen",
   "searchHere": "Hier suchen...",
   "searchThisArea": "In diesem Bereich suchen",
   "secondaryHeaderHiddenOnLivePage": "Sekundärer Header (Auf Live-Seite ausgeblendet)",
@@ -672,6 +676,8 @@
   "showLabels": "Labels anzeigen",
   "showLess": "Weniger anzeigen",
   "showMore": "Mehr anzeigen",
+  "showPinDetails": "Details zu Pin {{number}} anzeigen",
+  "showPinDetailsDefault": "Pin-Details anzeigen",
   "siteColors": "Site-Farben",
   "slots": {
     "directoryCard": "Verzeichniskarte",
@@ -779,6 +785,7 @@
   "utilityImage": "Utility-Bild",
   "videoThumbnail": "Video-Thumbnail",
   "visitPage": "Standortseite aufrufen",
+  "visitPageForName": "Besuchsseite für {{name}}",
   "voiceSearch": "Sprachsuche",
   "wednesday": "Mittwoch"
 }

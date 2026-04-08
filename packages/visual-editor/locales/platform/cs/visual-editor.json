@@ -47,6 +47,10 @@
   "closeMenu": "Zavřít menu",
   "closesAtTime": "Zavírá v {{time}}",
   "closesAtTimeWeek": "Zavírá v {{time}} {{dayOfWeek}}",
+  "colorPicker": {
+    "close": "Zavřete výběr barvy",
+    "open": "Otevřete výběr barvy"
+  },
   "componentErrorBoundary": {
     "error": "Chyba",
     "message": "Tuto sekci nelze vykreslit. Zkuste aktualizovat knihovnu komponent."
@@ -552,6 +556,7 @@
   "friday": "pátek",
   "generatingAIAnswer": "Generování odpovědi AI...",
   "getDirections": "Získejte pokyny",
+  "getDirectionsForLocation": "Získat trasu pro {{address}}",
   "heading": "Záhlaví",
   "healthcareFacilities": "Zdravotnická zařízení",
   "healthcareProfessionals": "Zdravotníci",
@@ -667,7 +672,6 @@
   "saturday": "sobota",
   "schemaMarkup": "Označení schématu",
   "search": "Vyhledávání",
-  "searchDropdownHere": "Rozbalovací vstup pro vyhledávání",
   "searchHere": "Hledejte zde ...",
   "searchThisArea": "Prohledejte tuto oblast",
   "secondaryHeaderHiddenOnLivePage": "Sekundární záhlaví (skryté na aktivní stránce)",
@@ -682,6 +686,8 @@
   "showLabels": "Zobrazit štítky",
   "showLess": "Ukázat méně",
   "showMore": "Ukázat více",
+  "showPinDetails": "Zobrazit podrobnosti pinu {{number}}",
+  "showPinDetailsDefault": "Zobrazit podrobnosti špendlíku",
   "siteColors": "Barvy webu",
   "slots": {
     "directoryCard": "Karta adresáře",
@@ -791,6 +797,7 @@
   "utilityImage": "Užitkový obrázek",
   "videoThumbnail": "Video miniatura",
   "visitPage": "Navštivte stránku",
+  "visitPageForName": "Navštivte stránku pro {{name}}",
   "voiceSearch": "Hlasové vyhledávání",
   "wednesday": "středa"
 }

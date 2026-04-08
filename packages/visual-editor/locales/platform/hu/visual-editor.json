@@ -47,6 +47,10 @@
   "closeMenu": "Zárja be a menüt",
   "closesAtTime": "Zárás: {{time}}",
   "closesAtTimeWeek": "Zárás: {{time}} {{dayOfWeek}}",
+  "colorPicker": {
+    "close": "Zárja be a színválasztót",
+    "open": "Nyissa meg a színválasztót"
+  },
   "componentErrorBoundary": {
     "error": "Hiba",
     "message": "Ez a szakasz nem jeleníthető meg. Próbálja meg frissíteni az összetevőkönyvtárat."
@@ -552,6 +556,7 @@
   "friday": "péntek",
   "generatingAIAnswer": "AI-válasz generálása...",
   "getDirections": "Szerezzen útmutatásokat",
+  "getDirectionsForLocation": "Útvonaltervezés ehhez: {{address}}",
   "heading": "Cím",
   "healthcareFacilities": "Egészségügyi létesítmények",
   "healthcareProfessionals": "Egészségügyi szakemberek",
@@ -657,7 +662,6 @@
   "saturday": "szombat",
   "schemaMarkup": "Séma jelölés",
   "search": "Keresés",
-  "searchDropdownHere": "Keresési legördülő bemenet",
   "searchHere": "Keressen itt ...",
   "searchThisArea": "Keresse meg ezt a területet",
   "secondaryHeaderHiddenOnLivePage": "Másodlagos fejléc (rejtett az élő oldalon)",
@@ -672,6 +676,8 @@
   "showLabels": "A címkék megjelenítését",
   "showLess": "Mutasson kevesebbet",
   "showMore": "Mutasson többet",
+  "showPinDetails": "A tű {{number}} részleteinek megjelenítése",
+  "showPinDetailsDefault": "A gombostű részleteinek megjelenítése",
   "siteColors": "Helyszínek",
   "slots": {
     "directoryCard": "Címtárkártya",
@@ -779,6 +785,7 @@
   "utilityImage": "Hasznossági kép",
   "videoThumbnail": "Videó miniatűr",
   "visitPage": "Látogasson el az oldalra",
+  "visitPageForName": "Látogassa meg a {{name}} oldalát",
   "voiceSearch": "Hangalapú keresés",
   "wednesday": "szerda"
 }

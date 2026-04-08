@@ -33,6 +33,7 @@
   "friday": "Vrijdag",
   "generatingAIAnswer": "AI-antwoord genereren...",
   "getDirections": "Routebeschrijving",
+  "getDirectionsForLocation": "Routebeschrijving opvragen voor {{address}}",
   "heroBanner": "Heldenbanner",
   "heroHeader": "Held koptekst",
   "heroImage": "Heldenbeeld",
@@ -79,7 +80,6 @@
   "reopenDate": "Heropen datum",
   "responseFrom": "Reactie van {{businessName}}",
   "saturday": "Zaterdag",
-  "searchDropdownHere": "Zoek de vervolgkeuzeveld",
   "searchHere": "Zoek hier ...",
   "searchThisArea": "Zoek dit gebied",
   "secondaryHeaderLinks": "Secundaire koptekstkoppelingen",
@@ -89,6 +89,8 @@
   "servicesSection": "Dienstensectie",
   "showLess": "Minder laten zien",
   "showMore": "Laat meer zien",
+  "showPinDetails": "Toon pin {{number}} details",
+  "showPinDetailsDefault": "Toon pingegevens",
   "socialLinks": {
     "facebook": "Volg ons op Facebook",
     "instagram": "Volg ons op Instagram",
@@ -108,6 +110,7 @@
   "tuesday": "Dinsdag",
   "useOurLocatorToFindALocationNearYou": "Gebruik onze locator om een ​​locatie bij u in de buurt te vinden",
   "visitPage": "Bezoek pagina",
+  "visitPageForName": "Bezoek pagina voor {{name}}",
   "voiceSearch": "Gesproken zoekopdracht",
   "wednesday": "Woensdag"
 }

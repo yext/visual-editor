@@ -47,6 +47,10 @@
   "closeMenu": "Aizvērt ēdienkarti",
   "closesAtTime": "Tiek slēgts plkst. {{time}}",
   "closesAtTimeWeek": "Tiek slēgts plkst. {{time}} {{dayOfWeek}}",
+  "colorPicker": {
+    "close": "Aizvērt krāsu atlasītāju",
+    "open": "Atveriet krāsu atlasītāju"
+  },
   "componentErrorBoundary": {
     "error": "Kļūda",
     "message": "Nevar atveidot šo sadaļu. Mēģiniet atjaunināt savu komponentu bibliotēku."
@@ -552,6 +556,7 @@
   "friday": "Piektdiena",
   "generatingAIAnswer": "Notiek AI atbildes ģenerēšana...",
   "getDirections": "Saņemt norādes",
+  "getDirectionsForLocation": "Saņemiet norādes uz {{address}}",
   "heading": "Virsraksts",
   "healthcareFacilities": "Veselības aprūpes iestādes",
   "healthcareProfessionals": "Veselības aprūpes speciālisti",
@@ -660,7 +665,6 @@
   "saturday": "Sestdiena",
   "schemaMarkup": "Shēmas uzcenojums",
   "search": "Meklēšana",
-  "searchDropdownHere": "Meklēt nolaižamās ieejas",
   "searchHere": "Meklēt šeit ...",
   "searchThisArea": "Meklējiet šo apgabalu",
   "secondaryHeaderHiddenOnLivePage": "Sekundārā galvene (paslēpta tiešsaistes lapā)",
@@ -675,6 +679,8 @@
   "showLabels": "Izrādes etiķetes",
   "showLess": "Rādīt mazāk",
   "showMore": "Parādīt vairāk",
+  "showPinDetails": "Rādīt spraudītes {{number}} informāciju",
+  "showPinDetailsDefault": "Rādīt spraudītes informāciju",
   "siteColors": "Vietnes krāsas",
   "slots": {
     "directoryCard": "Direktoriju karte",
@@ -783,6 +789,7 @@
   "utilityImage": "Lietderības attēls",
   "videoThumbnail": "Video sīktēls",
   "visitPage": "Apmeklējuma lapa",
+  "visitPageForName": "Apmeklējiet lapu {{name}}",
   "voiceSearch": "Balss meklēšana",
   "wednesday": "Trešdiena"
 }

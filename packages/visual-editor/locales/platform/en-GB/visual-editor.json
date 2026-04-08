@@ -47,6 +47,10 @@
   "closeMenu": "Close menu",
   "closesAtTime": "Closes at {{time}}",
   "closesAtTimeWeek": "Closes at {{time}} {{dayOfWeek}}",
+  "colorPicker": {
+    "close": "Close color picker",
+    "open": "Open color picker"
+  },
   "componentErrorBoundary": {
     "error": "Error",
     "message": "Can't render this section. Try updating your component library."
@@ -552,6 +556,7 @@
   "friday": "Friday",
   "generatingAIAnswer": "Generating AI Answer...",
   "getDirections": "Get Directions",
+  "getDirectionsForLocation": "Get Directions for {{address}}",
   "heading": "Heading",
   "healthcareFacilities": "Healthcare Facilities",
   "healthcareProfessionals": "Healthcare Professionals",
@@ -657,7 +662,6 @@
   "saturday": "Saturday",
   "schemaMarkup": "Schema Markup",
   "search": "Search",
-  "searchDropdownHere": "Search Dropdown Input",
   "searchHere": "Search here...",
   "searchThisArea": "Search This Area",
   "secondaryHeaderHiddenOnLivePage": "Secondary Header (Hidden on live page)",
@@ -672,6 +676,8 @@
   "showLabels": "Show Labels",
   "showLess": "Show less",
   "showMore": "Show more",
+  "showPinDetails": "Show pin {{number}} details",
+  "showPinDetailsDefault": "Show pin details",
   "siteColors": "Site Colors",
   "slots": {
     "directoryCard": "Directory Card",
@@ -779,6 +785,7 @@
   "utilityImage": "Utility Image",
   "videoThumbnail": "Video Thumbnail",
   "visitPage": "Visit Page",
+  "visitPageForName": "Visit Page for {{name}}",
   "voiceSearch": "Voice Search",
   "wednesday": "Wednesday"
 }

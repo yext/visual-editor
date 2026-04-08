@@ -33,6 +33,7 @@
   "friday": "Reede",
   "generatingAIAnswer": "AI vastuse genereerimine...",
   "getDirections": "Hankige juhiseid",
+  "getDirectionsForLocation": "Hankige juhised {{address}}",
   "heroBanner": "Kangelasriba",
   "heroHeader": "Kangelase päis",
   "heroImage": "Kangelasepilt",
@@ -79,7 +80,6 @@
   "reopenDate": "Taasavamine kuupäev",
   "responseFrom": "Vastus {{businessName}}",
   "saturday": "Laupäev",
-  "searchDropdownHere": "Otsi rippseandist",
   "searchHere": "Otsige siit ...",
   "searchThisArea": "Otsige sellest piirkonnast",
   "secondaryHeaderLinks": "Teisese päise lingid",
@@ -89,6 +89,8 @@
   "servicesSection": "Teenuste sektsioon",
   "showLess": "Näitama vähem",
   "showMore": "Näidata veel",
+  "showPinDetails": "Kuva nööpnõela {{number}} üksikasjad",
+  "showPinDetailsDefault": "Kuva nööpnõela üksikasjad",
   "socialLinks": {
     "facebook": "Jälgi meid Facebookis",
     "instagram": "Jälgi meid Instagramis",
@@ -108,6 +110,7 @@
   "tuesday": "Teisipäev",
   "useOurLocatorToFindALocationNearYou": "Kasutage meie asukoha leidmiseks meie asukohta",
   "visitPage": "Külastage leht",
+  "visitPageForName": "Külastage lehte {{name}} jaoks",
   "voiceSearch": "Häälotsing",
   "wednesday": "Kolmapäev"
 }

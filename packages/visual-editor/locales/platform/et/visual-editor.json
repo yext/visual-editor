@@ -47,6 +47,10 @@
   "closeMenu": "Sulgemenüü",
   "closesAtTime": "Suletakse {{time}}",
   "closesAtTimeWeek": "Suletakse kell {{time}} {{dayOfWeek}}",
+  "colorPicker": {
+    "close": "Sulgege värvivalija",
+    "open": "Ava värvivalija"
+  },
   "componentErrorBoundary": {
     "error": "Viga",
     "message": "Seda jaotist ei saa renderdada. Proovige oma komponentide teeki värskendada."
@@ -552,6 +556,7 @@
   "friday": "Reede",
   "generatingAIAnswer": "AI vastuse genereerimine...",
   "getDirections": "Hankige juhiseid",
+  "getDirectionsForLocation": "Hankige juhised {{address}}",
   "heading": "Pealkiri",
   "healthcareFacilities": "Tervishoiuasutused",
   "healthcareProfessionals": "Tervishoiutöötajad",
@@ -657,7 +662,6 @@
   "saturday": "Laupäev",
   "schemaMarkup": "Skeemi märgistus",
   "search": "Otsima",
-  "searchDropdownHere": "Otsi rippseandist",
   "searchHere": "Otsige siit ...",
   "searchThisArea": "Otsige sellest piirkonnast",
   "secondaryHeaderHiddenOnLivePage": "Sekundaarne päis (reaalajas lehel peidetud)",
@@ -672,6 +676,8 @@
   "showLabels": "Näita silte",
   "showLess": "Näitama vähem",
   "showMore": "Näidata veel",
+  "showPinDetails": "Kuva nööpnõela {{number}} üksikasjad",
+  "showPinDetailsDefault": "Kuva nööpnõela üksikasjad",
   "siteColors": "Saidi värvid",
   "slots": {
     "directoryCard": "Kataloogikaart",
@@ -779,6 +785,7 @@
   "utilityImage": "Kasulik pilt",
   "videoThumbnail": "Video pisipilt",
   "visitPage": "Külastage leht",
+  "visitPageForName": "Külastage lehte {{name}} jaoks",
   "voiceSearch": "Häälotsing",
   "wednesday": "Kolmapäev"
 }

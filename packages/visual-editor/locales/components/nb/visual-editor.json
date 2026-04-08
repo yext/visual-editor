@@ -33,6 +33,7 @@
   "friday": "fredag",
   "generatingAIAnswer": "Genererer AI-svar...",
   "getDirections": "Få veibeskrivelse",
+  "getDirectionsForLocation": "Få veibeskrivelse for {{address}}",
   "heroBanner": "Heltebanner",
   "heroHeader": "Hero Header",
   "heroImage": "Heltbilde",
@@ -79,7 +80,6 @@
   "reopenDate": "Åpne dato på nytt",
   "responseFrom": "Svar fra {{businessName}}",
   "saturday": "lørdag",
-  "searchDropdownHere": "Søk i rullegardininngang",
   "searchHere": "Søk her ...",
   "searchThisArea": "Søk i dette området",
   "secondaryHeaderLinks": "Sekundære overskriftskoblinger",
@@ -89,6 +89,8 @@
   "servicesSection": "Serviceseksjonen",
   "showLess": "Vis mindre",
   "showMore": "Vis mer",
+  "showPinDetails": "Vis detaljer om pin {{number}}",
+  "showPinDetailsDefault": "Vis pindetaljer",
   "socialLinks": {
     "facebook": "Følg oss på Facebook",
     "instagram": "Følg oss på Instagram",
@@ -108,6 +110,7 @@
   "tuesday": "tirsdag",
   "useOurLocatorToFindALocationNearYou": "Bruk vår lokaliserer for å finne et sted i nærheten",
   "visitPage": "Besøk side",
+  "visitPageForName": "Besøk siden for {{name}}",
   "voiceSearch": "Talesøk",
   "wednesday": "onsdag"
 }

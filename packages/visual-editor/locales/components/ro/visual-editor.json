@@ -33,6 +33,7 @@
   "friday": "vineri",
   "generatingAIAnswer": "Se generează răspunsul AI...",
   "getDirections": "Obțineți indicații",
+  "getDirectionsForLocation": "Obțineți indicații pentru {{address}}",
   "heroBanner": "Banner erou",
   "heroHeader": "Antet erou",
   "heroImage": "Imaginea eroului",
@@ -84,7 +85,6 @@
   "reopenDate": "Data redeschiderii",
   "responseFrom": "Răspuns de la {{businessName}}",
   "saturday": "sâmbătă",
-  "searchDropdownHere": "Căutați intrarea derulantă",
   "searchHere": "Căutați aici ...",
   "searchThisArea": "Căutați în această zonă",
   "secondaryHeaderLinks": "Linkuri de antet secundare",
@@ -94,6 +94,8 @@
   "servicesSection": "Secțiunea Servicii",
   "showLess": "Arată mai puțin",
   "showMore": "Arată mai mult",
+  "showPinDetails": "Afișați detaliile codului {{number}}",
+  "showPinDetailsDefault": "Afișați detaliile codului",
   "socialLinks": {
     "facebook": "Urmărește-ne pe Facebook",
     "instagram": "Urmărește-ne pe Instagram",
@@ -114,6 +116,7 @@
   "tuesday": "marţi",
   "useOurLocatorToFindALocationNearYou": "Folosiți localizatorul nostru pentru a găsi o locație lângă dvs.",
   "visitPage": "Vizitați pagina",
+  "visitPageForName": "Vizitați pagina pentru {{name}}",
   "voiceSearch": "Căutare vocală",
   "wednesday": "miercuri"
 }

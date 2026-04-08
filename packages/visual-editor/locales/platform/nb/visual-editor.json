@@ -47,6 +47,10 @@
   "closeMenu": "Lukk meny",
   "closesAtTime": "Stenger kl. {{time}}",
   "closesAtTimeWeek": "Stenger kl. {{time}} {{dayOfWeek}}",
+  "colorPicker": {
+    "close": "Lukk fargevelgeren",
+    "open": "Åpne fargevelgeren"
+  },
   "componentErrorBoundary": {
     "error": "Feil",
     "message": "Kan ikke gjengi denne delen. Prøv å oppdatere komponentbiblioteket."
@@ -552,6 +556,7 @@
   "friday": "fredag",
   "generatingAIAnswer": "Genererer AI-svar...",
   "getDirections": "Få veibeskrivelse",
+  "getDirectionsForLocation": "Få veibeskrivelse for {{address}}",
   "heading": "Overskrift",
   "healthcareFacilities": "Helsetjenester",
   "healthcareProfessionals": "Helsepersonell",
@@ -657,7 +662,6 @@
   "saturday": "lørdag",
   "schemaMarkup": "Skjema markering",
   "search": "Søk",
-  "searchDropdownHere": "Søk i rullegardininngang",
   "searchHere": "Søk her ...",
   "searchThisArea": "Søk i dette området",
   "secondaryHeaderHiddenOnLivePage": "Sekundær topptekst (skjult på live-side)",
@@ -672,6 +676,8 @@
   "showLabels": "Vis etiketter",
   "showLess": "Vis mindre",
   "showMore": "Vis mer",
+  "showPinDetails": "Vis detaljer om pin {{number}}",
+  "showPinDetailsDefault": "Vis pindetaljer",
   "siteColors": "Nettstedsfarger",
   "slots": {
     "directoryCard": "Katalogkort",
@@ -779,6 +785,7 @@
   "utilityImage": "Verktøybilde",
   "videoThumbnail": "Video miniatyrbilde",
   "visitPage": "Besøk side",
+  "visitPageForName": "Besøk siden for {{name}}",
   "voiceSearch": "Talesøk",
   "wednesday": "onsdag"
 }

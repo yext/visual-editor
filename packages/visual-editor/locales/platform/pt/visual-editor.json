@@ -47,6 +47,10 @@
   "closeMenu": "Feche o menu",
   "closesAtTime": "Fecha às {{time}}",
   "closesAtTimeWeek": "Fecha às {{time}} {{dayOfWeek}}",
+  "colorPicker": {
+    "close": "Fechar seletor de cores",
+    "open": "Abrir seletor de cores"
+  },
   "componentErrorBoundary": {
     "error": "Erro",
     "message": "Não é possível renderizar esta seção. Tente atualizar sua biblioteca de componentes."
@@ -552,6 +556,7 @@
   "friday": "Sexta-feira",
   "generatingAIAnswer": "Gerando resposta de IA...",
   "getDirections": "Obtenha direções",
+  "getDirectionsForLocation": "Obtenha rotas para {{address}}",
   "heading": "Cabeçalho",
   "healthcareFacilities": "Instalações de saúde",
   "healthcareProfessionals": "Profissionais de saúde",
@@ -662,7 +667,6 @@
   "saturday": "Sábado",
   "schemaMarkup": "Marcação de esquema",
   "search": "Procurar",
-  "searchDropdownHere": "Pesquise a entrada suspensa",
   "searchHere": "Pesquise aqui ...",
   "searchThisArea": "Pesquise nesta área",
   "secondaryHeaderHiddenOnLivePage": "Cabeçalho secundário (oculto na página ao vivo)",
@@ -677,6 +681,8 @@
   "showLabels": "Mostrar rótulos",
   "showLess": "Mostre menos",
   "showMore": "Mostre mais",
+  "showPinDetails": "Mostrar detalhes do pino {{number}}",
+  "showPinDetailsDefault": "Mostrar detalhes do alfinete",
   "siteColors": "Cores do site",
   "slots": {
     "directoryCard": "Cartão de diretório",
@@ -785,6 +791,7 @@
   "utilityImage": "Imagem Utilitária",
   "videoThumbnail": "Miniatura de vídeo",
   "visitPage": "Visite a página",
+  "visitPageForName": "Visite a página de {{name}}",
   "voiceSearch": "Pesquisa por voz",
   "wednesday": "Quarta-feira"
 }
