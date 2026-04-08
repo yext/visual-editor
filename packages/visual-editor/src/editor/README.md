@@ -169,16 +169,16 @@ The `basicSelector` field type renders a labeled combobox with optional search, 
 
 ### Props
 
-| Name                   | Type                         | Description                                                                |
-| ---------------------- | ---------------------------- | -------------------------------------------------------------------------- |
-| `type`                 | `"basicSelector"`            | Registers the field as the Yext combobox selector.                         |
-| `label?`               | `string \| MsgString`        | The field label shown in the editor.                                       |
-| `options`              | `ComboboxOption[]`           | Flat list of selectable options. Cannot be combined with `optionGroups`.   |
-| `optionGroups`         | `ComboboxOptionGroup[]`      | Grouped options with optional titles and descriptions.                     |
-| `translateOptions?`    | `boolean`                    | Whether option labels, group titles, and descriptions should be translated. |
-| `noOptionsPlaceholder?`| `string \| MsgString`        | Button text shown when no options are available.                           |
-| `noOptionsMessage?`    | `string \| MsgString`        | Optional helper text shown below the disabled selector.                    |
-| `disableSearch?`       | `boolean`                    | Disables the combobox search input.                                        |
+| Name                    | Type                    | Description                                                                 |
+| ----------------------- | ----------------------- | --------------------------------------------------------------------------- |
+| `type`                  | `"basicSelector"`       | Registers the field as the Yext combobox selector.                          |
+| `label?`                | `string \| MsgString`   | The field label shown in the editor.                                        |
+| `options`               | `ComboboxOption[]`      | Flat list of selectable options. Cannot be combined with `optionGroups`.    |
+| `optionGroups`          | `ComboboxOptionGroup[]` | Grouped options with optional titles and descriptions.                      |
+| `translateOptions?`     | `boolean`               | Whether option labels, group titles, and descriptions should be translated. |
+| `noOptionsPlaceholder?` | `string \| MsgString`   | Button text shown when no options are available.                            |
+| `noOptionsMessage?`     | `string \| MsgString`   | Optional helper text shown below the disabled selector.                     |
+| `disableSearch?`        | `boolean`               | Disables the combobox search input.                                         |
 
 ### Usage
 

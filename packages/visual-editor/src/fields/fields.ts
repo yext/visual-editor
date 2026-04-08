@@ -19,7 +19,9 @@ export type YextComponentConfig<
   fields: YextPuckFields;
 }>;
 
-export type YextFields<T extends DefaultComponentProps = DefaultComponentProps> = YextComponentConfig<T>["fields"];
+export type YextFields<
+  T extends DefaultComponentProps = DefaultComponentProps,
+> = YextComponentConfig<T>["fields"];
 
 export const YextPuckFieldOverrides = {
   basicSelector: BasicSelectorFieldOverride,
