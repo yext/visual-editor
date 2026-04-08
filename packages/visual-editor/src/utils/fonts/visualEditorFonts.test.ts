@@ -7,7 +7,6 @@ import {
   defaultFonts,
   constructGoogleFontLinkTags,
   generateCustomFontLinkData,
-  matchCustomFontsByDisplayName,
   getFontStyleOptions,
 } from "./visualEditorFonts.ts";
 
@@ -38,14 +37,14 @@ describe("extractInUseFontFamilies", () => {
       defaultFonts
     );
     expect(inUseGoogleFonts).toEqual(expected);
-    expect(inUseCustomFonts).toEqual([]);
+    expect(inUseCustomFonts).toEqual({});
   });
 
   it("should return an empty object if theme data is empty", () => {
     const themeData: ThemeData = {};
     expect(extractInUseFontFamilies(themeData, defaultFonts)).toEqual({
       inUseGoogleFonts: {},
-      inUseCustomFonts: [],
+      inUseCustomFonts: {},
     });
   });
 
@@ -60,7 +59,7 @@ describe("extractInUseFontFamilies", () => {
       defaultFonts
     );
     expect(inUseGoogleFonts).toEqual({});
-    expect(inUseCustomFonts).toEqual([]);
+    expect(inUseCustomFonts).toEqual({});
   });
 
   it("should return an empty object if the list of available fonts is empty", () => {
@@ -74,7 +73,7 @@ describe("extractInUseFontFamilies", () => {
       emptyAvailableFonts
     );
     expect(inUseGoogleFonts).toEqual({});
-    expect(inUseCustomFonts).toEqual(["Open Sans"]);
+    expect(inUseCustomFonts).toEqual({});
   });
 
   it("should handle malformed or empty fontFamily values gracefully", () => {
@@ -97,7 +96,7 @@ describe("extractInUseFontFamilies", () => {
       defaultFonts
     );
     expect(inUseGoogleFonts).toEqual(expected);
-    expect(inUseCustomFonts).toEqual([]);
+    expect(inUseCustomFonts).toEqual({});
   });
 
   it("should not include duplicate fonts, even if used multiple times", () => {
@@ -122,7 +121,7 @@ describe("extractInUseFontFamilies", () => {
       defaultFonts
     );
     expect(inUseGoogleFonts).toEqual(expected);
-    expect(inUseCustomFonts).toEqual([]);
+    expect(inUseCustomFonts).toEqual({});
   });
 
   it("should handle custom fonts", () => {
@@ -130,8 +129,17 @@ describe("extractInUseFontFamilies", () => {
       "--fontFamily-h1-fontFamily": "'Custom Font', sans-serif",
       "--fontFamily-h2-fontFamily": "'Open Sans', sans-serif",
     };
+    const customFonts: FontRegistry = {
+      "custom-font-key": {
+        name: "custom-font-regular",
+        displayName: "Custom Font",
+        italics: false,
+        weights: [400],
+        fallback: "sans-serif",
+      },
+    };
 
-    const expected: FontRegistry = {
+    const expectedGoogleFonts: FontRegistry = {
       "Open Sans": {
         displayName: "Open Sans",
         italics: true,
@@ -143,10 +151,13 @@ describe("extractInUseFontFamilies", () => {
 
     const { inUseGoogleFonts, inUseCustomFonts } = extractInUseFontFamilies(
       themeData,
-      defaultFonts
+      defaultFonts,
+      customFonts
     );
-    expect(inUseGoogleFonts).toEqual(expected);
-    expect(inUseCustomFonts).toEqual(["Custom Font"]);
+    expect(inUseGoogleFonts).toEqual(expectedGoogleFonts);
+    expect(inUseCustomFonts).toEqual({
+      "custom-font-regular": customFonts["custom-font-key"],
+    });
   });
 
   it("should resolve var() references to default header font", () => {
@@ -170,7 +181,7 @@ describe("extractInUseFontFamilies", () => {
       defaultFonts
     );
     expect(inUseGoogleFonts).toEqual(expected);
-    expect(inUseCustomFonts).toEqual([]);
+    expect(inUseCustomFonts).toEqual({});
   });
 });
 
@@ -231,24 +242,6 @@ describe("custom font helpers", () => {
         rel: "stylesheet",
       },
     ]);
-  });
-
-  it("should match custom fonts by display name", () => {
-    const customFonts: FontRegistry = {
-      "ebb-melvyn": {
-        name: "ebbmelvynregular-regular",
-        displayName: "EBB_Melvyn_Regular",
-        italics: false,
-        weights: [400],
-        fallback: "sans-serif",
-      },
-    };
-
-    expect(
-      matchCustomFontsByDisplayName(customFonts, ["EBB_Melvyn_Regular"])
-    ).toEqual({
-      "ebbmelvynregular-regular": customFonts["ebb-melvyn"],
-    });
   });
 });
 

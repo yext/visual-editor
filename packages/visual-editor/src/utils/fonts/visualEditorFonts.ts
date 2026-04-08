@@ -436,15 +436,9 @@ const getFontNameFromStyleElement = (
 };
 
 /**
- * Extracts the font families referenced by theme data, resolving one level of
- * CSS variable indirection for "Default font" style references. Google fonts
- * are returned as a registry and unknown fonts are returned as display-name
- * strings so legacy published-theme behavior is preserved.
+ * Extracts and parses the font family names from the ThemeData.
  */
-export const extractInUseFontFamilies = (
-  data: ThemeData,
-  availableFonts: FontRegistry
-): { inUseGoogleFonts: FontRegistry; inUseCustomFonts: string[] } => {
+export const extractReferencedFontNames = (data: ThemeData): string[] => {
   const fontFamilies = new Set<string>();
   // Resolve "Default font" references like var(--fontFamily-headers-defaultFont)
   // so we load the actual font used for headers.
@@ -484,39 +478,35 @@ export const extractInUseFontFamilies = (
     }
   }
 
-  const inUseGoogleFonts: FontRegistry = {};
-  const inUseCustomFonts: string[] = [];
-
-  // For each unique font family found, look it up in the availableFonts map.
-  for (const fontName of fontFamilies) {
-    const font = findFontByDisplayName(availableFonts, fontName);
-    if (!font) {
-      inUseCustomFonts.push(fontName);
-      continue;
-    }
-
-    inUseGoogleFonts[font.displayName] = font;
-  }
-
-  return { inUseGoogleFonts, inUseCustomFonts };
+  return [...fontFamilies];
 };
 
 /**
- * Matches theme-selected custom font display names back to the corresponding
- * font specifications so editor runtime code can load assets by `name`.
+ * Extracts the availableFonts as FontRegistry. If provided customFonts,
+ * also returns the customFonts as FontRegistry. All fonts are filtered
+ * to only include those actually referenced by the theme.
  */
-export const matchCustomFontsByDisplayName = (
-  customFonts: FontRegistry,
-  displayNames: string[]
-): FontRegistry => {
-  const matchedCustomFonts: FontRegistry = {};
+export const extractInUseFontFamilies = (
+  data: ThemeData,
+  availableFonts: FontRegistry,
+  customFonts: FontRegistry = {}
+): { inUseGoogleFonts: FontRegistry; inUseCustomFonts: FontRegistry } => {
+  const inUseGoogleFonts: FontRegistry = {};
+  const inUseCustomFonts: FontRegistry = {};
 
-  displayNames.forEach((displayName) => {
-    const font = findFontByDisplayName(customFonts, displayName);
-    if (font?.name) {
-      matchedCustomFonts[font.name] = font;
+  // For each unique font family found, look it up in the availableFonts map.
+  for (const fontName of extractReferencedFontNames(data)) {
+    const font = findFontByDisplayName(availableFonts, fontName);
+    if (font) {
+      inUseGoogleFonts[font.displayName] = font;
+      continue;
     }
-  });
 
-  return matchedCustomFonts;
+    const customFont = findFontByDisplayName(customFonts, fontName);
+    if (customFont) {
+      inUseCustomFonts[customFont.name ?? customFont.displayName] = customFont;
+    }
+  }
+
+  return { inUseGoogleFonts, inUseCustomFonts };
 };
