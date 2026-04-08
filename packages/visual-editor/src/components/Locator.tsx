@@ -1,8 +1,6 @@
 import {
   AutoField,
-  ComponentConfig,
   FieldLabel,
-  Fields,
   setDeep,
   WithPuckProps,
 } from "@puckeditor/core";
@@ -93,11 +91,7 @@ import {
   getLocatorEntityTypeSourceMap,
   getEntityTypeLabel,
 } from "../utils/locatorEntityTypes.ts";
-import {
-  YextComponentConfig,
-  YextFields,
-  YextPuckFields,
-} from "../fields/fields.ts";
+import { YextComponentConfig, YextFields } from "../fields/fields.ts";
 
 const RESULTS_LIMIT = 20;
 const LOCATION_FIELD = "builtin.location";
