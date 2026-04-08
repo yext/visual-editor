@@ -309,7 +309,7 @@ const textTransformOptions = [
 ];
 
 const fontStyleOptions = [
-  { label: msg("fields.options.regular", "Normal"), value: "normal" },
+  { label: msg("fields.options.normal", "Normal"), value: "normal" },
   { label: msg("fields.options.italic", "Italic"), value: "italic" },
 ];
 
