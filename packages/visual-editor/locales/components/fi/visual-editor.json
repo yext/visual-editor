@@ -32,6 +32,7 @@
   "findALocation": "Etsi sijainti",
   "friday": "perjantai",
   "getDirections": "Hanki reittiohjeet",
+  "getDirectionsForLocation": "Hanki reittiohjeet kohteeseen {{address}}",
   "heroBanner": "Sankari",
   "heroHeader": "Sankari -otsikko",
   "heroImage": "Sankarikuva",
@@ -75,7 +76,6 @@
   "reopenDate": "Avata päivämäärä uudelleen",
   "responseFrom": "Vastaus {{businessName}}",
   "saturday": "lauantai",
-  "searchDropdownHere": "Haku avattavasta tulosta",
   "searchHere": "Etsi täältä ...",
   "searchThisArea": "Etsi tätä aluetta",
   "secondaryHeaderLinks": "Toissijaiset otsikkolinkit",
@@ -85,6 +85,8 @@
   "servicesSection": "Palvelusosasto",
   "showLess": "Näytä vähemmän",
   "showMore": "Näytä enemmän",
+  "showPinDetails": "Näytä pin {{number}} tiedot",
+  "showPinDetailsDefault": "Näytä merkin tiedot",
   "socialLinks": {
     "facebook": "Seuraa meitä Facebookissa",
     "instagram": "Seuraa meitä Instagramissa",
@@ -102,5 +104,6 @@
   "tuesday": "tiistai",
   "useOurLocatorToFindALocationNearYou": "Löydä lähelläsi sijaintipaikka",
   "visitPage": "Vieraile sivussa",
+  "visitPageForName": "Siirry sivulle {{name}}",
   "wednesday": "keskiviikko"
 }

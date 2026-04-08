@@ -521,6 +521,7 @@
   "fontSizeDefaultLabel": "Misligholdelse",
   "friday": "fredag",
   "getDirections": "Få rutevejledning",
+  "getDirectionsForLocation": "Få rutevejledning til {{address}}",
   "heading": "Overskrift",
   "healthcareFacilities": "Sundhedsfaciliteter",
   "healthcareProfessionals": "Sundhedspersonale",
@@ -621,7 +622,6 @@
   "saturday": "lørdag",
   "schemaMarkup": "Skema markering",
   "search": "Søge",
-  "searchDropdownHere": "Søg rullelinjet",
   "searchHere": "Søg her ...",
   "searchThisArea": "Søg i dette område",
   "secondaryHeaderHiddenOnLivePage": "Sekundær overskrift (skjult på live-side)",
@@ -636,6 +636,8 @@
   "showLabels": "Vis etiketter",
   "showLess": "Vis mindre",
   "showMore": "Vis mere",
+  "showPinDetails": "Vis pin {{number}} detaljer",
+  "showPinDetailsDefault": "Vis pindetaljer",
   "siteColors": "Webstedsfarver",
   "slots": {
     "directoryCard": "Vejviserkort",
@@ -742,5 +744,6 @@
   "utilityImage": "Brugsbillede",
   "videoThumbnail": "Video -miniaturebillede",
   "visitPage": "Besøg side",
+  "visitPageForName": "Besøg siden for {{name}}",
   "wednesday": "onsdag"
 }

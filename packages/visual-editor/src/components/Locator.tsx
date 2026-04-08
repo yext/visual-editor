@@ -1642,6 +1642,9 @@ const LocatorInternal = ({
     getThemeColorCssValue(accentColor?.selectedColor) ??
     "var(--colors-palette-primary-dark)";
   const [showFilterModal, setShowFilterModal] = React.useState(false);
+  const filterToggleButtonRef = React.useRef<HTMLButtonElement>(null);
+  const filterModalCloseButtonRef = React.useRef<HTMLButtonElement>(null);
+  const hasOpenedFilterModalRef = React.useRef(false);
   const resolvedHeading =
     (pageHeading?.title &&
       resolveComponentData(pageHeading.title, i18n.language, streamDocument)) ||
@@ -1663,6 +1666,18 @@ const LocatorInternal = ({
     };
   }, []);
 
+  useEffect(() => {
+    if (showFilterModal) {
+      hasOpenedFilterModalRef.current = true;
+      filterModalCloseButtonRef.current?.focus();
+      return;
+    }
+
+    if (hasOpenedFilterModalRef.current) {
+      filterToggleButtonRef.current?.focus();
+    }
+  }, [showFilterModal]);
+
   return (
     <div className="components flex h-screen w-screen mx-auto">
       {/* Left Section: FilterSearch + Results. Full width for small screens */}
@@ -1683,13 +1698,13 @@ const LocatorInternal = ({
             ]}
             onSelect={(params) => handleFilterSelect(params)}
             placeholder={t("searchHere", "Search here...")}
-            ariaLabel={t("searchDropdownHere", "Search Dropdown Input")}
+            ariaLabel={t("findALocation", "Find a Location")}
             customCssClasses={{
               filterSearchContainer: "font-body-fontFamily",
               focusedOption: "bg-gray-200 hover:bg-gray-200 block",
               option: "hover:bg-gray-100 px-4 py-3",
               inputElement:
-                "rounded-md p-4 h-11 font-body-fontFamily font-body-fontWeight text-body-fontSize",
+                "rounded-md p-4 h-11 font-body-fontFamily font-body-fontWeight text-body-fontSize placeholder:text-gray-700",
               currentLocationButton:
                 "h-7 w-7 font-body-fontFamily font-body-fontWeight text-body-fontSize text-palette-primary-dark",
               label:
@@ -1715,9 +1730,13 @@ const LocatorInternal = ({
               />
               {hasFilterModalToggle && (
                 <button
+                  ref={filterToggleButtonRef}
                   className="inline-flex justify-between items-center gap-2 bg-white font-bold font-body-fontFamily text-body-sm-fontSize"
                   style={{ color: filterAccentColorCssVariable }}
                   onClick={() => setShowFilterModal((prev) => !prev)}
+                  aria-haspopup="dialog"
+                  aria-expanded={showFilterModal}
+                  aria-controls="locator-filter-modal"
                 >
                   {t("filter", "Filter")}
                   {<FaSlidersH />}
@@ -1765,6 +1784,7 @@ const LocatorInternal = ({
             handleCloseModalClick={() => setShowFilterModal(false)}
             handleClearFiltersClick={handleClearFiltersClick}
             accentColorCssValue={filterAccentColorCssVariable}
+            closeButtonRef={filterModalCloseButtonRef}
           />
         </div>
       </div>
@@ -2004,6 +2024,7 @@ interface FilterModalProps {
   ) => void;
   handleClearFiltersClick: () => void;
   accentColorCssValue: string;
+  closeButtonRef: React.Ref<HTMLButtonElement>;
 }
 
 const FilterModal = (props: FilterModalProps) => {
@@ -2018,13 +2039,17 @@ const FilterModal = (props: FilterModalProps) => {
     handleDistanceClick,
     handleClearFiltersClick,
     accentColorCssValue,
+    closeButtonRef,
   } = props;
   const { t } = useTranslation();
   const popupRef = React.useRef<HTMLDivElement>(null);
 
   return showFilterModal ? (
     <div
-      id="popup"
+      id="locator-filter-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="locator-filter-modal-title"
       className="absolute md:top-4 -top-20 z-50 md:w-80 w-full flex flex-col bg-white md:left-full md:ml-2 rounded-md shadow-lg max-h-[calc(100%-2rem)]"
       style={
         {
@@ -2034,10 +2059,11 @@ const FilterModal = (props: FilterModalProps) => {
       ref={popupRef}
     >
       <div className="inline-flex justify-between items-center px-6 py-4 gap-4">
-        <Body className="font-bold">
+        <Body className="font-bold" id="locator-filter-modal-title">
           {t("refineYourSearch", "Refine Your Search")}
         </Body>
         <button
+          ref={closeButtonRef}
           style={{ color: accentColorCssValue }}
           onClick={handleCloseModalClick}
           aria-label={t("close", "Close")}
