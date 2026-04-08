@@ -598,6 +598,7 @@ export const InternalLayoutEditor = ({
           puck: puckOverride,
         }}
         metadata={metadata}
+        _experimentalVirtualization
       />
     </EntityTooltipsProvider>
   );
