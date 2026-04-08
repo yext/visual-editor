@@ -1,12 +1,14 @@
 import { GenerativeDirectAnswer } from "@yext/search-ui-react";
 import SourceCard from "./SourceCard.tsx";
 import { useTranslation } from "react-i18next";
+import { SearchCtaStyles } from "./defaultPropsAndTypes.ts";
 
 type GDAResponseProps = {
   loading?: boolean;
+  ctaStyles?: SearchCtaStyles;
 };
 
-const GDAResponse = ({ loading = true }: GDAResponseProps) => {
+const GDAResponse = ({ loading = true, ctaStyles }: GDAResponseProps) => {
   const { t } = useTranslation();
   return (
     <>
@@ -33,7 +35,9 @@ const GDAResponse = ({ loading = true }: GDAResponseProps) => {
         </div>
       )}
       <GenerativeDirectAnswer
-        CitationCard={SourceCard}
+        CitationCard={(props) => (
+          <SourceCard props={props} ctaStyles={ctaStyles} />
+        )}
         customCssClasses={{
           container: "my-4",
           divider: "!py-5",

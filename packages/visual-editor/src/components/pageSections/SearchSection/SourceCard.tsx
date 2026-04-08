@@ -1,6 +1,7 @@
 import { CitationProps } from "@yext/search-ui-react";
 import { useTranslation } from "react-i18next";
 import { CTA } from "../../atoms/cta.tsx";
+import { SearchCtaStyles } from "./defaultPropsAndTypes.ts";
 
 interface RawData {
   landingPageUrl?: string;
@@ -9,7 +10,13 @@ interface RawData {
   };
 }
 
-const SourceCard = (props: CitationProps) => {
+const SourceCard = ({
+  props,
+  ctaStyles,
+}: {
+  props: CitationProps;
+  ctaStyles?: SearchCtaStyles;
+}) => {
   let rawData: RawData = props.searchResult.rawData;
   let link = rawData?.landingPageUrl || rawData?.c_primaryCTA?.link || "";
   const name = props.searchResult?.name;
@@ -18,6 +25,8 @@ const SourceCard = (props: CitationProps) => {
     <div className="px-5 py-2.5 rounded-md">
       {link ? (
         <CTA
+          color={ctaStyles?.background}
+          textColor={ctaStyles?.textColor}
           link={link}
           label={name}
           variant={"primary"}

@@ -50,7 +50,9 @@ export const VerticalResultsSection = ({
   if (currentVerticalConfig?.layout === "Map") {
     return (
       <div className="components flex flex-col w-full mx-auto gap-2">
-        {enableGDA && !!searchTerm && <GDAResponse loading={gdaLoading} />}
+        {enableGDA && !!searchTerm && (
+          <GDAResponse loading={gdaLoading} ctaStyles={ctaStyles} />
+        )}
         <div className="  flex h-screen w-full mx-auto gap-2">
           <div className="relative h-screen w-full md:w-2/4 flex flex-col ">
             <div className="relative flex-1 flex flex-col min-h-0">
@@ -164,7 +166,9 @@ export const VerticalResultsSection = ({
         />
       </div>
       <div className="flex-grow">
-        {enableGDA && !!searchTerm && <GDAResponse loading={gdaLoading} />}
+        {enableGDA && !!searchTerm && (
+          <GDAResponse loading={gdaLoading} ctaStyles={ctaStyles} />
+        )}
 
         <div className="text-body-fontSize inline-block w-full pl-4">
           <div className="flex flex-row justify-between">

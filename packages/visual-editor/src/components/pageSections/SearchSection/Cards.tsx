@@ -81,7 +81,7 @@ const Cards = ({
           )}
         </div>
         <div
-          className={`flex justify-between ${isVertical ? `flex-col` : `flex-row`}`}
+          className={`flex gap-4 justify-between ${isVertical ? `flex-col` : `flex-row`}`}
         >
           <div className={`flex ${isVertical ? `flex-col` : `flex-row`}`}>
             <div className={`flex flex-col  ${isVertical ? `w-full` : `w-52`}`}>
@@ -144,7 +144,7 @@ const Cards = ({
           {name ?? "name"}
         </Heading>
 
-        <div className="w-full flex space-between">
+        <div className="w-full flex space-between gap-4">
           <MaybeRTF data={description} />
 
           <div className="ml-auto mr-0 flex">
@@ -176,7 +176,7 @@ const Cards = ({
           </AccordionTrigger>
 
           <AccordionContent className="w-full">
-            <div className={`${FLEX_LAYOUT_CLASSES} space-between`}>
+            <div className={`${FLEX_LAYOUT_CLASSES} space-between gap-4`}>
               <MaybeRTF data={description} />
 
               <div className="flex">

@@ -389,6 +389,7 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
           searchTerm={committedSearchTerm}
           gdaLoading={gdaLoading}
           verticalConfigMap={verticalConfigMap}
+          ctaStyles={styles.ctaStyles}
         />
       )}
     </div>
