@@ -125,6 +125,15 @@ export const generateGoogleFontLinkData = (
   return [...PRECONNECT_LINKS, ...fontLinks];
 };
 
+/**
+ * Derives the family-level CSS id for a custom font by removing the final
+ * hyphen-delimited subfamily segment from `FontSpecification.name`.
+ *
+ * `getCustomFontCssId` expects names shaped like
+ * `<font-family-id>-<subfamily>`, where the trailing segment represents a
+ * subfamily or weight such as `regular` or `bold`. For example,
+ * `ebbmelvynregular-regular` becomes `ebbmelvynregular`.
+ */
 const getCustomFontCssId = (fontName: string) => {
   const lastHyphenIndex = fontName.lastIndexOf("-");
   if (lastHyphenIndex === -1) {
