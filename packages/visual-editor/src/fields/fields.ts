@@ -1,9 +1,26 @@
-import { BasicSelectorField, BasicSelectorFieldOverride } from "./BasicSelectorField.tsx";
+import type {
+  ComponentConfig,
+  DefaultComponentProps,
+  Field,
+} from "@puckeditor/core";
+import {
+  BasicSelectorField,
+  BasicSelectorFieldOverride,
+} from "./BasicSelectorField.tsx";
 
 export type YextPuckFields = {
   basicSelector: BasicSelectorField;
 };
 
+export type YextComponentConfig<
+  Props extends DefaultComponentProps = DefaultComponentProps,
+> = ComponentConfig<{
+  props: Props;
+  fields: YextPuckFields;
+}>;
+
+export type YextFields<T extends DefaultComponentProps = DefaultComponentProps> = YextComponentConfig<T>["fields"];
+
 export const YextPuckFieldOverrides = {
-    basicSelector: BasicSelectorFieldOverride
-}
+  basicSelector: BasicSelectorFieldOverride,
+};

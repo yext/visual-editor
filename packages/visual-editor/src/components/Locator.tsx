@@ -48,7 +48,6 @@ import {
   FaSlidersH,
   FaTimes,
 } from "react-icons/fa";
-import { BasicSelector } from "../editor/BasicSelector.tsx";
 import {
   DynamicOption,
   DynamicOptionsSelectorType,

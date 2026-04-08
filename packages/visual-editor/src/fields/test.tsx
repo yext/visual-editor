@@ -1,17 +1,12 @@
-import type { ComponentConfig, PuckComponent } from "@puckeditor/core";
+import type { PuckComponent } from "@puckeditor/core";
 import { msg } from "../utils/i18n/platform.ts";
-import { YextPuckFields } from "./fields.ts";
+import { YextComponentConfig, YextFields } from "./fields.ts";
 
 export type MyComponentProps = {
   foo: string;
 };
 
-type MyComponentConfig = ComponentConfig<{
-  props: MyComponentProps;
-  fields: YextPuckFields; // registers custom field types
-}>;
-
-const myComponentFields: MyComponentConfig["fields"] = {
+const myComponentFields: YextFields<MyComponentProps> = {
   foo: {
     type: "basicSelector",
     label: msg("tone", "Tone"),
@@ -27,7 +22,7 @@ const MyComponentWrapper: PuckComponent<MyComponentProps> = ({ foo }) => {
   return <div>{foo}</div>;
 };
 
-export const MyComponent: MyComponentConfig = {
+export const MyComponent: YextComponentConfig<MyComponentProps> = {
   label: msg("components.myComponent", "My Component"),
   fields: myComponentFields,
   // resolveData: (data) => {...},

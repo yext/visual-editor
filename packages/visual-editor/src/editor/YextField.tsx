@@ -6,7 +6,6 @@ import {
   ObjectField,
 } from "@puckeditor/core";
 import { ThemeOptions } from "../utils/themeConfigOptions.ts";
-import { BasicSelector } from "./BasicSelector.tsx";
 import {
   DynamicOption,
   DynamicOptionsSelector,
@@ -77,7 +76,8 @@ type YextRadioField = YextBaseField & {
 };
 
 // YextSelectField accepts normal FieldOptions or specific ThemeConfig options.
-// If hasSearch is true, uses the BasicSelector rather than Puck's SelectField.
+// If hasSearch is true, uses the basicSelector field behavior rather than
+// Puck's built-in select field.
 type YextSelectField = YextBaseField & {
   type: "select";
   hasSearch?: boolean;
@@ -213,29 +213,35 @@ export function YextField<T, U>(
 
   if (config.type === "select" && config.options === "BACKGROUND_COLOR") {
     const options = ThemeOptions[config.options];
-    return BasicSelector({
+    return {
+      type: "basicSelector",
       label: fieldName,
       optionGroups: options,
       disableSearch: true,
-    });
+    };
   }
 
   if (config.type === "select" && config.options === "SITE_COLOR") {
     const options = ThemeOptions[config.options];
-    return BasicSelector({
+    return {
+      type: "basicSelector",
       label: fieldName,
       optionGroups: options,
       disableSearch: true,
-    });
+    };
   }
 
-  // use BasicSelector functionality
+  // Use the basicSelector field behavior for searchable select inputs.
   if (config.type === "select" && config.hasSearch) {
     const options =
       typeof config.options === "string"
         ? ThemeOptions[config.options]
         : config.options;
-    return BasicSelector({ label: fieldName, options: options as any });
+    return {
+      type: "basicSelector",
+      label: fieldName,
+      options: options as any,
+    };
   }
 
   if (
@@ -267,7 +273,8 @@ export function YextField<T, U>(
 
   if (config.type === "maxWidth") {
     const maxWidthOptions = getMaxWidthOptions();
-    return BasicSelector({
+    return {
+      type: "basicSelector",
       label: fieldName,
       disableSearch: true,
       optionGroups: [
@@ -279,7 +286,7 @@ export function YextField<T, U>(
           options: maxWidthOptions,
         },
       ],
-    });
+    };
   }
 
   if (config.type === "translatableString") {
