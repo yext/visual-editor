@@ -131,12 +131,12 @@ export const generateGoogleFontLinkData = (
  * Derives the family-level CSS id for a custom font by removing the final
  * hyphen-delimited subfamily segment from `FontSpecification.name`.
  *
- * `getCustomFontCssId` expects names shaped like
+ * `convertNameToCssId` expects names shaped like
  * `<font-family-id>-<subfamily>`, where the trailing segment represents a
  * subfamily or weight such as `regular` or `bold`. For example,
  * `ebbmelvynregular-regular` becomes `ebbmelvynregular`.
  */
-const getCustomFontCssId = (fontName: string) => {
+const convertNameToCssId = (fontName: string) => {
   const lastHyphenIndex = fontName.lastIndexOf("-");
   if (lastHyphenIndex === -1) {
     return fontName;
@@ -145,7 +145,12 @@ const getCustomFontCssId = (fontName: string) => {
   return fontName.slice(0, lastHyphenIndex);
 };
 
-const normalizeLegacyCustomFontCssId = (fontName: string) =>
+/**
+ * Converts a display-facing custom font family name into the legacy CSS id
+ * format used by published themes when no preload-backed asset id is
+ * available.
+ */
+const convertDisplayNameToCssId = (fontName: string) =>
   fontName.replaceAll(" ", "").replaceAll("_", "").toLowerCase();
 
 /**
@@ -161,7 +166,7 @@ const getCustomFontCssIdsFromPreloads = (preloads: string[]) => {
         ?.replace(/\.woff2$/i, "")
     )
     .filter((fontName): fontName is string => Boolean(fontName))
-    .map((fontName) => getCustomFontCssId(fontName));
+    .map((fontName) => convertNameToCssId(fontName));
 };
 
 /**
@@ -179,14 +184,17 @@ const getCustomFontCssIds = (
     getCustomFontCssIdsFromPreloads(preloads);
   const preloadCssIds = new Set(customFontCssIdsFromPreloads);
 
-  const customFontCssIds = Array.isArray(customFonts)
-    ? customFonts
-        .map((fontName) => normalizeLegacyCustomFontCssId(fontName))
-        .filter((fontName) => !preloadCssIds.has(fontName))
-    : Object.values(customFonts)
-        .map((fontDetails) => fontDetails.name)
-        .filter((fontName): fontName is string => Boolean(fontName))
-        .map((fontName) => getCustomFontCssId(fontName));
+  let customFontCssIds: string[];
+  if (Array.isArray(customFonts)) {
+    customFontCssIds = customFonts
+      .map((fontName) => convertDisplayNameToCssId(fontName))
+      .filter((fontName) => !preloadCssIds.has(fontName));
+  } else {
+    customFontCssIds = Object.values(customFonts)
+      .map((fontDetails) => fontDetails.name)
+      .filter((fontName): fontName is string => Boolean(fontName))
+      .map((fontName) => convertNameToCssId(fontName));
+  }
 
   return [...new Set([...customFontCssIdsFromPreloads, ...customFontCssIds])];
 };
