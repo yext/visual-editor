@@ -20,14 +20,12 @@ describe("extractInUseFontFamilies", () => {
 
     const expected: FontRegistry = {
       Oi: {
-        name: "Oi",
         displayName: "Oi",
         italics: false,
         weights: [400],
         fallback: "sans-serif",
       },
       Adamina: {
-        name: "Adamina",
         displayName: "Adamina",
         italics: false,
         weights: [400],
@@ -87,7 +85,6 @@ describe("extractInUseFontFamilies", () => {
     };
     const expected: FontRegistry = {
       Adamina: {
-        name: "Adamina",
         displayName: "Adamina",
         italics: false,
         weights: [400],
@@ -112,7 +109,6 @@ describe("extractInUseFontFamilies", () => {
 
     const expected: FontRegistry = {
       "Open Sans": {
-        name: "Open Sans",
         displayName: "Open Sans",
         italics: true,
         minWeight: 300,
@@ -137,7 +133,6 @@ describe("extractInUseFontFamilies", () => {
 
     const expected: FontRegistry = {
       "Open Sans": {
-        name: "Open Sans",
         displayName: "Open Sans",
         italics: true,
         minWeight: 300,
@@ -162,7 +157,6 @@ describe("extractInUseFontFamilies", () => {
 
     const expected: FontRegistry = {
       "Open Sans": {
-        name: "Open Sans",
         displayName: "Open Sans",
         italics: true,
         minWeight: 300,
@@ -252,7 +246,9 @@ describe("custom font helpers", () => {
 
     expect(
       matchCustomFontsByDisplayName(customFonts, ["EBB_Melvyn_Regular"])
-    ).toEqual(customFonts);
+    ).toEqual({
+      "ebbmelvynregular-regular": customFonts["ebb-melvyn"],
+    });
   });
 });
 
@@ -301,7 +297,6 @@ describe("constructGoogleFontLinkTags", () => {
   it("should create a correct link for a single variable font without italics", () => {
     const fonts: FontRegistry = {
       "Open Sans": {
-        name: "Open Sans",
         displayName: "Open Sans",
         minWeight: 300,
         maxWeight: 800,
@@ -318,7 +313,6 @@ describe("constructGoogleFontLinkTags", () => {
   it("should create a correct link for a single variable font with italics", () => {
     const fonts: FontRegistry = {
       "Open Sans": {
-        name: "Open Sans",
         displayName: "Open Sans",
         minWeight: 300,
         maxWeight: 800,
@@ -488,6 +482,31 @@ describe("getFontStyleOptions", () => {
       getFontStyleOptions({
         fontCssVariable: "--fontFamily-body-fontFamily",
         fontList: defaultFonts,
+      })
+    ).toMatchObject([{ value: "normal" }]);
+  });
+
+  it("resolves custom fonts by display name instead of registry key", () => {
+    const iframe = createPreviewIframe();
+    const iframeDocument = iframe.contentDocument!;
+    const styleTag = iframeDocument.createElement("style");
+    styleTag.id = "visual-editor-theme";
+    styleTag.textContent =
+      ".components{--fontFamily-body-fontFamily:'Custom Display', sans-serif !important;}";
+    iframeDocument.head.appendChild(styleTag);
+
+    expect(
+      getFontStyleOptions({
+        fontCssVariable: "--fontFamily-body-fontFamily",
+        fontList: {
+          "custom-font-key": {
+            name: "custom-font-regular",
+            displayName: "Custom Display",
+            italics: false,
+            weights: [400],
+            fallback: "sans-serif",
+          },
+        },
       })
     ).toMatchObject([{ value: "normal" }]);
   });

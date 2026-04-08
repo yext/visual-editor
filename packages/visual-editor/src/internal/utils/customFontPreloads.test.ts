@@ -94,14 +94,14 @@ describe("buildCustomFontPreloads", () => {
     };
 
     const customFonts: FontRegistry = {
-      Alpha: {
+      "alpha-font-key": {
         name: "alpha-font",
         displayName: "Alpha",
         italics: false,
         weights: [400, 700],
         fallback: "sans-serif",
       },
-      Beta: {
+      "beta-font-key": {
         name: "beta-font",
         displayName: "Beta",
         italics: false,

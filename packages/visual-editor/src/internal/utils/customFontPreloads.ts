@@ -9,6 +9,7 @@
 
 import {
   FontRegistry,
+  findFontByDisplayName,
   generateCustomFontLinkData,
 } from "../../utils/fonts/visualEditorFonts.ts";
 import { ThemeConfig } from "../../utils/themeResolver.ts";
@@ -234,7 +235,7 @@ export const buildCustomFontPreloads = ({
     }
 
     const fontFamily = extractFontFamilyName(fontFamilyValue);
-    if (!customFonts[fontFamily]) {
+    if (!findFontByDisplayName(customFonts, fontFamily)) {
       return;
     }
 

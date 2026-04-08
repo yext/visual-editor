@@ -34,7 +34,8 @@ const systemFallbacks: Record<string, any> = {
 const generate = async () => {
   const results: Record<string, string[]> = {};
 
-  for (const [displayName, config] of Object.entries(defaultFonts)) {
+  for (const config of Object.values(defaultFonts)) {
+    const displayName = config.displayName;
     const camelName = fontFamilyToCamelCase(displayName);
 
     const fallbackMetrics = systemFallbacks[config.fallback] || arial;
