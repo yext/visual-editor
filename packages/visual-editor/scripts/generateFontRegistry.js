@@ -45,6 +45,7 @@ const getFontData = async () => {
 
 const parseFontDetails = (font) => {
   const baseDetails = {
+    name: font.family.toLowerCase().replace(/[^a-z0-9]/g, ""),
     displayName: font.family,
   };
 

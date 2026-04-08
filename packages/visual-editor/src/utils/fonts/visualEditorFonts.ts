@@ -36,7 +36,7 @@ export const defaultFonts = fontsJs as FontRegistry;
 export const findFontByDisplayName = (
   fonts: FontRegistry,
   displayName: string
-) => {
+): FontSpecification | undefined => {
   return Object.values(fonts).find(
     (fontDetails) => fontDetails.displayName === displayName
   );
@@ -47,7 +47,9 @@ export const findFontByDisplayName = (
  * font-family value are both derived from the font's display name so theme data
  * remains human-readable.
  */
-export const constructFontSelectOptions = (fonts: FontRegistry) => {
+export const constructFontSelectOptions = (
+  fonts: FontRegistry
+): { label: string; value: string }[] => {
   return Object.values(fonts).map((fontDetails) => ({
     label: fontDetails.displayName,
     value: `'${fontDetails.displayName}', '${fontDetails.displayName} Fallback', ${fontDetails.fallback}`,
