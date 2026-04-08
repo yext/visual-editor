@@ -200,7 +200,7 @@ describe("custom font helpers", () => {
     ]);
   });
 
-  it("should build custom font links from font names", () => {
+  it("should build custom font links from parsed family ids", () => {
     const customFonts: FontRegistry = {
       "ebb-melvyn": {
         name: "ebbmelvynregular-regular",
@@ -213,7 +213,26 @@ describe("custom font helpers", () => {
 
     expect(generateCustomFontLinkData(customFonts, "./")).toEqual([
       {
-        href: "./y-fonts/ebbmelvynregular-regular.css",
+        href: "./y-fonts/ebbmelvynregular.css",
+        rel: "stylesheet",
+      },
+    ]);
+  });
+
+  it("should keep internal hyphens when parsing custom font family ids", () => {
+    const customFonts: FontRegistry = {
+      "foo-bar": {
+        name: "foo-bar-regular",
+        displayName: "Foo Bar",
+        italics: false,
+        weights: [400],
+        fallback: "sans-serif",
+      },
+    };
+
+    expect(generateCustomFontLinkData(customFonts, "./")).toEqual([
+      {
+        href: "./y-fonts/foo-bar.css",
         rel: "stylesheet",
       },
     ]);

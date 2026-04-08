@@ -139,12 +139,22 @@ export const generateGoogleFontLinkData = (
   return [...PRECONNECT_LINKS, ...fontLinks];
 };
 
+const getCustomFontCssId = (fontName: string) => {
+  const lastHyphenIndex = fontName.lastIndexOf("-");
+  if (lastHyphenIndex === -1) {
+    return fontName;
+  }
+
+  return fontName.slice(0, lastHyphenIndex);
+};
+
 /**
  * Builds stylesheet link data for custom fonts.
  *
- * When given a FontRegistry, it uses `FontSpecification.name` as the canonical
- * asset id. When given a string array, it preserves the legacy derivation logic
- * used by published theme rendering.
+ * When given a FontRegistry, it derives the family-level stylesheet basename
+ * from `FontSpecification.name` by stripping the final hyphen-delimited
+ * subfamily segment. When given a string array, it preserves the legacy
+ * derivation logic used by published theme rendering.
  */
 export const generateCustomFontLinkData = (
   customFonts: FontRegistry | string[],
@@ -152,7 +162,9 @@ export const generateCustomFontLinkData = (
 ): FontLinkData[] => {
   const customFontFileNames = Array.isArray(customFonts)
     ? customFonts.map((fontName) => fontName.replaceAll(" ", "").toLowerCase())
-    : Object.values(customFonts).map((fontDetails) => fontDetails.name);
+    : Object.values(customFonts).map((fontDetails) =>
+        getCustomFontCssId(fontDetails.name)
+      );
 
   return customFontFileNames.map((fontFileName) => {
     return {
