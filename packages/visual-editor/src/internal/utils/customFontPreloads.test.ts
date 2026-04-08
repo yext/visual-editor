@@ -3,6 +3,39 @@ import { buildCustomFontPreloads } from "./customFontPreloads.ts";
 import { ThemeConfig } from "../../utils/themeResolver.ts";
 import { FontRegistry } from "../../utils/fonts/visualEditorFonts.ts";
 
+const createTextThemeConfig = (
+  fontFamilyDefault: string,
+  fontWeightDefault: string,
+  fontStyleDefault = "normal"
+): ThemeConfig => ({
+  body: {
+    label: "Body",
+    styles: {
+      fontFamily: {
+        label: "Font",
+        type: "select",
+        plugin: "fontFamily",
+        options: [],
+        default: fontFamilyDefault,
+      },
+      fontWeight: {
+        label: "Weight",
+        type: "select",
+        plugin: "fontWeight",
+        options: [],
+        default: fontWeightDefault,
+      },
+      fontStyle: {
+        label: "Style",
+        type: "select",
+        plugin: "fontStyle",
+        options: [],
+        default: fontStyleDefault,
+      },
+    },
+  },
+});
+
 describe("buildCustomFontPreloads", () => {
   it("returns all matching custom font files for multiple fonts", () => {
     const themeConfig: ThemeConfig = {
@@ -23,6 +56,13 @@ describe("buildCustomFontPreloads", () => {
             options: [],
             default: "700",
           },
+          fontStyle: {
+            label: "Style",
+            type: "select",
+            plugin: "fontStyle",
+            options: [],
+            default: "normal",
+          },
         },
       },
       body: {
@@ -41,6 +81,13 @@ describe("buildCustomFontPreloads", () => {
             plugin: "fontWeight",
             options: [],
             default: "400",
+          },
+          fontStyle: {
+            label: "Style",
+            type: "select",
+            plugin: "fontStyle",
+            options: [],
+            default: "normal",
           },
         },
       },
@@ -61,13 +108,21 @@ describe("buildCustomFontPreloads", () => {
 
     const customFontCssIndex = {
       Alpha: {
-        staticSrcByWeight: {
-          700: "/y-fonts/alpha-bold.woff2",
+        variableSrcByStyle: {},
+        staticSrcByStyleAndWeight: {
+          normal: {
+            700: "/y-fonts/alpha-bold.woff2",
+          },
+          italic: {},
         },
       },
       Beta: {
-        staticSrcByWeight: {
-          400: "/y-fonts/beta-regular.woff2",
+        variableSrcByStyle: {},
+        staticSrcByStyleAndWeight: {
+          normal: {
+            400: "/y-fonts/beta-regular.woff2",
+          },
+          italic: {},
         },
       },
     };
@@ -75,8 +130,10 @@ describe("buildCustomFontPreloads", () => {
     const themeValues = {
       "--fontFamily-h1-fontFamily": "'Alpha', sans-serif",
       "--fontWeight-h1-fontWeight": "700",
+      "--fontStyle-h1-fontStyle": "normal",
       "--fontFamily-body-fontFamily": "'Beta', serif",
       "--fontWeight-body-fontWeight": "400",
+      "--fontStyle-body-fontStyle": "normal",
     };
 
     const preloads = buildCustomFontPreloads({
@@ -95,32 +152,12 @@ describe("buildCustomFontPreloads", () => {
     );
   });
 
-  it("prefers variable font files regardless of selected weight", () => {
-    const themeConfig: ThemeConfig = {
-      body: {
-        label: "Body",
-        styles: {
-          fontFamily: {
-            label: "Font",
-            type: "select",
-            plugin: "fontFamily",
-            options: [],
-            default: "'Gamma', sans-serif",
-          },
-          fontWeight: {
-            label: "Weight",
-            type: "select",
-            plugin: "fontWeight",
-            options: [],
-            default: "500",
-          },
-        },
-      },
-    };
+  it("prefers variable font files for the selected font style", () => {
+    const themeConfig = createTextThemeConfig("'Gamma', sans-serif", "500");
 
     const customFonts: FontRegistry = {
       Gamma: {
-        italics: false,
+        italics: true,
         weights: [300, 400, 500, 600],
         fallback: "sans-serif",
       },
@@ -128,53 +165,116 @@ describe("buildCustomFontPreloads", () => {
 
     const customFontCssIndex = {
       Gamma: {
-        variableSrc: "/y-fonts/gamma-variable.woff2",
-        staticSrcByWeight: {
-          500: "/y-fonts/gamma-500.woff2",
+        variableSrcByStyle: {
+          normal: "/y-fonts/gamma-variable.woff2",
+          italic: "/y-fonts/gamma-variable-italic.woff2",
+        },
+        staticSrcByStyleAndWeight: {
+          normal: {
+            500: "/y-fonts/gamma-500.woff2",
+          },
+          italic: {
+            500: "/y-fonts/gamma-500-italic.woff2",
+          },
         },
       },
-    };
-
-    const themeValues = {
-      "--fontFamily-body-fontFamily": "'Gamma', sans-serif",
-      "--fontWeight-body-fontWeight": "500",
     };
 
     const preloads = buildCustomFontPreloads({
       themeConfig,
-      themeValues,
+      themeValues: {
+        "--fontFamily-body-fontFamily": "'Gamma', sans-serif",
+        "--fontWeight-body-fontWeight": "500",
+        "--fontStyle-body-fontStyle": "italic",
+      },
       customFonts,
       customFontCssIndex,
     });
 
-    expect(preloads).toEqual(["/y-fonts/gamma-variable.woff2"]);
+    expect(preloads).toEqual(["/y-fonts/gamma-variable-italic.woff2"]);
   });
 
-  it("omits a preload when no matching static weight exists", () => {
-    const themeConfig: ThemeConfig = {
-      body: {
-        label: "Body",
-        styles: {
-          fontFamily: {
-            label: "Font",
-            type: "select",
-            plugin: "fontFamily",
-            options: [],
-            default: "'Delta', sans-serif",
+  it("uses italic static files when italic is selected", () => {
+    const themeConfig = createTextThemeConfig("'Delta', sans-serif", "600");
+
+    const customFonts: FontRegistry = {
+      Delta: {
+        italics: true,
+        weights: [400, 600, 700],
+        fallback: "sans-serif",
+      },
+    };
+
+    const customFontCssIndex = {
+      Delta: {
+        variableSrcByStyle: {},
+        staticSrcByStyleAndWeight: {
+          normal: {
+            600: "/y-fonts/delta-600.woff2",
           },
-          fontWeight: {
-            label: "Weight",
-            type: "select",
-            plugin: "fontWeight",
-            options: [],
-            default: "600",
+          italic: {
+            600: "/y-fonts/delta-600-italic.woff2",
           },
         },
       },
     };
 
+    const preloads = buildCustomFontPreloads({
+      themeConfig,
+      themeValues: {
+        "--fontFamily-body-fontFamily": "'Delta', sans-serif",
+        "--fontWeight-body-fontWeight": "600",
+        "--fontStyle-body-fontStyle": "italic",
+      },
+      customFonts,
+      customFontCssIndex,
+    });
+
+    expect(preloads).toEqual(["/y-fonts/delta-600-italic.woff2"]);
+  });
+
+  it("omits a preload when italic is selected but no italic asset exists", () => {
+    const themeConfig = createTextThemeConfig("'Epsilon', sans-serif", "600");
+
     const customFonts: FontRegistry = {
-      Delta: {
+      Epsilon: {
+        italics: true,
+        weights: [400, 600, 700],
+        fallback: "sans-serif",
+      },
+    };
+
+    const customFontCssIndex = {
+      Epsilon: {
+        variableSrcByStyle: {},
+        staticSrcByStyleAndWeight: {
+          normal: {
+            600: "/y-fonts/epsilon-600.woff2",
+          },
+          italic: {},
+        },
+      },
+    };
+
+    const preloads = buildCustomFontPreloads({
+      themeConfig,
+      themeValues: {
+        "--fontFamily-body-fontFamily": "'Epsilon', sans-serif",
+        "--fontWeight-body-fontWeight": "600",
+        "--fontStyle-body-fontStyle": "italic",
+      },
+      customFonts,
+      customFontCssIndex,
+    });
+
+    expect(preloads).toEqual([]);
+  });
+
+  it("omits a preload when no matching static weight exists", () => {
+    const themeConfig = createTextThemeConfig("'Zeta', sans-serif", "600");
+
+    const customFonts: FontRegistry = {
+      Zeta: {
         italics: false,
         weights: [400, 700],
         fallback: "sans-serif",
@@ -182,22 +282,25 @@ describe("buildCustomFontPreloads", () => {
     };
 
     const customFontCssIndex = {
-      Delta: {
-        staticSrcByWeight: {
-          400: "/y-fonts/delta-regular.woff2",
-          700: "/y-fonts/delta-bold.woff2",
+      Zeta: {
+        variableSrcByStyle: {},
+        staticSrcByStyleAndWeight: {
+          normal: {
+            400: "/y-fonts/zeta-regular.woff2",
+            700: "/y-fonts/zeta-bold.woff2",
+          },
+          italic: {},
         },
       },
     };
 
-    const themeValues = {
-      "--fontFamily-body-fontFamily": "'Delta', sans-serif",
-      "--fontWeight-body-fontWeight": "600",
-    };
-
     const preloads = buildCustomFontPreloads({
       themeConfig,
-      themeValues,
+      themeValues: {
+        "--fontFamily-body-fontFamily": "'Zeta', sans-serif",
+        "--fontWeight-body-fontWeight": "600",
+        "--fontStyle-body-fontStyle": "normal",
+      },
       customFonts,
       customFontCssIndex,
     });
