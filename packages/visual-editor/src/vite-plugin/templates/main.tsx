@@ -31,6 +31,8 @@ import {
 } from "@yext/visual-editor";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
 
+// Temp change for PR branch
+
 export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
   data: TemplateRenderProps
 ): HeadConfig => {
