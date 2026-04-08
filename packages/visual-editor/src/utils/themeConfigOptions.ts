@@ -308,7 +308,7 @@ const textTransformOptions = [
   },
 ];
 
-const fontStyleOptions = [
+export const fontStyleOptions = [
   { label: msg("fields.options.normal", "Normal"), value: "normal" },
   { label: msg("fields.options.italic", "Italic"), value: "italic" },
 ];

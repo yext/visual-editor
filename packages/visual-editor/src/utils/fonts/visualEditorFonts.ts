@@ -3,6 +3,7 @@ import { StyleSelectOption } from "../themeResolver.ts";
 import { defaultFonts as fontsJs } from "./font_registry.js";
 import { msg } from "../i18n/platform.ts";
 import { ThemeData } from "../../internal/types/themeData.ts";
+import { fontStyleOptions } from "../themeConfigOptions.ts";
 
 const variableFontRegex = /var\((--[^)]+)\)/;
 
@@ -193,11 +194,6 @@ const defaultWeightOptions = [
   { label: msg("theme.fontWeight.black", "Black (900)"), value: "900" },
 ];
 
-const defaultFontStyleOptions = [
-  { label: msg("fields.options.normal", "Normal"), value: "normal" },
-  { label: msg("fields.options.italic", "Italic"), value: "italic" },
-];
-
 type getFontWeightParams = {
   fontCssVariable?: string;
   weightOptions?: StyleSelectOption[];
@@ -238,7 +234,7 @@ export const getFontWeightOptions = (options: getFontWeightParams) => {
 };
 
 export const getFontStyleOptions = (options: getFontStyleParams) => {
-  const { fontCssVariable, styleOptions = defaultFontStyleOptions } = options;
+  const { fontCssVariable, styleOptions = fontStyleOptions } = options;
   if (!fontCssVariable || typeof window === "undefined") {
     return styleOptions;
   }
@@ -330,7 +326,7 @@ const filterFontStyles = (
   styleElement: HTMLStyleElement,
   {
     fontCssVariable,
-    styleOptions = defaultFontStyleOptions,
+    styleOptions = fontStyleOptions,
     fontList = defaultFonts,
   }: getFontStyleParams
 ) => {
@@ -355,16 +351,18 @@ const getFontNameFromStyleElement = (
   }
 
   const styleContent = styleElement.textContent || styleElement.innerHTML;
-  const regex = new RegExp(
+  const regex = new RegExp( // matches Arial in "'Arial', sans-serif"
     `${fontCssVariable}:\\s*(['"]?([^',\\s]+(?:\\s+[^',\\s]+)*)['"]?)(?:,|\\s|;|$)`,
     "i"
   );
   let fontName = styleContent.match(regex)?.[2];
 
+  // Support "Default font" reference by resolving var(--fontFamily-headers-defaultFont).
   if (fontName?.startsWith("var(")) {
     const variableMatch = fontName.match(variableFontRegex);
     if (variableMatch?.[1]) {
       const variableName = variableMatch[1];
+      // Escape regex special characters to prevent ReDoS from malformed CSS
       const escapedVariableName = variableName.replace(
         /[.*+?^${}()|[\]\\]/g,
         "\\$&"
