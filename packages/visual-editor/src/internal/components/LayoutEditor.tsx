@@ -122,13 +122,23 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
         sendDevThemeSaveStateData({
           payload: { devThemeSaveStateData: JSON.stringify(localThemeData) },
         });
-        updateThemeInEditor(localThemeData, themeConfig, false);
+        updateThemeInEditor(
+          localThemeData,
+          themeConfig,
+          false,
+          templateMetadata.customFonts
+        );
         return;
       }
     }
 
     if (themeData) {
-      updateThemeInEditor(themeData as ThemeData, themeConfig, false);
+      updateThemeInEditor(
+        themeData as ThemeData,
+        themeConfig,
+        false,
+        templateMetadata.customFonts
+      );
     }
   }, [themeData, themeConfig, templateMetadata]);
 

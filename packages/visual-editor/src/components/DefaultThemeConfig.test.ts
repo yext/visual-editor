@@ -20,6 +20,8 @@ describe("createDefaultThemeConfig", () => {
   it("should include custom fonts in the font options", () => {
     const customFonts: FontRegistry = {
       "Custom Font": {
+        name: "custom-font",
+        displayName: "Custom Font",
         italics: true,
         weights: [400, 700],
         fallback: "sans-serif",
@@ -43,6 +45,8 @@ describe("createDefaultThemeConfig", () => {
   it("should override default fonts with custom fonts if they have the same name", () => {
     const customFonts: FontRegistry = {
       "Open Sans": {
+        name: "open-sans-custom",
+        displayName: "Open Sans",
         italics: true,
         weights: [300, 400, 500],
         fallback: "serif",
@@ -64,6 +68,8 @@ describe("createDefaultThemeConfig", () => {
   it("should merge custom fonts with default fonts", () => {
     const customFonts: FontRegistry = {
       "Custom Font": {
+        name: "custom-font",
+        displayName: "Custom Font",
         italics: false,
         weights: [400],
         fallback: "serif",

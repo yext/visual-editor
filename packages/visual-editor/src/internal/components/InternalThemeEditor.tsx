@@ -121,7 +121,12 @@ export const InternalThemeEditor = ({
         buildThemeLocalStorageKey(),
         lzstring.compress(JSON.stringify(newHistory.histories))
       );
-      updateThemeInEditor(newThemeValues, themeConfig, true);
+      updateThemeInEditor(
+        newThemeValues,
+        themeConfig,
+        true,
+        templateMetadata.customFonts
+      );
       setThemeHistories(newHistory);
       return;
     }
@@ -145,7 +150,12 @@ export const InternalThemeEditor = ({
       });
     }
 
-    updateThemeInEditor(newThemeValues, themeConfig, true);
+    updateThemeInEditor(
+      newThemeValues,
+      themeConfig,
+      true,
+      templateMetadata.customFonts
+    );
     setThemeHistories(newHistory);
   };
 
@@ -200,6 +210,7 @@ export const InternalThemeEditor = ({
               totalEntityCount={templateMetadata.totalEntityCount}
               localDev={localDev}
               headDeployStatus={templateMetadata.headDeployStatus}
+              customFonts={templateMetadata.customFonts}
             />
           ),
           actionBar: () => <></>,

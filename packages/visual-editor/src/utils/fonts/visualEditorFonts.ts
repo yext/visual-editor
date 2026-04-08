@@ -7,7 +7,9 @@ import { ThemeData } from "../../internal/types/themeData.ts";
 const variableFontRegex = /var\((--[^)]+)\)/;
 
 export type FontRegistry = Record<string, FontSpecification>;
-type FontSpecification = {
+export type FontSpecification = {
+  name: string;
+  displayName: string;
   italics: boolean; // whether the font supports italics
   fallback: "sans-serif" | "serif" | "monospace" | "cursive";
 } & (
@@ -22,17 +24,45 @@ type FontSpecification = {
     }
 );
 
+/**
+ * Normalizes the generated default font registry to the richer FontSpecification
+ * shape used by the editor by copying the registry key into both `name` and
+ * `displayName`.
+ */
+const addFontNamesToRegistry = (fonts: typeof fontsJs): FontRegistry => {
+  const fontRegistry: FontRegistry = {};
+
+  for (const [fontName, fontDetails] of Object.entries(fonts)) {
+    fontRegistry[fontName] = {
+      ...(fontDetails as Omit<FontSpecification, "name" | "displayName">),
+      name: fontName,
+      displayName: fontName,
+    } as FontSpecification;
+  }
+
+  return fontRegistry;
+};
+
 // List of variable Google Fonts https://fonts.google.com/?categoryFilters=Technology:%2FTechnology%2FVariable
 // prettier-ignore
-export const defaultFonts: FontRegistry = fontsJs as FontRegistry;
+export const defaultFonts: FontRegistry = addFontNamesToRegistry(fontsJs);
 
+const getFontDisplayName = (fontName: string, fontDetails: FontSpecification) =>
+  fontDetails.displayName || fontName;
+
+/**
+ * Builds font-family select options from a font registry. The label and CSS
+ * font-family value are both derived from the font's display name so theme data
+ * remains human-readable.
+ */
 export const constructFontSelectOptions = (fonts: FontRegistry) => {
   const fontOptions: StyleSelectOption[] = [];
   for (const fontName in fonts) {
     const fontDetails = fonts[fontName];
+    const displayName = getFontDisplayName(fontName, fontDetails);
     fontOptions.push({
-      label: fontName,
-      value: `'${fontName}', '${fontName} Fallback', ${fontDetails.fallback}`,
+      label: displayName,
+      value: `'${displayName}', '${displayName} Fallback', ${fontDetails.fallback}`,
     });
   }
   return fontOptions;
@@ -109,13 +139,24 @@ export const generateGoogleFontLinkData = (
   return [...PRECONNECT_LINKS, ...fontLinks];
 };
 
+/**
+ * Builds stylesheet link data for custom fonts.
+ *
+ * When given a FontRegistry, it uses `FontSpecification.name` as the canonical
+ * asset id. When given a string array, it preserves the legacy derivation logic
+ * used by published theme rendering.
+ */
 export const generateCustomFontLinkData = (
-  customFonts: string[],
+  customFonts: FontRegistry | string[],
   relativePrefixToRoot: string
 ): FontLinkData[] => {
-  return customFonts.map((fontName) => {
+  const customFontFileNames = Array.isArray(customFonts)
+    ? customFonts.map((fontName) => fontName.replaceAll(" ", "").toLowerCase())
+    : Object.values(customFonts).map((fontDetails) => fontDetails.name);
+
+  return customFontFileNames.map((fontFileName) => {
     return {
-      href: `${relativePrefixToRoot}y-fonts/${fontName.replaceAll(" ", "").toLowerCase()}.css`,
+      href: `${relativePrefixToRoot}y-fonts/${fontFileName}.css`,
       rel: "stylesheet",
     };
   });
@@ -141,10 +182,13 @@ export const googleFontLinkTags = fontLinkDataToHTML(
   generateGoogleFontLinkData(defaultFonts)
 );
 
-// Create DOM elements directly from font data
+/**
+ * Creates link elements for both Google fonts and custom font stylesheets so
+ * they can be appended directly into a document.
+ */
 export const createFontLinkElements = (
   googleFonts: FontRegistry,
-  customFonts: string[]
+  customFonts: FontRegistry | string[]
 ): HTMLLinkElement[] => {
   const googleFontLinkData = generateGoogleFontLinkData(googleFonts);
   const customFontLinkData = generateCustomFontLinkData(customFonts, "./");
@@ -160,7 +204,10 @@ export const createFontLinkElements = (
   });
 };
 
-// Helper function to load font links into the DOM
+/**
+ * Loads the provided font links into the document head once, using `idPrefix`
+ * to avoid appending duplicate font tags across rerenders.
+ */
 export const loadFontsIntoDOM = (
   document: Document,
   googleFonts: FontRegistry,
@@ -168,7 +215,7 @@ export const loadFontsIntoDOM = (
   idPrefix: string = "visual-editor-fonts"
 ) => {
   if (!document.getElementById(`${idPrefix}-0`)) {
-    const links = createFontLinkElements(googleFonts, Object.keys(customFonts));
+    const links = createFontLinkElements(googleFonts, customFonts);
 
     links.forEach((link, index) => {
       link.id = `${idPrefix}-${index}`;
@@ -324,7 +371,12 @@ const filterFontWeights = (
   }
 };
 
-// Returns FontRegistry only containing fonts used in ThemeData
+/**
+ * Extracts the font families referenced by theme data, resolving one level of
+ * CSS variable indirection for "Default font" style references. Google fonts
+ * are returned as a registry and unknown fonts are returned as display-name
+ * strings so legacy published-theme behavior is preserved.
+ */
 export const extractInUseFontFamilies = (
   data: ThemeData,
   availableFonts: FontRegistry
@@ -381,4 +433,26 @@ export const extractInUseFontFamilies = (
   }
 
   return { inUseGoogleFonts, inUseCustomFonts };
+};
+
+/**
+ * Matches theme-selected custom font display names back to the corresponding
+ * font specifications so editor runtime code can load assets by `name`.
+ */
+export const matchCustomFontsByDisplayName = (
+  customFonts: FontRegistry,
+  displayNames: string[]
+): FontRegistry => {
+  const matchedCustomFonts: FontRegistry = {};
+
+  displayNames.forEach((displayName) => {
+    for (const [fontKey, fontDetails] of Object.entries(customFonts)) {
+      if (getFontDisplayName(fontKey, fontDetails) === displayName) {
+        matchedCustomFonts[fontKey] = fontDetails;
+        break;
+      }
+    }
+  });
+
+  return matchedCustomFonts;
 };

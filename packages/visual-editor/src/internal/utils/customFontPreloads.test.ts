@@ -48,11 +48,15 @@ describe("buildCustomFontPreloads", () => {
 
     const customFonts: FontRegistry = {
       Alpha: {
+        name: "alpha-font",
+        displayName: "Alpha",
         italics: false,
         weights: [400, 700],
         fallback: "sans-serif",
       },
       Beta: {
+        name: "beta-font",
+        displayName: "Beta",
         italics: false,
         weights: [300, 400],
         fallback: "serif",
@@ -120,6 +124,8 @@ describe("buildCustomFontPreloads", () => {
 
     const customFonts: FontRegistry = {
       Gamma: {
+        name: "gamma-font",
+        displayName: "Gamma",
         italics: false,
         weights: [300, 400, 500, 600],
         fallback: "sans-serif",
@@ -175,6 +181,8 @@ describe("buildCustomFontPreloads", () => {
 
     const customFonts: FontRegistry = {
       Delta: {
+        name: "delta-font",
+        displayName: "Delta",
         italics: false,
         weights: [400, 700],
         fallback: "sans-serif",

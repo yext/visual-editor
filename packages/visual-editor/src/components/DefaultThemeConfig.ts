@@ -15,10 +15,13 @@ export function createDefaultThemeConfig(
     ...defaultFonts,
     ...customFonts,
   };
+  const customFontDisplayNames = new Set(
+    Object.values(customFonts).map((font) => font.displayName)
+  );
   const fontOptions = [
     ...constructFontSelectOptions(customFonts),
     ...constructFontSelectOptions(defaultFonts).filter(
-      (option) => !(option.label in customFonts)
+      (option) => !customFontDisplayNames.has(option.label)
     ),
   ];
   const defaultHeaderFontOption = {

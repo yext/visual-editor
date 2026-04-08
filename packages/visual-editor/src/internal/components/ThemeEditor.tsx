@@ -211,7 +211,8 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       updateThemeInEditor(
         themeHistories.histories[themeHistories.index]?.data as ThemeData,
         themeConfig,
-        true
+        true,
+        templateMetadata.customFonts
       );
     }
   }, [themeHistories, themeConfig]);

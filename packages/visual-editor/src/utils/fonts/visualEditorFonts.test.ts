@@ -1,10 +1,13 @@
 import { describe, it, expect } from "vitest";
 import { ThemeData } from "../../internal/types/themeData.ts";
 import {
+  constructFontSelectOptions,
   extractInUseFontFamilies,
   FontRegistry,
   defaultFonts,
   constructGoogleFontLinkTags,
+  generateCustomFontLinkData,
+  matchCustomFontsByDisplayName,
 } from "./visualEditorFonts.ts";
 
 describe("extractInUseFontFamilies", () => {
@@ -15,8 +18,20 @@ describe("extractInUseFontFamilies", () => {
     };
 
     const expected: FontRegistry = {
-      Oi: { italics: false, weights: [400], fallback: "sans-serif" },
-      Adamina: { italics: false, weights: [400], fallback: "serif" },
+      Oi: {
+        name: "Oi",
+        displayName: "Oi",
+        italics: false,
+        weights: [400],
+        fallback: "sans-serif",
+      },
+      Adamina: {
+        name: "Adamina",
+        displayName: "Adamina",
+        italics: false,
+        weights: [400],
+        fallback: "serif",
+      },
     };
 
     const { inUseGoogleFonts, inUseCustomFonts } = extractInUseFontFamilies(
@@ -70,7 +85,13 @@ describe("extractInUseFontFamilies", () => {
       "--fontFamily-button-fontFamily": "'Adamina', serif",
     };
     const expected: FontRegistry = {
-      Adamina: { italics: false, weights: [400], fallback: "serif" },
+      Adamina: {
+        name: "Adamina",
+        displayName: "Adamina",
+        italics: false,
+        weights: [400],
+        fallback: "serif",
+      },
     };
 
     const { inUseGoogleFonts, inUseCustomFonts } = extractInUseFontFamilies(
@@ -90,6 +111,8 @@ describe("extractInUseFontFamilies", () => {
 
     const expected: FontRegistry = {
       "Open Sans": {
+        name: "Open Sans",
+        displayName: "Open Sans",
         italics: true,
         minWeight: 300,
         maxWeight: 800,
@@ -113,6 +136,8 @@ describe("extractInUseFontFamilies", () => {
 
     const expected: FontRegistry = {
       "Open Sans": {
+        name: "Open Sans",
+        displayName: "Open Sans",
         italics: true,
         minWeight: 300,
         maxWeight: 800,
@@ -136,6 +161,8 @@ describe("extractInUseFontFamilies", () => {
 
     const expected: FontRegistry = {
       "Open Sans": {
+        name: "Open Sans",
+        displayName: "Open Sans",
         italics: true,
         minWeight: 300,
         maxWeight: 800,
@@ -152,6 +179,63 @@ describe("extractInUseFontFamilies", () => {
   });
 });
 
+describe("custom font helpers", () => {
+  it("should build font select options from display names", () => {
+    const customFonts: FontRegistry = {
+      "ebb-melvyn": {
+        name: "ebbmelvynregular-regular",
+        displayName: "EBB_Melvyn_Regular",
+        italics: false,
+        weights: [400, 700],
+        fallback: "sans-serif",
+      },
+    };
+
+    expect(constructFontSelectOptions(customFonts)).toEqual([
+      {
+        label: "EBB_Melvyn_Regular",
+        value:
+          "'EBB_Melvyn_Regular', 'EBB_Melvyn_Regular Fallback', sans-serif",
+      },
+    ]);
+  });
+
+  it("should build custom font links from font names", () => {
+    const customFonts: FontRegistry = {
+      "ebb-melvyn": {
+        name: "ebbmelvynregular-regular",
+        displayName: "EBB_Melvyn_Regular",
+        italics: false,
+        weights: [400],
+        fallback: "sans-serif",
+      },
+    };
+
+    expect(generateCustomFontLinkData(customFonts, "./")).toEqual([
+      {
+        href: "./y-fonts/ebbmelvynregular-regular.css",
+        rel: "stylesheet",
+      },
+    ]);
+  });
+
+  it("should match custom fonts by display name", () => {
+    const customFonts: FontRegistry = {
+      "ebb-melvyn": {
+        name: "ebbmelvynregular-regular",
+        displayName: "EBB_Melvyn_Regular",
+        italics: false,
+        weights: [400],
+        fallback: "sans-serif",
+      },
+    };
+
+    expect(
+      matchCustomFontsByDisplayName(customFonts, ["EBB_Melvyn_Regular"])
+    ).toEqual(customFonts);
+  });
+});
+
 describe("constructGoogleFontLinkTags", () => {
   const preconnectTags =
     '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
@@ -164,7 +248,13 @@ describe("constructGoogleFontLinkTags", () => {
 
   it("should create a correct link for a single static font without italics", () => {
     const fonts: FontRegistry = {
-      Roboto: { weights: [400, 700], italics: false, fallback: "sans-serif" },
+      Roboto: {
+        name: "Roboto",
+        displayName: "Roboto",
+        weights: [400, 700],
+        italics: false,
+        fallback: "sans-serif",
+      },
     };
     const expected =
       preconnectTags +
@@ -174,7 +264,13 @@ describe("constructGoogleFontLinkTags", () => {
 
   it("should create a correct link for a single static font with italics", () => {
     const fonts: FontRegistry = {
-      Lato: { weights: [400, 900], italics: true, fallback: "sans-serif" },
+      Lato: {
+        name: "Lato",
+        displayName: "Lato",
+        weights: [400, 900],
+        italics: true,
+        fallback: "sans-serif",
+      },
     };
     const expected =
       preconnectTags +
@@ -185,6 +281,8 @@ describe("constructGoogleFontLinkTags", () => {
   it("should create a correct link for a single variable font without italics", () => {
     const fonts: FontRegistry = {
       "Open Sans": {
+        name: "Open Sans",
+        displayName: "Open Sans",
         minWeight: 300,
         maxWeight: 800,
         italics: false,
@@ -200,6 +298,8 @@ describe("constructGoogleFontLinkTags", () => {
   it("should create a correct link for a single variable font with italics", () => {
     const fonts: FontRegistry = {
       "Open Sans": {
+        name: "Open Sans",
+        displayName: "Open Sans",
         minWeight: 300,
         maxWeight: 800,
         italics: true,
@@ -215,6 +315,8 @@ describe("constructGoogleFontLinkTags", () => {
   it("should handle variable fonts where min and max weight are the same", () => {
     const fonts: FontRegistry = {
       "Single Weight Var": {
+        name: "Single Weight Var",
+        displayName: "Single Weight Var",
         minWeight: 500,
         maxWeight: 500,
         italics: true,
@@ -229,8 +331,16 @@ describe("constructGoogleFontLinkTags", () => {
 
   it("should create separate link tags for multiple fonts", () => {
     const fonts: FontRegistry = {
-      Roboto: { weights: [400], italics: false, fallback: "sans-serif" },
+      Roboto: {
+        name: "Roboto",
+        displayName: "Roboto",
+        weights: [400],
+        italics: false,
+        fallback: "sans-serif",
+      },
       Lato: {
+        name: "Lato",
+        displayName: "Lato",
         minWeight: 300,
         maxWeight: 700,
         italics: true,
@@ -246,14 +356,62 @@ describe("constructGoogleFontLinkTags", () => {
 
   it("should create separate link tags for many fonts", () => {
     const fonts: FontRegistry = {
-      Font1: { weights: [400], italics: false, fallback: "sans-serif" },
-      Font2: { weights: [400], italics: false, fallback: "sans-serif" },
-      Font3: { weights: [400], italics: false, fallback: "sans-serif" },
-      Font4: { weights: [400], italics: false, fallback: "sans-serif" },
-      Font5: { weights: [400], italics: false, fallback: "sans-serif" },
-      Font6: { weights: [400], italics: false, fallback: "sans-serif" },
-      Font7: { weights: [400], italics: false, fallback: "sans-serif" },
-      Font8: { weights: [400], italics: false, fallback: "sans-serif" },
+      Font1: {
+        name: "Font1",
+        displayName: "Font1",
+        weights: [400],
+        italics: false,
+        fallback: "sans-serif",
+      },
+      Font2: {
+        name: "Font2",
+        displayName: "Font2",
+        weights: [400],
+        italics: false,
+        fallback: "sans-serif",
+      },
+      Font3: {
+        name: "Font3",
+        displayName: "Font3",
+        weights: [400],
+        italics: false,
+        fallback: "sans-serif",
+      },
+      Font4: {
+        name: "Font4",
+        displayName: "Font4",
+        weights: [400],
+        italics: false,
+        fallback: "sans-serif",
+      },
+      Font5: {
+        name: "Font5",
+        displayName: "Font5",
+        weights: [400],
+        italics: false,
+        fallback: "sans-serif",
+      },
+      Font6: {
+        name: "Font6",
+        displayName: "Font6",
+        weights: [400],
+        italics: false,
+        fallback: "sans-serif",
+      },
+      Font7: {
+        name: "Font7",
+        displayName: "Font7",
+        weights: [400],
+        italics: false,
+        fallback: "sans-serif",
+      },
+      Font8: {
+        name: "Font8",
+        displayName: "Font8",
+        weights: [400],
+        italics: false,
+        fallback: "sans-serif",
+      },
     };
 
     const expected =

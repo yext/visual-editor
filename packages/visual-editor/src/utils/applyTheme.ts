@@ -7,6 +7,7 @@ import { DevLogger } from "./devLogger.ts";
 import {
   defaultFonts,
   extractInUseFontFamilies,
+  matchCustomFontsByDisplayName,
   createFontLinkElements,
   generateGoogleFontLinkData,
   fontLinkDataToHTML,
@@ -163,7 +164,7 @@ const generateContrastingColors = (themeData: ThemeData) => {
 const updateFontLinksInDocument = (
   document: Document,
   fonts: FontRegistry,
-  customFonts: string[]
+  customFonts: FontRegistry | string[]
 ) => {
   // Remove only theme-specific font links, preserve default fonts
   const existingLinks = document.querySelectorAll(
@@ -171,7 +172,11 @@ const updateFontLinksInDocument = (
   );
   existingLinks.forEach((link) => link.remove());
 
-  if (Object.keys(fonts).length + customFonts.length > 0) {
+  const customFontCount = Array.isArray(customFonts)
+    ? customFonts.length
+    : Object.keys(customFonts).length;
+
+  if (Object.keys(fonts).length + customFontCount > 0) {
     const links = createFontLinkElements(fonts, customFonts);
     links.forEach((link) => {
       document.head.appendChild(link);
@@ -185,16 +190,19 @@ let pendingObserver: MutationObserver | null = null;
 export const updateThemeInEditor = async (
   newTheme: ThemeData,
   themeConfig: ThemeConfig,
-  isThemeMode: boolean
+  isThemeMode: boolean,
+  customFonts: FontRegistry = {}
 ) => {
   devLogger.logFunc("updateThemeInEditor");
   pendingObserver?.disconnect();
 
   const defaultThemeValues = generateCssVariablesFromThemeConfig(themeConfig);
   const mergedThemeData = { ...defaultThemeValues, ...newTheme };
-  const { inUseGoogleFonts, inUseCustomFonts } = extractInUseFontFamilies(
-    mergedThemeData,
-    defaultFonts
+  const { inUseGoogleFonts, inUseCustomFonts: inUseCustomFontDisplayNames } =
+    extractInUseFontFamilies(mergedThemeData, defaultFonts);
+  const inUseCustomFonts = matchCustomFontsByDisplayName(
+    customFonts,
+    inUseCustomFontDisplayNames
   );
 
   const newThemeTag = internalApplyTheme(newTheme, themeConfig);

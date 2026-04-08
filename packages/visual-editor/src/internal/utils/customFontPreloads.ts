@@ -142,12 +142,11 @@ export const loadCustomFontCssIndex = async (
   customFonts: FontRegistry
 ): Promise<CustomFontCssIndex> => {
   const index: CustomFontCssIndex = {};
-  const customFontNames = Object.keys(customFonts);
-  if (customFontNames.length === 0 || typeof window === "undefined") {
+  if (Object.keys(customFonts).length === 0 || typeof window === "undefined") {
     return index;
   }
 
-  const linkData = generateCustomFontLinkData(customFontNames, "./");
+  const linkData = generateCustomFontLinkData(customFonts, "./");
   const cssTexts = await Promise.all(
     linkData.map(async (link) => {
       try {
