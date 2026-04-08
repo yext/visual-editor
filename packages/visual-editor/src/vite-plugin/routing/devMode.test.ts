@@ -1,24 +1,24 @@
 import {
-  EDIT_DEV_ENTRY_MODE_PLACEHOLDER,
-  EDIT_DEV_ENTRY_TEMPLATE_IDS_BASE64_PLACEHOLDER,
-  EDIT_DEV_ENTRY_TARGET_PATH_PLACEHOLDER,
+  DEV_TEMPLATE_PICKER_MODE_PLACEHOLDER,
+  DEV_TEMPLATE_PICKER_TEMPLATE_IDS_BASE64_PLACEHOLDER,
+  DEV_TEMPLATE_PICKER_TARGET_PATH_PLACEHOLDER,
   getCustomEditorTemplateIds,
-  getEditorDevEntryTemplateInfoFromTemplateNames,
+  getDevTemplatePickerInfoFromTemplateNames,
   getLocalTemplateIdFromEditorPath,
   getSingleCustomTemplateId,
-  injectEditorDevEntryTemplateInfo,
-} from "./editorDevMode.ts";
+  injectDevTemplatePickerInfo,
+} from "./devMode.ts";
 
-describe("getEditorDevEntryTemplateInfoFromTemplateNames", () => {
-  it("does not create a dev entry page when the real route is edit", () => {
+describe("getDevTemplatePickerInfoFromTemplateNames", () => {
+  it("does not create a picker page when the real route is edit", () => {
     expect(
-      getEditorDevEntryTemplateInfoFromTemplateNames(["main", "directory"])
+      getDevTemplatePickerInfoFromTemplateNames(["main", "directory"])
     ).toBeNull();
   });
 
-  it("creates an entry page for a single custom template", () => {
+  it("creates a picker page for a single custom template", () => {
     expect(
-      getEditorDevEntryTemplateInfoFromTemplateNames(["demo-shop", "directory"])
+      getDevTemplatePickerInfoFromTemplateNames(["demo-shop", "directory"])
     ).toEqual({
       path: "edit",
       configName: "edit",
@@ -28,9 +28,9 @@ describe("getEditorDevEntryTemplateInfoFromTemplateNames", () => {
     });
   });
 
-  it("creates a chooser entry page for multiple custom templates", () => {
+  it("creates a chooser picker page for multiple custom templates", () => {
     expect(
-      getEditorDevEntryTemplateInfoFromTemplateNames([
+      getDevTemplatePickerInfoFromTemplateNames([
         "demo-shop",
         "sample-store",
         "directory",
@@ -44,12 +44,12 @@ describe("getEditorDevEntryTemplateInfoFromTemplateNames", () => {
   });
 });
 
-describe("injectEditorDevEntryTemplateInfo", () => {
-  it("replaces the entry page placeholders", () => {
-    const injected = injectEditorDevEntryTemplateInfo(
-      `const entryMode = "${EDIT_DEV_ENTRY_MODE_PLACEHOLDER}";
-const redirectPath = "${EDIT_DEV_ENTRY_TARGET_PATH_PLACEHOLDER}";
-const templateIds = "${EDIT_DEV_ENTRY_TEMPLATE_IDS_BASE64_PLACEHOLDER}";`,
+describe("injectDevTemplatePickerInfo", () => {
+  it("replaces the picker page placeholders", () => {
+    const injected = injectDevTemplatePickerInfo(
+      `const entryMode = "${DEV_TEMPLATE_PICKER_MODE_PLACEHOLDER}";
+const redirectPath = "${DEV_TEMPLATE_PICKER_TARGET_PATH_PLACEHOLDER}";
+const templateIds = "${DEV_TEMPLATE_PICKER_TEMPLATE_IDS_BASE64_PLACEHOLDER}";`,
       {
         path: "edit",
         configName: "edit",
@@ -61,14 +61,14 @@ const templateIds = "${EDIT_DEV_ENTRY_TEMPLATE_IDS_BASE64_PLACEHOLDER}";`,
     expect(injected).toContain('const entryMode = "redirect";');
     expect(injected).toContain('const redirectPath = "edit/demo-shop";');
     expect(injected).not.toContain(
-      EDIT_DEV_ENTRY_TEMPLATE_IDS_BASE64_PLACEHOLDER
+      DEV_TEMPLATE_PICKER_TEMPLATE_IDS_BASE64_PLACEHOLDER
     );
   });
 
-  it("throws when an entry page placeholder is missing", () => {
+  it("throws when a picker page placeholder is missing", () => {
     expect(() =>
-      injectEditorDevEntryTemplateInfo(
-        `const redirectPath = "${EDIT_DEV_ENTRY_TARGET_PATH_PLACEHOLDER}";`,
+      injectDevTemplatePickerInfo(
+        `const redirectPath = "${DEV_TEMPLATE_PICKER_TARGET_PATH_PLACEHOLDER}";`,
         {
           path: "edit",
           configName: "edit",
@@ -78,7 +78,7 @@ const templateIds = "${EDIT_DEV_ENTRY_TEMPLATE_IDS_BASE64_PLACEHOLDER}";`,
         }
       )
     ).toThrow(
-      "Unable to inject edit dev entry template info: placeholder not found"
+      "Unable to inject dev template picker info: placeholder not found"
     );
   });
 });

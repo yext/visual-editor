@@ -7,15 +7,15 @@ import locatorTemplate from "./templates/locator.tsx?raw";
 import localEditorTemplate from "./templates/local-editor.tsx?raw";
 import localEditorDataTemplate from "./templates/local-editor-data.tsx?raw";
 import { ComponentField } from "../types/fields.ts";
-import { defaultLayoutData } from "./defaultLayoutData.ts";
+import { defaultLayoutData } from "./registry/defaultLayoutData.ts";
 import {
   generateRegistryTemplateFiles,
   getCollectedRegistryTemplateNames,
-} from "./registryTemplateGenerator.ts";
-import { createGeneratedFileCleanupTracker } from "./generatedFileCleanup.ts";
-import { getEffectiveEditorTemplateNames } from "./editorTemplateNames.ts";
-import { syncGeneratedEditorFiles } from "./generatedEditorFiles.ts";
-import { hasExplicitLocalMainTemplate } from "./generatedTemplateFiles.ts";
+} from "./registry/registryTemplateGenerator.ts";
+import { createGeneratedFileCleanupTracker } from "./generated/fileCleanup.ts";
+import { getEffectiveEditorTemplateNames } from "./routing/editorTemplateNames.ts";
+import { syncGeneratedEditorFiles } from "./generated/editorFiles.ts";
+import { hasExplicitLocalMainTemplate } from "./generated/templateFiles.ts";
 import { createLocalEditorArtifactsManager } from "./local-editor/artifacts.ts";
 import { ensureLocalEditorStreamConfig } from "./local-editor/generatedFiles.ts";
 import {
@@ -23,7 +23,7 @@ import {
   sendJsonResponse,
 } from "./local-editor/server.ts";
 import type { LocalEditorOptions } from "./local-editor/types.ts";
-import { writeFileIfChanged } from "./writeFileIfChanged.ts";
+import { writeFileIfChanged } from "./generated/writeFileIfChanged.ts";
 
 type TemplateManifestEntry = {
   name: string;
@@ -97,7 +97,7 @@ export const yextVisualEditorPlugin = (
    * Overview:
    * 1. Ensure the built-in virtual template files exist on disk.
    * 2. Collect manifest entries for the generated template manifest.
-   * 3. Sync the generated editor templates and dev entry page with the
+   * 3. Sync the generated editor templates and dev template picker with the
    *    resolved editor route metadata.
    * 4. Write the .template-manifest.json file when it does not already exist.
    *

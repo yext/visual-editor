@@ -11,7 +11,7 @@ import {
 
 const TEMPLATES_DIRECTORY = path.join(
   path.dirname(fileURLToPath(import.meta.url)),
-  "templates"
+  "../templates"
 );
 const BASE_TEMPLATE_SOURCE = readFileSync(
   path.join(TEMPLATES_DIRECTORY, "base.tsx"),

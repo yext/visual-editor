@@ -11,12 +11,13 @@ import {
   TemplateRenderProps,
 } from "@yext/pages";
 
-const entryMode = "__YEXT_VISUAL_EDITOR_DEV_ENTRY_MODE__" as
+const entryMode = "__YEXT_VISUAL_EDITOR_DEV_TEMPLATE_PICKER_MODE__" as
   | "redirect"
   | "chooser";
-const redirectTargetPath = "__YEXT_VISUAL_EDITOR_DEV_ENTRY_TARGET_PATH__";
+const redirectTargetPath =
+  "__YEXT_VISUAL_EDITOR_DEV_TEMPLATE_PICKER_TARGET_PATH__";
 const templateIds = JSON.parse(
-  atob("__YEXT_VISUAL_EDITOR_DEV_ENTRY_TEMPLATE_IDS_BASE64__")
+  atob("__YEXT_VISUAL_EDITOR_DEV_TEMPLATE_PICKER_TEMPLATE_IDS_BASE64__")
 ) as string[];
 
 export const getPath: GetPath<TemplateProps> = () => {
@@ -33,8 +34,8 @@ export const getHeadConfig: GetHeadConfig<
   return {
     title:
       entryMode === "redirect"
-        ? pt("editDevEntryRedirectTitle", "Redirecting to Editor")
-        : pt("editDevEntryChooserTitle", "Choose Editor"),
+        ? pt("devTemplatePickerRedirectTitle", "Redirecting to Editor")
+        : pt("devTemplatePickerChooserTitle", "Choose Editor"),
     other: `<script>
 (function() {
   var entryMode = ${JSON.stringify(entryMode)};
@@ -71,13 +72,15 @@ export const getHeadConfig: GetHeadConfig<
 };
 
 /**
- * Dev-only `/edit` entry page used when a local starter repo does not have a
+ * Dev-only `/edit` picker page used when a local starter repo does not have a
  * `main` template. It either redirects to the only local editor page or lets
  * the developer choose between multiple local templates.
  */
-const EditDevEntry: Template<TemplateRenderProps> = () => {
+const DevTemplatePicker: Template<TemplateRenderProps> = () => {
   if (entryMode === "redirect") {
-    return <p>{pt("editDevEntryRedirectBody", "Redirecting to editor...")}</p>;
+    return (
+      <p>{pt("devTemplatePickerRedirectBody", "Redirecting to editor...")}</p>
+    );
   }
 
   return (
@@ -90,11 +93,11 @@ const EditDevEntry: Template<TemplateRenderProps> = () => {
       }}
     >
       <h1 style={{ fontSize: "28px", marginBottom: "12px" }}>
-        {pt("editDevEntryChooserHeading", "Choose a local editor")}
+        {pt("devTemplatePickerChooserHeading", "Choose a local editor")}
       </h1>
       <p style={{ marginBottom: "24px", lineHeight: 1.5 }}>
         {pt(
-          "editDevEntryChooserDescription",
+          "devTemplatePickerChooserDescription",
           "This local starter repo has multiple custom templates. Pick which local editor page to open."
         )}
       </p>
@@ -125,4 +128,4 @@ const EditDevEntry: Template<TemplateRenderProps> = () => {
   );
 };
 
-export default EditDevEntry;
+export default DevTemplatePicker;

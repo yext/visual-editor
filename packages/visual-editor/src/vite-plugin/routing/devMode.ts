@@ -5,14 +5,14 @@ import {
   isSharedEditorTemplateId,
 } from "./editorTemplateNames.ts";
 
-export const EDIT_DEV_ENTRY_MODE_PLACEHOLDER =
-  "__YEXT_VISUAL_EDITOR_DEV_ENTRY_MODE__";
-export const EDIT_DEV_ENTRY_TARGET_PATH_PLACEHOLDER =
-  "__YEXT_VISUAL_EDITOR_DEV_ENTRY_TARGET_PATH__";
-export const EDIT_DEV_ENTRY_TEMPLATE_IDS_BASE64_PLACEHOLDER =
-  "__YEXT_VISUAL_EDITOR_DEV_ENTRY_TEMPLATE_IDS_BASE64__";
+export const DEV_TEMPLATE_PICKER_MODE_PLACEHOLDER =
+  "__YEXT_VISUAL_EDITOR_DEV_TEMPLATE_PICKER_MODE__";
+export const DEV_TEMPLATE_PICKER_TARGET_PATH_PLACEHOLDER =
+  "__YEXT_VISUAL_EDITOR_DEV_TEMPLATE_PICKER_TARGET_PATH__";
+export const DEV_TEMPLATE_PICKER_TEMPLATE_IDS_BASE64_PLACEHOLDER =
+  "__YEXT_VISUAL_EDITOR_DEV_TEMPLATE_PICKER_TEMPLATE_IDS_BASE64__";
 
-export type EditorDevEntryTemplateInfo = {
+export type DevTemplatePickerInfo = {
   path: string;
   configName: string;
   entryMode: "redirect" | "chooser";
@@ -21,15 +21,15 @@ export type EditorDevEntryTemplateInfo = {
 };
 
 /**
- * Returns the dev-only `/edit` entry-page behavior for repos that do not have
- * a local `main` template.
+ * Returns the dev-only `/edit` picker behavior for repos that do not have a
+ * local `main` template.
  *
- * The entry page either redirects to the only custom editor page or renders a
+ * The picker page either redirects to the only custom editor page or renders a
  * chooser when multiple custom templates are available.
  */
-export const getEditorDevEntryTemplateInfoFromTemplateNames = (
+export const getDevTemplatePickerInfoFromTemplateNames = (
   templateNames: string[]
-): EditorDevEntryTemplateInfo | null => {
+): DevTemplatePickerInfo | null => {
   if (templateNames.includes("main")) {
     return null;
   }
@@ -58,35 +58,37 @@ export const getEditorDevEntryTemplateInfoFromTemplateNames = (
 };
 
 /**
- * Injects the dev entry-page behavior into the generated `/edit` entry page.
+ * Injects the dev template picker behavior into the generated `/edit` page.
  */
-export const injectEditorDevEntryTemplateInfo = (
+export const injectDevTemplatePickerInfo = (
   templateContent: string,
-  editorDevEntryTemplateInfo: EditorDevEntryTemplateInfo
+  devTemplatePickerInfo: DevTemplatePickerInfo
 ): string => {
   if (
-    !templateContent.includes(EDIT_DEV_ENTRY_TARGET_PATH_PLACEHOLDER) ||
-    !templateContent.includes(EDIT_DEV_ENTRY_MODE_PLACEHOLDER) ||
-    !templateContent.includes(EDIT_DEV_ENTRY_TEMPLATE_IDS_BASE64_PLACEHOLDER)
+    !templateContent.includes(DEV_TEMPLATE_PICKER_TARGET_PATH_PLACEHOLDER) ||
+    !templateContent.includes(DEV_TEMPLATE_PICKER_MODE_PLACEHOLDER) ||
+    !templateContent.includes(
+      DEV_TEMPLATE_PICKER_TEMPLATE_IDS_BASE64_PLACEHOLDER
+    )
   ) {
     throw new Error(
-      "Unable to inject edit dev entry template info: placeholder not found"
+      "Unable to inject dev template picker info: placeholder not found"
     );
   }
 
   return templateContent
     .replaceAll(
-      EDIT_DEV_ENTRY_TARGET_PATH_PLACEHOLDER,
-      editorDevEntryTemplateInfo.redirectTargetPath ?? ""
+      DEV_TEMPLATE_PICKER_TARGET_PATH_PLACEHOLDER,
+      devTemplatePickerInfo.redirectTargetPath ?? ""
     )
     .replaceAll(
-      EDIT_DEV_ENTRY_MODE_PLACEHOLDER,
-      editorDevEntryTemplateInfo.entryMode
+      DEV_TEMPLATE_PICKER_MODE_PLACEHOLDER,
+      devTemplatePickerInfo.entryMode
     )
     .replaceAll(
-      EDIT_DEV_ENTRY_TEMPLATE_IDS_BASE64_PLACEHOLDER,
+      DEV_TEMPLATE_PICKER_TEMPLATE_IDS_BASE64_PLACEHOLDER,
       Buffer.from(
-        JSON.stringify(editorDevEntryTemplateInfo.templateIds),
+        JSON.stringify(devTemplatePickerInfo.templateIds),
         "utf8"
       ).toString("base64")
     );
