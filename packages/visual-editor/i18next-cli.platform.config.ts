@@ -7,6 +7,7 @@ export default defineConfig({
     input: [
       "src/components/**/*.{ts,tsx}",
       "src/editor/**/*.{ts,tsx}",
+      "src/fields/**/*.{ts,tsx}",
       "src/internal/**/*.{ts,tsx}",
       "src/utils/*.ts",
     ],
