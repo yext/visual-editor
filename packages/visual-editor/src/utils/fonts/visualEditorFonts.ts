@@ -3,6 +3,7 @@ import { StyleSelectOption } from "../themeResolver.ts";
 import { defaultFonts as fontsJs } from "./font_registry.js";
 import { msg } from "../i18n/platform.ts";
 import { ThemeData } from "../../internal/types/themeData.ts";
+import { fontStyleOptions } from "../themeConfigOptions.ts";
 
 const variableFontRegex = /var\((--[^)]+)\)/;
 
@@ -258,6 +259,12 @@ type getFontWeightParams = {
   fontList?: FontRegistry;
 };
 
+type getFontStyleParams = {
+  fontCssVariable?: string;
+  styleOptions?: StyleSelectOption[];
+  fontList?: FontRegistry;
+};
+
 /*
  * getFontWeightOptions returns the available font weights for a given CSS variable
  * for use in the theme.config.
@@ -283,6 +290,26 @@ export const getFontWeightOptions = (options: getFontWeightParams) => {
   }
 
   return filterFontWeights(styleElement, options);
+};
+
+export const getFontStyleOptions = (options: getFontStyleParams) => {
+  const { fontCssVariable, styleOptions = fontStyleOptions } = options;
+  if (!fontCssVariable || typeof window === "undefined") {
+    return styleOptions;
+  }
+
+  const iframe = document.getElementById(
+    PUCK_PREVIEW_IFRAME_ID
+  ) as HTMLIFrameElement;
+  const styleElement = iframe?.contentDocument?.getElementById(
+    THEME_STYLE_TAG_ID
+  ) as HTMLStyleElement;
+
+  if (!styleElement) {
+    return styleOptions;
+  }
+
+  return filterFontStyles(styleElement, options);
 };
 
 /*
@@ -333,7 +360,55 @@ const filterFontWeights = (
     fontList = defaultFonts,
   }: getFontWeightParams
 ) => {
-  // get the font name from css variable in the style tag
+  const fontName = getFontNameFromStyleElement(styleElement, fontCssVariable);
+
+  if (!fontName || !fontList[fontName]) {
+    return weightOptions;
+  }
+
+  const font = fontList[fontName];
+  // filter the font weights by the font's allowed values
+  if ("weights" in font) {
+    return weightOptions.filter((weight) =>
+      font.weights.map(String).includes(weight.value)
+    );
+  } else {
+    return weightOptions.filter(
+      (weight) =>
+        Number(weight.value) <= font.maxWeight &&
+        Number(weight.value) >= font.minWeight
+    );
+  }
+};
+
+const filterFontStyles = (
+  styleElement: HTMLStyleElement,
+  {
+    fontCssVariable,
+    styleOptions = fontStyleOptions,
+    fontList = defaultFonts,
+  }: getFontStyleParams
+) => {
+  const fontName = getFontNameFromStyleElement(styleElement, fontCssVariable);
+
+  if (!fontName || !fontList[fontName]) {
+    return styleOptions;
+  }
+
+  const font = fontList[fontName];
+  return font.italics
+    ? styleOptions
+    : styleOptions.filter((style) => style.value === "normal");
+};
+
+const getFontNameFromStyleElement = (
+  styleElement: HTMLStyleElement,
+  fontCssVariable?: string
+) => {
+  if (!fontCssVariable) {
+    return undefined;
+  }
+
   const styleContent = styleElement.textContent || styleElement.innerHTML;
   const regex = new RegExp( // matches Arial in "'Arial', sans-serif"
     `${fontCssVariable}:\\s*(['"]?([^',\\s]+(?:\\s+[^',\\s]+)*)['"]?)(?:,|\\s|;|$)`,
@@ -364,23 +439,7 @@ const filterFontWeights = (
     }
   }
 
-  if (!fontName || !fontList[fontName]) {
-    return weightOptions;
-  }
-
-  const font = fontList[fontName];
-  // filter the font weights by the font's allowed values
-  if ("weights" in font) {
-    return weightOptions.filter((weight) =>
-      font.weights.map(String).includes(weight.value)
-    );
-  } else {
-    return weightOptions.filter(
-      (weight) =>
-        Number(weight.value) <= font.maxWeight &&
-        Number(weight.value) >= font.minWeight
-    );
-  }
+  return fontName;
 };
 
 /**

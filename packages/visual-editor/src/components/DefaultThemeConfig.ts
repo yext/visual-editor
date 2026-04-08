@@ -2,6 +2,7 @@ import { ThemeConfig } from "../utils/themeResolver.ts";
 import {
   defaultFonts,
   FontRegistry,
+  getFontStyleOptions,
   getFontWeightOptions,
   constructFontSelectOptions,
 } from "../utils/fonts/visualEditorFonts.ts";
@@ -32,6 +33,13 @@ export function createDefaultThemeConfig(
   const fontWeightOptions = (fontVariable?: string) => {
     return () =>
       getFontWeightOptions({
+        fontCssVariable: fontVariable,
+        fontList: fonts,
+      });
+  };
+  const fontStyleOptions = (fontVariable?: string) => {
+    return () =>
+      getFontStyleOptions({
         fontCssVariable: fontVariable,
         fontList: fonts,
       });
@@ -103,6 +111,13 @@ export function createDefaultThemeConfig(
           options: fontWeightOptions("--fontFamily-h1-fontFamily"),
           default: "700",
         },
+        fontStyle: {
+          label: msg("fields.fontStyle", "Font Style"),
+          type: "select",
+          plugin: "fontStyle",
+          options: fontStyleOptions("--fontFamily-h1-fontFamily"),
+          default: "normal",
+        },
         textTransform: {
           label: msg("theme.textTransform.textTransform", "Text Transform"),
           type: "select",
@@ -135,6 +150,13 @@ export function createDefaultThemeConfig(
           plugin: "fontWeight",
           options: fontWeightOptions("--fontFamily-h2-fontFamily"),
           default: "700",
+        },
+        fontStyle: {
+          label: msg("fields.fontStyle", "Font Style"),
+          type: "select",
+          plugin: "fontStyle",
+          options: fontStyleOptions("--fontFamily-h2-fontFamily"),
+          default: "normal",
         },
         textTransform: {
           label: msg("theme.textTransform.textTransform", "Text Transform"),
@@ -169,6 +191,13 @@ export function createDefaultThemeConfig(
           options: fontWeightOptions("--fontFamily-h3-fontFamily"),
           default: "700",
         },
+        fontStyle: {
+          label: msg("fields.fontStyle", "Font Style"),
+          type: "select",
+          plugin: "fontStyle",
+          options: fontStyleOptions("--fontFamily-h3-fontFamily"),
+          default: "normal",
+        },
         textTransform: {
           label: msg("theme.textTransform.textTransform", "Text Transform"),
           type: "select",
@@ -201,6 +230,13 @@ export function createDefaultThemeConfig(
           plugin: "fontWeight",
           options: fontWeightOptions("--fontFamily-h4-fontFamily"),
           default: "700",
+        },
+        fontStyle: {
+          label: msg("fields.fontStyle", "Font Style"),
+          type: "select",
+          plugin: "fontStyle",
+          options: fontStyleOptions("--fontFamily-h4-fontFamily"),
+          default: "normal",
         },
         textTransform: {
           label: msg("theme.textTransform.textTransform", "Text Transform"),
@@ -235,6 +271,13 @@ export function createDefaultThemeConfig(
           options: fontWeightOptions("--fontFamily-h5-fontFamily"),
           default: "700",
         },
+        fontStyle: {
+          label: msg("fields.fontStyle", "Font Style"),
+          type: "select",
+          plugin: "fontStyle",
+          options: fontStyleOptions("--fontFamily-h5-fontFamily"),
+          default: "normal",
+        },
         textTransform: {
           label: msg("theme.textTransform.textTransform", "Text Transform"),
           type: "select",
@@ -268,6 +311,13 @@ export function createDefaultThemeConfig(
           options: fontWeightOptions("--fontFamily-h6-fontFamily"),
           default: "700",
         },
+        fontStyle: {
+          label: msg("fields.fontStyle", "Font Style"),
+          type: "select",
+          plugin: "fontStyle",
+          options: fontStyleOptions("--fontFamily-h6-fontFamily"),
+          default: "normal",
+        },
         textTransform: {
           label: msg("theme.textTransform.textTransform", "Text Transform"),
           type: "select",
@@ -300,6 +350,13 @@ export function createDefaultThemeConfig(
           plugin: "fontWeight",
           options: fontWeightOptions("--fontFamily-body-fontFamily"),
           default: "400",
+        },
+        fontStyle: {
+          label: msg("fields.fontStyle", "Font Style"),
+          type: "select",
+          plugin: "fontStyle",
+          options: fontStyleOptions("--fontFamily-body-fontFamily"),
+          default: "normal",
         },
         textTransform: {
           label: msg("theme.textTransform.textTransform", "Text Transform"),
@@ -353,6 +410,13 @@ export function createDefaultThemeConfig(
           options: fontWeightOptions("--fontFamily-button-fontFamily"),
           default: "400",
         },
+        fontStyle: {
+          label: msg("fields.fontStyle", "Font Style"),
+          type: "select",
+          plugin: "fontStyle",
+          options: fontStyleOptions("--fontFamily-button-fontFamily"),
+          default: "normal",
+        },
         borderRadius: {
           label: msg("theme.borderRadius", "Border Radius"),
           type: "select",
@@ -399,6 +463,13 @@ export function createDefaultThemeConfig(
           plugin: "fontWeight",
           options: fontWeightOptions("--fontFamily-link-fontFamily"),
           default: "400",
+        },
+        fontStyle: {
+          label: msg("fields.fontStyle", "Font Style"),
+          type: "select",
+          plugin: "fontStyle",
+          options: fontStyleOptions("--fontFamily-link-fontFamily"),
+          default: "normal",
         },
         textTransform: {
           label: msg("theme.textTransform.textTransform", "Text Transform"),

@@ -107,4 +107,29 @@ describe("createDefaultThemeConfig", () => {
       value: "'Open Sans', 'Open Sans Fallback', sans-serif",
     });
   });
+
+  it("should include dynamic fontStyle controls for text styling sections", () => {
+    const result = createDefaultThemeConfig();
+
+    for (const sectionKey of [
+      "h1",
+      "h2",
+      "h3",
+      "h4",
+      "h5",
+      "h6",
+      "body",
+      "button",
+      "link",
+    ] as const) {
+      const fontStyle = (result[sectionKey].styles as any).fontStyle;
+      expect(fontStyle).toMatchObject({
+        label: "Font Style",
+        type: "select",
+        plugin: "fontStyle",
+        default: "normal",
+      });
+      expect(typeof fontStyle.options).toBe("function");
+    }
+  });
 });

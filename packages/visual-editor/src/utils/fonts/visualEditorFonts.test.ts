@@ -8,6 +8,7 @@ import {
   constructGoogleFontLinkTags,
   generateCustomFontLinkData,
   matchCustomFontsByDisplayName,
+  getFontStyleOptions,
 } from "./visualEditorFonts.ts";
 
 describe("extractInUseFontFamilies", () => {
@@ -445,5 +446,67 @@ describe("constructGoogleFontLinkTags", () => {
       '<link href="https://fonts.googleapis.com/css2?family=Font8:wght@400&display=swap" rel="stylesheet">';
 
     expect(constructGoogleFontLinkTags(fonts)).toBe(expected);
+  });
+});
+
+describe("getFontStyleOptions", () => {
+  const createPreviewIframe = () => {
+    document.body.replaceChildren();
+    const iframe = document.createElement("iframe");
+    iframe.id = "preview-frame";
+    document.body.appendChild(iframe);
+    return iframe;
+  };
+
+  it("returns both options when the selected font supports italics", () => {
+    const iframe = createPreviewIframe();
+    const iframeDocument = iframe.contentDocument!;
+    const styleTag = iframeDocument.createElement("style");
+    styleTag.id = "visual-editor-theme";
+    styleTag.textContent =
+      ".components{--fontFamily-body-fontFamily:'Open Sans', sans-serif !important;}";
+    iframeDocument.head.appendChild(styleTag);
+
+    expect(
+      getFontStyleOptions({
+        fontCssVariable: "--fontFamily-body-fontFamily",
+        fontList: defaultFonts,
+      })
+    ).toMatchObject([{ value: "normal" }, { value: "italic" }]);
+  });
+
+  it("filters italic out when the selected font does not support italics", () => {
+    const iframe = createPreviewIframe();
+    const iframeDocument = iframe.contentDocument!;
+    const styleTag = iframeDocument.createElement("style");
+    styleTag.id = "visual-editor-theme";
+    styleTag.textContent =
+      ".components{--fontFamily-body-fontFamily:'Adamina', serif !important;}";
+    iframeDocument.head.appendChild(styleTag);
+
+    expect(
+      getFontStyleOptions({
+        fontCssVariable: "--fontFamily-body-fontFamily",
+        fontList: defaultFonts,
+      })
+    ).toMatchObject([{ value: "normal" }]);
+  });
+
+  it("preserves caller-provided styleOptions before the theme style tag loads", () => {
+    createPreviewIframe();
+
+    expect(
+      getFontStyleOptions({
+        fontCssVariable: "--fontFamily-body-fontFamily",
+        fontList: defaultFonts,
+        styleOptions: [
+          { label: "Italic First", value: "italic" },
+          { label: "Normal Second", value: "normal" },
+        ],
+      })
+    ).toEqual([
+      { label: "Italic First", value: "italic" },
+      { label: "Normal Second", value: "normal" },
+    ]);
   });
 });

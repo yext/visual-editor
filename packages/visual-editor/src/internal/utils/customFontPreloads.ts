@@ -3,7 +3,7 @@
  *
  * High-level flow:
  * 1. Load custom font CSS from /y-fonts/*.css and index for @font-face rules.
- * 2. Use theme values (font family + weight) to choose the correct file per font.
+ * 2. Use theme values (font family + weight + style) to choose the correct file per font.
  * 3. Store the resulting file list in themeData for head preloading.
  */
 
@@ -17,9 +17,11 @@ import { generateCssVariablesFromThemeConfig } from "./internalThemeResolver.ts"
 
 export const CUSTOM_FONT_PRELOADS_KEY = "__customFontPreloads";
 
+type FontStyleValue = "normal" | "italic";
+
 type CustomFontFaceIndex = {
-  variableSrc?: string;
-  staticSrcByWeight: Record<number, string>;
+  variableSrcByStyle: Partial<Record<FontStyleValue, string>>;
+  staticSrcByStyleAndWeight: Record<FontStyleValue, Record<number, string>>;
 };
 
 export type CustomFontCssIndex = Record<string, CustomFontFaceIndex>;
@@ -86,7 +88,7 @@ const parseFontWeight = (value: string) => {
 };
 
 /**
- * Parses a single @font-face block into its family, weight, and file source.
+ * Parses a single @font-face block into its family, style, weight, and file source.
  * For example, given the block:
  *   @font-face {
  *     font-family: 'Alpha';
@@ -97,10 +99,11 @@ const parseFontWeight = (value: string) => {
  * It returns:
  *   {
  *     fontFamily: "Alpha",
+ *     fontStyle: "normal",
  *     weight: { type: "single", weight: 400 },
  *     src: "/y-fonts/alpha-400.woff2"
  *   }
- * It returns undefined if required properties are missing or if the style is not normal.
+ * It returns undefined if required properties are missing or if the style is unsupported.
  */
 const parseFontFaceBlock = (block: string) => {
   // Capture property values up to the semicolon (case-insensitive).
@@ -118,9 +121,8 @@ const parseFontFaceBlock = (block: string) => {
     return undefined;
   }
 
-  const fontStyle = fontStyleRaw.trim().toLowerCase();
-  // Theme data does not track italic styles; only preload normal font styles.
-  if (fontStyle !== "normal") {
+  const fontStyle = parseFontStyle(fontStyleRaw);
+  if (!fontStyle) {
     return undefined;
   }
 
@@ -132,7 +134,16 @@ const parseFontFaceBlock = (block: string) => {
     return undefined;
   }
 
-  return { fontFamily, weight, src };
+  return { fontFamily, fontStyle, weight, src };
+};
+
+const parseFontStyle = (value: string): FontStyleValue | undefined => {
+  const normalizedValue = value.trim().toLowerCase();
+  if (normalizedValue === "normal" || normalizedValue === "italic") {
+    return normalizedValue;
+  }
+
+  return undefined;
 };
 
 /**
@@ -168,14 +179,21 @@ export const loadCustomFontCssIndex = async (
         return;
       }
 
-      const { fontFamily, weight, src } = parsed;
+      const { fontFamily, fontStyle, weight, src } = parsed;
       if (!index[fontFamily]) {
-        index[fontFamily] = { staticSrcByWeight: {} };
+        index[fontFamily] = {
+          variableSrcByStyle: {},
+          staticSrcByStyleAndWeight: {
+            normal: {},
+            italic: {},
+          },
+        };
       }
       if (weight.type === "range") {
-        index[fontFamily].variableSrc = src;
+        index[fontFamily].variableSrcByStyle[fontStyle] = src;
       } else {
-        index[fontFamily].staticSrcByWeight[weight.weight] = src;
+        index[fontFamily].staticSrcByStyleAndWeight[fontStyle][weight.weight] =
+          src;
       }
     });
   });
@@ -226,13 +244,19 @@ export const buildCustomFontPreloads = ({
     if (Number.isNaN(weight)) {
       return;
     }
+    const fontStyleValue =
+      mergedThemeValues[`--fontStyle-${sectionKey}-fontStyle`];
+    const fontStyle: FontStyleValue =
+      fontStyleValue === "italic" ? "italic" : "normal";
 
     const index = customFontCssIndex[fontFamily];
     if (!index) {
       return;
     }
 
-    const src = index.variableSrc ?? index.staticSrcByWeight[weight];
+    const src =
+      index.variableSrcByStyle[fontStyle] ??
+      index.staticSrcByStyleAndWeight[fontStyle][weight];
     if (!src || seen.has(src)) {
       return;
     }

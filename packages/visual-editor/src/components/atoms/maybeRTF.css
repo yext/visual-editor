@@ -4,6 +4,7 @@
     font-size: var(--fontSize-body-fontSize) !important;
     line-height: 1.5 !important;
     font-weight: var(--fontWeight-body-fontWeight) !important;
+    font-style: var(--fontStyle-body-fontStyle) !important;
     text-transform: var(--textTransform-body-textTransform) !important;
   }
   li {
@@ -11,6 +12,7 @@
     font-size: var(--fontSize-body-fontSize) !important;
     line-height: 1.5 !important;
     font-weight: var(--fontWeight-body-fontWeight) !important;
+    font-style: var(--fontStyle-body-fontStyle) !important;
     text-transform: var(--textTransform-body-textTransform) !important;
   }
   h1 {
@@ -18,11 +20,13 @@
     font-size: var(--fontSize-h2-fontSize) !important;
     line-height: 1.2 !important;
     font-weight: var(--fontWeight-h2-fontWeight) !important;
+    font-style: var(--fontStyle-h2-fontStyle) !important;
     text-transform: var(--textTransform-h1-textTransform) !important;
     @media (min-width: 640px) {
       font-family: var(--fontFamily-h1-fontFamily) !important;
       font-size: var(--fontSize-h1-fontSize) !important;
       font-weight: var(--fontWeight-h1-fontWeight) !important;
+      font-style: var(--fontStyle-h1-fontStyle) !important;
     }
   }
   h2 {
@@ -30,11 +34,13 @@
     font-size: var(--fontSize-h3-fontSize) !important;
     line-height: 1.2 !important;
     font-weight: var(--fontWeight-h3-fontWeight) !important;
+    font-style: var(--fontStyle-h3-fontStyle) !important;
     text-transform: var(--textTransform-h2-textTransform) !important;
     @media (min-width: 640px) {
       font-family: var(--fontFamily-h2-fontFamily) !important;
       font-size: var(--fontSize-h2-fontSize) !important;
       font-weight: var(--fontWeight-h2-fontWeight) !important;
+      font-style: var(--fontStyle-h2-fontStyle) !important;
     }
   }
   h3 {
@@ -42,11 +48,13 @@
     font-size: var(--fontSize-h4-fontSize) !important;
     line-height: 1.2 !important;
     font-weight: var(--fontWeight-h4-fontWeight) !important;
+    font-style: var(--fontStyle-h4-fontStyle) !important;
     text-transform: var(--textTransform-h3-textTransform) !important;
     @media (min-width: 640px) {
       font-family: var(--fontFamily-h3-fontFamily) !important;
       font-size: var(--fontSize-h3-fontSize) !important;
       font-weight: var(--fontWeight-h3-fontWeight) !important;
+      font-style: var(--fontStyle-h3-fontStyle) !important;
     }
   }
   h4 {
@@ -54,11 +62,13 @@
     font-size: var(--fontSize-h5-fontSize) !important;
     line-height: 1.2 !important;
     font-weight: var(--fontWeight-h5-fontWeight) !important;
+    font-style: var(--fontStyle-h5-fontStyle) !important;
     text-transform: var(--textTransform-h4-textTransform) !important;
     @media (min-width: 640px) {
       font-family: var(--fontFamily-h4-fontFamily) !important;
       font-size: var(--fontSize-h4-fontSize) !important;
       font-weight: var(--fontWeight-h4-fontWeight) !important;
+      font-style: var(--fontStyle-h4-fontStyle) !important;
     }
   }
   h5 {
@@ -66,11 +76,13 @@
     font-size: var(--fontSize-h6-fontSize) !important;
     line-height: 1.2 !important;
     font-weight: var(--fontWeight-h6-fontWeight) !important;
+    font-style: var(--fontStyle-h6-fontStyle) !important;
     text-transform: var(--textTransform-h5-textTransform) !important;
     @media (min-width: 640px) {
       font-family: var(--fontFamily-h5-fontFamily) !important;
       font-size: var(--fontSize-h5-fontSize) !important;
       font-weight: var(--fontWeight-h5-fontWeight) !important;
+      font-style: var(--fontStyle-h5-fontStyle) !important;
     }
   }
   h6 {
@@ -78,12 +90,14 @@
     font-size: var(--fontSize-h6-fontSize) !important;
     line-height: 1.2 !important;
     font-weight: var(--fontWeight-h6-fontWeight) !important;
+    font-style: var(--fontStyle-h6-fontStyle) !important;
     text-transform: var(--textTransform-h6-textTransform) !important;
   }
   a {
     font-family: var(--fontFamily-link-fontFamily) !important;
     font-size: var(--fontSize-link-fontSize) !important;
     font-weight: var(--fontWeight-link-fontWeight) !important;
+    font-style: var(--fontStyle-link-fontStyle) !important;
     line-height: 1.5 !important;
     text-decoration: underline !important;
     text-transform: var(--textTransform-link-textTransform) !important;
