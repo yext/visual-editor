@@ -6,7 +6,7 @@ import {
 import { DevLogger } from "./devLogger.ts";
 import {
   defaultFonts,
-  extractReferencedFontNames,
+  extractReferencedFontFamilyNames,
   extractInUseFontFamilies,
   createFontLinkElements,
   generateGoogleFontLinkData,
@@ -67,9 +67,10 @@ export const applyTheme = (
       mergedThemeData,
       defaultFonts
     );
-    const inUseCustomFonts = extractReferencedFontNames(mergedThemeData).filter(
-      (fontName) => !inUseGoogleFonts[fontName]
-    );
+    const inUseCustomFonts = extractReferencedFontFamilyNames(
+      mergedThemeData
+    ).filter((fontName) => !inUseGoogleFonts[fontName]);
+    const customFontPreloads = getCustomFontPreloads(overrides);
 
     if (Object.keys(inUseGoogleFonts).length === 0) {
       // No fonts found in theme data, use only Open Sans
@@ -80,7 +81,11 @@ export const applyTheme = (
       fontLinkData = generateGoogleFontLinkData(inUseGoogleFonts);
     }
     fontLinkData = [
-      ...generateCustomFontLinkData(inUseCustomFonts, relativePrefixToRoot),
+      ...generateCustomFontLinkData(
+        inUseCustomFonts,
+        relativePrefixToRoot,
+        customFontPreloads
+      ),
       ...fontLinkData,
     ];
 
@@ -99,9 +104,8 @@ export const applyTheme = (
   const fontLinkTags = fontLinkDataToHTML(fontLinkData);
 
   if (Object.keys(themeConfig).length > 0) {
-    const customFontPreloads = getCustomFontPreloads(overrides);
     const preloadTags = buildFontPreloadTags(
-      customFontPreloads,
+      getCustomFontPreloads(overrides),
       relativePrefixToRoot
     );
 
@@ -167,7 +171,7 @@ const generateContrastingColors = (themeData: ThemeData) => {
 const updateFontLinksInDocument = (
   document: Document,
   fonts: FontRegistry,
-  customFonts: FontRegistry | string[]
+  customFonts: FontRegistry
 ) => {
   // Remove only theme-specific font links, preserve default fonts
   const existingLinks = document.querySelectorAll(
@@ -175,11 +179,7 @@ const updateFontLinksInDocument = (
   );
   existingLinks.forEach((link) => link.remove());
 
-  const customFontCount = Array.isArray(customFonts)
-    ? customFonts.length
-    : Object.keys(customFonts).length;
-
-  if (Object.keys(fonts).length + customFontCount > 0) {
+  if (Object.keys(fonts).length + Object.keys(customFonts).length > 0) {
     const links = createFontLinkElements(fonts, customFonts);
     links.forEach((link) => {
       document.head.appendChild(link);

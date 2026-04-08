@@ -243,6 +243,19 @@ describe("custom font helpers", () => {
       },
     ]);
   });
+
+  it("should prefer preload-derived custom font links and dedupe duplicates", () => {
+    expect(
+      generateCustomFontLinkData(["EBB_Melvyn_Regular"], "./", [
+        "/y-fonts/ebbmelvynregular-regular.woff2",
+      ])
+    ).toEqual([
+      {
+        href: "./y-fonts/ebbmelvynregular.css",
+        rel: "stylesheet",
+      },
+    ]);
+  });
 });
 
 describe("constructGoogleFontLinkTags", () => {

@@ -118,6 +118,26 @@ describe("buildCssOverridesStyle", () => {
     );
   });
 
+  it("should derive custom font stylesheet urls from preload paths when available", () => {
+    const streamDocument: StreamDocument = {
+      siteId: 123,
+      __: {
+        theme: JSON.stringify({
+          "--fontFamily-h1-fontFamily":
+            "'EBB_Melvyn_Regular', 'EBB_Melvyn_Regular Fallback', sans-serif",
+          __customFontPreloads: ["/y-fonts/ebbmelvynregular-regular.woff2"],
+        }),
+      },
+    };
+
+    const result = applyTheme(streamDocument, "./", themeConfig);
+
+    expect(result).toContain(
+      '<link href="./y-fonts/ebbmelvynregular.css" rel="stylesheet">'
+    );
+    expect(result).not.toContain("./y-fonts/ebb_melvyn_regular.css");
+  });
+
   it("should not include non-css keys in the theme style tag", () => {
     const streamDocument: StreamDocument = {
       siteId: 123,
