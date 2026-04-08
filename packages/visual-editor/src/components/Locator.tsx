@@ -93,7 +93,11 @@ import {
   getLocatorEntityTypeSourceMap,
   getEntityTypeLabel,
 } from "../utils/locatorEntityTypes.ts";
-import { YextPuckFields } from "../fields/fields.ts";
+import {
+  YextComponentConfig,
+  YextFields,
+  YextPuckFields,
+} from "../fields/fields.ts";
 
 const RESULTS_LIMIT = 20;
 const LOCATION_FIELD = "builtin.location";
@@ -618,12 +622,7 @@ export interface LocatorProps {
   distanceDisplay?: DistanceDisplayOption;
 }
 
-type LocatorComponentConfig = ComponentConfig<{
-  props: LocatorProps;
-  fields: YextPuckFields;
-}>;
-
-const locatorFields: LocatorComponentConfig["fields"] = {
+const locatorFields: YextFields<LocatorProps> = {
   mapStyle: {
     type: "basicSelector",
     label: msg("fields.mapStyle", "Map Style"),
@@ -852,7 +851,7 @@ const locatorFields: LocatorComponentConfig["fields"] = {
 /**
  * Available on Locator templates.
  */
-export const LocatorComponent: LocatorComponentConfig = {
+export const LocatorComponent: YextComponentConfig<LocatorProps> = {
   fields: locatorFields,
   /**
    * Locks array lengths for `locationStyles` and `resultCard` to the current
@@ -868,7 +867,7 @@ export const LocatorComponent: LocatorComponentConfig = {
     ) as (keyof typeof entityTypeSourceMap)[];
     const entityTypeCount = entityTypes.length;
 
-    let updatedFields: LocatorComponentConfig["fields"] = { ...locatorFields };
+    let updatedFields: YextFields<LocatorProps> = { ...locatorFields };
     updatedFields = setDeep(
       updatedFields,
       "locationStyles.min",
