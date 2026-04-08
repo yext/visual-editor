@@ -57,6 +57,22 @@ describe("YextField", () => {
     expect(onChange).toHaveBeenCalledWith("beta");
   });
 
+  it("returns a code field and renders it through YextAutoField", () => {
+    const field = YextField<string>(msg("fields.html", "HTML"), {
+      type: "code",
+      codeLanguage: "html",
+    });
+
+    expect(field.type).toBe("code");
+
+    renderCustomField(field, "<div>Alpha</div>");
+
+    expect(screen.getByText("HTML")).toBeDefined();
+    expect(screen.getByRole("button").textContent).toContain(
+      "<div>Alpha</div>"
+    );
+  });
+
   it.each([
     ["BACKGROUND_COLOR", "Recommended Colors"],
     ["SITE_COLOR", "Recommended Color"],
