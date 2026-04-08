@@ -10,6 +10,7 @@
 import {
   FontRegistry,
   findFontByDisplayName,
+  getCustomFontCssIdsFromFontRegistry,
   generateCustomFontLinkData,
 } from "../../utils/fonts/visualEditorFonts.ts";
 import { ThemeConfig } from "../../utils/themeResolver.ts";
@@ -158,7 +159,10 @@ export const loadCustomFontCssIndex = async (
     return index;
   }
 
-  const linkData = generateCustomFontLinkData(customFonts, "./");
+  const linkData = generateCustomFontLinkData(
+    getCustomFontCssIdsFromFontRegistry(customFonts),
+    "./"
+  );
   const cssTexts = await Promise.all(
     linkData.map(async (link) => {
       try {

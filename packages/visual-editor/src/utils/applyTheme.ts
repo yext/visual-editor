@@ -10,6 +10,8 @@ import {
   extractInUseFontFamilies,
   createFontLinkElements,
   generateGoogleFontLinkData,
+  getCustomFontCssIdsFromDisplayNames,
+  getCustomFontCssIdsFromPreloads,
   fontLinkDataToHTML,
   type FontRegistry,
   type FontLinkData,
@@ -71,6 +73,12 @@ export const applyTheme = (
       mergedThemeData
     ).filter((fontName) => !inUseGoogleFonts[fontName]);
     const customFontPreloads = getCustomFontPreloads(overrides);
+    const customFontCssIds = [
+      ...new Set([
+        ...getCustomFontCssIdsFromPreloads(customFontPreloads),
+        ...getCustomFontCssIdsFromDisplayNames(inUseCustomFonts),
+      ]),
+    ];
 
     if (Object.keys(inUseGoogleFonts).length === 0) {
       // No fonts found in theme data, use only Open Sans
@@ -81,11 +89,7 @@ export const applyTheme = (
       fontLinkData = generateGoogleFontLinkData(inUseGoogleFonts);
     }
     fontLinkData = [
-      ...generateCustomFontLinkData(
-        inUseCustomFonts,
-        relativePrefixToRoot,
-        customFontPreloads
-      ),
+      ...generateCustomFontLinkData(customFontCssIds, relativePrefixToRoot),
       ...fontLinkData,
     ];
 

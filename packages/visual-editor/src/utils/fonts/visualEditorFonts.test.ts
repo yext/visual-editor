@@ -7,6 +7,8 @@ import {
   defaultFonts,
   constructGoogleFontLinkTags,
   generateCustomFontLinkData,
+  getCustomFontCssIdsFromDisplayNames,
+  getCustomFontCssIdsFromPreloads,
   getFontStyleOptions,
 } from "./visualEditorFonts.ts";
 
@@ -207,17 +209,7 @@ describe("custom font helpers", () => {
   });
 
   it("should build custom font links from parsed family ids", () => {
-    const customFonts: FontRegistry = {
-      "ebb-melvyn": {
-        name: "ebbmelvynregular-regular",
-        displayName: "EBB_Melvyn_Regular",
-        italics: false,
-        weights: [400],
-        fallback: "sans-serif",
-      },
-    };
-
-    expect(generateCustomFontLinkData(customFonts, "./")).toEqual([
+    expect(generateCustomFontLinkData(["ebbmelvynregular"], "./")).toEqual([
       {
         href: "./y-fonts/ebbmelvynregular.css",
         rel: "stylesheet",
@@ -226,17 +218,7 @@ describe("custom font helpers", () => {
   });
 
   it("should keep internal hyphens when parsing custom font family ids", () => {
-    const customFonts: FontRegistry = {
-      "foo-bar": {
-        name: "foo-bar-regular",
-        displayName: "Foo Bar",
-        italics: false,
-        weights: [400],
-        fallback: "sans-serif",
-      },
-    };
-
-    expect(generateCustomFontLinkData(customFonts, "./")).toEqual([
+    expect(generateCustomFontLinkData(["foo-bar"], "./")).toEqual([
       {
         href: "./y-fonts/foo-bar.css",
         rel: "stylesheet",
@@ -244,12 +226,20 @@ describe("custom font helpers", () => {
     ]);
   });
 
-  it("should prefer preload-derived custom font links and dedupe duplicates", () => {
+  it("should build custom font css ids from preload paths", () => {
     expect(
-      generateCustomFontLinkData(["EBB_Melvyn_Regular"], "./", [
-        "/y-fonts/ebbmelvynregular-regular.woff2",
-      ])
-    ).toEqual([
+      getCustomFontCssIdsFromPreloads(["/y-fonts/foo-bar-regular.woff2"])
+    ).toEqual(["foo-bar"]);
+  });
+
+  it("should build legacy custom font css ids from display names", () => {
+    expect(getCustomFontCssIdsFromDisplayNames(["EBB_Melvyn_Regular"])).toEqual(
+      ["ebbmelvynregular"]
+    );
+  });
+
+  it("should build custom font links from normalized css ids", () => {
+    expect(generateCustomFontLinkData(["ebbmelvynregular"], "./")).toEqual([
       {
         href: "./y-fonts/ebbmelvynregular.css",
         rel: "stylesheet",

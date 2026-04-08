@@ -157,7 +157,7 @@ const convertDisplayNameToCssId = (fontName: string) =>
  * Normalizes persisted preload file paths into custom font family CSS ids.
  * Each `/y-fonts/<family-id>-<subfamily>.woff2` path becomes `<family-id>`.
  */
-const getCustomFontCssIdsFromPreloads = (preloads: string[]) => {
+export const getCustomFontCssIdsFromPreloads = (preloads: string[]) => {
   return preloads
     .map((preload) =>
       preload
@@ -170,53 +170,34 @@ const getCustomFontCssIdsFromPreloads = (preloads: string[]) => {
 };
 
 /**
- * Normalizes custom font inputs into deduped family-level CSS ids.
- *
- * Preload-derived ids are preferred because they come from persisted asset file
- * paths. Legacy string inputs are only included when they do not duplicate a
- * preload-backed id.
+ * Converts custom font specifications into family-level CSS ids using the
+ * platform-provided `name` field.
  */
-const getCustomFontCssIds = (
-  customFonts: FontRegistry | string[],
-  preloads: string[] = []
+export const getCustomFontCssIdsFromFontRegistry = (
+  customFonts: FontRegistry
 ) => {
-  const customFontCssIdsFromPreloads =
-    getCustomFontCssIdsFromPreloads(preloads);
-  const preloadCssIds = new Set(customFontCssIdsFromPreloads);
-
-  let customFontCssIds: string[];
-  if (Array.isArray(customFonts)) {
-    customFontCssIds = customFonts
-      .map((fontName) => convertDisplayNameToCssId(fontName))
-      .filter((fontName) => !preloadCssIds.has(fontName));
-  } else {
-    customFontCssIds = Object.values(customFonts)
-      .map((fontDetails) => fontDetails.name)
-      .filter((fontName): fontName is string => Boolean(fontName))
-      .map((fontName) => convertNameToCssId(fontName));
-  }
-
-  return [...new Set([...customFontCssIdsFromPreloads, ...customFontCssIds])];
+  return Object.values(customFonts)
+    .map((fontDetails) => fontDetails.name)
+    .filter((fontName): fontName is string => Boolean(fontName))
+    .map((fontName) => convertNameToCssId(fontName));
 };
 
 /**
- * Builds stylesheet link data for custom fonts.
- *
- * When preload file paths are provided, it derives family-level stylesheet
- * basenames from those paths first, then falls back to the provided custom
- * font names for any remaining entries. Duplicate stylesheet URLs are removed.
- *
- * When given a FontRegistry, it derives the family-level stylesheet basename
- * from `FontSpecification.name` by stripping the final hyphen-delimited
- * subfamily segment. When given a string array, it preserves the legacy
- * derivation logic used by published theme rendering.
+ * Converts display-facing custom font family names into the legacy CSS id
+ * format used by published themes when no preload-backed asset ids exist.
+ */
+export const getCustomFontCssIdsFromDisplayNames = (displayNames: string[]) => {
+  return displayNames.map((fontName) => convertDisplayNameToCssId(fontName));
+};
+
+/**
+ * Builds stylesheet link data for normalized custom font CSS ids.
  */
 export const generateCustomFontLinkData = (
-  customFonts: FontRegistry | string[],
-  relativePrefixToRoot: string,
-  preloads: string[] = []
+  customFontCssIds: string[],
+  relativePrefixToRoot: string
 ): FontLinkData[] => {
-  return getCustomFontCssIds(customFonts, preloads).map((fontFileName) => ({
+  return customFontCssIds.map((fontFileName) => ({
     href: `${relativePrefixToRoot}y-fonts/${fontFileName}.css`,
     rel: "stylesheet",
   }));
@@ -251,7 +232,10 @@ export const createFontLinkElements = (
   customFonts: FontRegistry
 ): HTMLLinkElement[] => {
   const googleFontLinkData = generateGoogleFontLinkData(googleFonts);
-  const customFontLinkData = generateCustomFontLinkData(customFonts, "./");
+  const customFontLinkData = generateCustomFontLinkData(
+    getCustomFontCssIdsFromFontRegistry(customFonts),
+    "./"
+  );
 
   return [...customFontLinkData, ...googleFontLinkData].map((link) => {
     const element = document.createElement("link");
