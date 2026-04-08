@@ -1,7 +1,6 @@
 import type {
   ComponentConfig,
   DefaultComponentProps,
-  Field,
 } from "@puckeditor/core";
 import {
   BasicSelectorField,
