@@ -6,13 +6,10 @@ import {
 import { DevLogger } from "./devLogger.ts";
 import {
   defaultFonts,
-  extractFontFamiliesFromTheme,
   filterInUseFontRegistries,
   createFontLinkElements,
   generateGoogleFontLinkData,
-  getCustomFontCssIdsFromDisplayNames,
   getCustomFontCssIdsFromNames,
-  getCustomFontCssIdsFromPreloads,
   fontLinkDataToHTML,
   type FontRegistry,
   type FontLinkData,
@@ -71,17 +68,8 @@ export const applyTheme = (
       mergedThemeData,
       defaultFonts
     );
-    const inUseCustomFonts = extractFontFamiliesFromTheme(
-      mergedThemeData
-    ).filter((fontName) => !inUseGoogleFonts[fontName]);
     const customFontNames = getCustomFonts(overrides);
-    const customFontPreloads = getCustomFontPreloads(overrides);
-    const customFontCssIds =
-      customFontNames.length > 0
-        ? getCustomFontCssIdsFromNames(customFontNames)
-        : customFontPreloads.length > 0
-          ? getCustomFontCssIdsFromPreloads(customFontPreloads)
-          : getCustomFontCssIdsFromDisplayNames(inUseCustomFonts);
+    const customFontCssIds = getCustomFontCssIdsFromNames(customFontNames);
 
     if (Object.keys(inUseGoogleFonts).length === 0) {
       // No fonts found in theme data, use only Open Sans

@@ -7,9 +7,7 @@ import {
   defaultFonts,
   constructGoogleFontLinkTags,
   generateCustomFontLinkData,
-  getCustomFontCssIdsFromDisplayNames,
   getCustomFontCssIdsFromNames,
-  getCustomFontCssIdsFromPreloads,
   getFontStyleOptions,
 } from "./visualEditorFonts.ts";
 
@@ -227,22 +225,10 @@ describe("custom font helpers", () => {
     ]);
   });
 
-  it("should build custom font css ids from preload paths", () => {
-    expect(
-      getCustomFontCssIdsFromPreloads(["/y-fonts/foo-bar-regular.woff2"])
-    ).toEqual(["foo-bar"]);
-  });
-
   it("should build custom font css ids from font names", () => {
     expect(getCustomFontCssIdsFromNames(["foo-bar-regular"])).toEqual([
       "foo-bar",
     ]);
-  });
-
-  it("should build legacy custom font css ids from display names", () => {
-    expect(getCustomFontCssIdsFromDisplayNames(["EBB_Melvyn_Regular"])).toEqual(
-      ["ebbmelvynregular"]
-    );
   });
 
   it("should build custom font links from normalized css ids", () => {

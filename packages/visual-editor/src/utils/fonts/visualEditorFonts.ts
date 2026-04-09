@@ -153,30 +153,6 @@ export const getCustomFontCssIdsFromNames = (fontNames: string[]) => {
 };
 
 /**
- * Converts a display-facing custom font family name into the CSS id
- * format used by published themes when no preload-backed asset id is
- * available.
- */
-const convertDisplayNameToCssId = (fontName: string) =>
-  fontName.replaceAll(" ", "").replaceAll("_", "").toLowerCase();
-
-/**
- * Normalizes persisted preload file paths into custom font family CSS ids.
- * Each `/y-fonts/<family-id>-<subfamily>.woff2` path becomes `<family-id>`.
- */
-export const getCustomFontCssIdsFromPreloads = (preloads: string[]) => {
-  return preloads
-    .map((preload) =>
-      preload
-        .split("/")
-        .pop()
-        ?.replace(/\.woff2$/i, "")
-    )
-    .filter((fontName): fontName is string => Boolean(fontName))
-    .map((fontName) => convertNameToCssId(fontName));
-};
-
-/**
  * Converts custom font specifications into family-level CSS ids using the
  * platform-provided `name` field.
  */
@@ -187,14 +163,6 @@ export const getCustomFontCssIdsFromFontRegistry = (
     .map((fontDetails) => fontDetails.name)
     .filter((fontName): fontName is string => Boolean(fontName))
     .map((fontName) => convertNameToCssId(fontName));
-};
-
-/**
- * Converts display-facing custom font family names into the legacy CSS id
- * format used by published themes when no preload-backed asset ids exist.
- */
-export const getCustomFontCssIdsFromDisplayNames = (displayNames: string[]) => {
-  return displayNames.map((fontName) => convertDisplayNameToCssId(fontName));
 };
 
 /**
