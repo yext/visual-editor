@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { ThemeData } from "../../internal/types/themeData.ts";
 import {
   constructFontSelectOptions,
-  extractInUseFontFamilies,
+  filterInUseFontRegistries,
   FontRegistry,
   defaultFonts,
   constructGoogleFontLinkTags,
@@ -34,7 +34,7 @@ describe("extractInUseFontFamilies", () => {
       },
     };
 
-    const { inUseGoogleFonts, inUseCustomFonts } = extractInUseFontFamilies(
+    const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
       themeData,
       defaultFonts
     );
@@ -44,7 +44,7 @@ describe("extractInUseFontFamilies", () => {
 
   it("should return an empty object if theme data is empty", () => {
     const themeData: ThemeData = {};
-    expect(extractInUseFontFamilies(themeData, defaultFonts)).toEqual({
+    expect(filterInUseFontRegistries(themeData, defaultFonts)).toEqual({
       inUseGoogleFonts: {},
       inUseCustomFonts: {},
     });
@@ -56,7 +56,7 @@ describe("extractInUseFontFamilies", () => {
       "--fontSize-h1-fontSize": "48px",
     };
 
-    const { inUseGoogleFonts, inUseCustomFonts } = extractInUseFontFamilies(
+    const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
       themeData,
       defaultFonts
     );
@@ -70,7 +70,7 @@ describe("extractInUseFontFamilies", () => {
     };
     const emptyAvailableFonts = {};
 
-    const { inUseGoogleFonts, inUseCustomFonts } = extractInUseFontFamilies(
+    const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
       themeData,
       emptyAvailableFonts
     );
@@ -93,7 +93,7 @@ describe("extractInUseFontFamilies", () => {
       },
     };
 
-    const { inUseGoogleFonts, inUseCustomFonts } = extractInUseFontFamilies(
+    const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
       themeData,
       defaultFonts
     );
@@ -118,7 +118,7 @@ describe("extractInUseFontFamilies", () => {
       },
     };
 
-    const { inUseGoogleFonts, inUseCustomFonts } = extractInUseFontFamilies(
+    const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
       themeData,
       defaultFonts
     );
@@ -151,7 +151,7 @@ describe("extractInUseFontFamilies", () => {
       },
     };
 
-    const { inUseGoogleFonts, inUseCustomFonts } = extractInUseFontFamilies(
+    const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
       themeData,
       defaultFonts,
       customFonts
@@ -178,7 +178,7 @@ describe("extractInUseFontFamilies", () => {
       },
     };
 
-    const { inUseGoogleFonts, inUseCustomFonts } = extractInUseFontFamilies(
+    const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
       themeData,
       defaultFonts
     );

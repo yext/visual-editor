@@ -146,7 +146,7 @@ const convertNameToCssId = (fontName: string) => {
 };
 
 /**
- * Converts a display-facing custom font family name into the legacy CSS id
+ * Converts a display-facing custom font family name into the CSS id
  * format used by published themes when no preload-backed asset id is
  * available.
  */
@@ -516,11 +516,10 @@ export const extractReferencedFontFamilyNames = (data: ThemeData): string[] => {
 };
 
 /**
- * Extracts the availableFonts as FontRegistry. If provided customFonts,
- * also returns the customFonts as FontRegistry. All fonts are filtered
- * to only include those actually referenced by the theme.
+ * Filters the available fonts and custom fonts to only include those actually referenced by the theme.
+ * Custom fonts are optional.
  */
-export const extractInUseFontFamilies = (
+export const filterInUseFontRegistries = (
   data: ThemeData,
   availableFonts: FontRegistry,
   customFonts: FontRegistry = {}

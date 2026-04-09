@@ -7,7 +7,7 @@ import { DevLogger } from "./devLogger.ts";
 import {
   defaultFonts,
   extractReferencedFontFamilyNames,
-  extractInUseFontFamilies,
+  filterInUseFontRegistries,
   createFontLinkElements,
   generateGoogleFontLinkData,
   getCustomFontCssIdsFromDisplayNames,
@@ -65,7 +65,7 @@ export const applyTheme = (
     // This ensures we get all fonts that are actually used, not just the ones that were explicitly changed
     const defaultThemeValues = generateCssVariablesFromThemeConfig(themeConfig);
     const mergedThemeData = { ...defaultThemeValues, ...overrides };
-    const { inUseGoogleFonts } = extractInUseFontFamilies(
+    const { inUseGoogleFonts } = filterInUseFontRegistries(
       mergedThemeData,
       defaultFonts
     );
@@ -205,7 +205,7 @@ export const updateThemeInEditor = async (
 
   const defaultThemeValues = generateCssVariablesFromThemeConfig(themeConfig);
   const mergedThemeData = { ...defaultThemeValues, ...newTheme };
-  const { inUseGoogleFonts, inUseCustomFonts } = extractInUseFontFamilies(
+  const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
     mergedThemeData,
     defaultFonts,
     customFonts
