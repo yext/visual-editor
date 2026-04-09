@@ -25,6 +25,14 @@ import {
   SlotsCategoryComponents,
   SlotsCategoryProps,
 } from "../categories/SlotsCategory.tsx";
+import {
+  ROOT_FOOTER_COMPONENTS,
+  ROOT_FOOTER_ZONE,
+  ROOT_HEADER_COMPONENTS,
+  ROOT_HEADER_ZONE,
+  ROOT_MAIN_DISALLOWED_COMPONENTS,
+  ROOT_MAIN_ZONE,
+} from "../../utils/rootZones.ts";
 
 export interface MainConfigProps
   extends PageSectionCategoryProps,
@@ -69,16 +77,47 @@ export const mainConfig: Config<MainConfigProps> = {
   },
   root: {
     render: () => {
+      const mainZoneDisallow = [
+        ...ROOT_MAIN_DISALLOWED_COMPONENTS,
+        ...AdvancedCoreInfoCategory.filter((k) => k !== "Grid"),
+      ];
+
       return (
-        <DropZone
-          zone="default-zone"
+        <div
           style={{
             display: "flex",
             flexDirection: "column",
             minHeight: "100vh",
           }}
-          disallow={AdvancedCoreInfoCategory.filter((k) => k !== "Grid")}
-        />
+        >
+          <DropZone
+            zone={ROOT_HEADER_ZONE}
+            allow={[...ROOT_HEADER_COMPONENTS]}
+            style={{ display: "flex", flexDirection: "column" }}
+          />
+          <main
+            style={{
+              display: "flex",
+              flex: 1,
+              flexDirection: "column",
+            }}
+          >
+            <DropZone
+              zone={ROOT_MAIN_ZONE}
+              style={{
+                display: "flex",
+                flex: 1,
+                flexDirection: "column",
+              }}
+              disallow={mainZoneDisallow}
+            />
+          </main>
+          <DropZone
+            zone={ROOT_FOOTER_ZONE}
+            allow={[...ROOT_FOOTER_COMPONENTS]}
+            style={{ display: "flex", flexDirection: "column" }}
+          />
+        </div>
       );
     },
   },

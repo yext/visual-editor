@@ -3,6 +3,12 @@ import { Migration, MigrationRegistry, migrate } from "./migrate.ts";
 import { addIdToSchema } from "../components/migrations/0023_add_id_to_schema.ts";
 import { updateSchemaIdAnchorFormat } from "../components/migrations/0069_update_schema_id_anchor_format.ts";
 import { themeColorPropertyKeyMigration } from "../components/migrations/0071_theme_color_property_keys.ts";
+import { threeZoneRootLayoutMigration } from "../components/migrations/0073_three_zone_root_layout.ts";
+import {
+  ROOT_FOOTER_ZONE_KEY,
+  ROOT_HEADER_ZONE_KEY,
+  ROOT_MAIN_ZONE_KEY,
+} from "./rootZones.ts";
 
 describe("migrate", () => {
   it("successfully applies a migration", async () => {
@@ -261,6 +267,118 @@ describe("migrate", () => {
     expect((migratedData.root.props as Record<string, any>)?.schemaMarkup).toBe(
       schemaMarkup
     );
+  });
+
+  it("migrates top-level content into root header, main, and footer zones", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+          },
+        },
+        content: [
+          { type: "ExpandedHeader", props: { id: "ExpandedHeader-1" } },
+          { type: "CustomCodeSection", props: { id: "CustomCodeSection-1" } },
+          { type: "BannerSection", props: { id: "BannerSection-1" } },
+          { type: "CustomCodeSection", props: { id: "CustomCodeSection-2" } },
+          { type: "ExpandedFooter", props: { id: "ExpandedFooter-1" } },
+        ],
+        zones: {},
+      } as any,
+      [threeZoneRootLayoutMigration],
+      {
+        components: {
+          ExpandedHeader: {} as any,
+          ExpandedFooter: {} as any,
+          CustomCodeSection: {} as any,
+        },
+      },
+      {}
+    );
+
+    expect(migratedData.content).toEqual([]);
+    expect(migratedData.zones).toEqual({
+      [ROOT_HEADER_ZONE_KEY]: [
+        { type: "ExpandedHeader", props: { id: "ExpandedHeader-1" } },
+        { type: "CustomCodeSection", props: { id: "CustomCodeSection-1" } },
+      ],
+      [ROOT_MAIN_ZONE_KEY]: [
+        { type: "BannerSection", props: { id: "BannerSection-1" } },
+      ],
+      [ROOT_FOOTER_ZONE_KEY]: [
+        { type: "CustomCodeSection", props: { id: "CustomCodeSection-2" } },
+        { type: "ExpandedFooter", props: { id: "ExpandedFooter-1" } },
+      ],
+    });
+  });
+
+  it("keeps middle custom code sections in the main zone", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+          },
+        },
+        content: [
+          { type: "BannerSection", props: { id: "BannerSection-1" } },
+          { type: "CustomCodeSection", props: { id: "CustomCodeSection-1" } },
+          { type: "BannerSection", props: { id: "BannerSection-2" } },
+        ],
+        zones: {},
+      } as any,
+      [threeZoneRootLayoutMigration],
+      {
+        components: {
+          ExpandedHeader: {} as any,
+          ExpandedFooter: {} as any,
+          CustomCodeSection: {} as any,
+        },
+      },
+      {}
+    );
+
+    expect(migratedData.zones).toEqual({
+      [ROOT_HEADER_ZONE_KEY]: [],
+      [ROOT_MAIN_ZONE_KEY]: [
+        { type: "BannerSection", props: { id: "BannerSection-1" } },
+        { type: "CustomCodeSection", props: { id: "CustomCodeSection-1" } },
+        { type: "BannerSection", props: { id: "BannerSection-2" } },
+      ],
+      [ROOT_FOOTER_ZONE_KEY]: [],
+    });
+  });
+
+  it("skips root zone migration for component-only configs", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+          },
+        },
+        content: [{ type: "BannerSection", props: { id: "BannerSection-1" } }],
+        zones: {},
+      } as any,
+      [threeZoneRootLayoutMigration],
+      {
+        components: {
+          BannerSection: {} as any,
+        },
+      },
+      {}
+    );
+
+    expect(migratedData).toEqual({
+      root: {
+        props: {
+          version: 1,
+        },
+      },
+      content: [{ type: "BannerSection", props: { id: "BannerSection-1" } }],
+      zones: {},
+    });
   });
 });
 

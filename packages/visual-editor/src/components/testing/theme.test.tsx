@@ -3,6 +3,7 @@ import { describe, it, expect } from "vitest";
 import { page } from "@vitest/browser/context";
 import { render as reactRender, waitFor } from "@testing-library/react";
 import {
+  DropZone,
   Render,
   Config,
   DefaultComponentProps,
@@ -21,6 +22,11 @@ import {
   testSetup,
   viewports,
 } from "../testing/componentTests.setup.ts";
+import {
+  ROOT_FOOTER_ZONE,
+  ROOT_HEADER_ZONE,
+  ROOT_MAIN_ZONE,
+} from "../../utils/rootZones.ts";
 
 const testDocument = {
   locale: "en",
@@ -54,8 +60,41 @@ describe("ThemeTest", async () => {
       ...OtherCategoryComponents,
     },
     root: {
-      render: ({ children }: { children: React.ReactNode }) => {
-        return <>{children}</>;
+      render: () => {
+        return (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              minHeight: "100vh",
+            }}
+          >
+            <DropZone
+              zone={ROOT_HEADER_ZONE}
+              style={{ display: "flex", flexDirection: "column" }}
+            />
+            <main
+              style={{
+                display: "flex",
+                flex: 1,
+                flexDirection: "column",
+              }}
+            >
+              <DropZone
+                zone={ROOT_MAIN_ZONE}
+                style={{
+                  display: "flex",
+                  flex: 1,
+                  flexDirection: "column",
+                }}
+              />
+            </main>
+            <DropZone
+              zone={ROOT_FOOTER_ZONE}
+              style={{ display: "flex", flexDirection: "column" }}
+            />
+          </div>
+        );
       },
     },
   };
