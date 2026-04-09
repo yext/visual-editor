@@ -11,6 +11,7 @@ import {
   createFontLinkElements,
   generateGoogleFontLinkData,
   getCustomFontCssIdsFromDisplayNames,
+  getCustomFontCssIdsFromNames,
   getCustomFontCssIdsFromPreloads,
   fontLinkDataToHTML,
   type FontRegistry,
@@ -19,6 +20,7 @@ import {
 } from "./fonts/visualEditorFonts.ts";
 import {
   buildFontPreloadTags,
+  getCustomFonts,
   getCustomFontPreloads,
 } from "../internal/utils/customFontPreloads.ts";
 import { ThemeConfig } from "./themeResolver.ts";
@@ -72,13 +74,14 @@ export const applyTheme = (
     const inUseCustomFonts = extractFontFamiliesFromTheme(
       mergedThemeData
     ).filter((fontName) => !inUseGoogleFonts[fontName]);
+    const customFontNames = getCustomFonts(overrides);
     const customFontPreloads = getCustomFontPreloads(overrides);
-    const customFontCssIds = [
-      ...new Set([
-        ...getCustomFontCssIdsFromPreloads(customFontPreloads),
-        ...getCustomFontCssIdsFromDisplayNames(inUseCustomFonts),
-      ]),
-    ];
+    const customFontCssIds =
+      customFontNames.length > 0
+        ? getCustomFontCssIdsFromNames(customFontNames)
+        : customFontPreloads.length > 0
+          ? getCustomFontCssIdsFromPreloads(customFontPreloads)
+          : getCustomFontCssIdsFromDisplayNames(inUseCustomFonts);
 
     if (Object.keys(inUseGoogleFonts).length === 0) {
       // No fonts found in theme data, use only Open Sans

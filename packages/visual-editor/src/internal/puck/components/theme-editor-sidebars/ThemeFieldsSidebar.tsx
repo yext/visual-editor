@@ -13,9 +13,12 @@ import {
 import { generateCssVariablesFromPuckFields } from "../../../utils/internalThemeResolver.ts";
 import { pt } from "../../../../utils/i18n/platform.ts";
 import {
+  buildCustomFontNames,
   buildCustomFontPreloads,
+  CUSTOM_FONTS_KEY,
   CUSTOM_FONT_PRELOADS_KEY,
   loadCustomFontCssIndex,
+  removeCustomFonts,
   removeCustomFontPreloads,
   type CustomFontCssIndex,
 } from "../../../utils/customFontPreloads.ts";
@@ -78,6 +81,24 @@ export const ThemeFieldsSidebar = ({
         themeSection
       ),
     };
+
+    if (customFonts) {
+      const customFontNames = buildCustomFontNames({
+        themeConfig,
+        themeValues: newThemeValues,
+        customFonts,
+      });
+      if (customFontNames.length > 0) {
+        newThemeValues = {
+          ...newThemeValues,
+          [CUSTOM_FONTS_KEY]: customFontNames,
+        };
+      } else {
+        newThemeValues = removeCustomFonts(newThemeValues);
+      }
+    } else if (CUSTOM_FONTS_KEY in newThemeValues) {
+      newThemeValues = removeCustomFonts(newThemeValues);
+    }
 
     if (customFonts && customFontCssIndex) {
       const preloads = buildCustomFontPreloads({

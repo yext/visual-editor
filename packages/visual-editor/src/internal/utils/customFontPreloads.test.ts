@@ -1,5 +1,8 @@
 import { describe, it, expect } from "vitest";
-import { buildCustomFontPreloads } from "./customFontPreloads.ts";
+import {
+  buildCustomFontNames,
+  buildCustomFontPreloads,
+} from "./customFontPreloads.ts";
 import { ThemeConfig } from "../../utils/themeResolver.ts";
 import { FontRegistry } from "../../utils/fonts/visualEditorFonts.ts";
 
@@ -318,5 +321,119 @@ describe("buildCustomFontPreloads", () => {
     });
 
     expect(preloads).toEqual([]);
+  });
+});
+
+describe("buildCustomFontNames", () => {
+  it("returns custom font names for the custom fonts used by the theme", () => {
+    const themeConfig: ThemeConfig = {
+      h1: {
+        label: "H1",
+        styles: {
+          fontFamily: {
+            label: "Font",
+            type: "select",
+            plugin: "fontFamily",
+            options: [],
+            default: "'Alpha', sans-serif",
+          },
+        },
+      },
+      body: {
+        label: "Body",
+        styles: {
+          fontFamily: {
+            label: "Font",
+            type: "select",
+            plugin: "fontFamily",
+            options: [],
+            default: "'Roboto', sans-serif",
+          },
+        },
+      },
+    };
+
+    const customFonts: FontRegistry = {
+      "alpha-font-key": {
+        name: "alpha-font-regular",
+        displayName: "Alpha",
+        italics: false,
+        weights: [400],
+        fallback: "sans-serif",
+      },
+    };
+
+    expect(
+      buildCustomFontNames({
+        themeConfig,
+        themeValues: {},
+        customFonts,
+      })
+    ).toEqual(["alpha-font-regular"]);
+  });
+
+  it("deduplicates repeated custom font selections and ignores fonts without names", () => {
+    const themeConfig: ThemeConfig = {
+      h1: {
+        label: "H1",
+        styles: {
+          fontFamily: {
+            label: "Font",
+            type: "select",
+            plugin: "fontFamily",
+            options: [],
+            default: "'Alpha', sans-serif",
+          },
+        },
+      },
+      h2: {
+        label: "H2",
+        styles: {
+          fontFamily: {
+            label: "Font",
+            type: "select",
+            plugin: "fontFamily",
+            options: [],
+            default: "'Alpha', sans-serif",
+          },
+        },
+      },
+      body: {
+        label: "Body",
+        styles: {
+          fontFamily: {
+            label: "Font",
+            type: "select",
+            plugin: "fontFamily",
+            options: [],
+            default: "'Nameless', sans-serif",
+          },
+        },
+      },
+    };
+
+    const customFonts: FontRegistry = {
+      alpha: {
+        name: "alpha-font-regular",
+        displayName: "Alpha",
+        italics: false,
+        weights: [400],
+        fallback: "sans-serif",
+      },
+      nameless: {
+        displayName: "Nameless",
+        italics: false,
+        weights: [400],
+        fallback: "sans-serif",
+      },
+    };
+
+    expect(
+      buildCustomFontNames({
+        themeConfig,
+        themeValues: {},
+        customFonts,
+      })
+    ).toEqual(["alpha-font-regular"]);
   });
 });

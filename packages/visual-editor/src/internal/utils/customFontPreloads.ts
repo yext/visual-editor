@@ -18,6 +18,7 @@ import { ThemeData } from "../types/themeData.ts";
 import { generateCssVariablesFromThemeConfig } from "./internalThemeResolver.ts";
 
 export const CUSTOM_FONT_PRELOADS_KEY = "__customFontPreloads";
+export const CUSTOM_FONTS_KEY = "__customFonts";
 
 type FontStyleValue = "normal" | "italic";
 
@@ -40,6 +41,44 @@ const stripQuotes = (value: string) => value.trim().replace(/^['"]|['"]$/g, "");
 const extractFontFamilyName = (value: string) => {
   const firstFont = value.split(",")[0];
   return stripQuotes(firstFont);
+};
+
+/**
+ * Computes the list of custom font `name` values referenced by the theme.
+ */
+export const buildCustomFontNames = ({
+  themeConfig,
+  themeValues,
+  customFonts,
+}: {
+  themeConfig: ThemeConfig;
+  themeValues: ThemeData;
+  customFonts: FontRegistry;
+}) => {
+  const defaultThemeValues = generateCssVariablesFromThemeConfig(themeConfig);
+  const mergedThemeValues = { ...defaultThemeValues, ...themeValues };
+  const customFontNames = new Set<string>();
+
+  Object.keys(mergedThemeValues).forEach((key) => {
+    if (!key.startsWith("--fontFamily-") || !key.endsWith("-fontFamily")) {
+      return;
+    }
+
+    const fontFamilyValue = mergedThemeValues[key];
+    if (typeof fontFamilyValue !== "string") {
+      return;
+    }
+
+    const fontFamily = extractFontFamilyName(fontFamilyValue);
+    const customFont = findFontByDisplayName(customFonts, fontFamily);
+    if (!customFont?.name) {
+      return;
+    }
+
+    customFontNames.add(customFont.name);
+  });
+
+  return [...customFontNames];
 };
 
 /**
@@ -286,6 +325,18 @@ export const removeCustomFontPreloads = (themeValues: ThemeData) => {
 };
 
 /**
+ * Removes the custom font names key from theme data if present.
+ */
+export const removeCustomFonts = (themeValues: ThemeData) => {
+  if (!(CUSTOM_FONTS_KEY in themeValues)) {
+    return themeValues;
+  }
+  // oxlint-disable-next-line no-unused-vars: ignore unused _
+  const { [CUSTOM_FONTS_KEY]: _, ...rest } = themeValues;
+  return rest;
+};
+
+/**
  * Returns the custom font preload list from theme data, if available.
  */
 export const getCustomFontPreloads = (themeValues: ThemeData | undefined) => {
@@ -294,6 +345,17 @@ export const getCustomFontPreloads = (themeValues: ThemeData | undefined) => {
   }
   const preloads = themeValues[CUSTOM_FONT_PRELOADS_KEY];
   return Array.isArray(preloads) ? preloads.filter(Boolean) : [];
+};
+
+/**
+ * Returns the custom font names from theme data, if available.
+ */
+export const getCustomFonts = (themeValues: ThemeData | undefined) => {
+  if (!themeValues) {
+    return [];
+  }
+  const customFonts = themeValues[CUSTOM_FONTS_KEY];
+  return Array.isArray(customFonts) ? customFonts.filter(Boolean) : [];
 };
 
 /**

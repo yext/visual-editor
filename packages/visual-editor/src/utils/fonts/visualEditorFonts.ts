@@ -146,6 +146,13 @@ const convertNameToCssId = (fontName: string) => {
 };
 
 /**
+ * Converts platform custom font `name` values into family-level CSS ids.
+ */
+export const getCustomFontCssIdsFromNames = (fontNames: string[]) => {
+  return fontNames.map((fontName) => convertNameToCssId(fontName));
+};
+
+/**
  * Converts a display-facing custom font family name into the CSS id
  * format used by published themes when no preload-backed asset id is
  * available.
