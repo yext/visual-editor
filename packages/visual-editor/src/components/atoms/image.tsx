@@ -17,6 +17,7 @@ import { TranslatableString } from "../../types/types.ts";
 import { useTranslation } from "react-i18next";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import { getThemeValue } from "../../utils/getThemeValue.ts";
+import { PUCK_PREVIEW_IFRAME_ID } from "../../utils/applyTheme.ts";
 
 export interface ImageProps {
   image: ImageType | ComplexImageType | TranslatableAssetImage;
@@ -61,13 +62,27 @@ export const Image: React.FC<ImageProps> = ({
   width,
   className,
   sizes,
-  loading = "lazy",
+  loading,
   streamDocumentOverride,
   style,
 }) => {
   const { i18n } = useTranslation();
   const streamDocument: StreamDocument | Record<string, any> =
     streamDocumentOverride ?? useDocument();
+  const isInPuckPreviewFrame = React.useMemo(() => {
+    if (typeof window === "undefined") {
+      return false;
+    }
+
+    try {
+      return (
+        window.frameElement instanceof HTMLIFrameElement &&
+        window.frameElement.id === PUCK_PREVIEW_IFRAME_ID
+      );
+    } catch {
+      return false;
+    }
+  }, []);
 
   const image = React.useMemo(() => {
     if (rawImage && isLocalizedAssetImage(rawImage)) {
@@ -90,6 +105,9 @@ export const Image: React.FC<ImageProps> = ({
     : `overflow-hidden w-full`; // Use w-full when no width specified
 
   const altText = getImageAltText(image, i18n.language, streamDocument);
+  // Puck virtualization already decides which sections mount in the preview.
+  // Avoid adding another lazy-loading threshold inside the iframe by default.
+  const resolvedLoading = loading ?? (isInPuckPreviewFrame ? "eager" : "lazy");
 
   return (
     <div
@@ -103,7 +121,7 @@ export const Image: React.FC<ImageProps> = ({
           aspectRatio={aspectRatio}
           className="object-cover w-full h-full"
           imgOverrides={{ sizes }}
-          loading={loading}
+          loading={resolvedLoading}
           style={style}
         />
       ) : !!width && !!calculatedHeight ? (
@@ -114,7 +132,7 @@ export const Image: React.FC<ImageProps> = ({
           height={calculatedHeight}
           className="object-cover"
           imgOverrides={{ sizes }}
-          loading={loading}
+          loading={resolvedLoading}
           style={style}
         />
       ) : (
@@ -122,7 +140,7 @@ export const Image: React.FC<ImageProps> = ({
           src={isComplexImageType(image) ? image.image.url : image.url}
           alt={altText}
           className="object-cover w-full h-full"
-          loading={loading}
+          loading={resolvedLoading}
           style={style}
         />
       )}
