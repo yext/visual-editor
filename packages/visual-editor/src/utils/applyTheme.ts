@@ -6,7 +6,7 @@ import {
 import { DevLogger } from "./devLogger.ts";
 import {
   defaultFonts,
-  extractReferencedFontFamilyNames,
+  extractFontFamiliesFromTheme,
   filterInUseFontRegistries,
   createFontLinkElements,
   generateGoogleFontLinkData,
@@ -69,7 +69,7 @@ export const applyTheme = (
       mergedThemeData,
       defaultFonts
     );
-    const inUseCustomFonts = extractReferencedFontFamilyNames(
+    const inUseCustomFonts = extractFontFamiliesFromTheme(
       mergedThemeData
     ).filter((fontName) => !inUseGoogleFonts[fontName]);
     const customFontPreloads = getCustomFontPreloads(overrides);

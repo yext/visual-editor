@@ -472,7 +472,7 @@ const getFontNameFromStyleElement = (
 /**
  * Extracts and parses the font family names from the ThemeData.
  */
-export const extractReferencedFontFamilyNames = (data: ThemeData): string[] => {
+export const extractFontFamiliesFromTheme = (data: ThemeData): string[] => {
   const fontFamilies = new Set<string>();
   // Resolve "Default font" references like var(--fontFamily-headers-defaultFont)
   // so we load the actual font used for headers.
@@ -517,7 +517,12 @@ export const extractReferencedFontFamilyNames = (data: ThemeData): string[] => {
 
 /**
  * Filters the available fonts and custom fonts to only include those actually referenced by the theme.
- * Custom fonts are optional.
+ * Custom fonts are optional. If provided, the filtered custom fonts are returned.
+ *
+ * @param data the ThemeData
+ * @param availableFonts built-in Google fonts from the repository
+ * @param customFonts custom fonts from FontAPIServer
+ * @return An object containing two font registries: inUseGoogleFonts and inUseCustomFonts.
  */
 export const filterInUseFontRegistries = (
   data: ThemeData,
@@ -528,7 +533,7 @@ export const filterInUseFontRegistries = (
   const inUseCustomFonts: FontRegistry = {};
 
   // For each unique font family found, look it up in the availableFonts map.
-  for (const fontName of extractReferencedFontFamilyNames(data)) {
+  for (const fontName of extractFontFamiliesFromTheme(data)) {
     const font = findFontByDisplayName(availableFonts, fontName);
     if (font) {
       inUseGoogleFonts[font.displayName] = font;
