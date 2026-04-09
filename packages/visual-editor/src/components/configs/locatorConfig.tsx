@@ -21,6 +21,14 @@ import {
   SlotsCategoryProps,
 } from "../categories/SlotsCategory.tsx";
 import { pt } from "../../utils/i18n/platform.ts";
+import {
+  ROOT_FOOTER_COMPONENTS,
+  ROOT_FOOTER_ZONE,
+  ROOT_HEADER_COMPONENTS,
+  ROOT_HEADER_ZONE,
+  ROOT_MAIN_DISALLOWED_COMPONENTS,
+  ROOT_MAIN_ZONE,
+} from "../../utils/rootZones.ts";
 
 export interface LocatorConfigProps
   extends LocatorCategoryProps,
@@ -60,14 +68,41 @@ export const locatorConfig: Config<LocatorConfigProps> = {
   root: {
     render: () => {
       return (
-        <DropZone
-          zone="default-zone"
+        <div
           style={{
             display: "flex",
             flexDirection: "column",
             minHeight: "100vh",
           }}
-        />
+        >
+          <DropZone
+            zone={ROOT_HEADER_ZONE}
+            allow={[...ROOT_HEADER_COMPONENTS]}
+            style={{ display: "flex", flexDirection: "column" }}
+          />
+          <main
+            style={{
+              display: "flex",
+              flex: 1,
+              flexDirection: "column",
+            }}
+          >
+            <DropZone
+              zone={ROOT_MAIN_ZONE}
+              style={{
+                display: "flex",
+                flex: 1,
+                flexDirection: "column",
+              }}
+              disallow={[...ROOT_MAIN_DISALLOWED_COMPONENTS]}
+            />
+          </main>
+          <DropZone
+            zone={ROOT_FOOTER_ZONE}
+            allow={[...ROOT_FOOTER_COMPONENTS]}
+            style={{ display: "flex", flexDirection: "column" }}
+          />
+        </div>
       );
     },
   },
