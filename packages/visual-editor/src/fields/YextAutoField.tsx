@@ -22,11 +22,7 @@ export const YextAutoField = <ValueType,>({
   if (isYextOverrideType(field.type)) {
     const FieldOverride = YextPuckFieldOverrides[field.type];
 
-    return (
-      <FieldOverride field={field} {...(props as any)}>
-        <></>
-      </FieldOverride>
-    );
+    return <FieldOverride field={field} {...(props as any)} />;
   }
 
   return <AutoField field={field} {...(props as any)} />;

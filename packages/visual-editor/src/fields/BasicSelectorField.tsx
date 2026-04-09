@@ -24,8 +24,8 @@ import { pt, type MsgString } from "../utils/i18n/platform.ts";
       type: "basicSelector",
       label: msg("tone", "Tone"),
       options: [
-        { label: "Neutral", value: "neutral" },
-        { label: "Bold", value: "bold" },
+        { label: msg("foo.options.neutral", "Neutral"), value: "neutral" },
+        { label: msg("foo.options.bold", "Bold"), value: "bold" },
       ],
       disableSearch: false,
     },
@@ -42,7 +42,6 @@ import { pt, type MsgString } from "../utils/i18n/platform.ts";
     render: (props) => <MyComponentWrapper {...props} />,
   };
  */
-
 export type BasicSelectorField = BaseField & {
   type: "basicSelector";
   label?: string | MsgString;
