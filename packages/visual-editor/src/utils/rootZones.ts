@@ -1,4 +1,4 @@
-import { Config, Data } from "@puckeditor/core";
+import { Data } from "@puckeditor/core";
 
 export const ROOT_HEADER_ZONE = "header-zone";
 export const ROOT_MAIN_ZONE = "main-zone";
@@ -27,24 +27,10 @@ export const ROOT_FOOTER_COMPONENTS = [
   "CustomCodeSection",
 ] as const;
 
-const ROOT_ZONE_MARKER_COMPONENTS = [
-  "ExpandedHeader",
-  "ExpandedFooter",
-  "CustomCodeSection",
-] as const;
-
 const headerComponents = new Set<string>(ROOT_HEADER_COMPONENTS);
 const footerComponents = new Set<string>(ROOT_FOOTER_COMPONENTS);
 
-type ContentNode = Data["content"][number];
-
-export const supportsThreeZoneRootMigration = (config: Config): boolean => {
-  return ROOT_ZONE_MARKER_COMPONENTS.every(
-    (componentName) => componentName in (config.components ?? {})
-  );
-};
-
-export const splitRootContentIntoZones = (content: ContentNode[]) => {
+export const splitRootContentIntoZones = (content: Data["content"] = []) => {
   let headerCount = 0;
   while (
     headerCount < content.length &&
@@ -69,9 +55,8 @@ export const splitRootContentIntoZones = (content: ContentNode[]) => {
 };
 
 export const applyRootZonesToData = (data: Data): Data => {
-  const content = (data.content ?? []) as ContentNode[];
   const { headerContent, mainContent, footerContent } =
-    splitRootContentIntoZones(content);
+    splitRootContentIntoZones(data.content);
 
   const otherZones = Object.fromEntries(
     Object.entries(data.zones ?? {}).filter(
