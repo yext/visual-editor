@@ -136,7 +136,7 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
     showImageConstrain = false,
   } = props;
 
-  console.log("create-dev-release 2");
+  console.log("create-dev-release 3");
 
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
