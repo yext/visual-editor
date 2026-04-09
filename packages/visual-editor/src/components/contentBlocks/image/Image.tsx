@@ -30,8 +30,6 @@ import { useTranslation } from "react-i18next";
 import { EmptyImageState } from "./EmptyImageState.tsx";
 import { ImageStylingFields, ImageStylingProps } from "./styling.ts";
 
-// Kick off a create-dev-release run 1
-
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 const DEFAULT_LINK = "#";
 const LINK_REGEX_VALIDATION = /^(https?:\/\/[^\s]+|\/[^\s]*|#[^\s]*)$/;
@@ -137,6 +135,9 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
     hideWidthProp,
     showImageConstrain = false,
   } = props;
+
+  console.log("create-dev-release 1");
+
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
   const resolvedImage = React.useMemo(() => {
