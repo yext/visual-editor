@@ -7,11 +7,6 @@ settings:
 overrides:
   happy-dom: 20.8.8
 
-patchedDependencies:
-  "@puckeditor/core@0.21.2":
-    hash: lfzpunvzzybzexiax4gym3cfzm
-    path: patches/@puckeditor__core@0.21.2.patch
-
 importers:
   .:
     devDependencies:
