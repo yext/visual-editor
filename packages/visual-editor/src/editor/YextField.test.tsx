@@ -171,21 +171,18 @@ describe("YextField", () => {
   it.each([
     [{ type: "text" }, "text"],
     [{ type: "text", isMultiline: true, visible: false }, "textarea"],
-  ] as const)(
-    "maps text fields to %s config",
-    (config, expectedType) => {
-      const fieldName = msg("fields.text", "Text");
+  ] as const)("maps text fields to %s config", (config, expectedType) => {
+    const fieldName = msg("fields.text", "Text");
 
-      const field = YextField(fieldName, config);
-      const visible = "visible" in config ? config.visible : undefined;
+    const field = YextField(fieldName, config);
+    const visible = "visible" in config ? config.visible : undefined;
 
-      expect(field).toEqual({
-        label: fieldName,
-        visible,
-        type: expectedType,
-      });
-    }
-  );
+    expect(field).toEqual({
+      label: fieldName,
+      visible,
+      type: expectedType,
+    });
+  });
 
   it("delegates entityField configs to YextEntityFieldSelector", () => {
     const returnedField = createCustomField();
