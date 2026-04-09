@@ -1,6 +1,6 @@
 import path from "node:path";
 import fs from "fs-extra";
-import { buildEditorTemplateSource } from "../registryTemplateGenerator.ts";
+import { buildEditorTemplateSource } from "../registry/registryTemplateGenerator.ts";
 import { getLocalEditorManifest } from "./data.ts";
 import {
   buildLocalEditorDataTemplatePath,

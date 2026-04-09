@@ -1,6 +1,6 @@
 import path from "node:path";
 import fs from "fs-extra";
-import { buildLocalEditorScaffoldSource } from "../localEditorScaffold.ts";
+import { buildLocalEditorScaffoldSource } from "./scaffold.ts";
 
 export const DEFAULT_LOCAL_EDITOR_ROUTE = "/local-editor";
 export const DEFAULT_LOCAL_EDITOR_STREAM_CONFIG_PATH = "stream.config.ts";
