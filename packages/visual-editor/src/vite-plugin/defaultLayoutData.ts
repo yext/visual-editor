@@ -1,39 +1,3 @@
-import {
-  ROOT_FOOTER_ZONE_KEY,
-  ROOT_HEADER_ZONE_KEY,
-  ROOT_MAIN_ZONE_KEY,
-} from "../utils/rootZones.ts";
-
-const ROOT_ZONE_LAYOUT_VERSION = 73;
-
-const moveContentToRootZones = (
-  layout: {
-    root: { props?: Record<string, unknown> } & Record<string, unknown>;
-    content?: unknown[];
-  } & Record<string, unknown>,
-  { headerCount, footerCount }: { headerCount: number; footerCount: number }
-) => {
-  const content = layout.content ?? [];
-  const footerStart = Math.max(headerCount, content.length - footerCount);
-
-  return {
-    ...layout,
-    root: {
-      ...layout.root,
-      props: {
-        ...layout.root.props,
-        version: ROOT_ZONE_LAYOUT_VERSION,
-      },
-    },
-    content: [],
-    zones: {
-      [ROOT_HEADER_ZONE_KEY]: content.slice(0, headerCount),
-      [ROOT_MAIN_ZONE_KEY]: content.slice(headerCount, footerStart),
-      [ROOT_FOOTER_ZONE_KEY]: content.slice(footerStart),
-    },
-  };
-};
-
 const mainDefaultLayout = {
   root: {
     props: {
@@ -5070,22 +5034,7 @@ const locatorDefaultLayout = {
 };
 
 export const defaultLayoutData = {
-  main: JSON.stringify(
-    moveContentToRootZones(mainDefaultLayout, {
-      headerCount: 1,
-      footerCount: 1,
-    })
-  ),
-  directory: JSON.stringify(
-    moveContentToRootZones(directoryDefaultLayout, {
-      headerCount: 1,
-      footerCount: 1,
-    })
-  ),
-  locator: JSON.stringify(
-    moveContentToRootZones(locatorDefaultLayout, {
-      headerCount: 0,
-      footerCount: 0,
-    })
-  ),
+  main: JSON.stringify(mainDefaultLayout),
+  directory: JSON.stringify(directoryDefaultLayout),
+  locator: JSON.stringify(locatorDefaultLayout),
 };
