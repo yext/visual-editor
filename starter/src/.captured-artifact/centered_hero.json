@@ -1,0 +1,114 @@
+{
+  "module": {
+    "name": "centered_hero",
+    "display_name": "Banner Image",
+    "parameters": [
+      {
+        "sink": "headline",
+        "name": "Headline",
+        "type": "TEXT_RTF",
+        "default": [
+          {
+            "field": "name"
+          }
+        ]
+      },
+      {
+        "sink": "paragraph",
+        "name": "Paragraph",
+        "type": "TEXT_RTF",
+        "default": [
+          {
+            "value_str": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas finibus placerat justo a viverra. Quisque ut congue tellus, vitae fermentum velit. Suspendisse sed gravida libero. Etiam pulvinar tincidunt augue vitae fermentum. Maecenas tortor nunc, ullamcorper eu tortor sed, vestibulum suscipit libero. Praesent sit amet pulvinar massa. Proin mattis tellus tristique neque ullamcorper, vel vestibulum lorem dapibus. Vivamus et magna in justo posuere imperdiet sit amet amour tellus. 500 characters"
+          },
+          {
+            "entity_type": "job",
+            "field_path": ["hiringOrganization"]
+          }
+        ]
+      },
+      {
+        "sink": "image",
+        "name": "Background Image",
+        "required": true,
+        "type": "IMAGE",
+        "attributes": {
+          "img_size": {
+            "desktop": {
+              "width": 800,
+              "height": 600
+            },
+            "mobile": {
+              "width": 320,
+              "height": 240
+            }
+          }
+        }
+      },
+      {
+        "sink": "buttonText",
+        "name": "Primary CTA Text",
+        "type": "TEXT_RTF",
+        "default": [
+          {
+            "value_str": "Primary CTA"
+          }
+        ]
+      },
+      {
+        "sink": "buttonUrl",
+        "name": "Primary CTA URL",
+        "type": "URL",
+        "default": [
+          {
+            "value_str": "#"
+          },
+          {
+            "entity_type": "job"
+          }
+        ]
+      },
+      {
+        "sink": "button2Text",
+        "name": "Secondary CTA Text",
+        "type": "TEXT_RTF",
+        "default": [
+          {
+            "value_str": "Secondary CTA"
+          }
+        ]
+      },
+      {
+        "sink": "button2Url",
+        "name": "Secondary CTA URL",
+        "type": "URL",
+        "default": [
+          {
+            "value_str": "#"
+          },
+          {
+            "entity_type": "job"
+          }
+        ]
+      }
+    ],
+    "description": "A large, full-width background image overlaid with a headline, paragraph, and buttons.",
+    "html": "e2xldCAkZGVmYXVsdFVSTH0KICB7aWYgJGltYWdlIGFuZCAkaW1hZ2UudXJscy5kZXNrdG9wID09ICcvL2Fzc2V0cy5zaXRlc2Nkbi5uZXQvbGFuZGluZ3BhZ2VzL3NoYXJlZC1hc3NldHMvaW1hZ2UtcGxhY2Vob2xkZXJzL2RlZmF1bHQuc3ZnJ30KICAgIGh0dHBzOi8vaW1hZ2VzLnVuc3BsYXNoLmNvbS9waG90by0xNTIxMDgwNzU1ODM4LWQyMzExMTE3Zjc2Nz9peGxpYj1yYi0wLjMuNSZpeGlkPWV5SmhjSEJmYVdRaU9qRXlNRGQ5JnM9ZGY0ZGJhNmViNzFlZmNjYTZkMTNjNTBiYzJmOTc2OTMmYXV0bz1mb3JtYXQmZml0PWNyb3Amdz0yMDI5JnE9ODAKICB7ZWxzZWlmICRpbWFnZX0KICAgIHskaW1hZ2UudXJscy5kZXNrdG9wfQogIHsvaWZ9CnsvbGV0fQo8ZGl2CiAgICBjbGFzcz0ibHAtcGFyYW0gbHAtcGFyYW0teyRjdXN0b21pemF0aW9uSW5zdGFuY2VJRH0taW1hZ2UgaW1hZ2Utb3V0ZXItY29udGFpbmVyIgogICAgc3R5bGU9ImJhY2tncm91bmQtaW1hZ2U6IHVybCgneyRkZWZhdWx0VVJMfScpOyIKPgogIDxkaXYgY2xhc3M9ImltYWdlLW92ZXJsYXkiPgogICAgPGRpdiBjbGFzcz0iaW1hZ2UtaW5uZXItY29udGFpbmVyIGNvbnRhaW5lciI+CiAgICAgIDwhLS0gIFBhcmFtIC0tPgogICAgICB7aWYgJGhlYWRsaW5lPy52YWx1ZX0KICAgICAgICA8aDIgY2xhc3M9ImxwLXBhcmFtIGxwLXBhcmFtLXskY3VzdG9taXphdGlvbkluc3RhbmNlSUR9LWhlYWRsaW5lIGhlYWRsaW5lIj4KICAgICAgICAgIHtpZiAkaGVhZGxpbmUuaXNSdGZ9CiAgICAgICAgICAgIHskaGVhZGxpbmUudmFsdWUgfGNvbnZlcnRSVEZUb0hUTUx9CiAgICAgICAgICB7ZWxzZWlmICRoZWFkbGluZS5pc1J0ZjJ9CiAgICAgICAgICAgIHskaGVhZGxpbmUudmFsdWUgfGNvbnZlcnRMUlRUb0hUTUx9CiAgICAgICAgICB7ZWxzZWlmICRoZWFkbGluZS5pc01hcmtkb3dufQogICAgICAgICAgICB7JGhlYWRsaW5lLnZhbHVlIHxjb252ZXJ0TURUb0hUTUx9CiAgICAgICAgICB7ZWxzZX0KICAgICAgICAgICAgeyRoZWFkbGluZS52YWx1ZSB8Y2hhbmdlTmV3bGluZVRvQnJ9CiAgICAgICAgICB7L2lmfQogICAgICAgIDwvaDI+CiAgICAgIHsvaWZ9CiAgICAgIHtpZiAkcGFyYWdyYXBoPy52YWx1ZX0KICAgICAgICA8ZGl2IGNsYXNzPSJscC1wYXJhbSBscC1wYXJhbS17JGN1c3RvbWl6YXRpb25JbnN0YW5jZUlEfS1wYXJhZ3JhcGggcGFyYWdyYXBoIj4KICAgICAgICAgIHtpZiAkcGFyYWdyYXBoLmlzUnRmfQogICAgICAgICAgICB7JHBhcmFncmFwaC52YWx1ZSB8Y29udmVydFJURlRvSFRNTH0KICAgICAgICAgIHtlbHNlaWYgJHBhcmFncmFwaC5pc1J0ZjJ9CiAgICAgICAgICAgIHskcGFyYWdyYXBoLnZhbHVlIHxjb252ZXJ0TFJUVG9IVE1MfQogICAgICAgICAge2Vsc2VpZiAkcGFyYWdyYXBoLmlzTWFya2Rvd259CiAgICAgICAgICAgIHskcGFyYWdyYXBoLnZhbHVlIHxjb252ZXJ0TURUb0hUTUx9CiAgICAgICAgICB7ZWxzZX0KICAgICAgICAgICAgeyRwYXJhZ3JhcGgudmFsdWUgfGNoYW5nZU5ld2xpbmVUb0JyfQogICAgICAgICAgey9pZn0KICAgICAgICA8L2Rpdj4KICAgICAgey9pZn0KICAgICAgPGRpdiBjbGFzcz0iY3RhcyI+CiAgICAgICAge2lmICRidXR0b25UZXh0Py52YWx1ZSBhbmQgJGJ1dHRvblVybH0KICAgICAgICAgIDxhIGNsYXNzPSJidG4gcHJpbWFyeS1jdGEgYnRuLXByaW1hcnkgYnRuLWxnIGxwLXBhcmFtIGxwLXBhcmFtLXskY3VzdG9taXphdGlvbkluc3RhbmNlSUR9LWJ1dHRvblRleHQgbHAtcGFyYW0teyRjdXN0b21pemF0aW9uSW5zdGFuY2VJRH0tYnV0dG9uVXJsIgogICAgICAgICAgICAgaHJlZj0ieyRidXR0b25Vcmx9IgogICAgICAgICAgICAgZGF0YS1wYWdlcy1hbmFseXRpY3M9ImNhbGx0b2FjdGlvbmNsaWNrIgogICAgICAgICAgPgogICAgICAgICAgICB7aWYgJGJ1dHRvblRleHQuaXNSdGZ9CiAgICAgICAgICAgICAgeyRidXR0b25UZXh0LnZhbHVlIHxjb252ZXJ0UlRGVG9IVE1MfQogICAgICAgICAgICB7ZWxzZWlmICRidXR0b25UZXh0LmlzUnRmMn0KICAgICAgICAgICAgICB7JGJ1dHRvblRleHQudmFsdWUgfGNvbnZlcnRMUlRUb0hUTUx9CiAgICAgICAgICAgIHtlbHNlaWYgJGJ1dHRvblRleHQuaXNNYXJrZG93bn0KICAgICAgICAgICAgICB7JGJ1dHRvblRleHQudmFsdWUgfGNvbnZlcnRNRFRvSFRNTH0KICAgICAgICAgICAge2Vsc2V9CiAgICAgICAgICAgICAgeyRidXR0b25UZXh0LnZhbHVlfQogICAgICAgICAgICB7L2lmfQogICAgICAgICAgPC9hPgogICAgICAgIHsvaWZ9CiAgICAgICAge2lmICRidXR0b24yVGV4dD8udmFsdWUgYW5kICRidXR0b24yVXJsfQogICAgICAgICAgPGEgY2xhc3M9ImJ0biBzZWNvbmRhcnktY3RhIGJ0bi1zZWNvbmRhcnkgYnRuLWxnIGxwLXBhcmFtIGxwLXBhcmFtLXskY3VzdG9taXphdGlvbkluc3RhbmNlSUR9LWJ1dHRvbjJUZXh0IGxwLXBhcmFtLXskY3VzdG9taXphdGlvbkluc3RhbmNlSUR9LWJ1dHRvbjJVcmwiCiAgICAgICAgICAgICBocmVmPSJ7JGJ1dHRvbjJVcmx9IgogICAgICAgICAgICAgZGF0YS1wYWdlcy1hbmFseXRpY3M9ImNhbGx0b2FjdGlvbmNsaWNrIgogICAgICAgICAgPgogICAgICAgICAgICB7aWYgJGJ1dHRvbjJUZXh0LmlzUnRmfQogICAgICAgICAgICAgIHskYnV0dG9uMlRleHQudmFsdWUgfGNvbnZlcnRSVEZUb0hUTUx9CiAgICAgICAgICAgIHtlbHNlaWYgJGJ1dHRvbjJUZXh0LmlzUnRmMn0KICAgICAgICAgICAgICB7JGJ1dHRvbjJUZXh0LnZhbHVlIHxjb252ZXJ0TFJUVG9IVE1MfQogICAgICAgICAgICB7ZWxzZWlmICRidXR0b24yVGV4dC5pc01hcmtkb3dufQogICAgICAgICAgICAgIHskYnV0dG9uMlRleHQudmFsdWUgfGNvbnZlcnRNRFRvSFRNTH0KICAgICAgICAgICAge2Vsc2V9CiAgICAgICAgICAgICAgeyRidXR0b24yVGV4dC52YWx1ZX0KICAgICAgICAgICAgey9pZn0KICAgICAgICAgIDwvYT4KICAgICAgICB7L2lmfQogICAgICA8L2Rpdj4KICAgIDwvZGl2PgogIDwvZGl2Pgo8L2Rpdj4K",
+    "id": "316",
+    "version": "79",
+    "entity_groups": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "date_created": "1539219781",
+    "date_updated": "1769183127",
+    "account_scope": {
+      "type": "ALL_ACCOUNTS"
+    },
+    "scss": "Ly8gQ2hvb3NlIHRoZSBjb2xvciBvdmVybGF5IG9uIHRoZSBpbWFnZQokb3ZlcmxheS1jb2xvcjogdHJhbnNwYXJlbnRpemUoYmxhY2ssIDAuNCk7CiRmb250LWNvbG9yOiB3aGl0ZTsKCi5pbWFnZS1vdXRlci1jb250YWluZXIgewogICAgYmFja2dyb3VuZC1jb2xvcjogIzIxMjUyOTsKICAgIGJhY2tncm91bmQtc2l6ZTogY292ZXI7CiAgICBiYWNrZ3JvdW5kLXBvc2l0aW9uOiBjZW50ZXIgY2VudGVyOwogICAgYmFja2dyb3VuZC1yZXBlYXQ6IG5vLXJlcGVhdDsKCiAgICAuaW1hZ2Utb3ZlcmxheSB7CiAgICAgICAgcGFkZGluZzogNHJlbSAwOwogICAgICAgIGNvbG9yOiAkZm9udC1jb2xvcjsKICAgICAgICAmaDEsaDIsaDMgewogICAgICAgICAgICBjb2xvcjogJGZvbnQtY29sb3I7CiAgICAgICAgfQogICAgICAgIHRleHQtYWxpZ246IGNlbnRlcjsKICAgICAgICBiYWNrZ3JvdW5kLWNvbG9yOiAkb3ZlcmxheS1jb2xvcjsKCiAgICAgICAgLmltYWdlLWlubmVyLWNvbnRhaW5lciB7CiAgICAgICAgICAgIG1hcmdpbjogMCBhdXRvOwogICAgICAgICAgICBtYXgtd2lkdGg6IDgwMHB4OwogICAgICAgICAgICBkaXNwbGF5OiBmbGV4OwogICAgICAgICAgICBmbGV4LWRpcmVjdGlvbjogY29sdW1uOwogICAgICAgICAgICBhbGlnbi1pdGVtczogY2VudGVyOwoKICAgICAgICAgICAgLmhlYWRsaW5lIHsKICAgICAgICAgICAgfQoKICAgICAgICAgICAgLnBhcmFncmFwaCB7CiAgICAgICAgICAgICAgICB3aWR0aDogMTAwJTsKICAgICAgICAgICAgfQoKICAgICAgICAgICAgLmN0YXMgewogICAgICAgICAgICAgICAgYSB7CiAgICAgICAgICAgICAgICAgICAgbWFyZ2luLWJvdHRvbTogMC41cmVtOwoKICAgICAgICAgICAgICAgICAgICAmOm5vdCg6bGFzdC1jaGlsZCkgewogICAgICAgICAgICAgICAgICAgICAgICBtYXJnaW4tcmlnaHQ6IDAuNXJlbTsKICAgICAgICAgICAgICAgICAgICB9CgogICAgICAgICAgICAgICAgICAgICYucHJpbWFyeS1jdGEgewoKICAgICAgICAgICAgICAgICAgICB9CgogICAgICAgICAgICAgICAgICAgICYuc2Vjb25kYXJ5LWN0YSB7CgogICAgICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgfQogICAgICAgIH0KICAgIH0KfQo=",
+    "type": "MODULE",
+    "created_by": "536",
+    "page_set_types": ["TEMPLATE", "SINGLE_PAGE"],
+    "cac_id": "backstage-grower-finer-a1b24",
+    "cac_namespace": "",
+    "api_version": "20220624"
+  },
+  "config_version": "20220617"
+}

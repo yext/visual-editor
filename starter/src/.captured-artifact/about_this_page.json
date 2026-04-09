@@ -1,0 +1,83 @@
+{
+  "module": {
+    "name": "about_this_page",
+    "display_name": "About this Page",
+    "parameters": [
+      {
+        "sink": "image",
+        "name": "Image",
+        "type": "IMAGE",
+        "attributes": {
+          "img_source_requirements": {
+            "aspect_ratio": "3:2"
+          },
+          "img_size": {
+            "default": {
+              "width": 3000,
+              "height": 3000
+            }
+          }
+        }
+      },
+      {
+        "sink": "headline",
+        "name": "Headline",
+        "type": "TEXT_RTF",
+        "default": [
+          {
+            "value_str": "Headline"
+          }
+        ]
+      },
+      {
+        "sink": "paragraph",
+        "name": "Paragraph",
+        "required": true,
+        "type": "TEXT_RTF",
+        "default": [
+          {
+            "value_str": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+          }
+        ]
+      },
+      {
+        "sink": "ctaText",
+        "name": "CTA Text",
+        "type": "TEXT_RTF",
+        "default": [
+          {
+            "value_str": "Primary CTA"
+          }
+        ]
+      },
+      {
+        "sink": "ctaURL",
+        "name": "CTA URL",
+        "type": "URL",
+        "default": [
+          {
+            "value_str": "#"
+          }
+        ]
+      }
+    ],
+    "description": "An image and paragraph with optional headline and call-to-action button",
+    "html": "PGRpdiBjbGFzcz0iY29udGFpbmVyIG1vZHVsZS1jb250YWluZXIiPgogIDxkaXYgY2xhc3M9InJvdyI+CiAgICB7aWYgJGltYWdlfQogICAgICA8ZGl2IGNsYXNzPSJjb2wtbWQtNiBvcmRlci0yIG9yZGVyLW1kLTEgbGVmdC1jb2x1bW4iPgogICAgICAgIDxpbWcgY2xhc3M9ImxwLXBhcmFtIGxwLXBhcmFtLXskY3VzdG9taXphdGlvbkluc3RhbmNlSUR9LWltYWdlIGltYWdlIiBzcmM9InskaW1hZ2UudXJscy5kZWZhdWx0fSIge2lmICRpbWFnZS5hbHRlcm5hdGVUZXh0fSBhbHQ9InskaW1hZ2UuYWx0ZXJuYXRlVGV4dH0iey9pZn0+CiAgICAgIDwvZGl2PgogICAgey9pZn0KCiAgICA8ZGl2IGNsYXNzPSJ7aWYgJGltYWdlfWNvbC1tZC02IHtlbHNlfWNvbC1tZC0xMnsvaWZ9IG9yZGVyLTEgb3JkZXItbWQtMiByaWdodC1jb2x1bW4iPgogICAgICB7aWYgJGhlYWRsaW5lPy52YWx1ZX0KICAgICAgICA8aDIgY2xhc3M9ImxwLXBhcmFtIGxwLXBhcmFtLXskY3VzdG9taXphdGlvbkluc3RhbmNlSUR9LWhlYWRsaW5lIGhlYWRsaW5lIGgxIj4KICAgICAgICAgIHtpZiAkaGVhZGxpbmUuaXNSdGZ9CiAgICAgICAgICAgIHskaGVhZGxpbmUudmFsdWUgfGNvbnZlcnRSVEZUb0hUTUx9CiAgICAgICAgICB7ZWxzZWlmICRoZWFkbGluZS5pc1J0ZjJ9CiAgICAgICAgICAgIHskaGVhZGxpbmUudmFsdWUgfGNvbnZlcnRMUlRUb0hUTUx9CiAgICAgICAgICB7ZWxzZWlmICRoZWFkbGluZS5pc01hcmtkb3dufQogICAgICAgICAgICB7JGhlYWRsaW5lLnZhbHVlIHxjb252ZXJ0TURUb0hUTUx9CiAgICAgICAgICB7ZWxzZX0KICAgICAgICAgICAgeyRoZWFkbGluZS52YWx1ZX0KICAgICAgICAgIHsvaWZ9CiAgICAgICAgPC9oMj4KICAgICAgey9pZn0KICAgICAge2lmICRpbWFnZX0KICAgICAgICA8ZGl2PgogICAgICAgICAgICA8aW1nIGNsYXNzPSJscC1wYXJhbSBscC1wYXJhbS17JGN1c3RvbWl6YXRpb25JbnN0YW5jZUlEfS1pbWFnZSBpbWFnZSIgc3JjPSJ7JGltYWdlLnVybHMuZGVmYXVsdH0iIHtpZiAkaW1hZ2UuYWx0ZXJuYXRlVGV4dH0gYWx0PSJ7JGltYWdlLmFsdGVybmF0ZVRleHR9InsvaWZ9PgogICAgICAgIDwvZGl2PgogICAgICB7L2lmfQogICAgICB7aWYgJHBhcmFncmFwaD8udmFsdWV9CiAgICAgICAgPGRpdiBjbGFzcz0ibHAtcGFyYW0gbHAtcGFyYW0teyRjdXN0b21pemF0aW9uSW5zdGFuY2VJRH0tcGFyYWdyYXBoIHBhcmFncmFwaCI+CiAgICAgICAgICB7aWYgJHBhcmFncmFwaC5pc1J0Zn0KICAgICAgICAgICAgeyRwYXJhZ3JhcGgudmFsdWUgfGNvbnZlcnRSVEZUb0hUTUx9CiAgICAgICAgICB7ZWxzZWlmICRwYXJhZ3JhcGguaXNSdGYyfQogICAgICAgICAgICB7JHBhcmFncmFwaC52YWx1ZSB8Y29udmVydExSVFRvSFRNTH0KICAgICAgICAgIHtlbHNlaWYgJHBhcmFncmFwaC5pc01hcmtkb3dufQogICAgICAgICAgICB7JHBhcmFncmFwaC52YWx1ZSB8Y29udmVydE1EVG9IVE1MfQogICAgICAgICAge2Vsc2V9CiAgICAgICAgICAgIHskcGFyYWdyYXBoLnZhbHVlIHxjaGFuZ2VOZXdsaW5lVG9Ccn0KICAgICAgICAgIHsvaWZ9CiAgICAgICAgPC9kaXY+CiAgICAgIHsvaWZ9CiAgICAgIHtpZiAkY3RhVVJMIGFuZCAkY3RhVGV4dD8udmFsdWV9CiAgICAgICAgPGRpdiBjbGFzcz0iY3RhLWNvbnRhaW5lciI+CiAgICAgICAgICA8YSBjbGFzcz0iYnRuIGJ0bi1wcmltYXJ5IGJ0bi1sZyBscC1wYXJhbSBscC1wYXJhbS17JGN1c3RvbWl6YXRpb25JbnN0YW5jZUlEfS1jdGFUZXh0IGxwLXBhcmFtLXskY3VzdG9taXphdGlvbkluc3RhbmNlSUR9LWN0YVVSTCBjdGEiIGhyZWY9InskY3RhVVJMfSIgZGF0YS1wYWdlcy1hbmFseXRpY3M9ImNhbGx0b2FjdGlvbmNsaWNrIj4KICAgICAgICAgICAge2lmICRjdGFUZXh0LmlzUnRmfQogICAgICAgICAgICAgIHskY3RhVGV4dC52YWx1ZSB8Y29udmVydFJURlRvSFRNTH0KICAgICAgICAgICAge2Vsc2VpZiAkY3RhVGV4dC5pc1J0ZjJ9CiAgICAgICAgICAgICAgeyRjdGFUZXh0LnZhbHVlIHxjb252ZXJ0TFJUVG9IVE1MfQogICAgICAgICAgICB7ZWxzZWlmICRjdGFUZXh0LmlzTWFya2Rvd259CiAgICAgICAgICAgICAgeyRjdGFUZXh0LnZhbHVlIHxjb252ZXJ0TURUb0hUTUx9CiAgICAgICAgICAgIHtlbHNlfQogICAgICAgICAgICAgIHskY3RhVGV4dC52YWx1ZX0KICAgICAgICAgICAgey9pZn0KICAgICAgICAgIDwvYT4KICAgICAgICA8L2Rpdj4KICAgICAgey9pZn0KICAgICAgPC9kaXY+CiAgPC9kaXY+CjwvZGl2Pgo=",
+    "id": "324",
+    "version": "92",
+    "entity_groups": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "date_created": "1539782359",
+    "date_updated": "1769183126",
+    "account_scope": {
+      "type": "ALL_ACCOUNTS"
+    },
+    "scss": "cGFkZGluZzogMnJlbSAwOwoKLmltYWdlIHsKICAgIHdpZHRoOiAxMDAlOwp9CgoubGVmdC1jb2x1bW4gewogICAgLy8gTm90IGluY2x1ZGVkIGluIElFCiAgICBAc3VwcG9ydHMgbm90ICgtbXMtaGlnaC1jb250cmFzdDogbm9uZSkgewogICAgICAgIGRpc3BsYXk6IGZsZXg7CiAgICAgICAgZmxleC1kaXJlY3Rpb246IGNvbHVtbjsKICAgICAgICBqdXN0aWZ5LWNvbnRlbnQ6IGNlbnRlcjsKICAgIH0KCiAgICBpbWcuaW1hZ2UgewogICAgfQp9CgoucmlnaHQtY29sdW1uIHsKICAgIC8vIE5vdCBpbmNsdWRlZCBpbiBJRQogICAgQHN1cHBvcnRzIG5vdCAoLW1zLWhpZ2gtY29udHJhc3Q6IG5vbmUpIHsKICAgICAgICBkaXNwbGF5OiBmbGV4OwogICAgICAgIGZsZXgtZGlyZWN0aW9uOiBjb2x1bW47CiAgICAgICAganVzdGlmeS1jb250ZW50OiBmbGV4LXN0YXJ0OwogICAgfQoKICAgIC5oZWFkbGluZSB7CiAgICAgICAgbWFyZ2luLWJvdHRvbTogMTZweDsKICAgIH0KCiAgICBpbWcuaW1hZ2UgewogICAgICAgIGRpc3BsYXk6IG5vbmU7IC8vIEhpZGRlbiBvbiBEZXNrdG9wCiAgICAgICAgbWFyZ2luLWJvdHRvbTogMTZweDsKICAgIH0KCiAgICAucGFyYWdyYXBoIHsKICAgICAgbWFyZ2luLWJvdHRvbTogMXJlbTsKICAgIH0KCiAgICAuY3RhLWNvbnRhaW5lciB7CiAgICAgICAgLmN0YSB7CiAgICAgICAgfQogICAgfQp9CgovLyBTdHlsZSBmb3IgbW9iaWxlCiRncmlkLWJyZWFrcG9pbnRzOiAoCiAgeHM6IDAsCiAgc206IDU3NnB4LAogIG1kOiA3NjhweCwKICBsZzogOTkycHgsCiAgeGw6IDEyMDBweAopICFkZWZhdWx0OwoKIEBtZWRpYSAobWF4LXdpZHRoOiBtYXAtZ2V0KCRncmlkLWJyZWFrcG9pbnRzLCAibWQiKSkgewogICAgLmxlZnQtY29sdW1uIHsKICAgICAgICBkaXNwbGF5OiBub25lOwogICAgfQoKICAgIC5yaWdodC1jb2x1bW4gewogICAgICBmbGV4OiBhdXRvOwogICAgICBtYXgtd2lkdGg6IDEwMCU7CgogICAgICAuaGVhZGxpbmUgewogICAgICAgICAgdGV4dC1hbGlnbjogY2VudGVyOwogICAgICB9CgogICAgICBpbWcuaW1hZ2UgewogICAgICAgICAgZGlzcGxheTogYmxvY2s7CiAgICAgIH0KCiAgICAgIC5jdGEtY29udGFpbmVyIHsKICAgICAgICAgIHRleHQtYWxpZ246IGNlbnRlcjsKICAgICAgfQogICAgfQoKIH0KCg==",
+    "type": "MODULE",
+    "created_by": "536",
+    "page_set_types": ["TEMPLATE", "SINGLE_PAGE"],
+    "cac_id": "myth-partake-tarantula-7fca1",
+    "cac_namespace": "",
+    "api_version": "20220624"
+  },
+  "config_version": "20220617"
+}

@@ -1,0 +1,48 @@
+{
+  "module": {
+    "name": "announcement_bar_2",
+    "display_name": "Announcement Bar",
+    "parameters": [
+      {
+        "sink": "announcementText",
+        "name": "Announcement Text",
+        "required": true,
+        "type": "TEXT_RTF",
+        "default": [
+          {
+            "value_str": "Announcement Bar Text"
+          }
+        ]
+      },
+      {
+        "sink": "announcementUrl",
+        "name": "Announcement URL",
+        "description": "If not provided then it’s not linked anywhere",
+        "type": "URL",
+        "default": [
+          {
+            "value_str": "#"
+          }
+        ]
+      }
+    ],
+    "description": "A colored bar with a single line of text that you would typically place at the top of your webpage",
+    "html": "PCEtLSBBbm5vdW5jZW1lbnQgQmFyIC0tPgp7aWYgJGFubm91bmNlbWVudFVybCBvciAkYW5ub3VuY2VtZW50VGV4dD8udmFsdWV9Cgk8ZGl2IGNsYXNzPSJtb2R1bGUgIG1vZHVsZS1hbm5vdW5jZW1lbnQtYmFyIG1vZHVsZS1hbm5vdW5jZW1lbnQtYmFyLXskY3VzdG9taXphdGlvbkluc3RhbmNlSUR9IG1vZHVsZS17JGN1c3RvbWl6YXRpb25JbnN0YW5jZUlEfSBkLWZsZXgganVzdGlmeS1pdGVtcy1zdHJldGNoICI+CgkJe2lmICRhbm5vdW5jZW1lbnRVcmx9CgkJCTxhIGNsYXNzPSJidG4gYnRuLXByaW1hcnkgdGV4dC1jb2xvci1pbnZlcnNlLXByaW1hcnkgbHAtcGFyYW0gbHAtcGFyYW0teyRjdXN0b21pemF0aW9uSW5zdGFuY2VJRH0tYW5ub3VuY2VtZW50VGV4dCBscC1wYXJhbS17JGN1c3RvbWl6YXRpb25JbnN0YW5jZUlEfS1hbm5vdW5jZW1lbnRVcmwiCgkJCQkgaHJlZj0ieyRhbm5vdW5jZW1lbnRVcmx9IgoJCQkJIGRhdGEtcGFnZXMtYW5hbHl0aWNzPSJjYWxsdG9hY3Rpb25jbGljayI+CgkJe2Vsc2V9CgkJCTxhIGNsYXNzPSJidG4gYnRuLXByaW1hcnkgdGV4dC1jb2xvci1pbnZlcnNlLXByaW1hcnkgbHAtcGFyYW0gbHAtcGFyYW0teyRjdXN0b21pemF0aW9uSW5zdGFuY2VJRH0tYW5ub3VuY2VtZW50VGV4dCIKICAgICAgICAgaHJlZj0iamF2YXNjcmlwdDo7Ij4KICAgIHsvaWZ9CiAgICAgIHtpZiAkYW5ub3VuY2VtZW50VGV4dD8udmFsdWV9CiAgICAgICAge2lmICRhbm5vdW5jZW1lbnRUZXh0LmlzUnRmfQogICAgICAgICAgeyRhbm5vdW5jZW1lbnRUZXh0LnZhbHVlIHxjb252ZXJ0UlRGVG9IVE1MfQogICAgICAgIHtlbHNlaWYgJGFubm91bmNlbWVudFRleHQuaXNSdGYyfQogICAgICAgICAgeyRhbm5vdW5jZW1lbnRUZXh0LnZhbHVlIHxjb252ZXJ0TFJUVG9IVE1MfQogICAgICAgIHtlbHNlaWYgJGFubm91bmNlbWVudFRleHQuaXNNYXJrZG93bn0KICAgICAgICAgIHskYW5ub3VuY2VtZW50VGV4dC52YWx1ZSB8Y29udmVydE1EVG9IVE1MfQogICAgICAgIHtlbHNlfQogICAgICAgICAgeyRhbm5vdW5jZW1lbnRUZXh0LnZhbHVlfQogICAgICAgIHsvaWZ9CiAgICAgIHsvaWZ9CiAgICA8L2E+Cgk8L2Rpdj4Key9pZn0K",
+    "id": "323",
+    "version": "50",
+    "entity_groups": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "date_created": "1539732450",
+    "date_updated": "1769183126",
+    "account_scope": {
+      "type": "ALL_ACCOUNTS"
+    },
+    "scss": "Lm1vZHVsZS1hbm5vdW5jZW1lbnQtYmFyIHsKCXBhZGRpbmc6IDA7Cn0KCi5tb2R1bGUtYW5ub3VuY2VtZW50LWJhciBhIHsKCWZsZXgtZ3JvdzogMTsKCXRleHQtYWxpZ246IGNlbnRlcjsKCXBhZGRpbmc6IDdweCA1cHg7Cn0KCi8vIE92ZXJyaWRlIHRoZSBiYWNrZ3JvdW5kIGNvbG9yIGJlbG93Ci5tb2R1bGUtYW5ub3VuY2VtZW50LWJhciAuYnRuIHsKICAgIC8vIGJhY2tncm91bmQtY29sb3I6IGdyYXk7Cglib3JkZXItcmFkaXVzOiAwcHg7Cgl3b3JkLXdyYXA6IGJyZWFrLXdvcmQ7Cgl3aGl0ZS1zcGFjZTogbm9ybWFsOwoJYm9yZGVyOiAwcHg7CgltYXJnaW46IDBweDsKCWJveC1zaGFkb3c6IG5vbmU7Cn0K",
+    "type": "MODULE",
+    "created_by": "2223",
+    "page_set_types": ["TEMPLATE", "SINGLE_PAGE"],
+    "cac_id": "eloquence-outspoken-reassign-85131",
+    "cac_namespace": "",
+    "api_version": "20220624"
+  },
+  "config_version": "20220617"
+}
