@@ -1,0 +1,264 @@
+diff --git a/dist/chunk-PK2F2YZX.mjs b/dist/chunk-PK2F2YZX.mjs
+index 0ba0c2017..c70c26a58 100644
+--- a/dist/chunk-PK2F2YZX.mjs
++++ b/dist/chunk-PK2F2YZX.mjs
+@@ -2588,6 +2588,9 @@ var DraggableComponent = ({
+   const ref = useRef2(null);
+   const refSetter = useCallback7(
+     (el) => {
++      if (el && itemRef) {
++        el.setAttribute("data-index", `${index}`);
++      }
+       sortableRef(el);
+       if (ref.current !== el) {
+         ref.current = el;
+@@ -2597,7 +2600,7 @@ var DraggableComponent = ({
+         }
+       }
+     },
+-    [itemRef, sortableRef]
++    [index, itemRef, sortableRef]
+   );
+   const [portalEl, setPortalEl] = useState9();
+   useEffect8(() => {
+@@ -2820,7 +2823,7 @@ var DraggableComponent = ({
+   const [_, startTransition] = useTransition();
+   useEffect8(() => {
+     startTransition(() => {
+-      if (hover || indicativeHover || isSelected) {
++      if (hover || indicativeHover || isSelected || thisIsDragging) {
+         scheduleSync();
+         setIsVisible(true);
+         setThisWasDragging(false);
+@@ -2828,7 +2831,7 @@ var DraggableComponent = ({
+         setIsVisible(false);
+       }
+     });
+-  }, [hover, indicativeHover, isSelected, iframe]);
++  }, [hover, indicativeHover, isSelected, thisIsDragging, iframe]);
+   const [thisWasDragging, setThisWasDragging] = useState9(false);
+   const onDragFinished = useOnDragFinished((finished) => {
+     if (finished) {
+@@ -2849,7 +2852,7 @@ var DraggableComponent = ({
+     if (thisWasDragging) return onDragFinished();
+   }, [thisWasDragging, onDragFinished]);
+   useEffect8(() => {
+-    if (!dragFinished || !(isSelected || thisIsDragging)) return;
++    if (!dragFinished || !(hover || indicativeHover || isSelected || thisIsDragging)) return;
+     const el = ref.current;
+     if (!el) return;
+     const doc = el.ownerDocument;
+@@ -2884,7 +2887,7 @@ var DraggableComponent = ({
+       view.removeEventListener("resize", onResize);
+       cancelAnimationFrame(frame);
+     };
+-  }, [dragFinished, isSelected, thisIsDragging, scheduleSync]);
++  }, [dragFinished, hover, indicativeHover, isSelected, thisIsDragging, scheduleSync]);
+   const syncActionsPosition = useCallback7(
+     (el) => {
+       if (el) {
+@@ -4698,7 +4701,6 @@ var VirtualizedDropZone = ({
+     return null;
+   });
+   const iframeWindow = frame == null ? void 0 : frame.defaultView;
+-  const measureRefsRef = useRef8(/* @__PURE__ */ new Map());
+   const appStoreApi = useAppStoreApi();
+   const resolveIndex = useCallback12(
+     (targetId) => {
+@@ -4753,6 +4755,14 @@ var VirtualizedDropZone = ({
+     getItemKey: (index) => contentIds[index],
+     estimateSize: (index) => getEstimatedItemHeight(contentIds[index]),
+     getScrollElement: () => iframeWindow != null ? iframeWindow : null,
++    measureElement: (element, _entry, instance) => {
++      const height = Math.ceil(element.getBoundingClientRect().height) || DEFAULT_VIRTUALIZED_ITEM_HEIGHT;
++      const componentId = contentIds[instance.indexFromElement(element)];
++      if (componentId && height > 0) {
++        cacheMeasuredItemHeight(componentId, height);
++      }
++      return height;
++    },
+     overscan: ROOT_ZONE_VIRTUALIZATION_OVERSCAN,
+     observeElementRect: (instance, cb) => iframeWindow ? observeWindowRect(instance, cb) : observeElementRect(instance, cb),
+     observeElementOffset: (instance, cb) => iframeWindow ? observeWindowOffset(instance, cb) : observeElementOffset(instance, cb),
+@@ -4769,31 +4779,6 @@ var VirtualizedDropZone = ({
+       zoneStore.getState().unregisterRootVirtualizer(zoneCompound);
+     };
+   }, [resolveIndex, virtualizer, zoneCompound, zoneStore]);
+-  const getMeasureRef = useCallback12((componentId) => {
+-    const cachedRef = measureRefsRef.current.get(componentId);
+-    if (cachedRef) {
+-      return cachedRef;
+-    }
+-    const measureRef = (element) => {
+-      if (!element) {
+-        return;
+-      }
+-      const height = Math.ceil(element.getBoundingClientRect().height) || DEFAULT_VIRTUALIZED_ITEM_HEIGHT;
+-      if (typeof height === "number" && height > 0) {
+-        cacheMeasuredItemHeight(componentId, height);
+-      }
+-    };
+-    measureRefsRef.current.set(componentId, measureRef);
+-    return measureRef;
+-  }, []);
+-  useEffect15(() => {
+-    const validIds = new Set(contentIds);
+-    Array.from(measureRefsRef.current.keys()).forEach((componentId) => {
+-      if (!validIds.has(componentId)) {
+-        measureRefsRef.current.delete(componentId);
+-      }
+-    });
+-  }, [contentIds]);
+   const virtualItems = virtualizer.getVirtualItems();
+   const totalSize = virtualizer.getTotalSize();
+   const renderedItems = useMemo11(() => {
+@@ -4819,7 +4804,7 @@ var VirtualizedDropZone = ({
+         renderItem({
+           componentId,
+           index: virtualItem.index,
+-          measureRef: getMeasureRef(componentId)
++          measureRef: virtualizer.measureElement
+         })
+       );
+       previousEnd = virtualItem.end;
+@@ -4838,7 +4823,7 @@ var VirtualizedDropZone = ({
+       );
+     }
+     return items;
+-  }, [totalSize, virtualItems, getMeasureRef]);
++  }, [contentIds, totalSize, virtualItems, virtualizer]);
+   return /* @__PURE__ */ jsx30(Fragment8, { children: renderedItems });
+ };
+ 
+diff --git a/dist/index.js b/dist/index.js
+index 624c3ffff..93ee8c559 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -8168,6 +8168,9 @@ var DraggableComponent = ({
+   const ref = (0, import_react51.useRef)(null);
+   const refSetter = (0, import_react51.useCallback)(
+     (el) => {
++      if (el && itemRef) {
++        el.setAttribute("data-index", `${index}`);
++      }
+       sortableRef(el);
+       if (ref.current !== el) {
+         ref.current = el;
+@@ -8177,7 +8180,7 @@ var DraggableComponent = ({
+         }
+       }
+     },
+-    [itemRef, sortableRef]
++    [index, itemRef, sortableRef]
+   );
+   const [portalEl, setPortalEl] = (0, import_react51.useState)();
+   (0, import_react51.useEffect)(() => {
+@@ -8400,7 +8403,7 @@ var DraggableComponent = ({
+   const [_, startTransition] = (0, import_react51.useTransition)();
+   (0, import_react51.useEffect)(() => {
+     startTransition(() => {
+-      if (hover || indicativeHover || isSelected) {
++      if (hover || indicativeHover || isSelected || thisIsDragging) {
+         scheduleSync();
+         setIsVisible(true);
+         setThisWasDragging(false);
+@@ -8408,7 +8411,7 @@ var DraggableComponent = ({
+         setIsVisible(false);
+       }
+     });
+-  }, [hover, indicativeHover, isSelected, iframe]);
++  }, [hover, indicativeHover, isSelected, thisIsDragging, iframe]);
+   const [thisWasDragging, setThisWasDragging] = (0, import_react51.useState)(false);
+   const onDragFinished = useOnDragFinished((finished) => {
+     if (finished) {
+@@ -8429,7 +8432,7 @@ var DraggableComponent = ({
+     if (thisWasDragging) return onDragFinished();
+   }, [thisWasDragging, onDragFinished]);
+   (0, import_react51.useEffect)(() => {
+-    if (!dragFinished || !(isSelected || thisIsDragging)) return;
++    if (!dragFinished || !(hover || indicativeHover || isSelected || thisIsDragging)) return;
+     const el = ref.current;
+     if (!el) return;
+     const doc = el.ownerDocument;
+@@ -8464,7 +8467,7 @@ var DraggableComponent = ({
+       view.removeEventListener("resize", onResize);
+       cancelAnimationFrame(frame);
+     };
+-  }, [dragFinished, isSelected, thisIsDragging, scheduleSync]);
++  }, [dragFinished, hover, indicativeHover, isSelected, thisIsDragging, scheduleSync]);
+   const syncActionsPosition = (0, import_react51.useCallback)(
+     (el) => {
+       if (el) {
+@@ -9607,7 +9610,6 @@ var VirtualizedDropZone = ({
+     return null;
+   });
+   const iframeWindow = frame == null ? void 0 : frame.defaultView;
+-  const measureRefsRef = (0, import_react66.useRef)(/* @__PURE__ */ new Map());
+   const appStoreApi = useAppStoreApi();
+   const resolveIndex = (0, import_react66.useCallback)(
+     (targetId) => {
+@@ -9662,6 +9664,14 @@ var VirtualizedDropZone = ({
+     getItemKey: (index) => contentIds[index],
+     estimateSize: (index) => getEstimatedItemHeight(contentIds[index]),
+     getScrollElement: () => iframeWindow != null ? iframeWindow : null,
++    measureElement: (element, _entry, instance) => {
++      const height = Math.ceil(element.getBoundingClientRect().height) || DEFAULT_VIRTUALIZED_ITEM_HEIGHT;
++      const componentId = contentIds[instance.indexFromElement(element)];
++      if (componentId && height > 0) {
++        cacheMeasuredItemHeight(componentId, height);
++      }
++      return height;
++    },
+     overscan: ROOT_ZONE_VIRTUALIZATION_OVERSCAN,
+     observeElementRect: (instance, cb) => iframeWindow ? (0, import_react_virtual.observeWindowRect)(instance, cb) : (0, import_react_virtual.observeElementRect)(instance, cb),
+     observeElementOffset: (instance, cb) => iframeWindow ? (0, import_react_virtual.observeWindowOffset)(instance, cb) : (0, import_react_virtual.observeElementOffset)(instance, cb),
+@@ -9678,31 +9688,6 @@ var VirtualizedDropZone = ({
+       zoneStore.getState().unregisterRootVirtualizer(zoneCompound);
+     };
+   }, [resolveIndex, virtualizer, zoneCompound, zoneStore]);
+-  const getMeasureRef = (0, import_react66.useCallback)((componentId) => {
+-    const cachedRef = measureRefsRef.current.get(componentId);
+-    if (cachedRef) {
+-      return cachedRef;
+-    }
+-    const measureRef = (element) => {
+-      if (!element) {
+-        return;
+-      }
+-      const height = Math.ceil(element.getBoundingClientRect().height) || DEFAULT_VIRTUALIZED_ITEM_HEIGHT;
+-      if (typeof height === "number" && height > 0) {
+-        cacheMeasuredItemHeight(componentId, height);
+-      }
+-    };
+-    measureRefsRef.current.set(componentId, measureRef);
+-    return measureRef;
+-  }, []);
+-  (0, import_react66.useEffect)(() => {
+-    const validIds = new Set(contentIds);
+-    Array.from(measureRefsRef.current.keys()).forEach((componentId) => {
+-      if (!validIds.has(componentId)) {
+-        measureRefsRef.current.delete(componentId);
+-      }
+-    });
+-  }, [contentIds]);
+   const virtualItems = virtualizer.getVirtualItems();
+   const totalSize = virtualizer.getTotalSize();
+   const renderedItems = (0, import_react66.useMemo)(() => {
+@@ -9728,7 +9713,7 @@ var VirtualizedDropZone = ({
+         renderItem({
+           componentId,
+           index: virtualItem.index,
+-          measureRef: getMeasureRef(componentId)
++          measureRef: virtualizer.measureElement
+         })
+       );
+       previousEnd = virtualItem.end;
+@@ -9747,7 +9732,7 @@ var VirtualizedDropZone = ({
+       );
+     }
+     return items;
+-  }, [totalSize, virtualItems, getMeasureRef]);
++  }, [contentIds, totalSize, virtualItems, virtualizer]);
+   return /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(import_jsx_runtime67.Fragment, { children: renderedItems });
+ };
+ 
