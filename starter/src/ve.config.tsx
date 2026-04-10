@@ -1,5 +1,6 @@
 import { type Config } from "@puckeditor/core";
 import "@yext/visual-editor/style.css";
+import "@mantine/core/styles.css";
 import "./index.css";
 import {
   DirectoryCategory,

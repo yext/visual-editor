@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "strict": true,
+    "noImplicitAny": false,
+    "moduleResolution": "Bundler",
+    "forceConsistentCasingInFileNames": true,
+    "jsx": "react-jsx",
+    "outDir": "./dist",
+    "module": "esnext",
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["src", "global.d.ts"],
+  "exclude": ["../node_modules", "node_modules"]
+}
