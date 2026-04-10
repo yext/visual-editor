@@ -9,7 +9,8 @@
     "dev": "cd .. && pnpm build && cd ./starter && pages dev --local --no-prod-url --noInit",
     "dev:stackblitz": "pages dev --local --no-prod-url --noInit",
     "prod": "pages prod",
-    "build": "pages build"
+    "build": "pages build",
+    "typecheck": "tsc --noEmit"
   },
   "engines": {
     "node": "^20.6.0 || ^22 || ^24"
@@ -17,8 +18,8 @@
   "dependencies": {
     "@headlessui/react": "^1.7.19",
     "@heroicons/react": "^2.1.5",
-    "@mantine/core": "^7.10.1",
-    "@mantine/hooks": "^7.10.1",
+    "@mantine/core": "^7.17.8",
+    "@mantine/hooks": "^7.17.8",
     "@puckeditor/core": "0.21.1",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-alert-dialog": "^1.0.5",
@@ -28,6 +29,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-toast": "^1.1.5",
     "@radix-ui/react-tooltip": "^1.1.2",
+    "@react-email/components": "1.0.11",
     "@types/node": "^20.12.3",
     "@yext/search-headless-react": "^2.5.3",
     "@yext/search-ui-react": "^3.0.0",
@@ -37,12 +39,14 @@
     "clsx": "^2.1.1",
     "i18next": "^25.2.1",
     "lucide-react": "^0.378.0",
+    "lz-string": "1.5.0",
     "mapbox-gl": "^3.20.0",
     "next-themes": "^0.3.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-i18next": "^15.5.2",
     "react-icons": "^5.2.1",
+    "react-is": "18.3.1",
     "sonner": "^1.4.41",
     "tailwind-merge": "^2.3.0"
   },
@@ -56,6 +60,8 @@
     "@yext/visual-editor": "workspace:*",
     "autoprefixer": "^10.4.8",
     "postcss": "^8.4.32",
+    "postcss-preset-mantine": "^1.18.0",
+    "postcss-simple-vars": "^7.0.1",
     "prettier": "^3.3.2",
     "prettier-plugin-tailwindcss": "0.4.1",
     "tailwindcss": "^3.3.0",
@@ -65,6 +71,7 @@
   "overrides": {
     "vite": {
       "rollup": "npm:@rollup/wasm-node@^4.59.0"
-    }
+    },
+    "react-is": "^18.3.1"
   }
 }
