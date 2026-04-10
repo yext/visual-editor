@@ -52,7 +52,8 @@ export const compareScreenshot: BrowserCommand<
     return {
       passes: false,
       numDiffPixels:
-        Math.abs(updatedImg.height - height) * Math.max(width, updatedImg.width) +
+        Math.abs(updatedImg.height - height) *
+          Math.max(width, updatedImg.width) +
         Math.abs(updatedImg.width - width) * height,
     };
   }

@@ -2029,8 +2029,9 @@ const Map: React.FC<MapProps> = ({
   locationStyleConfig,
 }) => {
   const entityDocument: StreamDocument = useDocument();
-  const results = useSearchState((state) => state.vertical.results ?? []) as
-    Result<Location>[];
+  const results = useSearchState(
+    (state) => state.vertical.results ?? []
+  ) as Result<Location>[];
 
   const documentIsUndefined = typeof document === "undefined";
   const iframe = documentIsUndefined

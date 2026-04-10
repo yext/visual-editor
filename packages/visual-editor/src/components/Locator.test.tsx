@@ -28,9 +28,11 @@ vi.mock("@yext/search-ui-react", async () => {
 
   return {
     ...actual,
-    getUserLocation: vi.fn().mockRejectedValue(
-      new Error("Locator screenshot tests use fixture search data.")
-    ),
+    getUserLocation: vi
+      .fn()
+      .mockRejectedValue(
+        new Error("Locator screenshot tests use fixture search data.")
+      ),
   };
 });
 
@@ -282,9 +284,12 @@ const createLocatorFetchMock = (document: Record<string, any>) => {
           : input.url;
 
     if (url.includes("/search/vertical/query")) {
-      return new Response(JSON.stringify(createLocatorVerticalSearchResponse(results)), {
-        status: 200,
-      });
+      return new Response(
+        JSON.stringify(createLocatorVerticalSearchResponse(results)),
+        {
+          status: 200,
+        }
+      );
     }
 
     if (url.includes("/search/filtersearch")) {

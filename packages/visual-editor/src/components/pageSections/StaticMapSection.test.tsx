@@ -1,6 +1,10 @@
 import * as React from "react";
 import { describe, it, expect } from "vitest";
-import { axe, ComponentTest, transformTests } from "../testing/componentTests.setup.ts";
+import {
+  axe,
+  ComponentTest,
+  transformTests,
+} from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import { migrate } from "../../utils/migrate.ts";
 import { migrationRegistry } from "../migrations/migrationRegistry.ts";
@@ -148,7 +152,9 @@ describe("StaticMapSection", async () => {
       );
 
       await page.viewport(width, height);
-      await expect(`StaticMapSection/[${viewportName}] ${name}`).toMatchScreenshot();
+      await expect(
+        `StaticMapSection/[${viewportName}] ${name}`
+      ).toMatchScreenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 

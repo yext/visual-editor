@@ -190,7 +190,9 @@ export const fetchNearbyLocations = async ({
         return a.distance - b.distance;
       }
 
-      return getDocStableSortKey(a.doc).localeCompare(getDocStableSortKey(b.doc));
+      return getDocStableSortKey(a.doc).localeCompare(
+        getDocStableSortKey(b.doc)
+      );
     })
     .slice(0, limit)
     .map(({ doc }) => doc);
