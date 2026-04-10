@@ -253,4 +253,51 @@ describe("fetchNearbyLocations", () => {
       "mid",
     ]);
   });
+
+  it("uses a stable secondary key when multiple docs have the same distance", async () => {
+    const fetchMock = vi.fn().mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          meta: { uuid: "page-1", errors: [] },
+          response: {
+            docs: [
+              {
+                id: "charlie",
+                yextDisplayCoordinate: { latitude: 0, longitude: 1 },
+              },
+              {
+                id: "alpha",
+                yextDisplayCoordinate: { latitude: 0, longitude: -1 },
+              },
+              {
+                id: "bravo",
+                yextDisplayCoordinate: { latitude: 1, longitude: 0 },
+              },
+            ],
+          },
+        }),
+        { status: 200 }
+      )
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const result = await fetchNearbyLocations({
+      businessId: "biz-1",
+      entityId: "entity-1",
+      apiKey: "api-key-1",
+      contentEndpointId: "content-endpoint-id",
+      contentDeliveryAPIDomain: "https://cdn.example.com",
+      latitude: 0,
+      longitude: 0,
+      radiusMi: 500,
+      limit: 3,
+      locale: "de",
+    });
+
+    expect(result.response.docs.map((doc: { id: string }) => doc.id)).toEqual([
+      "alpha",
+      "bravo",
+      "charlie",
+    ]);
+  });
 });

@@ -72,6 +72,91 @@ const getPrimaryColor = (streamDocument: StreamDocument) => {
   );
 };
 
+const isVisualEditorTestEnv = () =>
+  (typeof __VISUAL_EDITOR_TEST__ !== "undefined" &&
+    __VISUAL_EDITOR_TEST__ === true) ||
+  (globalThis as any).__VISUAL_EDITOR_TEST__ === true;
+
+const formatMapStyleLabel = (mapStyle?: string) => {
+  const rawStyle = mapStyle ?? "streets-v12";
+  return rawStyle
+    .replace(/-v\d+$/, "")
+    .replace(/-/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+};
+
+const getStaticMapPreviewBackground = (mapStyle?: string) => {
+  if (!mapStyle) {
+    return "linear-gradient(135deg, #dcfce7 0%, #dbeafe 55%, #fde68a 100%)";
+  }
+
+  if (mapStyle.includes("satellite")) {
+    return "linear-gradient(135deg, #14532d 0%, #166534 45%, #0369a1 100%)";
+  }
+
+  if (mapStyle.includes("navigation-night")) {
+    return "linear-gradient(135deg, #111827 0%, #1f2937 55%, #0f766e 100%)";
+  }
+
+  if (mapStyle.includes("navigation-day")) {
+    return "linear-gradient(135deg, #dbeafe 0%, #bfdbfe 40%, #86efac 100%)";
+  }
+
+  if (mapStyle.includes("dark")) {
+    return "linear-gradient(135deg, #0f172a 0%, #1e293b 55%, #334155 100%)";
+  }
+
+  if (mapStyle.includes("light")) {
+    return "linear-gradient(135deg, #f8fafc 0%, #e5e7eb 55%, #dbeafe 100%)";
+  }
+
+  return "linear-gradient(135deg, #dcfce7 0%, #dbeafe 55%, #fde68a 100%)";
+};
+
+const StaticMapTestPreview = ({
+  coordinate,
+  mapStyle,
+  primaryColor,
+}: {
+  coordinate: Coordinate;
+  mapStyle?: string;
+  primaryColor: string;
+}) => {
+  const { t } = useTranslation();
+
+  return (
+    <div
+      className="relative h-[300px] w-full overflow-hidden rounded-lg border border-gray-200"
+      style={{ background: getStaticMapPreviewBackground(mapStyle) }}
+    >
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 opacity-30"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.2) 1px, transparent 1px)",
+          backgroundSize: "40px 40px",
+        }}
+      />
+      <div className="absolute left-4 top-4 rounded-lg bg-white/85 px-3 py-2 shadow">
+        <Body variant="base" className="font-medium text-slate-900">
+          {t("map", "Map")}
+        </Body>
+        <Body variant="sm" className="text-slate-700">
+          {formatMapStyleLabel(mapStyle)}
+        </Body>
+      </div>
+      <div
+        className="absolute left-1/2 top-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full border-[5px] border-white shadow-lg"
+        style={{ backgroundColor: `#${primaryColor}` }}
+      />
+      <div className="absolute bottom-3 right-3 rounded bg-white/80 px-2 py-1 text-[10px] font-medium text-slate-700">
+        {`${coordinate.latitude.toFixed(3)}, ${coordinate.longitude.toFixed(3)}`}
+      </div>
+    </div>
+  );
+};
+
 export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
   apiKey,
   coordinate: coordinateField,
@@ -122,6 +207,23 @@ export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
   if (!coordinate) {
     console.warn(`${coordinateField.field} is not present in the stream`);
     return <></>;
+  }
+
+  if (isVisualEditorTestEnv()) {
+    return (
+      <EntityField
+        displayName={pt("coordinate", "Coordinate")}
+        fieldId={coordinateField.field}
+        constantValueEnabled={coordinateField.constantValueEnabled}
+        className="w-full"
+      >
+        <StaticMapTestPreview
+          coordinate={coordinate}
+          mapStyle={mapStyle}
+          primaryColor={getPrimaryColor(streamDocument)}
+        />
+      </EntityField>
+    );
   }
 
   const marker = `pin-l+${getPrimaryColor(streamDocument)}(${coordinate.longitude},${coordinate.latitude})`;

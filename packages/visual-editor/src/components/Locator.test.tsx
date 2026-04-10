@@ -1,5 +1,5 @@
 import * as React from "react";
-import { describe, it, expect } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   axe,
   ComponentTest,
@@ -19,8 +19,287 @@ import { VisualEditorProvider } from "../utils/VisualEditorProvider.tsx";
 import { LocatorComponent } from "./Locator.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
-import mapboxPackageJson from "mapbox-gl/package.json" with { type: "json" };
 import { backgroundColors } from "../utils/themeConfigOptions.ts";
+
+vi.mock("@yext/search-ui-react", async () => {
+  const actual = await vi.importActual<typeof import("@yext/search-ui-react")>(
+    "@yext/search-ui-react"
+  );
+
+  return {
+    ...actual,
+    getUserLocation: vi.fn().mockRejectedValue(
+      new Error("Locator screenshot tests use fixture search data.")
+    ),
+  };
+});
+
+const LOCATOR_TEST_IMAGE_URL = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+    <rect width="80" height="80" rx="16" fill="#0f172a"/>
+    <circle cx="40" cy="28" r="16" fill="#fbbf24"/>
+    <rect x="18" y="50" width="44" height="12" rx="6" fill="#f8fafc"/>
+  </svg>`
+)}`;
+
+const LOCATOR_TEST_ENV = {
+  YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: "fixture-visual-editor-app-api-key",
+  YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
+  YEXT_CLOUD_REGION: "US",
+  YEXT_ENVIRONMENT: "PROD",
+  YEXT_EDIT_LAYOUT_MODE_MAPBOX_API_KEY: "fixture-mapbox-api-key",
+  YEXT_MAPBOX_API_KEY: "fixture-mapbox-api-key",
+  YEXT_SEARCH_API_KEY: "fixture-search-api-key",
+};
+
+const LOCATOR_TEST_HOURS = {
+  sunday: { openIntervals: [{ start: "09:00", end: "17:00" }] },
+  monday: { openIntervals: [{ start: "09:00", end: "17:00" }] },
+  tuesday: { openIntervals: [{ start: "09:00", end: "17:00" }] },
+  wednesday: { openIntervals: [{ start: "09:00", end: "17:00" }] },
+  thursday: { openIntervals: [{ start: "09:00", end: "17:00" }] },
+  friday: { openIntervals: [{ start: "09:00", end: "17:00" }] },
+  saturday: { openIntervals: [{ start: "09:00", end: "17:00" }] },
+};
+
+const createLocatorApiResult = ({
+  id,
+  name,
+  entityType,
+  line1,
+  city,
+  region,
+  postalCode,
+  latitude,
+  longitude,
+  distance,
+  distanceFromFilter,
+  services,
+}: {
+  id: string;
+  name: string;
+  entityType: string;
+  line1: string;
+  city: string;
+  region: string;
+  postalCode: string;
+  latitude: number;
+  longitude: number;
+  distance: number;
+  distanceFromFilter: number;
+  services: string[];
+}) => ({
+  data: {
+    id,
+    slug: id,
+    type: entityType,
+    name,
+    timezone: "America/New_York",
+    address: {
+      line1,
+      city,
+      region,
+      postalCode,
+      countryCode: "US",
+    },
+    additionalHoursText: "Holiday hours may vary",
+    hours: LOCATOR_TEST_HOURS,
+    mainPhone: "+12025550101",
+    emails: [`${id}@example.com`],
+    services,
+    headshot: {
+      url: LOCATOR_TEST_IMAGE_URL,
+      height: 80,
+      width: 80,
+      alternateText: name,
+    },
+    website: `https://example.com/${id}`,
+    yextDisplayCoordinate: {
+      latitude,
+      longitude,
+    },
+    meta: {
+      locale: "en",
+      isPrimaryLocale: true,
+    },
+  },
+  distance,
+  distanceFromFilter,
+  highlightedFields: {},
+});
+
+const DEFAULT_LOCATOR_RESULTS = [
+  createLocatorApiResult({
+    id: "galaxy-grill",
+    name: "Galaxy Grill",
+    entityType: "location",
+    line1: "1101 Wilson Blvd",
+    city: "Arlington",
+    region: "VA",
+    postalCode: "22209",
+    latitude: 38.895546,
+    longitude: -77.069915,
+    distance: 1609,
+    distanceFromFilter: 804,
+    services: ["Dine-in", "Delivery", "Takeout"],
+  }),
+  createLocatorApiResult({
+    id: "nebula-bites",
+    name: "Nebula Bites",
+    entityType: "location",
+    line1: "725 14th St NW",
+    city: "Washington",
+    region: "DC",
+    postalCode: "20005",
+    latitude: 38.90362,
+    longitude: -77.03118,
+    distance: 3218,
+    distanceFromFilter: 1609,
+    services: ["Pickup", "Curbside"],
+  }),
+  createLocatorApiResult({
+    id: "comet-cafe",
+    name: "Comet Cafe",
+    entityType: "location",
+    line1: "1500 Market St",
+    city: "Philadelphia",
+    region: "PA",
+    postalCode: "19102",
+    latitude: 39.95289,
+    longitude: -75.16624,
+    distance: 8046,
+    distanceFromFilter: 4828,
+    services: ["Coffee", "Breakfast"],
+  }),
+];
+
+const MULTI_PAGESET_LOCATOR_RESULTS = [
+  createLocatorApiResult({
+    id: "galaxy-grill",
+    name: "Galaxy Grill",
+    entityType: "location",
+    line1: "1101 Wilson Blvd",
+    city: "Arlington",
+    region: "VA",
+    postalCode: "22209",
+    latitude: 38.895546,
+    longitude: -77.069915,
+    distance: 1609,
+    distanceFromFilter: 804,
+    services: ["Dine-in", "Delivery", "Takeout"],
+  }),
+  createLocatorApiResult({
+    id: "nebula-noodles",
+    name: "Nebula Noodles",
+    entityType: "restaurant",
+    line1: "19 W 44th St",
+    city: "New York",
+    region: "NY",
+    postalCode: "10036",
+    latitude: 40.75562,
+    longitude: -73.98093,
+    distance: 4023,
+    distanceFromFilter: 2414,
+    services: ["Lunch", "Dinner"],
+  }),
+  createLocatorApiResult({
+    id: "orbit-atm",
+    name: "Orbit ATM",
+    entityType: "atm",
+    line1: "401 7th St NW",
+    city: "Washington",
+    region: "DC",
+    postalCode: "20004",
+    latitude: 38.89341,
+    longitude: -77.01714,
+    distance: 6437,
+    distanceFromFilter: 3218,
+    services: ["24/7 Access"],
+  }),
+];
+
+const createLocatorVerticalSearchResponse = (results: any[]) => ({
+  meta: {
+    uuid: "locator-fixture-uuid",
+    errors: [],
+  },
+  response: {
+    queryId: "locator-fixture-query-id",
+    verticalConfigId: "locations",
+    source: "KNOWLEDGE_MANAGER",
+    resultsCount: results.length,
+    results,
+    facets: [],
+  },
+});
+
+const createLocatorFilterSearchResponse = () => ({
+  meta: {
+    uuid: "locator-filter-fixture-uuid",
+    errors: [],
+  },
+  response: {
+    businessId: "4174974",
+    queryId: "locator-filter-query-id",
+    sections: [
+      {
+        label: "Locations",
+        results: [
+          {
+            value: "Arlington, VA",
+            key: "arlington-va",
+            matchedSubstrings: [],
+            filter: {
+              "builtin.location": {
+                NEAR: {
+                  lat: 38.895546,
+                  lng: -77.069915,
+                  radius: 40233,
+                },
+              },
+            },
+          },
+        ],
+      },
+    ],
+  },
+});
+
+const getLocatorFixtureResults = (document: Record<string, any>) =>
+  document.__?.locatorSourcePageSets
+    ? MULTI_PAGESET_LOCATOR_RESULTS
+    : DEFAULT_LOCATOR_RESULTS;
+
+const createLocatorFetchMock = (document: Record<string, any>) => {
+  const results = getLocatorFixtureResults(document);
+
+  return vi.fn(async (input: string | URL | Request) => {
+    const url =
+      typeof input === "string"
+        ? input
+        : input instanceof URL
+          ? input.toString()
+          : input.url;
+
+    if (url.includes("/search/vertical/query")) {
+      return new Response(JSON.stringify(createLocatorVerticalSearchResponse(results)), {
+        status: 200,
+      });
+    }
+
+    if (url.includes("/search/filtersearch")) {
+      return new Response(JSON.stringify(createLocatorFilterSearchResponse()), {
+        status: 200,
+      });
+    }
+
+    throw new Error(`Unexpected fetch in Locator test: ${url}`);
+  });
+};
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
 
 // Uses the content endpoint from
 // https://www.yext.com/s/4174974/yextsites/155048/editor#pageSetId=locations
@@ -40,13 +319,7 @@ const tests: ComponentTest[] = [
         isPrimaryLocale: true,
       },
       _env: {
-        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
-          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
-        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
-        YEXT_CLOUD_REGION: "US",
-        YEXT_ENVIRONMENT: "PROD",
-        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
-        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
+        ...LOCATOR_TEST_ENV,
       },
       _pageset: JSON.stringify({
         type: "LOCATOR",
@@ -109,13 +382,7 @@ const tests: ComponentTest[] = [
         }),
       },
       _env: {
-        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
-          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
-        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
-        YEXT_CLOUD_REGION: "US",
-        YEXT_ENVIRONMENT: "PROD",
-        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
-        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
+        ...LOCATOR_TEST_ENV,
       },
       _pageset: JSON.stringify({
         type: "LOCATOR",
@@ -149,13 +416,7 @@ const tests: ComponentTest[] = [
         isPrimaryLocale: true,
       },
       _env: {
-        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
-          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
-        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
-        YEXT_CLOUD_REGION: "US",
-        YEXT_ENVIRONMENT: "PROD",
-        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
-        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
+        ...LOCATOR_TEST_ENV,
       },
       _pageset: JSON.stringify({
         type: "LOCATOR",
@@ -275,13 +536,7 @@ const tests: ComponentTest[] = [
         isPrimaryLocale: true,
       },
       _env: {
-        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
-          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
-        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
-        YEXT_CLOUD_REGION: "US",
-        YEXT_ENVIRONMENT: "PROD",
-        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
-        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
+        ...LOCATOR_TEST_ENV,
       },
       _pageset: JSON.stringify({
         type: "LOCATOR",
@@ -379,13 +634,7 @@ const tests: ComponentTest[] = [
         isPrimaryLocale: true,
       },
       _env: {
-        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
-          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
-        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
-        YEXT_CLOUD_REGION: "US",
-        YEXT_ENVIRONMENT: "PROD",
-        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
-        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
+        ...LOCATOR_TEST_ENV,
       },
       _pageset: JSON.stringify({
         type: "LOCATOR",
@@ -480,13 +729,7 @@ const tests: ComponentTest[] = [
         isPrimaryLocale: true,
       },
       _env: {
-        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
-          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
-        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
-        YEXT_CLOUD_REGION: "US",
-        YEXT_ENVIRONMENT: "PROD",
-        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
-        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
+        ...LOCATOR_TEST_ENV,
       },
       _pageset: JSON.stringify({
         type: "LOCATOR",
@@ -582,13 +825,7 @@ const tests: ComponentTest[] = [
         isPrimaryLocale: true,
       },
       _env: {
-        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
-          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
-        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
-        YEXT_CLOUD_REGION: "US",
-        YEXT_ENVIRONMENT: "PROD",
-        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
-        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
+        ...LOCATOR_TEST_ENV,
       },
       _pageset: JSON.stringify({
         type: "LOCATOR",
@@ -684,13 +921,7 @@ const tests: ComponentTest[] = [
         isPrimaryLocale: true,
       },
       _env: {
-        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
-          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
-        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
-        YEXT_CLOUD_REGION: "US",
-        YEXT_ENVIRONMENT: "PROD",
-        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
-        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
+        ...LOCATOR_TEST_ENV,
       },
       _pageset: JSON.stringify({
         type: "LOCATOR",
@@ -801,13 +1032,7 @@ const tests: ComponentTest[] = [
         isPrimaryLocale: true,
       },
       _env: {
-        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
-          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
-        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
-        YEXT_CLOUD_REGION: "US",
-        YEXT_ENVIRONMENT: "PROD",
-        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
-        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
+        ...LOCATOR_TEST_ENV,
       },
       _pageset: JSON.stringify({
         type: "LOCATOR",
@@ -892,7 +1117,7 @@ const tests: ComponentTest[] = [
           field: "headshot",
           constantValue: {
             en: {
-              url: "https://placehold.co/80x80",
+              url: LOCATOR_TEST_IMAGE_URL,
               height: 80,
               width: 80,
             },
@@ -952,22 +1177,12 @@ describe("Locator", async () => {
       });
 
       const translations = await injectTranslations(document);
+      vi.stubGlobal("fetch", createLocatorFetchMock(document));
 
       const { container } = reactRender(
-        <>
-          <script
-            id="mapbox-script"
-            src={`https://api.mapbox.com/mapbox-gl-js/v${mapboxPackageJson.version}/mapbox-gl.js`}
-          />
-          <link
-            id="mapbox-stylesheet"
-            rel="stylesheet"
-            href={`https://api.mapbox.com/mapbox-gl-js/v${mapboxPackageJson.version}/mapbox-gl.css`}
-          />
-          <VisualEditorProvider templateProps={{ document, translations }}>
-            <Render config={puckConfig} data={data} />
-          </VisualEditorProvider>
-        </>
+        <VisualEditorProvider templateProps={{ document, translations }}>
+          <Render config={puckConfig} data={data} />
+        </VisualEditorProvider>
       );
 
       await page.viewport(width, height);
@@ -985,20 +1200,13 @@ describe("Locator", async () => {
 
       const hideDistance = async () => {
         await act(async () => {
-          // Hide the distance to each location because it is based on the test runner's IP address
+          // Mask distance badges so screenshots focus on layout instead of label text.
           const allDivs = container.querySelectorAll("div");
           allDivs.forEach((div) => {
             if (div.textContent?.includes("mi") && !div.children.length) {
               div.style.backgroundColor = "black";
               div.style.width = "8em";
             }
-          });
-
-          // Hide the map makers because they can appear in different spots
-          const allMarkers =
-            container.querySelectorAll<HTMLDivElement>(".mapboxgl-marker");
-          allMarkers.forEach((marker) => {
-            marker.style.opacity = "0";
           });
         });
       };

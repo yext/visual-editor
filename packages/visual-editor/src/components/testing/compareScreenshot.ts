@@ -44,12 +44,17 @@ export const compareScreenshot: BrowserCommand<
   const { width, height } = baselineImg;
   const diff = new PNG({ width, height });
 
-  if (height !== updatedImg.height) {
+  if (width !== updatedImg.width || height !== updatedImg.height) {
     console.warn(
-      `Screenshot heights did not match (existing ${height}, updated ${height})`
+      `Screenshot dimensions did not match (existing ${width}x${height}, updated ${updatedImg.width}x${updatedImg.height})`
     );
     writeFileSync(filePath, PNG.sync.write(updatedImg));
-    return Math.abs(updatedImg.height - height) * width;
+    return {
+      passes: false,
+      numDiffPixels:
+        Math.abs(updatedImg.height - height) * Math.max(width, updatedImg.width) +
+        Math.abs(updatedImg.width - width) * height,
+    };
   }
 
   const numDiffPixels = pixelmatch(

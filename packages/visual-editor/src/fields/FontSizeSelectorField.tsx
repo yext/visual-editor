@@ -7,10 +7,12 @@ import { fontSizeOptions } from "../utils/themeConfigOptions.ts";
 import { type TailwindConfig } from "../utils/themeResolver.ts";
 
 export const convertToPixels = (fontSize: string): number => {
+  // If the font size is already in px, just extract the number
   if (fontSize.endsWith("px")) {
     return parseFloat(fontSize);
   }
 
+  // If the font size is in rem, convert it to pixels based on the root font size
   if (fontSize.endsWith("rem")) {
     const rootFontSize = parseFloat(
       getComputedStyle(document.documentElement).fontSize
@@ -18,16 +20,19 @@ export const convertToPixels = (fontSize: string): number => {
     return parseFloat(fontSize) * rootFontSize;
   }
 
+  // If the font size is in em, convert it based on the parent font size
   if (fontSize.endsWith("em")) {
     const parentFontSize = parseFloat(getComputedStyle(document.body).fontSize);
     return parseFloat(fontSize) * parentFontSize;
   }
 
+  // If the font size is in % (relative to parent), convert it similarly to em
   if (fontSize.endsWith("%")) {
     const parentFontSize = parseFloat(getComputedStyle(document.body).fontSize);
     return (parseFloat(fontSize) / 100) * parentFontSize;
   }
 
+  // If no unit recognized, throw an error
   throw new Error("Unknown font size unit");
 };
 
