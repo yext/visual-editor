@@ -10,7 +10,8 @@ import {
   createFontLinkElements,
   generateGoogleFontLinkData,
   fontLinkDataToHTML,
-  type FontRegistry,
+  type BuiltInFontRegistry,
+  type CustomFontRegistry,
   type FontLinkData,
   generateCustomFontLinkData,
 } from "./fonts/visualEditorFonts.ts";
@@ -163,8 +164,8 @@ const generateContrastingColors = (themeData: ThemeData) => {
 // Helper function to update font links in a document
 const updateFontLinksInDocument = (
   document: Document,
-  fonts: FontRegistry,
-  customFonts: FontRegistry
+  fonts: BuiltInFontRegistry,
+  customFonts: CustomFontRegistry
 ) => {
   // Remove only theme-specific font links, preserve default fonts
   const existingLinks = document.querySelectorAll(
@@ -187,7 +188,7 @@ export const updateThemeInEditor = async (
   newTheme: ThemeData,
   themeConfig: ThemeConfig,
   isThemeMode: boolean,
-  customFonts: FontRegistry = {}
+  customFonts: CustomFontRegistry = {}
 ) => {
   devLogger.logFunc("updateThemeInEditor");
   pendingObserver?.disconnect();
@@ -209,7 +210,7 @@ export const updateThemeInEditor = async (
   // In the theme editor, all fonts are already loaded
   // In the layout editor, we need to load the in-use fonts after the Puck iframe has loaded
   if (!isThemeMode) {
-    let fontsToLoad: FontRegistry;
+    let fontsToLoad: BuiltInFontRegistry;
     if (Object.keys(inUseGoogleFonts).length === 0) {
       fontsToLoad = {
         "Open Sans": defaultFonts["Open Sans"],

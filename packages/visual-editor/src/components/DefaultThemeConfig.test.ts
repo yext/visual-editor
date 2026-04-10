@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { createDefaultThemeConfig } from "./DefaultThemeConfig.ts";
-import { FontRegistry } from "../utils/fonts/visualEditorFonts.ts";
+import { CustomFontRegistry } from "../utils/fonts/visualEditorFonts.ts";
 
 vi.mock("../utils/i18n/platform.ts", async () => {
   const actual = await vi.importActual<
@@ -18,13 +18,15 @@ beforeEach(() => {
 
 describe("createDefaultThemeConfig", () => {
   it("should include custom fonts in the font options", () => {
-    const customFonts: FontRegistry = {
+    const customFonts: CustomFontRegistry = {
       "Custom Font": {
         name: "custom-font",
         displayName: "Custom Font",
         italics: true,
         weights: [400, 700],
         fallback: "sans-serif",
+        fontFacePath: "y-fonts/custom-font.css",
+        variants: [],
       },
     };
 
@@ -43,13 +45,15 @@ describe("createDefaultThemeConfig", () => {
   });
 
   it("should override default fonts with custom fonts if they have the same name", () => {
-    const customFonts: FontRegistry = {
+    const customFonts: CustomFontRegistry = {
       "Open Sans": {
         name: "open-sans-custom",
         displayName: "Open Sans",
         italics: true,
         weights: [300, 400, 500],
         fallback: "serif",
+        fontFacePath: "y-fonts/open-sans.css",
+        variants: [],
       },
     };
 
@@ -66,13 +70,15 @@ describe("createDefaultThemeConfig", () => {
   });
 
   it("should merge custom fonts with default fonts", () => {
-    const customFonts: FontRegistry = {
+    const customFonts: CustomFontRegistry = {
       "Custom Font": {
         name: "custom-font",
         displayName: "Custom Font",
         italics: false,
         weights: [400],
         fallback: "serif",
+        fontFacePath: "y-fonts/custom-font.css",
+        variants: [],
       },
     };
 

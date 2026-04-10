@@ -7,42 +7,42 @@ import { fontStyleOptions } from "../themeConfigOptions.ts";
 
 const variableFontRegex = /var\((--[^)]+)\)/;
 
-export type FontRegistry = Record<string, FontSpecification>;
+export type FontWeightSupport =
+  | { weights: number[] }
+  | { minWeight: number; maxWeight: number };
+
+export type BaseFontSpecification = {
+  displayName: string;
+  fallback: "sans-serif" | "serif" | "monospace" | "cursive";
+  italics: boolean;
+} & FontWeightSupport;
+
 export type CustomFontVariant = {
   fontStyle: "normal" | "italic";
   fontFilePath: string;
-} & (
-  | {
-      fontWeight: number;
-    }
-  | {
-      minWeight: number;
-      maxWeight: number;
-    }
-);
+} & FontWeightSupport;
 
-export type FontSpecification = {
-  name?: string;
-  displayName: string;
-  italics: boolean; // whether the font supports italics
-  fallback: "sans-serif" | "serif" | "monospace" | "cursive";
-  fontFacePath?: string;
-  variants?: CustomFontVariant[];
-} & (
-  | {
-      // variable fonts
-      minWeight: number; // minimum weight the font supports
-      maxWeight: number; // maximum weight the font supports
-    }
-  | {
-      // static fonts
-      weights: number[]; // the weights the font supports
-    }
-);
+export type BuiltInFontSpecification = BaseFontSpecification;
+export type CustomFontSpecification = BaseFontSpecification & {
+  name: string;
+  fontFacePath: string;
+  variants: CustomFontVariant[];
+};
+export type FontSpecification =
+  | BuiltInFontSpecification
+  | CustomFontSpecification;
+export type FontRegistry = Record<string, FontSpecification>;
+export type BuiltInFontRegistry = Record<string, BuiltInFontSpecification>;
+export type CustomFontRegistry = Record<string, CustomFontSpecification>;
 
 // List of variable Google Fonts https://fonts.google.com/?categoryFilters=Technology:%2FTechnology%2FVariable
 // prettier-ignore
-export const defaultFonts = fontsJs as FontRegistry;
+export const defaultFonts: BuiltInFontRegistry = Object.fromEntries(
+  Object.entries(fontsJs).map(([displayName, fontDetails]) => [
+    displayName,
+    { ...fontDetails, displayName },
+  ])
+) as BuiltInFontRegistry;
 
 /**
  * Finds the font specification whose display name matches the font-family name
@@ -126,7 +126,7 @@ const PRECONNECT_LINKS: FontLinkData[] = [
 ];
 
 export const generateGoogleFontLinkData = (
-  fonts: FontRegistry
+  fonts: BuiltInFontRegistry
 ): FontLinkData[] => {
   const fontLinks = Object.values(fonts).map((fontDetails) => {
     const axes = fontDetails.italics ? ":ital,wght@" : ":wght@";
@@ -143,7 +143,7 @@ export const generateGoogleFontLinkData = (
 };
 
 export const getCustomFontFacePathsFromFontRegistry = (
-  customFonts: FontRegistry
+  customFonts: CustomFontRegistry
 ): string[] => {
   return Object.values(customFonts)
     .map((fontDetails) => fontDetails.fontFacePath)
@@ -195,8 +195,8 @@ export const googleFontLinkTags = fontLinkDataToHTML(
  * they can be appended directly into a document.
  */
 export const createFontLinkElements = (
-  googleFonts: FontRegistry,
-  customFonts: FontRegistry
+  googleFonts: BuiltInFontRegistry,
+  customFonts: CustomFontRegistry
 ): HTMLLinkElement[] => {
   const googleFontLinkData = generateGoogleFontLinkData(googleFonts);
   const customFontLinkData = generateCustomFontLinkData(
@@ -221,8 +221,8 @@ export const createFontLinkElements = (
  */
 export const loadFontsIntoDOM = (
   document: Document,
-  googleFonts: FontRegistry,
-  customFonts: FontRegistry,
+  googleFonts: BuiltInFontRegistry,
+  customFonts: CustomFontRegistry,
   idPrefix: string = "visual-editor-fonts"
 ) => {
   if (!document.getElementById(`${idPrefix}-0`)) {
@@ -493,11 +493,14 @@ export const extractFontFamiliesFromTheme = (data: ThemeData): string[] => {
  */
 export const filterInUseFontRegistries = (
   data: ThemeData,
-  availableFonts: FontRegistry,
-  customFonts: FontRegistry = {}
-): { inUseGoogleFonts: FontRegistry; inUseCustomFonts: FontRegistry } => {
-  const inUseGoogleFonts: FontRegistry = {};
-  const inUseCustomFonts: FontRegistry = {};
+  availableFonts: BuiltInFontRegistry,
+  customFonts: CustomFontRegistry = {}
+): {
+  inUseGoogleFonts: BuiltInFontRegistry;
+  inUseCustomFonts: CustomFontRegistry;
+} => {
+  const inUseGoogleFonts: BuiltInFontRegistry = {};
+  const inUseCustomFonts: CustomFontRegistry = {};
 
   // For each unique font family found, look it up in the availableFonts map.
   for (const fontName of extractFontFamiliesFromTheme(data)) {
@@ -509,7 +512,8 @@ export const filterInUseFontRegistries = (
 
     const customFont = findFontByDisplayName(customFonts, fontName);
     if (customFont) {
-      inUseCustomFonts[customFont.displayName] = customFont;
+      inUseCustomFonts[customFont.displayName] =
+        customFont as CustomFontSpecification;
     }
   }
 

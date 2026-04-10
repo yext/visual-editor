@@ -19,13 +19,13 @@ import {
   removeCustomFonts,
   removeCustomFontPreloads,
 } from "../../../utils/customFontPreloads.ts";
-import { FontRegistry } from "../../../../utils/fonts/visualEditorFonts.ts";
+import { CustomFontRegistry } from "../../../../utils/fonts/visualEditorFonts.ts";
 
 type ThemeFieldsSidebarProps = {
   themeConfig: ThemeConfig;
   themeData: ThemeData;
   onThemeChange: OnThemeChangeFunc;
-  customFonts?: FontRegistry;
+  customFonts?: CustomFontRegistry;
 };
 
 export const ThemeFieldsSidebar = ({

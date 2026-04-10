@@ -4,6 +4,7 @@ import {
   constructFontSelectOptions,
   filterInUseFontRegistries,
   FontRegistry,
+  CustomFontRegistry,
   defaultFonts,
   constructGoogleFontLinkTags,
   generateCustomFontLinkData,
@@ -130,7 +131,7 @@ describe("extractInUseFontFamilies", () => {
       "--fontFamily-h1-fontFamily": "'Custom Font', sans-serif",
       "--fontFamily-h2-fontFamily": "'Open Sans', sans-serif",
     };
-    const customFonts: FontRegistry = {
+    const customFonts: CustomFontRegistry = {
       "custom-font-key": {
         name: "custom-font-regular",
         displayName: "Custom Font",
@@ -190,7 +191,7 @@ describe("extractInUseFontFamilies", () => {
 
 describe("custom font helpers", () => {
   it("should build font select options from display names", () => {
-    const customFonts: FontRegistry = {
+    const customFonts: CustomFontRegistry = {
       "ebb-melvyn": {
         name: "ebbmelvynregular-regular",
         displayName: "EBB_Melvyn_Regular",

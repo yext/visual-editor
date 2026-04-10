@@ -4,7 +4,7 @@ import { Button } from "../ui/button.tsx";
 import "../../../editor/index.css";
 import { ThemeConfig } from "../../../utils/themeResolver.ts";
 import { updateThemeInEditor } from "../../../utils/applyTheme.ts";
-import { FontRegistry } from "../../../utils/fonts/visualEditorFonts.ts";
+import { CustomFontRegistry } from "../../../utils/fonts/visualEditorFonts.ts";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
 import { InitialHistory, createUsePuck, useGetPuck } from "@puckeditor/core";
@@ -38,7 +38,7 @@ type ThemeHeaderProps = {
   totalEntityCount: number;
   localDev: boolean;
   headDeployStatus: HeadDeployStatus;
-  customFonts?: FontRegistry;
+  customFonts?: CustomFontRegistry;
 };
 
 export const ThemeHeader = (props: ThemeHeaderProps) => {

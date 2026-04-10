@@ -1,6 +1,6 @@
 import {
-  FontRegistry,
-  FontSpecification,
+  CustomFontRegistry,
+  CustomFontSpecification,
   findFontByDisplayName,
   type CustomFontVariant,
 } from "../../utils/fonts/visualEditorFonts.ts";
@@ -42,19 +42,19 @@ const getMergedThemeValues = (
 });
 
 const matchesWeight = (variant: CustomFontVariant, weight: number): boolean => {
-  if ("fontWeight" in variant) {
-    return variant.fontWeight === weight;
+  if ("weights" in variant) {
+    return variant.weights.includes(weight);
   }
 
   return variant.minWeight <= weight && weight <= variant.maxWeight;
 };
 
 const findMatchingVariant = (
-  customFont: FontSpecification,
+  customFont: CustomFontSpecification,
   fontStyle: FontStyleValue,
   weight: number
 ): CustomFontVariant | undefined => {
-  return customFont.variants?.find(
+  return customFont.variants.find(
     (variant) =>
       variant.fontStyle === fontStyle && matchesWeight(variant, weight)
   );
@@ -71,7 +71,7 @@ export const buildCustomFontAssets = ({
 }: {
   themeConfig: ThemeConfig;
   themeValues: ThemeData;
-  customFonts: FontRegistry;
+  customFonts: CustomFontRegistry;
 }): CustomFontAssets => {
   const mergedThemeValues = getMergedThemeValues(themeConfig, themeValues);
   const fontFacePaths = new Set<string>();
@@ -92,14 +92,14 @@ export const buildCustomFontAssets = ({
     }
 
     const fontFamily = extractFontFamilyName(fontFamilyValue);
-    const customFont = findFontByDisplayName(customFonts, fontFamily);
+    const customFont = findFontByDisplayName(customFonts, fontFamily) as
+      | CustomFontSpecification
+      | undefined;
     if (!customFont) {
       return;
     }
 
-    if (customFont.fontFacePath) {
-      fontFacePaths.add(customFont.fontFacePath);
-    }
+    fontFacePaths.add(customFont.fontFacePath);
 
     const weightValue =
       mergedThemeValues[`--fontWeight-${sectionKey}-fontWeight`];
