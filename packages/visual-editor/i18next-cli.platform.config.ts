@@ -7,10 +7,11 @@ export default defineConfig({
     input: [
       "src/components/**/*.{ts,tsx}",
       "src/editor/**/*.{ts,tsx}",
+      "src/fields/**/*.{ts,tsx}",
       "src/internal/**/*.{ts,tsx}",
       "src/utils/*.ts",
     ],
-    ignore: ["**/__screenshots__/**"],
+    ignore: ["**/__screenshots__/**", "src/editor/YextField.test.tsx"],
     output: "locales/platform/{{language}}/{{namespace}}.json",
     defaultNS: "visual-editor",
     contextSeparator: "_",

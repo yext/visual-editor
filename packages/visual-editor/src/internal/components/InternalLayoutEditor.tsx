@@ -38,6 +38,7 @@ import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 import { clonePuckResolveData } from "../utils/clonePuckResolveData.ts";
+import { YextPuckFieldOverrides } from "../../fields/fields.ts";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -253,7 +254,7 @@ export const InternalLayoutEditor = ({
           __advancedSettingsLink: null,
         },
       },
-    } as Config;
+    };
   }, [puckConfig, i18n.language]);
 
   // Resolve all data and slots when the document changes
@@ -419,6 +420,7 @@ export const InternalLayoutEditor = ({
             select: TranslatePuckFieldLabels,
             text: TranslatePuckFieldLabels,
             textarea: TranslatePuckFieldLabels,
+            ...YextPuckFieldOverrides,
           },
           actionBar: ({ children, label, parentAction }) => {
             const getPuck = useGetPuck();
