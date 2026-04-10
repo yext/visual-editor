@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { AutoField } from "@puckeditor/core";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import {
@@ -13,19 +13,19 @@ import {
 import { generateCssVariablesFromPuckFields } from "../../../utils/internalThemeResolver.ts";
 import { pt } from "../../../../utils/i18n/platform.ts";
 import {
-  buildCustomFontPreloads,
+  buildCustomFontAssets,
+  CUSTOM_FONTS_KEY,
   CUSTOM_FONT_PRELOADS_KEY,
-  loadCustomFontCssIndex,
+  removeCustomFonts,
   removeCustomFontPreloads,
-  type CustomFontCssIndex,
 } from "../../../utils/customFontPreloads.ts";
-import { FontRegistry } from "../../../../utils/fonts/visualEditorFonts.ts";
+import { CustomFontRegistry } from "../../../../utils/fonts/visualEditorFonts.ts";
 
 type ThemeFieldsSidebarProps = {
   themeConfig: ThemeConfig;
   themeData: ThemeData;
   onThemeChange: OnThemeChangeFunc;
-  customFonts?: FontRegistry;
+  customFonts?: CustomFontRegistry;
 };
 
 export const ThemeFieldsSidebar = ({
@@ -37,38 +37,10 @@ export const ThemeFieldsSidebar = ({
   const headerSectionKeys = ["h1", "h2", "h3", "h4", "h5", "h6"];
   const hasHeadersSection = "headers" in themeConfig;
 
-  const [customFontCssIndex, setCustomFontCssIndex] =
-    useState<CustomFontCssIndex | null>(null);
-
-  useEffect(() => {
-    let isActive = true;
-
-    const loadIndex = async () => {
-      // Build a cached index of @font-face rules for custom fonts to map weights -> files.
-      if (!customFonts || Object.keys(customFonts).length === 0) {
-        if (isActive) {
-          setCustomFontCssIndex(null);
-        }
-        return;
-      }
-
-      const index = await loadCustomFontCssIndex(customFonts);
-      if (isActive) {
-        setCustomFontCssIndex(index);
-      }
-    };
-
-    loadIndex();
-
-    return () => {
-      isActive = false;
-    };
-  }, [customFonts]);
-
   const handleThemeChange = (
     themeSectionKey: string,
     themeSection: ThemeConfigSection,
-    newValue: Record<string, any>
+    newValue: Record<string, unknown>
   ) => {
     let newThemeValues: ThemeData = {
       ...themeData,
@@ -79,13 +51,21 @@ export const ThemeFieldsSidebar = ({
       ),
     };
 
-    if (customFonts && customFontCssIndex) {
-      const preloads = buildCustomFontPreloads({
+    if (customFonts) {
+      const { fontFacePaths, preloads } = buildCustomFontAssets({
         themeConfig,
         themeValues: newThemeValues,
         customFonts,
-        customFontCssIndex,
       });
+      if (fontFacePaths.length > 0) {
+        newThemeValues = {
+          ...newThemeValues,
+          [CUSTOM_FONTS_KEY]: fontFacePaths,
+        };
+      } else {
+        newThemeValues = removeCustomFonts(newThemeValues);
+      }
+
       if (preloads.length > 0) {
         newThemeValues = {
           ...newThemeValues,
@@ -94,8 +74,14 @@ export const ThemeFieldsSidebar = ({
       } else {
         newThemeValues = removeCustomFontPreloads(newThemeValues);
       }
-    } else if (!customFonts && CUSTOM_FONT_PRELOADS_KEY in newThemeValues) {
-      newThemeValues = removeCustomFontPreloads(newThemeValues);
+    } else {
+      if (CUSTOM_FONTS_KEY in newThemeValues) {
+        newThemeValues = removeCustomFonts(newThemeValues);
+      }
+
+      if (CUSTOM_FONT_PRELOADS_KEY in newThemeValues) {
+        newThemeValues = removeCustomFontPreloads(newThemeValues);
+      }
     }
 
     onThemeChange(newThemeValues);

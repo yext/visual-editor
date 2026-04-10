@@ -1,10 +1,14 @@
 import { describe, it, expect } from "vitest";
 import { ThemeData } from "../../internal/types/themeData.ts";
 import {
-  extractInUseFontFamilies,
+  constructFontSelectOptions,
+  filterInUseFontRegistries,
   FontRegistry,
+  CustomFontRegistry,
   defaultFonts,
   constructGoogleFontLinkTags,
+  generateCustomFontLinkData,
+  getCustomFontFacePathsFromFontRegistry,
   getFontStyleOptions,
 } from "./visualEditorFonts.ts";
 
@@ -16,23 +20,33 @@ describe("extractInUseFontFamilies", () => {
     };
 
     const expected: FontRegistry = {
-      Oi: { italics: false, weights: [400], fallback: "sans-serif" },
-      Adamina: { italics: false, weights: [400], fallback: "serif" },
+      Oi: {
+        displayName: "Oi",
+        italics: false,
+        weights: [400],
+        fallback: "sans-serif",
+      },
+      Adamina: {
+        displayName: "Adamina",
+        italics: false,
+        weights: [400],
+        fallback: "serif",
+      },
     };
 
-    const { inUseGoogleFonts, inUseCustomFonts } = extractInUseFontFamilies(
+    const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
       themeData,
       defaultFonts
     );
     expect(inUseGoogleFonts).toEqual(expected);
-    expect(inUseCustomFonts).toEqual([]);
+    expect(inUseCustomFonts).toEqual({});
   });
 
   it("should return an empty object if theme data is empty", () => {
     const themeData: ThemeData = {};
-    expect(extractInUseFontFamilies(themeData, defaultFonts)).toEqual({
+    expect(filterInUseFontRegistries(themeData, defaultFonts)).toEqual({
       inUseGoogleFonts: {},
-      inUseCustomFonts: [],
+      inUseCustomFonts: {},
     });
   });
 
@@ -42,12 +56,12 @@ describe("extractInUseFontFamilies", () => {
       "--fontSize-h1-fontSize": "48px",
     };
 
-    const { inUseGoogleFonts, inUseCustomFonts } = extractInUseFontFamilies(
+    const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
       themeData,
       defaultFonts
     );
     expect(inUseGoogleFonts).toEqual({});
-    expect(inUseCustomFonts).toEqual([]);
+    expect(inUseCustomFonts).toEqual({});
   });
 
   it("should return an empty object if the list of available fonts is empty", () => {
@@ -56,12 +70,12 @@ describe("extractInUseFontFamilies", () => {
     };
     const emptyAvailableFonts = {};
 
-    const { inUseGoogleFonts, inUseCustomFonts } = extractInUseFontFamilies(
+    const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
       themeData,
       emptyAvailableFonts
     );
     expect(inUseGoogleFonts).toEqual({});
-    expect(inUseCustomFonts).toEqual(["Open Sans"]);
+    expect(inUseCustomFonts).toEqual({});
   });
 
   it("should handle malformed or empty fontFamily values gracefully", () => {
@@ -71,15 +85,20 @@ describe("extractInUseFontFamilies", () => {
       "--fontFamily-button-fontFamily": "'Adamina', serif",
     };
     const expected: FontRegistry = {
-      Adamina: { italics: false, weights: [400], fallback: "serif" },
+      Adamina: {
+        displayName: "Adamina",
+        italics: false,
+        weights: [400],
+        fallback: "serif",
+      },
     };
 
-    const { inUseGoogleFonts, inUseCustomFonts } = extractInUseFontFamilies(
+    const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
       themeData,
       defaultFonts
     );
     expect(inUseGoogleFonts).toEqual(expected);
-    expect(inUseCustomFonts).toEqual([]);
+    expect(inUseCustomFonts).toEqual({});
   });
 
   it("should not include duplicate fonts, even if used multiple times", () => {
@@ -91,6 +110,7 @@ describe("extractInUseFontFamilies", () => {
 
     const expected: FontRegistry = {
       "Open Sans": {
+        displayName: "Open Sans",
         italics: true,
         minWeight: 300,
         maxWeight: 800,
@@ -98,12 +118,12 @@ describe("extractInUseFontFamilies", () => {
       },
     };
 
-    const { inUseGoogleFonts, inUseCustomFonts } = extractInUseFontFamilies(
+    const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
       themeData,
       defaultFonts
     );
     expect(inUseGoogleFonts).toEqual(expected);
-    expect(inUseCustomFonts).toEqual([]);
+    expect(inUseCustomFonts).toEqual({});
   });
 
   it("should handle custom fonts", () => {
@@ -111,9 +131,21 @@ describe("extractInUseFontFamilies", () => {
       "--fontFamily-h1-fontFamily": "'Custom Font', sans-serif",
       "--fontFamily-h2-fontFamily": "'Open Sans', sans-serif",
     };
+    const customFonts: CustomFontRegistry = {
+      "custom-font-key": {
+        name: "custom-font-regular",
+        displayName: "Custom Font",
+        italics: false,
+        weights: [400],
+        fallback: "sans-serif",
+        fontFacePath: "y-fonts/custom-font.css",
+        variants: [],
+      },
+    };
 
-    const expected: FontRegistry = {
+    const expectedGoogleFonts: FontRegistry = {
       "Open Sans": {
+        displayName: "Open Sans",
         italics: true,
         minWeight: 300,
         maxWeight: 800,
@@ -121,12 +153,15 @@ describe("extractInUseFontFamilies", () => {
       },
     };
 
-    const { inUseGoogleFonts, inUseCustomFonts } = extractInUseFontFamilies(
+    const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
       themeData,
-      defaultFonts
+      defaultFonts,
+      customFonts
     );
-    expect(inUseGoogleFonts).toEqual(expected);
-    expect(inUseCustomFonts).toEqual(["Custom Font"]);
+    expect(inUseGoogleFonts).toEqual(expectedGoogleFonts);
+    expect(inUseCustomFonts).toEqual({
+      "Custom Font": customFonts["custom-font-key"],
+    });
   });
 
   it("should resolve var() references to default header font", () => {
@@ -137,6 +172,7 @@ describe("extractInUseFontFamilies", () => {
 
     const expected: FontRegistry = {
       "Open Sans": {
+        displayName: "Open Sans",
         italics: true,
         minWeight: 300,
         maxWeight: 800,
@@ -144,12 +180,83 @@ describe("extractInUseFontFamilies", () => {
       },
     };
 
-    const { inUseGoogleFonts, inUseCustomFonts } = extractInUseFontFamilies(
+    const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
       themeData,
       defaultFonts
     );
     expect(inUseGoogleFonts).toEqual(expected);
-    expect(inUseCustomFonts).toEqual([]);
+    expect(inUseCustomFonts).toEqual({});
+  });
+});
+
+describe("custom font helpers", () => {
+  it("should build font select options from display names", () => {
+    const customFonts: CustomFontRegistry = {
+      "ebb-melvyn": {
+        name: "ebbmelvynregular-regular",
+        displayName: "EBB_Melvyn_Regular",
+        italics: false,
+        weights: [400, 700],
+        fallback: "sans-serif",
+        fontFacePath: "y-fonts/ebbmelvynregular.css",
+        variants: [],
+      },
+    };
+
+    expect(constructFontSelectOptions(customFonts)).toEqual([
+      {
+        label: "EBB_Melvyn_Regular",
+        value:
+          "'EBB_Melvyn_Regular', 'EBB_Melvyn_Regular Fallback', sans-serif",
+      },
+    ]);
+  });
+
+  it("should build custom font links from font face paths", () => {
+    expect(
+      generateCustomFontLinkData(["y-fonts/ebbmelvynregular.css"], "./")
+    ).toEqual([
+      {
+        href: "./y-fonts/ebbmelvynregular.css",
+        rel: "stylesheet",
+      },
+    ]);
+  });
+
+  it("should keep internal hyphens in font face paths", () => {
+    expect(generateCustomFontLinkData(["y-fonts/foo-bar.css"], "./")).toEqual([
+      {
+        href: "./y-fonts/foo-bar.css",
+        rel: "stylesheet",
+      },
+    ]);
+  });
+
+  it("should read custom font face paths from the registry", () => {
+    expect(
+      getCustomFontFacePathsFromFontRegistry({
+        custom: {
+          name: "ebbmelvynregular-regular",
+          displayName: "EBB_Melvyn_Regular",
+          italics: false,
+          weights: [400],
+          fallback: "sans-serif",
+          fontFacePath: "y-fonts/ebbmelvynregular.css",
+          variants: [],
+        },
+      })
+    ).toEqual(["y-fonts/ebbmelvynregular.css"]);
+  });
+
+  it("should support already-relative custom font paths", () => {
+    expect(
+      generateCustomFontLinkData(["./y-fonts/ebbmelvynregular.css"], "./")
+    ).toEqual([
+      {
+        href: "./y-fonts/ebbmelvynregular.css",
+        rel: "stylesheet",
+      },
+    ]);
   });
 });
 
@@ -165,7 +272,13 @@ describe("constructGoogleFontLinkTags", () => {
 
   it("should create a correct link for a single static font without italics", () => {
     const fonts: FontRegistry = {
-      Roboto: { weights: [400, 700], italics: false, fallback: "sans-serif" },
+      Roboto: {
+        name: "Roboto",
+        displayName: "Roboto",
+        weights: [400, 700],
+        italics: false,
+        fallback: "sans-serif",
+      },
     };
     const expected =
       preconnectTags +
@@ -175,7 +288,13 @@ describe("constructGoogleFontLinkTags", () => {
 
   it("should create a correct link for a single static font with italics", () => {
     const fonts: FontRegistry = {
-      Lato: { weights: [400, 900], italics: true, fallback: "sans-serif" },
+      Lato: {
+        name: "Lato",
+        displayName: "Lato",
+        weights: [400, 900],
+        italics: true,
+        fallback: "sans-serif",
+      },
     };
     const expected =
       preconnectTags +
@@ -186,6 +305,7 @@ describe("constructGoogleFontLinkTags", () => {
   it("should create a correct link for a single variable font without italics", () => {
     const fonts: FontRegistry = {
       "Open Sans": {
+        displayName: "Open Sans",
         minWeight: 300,
         maxWeight: 800,
         italics: false,
@@ -201,6 +321,7 @@ describe("constructGoogleFontLinkTags", () => {
   it("should create a correct link for a single variable font with italics", () => {
     const fonts: FontRegistry = {
       "Open Sans": {
+        displayName: "Open Sans",
         minWeight: 300,
         maxWeight: 800,
         italics: true,
@@ -216,6 +337,8 @@ describe("constructGoogleFontLinkTags", () => {
   it("should handle variable fonts where min and max weight are the same", () => {
     const fonts: FontRegistry = {
       "Single Weight Var": {
+        name: "Single Weight Var",
+        displayName: "Single Weight Var",
         minWeight: 500,
         maxWeight: 500,
         italics: true,
@@ -230,8 +353,16 @@ describe("constructGoogleFontLinkTags", () => {
 
   it("should create separate link tags for multiple fonts", () => {
     const fonts: FontRegistry = {
-      Roboto: { weights: [400], italics: false, fallback: "sans-serif" },
+      Roboto: {
+        name: "Roboto",
+        displayName: "Roboto",
+        weights: [400],
+        italics: false,
+        fallback: "sans-serif",
+      },
       Lato: {
+        name: "Lato",
+        displayName: "Lato",
         minWeight: 300,
         maxWeight: 700,
         italics: true,
@@ -247,14 +378,62 @@ describe("constructGoogleFontLinkTags", () => {
 
   it("should create separate link tags for many fonts", () => {
     const fonts: FontRegistry = {
-      Font1: { weights: [400], italics: false, fallback: "sans-serif" },
-      Font2: { weights: [400], italics: false, fallback: "sans-serif" },
-      Font3: { weights: [400], italics: false, fallback: "sans-serif" },
-      Font4: { weights: [400], italics: false, fallback: "sans-serif" },
-      Font5: { weights: [400], italics: false, fallback: "sans-serif" },
-      Font6: { weights: [400], italics: false, fallback: "sans-serif" },
-      Font7: { weights: [400], italics: false, fallback: "sans-serif" },
-      Font8: { weights: [400], italics: false, fallback: "sans-serif" },
+      Font1: {
+        name: "Font1",
+        displayName: "Font1",
+        weights: [400],
+        italics: false,
+        fallback: "sans-serif",
+      },
+      Font2: {
+        name: "Font2",
+        displayName: "Font2",
+        weights: [400],
+        italics: false,
+        fallback: "sans-serif",
+      },
+      Font3: {
+        name: "Font3",
+        displayName: "Font3",
+        weights: [400],
+        italics: false,
+        fallback: "sans-serif",
+      },
+      Font4: {
+        name: "Font4",
+        displayName: "Font4",
+        weights: [400],
+        italics: false,
+        fallback: "sans-serif",
+      },
+      Font5: {
+        name: "Font5",
+        displayName: "Font5",
+        weights: [400],
+        italics: false,
+        fallback: "sans-serif",
+      },
+      Font6: {
+        name: "Font6",
+        displayName: "Font6",
+        weights: [400],
+        italics: false,
+        fallback: "sans-serif",
+      },
+      Font7: {
+        name: "Font7",
+        displayName: "Font7",
+        weights: [400],
+        italics: false,
+        fallback: "sans-serif",
+      },
+      Font8: {
+        name: "Font8",
+        displayName: "Font8",
+        weights: [400],
+        italics: false,
+        fallback: "sans-serif",
+      },
     };
 
     const expected =
@@ -311,6 +490,31 @@ describe("getFontStyleOptions", () => {
       getFontStyleOptions({
         fontCssVariable: "--fontFamily-body-fontFamily",
         fontList: defaultFonts,
+      })
+    ).toMatchObject([{ value: "normal" }]);
+  });
+
+  it("resolves custom fonts by display name instead of registry key", () => {
+    const iframe = createPreviewIframe();
+    const iframeDocument = iframe.contentDocument!;
+    const styleTag = iframeDocument.createElement("style");
+    styleTag.id = "visual-editor-theme";
+    styleTag.textContent =
+      ".components{--fontFamily-body-fontFamily:'Custom Display', sans-serif !important;}";
+    iframeDocument.head.appendChild(styleTag);
+
+    expect(
+      getFontStyleOptions({
+        fontCssVariable: "--fontFamily-body-fontFamily",
+        fontList: {
+          "custom-font-key": {
+            name: "custom-font-regular",
+            displayName: "Custom Display",
+            italics: false,
+            weights: [400],
+            fallback: "sans-serif",
+          },
+        },
       })
     ).toMatchObject([{ value: "normal" }]);
   });

@@ -2,6 +2,7 @@ import { ThemeConfig } from "../utils/themeResolver.ts";
 import {
   defaultFonts,
   FontRegistry,
+  CustomFontRegistry,
   getFontStyleOptions,
   getFontWeightOptions,
   constructFontSelectOptions,
@@ -10,16 +11,19 @@ import { ThemeOptions } from "../utils/themeConfigOptions.ts";
 import { msg } from "../utils/i18n/platform.ts";
 
 export function createDefaultThemeConfig(
-  customFonts: FontRegistry = {}
+  customFonts: CustomFontRegistry = {}
 ): ThemeConfig {
   const fonts: FontRegistry = {
     ...defaultFonts,
     ...customFonts,
   };
+  const customFontDisplayNames = new Set(
+    Object.values(customFonts).map((font) => font.displayName)
+  );
   const fontOptions = [
     ...constructFontSelectOptions(customFonts),
     ...constructFontSelectOptions(defaultFonts).filter(
-      (option) => !(option.label in customFonts)
+      (option) => !customFontDisplayNames.has(option.label)
     ),
   ];
   const defaultHeaderFontOption = {
