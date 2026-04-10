@@ -11,7 +11,7 @@ import {
 
 const TEMPLATES_DIRECTORY = path.join(
   path.dirname(fileURLToPath(import.meta.url)),
-  "templates"
+  "../templates"
 );
 const BASE_TEMPLATE_SOURCE = readFileSync(
   path.join(TEMPLATES_DIRECTORY, "base.tsx"),
@@ -29,6 +29,10 @@ const LOCATOR_TEMPLATE_SOURCE = readFileSync(
   path.join(TEMPLATES_DIRECTORY, "locator.tsx"),
   "utf8"
 );
+const LOCAL_EDITOR_TEMPLATE_SOURCE = readFileSync(
+  path.join(TEMPLATES_DIRECTORY, "local-editor.tsx"),
+  "utf8"
+);
 
 const tempRoots: string[] = [];
 
@@ -43,6 +47,42 @@ afterEach(() => {
 });
 
 describe.sequential("generateRegistryTemplateFiles", () => {
+  it("restores fallback main for an otherwise-empty starter", () => {
+    const rootDir = createStarterFixture();
+
+    runGenerator(rootDir);
+
+    expect(
+      fs.existsSync(path.join(rootDir, "src", "templates", "main.tsx"))
+    ).toBe(true);
+
+    const generatedTemplate = fs.readFileSync(
+      path.join(rootDir, "src", "templates", "main.tsx"),
+      "utf8"
+    );
+    expect(generatedTemplate).toContain('from "@yext/visual-editor";');
+    expect(generatedTemplate).toContain("mainConfig");
+    expect(generatedTemplate).toContain(
+      "const Main: Template<TemplateRenderProps>"
+    );
+    expect(generatedTemplate).toContain("config={mainConfig}");
+
+    const updatedEditTemplate = fs.readFileSync(
+      path.join(rootDir, "src", "templates", "edit.tsx"),
+      "utf8"
+    );
+    expect(updatedEditTemplate).toContain("mainConfig,");
+    expect(updatedEditTemplate).toContain('"main": mainConfig');
+
+    const manifest = readManifest(rootDir);
+    expect(manifest.templates).toEqual([
+      expect.objectContaining({
+        name: "main",
+        defaultLayoutData: DEFAULT_LAYOUT,
+      }),
+    ]);
+  });
+
   it("generates registry config, template, manifest fallback, and edit wiring", () => {
     const rootDir = createStarterFixture();
     writeRegistryComponent(
@@ -107,8 +147,6 @@ describe.sequential("generateRegistryTemplateFiles", () => {
       'import { MainConfig as mainConfig } from "../registry/main/config";'
     );
     expect(updatedEditTemplate).toContain('"main": mainConfig');
-    expect(updatedEditTemplate).toContain('const editPath = "edit";');
-    expect(updatedEditTemplate).toContain('const editTemplateName = "edit";');
 
     expect(
       fs.existsSync(path.join(rootDir, "src", "templates", "edit.tsx"))
@@ -119,9 +157,12 @@ describe.sequential("generateRegistryTemplateFiles", () => {
     expect(
       fs.existsSync(path.join(rootDir, "src", "templates", "locator.tsx"))
     ).toBe(true);
+    expect(
+      fs.existsSync(path.join(rootDir, "src", "templates", "local-editor.tsx"))
+    ).toBe(true);
   });
 
-  it("prunes stale generated outputs but preserves built-in templates", () => {
+  it("falls back to package main after explicit registry main is removed", () => {
     const rootDir = createStarterFixture();
     const componentPath = writeRegistryComponent(
       rootDir,
@@ -137,7 +178,7 @@ describe.sequential("generateRegistryTemplateFiles", () => {
 
     expect(
       fs.existsSync(path.join(rootDir, "src", "templates", "main.tsx"))
-    ).toBe(false);
+    ).toBe(true);
     expect(
       fs.existsSync(path.join(rootDir, "src", "registry", "main", "config.tsx"))
     ).toBe(false);
@@ -150,25 +191,51 @@ describe.sequential("generateRegistryTemplateFiles", () => {
     expect(
       fs.existsSync(path.join(rootDir, "src", "templates", "locator.tsx"))
     ).toBe(true);
+    expect(
+      fs.existsSync(path.join(rootDir, "src", "templates", "local-editor.tsx"))
+    ).toBe(true);
+    expect(
+      fs.existsSync(
+        path.join(rootDir, "src", "templates", "local-editor-data.tsx")
+      )
+    ).toBe(true);
+    expect(
+      fs.existsSync(
+        path.join(
+          rootDir,
+          "src",
+          "templates",
+          "local-editor-data-directory.tsx"
+        )
+      )
+    ).toBe(true);
+    expect(
+      fs.existsSync(
+        path.join(rootDir, "src", "templates", "local-editor-data-dunkin.tsx")
+      )
+    ).toBe(true);
 
     const updatedEditTemplate = fs.readFileSync(
       path.join(rootDir, "src", "templates", "edit.tsx"),
       "utf8"
     );
-    expect(updatedEditTemplate).not.toContain("mainConfig");
-    expect(updatedEditTemplate).not.toContain('"main"');
-    expect(updatedEditTemplate).toContain('const editPath = "edit";');
-    expect(updatedEditTemplate).toContain('const editTemplateName = "edit";');
+    expect(updatedEditTemplate).toContain("mainConfig,");
+    expect(updatedEditTemplate).toContain('"main": mainConfig');
 
     const manifest = readManifest(rootDir);
-    expect(manifest.templates).toEqual([]);
+    expect(manifest.templates).toEqual([
+      expect.objectContaining({
+        name: "main",
+        defaultLayoutData: DEFAULT_LAYOUT,
+      }),
+    ]);
   });
 
-  it("uses a template-scoped route when a single custom template is available alongside shared templates", () => {
+  it("suppresses fallback main when a custom template exists", () => {
     const rootDir = createStarterFixture();
     writeRegistryComponent(
       rootDir,
-      "dunkin",
+      "demo-shop",
       "Hero.tsx",
       "export const Hero = {};\n"
     );
@@ -179,13 +246,25 @@ describe.sequential("generateRegistryTemplateFiles", () => {
       path.join(rootDir, "src", "templates", "edit.tsx"),
       "utf8"
     );
-    expect(updatedEditTemplate).toContain('const editPath = "edit/dunkin";');
+    expect(
+      fs.existsSync(path.join(rootDir, "src", "templates", "main.tsx"))
+    ).toBe(false);
     expect(updatedEditTemplate).toContain(
-      'const editTemplateName = "edit-dunkin";'
+      'import { DemoShopConfig as demoShopConfig } from "../registry/demo-shop/config";'
     );
+    expect(updatedEditTemplate).toContain('"demo-shop": demoShopConfig');
+    expect(updatedEditTemplate).not.toContain('"main": mainConfig');
+
+    const manifest = readManifest(rootDir);
+    expect(manifest.templates).toEqual([
+      expect.objectContaining({
+        name: "demo-shop",
+        defaultLayoutData: DEFAULT_LAYOUT,
+      }),
+    ]);
   });
 
-  it("treats an on-disk main.tsx as available even when it is not in the manifest", () => {
+  it("keeps explicit hand-authored main when custom templates exist", () => {
     const rootDir = createStarterFixture();
     fs.writeFileSync(
       path.join(rootDir, "src", "templates", "main.tsx"),
@@ -193,7 +272,7 @@ describe.sequential("generateRegistryTemplateFiles", () => {
     );
     writeRegistryComponent(
       rootDir,
-      "dunkin",
+      "demo-shop",
       "Hero.tsx",
       "export const Hero = {};\n"
     );
@@ -204,8 +283,12 @@ describe.sequential("generateRegistryTemplateFiles", () => {
       path.join(rootDir, "src", "templates", "edit.tsx"),
       "utf8"
     );
-    expect(updatedEditTemplate).toContain('const editPath = "edit";');
-    expect(updatedEditTemplate).toContain('const editTemplateName = "edit";');
+    expect(updatedEditTemplate).toContain("mainConfig,");
+    expect(updatedEditTemplate).toContain('"main": mainConfig');
+    expect(updatedEditTemplate).toContain(
+      'import { DemoShopConfig as demoShopConfig } from "../registry/demo-shop/config";'
+    );
+    expect(updatedEditTemplate).toContain('"demo-shop": demoShopConfig');
   });
 
   it("refuses to overwrite a hand-authored template file", () => {
@@ -291,7 +374,7 @@ describe.sequential("generateRegistryTemplateFiles", () => {
     runGenerator(rootDir);
 
     expect(warnSpy).toHaveBeenCalledWith(
-      'Skipping registry template "directory" because it conflicts with a reserved componentRegistry key'
+      'Skipping registry template "directory" because it conflicts with a reserved template name'
     );
     expect(
       fs.existsSync(
@@ -338,6 +421,22 @@ function createStarterFixture(): string {
   fs.writeFileSync(
     path.join(rootDir, "src", "templates", "locator.tsx"),
     LOCATOR_TEMPLATE_SOURCE
+  );
+  fs.writeFileSync(
+    path.join(rootDir, "src", "templates", "local-editor.tsx"),
+    LOCAL_EDITOR_TEMPLATE_SOURCE
+  );
+  fs.writeFileSync(
+    path.join(rootDir, "src", "templates", "local-editor-data.tsx"),
+    "/** THIS FILE IS AUTOGENERATED AND SHOULD NOT BE EDITED */\nexport default null;\n"
+  );
+  fs.writeFileSync(
+    path.join(rootDir, "src", "templates", "local-editor-data-directory.tsx"),
+    "/** THIS FILE IS AUTOGENERATED AND SHOULD NOT BE EDITED */\nexport default null;\n"
+  );
+  fs.writeFileSync(
+    path.join(rootDir, "src", "templates", "local-editor-data-dunkin.tsx"),
+    "/** THIS FILE IS AUTOGENERATED AND SHOULD NOT BE EDITED */\nexport default null;\n"
   );
 
   return rootDir;

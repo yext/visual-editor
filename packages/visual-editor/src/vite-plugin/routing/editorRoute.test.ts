@@ -1,9 +1,45 @@
 import {
   EDIT_PATH_PLACEHOLDER,
   EDIT_TEMPLATE_NAME_PLACEHOLDER,
+  getEditorTemplateInfosFromTemplateNames,
   getEditorTemplateInfoFromTemplateNames,
+  getEditorTemplateFilePath,
+  isManagedEditorTemplateFileName,
   injectEditorTemplateInfo,
 } from "./editorRoute.ts";
+
+describe("getEditorTemplateInfosFromTemplateNames", () => {
+  it("uses the legacy edit route when main is available", () => {
+    expect(getEditorTemplateInfosFromTemplateNames(["main"])).toEqual([
+      {
+        path: "edit",
+        configName: "edit",
+      },
+    ]);
+  });
+
+  it("uses one editor route per custom template when main is absent", () => {
+    expect(
+      getEditorTemplateInfosFromTemplateNames([
+        "sample-store",
+        "demo-shop",
+        "directory",
+        "locator",
+      ])
+    ).toEqual([
+      {
+        templateId: "demo-shop",
+        path: "edit/demo-shop",
+        configName: "edit-demo-shop",
+      },
+      {
+        templateId: "sample-store",
+        path: "edit/sample-store",
+        configName: "edit-sample-store",
+      },
+    ]);
+  });
+});
 
 describe("getEditorTemplateInfoFromTemplateNames", () => {
   it("uses the legacy route when main is available", () => {
@@ -34,6 +70,7 @@ describe("getEditorTemplateInfoFromTemplateNames", () => {
   it("uses a template-scoped route for a single non-legacy template", () => {
     expect(getEditorTemplateInfoFromTemplateNames(["custom-template"])).toEqual(
       {
+        templateId: "custom-template",
         path: "edit/custom-template",
         configName: "edit-custom-template",
       }
@@ -48,6 +85,7 @@ describe("getEditorTemplateInfoFromTemplateNames", () => {
         "locator",
       ])
     ).toEqual({
+      templateId: "custom-template",
       path: "edit/custom-template",
       configName: "edit-custom-template",
     });
@@ -67,13 +105,14 @@ describe("getEditorTemplateInfoFromTemplateNames", () => {
   it("returns the matching path and config name", () => {
     expect(
       getEditorTemplateInfoFromTemplateNames([
-        "sweetgreen",
+        "test-market",
         "directory",
         "locator",
       ])
     ).toEqual({
-      path: "edit/sweetgreen",
-      configName: "edit-sweetgreen",
+      templateId: "test-market",
+      path: "edit/test-market",
+      configName: "edit-test-market",
     });
   });
 });
@@ -100,21 +139,21 @@ const duplicateEditPath = "${EDIT_PATH_PLACEHOLDER}";
 const editTemplateName = "${EDIT_TEMPLATE_NAME_PLACEHOLDER}";
 const duplicateEditTemplateName = "${EDIT_TEMPLATE_NAME_PLACEHOLDER}";`,
         {
-          path: "edit/dunkin",
-          configName: "edit-dunkin",
+          path: "edit/demo-shop",
+          configName: "edit-demo-shop",
         }
       )
-    ).toBe(`const editPath = "edit/dunkin";
-const duplicateEditPath = "edit/dunkin";
-const editTemplateName = "edit-dunkin";
-const duplicateEditTemplateName = "edit-dunkin";`);
+    ).toBe(`const editPath = "edit/demo-shop";
+const duplicateEditPath = "edit/demo-shop";
+const editTemplateName = "edit-demo-shop";
+const duplicateEditTemplateName = "edit-demo-shop";`);
   });
 
   it("throws when the path placeholder is missing", () => {
     expect(() =>
       injectEditorTemplateInfo('const editPath = "edit";', {
-        path: "edit/dunkin",
-        configName: "edit-dunkin",
+        path: "edit/demo-shop",
+        configName: "edit-demo-shop",
       })
     ).toThrow("Unable to inject editor path: placeholder not found");
   });
@@ -125,10 +164,34 @@ const duplicateEditTemplateName = "edit-dunkin";`);
         `const editPath = "${EDIT_PATH_PLACEHOLDER}";
 const editTemplateName = "edit";`,
         {
-          path: "edit/dunkin",
-          configName: "edit-dunkin",
+          path: "edit/demo-shop",
+          configName: "edit-demo-shop",
         }
       )
     ).toThrow("Unable to inject edit template name: placeholder not found");
+  });
+});
+
+describe("editor template files", () => {
+  it("maps legacy and custom editor templates to managed file paths", () => {
+    expect(
+      getEditorTemplateFilePath({
+        path: "edit",
+        configName: "edit",
+      })
+    ).toBe("src/templates/edit.tsx");
+    expect(
+      getEditorTemplateFilePath({
+        path: "edit/demo-shop",
+        configName: "edit-demo-shop",
+        templateId: "demo-shop",
+      })
+    ).toBe("src/templates/edit-demo-shop.tsx");
+  });
+
+  it("recognizes managed edit template file names", () => {
+    expect(isManagedEditorTemplateFileName("edit")).toBe(true);
+    expect(isManagedEditorTemplateFileName("edit-demo-shop")).toBe(true);
+    expect(isManagedEditorTemplateFileName("directory")).toBe(false);
   });
 });

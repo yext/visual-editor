@@ -27,6 +27,7 @@ import {
 import { DynamicOption } from "../../../editor/DynamicOptionsSelector.tsx";
 import { useTemplateMetadata } from "../../hooks/useMessageReceivers.ts";
 import { getPageSetLocales } from "../../../utils/pageSetLocales.ts";
+import { shouldUseStandaloneLocalPrompt } from "../../utils/shouldUseStandaloneLocalPrompt.ts";
 
 export type ImagePayload = {
   id: string;
@@ -102,7 +103,7 @@ const createImageConstantConfig = (options?: {
       e.preventDefault();
 
       /** Handles local development testing outside of Storm */
-      if (window.location.href.includes("http://localhost:5173/dev-location")) {
+      if (shouldUseStandaloneLocalPrompt()) {
         const userInput = prompt("Enter Image URL:");
         if (!userInput) {
           return;

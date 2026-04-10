@@ -39,6 +39,7 @@ type InternalThemeEditorProps = {
   sendDevThemeSaveStateData: (data: any) => void;
   buildThemeLocalStorageKey: () => string;
   localDev: boolean;
+  showLocalDevOverrideButtons: boolean;
   metadata?: Metadata;
 };
 
@@ -57,6 +58,7 @@ export const InternalThemeEditor = ({
   sendDevThemeSaveStateData,
   buildThemeLocalStorageKey,
   localDev,
+  showLocalDevOverrideButtons,
   metadata,
 }: InternalThemeEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false); // helps sync puck preview and save state
@@ -199,6 +201,7 @@ export const InternalThemeEditor = ({
               setClearLocalChangesModalOpen={setClearLocalChangesModalOpen}
               totalEntityCount={templateMetadata.totalEntityCount}
               localDev={localDev}
+              showLocalDevOverrideButtons={showLocalDevOverrideButtons}
               headDeployStatus={templateMetadata.headDeployStatus}
             />
           ),
