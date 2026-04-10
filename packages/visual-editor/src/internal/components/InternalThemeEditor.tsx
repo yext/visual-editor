@@ -212,6 +212,7 @@ export const InternalThemeEditor = ({
           ),
         }}
         metadata={metadata}
+        _experimentalVirtualization
       />
     </EntityTooltipsProvider>
   );

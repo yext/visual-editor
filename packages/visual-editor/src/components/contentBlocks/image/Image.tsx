@@ -135,6 +135,9 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
     hideWidthProp,
     showImageConstrain = false,
   } = props;
+
+  console.log("create-dev-release 3");
+
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
   const resolvedImage = React.useMemo(() => {
