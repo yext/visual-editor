@@ -61,9 +61,7 @@ export type BasicSelectorField = BaseField & {
       }
   );
 
-type BasicSelectorFieldProps = FieldProps<BasicSelectorField> & {
-  children: React.ReactNode;
-};
+type BasicSelectorFieldProps = FieldProps<BasicSelectorField>;
 
 export const BasicSelectorFieldOverride = ({
   field,
@@ -122,7 +120,7 @@ export const BasicSelectorFieldOverride = ({
           (option) => JSON.stringify(option.value) === JSON.stringify(value)
         ) ?? serializedOptions[0]
       }
-      onChange={(selectedValue: string) => onChange(selectedValue)}
+      onChange={onChange}
       optionGroups={translatedOptionGroups}
       disabled={noOptions}
       disableSearch={disableSearch}

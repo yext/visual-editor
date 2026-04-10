@@ -23,7 +23,6 @@ export {
   EmbeddedFieldStringInputFromEntity,
   EmbeddedFieldStringInputFromOptions,
 } from "./EmbeddedFieldStringInput.tsx";
-export { CodeField, type CodeFieldProps } from "./CodeField.tsx";
 export { getMaxWidthOptions, filterMaxWidths } from "./MaxWidthSelector.tsx";
 export { resolveDataFromParent } from "./ParentData.tsx";
 export {
