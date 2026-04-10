@@ -38,7 +38,7 @@ describe("buildCssOverridesStyle", () => {
           "--colors-palette-primary-foreground": "hsl(0 0% 100%)",
           "--fontFamily-h1-fontFamily": "'Roboto', sans-serif",
           "--fontFamily-h2-fontFamily": "'Yext Custom', serif",
-          __customFonts: ["yextcustom-bold"],
+          __customFonts: ["y-fonts/yextcustom.css"],
           "--borderRadius-border-lg": "20px",
         }),
       },
@@ -92,7 +92,7 @@ describe("buildCssOverridesStyle", () => {
             "'Adamina', 'Adamina Fallback', serif",
           "--fontFamily-h2-fontFamily":
             "'Yext Custom', 'Yext Custom Fallback', serif",
-          __customFonts: ["yextcustom-bold"],
+          __customFonts: ["y-fonts/yextcustom.css"],
           __customFontPreloads: ["/y-fonts/yextcustom-bold.woff2"],
         }),
       },
@@ -120,14 +120,14 @@ describe("buildCssOverridesStyle", () => {
     );
   });
 
-  it("should derive custom font stylesheet urls from __customFonts", () => {
+  it("should load custom font stylesheet urls directly from __customFonts", () => {
     const streamDocument: StreamDocument = {
       siteId: 123,
       __: {
         theme: JSON.stringify({
           "--fontFamily-h1-fontFamily":
             "'EBB_Melvyn_Regular', 'EBB_Melvyn_Regular Fallback', sans-serif",
-          __customFonts: ["ebbmelvynregular-regular"],
+          __customFonts: ["y-fonts/ebbmelvynregular.css"],
         }),
       },
     };
@@ -137,7 +137,6 @@ describe("buildCssOverridesStyle", () => {
     expect(result).toContain(
       '<link href="./y-fonts/ebbmelvynregular.css" rel="stylesheet">'
     );
-    expect(result).not.toContain("./y-fonts/ebb_melvyn_regular.css");
   });
 
   it("should only load custom font stylesheets from __customFonts", () => {
@@ -147,7 +146,7 @@ describe("buildCssOverridesStyle", () => {
         theme: JSON.stringify({
           "--fontFamily-h1-fontFamily":
             "'EBB_Melvyn_Regular', 'EBB_Melvyn_Regular Fallback', sans-serif",
-          __customFonts: ["ebbmelvynregular-regular"],
+          __customFonts: ["y-fonts/ebbmelvynregular.css"],
           __customFontPreloads: ["/y-fonts/not-the-right-font-regular.woff2"],
         }),
       },
@@ -159,7 +158,6 @@ describe("buildCssOverridesStyle", () => {
       '<link href="./y-fonts/ebbmelvynregular.css" rel="stylesheet">'
     );
     expect(result).not.toContain("./y-fonts/not-the-right-font.css");
-    expect(result).not.toContain("./y-fonts/ebb_melvyn_regular.css");
   });
 
   it("should not infer custom font stylesheet urls from preloads alone", () => {
@@ -190,7 +188,7 @@ describe("buildCssOverridesStyle", () => {
       __: {
         theme: JSON.stringify({
           "--fontFamily-h1-fontFamily": "'Roboto', sans-serif",
-          __customFonts: ["roboto-regular"],
+          __customFonts: ["y-fonts/roboto.css"],
           __customFontPreloads: ["./y-fonts/roboto-regular.woff2"],
         }),
       },

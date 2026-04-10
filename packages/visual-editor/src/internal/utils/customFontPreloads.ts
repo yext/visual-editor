@@ -1,17 +1,8 @@
-/**
- * Custom font preloads
- *
- * High-level flow:
- * 1. Load custom font CSS from /y-fonts/*.css and index for @font-face rules.
- * 2. Use theme values (font family + weight + style) to choose the correct file per font.
- * 3. Store the resulting file list in themeData for head preloading.
- */
-
 import {
   FontRegistry,
+  FontSpecification,
   findFontByDisplayName,
-  getCustomFontCssIdsFromFontRegistry,
-  generateCustomFontLinkData,
+  type CustomFontVariant,
 } from "../../utils/fonts/visualEditorFonts.ts";
 import { ThemeConfig } from "../../utils/themeResolver.ts";
 import { ThemeData } from "../types/themeData.ts";
@@ -22,31 +13,50 @@ export const CUSTOM_FONTS_KEY = "__customFonts";
 
 type FontStyleValue = "normal" | "italic";
 
-type CustomFontFaceIndex = {
-  variableSrcByStyle: Partial<Record<FontStyleValue, string>>;
-  staticSrcByStyleAndWeight: Record<FontStyleValue, Record<number, string>>;
+export type CustomFontAssets = {
+  fontFacePaths: string[];
+  preloads: string[];
 };
 
-export type CustomFontCssIndex = Record<string, CustomFontFaceIndex>;
-
-/**
- * Removes wrapping single or double quotes from a string.
- */
 const stripQuotes = (value: string) => value.trim().replace(/^['"]|['"]$/g, "");
 
-/**
- * Extracts the first font-family name from a font-family declaration value.
- * For example, given "'Alpha', sans-serif", it returns "Alpha".
- */
-const extractFontFamilyName = (value: string) => {
+const extractFontFamilyName = (value: string): string => {
   const firstFont = value.split(",")[0];
   return stripQuotes(firstFont);
 };
 
+const getMergedThemeValues = (
+  themeConfig: ThemeConfig,
+  themeValues: ThemeData
+): ThemeData => ({
+  ...generateCssVariablesFromThemeConfig(themeConfig),
+  ...themeValues,
+});
+
+const matchesWeight = (variant: CustomFontVariant, weight: number): boolean => {
+  if ("fontWeight" in variant) {
+    return variant.fontWeight === weight;
+  }
+
+  return variant.minWeight <= weight && weight <= variant.maxWeight;
+};
+
+const findMatchingVariant = (
+  customFont: FontSpecification,
+  fontStyle: FontStyleValue,
+  weight: number
+): CustomFontVariant | undefined => {
+  return customFont.variants?.find(
+    (variant) =>
+      variant.fontStyle === fontStyle && matchesWeight(variant, weight)
+  );
+};
+
 /**
- * Computes the list of custom font `name` values referenced by the theme.
+ * Resolves the custom font stylesheets and exact preload targets referenced by
+ * the merged theme values.
  */
-export const buildCustomFontNames = ({
+export const buildCustomFontAssets = ({
   themeConfig,
   themeValues,
   customFonts,
@@ -54,213 +64,9 @@ export const buildCustomFontNames = ({
   themeConfig: ThemeConfig;
   themeValues: ThemeData;
   customFonts: FontRegistry;
-}) => {
-  const defaultThemeValues = generateCssVariablesFromThemeConfig(themeConfig);
-  const mergedThemeValues = { ...defaultThemeValues, ...themeValues };
-  const customFontNames = new Set<string>();
-
-  Object.keys(mergedThemeValues).forEach((key) => {
-    if (!key.startsWith("--fontFamily-") || !key.endsWith("-fontFamily")) {
-      return;
-    }
-
-    const fontFamilyValue = mergedThemeValues[key];
-    if (typeof fontFamilyValue !== "string") {
-      return;
-    }
-
-    const fontFamily = extractFontFamilyName(fontFamilyValue);
-    const customFont = findFontByDisplayName(customFonts, fontFamily);
-    if (!customFont?.name) {
-      return;
-    }
-
-    customFontNames.add(customFont.name);
-  });
-
-  return [...customFontNames];
-};
-
-/**
- * Returns all @font-face blocks found in the css text.
- * For example:
- *   @font-face {
- *     font-family: 'Alpha';
- *     font-weight: 400;
- *     src: url('/y-fonts/alpha-400.woff2');
- *   }
- */
-const extractFontFaceBlocks = (cssText: string) => {
-  // Matches each "@font-face { ... }" block up to the first closing brace.
-  return cssText.match(/@font-face\s*{[^}]*}/gi) ?? [];
-};
-
-/**
- * Extracts the first URL from a css src declaration.
- */
-const extractFirstUrl = (srcValue: string) => {
-  // Captures the first url(...) occurrence in srcValue
-  const match = srcValue.match(/url\(([^)]+)\)/i);
-  if (!match) {
-    return undefined;
-  }
-  return stripQuotes(match[1]);
-};
-
-/**
- * Parses a font-weight value that can be a single number or a range.
- */
-const parseFontWeight = (value: string) => {
-  const normalized = value.trim().replace(/\s+/g, " ");
-  if (normalized.includes(" ")) {
-    const [min, max] = normalized.split(" ");
-    const minWeight = Number.parseInt(min, 10);
-    const maxWeight = Number.parseInt(max, 10);
-    if (!Number.isNaN(minWeight) && !Number.isNaN(maxWeight)) {
-      return { type: "range" as const, minWeight, maxWeight };
-    }
-  }
-
-  const weight = Number.parseInt(normalized, 10);
-  if (!Number.isNaN(weight)) {
-    return { type: "single" as const, weight };
-  }
-  return undefined;
-};
-
-/**
- * Parses a single @font-face block into its family, style, weight, and file source.
- * For example, given the block:
- *   @font-face {
- *     font-family: 'Alpha';
- *     font-weight: 400;
- *     font-style: normal;
- *     src: url('/y-fonts/alpha-400.woff2');
- *   }
- * It returns:
- *   {
- *     fontFamily: "Alpha",
- *     fontStyle: "normal",
- *     weight: { type: "single", weight: 400 },
- *     src: "/y-fonts/alpha-400.woff2"
- *   }
- * It returns undefined if required properties are missing or if the style is unsupported.
- */
-const parseFontFaceBlock = (block: string) => {
-  // Capture property values up to the semicolon (case-insensitive).
-  const familyMatch = block.match(/font-family\s*:\s*([^;]+);/i);
-  const weightMatch = block.match(/font-weight\s*:\s*([^;]+);/i);
-  const styleMatch = block.match(/font-style\s*:\s*([^;]+);/i);
-  const srcMatch = block.match(/src\s*:\s*([^;]+);/i);
-
-  const fontFamilyRaw = familyMatch ? familyMatch[1] : undefined;
-  const fontWeightRaw = weightMatch ? weightMatch[1] : undefined;
-  const fontStyleRaw = styleMatch ? styleMatch[1] : "normal";
-  const srcRaw = srcMatch ? srcMatch[1] : undefined;
-
-  if (!fontFamilyRaw || !fontWeightRaw || !srcRaw) {
-    return undefined;
-  }
-
-  const fontStyle = parseFontStyle(fontStyleRaw);
-  if (!fontStyle) {
-    return undefined;
-  }
-
-  const fontFamily = stripQuotes(fontFamilyRaw);
-  const weight = parseFontWeight(fontWeightRaw);
-  const src = extractFirstUrl(srcRaw);
-
-  if (!fontFamily || !weight || !src) {
-    return undefined;
-  }
-
-  return { fontFamily, fontStyle, weight, src };
-};
-
-const parseFontStyle = (value: string): FontStyleValue | undefined => {
-  const normalizedValue = value.trim().toLowerCase();
-  if (normalizedValue === "normal" || normalizedValue === "italic") {
-    return normalizedValue;
-  }
-
-  return undefined;
-};
-
-/**
- * Builds an index of @font-face rules for custom fonts by fetching their css.
- */
-export const loadCustomFontCssIndex = async (
-  customFonts: FontRegistry
-): Promise<CustomFontCssIndex> => {
-  const index: CustomFontCssIndex = {};
-  if (Object.keys(customFonts).length === 0 || typeof window === "undefined") {
-    return index;
-  }
-
-  const linkData = generateCustomFontLinkData(
-    getCustomFontCssIdsFromFontRegistry(customFonts),
-    "./"
-  );
-  const cssTexts = await Promise.all(
-    linkData.map(async (link) => {
-      try {
-        const response = await fetch(link.href);
-        if (!response.ok) {
-          return "";
-        }
-        return await response.text();
-      } catch {
-        return "";
-      }
-    })
-  );
-
-  cssTexts.forEach((cssText) => {
-    extractFontFaceBlocks(cssText).forEach((block) => {
-      const parsed = parseFontFaceBlock(block);
-      if (!parsed) {
-        return;
-      }
-
-      const { fontFamily, fontStyle, weight, src } = parsed;
-      if (!index[fontFamily]) {
-        index[fontFamily] = {
-          variableSrcByStyle: {},
-          staticSrcByStyleAndWeight: {
-            normal: {},
-            italic: {},
-          },
-        };
-      }
-      if (weight.type === "range") {
-        index[fontFamily].variableSrcByStyle[fontStyle] = src;
-      } else {
-        index[fontFamily].staticSrcByStyleAndWeight[fontStyle][weight.weight] =
-          src;
-      }
-    });
-  });
-
-  return index;
-};
-
-/**
- * Computes the list of custom font files to preload based on theme values.
- */
-export const buildCustomFontPreloads = ({
-  themeConfig,
-  themeValues,
-  customFonts,
-  customFontCssIndex,
-}: {
-  themeConfig: ThemeConfig;
-  themeValues: ThemeData;
-  customFonts: FontRegistry;
-  customFontCssIndex: CustomFontCssIndex;
-}) => {
-  const defaultThemeValues = generateCssVariablesFromThemeConfig(themeConfig);
-  const mergedThemeValues = { ...defaultThemeValues, ...themeValues };
+}): CustomFontAssets => {
+  const mergedThemeValues = getMergedThemeValues(themeConfig, themeValues);
+  const fontFacePaths = new Set<string>();
   const preloads: string[] = [];
   const seen = new Set<string>();
 
@@ -278,8 +84,13 @@ export const buildCustomFontPreloads = ({
     }
 
     const fontFamily = extractFontFamilyName(fontFamilyValue);
-    if (!findFontByDisplayName(customFonts, fontFamily)) {
+    const customFont = findFontByDisplayName(customFonts, fontFamily);
+    if (!customFont) {
       return;
+    }
+
+    if (customFont.fontFacePath) {
+      fontFacePaths.add(customFont.fontFacePath);
     }
 
     const weightValue =
@@ -288,83 +99,88 @@ export const buildCustomFontPreloads = ({
     if (Number.isNaN(weight)) {
       return;
     }
+
     const fontStyleValue =
       mergedThemeValues[`--fontStyle-${sectionKey}-fontStyle`];
     const fontStyle: FontStyleValue =
       fontStyleValue === "italic" ? "italic" : "normal";
 
-    const index = customFontCssIndex[fontFamily];
-    if (!index) {
+    const variant = findMatchingVariant(customFont, fontStyle, weight);
+    if (!variant || seen.has(variant.fontFilePath)) {
       return;
     }
 
-    const src =
-      index.variableSrcByStyle[fontStyle] ??
-      index.staticSrcByStyleAndWeight[fontStyle][weight];
-    if (!src || seen.has(src)) {
-      return;
-    }
-
-    seen.add(src);
-    preloads.push(src);
+    seen.add(variant.fontFilePath);
+    preloads.push(variant.fontFilePath);
   });
 
-  return preloads;
+  return {
+    fontFacePaths: [...fontFacePaths],
+    preloads,
+  };
 };
 
 /**
- * Removes the custom font preloads key from theme data if present.
+ * Removes saved custom font preload URLs from theme data before re-saving.
  */
-export const removeCustomFontPreloads = (themeValues: ThemeData) => {
+export const removeCustomFontPreloads = (themeValues: ThemeData): ThemeData => {
   if (!(CUSTOM_FONT_PRELOADS_KEY in themeValues)) {
     return themeValues;
   }
-  // oxlint-disable-next-line no-unused-vars: ignore unused _
-  const { [CUSTOM_FONT_PRELOADS_KEY]: _, ...rest } = themeValues;
+
+  const rest = { ...themeValues };
+  delete rest[CUSTOM_FONT_PRELOADS_KEY];
   return rest;
 };
 
 /**
- * Removes the custom font names key from theme data if present.
+ * Removes saved custom font stylesheet paths from theme data before re-saving.
  */
-export const removeCustomFonts = (themeValues: ThemeData) => {
+export const removeCustomFonts = (themeValues: ThemeData): ThemeData => {
   if (!(CUSTOM_FONTS_KEY in themeValues)) {
     return themeValues;
   }
-  // oxlint-disable-next-line no-unused-vars: ignore unused _
-  const { [CUSTOM_FONTS_KEY]: _, ...rest } = themeValues;
+
+  const rest = { ...themeValues };
+  delete rest[CUSTOM_FONTS_KEY];
   return rest;
 };
 
 /**
- * Returns the custom font preload list from theme data, if available.
+ * Reads the saved custom font preload URLs from theme data.
  */
-export const getCustomFontPreloads = (themeValues: ThemeData | undefined) => {
+export const getCustomFontPreloads = (
+  themeValues: ThemeData | undefined
+): string[] => {
   if (!themeValues) {
     return [];
   }
+
   const preloads = themeValues[CUSTOM_FONT_PRELOADS_KEY];
   return Array.isArray(preloads) ? preloads.filter(Boolean) : [];
 };
 
 /**
- * Returns the custom font names from theme data, if available.
+ * Reads the saved custom font stylesheet paths from theme data.
  */
-export const getCustomFonts = (themeValues: ThemeData | undefined) => {
+export const getCustomFontFacePaths = (
+  themeValues: ThemeData | undefined
+): string[] => {
   if (!themeValues) {
     return [];
   }
+
   const customFonts = themeValues[CUSTOM_FONTS_KEY];
   return Array.isArray(customFonts) ? customFonts.filter(Boolean) : [];
 };
 
 /**
- * Builds the HTML link tags for preloading custom fonts.
+ * Builds preload link HTML for the saved custom font file URLs.
  */
 export const buildFontPreloadTags = (
   preloads: string[],
   relativePrefixToRoot: string
-) => {
+): string => {
   if (preloads.length === 0) {
     return "";
   }

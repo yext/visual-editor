@@ -9,7 +9,6 @@ import {
   filterInUseFontRegistries,
   createFontLinkElements,
   generateGoogleFontLinkData,
-  getCustomFontCssIdsFromNames,
   fontLinkDataToHTML,
   type FontRegistry,
   type FontLinkData,
@@ -17,7 +16,7 @@ import {
 } from "./fonts/visualEditorFonts.ts";
 import {
   buildFontPreloadTags,
-  getCustomFonts,
+  getCustomFontFacePaths,
   getCustomFontPreloads,
 } from "../internal/utils/customFontPreloads.ts";
 import { ThemeConfig } from "./themeResolver.ts";
@@ -68,8 +67,7 @@ export const applyTheme = (
       mergedThemeData,
       defaultFonts
     );
-    const customFontNames = getCustomFonts(overrides);
-    const customFontCssIds = getCustomFontCssIdsFromNames(customFontNames);
+    const customFontFacePaths = getCustomFontFacePaths(overrides);
 
     if (Object.keys(inUseGoogleFonts).length === 0) {
       // No fonts found in theme data, use only Open Sans
@@ -80,7 +78,7 @@ export const applyTheme = (
       fontLinkData = generateGoogleFontLinkData(inUseGoogleFonts);
     }
     fontLinkData = [
-      ...generateCustomFontLinkData(customFontCssIds, relativePrefixToRoot),
+      ...generateCustomFontLinkData(customFontFacePaths, relativePrefixToRoot),
       ...fontLinkData,
     ];
 

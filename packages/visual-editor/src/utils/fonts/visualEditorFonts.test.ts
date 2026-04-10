@@ -7,7 +7,7 @@ import {
   defaultFonts,
   constructGoogleFontLinkTags,
   generateCustomFontLinkData,
-  getCustomFontCssIdsFromNames,
+  getCustomFontFacePathsFromFontRegistry,
   getFontStyleOptions,
 } from "./visualEditorFonts.ts";
 
@@ -137,6 +137,8 @@ describe("extractInUseFontFamilies", () => {
         italics: false,
         weights: [400],
         fallback: "sans-serif",
+        fontFacePath: "y-fonts/custom-font.css",
+        variants: [],
       },
     };
 
@@ -157,7 +159,7 @@ describe("extractInUseFontFamilies", () => {
     );
     expect(inUseGoogleFonts).toEqual(expectedGoogleFonts);
     expect(inUseCustomFonts).toEqual({
-      "custom-font-regular": customFonts["custom-font-key"],
+      "Custom Font": customFonts["custom-font-key"],
     });
   });
 
@@ -195,6 +197,8 @@ describe("custom font helpers", () => {
         italics: false,
         weights: [400, 700],
         fallback: "sans-serif",
+        fontFacePath: "y-fonts/ebbmelvynregular.css",
+        variants: [],
       },
     };
 
@@ -207,8 +211,10 @@ describe("custom font helpers", () => {
     ]);
   });
 
-  it("should build custom font links from parsed family ids", () => {
-    expect(generateCustomFontLinkData(["ebbmelvynregular"], "./")).toEqual([
+  it("should build custom font links from font face paths", () => {
+    expect(
+      generateCustomFontLinkData(["y-fonts/ebbmelvynregular.css"], "./")
+    ).toEqual([
       {
         href: "./y-fonts/ebbmelvynregular.css",
         rel: "stylesheet",
@@ -216,8 +222,8 @@ describe("custom font helpers", () => {
     ]);
   });
 
-  it("should keep internal hyphens when parsing custom font family ids", () => {
-    expect(generateCustomFontLinkData(["foo-bar"], "./")).toEqual([
+  it("should keep internal hyphens in font face paths", () => {
+    expect(generateCustomFontLinkData(["y-fonts/foo-bar.css"], "./")).toEqual([
       {
         href: "./y-fonts/foo-bar.css",
         rel: "stylesheet",
@@ -225,14 +231,26 @@ describe("custom font helpers", () => {
     ]);
   });
 
-  it("should build custom font css ids from font names", () => {
-    expect(getCustomFontCssIdsFromNames(["foo-bar-regular"])).toEqual([
-      "foo-bar",
-    ]);
+  it("should read custom font face paths from the registry", () => {
+    expect(
+      getCustomFontFacePathsFromFontRegistry({
+        custom: {
+          name: "ebbmelvynregular-regular",
+          displayName: "EBB_Melvyn_Regular",
+          italics: false,
+          weights: [400],
+          fallback: "sans-serif",
+          fontFacePath: "y-fonts/ebbmelvynregular.css",
+          variants: [],
+        },
+      })
+    ).toEqual(["y-fonts/ebbmelvynregular.css"]);
   });
 
-  it("should build custom font links from normalized css ids", () => {
-    expect(generateCustomFontLinkData(["ebbmelvynregular"], "./")).toEqual([
+  it("should support already-relative custom font paths", () => {
+    expect(
+      generateCustomFontLinkData(["./y-fonts/ebbmelvynregular.css"], "./")
+    ).toEqual([
       {
         href: "./y-fonts/ebbmelvynregular.css",
         rel: "stylesheet",

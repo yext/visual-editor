@@ -8,11 +8,26 @@ import { fontStyleOptions } from "../themeConfigOptions.ts";
 const variableFontRegex = /var\((--[^)]+)\)/;
 
 export type FontRegistry = Record<string, FontSpecification>;
+export type CustomFontVariant = {
+  fontStyle: "normal" | "italic";
+  fontFilePath: string;
+} & (
+  | {
+      fontWeight: number;
+    }
+  | {
+      minWeight: number;
+      maxWeight: number;
+    }
+);
+
 export type FontSpecification = {
   name?: string;
   displayName: string;
   italics: boolean; // whether the font supports italics
   fallback: "sans-serif" | "serif" | "monospace" | "cursive";
+  fontFacePath?: string;
+  variants?: CustomFontVariant[];
 } & (
   | {
       // variable fonts
@@ -127,53 +142,30 @@ export const generateGoogleFontLinkData = (
   return [...PRECONNECT_LINKS, ...fontLinks];
 };
 
-/**
- * Derives the family-level CSS id for a custom font by removing the final
- * hyphen-delimited subfamily segment from `FontSpecification.name`.
- *
- * `convertNameToCssId` expects names shaped like
- * `<font-family-id>-<subfamily>`, where the trailing segment represents a
- * subfamily or weight such as `regular` or `bold`. For example,
- * `ebbmelvynregular-regular` becomes `ebbmelvynregular`.
- */
-const convertNameToCssId = (fontName: string) => {
-  const lastHyphenIndex = fontName.lastIndexOf("-");
-  if (lastHyphenIndex === -1) {
-    return fontName;
-  }
-
-  return fontName.slice(0, lastHyphenIndex);
-};
-
-/**
- * Converts platform custom font `name` values into family-level CSS ids.
- */
-export const getCustomFontCssIdsFromNames = (fontNames: string[]) => {
-  return fontNames.map((fontName) => convertNameToCssId(fontName));
-};
-
-/**
- * Converts custom font specifications into family-level CSS ids using the
- * platform-provided `name` field.
- */
-export const getCustomFontCssIdsFromFontRegistry = (
+export const getCustomFontFacePathsFromFontRegistry = (
   customFonts: FontRegistry
-) => {
+): string[] => {
   return Object.values(customFonts)
-    .map((fontDetails) => fontDetails.name)
-    .filter((fontName): fontName is string => Boolean(fontName))
-    .map((fontName) => convertNameToCssId(fontName));
+    .map((fontDetails) => fontDetails.fontFacePath)
+    .filter((fontFacePath): fontFacePath is string => Boolean(fontFacePath));
 };
 
 /**
- * Builds stylesheet link data for normalized custom font CSS ids.
+ * Builds stylesheet link data for custom font face paths.
  */
 export const generateCustomFontLinkData = (
-  customFontCssIds: string[],
+  customFontFacePaths: string[],
   relativePrefixToRoot: string
 ): FontLinkData[] => {
-  return customFontCssIds.map((fontFileName) => ({
-    href: `${relativePrefixToRoot}y-fonts/${fontFileName}.css`,
+  return customFontFacePaths.map((fontFacePath) => ({
+    href:
+      fontFacePath.startsWith("http://") ||
+      fontFacePath.startsWith("https://") ||
+      fontFacePath.startsWith("/") ||
+      fontFacePath.startsWith("./") ||
+      fontFacePath.startsWith("../")
+        ? fontFacePath
+        : `${relativePrefixToRoot}${fontFacePath}`,
     rel: "stylesheet",
   }));
 };
@@ -208,7 +200,7 @@ export const createFontLinkElements = (
 ): HTMLLinkElement[] => {
   const googleFontLinkData = generateGoogleFontLinkData(googleFonts);
   const customFontLinkData = generateCustomFontLinkData(
-    getCustomFontCssIdsFromFontRegistry(customFonts),
+    getCustomFontFacePathsFromFontRegistry(customFonts),
     "./"
   );
 
@@ -517,7 +509,7 @@ export const filterInUseFontRegistries = (
 
     const customFont = findFontByDisplayName(customFonts, fontName);
     if (customFont) {
-      inUseCustomFonts[customFont.name ?? customFont.displayName] = customFont;
+      inUseCustomFonts[customFont.displayName] = customFont;
     }
   }
 
