@@ -8,6 +8,14 @@ import { ThemeConfig } from "../../utils/themeResolver.ts";
 import { ThemeData } from "../types/themeData.ts";
 import { generateCssVariablesFromThemeConfig } from "./internalThemeResolver.ts";
 
+/**
+ * Custom font asset flow:
+ * 1. Merge default theme values with the current edited theme values.
+ * 2. Find each custom font family referenced by the merged theme font-family variables.
+ * 3. Collect the matching `fontFacePath` values for stylesheet loading.
+ * 4. Match each referenced family's style/weight selection to a variant `fontFilePath` for preloading.
+ * 5. Save those resolved asset lists back into theme data for runtime use.
+ */
 export const CUSTOM_FONT_PRELOADS_KEY = "__customFontPreloads";
 export const CUSTOM_FONTS_KEY = "__customFonts";
 
