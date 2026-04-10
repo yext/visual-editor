@@ -31,6 +31,7 @@
   "filter": "Filtruoti",
   "findALocation": "Raskite vietą",
   "friday": "Penktadienis",
+  "generatingAIAnswer": "Generuojamas AI atsakymas...",
   "getDirections": "Gaukite nurodymus",
   "getDirectionsForLocation": "Gaukite nuorodas į {{address}}",
   "heroBanner": "Herojaus antraštė",
@@ -44,6 +45,7 @@
   "kilometer_one": "kilometras",
   "kilometer_other": "kilometrų",
   "kilometer_zero": "kilometrų",
+  "learnMore": "Sužinokite daugiau",
   "loadingMap": "Krovimo žemėlapis ...",
   "loadingNearbyLocations": "Pakraunama netoliese esančias vietas ...",
   "locationWithCount_few": "{{count}} vietos",
@@ -67,6 +69,8 @@
   "mile_other": "mylių",
   "mile_zero": "mylia",
   "monday": "Pirmadienis",
+  "more": "Daugiau",
+  "noLinkAvailable": "jokios nuorodos nėra",
   "noResultsFoundForThisArea": "Nerasta šios srities rezultatų",
   "open24Hours": "Atidarykite 24 valandas",
   "openHeaderMenu": "Atidarykite antraštės meniu",
@@ -106,6 +110,8 @@
     "xLink": "Sekite mus X („Twitter“)",
     "youtube": "Prenumeruokite mūsų YouTube kanalą"
   },
+  "sources": "Šaltiniai",
+  "staticMapEmptyStateAddApiKey": "Pridėkite API raktą, kad peržiūrėtumėte žemėlapį",
   "sunday": "Sekmadienis",
   "temporarilyClosed": "Laikinai uždarytas",
   "thursday": "Ketvirtadienis",
@@ -117,5 +123,6 @@
   "useOurLocatorToFindALocationNearYou": "Naudokite mūsų ieškiklį, kad rastumėte vietą šalia jūsų",
   "visitPage": "Apsilankykite puslapyje",
   "visitPageForName": "Apsilankykite puslapyje {{name}}",
+  "voiceSearch": "Balso paieška",
   "wednesday": "Trečiadienis"
 }

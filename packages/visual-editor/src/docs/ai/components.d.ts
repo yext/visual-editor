@@ -33,6 +33,8 @@ interface PageSectionCategoryProps {
   BannerSection: BannerSectionProps;
   BreadcrumbsSection: BreadcrumbsSectionProps;
   CoreInfoSection: CoreInfoSectionProps;
+  CustomBreadcrumbs: CustomBreadcrumbsProps;
+  CustomDirectoryComponent: CustomDirectoryProps;
   EventSection: EventSectionProps;
   FAQSection: FAQSectionProps;
   HeroSection: HeroSectionProps;
@@ -47,6 +49,7 @@ interface PageSectionCategoryProps {
   TeamSection: TeamSectionProps;
   TestimonialSection: TestimonialSectionProps;
   VideoSection: VideoSectionProps;
+  SearchComponent: SearchComponentProps;
 }
 
 interface ExpandedHeaderProps {
@@ -216,6 +219,28 @@ interface CoreInfoSectionProps {
    * @defaultValue true
    */
   liveVisibility: boolean;
+}
+
+interface CustomBreadcrumbsProps {
+  data: {
+    directoryRoot: TranslatableString;
+  };
+  styles: {
+    backgroundColor?: ThemeColor;
+  };
+  analytics: {
+    scope?: string;
+  };
+  liveVisibility: boolean;
+}
+
+interface CustomDirectoryProps {
+  slots: {
+    HeadingSlot: Slot;
+  };
+  styles: {
+    backgroundColor: ThemeColor;
+  };
 }
 
 interface EventSectionProps {
@@ -639,6 +664,18 @@ interface VideoSectionProps {
   liveVisibility: boolean;
 }
 
+interface SearchComponentProps {
+  styles: {
+    showSearchResultsSection: boolean;
+    backgroundColor?: ThemeColor;
+  };
+  /** @internal */
+  slots: {
+    SearchBarSlot: Slot;
+    SearchResultsSlot: Slot;
+  };
+}
+
 interface ExpandedHeaderStyles {
   /** The maximum width of the header */
   maxWidth: PageSectionProps["maxWidth"];
@@ -758,6 +795,12 @@ interface CoreInfoStyles {
    */
   backgroundColor?: ThemeColor;
 }
+
+/**
+ * A string that can be translated for different locales.
+ * @ai This should always be the LocalizedValues type
+ */
+type TranslatableString = string | LocalizedValues;
 
 /** Represents data that can either be from the Yext Knowledge Graph or statically defined */
 type YextEntityField<T> = {
@@ -1089,11 +1132,11 @@ type TranslatableRichText =
       defaultValue?: string | RichText;
     } & Record<string, string | RichText | undefined>);
 
-/**
- * A string that can be translated for different locales.
- * @ai This should always be the LocalizedValues type
- */
-type TranslatableString = string | LocalizedValues;
+/** Represents a translatable string. The key is the locale (en, es, fr), and the value is the localized string. */
+type LocalizedValues = {
+  hasLocalizedValue?: "true";
+  defaultValue?: string;
+} & Record<string, string | undefined>;
 
 /** An individual FAQ */
 type FAQStruct = {
@@ -1134,12 +1177,6 @@ type RichText = {
   html?: string;
   json?: string;
 };
-
-/** Represents a translatable string. The key is the locale (en, es, fr), and the value is the localized string. */
-type LocalizedValues = {
-  hasLocalizedValue?: "true";
-  defaultValue?: string;
-} & Record<string, string | undefined>;
 
 /** Describes the data corresponding to a piece of image content. */
 type ImageContentData = {

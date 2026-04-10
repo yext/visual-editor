@@ -31,6 +31,7 @@
   "filter": "Filter",
   "findALocation": "Nájdite miesto",
   "friday": "Piatok",
+  "generatingAIAnswer": "Generuje sa odpoveď AI...",
   "getDirections": "Získajte pokyny",
   "getDirectionsForLocation": "Získať trasu pre {{address}}",
   "heroBanner": "Hlavný banner",
@@ -44,6 +45,7 @@
   "kilometer_one": "kilometer",
   "kilometer_other": "kilometrov",
   "kilometer_zero": "kilometer",
+  "learnMore": "Zistite viac",
   "loadingMap": "Načítava mapa ...",
   "loadingNearbyLocations": "Načítavanie miest v okolí ...",
   "locationWithCount_few": "{{count}} miest",
@@ -67,6 +69,8 @@
   "mile_other": "míľ",
   "mile_zero": "míľa",
   "monday": "Pondelok",
+  "more": "Viac",
+  "noLinkAvailable": "nie je dostupný žiadny odkaz",
   "noResultsFoundForThisArea": "Pre túto oblasť sa nenašli žiadne výsledky",
   "open24Hours": "Otvorené 24 hodín",
   "openHeaderMenu": "Otvoriť ponuku hlavičky",
@@ -106,6 +110,8 @@
     "xLink": "Sledujte nás na X (Twitter)",
     "youtube": "Prihláste sa na odber nášho kanála YouTube"
   },
+  "sources": "Zdroje",
+  "staticMapEmptyStateAddApiKey": "Ak chcete zobraziť ukážku mapy, pridajte kľúč API",
   "sunday": "Nedeľa",
   "temporarilyClosed": "Dočasne zatvorené",
   "thursday": "Štvrtok",
@@ -117,5 +123,6 @@
   "useOurLocatorToFindALocationNearYou": "Pomocou nášho vyhľadávača nájdete miesto vo vašom okolí",
   "visitPage": "Navštíviť stránku",
   "visitPageForName": "Navštíviť stránku pre {{name}}",
+  "voiceSearch": "Hlasové vyhľadávanie",
   "wednesday": "Streda"
 }
