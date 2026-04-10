@@ -9,7 +9,6 @@ export {
   OptionalNumberField,
   type OptionalNumberFieldProps,
 } from "./OptionalNumberField.tsx";
-export { FontSizeSelector } from "./FontSizeSelector.tsx";
 export { SpacingSelector } from "./SpacingSelector.tsx";
 export { YextField } from "./YextField.tsx";
 export { YextAutoField } from "../fields/YextAutoField.tsx";

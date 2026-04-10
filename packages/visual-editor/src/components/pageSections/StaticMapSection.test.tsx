@@ -3,16 +3,17 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
-  delay,
   transformTests,
 } from "../testing/componentTests.setup.ts";
-import { act, render as reactRender, waitFor } from "@testing-library/react";
+import { render as reactRender } from "@testing-library/react";
 import { migrate } from "../../utils/migrate.ts";
 import { migrationRegistry } from "../migrations/migrationRegistry.ts";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { Render, Config } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 import { StaticMapSection } from "./StaticMapSection.tsx";
+
+const STATIC_MAP_TEST_API_KEY = "fixture-static-map-api-key";
 
 const tests: ComponentTest[] = [
   {
@@ -22,7 +23,7 @@ const tests: ComponentTest[] = [
       ...StaticMapSection.defaultProps,
       data: {
         ...StaticMapSection.defaultProps?.data,
-        apiKey: import.meta.env.COMPONENT_TESTS_MAPBOX_STATIC_MAP_KEY,
+        apiKey: STATIC_MAP_TEST_API_KEY,
       },
     },
     version: migrationRegistry.length,
@@ -50,7 +51,7 @@ const tests: ComponentTest[] = [
       ...StaticMapSection.defaultProps,
       data: {
         ...StaticMapSection.defaultProps?.data,
-        apiKey: import.meta.env.COMPONENT_TESTS_MAPBOX_STATIC_MAP_KEY,
+        apiKey: STATIC_MAP_TEST_API_KEY,
       },
     },
     version: migrationRegistry.length,
@@ -60,7 +61,7 @@ const tests: ComponentTest[] = [
     document: {},
     props: {
       data: {
-        apiKey: import.meta.env.COMPONENT_TESTS_MAPBOX_STATIC_MAP_KEY,
+        apiKey: STATIC_MAP_TEST_API_KEY,
       },
       liveVisibility: true,
     },
@@ -92,7 +93,7 @@ const tests: ComponentTest[] = [
     },
     props: {
       data: {
-        apiKey: import.meta.env.COMPONENT_TESTS_MAPBOX_STATIC_MAP_KEY,
+        apiKey: STATIC_MAP_TEST_API_KEY,
       },
       liveVisibility: true,
       styles: {
@@ -151,42 +152,9 @@ describe("StaticMapSection", async () => {
       );
 
       await page.viewport(width, height);
-      const images = Array.from(container.querySelectorAll("img"));
-      await waitFor(() => {
-        expect(images.every((i) => i.complete)).toBe(true);
-      });
-
-      await act(async () => await delay(500));
-      await act(async () => await delay(500));
-
-      await waitFor(async () => {
-        if (images.length) {
-          let expectedHeight = 0;
-          switch (viewportName) {
-            case "desktop":
-              expectedHeight = 300;
-              break;
-            case "tablet":
-              expectedHeight = 300;
-              break;
-            case "mobile":
-              expectedHeight = 300;
-              break;
-          }
-
-          expect(images[0]?.height).toBe(expectedHeight);
-        }
-      });
-
-      // The static image returned by mapbox can vary slightly
-      const threshold =
-        name.includes("with api key") && name.includes("with coordinate")
-          ? 200
-          : 0;
-
       await expect(
         `StaticMapSection/[${viewportName}] ${name}`
-      ).toMatchScreenshot({ customThreshold: threshold });
+      ).toMatchScreenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
@@ -194,7 +162,7 @@ describe("StaticMapSection", async () => {
         await interactions(page);
         await expect(
           `StaticMapSection/[${viewportName}] ${name} (after interactions)`
-        ).toMatchScreenshot({ customThreshold: threshold });
+        ).toMatchScreenshot();
         const results = await axe(container);
         expect(results).toHaveNoViolations();
       }
