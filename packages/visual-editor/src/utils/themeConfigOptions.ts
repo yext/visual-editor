@@ -164,7 +164,7 @@ export const backgroundColors: Record<
   },
 };
 
-// When used in BasicSelector, the color is displayed in the dropdown.
+// When used in the basicSelector field, the color is displayed in the dropdown.
 const backgroundColorOptions: ComboboxOptionGroup[] = [
   {
     title: msg("recommendedColors", "Recommended Colors"),
@@ -234,7 +234,7 @@ export const siteColorOptions: ComboboxOptionGroup[] = [
 /** Corresponds to the different semantic heading levels */
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
-// Provides a mapping of label to value for BasicSelector
+// Provides a mapping of label to value for the basicSelector field
 const headingLevelOptions: { label: string; value: HeadingLevel }[] = [
   { label: "H1", value: 1 },
   { label: "H2", value: 2 },
