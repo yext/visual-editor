@@ -5,6 +5,7 @@ import {
   internalThemeResolver,
 } from "./internalThemeResolver.ts";
 import { testThemeConfig } from "../../utils/testData.ts";
+import { createDefaultThemeConfig } from "../../components/DefaultThemeConfig.ts";
 
 describe("internalThemeResolver", () => {
   test("combines saved and default values", () => {
@@ -15,6 +16,21 @@ describe("internalThemeResolver", () => {
   test("works with undefined saved state", () => {
     const result = internalThemeResolver(testThemeConfig, undefined);
     expect(result).toEqual(defaultThemeValues);
+  });
+
+  test("defaults new fontStyle theme values to normal for existing saved themes", () => {
+    const themeConfig = createDefaultThemeConfig();
+
+    const result = internalThemeResolver(themeConfig, {
+      "--fontFamily-body-fontFamily":
+        "'Open Sans', 'Open Sans Fallback', sans-serif",
+      "--fontWeight-body-fontWeight": "400",
+    });
+
+    expect(result["--fontStyle-body-fontStyle"]).toBe("normal");
+    expect(result["--fontStyle-h1-fontStyle"]).toBe("normal");
+    expect(result["--fontStyle-link-fontStyle"]).toBe("normal");
+    expect(result["--fontStyle-button-fontStyle"]).toBe("normal");
   });
 });
 
@@ -84,6 +100,29 @@ describe("generateCssVariablesFromPuckFields", () => {
       "--colors-palette-primary-foreground": "#003300",
       "--colors-palette-primary-default-contrast": "#000000",
       "--colors-palette-primary-foreground-contrast": "#FFFFFF",
+    });
+  });
+
+  test("generates css variables from fontStyle select fields", () => {
+    const result = generateCssVariablesFromPuckFields(
+      { fontStyle: "italic" },
+      "body",
+      {
+        label: "Body",
+        styles: {
+          fontStyle: {
+            label: "Font Style",
+            type: "select",
+            default: "normal",
+            plugin: "fontStyle",
+            options: [],
+          },
+        },
+      }
+    );
+
+    expect(result).toEqual({
+      "--fontStyle-body-fontStyle": "italic",
     });
   });
 });

@@ -128,11 +128,11 @@ describe("convertStyleToPuckField", () => {
     });
   });
 
-  it("converts select style to select field", () => {
+  it("converts generic select style to select field", () => {
     const selectStyle: Style = {
       label: "Underline",
       type: "select",
-      plugin: "fontStyle",
+      plugin: "textDecoration",
       default: "none",
       options: [
         { label: "Underline", value: "underline" },
@@ -191,6 +191,30 @@ describe("convertStyleToPuckField", () => {
 
     expect(result).toMatchObject({
       label: "Font Weight",
+      type: "custom",
+    });
+    expect(typeof (result as any).options).toBe("function");
+  });
+
+  it("converts fontStyle style to custom field", () => {
+    const fontStyleStyle: Style = {
+      label: "Font Style",
+      type: "select",
+      plugin: "fontStyle",
+      default: "normal",
+      options: [
+        { label: "Normal", value: "normal" },
+        { label: "Italic", value: "italic" },
+      ],
+    };
+
+    const result = convertStyleToPuckField(
+      fontStyleStyle,
+      fontStyleStyle.plugin
+    );
+
+    expect(result).toMatchObject({
+      label: "Font Style",
       type: "custom",
     });
     expect(typeof (result as any).options).toBe("function");
