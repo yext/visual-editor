@@ -31,6 +31,7 @@
   "filter": "Filtre",
   "findALocation": "Bir Konum Bul",
   "friday": "Cuma",
+  "generatingAIAnswer": "Yapay zeka yanıtı oluşturuluyor...",
   "getDirections": "Yol tarifi alın",
   "getDirectionsForLocation": "{{address}} için Yol Tarifi Alın",
   "heroBanner": "Kahraman afiş",
@@ -42,6 +43,7 @@
   "kilometer_one": "kilometre",
   "kilometer_other": "kilometre",
   "kilometer_zero": "kilometre",
+  "learnMore": "Daha fazla bilgi edin",
   "loadingMap": "Yükleme haritası ...",
   "loadingNearbyLocations": "Yakındaki yerleri yükleme ...",
   "locationWithCount_one": "{{count}} Konum",
@@ -57,6 +59,8 @@
   "mile_other": "mil",
   "mile_zero": "mil",
   "monday": "Pazartesi",
+  "more": "Daha",
+  "noLinkAvailable": "bağlantı mevcut değil",
   "noResultsFoundForThisArea": "Bu alan için sonuç bulunamadı",
   "open24Hours": "24 saat açık",
   "openHeaderMenu": "Başlık Menüsünü Aç",
@@ -96,6 +100,8 @@
     "xLink": "Bizi X'te takip edin (Twitter)",
     "youtube": "YouTube kanalımıza abone olun"
   },
+  "sources": "Kaynaklar",
+  "staticMapEmptyStateAddApiKey": "Haritanızı önizlemek için bir API anahtarı ekleyin",
   "sunday": "Pazar",
   "temporarilyClosed": "Geçici olarak kapalı",
   "thursday": "Perşembe",
@@ -105,5 +111,6 @@
   "useOurLocatorToFindALocationNearYou": "Yakınınızdaki bir yer bulmak için bulucumuzu kullanın",
   "visitPage": "Sayfayı Ziyaret Edin",
   "visitPageForName": "{{name}} Sayfasını Ziyaret Edin",
+  "voiceSearch": "Sesli Arama",
   "wednesday": "Çarşamba"
 }

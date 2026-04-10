@@ -64,12 +64,26 @@ import {
   ProfessionalHeroSection,
   ProfessionalHeroSectionProps,
 } from "../pageSections/ProfessionalHeroSection.tsx";
+import {
+  SearchComponentProps,
+  SearchComponent,
+} from "../pageSections/SearchSection/Search.tsx";
+import {
+  CustomDirectoryComponent,
+  CustomDirectoryProps,
+} from "../pageSections/CustomDirectory/CustomDirectory.tsx";
+import {
+  CustomBreadcrumbs,
+  CustomBreadcrumbsProps,
+} from "../pageSections/CustomDirectory/CustomBreadcrumbs.tsx";
 
 export interface PageSectionCategoryProps {
   AboutSection: AboutSectionProps;
   BannerSection: BannerSectionProps;
   BreadcrumbsSection: BreadcrumbsSectionProps;
   CoreInfoSection: CoreInfoSectionProps;
+  CustomBreadcrumbs: CustomBreadcrumbsProps;
+  CustomDirectoryComponent: CustomDirectoryProps;
   EventSection: EventSectionProps;
   FAQSection: FAQSectionProps;
   HeroSection: HeroSectionProps;
@@ -84,6 +98,7 @@ export interface PageSectionCategoryProps {
   TeamSection: TeamSectionProps;
   TestimonialSection: TestimonialSectionProps;
   VideoSection: VideoSectionProps;
+  SearchComponent: SearchComponentProps;
 }
 
 export const PageSectionCategoryComponents = {
@@ -91,6 +106,8 @@ export const PageSectionCategoryComponents = {
   BannerSection,
   BreadcrumbsSection,
   CoreInfoSection,
+  CustomBreadcrumbs,
+  CustomDirectoryComponent,
   EventSection,
   FAQSection,
   HeroSection,
@@ -105,6 +122,7 @@ export const PageSectionCategoryComponents = {
   TeamSection,
   TestimonialSection,
   VideoSection,
+  SearchComponent,
 };
 
 export const PageSectionCategory = Object.keys(
