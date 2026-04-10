@@ -9,23 +9,17 @@ import { VIDEO_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Vi
 import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 
 const {
-  codeFieldMock,
   dynamicOptionsSelectorMock,
   dynamicOptionsSingleSelectorMock,
   optionalNumberFieldMock,
   translatableStringFieldMock,
   yextEntityFieldSelectorMock,
 } = vi.hoisted(() => ({
-  codeFieldMock: vi.fn(),
   dynamicOptionsSelectorMock: vi.fn(),
   dynamicOptionsSingleSelectorMock: vi.fn(),
   optionalNumberFieldMock: vi.fn(),
   translatableStringFieldMock: vi.fn(),
   yextEntityFieldSelectorMock: vi.fn(),
-}));
-
-vi.mock("./CodeField.tsx", () => ({
-  CodeField: codeFieldMock,
 }));
 
 vi.mock("./DynamicOptionsSelector.tsx", () => ({
@@ -251,22 +245,20 @@ describe("YextField", () => {
     expect(field).toBe(returnedField);
   });
 
-  it("delegates code configs to CodeField", () => {
-    const returnedField = createCustomField();
+  it("maps code fields to Puck config", () => {
     const fieldName = msg("fields.code", "Code");
-
-    codeFieldMock.mockReturnValue(returnedField);
 
     const field = YextField(fieldName, {
       type: "code",
       codeLanguage: "typescript",
     });
 
-    expect(codeFieldMock).toHaveBeenCalledWith({
-      fieldLabel: fieldName,
+    expect(field).toEqual({
+      type: "code",
+      label: fieldName,
+      visible: undefined,
       codeLanguage: "typescript",
     });
-    expect(field).toBe(returnedField);
   });
 
   it("renders the max width selector with grouped options and helper copy", () => {

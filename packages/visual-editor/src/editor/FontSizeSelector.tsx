@@ -99,7 +99,7 @@ export const FontSizeSelector = (
             selectedOption={
               options.find((option) => option.value === value) ?? options[0]
             }
-            onChange={(option: any) => onChange(option)}
+            onChange={onChange}
             optionGroups={[{ options }]}
           />
         </FieldLabel>

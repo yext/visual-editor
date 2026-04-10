@@ -106,9 +106,7 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
           <YextAutoField
             field={codeField}
             id="schemaMarkup"
-            onChange={(newValue: string) => {
-              onChange(String(newValue));
-            }}
+            onChange={onChange}
             value={schema}
           />
         </div>
