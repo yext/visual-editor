@@ -86,6 +86,37 @@ const disableHoverEffects = () => {
   document.head.appendChild(style);
 };
 
+const waitForNextFrame = () =>
+  new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+
+const waitForStableScreenshotFrame = async () => {
+  try {
+    await document.fonts?.ready;
+  } catch {
+    // Ignore font readiness errors in the browser test harness.
+  }
+
+  let previousMetrics = "";
+
+  for (let attempt = 0; attempt < 5; attempt++) {
+    await waitForNextFrame();
+    await waitForNextFrame();
+
+    const metrics = [
+      document.body.scrollWidth,
+      document.body.scrollHeight,
+      document.body.offsetWidth,
+      document.body.offsetHeight,
+    ].join(":");
+
+    if (metrics === previousMetrics) {
+      return;
+    }
+
+    previousMetrics = metrics;
+  }
+};
+
 // Adds the toMatchScreenshot method to vitest's expect.
 // This portion is run in the browser environment while
 // compareScreenshot is run in the node environment.
@@ -105,6 +136,8 @@ expect.extend({
       // See https://github.com/vitest-dev/vitest/discussions/7749
       (window.frameElement as HTMLIFrameElement).style.height =
         `${document.body.offsetHeight}px`;
+
+      await waitForStableScreenshotFrame();
 
       const screenshot = await page.screenshot({
         save: false,
