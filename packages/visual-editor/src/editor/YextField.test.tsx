@@ -1,25 +1,25 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
+import { YextAutoField } from "../fields/YextAutoField.tsx";
+import { msg } from "../utils/i18n/platform.ts";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { YextField } from "./YextField.tsx";
+import { ThemeOptions } from "../utils/themeConfigOptions.ts";
+import { VIDEO_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Video.tsx";
+import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 
 const {
-  codeFieldMock,
   dynamicOptionsSelectorMock,
   dynamicOptionsSingleSelectorMock,
   optionalNumberFieldMock,
   translatableStringFieldMock,
   yextEntityFieldSelectorMock,
 } = vi.hoisted(() => ({
-  codeFieldMock: vi.fn(),
   dynamicOptionsSelectorMock: vi.fn(),
   dynamicOptionsSingleSelectorMock: vi.fn(),
   optionalNumberFieldMock: vi.fn(),
   translatableStringFieldMock: vi.fn(),
   yextEntityFieldSelectorMock: vi.fn(),
-}));
-
-vi.mock("./CodeField.tsx", () => ({
-  CodeField: codeFieldMock,
 }));
 
 vi.mock("./DynamicOptionsSelector.tsx", () => ({
@@ -38,13 +38,6 @@ vi.mock("./TranslatableStringField.tsx", () => ({
 vi.mock("./YextEntityFieldSelector.tsx", () => ({
   YextEntityFieldSelector: yextEntityFieldSelectorMock,
 }));
-
-import { YextAutoField } from "../fields/YextAutoField.tsx";
-import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
-import { VIDEO_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Video.tsx";
-import { msg } from "../utils/i18n/platform.ts";
-import { ThemeOptions } from "../utils/themeConfigOptions.ts";
-import { YextField } from "./YextField.tsx";
 
 const renderCustomField = (field: any, value?: any) => {
   const onChange = vi.fn();
@@ -121,6 +114,22 @@ describe("YextField", () => {
     fireEvent.click(screen.getByText("Beta"));
 
     expect(onChange).toHaveBeenCalledWith("beta");
+  });
+
+  it("returns a code field and renders it through YextAutoField", () => {
+    const field = YextField<string>(msg("fields.html", "HTML"), {
+      type: "code",
+      codeLanguage: "html",
+    });
+
+    expect(field.type).toBe("code");
+
+    renderCustomField(field, "<div>Alpha</div>");
+
+    expect(screen.getByText("HTML")).toBeDefined();
+    expect(screen.getByRole("button").textContent).toContain(
+      "<div>Alpha</div>"
+    );
   });
 
   it.each([
@@ -236,22 +245,20 @@ describe("YextField", () => {
     expect(field).toBe(returnedField);
   });
 
-  it("delegates code configs to CodeField", () => {
-    const returnedField = createCustomField();
+  it("maps code fields to Puck config", () => {
     const fieldName = msg("fields.code", "Code");
-
-    codeFieldMock.mockReturnValue(returnedField);
 
     const field = YextField(fieldName, {
       type: "code",
       codeLanguage: "typescript",
     });
 
-    expect(codeFieldMock).toHaveBeenCalledWith({
-      fieldLabel: fieldName,
+    expect(field).toEqual({
+      type: "code",
+      label: fieldName,
+      visible: undefined,
       codeLanguage: "typescript",
     });
-    expect(field).toBe(returnedField);
   });
 
   it("renders the max width selector with grouped options and helper copy", () => {

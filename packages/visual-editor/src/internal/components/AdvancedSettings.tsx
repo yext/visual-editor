@@ -2,6 +2,7 @@ import { ComponentConfig, Fields, CustomField } from "@puckeditor/core";
 import { msg } from "../../utils/i18n/platform.ts";
 import { YextField } from "../../editor/YextField.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
+import { YextAutoField } from "../../fields/YextAutoField.tsx";
 import React from "react";
 import {
   useSendMessageToParent,
@@ -102,15 +103,12 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
           onMouseUp={(e) => e.stopPropagation()}
           style={{ pointerEvents: "none" }}
         >
-          {(codeField as any).render({
-            onChange: (newValue: string | number) => {
-              onChange(String(newValue));
-            },
-            value: schema,
-            field: codeField,
-            name: "schemaMarkup",
-            id: "schemaMarkup",
-          })}
+          <YextAutoField
+            field={codeField}
+            id="schemaMarkup"
+            onChange={onChange}
+            value={schema}
+          />
         </div>
       </div>
     );

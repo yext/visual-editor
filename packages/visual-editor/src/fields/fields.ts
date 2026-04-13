@@ -3,9 +3,11 @@ import {
   BasicSelectorField,
   BasicSelectorFieldOverride,
 } from "./BasicSelectorField.tsx";
+import { CodeField, CodeFieldOverride } from "./CodeField.tsx";
 
 export type YextPuckFields = {
   basicSelector: BasicSelectorField;
+  code: CodeField;
 };
 
 export type YextComponentConfig<
@@ -21,4 +23,5 @@ export type YextFields<
 
 export const YextPuckFieldOverrides = {
   basicSelector: BasicSelectorFieldOverride,
+  code: CodeFieldOverride,
 };

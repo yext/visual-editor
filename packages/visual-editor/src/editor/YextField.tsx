@@ -18,7 +18,6 @@ import {
   OptionalNumberFieldProps,
   OptionalNumberField,
 } from "./OptionalNumberField.tsx";
-import { CodeFieldProps, CodeField } from "./CodeField.tsx";
 import { getMaxWidthOptions } from "./MaxWidthSelector.tsx";
 import { msg } from "../utils/i18n/platform.ts";
 import { TranslatableStringField } from "./TranslatableStringField.tsx";
@@ -31,6 +30,7 @@ import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFiel
 import { MsgString } from "../utils/i18n/platform.ts";
 import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 import { VIDEO_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Video.tsx";
+import { YextPuckFields } from "../fields/fields.ts";
 
 /** Copied from Puck, do not change */
 export type FieldOption = {
@@ -98,11 +98,6 @@ type YextOptionalNumberField = YextBaseField &
     type: "optionalNumber";
   };
 
-type YextCodeField = YextBaseField &
-  Omit<CodeFieldProps, "fieldLabel"> & {
-    type: "code";
-  };
-
 type YextMaxWidthField = YextBaseField & {
   type: "maxWidth";
 };
@@ -154,7 +149,6 @@ type YextFieldConfig<Props = any> =
   | YextSelectField
   | YextRadioField
   | YextOptionalNumberField
-  | YextCodeField
   | YextMaxWidthField
   | YextTranslatableStringField
   | YextImageField
@@ -162,7 +156,8 @@ type YextFieldConfig<Props = any> =
   | YextDynamicSelectField<Props extends DynamicOptionValueTypes ? Props : any>
   | YextDynamicSingleSelectField<
       Props extends DynamicOptionValueTypes ? Props : any
-    >;
+    >
+  | YextPuckFields[keyof YextPuckFields];
 
 export function YextField<T = any>(
   fieldName: MsgString,
@@ -265,10 +260,12 @@ export function YextField<T, U>(
   }
 
   if (config.type === "code") {
-    return CodeField({
-      fieldLabel: fieldName,
+    return {
+      type: "code",
+      label: fieldName,
+      visible: config.visible,
       codeLanguage: config.codeLanguage,
-    });
+    };
   }
 
   if (config.type === "maxWidth") {
