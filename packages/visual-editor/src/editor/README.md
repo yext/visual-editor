@@ -163,44 +163,49 @@ const Example = ({ myField }: ExampleProps) => {
 };
 ```
 
-## BasicSelector
+## basicSelector Field Type
 
-`BasicSelector` creates a labeled field and searchable dropdown with the provided options. Each option consists of a label, value, and an optional color. This can be used when creating the Fields for a new component.
+The `basicSelector` field type renders a labeled combobox with optional search, grouped options, translated labels, and empty-state messaging. Use it when you need direct access to the selector behavior instead of going through `YextField({ type: "select", ... })`.
 
 ### Props
 
-| Name    | Type          | Description                       |
-| ------- | ------------- | --------------------------------- |
-| label   | `string`      | The label for the selector field. |
-| options | `Option<T>[]` | An array of selectable options.   |
-
-#### `Option<T>` Object
-
-| Name   | Type      | Description                                                                           |
-| ------ | --------- | ------------------------------------------------------------------------------------- |
-| label  | `string`  | The display label of the option.                                                      |
-| value  | `T`       | The associated value of the option.                                                   |
-| color? | `string?` | (Optional) A tailwind color class. Will be used to display the color in the dropdown. |
+| Name                    | Type                    | Description                                                                 |
+| ----------------------- | ----------------------- | --------------------------------------------------------------------------- |
+| `type`                  | `"basicSelector"`       | Registers the field as the Yext combobox selector.                          |
+| `label?`                | `string \| MsgString`   | The field label shown in the editor.                                        |
+| `options`               | `ComboboxOption[]`      | Flat list of selectable options. Cannot be combined with `optionGroups`.    |
+| `optionGroups`          | `ComboboxOptionGroup[]` | Grouped options with optional titles and descriptions.                      |
+| `translateOptions?`     | `boolean`               | Whether option labels, group titles, and descriptions should be translated. |
+| `noOptionsPlaceholder?` | `string \| MsgString`   | Button text shown when no options are available.                            |
+| `noOptionsMessage?`     | `string \| MsgString`   | Optional helper text shown below the disabled selector.                     |
+| `disableSearch?`        | `boolean`               | Disables the combobox search input.                                         |
 
 ### Usage
 
 ```tsx
-const myComponentFields: Fields<MyComponentProps> = {
-  heading: {
-    type: "object",
-    label: "Heading",
-    objectFields: {
-      level: BasicSelector("Level", [
-        { label: "H1", value: 1 },
-        { label: "H2", value: 2 },
-        { label: "H3", value: 3 },
-        { label: "H4", value: 4 },
-        { label: "H5", value: 5 },
-        { label: "H6", value: 6 },
-      ]),
-    },
-  },
+import { YextAutoField, msg } from "@yext/visual-editor";
+
+const toneField = {
+  type: "basicSelector" as const,
+  label: msg("fields.tone", "Tone"),
+  options: [
+    { label: "Neutral", value: "neutral" },
+    { label: "Bold", value: "bold" },
+  ],
+};
+
+const ToneField = ({
+  value,
+  onChange,
+}: {
+  value?: string;
+  onChange: (value: string) => void;
+}) => {
+  return <YextAutoField field={toneField} value={value} onChange={onChange} />;
+};
 ```
+
+When the field definition is part of a normal component `fields` config, Puck renders it through the registered Yext field override automatically. Use `YextAutoField` only when you are manually rendering a field definition inside a custom render path.
 
 ## OptionalNumberField
 
@@ -236,7 +241,7 @@ const myComponentFields: Fields<MyComponentProps> = {
 
 ## YextField
 
-`YextField` provides a unified utility for creating typed field configurations in a [Puck](https://github.com/measuredco/puck) and Yext Visual Editor integration context. It abstracts over common field types and includes special handling for Yext's [BasicSelector](##BasicSelector), [OptionalNumberField](##OptionalNumberField), [YextEntityFieldSelector](##YextEntityFieldSelector), and [TranslatableStringField](##TranslatableStringField).
+`YextField` provides a unified utility for creating typed field configurations in a [Puck](https://github.com/measuredco/puck) and Yext Visual Editor integration context. It abstracts over common field types and includes special handling for the internal `basicSelector` field type, [OptionalNumberField](##OptionalNumberField), [YextEntityFieldSelector](##YextEntityFieldSelector), and [TranslatableStringField](##TranslatableStringField).
 
 ### Features
 
@@ -330,7 +335,7 @@ description: YextField(msg("fields.description", "Description"), {
 
 #### Select Field
 
-Creates a dropdown select input. Options can be passed directly or as a string key from `ThemeOptions`. Optional search behavior uses the [BasicSelector](##BasicSelector).
+Creates a dropdown select input. Options can be passed directly or as a string key from `ThemeOptions`. Optional search behavior uses the internal `basicSelector` field type.
 
 ```tsx
 variant: YextField(msg("fields.variant", "CTA Variant"), {

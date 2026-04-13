@@ -68,7 +68,6 @@ export interface SearchBarSlotProps {
     width?: SearchBarWidthProps;
     align?: SearchBarAlignProps;
     rounded: SearchBarRoundedProps;
-    targetVertical?: string;
   };
   parentData?: {
     showSearchResultsSection: boolean;
@@ -137,12 +136,6 @@ const searchBarSlotFields: Fields<SearchBarSlotProps> = {
         min: 0,
         max: 5,
       }),
-      targetVertical: YextField(
-        msg("fields.targetVertical", "Target Vertical"),
-        {
-          type: "translatableString",
-        }
-      ),
       height: YextField(msg("fields.height", "Height"), {
         type: "radio",
         options: [
@@ -197,7 +190,6 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
     width = "full",
     align = "left",
     rounded = "none",
-    targetVertical = "all",
   },
   parentData,
   puck,
@@ -250,11 +242,6 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
         url.searchParams.set("searchTerm", searchTerm);
       } else {
         url.searchParams.delete("searchTerm");
-      }
-      if (targetVertical !== "all") {
-        url.searchParams.set("vertical", targetVertical);
-      } else {
-        url.searchParams.delete("vertical");
       }
       window.history.pushState({}, "", url.toString());
       window.dispatchEvent(new PopStateEvent("popstate"));

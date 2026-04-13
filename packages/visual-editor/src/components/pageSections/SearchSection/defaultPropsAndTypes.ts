@@ -80,6 +80,5 @@ export const defaultSearchData: SearchBarSlotProps = {
     width: "full",
     rounded: "none",
     align: "left",
-    targetVertical: "all",
   },
 };
