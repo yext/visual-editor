@@ -36,14 +36,6 @@ vi.mock("@yext/search-ui-react", async () => {
   };
 });
 
-const LOCATOR_TEST_IMAGE_URL = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(
-  `<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
-    <rect width="80" height="80" rx="16" fill="#0f172a"/>
-    <circle cx="40" cy="28" r="16" fill="#fbbf24"/>
-    <rect x="18" y="50" width="44" height="12" rx="6" fill="#f8fafc"/>
-  </svg>`
-)}`;
-
 const LOCATOR_TEST_ENV = {
   YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: "fixture-visual-editor-app-api-key",
   YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
@@ -110,7 +102,7 @@ const createLocatorApiResult = ({
     emails: [`${id}@example.com`],
     services,
     headshot: {
-      url: LOCATOR_TEST_IMAGE_URL,
+      url: "",
       height: 80,
       width: 80,
       alternateText: name,
@@ -1122,7 +1114,7 @@ const tests: ComponentTest[] = [
           field: "headshot",
           constantValue: {
             en: {
-              url: LOCATOR_TEST_IMAGE_URL,
+              url: "",
               height: 80,
               width: 80,
             },
@@ -1203,21 +1195,6 @@ describe("Locator", async () => {
         });
       }
 
-      const hideDistance = async () => {
-        await act(async () => {
-          // Mask distance badges so screenshots focus on layout instead of label text.
-          const allDivs = container.querySelectorAll("div");
-          allDivs.forEach((div) => {
-            if (div.textContent?.includes("mi") && !div.children.length) {
-              div.style.backgroundColor = "black";
-              div.style.width = "8em";
-            }
-          });
-        });
-      };
-
-      await hideDistance();
-
       await expect(`Locator/[${viewportName}] ${name}`).toMatchScreenshot({
         customThreshold: screenshotThreshold,
       });
@@ -1228,7 +1205,6 @@ describe("Locator", async () => {
 
       if (interactions) {
         await interactions(page);
-        await hideDistance();
         await expect(
           `Locator/[${viewportName}] ${name} (after interactions)`
         ).toMatchScreenshot({ customThreshold: screenshotThreshold });
