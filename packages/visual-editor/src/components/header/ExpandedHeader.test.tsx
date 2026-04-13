@@ -16,6 +16,7 @@ import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page, type BrowserPage } from "@vitest/browser/context";
 import { defaultBannerProps } from "../pageSections/Banner.tsx";
+import { MainContent } from "../structure/MainContent.tsx";
 
 const clickMenuIfVisible = async (page: BrowserPage) => {
   const menuButton = page.getByLabelText("Open menu");
@@ -2632,7 +2633,12 @@ const screenshotThreshold = 45;
 
 describe("ExpandedHeader", async () => {
   const puckConfig: Config = {
-    components: { ExpandedHeader, BannerSection, ...SlotsCategoryComponents },
+    components: {
+      ExpandedHeader,
+      BannerSection,
+      MainContent,
+      ...SlotsCategoryComponents,
+    },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;

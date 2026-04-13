@@ -14,6 +14,7 @@ import {
   transformTests,
 } from "../testing/componentTests.setup.ts";
 import { AdvancedCoreInfoCategoryComponents } from "../categories/AdvancedCoreInfoCategory.tsx";
+import { MainContent } from "../structure/MainContent.tsx";
 
 const testAddress = {
   city: "Brooklyn",
@@ -2144,7 +2145,7 @@ const tests: ComponentTest[] = [
 
 describe("Grid", async () => {
   const puckConfig: Config = {
-    components: AdvancedCoreInfoCategoryComponents,
+    components: { ...AdvancedCoreInfoCategoryComponents, MainContent },
     root: {
       render: ({ children }: { children: React.ReactNode }) => <>{children}</>,
     },

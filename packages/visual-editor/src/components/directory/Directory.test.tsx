@@ -14,6 +14,7 @@ import { SlotsCategoryComponents } from "../categories/SlotsCategory.tsx";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
+import { MainContent } from "../structure/MainContent.tsx";
 
 const rootDocument = {
   locale: "en",
@@ -653,7 +654,7 @@ const tests: ComponentTest[] = [
 
 describe("Directory", async () => {
   const puckConfig: Config = {
-    components: { Directory, ...SlotsCategoryComponents },
+    components: { Directory, MainContent, ...SlotsCategoryComponents },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;

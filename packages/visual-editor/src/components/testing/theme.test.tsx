@@ -16,6 +16,7 @@ import { SlotsCategoryComponents } from "../categories/SlotsCategory.tsx";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { migrate } from "../../utils/migrate.ts";
 import { ThemeData } from "../../internal/types/themeData.ts";
+import { MainContent } from "../structure/MainContent.tsx";
 import {
   testHours,
   testSetup,
@@ -52,6 +53,7 @@ describe("ThemeTest", async () => {
       ...PageSectionCategoryComponents,
       ...SlotsCategoryComponents,
       ...OtherCategoryComponents,
+      MainContent,
     },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {

@@ -36,7 +36,10 @@ export interface DirectoryConfigProps
 const rootAllowedComponents = [
   "ExpandedHeader",
   "ExpandedFooter",
+  "Header",
+  "Footer",
   "MainContent",
+  "CustomCodeSection",
 ];
 
 const components: Config<DirectoryConfigProps>["components"] = {

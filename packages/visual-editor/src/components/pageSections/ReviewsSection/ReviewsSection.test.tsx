@@ -15,6 +15,7 @@ import { SlotsCategoryComponents } from "../../categories/SlotsCategory.tsx";
 import { injectTranslations } from "../../../utils/i18n/components.ts";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
+import { MainContent } from "../../structure/MainContent.tsx";
 
 const interactionsDelay = 750;
 
@@ -311,7 +312,7 @@ const tests: ComponentTest[] = [
 
 describe("ReviewsSection", async () => {
   const puckConfig: Config = {
-    components: { ReviewsSection, ...SlotsCategoryComponents },
+    components: { ReviewsSection, MainContent, ...SlotsCategoryComponents },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;

@@ -16,6 +16,7 @@ import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
 import { Render, Config } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 import { backgroundColors } from "../../../utils/themeConfigOptions.ts";
+import { MainContent } from "../../structure/MainContent.tsx";
 
 const interactionsDelay = 1000;
 
@@ -481,7 +482,11 @@ describe("NearbyLocationsSection", async () => {
   });
 
   const puckConfig: Config = {
-    components: { NearbyLocationsSection, ...SlotsCategoryComponents },
+    components: {
+      NearbyLocationsSection,
+      MainContent,
+      ...SlotsCategoryComponents,
+    },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;

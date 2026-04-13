@@ -21,6 +21,7 @@ import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 import mapboxPackageJson from "mapbox-gl/package.json" with { type: "json" };
 import { backgroundColors } from "../utils/themeConfigOptions.ts";
+import { MainContent } from "./structure/MainContent.tsx";
 
 // Uses the content endpoint from
 // https://www.yext.com/s/4174974/yextsites/155048/editor#pageSetId=locations
@@ -911,7 +912,7 @@ const screenshotThreshold = 30;
 
 describe("Locator", async () => {
   const puckConfig: Config = {
-    components: { Locator: LocatorComponent },
+    components: { Locator: LocatorComponent, MainContent },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;

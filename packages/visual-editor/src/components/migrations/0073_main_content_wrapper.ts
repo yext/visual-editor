@@ -1,60 +1,72 @@
 import { Migration } from "../../utils/migrate.ts";
 
-const MAIN_CONTENT_TYPE = "MainContent";
-const EXPANDED_HEADER_TYPE = "ExpandedHeader";
-const EXPANDED_FOOTER_TYPE = "ExpandedFooter";
-
 export const mainContentWrapperMigration: Migration = {
   content: {
     transformation: (content) => {
-      const headerIndex = content.findIndex(
-        (component) => component.type === EXPANDED_HEADER_TYPE
+      const firstHeaderIndex = content.findIndex(
+        (component) =>
+          component.type === "ExpandedHeader" || component.type === "Header"
       );
-      let footerIndex = -1;
-      for (let index = content.length - 1; index >= 0; index -= 1) {
-        if (content[index].type === EXPANDED_FOOTER_TYPE) {
-          footerIndex = index;
-          break;
+      const preservedOutsideMain = new Set<number>();
+
+      content.forEach((component, index) => {
+        const isHeader =
+          component.type === "ExpandedHeader" || component.type === "Header";
+        const isFooter =
+          component.type === "ExpandedFooter" || component.type === "Footer";
+        const isPreHeaderCustomCode =
+          component.type === "CustomCodeSection" &&
+          firstHeaderIndex !== -1 &&
+          index < firstHeaderIndex;
+
+        if (isHeader || isFooter || isPreHeaderCustomCode) {
+          preservedOutsideMain.add(index);
         }
-      }
-
-      const hasHeader = headerIndex !== -1;
-      const hasFooter = footerIndex !== -1;
-
-      const mainContent = content.filter((_, index) => {
-        if (hasHeader && index === headerIndex) {
-          return false;
-        }
-
-        if (hasFooter && index === footerIndex) {
-          return false;
-        }
-
-        return true;
       });
 
+      const mainContent = content.filter(
+        (_, index) => !preservedOutsideMain.has(index)
+      );
+
       const wrappedContent = {
-        type: MAIN_CONTENT_TYPE,
+        type: "MainContent",
         props: {
           id: "MainContent-default",
           content: mainContent,
         },
       };
 
-      if (!hasHeader && !hasFooter) {
-        return [wrappedContent];
+      let insertionIndex = content.findIndex(
+        (_, index) => !preservedOutsideMain.has(index)
+      );
+
+      if (insertionIndex === -1) {
+        insertionIndex = content.findIndex(
+          (component) =>
+            component.type === "ExpandedFooter" || component.type === "Footer"
+        );
+      }
+
+      if (insertionIndex === -1) {
+        insertionIndex = content.length;
       }
 
       const transformedContent = [];
+      let insertedMainContent = false;
 
-      if (hasHeader) {
-        transformedContent.push(content[headerIndex]);
-      }
+      content.forEach((component, index) => {
+        if (!insertedMainContent && index === insertionIndex) {
+          transformedContent.push(wrappedContent);
+          insertedMainContent = true;
+        }
 
-      transformedContent.push(wrappedContent);
+        if (preservedOutsideMain.has(index)) {
+          transformedContent.push(component);
+        }
+      });
 
-      if (hasFooter) {
-        transformedContent.push(content[footerIndex]);
+      if (!insertedMainContent) {
+        transformedContent.push(wrappedContent);
       }
 
       return transformedContent;

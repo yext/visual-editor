@@ -13,6 +13,7 @@ import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { Render, Config } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 import { StaticMapSection } from "./StaticMapSection.tsx";
+import { MainContent } from "../structure/MainContent.tsx";
 
 const tests: ComponentTest[] = [
   {
@@ -108,7 +109,7 @@ const tests: ComponentTest[] = [
 
 describe("StaticMapSection", async () => {
   const puckConfig: Config = {
-    components: { StaticMapSection },
+    components: { StaticMapSection, MainContent },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;

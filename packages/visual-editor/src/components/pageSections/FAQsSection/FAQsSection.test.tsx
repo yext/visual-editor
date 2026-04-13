@@ -14,6 +14,7 @@ import { migrationRegistry } from "../../migrations/migrationRegistry.ts";
 import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
+import { MainContent } from "../../structure/MainContent.tsx";
 import { SlotsCategoryComponents } from "../../categories/SlotsCategory.tsx";
 
 const interactionsDelay = 200;
@@ -459,7 +460,7 @@ const ignoredScreenshotDifferences = [420, 422];
 
 describe("FAQSection", async () => {
   const puckConfig: Config = {
-    components: { FAQSection, ...SlotsCategoryComponents },
+    components: { FAQSection, MainContent, ...SlotsCategoryComponents },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;

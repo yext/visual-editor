@@ -35,7 +35,10 @@ export interface LocatorConfigProps
 const rootAllowedComponents = [
   "ExpandedHeader",
   "ExpandedFooter",
+  "Header",
+  "Footer",
   "MainContent",
+  "CustomCodeSection",
 ];
 
 const components: Config<LocatorConfigProps>["components"] = {

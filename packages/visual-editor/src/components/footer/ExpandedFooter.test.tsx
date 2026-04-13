@@ -12,6 +12,7 @@ import { SlotsCategoryComponents } from "../categories/SlotsCategory.tsx";
 import { Render, Config } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 import { ExpandedFooter, validPatterns } from "./ExpandedFooter.tsx";
+import { MainContent } from "../structure/MainContent.tsx";
 
 const testLogoUrl: string = "https://placehold.co/100";
 
@@ -2456,7 +2457,7 @@ const socialLinkTestCases = [
 
 describe("ExpandedFooter", async () => {
   const puckConfig: Config = {
-    components: { ExpandedFooter, ...SlotsCategoryComponents },
+    components: { ExpandedFooter, MainContent, ...SlotsCategoryComponents },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;

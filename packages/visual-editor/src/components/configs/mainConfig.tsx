@@ -48,7 +48,10 @@ const components: Config<MainConfigProps>["components"] = {
 const rootAllowedComponents = [
   "ExpandedHeader",
   "ExpandedFooter",
+  "Header",
+  "Footer",
   "MainContent",
+  "CustomCodeSection",
 ];
 
 // The config used for base entities (locations, financial professionals, etc.)

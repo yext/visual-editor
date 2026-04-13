@@ -13,6 +13,7 @@ import { SlotsCategoryComponents } from "../../categories/SlotsCategory.tsx";
 import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
+import { MainContent } from "../../structure/MainContent.tsx";
 
 const eventsData = {
   events: [
@@ -2518,7 +2519,7 @@ const tests: ComponentTest[] = [
 
 describe("EventSection", async () => {
   const puckConfig: Config = {
-    components: { EventSection, ...SlotsCategoryComponents },
+    components: { EventSection, MainContent, ...SlotsCategoryComponents },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;

@@ -6,9 +6,15 @@ export interface MainContentProps {
 
 const MainContentComponent: PuckComponent<MainContentProps> = ({
   content: Content,
+  puck,
 }) => {
   return (
-    <main id="main-content">
+    <main
+      id="main-content"
+      style={{
+        minHeight: puck.isEditing ? "400px" : undefined,
+      }}
+    >
       <Content disallow={["ExpandedHeader", "ExpandedFooter", "MainContent"]} />
     </main>
   );
