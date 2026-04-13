@@ -111,15 +111,6 @@ const DEFAULT_LOCATION_STYLE = {
   pinColor: backgroundColors.background6.value,
 };
 
-const TEST_MAP_PIN_POSITIONS = [
-  { left: "18%", top: "32%" },
-  { left: "48%", top: "22%" },
-  { left: "72%", top: "52%" },
-  { left: "36%", top: "68%" },
-  { left: "62%", top: "74%" },
-  { left: "84%", top: "34%" },
-];
-
 const getConfiguredMapCenterOrDefault = (mapStartingLocation?: {
   latitude: string;
   longitude: string;
@@ -1955,9 +1946,6 @@ const Map: React.FC<MapProps> = ({
   locationStyleConfig,
 }) => {
   const entityDocument: StreamDocument = useDocument();
-  const results = useSearchState(
-    (state) => state.vertical.results ?? []
-  ) as Result<Location>[];
 
   const documentIsUndefined = typeof document === "undefined";
   const iframe = documentIsUndefined
