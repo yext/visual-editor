@@ -1,4 +1,4 @@
-import { Fonts } from "../../utils/fonts/visualEditorFonts.ts";
+import { FontRegistry } from "../../utils/fonts/visualEditorFonts.ts";
 import DOMPurify from "dompurify";
 
 export type HeadDeployStatus = "RUNNING" | "INACTIVE" | "FAILED" | "ACTIVE";
@@ -21,7 +21,7 @@ export type TemplateMetadata = {
   locales: string[];
   layoutTaskApprovals: boolean;
   locatorDisplayFields?: Record<string, FieldTypeData>;
-  customFonts?: Fonts;
+  customFonts?: FontRegistry;
   headDeployStatus: HeadDeployStatus;
 };
 

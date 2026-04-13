@@ -1,5 +1,5 @@
 import {
-  type Fonts,
+  type FontRegistry,
   type Font,
   type Variant,
 } from "../../utils/fonts/visualEditorFonts.ts";
@@ -67,7 +67,7 @@ export const buildCustomFontAssets = ({
 }: {
   themeConfig: ThemeConfig;
   themeValues: ThemeData;
-  customFonts: Fonts;
+  customFonts: FontRegistry;
 }): CustomFontAssets => {
   const mergedThemeValues = getMergedThemeValues(themeConfig, themeValues);
   const facePaths = new Set<string>();

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { createDefaultThemeConfig } from "./DefaultThemeConfig.ts";
-import { Fonts } from "../utils/fonts/visualEditorFonts.ts";
+import { FontRegistry } from "../utils/fonts/visualEditorFonts.ts";
 
 vi.mock("../utils/i18n/platform.ts", async () => {
   const actual = await vi.importActual<
@@ -18,7 +18,7 @@ beforeEach(() => {
 
 describe("createDefaultThemeConfig", () => {
   it("should include custom fonts in the font options", () => {
-    const customFonts: Fonts = {
+    const customFonts: FontRegistry = {
       "Custom Font": {
         italics: true,
         weights: [400, 700],
@@ -43,7 +43,7 @@ describe("createDefaultThemeConfig", () => {
   });
 
   it("should override default fonts with custom fonts if they have the same name", () => {
-    const customFonts: Fonts = {
+    const customFonts: FontRegistry = {
       "Open Sans": {
         italics: true,
         weights: [300, 400, 500],
@@ -66,7 +66,7 @@ describe("createDefaultThemeConfig", () => {
   });
 
   it("should merge custom fonts with default fonts", () => {
-    const customFonts: Fonts = {
+    const customFonts: FontRegistry = {
       "Custom Font": {
         italics: false,
         weights: [400],

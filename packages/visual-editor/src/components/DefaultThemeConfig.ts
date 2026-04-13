@@ -1,7 +1,7 @@
 import { ThemeConfig } from "../utils/themeResolver.ts";
 import {
   defaultFonts,
-  type Fonts,
+  type FontRegistry,
   getFontStyleOptions,
   getFontWeightOptions,
   constructFontSelectOptions,
@@ -9,8 +9,10 @@ import {
 import { ThemeOptions } from "../utils/themeConfigOptions.ts";
 import { msg } from "../utils/i18n/platform.ts";
 
-export function createDefaultThemeConfig(customFonts: Fonts = {}): ThemeConfig {
-  const fonts: Fonts = {
+export function createDefaultThemeConfig(
+  customFonts: FontRegistry = {}
+): ThemeConfig {
+  const fonts: FontRegistry = {
     ...defaultFonts,
     ...customFonts,
   };

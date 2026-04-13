@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { buildCustomFontAssets } from "./customFontPreloads.ts";
 import { ThemeConfig } from "../../utils/themeResolver.ts";
-import { Fonts } from "../../utils/fonts/visualEditorFonts.ts";
+import { FontRegistry } from "../../utils/fonts/visualEditorFonts.ts";
 
 const createTextThemeConfig = (
   fontFamilyDefault: string,
@@ -93,7 +93,7 @@ describe("buildCustomFontAssets", () => {
       },
     };
 
-    const customFonts: Fonts = {
+    const customFonts: FontRegistry = {
       Alpha: {
         italics: false,
         weights: [400, 700],
@@ -153,7 +153,7 @@ describe("buildCustomFontAssets", () => {
   });
 
   it("prefers variable font files for the selected style", () => {
-    const customFonts: Fonts = {
+    const customFonts: FontRegistry = {
       Gamma: {
         italics: true,
         minWeight: 300,
@@ -192,7 +192,7 @@ describe("buildCustomFontAssets", () => {
   });
 
   it("uses italic static files when italic is selected", () => {
-    const customFonts: Fonts = {
+    const customFonts: FontRegistry = {
       Delta: {
         italics: true,
         weights: [400, 600, 700],
@@ -227,7 +227,7 @@ describe("buildCustomFontAssets", () => {
   });
 
   it("omits a preload when italic is selected but no italic asset exists", () => {
-    const customFonts: Fonts = {
+    const customFonts: FontRegistry = {
       Epsilon: {
         italics: true,
         weights: [400, 600, 700],
@@ -257,7 +257,7 @@ describe("buildCustomFontAssets", () => {
   });
 
   it("omits a preload when no matching static weight exists", () => {
-    const customFonts: Fonts = {
+    const customFonts: FontRegistry = {
       Zeta: {
         italics: false,
         weights: [400, 700],

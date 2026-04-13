@@ -43,7 +43,6 @@ export {
   defaultFonts,
   getFontWeightOptions,
   getFontWeightOverrideOptions,
-  type Fonts,
   type Font,
   type Variant,
   type WeightSupport,

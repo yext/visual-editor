@@ -3,7 +3,7 @@ import { ThemeData } from "../../internal/types/themeData.ts";
 import {
   constructFontSelectOptions,
   filterInUseFontRegistries,
-  type Fonts,
+  type FontRegistry,
   defaultFonts,
   constructGoogleFontLinkTags,
   generateCustomFontLinkData,
@@ -18,7 +18,7 @@ describe("filterInUseFontRegistries", () => {
       "--fontFamily-button-fontFamily": "'Adamina', serif",
     };
 
-    const expected: Fonts = {
+    const expected: FontRegistry = {
       Oi: {
         italics: false,
         weights: [400],
@@ -121,7 +121,7 @@ describe("filterInUseFontRegistries", () => {
       "--fontFamily-h1-fontFamily": "'Custom Font', sans-serif",
       "--fontFamily-h2-fontFamily": "'Open Sans', sans-serif",
     };
-    const customFonts: Fonts = {
+    const customFonts: FontRegistry = {
       "Custom Font": {
         italics: false,
         weights: [400],
@@ -171,7 +171,7 @@ describe("filterInUseFontRegistries", () => {
 
 describe("custom font helpers", () => {
   it("builds font select options from family names", () => {
-    const customFonts: Fonts = {
+    const customFonts: FontRegistry = {
       EBB_Melvyn_Regular: {
         italics: false,
         weights: [400, 700],
@@ -246,7 +246,7 @@ describe("constructGoogleFontLinkTags", () => {
   });
 
   it("creates a correct link for a single static font without italics", () => {
-    const fonts: Fonts = {
+    const fonts: FontRegistry = {
       Roboto: {
         weights: [400, 700],
         italics: false,
@@ -260,7 +260,7 @@ describe("constructGoogleFontLinkTags", () => {
   });
 
   it("creates a correct link for a single static font with italics", () => {
-    const fonts: Fonts = {
+    const fonts: FontRegistry = {
       Lato: {
         weights: [400, 900],
         italics: true,
@@ -274,7 +274,7 @@ describe("constructGoogleFontLinkTags", () => {
   });
 
   it("creates a correct link for a single variable font without italics", () => {
-    const fonts: Fonts = {
+    const fonts: FontRegistry = {
       "Open Sans": {
         minWeight: 300,
         maxWeight: 800,
@@ -289,7 +289,7 @@ describe("constructGoogleFontLinkTags", () => {
   });
 
   it("creates a correct link for a single variable font with italics", () => {
-    const fonts: Fonts = {
+    const fonts: FontRegistry = {
       "Open Sans": {
         minWeight: 300,
         maxWeight: 800,
@@ -304,7 +304,7 @@ describe("constructGoogleFontLinkTags", () => {
   });
 
   it("handles variable fonts where min and max weight are the same", () => {
-    const fonts: Fonts = {
+    const fonts: FontRegistry = {
       "Single Weight Var": {
         minWeight: 500,
         maxWeight: 500,
@@ -319,7 +319,7 @@ describe("constructGoogleFontLinkTags", () => {
   });
 
   it("creates separate link tags for multiple fonts", () => {
-    const fonts: Fonts = {
+    const fonts: FontRegistry = {
       Roboto: {
         weights: [400],
         italics: false,
@@ -340,7 +340,7 @@ describe("constructGoogleFontLinkTags", () => {
   });
 
   it("creates separate link tags for many fonts", () => {
-    const fonts: Fonts = {
+    const fonts: FontRegistry = {
       Font1: { weights: [400], italics: false, fallback: "sans-serif" },
       Font2: { weights: [400], italics: false, fallback: "sans-serif" },
       Font3: { weights: [400], italics: false, fallback: "sans-serif" },

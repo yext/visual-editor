@@ -5,13 +5,13 @@ import { OnThemeChangeFunc, ThemeHistories } from "../../../types/themeData.ts";
 import "@puckeditor/core/dist/index.css";
 import { ThemeFieldsSidebar } from "./ThemeFieldsSidebar.tsx";
 import { pt } from "../../../../utils/i18n/platform.ts";
-import { Fonts } from "../../../../utils/fonts/visualEditorFonts.ts";
+import { FontRegistry } from "../../../../utils/fonts/visualEditorFonts.ts";
 
 type ThemeEditorRightSidebarProps = {
   themeHistoriesRef: React.MutableRefObject<ThemeHistories | undefined>;
   themeConfig?: ThemeConfig;
   onThemeChange: OnThemeChangeFunc;
-  customFonts?: Fonts;
+  customFonts?: FontRegistry;
 };
 
 export const ThemeEditorRightSidebar = (

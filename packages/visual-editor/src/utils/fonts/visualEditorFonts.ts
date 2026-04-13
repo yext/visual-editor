@@ -23,12 +23,12 @@ export type Font = {
   variants?: Variant[];
 } & WeightSupport;
 
-export type Fonts = Record<string, Font>;
-export type FontRegistry = Fonts;
+export type FontRegistry = Record<string, Font>;
+export type Fonts = FontRegistry;
 
 // List of variable Google Fonts https://fonts.google.com/?categoryFilters=Technology:%2FTechnology%2FVariable
 // prettier-ignore
-export const defaultFonts: Fonts = fontsJs as Fonts;
+export const defaultFonts: FontRegistry = fontsJs as FontRegistry;
 
 /**
  * Builds font-family select options from a font registry. The label and CSS
@@ -36,7 +36,7 @@ export const defaultFonts: Fonts = fontsJs as Fonts;
  * remains human-readable.
  */
 export const constructFontSelectOptions = (
-  fonts: Fonts
+  fonts: FontRegistry
 ): { label: string; value: string }[] => {
   return Object.entries(fonts).map(([fontFamily, fontDetails]) => ({
     label: fontFamily,
@@ -50,7 +50,7 @@ export const constructFontSelectOptions = (
  * Note: Google does not return font file URLs if the params
  * fall outside of the font's supported values
  */
-export const constructGoogleFontLinkTags = (fonts: Fonts): string => {
+export const constructGoogleFontLinkTags = (fonts: FontRegistry): string => {
   if (Object.keys(fonts).length === 0) {
     return "";
   }
@@ -98,7 +98,9 @@ const PRECONNECT_LINKS: FontLinkData[] = [
   },
 ];
 
-export const generateGoogleFontLinkData = (fonts: Fonts): FontLinkData[] => {
+export const generateGoogleFontLinkData = (
+  fonts: FontRegistry
+): FontLinkData[] => {
   const fontLinks = Object.entries(fonts).map(([fontFamily, fontDetails]) => {
     const axes = fontDetails.italics ? ":ital,wght@" : ":wght@";
     const weightParam = generateWeightParam(fontDetails);
@@ -113,7 +115,7 @@ export const generateGoogleFontLinkData = (fonts: Fonts): FontLinkData[] => {
   return [...PRECONNECT_LINKS, ...fontLinks];
 };
 
-export const getFacePathsFromFonts = (fonts: Fonts): string[] => {
+export const getFacePathsFromFonts = (fonts: FontRegistry): string[] => {
   return Object.values(fonts)
     .map((fontDetails) => fontDetails.facePath)
     .filter((facePath): facePath is string => Boolean(facePath));
@@ -166,8 +168,8 @@ export const googleFontLinkTags = fontLinkDataToHTML(
  * they can be appended directly into a document.
  */
 export const createFontLinkElements = (
-  googleFonts: Fonts,
-  customFonts: Fonts
+  googleFonts: FontRegistry,
+  customFonts: FontRegistry
 ): HTMLLinkElement[] => {
   const googleFontLinkData = generateGoogleFontLinkData(googleFonts);
   const customFontLinkData = generateCustomFontLinkData(
@@ -192,8 +194,8 @@ export const createFontLinkElements = (
  */
 export const loadFontsIntoDOM = (
   document: Document,
-  googleFonts: Fonts,
-  customFonts: Fonts,
+  googleFonts: FontRegistry,
+  customFonts: FontRegistry,
   idPrefix: string = "visual-editor-fonts"
 ) => {
   if (!document.getElementById(`${idPrefix}-0`)) {
@@ -225,13 +227,13 @@ const defaultWeightOptions = [
 type getFontWeightParams = {
   fontCssVariable?: string;
   weightOptions?: StyleSelectOption[];
-  fontList?: Fonts;
+  fontList?: FontRegistry;
 };
 
 type getFontStyleParams = {
   fontCssVariable?: string;
   styleOptions?: StyleSelectOption[];
-  fontList?: Fonts;
+  fontList?: FontRegistry;
 };
 
 /*
@@ -464,14 +466,14 @@ export const extractFontFamiliesFromTheme = (data: ThemeData): string[] => {
  */
 export const filterInUseFontRegistries = (
   data: ThemeData,
-  availableFonts: Fonts,
-  customFonts: Fonts = {}
+  availableFonts: FontRegistry,
+  customFonts: FontRegistry = {}
 ): {
-  inUseGoogleFonts: Fonts;
-  inUseCustomFonts: Fonts;
+  inUseGoogleFonts: FontRegistry;
+  inUseCustomFonts: FontRegistry;
 } => {
-  const inUseGoogleFonts: Fonts = {};
-  const inUseCustomFonts: Fonts = {};
+  const inUseGoogleFonts: FontRegistry = {};
+  const inUseCustomFonts: FontRegistry = {};
 
   // For each unique font family found, look it up in the availableFonts map.
   for (const fontName of extractFontFamiliesFromTheme(data)) {
