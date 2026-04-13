@@ -1,8 +1,7 @@
 import { ThemeConfig } from "../utils/themeResolver.ts";
 import {
   defaultFonts,
-  FontRegistry,
-  CustomFontRegistry,
+  type Fonts,
   getFontStyleOptions,
   getFontWeightOptions,
   constructFontSelectOptions,
@@ -10,20 +9,15 @@ import {
 import { ThemeOptions } from "../utils/themeConfigOptions.ts";
 import { msg } from "../utils/i18n/platform.ts";
 
-export function createDefaultThemeConfig(
-  customFonts: CustomFontRegistry = {}
-): ThemeConfig {
-  const fonts: FontRegistry = {
+export function createDefaultThemeConfig(customFonts: Fonts = {}): ThemeConfig {
+  const fonts: Fonts = {
     ...defaultFonts,
     ...customFonts,
   };
-  const customFontDisplayNames = new Set(
-    Object.values(customFonts).map((font) => font.displayName)
-  );
   const fontOptions = [
     ...constructFontSelectOptions(customFonts),
     ...constructFontSelectOptions(defaultFonts).filter(
-      (option) => !customFontDisplayNames.has(option.label)
+      (option) => !(option.label in customFonts)
     ),
   ];
   const defaultHeaderFontOption = {

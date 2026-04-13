@@ -19,13 +19,13 @@ import {
   removeCustomFonts,
   removeCustomFontPreloads,
 } from "../../../utils/customFontPreloads.ts";
-import { CustomFontRegistry } from "../../../../utils/fonts/visualEditorFonts.ts";
+import { Fonts } from "../../../../utils/fonts/visualEditorFonts.ts";
 
 type ThemeFieldsSidebarProps = {
   themeConfig: ThemeConfig;
   themeData: ThemeData;
   onThemeChange: OnThemeChangeFunc;
-  customFonts?: CustomFontRegistry;
+  customFonts?: Fonts;
 };
 
 export const ThemeFieldsSidebar = ({
@@ -52,15 +52,15 @@ export const ThemeFieldsSidebar = ({
     };
 
     if (customFonts) {
-      const { fontFacePaths, preloads } = buildCustomFontAssets({
+      const { facePaths, preloads } = buildCustomFontAssets({
         themeConfig,
         themeValues: newThemeValues,
         customFonts,
       });
-      if (fontFacePaths.length > 0) {
+      if (facePaths.length > 0) {
         newThemeValues = {
           ...newThemeValues,
-          [CUSTOM_FONTS_KEY]: fontFacePaths,
+          [CUSTOM_FONTS_KEY]: facePaths,
         };
       } else {
         newThemeValues = removeCustomFonts(newThemeValues);

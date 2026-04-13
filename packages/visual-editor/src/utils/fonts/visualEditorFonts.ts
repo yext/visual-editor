@@ -7,67 +7,40 @@ import { fontStyleOptions } from "../themeConfigOptions.ts";
 
 const variableFontRegex = /var\((--[^)]+)\)/;
 
-export type FontWeightSupport =
+export type WeightSupport =
   | { weights: number[] }
   | { minWeight: number; maxWeight: number };
 
-export type BaseFontSpecification = {
-  displayName: string;
+export type Variant = {
+  style: "normal" | "italic";
+  filePath: string;
+} & WeightSupport;
+
+export type Font = {
   fallback: "sans-serif" | "serif" | "monospace" | "cursive";
   italics: boolean;
-} & FontWeightSupport;
+  facePath?: string;
+  variants?: Variant[];
+} & WeightSupport;
 
-export type CustomFontVariant = {
-  fontStyle: "normal" | "italic";
-  fontFilePath: string;
-} & FontWeightSupport;
-
-export type BuiltInFontSpecification = BaseFontSpecification;
-export type CustomFontSpecification = BaseFontSpecification & {
-  name: string;
-  fontFacePath: string;
-  variants: CustomFontVariant[];
-};
-export type FontSpecification =
-  | BuiltInFontSpecification
-  | CustomFontSpecification;
-export type FontRegistry = Record<string, FontSpecification>;
-export type BuiltInFontRegistry = Record<string, BuiltInFontSpecification>;
-export type CustomFontRegistry = Record<string, CustomFontSpecification>;
+export type Fonts = Record<string, Font>;
+export type FontRegistry = Fonts;
 
 // List of variable Google Fonts https://fonts.google.com/?categoryFilters=Technology:%2FTechnology%2FVariable
 // prettier-ignore
-export const defaultFonts: BuiltInFontRegistry = Object.fromEntries(
-  Object.entries(fontsJs).map(([displayName, fontDetails]) => [
-    displayName,
-    { ...fontDetails, displayName },
-  ])
-) as BuiltInFontRegistry;
-
-/**
- * Finds the font specification whose display name matches the font-family name
- * stored in theme CSS values.
- */
-export const findFontByDisplayName = (
-  fonts: FontRegistry,
-  displayName: string
-): FontSpecification | undefined => {
-  return Object.values(fonts).find(
-    (fontDetails) => fontDetails.displayName === displayName
-  );
-};
+export const defaultFonts: Fonts = fontsJs as Fonts;
 
 /**
  * Builds font-family select options from a font registry. The label and CSS
- * font-family value are both derived from the font's display name so theme data
+ * font-family value are both derived from the font family name so theme data
  * remains human-readable.
  */
 export const constructFontSelectOptions = (
-  fonts: FontRegistry
+  fonts: Fonts
 ): { label: string; value: string }[] => {
-  return Object.values(fonts).map((fontDetails) => ({
-    label: fontDetails.displayName,
-    value: `'${fontDetails.displayName}', '${fontDetails.displayName} Fallback', ${fontDetails.fallback}`,
+  return Object.entries(fonts).map(([fontFamily, fontDetails]) => ({
+    label: fontFamily,
+    value: `'${fontFamily}', '${fontFamily} Fallback', ${fontDetails.fallback}`,
   }));
 };
 
@@ -77,7 +50,7 @@ export const constructFontSelectOptions = (
  * Note: Google does not return font file URLs if the params
  * fall outside of the font's supported values
  */
-export const constructGoogleFontLinkTags = (fonts: FontRegistry): string => {
+export const constructGoogleFontLinkTags = (fonts: Fonts): string => {
   if (Object.keys(fonts).length === 0) {
     return "";
   }
@@ -91,7 +64,7 @@ export type FontLinkData = {
 };
 
 // Helper function to generate weight parameter for Google Fonts API
-const generateWeightParam = (fontDetails: FontSpecification): string => {
+const generateWeightParam = (fontDetails: Font): string => {
   if ("weights" in fontDetails) {
     if (fontDetails.italics) {
       const normalWeights = fontDetails.weights
@@ -125,13 +98,11 @@ const PRECONNECT_LINKS: FontLinkData[] = [
   },
 ];
 
-export const generateGoogleFontLinkData = (
-  fonts: BuiltInFontRegistry
-): FontLinkData[] => {
-  const fontLinks = Object.values(fonts).map((fontDetails) => {
+export const generateGoogleFontLinkData = (fonts: Fonts): FontLinkData[] => {
+  const fontLinks = Object.entries(fonts).map(([fontFamily, fontDetails]) => {
     const axes = fontDetails.italics ? ":ital,wght@" : ":wght@";
     const weightParam = generateWeightParam(fontDetails);
-    const param = `family=${fontDetails.displayName.replaceAll(" ", "+")}${axes}${weightParam}`;
+    const param = `family=${fontFamily.replaceAll(" ", "+")}${axes}${weightParam}`;
 
     return {
       href: `https://fonts.googleapis.com/css2?${param}&display=swap`,
@@ -142,30 +113,30 @@ export const generateGoogleFontLinkData = (
   return [...PRECONNECT_LINKS, ...fontLinks];
 };
 
-export const getCustomFontFacePathsFromFontRegistry = (
-  customFonts: CustomFontRegistry
-): string[] => {
-  return Object.values(customFonts)
-    .map((fontDetails) => fontDetails.fontFacePath)
-    .filter((fontFacePath): fontFacePath is string => Boolean(fontFacePath));
+export const getFacePathsFromFonts = (fonts: Fonts): string[] => {
+  return Object.values(fonts)
+    .map((fontDetails) => fontDetails.facePath)
+    .filter((facePath): facePath is string => Boolean(facePath));
 };
+
+export const getCustomFontFacePathsFromFontRegistry = getFacePathsFromFonts;
 
 /**
  * Builds stylesheet link data for custom font face paths.
  */
 export const generateCustomFontLinkData = (
-  customFontFacePaths: string[],
+  facePaths: string[],
   relativePrefixToRoot: string
 ): FontLinkData[] => {
-  return customFontFacePaths.map((fontFacePath) => ({
+  return facePaths.map((facePath) => ({
     href:
-      fontFacePath.startsWith("http://") ||
-      fontFacePath.startsWith("https://") ||
-      fontFacePath.startsWith("/") ||
-      fontFacePath.startsWith("./") ||
-      fontFacePath.startsWith("../")
-        ? fontFacePath
-        : `${relativePrefixToRoot}${fontFacePath}`,
+      facePath.startsWith("http://") ||
+      facePath.startsWith("https://") ||
+      facePath.startsWith("/") ||
+      facePath.startsWith("./") ||
+      facePath.startsWith("../")
+        ? facePath
+        : `${relativePrefixToRoot}${facePath}`,
     rel: "stylesheet",
   }));
 };
@@ -195,12 +166,12 @@ export const googleFontLinkTags = fontLinkDataToHTML(
  * they can be appended directly into a document.
  */
 export const createFontLinkElements = (
-  googleFonts: BuiltInFontRegistry,
-  customFonts: CustomFontRegistry
+  googleFonts: Fonts,
+  customFonts: Fonts
 ): HTMLLinkElement[] => {
   const googleFontLinkData = generateGoogleFontLinkData(googleFonts);
   const customFontLinkData = generateCustomFontLinkData(
-    getCustomFontFacePathsFromFontRegistry(customFonts),
+    getFacePathsFromFonts(customFonts),
     "./"
   );
 
@@ -221,8 +192,8 @@ export const createFontLinkElements = (
  */
 export const loadFontsIntoDOM = (
   document: Document,
-  googleFonts: BuiltInFontRegistry,
-  customFonts: CustomFontRegistry,
+  googleFonts: Fonts,
+  customFonts: Fonts,
   idPrefix: string = "visual-editor-fonts"
 ) => {
   if (!document.getElementById(`${idPrefix}-0`)) {
@@ -254,13 +225,13 @@ const defaultWeightOptions = [
 type getFontWeightParams = {
   fontCssVariable?: string;
   weightOptions?: StyleSelectOption[];
-  fontList?: FontRegistry;
+  fontList?: Fonts;
 };
 
 type getFontStyleParams = {
   fontCssVariable?: string;
   styleOptions?: StyleSelectOption[];
-  fontList?: FontRegistry;
+  fontList?: Fonts;
 };
 
 /*
@@ -359,7 +330,7 @@ const filterFontWeights = (
   }: getFontWeightParams
 ) => {
   const fontName = getFontNameFromStyleElement(styleElement, fontCssVariable);
-  const font = fontName ? findFontByDisplayName(fontList, fontName) : undefined;
+  const font = fontName ? fontList[fontName] : undefined;
   if (!font) {
     return weightOptions;
   }
@@ -386,7 +357,7 @@ const filterFontStyles = (
   }: getFontStyleParams
 ) => {
   const fontName = getFontNameFromStyleElement(styleElement, fontCssVariable);
-  const font = fontName ? findFontByDisplayName(fontList, fontName) : undefined;
+  const font = fontName ? fontList[fontName] : undefined;
   if (!font) {
     return styleOptions;
   }
@@ -493,27 +464,26 @@ export const extractFontFamiliesFromTheme = (data: ThemeData): string[] => {
  */
 export const filterInUseFontRegistries = (
   data: ThemeData,
-  availableFonts: BuiltInFontRegistry,
-  customFonts: CustomFontRegistry = {}
+  availableFonts: Fonts,
+  customFonts: Fonts = {}
 ): {
-  inUseGoogleFonts: BuiltInFontRegistry;
-  inUseCustomFonts: CustomFontRegistry;
+  inUseGoogleFonts: Fonts;
+  inUseCustomFonts: Fonts;
 } => {
-  const inUseGoogleFonts: BuiltInFontRegistry = {};
-  const inUseCustomFonts: CustomFontRegistry = {};
+  const inUseGoogleFonts: Fonts = {};
+  const inUseCustomFonts: Fonts = {};
 
   // For each unique font family found, look it up in the availableFonts map.
   for (const fontName of extractFontFamiliesFromTheme(data)) {
-    const font = findFontByDisplayName(availableFonts, fontName);
+    const font = availableFonts[fontName];
     if (font) {
-      inUseGoogleFonts[font.displayName] = font;
+      inUseGoogleFonts[fontName] = font;
       continue;
     }
 
-    const customFont = findFontByDisplayName(customFonts, fontName);
+    const customFont = customFonts[fontName];
     if (customFont) {
-      inUseCustomFonts[customFont.displayName] =
-        customFont as CustomFontSpecification;
+      inUseCustomFonts[fontName] = customFont;
     }
   }
 

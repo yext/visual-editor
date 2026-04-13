@@ -1,8 +1,7 @@
 import {
-  CustomFontRegistry,
-  CustomFontSpecification,
-  findFontByDisplayName,
-  type CustomFontVariant,
+  type Fonts,
+  type Font,
+  type Variant,
 } from "../../utils/fonts/visualEditorFonts.ts";
 import { ThemeConfig } from "../../utils/themeResolver.ts";
 import { ThemeData } from "../types/themeData.ts";
@@ -12,17 +11,15 @@ import { generateCssVariablesFromThemeConfig } from "./internalThemeResolver.ts"
  * Custom font asset flow:
  * 1. Merge default theme values with the current edited theme values.
  * 2. Find each custom font family referenced by the merged theme font-family variables.
- * 3. Collect the matching `fontFacePath` values for stylesheet loading.
- * 4. Match each referenced family's style/weight selection to a variant `fontFilePath` for preloading.
+ * 3. Collect the matching `facePath` values for stylesheet loading.
+ * 4. Match each referenced family's style/weight selection to a variant `filePath` for preloading.
  * 5. Save those resolved asset lists back into theme data for runtime use.
  */
 export const CUSTOM_FONT_PRELOADS_KEY = "__customFontPreloads";
 export const CUSTOM_FONTS_KEY = "__customFonts";
 
-type FontStyleValue = "normal" | "italic";
-
 export type CustomFontAssets = {
-  fontFacePaths: string[];
+  facePaths: string[];
   preloads: string[];
 };
 
@@ -41,22 +38,21 @@ const getMergedThemeValues = (
   ...themeValues,
 });
 
-const matchesWeight = (variant: CustomFontVariant, weight: number): boolean => {
-  if ("weights" in variant) {
-    return variant.weights.includes(weight);
+const matchesWeight = (asset: Variant | Font, weight: number): boolean => {
+  if ("weights" in asset) {
+    return asset.weights.includes(weight);
   }
 
-  return variant.minWeight <= weight && weight <= variant.maxWeight;
+  return asset.minWeight <= weight && weight <= asset.maxWeight;
 };
 
 const findMatchingVariant = (
-  customFont: CustomFontSpecification,
-  fontStyle: FontStyleValue,
+  customFont: Font,
+  style: "normal" | "italic",
   weight: number
-): CustomFontVariant | undefined => {
-  return customFont.variants.find(
-    (variant) =>
-      variant.fontStyle === fontStyle && matchesWeight(variant, weight)
+): Variant | undefined => {
+  return customFont.variants?.find(
+    (variant) => variant.style === style && matchesWeight(variant, weight)
   );
 };
 
@@ -71,10 +67,10 @@ export const buildCustomFontAssets = ({
 }: {
   themeConfig: ThemeConfig;
   themeValues: ThemeData;
-  customFonts: CustomFontRegistry;
+  customFonts: Fonts;
 }): CustomFontAssets => {
   const mergedThemeValues = getMergedThemeValues(themeConfig, themeValues);
-  const fontFacePaths = new Set<string>();
+  const facePaths = new Set<string>();
   const preloads: string[] = [];
   const seen = new Set<string>();
 
@@ -92,14 +88,14 @@ export const buildCustomFontAssets = ({
     }
 
     const fontFamily = extractFontFamilyName(fontFamilyValue);
-    const customFont = findFontByDisplayName(customFonts, fontFamily) as
-      | CustomFontSpecification
-      | undefined;
+    const customFont = customFonts[fontFamily];
     if (!customFont) {
       return;
     }
 
-    fontFacePaths.add(customFont.fontFacePath);
+    if (customFont.facePath) {
+      facePaths.add(customFont.facePath);
+    }
 
     const weightValue =
       mergedThemeValues[`--fontWeight-${sectionKey}-fontWeight`];
@@ -110,20 +106,19 @@ export const buildCustomFontAssets = ({
 
     const fontStyleValue =
       mergedThemeValues[`--fontStyle-${sectionKey}-fontStyle`];
-    const fontStyle: FontStyleValue =
-      fontStyleValue === "italic" ? "italic" : "normal";
+    const style = fontStyleValue === "italic" ? "italic" : "normal";
 
-    const variant = findMatchingVariant(customFont, fontStyle, weight);
-    if (!variant || seen.has(variant.fontFilePath)) {
+    const variant = findMatchingVariant(customFont, style, weight);
+    if (!variant || seen.has(variant.filePath)) {
       return;
     }
 
-    seen.add(variant.fontFilePath);
-    preloads.push(variant.fontFilePath);
+    seen.add(variant.filePath);
+    preloads.push(variant.filePath);
   });
 
   return {
-    fontFacePaths: [...fontFacePaths],
+    facePaths: [...facePaths],
     preloads,
   };
 };
@@ -171,7 +166,7 @@ export const getCustomFontPreloads = (
 /**
  * Reads the saved custom font stylesheet paths from theme data.
  */
-export const getCustomFontFacePaths = (
+export const getCustomFacePaths = (
   themeValues: ThemeData | undefined
 ): string[] => {
   if (!themeValues) {

@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { buildCustomFontAssets } from "./customFontPreloads.ts";
 import { ThemeConfig } from "../../utils/themeResolver.ts";
-import { CustomFontRegistry } from "../../utils/fonts/visualEditorFonts.ts";
+import { Fonts } from "../../utils/fonts/visualEditorFonts.ts";
 
 const createTextThemeConfig = (
   fontFamilyDefault: string,
@@ -37,7 +37,7 @@ const createTextThemeConfig = (
 });
 
 describe("buildCustomFontAssets", () => {
-  it("returns all matching custom font files for multiple fonts", () => {
+  it("returns all matching custom assets for multiple fonts", () => {
     const themeConfig: ThemeConfig = {
       h1: {
         label: "H1",
@@ -93,101 +93,40 @@ describe("buildCustomFontAssets", () => {
       },
     };
 
-    const customFonts: CustomFontRegistry = {
-      "alpha-regular": {
-        name: "alpha-regular",
-        displayName: "Alpha",
+    const customFonts: Fonts = {
+      Alpha: {
         italics: false,
         weights: [400, 700],
         fallback: "sans-serif",
-        fontFacePath: "y-fonts/alpha.css",
+        facePath: "y-fonts/alpha.css",
         variants: [
           {
-            fontStyle: "normal",
+            style: "normal",
             weights: [400],
-            fontFilePath: "/y-fonts/alpha-regular.woff2",
+            filePath: "/y-fonts/alpha-regular.woff2",
           },
           {
-            fontStyle: "normal",
+            style: "normal",
             weights: [700],
-            fontFilePath: "/y-fonts/alpha-bold.woff2",
+            filePath: "/y-fonts/alpha-bold.woff2",
           },
         ],
       },
-      "beta-regular": {
-        name: "beta-regular",
-        displayName: "Beta",
+      Beta: {
         italics: false,
         weights: [300, 400],
         fallback: "serif",
-        fontFacePath: "y-fonts/beta.css",
+        facePath: "y-fonts/beta.css",
         variants: [
           {
-            fontStyle: "normal",
+            style: "normal",
             weights: [400],
-            fontFilePath: "/y-fonts/beta-regular.woff2",
+            filePath: "/y-fonts/beta-regular.woff2",
           },
           {
-            fontStyle: "normal",
+            style: "normal",
             weights: [300],
-            fontFilePath: "/y-fonts/beta-light.woff2",
-          },
-        ],
-      },
-    };
-
-    const themeValues = {
-      "--fontFamily-h1-fontFamily": "'Alpha', sans-serif",
-      "--fontWeight-h1-fontWeight": "700",
-      "--fontStyle-h1-fontStyle": "normal",
-      "--fontFamily-body-fontFamily": "'Beta', serif",
-      "--fontWeight-body-fontWeight": "400",
-      "--fontStyle-body-fontStyle": "normal",
-    };
-
-    const assets = buildCustomFontAssets({
-      themeConfig,
-      themeValues,
-      customFonts,
-    });
-
-    expect(assets.fontFacePaths).toEqual([
-      "y-fonts/alpha.css",
-      "y-fonts/beta.css",
-    ]);
-    expect(assets.preloads).toHaveLength(2);
-    expect(assets.preloads).toEqual(
-      expect.arrayContaining([
-        "/y-fonts/alpha-bold.woff2",
-        "/y-fonts/beta-regular.woff2",
-      ])
-    );
-  });
-
-  it("prefers variable font files for the selected font style", () => {
-    const themeConfig = createTextThemeConfig("'Gamma', sans-serif", "500");
-
-    const customFonts: CustomFontRegistry = {
-      Gamma: {
-        name: "gamma-variable",
-        displayName: "Gamma",
-        italics: true,
-        minWeight: 300,
-        maxWeight: 600,
-        fallback: "sans-serif",
-        fontFacePath: "y-fonts/gamma.css",
-        variants: [
-          {
-            fontStyle: "normal",
-            minWeight: 300,
-            maxWeight: 600,
-            fontFilePath: "/y-fonts/gamma-variable.woff2",
-          },
-          {
-            fontStyle: "italic",
-            minWeight: 300,
-            maxWeight: 600,
-            fontFilePath: "/y-fonts/gamma-variable-italic.woff2",
+            filePath: "/y-fonts/beta-light.woff2",
           },
         ],
       },
@@ -196,6 +135,51 @@ describe("buildCustomFontAssets", () => {
     const assets = buildCustomFontAssets({
       themeConfig,
       themeValues: {
+        "--fontFamily-h1-fontFamily": "'Alpha', sans-serif",
+        "--fontWeight-h1-fontWeight": "700",
+        "--fontStyle-h1-fontStyle": "normal",
+        "--fontFamily-body-fontFamily": "'Beta', serif",
+        "--fontWeight-body-fontWeight": "400",
+        "--fontStyle-body-fontStyle": "normal",
+      },
+      customFonts,
+    });
+
+    expect(assets.facePaths).toEqual(["y-fonts/alpha.css", "y-fonts/beta.css"]);
+    expect(assets.preloads).toEqual([
+      "/y-fonts/alpha-bold.woff2",
+      "/y-fonts/beta-regular.woff2",
+    ]);
+  });
+
+  it("prefers variable font files for the selected style", () => {
+    const customFonts: Fonts = {
+      Gamma: {
+        italics: true,
+        minWeight: 300,
+        maxWeight: 600,
+        fallback: "sans-serif",
+        facePath: "y-fonts/gamma.css",
+        variants: [
+          {
+            style: "normal",
+            minWeight: 300,
+            maxWeight: 600,
+            filePath: "/y-fonts/gamma-variable.woff2",
+          },
+          {
+            style: "italic",
+            minWeight: 300,
+            maxWeight: 600,
+            filePath: "/y-fonts/gamma-variable-italic.woff2",
+          },
+        ],
+      },
+    };
+
+    const assets = buildCustomFontAssets({
+      themeConfig: createTextThemeConfig("'Gamma', sans-serif", "500"),
+      themeValues: {
         "--fontFamily-body-fontFamily": "'Gamma', sans-serif",
         "--fontWeight-body-fontWeight": "500",
         "--fontStyle-body-fontStyle": "italic",
@@ -203,38 +187,34 @@ describe("buildCustomFontAssets", () => {
       customFonts,
     });
 
-    expect(assets.fontFacePaths).toEqual(["y-fonts/gamma.css"]);
+    expect(assets.facePaths).toEqual(["y-fonts/gamma.css"]);
     expect(assets.preloads).toEqual(["/y-fonts/gamma-variable-italic.woff2"]);
   });
 
   it("uses italic static files when italic is selected", () => {
-    const themeConfig = createTextThemeConfig("'Delta', sans-serif", "600");
-
-    const customFonts: CustomFontRegistry = {
+    const customFonts: Fonts = {
       Delta: {
-        name: "delta-semibold",
-        displayName: "Delta",
         italics: true,
         weights: [400, 600, 700],
         fallback: "sans-serif",
-        fontFacePath: "y-fonts/delta.css",
+        facePath: "y-fonts/delta.css",
         variants: [
           {
-            fontStyle: "normal",
+            style: "normal",
             weights: [600],
-            fontFilePath: "/y-fonts/delta-600.woff2",
+            filePath: "/y-fonts/delta-600.woff2",
           },
           {
-            fontStyle: "italic",
+            style: "italic",
             weights: [600],
-            fontFilePath: "/y-fonts/delta-600-italic.woff2",
+            filePath: "/y-fonts/delta-600-italic.woff2",
           },
         ],
       },
     };
 
     const assets = buildCustomFontAssets({
-      themeConfig,
+      themeConfig: createTextThemeConfig("'Delta', sans-serif", "600"),
       themeValues: {
         "--fontFamily-body-fontFamily": "'Delta', sans-serif",
         "--fontWeight-body-fontWeight": "600",
@@ -247,28 +227,24 @@ describe("buildCustomFontAssets", () => {
   });
 
   it("omits a preload when italic is selected but no italic asset exists", () => {
-    const themeConfig = createTextThemeConfig("'Epsilon', sans-serif", "600");
-
-    const customFonts: CustomFontRegistry = {
+    const customFonts: Fonts = {
       Epsilon: {
-        name: "epsilon-semibold",
-        displayName: "Epsilon",
         italics: true,
         weights: [400, 600, 700],
         fallback: "sans-serif",
-        fontFacePath: "y-fonts/epsilon.css",
+        facePath: "y-fonts/epsilon.css",
         variants: [
           {
-            fontStyle: "normal",
+            style: "normal",
             weights: [600],
-            fontFilePath: "/y-fonts/epsilon-600.woff2",
+            filePath: "/y-fonts/epsilon-600.woff2",
           },
         ],
       },
     };
 
     const assets = buildCustomFontAssets({
-      themeConfig,
+      themeConfig: createTextThemeConfig("'Epsilon', sans-serif", "600"),
       themeValues: {
         "--fontFamily-body-fontFamily": "'Epsilon', sans-serif",
         "--fontWeight-body-fontWeight": "600",
@@ -281,33 +257,29 @@ describe("buildCustomFontAssets", () => {
   });
 
   it("omits a preload when no matching static weight exists", () => {
-    const themeConfig = createTextThemeConfig("'Zeta', sans-serif", "600");
-
-    const customFonts: CustomFontRegistry = {
+    const customFonts: Fonts = {
       Zeta: {
-        name: "zeta-regular",
-        displayName: "Zeta",
         italics: false,
         weights: [400, 700],
         fallback: "sans-serif",
-        fontFacePath: "y-fonts/zeta.css",
+        facePath: "y-fonts/zeta.css",
         variants: [
           {
-            fontStyle: "normal",
+            style: "normal",
             weights: [400],
-            fontFilePath: "/y-fonts/zeta-regular.woff2",
+            filePath: "/y-fonts/zeta-regular.woff2",
           },
           {
-            fontStyle: "normal",
+            style: "normal",
             weights: [700],
-            fontFilePath: "/y-fonts/zeta-bold.woff2",
+            filePath: "/y-fonts/zeta-bold.woff2",
           },
         ],
       },
     };
 
     const assets = buildCustomFontAssets({
-      themeConfig,
+      themeConfig: createTextThemeConfig("'Zeta', sans-serif", "600"),
       themeValues: {
         "--fontFamily-body-fontFamily": "'Zeta', sans-serif",
         "--fontWeight-body-fontWeight": "600",
@@ -319,7 +291,7 @@ describe("buildCustomFontAssets", () => {
     expect(assets.preloads).toEqual([]);
   });
 
-  it("returns custom font face paths for the custom fonts used by the theme", () => {
+  it("returns face paths for the custom fonts used by the theme", () => {
     const themeConfig: ThemeConfig = {
       h1: {
         label: "H1",
@@ -347,24 +319,20 @@ describe("buildCustomFontAssets", () => {
       },
     };
 
-    const customFonts: CustomFontRegistry = {
-      "alpha-regular": {
-        name: "alpha-regular",
-        displayName: "Alpha",
-        italics: false,
-        weights: [400],
-        fallback: "sans-serif",
-        fontFacePath: "y-fonts/alpha.css",
-        variants: [],
-      },
-    };
-
     expect(
       buildCustomFontAssets({
         themeConfig,
         themeValues: {},
-        customFonts,
-      }).fontFacePaths
+        customFonts: {
+          Alpha: {
+            italics: false,
+            weights: [400],
+            fallback: "sans-serif",
+            facePath: "y-fonts/alpha.css",
+            variants: [],
+          },
+        },
+      }).facePaths
     ).toEqual(["y-fonts/alpha.css"]);
   });
 
@@ -408,33 +376,27 @@ describe("buildCustomFontAssets", () => {
       },
     };
 
-    const customFonts: CustomFontRegistry = {
-      alpha: {
-        name: "alpha-regular",
-        displayName: "Alpha",
-        italics: false,
-        weights: [400],
-        fallback: "sans-serif",
-        fontFacePath: "y-fonts/alpha.css",
-        variants: [],
-      },
-      nameless: {
-        name: "nameless-regular",
-        displayName: "Nameless",
-        italics: false,
-        weights: [400],
-        fallback: "sans-serif",
-        fontFacePath: "y-fonts/alpha.css",
-        variants: [],
-      },
-    };
-
     expect(
       buildCustomFontAssets({
         themeConfig,
         themeValues: {},
-        customFonts,
-      }).fontFacePaths
+        customFonts: {
+          Alpha: {
+            italics: false,
+            weights: [400],
+            fallback: "sans-serif",
+            facePath: "y-fonts/alpha.css",
+            variants: [],
+          },
+          Nameless: {
+            italics: false,
+            weights: [400],
+            fallback: "sans-serif",
+            facePath: "y-fonts/alpha.css",
+            variants: [],
+          },
+        },
+      }).facePaths
     ).toEqual(["y-fonts/alpha.css"]);
   });
 
@@ -494,29 +456,25 @@ describe("buildCustomFontAssets", () => {
       },
     };
 
-    const customFonts: CustomFontRegistry = {
-      "alpha-regular": {
-        name: "alpha-regular",
-        displayName: "Alpha",
-        italics: false,
-        weights: [400, 700],
-        fallback: "sans-serif",
-        fontFacePath: "y-fonts/alpha.css",
-        variants: [
-          {
-            fontStyle: "normal",
-            weights: [700],
-            fontFilePath: "/y-fonts/alpha-bold.woff2",
-          },
-        ],
-      },
-    };
-
     expect(
       buildCustomFontAssets({
         themeConfig,
         themeValues: {},
-        customFonts,
+        customFonts: {
+          Alpha: {
+            italics: false,
+            weights: [400, 700],
+            fallback: "sans-serif",
+            facePath: "y-fonts/alpha.css",
+            variants: [
+              {
+                style: "normal",
+                weights: [700],
+                filePath: "/y-fonts/alpha-bold.woff2",
+              },
+            ],
+          },
+        },
       }).preloads
     ).toEqual(["/y-fonts/alpha-bold.woff2"]);
   });

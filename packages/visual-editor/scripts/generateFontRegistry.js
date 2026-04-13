@@ -47,7 +47,6 @@ const parseFontDetails = (font) => {
   // Temporary overrides for specific Cloudflare Fonts bugs
   if (font.family === "Inter") {
     return {
-      displayName: font.family,
       italics: false,
       minWeight: 100,
       maxWeight: 900,
@@ -56,7 +55,6 @@ const parseFontDetails = (font) => {
   }
   if (font.family === "Miriam Libre") {
     return {
-      displayName: font.family,
       italics: false,
       weights: [400],
       fallback: fallbackFromCategory(font.category),
@@ -71,7 +69,6 @@ const parseFontDetails = (font) => {
     const wghtTag = font.axes.find((dim) => dim.tag === "wght");
 
     return {
-      displayName: font.family,
       italics: hasItalic,
       minWeight: wghtTag.start,
       maxWeight: wghtTag.end,
@@ -93,7 +90,6 @@ const parseFontDetails = (font) => {
   }
 
   return {
-    displayName: font.family,
     italics: hasItalic,
     weights: [...new Set(weights)], // remove duplicates
     fallback: fallbackFromCategory(font.category),

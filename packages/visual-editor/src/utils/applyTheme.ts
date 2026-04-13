@@ -10,14 +10,13 @@ import {
   createFontLinkElements,
   generateGoogleFontLinkData,
   fontLinkDataToHTML,
-  type BuiltInFontRegistry,
-  type CustomFontRegistry,
+  type Fonts,
   type FontLinkData,
   generateCustomFontLinkData,
 } from "./fonts/visualEditorFonts.ts";
 import {
   buildFontPreloadTags,
-  getCustomFontFacePaths,
+  getCustomFacePaths,
   getCustomFontPreloads,
 } from "../internal/utils/customFontPreloads.ts";
 import { ThemeConfig } from "./themeResolver.ts";
@@ -68,7 +67,7 @@ export const applyTheme = (
       mergedThemeData,
       defaultFonts
     );
-    const customFontFacePaths = getCustomFontFacePaths(overrides);
+    const customFacePaths = getCustomFacePaths(overrides);
 
     if (Object.keys(inUseGoogleFonts).length === 0) {
       // No fonts found in theme data, use only Open Sans
@@ -79,7 +78,7 @@ export const applyTheme = (
       fontLinkData = generateGoogleFontLinkData(inUseGoogleFonts);
     }
     fontLinkData = [
-      ...generateCustomFontLinkData(customFontFacePaths, relativePrefixToRoot),
+      ...generateCustomFontLinkData(customFacePaths, relativePrefixToRoot),
       ...fontLinkData,
     ];
 
@@ -164,8 +163,8 @@ const generateContrastingColors = (themeData: ThemeData) => {
 // Helper function to update font links in a document
 const updateFontLinksInDocument = (
   document: Document,
-  fonts: BuiltInFontRegistry,
-  customFonts: CustomFontRegistry
+  fonts: Fonts,
+  customFonts: Fonts
 ) => {
   // Remove only theme-specific font links, preserve default fonts
   const existingLinks = document.querySelectorAll(
@@ -188,7 +187,7 @@ export const updateThemeInEditor = async (
   newTheme: ThemeData,
   themeConfig: ThemeConfig,
   isThemeMode: boolean,
-  customFonts: CustomFontRegistry = {}
+  customFonts: Fonts = {}
 ) => {
   devLogger.logFunc("updateThemeInEditor");
   pendingObserver?.disconnect();
@@ -210,7 +209,7 @@ export const updateThemeInEditor = async (
   // In the theme editor, all fonts are already loaded
   // In the layout editor, we need to load the in-use fonts after the Puck iframe has loaded
   if (!isThemeMode) {
-    let fontsToLoad: BuiltInFontRegistry;
+    let fontsToLoad: Fonts;
     if (Object.keys(inUseGoogleFonts).length === 0) {
       fontsToLoad = {
         "Open Sans": defaultFonts["Open Sans"],

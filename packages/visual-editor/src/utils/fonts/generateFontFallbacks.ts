@@ -34,9 +34,8 @@ const systemFallbacks: Record<string, any> = {
 const generate = async () => {
   const results: Record<string, string[]> = {};
 
-  for (const config of Object.values(defaultFonts)) {
-    const displayName = config.displayName;
-    const camelName = fontFamilyToCamelCase(displayName);
+  for (const [fontFamily, config] of Object.entries(defaultFonts)) {
+    const camelName = fontFamilyToCamelCase(fontFamily);
 
     const fallbackMetrics = systemFallbacks[config.fallback] || arial;
 
@@ -49,7 +48,7 @@ const generate = async () => {
       }
     }
 
-    results[displayName] = [];
+    results[fontFamily] = [];
 
     for (const weight of weights) {
       const styles = config.italics ? ["regular", "italic"] : ["regular"];
@@ -75,10 +74,10 @@ const generate = async () => {
             `  font-weight: ${weight};\n  font-style: ${style};\n}`
           );
 
-          results[displayName].push(finalizedFontFace);
+          results[fontFamily].push(finalizedFontFace);
         } catch {
           console.warn(
-            `Could not find metrics for ${displayName} (${variantSuffix})`
+            `Could not find metrics for ${fontFamily} (${variantSuffix})`
           );
         }
       }
