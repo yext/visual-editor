@@ -1,5 +1,7 @@
 import React from "react";
 import { AutoField, FieldLabel, Field, CustomField } from "@puckeditor/core";
+import { type BasicSelectorField } from "../fields/BasicSelectorField.tsx";
+import { YextAutoField } from "../fields/YextAutoField.tsx";
 import {
   ConstantValueTypes,
   EntityFieldTypes,
@@ -18,7 +20,6 @@ import {
 } from "../internal/puck/constant-value-fields/TextList.tsx";
 import { ENHANCED_CTA_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
 import { PHONE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Phone.tsx";
-import { BasicSelector } from "./BasicSelector.tsx";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
 import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 import { IMAGE_LIST_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/ImageList.tsx";
@@ -414,11 +415,12 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   const entityFields = useEntityFields();
   const templateMetadata = useTemplateMetadata();
 
-  const typeSelector = React.useMemo(() => {
+  const typeSelector = React.useMemo<BasicSelectorField | undefined>(() => {
     if (!typeSelectorConfig) {
       return;
     }
-    return BasicSelector({
+    return {
+      type: "basicSelector",
       label: typeSelectorConfig.typeLabel,
       options: typeSelectorConfig.options,
       translateOptions: false,
@@ -427,10 +429,12 @@ export const EntityFieldInput = <T extends Record<string, any>>({
         "noTypesFoundMsg",
         "No types found. Please check your configuration."
       ),
-    });
+    };
   }, [typeSelectorConfig]);
 
-  const entityFieldSelector = React.useMemo(() => {
+  const entityFieldSelector = React.useMemo<
+    BasicSelectorField | undefined
+  >(() => {
     // If a selectedType is provided, filter the entity fields by that type.
     // If optionValueToEntityFieldType is provided, use it to map the selectedType to an EntityFieldType.
     // Otherwise, use the selectedType directly.
@@ -445,10 +449,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
             typeSelectorConfig.optionValueToEntityFieldType[value.selectedType];
         } else {
           // If the selected type does not map to any entity field type, hide the selector.
-          return {
-            type: "custom",
-            render: () => <></>,
-          } satisfies CustomField<undefined>;
+          return;
         }
       } else {
         selectedEntityFieldType = value.selectedType;
@@ -474,19 +475,26 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       ...entityFieldOptions,
     ];
 
-    return BasicSelector({
+    return {
+      type: "basicSelector",
       label: typeSelectorConfig?.fieldLabel,
       options,
       translateOptions: false,
       noOptionsPlaceholder: pt("noAvailableFields", "No available fields"),
-    });
-  }, [entityFields, filter, value?.selectedType]);
+    };
+  }, [
+    entityFields,
+    filter,
+    templateMetadata.entityTypeDisplayName,
+    typeSelectorConfig,
+    value?.selectedType,
+  ]);
 
   return (
     <div className={"ve-inline-block ve-w-full " + className}>
-      {typeSelectorConfig && (
-        <AutoField
-          field={typeSelector!}
+      {typeSelectorConfig && typeSelector && (
+        <YextAutoField
+          field={typeSelector}
           onChange={(selectedType, uiState) => {
             onChange(
               {
@@ -500,20 +508,22 @@ export const EntityFieldInput = <T extends Record<string, any>>({
           value={value?.selectedType}
         />
       )}
-      <AutoField
-        key={value?.selectedType}
-        field={entityFieldSelector}
-        onChange={(selectedEntityField, uiState) => {
-          onChange(
-            {
-              ...value,
-              field: selectedEntityField,
-            },
-            uiState
-          );
-        }}
-        value={value?.field}
-      />
+      {entityFieldSelector && (
+        <YextAutoField
+          key={value?.selectedType}
+          field={entityFieldSelector}
+          onChange={(selectedEntityField, uiState) => {
+            onChange(
+              {
+                ...value,
+                field: selectedEntityField,
+              },
+              uiState
+            );
+          }}
+          value={value?.field}
+        />
+      )}
     </div>
   );
 };

@@ -13,7 +13,7 @@ export type ComboboxOptionGroup = {
 
 export type ComboboxProps = {
   selectedOption: ComboboxOption;
-  onChange: (value: string) => void;
+  onChange: (value: any) => void;
   optionGroups: Array<ComboboxOptionGroup>;
   disabled?: boolean;
   disableSearch?: boolean;
