@@ -49,27 +49,27 @@ export const ThemeFieldsSidebar = ({
       ),
     };
 
-    if (customFonts) {
-      const customFontAssets = buildCustomFontAssets({
-        themeConfig,
-        themeValues: newThemeValues,
-        customFonts,
-      });
-      if (
-        customFontAssets.stylesheetPaths.length > 0 ||
-        customFontAssets.preloads.length > 0
-      ) {
-        newThemeValues = {
-          ...newThemeValues,
-          [CUSTOM_FONT_ASSETS_KEY]: customFontAssets,
-        };
-      } else {
-        newThemeValues = removeCustomFontAssets(newThemeValues);
-      }
+    if (!customFonts) {
+      newThemeValues = removeCustomFontAssets(newThemeValues);
+      onThemeChange(newThemeValues);
+      return;
+    }
+
+    const customFontAssets = buildCustomFontAssets({
+      themeConfig,
+      themeValues: newThemeValues,
+      customFonts,
+    });
+    if (
+      customFontAssets.stylesheetPaths.length > 0 ||
+      customFontAssets.preloads.length > 0
+    ) {
+      newThemeValues = {
+        ...newThemeValues,
+        [CUSTOM_FONT_ASSETS_KEY]: customFontAssets,
+      };
     } else {
-      if (CUSTOM_FONT_ASSETS_KEY in newThemeValues) {
-        newThemeValues = removeCustomFontAssets(newThemeValues);
-      }
+      newThemeValues = removeCustomFontAssets(newThemeValues);
     }
 
     onThemeChange(newThemeValues);

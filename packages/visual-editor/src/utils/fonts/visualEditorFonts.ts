@@ -63,6 +63,23 @@ export type FontLinkData = {
   crossOrigin?: "anonymous" | "use-credentials";
 };
 
+const isNormalizedAssetPath = (path: string): boolean => {
+  return (
+    path.startsWith("http://") ||
+    path.startsWith("https://") ||
+    path.startsWith("/") ||
+    path.startsWith("./") ||
+    path.startsWith("../")
+  );
+};
+
+export const normalizeAssetPath = (
+  path: string,
+  relativePrefixToRoot: string
+): string => {
+  return isNormalizedAssetPath(path) ? path : `${relativePrefixToRoot}${path}`;
+};
+
 // Helper function to generate weight parameter for Google Fonts API
 const generateWeightParam = (fontDetails: Font): string => {
   if ("weights" in fontDetails) {
@@ -131,14 +148,7 @@ export const generateCustomFontLinkData = (
   relativePrefixToRoot: string
 ): FontLinkData[] => {
   return facePaths.map((facePath) => ({
-    href:
-      facePath.startsWith("http://") ||
-      facePath.startsWith("https://") ||
-      facePath.startsWith("/") ||
-      facePath.startsWith("./") ||
-      facePath.startsWith("../")
-        ? facePath
-        : `${relativePrefixToRoot}${facePath}`,
+    href: normalizeAssetPath(facePath, relativePrefixToRoot),
     rel: "stylesheet",
   }));
 };
@@ -368,6 +378,37 @@ const filterFontStyles = (
     : styleOptions.filter((style) => style.value === "normal");
 };
 
+const extractFontFamilyName = (value: string): string => {
+  const firstFont = value.split(",")[0];
+  return firstFont.trim().replace(/^['"]|['"]$/g, "");
+};
+
+const resolveFontFamilyValue = (
+  value: string,
+  data: Record<string, unknown>
+): string => {
+  let currentValue = value;
+  for (let i = 0; i < 2; i++) {
+    const match = currentValue.match(variableFontRegex);
+    if (!match) {
+      break;
+    }
+    const resolved = data[match[1]];
+    if (typeof resolved !== "string" || resolved.length === 0) {
+      break;
+    }
+    currentValue = resolved;
+  }
+  return currentValue;
+};
+
+export const getFontFamilyFromThemeValue = (
+  value: string,
+  data: Record<string, unknown>
+): string => {
+  return extractFontFamilyName(resolveFontFamilyValue(value, data));
+};
+
 const getFontNameFromStyleElement = (
   styleElement: HTMLStyleElement,
   fontCssVariable?: string
@@ -400,8 +441,7 @@ const getFontNameFromStyleElement = (
       const variableValue = styleContent.match(variableRegex)?.[1];
       if (variableValue) {
         const cleanedValue = variableValue.replace(/!important/g, "").trim();
-        const firstFont = cleanedValue.split(",")[0];
-        fontName = firstFont.trim().replace(/^['"]|['"]$/g, "");
+        fontName = extractFontFamilyName(cleanedValue);
       }
     }
   }
@@ -414,26 +454,6 @@ const getFontNameFromStyleElement = (
  */
 export const extractFontFamiliesFromTheme = (data: ThemeData): string[] => {
   const fontFamilies = new Set<string>();
-  // Resolve "Default font" references like var(--fontFamily-headers-defaultFont)
-  // so we load the actual font used for headers.
-  const resolveFontFamilyValue = (value: string): string => {
-    let currentValue = value;
-    for (let i = 0; i < 2; i++) {
-      // Shallow resolution avoids cyclical font references.
-      // Only fonts with one level of depth in their references (like "Default font")
-      // will be resolved, which is sufficient for our use case.
-      const match = currentValue.match(variableFontRegex);
-      if (!match) {
-        break;
-      }
-      const resolved = data[match[1]];
-      if (typeof resolved !== "string" || resolved.length === 0) {
-        break;
-      }
-      currentValue = resolved;
-    }
-    return currentValue;
-  };
 
   // Iterate over all the keys in the theme data to find font names.
   for (const key in data) {
@@ -443,11 +463,7 @@ export const extractFontFamiliesFromTheme = (data: ThemeData): string[] => {
       // key / value looks like "--fontFamily-h1-fontFamily": "'Open Sans', sans-serif"
       // parses fontName from the value
       if (typeof value === "string" && value.length > 0) {
-        // Replace var(...) values with the actual font family string.
-        const resolvedValue = resolveFontFamilyValue(value);
-        const firstFont = resolvedValue.split(",")[0];
-        const cleanedFontName = firstFont.trim().replace(/^['"]|['"]$/g, "");
-        fontFamilies.add(cleanedFontName);
+        fontFamilies.add(getFontFamilyFromThemeValue(value, data));
       }
     }
   }

@@ -27,6 +27,31 @@ export const THEME_STYLE_TAG_ID = "visual-editor-theme";
 export const PUCK_PREVIEW_IFRAME_ID = "preview-frame";
 const devLogger = new DevLogger();
 
+const resolveFontsToLoad = (
+  themeValues: ThemeData,
+  themeConfig: ThemeConfig,
+  customFonts: FontRegistry = {}
+) => {
+  const mergedThemeData = {
+    ...generateCssVariablesFromThemeConfig(themeConfig),
+    ...themeValues,
+  };
+  const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
+    mergedThemeData,
+    defaultFonts,
+    customFonts
+  );
+
+  return {
+    inUseGoogleFonts,
+    inUseCustomFonts,
+    googleFontsToLoad:
+      Object.keys(inUseGoogleFonts).length === 0
+        ? { "Open Sans": defaultFonts["Open Sans"] }
+        : inUseGoogleFonts,
+  };
+};
+
 export const applyTheme = (
   document: StreamDocument,
   relativePrefixToRoot: string,
@@ -58,24 +83,13 @@ export const applyTheme = (
       "Open Sans": defaultFonts["Open Sans"],
     });
   } else {
-    // Extract fonts from both published theme data AND default theme values
-    // This ensures we get all fonts that are actually used, not just the ones that were explicitly changed
-    const defaultThemeValues = generateCssVariablesFromThemeConfig(themeConfig);
-    const mergedThemeData = { ...defaultThemeValues, ...overrides };
-    const { inUseGoogleFonts } = filterInUseFontRegistries(
-      mergedThemeData,
-      defaultFonts
+    const { inUseGoogleFonts, googleFontsToLoad } = resolveFontsToLoad(
+      overrides,
+      themeConfig
     );
     const customFontAssets = getCustomFontAssets(overrides);
 
-    if (Object.keys(inUseGoogleFonts).length === 0) {
-      // No fonts found in theme data, use only Open Sans
-      fontLinkData = generateGoogleFontLinkData({
-        "Open Sans": defaultFonts["Open Sans"],
-      });
-    } else {
-      fontLinkData = generateGoogleFontLinkData(inUseGoogleFonts);
-    }
+    fontLinkData = generateGoogleFontLinkData(googleFontsToLoad);
     fontLinkData = [
       ...generateCustomFontLinkData(
         customFontAssets.stylesheetPaths,
@@ -195,11 +209,9 @@ export const updateThemeInEditor = async (
   devLogger.logFunc("updateThemeInEditor");
   pendingObserver?.disconnect();
 
-  const defaultThemeValues = generateCssVariablesFromThemeConfig(themeConfig);
-  const mergedThemeData = { ...defaultThemeValues, ...newTheme };
-  const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
-    mergedThemeData,
-    defaultFonts,
+  const { inUseCustomFonts, googleFontsToLoad } = resolveFontsToLoad(
+    newTheme,
+    themeConfig,
     customFonts
   );
 
@@ -212,16 +224,11 @@ export const updateThemeInEditor = async (
   // In the theme editor, all fonts are already loaded
   // In the layout editor, we need to load the in-use fonts after the Puck iframe has loaded
   if (!isThemeMode) {
-    let fontsToLoad: FontRegistry;
-    if (Object.keys(inUseGoogleFonts).length === 0) {
-      fontsToLoad = {
-        "Open Sans": defaultFonts["Open Sans"],
-      };
-    } else {
-      fontsToLoad = inUseGoogleFonts;
-    }
-
-    updateFontLinksInDocument(window.document, fontsToLoad, inUseCustomFonts);
+    updateFontLinksInDocument(
+      window.document,
+      googleFontsToLoad,
+      inUseCustomFonts
+    );
 
     const observer = new MutationObserver(() => {
       const iframe = document.getElementById(
@@ -236,7 +243,7 @@ export const updateThemeInEditor = async (
         pagePreviewStyleTag.innerText = newThemeTag;
         updateFontLinksInDocument(
           iframe.contentDocument!,
-          fontsToLoad,
+          googleFontsToLoad,
           inUseCustomFonts
         );
       }

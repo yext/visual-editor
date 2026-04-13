@@ -2,6 +2,8 @@ import {
   type FontRegistry,
   type Font,
   type Variant,
+  getFontFamilyFromThemeValue,
+  normalizeAssetPath,
 } from "../../utils/fonts/visualEditorFonts.ts";
 import { ThemeConfig } from "../../utils/themeResolver.ts";
 import { ThemeData } from "../types/themeData.ts";
@@ -20,13 +22,6 @@ export const CUSTOM_FONT_ASSETS_KEY = "__customFontAssets";
 export type CustomFontAssets = {
   stylesheetPaths: string[];
   preloads: string[];
-};
-
-const stripQuotes = (value: string) => value.trim().replace(/^['"]|['"]$/g, "");
-
-const extractFontFamilyName = (value: string): string => {
-  const firstFont = value.split(",")[0];
-  return stripQuotes(firstFont);
 };
 
 const getMergedThemeValues = (
@@ -86,7 +81,10 @@ export const buildCustomFontAssets = ({
       return;
     }
 
-    const fontFamily = extractFontFamilyName(fontFamilyValue);
+    const fontFamily = getFontFamilyFromThemeValue(
+      fontFamilyValue,
+      mergedThemeValues
+    );
     const customFont = customFonts[fontFamily];
     if (!customFont) {
       return;
@@ -180,16 +178,7 @@ export const buildFontPreloadTags = (
   return (
     preloads
       .map((href) => {
-        const normalizedHref =
-          href.startsWith("http://") ||
-          href.startsWith("https://") ||
-          href.startsWith("/") ||
-          href.startsWith("./") ||
-          href.startsWith("../")
-            ? href
-            : `${relativePrefixToRoot}${href}`;
-
-        return `<link rel="preload" href="${normalizedHref}" as="font" type="font/woff2" crossorigin="anonymous">`;
+        return `<link rel="preload" href="${normalizeAssetPath(href, relativePrefixToRoot)}" as="font" type="font/woff2" crossorigin="anonymous">`;
       })
       .join("\n") + "\n"
   );
