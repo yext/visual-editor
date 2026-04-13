@@ -24,17 +24,47 @@ export type MigrationAction =
         streamDocument: StreamDocument
       ) => { id: string } & Record<string, any>;
     };
+
+type ContentMigrationAction = {
+  transformation: (content: Data["content"]) => Data["content"];
+};
+
+type RootMigrationAction = {
+  propTransformation: (
+    oldProps: Record<string, any>,
+    streamDocument: StreamDocument
+  ) => Record<string, any>;
+};
+
 export type Migration =
   | Record<string, MigrationAction>
   | {
-      root: {
-        propTransformation: (
-          oldProps: Record<string, any>,
-          streamDocument: StreamDocument
-        ) => Record<string, any>;
-      };
+      content: ContentMigrationAction;
+    }
+  | {
+      root: RootMigrationAction;
     };
 export type MigrationRegistry = Migration[];
+
+const isContentMigration = (
+  migrationAction: unknown
+): migrationAction is ContentMigrationAction => {
+  return (
+    typeof migrationAction === "object" &&
+    migrationAction !== null &&
+    "transformation" in migrationAction
+  );
+};
+
+const isRootMigration = (
+  migrationAction: unknown
+): migrationAction is RootMigrationAction => {
+  return (
+    typeof migrationAction === "object" &&
+    migrationAction !== null &&
+    "propTransformation" in migrationAction
+  );
+};
 
 interface RootProps extends DefaultRootProps {
   props?: {
@@ -60,7 +90,12 @@ export const migrate = (
 
   migrationsToApply.forEach((migration) => {
     Object.entries(migration).forEach(([componentName, migrationAction]) => {
-      if (componentName === "root") {
+      if (componentName === "content" && isContentMigration(migrationAction)) {
+        data.content = migrationAction.transformation(data.content);
+        return;
+      }
+
+      if (componentName === "root" && isRootMigration(migrationAction)) {
         if (!data.root.props) {
           data.root.props = {};
         }

@@ -107,7 +107,7 @@ const ExpandedHeaderWrapper: PuckComponent<ExpandedHeaderProps> = ({
 }) => {
   return (
     <ExpandedHeaderMenuProvider>
-      <div className={headerWrapper({ position: styles.headerPosition })}>
+      <header className={headerWrapper({ position: styles.headerPosition })}>
         {/* Secondary Header (Top Bar) */}
         <div className="hidden md:flex">
           <slots.SecondaryHeaderSlot
@@ -119,7 +119,7 @@ const ExpandedHeaderWrapper: PuckComponent<ExpandedHeaderProps> = ({
         <slots.PrimaryHeaderSlot
           style={{ height: "auto", position: "relative" }}
         />
-      </div>
+      </header>
     </ExpandedHeaderMenuProvider>
   );
 };

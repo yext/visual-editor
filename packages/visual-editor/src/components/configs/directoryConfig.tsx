@@ -22,6 +22,7 @@ import {
 } from "../categories/SlotsCategory.tsx";
 import { resolveDirectoryRootProps } from "../../utils/getPageMetadata.ts";
 import { pt } from "../../utils/i18n/platform.ts";
+import { MainContent, MainContentProps } from "../structure/MainContent.tsx";
 
 export interface DirectoryConfigProps
   extends DirectoryCategoryProps,
@@ -29,17 +30,27 @@ export interface DirectoryConfigProps
     DeprecatedCategoryProps,
     OtherCategoryProps {
   BannerSection: BannerSectionProps;
+  MainContent: MainContentProps;
 }
+
+const rootAllowedComponents = [
+  "ExpandedHeader",
+  "ExpandedFooter",
+  "MainContent",
+];
+
+const components: Config<DirectoryConfigProps>["components"] = {
+  ...DirectoryCategoryComponents,
+  ...SlotsCategoryComponents,
+  ...DeprecatedCategoryComponents,
+  ...OtherCategoryComponents,
+  BannerSection,
+  MainContent,
+};
 
 // The config used for all levels of directory pages
 export const directoryConfig: Config<DirectoryConfigProps> = {
-  components: {
-    ...DirectoryCategoryComponents,
-    ...SlotsCategoryComponents,
-    ...DeprecatedCategoryComponents,
-    ...OtherCategoryComponents,
-    BannerSection,
-  },
+  components,
   categories: {
     pageSections: {
       title: pt("categories.standardSections", "Standard Sections"),
@@ -47,6 +58,10 @@ export const directoryConfig: Config<DirectoryConfigProps> = {
     },
     slots: {
       components: SlotsCategory,
+      visible: false,
+    },
+    structure: {
+      components: ["MainContent"],
       visible: false,
     },
     // deprecated components are hidden in the sidebar but still render if used in the page
@@ -78,6 +93,9 @@ export const directoryConfig: Config<DirectoryConfigProps> = {
             flexDirection: "column",
             minHeight: "100vh",
           }}
+          disallow={Object.keys(components).filter(
+            (componentName) => !rootAllowedComponents.includes(componentName)
+          )}
         />
       );
     },
