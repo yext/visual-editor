@@ -11,15 +11,14 @@ import { generateCssVariablesFromThemeConfig } from "./internalThemeResolver.ts"
  * Custom font asset flow:
  * 1. Merge default theme values with the current edited theme values.
  * 2. Find each custom font family referenced by the merged theme font-family variables.
- * 3. Collect the matching `facePath` values for stylesheet loading.
+ * 3. Collect the matching stylesheet paths for loading.
  * 4. Match each referenced family's style/weight selection to a variant `filePath` for preloading.
  * 5. Save those resolved asset lists back into theme data for runtime use.
  */
-export const CUSTOM_FONT_PRELOADS_KEY = "__customFontPreloads";
-export const CUSTOM_FONTS_KEY = "__customFonts";
+export const CUSTOM_FONT_ASSETS_KEY = "__customFontAssets";
 
 export type CustomFontAssets = {
-  facePaths: string[];
+  stylesheetPaths: string[];
   preloads: string[];
 };
 
@@ -70,7 +69,7 @@ export const buildCustomFontAssets = ({
   customFonts: FontRegistry;
 }): CustomFontAssets => {
   const mergedThemeValues = getMergedThemeValues(themeConfig, themeValues);
-  const facePaths = new Set<string>();
+  const stylesheetPaths = new Set<string>();
   const preloads: string[] = [];
   const seen = new Set<string>();
 
@@ -94,7 +93,7 @@ export const buildCustomFontAssets = ({
     }
 
     if (customFont.facePath) {
-      facePaths.add(customFont.facePath);
+      stylesheetPaths.add(customFont.facePath);
     }
 
     const weightValue =
@@ -118,63 +117,53 @@ export const buildCustomFontAssets = ({
   });
 
   return {
-    facePaths: [...facePaths],
+    stylesheetPaths: [...stylesheetPaths],
     preloads,
   };
 };
 
 /**
- * Removes saved custom font preload URLs from theme data before re-saving.
+ * Removes saved custom font assets from theme data before re-saving.
  */
-export const removeCustomFontPreloads = (themeValues: ThemeData): ThemeData => {
-  if (!(CUSTOM_FONT_PRELOADS_KEY in themeValues)) {
+export const removeCustomFontAssets = (themeValues: ThemeData): ThemeData => {
+  if (!(CUSTOM_FONT_ASSETS_KEY in themeValues)) {
     return themeValues;
   }
 
   const rest = { ...themeValues };
-  delete rest[CUSTOM_FONT_PRELOADS_KEY];
+  delete rest[CUSTOM_FONT_ASSETS_KEY];
   return rest;
 };
 
 /**
- * Removes saved custom font stylesheet paths from theme data before re-saving.
+ * Reads the saved custom font assets from theme data.
  */
-export const removeCustomFonts = (themeValues: ThemeData): ThemeData => {
-  if (!(CUSTOM_FONTS_KEY in themeValues)) {
-    return themeValues;
-  }
-
-  const rest = { ...themeValues };
-  delete rest[CUSTOM_FONTS_KEY];
-  return rest;
-};
-
-/**
- * Reads the saved custom font preload URLs from theme data.
- */
-export const getCustomFontPreloads = (
+export const getCustomFontAssets = (
   themeValues: ThemeData | undefined
-): string[] => {
+): CustomFontAssets => {
   if (!themeValues) {
-    return [];
+    return {
+      stylesheetPaths: [],
+      preloads: [],
+    };
   }
 
-  const preloads = themeValues[CUSTOM_FONT_PRELOADS_KEY];
-  return Array.isArray(preloads) ? preloads.filter(Boolean) : [];
-};
-
-/**
- * Reads the saved custom font stylesheet paths from theme data.
- */
-export const getCustomFacePaths = (
-  themeValues: ThemeData | undefined
-): string[] => {
-  if (!themeValues) {
-    return [];
+  const assets = themeValues[CUSTOM_FONT_ASSETS_KEY];
+  if (!assets || typeof assets !== "object") {
+    return {
+      stylesheetPaths: [],
+      preloads: [],
+    };
   }
 
-  const customFonts = themeValues[CUSTOM_FONTS_KEY];
-  return Array.isArray(customFonts) ? customFonts.filter(Boolean) : [];
+  return {
+    stylesheetPaths: Array.isArray((assets as CustomFontAssets).stylesheetPaths)
+      ? (assets as CustomFontAssets).stylesheetPaths.filter(Boolean)
+      : [],
+    preloads: Array.isArray((assets as CustomFontAssets).preloads)
+      ? (assets as CustomFontAssets).preloads.filter(Boolean)
+      : [],
+  };
 };
 
 /**

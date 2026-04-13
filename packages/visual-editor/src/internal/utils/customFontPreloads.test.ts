@@ -145,7 +145,10 @@ describe("buildCustomFontAssets", () => {
       customFonts,
     });
 
-    expect(assets.facePaths).toEqual(["y-fonts/alpha.css", "y-fonts/beta.css"]);
+    expect(assets.stylesheetPaths).toEqual([
+      "y-fonts/alpha.css",
+      "y-fonts/beta.css",
+    ]);
     expect(assets.preloads).toEqual([
       "/y-fonts/alpha-bold.woff2",
       "/y-fonts/beta-regular.woff2",
@@ -187,7 +190,7 @@ describe("buildCustomFontAssets", () => {
       customFonts,
     });
 
-    expect(assets.facePaths).toEqual(["y-fonts/gamma.css"]);
+    expect(assets.stylesheetPaths).toEqual(["y-fonts/gamma.css"]);
     expect(assets.preloads).toEqual(["/y-fonts/gamma-variable-italic.woff2"]);
   });
 
@@ -332,7 +335,7 @@ describe("buildCustomFontAssets", () => {
             variants: [],
           },
         },
-      }).facePaths
+      }).stylesheetPaths
     ).toEqual(["y-fonts/alpha.css"]);
   });
 
@@ -396,7 +399,7 @@ describe("buildCustomFontAssets", () => {
             variants: [],
           },
         },
-      }).facePaths
+      }).stylesheetPaths
     ).toEqual(["y-fonts/alpha.css"]);
   });
 

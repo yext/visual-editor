@@ -16,8 +16,7 @@ import {
 } from "./fonts/visualEditorFonts.ts";
 import {
   buildFontPreloadTags,
-  getCustomFacePaths,
-  getCustomFontPreloads,
+  getCustomFontAssets,
 } from "../internal/utils/customFontPreloads.ts";
 import { ThemeConfig } from "./themeResolver.ts";
 import { getContrastingColor } from "./colors.ts";
@@ -67,7 +66,7 @@ export const applyTheme = (
       mergedThemeData,
       defaultFonts
     );
-    const customFacePaths = getCustomFacePaths(overrides);
+    const customFontAssets = getCustomFontAssets(overrides);
 
     if (Object.keys(inUseGoogleFonts).length === 0) {
       // No fonts found in theme data, use only Open Sans
@@ -78,7 +77,10 @@ export const applyTheme = (
       fontLinkData = generateGoogleFontLinkData(inUseGoogleFonts);
     }
     fontLinkData = [
-      ...generateCustomFontLinkData(customFacePaths, relativePrefixToRoot),
+      ...generateCustomFontLinkData(
+        customFontAssets.stylesheetPaths,
+        relativePrefixToRoot
+      ),
       ...fontLinkData,
     ];
 
@@ -97,8 +99,9 @@ export const applyTheme = (
   const fontLinkTags = fontLinkDataToHTML(fontLinkData);
 
   if (Object.keys(themeConfig).length > 0) {
+    const customFontAssets = getCustomFontAssets(overrides);
     const preloadTags = buildFontPreloadTags(
-      getCustomFontPreloads(overrides),
+      customFontAssets.preloads,
       relativePrefixToRoot
     );
 
