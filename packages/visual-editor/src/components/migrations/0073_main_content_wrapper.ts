@@ -9,6 +9,7 @@ export const mainContentWrapperMigration: Migration = {
       );
       const preservedOutsideMain = new Set<number>();
 
+      // Keep top-level headers and footers outside MainContent; only pre-header custom code stays there too.
       content.forEach((component, index) => {
         const isHeader =
           component.type === "ExpandedHeader" || component.type === "Header";
