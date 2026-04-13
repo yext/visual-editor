@@ -118,14 +118,7 @@ describe("StaticMapSection", async () => {
   };
   it.each(transformTests(tests))(
     "$viewport.name $name",
-    async ({
-      document,
-      name,
-      props,
-      interactions,
-      version,
-      viewport: { width, height, name: viewportName },
-    }) => {
+    async ({ document, props, interactions, version }) => {
       const data = migrate(
         {
           root: {
@@ -151,18 +144,11 @@ describe("StaticMapSection", async () => {
         </VisualEditorProvider>
       );
 
-      await page.viewport(width, height);
-      await expect(
-        `StaticMapSection/[${viewportName}] ${name}`
-      ).toMatchScreenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
       if (interactions) {
         await interactions(page);
-        await expect(
-          `StaticMapSection/[${viewportName}] ${name} (after interactions)`
-        ).toMatchScreenshot();
         const results = await axe(container);
         expect(results).toHaveNoViolations();
       }

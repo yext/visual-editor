@@ -92,6 +92,7 @@ import {
   getEntityTypeLabel,
 } from "../utils/locatorEntityTypes.ts";
 import { YextComponentConfig, YextFields } from "../fields/fields.ts";
+import { isVisualEditorTestEnv } from "./testing/utils.ts";
 
 const RESULTS_LIMIT = 20;
 const LOCATION_FIELD = "builtin.location";
@@ -118,47 +119,6 @@ const TEST_MAP_PIN_POSITIONS = [
   { left: "62%", top: "74%" },
   { left: "84%", top: "34%" },
 ];
-
-const isVisualEditorTestEnv = () =>
-  (typeof __VISUAL_EDITOR_TEST__ !== "undefined" &&
-    __VISUAL_EDITOR_TEST__ === true) ||
-  (globalThis as any).__VISUAL_EDITOR_TEST__ === true;
-
-const formatMapStyleLabel = (mapStyle?: string) => {
-  const rawStyle = mapStyle?.split("/").pop() ?? "streets-v12";
-  return rawStyle
-    .replace(/-v\d+$/, "")
-    .replace(/-/g, " ")
-    .replace(/\b\w/g, (char) => char.toUpperCase());
-};
-
-const getLocatorTestMapBackground = (mapStyle?: string) => {
-  if (!mapStyle) {
-    return "linear-gradient(135deg, #dcfce7 0%, #dbeafe 55%, #fde68a 100%)";
-  }
-
-  if (mapStyle.includes("satellite")) {
-    return "linear-gradient(135deg, #14532d 0%, #166534 45%, #0369a1 100%)";
-  }
-
-  if (mapStyle.includes("navigation-night")) {
-    return "linear-gradient(135deg, #111827 0%, #1f2937 55%, #0f766e 100%)";
-  }
-
-  if (mapStyle.includes("navigation-day")) {
-    return "linear-gradient(135deg, #dbeafe 0%, #bfdbfe 40%, #86efac 100%)";
-  }
-
-  if (mapStyle.includes("dark")) {
-    return "linear-gradient(135deg, #0f172a 0%, #1e293b 55%, #334155 100%)";
-  }
-
-  if (mapStyle.includes("light")) {
-    return "linear-gradient(135deg, #f8fafc 0%, #e5e7eb 55%, #dbeafe 100%)";
-  }
-
-  return "linear-gradient(135deg, #dcfce7 0%, #dbeafe 55%, #fde68a 100%)";
-};
 
 const getConfiguredMapCenterOrDefault = (mapStartingLocation?: {
   latitude: string;
@@ -1067,19 +1027,14 @@ const LoadingMapPlaceholder = () => {
   );
 };
 
-const LocatorTestMap = ({
-  mapStyle,
-  results,
-  locationStyleConfig,
-}: {
-  mapStyle?: string;
-  results: Result<Location>[];
-  locationStyleConfig?: Record<string, { color?: ThemeColor; icon?: string }>;
-}) => {
+const LocatorTestMap = () => {
   return (
     <div
       className="relative h-full w-full overflow-hidden"
-      style={{ background: getLocatorTestMapBackground(mapStyle) }}
+      style={{
+        background:
+          "linear-gradient(135deg, #dcfce7 0%, #dbeafe 55%, #fde68a 100%)",
+      }}
     >
       <div
         aria-hidden="true"
@@ -1091,35 +1046,6 @@ const LocatorTestMap = ({
           backgroundSize: "48px 48px",
         }}
       />
-      <div className="absolute left-4 top-4 rounded-lg bg-white/85 px-3 py-2 shadow">
-        <Body variant="base" className="font-bold text-slate-900">
-          {formatMapStyleLabel(mapStyle)}
-        </Body>
-        <Body variant="sm" className="text-slate-700">
-          {`${results.length} pinned locations`}
-        </Body>
-      </div>
-      {results.slice(0, TEST_MAP_PIN_POSITIONS.length).map((result, index) => {
-        const position = TEST_MAP_PIN_POSITIONS[index];
-        const styleConfig = result.entityType
-          ? locationStyleConfig?.[result.entityType]
-          : undefined;
-
-        return (
-          <div
-            key={result.id ?? `${result.index}-${index}`}
-            className="absolute -translate-x-1/2 -translate-y-full"
-            style={position}
-          >
-            <MapPinIcon
-              color={styleConfig?.color}
-              icon={styleConfig?.icon}
-              resultIndex={result.index}
-              selected={false}
-            />
-          </div>
-        );
-      })}
     </div>
   );
 };
@@ -2070,13 +1996,7 @@ const Map: React.FC<MapProps> = ({
   );
 
   if (isVisualEditorTestEnv()) {
-    return (
-      <LocatorTestMap
-        mapStyle={mapStyle}
-        results={results}
-        locationStyleConfig={locationStyleConfig}
-      />
-    );
+    return <LocatorTestMap />;
   }
 
   // During page generation we don't exist in a browser context
