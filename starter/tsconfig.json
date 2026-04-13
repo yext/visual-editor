@@ -9,7 +9,8 @@
     "outDir": "./dist",
     "module": "esnext",
     "skipLibCheck": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "types": ["vite/client"]
   },
   "include": ["src", "global.d.ts"],
   "exclude": ["../node_modules", "node_modules"]

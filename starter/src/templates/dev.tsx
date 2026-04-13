@@ -1,4 +1,7 @@
-import "@yext/visual-editor/editor.css";
+import React from "react";
+import { Data, Render } from "@puckeditor/core";
+import * as lzstring from "lz-string";
+import { MantineProvider } from "@mantine/core";
 import {
   GetHeadConfig,
   GetPath,
@@ -9,7 +12,6 @@ import {
   TemplateRenderProps,
   TransformProps,
 } from "@yext/pages";
-import { componentRegistry } from "../ve.config";
 import {
   applyTheme,
   Editor,
@@ -21,14 +23,12 @@ import {
   getSchema,
   injectTranslations,
 } from "@yext/visual-editor";
+import { SchemaWrapper } from "@yext/pages-components";
+import "@yext/visual-editor/editor.css";
+import "@mantine/core/styles.css";
+import { componentRegistry } from "../ve.config";
 import tailwindConfig from "../../tailwind.config";
 import { devTemplateStream } from "../dev.config";
-import React from "react";
-import { SchemaWrapper } from "@yext/pages-components";
-import { Data, Render } from "@puckeditor/core";
-import * as lzstring from "lz-string";
-import "@mantine/core/styles.css";
-import { MantineProvider } from "@mantine/core";
 
 const EMPTY_PUCK_DATA: Data = {
   root: {},
@@ -57,9 +57,18 @@ const getVisualConfigLocalStorageKeyForDev = (): string | null => {
     return null;
   }
 
-  const cleanUrl = window.location.href.split("?")[0];
-  const layoutHash = hashCode(cleanUrl);
-  return `devTEMPLATE_devLAYOUT_${layoutHash}`;
+  const templateId = "dev";
+  const locale = "en";
+  const editorUrl = new URL(window.location.href);
+  editorUrl.searchParams.delete("preview");
+
+  const layoutScopeKey = JSON.stringify({
+    templateId,
+    entityId: editorUrl.toString(),
+    locale,
+  });
+
+  return `devTEMPLATE_${templateId}LAYOUT_${hashCode(layoutScopeKey)}`;
 };
 
 const readCurrentPuckDataFromHistory = (storageKey: string | null): Data => {
@@ -212,6 +221,7 @@ export const getPath: GetPath<TemplateProps> = ({ document }) => {
 
 const Dev: Template<TemplateRenderProps> = (props) => {
   const [themeMode, setThemeMode] = React.useState<boolean>(false);
+  const [isPreviewMode, setIsPreviewMode] = React.useState<boolean>(false);
   const [currentPuckData, setCurrentPuckData] =
     React.useState<Data>(EMPTY_PUCK_DATA);
   const { document } = props;
@@ -222,15 +232,23 @@ const Dev: Template<TemplateRenderProps> = (props) => {
     string,
     string
   >;
-  const isPreviewMode =
-    typeof window !== "undefined" &&
-    new URLSearchParams(window.location.search).get("vePreview") === "1";
   const previewStorageKey = React.useMemo(
     () => getVisualConfigLocalStorageKeyForDev(),
     [],
   );
 
   React.useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    setIsPreviewMode(
+      new URLSearchParams(window.location.search).get("preview") === "true",
+    );
+  }, []);
+
+  React.useEffect(() => {
+    // Keep puck data synced with localstorage
     if (!isPreviewMode || typeof window === "undefined") {
       return;
     }
@@ -259,14 +277,14 @@ const Dev: Template<TemplateRenderProps> = (props) => {
     }
 
     const previewUrl = new URL(window.location.href);
-    previewUrl.searchParams.set("vePreview", "1");
+    previewUrl.searchParams.set("preview", "true");
     window.location.assign(previewUrl.toString());
   };
 
   return (
     <div>
       {!isPreviewMode && (
-        <div className={"flex-container"}>
+        <div className={"flex-container gap-2"}>
           <>
             <button
               className={"toggle-button"}
@@ -274,7 +292,7 @@ const Dev: Template<TemplateRenderProps> = (props) => {
                 setThemeMode(!themeMode);
               }}
             >
-              {themeMode ? "Theme Mode" : "Layout Mode"}
+              {themeMode ? "Load Layout Editor" : "Load Theme Editor"}
             </button>
             <button className={"toggle-button"} onClick={openPreview}>
               Open Preview
