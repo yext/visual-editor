@@ -1,5 +1,18 @@
 import { Migration } from "../../utils/migrate.ts";
 
+// Keep only leading header content and trailing footer content at the root.
+//
+// This migration looks for:
+// - a leading prefix made of CustomCodeSection followed by Header or
+//   ExpandedHeader components
+// - a trailing suffix made of Footer or ExpandedFooter components followed by
+//   CustomCodeSection
+//
+// Those edge components stay at the root. Everything between them is wrapped
+// into MainContent, and the wrapper is inserted just before the trailing
+// footer suffix. Header/Footer components that appear in the middle of the
+// page are therefore wrapped into MainContent instead of being pulled to the
+// edges, which preserves the existing top-level order.
 export const mainContentWrapperMigration: Migration = {
   content: {
     transformation: (content) => {
@@ -9,7 +22,6 @@ export const mainContentWrapperMigration: Migration = {
         componentType === "ExpandedFooter" || componentType === "Footer";
       const isCustomCode = (componentType: string) =>
         componentType === "CustomCodeSection";
-
       let leadingRootIndex = 0;
       while (
         leadingRootIndex < content.length &&
