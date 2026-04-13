@@ -23,6 +23,7 @@ import {
 import { resolveDirectoryRootProps } from "../../utils/getPageMetadata.ts";
 import { pt } from "../../utils/i18n/platform.ts";
 import { MainContent, MainContentProps } from "../structure/MainContent.tsx";
+import { rootAllowedComponents } from "./rootAllowedComponents.ts";
 
 export interface DirectoryConfigProps
   extends DirectoryCategoryProps,
@@ -32,15 +33,6 @@ export interface DirectoryConfigProps
   BannerSection: BannerSectionProps;
   MainContent: MainContentProps;
 }
-
-const rootAllowedComponents = [
-  "ExpandedHeader",
-  "ExpandedFooter",
-  "Header",
-  "Footer",
-  "MainContent",
-  "CustomCodeSection",
-];
 
 const components: Config<DirectoryConfigProps>["components"] = {
   ...DirectoryCategoryComponents,

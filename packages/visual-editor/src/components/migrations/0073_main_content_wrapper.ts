@@ -3,28 +3,67 @@ import { Migration } from "../../utils/migrate.ts";
 export const mainContentWrapperMigration: Migration = {
   content: {
     transformation: (content) => {
-      const firstHeaderIndex = content.findIndex(
-        (component) =>
-          component.type === "ExpandedHeader" || component.type === "Header"
-      );
+      const isHeader = (componentType: string) =>
+        componentType === "ExpandedHeader" || componentType === "Header";
+      const isFooter = (componentType: string) =>
+        componentType === "ExpandedFooter" || componentType === "Footer";
+      const isCustomCode = (componentType: string) =>
+        componentType === "CustomCodeSection";
+
+      let leadingRootIndex = 0;
+      while (
+        leadingRootIndex < content.length &&
+        isCustomCode(content[leadingRootIndex].type)
+      ) {
+        leadingRootIndex++;
+      }
+
+      const firstHeaderIndex = leadingRootIndex;
+      while (
+        leadingRootIndex < content.length &&
+        isHeader(content[leadingRootIndex].type)
+      ) {
+        leadingRootIndex++;
+      }
+
+      const hasLeadingHeader = leadingRootIndex > firstHeaderIndex;
+      if (!hasLeadingHeader) {
+        leadingRootIndex = 0;
+      }
+
+      let trailingRootIndex = content.length;
+      while (
+        trailingRootIndex > leadingRootIndex &&
+        isCustomCode(content[trailingRootIndex - 1].type)
+      ) {
+        trailingRootIndex--;
+      }
+
+      const firstFooterAfterTrailingCustomCode = trailingRootIndex;
+      while (
+        trailingRootIndex > leadingRootIndex &&
+        isFooter(content[trailingRootIndex - 1].type)
+      ) {
+        trailingRootIndex--;
+      }
+
+      const hasTrailingFooter =
+        trailingRootIndex < firstFooterAfterTrailingCustomCode;
+      if (!hasTrailingFooter) {
+        trailingRootIndex = content.length;
+      }
+
       const preservedOutsideMain = new Set<number>();
 
-      // Keep top-level headers and footers outside MainContent; only pre-header custom code stays there too.
-      content.forEach((component, index) => {
-        const isHeader =
-          component.type === "ExpandedHeader" || component.type === "Header";
-        const isFooter =
-          component.type === "ExpandedFooter" || component.type === "Footer";
-        const isPreHeaderCustomCode =
-          component.type === "CustomCodeSection" &&
-          firstHeaderIndex !== -1 &&
-          index < firstHeaderIndex;
+      for (let index = 0; index < leadingRootIndex; index++) {
+        preservedOutsideMain.add(index);
+      }
 
-        if (isHeader || isFooter || isPreHeaderCustomCode) {
-          preservedOutsideMain.add(index);
-        }
-      });
+      for (let index = trailingRootIndex; index < content.length; index++) {
+        preservedOutsideMain.add(index);
+      }
 
+      // Only edge page structure stays at root so existing top-level order is preserved.
       const mainContent = content.filter(
         (_, index) => !preservedOutsideMain.has(index)
       );
@@ -37,20 +76,7 @@ export const mainContentWrapperMigration: Migration = {
         },
       };
 
-      let insertionIndex = content.findIndex(
-        (_, index) => !preservedOutsideMain.has(index)
-      );
-
-      if (insertionIndex === -1) {
-        insertionIndex = content.findIndex(
-          (component) =>
-            component.type === "ExpandedFooter" || component.type === "Footer"
-        );
-      }
-
-      if (insertionIndex === -1) {
-        insertionIndex = content.length;
-      }
+      const insertionIndex = trailingRootIndex;
 
       const transformedContent = [];
       let insertedMainContent = false;

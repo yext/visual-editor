@@ -22,6 +22,7 @@ import {
 } from "../categories/SlotsCategory.tsx";
 import { pt } from "../../utils/i18n/platform.ts";
 import { MainContent, MainContentProps } from "../structure/MainContent.tsx";
+import { rootAllowedComponents } from "./rootAllowedComponents.ts";
 
 export interface LocatorConfigProps
   extends LocatorCategoryProps,
@@ -31,15 +32,6 @@ export interface LocatorConfigProps
   BannerSection: BannerSectionProps;
   MainContent: MainContentProps;
 }
-
-const rootAllowedComponents = [
-  "ExpandedHeader",
-  "ExpandedFooter",
-  "Header",
-  "Footer",
-  "MainContent",
-  "CustomCodeSection",
-];
 
 const components: Config<LocatorConfigProps>["components"] = {
   ...LocatorCategoryComponents,

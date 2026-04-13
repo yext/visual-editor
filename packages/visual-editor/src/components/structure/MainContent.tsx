@@ -15,7 +15,15 @@ const MainContentComponent: PuckComponent<MainContentProps> = ({
         minHeight: puck.isEditing ? "400px" : undefined,
       }}
     >
-      <Content disallow={["ExpandedHeader", "ExpandedFooter", "MainContent"]} />
+      <Content
+        disallow={[
+          "ExpandedHeader",
+          "ExpandedFooter",
+          "Header",
+          "Footer",
+          "MainContent",
+        ]}
+      />
     </main>
   );
 };

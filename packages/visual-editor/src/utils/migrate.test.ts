@@ -154,6 +154,96 @@ describe("migrate", () => {
     });
   });
 
+  it("keeps non-edge headers inside MainContent to preserve content order", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+          },
+        },
+        content: [
+          { type: "BannerSection", props: { id: "banner" } },
+          { type: "ExpandedHeader", props: { id: "header" } },
+          { type: "HeroSection", props: { id: "hero" } },
+        ],
+        zones: {},
+      },
+      [mainContentWrapperMigration],
+      {
+        components: {},
+      },
+      {}
+    );
+
+    expect(migratedData).toEqual({
+      root: {
+        props: {
+          version: 1,
+        },
+      },
+      content: [
+        {
+          type: "MainContent",
+          props: {
+            id: "MainContent-default",
+            content: [
+              { type: "BannerSection", props: { id: "banner" } },
+              { type: "ExpandedHeader", props: { id: "header" } },
+              { type: "HeroSection", props: { id: "hero" } },
+            ],
+          },
+        },
+      ],
+      zones: {},
+    });
+  });
+
+  it("keeps trailing custom code outside MainContent without moving it ahead of the footer", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+          },
+        },
+        content: [
+          { type: "ExpandedHeader", props: { id: "header" } },
+          { type: "BannerSection", props: { id: "banner" } },
+          { type: "ExpandedFooter", props: { id: "footer" } },
+          { type: "CustomCodeSection", props: { id: "custom-code" } },
+        ],
+        zones: {},
+      },
+      [mainContentWrapperMigration],
+      {
+        components: {},
+      },
+      {}
+    );
+
+    expect(migratedData).toEqual({
+      root: {
+        props: {
+          version: 1,
+        },
+      },
+      content: [
+        { type: "ExpandedHeader", props: { id: "header" } },
+        {
+          type: "MainContent",
+          props: {
+            id: "MainContent-default",
+            content: [{ type: "BannerSection", props: { id: "banner" } }],
+          },
+        },
+        { type: "ExpandedFooter", props: { id: "footer" } },
+        { type: "CustomCodeSection", props: { id: "custom-code" } },
+      ],
+      zones: {},
+    });
+  });
+
   it("successfully applies migration based on document data", async () => {
     const migratedData = migrate(
       exampleBasicDataBefore,

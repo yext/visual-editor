@@ -26,6 +26,7 @@ import {
   SlotsCategoryProps,
 } from "../categories/SlotsCategory.tsx";
 import { MainContent, MainContentProps } from "../structure/MainContent.tsx";
+import { rootAllowedComponents } from "./rootAllowedComponents.ts";
 
 export interface MainConfigProps
   extends PageSectionCategoryProps,
@@ -44,15 +45,6 @@ const components: Config<MainConfigProps>["components"] = {
   ...SlotsCategoryComponents,
   MainContent,
 };
-
-const rootAllowedComponents = [
-  "ExpandedHeader",
-  "ExpandedFooter",
-  "Header",
-  "Footer",
-  "MainContent",
-  "CustomCodeSection",
-];
 
 // The config used for base entities (locations, financial professionals, etc.)
 export const mainConfig: Config<MainConfigProps> = {
