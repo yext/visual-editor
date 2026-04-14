@@ -24,7 +24,7 @@ import {
   HoursType,
   AddressType,
   DayOfWeekNames,
-  Coordinate,
+  Coordinate as Coordinate$1,
   ListingType,
 } from "@yext/pages-components";
 import { VariantProps } from "class-variance-authority";
