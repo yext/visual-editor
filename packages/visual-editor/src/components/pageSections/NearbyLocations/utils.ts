@@ -11,6 +11,8 @@ type Coordinate = {
 };
 
 type NearbyLocationDoc = {
+  id?: string;
+  name?: string;
   yextDisplayCoordinate?: Coordinate;
   geocodedCoordinate?: Coordinate;
 };
@@ -183,7 +185,15 @@ export const fetchNearbyLocations = async ({
         distance: coordinate ? getDistance(origin, coordinate) : Infinity,
       };
     })
-    .sort((a, b) => a.distance - b.distance)
+    .sort((a, b) => {
+      if (a.distance !== b.distance) {
+        return a.distance - b.distance;
+      }
+
+      return getDocStableSortKey(a.doc).localeCompare(
+        getDocStableSortKey(b.doc)
+      );
+    })
     .slice(0, limit)
     .map(({ doc }) => doc);
 
@@ -213,4 +223,8 @@ const getDocCoordinate = (
   }
 
   return { latitude, longitude };
+};
+
+const getDocStableSortKey = (doc: NearbyLocationDoc) => {
+  return doc.id ?? doc.name ?? JSON.stringify(doc);
 };
