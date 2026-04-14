@@ -15,6 +15,43 @@ import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 
 const devLogger = new DevLogger();
 
+const createEmptyLocalDevLayout: Data = {
+  root: {},
+  content: [],
+  zones: {},
+};
+
+export const getLocalDevLayoutData = (
+  puckConfig: Config,
+  streamDocument: StreamDocument
+) => {
+  const layout = streamDocument.__?.layout;
+  if (!layout) {
+    return migrate(
+      createEmptyLocalDevLayout,
+      migrationRegistry,
+      puckConfig,
+      streamDocument
+    );
+  }
+
+  try {
+    const parsedLayout = JSON.parse(layout) as Data;
+    return migrate(parsedLayout, migrationRegistry, puckConfig, streamDocument);
+  } catch (error) {
+    console.warn(
+      "Failed to parse local dev layout JSON. Falling back to empty layout.",
+      error
+    );
+    return migrate(
+      createEmptyLocalDevLayout,
+      migrationRegistry,
+      puckConfig,
+      streamDocument
+    );
+  }
+};
+
 export const useCommonMessageReceivers = (
   componentRegistry: Record<string, Config<any>>,
   localDev: boolean,
@@ -42,7 +79,7 @@ export const useCommonMessageReceivers = (
   // in localDev mode, return default data and mark all data as fetched
   useEffect(() => {
     if (localDev) {
-      const devMetadata = generateTemplateMetadata();
+      const devMetadata = generateTemplateMetadata(streamDocument);
       setTemplateMetadata(devMetadata);
 
       const puckConfig = componentRegistry[devMetadata.templateId];
@@ -53,19 +90,7 @@ export const useCommonMessageReceivers = (
       }
       setPuckConfig(puckConfig);
 
-      // applies current migration version to empty data
-      setLayoutData(
-        migrate(
-          {
-            root: {},
-            content: [],
-            zones: {},
-          },
-          migrationRegistry,
-          puckConfig,
-          streamDocument
-        )
-      );
+      setLayoutData(getLocalDevLayoutData(puckConfig, streamDocument));
       setLayoutDataFetched(true);
       setThemeData({});
       setThemeDataFetched(true);
@@ -78,6 +103,7 @@ export const useCommonMessageReceivers = (
     setLayoutDataFetched,
     setThemeData,
     setThemeDataFetched,
+    streamDocument,
   ]);
 
   // return default data for localDev mode

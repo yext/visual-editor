@@ -29,7 +29,7 @@
     "@radix-ui/react-toast": "^1.1.5",
     "@radix-ui/react-tooltip": "^1.1.2",
     "@types/node": "^20.12.3",
-    "@yext/search-headless-react": "^2.5.3",
+    "@yext/search-headless-react": "^2.7.1",
     "@yext/search-ui-react": "^3.0.0",
     "@yext/visual-editor": "workspace:*",
     "class-variance-authority": "^0.7.0",
