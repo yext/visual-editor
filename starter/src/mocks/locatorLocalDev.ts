@@ -28,6 +28,8 @@ type LocatorVerticalResult = {
   highlightedFields: Record<string, unknown>;
 };
 
+// Build stable fake search results so the locator UI has enough data to render
+// pagination, directions links, and card content without live APIs.
 const createLocatorApiResult = (index: number): LocatorVerticalResult => {
   const paddedIndex = String(index + 1).padStart(2, "0");
   const latitude = BASE_LATITUDE + index * 0.01;
@@ -86,6 +88,7 @@ const locatorResults = Array.from({ length: TOTAL_RESULTS }, (_, index) =>
   createLocatorApiResult(index)
 );
 
+// The locator only needs one vertical with deterministic paging behavior in local dev.
 const createLocatorVerticalSearchResponse = (offset: number, limit: number) => {
   const results = locatorResults.slice(offset, offset + limit);
 
@@ -105,6 +108,7 @@ const createLocatorVerticalSearchResponse = (offset: number, limit: number) => {
   };
 };
 
+// Keep filter-search simple: a single known location is enough to exercise the UI.
 const createLocatorFilterSearchResponse = () => ({
   meta: {
     uuid: "locator-filter-fixture-uuid",
@@ -149,6 +153,8 @@ const getRequestUrl = (input: string | URL | Request) => {
   return input.url;
 };
 
+// Pages/Search requests sometimes pass body through Request and sometimes via init.
+// Normalize both shapes so pagination parsing works for the vertical query mock.
 const getRequestBody = async (
   input: string | URL | Request,
   init?: RequestInit
@@ -173,6 +179,8 @@ const getRequestBody = async (
   return "";
 };
 
+// Vertical query requests include offset/limit in the JSON body.
+// Default to the first page when they are missing or malformed.
 const getPagination = async (
   input: string | URL | Request,
   init?: RequestInit
@@ -206,10 +214,13 @@ export const installLocatorLocalDevMocks = () => {
   const mockGlobal = globalThis as MockGlobal;
   const previousVisualEditorTestFlag = mockGlobal.__VISUAL_EDITOR_TEST__;
   const geolocation = navigator.geolocation;
-  const originalGetCurrentPosition = geolocation?.getCurrentPosition;
+  const originalGetCurrentPosition: Geolocation["getCurrentPosition"] | undefined =
+    geolocation?.getCurrentPosition;
 
   mockGlobal.__VISUAL_EDITOR_TEST__ = true;
 
+  // Intercept only the network calls the locator makes in fake local dev and
+  // let everything else hit the real fetch implementation.
   globalThis.fetch = async (
     input: string | URL | Request,
     init?: RequestInit
@@ -257,7 +268,7 @@ export const installLocatorLocalDevMocks = () => {
     return originalFetch(input, init);
   };
 
-  if (geolocation && originalGetCurrentPosition) {
+  if (geolocation) {
     Object.defineProperty(geolocation, "getCurrentPosition", {
       configurable: true,
       value: (
@@ -285,7 +296,7 @@ export const installLocatorLocalDevMocks = () => {
   return () => {
     globalThis.fetch = originalFetch;
 
-    if (geolocation && originalGetCurrentPosition) {
+    if (geolocation) {
       Object.defineProperty(geolocation, "getCurrentPosition", {
         configurable: true,
         value: originalGetCurrentPosition,

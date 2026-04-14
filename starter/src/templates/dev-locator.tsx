@@ -116,11 +116,11 @@ const DevLocator: Template<TemplateRenderProps> = (props) => {
     string
   >;
 
-  if (typeof window !== "undefined" && mockCleanupRef.current === null) {
-    mockCleanupRef.current = installLocatorLocalDevMocks();
-  }
-
   React.useEffect(() => {
+    if (typeof window !== "undefined" && mockCleanupRef.current === null) {
+      mockCleanupRef.current = installLocatorLocalDevMocks();
+    }
+
     return () => {
       mockCleanupRef.current?.();
       mockCleanupRef.current = null;
