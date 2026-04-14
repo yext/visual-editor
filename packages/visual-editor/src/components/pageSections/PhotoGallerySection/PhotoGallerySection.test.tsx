@@ -13,6 +13,7 @@ import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
 import { SlotsCategoryComponents } from "../../categories/SlotsCategory.tsx";
 import { Render, Config } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
+import { MainContent } from "../../structure/MainContent.tsx";
 
 const photoGalleryData = [
   {
@@ -866,7 +867,11 @@ const tests: ComponentTest[] = [
 
 describe("PhotoGallerySection", async () => {
   const puckConfig: Config = {
-    components: { PhotoGallerySection, ...SlotsCategoryComponents },
+    components: {
+      PhotoGallerySection,
+      MainContent,
+      ...SlotsCategoryComponents,
+    },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;

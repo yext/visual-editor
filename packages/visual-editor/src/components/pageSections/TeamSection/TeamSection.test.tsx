@@ -13,6 +13,7 @@ import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
 import { SlotsCategoryComponents } from "../../categories/SlotsCategory.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
+import { MainContent } from "../../structure/MainContent.tsx";
 
 const teamData = {
   people: [
@@ -1465,7 +1466,7 @@ const tests: ComponentTest[] = [
 
 describe("TeamSection", async () => {
   const puckConfig: Config = {
-    components: { TeamSection, ...SlotsCategoryComponents },
+    components: { TeamSection, MainContent, ...SlotsCategoryComponents },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;

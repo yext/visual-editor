@@ -14,6 +14,7 @@ import { SlotsCategoryComponents } from "../../categories/SlotsCategory.tsx";
 import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
+import { MainContent } from "../../structure/MainContent.tsx";
 
 const testDocument = {
   name: "Test Location",
@@ -539,7 +540,7 @@ const tests: ComponentTest[] = [
 
 describe("AboutSection", async () => {
   const puckConfig: Config = {
-    components: { AboutSection, ...SlotsCategoryComponents },
+    components: { AboutSection, MainContent, ...SlotsCategoryComponents },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
