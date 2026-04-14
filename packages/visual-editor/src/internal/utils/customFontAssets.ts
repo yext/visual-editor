@@ -19,19 +19,12 @@ import { generateCssVariablesFromThemeConfig } from "./internalThemeResolver.ts"
  */
 export const CUSTOM_FONT_ASSETS_KEY = "__customFontAssets";
 
-export type CustomFontPreload = {
-  href: string;
-  type?: string;
-};
-
 export type CustomFontAssets = {
   stylesheetPaths: string[];
-  preloads: CustomFontPreload[];
-};
-
-const EMPTY_CUSTOM_FONT_ASSETS: CustomFontAssets = {
-  stylesheetPaths: [],
-  preloads: [],
+  preloads: Array<{
+    href: string;
+    type?: string;
+  }>;
 };
 
 const getMergedThemeValues = (
@@ -168,12 +161,18 @@ export const getCustomFontAssets = (
   themeValues: ThemeData | undefined
 ): CustomFontAssets => {
   if (!themeValues) {
-    return EMPTY_CUSTOM_FONT_ASSETS;
+    return {
+      stylesheetPaths: [],
+      preloads: [],
+    };
   }
 
   const assets = themeValues[CUSTOM_FONT_ASSETS_KEY];
   if (!assets || typeof assets !== "object") {
-    return EMPTY_CUSTOM_FONT_ASSETS;
+    return {
+      stylesheetPaths: [],
+      preloads: [],
+    };
   }
 
   return {
@@ -184,7 +183,12 @@ export const getCustomFontAssets = (
       : [],
     preloads: Array.isArray((assets as CustomFontAssets).preloads)
       ? (assets as CustomFontAssets).preloads.filter(
-          (entry): entry is CustomFontPreload =>
+          (
+            entry
+          ): entry is {
+            href: string;
+            type?: string;
+          } =>
             typeof entry === "object" &&
             entry !== null &&
             typeof entry.href === "string" &&
@@ -198,7 +202,7 @@ export const getCustomFontAssets = (
  * Builds preload link HTML for the saved custom font file URLs.
  */
 export const buildFontPreloadTags = (
-  preloads: CustomFontPreload[],
+  preloads: Array<{ href: string; type?: string }>,
   relativePrefixToRoot: string
 ): string => {
   if (preloads.length === 0) {
