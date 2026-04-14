@@ -1226,6 +1226,9 @@ const HoursSection = (props: {
   accentColor?: ThemeColor;
 }) => {
   const { location, result, hoursProps, showIcons, accentColor } = props;
+  const [isExpanded, setIsExpanded] = React.useState(false);
+  const triggerId = React.useId();
+  const contentId = React.useId();
 
   const hoursField = getSelectedFieldId(hoursProps.field);
   const hoursData = parseHoursFromLocation(location, hoursField);
@@ -1234,8 +1237,18 @@ const HoursSection = (props: {
     showHoursSection && (
       <div className="font-body-fontFamily text-body-fontSize gap-8">
         <Accordion>
-          <AccordionItem key={`result-${result.index}-hours`} className="py-0">
-            <AccordionTrigger className="justify-start">
+          <AccordionItem
+            key={`result-${result.index}-hours`}
+            className="py-0"
+            onToggle={(event) => setIsExpanded(event.currentTarget.open)}
+          >
+            <AccordionTrigger
+              id={triggerId}
+              aria-controls={contentId}
+              aria-expanded={isExpanded}
+              className="justify-start"
+              role="button"
+            >
               <div className="flex flex-row items-center gap-2">
                 {showIcons && (
                   <CardIcon backgroundColor={accentColor}>
@@ -1251,7 +1264,11 @@ const HoursSection = (props: {
                 />
               </div>
             </AccordionTrigger>
-            <AccordionContent>
+            <AccordionContent
+              id={contentId}
+              aria-labelledby={triggerId}
+              role="region"
+            >
               <div className="flex flex-col gap-2">
                 <HoursTableAtom
                   hours={hoursData}

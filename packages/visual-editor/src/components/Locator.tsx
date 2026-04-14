@@ -290,6 +290,10 @@ function getFacetFieldOptionsForEntityType(
       label: msg("fields.options.facets.region", "Region"),
       value: "address.region",
     },
+    {
+      label: msg("fields.options.facets.brandName", "Brand Name"),
+      value: "brandReference.name",
+    },
   ];
   switch (entityType) {
     case "location":
