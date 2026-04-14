@@ -77,6 +77,7 @@ export const applyTheme = (
   // Load only fonts that are actually used in the theme
   let fontLinkData: FontLinkData[];
   const fallbackFontFaceDefinitions: string[] = [];
+  const customFontAssets = getCustomFontAssets(overrides);
   if (!overrides) {
     // No theme overrides, use only Open Sans (the default font)
     fontLinkData = generateGoogleFontLinkData({
@@ -87,7 +88,6 @@ export const applyTheme = (
       overrides,
       themeConfig
     );
-    const customFontAssets = getCustomFontAssets(overrides);
 
     fontLinkData = generateGoogleFontLinkData(googleFontsToLoad);
     fontLinkData = [
@@ -111,7 +111,6 @@ export const applyTheme = (
   }
 
   const fontLinkTags = fontLinkDataToHTML(fontLinkData);
-  const customFontAssets = getCustomFontAssets(overrides);
 
   if (Object.keys(themeConfig).length > 0) {
     const preloadTags = buildFontPreloadTags(

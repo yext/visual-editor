@@ -20,7 +20,6 @@ import { ThemeHistories, ThemeHistory } from "../types/themeData.ts";
 import * as lzstring from "lz-string";
 import { Metadata } from "../../editor/Editor.tsx";
 import { createPreviewFrameLinkBlocker } from "../utils/previewFrameLinkBlocker.ts";
-import { updateThemeWithCustomFontAssets } from "../utils/customFontAssets.ts";
 
 const devLogger = new DevLogger();
 // Used because we want the sidebar to be hidden
@@ -85,14 +84,7 @@ export const InternalThemeEditor = ({
     }
 
     const currentThemeHistory = themeHistories.histories[themeHistories.index];
-    // generate customFontAssets before publishing
-    const publishThemeData = themeConfig
-      ? updateThemeWithCustomFontAssets({
-          themeConfig,
-          themeValues: currentThemeHistory.data,
-          customFonts: templateMetadata.customFonts,
-        })
-      : currentThemeHistory.data;
+    const publishThemeData = currentThemeHistory.data;
 
     publishTheme({
       payload: {
