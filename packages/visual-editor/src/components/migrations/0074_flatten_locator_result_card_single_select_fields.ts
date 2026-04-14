@@ -63,9 +63,7 @@ export const flattenLocatorResultCardSingleSelectFields: Migration = {
                   | undefined
               ),
               tertiaryHeading: flattenFieldValue(
-                itemProps.tertiaryHeading as
-                  | Record<string, unknown>
-                  | undefined
+                itemProps.tertiaryHeading as Record<string, unknown> | undefined
               ),
               hours: flattenFieldValue(
                 itemProps.hours as Record<string, unknown> | undefined
