@@ -9,14 +9,28 @@
 }
 
 .flex-container {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  z-index: 2000;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 80px;
-  margin-bottom: -80px;
+  gap: 8px;
+  padding: 20px 16px 12px;
+  border-radius: 0 0 20px 20px;
+  background: rgb(238 238 238 / 92%);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
+  transform: translate(-50%, calc(-100% + 14px));
+  transition: transform 180ms ease;
+  backdrop-filter: blur(8px);
+
+  &:hover,
+  &:focus-within {
+    transform: translate(-50%, 0);
+  }
 
   .toggle-button {
-    z-index: 2000;
     outline: black double 1px;
     background: #eeeeee;
     padding: 4px 40px;

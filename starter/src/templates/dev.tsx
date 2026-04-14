@@ -1,4 +1,7 @@
-import "@yext/visual-editor/editor.css";
+import React from "react";
+import { Data, Render } from "@puckeditor/core";
+import * as lzstring from "lz-string";
+import { MantineProvider } from "@mantine/core";
 import {
   GetHeadConfig,
   GetPath,
@@ -9,7 +12,6 @@ import {
   TemplateRenderProps,
   TransformProps,
 } from "@yext/pages";
-import { componentRegistry } from "../ve.config";
 import {
   applyTheme,
   Editor,
@@ -21,10 +23,81 @@ import {
   getSchema,
   injectTranslations,
 } from "@yext/visual-editor";
+import { SchemaWrapper } from "@yext/pages-components";
+import "@yext/visual-editor/editor.css";
+import "@mantine/core/styles.css";
+import { componentRegistry } from "../ve.config";
 import tailwindConfig from "../../tailwind.config";
 import { devTemplateStream } from "../dev.config";
-import React from "react";
-import { SchemaWrapper } from "@yext/pages-components";
+
+const EMPTY_PUCK_DATA: Data = {
+  root: {},
+  content: [],
+  zones: {},
+};
+
+type PuckHistoryEntry = {
+  state?: {
+    data?: Data;
+  };
+};
+
+const hashCode = (value: string): number => {
+  let hash = 0;
+  for (let i = 0; i < value.length; i++) {
+    const chr = value.charCodeAt(i);
+    hash = (hash << 5) - hash + chr;
+    hash |= 0;
+  }
+  return Math.abs(hash);
+};
+
+const getVisualConfigLocalStorageKeyForDev = (): string | null => {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const templateId = "dev";
+  const locale = "en";
+  const editorUrl = new URL(window.location.href);
+  editorUrl.searchParams.delete("preview");
+
+  const layoutScopeKey = JSON.stringify({
+    templateId,
+    entityId: editorUrl.toString(),
+    locale,
+  });
+
+  return `devTEMPLATE_${templateId}LAYOUT_${hashCode(layoutScopeKey)}`;
+};
+
+const readCurrentPuckDataFromHistory = (storageKey: string | null): Data => {
+  if (!storageKey || typeof window === "undefined") {
+    return EMPTY_PUCK_DATA;
+  }
+
+  const compressedHistory = window.localStorage.getItem(storageKey);
+  if (!compressedHistory) {
+    return EMPTY_PUCK_DATA;
+  }
+
+  try {
+    const decompressedHistory = lzstring.decompress(compressedHistory);
+    if (!decompressedHistory) {
+      return EMPTY_PUCK_DATA;
+    }
+
+    const histories = JSON.parse(decompressedHistory) as PuckHistoryEntry[];
+    const currentData = histories[histories.length - 1]?.state?.data;
+    return currentData ?? EMPTY_PUCK_DATA;
+  } catch (error) {
+    console.warn("Failed to read preview layout history from localStorage", {
+      error,
+      storageKey,
+    });
+    return EMPTY_PUCK_DATA;
+  }
+};
 
 export const config = {
   name: "dev-location",
@@ -148,40 +221,109 @@ export const getPath: GetPath<TemplateProps> = ({ document }) => {
 
 const Dev: Template<TemplateRenderProps> = (props) => {
   const [themeMode, setThemeMode] = React.useState<boolean>(false);
+  const [isPreviewMode, setIsPreviewMode] = React.useState<boolean>(false);
+  const [currentPuckData, setCurrentPuckData] =
+    React.useState<Data>(EMPTY_PUCK_DATA);
   const { document } = props;
+  const puckConfig = componentRegistry.dev;
   const entityFields = devTemplateStream.stream.schema
     .fields as unknown as YextSchemaField[];
   const displayNames = devTemplateStream.apiNamesToDisplayNames as Record<
     string,
     string
   >;
+  const previewStorageKey = React.useMemo(
+    () => getVisualConfigLocalStorageKeyForDev(),
+    [],
+  );
+
+  React.useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    setIsPreviewMode(
+      new URLSearchParams(window.location.search).get("preview") === "true",
+    );
+  }, []);
+
+  React.useEffect(() => {
+    // Keep puck data synced with localstorage
+    if (!isPreviewMode || typeof window === "undefined") {
+      return;
+    }
+
+    const refreshPuckData = () => {
+      setCurrentPuckData(readCurrentPuckDataFromHistory(previewStorageKey));
+    };
+
+    refreshPuckData();
+
+    const onStorage = (event: StorageEvent) => {
+      if (!event.key || event.key === previewStorageKey) {
+        refreshPuckData();
+      }
+    };
+
+    window.addEventListener("storage", onStorage);
+    return () => {
+      window.removeEventListener("storage", onStorage);
+    };
+  }, [isPreviewMode, previewStorageKey]);
+
+  const openPreview = () => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const previewUrl = new URL(window.location.href);
+    previewUrl.searchParams.set("preview", "true");
+    window.location.assign(previewUrl.toString());
+  };
 
   return (
     <div>
-      <div className={"flex-container"}>
-        <button
-          className={"toggle-button"}
-          onClick={() => {
-            setThemeMode(!themeMode);
-          }}
-        >
-          {themeMode ? "Theme Mode" : "Layout Mode"}
-        </button>
-      </div>
+      {!isPreviewMode && (
+        <div className={"flex-container gap-2"}>
+          <>
+            <button
+              className={"toggle-button"}
+              onClick={() => {
+                setThemeMode(!themeMode);
+              }}
+            >
+              {themeMode ? "Load Layout Editor" : "Load Theme Editor"}
+            </button>
+            <button className={"toggle-button"} onClick={openPreview}>
+              Open Preview
+            </button>
+          </>
+        </div>
+      )}
       <div>
-        <VisualEditorProvider
-          templateProps={props}
-          entityFields={{ fields: entityFields, displayNames: displayNames }}
-          tailwindConfig={tailwindConfig}
-        >
-          <Editor
-            document={document}
-            componentRegistry={componentRegistry}
-            themeConfig={defaultThemeConfig}
-            localDev={true}
-            forceThemeMode={themeMode}
-          />
-        </VisualEditorProvider>
+        <MantineProvider>
+          <VisualEditorProvider
+            templateProps={props}
+            entityFields={{ fields: entityFields, displayNames: displayNames }}
+            tailwindConfig={tailwindConfig}
+          >
+            {isPreviewMode ? (
+              <Render
+                config={puckConfig}
+                data={currentPuckData}
+                metadata={{ streamDocument: document }}
+              />
+            ) : (
+              <Editor
+                document={document}
+                componentRegistry={componentRegistry}
+                themeConfig={defaultThemeConfig}
+                localDev={true}
+                forceThemeMode={themeMode}
+              />
+            )}
+          </VisualEditorProvider>
+        </MantineProvider>
       </div>
     </div>
   );
