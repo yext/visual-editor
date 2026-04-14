@@ -61,12 +61,8 @@ export const buildCustomFontAssets = ({
 }: {
   themeConfig: ThemeConfig;
   themeValues: ThemeData;
-  customFonts?: FontRegistry;
-}): CustomFontAssets | undefined => {
-  if (!customFonts || Object.keys(customFonts).length === 0) {
-    return undefined;
-  }
-
+  customFonts: FontRegistry;
+}): CustomFontAssets => {
   const mergedThemeValues = getMergedThemeValues(themeConfig, themeValues);
   const stylesheetPaths = new Set<string>();
   const preloads: string[] = [];
@@ -137,26 +133,26 @@ export const updateThemeWithCustomFontAssets = ({
   themeValues: ThemeData;
   customFonts?: FontRegistry;
 }): ThemeData => {
+  if (!customFonts || Object.keys(customFonts).length === 0) {
+    if (!(CUSTOM_FONT_ASSETS_KEY in themeValues)) {
+      return themeValues;
+    }
+
+    const rest = { ...themeValues };
+    delete rest[CUSTOM_FONT_ASSETS_KEY];
+    return rest;
+  }
+
   const customFontAssets = buildCustomFontAssets({
     themeConfig,
     themeValues,
     customFonts,
   });
 
-  if (customFontAssets) {
-    return {
-      ...themeValues,
-      [CUSTOM_FONT_ASSETS_KEY]: customFontAssets,
-    };
-  }
-
-  if (!(CUSTOM_FONT_ASSETS_KEY in themeValues)) {
-    return themeValues;
-  }
-
-  const rest = { ...themeValues };
-  delete rest[CUSTOM_FONT_ASSETS_KEY];
-  return rest;
+  return {
+    ...themeValues,
+    [CUSTOM_FONT_ASSETS_KEY]: customFontAssets,
+  };
 };
 
 /**

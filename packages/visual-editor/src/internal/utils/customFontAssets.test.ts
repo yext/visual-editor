@@ -3,11 +3,6 @@ import { buildCustomFontAssets } from "./customFontAssets.ts";
 import { ThemeConfig } from "../../utils/themeResolver.ts";
 import { FontRegistry } from "../../utils/fonts/visualEditorFonts.ts";
 
-const expectAssets = (assets: ReturnType<typeof buildCustomFontAssets>) => {
-  expect(assets).toBeDefined();
-  return assets!;
-};
-
 const createTextThemeConfig = (
   fontFamilyDefault: string,
   fontWeightDefault: string,
@@ -42,15 +37,6 @@ const createTextThemeConfig = (
 });
 
 describe("buildCustomFontAssets", () => {
-  it("returns undefined when custom fonts are missing", () => {
-    expect(
-      buildCustomFontAssets({
-        themeConfig: createTextThemeConfig("'Open Sans', sans-serif", "400"),
-        themeValues: {},
-      })
-    ).toBeUndefined();
-  });
-
   it("returns all matching custom assets for multiple fonts", () => {
     const themeConfig: ThemeConfig = {
       h1: {
@@ -159,11 +145,11 @@ describe("buildCustomFontAssets", () => {
       customFonts,
     });
 
-    expect(expectAssets(assets).stylesheetPaths).toEqual([
+    expect(assets.stylesheetPaths).toEqual([
       "y-fonts/alpha.css",
       "y-fonts/beta.css",
     ]);
-    expect(expectAssets(assets).preloads).toEqual([
+    expect(assets.preloads).toEqual([
       "/y-fonts/alpha-bold.woff2",
       "/y-fonts/beta-regular.woff2",
     ]);
@@ -204,10 +190,8 @@ describe("buildCustomFontAssets", () => {
       customFonts,
     });
 
-    expect(expectAssets(assets).stylesheetPaths).toEqual(["y-fonts/gamma.css"]);
-    expect(expectAssets(assets).preloads).toEqual([
-      "/y-fonts/gamma-variable-italic.woff2",
-    ]);
+    expect(assets.stylesheetPaths).toEqual(["y-fonts/gamma.css"]);
+    expect(assets.preloads).toEqual(["/y-fonts/gamma-variable-italic.woff2"]);
   });
 
   it("uses italic static files when italic is selected", () => {
@@ -242,9 +226,7 @@ describe("buildCustomFontAssets", () => {
       customFonts,
     });
 
-    expect(expectAssets(assets).preloads).toEqual([
-      "/y-fonts/delta-600-italic.woff2",
-    ]);
+    expect(assets.preloads).toEqual(["/y-fonts/delta-600-italic.woff2"]);
   });
 
   it("omits a preload when italic is selected but no italic asset exists", () => {
@@ -274,7 +256,7 @@ describe("buildCustomFontAssets", () => {
       customFonts,
     });
 
-    expect(expectAssets(assets).preloads).toEqual([]);
+    expect(assets.preloads).toEqual([]);
   });
 
   it("omits a preload when no matching static weight exists", () => {
@@ -309,7 +291,7 @@ describe("buildCustomFontAssets", () => {
       customFonts,
     });
 
-    expect(expectAssets(assets).preloads).toEqual([]);
+    expect(assets.preloads).toEqual([]);
   });
 
   it("returns face paths for the custom fonts used by the theme", () => {
@@ -341,21 +323,19 @@ describe("buildCustomFontAssets", () => {
     };
 
     expect(
-      expectAssets(
-        buildCustomFontAssets({
-          themeConfig,
-          themeValues: {},
-          customFonts: {
-            Alpha: {
-              italics: false,
-              weights: [400],
-              fallback: "sans-serif",
-              facePath: "y-fonts/alpha.css",
-              variants: [],
-            },
+      buildCustomFontAssets({
+        themeConfig,
+        themeValues: {},
+        customFonts: {
+          Alpha: {
+            italics: false,
+            weights: [400],
+            fallback: "sans-serif",
+            facePath: "y-fonts/alpha.css",
+            variants: [],
           },
-        })
-      ).stylesheetPaths
+        },
+      }).stylesheetPaths
     ).toEqual(["y-fonts/alpha.css"]);
   });
 
@@ -400,28 +380,26 @@ describe("buildCustomFontAssets", () => {
     };
 
     expect(
-      expectAssets(
-        buildCustomFontAssets({
-          themeConfig,
-          themeValues: {},
-          customFonts: {
-            Alpha: {
-              italics: false,
-              weights: [400],
-              fallback: "sans-serif",
-              facePath: "y-fonts/alpha.css",
-              variants: [],
-            },
-            Nameless: {
-              italics: false,
-              weights: [400],
-              fallback: "sans-serif",
-              facePath: "y-fonts/alpha.css",
-              variants: [],
-            },
+      buildCustomFontAssets({
+        themeConfig,
+        themeValues: {},
+        customFonts: {
+          Alpha: {
+            italics: false,
+            weights: [400],
+            fallback: "sans-serif",
+            facePath: "y-fonts/alpha.css",
+            variants: [],
           },
-        })
-      ).stylesheetPaths
+          Nameless: {
+            italics: false,
+            weights: [400],
+            fallback: "sans-serif",
+            facePath: "y-fonts/alpha.css",
+            variants: [],
+          },
+        },
+      }).stylesheetPaths
     ).toEqual(["y-fonts/alpha.css"]);
   });
 
@@ -482,27 +460,25 @@ describe("buildCustomFontAssets", () => {
     };
 
     expect(
-      expectAssets(
-        buildCustomFontAssets({
-          themeConfig,
-          themeValues: {},
-          customFonts: {
-            Alpha: {
-              italics: false,
-              weights: [400, 700],
-              fallback: "sans-serif",
-              facePath: "y-fonts/alpha.css",
-              variants: [
-                {
-                  style: "normal",
-                  weights: [700],
-                  filePath: "/y-fonts/alpha-bold.woff2",
-                },
-              ],
-            },
+      buildCustomFontAssets({
+        themeConfig,
+        themeValues: {},
+        customFonts: {
+          Alpha: {
+            italics: false,
+            weights: [400, 700],
+            fallback: "sans-serif",
+            facePath: "y-fonts/alpha.css",
+            variants: [
+              {
+                style: "normal",
+                weights: [700],
+                filePath: "/y-fonts/alpha-bold.woff2",
+              },
+            ],
           },
-        })
-      ).preloads
+        },
+      }).preloads
     ).toEqual(["/y-fonts/alpha-bold.woff2"]);
   });
 });
