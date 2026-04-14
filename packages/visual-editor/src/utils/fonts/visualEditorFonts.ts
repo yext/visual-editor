@@ -24,7 +24,6 @@ export type Font = {
 } & WeightSupport;
 
 export type FontRegistry = Record<string, Font>;
-export type Fonts = FontRegistry;
 
 // List of variable Google Fonts https://fonts.google.com/?categoryFilters=Technology:%2FTechnology%2FVariable
 // prettier-ignore
@@ -137,8 +136,6 @@ export const getFacePathsFromFonts = (fonts: FontRegistry): string[] => {
     .map((fontDetails) => fontDetails.facePath)
     .filter((facePath): facePath is string => Boolean(facePath));
 };
-
-export const getCustomFontFacePathsFromFontRegistry = getFacePathsFromFonts;
 
 /**
  * Builds stylesheet link data for custom font face paths.

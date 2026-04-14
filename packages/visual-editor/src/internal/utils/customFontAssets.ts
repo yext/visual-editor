@@ -61,8 +61,12 @@ export const buildCustomFontAssets = ({
 }: {
   themeConfig: ThemeConfig;
   themeValues: ThemeData;
-  customFonts: FontRegistry;
-}): CustomFontAssets => {
+  customFonts?: FontRegistry;
+}): CustomFontAssets | undefined => {
+  if (!customFonts || Object.keys(customFonts).length === 0) {
+    return undefined;
+  }
+
   const mergedThemeValues = getMergedThemeValues(themeConfig, themeValues);
   const stylesheetPaths = new Set<string>();
   const preloads: string[] = [];
@@ -121,9 +125,31 @@ export const buildCustomFontAssets = ({
 };
 
 /**
- * Removes custom font assets from theme data.
+ * Resolves and writes custom font assets into theme data, or removes the key
+ * entirely when no custom font assets are needed.
  */
-export const removeCustomFontAssets = (themeValues: ThemeData): ThemeData => {
+export const updateThemeWithCustomFontAssets = ({
+  themeConfig,
+  themeValues,
+  customFonts,
+}: {
+  themeConfig: ThemeConfig;
+  themeValues: ThemeData;
+  customFonts?: FontRegistry;
+}): ThemeData => {
+  const customFontAssets = buildCustomFontAssets({
+    themeConfig,
+    themeValues,
+    customFonts,
+  });
+
+  if (customFontAssets) {
+    return {
+      ...themeValues,
+      [CUSTOM_FONT_ASSETS_KEY]: customFontAssets,
+    };
+  }
+
   if (!(CUSTOM_FONT_ASSETS_KEY in themeValues)) {
     return themeValues;
   }

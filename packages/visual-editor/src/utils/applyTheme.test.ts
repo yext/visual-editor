@@ -125,28 +125,6 @@ describe("buildCssOverridesStyle", () => {
     );
   });
 
-  it("should load custom font stylesheet urls directly from __customFontAssets", () => {
-    const streamDocument: StreamDocument = {
-      siteId: 123,
-      __: {
-        theme: JSON.stringify({
-          "--fontFamily-h1-fontFamily":
-            "'EBB_Melvyn_Regular', 'EBB_Melvyn_Regular Fallback', sans-serif",
-          __customFontAssets: {
-            stylesheetPaths: ["y-fonts/ebbmelvynregular.css"],
-            preloads: [],
-          },
-        }),
-      },
-    };
-
-    const result = applyTheme(streamDocument, "./", themeConfig);
-
-    expect(result).toContain(
-      '<link href="./y-fonts/ebbmelvynregular.css" rel="stylesheet">'
-    );
-  });
-
   it("should only load custom font stylesheets from __customFontAssets", () => {
     const streamDocument: StreamDocument = {
       siteId: 123,
@@ -168,6 +146,7 @@ describe("buildCssOverridesStyle", () => {
       '<link href="./y-fonts/ebbmelvynregular.css" rel="stylesheet">'
     );
     expect(result).not.toContain("./y-fonts/not-the-right-font.css");
+    expect(result).not.toContain("./y-fonts/ebbmelvynregular-regular.css");
   });
 
   it("should not infer custom font stylesheet urls when stylesheetPaths are empty", () => {

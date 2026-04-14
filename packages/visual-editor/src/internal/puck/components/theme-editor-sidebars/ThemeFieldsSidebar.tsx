@@ -12,11 +12,7 @@ import {
 } from "../../../utils/constructThemePuckFields.ts";
 import { generateCssVariablesFromPuckFields } from "../../../utils/internalThemeResolver.ts";
 import { pt } from "../../../../utils/i18n/platform.ts";
-import {
-  buildCustomFontAssets,
-  CUSTOM_FONT_ASSETS_KEY,
-  removeCustomFontAssets,
-} from "../../../utils/customFontAssets.ts";
+import { updateThemeWithCustomFontAssets } from "../../../utils/customFontAssets.ts";
 import { FontRegistry } from "../../../../utils/fonts/visualEditorFonts.ts";
 
 type ThemeFieldsSidebarProps = {
@@ -49,28 +45,11 @@ export const ThemeFieldsSidebar = ({
       ),
     };
 
-    if (!customFonts) {
-      newThemeValues = removeCustomFontAssets(newThemeValues);
-      onThemeChange(newThemeValues);
-      return;
-    }
-
-    const customFontAssets = buildCustomFontAssets({
+    newThemeValues = updateThemeWithCustomFontAssets({
       themeConfig,
       themeValues: newThemeValues,
       customFonts,
     });
-    if (
-      customFontAssets.stylesheetPaths.length > 0 ||
-      customFontAssets.preloads.length > 0
-    ) {
-      newThemeValues = {
-        ...newThemeValues,
-        [CUSTOM_FONT_ASSETS_KEY]: customFontAssets,
-      };
-    } else {
-      newThemeValues = removeCustomFontAssets(newThemeValues);
-    }
 
     onThemeChange(newThemeValues);
   };

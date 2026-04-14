@@ -111,9 +111,9 @@ export const applyTheme = (
   }
 
   const fontLinkTags = fontLinkDataToHTML(fontLinkData);
+  const customFontAssets = getCustomFontAssets(overrides);
 
   if (Object.keys(themeConfig).length > 0) {
-    const customFontAssets = getCustomFontAssets(overrides);
     const preloadTags = buildFontPreloadTags(
       customFontAssets.preloads,
       relativePrefixToRoot
