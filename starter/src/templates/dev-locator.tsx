@@ -9,7 +9,7 @@ import {
   TemplateRenderProps,
   TransformProps,
 } from "@yext/pages";
-import { locatorComponentRegistry } from "../ve.config";
+import { componentRegistry } from "../ve.config";
 import {
   applyTheme,
   Editor,
@@ -26,6 +26,7 @@ import { devTemplateStream } from "../dev.config";
 import React from "react";
 import { SchemaWrapper } from "@yext/pages-components";
 import { installLocatorLocalDevMocks } from "../mocks/locatorLocalDev";
+import { disableHmrForStackBlitz } from "../utils";
 
 export const config = {
   name: "dev-locator",
@@ -68,28 +69,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
       applyHeaderScript(document),
       applyTheme(document, relativePrefixToRoot, defaultThemeConfig),
       SchemaWrapper(schema),
-      `<script>
-        (function() {
-          var isStackBlitz = window.location.hostname.includes('webcontainer.io');
-          
-          if (isStackBlitz) {
-            var originalWebSocket = window.WebSocket;
-            window.WebSocket = function(url, protocols) {
-              if (url && (url.includes('24678') || url.includes('vite') || url.includes('hmr'))) {
-                console.log('Blocked Vite WebSocket connection:', url);
-                return {
-                  readyState: 3,
-                  send: function() {},
-                  close: function() {},
-                  addEventListener: function() {},
-                  removeEventListener: function() {},
-                };
-              }
-              return new originalWebSocket(url, protocols);
-            };
-          }
-        })();
-      </script>`,
+      disableHmrForStackBlitz,
     ].join("\n"),
   };
 };
@@ -147,7 +127,7 @@ const DevLocator: Template<TemplateRenderProps> = (props) => {
         >
           <Editor
             document={document}
-            componentRegistry={locatorComponentRegistry}
+            componentRegistry={componentRegistry}
             themeConfig={defaultThemeConfig}
             localDev={true}
             forceThemeMode={themeMode}

@@ -121,7 +121,7 @@ export function generateTemplateMetadata(
 
   return {
     siteId: 1337,
-    templateId: "dev",
+    templateId: streamDocument?.__?.name ?? "dev",
     entityId: hashCode(cleanString),
     layoutId: hashCode(cleanString),
     assignment: "ALL",

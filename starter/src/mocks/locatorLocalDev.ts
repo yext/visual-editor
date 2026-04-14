@@ -214,8 +214,15 @@ export const installLocatorLocalDevMocks = () => {
   const mockGlobal = globalThis as MockGlobal;
   const previousVisualEditorTestFlag = mockGlobal.__VISUAL_EDITOR_TEST__;
   const geolocation = navigator.geolocation;
-  const originalGetCurrentPosition: Geolocation["getCurrentPosition"] | undefined =
-    geolocation?.getCurrentPosition;
+  const originalOwnGetCurrentPositionDescriptor = geolocation
+    ? Object.getOwnPropertyDescriptor(geolocation, "getCurrentPosition")
+    : undefined;
+  const originalPrototypeGetCurrentPositionDescriptor = geolocation
+    ? Object.getOwnPropertyDescriptor(
+        Object.getPrototypeOf(geolocation),
+        "getCurrentPosition"
+      )
+    : undefined;
 
   mockGlobal.__VISUAL_EDITOR_TEST__ = true;
 
@@ -270,7 +277,14 @@ export const installLocatorLocalDevMocks = () => {
 
   if (geolocation) {
     Object.defineProperty(geolocation, "getCurrentPosition", {
-      configurable: true,
+      configurable:
+        originalOwnGetCurrentPositionDescriptor?.configurable ??
+        originalPrototypeGetCurrentPositionDescriptor?.configurable ??
+        true,
+      enumerable:
+        originalOwnGetCurrentPositionDescriptor?.enumerable ??
+        originalPrototypeGetCurrentPositionDescriptor?.enumerable ??
+        false,
       value: (
         successCallback: PositionCallback,
         errorCallback?: PositionErrorCallback
@@ -297,10 +311,15 @@ export const installLocatorLocalDevMocks = () => {
     globalThis.fetch = originalFetch;
 
     if (geolocation) {
-      Object.defineProperty(geolocation, "getCurrentPosition", {
-        configurable: true,
-        value: originalGetCurrentPosition,
-      });
+      if (originalOwnGetCurrentPositionDescriptor) {
+        Object.defineProperty(
+          geolocation,
+          "getCurrentPosition",
+          originalOwnGetCurrentPositionDescriptor
+        );
+      } else {
+        delete geolocation.getCurrentPosition;
+      }
     }
 
     if (previousVisualEditorTestFlag === undefined) {

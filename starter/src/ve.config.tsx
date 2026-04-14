@@ -5,6 +5,7 @@ import {
   DirectoryCategory,
   DirectoryCategoryComponents,
   DirectoryCategoryProps,
+  LocatorConfigProps,
   MainConfigProps,
   locatorConfig,
   mainConfig,
@@ -29,10 +30,8 @@ export const devConfig: Config<DevProps> = {
   root: mainConfig.root,
 };
 
-export const mainComponentRegistry: Record<string, Config<DevProps>> = {
-  dev: devConfig,
-};
-
-export const locatorComponentRegistry: Record<string, Config<any>> = {
-  dev: locatorConfig,
+// TODO: Use mainConfig directly for dev-location once directory templates are supported
+export const componentRegistry: Record<string, Config<any>> = {
+  "dev-location": devConfig,
+  "dev-locator": locatorConfig,
 };

@@ -15,11 +15,11 @@ import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 
 const devLogger = new DevLogger();
 
-const createEmptyLocalDevLayout = (): Data => ({
+const createEmptyLocalDevLayout: Data = {
   root: {},
   content: [],
   zones: {},
-});
+};
 
 export const getLocalDevLayoutData = (
   puckConfig: Config,
@@ -28,7 +28,7 @@ export const getLocalDevLayoutData = (
   const layout = streamDocument.__?.layout;
   if (!layout) {
     return migrate(
-      createEmptyLocalDevLayout(),
+      createEmptyLocalDevLayout,
       migrationRegistry,
       puckConfig,
       streamDocument
@@ -44,7 +44,7 @@ export const getLocalDevLayoutData = (
       error
     );
     return migrate(
-      createEmptyLocalDevLayout(),
+      createEmptyLocalDevLayout,
       migrationRegistry,
       puckConfig,
       streamDocument
