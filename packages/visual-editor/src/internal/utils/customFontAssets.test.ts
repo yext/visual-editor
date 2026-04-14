@@ -153,8 +153,8 @@ describe("buildCustomFontAssets", () => {
       "y-fonts/beta.css",
     ]);
     expect(assets.preloads).toEqual([
-      { href: "/y-fonts/alpha-bold.woff2", type: undefined },
-      { href: "/y-fonts/beta-regular.woff2", type: undefined },
+      "/y-fonts/alpha-bold.woff2",
+      "/y-fonts/beta-regular.woff2",
     ]);
   });
 
@@ -194,9 +194,7 @@ describe("buildCustomFontAssets", () => {
     });
 
     expect(assets.stylesheetPaths).toEqual(["y-fonts/gamma.css"]);
-    expect(assets.preloads).toEqual([
-      { href: "/y-fonts/gamma-variable-italic.woff2", type: undefined },
-    ]);
+    expect(assets.preloads).toEqual(["/y-fonts/gamma-variable-italic.woff2"]);
   });
 
   it("uses italic static files when italic is selected", () => {
@@ -231,82 +229,73 @@ describe("buildCustomFontAssets", () => {
       customFonts,
     });
 
-    expect(assets.preloads).toEqual([
-      { href: "/y-fonts/delta-600-italic.woff2", type: undefined },
-    ]);
+    expect(assets.preloads).toEqual(["/y-fonts/delta-600-italic.woff2"]);
   });
 
-  it.each([
-    {
-      name: "italic is selected but no italic asset exists",
-      customFonts: {
-        Epsilon: {
-          italics: true,
-          weights: [400, 600, 700],
-          fallback: "sans-serif",
-          facePath: "y-fonts/epsilon.css",
-          variants: [
-            {
-              style: "normal",
-              weights: [600],
-              filePath: "/y-fonts/epsilon-600.woff2",
-            },
-          ],
-        },
-      } as FontRegistry,
+  it("omits a preload when italic is selected but no italic asset exists", () => {
+    const customFonts: FontRegistry = {
+      Epsilon: {
+        italics: true,
+        weights: [400, 600, 700],
+        fallback: "sans-serif",
+        facePath: "y-fonts/epsilon.css",
+        variants: [
+          {
+            style: "normal",
+            weights: [600],
+            filePath: "/y-fonts/epsilon-600.woff2",
+          },
+        ],
+      },
+    };
+
+    const assets = buildCustomFontAssets({
       themeConfig: createTextThemeConfig("'Epsilon', sans-serif", "600"),
       themeValues: {
         "--fontFamily-body-fontFamily": "'Epsilon', sans-serif",
         "--fontWeight-body-fontWeight": "600",
         "--fontStyle-body-fontStyle": "italic",
       },
-    },
-    {
-      name: "no matching static weight exists",
-      customFonts: {
-        Zeta: {
-          italics: false,
-          weights: [400, 700],
-          fallback: "sans-serif",
-          facePath: "y-fonts/zeta.css",
-          variants: [
-            {
-              style: "normal",
-              weights: [400],
-              filePath: "/y-fonts/zeta-regular.woff2",
-            },
-            {
-              style: "normal",
-              weights: [700],
-              filePath: "/y-fonts/zeta-bold.woff2",
-            },
-          ],
-        },
-      } as FontRegistry,
+      customFonts,
+    });
+
+    expect(assets.preloads).toEqual([]);
+  });
+
+  it("omits a preload when no matching static weight exists", () => {
+    const customFonts: FontRegistry = {
+      Zeta: {
+        italics: false,
+        weights: [400, 700],
+        fallback: "sans-serif",
+        facePath: "y-fonts/zeta.css",
+        variants: [
+          {
+            style: "normal",
+            weights: [400],
+            filePath: "/y-fonts/zeta-regular.woff2",
+          },
+          {
+            style: "normal",
+            weights: [700],
+            filePath: "/y-fonts/zeta-bold.woff2",
+          },
+        ],
+      },
+    };
+
+    const assets = buildCustomFontAssets({
       themeConfig: createTextThemeConfig("'Zeta', sans-serif", "600"),
       themeValues: {
         "--fontFamily-body-fontFamily": "'Zeta', sans-serif",
         "--fontWeight-body-fontWeight": "600",
         "--fontStyle-body-fontStyle": "normal",
       },
-    },
-  ] satisfies Array<{
-    name: string;
-    customFonts: FontRegistry;
-    themeConfig: ThemeConfig;
-    themeValues: Record<string, string>;
-  }>)(
-    "omits a preload when $name",
-    ({ customFonts, themeConfig, themeValues }) => {
-      const assets = buildCustomFontAssets({
-        themeConfig,
-        themeValues,
-        customFonts,
-      });
+      customFonts,
+    });
 
-      expect(assets.preloads).toEqual([]);
-    }
-  );
+    expect(assets.preloads).toEqual([]);
+  });
 
   it("returns face paths for the custom fonts used by the theme", () => {
     const themeConfig: ThemeConfig = {
@@ -493,26 +482,19 @@ describe("buildCustomFontAssets", () => {
           },
         },
       }).preloads
-    ).toEqual([{ href: "/y-fonts/alpha-bold.woff2", type: undefined }]);
+    ).toEqual(["/y-fonts/alpha-bold.woff2"]);
   });
 });
 
 describe("buildFontPreloadTags", () => {
-  it("uses the provided preload type", () => {
-    expect(
-      buildFontPreloadTags(
-        [{ href: "/y-fonts/alpha-regular.woff", type: "woff" }],
-        "./"
-      )
-    ).toEqual(
+  it("derives the preload type from the file extension", () => {
+    expect(buildFontPreloadTags(["/y-fonts/alpha-regular.woff"], "./")).toEqual(
       '<link rel="preload" href="/y-fonts/alpha-regular.woff" as="font" type="font/woff" crossorigin="anonymous">\n'
     );
   });
 
-  it("omits the preload type when none is provided", () => {
-    expect(
-      buildFontPreloadTags([{ href: "/y-fonts/alpha-regular.bin" }], "./")
-    ).toEqual(
+  it("omits the preload type when the extension is unknown", () => {
+    expect(buildFontPreloadTags(["/y-fonts/alpha-regular.bin"], "./")).toEqual(
       '<link rel="preload" href="/y-fonts/alpha-regular.bin" as="font" crossorigin="anonymous">\n'
     );
   });
