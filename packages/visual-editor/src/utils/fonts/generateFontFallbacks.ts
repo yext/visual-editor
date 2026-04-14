@@ -1,6 +1,7 @@
 import { createFontStack } from "@capsizecss/core";
 import { fontFamilyToCamelCase } from "@capsizecss/metrics";
-import { defaultFonts } from "./visualEditorFonts.ts";
+import type { FontRegistry } from "./visualEditorFonts.ts";
+import { defaultFonts as rawFontRegistry } from "./font_registry.js";
 import { writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
@@ -24,6 +25,8 @@ const systemFallbacks: Record<string, any> = {
   cursive: brushScript,
   monospace: courierNew,
 };
+
+const defaultFonts = rawFontRegistry as FontRegistry;
 
 /**
  * This script generates a JSON mapping of font families to the corresponding

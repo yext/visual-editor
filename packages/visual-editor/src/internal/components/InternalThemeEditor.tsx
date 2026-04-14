@@ -84,18 +84,16 @@ export const InternalThemeEditor = ({
     }
 
     const currentThemeHistory = themeHistories.histories[themeHistories.index];
-    const publishThemeData = currentThemeHistory.data;
-
     publishTheme({
       payload: {
-        saveThemeData: JSON.stringify(publishThemeData),
+        saveThemeData: JSON.stringify(currentThemeHistory.data),
       },
     });
 
     clearThemeHistory();
 
     setThemeHistories({
-      histories: [{ ...currentThemeHistory, data: publishThemeData }],
+      histories: [currentThemeHistory],
       index: 0,
     });
   };

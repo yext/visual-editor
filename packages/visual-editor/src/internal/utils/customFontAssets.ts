@@ -65,8 +65,7 @@ export const buildCustomFontAssets = ({
 }): CustomFontAssets => {
   const mergedThemeValues = getMergedThemeValues(themeConfig, themeValues);
   const stylesheetPaths = new Set<string>();
-  const preloads: string[] = [];
-  const seen = new Set<string>();
+  const preloads = new Set<string>();
 
   Object.keys(mergedThemeValues).forEach((key) => {
     if (!key.startsWith("--fontFamily-") || !key.endsWith("-fontFamily")) {
@@ -106,17 +105,14 @@ export const buildCustomFontAssets = ({
     const style = fontStyleValue === "italic" ? "italic" : "normal";
 
     const variant = findMatchingVariant(customFont, style, weight);
-    if (!variant || seen.has(variant.filePath)) {
-      return;
+    if (variant) {
+      preloads.add(variant.filePath);
     }
-
-    seen.add(variant.filePath);
-    preloads.push(variant.filePath);
   });
 
   return {
     stylesheetPaths: [...stylesheetPaths],
-    preloads,
+    preloads: [...preloads],
   };
 };
 
@@ -178,10 +174,14 @@ export const getCustomFontAssets = (
 
   return {
     stylesheetPaths: Array.isArray((assets as CustomFontAssets).stylesheetPaths)
-      ? (assets as CustomFontAssets).stylesheetPaths.filter(Boolean)
+      ? (assets as CustomFontAssets).stylesheetPaths.filter(
+          (entry): entry is string => typeof entry === "string"
+        )
       : [],
     preloads: Array.isArray((assets as CustomFontAssets).preloads)
-      ? (assets as CustomFontAssets).preloads.filter(Boolean)
+      ? (assets as CustomFontAssets).preloads.filter(
+          (entry): entry is string => typeof entry === "string"
+        )
       : [],
   };
 };
