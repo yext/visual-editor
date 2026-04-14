@@ -97,7 +97,9 @@ describe("buildCssOverridesStyle", () => {
             "'Yext Custom', 'Yext Custom Fallback', serif",
           __customFontAssets: {
             stylesheetPaths: ["y-fonts/yextcustom.css"],
-            preloads: ["/y-fonts/yextcustom-bold.woff2"],
+            preloads: [
+              { href: "/y-fonts/yextcustom-bold.woff2", type: "woff2" },
+            ],
           },
         }),
       },
@@ -134,7 +136,12 @@ describe("buildCssOverridesStyle", () => {
             "'EBB_Melvyn_Regular', 'EBB_Melvyn_Regular Fallback', sans-serif",
           __customFontAssets: {
             stylesheetPaths: ["y-fonts/ebbmelvynregular.css"],
-            preloads: ["/y-fonts/not-the-right-font-regular.woff2"],
+            preloads: [
+              {
+                href: "/y-fonts/not-the-right-font-regular.woff2",
+                type: "woff2",
+              },
+            ],
           },
         }),
       },
@@ -158,7 +165,12 @@ describe("buildCssOverridesStyle", () => {
             "'EBB_Melvyn_Regular', 'EBB_Melvyn_Regular Fallback', sans-serif",
           __customFontAssets: {
             stylesheetPaths: [],
-            preloads: ["/y-fonts/ebbmelvynregular-regular.woff2"],
+            preloads: [
+              {
+                href: "/y-fonts/ebbmelvynregular-regular.woff2",
+                type: "woff2",
+              },
+            ],
           },
         }),
       },
@@ -182,7 +194,9 @@ describe("buildCssOverridesStyle", () => {
           "--fontFamily-h1-fontFamily": "'Roboto', sans-serif",
           __customFontAssets: {
             stylesheetPaths: ["y-fonts/roboto.css"],
-            preloads: ["./y-fonts/roboto-regular.woff2"],
+            preloads: [
+              { href: "./y-fonts/roboto-regular.woff2", type: "woff2" },
+            ],
           },
         }),
       },

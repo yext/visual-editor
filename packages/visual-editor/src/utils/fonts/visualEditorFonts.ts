@@ -14,6 +14,7 @@ export type WeightSupport =
 export type Variant = {
   style: "normal" | "italic";
   filePath: string;
+  fileType?: string;
 } & WeightSupport;
 
 export type Font = {

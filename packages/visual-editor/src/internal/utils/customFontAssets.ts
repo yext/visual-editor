@@ -21,14 +21,10 @@ export const CUSTOM_FONT_ASSETS_KEY = "__customFontAssets";
 
 export type CustomFontAssets = {
   stylesheetPaths: string[];
-  preloads: string[];
-};
-
-const PRELOAD_MIME_TYPE_BY_EXTENSION: Record<string, string> = {
-  woff2: "font/woff2",
-  woff: "font/woff",
-  ttf: "font/ttf",
-  otf: "font/otf",
+  preloads: Array<{
+    href: string;
+    type?: string;
+  }>;
 };
 
 const getMergedThemeValues = (
@@ -72,7 +68,7 @@ export const buildCustomFontAssets = ({
 }): CustomFontAssets => {
   const mergedThemeValues = getMergedThemeValues(themeConfig, themeValues);
   const stylesheetPaths = new Set<string>();
-  const preloads = new Set<string>();
+  const preloads = new Map<string, string | undefined>();
 
   Object.keys(mergedThemeValues).forEach((key) => {
     if (!key.startsWith("--fontFamily-") || !key.endsWith("-fontFamily")) {
@@ -113,13 +109,13 @@ export const buildCustomFontAssets = ({
 
     const variant = findMatchingVariant(customFont, style, weight);
     if (variant) {
-      preloads.add(variant.filePath);
+      preloads.set(variant.filePath, variant.fileType);
     }
   });
 
   return {
     stylesheetPaths: [...stylesheetPaths],
-    preloads: [...preloads],
+    preloads: [...preloads.entries()].map(([href, type]) => ({ href, type })),
   };
 };
 
@@ -187,7 +183,16 @@ export const getCustomFontAssets = (
       : [],
     preloads: Array.isArray((assets as CustomFontAssets).preloads)
       ? (assets as CustomFontAssets).preloads.filter(
-          (entry): entry is string => typeof entry === "string"
+          (
+            entry
+          ): entry is {
+            href: string;
+            type?: string;
+          } =>
+            typeof entry === "object" &&
+            entry !== null &&
+            typeof entry.href === "string" &&
+            ("type" in entry ? typeof entry.type === "string" : true)
         )
       : [],
   };
@@ -197,7 +202,7 @@ export const getCustomFontAssets = (
  * Builds preload link HTML for the saved custom font file URLs.
  */
 export const buildFontPreloadTags = (
-  preloads: string[],
+  preloads: Array<{ href: string; type?: string }>,
   relativePrefixToRoot: string
 ): string => {
   if (preloads.length === 0) {
@@ -206,18 +211,9 @@ export const buildFontPreloadTags = (
 
   return (
     preloads
-      .map((href) => {
-        const extension = href
-          .split(/[?#]/, 1)[0]
-          ?.split(".")
-          .pop()
-          ?.toLowerCase();
-        const typeAttribute = extension
-          ? PRELOAD_MIME_TYPE_BY_EXTENSION[extension]
-          : undefined;
-
+      .map(({ href, type }) => {
         return `<link rel="preload" href="${normalizeAssetPath(href, relativePrefixToRoot)}" as="font"${
-          typeAttribute ? ` type="${typeAttribute}"` : ""
+          type ? ` type="font/${type}"` : ""
         } crossorigin="anonymous">`;
       })
       .join("\n") + "\n"
