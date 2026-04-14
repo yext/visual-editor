@@ -190,19 +190,17 @@ describe("custom font helpers", () => {
     ]);
   });
 
-  it("builds custom font links from face paths", () => {
+  it("builds custom font links from face paths without changing internal hyphens", () => {
     expect(
-      generateCustomFontLinkData(["y-fonts/ebbmelvynregular.css"], "./")
+      generateCustomFontLinkData(
+        ["y-fonts/ebbmelvynregular.css", "y-fonts/foo-bar.css"],
+        "./"
+      )
     ).toEqual([
       {
         href: "./y-fonts/ebbmelvynregular.css",
         rel: "stylesheet",
       },
-    ]);
-  });
-
-  it("keeps internal hyphens in face paths", () => {
-    expect(generateCustomFontLinkData(["y-fonts/foo-bar.css"], "./")).toEqual([
       {
         href: "./y-fonts/foo-bar.css",
         rel: "stylesheet",
