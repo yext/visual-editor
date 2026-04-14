@@ -24,6 +24,13 @@ export type CustomFontAssets = {
   preloads: string[];
 };
 
+const PRELOAD_MIME_TYPE_BY_EXTENSION: Record<string, string> = {
+  woff2: "font/woff2",
+  woff: "font/woff",
+  ttf: "font/ttf",
+  otf: "font/otf",
+};
+
 const getMergedThemeValues = (
   themeConfig: ThemeConfig,
   themeValues: ThemeData
@@ -200,7 +207,18 @@ export const buildFontPreloadTags = (
   return (
     preloads
       .map((href) => {
-        return `<link rel="preload" href="${normalizeAssetPath(href, relativePrefixToRoot)}" as="font" type="font/woff2" crossorigin="anonymous">`;
+        const extension = href
+          .split(/[?#]/, 1)[0]
+          ?.split(".")
+          .pop()
+          ?.toLowerCase();
+        const typeAttribute = extension
+          ? PRELOAD_MIME_TYPE_BY_EXTENSION[extension]
+          : undefined;
+
+        return `<link rel="preload" href="${normalizeAssetPath(href, relativePrefixToRoot)}" as="font"${
+          typeAttribute ? ` type="${typeAttribute}"` : ""
+        } crossorigin="anonymous">`;
       })
       .join("\n") + "\n"
   );

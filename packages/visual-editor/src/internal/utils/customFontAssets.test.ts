@@ -1,5 +1,8 @@
 import { describe, it, expect } from "vitest";
-import { buildCustomFontAssets } from "./customFontAssets.ts";
+import {
+  buildCustomFontAssets,
+  buildFontPreloadTags,
+} from "./customFontAssets.ts";
 import { ThemeConfig } from "../../utils/themeResolver.ts";
 import { FontRegistry } from "../../utils/fonts/visualEditorFonts.ts";
 
@@ -480,5 +483,19 @@ describe("buildCustomFontAssets", () => {
         },
       }).preloads
     ).toEqual(["/y-fonts/alpha-bold.woff2"]);
+  });
+});
+
+describe("buildFontPreloadTags", () => {
+  it("derives the preload type from the file extension", () => {
+    expect(buildFontPreloadTags(["/y-fonts/alpha-regular.woff"], "./")).toEqual(
+      '<link rel="preload" href="/y-fonts/alpha-regular.woff" as="font" type="font/woff" crossorigin="anonymous">\n'
+    );
+  });
+
+  it("omits the preload type when the extension is unknown", () => {
+    expect(buildFontPreloadTags(["/y-fonts/alpha-regular.bin"], "./")).toEqual(
+      '<link rel="preload" href="/y-fonts/alpha-regular.bin" as="font" crossorigin="anonymous">\n'
+    );
   });
 });
