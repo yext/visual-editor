@@ -25,51 +25,19 @@ import tailwindConfig from "../../tailwind.config";
 import { devTemplateStream } from "../dev.config";
 import React from "react";
 import { SchemaWrapper } from "@yext/pages-components";
+import { installLocatorLocalDevMocks } from "../mocks/locatorLocalDev";
 import { disableHmrForStackBlitz } from "../utils";
 
 export const config = {
-  name: "dev-location",
+  name: "dev-locator",
   stream: {
-    $id: "dev-location-stream",
+    $id: "dev-locator-stream",
     filter: {
-      entityTypes: ["location"],
+      entityTypes: ["locator"],
     },
-    fields: [
-      "id",
-      "uid",
-      "meta",
-      "slug",
-      "name",
-      "hours",
-      "dineInHours",
-      "driveThroughHours",
-      "address",
-      "yextDisplayCoordinate",
-      "c_productSection.sectionTitle",
-      "c_productSection.linkedProducts.name",
-      "c_productSection.linkedProducts.c_productPromo",
-      "c_productSection.linkedProducts.c_description",
-      "c_productSection.linkedProducts.c_coverPhoto",
-      "c_productSection.linkedProducts.c_productCTA",
-      "c_hero",
-      "c_faqSection.linkedFAQs.question",
-      "c_faqSection.linkedFAQs.answerV2",
-      "dm_directoryParents_defaultdirectory.slug",
-      "dm_directoryParents_defaultdirectory.name",
-      "dm_directoryChildren.name",
-      "dm_directoryChildren.address",
-      "dm_directoryChildren.slug",
-      "dm_directoryChildren.hours",
-      "dm_directoryChildren.timezone",
-      "additionalHoursText",
-      "mainPhone",
-      "emails",
-      "services",
-      "c_deliveryPromo",
-      "ref_listings",
-    ],
+    fields: ["id", "uid", "meta", "slug", "name"],
     localization: {
-      locales: ["en", "zh_hans_hk", "fr-CA"],
+      locales: ["en"],
     },
   },
   additionalProperties: {
@@ -114,16 +82,12 @@ export const transformProps: TransformProps<TemplateProps<any>> = async (
 };
 
 export const getPath: GetPath<TemplateProps> = ({ document }) => {
-  const localePath = document.locale !== "en" ? `${document.locale}/` : "";
-  return document.address
-    ? `${localePath}${document.address.region}/${document.address.city}/${
-        document.address.line1
-      }-${document.id.toString()}`
-    : `${localePath}${document.id.toString()}`;
+  return document.slug ?? document.id.toString();
 };
 
-const Dev: Template<TemplateRenderProps> = (props) => {
+const DevLocator: Template<TemplateRenderProps> = (props) => {
   const [themeMode, setThemeMode] = React.useState<boolean>(false);
+  const mockCleanupRef = React.useRef<(() => void) | null>(null);
   const { document } = props;
   const entityFields = devTemplateStream.stream.schema
     .fields as unknown as YextSchemaField[];
@@ -131,6 +95,17 @@ const Dev: Template<TemplateRenderProps> = (props) => {
     string,
     string
   >;
+
+  React.useEffect(() => {
+    if (typeof window !== "undefined" && mockCleanupRef.current === null) {
+      mockCleanupRef.current = installLocatorLocalDevMocks();
+    }
+
+    return () => {
+      mockCleanupRef.current?.();
+      mockCleanupRef.current = null;
+    };
+  }, []);
 
   return (
     <div>
@@ -163,4 +138,4 @@ const Dev: Template<TemplateRenderProps> = (props) => {
   );
 };
 
-export default Dev;
+export default DevLocator;
