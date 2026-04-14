@@ -20,6 +20,11 @@ import { ThemeHistories, ThemeHistory } from "../types/themeData.ts";
 import * as lzstring from "lz-string";
 import { Metadata } from "../../editor/Editor.tsx";
 import { createPreviewFrameLinkBlocker } from "../utils/previewFrameLinkBlocker.ts";
+import {
+  buildCustomFontAssets,
+  CUSTOM_FONT_ASSETS_KEY,
+  removeCustomFontAssets,
+} from "../utils/customFontPreloads.ts";
 
 const devLogger = new DevLogger();
 // Used because we want the sidebar to be hidden
@@ -84,17 +89,36 @@ export const InternalThemeEditor = ({
     }
 
     const currentThemeHistory = themeHistories.histories[themeHistories.index];
+    // generate customFontAssets before publishing
+    let publishThemeData = currentThemeHistory.data;
+
+    if (themeConfig && templateMetadata.customFonts) {
+      const customFontAssets = buildCustomFontAssets({
+        themeConfig,
+        themeValues: currentThemeHistory.data,
+        customFonts: templateMetadata.customFonts,
+      });
+
+      publishThemeData =
+        customFontAssets.stylesheetPaths.length > 0 ||
+        customFontAssets.preloads.length > 0
+          ? {
+              ...currentThemeHistory.data,
+              [CUSTOM_FONT_ASSETS_KEY]: customFontAssets,
+            }
+          : removeCustomFontAssets(currentThemeHistory.data);
+    }
 
     publishTheme({
       payload: {
-        saveThemeData: JSON.stringify(currentThemeHistory.data),
+        saveThemeData: JSON.stringify(publishThemeData),
       },
     });
 
     clearThemeHistory();
 
     setThemeHistories({
-      histories: [currentThemeHistory],
+      histories: [{ ...currentThemeHistory, data: publishThemeData }],
       index: 0,
     });
   };
