@@ -6,6 +6,7 @@ import {
   DirectoryCategoryComponents,
   DirectoryCategoryProps,
   MainConfigProps,
+  locatorConfig,
   mainConfig,
 } from "@yext/visual-editor";
 
@@ -28,6 +29,10 @@ export const devConfig: Config<DevProps> = {
   root: mainConfig.root,
 };
 
-export const componentRegistry: Record<string, Config<DevProps>> = {
+export const mainComponentRegistry: Record<string, Config<DevProps>> = {
   dev: devConfig,
+};
+
+export const locatorComponentRegistry: Record<string, Config<any>> = {
+  dev: locatorConfig,
 };

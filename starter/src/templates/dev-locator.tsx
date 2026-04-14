@@ -9,7 +9,7 @@ import {
   TemplateRenderProps,
   TransformProps,
 } from "@yext/pages";
-import { mainComponentRegistry } from "../ve.config";
+import { locatorComponentRegistry } from "../ve.config";
 import {
   applyTheme,
   Editor,
@@ -25,50 +25,18 @@ import tailwindConfig from "../../tailwind.config";
 import { devTemplateStream } from "../dev.config";
 import React from "react";
 import { SchemaWrapper } from "@yext/pages-components";
+import { installLocatorLocalDevMocks } from "../mocks/locatorLocalDev";
 
 export const config = {
-  name: "dev-location",
+  name: "dev-locator",
   stream: {
-    $id: "dev-location-stream",
+    $id: "dev-locator-stream",
     filter: {
-      entityTypes: ["location"],
+      entityTypes: ["locator"],
     },
-    fields: [
-      "id",
-      "uid",
-      "meta",
-      "slug",
-      "name",
-      "hours",
-      "dineInHours",
-      "driveThroughHours",
-      "address",
-      "yextDisplayCoordinate",
-      "c_productSection.sectionTitle",
-      "c_productSection.linkedProducts.name",
-      "c_productSection.linkedProducts.c_productPromo",
-      "c_productSection.linkedProducts.c_description",
-      "c_productSection.linkedProducts.c_coverPhoto",
-      "c_productSection.linkedProducts.c_productCTA",
-      "c_hero",
-      "c_faqSection.linkedFAQs.question",
-      "c_faqSection.linkedFAQs.answerV2",
-      "dm_directoryParents_defaultdirectory.slug",
-      "dm_directoryParents_defaultdirectory.name",
-      "dm_directoryChildren.name",
-      "dm_directoryChildren.address",
-      "dm_directoryChildren.slug",
-      "dm_directoryChildren.hours",
-      "dm_directoryChildren.timezone",
-      "additionalHoursText",
-      "mainPhone",
-      "emails",
-      "services",
-      "c_deliveryPromo",
-      "ref_listings",
-    ],
+    fields: ["id", "uid", "meta", "slug", "name"],
     localization: {
-      locales: ["en", "zh_hans_hk", "fr-CA"],
+      locales: ["en"],
     },
   },
   additionalProperties: {
@@ -100,21 +68,17 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
       applyHeaderScript(document),
       applyTheme(document, relativePrefixToRoot, defaultThemeConfig),
       SchemaWrapper(schema),
-      // Prevent Vite client script loading in StackBlitz
       `<script>
         (function() {
-          // Check if we're in StackBlitz
           var isStackBlitz = window.location.hostname.includes('webcontainer.io');
           
           if (isStackBlitz) {
-            // Block WebSocket connections for Vite HMR
             var originalWebSocket = window.WebSocket;
             window.WebSocket = function(url, protocols) {
-              // Block Vite HMR WebSocket connections
               if (url && (url.includes('24678') || url.includes('vite') || url.includes('hmr'))) {
                 console.log('Blocked Vite WebSocket connection:', url);
                 return {
-                  readyState: 3, // CLOSED
+                  readyState: 3,
                   send: function() {},
                   close: function() {},
                   addEventListener: function() {},
@@ -138,16 +102,12 @@ export const transformProps: TransformProps<TemplateProps<any>> = async (
 };
 
 export const getPath: GetPath<TemplateProps> = ({ document }) => {
-  const localePath = document.locale !== "en" ? `${document.locale}/` : "";
-  return document.address
-    ? `${localePath}${document.address.region}/${document.address.city}/${
-        document.address.line1
-      }-${document.id.toString()}`
-    : `${localePath}${document.id.toString()}`;
+  return document.slug ?? document.id.toString();
 };
 
-const Dev: Template<TemplateRenderProps> = (props) => {
+const DevLocator: Template<TemplateRenderProps> = (props) => {
   const [themeMode, setThemeMode] = React.useState<boolean>(false);
+  const mockCleanupRef = React.useRef<(() => void) | null>(null);
   const { document } = props;
   const entityFields = devTemplateStream.stream.schema
     .fields as unknown as YextSchemaField[];
@@ -155,6 +115,17 @@ const Dev: Template<TemplateRenderProps> = (props) => {
     string,
     string
   >;
+
+  if (typeof window !== "undefined" && mockCleanupRef.current === null) {
+    mockCleanupRef.current = installLocatorLocalDevMocks();
+  }
+
+  React.useEffect(() => {
+    return () => {
+      mockCleanupRef.current?.();
+      mockCleanupRef.current = null;
+    };
+  }, []);
 
   return (
     <div>
@@ -176,7 +147,7 @@ const Dev: Template<TemplateRenderProps> = (props) => {
         >
           <Editor
             document={document}
-            componentRegistry={mainComponentRegistry}
+            componentRegistry={locatorComponentRegistry}
             themeConfig={defaultThemeConfig}
             localDev={true}
             forceThemeMode={themeMode}
@@ -187,4 +158,4 @@ const Dev: Template<TemplateRenderProps> = (props) => {
   );
 };
 
-export default Dev;
+export default DevLocator;
