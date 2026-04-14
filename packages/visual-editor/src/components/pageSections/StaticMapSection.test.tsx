@@ -12,6 +12,7 @@ import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { Render, Config } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 import { StaticMapSection } from "./StaticMapSection.tsx";
+import { MainContent } from "../structure/MainContent.tsx";
 
 const STATIC_MAP_TEST_API_KEY = "fixture-static-map-api-key";
 
@@ -109,7 +110,7 @@ const tests: ComponentTest[] = [
 
 describe("StaticMapSection", async () => {
   const puckConfig: Config = {
-    components: { StaticMapSection },
+    components: { StaticMapSection, MainContent },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;

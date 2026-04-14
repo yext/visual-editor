@@ -20,6 +20,7 @@ import { LocatorComponent } from "./Locator.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 import { backgroundColors } from "../utils/themeConfigOptions.ts";
+import { MainContent } from "./structure/MainContent.tsx";
 
 vi.mock("@yext/search-ui-react", async () => {
   const actual = await vi.importActual<typeof import("@yext/search-ui-react")>(
@@ -1141,7 +1142,7 @@ const screenshotThreshold = 30;
 
 describe("Locator", async () => {
   const puckConfig: Config = {
-    components: { Locator: LocatorComponent },
+    components: { Locator: LocatorComponent, MainContent },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
