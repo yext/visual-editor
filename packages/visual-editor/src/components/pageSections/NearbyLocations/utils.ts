@@ -1,3 +1,4 @@
+import { AddressType, HoursType } from "@yext/pages-components";
 import { StreamDocument } from "../../../utils/types/StreamDocument.ts";
 import { getDistance } from "geolib";
 
@@ -10,18 +11,30 @@ type Coordinate = {
   longitude?: number;
 };
 
-type NearbyLocationDoc = {
+export type NearbyLocationDoc = {
+  /** The entity id of the location */
   id?: string;
+  /** The name of the location */
   name?: string;
+  /** The hours of the location */
+  hours?: HoursType;
+  /** The address of the location */
+  address?: AddressType;
+  /** The timezone of the location */
+  timezone?: string;
+  /** The phone number of the location */
+  mainPhone?: string;
   yextDisplayCoordinate?: Coordinate;
   geocodedCoordinate?: Coordinate;
 };
 
-type NearbyLocationsResponse = {
-  meta?: {
-    uuid?: string;
-    errors?: unknown[];
-  };
+type NearbyLocationsMeta = {
+  uuid?: string;
+  errors?: unknown[];
+};
+
+type NearbyLocationsRawResponse = {
+  meta?: NearbyLocationsMeta;
   response?: {
     docs?: NearbyLocationDoc[];
     count?: number;
@@ -29,8 +42,18 @@ type NearbyLocationsResponse = {
   };
 };
 
+export type NearbyLocationsResponse = {
+  meta?: NearbyLocationsMeta;
+  response: {
+    /** The entity data for the nearby locations. */
+    docs: NearbyLocationDoc[];
+    /** The number of nearby locations returned. */
+    count: number;
+  };
+};
+
 /** parseDocument parses the streamDocument to get the businessId, apiKey, contentEndpointId, and contentDeliveryAPIDomain */
-export const parseDocument = (
+export const parseDocumentForNearbyLocations = (
   streamDocument: StreamDocument,
   contentEndpointIdEnvVar?: string
 ): {
@@ -121,9 +144,9 @@ export const fetchNearbyLocations = async ({
   radiusMi: number;
   limit: number;
   locale: string;
-}): Promise<Record<string, any>> => {
+}): Promise<NearbyLocationsResponse> => {
   const allDocs: NearbyLocationDoc[] = [];
-  let firstPageMeta: NearbyLocationsResponse["meta"];
+  let firstPageMeta: NearbyLocationsMeta | undefined;
   let count: number = 0; // the total count of entities available given the filter params
 
   const url = new URL(
@@ -152,7 +175,7 @@ export const fetchNearbyLocations = async ({
     }
     pageCount++;
 
-    const pageData = (await response.json()) as NearbyLocationsResponse;
+    const pageData = (await response.json()) as NearbyLocationsRawResponse;
     if (!firstPageMeta) {
       firstPageMeta = pageData.meta;
     }

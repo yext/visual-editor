@@ -1,12 +1,8 @@
 import { getDirectoryParents } from "../schema/helpers.ts";
 import { normalizeSlug } from "../slugifier.ts";
 import { StreamDocument } from "../types/StreamDocument.ts";
+import { BreadcrumbLink } from "./resolveBreadcrumbs.ts";
 import { isPrimaryLocale } from "./resolveUrlFromPathInfo.ts";
-
-export type BreadcrumbLink = {
-  name: string;
-  slug: string;
-};
 
 /**
  * Builds breadcrumb links from __.pathInfo.breadcrumbPrefix and the

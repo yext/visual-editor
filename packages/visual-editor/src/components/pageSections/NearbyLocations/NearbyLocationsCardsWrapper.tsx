@@ -21,7 +21,11 @@ import {
   getPreferredDistanceUnit,
   toKilometers,
 } from "../../../utils/i18n/distance.ts";
-import { parseDocument, fetchNearbyLocations } from "./utils.ts";
+import {
+  parseDocumentForNearbyLocations,
+  fetchNearbyLocations,
+  NearbyLocationDoc,
+} from "./utils.ts";
 import { NearbyLocationCard } from "./NearbyLocationCard.tsx";
 import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers.ts";
 import { MapPinOff } from "lucide-react";
@@ -303,7 +307,11 @@ const NearbyLocationCardsWrapperComponent: PuckComponent<
     contentEndpointId: string;
     contentDeliveryAPIDomain: string;
   } = React.useMemo(
-    () => parseDocument(streamDocument, puck.metadata?.contentEndpointIdEnvVar),
+    () =>
+      parseDocumentForNearbyLocations(
+        streamDocument,
+        puck.metadata?.contentEndpointIdEnvVar
+      ),
     [streamDocument, puck.metadata?.contentEndpointIdEnvVar]
   );
 
@@ -378,7 +386,7 @@ const NearbyLocationCardsWrapperComponent: PuckComponent<
             id={id + "-wrapper"}
           >
             {nearbyLocationsData.response.docs.map(
-              (location: any, index: number) => (
+              (location: NearbyLocationDoc, index: number) => (
                 <NearbyLocationCard
                   key={index}
                   cardNumber={index}

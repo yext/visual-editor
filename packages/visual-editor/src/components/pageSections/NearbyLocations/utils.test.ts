@@ -1,5 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { fetchNearbyLocations, parseDocument } from "./utils.ts";
+import {
+  fetchNearbyLocations,
+  parseDocumentForNearbyLocations,
+} from "./utils.ts";
 
 describe("parseDocument", () => {
   const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
@@ -51,13 +54,15 @@ describe("parseDocument", () => {
       },
     },
   ])("$name", ({ document, envVarName, expected }) => {
-    expect(parseDocument(document as any, envVarName)).toEqual(expected);
+    expect(
+      parseDocumentForNearbyLocations(document as any, envVarName)
+    ).toEqual(expected);
     expect(errorSpy).not.toHaveBeenCalled();
     expect(warnSpy).not.toHaveBeenCalled();
   });
 
   it("logs parse error for invalid _pageset JSON", () => {
-    const result = parseDocument({
+    const result = parseDocumentForNearbyLocations({
       businessId: "biz-1",
       id: "entity-1",
       _env: { YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: "api-key-1" },
@@ -170,9 +175,7 @@ describe("fetchNearbyLocations", () => {
 
     expect(result.meta).toEqual({ uuid: "page-1", errors: [] });
     expect(result.response.count).toBe(expectedCount);
-    expect(result.response.docs.map((doc: { id: string }) => doc.id)).toEqual(
-      expectedIds
-    );
+    expect(result.response.docs.map((doc) => doc.id)).toEqual(expectedIds);
 
     expect(fetchMock).toHaveBeenCalled();
     const firstUrl = new URL(fetchedUrlSnapshots[0]);
@@ -248,7 +251,7 @@ describe("fetchNearbyLocations", () => {
       locale: "de",
     });
 
-    expect(result.response.docs.map((doc: { id: string }) => doc.id)).toEqual([
+    expect(result.response.docs.map((doc) => doc.id)).toEqual([
       "nearest",
       "mid",
     ]);
@@ -294,7 +297,7 @@ describe("fetchNearbyLocations", () => {
       locale: "de",
     });
 
-    expect(result.response.docs.map((doc: { id: string }) => doc.id)).toEqual([
+    expect(result.response.docs.map((doc) => doc.id)).toEqual([
       "alpha",
       "bravo",
       "charlie",
