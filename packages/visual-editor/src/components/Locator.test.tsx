@@ -533,6 +533,116 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
   },
   {
+    name: "version 72 wrapped result card selector values",
+    document: {
+      locale: "en",
+      businessId: "4174974",
+      __: {
+        isPrimaryLocale: true,
+      },
+      _env: {
+        ...LOCATOR_TEST_ENV,
+      },
+      _pageset: JSON.stringify({
+        type: "LOCATOR",
+        typeConfig: {
+          locatorConfig: {
+            source: "accounts/4174974/sites/155048/pagesets/locations",
+            experienceKey: "locator-41",
+            entityType: "location",
+          },
+        },
+        config: {
+          urlTemplate: {
+            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+          },
+        },
+      }),
+    },
+    props: {
+      filters: {
+        openNowButton: false,
+        showDistanceOptions: false,
+      },
+      resultCard: [
+        {
+          props: {
+            entityType: "location",
+            primaryHeading: {
+              field: { selection: { value: "name" } },
+              constantValue: { en: "", hasLocalizedValue: "true" },
+              constantValueEnabled: false,
+              headingLevel: 3,
+            },
+            secondaryHeading: {
+              field: { selection: { value: "name" } },
+              constantValue: { en: "", hasLocalizedValue: "true" },
+              constantValueEnabled: false,
+              variant: "base",
+              liveVisibility: false,
+            },
+            tertiaryHeading: {
+              field: { selection: { value: "name" } },
+              constantValue: { en: "", hasLocalizedValue: "true" },
+              constantValueEnabled: false,
+              variant: "base",
+              liveVisibility: false,
+            },
+            icons: true,
+            hours: {
+              field: { selection: { value: "hours" } },
+              table: {
+                startOfWeek: "today",
+                collapseDays: false,
+                showAdditionalHoursText: false,
+              },
+              liveVisibility: true,
+            },
+            address: {
+              showGetDirectionsLink: true,
+              liveVisibility: true,
+            },
+            phone: {
+              field: { selection: { value: "mainPhone" } },
+              phoneFormat: "domestic",
+              includePhoneHyperlink: true,
+              liveVisibility: true,
+            },
+            email: {
+              field: { selection: { value: "emails" } },
+              liveVisibility: false,
+            },
+            services: {
+              field: { selection: { value: "services" } },
+              liveVisibility: false,
+            },
+            primaryCTA: {
+              label: "Visit Page",
+              variant: "primary",
+              liveVisibility: true,
+            },
+            secondaryCTA: {
+              label: "Call to Action",
+              link: "#",
+              variant: "secondary",
+              liveVisibility: false,
+            },
+            image: {
+              field: { selection: { value: "headshot" } },
+              constantValue: {
+                en: { url: "", height: 0, width: 0 },
+                hasLocalizedValue: "true",
+              },
+              constantValueEnabled: false,
+              liveVisibility: false,
+            },
+          },
+        },
+      ],
+    },
+    version: 72,
+  },
+  {
     name: "version 24 with filters",
     document: {
       locale: "en",
@@ -1148,6 +1258,44 @@ describe("Locator", async () => {
       },
     },
   };
+  const wrappedSelectorValuesTest = tests.find(
+    (test) => test.name === "version 72 wrapped result card selector values"
+  );
+
+  it("flattens wrapped result card selector fields during migration", () => {
+    expect(wrappedSelectorValuesTest).toBeDefined();
+
+    const data = migrate(
+      {
+        root: {
+          props: {
+            version: wrappedSelectorValuesTest!.version,
+          },
+        },
+        content: [
+          {
+            type: "Locator",
+            props: wrappedSelectorValuesTest!.props,
+          },
+        ],
+      },
+      migrationRegistry,
+      puckConfig,
+      wrappedSelectorValuesTest!.document
+    );
+
+    const resultCardProps = (data.content[0] as any).props.resultCard[0].props;
+
+    expect(resultCardProps.primaryHeading.field).toBe("name");
+    expect(resultCardProps.secondaryHeading.field).toBe("name");
+    expect(resultCardProps.tertiaryHeading.field).toBe("name");
+    expect(resultCardProps.hours.field).toBe("hours");
+    expect(resultCardProps.phone.field).toBe("mainPhone");
+    expect(resultCardProps.email.field).toBe("emails");
+    expect(resultCardProps.services.field).toBe("services");
+    expect(resultCardProps.image.field).toBe("headshot");
+  });
+
   it.each(transformTests(tests))(
     "$viewport.name $name",
     async ({
