@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { buildCustomFontAssets } from "./customFontPreloads.ts";
+import { buildCustomFontAssets } from "./customFontAssets.ts";
 import { ThemeConfig } from "../../utils/themeResolver.ts";
 import { FontRegistry } from "../../utils/fonts/visualEditorFonts.ts";
 

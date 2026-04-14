@@ -18,7 +18,7 @@ export type Variant = {
 
 export type Font = {
   fallback: "sans-serif" | "serif" | "monospace" | "cursive";
-  italics: boolean;
+  italics: boolean; // whether the font supports italics
   facePath?: string;
   variants?: Variant[];
 } & WeightSupport;

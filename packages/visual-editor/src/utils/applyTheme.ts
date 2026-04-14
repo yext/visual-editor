@@ -17,7 +17,7 @@ import {
 import {
   buildFontPreloadTags,
   getCustomFontAssets,
-} from "../internal/utils/customFontPreloads.ts";
+} from "../internal/utils/customFontAssets.ts";
 import { ThemeConfig } from "./themeResolver.ts";
 import { getContrastingColor } from "./colors.ts";
 import fontFallbackTransformations from "./fonts/fontFallbackTransformations.json" with { type: "json" };

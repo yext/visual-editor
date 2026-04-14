@@ -16,7 +16,7 @@ import {
   buildCustomFontAssets,
   CUSTOM_FONT_ASSETS_KEY,
   removeCustomFontAssets,
-} from "../../../utils/customFontPreloads.ts";
+} from "../../../utils/customFontAssets.ts";
 import { FontRegistry } from "../../../../utils/fonts/visualEditorFonts.ts";
 
 type ThemeFieldsSidebarProps = {

@@ -24,7 +24,7 @@ import {
   buildCustomFontAssets,
   CUSTOM_FONT_ASSETS_KEY,
   removeCustomFontAssets,
-} from "../utils/customFontPreloads.ts";
+} from "../utils/customFontAssets.ts";
 
 const devLogger = new DevLogger();
 // Used because we want the sidebar to be hidden

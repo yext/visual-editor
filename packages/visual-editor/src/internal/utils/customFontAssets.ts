@@ -121,7 +121,7 @@ export const buildCustomFontAssets = ({
 };
 
 /**
- * Removes saved custom font assets from theme data before re-saving.
+ * Removes custom font assets from theme data.
  */
 export const removeCustomFontAssets = (themeValues: ThemeData): ThemeData => {
   if (!(CUSTOM_FONT_ASSETS_KEY in themeValues)) {
