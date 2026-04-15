@@ -52,7 +52,6 @@ export type PresetImageType =
 export type HeroSectionType = {
   /**
    * The image to show in the hero section
-   * @ai Always use ImageType
    */
   image?: ImageType | AssetImageType;
   /** The first CTA button for the hero section */
@@ -65,7 +64,6 @@ export type HeroSectionType = {
 export type PromoSectionType = {
   /**
    * The image or video to show in the promo
-   * @ai Always use ImageType
    */
   image?: ImageType | AssetImageType | AssetVideo;
   /** The main text to display in the promo */
@@ -85,26 +83,22 @@ export type ProductSectionType = {
 export type ProductStruct = {
   /**
    * The product's image
-   * @ai Always use ImageType
    */
   image?: ImageType | AssetImageType;
   /**
    * The product's brow text above the title/name
-   * @ai This should not be more than a few words
    */
   brow?: TranslatableString | TranslatableRichText;
   /** The product's name */
   name?: TranslatableString;
   /**
    * The product's price
-   * @ai This should not be more than a few words
    */
   price?: TranslatableString | TranslatableRichText;
   /** The product's description */
   description?: TranslatableRichText;
   /**
    * The product's category
-   * @ai This should not be more than a few words
    */
   category?: TranslatableString | TranslatableRichText;
   /** The product's CTA */
@@ -120,7 +114,6 @@ export type EventSectionType = {
 export type EventStruct = {
   /**
    * An image representing the event
-   * @ai Always use ImageType
    */
   image?: ImageType | AssetImageType;
   /** The event's title */
@@ -165,14 +158,12 @@ export type TestimonialStruct = {
 export type InsightStruct = {
   /**
    * An image representing the insight
-   * @ai Always use ImageType
    */
   image?: ImageType | AssetImageType;
   /** The insight's title */
   name?: TranslatableString;
   /**
    * The insight's category
-   * @ai This should not be more than a few words
    */
   category?: TranslatableString | TranslatableRichText;
   /** A UTC string for the insight's publish time (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ssZ) */
@@ -197,7 +188,6 @@ export type TeamSectionType = {
 export type PersonStruct = {
   /**
    * The person's headshot image
-   * @ai Always use ImageType
    */
   headshot?: ImageType | AssetImageType;
   /** The person's name */
@@ -220,13 +210,11 @@ type LocalizedValues = {
 
 /**
  * A string that can be translated for different locales.
- * @ai This should always be the LocalizedValues type
  */
 export type TranslatableString = string | LocalizedValues;
 
 /**
  * Rich text that can be translated for different locales.
- * @ai This should always be Record<string, RichText>
  */
 export type TranslatableRichText =
   | (string | RichText)

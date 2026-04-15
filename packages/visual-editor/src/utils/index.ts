@@ -47,3 +47,7 @@ export {
   type FontRegistry,
 } from "./fonts/visualEditorFonts.ts";
 export { withPropOverrides } from "./withPropOverrides.ts";
+export {
+  resolveBreadcrumbs,
+  type BreadcrumbLink,
+} from "./urls/resolveBreadcrumbs.ts";
