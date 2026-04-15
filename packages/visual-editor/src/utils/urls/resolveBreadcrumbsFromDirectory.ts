@@ -1,6 +1,6 @@
 import { getDirectoryParents } from "../schema/helpers.ts";
 import { StreamDocument } from "../types/StreamDocument.ts";
-import { BreadcrumbLink } from "./resolveBreadcrumbs.ts";
+import { type BreadcrumbLink } from "./resolveBreadcrumbs.ts";
 
 export const resolveBreadcrumbsFromDirectory = (
   streamDocument: StreamDocument

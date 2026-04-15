@@ -41,8 +41,6 @@ export type NearbyLocationsResponse = {
 
 type useNearbyLocationsOptions = {
   streamDocument: StreamDocument;
-  /** Optionally, override the content endpoint. Defaults to streamDocument._env.YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY. */
-  contentEndpointIdEnvVar?: string;
   /** The latitude of the location. */
   latitude?: number;
   /** The longitude of the location. */
@@ -53,6 +51,11 @@ type useNearbyLocationsOptions = {
   limit: number;
   /** Enable/disable the query. */
   enabled: boolean;
+  /**
+   * Optionally, provide a override for the content endpoint id.
+   * Uses streamDocument._pageset.config.contentEndpointId by default.
+   */
+  contentEndpointIdOverride?: string;
 };
 
 export const useNearbyLocations = (
@@ -60,7 +63,7 @@ export const useNearbyLocations = (
 ): UseQueryResult<NearbyLocationsResponse, Error> => {
   const {
     streamDocument,
-    contentEndpointIdEnvVar,
+    contentEndpointIdOverride: contentEndpointIdEnvVar,
     latitude,
     longitude,
     radiusMi,

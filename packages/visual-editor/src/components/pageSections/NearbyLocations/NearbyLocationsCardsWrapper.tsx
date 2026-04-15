@@ -300,7 +300,7 @@ const NearbyLocationCardsWrapperComponent: PuckComponent<
   const { data: nearbyLocationsData, status: nearbyLocationsStatus } =
     useNearbyLocations({
       streamDocument,
-      contentEndpointIdEnvVar: puck.metadata?.contentEndpointIdEnvVar,
+      contentEndpointIdOverride: puck.metadata?.contentEndpointIdEnvVar,
       latitude: coordinate?.latitude,
       longitude: coordinate?.longitude,
       radiusMi: data?.radius,
