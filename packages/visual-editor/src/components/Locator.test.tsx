@@ -1136,117 +1136,137 @@ const tests: ComponentTest[] = [
     },
     version: 64,
   },
-  {
-    name: "version 72 wrapped result card selector values",
-    document: {
-      locale: "en",
-      businessId: "4174974",
-      __: {
-        isPrimaryLocale: true,
-      },
-      _env: {
-        ...LOCATOR_TEST_ENV,
-      },
-      _pageset: JSON.stringify({
-        type: "LOCATOR",
-        typeConfig: {
-          locatorConfig: {
-            source: "accounts/4174974/sites/155048/pagesets/locations",
-            experienceKey: "locator-41",
-            entityType: "location",
-          },
-        },
-        config: {
-          urlTemplate: {
-            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
-          },
-        },
-      }),
-    },
-    props: {
-      filters: {
-        openNowButton: false,
-        showDistanceOptions: false,
-      },
-      resultCard: [
-        {
-          props: {
-            entityType: "location",
-            primaryHeading: {
-              field: { selection: { value: "name" } },
-              constantValue: { en: "", hasLocalizedValue: "true" },
-              constantValueEnabled: false,
-              headingLevel: 3,
-            },
-            secondaryHeading: {
-              field: { selection: { value: "name" } },
-              constantValue: { en: "", hasLocalizedValue: "true" },
-              constantValueEnabled: false,
-              variant: "base",
-              liveVisibility: false,
-            },
-            tertiaryHeading: {
-              field: { selection: { value: "name" } },
-              constantValue: { en: "", hasLocalizedValue: "true" },
-              constantValueEnabled: false,
-              variant: "base",
-              liveVisibility: false,
-            },
-            icons: true,
-            hours: {
-              field: { selection: { value: "hours" } },
-              table: {
-                startOfWeek: "today",
-                collapseDays: false,
-                showAdditionalHoursText: false,
-              },
-              liveVisibility: true,
-            },
-            address: {
-              showGetDirectionsLink: true,
-              liveVisibility: true,
-            },
-            phone: {
-              field: { selection: { value: "mainPhone" } },
-              phoneFormat: "domestic",
-              includePhoneHyperlink: true,
-              liveVisibility: true,
-            },
-            email: {
-              field: { selection: { value: "emails" } },
-              liveVisibility: false,
-            },
-            services: {
-              field: { selection: { value: "services" } },
-              liveVisibility: false,
-            },
-            primaryCTA: {
-              label: "Visit Page",
-              variant: "primary",
-              liveVisibility: true,
-            },
-            secondaryCTA: {
-              label: "Call to Action",
-              link: "#",
-              variant: "secondary",
-              liveVisibility: false,
-            },
-            image: {
-              field: { selection: { value: "headshot" } },
-              constantValue: {
-                en: { url: "", height: 0, width: 0 },
-                hasLocalizedValue: "true",
-              },
-              constantValueEnabled: false,
-              liveVisibility: false,
-            },
-          },
-        },
-      ],
-    },
-    version: 72,
-  },
 ];
+
+const wrappedSelectorValuesMigrationFixture = {
+  document: {
+    locale: "en",
+    businessId: "4174974",
+    __: {
+      isPrimaryLocale: true,
+    },
+    _env: {
+      ...LOCATOR_TEST_ENV,
+    },
+    _pageset: JSON.stringify({
+      type: "LOCATOR",
+      typeConfig: {
+        locatorConfig: {
+          source: "accounts/4174974/sites/155048/pagesets/locations",
+          experienceKey: "locator-41",
+          entityType: "location",
+        },
+      },
+      config: {
+        urlTemplate: {
+          primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+        },
+      },
+    }),
+  },
+  data: {
+    root: {
+      props: {
+        version: 73,
+      },
+    },
+    content: [
+      {
+        type: "MainContent",
+        props: {
+          id: "MainContent-default",
+          content: [
+            {
+              type: "Locator",
+              props: {
+                filters: {
+                  openNowButton: false,
+                  showDistanceOptions: false,
+                },
+                resultCard: [
+                  {
+                    props: {
+                      entityType: "location",
+                      primaryHeading: {
+                        field: { selection: { value: "name" } },
+                        constantValue: { en: "", hasLocalizedValue: "true" },
+                        constantValueEnabled: false,
+                        headingLevel: 3,
+                      },
+                      secondaryHeading: {
+                        field: { selection: { value: "name" } },
+                        constantValue: { en: "", hasLocalizedValue: "true" },
+                        constantValueEnabled: false,
+                        variant: "base",
+                        liveVisibility: false,
+                      },
+                      tertiaryHeading: {
+                        field: { selection: { value: "name" } },
+                        constantValue: { en: "", hasLocalizedValue: "true" },
+                        constantValueEnabled: false,
+                        variant: "base",
+                        liveVisibility: false,
+                      },
+                      icons: true,
+                      hours: {
+                        field: { selection: { value: "hours" } },
+                        table: {
+                          startOfWeek: "today",
+                          collapseDays: false,
+                          showAdditionalHoursText: false,
+                        },
+                        liveVisibility: true,
+                      },
+                      address: {
+                        showGetDirectionsLink: true,
+                        liveVisibility: true,
+                      },
+                      phone: {
+                        field: { selection: { value: "mainPhone" } },
+                        phoneFormat: "domestic",
+                        includePhoneHyperlink: true,
+                        liveVisibility: true,
+                      },
+                      email: {
+                        field: { selection: { value: "emails" } },
+                        liveVisibility: false,
+                      },
+                      services: {
+                        field: { selection: { value: "services" } },
+                        liveVisibility: false,
+                      },
+                      primaryCTA: {
+                        label: "Visit Page",
+                        variant: "primary",
+                        liveVisibility: true,
+                      },
+                      secondaryCTA: {
+                        label: "Call to Action",
+                        link: "#",
+                        variant: "secondary",
+                        liveVisibility: false,
+                      },
+                      image: {
+                        field: { selection: { value: "headshot" } },
+                        constantValue: {
+                          en: { url: "", height: 0, width: 0 },
+                          hasLocalizedValue: "true",
+                        },
+                        constantValueEnabled: false,
+                        liveVisibility: false,
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    ],
+    zones: {},
+  },
+};
 
 const screenshotThreshold = 30;
 
@@ -1259,33 +1279,24 @@ describe("Locator", async () => {
       },
     },
   };
-  const wrappedSelectorValuesTest = tests.find(
-    (test) => test.name === "version 72 wrapped result card selector values"
-  );
 
   it("flattens wrapped result card selector fields during migration", () => {
-    expect(wrappedSelectorValuesTest).toBeDefined();
-
     const data = migrate(
-      {
-        root: {
-          props: {
-            version: wrappedSelectorValuesTest!.version,
-          },
-        },
-        content: [
-          {
-            type: "Locator",
-            props: wrappedSelectorValuesTest!.props,
-          },
-        ],
-      },
+      wrappedSelectorValuesMigrationFixture.data as any,
       migrationRegistry,
       puckConfig,
-      wrappedSelectorValuesTest!.document
+      wrappedSelectorValuesMigrationFixture.document as any
     );
 
-    const resultCardProps = (data.content[0] as any).props.resultCard[0].props;
+    const mainContent = data.content[0] as any;
+    expect(mainContent.type).toBe("MainContent");
+
+    const locator = mainContent.props.content.find(
+      (item: any) => item.type === "Locator"
+    );
+    expect(locator).toBeDefined();
+
+    const resultCardProps = locator.props.resultCard[0].props;
 
     expect(resultCardProps.primaryHeading.field).toBe("name");
     expect(resultCardProps.secondaryHeading.field).toBe("name");
