@@ -1,92 +1,20 @@
-import { StreamDocument } from "../../../utils/types/StreamDocument.ts";
 import { getDistance } from "geolib";
+import { StreamDocument } from "../../../utils/types/StreamDocument.ts";
+import {
+  NearbyLocationDoc,
+  NearbyLocationsResponse,
+} from "./useNearbyLocations.ts";
 
 const V_PARAM = "20250407";
 const PAGE_SIZE = 50;
 const MAX_PAGES = 100;
 
-type Coordinate = {
-  latitude?: number;
-  longitude?: number;
-};
-
-type NearbyLocationDoc = {
-  yextDisplayCoordinate?: Coordinate;
-  geocodedCoordinate?: Coordinate;
-};
-
-type NearbyLocationsResponse = {
-  meta?: {
-    uuid?: string;
-    errors?: unknown[];
-  };
+type NearbyLocationsRawResponse = {
+  meta?: NearbyLocationsResponse["meta"];
   response?: {
     docs?: NearbyLocationDoc[];
     count?: number;
     nextPageToken?: string;
-  };
-};
-
-/** parseDocument parses the streamDocument to get the businessId, apiKey, contentEndpointId, and contentDeliveryAPIDomain */
-export const parseDocument = (
-  streamDocument: StreamDocument,
-  contentEndpointIdEnvVar?: string
-): {
-  businessId: string;
-  entityId: string;
-  apiKey: string;
-  contentEndpointId: string;
-  contentDeliveryAPIDomain: string;
-} => {
-  const businessId: string = streamDocument?.businessId;
-  if (!businessId) {
-    console.warn("Missing businessId! Unable to fetch nearby locations.");
-  }
-
-  const entityId: string = streamDocument?.id;
-  if (!entityId) {
-    console.warn("Missing entityId! Unable to fetch nearby locations.");
-  }
-
-  const apiKey: string =
-    streamDocument?._env?.YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY;
-  if (!apiKey) {
-    console.warn(
-      "Missing YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY! Unable to fetch nearby locations."
-    );
-  }
-
-  let contentEndpointId: string = "";
-  if (streamDocument?._pageset) {
-    try {
-      const pagesetJson = JSON.parse(streamDocument?._pageset);
-      contentEndpointId = pagesetJson?.config?.contentEndpointId;
-    } catch (e) {
-      console.error("Failed to parse pageset from stream document. err=", e);
-    }
-  } else if (contentEndpointIdEnvVar) {
-    contentEndpointId = streamDocument?._env?.[contentEndpointIdEnvVar];
-  }
-  if (!contentEndpointId) {
-    console.warn(
-      "Missing contentEndpointId! Unable to fetch nearby locations."
-    );
-  }
-
-  const contentDeliveryAPIDomain =
-    streamDocument?._yext?.contentDeliveryAPIDomain;
-  if (!contentDeliveryAPIDomain) {
-    console.warn(
-      "Missing contentDeliveryAPIDomain! Unable to fetch nearby locations."
-    );
-  }
-
-  return {
-    businessId: businessId,
-    entityId: entityId,
-    apiKey: apiKey,
-    contentEndpointId: contentEndpointId,
-    contentDeliveryAPIDomain: contentDeliveryAPIDomain,
   };
 };
 
@@ -98,30 +26,80 @@ export const parseDocument = (
  * sorts them by distance, and returns the closest ones up to the specified limit.
  */
 export const fetchNearbyLocations = async ({
-  businessId,
-  entityId,
-  apiKey,
-  contentEndpointId,
-  contentDeliveryAPIDomain,
+  streamDocument,
+  contentEndpointIdEnvVar,
   latitude,
   longitude,
   radiusMi,
   limit,
   locale,
 }: {
-  businessId: string;
-  entityId: string;
-  apiKey: string;
-  contentEndpointId: string;
-  contentDeliveryAPIDomain: string;
+  streamDocument: StreamDocument;
+  contentEndpointIdEnvVar?: string;
   longitude: number;
   latitude: number;
   radiusMi: number;
   limit: number;
   locale: string;
-}): Promise<Record<string, any>> => {
+}): Promise<NearbyLocationsResponse> => {
+  const businessId: string = streamDocument?.businessId;
+  const entityId: string = streamDocument?.id;
+  const apiKey: string =
+    streamDocument?._env?.YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY;
+  const contentDeliveryAPIDomain =
+    streamDocument?._yext?.contentDeliveryAPIDomain;
+
+  let contentEndpointId = "";
+  if (streamDocument?._pageset) {
+    try {
+      const pagesetJson = JSON.parse(streamDocument._pageset);
+      contentEndpointId = pagesetJson?.config?.contentEndpointId;
+    } catch (e) {
+      console.error("Failed to parse pageset from stream document. err=", e);
+    }
+  } else if (contentEndpointIdEnvVar) {
+    contentEndpointId = streamDocument?._env?.[contentEndpointIdEnvVar];
+  }
+
+  if (!businessId) {
+    console.warn("Missing businessId! Unable to fetch nearby locations.");
+  }
+  if (!entityId) {
+    console.warn("Missing entityId! Unable to fetch nearby locations.");
+  }
+  if (!apiKey) {
+    console.warn(
+      "Missing YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY! Unable to fetch nearby locations."
+    );
+  }
+  if (!contentEndpointId) {
+    console.warn(
+      "Missing contentEndpointId! Unable to fetch nearby locations."
+    );
+  }
+  if (!contentDeliveryAPIDomain) {
+    console.warn(
+      "Missing contentDeliveryAPIDomain! Unable to fetch nearby locations."
+    );
+  }
+
+  if (
+    !businessId ||
+    !entityId ||
+    !apiKey ||
+    !contentEndpointId ||
+    !contentDeliveryAPIDomain
+  ) {
+    return {
+      meta: { errors: [] },
+      response: {
+        docs: [],
+        count: 0,
+      },
+    };
+  }
   const allDocs: NearbyLocationDoc[] = [];
-  let firstPageMeta: NearbyLocationsResponse["meta"];
+  let firstPageMeta: NearbyLocationsRawResponse["meta"];
   let count: number = 0; // the total count of entities available given the filter params
 
   const url = new URL(
@@ -150,7 +128,7 @@ export const fetchNearbyLocations = async ({
     }
     pageCount++;
 
-    const pageData = (await response.json()) as NearbyLocationsResponse;
+    const pageData = (await response.json()) as NearbyLocationsRawResponse;
     if (!firstPageMeta) {
       firstPageMeta = pageData.meta;
     }
