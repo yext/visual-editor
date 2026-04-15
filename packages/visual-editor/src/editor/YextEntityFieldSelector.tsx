@@ -113,7 +113,10 @@ export const TYPE_TO_CONSTANT_CONFIG: Record<string, ConstantFieldConfig> = {
   },
 };
 
-const LIST_TYPE_TO_CONSTANT_CONFIG = (): Record<string, ConstantFieldConfig> => {
+const LIST_TYPE_TO_CONSTANT_CONFIG = (): Record<
+  string,
+  ConstantFieldConfig
+> => {
   return {
     "type.string": TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG,
     "type.image": IMAGE_LIST_CONSTANT_CONFIG(),
