@@ -1,6 +1,6 @@
 import React from "react";
 import { PuckContext } from "@puckeditor/core";
-import { HoursType, AddressType, Address } from "@yext/pages-components";
+import { Address } from "@yext/pages-components";
 import { Background } from "../../atoms/background.tsx";
 import { Heading } from "../../atoms/heading.tsx";
 import { HeadingLevel } from "../../../utils/themeConfigOptions.ts";
@@ -13,22 +13,12 @@ import {
   mergeMeta,
   resolveUrlTemplate,
 } from "../../../utils/urls/resolveUrlTemplate.ts";
+import { NearbyLocationDoc } from "./useNearbyLocations.ts";
 
 /** A single card for the Nearby Locations Section */
 type NearbyLocationCardProps = {
   /** The location data to display in the card */
-  locationData?: {
-    /** The name of the location */
-    name: string;
-    /** The hours of the location */
-    hours: HoursType;
-    /** The address of the location */
-    address: AddressType;
-    /** The timezone of the location */
-    timezone: string;
-    /** The phone number of the location */
-    mainPhone: string;
-  };
+  locationData?: NearbyLocationDoc;
 
   /** @internal Shared styles for the card (controlled by the parent) */
   styles: NearbyLocationCardsWrapperProps["styles"];

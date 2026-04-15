@@ -12,6 +12,7 @@ import { migrationRegistry } from "../migrations/migrationRegistry.ts";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { Render, Config } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
+import { MainContent } from "../structure/MainContent.tsx";
 
 const tests: ComponentTest[] = [
   {
@@ -200,7 +201,7 @@ const tests: ComponentTest[] = [
 
 describe("BannerSection", async () => {
   const puckConfig: Config = {
-    components: { BannerSection },
+    components: { BannerSection, MainContent },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;

@@ -92,6 +92,7 @@ import {
   getEntityTypeLabel,
 } from "../utils/locatorEntityTypes.ts";
 import { YextComponentConfig, YextFields } from "../fields/fields.ts";
+import { isVisualEditorTestEnv } from "./testing/utils.ts";
 
 const RESULTS_LIMIT = 20;
 const LOCATION_FIELD = "builtin.location";
@@ -288,6 +289,10 @@ function getFacetFieldOptionsForEntityType(
     {
       label: msg("fields.options.facets.region", "Region"),
       value: "address.region",
+    },
+    {
+      label: msg("fields.options.facets.brandName", "Brand Name"),
+      value: "brandReference.name",
     },
   ];
   switch (entityType) {
@@ -1013,6 +1018,29 @@ const LoadingMapPlaceholder = () => {
           {t("loadingMap", "Loading Map...")}
         </Body>
       </div>
+    </div>
+  );
+};
+
+const LocatorTestMap = () => {
+  return (
+    <div
+      className="relative h-full w-full overflow-hidden"
+      style={{
+        background:
+          "linear-gradient(135deg, #dcfce7 0%, #dbeafe 55%, #fde68a 100%)",
+      }}
+    >
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 opacity-30"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.2) 1px, transparent 1px)",
+          backgroundPosition: "0 0, 0 0",
+          backgroundSize: "48px 48px",
+        }}
+      />
     </div>
   );
 };
@@ -1958,6 +1986,10 @@ const Map: React.FC<MapProps> = ({
       },
     [locationStyleConfig]
   );
+
+  if (isVisualEditorTestEnv()) {
+    return <LocatorTestMap />;
+  }
 
   // During page generation we don't exist in a browser context
   //@ts-expect-error MapboxGL is not loaded in the iframe content window
