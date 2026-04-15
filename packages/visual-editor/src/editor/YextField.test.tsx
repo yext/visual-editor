@@ -10,13 +10,11 @@ import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Im
 
 const {
   dynamicOptionsSelectorMock,
-  dynamicOptionsSingleSelectorMock,
   optionalNumberFieldMock,
   translatableStringFieldMock,
   yextEntityFieldSelectorMock,
 } = vi.hoisted(() => ({
   dynamicOptionsSelectorMock: vi.fn(),
-  dynamicOptionsSingleSelectorMock: vi.fn(),
   optionalNumberFieldMock: vi.fn(),
   translatableStringFieldMock: vi.fn(),
   yextEntityFieldSelectorMock: vi.fn(),
@@ -24,7 +22,6 @@ const {
 
 vi.mock("./DynamicOptionsSelector.tsx", () => ({
   DynamicOptionsSelector: dynamicOptionsSelectorMock,
-  DynamicOptionsSingleSelector: dynamicOptionsSingleSelectorMock,
 }));
 
 vi.mock("./OptionalNumberField.tsx", () => ({
@@ -111,6 +108,36 @@ describe("YextField", () => {
 
     expect(screen.getByPlaceholderText("Search")).toBeDefined();
 
+    fireEvent.click(screen.getByText("Beta"));
+
+    expect(onChange).toHaveBeenCalledWith("beta");
+  });
+
+  it("renders basicSelector configs with function-valued options through YextAutoField", () => {
+    const fieldName = msg("fields.item", "Item");
+    const getOptions = vi.fn(() => [
+      { label: "Alpha", value: "alpha" },
+      { label: "Beta", value: "beta" },
+    ]);
+
+    const field = YextField<string | undefined>(fieldName, {
+      type: "basicSelector",
+      options: getOptions,
+      translateOptions: false,
+    });
+
+    expect(field).toMatchObject({
+      type: "basicSelector",
+      label: fieldName,
+      translateOptions: false,
+    });
+
+    const { onChange } = renderCustomField(field, "alpha");
+
+    expect(getOptions).toHaveBeenCalled();
+    expect(screen.getByRole("combobox").textContent).toContain("Alpha");
+
+    fireEvent.click(screen.getByRole("combobox"));
     fireEvent.click(screen.getByText("Beta"));
 
     expect(onChange).toHaveBeenCalledWith("beta");
@@ -367,32 +394,6 @@ describe("YextField", () => {
       dropdownLabel: "Items",
       getOptions,
       placeholderOptionLabel: "Select an item",
-    });
-    expect(field).toBe(returnedField);
-  });
-
-  it("delegates dynamicSingleSelect configs to DynamicOptionsSingleSelector", () => {
-    const returnedField = createCustomField();
-    const fieldName = msg("fields.item", "Item");
-    const getOptions = vi.fn(() => [
-      { label: "Alpha", value: "alpha" },
-      { label: "Beta", value: "beta" },
-    ]);
-
-    dynamicOptionsSingleSelectorMock.mockReturnValue(returnedField);
-
-    const field = YextField(fieldName, {
-      type: "dynamicSingleSelect",
-      dropdownLabel: "Item",
-      getOptions,
-      placeholderOptionLabel: "Select one",
-    });
-
-    expect(dynamicOptionsSingleSelectorMock).toHaveBeenCalledWith({
-      label: fieldName,
-      dropdownLabel: "Item",
-      getOptions,
-      placeholderOptionLabel: "Select one",
     });
     expect(field).toBe(returnedField);
   });

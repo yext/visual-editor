@@ -25,10 +25,7 @@ import { HoursTableAtom } from "./atoms/hoursTable.tsx";
 import { YextField } from "../editor/YextField.tsx";
 import { ConstantValueModeToggler } from "../editor/YextEntityFieldSelector.tsx";
 import { LOCATOR_IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
-import {
-  DynamicOption,
-  DynamicOptionsSingleSelectorType,
-} from "../editor/DynamicOptionsSelector.tsx";
+import { DynamicOption } from "../editor/DynamicOptionsSelector.tsx";
 import { TranslatableString } from "../types/types.ts";
 import { TranslatableAssetImage } from "../types/images.ts";
 import {
@@ -84,7 +81,7 @@ export interface LocatorResultCardProps {
      * The field from the data to use for the primary heading
      * @defaultValue "name"
      */
-    field: DynamicOptionsSingleSelectorType<string>;
+    field?: string;
     /** Static value for the primary heading */
     constantValue?: TranslatableString;
     /** Whether to use the static value for the primary heading */
@@ -101,7 +98,7 @@ export interface LocatorResultCardProps {
   /** Settings for the secondary heading of the card */
   secondaryHeading: {
     /** The field from the data to use for the secondary heading */
-    field: DynamicOptionsSingleSelectorType<string>;
+    field?: string;
     /** Static value for the secondary heading */
     constantValue?: TranslatableString;
     /** Whether to use the static value for the secondary heading */
@@ -115,7 +112,7 @@ export interface LocatorResultCardProps {
   /** Settings for the tertiary heading of the card */
   tertiaryHeading: {
     /** The field from the data to use for the tertiary heading */
-    field: DynamicOptionsSingleSelectorType<string>;
+    field?: string;
     /** Static value for the tertiary heading */
     constantValue?: TranslatableString;
     /** Whether to use the static value for the tertiary heading */
@@ -135,7 +132,7 @@ export interface LocatorResultCardProps {
   /** Settings for the hours block */
   hours: {
     /** The field from the data to use for the hours */
-    field: DynamicOptionsSingleSelectorType<string>;
+    field?: string;
     /** Styles for the hours table */
     table: Omit<HoursTableProps["styles"], "alignment">;
     /** Whether the hours block is visible in live mode */
@@ -169,7 +166,7 @@ export interface LocatorResultCardProps {
      * The field from the data to use for the phone number
      * @defaultValue "mainPhone"
      */
-    field: DynamicOptionsSingleSelectorType<string>;
+    field?: string;
     /**
      * The format to use for the phone number
      * @defaultValue "domestic"
@@ -187,7 +184,7 @@ export interface LocatorResultCardProps {
      * The field from the data to use for the email address
      * @defaultValue "emails"
      */
-    field: DynamicOptionsSingleSelectorType<string>;
+    field?: string;
     /** Whether the email block is visible in live mode */
     liveVisibility: boolean;
   };
@@ -197,7 +194,7 @@ export interface LocatorResultCardProps {
     /**The field from the data to use for the services
      * @defaultValue "services"
      */
-    field: DynamicOptionsSingleSelectorType<string>;
+    field?: string;
     /** Whether the services block is visible in live mode */
     liveVisibility: boolean;
   };
@@ -233,7 +230,7 @@ export interface LocatorResultCardProps {
   /** Settings for the image */
   image: {
     /** The field from the data to use for the image */
-    field: DynamicOptionsSingleSelectorType<string>;
+    field?: string;
     /** Static value for the image */
     constantValue?: TranslatableAssetImage;
     /** Whether to use the static value for the image */
@@ -251,20 +248,20 @@ export type DistanceDisplayOption =
 export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
   entityType: DEFAULT_ENTITY_TYPE,
   primaryHeading: {
-    field: { selection: { value: "name" } },
+    field: "name",
     constantValue: "",
     constantValueEnabled: false,
     headingLevel: 3,
   },
   secondaryHeading: {
-    field: { selection: { value: "name" } },
+    field: "name",
     constantValue: "",
     constantValueEnabled: false,
     variant: "base",
     liveVisibility: false,
   },
   tertiaryHeading: {
-    field: { selection: { value: "name" } },
+    field: "name",
     constantValue: "",
     constantValueEnabled: false,
     variant: "base",
@@ -272,7 +269,7 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
   },
   icons: true,
   hours: {
-    field: { selection: { value: "hours" } },
+    field: "hours",
     table: {
       startOfWeek: "today",
       collapseDays: false,
@@ -287,17 +284,17 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
     liveVisibility: true,
   },
   phone: {
-    field: { selection: { value: "mainPhone" } },
+    field: "mainPhone",
     phoneFormat: "domestic",
     includePhoneHyperlink: true,
     liveVisibility: true,
   },
   email: {
-    field: { selection: { value: "emails" } },
+    field: "emails",
     liveVisibility: false,
   },
   services: {
-    field: { selection: { value: "services" } },
+    field: "services",
     liveVisibility: false,
   },
   primaryCTA: {
@@ -314,7 +311,7 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
     liveVisibility: false,
   },
   image: {
-    field: { selection: { value: "headshot" } },
+    field: "headshot",
     constantValue: {
       url: "",
       height: 0,
@@ -328,6 +325,7 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
 const getDisplayFieldOptions = (
   fieldTypeId: string | string[]
 ): DynamicOption<string>[] => {
+  // TODO: This breaks the rule of hooks, refactor after YextField is converted to a fieldType
   const templateMetadata = useTemplateMetadata();
   if (!templateMetadata?.locatorDisplayFields) {
     return [];
@@ -344,6 +342,13 @@ const getDisplayFieldOptions = (
       };
     });
 };
+
+const DisplayFieldSelector = (fieldTypeId: string | string[]) =>
+  YextField<string | undefined>(msg("fields.field", "Field"), {
+    type: "basicSelector",
+    options: () => getDisplayFieldOptions(fieldTypeId),
+    translateOptions: false,
+  });
 
 export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
   label: msg("fields.resultCard", "Result Card"),
@@ -378,14 +383,7 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
           true,
           () => getDisplayFieldOptions("type.string")
         ),
-        field: YextField<DynamicOptionsSingleSelectorType<string>, string>(
-          msg("fields.field", "Field"),
-          {
-            type: "dynamicSingleSelect",
-            dropdownLabel: msg("fields.field", "Field"),
-            getOptions: () => getDisplayFieldOptions("type.string"),
-          }
-        ),
+        field: DisplayFieldSelector("type.string"),
         headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
           type: "select",
           hasSearch: true,
@@ -422,14 +420,7 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
           true,
           () => getDisplayFieldOptions("type.string")
         ),
-        field: YextField<DynamicOptionsSingleSelectorType<string>, string>(
-          msg("fields.field", "Field"),
-          {
-            type: "dynamicSingleSelect",
-            dropdownLabel: msg("fields.field", "Field"),
-            getOptions: () => getDisplayFieldOptions("type.string"),
-          }
-        ),
+        field: DisplayFieldSelector("type.string"),
         variant: YextField(msg("fields.variant", "Variant"), {
           type: "radio",
           options: "BODY_VARIANT",
@@ -471,14 +462,7 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
           true,
           () => getDisplayFieldOptions("type.string")
         ),
-        field: YextField<DynamicOptionsSingleSelectorType<string>, string>(
-          msg("fields.field", "Field"),
-          {
-            type: "dynamicSingleSelect",
-            dropdownLabel: msg("fields.field", "Field"),
-            getOptions: () => getDisplayFieldOptions("type.string"),
-          }
-        ),
+        field: DisplayFieldSelector("type.string"),
         variant: YextField(msg("fields.variant", "Variant"), {
           type: "radio",
           options: "BODY_VARIANT",
@@ -510,14 +494,7 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.hours", "Hours"),
       type: "object",
       objectFields: {
-        field: YextField<DynamicOptionsSingleSelectorType<string>, string>(
-          msg("fields.field", "Field"),
-          {
-            type: "dynamicSingleSelect",
-            dropdownLabel: msg("fields.field", "Field"),
-            getOptions: () => getDisplayFieldOptions("type.hours"),
-          }
-        ),
+        field: DisplayFieldSelector("type.hours"),
         table: YextField(msg("fields.hoursColumn", "Hours Column"), {
           type: "object",
           objectFields: HoursTableStyleFields,
@@ -578,14 +555,7 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.phone", "Phone"),
       type: "object",
       objectFields: {
-        field: YextField<DynamicOptionsSingleSelectorType<string>, string>(
-          msg("fields.field", "Field"),
-          {
-            type: "dynamicSingleSelect",
-            dropdownLabel: msg("fields.field", "Field"),
-            getOptions: () => getDisplayFieldOptions("type.phone"),
-          }
-        ),
+        field: DisplayFieldSelector("type.phone"),
         phoneFormat: YextField(msg("fields.phoneFormat", "Phone Format"), {
           type: "radio",
           options: [
@@ -625,14 +595,7 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.email", "Email"),
       type: "object",
       objectFields: {
-        field: YextField<DynamicOptionsSingleSelectorType<string>, string>(
-          msg("fields.field", "Field"),
-          {
-            type: "dynamicSingleSelect",
-            dropdownLabel: msg("fields.field", "Field"),
-            getOptions: () => getDisplayFieldOptions("type.string"),
-          }
-        ),
+        field: DisplayFieldSelector("type.string"),
         liveVisibility: YextField(
           msg("fields.visibleOnLivePage", "Visible on Live Page"),
           {
@@ -649,14 +612,7 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.services", "Services"),
       type: "object",
       objectFields: {
-        field: YextField<DynamicOptionsSingleSelectorType<string>, string>(
-          msg("fields.field", "Field"),
-          {
-            type: "dynamicSingleSelect",
-            dropdownLabel: msg("fields.field", "Field"),
-            getOptions: () => getDisplayFieldOptions("type.string"),
-          }
-        ),
+        field: DisplayFieldSelector("type.string"),
         liveVisibility: YextField(
           msg("fields.visibleOnLivePage", "Visible on Live Page"),
           {
@@ -776,14 +732,7 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
           ),
         },
         constantValue: LOCATOR_IMAGE_CONSTANT_CONFIG,
-        field: YextField<DynamicOptionsSingleSelectorType<string>, string>(
-          msg("fields.field", "Field"),
-          {
-            type: "dynamicSingleSelect",
-            dropdownLabel: msg("fields.field", "Field"),
-            getOptions: () => getDisplayFieldOptions("type.image"),
-          }
-        ),
+        field: DisplayFieldSelector("type.image"),
         liveVisibility: YextField(
           msg("fields.visibleOnLivePage", "Visible on Live Page"),
           {
@@ -1045,12 +994,11 @@ const PrimaryCTA = (props: {
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
   const { t, i18n } = useTranslation();
 
-  const primaryFieldId = getSelectedFieldId(primaryHeading.field);
   const primaryHeadingText = resolveText({
     config: primaryHeading,
     location,
     language: i18n.language,
-    fieldId: primaryFieldId,
+    fieldId: primaryHeading.field,
     fallback: location.name,
   });
 
@@ -1140,8 +1088,7 @@ const ImageSection = (props: {
     );
   }
 
-  const fieldId = getSelectedFieldId(image.field);
-  const imageRecord = parseRecordFromLocation(location, fieldId);
+  const imageRecord = parseRecordFromLocation(location, image.field);
   const imageData = {
     url: imageRecord?.url,
     alternateText: imageRecord?.alternateText || location.name,
@@ -1171,15 +1118,11 @@ const HeadingTextSection = (props: {
   const { primaryHeading, secondaryHeading, tertiaryHeading, location } = props;
   const { i18n } = useTranslation();
 
-  const primaryFieldId = getSelectedFieldId(primaryHeading.field);
-  const secondaryFieldId = getSelectedFieldId(secondaryHeading.field);
-  const tertiaryFieldId = getSelectedFieldId(tertiaryHeading.field);
-
   const primaryHeadingText = resolveText({
     config: primaryHeading,
     location,
     language: i18n.language,
-    fieldId: primaryFieldId,
+    fieldId: primaryHeading.field,
     fallback: location.name,
   });
 
@@ -1187,14 +1130,14 @@ const HeadingTextSection = (props: {
     config: secondaryHeading,
     location,
     language: i18n.language,
-    fieldId: secondaryFieldId,
+    fieldId: secondaryHeading.field,
   });
 
   const tertiaryHeadingText = resolveText({
     config: tertiaryHeading,
     location,
     language: i18n.language,
-    fieldId: tertiaryFieldId,
+    fieldId: tertiaryHeading.field,
   });
 
   return (
@@ -1230,8 +1173,7 @@ const HoursSection = (props: {
   const triggerId = React.useId();
   const contentId = React.useId();
 
-  const hoursField = getSelectedFieldId(hoursProps.field);
-  const hoursData = parseHoursFromLocation(location, hoursField);
+  const hoursData = parseHoursFromLocation(location, hoursProps.field);
   const showHoursSection = hoursData && hoursProps.liveVisibility;
   return (
     showHoursSection && (
@@ -1311,9 +1253,8 @@ const PhoneSection = (props: {
   } = props;
   const { t } = useTranslation();
 
-  const phoneFieldId = getSelectedFieldId(phone.field);
-  const phoneNumber = parseStringFromLocation(location, phoneFieldId);
-  const showPhoneNumber = phoneFieldId && phone.liveVisibility && phoneNumber;
+  const phoneNumber = parseStringFromLocation(location, phone.field);
+  const showPhoneNumber = phone.field && phone.liveVisibility && phoneNumber;
   return (
     showPhoneNumber && (
       <PhoneAtom
@@ -1342,8 +1283,7 @@ const EmailSection = (props: {
   const { email, location, index, icons, iconBackgroundColor, linkColor } =
     props;
 
-  const emailFieldId = getSelectedFieldId(email.field);
-  const emailAddresses = parseArrayFromLocation(location, emailFieldId);
+  const emailAddresses = parseArrayFromLocation(location, email.field);
   const showEmailSection =
     email.liveVisibility &&
     emailAddresses &&
@@ -1378,8 +1318,7 @@ const ServicesSection = (props: {
   const { services, location } = props;
   const { t } = useTranslation();
 
-  const fieldId = getSelectedFieldId(services.field);
-  const servicesList = parseArrayFromLocation(location, fieldId);
+  const servicesList = parseArrayFromLocation(location, services.field);
   const showServicesSection =
     services.liveVisibility &&
     servicesList &&
@@ -1462,18 +1401,6 @@ const parseHoursFromLocation = (
   hoursFieldId: string | undefined
 ): HoursType | undefined => {
   return resolveProjectedField(location, hoursFieldId) as HoursType;
-};
-
-const getSelectedFieldId = (
-  field: DynamicOptionsSingleSelectorType<string> | string | undefined
-): string | undefined => {
-  if (!field) {
-    return undefined;
-  }
-  if (typeof field === "string") {
-    return field;
-  }
-  return field.selection?.value;
 };
 
 /**
