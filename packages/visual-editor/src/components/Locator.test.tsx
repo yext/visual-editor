@@ -534,116 +534,6 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
   },
   {
-    name: "version 72 wrapped result card selector values",
-    document: {
-      locale: "en",
-      businessId: "4174974",
-      __: {
-        isPrimaryLocale: true,
-      },
-      _env: {
-        ...LOCATOR_TEST_ENV,
-      },
-      _pageset: JSON.stringify({
-        type: "LOCATOR",
-        typeConfig: {
-          locatorConfig: {
-            source: "accounts/4174974/sites/155048/pagesets/locations",
-            experienceKey: "locator-41",
-            entityType: "location",
-          },
-        },
-        config: {
-          urlTemplate: {
-            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
-          },
-        },
-      }),
-    },
-    props: {
-      filters: {
-        openNowButton: false,
-        showDistanceOptions: false,
-      },
-      resultCard: [
-        {
-          props: {
-            entityType: "location",
-            primaryHeading: {
-              field: { selection: { value: "name" } },
-              constantValue: { en: "", hasLocalizedValue: "true" },
-              constantValueEnabled: false,
-              headingLevel: 3,
-            },
-            secondaryHeading: {
-              field: { selection: { value: "name" } },
-              constantValue: { en: "", hasLocalizedValue: "true" },
-              constantValueEnabled: false,
-              variant: "base",
-              liveVisibility: false,
-            },
-            tertiaryHeading: {
-              field: { selection: { value: "name" } },
-              constantValue: { en: "", hasLocalizedValue: "true" },
-              constantValueEnabled: false,
-              variant: "base",
-              liveVisibility: false,
-            },
-            icons: true,
-            hours: {
-              field: { selection: { value: "hours" } },
-              table: {
-                startOfWeek: "today",
-                collapseDays: false,
-                showAdditionalHoursText: false,
-              },
-              liveVisibility: true,
-            },
-            address: {
-              showGetDirectionsLink: true,
-              liveVisibility: true,
-            },
-            phone: {
-              field: { selection: { value: "mainPhone" } },
-              phoneFormat: "domestic",
-              includePhoneHyperlink: true,
-              liveVisibility: true,
-            },
-            email: {
-              field: { selection: { value: "emails" } },
-              liveVisibility: false,
-            },
-            services: {
-              field: { selection: { value: "services" } },
-              liveVisibility: false,
-            },
-            primaryCTA: {
-              label: "Visit Page",
-              variant: "primary",
-              liveVisibility: true,
-            },
-            secondaryCTA: {
-              label: "Call to Action",
-              link: "#",
-              variant: "secondary",
-              liveVisibility: false,
-            },
-            image: {
-              field: { selection: { value: "headshot" } },
-              constantValue: {
-                en: { url: "", height: 0, width: 0 },
-                hasLocalizedValue: "true",
-              },
-              constantValueEnabled: false,
-              liveVisibility: false,
-            },
-          },
-        },
-      ],
-    },
-    version: 72,
-  },
-  {
     name: "version 24 with filters",
     document: {
       locale: "en",
@@ -1245,6 +1135,116 @@ const tests: ComponentTest[] = [
       },
     },
     version: 64,
+  },
+  {
+    name: "version 72 wrapped result card selector values",
+    document: {
+      locale: "en",
+      businessId: "4174974",
+      __: {
+        isPrimaryLocale: true,
+      },
+      _env: {
+        ...LOCATOR_TEST_ENV,
+      },
+      _pageset: JSON.stringify({
+        type: "LOCATOR",
+        typeConfig: {
+          locatorConfig: {
+            source: "accounts/4174974/sites/155048/pagesets/locations",
+            experienceKey: "locator-41",
+            entityType: "location",
+          },
+        },
+        config: {
+          urlTemplate: {
+            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+          },
+        },
+      }),
+    },
+    props: {
+      filters: {
+        openNowButton: false,
+        showDistanceOptions: false,
+      },
+      resultCard: [
+        {
+          props: {
+            entityType: "location",
+            primaryHeading: {
+              field: { selection: { value: "name" } },
+              constantValue: { en: "", hasLocalizedValue: "true" },
+              constantValueEnabled: false,
+              headingLevel: 3,
+            },
+            secondaryHeading: {
+              field: { selection: { value: "name" } },
+              constantValue: { en: "", hasLocalizedValue: "true" },
+              constantValueEnabled: false,
+              variant: "base",
+              liveVisibility: false,
+            },
+            tertiaryHeading: {
+              field: { selection: { value: "name" } },
+              constantValue: { en: "", hasLocalizedValue: "true" },
+              constantValueEnabled: false,
+              variant: "base",
+              liveVisibility: false,
+            },
+            icons: true,
+            hours: {
+              field: { selection: { value: "hours" } },
+              table: {
+                startOfWeek: "today",
+                collapseDays: false,
+                showAdditionalHoursText: false,
+              },
+              liveVisibility: true,
+            },
+            address: {
+              showGetDirectionsLink: true,
+              liveVisibility: true,
+            },
+            phone: {
+              field: { selection: { value: "mainPhone" } },
+              phoneFormat: "domestic",
+              includePhoneHyperlink: true,
+              liveVisibility: true,
+            },
+            email: {
+              field: { selection: { value: "emails" } },
+              liveVisibility: false,
+            },
+            services: {
+              field: { selection: { value: "services" } },
+              liveVisibility: false,
+            },
+            primaryCTA: {
+              label: "Visit Page",
+              variant: "primary",
+              liveVisibility: true,
+            },
+            secondaryCTA: {
+              label: "Call to Action",
+              link: "#",
+              variant: "secondary",
+              liveVisibility: false,
+            },
+            image: {
+              field: { selection: { value: "headshot" } },
+              constantValue: {
+                en: { url: "", height: 0, width: 0 },
+                hasLocalizedValue: "true",
+              },
+              constantValueEnabled: false,
+              liveVisibility: false,
+            },
+          },
+        },
+      ],
+    },
+    version: 72,
   },
 ];
 
