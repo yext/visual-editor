@@ -325,6 +325,7 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
 const getDisplayFieldOptions = (
   fieldTypeId: string | string[]
 ): DynamicOption<string>[] => {
+  // TODO: This breaks the rule of hooks, refactor after YextField is converted to a fieldType
   const templateMetadata = useTemplateMetadata();
   if (!templateMetadata?.locatorDisplayFields) {
     return [];
