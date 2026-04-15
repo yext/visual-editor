@@ -245,6 +245,10 @@ interface EventSectionProps {
   analytics: {
     scope?: string;
   };
+  /** @internal */
+  conditionalRender?: {
+    watchForMappedContentEmptyState: boolean;
+  };
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
    * @defaultValue true
@@ -270,6 +274,10 @@ interface FAQSectionProps {
   /** @internal */
   analytics: {
     scope?: string;
+  };
+  /** @internal */
+  conditionalRender?: {
+    hasMappedContent: boolean;
   };
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
@@ -337,6 +345,10 @@ interface InsightSectionProps {
   analytics: {
     scope?: string;
   };
+  /** @internal */
+  conditionalRender?: {
+    watchForMappedContentEmptyState: boolean;
+  };
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
    * @defaultValue true
@@ -388,6 +400,10 @@ interface PhotoGallerySectionProps {
     HeadingSlot: Slot;
     PhotoGalleryWrapper: Slot;
   };
+  /** @internal */
+  conditionalRender?: {
+    hasMappedContent: boolean;
+  };
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
    * @defaultValue true
@@ -424,6 +440,10 @@ interface ProductSectionProps {
   /** @internal  */
   analytics: {
     scope?: string;
+  };
+  /** @internal */
+  conditionalRender?: {
+    watchForMappedContentEmptyState: boolean;
   };
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
@@ -577,6 +597,10 @@ interface TeamSectionProps {
   analytics: {
     scope?: string;
   };
+  /** @internal */
+  conditionalRender?: {
+    watchForMappedContentEmptyState: boolean;
+  };
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
    * @defaultValue true
@@ -609,6 +633,10 @@ interface TestimonialSectionProps {
   /** @internal */
   analytics: {
     scope?: string;
+  };
+  /** @internal */
+  conditionalRender?: {
+    watchForMappedContentEmptyState: boolean;
   };
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
