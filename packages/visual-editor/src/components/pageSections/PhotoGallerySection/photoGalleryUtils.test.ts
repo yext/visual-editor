@@ -110,6 +110,8 @@ describe("getPhotoGalleryImageData", () => {
     expect(result.galleryImages[0]?.image.url).toBe(
       "https://example.com/fr.jpg"
     );
+    expect(result.galleryImages[0]?.image.width).toBe(120);
+    expect(result.galleryImages[0]?.image.height).toBe(120);
     expect(result.hasRenderableImages).toBe(true);
   });
 });

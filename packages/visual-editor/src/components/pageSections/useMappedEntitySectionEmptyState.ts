@@ -7,10 +7,10 @@ export const useMappedEntitySectionEmptyState = ({
 }: {
   enabled: boolean;
 }) => {
-  const wrapperRef = React.useRef<HTMLDivElement | null>(null);
+  const [element, setElement] = React.useState<HTMLDivElement | null>(null);
   const [isMappedContentEmpty, setIsMappedContentEmpty] = React.useState(false);
   const setWrapperRef = React.useCallback((element: HTMLDivElement | null) => {
-    wrapperRef.current = element;
+    setElement(element);
   }, []);
 
   React.useEffect(() => {
@@ -19,7 +19,6 @@ export const useMappedEntitySectionEmptyState = ({
       return;
     }
 
-    const element = wrapperRef.current;
     if (!element) {
       return;
     }
@@ -42,7 +41,7 @@ export const useMappedEntitySectionEmptyState = ({
     return () => {
       observer.disconnect();
     };
-  }, [enabled]);
+  }, [element, enabled]);
 
   return { setWrapperRef, isMappedContentEmpty };
 };

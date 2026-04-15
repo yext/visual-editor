@@ -239,7 +239,7 @@ describe.each(directSectionCases)(
       });
 
       await waitFor(() => {
-        expect(result.container.textContent?.trim()).toBe("");
+        expect(result.container.childElementCount).toBe(0);
       });
     });
 
@@ -500,7 +500,7 @@ describe.each(wrapperCases)("$sectionName render", ({ sectionConfig }) => {
     });
 
     await waitFor(() => {
-      expect(result.container.textContent?.trim()).toBe("");
+      expect(result.container.childElementCount).toBe(0);
     });
   });
 

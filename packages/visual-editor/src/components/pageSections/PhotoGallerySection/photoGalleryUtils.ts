@@ -78,6 +78,8 @@ export const getPhotoGalleryImageData = ({
     }
 
     const url = image?.url;
+    const imageHeight = image?.height || 570;
+    const imageWidth = image?.width || 1000;
     const isEmpty = !url || (typeof url === "string" && url.trim() === "");
 
     return {
@@ -93,20 +95,8 @@ export const getPhotoGalleryImageData = ({
         : {
             url,
             alternateText: altText,
-            height:
-              typeof rawImage === "object" &&
-              rawImage !== null &&
-              "height" in rawImage &&
-              rawImage.height
-                ? rawImage.height
-                : 570,
-            width:
-              typeof rawImage === "object" &&
-              rawImage !== null &&
-              "width" in rawImage &&
-              rawImage.width
-                ? rawImage.width
-                : 1000,
+            height: imageHeight,
+            width: imageWidth,
           },
       aspectRatio,
       width: width || 1000,
