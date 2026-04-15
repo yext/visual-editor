@@ -22,7 +22,10 @@ import { ProductCardsWrapperProps } from "./ProductCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { EntityFieldSectionEmptyState } from "../EntityFieldSectionEmptyState.tsx";
-import { isMappedCardWrapperSelected } from "../entityFieldSectionUtils.ts";
+import {
+  getEditorItemId,
+  isMappedCardWrapperSelected,
+} from "../entityFieldSectionUtils.ts";
 import { useMappedEntitySectionEmptyState } from "../useMappedEntitySectionEmptyState.ts";
 
 export type ProductSectionVariant = "immersive" | "classic" | "minimal";
@@ -66,6 +69,7 @@ export interface ProductSectionProps {
   /** @internal */
   conditionalRender?: {
     watchForMappedContentEmptyState: boolean;
+    mappedFieldOwnerId?: string;
   };
 
   /**
@@ -272,6 +276,9 @@ export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
       props: {
         ...updatedData.props,
         conditionalRender: {
+          mappedFieldOwnerId: getEditorItemId(
+            updatedData.props.slots.CardsWrapperSlot?.[0]
+          ),
           watchForMappedContentEmptyState: isMappedCardWrapperSelected(
             updatedData.props.slots.CardsWrapperSlot?.[0]
           ),
@@ -307,6 +314,7 @@ export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
                 <>
                   <EntityFieldSectionEmptyState
                     backgroundColor={props.styles.backgroundColor}
+                    targetItemId={props.conditionalRender?.mappedFieldOwnerId}
                   />
                   <div
                     ref={setWrapperRef}

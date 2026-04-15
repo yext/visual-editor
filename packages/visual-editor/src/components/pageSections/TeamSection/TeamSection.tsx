@@ -16,7 +16,10 @@ import { TeamCardsWrapperProps } from "./TeamCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { EntityFieldSectionEmptyState } from "../EntityFieldSectionEmptyState.tsx";
-import { isMappedCardWrapperSelected } from "../entityFieldSectionUtils.ts";
+import {
+  getEditorItemId,
+  isMappedCardWrapperSelected,
+} from "../entityFieldSectionUtils.ts";
 import { useMappedEntitySectionEmptyState } from "../useMappedEntitySectionEmptyState.ts";
 
 export interface TeamSectionProps {
@@ -52,6 +55,7 @@ export interface TeamSectionProps {
   /** @internal */
   conditionalRender?: {
     watchForMappedContentEmptyState: boolean;
+    mappedFieldOwnerId?: string;
   };
 
   /**
@@ -201,6 +205,9 @@ export const TeamSection: ComponentConfig<{ props: TeamSectionProps }> = {
       props: {
         ...updatedData.props,
         conditionalRender: {
+          mappedFieldOwnerId: getEditorItemId(
+            updatedData.props.slots.CardsWrapperSlot?.[0]
+          ),
           watchForMappedContentEmptyState: isMappedCardWrapperSelected(
             updatedData.props.slots.CardsWrapperSlot?.[0]
           ),
@@ -236,6 +243,7 @@ export const TeamSection: ComponentConfig<{ props: TeamSectionProps }> = {
                 <>
                   <EntityFieldSectionEmptyState
                     backgroundColor={props.styles.backgroundColor}
+                    targetItemId={props.conditionalRender?.mappedFieldOwnerId}
                   />
                   <div
                     ref={setWrapperRef}

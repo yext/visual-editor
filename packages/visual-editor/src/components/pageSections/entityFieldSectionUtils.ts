@@ -4,7 +4,9 @@ type EntityFieldSelection = {
 };
 
 type CardWrapperSlot = {
+  id?: string;
   props?: {
+    id?: string;
     data?: EntityFieldSelection;
     slots?: {
       CardSlot?: unknown[];
@@ -40,4 +42,17 @@ export const isMappedCardWrapperSelected = (
   cardWrapperSlot: CardWrapperSlot | undefined
 ): boolean => {
   return isMappedEntityFieldSelected(cardWrapperSlot?.props?.data);
+};
+
+export const getEditorItemId = (
+  item:
+    | {
+        id?: string;
+        props?: {
+          id?: string;
+        };
+      }
+    | undefined
+): string | undefined => {
+  return item?.id ?? item?.props?.id;
 };

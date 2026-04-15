@@ -357,6 +357,7 @@ export const FAQSection: ComponentConfig<{ props: FAQSectionProps }> = {
             props.puck.isEditing ? (
               <EntityFieldSectionEmptyState
                 backgroundColor={props.styles.backgroundColor}
+                targetItemId={props.id}
               />
             ) : (
               <></>

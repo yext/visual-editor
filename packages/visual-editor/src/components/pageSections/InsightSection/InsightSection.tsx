@@ -16,7 +16,10 @@ import { ComponentErrorBoundary } from "../../../internal/components/ComponentEr
 import { defaultInsightCardSlotData } from "./InsightCard.tsx";
 import { InsightCardsWrapperProps } from "./InsightCardsWrapper.tsx";
 import { EntityFieldSectionEmptyState } from "../EntityFieldSectionEmptyState.tsx";
-import { isMappedCardWrapperSelected } from "../entityFieldSectionUtils.ts";
+import {
+  getEditorItemId,
+  isMappedCardWrapperSelected,
+} from "../entityFieldSectionUtils.ts";
 import { useMappedEntitySectionEmptyState } from "../useMappedEntitySectionEmptyState.ts";
 
 export interface InsightSectionProps {
@@ -51,6 +54,7 @@ export interface InsightSectionProps {
   /** @internal */
   conditionalRender?: {
     watchForMappedContentEmptyState: boolean;
+    mappedFieldOwnerId?: string;
   };
 
   /**
@@ -206,6 +210,9 @@ export const InsightSection: ComponentConfig<{ props: InsightSectionProps }> = {
       props: {
         ...updatedData.props,
         conditionalRender: {
+          mappedFieldOwnerId: getEditorItemId(
+            updatedData.props.slots.CardsWrapperSlot?.[0]
+          ),
           watchForMappedContentEmptyState: isMappedCardWrapperSelected(
             updatedData.props.slots.CardsWrapperSlot?.[0]
           ),
@@ -241,6 +248,7 @@ export const InsightSection: ComponentConfig<{ props: InsightSectionProps }> = {
                 <>
                   <EntityFieldSectionEmptyState
                     backgroundColor={props.styles.backgroundColor}
+                    targetItemId={props.conditionalRender?.mappedFieldOwnerId}
                   />
                   <div
                     ref={setWrapperRef}

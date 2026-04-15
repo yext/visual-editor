@@ -15,7 +15,10 @@ import { ComponentErrorBoundary } from "../../../internal/components/ComponentEr
 import { EventCardsWrapperProps } from "./EventCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { EntityFieldSectionEmptyState } from "../EntityFieldSectionEmptyState.tsx";
-import { isMappedCardWrapperSelected } from "../entityFieldSectionUtils.ts";
+import {
+  getEditorItemId,
+  isMappedCardWrapperSelected,
+} from "../entityFieldSectionUtils.ts";
 import { useMappedEntitySectionEmptyState } from "../useMappedEntitySectionEmptyState.ts";
 
 export interface EventSectionProps {
@@ -51,6 +54,7 @@ export interface EventSectionProps {
   /** @internal */
   conditionalRender?: {
     watchForMappedContentEmptyState: boolean;
+    mappedFieldOwnerId?: string;
   };
 
   /**
@@ -199,6 +203,9 @@ export const EventSection: ComponentConfig<{ props: EventSectionProps }> = {
       props: {
         ...updatedData.props,
         conditionalRender: {
+          mappedFieldOwnerId: getEditorItemId(
+            updatedData.props.slots.CardsWrapperSlot?.[0]
+          ),
           watchForMappedContentEmptyState: isMappedCardWrapperSelected(
             updatedData.props.slots.CardsWrapperSlot?.[0]
           ),
@@ -234,6 +241,7 @@ export const EventSection: ComponentConfig<{ props: EventSectionProps }> = {
                 <>
                   <EntityFieldSectionEmptyState
                     backgroundColor={props.styles.backgroundColor}
+                    targetItemId={props.conditionalRender?.mappedFieldOwnerId}
                   />
                   <div
                     ref={setWrapperRef}

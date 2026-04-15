@@ -1,6 +1,18 @@
 import * as React from "react";
-import { describe, expect, it } from "vitest";
-import { render as reactRender, waitFor } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import {
+  fireEvent,
+  render as reactRender,
+  waitFor,
+} from "@testing-library/react";
+const { mockSelectEditorItem } = vi.hoisted(() => ({
+  mockSelectEditorItem: vi.fn(),
+}));
+
+vi.mock("./useSelectEditorItem.ts", () => ({
+  useSelectEditorItem: () => mockSelectEditorItem,
+}));
+
 import { FAQSection } from "./FAQsSection/FAQsSection.tsx";
 import { PhotoGallerySection } from "./PhotoGallerySection/PhotoGallerySection.tsx";
 import { TestimonialSection } from "./TestimonialSection/TestimonialSection.tsx";
@@ -14,6 +26,12 @@ import { EventCardsWrapper } from "./EventSection/EventCardsWrapper.tsx";
 import { InsightSection } from "./InsightSection/InsightSection.tsx";
 import { InsightCardsWrapper } from "./InsightSection/InsightCardsWrapper.tsx";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
+import { EntityFieldSectionEmptyState } from "./EntityFieldSectionEmptyState.tsx";
+
+beforeEach(() => {
+  mockSelectEditorItem.mockReset();
+  mockSelectEditorItem.mockReturnValue(true);
+});
 
 const cloneValue = <T,>(value: T): T => {
   return JSON.parse(JSON.stringify(value)) as T;
@@ -155,7 +173,10 @@ const directSectionCases: DirectSectionCase[] = [
       return {
         ...props,
         id: "PhotoGallerySection-test",
-        conditionalRender: { hasMappedContent },
+        conditionalRender: {
+          hasMappedContent,
+          mappedFieldOwnerId: "PhotoGalleryWrapper-test",
+        },
         puck: { isEditing },
         slots: {
           HeadingSlot: createSectionHeadingSlot(),
@@ -398,6 +419,7 @@ const createCardsSectionRenderProps = (
     isEditing: boolean;
     watchForMappedContentEmptyState: boolean;
     cardsWrapperContent: React.ReactNode;
+    mappedFieldOwnerId?: string;
   }
 ) => {
   const props = cloneValue(sectionConfig.defaultProps!);
@@ -406,6 +428,7 @@ const createCardsSectionRenderProps = (
     id: `${sectionConfig.label}-test`,
     conditionalRender: {
       watchForMappedContentEmptyState: options.watchForMappedContentEmptyState,
+      mappedFieldOwnerId: options.mappedFieldOwnerId ?? "CardsWrapperSlot-test",
     },
     puck: { isEditing: options.isEditing },
     slots: {
@@ -550,5 +573,84 @@ describe.each(wrapperCases)("$sectionName render", ({ sectionConfig }) => {
       expect(result.getByText("Section Heading")).toBeInTheDocument();
     });
     expect(result.queryByText(/Section hidden for this/i)).toBeNull();
+  });
+});
+
+describe("empty-state editor selection", () => {
+  it("selects the FAQ section when the empty state is clicked", async () => {
+    const result = renderSection({
+      sectionConfig: FAQSection,
+      props: directSectionCases[0].createRenderProps({
+        hasMappedContent: false,
+        isEditing: true,
+      }),
+    });
+
+    const emptyState = await result.findByRole("button");
+    fireEvent.click(emptyState);
+
+    expect(mockSelectEditorItem).toHaveBeenCalledWith("FAQSection-test");
+  });
+
+  it("selects the photo gallery wrapper when the empty state is clicked", async () => {
+    const result = renderSection({
+      sectionConfig: PhotoGallerySection,
+      props: directSectionCases[1].createRenderProps({
+        hasMappedContent: false,
+        isEditing: true,
+      }),
+    });
+
+    const emptyState = await result.findByRole("button");
+    fireEvent.click(emptyState);
+
+    expect(mockSelectEditorItem).toHaveBeenCalledWith(
+      "PhotoGalleryWrapper-test"
+    );
+  });
+
+  it("selects the cards wrapper for wrapper-backed sections", async () => {
+    const result = renderSection({
+      sectionConfig: ProductSection,
+      props: createCardsSectionRenderProps(ProductSection, {
+        isEditing: true,
+        watchForMappedContentEmptyState: true,
+        cardsWrapperContent: <div data-empty-state="true" />,
+        mappedFieldOwnerId: "ProductCardsWrapper-test",
+      }),
+    });
+
+    const emptyState = await result.findByRole("button");
+    fireEvent.click(emptyState);
+
+    expect(mockSelectEditorItem).toHaveBeenCalledWith(
+      "ProductCardsWrapper-test"
+    );
+  });
+
+  it("supports keyboard activation with Enter and Space", () => {
+    const result = reactRender(
+      <VisualEditorProvider templateProps={{ document: { locale: "en" } }}>
+        <EntityFieldSectionEmptyState targetItemId="FAQSection-test" />
+      </VisualEditorProvider>
+    );
+
+    const emptyState = result.getByRole("button");
+    fireEvent.keyDown(emptyState, { key: "Enter" });
+    fireEvent.keyDown(emptyState, { key: " " });
+
+    expect(mockSelectEditorItem).toHaveBeenNthCalledWith(1, "FAQSection-test");
+    expect(mockSelectEditorItem).toHaveBeenNthCalledWith(2, "FAQSection-test");
+  });
+
+  it("stays non-interactive when no target item id is available", () => {
+    const result = reactRender(
+      <VisualEditorProvider templateProps={{ document: { locale: "en" } }}>
+        <EntityFieldSectionEmptyState />
+      </VisualEditorProvider>
+    );
+
+    expect(result.queryByRole("button")).toBeNull();
+    expect(result.getByText(/Section hidden for this/i)).toBeInTheDocument();
   });
 });

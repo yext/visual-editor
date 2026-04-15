@@ -22,7 +22,10 @@ import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholder
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { EntityFieldSectionEmptyState } from "../EntityFieldSectionEmptyState.tsx";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
-import { isMappedEntityFieldSelected } from "../entityFieldSectionUtils.ts";
+import {
+  getEditorItemId,
+  isMappedEntityFieldSelected,
+} from "../entityFieldSectionUtils.ts";
 import {
   getPhotoGalleryImageData,
   PhotoGalleryImageValue,
@@ -74,6 +77,7 @@ export interface PhotoGallerySectionProps {
   /** @internal */
   conditionalRender?: {
     hasMappedContent: boolean;
+    mappedFieldOwnerId?: string;
   };
 
   /**
@@ -289,6 +293,9 @@ export const PhotoGallerySection: ComponentConfig<{
       props: {
         ...updatedData.props,
         conditionalRender: {
+          mappedFieldOwnerId: getEditorItemId(
+            updatedData.props.slots.PhotoGalleryWrapper?.[0]
+          ),
           hasMappedContent:
             !isMappedEntityFieldSelected(
               photoGalleryWrapperProps?.data?.images
@@ -310,6 +317,7 @@ export const PhotoGallerySection: ComponentConfig<{
           props.puck.isEditing ? (
             <EntityFieldSectionEmptyState
               backgroundColor={props.styles.backgroundColor}
+              targetItemId={props.conditionalRender?.mappedFieldOwnerId}
             />
           ) : (
             <></>
