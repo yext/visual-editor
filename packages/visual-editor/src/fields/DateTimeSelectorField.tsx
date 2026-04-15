@@ -37,7 +37,8 @@ export const DateTimeSelectorFieldOverride = ({
   return translatedLabel ? (
     <FieldLabel label={translatedLabel}>{dateTimeInput}</FieldLabel>
   ) : (
-    dateTimeInput
+    // The class gives a margin above the input for the entity toggle
+    <div className="ve-mt-3">{dateTimeInput}</div>
   );
 };
 
