@@ -994,12 +994,11 @@ const PrimaryCTA = (props: {
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
   const { t, i18n } = useTranslation();
 
-  const primaryFieldId = getSelectedFieldId(primaryHeading.field);
   const primaryHeadingText = resolveText({
     config: primaryHeading,
     location,
     language: i18n.language,
-    fieldId: primaryFieldId,
+    fieldId: primaryHeading.field,
     fallback: location.name,
   });
 
@@ -1089,8 +1088,7 @@ const ImageSection = (props: {
     );
   }
 
-  const fieldId = getSelectedFieldId(image.field);
-  const imageRecord = parseRecordFromLocation(location, fieldId);
+  const imageRecord = parseRecordFromLocation(location, image.field);
   const imageData = {
     url: imageRecord?.url,
     alternateText: imageRecord?.alternateText || location.name,
@@ -1120,15 +1118,11 @@ const HeadingTextSection = (props: {
   const { primaryHeading, secondaryHeading, tertiaryHeading, location } = props;
   const { i18n } = useTranslation();
 
-  const primaryFieldId = getSelectedFieldId(primaryHeading.field);
-  const secondaryFieldId = getSelectedFieldId(secondaryHeading.field);
-  const tertiaryFieldId = getSelectedFieldId(tertiaryHeading.field);
-
   const primaryHeadingText = resolveText({
     config: primaryHeading,
     location,
     language: i18n.language,
-    fieldId: primaryFieldId,
+    fieldId: primaryHeading.field,
     fallback: location.name,
   });
 
@@ -1136,14 +1130,14 @@ const HeadingTextSection = (props: {
     config: secondaryHeading,
     location,
     language: i18n.language,
-    fieldId: secondaryFieldId,
+    fieldId: secondaryHeading.field,
   });
 
   const tertiaryHeadingText = resolveText({
     config: tertiaryHeading,
     location,
     language: i18n.language,
-    fieldId: tertiaryFieldId,
+    fieldId: tertiaryHeading.field,
   });
 
   return (
@@ -1179,8 +1173,7 @@ const HoursSection = (props: {
   const triggerId = React.useId();
   const contentId = React.useId();
 
-  const hoursField = getSelectedFieldId(hoursProps.field);
-  const hoursData = parseHoursFromLocation(location, hoursField);
+  const hoursData = parseHoursFromLocation(location, hoursProps.field);
   const showHoursSection = hoursData && hoursProps.liveVisibility;
   return (
     showHoursSection && (
@@ -1260,9 +1253,8 @@ const PhoneSection = (props: {
   } = props;
   const { t } = useTranslation();
 
-  const phoneFieldId = getSelectedFieldId(phone.field);
-  const phoneNumber = parseStringFromLocation(location, phoneFieldId);
-  const showPhoneNumber = phoneFieldId && phone.liveVisibility && phoneNumber;
+  const phoneNumber = parseStringFromLocation(location, phone.field);
+  const showPhoneNumber = phone.field && phone.liveVisibility && phoneNumber;
   return (
     showPhoneNumber && (
       <PhoneAtom
@@ -1291,8 +1283,7 @@ const EmailSection = (props: {
   const { email, location, index, icons, iconBackgroundColor, linkColor } =
     props;
 
-  const emailFieldId = getSelectedFieldId(email.field);
-  const emailAddresses = parseArrayFromLocation(location, emailFieldId);
+  const emailAddresses = parseArrayFromLocation(location, email.field);
   const showEmailSection =
     email.liveVisibility &&
     emailAddresses &&
@@ -1327,8 +1318,7 @@ const ServicesSection = (props: {
   const { services, location } = props;
   const { t } = useTranslation();
 
-  const fieldId = getSelectedFieldId(services.field);
-  const servicesList = parseArrayFromLocation(location, fieldId);
+  const servicesList = parseArrayFromLocation(location, services.field);
   const showServicesSection =
     services.liveVisibility &&
     servicesList &&
@@ -1411,21 +1401,6 @@ const parseHoursFromLocation = (
   hoursFieldId: string | undefined
 ): HoursType | undefined => {
   return resolveProjectedField(location, hoursFieldId) as HoursType;
-};
-
-type LegacyLocatorResultCardFieldValue = {
-  selection?: {
-    value?: string;
-  };
-};
-
-const getSelectedFieldId = (
-  field: string | LegacyLocatorResultCardFieldValue | undefined
-): string | undefined => {
-  if (typeof field === "string") {
-    return field;
-  }
-  return field?.selection?.value;
 };
 
 /**
