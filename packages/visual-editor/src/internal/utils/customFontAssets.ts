@@ -1,7 +1,7 @@
 import {
   type FontRegistry,
   type Font,
-  type Variant,
+  type FontVariant,
   getFontFamilyFromThemeValue,
   normalizeAssetPath,
 } from "../../utils/fonts/visualEditorFonts.ts";
@@ -39,7 +39,7 @@ const getMergedThemeValues = (
   ...themeValues,
 });
 
-const matchesWeight = (asset: Variant | Font, weight: number): boolean => {
+const matchesWeight = (asset: FontVariant | Font, weight: number): boolean => {
   if ("weights" in asset) {
     return asset.weights.includes(weight);
   }
@@ -51,7 +51,7 @@ const findMatchingVariant = (
   customFont: Font,
   style: "normal" | "italic",
   weight: number
-): Variant | undefined => {
+): FontVariant | undefined => {
   return customFont.variants?.find(
     (variant) => variant.style === style && matchesWeight(variant, weight)
   );

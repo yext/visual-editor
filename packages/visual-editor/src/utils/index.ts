@@ -44,8 +44,6 @@ export {
   getFontWeightOptions,
   getFontWeightOverrideOptions,
   type Font,
-  type Variant,
-  type WeightSupport,
   type FontRegistry,
 } from "./fonts/visualEditorFonts.ts";
 export { withPropOverrides } from "./withPropOverrides.ts";

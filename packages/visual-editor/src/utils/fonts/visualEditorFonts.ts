@@ -7,21 +7,21 @@ import { fontStyleOptions } from "../themeConfigOptions.ts";
 
 const variableFontRegex = /var\((--[^)]+)\)/;
 
-export type WeightSupport =
+export type FontWeightSupport =
   | { weights: number[] }
   | { minWeight: number; maxWeight: number };
 
-export type Variant = {
+export type FontVariant = {
   style: "normal" | "italic";
   filePath: string;
-} & WeightSupport;
+} & FontWeightSupport;
 
 export type Font = {
   fallback: "sans-serif" | "serif" | "monospace" | "cursive";
   italics: boolean; // whether the font supports italics
   facePath?: string;
-  variants?: Variant[];
-} & WeightSupport;
+  variants?: FontVariant[];
+} & FontWeightSupport;
 
 export type FontRegistry = Record<string, Font>;
 
