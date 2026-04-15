@@ -20,6 +20,13 @@ import { AssetImageType } from "../../../types/images.ts";
 import { PhotoGalleryWrapperProps } from "./PhotoGalleryWrapper.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import { EntityFieldSectionEmptyState } from "../EntityFieldSectionEmptyState.tsx";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+import { isMappedEntityFieldSelected } from "../entityFieldSectionUtils.ts";
+import {
+  getPhotoGalleryImageData,
+  PhotoGalleryImageValue,
+} from "./photoGalleryUtils.ts";
 
 // Generate 3 random placeholder images for the gallery
 export const PLACEHOLDER: AssetImageType = {
@@ -62,6 +69,11 @@ export interface PhotoGallerySectionProps {
   slots: {
     HeadingSlot: Slot;
     PhotoGalleryWrapper: Slot;
+  };
+
+  /** @internal */
+  conditionalRender?: {
+    hasMappedContent: boolean;
   };
 
   /**
@@ -236,19 +248,54 @@ export const PhotoGallerySection: ComponentConfig<{
     },
     liveVisibility: true,
   },
-  resolveData(data) {
+  resolveData(data, params) {
+    let updatedData = data;
+
     if (
-      data.props.slots.PhotoGalleryWrapper[0]?.props.parentData?.variant ===
+      data.props.slots.PhotoGalleryWrapper[0]?.props.parentData?.variant !==
       data.props.styles.variant
     ) {
-      return data;
+      updatedData = setDeep(
+        data,
+        "props.slots.PhotoGalleryWrapper[0].props.parentData.variant",
+        data.props.styles.variant
+      );
     }
 
-    return setDeep(
-      data,
-      "props.slots.PhotoGalleryWrapper[0].props.parentData.variant",
-      data.props.styles.variant
-    );
+    const photoGalleryWrapperProps = updatedData.props.slots
+      .PhotoGalleryWrapper[0]?.props as unknown as
+      | PhotoGalleryWrapperProps
+      | undefined;
+    const streamDocument = params.metadata.streamDocument;
+    const locale = streamDocument?.locale ?? "en";
+    const resolvedImages = photoGalleryWrapperProps?.data?.images
+      ? (resolveComponentData(
+          photoGalleryWrapperProps.data.images as any,
+          locale,
+          streamDocument
+        ) as unknown as PhotoGalleryImageValue[] | undefined)
+      : undefined;
+    const { hasRenderableImages } = getPhotoGalleryImageData({
+      resolvedImages,
+      locale,
+      streamDocument,
+      aspectRatio: photoGalleryWrapperProps?.styles?.image?.aspectRatio,
+      width: photoGalleryWrapperProps?.styles?.image?.width,
+      isEditing: false,
+    });
+
+    return {
+      ...updatedData,
+      props: {
+        ...updatedData.props,
+        conditionalRender: {
+          hasMappedContent:
+            !isMappedEntityFieldSelected(
+              photoGalleryWrapperProps?.data?.images
+            ) || hasRenderableImages,
+        },
+      },
+    };
   },
   render: (props) => (
     <ComponentErrorBoundary
@@ -259,7 +306,17 @@ export const PhotoGallerySection: ComponentConfig<{
         liveVisibility={props.liveVisibility}
         isEditing={props.puck.isEditing}
       >
-        <PhotoGallerySectionComponent {...props} />
+        {props.conditionalRender?.hasMappedContent === false ? (
+          props.puck.isEditing ? (
+            <EntityFieldSectionEmptyState
+              backgroundColor={props.styles.backgroundColor}
+            />
+          ) : (
+            <></>
+          )
+        ) : (
+          <PhotoGallerySectionComponent {...props} />
+        )}
       </VisibilityWrapper>
     </ComponentErrorBoundary>
   ),

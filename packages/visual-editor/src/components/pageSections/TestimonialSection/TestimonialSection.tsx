@@ -1,3 +1,4 @@
+import * as React from "react";
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import {
   ThemeColor,
@@ -14,6 +15,9 @@ import { defaultTestimonialCardSlotData } from "./TestimonialCard.tsx";
 import { TestimonialCardsWrapperProps } from "./TestimonialCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import { EntityFieldSectionEmptyState } from "../EntityFieldSectionEmptyState.tsx";
+import { isMappedCardWrapperSelected } from "../entityFieldSectionUtils.ts";
+import { useMappedEntitySectionEmptyState } from "../useMappedEntitySectionEmptyState.ts";
 
 export interface TestimonialSectionProps {
   /**
@@ -43,6 +47,11 @@ export interface TestimonialSectionProps {
   /** @internal */
   analytics: {
     scope?: string;
+  };
+
+  /** @internal */
+  conditionalRender?: {
+    watchForMappedContentEmptyState: boolean;
   };
 
   /**
@@ -101,10 +110,13 @@ const testimonialSectionFields: Fields<TestimonialSectionProps> = {
   ),
 };
 
-const TestimonialSectionWrapper: PuckComponent<TestimonialSectionProps> = (
-  props
-) => {
+const TestimonialSectionWrapper: PuckComponent<
+  TestimonialSectionProps & {
+    setCardsWrapperRef?: (element: HTMLDivElement | null) => void;
+  }
+> = (props) => {
   const { styles, slots } = props;
+  const { setCardsWrapperRef } = props;
 
   return (
     <PageSection
@@ -114,7 +126,9 @@ const TestimonialSectionWrapper: PuckComponent<TestimonialSectionProps> = (
       {styles?.showSectionHeading && (
         <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
       )}
-      <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
+      <div ref={setCardsWrapperRef}>
+        <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
+      </div>
     </PageSection>
   );
 };
@@ -179,23 +193,69 @@ export const TestimonialSection: ComponentConfig<{
     liveVisibility: true,
   },
   resolveData: (data) => {
-    return forwardHeadingLevel(data, "ContributorNameSlot");
+    const updatedData = forwardHeadingLevel(data, "ContributorNameSlot");
+
+    return {
+      ...updatedData,
+      props: {
+        ...updatedData.props,
+        conditionalRender: {
+          watchForMappedContentEmptyState: isMappedCardWrapperSelected(
+            updatedData.props.slots.CardsWrapperSlot?.[0]
+          ),
+        },
+      },
+    };
   },
-  render: (props) => (
-    <ComponentErrorBoundary
-      isEditing={props.puck.isEditing}
-      resetKeys={[props]}
-    >
-      <AnalyticsScopeProvider
-        name={`${props.analytics?.scope ?? "testimonialSection"}${getAnalyticsScopeHash(props.id)}`}
+  render: (props) => {
+    const watchForMappedContentEmptyState =
+      props.conditionalRender?.watchForMappedContentEmptyState ?? false;
+    const { setWrapperRef, isMappedContentEmpty } =
+      useMappedEntitySectionEmptyState({
+        enabled: watchForMappedContentEmptyState,
+      });
+    const cardsWrapperSlot = (
+      <props.slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
+    );
+
+    return (
+      <ComponentErrorBoundary
+        isEditing={props.puck.isEditing}
+        resetKeys={[props]}
       >
-        <VisibilityWrapper
-          liveVisibility={props.liveVisibility}
-          isEditing={props.puck.isEditing}
+        <AnalyticsScopeProvider
+          name={`${props.analytics?.scope ?? "testimonialSection"}${getAnalyticsScopeHash(props.id)}`}
         >
-          <TestimonialSectionWrapper {...props} />
-        </VisibilityWrapper>
-      </AnalyticsScopeProvider>
-    </ComponentErrorBoundary>
-  ),
+          <VisibilityWrapper
+            liveVisibility={props.liveVisibility}
+            isEditing={props.puck.isEditing}
+          >
+            {watchForMappedContentEmptyState && isMappedContentEmpty ? (
+              props.puck.isEditing ? (
+                <>
+                  <EntityFieldSectionEmptyState
+                    backgroundColor={props.styles.backgroundColor}
+                  />
+                  <div
+                    ref={setWrapperRef}
+                    className="hidden"
+                    aria-hidden="true"
+                  >
+                    {cardsWrapperSlot}
+                  </div>
+                </>
+              ) : (
+                <></>
+              )
+            ) : (
+              <TestimonialSectionWrapper
+                {...props}
+                setCardsWrapperRef={setWrapperRef}
+              />
+            )}
+          </VisibilityWrapper>
+        </AnalyticsScopeProvider>
+      </ComponentErrorBoundary>
+    );
+  },
 };

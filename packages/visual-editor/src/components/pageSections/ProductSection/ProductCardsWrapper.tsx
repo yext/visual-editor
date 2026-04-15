@@ -34,6 +34,11 @@ export type ProductCardsWrapperProps = CardWrapperType<ProductSectionType> & {
 
     variant?: ProductSectionVariant;
   };
+
+  /** @internal */
+  conditionalRender?: {
+    hasMappedContent: boolean;
+  };
 };
 
 const productCardsWrapperFields = {
@@ -140,7 +145,12 @@ export const ProductCardsWrapper: ComponentConfig<{
       )?.products;
 
       if (!resolvedProducts?.length) {
-        return setDeep(data, "props.slots.CardSlot", []);
+        const updatedData = setDeep(data, "props.slots.CardSlot", []);
+        return setDeep(
+          updatedData,
+          "props.conditionalRender.hasMappedContent",
+          false
+        );
       }
 
       const requiredLength = resolvedProducts.length;
@@ -165,7 +175,7 @@ export const ProductCardsWrapper: ComponentConfig<{
         ...cardsToAdd,
       ].slice(0, requiredLength) as ComponentData<ProductCardProps>[];
 
-      return setDeep(
+      const updatedData = setDeep(
         data,
         "props.slots.CardSlot",
         updatedCardSlot.map((card, i) => {
@@ -175,6 +185,11 @@ export const ProductCardsWrapper: ComponentConfig<{
             product: resolvedProducts[i],
           } satisfies ProductCardProps["parentData"]);
         })
+      );
+      return setDeep(
+        updatedData,
+        "props.conditionalRender.hasMappedContent",
+        true
       );
     } else {
       // STATIC VALUES
@@ -234,8 +249,18 @@ export const ProductCardsWrapper: ComponentConfig<{
         "props.data.constantValue",
         newSlots.map((card) => ({ id: card.props.id }))
       );
-      return updatedData;
+      return setDeep(
+        updatedData,
+        "props.conditionalRender.hasMappedContent",
+        true
+      );
     }
   },
-  render: (props) => <ProductCardsWrapperComponent {...props} />,
+  render: (props) => {
+    if (props.conditionalRender?.hasMappedContent === false) {
+      return <div data-empty-state="true" />;
+    }
+
+    return <ProductCardsWrapperComponent {...props} />;
+  },
 };

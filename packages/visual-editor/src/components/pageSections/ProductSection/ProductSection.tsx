@@ -1,3 +1,4 @@
+import * as React from "react";
 import {
   ThemeColor,
   backgroundColors,
@@ -20,6 +21,9 @@ import { defaultProductCardSlotData } from "./ProductCard.tsx";
 import { ProductCardsWrapperProps } from "./ProductCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import { EntityFieldSectionEmptyState } from "../EntityFieldSectionEmptyState.tsx";
+import { isMappedCardWrapperSelected } from "../entityFieldSectionUtils.ts";
+import { useMappedEntitySectionEmptyState } from "../useMappedEntitySectionEmptyState.ts";
 
 export type ProductSectionVariant = "immersive" | "classic" | "minimal";
 export type ProductSectionImageConstrain = "fill" | "fixed";
@@ -57,6 +61,11 @@ export interface ProductSectionProps {
   /** @internal  */
   analytics: {
     scope?: string;
+  };
+
+  /** @internal */
+  conditionalRender?: {
+    watchForMappedContentEmptyState: boolean;
   };
 
   /**
@@ -126,8 +135,13 @@ const productSectionFields: Fields<ProductSectionProps> = {
   ),
 };
 
-const ProductSectionComponent: PuckComponent<ProductSectionProps> = (props) => {
+const ProductSectionComponent: PuckComponent<
+  ProductSectionProps & {
+    setCardsWrapperRef?: (element: HTMLDivElement | null) => void;
+  }
+> = (props) => {
   const { slots, styles } = props;
+  const { setCardsWrapperRef } = props;
 
   return (
     <PageSection
@@ -137,7 +151,9 @@ const ProductSectionComponent: PuckComponent<ProductSectionProps> = (props) => {
       {styles.showSectionHeading && (
         <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
       )}
-      <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
+      <div ref={setCardsWrapperRef}>
+        <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
+      </div>
     </PageSection>
   );
 };
@@ -251,9 +267,29 @@ export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
       });
     }
 
-    return updatedData;
+    return {
+      ...updatedData,
+      props: {
+        ...updatedData.props,
+        conditionalRender: {
+          watchForMappedContentEmptyState: isMappedCardWrapperSelected(
+            updatedData.props.slots.CardsWrapperSlot?.[0]
+          ),
+        },
+      },
+    };
   },
   render: (props) => {
+    const watchForMappedContentEmptyState =
+      props.conditionalRender?.watchForMappedContentEmptyState ?? false;
+    const { setWrapperRef, isMappedContentEmpty } =
+      useMappedEntitySectionEmptyState({
+        enabled: watchForMappedContentEmptyState,
+      });
+    const cardsWrapperSlot = (
+      <props.slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
+    );
+
     return (
       <ComponentErrorBoundary
         isEditing={props.puck.isEditing}
@@ -266,7 +302,29 @@ export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
             liveVisibility={props.liveVisibility}
             isEditing={props.puck.isEditing}
           >
-            <ProductSectionComponent {...props} />
+            {watchForMappedContentEmptyState && isMappedContentEmpty ? (
+              props.puck.isEditing ? (
+                <>
+                  <EntityFieldSectionEmptyState
+                    backgroundColor={props.styles.backgroundColor}
+                  />
+                  <div
+                    ref={setWrapperRef}
+                    className="hidden"
+                    aria-hidden="true"
+                  >
+                    {cardsWrapperSlot}
+                  </div>
+                </>
+              ) : (
+                <></>
+              )
+            ) : (
+              <ProductSectionComponent
+                {...props}
+                setCardsWrapperRef={setWrapperRef}
+              />
+            )}
           </VisibilityWrapper>
         </AnalyticsScopeProvider>
       </ComponentErrorBoundary>

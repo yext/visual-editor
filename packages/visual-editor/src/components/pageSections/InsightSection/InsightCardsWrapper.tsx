@@ -29,6 +29,11 @@ export type InsightCardsWrapperProps = CardWrapperType<InsightSectionType> & {
     showDescription: boolean;
     showCTA: boolean;
   };
+
+  /** @internal */
+  conditionalRender?: {
+    hasMappedContent: boolean;
+  };
 };
 
 const insightCardsWrapperFields = {
@@ -132,7 +137,12 @@ export const InsightCardsWrapper: ComponentConfig<{
       )?.insights;
 
       if (!resolvedInsights?.length) {
-        return setDeep(data, "props.slots.CardSlot", []);
+        const updatedData = setDeep(data, "props.slots.CardSlot", []);
+        return setDeep(
+          updatedData,
+          "props.conditionalRender.hasMappedContent",
+          false
+        );
       }
 
       const requiredLength = resolvedInsights.length;
@@ -155,7 +165,7 @@ export const InsightCardsWrapper: ComponentConfig<{
         ...cardsToAdd,
       ].slice(0, requiredLength);
 
-      return setDeep(
+      const updatedData = setDeep(
         data,
         "props.slots.CardSlot",
         updatedCardSlot
@@ -168,6 +178,11 @@ export const InsightCardsWrapper: ComponentConfig<{
               insight: resolvedInsights[i],
             } satisfies InsightCardProps["parentData"]);
           })
+      );
+      return setDeep(
+        updatedData,
+        "props.conditionalRender.hasMappedContent",
+        true
       );
     } else {
       let updatedData = data;
@@ -217,8 +232,18 @@ export const InsightCardsWrapper: ComponentConfig<{
         "props.data.constantValue",
         newSlots.map((card) => ({ id: card.props.id }))
       );
-      return updatedData;
+      return setDeep(
+        updatedData,
+        "props.conditionalRender.hasMappedContent",
+        true
+      );
     }
   },
-  render: (props) => <InsightCardsWrapperComponent {...props} />,
+  render: (props) => {
+    if (props.conditionalRender?.hasMappedContent === false) {
+      return <div data-empty-state="true" />;
+    }
+
+    return <InsightCardsWrapperComponent {...props} />;
+  },
 };

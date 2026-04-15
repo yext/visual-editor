@@ -1,3 +1,4 @@
+import * as React from "react";
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import {
   ThemeColor,
@@ -13,6 +14,9 @@ import { defaultEventCardSlotData } from "./EventCard.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { EventCardsWrapperProps } from "./EventCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
+import { EntityFieldSectionEmptyState } from "../EntityFieldSectionEmptyState.tsx";
+import { isMappedCardWrapperSelected } from "../entityFieldSectionUtils.ts";
+import { useMappedEntitySectionEmptyState } from "../useMappedEntitySectionEmptyState.ts";
 
 export interface EventSectionProps {
   /**
@@ -42,6 +46,11 @@ export interface EventSectionProps {
   /** @internal */
   analytics: {
     scope?: string;
+  };
+
+  /** @internal */
+  conditionalRender?: {
+    watchForMappedContentEmptyState: boolean;
   };
 
   /**
@@ -100,8 +109,13 @@ const eventSectionFields: Fields<EventSectionProps> = {
   ),
 };
 
-const EventSectionWrapper: PuckComponent<EventSectionProps> = (props) => {
+const EventSectionWrapper: PuckComponent<
+  EventSectionProps & {
+    setCardsWrapperRef?: (element: HTMLDivElement | null) => void;
+  }
+> = (props) => {
   const { styles, slots } = props;
+  const { setCardsWrapperRef } = props;
 
   return (
     <PageSection
@@ -111,7 +125,9 @@ const EventSectionWrapper: PuckComponent<EventSectionProps> = (props) => {
       {styles.showSectionHeading && (
         <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
       )}
-      <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
+      <div ref={setCardsWrapperRef}>
+        <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
+      </div>
     </PageSection>
   );
 };
@@ -176,23 +192,69 @@ export const EventSection: ComponentConfig<{ props: EventSectionProps }> = {
     liveVisibility: true,
   },
   resolveData: (data) => {
-    return forwardHeadingLevel(data, "TitleSlot");
+    const updatedData = forwardHeadingLevel(data, "TitleSlot");
+
+    return {
+      ...updatedData,
+      props: {
+        ...updatedData.props,
+        conditionalRender: {
+          watchForMappedContentEmptyState: isMappedCardWrapperSelected(
+            updatedData.props.slots.CardsWrapperSlot?.[0]
+          ),
+        },
+      },
+    };
   },
-  render: (props) => (
-    <ComponentErrorBoundary
-      isEditing={props.puck.isEditing}
-      resetKeys={[props]}
-    >
-      <AnalyticsScopeProvider
-        name={`${props.analytics?.scope ?? "eventsSection"}${getAnalyticsScopeHash(props.id)}`}
+  render: (props) => {
+    const watchForMappedContentEmptyState =
+      props.conditionalRender?.watchForMappedContentEmptyState ?? false;
+    const { setWrapperRef, isMappedContentEmpty } =
+      useMappedEntitySectionEmptyState({
+        enabled: watchForMappedContentEmptyState,
+      });
+    const cardsWrapperSlot = (
+      <props.slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
+    );
+
+    return (
+      <ComponentErrorBoundary
+        isEditing={props.puck.isEditing}
+        resetKeys={[props]}
       >
-        <VisibilityWrapper
-          liveVisibility={props.liveVisibility}
-          isEditing={props.puck.isEditing}
+        <AnalyticsScopeProvider
+          name={`${props.analytics?.scope ?? "eventsSection"}${getAnalyticsScopeHash(props.id)}`}
         >
-          <EventSectionWrapper {...props} />
-        </VisibilityWrapper>
-      </AnalyticsScopeProvider>
-    </ComponentErrorBoundary>
-  ),
+          <VisibilityWrapper
+            liveVisibility={props.liveVisibility}
+            isEditing={props.puck.isEditing}
+          >
+            {watchForMappedContentEmptyState && isMappedContentEmpty ? (
+              props.puck.isEditing ? (
+                <>
+                  <EntityFieldSectionEmptyState
+                    backgroundColor={props.styles.backgroundColor}
+                  />
+                  <div
+                    ref={setWrapperRef}
+                    className="hidden"
+                    aria-hidden="true"
+                  >
+                    {cardsWrapperSlot}
+                  </div>
+                </>
+              ) : (
+                <></>
+              )
+            ) : (
+              <EventSectionWrapper
+                {...props}
+                setCardsWrapperRef={setWrapperRef}
+              />
+            )}
+          </VisibilityWrapper>
+        </AnalyticsScopeProvider>
+      </ComponentErrorBoundary>
+    );
+  },
 };

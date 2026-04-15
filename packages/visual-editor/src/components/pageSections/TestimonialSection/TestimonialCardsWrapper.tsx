@@ -36,6 +36,11 @@ export type TestimonialCardsWrapperProps =
        */
       showDate: boolean;
     };
+
+    /** @internal */
+    conditionalRender?: {
+      hasMappedContent: boolean;
+    };
   };
 
 const testimonialCardsWrapperFields = {
@@ -122,7 +127,12 @@ export const TestimonialCardsWrapper: ComponentConfig<{
       )?.testimonials;
 
       if (!resolvedTestimonials?.length) {
-        return setDeep(data, "props.slots.CardSlot", []);
+        const updatedData = setDeep(data, "props.slots.CardSlot", []);
+        return setDeep(
+          updatedData,
+          "props.conditionalRender.hasMappedContent",
+          false
+        );
       }
 
       const requiredLength = resolvedTestimonials.length;
@@ -145,7 +155,7 @@ export const TestimonialCardsWrapper: ComponentConfig<{
         ...cardsToAdd,
       ].slice(0, requiredLength) as ComponentData<TestimonialCardProps>[];
 
-      return setDeep(
+      const updatedData = setDeep(
         data,
         "props.slots.CardSlot",
         updatedCardSlot.map((card, i) => {
@@ -156,12 +166,21 @@ export const TestimonialCardsWrapper: ComponentConfig<{
           } satisfies TestimonialCardProps["parentData"]);
         })
       );
+      return setDeep(
+        updatedData,
+        "props.conditionalRender.hasMappedContent",
+        true
+      );
     } else {
       let updatedData = data;
 
       if (!Array.isArray(data.props.data.constantValue)) {
         updatedData = setDeep(updatedData, "props.data.constantValue", []);
-        return updatedData;
+        return setDeep(
+          updatedData,
+          "props.conditionalRender.hasMappedContent",
+          true
+        );
       }
 
       const inUseIds = new Set<string>();
@@ -213,8 +232,18 @@ export const TestimonialCardsWrapper: ComponentConfig<{
         "props.data.constantValue",
         newSlots.map((card) => ({ id: card.props.id }))
       );
-      return updatedData;
+      return setDeep(
+        updatedData,
+        "props.conditionalRender.hasMappedContent",
+        true
+      );
     }
   },
-  render: (props) => <TestimonialCardsWrapperComponent {...props} />,
+  render: (props) => {
+    if (props.conditionalRender?.hasMappedContent === false) {
+      return <div data-empty-state="true" />;
+    }
+
+    return <TestimonialCardsWrapperComponent {...props} />;
+  },
 };

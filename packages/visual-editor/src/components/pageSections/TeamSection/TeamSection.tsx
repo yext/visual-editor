@@ -1,3 +1,4 @@
+import * as React from "react";
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import {
   ThemeColor,
@@ -14,6 +15,9 @@ import { defaultTeamCardSlotData } from "./TeamCard.tsx";
 import { TeamCardsWrapperProps } from "./TeamCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import { EntityFieldSectionEmptyState } from "../EntityFieldSectionEmptyState.tsx";
+import { isMappedCardWrapperSelected } from "../entityFieldSectionUtils.ts";
+import { useMappedEntitySectionEmptyState } from "../useMappedEntitySectionEmptyState.ts";
 
 export interface TeamSectionProps {
   /**
@@ -43,6 +47,11 @@ export interface TeamSectionProps {
   /** @internal */
   analytics: {
     scope?: string;
+  };
+
+  /** @internal */
+  conditionalRender?: {
+    watchForMappedContentEmptyState: boolean;
   };
 
   /**
@@ -101,8 +110,13 @@ const teamSectionFields: Fields<TeamSectionProps> = {
   ),
 };
 
-const TeamSectionWrapper: PuckComponent<TeamSectionProps> = (props) => {
+const TeamSectionWrapper: PuckComponent<
+  TeamSectionProps & {
+    setCardsWrapperRef?: (element: HTMLDivElement | null) => void;
+  }
+> = (props) => {
   const { styles, slots } = props;
+  const { setCardsWrapperRef } = props;
 
   return (
     <PageSection
@@ -112,7 +126,9 @@ const TeamSectionWrapper: PuckComponent<TeamSectionProps> = (props) => {
       {styles.showSectionHeading && (
         <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
       )}
-      <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
+      <div ref={setCardsWrapperRef}>
+        <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
+      </div>
     </PageSection>
   );
 };
@@ -178,23 +194,69 @@ export const TeamSection: ComponentConfig<{ props: TeamSectionProps }> = {
     liveVisibility: true,
   },
   resolveData: (data) => {
-    return forwardHeadingLevel(data, "TitleSlot");
+    const updatedData = forwardHeadingLevel(data, "TitleSlot");
+
+    return {
+      ...updatedData,
+      props: {
+        ...updatedData.props,
+        conditionalRender: {
+          watchForMappedContentEmptyState: isMappedCardWrapperSelected(
+            updatedData.props.slots.CardsWrapperSlot?.[0]
+          ),
+        },
+      },
+    };
   },
-  render: (props) => (
-    <ComponentErrorBoundary
-      isEditing={props.puck.isEditing}
-      resetKeys={[props]}
-    >
-      <AnalyticsScopeProvider
-        name={`${props.analytics?.scope ?? "teamSection"}${getAnalyticsScopeHash(props.id)}`}
+  render: (props) => {
+    const watchForMappedContentEmptyState =
+      props.conditionalRender?.watchForMappedContentEmptyState ?? false;
+    const { setWrapperRef, isMappedContentEmpty } =
+      useMappedEntitySectionEmptyState({
+        enabled: watchForMappedContentEmptyState,
+      });
+    const cardsWrapperSlot = (
+      <props.slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
+    );
+
+    return (
+      <ComponentErrorBoundary
+        isEditing={props.puck.isEditing}
+        resetKeys={[props]}
       >
-        <VisibilityWrapper
-          liveVisibility={props.liveVisibility}
-          isEditing={props.puck.isEditing}
+        <AnalyticsScopeProvider
+          name={`${props.analytics?.scope ?? "teamSection"}${getAnalyticsScopeHash(props.id)}`}
         >
-          <TeamSectionWrapper {...props} />
-        </VisibilityWrapper>
-      </AnalyticsScopeProvider>
-    </ComponentErrorBoundary>
-  ),
+          <VisibilityWrapper
+            liveVisibility={props.liveVisibility}
+            isEditing={props.puck.isEditing}
+          >
+            {watchForMappedContentEmptyState && isMappedContentEmpty ? (
+              props.puck.isEditing ? (
+                <>
+                  <EntityFieldSectionEmptyState
+                    backgroundColor={props.styles.backgroundColor}
+                  />
+                  <div
+                    ref={setWrapperRef}
+                    className="hidden"
+                    aria-hidden="true"
+                  >
+                    {cardsWrapperSlot}
+                  </div>
+                </>
+              ) : (
+                <></>
+              )
+            ) : (
+              <TeamSectionWrapper
+                {...props}
+                setCardsWrapperRef={setWrapperRef}
+              />
+            )}
+          </VisibilityWrapper>
+        </AnalyticsScopeProvider>
+      </ComponentErrorBoundary>
+    );
+  },
 };

@@ -25,6 +25,7 @@ import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultFAQCardData, FAQCardProps } from "./FAQCard.tsx";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import { EntityFieldSectionEmptyState } from "../EntityFieldSectionEmptyState.tsx";
 
 export interface FAQStyles {
   /**
@@ -61,6 +62,11 @@ export interface FAQSectionProps {
   /** @internal */
   analytics: {
     scope?: string;
+  };
+
+  /** @internal */
+  conditionalRender?: {
+    hasMappedContent: boolean;
   };
 
   /**
@@ -216,7 +222,16 @@ export const FAQSection: ComponentConfig<{ props: FAQSectionProps }> = {
       )?.faqs;
 
       if (!resolvedFAQs?.length) {
-        return setDeep(data, "props.slots.CardSlot", []);
+        const updatedData = setDeep(data, "props.slots.CardSlot", []);
+        return {
+          ...updatedData,
+          props: {
+            ...updatedData.props,
+            conditionalRender: {
+              hasMappedContent: false,
+            },
+          },
+        };
       }
 
       const requiredLength = resolvedFAQs.length;
@@ -242,7 +257,7 @@ export const FAQSection: ComponentConfig<{ props: FAQSectionProps }> = {
         ...cardsToAdd,
       ].slice(0, requiredLength) as ComponentData<FAQCardProps>[];
 
-      return setDeep(
+      const updatedData = setDeep(
         data,
         "props.slots.CardSlot",
         updatedCardSlot.map((card, i) => {
@@ -253,6 +268,15 @@ export const FAQSection: ComponentConfig<{ props: FAQSectionProps }> = {
           } satisfies FAQCardProps["parentData"]);
         })
       );
+      return {
+        ...updatedData,
+        props: {
+          ...updatedData.props,
+          conditionalRender: {
+            hasMappedContent: true,
+          },
+        },
+      };
     } else {
       // STATIC VALUES
       let updatedData = data;
@@ -306,7 +330,15 @@ export const FAQSection: ComponentConfig<{ props: FAQSectionProps }> = {
         "props.data.constantValue",
         newSlots.map((card) => ({ id: card.props.id }))
       );
-      return updatedData;
+      return {
+        ...updatedData,
+        props: {
+          ...updatedData.props,
+          conditionalRender: {
+            hasMappedContent: true,
+          },
+        },
+      };
     }
   },
   render: (props) => (
@@ -321,7 +353,17 @@ export const FAQSection: ComponentConfig<{ props: FAQSectionProps }> = {
           liveVisibility={props.liveVisibility}
           isEditing={props.puck.isEditing}
         >
-          <FAQsSectionComponent {...props} />
+          {props.conditionalRender?.hasMappedContent === false ? (
+            props.puck.isEditing ? (
+              <EntityFieldSectionEmptyState
+                backgroundColor={props.styles.backgroundColor}
+              />
+            ) : (
+              <></>
+            )
+          ) : (
+            <FAQsSectionComponent {...props} />
+          )}
         </VisibilityWrapper>
       </AnalyticsScopeProvider>
     </ComponentErrorBoundary>

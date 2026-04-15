@@ -1,0 +1,125 @@
+import { ComplexImageType, ImageType } from "@yext/pages-components";
+import {
+  AssetImageType,
+  isLocalizedAssetImage,
+  resolveLocalizedAssetImage,
+  TranslatableAssetImage,
+} from "../../../types/images.ts";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+
+export type PhotoGalleryImageValue =
+  | ImageType
+  | ComplexImageType
+  | { assetImage: AssetImageType | TranslatableAssetImage };
+
+export type ResolvedGalleryImage = {
+  isEmpty: boolean;
+  originalIndex: number;
+  image: ImageType | AssetImageType;
+  aspectRatio?: number;
+  width?: number;
+  originalImage: PhotoGalleryImageValue;
+};
+
+export const getPhotoGalleryImageData = ({
+  resolvedImages,
+  locale,
+  streamDocument,
+  aspectRatio,
+  width,
+  isEditing,
+}: {
+  resolvedImages: PhotoGalleryImageValue[] | undefined;
+  locale: string;
+  streamDocument?: Record<string, any>;
+  aspectRatio?: number;
+  width?: number;
+  isEditing: boolean;
+}): {
+  galleryImages: ResolvedGalleryImage[];
+  hasRenderableImages: boolean;
+} => {
+  const allGalleryImages = (
+    Array.isArray(resolvedImages) ? resolvedImages : []
+  ).map((rawImage, originalIndex) => {
+    let image: ImageType | AssetImageType | undefined;
+    let altText = "";
+
+    if (
+      typeof rawImage === "object" &&
+      rawImage !== null &&
+      "assetImage" in rawImage
+    ) {
+      if (isLocalizedAssetImage(rawImage.assetImage)) {
+        image = resolveLocalizedAssetImage(rawImage.assetImage, locale);
+        altText = resolveComponentData(
+          image?.alternateText ?? "",
+          locale,
+          streamDocument
+        );
+      } else {
+        image = rawImage.assetImage;
+        altText = resolveComponentData(
+          rawImage.assetImage?.alternateText ?? "",
+          locale,
+          streamDocument
+        );
+      }
+    } else if (
+      typeof rawImage === "object" &&
+      rawImage !== null &&
+      "image" in rawImage
+    ) {
+      image = rawImage.image;
+      altText = rawImage.image?.alternateText ?? "";
+    } else {
+      image = rawImage;
+      altText = rawImage?.alternateText ?? "";
+    }
+
+    const url = image?.url;
+    const isEmpty = !url || (typeof url === "string" && url.trim() === "");
+
+    return {
+      isEmpty,
+      originalIndex,
+      image: isEmpty
+        ? {
+            url: "",
+            alternateText: altText,
+            height: 570,
+            width: 1000,
+          }
+        : {
+            url,
+            alternateText: altText,
+            height:
+              typeof rawImage === "object" &&
+              rawImage !== null &&
+              "height" in rawImage &&
+              rawImage.height
+                ? rawImage.height
+                : 570,
+            width:
+              typeof rawImage === "object" &&
+              rawImage !== null &&
+              "width" in rawImage &&
+              rawImage.width
+                ? rawImage.width
+                : 1000,
+          },
+      aspectRatio,
+      width: width || 1000,
+      originalImage: rawImage,
+    };
+  });
+
+  return {
+    galleryImages: allGalleryImages.filter(
+      (galleryImage) => isEditing || !galleryImage.isEmpty
+    ),
+    hasRenderableImages: allGalleryImages.some(
+      (galleryImage) => !galleryImage.isEmpty
+    ),
+  };
+};

@@ -26,6 +26,11 @@ export type TeamCardsWrapperProps = CardWrapperType<TeamSectionType> & {
     showEmail: boolean;
     showCTA: boolean;
   };
+
+  /** @internal */
+  conditionalRender?: {
+    hasMappedContent: boolean;
+  };
 };
 
 const teamCardsWrapperFields = {
@@ -127,7 +132,12 @@ export const TeamCardsWrapper: ComponentConfig<{
       )?.people;
 
       if (!resolvedTeam?.length) {
-        return setDeep(data, "props.slots.CardSlot", []);
+        const updatedData = setDeep(data, "props.slots.CardSlot", []);
+        return setDeep(
+          updatedData,
+          "props.conditionalRender.hasMappedContent",
+          false
+        );
       }
 
       const requiredLength = resolvedTeam.length;
@@ -150,7 +160,7 @@ export const TeamCardsWrapper: ComponentConfig<{
         ...cardsToAdd,
       ].slice(0, requiredLength) as ComponentData<TeamCardProps>[];
 
-      return setDeep(
+      const updatedData = setDeep(
         data,
         "props.slots.CardSlot",
         updatedCardSlot.map((card, i) => {
@@ -161,12 +171,21 @@ export const TeamCardsWrapper: ComponentConfig<{
           } satisfies TeamCardProps["parentData"]);
         })
       );
+      return setDeep(
+        updatedData,
+        "props.conditionalRender.hasMappedContent",
+        true
+      );
     } else {
       let updatedData = data;
 
       if (!Array.isArray(data.props.data.constantValue)) {
         updatedData = setDeep(updatedData, "props.data.constantValue", []);
-        return updatedData;
+        return setDeep(
+          updatedData,
+          "props.conditionalRender.hasMappedContent",
+          true
+        );
       }
 
       const inUseIds = new Set<string>();
@@ -217,8 +236,18 @@ export const TeamCardsWrapper: ComponentConfig<{
         "props.data.constantValue",
         newSlots.map((card) => ({ id: card.props.id }))
       );
-      return updatedData;
+      return setDeep(
+        updatedData,
+        "props.conditionalRender.hasMappedContent",
+        true
+      );
     }
   },
-  render: (props) => <TeamCardsWrapperComponent {...props} />,
+  render: (props) => {
+    if (props.conditionalRender?.hasMappedContent === false) {
+      return <div data-empty-state="true" />;
+    }
+
+    return <TeamCardsWrapperComponent {...props} />;
+  },
 };

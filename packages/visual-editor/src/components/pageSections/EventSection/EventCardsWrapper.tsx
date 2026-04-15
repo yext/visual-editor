@@ -25,6 +25,11 @@ export type EventCardsWrapperProps = CardWrapperType<EventSectionType> & {
     showDescription: boolean;
     showCTA: boolean;
   };
+
+  /** @internal */
+  conditionalRender?: {
+    hasMappedContent: boolean;
+  };
 };
 
 const eventCardsWrapperFields = {
@@ -120,7 +125,12 @@ export const EventCardsWrapper: ComponentConfig<{
       )?.events;
 
       if (!resolvedEvents?.length) {
-        return setDeep(data, "props.slots.CardSlot", []);
+        const updatedData = setDeep(data, "props.slots.CardSlot", []);
+        return setDeep(
+          updatedData,
+          "props.conditionalRender.hasMappedContent",
+          false
+        );
       }
 
       const requiredLength = resolvedEvents.length;
@@ -146,7 +156,7 @@ export const EventCardsWrapper: ComponentConfig<{
         ...cardsToAdd,
       ].slice(0, requiredLength) as ComponentData<EventCardProps>[];
 
-      return setDeep(
+      const updatedData = setDeep(
         data,
         "props.slots.CardSlot",
         updatedCardSlot.map((card, i) => {
@@ -156,6 +166,11 @@ export const EventCardsWrapper: ComponentConfig<{
             event: resolvedEvents[i],
           } satisfies EventCardProps["parentData"]);
         })
+      );
+      return setDeep(
+        updatedData,
+        "props.conditionalRender.hasMappedContent",
+        true
       );
     } else {
       // STATIC VALUES
@@ -216,8 +231,18 @@ export const EventCardsWrapper: ComponentConfig<{
         "props.data.constantValue",
         newSlots.map((card) => ({ id: card.props.id }))
       );
-      return updatedData;
+      return setDeep(
+        updatedData,
+        "props.conditionalRender.hasMappedContent",
+        true
+      );
     }
   },
-  render: (props) => <EventCardsWrapperComponent {...props} />,
+  render: (props) => {
+    if (props.conditionalRender?.hasMappedContent === false) {
+      return <div data-empty-state="true" />;
+    }
+
+    return <EventCardsWrapperComponent {...props} />;
+  },
 };
