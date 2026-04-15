@@ -1,82 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import {
-  fetchNearbyLocations,
-  parseDocumentForNearbyLocations,
-} from "./utils.ts";
-
-describe("parseDocument", () => {
-  const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
-  const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  it.each([
-    {
-      name: "reads contentEndpointId from _pageset",
-      document: {
-        businessId: "biz-1",
-        id: "entity-1",
-        _env: { YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: "api-key-1" },
-        _pageset: JSON.stringify({
-          config: { contentEndpointId: "ce-from-json" },
-        }),
-        _yext: { contentDeliveryAPIDomain: "https://cdn.example.com" },
-      },
-      envVarName: "YEXT_CONTENT_ENDPOINT_ID",
-      expected: {
-        businessId: "biz-1",
-        entityId: "entity-1",
-        apiKey: "api-key-1",
-        contentEndpointId: "ce-from-json",
-        contentDeliveryAPIDomain: "https://cdn.example.com",
-      },
-    },
-    {
-      name: "falls back to env var contentEndpointId when _pageset is missing",
-      document: {
-        businessId: "biz-2",
-        id: "entity-2",
-        _env: {
-          YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: "api-key-2",
-          YEXT_CONTENT_ENDPOINT_ID: "ce-from-env",
-        },
-        _yext: { contentDeliveryAPIDomain: "https://cdn.example.com" },
-      },
-      envVarName: "YEXT_CONTENT_ENDPOINT_ID",
-      expected: {
-        businessId: "biz-2",
-        entityId: "entity-2",
-        apiKey: "api-key-2",
-        contentEndpointId: "ce-from-env",
-        contentDeliveryAPIDomain: "https://cdn.example.com",
-      },
-    },
-  ])("$name", ({ document, envVarName, expected }) => {
-    expect(
-      parseDocumentForNearbyLocations(document as any, envVarName)
-    ).toEqual(expected);
-    expect(errorSpy).not.toHaveBeenCalled();
-    expect(warnSpy).not.toHaveBeenCalled();
-  });
-
-  it("logs parse error for invalid _pageset JSON", () => {
-    const result = parseDocumentForNearbyLocations({
-      businessId: "biz-1",
-      id: "entity-1",
-      _env: { YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: "api-key-1" },
-      _pageset: "{bad json",
-      _yext: { contentDeliveryAPIDomain: "https://cdn.example.com" },
-    } as any);
-
-    expect(result.contentEndpointId).toBe("");
-    expect(errorSpy).toHaveBeenCalled();
-    expect(warnSpy).toHaveBeenCalledWith(
-      "Missing contentEndpointId! Unable to fetch nearby locations."
-    );
-  });
-});
+import { fetchNearbyLocations } from "./utils.ts";
 
 describe("fetchNearbyLocations", () => {
   beforeEach(() => {
@@ -161,11 +84,15 @@ describe("fetchNearbyLocations", () => {
     vi.stubGlobal("fetch", fetchMock);
 
     const result = await fetchNearbyLocations({
-      businessId: "biz-1",
-      entityId: "entity-1",
-      apiKey: "api-key-1",
-      contentEndpointId: "content-endpoint-id",
-      contentDeliveryAPIDomain: "https://cdn.example.com",
+      streamDocument: {
+        businessId: "biz-1",
+        id: "entity-1",
+        _env: { YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: "api-key-1" },
+        _pageset: JSON.stringify({
+          config: { contentEndpointId: "content-endpoint-id" },
+        }),
+        _yext: { contentDeliveryAPIDomain: "https://cdn.example.com" },
+      } as any,
       latitude: 0,
       longitude: 0,
       radiusMi: 500,
@@ -179,6 +106,9 @@ describe("fetchNearbyLocations", () => {
 
     expect(fetchMock).toHaveBeenCalled();
     const firstUrl = new URL(fetchedUrlSnapshots[0]);
+    expect(firstUrl.pathname).toBe(
+      "/v2/accounts/biz-1/content/content-endpoint-id"
+    );
     expect(firstUrl.searchParams.get("limit")).toBe("50");
     expect(firstUrl.searchParams.get("pageToken")).toBeNull();
 
@@ -196,11 +126,15 @@ describe("fetchNearbyLocations", () => {
 
     await expect(
       fetchNearbyLocations({
-        businessId: "biz-1",
-        entityId: "entity-1",
-        apiKey: "api-key-1",
-        contentEndpointId: "content-endpoint-id",
-        contentDeliveryAPIDomain: "https://cdn.example.com",
+        streamDocument: {
+          businessId: "biz-1",
+          id: "entity-1",
+          _env: { YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: "api-key-1" },
+          _pageset: JSON.stringify({
+            config: { contentEndpointId: "content-endpoint-id" },
+          }),
+          _yext: { contentDeliveryAPIDomain: "https://cdn.example.com" },
+        } as any,
         latitude: 0,
         longitude: 0,
         radiusMi: 500,
@@ -239,11 +173,15 @@ describe("fetchNearbyLocations", () => {
     vi.stubGlobal("fetch", fetchMock);
 
     const result = await fetchNearbyLocations({
-      businessId: "biz-1",
-      entityId: "entity-1",
-      apiKey: "api-key-1",
-      contentEndpointId: "content-endpoint-id",
-      contentDeliveryAPIDomain: "https://cdn.example.com",
+      streamDocument: {
+        businessId: "biz-1",
+        id: "entity-1",
+        _env: { YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: "api-key-1" },
+        _pageset: JSON.stringify({
+          config: { contentEndpointId: "content-endpoint-id" },
+        }),
+        _yext: { contentDeliveryAPIDomain: "https://cdn.example.com" },
+      } as any,
       latitude: 0,
       longitude: 0,
       radiusMi: 500,
@@ -285,11 +223,15 @@ describe("fetchNearbyLocations", () => {
     vi.stubGlobal("fetch", fetchMock);
 
     const result = await fetchNearbyLocations({
-      businessId: "biz-1",
-      entityId: "entity-1",
-      apiKey: "api-key-1",
-      contentEndpointId: "content-endpoint-id",
-      contentDeliveryAPIDomain: "https://cdn.example.com",
+      streamDocument: {
+        businessId: "biz-1",
+        id: "entity-1",
+        _env: { YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: "api-key-1" },
+        _pageset: JSON.stringify({
+          config: { contentEndpointId: "content-endpoint-id" },
+        }),
+        _yext: { contentDeliveryAPIDomain: "https://cdn.example.com" },
+      } as any,
       latitude: 0,
       longitude: 0,
       radiusMi: 500,
@@ -302,5 +244,40 @@ describe("fetchNearbyLocations", () => {
       "bravo",
       "charlie",
     ]);
+  });
+
+  it("returns an empty response and logs when the stream document is missing required config", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+
+    const result = await fetchNearbyLocations({
+      streamDocument: {
+        businessId: "biz-1",
+        id: "entity-1",
+        _env: { YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: "api-key-1" },
+        _pageset: "{bad json",
+        _yext: { contentDeliveryAPIDomain: "https://cdn.example.com" },
+      } as any,
+      latitude: 0,
+      longitude: 0,
+      radiusMi: 500,
+      limit: 3,
+      locale: "de",
+    });
+
+    expect(result).toEqual({
+      meta: { errors: [] },
+      response: {
+        docs: [],
+        count: 0,
+      },
+    });
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(errorSpy).toHaveBeenCalled();
+    expect(warnSpy).toHaveBeenCalledWith(
+      "Missing contentEndpointId! Unable to fetch nearby locations."
+    );
   });
 });

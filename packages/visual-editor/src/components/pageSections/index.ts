@@ -45,11 +45,10 @@ export {
   type NearbyLocationsSectionProps,
 } from "./NearbyLocations/NearbyLocations.tsx";
 export {
-  parseDocumentForNearbyLocations,
-  fetchNearbyLocations,
+  useNearbyLocations,
   type NearbyLocationDoc,
   type NearbyLocationsResponse,
-} from "./NearbyLocations/utils.ts";
+} from "./NearbyLocations/useNearbyLocations.ts";
 export {
   TeamSection,
   type TeamSectionProps,

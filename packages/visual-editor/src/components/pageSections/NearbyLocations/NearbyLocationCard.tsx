@@ -13,7 +13,7 @@ import {
   mergeMeta,
   resolveUrlTemplate,
 } from "../../../utils/urls/resolveUrlTemplate.ts";
-import { NearbyLocationDoc } from "./utils.ts";
+import { NearbyLocationDoc } from "./useNearbyLocations.ts";
 
 /** A single card for the Nearby Locations Section */
 type NearbyLocationCardProps = {
