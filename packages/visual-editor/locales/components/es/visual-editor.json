@@ -31,6 +31,7 @@
   "filter": "Filtrar",
   "findALocation": "Encuentra una ubicación",
   "friday": "Viernes",
+  "generatingAIAnswer": "Generando respuesta de IA...",
   "getDirections": "Obtener instrucciones",
   "getDirectionsForLocation": "Obtener indicaciones para {{address}}",
   "heroBanner": "Estandarte",
@@ -43,6 +44,7 @@
   "kilometer_one": "kilómetro",
   "kilometer_other": "kilómetros",
   "kilometer_zero": "kilómetro",
+  "learnMore": "Más información",
   "loadingMap": "Mapa de carga ...",
   "loadingNearbyLocations": "Cargando ubicaciones cercanas ...",
   "locationWithCount_many": "{{count}} ubicaciones",
@@ -62,6 +64,8 @@
   "mile_other": "millas",
   "mile_zero": "milla",
   "monday": "Lunes",
+  "more": "Más",
+  "noLinkAvailable": "no hay enlace disponible",
   "noResultsFoundForThisArea": "No se encontraron resultados para esta área",
   "open24Hours": "Abierto 24 horas",
   "openHeaderMenu": "Abrir menú de encabezado",
@@ -101,6 +105,8 @@
     "xLink": "Síguenos en X (Twitter)",
     "youtube": "Suscríbete a nuestro canal de YouTube"
   },
+  "sources": "Fuentes",
+  "staticMapEmptyStateAddApiKey": "Agregue una clave API para obtener una vista previa de su mapa",
   "sunday": "Domingo",
   "temporarilyClosed": "Temporalmente cerrado",
   "thursday": "Jueves",
@@ -111,5 +117,6 @@
   "useOurLocatorToFindALocationNearYou": "Use nuestro localizador para encontrar una ubicación cerca de usted",
   "visitPage": "Visitar la página",
   "visitPageForName": "Visitar la página de {{name}}",
+  "voiceSearch": "Búsqueda por voz",
   "wednesday": "Miércoles"
 }

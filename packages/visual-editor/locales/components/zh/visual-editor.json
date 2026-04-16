@@ -31,6 +31,7 @@
   "filter": "筛选",
   "findALocation": "找到一个位置",
   "friday": "星期五",
+  "generatingAIAnswer": "正在生成 AI 答案...",
   "getDirections": "获取指示",
   "getDirectionsForLocation": "获取 {{address}} 的路线",
   "heroBanner": "英雄横幅",
@@ -42,6 +43,7 @@
   "kilometer_one": "公里",
   "kilometer_other": "公里",
   "kilometer_zero": "公里",
+  "learnMore": "了解更多",
   "loadingMap": "加载地图...",
   "loadingNearbyLocations": "在附近的位置加载...",
   "locationWithCount_one": "{{count}} 个位置",
@@ -57,6 +59,8 @@
   "mile_other": "英里",
   "mile_zero": "英里",
   "monday": "周一",
+  "more": "更多的",
+  "noLinkAvailable": "没有可用的链接",
   "noResultsFoundForThisArea": "该区域找不到结果",
   "open24Hours": "打开24小时",
   "openHeaderMenu": "打开标题菜单",
@@ -96,6 +100,8 @@
     "xLink": "在 X (Twitter) 上关注我们",
     "youtube": "订阅我们的 YouTube 频道"
   },
+  "sources": "来源",
+  "staticMapEmptyStateAddApiKey": "添加 API 密钥以预览地图",
   "sunday": "星期日",
   "temporarilyClosed": "暂时关闭",
   "thursday": "周四",
@@ -105,5 +111,6 @@
   "useOurLocatorToFindALocationNearYou": "使用我们的定位器找到您附近的位置",
   "visitPage": "访问页面",
   "visitPageForName": "访问 {{name}} 页面",
+  "voiceSearch": "语音搜索",
   "wednesday": "周三"
 }

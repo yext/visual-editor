@@ -31,6 +31,7 @@
   "filter": "Szűrő",
   "findALocation": "Keressen egy helyet",
   "friday": "péntek",
+  "generatingAIAnswer": "AI-válasz generálása...",
   "getDirections": "Szerezzen útmutatásokat",
   "getDirectionsForLocation": "Útvonaltervezés ehhez: {{address}}",
   "heroBanner": "Hős szalaghirdetés",
@@ -42,6 +43,7 @@
   "kilometer_one": "kilométer",
   "kilometer_other": "kilométer",
   "kilometer_zero": "kilométer",
+  "learnMore": "További információ",
   "loadingMap": "Betöltési térkép ...",
   "loadingNearbyLocations": "A közeli helyek betöltése ...",
   "locationWithCount_one": "{{count}} hely",
@@ -57,6 +59,8 @@
   "mile_other": "mérföld",
   "mile_zero": "mérföld",
   "monday": "hétfő",
+  "more": "Több",
+  "noLinkAvailable": "nincs elérhető hivatkozás",
   "noResultsFoundForThisArea": "Nincs eredmény erre a területre",
   "open24Hours": "Nyitva 24 órát",
   "openHeaderMenu": "Nyissa meg a fejléc menüjét",
@@ -96,6 +100,8 @@
     "xLink": "Kövess minket az X-en (Twitter)",
     "youtube": "Iratkozz fel YouTube csatornánkra"
   },
+  "sources": "Források",
+  "staticMapEmptyStateAddApiKey": "Adjon hozzá egy API-kulcsot a térkép előnézetéhez",
   "sunday": "vasárnap",
   "temporarilyClosed": "Ideiglenesen bezárt",
   "thursday": "csütörtök",
@@ -105,5 +111,6 @@
   "useOurLocatorToFindALocationNearYou": "Használja a lokátorunkat, hogy találjon egy helyet a közelben",
   "visitPage": "Látogasson el az oldalra",
   "visitPageForName": "Látogassa meg a {{name}} oldalát",
+  "voiceSearch": "Hangalapú keresés",
   "wednesday": "szerda"
 }

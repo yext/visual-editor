@@ -1,15 +1,14 @@
 import { type Config } from "@puckeditor/core";
-import "@yext/visual-editor/style.css";
-import "./index.css";
 import {
   DirectoryCategory,
   DirectoryCategoryComponents,
   DirectoryCategoryProps,
-  LocatorConfigProps,
   MainConfigProps,
   locatorConfig,
   mainConfig,
 } from "@yext/visual-editor";
+import "@yext/visual-editor/style.css";
+import "./index.css";
 
 interface DevProps extends MainConfigProps, DirectoryCategoryProps {}
 

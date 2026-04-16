@@ -3,7 +3,7 @@ const LOCATOR_TEST_IMAGE_URL = `data:image/svg+xml;charset=UTF-8,${encodeURIComp
     <rect width="80" height="80" rx="16" fill="#0f172a"/>
     <circle cx="40" cy="28" r="16" fill="#fbbf24"/>
     <rect x="18" y="50" width="44" height="12" rx="6" fill="#f8fafc"/>
-  </svg>`
+  </svg>`,
 )}`;
 
 const LOCATOR_TEST_HOURS = {
@@ -58,7 +58,7 @@ const createLocatorApiResult = (index: number): LocatorVerticalResult => {
         {
           publisher: "GOOGLEMYBUSINESS",
           listingUrl: `https://maps.google.com/maps/search/?api=1&query=${encodeURIComponent(
-            `Mock Location ${paddedIndex}`
+            `Mock Location ${paddedIndex}`,
           )}`,
         },
       ],
@@ -85,7 +85,7 @@ const createLocatorApiResult = (index: number): LocatorVerticalResult => {
 };
 
 const locatorResults = Array.from({ length: TOTAL_RESULTS }, (_, index) =>
-  createLocatorApiResult(index)
+  createLocatorApiResult(index),
 );
 
 // The locator only needs one vertical with deterministic paging behavior in local dev.
@@ -157,7 +157,7 @@ const getRequestUrl = (input: string | URL | Request) => {
 // Normalize both shapes so pagination parsing works for the vertical query mock.
 const getRequestBody = async (
   input: string | URL | Request,
-  init?: RequestInit
+  init?: RequestInit,
 ) => {
   const body = init?.body;
   if (typeof body === "string") {
@@ -183,7 +183,7 @@ const getRequestBody = async (
 // Default to the first page when they are missing or malformed.
 const getPagination = async (
   input: string | URL | Request,
-  init?: RequestInit
+  init?: RequestInit,
 ) => {
   const requestBody = await getRequestBody(input, init);
   if (!requestBody) {
@@ -220,7 +220,7 @@ export const installLocatorLocalDevMocks = () => {
   const originalPrototypeGetCurrentPositionDescriptor = geolocation
     ? Object.getOwnPropertyDescriptor(
         Object.getPrototypeOf(geolocation),
-        "getCurrentPosition"
+        "getCurrentPosition",
       )
     : undefined;
 
@@ -230,7 +230,7 @@ export const installLocatorLocalDevMocks = () => {
   // let everything else hit the real fetch implementation.
   globalThis.fetch = async (
     input: string | URL | Request,
-    init?: RequestInit
+    init?: RequestInit,
   ) => {
     const url = getRequestUrl(input);
 
@@ -241,7 +241,7 @@ export const installLocatorLocalDevMocks = () => {
         {
           status: 200,
           headers: { "Content-Type": "application/json" },
-        }
+        },
       );
     }
 
@@ -264,7 +264,7 @@ export const installLocatorLocalDevMocks = () => {
         {
           status: 200,
           headers: { "Content-Type": "application/json" },
-        }
+        },
       );
     }
 
@@ -285,10 +285,7 @@ export const installLocatorLocalDevMocks = () => {
         originalOwnGetCurrentPositionDescriptor?.enumerable ??
         originalPrototypeGetCurrentPositionDescriptor?.enumerable ??
         false,
-      value: (
-        successCallback: PositionCallback,
-        errorCallback?: PositionErrorCallback
-      ) => {
+      value: (successCallback: PositionCallback) => {
         successCallback({
           coords: {
             latitude: BASE_LATITUDE,
@@ -315,7 +312,7 @@ export const installLocatorLocalDevMocks = () => {
         Object.defineProperty(
           geolocation,
           "getCurrentPosition",
-          originalOwnGetCurrentPositionDescriptor
+          originalOwnGetCurrentPositionDescriptor,
         );
       } else {
         delete geolocation.getCurrentPosition;

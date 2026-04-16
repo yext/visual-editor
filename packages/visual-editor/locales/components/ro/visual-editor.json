@@ -31,6 +31,7 @@
   "filter": "Filtra",
   "findALocation": "Găsiți o locație",
   "friday": "vineri",
+  "generatingAIAnswer": "Se generează răspunsul AI...",
   "getDirections": "Obțineți indicații",
   "getDirectionsForLocation": "Obțineți indicații pentru {{address}}",
   "heroBanner": "Banner erou",
@@ -43,6 +44,7 @@
   "kilometer_one": "kilometru",
   "kilometer_other": "kilometri",
   "kilometer_zero": "kilometru",
+  "learnMore": "Află mai multe",
   "loadingMap": "Harta de încărcare ...",
   "loadingNearbyLocations": "Încărcarea locațiilor din apropiere ...",
   "locationWithCount_few": "{{count}} locații",
@@ -62,6 +64,8 @@
   "mile_other": "mile",
   "mile_zero": "milă",
   "monday": "luni",
+  "more": "Mai mult",
+  "noLinkAvailable": "nici un link disponibil",
   "noResultsFoundForThisArea": "Nu s -au găsit rezultate pentru acest domeniu",
   "open24Hours": "Deschis 24 de ore",
   "openHeaderMenu": "Deschideți meniul antetului",
@@ -101,6 +105,8 @@
     "xLink": "Urmărește-ne pe X (Twitter)",
     "youtube": "Abonați-vă la canalul nostru YouTube"
   },
+  "sources": "Surse",
+  "staticMapEmptyStateAddApiKey": "Adăugați o cheie API pentru a vă previzualiza harta",
   "sunday": "duminică",
   "temporarilyClosed": "Închis temporar",
   "thursday": "joi",
@@ -111,5 +117,6 @@
   "useOurLocatorToFindALocationNearYou": "Folosiți localizatorul nostru pentru a găsi o locație lângă dvs.",
   "visitPage": "Vizitați pagina",
   "visitPageForName": "Vizitați pagina pentru {{name}}",
+  "voiceSearch": "Căutare vocală",
   "wednesday": "miercuri"
 }

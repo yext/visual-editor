@@ -31,6 +31,7 @@
   "filter": "Suodata",
   "findALocation": "Etsi sijainti",
   "friday": "perjantai",
+  "generatingAIAnswer": "Luodaan tekoälyvastausta...",
   "getDirections": "Hanki reittiohjeet",
   "getDirectionsForLocation": "Hanki reittiohjeet kohteeseen {{address}}",
   "heroBanner": "Sankari",
@@ -42,6 +43,7 @@
   "kilometer_one": "kilometri",
   "kilometer_other": "kilometriä",
   "kilometer_zero": "kilometri",
+  "learnMore": "Lue lisää",
   "loadingMap": "Latauskartta ...",
   "loadingNearbyLocations": "Lataaminen lähellä olevia paikkoja ...",
   "locationWithCount_one": "{{count}} sijainti",
@@ -57,6 +59,8 @@
   "mile_other": "mailia",
   "mile_zero": "mailia",
   "monday": "maanantai",
+  "more": "Lisää",
+  "noLinkAvailable": "linkkiä ei ole saatavilla",
   "noResultsFoundForThisArea": "Tälle alueelle ei löydy tuloksia",
   "open24Hours": "Avoinna 24 tuntia",
   "openHeaderMenu": "Avaa otsikkovalikko",
@@ -96,6 +100,8 @@
     "xLink": "Seuraa meitä X:ssä (Twitter)",
     "youtube": "Tilaa YouTube-kanavamme"
   },
+  "sources": "Lähteet",
+  "staticMapEmptyStateAddApiKey": "Lisää API-avain esikatsellaksesi karttaasi",
   "sunday": "sunnuntai",
   "temporarilyClosed": "Väliaikaisesti suljettu",
   "thursday": "torstai",
@@ -105,5 +111,6 @@
   "useOurLocatorToFindALocationNearYou": "Löydä lähelläsi sijaintipaikka",
   "visitPage": "Vieraile sivussa",
   "visitPageForName": "Siirry sivulle {{name}}",
+  "voiceSearch": "Äänihaku",
   "wednesday": "keskiviikko"
 }

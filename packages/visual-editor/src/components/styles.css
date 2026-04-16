@@ -3,3 +3,5 @@
 @import "./atoms/hours.css";
 @import "./atoms/maybeRTF.css";
 @import "./atoms/fontStyle.css";
+@import "./pageSections/SearchSection/search.css";
+@import "mapbox-gl/dist/mapbox-gl.css";
