@@ -15,6 +15,7 @@ import { SlotsCategoryComponents } from "../categories/SlotsCategory.tsx";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
+import { MainContent } from "../structure/MainContent.tsx";
 
 const testDocument = {
   locale: "en",
@@ -2092,6 +2093,7 @@ describe("HeroSection", async () => {
   const puckConfig: Config = {
     components: {
       HeroSection,
+      MainContent,
       ...SlotsCategoryComponents,
     },
     root: {

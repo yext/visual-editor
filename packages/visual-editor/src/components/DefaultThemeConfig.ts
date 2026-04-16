@@ -1,7 +1,7 @@
 import { ThemeConfig } from "../utils/themeResolver.ts";
 import {
   defaultFonts,
-  FontRegistry,
+  type FontRegistry,
   getFontStyleOptions,
   getFontWeightOptions,
   constructFontSelectOptions,

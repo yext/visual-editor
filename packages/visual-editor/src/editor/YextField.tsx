@@ -9,10 +9,8 @@ import { ThemeOptions } from "../utils/themeConfigOptions.ts";
 import {
   DynamicOption,
   DynamicOptionsSelector,
-  DynamicOptionsSingleSelector,
   DynamicOptionValueTypes,
   DynamicOptionsSelectorType,
-  DynamicOptionsSingleSelectorType,
 } from "./DynamicOptionsSelector.tsx";
 import {
   OptionalNumberFieldProps,
@@ -124,14 +122,6 @@ type YextDynamicSelectField<T extends DynamicOptionValueTypes> =
     placeholderOptionLabel?: string;
   };
 
-type YextDynamicSingleSelectField<T extends DynamicOptionValueTypes> =
-  YextBaseField & {
-    type: "dynamicSingleSelect";
-    getOptions: () => DynamicOption<T>[];
-    dropdownLabel: string;
-    placeholderOptionLabel?: string;
-  };
-
 // YextEntitySelectorField has same functionality as YextEntityFieldSelector
 type YextEntitySelectorField<
   T extends Record<string, any> = Record<string, any>,
@@ -154,9 +144,6 @@ type YextFieldConfig<Props = any> =
   | YextImageField
   | YextVideoField
   | YextDynamicSelectField<Props extends DynamicOptionValueTypes ? Props : any>
-  | YextDynamicSingleSelectField<
-      Props extends DynamicOptionValueTypes ? Props : any
-    >
   | YextPuckFields[keyof YextPuckFields];
 
 export function YextField<T = any>(
@@ -176,11 +163,6 @@ export function YextField<
   fieldName: MsgString,
   config: YextDynamicSelectField<U>
 ): Field<T | undefined>;
-
-export function YextField<
-  T extends DynamicOptionsSingleSelectorType<U>,
-  U extends DynamicOptionValueTypes,
->(fieldName: MsgString, config: YextDynamicSingleSelectField<U>): Field<T>;
 
 export function YextField<T, U>(
   fieldName: MsgString,
@@ -310,15 +292,6 @@ export function YextField<T, U>(
 
   if (config.type === "dynamicSelect") {
     return DynamicOptionsSelector({
-      label: fieldName,
-      dropdownLabel: config.dropdownLabel,
-      getOptions: config.getOptions,
-      placeholderOptionLabel: config.placeholderOptionLabel,
-    });
-  }
-
-  if (config.type === "dynamicSingleSelect") {
-    return DynamicOptionsSingleSelector({
       label: fieldName,
       dropdownLabel: config.dropdownLabel,
       getOptions: config.getOptions,

@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import { ComponentsContentPath as SearchUiComponentsContentPath } from "@yext/search-ui-react";
 import {
   themeResolver,
   defaultThemeTailwindExtensions,
@@ -11,6 +12,7 @@ export default {
   content: [
     "./src/**/*.{html,js,jsx,ts,tsx}",
     VisualEditorComponentsContentPath,
+    SearchUiComponentsContentPath,
   ],
   safelist: VisualEditorThemeClassSafelist,
   theme: {

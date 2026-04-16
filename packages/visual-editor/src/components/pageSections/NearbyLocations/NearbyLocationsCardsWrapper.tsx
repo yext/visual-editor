@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
-import { useQuery } from "@tanstack/react-query";
 import {
   backgroundColors,
   ThemeColor,
@@ -21,7 +20,10 @@ import {
   getPreferredDistanceUnit,
   toKilometers,
 } from "../../../utils/i18n/distance.ts";
-import { parseDocument, fetchNearbyLocations } from "./utils.ts";
+import {
+  useNearbyLocations,
+  type NearbyLocationDoc,
+} from "./useNearbyLocations.ts";
 import { NearbyLocationCard } from "./NearbyLocationCard.tsx";
 import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers.ts";
 import { MapPinOff } from "lucide-react";
@@ -289,66 +291,22 @@ const NearbyLocationCardsWrapperComponent: PuckComponent<
     streamDocument
   );
 
-  // parse variables from streamDocument
-  const {
-    businessId,
-    entityId,
-    apiKey,
-    contentEndpointId,
-    contentDeliveryAPIDomain,
-  }: {
-    businessId: string;
-    entityId: string;
-    apiKey: string;
-    contentEndpointId: string;
-    contentDeliveryAPIDomain: string;
-  } = React.useMemo(
-    () => parseDocument(streamDocument, puck.metadata?.contentEndpointIdEnvVar),
-    [streamDocument, puck.metadata?.contentEndpointIdEnvVar]
-  );
-
   const enableNearbyLocations =
-    !!businessId &&
-    !!entityId &&
-    !!apiKey &&
-    !!contentEndpointId &&
-    !!contentDeliveryAPIDomain &&
     coordinate?.latitude !== undefined &&
     coordinate?.longitude !== undefined &&
     !!data?.radius &&
     !!data?.limit;
 
-  const { data: nearbyLocationsData, status: nearbyLocationsStatus } = useQuery(
-    {
-      queryKey: [
-        "NearbyLocations",
-        businessId,
-        entityId,
-        apiKey,
-        contentEndpointId,
-        contentDeliveryAPIDomain,
-        coordinate?.latitude,
-        coordinate?.longitude,
-        data?.radius,
-        data?.limit,
-      ],
-      queryFn: async () => {
-        return await fetchNearbyLocations({
-          businessId: businessId,
-          entityId: entityId,
-          apiKey: apiKey,
-          contentEndpointId: contentEndpointId,
-          contentDeliveryAPIDomain: contentDeliveryAPIDomain,
-          latitude: coordinate?.latitude || 0,
-          longitude: coordinate?.longitude || 0,
-          radiusMi: data?.radius,
-          limit: data?.limit,
-          locale: i18n.language,
-        });
-      },
+  const { data: nearbyLocationsData, status: nearbyLocationsStatus } =
+    useNearbyLocations({
+      streamDocument,
+      contentEndpointIdOverride: puck.metadata?.contentEndpointIdEnvVar,
+      latitude: coordinate?.latitude,
+      longitude: coordinate?.longitude,
+      radiusMi: data?.radius,
+      limit: data?.limit,
       enabled: enableNearbyLocations,
-    }
-  );
+    });
 
   // Show loading state only when query is enabled and pending
   if (enableNearbyLocations && nearbyLocationsStatus === "pending") {
@@ -378,7 +336,7 @@ const NearbyLocationCardsWrapperComponent: PuckComponent<
             id={id + "-wrapper"}
           >
             {nearbyLocationsData.response.docs.map(
-              (location: any, index: number) => (
+              (location: NearbyLocationDoc, index: number) => (
                 <NearbyLocationCard
                   key={index}
                   cardNumber={index}

@@ -8,6 +8,7 @@ import {
   Dispatch,
   SetStateAction,
 } from "react";
+import { isFakeStarterLocalDev } from "../../utils/isFakeStarterLocalDev.ts";
 
 export type Payload = Record<string, any>;
 export type Status = "success" | "error";
@@ -194,9 +195,13 @@ const initializeGlobalOriginTracker = () => {
  * Includes TARGET_ORIGINS plus any tracked parent origin.
  * Also tries to infer the parent origin from document.referrer if not yet tracked.
  */
-const getOriginsForSending = (targetOrigins: string[]): string[] => {
+export const getOriginsForSending = (targetOrigins: string[]): string[] => {
   // Initialize the global tracker to ensure we capture the parent origin early
   initializeGlobalOriginTracker();
+
+  if (typeof window !== "undefined" && isFakeStarterLocalDev()) {
+    return [window.location.origin];
+  }
 
   const origins = [...targetOrigins];
 

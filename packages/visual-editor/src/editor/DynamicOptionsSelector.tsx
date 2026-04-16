@@ -18,12 +18,6 @@ export interface DynamicOptionsSelectorType<T extends DynamicOptionValueTypes> {
   selections: DynamicOptionSelection<T>[];
 }
 
-export interface DynamicOptionsSingleSelectorType<
-  T extends DynamicOptionValueTypes,
-> {
-  selection: DynamicOptionSelection<T>;
-}
-
 export interface DynamicOption<T extends DynamicOptionValueTypes> {
   label: string;
   value: T | undefined;
@@ -85,82 +79,6 @@ export const DynamicOptionsSelector = <T extends DynamicOptionValueTypes>(
         </div>
       );
     },
-  };
-};
-
-/**
- * A single selector component for dynamic options. The options can be loaded from a function that
- * uses hooks.
- */
-export const DynamicOptionsSingleSelector = <T extends DynamicOptionValueTypes>(
-  props: DynamicOptionsSelectorProps<T>
-): Field<DynamicOptionsSingleSelectorType<T> | undefined> => {
-  return {
-    type: "custom",
-    render: ({
-      value,
-      onChange,
-      id,
-      readOnly,
-    }: {
-      value: DynamicOptionsSingleSelectorType<T> | undefined;
-      onChange: (
-        value: DynamicOptionsSingleSelectorType<T> | undefined,
-        uiState?: Partial<UiState>
-      ) => void;
-      id?: string;
-      readOnly?: boolean;
-    }) => {
-      const allOptions = props.getOptions();
-      const selectedValue = value?.selection ?? { value: undefined };
-      return (
-        <div className="ve-pt-3">
-          <div className="ve-mb-2 ve-text-sm ve-font-medium ve-leading-none">
-            {pt(props.label)}
-          </div>
-          <AutoField
-            id={id ? `${id}_selection` : undefined}
-            readOnly={readOnly}
-            field={DynamicOptionsSingleSelectField(
-              allOptions,
-              props.dropdownLabel,
-              props.placeholderOptionLabel
-            )}
-            value={selectedValue.value}
-            onChange={(newValue, uiState) =>
-              onChange(
-                newValue !== undefined
-                  ? { selection: { value: newValue } }
-                  : undefined,
-                uiState
-              )
-            }
-          />
-        </div>
-      );
-    },
-  };
-};
-
-const DynamicOptionsSingleSelectField = <T extends DynamicOptionValueTypes>(
-  options: DynamicOption<T>[],
-  dropdownLabel: string,
-  placeholderOptionLabel?: string
-): Field<T | undefined> => {
-  const dropdownOptions = options.map((opt) => ({
-    label: opt.label,
-    value: opt.value,
-  }));
-  if (placeholderOptionLabel) {
-    dropdownOptions.unshift({
-      label: placeholderOptionLabel,
-      value: undefined,
-    });
-  }
-  return {
-    label: dropdownLabel,
-    type: "select" as const,
-    options: dropdownOptions,
   };
 };
 

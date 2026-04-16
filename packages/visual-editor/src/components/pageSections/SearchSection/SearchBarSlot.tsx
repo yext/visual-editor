@@ -326,10 +326,15 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
       } else {
         url.searchParams.delete("searchTerm");
       }
+      if (targetVertical !== "all") {
+        url.searchParams.set("vertical", targetVertical);
+      } else {
+        url.searchParams.delete("vertical");
+      }
       window.history.pushState({}, "", url.toString());
       window.dispatchEvent(new PopStateEvent("popstate"));
     },
-    [showResults]
+    [showResults, targetVertical]
   );
 
   return (

@@ -25,6 +25,7 @@ import tailwindConfig from "../../tailwind.config";
 import { devTemplateStream } from "../dev.config";
 import React from "react";
 import { SchemaWrapper } from "@yext/pages-components";
+import { disableHmrForStackBlitz } from "../utils";
 
 export const config = {
   name: "dev-location",
@@ -100,32 +101,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
       applyHeaderScript(document),
       applyTheme(document, relativePrefixToRoot, defaultThemeConfig),
       SchemaWrapper(schema),
-      // Prevent Vite client script loading in StackBlitz
-      `<script>
-        (function() {
-          // Check if we're in StackBlitz
-          var isStackBlitz = window.location.hostname.includes('webcontainer.io');
-          
-          if (isStackBlitz) {
-            // Block WebSocket connections for Vite HMR
-            var originalWebSocket = window.WebSocket;
-            window.WebSocket = function(url, protocols) {
-              // Block Vite HMR WebSocket connections
-              if (url && (url.includes('24678') || url.includes('vite') || url.includes('hmr'))) {
-                console.log('Blocked Vite WebSocket connection:', url);
-                return {
-                  readyState: 3, // CLOSED
-                  send: function() {},
-                  close: function() {},
-                  addEventListener: function() {},
-                  removeEventListener: function() {},
-                };
-              }
-              return new originalWebSocket(url, protocols);
-            };
-          }
-        })();
-      </script>`,
+      disableHmrForStackBlitz,
     ].join("\n"),
   };
 };
