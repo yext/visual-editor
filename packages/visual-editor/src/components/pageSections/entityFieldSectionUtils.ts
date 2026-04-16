@@ -54,5 +54,5 @@ export const getEditorItemId = (
       }
     | undefined
 ): string | undefined => {
-  return item?.id ?? item?.props?.id;
+  return item?.props?.id ?? item?.id;
 };

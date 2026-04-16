@@ -18,17 +18,37 @@ export const EntityFieldSectionEmptyState = ({
   const entityTypeDisplayName = templateMetadata?.entityTypeDisplayName;
   const selectEditorItem = useSelectEditorItem();
   const isInteractive = Boolean(targetItemId);
-  const handleSelectTarget = React.useCallback(() => {
-    selectEditorItem(targetItemId);
-  }, [selectEditorItem, targetItemId]);
+  const handleSelectTarget = React.useCallback(
+    (
+      event?:
+        | React.MouseEvent<HTMLDivElement>
+        | React.KeyboardEvent<HTMLDivElement>
+    ) => {
+      event?.preventDefault();
+      event?.stopPropagation();
+      selectEditorItem(targetItemId);
+    },
+    [selectEditorItem, targetItemId]
+  );
+  const handleClick = React.useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      handleSelectTarget(event);
+    },
+    [handleSelectTarget]
+  );
+  const handleClickCapture = React.useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      handleSelectTarget(event);
+    },
+    [handleSelectTarget]
+  );
   const handleKeyDown = React.useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
       if (event.key !== "Enter" && event.key !== " ") {
         return;
       }
 
-      event.preventDefault();
-      handleSelectTarget();
+      handleSelectTarget(event);
     },
     [handleSelectTarget]
   );
@@ -38,7 +58,8 @@ export const EntityFieldSectionEmptyState = ({
       <div
         className={`relative h-[300px] w-full bg-gray-100 rounded-lg border border-gray-200 flex flex-col items-center justify-center py-8 gap-2.5 ${isInteractive ? "cursor-pointer transition-colors hover:bg-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2" : ""}`}
         data-testid="entity-field-section-empty-state"
-        onClick={isInteractive ? handleSelectTarget : undefined}
+        onClick={isInteractive ? handleClick : undefined}
+        onClickCapture={isInteractive ? handleClickCapture : undefined}
         onKeyDown={isInteractive ? handleKeyDown : undefined}
         role={isInteractive ? "button" : undefined}
         tabIndex={isInteractive ? 0 : undefined}

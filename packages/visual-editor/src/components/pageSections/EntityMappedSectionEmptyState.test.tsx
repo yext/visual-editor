@@ -27,6 +27,7 @@ import { InsightSection } from "./InsightSection/InsightSection.tsx";
 import { InsightCardsWrapper } from "./InsightSection/InsightCardsWrapper.tsx";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { EntityFieldSectionEmptyState } from "./EntityFieldSectionEmptyState.tsx";
+import { getEditorItemId } from "./entityFieldSectionUtils.ts";
 
 beforeEach(() => {
   mockSelectEditorItem.mockReset();
@@ -643,6 +644,43 @@ describe("empty-state editor selection", () => {
     expect(mockSelectEditorItem).toHaveBeenNthCalledWith(2, "FAQSection-test");
   });
 
+  it("prevents parent native click handlers from overriding the empty-state selection", () => {
+    const parentClickHandler = vi.fn();
+
+    const ParentWrapper = () => {
+      const parentRef = React.useRef<HTMLDivElement>(null);
+
+      React.useEffect(() => {
+        const element = parentRef.current;
+
+        if (!element) {
+          return;
+        }
+
+        element.addEventListener("click", parentClickHandler);
+
+        return () => {
+          element.removeEventListener("click", parentClickHandler);
+        };
+      }, []);
+
+      return (
+        <div ref={parentRef}>
+          <VisualEditorProvider templateProps={{ document: { locale: "en" } }}>
+            <EntityFieldSectionEmptyState targetItemId="FAQSection-test" />
+          </VisualEditorProvider>
+        </div>
+      );
+    };
+
+    const result = reactRender(<ParentWrapper />);
+
+    fireEvent.click(result.getByRole("button"));
+
+    expect(parentClickHandler).not.toHaveBeenCalled();
+    expect(mockSelectEditorItem).toHaveBeenCalledWith("FAQSection-test");
+  });
+
   it("stays non-interactive when no target item id is available", () => {
     const result = reactRender(
       <VisualEditorProvider templateProps={{ document: { locale: "en" } }}>
@@ -652,5 +690,18 @@ describe("empty-state editor selection", () => {
 
     expect(result.queryByRole("button")).toBeNull();
     expect(result.getByText(/Section hidden for this/i)).toBeInTheDocument();
+  });
+});
+
+describe("getEditorItemId", () => {
+  it("prefers props.id because that is the id Puck uses for selection", () => {
+    expect(
+      getEditorItemId({
+        id: "top-level-id",
+        props: {
+          id: "props-id",
+        },
+      })
+    ).toBe("props-id");
   });
 });
