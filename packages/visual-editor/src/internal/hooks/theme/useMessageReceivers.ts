@@ -31,12 +31,16 @@ export const useThemeMessageReceivers = (
   useReceiveMessage("getThemeSaveState", TARGET_ORIGINS, (send, payload) => {
     let receivedThemeSaveState;
     if (payload?.history) {
-      receivedThemeSaveState = {
-        hash: payload.hash,
-        history: {
-          data: migrateTheme(JSON.parse(payload.history), migrationContext),
-        },
-      } as ThemeSaveState;
+      try {
+        receivedThemeSaveState = {
+          hash: payload.hash,
+          history: {
+            data: migrateTheme(JSON.parse(payload.history), migrationContext),
+          },
+        } as ThemeSaveState;
+      } catch (error) {
+        console.warn("Failed to parse or migrate theme save state.", error);
+      }
     }
     devLogger.logData("THEME_SAVE_STATE", receivedThemeSaveState);
     setThemeSaveState(receivedThemeSaveState);
