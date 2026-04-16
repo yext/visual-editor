@@ -149,6 +149,32 @@ describe("buildCssOverridesStyle", () => {
     expect(result).not.toContain("./y-fonts/ebbmelvynregular-regular.css");
   });
 
+  it("preserves saved custom font assets when applying live theme migrations without customFonts", () => {
+    const streamDocument: StreamDocument = {
+      siteId: 123,
+      __: {
+        theme: JSON.stringify({
+          "--fontFamily-h1-fontFamily":
+            "'EBB_Melvyn_Regular', 'EBB_Melvyn_Regular Fallback', sans-serif",
+          __customFontPreloads: ["/y-fonts/legacy-preload.woff2"],
+          __customFontAssets: {
+            stylesheetPaths: ["y-fonts/ebbmelvynregular.css"],
+            preloads: ["/y-fonts/ebbmelvynregular-regular.woff2"],
+          },
+        }),
+      },
+    };
+
+    const result = applyTheme(streamDocument, "./", themeConfig);
+
+    expect(result).toContain(
+      '<link href="./y-fonts/ebbmelvynregular.css" rel="stylesheet">'
+    );
+    expect(result).toContain(
+      '<link rel="preload" href="/y-fonts/ebbmelvynregular-regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">'
+    );
+  });
+
   it("should not infer custom font stylesheet urls when stylesheetPaths are empty", () => {
     const streamDocument: StreamDocument = {
       siteId: 123,

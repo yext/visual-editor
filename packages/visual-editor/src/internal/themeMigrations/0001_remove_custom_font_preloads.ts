@@ -15,7 +15,7 @@ export const removeCustomFontPreloadsMigration: ThemeMigration = (
   const migratedThemeValues = { ...themeValues };
   delete migratedThemeValues[LEGACY_CUSTOM_FONT_PRELOADS_KEY];
 
-  if (!themeConfig) {
+  if (!themeConfig || !customFonts || Object.keys(customFonts).length === 0) {
     return migratedThemeValues;
   }
 
