@@ -2,6 +2,7 @@ import { TranslatableRichText, RichText } from "../types/types.ts";
 import { MsgString, pt } from "../utils/i18n/platform.ts";
 import { CustomField, FieldLabel } from "@puckeditor/core";
 import { resolveComponentData } from "../utils/resolveComponentData.tsx";
+import { isFakeStarterLocalDev } from "../utils/isFakeStarterLocalDev.ts";
 import React from "react";
 import {
   TARGET_ORIGINS,
@@ -74,9 +75,7 @@ export function TranslatableRichTextField<
         });
 
         /** Handles local development testing outside of storm */
-        if (
-          window.location.href.includes("http://localhost:5173/dev-location")
-        ) {
+        if (isFakeStarterLocalDev()) {
           const userInput = prompt("Enter Rich Text (HTML):");
           handleNewValue({ json: "", html: userInput ?? "" }, locale);
           if (pendingRichTextSession?.messageId === messageId) {

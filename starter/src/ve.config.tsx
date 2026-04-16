@@ -1,13 +1,14 @@
 import { type Config } from "@puckeditor/core";
-import "@yext/visual-editor/style.css";
-import "./index.css";
 import {
   DirectoryCategory,
   DirectoryCategoryComponents,
   DirectoryCategoryProps,
   MainConfigProps,
+  locatorConfig,
   mainConfig,
 } from "@yext/visual-editor";
+import "@yext/visual-editor/style.css";
+import "./index.css";
 
 interface DevProps extends MainConfigProps, DirectoryCategoryProps {}
 
@@ -28,6 +29,8 @@ export const devConfig: Config<DevProps> = {
   root: mainConfig.root,
 };
 
-export const componentRegistry: Record<string, Config<DevProps>> = {
-  dev: devConfig,
+// TODO: Use mainConfig directly for dev-location once directory templates are supported
+export const componentRegistry: Record<string, Config<any>> = {
+  "dev-location": devConfig,
+  "dev-locator": locatorConfig,
 };

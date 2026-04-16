@@ -23,6 +23,8 @@ describe("createDefaultThemeConfig", () => {
         italics: true,
         weights: [400, 700],
         fallback: "sans-serif",
+        facePath: "y-fonts/custom-font.css",
+        variants: [],
       },
     };
 
@@ -46,6 +48,8 @@ describe("createDefaultThemeConfig", () => {
         italics: true,
         weights: [300, 400, 500],
         fallback: "serif",
+        facePath: "y-fonts/open-sans.css",
+        variants: [],
       },
     };
 
@@ -67,6 +71,8 @@ describe("createDefaultThemeConfig", () => {
         italics: false,
         weights: [400],
         fallback: "serif",
+        facePath: "y-fonts/custom-font.css",
+        variants: [],
       },
     };
 

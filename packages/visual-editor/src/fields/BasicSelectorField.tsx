@@ -8,6 +8,8 @@ import {
 } from "../internal/types/combobox.ts";
 import { pt, type MsgString } from "../utils/i18n/platform.ts";
 
+export type BasicSelectorOptions = ComboboxOption[] | (() => ComboboxOption[]);
+
 /**
   Example usage:
 
@@ -52,7 +54,7 @@ export type BasicSelectorField = BaseField & {
   disableSearch?: boolean;
 } & (
     | {
-        options: ComboboxOption[];
+        options: BasicSelectorOptions;
         optionGroups?: never;
       }
     | {
@@ -70,8 +72,6 @@ export const BasicSelectorFieldOverride = ({
 }: BasicSelectorFieldProps) => {
   const {
     label,
-    options = [],
-    optionGroups = [{ options }],
     translateOptions = true,
     noOptionsPlaceholder = pt(
       "basicSelectorNoOptionsLabel",
@@ -80,6 +80,16 @@ export const BasicSelectorFieldOverride = ({
     noOptionsMessage,
     disableSearch,
   } = field;
+
+  const options: ComboboxOption[] =
+    field.optionGroups === undefined
+      ? typeof field.options === "function"
+        ? field.options()
+        : (field.options ?? [])
+      : [];
+  const optionGroups: ComboboxOptionGroup[] = field.optionGroups ?? [
+    { options },
+  ];
 
   const translatedOptionGroups = translateOptions
     ? optionGroups.map((group) => ({

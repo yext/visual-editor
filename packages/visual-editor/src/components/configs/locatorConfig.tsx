@@ -21,6 +21,8 @@ import {
   SlotsCategoryProps,
 } from "../categories/SlotsCategory.tsx";
 import { pt } from "../../utils/i18n/platform.ts";
+import { MainContent, MainContentProps } from "../structure/MainContent.tsx";
+import { rootAllowedComponents } from "./rootAllowedComponents.ts";
 
 export interface LocatorConfigProps
   extends LocatorCategoryProps,
@@ -28,17 +30,21 @@ export interface LocatorConfigProps
     DeprecatedCategoryProps,
     OtherCategoryProps {
   BannerSection: BannerSectionProps;
+  MainContent: MainContentProps;
 }
+
+const components: Config<LocatorConfigProps>["components"] = {
+  ...LocatorCategoryComponents,
+  ...SlotsCategoryComponents,
+  ...DeprecatedCategoryComponents,
+  ...OtherCategoryComponents,
+  BannerSection,
+  MainContent,
+};
 
 // The config used for the locator
 export const locatorConfig: Config<LocatorConfigProps> = {
-  components: {
-    ...LocatorCategoryComponents,
-    ...SlotsCategoryComponents,
-    ...DeprecatedCategoryComponents,
-    ...OtherCategoryComponents,
-    BannerSection,
-  },
+  components,
   categories: {
     pageSections: {
       title: pt("categories.standardSections", "Standard Sections"),
@@ -46,6 +52,10 @@ export const locatorConfig: Config<LocatorConfigProps> = {
     },
     slots: {
       components: SlotsCategory,
+      visible: false,
+    },
+    structure: {
+      components: ["MainContent"],
       visible: false,
     },
     // deprecated components are hidden in the sidebar but still render if used in the page
@@ -67,6 +77,9 @@ export const locatorConfig: Config<LocatorConfigProps> = {
             flexDirection: "column",
             minHeight: "100vh",
           }}
+          disallow={Object.keys(components).filter(
+            (componentName) => !rootAllowedComponents.includes(componentName)
+          )}
         />
       );
     },

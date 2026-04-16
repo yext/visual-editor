@@ -13,6 +13,7 @@ import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
 import { SlotsCategoryComponents } from "../../categories/SlotsCategory.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
+import { MainContent } from "../../structure/MainContent.tsx";
 
 const insightsData = {
   insights: [
@@ -1459,7 +1460,7 @@ const tests: ComponentTest[] = [
 
 describe("InsightSection", async () => {
   const puckConfig: Config = {
-    components: { InsightSection, ...SlotsCategoryComponents },
+    components: { InsightSection, MainContent, ...SlotsCategoryComponents },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;

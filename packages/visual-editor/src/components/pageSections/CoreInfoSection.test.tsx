@@ -14,6 +14,7 @@ import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 import { SlotsCategoryComponents } from "../categories/SlotsCategory.tsx";
+import { MainContent } from "../structure/MainContent.tsx";
 
 const testAddress = {
   city: "Brooklyn",
@@ -668,6 +669,7 @@ describe("CoreInfoSection", async () => {
   const puckConfig: Config = {
     components: {
       CoreInfoSection,
+      MainContent,
       ...SlotsCategoryComponents,
     },
     root: {

@@ -1,5 +1,11 @@
-import { describe, it, expect } from "vitest";
-import { isOriginAllowed } from "./useMessage.ts";
+import { afterEach, describe, it, expect } from "vitest";
+import { getOriginsForSending, isOriginAllowed } from "./useMessage.ts";
+
+const initialPathname = window.location.pathname;
+
+afterEach(() => {
+  window.history.replaceState({}, "", initialPathname);
+});
 
 describe("isOriginAllowed", () => {
   describe("exact matches with target origins", () => {
@@ -76,5 +82,15 @@ describe("isOriginAllowed", () => {
       expect(isOriginAllowed("")).toBe(false);
       expect(isOriginAllowed("://invalid")).toBe(false);
     });
+  });
+});
+
+describe("getOriginsForSending", () => {
+  it("uses the current origin only on fake starter local dev routes", () => {
+    window.history.replaceState({}, "", "/dev-locator/example");
+
+    expect(getOriginsForSending(["https://dev.yext.com"])).toEqual([
+      window.location.origin,
+    ]);
   });
 });

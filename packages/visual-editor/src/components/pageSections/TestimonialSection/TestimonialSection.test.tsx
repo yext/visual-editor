@@ -13,6 +13,7 @@ import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
 import { SlotsCategoryComponents } from "../../categories/SlotsCategory.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
+import { MainContent } from "../../structure/MainContent.tsx";
 
 const testimonialData = {
   testimonials: [
@@ -821,7 +822,7 @@ const tests: ComponentTest[] = [
 
 describe("TestimonialSection", async () => {
   const puckConfig: Config = {
-    components: { TestimonialSection, ...SlotsCategoryComponents },
+    components: { TestimonialSection, MainContent, ...SlotsCategoryComponents },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;

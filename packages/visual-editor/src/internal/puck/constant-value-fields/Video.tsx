@@ -8,6 +8,7 @@ import {
 import { Button } from "../ui/button.tsx";
 import { AssetVideo } from "../../../types/videos.ts";
 import { pt } from "../../../utils/i18n/platform.ts";
+import { isFakeStarterLocalDev } from "../../../utils/isFakeStarterLocalDev.ts";
 
 type VideoPayload = {
   id: string;
@@ -45,7 +46,7 @@ export const VIDEO_CONSTANT_CONFIG: CustomField<AssetVideo | undefined> = {
       e.preventDefault();
 
       /** Handles local development testing outside of Storm */
-      if (window.location.href.includes("http://localhost:5173/dev-location")) {
+      if (isFakeStarterLocalDev()) {
         const userInput = prompt("Enter Video URL:");
         if (!userInput) {
           return;
