@@ -160,6 +160,15 @@ describe.sequential("generateRegistryTemplateFiles", () => {
     expect(
       fs.existsSync(path.join(rootDir, "src", "templates", "local-editor.tsx"))
     ).toBe(true);
+
+    const localEditorTemplate = fs.readFileSync(
+      path.join(rootDir, "src", "templates", "local-editor.tsx"),
+      "utf8"
+    );
+    expect(localEditorTemplate).toContain(
+      'const DEFAULT_LOCAL_EDITOR_ROUTE = "/local-editor";'
+    );
+    expect(localEditorTemplate).not.toContain("../local-editor/generatedFiles");
   });
 
   it("falls back to package main after explicit registry main is removed", () => {

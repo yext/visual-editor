@@ -18,7 +18,8 @@ import {
   locatorConfig,
 } from "@yext/visual-editor";
 import tailwindConfig from "../../tailwind.config";
-import { DEFAULT_LOCAL_EDITOR_ROUTE } from "../local-editor/generatedFiles.ts";
+
+const DEFAULT_LOCAL_EDITOR_ROUTE = "/local-editor";
 
 const componentRegistry: Record<string, Config<any>> = {
   directory: directoryConfig,
