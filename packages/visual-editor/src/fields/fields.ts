@@ -5,6 +5,10 @@ import {
 } from "./BasicSelectorField.tsx";
 import { CodeField, CodeFieldOverride } from "./CodeField.tsx";
 import {
+  DateTimeSelectorField,
+  DateTimeSelectorFieldOverride,
+} from "./DateTimeSelectorField.tsx";
+import {
   FontSizeSelectorField,
   FontSizeSelectorFieldOverride,
 } from "./FontSizeSelectorField.tsx";
@@ -12,6 +16,7 @@ import {
 export type YextPuckFields = {
   basicSelector: BasicSelectorField;
   code: CodeField;
+  dateTimeSelector: DateTimeSelectorField;
   fontSizeSelector: FontSizeSelectorField;
 };
 
@@ -29,5 +34,6 @@ export type YextFields<
 export const YextPuckFieldOverrides = {
   basicSelector: BasicSelectorFieldOverride,
   code: CodeFieldOverride,
+  dateTimeSelector: DateTimeSelectorFieldOverride,
   fontSizeSelector: FontSizeSelectorFieldOverride,
 };
