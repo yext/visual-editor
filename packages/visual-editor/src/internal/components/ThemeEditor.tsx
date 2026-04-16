@@ -22,6 +22,7 @@ import { useProgress } from "../hooks/useProgress.ts";
 import * as lzstring from "lz-string";
 import { Metadata } from "../../editor/Editor.tsx";
 import { updateThemeWithCustomFontAssets } from "../utils/customFontAssets.ts";
+import { migrateTheme } from "../../utils/migrateTheme.ts";
 
 const devLogger = new DevLogger();
 
@@ -148,7 +149,12 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       // Use localStorage directly if it exists
       if (localHistoryArray) {
         devLogger.log("Theme Dev Mode - Using theme localStorage");
-        histories = JSON.parse(localHistoryArray) as ThemeHistory[];
+        histories = (JSON.parse(localHistoryArray) as ThemeHistory[]).map(
+          (themeHistory) => ({
+            ...themeHistory,
+            data: migrateTheme(themeHistory.data),
+          })
+        );
         index = histories.length - 1;
       } else {
         // Otherwise start fresh from Content
@@ -173,9 +179,17 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       histories = themeData
         ? [
             { id: "root", data: themeData },
-            { id: themeSaveState.hash, data: themeSaveState.history.data },
+            {
+              id: themeSaveState.hash,
+              data: migrateTheme(themeSaveState.history.data),
+            },
           ]
-        : [{ id: themeSaveState.hash, data: themeSaveState.history.data }];
+        : [
+            {
+              id: themeSaveState.hash,
+              data: migrateTheme(themeSaveState.history.data),
+            },
+          ];
       index = themeData ? 1 : 0;
     }
 
@@ -199,8 +213,9 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
   }, [
     setThemeHistories,
     setThemeHistoryFetched,
-    clearThemeLocalStorage,
     buildThemeLocalStorageKey,
+    themeData,
+    themeSaveState,
   ]);
 
   // Log THEME_HISTORIES on load and update theme in editor to reflect save state

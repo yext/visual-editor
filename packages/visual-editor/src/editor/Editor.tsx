@@ -30,6 +30,7 @@ import {
   loadFontsIntoDOM,
 } from "../utils/fonts/visualEditorFonts.ts";
 import { migrate } from "../utils/migrate.ts";
+import { migrateTheme } from "../utils/migrateTheme.ts";
 import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";
 
@@ -202,9 +203,12 @@ export const Editor = ({
   if (themeConfig === defaultThemeConfig && templateMetadata?.customFonts) {
     finalThemeConfig = createDefaultThemeConfig(templateMetadata?.customFonts);
   }
-  const migratedData = !isLoading
+  const migratedLayoutData = !isLoading
     ? migrate(layoutData!, migrationRegistry, puckConfig, document)
     : undefined;
+  const migratedThemeData = !isLoading
+    ? migrateTheme(themeData ?? {})
+    : themeData;
 
   return (
     <ErrorProvider>
@@ -215,8 +219,8 @@ export const Editor = ({
               <ThemeEditor
                 puckConfig={puckConfig!}
                 templateMetadata={templateMetadata!}
-                layoutData={migratedData!}
-                themeData={themeData!}
+                layoutData={migratedLayoutData!}
+                themeData={migratedThemeData!}
                 themeConfig={finalThemeConfig}
                 localDev={!!localDev}
                 metadata={{ ...metadata, streamDocument: document }}
@@ -225,8 +229,8 @@ export const Editor = ({
               <LayoutEditor
                 puckConfig={puckConfig!}
                 templateMetadata={templateMetadata!}
-                layoutData={migratedData!}
-                themeData={themeData!}
+                layoutData={migratedLayoutData!}
+                themeData={migratedThemeData!}
                 themeConfig={finalThemeConfig}
                 localDev={!!localDev}
                 metadata={{ ...metadata, streamDocument: document }}

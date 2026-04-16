@@ -15,6 +15,12 @@ export {
   type MigrationAction,
   type MigrationRegistry,
 } from "./migrate.ts";
+export {
+  migrateTheme,
+  THEME_VERSION_KEY,
+  type ThemeMigration,
+  type ThemeMigrationRegistry,
+} from "./migrateTheme.ts";
 export { resolveComponentData } from "./resolveComponentData.tsx";
 export { resolveYextEntityField } from "./resolveYextEntityField.ts";
 export {
