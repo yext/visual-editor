@@ -175,7 +175,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
             error
           );
           clearThemeLocalStorage();
-          histories = [];
+          histories = themeData ? [{ id: "root", data: themeData }] : [];
         }
         index = histories.length - 1;
       } else {
