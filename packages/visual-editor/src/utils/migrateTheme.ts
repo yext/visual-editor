@@ -1,5 +1,5 @@
 import { ThemeData } from "../internal/types/themeData.ts";
-import { migrationRegistry as commonMigrationRegistry } from "../internal/themeMigrations/migrationRegistry.ts";
+import { themeMigrationRegistry as commonThemeMigrationRegistry } from "../internal/themeMigrations/migrationRegistry.ts";
 import { FontRegistry } from "./fonts/visualEditorFonts.ts";
 import { ThemeConfig } from "./themeResolver.ts";
 
@@ -28,7 +28,7 @@ export type ThemeMigrationRegistry = ThemeMigration[];
 export const migrateTheme = (
   themeValues: ThemeData,
   context: ThemeMigrationContext = {},
-  migrationRegistry: ThemeMigrationRegistry = commonMigrationRegistry
+  migrationRegistry: ThemeMigrationRegistry = commonThemeMigrationRegistry
 ): ThemeData => {
   const version =
     typeof themeValues?.[THEME_VERSION_KEY] === "number"

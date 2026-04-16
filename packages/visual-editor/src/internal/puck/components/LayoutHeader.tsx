@@ -23,7 +23,7 @@ import { TemplateMetadata } from "../../types/templateMetadata.ts";
 import "../ui/puck.css";
 import "../../../editor/index.css";
 import { migrateLayout } from "../../../utils/migrate.ts";
-import { migrationRegistry } from "../../../components/migrations/migrationRegistry.ts";
+import { layoutMigrationRegistry } from "../../../components/migrations/migrationRegistry.ts";
 import {
   i18nComponentsInstance,
   loadComponentTranslations,
@@ -195,7 +195,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
 
                 const migratedPastedData = migrateLayout(
                   pastedData,
-                  migrationRegistry,
+                  layoutMigrationRegistry,
                   config,
                   streamDocument
                 );
@@ -346,7 +346,7 @@ export const LocalDevOverrideButtons = () => {
           } finally {
             const migratedData = migrateLayout(
               data,
-              migrationRegistry,
+              layoutMigrationRegistry,
               config,
               streamDocument
             );

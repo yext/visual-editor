@@ -7,7 +7,7 @@ outline: deep
 
 Migrations ensure backwards compatibility for component updates. When a site is updated, it immediately begins
 using the new components; however, the published and save state data may not reflect the schema of these component updates.
-This data is run through `migrate` prior to being rendered so that any migrations will be applied and the data will match with the components.
+This data is run through `migrateLayout` prior to being rendered so that any migrations will be applied and the data will match with the components.
 
 ## When do I need to add a migrations?
 
@@ -78,7 +78,7 @@ See https://puckeditor.com/docs/api-reference/functions/transform-props
 }
 ```
 
-In `migrationRegistry.ts`, import your migration and append it to the array. Migrations are run in order.
+In `migrationRegistry.ts`, import your migration and append it to `layoutMigrationRegistry`. Migrations are run in order.
 
 ## How do I test a migration?
 

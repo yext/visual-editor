@@ -24,7 +24,7 @@ import {
   injectTranslations,
   getCanonicalUrl,
   migrateLayout,
-  migrationRegistry,
+  layoutMigrationRegistry,
   GTMBody,
   resolveUrlTemplate,
 } from "@yext/visual-editor";
@@ -107,7 +107,7 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
 
   const migratedData = migrateLayout(
     JSON.parse(document.__.layout),
-    migrationRegistry,
+    layoutMigrationRegistry,
     locatorConfig,
     document
   );

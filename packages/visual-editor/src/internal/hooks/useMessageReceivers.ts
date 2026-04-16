@@ -10,7 +10,7 @@ import { Config, Data } from "@puckeditor/core";
 import { useCommonMessageSenders } from "./useMessageSenders.ts";
 import { ThemeData } from "../types/themeData.ts";
 import { migrateLayout } from "../../utils/migrate.ts";
-import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
+import { layoutMigrationRegistry } from "../../components/migrations/migrationRegistry.ts";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 
 const devLogger = new DevLogger();
@@ -29,7 +29,7 @@ export const getLocalDevLayoutData = (
   if (!layout) {
     return migrateLayout(
       createEmptyLocalDevLayout,
-      migrationRegistry,
+      layoutMigrationRegistry,
       puckConfig,
       streamDocument
     );
@@ -39,7 +39,7 @@ export const getLocalDevLayoutData = (
     const parsedLayout = JSON.parse(layout) as Data;
     return migrateLayout(
       parsedLayout,
-      migrationRegistry,
+      layoutMigrationRegistry,
       puckConfig,
       streamDocument
     );
@@ -50,7 +50,7 @@ export const getLocalDevLayoutData = (
     );
     return migrateLayout(
       createEmptyLocalDevLayout,
-      migrationRegistry,
+      layoutMigrationRegistry,
       puckConfig,
       streamDocument
     );

@@ -6,7 +6,7 @@ import {
   migrate as migratePuck,
   walkTree,
 } from "@puckeditor/core";
-import { migrationRegistry as commonMigrationRegistry } from "../components/migrations/migrationRegistry.ts";
+import { layoutMigrationRegistry as commonLayoutMigrationRegistry } from "../components/migrations/migrationRegistry.ts";
 import { StreamDocument } from "./types/StreamDocument.ts";
 
 export type MigrationAction =
@@ -74,7 +74,7 @@ interface RootProps extends DefaultRootProps {
 
 export const migrateLayout = (
   data: Data<DefaultComponentProps, RootProps>,
-  migrationRegistry: MigrationRegistry = commonMigrationRegistry,
+  migrationRegistry: MigrationRegistry = commonLayoutMigrationRegistry,
   config: Config,
   streamDocument: StreamDocument
 ): Data => {

@@ -19,7 +19,7 @@ import {
   applyAnalytics,
   applyHeaderScript,
   migrateLayout,
-  migrationRegistry,
+  layoutMigrationRegistry,
   defaultThemeConfig,
   directoryConfig,
   getSchema,
@@ -106,7 +106,7 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
 
   const migratedData = migrateLayout(
     JSON.parse(document.__.layout),
-    migrationRegistry,
+    layoutMigrationRegistry,
     directoryConfig,
     document
   );

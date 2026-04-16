@@ -1,1 +1,4 @@
-export { migrationRegistry } from "./migrationRegistry.ts";
+export {
+  themeMigrationRegistry,
+  migrationRegistry,
+} from "./migrationRegistry.ts";

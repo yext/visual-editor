@@ -79,7 +79,7 @@ import { flattenLocatorResultCardSingleSelectFields } from "./0074_flatten_locat
 // Import it in this file and add it to this array.
 // The migrations are run in the order of this array
 // and the data's version number indicates the last applied index.
-export const migrationRegistry: MigrationRegistry = [
+export const layoutMigrationRegistry: MigrationRegistry = [
   adjustPropObjectsMigration,
   addHeadingAlignmentMigration,
   adjustStructFields,
@@ -155,3 +155,5 @@ export const migrationRegistry: MigrationRegistry = [
   mainContentWrapperMigration,
   flattenLocatorResultCardSingleSelectFields,
 ];
+
+export const migrationRegistry = layoutMigrationRegistry;

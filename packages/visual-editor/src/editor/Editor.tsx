@@ -31,7 +31,7 @@ import {
 } from "../utils/fonts/visualEditorFonts.ts";
 import { migrateLayout } from "../utils/migrate.ts";
 import { migrateTheme } from "../utils/migrateTheme.ts";
-import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
+import { layoutMigrationRegistry } from "../components/migrations/migrationRegistry.ts";
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";
 
 const devLogger = new DevLogger();
@@ -204,7 +204,7 @@ export const Editor = ({
     finalThemeConfig = createDefaultThemeConfig(templateMetadata?.customFonts);
   }
   const migratedLayoutData = !isLoading
-    ? migrateLayout(layoutData!, migrationRegistry, puckConfig, document)
+    ? migrateLayout(layoutData!, layoutMigrationRegistry, puckConfig, document)
     : undefined;
   const migratedThemeData = !isLoading
     ? migrateTheme(themeData ?? {}, {

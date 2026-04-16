@@ -22,7 +22,7 @@ import { useCommonMessageSenders } from "../hooks/useMessageSenders.ts";
 import { useProgress } from "../hooks/useProgress.ts";
 import { migrateLayout } from "../../utils/migrate.ts";
 import { migrateTheme } from "../../utils/migrateTheme.ts";
-import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
+import { layoutMigrationRegistry } from "../../components/migrations/migrationRegistry.ts";
 import { Metadata } from "../../editor/Editor.tsx";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 import { getPublishErrorMessage } from "../../utils/publishErrors.ts";
@@ -185,7 +185,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
             state: {
               data: migrateLayout(
                 history.state.data,
-                migrationRegistry,
+                layoutMigrationRegistry,
                 puckConfig,
                 streamDocument
               ),
