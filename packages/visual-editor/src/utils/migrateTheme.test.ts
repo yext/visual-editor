@@ -29,4 +29,16 @@ describe("migrateTheme", () => {
       [THEME_VERSION_KEY]: 1,
     });
   });
+
+  it("does not lower a saved theme version that is newer than the current registry", () => {
+    const migratedTheme = migrateTheme({
+      "--fontFamily-body-fontFamily": "'Helvetica', sans-serif",
+      [THEME_VERSION_KEY]: 99,
+    });
+
+    expect(migratedTheme).toEqual({
+      "--fontFamily-body-fontFamily": "'Helvetica', sans-serif",
+      [THEME_VERSION_KEY]: 99,
+    });
+  });
 });

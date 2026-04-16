@@ -25,16 +25,15 @@ export const migrateTheme = (
       : 0;
 
   let migratedThemeValues = { ...themeValues };
+  const migrationsToApply = migrationRegistry.slice(version);
 
-  migrationRegistry
-    .slice(version)
-    .forEach(
-      (migration) => (migratedThemeValues = migration(migratedThemeValues))
-    );
-
-  if (migrationRegistry.length === 0) {
+  if (migrationsToApply.length === 0) {
     return migratedThemeValues;
   }
+
+  migrationsToApply.forEach(
+    (migration) => (migratedThemeValues = migration(migratedThemeValues))
+  );
 
   return {
     ...migratedThemeValues,
