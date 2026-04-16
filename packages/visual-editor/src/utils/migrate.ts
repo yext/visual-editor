@@ -72,7 +72,7 @@ interface RootProps extends DefaultRootProps {
   };
 }
 
-export const migrate = (
+export const migrateLayout = (
   data: Data<DefaultComponentProps, RootProps>,
   migrationRegistry: MigrationRegistry = commonMigrationRegistry,
   config: Config,
@@ -153,3 +153,8 @@ export const migrate = (
   data.root.props.version = migrationRegistry.length;
   return data;
 };
+
+/**
+ * @deprecated Use migrateLayout instead.
+ */
+export const migrate = migrateLayout;

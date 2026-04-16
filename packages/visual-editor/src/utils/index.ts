@@ -10,6 +10,7 @@ export { themeManagerCn, themeManagerTwMergeConfiguration } from "./cn.ts";
 export { getPageMetadata } from "./getPageMetadata.ts";
 export { normalizeLink } from "./normalizeLink.ts";
 export {
+  migrateLayout,
   migrate,
   type Migration,
   type MigrationAction,

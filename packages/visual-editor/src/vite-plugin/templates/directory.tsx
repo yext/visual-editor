@@ -18,7 +18,7 @@ import {
   getPageMetadata,
   applyAnalytics,
   applyHeaderScript,
-  migrate,
+  migrateLayout,
   migrationRegistry,
   defaultThemeConfig,
   directoryConfig,
@@ -104,7 +104,7 @@ export const getPath: GetPath<TemplateProps> = ({
 export const transformProps: TransformProps<TemplateProps> = async (props) => {
   const { document } = props;
 
-  const migratedData = migrate(
+  const migratedData = migrateLayout(
     JSON.parse(document.__.layout),
     migrationRegistry,
     directoryConfig,

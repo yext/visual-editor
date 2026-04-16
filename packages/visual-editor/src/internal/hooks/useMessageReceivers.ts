@@ -9,7 +9,7 @@ import { DevLogger } from "../../utils/devLogger.ts";
 import { Config, Data } from "@puckeditor/core";
 import { useCommonMessageSenders } from "./useMessageSenders.ts";
 import { ThemeData } from "../types/themeData.ts";
-import { migrate } from "../../utils/migrate.ts";
+import { migrateLayout } from "../../utils/migrate.ts";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 
@@ -27,7 +27,7 @@ export const getLocalDevLayoutData = (
 ) => {
   const layout = streamDocument.__?.layout;
   if (!layout) {
-    return migrate(
+    return migrateLayout(
       createEmptyLocalDevLayout,
       migrationRegistry,
       puckConfig,
@@ -37,13 +37,18 @@ export const getLocalDevLayoutData = (
 
   try {
     const parsedLayout = JSON.parse(layout) as Data;
-    return migrate(parsedLayout, migrationRegistry, puckConfig, streamDocument);
+    return migrateLayout(
+      parsedLayout,
+      migrationRegistry,
+      puckConfig,
+      streamDocument
+    );
   } catch (error) {
     console.warn(
       "Failed to parse local dev layout JSON. Falling back to empty layout.",
       error
     );
-    return migrate(
+    return migrateLayout(
       createEmptyLocalDevLayout,
       migrationRegistry,
       puckConfig,

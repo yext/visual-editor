@@ -20,7 +20,7 @@ import { updateThemeInEditor } from "../../utils/applyTheme.ts";
 import { useThemeLocalStorage } from "../hooks/theme/useLocalStorage.ts";
 import { useCommonMessageSenders } from "../hooks/useMessageSenders.ts";
 import { useProgress } from "../hooks/useProgress.ts";
-import { migrate } from "../../utils/migrate.ts";
+import { migrateLayout } from "../../utils/migrate.ts";
 import { migrateTheme } from "../../utils/migrateTheme.ts";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
 import { Metadata } from "../../editor/Editor.tsx";
@@ -183,7 +183,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
           .map((history) => ({
             id: history.id,
             state: {
-              data: migrate(
+              data: migrateLayout(
                 history.state.data,
                 migrationRegistry,
                 puckConfig,

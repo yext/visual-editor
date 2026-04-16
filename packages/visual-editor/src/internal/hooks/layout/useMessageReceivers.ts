@@ -9,7 +9,7 @@ import {
 } from "../useMessage.ts";
 import { useCommonMessageSenders } from "../useMessageSenders.ts";
 import { migrationRegistry } from "../../../components/migrations/migrationRegistry.ts";
-import { migrate } from "../../../utils/migrate.ts";
+import { migrateLayout } from "../../../utils/migrate.ts";
 import { resolveSchemaJson } from "../../../utils/schema/resolveSchema.ts";
 import { type StreamDocument } from "../../../utils/types/StreamDocument.ts";
 import {
@@ -42,7 +42,7 @@ export const useLayoutMessageReceivers = (
       const history = JSON.parse(payload.history) as AppState;
       const migratedHistory = {
         ...history,
-        data: migrate(
+        data: migrateLayout(
           history.data,
           migrationRegistry,
           puckConfig,

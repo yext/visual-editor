@@ -23,7 +23,7 @@ import {
   getSchema,
   injectTranslations,
   getCanonicalUrl,
-  migrate,
+  migrateLayout,
   migrationRegistry,
   GTMBody,
   resolveUrlTemplate,
@@ -105,7 +105,7 @@ export const getPath: GetPath<TemplateProps> = ({
 export const transformProps: TransformProps<TemplateProps> = async (props) => {
   const { document } = props;
 
-  const migratedData = migrate(
+  const migratedData = migrateLayout(
     JSON.parse(document.__.layout),
     migrationRegistry,
     locatorConfig,

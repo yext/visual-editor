@@ -19,7 +19,7 @@ import {
   applyAnalytics,
   applyHeaderScript,
   applyCertifiedFacts,
-  migrate,
+  migrateLayout,
   migrationRegistry,
   defaultThemeConfig,
   mainConfig,
@@ -106,7 +106,7 @@ export const getPath: GetPath<TemplateProps> = ({
 export const transformProps: TransformProps<TemplateProps> = async (props) => {
   const { document } = props;
 
-  const migratedData = migrate(
+  const migratedData = migrateLayout(
     JSON.parse(document.__.layout),
     migrationRegistry,
     mainConfig,
