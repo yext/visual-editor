@@ -162,12 +162,21 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       // Use localStorage directly if it exists
       if (localHistoryArray) {
         devLogger.log("Theme Dev Mode - Using theme localStorage");
-        histories = (JSON.parse(localHistoryArray) as ThemeHistory[]).map(
-          (themeHistory) => ({
-            ...themeHistory,
-            data: migrateSavedThemeData(themeHistory.data),
-          })
-        );
+        try {
+          histories = (JSON.parse(localHistoryArray) as ThemeHistory[]).map(
+            (themeHistory) => ({
+              ...themeHistory,
+              data: migrateSavedThemeData(themeHistory.data),
+            })
+          );
+        } catch (error) {
+          console.warn(
+            "Failed to parse or migrate theme localStorage history.",
+            error
+          );
+          clearThemeLocalStorage();
+          histories = [];
+        }
         index = histories.length - 1;
       } else {
         // Otherwise start fresh from Content
@@ -218,6 +227,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     setThemeHistories,
     setThemeHistoryFetched,
     buildThemeLocalStorageKey,
+    clearThemeLocalStorage,
     migrateSavedThemeData,
     themeData,
     themeSaveState,
