@@ -1,5 +1,5 @@
 import { ThemeData } from "../internal/types/themeData.ts";
-import { themeMigrationRegistry as commonThemeMigrationRegistry } from "../internal/themeMigrations/migrationRegistry.ts";
+import { migrationRegistry as commonMigrationRegistry } from "../internal/themeMigrations/migrationRegistry.ts";
 
 export const THEME_VERSION_KEY = "__themeVersion";
 
@@ -17,7 +17,7 @@ export type ThemeMigrationRegistry = ThemeMigration[];
  */
 export const migrateTheme = (
   themeValues: ThemeData,
-  migrationRegistry: ThemeMigrationRegistry = commonThemeMigrationRegistry
+  migrationRegistry: ThemeMigrationRegistry = commonMigrationRegistry
 ): ThemeData => {
   const version =
     typeof themeValues?.[THEME_VERSION_KEY] === "number"
