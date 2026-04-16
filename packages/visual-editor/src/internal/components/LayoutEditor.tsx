@@ -119,7 +119,11 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       ) as ThemeHistory[];
       if (localHistories.length > 0) {
         const localThemeData = migrateTheme(
-          localHistories[localHistories.length - 1].data
+          localHistories[localHistories.length - 1].data,
+          {
+            themeConfig,
+            customFonts: templateMetadata.customFonts,
+          }
         );
         devLogger.log("Layout Dev Mode - Using theme data from local storage");
         sendDevThemeSaveStateData({

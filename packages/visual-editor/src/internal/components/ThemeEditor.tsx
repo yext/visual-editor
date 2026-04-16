@@ -21,7 +21,6 @@ import { useCommonMessageSenders } from "../hooks/useMessageSenders.ts";
 import { useProgress } from "../hooks/useProgress.ts";
 import * as lzstring from "lz-string";
 import { Metadata } from "../../editor/Editor.tsx";
-import { updateThemeWithCustomFontAssets } from "../utils/customFontAssets.ts";
 import { migrateTheme } from "../../utils/migrateTheme.ts";
 
 const devLogger = new DevLogger();
@@ -53,8 +52,13 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
   const { saveThemeSaveState, publishTheme, deleteThemeSaveState } =
     useThemeMessageSenders();
 
-  const { themeSaveState, themeSaveStateFetched } =
-    useThemeMessageReceivers(localDev);
+  const { themeSaveState, themeSaveStateFetched } = useThemeMessageReceivers(
+    localDev,
+    {
+      themeConfig,
+      customFonts: templateMetadata.customFonts,
+    }
+  );
 
   const { buildThemeLocalStorageKey, clearThemeLocalStorage } =
     useThemeLocalStorage(templateMetadata);
@@ -71,6 +75,15 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
   >();
   const [themeHistoryFetched, setThemeHistoryFetched] =
     useState<boolean>(false);
+
+  const migrateSavedThemeData = useCallback(
+    (themeValues: ThemeData) =>
+      migrateTheme(themeValues, {
+        themeConfig,
+        customFonts: templateMetadata.customFonts,
+      }),
+    [themeConfig, templateMetadata.customFonts]
+  );
 
   /**
    * Determines the initialHistory to send to Puck.
@@ -152,7 +165,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
         histories = (JSON.parse(localHistoryArray) as ThemeHistory[]).map(
           (themeHistory) => ({
             ...themeHistory,
-            data: migrateTheme(themeHistory.data),
+            data: migrateSavedThemeData(themeHistory.data),
           })
         );
         index = histories.length - 1;
@@ -181,13 +194,13 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
             { id: "root", data: themeData },
             {
               id: themeSaveState.hash,
-              data: migrateTheme(themeSaveState.history.data),
+              data: themeSaveState.history.data,
             },
           ]
         : [
             {
               id: themeSaveState.hash,
-              data: migrateTheme(themeSaveState.history.data),
+              data: themeSaveState.history.data,
             },
           ];
       index = themeData ? 1 : 0;
@@ -195,16 +208,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
 
     if (histories) {
       setThemeHistories({
-        histories: histories.map((themeHistory) => ({
-          ...themeHistory,
-          data: themeConfig
-            ? updateThemeWithCustomFontAssets({
-                themeConfig,
-                themeValues: themeHistory.data,
-                customFonts: templateMetadata.customFonts,
-              })
-            : themeHistory.data,
-        })),
+        histories,
         index,
       });
     }
@@ -214,6 +218,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     setThemeHistories,
     setThemeHistoryFetched,
     buildThemeLocalStorageKey,
+    migrateSavedThemeData,
     themeData,
     themeSaveState,
   ]);

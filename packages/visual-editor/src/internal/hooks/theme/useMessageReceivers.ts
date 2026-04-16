@@ -3,10 +3,17 @@ import { DevLogger } from "../../../utils/devLogger.ts";
 import { ThemeSaveState } from "../../types/themeData.ts";
 import { useReceiveMessage, TARGET_ORIGINS } from "../useMessage.ts";
 import { useCommonMessageSenders } from "../useMessageSenders.ts";
+import {
+  migrateTheme,
+  ThemeMigrationContext,
+} from "../../../utils/migrateTheme.ts";
 
 const devLogger = new DevLogger();
 
-export const useThemeMessageReceivers = (localDev: boolean) => {
+export const useThemeMessageReceivers = (
+  localDev: boolean,
+  migrationContext: ThemeMigrationContext
+) => {
   const { iFrameLoaded } = useCommonMessageSenders();
 
   // Trigger additional data flow from parent
@@ -26,7 +33,9 @@ export const useThemeMessageReceivers = (localDev: boolean) => {
     if (payload?.history) {
       receivedThemeSaveState = {
         hash: payload.hash,
-        history: { data: JSON.parse(payload.history) },
+        history: {
+          data: migrateTheme(JSON.parse(payload.history), migrationContext),
+        },
       } as ThemeSaveState;
     }
     devLogger.logData("THEME_SAVE_STATE", receivedThemeSaveState);

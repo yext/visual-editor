@@ -207,7 +207,10 @@ export const Editor = ({
     ? migrate(layoutData!, migrationRegistry, puckConfig, document)
     : undefined;
   const migratedThemeData = !isLoading
-    ? migrateTheme(themeData ?? {})
+    ? migrateTheme(themeData ?? {}, {
+        themeConfig: finalThemeConfig,
+        customFonts: templateMetadata?.customFonts,
+      })
     : themeData;
 
   return (
