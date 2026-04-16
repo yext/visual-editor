@@ -17,6 +17,7 @@ import {
 import { defaultTeamCardSlotData, TeamCardProps } from "./TeamCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
+import { EntityFieldSectionEmptyStateBox } from "../EntityFieldSectionEmptyState.tsx";
 
 export type TeamCardsWrapperProps = CardWrapperType<TeamSectionType> & {
   styles: {
@@ -245,7 +246,11 @@ export const TeamCardsWrapper: ComponentConfig<{
   },
   render: (props) => {
     if (props.conditionalRender?.hasMappedContent === false) {
-      return <div data-empty-state="true" />;
+      return props.puck.isEditing ? (
+        <EntityFieldSectionEmptyStateBox showEmptyStateMarker />
+      ) : (
+        <div data-empty-state="true" />
+      );
     }
 
     return <TeamCardsWrapperComponent {...props} />;

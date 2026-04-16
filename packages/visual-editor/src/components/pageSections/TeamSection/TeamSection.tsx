@@ -15,11 +15,7 @@ import { defaultTeamCardSlotData } from "./TeamCard.tsx";
 import { TeamCardsWrapperProps } from "./TeamCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
-import { EntityFieldSectionEmptyState } from "../EntityFieldSectionEmptyState.tsx";
-import {
-  getEditorItemId,
-  isMappedCardWrapperSelected,
-} from "../entityFieldSectionUtils.ts";
+import { isMappedCardWrapperSelected } from "../entityFieldSectionUtils.ts";
 import { useMappedEntitySectionEmptyState } from "../useMappedEntitySectionEmptyState.ts";
 
 export interface TeamSectionProps {
@@ -55,7 +51,6 @@ export interface TeamSectionProps {
   /** @internal */
   conditionalRender?: {
     watchForMappedContentEmptyState: boolean;
-    mappedFieldOwnerId?: string;
   };
 
   /**
@@ -205,9 +200,6 @@ export const TeamSection: ComponentConfig<{ props: TeamSectionProps }> = {
       props: {
         ...updatedData.props,
         conditionalRender: {
-          mappedFieldOwnerId: getEditorItemId(
-            updatedData.props.slots.CardsWrapperSlot?.[0]
-          ),
           watchForMappedContentEmptyState: isMappedCardWrapperSelected(
             updatedData.props.slots.CardsWrapperSlot?.[0]
           ),
@@ -222,9 +214,6 @@ export const TeamSection: ComponentConfig<{ props: TeamSectionProps }> = {
       useMappedEntitySectionEmptyState({
         enabled: watchForMappedContentEmptyState,
       });
-    const cardsWrapperSlot = (
-      <props.slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
-    );
 
     return (
       <ComponentErrorBoundary
@@ -238,24 +227,10 @@ export const TeamSection: ComponentConfig<{ props: TeamSectionProps }> = {
             liveVisibility={props.liveVisibility}
             isEditing={props.puck.isEditing}
           >
-            {watchForMappedContentEmptyState && isMappedContentEmpty ? (
-              props.puck.isEditing ? (
-                <>
-                  <EntityFieldSectionEmptyState
-                    backgroundColor={props.styles.backgroundColor}
-                    targetItemId={props.conditionalRender?.mappedFieldOwnerId}
-                  />
-                  <div
-                    ref={setWrapperRef}
-                    className="hidden"
-                    aria-hidden="true"
-                  >
-                    {cardsWrapperSlot}
-                  </div>
-                </>
-              ) : (
-                <></>
-              )
+            {watchForMappedContentEmptyState &&
+            isMappedContentEmpty &&
+            !props.puck.isEditing ? (
+              <></>
             ) : (
               <TeamSectionWrapper
                 {...props}

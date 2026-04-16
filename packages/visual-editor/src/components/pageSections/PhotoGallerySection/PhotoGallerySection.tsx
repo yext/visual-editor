@@ -20,12 +20,8 @@ import { AssetImageType } from "../../../types/images.ts";
 import { PhotoGalleryWrapperProps } from "./PhotoGalleryWrapper.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
-import { EntityFieldSectionEmptyState } from "../EntityFieldSectionEmptyState.tsx";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
-import {
-  getEditorItemId,
-  isMappedEntityFieldSelected,
-} from "../entityFieldSectionUtils.ts";
+import { isMappedEntityFieldSelected } from "../entityFieldSectionUtils.ts";
 import {
   getPhotoGalleryImageData,
   PhotoGalleryImageValue,
@@ -77,7 +73,6 @@ export interface PhotoGallerySectionProps {
   /** @internal */
   conditionalRender?: {
     hasMappedContent: boolean;
-    mappedFieldOwnerId?: string;
   };
 
   /**
@@ -293,9 +288,6 @@ export const PhotoGallerySection: ComponentConfig<{
       props: {
         ...updatedData.props,
         conditionalRender: {
-          mappedFieldOwnerId: getEditorItemId(
-            updatedData.props.slots.PhotoGalleryWrapper?.[0]
-          ),
           hasMappedContent:
             !isMappedEntityFieldSelected(
               photoGalleryWrapperProps?.data?.images
@@ -313,15 +305,9 @@ export const PhotoGallerySection: ComponentConfig<{
         liveVisibility={props.liveVisibility}
         isEditing={props.puck.isEditing}
       >
-        {props.conditionalRender?.hasMappedContent === false ? (
-          props.puck.isEditing ? (
-            <EntityFieldSectionEmptyState
-              backgroundColor={props.styles.backgroundColor}
-              targetItemId={props.conditionalRender?.mappedFieldOwnerId}
-            />
-          ) : (
-            <></>
-          )
+        {props.conditionalRender?.hasMappedContent === false &&
+        !props.puck.isEditing ? (
+          <></>
         ) : (
           <PhotoGallerySectionComponent {...props} />
         )}

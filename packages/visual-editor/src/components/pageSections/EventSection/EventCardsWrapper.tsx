@@ -17,6 +17,7 @@ import {
 import { defaultEventCardSlotData, EventCardProps } from "./EventCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
+import { EntityFieldSectionEmptyStateBox } from "../EntityFieldSectionEmptyState.tsx";
 
 export type EventCardsWrapperProps = CardWrapperType<EventSectionType> & {
   styles: {
@@ -240,7 +241,11 @@ export const EventCardsWrapper: ComponentConfig<{
   },
   render: (props) => {
     if (props.conditionalRender?.hasMappedContent === false) {
-      return <div data-empty-state="true" />;
+      return props.puck.isEditing ? (
+        <EntityFieldSectionEmptyStateBox showEmptyStateMarker />
+      ) : (
+        <div data-empty-state="true" />
+      );
     }
 
     return <EventCardsWrapperComponent {...props} />;

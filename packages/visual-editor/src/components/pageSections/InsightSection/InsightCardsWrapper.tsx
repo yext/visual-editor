@@ -20,6 +20,7 @@ import {
 } from "./InsightCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
+import { EntityFieldSectionEmptyStateBox } from "../EntityFieldSectionEmptyState.tsx";
 
 export type InsightCardsWrapperProps = CardWrapperType<InsightSectionType> & {
   styles: {
@@ -241,7 +242,11 @@ export const InsightCardsWrapper: ComponentConfig<{
   },
   render: (props) => {
     if (props.conditionalRender?.hasMappedContent === false) {
-      return <div data-empty-state="true" />;
+      return props.puck.isEditing ? (
+        <EntityFieldSectionEmptyStateBox showEmptyStateMarker />
+      ) : (
+        <div data-empty-state="true" />
+      );
     }
 
     return <InsightCardsWrapperComponent {...props} />;

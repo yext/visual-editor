@@ -14,11 +14,7 @@ import { defaultEventCardSlotData } from "./EventCard.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { EventCardsWrapperProps } from "./EventCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
-import { EntityFieldSectionEmptyState } from "../EntityFieldSectionEmptyState.tsx";
-import {
-  getEditorItemId,
-  isMappedCardWrapperSelected,
-} from "../entityFieldSectionUtils.ts";
+import { isMappedCardWrapperSelected } from "../entityFieldSectionUtils.ts";
 import { useMappedEntitySectionEmptyState } from "../useMappedEntitySectionEmptyState.ts";
 
 export interface EventSectionProps {
@@ -54,7 +50,6 @@ export interface EventSectionProps {
   /** @internal */
   conditionalRender?: {
     watchForMappedContentEmptyState: boolean;
-    mappedFieldOwnerId?: string;
   };
 
   /**
@@ -203,9 +198,6 @@ export const EventSection: ComponentConfig<{ props: EventSectionProps }> = {
       props: {
         ...updatedData.props,
         conditionalRender: {
-          mappedFieldOwnerId: getEditorItemId(
-            updatedData.props.slots.CardsWrapperSlot?.[0]
-          ),
           watchForMappedContentEmptyState: isMappedCardWrapperSelected(
             updatedData.props.slots.CardsWrapperSlot?.[0]
           ),
@@ -220,9 +212,6 @@ export const EventSection: ComponentConfig<{ props: EventSectionProps }> = {
       useMappedEntitySectionEmptyState({
         enabled: watchForMappedContentEmptyState,
       });
-    const cardsWrapperSlot = (
-      <props.slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
-    );
 
     return (
       <ComponentErrorBoundary
@@ -236,24 +225,10 @@ export const EventSection: ComponentConfig<{ props: EventSectionProps }> = {
             liveVisibility={props.liveVisibility}
             isEditing={props.puck.isEditing}
           >
-            {watchForMappedContentEmptyState && isMappedContentEmpty ? (
-              props.puck.isEditing ? (
-                <>
-                  <EntityFieldSectionEmptyState
-                    backgroundColor={props.styles.backgroundColor}
-                    targetItemId={props.conditionalRender?.mappedFieldOwnerId}
-                  />
-                  <div
-                    ref={setWrapperRef}
-                    className="hidden"
-                    aria-hidden="true"
-                  >
-                    {cardsWrapperSlot}
-                  </div>
-                </>
-              ) : (
-                <></>
-              )
+            {watchForMappedContentEmptyState &&
+            isMappedContentEmpty &&
+            !props.puck.isEditing ? (
+              <></>
             ) : (
               <EventSectionWrapper
                 {...props}

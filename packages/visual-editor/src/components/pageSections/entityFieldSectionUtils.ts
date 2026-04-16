@@ -43,16 +43,3 @@ export const isMappedCardWrapperSelected = (
 ): boolean => {
   return isMappedEntityFieldSelected(cardWrapperSlot?.props?.data);
 };
-
-export const getEditorItemId = (
-  item:
-    | {
-        id?: string;
-        props?: {
-          id?: string;
-        };
-      }
-    | undefined
-): string | undefined => {
-  return item?.props?.id ?? item?.id;
-};
