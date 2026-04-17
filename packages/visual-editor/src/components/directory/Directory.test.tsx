@@ -8,7 +8,7 @@ import {
 } from ".././testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import { Directory } from "./Directory.tsx";
-import { migrateLayout } from "../../utils/migrate.ts";
+import { migrateLayout } from "../../utils/migrateLayout.ts";
 import { layoutMigrationRegistry } from "../migrations/migrationRegistry.ts";
 import { SlotsCategoryComponents } from "../categories/SlotsCategory.tsx";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";

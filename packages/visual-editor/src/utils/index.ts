@@ -9,7 +9,7 @@ export { getCanonicalUrl } from "./canonicalUrl.ts";
 export { themeManagerCn, themeManagerTwMergeConfiguration } from "./cn.ts";
 export { getPageMetadata } from "./getPageMetadata.ts";
 export { normalizeLink } from "./normalizeLink.ts";
-export { migrateLayout, migrateLayout as migrate } from "./migrate.ts";
+export { migrateLayout, migrateLayout as migrate } from "./migrateLayout.ts";
 export type {
   LayoutMigration,
   LayoutMigrationAction,
@@ -17,7 +17,7 @@ export type {
   LayoutMigration as Migration,
   LayoutMigrationAction as MigrationAction,
   LayoutMigrationRegistry as MigrationRegistry,
-} from "./migrate.ts";
+} from "./migrateLayout.ts";
 export {
   migrateTheme,
   type ThemeMigration,

@@ -1,4 +1,4 @@
-import { LayoutMigration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
 const LEGACY_PAGE_SCHEMA_ID_REGEX =
   /^https:\/\/\[\[siteDomain\]\]\/\[\[uid\]\]#(.+)$/;

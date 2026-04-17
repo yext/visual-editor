@@ -9,7 +9,7 @@ import {
 import { act, render as reactRender, waitFor } from "@testing-library/react";
 import { BannerSection } from "../pageSections/Banner.tsx";
 import { ExpandedHeader } from "./ExpandedHeader.tsx";
-import { migrateLayout } from "../../utils/migrate.ts";
+import { migrateLayout } from "../../utils/migrateLayout.ts";
 import { layoutMigrationRegistry } from "../migrations/migrationRegistry.ts";
 import { SlotsCategoryComponents } from "../categories/SlotsCategory.tsx";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";

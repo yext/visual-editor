@@ -34,11 +34,11 @@ In the `migrations` directory, create a new file of the form `1234_example_migra
 the number increases sequentially and the rest of the name is a brief description of the migration.
 
 In that file, export an object of type `Migration`, which is object mapping component names to
-`MigrationActions` (see [migrate.ts](https://github.com/yext/visual-editor/blob/main/packages/visual-editor/src/utils/migrate.ts)).
+`MigrationActions` (see [migrateLayout.ts](https://github.com/yext/visual-editor/blob/main/packages/visual-editor/src/utils/migrateLayout.ts)).
 The component name should be the name the component is registered as in
 `src/components/categories`.
 
-There are three [`MigrationActions`](https://github.com/yext/visual-editor/blob/1210ee5bae73bff1456563b57506ff163fa59cb6/packages/visual-editor/src/utils/migrate.ts#L11):
+There are three [`MigrationActions`](https://github.com/yext/visual-editor/blob/1210ee5bae73bff1456563b57506ff163fa59cb6/packages/visual-editor/src/utils/migrateLayout.ts#L11):
 
 ### Removed
 

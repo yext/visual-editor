@@ -6,7 +6,7 @@ import {
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender, waitFor } from "@testing-library/react";
 import { CustomCodeSection } from "./CustomCodeSection.tsx";
-import { migrateLayout } from "../../utils/migrate.ts";
+import { migrateLayout } from "../../utils/migrateLayout.ts";
 import { layoutMigrationRegistry } from "../migrations/migrationRegistry.ts";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { Render, Config } from "@puckeditor/core";

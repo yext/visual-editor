@@ -1,5 +1,5 @@
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
-import { LayoutMigration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
 /**
  * Migration to add default meta fields for locator and directory pages.

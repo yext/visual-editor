@@ -1,5 +1,5 @@
 import { LOCAL_BUSINESS_ENTITY_TYPES } from "../../utils/schema/defaultSchemas.ts";
-import { LayoutMigration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 
 export const schemaUpdates: LayoutMigration = {

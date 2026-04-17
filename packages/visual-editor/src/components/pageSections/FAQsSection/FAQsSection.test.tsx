@@ -9,7 +9,7 @@ import {
 import { render as reactRender, act } from "@testing-library/react";
 import { FAQSection } from "./FAQsSection.tsx";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
-import { migrateLayout } from "../../../utils/migrate.ts";
+import { migrateLayout } from "../../../utils/migrateLayout.ts";
 import { layoutMigrationRegistry } from "../../migrations/migrationRegistry.ts";
 import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";

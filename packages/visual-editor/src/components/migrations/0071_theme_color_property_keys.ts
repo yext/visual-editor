@@ -1,4 +1,4 @@
-import { LayoutMigration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
 const stripPrefix = (value: unknown, prefix: string): string | undefined => {
   if (typeof value !== "string") {

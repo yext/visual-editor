@@ -7,7 +7,7 @@ import {
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import { BannerSection } from "./Banner.tsx";
-import { migrateLayout } from "../../utils/migrate.ts";
+import { migrateLayout } from "../../utils/migrateLayout.ts";
 import { layoutMigrationRegistry } from "../migrations/migrationRegistry.ts";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { Render, Config } from "@puckeditor/core";

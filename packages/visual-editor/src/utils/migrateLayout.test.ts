@@ -3,7 +3,7 @@ import {
   LayoutMigration,
   LayoutMigrationRegistry,
   migrateLayout,
-} from "./migrate.ts";
+} from "./migrateLayout.ts";
 import { addIdToSchema } from "../components/migrations/0023_add_id_to_schema.ts";
 import { updateSchemaIdAnchorFormat } from "../components/migrations/0069_update_schema_id_anchor_format.ts";
 import { themeColorPropertyKeyMigration } from "../components/migrations/0071_theme_color_property_keys.ts";

@@ -1,4 +1,4 @@
-import { LayoutMigration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
 const getFlattenedFieldId = (field: unknown): string | undefined => {
   if (typeof field === "string") {

@@ -7,7 +7,7 @@ import {
   transformTests,
 } from "../../testing/componentTests.setup.ts";
 import { act, render as reactRender } from "@testing-library/react";
-import { migrateLayout } from "../../../utils/migrate.ts";
+import { migrateLayout } from "../../../utils/migrateLayout.ts";
 import { layoutMigrationRegistry } from "../../migrations/migrationRegistry.ts";
 import { ReviewsSection } from "./ReviewsSection.tsx";
 import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";

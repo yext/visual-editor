@@ -1,4 +1,4 @@
-import { LayoutMigration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
 const hasOwn = (obj: object, key: string) =>
   Object.prototype.hasOwnProperty.call(obj, key);

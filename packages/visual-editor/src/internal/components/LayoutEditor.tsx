@@ -20,7 +20,7 @@ import { updateThemeInEditor } from "../../utils/applyTheme.ts";
 import { useThemeLocalStorage } from "../hooks/theme/useLocalStorage.ts";
 import { useCommonMessageSenders } from "../hooks/useMessageSenders.ts";
 import { useProgress } from "../hooks/useProgress.ts";
-import { migrateLayout } from "../../utils/migrate.ts";
+import { migrateLayout } from "../../utils/migrateLayout.ts";
 import { migrateTheme } from "../../utils/migrateTheme.ts";
 import { layoutMigrationRegistry } from "../../components/migrations/migrationRegistry.ts";
 import { Metadata } from "../../editor/Editor.tsx";

@@ -29,7 +29,7 @@ import {
   defaultFonts,
   loadFontsIntoDOM,
 } from "../utils/fonts/visualEditorFonts.ts";
-import { migrateLayout } from "../utils/migrate.ts";
+import { migrateLayout } from "../utils/migrateLayout.ts";
 import { migrateTheme } from "../utils/migrateTheme.ts";
 import { layoutMigrationRegistry } from "../components/migrations/migrationRegistry.ts";
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";

@@ -1,4 +1,4 @@
-import { LayoutMigration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
 // Keep only leading header content and trailing footer content at the root.
 //

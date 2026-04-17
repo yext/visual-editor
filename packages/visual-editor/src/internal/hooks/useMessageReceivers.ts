@@ -9,7 +9,7 @@ import { DevLogger } from "../../utils/devLogger.ts";
 import { Config, Data } from "@puckeditor/core";
 import { useCommonMessageSenders } from "./useMessageSenders.ts";
 import { ThemeData } from "../types/themeData.ts";
-import { migrateLayout } from "../../utils/migrate.ts";
+import { migrateLayout } from "../../utils/migrateLayout.ts";
 import { layoutMigrationRegistry } from "../../components/migrations/migrationRegistry.ts";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 

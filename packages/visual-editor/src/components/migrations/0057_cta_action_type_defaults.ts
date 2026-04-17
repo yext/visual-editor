@@ -1,4 +1,4 @@
-import { LayoutMigration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 
 const applyCtaDefaults = (

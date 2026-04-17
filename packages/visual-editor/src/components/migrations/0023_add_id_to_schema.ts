@@ -1,5 +1,5 @@
 import { schemaWhitespaceRegex } from "../../utils/schema/defaultSchemas.ts";
-import { LayoutMigration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
 export const addIdToSchema: LayoutMigration = {
   root: {

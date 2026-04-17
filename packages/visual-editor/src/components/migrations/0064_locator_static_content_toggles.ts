@@ -1,4 +1,4 @@
-import { LayoutMigration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
 const DEFAULT_PRIMARY_HEADING_CONSTANT_VALUE = "";
 const DEFAULT_IMAGE_CONSTANT_VALUE = {

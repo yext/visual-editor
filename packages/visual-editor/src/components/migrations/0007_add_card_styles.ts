@@ -1,4 +1,4 @@
-import { LayoutMigration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 import { backgroundColors } from "../../utils/themeConfigOptions.ts";
 
 export const addCardStylesMigration: LayoutMigration = {

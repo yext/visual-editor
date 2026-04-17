@@ -14,7 +14,7 @@ import { OtherCategoryComponents } from "../categories/OtherCategory.tsx";
 import { PageSectionCategoryComponents } from "../categories/PageSectionCategory.tsx";
 import { SlotsCategoryComponents } from "../categories/SlotsCategory.tsx";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
-import { migrateLayout } from "../../utils/migrate.ts";
+import { migrateLayout } from "../../utils/migrateLayout.ts";
 import { ThemeData } from "../../internal/types/themeData.ts";
 import { MainContent } from "../structure/MainContent.tsx";
 import {

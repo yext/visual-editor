@@ -1,5 +1,5 @@
 import { getRandomPlaceholderImage } from "../../utils/imagePlaceholders.ts";
-import { LayoutMigration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
 export const promoVariants: LayoutMigration = {
   PromoSection: {

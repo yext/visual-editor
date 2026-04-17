@@ -1,4 +1,4 @@
-import { LayoutMigration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 import { translatableToPlainText } from "../../utils/plainText.ts";
 
 const toPlainTextEntityField = (entityField: any) => {

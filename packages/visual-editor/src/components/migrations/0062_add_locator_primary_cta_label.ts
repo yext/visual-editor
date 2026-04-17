@@ -1,5 +1,5 @@
 import { setDeep } from "@puckeditor/core";
-import { LayoutMigration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
 const DEFAULT_PRIMARY_CTA_LABEL = "Visit Page";
 

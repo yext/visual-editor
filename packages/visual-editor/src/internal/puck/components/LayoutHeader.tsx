@@ -22,7 +22,7 @@ import { LayoutApprovalModal } from "../../components/modals/LayoutApprovalModal
 import { TemplateMetadata } from "../../types/templateMetadata.ts";
 import "../ui/puck.css";
 import "../../../editor/index.css";
-import { migrateLayout } from "../../../utils/migrate.ts";
+import { migrateLayout } from "../../../utils/migrateLayout.ts";
 import { layoutMigrationRegistry } from "../../../components/migrations/migrationRegistry.ts";
 import {
   i18nComponentsInstance,

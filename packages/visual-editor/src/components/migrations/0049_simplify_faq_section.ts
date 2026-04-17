@@ -1,7 +1,7 @@
 import { FAQSectionType } from "../../types/types.ts";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
-import { LayoutMigration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
 export const simplifyFaqSection: LayoutMigration = {
   FAQSection: {

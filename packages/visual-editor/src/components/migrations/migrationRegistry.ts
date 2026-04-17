@@ -1,4 +1,4 @@
-import { LayoutMigrationRegistry } from "../../utils/migrate.ts";
+import { LayoutMigrationRegistry } from "../../utils/migrateLayout.ts";
 import { adjustPropObjectsMigration } from "./0001_adjust_prop_objects.ts";
 import { addHeadingAlignmentMigration } from "./0002_add_heading_alignment.ts";
 import { adjustStructFields } from "./0003_adjust_struct_fields.ts";

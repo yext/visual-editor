@@ -9,7 +9,7 @@ import {
 } from "../useMessage.ts";
 import { useCommonMessageSenders } from "../useMessageSenders.ts";
 import { layoutMigrationRegistry } from "../../../components/migrations/migrationRegistry.ts";
-import { migrateLayout } from "../../../utils/migrate.ts";
+import { migrateLayout } from "../../../utils/migrateLayout.ts";
 import { resolveSchemaJson } from "../../../utils/schema/resolveSchema.ts";
 import { type StreamDocument } from "../../../utils/types/StreamDocument.ts";
 import {

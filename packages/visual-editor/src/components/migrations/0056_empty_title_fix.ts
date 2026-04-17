@@ -1,5 +1,5 @@
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
-import { LayoutMigration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 import { getPageSetLocales } from "../../utils/pageSetLocales.ts";
 
 /**

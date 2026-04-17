@@ -13,7 +13,7 @@ import {
   waitFor,
 } from "@testing-library/react";
 import { injectTranslations } from "../utils/i18n/components.ts";
-import { migrateLayout } from "../utils/migrate.ts";
+import { migrateLayout } from "../utils/migrateLayout.ts";
 import { layoutMigrationRegistry } from "./migrations/migrationRegistry.ts";
 import { VisualEditorProvider } from "../utils/VisualEditorProvider.tsx";
 import { LocatorComponent } from "./Locator.tsx";
