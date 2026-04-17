@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
-import { Link } from "@yext/pages-components";
+import { Link } from "../../shared/SafeLink";
 
 type StaffMember = {
   name: string;

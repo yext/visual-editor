@@ -8,7 +8,8 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
 } from "@yext/visual-editor";
-import { ComplexImageType, ImageType, Link } from "@yext/pages-components";
+import { ComplexImageType, ImageType } from "@yext/pages-components";
+import { Link } from "../../shared/SafeLink";
 
 type StyledTextProps = {
   text: YextEntityField<TranslatableString>;

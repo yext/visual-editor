@@ -7,7 +7,8 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
 } from "@yext/visual-editor";
-import { ComplexImageType, ImageType, Link } from "@yext/pages-components";
+import { ComplexImageType, ImageType } from "@yext/pages-components";
+import { Link } from "../../shared/SafeLink";
 import { FaFacebookF, FaTwitter, FaYoutube } from "react-icons/fa";
 
 type LinkItem = {

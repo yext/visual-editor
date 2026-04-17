@@ -1,5 +1,5 @@
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
-import { Link } from "@yext/pages-components";
+import { Link } from "../../shared/SafeLink";
 
 type CopyrightLink = {
   label: string;

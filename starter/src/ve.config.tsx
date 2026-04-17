@@ -53,6 +53,42 @@ import {
   Hs1AlbanyWelcomeSectionProps,
 } from "./registry/hs1-albany/components/Hs1AlbanyWelcomeSection";
 import {
+  Hs1AlbanyStaffBreadcrumbsSection,
+  Hs1AlbanyStaffBreadcrumbsSectionProps,
+} from "./registry/hs1-albany-staff/components/Hs1AlbanyStaffBreadcrumbsSection";
+import {
+  Hs1AlbanyStaffContactFormSection,
+  Hs1AlbanyStaffContactFormSectionProps,
+} from "./registry/hs1-albany-staff/components/Hs1AlbanyStaffContactFormSection";
+import {
+  Hs1AlbanyStaffCopyrightSection,
+  Hs1AlbanyStaffCopyrightSectionProps,
+} from "./registry/hs1-albany-staff/components/Hs1AlbanyStaffCopyrightSection";
+import {
+  Hs1AlbanyStaffFooterSection,
+  Hs1AlbanyStaffFooterSectionProps,
+} from "./registry/hs1-albany-staff/components/Hs1AlbanyStaffFooterSection";
+import {
+  Hs1AlbanyStaffHeaderSection,
+  Hs1AlbanyStaffHeaderSectionProps,
+} from "./registry/hs1-albany-staff/components/Hs1AlbanyStaffHeaderSection";
+import {
+  Hs1AlbanyStaffHoursSection,
+  Hs1AlbanyStaffHoursSectionProps,
+} from "./registry/hs1-albany-staff/components/Hs1AlbanyStaffHoursSection";
+import {
+  Hs1AlbanyStaffLocationSection,
+  Hs1AlbanyStaffLocationSectionProps,
+} from "./registry/hs1-albany-staff/components/Hs1AlbanyStaffLocationSection";
+import {
+  Hs1AlbanyStaffRosterSection,
+  Hs1AlbanyStaffRosterSectionProps,
+} from "./registry/hs1-albany-staff/components/Hs1AlbanyStaffRosterSection";
+import {
+  Hs1AlbanyStaffTitleSection,
+  Hs1AlbanyStaffTitleSectionProps,
+} from "./registry/hs1-albany-staff/components/Hs1AlbanyStaffTitleSection";
+import {
   Hs1CarmelContactFormSection,
   Hs1CarmelContactFormSectionProps,
 } from "./registry/hs1-carmel/components/Hs1CarmelContactFormSection";
@@ -137,6 +173,106 @@ import {
   Hs1LagunaCopyrightSectionProps,
 } from "./registry/hs1-laguna/components/Hs1LagunaCopyrightSection";
 import {
+  Hs1AlbanyOfficeContactFormSection,
+  Hs1AlbanyOfficeContactFormSectionProps,
+} from "./registry/hs1-albany-office/components/Hs1AlbanyOfficeContactFormSection";
+import {
+  Hs1AlbanyOfficeContentSection,
+  Hs1AlbanyOfficeContentSectionProps,
+} from "./registry/hs1-albany-office/components/Hs1AlbanyOfficeContentSection";
+import {
+  Hs1AlbanyOfficeFooterSection,
+  Hs1AlbanyOfficeFooterSectionProps,
+} from "./registry/hs1-albany-office/components/Hs1AlbanyOfficeFooterSection";
+import {
+  Hs1AlbanyOfficeHeaderSection,
+  Hs1AlbanyOfficeHeaderSectionProps,
+} from "./registry/hs1-albany-office/components/Hs1AlbanyOfficeHeaderSection";
+import {
+  Hs1AlbanyOfficeHeroSection,
+  Hs1AlbanyOfficeHeroSectionProps,
+} from "./registry/hs1-albany-office/components/Hs1AlbanyOfficeHeroSection";
+import {
+  Hs1AlbanyOfficeHoursSection,
+  Hs1AlbanyOfficeHoursSectionProps,
+} from "./registry/hs1-albany-office/components/Hs1AlbanyOfficeHoursSection";
+import {
+  Hs1AlbanyOfficeLocationSection,
+  Hs1AlbanyOfficeLocationSectionProps,
+} from "./registry/hs1-albany-office/components/Hs1AlbanyOfficeLocationSection";
+import {
+  Hs1AlbanyServicesBreadcrumbsSection,
+  Hs1AlbanyServicesBreadcrumbsSectionProps,
+} from "./registry/hs1-albany-services/components/Hs1AlbanyServicesBreadcrumbsSection";
+import {
+  Hs1AlbanyServicesContactFormSection,
+  Hs1AlbanyServicesContactFormSectionProps,
+} from "./registry/hs1-albany-services/components/Hs1AlbanyServicesContactFormSection";
+import {
+  Hs1AlbanyServicesContentSection,
+  Hs1AlbanyServicesContentSectionProps,
+} from "./registry/hs1-albany-services/components/Hs1AlbanyServicesContentSection";
+import {
+  Hs1AlbanyServicesCopyrightSection,
+  Hs1AlbanyServicesCopyrightSectionProps,
+} from "./registry/hs1-albany-services/components/Hs1AlbanyServicesCopyrightSection";
+import {
+  Hs1AlbanyServicesFooterSection,
+  Hs1AlbanyServicesFooterSectionProps,
+} from "./registry/hs1-albany-services/components/Hs1AlbanyServicesFooterSection";
+import {
+  Hs1AlbanyServicesHeaderSection,
+  Hs1AlbanyServicesHeaderSectionProps,
+} from "./registry/hs1-albany-services/components/Hs1AlbanyServicesHeaderSection";
+import {
+  Hs1AlbanyServicesHoursSection,
+  Hs1AlbanyServicesHoursSectionProps,
+} from "./registry/hs1-albany-services/components/Hs1AlbanyServicesHoursSection";
+import {
+  Hs1AlbanyServicesLocationSection,
+  Hs1AlbanyServicesLocationSectionProps,
+} from "./registry/hs1-albany-services/components/Hs1AlbanyServicesLocationSection";
+import {
+  Hs1AlbanyServicesTitleSection,
+  Hs1AlbanyServicesTitleSectionProps,
+} from "./registry/hs1-albany-services/components/Hs1AlbanyServicesTitleSection";
+import {
+  Hs1AlbanyNewPatientsBreadcrumbsSection,
+  Hs1AlbanyNewPatientsBreadcrumbsSectionProps,
+} from "./registry/hs1-albany-new-patients/components/Hs1AlbanyNewPatientsBreadcrumbsSection";
+import {
+  Hs1AlbanyNewPatientsContactFormSection,
+  Hs1AlbanyNewPatientsContactFormSectionProps,
+} from "./registry/hs1-albany-new-patients/components/Hs1AlbanyNewPatientsContactFormSection";
+import {
+  Hs1AlbanyNewPatientsContentSection,
+  Hs1AlbanyNewPatientsContentSectionProps,
+} from "./registry/hs1-albany-new-patients/components/Hs1AlbanyNewPatientsContentSection";
+import {
+  Hs1AlbanyNewPatientsCopyrightSection,
+  Hs1AlbanyNewPatientsCopyrightSectionProps,
+} from "./registry/hs1-albany-new-patients/components/Hs1AlbanyNewPatientsCopyrightSection";
+import {
+  Hs1AlbanyNewPatientsFooterSection,
+  Hs1AlbanyNewPatientsFooterSectionProps,
+} from "./registry/hs1-albany-new-patients/components/Hs1AlbanyNewPatientsFooterSection";
+import {
+  Hs1AlbanyNewPatientsHeaderSection,
+  Hs1AlbanyNewPatientsHeaderSectionProps,
+} from "./registry/hs1-albany-new-patients/components/Hs1AlbanyNewPatientsHeaderSection";
+import {
+  Hs1AlbanyNewPatientsHoursSection,
+  Hs1AlbanyNewPatientsHoursSectionProps,
+} from "./registry/hs1-albany-new-patients/components/Hs1AlbanyNewPatientsHoursSection";
+import {
+  Hs1AlbanyNewPatientsLocationSection,
+  Hs1AlbanyNewPatientsLocationSectionProps,
+} from "./registry/hs1-albany-new-patients/components/Hs1AlbanyNewPatientsLocationSection";
+import {
+  Hs1AlbanyNewPatientsTitleSection,
+  Hs1AlbanyNewPatientsTitleSectionProps,
+} from "./registry/hs1-albany-new-patients/components/Hs1AlbanyNewPatientsTitleSection";
+import {
   Hs1LagunaFeaturedArticlesSection,
   Hs1LagunaFeaturedArticlesSectionProps,
 } from "./registry/hs1-laguna/components/Hs1LagunaFeaturedArticlesSection";
@@ -193,6 +329,15 @@ interface DevProps extends MainConfigProps, DirectoryCategoryProps {
   Hs1AlbanyContactFormSection: Hs1AlbanyContactFormSectionProps;
   Hs1AlbanyFooterSection: Hs1AlbanyFooterSectionProps;
   Hs1AlbanyCopyrightSection: Hs1AlbanyCopyrightSectionProps;
+  Hs1AlbanyStaffHeaderSection: Hs1AlbanyStaffHeaderSectionProps;
+  Hs1AlbanyStaffBreadcrumbsSection: Hs1AlbanyStaffBreadcrumbsSectionProps;
+  Hs1AlbanyStaffTitleSection: Hs1AlbanyStaffTitleSectionProps;
+  Hs1AlbanyStaffRosterSection: Hs1AlbanyStaffRosterSectionProps;
+  Hs1AlbanyStaffHoursSection: Hs1AlbanyStaffHoursSectionProps;
+  Hs1AlbanyStaffLocationSection: Hs1AlbanyStaffLocationSectionProps;
+  Hs1AlbanyStaffContactFormSection: Hs1AlbanyStaffContactFormSectionProps;
+  Hs1AlbanyStaffFooterSection: Hs1AlbanyStaffFooterSectionProps;
+  Hs1AlbanyStaffCopyrightSection: Hs1AlbanyStaffCopyrightSectionProps;
   Hs1CarmelHeaderSection: Hs1CarmelHeaderSectionProps;
   Hs1CarmelHeroSection: Hs1CarmelHeroSectionProps;
   Hs1CarmelQuickLinksSection: Hs1CarmelQuickLinksSectionProps;
@@ -225,6 +370,31 @@ interface DevProps extends MainConfigProps, DirectoryCategoryProps {
   Hs1LagunaTestimonialsSection: Hs1LagunaTestimonialsSectionProps;
   Hs1LagunaFooterSection: Hs1LagunaFooterSectionProps;
   Hs1LagunaCopyrightSection: Hs1LagunaCopyrightSectionProps;
+  Hs1AlbanyOfficeHeaderSection: Hs1AlbanyOfficeHeaderSectionProps;
+  Hs1AlbanyOfficeHeroSection: Hs1AlbanyOfficeHeroSectionProps;
+  Hs1AlbanyOfficeContentSection: Hs1AlbanyOfficeContentSectionProps;
+  Hs1AlbanyOfficeHoursSection: Hs1AlbanyOfficeHoursSectionProps;
+  Hs1AlbanyOfficeLocationSection: Hs1AlbanyOfficeLocationSectionProps;
+  Hs1AlbanyOfficeContactFormSection: Hs1AlbanyOfficeContactFormSectionProps;
+  Hs1AlbanyOfficeFooterSection: Hs1AlbanyOfficeFooterSectionProps;
+  Hs1AlbanyServicesHeaderSection: Hs1AlbanyServicesHeaderSectionProps;
+  Hs1AlbanyServicesBreadcrumbsSection: Hs1AlbanyServicesBreadcrumbsSectionProps;
+  Hs1AlbanyServicesTitleSection: Hs1AlbanyServicesTitleSectionProps;
+  Hs1AlbanyServicesContentSection: Hs1AlbanyServicesContentSectionProps;
+  Hs1AlbanyServicesHoursSection: Hs1AlbanyServicesHoursSectionProps;
+  Hs1AlbanyServicesLocationSection: Hs1AlbanyServicesLocationSectionProps;
+  Hs1AlbanyServicesContactFormSection: Hs1AlbanyServicesContactFormSectionProps;
+  Hs1AlbanyServicesFooterSection: Hs1AlbanyServicesFooterSectionProps;
+  Hs1AlbanyServicesCopyrightSection: Hs1AlbanyServicesCopyrightSectionProps;
+  Hs1AlbanyNewPatientsHeaderSection: Hs1AlbanyNewPatientsHeaderSectionProps;
+  Hs1AlbanyNewPatientsBreadcrumbsSection: Hs1AlbanyNewPatientsBreadcrumbsSectionProps;
+  Hs1AlbanyNewPatientsTitleSection: Hs1AlbanyNewPatientsTitleSectionProps;
+  Hs1AlbanyNewPatientsContentSection: Hs1AlbanyNewPatientsContentSectionProps;
+  Hs1AlbanyNewPatientsHoursSection: Hs1AlbanyNewPatientsHoursSectionProps;
+  Hs1AlbanyNewPatientsLocationSection: Hs1AlbanyNewPatientsLocationSectionProps;
+  Hs1AlbanyNewPatientsContactFormSection: Hs1AlbanyNewPatientsContactFormSectionProps;
+  Hs1AlbanyNewPatientsFooterSection: Hs1AlbanyNewPatientsFooterSectionProps;
+  Hs1AlbanyNewPatientsCopyrightSection: Hs1AlbanyNewPatientsCopyrightSectionProps;
 }
 
 const components: Config<DevProps>["components"] = {
@@ -241,6 +411,15 @@ const components: Config<DevProps>["components"] = {
   Hs1AlbanyContactFormSection,
   Hs1AlbanyFooterSection,
   Hs1AlbanyCopyrightSection,
+  Hs1AlbanyStaffHeaderSection,
+  Hs1AlbanyStaffBreadcrumbsSection,
+  Hs1AlbanyStaffTitleSection,
+  Hs1AlbanyStaffRosterSection,
+  Hs1AlbanyStaffHoursSection,
+  Hs1AlbanyStaffLocationSection,
+  Hs1AlbanyStaffContactFormSection,
+  Hs1AlbanyStaffFooterSection,
+  Hs1AlbanyStaffCopyrightSection,
   Hs1CarmelHeaderSection,
   Hs1CarmelHeroSection,
   Hs1CarmelQuickLinksSection,
@@ -273,6 +452,31 @@ const components: Config<DevProps>["components"] = {
   Hs1LagunaTestimonialsSection,
   Hs1LagunaFooterSection,
   Hs1LagunaCopyrightSection,
+  Hs1AlbanyOfficeHeaderSection,
+  Hs1AlbanyOfficeHeroSection,
+  Hs1AlbanyOfficeContentSection,
+  Hs1AlbanyOfficeHoursSection,
+  Hs1AlbanyOfficeLocationSection,
+  Hs1AlbanyOfficeContactFormSection,
+  Hs1AlbanyOfficeFooterSection,
+  Hs1AlbanyServicesHeaderSection,
+  Hs1AlbanyServicesBreadcrumbsSection,
+  Hs1AlbanyServicesTitleSection,
+  Hs1AlbanyServicesContentSection,
+  Hs1AlbanyServicesHoursSection,
+  Hs1AlbanyServicesLocationSection,
+  Hs1AlbanyServicesContactFormSection,
+  Hs1AlbanyServicesFooterSection,
+  Hs1AlbanyServicesCopyrightSection,
+  Hs1AlbanyNewPatientsHeaderSection,
+  Hs1AlbanyNewPatientsBreadcrumbsSection,
+  Hs1AlbanyNewPatientsTitleSection,
+  Hs1AlbanyNewPatientsContentSection,
+  Hs1AlbanyNewPatientsHoursSection,
+  Hs1AlbanyNewPatientsLocationSection,
+  Hs1AlbanyNewPatientsContactFormSection,
+  Hs1AlbanyNewPatientsFooterSection,
+  Hs1AlbanyNewPatientsCopyrightSection,
 };
 
 export const devConfig: Config<DevProps> = {
@@ -297,6 +501,20 @@ export const devConfig: Config<DevProps> = {
         "Hs1AlbanyContactFormSection",
         "Hs1AlbanyFooterSection",
         "Hs1AlbanyCopyrightSection",
+      ],
+    },
+    hs1AlbanyStaff: {
+      title: "HS1 Albany Staff",
+      components: [
+        "Hs1AlbanyStaffHeaderSection",
+        "Hs1AlbanyStaffBreadcrumbsSection",
+        "Hs1AlbanyStaffTitleSection",
+        "Hs1AlbanyStaffRosterSection",
+        "Hs1AlbanyStaffHoursSection",
+        "Hs1AlbanyStaffLocationSection",
+        "Hs1AlbanyStaffContactFormSection",
+        "Hs1AlbanyStaffFooterSection",
+        "Hs1AlbanyStaffCopyrightSection",
       ],
     },
     hs1Carmel: {
@@ -344,6 +562,46 @@ export const devConfig: Config<DevProps> = {
         "Hs1LagunaTestimonialsSection",
         "Hs1LagunaFooterSection",
         "Hs1LagunaCopyrightSection",
+      ],
+    },
+    hs1AlbanyOffice: {
+      title: "HS1 Albany Office",
+      components: [
+        "Hs1AlbanyOfficeHeaderSection",
+        "Hs1AlbanyOfficeHeroSection",
+        "Hs1AlbanyOfficeContentSection",
+        "Hs1AlbanyOfficeHoursSection",
+        "Hs1AlbanyOfficeLocationSection",
+        "Hs1AlbanyOfficeContactFormSection",
+        "Hs1AlbanyOfficeFooterSection",
+      ],
+    },
+    hs1AlbanyServices: {
+      title: "HS1 Albany Services",
+      components: [
+        "Hs1AlbanyServicesHeaderSection",
+        "Hs1AlbanyServicesBreadcrumbsSection",
+        "Hs1AlbanyServicesTitleSection",
+        "Hs1AlbanyServicesContentSection",
+        "Hs1AlbanyServicesHoursSection",
+        "Hs1AlbanyServicesLocationSection",
+        "Hs1AlbanyServicesContactFormSection",
+        "Hs1AlbanyServicesFooterSection",
+        "Hs1AlbanyServicesCopyrightSection",
+      ],
+    },
+    hs1AlbanyNewPatients: {
+      title: "HS1 Albany New Patients",
+      components: [
+        "Hs1AlbanyNewPatientsHeaderSection",
+        "Hs1AlbanyNewPatientsBreadcrumbsSection",
+        "Hs1AlbanyNewPatientsTitleSection",
+        "Hs1AlbanyNewPatientsContentSection",
+        "Hs1AlbanyNewPatientsHoursSection",
+        "Hs1AlbanyNewPatientsLocationSection",
+        "Hs1AlbanyNewPatientsContactFormSection",
+        "Hs1AlbanyNewPatientsFooterSection",
+        "Hs1AlbanyNewPatientsCopyrightSection",
       ],
     },
   },

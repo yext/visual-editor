@@ -6,7 +6,7 @@ import {
   YextEntityFieldSelector,
   resolveComponentData,
 } from "@yext/visual-editor";
-import { Link } from "@yext/pages-components";
+import { Link } from "../../shared/SafeLink";
 
 type StyledTextProps = {
   text: YextEntityField<TranslatableString>;

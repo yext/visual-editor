@@ -1,0 +1,601 @@
+{
+  "root": {
+    "props": {
+      "title": {
+        "field": "name",
+        "constantValue": "Hs1 Albany Staff Pages",
+        "constantValueEnabled": false
+      },
+      "description": {
+        "field": "description",
+        "constantValue": "",
+        "constantValueEnabled": false
+      }
+    }
+  },
+  "content": [
+    {
+      "type": "Hs1AlbanyStaffHeaderSection",
+      "props": {
+        "id": "Hs1AlbanyStaffHeaderSection-a32dbd47-0746-4342-b400-5df0fd9a444e",
+        "logoImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://cdcssl.ibsrv.net/ibimg/smb/450x292_80/webmgr/1o/u/o/brooklyn/sunnysmileslogo.png.webp?60c03c38fcebb177765418932264c8d5",
+            "width": 450,
+            "height": 292
+          },
+          "constantValueEnabled": true
+        },
+        "logoText": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Sunny Smiles",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 400,
+          "textTransform": "uppercase"
+        },
+        "primaryLinks": [
+          {
+            "label": "Home",
+            "href": "https://www.ofc-albany.com"
+          },
+          {
+            "label": "Staff",
+            "href": "https://www.ofc-albany.com/staff"
+          },
+          {
+            "label": "Office",
+            "href": "https://www.ofc-albany.com/our-locations"
+          },
+          {
+            "label": "Services",
+            "href": "https://www.ofc-albany.com/dental-services"
+          },
+          {
+            "label": "New Patients",
+            "href": "https://www.ofc-albany.com/new-patients"
+          }
+        ],
+        "moreMenu": {
+          "label": "More",
+          "href": "#",
+          "links": [
+            {
+              "label": "Contact Us",
+              "href": "https://www.ofc-albany.com/contact"
+            },
+            {
+              "label": "Appointment Request",
+              "href": "https://www.ofc-albany.com/appointment"
+            },
+            {
+              "label": "Testimonials",
+              "href": "https://www.ofc-albany.com/testimonials"
+            },
+            {
+              "label": "Smile Gallery",
+              "href": "https://www.ofc-albany.com/gallery"
+            },
+            {
+              "label": "Blog",
+              "href": "https://www.ofc-albany.com/blog"
+            }
+          ],
+          "nestedMenuLabel": "Patient Education",
+          "nestedMenuHref": "https://www.ofc-albany.com/articles/premium_education",
+          "nestedLinks": [
+            {
+              "label": "Educational Videos",
+              "href": "https://www.ofc-albany.com/articles/premium_education/category/47361"
+            },
+            {
+              "label": "Cosmetic & General Dentistry",
+              "href": "https://www.ofc-albany.com/articles/premium_education/category/47362"
+            },
+            {
+              "label": "Emergency Care",
+              "href": "https://www.ofc-albany.com/articles/premium_education/category/47363"
+            },
+            {
+              "label": "Endodontics",
+              "href": "https://www.ofc-albany.com/articles/premium_education/category/47364"
+            },
+            {
+              "label": "Implant Dentistry",
+              "href": "https://www.ofc-albany.com/articles/premium_education/category/47365"
+            },
+            {
+              "label": "Oral Health",
+              "href": "https://www.ofc-albany.com/articles/premium_education/category/47366"
+            },
+            {
+              "label": "Oral Hygiene",
+              "href": "https://www.ofc-albany.com/articles/premium_education/category/47367"
+            },
+            {
+              "label": "Oral Surgery",
+              "href": "https://www.ofc-albany.com/articles/premium_education/category/47368"
+            },
+            {
+              "label": "Orthodontics",
+              "href": "https://www.ofc-albany.com/articles/premium_education/category/47369"
+            },
+            {
+              "label": "Pediatric Dentistry",
+              "href": "https://www.ofc-albany.com/articles/premium_education/category/47370"
+            },
+            {
+              "label": "Periodontal Therapy",
+              "href": "https://www.ofc-albany.com/articles/premium_education/category/47371"
+            },
+            {
+              "label": "Technology",
+              "href": "https://www.ofc-albany.com/articles/premium_education/category/47372"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Hs1AlbanyStaffBreadcrumbsSection",
+      "props": {
+        "id": "Hs1AlbanyStaffBreadcrumbsSection-15635c94-a364-4dfe-832a-82c7700c0e2d",
+        "homeLink": {
+          "label": "Home",
+          "href": "https://www.ofc-albany.com"
+        },
+        "currentLabel": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Staff",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 13,
+          "fontColor": "#ffffff",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        }
+      }
+    },
+    {
+      "type": "Hs1AlbanyStaffTitleSection",
+      "props": {
+        "id": "Hs1AlbanyStaffTitleSection-5f8fb4b9-d01c-409a-a048-ea50414a4683",
+        "title": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Dental Staff",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#ffffff",
+          "fontWeight": 400,
+          "textTransform": "uppercase"
+        }
+      }
+    },
+    {
+      "type": "Hs1AlbanyStaffRosterSection",
+      "props": {
+        "id": "Hs1AlbanyStaffRosterSection-b1ce453d-5bf2-437b-bf84-c214f3411056",
+        "intro": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "All professionals at Sunny Smiles Dental maintain the highest levels of accreditation and pursue ongoing education to stay abreast of the latest trends in the medical field. Read on to learn more about our staff's experience and training.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "staffMembers": [
+          {
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://cdcssl.ibsrv.net/ibimg/smb/1365x2048_80/webmgr/1o/u/o/51847043446_64d4ebad59_k.jpg.webp?c28a73b6870d253e190cdccd3a50c225",
+                "width": 1365,
+                "height": 2048
+              },
+              "constantValueEnabled": true
+            },
+            "name": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Dr. Nathan Anderson",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 28,
+              "fontColor": "#4a4a4a",
+              "fontWeight": 400,
+              "textTransform": "uppercase"
+            },
+            "role": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Dentist",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 22,
+              "fontColor": "#d3a335",
+              "fontWeight": 300,
+              "textTransform": "normal"
+            },
+            "bio": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Dr. John Smith was born and raised in Minnesota. He received his degree from the University of Minnesota in 1990. He practiced in Minneapolis for ten years. Dr. Smith entered the Master'Degree program in at the University of Minnesota in 2000. Dr Smith enjoys spending time with his family, traveling, and exploring the wilderness of the Boundary Waters. He is a talented musician and avid reader.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#4a4a4a",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "image": {
+              "field": "",
+              "constantValue": {
+                "url": "https://cdcssl.ibsrv.net/ibimg/smb/1000x668_80/webmgr/1o/u/o/wellnessproducts.jpg.webp?36a57dafc0203121e5236819f25e27d2",
+                "width": 1000,
+                "height": 668
+              },
+              "constantValueEnabled": true
+            },
+            "name": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Jessica Anderson",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 28,
+              "fontColor": "#4a4a4a",
+              "fontWeight": 400,
+              "textTransform": "uppercase"
+            },
+            "role": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Dental Hygienist",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 22,
+              "fontColor": "#d3a335",
+              "fontWeight": 300,
+              "textTransform": "normal"
+            },
+            "bio": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Jessica's practice philosophy is based on extreme excellence. When not working with her patients she enjoys baking and watching movies.",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 16,
+              "fontColor": "#4a4a4a",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Hs1AlbanyStaffHoursSection",
+      "props": {
+        "id": "Hs1AlbanyStaffHoursSection-39e90368-436a-4cd2-82e1-3e98c4c025d0",
+        "title": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Hours of Operation",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 400,
+          "textTransform": "uppercase"
+        },
+        "subtitle": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Summer Hours",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 22,
+          "fontColor": "#d3a335",
+          "fontWeight": 300,
+          "textTransform": "normal"
+        },
+        "data": {
+          "hours": {
+            "field": "hours",
+            "constantValue": {}
+          }
+        }
+      }
+    },
+    {
+      "type": "Hs1AlbanyStaffLocationSection",
+      "props": {
+        "id": "Hs1AlbanyStaffLocationSection-0cc424ec-6b78-41bf-a28f-3d1ab0a1f3f4",
+        "title": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Our Location",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 400,
+          "textTransform": "uppercase"
+        },
+        "subtitle": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Find us on the map",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 22,
+          "fontColor": "#d3a335",
+          "fontWeight": 300,
+          "textTransform": "normal"
+        },
+        "locationLabel": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Primary Location",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 22,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 500,
+          "textTransform": "normal"
+        },
+        "addressLabel": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Address",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "contactLabel": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Contact Information",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        }
+      }
+    },
+    {
+      "type": "Hs1AlbanyStaffContactFormSection",
+      "props": {
+        "id": "Hs1AlbanyStaffContactFormSection-aba1d9d5-1a3f-4b41-a9e1-72e123a00536",
+        "title": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Contact Us Today",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#ffffff",
+          "fontWeight": 400,
+          "textTransform": "uppercase"
+        },
+        "inputFields": [
+          {
+            "label": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Enter your name (Required)",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 18,
+              "fontColor": "#9b9b9b",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "label": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Enter email (Required)",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 18,
+              "fontColor": "#9b9b9b",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "label": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "(XXX)XXX-XXXX (Required)",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 18,
+              "fontColor": "#9b9b9b",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ],
+        "notesField": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Notes to the Doctor",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#9b9b9b",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "disclaimer": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Please do not submit any Protected Health Information (PHI).",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 14,
+          "fontColor": "#ffffff",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "submitLabel": "Submit"
+      }
+    },
+    {
+      "type": "Hs1AlbanyStaffFooterSection",
+      "props": {
+        "id": "Hs1AlbanyStaffFooterSection-7b2ee502-6ce9-40ed-8849-cec274418f1c",
+        "logoImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://cdcssl.ibsrv.net/ibimg/smb/120x78_80/webmgr/1o/u/o/brooklyn/sunnysmileslogo.png.webp?60c03c38fcebb177765418932264c8d5",
+            "width": 120,
+            "height": 78
+          },
+          "constantValueEnabled": true
+        },
+        "logoText": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Sunny Smiles",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 400,
+          "textTransform": "uppercase"
+        },
+        "socialLinks": [
+          {
+            "platform": "Facebook",
+            "href": "https://www.facebook.com/Anderson-Optometry-363713737059041/"
+          },
+          {
+            "platform": "Twitter",
+            "href": "https://twitter.com/InternetMatrix"
+          },
+          {
+            "platform": "Youtube",
+            "href": "https://www.youtube.com/user/webmarketingimatrix"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Hs1AlbanyStaffCopyrightSection",
+      "props": {
+        "id": "Hs1AlbanyStaffCopyrightSection-2a1bde87-addd-4447-89a4-4d720089c53c",
+        "links": [
+          {
+            "label": "Copyright © 2026 MH Sub I, LLC dba Officite",
+            "href": "//www.henryscheinone.com/products/officite",
+            "newTab": true
+          },
+          {
+            "label": "Admin Log In",
+            "href": "https://secure.officite.com",
+            "newTab": true
+          },
+          {
+            "label": "Site Map",
+            "href": "https://www.ofc-albany.com/sitemap",
+            "newTab": false
+          }
+        ]
+      }
+    }
+  ],
+  "zones": {}
+}

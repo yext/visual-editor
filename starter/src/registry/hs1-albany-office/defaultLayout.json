@@ -1,0 +1,795 @@
+{
+  "root": {
+    "props": {
+      "title": {
+        "field": "name",
+        "constantValue": "Hs1 Albany Office Pages",
+        "constantValueEnabled": false
+      },
+      "description": {
+        "field": "description",
+        "constantValue": "",
+        "constantValueEnabled": false
+      }
+    }
+  },
+  "content": [
+    {
+      "type": "Hs1AlbanyOfficeHeaderSection",
+      "props": {
+        "id": "Hs1AlbanyOfficeHeaderSection-8ffe155e-66a3-4c36-896f-6fcfe3d29d01",
+        "logoImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://cdcssl.ibsrv.net/ibimg/smb/450x292_80/webmgr/1o/u/o/brooklyn/sunnysmileslogo.png.webp?60c03c38fcebb177765418932264c8d5",
+            "width": 120,
+            "height": 78
+          },
+          "constantValueEnabled": true
+        },
+        "brandName": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Sunny Smiles",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 20,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "moreLabel": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "More",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 11,
+          "fontColor": "#000000",
+          "fontWeight": 500,
+          "textTransform": "uppercase"
+        },
+        "primaryLinks": [
+          {
+            "label": "Home",
+            "link": "https://www.ofc-albany.com"
+          },
+          {
+            "label": "Staff",
+            "link": "https://www.ofc-albany.com/staff"
+          },
+          {
+            "label": "Office",
+            "link": "https://www.ofc-albany.com/our-locations"
+          },
+          {
+            "label": "Services",
+            "link": "https://www.ofc-albany.com/dental-services"
+          },
+          {
+            "label": "New Patients",
+            "link": "https://www.ofc-albany.com/new-patients"
+          }
+        ],
+        "secondaryLinks": [
+          {
+            "label": "Contact Us",
+            "link": "https://www.ofc-albany.com/contact"
+          },
+          {
+            "label": "Appointment Request",
+            "link": "https://www.ofc-albany.com/appointment"
+          },
+          {
+            "label": "Testimonials",
+            "link": "https://www.ofc-albany.com/testimonials"
+          },
+          {
+            "label": "Smile Gallery",
+            "link": "https://www.ofc-albany.com/gallery"
+          },
+          {
+            "label": "Blog",
+            "link": "https://www.ofc-albany.com/blog"
+          }
+        ],
+        "educationParentLink": {
+          "label": "Patient Education",
+          "link": "https://www.ofc-albany.com/articles/premium_education"
+        },
+        "educationLinks": [
+          {
+            "label": "Educational Videos",
+            "link": "https://www.ofc-albany.com/articles/premium_education/category/47361"
+          },
+          {
+            "label": "Cosmetic & General Dentistry",
+            "link": "https://www.ofc-albany.com/articles/premium_education/category/47362"
+          },
+          {
+            "label": "Emergency Care",
+            "link": "https://www.ofc-albany.com/articles/premium_education/category/47363"
+          },
+          {
+            "label": "Endodontics",
+            "link": "https://www.ofc-albany.com/articles/premium_education/category/47364"
+          },
+          {
+            "label": "Implant Dentistry",
+            "link": "https://www.ofc-albany.com/articles/premium_education/category/47365"
+          },
+          {
+            "label": "Oral Health",
+            "link": "https://www.ofc-albany.com/articles/premium_education/category/47366"
+          },
+          {
+            "label": "Oral Hygiene",
+            "link": "https://www.ofc-albany.com/articles/premium_education/category/47367"
+          },
+          {
+            "label": "Oral Surgery",
+            "link": "https://www.ofc-albany.com/articles/premium_education/category/47368"
+          },
+          {
+            "label": "Orthodontics",
+            "link": "https://www.ofc-albany.com/articles/premium_education/category/47369"
+          },
+          {
+            "label": "Pediatric Dentistry",
+            "link": "https://www.ofc-albany.com/articles/premium_education/category/47370"
+          },
+          {
+            "label": "Periodontal Therapy",
+            "link": "https://www.ofc-albany.com/articles/premium_education/category/47371"
+          },
+          {
+            "label": "Technology",
+            "link": "https://www.ofc-albany.com/articles/premium_education/category/47372"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Hs1AlbanyOfficeHeroSection",
+      "props": {
+        "id": "Hs1AlbanyOfficeHeroSection-2f27daeb-750e-49a8-a0d4-1f5ac66085a1",
+        "homeLink": {
+          "label": "Home",
+          "link": "https://www.ofc-albany.com"
+        },
+        "currentCrumb": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Office",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 10,
+          "fontColor": "#fff7e5",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "pageTitle": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Our Locations",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#ffffff",
+          "fontWeight": 400,
+          "textTransform": "uppercase"
+        }
+      }
+    },
+    {
+      "type": "Hs1AlbanyOfficeContentSection",
+      "props": {
+        "id": "Hs1AlbanyOfficeContentSection-6d3110cb-034c-4642-8bd8-c34e15bd4715",
+        "officeImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://cdcssl.ibsrv.net/ibimg/smb/250x185_80/webmgr/1o/u/o/_SHARED/office.jpg.webp?cff02776815b9c6597f67f95a127592e",
+            "width": 250,
+            "height": 185
+          },
+          "constantValueEnabled": true
+        },
+        "introTitle": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Downers Grove Dentist - Downers Grove Dental Office",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 22,
+          "fontColor": "#d3a335",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "introBody": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "This page provides you with practical information about our practice. It includes descriptions of our office location, including a map and directions, hours, appointment scheduling, insurance acceptance and billing policies.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 15,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "officeName": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Sunny Smiles Dental",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 22,
+          "fontColor": "#d3a335",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "officeHoursTitle": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Office Hours",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 22,
+          "fontColor": "#d3a335",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "hours": {
+          "field": "hours",
+          "constantValue": {}
+        },
+        "appointmentsHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Appointments",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 22,
+          "fontColor": "#d3a335",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "appointmentsBodyBefore": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "We know you have many choices when choosing a Dentist in Downers Grove, IL so we have made",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 15,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "appointmentCta": {
+          "label": "requesting an appointment",
+          "link": "appointment"
+        },
+        "appointmentsBodyAfter": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "a simple process via our Web site. If, for any reason you cannot keep a scheduled appointment, or will be delayed, please call us as soon as possible.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 15,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "insuranceHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Insurance and Billing",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 22,
+          "fontColor": "#d3a335",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "insuranceBody": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "We accept most traditional insurance plans, contact our office to verify acceptance of your plan. Sunny Smiles Dental does not participate in Health Management Organizations; however, we will be happy to file your insurance claims for you. We accept checks, cash or credit cards. We also offer a flexible payment plan. Please see our Financial Coordinator for details. We are happy to file insurance for your reimbursement as long as you are free to choose your own dentist.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 15,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "paymentHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Payment Options",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 22,
+          "fontColor": "#d3a335",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "paymentBody": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "We accept checks, cash or credit cards. We also offer a flexible payment plan. Please see our Financial Coordinator for details. We are happy to file insurance for your reimbursement as long as you are free to choose your own dentist.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 15,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "financingHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Financing Options",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 22,
+          "fontColor": "#d3a335",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "financingImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://cdcssl.ibsrv.net/ibimg/smb/150x31_80/webmgr/1o/u/o/_SHARED/carecredit.gif?47ad7afb5dfa6ee7cdf3e27561e5feb5",
+            "width": 150,
+            "height": 31
+          },
+          "constantValueEnabled": true
+        },
+        "financingBodyOne": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "CareCredit is here to help you pay for treatments and procedures your insurance doesn’t cover. We offer No Interest* financing or low minimum monthly payment options so you can get what you want, when you want it. You can even use CareCredit for your family and favorite pet.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 15,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "financingBodyTwo": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "With three simple steps, including an instant approval process, it’s easy to apply for CareCredit. After you’re approved, you’re free to use CareCredit for the services you choose including LASIK, veterinary, dentistry, cosmetic, hearing aids and more.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 15,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "financingBodyThree": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "CareCredit is endorsed by some of the most credible organizations specific to each healthcare profession we support. And CareCredit is a GE Money Company, so you know you can count on us. For over 20 years, we’ve been helping over five million cardholders get the healthcare treatments they want and need.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 15,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "financingBodyFourBefore": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Now you don’t have to worry about saving up for the procedures you want and need. With CareCredit, the decision’s in your hands to get what you want, when you want it. For more information or to apply online, visit",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 15,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "financingCta": {
+          "label": "carecredit.com",
+          "link": "//carecredit.com/"
+        },
+        "financingBodyFourAfter": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": ".",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 15,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "facilitiesHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Facilities and Equipment",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 22,
+          "fontColor": "#d3a335",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "facilityItems": [
+          {
+            "item": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Digital X-rays",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 15,
+              "fontColor": "#4a4a4a",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          },
+          {
+            "item": {
+              "text": {
+                "field": "",
+                "constantValue": {
+                  "defaultValue": "Invisalign",
+                  "hasLocalizedValue": "true"
+                },
+                "constantValueEnabled": true
+              },
+              "fontSize": 15,
+              "fontColor": "#4a4a4a",
+              "fontWeight": 400,
+              "textTransform": "normal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Hs1AlbanyOfficeHoursSection",
+      "props": {
+        "id": "Hs1AlbanyOfficeHoursSection-26902722-fe5b-4483-83f4-c771bc3828e2",
+        "title": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Hours of Operation",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 400,
+          "textTransform": "uppercase"
+        },
+        "subtitle": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Summer Hours",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#d3a335",
+          "fontWeight": 300,
+          "textTransform": "normal"
+        },
+        "hours": {
+          "field": "hours",
+          "constantValue": {}
+        }
+      }
+    },
+    {
+      "type": "Hs1AlbanyOfficeLocationSection",
+      "props": {
+        "id": "Hs1AlbanyOfficeLocationSection-21080709-472f-49aa-a564-10b62af3a5f9",
+        "title": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Our Location",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 400,
+          "textTransform": "uppercase"
+        },
+        "subtitle": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Find us on the map",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#d3a335",
+          "fontWeight": 300,
+          "textTransform": "normal"
+        },
+        "locationLabel": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Primary Location",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "addressLabel": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Address",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 13,
+          "fontColor": "#767676",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "contactLabel": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Contact Information",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 13,
+          "fontColor": "#767676",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        }
+      }
+    },
+    {
+      "type": "Hs1AlbanyOfficeContactFormSection",
+      "props": {
+        "id": "Hs1AlbanyOfficeContactFormSection-617218eb-a78e-4502-97e7-70af0ad76b50",
+        "title": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Contact Us Today",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#ffffff",
+          "fontWeight": 400,
+          "textTransform": "uppercase"
+        },
+        "namePlaceholder": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Enter your name (Required)",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 13,
+          "fontColor": "#7c7c7c",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "emailPlaceholder": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Enter email (Required)",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 13,
+          "fontColor": "#7c7c7c",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "phonePlaceholder": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "(XXX)XXX-XXXX (Required)",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 13,
+          "fontColor": "#7c7c7c",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "notesPlaceholder": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Notes to the Doctor",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 13,
+          "fontColor": "#7c7c7c",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "privacyNote": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Please do not submit any Protected Health Information (PHI).",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 10,
+          "fontColor": "#ffffff",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "submitText": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Submit",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 12,
+          "fontColor": "#ffffff",
+          "fontWeight": 500,
+          "textTransform": "uppercase"
+        }
+      }
+    },
+    {
+      "type": "Hs1AlbanyOfficeFooterSection",
+      "props": {
+        "id": "Hs1AlbanyOfficeFooterSection-6f5bf77f-87bb-4855-bc82-4980fd1a3745",
+        "logoImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://cdcssl.ibsrv.net/ibimg/smb/120x78_80/webmgr/1o/u/o/brooklyn/sunnysmileslogo.png.webp?60c03c38fcebb177765418932264c8d5",
+            "width": 120,
+            "height": 78
+          },
+          "constantValueEnabled": true
+        },
+        "brandName": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Sunny Smiles",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 20,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "socialLinks": [
+          {
+            "label": "Facebook",
+            "link": "https://www.facebook.com/Anderson-Optometry-363713737059041/"
+          },
+          {
+            "label": "Twitter",
+            "link": "https://twitter.com/InternetMatrix"
+          },
+          {
+            "label": "Youtube",
+            "link": "https://www.youtube.com/user/webmarketingimatrix"
+          }
+        ],
+        "legalLinks": [
+          {
+            "label": "Copyright © 2026 MH Sub I, LLC dba Officite",
+            "link": "//www.henryscheinone.com/products/officite"
+          },
+          {
+            "label": "Admin Log In",
+            "link": "https://secure.officite.com"
+          },
+          {
+            "label": "Site Map",
+            "link": "https://www.ofc-albany.com/sitemap"
+          }
+        ]
+      }
+    }
+  ],
+  "zones": {}
+}
