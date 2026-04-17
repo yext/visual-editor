@@ -708,11 +708,11 @@ the migrations specified in `components/migrations/migrationRegistry.ts` via `la
 A version number is stored in `data.root.props.version` of the layout data. This corresponds to
 the index of the last applied migration from the `layoutMigrationRegistry`.
 
-Migrations should be specified as a map of ComponentName to MigrationAction.
+Layout migrations should be specified as a map of ComponentName to `LayoutMigrationAction`.
 The ComponentName is the name of a component as provided to Puck Config in the `components` object
 (see `components/_componentCategories.ts`).
 
-There are three type of MigrationActions:
+There are three types of `LayoutMigrationAction`:
 
 ```ts
 {
