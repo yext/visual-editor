@@ -7,7 +7,7 @@ outline: deep
 
 Migrations ensure backwards compatibility for component updates. When a site is updated, it immediately begins
 using the new components; however, the published and save state data may not reflect the schema of these component updates.
-This data is run through `migrate` prior to being rendered so that any migrations will be applied and the data will match with the components.
+This data is run through `migrateLayout` prior to being rendered so that any layout migrations will be applied and the data will match with the components.
 
 ## When do I need to add a migrations?
 
@@ -33,12 +33,12 @@ A removed component will automatically disappear from the live page as well as s
 In the `migrations` directory, create a new file of the form `1234_example_migration.ts` where
 the number increases sequentially and the rest of the name is a brief description of the migration.
 
-In that file, export an object of type `Migration`, which is object mapping component names to
-`MigrationActions` (see [migrate.ts](https://github.com/yext/visual-editor/blob/main/packages/visual-editor/src/utils/migrate.ts)).
+In that file, export an object of type `LayoutMigration`, which is an object mapping component names to
+`LayoutMigrationAction` values (see [migrateLayout.ts](https://github.com/yext/visual-editor/blob/main/packages/visual-editor/src/utils/migrateLayout.ts)).
 The component name should be the name the component is registered as in
 `src/components/categories`.
 
-There are three [`MigrationActions`](https://github.com/yext/visual-editor/blob/1210ee5bae73bff1456563b57506ff163fa59cb6/packages/visual-editor/src/utils/migrate.ts#L11):
+There are three [`LayoutMigrationAction`](https://github.com/yext/visual-editor/blob/1210ee5bae73bff1456563b57506ff163fa59cb6/packages/visual-editor/src/utils/migrateLayout.ts#L11) variants:
 
 ### Removed
 
@@ -78,7 +78,7 @@ See https://puckeditor.com/docs/api-reference/functions/transform-props
 }
 ```
 
-In `migrationRegistry.ts`, import your migration and append it to the array. Migrations are run in order.
+In `migrationRegistry.ts`, import your layout migration and append it to `layoutMigrationRegistry`. Migrations are run in order.
 
 ## How do I test a migration?
 
