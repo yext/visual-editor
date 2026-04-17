@@ -1,11 +1,11 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrate.ts";
 
 /**
  * Migration to fix root props (title/description) that are missing constantValue.
  * The isYextEntityField check requires both "field" and "constantValue" to be present,
  * so we need to add constantValue: "" for any entity fields that are missing it.
  */
-export const fixRootMetaFieldsMigration: Migration = {
+export const fixRootMetaFieldsMigration: LayoutMigration = {
   root: {
     propTransformation: (props: Record<string, any>) => {
       const updatedProps = { ...props };

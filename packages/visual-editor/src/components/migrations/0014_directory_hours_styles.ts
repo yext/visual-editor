@@ -1,6 +1,6 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrate.ts";
 
-export const directoryHoursStyles: Migration = {
+export const directoryHoursStyles: LayoutMigration = {
   Directory: {
     action: "updated",
     propTransformation: (props) => {

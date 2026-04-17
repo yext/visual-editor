@@ -1,4 +1,4 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrate.ts";
 import { getPageSetLocales } from "../../utils/pageSetLocales.ts";
 
 // Helper to migrate Image constant value
@@ -62,7 +62,7 @@ const migrateCTA = (cta: any, locales: string[]) => {
   return cta;
 };
 
-export const translatableCTAImageMigration: Migration = {
+export const translatableCTAImageMigration: LayoutMigration = {
   PromoSection: {
     action: "updated",
     propTransformation: (props, streamDocument) => {

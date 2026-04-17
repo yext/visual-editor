@@ -1,6 +1,6 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrate.ts";
 
-export const adjustPropObjectsMigration: Migration = {
+export const adjustPropObjectsMigration: LayoutMigration = {
   BannerSection: {
     action: "updated",
     propTransformation: ({

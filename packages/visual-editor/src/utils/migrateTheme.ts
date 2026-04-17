@@ -28,7 +28,7 @@ export type ThemeMigrationRegistry = ThemeMigration[];
 export const migrateTheme = (
   themeValues: ThemeData,
   context: ThemeMigrationContext = {},
-  migrationRegistry: ThemeMigrationRegistry = commonThemeMigrationRegistry
+  themeMigrationRegistry: ThemeMigrationRegistry = commonThemeMigrationRegistry
 ): ThemeData => {
   const version =
     typeof themeValues?.[THEME_VERSION_KEY] === "number"
@@ -36,19 +36,19 @@ export const migrateTheme = (
       : 0;
 
   let migratedThemeValues = { ...themeValues };
-  const migrationsToApply = migrationRegistry.slice(version);
+  const themeMigrationsToApply = themeMigrationRegistry.slice(version);
 
-  if (migrationsToApply.length === 0) {
+  if (themeMigrationsToApply.length === 0) {
     return migratedThemeValues;
   }
 
-  migrationsToApply.forEach(
-    (migration) =>
-      (migratedThemeValues = migration(migratedThemeValues, context))
+  themeMigrationsToApply.forEach(
+    (themeMigration) =>
+      (migratedThemeValues = themeMigration(migratedThemeValues, context))
   );
 
   return {
     ...migratedThemeValues,
-    [THEME_VERSION_KEY]: migrationRegistry.length,
+    [THEME_VERSION_KEY]: themeMigrationRegistry.length,
   };
 };

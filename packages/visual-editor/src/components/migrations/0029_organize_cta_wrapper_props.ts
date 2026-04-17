@@ -1,6 +1,6 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrate.ts";
 
-export const organizeCTAWrapperProps: Migration = {
+export const organizeCTAWrapperProps: LayoutMigration = {
   CTAWrapper: {
     action: "updated",
     propTransformation: (props) => {

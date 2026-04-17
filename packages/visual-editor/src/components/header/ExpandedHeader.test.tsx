@@ -9,8 +9,8 @@ import {
 import { act, render as reactRender, waitFor } from "@testing-library/react";
 import { BannerSection } from "../pageSections/Banner.tsx";
 import { ExpandedHeader } from "./ExpandedHeader.tsx";
-import { migrate } from "../../utils/migrate.ts";
-import { migrationRegistry } from "../migrations/migrationRegistry.ts";
+import { migrateLayout } from "../../utils/migrate.ts";
+import { layoutMigrationRegistry } from "../migrations/migrationRegistry.ts";
 import { SlotsCategoryComponents } from "../categories/SlotsCategory.tsx";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
@@ -38,7 +38,7 @@ const tests: ComponentTest[] = [
     name: "default props",
     document: {},
     props: { ...ExpandedHeader.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
     interactions: async (page) => {
       await clickMenuIfVisible(page);
     },
@@ -2676,7 +2676,7 @@ describe("ExpandedHeader", async () => {
               },
             ];
 
-      const data = migrate(
+      const data = migrateLayout(
         {
           root: {
             props: {
@@ -2685,7 +2685,7 @@ describe("ExpandedHeader", async () => {
           },
           content: content,
         },
-        migrationRegistry,
+        layoutMigrationRegistry,
         puckConfig,
         document
       );

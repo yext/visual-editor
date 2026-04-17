@@ -1,4 +1,4 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrate.ts";
 import { backgroundColors } from "../../utils/themeConfigOptions.ts";
 
 const setDefaultDirectoryGridBackgroundColor = (
@@ -33,7 +33,7 @@ const setDefaultDirectoryListBackgroundColor = (
   };
 };
 
-export const directoryGridBackgroundStyles: Migration = {
+export const directoryGridBackgroundStyles: LayoutMigration = {
   DirectoryGrid: {
     action: "updated",
     propTransformation: setDefaultDirectoryGridBackgroundColor,

@@ -1,6 +1,6 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrate.ts";
 
-export const addHeaderFooterMaxWidth: Migration = {
+export const addHeaderFooterMaxWidth: LayoutMigration = {
   ExpandedHeader: {
     action: "updated",
     propTransformation: (props) => {

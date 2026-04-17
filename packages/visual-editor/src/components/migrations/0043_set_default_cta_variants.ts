@@ -1,7 +1,7 @@
 import { setDeep } from "@puckeditor/core";
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrate.ts";
 
-export const setDefaultCtaVariants: Migration = {
+export const setDefaultCtaVariants: LayoutMigration = {
   InsightCard: {
     action: "updated",
     propTransformation: (props) => {

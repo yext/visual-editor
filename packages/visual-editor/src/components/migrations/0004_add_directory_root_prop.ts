@@ -1,6 +1,6 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrate.ts";
 
-export const addDirectoryRootPropMigration: Migration = {
+export const addDirectoryRootPropMigration: LayoutMigration = {
   BreadcrumbsSection: {
     action: "updated",
     propTransformation: (props) => {

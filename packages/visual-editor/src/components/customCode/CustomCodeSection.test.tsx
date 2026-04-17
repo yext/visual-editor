@@ -6,8 +6,8 @@ import {
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender, waitFor } from "@testing-library/react";
 import { CustomCodeSection } from "./CustomCodeSection.tsx";
-import { migrate } from "../../utils/migrate.ts";
-import { migrationRegistry } from "../migrations/migrationRegistry.ts";
+import { migrateLayout } from "../../utils/migrate.ts";
+import { layoutMigrationRegistry } from "../migrations/migrationRegistry.ts";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { Render, Config } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
@@ -18,7 +18,7 @@ const tests: ComponentTest[] = [
     name: "default props with empty document",
     document: {},
     props: { ...CustomCodeSection.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "with custom HTML, CSS, and JS interaction to change color",
@@ -47,7 +47,7 @@ const tests: ComponentTest[] = [
     interactions: async (page) => {
       await page.getByRole("button", { name: "Change Color" }).click();
     },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "renders Handlebars template with document data",
@@ -144,7 +144,7 @@ const tests: ComponentTest[] = [
     interactions: async (page) => {
       await page.getByRole("button", { name: "Show Name" }).click();
     },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
 ];
 
@@ -168,7 +168,7 @@ describe("CustomCodeSection", async () => {
       version,
       viewport: { width, height, name: viewportName },
     }) => {
-      const data = migrate(
+      const data = migrateLayout(
         {
           root: {
             props: {
@@ -182,7 +182,7 @@ describe("CustomCodeSection", async () => {
             },
           ],
         },
-        migrationRegistry,
+        layoutMigrationRegistry,
         puckConfig,
         document
       );

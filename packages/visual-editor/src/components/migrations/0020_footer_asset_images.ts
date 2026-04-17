@@ -1,6 +1,6 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrate.ts";
 
-export const updateFooterForAssetImages: Migration = {
+export const updateFooterForAssetImages: LayoutMigration = {
   ExpandedFooter: {
     action: "updated",
     propTransformation: (props) => {

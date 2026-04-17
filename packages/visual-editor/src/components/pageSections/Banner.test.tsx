@@ -7,8 +7,8 @@ import {
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import { BannerSection } from "./Banner.tsx";
-import { migrate } from "../../utils/migrate.ts";
-import { migrationRegistry } from "../migrations/migrationRegistry.ts";
+import { migrateLayout } from "../../utils/migrate.ts";
+import { layoutMigrationRegistry } from "../migrations/migrationRegistry.ts";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { Render, Config } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
@@ -19,7 +19,7 @@ const tests: ComponentTest[] = [
     name: "default props with empty document",
     document: {},
     props: { ...BannerSection.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "version 1 props with entity values",
@@ -218,7 +218,7 @@ describe("BannerSection", async () => {
       version,
       viewport: { width, height, name: viewportName },
     }) => {
-      const data = migrate(
+      const data = migrateLayout(
         {
           root: {
             props: {
@@ -232,7 +232,7 @@ describe("BannerSection", async () => {
             },
           ],
         },
-        migrationRegistry,
+        layoutMigrationRegistry,
         puckConfig,
         document
       );

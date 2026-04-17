@@ -1,9 +1,9 @@
 import { setDeep } from "@puckeditor/core";
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrate.ts";
 
 const DEFAULT_PRIMARY_CTA_LABEL = "Visit Page";
 
-export const addLocatorPrimaryCtaLabel: Migration = {
+export const addLocatorPrimaryCtaLabel: LayoutMigration = {
   Locator: {
     action: "updated",
     propTransformation: (props) => {

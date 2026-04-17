@@ -6,8 +6,8 @@ import {
   transformTests,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
-import { migrate } from "../../utils/migrate.ts";
-import { migrationRegistry } from "../migrations/migrationRegistry.ts";
+import { migrateLayout } from "../../utils/migrate.ts";
+import { layoutMigrationRegistry } from "../migrations/migrationRegistry.ts";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { Render, Config } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
@@ -27,7 +27,7 @@ const tests: ComponentTest[] = [
         apiKey: STATIC_MAP_TEST_API_KEY,
       },
     },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "default props with coordinate - no api key",
@@ -38,7 +38,7 @@ const tests: ComponentTest[] = [
       },
     },
     props: { ...StaticMapSection.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "default props with coordinate - with api key",
@@ -55,7 +55,7 @@ const tests: ComponentTest[] = [
         apiKey: STATIC_MAP_TEST_API_KEY,
       },
     },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "version 10 props with no coordinate",
@@ -120,7 +120,7 @@ describe("StaticMapSection", async () => {
   it.each(transformTests(tests))(
     "$viewport.name $name",
     async ({ document, props, interactions, version }) => {
-      const data = migrate(
+      const data = migrateLayout(
         {
           root: {
             props: {
@@ -134,7 +134,7 @@ describe("StaticMapSection", async () => {
             },
           ],
         },
-        migrationRegistry,
+        layoutMigrationRegistry,
         puckConfig,
         document
       );

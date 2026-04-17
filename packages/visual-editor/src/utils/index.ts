@@ -9,12 +9,14 @@ export { getCanonicalUrl } from "./canonicalUrl.ts";
 export { themeManagerCn, themeManagerTwMergeConfiguration } from "./cn.ts";
 export { getPageMetadata } from "./getPageMetadata.ts";
 export { normalizeLink } from "./normalizeLink.ts";
-export {
-  migrateLayout,
-  migrate,
-  type Migration,
-  type MigrationAction,
-  type MigrationRegistry,
+export { migrateLayout, migrateLayout as migrate } from "./migrate.ts";
+export type {
+  LayoutMigration,
+  LayoutMigrationAction,
+  LayoutMigrationRegistry,
+  LayoutMigration as Migration,
+  LayoutMigrationAction as MigrationAction,
+  LayoutMigrationRegistry as MigrationRegistry,
 } from "./migrate.ts";
 export {
   migrateTheme,

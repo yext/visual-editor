@@ -1,8 +1,8 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrate.ts";
 
 const DEFAULT_TITLE = "Find a Location";
 
-export const addDefaultLocatorPageTitle: Migration = {
+export const addDefaultLocatorPageTitle: LayoutMigration = {
   Locator: {
     action: "updated",
     propTransformation: (props) => {

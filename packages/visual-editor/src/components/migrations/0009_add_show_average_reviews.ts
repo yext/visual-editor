@@ -1,6 +1,6 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrate.ts";
 
-export const addShowAverageReviewMigration: Migration = {
+export const addShowAverageReviewMigration: LayoutMigration = {
   HeroSection: {
     action: "updated",
     propTransformation: (props) => {

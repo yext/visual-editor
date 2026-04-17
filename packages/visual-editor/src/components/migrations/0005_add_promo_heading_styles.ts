@@ -1,4 +1,4 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrate.ts";
 
 const updatePromoHeadingStructure = (oldProps: any) => {
   if (!oldProps?.styles) {
@@ -26,7 +26,7 @@ const updatePromoHeadingStructure = (oldProps: any) => {
   };
 };
 
-export const addPromoHeadingStylesMigration: Migration = {
+export const addPromoHeadingStylesMigration: LayoutMigration = {
   PromoSection: {
     action: "updated",
     propTransformation: updatePromoHeadingStructure,

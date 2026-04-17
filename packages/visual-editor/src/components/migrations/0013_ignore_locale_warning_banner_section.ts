@@ -1,6 +1,6 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrate.ts";
 
-export const ignoreLocaleWarningBannerSection: Migration = {
+export const ignoreLocaleWarningBannerSection: LayoutMigration = {
   BannerSection: {
     action: "updated",
     propTransformation: (props) => {

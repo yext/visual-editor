@@ -9,7 +9,7 @@ import {
 import { layoutMigrationRegistry as commonLayoutMigrationRegistry } from "../components/migrations/migrationRegistry.ts";
 import { StreamDocument } from "./types/StreamDocument.ts";
 
-export type MigrationAction =
+export type LayoutMigrationAction =
   | {
       action: "removed";
     }
@@ -36,33 +36,33 @@ type RootMigrationAction = {
   ) => Record<string, any>;
 };
 
-export type Migration =
-  | Record<string, MigrationAction>
+export type LayoutMigration =
+  | Record<string, LayoutMigrationAction>
   | {
       content: ContentMigrationAction;
     }
   | {
       root: RootMigrationAction;
     };
-export type MigrationRegistry = Migration[];
+export type LayoutMigrationRegistry = LayoutMigration[];
 
-const isContentMigration = (
-  migrationAction: unknown
-): migrationAction is ContentMigrationAction => {
+const isContentLayoutMigration = (
+  layoutMigrationAction: unknown
+): layoutMigrationAction is ContentMigrationAction => {
   return (
-    typeof migrationAction === "object" &&
-    migrationAction !== null &&
-    "transformation" in migrationAction
+    typeof layoutMigrationAction === "object" &&
+    layoutMigrationAction !== null &&
+    "transformation" in layoutMigrationAction
   );
 };
 
-const isRootMigration = (
-  migrationAction: unknown
-): migrationAction is RootMigrationAction => {
+const isRootLayoutMigration = (
+  layoutMigrationAction: unknown
+): layoutMigrationAction is RootMigrationAction => {
   return (
-    typeof migrationAction === "object" &&
-    migrationAction !== null &&
-    "propTransformation" in migrationAction
+    typeof layoutMigrationAction === "object" &&
+    layoutMigrationAction !== null &&
+    "propTransformation" in layoutMigrationAction
   );
 };
 
@@ -74,7 +74,7 @@ interface RootProps extends DefaultRootProps {
 
 export const migrateLayout = (
   data: Data<DefaultComponentProps, RootProps>,
-  migrationRegistry: MigrationRegistry = commonLayoutMigrationRegistry,
+  layoutMigrationRegistry: LayoutMigrationRegistry = commonLayoutMigrationRegistry,
   config: Config,
   streamDocument: StreamDocument
 ): Data => {
@@ -83,78 +83,83 @@ export const migrateLayout = (
   // Apply puck migrations
   data = migratePuck(data);
 
-  const migrationsToApply = migrationRegistry.slice(version);
-  if (migrationsToApply.length === 0) {
+  const layoutMigrationsToApply = layoutMigrationRegistry.slice(version);
+  if (layoutMigrationsToApply.length === 0) {
     return data;
   }
 
-  migrationsToApply.forEach((migration) => {
-    Object.entries(migration).forEach(([componentName, migrationAction]) => {
-      if (componentName === "content" && isContentMigration(migrationAction)) {
-        data.content = migrationAction.transformation(data.content);
-        return;
-      }
-
-      if (componentName === "root" && isRootMigration(migrationAction)) {
-        if (!data.root.props) {
-          data.root.props = {};
+  layoutMigrationsToApply.forEach((layoutMigration) => {
+    Object.entries(layoutMigration).forEach(
+      ([componentName, layoutMigrationAction]) => {
+        if (
+          componentName === "content" &&
+          isContentLayoutMigration(layoutMigrationAction)
+        ) {
+          data.content = layoutMigrationAction.transformation(data.content);
+          return;
         }
-        data.root.props = migrationAction.propTransformation(
-          data.root.props,
-          streamDocument
-        );
-        return;
-      }
 
-      const appliesToAllComponents = componentName === "*";
-      data = walkTree(data, config, (content) => {
-        switch (migrationAction.action) {
-          case "removed":
-            if (appliesToAllComponents) {
-              throw new Error(
-                "Cannot apply remove migration to all components."
-              );
-            }
-            return content.filter((c) => c.type !== componentName);
-          case "renamed":
-            if (appliesToAllComponents) {
-              throw new Error(
-                "Cannot apply rename migration to all components."
-              );
-            }
-            return content.map((c) => {
-              return {
-                ...c,
-                type:
-                  c.type === componentName ? migrationAction.newName : c.type,
-              };
-            });
-          case "updated":
-            return content.map((c) => {
-              if (!appliesToAllComponents && c.type !== componentName) {
-                return c;
+        if (
+          componentName === "root" &&
+          isRootLayoutMigration(layoutMigrationAction)
+        ) {
+          if (!data.root.props) {
+            data.root.props = {};
+          }
+          data.root.props = layoutMigrationAction.propTransformation(
+            data.root.props,
+            streamDocument
+          );
+          return;
+        }
+
+        const appliesToAllComponents = componentName === "*";
+        data = walkTree(data, config, (content) => {
+          switch (layoutMigrationAction.action) {
+            case "removed":
+              if (appliesToAllComponents) {
+                throw new Error(
+                  "Cannot apply remove layout migration to all components."
+                );
               }
-              return {
-                ...c,
-                props: migrationAction.propTransformation(
-                  c.props,
-                  streamDocument
-                ),
-              };
-            });
-        }
-      });
-    });
+              return content.filter((c) => c.type !== componentName);
+            case "renamed":
+              if (appliesToAllComponents) {
+                throw new Error(
+                  "Cannot apply rename layout migration to all components."
+                );
+              }
+              return content.map((c) => {
+                return {
+                  ...c,
+                  type:
+                    c.type === componentName
+                      ? layoutMigrationAction.newName
+                      : c.type,
+                };
+              });
+            case "updated":
+              return content.map((c) => {
+                if (!appliesToAllComponents && c.type !== componentName) {
+                  return c;
+                }
+                return {
+                  ...c,
+                  props: layoutMigrationAction.propTransformation(
+                    c.props,
+                    streamDocument
+                  ),
+                };
+              });
+          }
+        });
+      }
+    );
   });
 
   if (!data.root.props) {
     data.root.props = {};
   }
-  data.root.props.version = migrationRegistry.length;
+  data.root.props.version = layoutMigrationRegistry.length;
   return data;
 };
-
-/**
- * @deprecated Use migrateLayout instead.
- */
-export const migrate = migrateLayout;

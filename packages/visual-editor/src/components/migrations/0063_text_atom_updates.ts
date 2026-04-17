@@ -1,4 +1,4 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrate.ts";
 import { translatableToPlainText } from "../../utils/plainText.ts";
 
 const toPlainTextEntityField = (entityField: any) => {
@@ -53,7 +53,7 @@ const convertToTextSlot = (
   };
 };
 
-export const textAtomUpdates: Migration = {
+export const textAtomUpdates: LayoutMigration = {
   InsightCard: {
     action: "updated",
     propTransformation: (props) => {

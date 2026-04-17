@@ -1,6 +1,6 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrate.ts";
 
-export const updateLinksAlignmentMigration: Migration = {
+export const updateLinksAlignmentMigration: LayoutMigration = {
   ExpandedFooter: {
     action: "updated",
     propTransformation: ({ styles, ...props }) => {

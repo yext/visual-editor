@@ -13,8 +13,8 @@ import {
   waitFor,
 } from "@testing-library/react";
 import { injectTranslations } from "../utils/i18n/components.ts";
-import { migrate } from "../utils/migrate.ts";
-import { migrationRegistry } from "./migrations/migrationRegistry.ts";
+import { migrateLayout } from "../utils/migrate.ts";
+import { layoutMigrationRegistry } from "./migrations/migrationRegistry.ts";
 import { VisualEditorProvider } from "../utils/VisualEditorProvider.tsx";
 import { LocatorComponent } from "./Locator.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
@@ -314,7 +314,7 @@ const tests: ComponentTest[] = [
     name: "latest version default props with empty document",
     document: {},
     props: { ...LocatorComponent.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "latest version default props",
@@ -344,7 +344,7 @@ const tests: ComponentTest[] = [
       }),
     },
     props: { ...LocatorComponent.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "latest version multi-pageset default props",
@@ -411,7 +411,7 @@ const tests: ComponentTest[] = [
       }),
     },
     props: { ...LocatorComponent.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "latest version non-default props",
@@ -531,7 +531,7 @@ const tests: ComponentTest[] = [
         },
       ],
     },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "version 24 with filters",
@@ -1281,9 +1281,9 @@ describe("Locator", async () => {
   };
 
   it("flattens wrapped result card selector fields during migration", () => {
-    const data = migrate(
+    const data = migrateLayout(
       wrappedSelectorValuesMigrationFixture.data as any,
-      migrationRegistry,
+      layoutMigrationRegistry,
       puckConfig,
       wrappedSelectorValuesMigrationFixture.document as any
     );
@@ -1318,7 +1318,7 @@ describe("Locator", async () => {
       version,
       viewport: { width, height, name: viewportName },
     }) => {
-      let data = migrate(
+      let data = migrateLayout(
         {
           root: {
             props: {
@@ -1332,7 +1332,7 @@ describe("Locator", async () => {
             },
           ],
         },
-        migrationRegistry,
+        layoutMigrationRegistry,
         puckConfig,
         document
       );

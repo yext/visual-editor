@@ -1,6 +1,6 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrate.ts";
 
-export const refactorContentBlocks: Migration = {
+export const refactorContentBlocks: LayoutMigration = {
   Address: {
     action: "updated",
     propTransformation: ({ address, showGetDirections, ...props }) => {

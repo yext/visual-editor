@@ -1,6 +1,6 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrate.ts";
 
-export const adjustStructFields: Migration = {
+export const adjustStructFields: LayoutMigration = {
   PromoSection: {
     action: "updated",
     propTransformation: (props) => {

@@ -1,4 +1,4 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrate.ts";
 
 const getFlattenedFieldId = (field: unknown): string | undefined => {
   if (typeof field === "string") {
@@ -34,7 +34,7 @@ const flattenFieldValue = (
     : { ...section, field: flattenedFieldId };
 };
 
-export const flattenLocatorResultCardSingleSelectFields: Migration = {
+export const flattenLocatorResultCardSingleSelectFields: LayoutMigration = {
   Locator: {
     action: "updated",
     propTransformation: (props) => {

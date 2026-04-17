@@ -1,9 +1,9 @@
 import { FAQSectionType } from "../../types/types.ts";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrate.ts";
 
-export const simplifyFaqSection: Migration = {
+export const simplifyFaqSection: LayoutMigration = {
   FAQSection: {
     action: "updated",
     propTransformation: (props, streamDocument) => {

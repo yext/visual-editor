@@ -1,6 +1,6 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrate.ts";
 
-export const nearbyLocationSlots: Migration = {
+export const nearbyLocationSlots: LayoutMigration = {
   NearbyLocationsSection: {
     action: "updated",
     propTransformation: (props) => {

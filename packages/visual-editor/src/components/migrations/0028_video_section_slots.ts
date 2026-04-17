@@ -1,6 +1,6 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrate.ts";
 
-export const videoSectionSlots: Migration = {
+export const videoSectionSlots: LayoutMigration = {
   VideoSection: {
     action: "updated",
     propTransformation: (props) => {

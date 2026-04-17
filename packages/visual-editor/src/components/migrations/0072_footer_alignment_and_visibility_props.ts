@@ -1,4 +1,4 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrate.ts";
 
 const hasOwn = (obj: object, key: string) =>
   Object.prototype.hasOwnProperty.call(obj, key);
@@ -138,7 +138,7 @@ const migrateExpandedFooterSecondaryFooterShow = (
   };
 };
 
-export const footerAlignmentAndVisibilityPropsMigration: Migration = {
+export const footerAlignmentAndVisibilityPropsMigration: LayoutMigration = {
   FooterLinksSlot: {
     action: "updated",
     propTransformation: migrateLegacyAlignment,

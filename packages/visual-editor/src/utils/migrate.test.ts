@@ -1,15 +1,19 @@
 import { describe, expect, it } from "vitest";
-import { Migration, MigrationRegistry, migrate } from "./migrate.ts";
+import {
+  LayoutMigration,
+  LayoutMigrationRegistry,
+  migrateLayout,
+} from "./migrate.ts";
 import { addIdToSchema } from "../components/migrations/0023_add_id_to_schema.ts";
 import { updateSchemaIdAnchorFormat } from "../components/migrations/0069_update_schema_id_anchor_format.ts";
 import { themeColorPropertyKeyMigration } from "../components/migrations/0071_theme_color_property_keys.ts";
 import { mainContentWrapperMigration } from "../components/migrations/0073_main_content_wrapper.ts";
 
-describe("migrate", () => {
+describe("migrateLayout", () => {
   it("successfully applies a migration", async () => {
-    const migratedData = migrate(
+    const migratedData = migrateLayout(
       exampleDataBefore,
-      migrationRegistry,
+      layoutMigrationRegistry,
       {
         components: {},
       },
@@ -19,7 +23,7 @@ describe("migrate", () => {
   });
 
   it("successfully applies root migration", async () => {
-    const migratedData = migrate(
+    const migratedData = migrateLayout(
       exampleRootDataBefore,
       [addIdToSchema],
       {
@@ -32,7 +36,7 @@ describe("migrate", () => {
   });
 
   it("wraps header and footer siblings around a new MainContent component", async () => {
-    const migratedData = migrate(
+    const migratedData = migrateLayout(
       {
         root: {
           props: {
@@ -75,7 +79,7 @@ describe("migrate", () => {
   });
 
   it("wraps locator content in MainContent when there is no header or footer", async () => {
-    const migratedData = migrate(
+    const migratedData = migrateLayout(
       {
         root: {
           props: {
@@ -112,7 +116,7 @@ describe("migrate", () => {
   });
 
   it("wraps all top-level body components in MainContent when there is no page chrome", async () => {
-    const migratedData = migrate(
+    const migratedData = migrateLayout(
       {
         root: {
           props: {
@@ -155,7 +159,7 @@ describe("migrate", () => {
   });
 
   it("keeps non-edge headers inside MainContent to preserve content order", async () => {
-    const migratedData = migrate(
+    const migratedData = migrateLayout(
       {
         root: {
           props: {
@@ -200,7 +204,7 @@ describe("migrate", () => {
   });
 
   it("keeps trailing custom code outside MainContent without moving it ahead of the footer", async () => {
-    const migratedData = migrate(
+    const migratedData = migrateLayout(
       {
         root: {
           props: {
@@ -245,7 +249,7 @@ describe("migrate", () => {
   });
 
   it("successfully applies migration based on document data", async () => {
-    const migratedData = migrate(
+    const migratedData = migrateLayout(
       exampleBasicDataBefore,
       [
         {
@@ -267,7 +271,7 @@ describe("migrate", () => {
   });
 
   it("recursively migrates legacy ThemeColor keys while preserving non-legacy textColor values", async () => {
-    const migratedData = migrate(
+    const migratedData = migrateLayout(
       {
         root: {
           props: {
@@ -430,7 +434,7 @@ describe("migrate", () => {
       content: [],
       zones: {},
     } as any;
-    const migratedData = migrate(
+    const migratedData = migrateLayout(
       data,
       [updateSchemaIdAnchorFormat],
       {
@@ -463,7 +467,7 @@ describe("migrate", () => {
       content: [],
       zones: {},
     } as any;
-    const migratedData = migrate(
+    const migratedData = migrateLayout(
       data,
       [updateSchemaIdAnchorFormat],
       {
@@ -478,7 +482,7 @@ describe("migrate", () => {
   });
 });
 
-const migration: Migration = {
+const layoutMigration: LayoutMigration = {
   CoreInfoSection: {
     action: "removed",
   },
@@ -496,16 +500,16 @@ const migration: Migration = {
   },
 };
 
-const alreadyAppliedMigration: Migration = {
+const alreadyAppliedLayoutMigration: LayoutMigration = {
   HeroSection: {
     action: "renamed",
     newName: "RenamedSection",
   },
 };
 
-export const migrationRegistry: MigrationRegistry = [
-  alreadyAppliedMigration,
-  migration,
+export const layoutMigrationRegistry: LayoutMigrationRegistry = [
+  alreadyAppliedLayoutMigration,
+  layoutMigration,
 ];
 
 const exampleDataBefore = {

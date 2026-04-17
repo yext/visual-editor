@@ -7,8 +7,8 @@ import {
 } from "../../testing/componentTests.setup.ts";
 import { render as reactRender, waitFor } from "@testing-library/react";
 import { EventSection } from "./EventSection.tsx";
-import { migrate } from "../../../utils/migrate.ts";
-import { migrationRegistry } from "../../migrations/migrationRegistry.ts";
+import { migrateLayout } from "../../../utils/migrate.ts";
+import { layoutMigrationRegistry } from "../../migrations/migrationRegistry.ts";
 import { SlotsCategoryComponents } from "../../categories/SlotsCategory.tsx";
 import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
@@ -668,13 +668,13 @@ const tests: ComponentTest[] = [
     name: "default props with empty document",
     document: {},
     props: { ...EventSection.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "default props with document data",
     document: { c_events: eventsData },
     props: { ...EventSection.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "version 26 props with constant values",
@@ -2536,7 +2536,7 @@ describe("EventSection", async () => {
       version,
       viewport: { width, height, name: viewportName },
     }) => {
-      let data = migrate(
+      let data = migrateLayout(
         {
           root: {
             props: {
@@ -2550,7 +2550,7 @@ describe("EventSection", async () => {
             },
           ],
         },
-        migrationRegistry,
+        layoutMigrationRegistry,
         puckConfig,
         document
       );

@@ -1,4 +1,4 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrate.ts";
 
 // Helper function to add missing CTA properties
 const addMissingCTAProperties = (cta: any) => {
@@ -36,7 +36,7 @@ const processArrayWithCTAs = (data: any, arrayKey?: string) => {
   return data;
 };
 
-export const migrateCTAStructures: Migration = {
+export const migrateCTAStructures: LayoutMigration = {
   HeroSection: {
     action: "updated",
     propTransformation: (props) => {

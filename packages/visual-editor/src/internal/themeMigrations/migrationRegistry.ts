@@ -4,5 +4,3 @@ import { removeCustomFontPreloadsMigration } from "./0001_remove_custom_font_pre
 export const themeMigrationRegistry: ThemeMigrationRegistry = [
   removeCustomFontPreloadsMigration,
 ];
-
-export const migrationRegistry = themeMigrationRegistry;

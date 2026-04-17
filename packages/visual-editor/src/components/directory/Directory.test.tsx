@@ -8,8 +8,8 @@ import {
 } from ".././testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import { Directory } from "./Directory.tsx";
-import { migrate } from "../../utils/migrate.ts";
-import { migrationRegistry } from "../migrations/migrationRegistry.ts";
+import { migrateLayout } from "../../utils/migrate.ts";
+import { layoutMigrationRegistry } from "../migrations/migrationRegistry.ts";
 import { SlotsCategoryComponents } from "../categories/SlotsCategory.tsx";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
@@ -353,31 +353,31 @@ const tests: ComponentTest[] = [
     name: "default props - no document",
     document: {},
     props: { ...Directory.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "default props - root - document data",
     document: rootDocument,
     props: { ...Directory.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "default props - country - document data",
     document: countryDocument,
     props: { ...Directory.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "default props - region - document data",
     document: regionDocument,
     props: { ...Directory.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "default props - city list - document data",
     document: cityDocument,
     props: { ...Directory.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "version 8 - directory list - non-default props",
@@ -671,7 +671,7 @@ describe("Directory", async () => {
       version,
       viewport: { width, height, name: viewportName },
     }) => {
-      let data = migrate(
+      let data = migrateLayout(
         {
           root: {
             props: {
@@ -685,7 +685,7 @@ describe("Directory", async () => {
             },
           ],
         },
-        migrationRegistry,
+        layoutMigrationRegistry,
         puckConfig,
         document
       );

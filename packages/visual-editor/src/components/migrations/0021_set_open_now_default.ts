@@ -1,6 +1,6 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrate.ts";
 
-export const setOpenNowDefault: Migration = {
+export const setOpenNowDefault: LayoutMigration = {
   LocatorComponent: {
     action: "updated",
     propTransformation: (props) => {
