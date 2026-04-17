@@ -1,5 +1,5 @@
 import { Config, Render } from "@puckeditor/core";
-import { render as reactRender, waitFor } from "@testing-library/react";
+import { render as reactRender, screen, waitFor } from "@testing-library/react";
 import { page } from "@vitest/browser/context";
 import { backgroundColors } from "../../utils/themeConfigOptions.ts";
 import { migrate } from "../../utils/migrate.ts";
@@ -2206,4 +2206,83 @@ describe("Grid", async () => {
       }
     }
   );
+
+  it("uses configured readable secondary CTA colors inside a dark grid CTA Group", () => {
+    const document = {
+      locale: "en",
+    };
+    const data = migrate(
+      {
+        root: { props: { version: 71 } },
+        content: [
+          {
+            type: "Grid",
+            props: {
+              columns: 1,
+              backgroundColor: {
+                selectedColor: "[#341A1F]",
+                contrastingColor: "white",
+              },
+              slots: [
+                {
+                  Column: [
+                    {
+                      type: "CTAGroup",
+                      props: {
+                        buttons: [
+                          {
+                            entityField: {
+                              field: "",
+                              constantValueEnabled: true,
+                              constantValue: {
+                                ctaType: "textAndLink",
+                                label: {
+                                  en: "Outline CTA",
+                                  hasLocalizedValue: "true",
+                                },
+                                link: "#",
+                                linkType: "URL",
+                              },
+                            },
+                            normalizeLink: false,
+                            variant: "secondary",
+                            color: {
+                              selectedColor: "[#FF6D66]",
+                              contrastingColor: "black",
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+                { Column: [] },
+                { Column: [] },
+              ],
+              liveVisibility: true,
+              analytics: {
+                scope: "gridSection",
+              },
+              align: "left",
+            },
+          },
+        ],
+      },
+      migrationRegistry,
+      puckConfig,
+      document
+    );
+
+    reactRender(
+      <VisualEditorProvider templateProps={{ document }}>
+        <Render config={puckConfig} data={data} />
+      </VisualEditorProvider>
+    );
+
+    const cta = screen.getByRole("link", { name: "Outline CTA" });
+    const styles = window.getComputedStyle(cta);
+
+    expect(styles.color).toBe("rgb(255, 109, 102)");
+    expect(styles.borderColor).toBe("rgb(255, 109, 102)");
+  });
 });

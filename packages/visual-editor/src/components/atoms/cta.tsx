@@ -12,7 +12,12 @@ import { FaAngleRight, FaExternalLinkAlt } from "react-icons/fa";
 import { getDirections } from "@yext/pages-components";
 import { PresetImageType, FOOD_DELIVERY_SERVICES } from "../../types/types.ts";
 import { presetImageIcons } from "../../utils/presetImageIcons.tsx";
-import { getThemeColorCssValue } from "../../utils/colors.ts";
+import {
+  convertComputedStyleColorToHex,
+  getThemeColorCssValue,
+  hexToRGB,
+  isColorContrastWcagCompliant,
+} from "../../utils/colors.ts";
 
 const LINK_TEXT_TRANSFORM_CSS_VAR =
   "var(--textTransform-link-textTransform)" as React.CSSProperties["textTransform"];
@@ -97,6 +102,64 @@ const presetImageTypeToName = (presetImageType: PresetImageType) => {
     default:
       return presetImageType;
   }
+};
+
+const resolveCssColorToHex = (cssValue?: string): string | undefined => {
+  if (!cssValue) {
+    return undefined;
+  }
+
+  if (cssValue === "white") {
+    return "#FFFFFF";
+  }
+
+  if (cssValue === "black") {
+    return "#000000";
+  }
+
+  const normalizedHex = cssValue.toUpperCase();
+  if (/^#[0-9A-F]{6}$/.test(normalizedHex)) {
+    return normalizedHex;
+  }
+
+  if (/^#[0-9A-F]{3}$/.test(normalizedHex)) {
+    return `#${normalizedHex[1]}${normalizedHex[1]}${normalizedHex[2]}${normalizedHex[2]}${normalizedHex[3]}${normalizedHex[3]}`;
+  }
+
+  if (typeof window === "undefined") {
+    return undefined;
+  }
+
+  const themeRoot =
+    document.getElementsByClassName("components")?.[0] ??
+    document.body ??
+    document.documentElement;
+
+  const element = document.createElement("div");
+  element.style.color = cssValue;
+  themeRoot.appendChild(element);
+
+  const resolvedHex =
+    convertComputedStyleColorToHex(window.getComputedStyle(element).color) ||
+    undefined;
+
+  element.remove();
+
+  return resolvedHex;
+};
+
+const doesColorMeetContrastRequirement = (
+  foregroundHex?: string,
+  backgroundHex?: string
+): boolean => {
+  const foregroundRgb = foregroundHex ? hexToRGB(foregroundHex) : undefined;
+  const backgroundRgb = backgroundHex ? hexToRGB(backgroundHex) : undefined;
+
+  if (!foregroundRgb || !backgroundRgb) {
+    return false;
+  }
+
+  return isColorContrastWcagCompliant(foregroundRgb, backgroundRgb, 12, 400);
 };
 
 // useResolvedCtaProps resolves the CTA props based on the current context and ctaType
@@ -245,7 +308,25 @@ export const CTA = (props: CTAProps) => {
   const { t } = useTranslation();
   const resolvedProps = useResolvedCtaProps(props);
   const isButton = actionType === "button";
-  const isDarkBackground = useBackground()?.isDarkColor;
+  const background = useBackground();
+  const isDarkBackground = background?.isDarkColor;
+  const resolvedCtaColorHex = React.useMemo(
+    () => resolveCssColorToHex(getThemeColorCssValue(color?.selectedColor)),
+    [color?.selectedColor]
+  );
+  const resolvedBackgroundColorHex = React.useMemo(
+    () =>
+      resolveCssColorToHex(getThemeColorCssValue(background?.selectedColor)),
+    [background?.selectedColor]
+  );
+  const shouldUseConfiguredSecondaryColor =
+    !!color?.selectedColor &&
+    !!resolvedCtaColorHex &&
+    (!isDarkBackground ||
+      doesColorMeetContrastRequirement(
+        resolvedCtaColorHex,
+        resolvedBackgroundColorHex
+      ));
   const dynamicStyle: React.CSSProperties = (() => {
     const bg = getThemeColorCssValue(color?.selectedColor);
     const textColor = getThemeColorCssValue(color?.contrastingColor);
@@ -256,6 +337,13 @@ export const CTA = (props: CTAProps) => {
         backgroundColor: bg,
         color: textColor,
         borderColor: border,
+      };
+    }
+
+    if (variant === "secondary" && shouldUseConfiguredSecondaryColor) {
+      return {
+        borderColor: border,
+        color: border,
       };
     }
 

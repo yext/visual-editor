@@ -31,6 +31,22 @@ const getThemeValueFromDocument = (
   return undefined;
 };
 
+const getThemeValueFromPublishedTheme = (
+  variableName: string,
+  streamDocument?: StreamDocument | Record<string, any>
+): string | undefined => {
+  if (!streamDocument?.__?.theme) {
+    return undefined;
+  }
+
+  const publishedValue = JSON.parse(streamDocument.__.theme)?.[variableName];
+  if (!publishedValue) {
+    return undefined;
+  }
+
+  return String(publishedValue).replace("!important", "").trim();
+};
+
 /**
  * Reads a theme CSS variable value in both editor and page-generation contexts.
  */
@@ -53,13 +69,14 @@ export const getThemeValue = (
           return value;
         }
       }
-    } else if (streamDocument?.__?.theme) {
-      const publishedValue = JSON.parse(streamDocument.__.theme)?.[
-        variableName
-      ];
-      if (publishedValue) {
-        return String(publishedValue).trim();
-      }
+    }
+
+    const publishedValue = getThemeValueFromPublishedTheme(
+      variableName,
+      streamDocument
+    );
+    if (publishedValue) {
+      return publishedValue;
     }
   } catch {
     // return undefined and let callers apply fallback behavior
