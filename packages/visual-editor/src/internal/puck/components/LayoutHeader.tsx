@@ -41,7 +41,6 @@ import {
   type ErrorSource,
 } from "../../../contexts/ErrorContext.tsx";
 import { getPublishErrorMessage } from "../../../utils/publishErrors.ts";
-import { getPublishTooltipMessageFromHeadDeployStatus } from "../../utils/getPublishTooltipMessageFromHeadDeployStatus.ts";
 
 const usePuck = createUsePuck();
 const devLogger = new DevLogger();
@@ -125,15 +124,17 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
     }
   };
 
+  const deploymentInProgress = templateMetadata.deploymentInProgress;
   const publishDisabled =
-    histories.length === 1 ||
-    hasErrors ||
-    templateMetadata.headDeployStatus !== "ACTIVE";
-  const publishTooltipMessage =
-    (hasErrors ?? getPublishErrorMessage(errorSources, errorDetails)) ||
-    getPublishTooltipMessageFromHeadDeployStatus(
-      templateMetadata.headDeployStatus
-    );
+    histories.length === 1 || hasErrors || deploymentInProgress;
+  const publishTooltipMessage = deploymentInProgress
+    ? pt(
+        "publishBlocked.deploymentInProgress",
+        "Update is disabled while deployment is in progress"
+      )
+    : hasErrors
+      ? getPublishErrorMessage(errorSources, errorDetails)
+      : undefined;
 
   return (
     <>

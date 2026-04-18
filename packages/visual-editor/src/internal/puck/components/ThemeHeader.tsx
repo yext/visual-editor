@@ -13,14 +13,12 @@ import { RotateCcw, RotateCw } from "lucide-react";
 import { Separator } from "@radix-ui/react-separator";
 import { LocalDevOverrideButtons } from "./LayoutHeader.tsx";
 import { pt } from "../../../utils/i18n/platform.ts";
-import { HeadDeployStatus } from "../../types/templateMetadata.ts";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/Tooltip.tsx";
-import { getPublishTooltipMessageFromHeadDeployStatus } from "../../utils/getPublishTooltipMessageFromHeadDeployStatus.ts";
 
 const SIDEBAR_HIDE_STYLE_ID = "yext-theme-hide-sidebar-breadcrumbs";
 const usePuck = createUsePuck();
@@ -37,7 +35,7 @@ type ThemeHeaderProps = {
   setClearLocalChangesModalOpen: (newValue: boolean) => void;
   totalEntityCount: number;
   localDev: boolean;
-  headDeployStatus: HeadDeployStatus;
+  deploymentInProgress: boolean;
   customFonts?: FontRegistry;
 };
 
@@ -54,7 +52,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
     setClearLocalChangesModalOpen,
     totalEntityCount,
     localDev,
-    headDeployStatus,
+    deploymentInProgress,
     customFonts,
   } = props;
 
@@ -152,10 +150,13 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
   }, []);
 
   const publishDisabled =
-    themeHistories?.histories?.length === 1 || headDeployStatus !== "ACTIVE";
-
-  const publishTooltipMessage =
-    getPublishTooltipMessageFromHeadDeployStatus(headDeployStatus);
+    themeHistories?.histories?.length === 1 || deploymentInProgress;
+  const publishTooltipMessage = deploymentInProgress
+    ? pt(
+        "publishBlocked.deploymentInProgress",
+        "Update is disabled while deployment is in progress"
+      )
+    : undefined;
 
   return (
     <header className="puck-header">

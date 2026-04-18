@@ -208,7 +208,7 @@ export const InternalThemeEditor = ({
               setClearLocalChangesModalOpen={setClearLocalChangesModalOpen}
               totalEntityCount={templateMetadata.totalEntityCount}
               localDev={localDev}
-              headDeployStatus={templateMetadata.headDeployStatus}
+              deploymentInProgress={templateMetadata.deploymentInProgress}
               customFonts={templateMetadata.customFonts}
             />
           ),

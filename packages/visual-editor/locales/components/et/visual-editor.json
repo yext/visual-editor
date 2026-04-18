@@ -31,6 +31,7 @@
   "filter": "Filter",
   "findALocation": "Leidke asukoht",
   "friday": "Reede",
+  "generatingAIAnswer": "AI vastuse genereerimine...",
   "getDirections": "Hankige juhiseid",
   "getDirectionsForLocation": "Hankige juhised {{address}}",
   "heroBanner": "Kangelasriba",
@@ -42,6 +43,7 @@
   "kilometer_one": "kilomeeter",
   "kilometer_other": "kilomeetrit",
   "kilometer_zero": "kilomeetrit",
+  "learnMore": "Lisateavet",
   "loadingMap": "Kaardi laadimine ...",
   "loadingNearbyLocations": "Lähedal asuvate asukohtade laadimine ...",
   "locationWithCount_one": "{{count}} asukoht",
@@ -57,6 +59,8 @@
   "mile_other": "miili",
   "mile_zero": "miil",
   "monday": "Esmaspäev",
+  "more": "Rohkem",
+  "noLinkAvailable": "linki pole saadaval",
   "noResultsFoundForThisArea": "Selle piirkonna kohta tulemusi ei leitud",
   "open24Hours": "Avatud 24 tundi",
   "openHeaderMenu": "Avatud päisemenüü",
@@ -96,6 +100,8 @@
     "xLink": "Jälgi meid X-is (Twitter)",
     "youtube": "Tellige meie YouTube'i kanal"
   },
+  "sources": "Allikad",
+  "staticMapEmptyStateAddApiKey": "Lisage oma kaardi eelvaate kuvamiseks API-võti",
   "sunday": "Pühapäev",
   "temporarilyClosed": "Ajutiselt suletud",
   "thursday": "Neljapäev",
@@ -105,5 +111,6 @@
   "useOurLocatorToFindALocationNearYou": "Kasutage meie asukoha leidmiseks meie asukohta",
   "visitPage": "Külastage leht",
   "visitPageForName": "Külastage lehte {{name}} jaoks",
+  "voiceSearch": "Häälotsing",
   "wednesday": "Kolmapäev"
 }

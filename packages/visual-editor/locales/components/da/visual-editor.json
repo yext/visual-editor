@@ -31,6 +31,7 @@
   "filter": "Filter",
   "findALocation": "Find en placering",
   "friday": "fredag",
+  "generatingAIAnswer": "Genererer AI-svar...",
   "getDirections": "Få rutevejledning",
   "getDirectionsForLocation": "Få rutevejledning til {{address}}",
   "heroBanner": "Heltebanner",
@@ -42,6 +43,7 @@
   "kilometer_one": "kilometer",
   "kilometer_other": "kilometer",
   "kilometer_zero": "kilometer",
+  "learnMore": "Få flere oplysninger",
   "loadingMap": "Indlæsningskort ...",
   "loadingNearbyLocations": "Indlæser placeringer i nærheden ...",
   "locationWithCount_one": "{{count}} placering",
@@ -57,6 +59,8 @@
   "mile_other": "mil",
   "mile_zero": "mil",
   "monday": "mandag",
+  "more": "Mere",
+  "noLinkAvailable": "intet link tilgængeligt",
   "noResultsFoundForThisArea": "Ingen resultater fundet for dette område",
   "open24Hours": "Åben 24 timer",
   "openHeaderMenu": "Åben header -menu",
@@ -96,6 +100,8 @@
     "xLink": "Følg os på X (Twitter)",
     "youtube": "Abonner på vores YouTube-kanal"
   },
+  "sources": "Kilder",
+  "staticMapEmptyStateAddApiKey": "Tilføj en API-nøgle for at få vist dit kort",
   "sunday": "søndag",
   "temporarilyClosed": "Midlertidigt lukket",
   "thursday": "torsdag",
@@ -105,5 +111,6 @@
   "useOurLocatorToFindALocationNearYou": "Brug vores Locator til at finde en placering i nærheden af ​​dig",
   "visitPage": "Besøg side",
   "visitPageForName": "Besøg siden for {{name}}",
+  "voiceSearch": "Stemmesøgning",
   "wednesday": "onsdag"
 }

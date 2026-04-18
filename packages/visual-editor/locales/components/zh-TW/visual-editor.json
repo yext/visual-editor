@@ -31,6 +31,7 @@
   "filter": "篩選",
   "findALocation": "找到一個位置",
   "friday": "星期五",
+  "generatingAIAnswer": "正在生成 AI 答案...",
   "getDirections": "獲取指示",
   "getDirectionsForLocation": "取得 {{address}} 的路線",
   "heroBanner": "英雄橫幅",
@@ -42,6 +43,7 @@
   "kilometer_one": "公里",
   "kilometer_other": "公里",
   "kilometer_zero": "公里",
+  "learnMore": "了解更多",
   "loadingMap": "加載地圖...",
   "loadingNearbyLocations": "在附近的位置加載...",
   "locationWithCount_one": "{{count}} 個位置",
@@ -57,6 +59,8 @@
   "mile_other": "英里",
   "mile_zero": "英里",
   "monday": "週一",
+  "more": "更多的",
+  "noLinkAvailable": "沒有可用的連結",
   "noResultsFoundForThisArea": "該區域找不到結果",
   "open24Hours": "打開24小時",
   "openHeaderMenu": "打開標題菜單",
@@ -96,6 +100,8 @@
     "xLink": "在 X (Twitter) 上關注我們",
     "youtube": "訂閱我們的 YouTube 頻道"
   },
+  "sources": "來源",
+  "staticMapEmptyStateAddApiKey": "添加 API 密鑰以預覽地圖",
   "sunday": "星期日",
   "temporarilyClosed": "暫時關閉",
   "thursday": "週四",
@@ -105,5 +111,6 @@
   "useOurLocatorToFindALocationNearYou": "使用我們的定位器找到您附近的位置",
   "visitPage": "訪問頁面",
   "visitPageForName": "造訪 {{name}} 頁面",
+  "voiceSearch": "語音搜尋",
   "wednesday": "週三"
 }
