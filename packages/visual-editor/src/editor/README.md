@@ -268,7 +268,12 @@ YextField(label: MsgString, config: YextFieldConfig): Field<any>
 ### Usage
 
 ```tsx
-import { YextField, msg, YextFields, YextComponentConfig } from "@yext/visual-editor";
+import {
+  YextField,
+  msg,
+  YextFields,
+  YextComponentConfig,
+} from "@yext/visual-editor";
 
 const myComponentFields: YextFields<myComponentProps> = {
   address: YextField<any, AddressType>(msg("fields.address", "Address"), {

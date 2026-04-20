@@ -1,4 +1,8 @@
-import type { ComponentConfig, DefaultComponentProps, Fields } from "@puckeditor/core";
+import type {
+  ComponentConfig,
+  DefaultComponentProps,
+  Fields,
+} from "@puckeditor/core";
 import {
   BasicSelectorField,
   BasicSelectorFieldOverride,
