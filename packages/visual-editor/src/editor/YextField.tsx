@@ -62,7 +62,10 @@ type YextFieldMap<Props extends Record<string, any>> = {
 
 type YextArrayFieldConfig<
   Props extends { [key: string]: any }[] = { [key: string]: any }[],
-> = YextBaseField & Omit<ArrayField<Props, YextPuckField>, keyof BaseField>;
+> = YextBaseField &
+  Omit<ArrayField<Props, YextPuckField>, keyof BaseField | "arrayFields"> & {
+  arrayFields: YextFieldMap<Props[0]>;
+};
 
 export type YextArrayField<
   Props extends { [key: string]: any }[] = { [key: string]: any }[],
@@ -75,7 +78,10 @@ type YextNumberField = YextBaseField & Omit<NumberField, keyof BaseField>;
 
 type YextObjectFieldConfig<
   Props extends { [key: string]: any } = { [key: string]: any },
-> = YextBaseField & Omit<ObjectField<Props, YextPuckField>, keyof BaseField>;
+> = YextBaseField &
+  Omit<ObjectField<Props, YextPuckField>, keyof BaseField | "objectFields"> & {
+  objectFields: YextFieldMap<Props>;
+};
 
 export type YextObjectField<
   Props extends { [key: string]: any } = { [key: string]: any },
@@ -85,6 +91,7 @@ export type YextObjectField<
 
 export type YextFieldDefinition<ValueType = any> =
   | Field<ValueType, YextPuckField>
+  | Field<NonNullable<ValueType>, YextPuckField>
   | YextPuckField
   | (ValueType extends Record<string, any>[]
       ? YextArrayField<ValueType>

@@ -172,7 +172,7 @@ export const FooterUtilityImagesSlot: YextComponentConfig<FooterUtilityImagesSlo
         type: "object",
         objectFields: {
           width: ImageStylingFields.width,
-          aspectRatio: ImageStylingFields.aspectRatio as any,
+          aspectRatio: ImageStylingFields.aspectRatio,
         },
       }),
     },

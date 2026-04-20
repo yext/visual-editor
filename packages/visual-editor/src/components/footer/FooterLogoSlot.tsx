@@ -113,7 +113,7 @@ export const FooterLogoSlot: YextComponentConfig<FooterLogoSlotProps> = {
       type: "object",
       objectFields: {
         width: ImageStylingFields.width,
-        aspectRatio: ImageStylingFields.aspectRatio as any,
+        aspectRatio: ImageStylingFields.aspectRatio,
       },
     }),
   },
