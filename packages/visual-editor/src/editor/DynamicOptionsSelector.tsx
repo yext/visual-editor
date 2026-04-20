@@ -1,4 +1,4 @@
-import { ArrayField, UiState, Field } from "@puckeditor/core";
+import { UiState, Field } from "@puckeditor/core";
 import { YextAutoField } from "../fields/YextAutoField.tsx";
 import { pt } from "../utils/i18n/platform.ts";
 import { YextArrayField } from "./YextField.tsx";

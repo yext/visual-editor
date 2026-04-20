@@ -24,7 +24,7 @@ const wrapNestedOverrideField = (
   return {
     type: "custom",
     visible: field.visible,
-    render: ({ field: _field, ...props }) => (
+    render: ({ field: _, ...props }) => (
       <FieldOverride field={field} {...(props as any)} />
     ),
   };
