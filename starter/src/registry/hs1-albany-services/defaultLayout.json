@@ -1,0 +1,564 @@
+{
+  "root": {
+    "props": {
+      "title": {
+        "field": "name",
+        "constantValue": "Hs1 Albany Services Pages",
+        "constantValueEnabled": false
+      },
+      "description": {
+        "field": "description",
+        "constantValue": "",
+        "constantValueEnabled": false
+      }
+    }
+  },
+  "content": [
+    {
+      "type": "Hs1AlbanyServicesHeaderSection",
+      "props": {
+        "id": "Hs1AlbanyServicesHeaderSection-6f627767-d881-4a8b-a7c4-76430cdc646a",
+        "logoImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://cdcssl.ibsrv.net/ibimg/smb/450x292_80/webmgr/1o/u/o/brooklyn/sunnysmileslogo.png.webp?60c03c38fcebb177765418932264c8d5",
+            "width": 450,
+            "height": 292
+          },
+          "constantValueEnabled": true
+        },
+        "logoTitle": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "SUNNY SMILES",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 400,
+          "textTransform": "uppercase"
+        },
+        "primaryLinks": [
+          {
+            "label": "Home",
+            "link": "https://www.ofc-albany.com"
+          },
+          {
+            "label": "Staff",
+            "link": "https://www.ofc-albany.com/staff"
+          },
+          {
+            "label": "Office",
+            "link": "https://www.ofc-albany.com/our-locations"
+          },
+          {
+            "label": "Services",
+            "link": "https://www.ofc-albany.com/dental-services"
+          },
+          {
+            "label": "New Patients",
+            "link": "https://www.ofc-albany.com/new-patients"
+          }
+        ],
+        "moreLabel": "More",
+        "moreLinks": [
+          {
+            "label": "Contact Us",
+            "link": "https://www.ofc-albany.com/contact",
+            "childLinks": []
+          },
+          {
+            "label": "Appointment Request",
+            "link": "https://www.ofc-albany.com/appointment",
+            "childLinks": []
+          },
+          {
+            "label": "Testimonials",
+            "link": "https://www.ofc-albany.com/testimonials",
+            "childLinks": []
+          },
+          {
+            "label": "Smile Gallery",
+            "link": "https://www.ofc-albany.com/gallery",
+            "childLinks": []
+          },
+          {
+            "label": "Blog",
+            "link": "https://www.ofc-albany.com/blog",
+            "childLinks": []
+          },
+          {
+            "label": "Patient Education",
+            "link": "https://www.ofc-albany.com/articles/premium_education",
+            "childLinks": [
+              {
+                "label": "Cosmetic & General Dentistry",
+                "link": "https://www.ofc-albany.com/articles/premium_education/category/47361"
+              },
+              {
+                "label": "Emergency Care",
+                "link": "https://www.ofc-albany.com/articles/premium_education/category/47362"
+              },
+              {
+                "label": "Endodontics",
+                "link": "https://www.ofc-albany.com/articles/premium_education/category/47363"
+              },
+              {
+                "label": "Implant Dentistry",
+                "link": "https://www.ofc-albany.com/articles/premium_education/category/47364"
+              },
+              {
+                "label": "Oral Health",
+                "link": "https://www.ofc-albany.com/articles/premium_education/category/47365"
+              },
+              {
+                "label": "Oral Hygiene",
+                "link": "https://www.ofc-albany.com/articles/premium_education/category/47366"
+              },
+              {
+                "label": "Oral Surgery",
+                "link": "https://www.ofc-albany.com/articles/premium_education/category/47367"
+              },
+              {
+                "label": "Orthodontics",
+                "link": "https://www.ofc-albany.com/articles/premium_education/category/47368"
+              },
+              {
+                "label": "Pediatric Dentistry",
+                "link": "https://www.ofc-albany.com/articles/premium_education/category/47369"
+              },
+              {
+                "label": "Periodontal Health",
+                "link": "https://www.ofc-albany.com/articles/premium_education/category/47370"
+              },
+              {
+                "label": "Restorative Dentistry",
+                "link": "https://www.ofc-albany.com/articles/premium_education/category/47371"
+              },
+              {
+                "label": "TMD",
+                "link": "https://www.ofc-albany.com/articles/premium_education/category/47372"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "Hs1AlbanyServicesBreadcrumbsSection",
+      "props": {
+        "id": "Hs1AlbanyServicesBreadcrumbsSection-9f1216ef-c7d2-4054-a7a5-f08d26fd7fb9",
+        "homeLink": {
+          "label": "Home",
+          "link": "https://www.ofc-albany.com"
+        },
+        "currentLabel": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Services",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 13,
+          "fontColor": "#ffffff",
+          "fontWeight": 600,
+          "textTransform": "normal"
+        }
+      }
+    },
+    {
+      "type": "Hs1AlbanyServicesTitleSection",
+      "props": {
+        "id": "Hs1AlbanyServicesTitleSection-036a6f4d-9f8b-4d94-b67f-85ca25bfd7e7",
+        "title": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Dental Services",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#ffffff",
+          "fontWeight": 400,
+          "textTransform": "uppercase"
+        }
+      }
+    },
+    {
+      "type": "Hs1AlbanyServicesContentSection",
+      "props": {
+        "id": "Hs1AlbanyServicesContentSection-a39ea4c0-e8b2-473c-be3e-b492d825ad65",
+        "introText": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Regular dental visits are essential to make sure oral health problems — from tooth decay to oral cancer — are detected and treated in a timely manner. At our office, your oral health is our paramount concern. We want to make sure your teeth stay healthy, function well and look great! From regular cleanings and exams to advanced restorative treatments, all of your routine dental needs can be met right here.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 17,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "servicesLead": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Services we offer include:",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 17,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "services": [
+          {
+            "label": "Bonding",
+            "link": "https://www.ofc-albany.com/articles/premium_education/915074-bonding",
+            "description": "to repair small chips or cracks"
+          },
+          {
+            "label": "Crowns & Bridgework",
+            "link": "https://www.ofc-albany.com/articles/premium_education/509264-crowns-bridgework",
+            "description": "to replace large amounts of lost tooth structure and/or missing teeth"
+          },
+          {
+            "label": "Dental Implants",
+            "link": "https://www.ofc-albany.com/articles/premium_education/category/47365",
+            "description": "for the longest-lasting tooth replacement available today"
+          },
+          {
+            "label": "Fillings",
+            "link": "https://www.ofc-albany.com/articles/premium_education/915070-fillings",
+            "description": "to make your teeth strong and healthy again"
+          },
+          {
+            "label": "Oral Cancer Screenings",
+            "link": "https://www.ofc-albany.com/articles/premium_education/509307-oral-cancer-screening",
+            "description": "to detect disease at a curable stage"
+          },
+          {
+            "label": "Orthodontic Treatment",
+            "link": "https://www.ofc-albany.com/articles/premium_education/category/47369",
+            "description": "to move teeth into the right position"
+          },
+          {
+            "label": "Periodontal (Gum) Disease Therapy",
+            "link": "https://www.ofc-albany.com/articles/premium_education/category/47371",
+            "description": "to prevent tooth loss"
+          },
+          {
+            "label": "Porcelain Veneers",
+            "link": "https://www.ofc-albany.com/articles/premium_education/509326-porcelain-veneers",
+            "description": "for repairing larger chips and cracks, and reshaping teeth"
+          },
+          {
+            "label": "Professional Teeth Cleanings",
+            "link": "https://www.ofc-albany.com/articles/premium_education/509331-professional-teeth-cleanings",
+            "description": "to maintain good oral health"
+          },
+          {
+            "label": "Removable Dentures",
+            "link": "https://www.ofc-albany.com/articles/premium_education/915076-dentures",
+            "description": "to help you smile again"
+          },
+          {
+            "label": "Root Canal Treatment",
+            "link": "https://www.ofc-albany.com/articles/premium_education/509336-root-canal-treatment",
+            "description": "to save an infected tooth"
+          },
+          {
+            "label": "Sealants",
+            "link": "https://www.ofc-albany.com/articles/premium_education/509340-sealants",
+            "description": "to protect children's teeth from decay"
+          },
+          {
+            "label": "Teeth Whitening",
+            "link": "https://www.ofc-albany.com/articles/premium_education/915075-teeth-whitening",
+            "description": "to brighten a faded or discolored smile"
+          },
+          {
+            "label": "TMJ/TMD Treatment",
+            "link": "https://www.ofc-albany.com/articles/premium_education/915079-tmd",
+            "description": "for chronic jaw pain"
+          },
+          {
+            "label": "Tooth Extractions",
+            "link": "https://www.ofc-albany.com/articles/premium_education/915164-extractions",
+            "description": "when a tooth is hopelessly damaged or decayed"
+          }
+        ],
+        "emergencyHeading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Emergency Dental Treatment",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 22,
+          "fontColor": "#d3a335",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "emergencyText": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "If you have a life-threatening or severe injury, call 911 or go directly to the nearest hospital emergency room. We can treat a variety of traumatic dental injuries, including teeth that have been chipped, moved, or knocked out entirely. Please call our office for assistance.",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 17,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        }
+      }
+    },
+    {
+      "type": "Hs1AlbanyServicesHoursSection",
+      "props": {
+        "id": "Hs1AlbanyServicesHoursSection-8e3dde5e-8ee1-4a57-9aa5-5095667b7a3b",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Hours of Operation",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 400,
+          "textTransform": "uppercase"
+        },
+        "subheading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Summer Hours",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 22,
+          "fontColor": "#d3a335",
+          "fontWeight": 300,
+          "textTransform": "normal"
+        },
+        "data": {
+          "hours": {
+            "field": "hours",
+            "constantValue": {}
+          }
+        }
+      }
+    },
+    {
+      "type": "Hs1AlbanyServicesLocationSection",
+      "props": {
+        "id": "Hs1AlbanyServicesLocationSection-98686de8-34b1-4c73-84d9-1aec74ccd379",
+        "title": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Our Location",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 400,
+          "textTransform": "uppercase"
+        },
+        "subtitle": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Find us on the map",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 22,
+          "fontColor": "#d3a335",
+          "fontWeight": 300,
+          "textTransform": "normal"
+        },
+        "locationName": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Primary Location",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 22,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "addressLabel": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Address",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 17,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "contactLabel": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Contact Information",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 17,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        }
+      }
+    },
+    {
+      "type": "Hs1AlbanyServicesContactFormSection",
+      "props": {
+        "id": "Hs1AlbanyServicesContactFormSection-c5a346d0-39e1-470e-a2ba-d7055900db92",
+        "title": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Contact Us Today",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 28,
+          "fontColor": "#ffffff",
+          "fontWeight": 400,
+          "textTransform": "uppercase"
+        },
+        "formFields": [
+          {
+            "placeholder": "Enter your name (Required)",
+            "type": "text"
+          },
+          {
+            "placeholder": "Enter email (Required)",
+            "type": "email"
+          },
+          {
+            "placeholder": "(XXX)XXX-XXXX (Required)",
+            "type": "tel"
+          }
+        ],
+        "messagePlaceholder": "Notes to the Doctor",
+        "disclaimer": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "Please do not submit any Protected Health Information (PHI).",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 14,
+          "fontColor": "#ffffff",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        },
+        "submitLabel": "SUBMIT"
+      }
+    },
+    {
+      "type": "Hs1AlbanyServicesFooterSection",
+      "props": {
+        "id": "Hs1AlbanyServicesFooterSection-0d0893e9-029d-4c56-8144-94c92eef9b8d",
+        "logoImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://cdcssl.ibsrv.net/ibimg/smb/120x78_80/webmgr/1o/u/o/brooklyn/sunnysmileslogo.png.webp?60c03c38fcebb177765418932264c8d5",
+            "width": 120,
+            "height": 78
+          },
+          "constantValueEnabled": true
+        },
+        "logoTitle": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "defaultValue": "SUNNY SMILES",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 25,
+          "fontColor": "#4a4a4a",
+          "fontWeight": 400,
+          "textTransform": "uppercase"
+        },
+        "socialLinks": [
+          {
+            "platform": "facebook",
+            "link": "https://www.facebook.com/Anderson-Optometry-363713737059041/"
+          },
+          {
+            "platform": "twitter",
+            "link": "https://twitter.com/InternetMatrix"
+          },
+          {
+            "platform": "youtube",
+            "link": "https://www.youtube.com/user/webmarketingimatrix"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Hs1AlbanyServicesCopyrightSection",
+      "props": {
+        "id": "Hs1AlbanyServicesCopyrightSection-9993844f-4fb8-4703-8e64-5524377416ba",
+        "links": [
+          {
+            "label": "Copyright © 2026 MH Sub I, LLC dba Officite",
+            "link": "//www.henryscheinone.com/products/officite"
+          },
+          {
+            "label": "Admin Log In",
+            "link": "https://secure.officite.com"
+          },
+          {
+            "label": "Site Map",
+            "link": "https://www.ofc-albany.com/sitemap"
+          }
+        ]
+      }
+    }
+  ],
+  "zones": {}
+}

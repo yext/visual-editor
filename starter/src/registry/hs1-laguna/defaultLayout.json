@@ -1,0 +1,578 @@
+{
+  "root": {
+    "props": {
+      "title": {
+        "field": "name",
+        "constantValue": "Hs1 Laguna Pages",
+        "constantValueEnabled": false
+      },
+      "description": {
+        "field": "description",
+        "constantValue": "",
+        "constantValueEnabled": false
+      }
+    }
+  },
+  "content": [
+    {
+      "type": "Hs1LagunaHeaderSection",
+      "props": {
+        "id": "Hs1LagunaHeaderSection-51ce68e9-932c-4be3-950b-8c83068781e5",
+        "logoImage": {
+          "field": "",
+          "constantValue": {
+            "url": "https://cdcssl.ibsrv.net/ibimg/smb/98x100_80/webmgr/1o/s/5/whitetoothlogo1.png.webp?3888a828772d97a4896e13f9cbd10ce2",
+            "width": 98,
+            "height": 100
+          },
+          "constantValueEnabled": true
+        },
+        "logoTitle": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Sunny Smiles",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 25,
+          "fontColor": "#ffffff",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "logoDescription": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Dental",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 16,
+          "fontColor": "#ffffff",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "menuLabel": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Menu",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 15,
+          "fontColor": "#4f4f4f",
+          "fontWeight": 700,
+          "textTransform": "uppercase"
+        },
+        "homeLink": {
+          "label": "Home",
+          "link": "https://www.ofc-laguna.com"
+        },
+        "offerCta": {
+          "label": "Exclusive Offer",
+          "link": ""
+        },
+        "primaryLinks": [
+          {
+            "label": "Home",
+            "link": "https://www.ofc-laguna.com"
+          },
+          {
+            "label": "Staff",
+            "link": "https://www.ofc-laguna.com/staff"
+          },
+          {
+            "label": "Office",
+            "link": "https://www.ofc-laguna.com/our-locations"
+          },
+          {
+            "label": "Services",
+            "link": "https://www.ofc-laguna.com/dental-services"
+          },
+          {
+            "label": "New Patients",
+            "link": "https://www.ofc-laguna.com/new-patients"
+          },
+          {
+            "label": "Contact Us",
+            "link": "https://www.ofc-laguna.com/contact"
+          },
+          {
+            "label": "Appointment Request",
+            "link": "https://www.ofc-laguna.com/appointment"
+          },
+          {
+            "label": "Testimonials",
+            "link": "https://www.ofc-laguna.com/testimonials"
+          },
+          {
+            "label": "Smile Gallery",
+            "link": "https://www.ofc-laguna.com/gallery"
+          },
+          {
+            "label": "Blog",
+            "link": "https://www.ofc-laguna.com/blog"
+          }
+        ],
+        "patientEducationLink": {
+          "label": "Patient Education",
+          "link": "https://www.ofc-laguna.com/articles/premium_education"
+        },
+        "patientEducationLinks": [
+          {
+            "label": "Educational Videos",
+            "link": "https://www.ofc-laguna.com/articles/premium_education/category/47361"
+          },
+          {
+            "label": "Cosmetic & General Dentistry",
+            "link": "https://www.ofc-laguna.com/articles/premium_education/category/47362"
+          },
+          {
+            "label": "Emergency Care",
+            "link": "https://www.ofc-laguna.com/articles/premium_education/category/47363"
+          },
+          {
+            "label": "Endodontics",
+            "link": "https://www.ofc-laguna.com/articles/premium_education/category/47364"
+          },
+          {
+            "label": "Implant Dentistry",
+            "link": "https://www.ofc-laguna.com/articles/premium_education/category/47365"
+          },
+          {
+            "label": "Oral Health",
+            "link": "https://www.ofc-laguna.com/articles/premium_education/category/47366"
+          },
+          {
+            "label": "Oral Hygiene",
+            "link": "https://www.ofc-laguna.com/articles/premium_education/category/47367"
+          },
+          {
+            "label": "Oral Surgery",
+            "link": "https://www.ofc-laguna.com/articles/premium_education/category/47368"
+          },
+          {
+            "label": "Orthodontics",
+            "link": "https://www.ofc-laguna.com/articles/premium_education/category/47369"
+          },
+          {
+            "label": "Pediatric Dentistry",
+            "link": "https://www.ofc-laguna.com/articles/premium_education/category/47370"
+          },
+          {
+            "label": "Periodontal Therapy",
+            "link": "https://www.ofc-laguna.com/articles/premium_education/category/47371"
+          },
+          {
+            "label": "Technology",
+            "link": "https://www.ofc-laguna.com/articles/premium_education/category/47372"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Hs1LagunaFeaturedBlocksSection",
+      "props": {
+        "id": "Hs1LagunaFeaturedBlocksSection-bd790d05-8ecc-4afd-b455-6f704bbe8282",
+        "cardOne": {
+          "image": {
+            "field": "",
+            "constantValue": {
+              "url": "https://cdcssl.ibsrv.net/ibimg/smb/633x800_80/webmgr/1o/s/5/laguna/featuredblocks_1.jpg.webp?4544b3a1dbcae2ca44b042bc470dcec3",
+              "width": 633,
+              "height": 800
+            },
+            "constantValueEnabled": true
+          },
+          "title": {
+            "text": {
+              "field": "",
+              "constantValue": {
+                "en": "General Dentistry",
+                "hasLocalizedValue": "true"
+              },
+              "constantValueEnabled": true
+            },
+            "fontSize": 20,
+            "fontColor": "#ffffff",
+            "fontWeight": 400,
+            "textTransform": "normal"
+          },
+          "description": {
+            "text": {
+              "field": "",
+              "constantValue": {
+                "en": "Dentistry encompasses array of services and procedures with a common goal: to help you to preserve your natural teeth, ensure your oral health, and keep you looking and...",
+                "hasLocalizedValue": "true"
+              },
+              "constantValueEnabled": true
+            },
+            "fontSize": 16,
+            "fontColor": "#ffffff",
+            "fontWeight": 400,
+            "textTransform": "normal"
+          },
+          "cta": {
+            "label": "Learn More",
+            "link": "https://www.ofc-laguna.com/dental-services"
+          }
+        },
+        "cardTwo": {
+          "image": {
+            "field": "",
+            "constantValue": {
+              "url": "https://cdcssl.ibsrv.net/ibimg/smb/633x800_80/webmgr/1o/s/5/laguna/featuredblocks_2.jpg.webp?c2054054b39e2b725fddab24ac05d738",
+              "width": 633,
+              "height": 800
+            },
+            "constantValueEnabled": true
+          },
+          "title": {
+            "text": {
+              "field": "",
+              "constantValue": {
+                "en": "Teeth Whitening",
+                "hasLocalizedValue": "true"
+              },
+              "constantValueEnabled": true
+            },
+            "fontSize": 20,
+            "fontColor": "#ffffff",
+            "fontWeight": 400,
+            "textTransform": "normal"
+          },
+          "description": {
+            "text": {
+              "field": "",
+              "constantValue": {
+                "en": "Whitening procedures have effectively restored the smile of people with stained, dull, or discolored teeth.",
+                "hasLocalizedValue": "true"
+              },
+              "constantValueEnabled": true
+            },
+            "fontSize": 16,
+            "fontColor": "#ffffff",
+            "fontWeight": 400,
+            "textTransform": "normal"
+          },
+          "cta": {
+            "label": "Learn More",
+            "link": "https://www.ofc-laguna.com/dental-services"
+          }
+        },
+        "cardThree": {
+          "image": {
+            "field": "",
+            "constantValue": {
+              "url": "https://cdcssl.ibsrv.net/ibimg/smb/633x800_80/webmgr/1o/s/5/laguna/featuredblocks_3.jpg.webp?04b0b9f33281977c308c44ecf8718976",
+              "width": 633,
+              "height": 800
+            },
+            "constantValueEnabled": true
+          },
+          "title": {
+            "text": {
+              "field": "",
+              "constantValue": {
+                "en": "Fillings",
+                "hasLocalizedValue": "true"
+              },
+              "constantValueEnabled": true
+            },
+            "fontSize": 20,
+            "fontColor": "#ffffff",
+            "fontWeight": 400,
+            "textTransform": "normal"
+          },
+          "description": {
+            "text": {
+              "field": "",
+              "constantValue": {
+                "en": "Frequently asked questions: dental fillings are dental amalgams safe? Is it possible to have an allergic reaction to amalgam?",
+                "hasLocalizedValue": "true"
+              },
+              "constantValueEnabled": true
+            },
+            "fontSize": 16,
+            "fontColor": "#ffffff",
+            "fontWeight": 400,
+            "textTransform": "normal"
+          },
+          "cta": {
+            "label": "Learn More",
+            "link": "https://www.ofc-laguna.com/dental-services"
+          }
+        }
+      }
+    },
+    {
+      "type": "Hs1LagunaWelcomeSection",
+      "props": {
+        "id": "Hs1LagunaWelcomeSection-2d41fe8b-a14b-4906-a8e0-bdf09cc314aa",
+        "heading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Welcome to Our Practice",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 23,
+          "fontColor": "#4f4f4f",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "subheading": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Welcome to Dental Practice Demo, Your Dentist in Downers Grove, IL",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 26,
+          "fontColor": "#4f4f4f",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "emailLink": {
+          "label": "email",
+          "link": "contact"
+        },
+        "appointmentLink": {
+          "label": "request an appointment",
+          "link": "appointment"
+        }
+      }
+    },
+    {
+      "type": "Hs1LagunaHeroSection",
+      "props": {
+        "id": "Hs1LagunaHeroSection-0521bf80-0d8a-46e4-bf68-d8d9068e598d",
+        "slides": [
+          {
+            "title": "Healthy Mouth",
+            "subtitle": "Happy Life",
+            "ctaLabel": "Make an Appointment",
+            "link": "https://www.ofc-laguna.com/appointment",
+            "imageUrl": "https://cdcssl.ibsrv.net/ibimg/smb/1200x1200_80/webmgr/1o/s/5/laguna/featuredblocks_1.jpg.webp?4544b3a1dbcae2ca44b042bc470dcec3"
+          },
+          {
+            "title": "Changing Lives",
+            "subtitle": "One Smile at a time",
+            "ctaLabel": "Make an Appointment",
+            "link": "https://www.ofc-laguna.com/appointment",
+            "imageUrl": "https://cdcssl.ibsrv.net/ibimg/smb/1200x1200_80/webmgr/1o/s/5/laguna/slider_2.jpg.webp?3082e519a2ac471923838f8a8c94d418"
+          },
+          {
+            "title": "Discover your smile",
+            "subtitle": "Today!",
+            "ctaLabel": "Make an Appointment",
+            "link": "https://www.ofc-laguna.com/appointment",
+            "imageUrl": "https://cdcssl.ibsrv.net/ibimg/smb/1200x1200_80/webmgr/1o/s/5/laguna/slider_3.jpg.webp?bad98343b203708499c06569c63a61e3"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Hs1LagunaStaffSection",
+      "props": {
+        "id": "Hs1LagunaStaffSection-bb3dd2e3-860a-44cb-be79-c2929d61cf47",
+        "title": "Meet Our Staff",
+        "caption": "Learn Who We Are",
+        "members": [
+          {
+            "name": "Danielle Harris",
+            "role": "Office Manager",
+            "description": "Danielle is a graduate of University of Illinois. She enjoys meeting new patients, and spends her spare time fostering dogs and exploring local restaurants.",
+            "imageUrl": "https://cdcssl.ibsrv.net/ibimg/smb/200x200_80/webmgr/1o/s/5/_SHARED/staff_3.jpg.webp?93137c4acfded3fb32879391b6cf9968",
+            "linkLabel": "",
+            "link": ""
+          },
+          {
+            "name": "Dr. Sarah Green",
+            "role": "Doctor",
+            "description": "Dr. Sarah Green's practice philosophy is based on extreme excellence. When not working with her patients she enjoys baking and watching movies.",
+            "imageUrl": "https://cdcssl.ibsrv.net/ibimg/smb/200x200_80/webmgr/1o/s/5/_SHARED/staff_2.jpg.webp?bc2462d0ef5a3284b8c8d9c9491708dd",
+            "linkLabel": "",
+            "link": ""
+          },
+          {
+            "name": "Dr. John Smith",
+            "role": "Doctor",
+            "description": "Dr. John Smith was born and raised in Minnesota. He received his degree from the University of Minnesota in 1990. He practiced in Minneapolis for ten years. Dr. Smith entered the Master'Degree program in at the University of Minnesota in 2000. Dr Smith enjoys spending time with his family, traveling, and exploring the wilderness of the Boundary Waters.",
+            "imageUrl": "https://cdcssl.ibsrv.net/ibimg/smb/200x200_80/webmgr/1o/s/5/_SHARED/staff_1.jpg.webp?0179ff3475d44b26f95e529c2abcf3dd",
+            "linkLabel": "Read More",
+            "link": "https://www.ofc-laguna.com/staff"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Hs1LagunaLocationHoursSection",
+      "props": {
+        "id": "Hs1LagunaLocationHoursSection-3be8c72d-bb4f-49b7-a6c9-74cbd9343c7d",
+        "locationTitle": "Our Location",
+        "locationCaption": "Find us on the map",
+        "hoursTitle": "Hours of Operation",
+        "hoursCaption": "Our Regular Schedule"
+      }
+    },
+    {
+      "type": "Hs1LagunaFeaturedArticlesSection",
+      "props": {
+        "id": "Hs1LagunaFeaturedArticlesSection-96cfe127-cec1-40d8-8c5e-52e32824ec76",
+        "title": "Featured Articles",
+        "caption": "Read about helpful topics",
+        "articles": [
+          {
+            "title": "Broken Teeth",
+            "description": "Even though enamel is the hardest substance in the body, teeth aren’t indestructible, and chipped, cracked, and broken teeth are among the most common dental injuries. Tooth fractures might result from accidents, trauma, tooth grinding, chewing hard objects and foods, or extensive decay.",
+            "linkLabel": "Read More",
+            "link": "https://www.ofc-laguna.com/articles/premium_education/915096-broken-teeth"
+          },
+          {
+            "title": "Apicoectomy",
+            "description": "Root canal therapy is often enough to treat infection in the inner tooth successfully. If pain or inflammation return, however, these symptoms can indicate a new or recurring infection. In such cases, an apicoectomy is a common surgical procedure used to save the tooth and restore the health of the surrounding area.",
+            "linkLabel": "Read More",
+            "link": "https://www.ofc-laguna.com/articles/premium_education/915095-apicoectomy"
+          },
+          {
+            "title": "Mouthguards",
+            "description": "While you’re living your active life, be sure to protect your smile. A mouthguard is essential safety gear whenever you participate in any sport or activity that could lead to dental trauma. Oral and dental injuries are very common for athletes, and often these injuries can be prevented or reduced with the right protection.",
+            "linkLabel": "Read More",
+            "link": "https://www.ofc-laguna.com/articles/premium_education/915085-mouthguards"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Hs1LagunaNewsletterSection",
+      "props": {
+        "id": "Hs1LagunaNewsletterSection-23d600d4-6c01-4ba3-b839-920e54ac723d",
+        "title": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Newsletter Signup",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 23,
+          "fontColor": "#636363",
+          "fontWeight": 700,
+          "textTransform": "normal"
+        },
+        "caption": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Sign up to receive our updates",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 18,
+          "fontColor": "#adadad",
+          "fontWeight": 500,
+          "textTransform": "normal"
+        },
+        "disclaimer": {
+          "text": {
+            "field": "",
+            "constantValue": {
+              "en": "Please do not submit any Protected Health Information (PHI).",
+              "hasLocalizedValue": "true"
+            },
+            "constantValueEnabled": true
+          },
+          "fontSize": 13,
+          "fontColor": "#4f4f4f",
+          "fontWeight": 400,
+          "textTransform": "normal"
+        }
+      }
+    },
+    {
+      "type": "Hs1LagunaTestimonialsSection",
+      "props": {
+        "id": "Hs1LagunaTestimonialsSection-acdc5324-c59c-4710-9340-56e660692915",
+        "title": "Testimonials",
+        "caption": "What Our Clients Say About Us",
+        "testimonials": [
+          {
+            "quote": "Visiting Dental Practice Demo gives my family and me more reasons to smile.",
+            "source": "The Johnson Family"
+          },
+          {
+            "quote": "Dr. Smith provided me with excellent care when I needed it the most.",
+            "source": "Jennifer R."
+          }
+        ]
+      }
+    },
+    {
+      "type": "Hs1LagunaFooterSection",
+      "props": {
+        "id": "Hs1LagunaFooterSection-4bff4a63-3c80-4fa9-8c70-649b4ac4b875",
+        "brandName": "Sunny Smiles Dental",
+        "phoneTitle": "Call Us Today",
+        "phoneNumber": "(877) 393-3348",
+        "socialTitle": "Connect With Us",
+        "socialLinks": [
+          {
+            "label": "Facebook",
+            "link": ""
+          },
+          {
+            "label": "Twitter",
+            "link": ""
+          },
+          {
+            "label": "Youtube",
+            "link": ""
+          }
+        ],
+        "actionLinks": [
+          {
+            "label": "Location",
+            "link": "https://www.ofc-laguna.com/office"
+          },
+          {
+            "label": "Request Appointment",
+            "link": "https://www.ofc-laguna.com/appointment-request"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Hs1LagunaCopyrightSection",
+      "props": {
+        "id": "Hs1LagunaCopyrightSection-83337505-5bcd-4118-8f92-56db5e6ce827",
+        "links": [
+          {
+            "label": "Copyright © 2026 MH Sub I, LLC dba Officite.",
+            "link": "//www.henryscheinone.com/products/officite"
+          },
+          {
+            "label": "Admin Log In",
+            "link": "https://secure.officite.com"
+          },
+          {
+            "label": "Site Map",
+            "link": "https://www.ofc-laguna.com/sitemap"
+          }
+        ]
+      }
+    }
+  ],
+  "zones": {}
+}

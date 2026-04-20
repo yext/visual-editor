@@ -41,6 +41,19 @@ const mockDocument = {
 describe("resolveComponentData", () => {
   describe("with document", () => {
     describe("with field path", () => {
+      it("resolves a field-only KG binding without a constantValue", () => {
+        expect(
+          resolveComponentData(
+            {
+              field: "name",
+              constantValueEnabled: false,
+            } as YextEntityField<string>,
+            "en",
+            mockDocument
+          )
+        ).toBe("Yext");
+      });
+
       it("resolves a simple string field path", () => {
         const field: YextEntityField<string> = {
           constantValue: "",

@@ -88,6 +88,14 @@ const readCurrentPuckDataFromHistory = (storageKey: string | null): Data => {
   }
 };
 
+const getIsPreviewMode = (): boolean => {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  return new URLSearchParams(window.location.search).get("vePreview") === "1";
+};
+
 export const config = {
   name: "dev-location",
   stream: {
@@ -209,7 +217,9 @@ export const getPath: GetPath<TemplateProps> = ({ document }) => {
 };
 
 const Dev: Template<TemplateRenderProps> = (props) => {
+  const [isMounted, setIsMounted] = React.useState(false);
   const [themeMode, setThemeMode] = React.useState<boolean>(false);
+  const [isPreviewMode, setIsPreviewMode] = React.useState(false);
   const [currentPuckData, setCurrentPuckData] =
     React.useState<Data>(EMPTY_PUCK_DATA);
   const { document } = props;
@@ -220,16 +230,18 @@ const Dev: Template<TemplateRenderProps> = (props) => {
     string,
     string
   >;
-  const isPreviewMode =
-    typeof window !== "undefined" &&
-    new URLSearchParams(window.location.search).get("vePreview") === "1";
   const previewStorageKey = React.useMemo(
-    () => getVisualConfigLocalStorageKeyForDev(),
-    [],
+    () => (isMounted ? getVisualConfigLocalStorageKeyForDev() : null),
+    [isMounted],
   );
 
   React.useEffect(() => {
-    if (!isPreviewMode || typeof window === "undefined") {
+    setIsMounted(true);
+    setIsPreviewMode(getIsPreviewMode());
+  }, []);
+
+  React.useEffect(() => {
+    if (!isMounted || !isPreviewMode || typeof window === "undefined") {
       return;
     }
 
@@ -249,7 +261,7 @@ const Dev: Template<TemplateRenderProps> = (props) => {
     return () => {
       window.removeEventListener("storage", onStorage);
     };
-  }, [isPreviewMode, previewStorageKey]);
+  }, [isMounted, isPreviewMode, previewStorageKey]);
 
   const openPreview = () => {
     if (typeof window === "undefined") {
@@ -261,39 +273,27 @@ const Dev: Template<TemplateRenderProps> = (props) => {
     window.location.assign(previewUrl.toString());
   };
 
-  const goBackToEditor = () => {
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    const editorUrl = new URL(window.location.href);
-    editorUrl.searchParams.delete("vePreview");
-    window.location.assign(editorUrl.toString());
-  };
+  if (!isMounted) {
+    return <div />;
+  }
 
   return (
     <div>
-      <div className={"flex-container"}>
-        {isPreviewMode ? (
-          <button className={"toggle-button"} onClick={goBackToEditor}>
-            Back to Editor
+      {!isPreviewMode ? (
+        <div className={"flex-container"}>
+          <button
+            className={"toggle-button"}
+            onClick={() => {
+              setThemeMode(!themeMode);
+            }}
+          >
+            {themeMode ? "Theme Mode" : "Layout Mode"}
           </button>
-        ) : (
-          <>
-            <button
-              className={"toggle-button"}
-              onClick={() => {
-                setThemeMode(!themeMode);
-              }}
-            >
-              {themeMode ? "Theme Mode" : "Layout Mode"}
-            </button>
-            <button className={"toggle-button"} onClick={openPreview}>
-              Open Preview
-            </button>
-          </>
-        )}
-      </div>
+          <button className={"toggle-button"} onClick={openPreview}>
+            Open Preview
+          </button>
+        </div>
+      ) : null}
       <div>
         <VisualEditorProvider
           templateProps={props}

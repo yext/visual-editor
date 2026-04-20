@@ -7,12 +7,7 @@ export const resolveYextEntityField = <T>(
   entityField: YextEntityField<T>,
   locale?: string
 ): T | undefined => {
-  if (
-    !entityField ||
-    typeof entityField !== "object" ||
-    !("field" in entityField) ||
-    !("constantValue" in entityField)
-  ) {
+  if (!entityField || typeof entityField !== "object") {
     return undefined;
   }
 
