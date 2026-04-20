@@ -80,6 +80,19 @@ export const resolveUrlTemplateOfChild = (
   throw new Error("Could not resolve url for child entity.");
 };
 
+/**
+ * Merges the values for the provided `profile` with the metadata
+ * of the provided `streamDocument`.
+ *
+ * The `meta` and `__` fields are merged with the `profile`'s values taking precedence.
+ * The `locale` and deprecated `isPrimaryLocale` fields are normalized.
+ * The `_pageset` field is copied from the `streamDocument`.
+ * The rest of the fields are preserved from `profile`.
+ *
+ * Used when resolving urls of directory children and nearby location siblings,
+ * since we want the pathInfo/urlTemplate of the entity page set used with the
+ * values of the child/sibling in those cases.
+ */
 export const mergeMeta = (
   profile: any,
   streamDocument: StreamDocument
