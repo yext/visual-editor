@@ -90,9 +90,6 @@ const isComboboxOptionGroupArray = (
 ): value is ComboboxOptionGroup[] =>
   Array.isArray(value) && value.every((item) => isComboboxOptionGroup(item));
 
-const INVALID_THEME_OPTIONS_MESSAGE =
-  "Use a valid ThemeOptions key or pass explicit options.";
-
 export const BasicSelectorFieldOverride = ({
   field,
   value,
@@ -149,9 +146,7 @@ export const BasicSelectorFieldOverride = ({
     (isComboboxOptionGroupArray(resolvedOptionsSource)
       ? resolvedOptionsSource
       : [{ options }]);
-  const noOptionsMessage =
-    providedNoOptionsMessage ??
-    (invalidThemeOptionsKey ? INVALID_THEME_OPTIONS_MESSAGE : undefined);
+  const noOptionsMessage = providedNoOptionsMessage ?? undefined;
 
   const translatedOptionGroups = translateOptions
     ? optionGroups.map((group) => ({
