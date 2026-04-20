@@ -104,20 +104,6 @@ const presetImageTypeToName = (presetImageType: PresetImageType) => {
   }
 };
 
-const doesColorMeetContrastRequirement = (
-  foregroundHex?: string,
-  backgroundHex?: string
-): boolean => {
-  const foregroundRgb = foregroundHex ? hexToRGB(foregroundHex) : undefined;
-  const backgroundRgb = backgroundHex ? hexToRGB(backgroundHex) : undefined;
-
-  if (!foregroundRgb || !backgroundRgb) {
-    return false;
-  }
-
-  return isColorContrastWcagCompliant(foregroundRgb, backgroundRgb, 12, 400);
-};
-
 // useResolvedCtaProps resolves the CTA props based on the current context and ctaType
 const useResolvedCtaProps = (props: CTAProps) => {
   const {
@@ -290,14 +276,24 @@ export const CTA = (props: CTAProps) => {
     () => getThemeColorHexValue(background?.selectedColor, streamDocument),
     [background?.selectedColor, streamDocument]
   );
+  const resolvedCtaColorRgb = resolvedCtaColorHex
+    ? hexToRGB(resolvedCtaColorHex)
+    : undefined;
+  const resolvedBackgroundColorRgb = resolvedBackgroundColorHex
+    ? hexToRGB(resolvedBackgroundColorHex)
+    : undefined;
   const shouldUseConfiguredSecondaryColor =
     !!color?.selectedColor &&
     !!resolvedCtaColorHex &&
     (!isDarkBackground ||
-      doesColorMeetContrastRequirement(
-        resolvedCtaColorHex,
-        resolvedBackgroundColorHex
-      ));
+      (!!resolvedCtaColorRgb &&
+        !!resolvedBackgroundColorRgb &&
+        isColorContrastWcagCompliant(
+          resolvedCtaColorRgb,
+          resolvedBackgroundColorRgb,
+          12,
+          400
+        )));
   const dynamicStyle: React.CSSProperties = (() => {
     const bg = getThemeColorCssValue(color?.selectedColor);
     const textColor = getThemeColorCssValue(color?.contrastingColor);

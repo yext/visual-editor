@@ -212,6 +212,12 @@ export const getThemeColorCssValue = (
   return `var(--colors-${colorToken})`;
 };
 
+/**
+ * Normalizes a color string into an uppercase hex value when possible.
+ * Supports the literal tokens `white` and `black`, 3/6-digit hex, and
+ * 8-digit hex values where the alpha channel is dropped for contrast checks.
+ * Falls back to parsing computed-style color strings such as `rgb(...)`.
+ */
 const normalizeHexColor = (colorValue?: string): string | undefined => {
   if (!colorValue) {
     return undefined;
@@ -330,6 +336,11 @@ const hslToHex = (hue: number, saturation: number, lightness: number) => {
     .join("")}`.toUpperCase();
 };
 
+/**
+ * Derives a concrete hex color for palette light/dark variants by reading the
+ * base palette token, preserving its hue and saturation, and replacing only
+ * the lightness component.
+ */
 const getDerivedPaletteHexColor = (
   baseColorToken: string,
   lightness: number,

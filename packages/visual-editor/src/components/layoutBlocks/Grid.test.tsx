@@ -2142,7 +2142,7 @@ const tests: ComponentTest[] = [
     version: 61,
   },
   {
-    name: "current - CTA Group custom colors on dark background",
+    name: "version 74 - CTA Group custom colors on dark background",
     document: {
       locale: "en",
     },
@@ -2193,7 +2193,7 @@ const tests: ComponentTest[] = [
                     normalizeLink: false,
                     variant: "secondary",
                     color: {
-                      selectedColor: "[#FF6D66]",
+                      selectedColor: "[#00E5FF]",
                       contrastingColor: "black",
                     },
                   },
@@ -2228,7 +2228,7 @@ const tests: ComponentTest[] = [
         { Column: [] },
       ],
       backgroundColor: {
-        selectedColor: "[#341A1F]",
+        selectedColor: "black",
         contrastingColor: "white",
       },
       liveVisibility: true,
