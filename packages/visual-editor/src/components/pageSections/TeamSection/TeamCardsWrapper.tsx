@@ -1,9 +1,4 @@
-import {
-  ComponentConfig,
-  ComponentData,
-  PuckComponent,
-  setDeep,
-} from "@puckeditor/core";
+import { ComponentData, PuckComponent, setDeep } from "@puckeditor/core";
 import { TeamSectionType } from "../../../types/types.ts";
 import { ComponentFields } from "../../../types/fields.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
@@ -17,6 +12,7 @@ import {
 import { defaultTeamCardSlotData, TeamCardProps } from "./TeamCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
+import { YextComponentConfig } from "../../../fields/fields.ts";
 
 export type TeamCardsWrapperProps = CardWrapperType<TeamSectionType> & {
   styles: {
@@ -75,9 +71,7 @@ const TeamCardsWrapperComponent: PuckComponent<TeamCardsWrapperProps> = (
   );
 };
 
-export const TeamCardsWrapper: ComponentConfig<{
-  props: TeamCardsWrapperProps;
-}> = {
+export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
   label: msg("components.teamCardsWrapper", "Team Cards"),
   fields: teamCardsWrapperFields,
   defaultProps: {

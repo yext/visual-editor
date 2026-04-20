@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import {
   backgroundColors,
   ThemeColor,
@@ -28,6 +28,11 @@ import { NearbyLocationCard } from "./NearbyLocationCard.tsx";
 import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers.ts";
 import { MapPinOff } from "lucide-react";
 import { updateFields } from "../HeroSection.tsx";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  YextFields,
+} from "../../../fields/fields.ts";
 
 export type NearbyLocationCardsWrapperProps = {
   /** The search parameters for finding nearby locations. */
@@ -120,7 +125,7 @@ export type NearbyLocationCardsWrapperProps = {
   sectionHeadingLevel?: HeadingLevel;
 };
 
-const nearbyLocationCardsWrapperFields: Fields<NearbyLocationCardsWrapperProps> =
+const nearbyLocationCardsWrapperFields: YextFields<NearbyLocationCardsWrapperProps> =
   {
     data: YextField(msg("fields.data", "Data"), {
       type: "object",
@@ -139,22 +144,21 @@ const nearbyLocationCardsWrapperFields: Fields<NearbyLocationCardsWrapperProps> 
     styles: YextField(msg("fields.styles", "Styles"), {
       type: "object",
       objectFields: {
-        backgroundColor: YextField(
-          msg("fields.backgroundColor", "Background Color"),
-          {
-            type: "select",
-            options: "BACKGROUND_COLOR",
-          }
-        ),
-        headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
-          type: "select",
-          hasSearch: true,
+        backgroundColor: {
+          type: "basicSelector",
+          label: msg("fields.backgroundColor", "Background Color"),
+          options: "BACKGROUND_COLOR",
+        },
+        headingLevel: {
+          type: "basicSelector",
+          label: msg("fields.headingLevel", "Heading Level"),
           options: "HEADING_LEVEL",
-        }),
-        color: YextField(msg("fields.cardTitleColor", "Card Title Color"), {
-          type: "select",
+        },
+        color: {
+          type: "basicSelector",
+          label: msg("fields.cardTitleColor", "Card Title Color"),
           options: "SITE_COLOR",
-        }),
+        },
         hours: YextField(msg("fields.hours", "Hours"), {
           type: "object",
           objectFields: {
@@ -229,10 +233,11 @@ const nearbyLocationCardsWrapperFields: Fields<NearbyLocationCardsWrapperProps> 
                 ],
               }
             ),
-            color: YextField(msg("fields.color", "Color"), {
-              type: "select",
+            color: {
+              type: "basicSelector",
+              label: msg("fields.color", "Color"),
               options: "SITE_COLOR",
-            }),
+            },
           },
         }),
         address: YextField(msg("fields.address", "Address"), {
@@ -382,31 +387,30 @@ export const defaultNearbyLocationsCardsProps: NearbyLocationCardsWrapperProps =
     },
   };
 
-export const NearbyLocationCardsWrapper: ComponentConfig<{
-  props: NearbyLocationCardsWrapperProps;
-}> = {
-  label: msg("slots.nearbyLocationCards", "Nearby Location Cards"),
-  fields: nearbyLocationCardsWrapperFields,
-  defaultProps: defaultNearbyLocationsCardsProps,
-  resolveFields: (data) => {
-    let fields = nearbyLocationCardsWrapperFields;
+export const NearbyLocationCardsWrapper: YextComponentConfig<NearbyLocationCardsWrapperProps> =
+  {
+    label: msg("slots.nearbyLocationCards", "Nearby Location Cards"),
+    fields: nearbyLocationCardsWrapperFields,
+    defaultProps: defaultNearbyLocationsCardsProps,
+    resolveFields: (data) => {
+      let fields = nearbyLocationCardsWrapperFields;
 
-    if (!data.props.styles.showHours) {
-      fields = updateFields(fields, ["styles.hours.visible"], false);
-    }
+      if (!data.props.styles.showHours) {
+        fields = updateFields(fields, ["styles.hours.visible"], false);
+      }
 
-    if (!data.props.styles.showPhone) {
-      fields = updateFields(fields, ["styles.phone.visible"], false);
-    }
+      if (!data.props.styles.showPhone) {
+        fields = updateFields(fields, ["styles.phone.visible"], false);
+      }
 
-    if (!data.props.styles.showAddress) {
-      fields = updateFields(fields, ["styles.address.visible"], false);
-    }
+      if (!data.props.styles.showAddress) {
+        fields = updateFields(fields, ["styles.address.visible"], false);
+      }
 
-    return fields;
-  },
-  render: (props) => <NearbyLocationCardsWrapperComponent {...props} />,
-};
+      return toPuckFields(fields);
+    },
+    render: (props) => <NearbyLocationCardsWrapperComponent {...props} />,
+  };
 
 /** @internal */
 const NearbyLocationsEmptyState: React.FC<{

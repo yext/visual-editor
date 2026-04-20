@@ -5,19 +5,16 @@ import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { YextField } from "../../editor/YextField.tsx";
+import { type BasicSelectorField } from "../../fields/BasicSelectorField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { Body } from "../atoms/body.tsx";
-import {
-  ComponentConfig,
-  Field,
-  Fields,
-  PuckComponent,
-} from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import mapboxLogo from "../assets/mapbox-logo-black.svg";
 import { Map } from "lucide-react";
 import { getThemeValue } from "../../utils/getThemeValue.ts";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export type MapboxStaticProps = {
   apiKey: string;
@@ -26,31 +23,29 @@ export type MapboxStaticProps = {
   zoom?: number;
 };
 
-export const mapStyleField: Field<string> = YextField(
-  msg("fields.mapStyle", "Map Style"),
-  {
-    type: "select",
-    options: [
-      { value: "streets-v12", label: msg("fields.options.default", "Default") },
-      {
-        value: "satellite-streets-v12",
-        label: msg("fields.options.satellite", "Satellite"),
-      },
-      { value: "light-v11", label: msg("fields.options.light", "Light") },
-      { value: "dark-v11", label: msg("fields.options.dark", "Dark") },
-      {
-        value: "navigation-day-v1",
-        label: msg("fields.options.navigationDay", "Navigation (Day)"),
-      },
-      {
-        value: "navigation-night-v1",
-        label: msg("fields.options.navigationNight", "Navigation (Night)"),
-      },
-    ],
-  }
-);
+export const mapStyleField: BasicSelectorField = {
+  label: msg("fields.mapStyle", "Map Style"),
+  type: "basicSelector",
+  options: [
+    { value: "streets-v12", label: msg("fields.options.default", "Default") },
+    {
+      value: "satellite-streets-v12",
+      label: msg("fields.options.satellite", "Satellite"),
+    },
+    { value: "light-v11", label: msg("fields.options.light", "Light") },
+    { value: "dark-v11", label: msg("fields.options.dark", "Dark") },
+    {
+      value: "navigation-day-v1",
+      label: msg("fields.options.navigationDay", "Navigation (Day)"),
+    },
+    {
+      value: "navigation-night-v1",
+      label: msg("fields.options.navigationNight", "Navigation (Night)"),
+    },
+  ],
+};
 
-const mapboxFields: Fields<MapboxStaticProps> = {
+const mapboxFields: YextFields<MapboxStaticProps> = {
   apiKey: YextField(msg("fields.apiKey", "API Key"), {
     type: "text",
   }),
@@ -184,7 +179,7 @@ export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
   );
 };
 
-export const MapboxStaticMap: ComponentConfig<{ props: MapboxStaticProps }> = {
+export const MapboxStaticMap: YextComponentConfig<MapboxStaticProps> = {
   label: msg("components.mapboxStaticMap", "Mapbox Static Map"),
   fields: mapboxFields,
   defaultProps: {

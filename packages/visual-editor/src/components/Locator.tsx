@@ -1,9 +1,4 @@
-import {
-  AutoField,
-  FieldLabel,
-  setDeep,
-  WithPuckProps,
-} from "@puckeditor/core";
+import { FieldLabel, setDeep, WithPuckProps } from "@puckeditor/core";
 import {
   FieldValueFilter,
   FieldValueStaticFilter,
@@ -51,6 +46,7 @@ import {
   DynamicOptionsSelectorType,
 } from "../editor/DynamicOptionsSelector.tsx";
 import { YextField } from "../editor/YextField.tsx";
+import { YextAutoField } from "../fields/YextAutoField.tsx";
 import { useDocument } from "../hooks/useDocument.tsx";
 import { Button } from "./atoms/button.tsx";
 import { TranslatableString } from "../types/types.ts";
@@ -91,7 +87,11 @@ import {
   getLocatorEntityTypeSourceMap,
   getEntityTypeLabel,
 } from "../utils/locatorEntityTypes.ts";
-import { YextComponentConfig, YextFields } from "../fields/fields.ts";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  YextFields,
+} from "../fields/fields.ts";
 import { isVisualEditorTestEnv } from "./testing/utils.ts";
 
 const RESULTS_LIMIT = 20;
@@ -250,7 +250,7 @@ const ResultCardPropsField = ({
   }, [entityTypeSourceMap, entityTypeScopes, value]);
 
   return (
-    <AutoField
+    <YextAutoField
       field={resultCardFields}
       value={value ?? DEFAULT_LOCATOR_RESULT_CARD_PROPS}
       onChange={onChange}
@@ -669,23 +669,21 @@ const locatorFields: YextFields<LocatorProps> = {
             return (
               <div className="flex flex-col gap-3">
                 <FieldLabel label={pt("fields.pinIcon", "Pin Icon")}>
-                  <AutoField
-                    field={YextField<"none" | "icon">(
-                      msg("fields.pinIcon", "Pin Icon"),
-                      {
-                        type: "select",
-                        options: [
-                          {
-                            label: msg("fields.options.none", "None"),
-                            value: "none",
-                          },
-                          {
-                            label: msg("fields.options.icon", "Icon"),
-                            value: "icon",
-                          },
-                        ],
-                      }
-                    )}
+                  <YextAutoField
+                    field={{
+                      type: "basicSelector",
+                      label: msg("fields.pinIcon", "Pin Icon"),
+                      options: [
+                        {
+                          label: msg("fields.options.none", "None"),
+                          value: "none",
+                        },
+                        {
+                          label: msg("fields.options.icon", "Icon"),
+                          value: "icon",
+                        },
+                      ],
+                    }}
                     value={selectedType}
                     onChange={(type) =>
                       onChange({
@@ -699,15 +697,12 @@ const locatorFields: YextFields<LocatorProps> = {
                   />
                 </FieldLabel>
                 {selectedType === "icon" && (
-                  <AutoField
-                    field={YextField<string | undefined>(
-                      msg("fields.icon", "Icon"),
-                      {
-                        type: "select",
-                        hasSearch: true,
-                        options: makiIconOptions,
-                      }
-                    )}
+                  <YextAutoField
+                    field={{
+                      type: "basicSelector",
+                      label: msg("fields.icon", "Icon"),
+                      options: makiIconOptions,
+                    }}
                     value={value?.iconName}
                     onChange={(iconName) =>
                       onChange({ type: "icon", iconName })
@@ -718,10 +713,11 @@ const locatorFields: YextFields<LocatorProps> = {
             );
           },
         },
-        pinColor: YextField(msg("fields.pinColor", "Pin Color"), {
-          type: "select",
+        pinColor: {
+          type: "basicSelector",
+          label: msg("fields.pinColor", "Pin Color"),
           options: "BACKGROUND_COLOR",
-        }),
+        },
       },
       defaultItemProps: {
         entityType: DEFAULT_ENTITY_TYPE,
@@ -754,10 +750,11 @@ const locatorFields: YextFields<LocatorProps> = {
           ],
         }
       ),
-      accentColor: YextField(msg("fields.accentColor", "Accent Color"), {
-        type: "select",
+      accentColor: {
+        type: "basicSelector",
+        label: msg("fields.accentColor", "Accent Color"),
         options: "SITE_COLOR",
-      }),
+      },
       facetFields: YextField<DynamicOptionsSelectorType<string>, string>(
         msg("fields.dynamicFilters", "Dynamic Filters"),
         {
@@ -798,10 +795,11 @@ const locatorFields: YextFields<LocatorProps> = {
         type: "translatableString",
         filter: { types: ["type.string"] },
       }),
-      color: YextField(msg("fields.color", "Color"), {
-        type: "select",
+      color: {
+        type: "basicSelector",
+        label: msg("fields.color", "Color"),
         options: "SITE_COLOR",
-      }),
+      },
     },
   }),
   resultCard: YextField<LocatorProps["resultCard"]>(
@@ -822,29 +820,24 @@ const locatorFields: YextFields<LocatorProps> = {
       },
     }
   ),
-  distanceDisplay: YextField(
-    msg("fields.distanceDisplay", "Distance Display"),
-    {
-      type: "select",
-      options: [
-        {
-          label: msg("fields.options.distanceFromUser", "Distance from User"),
-          value: "distanceFromUser",
-        },
-        {
-          label: msg(
-            "fields.options.distanceFromSearch",
-            "Distance from Search"
-          ),
-          value: "distanceFromSearch",
-        },
-        {
-          label: msg("fields.options.hidden", "Hidden"),
-          value: "hidden",
-        },
-      ],
-    }
-  ),
+  distanceDisplay: {
+    type: "basicSelector",
+    label: msg("fields.distanceDisplay", "Distance Display"),
+    options: [
+      {
+        label: msg("fields.options.distanceFromUser", "Distance from User"),
+        value: "distanceFromUser",
+      },
+      {
+        label: msg("fields.options.distanceFromSearch", "Distance from Search"),
+        value: "distanceFromSearch",
+      },
+      {
+        label: msg("fields.options.hidden", "Hidden"),
+        value: "hidden",
+      },
+    ],
+  },
 };
 
 /**
@@ -880,7 +873,7 @@ export const LocatorComponent: YextComponentConfig<LocatorProps> = {
     updatedFields = setDeep(updatedFields, "resultCard.min", entityTypeCount);
     updatedFields = setDeep(updatedFields, "resultCard.max", entityTypeCount);
 
-    return updatedFields;
+    return toPuckFields<LocatorProps>(updatedFields);
   },
   defaultProps: {
     locationStyles: [],

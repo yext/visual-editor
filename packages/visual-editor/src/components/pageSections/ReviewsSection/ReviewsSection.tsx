@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { FaArrowLeft, FaArrowRight, FaChevronDown } from "react-icons/fa";
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
+import { PuckComponent, Slot } from "@puckeditor/core";
 import * as React from "react";
 import {
   backgroundColors,
@@ -24,6 +24,7 @@ import { StarOff } from "lucide-react";
 import { AnalyticsScopeProvider, useAnalytics } from "@yext/pages-components";
 import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 type Review = {
   authorName: string;
@@ -131,21 +132,20 @@ const ReviewsEmptyState: React.FC<{ backgroundColor: ThemeColor }> = ({
   );
 };
 
-const reviewsFields: Fields<ReviewsSectionProps> = {
+const reviewsFields: YextFields<ReviewsSectionProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
-      accentColor: YextField(msg("fields.accentColor", "Accent Color"), {
-        type: "select",
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
+      accentColor: {
+        type: "basicSelector",
+        label: msg("fields.accentColor", "Accent Color"),
         options: "SITE_COLOR",
-      }),
+      },
       showSectionHeading: YextField(
         msg("fields.showSectionHeading", "Show Section Heading"),
         {
@@ -581,7 +581,7 @@ const ShowMoreButton: React.FC<{
  * The Reviews Section displays customer reviews fetched dynamically from the Yext Reviews API. It features a customizable section heading and shows review details including ratings, content, and timestamps.
  * Available on Location templates.
  */
-export const ReviewsSection: ComponentConfig<{ props: ReviewsSectionProps }> = {
+export const ReviewsSection: YextComponentConfig<ReviewsSectionProps> = {
   fields: reviewsFields,
   label: msg("components.reviewsSection", "Reviews Section"),
   defaultProps: {

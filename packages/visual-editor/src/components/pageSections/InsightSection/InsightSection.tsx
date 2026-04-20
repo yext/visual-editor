@@ -8,12 +8,13 @@ import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
+import { PuckComponent, Slot } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { defaultInsightCardSlotData } from "./InsightCard.tsx";
 import { InsightCardsWrapperProps } from "./InsightCardsWrapper.tsx";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 export interface InsightSectionProps {
   /**
@@ -51,17 +52,15 @@ export interface InsightSectionProps {
   liveVisibility: boolean;
 }
 
-const insightSectionFields: Fields<InsightSectionProps> = {
+const insightSectionFields: YextFields<InsightSectionProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
       showSectionHeading: YextField(
         msg("fields.showSectionHeading", "Show Section Heading"),
         {
@@ -120,7 +119,7 @@ const InsightSectionComponent: PuckComponent<InsightSectionProps> = (props) => {
  * The Insight Section is used to display a curated list of content such as articles, blog posts, or other informational blurbs. It features a main section heading and renders each insight as a distinct card, making it an effective way to showcase valuable content.
  * Available on Location templates.
  */
-export const InsightSection: ComponentConfig<{ props: InsightSectionProps }> = {
+export const InsightSection: YextComponentConfig<InsightSectionProps> = {
   label: msg("components.insightsSection", "Insights Section"),
   fields: insightSectionFields,
   defaultProps: {

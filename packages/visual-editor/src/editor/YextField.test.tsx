@@ -61,88 +61,6 @@ afterEach(() => {
 });
 
 describe("YextField", () => {
-  it("returns a basicSelector field for searchable select inputs", () => {
-    const field = YextField<string>(msg("fields.variant", "Variant"), {
-      type: "select",
-      hasSearch: true,
-      options: [
-        { label: "Alpha", value: "alpha" },
-        { label: "Beta", value: "beta" },
-      ],
-    });
-
-    expect(field.type).toBe("basicSelector");
-  });
-
-  it("uses theme options for searchable select inputs with string option keys", () => {
-    const fieldName = msg("fields.headingLevel", "Heading Level");
-
-    const field = YextField(fieldName, {
-      type: "select",
-      hasSearch: true,
-      options: "HEADING_LEVEL",
-    });
-
-    expect(field).toEqual({
-      type: "basicSelector",
-      label: fieldName,
-      options: ThemeOptions.HEADING_LEVEL,
-    });
-  });
-
-  it("renders searchable select fields through YextAutoField", () => {
-    const field = YextField<string>(msg("fields.variant", "Variant"), {
-      type: "select",
-      hasSearch: true,
-      options: [
-        { label: "Alpha", value: "alpha" },
-        { label: "Beta", value: "beta" },
-      ],
-    });
-
-    const { onChange } = renderCustomField(field, "alpha");
-
-    expect(screen.getByRole("combobox").textContent).toContain("Alpha");
-
-    fireEvent.click(screen.getByRole("combobox"));
-
-    expect(screen.getByPlaceholderText("Search")).toBeDefined();
-
-    fireEvent.click(screen.getByText("Beta"));
-
-    expect(onChange).toHaveBeenCalledWith("beta");
-  });
-
-  it("renders basicSelector configs with function-valued options through YextAutoField", () => {
-    const fieldName = msg("fields.item", "Item");
-    const getOptions = vi.fn(() => [
-      { label: "Alpha", value: "alpha" },
-      { label: "Beta", value: "beta" },
-    ]);
-
-    const field = YextField<string | undefined>(fieldName, {
-      type: "basicSelector",
-      options: getOptions,
-      translateOptions: false,
-    });
-
-    expect(field).toMatchObject({
-      type: "basicSelector",
-      label: fieldName,
-      translateOptions: false,
-    });
-
-    const { onChange } = renderCustomField(field, "alpha");
-
-    expect(getOptions).toHaveBeenCalled();
-    expect(screen.getByRole("combobox").textContent).toContain("Alpha");
-
-    fireEvent.click(screen.getByRole("combobox"));
-    fireEvent.click(screen.getByText("Beta"));
-
-    expect(onChange).toHaveBeenCalledWith("beta");
-  });
-
   it("returns a code field and renders it through YextAutoField", () => {
     const field = YextField<string>(msg("fields.html", "HTML"), {
       type: "code",
@@ -159,50 +77,22 @@ describe("YextField", () => {
     );
   });
 
-  it.each([
-    ["BACKGROUND_COLOR", "Recommended Colors"],
-    ["SITE_COLOR", "Recommended Color"],
-  ] as const)(
-    "renders %s grouped options without search",
-    (optionKey, expectedHeading) => {
-      const field = YextField(msg("fields.color", "Color"), {
-        type: "select",
-        options: optionKey,
-      });
+  it("maps radio fields with theme option keys to Puck config", () => {
+    const fieldName = msg("fields.radio", "radio");
 
-      expect(field.type).toBe("basicSelector");
+    const field = YextField(fieldName, {
+      type: "radio",
+      options: "ALIGNMENT",
+      visible: false,
+    });
 
-      renderCustomField(field);
-
-      fireEvent.click(screen.getByRole("combobox"));
-
-      expect(screen.queryByPlaceholderText("Search")).toBeNull();
-      expect(screen.getByText(expectedHeading)).toBeDefined();
-    }
-  );
-
-  it.each([
-    ["select", "HEADING_LEVEL", ThemeOptions.HEADING_LEVEL],
-    ["radio", "ALIGNMENT", ThemeOptions.ALIGNMENT],
-  ] as const)(
-    "maps %s fields with theme option keys to Puck config",
-    (fieldType, optionKey, options) => {
-      const fieldName = msg(`fields.${fieldType}`, fieldType);
-
-      const field = YextField(fieldName, {
-        type: fieldType,
-        options: optionKey,
-        visible: false,
-      } as any);
-
-      expect(field).toEqual({
-        label: fieldName,
-        visible: false,
-        type: fieldType,
-        options,
-      });
-    }
-  );
+    expect(field).toEqual({
+      label: fieldName,
+      visible: false,
+      type: "radio",
+      options: ThemeOptions.ALIGNMENT,
+    });
+  });
 
   it.each([
     [{ type: "text" }, "text"],
@@ -402,14 +292,6 @@ describe("YextField", () => {
     {
       fieldName: msg("fields.number", "Number"),
       config: { type: "number", min: 1, max: 5, visible: false },
-    },
-    {
-      fieldName: msg("fields.select", "Select"),
-      config: {
-        type: "select",
-        options: [{ label: "Alpha", value: "alpha" }],
-        visible: true,
-      },
     },
     {
       fieldName: msg("fields.group", "Group"),

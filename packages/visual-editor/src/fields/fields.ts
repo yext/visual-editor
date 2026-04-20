@@ -1,4 +1,4 @@
-import type { ComponentConfig, DefaultComponentProps } from "@puckeditor/core";
+import type { ComponentConfig, DefaultComponentProps, Fields } from "@puckeditor/core";
 import {
   BasicSelectorField,
   BasicSelectorFieldOverride,
@@ -29,7 +29,15 @@ export type YextComponentConfig<
 
 export type YextFields<
   T extends DefaultComponentProps = DefaultComponentProps,
-> = YextComponentConfig<T>["fields"];
+> = NonNullable<YextComponentConfig<T>["fields"]>;
+
+// For things like resolveFields, Puck does not currently let you override the return type
+// so we need this function to satisfy the typing.
+export const toPuckFields = <
+  Props extends DefaultComponentProps = DefaultComponentProps,
+>(
+  fields: YextFields<Props>
+): Fields<Props> => fields as unknown as Fields<Props>;
 
 export const YextPuckFieldOverrides = {
   basicSelector: BasicSelectorFieldOverride,

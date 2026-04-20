@@ -1,4 +1,5 @@
-import { ArrayField, AutoField, UiState, Field } from "@puckeditor/core";
+import { ArrayField, UiState, Field } from "@puckeditor/core";
+import { YextAutoField } from "../fields/YextAutoField.tsx";
 import { pt } from "../utils/i18n/platform.ts";
 
 export type DynamicOptionValueTypes = string | number | boolean | object;
@@ -60,7 +61,7 @@ export const DynamicOptionsSelector = <T extends DynamicOptionValueTypes>(
           <div className="ve-mb-2 ve-text-sm ve-font-medium ve-leading-none">
             {pt(props.label)}
           </div>
-          <AutoField
+          <YextAutoField
             id={id ? `${id}_selections` : undefined}
             readOnly={readOnly}
             field={DynamicOptionsArrayField(
@@ -99,9 +100,9 @@ const DynamicOptionsArrayField = <T extends DynamicOptionValueTypes>(
   }
   const dropdownField = {
     label: dropdownLabel,
-    type: "select" as const,
+    type: "basicSelector" as const,
     options: dropdownOptions,
-  };
+  } as any;
 
   return {
     type: "array",

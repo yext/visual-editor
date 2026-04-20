@@ -1,4 +1,4 @@
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
+import { PuckComponent, Slot } from "@puckeditor/core";
 import { YextField } from "../../editor/YextField.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import {
@@ -19,6 +19,7 @@ import {
 import { pt } from "../../utils/i18n/platform.ts";
 import { useOverflow } from "../../hooks/useOverflow.ts";
 import * as React from "react";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export interface SecondaryHeaderSlotProps {
   data: {
@@ -40,7 +41,7 @@ export interface SecondaryHeaderSlotProps {
   };
 }
 
-const secondaryHeaderSlotFields: Fields<SecondaryHeaderSlotProps> = {
+const secondaryHeaderSlotFields: YextFields<SecondaryHeaderSlotProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
@@ -69,14 +70,11 @@ const secondaryHeaderSlotFields: Fields<SecondaryHeaderSlotProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          hasSearch: true,
-          options: "BACKGROUND_COLOR",
-        }
-      ),
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
     },
   }),
   slots: {
@@ -226,11 +224,10 @@ export const defaultSecondaryHeaderProps: SecondaryHeaderSlotProps = {
   },
 };
 
-export const SecondaryHeaderSlot: ComponentConfig<{
-  props: SecondaryHeaderSlotProps;
-}> = {
-  label: msg("components.secondaryHeader", "Secondary Header"),
-  fields: secondaryHeaderSlotFields,
-  defaultProps: defaultSecondaryHeaderProps,
-  render: (props) => <SecondaryHeaderSlotWrapper {...props} />,
-};
+export const SecondaryHeaderSlot: YextComponentConfig<SecondaryHeaderSlotProps> =
+  {
+    label: msg("components.secondaryHeader", "Secondary Header"),
+    fields: secondaryHeaderSlotFields,
+    defaultProps: defaultSecondaryHeaderProps,
+    render: (props) => <SecondaryHeaderSlotWrapper {...props} />,
+  };

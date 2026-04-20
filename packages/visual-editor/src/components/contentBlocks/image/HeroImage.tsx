@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { EntityField } from "../../../editor/EntityField.tsx";
@@ -20,6 +20,7 @@ import {
   ImageWrapperProps,
 } from "./Image.tsx";
 import { EmptyImageState } from "./EmptyImageState.tsx";
+import { YextComponentConfig } from "../../../fields/fields.ts";
 
 export interface HeroImageProps extends ImageWrapperProps {
   /** @internal from the parent Hero Section Component */
@@ -99,7 +100,7 @@ const HeroImageComponent: PuckComponent<HeroImageProps> = (props) => {
   );
 };
 
-export const HeroImage: ComponentConfig<{ props: HeroImageProps }> = {
+export const HeroImage: YextComponentConfig<HeroImageProps> = {
   label: msg("components.heroImage", "Hero Image"),
   fields: ImageWrapperFields,
   defaultProps: imageDefaultProps,

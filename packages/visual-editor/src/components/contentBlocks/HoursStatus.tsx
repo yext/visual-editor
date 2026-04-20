@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { HoursType } from "@yext/pages-components";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
@@ -9,6 +9,7 @@ import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { HoursStatusAtom } from "../atoms/hoursStatus.tsx";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export interface HoursStatusProps {
   data: {
@@ -39,7 +40,7 @@ export interface HoursStatusProps {
   };
 }
 
-export const hoursStatusWrapperFields: Fields<HoursStatusProps> = {
+export const hoursStatusWrapperFields: YextFields<HoursStatusProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
@@ -129,7 +130,7 @@ const HoursStatusWrapper: PuckComponent<HoursStatusProps> = ({
   );
 };
 
-export const HoursStatus: ComponentConfig<HoursStatusProps> = {
+export const HoursStatus: YextComponentConfig<HoursStatusProps> = {
   label: msg("components.hoursStatus", "Hours Status"),
   fields: hoursStatusWrapperFields,
   defaultProps: {

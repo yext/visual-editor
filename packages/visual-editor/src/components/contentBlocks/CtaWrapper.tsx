@@ -1,9 +1,4 @@
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  setDeep,
-} from "@puckeditor/core";
+import { PuckComponent, setDeep } from "@puckeditor/core";
 import { ThemeColor } from "../../utils/themeConfigOptions.ts";
 import { CTA, CTAVariant, isCtaVariantWithColor } from "../atoms/cta.tsx";
 import {
@@ -25,6 +20,7 @@ import {
   ctaTypeOptions,
   getCTAType,
 } from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export interface CTAWrapperProps {
   data: {
@@ -74,7 +70,7 @@ export interface CTAWrapperProps {
   eventName?: string;
 }
 
-const ctaWrapperFields: Fields<CTAWrapperProps> = {
+const ctaWrapperFields: YextFields<CTAWrapperProps> = {
   data: {
     type: "object",
     label: msg("fields.data", "Data"),
@@ -159,14 +155,16 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
         type: "radio",
         options: "CTA_VARIANT",
       }),
-      presetImage: YextField(msg("fields.presetImage", "Preset Image"), {
-        type: "select",
+      presetImage: {
+        type: "basicSelector",
+        label: msg("fields.presetImage", "Preset Image"),
         options: "PRESET_IMAGE",
-      }),
-      color: YextField(msg("fields.color", "Color"), {
-        type: "select",
+      },
+      color: {
+        type: "basicSelector",
+        label: msg("fields.color", "Color"),
         options: "SITE_COLOR",
-      }),
+      },
     },
   },
 };
@@ -294,7 +292,7 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
   );
 };
 
-export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
+export const CTAWrapper: YextComponentConfig<CTAWrapperProps> = {
   label: msg("components.callToAction", "Call to Action"),
   fields: ctaWrapperFields,
   defaultProps: {

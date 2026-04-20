@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { FaRegEnvelope } from "react-icons/fa";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
@@ -15,6 +15,11 @@ import {
 } from "../../utils/themeConfigOptions.ts";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import { updateFields } from "../pageSections/HeroSection.tsx";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  YextFields,
+} from "../../fields/fields.ts";
 
 export interface EmailsProps {
   data: {
@@ -39,7 +44,7 @@ export interface EmailsProps {
 }
 
 // Email fields used in Emails and CoreInfoSection
-export const EmailsFields: Fields<EmailsProps> = {
+export const EmailsFields: YextFields<EmailsProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
@@ -67,10 +72,11 @@ export const EmailsFields: Fields<EmailsProps> = {
         type: "radio",
         options: "SHOW_HIDE",
       }),
-      color: YextField(msg("fields.color", "Color"), {
-        type: "select",
+      color: {
+        type: "basicSelector",
+        label: msg("fields.color", "Color"),
         options: "SITE_COLOR",
-      }),
+      },
     },
   }),
 };
@@ -139,7 +145,7 @@ const EmailsComponent: PuckComponent<EmailsProps> = (props) => {
   );
 };
 
-export const Emails: ComponentConfig<EmailsProps> = {
+export const Emails: YextComponentConfig<EmailsProps> = {
   label: msg("components.emails", "Emails"),
   fields: EmailsFields,
   resolveFields: (data) => {
@@ -149,7 +155,13 @@ export const Emails: ComponentConfig<EmailsProps> = {
       return updatedFields;
     }
 
-    return updateFields(updatedFields, ["styles.listLength.visible"], true);
+    return toPuckFields(
+      updateFields<EmailsProps>(
+        updatedFields,
+        ["styles.listLength.visible"],
+        true
+      )
+    );
   },
   defaultProps: {
     data: {

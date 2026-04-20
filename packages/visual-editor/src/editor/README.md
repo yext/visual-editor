@@ -112,6 +112,8 @@ import {
   YextEntityFieldSelector,
   resolveYextEntityField,
   useDocument,
+  YextComponentConfig
+  YextFields
 } from "@yext/visual-editor";
 import { MyFieldType, TemplateStream } from "../types/autogen";
 import { config } from "../templates/myTemplate";
@@ -122,7 +124,7 @@ export type ExampleProps = {
   };
 };
 
-const exampleFields: Fields<ExampleProps> = {
+const exampleFields: YextFields<ExampleProps> = {
   myField: {
     type: "object",
     label: "Example Parent Field", // top-level sidebar label
@@ -139,7 +141,7 @@ const exampleFields: Fields<ExampleProps> = {
   },
 };
 
-export const ExampleComponent: ComponentConfig<ExampleProps> = {
+export const ExampleComponent: YextComponentConfig<ExampleProps> = {
   fields: exampleFields,
   defaultProps: {
     myField: {
@@ -266,9 +268,9 @@ YextField(label: MsgString, config: YextFieldConfig): Field<any>
 ### Usage
 
 ```tsx
-import { YextField, msg } from "@yext/visual-editor";
+import { YextField, msg, YextFields, YextComponentConfig } from "@yext/visual-editor";
 
-const myComponentFields: Fields<myComponentProps> = {
+const myComponentFields: YextFields<myComponentProps> = {
   address: YextField<any, AddressType>(msg("fields.address", "Address"), {
     type: "entityField",
     filter: { types: ["type.address"] },
@@ -285,7 +287,7 @@ const myComponentFields: Fields<myComponentProps> = {
   ),
 };
 
-export const MyComponent: ComponentConfig<myComponentProps> = {
+export const MyComponent: YextComponentConfig<myComponentProps> = {
   fields: myComponentFields,
   render: (props) => <SomeComponent {...props} />,
 };

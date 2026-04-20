@@ -1,9 +1,4 @@
-import {
-  ComponentConfig,
-  ComponentData,
-  PuckComponent,
-  setDeep,
-} from "@puckeditor/core";
+import { ComponentData, PuckComponent, setDeep } from "@puckeditor/core";
 import { EventSectionType } from "../../../types/types.ts";
 import { ComponentFields } from "../../../types/fields.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
@@ -17,6 +12,7 @@ import {
 import { defaultEventCardSlotData, EventCardProps } from "./EventCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
+import { YextComponentConfig } from "../../../fields/fields.ts";
 
 export type EventCardsWrapperProps = CardWrapperType<EventSectionType> & {
   styles: {
@@ -70,9 +66,7 @@ const EventCardsWrapperComponent: PuckComponent<EventCardsWrapperProps> = (
   );
 };
 
-export const EventCardsWrapper: ComponentConfig<{
-  props: EventCardsWrapperProps;
-}> = {
+export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
   label: msg("components.eventCardsWrapper", "Event Cards"),
   fields: eventCardsWrapperFields,
   defaultProps: {

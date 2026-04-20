@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields } from "@puckeditor/core";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
@@ -13,6 +12,7 @@ import {
   backgroundColors,
 } from "../../utils/themeConfigOptions.ts";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 /** The props for the Phone component */
 export interface PhoneProps {
@@ -56,7 +56,7 @@ export const PhoneDataFields = {
 };
 
 // Phone style definitions used in Phone and CoreInfoSection
-export const PhoneStyleFields = {
+export const PhoneStyleFields: YextFields<PhoneProps["styles"]> = {
   phoneFormat: YextField<"domestic" | "international">(
     msg("fields.phoneFormat", "Phone Format"),
     {
@@ -79,10 +79,11 @@ export const PhoneStyleFields = {
     type: "radio",
     options: "SHOW_HIDE",
   }),
-  color: YextField(msg("fields.color", "Color"), {
-    type: "select",
+  color: {
+    type: "basicSelector",
+    label: msg("fields.color", "Color"),
     options: "SITE_COLOR",
-  }),
+  },
 };
 
 export const defaultPhoneDataProps: PhoneProps["data"] = {
@@ -93,7 +94,7 @@ export const defaultPhoneDataProps: PhoneProps["data"] = {
   label: { defaultValue: "Phone" },
 };
 
-export const PhoneFields: Fields<PhoneProps> = {
+export const PhoneFields: YextFields<PhoneProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: PhoneDataFields,
@@ -137,7 +138,7 @@ const PhoneComponent = ({ data, styles, parentData }: PhoneProps) => {
   );
 };
 
-export const Phone: ComponentConfig<{ props: PhoneProps }> = {
+export const Phone: YextComponentConfig<PhoneProps> = {
   label: msg("components.phone", "Phone"),
   fields: PhoneFields,
   defaultProps: {

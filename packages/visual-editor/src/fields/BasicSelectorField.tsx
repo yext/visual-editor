@@ -6,9 +6,15 @@ import {
   type ComboboxOption,
   type ComboboxOptionGroup,
 } from "../internal/types/combobox.ts";
+import { ThemeOptions } from "../utils/themeConfigOptions.ts";
 import { pt, type MsgString } from "../utils/i18n/platform.ts";
 
-export type BasicSelectorOptions = ComboboxOption[] | (() => ComboboxOption[]);
+type ThemeOptionKey = keyof typeof ThemeOptions;
+
+export type BasicSelectorOptions =
+  | ComboboxOption[]
+  | (() => ComboboxOption[])
+  | ThemeOptionKey;
 
 /**
   Example usage:
@@ -44,7 +50,7 @@ export type BasicSelectorOptions = ComboboxOption[] | (() => ComboboxOption[]);
     render: (props) => <MyComponentWrapper {...props} />,
   };
  */
-export type BasicSelectorField = BaseField & {
+type BasicSelectorFieldBase = BaseField & {
   type: "basicSelector";
   label?: string | MsgString;
   visible?: boolean;
@@ -52,18 +58,40 @@ export type BasicSelectorField = BaseField & {
   noOptionsPlaceholder?: string | MsgString;
   noOptionsMessage?: string | MsgString;
   disableSearch?: boolean;
-} & (
-    | {
-        options: BasicSelectorOptions;
-        optionGroups?: never;
-      }
-    | {
-        options?: never;
-        optionGroups: ComboboxOptionGroup[];
-      }
-  );
+};
+
+type BasicSelectorFieldWithOptions = BasicSelectorFieldBase & {
+  options: BasicSelectorOptions;
+  optionGroups?: never;
+};
+
+type BasicSelectorFieldWithGroups = BasicSelectorFieldBase & {
+  options?: never;
+  optionGroups: ComboboxOptionGroup[];
+};
+
+export type BasicSelectorField =
+  | BasicSelectorFieldWithOptions
+  | BasicSelectorFieldWithGroups;
 
 type BasicSelectorFieldProps = FieldProps<BasicSelectorField>;
+
+const isThemeOptionKey = (value: string): value is ThemeOptionKey =>
+  value in ThemeOptions;
+
+const isComboboxOptionGroup = (value: unknown): value is ComboboxOptionGroup =>
+  typeof value === "object" &&
+  value !== null &&
+  "options" in value &&
+  Array.isArray((value as ComboboxOptionGroup).options);
+
+const isComboboxOptionGroupArray = (
+  value: unknown
+): value is ComboboxOptionGroup[] =>
+  Array.isArray(value) && value.every((item) => isComboboxOptionGroup(item));
+
+const INVALID_THEME_OPTIONS_MESSAGE =
+  "Use a valid ThemeOptions key or pass explicit options.";
 
 export const BasicSelectorFieldOverride = ({
   field,
@@ -77,19 +105,53 @@ export const BasicSelectorFieldOverride = ({
       "basicSelectorNoOptionsLabel",
       "No options available"
     ),
-    noOptionsMessage,
+    noOptionsMessage: providedNoOptionsMessage,
     disableSearch,
   } = field;
 
+  const resolvedThemeOptions =
+    field.optionGroups === undefined && typeof field.options === "string"
+      ? isThemeOptionKey(field.options)
+        ? ThemeOptions[field.options]
+        : undefined
+      : undefined;
+
+  const invalidThemeOptionsKey =
+    field.optionGroups === undefined &&
+    typeof field.options === "string" &&
+    !isThemeOptionKey(field.options);
+
+  React.useEffect(() => {
+    if (invalidThemeOptionsKey) {
+      console.warn(
+        `Invalid ThemeOptions key "${field.options}" passed to basicSelector.`
+      );
+    }
+  }, [field.options, invalidThemeOptionsKey]);
+
+  const resolvedOptionsSource = invalidThemeOptionsKey
+    ? []
+    : (resolvedThemeOptions ??
+      (field.optionGroups === undefined ? field.options : undefined));
+
   const options: ComboboxOption[] =
     field.optionGroups === undefined
-      ? typeof field.options === "function"
-        ? field.options()
-        : (field.options ?? [])
+      ? typeof resolvedOptionsSource === "function"
+        ? resolvedOptionsSource()
+        : isComboboxOptionGroupArray(resolvedOptionsSource)
+          ? []
+          : typeof resolvedOptionsSource === "string"
+            ? []
+            : (resolvedOptionsSource ?? [])
       : [];
-  const optionGroups: ComboboxOptionGroup[] = field.optionGroups ?? [
-    { options },
-  ];
+  const optionGroups: ComboboxOptionGroup[] =
+    field.optionGroups ??
+    (isComboboxOptionGroupArray(resolvedOptionsSource)
+      ? resolvedOptionsSource
+      : [{ options }]);
+  const noOptionsMessage =
+    providedNoOptionsMessage ??
+    (invalidThemeOptionsKey ? INVALID_THEME_OPTIONS_MESSAGE : undefined);
 
   const translatedOptionGroups = translateOptions
     ? optionGroups.map((group) => ({
