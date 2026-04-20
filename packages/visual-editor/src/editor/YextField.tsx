@@ -64,8 +64,8 @@ type YextArrayFieldConfig<
   Props extends { [key: string]: any }[] = { [key: string]: any }[],
 > = YextBaseField &
   Omit<ArrayField<Props, YextPuckField>, keyof BaseField | "arrayFields"> & {
-  arrayFields: YextFieldMap<Props[0]>;
-};
+    arrayFields: YextFieldMap<Props[0]>;
+  };
 
 export type YextArrayField<
   Props extends { [key: string]: any }[] = { [key: string]: any }[],
@@ -80,8 +80,8 @@ type YextObjectFieldConfig<
   Props extends { [key: string]: any } = { [key: string]: any },
 > = YextBaseField &
   Omit<ObjectField<Props, YextPuckField>, keyof BaseField | "objectFields"> & {
-  objectFields: YextFieldMap<Props>;
-};
+    objectFields: YextFieldMap<Props>;
+  };
 
 export type YextObjectField<
   Props extends { [key: string]: any } = { [key: string]: any },
