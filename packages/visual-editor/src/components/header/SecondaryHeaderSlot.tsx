@@ -12,10 +12,7 @@ import {
   parseDocumentForLanguageDropdown,
 } from "./languageDropdown.tsx";
 import { defaultHeaderLinkProps, HeaderLinksProps } from "./HeaderLinks.tsx";
-import {
-  useExpandedHeaderMenu,
-  useHeaderLinksDisplayMode,
-} from "./ExpandedHeaderMenuContext.tsx";
+import { useHeaderLinksDisplayMode } from "./ExpandedHeaderMenuContext.tsx";
 import { pt } from "../../utils/i18n/platform.ts";
 import { useOverflow } from "../../hooks/useOverflow.ts";
 import * as React from "react";
@@ -97,7 +94,6 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
 }) => {
   const streamDocument = useDocument();
   const displayMode = useHeaderLinksDisplayMode();
-  const menuContext = useExpandedHeaderMenu();
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const contentRef = React.useRef<HTMLDivElement>(null);
@@ -113,18 +109,6 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
     languageDropDownProps &&
     languageDropDownProps.locales?.length > 1;
   const isMenuMode = displayMode === "menu";
-  const hideSecondaryHeader = !isMenuMode && isOverflow;
-
-  React.useEffect(() => {
-    if (!menuContext || isMenuMode) {
-      return;
-    }
-
-    // If shown, report actual overflow; if hidden, report false.
-    menuContext.setSecondaryOverflow(data.show ? isOverflow : false);
-
-    return () => menuContext.setSecondaryOverflow(false);
-  }, [menuContext, isMenuMode, data.show, isOverflow]);
 
   if (puck.isEditing && !data.show) {
     return (
@@ -146,20 +130,9 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
   return (
     <PageSection
       maxWidth={parentStyles?.maxWidth}
-      verticalPadding={hideSecondaryHeader ? "none" : "sm"}
+      verticalPadding={"sm"}
       background={styles.backgroundColor}
       className="w-full"
-      outerStyle={
-        hideSecondaryHeader
-          ? {
-              height: 0,
-              overflow: "hidden",
-              visibility: "hidden",
-              pointerEvents: "none",
-            }
-          : undefined
-      }
-      aria-hidden={hideSecondaryHeader}
     >
       <div ref={containerRef} className="w-full">
         <div

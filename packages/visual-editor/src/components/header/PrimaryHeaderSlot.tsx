@@ -156,9 +156,7 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
 
   const primaryHasCollapsedLinks =
     menuContext?.primaryHasCollapsedLinks ?? false;
-  const secondaryOverflow = menuContext?.secondaryOverflow ?? false;
-  const showHamburger =
-    primaryOverflow || primaryHasCollapsedLinks || secondaryOverflow;
+  const showHamburger = primaryOverflow || primaryHasCollapsedLinks;
   const hasExtraMargin =
     showHamburger && (isDesktop || isTablet) && !primaryOverflow && !showCTAs;
 
@@ -237,7 +235,6 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
 
   const renderMenuContent = (variant: "mobile" | "tablet" | "desktop") => {
     const showCtasInMenu = variant === "mobile";
-    const showSecondaryInMenu = variant === "mobile" || secondaryOverflow;
 
     return (
       <>
@@ -250,17 +247,6 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
             <slots.LinksSlot style={{ height: "auto" }} />
           </HeaderLinksDisplayModeProvider>
         </PageSection>
-
-        {/* Secondary Header (Menu) */}
-        {parentValues && (
-          <HeaderLinksDisplayModeProvider value="menu">
-            <div className={showSecondaryInMenu ? "flex" : "flex md:hidden"}>
-              <parentValues.SecondaryHeaderSlot
-                style={{ height: "auto", width: "100%" }}
-              />
-            </div>
-          </HeaderLinksDisplayModeProvider>
-        )}
 
         {showCTAs && showCtasInMenu && (
           <PageSection
@@ -526,12 +512,6 @@ export const PrimaryHeaderSlot: ComponentConfig<{
       showSecondaryCTA ||
       !!data.props.slots.LinksSlot?.[0]?.props.data.links?.some(
         (l: TranslatableCTA) => l.label && l.link
-      ) ||
-      !!(
-        data.props.parentValues?.SecondaryHeaderSlot?.[0]?.props.data.show &&
-        data.props.parentValues?.SecondaryHeaderSlot?.[0]?.props.data.links?.some(
-          (l: TranslatableCTA) => l.label && l.link
-        )
       );
 
     return {
