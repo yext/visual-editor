@@ -13,8 +13,8 @@ import { getDirections } from "@yext/pages-components";
 import { PresetImageType, FOOD_DELIVERY_SERVICES } from "../../types/types.ts";
 import { presetImageIcons } from "../../utils/presetImageIcons.tsx";
 import {
-  convertComputedStyleColorToHex,
   getThemeColorCssValue,
+  getThemeColorHexValue,
   hexToRGB,
   isColorContrastWcagCompliant,
 } from "../../utils/colors.ts";
@@ -102,50 +102,6 @@ const presetImageTypeToName = (presetImageType: PresetImageType) => {
     default:
       return presetImageType;
   }
-};
-
-const resolveCssColorToHex = (cssValue?: string): string | undefined => {
-  if (!cssValue) {
-    return undefined;
-  }
-
-  if (cssValue === "white") {
-    return "#FFFFFF";
-  }
-
-  if (cssValue === "black") {
-    return "#000000";
-  }
-
-  const normalizedHex = cssValue.toUpperCase();
-  if (/^#[0-9A-F]{6}$/.test(normalizedHex)) {
-    return normalizedHex;
-  }
-
-  if (/^#[0-9A-F]{3}$/.test(normalizedHex)) {
-    return `#${normalizedHex[1]}${normalizedHex[1]}${normalizedHex[2]}${normalizedHex[2]}${normalizedHex[3]}${normalizedHex[3]}`;
-  }
-
-  if (typeof window === "undefined") {
-    return undefined;
-  }
-
-  const themeRoot =
-    document.getElementsByClassName("components")?.[0] ??
-    document.body ??
-    document.documentElement;
-
-  const element = document.createElement("div");
-  element.style.color = cssValue;
-  themeRoot.appendChild(element);
-
-  const resolvedHex =
-    convertComputedStyleColorToHex(window.getComputedStyle(element).color) ||
-    undefined;
-
-  element.remove();
-
-  return resolvedHex;
 };
 
 const doesColorMeetContrastRequirement = (
@@ -286,6 +242,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
     buttonVariant,
     buttonClassName,
     showCaret,
+    background,
   };
 };
 
@@ -306,18 +263,32 @@ export const CTA = (props: CTAProps) => {
   } = props;
 
   const { t } = useTranslation();
+  const streamDocument = useDocument();
   const resolvedProps = useResolvedCtaProps(props);
   const isButton = actionType === "button";
-  const background = useBackground();
+
+  if (!resolvedProps) {
+    return null;
+  }
+
+  const {
+    link,
+    linkType,
+    label,
+    ariaLabel,
+    buttonVariant,
+    buttonClassName,
+    showCaret,
+    background,
+  } = resolvedProps;
   const isDarkBackground = background?.isDarkColor;
   const resolvedCtaColorHex = React.useMemo(
-    () => resolveCssColorToHex(getThemeColorCssValue(color?.selectedColor)),
-    [color?.selectedColor]
+    () => getThemeColorHexValue(color?.selectedColor, streamDocument),
+    [color?.selectedColor, streamDocument]
   );
   const resolvedBackgroundColorHex = React.useMemo(
-    () =>
-      resolveCssColorToHex(getThemeColorCssValue(background?.selectedColor)),
-    [background?.selectedColor]
+    () => getThemeColorHexValue(background?.selectedColor, streamDocument),
+    [background?.selectedColor, streamDocument]
   );
   const shouldUseConfiguredSecondaryColor =
     !!color?.selectedColor &&
@@ -340,14 +311,10 @@ export const CTA = (props: CTAProps) => {
       };
     }
 
-    if (variant === "secondary" && shouldUseConfiguredSecondaryColor) {
-      return {
-        borderColor: border,
-        color: border,
-      };
-    }
-
-    if (variant === "secondary" && !isDarkBackground) {
+    if (
+      variant === "secondary" &&
+      (shouldUseConfiguredSecondaryColor || !isDarkBackground)
+    ) {
       return {
         borderColor: border,
         color: border,
@@ -367,26 +334,11 @@ export const CTA = (props: CTAProps) => {
 
     return {};
   })();
-
   const disabledStyle: React.CSSProperties = {
     ...(ctaType !== "presetImage" ? dynamicStyle : undefined),
     cursor: "default",
     pointerEvents: "auto",
   };
-
-  if (!resolvedProps) {
-    return null;
-  }
-
-  const {
-    link,
-    linkType,
-    label,
-    ariaLabel,
-    buttonVariant,
-    buttonClassName,
-    showCaret,
-  } = resolvedProps;
 
   const linkContent = (
     <>

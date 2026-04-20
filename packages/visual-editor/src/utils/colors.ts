@@ -1,4 +1,6 @@
+import { getThemeValue } from "./getThemeValue.ts";
 import { type ThemeColor } from "./themeConfigOptions.ts";
+import { type StreamDocument } from "./types/StreamDocument.ts";
 
 /**
  * hexToRGB converts a hex color to rgb
@@ -208,6 +210,175 @@ export const getThemeColorCssValue = (
   }
 
   return `var(--colors-${colorToken})`;
+};
+
+const normalizeHexColor = (colorValue?: string): string | undefined => {
+  if (!colorValue) {
+    return undefined;
+  }
+
+  if (colorValue === "white") {
+    return "#FFFFFF";
+  }
+
+  if (colorValue === "black") {
+    return "#000000";
+  }
+
+  const normalizedHex = colorValue.toUpperCase();
+  if (/^#[0-9A-F]{6}$/.test(normalizedHex)) {
+    return normalizedHex;
+  }
+
+  if (/^#[0-9A-F]{3}$/.test(normalizedHex)) {
+    return `#${normalizedHex[1]}${normalizedHex[1]}${normalizedHex[2]}${normalizedHex[2]}${normalizedHex[3]}${normalizedHex[3]}`;
+  }
+
+  const computedStyleHex = convertComputedStyleColorToHex(colorValue);
+  return computedStyleHex || undefined;
+};
+
+const rgbToHsl = (rgb: number[]) => {
+  const [r, g, b] = rgb.map((value) => value / 255);
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const lightness = (max + min) / 2;
+  const delta = max - min;
+
+  if (delta === 0) {
+    return { hue: 0, saturation: 0, lightness: lightness * 100 };
+  }
+
+  const saturation =
+    lightness > 0.5 ? delta / (2 - max - min) : delta / (max + min);
+
+  let hue = 0;
+  switch (max) {
+    case r:
+      hue = (g - b) / delta + (g < b ? 6 : 0);
+      break;
+    case g:
+      hue = (b - r) / delta + 2;
+      break;
+    default:
+      hue = (r - g) / delta + 4;
+      break;
+  }
+
+  return {
+    hue: hue * 60,
+    saturation: saturation * 100,
+    lightness: lightness * 100,
+  };
+};
+
+const hueToRgb = (p: number, q: number, t: number) => {
+  let normalizedT = t;
+
+  if (normalizedT < 0) {
+    normalizedT += 1;
+  }
+  if (normalizedT > 1) {
+    normalizedT -= 1;
+  }
+  if (normalizedT < 1 / 6) {
+    return p + (q - p) * 6 * normalizedT;
+  }
+  if (normalizedT < 1 / 2) {
+    return q;
+  }
+  if (normalizedT < 2 / 3) {
+    return p + (q - p) * (2 / 3 - normalizedT) * 6;
+  }
+
+  return p;
+};
+
+const hslToHex = (hue: number, saturation: number, lightness: number) => {
+  const normalizedHue = hue / 360;
+  const normalizedSaturation = saturation / 100;
+  const normalizedLightness = lightness / 100;
+
+  if (normalizedSaturation === 0) {
+    const grayscaleValue = Math.round(normalizedLightness * 255);
+    const hexValue = grayscaleValue.toString(16).padStart(2, "0");
+    return `#${hexValue}${hexValue}${hexValue}`.toUpperCase();
+  }
+
+  const q =
+    normalizedLightness < 0.5
+      ? normalizedLightness * (1 + normalizedSaturation)
+      : normalizedLightness +
+        normalizedSaturation -
+        normalizedLightness * normalizedSaturation;
+  const p = 2 * normalizedLightness - q;
+
+  const red = hueToRgb(p, q, normalizedHue + 1 / 3);
+  const green = hueToRgb(p, q, normalizedHue);
+  const blue = hueToRgb(p, q, normalizedHue - 1 / 3);
+
+  return `#${[red, green, blue]
+    .map((value) =>
+      Math.round(value * 255)
+        .toString(16)
+        .padStart(2, "0")
+    )
+    .join("")}`.toUpperCase();
+};
+
+const getDerivedPaletteHexColor = (
+  baseColorToken: string,
+  lightness: number,
+  streamDocument?: StreamDocument | Record<string, any>
+): string | undefined => {
+  const baseColorHex = normalizeHexColor(
+    getThemeValue(`--colors-${baseColorToken}`, streamDocument)
+  );
+  const baseColorRgb = baseColorHex ? hexToRGB(baseColorHex) : undefined;
+
+  if (!baseColorRgb) {
+    return undefined;
+  }
+
+  const { hue, saturation } = rgbToHsl(baseColorRgb);
+  return hslToHex(hue, saturation, lightness);
+};
+
+/**
+ * Resolves a ThemeColor token to a concrete hex color value in both browser and SSR contexts.
+ */
+export const getThemeColorHexValue = (
+  colorToken?: string,
+  streamDocument?: StreamDocument | Record<string, any>
+): string | undefined => {
+  if (!colorToken) {
+    return undefined;
+  }
+
+  if (colorToken.startsWith("[") && colorToken.endsWith("]")) {
+    return normalizeHexColor(colorToken.slice(1, -1));
+  }
+
+  const directHex = normalizeHexColor(colorToken);
+  if (directHex) {
+    return directHex;
+  }
+
+  const derivedPaletteMatch = colorToken.match(
+    /^palette-(primary|secondary|tertiary|quaternary)-(light|dark)$/
+  );
+  if (derivedPaletteMatch) {
+    const [, paletteName, tone] = derivedPaletteMatch;
+    return getDerivedPaletteHexColor(
+      `palette-${paletteName}`,
+      tone === "light" ? 98 : 20,
+      streamDocument
+    );
+  }
+
+  return normalizeHexColor(
+    getThemeValue(`--colors-${colorToken}`, streamDocument)
+  );
 };
 
 /**
