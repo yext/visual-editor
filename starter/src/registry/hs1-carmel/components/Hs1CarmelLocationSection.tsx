@@ -6,6 +6,7 @@ import {
   YextEntityFieldSelector,
   resolveComponentData,
 } from "@yext/visual-editor";
+import { AddressType } from "@yext/pages-components";
 import { HoursStatus, HoursTable } from "@yext/pages-components";
 import { Address } from "../../shared/SafeAddress";
 import { Link } from "../../shared/SafeLink";
@@ -25,6 +26,7 @@ type ActionLink = {
 
 export type Hs1CarmelLocationSectionProps = {
   heading: StyledTextProps;
+  address: YextEntityField<AddressType>;
   directionsCta: ActionLink;
 };
 
@@ -71,6 +73,12 @@ const createStyledTextField = (label: string) =>
 
 const Hs1CarmelLocationSectionFields: Fields<Hs1CarmelLocationSectionProps> = {
   heading: createStyledTextField("Heading"),
+  address: YextEntityFieldSelector<any, AddressType>({
+    label: "Address",
+    filter: {
+      types: ["type.address"],
+    },
+  }),
   directionsCta: {
     label: "Directions Call To Action",
     type: "object",
@@ -88,18 +96,31 @@ export const Hs1CarmelLocationSectionComponent: PuckComponent<
   const locale = streamDocument.locale ?? "en";
   const resolvedHeading =
     resolveComponentData(props.heading.text, locale, streamDocument) || "";
+  const resolvedAddress = resolveComponentData(
+    props.address,
+    locale,
+    streamDocument,
+  ) as AddressType | undefined;
   const directionsLink =
     props.directionsCta.link ||
     `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
       [
-        streamDocument.address?.line1,
-        streamDocument.address?.city,
-        streamDocument.address?.region,
-        streamDocument.address?.postalCode,
+        resolvedAddress?.line1,
+        resolvedAddress?.city,
+        resolvedAddress?.region,
+        resolvedAddress?.postalCode,
       ]
         .filter(Boolean)
         .join(" "),
     )}`;
+  const mapQuery = [
+    resolvedAddress?.line1,
+    resolvedAddress?.city,
+    resolvedAddress?.region,
+    resolvedAddress?.postalCode,
+  ]
+    .filter(Boolean)
+    .join(", ");
 
   return (
     <section className="bg-[#F7F7F7] px-4 py-16 lg:px-6">
@@ -123,9 +144,16 @@ export const Hs1CarmelLocationSectionComponent: PuckComponent<
                 timezone={streamDocument.timezone}
               />
             </div>
-            {streamDocument.address && (
+            {resolvedAddress && (
               <div className="mb-6">
-                <Address address={streamDocument.address} />
+                <Address
+                  address={resolvedAddress}
+                  lines={[
+                    ["line1"],
+                    ["city", ",", "region", "postalCode", ",", "countryCode"],
+                  ]}
+                  separator=" "
+                />
               </div>
             )}
             {streamDocument.mainPhone && (
@@ -161,11 +189,20 @@ export const Hs1CarmelLocationSectionComponent: PuckComponent<
             </Link>
           </div>
         </div>
-        <div className="relative min-h-[420px] overflow-hidden rounded-lg bg-[linear-gradient(135deg,#dfe7ec_0%,#b9cfdc_100%)]">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.7),transparent_35%),radial-gradient(circle_at_70%_60%,rgba(4,54,78,0.18),transparent_30%)]" />
-          <div className="absolute left-1/2 top-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[#04364E] text-white shadow-lg">
-            <span className="block h-3 w-3 rounded-full bg-white" />
-          </div>
+        <div className="min-h-[420px] overflow-hidden rounded-lg border border-[#d8dde3] bg-white">
+          {mapQuery ? (
+            <iframe
+              title="Carmel location map"
+              src={`https://www.google.com/maps?q=${encodeURIComponent(mapQuery)}&output=embed`}
+              className="h-[420px] w-full"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          ) : (
+            <div className="relative h-[420px] bg-[linear-gradient(135deg,#dfe7ec_0%,#b9cfdc_100%)]">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.7),transparent_35%),radial-gradient(circle_at_70%_60%,rgba(4,54,78,0.18),transparent_30%)]" />
+            </div>
+          )}
         </div>
       </div>
     </section>
@@ -190,6 +227,15 @@ export const Hs1CarmelLocationSection: ComponentConfig<Hs1CarmelLocationSectionP
         fontColor: "#04364E",
         fontWeight: 700,
         textTransform: "none",
+      },
+      address: {
+        field: "address",
+        constantValue: {
+          line1: "",
+          city: "",
+          postalCode: "",
+          countryCode: "",
+        },
       },
       directionsCta: {
         label: "Driving Directions",

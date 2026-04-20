@@ -142,10 +142,6 @@ export const Hs1AlbanyNewPatientsHoursSectionComponent: PuckComponent<
     streamDocument,
   );
 
-  if (!resolvedHours) {
-    return <section className="hidden" />;
-  }
-
   return (
     <section className="bg-[#f3f3f3] text-[#4a4a4a]">
       <div className="mx-auto max-w-[1170px] px-[15px] py-[50px]">
@@ -194,7 +190,7 @@ export const Hs1AlbanyNewPatientsHoursSectionComponent: PuckComponent<
                 {label}
               </strong>
               <p className="mt-2 text-sm leading-6">
-                {formatHours(resolvedHours[key])}
+                {formatHours(resolvedHours?.[key])}
               </p>
             </div>
           ))}
@@ -210,7 +206,7 @@ export const Hs1AlbanyNewPatientsHoursSectionComponent: PuckComponent<
                 {label}
               </div>
               <div className="text-right text-sm leading-6">
-                {formatHours(resolvedHours[key])}
+                {formatHours(resolvedHours?.[key])}
               </div>
             </div>
           ))}
@@ -257,6 +253,7 @@ export const Hs1AlbanyNewPatientsHoursSection: ComponentConfig<Hs1AlbanyNewPatie
         hours: {
           field: "hours",
           constantValue: {},
+          constantValueEnabled: false,
         },
       },
     },

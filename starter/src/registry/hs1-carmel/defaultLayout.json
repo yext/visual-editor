@@ -347,26 +347,244 @@
       }
     },
     {
-      "type": "Hs1CarmelLocationSection",
+      "type": "Hs1CarmelCoreInformationSection",
       "props": {
-        "id": "Hs1CarmelLocationSection-79147a79-3d15-4eb3-a4d2-aa2243a0a252",
-        "heading": {
-          "text": {
-            "field": "",
-            "constantValue": {
-              "en": "Our Location",
-              "hasLocalizedValue": "true"
+        "id": "Hs1CarmelCoreInformationSection-79147a79-3d15-4eb3-a4d2-aa2243a0a252",
+        "actionButtons": [
+          {
+            "label": {
+              "field": "",
+              "constantValue": {
+                "defaultValue": "Get Directions",
+                "hasLocalizedValue": "true"
+              },
+              "constantValueEnabled": true
             },
-            "constantValueEnabled": true
+            "link": {
+              "field": "",
+              "constantValue": "",
+              "constantValueEnabled": true
+            },
+            "linkType": "DRIVING_DIRECTIONS",
+            "icon": "directions",
+            "variant": "solid"
           },
-          "fontSize": 32,
-          "fontColor": "#04364E",
-          "fontWeight": 700,
-          "textTransform": "normal"
+          {
+            "label": {
+              "field": "",
+              "constantValue": {
+                "defaultValue": "Call",
+                "hasLocalizedValue": "true"
+              },
+              "constantValueEnabled": true
+            },
+            "link": {
+              "field": "mainPhone",
+              "constantValue": ""
+            },
+            "linkType": "PHONE",
+            "icon": "phone",
+            "variant": "outline"
+          },
+          {
+            "label": {
+              "field": "",
+              "constantValue": {
+                "defaultValue": "Website",
+                "hasLocalizedValue": "true"
+              },
+              "constantValueEnabled": true
+            },
+            "link": {
+              "field": "websiteUrl",
+              "constantValue": ""
+            },
+            "linkType": "URL",
+            "icon": "website",
+            "variant": "outline"
+          }
+        ],
+        "businessDetailsHeading": {
+          "field": "",
+          "constantValue": {
+            "defaultValue": "Business Details",
+            "hasLocalizedValue": "true"
+          },
+          "constantValueEnabled": true
         },
-        "directionsCta": {
-          "label": "Driving Directions",
-          "link": ""
+        "address": {
+          "field": "address",
+          "constantValue": {
+            "line1": "",
+            "city": "",
+            "postalCode": "",
+            "countryCode": ""
+          }
+        },
+        "phone": {
+          "field": "mainPhone",
+          "constantValue": ""
+        },
+        "websiteLabel": {
+          "field": "",
+          "constantValue": {
+            "defaultValue": "",
+            "hasLocalizedValue": "true"
+          },
+          "constantValueEnabled": true
+        },
+        "websiteLink": {
+          "field": "websiteUrl",
+          "constantValue": ""
+        },
+        "socialLinks": [
+          {
+            "label": {
+              "field": "",
+              "constantValue": {
+                "defaultValue": "Google",
+                "hasLocalizedValue": "true"
+              },
+              "constantValueEnabled": true
+            },
+            "link": {
+              "field": "",
+              "constantValue": "https://www.google.com",
+              "constantValueEnabled": true
+            },
+            "icon": "google"
+          },
+          {
+            "label": {
+              "field": "",
+              "constantValue": {
+                "defaultValue": "Facebook",
+                "hasLocalizedValue": "true"
+              },
+              "constantValueEnabled": true
+            },
+            "link": {
+              "field": "facebookPageUrl",
+              "constantValue": "{SOCM.icon1pagelink}"
+            },
+            "icon": "facebook"
+          },
+          {
+            "label": {
+              "field": "",
+              "constantValue": {
+                "defaultValue": "Instagram",
+                "hasLocalizedValue": "true"
+              },
+              "constantValueEnabled": true
+            },
+            "link": {
+              "field": "",
+              "constantValue": "//instagram.com/",
+              "constantValueEnabled": true
+            },
+            "icon": "instagram"
+          },
+          {
+            "label": {
+              "field": "",
+              "constantValue": {
+                "defaultValue": "Twitter",
+                "hasLocalizedValue": "true"
+              },
+              "constantValueEnabled": true
+            },
+            "link": {
+              "field": "",
+              "constantValue": "{SOCM.icon2pagelink}",
+              "constantValueEnabled": true
+            },
+            "icon": "twitter"
+          }
+        ],
+        "aboutHeading": {
+          "field": "",
+          "constantValue": {
+            "defaultValue": "About",
+            "hasLocalizedValue": "true"
+          },
+          "constantValueEnabled": true
+        },
+        "aboutCategory": {
+          "field": "",
+          "constantValue": {
+            "defaultValue": "Dental Practice",
+            "hasLocalizedValue": "true"
+          },
+          "constantValueEnabled": true
+        },
+        "aboutItems": {
+          "field": "",
+          "constantValue": [
+            "Comprehensive preventive dental exams and cleanings",
+            "Cosmetic dentistry and whitening treatments",
+            "Restorative care to protect long-term oral health",
+            "Friendly scheduling support and patient education"
+          ],
+          "constantValueEnabled": true
+        },
+        "hoursHeading": {
+          "field": "",
+          "constantValue": {
+            "defaultValue": "Hours",
+            "hasLocalizedValue": "true"
+          },
+          "constantValueEnabled": true
+        },
+        "hours": {
+          "field": "hours",
+          "constantValue": {}
+        },
+        "locationHeading": {
+          "field": "",
+          "constantValue": {
+            "defaultValue": "Location",
+            "hasLocalizedValue": "true"
+          },
+          "constantValueEnabled": true
+        },
+        "locationImage": {
+          "field": "",
+          "constantValue": {
+            "url": "",
+            "width": 0,
+            "height": 0
+          },
+          "constantValueEnabled": false
+        },
+        "locationTitle": {
+          "field": "name",
+          "constantValue": {
+            "defaultValue": "Round Valley Dental Center",
+            "hasLocalizedValue": "true"
+          }
+        },
+        "locationAddress": {
+          "field": "address",
+          "constantValue": {
+            "line1": "",
+            "city": "",
+            "postalCode": "",
+            "countryCode": ""
+          }
+        },
+        "locationCtaLabel": {
+          "field": "",
+          "constantValue": {
+            "defaultValue": "Get Directions",
+            "hasLocalizedValue": "true"
+          },
+          "constantValueEnabled": true
+        },
+        "locationCtaLink": {
+          "field": "",
+          "constantValue": "",
+          "constantValueEnabled": true
         }
       }
     },

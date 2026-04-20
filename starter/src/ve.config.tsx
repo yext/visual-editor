@@ -93,6 +93,10 @@ import {
   Hs1CarmelContactFormSectionProps,
 } from "./registry/hs1-carmel/components/Hs1CarmelContactFormSection";
 import {
+  Hs1CarmelCoreInformationSection,
+  Hs1CarmelCoreInformationSectionProps,
+} from "./registry/hs1-carmel/components/Hs1CarmelCoreInformationSection";
+import {
   Hs1CarmelCopyrightSection,
   Hs1CarmelCopyrightSectionProps,
 } from "./registry/hs1-carmel/components/Hs1CarmelCopyrightSection";
@@ -344,6 +348,7 @@ interface DevProps extends MainConfigProps, DirectoryCategoryProps {
   Hs1CarmelWelcomeSection: Hs1CarmelWelcomeSectionProps;
   Hs1CarmelServicesSection: Hs1CarmelServicesSectionProps;
   Hs1CarmelContactFormSection: Hs1CarmelContactFormSectionProps;
+  Hs1CarmelCoreInformationSection: Hs1CarmelCoreInformationSectionProps;
   Hs1CarmelLocationSection: Hs1CarmelLocationSectionProps;
   Hs1CarmelFooterSection: Hs1CarmelFooterSectionProps;
   Hs1CarmelCopyrightSection: Hs1CarmelCopyrightSectionProps;
@@ -426,6 +431,7 @@ const components: Config<DevProps>["components"] = {
   Hs1CarmelWelcomeSection,
   Hs1CarmelServicesSection,
   Hs1CarmelContactFormSection,
+  Hs1CarmelCoreInformationSection,
   Hs1CarmelLocationSection,
   Hs1CarmelFooterSection,
   Hs1CarmelCopyrightSection,
@@ -526,6 +532,7 @@ export const devConfig: Config<DevProps> = {
         "Hs1CarmelWelcomeSection",
         "Hs1CarmelServicesSection",
         "Hs1CarmelContactFormSection",
+        "Hs1CarmelCoreInformationSection",
         "Hs1CarmelLocationSection",
         "Hs1CarmelFooterSection",
         "Hs1CarmelCopyrightSection",
