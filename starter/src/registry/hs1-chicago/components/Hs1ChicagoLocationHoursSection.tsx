@@ -6,7 +6,8 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
 } from "@yext/visual-editor";
-import { Address, HoursTable } from "@yext/pages-components";
+import { HoursTable } from "@yext/pages-components";
+import { Address } from "../../shared/SafeAddress";
 
 type StyledTextProps = {
   text: YextEntityField<TranslatableString>;

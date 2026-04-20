@@ -9,13 +9,13 @@ import {
   YextEntityFieldSelector,
 } from "@yext/visual-editor";
 import {
-  Address,
   ComplexImageType,
   HoursTable,
   HoursType,
   ImageType,
-  Link,
 } from "@yext/pages-components";
+import { Address } from "../../shared/SafeAddress";
+import { Link } from "../../shared/SafeLink";
 
 type StyledTextProps = {
   text: YextEntityField<TranslatableString>;
@@ -325,6 +325,7 @@ export const Hs1AlbanyOfficeContentSectionComponent: PuckComponent<
 > = (props) => {
   const streamDocument = useDocument() as Record<string, unknown>;
   const locale = (streamDocument.locale as string) ?? "en";
+  const address = streamDocument.address as Record<string, unknown> | undefined;
   const officeImage = resolveComponentData(
     props.officeImage,
     locale,
@@ -449,20 +450,24 @@ export const Hs1AlbanyOfficeContentSectionComponent: PuckComponent<
 
         {renderHeading(props.officeName, officeName)}
         <div className="space-y-2 font-['Arial','Helvetica',sans-serif] text-[15px] leading-[1.65] text-[#4a4a4a]">
-          <Address
-            address={streamDocument.address as never}
-            lines={[["line1"], ["city", ",", "region", "postalCode"]]}
-            className="not-italic"
-          />
-          <Link
-            cta={{
-              link: mainPhone,
-              linkType: "PHONE",
-            }}
-            className="inline-block"
-          >
-            {mainPhone}
-          </Link>
+          {address ? (
+            <Address
+              address={address as never}
+              lines={[["line1"], ["city", ",", "region", "postalCode"]]}
+              className="not-italic"
+            />
+          ) : null}
+          {mainPhone ? (
+            <Link
+              cta={{
+                link: mainPhone,
+                linkType: "PHONE",
+              }}
+              className="inline-block"
+            >
+              {mainPhone}
+            </Link>
+          ) : null}
         </div>
 
         {renderHeading(props.officeHoursTitle, officeHoursTitle)}

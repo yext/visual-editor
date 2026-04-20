@@ -10,7 +10,7 @@ import {
   type YextEntityField,
   YextEntityFieldSelector,
 } from "@yext/visual-editor";
-import { Address, type AddressLine } from "@yext/pages-components";
+import { Address, type AddressLine } from "../../shared/SafeAddress";
 import { Link } from "../../shared/SafeLink";
 
 type StyledTextProps = {

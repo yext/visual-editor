@@ -6,7 +6,7 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
 } from "@yext/visual-editor";
-import { Address } from "@yext/pages-components";
+import { Address } from "../../shared/SafeAddress";
 import { Link } from "../../shared/SafeLink";
 
 type StyledTextProps = {
@@ -219,7 +219,7 @@ export const Hs1AlbanyOfficeLocationSectionComponent: PuckComponent<
               {addressLabel}
             </p>
             <Address
-              address={streamDocument.address as never}
+              address={address as never}
               lines={[
                 ["line1"],
                 ["city", ",", "region", "postalCode", ",", "countryCode"],
@@ -239,15 +239,17 @@ export const Hs1AlbanyOfficeLocationSectionComponent: PuckComponent<
             >
               {contactLabel}
             </p>
-            <Link
-              cta={{
-                link: mainPhone,
-                linkType: "PHONE",
-              }}
-              className="font-['Arial','Helvetica',sans-serif] text-[14px] text-[#4a4a4a]"
-            >
-              {mainPhone}
-            </Link>
+            {mainPhone ? (
+              <Link
+                cta={{
+                  link: mainPhone,
+                  linkType: "PHONE",
+                }}
+                className="font-['Arial','Helvetica',sans-serif] text-[14px] text-[#4a4a4a]"
+              >
+                {mainPhone}
+              </Link>
+            ) : null}
           </div>
           <div className="min-h-[320px] border border-[#dddddd] bg-white">
             <iframe

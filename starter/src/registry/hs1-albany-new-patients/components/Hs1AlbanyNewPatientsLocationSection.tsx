@@ -1,5 +1,5 @@
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
-import { Address } from "@yext/pages-components";
+import { Address } from "../../shared/SafeAddress";
 import {
   resolveComponentData,
   TranslatableString,

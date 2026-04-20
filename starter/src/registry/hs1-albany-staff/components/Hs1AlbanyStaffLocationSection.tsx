@@ -6,7 +6,7 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
 } from "@yext/visual-editor";
-import { Address } from "@yext/pages-components";
+import { Address } from "../../shared/SafeAddress";
 import { Link } from "../../shared/SafeLink";
 
 type StyledTextProps = {
