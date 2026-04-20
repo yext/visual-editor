@@ -20,7 +20,7 @@ import {
   ImageWrapperProps,
 } from "./Image.tsx";
 import { EmptyImageState } from "./EmptyImageState.tsx";
-import { YextComponentConfig } from "../../../fields/fields.ts";
+import { toPuckFields, YextComponentConfig } from "../../../fields/fields.ts";
 
 export interface HeroImageProps extends ImageWrapperProps {
   /** @internal from the parent Hero Section Component */
@@ -125,7 +125,7 @@ export const HeroImage: YextComponentConfig<HeroImageProps> = {
         break;
       }
     }
-    return fields;
+    return toPuckFields(fields);
   },
   render: (props) => <HeroImageComponent {...props} />,
 };
