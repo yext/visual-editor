@@ -405,6 +405,7 @@ const createCardsSectionRenderProps = (
   options: {
     isEditing: boolean;
     watchForMappedContentEmptyState: boolean;
+    initialMappedContentEmpty?: boolean;
     cardsWrapperContent: React.ReactNode;
   }
 ) => {
@@ -414,6 +415,7 @@ const createCardsSectionRenderProps = (
     id: `${sectionConfig.label}-test`,
     conditionalRender: {
       watchForMappedContentEmptyState: options.watchForMappedContentEmptyState,
+      initialMappedContentEmpty: options.initialMappedContentEmpty,
     },
     puck: { isEditing: options.isEditing },
     slots: {
@@ -504,14 +506,17 @@ describe.each(wrapperCases)("$sectionName render", ({ sectionConfig }) => {
       props: createCardsSectionRenderProps(sectionConfig, {
         isEditing: false,
         watchForMappedContentEmptyState: true,
-        cardsWrapperContent: (
-          <EntityFieldSectionEmptyStateBox showEmptyStateMarker />
-        ),
+        initialMappedContentEmpty: true,
+        cardsWrapperContent: <div data-empty-state="true" />,
       }),
     });
 
+    expect(result.queryByText("Section Heading")).toBeNull();
+    expect(result.queryByText(/Section hidden for this/i)).toBeNull();
+
     await waitFor(() => {
-      expect(result.container.childElementCount).toBe(0);
+      expect(result.queryByText("Section Heading")).toBeNull();
+      expect(result.queryByText(/Section hidden for this/i)).toBeNull();
     });
   });
 

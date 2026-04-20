@@ -4,11 +4,15 @@ const EMPTY_STATE_MARKER_SELECTOR = '[data-empty-state="true"]';
 
 export const useMappedEntitySectionEmptyState = ({
   enabled,
+  initialIsMappedContentEmpty = false,
 }: {
   enabled: boolean;
+  initialIsMappedContentEmpty?: boolean;
 }) => {
   const [element, setElement] = React.useState<HTMLDivElement | null>(null);
-  const [isMappedContentEmpty, setIsMappedContentEmpty] = React.useState(false);
+  const [isMappedContentEmpty, setIsMappedContentEmpty] = React.useState(
+    enabled && initialIsMappedContentEmpty
+  );
   const setWrapperRef = React.useCallback((element: HTMLDivElement | null) => {
     setElement(element);
   }, []);
@@ -16,6 +20,14 @@ export const useMappedEntitySectionEmptyState = ({
   React.useEffect(() => {
     if (!enabled) {
       setIsMappedContentEmpty(false);
+      return;
+    }
+
+    setIsMappedContentEmpty(initialIsMappedContentEmpty);
+  }, [enabled, initialIsMappedContentEmpty]);
+
+  React.useEffect(() => {
+    if (!enabled) {
       return;
     }
 

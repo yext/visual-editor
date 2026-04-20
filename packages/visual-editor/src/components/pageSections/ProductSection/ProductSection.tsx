@@ -21,7 +21,10 @@ import { defaultProductCardSlotData } from "./ProductCard.tsx";
 import { ProductCardsWrapperProps } from "./ProductCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
-import { isMappedCardWrapperSelected } from "../entityFieldSectionUtils.ts";
+import {
+  isMappedCardWrapperEmpty,
+  isMappedCardWrapperSelected,
+} from "../entityFieldSectionUtils.ts";
 import { useMappedEntitySectionEmptyState } from "../useMappedEntitySectionEmptyState.ts";
 
 export type ProductSectionVariant = "immersive" | "classic" | "minimal";
@@ -65,6 +68,7 @@ export interface ProductSectionProps {
   /** @internal */
   conditionalRender?: {
     watchForMappedContentEmptyState: boolean;
+    initialMappedContentEmpty?: boolean;
   };
 
   /**
@@ -266,14 +270,19 @@ export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
       });
     }
 
+    const cardsWrapperSlot = updatedData.props.slots.CardsWrapperSlot?.[0];
+    const watchForMappedContentEmptyState =
+      isMappedCardWrapperSelected(cardsWrapperSlot);
+    const initialMappedContentEmpty =
+      isMappedCardWrapperEmpty(cardsWrapperSlot);
+
     return {
       ...updatedData,
       props: {
         ...updatedData.props,
         conditionalRender: {
-          watchForMappedContentEmptyState: isMappedCardWrapperSelected(
-            updatedData.props.slots.CardsWrapperSlot?.[0]
-          ),
+          watchForMappedContentEmptyState,
+          initialMappedContentEmpty,
         },
       },
     };
@@ -281,10 +290,18 @@ export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
   render: (props) => {
     const watchForMappedContentEmptyState =
       props.conditionalRender?.watchForMappedContentEmptyState ?? false;
+    const initialMappedContentEmpty =
+      props.conditionalRender?.initialMappedContentEmpty ?? false;
     const { setWrapperRef, isMappedContentEmpty } =
       useMappedEntitySectionEmptyState({
         enabled: watchForMappedContentEmptyState,
+        initialIsMappedContentEmpty: initialMappedContentEmpty,
       });
+    const hiddenObservedWrapper = (
+      <div ref={setWrapperRef} className="hidden" aria-hidden="true">
+        <props.slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
+      </div>
+    );
 
     return (
       <ComponentErrorBoundary
@@ -301,7 +318,7 @@ export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
             {watchForMappedContentEmptyState &&
             isMappedContentEmpty &&
             !props.puck.isEditing ? (
-              <></>
+              hiddenObservedWrapper
             ) : (
               <ProductSectionComponent
                 {...props}
