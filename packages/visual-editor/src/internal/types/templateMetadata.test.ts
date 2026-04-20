@@ -35,4 +35,33 @@ describe("generateTemplateMetadata", () => {
       "type.image"
     );
   });
+
+  it("preserves linked entity schemas when provided", () => {
+    const metadata = {
+      ...generateTemplateMetadata(),
+      linkedEntitySchemas: {
+        c_linkedLocation: {
+          displayName: "Linked Location",
+          fields: [
+            {
+              name: "name",
+              displayName: "Name",
+              definition: {
+                name: "name",
+                typeName: "type.string",
+                type: {},
+              },
+            },
+          ],
+        },
+      },
+    };
+
+    expect(metadata.linkedEntitySchemas?.c_linkedLocation.displayName).toBe(
+      "Linked Location"
+    );
+    expect(metadata.linkedEntitySchemas?.c_linkedLocation.fields[0]?.name).toBe(
+      "name"
+    );
+  });
 });

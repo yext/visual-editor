@@ -1,6 +1,7 @@
 import { FontRegistry } from "../../utils/fonts/visualEditorFonts.ts";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import DOMPurify from "dompurify";
+import { LinkedEntitySchemas } from "../../editor/linkedEntityFieldUtils.ts";
 
 export type HeadDeployStatus = "RUNNING" | "INACTIVE" | "FAILED" | "ACTIVE";
 
@@ -22,6 +23,7 @@ export type TemplateMetadata = {
   locales: string[];
   layoutTaskApprovals: boolean;
   locatorDisplayFields?: Record<string, FieldTypeData>;
+  linkedEntitySchemas?: LinkedEntitySchemas;
   customFonts?: FontRegistry;
   headDeployStatus: HeadDeployStatus;
 };

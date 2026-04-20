@@ -1,5 +1,8 @@
 import { assert, describe, it } from "vitest";
-import { resolveYextEntityField } from "./resolveYextEntityField.ts";
+import {
+  resolveField,
+  resolveYextEntityField,
+} from "./resolveYextEntityField.ts";
 
 describe("resolveYextEntityField", () => {
   it("returns value when field found in document", async () => {
@@ -57,6 +60,70 @@ describe("resolveYextEntityField", () => {
         "en"
       ),
       "City"
+    );
+  });
+
+  it("resolves linked entity fields from the first referenced entity", async () => {
+    assert.equal(
+      resolveYextEntityField(
+        {
+          c_linkedLocation: [
+            {
+              name: "First Linked Location",
+            },
+          ],
+        },
+        { field: "c_linkedLocation.name", constantValue: "" },
+        "en"
+      ),
+      "First Linked Location"
+    );
+  });
+
+  it("resolves nested linked entity fields from the first referenced entity", async () => {
+    assert.equal(
+      resolveYextEntityField(
+        {
+          c_linkedLocation: [
+            {
+              address: {
+                city: "New York",
+              },
+            },
+          ],
+        },
+        { field: "c_linkedLocation.address.city", constantValue: "" },
+        "en"
+      ),
+      "New York"
+    );
+  });
+
+  it("returns undefined for empty linked entity reference lists", async () => {
+    assert.equal(
+      resolveYextEntityField(
+        {
+          c_linkedLocation: [],
+        },
+        { field: "c_linkedLocation.name", constantValue: "" },
+        "en"
+      ),
+      undefined
+    );
+  });
+
+  it("tracks when linked entity resolution traverses multiple references", async () => {
+    assert.deepEqual(
+      resolveField(
+        {
+          c_linkedLocation: [{ name: "First" }, { name: "Second" }],
+        },
+        "c_linkedLocation.name"
+      ),
+      {
+        value: "First",
+        traversedMultiValueReference: true,
+      }
     );
   });
 });

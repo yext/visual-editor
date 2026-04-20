@@ -3,6 +3,10 @@ import {
   RenderEntityFieldFilter,
 } from "../internal/utils/getFilteredEntityFields.ts";
 import { StreamFields, YextSchemaField } from "../types/entityFields.ts";
+import {
+  buildLinkedEntityStreamFields,
+  type LinkedEntitySchemas,
+} from "./linkedEntityFieldUtils.ts";
 
 /** Represents data that can either be from the Yext Knowledge Graph or statically defined */
 export type YextEntityField<T> = {
@@ -20,9 +24,17 @@ export type YextEntityField<T> = {
 
 export const getFieldsForSelector = (
   entityFields: StreamFields | null,
-  filter: RenderEntityFieldFilter<any>
+  filter: RenderEntityFieldFilter<any>,
+  linkedEntitySchemas?: LinkedEntitySchemas
 ): YextSchemaField[] => {
   let filteredEntityFields = getFilteredEntityFields(entityFields, filter);
+  const linkedEntityFields =
+    !filter.includeListsOnly && linkedEntitySchemas
+      ? getFilteredEntityFields(
+          buildLinkedEntityStreamFields(linkedEntitySchemas),
+          filter
+        )
+      : [];
 
   // If there are no direct children, return the parent field if it is a list
   if (filter.directChildrenOf && filteredEntityFields.length === 0) {
@@ -33,9 +45,15 @@ export const getFieldsForSelector = (
     });
   }
 
-  return filteredEntityFields.sort((entityFieldA, entityFieldB) => {
-    const nameA = (entityFieldA.displayName ?? entityFieldA.name).toUpperCase();
-    const nameB = (entityFieldB.displayName ?? entityFieldB.name).toUpperCase();
-    return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
-  });
+  return [...filteredEntityFields, ...linkedEntityFields].sort(
+    (entityFieldA, entityFieldB) => {
+      const nameA = (
+        entityFieldA.displayName ?? entityFieldA.name
+      ).toUpperCase();
+      const nameB = (
+        entityFieldB.displayName ?? entityFieldB.name
+      ).toUpperCase();
+      return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+    }
+  );
 };

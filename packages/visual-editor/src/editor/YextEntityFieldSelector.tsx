@@ -51,8 +51,13 @@ import {
   type YextEntityField,
 } from "./yextEntityFieldUtils.ts";
 import { type ComboboxOption } from "../internal/types/combobox.ts";
+import { useDocument } from "../hooks/useDocument.tsx";
+import { resolveField } from "../utils/resolveYextEntityField.ts";
+import { toast } from "sonner";
+import { isLinkedEntityFieldPath } from "./linkedEntityFieldUtils.ts";
 
 const devLogger = new DevLogger();
+const warnedLinkedEntityFieldPaths = new Set<string>();
 
 type RenderProps = Parameters<CustomField<any>["render"]>[0];
 type ConstantFieldConfig<ValueType = any> =
@@ -434,6 +439,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
   const templateMetadata = useTemplateMetadata();
+  const streamDocument = useDocument();
 
   const typeSelector = React.useMemo<BasicSelectorField | undefined>(() => {
     if (!typeSelectorConfig) {
@@ -476,10 +482,16 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       }
     }
 
-    const filteredEntityFields = getFieldsForSelector(entityFields, {
-      ...filter,
-      types: selectedEntityFieldType ? [selectedEntityFieldType] : filter.types,
-    });
+    const filteredEntityFields = getFieldsForSelector(
+      entityFields,
+      {
+        ...filter,
+        types: selectedEntityFieldType
+          ? [selectedEntityFieldType]
+          : filter.types,
+      },
+      templateMetadata.linkedEntitySchemas
+    );
     const entityFieldOptions = filteredEntityFields.map((field) => ({
       label: field.displayName ?? field.name,
       value: field.name,
@@ -508,6 +520,44 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     templateMetadata.entityTypeDisplayName,
     typeSelectorConfig,
     value?.selectedType,
+    templateMetadata.linkedEntitySchemas,
+  ]);
+
+  React.useEffect(() => {
+    if (
+      filter.includeListsOnly ||
+      !value?.field ||
+      !isLinkedEntityFieldPath(
+        value.field,
+        templateMetadata.linkedEntitySchemas
+      )
+    ) {
+      return;
+    }
+
+    const resolution = resolveField(streamDocument, value.field);
+    if (
+      !resolution.traversedMultiValueReference ||
+      warnedLinkedEntityFieldPaths.has(value.field)
+    ) {
+      return;
+    }
+
+    warnedLinkedEntityFieldPaths.add(value.field);
+    toast.warning(
+      pt(
+        "linkedEntityMultiValueWarning",
+        "Multiple linked entities were found for {{fieldName}}. Using the first linked entity.",
+        {
+          fieldName: value.field,
+        }
+      )
+    );
+  }, [
+    filter.includeListsOnly,
+    streamDocument,
+    templateMetadata.linkedEntitySchemas,
+    value?.field,
   ]);
 
   return (

@@ -2,6 +2,11 @@ import { type YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
 
 export const embeddedFieldRegex = /\[\[([a-zA-Z0-9._]+)\]\]/g;
 
+export type FieldResolution<T> = {
+  value: T | undefined;
+  traversedMultiValueReference: boolean;
+};
+
 export const resolveYextEntityField = <T>(
   streamDocument: any,
   entityField: YextEntityField<T>,
@@ -33,7 +38,7 @@ export const resolveYextEntityField = <T>(
     return entityField.constantValue as T;
   }
 
-  return findField<T>(streamDocument, entityField.field);
+  return resolveField(streamDocument, entityField.field).value;
 };
 
 /**
@@ -189,27 +194,44 @@ export const findField = <T>(
   document: any,
   fieldName: string
 ): T | undefined => {
+  return resolveField<T>(document, fieldName).value;
+};
+
+export const resolveField = <T>(
+  document: any,
+  fieldName: string
+): FieldResolution<T> => {
   if (fieldName === "") {
-    return undefined;
+    return { value: undefined, traversedMultiValueReference: false };
   }
 
   try {
     const levels: string[] = fieldName.split(".");
-    let levelsExist = true;
+    let traversedMultiValueReference = false;
     let current = document;
     for (let i = 0; i < levels.length; i++) {
+      if (Array.isArray(current)) {
+        if (current.length === 0) {
+          return { value: undefined, traversedMultiValueReference };
+        }
+
+        if (current.length > 1) {
+          traversedMultiValueReference = true;
+        }
+
+        current = current[0];
+      }
+
       if (current?.[levels[i]] !== undefined) {
         current = current[levels[i]];
       } else {
-        levelsExist = false;
-        break;
+        return { value: undefined, traversedMultiValueReference };
       }
     }
-    if (levelsExist) {
-      return current;
-    }
+
+    return { value: current, traversedMultiValueReference };
   } catch (e) {
     console.error("Error in findField:", e);
   }
-  return undefined;
+  return { value: undefined, traversedMultiValueReference: false };
 };

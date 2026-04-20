@@ -10,6 +10,19 @@ import {
   EntityFieldInput,
   type TypeSelectorConfigProps,
 } from "./YextEntityFieldSelector.tsx";
+import { TemplatePropsContext } from "../hooks/useDocument.tsx";
+import { EmbeddedFieldStringInputFromEntity } from "./EmbeddedFieldStringInput.tsx";
+import { type LinkedEntitySchemas } from "./linkedEntityFieldUtils.ts";
+
+const { warningToast } = vi.hoisted(() => ({
+  warningToast: vi.fn(),
+}));
+
+vi.mock("sonner", () => ({
+  toast: {
+    warning: warningToast,
+  },
+}));
 
 const defaultEntityFields: StreamFields = {
   fields: [
@@ -64,35 +77,127 @@ const renderEntityFieldInput = ({
   onChange = vi.fn(),
   typeSelectorConfig = defaultTypeSelectorConfig,
   value = {},
+  document = {},
+  linkedEntitySchemas,
 }: {
   entityFields?: StreamFields | null;
   filter?: any;
   onChange?: any;
   typeSelectorConfig?: TypeSelectorConfigProps;
   value?: Record<string, any>;
+  document?: Record<string, unknown>;
+  linkedEntitySchemas?: LinkedEntitySchemas;
 } = {}) => {
   const templateMetadata = {
     ...generateTemplateMetadata(),
     entityTypeDisplayName: "Location",
+    linkedEntitySchemas,
   };
 
   render(
-    <TemplateMetadataContext.Provider value={templateMetadata}>
-      <EntityFieldsContext.Provider value={entityFields}>
-        <EntityFieldInput
-          filter={filter}
-          onChange={onChange}
-          typeSelectorConfig={typeSelectorConfig}
-          value={value}
-        />
-      </EntityFieldsContext.Provider>
-    </TemplateMetadataContext.Provider>
+    <TemplatePropsContext.Provider value={{ document }}>
+      <TemplateMetadataContext.Provider value={templateMetadata}>
+        <EntityFieldsContext.Provider value={entityFields}>
+          <EntityFieldInput
+            filter={filter}
+            onChange={onChange}
+            typeSelectorConfig={typeSelectorConfig}
+            value={value}
+          />
+        </EntityFieldsContext.Provider>
+      </TemplateMetadataContext.Provider>
+    </TemplatePropsContext.Provider>
   );
 
   return { onChange };
 };
 
+const renderEmbeddedFieldInput = ({
+  entityFields = defaultEntityFields,
+  filter = { types: ["type.string"] },
+  linkedEntitySchemas,
+}: {
+  entityFields?: StreamFields | null;
+  filter?: any;
+  linkedEntitySchemas?: LinkedEntitySchemas;
+} = {}) => {
+  const templateMetadata = {
+    ...generateTemplateMetadata(),
+    linkedEntitySchemas,
+  };
+
+  render(
+    <TemplatePropsContext.Provider value={{ document: {} }}>
+      <TemplateMetadataContext.Provider value={templateMetadata}>
+        <EntityFieldsContext.Provider value={entityFields}>
+          <EmbeddedFieldStringInputFromEntity
+            filter={filter}
+            onChange={vi.fn()}
+            showFieldSelector={true}
+            value=""
+          />
+        </EntityFieldsContext.Provider>
+      </TemplateMetadataContext.Provider>
+    </TemplatePropsContext.Provider>
+  );
+};
+
 describe("YextEntityFieldSelector", () => {
+  it("shows linked entity fields for single-value selectors", () => {
+    renderEntityFieldInput({
+      filter: { types: ["type.string"] },
+      typeSelectorConfig: undefined,
+      linkedEntitySchemas: {
+        c_linkedLocation: {
+          displayName: "Linked Location",
+          fields: [
+            {
+              name: "name",
+              displayName: "Name",
+              definition: {
+                name: "name",
+                typeName: "type.string",
+                type: {},
+              },
+            },
+          ],
+        },
+      },
+    });
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(screen.getByText("Name")).toBeDefined();
+    expect(screen.getByText("Linked Location > Name")).toBeDefined();
+  });
+
+  it("does not show linked entity fields for list-only selectors", () => {
+    renderEntityFieldInput({
+      filter: { types: ["type.string"], includeListsOnly: true },
+      linkedEntitySchemas: {
+        c_linkedLocation: {
+          displayName: "Linked Location",
+          fields: [
+            {
+              name: "name",
+              displayName: "Name",
+              definition: {
+                name: "name",
+                typeName: "type.string",
+                type: {},
+              },
+            },
+          ],
+        },
+      },
+      typeSelectorConfig: undefined,
+    });
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(screen.queryByText("Linked Location > Name")).toBeNull();
+  });
+
   it("renders a type selector and filters entity field options by selected type", () => {
     renderEntityFieldInput({
       value: {
@@ -197,6 +302,83 @@ describe("YextEntityFieldSelector", () => {
         constantValue: "2026-06-01T13:45",
       },
       undefined
+    );
+  });
+
+  it("includes linked entity fields in the embedded field selector", () => {
+    renderEmbeddedFieldInput({
+      linkedEntitySchemas: {
+        c_linkedLocation: {
+          displayName: "Linked Location",
+          fields: [
+            {
+              name: "address",
+              displayName: "Address",
+              definition: {
+                name: "address",
+                typeName: "type.address",
+                type: {},
+              },
+              children: {
+                fields: [
+                  {
+                    name: "city",
+                    displayName: "City",
+                    definition: {
+                      name: "city",
+                      typeName: "type.string",
+                      type: {},
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    });
+
+    fireEvent.click(screen.getByLabelText("Add entity field"));
+
+    expect(screen.getByText("Linked Location > Address > City")).toBeDefined();
+  });
+
+  it("warns once when a linked entity field resolves through multiple references", () => {
+    warningToast.mockClear();
+
+    const props = {
+      filter: { types: ["type.string"] },
+      value: {
+        field: "c_linkedLocation.name",
+      },
+      document: {
+        c_linkedLocation: [{ name: "First" }, { name: "Second" }],
+      },
+      linkedEntitySchemas: {
+        c_linkedLocation: {
+          displayName: "Linked Location",
+          fields: [
+            {
+              name: "name",
+              displayName: "Name",
+              definition: {
+                name: "name",
+                typeName: "type.string",
+                type: {},
+              },
+            },
+          ],
+        },
+      },
+      typeSelectorConfig: undefined,
+    };
+
+    renderEntityFieldInput(props);
+    renderEntityFieldInput(props);
+
+    expect(warningToast).toHaveBeenCalledTimes(1);
+    expect(warningToast).toHaveBeenCalledWith(
+      "Multiple linked entities were found for c_linkedLocation.name. Using the first linked entity."
     );
   });
 });

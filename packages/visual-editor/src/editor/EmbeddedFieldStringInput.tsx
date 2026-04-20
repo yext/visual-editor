@@ -23,6 +23,7 @@ import { pt } from "../utils/i18n/platform.ts";
 import { resolveComponentData } from "../utils/resolveComponentData.tsx";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
 import { useDocument } from "../hooks/useDocument.tsx";
+import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 
 /**
  * A debounced string input that allows embedding entity fields via a popover selector.
@@ -41,16 +42,21 @@ export const EmbeddedFieldStringInputFromEntity = <
   showFieldSelector: boolean;
 }) => {
   const entityFields = useEntityFields();
+  const templateMetadata = useTemplateMetadata();
 
   const entityFieldOptions = React.useMemo(() => {
-    const filteredEntityFields = getFieldsForSelector(entityFields, filter);
+    const filteredEntityFields = getFieldsForSelector(
+      entityFields,
+      filter,
+      templateMetadata.linkedEntitySchemas
+    );
     return filteredEntityFields.map((field) => {
       return {
         label: field.displayName ?? field.name,
         value: field.name,
       };
     });
-  }, [entityFields, filter]);
+  }, [entityFields, filter, templateMetadata.linkedEntitySchemas]);
 
   return (
     <EmbeddedFieldStringInputFromOptions
