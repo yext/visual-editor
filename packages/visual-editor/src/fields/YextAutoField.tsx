@@ -31,7 +31,7 @@ const wrapNestedOverrideField = (
 };
 
 const normalizeField = (
-  field: YextFieldDefinition<any>,
+  field: YextFieldDefinition<any>
 ): YextFieldDefinition<any> => {
   if (isYextOverrideType(field.type)) {
     // Nested Puck override field types render correctly, but Puck still creates
@@ -79,10 +79,7 @@ export const YextAutoField = <ValueType,>({
     return <FieldOverride field={field} {...(props as any)} />;
   }
 
-  const normalizedField = React.useMemo(
-    () => normalizeField(field),
-    [field]
-  );
+  const normalizedField = React.useMemo(() => normalizeField(field), [field]);
 
   return <AutoField field={normalizedField} {...(props as any)} />;
 };
