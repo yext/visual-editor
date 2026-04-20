@@ -1,3 +1,5 @@
+import type { ComponentProps } from "react";
+import { Link as PagesLink } from "@yext/pages-components";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import {
   Image,
@@ -8,7 +10,30 @@ import {
   YextEntityFieldSelector,
 } from "@yext/visual-editor";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
-import { Link } from "../../shared/SafeLink";
+
+const getSafeHref = (href?: string): string => {
+  const trimmedHref = href?.trim();
+  return trimmedHref ? trimmedHref : "#";
+};
+
+type PagesLinkProps = ComponentProps<typeof PagesLink>;
+
+const Link = (props: PagesLinkProps) => {
+  const safeProps = { ...props } as any;
+
+  if ("cta" in safeProps && safeProps.cta) {
+    safeProps.cta = {
+      ...safeProps.cta,
+      link: getSafeHref(safeProps.cta.link),
+    };
+  }
+
+  if ("href" in safeProps) {
+    safeProps.href = getSafeHref(safeProps.href);
+  }
+
+  return <PagesLink {...safeProps} />;
+};
 
 type QuickLinkCard = {
   title: string;

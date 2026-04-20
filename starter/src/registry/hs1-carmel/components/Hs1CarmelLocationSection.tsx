@@ -1,3 +1,6 @@
+import type { ComponentProps } from "react";
+import { Address as PagesAddress } from "@yext/pages-components";
+import { Link as PagesLink } from "@yext/pages-components";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import {
   TranslatableString,
@@ -8,8 +11,55 @@ import {
 } from "@yext/visual-editor";
 import { AddressType } from "@yext/pages-components";
 import { HoursStatus, HoursTable } from "@yext/pages-components";
-import { Address } from "../../shared/SafeAddress";
-import { Link } from "../../shared/SafeLink";
+
+type PagesAddressProps = ComponentProps<typeof PagesAddress>;
+
+const hasAddressContent = (address: PagesAddressProps["address"]): boolean => {
+  if (!address) {
+    return false;
+  }
+
+  return Boolean(
+    address.line1 ||
+      address.line2 ||
+      address.city ||
+      address.region ||
+      address.postalCode ||
+      address.countryCode,
+  );
+};
+
+const Address = (props: PagesAddressProps) => {
+  if (!hasAddressContent(props.address)) {
+    return null;
+  }
+
+  return <PagesAddress {...props} />;
+};
+
+const getSafeHref = (href?: string): string => {
+  const trimmedHref = href?.trim();
+  return trimmedHref ? trimmedHref : "#";
+};
+
+type PagesLinkProps = ComponentProps<typeof PagesLink>;
+
+const Link = (props: PagesLinkProps) => {
+  const safeProps = { ...props } as any;
+
+  if ("cta" in safeProps && safeProps.cta) {
+    safeProps.cta = {
+      ...safeProps.cta,
+      link: getSafeHref(safeProps.cta.link),
+    };
+  }
+
+  if ("href" in safeProps) {
+    safeProps.href = getSafeHref(safeProps.href);
+  }
+
+  return <PagesLink {...safeProps} />;
+};
 
 type StyledTextProps = {
   text: YextEntityField<TranslatableString>;

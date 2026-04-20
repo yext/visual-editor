@@ -1,5 +1,6 @@
+import type { ComponentProps } from "react";
+import { Address as PagesAddress } from "@yext/pages-components";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
-import { Address } from "../../shared/SafeAddress";
 import {
   resolveComponentData,
   TranslatableString,
@@ -7,6 +8,31 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
 } from "@yext/visual-editor";
+
+type PagesAddressProps = ComponentProps<typeof PagesAddress>;
+
+const hasAddressContent = (address: PagesAddressProps["address"]): boolean => {
+  if (!address) {
+    return false;
+  }
+
+  return Boolean(
+    address.line1 ||
+      address.line2 ||
+      address.city ||
+      address.region ||
+      address.postalCode ||
+      address.countryCode,
+  );
+};
+
+const Address = (props: PagesAddressProps) => {
+  if (!hasAddressContent(props.address)) {
+    return null;
+  }
+
+  return <PagesAddress {...props} />;
+};
 
 type StyledTextProps = {
   text: YextEntityField<TranslatableString>;
