@@ -71,6 +71,26 @@ describe("CTA", () => {
     expect(styles.borderColor).toBe("rgb(255, 109, 102)");
   });
 
+  it("uses configured secondary CTA colors on dark translucent backgrounds", () => {
+    const cta = renderCta({
+      background: {
+        selectedColor: "[#00000099]",
+        contrastingColor: "white",
+        isDarkColor: true,
+      },
+      color: {
+        selectedColor: "[#FF6D66]",
+        contrastingColor: "black",
+      },
+      variant: "secondary",
+    });
+
+    const styles = window.getComputedStyle(cta);
+
+    expect(styles.color).toBe("rgb(255, 109, 102)");
+    expect(styles.borderColor).toBe("rgb(255, 109, 102)");
+  });
+
   it("falls back to white for low-contrast configured secondary CTA colors on dark backgrounds", () => {
     const cta = renderCta({
       background: {

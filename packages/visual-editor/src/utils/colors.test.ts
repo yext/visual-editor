@@ -213,6 +213,9 @@ describe("getThemeColorHexValue", () => {
     expect(getThemeColorHexValue("white", streamDocument)).toBe("#FFFFFF");
     expect(getThemeColorHexValue("black", streamDocument)).toBe("#000000");
     expect(getThemeColorHexValue("[#ff6d66]", streamDocument)).toBe("#FF6D66");
+    expect(getThemeColorHexValue("[#00000099]", streamDocument)).toBe(
+      "#000000"
+    );
   });
 
   it("resolves base palette tokens from the published theme", () => {

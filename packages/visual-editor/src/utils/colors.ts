@@ -226,6 +226,10 @@ const normalizeHexColor = (colorValue?: string): string | undefined => {
   }
 
   const normalizedHex = colorValue.toUpperCase();
+  if (/^#[0-9A-F]{8}$/.test(normalizedHex)) {
+    return normalizedHex.slice(0, 7);
+  }
+
   if (/^#[0-9A-F]{6}$/.test(normalizedHex)) {
     return normalizedHex;
   }
