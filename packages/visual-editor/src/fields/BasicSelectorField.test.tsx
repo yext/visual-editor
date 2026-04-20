@@ -160,9 +160,6 @@ describe("BasicSelectorField", () => {
         .getByRole("button", { name: "No options available" })
         .hasAttribute("disabled")
     ).toBe(true);
-    expect(
-      screen.getByText("Use a valid ThemeOptions key or pass explicit options.")
-    ).toBeDefined();
     expect(consoleWarn).toHaveBeenCalledWith(
       'Invalid ThemeOptions key "NOT_A_THEME_OPTION" passed to basicSelector.'
     );

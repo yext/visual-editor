@@ -1,8 +1,7 @@
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { Config, Data, DefaultRootProps, Puck } from "@puckeditor/core";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { YextAutoField } from "../fields/YextAutoField.tsx";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { YextPuckFieldOverrides } from "../fields/fields.ts";
 import {
   DynamicOption,
@@ -10,37 +9,9 @@ import {
   DynamicOptionsSelectorType,
 } from "./DynamicOptionsSelector.tsx";
 
-const puckConfig: Config = {
-  components: {},
-  root: {
-    render: () => <></>,
-  },
+type TestRootProps = DefaultRootProps & {
+  items?: DynamicOptionsSelectorType<string>;
 };
-
-const puckData: Data<any, DefaultRootProps> = {
-  root: {
-    props: {},
-  },
-  content: [],
-  zones: {},
-};
-
-let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
-
-beforeEach(() => {
-  consoleErrorSpy = vi.spyOn(console, "error").mockImplementation((...args) => {
-    if (
-      typeof args[0] === "string" &&
-      args[0].includes("React.jsx: type is invalid")
-    ) {
-      return;
-    }
-  });
-});
-
-afterEach(() => {
-  consoleErrorSpy.mockRestore();
-});
 
 beforeEach(() => {
   Object.defineProperty(window, "matchMedia", {
@@ -68,22 +39,42 @@ const renderDynamicOptionsField = (
     dropdownLabel: "Item",
     getOptions: () => options,
   });
+  const fieldTypes = { ...YextPuckFieldOverrides };
+  expect(fieldTypes.basicSelector).toBeDefined();
 
-  const TestHarness = () => {
-    const [value, setValue] = React.useState<
-      DynamicOptionsSelectorType<string> | undefined
-    >(initialValue);
+  const instrumentedField =
+    field.type === "custom"
+      ? {
+          ...field,
+          render: (props: Parameters<typeof field.render>[0]) =>
+            field.render({
+              ...props,
+              onChange: (newValue, uiState) => {
+                onChange(newValue);
+                props.onChange(newValue, uiState);
+              },
+            }),
+        }
+      : field;
 
-    return (
-      <YextAutoField
-        field={field}
-        value={value}
-        onChange={(newValue) => {
-          setValue(newValue);
-          onChange(newValue);
-        }}
-      />
-    );
+  const puckConfig: Config<Record<string, never>, TestRootProps> = {
+    components: {},
+    root: {
+      fields: {
+        items: instrumentedField as any,
+      },
+      render: () => <></>,
+    },
+  };
+
+  const puckData: Data<any, TestRootProps> = {
+    root: {
+      props: {
+        items: initialValue,
+      },
+    },
+    content: [],
+    zones: {},
   };
 
   render(
@@ -91,28 +82,35 @@ const renderDynamicOptionsField = (
       config={puckConfig}
       data={puckData}
       overrides={{
-        fields: () => <TestHarness />,
-        fieldTypes: { ...YextPuckFieldOverrides } as any,
+        fieldTypes: fieldTypes as any,
       }}
-    />
+    >
+      <Puck.Fields wrapFields={false} />
+    </Puck>
   );
 
   return { onChange };
 };
 
 describe("DynamicOptionsSelector", () => {
-  it("renders nested basicSelector items through YextAutoField", () => {
-    const { onChange } = renderDynamicOptionsField(
-      [
-        { label: "Alpha", value: "alpha" },
-        { label: "Beta", value: "beta" },
-      ],
-      {
-        selections: [{ value: "alpha" }],
-      }
-    );
+  it("renders nested basicSelector items through YextAutoField", async () => {
+    let onChange: ReturnType<typeof vi.fn>;
 
-    fireEvent.click(screen.getAllByText("Alpha")[0]);
+    await act(async () => {
+      ({ onChange } = renderDynamicOptionsField(
+        [
+          { label: "Alpha", value: "alpha" },
+          { label: "Beta", value: "beta" },
+        ],
+        {
+          selections: [{ value: "alpha" }],
+        }
+      ));
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getAllByText("Alpha")[0]);
+    });
 
     const selectorCombobox = screen
       .getAllByRole("combobox")
@@ -120,13 +118,17 @@ describe("DynamicOptionsSelector", () => {
 
     expect(selectorCombobox?.textContent).toContain("Alpha");
 
-    fireEvent.click(selectorCombobox!);
+    await act(async () => {
+      fireEvent.click(selectorCombobox!);
+    });
 
     expect(screen.getByPlaceholderText("Search")).toBeDefined();
 
-    fireEvent.click(screen.getByText("Beta"));
+    await act(async () => {
+      fireEvent.click(screen.getByText("Beta"));
+    });
 
-    expect(onChange.mock.lastCall?.[0]).toEqual({
+    expect(onChange!.mock.lastCall?.[0]).toEqual({
       selections: [{ value: "beta" }],
     });
   });

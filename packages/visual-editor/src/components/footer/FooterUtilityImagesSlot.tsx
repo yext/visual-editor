@@ -181,7 +181,7 @@ export const FooterUtilityImagesSlot: YextComponentConfig<FooterUtilityImagesSlo
         utilityImages: [],
       },
       styles: {
-        width: 0,
+        width: 60,
         aspectRatio: 1,
       },
       desktopContentAlignment: "left",

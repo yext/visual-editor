@@ -16,6 +16,59 @@ type YextOverrideType = keyof typeof YextPuckFieldOverrides;
 const isYextOverrideType = (type: string): type is YextOverrideType =>
   type in YextPuckFieldOverrides;
 
+const wrapNestedOverrideField = (
+  field: YextFieldDefinition<any> & { type: YextOverrideType }
+): YextFieldDefinition<any> => {
+  const FieldOverride = YextPuckFieldOverrides[field.type];
+
+  return {
+    type: "custom",
+    visible: field.visible,
+    render: ({ field: _field, ...props }) => (
+      <FieldOverride field={field} {...(props as any)} />
+    ),
+  };
+};
+
+const normalizeField = (
+  field: YextFieldDefinition<any>,
+): YextFieldDefinition<any> => {
+  if (isYextOverrideType(field.type)) {
+    // Nested Puck override field types render correctly, but Puck still creates
+    // a default child component for non-core field types, which produces React
+    // warnings. Wrapping nested overrides as `custom` avoids that path.
+    return wrapNestedOverrideField(
+      field as YextFieldDefinition<any> & { type: YextOverrideType }
+    );
+  }
+
+  if (field.type === "array" && "arrayFields" in field) {
+    return {
+      ...field,
+      arrayFields: Object.fromEntries(
+        Object.entries(field.arrayFields).map(([key, value]) => [
+          key,
+          normalizeField(value as YextFieldDefinition<any>),
+        ])
+      ) as any,
+    };
+  }
+
+  if (field.type === "object" && "objectFields" in field) {
+    return {
+      ...field,
+      objectFields: Object.fromEntries(
+        Object.entries(field.objectFields).map(([key, value]) => [
+          key,
+          normalizeField(value as YextFieldDefinition<any>),
+        ])
+      ) as any,
+    };
+  }
+
+  return field;
+};
+
 export const YextAutoField = <ValueType,>({
   field,
   ...props
@@ -26,5 +79,10 @@ export const YextAutoField = <ValueType,>({
     return <FieldOverride field={field} {...(props as any)} />;
   }
 
-  return <AutoField field={field} {...(props as any)} />;
+  const normalizedField = React.useMemo(
+    () => normalizeField(field),
+    [field]
+  );
+
+  return <AutoField field={normalizedField} {...(props as any)} />;
 };

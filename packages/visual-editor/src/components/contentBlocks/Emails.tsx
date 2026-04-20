@@ -158,7 +158,7 @@ export const Emails: YextComponentConfig<EmailsProps> = {
     return toPuckFields(
       updateFields<EmailsProps>(
         updatedFields,
-        ["styles.listLength.visible"],
+        ["styles.objectFields.listLength.visible"],
         true
       )
     );
