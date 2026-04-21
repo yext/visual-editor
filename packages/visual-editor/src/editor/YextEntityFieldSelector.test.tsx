@@ -2,6 +2,7 @@ import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { EntityFieldsContext } from "../hooks/useEntityFields.tsx";
+import { LinkedEntitySchemasContext } from "../hooks/useLinkedEntitySchemas.tsx";
 import { TemplateMetadataContext } from "../internal/hooks/useMessageReceivers.ts";
 import { generateTemplateMetadata } from "../internal/types/templateMetadata.ts";
 import { type StreamFields } from "../types/entityFields.ts";
@@ -71,40 +72,49 @@ const defaultTypeSelectorConfig: TypeSelectorConfigProps = {
   },
 };
 
-const renderEntityFieldInput = ({
-  entityFields = defaultEntityFields,
-  filter = { types: ["type.string", "type.image"] },
-  onChange = vi.fn(),
-  typeSelectorConfig = defaultTypeSelectorConfig,
-  value = {},
-  document = {},
-  linkedEntitySchemas,
-}: {
-  entityFields?: StreamFields | null;
-  filter?: any;
-  onChange?: any;
-  typeSelectorConfig?: TypeSelectorConfigProps;
-  value?: Record<string, any>;
-  document?: Record<string, unknown>;
-  linkedEntitySchemas?: LinkedEntitySchemas;
-} = {}) => {
+const renderEntityFieldInput = (
+  props: {
+    entityFields?: StreamFields | null;
+    filter?: any;
+    onChange?: any;
+    typeSelectorConfig?: TypeSelectorConfigProps;
+    value?: Record<string, any>;
+    document?: Record<string, unknown>;
+    linkedEntitySchemas?: LinkedEntitySchemas;
+  } = {}
+) => {
+  const {
+    entityFields = defaultEntityFields,
+    filter = { types: ["type.string", "type.image"] },
+    onChange = vi.fn(),
+    value = {},
+    document = {},
+    linkedEntitySchemas,
+  } = props;
+  const resolvedTypeSelectorConfig =
+    "typeSelectorConfig" in props
+      ? props.typeSelectorConfig
+      : defaultTypeSelectorConfig;
   const templateMetadata = {
     ...generateTemplateMetadata(),
     entityTypeDisplayName: "Location",
-    linkedEntitySchemas,
   };
 
   render(
     <TemplatePropsContext.Provider value={{ document }}>
       <TemplateMetadataContext.Provider value={templateMetadata}>
-        <EntityFieldsContext.Provider value={entityFields}>
-          <EntityFieldInput
-            filter={filter}
-            onChange={onChange}
-            typeSelectorConfig={typeSelectorConfig}
-            value={value}
-          />
-        </EntityFieldsContext.Provider>
+        <LinkedEntitySchemasContext.Provider
+          value={linkedEntitySchemas ?? null}
+        >
+          <EntityFieldsContext.Provider value={entityFields}>
+            <EntityFieldInput
+              filter={filter}
+              onChange={onChange}
+              typeSelectorConfig={resolvedTypeSelectorConfig}
+              value={value}
+            />
+          </EntityFieldsContext.Provider>
+        </LinkedEntitySchemasContext.Provider>
       </TemplateMetadataContext.Provider>
     </TemplatePropsContext.Provider>
   );
@@ -121,22 +131,23 @@ const renderEmbeddedFieldInput = ({
   filter?: any;
   linkedEntitySchemas?: LinkedEntitySchemas;
 } = {}) => {
-  const templateMetadata = {
-    ...generateTemplateMetadata(),
-    linkedEntitySchemas,
-  };
+  const templateMetadata = generateTemplateMetadata();
 
   render(
     <TemplatePropsContext.Provider value={{ document: {} }}>
       <TemplateMetadataContext.Provider value={templateMetadata}>
-        <EntityFieldsContext.Provider value={entityFields}>
-          <EmbeddedFieldStringInputFromEntity
-            filter={filter}
-            onChange={vi.fn()}
-            showFieldSelector={true}
-            value=""
-          />
-        </EntityFieldsContext.Provider>
+        <LinkedEntitySchemasContext.Provider
+          value={linkedEntitySchemas ?? null}
+        >
+          <EntityFieldsContext.Provider value={entityFields}>
+            <EmbeddedFieldStringInputFromEntity
+              filter={filter}
+              onChange={vi.fn()}
+              showFieldSelector={true}
+              value=""
+            />
+          </EntityFieldsContext.Provider>
+        </LinkedEntitySchemasContext.Provider>
       </TemplateMetadataContext.Provider>
     </TemplatePropsContext.Provider>
   );

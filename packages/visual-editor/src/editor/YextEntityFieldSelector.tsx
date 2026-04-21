@@ -26,6 +26,7 @@ import {
 import { ENHANCED_CTA_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
 import { PHONE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Phone.tsx";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
+import { useLinkedEntitySchemas } from "../hooks/useLinkedEntitySchemas.tsx";
 import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 import { IMAGE_LIST_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/ImageList.tsx";
 import { EVENT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/EventSection.tsx";
@@ -438,6 +439,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   typeSelectorConfig,
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
+  const linkedEntitySchemas = useLinkedEntitySchemas();
   const templateMetadata = useTemplateMetadata();
   const streamDocument = useDocument();
 
@@ -490,7 +492,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
           ? [selectedEntityFieldType]
           : filter.types,
       },
-      templateMetadata.linkedEntitySchemas
+      linkedEntitySchemas ?? undefined
     );
     const entityFieldOptions = filteredEntityFields.map((field) => ({
       label: field.displayName ?? field.name,
@@ -520,17 +522,14 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     templateMetadata.entityTypeDisplayName,
     typeSelectorConfig,
     value?.selectedType,
-    templateMetadata.linkedEntitySchemas,
+    linkedEntitySchemas,
   ]);
 
   React.useEffect(() => {
     if (
       filter.includeListsOnly ||
       !value?.field ||
-      !isLinkedEntityFieldPath(
-        value.field,
-        templateMetadata.linkedEntitySchemas
-      )
+      !isLinkedEntityFieldPath(value.field, linkedEntitySchemas ?? undefined)
     ) {
       return;
     }
@@ -555,8 +554,8 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     );
   }, [
     filter.includeListsOnly,
+    linkedEntitySchemas,
     streamDocument,
-    templateMetadata.linkedEntitySchemas,
     value?.field,
   ]);
 

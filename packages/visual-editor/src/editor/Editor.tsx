@@ -5,6 +5,10 @@ import { LoadingScreen } from "../internal/puck/components/LoadingScreen.tsx";
 import { Toaster } from "../internal/puck/ui/Toaster.tsx";
 import { type Config } from "@puckeditor/core";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
+import {
+  LinkedEntitySchemasContext,
+  usePlatformBridgeLinkedEntitySchemas,
+} from "../hooks/useLinkedEntitySchemas.tsx";
 import { DevLogger } from "../utils/devLogger.ts";
 import { ThemeConfig } from "../utils/themeResolver.ts";
 import { useQuickFindShortcut } from "../internal/hooks/useQuickFindShortcut.ts";
@@ -85,6 +89,7 @@ export const Editor = ({
   const [devSiteStream, setDevSiteStream] = useState<any>(undefined);
   const [parentLoaded, setParentLoaded] = useState<boolean>(false);
   const entityFields = useEntityFields();
+  const linkedEntitySchemas = usePlatformBridgeLinkedEntitySchemas();
 
   const {
     templateMetadata,
@@ -209,40 +214,42 @@ export const Editor = ({
   return (
     <ErrorProvider>
       <TemplateMetadataContext.Provider value={templateMetadata!}>
-        <ErrorBoundary fallback={<></>} onError={logError}>
-          {!isLoading ? (
-            templateMetadata?.isThemeMode || forceThemeMode ? (
-              <ThemeEditor
-                puckConfig={puckConfig!}
-                templateMetadata={templateMetadata!}
-                layoutData={migratedData!}
-                themeData={themeData!}
-                themeConfig={finalThemeConfig}
-                localDev={!!localDev}
-                metadata={{ ...metadata, streamDocument: document }}
-              />
+        <LinkedEntitySchemasContext.Provider value={linkedEntitySchemas}>
+          <ErrorBoundary fallback={<></>} onError={logError}>
+            {!isLoading ? (
+              templateMetadata?.isThemeMode || forceThemeMode ? (
+                <ThemeEditor
+                  puckConfig={puckConfig!}
+                  templateMetadata={templateMetadata!}
+                  layoutData={migratedData!}
+                  themeData={themeData!}
+                  themeConfig={finalThemeConfig}
+                  localDev={!!localDev}
+                  metadata={{ ...metadata, streamDocument: document }}
+                />
+              ) : (
+                <LayoutEditor
+                  puckConfig={puckConfig!}
+                  templateMetadata={templateMetadata!}
+                  layoutData={migratedData!}
+                  themeData={themeData!}
+                  themeConfig={finalThemeConfig}
+                  localDev={!!localDev}
+                  metadata={{ ...metadata, streamDocument: document }}
+                  streamDocument={document}
+                />
+              )
             ) : (
-              <LayoutEditor
-                puckConfig={puckConfig!}
-                templateMetadata={templateMetadata!}
-                layoutData={migratedData!}
-                themeData={themeData!}
-                themeConfig={finalThemeConfig}
-                localDev={!!localDev}
-                metadata={{ ...metadata, streamDocument: document }}
-                streamDocument={document}
-              />
-            )
-          ) : (
-            parentLoaded && (
-              <LoadingScreen
-                progress={progress}
-                platformLanguageIsSet={!!templateMetadata?.platformLocale}
-              />
-            )
-          )}
-          <Toaster closeButton richColors />
-        </ErrorBoundary>
+              parentLoaded && (
+                <LoadingScreen
+                  progress={progress}
+                  platformLanguageIsSet={!!templateMetadata?.platformLocale}
+                />
+              )
+            )}
+            <Toaster closeButton richColors />
+          </ErrorBoundary>
+        </LinkedEntitySchemasContext.Provider>
       </TemplateMetadataContext.Provider>
     </ErrorProvider>
   );
