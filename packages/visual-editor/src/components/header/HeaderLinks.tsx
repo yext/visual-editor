@@ -207,8 +207,6 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
   const primaryOverflow = menuContext?.primaryOverflow ?? false;
   const shouldWrapSecondaryInline =
     isSecondary && displayMode === "inline" && !isMobile && isOverflow;
-  const shouldUseWrappedSecondaryLayout =
-    isSecondary && displayMode === "inline" && (isMobile || isOverflow);
   const ariaLabel =
     displayMode === "menu"
       ? type === "Primary"
@@ -252,7 +250,7 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
         lg: "text-body-lg-fontSize",
       }[styles.variant]
     : "text-body-fontSize";
-  const linkJustifyClass = shouldUseWrappedSecondaryLayout
+  const linkJustifyClass = shouldWrapSecondaryInline
     ? "justify-start"
     : justifyClass;
 
@@ -318,7 +316,7 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
       aria-label={ariaLabel}
       ref={navRef}
       className={`flex ${
-        displayMode === "menu" || shouldUseWrappedSecondaryLayout
+        displayMode === "menu" || shouldWrapSecondaryInline
           ? "w-full justify-start"
           : `md:gap-6 md:items-center ${justifyClass}`
       } ${puck.isEditing ? " min-w-[100px] min-h-[30px]" : ""}`}
@@ -345,8 +343,8 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
           className={`flex flex-col gap-0 ${
             displayMode === "menu"
               ? "w-full justify-start sm:flex-row sm:flex-wrap sm:items-start sm:gap-x-6 sm:gap-y-4"
-              : shouldUseWrappedSecondaryLayout
-                ? "w-full grid grid-cols-1 gap-y-4 md:grid-cols-2 md:gap-x-6"
+              : shouldWrapSecondaryInline
+                ? "w-full md:flex-row md:flex-wrap md:items-start md:gap-x-6 md:gap-y-4"
                 : `w-full sm:w-auto ${justifyClass} md:flex-row md:gap-6`
           } ${sizeClass} ${weightClass}`}
         >
@@ -356,9 +354,9 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
               className={
                 displayMode === "menu"
                   ? "min-w-0 py-4 sm:max-w-full sm:basis-auto sm:py-0"
-                  : shouldUseWrappedSecondaryLayout
+                  : shouldWrapSecondaryInline
                     ? "min-w-0 py-2 md:py-0"
-                  : "py-4 lg:py-0"
+                    : "py-4 lg:py-0"
               }
             >
               {renderLink(item, i)}
