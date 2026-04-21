@@ -1,6 +1,6 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
-export const addShowHideOptions: Migration = {
+export const addShowHideOptions: LayoutMigration = {
   AboutSection: {
     action: "updated",
     propTransformation: (props) => {

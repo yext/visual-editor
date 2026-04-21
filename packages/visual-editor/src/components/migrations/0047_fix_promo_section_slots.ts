@@ -1,9 +1,9 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
 // The original version of migration 30 incorrectly set the field for the slot components.
 // This migration fixes the issue if the field is set incorrectly.
 // Otherwise, it leaves the props unchanged.
-export const fixPromoSectionSlots: Migration = {
+export const fixPromoSectionSlots: LayoutMigration = {
   PromoSection: {
     action: "updated",
     propTransformation: (props) => {

@@ -20,8 +20,9 @@ import { updateThemeInEditor } from "../../utils/applyTheme.ts";
 import { useThemeLocalStorage } from "../hooks/theme/useLocalStorage.ts";
 import { useCommonMessageSenders } from "../hooks/useMessageSenders.ts";
 import { useProgress } from "../hooks/useProgress.ts";
-import { migrate } from "../../utils/migrate.ts";
-import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
+import { migrateLayout } from "../../utils/migrateLayout.ts";
+import { migrateTheme } from "../../utils/migrateTheme.ts";
+import { layoutMigrationRegistry } from "../../components/migrations/migrationRegistry.ts";
 import { Metadata } from "../../editor/Editor.tsx";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 import { getPublishErrorMessage } from "../../utils/publishErrors.ts";
@@ -117,7 +118,13 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
         localHistoryArray ? JSON.parse(localHistoryArray) : []
       ) as ThemeHistory[];
       if (localHistories.length > 0) {
-        const localThemeData = localHistories[localHistories.length - 1].data;
+        const localThemeData = migrateTheme(
+          localHistories[localHistories.length - 1].data,
+          {
+            themeConfig,
+            customFonts: templateMetadata.customFonts,
+          }
+        );
         devLogger.log("Layout Dev Mode - Using theme data from local storage");
         sendDevThemeSaveStateData({
           payload: { devThemeSaveStateData: JSON.stringify(localThemeData) },
@@ -176,9 +183,9 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
           .map((history) => ({
             id: history.id,
             state: {
-              data: migrate(
+              data: migrateLayout(
                 history.state.data,
-                migrationRegistry,
+                layoutMigrationRegistry,
                 puckConfig,
                 streamDocument
               ),

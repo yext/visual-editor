@@ -1,5 +1,5 @@
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
 /**
  * Migration to add default meta fields for locator and directory pages.
@@ -7,7 +7,7 @@ import { Migration } from "../../utils/migrate.ts";
  * If they are present but have empty constantValue, set a default constantValue.
  * If the field is empty, enable constantValueEnabled.
  */
-export const addDefaultLocatorAndDirectoryMetaFields: Migration = {
+export const addDefaultLocatorAndDirectoryMetaFields: LayoutMigration = {
   root: {
     propTransformation: (
       props: Record<string, any>,

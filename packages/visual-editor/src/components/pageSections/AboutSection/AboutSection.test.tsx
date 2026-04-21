@@ -8,8 +8,8 @@ import {
 } from "../../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import { AboutSection } from "./AboutSection.tsx";
-import { migrate } from "../../../utils/migrate.ts";
-import { migrationRegistry } from "../../migrations/migrationRegistry.ts";
+import { migrateLayout } from "../../../utils/migrateLayout.ts";
+import { layoutMigrationRegistry } from "../../migrations/migrationRegistry.ts";
 import { SlotsCategoryComponents } from "../../categories/SlotsCategory.tsx";
 import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
@@ -37,7 +37,7 @@ const tests: ComponentTest[] = [
     name: "default props",
     document: testDocument,
     props: { ...AboutSection.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "version 50 props with details column",
@@ -557,7 +557,7 @@ describe("AboutSection", async () => {
       version,
       viewport: { width, height, name: viewportName },
     }) => {
-      let data = migrate(
+      let data = migrateLayout(
         {
           root: {
             props: {
@@ -571,7 +571,7 @@ describe("AboutSection", async () => {
             },
           ],
         },
-        migrationRegistry,
+        layoutMigrationRegistry,
         puckConfig,
         document
       );

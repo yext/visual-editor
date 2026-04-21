@@ -8,8 +8,8 @@ import {
   transformTests,
 } from "../../testing/componentTests.setup.ts";
 import { render as reactRender, waitFor } from "@testing-library/react";
-import { migrate } from "../../../utils/migrate.ts";
-import { migrationRegistry } from "../../migrations/migrationRegistry.ts";
+import { migrateLayout } from "../../../utils/migrateLayout.ts";
+import { layoutMigrationRegistry } from "../../migrations/migrationRegistry.ts";
 import { NearbyLocationsSection } from "./NearbyLocations.tsx";
 import { SlotsCategoryComponents } from "../../categories/SlotsCategory.tsx";
 import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
@@ -27,7 +27,7 @@ const tests: ComponentTest[] = [
     name: "default props with empty document",
     document: {},
     props: { ...NearbyLocationsSection.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "default props with multiple nearby locations",
@@ -57,7 +57,7 @@ const tests: ComponentTest[] = [
       _yext: { contentDeliveryAPIDomain: "https://cdn.yextapis.com" },
     },
     props: { ...NearbyLocationsSection.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "default props with no nearby locations",
@@ -92,7 +92,7 @@ const tests: ComponentTest[] = [
       vi.unstubAllGlobals();
       await delay(interactionsDelay);
     },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "version 36 with no nearby locations",
@@ -503,7 +503,7 @@ describe("NearbyLocationsSection", async () => {
       version,
       viewport: { width, height, name: viewportName },
     }) => {
-      const data = migrate(
+      const data = migrateLayout(
         {
           root: {
             props: {
@@ -517,7 +517,7 @@ describe("NearbyLocationsSection", async () => {
             },
           ],
         },
-        migrationRegistry,
+        layoutMigrationRegistry,
         puckConfig,
         document
       );

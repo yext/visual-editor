@@ -1,12 +1,12 @@
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 import { getPageSetLocales } from "../../utils/pageSetLocales.ts";
 
 /**
  * Empty titles now fail page generation. Ensure the title is not set to
  * constantValueEnabled with an empty constantValue.
  */
-export const emptyTitleFix: Migration = {
+export const emptyTitleFix: LayoutMigration = {
   root: {
     propTransformation: (
       props: Record<string, any>,

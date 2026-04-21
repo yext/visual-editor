@@ -1,4 +1,4 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
 const DEFAULT_PRIMARY_HEADING_CONSTANT_VALUE = "";
 const DEFAULT_IMAGE_CONSTANT_VALUE = {
@@ -7,7 +7,7 @@ const DEFAULT_IMAGE_CONSTANT_VALUE = {
   width: 0,
 };
 
-export const locatorStaticContentToggles: Migration = {
+export const locatorStaticContentToggles: LayoutMigration = {
   Locator: {
     action: "updated",
     propTransformation: (props) => {

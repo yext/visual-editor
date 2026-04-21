@@ -1,6 +1,6 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
-export const coreInfoSectionSlots: Migration = {
+export const coreInfoSectionSlots: LayoutMigration = {
   Emails: {
     action: "updated",
     propTransformation: (props) => {

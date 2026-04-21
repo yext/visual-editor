@@ -1,9 +1,9 @@
 import { setDeep } from "@puckeditor/core";
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
 const DEFAULT_DISTANCE_DISPLAY = "distanceFromUser";
 
-export const locatorDistanceDisplay: Migration = {
+export const locatorDistanceDisplay: LayoutMigration = {
   Locator: {
     action: "updated",
     propTransformation: (props) => {

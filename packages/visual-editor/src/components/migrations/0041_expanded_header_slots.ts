@@ -1,6 +1,6 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
-export const expandedHeaderSlots: Migration = {
+export const expandedHeaderSlots: LayoutMigration = {
   ExpandedHeader: {
     action: "updated",
     propTransformation: (props) => {

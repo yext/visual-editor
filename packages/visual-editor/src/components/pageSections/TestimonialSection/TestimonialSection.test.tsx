@@ -7,8 +7,8 @@ import {
 } from "../../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import { TestimonialSection } from "./TestimonialSection.tsx";
-import { migrate } from "../../../utils/migrate.ts";
-import { migrationRegistry } from "../../migrations/migrationRegistry.ts";
+import { migrateLayout } from "../../../utils/migrateLayout.ts";
+import { layoutMigrationRegistry } from "../../migrations/migrationRegistry.ts";
 import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
 import { SlotsCategoryComponents } from "../../categories/SlotsCategory.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
@@ -389,13 +389,13 @@ const tests: ComponentTest[] = [
     name: "default props with empty document",
     document: {},
     props: { ...TestimonialSection.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "default props with document data",
     document: { c_testimonials: testimonialData },
     props: { ...TestimonialSection.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "version 37 props with entity values",
@@ -839,7 +839,7 @@ describe("TestimonialSection", async () => {
       version,
       viewport: { width, height, name: viewportName },
     }) => {
-      let data = migrate(
+      let data = migrateLayout(
         {
           root: {
             props: {
@@ -853,7 +853,7 @@ describe("TestimonialSection", async () => {
             },
           ],
         },
-        migrationRegistry,
+        layoutMigrationRegistry,
         puckConfig,
         document
       );

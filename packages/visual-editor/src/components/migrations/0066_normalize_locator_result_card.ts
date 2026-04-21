@@ -1,4 +1,4 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 import {
   getLocatorEntityTypeSourceMap,
   isLocatorEntityType,
@@ -78,7 +78,7 @@ const DEFAULT_LOCATOR_RESULT_CARD_PROPS = {
   },
 };
 
-export const normalizeLocatorResultCard: Migration = {
+export const normalizeLocatorResultCard: LayoutMigration = {
   Locator: {
     action: "updated",
     propTransformation: (props, streamDocument) => {

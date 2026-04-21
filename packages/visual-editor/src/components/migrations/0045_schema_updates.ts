@@ -1,8 +1,8 @@
 import { LOCAL_BUSINESS_ENTITY_TYPES } from "../../utils/schema/defaultSchemas.ts";
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 
-export const schemaUpdates: Migration = {
+export const schemaUpdates: LayoutMigration = {
   root: {
     propTransformation: (
       oldProps: Record<string, any>,

@@ -107,9 +107,9 @@ const Location: Template<TemplateRenderProps> = (props) => {
         <GTMBody>
           <Render
             config={mainConfig}
-            data={migrate(
+            data={migrateLayout(
               JSON.parse(document.__.layout),
-              migrationRegistry,
+              layoutMigrationRegistry,
               mainConfig
             )}
           />
@@ -124,7 +124,7 @@ const Location: Template<TemplateRenderProps> = (props) => {
 
 `<Render>` converts the saved layout data from the editor into the rendered page.
 
-`migrate` handles updates to the components exported from `@yext/visual-editor`. If you are not using `@yext/visual-editor` components, you do not need to use `migrate`.
+`migrateLayout` handles updates to the components exported from `@yext/visual-editor`. If you are not using `@yext/visual-editor` components, you do not need to use `migrateLayout`.
 
 ### Puck Configs
 
@@ -257,9 +257,9 @@ const Location: Template<TemplateRenderProps> = (props) => {
       <VisualEditorProvider templateProps={props}>
         <Render
           config={mainConfig}
-          data={migrate(
+          data={migrateLayout(
             JSON.parse(document.__.layout),
-            migrationRegistry,
+            layoutMigrationRegistry,
             filteredConfig
           )}
           metadata={customMetadata} // added here

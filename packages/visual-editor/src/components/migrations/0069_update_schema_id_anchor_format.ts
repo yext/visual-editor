@@ -1,4 +1,4 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
 const LEGACY_PAGE_SCHEMA_ID_REGEX =
   /^https:\/\/\[\[siteDomain\]\]\/\[\[uid\]\]#(.+)$/;
@@ -32,7 +32,7 @@ const transformSchemaIdAnchorFormat = (oldProps: Record<string, any>) => {
   }
 };
 
-export const updateSchemaIdAnchorFormat: Migration = {
+export const updateSchemaIdAnchorFormat: LayoutMigration = {
   root: {
     propTransformation: transformSchemaIdAnchorFormat,
   },

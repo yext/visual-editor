@@ -1,6 +1,6 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
-export const photoGalleryVariant: Migration = {
+export const photoGalleryVariant: LayoutMigration = {
   PhotoGallerySection: {
     action: "updated",
     propTransformation: (props) => {

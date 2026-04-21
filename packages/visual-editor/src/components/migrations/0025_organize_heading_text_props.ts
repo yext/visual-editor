@@ -1,6 +1,6 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
-export const organizeHeadingTextProps: Migration = {
+export const organizeHeadingTextProps: LayoutMigration = {
   HeadingText: {
     action: "updated",
     propTransformation: (props) => {

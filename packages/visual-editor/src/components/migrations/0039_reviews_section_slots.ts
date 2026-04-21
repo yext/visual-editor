@@ -1,6 +1,6 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
-export const reviewsSectionSlots: Migration = {
+export const reviewsSectionSlots: LayoutMigration = {
   ReviewsSection: {
     action: "updated",
     propTransformation: (props) => {

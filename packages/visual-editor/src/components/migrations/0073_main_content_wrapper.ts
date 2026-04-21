@@ -1,4 +1,4 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
 // Keep only leading header content and trailing footer content at the root.
 //
@@ -13,7 +13,7 @@ import { Migration } from "../../utils/migrate.ts";
 // footer suffix. Header/Footer components that appear in the middle of the
 // page are therefore wrapped into MainContent instead of being pulled to the
 // edges, which preserves the existing top-level order.
-export const mainContentWrapperMigration: Migration = {
+export const mainContentWrapperMigration: LayoutMigration = {
   content: {
     transformation: (content) => {
       const isHeader = (componentType: string) =>

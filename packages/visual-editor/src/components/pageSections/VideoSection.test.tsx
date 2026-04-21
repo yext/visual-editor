@@ -8,8 +8,8 @@ import {
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import { VideoSection } from "./VideoSection.tsx";
-import { migrate } from "../../utils/migrate.ts";
-import { migrationRegistry } from "../migrations/migrationRegistry.ts";
+import { migrateLayout } from "../../utils/migrateLayout.ts";
+import { layoutMigrationRegistry } from "../migrations/migrationRegistry.ts";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { SlotsCategoryComponents } from "../categories/SlotsCategory.tsx";
 import { Render, Config } from "@puckeditor/core";
@@ -21,7 +21,7 @@ const tests: ComponentTest[] = [
     name: "default props with empty document",
     document: {},
     props: { ...VideoSection.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "version 28 props with entity heading text and no video",
@@ -136,7 +136,7 @@ describe("VideoSection", async () => {
       version,
       viewport: { width, height, name: viewportName },
     }) => {
-      const data = migrate(
+      const data = migrateLayout(
         {
           root: {
             props: {
@@ -150,7 +150,7 @@ describe("VideoSection", async () => {
             },
           ],
         },
-        migrationRegistry,
+        layoutMigrationRegistry,
         puckConfig,
         document
       );

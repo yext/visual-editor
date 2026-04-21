@@ -1,10 +1,10 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
 import { ProductSectionType } from "../../types/types.ts";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 
-export const productSectionSlots: Migration = {
+export const productSectionSlots: LayoutMigration = {
   ProductSection: {
     action: "updated",
     propTransformation: (props, streamDocument) => {

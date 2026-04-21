@@ -1,6 +1,6 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
-export const adjustLocatorOpenNowSchema: Migration = {
+export const adjustLocatorOpenNowSchema: LayoutMigration = {
   Locator: {
     action: "updated",
     propTransformation: (props) => {

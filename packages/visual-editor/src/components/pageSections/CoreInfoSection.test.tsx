@@ -8,8 +8,8 @@ import {
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import { CoreInfoSection } from "./CoreInfoSection.tsx";
-import { migrate } from "../../utils/migrate.ts";
-import { migrationRegistry } from "../migrations/migrationRegistry.ts";
+import { migrateLayout } from "../../utils/migrateLayout.ts";
+import { layoutMigrationRegistry } from "../migrations/migrationRegistry.ts";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
@@ -31,7 +31,7 @@ const tests: ComponentTest[] = [
     name: "default props with no additional document data",
     document: { locale: "en" },
     props: { ...CoreInfoSection.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "default props with document data",
@@ -44,7 +44,7 @@ const tests: ComponentTest[] = [
       services: ["Delivery", "Catering"],
     },
     props: { ...CoreInfoSection.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "version 1 props with entity values",
@@ -688,7 +688,7 @@ describe("CoreInfoSection", async () => {
       version,
       viewport: { width, height, name: viewportName },
     }) => {
-      const data = migrate(
+      const data = migrateLayout(
         {
           root: {
             props: {
@@ -702,7 +702,7 @@ describe("CoreInfoSection", async () => {
             },
           ],
         },
-        migrationRegistry,
+        layoutMigrationRegistry,
         puckConfig,
         document
       );

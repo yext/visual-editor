@@ -22,8 +22,8 @@ import { LayoutApprovalModal } from "../../components/modals/LayoutApprovalModal
 import { TemplateMetadata } from "../../types/templateMetadata.ts";
 import "../ui/puck.css";
 import "../../../editor/index.css";
-import { migrate } from "../../../utils/migrate.ts";
-import { migrationRegistry } from "../../../components/migrations/migrationRegistry.ts";
+import { migrateLayout } from "../../../utils/migrateLayout.ts";
+import { layoutMigrationRegistry } from "../../../components/migrations/migrationRegistry.ts";
 import {
   i18nComponentsInstance,
   loadComponentTranslations,
@@ -193,9 +193,9 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
                   return;
                 }
 
-                const migratedPastedData = migrate(
+                const migratedPastedData = migrateLayout(
                   pastedData,
-                  migrationRegistry,
+                  layoutMigrationRegistry,
                   config,
                   streamDocument
                 );
@@ -344,9 +344,9 @@ export const LocalDevOverrideButtons = () => {
           try {
             data = JSON.parse(prompt("Enter layout data:") ?? "{}");
           } finally {
-            const migratedData = migrate(
+            const migratedData = migrateLayout(
               data,
-              migrationRegistry,
+              layoutMigrationRegistry,
               config,
               streamDocument
             );

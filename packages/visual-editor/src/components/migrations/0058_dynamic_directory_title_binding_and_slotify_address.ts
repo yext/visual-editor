@@ -1,6 +1,6 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
-export const fixDirectoryTitleBindingAndSlotifyAddress: Migration = {
+export const fixDirectoryTitleBindingAndSlotifyAddress: LayoutMigration = {
   DirectoryCard: {
     action: "updated",
     propTransformation: (props) => {

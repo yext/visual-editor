@@ -2,8 +2,8 @@ import { Config, Render } from "@puckeditor/core";
 import { render as reactRender, waitFor } from "@testing-library/react";
 import { page } from "@vitest/browser/context";
 import { backgroundColors } from "../../utils/themeConfigOptions.ts";
-import { migrate } from "../../utils/migrate.ts";
-import { migrationRegistry } from "../migrations/migrationRegistry.ts";
+import { migrateLayout } from "../../utils/migrateLayout.ts";
+import { layoutMigrationRegistry } from "../migrations/migrationRegistry.ts";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { describe, expect, it } from "vitest";
 import {
@@ -2235,7 +2235,7 @@ const tests: ComponentTest[] = [
       analytics: { scope: "gridSection" },
       align: "left",
     },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
 ];
 
@@ -2257,12 +2257,12 @@ describe("Grid", async () => {
       version,
       viewport: { width, height, name: viewportName },
     }) => {
-      const data = migrate(
+      const data = migrateLayout(
         {
           root: { props: { version } },
           content: [{ type: "Grid", props }],
         },
-        migrationRegistry,
+        layoutMigrationRegistry,
         puckConfig,
         document
       );

@@ -1,7 +1,7 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 import { backgroundColors } from "../../utils/themeConfigOptions.ts";
 
-export const addCardStylesMigration: Migration = {
+export const addCardStylesMigration: LayoutMigration = {
   Directory: {
     action: "updated",
     propTransformation: (props) => ({

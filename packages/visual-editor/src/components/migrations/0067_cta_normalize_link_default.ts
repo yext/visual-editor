@@ -1,4 +1,4 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
 
 const applyNormalizeLinkDefault = (value: any) => {
@@ -71,7 +71,7 @@ const applyCtaNormalizeLinkDefault = (
   };
 };
 
-export const ctaNormalizeLinkDefault: Migration = {
+export const ctaNormalizeLinkDefault: LayoutMigration = {
   CTAWrapper: {
     action: "updated",
     propTransformation: applyCtaNormalizeLinkDefault,

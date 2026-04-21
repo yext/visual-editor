@@ -1,4 +1,4 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
 // Ensures currentPage defaults to the 'name' field if no constantValue is present.
 const transformBreadcrumbProps = (props: any) => {
@@ -26,7 +26,7 @@ const transformBreadcrumbProps = (props: any) => {
   };
 };
 
-export const directoryBreadcrumbCurrentPage: Migration = {
+export const directoryBreadcrumbCurrentPage: LayoutMigration = {
   BreadcrumbsSection: {
     action: "updated",
     propTransformation: transformBreadcrumbProps,

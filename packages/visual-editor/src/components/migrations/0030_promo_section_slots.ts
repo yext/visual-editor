@@ -1,9 +1,9 @@
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 import { PromoSectionType } from "../../types/types.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 
-export const promoSectionSlots: Migration = {
+export const promoSectionSlots: LayoutMigration = {
   PromoSection: {
     action: "updated",
     propTransformation: (props, streamDocument) => {

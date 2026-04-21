@@ -1,4 +1,4 @@
-import { MigrationRegistry } from "../../utils/migrate.ts";
+import { LayoutMigrationRegistry } from "../../utils/migrateLayout.ts";
 import { adjustPropObjectsMigration } from "./0001_adjust_prop_objects.ts";
 import { addHeadingAlignmentMigration } from "./0002_add_heading_alignment.ts";
 import { adjustStructFields } from "./0003_adjust_struct_fields.ts";
@@ -79,7 +79,7 @@ import { flattenLocatorResultCardSingleSelectFields } from "./0074_flatten_locat
 // Import it in this file and add it to this array.
 // The migrations are run in the order of this array
 // and the data's version number indicates the last applied index.
-export const migrationRegistry: MigrationRegistry = [
+export const layoutMigrationRegistry: LayoutMigrationRegistry = [
   adjustPropObjectsMigration,
   addHeadingAlignmentMigration,
   adjustStructFields,

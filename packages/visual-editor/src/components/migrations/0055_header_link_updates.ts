@@ -1,7 +1,7 @@
 import { setDeep } from "@puckeditor/core";
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
-export const headerLinksUpdate: Migration = {
+export const headerLinksUpdate: LayoutMigration = {
   PrimaryHeaderSlot: {
     action: "updated",
     propTransformation: (props) => {

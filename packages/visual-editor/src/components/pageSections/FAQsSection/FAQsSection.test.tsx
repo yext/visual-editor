@@ -9,8 +9,8 @@ import {
 import { render as reactRender, act } from "@testing-library/react";
 import { FAQSection } from "./FAQsSection.tsx";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
-import { migrate } from "../../../utils/migrate.ts";
-import { migrationRegistry } from "../../migrations/migrationRegistry.ts";
+import { migrateLayout } from "../../../utils/migrateLayout.ts";
+import { layoutMigrationRegistry } from "../../migrations/migrationRegistry.ts";
 import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
@@ -68,13 +68,13 @@ const tests: ComponentTest[] = [
       locale: "en",
     },
     props: { ...FAQSection.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "default props with document data",
     document: { locale: "en", c_faq: faqData },
     props: { ...FAQSection.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "version 35 with entity value for FAQs and Heading",
@@ -478,7 +478,7 @@ describe("FAQSection", async () => {
       version,
       viewport: { width, height, name: viewportName },
     }) => {
-      const data = migrate(
+      const data = migrateLayout(
         {
           root: {
             props: {
@@ -492,7 +492,7 @@ describe("FAQSection", async () => {
             },
           ],
         },
-        migrationRegistry,
+        layoutMigrationRegistry,
         puckConfig,
         document
       );

@@ -5,8 +5,8 @@ import {
   transformTests,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender, waitFor } from "@testing-library/react";
-import { migrate } from "../../utils/migrate.ts";
-import { migrationRegistry } from "../migrations/migrationRegistry.ts";
+import { migrateLayout } from "../../utils/migrateLayout.ts";
+import { layoutMigrationRegistry } from "../migrations/migrationRegistry.ts";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { SlotsCategoryComponents } from "../categories/SlotsCategory.tsx";
 import { Render, Config } from "@puckeditor/core";
@@ -41,7 +41,7 @@ const tests: ComponentTest[] = [
     name: "default props",
     document: {},
     props: { ...ExpandedFooter.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "version 20 props - expanded full width",
@@ -2475,7 +2475,7 @@ describe("ExpandedFooter", async () => {
       version,
       viewport: { width, height, name: viewportName },
     }) => {
-      const data = migrate(
+      const data = migrateLayout(
         {
           root: {
             props: {
@@ -2489,7 +2489,7 @@ describe("ExpandedFooter", async () => {
             },
           ],
         },
-        migrationRegistry,
+        layoutMigrationRegistry,
         puckConfig,
         document
       );

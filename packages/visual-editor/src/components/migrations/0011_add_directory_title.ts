@@ -1,6 +1,6 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
-export const addDirectoryTitleMigration: Migration = {
+export const addDirectoryTitleMigration: LayoutMigration = {
   Directory: {
     action: "updated",
     propTransformation: (props) => {

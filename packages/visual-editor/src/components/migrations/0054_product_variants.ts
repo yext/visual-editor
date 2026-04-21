@@ -1,7 +1,7 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 import { getDefaultRTF } from "../../editor/TranslatableRichTextField.tsx";
 
-export const productVariants: Migration = {
+export const productVariants: LayoutMigration = {
   ProductSection: {
     action: "updated",
     propTransformation: (props) => {

@@ -1,10 +1,10 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 import {
   isDirectoryGrid,
   sortAlphabetically,
 } from "../../utils/directory/utils.ts";
 
-export const directorySlots: Migration = {
+export const directorySlots: LayoutMigration = {
   Directory: {
     action: "updated",
     propTransformation: (props, streamDocument) => {

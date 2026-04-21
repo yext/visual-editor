@@ -1,4 +1,4 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
 const stripPrefix = (value: unknown, prefix: string): string | undefined => {
   if (typeof value !== "string") {
@@ -66,7 +66,7 @@ const migrateThemeColorRecursively = (value: unknown): unknown => {
   return migrateLegacyThemeColor(transformedObject);
 };
 
-export const themeColorPropertyKeyMigration: Migration = {
+export const themeColorPropertyKeyMigration: LayoutMigration = {
   "*": {
     action: "updated",
     propTransformation: (props) => {

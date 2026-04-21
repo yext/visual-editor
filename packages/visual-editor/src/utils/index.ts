@@ -9,12 +9,20 @@ export { getCanonicalUrl } from "./canonicalUrl.ts";
 export { themeManagerCn, themeManagerTwMergeConfiguration } from "./cn.ts";
 export { getPageMetadata } from "./getPageMetadata.ts";
 export { normalizeLink } from "./normalizeLink.ts";
+export { migrateLayout, migrateLayout as migrate } from "./migrateLayout.ts";
+export type {
+  LayoutMigration,
+  LayoutMigrationAction,
+  LayoutMigrationRegistry,
+  LayoutMigration as Migration,
+  LayoutMigrationAction as MigrationAction,
+  LayoutMigrationRegistry as MigrationRegistry,
+} from "./migrateLayout.ts";
 export {
-  migrate,
-  type Migration,
-  type MigrationAction,
-  type MigrationRegistry,
-} from "./migrate.ts";
+  migrateTheme,
+  type ThemeMigration,
+  type ThemeMigrationRegistry,
+} from "./migrateTheme.ts";
 export { resolveComponentData } from "./resolveComponentData.tsx";
 export { resolveYextEntityField } from "./resolveYextEntityField.ts";
 export {

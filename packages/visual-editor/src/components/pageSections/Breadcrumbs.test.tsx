@@ -7,8 +7,8 @@ import {
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import { BreadcrumbsSection } from "./Breadcrumbs.tsx";
-import { migrate } from "../../utils/migrate.ts";
-import { migrationRegistry } from "../migrations/migrationRegistry.ts";
+import { migrateLayout } from "../../utils/migrateLayout.ts";
+import { layoutMigrationRegistry } from "../migrations/migrationRegistry.ts";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { Render, Config } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
@@ -19,7 +19,7 @@ const tests: ComponentTest[] = [
     name: "default props with empty document",
     document: {},
     props: { ...BreadcrumbsSection.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "default props with document data",
@@ -47,7 +47,7 @@ const tests: ComponentTest[] = [
       ],
     },
     props: { ...BreadcrumbsSection.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "version 4 props",
@@ -143,7 +143,7 @@ describe("BreadcrumbsSection", async () => {
       version,
       viewport: { width, height, name: viewportName },
     }) => {
-      const data = migrate(
+      const data = migrateLayout(
         {
           root: {
             props: {
@@ -157,7 +157,7 @@ describe("BreadcrumbsSection", async () => {
             },
           ],
         },
-        migrationRegistry,
+        layoutMigrationRegistry,
         puckConfig,
         document
       );

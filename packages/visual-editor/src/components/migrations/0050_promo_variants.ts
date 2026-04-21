@@ -1,7 +1,7 @@
 import { getRandomPlaceholderImage } from "../../utils/imagePlaceholders.ts";
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
-export const promoVariants: Migration = {
+export const promoVariants: LayoutMigration = {
   PromoSection: {
     action: "updated",
     propTransformation: (props) => {

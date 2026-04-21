@@ -1,6 +1,6 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
-export const updateImageStylingMigration: Migration = {
+export const updateImageStylingMigration: LayoutMigration = {
   // Update ImageWrapper component
   ImageWrapper: {
     action: "updated",

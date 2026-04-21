@@ -7,8 +7,8 @@ import {
 } from "../../testing/componentTests.setup.ts";
 import { render as reactRender, waitFor } from "@testing-library/react";
 import { PhotoGallerySection } from "./PhotoGallerySection.tsx";
-import { migrate } from "../../../utils/migrate.ts";
-import { migrationRegistry } from "../../migrations/migrationRegistry.ts";
+import { migrateLayout } from "../../../utils/migrateLayout.ts";
+import { layoutMigrationRegistry } from "../../migrations/migrationRegistry.ts";
 import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
 import { SlotsCategoryComponents } from "../../categories/SlotsCategory.tsx";
 import { Render, Config } from "@puckeditor/core";
@@ -159,13 +159,13 @@ const tests: ComponentTest[] = [
     name: "default props with empty document",
     document: {},
     props: { ...PhotoGallerySection.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "default props with document data",
     document: { photoGallery: photoGalleryData },
     props: { ...PhotoGallerySection.defaultProps },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
   {
     name: "version 53 gallery variant with mixed locale images",
@@ -889,7 +889,7 @@ describe("PhotoGallerySection", async () => {
       version,
       viewport: { width, height, name: viewportName },
     }) => {
-      const data = migrate(
+      const data = migrateLayout(
         {
           root: {
             props: {
@@ -903,7 +903,7 @@ describe("PhotoGallerySection", async () => {
             },
           ],
         },
-        migrationRegistry,
+        layoutMigrationRegistry,
         puckConfig,
         document
       );

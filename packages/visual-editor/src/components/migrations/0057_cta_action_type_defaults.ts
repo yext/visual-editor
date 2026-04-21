@@ -1,4 +1,4 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 
 const applyCtaDefaults = (
@@ -31,7 +31,7 @@ const applyCtaDefaults = (
   };
 };
 
-export const ctaActionTypeDefaults: Migration = {
+export const ctaActionTypeDefaults: LayoutMigration = {
   CTAWrapper: {
     action: "updated",
     propTransformation: applyCtaDefaults,

@@ -9,12 +9,12 @@ import {
   Data,
   DefaultRootProps,
 } from "@puckeditor/core";
-import { migrationRegistry } from "../migrations/migrationRegistry.ts";
+import { layoutMigrationRegistry } from "../migrations/migrationRegistry.ts";
 import { OtherCategoryComponents } from "../categories/OtherCategory.tsx";
 import { PageSectionCategoryComponents } from "../categories/PageSectionCategory.tsx";
 import { SlotsCategoryComponents } from "../categories/SlotsCategory.tsx";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
-import { migrate } from "../../utils/migrate.ts";
+import { migrateLayout } from "../../utils/migrateLayout.ts";
 import { ThemeData } from "../../internal/types/themeData.ts";
 import { MainContent } from "../structure/MainContent.tsx";
 import {
@@ -321,9 +321,9 @@ describe("ThemeTest", async () => {
       data,
       viewport: { width, height, name: viewportName },
     }) => {
-      const migratedData = migrate(
+      const migratedData = migrateLayout(
         data,
-        migrationRegistry,
+        layoutMigrationRegistry,
         puckConfig,
         document
       );

@@ -22,6 +22,7 @@ import { ThemeConfig } from "./themeResolver.ts";
 import { getContrastingColor } from "./colors.ts";
 import fontFallbackTransformations from "./fonts/fontFallbackTransformations.json" with { type: "json" };
 import { StreamDocument } from "./types/StreamDocument.ts";
+import { migrateTheme } from "./migrateTheme.ts";
 
 export const THEME_STYLE_TAG_ID = "visual-editor-theme";
 export const PUCK_PREVIEW_IFRAME_ID = "preview-frame";
@@ -66,7 +67,9 @@ export const applyTheme = (
 
   if (publishedTheme) {
     try {
-      overrides = JSON.parse(publishedTheme);
+      overrides = migrateTheme(JSON.parse(publishedTheme), {
+        themeConfig,
+      });
 
       devLogger.logData("THEME_DATA", overrides);
     } catch (error) {

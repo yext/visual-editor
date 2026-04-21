@@ -1,4 +1,4 @@
-import { Migration } from "../../utils/migrate.ts";
+import { LayoutMigration } from "../../utils/migrateLayout.ts";
 
 const DEFAULT_RESULT_CARD = {
   primaryHeading: {
@@ -91,7 +91,7 @@ const DEFAULT_RESULT_CARD = {
   },
 };
 
-export const locatorCardDefaultProps: Migration = {
+export const locatorCardDefaultProps: LayoutMigration = {
   Locator: {
     action: "updated",
     propTransformation: (props) => {
