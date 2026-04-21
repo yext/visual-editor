@@ -322,7 +322,7 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
     <nav
       aria-label={ariaLabel}
       ref={navRef}
-      className={`flex ${displayMode === "menu" ? "w-full justify-start" : `md:gap-6 md:items-center ${justifyClass}`} ${puck.isEditing ? " min-w-[100px] min-h-[30px]" : ""}`}
+      className={`flex md:gap-6 md:items-center ${justifyClass} ${puck.isEditing ? " min-w-[100px] min-h-[30px]" : ""}`}
     >
       {/* Hidden measure list for overflow math */}
       <ul
@@ -339,9 +339,11 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
       {/* Visible list */}
       {(!isSecondary || displayMode === "menu" || isMobile || !isOverflow) && (
         <ul
-          className={`flex flex-col gap-0 ${
+          className={`flex flex-col w-full sm:w-auto gap-0 ${
             displayMode === "menu"
-              ? "w-full justify-start sm:flex-row sm:flex-wrap sm:items-start sm:gap-x-6 sm:gap-y-4"
+              ? isDesktop
+                ? "md:flex-row md:flex-wrap md:items-start justify-end md:gap-x-6 md:gap-y-4"
+                : "justify-start"
               : `w-full sm:w-auto ${justifyClass} md:flex-row md:gap-6`
           } ${sizeClass} ${weightClass}`}
         >
