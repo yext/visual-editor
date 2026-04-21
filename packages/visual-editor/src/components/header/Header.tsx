@@ -6,7 +6,6 @@ import {
   ComplexImageType,
   useAnalytics,
 } from "@yext/pages-components";
-import { ComponentConfig, Fields } from "@puckeditor/core";
 import { CTA } from "../atoms/cta.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
@@ -23,6 +22,7 @@ import {
   LanguageDropdownProps,
   parseDocumentForLanguageDropdown,
 } from "./languageDropdown.tsx";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 const PLACEHOLDER_IMAGE: ComplexImageType = {
   image: {
@@ -52,7 +52,7 @@ export interface HeaderProps {
   };
 }
 
-const headerFields: Fields<HeaderProps> = {
+const headerFields: YextFields<HeaderProps> = {
   logoWidth: YextField(msg("fields.logoWidth", "Logo Width"), {
     type: "number",
     min: 0,
@@ -82,7 +82,7 @@ const headerFields: Fields<HeaderProps> = {
  * The Header component appears at the top of pages. It serves as the primary navigation and branding element, containing the site logo and optionally a language selector. See [Expanded Header](#expanded-header) for the newest header component.
  * Available on Directory and Locator templates.
  */
-export const Header: ComponentConfig<{ props: HeaderProps }> = {
+export const Header: YextComponentConfig<HeaderProps> = {
   label: msg("components.header", "Header"),
   fields: headerFields,
   defaultProps: {

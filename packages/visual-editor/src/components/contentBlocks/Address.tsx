@@ -1,9 +1,7 @@
 import { useTranslation } from "react-i18next";
 import {
-  ComponentConfig,
   ComponentData,
   DefaultComponentProps,
-  Fields,
   PuckComponent,
   setDeep,
 } from "@puckeditor/core";
@@ -24,6 +22,7 @@ import {
   backgroundColors,
 } from "../../utils/themeConfigOptions.ts";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 /** Props for the Address component */
 export interface AddressProps {
@@ -62,16 +61,15 @@ export interface AddressProps {
 }
 
 // Address field definition used in Address and CoreInfoSection
-export const AddressDataField = YextField<any, AddressType>(
-  msg("fields.address", "Address"),
-  {
+export const AddressDataField: YextFields<AddressProps["data"]> = {
+  address: YextField<AddressType>(msg("fields.address", "Address"), {
     type: "entityField",
     filter: { types: ["type.address"] },
-  }
-);
+  }),
+} as any; // TODO: Update this once "entityField" is a registered YextFields fieldType
 
 // Address style fields used in Address and CoreInfoSection
-export const AddressStyleFields: Fields<AddressProps["styles"]> = {
+export const AddressStyleFields: YextFields<AddressProps["styles"]> = {
   showRegion: YextField(msg("fields.showRegion", "Show Region"), {
     type: "radio",
     options: [
@@ -100,18 +98,17 @@ export const AddressStyleFields: Fields<AddressProps["styles"]> = {
     type: "radio",
     options: "CTA_VARIANT",
   }),
-  color: YextField(msg("fields.linkColor", "Link Color"), {
-    type: "select",
+  color: {
+    type: "basicSelector",
+    label: msg("fields.linkColor", "Link Color"),
     options: "SITE_COLOR",
-  }),
+  },
 };
 
-export const addressFields: Fields<AddressProps> = {
+export const addressFields: YextFields<AddressProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
-    objectFields: {
-      address: AddressDataField,
-    },
+    objectFields: AddressDataField,
   }),
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
@@ -221,9 +218,7 @@ export const resolveAddressFields = (
   return updatedFields;
 };
 
-export const Address: ComponentConfig<{
-  props: AddressProps;
-}> = {
+export const Address: YextComponentConfig<AddressProps> = {
   label: msg("components.address", "Address"),
   fields: addressFields,
   defaultProps: {

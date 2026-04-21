@@ -1,9 +1,8 @@
 import { cva, VariantProps } from "class-variance-authority";
-import { Fields } from "@puckeditor/core";
 import { SpacingSelector } from "../editor/SpacingSelector.tsx";
 import { ThemeColor } from "../utils/themeConfigOptions.ts";
-import { YextField } from "../editor/YextField.tsx";
 import { msg } from "../utils/i18n/platform.ts";
+import { YextFields } from "../fields/fields.ts";
 
 export const layoutVariants = cva("components w-full", {
   variants: {
@@ -98,14 +97,12 @@ export interface layoutProps extends VariantProps<typeof layoutVariants> {
   backgroundColor?: ThemeColor;
 }
 
-export const layoutFields: Fields<layoutProps> = {
-  backgroundColor: YextField(
-    msg("fields.backgroundColor", "Background Color"),
-    {
-      type: "select",
-      options: "BACKGROUND_COLOR",
-    }
-  ),
+export const layoutFields: YextFields<layoutProps> = {
+  backgroundColor: {
+    label: msg("fields.backgroundColor", "Background Color"),
+    type: "basicSelector",
+    options: "BACKGROUND_COLOR",
+  },
   gap: SpacingSelector<layoutProps["gap"]>("Gap", "gap", false),
   verticalPadding: SpacingSelector<layoutProps["verticalPadding"]>(
     msg("fields.verticalPadding", "Top/Bottom Padding"),

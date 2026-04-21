@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
+import { PuckComponent, Slot } from "@puckeditor/core";
 import { layoutFields, layoutProps, layoutVariants } from "../Layout.tsx";
 import { backgroundColors } from "../../utils/themeConfigOptions.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
@@ -8,6 +8,7 @@ import { YextField } from "../../editor/YextField.tsx";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
 import { AdvancedCoreInfoCategory } from "../categories/AdvancedCoreInfoCategory.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export interface FlexProps extends layoutProps {
   justifyContent: "start" | "center" | "end";
@@ -67,7 +68,7 @@ const FlexContainer = React.forwardRef<
 
 FlexContainer.displayName = "Flex";
 
-const flexContainerFields: Fields<FlexProps> = {
+const flexContainerFields: YextFields<FlexProps> = {
   direction: YextField(msg("fields.direction", "Direction"), {
     type: "radio",
     options: [
@@ -106,7 +107,7 @@ const flexContainerFields: Fields<FlexProps> = {
   ),
 };
 
-export const Flex: ComponentConfig<{ props: FlexProps }> = {
+export const Flex: YextComponentConfig<FlexProps> = {
   label: "Flex",
   fields: flexContainerFields,
   defaultProps: {

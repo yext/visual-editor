@@ -1,4 +1,4 @@
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
+import { PuckComponent, Slot } from "@puckeditor/core";
 import {
   ThemeColor,
   backgroundColors,
@@ -14,6 +14,7 @@ import { defaultTeamCardSlotData } from "./TeamCard.tsx";
 import { TeamCardsWrapperProps } from "./TeamCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 export interface TeamSectionProps {
   /**
@@ -52,17 +53,15 @@ export interface TeamSectionProps {
   liveVisibility: boolean;
 }
 
-const teamSectionFields: Fields<TeamSectionProps> = {
+const teamSectionFields: YextFields<TeamSectionProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
       showSectionHeading: YextField(
         msg("fields.showSectionHeading", "Show Section Heading"),
         {
@@ -121,7 +120,7 @@ const TeamSectionWrapper: PuckComponent<TeamSectionProps> = (props) => {
  * The Team Section is designed to showcase a list of people, such as employees, executives, or other team members. It features a main section heading and renders each person's information—typically a photo, name, and title—as an individual card.
  * Available on Location templates.
  */
-export const TeamSection: ComponentConfig<{ props: TeamSectionProps }> = {
+export const TeamSection: YextComponentConfig<TeamSectionProps> = {
   label: msg("components.teamSection", "Team Section"),
   fields: teamSectionFields,
   defaultProps: {

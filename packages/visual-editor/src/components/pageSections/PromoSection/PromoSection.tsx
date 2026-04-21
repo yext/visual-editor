@@ -1,4 +1,4 @@
-import { ComponentConfig, Fields, setDeep, Slot } from "@puckeditor/core";
+import { setDeep, Slot } from "@puckeditor/core";
 import { PromoSectionType } from "../../../types/types.ts";
 import {
   backgroundColors,
@@ -38,6 +38,11 @@ import { CompactPromo } from "./CompactPromo.tsx";
 import { useTranslation } from "react-i18next";
 import { PromoEmptyState } from "./PromoEmptyState.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  YextFields,
+} from "../../../fields/fields.ts";
 
 export interface PromoData {
   /**
@@ -163,7 +168,7 @@ export type PromoVariantProps = Pick<
   "data" | "styles" | "slots"
 >;
 
-const promoSectionFields: Fields<PromoSectionProps> = {
+const promoSectionFields: YextFields<PromoSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
@@ -191,8 +196,9 @@ const promoSectionFields: Fields<PromoSectionProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      variant: YextField(msg("fields.variant", "Variant"), {
-        type: "select",
+      variant: {
+        type: "basicSelector",
+        label: msg("fields.variant", "Variant"),
         options: [
           { label: msg("fields.options.classic", "Classic"), value: "classic" },
           {
@@ -208,14 +214,12 @@ const promoSectionFields: Fields<PromoSectionProps> = {
             value: "compact",
           },
         ],
-      }),
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
+      },
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
       desktopImagePosition: YextField(
         msg("fields.desktopMediaPosition", "Desktop Media Position"),
         {
@@ -311,7 +315,7 @@ const promoSectionFields: Fields<PromoSectionProps> = {
  * The Promo Section is a flexible content component designed to highlight a single, specific promotion. It combines an image with a title, description, and a call-to-action button in a customizable, split-column layout, making it perfect for drawing attention to special offers or announcements.
  * Available on Location templates.
  */
-export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
+export const PromoSection: YextComponentConfig<PromoSectionProps> = {
   label: msg("components.promoSection", "Promo Section"),
   fields: promoSectionFields,
   defaultProps: {
@@ -499,7 +503,7 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
       fields = updateFields(fields, ["data.objectFields.media"], undefined);
     }
 
-    return fields;
+    return toPuckFields(fields);
   },
   resolveData: (data, params) => {
     let updatedData = { ...data };

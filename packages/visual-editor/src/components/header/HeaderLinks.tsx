@@ -2,10 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import {
   ArrayField,
-  AutoField,
-  ComponentConfig,
   FieldLabel,
-  Fields,
   PuckComponent,
   setDeep,
 } from "@puckeditor/core";
@@ -17,7 +14,12 @@ import { TranslatableCTA } from "../../types/types.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { useOverflow } from "../../hooks/useOverflow.ts";
 import { usePreviewWindow } from "../../hooks/usePreviewWindow.ts";
-import { YextField } from "../../editor/YextField.tsx";
+import {
+  YextField,
+  type YextCustomFieldRenderProps,
+  type YextPuckField,
+} from "../../editor/YextField.tsx";
+import { YextAutoField } from "../../fields/YextAutoField.tsx";
 import { linkTypeOptions } from "../../internal/puck/constant-value-fields/CallToAction.tsx";
 import {
   useExpandedHeaderMenu,
@@ -27,6 +29,11 @@ import { getHeaderViewport } from "./viewport.ts";
 import { ThemeColor } from "../../utils/themeConfigOptions.ts";
 import { BodyProps } from "../atoms/body.tsx";
 import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  YextFields,
+} from "../../fields/fields.ts";
 
 export type HeaderLinksProps = {
   data: {
@@ -70,7 +77,7 @@ const defaultLink: TranslatableCTA = {
   openInNewTab: false,
 };
 
-const linkFieldConfig: ArrayField<TranslatableCTA[]> = {
+const linkFieldConfig: ArrayField<TranslatableCTA[], YextPuckField> = {
   type: "array",
   arrayFields: {
     label: YextField(msg("fields.label", "Label"), {
@@ -80,10 +87,11 @@ const linkFieldConfig: ArrayField<TranslatableCTA[]> = {
     link: YextField(msg("fields.link", "Link"), {
       type: "translatableString",
     }),
-    linkType: YextField(msg("fields.linkType", "Link Type"), {
-      type: "select",
+    linkType: {
+      type: "basicSelector",
+      label: msg("fields.linkType", "Link Type"),
       options: linkTypeOptions(),
-    }),
+    },
     normalizeLink: YextField(msg("fields.normalizeLink", "Normalize Link"), {
       type: "radio",
       options: [
@@ -108,13 +116,16 @@ const linkFieldConfig: ArrayField<TranslatableCTA[]> = {
   },
 };
 
-const headerLinksFields: Fields<HeaderLinksProps> = {
+const headerLinksFields: YextFields<HeaderLinksProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
       links: {
         type: "custom",
-        render: ({ onChange, value }) => {
+        render: ({
+          onChange,
+          value,
+        }: YextCustomFieldRenderProps<HeaderLinksProps["data"]["links"]>) => {
           const tooltip = pt(
             "fields.linksTooltip",
             "Links will automatically collapse if the viewport is too narrow"
@@ -127,7 +138,7 @@ const headerLinksFields: Fields<HeaderLinksProps> = {
                 className="mb-3"
               >
                 <p className="ve-text-xs ve-mb-3">{tooltip}</p>
-                <AutoField
+                <YextAutoField
                   value={value}
                   onChange={onChange}
                   field={linkFieldConfig}
@@ -154,10 +165,11 @@ const headerLinksFields: Fields<HeaderLinksProps> = {
         type: "radio",
         options: "BODY_VARIANT",
       }),
-      color: YextField(msg("fields.color", "Color"), {
-        type: "select",
+      color: {
+        type: "basicSelector",
+        label: msg("fields.color", "Color"),
         options: "SITE_COLOR",
-      }),
+      },
       weight: YextField(msg("fields.weight", "Weight"), {
         type: "radio",
         options: [
@@ -358,14 +370,14 @@ export const defaultHeaderLinkProps: HeaderLinksProps = {
   },
 };
 
-export const HeaderLinks: ComponentConfig<{ props: HeaderLinksProps }> = {
+export const HeaderLinks: YextComponentConfig<HeaderLinksProps> = {
   label: msg("components.headerLinks", "Header Links"),
   fields: headerLinksFields,
   resolveFields: (data, params) => {
     let updatedFields = headerLinksFields;
 
     updatedFields = setDeep(
-      headerLinksFields,
+      updatedFields,
       "styles.objectFields.align.visible",
       params.parent?.type !== "PrimaryHeaderSlot"
     );
@@ -394,7 +406,7 @@ export const HeaderLinks: ComponentConfig<{ props: HeaderLinksProps }> = {
         )
     );
 
-    return updatedFields;
+    return toPuckFields(updatedFields);
   },
   defaultProps: defaultHeaderLinkProps,
   render: (props) => <HeaderLinksComponent {...props} />,

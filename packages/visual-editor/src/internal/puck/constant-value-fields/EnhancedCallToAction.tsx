@@ -1,4 +1,5 @@
-import { AutoField, CustomField, FieldLabel } from "@puckeditor/core";
+import { CustomField, FieldLabel } from "@puckeditor/core";
+import { YextAutoField } from "../../../fields/YextAutoField.tsx";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import {
   EnhancedTranslatableCTA,
@@ -71,9 +72,9 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
         <div className={"ve-mt-3"}>
           <div className="ve-mb-3">
             <FieldLabel label={pt("fields.ctaType", "CTA Type")}>
-              <AutoField
+              <YextAutoField
                 field={{
-                  type: "select",
+                  type: "basicSelector",
                   options: ctaTypeOptions(),
                 }}
                 value={value?.ctaType || "textAndLink"}
@@ -100,7 +101,7 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
           </div>
           {showLabel && (
             <div className="ve-mb-3">
-              <AutoField
+              <YextAutoField
                 field={labelField}
                 value={value?.label}
                 onChange={(newValue) => onChange({ ...value, label: newValue })}
@@ -110,7 +111,7 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
           {showLinkFields && (
             <>
               <div className="ve-mb-3">
-                <AutoField
+                <YextAutoField
                   field={linkField}
                   value={value?.link || ""}
                   onChange={(newValue) =>
@@ -120,9 +121,9 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
               </div>
               <div className="ve-mb-3">
                 <FieldLabel label={pt("fields.linkType", "Link Type")}>
-                  <AutoField
+                  <YextAutoField
                     field={{
-                      type: "select",
+                      type: "basicSelector",
                       options: linkTypeOptions(),
                     }}
                     value={value?.linkType || "URL"}

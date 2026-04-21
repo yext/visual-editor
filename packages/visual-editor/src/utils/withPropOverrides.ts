@@ -1,6 +1,6 @@
-import { ComponentConfig } from "@puckeditor/core";
+import { YextComponentConfig } from "../fields/fields.ts";
 
-export function withPropOverrides<C extends ComponentConfig>(
+export function withPropOverrides<C extends YextComponentConfig>(
   base: C,
   overrides: Partial<typeof base.defaultProps>
 ): C {
