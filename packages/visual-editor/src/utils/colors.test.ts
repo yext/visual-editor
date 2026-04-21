@@ -7,6 +7,7 @@ import {
   convertComputedStyleColorToHex,
   getBackgroundColorClasses,
   getThemeColorCssValue,
+  getThemeColorHexValue,
   getTextColorClass,
 } from "./colors.ts";
 
@@ -194,5 +195,50 @@ describe("getThemeColorCssValue", () => {
 
   it("returns undefined for empty values", () => {
     expect(getThemeColorCssValue(undefined)).toBeUndefined();
+  });
+});
+
+describe("getThemeColorHexValue", () => {
+  const streamDocument = {
+    __: {
+      theme: JSON.stringify({
+        "--colors-palette-primary": "#341A1F",
+        "--colors-palette-secondary": "#111418",
+        "--colors-palette-quaternary-contrast": "#F5F5F5",
+      }),
+    },
+  };
+
+  it("supports literal and bracketed colors", () => {
+    expect(getThemeColorHexValue("white", streamDocument)).toBe("#FFFFFF");
+    expect(getThemeColorHexValue("black", streamDocument)).toBe("#000000");
+    expect(getThemeColorHexValue("[#ff6d66]", streamDocument)).toBe("#FF6D66");
+    expect(getThemeColorHexValue("[#00000099]", streamDocument)).toBe(
+      "#000000"
+    );
+  });
+
+  it("resolves base palette tokens from the published theme", () => {
+    expect(getThemeColorHexValue("palette-primary", streamDocument)).toBe(
+      "#341A1F"
+    );
+    expect(
+      getThemeColorHexValue("palette-quaternary-contrast", streamDocument)
+    ).toBe("#F5F5F5");
+  });
+
+  it("derives light and dark palette tokens from the published theme", () => {
+    expect(getThemeColorHexValue("palette-primary-light", streamDocument)).toBe(
+      "#FCF8F9"
+    );
+    expect(
+      getThemeColorHexValue("palette-secondary-dark", streamDocument)
+    ).toBe("#2A323C");
+  });
+
+  it("returns undefined when theme values are unavailable", () => {
+    expect(
+      getThemeColorHexValue("palette-primary", { __: { theme: "{}" } })
+    ).toBeUndefined();
   });
 });

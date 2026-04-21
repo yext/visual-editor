@@ -19,14 +19,9 @@ import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
 import { TextProps } from "../../contentBlocks/Text.tsx";
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  setDeep,
-  Slot,
-} from "@puckeditor/core";
+import { PuckComponent, setDeep, Slot } from "@puckeditor/core";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 const defaultInsight = {
   image: {
@@ -256,17 +251,15 @@ export type InsightCardProps = {
   index?: number;
 };
 
-const insightCardFields: Fields<InsightCardProps> = {
+const insightCardFields: YextFields<InsightCardProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
     },
   }),
   slots: {
@@ -434,7 +427,7 @@ const InsightCardComponent: PuckComponent<InsightCardProps> = (props) => {
   );
 };
 
-export const InsightCard: ComponentConfig<{ props: InsightCardProps }> = {
+export const InsightCard: YextComponentConfig<InsightCardProps> = {
   label: msg("slots.insightCard", "Insight Card"),
   fields: insightCardFields,
   inline: true,

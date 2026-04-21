@@ -6,7 +6,7 @@ import { type BasicSelectorField } from "./BasicSelectorField.tsx";
 
 const renderField = (
   field: BasicSelectorField,
-  value?: string
+  value?: any
 ): {
   onChange: ReturnType<typeof vi.fn>;
 } => {
@@ -87,6 +87,44 @@ describe("BasicSelectorField", () => {
     expect(screen.getByRole("combobox").textContent).toContain("Beta");
   });
 
+  it("resolves ThemeOptions keys passed to basicSelector", () => {
+    const field: BasicSelectorField = {
+      type: "basicSelector",
+      label: "Heading Level",
+      options: "HEADING_LEVEL",
+    };
+
+    const { onChange } = renderField(field, 1);
+
+    expect(screen.getByRole("combobox").textContent).toContain("H1");
+
+    fireEvent.click(screen.getByRole("combobox"));
+    fireEvent.click(screen.getByText("H2"));
+
+    expect(onChange).toHaveBeenCalledWith(2);
+  });
+
+  it.each([
+    ["BACKGROUND_COLOR", "Recommended Colors"],
+    ["SITE_COLOR", "Recommended Color"],
+  ] as const)(
+    "renders %s grouped options with search",
+    (optionKey, expectedHeading) => {
+      const field: BasicSelectorField = {
+        type: "basicSelector",
+        label: "Color",
+        options: optionKey,
+      };
+
+      renderField(field);
+
+      fireEvent.click(screen.getByRole("combobox"));
+
+      expect(screen.getByPlaceholderText("Search")).toBeDefined();
+      expect(screen.getByText(expectedHeading)).toBeDefined();
+    }
+  );
+
   it("renders the empty state for function-valued options with no results", () => {
     const field: BasicSelectorField = {
       type: "basicSelector",
@@ -105,5 +143,27 @@ describe("BasicSelectorField", () => {
         .hasAttribute("disabled")
     ).toBe(true);
     expect(screen.getByText("Check your configuration.")).toBeDefined();
+  });
+
+  it("warns when a basicSelector receives an invalid ThemeOptions key", () => {
+    const consoleWarn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const field: BasicSelectorField = {
+      type: "basicSelector",
+      label: "Field",
+      options: "NOT_A_THEME_OPTION" as any,
+    };
+
+    renderField(field);
+
+    expect(
+      screen
+        .getByRole("button", { name: "No options available" })
+        .hasAttribute("disabled")
+    ).toBe(true);
+    expect(consoleWarn).toHaveBeenCalledWith(
+      'Invalid ThemeOptions key "NOT_A_THEME_OPTION" passed to basicSelector.'
+    );
+
+    consoleWarn.mockRestore();
   });
 });

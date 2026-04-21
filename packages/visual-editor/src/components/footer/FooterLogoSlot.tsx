@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ComponentConfig, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { YextField } from "../../editor/YextField.tsx";
 import {
   AssetImageType,
@@ -17,6 +17,7 @@ import { useTranslation } from "react-i18next";
 import { ImageStylingFields } from "../contentBlocks/image/styling.ts";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 import { getImageUrl } from "../contentBlocks/image/Image.tsx";
+import { YextComponentConfig } from "../../fields/fields.ts";
 
 export interface FooterLogoSlotProps {
   data: {
@@ -91,7 +92,7 @@ const FooterLogoSlotInternal: PuckComponent<FooterLogoSlotProps> = (props) => {
   );
 };
 
-export const FooterLogoSlot: ComponentConfig<{ props: FooterLogoSlotProps }> = {
+export const FooterLogoSlot: YextComponentConfig<FooterLogoSlotProps> = {
   label: msg("components.footerLogoSlot", "Logo"),
   fields: {
     data: YextField(msg("fields.data", "Data"), {
@@ -112,7 +113,7 @@ export const FooterLogoSlot: ComponentConfig<{ props: FooterLogoSlotProps }> = {
       type: "object",
       objectFields: {
         width: ImageStylingFields.width,
-        aspectRatio: ImageStylingFields.aspectRatio as any,
+        aspectRatio: ImageStylingFields.aspectRatio,
       },
     }),
   },

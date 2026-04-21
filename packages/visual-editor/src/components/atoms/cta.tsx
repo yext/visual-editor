@@ -12,7 +12,12 @@ import { FaAngleRight, FaExternalLinkAlt } from "react-icons/fa";
 import { getDirections } from "@yext/pages-components";
 import { PresetImageType, FOOD_DELIVERY_SERVICES } from "../../types/types.ts";
 import { presetImageIcons } from "../../utils/presetImageIcons.tsx";
-import { getThemeColorCssValue } from "../../utils/colors.ts";
+import {
+  getThemeColorCssValue,
+  getThemeColorHexValue,
+  hexToRGB,
+  isColorContrastWcagCompliant,
+} from "../../utils/colors.ts";
 
 const LINK_TEXT_TRANSFORM_CSS_VAR =
   "var(--textTransform-link-textTransform)" as React.CSSProperties["textTransform"];
@@ -223,6 +228,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
     buttonVariant,
     buttonClassName,
     showCaret,
+    background,
   };
 };
 
@@ -243,9 +249,51 @@ export const CTA = (props: CTAProps) => {
   } = props;
 
   const { t } = useTranslation();
+  const streamDocument = useDocument();
   const resolvedProps = useResolvedCtaProps(props);
   const isButton = actionType === "button";
-  const isDarkBackground = useBackground()?.isDarkColor;
+
+  if (!resolvedProps) {
+    return null;
+  }
+
+  const {
+    link,
+    linkType,
+    label,
+    ariaLabel,
+    buttonVariant,
+    buttonClassName,
+    showCaret,
+    background,
+  } = resolvedProps;
+  const isDarkBackground = background?.isDarkColor;
+  const resolvedCtaColorHex = React.useMemo(
+    () => getThemeColorHexValue(color?.selectedColor, streamDocument),
+    [color?.selectedColor, streamDocument]
+  );
+  const resolvedBackgroundColorHex = React.useMemo(
+    () => getThemeColorHexValue(background?.selectedColor, streamDocument),
+    [background?.selectedColor, streamDocument]
+  );
+  const resolvedCtaColorRgb = resolvedCtaColorHex
+    ? hexToRGB(resolvedCtaColorHex)
+    : undefined;
+  const resolvedBackgroundColorRgb = resolvedBackgroundColorHex
+    ? hexToRGB(resolvedBackgroundColorHex)
+    : undefined;
+  const shouldUseConfiguredSecondaryColor =
+    !!color?.selectedColor &&
+    !!resolvedCtaColorHex &&
+    (!isDarkBackground ||
+      (!!resolvedCtaColorRgb &&
+        !!resolvedBackgroundColorRgb &&
+        isColorContrastWcagCompliant(
+          resolvedCtaColorRgb,
+          resolvedBackgroundColorRgb,
+          12,
+          400
+        )));
   const dynamicStyle: React.CSSProperties = (() => {
     const bg = getThemeColorCssValue(color?.selectedColor);
     const textColor = getThemeColorCssValue(color?.contrastingColor);
@@ -259,7 +307,10 @@ export const CTA = (props: CTAProps) => {
       };
     }
 
-    if (variant === "secondary" && !isDarkBackground) {
+    if (
+      variant === "secondary" &&
+      (shouldUseConfiguredSecondaryColor || !isDarkBackground)
+    ) {
       return {
         borderColor: border,
         color: border,
@@ -279,26 +330,11 @@ export const CTA = (props: CTAProps) => {
 
     return {};
   })();
-
   const disabledStyle: React.CSSProperties = {
     ...(ctaType !== "presetImage" ? dynamicStyle : undefined),
     cursor: "default",
     pointerEvents: "auto",
   };
-
-  if (!resolvedProps) {
-    return null;
-  }
-
-  const {
-    link,
-    linkType,
-    label,
-    ariaLabel,
-    buttonVariant,
-    buttonClassName,
-    showCaret,
-  } = resolvedProps;
 
   const linkContent = (
     <>

@@ -87,4 +87,26 @@ describe("getThemeValue", () => {
 
     expect(getThemeValue("--colors-palette-quaternary-contrast")).toBe("#000");
   });
+
+  it("falls back to the published stream theme in the browser", () => {
+    expect(
+      getThemeValue("--colors-palette-quaternary-contrast", {
+        __: {
+          theme: JSON.stringify({
+            "--colors-palette-quaternary-contrast": "#123456",
+          }),
+        },
+      })
+    ).toBe("#123456");
+  });
+
+  it("returns undefined when the value is missing from every source", () => {
+    expect(
+      getThemeValue("--colors-palette-quaternary-contrast", {
+        __: {
+          theme: JSON.stringify({}),
+        },
+      })
+    ).toBeUndefined();
+  });
 });

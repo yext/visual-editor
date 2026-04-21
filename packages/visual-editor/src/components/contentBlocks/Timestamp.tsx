@@ -1,10 +1,5 @@
 import { useTranslation } from "react-i18next";
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  setDeep,
-} from "@puckeditor/core";
+import { PuckComponent, setDeep } from "@puckeditor/core";
 import { msg } from "../../utils/i18n/platform.ts";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
@@ -12,6 +7,11 @@ import { useDocument } from "../../hooks/useDocument.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { YextField } from "../../editor/YextField.tsx";
 import { TimestampAtom, TimestampOption } from "../atoms/timestamp.tsx";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  YextFields,
+} from "../../fields/fields.ts";
 
 export type TimestampProps = {
   /** The start and end date to display */
@@ -38,7 +38,7 @@ export type TimestampProps = {
   };
 };
 
-const timestampFields: Fields<TimestampProps> = {
+const timestampFields: YextFields<TimestampProps> = {
   data: {
     type: "object",
     label: msg("fields.data", "Data"),
@@ -114,7 +114,7 @@ const TimestampComponent: PuckComponent<TimestampProps> = (props) => {
   );
 };
 
-export const Timestamp: ComponentConfig<{ props: TimestampProps }> = {
+export const Timestamp: YextComponentConfig<TimestampProps> = {
   label: msg("components.timestamp", "Timestamp"),
   fields: timestampFields,
   defaultProps: {
@@ -138,19 +138,21 @@ export const Timestamp: ComponentConfig<{ props: TimestampProps }> = {
   resolveFields: (data) => {
     if (data.props.parentData) {
       let fields = resolveDataFromParent(timestampFields, data);
-      return setDeep(fields, "styles.objectFields.includeRange.visible", false);
+      return toPuckFields(
+        setDeep(fields, "styles.objectFields.includeRange.visible", false)
+      );
     }
 
     setDeep(timestampFields, "styles.objectFields.includeRange.visible", true);
 
     if (data.props.styles.includeRange) {
-      return setDeep(
-        timestampFields,
-        "data.objectFields.endDate.visible",
-        true
+      return toPuckFields(
+        setDeep(timestampFields, "data.objectFields.endDate.visible", true)
       );
     }
-    return setDeep(timestampFields, "data.objectFields.endDate.visible", false);
+    return toPuckFields(
+      setDeep(timestampFields, "data.objectFields.endDate.visible", false)
+    );
   },
   render: (props) => <TimestampComponent {...props} />,
 };

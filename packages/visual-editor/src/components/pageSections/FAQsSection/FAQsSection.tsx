@@ -1,11 +1,4 @@
-import {
-  ComponentConfig,
-  ComponentData,
-  Fields,
-  PuckComponent,
-  setDeep,
-  Slot,
-} from "@puckeditor/core";
+import { ComponentData, PuckComponent, setDeep, Slot } from "@puckeditor/core";
 import {
   backgroundColors,
   ThemeColor,
@@ -25,6 +18,7 @@ import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultFAQCardData, FAQCardProps } from "./FAQCard.tsx";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 export interface FAQStyles {
   /**
@@ -70,7 +64,7 @@ export interface FAQSectionProps {
   liveVisibility: boolean;
 }
 
-const FAQsSectionFields: Fields<FAQSectionProps> = {
+const FAQsSectionFields: YextFields<FAQSectionProps> = {
   data: YextField(msg("fields.faqs", "FAQs"), {
     type: "entityField",
     filter: {
@@ -80,13 +74,11 @@ const FAQsSectionFields: Fields<FAQSectionProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
       showSectionHeading: YextField(
         msg("fields.showSectionHeading", "Show Section Heading"),
         {
@@ -149,7 +141,7 @@ const FAQsSectionComponent: PuckComponent<FAQSectionProps> = ({
  * It includes a main heading for the section and typically renders the FAQs as an accordion,
  * where users can click on a question to reveal the answer.
  */
-export const FAQSection: ComponentConfig<{ props: FAQSectionProps }> = {
+export const FAQSection: YextComponentConfig<FAQSectionProps> = {
   label: msg("components.faqsSection", "FAQs Section"),
   fields: FAQsSectionFields,
   defaultProps: {

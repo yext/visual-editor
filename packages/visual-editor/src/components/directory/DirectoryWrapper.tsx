@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  setDeep,
-  Slot,
-} from "@puckeditor/core";
+import { PuckComponent, setDeep, Slot } from "@puckeditor/core";
 import { YextField } from "../../editor/YextField.tsx";
 import {
   backgroundColors,
@@ -31,6 +25,7 @@ import {
   getSortedDirectoryChildren,
   matchesDirectoryChildReference,
 } from "./directoryChildReference.tsx";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export type DirectoryGridProps = {
   styles: {
@@ -125,17 +120,15 @@ export const DirectoryList = ({
   );
 };
 
-const directoryGridFields: Fields<DirectoryGridProps> = {
+const directoryGridFields: YextFields<DirectoryGridProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
     },
   }),
   slots: {
@@ -174,9 +167,7 @@ const DirectoryGridWrapper: PuckComponent<DirectoryGridProps> = (props) => {
   );
 };
 
-export const DirectoryGrid: ComponentConfig<{
-  props: DirectoryGridProps;
-}> = {
+export const DirectoryGrid: YextComponentConfig<DirectoryGridProps> = {
   label: msg("components.directoryGrid", "Directory Grid"),
   fields: directoryGridFields,
   defaultProps: {

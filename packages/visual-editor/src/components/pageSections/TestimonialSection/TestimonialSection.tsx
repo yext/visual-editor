@@ -1,4 +1,4 @@
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
+import { PuckComponent, Slot } from "@puckeditor/core";
 import {
   ThemeColor,
   backgroundColors,
@@ -14,6 +14,7 @@ import { defaultTestimonialCardSlotData } from "./TestimonialCard.tsx";
 import { TestimonialCardsWrapperProps } from "./TestimonialCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 export interface TestimonialSectionProps {
   /**
@@ -52,17 +53,15 @@ export interface TestimonialSectionProps {
   liveVisibility: boolean;
 }
 
-const testimonialSectionFields: Fields<TestimonialSectionProps> = {
+const testimonialSectionFields: YextFields<TestimonialSectionProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
       showSectionHeading: YextField(
         msg("fields.showSectionHeading", "Show Section Heading"),
         {
@@ -123,79 +122,78 @@ const TestimonialSectionWrapper: PuckComponent<TestimonialSectionProps> = (
  * The Testimonial Section is used to display a list of customer testimonials or reviews. It features a main section heading and renders each testimonial as an individual card, providing social proof and building trust with visitors.
  * Available on Location templates.
  */
-export const TestimonialSection: ComponentConfig<{
-  props: TestimonialSectionProps;
-}> = {
-  label: msg("components.testimonialsSection", "Testimonials Section"),
-  fields: testimonialSectionFields,
-  defaultProps: {
-    styles: {
-      backgroundColor: backgroundColors.background2.value,
-      showSectionHeading: true,
-    },
-    slots: {
-      SectionHeadingSlot: [
-        {
-          type: "HeadingTextSlot",
-          props: {
-            data: {
-              text: {
-                constantValue: { defaultValue: "Featured Testimonials" },
-                constantValueEnabled: true,
-                field: "",
+export const TestimonialSection: YextComponentConfig<TestimonialSectionProps> =
+  {
+    label: msg("components.testimonialsSection", "Testimonials Section"),
+    fields: testimonialSectionFields,
+    defaultProps: {
+      styles: {
+        backgroundColor: backgroundColors.background2.value,
+        showSectionHeading: true,
+      },
+      slots: {
+        SectionHeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              data: {
+                text: {
+                  constantValue: { defaultValue: "Featured Testimonials" },
+                  constantValueEnabled: true,
+                  field: "",
+                },
               },
-            },
-            styles: { level: 2, align: "left" },
-          } satisfies HeadingTextProps,
-        },
-      ],
-      CardsWrapperSlot: [
-        {
-          type: "TestimonialCardsWrapper",
-          props: {
-            data: {
-              field: "",
-              constantValueEnabled: true,
-              constantValue: [{}, {}, {}],
-            },
-            slots: {
-              CardSlot: [
-                defaultTestimonialCardSlotData(undefined, 0),
-                defaultTestimonialCardSlotData(undefined, 1),
-                defaultTestimonialCardSlotData(undefined, 2),
-              ],
-            },
-            styles: {
-              showName: true,
-              showDate: true,
-            },
-          } satisfies TestimonialCardsWrapperProps,
-        },
-      ],
+              styles: { level: 2, align: "left" },
+            } satisfies HeadingTextProps,
+          },
+        ],
+        CardsWrapperSlot: [
+          {
+            type: "TestimonialCardsWrapper",
+            props: {
+              data: {
+                field: "",
+                constantValueEnabled: true,
+                constantValue: [{}, {}, {}],
+              },
+              slots: {
+                CardSlot: [
+                  defaultTestimonialCardSlotData(undefined, 0),
+                  defaultTestimonialCardSlotData(undefined, 1),
+                  defaultTestimonialCardSlotData(undefined, 2),
+                ],
+              },
+              styles: {
+                showName: true,
+                showDate: true,
+              },
+            } satisfies TestimonialCardsWrapperProps,
+          },
+        ],
+      },
+      analytics: {
+        scope: "testimonialSection",
+      },
+      liveVisibility: true,
     },
-    analytics: {
-      scope: "testimonialSection",
+    resolveData: (data) => {
+      return forwardHeadingLevel(data, "ContributorNameSlot");
     },
-    liveVisibility: true,
-  },
-  resolveData: (data) => {
-    return forwardHeadingLevel(data, "ContributorNameSlot");
-  },
-  render: (props) => (
-    <ComponentErrorBoundary
-      isEditing={props.puck.isEditing}
-      resetKeys={[props]}
-    >
-      <AnalyticsScopeProvider
-        name={`${props.analytics?.scope ?? "testimonialSection"}${getAnalyticsScopeHash(props.id)}`}
+    render: (props) => (
+      <ComponentErrorBoundary
+        isEditing={props.puck.isEditing}
+        resetKeys={[props]}
       >
-        <VisibilityWrapper
-          liveVisibility={props.liveVisibility}
-          isEditing={props.puck.isEditing}
+        <AnalyticsScopeProvider
+          name={`${props.analytics?.scope ?? "testimonialSection"}${getAnalyticsScopeHash(props.id)}`}
         >
-          <TestimonialSectionWrapper {...props} />
-        </VisibilityWrapper>
-      </AnalyticsScopeProvider>
-    </ComponentErrorBoundary>
-  ),
-};
+          <VisibilityWrapper
+            liveVisibility={props.liveVisibility}
+            isEditing={props.puck.isEditing}
+          >
+            <TestimonialSectionWrapper {...props} />
+          </VisibilityWrapper>
+        </AnalyticsScopeProvider>
+      </ComponentErrorBoundary>
+    ),
+  };

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ComponentConfig, PuckComponent, setDeep } from "@puckeditor/core";
+import { PuckComponent, setDeep } from "@puckeditor/core";
 import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { TranslatableString, TranslatableCTA } from "../../types/types.ts";
@@ -18,6 +18,7 @@ import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
 import { ThemeColor } from "../../utils/themeConfigOptions.ts";
 import { cva } from "class-variance-authority";
 import { themeManagerCn } from "../../utils/cn.ts";
+import { YextComponentConfig } from "../../fields/fields.ts";
 
 const defaultSection = {
   label: { defaultValue: "Footer Label" },
@@ -112,10 +113,11 @@ const footerExpandedLinksWrapperFields = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      color: YextField(msg("fields.color", "Color"), {
-        type: "select",
+      color: {
+        type: "basicSelector",
+        label: msg("fields.color", "Color"),
         options: "SITE_COLOR",
-      }),
+      },
     },
   }),
 };
@@ -343,26 +345,25 @@ const FooterExpandedLinksWrapperInternal: PuckComponent<
   );
 };
 
-export const FooterExpandedLinksWrapper: ComponentConfig<{
-  props: FooterExpandedLinksWrapperProps;
-}> = {
-  label: msg("components.expandedLinks", "Expanded Links"),
-  fields: footerExpandedLinksWrapperFields,
-  resolveFields: (data) =>
-    setDeep(
-      footerExpandedLinksWrapperFields,
-      "data.objectFields.sections.arrayFields.links.arrayFields.normalizeLink.visible",
-      shouldShowNormalizeLinkField(data.props.data.sections)
-    ),
-  defaultProps: {
-    data: {
-      sections: [
-        { ...defaultSection },
-        { ...defaultSection },
-        { ...defaultSection },
-        { ...defaultSection },
-      ],
+export const FooterExpandedLinksWrapper: YextComponentConfig<FooterExpandedLinksWrapperProps> =
+  {
+    label: msg("components.expandedLinks", "Expanded Links"),
+    fields: footerExpandedLinksWrapperFields,
+    resolveFields: (data) =>
+      setDeep(
+        footerExpandedLinksWrapperFields,
+        "data.objectFields.sections.arrayFields.links.arrayFields.normalizeLink.visible",
+        shouldShowNormalizeLinkField(data.props.data.sections)
+      ),
+    defaultProps: {
+      data: {
+        sections: [
+          { ...defaultSection },
+          { ...defaultSection },
+          { ...defaultSection },
+          { ...defaultSection },
+        ],
+      },
     },
-  },
-  render: (props) => <FooterExpandedLinksWrapperInternal {...props} />,
-};
+    render: (props) => <FooterExpandedLinksWrapperInternal {...props} />,
+  };

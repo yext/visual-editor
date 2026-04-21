@@ -1,10 +1,5 @@
 import * as React from "react";
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  setDeep,
-} from "@puckeditor/core";
+import { PuckComponent, setDeep } from "@puckeditor/core";
 import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
@@ -19,6 +14,11 @@ import { useTranslation } from "react-i18next";
 import { defaultLink, defaultLinks } from "./ExpandedFooter.tsx";
 import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
 import { ThemeColor } from "../../utils/themeConfigOptions.ts";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  YextFields,
+} from "../../fields/fields.ts";
 
 export interface FooterExpandedLinkSectionSlotProps {
   data: {
@@ -113,7 +113,7 @@ const shouldShowNormalizeLinkField = (links?: TranslatableCTA[]) => {
   );
 };
 
-const footerExpandedLinkSectionSlotFields: Fields<FooterExpandedLinkSectionSlotProps> =
+const footerExpandedLinkSectionSlotFields: YextFields<FooterExpandedLinkSectionSlotProps> =
   {
     data: YextField(msg("fields.data", "Data"), {
       type: "object",
@@ -176,10 +176,11 @@ const footerExpandedLinkSectionSlotFields: Fields<FooterExpandedLinkSectionSlotP
     styles: YextField(msg("fields.styles", "Styles"), {
       type: "object",
       objectFields: {
-        color: YextField(msg("fields.color", "Color"), {
-          type: "select",
+        color: {
+          type: "basicSelector",
+          label: msg("fields.color", "Color"),
           options: "SITE_COLOR",
-        }),
+        },
       },
     }),
     index: {
@@ -188,20 +189,19 @@ const footerExpandedLinkSectionSlotFields: Fields<FooterExpandedLinkSectionSlotP
     },
   };
 
-export const FooterExpandedLinkSectionSlot: ComponentConfig<{
-  props: FooterExpandedLinkSectionSlotProps;
-}> = {
-  label: msg(
-    "components.footerExpandedLinkSectionSlot",
-    "Expanded Link Section"
-  ),
-  fields: footerExpandedLinkSectionSlotFields,
-  resolveFields: (data) =>
-    setDeep(
-      footerExpandedLinkSectionSlotFields,
-      "data.objectFields.links.arrayFields.normalizeLink.visible",
-      shouldShowNormalizeLinkField(data.props.data.links)
+export const FooterExpandedLinkSectionSlot: YextComponentConfig<FooterExpandedLinkSectionSlotProps> =
+  {
+    label: msg(
+      "components.footerExpandedLinkSectionSlot",
+      "Expanded Link Section"
     ),
-  defaultProps: defaultFooterExpandedLinkSectionProps,
-  render: (props) => <FooterExpandedLinkSectionSlotInternal {...props} />,
-};
+    fields: footerExpandedLinkSectionSlotFields,
+    resolveFields: (data) =>
+      setDeep(
+        toPuckFields(footerExpandedLinkSectionSlotFields),
+        "data.objectFields.links.arrayFields.normalizeLink.visible",
+        shouldShowNormalizeLinkField(data.props.data.links)
+      ),
+    defaultProps: defaultFooterExpandedLinkSectionProps,
+    render: (props) => <FooterExpandedLinkSectionSlotInternal {...props} />,
+  };

@@ -1,9 +1,4 @@
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  setDeep,
-} from "@puckeditor/core";
+import { PuckComponent, setDeep } from "@puckeditor/core";
 import { ThemeColor } from "../../utils/themeConfigOptions.ts";
 import { CTA } from "../atoms/cta.tsx";
 import { PresetImageType } from "../../types/types.ts";
@@ -19,6 +14,11 @@ import {
 import { CTAVariant } from "../atoms/cta.tsx";
 import { CTAWrapperProps } from "./CtaWrapper.tsx";
 import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  YextFields,
+} from "../../fields/fields.ts";
 
 // TODO: re-enable CTA Group
 
@@ -53,7 +53,7 @@ export interface CTAGroupProps {
   buttons: BasicCTAProps[];
 }
 
-const ctaGroupFields: Fields<CTAGroupProps> = {
+const ctaGroupFields: YextFields<CTAGroupProps> = {
   buttons: YextField(msg("fields.buttons", "Buttons"), {
     type: "array",
     max: 9,
@@ -85,14 +85,16 @@ const ctaGroupFields: Fields<CTAGroupProps> = {
         type: "radio",
         options: "CTA_VARIANT",
       }),
-      presetImage: YextField(msg("fields.presetImage", "Preset Image"), {
-        type: "select",
+      presetImage: {
+        type: "basicSelector",
+        label: msg("fields.presetImage", "Preset Image"),
         options: "PRESET_IMAGE",
-      }),
-      color: YextField(msg("fields.color", "Color"), {
-        type: "select",
+      },
+      color: {
+        type: "basicSelector",
+        label: msg("fields.color", "Color"),
         options: "SITE_COLOR",
-      }),
+      },
     },
     getItemSummary: (_, i) => pt("cta", "CTA") + " " + ((i ?? 0) + 1),
   }),
@@ -162,7 +164,7 @@ const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
   );
 };
 
-export const CTAGroup: ComponentConfig<{ props: CTAGroupProps }> = {
+export const CTAGroup: YextComponentConfig<CTAGroupProps> = {
   label: msg("components.ctaGroup", "CTA Group"),
   fields: ctaGroupFields,
   resolveFields: (data) => {
@@ -184,7 +186,7 @@ export const CTAGroup: ComponentConfig<{ props: CTAGroupProps }> = {
       showNormalizeLinkField
     );
 
-    return updatedFields;
+    return toPuckFields(updatedFields);
   },
   defaultProps: {
     buttons: [defaultButton, defaultButton],

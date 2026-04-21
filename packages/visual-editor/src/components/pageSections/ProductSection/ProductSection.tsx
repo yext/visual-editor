@@ -8,18 +8,13 @@ import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  Slot,
-  setDeep,
-} from "@puckeditor/core";
+import { PuckComponent, Slot, setDeep } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultProductCardSlotData } from "./ProductCard.tsx";
 import { ProductCardsWrapperProps } from "./ProductCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 export type ProductSectionVariant = "immersive" | "classic" | "minimal";
 export type ProductSectionImageConstrain = "fill" | "fixed";
@@ -66,19 +61,18 @@ export interface ProductSectionProps {
   liveVisibility: boolean;
 }
 
-const productSectionFields: Fields<ProductSectionProps> = {
+const productSectionFields: YextFields<ProductSectionProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
-      cardVariant: YextField(msg("fields.cardVariant", "Card Variant"), {
-        type: "select",
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
+      cardVariant: {
+        type: "basicSelector",
+        label: msg("fields.cardVariant", "Card Variant"),
         options: [
           {
             label: msg("fields.options.immersive", "Immersive"),
@@ -87,7 +81,7 @@ const productSectionFields: Fields<ProductSectionProps> = {
           { label: msg("fields.options.classic", "Classic"), value: "classic" },
           { label: msg("fields.options.minimal", "Minimal"), value: "minimal" },
         ],
-      }),
+      },
       showSectionHeading: YextField(
         msg("fields.showSectionHeading", "Show Section Heading"),
         {
@@ -146,7 +140,7 @@ const ProductSectionComponent: PuckComponent<ProductSectionProps> = (props) => {
  * The Product Section is used to display a curated list of products in a dedicated section. It features a main heading and renders each product as an individual card, making it ideal for showcasing featured items, new arrivals, or bestsellers.
  * Available on Location templates.
  */
-export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
+export const ProductSection: YextComponentConfig<ProductSectionProps> = {
   label: msg("components.productsSection", "Products Section"),
   fields: productSectionFields,
   defaultProps: {

@@ -10,8 +10,9 @@ import {
   MapboxStaticMapComponent,
   mapStyleField,
 } from "../contentBlocks/MapboxStaticMap.tsx";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export interface StaticMapData {
   /**
@@ -55,7 +56,7 @@ export interface StaticMapSectionProps {
   styles: StaticMapStyles;
 }
 
-const staticMapSectionFields: Fields<StaticMapSectionProps> = {
+const staticMapSectionFields: YextFields<StaticMapSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
@@ -77,13 +78,11 @@ const staticMapSectionFields: Fields<StaticMapSectionProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
       mapStyle: mapStyleField,
     },
   }),
@@ -121,9 +120,7 @@ const StaticMapSectionWrapper: PuckComponent<StaticMapSectionProps> = ({
  * The Static Map Section displays a non-interactive map image of a business's location. It uses the entity's address or coordinates to generate the map and requires a valid API key from mapbox.
  * Available on Location templates.
  */
-export const StaticMapSection: ComponentConfig<{
-  props: StaticMapSectionProps;
-}> = {
+export const StaticMapSection: YextComponentConfig<StaticMapSectionProps> = {
   label: msg("components.staticMapSection", "Static Map Section"),
   fields: staticMapSectionFields,
   defaultProps: {

@@ -1,10 +1,4 @@
-import {
-  ComponentConfig,
-  DefaultComponentProps,
-  Fields,
-  setDeep,
-  Slot,
-} from "@puckeditor/core";
+import { DefaultComponentProps, Fields, setDeep, Slot } from "@puckeditor/core";
 import { AnalyticsScopeProvider, ImageType } from "@yext/pages-components";
 import {
   backgroundColors,
@@ -12,7 +6,7 @@ import {
   HeadingLevel,
   ThemeOptions,
 } from "../../utils/themeConfigOptions.ts";
-import { YextField } from "../../editor/YextField.tsx";
+import { YextField, type YextPuckField } from "../../editor/YextField.tsx";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../utils/applyAnalytics.ts";
@@ -31,6 +25,11 @@ import { SpotlightHero } from "./heroVariants/SpotlightHero.js";
 import { ImmersiveHero } from "./heroVariants/ImmersiveHero.js";
 import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders.ts";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  YextFields,
+} from "../../fields/fields.ts";
 
 export interface HeroData {
   backgroundImage: YextEntityField<
@@ -181,7 +180,7 @@ export type HeroImageProps = {
   slots: HeroSectionProps["slots"];
 };
 
-const heroSectionFields: Fields<HeroSectionProps> = {
+const heroSectionFields: YextFields<HeroSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
@@ -196,8 +195,9 @@ const heroSectionFields: Fields<HeroSectionProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      variant: YextField(msg("fields.variant", "Variant"), {
-        type: "select",
+      variant: {
+        type: "basicSelector",
+        label: msg("fields.variant", "Variant"),
         options: [
           { label: msg("fields.options.classic", "Classic"), value: "classic" },
           {
@@ -213,14 +213,12 @@ const heroSectionFields: Fields<HeroSectionProps> = {
             value: "compact",
           },
         ],
-      }),
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
+      },
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
       imageHeight: YextField(msg("fields.imageHeight", "Image Height"), {
         type: "number",
         min: 0,
@@ -320,13 +318,11 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           options: "SHOW_HIDE",
         }
       ),
-      reviewStarsColor: YextField(
-        msg("fields.reviewStarsColor", "Review Stars Color"),
-        {
-          type: "select",
-          options: "SITE_COLOR",
-        }
-      ),
+      reviewStarsColor: {
+        type: "basicSelector",
+        label: msg("fields.reviewStarsColor", "Review Stars Color"),
+        options: "SITE_COLOR",
+      },
       showPrimaryCTA: YextField(
         msg("fields.showPrimaryCTA", "Show Primary CTA"),
         {
@@ -380,7 +376,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
   ),
 };
 
-export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
+export const HeroSection: YextComponentConfig<HeroSectionProps> = {
   label: msg("components.heroSection", "Hero Section"),
   fields: heroSectionFields,
   defaultProps: {
@@ -682,7 +678,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
       }
     }
 
-    return fields;
+    return toPuckFields(fields);
   },
   render: (props) => {
     let HeroVariant = <ClassicHero {...props} />;
@@ -727,7 +723,7 @@ export const updateFields = <T extends DefaultComponentProps>(
   obj: Record<string, any>,
   paths: (string | undefined)[],
   value: any
-): Fields<T> => {
+): YextFields<T> => {
   const newObj = { ...obj };
 
   for (const path of paths) {
@@ -754,5 +750,5 @@ export const updateFields = <T extends DefaultComponentProps>(
     }
   }
 
-  return newObj as Fields<T>;
+  return newObj as Fields<T, YextPuckField>;
 };

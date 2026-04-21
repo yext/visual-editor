@@ -1,4 +1,5 @@
-import { ComponentConfig, PuckComponent, Slot } from "@puckeditor/core";
+import { PuckComponent, Slot } from "@puckeditor/core";
+import { YextComponentConfig } from "../../fields/fields.ts";
 
 export interface MainContentProps {
   content: Slot;
@@ -28,7 +29,7 @@ const MainContentComponent: PuckComponent<MainContentProps> = ({
   );
 };
 
-export const MainContent: ComponentConfig<{ props: MainContentProps }> = {
+export const MainContent: YextComponentConfig<MainContentProps> = {
   label: "Main Content",
   fields: {
     content: {

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { YextField } from "../../editor/YextField.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import { CTA } from "../atoms/cta.tsx";
@@ -17,6 +17,7 @@ import {
 } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { validPatterns } from "./ExpandedFooter.tsx";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export interface FooterSocialLinksSlotProps {
   data: {
@@ -43,43 +44,51 @@ type socialLink = {
   ariaLabel: string;
 };
 
-export const FooterSocialLinksSlotFields: Fields<FooterSocialLinksSlotProps> = {
-  data: YextField(msg("fields.data", "Data"), {
-    type: "object",
-    objectFields: {
-      xLink: YextField(msg("fields.xLink", "X Link"), {
-        type: "text",
-      }),
-      facebookLink: YextField(msg("fields.facebookLink", "Facebook Link"), {
-        type: "text",
-      }),
-      instagramLink: YextField(msg("fields.instagramLink", "Instagram Link"), {
-        type: "text",
-      }),
-      linkedInLink: YextField(msg("fields.linkedInLink", "LinkedIn Link"), {
-        type: "text",
-      }),
-      pinterestLink: YextField(msg("fields.pinterestLink", "Pinterest Link"), {
-        type: "text",
-      }),
-      tiktokLink: YextField(msg("fields.tiktokLink", "TikTok Link"), {
-        type: "text",
-      }),
-      youtubeLink: YextField(msg("fields.youtubeLink", "YouTube Link"), {
-        type: "text",
-      }),
-    },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
-    type: "object",
-    objectFields: {
-      iconColor: YextField(msg("fields.iconColor", "Icon Color"), {
-        type: "select",
-        options: "SITE_COLOR",
-      }),
-    },
-  }),
-};
+export const FooterSocialLinksSlotFields: YextFields<FooterSocialLinksSlotProps> =
+  {
+    data: YextField(msg("fields.data", "Data"), {
+      type: "object",
+      objectFields: {
+        xLink: YextField(msg("fields.xLink", "X Link"), {
+          type: "text",
+        }),
+        facebookLink: YextField(msg("fields.facebookLink", "Facebook Link"), {
+          type: "text",
+        }),
+        instagramLink: YextField(
+          msg("fields.instagramLink", "Instagram Link"),
+          {
+            type: "text",
+          }
+        ),
+        linkedInLink: YextField(msg("fields.linkedInLink", "LinkedIn Link"), {
+          type: "text",
+        }),
+        pinterestLink: YextField(
+          msg("fields.pinterestLink", "Pinterest Link"),
+          {
+            type: "text",
+          }
+        ),
+        tiktokLink: YextField(msg("fields.tiktokLink", "TikTok Link"), {
+          type: "text",
+        }),
+        youtubeLink: YextField(msg("fields.youtubeLink", "YouTube Link"), {
+          type: "text",
+        }),
+      },
+    }),
+    styles: YextField(msg("fields.styles", "Styles"), {
+      type: "object",
+      objectFields: {
+        iconColor: {
+          type: "basicSelector",
+          label: msg("fields.iconColor", "Icon Color"),
+          options: "SITE_COLOR",
+        },
+      },
+    }),
+  };
 
 const FooterSocialLinksSlotInternal: PuckComponent<
   FooterSocialLinksSlotProps
@@ -188,21 +197,20 @@ const FooterSocialLinksSlotInternal: PuckComponent<
   );
 };
 
-export const FooterSocialLinksSlot: ComponentConfig<{
-  props: FooterSocialLinksSlotProps;
-}> = {
-  label: msg("components.footerSocialLinksSlot", "Social Links"),
-  fields: FooterSocialLinksSlotFields,
-  defaultProps: {
-    data: {
-      xLink: "",
-      facebookLink: "",
-      instagramLink: "",
-      linkedInLink: "",
-      pinterestLink: "",
-      tiktokLink: "",
-      youtubeLink: "",
+export const FooterSocialLinksSlot: YextComponentConfig<FooterSocialLinksSlotProps> =
+  {
+    label: msg("components.footerSocialLinksSlot", "Social Links"),
+    fields: FooterSocialLinksSlotFields,
+    defaultProps: {
+      data: {
+        xLink: "",
+        facebookLink: "",
+        instagramLink: "",
+        linkedInLink: "",
+        pinterestLink: "",
+        tiktokLink: "",
+        youtubeLink: "",
+      },
     },
-  },
-  render: (props) => <FooterSocialLinksSlotInternal {...props} />,
-};
+    render: (props) => <FooterSocialLinksSlotInternal {...props} />,
+  };

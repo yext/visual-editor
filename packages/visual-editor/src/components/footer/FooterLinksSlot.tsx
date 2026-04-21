@@ -1,10 +1,5 @@
 import * as React from "react";
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  setDeep,
-} from "@puckeditor/core";
+import { PuckComponent, setDeep } from "@puckeditor/core";
 import { cva } from "class-variance-authority";
 import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
@@ -17,6 +12,11 @@ import { useTranslation } from "react-i18next";
 import { defaultLink, defaultLinks } from "./ExpandedFooter.tsx";
 import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
 import { ThemeColor } from "../../utils/themeConfigOptions.ts";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  YextFields,
+} from "../../fields/fields.ts";
 
 export interface FooterLinksSlotProps {
   data: {
@@ -258,7 +258,7 @@ const defaultFooterLinkProps: FooterLinksSlotProps = {
   mobileContentAlignment: "left",
 };
 
-const footerLinksSlotFields: Fields<FooterLinksSlotProps> = {
+const footerLinksSlotFields: YextFields<FooterLinksSlotProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
@@ -317,10 +317,11 @@ const footerLinksSlotFields: Fields<FooterLinksSlotProps> = {
       }),
     },
   }),
-  color: YextField(msg("fields.color", "Color"), {
-    type: "select",
+  color: {
+    type: "basicSelector",
+    label: msg("fields.color", "Color"),
     options: "SITE_COLOR",
-  }),
+  },
   variant: {
     type: "radio",
     options: [
@@ -335,16 +336,15 @@ const footerLinksSlotFields: Fields<FooterLinksSlotProps> = {
   },
 };
 
-export const FooterLinksSlot: ComponentConfig<{ props: FooterLinksSlotProps }> =
-  {
-    label: msg("components.footerLinksSlot", "Links"),
-    fields: footerLinksSlotFields,
-    resolveFields: (data) =>
-      setDeep(
-        footerLinksSlotFields,
-        "data.objectFields.links.arrayFields.normalizeLink.visible",
-        shouldShowNormalizeLinkField(data.props.data.links)
-      ),
-    defaultProps: defaultFooterLinkProps,
-    render: (props) => <FooterLinksSlotInternal {...props} />,
-  };
+export const FooterLinksSlot: YextComponentConfig<FooterLinksSlotProps> = {
+  label: msg("components.footerLinksSlot", "Links"),
+  fields: footerLinksSlotFields,
+  resolveFields: (data) =>
+    setDeep(
+      toPuckFields(footerLinksSlotFields),
+      "data.objectFields.links.arrayFields.normalizeLink.visible",
+      shouldShowNormalizeLinkField(data.props.data.links)
+    ),
+  defaultProps: defaultFooterLinkProps,
+  render: (props) => <FooterLinksSlotInternal {...props} />,
+};

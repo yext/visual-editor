@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
@@ -15,6 +15,7 @@ import {
 } from "../../utils/themeConfigOptions.ts";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import { useTranslation } from "react-i18next";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export type HeadingTextProps = {
   /** The heading text value */
@@ -89,7 +90,7 @@ const HeadingTextWrapper: PuckComponent<HeadingTextProps> = (props) => {
   );
 };
 
-const headingTextFields: Fields<HeadingTextProps> = {
+const headingTextFields: YextFields<HeadingTextProps> = {
   data: {
     label: msg("fields.data", "Data"),
     type: "object",
@@ -106,24 +107,25 @@ const headingTextFields: Fields<HeadingTextProps> = {
     label: msg("fields.styles", "Styles"),
     type: "object",
     objectFields: {
-      level: YextField(msg("fields.headingLevel", "Heading Level"), {
-        type: "select",
-        hasSearch: true,
+      level: {
+        type: "basicSelector",
+        label: msg("fields.headingLevel", "Heading Level"),
         options: "HEADING_LEVEL",
-      }),
+      },
       align: YextField(msg("fields.headingAlign", "Heading Align"), {
         type: "radio",
         options: ThemeOptions.ALIGNMENT,
       }),
-      color: YextField(msg("fields.color", "Color"), {
-        type: "select",
+      color: {
+        type: "basicSelector",
+        label: msg("fields.color", "Color"),
         options: "SITE_COLOR",
-      }),
+      },
     },
   },
 };
 
-export const HeadingText: ComponentConfig<{ props: HeadingTextProps }> = {
+export const HeadingText: YextComponentConfig<HeadingTextProps> = {
   label: msg("components.headingText", "Heading Text"),
   fields: headingTextFields,
   resolveFields: (data) => resolveDataFromParent(headingTextFields, data),
