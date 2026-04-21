@@ -77,7 +77,7 @@ export const InternalThemeEditor = ({
           buildThemeLocalStorageKey(),
           lzstring.compress(JSON.stringify(nextHistories))
         );
-        devLogger.log(
+        console.log(
           `Deferred theme history write ran after ${Math.round(
             queuedForMs ?? 0
           )}ms and took ${Math.round(

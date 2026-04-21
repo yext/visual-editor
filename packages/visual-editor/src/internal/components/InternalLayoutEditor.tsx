@@ -127,7 +127,7 @@ export const InternalLayoutEditor = ({
           buildVisualConfigLocalStorageKey(),
           lzstring.compress(JSON.stringify(nextHistories))
         );
-        devLogger.log(
+        console.log(
           `Deferred layout history write ran after ${Math.round(
             queuedForMs ?? 0
           )}ms and took ${Math.round(
