@@ -12,9 +12,7 @@ import {
   parseDocumentForLanguageDropdown,
 } from "./languageDropdown.tsx";
 import { defaultHeaderLinkProps, HeaderLinksProps } from "./HeaderLinks.tsx";
-import { useHeaderLinksDisplayMode } from "./ExpandedHeaderMenuContext.tsx";
 import { pt } from "../../utils/i18n/platform.ts";
-import { useOverflow } from "../../hooks/useOverflow.ts";
 import * as React from "react";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
@@ -91,11 +89,6 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
   puck,
 }) => {
   const streamDocument = useDocument();
-  const displayMode = useHeaderLinksDisplayMode();
-
-  const containerRef = React.useRef<HTMLDivElement>(null);
-  const contentRef = React.useRef<HTMLDivElement>(null);
-  const isOverflow = useOverflow(containerRef, contentRef, 0);
 
   const languageDropDownProps = React.useMemo(
     () => parseDocumentForLanguageDropdown(streamDocument),
@@ -106,7 +99,6 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
     data.showLanguageDropdown &&
     languageDropDownProps &&
     languageDropDownProps.locales?.length > 1;
-  const isMenuMode = displayMode === "menu";
 
   if (puck.isEditing && !data.show) {
     return (
@@ -132,39 +124,14 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
       background={styles.backgroundColor}
       className="w-full"
     >
-      <div ref={containerRef} className="w-full">
-        <div
-          className={
-            isMenuMode
-              ? "flex flex-col items-start gap-4"
-              : "md:flex md:justify-end md:gap-6 md:items-center"
-          }
-        >
+      <div className="w-full">
+        <div className="md:flex md:justify-end md:gap-6 md:items-center">
           <slots.LinksSlot style={{ height: "auto", width: "100%" }} />
           {showLanguageSelector && (
             <LanguageDropdown {...languageDropDownProps} />
           )}
         </div>
       </div>
-
-      {/* Measurement Div - Only needed in inline mode */}
-      {!isMenuMode && (
-        <div
-          ref={contentRef}
-          className="absolute top-0 left-[-9999px] invisible pointer-events-none flex items-center gap-6 w-max"
-          aria-hidden="true"
-        >
-          <div className="flex-shrink-0 w-max">
-            <slots.LinksSlot style={{ height: "auto", width: "auto" }} />
-          </div>
-          {showLanguageSelector && (
-            <div className="flex-shrink-0 w-max">
-              <div className="h-5 w-20 bg-gray-200" />{" "}
-              {/* Placeholder for language dropdown */}
-            </div>
-          )}
-        </div>
-      )}
     </PageSection>
   );
 };
