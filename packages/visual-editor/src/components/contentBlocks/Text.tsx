@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { Body, BodyProps } from "../atoms/body.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import { ThemeColor } from "../../utils/themeConfigOptions.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export type TextProps = {
   data: {
@@ -40,7 +41,7 @@ export type TextProps = {
   };
 };
 
-const textFields: Fields<TextProps> = {
+const textFields: YextFields<TextProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
@@ -62,10 +63,11 @@ const textFields: Fields<TextProps> = {
         type: "radio",
         options: "BODY_VARIANT",
       }),
-      color: YextField(msg("fields.color", "Color"), {
-        type: "select",
+      color: {
+        type: "basicSelector",
+        label: msg("fields.color", "Color"),
         options: "SITE_COLOR",
-      }),
+      },
       fontStyle: YextField(msg("fields.fontStyle", "Font Style"), {
         type: "radio",
         options: [
@@ -123,7 +125,7 @@ const TextComponent: PuckComponent<TextProps> = (props) => {
   );
 };
 
-export const Text: ComponentConfig<{ props: TextProps }> = {
+export const Text: YextComponentConfig<TextProps> = {
   label: msg("components.text", "Text"),
   fields: textFields,
   resolveFields: (data) => resolveDataFromParent(textFields, data),

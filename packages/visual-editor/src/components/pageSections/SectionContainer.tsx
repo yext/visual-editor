@@ -15,9 +15,10 @@ import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
 import { TranslatableString } from "../../types/types.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
-import { ComponentConfig, Fields, Slot, PuckComponent } from "@puckeditor/core";
+import { Slot, PuckComponent } from "@puckeditor/core";
 import { useTranslation } from "react-i18next";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export type SectionContainerProps = {
   background?: ThemeColor;
@@ -30,11 +31,12 @@ export type SectionContainerProps = {
   sectionContent: Slot;
 };
 
-const sectionContainerFields: Fields<SectionContainerProps> = {
-  background: YextField(msg("fields.backgroundColor", "Background Color"), {
-    type: "select",
+const sectionContainerFields: YextFields<SectionContainerProps> = {
+  background: {
+    type: "basicSelector",
+    label: msg("fields.backgroundColor", "Background Color"),
     options: "BACKGROUND_COLOR",
-  }),
+  },
   sectionHeading: YextField(msg("fields.sectionHeading", "Section Heading"), {
     type: "object",
     objectFields: {
@@ -47,11 +49,11 @@ const sectionContainerFields: Fields<SectionContainerProps> = {
           },
         }
       ),
-      level: YextField(msg("fields.headingLevel", "Heading Level"), {
-        type: "select",
-        hasSearch: true,
+      level: {
+        type: "basicSelector",
+        label: msg("fields.headingLevel", "Heading Level"),
         options: "HEADING_LEVEL",
-      }),
+      },
       alignment: YextField(msg("fields.alignment", "Alignment"), {
         type: "radio",
         options: ThemeOptions.ALIGNMENT,
@@ -108,9 +110,7 @@ const SectionContainerComponent: PuckComponent<SectionContainerProps> = (
   );
 };
 
-export const SectionContainer: ComponentConfig<{
-  props: SectionContainerProps;
-}> = {
+export const SectionContainer: YextComponentConfig<SectionContainerProps> = {
   label: "Section Container",
   fields: sectionContainerFields,
   defaultProps: {

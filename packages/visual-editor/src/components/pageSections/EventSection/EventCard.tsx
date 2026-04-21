@@ -1,12 +1,5 @@
 import * as React from "react";
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  Slot,
-  WithId,
-  setDeep,
-} from "@puckeditor/core";
+import { PuckComponent, Slot, WithId, setDeep } from "@puckeditor/core";
 import {
   ThemeColor,
   backgroundColors,
@@ -30,6 +23,7 @@ import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 const defaultEvent = {
   image: {
@@ -242,17 +236,15 @@ export type EventCardProps = {
   index?: number;
 };
 
-const eventCardFields: Fields<EventCardProps> = {
+const eventCardFields: YextFields<EventCardProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
       truncateDescription: YextField(
         msg("fields.truncateDescription", "Truncate Description"),
         {
@@ -425,7 +417,7 @@ const EventCardComponent: PuckComponent<EventCardProps> = (props) => {
   );
 };
 
-export const EventCard: ComponentConfig<{ props: EventCardProps }> = {
+export const EventCard: YextComponentConfig<EventCardProps> = {
   label: msg("components.eventCard", "Event Card"),
   fields: eventCardFields,
   defaultProps: {

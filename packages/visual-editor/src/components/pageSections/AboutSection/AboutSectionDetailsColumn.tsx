@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  AutoField,
-  ComponentConfig,
-  FieldLabel,
-  Fields,
-  PuckComponent,
-} from "@puckeditor/core";
+import { FieldLabel, PuckComponent } from "@puckeditor/core";
 import { useTranslation } from "react-i18next";
 import { Body } from "../../atoms/body.tsx";
 import { EntityField } from "../../../editor/EntityField.tsx";
@@ -21,6 +15,7 @@ import { TranslatableString } from "../../../types/types.ts";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
+import { YextAutoField } from "../../../fields/YextAutoField.tsx";
 import {
   HoursStatus,
   HoursStatusProps,
@@ -52,6 +47,7 @@ import {
   hoursTableFields,
   HoursTable,
 } from "../../contentBlocks/HoursTable.tsx";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 export type AboutSectionDetailsColumnProps = {
   sections: DetailSection[];
@@ -187,7 +183,7 @@ const typeToFields = (
   type: DetailSection["content"]["type"],
   data: DetailSection["content"]
 ) => {
-  const fields: Record<DetailSection["content"]["type"], Fields<any>> = {
+  const fields: Record<DetailSection["content"]["type"], YextFields<any>> = {
     hoursStatus: hoursStatusWrapperFields,
     hoursTable: hoursTableFields,
     address:
@@ -202,7 +198,7 @@ const typeToFields = (
   return fields[type];
 };
 
-const aboutSectionDetailsColumnFields: Fields<AboutSectionDetailsColumnProps> =
+const aboutSectionDetailsColumnFields: YextFields<AboutSectionDetailsColumnProps> =
   {
     sections: {
       type: "array",
@@ -230,13 +226,13 @@ const aboutSectionDetailsColumnFields: Fields<AboutSectionDetailsColumnProps> =
                   el="div"
                   className="mb-3"
                 >
-                  <AutoField
+                  <YextAutoField
                     value={value.type}
                     onChange={(v) => {
                       onChange({ type: v, [v]: defaultAboutSectionProps[v] });
                     }}
                     field={{
-                      type: "select",
+                      type: "basicSelector",
                       label: msg("fields.contentType", "Content Type"),
                       options: [
                         {
@@ -280,17 +276,19 @@ const aboutSectionDetailsColumnFields: Fields<AboutSectionDetailsColumnProps> =
                     }}
                   />
                 </FieldLabel>
-                <AutoField
+                <YextAutoField
                   value={
                     value?.[value.type] ?? defaultAboutSectionProps[value.type]
                   }
                   onChange={(v) =>
                     onChange({ type: value.type, [value.type]: v })
                   }
-                  field={{
-                    type: "object",
-                    objectFields: typeToFields(value.type, value),
-                  }}
+                  field={
+                    {
+                      type: "object",
+                      objectFields: typeToFields(value.type, value),
+                    } as any
+                  }
                 />
               </div>
             );
@@ -506,13 +504,12 @@ const AboutSectionDetailsColumnComponent: PuckComponent<
   );
 };
 
-export const AboutSectionDetailsColumn: ComponentConfig<{
-  props: AboutSectionDetailsColumnProps;
-}> = {
-  label: msg("components.aboutSectionDetailsColumn", "Details Column"),
-  fields: aboutSectionDetailsColumnFields,
-  defaultProps: {
-    sections: [],
-  },
-  render: (props) => <AboutSectionDetailsColumnComponent {...props} />,
-};
+export const AboutSectionDetailsColumn: YextComponentConfig<AboutSectionDetailsColumnProps> =
+  {
+    label: msg("components.aboutSectionDetailsColumn", "Details Column"),
+    fields: aboutSectionDetailsColumnFields,
+    defaultProps: {
+      sections: [],
+    },
+    render: (props) => <AboutSectionDetailsColumnComponent {...props} />,
+  };

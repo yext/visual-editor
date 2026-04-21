@@ -1,4 +1,4 @@
-import { ComponentConfig, Fields, CustomField } from "@puckeditor/core";
+import { CustomField } from "@puckeditor/core";
 import { msg } from "../../utils/i18n/platform.ts";
 import { YextField } from "../../editor/YextField.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
@@ -11,6 +11,7 @@ import {
 } from "../hooks/useMessage.ts";
 import { getSchemaTemplate } from "../../utils/schema/defaultSchemas.ts";
 import { isFakeStarterLocalDev } from "../../utils/isFakeStarterLocalDev.ts";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 let pendingSchemaMarkupSession:
   | { messageId: string; apply: (payload: any) => void }
@@ -116,7 +117,7 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
   },
 };
 
-const advancedSettingsFields: Fields<AdvancedSettingsProps> = {
+const advancedSettingsFields: YextFields<AdvancedSettingsProps> = {
   data: {
     type: "object",
     objectFields: {
@@ -130,9 +131,7 @@ const advancedSettingsFields: Fields<AdvancedSettingsProps> = {
  * This component provides access to advanced page settings like schema markup.
  * It includes breadcrumb navigation to show "Page > Advanced Settings".
  */
-export const AdvancedSettings: ComponentConfig<{
-  props: AdvancedSettingsProps;
-}> = {
+export const AdvancedSettings: YextComponentConfig<AdvancedSettingsProps> = {
   label: msg("advancedSettings", "Advanced Settings"),
   fields: advancedSettingsFields,
   defaultProps: {

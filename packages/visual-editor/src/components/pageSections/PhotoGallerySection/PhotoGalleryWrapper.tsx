@@ -19,7 +19,7 @@ import {
   resolveLocalizedAssetImage,
   TranslatableAssetImage,
 } from "../../../types/images.ts";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { PLACEHOLDER } from "./PhotoGallerySection.tsx";
 import React, { cloneElement } from "react";
 import { useTranslation } from "react-i18next";
@@ -37,6 +37,11 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { ImagePlus } from "lucide-react";
 import { Button } from "../../../internal/puck/ui/button.tsx";
 import { updateFields } from "../HeroSection.tsx";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  YextFields,
+} from "../../../fields/fields.ts";
 
 export interface PhotoGalleryWrapperProps {
   data: {
@@ -77,7 +82,7 @@ export interface PhotoGalleryWrapperProps {
   };
 }
 
-const photoGalleryWrapperFields: Fields<PhotoGalleryWrapperProps> = {
+const photoGalleryWrapperFields: YextFields<PhotoGalleryWrapperProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
@@ -102,18 +107,20 @@ const photoGalleryWrapperFields: Fields<PhotoGalleryWrapperProps> = {
         type: "object",
         objectFields: ImageStylingFields,
       }),
-      imageFillType: YextField(msg("fields.imageFillType", "Image Fill Type"), {
-        type: "select",
+      imageFillType: {
+        type: "basicSelector",
+        label: msg("fields.imageFillType", "Image Fill Type"),
         options: [
           { label: msg("fields.options.fill", "Fill"), value: "fill" },
           { label: msg("fields.options.fit", "Fit"), value: "fit" },
         ],
         visible: false,
-      }),
-      accentColor: YextField(msg("fields.accentColor", "Accent Color"), {
-        type: "select",
+      },
+      accentColor: {
+        type: "basicSelector",
+        label: msg("fields.accentColor", "Accent Color"),
         options: "SITE_COLOR",
-      }),
+      },
       carouselImageCount: YextField(
         msg("fields.carouselImageCount", "Carousel Image Count"),
         {
@@ -477,45 +484,45 @@ const GalleryGrid = ({
   );
 };
 
-export const PhotoGalleryWrapper: ComponentConfig<{
-  props: PhotoGalleryWrapperProps;
-}> = {
-  label: msg("components.gallery", "Gallery"),
-  fields: photoGalleryWrapperFields,
-  defaultProps: {
-    data: {
-      images: {
-        field: "",
-        constantValue: [
-          { assetImage: PLACEHOLDER },
-          { assetImage: PLACEHOLDER },
-          { assetImage: PLACEHOLDER },
+export const PhotoGalleryWrapper: YextComponentConfig<PhotoGalleryWrapperProps> =
+  {
+    label: msg("components.gallery", "Gallery"),
+    fields: photoGalleryWrapperFields,
+    defaultProps: {
+      data: {
+        images: {
+          field: "",
+          constantValue: [
+            { assetImage: PLACEHOLDER },
+            { assetImage: PLACEHOLDER },
+            { assetImage: PLACEHOLDER },
+          ],
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        image: {
+          aspectRatio: 1.78,
+        },
+        imageFillType: "fill",
+        carouselImageCount: 1,
+      },
+    },
+    resolveFields: (data) => {
+      const isCarousel = data.props.parentData?.variant === "carousel";
+      const fields = updateFields<PhotoGalleryWrapperProps>(
+        photoGalleryWrapperFields,
+        [
+          "styles.objectFields.carouselImageCount.visible",
+          "styles.objectFields.imageFillType.visible",
+          "styles.objectFields.accentColor.visible",
         ],
-        constantValueEnabled: true,
-      },
+        isCarousel
+      );
+      return toPuckFields(fields);
     },
-    styles: {
-      image: {
-        aspectRatio: 1.78,
-      },
-      imageFillType: "fill",
-      carouselImageCount: 1,
-    },
-  },
-  resolveFields: (data) => {
-    const isCarousel = data.props.parentData?.variant === "carousel";
-    return updateFields(
-      photoGalleryWrapperFields,
-      [
-        "styles.objectFields.carouselImageCount.visible",
-        "styles.objectFields.imageFillType.visible",
-        "styles.objectFields.accentColor.visible",
-      ],
-      isCarousel
-    );
-  },
-  render: (props) => <PhotoGalleryWrapperComponent {...props} />,
-};
+    render: (props) => <PhotoGalleryWrapperComponent {...props} />,
+  };
 
 const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
   data,

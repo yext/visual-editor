@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
+import { PuckComponent, Slot } from "@puckeditor/core";
 import { themeManagerCn } from "../../utils/cn.ts";
 import {
   backgroundColors,
@@ -13,6 +13,11 @@ import { msg } from "../../utils/i18n/platform.ts";
 import { AdvancedCoreInfoCategory } from "../categories/AdvancedCoreInfoCategory.tsx";
 import { layoutProps, layoutVariants } from "../Layout.tsx";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  YextFields,
+} from "../../fields/fields.ts";
 
 export interface GridProps extends layoutProps {
   columns: number;
@@ -67,7 +72,7 @@ const GridSection = React.forwardRef<
 
 GridSection.displayName = "GridSection";
 
-const gridSectionFields: Fields<GridProps> = {
+const gridSectionFields: YextFields<GridProps> = {
   columns: YextField(msg("fields.columns", "Columns"), {
     type: "radio",
     options: [
@@ -83,13 +88,11 @@ const gridSectionFields: Fields<GridProps> = {
     },
     visible: false,
   },
-  backgroundColor: YextField(
-    msg("fields.backgroundColor", "Background Color"),
-    {
-      type: "select",
-      options: "BACKGROUND_COLOR",
-    }
-  ),
+  backgroundColor: {
+    type: "basicSelector",
+    label: msg("fields.backgroundColor", "Background Color"),
+    options: "BACKGROUND_COLOR",
+  },
   align: YextField(msg("fields.alignContent", "Align Content"), {
     type: "radio",
     options: ThemeOptions.ALIGNMENT,
@@ -118,7 +121,7 @@ const gridSectionFields: Fields<GridProps> = {
 /**
  * The Grid Section component presents a series of columns into which a variety of smaller content blocks may be dragged, allowing for a higher degree of customization.
  */
-export const Grid: ComponentConfig<{ props: GridProps }> = {
+export const Grid: YextComponentConfig<GridProps> = {
   label: msg("components.gridSection", "Grid Section"),
   fields: gridSectionFields,
   defaultProps: {
@@ -133,13 +136,13 @@ export const Grid: ComponentConfig<{ props: GridProps }> = {
   },
   resolveFields: (data) => {
     if (data.props.columns === 1) {
-      return gridSectionFields;
+      return toPuckFields(gridSectionFields);
     }
 
     const rest = { ...gridSectionFields };
     delete rest.align;
 
-    return rest;
+    return toPuckFields(rest);
   },
   render: (props) => (
     <AnalyticsScopeProvider

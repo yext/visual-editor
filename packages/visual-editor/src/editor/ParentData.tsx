@@ -1,15 +1,16 @@
 import { ComponentData, DefaultComponentProps, Fields } from "@puckeditor/core";
 import { msg, pt } from "../utils/i18n/platform.ts";
+import { toPuckFields, YextFields } from "../fields/fields.ts";
 
 export const resolveDataFromParent = <T extends DefaultComponentProps>(
-  fields: Fields<T>,
+  fields: YextFields<T>,
   data: Omit<
     ComponentData<T, string, Record<string, DefaultComponentProps>>,
     "type"
   >
 ): Fields<T> => {
   if (data.props.parentData) {
-    return {
+    return toPuckFields({
       ...fields,
       data: {
         label: msg("fields.data", "Data"),
@@ -28,7 +29,7 @@ export const resolveDataFromParent = <T extends DefaultComponentProps>(
           },
         },
       },
-    } as any;
+    });
   }
-  return fields;
+  return toPuckFields(fields);
 };

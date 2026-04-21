@@ -1,12 +1,7 @@
 import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { AnalyticsScopeProvider, CTA as CTAType } from "@yext/pages-components";
-import {
-  ComponentConfig,
-  Fields,
-  WithId,
-  WithPuckProps,
-} from "@puckeditor/core";
+import { WithId, WithPuckProps } from "@puckeditor/core";
 import { Body } from "../atoms/body.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
@@ -27,6 +22,7 @@ import {
   FaTwitter,
   FaYoutube,
 } from "react-icons/fa";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 type socialLink = {
   name: string;
@@ -49,14 +45,12 @@ export interface FooterProps {
   };
 }
 
-const footerFields: Fields<FooterProps> = {
-  backgroundColor: YextField(
-    msg("fields.backgroundColor", "Background Color"),
-    {
-      type: "select",
-      options: "BACKGROUND_COLOR",
-    }
-  ),
+const footerFields: YextFields<FooterProps> = {
+  backgroundColor: {
+    type: "basicSelector",
+    label: msg("fields.backgroundColor", "Background Color"),
+    options: "BACKGROUND_COLOR",
+  },
   analytics: YextField(msg("fields.analytics", "Analytics"), {
     type: "object",
     visible: false,
@@ -72,7 +66,7 @@ const footerFields: Fields<FooterProps> = {
  * The Footer appears at the bottom of the page. It serves as a container for secondary navigation, social media links, legal disclaimers, and copyright information. See [Expanded Footer](#expanded-footer) for the newest footer component.
  * Available on Directory and Locator templates.
  */
-export const Footer: ComponentConfig<{ props: FooterProps }> = {
+export const Footer: YextComponentConfig<FooterProps> = {
   label: msg("components.footer", "Footer"),
   fields: footerFields,
   defaultProps: {

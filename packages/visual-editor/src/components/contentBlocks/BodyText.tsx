@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import * as React from "react";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { BodyProps, Body } from "../atoms/body.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
@@ -12,6 +12,7 @@ import { TranslatableRichText } from "../../types/types.ts";
 import { useBackground } from "../../hooks/useBackground.tsx";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import { ThemeColor } from "../../utils/themeConfigOptions.ts";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export type BodyTextProps = {
   data: {
@@ -41,7 +42,7 @@ export type BodyTextProps = {
   };
 };
 
-const bodyTextFields: Fields<BodyTextProps> = {
+const bodyTextFields: YextFields<BodyTextProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
@@ -60,10 +61,11 @@ const bodyTextFields: Fields<BodyTextProps> = {
         type: "radio",
         options: "BODY_VARIANT",
       }),
-      color: YextField(msg("fields.color", "Color"), {
-        type: "select",
+      color: {
+        type: "basicSelector",
+        label: msg("fields.color", "Color"),
         options: "SITE_COLOR",
-      }),
+      },
     },
   }),
 };
@@ -107,7 +109,7 @@ const BodyTextComponent: PuckComponent<BodyTextProps> = (props) => {
   );
 };
 
-export const BodyText: ComponentConfig<{ props: BodyTextProps }> = {
+export const BodyText: YextComponentConfig<BodyTextProps> = {
   label: msg("components.richText", "Rich Text"),
   fields: bodyTextFields,
   resolveFields: (data) => resolveDataFromParent(bodyTextFields, data),

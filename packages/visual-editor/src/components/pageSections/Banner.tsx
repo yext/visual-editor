@@ -11,7 +11,7 @@ import { TranslatableRichText } from "../../types/types.ts";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { Body } from "../atoms/body.tsx";
 import { getDefaultRTF } from "../../editor/TranslatableRichTextField.tsx";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import {
   backgroundColors,
   ThemeColor,
@@ -20,6 +20,7 @@ import { CircleSlash2 } from "lucide-react";
 import { useTemplateMetadata } from "../../internal/hooks/useMessageReceivers.ts";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export interface BannerData {
   /**
@@ -75,7 +76,7 @@ export interface BannerSectionProps {
   ignoreLocaleWarning?: string[];
 }
 
-const bannerSectionFields: Fields<BannerSectionProps> = {
+const bannerSectionFields: YextFields<BannerSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
@@ -90,17 +91,16 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
-      textColor: YextField(msg("fields.textColor", "Text Color"), {
-        type: "select",
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
+      textColor: {
+        type: "basicSelector",
+        label: msg("fields.textColor", "Text Color"),
         options: "SITE_COLOR",
-      }),
+      },
       textAlignment: YextField(msg("fields.textAlignment", "Text Alignment"), {
         type: "radio",
         options: "ALIGNMENT",
@@ -252,7 +252,7 @@ export const defaultBannerProps: BannerSectionProps = {
  * The Banner Section component displays a single, translatable line of rich text. It's designed to be used as a simple, full-width banner on a page.
  * Available on Location templates.
  */
-export const BannerSection: ComponentConfig<{ props: BannerSectionProps }> = {
+export const BannerSection: YextComponentConfig<BannerSectionProps> = {
   label: msg("components.bannerSection", "Banner Section"),
   fields: bannerSectionFields,
   defaultProps: defaultBannerProps,
