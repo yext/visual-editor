@@ -74,7 +74,7 @@ const populateLinkedEntityDisplayNames = (
 
 /**
  * Returns true when the provided field path starts at a linked entity
- * reference field exposed by template metadata.
+ * reference field exposed by the linked entity schema payload.
  */
 export const isLinkedEntityFieldPath = (
   fieldPath: string | undefined,
