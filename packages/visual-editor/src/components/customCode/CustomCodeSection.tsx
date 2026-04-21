@@ -5,14 +5,10 @@ import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
 import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
-import {
-  ComponentConfig,
-  Fields,
-  WithId,
-  WithPuckProps,
-} from "@puckeditor/core";
+import { WithId, WithPuckProps } from "@puckeditor/core";
 import { resolveEmbeddedFieldsInString } from "../../utils/resolveYextEntityField.ts";
 import { processHandlebarsTemplate } from "./customCodeHandlebars.ts";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export interface CustomCodeSectionProps {
   /**
@@ -44,7 +40,7 @@ export interface CustomCodeSectionProps {
   };
 }
 
-const customCodeSectionFields: Fields<CustomCodeSectionProps> = {
+const customCodeSectionFields: YextFields<CustomCodeSectionProps> = {
   html: YextField(msg("fields.html", "HTML"), {
     type: "code",
     codeLanguage: "html",
@@ -147,9 +143,7 @@ const CustomCodeSectionWrapper = ({
  * The CustomCodeSection component allows you to add custom HTML, CSS, and JavaScript to your page.
  * It is useful for integrating third-party widgets or custom scripts that are not supported by the visual editor natively.
  */
-export const CustomCodeSection: ComponentConfig<{
-  props: CustomCodeSectionProps;
-}> = {
+export const CustomCodeSection: YextComponentConfig<CustomCodeSectionProps> = {
   label: msg("components.customCodeSection", "Custom Code Section"),
   fields: customCodeSectionFields,
   defaultProps: {

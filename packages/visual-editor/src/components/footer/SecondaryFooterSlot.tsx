@@ -1,16 +1,11 @@
 import * as React from "react";
-import {
-  ComponentConfig,
-  Fields,
-  Slot,
-  PuckComponent,
-  setDeep,
-} from "@puckeditor/core";
+import { Slot, PuckComponent, setDeep } from "@puckeditor/core";
 import { YextField } from "../../editor/YextField.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import { ThemeColor } from "../../utils/themeConfigOptions.ts";
 import { PageSection, PageSectionProps } from "../atoms/pageSection.tsx";
 import { defaultCopyrightMessageSlotProps } from "./CopyrightMessageSlot.tsx";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 const defaultLink = {
   linkType: "URL" as const,
@@ -49,18 +44,15 @@ export interface SecondaryFooterSlotProps {
   maxWidth?: PageSectionProps["maxWidth"];
 }
 
-const secondaryFooterSlotFields: Fields<SecondaryFooterSlotProps> = {
+const secondaryFooterSlotFields: YextFields<SecondaryFooterSlotProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          hasSearch: true,
-          options: "BACKGROUND_COLOR",
-        }
-      ),
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
       desktopContentAlignment: YextField(
         msg("fields.desktopContentAlignment", "Desktop Content Alignment"),
         {
@@ -125,73 +117,72 @@ const SecondaryFooterSlotWrapper: PuckComponent<SecondaryFooterSlotProps> = ({
 /**
  * The Secondary Footer Slot is a sub-section of the Expanded Footer that contains copyright information and secondary links.
  */
-export const SecondaryFooterSlot: ComponentConfig<{
-  props: SecondaryFooterSlotProps;
-}> = {
-  label: msg("components.secondaryFooter", "Secondary Footer"),
-  fields: secondaryFooterSlotFields,
-  defaultProps: {
-    styles: {
-      desktopContentAlignment: "left",
-      mobileContentAlignment: "left",
-      showLinks: true,
-    },
-    slots: {
-      SecondaryLinksWrapperSlot: [
-        {
-          type: "FooterLinksSlot",
-          props: {
-            data: {
-              links: defaultLinks,
+export const SecondaryFooterSlot: YextComponentConfig<SecondaryFooterSlotProps> =
+  {
+    label: msg("components.secondaryFooter", "Secondary Footer"),
+    fields: secondaryFooterSlotFields,
+    defaultProps: {
+      styles: {
+        desktopContentAlignment: "left",
+        mobileContentAlignment: "left",
+        showLinks: true,
+      },
+      slots: {
+        SecondaryLinksWrapperSlot: [
+          {
+            type: "FooterLinksSlot",
+            props: {
+              data: {
+                links: defaultLinks,
+              },
+              variant: "secondary",
+              eventNamePrefix: "secondary",
+              desktopContentAlignment: "left",
+              mobileContentAlignment: "left",
             },
-            variant: "secondary",
-            eventNamePrefix: "secondary",
-            desktopContentAlignment: "left",
-            mobileContentAlignment: "left",
           },
-        },
-      ],
-      CopyrightSlot: [
-        {
-          type: "CopyrightMessageSlot",
-          props: defaultCopyrightMessageSlotProps,
-        },
-      ],
+        ],
+        CopyrightSlot: [
+          {
+            type: "CopyrightMessageSlot",
+            props: defaultCopyrightMessageSlotProps,
+          },
+        ],
+      },
     },
-  },
-  resolveData: async (data) => {
-    let updatedData = { ...data };
+    resolveData: async (data) => {
+      let updatedData = { ...data };
 
-    // Pass alignment to SecondaryLinksWrapperSlot based on parent styles
-    if (data.props.slots?.SecondaryLinksWrapperSlot?.[0]?.props) {
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.SecondaryLinksWrapperSlot[0].props.desktopContentAlignment",
-        data.props.styles.desktopContentAlignment
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.SecondaryLinksWrapperSlot[0].props.mobileContentAlignment",
-        data.props.styles.mobileContentAlignment
-      );
-    }
+      // Pass alignment to SecondaryLinksWrapperSlot based on parent styles
+      if (data.props.slots?.SecondaryLinksWrapperSlot?.[0]?.props) {
+        updatedData = setDeep(
+          updatedData,
+          "props.slots.SecondaryLinksWrapperSlot[0].props.desktopContentAlignment",
+          data.props.styles.desktopContentAlignment
+        );
+        updatedData = setDeep(
+          updatedData,
+          "props.slots.SecondaryLinksWrapperSlot[0].props.mobileContentAlignment",
+          data.props.styles.mobileContentAlignment
+        );
+      }
 
-    // Pass alignment to CopyrightSlot based on parent styles
-    if (data.props.slots?.CopyrightSlot?.[0]?.props) {
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.CopyrightSlot[0].props.desktopContentAlignment",
-        data.props.styles.desktopContentAlignment
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.CopyrightSlot[0].props.mobileContentAlignment",
-        data.props.styles.mobileContentAlignment
-      );
-    }
+      // Pass alignment to CopyrightSlot based on parent styles
+      if (data.props.slots?.CopyrightSlot?.[0]?.props) {
+        updatedData = setDeep(
+          updatedData,
+          "props.slots.CopyrightSlot[0].props.desktopContentAlignment",
+          data.props.styles.desktopContentAlignment
+        );
+        updatedData = setDeep(
+          updatedData,
+          "props.slots.CopyrightSlot[0].props.mobileContentAlignment",
+          data.props.styles.mobileContentAlignment
+        );
+      }
 
-    return updatedData;
-  },
-  inline: true,
-  render: (props) => <SecondaryFooterSlotWrapper {...props} />,
-};
+      return updatedData;
+    },
+    inline: true,
+    render: (props) => <SecondaryFooterSlotWrapper {...props} />,
+  };

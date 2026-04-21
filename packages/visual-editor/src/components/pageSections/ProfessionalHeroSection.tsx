@@ -1,5 +1,5 @@
 import React from "react";
-import { ComponentConfig, Fields, Slot, PuckComponent } from "@puckeditor/core";
+import { Slot, PuckComponent } from "@puckeditor/core";
 import {
   backgroundColors,
   ThemeColor,
@@ -24,6 +24,7 @@ import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders.ts";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export interface ProfessionalHeroStyles {
   /**
@@ -272,60 +273,17 @@ const ProfessionalHero: PuckComponent<ProfessionalHeroSectionProps> = (
   );
 };
 
-const professionalHeroSectionFields: Fields<ProfessionalHeroSectionProps> = {
-  styles: YextField(msg("fields.styles", "Styles"), {
-    type: "object",
-    objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
+const professionalHeroSectionFields: YextFields<ProfessionalHeroSectionProps> =
+  {
+    styles: YextField(msg("fields.styles", "Styles"), {
+      type: "object",
+      objectFields: {
+        backgroundColor: {
+          type: "basicSelector",
+          label: msg("fields.backgroundColor", "Background Color"),
           options: "BACKGROUND_COLOR",
-        }
-      ),
-      showImage: YextField(msg("fields.showImage", "Show Image"), {
-        type: "radio",
-        options: [
-          {
-            label: msg("fields.options.show", "Show"),
-            value: true,
-          },
-          {
-            label: msg("fields.options.hide", "Hide"),
-            value: false,
-          },
-        ],
-      }),
-      desktopImagePosition: YextField(
-        msg("fields.desktopImagePosition", "Desktop Image Position"),
-        {
-          type: "radio",
-          options: [
-            {
-              label: msg("fields.options.left", "Left", {
-                context: "direction",
-              }),
-              value: "left",
-            },
-            {
-              label: msg("fields.options.right", "Right", {
-                context: "direction",
-              }),
-              value: "right",
-            },
-          ],
-        }
-      ),
-      mobileImagePosition: YextField(
-        msg("fields.mobileImagePosition", "Mobile Image Position"),
-        {
-          type: "radio",
-          options: ThemeOptions.VERTICAL_POSITION,
-        }
-      ),
-      showBusinessName: YextField(
-        msg("fields.showBusinessName", "Show Business Name"),
-        {
+        },
+        showImage: YextField(msg("fields.showImage", "Show Image"), {
           type: "radio",
           options: [
             {
@@ -337,56 +295,83 @@ const professionalHeroSectionFields: Fields<ProfessionalHeroSectionProps> = {
               value: false,
             },
           ],
-        }
-      ),
-      showCredentials: YextField(
-        msg("fields.showCredentials", "Show Credentials"),
-        {
-          type: "radio",
-          options: [
-            {
-              label: msg("fields.options.show", "Show"),
-              value: true,
-            },
-            {
-              label: msg("fields.options.hide", "Hide"),
-              value: false,
-            },
-          ],
-        }
-      ),
-      showProfessionalTitle: YextField(
-        msg("fields.showProfessionalTitle", "Show Professional Title"),
-        {
-          type: "radio",
-          options: [
-            {
-              label: msg("fields.options.show", "Show"),
-              value: true,
-            },
-            {
-              label: msg("fields.options.hide", "Hide"),
-              value: false,
-            },
-          ],
-        }
-      ),
-      showSubtitle: YextField(msg("fields.showSubtitle", "Show Subtitle"), {
-        type: "radio",
-        options: [
+        }),
+        desktopImagePosition: YextField(
+          msg("fields.desktopImagePosition", "Desktop Image Position"),
           {
-            label: msg("fields.options.show", "Show"),
-            value: true,
-          },
+            type: "radio",
+            options: [
+              {
+                label: msg("fields.options.left", "Left", {
+                  context: "direction",
+                }),
+                value: "left",
+              },
+              {
+                label: msg("fields.options.right", "Right", {
+                  context: "direction",
+                }),
+                value: "right",
+              },
+            ],
+          }
+        ),
+        mobileImagePosition: YextField(
+          msg("fields.mobileImagePosition", "Mobile Image Position"),
           {
-            label: msg("fields.options.hide", "Hide"),
-            value: false,
-          },
-        ],
-      }),
-      showAverageReview: YextField(
-        msg("fields.showAverageReview", "Show Average Review"),
-        {
+            type: "radio",
+            options: ThemeOptions.VERTICAL_POSITION,
+          }
+        ),
+        showBusinessName: YextField(
+          msg("fields.showBusinessName", "Show Business Name"),
+          {
+            type: "radio",
+            options: [
+              {
+                label: msg("fields.options.show", "Show"),
+                value: true,
+              },
+              {
+                label: msg("fields.options.hide", "Hide"),
+                value: false,
+              },
+            ],
+          }
+        ),
+        showCredentials: YextField(
+          msg("fields.showCredentials", "Show Credentials"),
+          {
+            type: "radio",
+            options: [
+              {
+                label: msg("fields.options.show", "Show"),
+                value: true,
+              },
+              {
+                label: msg("fields.options.hide", "Hide"),
+                value: false,
+              },
+            ],
+          }
+        ),
+        showProfessionalTitle: YextField(
+          msg("fields.showProfessionalTitle", "Show Professional Title"),
+          {
+            type: "radio",
+            options: [
+              {
+                label: msg("fields.options.show", "Show"),
+                value: true,
+              },
+              {
+                label: msg("fields.options.hide", "Hide"),
+                value: false,
+              },
+            ],
+          }
+        ),
+        showSubtitle: YextField(msg("fields.showSubtitle", "Show Subtitle"), {
           type: "radio",
           options: [
             {
@@ -398,31 +383,29 @@ const professionalHeroSectionFields: Fields<ProfessionalHeroSectionProps> = {
               value: false,
             },
           ],
-        }
-      ),
-      reviewStarsColor: YextField(
-        msg("fields.reviewStarsColor", "Review Stars Color"),
-        {
-          type: "select",
+        }),
+        showAverageReview: YextField(
+          msg("fields.showAverageReview", "Show Average Review"),
+          {
+            type: "radio",
+            options: [
+              {
+                label: msg("fields.options.show", "Show"),
+                value: true,
+              },
+              {
+                label: msg("fields.options.hide", "Hide"),
+                value: false,
+              },
+            ],
+          }
+        ),
+        reviewStarsColor: {
+          type: "basicSelector",
+          label: msg("fields.reviewStarsColor", "Review Stars Color"),
           options: "SITE_COLOR",
-        }
-      ),
-      showAddress: YextField(msg("fields.showAddress", "Show Address"), {
-        type: "radio",
-        options: [
-          {
-            label: msg("fields.options.show", "Show"),
-            value: true,
-          },
-          {
-            label: msg("fields.options.hide", "Hide"),
-            value: false,
-          },
-        ],
-      }),
-      showPrimaryCTA: YextField(
-        msg("fields.showPrimaryCTA", "Show Primary CTA"),
-        {
+        },
+        showAddress: YextField(msg("fields.showAddress", "Show Address"), {
           type: "radio",
           options: [
             {
@@ -434,11 +417,40 @@ const professionalHeroSectionFields: Fields<ProfessionalHeroSectionProps> = {
               value: false,
             },
           ],
-        }
-      ),
-      showSecondaryCTA: YextField(
-        msg("fields.showSecondaryCTA", "Show Secondary CTA"),
-        {
+        }),
+        showPrimaryCTA: YextField(
+          msg("fields.showPrimaryCTA", "Show Primary CTA"),
+          {
+            type: "radio",
+            options: [
+              {
+                label: msg("fields.options.show", "Show"),
+                value: true,
+              },
+              {
+                label: msg("fields.options.hide", "Hide"),
+                value: false,
+              },
+            ],
+          }
+        ),
+        showSecondaryCTA: YextField(
+          msg("fields.showSecondaryCTA", "Show Secondary CTA"),
+          {
+            type: "radio",
+            options: [
+              {
+                label: msg("fields.options.show", "Show"),
+                value: true,
+              },
+              {
+                label: msg("fields.options.hide", "Hide"),
+                value: false,
+              },
+            ],
+          }
+        ),
+        showPhone: YextField(msg("fields.showPhone", "Show Phone"), {
           type: "radio",
           options: [
             {
@@ -450,377 +462,369 @@ const professionalHeroSectionFields: Fields<ProfessionalHeroSectionProps> = {
               value: false,
             },
           ],
-        }
-      ),
-      showPhone: YextField(msg("fields.showPhone", "Show Phone"), {
-        type: "radio",
-        options: [
-          {
-            label: msg("fields.options.show", "Show"),
-            value: true,
-          },
-          {
-            label: msg("fields.options.hide", "Hide"),
-            value: false,
-          },
-        ],
-      }),
-      showEmail: YextField(msg("fields.showEmail", "Show Email"), {
-        type: "radio",
-        options: [
-          {
-            label: msg("fields.options.show", "Show"),
-            value: true,
-          },
-          {
-            label: msg("fields.options.hide", "Hide"),
-            value: false,
-          },
-        ],
-      }),
-    },
-  }),
-  slots: {
-    type: "object",
-    objectFields: {
-      ImageSlot: { type: "slot" },
-      BusinessNameSlot: { type: "slot" },
-      CredentialsSlot: { type: "slot" },
-      ProfessionalNameSlot: { type: "slot" },
-      ProfessionalTitleSlot: { type: "slot" },
-      SubtitleSlot: { type: "slot" },
-      AddressSlot: { type: "slot" },
-      PrimaryCTASlot: { type: "slot" },
-      SecondaryCTASlot: { type: "slot" },
-      PhoneSlot: { type: "slot" },
-      EmailSlot: { type: "slot" },
-    },
-    visible: false,
-  },
-  analytics: YextField(msg("fields.analytics", "Analytics"), {
-    type: "object",
-    visible: false,
-    objectFields: {
-      scope: YextField(msg("fields.scope", "Scope"), {
-        type: "text",
-      }),
-    },
-  }),
-  liveVisibility: YextField(
-    msg("fields.visibleOnLivePage", "Visible on Live Page"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: false },
-      ],
-    }
-  ),
-};
-
-export const ProfessionalHeroSection: ComponentConfig<{
-  props: ProfessionalHeroSectionProps;
-}> = {
-  label: msg("components.professionalHeroSection", "Professional Hero Section"),
-  fields: professionalHeroSectionFields,
-  defaultProps: {
-    styles: {
-      backgroundColor: backgroundColors.background1.value,
-      showImage: true,
-      desktopImagePosition: "left",
-      mobileImagePosition: "top",
-      showBusinessName: true,
-      showCredentials: true,
-      showProfessionalTitle: true,
-      showSubtitle: true,
-      showAverageReview: true,
-      showAddress: true,
-      showPrimaryCTA: true,
-      showSecondaryCTA: true,
-      showPhone: true,
-      showEmail: true,
-    },
+        }),
+        showEmail: YextField(msg("fields.showEmail", "Show Email"), {
+          type: "radio",
+          options: [
+            {
+              label: msg("fields.options.show", "Show"),
+              value: true,
+            },
+            {
+              label: msg("fields.options.hide", "Hide"),
+              value: false,
+            },
+          ],
+        }),
+      },
+    }),
     slots: {
-      ImageSlot: [
-        {
-          type: "HeroImageSlot",
-          props: {
-            data: {
-              image: {
-                field: "",
-                constantValue: {
-                  ...getRandomPlaceholderImageObject({
+      type: "object",
+      objectFields: {
+        ImageSlot: { type: "slot" },
+        BusinessNameSlot: { type: "slot" },
+        CredentialsSlot: { type: "slot" },
+        ProfessionalNameSlot: { type: "slot" },
+        ProfessionalTitleSlot: { type: "slot" },
+        SubtitleSlot: { type: "slot" },
+        AddressSlot: { type: "slot" },
+        PrimaryCTASlot: { type: "slot" },
+        SecondaryCTASlot: { type: "slot" },
+        PhoneSlot: { type: "slot" },
+        EmailSlot: { type: "slot" },
+      },
+      visible: false,
+    },
+    analytics: YextField(msg("fields.analytics", "Analytics"), {
+      type: "object",
+      visible: false,
+      objectFields: {
+        scope: YextField(msg("fields.scope", "Scope"), {
+          type: "text",
+        }),
+      },
+    }),
+    liveVisibility: YextField(
+      msg("fields.visibleOnLivePage", "Visible on Live Page"),
+      {
+        type: "radio",
+        options: [
+          { label: msg("fields.options.show", "Show"), value: true },
+          { label: msg("fields.options.hide", "Hide"), value: false },
+        ],
+      }
+    ),
+  };
+
+export const ProfessionalHeroSection: YextComponentConfig<ProfessionalHeroSectionProps> =
+  {
+    label: msg(
+      "components.professionalHeroSection",
+      "Professional Hero Section"
+    ),
+    fields: professionalHeroSectionFields,
+    defaultProps: {
+      styles: {
+        backgroundColor: backgroundColors.background1.value,
+        showImage: true,
+        desktopImagePosition: "left",
+        mobileImagePosition: "top",
+        showBusinessName: true,
+        showCredentials: true,
+        showProfessionalTitle: true,
+        showSubtitle: true,
+        showAverageReview: true,
+        showAddress: true,
+        showPrimaryCTA: true,
+        showSecondaryCTA: true,
+        showPhone: true,
+        showEmail: true,
+      },
+      slots: {
+        ImageSlot: [
+          {
+            type: "HeroImageSlot",
+            props: {
+              data: {
+                image: {
+                  field: "",
+                  constantValue: {
+                    ...getRandomPlaceholderImageObject({
+                      width: 500,
+                      height: 500,
+                    }),
                     width: 500,
                     height: 500,
-                  }),
-                  width: 500,
-                  height: 500,
-                },
-                constantValueEnabled: true,
-              },
-            },
-            styles: {
-              aspectRatio: 1,
-              width: 500,
-            },
-          } satisfies ImageWrapperProps,
-        },
-      ],
-      BusinessNameSlot: [
-        {
-          type: "BodyTextSlot",
-          props: {
-            data: {
-              text: {
-                field: "",
-                constantValue: { defaultValue: "Business Name" },
-                constantValueEnabled: true,
-              },
-            },
-            styles: {
-              variant: "lg",
-            },
-          } satisfies BodyTextProps,
-        },
-      ],
-      CredentialsSlot: [
-        {
-          type: "HeadingTextSlot",
-          props: {
-            data: {
-              text: {
-                field: "",
-                constantValue: { defaultValue: "Credentials" },
-                constantValueEnabled: true,
-              },
-            },
-            styles: {
-              level: 2,
-              align: "left",
-            },
-          } satisfies HeadingTextProps,
-        },
-      ],
-      ProfessionalNameSlot: [
-        {
-          type: "HeadingTextSlot",
-          props: {
-            data: {
-              text: {
-                constantValue: { defaultValue: "Professional Name" },
-                constantValueEnabled: true,
-                field: "name",
-              },
-            },
-            styles: { level: 2, align: "left" },
-          } satisfies HeadingTextProps,
-        },
-      ],
-      ProfessionalTitleSlot: [
-        {
-          type: "HeadingTextSlot",
-          props: {
-            data: {
-              text: {
-                constantValue: { defaultValue: "Professional Title" },
-                constantValueEnabled: true,
-                field: "",
-              },
-            },
-            styles: {
-              level: 5,
-              align: "left",
-              semanticLevelOverride: 3,
-            },
-          } satisfies HeadingTextProps,
-        },
-      ],
-      SubtitleSlot: [
-        {
-          type: "BodyTextSlot",
-          props: {
-            data: {
-              text: {
-                constantValue: { defaultValue: "Subtitle" },
-                constantValueEnabled: true,
-                field: "",
-              },
-            },
-            styles: {
-              variant: "base",
-            },
-          } satisfies BodyTextProps,
-        },
-      ],
-      AddressSlot: [
-        {
-          type: "AddressSlot",
-          props: {
-            data: {
-              address: {
-                constantValue: {
-                  line1: "",
-                  city: "",
-                  postalCode: "",
-                  countryCode: "",
-                },
-                field: "address",
-              },
-            },
-            styles: {
-              showGetDirectionsLink: true,
-              ctaVariant: "link",
-            },
-          } satisfies AddressProps,
-        },
-      ],
-      PrimaryCTASlot: [
-        {
-          type: "CTASlot",
-          props: {
-            data: {
-              actionType: "link",
-              normalizeLink: true,
-              buttonText: { defaultValue: "Button" },
-              entityField: {
-                field: "",
-                constantValue: {
-                  label: { defaultValue: "Contact Me" },
-                  link: { defaultValue: "#" },
-                  linkType: "URL",
-                  ctaType: "textAndLink",
-                },
-              },
-            },
-            eventName: "primaryCta",
-            styles: {
-              variant: "primary",
-            },
-          } satisfies CTAWrapperProps,
-        },
-      ],
-      SecondaryCTASlot: [
-        {
-          type: "CTASlot",
-          props: {
-            data: {
-              actionType: "link",
-              normalizeLink: true,
-              buttonText: { defaultValue: "Button" },
-              entityField: {
-                field: "",
-                constantValue: {
-                  label: { defaultValue: "Learn More" },
-                  link: { defaultValue: "#" },
-                  linkType: "URL",
-                  ctaType: "textAndLink",
-                },
-              },
-            },
-            eventName: "secondaryCta",
-            styles: {
-              variant: "secondary",
-            },
-          } satisfies CTAWrapperProps,
-        },
-      ],
-      PhoneSlot: [
-        {
-          type: "PhoneNumbersSlot",
-          props: {
-            data: {
-              phoneNumbers: [
-                {
-                  number: {
-                    field: "mainPhone",
-                    constantValue: "",
                   },
-                  label: { defaultValue: "Phone" },
+                  constantValueEnabled: true,
                 },
-              ],
-            },
-            styles: {
-              phoneFormat: "domestic",
-              includePhoneHyperlink: true,
-            },
-          } satisfies PhoneListProps,
-        },
-      ],
-      EmailSlot: [
-        {
-          type: "EmailsSlot",
-          props: {
-            data: {
-              list: {
-                field: "emails",
-                constantValue: [],
               },
-            },
-            styles: {
-              listLength: 1,
-            },
-          } satisfies EmailsProps,
-        },
-      ],
-    },
-    analytics: {
-      scope: "professionalHeroSection",
-    },
-    liveVisibility: true,
-  },
-  resolveData: (data, params) => {
-    const streamDocument = params.metadata?.streamDocument;
-    const locale = streamDocument?.locale;
-    if (!locale || !streamDocument) {
-      return { ...data };
-    }
-
-    const emailSlot = data?.props?.slots?.EmailSlot?.[0];
-    const resolvedEmails = emailSlot
-      ? resolveComponentData(emailSlot.props.data.list, locale, streamDocument)
-      : [];
-
-    const phoneSlot = data?.props?.slots?.PhoneSlot?.[0];
-    const phoneNumbersConfig = phoneSlot?.props?.data?.phoneNumbers || [];
-    const hasPhones = phoneNumbersConfig.some((config: any) => {
-      const resolved = resolveComponentData(
-        config.number,
-        locale,
-        streamDocument
-      );
-      return !!resolved;
-    });
-
-    const showPhone = data.props.styles.showPhone ?? true;
-    const showEmail = data.props.styles.showEmail ?? true;
-
-    const isRightColumnVisible =
-      (showEmail && resolvedEmails && resolvedEmails.length > 0) ||
-      (showPhone && hasPhones);
-
-    return {
-      ...data,
-      props: {
-        ...data.props,
-        conditionalRender: { isRightColumnVisible },
+              styles: {
+                aspectRatio: 1,
+                width: 500,
+              },
+            } satisfies ImageWrapperProps,
+          },
+        ],
+        BusinessNameSlot: [
+          {
+            type: "BodyTextSlot",
+            props: {
+              data: {
+                text: {
+                  field: "",
+                  constantValue: { defaultValue: "Business Name" },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                variant: "lg",
+              },
+            } satisfies BodyTextProps,
+          },
+        ],
+        CredentialsSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              data: {
+                text: {
+                  field: "",
+                  constantValue: { defaultValue: "Credentials" },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                level: 2,
+                align: "left",
+              },
+            } satisfies HeadingTextProps,
+          },
+        ],
+        ProfessionalNameSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              data: {
+                text: {
+                  constantValue: { defaultValue: "Professional Name" },
+                  constantValueEnabled: true,
+                  field: "name",
+                },
+              },
+              styles: { level: 2, align: "left" },
+            } satisfies HeadingTextProps,
+          },
+        ],
+        ProfessionalTitleSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              data: {
+                text: {
+                  constantValue: { defaultValue: "Professional Title" },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: {
+                level: 5,
+                align: "left",
+                semanticLevelOverride: 3,
+              },
+            } satisfies HeadingTextProps,
+          },
+        ],
+        SubtitleSlot: [
+          {
+            type: "BodyTextSlot",
+            props: {
+              data: {
+                text: {
+                  constantValue: { defaultValue: "Subtitle" },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: {
+                variant: "base",
+              },
+            } satisfies BodyTextProps,
+          },
+        ],
+        AddressSlot: [
+          {
+            type: "AddressSlot",
+            props: {
+              data: {
+                address: {
+                  constantValue: {
+                    line1: "",
+                    city: "",
+                    postalCode: "",
+                    countryCode: "",
+                  },
+                  field: "address",
+                },
+              },
+              styles: {
+                showGetDirectionsLink: true,
+                ctaVariant: "link",
+              },
+            } satisfies AddressProps,
+          },
+        ],
+        PrimaryCTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              data: {
+                actionType: "link",
+                normalizeLink: true,
+                buttonText: { defaultValue: "Button" },
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: { defaultValue: "Contact Me" },
+                    link: { defaultValue: "#" },
+                    linkType: "URL",
+                    ctaType: "textAndLink",
+                  },
+                },
+              },
+              eventName: "primaryCta",
+              styles: {
+                variant: "primary",
+              },
+            } satisfies CTAWrapperProps,
+          },
+        ],
+        SecondaryCTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              data: {
+                actionType: "link",
+                normalizeLink: true,
+                buttonText: { defaultValue: "Button" },
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: { defaultValue: "Learn More" },
+                    link: { defaultValue: "#" },
+                    linkType: "URL",
+                    ctaType: "textAndLink",
+                  },
+                },
+              },
+              eventName: "secondaryCta",
+              styles: {
+                variant: "secondary",
+              },
+            } satisfies CTAWrapperProps,
+          },
+        ],
+        PhoneSlot: [
+          {
+            type: "PhoneNumbersSlot",
+            props: {
+              data: {
+                phoneNumbers: [
+                  {
+                    number: {
+                      field: "mainPhone",
+                      constantValue: "",
+                    },
+                    label: { defaultValue: "Phone" },
+                  },
+                ],
+              },
+              styles: {
+                phoneFormat: "domestic",
+                includePhoneHyperlink: true,
+              },
+            } satisfies PhoneListProps,
+          },
+        ],
+        EmailSlot: [
+          {
+            type: "EmailsSlot",
+            props: {
+              data: {
+                list: {
+                  field: "emails",
+                  constantValue: [],
+                },
+              },
+              styles: {
+                listLength: 1,
+              },
+            } satisfies EmailsProps,
+          },
+        ],
       },
-    };
-  },
-  render: (props) => (
-    <ComponentErrorBoundary
-      isEditing={props.puck.isEditing}
-      resetKeys={[props]}
-    >
-      <AnalyticsScopeProvider
-        name={`${props.analytics?.scope ?? "professionalHeroSection"}${getAnalyticsScopeHash(props.id)}`}
+      analytics: {
+        scope: "professionalHeroSection",
+      },
+      liveVisibility: true,
+    },
+    resolveData: (data, params) => {
+      const streamDocument = params.metadata?.streamDocument;
+      const locale = streamDocument?.locale;
+      if (!locale || !streamDocument) {
+        return { ...data };
+      }
+
+      const emailSlot = data?.props?.slots?.EmailSlot?.[0];
+      const resolvedEmails = emailSlot
+        ? resolveComponentData(
+            emailSlot.props.data.list,
+            locale,
+            streamDocument
+          )
+        : [];
+
+      const phoneSlot = data?.props?.slots?.PhoneSlot?.[0];
+      const phoneNumbersConfig = phoneSlot?.props?.data?.phoneNumbers || [];
+      const hasPhones = phoneNumbersConfig.some((config: any) => {
+        const resolved = resolveComponentData(
+          config.number,
+          locale,
+          streamDocument
+        );
+        return !!resolved;
+      });
+
+      const showPhone = data.props.styles.showPhone ?? true;
+      const showEmail = data.props.styles.showEmail ?? true;
+
+      const isRightColumnVisible =
+        (showEmail && resolvedEmails && resolvedEmails.length > 0) ||
+        (showPhone && hasPhones);
+
+      return {
+        ...data,
+        props: {
+          ...data.props,
+          conditionalRender: { isRightColumnVisible },
+        },
+      };
+    },
+    render: (props) => (
+      <ComponentErrorBoundary
+        isEditing={props.puck.isEditing}
+        resetKeys={[props]}
       >
-        <VisibilityWrapper
-          liveVisibility={!!props.liveVisibility}
-          isEditing={props.puck.isEditing}
+        <AnalyticsScopeProvider
+          name={`${props.analytics?.scope ?? "professionalHeroSection"}${getAnalyticsScopeHash(props.id)}`}
         >
-          <ProfessionalHero {...props} />
-        </VisibilityWrapper>
-      </AnalyticsScopeProvider>
-    </ComponentErrorBoundary>
-  ),
-};
+          <VisibilityWrapper
+            liveVisibility={!!props.liveVisibility}
+            isEditing={props.puck.isEditing}
+          >
+            <ProfessionalHero {...props} />
+          </VisibilityWrapper>
+        </AnalyticsScopeProvider>
+      </ComponentErrorBoundary>
+    ),
+  };

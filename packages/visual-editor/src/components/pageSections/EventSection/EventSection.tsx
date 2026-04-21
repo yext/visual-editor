@@ -1,4 +1,4 @@
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
+import { PuckComponent, Slot } from "@puckeditor/core";
 import {
   ThemeColor,
   backgroundColors,
@@ -13,6 +13,7 @@ import { defaultEventCardSlotData } from "./EventCard.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { EventCardsWrapperProps } from "./EventCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 export interface EventSectionProps {
   /**
@@ -51,17 +52,15 @@ export interface EventSectionProps {
   liveVisibility: boolean;
 }
 
-const eventSectionFields: Fields<EventSectionProps> = {
+const eventSectionFields: YextFields<EventSectionProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
       showSectionHeading: YextField(
         msg("fields.showSectionHeading", "Show Section Heading"),
         {
@@ -120,7 +119,7 @@ const EventSectionWrapper: PuckComponent<EventSectionProps> = (props) => {
  * The Events Section component is designed to display a curated list of events. It features a prominent section heading and renders each event as an individual card, making it ideal for showcasing upcoming activities, workshops, or promotions.
  * Available on Location templates.
  */
-export const EventSection: ComponentConfig<{ props: EventSectionProps }> = {
+export const EventSection: YextComponentConfig<EventSectionProps> = {
   label: msg("components.eventsSection", "Events Section"),
   fields: eventSectionFields,
   defaultProps: {

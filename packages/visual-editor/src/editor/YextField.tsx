@@ -1,6 +1,7 @@
 import {
   ArrayField,
   BaseField,
+  type CustomField,
   Field,
   NumberField,
   ObjectField,
@@ -28,7 +29,7 @@ import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFiel
 import { MsgString } from "../utils/i18n/platform.ts";
 import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 import { VIDEO_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Video.tsx";
-import { YextPuckFields } from "../fields/fields.ts";
+import type { YextPuckFields } from "../fields/fields.ts";
 
 /** Copied from Puck, do not change */
 export type FieldOption = {
@@ -47,39 +48,67 @@ type radioOptions =
   | "CTA_VARIANT"
   | "SHOW_HIDE";
 
-type selectOptions = keyof Omit<typeof ThemeOptions, radioOptions>;
-
 type YextBaseField = {
   type: string;
   visible?: boolean;
 };
 
-// YextArrayField has same functionality as Puck's ArrayField
-type YextArrayField<
+export type YextPuckField = YextPuckFields[keyof YextPuckFields];
+
+type YextFieldMap<Props extends Record<string, any>> = {
+  [PropName in keyof Props as PropName extends "editMode"
+    ? never
+    : PropName]: YextFieldDefinition<Props[PropName]>;
+};
+
+type YextArrayFieldConfig<
   Props extends { [key: string]: any }[] = { [key: string]: any }[],
-> = YextBaseField & Omit<ArrayField<Props>, keyof BaseField>;
+> = YextBaseField &
+  Omit<ArrayField<Props, YextPuckField>, keyof BaseField | "arrayFields"> & {
+    arrayFields: YextFieldMap<Props[0]>;
+  };
+
+export type YextArrayField<
+  Props extends { [key: string]: any }[] = { [key: string]: any }[],
+> = Omit<ArrayField<Props, YextPuckField>, "arrayFields"> & {
+  arrayFields: YextFieldMap<Props[0]>;
+};
 
 // YextNumberField has same functionality as Puck's NumberField
 type YextNumberField = YextBaseField & Omit<NumberField, keyof BaseField>;
 
-// YextObjectField has same functionality as Puck's ObjectField
-type YextObjectField<
+type YextObjectFieldConfig<
   Props extends { [key: string]: any } = { [key: string]: any },
-> = YextBaseField & Omit<ObjectField<Props>, keyof BaseField>;
+> = YextBaseField &
+  Omit<ObjectField<Props, YextPuckField>, keyof BaseField | "objectFields"> & {
+    objectFields: YextFieldMap<Props>;
+  };
+
+export type YextObjectField<
+  Props extends { [key: string]: any } = { [key: string]: any },
+> = Omit<ObjectField<Props, YextPuckField>, "objectFields"> & {
+  objectFields: YextFieldMap<Props>;
+};
+
+export type YextCustomFieldRenderProps<ValueType> = Parameters<
+  CustomField<ValueType>["render"]
+>[0];
+
+export type YextFieldDefinition<ValueType = any> =
+  | Field<ValueType, YextPuckField>
+  | Field<NonNullable<ValueType>, YextPuckField>
+  | YextPuckField
+  | (ValueType extends Record<string, any>[]
+      ? YextArrayField<ValueType>
+      : never)
+  | (ValueType extends Record<string, any>
+      ? YextObjectField<ValueType>
+      : never);
 
 // YextRadioField accepts normal FieldOptions or specific ThemeConfig options.
 type YextRadioField = YextBaseField & {
   type: "radio";
   options: FieldOptions | radioOptions;
-};
-
-// YextSelectField accepts normal FieldOptions or specific ThemeConfig options.
-// If hasSearch is true, uses the basicSelector field behavior rather than
-// Puck's built-in select field.
-type YextSelectField = YextBaseField & {
-  type: "select";
-  hasSearch?: boolean;
-  options: FieldOptions | selectOptions;
 };
 
 // YextTextField has same functionality as Puck's TextField
@@ -131,12 +160,11 @@ type YextEntitySelectorField<
   };
 
 type YextFieldConfig<Props = any> =
-  | YextArrayField<Props extends Record<string, any>[] ? Props : any>
-  | YextObjectField<Props extends Record<string, any> ? Props : any>
+  | YextArrayFieldConfig<Props extends Record<string, any>[] ? Props : any>
+  | YextObjectFieldConfig<Props extends Record<string, any> ? Props : any>
   | YextNumberField
   | YextTextField
   | YextEntitySelectorField<Props extends Record<string, any> ? Props : any>
-  | YextSelectField
   | YextRadioField
   | YextOptionalNumberField
   | YextMaxWidthField
@@ -144,7 +172,7 @@ type YextFieldConfig<Props = any> =
   | YextImageField
   | YextVideoField
   | YextDynamicSelectField<Props extends DynamicOptionValueTypes ? Props : any>
-  | YextPuckFields[keyof YextPuckFields];
+  | YextPuckFields[Exclude<keyof YextPuckFields, "basicSelector">];
 
 export function YextField<T = any>(
   fieldName: MsgString,
@@ -168,6 +196,10 @@ export function YextField<T, U>(
   fieldName: MsgString,
   config: YextFieldConfig<T>
 ): any {
+  const isThemeOptionKey = (
+    option: string
+  ): option is keyof typeof ThemeOptions => option in ThemeOptions;
+
   // use YextEntityFieldSelector
   if (config.type === "entityField") {
     return YextEntityFieldSelector<T extends Record<string, any> ? T : any, U>({
@@ -188,43 +220,19 @@ export function YextField<T, U>(
     });
   }
 
-  if (config.type === "select" && config.options === "BACKGROUND_COLOR") {
-    const options = ThemeOptions[config.options];
-    return {
-      type: "basicSelector",
-      label: fieldName,
-      optionGroups: options,
-      disableSearch: true,
-    };
-  }
+  if (config.type === "radio" && typeof config.options === "string") {
+    if (!isThemeOptionKey(config.options)) {
+      console.warn(
+        `Invalid ThemeOptions key "${config.options}" passed to radio field "${fieldName}".`
+      );
+      return {
+        label: fieldName,
+        visible: config.visible,
+        type: config.type,
+        options: [],
+      };
+    }
 
-  if (config.type === "select" && config.options === "SITE_COLOR") {
-    const options = ThemeOptions[config.options];
-    return {
-      type: "basicSelector",
-      label: fieldName,
-      optionGroups: options,
-      disableSearch: true,
-    };
-  }
-
-  // Use the basicSelector field behavior for searchable select inputs.
-  if (config.type === "select" && config.hasSearch) {
-    const options =
-      typeof config.options === "string"
-        ? ThemeOptions[config.options]
-        : config.options;
-    return {
-      type: "basicSelector",
-      label: fieldName,
-      options: options as any,
-    };
-  }
-
-  if (
-    (config.type === "select" || config.type === "radio") &&
-    typeof config.options === "string"
-  ) {
     return {
       label: fieldName,
       visible: config.visible,

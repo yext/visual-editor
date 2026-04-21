@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { DayOfWeekNames, HoursType } from "@yext/pages-components";
 import "@yext/pages-components/style.css";
 import { EntityField } from "../../editor/EntityField.tsx";
@@ -10,6 +10,7 @@ import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { Body } from "../atoms/body.tsx";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 /** Props for the HoursTable component. */
 export interface HoursTableProps {
@@ -43,16 +44,15 @@ export const HoursTableDataField = YextField<any, HoursType>(
   }
 );
 
+type HoursTableStyleFieldProps = Omit<HoursTableProps["styles"], "alignment">;
+
 // HoursTable style fields used in HoursTable and CoreInfoSection
-export const HoursTableStyleFields = {
-  startOfWeek: YextField<keyof DayOfWeekNames | "today">(
-    msg("fields.startOfTheWeek", "Start of the Week"),
-    {
-      type: "select",
-      hasSearch: true,
-      options: "HOURS_OPTIONS",
-    }
-  ),
+export const HoursTableStyleFields: YextFields<HoursTableStyleFieldProps> = {
+  startOfWeek: {
+    type: "basicSelector",
+    label: msg("fields.startOfTheWeek", "Start of the Week"),
+    options: "HOURS_OPTIONS",
+  },
   collapseDays: YextField<boolean>(
     msg("fields.collapseDays", "Collapse Days"),
     {
@@ -75,7 +75,7 @@ export const HoursTableStyleFields = {
   ),
 };
 
-export const hoursTableFields: Fields<HoursTableProps> = {
+export const hoursTableFields: YextFields<HoursTableProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
@@ -146,7 +146,7 @@ const VisualEditorHoursTable: PuckComponent<HoursTableProps> = (props) => {
   );
 };
 
-export const HoursTable: ComponentConfig<{ props: HoursTableProps }> = {
+export const HoursTable: YextComponentConfig<HoursTableProps> = {
   fields: hoursTableFields,
   defaultProps: {
     data: {

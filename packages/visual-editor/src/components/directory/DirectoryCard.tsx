@@ -1,4 +1,4 @@
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
+import { PuckComponent, Slot } from "@puckeditor/core";
 import React from "react";
 import { YextField } from "../../editor/YextField.tsx";
 import { useCardContext } from "../../hooks/useCardContext.tsx";
@@ -29,6 +29,7 @@ import {
   resolveDirectoryChildFromReference,
   useDirectoryChildren,
 } from "./directoryChildReference.tsx";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export const defaultDirectoryCardSlotData = (
   id: string,
@@ -363,17 +364,15 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
   );
 };
 
-const directoryCardFields: Fields<DirectoryCardProps> = {
+const directoryCardFields: YextFields<DirectoryCardProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
     },
   }),
   slots: {
@@ -388,9 +387,7 @@ const directoryCardFields: Fields<DirectoryCardProps> = {
   },
 };
 
-export const DirectoryCard: ComponentConfig<{
-  props: DirectoryCardProps;
-}> = {
+export const DirectoryCard: YextComponentConfig<DirectoryCardProps> = {
   label: msg("slots.directoryCard", "Directory Card"),
   fields: directoryCardFields,
   defaultProps: {

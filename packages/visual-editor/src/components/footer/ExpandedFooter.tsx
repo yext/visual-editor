@@ -1,11 +1,5 @@
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import {
-  ComponentConfig,
-  Fields,
-  Slot,
-  PuckComponent,
-  setDeep,
-} from "@puckeditor/core";
+import { Slot, PuckComponent, setDeep } from "@puckeditor/core";
 import { cva } from "class-variance-authority";
 import {
   backgroundColors,
@@ -24,6 +18,7 @@ import { FooterUtilityImagesSlotProps } from "./FooterUtilityImagesSlot.tsx";
 import { FooterLinksSlotProps } from "./FooterLinksSlot.tsx";
 import { FooterExpandedLinksWrapperProps } from "./FooterExpandedLinksWrapper.tsx";
 import { SecondaryFooterSlotProps } from "./SecondaryFooterSlot.tsx";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 const PLACEHOLDER_LOGO_IMAGE: string =
   "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg";
@@ -143,7 +138,7 @@ export interface ExpandedFooterProps {
   ignoreLocaleWarning?: string[];
 }
 
-const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
+const expandedFooterSectionFields: YextFields<ExpandedFooterProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
@@ -206,14 +201,11 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
       primaryFooter: YextField(msg("fields.primaryFooter", "Primary Footer"), {
         type: "object",
         objectFields: {
-          backgroundColor: YextField(
-            msg("fields.backgroundColor", "Background Color"),
-            {
-              type: "select",
-              hasSearch: true,
-              options: "BACKGROUND_COLOR",
-            }
-          ),
+          backgroundColor: {
+            type: "basicSelector",
+            label: msg("fields.backgroundColor", "Background Color"),
+            options: "BACKGROUND_COLOR",
+          },
           linksPosition: YextField(
             msg("fields.desktopLinkPosition", "Desktop Link Position"),
             {
@@ -428,7 +420,7 @@ const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = (props) => {
  * It includes a primary footer area for a logo, social media links, and utility images, and features two distinct layouts: a standard link list or an "expanded" multi-column mega-footer.
  * It also includes an optional secondary sub-footer for copyright notices and legal links.
  */
-export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
+export const ExpandedFooter: YextComponentConfig<ExpandedFooterProps> = {
   label: msg("components.expandedFooter", "Expanded Footer"),
   fields: expandedFooterSectionFields,
   defaultProps: {

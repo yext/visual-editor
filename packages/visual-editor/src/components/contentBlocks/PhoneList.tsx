@@ -13,8 +13,9 @@ import {
   PhoneStyleFields,
   PhoneProps,
 } from "./Phone.tsx";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { useTranslation } from "react-i18next";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export interface PhoneListProps {
   data: {
@@ -35,7 +36,7 @@ export interface PhoneListProps {
   };
 }
 
-export const phoneListFields: Fields<PhoneListProps> = {
+export const phoneListFields: YextFields<PhoneListProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
@@ -149,7 +150,7 @@ export const PhoneListComponent: PuckComponent<PhoneListProps> = (props) => {
   );
 };
 
-export const PhoneList: ComponentConfig<{ props: PhoneListProps }> = {
+export const PhoneList: YextComponentConfig<PhoneListProps> = {
   label: msg("components.phoneList", "Phone List"),
   fields: phoneListFields,
   resolveFields: (data) => resolveDataFromParent(phoneListFields, data),

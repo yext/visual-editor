@@ -17,20 +17,14 @@ import { ImgSizesByBreakpoint } from "../../atoms/image.tsx";
 import { themeManagerCn } from "../../../utils/cn.ts";
 import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  setDeep,
-  Slot,
-  WithId,
-} from "@puckeditor/core";
+import { PuckComponent, setDeep, Slot, WithId } from "@puckeditor/core";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
 import { TextProps } from "../../contentBlocks/Text.tsx";
 import { ProductSectionVariant } from "./ProductSection.tsx";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 const defaultProduct = {
   image: {
@@ -259,17 +253,15 @@ export type ProductCardProps = {
   index?: number;
 };
 
-const ProductCardFields: Fields<ProductCardProps> = {
+const ProductCardFields: YextFields<ProductCardProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
     },
   }),
   slots: {
@@ -444,7 +436,7 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
   );
 };
 
-export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
+export const ProductCard: YextComponentConfig<ProductCardProps> = {
   label: msg("slots.productCard", "Product Card"),
   fields: ProductCardFields,
   inline: true,
