@@ -13,6 +13,7 @@ import { applyTheme } from "../../utils/applyTheme.ts";
 import { ThemeData } from "../../internal/types/themeData.ts";
 
 const TEST_CSS_OVERRIDE_TAG_ID = "screenshot-test-overrides";
+const TEST_HOVER_SHIELD_ID = "screenshot-hover-shield";
 const originalConsoleError = console.error.bind(console);
 let hasLoggedActWarning = false;
 
@@ -117,6 +118,34 @@ const waitForStableScreenshotFrame = async () => {
   }
 };
 
+const clearInteractiveStateForScreenshot = async () => {
+  if (document.activeElement instanceof HTMLElement) {
+    document.activeElement.blur();
+  }
+
+  const existingShield = document.getElementById(TEST_HOVER_SHIELD_ID);
+  if (existingShield) {
+    existingShield.remove();
+  }
+
+  const hoverShield = document.createElement("div");
+  hoverShield.id = TEST_HOVER_SHIELD_ID;
+  Object.assign(hoverShield.style, {
+    position: "fixed",
+    inset: "0",
+    background: "transparent",
+    pointerEvents: "auto",
+    zIndex: "2147483647",
+    cursor: "default",
+  } satisfies Partial<CSSStyleDeclaration>);
+
+  document.body.appendChild(hoverShield);
+  await waitForNextFrame();
+  await waitForNextFrame();
+
+  return () => hoverShield.remove();
+};
+
 // Adds the toMatchScreenshot method to vitest's expect.
 // This portion is run in the browser environment while
 // compareScreenshot is run in the node environment.
@@ -138,14 +167,18 @@ expect.extend({
         `${document.body.offsetHeight}px`;
 
       await waitForStableScreenshotFrame();
+      const restoreInteractiveState =
+        await clearInteractiveStateForScreenshot();
 
-      const screenshot = await page.screenshot({
-        save: false,
-      });
-
-      // Reset to default screen height
-      (window.frameElement as HTMLIFrameElement).style.height = "";
-      return screenshot;
+      try {
+        return await page.screenshot({
+          save: false,
+        });
+      } finally {
+        restoreInteractiveState();
+        // Reset to default screen height
+        (window.frameElement as HTMLIFrameElement).style.height = "";
+      }
     });
 
     const { passes, numDiffPixels } = await commands.compareScreenshot(
