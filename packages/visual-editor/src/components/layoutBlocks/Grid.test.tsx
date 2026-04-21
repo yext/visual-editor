@@ -2235,7 +2235,7 @@ const tests: ComponentTest[] = [
       analytics: { scope: "gridSection" },
       align: "left",
     },
-    version: migrationRegistry.length,
+    version: layoutMigrationRegistry.length,
   },
 ];
 
