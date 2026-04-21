@@ -66,7 +66,7 @@ export interface FAQSectionProps {
 
   /** @internal */
   conditionalRender?: {
-    hasMappedContent: boolean;
+    isMappedContentEmpty?: boolean;
   };
 
   /**
@@ -228,7 +228,7 @@ export const FAQSection: ComponentConfig<{ props: FAQSectionProps }> = {
           props: {
             ...updatedData.props,
             conditionalRender: {
-              hasMappedContent: false,
+              isMappedContentEmpty: true,
             },
           },
         };
@@ -272,9 +272,7 @@ export const FAQSection: ComponentConfig<{ props: FAQSectionProps }> = {
         ...updatedData,
         props: {
           ...updatedData.props,
-          conditionalRender: {
-            hasMappedContent: true,
-          },
+          conditionalRender: undefined,
         },
       };
     } else {
@@ -334,9 +332,7 @@ export const FAQSection: ComponentConfig<{ props: FAQSectionProps }> = {
         ...updatedData,
         props: {
           ...updatedData.props,
-          conditionalRender: {
-            hasMappedContent: true,
-          },
+          conditionalRender: undefined,
         },
       };
     }
@@ -353,7 +349,7 @@ export const FAQSection: ComponentConfig<{ props: FAQSectionProps }> = {
           liveVisibility={props.liveVisibility}
           isEditing={props.puck.isEditing}
         >
-          {props.conditionalRender?.hasMappedContent === false ? (
+          {props.conditionalRender?.isMappedContentEmpty ? (
             props.puck.isEditing ? (
               <EntityFieldSectionEmptyState
                 backgroundColor={props.styles.backgroundColor}

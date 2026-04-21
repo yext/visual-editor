@@ -64,7 +64,7 @@ type DirectSectionCase = {
   emptyDocument: Record<string, any>;
   populatedDocument: Record<string, any>;
   createRenderProps: (options: {
-    hasMappedContent: boolean;
+    isMappedContentEmpty: boolean;
     isEditing: boolean;
   }) => Record<string, any>;
   visibleContentText: string;
@@ -103,12 +103,14 @@ const directSectionCases: DirectSectionCase[] = [
         ],
       },
     },
-    createRenderProps: ({ hasMappedContent, isEditing }) => {
+    createRenderProps: ({ isMappedContentEmpty, isEditing }) => {
       const props = cloneValue(FAQSection.defaultProps!);
       return {
         ...props,
         id: "FAQSection-test",
-        conditionalRender: { hasMappedContent },
+        conditionalRender: isMappedContentEmpty
+          ? { isMappedContentEmpty: true }
+          : undefined,
         puck: { isEditing },
         slots: {
           HeadingSlot: createSectionHeadingSlot(),
@@ -152,20 +154,22 @@ const directSectionCases: DirectSectionCase[] = [
         },
       ],
     },
-    createRenderProps: ({ hasMappedContent, isEditing }) => {
+    createRenderProps: ({ isMappedContentEmpty, isEditing }) => {
       const props = cloneValue(PhotoGallerySection.defaultProps!);
       return {
         ...props,
         id: "PhotoGallerySection-test",
-        conditionalRender: { hasMappedContent },
+        conditionalRender: isMappedContentEmpty
+          ? { isMappedContentEmpty: true }
+          : undefined,
         puck: { isEditing },
         slots: {
           HeadingSlot: createSectionHeadingSlot(),
           PhotoGalleryWrapper: createCardsSlot(
-            hasMappedContent ? (
-              "Gallery Images"
-            ) : (
+            isMappedContentEmpty ? (
               <EntityFieldSectionEmptyStateBox showEmptyStateMarker />
+            ) : (
+              "Gallery Images"
             )
           ),
         },
@@ -197,7 +201,7 @@ describe.each(directSectionCases)(
         } as any
       ) as any;
 
-      expect(resolved.props.conditionalRender.hasMappedContent).toBe(false);
+      expect(resolved.props.conditionalRender?.isMappedContentEmpty).toBe(true);
     });
 
     it("keeps mapped sections visible when entity data exists", () => {
@@ -213,7 +217,7 @@ describe.each(directSectionCases)(
         } as any
       ) as any;
 
-      expect(resolved.props.conditionalRender.hasMappedContent).toBe(true);
+      expect(resolved.props.conditionalRender).toBeUndefined();
     });
 
     it("does not auto-hide constant-value mode", () => {
@@ -229,7 +233,7 @@ describe.each(directSectionCases)(
         } as any
       ) as any;
 
-      expect(resolved.props.conditionalRender.hasMappedContent).toBe(true);
+      expect(resolved.props.conditionalRender).toBeUndefined();
     });
   }
 );
@@ -241,7 +245,7 @@ describe.each(directSectionCases)(
       const result = renderSection({
         sectionConfig,
         props: createRenderProps({
-          hasMappedContent: false,
+          isMappedContentEmpty: true,
           isEditing: false,
         }),
       });
@@ -255,7 +259,7 @@ describe.each(directSectionCases)(
       const result = renderSection({
         sectionConfig,
         props: createRenderProps({
-          hasMappedContent: false,
+          isMappedContentEmpty: true,
           isEditing: true,
         }),
       });
@@ -272,7 +276,7 @@ describe.each(directSectionCases)(
       const result = renderSection({
         sectionConfig,
         props: createRenderProps({
-          hasMappedContent: true,
+          isMappedContentEmpty: false,
           isEditing: false,
         }),
       });
@@ -441,7 +445,7 @@ describe.each(wrapperCases)(
         } as any
       ) as any;
 
-      expect(resolved.props.conditionalRender.hasMappedContent).toBe(false);
+      expect(resolved.props.conditionalRender?.isMappedContentEmpty).toBe(true);
       expect(resolved.props.slots.CardSlot).toEqual([]);
     });
 
@@ -458,7 +462,7 @@ describe.each(wrapperCases)(
         } as any
       ) as any;
 
-      expect(resolved.props.conditionalRender.hasMappedContent).toBe(true);
+      expect(resolved.props.conditionalRender).toBeUndefined();
       expect(resolved.props.slots.CardSlot.length).toBeGreaterThan(0);
     });
 
@@ -475,7 +479,7 @@ describe.each(wrapperCases)(
         } as any
       ) as any;
 
-      expect(resolved.props.conditionalRender.hasMappedContent).toBe(true);
+      expect(resolved.props.conditionalRender).toBeUndefined();
     });
 
     it("renders an empty-state marker when mapped data is empty", () => {
@@ -483,7 +487,7 @@ describe.each(wrapperCases)(
         <>
           {wrapperConfig.render?.({
             ...createMappedWrapperProps(wrapperConfig, mappedField),
-            conditionalRender: { hasMappedContent: false },
+            conditionalRender: { isMappedContentEmpty: true },
             puck: { isEditing: false },
             slots: {
               CardSlot: createCardsSlot("Cards"),

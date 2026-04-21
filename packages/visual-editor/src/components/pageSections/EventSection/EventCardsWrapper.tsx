@@ -29,7 +29,7 @@ export type EventCardsWrapperProps = CardWrapperType<EventSectionType> & {
 
   /** @internal */
   conditionalRender?: {
-    hasMappedContent: boolean;
+    isMappedContentEmpty?: boolean;
   };
 };
 
@@ -127,11 +127,15 @@ export const EventCardsWrapper: ComponentConfig<{
 
       if (!resolvedEvents?.length) {
         const updatedData = setDeep(data, "props.slots.CardSlot", []);
-        return setDeep(
-          updatedData,
-          "props.conditionalRender.hasMappedContent",
-          false
-        );
+        return {
+          ...updatedData,
+          props: {
+            ...updatedData.props,
+            conditionalRender: {
+              isMappedContentEmpty: true,
+            },
+          },
+        };
       }
 
       const requiredLength = resolvedEvents.length;
@@ -168,11 +172,13 @@ export const EventCardsWrapper: ComponentConfig<{
           } satisfies EventCardProps["parentData"]);
         })
       );
-      return setDeep(
-        updatedData,
-        "props.conditionalRender.hasMappedContent",
-        true
-      );
+      return {
+        ...updatedData,
+        props: {
+          ...updatedData.props,
+          conditionalRender: undefined,
+        },
+      };
     } else {
       // STATIC VALUES
       let updatedData = data;
@@ -232,15 +238,17 @@ export const EventCardsWrapper: ComponentConfig<{
         "props.data.constantValue",
         newSlots.map((card) => ({ id: card.props.id }))
       );
-      return setDeep(
-        updatedData,
-        "props.conditionalRender.hasMappedContent",
-        true
-      );
+      return {
+        ...updatedData,
+        props: {
+          ...updatedData.props,
+          conditionalRender: undefined,
+        },
+      };
     }
   },
   render: (props) => {
-    if (props.conditionalRender?.hasMappedContent === false) {
+    if (props.conditionalRender?.isMappedContentEmpty) {
       return props.puck.isEditing ? (
         <EntityFieldSectionEmptyStateBox showEmptyStateMarker />
       ) : (

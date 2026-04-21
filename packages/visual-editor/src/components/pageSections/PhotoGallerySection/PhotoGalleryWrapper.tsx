@@ -79,11 +79,6 @@ export interface PhotoGalleryWrapperProps {
   parentData?: {
     variant: "gallery" | "carousel";
   };
-
-  /** @internal */
-  conditionalRender?: {
-    hasMappedContent: boolean;
-  };
 }
 
 const photoGalleryWrapperFields: Fields<PhotoGalleryWrapperProps> = {

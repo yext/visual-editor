@@ -277,7 +277,7 @@ interface FAQSectionProps {
   };
   /** @internal */
   conditionalRender?: {
-    hasMappedContent: boolean;
+    isMappedContentEmpty?: boolean;
   };
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
@@ -402,7 +402,7 @@ interface PhotoGallerySectionProps {
   };
   /** @internal */
   conditionalRender?: {
-    hasMappedContent: boolean;
+    isMappedContentEmpty?: boolean;
   };
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.

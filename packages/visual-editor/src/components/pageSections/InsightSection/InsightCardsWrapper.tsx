@@ -33,7 +33,7 @@ export type InsightCardsWrapperProps = CardWrapperType<InsightSectionType> & {
 
   /** @internal */
   conditionalRender?: {
-    hasMappedContent: boolean;
+    isMappedContentEmpty?: boolean;
   };
 };
 
@@ -139,11 +139,15 @@ export const InsightCardsWrapper: ComponentConfig<{
 
       if (!resolvedInsights?.length) {
         const updatedData = setDeep(data, "props.slots.CardSlot", []);
-        return setDeep(
-          updatedData,
-          "props.conditionalRender.hasMappedContent",
-          false
-        );
+        return {
+          ...updatedData,
+          props: {
+            ...updatedData.props,
+            conditionalRender: {
+              isMappedContentEmpty: true,
+            },
+          },
+        };
       }
 
       const requiredLength = resolvedInsights.length;
@@ -180,11 +184,13 @@ export const InsightCardsWrapper: ComponentConfig<{
             } satisfies InsightCardProps["parentData"]);
           })
       );
-      return setDeep(
-        updatedData,
-        "props.conditionalRender.hasMappedContent",
-        true
-      );
+      return {
+        ...updatedData,
+        props: {
+          ...updatedData.props,
+          conditionalRender: undefined,
+        },
+      };
     } else {
       let updatedData = data;
       const inUseIds = new Set<string>();
@@ -233,15 +239,17 @@ export const InsightCardsWrapper: ComponentConfig<{
         "props.data.constantValue",
         newSlots.map((card) => ({ id: card.props.id }))
       );
-      return setDeep(
-        updatedData,
-        "props.conditionalRender.hasMappedContent",
-        true
-      );
+      return {
+        ...updatedData,
+        props: {
+          ...updatedData.props,
+          conditionalRender: undefined,
+        },
+      };
     }
   },
   render: (props) => {
-    if (props.conditionalRender?.hasMappedContent === false) {
+    if (props.conditionalRender?.isMappedContentEmpty) {
       return props.puck.isEditing ? (
         <EntityFieldSectionEmptyStateBox showEmptyStateMarker />
       ) : (

@@ -38,7 +38,7 @@ export type ProductCardsWrapperProps = CardWrapperType<ProductSectionType> & {
 
   /** @internal */
   conditionalRender?: {
-    hasMappedContent: boolean;
+    isMappedContentEmpty?: boolean;
   };
 };
 
@@ -147,11 +147,15 @@ export const ProductCardsWrapper: ComponentConfig<{
 
       if (!resolvedProducts?.length) {
         const updatedData = setDeep(data, "props.slots.CardSlot", []);
-        return setDeep(
-          updatedData,
-          "props.conditionalRender.hasMappedContent",
-          false
-        );
+        return {
+          ...updatedData,
+          props: {
+            ...updatedData.props,
+            conditionalRender: {
+              isMappedContentEmpty: true,
+            },
+          },
+        };
       }
 
       const requiredLength = resolvedProducts.length;
@@ -187,11 +191,13 @@ export const ProductCardsWrapper: ComponentConfig<{
           } satisfies ProductCardProps["parentData"]);
         })
       );
-      return setDeep(
-        updatedData,
-        "props.conditionalRender.hasMappedContent",
-        true
-      );
+      return {
+        ...updatedData,
+        props: {
+          ...updatedData.props,
+          conditionalRender: undefined,
+        },
+      };
     } else {
       // STATIC VALUES
       let updatedData = data;
@@ -250,15 +256,17 @@ export const ProductCardsWrapper: ComponentConfig<{
         "props.data.constantValue",
         newSlots.map((card) => ({ id: card.props.id }))
       );
-      return setDeep(
-        updatedData,
-        "props.conditionalRender.hasMappedContent",
-        true
-      );
+      return {
+        ...updatedData,
+        props: {
+          ...updatedData.props,
+          conditionalRender: undefined,
+        },
+      };
     }
   },
   render: (props) => {
-    if (props.conditionalRender?.hasMappedContent === false) {
+    if (props.conditionalRender?.isMappedContentEmpty) {
       return props.puck.isEditing ? (
         <EntityFieldSectionEmptyStateBox showEmptyStateMarker />
       ) : (

@@ -1,11 +1,9 @@
-import * as React from "react";
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
+import { ComponentConfig, Fields, Slot } from "@puckeditor/core";
 import {
   ThemeColor,
   backgroundColors,
 } from "../../../utils/themeConfigOptions.ts";
 import { YextField } from "../../../editor/YextField.tsx";
-import { PageSection } from "../../atoms/pageSection.tsx";
 import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
@@ -15,10 +13,11 @@ import { ComponentErrorBoundary } from "../../../internal/components/ComponentEr
 import { EventCardsWrapperProps } from "./EventCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import {
-  isMappedCardWrapperEmpty,
-  isMappedCardWrapperSelected,
-} from "../entityFieldSectionUtils.ts";
-import { useMappedEntitySectionEmptyState } from "../useMappedEntitySectionEmptyState.ts";
+  getMappedCardsSectionConditionalRender,
+  MappedCardsSectionConditionalRender,
+  MappedCardsSectionContent,
+  MappedCardsSectionShell,
+} from "../mappedCardsSectionUtils.tsx";
 
 export interface EventSectionProps {
   /**
@@ -51,10 +50,7 @@ export interface EventSectionProps {
   };
 
   /** @internal */
-  conditionalRender?: {
-    watchForMappedContentEmptyState: boolean;
-    initialMappedContentEmpty?: boolean;
-  };
+  conditionalRender?: MappedCardsSectionConditionalRender;
 
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
@@ -110,29 +106,6 @@ const eventSectionFields: Fields<EventSectionProps> = {
       ],
     }
   ),
-};
-
-const EventSectionWrapper: PuckComponent<
-  EventSectionProps & {
-    setCardsWrapperRef?: (element: HTMLDivElement | null) => void;
-  }
-> = (props) => {
-  const { styles, slots } = props;
-  const { setCardsWrapperRef } = props;
-
-  return (
-    <PageSection
-      background={styles?.backgroundColor}
-      className="flex flex-col gap-8"
-    >
-      {styles.showSectionHeading && (
-        <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
-      )}
-      <div ref={setCardsWrapperRef}>
-        <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
-      </div>
-    </PageSection>
-  );
 };
 
 /**
@@ -196,39 +169,17 @@ export const EventSection: ComponentConfig<{ props: EventSectionProps }> = {
   },
   resolveData: (data) => {
     const updatedData = forwardHeadingLevel(data, "TitleSlot");
-    const cardsWrapperSlot = updatedData.props.slots.CardsWrapperSlot?.[0];
-    const watchForMappedContentEmptyState =
-      isMappedCardWrapperSelected(cardsWrapperSlot);
-    const initialMappedContentEmpty =
-      isMappedCardWrapperEmpty(cardsWrapperSlot);
-
     return {
       ...updatedData,
       props: {
         ...updatedData.props,
-        conditionalRender: {
-          watchForMappedContentEmptyState,
-          initialMappedContentEmpty,
-        },
+        conditionalRender: getMappedCardsSectionConditionalRender(
+          updatedData.props.slots.CardsWrapperSlot?.[0]
+        ),
       },
     };
   },
   render: (props) => {
-    const watchForMappedContentEmptyState =
-      props.conditionalRender?.watchForMappedContentEmptyState ?? false;
-    const initialMappedContentEmpty =
-      props.conditionalRender?.initialMappedContentEmpty ?? false;
-    const { setWrapperRef, isMappedContentEmpty } =
-      useMappedEntitySectionEmptyState({
-        enabled: watchForMappedContentEmptyState,
-        initialIsMappedContentEmpty: initialMappedContentEmpty,
-      });
-    const hiddenObservedWrapper = (
-      <div ref={setWrapperRef} className="hidden" aria-hidden="true">
-        <props.slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
-      </div>
-    );
-
     return (
       <ComponentErrorBoundary
         isEditing={props.puck.isEditing}
@@ -241,16 +192,21 @@ export const EventSection: ComponentConfig<{ props: EventSectionProps }> = {
             liveVisibility={props.liveVisibility}
             isEditing={props.puck.isEditing}
           >
-            {watchForMappedContentEmptyState &&
-            isMappedContentEmpty &&
-            !props.puck.isEditing ? (
-              hiddenObservedWrapper
-            ) : (
-              <EventSectionWrapper
-                {...props}
-                setCardsWrapperRef={setWrapperRef}
-              />
-            )}
+            <MappedCardsSectionShell
+              conditionalRender={props.conditionalRender}
+              isEditing={props.puck.isEditing}
+              CardsWrapperSlot={props.slots.CardsWrapperSlot}
+            >
+              {(setCardsWrapperRef) => (
+                <MappedCardsSectionContent
+                  backgroundColor={props.styles?.backgroundColor}
+                  showSectionHeading={props.styles.showSectionHeading}
+                  SectionHeadingSlot={props.slots.SectionHeadingSlot}
+                  CardsWrapperSlot={props.slots.CardsWrapperSlot}
+                  setCardsWrapperRef={setCardsWrapperRef}
+                />
+              )}
+            </MappedCardsSectionShell>
           </VisibilityWrapper>
         </AnalyticsScopeProvider>
       </ComponentErrorBoundary>

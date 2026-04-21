@@ -30,7 +30,7 @@ export type TeamCardsWrapperProps = CardWrapperType<TeamSectionType> & {
 
   /** @internal */
   conditionalRender?: {
-    hasMappedContent: boolean;
+    isMappedContentEmpty?: boolean;
   };
 };
 
@@ -134,11 +134,15 @@ export const TeamCardsWrapper: ComponentConfig<{
 
       if (!resolvedTeam?.length) {
         const updatedData = setDeep(data, "props.slots.CardSlot", []);
-        return setDeep(
-          updatedData,
-          "props.conditionalRender.hasMappedContent",
-          false
-        );
+        return {
+          ...updatedData,
+          props: {
+            ...updatedData.props,
+            conditionalRender: {
+              isMappedContentEmpty: true,
+            },
+          },
+        };
       }
 
       const requiredLength = resolvedTeam.length;
@@ -172,21 +176,25 @@ export const TeamCardsWrapper: ComponentConfig<{
           } satisfies TeamCardProps["parentData"]);
         })
       );
-      return setDeep(
-        updatedData,
-        "props.conditionalRender.hasMappedContent",
-        true
-      );
+      return {
+        ...updatedData,
+        props: {
+          ...updatedData.props,
+          conditionalRender: undefined,
+        },
+      };
     } else {
       let updatedData = data;
 
       if (!Array.isArray(data.props.data.constantValue)) {
         updatedData = setDeep(updatedData, "props.data.constantValue", []);
-        return setDeep(
-          updatedData,
-          "props.conditionalRender.hasMappedContent",
-          true
-        );
+        return {
+          ...updatedData,
+          props: {
+            ...updatedData.props,
+            conditionalRender: undefined,
+          },
+        };
       }
 
       const inUseIds = new Set<string>();
@@ -237,15 +245,17 @@ export const TeamCardsWrapper: ComponentConfig<{
         "props.data.constantValue",
         newSlots.map((card) => ({ id: card.props.id }))
       );
-      return setDeep(
-        updatedData,
-        "props.conditionalRender.hasMappedContent",
-        true
-      );
+      return {
+        ...updatedData,
+        props: {
+          ...updatedData.props,
+          conditionalRender: undefined,
+        },
+      };
     }
   },
   render: (props) => {
-    if (props.conditionalRender?.hasMappedContent === false) {
+    if (props.conditionalRender?.isMappedContentEmpty) {
       return props.puck.isEditing ? (
         <EntityFieldSectionEmptyStateBox showEmptyStateMarker />
       ) : (

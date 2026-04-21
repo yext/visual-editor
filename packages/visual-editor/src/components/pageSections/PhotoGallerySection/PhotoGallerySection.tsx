@@ -72,7 +72,7 @@ export interface PhotoGallerySectionProps {
 
   /** @internal */
   conditionalRender?: {
-    hasMappedContent: boolean;
+    isMappedContentEmpty?: boolean;
   };
 
   /**
@@ -287,12 +287,11 @@ export const PhotoGallerySection: ComponentConfig<{
       ...updatedData,
       props: {
         ...updatedData.props,
-        conditionalRender: {
-          hasMappedContent:
-            !isMappedEntityFieldSelected(
-              photoGalleryWrapperProps?.data?.images
-            ) || hasRenderableImages,
-        },
+        conditionalRender:
+          isMappedEntityFieldSelected(photoGalleryWrapperProps?.data?.images) &&
+          !hasRenderableImages
+            ? { isMappedContentEmpty: true }
+            : undefined,
       },
     };
   },
@@ -305,7 +304,7 @@ export const PhotoGallerySection: ComponentConfig<{
         liveVisibility={props.liveVisibility}
         isEditing={props.puck.isEditing}
       >
-        {props.conditionalRender?.hasMappedContent === false &&
+        {props.conditionalRender?.isMappedContentEmpty &&
         !props.puck.isEditing ? (
           <></>
         ) : (
