@@ -58,7 +58,11 @@ import { toast } from "sonner";
 import { isLinkedEntityFieldPath } from "./linkedEntityFieldUtils.ts";
 
 const devLogger = new DevLogger();
-const warnedLinkedEntityFieldPaths = new Set<string>();
+const warnedLinkedEntityFieldPathsByDocument = new Map<any, Set<string>>();
+
+export const resetWarnedLinkedEntityFieldPaths = () => {
+  warnedLinkedEntityFieldPathsByDocument.clear();
+};
 
 type RenderProps = Parameters<CustomField<any>["render"]>[0];
 type ConstantFieldConfig<ValueType = any> =
@@ -535,6 +539,13 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     }
 
     const resolution = resolveField(streamDocument, value.field);
+    const warnedLinkedEntityFieldPaths =
+      warnedLinkedEntityFieldPathsByDocument.get(streamDocument) ??
+      new Set<string>();
+    warnedLinkedEntityFieldPathsByDocument.set(
+      streamDocument,
+      warnedLinkedEntityFieldPaths
+    );
     if (
       !resolution.traversedMultiValueReference ||
       warnedLinkedEntityFieldPaths.has(value.field)

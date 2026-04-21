@@ -9,6 +9,7 @@ import { type StreamFields } from "../types/entityFields.ts";
 import {
   ConstantValueInput,
   EntityFieldInput,
+  resetWarnedLinkedEntityFieldPaths,
   type TypeSelectorConfigProps,
 } from "./YextEntityFieldSelector.tsx";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
@@ -356,6 +357,7 @@ describe("YextEntityFieldSelector", () => {
 
   it("warns once when a linked entity field resolves through multiple references", () => {
     warningToast.mockClear();
+    resetWarnedLinkedEntityFieldPaths();
 
     const props = {
       filter: { types: ["type.string"] },

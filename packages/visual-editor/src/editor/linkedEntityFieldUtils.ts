@@ -85,7 +85,7 @@ export const isLinkedEntityFieldPath = (
   }
 
   const [referenceFieldName] = fieldPath.split(".");
-  return !!linkedEntitySchemas[referenceFieldName];
+  return Object.hasOwn(linkedEntitySchemas, referenceFieldName);
 };
 
 /**

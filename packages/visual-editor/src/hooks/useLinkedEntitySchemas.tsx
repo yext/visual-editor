@@ -50,7 +50,7 @@ const useLinkedEntitySchemas = () => {
   const context = React.useContext(LinkedEntitySchemasContext);
   if (context === undefined) {
     throw new Error(
-      "useLinkedEntitySchemas must be used within VisualEditorProvider"
+      "useLinkedEntitySchemas must be used within LinkedEntitySchemasContext.Provider"
     );
   }
 

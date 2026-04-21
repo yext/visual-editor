@@ -205,9 +205,9 @@ export const resolveField = <T>(
     return { value: undefined, traversedMultiValueReference: false };
   }
 
+  let traversedMultiValueReference = false;
   try {
     const levels: string[] = fieldName.split(".");
-    let traversedMultiValueReference = false;
     let current = document;
     for (let i = 0; i < levels.length; i++) {
       if (Array.isArray(current)) {
@@ -231,7 +231,7 @@ export const resolveField = <T>(
 
     return { value: current, traversedMultiValueReference };
   } catch (e) {
-    console.error("Error in findField:", e);
+    console.error("Error in resolveField:", e);
   }
-  return { value: undefined, traversedMultiValueReference: false };
+  return { value: undefined, traversedMultiValueReference };
 };
