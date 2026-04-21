@@ -72,6 +72,7 @@ import { directoryGridBackgroundStyles } from "./0070_directory_grid_background_
 import { themeColorPropertyKeyMigration } from "./0071_theme_color_property_keys.ts";
 import { footerAlignmentAndVisibilityPropsMigration } from "./0072_footer_alignment_and_visibility_props.ts";
 import { mainContentWrapperMigration } from "./0073_main_content_wrapper.ts";
+import { flattenLocatorResultCardSingleSelectFields } from "./0074_flatten_locator_result_card_single_select_fields.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -152,4 +153,5 @@ export const migrationRegistry: MigrationRegistry = [
   themeColorPropertyKeyMigration,
   footerAlignmentAndVisibilityPropsMigration,
   mainContentWrapperMigration,
+  flattenLocatorResultCardSingleSelectFields,
 ];

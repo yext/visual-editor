@@ -1,11 +1,5 @@
 import { useTranslation } from "react-i18next";
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  setDeep,
-  Slot,
-} from "@puckeditor/core";
+import { PuckComponent, setDeep, Slot } from "@puckeditor/core";
 import "pure-react-carousel/dist/react-carousel.es.css";
 import {
   backgroundColors,
@@ -26,8 +20,8 @@ import {
   getPhotoGalleryImageData,
   PhotoGalleryImageValue,
 } from "./photoGalleryUtils.ts";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
-// Generate 3 random placeholder images for the gallery
 export const PLACEHOLDER: AssetImageType = {
   ...getRandomPlaceholderImageObject({ width: 1000, height: 570 }),
   width: 1000,
@@ -38,30 +32,12 @@ export const PLACEHOLDER: AssetImageType = {
 };
 
 export interface PhotoGalleryStyles {
-  /**
-   * The background color for the entire section, selected from the theme.
-   * @defaultValue Background Color 1
-   */
   backgroundColor?: ThemeColor;
-
-  /**
-   * The layout style for displaying images in the gallery.
-   * @defaultValue "gallery"
-   */
   variant: "gallery" | "carousel";
-
-  /**
-   * Whether to show the section heading
-   * @defaultValue true
-   */
   showSectionHeading: boolean;
 }
 
 export interface PhotoGallerySectionProps {
-  /**
-   * This object contains properties for customizing the component's appearance.
-   * @propCategory Style Props
-   */
   styles: PhotoGalleryStyles;
 
   /** @internal */
@@ -75,26 +51,21 @@ export interface PhotoGallerySectionProps {
     isMappedContentEmpty?: boolean;
   };
 
-  /**
-   * If 'true', the component is visible on the live page; if 'false', it's hidden.
-   * @defaultValue true
-   */
   liveVisibility: boolean;
 }
 
-const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
+const photoGallerySectionFields: YextFields<PhotoGallerySectionProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
-      variant: YextField(msg("fields.variant", "Variant"), {
-        type: "select",
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
+      variant: {
+        type: "basicSelector",
+        label: msg("fields.variant", "Variant"),
         options: [
           { label: msg("fields.options.gallery", "Gallery"), value: "gallery" },
           {
@@ -102,7 +73,7 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
             value: "carousel",
           },
         ],
-      }),
+      },
       showSectionHeading: YextField(
         msg("fields.showSectionHeading", "Show Section Heading"),
         {
@@ -152,165 +123,131 @@ const PhotoGallerySectionComponent: PuckComponent<PhotoGallerySectionProps> = ({
   );
 };
 
-/**
- * The Photo Gallery Section is designed to display a collection of images in a visually appealing format. It consists of a main heading for the section and a flexible grid of images, with options for styling the image presentation.
- * Available on Location templates.
- */
-export const PhotoGallerySection: ComponentConfig<{
-  props: PhotoGallerySectionProps;
-}> = {
-  label: msg("components.photoGallerySection", "Photo Gallery Section"),
-  fields: photoGallerySectionFields,
-  defaultProps: {
-    styles: {
-      variant: "gallery",
-      backgroundColor: backgroundColors.background1.value,
-      showSectionHeading: true,
-    },
-    slots: {
-      HeadingSlot: [
-        {
-          type: "HeadingTextSlot",
-          props: {
-            data: {
-              text: {
-                field: "",
-                constantValue: { defaultValue: "Gallery" },
-                constantValueEnabled: true,
-              },
-            },
-            styles: {
-              level: 2,
-              align: "left",
-            },
-          } satisfies HeadingTextProps,
-        },
-      ],
-      PhotoGalleryWrapper: [
-        {
-          type: "PhotoGalleryWrapper",
-          props: {
-            data: {
-              images: {
-                field: "",
-                constantValue: [
-                  {
-                    assetImage: {
-                      ...getRandomPlaceholderImageObject({
-                        width: 1000,
-                        height: 570,
-                      }),
-                      width: 1000,
-                      height: 570,
-                      assetImage: { name: "Placeholder" },
-                    },
-                  },
-                  {
-                    assetImage: {
-                      ...getRandomPlaceholderImageObject({
-                        width: 1000,
-                        height: 570,
-                      }),
-                      width: 1000,
-                      height: 570,
-                      assetImage: { name: "Placeholder" },
-                    },
-                  },
-                  {
-                    assetImage: {
-                      ...getRandomPlaceholderImageObject({
-                        width: 1000,
-                        height: 570,
-                      }),
-                      width: 1000,
-                      height: 570,
-                      assetImage: { name: "Placeholder" },
-                    },
-                  },
-                ],
-                constantValueEnabled: true,
-              },
-            },
-            styles: {
-              image: {
-                aspectRatio: 1.78,
-              },
-              imageFillType: "fill",
-              carouselImageCount: 1,
-            },
-            parentData: {
-              variant: "gallery",
-            },
-          } satisfies PhotoGalleryWrapperProps,
-        },
-      ],
-    },
-    liveVisibility: true,
-  },
-  resolveData(data, params) {
-    let updatedData = data;
-
-    if (
-      data.props.slots.PhotoGalleryWrapper[0]?.props.parentData?.variant !==
-      data.props.styles.variant
-    ) {
-      updatedData = setDeep(
-        data,
-        "props.slots.PhotoGalleryWrapper[0].props.parentData.variant",
-        data.props.styles.variant
-      );
-    }
-
-    const photoGalleryWrapperProps = updatedData.props.slots
-      .PhotoGalleryWrapper[0]?.props as unknown as
-      | PhotoGalleryWrapperProps
-      | undefined;
-    const streamDocument = params.metadata.streamDocument;
-    const locale = streamDocument?.locale ?? "en";
-    const resolvedImages = photoGalleryWrapperProps?.data?.images
-      ? (resolveComponentData(
-          photoGalleryWrapperProps.data.images as any,
-          locale,
-          streamDocument
-        ) as unknown as PhotoGalleryImageValue[] | undefined)
-      : undefined;
-    const { hasRenderableImages } = getPhotoGalleryImageData({
-      resolvedImages,
-      locale,
-      streamDocument,
-      aspectRatio: photoGalleryWrapperProps?.styles?.image?.aspectRatio,
-      width: photoGalleryWrapperProps?.styles?.image?.width,
-      isEditing: false,
-    });
-
-    return {
-      ...updatedData,
-      props: {
-        ...updatedData.props,
-        conditionalRender:
-          isMappedEntityFieldSelected(photoGalleryWrapperProps?.data?.images) &&
-          !hasRenderableImages
-            ? { isMappedContentEmpty: true }
-            : undefined,
+export const PhotoGallerySection: YextComponentConfig<PhotoGallerySectionProps> =
+  {
+    label: msg("components.photoGallerySection", "Photo Gallery Section"),
+    fields: photoGallerySectionFields,
+    defaultProps: {
+      styles: {
+        variant: "gallery",
+        backgroundColor: backgroundColors.background1.value,
+        showSectionHeading: true,
       },
-    };
-  },
-  render: (props) => (
-    <ComponentErrorBoundary
-      isEditing={props.puck.isEditing}
-      resetKeys={[props]}
-    >
-      <VisibilityWrapper
-        liveVisibility={props.liveVisibility}
+      slots: {
+        HeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              data: {
+                text: {
+                  field: "",
+                  constantValue: { defaultValue: "Gallery" },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                level: 2,
+                align: "left",
+              },
+            } satisfies HeadingTextProps,
+          },
+        ],
+        PhotoGalleryWrapper: [
+          {
+            type: "PhotoGalleryWrapper",
+            props: {
+              data: {
+                images: {
+                  field: "",
+                  constantValue: [
+                    { assetImage: PLACEHOLDER },
+                    { assetImage: PLACEHOLDER },
+                    { assetImage: PLACEHOLDER },
+                  ],
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                image: {
+                  aspectRatio: 1.78,
+                },
+                imageFillType: "fill",
+                carouselImageCount: 1,
+              },
+              parentData: {
+                variant: "gallery",
+              },
+            } satisfies PhotoGalleryWrapperProps,
+          },
+        ],
+      },
+      liveVisibility: true,
+    },
+    resolveData(data, params) {
+      let updatedData = data;
+
+      if (
+        data.props.slots.PhotoGalleryWrapper[0]?.props.parentData?.variant !==
+        data.props.styles.variant
+      ) {
+        updatedData = setDeep(
+          data,
+          "props.slots.PhotoGalleryWrapper[0].props.parentData.variant",
+          data.props.styles.variant
+        );
+      }
+
+      const photoGalleryWrapperProps = updatedData.props.slots
+        .PhotoGalleryWrapper[0]?.props as unknown as
+        | PhotoGalleryWrapperProps
+        | undefined;
+      const streamDocument = params.metadata.streamDocument;
+      const locale = streamDocument?.locale ?? "en";
+      const resolvedImages = photoGalleryWrapperProps?.data?.images
+        ? (resolveComponentData(
+            photoGalleryWrapperProps.data.images as any,
+            locale,
+            streamDocument
+          ) as unknown as PhotoGalleryImageValue[] | undefined)
+        : undefined;
+      const { hasRenderableImages } = getPhotoGalleryImageData({
+        resolvedImages,
+        locale,
+        streamDocument,
+        aspectRatio: photoGalleryWrapperProps?.styles?.image?.aspectRatio,
+        width: photoGalleryWrapperProps?.styles?.image?.width,
+        isEditing: false,
+      });
+
+      return {
+        ...updatedData,
+        props: {
+          ...updatedData.props,
+          conditionalRender:
+            isMappedEntityFieldSelected(
+              photoGalleryWrapperProps?.data?.images
+            ) && !hasRenderableImages
+              ? { isMappedContentEmpty: true }
+              : undefined,
+        },
+      };
+    },
+    render: (props) => (
+      <ComponentErrorBoundary
         isEditing={props.puck.isEditing}
+        resetKeys={[props]}
       >
-        {props.conditionalRender?.isMappedContentEmpty &&
-        !props.puck.isEditing ? (
-          <></>
-        ) : (
-          <PhotoGallerySectionComponent {...props} />
-        )}
-      </VisibilityWrapper>
-    </ComponentErrorBoundary>
-  ),
-};
+        <VisibilityWrapper
+          liveVisibility={props.liveVisibility}
+          isEditing={props.puck.isEditing}
+        >
+          {props.conditionalRender?.isMappedContentEmpty &&
+          !props.puck.isEditing ? (
+            <></>
+          ) : (
+            <PhotoGallerySectionComponent {...props} />
+          )}
+        </VisibilityWrapper>
+      </ComponentErrorBoundary>
+    ),
+  };

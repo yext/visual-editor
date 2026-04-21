@@ -6,7 +6,7 @@ import {
 import { DevLogger } from "./devLogger.ts";
 import {
   defaultFonts,
-  extractInUseFontFamilies,
+  filterInUseFontRegistries,
   createFontLinkElements,
   generateGoogleFontLinkData,
   fontLinkDataToHTML,
@@ -16,8 +16,8 @@ import {
 } from "./fonts/visualEditorFonts.ts";
 import {
   buildFontPreloadTags,
-  getCustomFontPreloads,
-} from "../internal/utils/customFontPreloads.ts";
+  getCustomFontAssets,
+} from "../internal/utils/customFontAssets.ts";
 import { ThemeConfig } from "./themeResolver.ts";
 import { getContrastingColor } from "./colors.ts";
 import fontFallbackTransformations from "./fonts/fontFallbackTransformations.json" with { type: "json" };
@@ -26,6 +26,31 @@ import { StreamDocument } from "./types/StreamDocument.ts";
 export const THEME_STYLE_TAG_ID = "visual-editor-theme";
 export const PUCK_PREVIEW_IFRAME_ID = "preview-frame";
 const devLogger = new DevLogger();
+
+const resolveFontsToLoad = (
+  themeValues: ThemeData,
+  themeConfig: ThemeConfig,
+  customFonts: FontRegistry = {}
+) => {
+  const mergedThemeData = {
+    ...generateCssVariablesFromThemeConfig(themeConfig),
+    ...themeValues,
+  };
+  const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
+    mergedThemeData,
+    defaultFonts,
+    customFonts
+  );
+
+  return {
+    inUseGoogleFonts,
+    inUseCustomFonts,
+    googleFontsToLoad:
+      Object.keys(inUseGoogleFonts).length === 0
+        ? { "Open Sans": defaultFonts["Open Sans"] }
+        : inUseGoogleFonts,
+  };
+};
 
 export const applyTheme = (
   document: StreamDocument,
@@ -52,31 +77,24 @@ export const applyTheme = (
   // Load only fonts that are actually used in the theme
   let fontLinkData: FontLinkData[];
   const fallbackFontFaceDefinitions: string[] = [];
+  const customFontAssets = getCustomFontAssets(overrides);
   if (!overrides) {
     // No theme overrides, use only Open Sans (the default font)
     fontLinkData = generateGoogleFontLinkData({
       "Open Sans": defaultFonts["Open Sans"],
     });
   } else {
-    // Extract fonts from both published theme data AND default theme values
-    // This ensures we get all fonts that are actually used, not just the ones that were explicitly changed
-    const defaultThemeValues = generateCssVariablesFromThemeConfig(themeConfig);
-    const mergedThemeData = { ...defaultThemeValues, ...overrides };
-    const { inUseGoogleFonts, inUseCustomFonts } = extractInUseFontFamilies(
-      mergedThemeData,
-      defaultFonts
+    const { inUseGoogleFonts, googleFontsToLoad } = resolveFontsToLoad(
+      overrides,
+      themeConfig
     );
 
-    if (Object.keys(inUseGoogleFonts).length === 0) {
-      // No fonts found in theme data, use only Open Sans
-      fontLinkData = generateGoogleFontLinkData({
-        "Open Sans": defaultFonts["Open Sans"],
-      });
-    } else {
-      fontLinkData = generateGoogleFontLinkData(inUseGoogleFonts);
-    }
+    fontLinkData = generateGoogleFontLinkData(googleFontsToLoad);
     fontLinkData = [
-      ...generateCustomFontLinkData(inUseCustomFonts, relativePrefixToRoot),
+      ...generateCustomFontLinkData(
+        customFontAssets.stylesheetPaths,
+        relativePrefixToRoot
+      ),
       ...fontLinkData,
     ];
 
@@ -95,9 +113,8 @@ export const applyTheme = (
   const fontLinkTags = fontLinkDataToHTML(fontLinkData);
 
   if (Object.keys(themeConfig).length > 0) {
-    const customFontPreloads = getCustomFontPreloads(overrides);
     const preloadTags = buildFontPreloadTags(
-      customFontPreloads,
+      customFontAssets.preloads,
       relativePrefixToRoot
     );
 
@@ -163,7 +180,7 @@ const generateContrastingColors = (themeData: ThemeData) => {
 const updateFontLinksInDocument = (
   document: Document,
   fonts: FontRegistry,
-  customFonts: string[]
+  customFonts: FontRegistry
 ) => {
   // Remove only theme-specific font links, preserve default fonts
   const existingLinks = document.querySelectorAll(
@@ -171,7 +188,7 @@ const updateFontLinksInDocument = (
   );
   existingLinks.forEach((link) => link.remove());
 
-  if (Object.keys(fonts).length + customFonts.length > 0) {
+  if (Object.keys(fonts).length + Object.keys(customFonts).length > 0) {
     const links = createFontLinkElements(fonts, customFonts);
     links.forEach((link) => {
       document.head.appendChild(link);
@@ -185,16 +202,16 @@ let pendingObserver: MutationObserver | null = null;
 export const updateThemeInEditor = async (
   newTheme: ThemeData,
   themeConfig: ThemeConfig,
-  isThemeMode: boolean
+  isThemeMode: boolean,
+  customFonts: FontRegistry = {}
 ) => {
   devLogger.logFunc("updateThemeInEditor");
   pendingObserver?.disconnect();
 
-  const defaultThemeValues = generateCssVariablesFromThemeConfig(themeConfig);
-  const mergedThemeData = { ...defaultThemeValues, ...newTheme };
-  const { inUseGoogleFonts, inUseCustomFonts } = extractInUseFontFamilies(
-    mergedThemeData,
-    defaultFonts
+  const { inUseCustomFonts, googleFontsToLoad } = resolveFontsToLoad(
+    newTheme,
+    themeConfig,
+    customFonts
   );
 
   const newThemeTag = internalApplyTheme(newTheme, themeConfig);
@@ -206,16 +223,11 @@ export const updateThemeInEditor = async (
   // In the theme editor, all fonts are already loaded
   // In the layout editor, we need to load the in-use fonts after the Puck iframe has loaded
   if (!isThemeMode) {
-    let fontsToLoad: FontRegistry;
-    if (Object.keys(inUseGoogleFonts).length === 0) {
-      fontsToLoad = {
-        "Open Sans": defaultFonts["Open Sans"],
-      };
-    } else {
-      fontsToLoad = inUseGoogleFonts;
-    }
-
-    updateFontLinksInDocument(window.document, fontsToLoad, inUseCustomFonts);
+    updateFontLinksInDocument(
+      window.document,
+      googleFontsToLoad,
+      inUseCustomFonts
+    );
 
     const observer = new MutationObserver(() => {
       const iframe = document.getElementById(
@@ -230,7 +242,7 @@ export const updateThemeInEditor = async (
         pagePreviewStyleTag.innerText = newThemeTag;
         updateFontLinksInDocument(
           iframe.contentDocument!,
-          fontsToLoad,
+          googleFontsToLoad,
           inUseCustomFonts
         );
       }

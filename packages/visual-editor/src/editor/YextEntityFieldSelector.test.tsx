@@ -6,6 +6,7 @@ import { TemplateMetadataContext } from "../internal/hooks/useMessageReceivers.t
 import { generateTemplateMetadata } from "../internal/types/templateMetadata.ts";
 import { type StreamFields } from "../types/entityFields.ts";
 import {
+  ConstantValueInput,
   EntityFieldInput,
   type TypeSelectorConfigProps,
 } from "./YextEntityFieldSelector.tsx";
@@ -169,5 +170,33 @@ describe("YextEntityFieldSelector", () => {
 
     expect(screen.getAllByText("Location Field").length).toBeGreaterThan(0);
     expect(screen.queryByText("Name")).toBeNull();
+  });
+
+  it("renders datetime constant values through the registered Yext field type", () => {
+    const onChange = vi.fn();
+
+    render(
+      <ConstantValueInput
+        filter={{ types: ["type.datetime"] }}
+        onChange={onChange}
+        value={{ constantValue: "2026-04-15T09:30" }}
+      />
+    );
+
+    expect(
+      (screen.getByDisplayValue("2026-04-15T09:30") as HTMLInputElement).type
+    ).toBe("datetime-local");
+    expect(screen.queryByText("Value")).toBeNull();
+
+    fireEvent.change(screen.getByDisplayValue("2026-04-15T09:30"), {
+      target: { value: "2026-06-01T13:45" },
+    });
+
+    expect(onChange).toHaveBeenCalledWith(
+      {
+        constantValue: "2026-06-01T13:45",
+      },
+      undefined
+    );
   });
 });

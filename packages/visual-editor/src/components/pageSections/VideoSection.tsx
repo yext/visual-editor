@@ -1,4 +1,4 @@
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
+import { PuckComponent, Slot } from "@puckeditor/core";
 import {
   backgroundColors,
   ThemeColor,
@@ -8,7 +8,7 @@ import { PageSection } from "../atoms/pageSection.tsx";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
 import { YextField } from "../../editor/YextField.tsx";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
-
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 export interface VideoSectionProps {
   /**
    * This object contains properties for customizing the component's appearance.
@@ -34,17 +34,15 @@ export interface VideoSectionProps {
   liveVisibility: boolean;
 }
 
-const videoSectionFields: Fields<VideoSectionProps> = {
+const videoSectionFields: YextFields<VideoSectionProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
     },
   }),
   slots: {
@@ -82,9 +80,7 @@ const VideoSectionComponent: PuckComponent<VideoSectionProps> = (props) => {
  * The Video Section is used to display an embedded YouTube video.
  * Available on Location templates.
  */
-export const VideoSection: ComponentConfig<{
-  props: VideoSectionProps;
-}> = {
+export const VideoSection: YextComponentConfig<VideoSectionProps> = {
   label: msg("components.videoSection", "Video Section"),
   fields: videoSectionFields,
   defaultProps: {

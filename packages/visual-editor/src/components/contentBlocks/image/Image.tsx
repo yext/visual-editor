@@ -1,9 +1,4 @@
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  setDeep,
-} from "@puckeditor/core";
+import { PuckComponent, setDeep } from "@puckeditor/core";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 import {
   AssetImageType,
@@ -29,6 +24,7 @@ import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { EmptyImageState } from "./EmptyImageState.tsx";
 import { ImageStylingFields, ImageStylingProps } from "./styling.ts";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 const DEFAULT_LINK = "#";
@@ -63,7 +59,7 @@ export interface ImageWrapperProps {
   showImageConstrain?: boolean;
 }
 
-export const ImageWrapperFields: Fields<ImageWrapperProps> = {
+export const ImageWrapperFields: YextFields<ImageWrapperProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
@@ -245,7 +241,7 @@ export const imageDefaultProps = {
   allowWidthProp: true,
 };
 
-export const ImageWrapper: ComponentConfig<{ props: ImageWrapperProps }> = {
+export const ImageWrapper: YextComponentConfig<ImageWrapperProps> = {
   label: msg("components.image", "Image"),
   inline: true,
   fields: ImageWrapperFields,

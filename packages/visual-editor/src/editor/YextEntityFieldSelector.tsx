@@ -1,7 +1,12 @@
 import React from "react";
-import { AutoField, FieldLabel, Field, CustomField } from "@puckeditor/core";
+import { FieldLabel, Field, CustomField } from "@puckeditor/core";
 import { type BasicSelectorField } from "../fields/BasicSelectorField.tsx";
+import {
+  YextPuckFieldOverrides,
+  type YextPuckFields,
+} from "../fields/fields.ts";
 import { YextAutoField } from "../fields/YextAutoField.tsx";
+import { DATE_TIME_CONSTANT_CONFIG } from "../fields/DateTimeSelectorField.tsx";
 import {
   ConstantValueTypes,
   EntityFieldTypes,
@@ -40,7 +45,6 @@ import { Switch } from "../internal/puck/ui/switch.tsx";
 import { pt } from "../utils/i18n/platform.ts";
 import { useTranslation } from "react-i18next";
 import { EmbeddedFieldStringInputFromEntity } from "./EmbeddedFieldStringInput.tsx";
-import { DATE_TIME_CONSTANT_CONFIG } from "../internal/puck/components/DateTimeSelector.tsx";
 import { FAQ_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/FAQsSection.tsx";
 import {
   getFieldsForSelector,
@@ -51,6 +55,15 @@ import { type ComboboxOption } from "../internal/types/combobox.ts";
 const devLogger = new DevLogger();
 
 type RenderProps = Parameters<CustomField<any>["render"]>[0];
+type ConstantFieldConfig<ValueType = any> =
+  | Field<ValueType>
+  | YextPuckFields[keyof YextPuckFields];
+
+const isYextPuckFieldType = (
+  type: string
+): type is keyof typeof YextPuckFieldOverrides => {
+  return type in YextPuckFieldOverrides;
+};
 
 export type { YextEntityField } from "./yextEntityFieldUtils.ts";
 
@@ -81,7 +94,7 @@ export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
     typeSelectorConfig?: TypeSelectorConfigProps;
   };
 
-export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
+export const TYPE_TO_CONSTANT_CONFIG: Record<string, ConstantFieldConfig> = {
   "type.string": TRANSLATABLE_STRING_CONSTANT_CONFIG,
   "type.rich_text_v2": TRANSLATABLE_RICH_TEXT_CONSTANT_CONFIG,
   "type.phone": PHONE_CONSTANT_CONFIG,
@@ -100,21 +113,27 @@ export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   },
 };
 
-const LIST_TYPE_TO_CONSTANT_CONFIG = (): Record<string, Field<any>> => {
+const LIST_TYPE_TO_CONSTANT_CONFIG = (): Record<
+  string,
+  ConstantFieldConfig
+> => {
   return {
     "type.string": TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG,
     "type.image": IMAGE_LIST_CONSTANT_CONFIG(),
   };
 };
 
-const TYPE_TO_NON_TRANSLATABLE_CONSTANT_CONFIG: Record<string, Field<any>> = {
+const TYPE_TO_NON_TRANSLATABLE_CONSTANT_CONFIG: Record<
+  string,
+  ConstantFieldConfig
+> = {
   "type.string": TEXT_CONSTANT_CONFIG,
   "type.rich_text_v2": TEXT_CONSTANT_CONFIG,
 };
 
 const LIST_TYPE_TO_NON_TRANSLATABLE_CONSTANT_CONFIG: Record<
   string,
-  Field<any>
+  ConstantFieldConfig
 > = {
   "type.string": TEXT_LIST_CONSTANT_CONFIG,
   "type.rich_text_v2": TEXT_LIST_CONSTANT_CONFIG,
@@ -124,7 +143,7 @@ export const getConstantConfigFromType = (
   type: ConstantValueTypes,
   isList?: boolean,
   disallowTranslation?: boolean
-): Field<any> | undefined => {
+): ConstantFieldConfig | undefined => {
   if (isList) {
     if (disallowTranslation) {
       return (
@@ -155,12 +174,12 @@ const returnConstantFieldConfig = (
   typeFilter: EntityFieldTypes[] | undefined,
   isList: boolean,
   disallowTranslation: boolean
-): Field | undefined => {
+): ConstantFieldConfig | undefined => {
   if (!typeFilter) {
     return undefined;
   }
 
-  let fieldConfiguration: Field | undefined;
+  let fieldConfiguration: ConstantFieldConfig | undefined;
   for (const entityFieldType of typeFilter) {
     const mappedConfiguration = getConstantConfigFromType(
       entityFieldType,
@@ -374,7 +393,7 @@ export const ConstantValueInput = <T extends Record<string, any>>({
       />
     </div>
   ) : (
-    <AutoField
+    <YextAutoField
       key={value?.selectedType} // reset when type changes
       onChange={(newConstantValue, uiState) =>
         onChange(
@@ -390,7 +409,8 @@ export const ConstantValueInput = <T extends Record<string, any>>({
     />
   );
 
-  return constantFieldConfig.type === "custom" ? (
+  return constantFieldConfig.type === "custom" ||
+    isYextPuckFieldType(constantFieldConfig.type) ? (
     fieldEditor
   ) : (
     <FieldLabel

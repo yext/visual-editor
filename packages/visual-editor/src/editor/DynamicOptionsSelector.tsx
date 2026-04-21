@@ -1,5 +1,8 @@
-import { ArrayField, AutoField, UiState, Field } from "@puckeditor/core";
+import { UiState, Field } from "@puckeditor/core";
+import { YextAutoField } from "../fields/YextAutoField.tsx";
 import { pt } from "../utils/i18n/platform.ts";
+import { YextArrayField } from "./YextField.tsx";
+import { BasicSelectorField } from "../fields/BasicSelectorField.tsx";
 
 export type DynamicOptionValueTypes = string | number | boolean | object;
 
@@ -16,12 +19,6 @@ interface DynamicOptionSelection<T extends DynamicOptionValueTypes> {
 
 export interface DynamicOptionsSelectorType<T extends DynamicOptionValueTypes> {
   selections: DynamicOptionSelection<T>[];
-}
-
-export interface DynamicOptionsSingleSelectorType<
-  T extends DynamicOptionValueTypes,
-> {
-  selection: DynamicOptionSelection<T>;
 }
 
 export interface DynamicOption<T extends DynamicOptionValueTypes> {
@@ -66,7 +63,7 @@ export const DynamicOptionsSelector = <T extends DynamicOptionValueTypes>(
           <div className="ve-mb-2 ve-text-sm ve-font-medium ve-leading-none">
             {pt(props.label)}
           </div>
-          <AutoField
+          <YextAutoField
             id={id ? `${id}_selections` : undefined}
             readOnly={readOnly}
             field={DynamicOptionsArrayField(
@@ -88,87 +85,11 @@ export const DynamicOptionsSelector = <T extends DynamicOptionValueTypes>(
   };
 };
 
-/**
- * A single selector component for dynamic options. The options can be loaded from a function that
- * uses hooks.
- */
-export const DynamicOptionsSingleSelector = <T extends DynamicOptionValueTypes>(
-  props: DynamicOptionsSelectorProps<T>
-): Field<DynamicOptionsSingleSelectorType<T> | undefined> => {
-  return {
-    type: "custom",
-    render: ({
-      value,
-      onChange,
-      id,
-      readOnly,
-    }: {
-      value: DynamicOptionsSingleSelectorType<T> | undefined;
-      onChange: (
-        value: DynamicOptionsSingleSelectorType<T> | undefined,
-        uiState?: Partial<UiState>
-      ) => void;
-      id?: string;
-      readOnly?: boolean;
-    }) => {
-      const allOptions = props.getOptions();
-      const selectedValue = value?.selection ?? { value: undefined };
-      return (
-        <div className="ve-pt-3">
-          <div className="ve-mb-2 ve-text-sm ve-font-medium ve-leading-none">
-            {pt(props.label)}
-          </div>
-          <AutoField
-            id={id ? `${id}_selection` : undefined}
-            readOnly={readOnly}
-            field={DynamicOptionsSingleSelectField(
-              allOptions,
-              props.dropdownLabel,
-              props.placeholderOptionLabel
-            )}
-            value={selectedValue.value}
-            onChange={(newValue, uiState) =>
-              onChange(
-                newValue !== undefined
-                  ? { selection: { value: newValue } }
-                  : undefined,
-                uiState
-              )
-            }
-          />
-        </div>
-      );
-    },
-  };
-};
-
-const DynamicOptionsSingleSelectField = <T extends DynamicOptionValueTypes>(
-  options: DynamicOption<T>[],
-  dropdownLabel: string,
-  placeholderOptionLabel?: string
-): Field<T | undefined> => {
-  const dropdownOptions = options.map((opt) => ({
-    label: opt.label,
-    value: opt.value,
-  }));
-  if (placeholderOptionLabel) {
-    dropdownOptions.unshift({
-      label: placeholderOptionLabel,
-      value: undefined,
-    });
-  }
-  return {
-    label: dropdownLabel,
-    type: "select" as const,
-    options: dropdownOptions,
-  };
-};
-
 const DynamicOptionsArrayField = <T extends DynamicOptionValueTypes>(
   options: DynamicOption<T>[],
   dropdownLabel: string,
   placeholderOptionLabel?: string
-): ArrayField<DynamicOptionSelection<T>[]> => {
+): YextArrayField<DynamicOptionSelection<T>[]> => {
   const dropdownOptions = options.map((opt) => ({
     label: opt.label,
     value: opt.value,
@@ -179,9 +100,9 @@ const DynamicOptionsArrayField = <T extends DynamicOptionValueTypes>(
       value: undefined,
     });
   }
-  const dropdownField = {
+  const dropdownField: BasicSelectorField = {
     label: dropdownLabel,
-    type: "select" as const,
+    type: "basicSelector",
     options: dropdownOptions,
   };
 

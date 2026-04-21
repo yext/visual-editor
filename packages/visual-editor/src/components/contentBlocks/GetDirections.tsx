@@ -1,4 +1,4 @@
-import { ComponentConfig, Fields, setDeep } from "@puckeditor/core";
+import { setDeep } from "@puckeditor/core";
 import "@yext/pages-components/style.css";
 import { ThemeColor } from "../../utils/themeConfigOptions.ts";
 import { CTA, CTAVariant, isCtaVariantWithColor } from "../atoms/cta.tsx";
@@ -6,21 +6,23 @@ import { YextField } from "../../editor/YextField.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import { useTranslation } from "react-i18next";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export type GetDirectionsProps = {
   variant: CTAVariant;
   color?: ThemeColor;
 };
 
-const getDirectionsFields: Fields<GetDirectionsProps> = {
+const getDirectionsFields: YextFields<GetDirectionsProps> = {
   variant: YextField(msg("fields.variant", "Variant"), {
     type: "radio",
     options: "CTA_VARIANT",
   }),
-  color: YextField(msg("fields.color", "Color"), {
-    type: "select",
+  color: {
+    type: "basicSelector",
+    label: msg("fields.color", "Color"),
     options: "SITE_COLOR",
-  }),
+  },
 };
 
 const GetDirectionsComponent = ({ variant, color }: GetDirectionsProps) => {
@@ -41,7 +43,7 @@ const GetDirectionsComponent = ({ variant, color }: GetDirectionsProps) => {
   );
 };
 
-export const GetDirections: ComponentConfig<{ props: GetDirectionsProps }> = {
+export const GetDirections: YextComponentConfig<GetDirectionsProps> = {
   label: msg("components.getDirections", "Get Directions"),
   fields: getDirectionsFields,
   defaultProps: {

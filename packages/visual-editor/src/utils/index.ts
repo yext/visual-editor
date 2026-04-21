@@ -43,6 +43,7 @@ export {
   defaultFonts,
   getFontWeightOptions,
   getFontWeightOverrideOptions,
+  type Font,
   type FontRegistry,
 } from "./fonts/visualEditorFonts.ts";
 export { withPropOverrides } from "./withPropOverrides.ts";

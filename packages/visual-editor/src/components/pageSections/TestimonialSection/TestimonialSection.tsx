@@ -1,4 +1,4 @@
-import { ComponentConfig, Fields, Slot } from "@puckeditor/core";
+import { Slot } from "@puckeditor/core";
 import {
   ThemeColor,
   backgroundColors,
@@ -19,23 +19,11 @@ import {
   MappedCardsSectionContent,
   MappedCardsSectionShell,
 } from "../mappedCardsSectionUtils.tsx";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 export interface TestimonialSectionProps {
-  /**
-   * This object contains properties for customizing the component's appearance.
-   * @propCategory Style Props
-   */
   styles: {
-    /**
-     * The background color of the section.
-     * @defaultValue Background Color 2
-     */
     backgroundColor?: ThemeColor;
-
-    /**
-     * Whether to show the section heading.
-     * @defaultValue true
-     */
     showSectionHeading: boolean;
   };
 
@@ -53,24 +41,18 @@ export interface TestimonialSectionProps {
   /** @internal */
   conditionalRender?: MappedCardsSectionConditionalRender;
 
-  /**
-   * If 'true', the component is visible on the live page; if 'false', it's hidden.
-   * @defaultValue true
-   */
   liveVisibility: boolean;
 }
 
-const testimonialSectionFields: Fields<TestimonialSectionProps> = {
+const testimonialSectionFields: YextFields<TestimonialSectionProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
       showSectionHeading: YextField(
         msg("fields.showSectionHeading", "Show Section Heading"),
         {
@@ -109,79 +91,73 @@ const testimonialSectionFields: Fields<TestimonialSectionProps> = {
   ),
 };
 
-/**
- * The Testimonial Section is used to display a list of customer testimonials or reviews. It features a main section heading and renders each testimonial as an individual card, providing social proof and building trust with visitors.
- * Available on Location templates.
- */
-export const TestimonialSection: ComponentConfig<{
-  props: TestimonialSectionProps;
-}> = {
-  label: msg("components.testimonialsSection", "Testimonials Section"),
-  fields: testimonialSectionFields,
-  defaultProps: {
-    styles: {
-      backgroundColor: backgroundColors.background2.value,
-      showSectionHeading: true,
-    },
-    slots: {
-      SectionHeadingSlot: [
-        {
-          type: "HeadingTextSlot",
-          props: {
-            data: {
-              text: {
-                constantValue: { defaultValue: "Featured Testimonials" },
-                constantValueEnabled: true,
-                field: "",
-              },
-            },
-            styles: { level: 2, align: "left" },
-          } satisfies HeadingTextProps,
-        },
-      ],
-      CardsWrapperSlot: [
-        {
-          type: "TestimonialCardsWrapper",
-          props: {
-            data: {
-              field: "",
-              constantValueEnabled: true,
-              constantValue: [{}, {}, {}],
-            },
-            slots: {
-              CardSlot: [
-                defaultTestimonialCardSlotData(undefined, 0),
-                defaultTestimonialCardSlotData(undefined, 1),
-                defaultTestimonialCardSlotData(undefined, 2),
-              ],
-            },
-            styles: {
-              showName: true,
-              showDate: true,
-            },
-          } satisfies TestimonialCardsWrapperProps,
-        },
-      ],
-    },
-    analytics: {
-      scope: "testimonialSection",
-    },
-    liveVisibility: true,
-  },
-  resolveData: (data) => {
-    const updatedData = forwardHeadingLevel(data, "ContributorNameSlot");
-    return {
-      ...updatedData,
-      props: {
-        ...updatedData.props,
-        conditionalRender: getMappedCardsSectionConditionalRender(
-          updatedData.props.slots.CardsWrapperSlot?.[0]
-        ),
+export const TestimonialSection: YextComponentConfig<TestimonialSectionProps> =
+  {
+    label: msg("components.testimonialsSection", "Testimonials Section"),
+    fields: testimonialSectionFields,
+    defaultProps: {
+      styles: {
+        backgroundColor: backgroundColors.background2.value,
+        showSectionHeading: true,
       },
-    };
-  },
-  render: (props) => {
-    return (
+      slots: {
+        SectionHeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              data: {
+                text: {
+                  constantValue: { defaultValue: "Featured Testimonials" },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: { level: 2, align: "left" },
+            } satisfies HeadingTextProps,
+          },
+        ],
+        CardsWrapperSlot: [
+          {
+            type: "TestimonialCardsWrapper",
+            props: {
+              data: {
+                field: "",
+                constantValueEnabled: true,
+                constantValue: [{}, {}, {}],
+              },
+              slots: {
+                CardSlot: [
+                  defaultTestimonialCardSlotData(undefined, 0),
+                  defaultTestimonialCardSlotData(undefined, 1),
+                  defaultTestimonialCardSlotData(undefined, 2),
+                ],
+              },
+              styles: {
+                showName: true,
+                showDate: true,
+              },
+            } satisfies TestimonialCardsWrapperProps,
+          },
+        ],
+      },
+      analytics: {
+        scope: "testimonialSection",
+      },
+      liveVisibility: true,
+    },
+    resolveData: (data) => {
+      const updatedData = forwardHeadingLevel(data, "ContributorNameSlot");
+      return {
+        ...updatedData,
+        props: {
+          ...updatedData.props,
+          conditionalRender: getMappedCardsSectionConditionalRender(
+            updatedData.props.slots.CardsWrapperSlot?.[0]
+          ),
+        },
+      };
+    },
+    render: (props) => (
       <ComponentErrorBoundary
         isEditing={props.puck.isEditing}
         resetKeys={[props]}
@@ -211,6 +187,5 @@ export const TestimonialSection: ComponentConfig<{
           </VisibilityWrapper>
         </AnalyticsScopeProvider>
       </ComponentErrorBoundary>
-    );
-  },
-};
+    ),
+  };

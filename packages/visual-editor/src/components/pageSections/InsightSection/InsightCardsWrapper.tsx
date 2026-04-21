@@ -7,12 +7,7 @@ import {
   cardWrapperFields,
   CardWrapperType,
 } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
-import {
-  ComponentConfig,
-  ComponentData,
-  PuckComponent,
-  setDeep,
-} from "@puckeditor/core";
+import { ComponentData, PuckComponent, setDeep } from "@puckeditor/core";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import {
   defaultInsightCardSlotData,
@@ -21,6 +16,7 @@ import {
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
 import { EntityFieldSectionEmptyStateBox } from "../EntityFieldSectionEmptyState.tsx";
+import { YextComponentConfig } from "../../../fields/fields.ts";
 
 export type InsightCardsWrapperProps = CardWrapperType<InsightSectionType> & {
   styles: {
@@ -90,108 +86,107 @@ const InsightCardsWrapperComponent: PuckComponent<InsightCardsWrapperProps> = (
   );
 };
 
-export const InsightCardsWrapper: ComponentConfig<{
-  props: InsightCardsWrapperProps;
-}> = {
-  label: msg("slots.insightCards", "Insight Cards"),
-  fields: insightCardsWrapperFields,
-  defaultProps: {
-    data: {
-      field: "",
-      constantValueEnabled: true,
-      constantValue: [],
+export const InsightCardsWrapper: YextComponentConfig<InsightCardsWrapperProps> =
+  {
+    label: msg("slots.insightCards", "Insight Cards"),
+    fields: insightCardsWrapperFields,
+    defaultProps: {
+      data: {
+        field: "",
+        constantValueEnabled: true,
+        constantValue: [],
+      },
+      styles: {
+        showImage: true,
+        showCategory: true,
+        showPublishTime: true,
+        showDescription: true,
+        showCTA: true,
+      },
+      slots: {
+        CardSlot: [],
+      },
     },
-    styles: {
-      showImage: true,
-      showCategory: true,
-      showPublishTime: true,
-      showDescription: true,
-      showCTA: true,
-    },
-    slots: {
-      CardSlot: [],
-    },
-  },
-  resolveData: (data, params) => {
-    const streamDocument = params.metadata.streamDocument;
-    const sharedCardProps =
-      data.props.slots.CardSlot.length === 0
-        ? undefined
-        : {
-            backgroundColor:
-              data.props.slots.CardSlot[0].props.styles.backgroundColor,
-            slotStyles: gatherSlotStyles(
-              data.props.slots.CardSlot[0].props.slots
-            ),
+    resolveData: (data, params) => {
+      const streamDocument = params.metadata.streamDocument;
+      const sharedCardProps =
+        data.props.slots.CardSlot.length === 0
+          ? undefined
+          : {
+              backgroundColor:
+                data.props.slots.CardSlot[0].props.styles.backgroundColor,
+              slotStyles: gatherSlotStyles(
+                data.props.slots.CardSlot[0].props.slots
+              ),
+            };
+
+      if (!data.props.data.constantValueEnabled && data.props.data.field) {
+        const resolvedInsights = resolveYextEntityField<
+          InsightSectionType | { insights: undefined }
+        >(
+          streamDocument,
+          {
+            ...data.props.data,
+            constantValue: { insights: undefined },
+          },
+          i18nComponentsInstance.language || "en"
+        )?.insights;
+
+        if (!resolvedInsights?.length) {
+          const updatedData = setDeep(data, "props.slots.CardSlot", []);
+          return {
+            ...updatedData,
+            props: {
+              ...updatedData.props,
+              conditionalRender: {
+                isMappedContentEmpty: true,
+              },
+            },
           };
+        }
 
-    if (!data.props.data.constantValueEnabled && data.props.data.field) {
-      const resolvedInsights = resolveYextEntityField<
-        InsightSectionType | { insights: undefined }
-      >(
-        streamDocument,
-        {
-          ...data.props.data,
-          constantValue: { insights: undefined },
-        },
-        i18nComponentsInstance.language || "en"
-      )?.insights;
+        const requiredLength = resolvedInsights.length;
+        const currentLength = data.props.slots.CardSlot.length;
+        const cardsToAdd =
+          currentLength < requiredLength
+            ? Array(requiredLength - currentLength)
+                .fill(null)
+                .map(() =>
+                  defaultInsightCardSlotData(
+                    `InsightCard-${crypto.randomUUID()}`,
+                    undefined,
+                    sharedCardProps?.backgroundColor,
+                    sharedCardProps?.slotStyles
+                  )
+                )
+            : [];
+        const updatedCardSlot = [
+          ...data.props.slots.CardSlot,
+          ...cardsToAdd,
+        ].slice(0, requiredLength);
 
-      if (!resolvedInsights?.length) {
-        const updatedData = setDeep(data, "props.slots.CardSlot", []);
+        const updatedData = setDeep(
+          data,
+          "props.slots.CardSlot",
+          updatedCardSlot
+            .map((card, i) => setDeep(card, "props.index", i))
+            .map((card, i) =>
+              setDeep(card, "props.parentData", {
+                field: data.props.data.field,
+                insight: resolvedInsights[i],
+              } satisfies InsightCardProps["parentData"])
+            )
+        );
+
         return {
           ...updatedData,
           props: {
             ...updatedData.props,
-            conditionalRender: {
-              isMappedContentEmpty: true,
-            },
+            conditionalRender: undefined,
           },
         };
       }
 
-      const requiredLength = resolvedInsights.length;
-      const currentLength = data.props.slots.CardSlot.length;
-      const cardsToAdd =
-        currentLength < requiredLength
-          ? Array(requiredLength - currentLength)
-              .fill(null)
-              .map(() =>
-                defaultInsightCardSlotData(
-                  `InsightCard-${crypto.randomUUID()}`,
-                  undefined,
-                  sharedCardProps?.backgroundColor,
-                  sharedCardProps?.slotStyles
-                )
-              )
-          : [];
-      const updatedCardSlot = [
-        ...data.props.slots.CardSlot,
-        ...cardsToAdd,
-      ].slice(0, requiredLength);
-
-      const updatedData = setDeep(
-        data,
-        "props.slots.CardSlot",
-        updatedCardSlot
-          .map((card, i) => {
-            return setDeep(card, "props.index", i);
-          })
-          .map((card, i) => {
-            return setDeep(card, "props.parentData", {
-              field: data.props.data.field,
-              insight: resolvedInsights[i],
-            } satisfies InsightCardProps["parentData"]);
-          })
-      );
-      return {
-        ...updatedData,
-        props: {
-          ...updatedData.props,
-          conditionalRender: undefined,
-        },
-      };
-    } else {
       let updatedData = data;
       const inUseIds = new Set<string>();
       const newSlots = data.props.data.constantValue.map(({ id }, i) => {
@@ -239,6 +234,7 @@ export const InsightCardsWrapper: ComponentConfig<{
         "props.data.constantValue",
         newSlots.map((card) => ({ id: card.props.id }))
       );
+
       return {
         ...updatedData,
         props: {
@@ -246,17 +242,16 @@ export const InsightCardsWrapper: ComponentConfig<{
           conditionalRender: undefined,
         },
       };
-    }
-  },
-  render: (props) => {
-    if (props.conditionalRender?.isMappedContentEmpty) {
-      return props.puck.isEditing ? (
-        <EntityFieldSectionEmptyStateBox showEmptyStateMarker />
-      ) : (
-        <div data-empty-state="true" />
-      );
-    }
+    },
+    render: (props) => {
+      if (props.conditionalRender?.isMappedContentEmpty) {
+        return props.puck.isEditing ? (
+          <EntityFieldSectionEmptyStateBox showEmptyStateMarker />
+        ) : (
+          <div data-empty-state="true" />
+        );
+      }
 
-    return <InsightCardsWrapperComponent {...props} />;
-  },
-};
+      return <InsightCardsWrapperComponent {...props} />;
+    },
+  };

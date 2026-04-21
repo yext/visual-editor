@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { Body, BodyProps } from "../../atoms/body.tsx";
 import {
   FAQStruct,
@@ -24,6 +24,7 @@ import { useTranslation } from "react-i18next";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { ThemeColor } from "../../../utils/themeConfigOptions.ts";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 const defaultFAQ = {
   question: { defaultValue: "Question Lorem ipsum dolor sit amet?" },
@@ -91,7 +92,7 @@ export type FAQCardProps = {
   index?: number;
 };
 
-const FAQCardFields: Fields<FAQCardProps> = {
+const FAQCardFields: YextFields<FAQCardProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
@@ -123,10 +124,11 @@ const FAQCardFields: Fields<FAQCardProps> = {
         type: "radio",
         options: "BODY_VARIANT",
       }),
-      answerColor: YextField(msg("fields.answerColor", "Answer Color"), {
-        type: "select",
+      answerColor: {
+        type: "basicSelector",
+        label: msg("fields.answerColor", "Answer Color"),
         options: "SITE_COLOR",
-      }),
+      },
     },
   }),
   slots: {
@@ -265,7 +267,7 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
   );
 };
 
-export const FAQCard: ComponentConfig<{ props: FAQCardProps }> = {
+export const FAQCard: YextComponentConfig<FAQCardProps> = {
   label: msg("faq", "FAQ"),
   fields: FAQCardFields,
   defaultProps: {

@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  Slot,
-  WithId,
-} from "@puckeditor/core";
+import { PuckComponent, Slot, WithId } from "@puckeditor/core";
 import {
   backgroundColors,
   ThemeColor,
@@ -26,6 +20,7 @@ import {
   defaultAboutSectionProps,
 } from "./AboutSectionDetailsColumn.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 const placeholderText = {
   defaultValue: {
@@ -71,24 +66,20 @@ export type AboutSectionProps = {
   liveVisibility: boolean;
 };
 
-const aboutSectionFields: Fields<AboutSectionProps> = {
+const aboutSectionFields: YextFields<AboutSectionProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
-      readMoreButtonColor: YextField(
-        msg("fields.readMoreButtonColor", "Read More Button Color"),
-        {
-          type: "select",
-          options: "SITE_COLOR",
-        }
-      ),
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
+      readMoreButtonColor: {
+        type: "basicSelector",
+        label: msg("fields.readMoreButtonColor", "Read More Button Color"),
+        options: "SITE_COLOR",
+      },
       showDetailsColumn: YextField(
         msg("fields.showDetailsColumn", "Show Details Column"),
         {
@@ -204,7 +195,7 @@ const AboutComponent: PuckComponent<AboutSectionProps> = (props) => {
   );
 };
 
-export const AboutSection: ComponentConfig<{ props: AboutSectionProps }> = {
+export const AboutSection: YextComponentConfig<AboutSectionProps> = {
   label: msg("components.aboutSection", "About Section"),
   fields: aboutSectionFields,
   defaultProps: {

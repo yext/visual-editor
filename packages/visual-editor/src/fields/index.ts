@@ -6,6 +6,11 @@ export {
 export { CodeFieldOverride, type CodeField } from "./CodeField.tsx";
 
 export {
+  DateTimeSelectorFieldOverride,
+  type DateTimeSelectorField,
+} from "./DateTimeSelectorField.tsx";
+
+export {
   FontSizeSelectorFieldOverride,
   type FontSizeSelectorField,
 } from "./FontSizeSelectorField.tsx";
