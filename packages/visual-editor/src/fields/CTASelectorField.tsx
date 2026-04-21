@@ -32,14 +32,12 @@ const CTA_FIELD_FILTER: RenderEntityFieldFilter<Record<string, any>> = {
   types: ["type.cta"],
 };
 
-const DEFAULT_CTA_SELECTION_TYPE: CTASelectionType = "textAndLink";
-
 export const CTASelectorFieldOverride = ({
   field,
   value,
   onChange,
 }: CTASelectorFieldProps) => {
-  const selectedType = value?.selectedType ?? DEFAULT_CTA_SELECTION_TYPE;
+  const selectedType: CTASelectionType = value?.selectedType ?? "textAndLink";
   const showEntityFieldSelector = selectedType !== "getDirections";
   const translatedLabel = field.label
     ? pt(field.label)
