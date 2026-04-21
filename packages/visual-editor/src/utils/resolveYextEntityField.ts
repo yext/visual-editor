@@ -38,7 +38,7 @@ export const resolveYextEntityField = <T>(
     return entityField.constantValue as T;
   }
 
-  return resolveField(streamDocument, entityField.field).value;
+  return resolveField<T>(streamDocument, entityField.field).value;
 };
 
 /**
