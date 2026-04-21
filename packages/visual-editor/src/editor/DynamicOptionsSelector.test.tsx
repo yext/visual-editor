@@ -49,9 +49,11 @@ const renderDynamicOptionsField = (
           render: (props: Parameters<typeof field.render>[0]) =>
             field.render({
               ...props,
-              onChange: (newValue, uiState) => {
+              onChange: (
+                newValue: Parameters<typeof props.onChange>[0]
+              ): void => {
                 onChange(newValue);
-                props.onChange(newValue, uiState);
+                props.onChange(newValue);
               },
             }),
         }
