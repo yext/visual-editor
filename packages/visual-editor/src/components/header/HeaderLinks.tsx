@@ -14,7 +14,11 @@ import { TranslatableCTA } from "../../types/types.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { useOverflow } from "../../hooks/useOverflow.ts";
 import { usePreviewWindow } from "../../hooks/usePreviewWindow.ts";
-import { YextField, type YextPuckField } from "../../editor/YextField.tsx";
+import {
+  YextField,
+  type YextCustomFieldRenderProps,
+  type YextPuckField,
+} from "../../editor/YextField.tsx";
 import { YextAutoField } from "../../fields/YextAutoField.tsx";
 import { linkTypeOptions } from "../../internal/puck/constant-value-fields/CallToAction.tsx";
 import {
@@ -118,7 +122,10 @@ const headerLinksFields: YextFields<HeaderLinksProps> = {
     objectFields: {
       links: {
         type: "custom",
-        render: ({ onChange, value }) => {
+        render: ({
+          onChange,
+          value,
+        }: YextCustomFieldRenderProps<HeaderLinksProps["data"]["links"]>) => {
           const tooltip = pt(
             "fields.linksTooltip",
             "Links will automatically collapse if the viewport is too narrow"

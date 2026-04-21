@@ -21,7 +21,11 @@ import { useTemplateProps } from "../hooks/useDocument.tsx";
 import { resolveComponentData } from "../utils/resolveComponentData.tsx";
 import { HoursStatusAtom } from "./atoms/hoursStatus.tsx";
 import { HoursTableAtom } from "./atoms/hoursTable.tsx";
-import { YextField, type YextObjectField } from "../editor/YextField.tsx";
+import {
+  YextField,
+  type YextCustomFieldRenderProps,
+  type YextObjectField,
+} from "../editor/YextField.tsx";
 import { type BasicSelectorField } from "../fields/BasicSelectorField.tsx";
 import { ConstantValueModeToggler } from "../editor/YextEntityFieldSelector.tsx";
 import { LOCATOR_IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
@@ -367,7 +371,10 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
         objectFields: {
           constantValueEnabled: {
             type: "custom",
-            render: ({ value, onChange }) => (
+            render: ({
+              value,
+              onChange,
+            }: YextCustomFieldRenderProps<boolean | undefined>) => (
               <ConstantValueModeToggler
                 fieldTypeFilter={["type.string"]}
                 constantValueEnabled={value ?? false}
@@ -403,7 +410,10 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
         objectFields: {
           constantValueEnabled: {
             type: "custom",
-            render: ({ value, onChange }) => (
+            render: ({
+              value,
+              onChange,
+            }: YextCustomFieldRenderProps<boolean | undefined>) => (
               <ConstantValueModeToggler
                 fieldTypeFilter={["type.string"]}
                 constantValueEnabled={value ?? false}
@@ -443,7 +453,10 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
         objectFields: {
           constantValueEnabled: {
             type: "custom",
-            render: ({ value, onChange }) => (
+            render: ({
+              value,
+              onChange,
+            }: YextCustomFieldRenderProps<boolean | undefined>) => (
               <ConstantValueModeToggler
                 fieldTypeFilter={["type.string"]}
                 constantValueEnabled={value ?? false}
@@ -718,7 +731,10 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
         objectFields: {
           constantValueEnabled: {
             type: "custom",
-            render: ({ value, onChange }) => (
+            render: ({
+              value,
+              onChange,
+            }: YextCustomFieldRenderProps<boolean | undefined>) => (
               <ConstantValueModeToggler
                 fieldTypeFilter={["type.image"]}
                 constantValueEnabled={value ?? false}

@@ -1,6 +1,7 @@
 import {
   ArrayField,
   BaseField,
+  type CustomField,
   Field,
   NumberField,
   ObjectField,
@@ -88,6 +89,9 @@ export type YextObjectField<
 > = Omit<ObjectField<Props, YextPuckField>, "objectFields"> & {
   objectFields: YextFieldMap<Props>;
 };
+
+export type YextCustomFieldRenderProps<ValueType> =
+  Parameters<CustomField<ValueType>["render"]>[0];
 
 export type YextFieldDefinition<ValueType = any> =
   | Field<ValueType, YextPuckField>

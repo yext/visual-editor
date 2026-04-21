@@ -16,20 +16,6 @@ type YextOverrideType = keyof typeof YextPuckFieldOverrides;
 const isYextOverrideType = (type: string): type is YextOverrideType =>
   type in YextPuckFieldOverrides;
 
-const wrapNestedOverrideField = (
-  field: YextFieldDefinition<any> & { type: YextOverrideType }
-): YextFieldDefinition<any> => {
-  const FieldOverride = YextPuckFieldOverrides[field.type];
-
-  return {
-    type: "custom",
-    visible: field.visible,
-    render: ({ field: _, ...props }) => (
-      <FieldOverride field={field} {...(props as any)} />
-    ),
-  };
-};
-
 const normalizeField = (
   field: YextFieldDefinition<any>
 ): YextFieldDefinition<any> => {
@@ -37,9 +23,15 @@ const normalizeField = (
     // Nested Puck override field types render correctly, but Puck still creates
     // a default child component for non-core field types, which produces React
     // warnings. Wrapping nested overrides as `custom` avoids that path.
-    return wrapNestedOverrideField(
-      field as YextFieldDefinition<any> & { type: YextOverrideType }
-    );
+    const FieldOverride = YextPuckFieldOverrides[field.type];
+
+    return {
+      type: "custom",
+      visible: field.visible,
+      render: ({ field: _, ...props }) => (
+        <FieldOverride field={field} {...(props as any)} />
+      ),
+    };
   }
 
   if (field.type === "array" && "arrayFields" in field) {
@@ -50,7 +42,7 @@ const normalizeField = (
           key,
           normalizeField(value as YextFieldDefinition<any>),
         ])
-      ) as any,
+      ),
     };
   }
 
@@ -62,7 +54,7 @@ const normalizeField = (
           key,
           normalizeField(value as YextFieldDefinition<any>),
         ])
-      ) as any,
+      ),
     };
   }
 

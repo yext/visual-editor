@@ -45,7 +45,7 @@ import {
   DynamicOption,
   DynamicOptionsSelectorType,
 } from "../editor/DynamicOptionsSelector.tsx";
-import { YextField } from "../editor/YextField.tsx";
+import { YextField, type YextCustomFieldRenderProps } from "../editor/YextField.tsx";
 import { YextAutoField } from "../fields/YextAutoField.tsx";
 import { useDocument } from "../hooks/useDocument.tsx";
 import { Button } from "./atoms/button.tsx";
@@ -664,7 +664,12 @@ const locatorFields: YextFields<LocatorProps> = {
         }),
         pinIcon: {
           type: "custom",
-          render: ({ value, onChange }) => {
+          render: ({
+            value,
+            onChange,
+          }: YextCustomFieldRenderProps<
+            LocatorProps["locationStyles"][number]["pinIcon"]
+          >) => {
             const selectedType = value?.type ?? "none";
             return (
               <div className="flex flex-col gap-3">
