@@ -38,6 +38,7 @@ import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 import { clonePuckResolveData } from "../utils/clonePuckResolveData.ts";
+import { createDeferredWriter } from "../utils/deferredWriter.ts";
 import { YextPuckFieldOverrides } from "../../fields/fields.ts";
 
 const devLogger = new DevLogger();
@@ -112,6 +113,23 @@ export const InternalLayoutEditor = ({
   const { i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
   const { errorCount, errorSources, errorDetails } = useErrorContext();
+  const localStorageHistoryWriter = React.useMemo(
+    () =>
+      createDeferredWriter<History<Partial<AppState>>[]>((nextHistories) => {
+        devLogger.logFunc("saveLayoutToLocalStorage");
+        window.localStorage.setItem(
+          buildVisualConfigLocalStorageKey(),
+          lzstring.compress(JSON.stringify(nextHistories))
+        );
+      }),
+    [buildVisualConfigLocalStorageKey]
+  );
+
+  React.useEffect(() => {
+    return () => {
+      localStorageHistoryWriter.flush();
+    };
+  }, [localStorageHistoryWriter]);
 
   /**
    * When the Puck history changes save it to localStorage and send a message
@@ -130,11 +148,7 @@ export const InternalLayoutEditor = ({
         historyIndex.current = index;
 
         if (localDev || templateMetadata.isDevMode) {
-          devLogger.logFunc("saveLayoutToLocalStorage");
-          window.localStorage.setItem(
-            buildVisualConfigLocalStorageKey(),
-            lzstring.compress(JSON.stringify(histories))
-          );
+          localStorageHistoryWriter.schedule(histories.slice());
           if (localDev) {
             return;
           }
@@ -171,13 +185,16 @@ export const InternalLayoutEditor = ({
     },
     [
       templateMetadata,
-      buildVisualConfigLocalStorageKey,
+      localStorageHistoryWriter,
       layoutSaveState,
       saveLayoutSaveState,
+      sendDevSaveStateData,
+      localDev,
     ]
   );
 
   const handleClearLocalChanges = () => {
+    localStorageHistoryWriter.cancel();
     clearHistory();
     historyIndex.current = 0;
   };
