@@ -211,14 +211,12 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
   const menuContext = useExpandedHeaderMenu();
 
   const windowWidth = useWindowWidth(previewWindow);
-  const { isMobile } = getHeaderViewport(windowWidth);
+  const { isMobile, isDesktop } = getHeaderViewport(windowWidth);
   const isOverflow = useOverflow(navRef, measureContainerRef, 0);
 
   const type = parentData?.type || "Primary";
   const isSecondary = type === "Secondary";
   const primaryOverflow = menuContext?.primaryOverflow ?? false;
-  const shouldWrapSecondaryInline =
-    isSecondary && displayMode === "inline" && !isMobile && isOverflow;
   const ariaLabel =
     displayMode === "menu"
       ? type === "Primary"
@@ -243,7 +241,7 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
   // Derive styles based on display mode and styles props.
   const justifyClass = React.useMemo(() => {
     if (displayMode === "menu") {
-      return "justify-start";
+      return isDesktop ? "justify-end" : "justify-start";
     }
 
     const alignmentMap = {
@@ -252,7 +250,7 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
       right: "justify-end",
     };
     return alignmentMap[styles?.align || "right"];
-  }, [displayMode, styles?.align]);
+  }, [displayMode, isDesktop, styles?.align]);
   const weightClass = styles?.weight === "bold" ? "font-bold" : "font-normal";
   const sizeClass = styles?.variant
     ? {
@@ -262,9 +260,6 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
         lg: "text-body-lg-fontSize",
       }[styles.variant]
     : "text-body-fontSize";
-  const linkJustifyClass = shouldWrapSecondaryInline
-    ? "justify-start"
-    : justifyClass;
 
   const linksToRender = React.useMemo(() => {
     if (displayMode !== "menu" || isSecondary) {
@@ -310,7 +305,7 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
           ? false
           : (item.normalizeLink ?? true)
       }
-      className={`${linkJustifyClass} ${weightClass} ${sizeClass} w-full text-wrap break-words`}
+      className={`${justifyClass} ${weightClass} ${sizeClass} w-full text-wrap break-words`}
     />
   );
 
@@ -327,11 +322,7 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
     <nav
       aria-label={ariaLabel}
       ref={navRef}
-      className={`flex ${
-        displayMode === "menu" || shouldWrapSecondaryInline
-          ? "w-full justify-start"
-          : `md:gap-6 md:items-center ${justifyClass}`
-      } ${puck.isEditing ? " min-w-[100px] min-h-[30px]" : ""}`}
+      className={`flex ${displayMode === "menu" ? "w-full justify-start" : `md:gap-6 md:items-center ${justifyClass}`} ${puck.isEditing ? " min-w-[100px] min-h-[30px]" : ""}`}
     >
       {/* Hidden measure list for overflow math */}
       <ul
@@ -346,18 +337,12 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
       </ul>
 
       {/* Visible list */}
-      {(!isSecondary ||
-        displayMode === "menu" ||
-        isMobile ||
-        !isOverflow ||
-        shouldWrapSecondaryInline) && (
+      {(!isSecondary || displayMode === "menu" || isMobile || !isOverflow) && (
         <ul
           className={`flex flex-col gap-0 ${
             displayMode === "menu"
               ? "w-full justify-start sm:flex-row sm:flex-wrap sm:items-start sm:gap-x-6 sm:gap-y-4"
-              : shouldWrapSecondaryInline
-                ? "w-full md:flex-row md:flex-wrap md:items-start md:gap-x-6 md:gap-y-4"
-                : `w-full sm:w-auto ${justifyClass} md:flex-row md:gap-6`
+              : `w-full sm:w-auto ${justifyClass} md:flex-row md:gap-6`
           } ${sizeClass} ${weightClass}`}
         >
           {linksToRender.map((item, i) => (
@@ -366,9 +351,7 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
               className={
                 displayMode === "menu"
                   ? "min-w-0 py-4 sm:max-w-full sm:basis-auto sm:py-0"
-                  : shouldWrapSecondaryInline
-                    ? "min-w-0 py-2 md:py-0"
-                    : "py-4 lg:py-0"
+                  : "py-4 lg:py-0"
               }
             >
               {renderLink(item, i)}
