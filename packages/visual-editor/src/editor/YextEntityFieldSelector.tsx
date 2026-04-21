@@ -58,10 +58,10 @@ import { toast } from "sonner";
 import { isLinkedEntityFieldPath } from "./linkedEntityFieldUtils.ts";
 
 const devLogger = new DevLogger();
-const warnedLinkedEntityFieldPathsByDocument = new Map<any, Set<string>>();
+let warnedLinkedEntityFieldPathsByDocument = new WeakMap<any, Set<string>>();
 
 export const resetWarnedLinkedEntityFieldPaths = () => {
-  warnedLinkedEntityFieldPathsByDocument.clear();
+  warnedLinkedEntityFieldPathsByDocument = new WeakMap<any, Set<string>>();
 };
 
 type RenderProps = Parameters<CustomField<any>["render"]>[0];

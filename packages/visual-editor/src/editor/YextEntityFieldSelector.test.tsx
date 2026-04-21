@@ -1,6 +1,6 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { EntityFieldsContext } from "../hooks/useEntityFields.tsx";
 import { LinkedEntitySchemasContext } from "../hooks/useLinkedEntitySchemas.tsx";
 import { TemplateMetadataContext } from "../internal/hooks/useMessageReceivers.ts";
@@ -155,6 +155,11 @@ const renderEmbeddedFieldInput = ({
 };
 
 describe("YextEntityFieldSelector", () => {
+  beforeEach(() => {
+    warningToast.mockClear();
+    resetWarnedLinkedEntityFieldPaths();
+  });
+
   it("shows linked entity fields for single-value selectors", () => {
     renderEntityFieldInput({
       filter: { types: ["type.string"] },
@@ -356,9 +361,6 @@ describe("YextEntityFieldSelector", () => {
   });
 
   it("warns once when a linked entity field resolves through multiple references", () => {
-    warningToast.mockClear();
-    resetWarnedLinkedEntityFieldPaths();
-
     const props = {
       filter: { types: ["type.string"] },
       value: {

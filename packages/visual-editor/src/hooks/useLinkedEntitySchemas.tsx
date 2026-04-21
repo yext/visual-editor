@@ -28,9 +28,9 @@ export const usePlatformBridgeLinkedEntitySchemas = () => {
           ? payload.linkedEntitySchemas
           : null;
 
-      if (!isDeepEqual(receivedSchemas, linkedEntitySchemas)) {
-        setLinkedEntitySchemas(receivedSchemas);
-      }
+      setLinkedEntitySchemas((prev) =>
+        isDeepEqual(receivedSchemas, prev) ? prev : receivedSchemas
+      );
 
       send({
         status: "success",
