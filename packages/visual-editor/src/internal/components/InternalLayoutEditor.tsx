@@ -110,16 +110,29 @@ export const InternalLayoutEditor = ({
   metadata,
 }: InternalLayoutEditorProps) => {
   const historyIndex = useRef<number>(0);
+  const deferredLayoutWriteScheduledAt = useRef<number>();
   const { i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
   const { errorCount, errorSources, errorDetails } = useErrorContext();
   const localStorageHistoryWriter = React.useMemo(
     () =>
       createDeferredWriter<History<Partial<AppState>>[]>((nextHistories) => {
+        const writeStartedAt = performance.now();
+        const queuedForMs = deferredLayoutWriteScheduledAt.current
+          ? writeStartedAt - deferredLayoutWriteScheduledAt.current
+          : undefined;
+
         devLogger.logFunc("saveLayoutToLocalStorage");
         window.localStorage.setItem(
           buildVisualConfigLocalStorageKey(),
           lzstring.compress(JSON.stringify(nextHistories))
+        );
+        devLogger.log(
+          `Deferred layout history write ran after ${Math.round(
+            queuedForMs ?? 0
+          )}ms and took ${Math.round(
+            performance.now() - writeStartedAt
+          )}ms for ${nextHistories.length} history entries`
         );
       }),
     [buildVisualConfigLocalStorageKey]
@@ -162,6 +175,7 @@ export const InternalLayoutEditor = ({
         historyIndex.current = index;
 
         if (localDev || templateMetadata.isDevMode) {
+          deferredLayoutWriteScheduledAt.current = performance.now();
           localStorageHistoryWriter.schedule(histories.slice());
           if (localDev) {
             return;

@@ -63,13 +63,26 @@ export const InternalThemeEditor = ({
   const [canEdit, setCanEdit] = useState<boolean>(false); // helps sync puck preview and save state
   const [clearLocalChangesModalOpen, setClearLocalChangesModalOpen] =
     useState<boolean>(false);
+  const deferredThemeWriteScheduledAt = useRef<number>();
   const localStorageThemeWriter = React.useMemo(
     () =>
       createDeferredWriter<ThemeHistory[]>((nextHistories) => {
+        const writeStartedAt = performance.now();
+        const queuedForMs = deferredThemeWriteScheduledAt.current
+          ? writeStartedAt - deferredThemeWriteScheduledAt.current
+          : undefined;
+
         devLogger.logFunc("saveThemeToLocalStorage");
         window.localStorage.setItem(
           buildThemeLocalStorageKey(),
           lzstring.compress(JSON.stringify(nextHistories))
+        );
+        devLogger.log(
+          `Deferred theme history write ran after ${Math.round(
+            queuedForMs ?? 0
+          )}ms and took ${Math.round(
+            performance.now() - writeStartedAt
+          )}ms for ${nextHistories.length} history entries`
         );
       }),
     [buildThemeLocalStorageKey]
@@ -152,6 +165,7 @@ export const InternalThemeEditor = ({
     };
 
     if (localDev || templateMetadata.isDevMode) {
+      deferredThemeWriteScheduledAt.current = performance.now();
       localStorageThemeWriter.schedule(newHistory.histories.slice());
       updateThemeInEditor(
         newThemeValues,
