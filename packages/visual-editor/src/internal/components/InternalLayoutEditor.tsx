@@ -126,8 +126,22 @@ export const InternalLayoutEditor = ({
   );
 
   React.useEffect(() => {
-    return () => {
+    const flushPendingHistory = () => {
       localStorageHistoryWriter.flush();
+    };
+    const flushOnVisibilityChange = () => {
+      if (document.visibilityState === "hidden") {
+        flushPendingHistory();
+      }
+    };
+
+    window.addEventListener("pagehide", flushPendingHistory);
+    document.addEventListener("visibilitychange", flushOnVisibilityChange);
+
+    return () => {
+      window.removeEventListener("pagehide", flushPendingHistory);
+      document.removeEventListener("visibilitychange", flushOnVisibilityChange);
+      flushPendingHistory();
     };
   }, [localStorageHistoryWriter]);
 

@@ -39,9 +39,10 @@ export const createDeferredWriter = <T>(
       return;
     }
 
-    hasPendingValue = false;
-    writeValue(pendingValue as T);
+    const valueToWrite = pendingValue as T;
     pendingValue = undefined;
+    hasPendingValue = false;
+    writeValue(valueToWrite);
   };
 
   return {

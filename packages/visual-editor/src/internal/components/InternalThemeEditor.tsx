@@ -90,8 +90,22 @@ export const InternalThemeEditor = ({
   }, []);
 
   useEffect(() => {
-    return () => {
+    const flushPendingThemeHistory = () => {
       localStorageThemeWriter.flush();
+    };
+    const flushOnVisibilityChange = () => {
+      if (document.visibilityState === "hidden") {
+        flushPendingThemeHistory();
+      }
+    };
+
+    window.addEventListener("pagehide", flushPendingThemeHistory);
+    document.addEventListener("visibilitychange", flushOnVisibilityChange);
+
+    return () => {
+      window.removeEventListener("pagehide", flushPendingThemeHistory);
+      document.removeEventListener("visibilitychange", flushOnVisibilityChange);
+      flushPendingThemeHistory();
     };
   }, [localStorageThemeWriter]);
 
