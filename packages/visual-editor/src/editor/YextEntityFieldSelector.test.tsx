@@ -8,7 +8,6 @@ import { type StreamFields } from "../types/entityFields.ts";
 import {
   ConstantValueInput,
   EntityFieldInput,
-  type TypeSelectorConfigProps,
 } from "./YextEntityFieldSelector.tsx";
 
 const defaultEntityFields: StreamFields = {
@@ -45,30 +44,17 @@ const defaultEntityFields: StreamFields = {
   },
 };
 
-const defaultTypeSelectorConfig: TypeSelectorConfigProps = {
-  typeLabel: "Type",
-  fieldLabel: "Field",
-  options: [
-    { label: "Text", value: "text" },
-    { label: "Image", value: "image" },
-  ],
-  optionValueToEntityFieldType: {
-    text: "type.string",
-    image: "type.image",
-  },
-};
-
 const renderEntityFieldInput = ({
   entityFields = defaultEntityFields,
   filter = { types: ["type.string", "type.image"] },
   onChange = vi.fn(),
-  typeSelectorConfig = defaultTypeSelectorConfig,
+  label,
   value = {},
 }: {
   entityFields?: StreamFields | null;
   filter?: any;
   onChange?: any;
-  typeSelectorConfig?: TypeSelectorConfigProps;
+  label?: string;
   value?: Record<string, any>;
 } = {}) => {
   const templateMetadata = {
@@ -81,8 +67,8 @@ const renderEntityFieldInput = ({
       <EntityFieldsContext.Provider value={entityFields}>
         <EntityFieldInput
           filter={filter}
+          label={label}
           onChange={onChange}
-          typeSelectorConfig={typeSelectorConfig}
           value={value}
         />
       </EntityFieldsContext.Provider>
@@ -93,62 +79,39 @@ const renderEntityFieldInput = ({
 };
 
 describe("YextEntityFieldSelector", () => {
-  it("renders a type selector and filters entity field options by selected type", () => {
-    renderEntityFieldInput({
-      value: {
-        selectedType: "text",
-      },
-    });
+  it("renders a single entity field selector with matching options", () => {
+    renderEntityFieldInput();
 
-    expect(screen.getAllByRole("combobox")).toHaveLength(2);
+    expect(screen.getAllByRole("combobox")).toHaveLength(1);
 
-    fireEvent.click(screen.getAllByRole("combobox")[1]);
-
+    fireEvent.click(screen.getByRole("combobox"));
     expect(screen.getAllByText("Location Field").length).toBeGreaterThan(0);
     expect(screen.getByText("Name")).toBeDefined();
     expect(screen.getByText("Description")).toBeDefined();
-    expect(screen.queryByText("Photo")).toBeNull();
+    expect(screen.getByText("Photo")).toBeDefined();
   });
 
-  it("clears the selected field when the selected type changes", () => {
+  it("updates the selected entity field", () => {
     const { onChange } = renderEntityFieldInput({
       value: {
         field: "name",
-        selectedType: "text",
       },
     });
 
-    fireEvent.click(screen.getAllByRole("combobox")[0]);
-    fireEvent.click(screen.getByText("Image"));
+    fireEvent.click(screen.getByRole("combobox"));
+    fireEvent.click(screen.getByText("Description"));
 
     expect(onChange.mock.calls[0]?.[0]).toEqual({
-      field: "",
-      selectedType: "image",
+      field: "description",
     });
   });
 
-  it("hides the field selector when the selected type does not map to an entity field type", () => {
+  it("uses the provided label when one is set", () => {
     renderEntityFieldInput({
-      value: {
-        selectedType: "unsupported",
-      },
+      label: "CTA Field",
     });
 
-    expect(screen.getAllByRole("combobox")).toHaveLength(1);
-  });
-
-  it("shows the no-options placeholder and message when no type options are available", () => {
-    renderEntityFieldInput({
-      typeSelectorConfig: {
-        ...defaultTypeSelectorConfig,
-        options: [],
-      },
-    });
-
-    expect(screen.getByText("No available types")).toBeDefined();
-    expect(
-      screen.getByText("No types found. Please check your configuration.")
-    ).toBeDefined();
+    expect(screen.getByText("CTA Field")).toBeDefined();
   });
 
   it("falls back to the default entity field option when no matching entity fields exist", () => {
@@ -156,17 +119,14 @@ describe("YextEntityFieldSelector", () => {
       entityFields: {
         fields: [],
       },
-      value: {
-        selectedType: "text",
-      },
     });
 
-    expect(screen.getAllByRole("combobox")).toHaveLength(2);
-    expect(screen.getAllByRole("combobox")[1]?.textContent).toContain(
+    expect(screen.getAllByRole("combobox")).toHaveLength(1);
+    expect(screen.getByRole("combobox")?.textContent).toContain(
       "Location Field"
     );
 
-    fireEvent.click(screen.getAllByRole("combobox")[1]);
+    fireEvent.click(screen.getByRole("combobox"));
 
     expect(screen.getAllByText("Location Field").length).toBeGreaterThan(0);
     expect(screen.queryByText("Name")).toBeNull();
