@@ -14,8 +14,6 @@ export type YextEntityField<T> = {
   constantValueEnabled?: boolean;
   /** Whether the field can be translated or not. */
   disallowTranslation?: boolean;
-  /** Filter the embedded field input to this type. */
-  selectedType?: string;
 };
 
 export const getFieldsForSelector = (

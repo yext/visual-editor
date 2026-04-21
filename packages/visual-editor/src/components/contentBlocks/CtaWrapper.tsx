@@ -7,7 +7,6 @@ import {
   TranslatableString,
 } from "../../types/types.ts";
 import { EntityField } from "../../editor/EntityField.tsx";
-import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
@@ -16,10 +15,8 @@ import { themeManagerCn } from "../../utils/cn.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { useTranslation } from "react-i18next";
 import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
-import {
-  ctaTypeOptions,
-  getCTAType,
-} from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
+import { getCTAType } from "../../internal/utils/ctaFieldUtils.ts";
+import { type YextCTAField } from "../../fields/CTASelectorField.tsx";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export interface CTAWrapperProps {
@@ -31,7 +28,7 @@ export interface CTAWrapperProps {
     /** Whether CTA links should be normalized before rendering */
     normalizeLink: boolean;
     /** The call to action to display */
-    entityField: YextEntityField<EnhancedTranslatableCTA>;
+    entityField: YextCTAField;
     /** Static text for the button label */
     buttonText?: TranslatableString;
     /** Sets id attribute on the button */
@@ -90,21 +87,10 @@ const ctaWrapperFields: YextFields<CTAWrapperProps> = {
           { label: msg("fields.options.button", "Button"), value: "button" },
         ],
       }),
-      entityField: YextField(msg("fields.cta", "CTA"), {
-        type: "entityField",
-        filter: {
-          types: ["type.cta"],
-        },
-        typeSelectorConfig: {
-          typeLabel: msg("fields.ctaType", "CTA Type"),
-          fieldLabel: msg("fields.ctaField", "CTA Field"),
-          options: ctaTypeOptions(),
-          optionValueToEntityFieldType: {
-            presetImage: "type.cta",
-            textAndLink: "type.cta",
-          },
-        },
-      }),
+      entityField: {
+        type: "ctaSelector",
+        label: msg("fields.cta", "CTA"),
+      },
       normalizeLink: YextField(msg("fields.normalizeLink", "Normalize Link"), {
         type: "radio",
         options: [
