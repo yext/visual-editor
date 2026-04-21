@@ -90,8 +90,9 @@ export type YextObjectField<
   objectFields: YextFieldMap<Props>;
 };
 
-export type YextCustomFieldRenderProps<ValueType> =
-  Parameters<CustomField<ValueType>["render"]>[0];
+export type YextCustomFieldRenderProps<ValueType> = Parameters<
+  CustomField<ValueType>["render"]
+>[0];
 
 export type YextFieldDefinition<ValueType = any> =
   | Field<ValueType, YextPuckField>

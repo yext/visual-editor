@@ -45,7 +45,10 @@ import {
   DynamicOption,
   DynamicOptionsSelectorType,
 } from "../editor/DynamicOptionsSelector.tsx";
-import { YextField, type YextCustomFieldRenderProps } from "../editor/YextField.tsx";
+import {
+  YextField,
+  type YextCustomFieldRenderProps,
+} from "../editor/YextField.tsx";
 import { YextAutoField } from "../fields/YextAutoField.tsx";
 import { useDocument } from "../hooks/useDocument.tsx";
 import { Button } from "./atoms/button.tsx";
