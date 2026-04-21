@@ -114,11 +114,6 @@ describe("YextField", () => {
     const returnedField = createCustomField();
     const fieldName = msg("fields.entity", "Entity Field");
     const filter = { types: ["type.string"] };
-    const typeSelectorConfig = {
-      typeLabel: "Type",
-      fieldLabel: "Field",
-      options: [{ label: "Text", value: "text" }],
-    };
 
     yextEntityFieldSelectorMock.mockReturnValue(returnedField);
 
@@ -127,7 +122,6 @@ describe("YextField", () => {
       filter,
       disableConstantValueToggle: true,
       disallowTranslation: true,
-      typeSelectorConfig,
     } as any);
 
     expect(yextEntityFieldSelectorMock).toHaveBeenCalledWith({
@@ -135,9 +129,23 @@ describe("YextField", () => {
       filter,
       disableConstantValueToggle: true,
       disallowTranslation: true,
-      typeSelectorConfig,
     });
     expect(field).toBe(returnedField);
+  });
+
+  it("passes registered custom field configs through with the provided label", () => {
+    const fieldName = msg("fields.cta", "CTA");
+
+    const field = YextField(fieldName, {
+      type: "ctaSelector",
+      disableConstantValueToggle: true,
+    });
+
+    expect(field).toEqual({
+      label: fieldName,
+      type: "ctaSelector",
+      disableConstantValueToggle: true,
+    });
   });
 
   it("delegates optionalNumber configs to OptionalNumberField", () => {

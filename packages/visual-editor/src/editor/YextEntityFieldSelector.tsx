@@ -50,7 +50,6 @@ import {
   getFieldsForSelector,
   type YextEntityField,
 } from "./yextEntityFieldUtils.ts";
-import { type ComboboxOption } from "../internal/types/combobox.ts";
 
 const devLogger = new DevLogger();
 
@@ -67,31 +66,12 @@ const isYextPuckFieldType = (
 
 export type { YextEntityField } from "./yextEntityFieldUtils.ts";
 
-/**
- * Configuration for the type selector dropdown in the YextEntityFieldSelector.
- * This allows for a two-tiered selection: first a "type", then a "field" of that type.
- */
-export type TypeSelectorConfigProps = {
-  /** The label for the type selector dropdown. */
-  typeLabel: string;
-  /** The label for the field selector dropdown. */
-  fieldLabel: string;
-  /** The options to display in the type selector dropdown. */
-  options: ComboboxOption[];
-  /**
-   * An optional mapping from a type selector option's value to an entity field type.
-   * This is useful when multiple type options should filter for the same underlying entity field type.
-   */
-  optionValueToEntityFieldType?: Record<string, string>;
-};
-
 export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
   {
     label: string;
     filter: RenderEntityFieldFilter<T>;
     disableConstantValueToggle?: boolean;
     disallowTranslation?: boolean;
-    typeSelectorConfig?: TypeSelectorConfigProps;
   };
 
 export const TYPE_TO_CONSTANT_CONFIG: Record<string, ConstantFieldConfig> = {
@@ -244,7 +224,6 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
               onChange={onChange}
               value={value}
               filter={props.filter}
-              typeSelectorConfig={props.typeSelectorConfig}
             />
           )}
         </>
@@ -325,7 +304,6 @@ type InputProps<T extends Record<string, any>> = {
   className?: string;
   disallowTranslation?: boolean;
   label?: string;
-  typeSelectorConfig?: TypeSelectorConfigProps;
 };
 
 export const ConstantValueInput = <T extends Record<string, any>>({
@@ -394,7 +372,6 @@ export const ConstantValueInput = <T extends Record<string, any>>({
     </div>
   ) : (
     <YextAutoField
-      key={value?.selectedType} // reset when type changes
       onChange={(newConstantValue, uiState) =>
         onChange(
           {
@@ -430,55 +407,14 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   onChange,
   value,
   className,
-  typeSelectorConfig,
+  label,
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
   const templateMetadata = useTemplateMetadata();
 
-  const typeSelector = React.useMemo<BasicSelectorField | undefined>(() => {
-    if (!typeSelectorConfig) {
-      return;
-    }
-    return {
-      type: "basicSelector",
-      label: typeSelectorConfig.typeLabel,
-      options: typeSelectorConfig.options,
-      translateOptions: false,
-      noOptionsPlaceholder: pt("noAvailableTypes", "No available types"),
-      noOptionsMessage: pt(
-        "noTypesFoundMsg",
-        "No types found. Please check your configuration."
-      ),
-    };
-  }, [typeSelectorConfig]);
-
-  const entityFieldSelector = React.useMemo<
-    BasicSelectorField | undefined
-  >(() => {
-    // If a selectedType is provided, filter the entity fields by that type.
-    // If optionValueToEntityFieldType is provided, use it to map the selectedType to an EntityFieldType.
-    // Otherwise, use the selectedType directly.
-    // This allows for type selections that map to the same entity field type.
-    let selectedEntityFieldType;
-    if (value?.selectedType) {
-      if (typeSelectorConfig?.optionValueToEntityFieldType) {
-        if (
-          typeSelectorConfig.optionValueToEntityFieldType[value.selectedType]
-        ) {
-          selectedEntityFieldType =
-            typeSelectorConfig.optionValueToEntityFieldType[value.selectedType];
-        } else {
-          // If the selected type does not map to any entity field type, hide the selector.
-          return;
-        }
-      } else {
-        selectedEntityFieldType = value.selectedType;
-      }
-    }
-
+  const entityFieldSelector = React.useMemo<BasicSelectorField>(() => {
     const filteredEntityFields = getFieldsForSelector(entityFields, {
       ...filter,
-      types: selectedEntityFieldType ? [selectedEntityFieldType] : filter.types,
     });
     const entityFieldOptions = filteredEntityFields.map((field) => ({
       label: field.displayName ?? field.name,
@@ -497,53 +433,28 @@ export const EntityFieldInput = <T extends Record<string, any>>({
 
     return {
       type: "basicSelector",
-      label: typeSelectorConfig?.fieldLabel,
+      label,
       options,
       translateOptions: false,
       noOptionsPlaceholder: pt("noAvailableFields", "No available fields"),
     };
-  }, [
-    entityFields,
-    filter,
-    templateMetadata.entityTypeDisplayName,
-    typeSelectorConfig,
-    value?.selectedType,
-  ]);
+  }, [entityFields, filter, label, templateMetadata.entityTypeDisplayName]);
 
   return (
     <div className={"ve-inline-block ve-w-full " + className}>
-      {typeSelectorConfig && typeSelector && (
-        <YextAutoField
-          field={typeSelector}
-          onChange={(selectedType, uiState) => {
-            onChange(
-              {
-                ...value,
-                field: "",
-                selectedType: selectedType,
-              },
-              uiState
-            );
-          }}
-          value={value?.selectedType}
-        />
-      )}
-      {entityFieldSelector && (
-        <YextAutoField
-          key={value?.selectedType}
-          field={entityFieldSelector}
-          onChange={(selectedEntityField, uiState) => {
-            onChange(
-              {
-                ...value,
-                field: selectedEntityField,
-              },
-              uiState
-            );
-          }}
-          value={value?.field}
-        />
-      )}
+      <YextAutoField
+        field={entityFieldSelector}
+        onChange={(selectedEntityField, uiState) => {
+          onChange(
+            {
+              ...value,
+              field: selectedEntityField,
+            },
+            uiState
+          );
+        }}
+        value={value?.field}
+      />
     </div>
   );
 };
