@@ -108,11 +108,10 @@ describe("CTASelectorField", () => {
       });
 
       expect(screen.getByRole("combobox", { name: "CTA Type" })).toBeDefined();
-      const entityFieldSelectors = screen.queryAllByRole("combobox", {
-        name: "CTA Field",
-      });
 
-      expect(entityFieldSelectors.length > 0).toBe(shouldShowEntityField);
+      expect(screen.getAllByRole("combobox")).toHaveLength(
+        shouldShowEntityField ? 2 : 1
+      );
     }
   );
 
