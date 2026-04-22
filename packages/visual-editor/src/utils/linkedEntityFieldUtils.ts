@@ -97,7 +97,7 @@ export const isLinkedEntityFieldPath = (
  * The root intentionally does not advertise a scalar type so only its children
  * are presented for normal single-value field selection.
  */
-export const createLinkedEntityRootDefinition = (
+const createLinkedEntityRootDefinition = (
   referenceFieldName: string
 ): YextFieldDefinition => {
   return {
