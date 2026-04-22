@@ -20,6 +20,14 @@ const normalizePriceValue = (
   return Number.isFinite(parsedValue) ? parsedValue : undefined;
 };
 
+const getSafeLocale = (locale: string) => {
+  try {
+    return Intl.NumberFormat.supportedLocalesOf(locale)[0] || "en-US";
+  } catch {
+    return "en-US";
+  }
+};
+
 export const formatCurrency = (
   value: ProductPrice["value"],
   currencyCode: ProductPrice["currencyCode"],
@@ -36,7 +44,8 @@ export const formatCurrency = (
       currency: currencyCode,
     }).format(normalizedValue);
   } catch {
-    const fallbackValue = new Intl.NumberFormat(locale, {
+    const safeLocale = getSafeLocale(locale);
+    const fallbackValue = new Intl.NumberFormat(safeLocale, {
       maximumFractionDigits: 20,
     }).format(normalizedValue);
 

@@ -18,4 +18,8 @@ describe("productPrice", () => {
   it("falls back to value and currency code for invalid currency codes", () => {
     expect(formatCurrency(49.95, "INVALID", "en-US")).toBe("49.95 INVALID");
   });
+
+  it("falls back safely for malformed locales", () => {
+    expect(formatCurrency(49.95, "INVALID", "en_US")).toBe("49.95 INVALID");
+  });
 });

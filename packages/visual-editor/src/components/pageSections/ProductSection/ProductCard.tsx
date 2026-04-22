@@ -27,7 +27,7 @@ import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 import { formatCurrency } from "../../../utils/productPrice.ts";
 
-const defaultProduct = {
+const productDefaultData = {
   image: {
     url: "https://placehold.co/640x360",
     height: 360,
@@ -35,7 +35,10 @@ const defaultProduct = {
   },
   brow: { defaultValue: "Category" },
   name: { defaultValue: "Product Name" },
-  price: { defaultValue: "$123.00" },
+  price: {
+    value: 123,
+    currencyCode: "USD",
+  },
   description: {
     defaultValue: getDefaultRTF(
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
@@ -47,6 +50,27 @@ const defaultProduct = {
     linkType: "URL" as const,
     ctaType: "textAndLink" as const,
   },
+} satisfies ProductStruct;
+
+const slotDefaultData = {
+  priceText: { defaultValue: "$123.00" },
+};
+
+const isPriceLikeObject = (
+  value: unknown
+): value is Partial<NonNullable<ProductStruct["price"]>> => {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    ("value" in value || "currencyCode" in value)
+  );
+};
+
+const isIncompletePriceLikeObject = (value: unknown) => {
+  return (
+    isPriceLikeObject(value) &&
+    (value.value === undefined || !value.currencyCode)
+  );
 };
 
 export const defaultProductCardSlotData = (
@@ -99,7 +123,7 @@ export const defaultProductCardSlotData = (
               data: {
                 text: {
                   field: "",
-                  constantValue: defaultProduct.brow,
+                  constantValue: productDefaultData.brow,
                   constantValueEnabled: true,
                 },
               },
@@ -118,7 +142,7 @@ export const defaultProductCardSlotData = (
               data: {
                 text: {
                   field: "",
-                  constantValue: defaultProduct.name,
+                  constantValue: productDefaultData.name,
                   constantValueEnabled: true,
                 },
               },
@@ -137,7 +161,7 @@ export const defaultProductCardSlotData = (
               data: {
                 text: {
                   field: "",
-                  constantValue: defaultProduct.price,
+                  constantValue: slotDefaultData.priceText,
                   constantValueEnabled: true,
                 },
               },
@@ -156,7 +180,7 @@ export const defaultProductCardSlotData = (
               data: {
                 text: {
                   field: "",
-                  constantValue: defaultProduct.description,
+                  constantValue: productDefaultData.description,
                   constantValueEnabled: true,
                 },
               },
@@ -177,7 +201,7 @@ export const defaultProductCardSlotData = (
                 buttonText: { defaultValue: "Button" },
                 entityField: {
                   field: "",
-                  constantValue: defaultProduct.cta,
+                  constantValue: productDefaultData.cta,
                   constantValueEnabled: true,
                 },
               },
@@ -461,15 +485,18 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       entityPrice?.currencyCode,
       locale
     );
+    const fallbackPriceCandidate = priceSlotProps
+      ? resolveYextEntityField(
+          params.metadata.streamDocument,
+          priceSlotProps?.data?.text,
+          locale
+        )
+      : undefined;
     const resolvedPrice =
       resolvedPriceFromEntity ??
-      (priceSlotProps
-        ? resolveYextEntityField(
-            params.metadata.streamDocument,
-            priceSlotProps?.data?.text,
-            locale
-          )
-        : undefined);
+      (isIncompletePriceLikeObject(fallbackPriceCandidate)
+        ? undefined
+        : fallbackPriceCandidate);
     const showPrice = Boolean(resolvedPrice);
 
     const browSlotProps = data.props.slots.BrowSlot?.[0]?.props as
