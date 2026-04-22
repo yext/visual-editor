@@ -25,6 +25,7 @@ import { TextProps } from "../../contentBlocks/Text.tsx";
 import { ProductSectionVariant } from "./ProductSection.tsx";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
+import { formatProductPrice } from "../../../utils/productPrice.ts";
 
 const defaultProduct = {
   image: {
@@ -441,20 +442,26 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
   fields: ProductCardFields,
   inline: true,
   resolveData: (data, params) => {
+    const locale = i18nComponentsInstance.language || "en";
     const priceSlotProps = data.props.slots.PriceSlot?.[0]?.props as
       | WithId<TextProps>
       | undefined;
 
-    const resolvedPrice =
+    const rawPrice =
       data.props.parentData?.product.price ??
       priceSlotProps?.parentData?.text ??
       (priceSlotProps
-        ? resolveYextEntityField(
+        ? (resolveYextEntityField(
             params.metadata.streamDocument,
             priceSlotProps?.data?.text,
-            i18nComponentsInstance.language || "en"
-          )
+            locale
+          ) as ProductStruct["price"] | undefined)
         : undefined);
+    const resolvedPrice = formatProductPrice(
+      rawPrice,
+      locale,
+      params.metadata.streamDocument
+    );
     const showPrice = Boolean(resolvedPrice);
 
     const browSlotProps = data.props.slots.BrowSlot?.[0]?.props as
@@ -468,7 +475,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
         ? resolveYextEntityField(
             params.metadata.streamDocument,
             browSlotProps?.data?.text,
-            i18nComponentsInstance.language || "en"
+            locale
           )
         : undefined);
     const showBrow = Boolean(resolvedBrow);
@@ -483,7 +490,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
         ? resolveYextEntityField(
             params.metadata.streamDocument,
             descriptionSlotProps?.data?.text,
-            i18nComponentsInstance.language || "en"
+            locale
           )
         : undefined);
     const showDescription = Boolean(resolvedDescription);
@@ -498,7 +505,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
           ? resolveYextEntityField(
               params.metadata.streamDocument,
               ctaSlotProps?.data?.entityField,
-              i18nComponentsInstance.language || "en"
+              locale
             )
           : undefined));
     const showCTA = Boolean(resolvedCTA);
@@ -553,6 +560,11 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
     if (data.props.parentData) {
       const product = data.props.parentData.product;
       const field = data.props.parentData.field;
+      const formattedPrice = formatProductPrice(
+        product.price,
+        locale,
+        params.metadata.streamDocument
+      );
 
       updatedData = setDeep(
         updatedData,
@@ -583,7 +595,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
         "props.slots.PriceSlot[0].props.parentData",
         {
           field: field,
-          text: product.price,
+          text: formattedPrice,
         } satisfies TextProps["parentData"]
       );
       updatedData = setDeep(
