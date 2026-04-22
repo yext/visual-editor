@@ -22,7 +22,7 @@ import {
   injectTranslations,
 } from "@yext/visual-editor";
 import tailwindConfig from "../../tailwind.config";
-import { devTemplateStream } from "../dev.config";
+import { devLinkedEntitySchemas, devTemplateStream } from "../dev.config";
 import React from "react";
 import { SchemaWrapper } from "@yext/pages-components";
 import { disableHmrForStackBlitz } from "../utils";
@@ -148,12 +148,14 @@ const Dev: Template<TemplateRenderProps> = (props) => {
         <VisualEditorProvider
           templateProps={props}
           entityFields={{ fields: entityFields, displayNames: displayNames }}
+          linkedEntitySchemas={devLinkedEntitySchemas}
           tailwindConfig={tailwindConfig}
         >
           <Editor
             document={document}
             componentRegistry={componentRegistry}
             themeConfig={defaultThemeConfig}
+            linkedEntitySchemas={devLinkedEntitySchemas}
             localDev={true}
             forceThemeMode={themeMode}
           />

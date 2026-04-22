@@ -1,4 +1,5 @@
 import { type YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
+import { type StreamDocument } from "./types/StreamDocument.ts";
 
 export const embeddedFieldRegex = /\[\[([a-zA-Z0-9._]+)\]\]/g;
 
@@ -191,14 +192,14 @@ export const resolveEmbeddedFieldsRecursively = (
 };
 
 export const findField = <T>(
-  document: any,
+  streamDocument: StreamDocument,
   fieldName: string
 ): T | undefined => {
-  return resolveField<T>(document, fieldName).value;
+  return resolveField<T>(streamDocument, fieldName).value;
 };
 
 export const resolveField = <T>(
-  document: any,
+  streamDocument: StreamDocument,
   fieldName: string
 ): FieldResolution<T> => {
   if (fieldName === "") {
@@ -208,7 +209,7 @@ export const resolveField = <T>(
   let traversedMultiValueReference = false;
   try {
     const levels: string[] = fieldName.split(".");
-    let current = document;
+    let current: unknown = streamDocument;
     for (let i = 0; i < levels.length; i++) {
       if (Array.isArray(current)) {
         if (current.length === 0) {
@@ -222,14 +223,19 @@ export const resolveField = <T>(
         current = current[0];
       }
 
-      if (current?.[levels[i]] !== undefined) {
-        current = current[levels[i]];
-      } else {
+      if (typeof current !== "object" || current === null) {
         return { value: undefined, traversedMultiValueReference };
       }
+
+      const currentRecord = current as Record<string, unknown>;
+      if (currentRecord[levels[i]] === undefined) {
+        return { value: undefined, traversedMultiValueReference };
+      }
+
+      current = currentRecord[levels[i]];
     }
 
-    return { value: current, traversedMultiValueReference };
+    return { value: current as T | undefined, traversedMultiValueReference };
   } catch (e) {
     console.error("Error in resolveField:", e);
   }

@@ -36,6 +36,7 @@ import {
 import { migrate } from "../utils/migrate.ts";
 import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";
+import type { LinkedEntitySchemas } from "../utils/linkedEntityFieldUtils.ts";
 
 const devLogger = new DevLogger();
 
@@ -66,6 +67,7 @@ export type EditorProps = {
   document: any;
   componentRegistry: Record<string, Config<any>>;
   themeConfig?: ThemeConfig;
+  linkedEntitySchemas?: LinkedEntitySchemas;
   // localDev is used for running VE outside of the platform
   localDev?: boolean;
   // forceThemeMode is used with localDev to load the theme editor
@@ -77,6 +79,7 @@ export const Editor = ({
   document,
   componentRegistry,
   themeConfig,
+  linkedEntitySchemas: localDevLinkedEntitySchemas,
   localDev,
   forceThemeMode,
   metadata,
@@ -89,7 +92,9 @@ export const Editor = ({
   const [devSiteStream, setDevSiteStream] = useState<any>(undefined);
   const [parentLoaded, setParentLoaded] = useState<boolean>(false);
   const entityFields = useEntityFields();
-  const linkedEntitySchemas = usePlatformBridgeLinkedEntitySchemas();
+  const platformLinkedEntitySchemas = usePlatformBridgeLinkedEntitySchemas();
+  const linkedEntitySchemas =
+    localDevLinkedEntitySchemas ?? platformLinkedEntitySchemas;
 
   const {
     templateMetadata,

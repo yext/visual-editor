@@ -14,7 +14,7 @@ import {
 } from "./YextEntityFieldSelector.tsx";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { EmbeddedFieldStringInputFromEntity } from "./EmbeddedFieldStringInput.tsx";
-import { type LinkedEntitySchemas } from "./linkedEntityFieldUtils.ts";
+import { type LinkedEntitySchemas } from "../utils/linkedEntityFieldUtils.ts";
 
 const { warningToast } = vi.hoisted(() => ({
   warningToast: vi.fn(),

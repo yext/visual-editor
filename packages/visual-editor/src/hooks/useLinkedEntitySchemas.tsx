@@ -3,7 +3,7 @@ import {
   useReceiveMessage,
   TARGET_ORIGINS,
 } from "../internal/hooks/useMessage.ts";
-import { type LinkedEntitySchemas } from "../editor/linkedEntityFieldUtils.ts";
+import { type LinkedEntitySchemas } from "../utils/linkedEntityFieldUtils.ts";
 import { isDeepEqual } from "../utils/deepEqual.ts";
 
 export type LinkedEntitySchemasPayload = {

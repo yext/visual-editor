@@ -6,7 +6,7 @@ import { StreamFields, YextSchemaField } from "../types/entityFields.ts";
 import {
   buildLinkedEntityStreamFields,
   type LinkedEntitySchemas,
-} from "./linkedEntityFieldUtils.ts";
+} from "../utils/linkedEntityFieldUtils.ts";
 
 /** Represents data that can either be from the Yext Knowledge Graph or statically defined */
 export type YextEntityField<T> = {

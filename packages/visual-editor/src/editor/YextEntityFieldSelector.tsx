@@ -55,7 +55,7 @@ import { type ComboboxOption } from "../internal/types/combobox.ts";
 import { useDocument } from "../hooks/useDocument.tsx";
 import { resolveField } from "../utils/resolveYextEntityField.ts";
 import { toast } from "sonner";
-import { isLinkedEntityFieldPath } from "./linkedEntityFieldUtils.ts";
+import { isLinkedEntityFieldPath } from "../utils/linkedEntityFieldUtils.ts";
 
 const devLogger = new DevLogger();
 let warnedLinkedEntityFieldPathsByDocument = new WeakMap<any, Set<string>>();
@@ -520,6 +520,8 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     linkedEntitySchemas,
   ]);
 
+  // Warn once per document and linked field path when we resolve through a
+  // multi-value linked reference and fall back to the first linked entity.
   React.useEffect(() => {
     if (
       filter.includeListsOnly ||

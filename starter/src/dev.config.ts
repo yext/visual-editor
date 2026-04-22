@@ -11728,3 +11728,81 @@ export const devTemplateStream = {
     youTubeChannelUrl: "YouTube Channel URL",
   },
 };
+
+export const devLinkedEntitySchemas = {
+  c_linkedLocation: {
+    displayName: "Linked Location",
+    fields: [
+      {
+        name: "accessHours",
+        displayName: "Access Hours",
+        definition: {
+          name: "accessHours",
+          typeName: "type.hours",
+          type: {
+            typeName: "type.hours",
+          },
+        },
+      },
+      {
+        name: "additionalHoursText",
+        displayName: "Additional Hours Text",
+        definition: {
+          name: "additionalHoursText",
+          typeName: "type.string",
+          type: {
+            typeName: "type.string",
+          },
+        },
+      },
+      {
+        name: "address",
+        displayName: "Address",
+        definition: {
+          name: "address",
+          typeName: "type.address",
+          type: {
+            typeName: "type.address",
+          },
+        },
+        children: {
+          fields: [
+            {
+              name: "city",
+              displayName: "City",
+              definition: {
+                name: "city",
+                typeName: "type.string",
+                type: {
+                  typeName: "type.string",
+                },
+              },
+            },
+            {
+              name: "region",
+              displayName: "Region",
+              definition: {
+                name: "region",
+                typeName: "type.string",
+                type: {
+                  typeName: "type.string",
+                },
+              },
+            },
+            {
+              name: "postalCode",
+              displayName: "Postal Code",
+              definition: {
+                name: "postalCode",
+                typeName: "type.string",
+                type: {
+                  typeName: "type.string",
+                },
+              },
+            },
+          ],
+        },
+      },
+    ],
+  },
+};

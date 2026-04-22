@@ -9,6 +9,10 @@ export type LinkedEntitySchema = {
   fields: YextSchemaField[];
 };
 
+/**
+ * Maps each linked entity reference field API name to the schema of the
+ * entity that reference points to.
+ */
 export type LinkedEntitySchemas = Record<string, LinkedEntitySchema>;
 
 /**
