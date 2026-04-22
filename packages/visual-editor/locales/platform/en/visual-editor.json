@@ -542,6 +542,7 @@
   "kilometer_other": "kilometers",
   "knowledgeGraphContent": "Knowledge Graph content",
   "link": "Link",
+  "linkedEntityMultiValueWarning": "Multiple linked entities were found for {{fieldName}}. Using the first linked entity.",
   "linkTypes": {
     "clickToWebsite": "Click to Website",
     "drivingDirections": "Driving Directions",
@@ -573,8 +574,10 @@
   "nearbyLocationsEmptyState": "No {{entityType}} within {{radius}} {{unit}}",
   "nearbyLocationsEmptyStateSectionHidden": "Section hidden for this {{entityType}}",
   "noAvailableFields": "No available fields",
+  "noAvailableTypes": "No available types",
   "noMatchesFound": "No matches found.",
   "noResultsFoundForThisArea": "No results found for this area",
+  "noTypesFoundMsg": "No types found. Please check your configuration.",
   "open24Hours": "Open 24 Hours",
   "openHeaderMenu": "Open header menu",
   "openMenu": "Open menu",

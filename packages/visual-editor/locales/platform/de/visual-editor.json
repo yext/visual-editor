@@ -542,6 +542,7 @@
   "kilometer_other": "Kilometer",
   "knowledgeGraphContent": "Knowledge Graph Inhalt",
   "link": "Link",
+  "linkedEntityMultiValueWarning": "Für {{fieldName}} wurden mehrere verknüpfte Entitäten gefunden. Verwendung der ersten verknüpften Entität.",
   "linkTypes": {
     "clickToWebsite": "Klick zur Website",
     "drivingDirections": "Routenplaner",
@@ -573,8 +574,10 @@
   "nearbyLocationsEmptyState": "Kein {{entityType}} im Umkreis von {{radius}} {{unit}}",
   "nearbyLocationsEmptyStateSectionHidden": "Modul für diesen {{entityType}} ausgeblendet",
   "noAvailableFields": "Keine verfügbaren Felder",
+  "noAvailableTypes": "Keine verfügbaren Typen",
   "noMatchesFound": "Keine Übereinstimmungen gefunden.",
   "noResultsFoundForThisArea": "Keine Ergebnisse für diesen Bereich gefunden",
+  "noTypesFoundMsg": "Keine Typen gefunden. Bitte überprüfen Sie Ihre Konfiguration.",
   "open24Hours": "24 Stunden geöffnet",
   "openHeaderMenu": "Header-Menü öffnen",
   "openMenu": "Menü öffnen",

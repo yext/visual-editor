@@ -542,6 +542,7 @@
   "kilometer_other": "kilometer",
   "knowledgeGraphContent": "Videngrafindhold",
   "link": "forbindelse",
+  "linkedEntityMultiValueWarning": "Der blev fundet flere sammenkædede enheder for {{fieldName}}. Brug af den første linkede enhed.",
   "linkTypes": {
     "clickToWebsite": "Klik på webstedet",
     "drivingDirections": "Kørselsvejledning",
@@ -573,8 +574,10 @@
   "nearbyLocationsEmptyState": "Ingen {{entityType}} inden for {{radius}} {{unit}}",
   "nearbyLocationsEmptyStateSectionHidden": "Sektion skjult for denne {{entityType}}",
   "noAvailableFields": "Ingen tilgængelige felter",
+  "noAvailableTypes": "Ingen tilgængelige typer",
   "noMatchesFound": "Ingen kampe fundet.",
   "noResultsFoundForThisArea": "Ingen resultater fundet for dette område",
+  "noTypesFoundMsg": "Ingen typer fundet. Tjek venligst din konfiguration.",
   "open24Hours": "Åben 24 timer",
   "openHeaderMenu": "Åben header -menu",
   "openMenu": "Åben menu",

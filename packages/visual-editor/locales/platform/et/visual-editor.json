@@ -542,6 +542,7 @@
   "kilometer_other": "kilomeetrit",
   "knowledgeGraphContent": "Teadmiste graafi sisu",
   "link": "link",
+  "linkedEntityMultiValueWarning": "{{fieldName}} jaoks leiti mitu lingitud olemit. Kasutades esimest lingitud olemit.",
   "linkTypes": {
     "clickToWebsite": "Klõpsake veebisaidil",
     "drivingDirections": "Juhtimissuunad",
@@ -573,8 +574,10 @@
   "nearbyLocationsEmptyState": "{{entityType}} pole {{radius}} {{unit}} raadiuses",
   "nearbyLocationsEmptyStateSectionHidden": "Selle {{entityType}} jaoks peidetud jaotis",
   "noAvailableFields": "Pole saadaval väljad",
+  "noAvailableTypes": "Saadaolevaid tüüpe pole",
   "noMatchesFound": "Matše pole leitud.",
   "noResultsFoundForThisArea": "Selle piirkonna kohta tulemusi ei leitud",
+  "noTypesFoundMsg": "Tüüpe ei leitud. Kontrollige oma konfiguratsiooni.",
   "open24Hours": "Avatud 24 tundi",
   "openHeaderMenu": "Avatud päisemenüü",
   "openMenu": "Avatud menüü",

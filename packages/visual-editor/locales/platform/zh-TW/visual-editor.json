@@ -542,6 +542,7 @@
   "kilometer_other": "公里",
   "knowledgeGraphContent": "知識圖內容",
   "link": "鏈接",
+  "linkedEntityMultiValueWarning": "找到了 {{fieldName}} 的多個連結實體。使用第一個連結實體。",
   "linkTypes": {
     "clickToWebsite": "單擊網站",
     "drivingDirections": "行駛方向",
@@ -573,8 +574,10 @@
   "nearbyLocationsEmptyState": "{{radius}} {{unit}}內沒有 {{entityType}}",
   "nearbyLocationsEmptyStateSectionHidden": "此 {{entityType}} 的部分已隱藏",
   "noAvailableFields": "沒有可用的字段",
+  "noAvailableTypes": "無可用類型",
   "noMatchesFound": "找不到比賽。",
   "noResultsFoundForThisArea": "該區域找不到結果",
+  "noTypesFoundMsg": "未找到類型。請檢查您的配置。",
   "open24Hours": "打開24小時",
   "openHeaderMenu": "打開標題菜單",
   "openMenu": "開放菜單",

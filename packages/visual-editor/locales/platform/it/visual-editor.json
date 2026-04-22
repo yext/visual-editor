@@ -543,6 +543,7 @@
   "kilometer_other": "chilometri",
   "knowledgeGraphContent": "Contenuto del grafico della conoscenza",
   "link": "collegamento",
+  "linkedEntityMultiValueWarning": "Sono state trovate più entità collegate per {{fieldName}}. Utilizzando la prima entità collegata.",
   "linkTypes": {
     "clickToWebsite": "Fai clic sul sito Web",
     "drivingDirections": "Indicazioni stradali",
@@ -578,8 +579,10 @@
   "nearbyLocationsEmptyState": "Nessun {{entityType}} entro {{radius}} {{unit}}",
   "nearbyLocationsEmptyStateSectionHidden": "Sezione nascosta per questo {{entityType}}",
   "noAvailableFields": "Nessun campo disponibile",
+  "noAvailableTypes": "Nessun tipo disponibile",
   "noMatchesFound": "Nessuna corrispondenza trovata.",
   "noResultsFoundForThisArea": "Nessun risultato trovato per quest'area",
+  "noTypesFoundMsg": "Nessun tipo trovato. Controlla la tua configurazione.",
   "open24Hours": "Aperto 24 ore",
   "openHeaderMenu": "Menu di intestazione aperta",
   "openMenu": "Menu aperto",

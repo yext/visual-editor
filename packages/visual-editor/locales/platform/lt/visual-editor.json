@@ -544,6 +544,7 @@
   "kilometer_other": "kilometrų",
   "knowledgeGraphContent": "Žinių grafiko turinys",
   "link": "nuoroda",
+  "linkedEntityMultiValueWarning": "Rasti keli susieti objektai, skirti {{fieldName}}. Naudojant pirmąjį susietą objektą.",
   "linkTypes": {
     "clickToWebsite": "Spustelėkite svetainę",
     "drivingDirections": "Važiavimo kryptys",
@@ -583,8 +584,10 @@
   "nearbyLocationsEmptyState": "Nėra {{entityType}} per {{radius}} {{unit}}",
   "nearbyLocationsEmptyStateSectionHidden": "Šio {{entityType}} skyrius paslėptas",
   "noAvailableFields": "Jokių laukų",
+  "noAvailableTypes": "Nėra galimų tipų",
   "noMatchesFound": "Nerasta rungtynių.",
   "noResultsFoundForThisArea": "Nerasta šios srities rezultatų",
+  "noTypesFoundMsg": "Nerasta jokių tipų. Patikrinkite konfigūraciją.",
   "open24Hours": "Atidarykite 24 valandas",
   "openHeaderMenu": "Atidarykite antraštės meniu",
   "openMenu": "Atidaryti meniu",

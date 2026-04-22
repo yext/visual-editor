@@ -542,6 +542,7 @@
   "kilometer_other": "kilometers",
   "knowledgeGraphContent": "Kennisgrafiekinhoud",
   "link": "link",
+  "linkedEntityMultiValueWarning": "Er zijn meerdere gekoppelde entiteiten gevonden voor {{fieldName}}. Met behulp van de eerste gekoppelde entiteit.",
   "linkTypes": {
     "clickToWebsite": "Klik op de website",
     "drivingDirections": "Routebeschrijving",
@@ -573,8 +574,10 @@
   "nearbyLocationsEmptyState": "Geen {{entityType}} binnen {{radius}} {{unit}}",
   "nearbyLocationsEmptyStateSectionHidden": "Sectie verborgen voor deze {{entityType}}",
   "noAvailableFields": "Geen beschikbare velden",
+  "noAvailableTypes": "Geen beschikbare typen",
   "noMatchesFound": "Geen overeenkomsten gevonden.",
   "noResultsFoundForThisArea": "Geen resultaten gevonden voor dit gebied",
+  "noTypesFoundMsg": "Geen typen gevonden. Controleer uw configuratie.",
   "open24Hours": "24 uur open",
   "openHeaderMenu": "Open koptekstmenu",
   "openMenu": "Open het menu",

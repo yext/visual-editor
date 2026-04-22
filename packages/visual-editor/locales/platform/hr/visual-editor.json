@@ -543,6 +543,7 @@
   "kilometer_other": "kilometara",
   "knowledgeGraphContent": "Sadržaj grafikona znanja",
   "link": "link",
+  "linkedEntityMultiValueWarning": "Pronađeno je više povezanih entiteta za {{fieldName}}. Korištenje prvog povezanog entiteta.",
   "linkTypes": {
     "clickToWebsite": "Kliknite na web mjesto",
     "drivingDirections": "Upute za vožnju",
@@ -578,8 +579,10 @@
   "nearbyLocationsEmptyState": "Nema {{entityType}} unutar {{radius}} {{unit}}",
   "nearbyLocationsEmptyStateSectionHidden": "Odjeljak skriven za ovaj {{entityType}}",
   "noAvailableFields": "Nema dostupnih polja",
+  "noAvailableTypes": "Nema dostupnih vrsta",
   "noMatchesFound": "Nijedna meč nije pronađena.",
   "noResultsFoundForThisArea": "Nisu pronađeni rezultati za ovo područje",
+  "noTypesFoundMsg": "Nema pronađenih vrsta. Provjerite svoju konfiguraciju.",
   "open24Hours": "Otvoreno 24 sata",
   "openHeaderMenu": "Izbornik otvorenog zaglavlja",
   "openMenu": "Otvoreni izbornik",
