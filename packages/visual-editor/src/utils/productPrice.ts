@@ -1,18 +1,4 @@
-import {
-  ProductPrice,
-  TranslatableRichText,
-  TranslatableString,
-} from "../types/types.ts";
-import { resolveComponentData } from "./resolveComponentData.tsx";
-
-const isProductPrice = (value: unknown): value is ProductPrice => {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    "value" in value &&
-    "currencyCode" in value
-  );
-};
+import { ProductPrice } from "../types/types.ts";
 
 const normalizePriceValue = (
   value: ProductPrice["value"]
@@ -56,24 +42,4 @@ export const formatCurrency = (
 
     return `${fallbackValue} ${currencyCode}`;
   }
-};
-
-export const formatProductPrice = (
-  price: ProductPrice | TranslatableString | TranslatableRichText | undefined,
-  locale: string,
-  streamDocument?: Record<string, any>
-): string | undefined => {
-  if (price === undefined || price === null) {
-    return undefined;
-  }
-
-  if (isProductPrice(price)) {
-    return formatCurrency(price.value, price.currencyCode, locale);
-  }
-
-  const resolvedPrice = resolveComponentData(price, locale, streamDocument, {
-    output: "plainText",
-  });
-
-  return resolvedPrice || undefined;
 };

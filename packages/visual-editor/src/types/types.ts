@@ -102,7 +102,7 @@ export type ProductStruct = {
   /**
    * The product's price
    */
-  price?: ProductPrice | TranslatableString | TranslatableRichText;
+  price?: ProductPrice;
   /** The product's description */
   description?: TranslatableRichText;
   /**
