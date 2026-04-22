@@ -60,7 +60,12 @@ describe("YextField", () => {
 
     if (false) {
       // @ts-expect-error optionalNumber must be declared directly as a field object.
-      void YextField(msg("fields.limit", "Limit"), { type: "optionalNumber", hideNumberFieldRadioLabel: "All", showNumberFieldRadioLabel: "Limit", defaultCustomValue: 3 });
+      void YextField(msg("fields.limit", "Limit"), {
+        type: "optionalNumber",
+        hideNumberFieldRadioLabel: "All",
+        showNumberFieldRadioLabel: "Limit",
+        defaultCustomValue: 3,
+      });
     }
   });
 

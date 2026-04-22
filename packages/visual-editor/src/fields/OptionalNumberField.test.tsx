@@ -34,9 +34,10 @@ const renderField = (
 };
 
 const getRadioInput = (label: string) =>
-  screen.getByText(label).closest("label")?.querySelector("input") as
-    | HTMLInputElement
-    | null;
+  screen
+    .getByText(label)
+    .closest("label")
+    ?.querySelector("input") as HTMLInputElement | null;
 
 describe("OptionalNumberField", () => {
   it("renders through YextAutoField as a registered field type", () => {
@@ -118,8 +119,6 @@ describe("OptionalNumberField", () => {
 
     expect(getRadioInput("Custom")?.checked).toBe(true);
     expect(screen.getByRole("spinbutton")).toBeDefined();
-    expect((screen.getByRole("spinbutton") as HTMLInputElement).value).toBe(
-      ""
-    );
+    expect((screen.getByRole("spinbutton") as HTMLInputElement).value).toBe("");
   });
 });

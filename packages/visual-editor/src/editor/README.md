@@ -217,13 +217,13 @@ This could be used for a number field with an "all" or "default" option.
 
 ### Props
 
-| Name                      | Type                   | Description                                                               |
-| ------------------------- | ---------------------- | ------------------------------------------------------------------------- |
-| type                      | `"optionalNumber"`     | The registered field type.                                                |
-| label                     | `string \| MsgString`  | The label for the field.                                                  |
-| hideNumberFieldRadioLabel | `string \| MsgString`  | The label for the radio option corresponding to hiding the number field.  |
-| showNumberFieldRadioLabel | `string \| MsgString`  | The label for the radio option corresponding to showing the number field. |
-| defaultCustomValue        | `number`               | The default number if the number field is shown.                          |
+| Name                      | Type                  | Description                                                               |
+| ------------------------- | --------------------- | ------------------------------------------------------------------------- |
+| type                      | `"optionalNumber"`    | The registered field type.                                                |
+| label                     | `string \| MsgString` | The label for the field.                                                  |
+| hideNumberFieldRadioLabel | `string \| MsgString` | The label for the radio option corresponding to hiding the number field.  |
+| showNumberFieldRadioLabel | `string \| MsgString` | The label for the radio option corresponding to showing the number field. |
+| defaultCustomValue        | `number`              | The default number if the number field is shown.                          |
 
 #### Usage
 

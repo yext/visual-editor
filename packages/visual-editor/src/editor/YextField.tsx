@@ -161,9 +161,10 @@ type YextFieldConfig<Props = any> =
   | YextImageField
   | YextVideoField
   | YextDynamicSelectField<Props extends DynamicOptionValueTypes ? Props : any>
-  | YextPuckFields[
-      Exclude<keyof YextPuckFields, "basicSelector" | "optionalNumber">
-    ];
+  | YextPuckFields[Exclude<
+      keyof YextPuckFields,
+      "basicSelector" | "optionalNumber"
+    >];
 
 export function YextField<T = any>(
   fieldName: MsgString,
