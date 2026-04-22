@@ -544,6 +544,7 @@
   "kilometer_other": "kilometry",
   "knowledgeGraphContent": "Treść wykresu wiedzy",
   "link": "Link",
+  "linkedEntityMultiValueWarning": "Znaleziono wiele połączonych jednostek dla {{fieldName}}. Korzystanie z pierwszego połączonego elementu.",
   "linkTypes": {
     "clickToWebsite": "Kliknij na stronę internetową",
     "drivingDirections": "Kierunki jazdy",
@@ -583,8 +584,10 @@
   "nearbyLocationsEmptyState": "Brak {{entityType}} w promieniu {{radius}} {{unit}}",
   "nearbyLocationsEmptyStateSectionHidden": "Sekcja ukryta dla tego elementu {{entityType}}",
   "noAvailableFields": "Brak dostępnych pól",
+  "noAvailableTypes": "Brak dostępnych typów",
   "noMatchesFound": "Nie znaleziono dopasowań.",
   "noResultsFoundForThisArea": "Nie znaleziono wyników dla tego obszaru",
+  "noTypesFoundMsg": "Nie znaleziono typów. Sprawdź swoją konfigurację.",
   "open24Hours": "Otwarte 24 godziny",
   "openHeaderMenu": "Otwórz menu nagłówka",
   "openMenu": "Otwórz menu",

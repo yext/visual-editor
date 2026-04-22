@@ -542,6 +542,7 @@
   "kilometer_other": "kilometer",
   "knowledgeGraphContent": "Kunskapgrafinnehåll",
   "link": "länk",
+  "linkedEntityMultiValueWarning": "Flera länkade enheter hittades för {{fieldName}}. Använder den första länkade enheten.",
   "linkTypes": {
     "clickToWebsite": "Klicka på webbplatsen",
     "drivingDirections": "Vägbeskrivning",
@@ -573,8 +574,10 @@
   "nearbyLocationsEmptyState": "Ingen {{entityType}} inom {{radius}} {{unit}}",
   "nearbyLocationsEmptyStateSectionHidden": "Avsnittet är dolt för denna {{entityType}}",
   "noAvailableFields": "Inga tillgängliga fält",
+  "noAvailableTypes": "Inga tillgängliga typer",
   "noMatchesFound": "Inga matcher hittades.",
   "noResultsFoundForThisArea": "Inga resultat hittades för detta område",
+  "noTypesFoundMsg": "Inga typer hittades. Kontrollera din konfiguration.",
   "open24Hours": "Öppet 24 timmar",
   "openHeaderMenu": "Öppen rubrikmeny",
   "openMenu": "Öppna meny",

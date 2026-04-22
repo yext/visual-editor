@@ -542,6 +542,7 @@
   "kilometer_other": "kilométer",
   "knowledgeGraphContent": "Tudás grafikon tartalma",
   "link": "link",
+  "linkedEntityMultiValueWarning": "Több összekapcsolt entitás található a következőhöz: {{fieldName}}. Az első kapcsolt entitás használata.",
   "linkTypes": {
     "clickToWebsite": "Kattintson a weboldalra",
     "drivingDirections": "Vezetési útmutatások",
@@ -573,8 +574,10 @@
   "nearbyLocationsEmptyState": "Nincs {{entityType}} {{radius}} {{unit}} belül",
   "nearbyLocationsEmptyStateSectionHidden": "A szakasz elrejtve ehhez a(z) {{entityType}}",
   "noAvailableFields": "Nincs elérhető mezők",
+  "noAvailableTypes": "Nincsenek elérhető típusok",
   "noMatchesFound": "Nincsenek mérkőzések.",
   "noResultsFoundForThisArea": "Nincs eredmény erre a területre",
+  "noTypesFoundMsg": "Nem található típus. Kérjük, ellenőrizze a konfigurációt.",
   "open24Hours": "Nyitva 24 órát",
   "openHeaderMenu": "Nyissa meg a fejléc menüjét",
   "openMenu": "Nyissa meg a menüt",

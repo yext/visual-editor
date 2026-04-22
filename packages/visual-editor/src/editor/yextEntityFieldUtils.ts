@@ -25,22 +25,30 @@ export const getFieldsForSelector = (
   filter: RenderEntityFieldFilter<any>,
   linkedEntitySchemas?: LinkedEntitySchemas
 ): YextSchemaField[] => {
+  const linkedEntityStreamFields =
+    buildLinkedEntityStreamFields(linkedEntitySchemas);
   let filteredEntityFields = getFilteredEntityFields(entityFields, filter);
-  const linkedEntityFields =
-    !filter.includeListsOnly && linkedEntitySchemas
-      ? getFilteredEntityFields(
-          buildLinkedEntityStreamFields(linkedEntitySchemas),
-          filter
-        )
+  let linkedEntityFields =
+    !filter.includeListsOnly && linkedEntityStreamFields
+      ? getFilteredEntityFields(linkedEntityStreamFields, filter)
       : [];
 
   // If there are no direct children, return the parent field if it is a list
   if (filter.directChildrenOf && filteredEntityFields.length === 0) {
-    filteredEntityFields = getFilteredEntityFields(entityFields, {
+    const fallbackFilter = {
       allowList: [filter.directChildrenOf],
       types: filter.types,
       includeListsOnly: true,
-    });
+    } satisfies RenderEntityFieldFilter<any>;
+
+    filteredEntityFields = getFilteredEntityFields(
+      entityFields,
+      fallbackFilter
+    );
+    linkedEntityFields =
+      !filter.includeListsOnly && linkedEntityStreamFields
+        ? getFilteredEntityFields(linkedEntityStreamFields, fallbackFilter)
+        : [];
   }
 
   return [...filteredEntityFields, ...linkedEntityFields].sort(

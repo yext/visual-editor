@@ -542,6 +542,7 @@
   "kilometer_other": "kilometre",
   "knowledgeGraphContent": "Bilgi Grafik İçeriği",
   "link": "bağlantı",
+  "linkedEntityMultiValueWarning": "{{fieldName}} için birden fazla bağlantılı varlık bulundu. İlk bağlantılı varlığın kullanılması.",
   "linkTypes": {
     "clickToWebsite": "Web sitesine tıklayın",
     "drivingDirections": "Yol Tarifi",
@@ -573,8 +574,10 @@
   "nearbyLocationsEmptyState": "{{radius}} {{unit}} içerisinde {{entityType}} yok",
   "nearbyLocationsEmptyStateSectionHidden": "Bu {{entityType}} için bölüm gizlendi",
   "noAvailableFields": "Mevcut alan yok",
+  "noAvailableTypes": "Kullanılabilir tür yok",
   "noMatchesFound": "Eşleşme bulunamadı.",
   "noResultsFoundForThisArea": "Bu alan için sonuç bulunamadı",
+  "noTypesFoundMsg": "Hiçbir tür bulunamadı. Lütfen yapılandırmanızı kontrol edin.",
   "open24Hours": "24 saat açık",
   "openHeaderMenu": "Başlık Menüsünü Aç",
   "openMenu": "Açık Menü",

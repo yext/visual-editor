@@ -542,6 +542,7 @@
   "kilometer_other": "公里",
   "knowledgeGraphContent": "知识图内容",
   "link": "关联",
+  "linkedEntityMultiValueWarning": "找到了 {{fieldName}} 的多个链接实体。使用第一个链接实体。",
   "linkTypes": {
     "clickToWebsite": "单击网站",
     "drivingDirections": "行驶方向",
@@ -573,8 +574,10 @@
   "nearbyLocationsEmptyState": "{{radius}} {{unit}}内没有 {{entityType}}",
   "nearbyLocationsEmptyStateSectionHidden": "此 {{entityType}} 的部分已隐藏",
   "noAvailableFields": "没有可用的字段",
+  "noAvailableTypes": "无可用类型",
   "noMatchesFound": "找不到比赛。",
   "noResultsFoundForThisArea": "该区域找不到结果",
+  "noTypesFoundMsg": "未找到类型。请检查您的配置。",
   "open24Hours": "打开24小时",
   "openHeaderMenu": "打开标题菜单",
   "openMenu": "开放菜单",

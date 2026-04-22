@@ -542,6 +542,7 @@
   "kilometer_other": "kilometer",
   "knowledgeGraphContent": "Kunnskapsgrafinnhold",
   "link": "lenke",
+  "linkedEntityMultiValueWarning": "Det ble funnet flere koblede enheter for {{fieldName}}. Bruker den første koblede enheten.",
   "linkTypes": {
     "clickToWebsite": "Klikk til nettstedet",
     "drivingDirections": "Veibeskrivelse",
@@ -573,8 +574,10 @@
   "nearbyLocationsEmptyState": "Ingen {{entityType}} innenfor {{radius}} {{unit}}",
   "nearbyLocationsEmptyStateSectionHidden": "Seksjon skjult for denne {{entityType}}",
   "noAvailableFields": "Ingen tilgjengelige felt",
+  "noAvailableTypes": "Ingen tilgjengelige typer",
   "noMatchesFound": "Ingen kamper funnet.",
   "noResultsFoundForThisArea": "Ingen resultater funnet for dette området",
+  "noTypesFoundMsg": "Ingen typer funnet. Vennligst sjekk konfigurasjonen din.",
   "open24Hours": "Åpent 24 timer",
   "openHeaderMenu": "Åpne headermeny",
   "openMenu": "Åpen meny",
