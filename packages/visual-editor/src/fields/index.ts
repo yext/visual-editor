@@ -3,6 +3,12 @@ export {
   type BasicSelectorField,
 } from "./BasicSelectorField.tsx";
 
+export {
+  CTASelectorFieldOverride,
+  type CTASelectorField,
+  type YextCTAField,
+} from "./CTASelectorField.tsx";
+
 export { CodeFieldOverride, type CodeField } from "./CodeField.tsx";
 
 export {

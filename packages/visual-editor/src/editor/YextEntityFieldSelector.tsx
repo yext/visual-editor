@@ -278,8 +278,6 @@ export const ConstantValueModeToggler = ({
   label: string;
   showLocale?: boolean;
 }) => {
-  // If disableConstantValue is true, constantValueInputSupported is always false.
-  // Else if the field type is supported by constant value input, constantValueInputSupported is true
   const constantValueInputSupported =
     !disableConstantValue &&
     fieldTypeFilter.some(
@@ -354,8 +352,6 @@ export const ConstantValueInput = <T extends Record<string, any>>({
   );
 
   if (!constantFieldConfig && isSingleStringField) {
-    // Support mixed string/rich-text field filters while keeping a plain
-    // text constant input experience for components that opt into both.
     constantFieldConfig = getConstantConfigFromType(
       "type.string",
       false,
@@ -404,7 +400,7 @@ export const ConstantValueInput = <T extends Record<string, any>>({
     </div>
   ) : (
     <YextAutoField
-      key={value?.selectedType} // reset when type changes
+      key={value?.selectedType}
       onChange={(newConstantValue, uiState) =>
         onChange(
           {
@@ -467,10 +463,6 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   const entityFieldSelector = React.useMemo<
     BasicSelectorField | undefined
   >(() => {
-    // If a selectedType is provided, filter the entity fields by that type.
-    // If optionValueToEntityFieldType is provided, use it to map the selectedType to an EntityFieldType.
-    // Otherwise, use the selectedType directly.
-    // This allows for type selections that map to the same entity field type.
     let selectedEntityFieldType;
     if (value?.selectedType) {
       if (typeSelectorConfig?.optionValueToEntityFieldType) {
@@ -480,7 +472,6 @@ export const EntityFieldInput = <T extends Record<string, any>>({
           selectedEntityFieldType =
             typeSelectorConfig.optionValueToEntityFieldType[value.selectedType];
         } else {
-          // If the selected type does not map to any entity field type, hide the selector.
           return;
         }
       } else {
