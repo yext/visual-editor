@@ -352,7 +352,7 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
               key={`visible-${i}`}
               className={
                 displayMode === "menu"
-                  ? "min-w-0 py-4 sm:max-w-full sm:basis-auto sm:py-0"
+                  ? "min-w-0 py-4 sm:max-w-full sm:basis-auto lg:py-0"
                   : "py-4 lg:py-0"
               }
             >
