@@ -10,22 +10,16 @@ import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Im
 
 const {
   dynamicOptionsSelectorMock,
-  optionalNumberFieldMock,
   translatableStringFieldMock,
   yextEntityFieldSelectorMock,
 } = vi.hoisted(() => ({
   dynamicOptionsSelectorMock: vi.fn(),
-  optionalNumberFieldMock: vi.fn(),
   translatableStringFieldMock: vi.fn(),
   yextEntityFieldSelectorMock: vi.fn(),
 }));
 
 vi.mock("./DynamicOptionsSelector.tsx", () => ({
   DynamicOptionsSelector: dynamicOptionsSelectorMock,
-}));
-
-vi.mock("./OptionalNumberField.tsx", () => ({
-  OptionalNumberField: optionalNumberFieldMock,
 }));
 
 vi.mock("./TranslatableStringField.tsx", () => ({
@@ -61,6 +55,15 @@ afterEach(() => {
 });
 
 describe("YextField", () => {
+  it("does not allow optionalNumber configs", () => {
+    expect(true).toBe(true);
+
+    if (false) {
+      // @ts-expect-error optionalNumber must be declared directly as a field object.
+      void YextField(msg("fields.limit", "Limit"), { type: "optionalNumber", hideNumberFieldRadioLabel: "All", showNumberFieldRadioLabel: "Limit", defaultCustomValue: 3 });
+    }
+  });
+
   it("returns a code field and renders it through YextAutoField", () => {
     const field = YextField<string>(msg("fields.html", "HTML"), {
       type: "code",
@@ -146,28 +149,6 @@ describe("YextField", () => {
       type: "ctaSelector",
       disableConstantValueToggle: true,
     });
-  });
-
-  it("delegates optionalNumber configs to OptionalNumberField", () => {
-    const returnedField = createCustomField();
-    const fieldName = msg("fields.columns", "Columns");
-
-    optionalNumberFieldMock.mockReturnValue(returnedField);
-
-    const field = YextField(fieldName, {
-      type: "optionalNumber",
-      hideNumberFieldRadioLabel: "Hide",
-      showNumberFieldRadioLabel: "Show",
-      defaultCustomValue: 3,
-    });
-
-    expect(optionalNumberFieldMock).toHaveBeenCalledWith({
-      fieldLabel: fieldName,
-      hideNumberFieldRadioLabel: "Hide",
-      showNumberFieldRadioLabel: "Show",
-      defaultCustomValue: 3,
-    });
-    expect(field).toBe(returnedField);
   });
 
   it("maps code fields to Puck config", () => {

@@ -20,3 +20,8 @@ export {
   FontSizeSelectorFieldOverride,
   type FontSizeSelectorField,
 } from "./FontSizeSelectorField.tsx";
+
+export {
+  OptionalNumberFieldOverride,
+  type OptionalNumberField,
+} from "./OptionalNumberField.tsx";
