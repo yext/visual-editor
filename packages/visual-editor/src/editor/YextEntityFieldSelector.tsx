@@ -51,7 +51,6 @@ import {
   getFieldsForSelector,
   type YextEntityField,
 } from "./yextEntityFieldUtils.ts";
-import { type ComboboxOption } from "../internal/types/combobox.ts";
 import { useDocument } from "../hooks/useDocument.tsx";
 import { resolveField } from "../utils/resolveYextEntityField.ts";
 import { toast } from "sonner";
@@ -76,32 +75,12 @@ const isYextPuckFieldType = (
 };
 
 export type { YextEntityField } from "./yextEntityFieldUtils.ts";
-
-/**
- * Configuration for the type selector dropdown in the YextEntityFieldSelector.
- * This allows for a two-tiered selection: first a "type", then a "field" of that type.
- */
-export type TypeSelectorConfigProps = {
-  /** The label for the type selector dropdown. */
-  typeLabel: string;
-  /** The label for the field selector dropdown. */
-  fieldLabel: string;
-  /** The options to display in the type selector dropdown. */
-  options: ComboboxOption[];
-  /**
-   * An optional mapping from a type selector option's value to an entity field type.
-   * This is useful when multiple type options should filter for the same underlying entity field type.
-   */
-  optionValueToEntityFieldType?: Record<string, string>;
-};
-
 export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
   {
     label: string;
     filter: RenderEntityFieldFilter<T>;
     disableConstantValueToggle?: boolean;
     disallowTranslation?: boolean;
-    typeSelectorConfig?: TypeSelectorConfigProps;
   };
 
 export const TYPE_TO_CONSTANT_CONFIG: Record<string, ConstantFieldConfig> = {
@@ -254,7 +233,6 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
               onChange={onChange}
               value={value}
               filter={props.filter}
-              typeSelectorConfig={props.typeSelectorConfig}
             />
           )}
         </>
@@ -278,6 +256,8 @@ export const ConstantValueModeToggler = ({
   label: string;
   showLocale?: boolean;
 }) => {
+  // If disableConstantValue is true, constantValueInputSupported is always false.
+  // Else if the field type is supported by constant value input, constantValueInputSupported is true
   const constantValueInputSupported =
     !disableConstantValue &&
     fieldTypeFilter.some(
@@ -333,7 +313,6 @@ type InputProps<T extends Record<string, any>> = {
   className?: string;
   disallowTranslation?: boolean;
   label?: string;
-  typeSelectorConfig?: TypeSelectorConfigProps;
 };
 
 export const ConstantValueInput = <T extends Record<string, any>>({
@@ -352,6 +331,8 @@ export const ConstantValueInput = <T extends Record<string, any>>({
   );
 
   if (!constantFieldConfig && isSingleStringField) {
+    // Support mixed string/rich-text field filters while keeping a plain
+    // text constant input experience for components that opt into both.
     constantFieldConfig = getConstantConfigFromType(
       "type.string",
       false,
@@ -400,7 +381,6 @@ export const ConstantValueInput = <T extends Record<string, any>>({
     </div>
   ) : (
     <YextAutoField
-      key={value?.selectedType}
       onChange={(newConstantValue, uiState) =>
         onChange(
           {
@@ -436,57 +416,16 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   onChange,
   value,
   className,
-  typeSelectorConfig,
+  label,
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
   const linkedEntitySchemas = useLinkedEntitySchemas();
   const templateMetadata = useTemplateMetadata();
   const streamDocument = useDocument();
-
-  const typeSelector = React.useMemo<BasicSelectorField | undefined>(() => {
-    if (!typeSelectorConfig) {
-      return;
-    }
-    return {
-      type: "basicSelector",
-      label: typeSelectorConfig.typeLabel,
-      options: typeSelectorConfig.options,
-      translateOptions: false,
-      noOptionsPlaceholder: pt("noAvailableTypes", "No available types"),
-      noOptionsMessage: pt(
-        "noTypesFoundMsg",
-        "No types found. Please check your configuration."
-      ),
-    };
-  }, [typeSelectorConfig]);
-
-  const entityFieldSelector = React.useMemo<
-    BasicSelectorField | undefined
-  >(() => {
-    let selectedEntityFieldType;
-    if (value?.selectedType) {
-      if (typeSelectorConfig?.optionValueToEntityFieldType) {
-        if (
-          typeSelectorConfig.optionValueToEntityFieldType[value.selectedType]
-        ) {
-          selectedEntityFieldType =
-            typeSelectorConfig.optionValueToEntityFieldType[value.selectedType];
-        } else {
-          return;
-        }
-      } else {
-        selectedEntityFieldType = value.selectedType;
-      }
-    }
-
+  const entityFieldSelector = React.useMemo<BasicSelectorField>(() => {
     const filteredEntityFields = getFieldsForSelector(
       entityFields,
-      {
-        ...filter,
-        types: selectedEntityFieldType
-          ? [selectedEntityFieldType]
-          : filter.types,
-      },
+      { ...filter },
       linkedEntitySchemas ?? undefined
     );
     const entityFieldOptions = filteredEntityFields.map((field) => ({
@@ -506,7 +445,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
 
     return {
       type: "basicSelector",
-      label: typeSelectorConfig?.fieldLabel,
+      label,
       options,
       translateOptions: false,
       noOptionsPlaceholder: pt("noAvailableFields", "No available fields"),
@@ -514,9 +453,8 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   }, [
     entityFields,
     filter,
+    label,
     templateMetadata.entityTypeDisplayName,
-    typeSelectorConfig,
-    value?.selectedType,
     linkedEntitySchemas,
   ]);
 
@@ -565,38 +503,19 @@ export const EntityFieldInput = <T extends Record<string, any>>({
 
   return (
     <div className={"ve-inline-block ve-w-full " + className}>
-      {typeSelectorConfig && typeSelector && (
-        <YextAutoField
-          field={typeSelector}
-          onChange={(selectedType, uiState) => {
-            onChange(
-              {
-                ...value,
-                field: "",
-                selectedType: selectedType,
-              },
-              uiState
-            );
-          }}
-          value={value?.selectedType}
-        />
-      )}
-      {entityFieldSelector && (
-        <YextAutoField
-          key={value?.selectedType}
-          field={entityFieldSelector}
-          onChange={(selectedEntityField, uiState) => {
-            onChange(
-              {
-                ...value,
-                field: selectedEntityField,
-              },
-              uiState
-            );
-          }}
-          value={value?.field}
-        />
-      )}
+      <YextAutoField
+        field={entityFieldSelector}
+        onChange={(selectedEntityField, uiState) => {
+          onChange(
+            {
+              ...value,
+              field: selectedEntityField,
+            },
+            uiState
+          );
+        }}
+        value={value?.field}
+      />
     </div>
   );
 };

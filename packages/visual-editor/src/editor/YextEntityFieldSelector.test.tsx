@@ -10,7 +10,6 @@ import {
   ConstantValueInput,
   EntityFieldInput,
   resetWarnedLinkedEntityFieldPaths,
-  type TypeSelectorConfigProps,
 } from "./YextEntityFieldSelector.tsx";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { EmbeddedFieldStringInputFromEntity } from "./EmbeddedFieldStringInput.tsx";
@@ -60,25 +59,11 @@ const defaultEntityFields: StreamFields = {
   },
 };
 
-const defaultTypeSelectorConfig: TypeSelectorConfigProps = {
-  typeLabel: "Type",
-  fieldLabel: "Field",
-  options: [
-    { label: "Text", value: "text" },
-    { label: "Image", value: "image" },
-  ],
-  optionValueToEntityFieldType: {
-    text: "type.string",
-    image: "type.image",
-  },
-};
-
 const renderEntityFieldInput = (
   props: {
     entityFields?: StreamFields | null;
     filter?: any;
     onChange?: any;
-    typeSelectorConfig?: TypeSelectorConfigProps;
     value?: Record<string, any>;
     document?: Record<string, unknown>;
     linkedEntitySchemas?: LinkedEntitySchemas;
@@ -92,10 +77,6 @@ const renderEntityFieldInput = (
     document = {},
     linkedEntitySchemas,
   } = props;
-  const resolvedTypeSelectorConfig =
-    "typeSelectorConfig" in props
-      ? props.typeSelectorConfig
-      : defaultTypeSelectorConfig;
   const templateMetadata = {
     ...generateTemplateMetadata(),
     entityTypeDisplayName: "Location",
@@ -111,7 +92,6 @@ const renderEntityFieldInput = (
             <EntityFieldInput
               filter={filter}
               onChange={onChange}
-              typeSelectorConfig={resolvedTypeSelectorConfig}
               value={value}
             />
           </EntityFieldsContext.Provider>
@@ -163,7 +143,6 @@ describe("YextEntityFieldSelector", () => {
   it("shows linked entity fields for single-value selectors", () => {
     renderEntityFieldInput({
       filter: { types: ["type.string"] },
-      typeSelectorConfig: undefined,
       linkedEntitySchemas: {
         c_linkedLocation: {
           displayName: "Linked Location",
@@ -207,7 +186,6 @@ describe("YextEntityFieldSelector", () => {
           ],
         },
       },
-      typeSelectorConfig: undefined,
     });
 
     fireEvent.click(screen.getByRole("combobox"));
@@ -215,80 +193,19 @@ describe("YextEntityFieldSelector", () => {
     expect(screen.queryByText("Linked Location > Name")).toBeNull();
   });
 
-  it("renders a type selector and filters entity field options by selected type", () => {
-    renderEntityFieldInput({
-      value: {
-        selectedType: "text",
-      },
-    });
-
-    expect(screen.getAllByRole("combobox")).toHaveLength(2);
-
-    fireEvent.click(screen.getAllByRole("combobox")[1]);
-
-    expect(screen.getAllByText("Location Field").length).toBeGreaterThan(0);
-    expect(screen.getByText("Name")).toBeDefined();
-    expect(screen.getByText("Description")).toBeDefined();
-    expect(screen.queryByText("Photo")).toBeNull();
-  });
-
-  it("clears the selected field when the selected type changes", () => {
-    const { onChange } = renderEntityFieldInput({
-      value: {
-        field: "name",
-        selectedType: "text",
-      },
-    });
-
-    fireEvent.click(screen.getAllByRole("combobox")[0]);
-    fireEvent.click(screen.getByText("Image"));
-
-    expect(onChange.mock.calls[0]?.[0]).toEqual({
-      field: "",
-      selectedType: "image",
-    });
-  });
-
-  it("hides the field selector when the selected type does not map to an entity field type", () => {
-    renderEntityFieldInput({
-      value: {
-        selectedType: "unsupported",
-      },
-    });
-
-    expect(screen.getAllByRole("combobox")).toHaveLength(1);
-  });
-
-  it("shows the no-options placeholder and message when no type options are available", () => {
-    renderEntityFieldInput({
-      typeSelectorConfig: {
-        ...defaultTypeSelectorConfig,
-        options: [],
-      },
-    });
-
-    expect(screen.getByText("No available types")).toBeDefined();
-    expect(
-      screen.getByText("No types found. Please check your configuration.")
-    ).toBeDefined();
-  });
-
   it("falls back to the default entity field option when no matching entity fields exist", () => {
     renderEntityFieldInput({
       entityFields: {
         fields: [],
       },
-      value: {
-        selectedType: "text",
-      },
     });
 
-    expect(screen.getAllByRole("combobox")).toHaveLength(2);
-    expect(screen.getAllByRole("combobox")[1]?.textContent).toContain(
+    expect(screen.getAllByRole("combobox")).toHaveLength(1);
+    expect(screen.getAllByRole("combobox")[0]?.textContent).toContain(
       "Location Field"
     );
 
-    fireEvent.click(screen.getAllByRole("combobox")[1]);
+    fireEvent.click(screen.getAllByRole("combobox")[0]);
 
     expect(screen.getAllByText("Location Field").length).toBeGreaterThan(0);
     expect(screen.queryByText("Name")).toBeNull();
@@ -385,7 +302,6 @@ describe("YextEntityFieldSelector", () => {
           ],
         },
       },
-      typeSelectorConfig: undefined,
     };
 
     renderEntityFieldInput(props);
