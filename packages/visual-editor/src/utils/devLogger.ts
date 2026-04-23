@@ -1,5 +1,7 @@
 export type DevLoggerPrefix =
   | "TEMPLATE_METADATA"
+  | "ENTITY_FIELDS"
+  | "LINKED_ENTITY_SCHEMAS"
   | "PUCK_CONFIG"
   | "LAYOUT_SAVE_STATE"
   | "THEME_SAVE_STATE"

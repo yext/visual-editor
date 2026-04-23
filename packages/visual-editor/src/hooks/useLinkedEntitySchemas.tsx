@@ -5,6 +5,9 @@ import {
 } from "../internal/hooks/useMessage.ts";
 import { type LinkedEntitySchemas } from "../utils/linkedEntityFieldUtils.ts";
 import { isDeepEqual } from "../utils/deepEqual.ts";
+import { DevLogger } from "../utils/devLogger.ts";
+
+const devLogger = new DevLogger();
 
 export type LinkedEntitySchemasPayload = {
   linkedEntitySchemas?: LinkedEntitySchemas;
@@ -27,6 +30,8 @@ export const usePlatformBridgeLinkedEntitySchemas = () => {
         Object.keys(payload.linkedEntitySchemas).length > 0
           ? payload.linkedEntitySchemas
           : null;
+
+      devLogger.logData("LINKED_ENTITY_SCHEMAS", receivedSchemas);
 
       setLinkedEntitySchemas((prev) =>
         isDeepEqual(receivedSchemas, prev) ? prev : receivedSchemas

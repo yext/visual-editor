@@ -5,6 +5,9 @@ import {
 } from "../internal/hooks/useMessage.ts";
 import { StreamFields, YextSchemaField } from "../types/entityFields.ts";
 import { isDeepEqual } from "../utils/deepEqual.ts";
+import { DevLogger } from "../utils/devLogger.ts";
+
+const devLogger = new DevLogger();
 
 /**
  * Under the hood we receive a Stream for a template, but we expose
@@ -21,6 +24,8 @@ export const usePlatformBridgeEntityFields = () => {
       displayNames: payload.apiNamesToDisplayNames,
     };
 
+    devLogger.logData("ENTITY_FIELDS", receivedValues);
+
     if (!isDeepEqual(receivedValues, entityFields)) {
       setEntityFields(receivedValues);
     }
@@ -32,7 +37,9 @@ export const usePlatformBridgeEntityFields = () => {
   });
 
   useReceiveMessage("getDevEntityFields", TARGET_ORIGINS, (send, payload) => {
-    setEntityFields({ fields: assignDefinitions(payload) });
+    const receivedValues = { fields: assignDefinitions(payload) };
+    devLogger.logData("ENTITY_FIELDS", receivedValues);
+    setEntityFields(receivedValues);
     send({
       status: "success",
       payload: { message: "getDevEntityFields received" },
