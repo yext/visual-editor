@@ -16,16 +16,30 @@ export type DevLoggerPrefix =
   | "PUCK_INITIAL_HISTORY"
   | "THEME_VALUES_TO_APPLY";
 
+type PendingLogEntry =
+  | {
+      kind: "data";
+      prefix: DevLoggerPrefix;
+      payload: any;
+    }
+  | {
+      kind: "func";
+      functionName: string;
+    }
+  | {
+      kind: "text";
+      text: string;
+    };
+
 export class DevLogger {
-  private static enabled: boolean;
+  private static enabled = false;
+  private static pendingLogs: PendingLogEntry[] = [];
+  private static readonly maxPendingLogs = 100;
 
   constructor(enabled: boolean = false) {
-    DevLogger.enabled = enabled;
-    if (!DevLogger.enabled) {
-      return;
+    if (enabled) {
+      this.enable(true);
     }
-
-    console.log("[DEBUG] xYextDebug enabled");
   }
 
   enable = (enabled: boolean) => {
@@ -36,10 +50,29 @@ export class DevLogger {
     }
 
     console.log("[DEBUG] xYextDebug enabled");
+    DevLogger.pendingLogs.forEach((entry) => {
+      switch (entry.kind) {
+        case "data":
+          console.log("[DEBUG]", entry.prefix, "-", entry.payload);
+          break;
+        case "func":
+          console.log("[DEBUG] -->", entry.functionName, "called");
+          break;
+        case "text":
+          console.log("[DEBUG]", entry.text);
+          break;
+      }
+    });
+    DevLogger.pendingLogs = [];
   };
 
   logData = (devLoggerPrefix: DevLoggerPrefix, payload: any) => {
     if (!DevLogger.enabled) {
+      DevLogger.bufferLog({
+        kind: "data",
+        prefix: devLoggerPrefix,
+        payload,
+      });
       return;
     }
 
@@ -48,6 +81,10 @@ export class DevLogger {
 
   logFunc = (functionName: string) => {
     if (!DevLogger.enabled) {
+      DevLogger.bufferLog({
+        kind: "func",
+        functionName,
+      });
       return;
     }
 
@@ -56,9 +93,20 @@ export class DevLogger {
 
   log = (text: string) => {
     if (!DevLogger.enabled) {
+      DevLogger.bufferLog({
+        kind: "text",
+        text,
+      });
       return;
     }
 
     console.log("[DEBUG]", text);
+  };
+
+  private static bufferLog = (entry: PendingLogEntry) => {
+    DevLogger.pendingLogs.push(entry);
+    if (DevLogger.pendingLogs.length > DevLogger.maxPendingLogs) {
+      DevLogger.pendingLogs.shift();
+    }
   };
 }
