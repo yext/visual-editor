@@ -5,11 +5,11 @@ import { EntityFieldsContext } from "../hooks/useEntityFields.tsx";
 import { LinkedEntitySchemasContext } from "../hooks/useLinkedEntitySchemas.tsx";
 import { TemplateMetadataContext } from "../internal/hooks/useMessageReceivers.ts";
 import { generateTemplateMetadata } from "../internal/types/templateMetadata.ts";
+import { type RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
 import { type StreamFields } from "../types/entityFields.ts";
 import {
   ConstantValueInput,
   EntityFieldInput,
-  resetWarnedLinkedEntityFieldPaths,
 } from "./YextEntityFieldSelector.tsx";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { EmbeddedFieldStringInputFromEntity } from "./EmbeddedFieldStringInput.tsx";
@@ -82,7 +82,7 @@ const renderEntityFieldInput = (
     entityTypeDisplayName: "Location",
   };
 
-  render(
+  const view = render(
     <TemplatePropsContext.Provider value={{ document }}>
       <TemplateMetadataContext.Provider value={templateMetadata}>
         <LinkedEntitySchemasContext.Provider
@@ -100,7 +100,7 @@ const renderEntityFieldInput = (
     </TemplatePropsContext.Provider>
   );
 
-  return { onChange };
+  return { onChange, ...view };
 };
 
 const renderEmbeddedFieldInput = ({
@@ -137,7 +137,6 @@ const renderEmbeddedFieldInput = ({
 describe("YextEntityFieldSelector", () => {
   beforeEach(() => {
     warningToast.mockClear();
-    resetWarnedLinkedEntityFieldPaths();
   });
 
   it("shows linked entity fields for single-value selectors", () => {
@@ -279,7 +278,9 @@ describe("YextEntityFieldSelector", () => {
 
   it("warns once when a linked entity field resolves through multiple references", () => {
     const props = {
-      filter: { types: ["type.string"] },
+      filter: {
+        types: ["type.string"],
+      } satisfies RenderEntityFieldFilter<Record<string, any>>,
       value: {
         field: "c_linkedLocation.name",
       },
@@ -304,8 +305,29 @@ describe("YextEntityFieldSelector", () => {
       },
     };
 
-    renderEntityFieldInput(props);
-    renderEntityFieldInput(props);
+    const { rerender } = renderEntityFieldInput(props);
+    rerender(
+      <TemplatePropsContext.Provider value={{ document: props.document }}>
+        <TemplateMetadataContext.Provider
+          value={{
+            ...generateTemplateMetadata(),
+            entityTypeDisplayName: "Location",
+          }}
+        >
+          <LinkedEntitySchemasContext.Provider
+            value={props.linkedEntitySchemas ?? null}
+          >
+            <EntityFieldsContext.Provider value={defaultEntityFields}>
+              <EntityFieldInput
+                filter={props.filter}
+                onChange={vi.fn()}
+                value={props.value}
+              />
+            </EntityFieldsContext.Provider>
+          </LinkedEntitySchemasContext.Provider>
+        </TemplateMetadataContext.Provider>
+      </TemplatePropsContext.Provider>
+    );
 
     expect(warningToast).toHaveBeenCalledTimes(1);
     expect(warningToast).toHaveBeenCalledWith(

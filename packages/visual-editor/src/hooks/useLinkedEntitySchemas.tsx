@@ -42,11 +42,11 @@ export const usePlatformBridgeLinkedEntitySchemas = () => {
   return linkedEntitySchemas;
 };
 
-const LinkedEntitySchemasContext = React.createContext<
+export const LinkedEntitySchemasContext = React.createContext<
   LinkedEntitySchemas | null | undefined
 >(undefined);
 
-const useLinkedEntitySchemas = () => {
+export const useLinkedEntitySchemas = () => {
   const context = React.useContext(LinkedEntitySchemasContext);
   if (context === undefined) {
     throw new Error(
@@ -56,5 +56,3 @@ const useLinkedEntitySchemas = () => {
 
   return context;
 };
-
-export { useLinkedEntitySchemas, LinkedEntitySchemasContext };

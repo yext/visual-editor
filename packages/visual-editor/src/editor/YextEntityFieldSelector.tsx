@@ -57,11 +57,6 @@ import { toast } from "sonner";
 import { isLinkedEntityFieldPath } from "../utils/linkedEntityFieldUtils.ts";
 
 const devLogger = new DevLogger();
-let warnedLinkedEntityFieldPathsByDocument = new WeakMap<any, Set<string>>();
-
-export const resetWarnedLinkedEntityFieldPaths = () => {
-  warnedLinkedEntityFieldPathsByDocument = new WeakMap<any, Set<string>>();
-};
 
 type RenderProps = Parameters<CustomField<any>["render"]>[0];
 type ConstantFieldConfig<ValueType = any> =
@@ -422,6 +417,13 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   const linkedEntitySchemas = useLinkedEntitySchemas();
   const templateMetadata = useTemplateMetadata();
   const streamDocument = useDocument();
+  const lastWarnedLinkedEntityFieldRef = React.useRef<
+    | {
+        document: object;
+        fieldPath: string;
+      }
+    | undefined
+  >(undefined);
   const entityFieldSelector = React.useMemo<BasicSelectorField>(() => {
     const filteredEntityFields = getFieldsForSelector(
       entityFields,
@@ -470,21 +472,18 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     }
 
     const resolution = resolveField(streamDocument, value.field);
-    const warnedLinkedEntityFieldPaths =
-      warnedLinkedEntityFieldPathsByDocument.get(streamDocument) ??
-      new Set<string>();
-    warnedLinkedEntityFieldPathsByDocument.set(
-      streamDocument,
-      warnedLinkedEntityFieldPaths
-    );
     if (
       !resolution.traversedMultiValueReference ||
-      warnedLinkedEntityFieldPaths.has(value.field)
+      (lastWarnedLinkedEntityFieldRef.current?.document === streamDocument &&
+        lastWarnedLinkedEntityFieldRef.current.fieldPath === value.field)
     ) {
       return;
     }
 
-    warnedLinkedEntityFieldPaths.add(value.field);
+    lastWarnedLinkedEntityFieldRef.current = {
+      document: streamDocument,
+      fieldPath: value.field,
+    };
     toast.warning(
       pt(
         "linkedEntityMultiValueWarning",
