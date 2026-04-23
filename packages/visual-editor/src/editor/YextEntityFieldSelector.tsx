@@ -55,6 +55,7 @@ import { useDocument } from "../hooks/useDocument.tsx";
 import { resolveField } from "../utils/resolveYextEntityField.ts";
 import { toast } from "sonner";
 import { isLinkedEntityFieldPath } from "../utils/linkedEntityFieldUtils.ts";
+import { StreamDocument } from "../utils/types/StreamDocument.ts";
 
 const devLogger = new DevLogger();
 
@@ -419,7 +420,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   const streamDocument = useDocument();
   const lastWarnedLinkedEntityFieldRef = React.useRef<
     | {
-        document: object;
+        streamDocument: StreamDocument;
         fieldPath: string;
       }
     | undefined
@@ -474,14 +475,15 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     const resolution = resolveField(streamDocument, value.field);
     if (
       !resolution.traversedMultiValueReference ||
-      (lastWarnedLinkedEntityFieldRef.current?.document === streamDocument &&
+      (lastWarnedLinkedEntityFieldRef.current?.streamDocument ===
+        streamDocument &&
         lastWarnedLinkedEntityFieldRef.current.fieldPath === value.field)
     ) {
       return;
     }
 
     lastWarnedLinkedEntityFieldRef.current = {
-      document: streamDocument,
+      streamDocument: streamDocument,
       fieldPath: value.field,
     };
     toast.warning(
