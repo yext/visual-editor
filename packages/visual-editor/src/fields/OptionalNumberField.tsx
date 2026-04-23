@@ -8,6 +8,7 @@ import {
 import { pt, type MsgString } from "../utils/i18n/platform.ts";
 
 const SHOW_OPTION_VALUE = "__ve_optionalNumber_show__";
+const HIDE_OPTION_VALUE = "__ve_optionalNumber_hide__";
 
 type OptionalNumberValue = number | string | null | undefined;
 
@@ -29,7 +30,7 @@ export const OptionalNumberFieldOverride = ({
   value,
   onChange,
 }: OptionalNumberFieldProps) => {
-  const isHidden = value === field.hideNumberFieldRadioLabel;
+  const isHidden = value === HIDE_OPTION_VALUE;
   const translatedLabel = field.label && pt(field.label);
 
   const optionalNumberField = (
@@ -39,7 +40,7 @@ export const OptionalNumberFieldOverride = ({
           type: "radio",
           options: [
             {
-              value: field.hideNumberFieldRadioLabel,
+              value: HIDE_OPTION_VALUE,
               label: pt(field.hideNumberFieldRadioLabel),
             },
             {
@@ -50,12 +51,12 @@ export const OptionalNumberFieldOverride = ({
         }}
         onChange={(nextValue) =>
           onChange(
-            nextValue === field.hideNumberFieldRadioLabel
-              ? field.hideNumberFieldRadioLabel
+            nextValue === HIDE_OPTION_VALUE
+              ? HIDE_OPTION_VALUE
               : field.defaultCustomValue
           )
         }
-        value={isHidden ? field.hideNumberFieldRadioLabel : SHOW_OPTION_VALUE}
+        value={isHidden ? HIDE_OPTION_VALUE : SHOW_OPTION_VALUE}
       />
       {!isHidden && (
         <AutoField

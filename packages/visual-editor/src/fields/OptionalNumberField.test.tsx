@@ -8,10 +8,12 @@ import { type OptionalNumberField } from "./OptionalNumberField.tsx";
 const baseField = {
   type: "optionalNumber",
   label: "Limit",
-  hideNumberFieldRadioLabel: "All",
-  showNumberFieldRadioLabel: "Custom",
+  hideNumberFieldRadioLabel: "Hide",
+  showNumberFieldRadioLabel: "Show",
   defaultCustomValue: 3,
 } satisfies OptionalNumberField;
+
+const HIDE_OPTION_VALUE = "__ve_optionalNumber_hide__";
 
 const renderField = (
   field: OptionalNumberField = baseField,
@@ -44,42 +46,42 @@ describe("OptionalNumberField", () => {
     renderField(baseField, 5);
 
     expect(screen.getByText("Limit")).toBeDefined();
-    expect(getRadioInput("Custom")?.checked).toBe(true);
+    expect(getRadioInput("Show")?.checked).toBe(true);
     expect((screen.getByRole("spinbutton") as HTMLInputElement).value).toBe(
       "5"
     );
   });
 
-  it("shows the hidden-state radio selection and hides the number input", () => {
-    renderField(baseField, "All");
+  it("hides the number input when the hide radio sentinel value is used", () => {
+    renderField(baseField, HIDE_OPTION_VALUE);
 
-    expect(getRadioInput("All")?.checked).toBe(true);
+    expect(getRadioInput("Hide")?.checked).toBe(true);
     expect(screen.queryByRole("spinbutton")).toBeNull();
   });
 
-  it("renders the shown-state numeric input", () => {
+  it("renders the number input", () => {
     renderField(baseField, 7);
 
-    expect(getRadioInput("Custom")?.checked).toBe(true);
+    expect(getRadioInput("Show")?.checked).toBe(true);
     expect((screen.getByRole("spinbutton") as HTMLInputElement).value).toBe(
       "7"
     );
   });
 
   it("restores the default custom value when toggled on", () => {
-    const { onChange } = renderField(baseField, "All");
+    const { onChange } = renderField(baseField, HIDE_OPTION_VALUE);
 
-    fireEvent.click(getRadioInput("Custom") as HTMLInputElement);
+    fireEvent.click(getRadioInput("Show") as HTMLInputElement);
 
     expect(onChange).toHaveBeenCalledWith(3);
   });
 
-  it("stores the hide label value when toggled off", () => {
+  it("stores the hide sentinel when toggled off", () => {
     const { onChange } = renderField(baseField, 8);
 
-    fireEvent.click(getRadioInput("All") as HTMLInputElement);
+    fireEvent.click(getRadioInput("Hide") as HTMLInputElement);
 
-    expect(onChange).toHaveBeenCalledWith("All");
+    expect(onChange).toHaveBeenCalledWith(HIDE_OPTION_VALUE);
   });
 
   it("translates the label and radio copy", () => {
@@ -103,8 +105,8 @@ describe("OptionalNumberField", () => {
     const { container } = renderField(
       {
         type: "optionalNumber",
-        hideNumberFieldRadioLabel: "All",
-        showNumberFieldRadioLabel: "Custom",
+        hideNumberFieldRadioLabel: "Hide",
+        showNumberFieldRadioLabel: "Show",
         defaultCustomValue: 3,
       },
       2
@@ -117,7 +119,7 @@ describe("OptionalNumberField", () => {
   it("treats an undefined initial value as the shown path", () => {
     renderField(baseField);
 
-    expect(getRadioInput("Custom")?.checked).toBe(true);
+    expect(getRadioInput("Show")?.checked).toBe(true);
     expect(screen.getByRole("spinbutton")).toBeDefined();
     expect((screen.getByRole("spinbutton") as HTMLInputElement).value).toBe("");
   });
