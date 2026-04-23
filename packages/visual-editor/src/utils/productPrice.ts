@@ -1,5 +1,8 @@
 import { ProductPrice } from "../types/types.ts";
 
+/**
+ * Normalizes a product price value into a finite number when possible.
+ */
 const normalizePriceValue = (
   value: ProductPrice["value"]
 ): number | undefined => {
@@ -20,6 +23,9 @@ const normalizePriceValue = (
   return Number.isFinite(parsedValue) ? parsedValue : undefined;
 };
 
+/**
+ * Returns a locale that can be safely used with Intl.NumberFormat.
+ */
 const getSafeLocale = (locale: string) => {
   try {
     return Intl.NumberFormat.supportedLocalesOf(locale)[0] || "en-US";
@@ -28,6 +34,9 @@ const getSafeLocale = (locale: string) => {
   }
 };
 
+/**
+ * Formats a product price value and currency code into a display string.
+ */
 export const formatCurrency = (
   value: ProductPrice["value"],
   currencyCode: ProductPrice["currencyCode"],
