@@ -124,7 +124,7 @@ export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
   const staticImageSizes = {
     large: "1280x720",
     medium: "960x540",
-    small: "412x232",
+    small: "412x412",
   } as const;
 
   type StaticImageSize = keyof typeof staticImageSizes;
@@ -142,7 +142,7 @@ export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
       fullHeight
     >
       <div
-        className="mapbox-static-map-shell relative h-full w-full overflow-hidden"
+        className="mapbox-static-map-shell relative w-full overflow-hidden"
         style={{ height }}
       >
         <picture className="mapbox-static-map-picture block h-full w-full">
