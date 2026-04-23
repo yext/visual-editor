@@ -27,6 +27,7 @@ import { ProductSectionVariant } from "./ProductSection.tsx";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 import { formatCurrency } from "../../../utils/productPrice.ts";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 
 /**
  * Default product-shaped data used to keep placeholder content aligned with
@@ -57,15 +58,13 @@ const defaultProductData = {
   },
 } satisfies ProductStruct;
 
-/**
- * Default text-only slot placeholders used by the card's presentational slots.
- */
 const slotDefaultData = {
   priceText: { defaultValue: "$123.00" },
 };
 
 /**
- * Returns true when a value can be formatted as a complete product price.
+ * Returns true when a price includes a value and currency code
+ * and can be correctly formatted.
  */
 const isCompleteProductPrice = (
   value: unknown,
@@ -79,6 +78,19 @@ const isCompleteProductPrice = (
   return (
     ("value" in price || "currencyCode" in price) &&
     formatCurrency(price.value, price.currencyCode, locale) !== undefined
+  );
+};
+
+/**
+ * Returns true when a value looks like a product price object but cannot be
+ * formatted into a display string.
+ */
+const isInvalidProductPrice = (value: unknown, locale: string) => {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    ("value" in value || "currencyCode" in value) &&
+    !isCompleteProductPrice(value, locale)
   );
 };
 
@@ -504,19 +516,25 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
           locale
         )
       : undefined;
-    const resolvedFallbackPrice =
-      typeof fallbackPriceCandidate === "string" ||
-      typeof fallbackPriceCandidate === "number" ||
-      !fallbackPriceCandidate
-        ? fallbackPriceCandidate
-        : isCompleteProductPrice(fallbackPriceCandidate, locale)
-          ? formatCurrency(
-              fallbackPriceCandidate.value,
-              fallbackPriceCandidate.currencyCode,
-              locale
-            )
-          : undefined;
-    const resolvedPrice = resolvedPriceFromEntity ?? resolvedFallbackPrice;
+    const resolvedFallbackPrice = !fallbackPriceCandidate
+      ? fallbackPriceCandidate
+      : isCompleteProductPrice(fallbackPriceCandidate, locale)
+        ? formatCurrency(
+            fallbackPriceCandidate.value,
+            fallbackPriceCandidate.currencyCode,
+            locale
+          )
+        : isInvalidProductPrice(fallbackPriceCandidate, locale)
+          ? undefined
+          : resolveComponentData(
+              fallbackPriceCandidate,
+              locale,
+              params.metadata.streamDocument,
+              { output: "plainText" }
+            );
+    const resolvedPrice = !!resolvedPriceFromEntity
+      ? resolvedPriceFromEntity
+      : resolvedFallbackPrice;
     const showPrice = Boolean(resolvedPrice);
 
     const browSlotProps = data.props.slots.BrowSlot?.[0]?.props as
