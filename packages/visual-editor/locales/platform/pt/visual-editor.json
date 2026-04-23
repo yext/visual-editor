@@ -543,6 +543,7 @@
   "kilometer_other": "quilômetros",
   "knowledgeGraphContent": "Conteúdo do gráfico de conhecimento",
   "link": "link",
+  "linkedEntityMultiValueWarning": "Várias entidades vinculadas foram encontradas para {{fieldName}}. Usando a primeira entidade vinculada.",
   "linkTypes": {
     "clickToWebsite": "Clique no site",
     "drivingDirections": "Direções de direção",

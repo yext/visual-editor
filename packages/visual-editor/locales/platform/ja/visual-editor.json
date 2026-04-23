@@ -542,6 +542,7 @@
   "kilometer_other": "キロメートル",
   "knowledgeGraphContent": "ナレッジグラフコンテンツ",
   "link": "リンク",
+  "linkedEntityMultiValueWarning": "{{fieldName}} に対して複数のリンクされたエンティティが見つかりました。最初にリンクされたエンティティを使用します。",
   "linkTypes": {
     "clickToWebsite": "Webサイトをクリックしてください",
     "drivingDirections": "運転方向",

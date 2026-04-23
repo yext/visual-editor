@@ -542,6 +542,7 @@
   "kilometer_other": "kilomeetrit",
   "knowledgeGraphContent": "Teadmiste graafi sisu",
   "link": "link",
+  "linkedEntityMultiValueWarning": "{{fieldName}} jaoks leiti mitu lingitud olemit. Kasutades esimest lingitud olemit.",
   "linkTypes": {
     "clickToWebsite": "Klõpsake veebisaidil",
     "drivingDirections": "Juhtimissuunad",

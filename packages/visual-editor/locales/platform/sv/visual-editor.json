@@ -542,6 +542,7 @@
   "kilometer_other": "kilometer",
   "knowledgeGraphContent": "Kunskapgrafinnehåll",
   "link": "länk",
+  "linkedEntityMultiValueWarning": "Flera länkade enheter hittades för {{fieldName}}. Använder den första länkade enheten.",
   "linkTypes": {
     "clickToWebsite": "Klicka på webbplatsen",
     "drivingDirections": "Vägbeskrivning",

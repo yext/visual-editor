@@ -543,6 +543,7 @@
   "kilometer_other": "kilometara",
   "knowledgeGraphContent": "Sadržaj grafikona znanja",
   "link": "link",
+  "linkedEntityMultiValueWarning": "Pronađeno je više povezanih entiteta za {{fieldName}}. Korištenje prvog povezanog entiteta.",
   "linkTypes": {
     "clickToWebsite": "Kliknite na web mjesto",
     "drivingDirections": "Upute za vožnju",

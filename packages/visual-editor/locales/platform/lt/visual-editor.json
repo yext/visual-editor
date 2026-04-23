@@ -544,6 +544,7 @@
   "kilometer_other": "kilometrų",
   "knowledgeGraphContent": "Žinių grafiko turinys",
   "link": "nuoroda",
+  "linkedEntityMultiValueWarning": "Rasti keli susieti objektai, skirti {{fieldName}}. Naudojant pirmąjį susietą objektą.",
   "linkTypes": {
     "clickToWebsite": "Spustelėkite svetainę",
     "drivingDirections": "Važiavimo kryptys",

@@ -544,6 +544,7 @@
   "kilometer_other": "kilometry",
   "knowledgeGraphContent": "Treść wykresu wiedzy",
   "link": "Link",
+  "linkedEntityMultiValueWarning": "Znaleziono wiele połączonych jednostek dla {{fieldName}}. Korzystanie z pierwszego połączonego elementu.",
   "linkTypes": {
     "clickToWebsite": "Kliknij na stronę internetową",
     "drivingDirections": "Kierunki jazdy",

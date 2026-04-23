@@ -26,6 +26,7 @@ import {
 import { ENHANCED_CTA_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
 import { PHONE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Phone.tsx";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
+import { useLinkedEntitySchemas } from "../hooks/useLinkedEntitySchemas.tsx";
 import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 import { IMAGE_LIST_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/ImageList.tsx";
 import { EVENT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/EventSection.tsx";
@@ -50,6 +51,11 @@ import {
   getFieldsForSelector,
   type YextEntityField,
 } from "./yextEntityFieldUtils.ts";
+import { useDocument } from "../hooks/useDocument.tsx";
+import { resolveField } from "../utils/resolveYextEntityField.ts";
+import { toast } from "sonner";
+import { isLinkedEntityFieldPath } from "../utils/linkedEntityFieldUtils.ts";
+import { StreamDocument } from "../utils/types/StreamDocument.ts";
 
 const devLogger = new DevLogger();
 
@@ -65,7 +71,6 @@ const isYextPuckFieldType = (
 };
 
 export type { YextEntityField } from "./yextEntityFieldUtils.ts";
-
 export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
   {
     label: string;
@@ -410,12 +415,22 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   label,
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
+  const linkedEntitySchemas = useLinkedEntitySchemas();
   const templateMetadata = useTemplateMetadata();
-
+  const streamDocument = useDocument();
+  const lastWarnedLinkedEntityFieldRef = React.useRef<
+    | {
+        streamDocument: StreamDocument;
+        fieldPath: string;
+      }
+    | undefined
+  >(undefined);
   const entityFieldSelector = React.useMemo<BasicSelectorField>(() => {
-    const filteredEntityFields = getFieldsForSelector(entityFields, {
-      ...filter,
-    });
+    const filteredEntityFields = getFieldsForSelector(
+      entityFields,
+      { ...filter },
+      linkedEntitySchemas ?? undefined
+    );
     const entityFieldOptions = filteredEntityFields.map((field) => ({
       label: field.displayName ?? field.name,
       value: field.name,
@@ -438,7 +453,54 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       translateOptions: false,
       noOptionsPlaceholder: pt("noAvailableFields", "No available fields"),
     };
-  }, [entityFields, filter, label, templateMetadata.entityTypeDisplayName]);
+  }, [
+    entityFields,
+    filter,
+    label,
+    templateMetadata.entityTypeDisplayName,
+    linkedEntitySchemas,
+  ]);
+
+  // Warn once per document and linked field path when we resolve through a
+  // multi-value linked reference and fall back to the first linked entity.
+  React.useEffect(() => {
+    if (
+      filter.includeListsOnly ||
+      !value?.field ||
+      !isLinkedEntityFieldPath(value.field, linkedEntitySchemas ?? undefined)
+    ) {
+      return;
+    }
+
+    const resolution = resolveField(streamDocument, value.field);
+    if (
+      !resolution.traversedMultiValueReference ||
+      (lastWarnedLinkedEntityFieldRef.current?.streamDocument ===
+        streamDocument &&
+        lastWarnedLinkedEntityFieldRef.current.fieldPath === value.field)
+    ) {
+      return;
+    }
+
+    lastWarnedLinkedEntityFieldRef.current = {
+      streamDocument: streamDocument,
+      fieldPath: value.field,
+    };
+    toast.warning(
+      pt(
+        "linkedEntityMultiValueWarning",
+        "Multiple linked entities were found for {{fieldName}}. Using the first linked entity.",
+        {
+          fieldName: value.field,
+        }
+      )
+    );
+  }, [
+    filter.includeListsOnly,
+    linkedEntitySchemas,
+    streamDocument,
+    value?.field,
+  ]);
 
   return (
     <div className={"ve-inline-block ve-w-full " + className}>

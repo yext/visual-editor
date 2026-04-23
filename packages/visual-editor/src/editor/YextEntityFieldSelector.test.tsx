@@ -1,14 +1,29 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { EntityFieldsContext } from "../hooks/useEntityFields.tsx";
+import { LinkedEntitySchemasContext } from "../hooks/useLinkedEntitySchemas.tsx";
 import { TemplateMetadataContext } from "../internal/hooks/useMessageReceivers.ts";
 import { generateTemplateMetadata } from "../internal/types/templateMetadata.ts";
+import { type RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
 import { type StreamFields } from "../types/entityFields.ts";
 import {
   ConstantValueInput,
   EntityFieldInput,
 } from "./YextEntityFieldSelector.tsx";
+import { TemplatePropsContext } from "../hooks/useDocument.tsx";
+import { EmbeddedFieldStringInputFromEntity } from "./EmbeddedFieldStringInput.tsx";
+import { type LinkedEntitySchemas } from "../utils/linkedEntityFieldUtils.ts";
+
+const { warningToast } = vi.hoisted(() => ({
+  warningToast: vi.fn(),
+}));
+
+vi.mock("sonner", () => ({
+  toast: {
+    warning: warningToast,
+  },
+}));
 
 const defaultEntityFields: StreamFields = {
   fields: [
@@ -44,74 +59,137 @@ const defaultEntityFields: StreamFields = {
   },
 };
 
-const renderEntityFieldInput = ({
-  entityFields = defaultEntityFields,
-  filter = { types: ["type.string", "type.image"] },
-  onChange = vi.fn(),
-  label,
-  value = {},
-}: {
-  entityFields?: StreamFields | null;
-  filter?: any;
-  onChange?: any;
-  label?: string;
-  value?: Record<string, any>;
-} = {}) => {
+const renderEntityFieldInput = (
+  props: {
+    entityFields?: StreamFields | null;
+    filter?: any;
+    onChange?: any;
+    value?: Record<string, any>;
+    document?: Record<string, unknown>;
+    linkedEntitySchemas?: LinkedEntitySchemas;
+  } = {}
+) => {
+  const {
+    entityFields = defaultEntityFields,
+    filter = { types: ["type.string", "type.image"] },
+    onChange = vi.fn(),
+    value = {},
+    document = {},
+    linkedEntitySchemas,
+  } = props;
   const templateMetadata = {
     ...generateTemplateMetadata(),
     entityTypeDisplayName: "Location",
   };
 
-  render(
-    <TemplateMetadataContext.Provider value={templateMetadata}>
-      <EntityFieldsContext.Provider value={entityFields}>
-        <EntityFieldInput
-          filter={filter}
-          label={label}
-          onChange={onChange}
-          value={value}
-        />
-      </EntityFieldsContext.Provider>
-    </TemplateMetadataContext.Provider>
+  const view = render(
+    <TemplatePropsContext.Provider value={{ document }}>
+      <TemplateMetadataContext.Provider value={templateMetadata}>
+        <LinkedEntitySchemasContext.Provider
+          value={linkedEntitySchemas ?? null}
+        >
+          <EntityFieldsContext.Provider value={entityFields}>
+            <EntityFieldInput
+              filter={filter}
+              onChange={onChange}
+              value={value}
+            />
+          </EntityFieldsContext.Provider>
+        </LinkedEntitySchemasContext.Provider>
+      </TemplateMetadataContext.Provider>
+    </TemplatePropsContext.Provider>
   );
 
-  return { onChange };
+  return { onChange, ...view };
+};
+
+const renderEmbeddedFieldInput = ({
+  entityFields = defaultEntityFields,
+  filter = { types: ["type.string"] },
+  linkedEntitySchemas,
+}: {
+  entityFields?: StreamFields | null;
+  filter?: any;
+  linkedEntitySchemas?: LinkedEntitySchemas;
+} = {}) => {
+  const templateMetadata = generateTemplateMetadata();
+
+  render(
+    <TemplatePropsContext.Provider value={{ document: {} }}>
+      <TemplateMetadataContext.Provider value={templateMetadata}>
+        <LinkedEntitySchemasContext.Provider
+          value={linkedEntitySchemas ?? null}
+        >
+          <EntityFieldsContext.Provider value={entityFields}>
+            <EmbeddedFieldStringInputFromEntity
+              filter={filter}
+              onChange={vi.fn()}
+              showFieldSelector={true}
+              value=""
+            />
+          </EntityFieldsContext.Provider>
+        </LinkedEntitySchemasContext.Provider>
+      </TemplateMetadataContext.Provider>
+    </TemplatePropsContext.Provider>
+  );
 };
 
 describe("YextEntityFieldSelector", () => {
-  it("renders a single entity field selector with matching options", () => {
-    renderEntityFieldInput();
-
-    expect(screen.getAllByRole("combobox")).toHaveLength(1);
-
-    fireEvent.click(screen.getByRole("combobox"));
-    expect(screen.getAllByText("Location Field").length).toBeGreaterThan(0);
-    expect(screen.getByText("Name")).toBeDefined();
-    expect(screen.getByText("Description")).toBeDefined();
-    expect(screen.getByText("Photo")).toBeDefined();
+  beforeEach(() => {
+    warningToast.mockClear();
   });
 
-  it("updates the selected entity field", () => {
-    const { onChange } = renderEntityFieldInput({
-      value: {
-        field: "name",
+  it("shows linked entity fields for single-value selectors", () => {
+    renderEntityFieldInput({
+      filter: { types: ["type.string"] },
+      linkedEntitySchemas: {
+        c_linkedLocation: {
+          displayName: "Linked Location",
+          fields: [
+            {
+              name: "name",
+              displayName: "Name",
+              definition: {
+                name: "name",
+                typeName: "type.string",
+                type: {},
+              },
+            },
+          ],
+        },
       },
     });
 
     fireEvent.click(screen.getByRole("combobox"));
-    fireEvent.click(screen.getByText("Description"));
 
-    expect(onChange.mock.calls[0]?.[0]).toEqual({
-      field: "description",
-    });
+    expect(screen.getByText("Name")).toBeDefined();
+    expect(screen.getByText("Linked Location > Name")).toBeDefined();
   });
 
-  it("uses the provided label when one is set", () => {
+  it("does not show linked entity fields for list-only selectors", () => {
     renderEntityFieldInput({
-      label: "CTA Field",
+      filter: { types: ["type.string"], includeListsOnly: true },
+      linkedEntitySchemas: {
+        c_linkedLocation: {
+          displayName: "Linked Location",
+          fields: [
+            {
+              name: "name",
+              displayName: "Name",
+              definition: {
+                name: "name",
+                typeName: "type.string",
+                type: {},
+              },
+            },
+          ],
+        },
+      },
     });
 
-    expect(screen.getByText("CTA Field")).toBeDefined();
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(screen.queryByText("Linked Location > Name")).toBeNull();
   });
 
   it("falls back to the default entity field option when no matching entity fields exist", () => {
@@ -122,11 +200,11 @@ describe("YextEntityFieldSelector", () => {
     });
 
     expect(screen.getAllByRole("combobox")).toHaveLength(1);
-    expect(screen.getByRole("combobox")?.textContent).toContain(
+    expect(screen.getAllByRole("combobox")[0]?.textContent).toContain(
       "Location Field"
     );
 
-    fireEvent.click(screen.getByRole("combobox"));
+    fireEvent.click(screen.getAllByRole("combobox")[0]);
 
     expect(screen.getAllByText("Location Field").length).toBeGreaterThan(0);
     expect(screen.queryByText("Name")).toBeNull();
@@ -157,6 +235,103 @@ describe("YextEntityFieldSelector", () => {
         constantValue: "2026-06-01T13:45",
       },
       undefined
+    );
+  });
+
+  it("includes linked entity fields in the embedded field selector", () => {
+    renderEmbeddedFieldInput({
+      linkedEntitySchemas: {
+        c_linkedLocation: {
+          displayName: "Linked Location",
+          fields: [
+            {
+              name: "address",
+              displayName: "Address",
+              definition: {
+                name: "address",
+                typeName: "type.address",
+                type: {},
+              },
+              children: {
+                fields: [
+                  {
+                    name: "city",
+                    displayName: "City",
+                    definition: {
+                      name: "city",
+                      typeName: "type.string",
+                      type: {},
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    });
+
+    fireEvent.click(screen.getByLabelText("Add entity field"));
+
+    expect(screen.getByText("Linked Location > Address > City")).toBeDefined();
+  });
+
+  it("warns once when a linked entity field resolves through multiple references", () => {
+    const props = {
+      filter: {
+        types: ["type.string"],
+      } satisfies RenderEntityFieldFilter<Record<string, any>>,
+      value: {
+        field: "c_linkedLocation.name",
+      },
+      document: {
+        c_linkedLocation: [{ name: "First" }, { name: "Second" }],
+      },
+      linkedEntitySchemas: {
+        c_linkedLocation: {
+          displayName: "Linked Location",
+          fields: [
+            {
+              name: "name",
+              displayName: "Name",
+              definition: {
+                name: "name",
+                typeName: "type.string",
+                type: {},
+              },
+            },
+          ],
+        },
+      },
+    };
+
+    const { rerender } = renderEntityFieldInput(props);
+    rerender(
+      <TemplatePropsContext.Provider value={{ document: props.document }}>
+        <TemplateMetadataContext.Provider
+          value={{
+            ...generateTemplateMetadata(),
+            entityTypeDisplayName: "Location",
+          }}
+        >
+          <LinkedEntitySchemasContext.Provider
+            value={props.linkedEntitySchemas ?? null}
+          >
+            <EntityFieldsContext.Provider value={defaultEntityFields}>
+              <EntityFieldInput
+                filter={props.filter}
+                onChange={vi.fn()}
+                value={props.value}
+              />
+            </EntityFieldsContext.Provider>
+          </LinkedEntitySchemasContext.Provider>
+        </TemplateMetadataContext.Provider>
+      </TemplatePropsContext.Provider>
+    );
+
+    expect(warningToast).toHaveBeenCalledTimes(1);
+    expect(warningToast).toHaveBeenCalledWith(
+      "Multiple linked entities were found for c_linkedLocation.name. Using the first linked entity."
     );
   });
 });

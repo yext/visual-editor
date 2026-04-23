@@ -543,6 +543,7 @@
   "kilometer_other": "kilometri",
   "knowledgeGraphContent": "Conținut grafic de cunoștințe",
   "link": "legătură",
+  "linkedEntityMultiValueWarning": "Au fost găsite mai multe entități conectate pentru {{fieldName}}. Folosind prima entitate conectată.",
   "linkTypes": {
     "clickToWebsite": "Faceți clic pe site -ul web",
     "drivingDirections": "Direcții de conducere",

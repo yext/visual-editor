@@ -542,6 +542,7 @@
   "kilometer_other": "kilometers",
   "knowledgeGraphContent": "Knowledge Graph content",
   "link": "Link",
+  "linkedEntityMultiValueWarning": "Multiple linked entities were found for {{fieldName}}. Using the first linked entity.",
   "linkTypes": {
     "clickToWebsite": "Click to Website",
     "drivingDirections": "Driving Directions",

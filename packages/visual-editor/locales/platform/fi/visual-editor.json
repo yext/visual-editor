@@ -542,6 +542,7 @@
   "kilometer_other": "kilometriä",
   "knowledgeGraphContent": "Tietokaavion sisältö",
   "link": "linkki",
+  "linkedEntityMultiValueWarning": "Kohdalle {{fieldName}} löydettiin useita linkitettyjä entiteettejä. Ensimmäisen linkitetyn entiteetin käyttäminen.",
   "linkTypes": {
     "clickToWebsite": "Napsauta verkkosivustoa",
     "drivingDirections": "Ajo -ohjeet",

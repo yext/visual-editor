@@ -542,6 +542,7 @@
   "kilometer_other": "Kilometer",
   "knowledgeGraphContent": "Knowledge Graph Inhalt",
   "link": "Link",
+  "linkedEntityMultiValueWarning": "Für {{fieldName}} wurden mehrere verknüpfte Entitäten gefunden. Verwendung der ersten verknüpften Entität.",
   "linkTypes": {
     "clickToWebsite": "Klick zur Website",
     "drivingDirections": "Routenplaner",

@@ -544,6 +544,7 @@
   "kilometer_other": "kilometrů",
   "knowledgeGraphContent": "Obsah grafu znalostí",
   "link": "odkaz",
+  "linkedEntityMultiValueWarning": "Pro {{fieldName}} bylo nalezeno více propojených entit. Pomocí první propojené entity.",
   "linkTypes": {
     "clickToWebsite": "Klikněte na web",
     "drivingDirections": "Směry jízdy",

@@ -544,6 +544,7 @@
   "kilometer_other": "kilometrov",
   "knowledgeGraphContent": "Obsah grafov vedomostí",
   "link": "prepojiť",
+  "linkedEntityMultiValueWarning": "Pre {{fieldName}} sa našlo viacero prepojených entít. Pomocou prvej prepojenej entity.",
   "linkTypes": {
     "clickToWebsite": "Kliknite na webovú stránku",
     "drivingDirections": "Riadenie",
