@@ -193,7 +193,6 @@ export const MapboxStaticMap: ComponentConfig<{ props: MapboxStaticProps }> = {
         longitude: 0,
       },
     },
-    height: "300px",
     mapStyle: "streets-v12",
   },
   render: (props) => <MapboxStaticMapComponent {...props} />,
