@@ -8,7 +8,7 @@ import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
 import { YextField } from "../../editor/YextField.tsx";
 import {
   MapboxStaticMapComponent,
-  mapStyleField,
+  mapboxStaticMapStyleOptions,
 } from "../contentBlocks/MapboxStaticMap.tsx";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
@@ -84,7 +84,10 @@ const staticMapSectionFields: Fields<StaticMapSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      mapStyle: mapStyleField,
+      mapStyle: YextField(msg("fields.mapStyle", "Map Style"), {
+        type: "select",
+        options: mapboxStaticMapStyleOptions,
+      }),
     },
   }),
 };

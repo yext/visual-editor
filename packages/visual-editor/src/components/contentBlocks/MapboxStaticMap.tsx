@@ -8,12 +8,7 @@ import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { Body } from "../atoms/body.tsx";
-import {
-  ComponentConfig,
-  Field,
-  Fields,
-  PuckComponent,
-} from "@puckeditor/core";
+import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import mapboxLogo from "../assets/mapbox-logo-black.svg";
 import { Map } from "lucide-react";
@@ -23,32 +18,27 @@ export type MapboxStaticProps = {
   apiKey: string;
   coordinate: YextEntityField<Coordinate>;
   mapStyle: string;
+  height?: string;
   zoom?: number;
 };
 
-export const mapStyleField: Field<string> = YextField(
-  msg("fields.mapStyle", "Map Style"),
+export const mapboxStaticMapStyleOptions = [
+  { value: "streets-v12", label: msg("fields.options.default", "Default") },
   {
-    type: "select",
-    options: [
-      { value: "streets-v12", label: msg("fields.options.default", "Default") },
-      {
-        value: "satellite-streets-v12",
-        label: msg("fields.options.satellite", "Satellite"),
-      },
-      { value: "light-v11", label: msg("fields.options.light", "Light") },
-      { value: "dark-v11", label: msg("fields.options.dark", "Dark") },
-      {
-        value: "navigation-day-v1",
-        label: msg("fields.options.navigationDay", "Navigation (Day)"),
-      },
-      {
-        value: "navigation-night-v1",
-        label: msg("fields.options.navigationNight", "Navigation (Night)"),
-      },
-    ],
-  }
-);
+    value: "satellite-streets-v12",
+    label: msg("fields.options.satellite", "Satellite"),
+  },
+  { value: "light-v11", label: msg("fields.options.light", "Light") },
+  { value: "dark-v11", label: msg("fields.options.dark", "Dark") },
+  {
+    value: "navigation-day-v1",
+    label: msg("fields.options.navigationDay", "Navigation (Day)"),
+  },
+  {
+    value: "navigation-night-v1",
+    label: msg("fields.options.navigationNight", "Navigation (Night)"),
+  },
+];
 
 const mapboxFields: Fields<MapboxStaticProps> = {
   apiKey: YextField(msg("fields.apiKey", "API Key"), {
@@ -61,7 +51,10 @@ const mapboxFields: Fields<MapboxStaticProps> = {
       filter: { types: ["type.coordinate"] },
     }
   ),
-  mapStyle: mapStyleField,
+  mapStyle: YextField(msg("fields.mapStyle", "Map Style"), {
+    type: "select",
+    options: mapboxStaticMapStyleOptions,
+  }),
 };
 
 const getPrimaryColor = (streamDocument: StreamDocument) => {
@@ -75,6 +68,7 @@ const getPrimaryColor = (streamDocument: StreamDocument) => {
 export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
   apiKey,
   coordinate: coordinateField,
+  height = "300px",
   zoom = 14,
   mapStyle = "light-v11",
   puck,
@@ -94,8 +88,9 @@ export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
       return (
         <div
           className={themeManagerCn(
-            "relative h-[300px] w-full bg-gray-100 rounded-lg border border-gray-200 flex flex-col items-center justify-center py-8 gap-2.5"
+            "relative w-full bg-gray-100 rounded-lg border border-gray-200 flex flex-col items-center justify-center py-8 gap-2.5"
           )}
+          style={{ height }}
         >
           <Map className="w-12 h-12 text-gray-400" />
           <div className="flex flex-col items-center gap-0">
@@ -129,7 +124,7 @@ export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
   const staticImageSizes = {
     large: "1280x720",
     medium: "960x540",
-    small: "412x412",
+    small: "412x232",
   } as const;
 
   type StaticImageSize = keyof typeof staticImageSizes;
@@ -143,39 +138,41 @@ export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
       displayName={pt("coordinate", "Coordinate")}
       fieldId={coordinateField.field}
       constantValueEnabled={coordinateField.constantValueEnabled}
-      className="w-full"
+      className="h-full w-full"
+      fullHeight
     >
-      <div className="relative h-[300px] w-full overflow-hidden">
-        <picture>
+      <div
+        className="mapbox-static-map-shell relative h-full w-full overflow-hidden"
+        style={{ height }}
+      >
+        <picture className="mapbox-static-map-picture block h-full w-full">
           <source
             media="(max-width: 412px)"
-            className="components h-full w-full object-cover"
             srcSet={getMapboxStaticImageUrl("small")}
           />
           <source
             media="(max-width: 960px)"
-            className="components h-full w-full object-cover"
             srcSet={getMapboxStaticImageUrl("medium")}
           />
           <img
             loading="lazy"
             src={getMapboxStaticImageUrl("large")}
-            className="components h-full w-full object-cover"
+            className="mapbox-static-map-image components block h-full w-full object-cover object-center"
             alt={t("map", "Map")}
           />
         </picture>
         {/* Mapbox requires attribution when using their static maps, https://docs.mapbox.com/help/dive-deeper/attribution/#static--print */}
-        <span className="absolute bottom-0 right-0 bg-gray-400/50 text-[8px] text-black">
+        <span className="mapbox-static-map-attribution absolute bottom-0 right-0 bg-gray-400/50 text-[8px] text-black">
           © <a href="https://www.mapbox.com/about/maps">Mapbox</a>©{" "}
           <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>
         </span>
-        <span className="absolute bottom-0 left-0">
+        <span className="mapbox-static-map-logo absolute bottom-0 left-0">
           <a href="https://www.mapbox.com/">
             <img
               loading="lazy"
               src={mapboxLogo}
               alt="Mapbox"
-              className="w-10"
+              className="block h-auto w-10 object-contain object-left-bottom"
             />
           </a>
         </span>
@@ -196,6 +193,7 @@ export const MapboxStaticMap: ComponentConfig<{ props: MapboxStaticProps }> = {
         longitude: 0,
       },
     },
+    height: "300px",
     mapStyle: "streets-v12",
   },
   render: (props) => <MapboxStaticMapComponent {...props} />,
