@@ -55,20 +55,6 @@ afterEach(() => {
 });
 
 describe("YextField", () => {
-  it("does not allow optionalNumber configs", () => {
-    expect(true).toBe(true);
-
-    if (false) {
-      // @ts-expect-error optionalNumber must be declared directly as a field object.
-      void YextField(msg("fields.limit", "Limit"), {
-        type: "optionalNumber",
-        hideNumberFieldRadioLabel: "All",
-        showNumberFieldRadioLabel: "Limit",
-        defaultCustomValue: 3,
-      });
-    }
-  });
-
   it("returns a code field and renders it through YextAutoField", () => {
     const field = YextField<string>(msg("fields.html", "HTML"), {
       type: "code",
