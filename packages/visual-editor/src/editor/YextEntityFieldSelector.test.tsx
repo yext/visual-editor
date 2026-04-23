@@ -166,7 +166,7 @@ describe("YextEntityFieldSelector", () => {
     expect(screen.getByText("Linked Location > Name")).toBeDefined();
   });
 
-  it("does not show linked entity fields for list-only selectors", () => {
+  it("shows linked entity list fields for list-only selectors", () => {
     renderEntityFieldInput({
       filter: { types: ["type.string"], includeListsOnly: true },
       linkedEntitySchemas: {
@@ -174,12 +174,13 @@ describe("YextEntityFieldSelector", () => {
           displayName: "Linked Location",
           fields: [
             {
-              name: "name",
-              displayName: "Name",
+              name: "emails",
+              displayName: "Emails",
               definition: {
-                name: "name",
+                name: "emails",
                 typeName: "type.string",
                 type: {},
+                isList: true,
               },
             },
           ],
@@ -189,7 +190,7 @@ describe("YextEntityFieldSelector", () => {
 
     fireEvent.click(screen.getByRole("combobox"));
 
-    expect(screen.queryByText("Linked Location > Name")).toBeNull();
+    expect(screen.getByText("Linked Location > Emails")).toBeDefined();
   });
 
   it("falls back to the default entity field option when no matching entity fields exist", () => {

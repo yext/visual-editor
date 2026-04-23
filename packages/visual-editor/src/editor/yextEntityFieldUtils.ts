@@ -29,12 +29,16 @@ export const getFieldsForSelector = (
     buildLinkedEntityStreamFields(linkedEntitySchemas);
   let filteredEntityFields = getFilteredEntityFields(entityFields, filter);
   let linkedEntityFields =
-    !filter.includeListsOnly && linkedEntityStreamFields
+    linkedEntityStreamFields
       ? getFilteredEntityFields(linkedEntityStreamFields, filter)
       : [];
 
   // If there are no direct children, return the parent field if it is a list
-  if (filter.directChildrenOf && filteredEntityFields.length === 0) {
+  if (
+    filter.directChildrenOf &&
+    filteredEntityFields.length === 0 &&
+    linkedEntityFields.length === 0
+  ) {
     const fallbackFilter = {
       allowList: [filter.directChildrenOf],
       types: filter.types,
@@ -46,7 +50,7 @@ export const getFieldsForSelector = (
       fallbackFilter
     );
     linkedEntityFields =
-      !filter.includeListsOnly && linkedEntityStreamFields
+      linkedEntityStreamFields
         ? getFilteredEntityFields(linkedEntityStreamFields, fallbackFilter)
         : [];
   }

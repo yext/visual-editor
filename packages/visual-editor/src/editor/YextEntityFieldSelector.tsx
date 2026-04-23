@@ -465,7 +465,6 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   // multi-value linked reference and fall back to the first linked entity.
   React.useEffect(() => {
     if (
-      filter.includeListsOnly ||
       !value?.field ||
       !isLinkedEntityFieldPath(value.field, linkedEntitySchemas ?? undefined)
     ) {
@@ -496,7 +495,6 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       )
     );
   }, [
-    filter.includeListsOnly,
     linkedEntitySchemas,
     streamDocument,
     value?.field,
