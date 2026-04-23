@@ -6,15 +6,11 @@ import { useDocument } from "../hooks/useDocument.tsx";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
 import { useLinkedEntitySchemas } from "../hooks/useLinkedEntitySchemas.tsx";
 import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
-import {
-  type RenderEntityFieldFilter,
-} from "../internal/utils/getFilteredEntityFields.ts";
+import { type RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
 import { toast } from "sonner";
 import { type StreamDocument } from "../utils/types/StreamDocument.ts";
 import { pt, type MsgString } from "../utils/i18n/platform.ts";
-import {
-  isLinkedEntityFieldPath,
-} from "../utils/linkedEntityFieldUtils.ts";
+import { isLinkedEntityFieldPath } from "../utils/linkedEntityFieldUtils.ts";
 import { resolveField } from "../utils/resolveYextEntityField.ts";
 import {
   getListSourceSelectorOptions,
@@ -91,7 +87,9 @@ const ListSourceFieldInput = ({
   const normalizedValue = React.useMemo<ListSourceFieldValue>(
     () => ({
       field: value?.field ?? "",
-      constantValue: Array.isArray(value?.constantValue) ? value.constantValue : [],
+      constantValue: Array.isArray(value?.constantValue)
+        ? value.constantValue
+        : [],
       constantValueEnabled: value?.constantValueEnabled ?? true,
       itemFieldMappings: value?.itemFieldMappings,
     }),
@@ -131,7 +129,8 @@ const ListSourceFieldInput = ({
       !resolution.traversedMultiValueReference ||
       (lastWarnedLinkedEntityFieldRef.current?.streamDocument ===
         streamDocument &&
-        lastWarnedLinkedEntityFieldRef.current.fieldPath === normalizedValue.field)
+        lastWarnedLinkedEntityFieldRef.current.fieldPath ===
+          normalizedValue.field)
     ) {
       return;
     }
@@ -264,7 +263,7 @@ const ListSourceFieldInput = ({
                       {
                         ...normalizedValue,
                         itemFieldMappings: {
-                          ...(normalizedValue.itemFieldMappings ?? {}),
+                          ...normalizedValue.itemFieldMappings,
                           [config.key]: selectedMappingField,
                         },
                       },

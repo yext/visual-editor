@@ -9,9 +9,7 @@ import {
 } from "../internal/utils/getFilteredEntityFields.ts";
 import { type StreamFields } from "../types/entityFields.ts";
 import { resolveField } from "./resolveYextEntityField.ts";
-import {
-  type LinkedEntitySchemas,
-} from "./linkedEntityFieldUtils.ts";
+import { type LinkedEntitySchemas } from "./linkedEntityFieldUtils.ts";
 import { type StreamDocument } from "./types/StreamDocument.ts";
 
 export type ListSourceMappingConfig = {
@@ -94,8 +92,7 @@ export const getListSourceSelectorOptions = ({
       value: field.name,
     }));
 
-  const sourceOptions =
-    legacyOptions.length > 0 ? legacyOptions : listOptions;
+  const sourceOptions = legacyOptions.length > 0 ? legacyOptions : listOptions;
   const sourceOptionGroups =
     legacyOptions.length > 0 && listOptions.length > 0
       ? [
@@ -130,13 +127,17 @@ export const resolveDefaultListItemMappings = (
   mappingConfigs.forEach((config) => {
     const options = mappingOptionsByKey[config.key] ?? [];
     const existingValue = existingMappings?.[config.key];
-    if (existingValue && options.some((option) => option.value === existingValue)) {
+    if (
+      existingValue &&
+      options.some((option) => option.value === existingValue)
+    ) {
       nextMappings[config.key] = existingValue;
       return;
     }
 
-    const preferredValue = config.preferredFieldNames?.find((preferredFieldName) =>
-      options.some((option) => option.value === preferredFieldName)
+    const preferredValue = config.preferredFieldNames?.find(
+      (preferredFieldName) =>
+        options.some((option) => option.value === preferredFieldName)
     );
     if (preferredValue) {
       nextMappings[config.key] = preferredValue;
@@ -168,7 +169,10 @@ export const resolveMappedListItems = <T>(
     return undefined;
   }
 
-  const resolvedSource = resolveField<unknown>(streamDocument, sourceField).value;
+  const resolvedSource = resolveField<unknown>(
+    streamDocument,
+    sourceField
+  ).value;
   if (!Array.isArray(resolvedSource)) {
     return undefined;
   }

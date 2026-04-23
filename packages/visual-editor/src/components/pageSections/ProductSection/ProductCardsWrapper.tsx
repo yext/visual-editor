@@ -209,7 +209,8 @@ export const ProductCardsWrapper: YextComponentConfig<ProductCardsWrapperProps> 
               description:
                 resolvedItemFields.description as ProductStruct["description"],
               cta: resolvedItemFields.cta as ProductStruct["cta"],
-              category: resolvedItemFields.category as ProductStruct["category"],
+              category:
+                resolvedItemFields.category as ProductStruct["category"],
             })
           ) ??
           resolveYextEntityField<ProductSectionType | { products: undefined }>(

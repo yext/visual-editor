@@ -494,11 +494,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
         }
       )
     );
-  }, [
-    linkedEntitySchemas,
-    streamDocument,
-    value?.field,
-  ]);
+  }, [linkedEntitySchemas, streamDocument, value?.field]);
 
   return (
     <div className={"ve-inline-block ve-w-full " + className}>

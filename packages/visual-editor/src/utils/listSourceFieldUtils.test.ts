@@ -88,7 +88,9 @@ describe("getListSourceSelectorOptions", () => {
     expect(result.listSourceFieldNames.has("c_linkedLocation.linkedFAQs")).toBe(
       true
     );
-    expect(result.mappingOptionsBySourceField["c_linkedLocation.linkedFAQs"]).toEqual({
+    expect(
+      result.mappingOptionsBySourceField["c_linkedLocation.linkedFAQs"]
+    ).toEqual({
       question: [
         {
           label: "Linked Location > Linked FAQs > Answer",
