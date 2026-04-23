@@ -138,7 +138,7 @@ export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
       displayName={pt("coordinate", "Coordinate")}
       fieldId={coordinateField.field}
       constantValueEnabled={coordinateField.constantValueEnabled}
-      className="h-full w-full"
+      className="w-full"
       fullHeight
     >
       <div
