@@ -7,16 +7,14 @@ import { useEntityFields } from "../hooks/useEntityFields.tsx";
 import { useLinkedEntitySchemas } from "../hooks/useLinkedEntitySchemas.tsx";
 import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 import { type RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
-import { toast } from "sonner";
-import { type StreamDocument } from "../utils/types/StreamDocument.ts";
 import { pt, type MsgString } from "../utils/i18n/platform.ts";
 import { isLinkedEntityFieldPath } from "../utils/linkedEntityFieldUtils.ts";
-import { resolveField } from "../utils/resolveYextEntityField.ts";
 import {
   getListSourceSelectorOptions,
   resolveDefaultListItemMappings,
   type ListSourceMappingConfig,
 } from "../utils/listSourceFieldUtils.ts";
+import { warnOnMultiValueLinkedEntityTraversal } from "../utils/linkedEntityWarningUtils.ts";
 import {
   ConstantValueModeToggler,
   type YextEntityField,
@@ -76,13 +74,6 @@ const ListSourceFieldInput = ({
   const linkedEntitySchemas = useLinkedEntitySchemas();
   const streamDocument = useDocument();
   const templateMetadata = useTemplateMetadata();
-  const lastWarnedLinkedEntityFieldRef = React.useRef<
-    | {
-        fieldPath: string;
-        streamDocument: StreamDocument;
-      }
-    | undefined
-  >(undefined);
 
   const normalizedValue = React.useMemo<ListSourceFieldValue>(
     () => ({
@@ -124,29 +115,9 @@ const ListSourceFieldInput = ({
       return;
     }
 
-    const resolution = resolveField(streamDocument, normalizedValue.field);
-    if (
-      !resolution.traversedMultiValueReference ||
-      (lastWarnedLinkedEntityFieldRef.current?.streamDocument ===
-        streamDocument &&
-        lastWarnedLinkedEntityFieldRef.current.fieldPath ===
-          normalizedValue.field)
-    ) {
-      return;
-    }
-
-    lastWarnedLinkedEntityFieldRef.current = {
-      fieldPath: normalizedValue.field,
+    warnOnMultiValueLinkedEntityTraversal(
       streamDocument,
-    };
-    toast.warning(
-      pt(
-        "linkedEntityMultiValueWarning",
-        "Multiple linked entities were found for {{fieldName}}. Using the first linked entity.",
-        {
-          fieldName: normalizedValue.field,
-        }
-      )
+      normalizedValue.field
     );
   }, [linkedEntitySchemas, normalizedValue.field, streamDocument]);
 

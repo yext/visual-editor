@@ -52,10 +52,8 @@ import {
   type YextEntityField,
 } from "./yextEntityFieldUtils.ts";
 import { useDocument } from "../hooks/useDocument.tsx";
-import { resolveField } from "../utils/resolveYextEntityField.ts";
-import { toast } from "sonner";
 import { isLinkedEntityFieldPath } from "../utils/linkedEntityFieldUtils.ts";
-import { StreamDocument } from "../utils/types/StreamDocument.ts";
+import { warnOnMultiValueLinkedEntityTraversal } from "../utils/linkedEntityWarningUtils.ts";
 
 const devLogger = new DevLogger();
 
@@ -418,13 +416,6 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   const linkedEntitySchemas = useLinkedEntitySchemas();
   const templateMetadata = useTemplateMetadata();
   const streamDocument = useDocument();
-  const lastWarnedLinkedEntityFieldRef = React.useRef<
-    | {
-        streamDocument: StreamDocument;
-        fieldPath: string;
-      }
-    | undefined
-  >(undefined);
   const entityFieldSelector = React.useMemo<BasicSelectorField>(() => {
     const filteredEntityFields = getFieldsForSelector(
       entityFields,
@@ -471,29 +462,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       return;
     }
 
-    const resolution = resolveField(streamDocument, value.field);
-    if (
-      !resolution.traversedMultiValueReference ||
-      (lastWarnedLinkedEntityFieldRef.current?.streamDocument ===
-        streamDocument &&
-        lastWarnedLinkedEntityFieldRef.current.fieldPath === value.field)
-    ) {
-      return;
-    }
-
-    lastWarnedLinkedEntityFieldRef.current = {
-      streamDocument: streamDocument,
-      fieldPath: value.field,
-    };
-    toast.warning(
-      pt(
-        "linkedEntityMultiValueWarning",
-        "Multiple linked entities were found for {{fieldName}}. Using the first linked entity.",
-        {
-          fieldName: value.field,
-        }
-      )
-    );
+    warnOnMultiValueLinkedEntityTraversal(streamDocument, value.field);
   }, [linkedEntitySchemas, streamDocument, value?.field]);
 
   return (

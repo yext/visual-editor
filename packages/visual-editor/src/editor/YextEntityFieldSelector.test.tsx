@@ -1,5 +1,5 @@
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { EntityFieldsContext } from "../hooks/useEntityFields.tsx";
 import { LinkedEntitySchemasContext } from "../hooks/useLinkedEntitySchemas.tsx";
@@ -334,5 +334,41 @@ describe("YextEntityFieldSelector", () => {
     expect(warningToast).toHaveBeenCalledWith(
       "Multiple linked entities were found for c_linkedLocation.name. Using the first linked entity."
     );
+  });
+
+  it("warns once across remounts when a linked entity field resolves through multiple references", () => {
+    const props = {
+      filter: {
+        types: ["type.string"],
+      } satisfies RenderEntityFieldFilter<Record<string, any>>,
+      value: {
+        field: "c_linkedLocation.name",
+      },
+      document: {
+        c_linkedLocation: [{ name: "First" }, { name: "Second" }],
+      },
+      linkedEntitySchemas: {
+        c_linkedLocation: {
+          displayName: "Linked Location",
+          fields: [
+            {
+              name: "name",
+              displayName: "Name",
+              definition: {
+                name: "name",
+                typeName: "type.string",
+                type: {},
+              },
+            },
+          ],
+        },
+      },
+    };
+
+    renderEntityFieldInput(props);
+    cleanup();
+    renderEntityFieldInput(props);
+
+    expect(warningToast).toHaveBeenCalledTimes(1);
   });
 });
