@@ -62,10 +62,7 @@ const secondaryFooterSlotFields: YextFields<SecondaryFooterSlotProps> = {
         options: ThemeOptions.ALIGNMENT,
       },
       mobileContentAlignment: {
-        label: msg(
-          "fields.mobileContentAlignment",
-          "Mobile Content Alignment"
-        ),
+        label: msg("fields.mobileContentAlignment", "Mobile Content Alignment"),
         type: "radio",
         options: ThemeOptions.ALIGNMENT,
       },
