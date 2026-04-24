@@ -14,9 +14,14 @@ import { AssetImageType } from "../../../types/images.ts";
 import { PhotoGalleryWrapperProps } from "./PhotoGalleryWrapper.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+import { isMappedEntityFieldSelected } from "../entityFieldSectionUtils.ts";
+import {
+  getPhotoGalleryImageData,
+  PhotoGalleryImageValue,
+} from "./photoGalleryUtils.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
-// Generate 3 random placeholder images for the gallery
 export const PLACEHOLDER: AssetImageType = {
   ...getRandomPlaceholderImageObject({ width: 1000, height: 570 }),
   width: 1000,
@@ -27,30 +32,12 @@ export const PLACEHOLDER: AssetImageType = {
 };
 
 export interface PhotoGalleryStyles {
-  /**
-   * The background color for the entire section, selected from the theme.
-   * @defaultValue Background Color 1
-   */
   backgroundColor?: ThemeColor;
-
-  /**
-   * The layout style for displaying images in the gallery.
-   * @defaultValue "gallery"
-   */
   variant: "gallery" | "carousel";
-
-  /**
-   * Whether to show the section heading
-   * @defaultValue true
-   */
   showSectionHeading: boolean;
 }
 
 export interface PhotoGallerySectionProps {
-  /**
-   * This object contains properties for customizing the component's appearance.
-   * @propCategory Style Props
-   */
   styles: PhotoGalleryStyles;
 
   /** @internal */
@@ -59,10 +46,11 @@ export interface PhotoGallerySectionProps {
     PhotoGalleryWrapper: Slot;
   };
 
-  /**
-   * If 'true', the component is visible on the live page; if 'false', it's hidden.
-   * @defaultValue true
-   */
+  /** @internal */
+  conditionalRender?: {
+    isMappedContentEmpty?: boolean;
+  };
+
   liveVisibility: boolean;
 }
 
@@ -135,10 +123,6 @@ const PhotoGallerySectionComponent: PuckComponent<PhotoGallerySectionProps> = ({
   );
 };
 
-/**
- * The Photo Gallery Section is designed to display a collection of images in a visually appealing format. It consists of a main heading for the section and a flexible grid of images, with options for styling the image presentation.
- * Available on Location templates.
- */
 export const PhotoGallerySection: YextComponentConfig<PhotoGallerySectionProps> =
   {
     label: msg("components.photoGallerySection", "Photo Gallery Section"),
@@ -176,39 +160,9 @@ export const PhotoGallerySection: YextComponentConfig<PhotoGallerySectionProps> 
                 images: {
                   field: "",
                   constantValue: [
-                    {
-                      assetImage: {
-                        ...getRandomPlaceholderImageObject({
-                          width: 1000,
-                          height: 570,
-                        }),
-                        width: 1000,
-                        height: 570,
-                        assetImage: { name: "Placeholder" },
-                      },
-                    },
-                    {
-                      assetImage: {
-                        ...getRandomPlaceholderImageObject({
-                          width: 1000,
-                          height: 570,
-                        }),
-                        width: 1000,
-                        height: 570,
-                        assetImage: { name: "Placeholder" },
-                      },
-                    },
-                    {
-                      assetImage: {
-                        ...getRandomPlaceholderImageObject({
-                          width: 1000,
-                          height: 570,
-                        }),
-                        width: 1000,
-                        height: 570,
-                        assetImage: { name: "Placeholder" },
-                      },
-                    },
+                    { assetImage: PLACEHOLDER },
+                    { assetImage: PLACEHOLDER },
+                    { assetImage: PLACEHOLDER },
                   ],
                   constantValueEnabled: true,
                 },
@@ -229,19 +183,54 @@ export const PhotoGallerySection: YextComponentConfig<PhotoGallerySectionProps> 
       },
       liveVisibility: true,
     },
-    resolveData(data) {
+    resolveData(data, params) {
+      let updatedData = data;
+
       if (
-        data.props.slots.PhotoGalleryWrapper[0]?.props.parentData?.variant ===
+        data.props.slots.PhotoGalleryWrapper[0]?.props.parentData?.variant !==
         data.props.styles.variant
       ) {
-        return data;
+        updatedData = setDeep(
+          data,
+          "props.slots.PhotoGalleryWrapper[0].props.parentData.variant",
+          data.props.styles.variant
+        );
       }
 
-      return setDeep(
-        data,
-        "props.slots.PhotoGalleryWrapper[0].props.parentData.variant",
-        data.props.styles.variant
-      );
+      const photoGalleryWrapperProps = updatedData.props.slots
+        .PhotoGalleryWrapper[0]?.props as unknown as
+        | PhotoGalleryWrapperProps
+        | undefined;
+      const streamDocument = params.metadata.streamDocument;
+      const locale = streamDocument?.locale ?? "en";
+      const resolvedImages = photoGalleryWrapperProps?.data?.images
+        ? (resolveComponentData(
+            photoGalleryWrapperProps.data.images as any,
+            locale,
+            streamDocument
+          ) as unknown as PhotoGalleryImageValue[] | undefined)
+        : undefined;
+      const { hasRenderableImages } = getPhotoGalleryImageData({
+        resolvedImages,
+        locale,
+        streamDocument,
+        aspectRatio: photoGalleryWrapperProps?.styles?.image?.aspectRatio,
+        width: photoGalleryWrapperProps?.styles?.image?.width,
+        isEditing: false,
+      });
+
+      return {
+        ...updatedData,
+        props: {
+          ...updatedData.props,
+          conditionalRender:
+            isMappedEntityFieldSelected(
+              photoGalleryWrapperProps?.data?.images
+            ) && !hasRenderableImages
+              ? { isMappedContentEmpty: true }
+              : undefined,
+        },
+      };
     },
     render: (props) => (
       <ComponentErrorBoundary
@@ -252,7 +241,12 @@ export const PhotoGallerySection: YextComponentConfig<PhotoGallerySectionProps> 
           liveVisibility={props.liveVisibility}
           isEditing={props.puck.isEditing}
         >
-          <PhotoGallerySectionComponent {...props} />
+          {props.conditionalRender?.isMappedContentEmpty &&
+          !props.puck.isEditing ? (
+            <></>
+          ) : (
+            <PhotoGallerySectionComponent {...props} />
+          )}
         </VisibilityWrapper>
       </ComponentErrorBoundary>
     ),

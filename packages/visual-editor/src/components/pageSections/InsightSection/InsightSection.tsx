@@ -3,35 +3,27 @@ import {
   backgroundColors,
 } from "../../../utils/themeConfigOptions.ts";
 import { YextField } from "../../../editor/YextField.tsx";
-import { PageSection } from "../../atoms/pageSection.tsx";
 import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
-import { PuckComponent, Slot } from "@puckeditor/core";
+import { Slot } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { defaultInsightCardSlotData } from "./InsightCard.tsx";
 import { InsightCardsWrapperProps } from "./InsightCardsWrapper.tsx";
+import {
+  getMappedCardsSectionConditionalRender,
+  MappedCardsSectionConditionalRender,
+  MappedCardsSectionContent,
+  MappedCardsSectionShell,
+} from "../mappedCardsSectionUtils.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 export interface InsightSectionProps {
-  /**
-   * This object contains properties for customizing the component's appearance.
-   * @propCategory Style Props
-   */
   styles: {
-    /**
-     * The background color for the entire section.
-     * @defaultValue Background Color 2
-     */
     backgroundColor?: ThemeColor;
-
-    /**
-     * Whether to show the section heading.
-     * @defaultValue true
-     */
     showSectionHeading: boolean;
   };
 
@@ -45,10 +37,9 @@ export interface InsightSectionProps {
     scope?: string;
   };
 
-  /**
-   * If 'true', the component is visible on the live page; if 'false', it's hidden.
-   * @defaultValue true
-   */
+  /** @internal */
+  conditionalRender?: MappedCardsSectionConditionalRender;
+
   liveVisibility: boolean;
 }
 
@@ -99,26 +90,6 @@ const insightSectionFields: YextFields<InsightSectionProps> = {
   ),
 };
 
-const InsightSectionComponent: PuckComponent<InsightSectionProps> = (props) => {
-  const { slots, styles } = props;
-
-  return (
-    <PageSection
-      background={styles?.backgroundColor}
-      className="flex flex-col gap-8"
-    >
-      {styles.showSectionHeading && (
-        <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
-      )}
-      <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
-    </PageSection>
-  );
-};
-
-/**
- * The Insight Section is used to display a curated list of content such as articles, blog posts, or other informational blurbs. It features a main section heading and renders each insight as a distinct card, making it an effective way to showcase valuable content.
- * Available on Location templates.
- */
 export const InsightSection: YextComponentConfig<InsightSectionProps> = {
   label: msg("components.insightsSection", "Insights Section"),
   fields: insightSectionFields,
@@ -153,7 +124,7 @@ export const InsightSection: YextComponentConfig<InsightSectionProps> = {
             data: {
               field: "",
               constantValueEnabled: true,
-              constantValue: [{}, {}, {}], // leave ids blank to auto-generate
+              constantValue: [{}, {}, {}],
             },
             styles: {
               showImage: true,
@@ -179,25 +150,50 @@ export const InsightSection: YextComponentConfig<InsightSectionProps> = {
     liveVisibility: true,
   },
   resolveData: (data) => {
-    return forwardHeadingLevel<InsightCardsWrapperProps>(data, "TitleSlot");
-  },
-  render: (props) => {
-    return (
-      <ComponentErrorBoundary
-        isEditing={props.puck.isEditing}
-        resetKeys={[props]}
-      >
-        <AnalyticsScopeProvider
-          name={`${props.analytics?.scope ?? "insightsSection"}${getAnalyticsScopeHash(props.id)}`}
-        >
-          <VisibilityWrapper
-            liveVisibility={props.liveVisibility}
-            isEditing={props.puck.isEditing}
-          >
-            <InsightSectionComponent {...props} />
-          </VisibilityWrapper>
-        </AnalyticsScopeProvider>
-      </ComponentErrorBoundary>
+    const updatedData = forwardHeadingLevel<InsightCardsWrapperProps>(
+      data,
+      "TitleSlot"
     );
+
+    return {
+      ...updatedData,
+      props: {
+        ...updatedData.props,
+        conditionalRender: getMappedCardsSectionConditionalRender(
+          updatedData.props.slots.CardsWrapperSlot?.[0]
+        ),
+      },
+    };
   },
+  render: (props) => (
+    <ComponentErrorBoundary
+      isEditing={props.puck.isEditing}
+      resetKeys={[props]}
+    >
+      <AnalyticsScopeProvider
+        name={`${props.analytics?.scope ?? "insightsSection"}${getAnalyticsScopeHash(props.id)}`}
+      >
+        <VisibilityWrapper
+          liveVisibility={props.liveVisibility}
+          isEditing={props.puck.isEditing}
+        >
+          <MappedCardsSectionShell
+            conditionalRender={props.conditionalRender}
+            isEditing={props.puck.isEditing}
+            CardsWrapperSlot={props.slots.CardsWrapperSlot}
+          >
+            {(setCardsWrapperRef) => (
+              <MappedCardsSectionContent
+                backgroundColor={props.styles?.backgroundColor}
+                showSectionHeading={props.styles.showSectionHeading}
+                SectionHeadingSlot={props.slots.SectionHeadingSlot}
+                CardsWrapperSlot={props.slots.CardsWrapperSlot}
+                setCardsWrapperRef={setCardsWrapperRef}
+              />
+            )}
+          </MappedCardsSectionShell>
+        </VisibilityWrapper>
+      </AnalyticsScopeProvider>
+    </ComponentErrorBoundary>
+  ),
 };

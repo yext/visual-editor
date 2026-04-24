@@ -12,6 +12,7 @@ import {
 import { defaultTeamCardSlotData, TeamCardProps } from "./TeamCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
+import { EntityFieldSectionEmptyStateBox } from "../EntityFieldSectionEmptyState.tsx";
 import { YextComponentConfig } from "../../../fields/fields.ts";
 
 export type TeamCardsWrapperProps = CardWrapperType<TeamSectionType> & {
@@ -21,6 +22,11 @@ export type TeamCardsWrapperProps = CardWrapperType<TeamSectionType> & {
     showPhone: boolean;
     showEmail: boolean;
     showCTA: boolean;
+  };
+
+  /** @internal */
+  conditionalRender?: {
+    isMappedContentEmpty?: boolean;
   };
 };
 
@@ -121,7 +127,16 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
       )?.people;
 
       if (!resolvedTeam?.length) {
-        return setDeep(data, "props.slots.CardSlot", []);
+        const updatedData = setDeep(data, "props.slots.CardSlot", []);
+        return {
+          ...updatedData,
+          props: {
+            ...updatedData.props,
+            conditionalRender: {
+              isMappedContentEmpty: true,
+            },
+          },
+        };
       }
 
       const requiredLength = resolvedTeam.length;
@@ -144,7 +159,7 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
         ...cardsToAdd,
       ].slice(0, requiredLength) as ComponentData<TeamCardProps>[];
 
-      return setDeep(
+      const updatedData = setDeep(
         data,
         "props.slots.CardSlot",
         updatedCardSlot.map((card, i) => {
@@ -155,64 +170,93 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
           } satisfies TeamCardProps["parentData"]);
         })
       );
-    } else {
-      let updatedData = data;
 
-      if (!Array.isArray(data.props.data.constantValue)) {
-        updatedData = setDeep(updatedData, "props.data.constantValue", []);
-        return updatedData;
+      return {
+        ...updatedData,
+        props: {
+          ...updatedData.props,
+          conditionalRender: undefined,
+        },
+      };
+    }
+
+    let updatedData = data;
+
+    if (!Array.isArray(data.props.data.constantValue)) {
+      updatedData = setDeep(updatedData, "props.data.constantValue", []);
+      return {
+        ...updatedData,
+        props: {
+          ...updatedData.props,
+          conditionalRender: undefined,
+        },
+      };
+    }
+
+    const inUseIds = new Set<string>();
+    const newSlots = data.props.data.constantValue.map(({ id }, i) => {
+      const existingCard = id
+        ? (data.props.slots.CardSlot.find(
+            (slot) => slot.props.id === id
+          ) as ComponentData<TeamCardProps>)
+        : (data.props.slots.CardSlot[i] as
+            | ComponentData<TeamCardProps>
+            | undefined);
+
+      let newCard = existingCard
+        ? (JSON.parse(JSON.stringify(existingCard)) as typeof existingCard)
+        : undefined;
+
+      let newId = newCard?.props.id || `TeamCard-${crypto.randomUUID()}`;
+
+      if (newCard && inUseIds.has(newId)) {
+        newId = `TeamCard-${crypto.randomUUID()}`;
+        Object.entries(newCard.props.slots).forEach(([slotKey, slotArray]) => {
+          slotArray[0].props.id = newId + "-" + slotKey;
+        });
+      }
+      inUseIds.add(newId);
+
+      if (!newCard) {
+        return defaultTeamCardSlotData(
+          newId,
+          i,
+          sharedCardProps?.backgroundColor,
+          sharedCardProps?.slotStyles
+        );
       }
 
-      const inUseIds = new Set<string>();
-      const newSlots = data.props.data.constantValue.map(({ id }, i) => {
-        const existingCard = id
-          ? (data.props.slots.CardSlot.find(
-              (slot) => slot.props.id === id
-            ) as ComponentData<TeamCardProps>)
-          : (data.props.slots.CardSlot[i] as
-              | ComponentData<TeamCardProps>
-              | undefined);
+      newCard = setDeep(newCard, "props.id", newId);
+      newCard = setDeep(newCard, "props.index", i);
+      newCard = setDeep(newCard, "props.parentData", undefined);
 
-        let newCard = existingCard
-          ? (JSON.parse(JSON.stringify(existingCard)) as typeof existingCard)
-          : undefined;
+      return newCard;
+    });
 
-        let newId = newCard?.props.id || `TeamCard-${crypto.randomUUID()}`;
+    updatedData = setDeep(updatedData, "props.slots.CardSlot", newSlots);
+    updatedData = setDeep(
+      updatedData,
+      "props.data.constantValue",
+      newSlots.map((card) => ({ id: card.props.id }))
+    );
 
-        if (newCard && inUseIds.has(newId)) {
-          newId = `TeamCard-${crypto.randomUUID()}`;
-          Object.entries(newCard.props.slots).forEach(
-            ([slotKey, slotArray]) => {
-              slotArray[0].props.id = newId + "-" + slotKey;
-            }
-          );
-        }
-        inUseIds.add(newId);
-
-        if (!newCard) {
-          return defaultTeamCardSlotData(
-            newId,
-            i,
-            sharedCardProps?.backgroundColor,
-            sharedCardProps?.slotStyles
-          );
-        }
-
-        newCard = setDeep(newCard, "props.id", newId);
-        newCard = setDeep(newCard, "props.index", i);
-        newCard = setDeep(newCard, "props.parentData", undefined);
-
-        return newCard;
-      });
-
-      updatedData = setDeep(updatedData, "props.slots.CardSlot", newSlots);
-      updatedData = setDeep(
-        updatedData,
-        "props.data.constantValue",
-        newSlots.map((card) => ({ id: card.props.id }))
-      );
-      return updatedData;
-    }
+    return {
+      ...updatedData,
+      props: {
+        ...updatedData.props,
+        conditionalRender: undefined,
+      },
+    };
   },
-  render: (props) => <TeamCardsWrapperComponent {...props} />,
+  render: (props) => {
+    if (props.conditionalRender?.isMappedContentEmpty) {
+      return props.puck.isEditing ? (
+        <EntityFieldSectionEmptyStateBox showEmptyStateMarker />
+      ) : (
+        <div data-empty-state="true" />
+      );
+    }
+
+    return <TeamCardsWrapperComponent {...props} />;
+  },
 };

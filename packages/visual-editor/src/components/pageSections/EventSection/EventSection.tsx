@@ -1,10 +1,9 @@
-import { PuckComponent, Slot } from "@puckeditor/core";
+import { Slot } from "@puckeditor/core";
 import {
   ThemeColor,
   backgroundColors,
 } from "../../../utils/themeConfigOptions.ts";
 import { YextField } from "../../../editor/YextField.tsx";
-import { PageSection } from "../../atoms/pageSection.tsx";
 import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
@@ -13,24 +12,17 @@ import { defaultEventCardSlotData } from "./EventCard.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { EventCardsWrapperProps } from "./EventCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
+import {
+  getMappedCardsSectionConditionalRender,
+  MappedCardsSectionConditionalRender,
+  MappedCardsSectionContent,
+  MappedCardsSectionShell,
+} from "../mappedCardsSectionUtils.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 export interface EventSectionProps {
-  /**
-   * This object contains properties for customizing the component's appearance.
-   * @propCategory Style Props
-   */
   styles: {
-    /**
-     * The background color of the section.
-     * @defaultValue Background Color 3
-     */
     backgroundColor?: ThemeColor;
-
-    /**
-     * Whether to show the section heading.
-     * @defaultValue true
-     */
     showSectionHeading: boolean;
   };
 
@@ -44,6 +36,9 @@ export interface EventSectionProps {
   analytics: {
     scope?: string;
   };
+
+  /** @internal */
+  conditionalRender?: MappedCardsSectionConditionalRender;
 
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
@@ -99,26 +94,6 @@ const eventSectionFields: YextFields<EventSectionProps> = {
   ),
 };
 
-const EventSectionWrapper: PuckComponent<EventSectionProps> = (props) => {
-  const { styles, slots } = props;
-
-  return (
-    <PageSection
-      background={styles?.backgroundColor}
-      className="flex flex-col gap-8"
-    >
-      {styles.showSectionHeading && (
-        <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
-      )}
-      <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
-    </PageSection>
-  );
-};
-
-/**
- * The Events Section component is designed to display a curated list of events. It features a prominent section heading and renders each event as an individual card, making it ideal for showcasing upcoming activities, workshops, or promotions.
- * Available on Location templates.
- */
 export const EventSection: YextComponentConfig<EventSectionProps> = {
   label: msg("components.eventsSection", "Events Section"),
   fields: eventSectionFields,
@@ -150,7 +125,7 @@ export const EventSection: YextComponentConfig<EventSectionProps> = {
             data: {
               field: "",
               constantValueEnabled: true,
-              constantValue: [{}, {}, {}], // leave ids blank to auto-generate
+              constantValue: [{}, {}, {}],
             },
             styles: {
               showImage: true,
@@ -175,7 +150,16 @@ export const EventSection: YextComponentConfig<EventSectionProps> = {
     liveVisibility: true,
   },
   resolveData: (data) => {
-    return forwardHeadingLevel(data, "TitleSlot");
+    const updatedData = forwardHeadingLevel(data, "TitleSlot");
+    return {
+      ...updatedData,
+      props: {
+        ...updatedData.props,
+        conditionalRender: getMappedCardsSectionConditionalRender(
+          updatedData.props.slots.CardsWrapperSlot?.[0]
+        ),
+      },
+    };
   },
   render: (props) => (
     <ComponentErrorBoundary
@@ -189,7 +173,21 @@ export const EventSection: YextComponentConfig<EventSectionProps> = {
           liveVisibility={props.liveVisibility}
           isEditing={props.puck.isEditing}
         >
-          <EventSectionWrapper {...props} />
+          <MappedCardsSectionShell
+            conditionalRender={props.conditionalRender}
+            isEditing={props.puck.isEditing}
+            CardsWrapperSlot={props.slots.CardsWrapperSlot}
+          >
+            {(setCardsWrapperRef) => (
+              <MappedCardsSectionContent
+                backgroundColor={props.styles?.backgroundColor}
+                showSectionHeading={props.styles.showSectionHeading}
+                SectionHeadingSlot={props.slots.SectionHeadingSlot}
+                CardsWrapperSlot={props.slots.CardsWrapperSlot}
+                setCardsWrapperRef={setCardsWrapperRef}
+              />
+            )}
+          </MappedCardsSectionShell>
         </VisibilityWrapper>
       </AnalyticsScopeProvider>
     </ComponentErrorBoundary>

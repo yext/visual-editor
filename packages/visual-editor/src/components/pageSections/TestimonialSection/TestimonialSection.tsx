@@ -1,10 +1,9 @@
-import { PuckComponent, Slot } from "@puckeditor/core";
+import { Slot } from "@puckeditor/core";
 import {
   ThemeColor,
   backgroundColors,
 } from "../../../utils/themeConfigOptions.ts";
 import { YextField } from "../../../editor/YextField.tsx";
-import { PageSection } from "../../atoms/pageSection.tsx";
 import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
@@ -14,24 +13,17 @@ import { defaultTestimonialCardSlotData } from "./TestimonialCard.tsx";
 import { TestimonialCardsWrapperProps } from "./TestimonialCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import {
+  getMappedCardsSectionConditionalRender,
+  MappedCardsSectionConditionalRender,
+  MappedCardsSectionContent,
+  MappedCardsSectionShell,
+} from "../mappedCardsSectionUtils.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 export interface TestimonialSectionProps {
-  /**
-   * This object contains properties for customizing the component's appearance.
-   * @propCategory Style Props
-   */
   styles: {
-    /**
-     * The background color of the section.
-     * @defaultValue Background Color 2
-     */
     backgroundColor?: ThemeColor;
-
-    /**
-     * Whether to show the section heading.
-     * @defaultValue true
-     */
     showSectionHeading: boolean;
   };
 
@@ -46,10 +38,9 @@ export interface TestimonialSectionProps {
     scope?: string;
   };
 
-  /**
-   * If 'true', the component is visible on the live page; if 'false', it's hidden.
-   * @defaultValue true
-   */
+  /** @internal */
+  conditionalRender?: MappedCardsSectionConditionalRender;
+
   liveVisibility: boolean;
 }
 
@@ -100,28 +91,6 @@ const testimonialSectionFields: YextFields<TestimonialSectionProps> = {
   ),
 };
 
-const TestimonialSectionWrapper: PuckComponent<TestimonialSectionProps> = (
-  props
-) => {
-  const { styles, slots } = props;
-
-  return (
-    <PageSection
-      background={styles?.backgroundColor}
-      className="flex flex-col gap-8"
-    >
-      {styles?.showSectionHeading && (
-        <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
-      )}
-      <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
-    </PageSection>
-  );
-};
-
-/**
- * The Testimonial Section is used to display a list of customer testimonials or reviews. It features a main section heading and renders each testimonial as an individual card, providing social proof and building trust with visitors.
- * Available on Location templates.
- */
 export const TestimonialSection: YextComponentConfig<TestimonialSectionProps> =
   {
     label: msg("components.testimonialsSection", "Testimonials Section"),
@@ -177,7 +146,16 @@ export const TestimonialSection: YextComponentConfig<TestimonialSectionProps> =
       liveVisibility: true,
     },
     resolveData: (data) => {
-      return forwardHeadingLevel(data, "ContributorNameSlot");
+      const updatedData = forwardHeadingLevel(data, "ContributorNameSlot");
+      return {
+        ...updatedData,
+        props: {
+          ...updatedData.props,
+          conditionalRender: getMappedCardsSectionConditionalRender(
+            updatedData.props.slots.CardsWrapperSlot?.[0]
+          ),
+        },
+      };
     },
     render: (props) => (
       <ComponentErrorBoundary
@@ -191,7 +169,21 @@ export const TestimonialSection: YextComponentConfig<TestimonialSectionProps> =
             liveVisibility={props.liveVisibility}
             isEditing={props.puck.isEditing}
           >
-            <TestimonialSectionWrapper {...props} />
+            <MappedCardsSectionShell
+              conditionalRender={props.conditionalRender}
+              isEditing={props.puck.isEditing}
+              CardsWrapperSlot={props.slots.CardsWrapperSlot}
+            >
+              {(setCardsWrapperRef) => (
+                <MappedCardsSectionContent
+                  backgroundColor={props.styles?.backgroundColor}
+                  showSectionHeading={props.styles.showSectionHeading}
+                  SectionHeadingSlot={props.slots.SectionHeadingSlot}
+                  CardsWrapperSlot={props.slots.CardsWrapperSlot}
+                  setCardsWrapperRef={setCardsWrapperRef}
+                />
+              )}
+            </MappedCardsSectionShell>
           </VisibilityWrapper>
         </AnalyticsScopeProvider>
       </ComponentErrorBoundary>
