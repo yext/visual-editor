@@ -1,5 +1,5 @@
 import { PuckComponent, setDeep } from "@puckeditor/core";
-import { ThemeColor } from "../../utils/themeConfigOptions.ts";
+import { ThemeColor, ThemeOptions } from "../../utils/themeConfigOptions.ts";
 import { CTA } from "../atoms/cta.tsx";
 import { PresetImageType } from "../../types/types.ts";
 import { YextField } from "../../editor/YextField.tsx";
@@ -60,17 +60,19 @@ const ctaGroupFields: YextFields<CTAGroupProps> = {
         type: "ctaSelector",
         label: msg("fields.cta", "CTA"),
       },
-      normalizeLink: YextField(msg("fields.normalizeLink", "Normalize Link"), {
+      normalizeLink: {
+        label: msg("fields.normalizeLink", "Normalize Link"),
         type: "radio",
         options: [
           { label: msg("fields.options.yes", "Yes"), value: true },
           { label: msg("fields.options.no", "No"), value: false },
         ],
-      }),
-      variant: YextField(msg("fields.variant", "Variant"), {
+      },
+      variant: {
+        label: msg("fields.variant", "Variant"),
         type: "radio",
-        options: "CTA_VARIANT",
-      }),
+        options: ThemeOptions.CTA_VARIANT,
+      },
       presetImage: {
         type: "basicSelector",
         label: msg("fields.presetImage", "Preset Image"),

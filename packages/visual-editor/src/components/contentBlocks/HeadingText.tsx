@@ -112,10 +112,11 @@ const headingTextFields: YextFields<HeadingTextProps> = {
         label: msg("fields.headingLevel", "Heading Level"),
         options: "HEADING_LEVEL",
       },
-      align: YextField(msg("fields.headingAlign", "Heading Align"), {
+      align: {
+        label: msg("fields.headingAlign", "Heading Align"),
         type: "radio",
         options: ThemeOptions.ALIGNMENT,
-      }),
+      },
       color: {
         type: "basicSelector",
         label: msg("fields.color", "Color"),

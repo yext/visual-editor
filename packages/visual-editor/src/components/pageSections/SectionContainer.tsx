@@ -54,25 +54,24 @@ const sectionContainerFields: YextFields<SectionContainerProps> = {
         label: msg("fields.headingLevel", "Heading Level"),
         options: "HEADING_LEVEL",
       },
-      alignment: YextField(msg("fields.alignment", "Alignment"), {
+      alignment: {
+        label: msg("fields.alignment", "Alignment"),
         type: "radio",
         options: ThemeOptions.ALIGNMENT,
-      }),
+      },
     },
   }),
   sectionContent: {
     type: "slot",
   },
-  liveVisibility: YextField(
-    msg("fields.liveVisibility", "Visible on Live Page"),
-    {
-      type: "radio",
-      options: [
-        { label: "Show", value: true },
-        { label: "Hide", value: false },
-      ],
-    }
-  ),
+  liveVisibility: {
+    label: msg("fields.liveVisibility", "Visible on Live Page"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.show", "Show"), value: true },
+      { label: msg("fields.options.hide", "Hide"), value: false },
+    ],
+  },
 };
 
 const SectionContainerComponent: PuckComponent<SectionContainerProps> = (

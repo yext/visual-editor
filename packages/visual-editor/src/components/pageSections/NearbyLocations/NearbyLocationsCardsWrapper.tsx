@@ -5,6 +5,7 @@ import {
   backgroundColors,
   ThemeColor,
   HeadingLevel,
+  ThemeOptions,
 } from "../../../utils/themeConfigOptions.ts";
 import { Body } from "../../atoms/body.tsx";
 import {
@@ -162,17 +163,16 @@ const nearbyLocationCardsWrapperFields: YextFields<NearbyLocationCardsWrapperPro
         hours: YextField(msg("fields.hours", "Hours"), {
           type: "object",
           objectFields: {
-            showCurrentStatus: YextField(
-              msg("fields.showCurrentStatus", "Show Current Status"),
-              {
-                type: "radio",
-                options: [
-                  { label: msg("fields.options.yes", "Yes"), value: true },
-                  { label: msg("fields.options.no", "No"), value: false },
-                ],
-              }
-            ),
-            timeFormat: YextField(msg("fields.timeFormat", "Time Format"), {
+            showCurrentStatus: {
+              label: msg("fields.showCurrentStatus", "Show Current Status"),
+              type: "radio",
+              options: [
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
+              ],
+            },
+            timeFormat: {
+              label: msg("fields.timeFormat", "Time Format"),
               type: "radio",
               options: [
                 {
@@ -184,55 +184,50 @@ const nearbyLocationCardsWrapperFields: YextFields<NearbyLocationCardsWrapperPro
                   value: "24h",
                 },
               ],
-            }),
-            showDayNames: YextField(
-              msg("fields.showDayNames", "Show Day Names"),
-              {
-                type: "radio",
-                options: [
-                  { label: msg("fields.options.yes", "Yes"), value: true },
-                  { label: msg("fields.options.no", "No"), value: false },
-                ],
-              }
-            ),
-            dayOfWeekFormat: YextField(
-              msg("fields.dayOfWeekFormat", "Day of Week Format"),
-              {
-                type: "radio",
-                options: [
-                  {
-                    label: msg("fields.options.short", "Short"),
-                    value: "short",
-                  },
-                  {
-                    label: msg("fields.options.long", "Long"),
-                    value: "long",
-                  },
-                ],
-              }
-            ),
+            },
+            showDayNames: {
+              label: msg("fields.showDayNames", "Show Day Names"),
+              type: "radio",
+              options: [
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
+              ],
+            },
+            dayOfWeekFormat: {
+              label: msg("fields.dayOfWeekFormat", "Day of Week Format"),
+              type: "radio",
+              options: [
+                {
+                  label: msg("fields.options.short", "Short"),
+                  value: "short",
+                },
+                {
+                  label: msg("fields.options.long", "Long"),
+                  value: "long",
+                },
+              ],
+            },
           },
         }),
         phone: YextField(msg("fields.phone", "Phone"), {
           type: "object",
           objectFields: {
-            phoneNumberFormat: YextField(
-              msg("fields.phoneNumberFormat", "Phone Number Format"),
-              {
-                type: "radio",
-                options: "PHONE_OPTIONS",
-              }
-            ),
-            phoneNumberLink: YextField(
-              msg("fields.includePhoneHyperlink", "Include Phone Hyperlink"),
-              {
-                type: "radio",
-                options: [
-                  { label: msg("fields.options.yes", "Yes"), value: true },
-                  { label: msg("fields.options.no", "No"), value: false },
-                ],
-              }
-            ),
+            phoneNumberFormat: {
+              label: msg("fields.phoneNumberFormat", "Phone Number Format"),
+              type: "radio",
+              options: ThemeOptions.PHONE_OPTIONS,
+            },
+            phoneNumberLink: {
+              label: msg(
+                "fields.includePhoneHyperlink",
+                "Include Phone Hyperlink"
+              ),
+              type: "radio",
+              options: [
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
+              ],
+            },
             color: {
               type: "basicSelector",
               label: msg("fields.color", "Color"),
@@ -243,34 +238,39 @@ const nearbyLocationCardsWrapperFields: YextFields<NearbyLocationCardsWrapperPro
         address: YextField(msg("fields.address", "Address"), {
           type: "object",
           objectFields: {
-            showRegion: YextField(msg("fields.showRegion", "Show Region"), {
+            showRegion: {
+              label: msg("fields.showRegion", "Show Region"),
               type: "radio",
               options: [
                 { label: msg("fields.options.yes", "Yes"), value: true },
                 { label: msg("fields.options.no", "No"), value: false },
               ],
-            }),
-            showCountry: YextField(msg("fields.showCountry", "Show Country"), {
+            },
+            showCountry: {
+              label: msg("fields.showCountry", "Show Country"),
               type: "radio",
               options: [
                 { label: msg("fields.options.yes", "Yes"), value: true },
                 { label: msg("fields.options.no", "No"), value: false },
               ],
-            }),
+            },
           },
         }),
-        showHours: YextField(msg("fields.showHours", "Show Hours"), {
+        showHours: {
+          label: msg("fields.showHours", "Show Hours"),
           type: "radio",
-          options: "SHOW_HIDE",
-        }),
-        showPhone: YextField(msg("fields.showPhone", "Show Phone"), {
+          options: ThemeOptions.SHOW_HIDE,
+        },
+        showPhone: {
+          label: msg("fields.showPhone", "Show Phone"),
           type: "radio",
-          options: "SHOW_HIDE",
-        }),
-        showAddress: YextField(msg("fields.showAddress", "Show Address"), {
+          options: ThemeOptions.SHOW_HIDE,
+        },
+        showAddress: {
+          label: msg("fields.showAddress", "Show Address"),
           type: "radio",
-          options: "SHOW_HIDE",
-        }),
+          options: ThemeOptions.SHOW_HIDE,
+        },
       },
     }),
   };

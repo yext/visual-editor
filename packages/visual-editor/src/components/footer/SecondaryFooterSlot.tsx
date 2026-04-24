@@ -2,7 +2,7 @@ import * as React from "react";
 import { Slot, PuckComponent, setDeep } from "@puckeditor/core";
 import { YextField } from "../../editor/YextField.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
-import { ThemeColor } from "../../utils/themeConfigOptions.ts";
+import { ThemeColor, ThemeOptions } from "../../utils/themeConfigOptions.ts";
 import { PageSection, PageSectionProps } from "../atoms/pageSection.tsx";
 import { defaultCopyrightMessageSlotProps } from "./CopyrightMessageSlot.tsx";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
@@ -53,24 +53,24 @@ const secondaryFooterSlotFields: YextFields<SecondaryFooterSlotProps> = {
         label: msg("fields.backgroundColor", "Background Color"),
         options: "BACKGROUND_COLOR",
       },
-      desktopContentAlignment: YextField(
-        msg("fields.desktopContentAlignment", "Desktop Content Alignment"),
-        {
-          type: "radio",
-          options: "ALIGNMENT",
-        }
-      ),
-      mobileContentAlignment: YextField(
-        msg("fields.mobileContentAlignment", "Mobile Content Alignment"),
-        {
-          type: "radio",
-          options: "ALIGNMENT",
-        }
-      ),
-      showLinks: YextField(msg("fields.showLinks", "Show Links"), {
+      desktopContentAlignment: {
+        label: msg(
+          "fields.desktopContentAlignment",
+          "Desktop Content Alignment"
+        ),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
+        options: ThemeOptions.ALIGNMENT,
+      },
+      mobileContentAlignment: {
+        label: msg("fields.mobileContentAlignment", "Mobile Content Alignment"),
+        type: "radio",
+        options: ThemeOptions.ALIGNMENT,
+      },
+      showLinks: {
+        label: msg("fields.showLinks", "Show Links"),
+        type: "radio",
+        options: ThemeOptions.SHOW_HIDE,
+      },
     },
   }),
   slots: {

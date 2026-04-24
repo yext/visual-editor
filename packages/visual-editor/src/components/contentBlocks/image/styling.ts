@@ -11,7 +11,8 @@ export interface ImageStylingProps {
 }
 
 export const ImageStylingFields: YextFields<ImageStylingProps> = {
-  imageConstrain: YextField(msg("fields.imageConstrain", "Image Constrain"), {
+  imageConstrain: {
+    label: msg("fields.imageConstrain", "Image Constrain"),
     type: "radio",
     options: [
       {
@@ -24,7 +25,7 @@ export const ImageStylingFields: YextFields<ImageStylingProps> = {
       },
     ],
     visible: false,
-  }),
+  },
   width: YextField(msg("fields.options.width", "Width"), {
     type: "number",
     min: 0,

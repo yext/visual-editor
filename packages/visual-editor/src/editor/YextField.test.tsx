@@ -4,7 +4,6 @@ import { YextAutoField } from "../fields/YextAutoField.tsx";
 import { msg } from "../utils/i18n/platform.ts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { YextField } from "./YextField.tsx";
-import { ThemeOptions } from "../utils/themeConfigOptions.ts";
 import { VIDEO_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Video.tsx";
 import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 
@@ -71,21 +70,21 @@ describe("YextField", () => {
     );
   });
 
-  it("maps radio fields with theme option keys to Puck config", () => {
-    const fieldName = msg("fields.radio", "radio");
+  it("renders native radio fields through YextAutoField", () => {
+    renderCustomField(
+      {
+        label: msg("fields.show", "Show"),
+        type: "radio",
+        options: [
+          { label: msg("fields.options.yes", "Yes"), value: true },
+          { label: msg("fields.options.no", "No"), value: false },
+        ],
+      },
+      true
+    );
 
-    const field = YextField(fieldName, {
-      type: "radio",
-      options: "ALIGNMENT",
-      visible: false,
-    });
-
-    expect(field).toEqual({
-      label: fieldName,
-      visible: false,
-      type: "radio",
-      options: ThemeOptions.ALIGNMENT,
-    });
+    expect(screen.getAllByRole("radio")).toHaveLength(2);
+    expect(screen.getByRole("radio", { checked: true })).toBeDefined();
   });
 
   it.each([

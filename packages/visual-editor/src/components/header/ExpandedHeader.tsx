@@ -62,19 +62,17 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
       maxWidth: YextField(msg("fields.maxWidth", "Max Width"), {
         type: "maxWidth",
       }),
-      headerPosition: YextField(
-        msg("fields.headerPosition", "Header Position"),
-        {
-          type: "radio",
-          options: [
-            {
-              label: msg("fields.options.scrollsWithPage", "Scrolls with Page"),
-              value: "scrollsWithPage",
-            },
-            { label: msg("fields.options.fixed", "Fixed"), value: "fixed" },
-          ],
-        }
-      ),
+      headerPosition: {
+        label: msg("fields.headerPosition", "Header Position"),
+        type: "radio",
+        options: [
+          {
+            label: msg("fields.options.scrollsWithPage", "Scrolls with Page"),
+            value: "scrollsWithPage",
+          },
+          { label: msg("fields.options.fixed", "Fixed"), value: "fixed" },
+        ],
+      },
     },
   }),
   slots: {

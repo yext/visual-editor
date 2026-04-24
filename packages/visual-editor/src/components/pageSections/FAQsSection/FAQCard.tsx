@@ -23,7 +23,7 @@ import { useAnalytics } from "@yext/pages-components";
 import { useTranslation } from "react-i18next";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
-import { ThemeColor } from "../../../utils/themeConfigOptions.ts";
+import { ThemeColor, ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 const defaultFAQ = {
@@ -113,17 +113,16 @@ const FAQCardFields: YextFields<FAQCardProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      questionVariant: YextField(
-        msg("fields.questionVariant", "Question Variant"),
-        {
-          type: "radio",
-          options: "BODY_VARIANT",
-        }
-      ),
-      answerVariant: YextField(msg("fields.answerVariant", "Answer Variant"), {
+      questionVariant: {
+        label: msg("fields.questionVariant", "Question Variant"),
         type: "radio",
-        options: "BODY_VARIANT",
-      }),
+        options: ThemeOptions.BODY_VARIANT,
+      },
+      answerVariant: {
+        label: msg("fields.answerVariant", "Answer Variant"),
+        type: "radio",
+        options: ThemeOptions.BODY_VARIANT,
+      },
       answerColor: {
         type: "basicSelector",
         label: msg("fields.answerColor", "Answer Color"),

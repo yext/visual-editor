@@ -178,13 +178,14 @@ const promoSectionFields: YextFields<PromoSectionProps> = {
           types: [ComponentFields.PromoSection.type],
         },
       }),
-      media: YextField(msg("fields.media", "Media"), {
+      media: {
+        label: msg("fields.media", "Media"),
         type: "radio",
         options: [
           { label: msg("fields.options.image", "Image"), value: "image" },
           { label: msg("fields.options.video", "Video"), value: "video" },
         ],
-      }),
+      },
       backgroundImage: YextField(msg("fields.image", "Image"), {
         type: "entityField",
         filter: {
@@ -220,63 +221,58 @@ const promoSectionFields: YextFields<PromoSectionProps> = {
         label: msg("fields.backgroundColor", "Background Color"),
         options: "BACKGROUND_COLOR",
       },
-      desktopImagePosition: YextField(
-        msg("fields.desktopMediaPosition", "Desktop Media Position"),
-        {
-          type: "radio",
-          options: [
-            {
-              label: msg("fields.options.left", "Left", {
-                context: "direction",
-              }),
-              value: "left",
-            },
-            {
-              label: msg("fields.options.right", "Right", {
-                context: "direction",
-              }),
-              value: "right",
-            },
-          ],
-        }
-      ),
-      mobileImagePosition: YextField(
-        msg("fields.mobileMediaPosition", "Mobile Media Position"),
-        {
-          type: "radio",
-          options: ThemeOptions.VERTICAL_POSITION,
-        }
-      ),
-      containerAlignment: YextField(
-        msg("fields.containerAlignment", "Container Alignment"),
-        {
-          type: "radio",
-          options: ThemeOptions.ALIGNMENT,
-        }
-      ),
+      desktopImagePosition: {
+        label: msg("fields.desktopMediaPosition", "Desktop Media Position"),
+        type: "radio",
+        options: [
+          {
+            label: msg("fields.options.left", "Left", {
+              context: "direction",
+            }),
+            value: "left",
+          },
+          {
+            label: msg("fields.options.right", "Right", {
+              context: "direction",
+            }),
+            value: "right",
+          },
+        ],
+      },
+      mobileImagePosition: {
+        label: msg("fields.mobileMediaPosition", "Mobile Media Position"),
+        type: "radio",
+        options: ThemeOptions.VERTICAL_POSITION,
+      },
+      containerAlignment: {
+        label: msg("fields.containerAlignment", "Container Alignment"),
+        type: "radio",
+        options: ThemeOptions.ALIGNMENT,
+      },
       imageHeight: YextField(msg("fields.imageHeight", "Image Height"), {
         type: "number",
         min: 0,
       }),
-      showMedia: YextField(msg("fields.showMedia", "Show Media"), {
+      showMedia: {
+        label: msg("fields.showMedia", "Show Media"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
-      showHeading: YextField(msg("fields.showHeading", "Show Heading"), {
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showHeading: {
+        label: msg("fields.showHeading", "Show Heading"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
-      showDescription: YextField(
-        msg("fields.showDescription", "Show Description"),
-        {
-          type: "radio",
-          options: "SHOW_HIDE",
-        }
-      ),
-      showCTA: YextField(msg("fields.showCTA", "Show CTA"), {
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showDescription: {
+        label: msg("fields.showDescription", "Show Description"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showCTA: {
+        label: msg("fields.showCTA", "Show CTA"),
+        type: "radio",
+        options: ThemeOptions.SHOW_HIDE,
+      },
     },
   }),
   slots: {
@@ -299,16 +295,14 @@ const promoSectionFields: YextFields<PromoSectionProps> = {
       }),
     },
   }),
-  liveVisibility: YextField(
-    msg("fields.visibleOnLivePage", "Visible on Live Page"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: false },
-      ],
-    }
-  ),
+  liveVisibility: {
+    label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.show", "Show"), value: true },
+      { label: msg("fields.options.hide", "Hide"), value: false },
+    ],
+  },
 };
 
 /**

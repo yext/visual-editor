@@ -1,5 +1,5 @@
 import { PuckComponent, setDeep } from "@puckeditor/core";
-import { ThemeColor } from "../../utils/themeConfigOptions.ts";
+import { ThemeColor, ThemeOptions } from "../../utils/themeConfigOptions.ts";
 import { CTA, CTAVariant, isCtaVariantWithColor } from "../atoms/cta.tsx";
 import {
   EnhancedTranslatableCTA,
@@ -72,33 +72,36 @@ const ctaWrapperFields: YextFields<CTAWrapperProps> = {
     type: "object",
     label: msg("fields.data", "Data"),
     objectFields: {
-      show: YextField(msg("fields.showCTA", "Show CTA"), {
+      show: {
+        label: msg("fields.showCTA", "Show CTA"),
         type: "radio",
         options: [
           { label: msg("fields.options.show", "Show"), value: true },
           { label: msg("fields.options.hide", "Hide"), value: false },
         ],
         visible: false,
-      }),
-      actionType: YextField(msg("fields.actionType", "Action Type"), {
+      },
+      actionType: {
+        label: msg("fields.actionType", "Action Type"),
         type: "radio",
         options: [
           { label: msg("fields.options.link", "Link"), value: "link" },
           { label: msg("fields.options.button", "Button"), value: "button" },
         ],
-      }),
+      },
       entityField: {
         type: "ctaSelector",
         label: msg("fields.cta", "CTA"),
       },
-      normalizeLink: YextField(msg("fields.normalizeLink", "Normalize Link"), {
+      normalizeLink: {
+        label: msg("fields.normalizeLink", "Normalize Link"),
         type: "radio",
         options: [
           { label: msg("fields.options.yes", "Yes"), value: true },
           { label: msg("fields.options.no", "No"), value: false },
         ],
         visible: false,
-      }),
+      },
       buttonText: YextField(msg("fields.buttonText", "Button Text"), {
         type: "translatableString",
         filter: { types: ["type.string"] },
@@ -137,10 +140,11 @@ const ctaWrapperFields: YextFields<CTAWrapperProps> = {
     type: "object",
     label: msg("fields.styles", "Styles"),
     objectFields: {
-      variant: YextField(msg("fields.variant", "Variant"), {
+      variant: {
+        label: msg("fields.variant", "Variant"),
         type: "radio",
-        options: "CTA_VARIANT",
-      }),
+        options: ThemeOptions.CTA_VARIANT,
+      },
       presetImage: {
         type: "basicSelector",
         label: msg("fields.presetImage", "Preset Image"),
