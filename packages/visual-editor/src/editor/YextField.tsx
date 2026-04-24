@@ -13,10 +13,6 @@ import {
   DynamicOptionValueTypes,
   DynamicOptionsSelectorType,
 } from "./DynamicOptionsSelector.tsx";
-import {
-  OptionalNumberFieldProps,
-  OptionalNumberField,
-} from "./OptionalNumberField.tsx";
 import { getMaxWidthOptions } from "./MaxWidthSelector.tsx";
 import { msg } from "../utils/i18n/platform.ts";
 import { TranslatableStringField } from "./TranslatableStringField.tsx";
@@ -119,12 +115,6 @@ type YextTextField = YextBaseField & {
   disallowTranslation?: boolean;
 };
 
-// YextOptionalNumberField has same functionality as OptionalNumberField
-type YextOptionalNumberField = YextBaseField &
-  Omit<OptionalNumberFieldProps, "fieldLabel"> & {
-    type: "optionalNumber";
-  };
-
 type YextMaxWidthField = YextBaseField & {
   type: "maxWidth";
 };
@@ -166,13 +156,15 @@ type YextFieldConfig<Props = any> =
   | YextTextField
   | YextEntitySelectorField<Props extends Record<string, any> ? Props : any>
   | YextRadioField
-  | YextOptionalNumberField
   | YextMaxWidthField
   | YextTranslatableStringField
   | YextImageField
   | YextVideoField
   | YextDynamicSelectField<Props extends DynamicOptionValueTypes ? Props : any>
-  | YextPuckFields[Exclude<keyof YextPuckFields, "basicSelector">];
+  | YextPuckFields[Exclude<
+      keyof YextPuckFields,
+      "basicSelector" | "optionalNumber"
+    >];
 
 export function YextField<T = any>(
   fieldName: MsgString,
@@ -207,15 +199,6 @@ export function YextField<T, U>(
       filter: config.filter,
       disableConstantValueToggle: config.disableConstantValueToggle,
       disallowTranslation: config.disallowTranslation,
-    });
-  }
-
-  if (config.type === "optionalNumber") {
-    return OptionalNumberField({
-      fieldLabel: fieldName,
-      hideNumberFieldRadioLabel: config.hideNumberFieldRadioLabel,
-      showNumberFieldRadioLabel: config.showNumberFieldRadioLabel,
-      defaultCustomValue: config.defaultCustomValue,
     });
   }
 

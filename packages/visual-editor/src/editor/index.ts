@@ -5,10 +5,6 @@ export {
   type RenderYextEntityFieldSelectorProps,
   type YextEntityField,
 } from "./YextEntityFieldSelector.tsx";
-export {
-  OptionalNumberField,
-  type OptionalNumberFieldProps,
-} from "./OptionalNumberField.tsx";
 export { SpacingSelector } from "./SpacingSelector.tsx";
 export { YextField } from "./YextField.tsx";
 export { YextAutoField } from "../fields/YextAutoField.tsx";
