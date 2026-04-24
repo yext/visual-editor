@@ -342,13 +342,20 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
           className={`flex flex-col w-full sm:w-auto gap-0 ${
             displayMode === "menu"
               ? isDesktop
-                ? "md:flex-row md:gap-6 md:items-center justify-end"
+                ? "md:flex-row md:flex-wrap md:items-start justify-end md:gap-x-6 md:gap-y-4"
                 : "justify-start"
-              : `${justifyClass} md:flex-row md:gap-6`
+              : `w-full sm:w-auto ${justifyClass} md:flex-row md:gap-6`
           } ${sizeClass} ${weightClass}`}
         >
           {linksToRender.map((item, i) => (
-            <li key={`visible-${i}`} className="py-4 lg:py-0">
+            <li
+              key={`visible-${i}`}
+              className={
+                displayMode === "menu"
+                  ? "min-w-0 py-4 sm:max-w-full sm:basis-auto lg:py-0"
+                  : "py-4 lg:py-0"
+              }
+            >
               {renderLink(item, i)}
             </li>
           ))}
