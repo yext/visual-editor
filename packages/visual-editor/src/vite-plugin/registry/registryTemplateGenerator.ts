@@ -1070,11 +1070,14 @@ function setEditComponentRegistry(
     return;
   }
 
+  const orderedTemplateNames =
+    getOrderedEditRegistryTemplateNames(templateNames);
+
   const initializer = declaration.getInitializerIfKind(
     SyntaxKind.ObjectLiteralExpression
   );
   if (!initializer) {
-    const registryEntries = templateNames
+    const registryEntries = orderedTemplateNames
       .map((templateName) => {
         return `  "${templateName}": ${getEditConfigIdentifier(templateName)},`;
       })
@@ -1085,6 +1088,8 @@ ${registryEntries}
     return;
   }
 
+  const preservedRegistryInitializers = new Map<string, string>();
+
   for (const property of initializer.getProperties()) {
     const propertyAssignment = property.asKind(SyntaxKind.PropertyAssignment);
     if (!propertyAssignment) {
@@ -1092,19 +1097,51 @@ ${registryEntries}
     }
 
     const propertyName = propertyAssignment.getName();
-    if (PRESERVED_EDIT_REGISTRY_KEYS.has(propertyName)) {
-      continue;
+    if (
+      PRESERVED_EDIT_REGISTRY_KEYS.has(propertyName) &&
+      !preservedRegistryInitializers.has(propertyName)
+    ) {
+      const propertyInitializer = propertyAssignment.getInitializer();
+      if (propertyInitializer) {
+        preservedRegistryInitializers.set(
+          propertyName,
+          propertyInitializer.getText()
+        );
+      }
     }
-
     propertyAssignment.remove();
   }
 
-  for (const templateName of templateNames) {
+  for (const templateName of orderedTemplateNames) {
+    const preservedInitializer =
+      preservedRegistryInitializers.get(templateName);
+    if (preservedInitializer) {
+      initializer.addPropertyAssignment({
+        name: `"${templateName}"`,
+        initializer: preservedInitializer,
+      });
+      continue;
+    }
+
     initializer.addPropertyAssignment({
       name: `"${templateName}"`,
       initializer: getEditConfigIdentifier(templateName),
     });
   }
+}
+
+function getOrderedEditRegistryTemplateNames(
+  templateNames: string[]
+): string[] {
+  const uniqueTemplateNames = [...new Set(templateNames)];
+  return [
+    ...["main", "directory", "locator"].filter((templateName) => {
+      return uniqueTemplateNames.includes(templateName);
+    }),
+    ...uniqueTemplateNames.filter((templateName) => {
+      return !["main", "directory", "locator"].includes(templateName);
+    }),
+  ];
 }
 
 function getTemplateConfigExportName(templateName: string): string {
