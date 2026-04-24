@@ -1,6 +1,7 @@
 import {
   ThemeColor,
   backgroundColors,
+  ThemeOptions,
 } from "../../../utils/themeConfigOptions.ts";
 import { YextField } from "../../../editor/YextField.tsx";
 import { PageSection } from "../../atoms/pageSection.tsx";
@@ -82,13 +83,11 @@ const productSectionFields: YextFields<ProductSectionProps> = {
           { label: msg("fields.options.minimal", "Minimal"), value: "minimal" },
         ],
       },
-      showSectionHeading: YextField(
-        msg("fields.showSectionHeading", "Show Section Heading"),
-        {
-          type: "radio",
-          options: "SHOW_HIDE",
-        }
-      ),
+      showSectionHeading: {
+        label: msg("fields.showSectionHeading", "Show Section Heading"),
+        type: "radio",
+        options: ThemeOptions.SHOW_HIDE,
+      },
     },
   }),
   slots: {
@@ -108,16 +107,14 @@ const productSectionFields: YextFields<ProductSectionProps> = {
       }),
     },
   }),
-  liveVisibility: YextField(
-    msg("fields.visibleOnLivePage", "Visible on Live Page"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: false },
-      ],
-    }
-  ),
+  liveVisibility: {
+    label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.show", "Show"), value: true },
+      { label: msg("fields.options.hide", "Hide"), value: false },
+    ],
+  },
 };
 
 const ProductSectionComponent: PuckComponent<ProductSectionProps> = (props) => {

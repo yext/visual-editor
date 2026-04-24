@@ -9,6 +9,7 @@ import {
 } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 import { ComponentData, PuckComponent, setDeep } from "@puckeditor/core";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
+import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 import {
   defaultInsightCardSlotData,
   InsightCardProps,
@@ -35,32 +36,31 @@ const insightCardsWrapperFields = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      showImage: YextField(msg("fields.showImage", "Show Image"), {
+      showImage: {
+        label: msg("fields.showImage", "Show Image"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
-      showCategory: YextField(msg("fields.showCategory", "Show Category"), {
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showCategory: {
+        label: msg("fields.showCategory", "Show Category"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
-      showPublishTime: YextField(
-        msg("fields.showPublishTime", "Show Publish Time"),
-        {
-          type: "radio",
-          options: "SHOW_HIDE",
-        }
-      ),
-      showDescription: YextField(
-        msg("fields.showDescription", "Show Description"),
-        {
-          type: "radio",
-          options: "SHOW_HIDE",
-        }
-      ),
-      showCTA: YextField(msg("fields.showCTA", "Show CTA"), {
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showPublishTime: {
+        label: msg("fields.showPublishTime", "Show Publish Time"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showDescription: {
+        label: msg("fields.showDescription", "Show Description"),
+        type: "radio",
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showCTA: {
+        label: msg("fields.showCTA", "Show CTA"),
+        type: "radio",
+        options: ThemeOptions.SHOW_HIDE,
+      },
     },
   }),
 };

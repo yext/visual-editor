@@ -245,14 +245,14 @@ const myComponentFields: YextFields<MyComponentProps> = {
 
 ## YextField
 
-`YextField` provides a unified utility for creating typed field configurations in a [Puck](https://github.com/measuredco/puck) and Yext Visual Editor integration context. It abstracts over common field types and includes special handling for the internal `basicSelector` field type, [YextEntityFieldSelector](##YextEntityFieldSelector), and [TranslatableStringField](##TranslatableStringField).
+`YextField` provides a unified utility for creating typed field configurations in a [Puck](https://github.com/measuredco/puck) and Yext Visual Editor integration context. It abstracts over a subset of common field types and includes special handling for the internal `basicSelector` field type, [YextEntityFieldSelector](##YextEntityFieldSelector), and [TranslatableStringField](##TranslatableStringField).
 
 ### Features
 
 - Strongly typed helper for defining field configs
-- Support for standard Puck field types (`text`, `radio`, `select`, `array`, etc.)
+- Support for standard Puck field types such as `text`, `array`, and `object`
 - Extended support for Yext-specific entity selectors
-- Intelligent handling of options from `@yext/visual-editor` theme options
+- Native Puck fields like `radio` can be authored directly inside `YextFields`
 
 ### Props
 
@@ -282,16 +282,14 @@ const myComponentFields: YextFields<myComponentProps> = {
     type: "entityField",
     filter: { types: ["type.address"] },
   }),
-  showGetDirections: YextField(
-    msg("fields.showGetDirections", "Show Get Directions Link"),
-    {
-      type: "radio",
-      options: [
-        { label: "Yes", value: true },
-        { label: "No", value: false },
-      ],
-    }
-  ),
+  showGetDirections: {
+    label: msg("fields.showGetDirections", "Show Get Directions Link"),
+    type: "radio",
+    options: [
+      { label: "Yes", value: true },
+      { label: "No", value: false },
+    ],
+  },
 };
 
 export const MyComponent: YextComponentConfig<myComponentProps> = {
@@ -342,56 +340,20 @@ description: YextField(msg("fields.description", "Description"), {
 
 ---
 
-#### Select Field
+#### Native Radio Field
 
-Creates a dropdown select input. Options can be passed directly or as a string key from `ThemeOptions`. Optional search behavior uses the internal `basicSelector` field type.
-
-```tsx
-variant: YextField(msg("fields.variant", "CTA Variant"), {
-  type: "select",
-  options: "CTA_VARIANT",
-  hasSearch: true,
-}),
-aspectRatio: YextField(msg("fields.aspectRatio", "Aspect Ratio"), {
-  type: "select",
-  options: [
-    { label: "1:1", value: 1 },
-    { label: "5:4", value: 1.25 },
-    { label: "4:3", value: 1.33 },
-  ],
-}),
-```
-
-**Props:**
-
-- `type`: `"select"`
-- `options`: `FieldOptions | keyof ThemeOptions`
-- `hasSearch?`: `boolean` — enables searchable dropdown
-
----
-
-#### Radio Field
-
-Creates a radio button group. Options can be passed directly or via a `ThemeOptions` key.
+Define radio fields directly in `YextFields` instead of routing them through `YextField`.
 
 ```tsx
-alignment: YextField(msg("fields.alignment", "Alignment"), {
-  type: "radio",
-  options: "ALIGNMENT",
-}),
-includeHyperlink: YextField(msg("fields.includeHyperlink", "Include Hyperlink"), {
+alignment: {
+  label: msg("fields.alignment", "Alignment"),
   type: "radio",
   options: [
-    { label: "Yes", value: true },
-    { label: "No", value: false },
+    { label: "Left", value: "left" },
+    { label: "Center", value: "center" },
   ],
-}),
+},
 ```
-
-**Props:**
-
-- `type`: `"radio"`
-- `options`: `FieldOptions | keyof ThemeOptions`
 
 ---
 

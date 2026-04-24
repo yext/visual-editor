@@ -3,6 +3,7 @@ import { PuckComponent, setDeep, Slot, WithId } from "@puckeditor/core";
 import {
   ThemeColor,
   backgroundColors,
+  ThemeOptions,
 } from "../../../utils/themeConfigOptions.ts";
 import { PageSection } from "../../atoms/pageSection.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
@@ -60,13 +61,11 @@ const nearbyLocationsSectionFields: YextFields<NearbyLocationsSectionProps> = {
         label: msg("fields.backgroundColor", "Background Color"),
         options: "BACKGROUND_COLOR",
       },
-      showSectionHeading: YextField(
-        msg("fields.showSectionHeading", "Show Section Heading"),
-        {
-          type: "radio",
-          options: "SHOW_HIDE",
-        }
-      ),
+      showSectionHeading: {
+        label: msg("fields.showSectionHeading", "Show Section Heading"),
+        type: "radio",
+        options: ThemeOptions.SHOW_HIDE,
+      },
     },
   }),
   analytics: YextField(msg("fields.analytics", "Analytics"), {
@@ -86,16 +85,14 @@ const nearbyLocationsSectionFields: YextFields<NearbyLocationsSectionProps> = {
     },
     visible: false,
   },
-  liveVisibility: YextField(
-    msg("fields.visibleOnLivePage", "Visible on Live Page"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: false },
-      ],
-    }
-  ),
+  liveVisibility: {
+    label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.show", "Show"), value: true },
+      { label: msg("fields.options.hide", "Hide"), value: false },
+    ],
+  },
 };
 
 const NearbyLocationsComponent: PuckComponent<NearbyLocationsSectionProps> = (

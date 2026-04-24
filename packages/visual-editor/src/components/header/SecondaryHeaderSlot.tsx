@@ -3,6 +3,7 @@ import { YextField } from "../../editor/YextField.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import {
   ThemeColor,
+  ThemeOptions,
   backgroundColors,
 } from "../../utils/themeConfigOptions.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
@@ -45,26 +46,22 @@ const secondaryHeaderSlotFields: YextFields<SecondaryHeaderSlotProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      show: YextField(
-        msg("fields.showSecondaryHeader", "Show Secondary Header"),
-        {
-          type: "radio",
-          options: [
-            { label: msg("fields.options.show", "Show"), value: true },
-            { label: msg("fields.options.hide", "Hide"), value: false },
-          ],
-        }
-      ),
-      showLanguageDropdown: YextField(
-        msg("fields.showLanguageDropdown", "Show Language Dropdown"),
-        {
-          type: "radio",
-          options: [
-            { label: msg("fields.options.show", "Show"), value: true },
-            { label: msg("fields.options.hide", "Hide"), value: false },
-          ],
-        }
-      ),
+      show: {
+        label: msg("fields.showSecondaryHeader", "Show Secondary Header"),
+        type: "radio",
+        options: [
+          { label: msg("fields.options.show", "Show"), value: true },
+          { label: msg("fields.options.hide", "Hide"), value: false },
+        ],
+      },
+      showLanguageDropdown: {
+        label: msg("fields.showLanguageDropdown", "Show Language Dropdown"),
+        type: "radio",
+        options: [
+          { label: msg("fields.options.show", "Show"), value: true },
+          { label: msg("fields.options.hide", "Hide"), value: false },
+        ],
+      },
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {

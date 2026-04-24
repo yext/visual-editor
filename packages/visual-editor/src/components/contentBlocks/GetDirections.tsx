@@ -1,6 +1,6 @@
 import { setDeep } from "@puckeditor/core";
 import "@yext/pages-components/style.css";
-import { ThemeColor } from "../../utils/themeConfigOptions.ts";
+import { ThemeColor, ThemeOptions } from "../../utils/themeConfigOptions.ts";
 import { CTA, CTAVariant, isCtaVariantWithColor } from "../atoms/cta.tsx";
 import { YextField } from "../../editor/YextField.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
@@ -14,10 +14,11 @@ export type GetDirectionsProps = {
 };
 
 const getDirectionsFields: YextFields<GetDirectionsProps> = {
-  variant: YextField(msg("fields.variant", "Variant"), {
+  variant: {
+    label: msg("fields.variant", "Variant"),
     type: "radio",
-    options: "CTA_VARIANT",
-  }),
+    options: ThemeOptions.CTA_VARIANT,
+  },
   color: {
     type: "basicSelector",
     label: msg("fields.color", "Color"),
