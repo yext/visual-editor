@@ -20,6 +20,10 @@ import {
   CTASelectorField,
   CTASelectorFieldOverride,
 } from "./CTASelectorField.tsx";
+import {
+  OptionalNumberField,
+  OptionalNumberFieldOverride,
+} from "./OptionalNumberField.tsx";
 
 export type YextPuckFields = {
   basicSelector: BasicSelectorField;
@@ -27,6 +31,7 @@ export type YextPuckFields = {
   code: CodeField;
   dateTimeSelector: DateTimeSelectorField;
   fontSizeSelector: FontSizeSelectorField;
+  optionalNumber: OptionalNumberField;
 };
 
 export type YextComponentConfig<
@@ -54,4 +59,5 @@ export const YextPuckFieldOverrides = {
   code: CodeFieldOverride,
   dateTimeSelector: DateTimeSelectorFieldOverride,
   fontSizeSelector: FontSizeSelectorFieldOverride,
+  optionalNumber: OptionalNumberFieldOverride,
 };
