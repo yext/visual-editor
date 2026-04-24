@@ -38,6 +38,7 @@ import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 import { clonePuckResolveData } from "../utils/clonePuckResolveData.ts";
+import { createDeferredWriter } from "../utils/deferredWriter.ts";
 import { YextPuckFieldOverrides } from "../../fields/fields.ts";
 
 const devLogger = new DevLogger();
@@ -109,9 +110,53 @@ export const InternalLayoutEditor = ({
   metadata,
 }: InternalLayoutEditorProps) => {
   const historyIndex = useRef<number>(0);
+  const deferredLayoutWriteScheduledAt = useRef<number>();
   const { i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
   const { errorCount, errorSources, errorDetails } = useErrorContext();
+  const localStorageHistoryWriter = React.useMemo(
+    () =>
+      createDeferredWriter<History<Partial<AppState>>[]>((nextHistories) => {
+        const writeStartedAt = performance.now();
+        const queuedForMs = deferredLayoutWriteScheduledAt.current
+          ? writeStartedAt - deferredLayoutWriteScheduledAt.current
+          : undefined;
+
+        devLogger.logFunc("saveLayoutToLocalStorage");
+        window.localStorage.setItem(
+          buildVisualConfigLocalStorageKey(),
+          lzstring.compress(JSON.stringify(nextHistories))
+        );
+        console.log(
+          `Deferred layout history write ran after ${Math.round(
+            queuedForMs ?? 0
+          )}ms and took ${Math.round(
+            performance.now() - writeStartedAt
+          )}ms for ${nextHistories.length} history entries`
+        );
+      }),
+    [buildVisualConfigLocalStorageKey]
+  );
+
+  React.useEffect(() => {
+    const flushPendingHistory = () => {
+      localStorageHistoryWriter.flush();
+    };
+    const flushOnVisibilityChange = () => {
+      if (document.visibilityState === "hidden") {
+        flushPendingHistory();
+      }
+    };
+
+    window.addEventListener("pagehide", flushPendingHistory);
+    document.addEventListener("visibilitychange", flushOnVisibilityChange);
+
+    return () => {
+      window.removeEventListener("pagehide", flushPendingHistory);
+      document.removeEventListener("visibilitychange", flushOnVisibilityChange);
+      flushPendingHistory();
+    };
+  }, [localStorageHistoryWriter]);
 
   /**
    * When the Puck history changes save it to localStorage and send a message
@@ -130,11 +175,8 @@ export const InternalLayoutEditor = ({
         historyIndex.current = index;
 
         if (localDev || templateMetadata.isDevMode) {
-          devLogger.logFunc("saveLayoutToLocalStorage");
-          window.localStorage.setItem(
-            buildVisualConfigLocalStorageKey(),
-            lzstring.compress(JSON.stringify(histories))
-          );
+          deferredLayoutWriteScheduledAt.current = performance.now();
+          localStorageHistoryWriter.schedule(histories.slice());
           if (localDev) {
             return;
           }
@@ -171,13 +213,16 @@ export const InternalLayoutEditor = ({
     },
     [
       templateMetadata,
-      buildVisualConfigLocalStorageKey,
+      localStorageHistoryWriter,
       layoutSaveState,
       saveLayoutSaveState,
+      sendDevSaveStateData,
+      localDev,
     ]
   );
 
   const handleClearLocalChanges = () => {
+    localStorageHistoryWriter.cancel();
     clearHistory();
     historyIndex.current = 0;
   };

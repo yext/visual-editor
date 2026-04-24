@@ -20,6 +20,7 @@ import { ThemeHistories, ThemeHistory } from "../types/themeData.ts";
 import * as lzstring from "lz-string";
 import { Metadata } from "../../editor/Editor.tsx";
 import { createPreviewFrameLinkBlocker } from "../utils/previewFrameLinkBlocker.ts";
+import { createDeferredWriter } from "../utils/deferredWriter.ts";
 
 const devLogger = new DevLogger();
 // Used because we want the sidebar to be hidden
@@ -62,6 +63,30 @@ export const InternalThemeEditor = ({
   const [canEdit, setCanEdit] = useState<boolean>(false); // helps sync puck preview and save state
   const [clearLocalChangesModalOpen, setClearLocalChangesModalOpen] =
     useState<boolean>(false);
+  const deferredThemeWriteScheduledAt = useRef<number>();
+  const localStorageThemeWriter = React.useMemo(
+    () =>
+      createDeferredWriter<ThemeHistory[]>((nextHistories) => {
+        const writeStartedAt = performance.now();
+        const queuedForMs = deferredThemeWriteScheduledAt.current
+          ? writeStartedAt - deferredThemeWriteScheduledAt.current
+          : undefined;
+
+        devLogger.logFunc("saveThemeToLocalStorage");
+        window.localStorage.setItem(
+          buildThemeLocalStorageKey(),
+          lzstring.compress(JSON.stringify(nextHistories))
+        );
+        console.log(
+          `Deferred theme history write ran after ${Math.round(
+            queuedForMs ?? 0
+          )}ms and took ${Math.round(
+            performance.now() - writeStartedAt
+          )}ms for ${nextHistories.length} history entries`
+        );
+      }),
+    [buildThemeLocalStorageKey]
+  );
 
   // Puck remounts the sidebar overrides each render so they have to be
   // wrapped in useCallback to maintain internal state. Refs can be used
@@ -77,6 +102,31 @@ export const InternalThemeEditor = ({
     return createPreviewFrameLinkBlocker();
   }, []);
 
+  useEffect(() => {
+    const flushPendingThemeHistory = () => {
+      localStorageThemeWriter.flush();
+    };
+    const flushOnVisibilityChange = () => {
+      if (document.visibilityState === "hidden") {
+        flushPendingThemeHistory();
+      }
+    };
+
+    window.addEventListener("pagehide", flushPendingThemeHistory);
+    document.addEventListener("visibilitychange", flushOnVisibilityChange);
+
+    return () => {
+      window.removeEventListener("pagehide", flushPendingThemeHistory);
+      document.removeEventListener("visibilitychange", flushOnVisibilityChange);
+      flushPendingThemeHistory();
+    };
+  }, [localStorageThemeWriter]);
+
+  const handleClearThemeHistory = useCallback(() => {
+    localStorageThemeWriter.cancel();
+    clearThemeHistory();
+  }, [clearThemeHistory, localStorageThemeWriter]);
+
   const handlePublishTheme = async () => {
     devLogger.logFunc("saveThemeData");
     if (!themeHistories) {
@@ -90,7 +140,7 @@ export const InternalThemeEditor = ({
       },
     });
 
-    clearThemeHistory();
+    handleClearThemeHistory();
 
     setThemeHistories({
       histories: [currentThemeHistory],
@@ -115,11 +165,8 @@ export const InternalThemeEditor = ({
     };
 
     if (localDev || templateMetadata.isDevMode) {
-      devLogger.logFunc("saveThemeToLocalStorage");
-      window.localStorage.setItem(
-        buildThemeLocalStorageKey(),
-        lzstring.compress(JSON.stringify(newHistory.histories))
-      );
+      deferredThemeWriteScheduledAt.current = performance.now();
+      localStorageThemeWriter.schedule(newHistory.histories.slice());
       updateThemeInEditor(
         newThemeValues,
         themeConfig,
@@ -202,7 +249,7 @@ export const InternalThemeEditor = ({
               onPublishTheme={handlePublishTheme}
               isDevMode={templateMetadata.isDevMode}
               setThemeHistories={setThemeHistories}
-              clearThemeHistory={clearThemeHistory}
+              clearThemeHistory={handleClearThemeHistory}
               puckInitialHistory={puckInitialHistory}
               clearLocalChangesModalOpen={clearLocalChangesModalOpen}
               setClearLocalChangesModalOpen={setClearLocalChangesModalOpen}
