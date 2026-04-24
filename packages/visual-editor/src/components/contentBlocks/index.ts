@@ -8,7 +8,12 @@ export { HeadingText, type HeadingTextProps } from "./HeadingText.tsx";
 export { HoursStatus, type HoursStatusProps } from "./HoursStatus.tsx";
 export { HoursTable, type HoursTableProps } from "./HoursTable.tsx";
 export { ImageWrapper, type ImageWrapperProps } from "./image/Image.tsx";
-export { MapboxStaticMap, type MapboxStaticProps } from "./MapboxStaticMap.tsx";
+export {
+  MapboxStaticMap,
+  mapboxStaticMapStyleOptions,
+  MapboxStaticMapComponent,
+  type MapboxStaticProps,
+} from "./MapboxStaticMap.tsx";
 export { Phone, type PhoneProps } from "./Phone.tsx";
 export { PhoneList, type PhoneListProps } from "./PhoneList.tsx";
 export { TextList, type TextListProps } from "./TextList.tsx";
