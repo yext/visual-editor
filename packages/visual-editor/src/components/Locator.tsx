@@ -661,10 +661,11 @@ const locatorFields: YextFields<LocatorProps> = {
       type: "array",
       getItemSummary: (item) => getEntityTypeLabel(item.entityType),
       arrayFields: {
-        entityType: YextField(msg("fields.entityType", "Entity Type"), {
+        entityType: {
+          label: msg("fields.entityType", "Entity Type"),
           type: "text",
           visible: false,
-        }),
+        },
         pinIcon: {
           type: "custom",
           render: ({
@@ -786,12 +787,14 @@ const locatorFields: YextFields<LocatorProps> = {
     {
       type: "object",
       objectFields: {
-        latitude: YextField(msg("fields.latitude", "Latitude"), {
+        latitude: {
+          label: msg("fields.latitude", "Latitude"),
           type: "text",
-        }),
-        longitude: YextField(msg("fields.longitude", "Longitude"), {
+        },
+        longitude: {
+          label: msg("fields.longitude", "Longitude"),
           type: "text",
-        }),
+        },
       },
     }
   ),

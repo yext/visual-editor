@@ -300,16 +300,22 @@ export const MyComponent: YextComponentConfig<myComponentProps> = {
 
 ### Translation Requirements
 
-All field labels in `YextField` must use the `msg()` function to ensure proper internationalization. This enforces translation compliance at compile time through TypeScript's type system.
+Use the `msg()` function for field labels to ensure proper internationalization, whether the field is authored directly in `YextFields` or created through `YextField`.
 
 ```tsx
 import { msg } from "@yext/visual-editor";
 
-// Correct - uses msg() function
-title: YextField(msg("fields.title", "Title"), { type: "text" });
+// Correct - uses msg() for a native field
+title: {
+  label: msg("fields.title", "Title"),
+  type: "text",
+};
 
-// Incorrect - plain string will cause TypeScript error
-title: YextField("Title", { type: "text" });
+// Incorrect - plain string label will not be translated
+title: {
+  label: "Title",
+  type: "text",
+};
 ```
 
 The `msg()` function takes two parameters:
@@ -319,24 +325,25 @@ The `msg()` function takes two parameters:
 
 ### Supported Field Types
 
-#### Text Field
+#### Native Text Fields
 
-Creates a simple string input. Supports multi-line input.
+Define plain string inputs directly in `YextFields`. Use `text` for a single-line input and `textarea` for multiline input.
 
 ```tsx
-title: YextField(msg("fields.title", "Title"), {
+title: {
+  label: msg("fields.title", "Title"),
   type: "text",
-}),
-description: YextField(msg("fields.description", "Description"), {
-  type: "text",
-  isMultiline: true
-})
+},
+description: {
+  label: msg("fields.description", "Description"),
+  type: "textarea",
+},
 ```
 
 **Props:**
 
 - `type`: `"text"`
-- `isMultiline?`: `boolean` — if true, renders a `<textarea>` for the multiline input.
+- `type`: `"textarea"`
 
 ---
 
@@ -381,8 +388,14 @@ Creates a repeatable field group (e.g., a list of items). Define inner fields us
 items: YextField(msg("fields.items", "Items"), {
   type: "array",
   arrayFields: {
-    title: YextField(msg("fields.title", "Title"), { type: "text" }),
-    url: YextField(msg("fields.url", "URL"), { type: "text" }),
+    title: {
+      label: msg("fields.title", "Title"),
+      type: "text",
+    },
+    url: {
+      label: msg("fields.url", "URL"),
+      type: "text",
+    },
   },
 });
 ```
@@ -406,11 +419,14 @@ Creates a nested object field with multiple subfields. [Additional documentation
 card: YextField(msg("fields.card", "Card"), {
   type: "object",
   objectFields: {
-    title: YextField(msg("fields.title", "Title"), { type: "text" }),
-    description: YextField(msg("fields.description", "Description"), {
+    title: {
+      label: msg("fields.title", "Title"),
       type: "text",
-      isMultiline: true,
-    }),
+    },
+    description: {
+      label: msg("fields.description", "Description"),
+      type: "textarea",
+    },
   },
 });
 ```

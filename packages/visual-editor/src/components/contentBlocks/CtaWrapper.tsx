@@ -106,12 +106,14 @@ const ctaWrapperFields: YextFields<CTAWrapperProps> = {
         type: "translatableString",
         filter: { types: ["type.string"] },
       }),
-      customId: YextField(msg("fields.customId", "Custom ID"), {
+      customId: {
+        label: msg("fields.customId", "Custom ID"),
         type: "text",
-      }),
-      customClass: YextField(msg("fields.customClass", "Custom Class"), {
+      },
+      customClass: {
+        label: msg("fields.customClass", "Custom Class"),
         type: "text",
-      }),
+      },
       dataAttributes: YextField(
         msg("fields.dataAttributes", "Data Attributes"),
         {
@@ -121,8 +123,14 @@ const ctaWrapperFields: YextFields<CTAWrapperProps> = {
             value: "",
           },
           arrayFields: {
-            key: YextField(msg("fields.key", "Key"), { type: "text" }),
-            value: YextField(msg("fields.value", "Value"), { type: "text" }),
+            key: {
+              label: msg("fields.key", "Key"),
+              type: "text",
+            },
+            value: {
+              label: msg("fields.value", "Value"),
+              type: "text",
+            },
           },
           getItemSummary: (item, index) =>
             item?.key?.trim()

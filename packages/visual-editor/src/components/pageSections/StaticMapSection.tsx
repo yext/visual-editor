@@ -60,9 +60,10 @@ const staticMapSectionFields: YextFields<StaticMapSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      apiKey: YextField(msg("fields.apiKey", "API Key"), {
+      apiKey: {
+        label: msg("fields.apiKey", "API Key"),
         type: "text",
-      }),
+      },
     },
   }),
   liveVisibility: {

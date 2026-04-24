@@ -104,9 +104,10 @@ export const FooterLogoSlot: YextComponentConfig<FooterLogoSlotProps> = {
             types: ["type.image"],
           },
         }),
-        linkTarget: YextField(msg("fields.linkTarget", "Link Target"), {
+        linkTarget: {
+          label: msg("fields.linkTarget", "Link Target"),
           type: "text",
-        }),
+        },
       },
     }),
     styles: YextField(msg("fields.styles", "Styles"), {
