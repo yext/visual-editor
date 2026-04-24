@@ -9,8 +9,7 @@ import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
-import { FAQSectionType } from "../../../types/types.ts";
-import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
+import { FAQSectionType, FAQStruct } from "../../../types/types.ts";
 import { ComponentFields } from "../../../types/fields.ts";
 import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
@@ -19,6 +18,12 @@ import { defaultFAQCardData, FAQCardProps } from "./FAQCard.tsx";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
+import {
+  createListSourceField,
+  type ListSourceFieldValue,
+} from "../../../editor/ListSourceField.tsx";
+import { FAQ_SECTION_CONSTANT_CONFIG } from "../../../internal/puck/constant-value-fields/FAQsSection.tsx";
+import { resolveMappedListItems } from "../../../utils/listSourceFieldUtils.ts";
 
 export interface FAQStyles {
   /**
@@ -35,11 +40,7 @@ export interface FAQStyles {
 }
 
 export interface FAQSectionProps {
-  data: Omit<YextEntityField<FAQSectionType>, "constantValue"> & {
-    constantValue: {
-      id?: string;
-    }[];
-  };
+  data: ListSourceFieldValue;
 
   /**
    * This object contains properties for customizing the component's appearance.
@@ -65,11 +66,26 @@ export interface FAQSectionProps {
 }
 
 const FAQsSectionFields: YextFields<FAQSectionProps> = {
-  data: YextField(msg("fields.faqs", "FAQs"), {
-    type: "entityField",
-    filter: {
+  data: createListSourceField({
+    label: msg("fields.faqs", "FAQs"),
+    legacySourceFilter: {
       types: [ComponentFields.FAQSection.type],
     },
+    constantField: FAQ_SECTION_CONSTANT_CONFIG,
+    mappingConfigs: [
+      {
+        key: "question",
+        label: msg("fields.question", "Question"),
+        preferredFieldNames: ["question"],
+        types: ["type.string", "type.rich_text_v2"],
+      },
+      {
+        key: "answer",
+        label: msg("fields.answer", "Answer"),
+        preferredFieldNames: ["answer", "answerV2"],
+        types: ["type.rich_text_v2"],
+      },
+    ],
   }),
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
@@ -183,6 +199,9 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
   },
   resolveData: (data, params) => {
     const streamDocument = params.metadata.streamDocument;
+    if (!streamDocument) {
+      return data;
+    }
     const sharedCardProps =
       data.props.slots.CardSlot.length === 0
         ? undefined
@@ -196,16 +215,24 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
 
     if (!data.props.data.constantValueEnabled && data.props.data.field) {
       // ENTITY VALUES
-      const resolvedFAQs = resolveYextEntityField<
-        FAQSectionType | { faqs: undefined }
-      >(
-        streamDocument,
-        {
-          ...data.props.data,
-          constantValue: { faqs: undefined },
-        },
-        i18nComponentsInstance.language || "en"
-      )?.faqs;
+      const resolvedFAQs =
+        resolveMappedListItems<FAQStruct>(
+          streamDocument,
+          data.props.data.field,
+          data.props.data.itemFieldMappings,
+          (resolvedItemFields) => ({
+            question: resolvedItemFields.question as FAQStruct["question"],
+            answer: resolvedItemFields.answer as FAQStruct["answer"],
+          })
+        ) ??
+        resolveYextEntityField<FAQSectionType | { faqs: undefined }>(
+          streamDocument,
+          {
+            ...data.props.data,
+            constantValue: { faqs: undefined },
+          },
+          i18nComponentsInstance.language || "en"
+        )?.faqs;
 
       if (!resolvedFAQs?.length) {
         return setDeep(data, "props.slots.CardSlot", []);
