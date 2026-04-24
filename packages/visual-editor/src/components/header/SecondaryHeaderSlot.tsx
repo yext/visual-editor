@@ -3,7 +3,6 @@ import { YextField } from "../../editor/YextField.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import {
   ThemeColor,
-  ThemeOptions,
   backgroundColors,
 } from "../../utils/themeConfigOptions.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";

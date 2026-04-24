@@ -65,11 +65,7 @@ import {
   createSearchHeadlessConfig,
 } from "../utils/searchHeadlessConfig.ts";
 import { getThemeColorCssValue } from "../utils/colors.ts";
-import {
-  ThemeColor,
-  ThemeOptions,
-  backgroundColors,
-} from "../utils/themeConfigOptions.ts";
+import { ThemeColor, backgroundColors } from "../utils/themeConfigOptions.ts";
 import {
   LocatorConfig,
   StreamDocument,

@@ -68,8 +68,8 @@ const sectionContainerFields: YextFields<SectionContainerProps> = {
     label: msg("fields.liveVisibility", "Visible on Live Page"),
     type: "radio",
     options: [
-      { label: "Show", value: true },
-      { label: "Hide", value: false },
+      { label: msg("fields.options.show", "Show"), value: true },
+      { label: msg("fields.options.hide", "Hide"), value: false },
     ],
   },
 };

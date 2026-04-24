@@ -2,7 +2,6 @@ import { setDeep } from "@puckeditor/core";
 import "@yext/pages-components/style.css";
 import { ThemeColor, ThemeOptions } from "../../utils/themeConfigOptions.ts";
 import { CTA, CTAVariant, isCtaVariantWithColor } from "../atoms/cta.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import { useTranslation } from "react-i18next";
