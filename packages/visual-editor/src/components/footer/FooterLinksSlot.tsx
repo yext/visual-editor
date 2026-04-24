@@ -284,9 +284,10 @@ const footerLinksSlotFields: YextFields<FooterLinksSlotProps> = {
             type: "translatableString",
             filter: { types: ["type.string"] },
           }),
-          link: YextField(msg("fields.link", "Link"), {
+          link: {
+            label: msg("fields.link", "Link"),
             type: "text",
-          }),
+          },
           normalizeLink: {
             label: msg("fields.normalizeLink", "Normalize Link"),
             type: "radio",

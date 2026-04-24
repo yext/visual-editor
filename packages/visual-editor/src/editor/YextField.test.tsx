@@ -87,20 +87,35 @@ describe("YextField", () => {
     expect(screen.getByRole("radio", { checked: true })).toBeDefined();
   });
 
-  it.each([
-    [{ type: "text" }, "text"],
-    [{ type: "text", isMultiline: true, visible: false }, "textarea"],
-  ] as const)("maps text fields to %s config", (config, expectedType) => {
-    const fieldName = msg("fields.text", "Text");
+  it("renders native text and textarea fields through YextAutoField", () => {
+    const { unmount } = render(
+      <YextAutoField
+        field={{ label: msg("fields.text", "Text"), type: "text" }}
+        id="text-field"
+        onChange={vi.fn()}
+        value="Alpha"
+      />
+    );
 
-    const field = YextField(fieldName, config);
-    const visible = "visible" in config ? config.visible : undefined;
+    expect(document.querySelector('input[type="text"]')).toBeDefined();
+    expect(screen.getByDisplayValue("Alpha")).toBeDefined();
 
-    expect(field).toEqual({
-      label: fieldName,
-      visible,
-      type: expectedType,
-    });
+    unmount();
+
+    render(
+      <YextAutoField
+        field={{
+          label: msg("fields.description", "Description"),
+          type: "textarea",
+        }}
+        id="textarea-field"
+        onChange={vi.fn()}
+        value="Beta"
+      />
+    );
+
+    expect(document.querySelector("textarea")).toBeDefined();
+    expect(screen.getByDisplayValue("Beta")).toBeDefined();
   });
 
   it("delegates entityField configs to YextEntityFieldSelector", () => {

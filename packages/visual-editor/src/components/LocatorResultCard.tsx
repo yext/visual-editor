@@ -362,10 +362,11 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
     label: msg("fields.resultCard", "Result Card"),
     type: "object",
     objectFields: {
-      entityType: YextField(msg("fields.entityType", "Entity Type"), {
+      entityType: {
+        label: msg("fields.entityType", "Entity Type"),
         type: "text",
         visible: false,
-      }),
+      },
       primaryHeading: {
         label: msg("fields.primaryHeading", "Primary Heading"),
         type: "object",

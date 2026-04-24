@@ -82,9 +82,10 @@ const teamSectionFields: YextFields<TeamSectionProps> = {
     type: "object",
     visible: false,
     objectFields: {
-      scope: YextField(msg("fields.scope", "Scope"), {
+      scope: {
+        label: msg("fields.scope", "Scope"),
         type: "text",
-      }),
+      },
     },
   }),
   liveVisibility: {

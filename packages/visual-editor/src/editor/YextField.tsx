@@ -92,14 +92,6 @@ export type YextFieldDefinition<ValueType = any> =
       ? YextObjectField<ValueType>
       : never);
 
-// YextTextField has same functionality as Puck's TextField
-// If isMultiline is true, uses Puck's TextAreaField
-type YextTextField = YextBaseField & {
-  type: "text";
-  isMultiline?: boolean;
-  disallowTranslation?: boolean;
-};
-
 type YextMaxWidthField = YextBaseField & {
   type: "maxWidth";
 };
@@ -138,7 +130,6 @@ type YextFieldConfig<Props = any> =
   | YextArrayFieldConfig<Props extends Record<string, any>[] ? Props : any>
   | YextObjectFieldConfig<Props extends Record<string, any> ? Props : any>
   | YextNumberField
-  | YextTextField
   | YextEntitySelectorField<Props extends Record<string, any> ? Props : any>
   | YextMaxWidthField
   | YextTranslatableStringField
@@ -180,14 +171,6 @@ export function YextField<T, U>(
       disableConstantValueToggle: config.disableConstantValueToggle,
       disallowTranslation: config.disallowTranslation,
     });
-  }
-
-  if (config.type === "text") {
-    return {
-      label: fieldName,
-      visible: config.visible,
-      type: config.isMultiline ? "textarea" : "text",
-    };
   }
 
   if (config.type === "code") {
