@@ -20,7 +20,10 @@ import {
   type ListSourceFieldValue,
 } from "../../../editor/ListSourceField.tsx";
 import { PRODUCT_SECTION_CONSTANT_CONFIG } from "../../../internal/puck/constant-value-fields/ProductSection.tsx";
-import { resolveMappedListItems } from "../../../utils/listSourceFieldUtils.ts";
+import {
+  buildListSectionCards,
+  resolveListSectionItems,
+} from "../../../utils/cardSlots/listSectionData.ts";
 
 export type ProductCardsWrapperProps = Omit<
   CardWrapperType<ProductSectionType>,
@@ -193,12 +196,9 @@ export const ProductCardsWrapper: YextComponentConfig<ProductCardsWrapperProps> 
 
       if (!data.props.data.constantValueEnabled && data.props.data.field) {
         // ENTITY VALUES
-        const resolvedProducts =
-          resolveMappedListItems<ProductStruct>(
-            streamDocument,
-            data.props.data.field,
-            data.props.data.itemFieldMappings,
-            (resolvedItemFields) => ({
+        const { items: resolvedProducts, requiredLength } =
+          resolveListSectionItems<ProductStruct>({
+            buildMappedItem: (resolvedItemFields) => ({
               image: resolvedItemFields.image as ProductStruct["image"],
               brow: resolvedItemFields.brow as ProductStruct["brow"],
               name:
@@ -211,52 +211,46 @@ export const ProductCardsWrapper: YextComponentConfig<ProductCardsWrapperProps> 
               cta: resolvedItemFields.cta as ProductStruct["cta"],
               category:
                 resolvedItemFields.category as ProductStruct["category"],
-            })
-          ) ??
-          resolveYextEntityField<ProductSectionType | { products: undefined }>(
+            }),
+            data: data.props.data,
+            isValidItem: (product) => Boolean(product.name),
+            resolveLegacyItems: () =>
+              resolveYextEntityField<
+                ProductSectionType | { products: undefined }
+              >(
+                streamDocument,
+                {
+                  ...data.props.data,
+                  constantValue: { products: undefined },
+                },
+                i18nComponentsInstance.language || "en"
+              )?.products,
             streamDocument,
-            {
-              ...data.props.data,
-              constantValue: { products: undefined },
-            },
-            i18nComponentsInstance.language || "en"
-          )?.products;
+          });
 
-        if (!resolvedProducts?.length) {
+        if (!requiredLength || !resolvedProducts) {
           return setDeep(data, "props.slots.CardSlot", []);
         }
-
-        const requiredLength = resolvedProducts.length;
-        const currentLength = data.props.slots.CardSlot.length;
-        // If CardSlot is shorter, create an array of placeholder cards and append them.
-        // If CardSlot is longer or equal, this will just be an empty array.
-        const cardsToAdd =
-          currentLength < requiredLength
-            ? Array(requiredLength - currentLength)
-                .fill(null)
-                .map(() =>
-                  defaultProductCardSlotData(
-                    `ProductCard-${crypto.randomUUID()}`,
-                    undefined,
-                    sharedCardProps?.backgroundColor,
-                    sharedCardProps?.slotStyles
-                  )
-                )
-            : [];
-        const updatedCardSlot = [
-          ...data.props.slots.CardSlot,
-          ...cardsToAdd,
-        ].slice(0, requiredLength) as ComponentData<ProductCardProps>[];
 
         return setDeep(
           data,
           "props.slots.CardSlot",
-          updatedCardSlot.map((card, i) => {
-            card.props.index = i;
-            return setDeep(card, "props.parentData", {
-              field: data.props.data.field,
-              product: resolvedProducts[i],
-            } satisfies ProductCardProps["parentData"]);
+          buildListSectionCards<ProductCardProps, ProductStruct>({
+            currentCards: data.props.slots
+              .CardSlot as ComponentData<ProductCardProps>[],
+            createCard: () =>
+              defaultProductCardSlotData(
+                `ProductCard-${crypto.randomUUID()}`,
+                undefined,
+                sharedCardProps?.backgroundColor,
+                sharedCardProps?.slotStyles
+              ) as ComponentData<ProductCardProps>,
+            decorateCard: (card, product, index) =>
+              setDeep(setDeep(card, "props.index", index), "props.parentData", {
+                field: data.props.data.field,
+                product: product,
+              } satisfies ProductCardProps["parentData"]) as ComponentData<ProductCardProps>,
+            items: resolvedProducts,
           })
         );
       } else {

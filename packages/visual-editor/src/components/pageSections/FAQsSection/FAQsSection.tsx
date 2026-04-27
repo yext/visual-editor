@@ -23,7 +23,10 @@ import {
   type ListSourceFieldValue,
 } from "../../../editor/ListSourceField.tsx";
 import { FAQ_SECTION_CONSTANT_CONFIG } from "../../../internal/puck/constant-value-fields/FAQsSection.tsx";
-import { resolveMappedListItems } from "../../../utils/listSourceFieldUtils.ts";
+import {
+  buildListSectionCards,
+  resolveListSectionItems,
+} from "../../../utils/cardSlots/listSectionData.ts";
 
 export interface FAQStyles {
   /**
@@ -215,61 +218,49 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
 
     if (!data.props.data.constantValueEnabled && data.props.data.field) {
       // ENTITY VALUES
-      const resolvedFAQs =
-        resolveMappedListItems<FAQStruct>(
-          streamDocument,
-          data.props.data.field,
-          data.props.data.itemFieldMappings,
-          (resolvedItemFields) => ({
+      const { items: resolvedFAQs, requiredLength } =
+        resolveListSectionItems<FAQStruct>({
+          buildMappedItem: (resolvedItemFields) => ({
             question: resolvedItemFields.question as FAQStruct["question"],
             answer: resolvedItemFields.answer as FAQStruct["answer"],
-          })
-        ) ??
-        resolveYextEntityField<FAQSectionType | { faqs: undefined }>(
+          }),
+          data: data.props.data,
+          resolveLegacyItems: () =>
+            resolveYextEntityField<FAQSectionType | { faqs: undefined }>(
+              streamDocument,
+              {
+                ...data.props.data,
+                constantValue: { faqs: undefined },
+              },
+              i18nComponentsInstance.language || "en"
+            )?.faqs,
           streamDocument,
-          {
-            ...data.props.data,
-            constantValue: { faqs: undefined },
-          },
-          i18nComponentsInstance.language || "en"
-        )?.faqs;
+        });
 
-      if (!resolvedFAQs?.length) {
+      if (!requiredLength || !resolvedFAQs) {
         return setDeep(data, "props.slots.CardSlot", []);
       }
-
-      const requiredLength = resolvedFAQs.length;
-      const currentLength = data.props.slots.CardSlot.length;
-      // If CardSlot is shorter, create an array of placeholder cards and append them.
-      // If CardSlot is longer or equal, this will just be an empty array.
-      const cardsToAdd =
-        currentLength < requiredLength
-          ? Array(requiredLength - currentLength)
-              .fill(null)
-              .map(() =>
-                defaultFAQCardData(
-                  `FAQCard-${crypto.randomUUID()}`,
-                  undefined,
-                  sharedCardProps?.questionVariant,
-                  sharedCardProps?.answerVariant,
-                  sharedCardProps?.answerColor
-                )
-              )
-          : [];
-      const updatedCardSlot = [
-        ...data.props.slots.CardSlot,
-        ...cardsToAdd,
-      ].slice(0, requiredLength) as ComponentData<FAQCardProps>[];
 
       return setDeep(
         data,
         "props.slots.CardSlot",
-        updatedCardSlot.map((card, i) => {
-          card.props.index = i;
-          return setDeep(card, "props.parentData", {
-            field: data.props.data.field,
-            faq: resolvedFAQs[i],
-          } satisfies FAQCardProps["parentData"]);
+        buildListSectionCards<FAQCardProps, FAQStruct>({
+          currentCards: data.props.slots
+            .CardSlot as ComponentData<FAQCardProps>[],
+          createCard: () =>
+            defaultFAQCardData(
+              `FAQCard-${crypto.randomUUID()}`,
+              undefined,
+              sharedCardProps?.questionVariant,
+              sharedCardProps?.answerVariant,
+              sharedCardProps?.answerColor
+            ) as ComponentData<FAQCardProps>,
+          decorateCard: (card, faq, index) =>
+            setDeep(setDeep(card, "props.index", index), "props.parentData", {
+              field: data.props.data.field,
+              faq: faq,
+            } satisfies FAQCardProps["parentData"]) as ComponentData<FAQCardProps>,
+          items: resolvedFAQs,
         })
       );
     } else {
