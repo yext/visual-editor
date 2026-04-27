@@ -4,6 +4,7 @@ import {
   backgroundColors,
   ThemeColor,
   HeadingLevel,
+  ThemeOptions,
 } from "../../../utils/themeConfigOptions.ts";
 import { getThemeColorCssValue } from "../../../utils/colors.ts";
 import { BodyTextProps } from "../../contentBlocks/BodyText.tsx";
@@ -80,13 +81,11 @@ const aboutSectionFields: YextFields<AboutSectionProps> = {
         label: msg("fields.readMoreButtonColor", "Read More Button Color"),
         options: "SITE_COLOR",
       },
-      showDetailsColumn: YextField(
-        msg("fields.showDetailsColumn", "Show Details Column"),
-        {
-          type: "radio",
-          options: "SHOW_HIDE",
-        }
-      ),
+      showDetailsColumn: {
+        label: msg("fields.showDetailsColumn", "Show Details Column"),
+        type: "radio",
+        options: ThemeOptions.SHOW_HIDE,
+      },
     },
   }),
   slots: {
@@ -104,16 +103,14 @@ const aboutSectionFields: YextFields<AboutSectionProps> = {
     },
     visible: false,
   },
-  liveVisibility: YextField(
-    msg("fields.visibleOnLivePage", "Visible on Live Page"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: false },
-      ],
-    }
-  ),
+  liveVisibility: {
+    label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.show", "Show"), value: true },
+      { label: msg("fields.options.hide", "Hide"), value: false },
+    ],
+  },
 };
 
 const AboutComponent: PuckComponent<AboutSectionProps> = (props) => {

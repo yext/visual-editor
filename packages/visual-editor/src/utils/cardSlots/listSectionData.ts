@@ -1,4 +1,4 @@
-import { ComponentData } from "@puckeditor/core";
+import { ComponentData, DefaultComponentProps } from "@puckeditor/core";
 import { resolveMappedListItems } from "../listSourceFieldUtils.ts";
 import { type StreamDocument } from "../types/StreamDocument.ts";
 
@@ -44,7 +44,10 @@ export const resolveListSectionItems = <T>({
   };
 };
 
-type BuildListSectionCardsArgs<TCardProps, TItem> = {
+type BuildListSectionCardsArgs<
+  TCardProps extends DefaultComponentProps,
+  TItem,
+> = {
   currentCards: ComponentData<TCardProps>[];
   createCard: () => ComponentData<TCardProps>;
   decorateCard: (
@@ -59,7 +62,10 @@ type BuildListSectionCardsArgs<TCardProps, TItem> = {
  * Expands or trims a card slot to match the resolved items, then decorates
  * each card with item-specific data.
  */
-export const buildListSectionCards = <TCardProps, TItem>({
+export const buildListSectionCards = <
+  TCardProps extends DefaultComponentProps,
+  TItem,
+>({
   currentCards,
   createCard,
   decorateCard,

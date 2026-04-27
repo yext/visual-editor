@@ -4,6 +4,7 @@ import { cva } from "class-variance-authority";
 import {
   backgroundColors,
   ThemeColor,
+  ThemeOptions,
 } from "../../utils/themeConfigOptions.ts";
 import { msg } from "../../utils/i18n/platform.ts";
 import { YextField } from "../../editor/YextField.tsx";
@@ -145,34 +146,29 @@ const expandedFooterSectionFields: YextFields<ExpandedFooterProps> = {
       primaryFooter: YextField(msg("fields.primaryFooter", "Primary Footer"), {
         type: "object",
         objectFields: {
-          expandedFooter: YextField(
-            msg("fields.expandFooter", "Expand Footer"),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.yes", "Yes"), value: true },
-                { label: msg("fields.options.no", "No"), value: false },
-              ],
-            }
-          ),
-          showLogo: YextField(msg("fields.showLogo", "Show Logo"), {
+          expandedFooter: {
+            label: msg("fields.expandFooter", "Expand Footer"),
             type: "radio",
-            options: "SHOW_HIDE",
-          }),
-          showSocialLinks: YextField(
-            msg("fields.showSocialLinks", "Show Social Links"),
-            {
-              type: "radio",
-              options: "SHOW_HIDE",
-            }
-          ),
-          showUtilityImages: YextField(
-            msg("fields.showUtilityImages", "Show Utility Images"),
-            {
-              type: "radio",
-              options: "SHOW_HIDE",
-            }
-          ),
+            options: [
+              { label: msg("fields.options.yes", "Yes"), value: true },
+              { label: msg("fields.options.no", "No"), value: false },
+            ],
+          },
+          showLogo: {
+            label: msg("fields.showLogo", "Show Logo"),
+            type: "radio",
+            options: ThemeOptions.SHOW_HIDE,
+          },
+          showSocialLinks: {
+            label: msg("fields.showSocialLinks", "Show Social Links"),
+            type: "radio",
+            options: ThemeOptions.SHOW_HIDE,
+          },
+          showUtilityImages: {
+            label: msg("fields.showUtilityImages", "Show Utility Images"),
+            type: "radio",
+            options: ThemeOptions.SHOW_HIDE,
+          },
         },
       }),
       secondaryFooter: YextField(
@@ -180,16 +176,14 @@ const expandedFooterSectionFields: YextFields<ExpandedFooterProps> = {
         {
           type: "object",
           objectFields: {
-            show: YextField(
-              msg("fields.visibleOnLivePage", "Visible on Live Page"),
-              {
-                type: "radio",
-                options: [
-                  { label: msg("fields.options.yes", "Yes"), value: true },
-                  { label: msg("fields.options.no", "No"), value: false },
-                ],
-              }
-            ),
+            show: {
+              label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+              type: "radio",
+              options: [
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
+              ],
+            },
           },
         }
       ),
@@ -206,40 +200,40 @@ const expandedFooterSectionFields: YextFields<ExpandedFooterProps> = {
             label: msg("fields.backgroundColor", "Background Color"),
             options: "BACKGROUND_COLOR",
           },
-          linksPosition: YextField(
-            msg("fields.desktopLinkPosition", "Desktop Link Position"),
-            {
-              type: "radio",
-              options: [
-                {
-                  label: msg("fields.options.left", "Left", {
-                    context: "direction",
-                  }),
-                  value: "left",
-                },
-                {
-                  label: msg("fields.options.right", "Right", {
-                    context: "direction",
-                  }),
-                  value: "right",
-                },
-              ],
-            }
-          ),
-          desktopContentAlignment: YextField(
-            msg("fields.desktopContentAlignment", "Desktop Content Alignment"),
-            {
-              type: "radio",
-              options: "ALIGNMENT",
-            }
-          ),
-          mobileContentAlignment: YextField(
-            msg("fields.mobileContentAlignment", "Mobile Content Alignment"),
-            {
-              type: "radio",
-              options: "ALIGNMENT",
-            }
-          ),
+          linksPosition: {
+            label: msg("fields.desktopLinkPosition", "Desktop Link Position"),
+            type: "radio",
+            options: [
+              {
+                label: msg("fields.options.left", "Left", {
+                  context: "direction",
+                }),
+                value: "left",
+              },
+              {
+                label: msg("fields.options.right", "Right", {
+                  context: "direction",
+                }),
+                value: "right",
+              },
+            ],
+          },
+          desktopContentAlignment: {
+            label: msg(
+              "fields.desktopContentAlignment",
+              "Desktop Content Alignment"
+            ),
+            type: "radio",
+            options: ThemeOptions.ALIGNMENT,
+          },
+          mobileContentAlignment: {
+            label: msg(
+              "fields.mobileContentAlignment",
+              "Mobile Content Alignment"
+            ),
+            type: "radio",
+            options: ThemeOptions.ALIGNMENT,
+          },
           // Logo and utility image styles are controlled within their respective slots
         },
       }),
@@ -264,9 +258,10 @@ const expandedFooterSectionFields: YextFields<ExpandedFooterProps> = {
     type: "object",
     visible: false,
     objectFields: {
-      scope: YextField(msg("fields.scope", "Scope"), {
+      scope: {
+        label: msg("fields.scope", "Scope"),
         type: "text",
-      }),
+      },
     },
   }),
 };

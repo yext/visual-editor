@@ -24,6 +24,7 @@ import {
   buildListSectionCards,
   resolveListSectionItems,
 } from "../../../utils/cardSlots/listSectionData.ts";
+import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 
 export type ProductCardsWrapperProps = Omit<
   CardWrapperType<ProductSectionType>,
@@ -103,33 +104,36 @@ const productCardsWrapperFields: YextFields<ProductCardsWrapperProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      showImage: YextField(msg("fields.showImage", "Show Image"), {
+      showImage: {
+        label: msg("fields.showImage", "Show Image"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
-      showBrow: YextField(msg("fields.showBrow", "Show Brow Text"), {
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showBrow: {
+        label: msg("fields.showBrow", "Show Brow Text"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
-      showTitle: YextField(msg("fields.showTitle", "Show Title"), {
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showTitle: {
+        label: msg("fields.showTitle", "Show Title"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
-      showPrice: YextField(msg("fields.showPrice", "Show Price"), {
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showPrice: {
+        label: msg("fields.showPrice", "Show Price"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
-      showDescription: YextField(
-        msg("fields.showDescription", "Show Description"),
-        {
-          type: "radio",
-          options: "SHOW_HIDE",
-        }
-      ),
-      showCTA: YextField(msg("fields.showCTA", "Show CTA"), {
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showDescription: {
+        label: msg("fields.showDescription", "Show Description"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showCTA: {
+        label: msg("fields.showCTA", "Show CTA"),
+        type: "radio",
+        options: ThemeOptions.SHOW_HIDE,
+      },
     },
   }),
   slots: {

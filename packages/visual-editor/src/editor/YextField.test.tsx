@@ -4,7 +4,6 @@ import { YextAutoField } from "../fields/YextAutoField.tsx";
 import { msg } from "../utils/i18n/platform.ts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { YextField } from "./YextField.tsx";
-import { ThemeOptions } from "../utils/themeConfigOptions.ts";
 import { VIDEO_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Video.tsx";
 import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 
@@ -71,37 +70,52 @@ describe("YextField", () => {
     );
   });
 
-  it("maps radio fields with theme option keys to Puck config", () => {
-    const fieldName = msg("fields.radio", "radio");
+  it("renders native radio fields through YextAutoField", () => {
+    renderCustomField(
+      {
+        label: msg("fields.show", "Show"),
+        type: "radio",
+        options: [
+          { label: msg("fields.options.yes", "Yes"), value: true },
+          { label: msg("fields.options.no", "No"), value: false },
+        ],
+      },
+      true
+    );
 
-    const field = YextField(fieldName, {
-      type: "radio",
-      options: "ALIGNMENT",
-      visible: false,
-    });
-
-    expect(field).toEqual({
-      label: fieldName,
-      visible: false,
-      type: "radio",
-      options: ThemeOptions.ALIGNMENT,
-    });
+    expect(screen.getAllByRole("radio")).toHaveLength(2);
+    expect(screen.getByRole("radio", { checked: true })).toBeDefined();
   });
 
-  it.each([
-    [{ type: "text" }, "text"],
-    [{ type: "text", isMultiline: true, visible: false }, "textarea"],
-  ] as const)("maps text fields to %s config", (config, expectedType) => {
-    const fieldName = msg("fields.text", "Text");
+  it("renders native text and textarea fields through YextAutoField", () => {
+    const { unmount } = render(
+      <YextAutoField
+        field={{ label: msg("fields.text", "Text"), type: "text" }}
+        id="text-field"
+        onChange={vi.fn()}
+        value="Alpha"
+      />
+    );
 
-    const field = YextField(fieldName, config);
-    const visible = "visible" in config ? config.visible : undefined;
+    expect(document.querySelector('input[type="text"]')).toBeDefined();
+    expect(screen.getByDisplayValue("Alpha")).toBeDefined();
 
-    expect(field).toEqual({
-      label: fieldName,
-      visible,
-      type: expectedType,
-    });
+    unmount();
+
+    render(
+      <YextAutoField
+        field={{
+          label: msg("fields.description", "Description"),
+          type: "textarea",
+        }}
+        id="textarea-field"
+        onChange={vi.fn()}
+        value="Beta"
+      />
+    );
+
+    expect(document.querySelector("textarea")).toBeDefined();
+    expect(screen.getByDisplayValue("Beta")).toBeDefined();
   });
 
   it("delegates entityField configs to YextEntityFieldSelector", () => {

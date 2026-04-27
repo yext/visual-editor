@@ -13,6 +13,7 @@ import { defaultTeamCardSlotData, TeamCardProps } from "./TeamCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
 import { YextComponentConfig } from "../../../fields/fields.ts";
+import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 
 export type TeamCardsWrapperProps = CardWrapperType<TeamSectionType> & {
   styles: {
@@ -32,26 +33,31 @@ const teamCardsWrapperFields = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      showImage: YextField(msg("fields.showImage", "Show Image"), {
+      showImage: {
+        label: msg("fields.showImage", "Show Image"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
-      showTitle: YextField(msg("fields.showTitle", "Show Title"), {
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showTitle: {
+        label: msg("fields.showTitle", "Show Title"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
-      showPhone: YextField(msg("fields.showPhone", "Show Phone"), {
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showPhone: {
+        label: msg("fields.showPhone", "Show Phone"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
-      showEmail: YextField(msg("fields.showEmail", "Show Email"), {
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showEmail: {
+        label: msg("fields.showEmail", "Show Email"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
-      showCTA: YextField(msg("fields.showCTA", "Show CTA"), {
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showCTA: {
+        label: msg("fields.showCTA", "Show CTA"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
+        options: ThemeOptions.SHOW_HIDE,
+      },
     },
   }),
 };

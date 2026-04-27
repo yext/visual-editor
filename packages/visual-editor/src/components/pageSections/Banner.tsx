@@ -15,6 +15,7 @@ import { PuckComponent } from "@puckeditor/core";
 import {
   backgroundColors,
   ThemeColor,
+  ThemeOptions,
 } from "../../utils/themeConfigOptions.js";
 import { CircleSlash2 } from "lucide-react";
 import { useTemplateMetadata } from "../../internal/hooks/useMessageReceivers.ts";
@@ -101,22 +102,21 @@ const bannerSectionFields: YextFields<BannerSectionProps> = {
         label: msg("fields.textColor", "Text Color"),
         options: "SITE_COLOR",
       },
-      textAlignment: YextField(msg("fields.textAlignment", "Text Alignment"), {
+      textAlignment: {
+        label: msg("fields.textAlignment", "Text Alignment"),
         type: "radio",
-        options: "ALIGNMENT",
-      }),
+        options: ThemeOptions.ALIGNMENT,
+      },
     },
   }),
-  liveVisibility: YextField(
-    msg("fields.visibleOnLivePage", "Visible on Live Page"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: false },
-      ],
-    }
-  ),
+  liveVisibility: {
+    label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.show", "Show"), value: true },
+      { label: msg("fields.options.hide", "Hide"), value: false },
+    ],
+  },
 };
 
 function isRichTextEmpty(value: any): boolean {

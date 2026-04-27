@@ -283,7 +283,8 @@ const professionalHeroSectionFields: YextFields<ProfessionalHeroSectionProps> =
           label: msg("fields.backgroundColor", "Background Color"),
           options: "BACKGROUND_COLOR",
         },
-        showImage: YextField(msg("fields.showImage", "Show Image"), {
+        showImage: {
+          label: msg("fields.showImage", "Show Image"),
           type: "radio",
           options: [
             {
@@ -295,187 +296,85 @@ const professionalHeroSectionFields: YextFields<ProfessionalHeroSectionProps> =
               value: false,
             },
           ],
-        }),
-        desktopImagePosition: YextField(
-          msg("fields.desktopImagePosition", "Desktop Image Position"),
-          {
-            type: "radio",
-            options: [
-              {
-                label: msg("fields.options.left", "Left", {
-                  context: "direction",
-                }),
-                value: "left",
-              },
-              {
-                label: msg("fields.options.right", "Right", {
-                  context: "direction",
-                }),
-                value: "right",
-              },
-            ],
-          }
-        ),
-        mobileImagePosition: YextField(
-          msg("fields.mobileImagePosition", "Mobile Image Position"),
-          {
-            type: "radio",
-            options: ThemeOptions.VERTICAL_POSITION,
-          }
-        ),
-        showBusinessName: YextField(
-          msg("fields.showBusinessName", "Show Business Name"),
-          {
-            type: "radio",
-            options: [
-              {
-                label: msg("fields.options.show", "Show"),
-                value: true,
-              },
-              {
-                label: msg("fields.options.hide", "Hide"),
-                value: false,
-              },
-            ],
-          }
-        ),
-        showCredentials: YextField(
-          msg("fields.showCredentials", "Show Credentials"),
-          {
-            type: "radio",
-            options: [
-              {
-                label: msg("fields.options.show", "Show"),
-                value: true,
-              },
-              {
-                label: msg("fields.options.hide", "Hide"),
-                value: false,
-              },
-            ],
-          }
-        ),
-        showProfessionalTitle: YextField(
-          msg("fields.showProfessionalTitle", "Show Professional Title"),
-          {
-            type: "radio",
-            options: [
-              {
-                label: msg("fields.options.show", "Show"),
-                value: true,
-              },
-              {
-                label: msg("fields.options.hide", "Hide"),
-                value: false,
-              },
-            ],
-          }
-        ),
-        showSubtitle: YextField(msg("fields.showSubtitle", "Show Subtitle"), {
+        },
+        desktopImagePosition: {
+          label: msg("fields.desktopImagePosition", "Desktop Image Position"),
           type: "radio",
           options: [
             {
-              label: msg("fields.options.show", "Show"),
-              value: true,
+              label: msg("fields.options.left", "Left", {
+                context: "direction",
+              }),
+              value: "left",
             },
             {
-              label: msg("fields.options.hide", "Hide"),
-              value: false,
+              label: msg("fields.options.right", "Right", {
+                context: "direction",
+              }),
+              value: "right",
             },
           ],
-        }),
-        showAverageReview: YextField(
-          msg("fields.showAverageReview", "Show Average Review"),
-          {
-            type: "radio",
-            options: [
-              {
-                label: msg("fields.options.show", "Show"),
-                value: true,
-              },
-              {
-                label: msg("fields.options.hide", "Hide"),
-                value: false,
-              },
-            ],
-          }
-        ),
+        },
+        mobileImagePosition: {
+          label: msg("fields.mobileImagePosition", "Mobile Image Position"),
+          type: "radio",
+          options: ThemeOptions.VERTICAL_POSITION,
+        },
+        showBusinessName: {
+          label: msg("fields.showBusinessName", "Show Business Name"),
+          type: "radio",
+          options: ThemeOptions.SHOW_HIDE,
+        },
+        showCredentials: {
+          label: msg("fields.showCredentials", "Show Credentials"),
+          type: "radio",
+          options: ThemeOptions.SHOW_HIDE,
+        },
+        showProfessionalTitle: {
+          label: msg("fields.showProfessionalTitle", "Show Professional Title"),
+          type: "radio",
+          options: ThemeOptions.SHOW_HIDE,
+        },
+        showSubtitle: {
+          label: msg("fields.showSubtitle", "Show Subtitle"),
+          type: "radio",
+          options: ThemeOptions.SHOW_HIDE,
+        },
+        showAverageReview: {
+          label: msg("fields.showAverageReview", "Show Average Review"),
+          type: "radio",
+          options: ThemeOptions.SHOW_HIDE,
+        },
         reviewStarsColor: {
           type: "basicSelector",
           label: msg("fields.reviewStarsColor", "Review Stars Color"),
           options: "SITE_COLOR",
         },
-        showAddress: YextField(msg("fields.showAddress", "Show Address"), {
+        showAddress: {
+          label: msg("fields.showAddress", "Show Address"),
           type: "radio",
-          options: [
-            {
-              label: msg("fields.options.show", "Show"),
-              value: true,
-            },
-            {
-              label: msg("fields.options.hide", "Hide"),
-              value: false,
-            },
-          ],
-        }),
-        showPrimaryCTA: YextField(
-          msg("fields.showPrimaryCTA", "Show Primary CTA"),
-          {
-            type: "radio",
-            options: [
-              {
-                label: msg("fields.options.show", "Show"),
-                value: true,
-              },
-              {
-                label: msg("fields.options.hide", "Hide"),
-                value: false,
-              },
-            ],
-          }
-        ),
-        showSecondaryCTA: YextField(
-          msg("fields.showSecondaryCTA", "Show Secondary CTA"),
-          {
-            type: "radio",
-            options: [
-              {
-                label: msg("fields.options.show", "Show"),
-                value: true,
-              },
-              {
-                label: msg("fields.options.hide", "Hide"),
-                value: false,
-              },
-            ],
-          }
-        ),
-        showPhone: YextField(msg("fields.showPhone", "Show Phone"), {
+          options: ThemeOptions.SHOW_HIDE,
+        },
+        showPrimaryCTA: {
+          label: msg("fields.showPrimaryCTA", "Show Primary CTA"),
           type: "radio",
-          options: [
-            {
-              label: msg("fields.options.show", "Show"),
-              value: true,
-            },
-            {
-              label: msg("fields.options.hide", "Hide"),
-              value: false,
-            },
-          ],
-        }),
-        showEmail: YextField(msg("fields.showEmail", "Show Email"), {
+          options: ThemeOptions.SHOW_HIDE,
+        },
+        showSecondaryCTA: {
+          label: msg("fields.showSecondaryCTA", "Show Secondary CTA"),
           type: "radio",
-          options: [
-            {
-              label: msg("fields.options.show", "Show"),
-              value: true,
-            },
-            {
-              label: msg("fields.options.hide", "Hide"),
-              value: false,
-            },
-          ],
-        }),
+          options: ThemeOptions.SHOW_HIDE,
+        },
+        showPhone: {
+          label: msg("fields.showPhone", "Show Phone"),
+          type: "radio",
+          options: ThemeOptions.SHOW_HIDE,
+        },
+        showEmail: {
+          label: msg("fields.showEmail", "Show Email"),
+          type: "radio",
+          options: ThemeOptions.SHOW_HIDE,
+        },
       },
     }),
     slots: {
@@ -499,21 +398,20 @@ const professionalHeroSectionFields: YextFields<ProfessionalHeroSectionProps> =
       type: "object",
       visible: false,
       objectFields: {
-        scope: YextField(msg("fields.scope", "Scope"), {
+        scope: {
+          label: msg("fields.scope", "Scope"),
           type: "text",
-        }),
+        },
       },
     }),
-    liveVisibility: YextField(
-      msg("fields.visibleOnLivePage", "Visible on Live Page"),
-      {
-        type: "radio",
-        options: [
-          { label: msg("fields.options.show", "Show"), value: true },
-          { label: msg("fields.options.hide", "Hide"), value: false },
-        ],
-      }
-    ),
+    liveVisibility: {
+      label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+      type: "radio",
+      options: [
+        { label: msg("fields.options.show", "Show"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: false },
+      ],
+    },
   };
 
 export const ProfessionalHeroSection: YextComponentConfig<ProfessionalHeroSectionProps> =

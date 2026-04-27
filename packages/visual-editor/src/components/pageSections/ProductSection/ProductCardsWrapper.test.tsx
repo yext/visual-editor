@@ -1,30 +1,33 @@
 import { describe, expect, it } from "vitest";
 import { ProductCardsWrapper } from "./ProductCardsWrapper.tsx";
 
-const resolveData = (
-  data: Partial<(typeof ProductCardsWrapper.defaultProps)["data"]>,
+const defaultProps = ProductCardsWrapper.defaultProps!;
+const resolveData = async (
+  data: Partial<typeof defaultProps.data>,
   streamDocument: Record<string, unknown>
 ) =>
-  ProductCardsWrapper.resolveData!(
+  await ProductCardsWrapper.resolveData!(
     {
       props: {
-        ...ProductCardsWrapper.defaultProps,
+        ...defaultProps,
         data: {
-          ...ProductCardsWrapper.defaultProps.data,
+          ...defaultProps.data,
           ...data,
         },
       },
-    } as Parameters<typeof ProductCardsWrapper.resolveData>[0],
+    } as NonNullable<
+      Parameters<NonNullable<typeof ProductCardsWrapper.resolveData>>[0]
+    >,
     {
       metadata: {
         streamDocument,
       },
-    } as Parameters<typeof ProductCardsWrapper.resolveData>[1]
+    } as Parameters<NonNullable<typeof ProductCardsWrapper.resolveData>>[1]
   );
 
 describe("ProductCardsWrapper", () => {
-  it("when using a base entity section field then legacy products are resolved", () => {
-    const result = resolveData(
+  it("when using a base entity section field then legacy products are resolved", async () => {
+    const result = await resolveData(
       {
         field: "c_productSection",
         constantValueEnabled: false,
@@ -36,17 +39,18 @@ describe("ProductCardsWrapper", () => {
       }
     );
 
-    expect(result.props.slots.CardSlot).toHaveLength(2);
-    expect(result.props.slots.CardSlot[0]?.props.parentData?.product).toEqual({
+    const cardSlot = result.props!.slots!.CardSlot!;
+    expect(cardSlot).toHaveLength(2);
+    expect(cardSlot[0]?.props.parentData?.product).toEqual({
       name: "Base Product",
     });
-    expect(result.props.slots.CardSlot[1]?.props.parentData?.product).toEqual({
+    expect(cardSlot[1]?.props.parentData?.product).toEqual({
       name: "Second Product",
     });
   });
 
-  it("when using a linked section field then the first linked entity's products are resolved", () => {
-    const result = resolveData(
+  it("when using a linked section field then the first linked entity's products are resolved", async () => {
+    const result = await resolveData(
       {
         field: "c_linkedLocation.c_productSection",
         constantValueEnabled: false,
@@ -67,14 +71,15 @@ describe("ProductCardsWrapper", () => {
       }
     );
 
-    expect(result.props.slots.CardSlot).toHaveLength(1);
-    expect(result.props.slots.CardSlot[0]?.props.parentData?.product).toEqual({
+    const cardSlot = result.props!.slots!.CardSlot!;
+    expect(cardSlot).toHaveLength(1);
+    expect(cardSlot[0]?.props.parentData?.product).toEqual({
       name: "Linked Product",
     });
   });
 
-  it("when using a linked mapped list field then mapped products are resolved", () => {
-    const result = resolveData(
+  it("when using a linked mapped list field then mapped products are resolved", async () => {
+    const result = await resolveData(
       {
         field: "c_linkedLocation.c_productSection.products",
         constantValueEnabled: false,
@@ -101,16 +106,17 @@ describe("ProductCardsWrapper", () => {
       }
     );
 
-    expect(result.props.slots.CardSlot).toHaveLength(1);
-    expect(result.props.slots.CardSlot[0]?.props.parentData?.product).toEqual({
+    const cardSlot = result.props!.slots!.CardSlot!;
+    expect(cardSlot).toHaveLength(1);
+    expect(cardSlot[0]?.props.parentData?.product).toEqual({
       description: { html: "<p>Product Description</p>" },
       image: { url: "https://example.com/product.jpg" },
       name: "Mapped Product",
     });
   });
 
-  it("when optional mapped fields are missing then products still render as long as name resolves", () => {
-    const result = resolveData(
+  it("when optional mapped fields are missing then products still render as long as name resolves", async () => {
+    const result = await resolveData(
       {
         field: "c_linkedLocation.c_productSection.products",
         constantValueEnabled: false,
@@ -129,8 +135,9 @@ describe("ProductCardsWrapper", () => {
       }
     );
 
-    expect(result.props.slots.CardSlot).toHaveLength(1);
-    expect(result.props.slots.CardSlot[0]?.props.parentData?.product).toEqual({
+    const cardSlot = result.props!.slots!.CardSlot!;
+    expect(cardSlot).toHaveLength(1);
+    expect(cardSlot[0]?.props.parentData?.product).toEqual({
       brow: undefined,
       category: undefined,
       cta: undefined,
@@ -141,8 +148,8 @@ describe("ProductCardsWrapper", () => {
     });
   });
 
-  it("when mapped products are missing the required name then the card slot is cleared", () => {
-    const result = resolveData(
+  it("when mapped products are missing the required name then the card slot is cleared", async () => {
+    const result = await resolveData(
       {
         field: "c_linkedLocation.c_productSection.products",
         constantValueEnabled: false,
@@ -161,6 +168,6 @@ describe("ProductCardsWrapper", () => {
       }
     );
 
-    expect(result.props.slots.CardSlot).toEqual([]);
+    expect(result.props!.slots!.CardSlot!).toEqual([]);
   });
 });

@@ -16,6 +16,7 @@ import {
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
 import { YextComponentConfig } from "../../../fields/fields.ts";
+import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 
 export type TestimonialCardsWrapperProps =
   CardWrapperType<TestimonialSectionType> & {
@@ -42,14 +43,16 @@ const testimonialCardsWrapperFields = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      showName: YextField(msg("fields.showName", "Show Name"), {
+      showName: {
+        label: msg("fields.showName", "Show Name"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
-      showDate: YextField(msg("fields.showDate", "Show Date"), {
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showDate: {
+        label: msg("fields.showDate", "Show Date"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
+        options: ThemeOptions.SHOW_HIDE,
+      },
     },
   }),
 };

@@ -158,9 +158,10 @@ export const FooterUtilityImagesSlot: YextComponentConfig<FooterUtilityImagesSlo
                 image: YextField(msg("fields.image", "Image"), {
                   type: "image",
                 }),
-                linkTarget: YextField(msg("fields.linkTarget", "Link Target"), {
+                linkTarget: {
+                  label: msg("fields.linkTarget", "Link Target"),
                   type: "text",
-                }),
+                },
               },
               getItemSummary: (item, index) =>
                 pt("utilityImage", "Utility Image") + " " + ((index ?? 0) + 1),
