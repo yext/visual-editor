@@ -37,6 +37,26 @@
     "region": "VA"
   },
   "businessId": 1000146856,
+  "c_linkedLocation": [
+    {
+      "address": {
+        "city": "Houston",
+        "countryCode": "US",
+        "line1": "1600 East Nasa Parkway",
+        "postalCode": "77058",
+        "region": "TX"
+      }
+    },
+    {
+      "address": {
+        "city": "Seattle",
+        "countryCode": "US",
+        "line1": "400 Broad Street",
+        "postalCode": "98109",
+        "region": "WA"
+      }
+    }
+  ],
   "emails": ["yext@gmail.com"],
   "c_exampleEvents": {
     "events": [

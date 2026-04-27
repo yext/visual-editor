@@ -661,10 +661,11 @@ const locatorFields: YextFields<LocatorProps> = {
       type: "array",
       getItemSummary: (item) => getEntityTypeLabel(item.entityType),
       arrayFields: {
-        entityType: YextField(msg("fields.entityType", "Entity Type"), {
+        entityType: {
+          label: msg("fields.entityType", "Entity Type"),
           type: "text",
           visible: false,
-        }),
+        },
         pinIcon: {
           type: "custom",
           render: ({
@@ -738,26 +739,25 @@ const locatorFields: YextFields<LocatorProps> = {
     label: msg("fields.filters", "Filters"),
     type: "object",
     objectFields: {
-      openNowButton: YextField(
-        msg("fields.options.includeOpenNow", "Include Open Now Button"),
-        {
-          type: "radio",
-          options: [
-            { label: msg("fields.options.yes", "Yes"), value: true },
-            { label: msg("fields.options.no", "No"), value: false },
-          ],
-        }
-      ),
-      showDistanceOptions: YextField(
-        msg("fields.options.showDistanceOptions", "Include Distance Options"),
-        {
-          type: "radio",
-          options: [
-            { label: msg("fields.options.yes", "Yes"), value: true },
-            { label: msg("fields.options.no", "No"), value: false },
-          ],
-        }
-      ),
+      openNowButton: {
+        label: msg("fields.options.includeOpenNow", "Include Open Now Button"),
+        type: "radio",
+        options: [
+          { label: msg("fields.options.yes", "Yes"), value: true },
+          { label: msg("fields.options.no", "No"), value: false },
+        ],
+      },
+      showDistanceOptions: {
+        label: msg(
+          "fields.options.showDistanceOptions",
+          "Include Distance Options"
+        ),
+        type: "radio",
+        options: [
+          { label: msg("fields.options.yes", "Yes"), value: true },
+          { label: msg("fields.options.no", "No"), value: false },
+        ],
+      },
       accentColor: {
         type: "basicSelector",
         label: msg("fields.accentColor", "Accent Color"),
@@ -787,12 +787,14 @@ const locatorFields: YextFields<LocatorProps> = {
     {
       type: "object",
       objectFields: {
-        latitude: YextField(msg("fields.latitude", "Latitude"), {
+        latitude: {
+          label: msg("fields.latitude", "Latitude"),
           type: "text",
-        }),
-        longitude: YextField(msg("fields.longitude", "Longitude"), {
+        },
+        longitude: {
+          label: msg("fields.longitude", "Longitude"),
           type: "text",
-        }),
+        },
       },
     }
   ),

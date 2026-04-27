@@ -8,42 +8,7 @@ import {
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { linkTypeOptions } from "./CallToAction.tsx";
 import { useMemo } from "react";
-import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
-
-export const ctaTypeOptions = () => {
-  return [
-    {
-      label: pt("ctaTypes.textAndLink", "Text & Link"),
-      value: "textAndLink",
-    },
-    {
-      label: pt("ctaTypes.getDirections", "Get Directions"),
-      value: "getDirections",
-    },
-    {
-      label: pt("ctaTypes.presetImage", "Preset Image"),
-      value: "presetImage",
-    },
-  ];
-};
-
-/**
- * Determines the CTA type
- *
- * @param entityField - The Yext entity field containing CTA configuration.
- * @returns An object containing the CTA type
- */
-export const getCTAType = <T extends Record<string, any>>(
-  entityField: YextEntityField<T>
-): {
-  ctaType: "textAndLink" | "getDirections" | "presetImage" | undefined;
-} => {
-  const ctaType = entityField.constantValueEnabled
-    ? entityField.constantValue.ctaType
-    : entityField.selectedType;
-
-  return { ctaType };
-};
+import { ctaTypeOptions } from "../../../internal/utils/ctaFieldUtils.ts";
 
 export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> =
   {

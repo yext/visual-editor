@@ -53,26 +53,25 @@ export const HoursTableStyleFields: YextFields<HoursTableStyleFieldProps> = {
     label: msg("fields.startOfTheWeek", "Start of the Week"),
     options: "HOURS_OPTIONS",
   },
-  collapseDays: YextField<boolean>(
-    msg("fields.collapseDays", "Collapse Days"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.yes", "Yes"), value: true },
-        { label: msg("fields.options.no", "No"), value: false },
-      ],
-    }
-  ),
-  showAdditionalHoursText: YextField<boolean>(
-    msg("fields.options.showAdditionalHoursText", "Show Additional Hours Text"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.yes", "Yes"), value: true },
-        { label: msg("fields.options.no", "No"), value: false },
-      ],
-    }
-  ),
+  collapseDays: {
+    label: msg("fields.collapseDays", "Collapse Days"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.yes", "Yes"), value: true },
+      { label: msg("fields.options.no", "No"), value: false },
+    ],
+  },
+  showAdditionalHoursText: {
+    label: msg(
+      "fields.options.showAdditionalHoursText",
+      "Show Additional Hours Text"
+    ),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.yes", "Yes"), value: true },
+      { label: msg("fields.options.no", "No"), value: false },
+    ],
+  },
 };
 
 export const hoursTableFields: YextFields<HoursTableProps> = {
@@ -86,19 +85,17 @@ export const hoursTableFields: YextFields<HoursTableProps> = {
     type: "object",
     objectFields: {
       ...HoursTableStyleFields,
-      alignment: YextField(
-        msg("fields.contentAlignment", "Content Alignment"),
-        {
-          type: "radio",
-          options: [
-            { label: msg("fields.options.left", "Left"), value: "items-start" },
-            {
-              label: msg("fields.options.center", "Center"),
-              value: "items-center",
-            },
-          ],
-        }
-      ),
+      alignment: {
+        label: msg("fields.contentAlignment", "Content Alignment"),
+        type: "radio",
+        options: [
+          { label: msg("fields.options.left", "Left"), value: "items-start" },
+          {
+            label: msg("fields.options.center", "Center"),
+            value: "items-center",
+          },
+        ],
+      },
     },
   }),
 };

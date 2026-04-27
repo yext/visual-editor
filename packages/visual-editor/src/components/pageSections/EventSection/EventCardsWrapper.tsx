@@ -5,6 +5,7 @@ import { msg } from "../../../utils/i18n/platform.ts";
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
+import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 import {
   cardWrapperFields,
   CardWrapperType,
@@ -37,25 +38,26 @@ const eventCardsWrapperFields = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      showImage: YextField(msg("fields.showImage", "Show Image"), {
+      showImage: {
+        label: msg("fields.showImage", "Show Image"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
-      showDateTime: YextField(msg("fields.showDateTime", "Show Date & Time"), {
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showDateTime: {
+        label: msg("fields.showDateTime", "Show Date & Time"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
-      showDescription: YextField(
-        msg("fields.showDescription", "Show Description"),
-        {
-          type: "radio",
-          options: "SHOW_HIDE",
-        }
-      ),
-      showCTA: YextField(msg("fields.showCTA", "Show CTA"), {
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showDescription: {
+        label: msg("fields.showDescription", "Show Description"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showCTA: {
+        label: msg("fields.showCTA", "Show CTA"),
+        type: "radio",
+        options: ThemeOptions.SHOW_HIDE,
+      },
     },
   }),
 };

@@ -265,7 +265,8 @@ const footerLinksSlotFields: YextFields<FooterLinksSlotProps> = {
       links: YextField(msg("fields.links", "Links"), {
         type: "array",
         arrayFields: {
-          linkType: YextField(msg("fields.linkType", "Link Type"), {
+          linkType: {
+            label: msg("fields.linkType", "Link Type"),
             type: "radio",
             options: [
               { label: msg("fields.options.url", "URL"), value: "URL" },
@@ -278,34 +279,31 @@ const footerLinksSlotFields: YextFields<FooterLinksSlotProps> = {
                 value: "EMAIL",
               },
             ],
-          }),
+          },
           label: YextField(msg("fields.label", "Label"), {
             type: "translatableString",
             filter: { types: ["type.string"] },
           }),
-          link: YextField(msg("fields.link", "Link"), {
+          link: {
+            label: msg("fields.link", "Link"),
             type: "text",
-          }),
-          normalizeLink: YextField(
-            msg("fields.normalizeLink", "Normalize Link"),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.yes", "Yes"), value: true },
-                { label: msg("fields.options.no", "No"), value: false },
-              ],
-            }
-          ),
-          openInNewTab: YextField(
-            msg("fields.openInNewTab", "Open in new tab"),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.yes", "Yes"), value: true },
-                { label: msg("fields.options.no", "No"), value: false },
-              ],
-            }
-          ),
+          },
+          normalizeLink: {
+            label: msg("fields.normalizeLink", "Normalize Link"),
+            type: "radio",
+            options: [
+              { label: msg("fields.options.yes", "Yes"), value: true },
+              { label: msg("fields.options.no", "No"), value: false },
+            ],
+          },
+          openInNewTab: {
+            label: msg("fields.openInNewTab", "Open in new tab"),
+            type: "radio",
+            options: [
+              { label: msg("fields.options.yes", "Yes"), value: true },
+              { label: msg("fields.options.no", "No"), value: false },
+            ],
+          },
         },
         defaultItemProps: defaultLink,
         getItemSummary: (item: any, index?: number) => {

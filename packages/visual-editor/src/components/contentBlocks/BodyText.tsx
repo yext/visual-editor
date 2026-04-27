@@ -11,7 +11,7 @@ import { pt, msg } from "../../utils/i18n/platform.ts";
 import { TranslatableRichText } from "../../types/types.ts";
 import { useBackground } from "../../hooks/useBackground.tsx";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
-import { ThemeColor } from "../../utils/themeConfigOptions.ts";
+import { ThemeColor, ThemeOptions } from "../../utils/themeConfigOptions.ts";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export type BodyTextProps = {
@@ -57,10 +57,11 @@ const bodyTextFields: YextFields<BodyTextProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      variant: YextField(msg("fields.variant", "Variant"), {
+      variant: {
+        label: msg("fields.variant", "Variant"),
         type: "radio",
-        options: "BODY_VARIANT",
-      }),
+        options: ThemeOptions.BODY_VARIANT,
+      },
       color: {
         type: "basicSelector",
         label: msg("fields.color", "Color"),

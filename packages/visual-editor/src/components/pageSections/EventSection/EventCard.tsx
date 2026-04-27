@@ -245,16 +245,14 @@ const eventCardFields: YextFields<EventCardProps> = {
         label: msg("fields.backgroundColor", "Background Color"),
         options: "BACKGROUND_COLOR",
       },
-      truncateDescription: YextField(
-        msg("fields.truncateDescription", "Truncate Description"),
-        {
-          type: "radio",
-          options: [
-            { label: msg("fields.options.yes", "Yes"), value: true },
-            { label: msg("fields.options.no", "No"), value: false },
-          ],
-        }
-      ),
+      truncateDescription: {
+        label: msg("fields.truncateDescription", "Truncate Description"),
+        type: "radio",
+        options: [
+          { label: msg("fields.options.yes", "Yes"), value: true },
+          { label: msg("fields.options.no", "No"), value: false },
+        ],
+      },
     },
   }),
   slots: {

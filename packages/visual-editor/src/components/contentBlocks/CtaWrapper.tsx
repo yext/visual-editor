@@ -1,5 +1,5 @@
 import { PuckComponent, setDeep } from "@puckeditor/core";
-import { ThemeColor } from "../../utils/themeConfigOptions.ts";
+import { ThemeColor, ThemeOptions } from "../../utils/themeConfigOptions.ts";
 import { CTA, CTAVariant, isCtaVariantWithColor } from "../atoms/cta.tsx";
 import {
   EnhancedTranslatableCTA,
@@ -7,7 +7,6 @@ import {
   TranslatableString,
 } from "../../types/types.ts";
 import { EntityField } from "../../editor/EntityField.tsx";
-import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
@@ -16,10 +15,8 @@ import { themeManagerCn } from "../../utils/cn.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { useTranslation } from "react-i18next";
 import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
-import {
-  ctaTypeOptions,
-  getCTAType,
-} from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
+import { getCTAType } from "../../internal/utils/ctaFieldUtils.ts";
+import { type YextCTAField } from "../../fields/CTASelectorField.tsx";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export interface CTAWrapperProps {
@@ -31,7 +28,7 @@ export interface CTAWrapperProps {
     /** Whether CTA links should be normalized before rendering */
     normalizeLink: boolean;
     /** The call to action to display */
-    entityField: YextEntityField<EnhancedTranslatableCTA>;
+    entityField: YextCTAField;
     /** Static text for the button label */
     buttonText?: TranslatableString;
     /** Sets id attribute on the button */
@@ -75,54 +72,48 @@ const ctaWrapperFields: YextFields<CTAWrapperProps> = {
     type: "object",
     label: msg("fields.data", "Data"),
     objectFields: {
-      show: YextField(msg("fields.showCTA", "Show CTA"), {
+      show: {
+        label: msg("fields.showCTA", "Show CTA"),
         type: "radio",
         options: [
           { label: msg("fields.options.show", "Show"), value: true },
           { label: msg("fields.options.hide", "Hide"), value: false },
         ],
         visible: false,
-      }),
-      actionType: YextField(msg("fields.actionType", "Action Type"), {
+      },
+      actionType: {
+        label: msg("fields.actionType", "Action Type"),
         type: "radio",
         options: [
           { label: msg("fields.options.link", "Link"), value: "link" },
           { label: msg("fields.options.button", "Button"), value: "button" },
         ],
-      }),
-      entityField: YextField(msg("fields.cta", "CTA"), {
-        type: "entityField",
-        filter: {
-          types: ["type.cta"],
-        },
-        typeSelectorConfig: {
-          typeLabel: msg("fields.ctaType", "CTA Type"),
-          fieldLabel: msg("fields.ctaField", "CTA Field"),
-          options: ctaTypeOptions(),
-          optionValueToEntityFieldType: {
-            presetImage: "type.cta",
-            textAndLink: "type.cta",
-          },
-        },
-      }),
-      normalizeLink: YextField(msg("fields.normalizeLink", "Normalize Link"), {
+      },
+      entityField: {
+        type: "ctaSelector",
+        label: msg("fields.cta", "CTA"),
+      },
+      normalizeLink: {
+        label: msg("fields.normalizeLink", "Normalize Link"),
         type: "radio",
         options: [
           { label: msg("fields.options.yes", "Yes"), value: true },
           { label: msg("fields.options.no", "No"), value: false },
         ],
         visible: false,
-      }),
+      },
       buttonText: YextField(msg("fields.buttonText", "Button Text"), {
         type: "translatableString",
         filter: { types: ["type.string"] },
       }),
-      customId: YextField(msg("fields.customId", "Custom ID"), {
+      customId: {
+        label: msg("fields.customId", "Custom ID"),
         type: "text",
-      }),
-      customClass: YextField(msg("fields.customClass", "Custom Class"), {
+      },
+      customClass: {
+        label: msg("fields.customClass", "Custom Class"),
         type: "text",
-      }),
+      },
       dataAttributes: YextField(
         msg("fields.dataAttributes", "Data Attributes"),
         {
@@ -132,8 +123,14 @@ const ctaWrapperFields: YextFields<CTAWrapperProps> = {
             value: "",
           },
           arrayFields: {
-            key: YextField(msg("fields.key", "Key"), { type: "text" }),
-            value: YextField(msg("fields.value", "Value"), { type: "text" }),
+            key: {
+              label: msg("fields.key", "Key"),
+              type: "text",
+            },
+            value: {
+              label: msg("fields.value", "Value"),
+              type: "text",
+            },
           },
           getItemSummary: (item, index) =>
             item?.key?.trim()
@@ -151,10 +148,11 @@ const ctaWrapperFields: YextFields<CTAWrapperProps> = {
     type: "object",
     label: msg("fields.styles", "Styles"),
     objectFields: {
-      variant: YextField(msg("fields.variant", "Variant"), {
+      variant: {
+        label: msg("fields.variant", "Variant"),
         type: "radio",
-        options: "CTA_VARIANT",
-      }),
+        options: ThemeOptions.CTA_VARIANT,
+      },
       presetImage: {
         type: "basicSelector",
         label: msg("fields.presetImage", "Preset Image"),

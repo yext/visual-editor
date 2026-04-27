@@ -122,8 +122,7 @@ const getTypeFromSchemaField = (schemaField: YextSchemaField) => {
   return (
     schemaField.definition.typeName ||
     schemaField.definition.typeRegistryId ||
-    (schemaField.definition.type &&
-      Object.entries(schemaField.definition.type)[0][1])
+    Object.entries(schemaField.definition.type ?? {})[0]?.[1]
   );
 };
 

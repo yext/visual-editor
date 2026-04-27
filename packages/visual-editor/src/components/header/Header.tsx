@@ -57,23 +57,22 @@ const headerFields: YextFields<HeaderProps> = {
     type: "number",
     min: 0,
   }),
-  enableLanguageSelector: YextField(
-    msg("fields.enableLanguageSelector", "Enable Language Selector"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.yes", "Yes"), value: true },
-        { label: msg("fields.options.no", "No"), value: false },
-      ],
-    }
-  ),
+  enableLanguageSelector: {
+    label: msg("fields.enableLanguageSelector", "Enable Language Selector"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.yes", "Yes"), value: true },
+      { label: msg("fields.options.no", "No"), value: false },
+    ],
+  },
   analytics: YextField(msg("fields.analytics", "Analytics"), {
     type: "object",
     visible: false,
     objectFields: {
-      scope: YextField(msg("fields.scope", "Scope"), {
+      scope: {
+        label: msg("fields.scope", "Scope"),
         type: "text",
-      }),
+      },
     },
   }),
 };

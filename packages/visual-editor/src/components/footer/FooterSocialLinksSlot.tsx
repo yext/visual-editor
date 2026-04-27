@@ -49,33 +49,34 @@ export const FooterSocialLinksSlotFields: YextFields<FooterSocialLinksSlotProps>
     data: YextField(msg("fields.data", "Data"), {
       type: "object",
       objectFields: {
-        xLink: YextField(msg("fields.xLink", "X Link"), {
+        xLink: {
+          label: msg("fields.xLink", "X Link"),
           type: "text",
-        }),
-        facebookLink: YextField(msg("fields.facebookLink", "Facebook Link"), {
+        },
+        facebookLink: {
+          label: msg("fields.facebookLink", "Facebook Link"),
           type: "text",
-        }),
-        instagramLink: YextField(
-          msg("fields.instagramLink", "Instagram Link"),
-          {
-            type: "text",
-          }
-        ),
-        linkedInLink: YextField(msg("fields.linkedInLink", "LinkedIn Link"), {
+        },
+        instagramLink: {
+          label: msg("fields.instagramLink", "Instagram Link"),
           type: "text",
-        }),
-        pinterestLink: YextField(
-          msg("fields.pinterestLink", "Pinterest Link"),
-          {
-            type: "text",
-          }
-        ),
-        tiktokLink: YextField(msg("fields.tiktokLink", "TikTok Link"), {
+        },
+        linkedInLink: {
+          label: msg("fields.linkedInLink", "LinkedIn Link"),
           type: "text",
-        }),
-        youtubeLink: YextField(msg("fields.youtubeLink", "YouTube Link"), {
+        },
+        pinterestLink: {
+          label: msg("fields.pinterestLink", "Pinterest Link"),
           type: "text",
-        }),
+        },
+        tiktokLink: {
+          label: msg("fields.tiktokLink", "TikTok Link"),
+          type: "text",
+        },
+        youtubeLink: {
+          label: msg("fields.youtubeLink", "YouTube Link"),
+          type: "text",
+        },
       },
     }),
     styles: YextField(msg("fields.styles", "Styles"), {

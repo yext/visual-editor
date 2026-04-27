@@ -4,6 +4,7 @@ import "pure-react-carousel/dist/react-carousel.es.css";
 import {
   backgroundColors,
   ThemeColor,
+  ThemeOptions,
 } from "../../../utils/themeConfigOptions.ts";
 import { PageSection } from "../../atoms/pageSection.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
@@ -74,13 +75,11 @@ const photoGallerySectionFields: YextFields<PhotoGallerySectionProps> = {
           },
         ],
       },
-      showSectionHeading: YextField(
-        msg("fields.showSectionHeading", "Show Section Heading"),
-        {
-          type: "radio",
-          options: "SHOW_HIDE",
-        }
-      ),
+      showSectionHeading: {
+        label: msg("fields.showSectionHeading", "Show Section Heading"),
+        type: "radio",
+        options: ThemeOptions.SHOW_HIDE,
+      },
     },
   }),
   slots: {
@@ -91,16 +90,14 @@ const photoGallerySectionFields: YextFields<PhotoGallerySectionProps> = {
     },
     visible: false,
   },
-  liveVisibility: YextField(
-    msg("fields.visibleOnLivePage", "Visible on Live Page"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: false },
-      ],
-    }
-  ),
+  liveVisibility: {
+    label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.show", "Show"), value: true },
+      { label: msg("fields.options.hide", "Hide"), value: false },
+    ],
+  },
 };
 
 const PhotoGallerySectionComponent: PuckComponent<PhotoGallerySectionProps> = ({

@@ -60,21 +60,20 @@ const staticMapSectionFields: YextFields<StaticMapSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      apiKey: YextField(msg("fields.apiKey", "API Key"), {
+      apiKey: {
+        label: msg("fields.apiKey", "API Key"),
         type: "text",
-      }),
+      },
     },
   }),
-  liveVisibility: YextField(
-    msg("fields.visibleOnLivePage", "Visible on Live Page"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: false },
-      ],
-    }
-  ),
+  liveVisibility: {
+    label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.show", "Show"), value: true },
+      { label: msg("fields.options.hide", "Hide"), value: false },
+    ],
+  },
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {

@@ -10,6 +10,7 @@ import {
   backgroundColors,
   ThemeColor,
   HeadingLevel,
+  ThemeOptions,
 } from "../utils/themeConfigOptions.ts";
 import { Body, BodyProps } from "./atoms/body.tsx";
 import { CTA, CTAVariant } from "./atoms/cta.tsx";
@@ -361,10 +362,11 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
     label: msg("fields.resultCard", "Result Card"),
     type: "object",
     objectFields: {
-      entityType: YextField(msg("fields.entityType", "Entity Type"), {
+      entityType: {
+        label: msg("fields.entityType", "Entity Type"),
         type: "text",
         visible: false,
-      }),
+      },
       primaryHeading: {
         label: msg("fields.primaryHeading", "Primary Heading"),
         type: "object",
@@ -431,20 +433,19 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
             getDisplayFieldOptions("type.string")
           ),
           field: DisplayFieldSelector("type.string"),
-          variant: YextField(msg("fields.variant", "Variant"), {
+          variant: {
+            label: msg("fields.variant", "Variant"),
             type: "radio",
-            options: "BODY_VARIANT",
-          }),
-          liveVisibility: YextField(
-            msg("fields.visibleOnLivePage", "Visible on Live Page"),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.show", "Show"), value: true },
-                { label: msg("fields.options.hide", "Hide"), value: false },
-              ],
-            }
-          ),
+            options: ThemeOptions.BODY_VARIANT,
+          },
+          liveVisibility: {
+            label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+            type: "radio",
+            options: [
+              { label: msg("fields.options.show", "Show"), value: true },
+              { label: msg("fields.options.hide", "Hide"), value: false },
+            ],
+          },
         },
       },
       tertiaryHeading: {
@@ -474,29 +475,29 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
             getDisplayFieldOptions("type.string")
           ),
           field: DisplayFieldSelector("type.string"),
-          variant: YextField(msg("fields.variant", "Variant"), {
+          variant: {
+            label: msg("fields.variant", "Variant"),
             type: "radio",
-            options: "BODY_VARIANT",
-          }),
-          liveVisibility: YextField(
-            msg("fields.visibleOnLivePage", "Visible on Live Page"),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.show", "Show"), value: true },
-                { label: msg("fields.options.hide", "Hide"), value: false },
-              ],
-            }
-          ),
+            options: ThemeOptions.BODY_VARIANT,
+          },
+          liveVisibility: {
+            label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+            type: "radio",
+            options: [
+              { label: msg("fields.options.show", "Show"), value: true },
+              { label: msg("fields.options.hide", "Hide"), value: false },
+            ],
+          },
         },
       },
-      icons: YextField(msg("fields.icons", "Icons"), {
+      icons: {
+        label: msg("fields.icons", "Icons"),
         type: "radio",
         options: [
           { label: msg("fields.options.show", "Show"), value: true },
           { label: msg("fields.options.hide", "Hide"), value: false },
         ],
-      }),
+      },
       accentColor: {
         type: "basicSelector",
         label: msg("fields.accentColor", "Accent Color"),
@@ -511,56 +512,55 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
             type: "object",
             objectFields: HoursTableStyleFields,
           }),
-          liveVisibility: YextField(
-            msg("fields.visibleOnLivePage", "Visible on Live Page"),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.show", "Show"), value: true },
-                { label: msg("fields.options.hide", "Hide"), value: false },
-              ],
-            }
-          ),
+          liveVisibility: {
+            label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+            type: "radio",
+            options: [
+              { label: msg("fields.options.show", "Show"), value: true },
+              { label: msg("fields.options.hide", "Hide"), value: false },
+            ],
+          },
         },
       },
       address: {
         label: msg("fields.address", "Address"),
         type: "object",
         objectFields: {
-          showRegion: YextField(msg("fields.showRegion", "Show Region"), {
+          showRegion: {
+            label: msg("fields.showRegion", "Show Region"),
             type: "radio",
             options: [
               { label: msg("fields.options.yes", "Yes"), value: true },
               { label: msg("fields.options.no", "No"), value: false },
             ],
-          }),
-          showCountry: YextField(msg("fields.showCountry", "Show Country"), {
+          },
+          showCountry: {
+            label: msg("fields.showCountry", "Show Country"),
             type: "radio",
             options: [
               { label: msg("fields.options.yes", "Yes"), value: true },
               { label: msg("fields.options.no", "No"), value: false },
             ],
-          }),
-          showGetDirectionsLink: YextField(
-            msg("fields.showGetDirectionsLink", "Show Get Directions Link"),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.yes", "Yes"), value: true },
-                { label: msg("fields.options.no", "No"), value: false },
-              ],
-            }
-          ),
-          liveVisibility: YextField(
-            msg("fields.visibleOnLivePage", "Visible on Live Page"),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.show", "Show"), value: true },
-                { label: msg("fields.options.hide", "Hide"), value: false },
-              ],
-            }
-          ),
+          },
+          showGetDirectionsLink: {
+            label: msg(
+              "fields.showGetDirectionsLink",
+              "Show Get Directions Link"
+            ),
+            type: "radio",
+            options: [
+              { label: msg("fields.options.yes", "Yes"), value: true },
+              { label: msg("fields.options.no", "No"), value: false },
+            ],
+          },
+          liveVisibility: {
+            label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+            type: "radio",
+            options: [
+              { label: msg("fields.options.show", "Show"), value: true },
+              { label: msg("fields.options.hide", "Hide"), value: false },
+            ],
+          },
         },
       },
       phone: {
@@ -568,7 +568,8 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
         type: "object",
         objectFields: {
           field: DisplayFieldSelector("type.phone"),
-          phoneFormat: YextField(msg("fields.phoneFormat", "Phone Format"), {
+          phoneFormat: {
+            label: msg("fields.phoneFormat", "Phone Format"),
             type: "radio",
             options: [
               {
@@ -580,27 +581,26 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
                 value: "international",
               },
             ],
-          }),
-          includePhoneHyperlink: YextField(
-            msg("fields.includePhoneHyperlink", "Include Phone Hyperlink"),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.yes", "Yes"), value: true },
-                { label: msg("fields.options.no", "No"), value: false },
-              ],
-            }
-          ),
-          liveVisibility: YextField(
-            msg("fields.visibleOnLivePage", "Visible on Live Page"),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.show", "Show"), value: true },
-                { label: msg("fields.options.hide", "Hide"), value: false },
-              ],
-            }
-          ),
+          },
+          includePhoneHyperlink: {
+            label: msg(
+              "fields.includePhoneHyperlink",
+              "Include Phone Hyperlink"
+            ),
+            type: "radio",
+            options: [
+              { label: msg("fields.options.yes", "Yes"), value: true },
+              { label: msg("fields.options.no", "No"), value: false },
+            ],
+          },
+          liveVisibility: {
+            label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+            type: "radio",
+            options: [
+              { label: msg("fields.options.show", "Show"), value: true },
+              { label: msg("fields.options.hide", "Hide"), value: false },
+            ],
+          },
         },
       },
       email: {
@@ -608,16 +608,14 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
         type: "object",
         objectFields: {
           field: DisplayFieldSelector("type.string"),
-          liveVisibility: YextField(
-            msg("fields.visibleOnLivePage", "Visible on Live Page"),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.show", "Show"), value: true },
-                { label: msg("fields.options.hide", "Hide"), value: false },
-              ],
-            }
-          ),
+          liveVisibility: {
+            label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+            type: "radio",
+            options: [
+              { label: msg("fields.options.show", "Show"), value: true },
+              { label: msg("fields.options.hide", "Hide"), value: false },
+            ],
+          },
         },
       },
       services: {
@@ -625,16 +623,14 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
         type: "object",
         objectFields: {
           field: DisplayFieldSelector("type.string"),
-          liveVisibility: YextField(
-            msg("fields.visibleOnLivePage", "Visible on Live Page"),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.show", "Show"), value: true },
-                { label: msg("fields.options.hide", "Hide"), value: false },
-              ],
-            }
-          ),
+          liveVisibility: {
+            label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+            type: "radio",
+            options: [
+              { label: msg("fields.options.show", "Show"), value: true },
+              { label: msg("fields.options.hide", "Hide"), value: false },
+            ],
+          },
         },
       },
       primaryCTA: {
@@ -648,20 +644,19 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
             true,
             () => getDisplayFieldOptions("type.string")
           ),
-          variant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
+          variant: {
+            label: msg("fields.ctaVariant", "CTA Variant"),
             type: "radio",
-            options: "CTA_VARIANT",
-          }),
-          liveVisibility: YextField(
-            msg("fields.visibleOnLivePage", "Visible on Live Page"),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.show", "Show"), value: true },
-                { label: msg("fields.options.hide", "Hide"), value: false },
-              ],
-            }
-          ),
+            options: ThemeOptions.CTA_VARIANT,
+          },
+          liveVisibility: {
+            label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+            type: "radio",
+            options: [
+              { label: msg("fields.options.show", "Show"), value: true },
+              { label: msg("fields.options.hide", "Hide"), value: false },
+            ],
+          },
           link: TranslatableStringField<TranslatableString | undefined>(
             msg("fields.link", "Link"),
             undefined,
@@ -669,16 +664,14 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
             true,
             () => getDisplayFieldOptions("type.string")
           ),
-          normalizeLink: YextField(
-            msg("fields.normalizeLink", "Normalize Link"),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.yes", "Yes"), value: true },
-                { label: msg("fields.options.no", "No"), value: false },
-              ],
-            }
-          ),
+          normalizeLink: {
+            label: msg("fields.normalizeLink", "Normalize Link"),
+            type: "radio",
+            options: [
+              { label: msg("fields.options.yes", "Yes"), value: true },
+              { label: msg("fields.options.no", "No"), value: false },
+            ],
+          },
         },
       },
       secondaryCTA: {
@@ -699,30 +692,27 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
             true,
             () => getDisplayFieldOptions("type.string")
           ),
-          normalizeLink: YextField(
-            msg("fields.normalizeLink", "Normalize Link"),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.yes", "Yes"), value: true },
-                { label: msg("fields.options.no", "No"), value: false },
-              ],
-            }
-          ),
-          variant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
+          normalizeLink: {
+            label: msg("fields.normalizeLink", "Normalize Link"),
             type: "radio",
-            options: "CTA_VARIANT",
-          }),
-          liveVisibility: YextField(
-            msg("fields.visibleOnLivePage", "Visible on Live Page"),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.show", "Show"), value: true },
-                { label: msg("fields.options.hide", "Hide"), value: false },
-              ],
-            }
-          ),
+            options: [
+              { label: msg("fields.options.yes", "Yes"), value: true },
+              { label: msg("fields.options.no", "No"), value: false },
+            ],
+          },
+          variant: {
+            label: msg("fields.ctaVariant", "CTA Variant"),
+            type: "radio",
+            options: ThemeOptions.CTA_VARIANT,
+          },
+          liveVisibility: {
+            label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+            type: "radio",
+            options: [
+              { label: msg("fields.options.show", "Show"), value: true },
+              { label: msg("fields.options.hide", "Hide"), value: false },
+            ],
+          },
         },
       },
       image: {
@@ -748,16 +738,14 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
           },
           constantValue: LOCATOR_IMAGE_CONSTANT_CONFIG,
           field: DisplayFieldSelector("type.image"),
-          liveVisibility: YextField(
-            msg("fields.visibleOnLivePage", "Visible on Live Page"),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.show", "Show"), value: true },
-                { label: msg("fields.options.hide", "Hide"), value: false },
-              ],
-            }
-          ),
+          liveVisibility: {
+            label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+            type: "radio",
+            options: [
+              { label: msg("fields.options.show", "Show"), value: true },
+              { label: msg("fields.options.hide", "Hide"), value: false },
+            ],
+          },
         },
       },
     },

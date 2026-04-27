@@ -10,7 +10,7 @@ import { msg, pt } from "../../utils/i18n/platform.ts";
 import { TranslatableRichText, TranslatableString } from "../../types/types.ts";
 import { useTranslation } from "react-i18next";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
-import { ThemeColor } from "../../utils/themeConfigOptions.ts";
+import { ThemeColor, ThemeOptions } from "../../utils/themeConfigOptions.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
@@ -59,23 +59,25 @@ const textFields: YextFields<TextProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      variant: YextField(msg("fields.textSize", "Text Size"), {
+      variant: {
+        label: msg("fields.textSize", "Text Size"),
         type: "radio",
-        options: "BODY_VARIANT",
-      }),
+        options: ThemeOptions.BODY_VARIANT,
+      },
       color: {
         type: "basicSelector",
         label: msg("fields.color", "Color"),
         options: "SITE_COLOR",
       },
-      fontStyle: YextField(msg("fields.fontStyle", "Font Style"), {
+      fontStyle: {
+        label: msg("fields.fontStyle", "Font Style"),
         type: "radio",
         options: [
           { label: msg("fields.options.regular", "Regular"), value: "regular" },
           { label: msg("fields.options.bold", "Bold"), value: "bold" },
           { label: msg("fields.options.italic", "Italic"), value: "italic" },
         ],
-      }),
+      },
     },
   }),
 };

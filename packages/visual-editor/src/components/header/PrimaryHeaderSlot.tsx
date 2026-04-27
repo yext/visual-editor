@@ -9,13 +9,12 @@ import {
   ThemeColor,
 } from "../../utils/themeConfigOptions.ts";
 import { CTAWrapperProps } from "../contentBlocks/CtaWrapper.tsx";
-import { EnhancedTranslatableCTA, TranslatableCTA } from "../../types/types.ts";
+import { TranslatableCTA } from "../../types/types.ts";
 import { ImageWrapperProps } from "../contentBlocks/image/Image.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import { PageSection, PageSectionProps } from "../atoms/pageSection.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { useOverflow } from "../../hooks/useOverflow.ts";
-import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { YextField } from "../../editor/YextField.tsx";
 import { usePreviewWindow } from "../../hooks/usePreviewWindow.ts";
 import * as React from "react";
@@ -28,6 +27,7 @@ import {
 } from "./ExpandedHeaderMenuContext.tsx";
 import { getHeaderViewport } from "./viewport.ts";
 import { SlidePanel } from "./SlidePanel.tsx";
+import { type YextCTAField } from "../../fields/CTASelectorField.tsx";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 const HAMBURGER_RESERVE_PX = 48;
@@ -495,7 +495,7 @@ export const PrimaryHeaderSlot: YextComponentConfig<PrimaryHeaderSlotProps> = {
     // Check if PrimaryCTA has data to display
     const primaryCTA = resolveComponentData(
       data.props.slots.PrimaryCTASlot[0]?.props.data
-        .entityField as YextEntityField<EnhancedTranslatableCTA>,
+        .entityField as YextCTAField,
       locale,
       streamDocument
     );
@@ -506,7 +506,7 @@ export const PrimaryHeaderSlot: YextComponentConfig<PrimaryHeaderSlotProps> = {
 
     const secondaryCTA = resolveComponentData(
       data.props.slots.SecondaryCTASlot[0]?.props.data
-        .entityField as YextEntityField<EnhancedTranslatableCTA>,
+        .entityField as YextCTAField,
       locale,
       streamDocument
     );

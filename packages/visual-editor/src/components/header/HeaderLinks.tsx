@@ -26,7 +26,7 @@ import {
   useHeaderLinksDisplayMode,
 } from "./ExpandedHeaderMenuContext.tsx";
 import { getHeaderViewport } from "./viewport.ts";
-import { ThemeColor } from "../../utils/themeConfigOptions.ts";
+import { ThemeColor, ThemeOptions } from "../../utils/themeConfigOptions.ts";
 import { BodyProps } from "../atoms/body.tsx";
 import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
 import {
@@ -92,20 +92,22 @@ const linkFieldConfig: ArrayField<TranslatableCTA[], YextPuckField> = {
       label: msg("fields.linkType", "Link Type"),
       options: linkTypeOptions(),
     },
-    normalizeLink: YextField(msg("fields.normalizeLink", "Normalize Link"), {
+    normalizeLink: {
+      label: msg("fields.normalizeLink", "Normalize Link"),
       type: "radio",
       options: [
         { label: msg("fields.options.yes", "Yes"), value: true },
         { label: msg("fields.options.no", "No"), value: false },
       ],
-    }),
-    openInNewTab: YextField(msg("fields.openInNewTab", "Open in new tab"), {
+    },
+    openInNewTab: {
+      label: msg("fields.openInNewTab", "Open in new tab"),
       type: "radio",
       options: [
         { label: msg("fields.options.yes", "Yes"), value: true },
         { label: msg("fields.options.no", "No"), value: false },
       ],
-    }),
+    },
   },
   defaultItemProps: defaultLink satisfies TranslatableCTA,
   getItemSummary: (item, i) => {
@@ -157,26 +159,29 @@ const headerLinksFields: YextFields<HeaderLinksProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      align: YextField(msg("fields.align", "Align"), {
+      align: {
+        label: msg("fields.align", "Align"),
         type: "radio",
-        options: "ALIGNMENT",
-      }),
-      variant: YextField(msg("fields.variant", "Variant"), {
+        options: ThemeOptions.ALIGNMENT,
+      },
+      variant: {
+        label: msg("fields.variant", "Variant"),
         type: "radio",
-        options: "BODY_VARIANT",
-      }),
+        options: ThemeOptions.BODY_VARIANT,
+      },
       color: {
         type: "basicSelector",
         label: msg("fields.color", "Color"),
         options: "SITE_COLOR",
       },
-      weight: YextField(msg("fields.weight", "Weight"), {
+      weight: {
+        label: msg("fields.weight", "Weight"),
         type: "radio",
         options: [
           { label: msg("fields.options.normal", "Normal"), value: "normal" },
           { label: msg("fields.options.bold", "Bold"), value: "bold" },
         ],
-      }),
+      },
     },
   }),
 };
