@@ -6,17 +6,12 @@ import {
   NumberField,
   ObjectField,
 } from "@puckeditor/core";
-import { ThemeOptions } from "../utils/themeConfigOptions.ts";
 import {
   DynamicOption,
   DynamicOptionsSelector,
   DynamicOptionValueTypes,
   DynamicOptionsSelectorType,
 } from "./DynamicOptionsSelector.tsx";
-import {
-  OptionalNumberFieldProps,
-  OptionalNumberField,
-} from "./OptionalNumberField.tsx";
 import { getMaxWidthOptions } from "./MaxWidthSelector.tsx";
 import { msg } from "../utils/i18n/platform.ts";
 import { TranslatableStringField } from "./TranslatableStringField.tsx";
@@ -39,14 +34,6 @@ export type FieldOption = {
 
 /** Copied from Puck, do not change */
 export type FieldOptions = Array<FieldOption> | ReadonlyArray<FieldOption>;
-
-type radioOptions =
-  | "PHONE_OPTIONS"
-  | "ALIGNMENT"
-  | "BODY_VARIANT"
-  | "JUSTIFY_CONTENT"
-  | "CTA_VARIANT"
-  | "SHOW_HIDE";
 
 type YextBaseField = {
   type: string;
@@ -105,26 +92,6 @@ export type YextFieldDefinition<ValueType = any> =
       ? YextObjectField<ValueType>
       : never);
 
-// YextRadioField accepts normal FieldOptions or specific ThemeConfig options.
-type YextRadioField = YextBaseField & {
-  type: "radio";
-  options: FieldOptions | radioOptions;
-};
-
-// YextTextField has same functionality as Puck's TextField
-// If isMultiline is true, uses Puck's TextAreaField
-type YextTextField = YextBaseField & {
-  type: "text";
-  isMultiline?: boolean;
-  disallowTranslation?: boolean;
-};
-
-// YextOptionalNumberField has same functionality as OptionalNumberField
-type YextOptionalNumberField = YextBaseField &
-  Omit<OptionalNumberFieldProps, "fieldLabel"> & {
-    type: "optionalNumber";
-  };
-
 type YextMaxWidthField = YextBaseField & {
   type: "maxWidth";
 };
@@ -163,16 +130,16 @@ type YextFieldConfig<Props = any> =
   | YextArrayFieldConfig<Props extends Record<string, any>[] ? Props : any>
   | YextObjectFieldConfig<Props extends Record<string, any> ? Props : any>
   | YextNumberField
-  | YextTextField
   | YextEntitySelectorField<Props extends Record<string, any> ? Props : any>
-  | YextRadioField
-  | YextOptionalNumberField
   | YextMaxWidthField
   | YextTranslatableStringField
   | YextImageField
   | YextVideoField
   | YextDynamicSelectField<Props extends DynamicOptionValueTypes ? Props : any>
-  | YextPuckFields[Exclude<keyof YextPuckFields, "basicSelector">];
+  | YextPuckFields[Exclude<
+      keyof YextPuckFields,
+      "basicSelector" | "optionalNumber"
+    >];
 
 export function YextField<T = any>(
   fieldName: MsgString,
@@ -196,10 +163,6 @@ export function YextField<T, U>(
   fieldName: MsgString,
   config: YextFieldConfig<T>
 ): any {
-  const isThemeOptionKey = (
-    option: string
-  ): option is keyof typeof ThemeOptions => option in ThemeOptions;
-
   // use YextEntityFieldSelector
   if (config.type === "entityField") {
     return YextEntityFieldSelector<T extends Record<string, any> ? T : any, U>({
@@ -207,46 +170,7 @@ export function YextField<T, U>(
       filter: config.filter,
       disableConstantValueToggle: config.disableConstantValueToggle,
       disallowTranslation: config.disallowTranslation,
-      typeSelectorConfig: config.typeSelectorConfig,
     });
-  }
-
-  if (config.type === "optionalNumber") {
-    return OptionalNumberField({
-      fieldLabel: fieldName,
-      hideNumberFieldRadioLabel: config.hideNumberFieldRadioLabel,
-      showNumberFieldRadioLabel: config.showNumberFieldRadioLabel,
-      defaultCustomValue: config.defaultCustomValue,
-    });
-  }
-
-  if (config.type === "radio" && typeof config.options === "string") {
-    if (!isThemeOptionKey(config.options)) {
-      console.warn(
-        `Invalid ThemeOptions key "${config.options}" passed to radio field "${fieldName}".`
-      );
-      return {
-        label: fieldName,
-        visible: config.visible,
-        type: config.type,
-        options: [],
-      };
-    }
-
-    return {
-      label: fieldName,
-      visible: config.visible,
-      type: config.type,
-      options: ThemeOptions[config.options] as FieldOptions,
-    };
-  }
-
-  if (config.type === "text") {
-    return {
-      label: fieldName,
-      visible: config.visible,
-      type: config.isMultiline ? "textarea" : "text",
-    };
   }
 
   if (config.type === "code") {

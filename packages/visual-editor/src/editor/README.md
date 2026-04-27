@@ -209,20 +209,21 @@ const ToneField = ({
 
 When the field definition is part of a normal component `fields` config, Puck renders it through the registered Yext field override automatically. Use `YextAutoField` only when you are manually rendering a field definition inside a custom render path.
 
-## OptionalNumberField
+## optionalNumber Field
 
-This field displays a radio group with two options. When one option is selected, a number input is also
-rendered. When the other option is selected, the number input is hidden. This could be used
-for a number field with an "all" or "default" option.
+This registered field type displays a radio group with two options. When one option is selected,
+a number input is also rendered. When the other option is selected, the number input is hidden.
+This could be used for a number field with an "all" or "default" option.
 
 ### Props
 
-| Name                      | Type     | Description                                                               |
-| ------------------------- | -------- | ------------------------------------------------------------------------- |
-| fieldLabel                | `string` | The label for the field.                                                  |
-| hideNumberFieldRadioLabel | `string` | The label for the radio option corresponding to hiding the number field.  |
-| showNumberFieldRadioLabel | `string` | The label for the radio option corresponding to showing the number field. |
-| defaultCustomValue        | `number` | The default number if the number field is shown.                          |
+| Name                      | Type                  | Description                                                               |
+| ------------------------- | --------------------- | ------------------------------------------------------------------------- |
+| type                      | `"optionalNumber"`    | The registered field type.                                                |
+| label                     | `string \| MsgString` | The label for the field.                                                  |
+| hideNumberFieldRadioLabel | `string \| MsgString` | The label for the radio option corresponding to hiding the number field.  |
+| showNumberFieldRadioLabel | `string \| MsgString` | The label for the radio option corresponding to showing the number field. |
+| defaultCustomValue        | `number`              | The default number if the number field is shown.                          |
 
 #### Usage
 
@@ -231,26 +232,27 @@ type MyComponentProps = {
   limit: number | string;
 };
 
-const myComponentFields: Fields<MyComponentProps> = {
-  limit: OptionalNumberField({
-    fieldLabel: "Number of Items",
-    hideNumberFieldRadioLabel: "Show All",
-    showNumberFieldRadioLabel: "Limit Items",
+const myComponentFields: YextFields<MyComponentProps> = {
+  limit: {
+    type: "optionalNumber",
+    label: msg("fields.limit", "Limit"),
+    hideNumberFieldRadioLabel: msg("fields.options.all", "All"),
+    showNumberFieldRadioLabel: msg("fields.options.limit", "Limit"),
     defaultCustomValue: 3,
-  }),
+  },
 };
 ```
 
 ## YextField
 
-`YextField` provides a unified utility for creating typed field configurations in a [Puck](https://github.com/measuredco/puck) and Yext Visual Editor integration context. It abstracts over common field types and includes special handling for the internal `basicSelector` field type, [OptionalNumberField](##OptionalNumberField), [YextEntityFieldSelector](##YextEntityFieldSelector), and [TranslatableStringField](##TranslatableStringField).
+`YextField` provides a unified utility for creating typed field configurations in a [Puck](https://github.com/measuredco/puck) and Yext Visual Editor integration context. It abstracts over a subset of common field types and includes special handling for the internal `basicSelector` field type, [YextEntityFieldSelector](##YextEntityFieldSelector), and [TranslatableStringField](##TranslatableStringField).
 
 ### Features
 
 - Strongly typed helper for defining field configs
-- Support for standard Puck field types (`text`, `radio`, `select`, `array`, etc.)
+- Support for standard Puck field types such as `text`, `array`, and `object`
 - Extended support for Yext-specific entity selectors
-- Intelligent handling of options from `@yext/visual-editor` theme options
+- Native Puck fields like `radio` can be authored directly inside `YextFields`
 
 ### Props
 
@@ -280,16 +282,14 @@ const myComponentFields: YextFields<myComponentProps> = {
     type: "entityField",
     filter: { types: ["type.address"] },
   }),
-  showGetDirections: YextField(
-    msg("fields.showGetDirections", "Show Get Directions Link"),
-    {
-      type: "radio",
-      options: [
-        { label: "Yes", value: true },
-        { label: "No", value: false },
-      ],
-    }
-  ),
+  showGetDirections: {
+    label: msg("fields.showGetDirections", "Show Get Directions Link"),
+    type: "radio",
+    options: [
+      { label: "Yes", value: true },
+      { label: "No", value: false },
+    ],
+  },
 };
 
 export const MyComponent: YextComponentConfig<myComponentProps> = {
@@ -300,16 +300,22 @@ export const MyComponent: YextComponentConfig<myComponentProps> = {
 
 ### Translation Requirements
 
-All field labels in `YextField` must use the `msg()` function to ensure proper internationalization. This enforces translation compliance at compile time through TypeScript's type system.
+Use the `msg()` function for field labels to ensure proper internationalization, whether the field is authored directly in `YextFields` or created through `YextField`.
 
 ```tsx
 import { msg } from "@yext/visual-editor";
 
-// Correct - uses msg() function
-title: YextField(msg("fields.title", "Title"), { type: "text" });
+// Correct - uses msg() for a native field
+title: {
+  label: msg("fields.title", "Title"),
+  type: "text",
+};
 
-// Incorrect - plain string will cause TypeScript error
-title: YextField("Title", { type: "text" });
+// Incorrect - plain string label will not be translated
+title: {
+  label: "Title",
+  type: "text",
+};
 ```
 
 The `msg()` function takes two parameters:
@@ -319,77 +325,42 @@ The `msg()` function takes two parameters:
 
 ### Supported Field Types
 
-#### Text Field
+#### Native Text Fields
 
-Creates a simple string input. Supports multi-line input.
+Define plain string inputs directly in `YextFields`. Use `text` for a single-line input and `textarea` for multiline input.
 
 ```tsx
-title: YextField(msg("fields.title", "Title"), {
+title: {
+  label: msg("fields.title", "Title"),
   type: "text",
-}),
-description: YextField(msg("fields.description", "Description"), {
-  type: "text",
-  isMultiline: true
-})
+},
+description: {
+  label: msg("fields.description", "Description"),
+  type: "textarea",
+},
 ```
 
 **Props:**
 
 - `type`: `"text"`
-- `isMultiline?`: `boolean` — if true, renders a `<textarea>` for the multiline input.
+- `type`: `"textarea"`
 
 ---
 
-#### Select Field
+#### Native Radio Field
 
-Creates a dropdown select input. Options can be passed directly or as a string key from `ThemeOptions`. Optional search behavior uses the internal `basicSelector` field type.
-
-```tsx
-variant: YextField(msg("fields.variant", "CTA Variant"), {
-  type: "select",
-  options: "CTA_VARIANT",
-  hasSearch: true,
-}),
-aspectRatio: YextField(msg("fields.aspectRatio", "Aspect Ratio"), {
-  type: "select",
-  options: [
-    { label: "1:1", value: 1 },
-    { label: "5:4", value: 1.25 },
-    { label: "4:3", value: 1.33 },
-  ],
-}),
-```
-
-**Props:**
-
-- `type`: `"select"`
-- `options`: `FieldOptions | keyof ThemeOptions`
-- `hasSearch?`: `boolean` — enables searchable dropdown
-
----
-
-#### Radio Field
-
-Creates a radio button group. Options can be passed directly or via a `ThemeOptions` key.
+Define radio fields directly in `YextFields` instead of routing them through `YextField`.
 
 ```tsx
-alignment: YextField(msg("fields.alignment", "Alignment"), {
-  type: "radio",
-  options: "ALIGNMENT",
-}),
-includeHyperlink: YextField(msg("fields.includeHyperlink", "Include Hyperlink"), {
+alignment: {
+  label: msg("fields.alignment", "Alignment"),
   type: "radio",
   options: [
-    { label: "Yes", value: true },
-    { label: "No", value: false },
+    { label: "Left", value: "left" },
+    { label: "Center", value: "center" },
   ],
-}),
+},
 ```
-
-**Props:**
-
-- `type`: `"radio"`
-- `options`: `FieldOptions | keyof ThemeOptions`
 
 ---
 
@@ -417,8 +388,14 @@ Creates a repeatable field group (e.g., a list of items). Define inner fields us
 items: YextField(msg("fields.items", "Items"), {
   type: "array",
   arrayFields: {
-    title: YextField(msg("fields.title", "Title"), { type: "text" }),
-    url: YextField(msg("fields.url", "URL"), { type: "text" }),
+    title: {
+      label: msg("fields.title", "Title"),
+      type: "text",
+    },
+    url: {
+      label: msg("fields.url", "URL"),
+      type: "text",
+    },
   },
 });
 ```
@@ -442,11 +419,14 @@ Creates a nested object field with multiple subfields. [Additional documentation
 card: YextField(msg("fields.card", "Card"), {
   type: "object",
   objectFields: {
-    title: YextField(msg("fields.title", "Title"), { type: "text" }),
-    description: YextField(msg("fields.description", "Description"), {
+    title: {
+      label: msg("fields.title", "Title"),
       type: "text",
-      isMultiline: true,
-    }),
+    },
+    description: {
+      label: msg("fields.description", "Description"),
+      type: "textarea",
+    },
   },
 });
 ```
@@ -473,28 +453,6 @@ linkedEntity: YextField("Linked Entity", {
 
 - `type`: `"entityField"`
 - `filter`: `any` — passed to [YextEntityFieldSelector](##YextEntityFieldSelector)
-
----
-
-#### Optional Number Selector Field
-
-[Additional documentation](##OptionalNumberField)
-
-```tsx
-limit: YextField("Items Limit", {
-  type: "optionalNumber",
-  hideNumberFieldRadioLabel: "All",
-  showNumberFieldRadioLabel: "Limit",
-  defaultCustomValue: 3,
-}),
-```
-
-**Props:**
-
-- `type`: `"optionalNumber"`
-- `hideNumberFieldRadioLabel`: `boolean`
-- `showNumberFieldRadioLabel`: `boolean`
-- `defaultCustomValue `: `number`
 
 ---
 

@@ -19,6 +19,7 @@ import { YextField } from "../../editor/YextField.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import {
   ThemeColor,
+  ThemeOptions,
   backgroundColors,
 } from "../../utils/themeConfigOptions.ts";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
@@ -70,34 +71,35 @@ export const AddressDataField: YextFields<AddressProps["data"]> = {
 
 // Address style fields used in Address and CoreInfoSection
 export const AddressStyleFields: YextFields<AddressProps["styles"]> = {
-  showRegion: YextField(msg("fields.showRegion", "Show Region"), {
+  showRegion: {
+    label: msg("fields.showRegion", "Show Region"),
     type: "radio",
     options: [
       { label: msg("fields.options.yes", "Yes"), value: true },
       { label: msg("fields.options.no", "No"), value: false },
     ],
-  }),
-  showCountry: YextField(msg("fields.showCountry", "Show Country"), {
+  },
+  showCountry: {
+    label: msg("fields.showCountry", "Show Country"),
     type: "radio",
     options: [
       { label: msg("fields.options.yes", "Yes"), value: true },
       { label: msg("fields.options.no", "No"), value: false },
     ],
-  }),
-  showGetDirectionsLink: YextField<boolean>(
-    msg("fields.showGetDirectionsLink", "Show Get Directions Link"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.yes", "Yes"), value: true },
-        { label: msg("fields.options.no", "No"), value: false },
-      ],
-    }
-  ),
-  ctaVariant: YextField<CTAVariant>(msg("fields.ctaVariant", "CTA Variant"), {
+  },
+  showGetDirectionsLink: {
+    label: msg("fields.showGetDirectionsLink", "Show Get Directions Link"),
     type: "radio",
-    options: "CTA_VARIANT",
-  }),
+    options: [
+      { label: msg("fields.options.yes", "Yes"), value: true },
+      { label: msg("fields.options.no", "No"), value: false },
+    ],
+  },
+  ctaVariant: {
+    label: msg("fields.ctaVariant", "CTA Variant"),
+    type: "radio",
+    options: ThemeOptions.CTA_VARIANT,
+  },
   color: {
     type: "basicSelector",
     label: msg("fields.linkColor", "Link Color"),

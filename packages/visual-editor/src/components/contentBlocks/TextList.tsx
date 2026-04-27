@@ -22,16 +22,14 @@ export const textListFields: YextFields<TextListProps> = {
       includeListsOnly: true,
     },
   }),
-  commaSeparated: YextField<boolean>(
-    msg("fields.commaSeparated", "Comma Separated"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.yes", "Yes"), value: true },
-        { label: msg("fields.options.no", "No"), value: false },
-      ],
-    }
-  ),
+  commaSeparated: {
+    label: msg("fields.commaSeparated", "Comma Separated"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.yes", "Yes"), value: true },
+      { label: msg("fields.options.no", "No"), value: false },
+    ],
+  },
 };
 
 const TextListComponent: PuckComponent<TextListProps> = ({

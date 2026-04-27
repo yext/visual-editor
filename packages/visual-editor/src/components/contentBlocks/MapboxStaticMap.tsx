@@ -46,9 +46,10 @@ export const mapStyleField: BasicSelectorField = {
 };
 
 const mapboxFields: YextFields<MapboxStaticProps> = {
-  apiKey: YextField(msg("fields.apiKey", "API Key"), {
+  apiKey: {
+    label: msg("fields.apiKey", "API Key"),
     type: "text",
-  }),
+  },
   coordinate: YextField<any, Coordinate>(
     msg("fields.coordinates", "Coordinates"),
     {

@@ -9,6 +9,7 @@ import { TranslatableString } from "../../types/types.ts";
 import {
   ThemeColor,
   backgroundColors,
+  ThemeOptions,
 } from "../../utils/themeConfigOptions.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { setDeep } from "@puckeditor/core";
@@ -118,37 +119,34 @@ const breadcrumbsSectionFields: YextFields<BreadcrumbsSectionProps> = {
         label: msg("fields.linkColor", "Link Color"),
         options: "SITE_COLOR",
       },
-      showCurrentPage: YextField(
-        msg(
+      showCurrentPage: {
+        label: msg(
           "fields.showCurrentPagesLinkLabel",
           "Show Current Page's Link Label"
         ),
-        {
-          type: "radio",
-          options: "SHOW_HIDE",
-        }
-      ),
+        type: "radio",
+        options: ThemeOptions.SHOW_HIDE,
+      },
     },
   }),
   analytics: YextField(msg("fields.analytics", "Analytics"), {
     type: "object",
     visible: false,
     objectFields: {
-      scope: YextField(msg("fields.scope", "Scope"), {
+      scope: {
+        label: msg("fields.scope", "Scope"),
         type: "text",
-      }),
+      },
     },
   }),
-  liveVisibility: YextField(
-    msg("fields.visibleOnLivePage", "Visible on Live Page"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: false },
-      ],
-    }
-  ),
+  liveVisibility: {
+    label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.show", "Show"), value: true },
+      { label: msg("fields.options.hide", "Hide"), value: false },
+    ],
+  },
 };
 
 // BreadcrumbsComponent renders breadcrumbs for DM related pages.

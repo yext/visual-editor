@@ -5,6 +5,7 @@ import * as React from "react";
 import {
   backgroundColors,
   type ThemeColor,
+  ThemeOptions,
 } from "../../../utils/themeConfigOptions.ts";
 import { getThemeColorCssValue } from "../../../utils/colors.ts";
 import { Body } from "../../atoms/body.tsx";
@@ -146,13 +147,11 @@ const reviewsFields: YextFields<ReviewsSectionProps> = {
         label: msg("fields.accentColor", "Accent Color"),
         options: "SITE_COLOR",
       },
-      showSectionHeading: YextField(
-        msg("fields.showSectionHeading", "Show Section Heading"),
-        {
-          type: "radio",
-          options: "SHOW_HIDE",
-        }
-      ),
+      showSectionHeading: {
+        label: msg("fields.showSectionHeading", "Show Section Heading"),
+        type: "radio",
+        options: ThemeOptions.SHOW_HIDE,
+      },
     },
   }),
   slots: {
@@ -166,21 +165,20 @@ const reviewsFields: YextFields<ReviewsSectionProps> = {
     type: "object",
     visible: false,
     objectFields: {
-      scope: YextField(msg("fields.scope", "Scope"), {
+      scope: {
+        label: msg("fields.scope", "Scope"),
         type: "text",
-      }),
+      },
     },
   }),
-  liveVisibility: YextField(
-    msg("fields.visibleOnLivePage", "Visible on Live Page"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: false },
-      ],
-    }
-  ),
+  liveVisibility: {
+    label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.show", "Show"), value: true },
+      { label: msg("fields.options.hide", "Hide"), value: false },
+    ],
+  },
 };
 
 const ReviewsSectionInternal: PuckComponent<ReviewsSectionProps> = (props) => {

@@ -126,18 +126,16 @@ const photoGalleryWrapperFields: YextFields<PhotoGalleryWrapperProps> = {
         label: msg("fields.accentColor", "Accent Color"),
         options: "SITE_COLOR",
       },
-      carouselImageCount: YextField(
-        msg("fields.carouselImageCount", "Carousel Image Count"),
-        {
-          type: "radio",
-          options: [
-            { label: "1", value: 1 },
-            { label: "2", value: 2 },
-            { label: "3", value: 3 },
-          ],
-          visible: false,
-        }
-      ),
+      carouselImageCount: {
+        label: msg("fields.carouselImageCount", "Carousel Image Count"),
+        type: "radio",
+        options: [
+          { label: "1", value: 1 },
+          { label: "2", value: 2 },
+          { label: "3", value: 3 },
+        ],
+        visible: false,
+      },
     },
   }),
 };

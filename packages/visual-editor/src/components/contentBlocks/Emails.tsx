@@ -11,6 +11,7 @@ import { msg, pt } from "../../utils/i18n/platform.ts";
 import { Background } from "../atoms/background.tsx";
 import {
   ThemeColor,
+  ThemeOptions,
   backgroundColors,
 } from "../../utils/themeConfigOptions.ts";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
@@ -68,10 +69,11 @@ export const EmailsFields: YextFields<EmailsProps> = {
         max: 5,
         visible: false,
       }),
-      showIcon: YextField(msg("fields.showIcon", "Show Icon"), {
+      showIcon: {
+        label: msg("fields.showIcon", "Show Icon"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
+        options: ThemeOptions.SHOW_HIDE,
+      },
       color: {
         type: "basicSelector",
         label: msg("fields.color", "Color"),

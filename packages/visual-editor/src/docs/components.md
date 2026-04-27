@@ -152,11 +152,11 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 Additional CSS classes to apply to the CTA.
 
-| Prop        | Type                                                                                                                                                                                                                                                                                                     | Description                                 | Default |
-| :---------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------ | :------ |
-| `className` | `string`                                                                                                                                                                                                                                                                                                 | Additional CSS classes to apply to the CTA. |         |
-| `data`      | `{ show?: boolean; actionType?: "link" \| "button"; normalizeLink: boolean; entityField: YextEntityField<EnhancedTranslatableCTA>; buttonText?: TranslatableString; customId?: string; customClass?: string; dataAttributes?: Array<{ key: string; value: string; }>; ariaLabel?: TranslatableString; }` |                                             |         |
-| `styles`    | `{ variant: CTAVariant; presetImage?: PresetImageType; color?: ThemeColor; }`                                                                                                                                                                                                                            |                                             |         |
+| Prop        | Type                                                                                                                                                                                                                                                                         | Description                                 | Default |
+| :---------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------ | :------ |
+| `className` | `string`                                                                                                                                                                                                                                                                     | Additional CSS classes to apply to the CTA. |         |
+| `data`      | `{ show?: boolean; actionType?: "link" \| "button"; normalizeLink: boolean; entityField: YextCTAField; buttonText?: TranslatableString; customId?: string; customClass?: string; dataAttributes?: Array<{ key: string; value: string; }>; ariaLabel?: TranslatableString; }` |                                             |         |
+| `styles`    | `{ variant: CTAVariant; presetImage?: PresetImageType; color?: ThemeColor; }`                                                                                                                                                                                                |                                             |         |
 
 ---
 
@@ -216,27 +216,18 @@ This object contains properties for customizing the component's appearance.
 
 ## EventSection
 
-The Events Section component is designed to display a curated list of events. It features a prominent section heading and renders each event as an individual card, making it ideal for showcasing upcoming activities, workshops, or promotions. Available on Location templates.
-
 ![Preview of the EventSection component](../components/testing/screenshots/EventSection/%5Bdesktop%5D%20default%20props%20with%20document%20data.png)
 
 ### Props
-
-#### Style Props
-
-This object contains properties for customizing the component's appearance.
-
-| Prop     | Type                                                             | Description                                                                 | Default |
-| :------- | :--------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
-| `styles` | `{ backgroundColor?: ThemeColor; showSectionHeading: boolean; }` | This object contains properties for customizing the component's appearance. |         |
 
 #### Other Props
 
 If 'true', the component is visible on the live page; if 'false', it's hidden.
 
-| Prop             | Type      | Description                                                                    | Default |
-| :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
-| `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| Prop             | Type                                                             | Description                                                                    | Default |
+| :--------------- | :--------------------------------------------------------------- | :----------------------------------------------------------------------------- | :------ |
+| `liveVisibility` | `boolean`                                                        | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| `styles`         | `{ backgroundColor?: ThemeColor; showSectionHeading: boolean; }` |                                                                                |         |
 
 ---
 
@@ -289,26 +280,17 @@ This object contains properties for customizing the appearance of both header ti
 
 ## FAQSection
 
-The FAQ Section component displays a list of questions and answers in an organized format. It includes a main heading for the section and typically renders the FAQs as an accordion, where users can click on a question to reveal the answer.
-
 ### Props
-
-#### Style Props
-
-This object contains properties for customizing the component's appearance.
-
-| Prop                        | Type         | Description                          | Default              |
-| :-------------------------- | :----------- | :----------------------------------- | :------------------- |
-| `styles.backgroundColor`    | `ThemeColor` | The background color of the section. | `Background Color 3` |
-| `styles.showSectionHeading` | `boolean`    | Whether to show the section heading. | `true`               |
 
 #### Other Props
 
-| Prop             | Type                                                                                              | Description                                                                    | Default |
-| :--------------- | :------------------------------------------------------------------------------------------------ | :----------------------------------------------------------------------------- | :------ |
-| `data`           | `Omit<YextEntityField<FAQSectionType>, "constantValue"> & { constantValue: { id?: string; }[]; }` |                                                                                |         |
-| `liveVisibility` | `boolean`                                                                                         | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
-| `slots`          | `{ HeadingSlot: Slot; CardSlot: Slot; }`                                                          |                                                                                |         |
+| Prop                        | Type                                                                                              | Description | Default |
+| :-------------------------- | :------------------------------------------------------------------------------------------------ | :---------- | :------ |
+| `data`                      | `Omit<YextEntityField<FAQSectionType>, "constantValue"> & { constantValue: { id?: string; }[]; }` |             |         |
+| `liveVisibility`            | `boolean`                                                                                         |             |         |
+| `slots`                     | `{ HeadingSlot: Slot; CardSlot: Slot; }`                                                          |             |         |
+| `styles.backgroundColor`    | `ThemeColor`                                                                                      |             |         |
+| `styles.showSectionHeading` | `boolean`                                                                                         |             |         |
 
 ---
 
@@ -518,28 +500,17 @@ Additional CSS classes to apply to the image.
 
 ## InsightSection
 
-The Insight Section is used to display a curated list of content such as articles, blog posts, or other informational blurbs. It features a main section heading and renders each insight as a distinct card, making it an effective way to showcase valuable content. Available on Location templates.
-
 ![Preview of the InsightSection component](../components/testing/screenshots/InsightSection/%5Bdesktop%5D%20default%20props%20with%20document%20data.png)
 
 ### Props
 
-#### Style Props
-
-This object contains properties for customizing the component's appearance.
-
-| Prop     | Type                                                             | Description                                                                 | Default |
-| :------- | :--------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
-| `styles` | `{ backgroundColor?: ThemeColor; showSectionHeading: boolean; }` | This object contains properties for customizing the component's appearance. |         |
-
 #### Other Props
 
-If 'true', the component is visible on the live page; if 'false', it's hidden.
-
-| Prop             | Type                                                    | Description                                                                    | Default |
-| :--------------- | :------------------------------------------------------ | :----------------------------------------------------------------------------- | :------ |
-| `liveVisibility` | `boolean`                                               | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
-| `slots`          | `{ SectionHeadingSlot: Slot; CardsWrapperSlot: Slot; }` |                                                                                |         |
+| Prop             | Type                                                             | Description | Default |
+| :--------------- | :--------------------------------------------------------------- | :---------- | :------ |
+| `liveVisibility` | `boolean`                                                        |             |         |
+| `slots`          | `{ SectionHeadingSlot: Slot; CardsWrapperSlot: Slot; }`          |             |         |
+| `styles`         | `{ backgroundColor?: ThemeColor; showSectionHeading: boolean; }` |             |         |
 
 ---
 
@@ -621,56 +592,34 @@ The props for the Phone component
 
 ## PhotoGallerySection
 
-The Photo Gallery Section is designed to display a collection of images in a visually appealing format. It consists of a main heading for the section and a flexible grid of images, with options for styling the image presentation. Available on Location templates.
-
 ![Preview of the PhotoGallerySection component](../components/testing/screenshots/PhotoGallerySection/%5Bdesktop%5D%20default%20props%20with%20document%20data.png)
 
 ### Props
 
-#### Style Props
-
-This object contains properties for customizing the component's appearance.
-
-| Prop                        | Type                      | Description                                                           | Default              |
-| :-------------------------- | :------------------------ | :-------------------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor`    | `ThemeColor`              | The background color for the entire section, selected from the theme. | `Background Color 1` |
-| `styles.showSectionHeading` | `boolean`                 | Whether to show the section heading                                   | `true`               |
-| `styles.variant`            | `"gallery" \| "carousel"` | The layout style for displaying images in the gallery.                | `"gallery"`          |
-
 #### Other Props
 
-If 'true', the component is visible on the live page; if 'false', it's hidden.
-
-| Prop             | Type      | Description                                                                    | Default |
-| :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
-| `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| Prop                        | Type                      | Description | Default |
+| :-------------------------- | :------------------------ | :---------- | :------ |
+| `liveVisibility`            | `boolean`                 |             |         |
+| `styles.backgroundColor`    | `ThemeColor`              |             |         |
+| `styles.showSectionHeading` | `boolean`                 |             |         |
+| `styles.variant`            | `"gallery" \| "carousel"` |             |         |
 
 ---
 
 ## ProductSection
 
-The Product Section is used to display a curated list of products in a dedicated section. It features a main heading and renders each product as an individual card, making it ideal for showcasing featured items, new arrivals, or bestsellers. Available on Location templates.
-
 ![Preview of the ProductSection component](../components/testing/screenshots/ProductSection/%5Bdesktop%5D%20%5Bimmersive%5D%20version%2059%20with%20showSectionHeading,%20showImage%20false.png)
 
 ### Props
 
-#### Style Props
-
-This object contains properties for customizing the component's appearance.
-
-| Prop     | Type                                                                                                  | Description                                                                 | Default |
-| :------- | :---------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
-| `styles` | `{ backgroundColor?: ThemeColor; cardVariant?: ProductSectionVariant; showSectionHeading: boolean; }` | This object contains properties for customizing the component's appearance. |         |
-
 #### Other Props
 
-If 'true', the component is visible on the live page; if 'false', it's hidden.
-
-| Prop             | Type                                                    | Description                                                                    | Default |
-| :--------------- | :------------------------------------------------------ | :----------------------------------------------------------------------------- | :------ |
-| `liveVisibility` | `boolean`                                               | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
-| `slots`          | `{ SectionHeadingSlot: Slot; CardsWrapperSlot: Slot; }` |                                                                                |         |
+| Prop             | Type                                                                                                  | Description | Default |
+| :--------------- | :---------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `liveVisibility` | `boolean`                                                                                             |             |         |
+| `slots`          | `{ SectionHeadingSlot: Slot; CardsWrapperSlot: Slot; }`                                               |             |         |
+| `styles`         | `{ backgroundColor?: ThemeColor; cardVariant?: ProductSectionVariant; showSectionHeading: boolean; }` |             |         |
 
 ---
 
@@ -836,53 +785,31 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ## TeamSection
 
-The Team Section is designed to showcase a list of people, such as employees, executives, or other team members. It features a main section heading and renders each person's information—typically a photo, name, and title—as an individual card. Available on Location templates.
-
 ![Preview of the TeamSection component](../components/testing/screenshots/TeamSection/%5Bdesktop%5D%20default%20props%20with%20document%20data.png)
 
 ### Props
 
-#### Style Props
-
-This object contains properties for customizing the component's appearance.
-
-| Prop     | Type                                                             | Description                                                                 | Default |
-| :------- | :--------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
-| `styles` | `{ backgroundColor?: ThemeColor; showSectionHeading: boolean; }` | This object contains properties for customizing the component's appearance. |         |
-
 #### Other Props
 
-If 'true', the component is visible on the live page; if 'false', it's hidden.
-
-| Prop             | Type      | Description                                                                    | Default |
-| :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
-| `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| Prop             | Type                                                             | Description | Default |
+| :--------------- | :--------------------------------------------------------------- | :---------- | :------ |
+| `liveVisibility` | `boolean`                                                        |             |         |
+| `styles`         | `{ backgroundColor?: ThemeColor; showSectionHeading: boolean; }` |             |         |
 
 ---
 
 ## TestimonialSection
 
-The Testimonial Section is used to display a list of customer testimonials or reviews. It features a main section heading and renders each testimonial as an individual card, providing social proof and building trust with visitors. Available on Location templates.
-
 ![Preview of the TestimonialSection component](../components/testing/screenshots/TestimonialSection/%5Bdesktop%5D%20default%20props%20with%20document%20data.png)
 
 ### Props
 
-#### Style Props
-
-This object contains properties for customizing the component's appearance.
-
-| Prop     | Type                                                             | Description                                                                 | Default |
-| :------- | :--------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
-| `styles` | `{ backgroundColor?: ThemeColor; showSectionHeading: boolean; }` | This object contains properties for customizing the component's appearance. |         |
-
 #### Other Props
 
-If 'true', the component is visible on the live page; if 'false', it's hidden.
-
-| Prop             | Type      | Description                                                                    | Default |
-| :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
-| `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| Prop             | Type                                                             | Description | Default |
+| :--------------- | :--------------------------------------------------------------- | :---------- | :------ |
+| `liveVisibility` | `boolean`                                                        |             |         |
+| `styles`         | `{ backgroundColor?: ThemeColor; showSectionHeading: boolean; }` |             |         |
 
 ---
 

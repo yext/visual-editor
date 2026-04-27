@@ -83,17 +83,15 @@ export const ImageWrapperFields: YextFields<ImageWrapperProps> = {
       ...ImageStylingFields,
     },
   }),
-  showImageConstrain: YextField(
-    msg("fields.showImageConstrain", "Show Image Constrain"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: false },
-      ],
-      visible: false,
-    }
-  ),
+  showImageConstrain: {
+    label: msg("fields.showImageConstrain", "Show Image Constrain"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.show", "Show"), value: true },
+      { label: msg("fields.options.hide", "Hide"), value: false },
+    ],
+    visible: false,
+  },
 };
 
 export const getImageUrl = (

@@ -73,14 +73,15 @@ const GridSection = React.forwardRef<
 GridSection.displayName = "GridSection";
 
 const gridSectionFields: YextFields<GridProps> = {
-  columns: YextField(msg("fields.columns", "Columns"), {
+  columns: {
+    label: msg("fields.columns", "Columns"),
     type: "radio",
     options: [
       { label: msg("fields.options.one", "One"), value: 1 },
       { label: msg("fields.options.two", "Two"), value: 2 },
       { label: msg("fields.options.three", "Three"), value: 3 },
     ],
-  }),
+  },
   slots: {
     type: "array",
     arrayFields: {
@@ -93,29 +94,29 @@ const gridSectionFields: YextFields<GridProps> = {
     label: msg("fields.backgroundColor", "Background Color"),
     options: "BACKGROUND_COLOR",
   },
-  align: YextField(msg("fields.alignContent", "Align Content"), {
+  align: {
+    label: msg("fields.alignContent", "Align Content"),
     type: "radio",
     options: ThemeOptions.ALIGNMENT,
-  }),
+  },
   analytics: YextField(msg("fields.analytics", "Analytics"), {
     type: "object",
     visible: false,
     objectFields: {
-      scope: YextField(msg("fields.scope", "Scope"), {
+      scope: {
+        label: msg("fields.scope", "Scope"),
         type: "text",
-      }),
+      },
     },
   }),
-  liveVisibility: YextField(
-    msg("fields.visibleOnLivePage", "Visible on Live Page"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: false },
-      ],
-    }
-  ),
+  liveVisibility: {
+    label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.show", "Show"), value: true },
+      { label: msg("fields.options.hide", "Hide"), value: false },
+    ],
+  },
 };
 
 /**
