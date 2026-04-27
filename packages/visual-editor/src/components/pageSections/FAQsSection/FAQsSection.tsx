@@ -20,6 +20,10 @@ import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { EntityFieldSectionEmptyState } from "../EntityFieldSectionEmptyState.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
+import {
+  MappedEntityFieldConditionalRender,
+  withMappedEntityFieldConditionalRender,
+} from "../entityFieldSectionUtils.ts";
 
 export interface FAQStyles {
   /**
@@ -59,9 +63,7 @@ export interface FAQSectionProps {
   };
 
   /** @internal */
-  conditionalRender?: {
-    isMappedContentEmpty?: boolean;
-  };
+  conditionalRender?: MappedEntityFieldConditionalRender;
 
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
@@ -215,15 +217,7 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
       if (!resolvedFAQs?.length) {
         // Clear the rendered cards when the mapped FAQ field resolves empty.
         const updatedData = setDeep(data, "props.slots.CardSlot", []);
-        return {
-          ...updatedData,
-          props: {
-            ...updatedData.props,
-            conditionalRender: {
-              isMappedContentEmpty: true,
-            },
-          },
-        };
+        return withMappedEntityFieldConditionalRender(updatedData, true);
       }
 
       const requiredLength = resolvedFAQs.length;
@@ -262,13 +256,7 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
         })
       );
 
-      return {
-        ...updatedData,
-        props: {
-          ...updatedData.props,
-          conditionalRender: undefined,
-        },
-      };
+      return withMappedEntityFieldConditionalRender(updatedData, false);
     }
 
     let updatedData = data;
@@ -318,13 +306,7 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
       newSlots.map((card) => ({ id: card.props.id }))
     );
 
-    return {
-      ...updatedData,
-      props: {
-        ...updatedData.props,
-        conditionalRender: undefined,
-      },
-    };
+    return withMappedEntityFieldConditionalRender(updatedData, false);
   },
   render: (props) => (
     <ComponentErrorBoundary

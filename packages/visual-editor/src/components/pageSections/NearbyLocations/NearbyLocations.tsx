@@ -13,6 +13,7 @@ import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultNearbyLocationsCardsProps } from "./NearbyLocationsCardsWrapper.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
+import { EMPTY_STATE_MARKER_SELECTOR } from "../emptyStateMarker.tsx";
 
 export interface NearbyLocationsSectionProps {
   /**
@@ -118,7 +119,7 @@ const NearbyLocationsComponent: PuckComponent<NearbyLocationsSectionProps> = (
 
     const checkIfEmptyState = () => {
       const hasEmptyStateMarker =
-        element.querySelector('[data-empty-state="true"]') !== null;
+        element.querySelector(EMPTY_STATE_MARKER_SELECTOR) !== null;
       const hasHeight = element.clientHeight > 0;
       const hasContent = element.querySelector('[id$="-wrapper"]') !== null; // Check for the cards wrapper div
       const isLoading = element.querySelector('[data-loading="true"]') !== null; // Check for loading state

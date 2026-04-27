@@ -15,7 +15,11 @@ import { PhotoGalleryWrapperProps } from "./PhotoGalleryWrapper.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
-import { isMappedEntityFieldSelected } from "../entityFieldSectionUtils.ts";
+import {
+  isMappedEntityFieldSelected,
+  MappedEntityFieldConditionalRender,
+  withMappedEntityFieldConditionalRender,
+} from "../entityFieldSectionUtils.ts";
 import {
   getPhotoGalleryImageData,
   PhotoGalleryImageValue,
@@ -66,9 +70,7 @@ export interface PhotoGallerySectionProps {
   };
 
   /** @internal */
-  conditionalRender?: {
-    isMappedContentEmpty?: boolean;
-  };
+  conditionalRender?: MappedEntityFieldConditionalRender;
 
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
@@ -246,18 +248,11 @@ export const PhotoGallerySection: YextComponentConfig<PhotoGallerySectionProps> 
         isEditing: false,
       });
 
-      return {
-        ...updatedData,
-        props: {
-          ...updatedData.props,
-          conditionalRender:
-            isMappedEntityFieldSelected(
-              photoGalleryWrapperProps?.data?.images
-            ) && !hasRenderableImages
-              ? { isMappedContentEmpty: true }
-              : undefined,
-        },
-      };
+      return withMappedEntityFieldConditionalRender(
+        updatedData,
+        isMappedEntityFieldSelected(photoGalleryWrapperProps?.data?.images) &&
+          !hasRenderableImages
+      );
     },
     render: (props) => (
       <ComponentErrorBoundary

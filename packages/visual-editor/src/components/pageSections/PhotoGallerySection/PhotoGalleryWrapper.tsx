@@ -37,6 +37,7 @@ import { Button } from "../../../internal/puck/ui/button.tsx";
 import { updateFields } from "../HeroSection.tsx";
 import { isMappedEntityFieldSelected } from "../entityFieldSectionUtils.ts";
 import { EntityFieldSectionEmptyStateBox } from "../EntityFieldSectionEmptyState.tsx";
+import { EmptyStateMarker } from "../emptyStateMarker.tsx";
 import {
   getPhotoGalleryImageData,
   ResolvedGalleryImage,
@@ -614,7 +615,7 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
       ) : puck?.isEditing ? (
         <EntityFieldSectionEmptyStateBox showEmptyStateMarker />
       ) : (
-        <div data-empty-state="true" />
+        <EmptyStateMarker />
       )}
     </div>
   );

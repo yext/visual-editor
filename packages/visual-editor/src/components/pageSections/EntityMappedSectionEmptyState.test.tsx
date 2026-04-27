@@ -16,6 +16,10 @@ import { InsightSection } from "./InsightSection/InsightSection.tsx";
 import { InsightCardsWrapper } from "./InsightSection/InsightCardsWrapper.tsx";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { EntityFieldSectionEmptyStateBox } from "./EntityFieldSectionEmptyState.tsx";
+import {
+  EmptyStateMarker,
+  EMPTY_STATE_MARKER_SELECTOR,
+} from "./emptyStateMarker.tsx";
 
 const cloneValue = <T,>(value: T): T => {
   return JSON.parse(JSON.stringify(value)) as T;
@@ -497,7 +501,7 @@ describe.each(wrapperCases)(
       );
 
       expect(
-        result.container.querySelector('[data-empty-state="true"]')
+        result.container.querySelector(EMPTY_STATE_MARKER_SELECTOR)
       ).not.toBeNull();
     });
   }
@@ -511,7 +515,7 @@ describe.each(wrapperCases)("$sectionName render", ({ sectionConfig }) => {
         isEditing: false,
         watchForMappedContentEmptyState: true,
         initialMappedContentEmpty: true,
-        cardsWrapperContent: <div data-empty-state="true" />,
+        cardsWrapperContent: <EmptyStateMarker />,
       }),
     });
 
@@ -598,7 +602,7 @@ describe("Photo Gallery Wrapper render", () => {
 
     expect(result.getByText(/Section hidden for this/i)).toBeInTheDocument();
     expect(
-      result.container.querySelector('[data-empty-state="true"]')
+      result.container.querySelector(EMPTY_STATE_MARKER_SELECTOR)
     ).not.toBeNull();
   });
 });

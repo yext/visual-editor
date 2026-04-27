@@ -21,6 +21,14 @@ export type ResolvedGalleryImage = {
   originalImage: PhotoGalleryImageValue;
 };
 
+/**
+ * Normalizes the resolved photo gallery field value into the image shape used by
+ * the gallery renderers and reports whether the mapped field produced any
+ * renderable images.
+ *
+ * Empty images are retained only in editor mode so the wrapper can still render
+ * its empty state; live rendering filters them out entirely.
+ */
 export const getPhotoGalleryImageData = ({
   resolvedImages,
   locale,

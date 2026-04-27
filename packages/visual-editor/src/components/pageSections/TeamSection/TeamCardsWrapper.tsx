@@ -14,6 +14,11 @@ import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
 import { EntityFieldSectionEmptyStateBox } from "../EntityFieldSectionEmptyState.tsx";
 import { YextComponentConfig } from "../../../fields/fields.ts";
+import {
+  MappedEntityFieldConditionalRender,
+  withMappedEntityFieldConditionalRender,
+} from "../entityFieldSectionUtils.ts";
+import { EmptyStateMarker } from "../emptyStateMarker.tsx";
 
 export type TeamCardsWrapperProps = CardWrapperType<TeamSectionType> & {
   styles: {
@@ -25,9 +30,7 @@ export type TeamCardsWrapperProps = CardWrapperType<TeamSectionType> & {
   };
 
   /** @internal */
-  conditionalRender?: {
-    isMappedContentEmpty?: boolean;
-  };
+  conditionalRender?: MappedEntityFieldConditionalRender;
 };
 
 const teamCardsWrapperFields = {
@@ -128,15 +131,7 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
 
       if (!resolvedTeam?.length) {
         const updatedData = setDeep(data, "props.slots.CardSlot", []);
-        return {
-          ...updatedData,
-          props: {
-            ...updatedData.props,
-            conditionalRender: {
-              isMappedContentEmpty: true,
-            },
-          },
-        };
+        return withMappedEntityFieldConditionalRender(updatedData, true);
       }
 
       const requiredLength = resolvedTeam.length;
@@ -171,26 +166,14 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
         })
       );
 
-      return {
-        ...updatedData,
-        props: {
-          ...updatedData.props,
-          conditionalRender: undefined,
-        },
-      };
+      return withMappedEntityFieldConditionalRender(updatedData, false);
     }
 
     let updatedData = data;
 
     if (!Array.isArray(data.props.data.constantValue)) {
       updatedData = setDeep(updatedData, "props.data.constantValue", []);
-      return {
-        ...updatedData,
-        props: {
-          ...updatedData.props,
-          conditionalRender: undefined,
-        },
-      };
+      return withMappedEntityFieldConditionalRender(updatedData, false);
     }
 
     const inUseIds = new Set<string>();
@@ -240,20 +223,14 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
       newSlots.map((card) => ({ id: card.props.id }))
     );
 
-    return {
-      ...updatedData,
-      props: {
-        ...updatedData.props,
-        conditionalRender: undefined,
-      },
-    };
+    return withMappedEntityFieldConditionalRender(updatedData, false);
   },
   render: (props) => {
     if (props.conditionalRender?.isMappedContentEmpty) {
       return props.puck.isEditing ? (
         <EntityFieldSectionEmptyStateBox showEmptyStateMarker />
       ) : (
-        <div data-empty-state="true" />
+        <EmptyStateMarker />
       );
     }
 

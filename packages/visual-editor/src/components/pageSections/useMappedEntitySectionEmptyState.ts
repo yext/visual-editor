@@ -1,6 +1,5 @@
 import * as React from "react";
-
-const EMPTY_STATE_MARKER_SELECTOR = '[data-empty-state="true"]';
+import { EMPTY_STATE_MARKER_SELECTOR } from "./emptyStateMarker.tsx";
 
 export const useMappedEntitySectionEmptyState = ({
   enabled,

@@ -5,7 +5,22 @@ import { pt } from "../../utils/i18n/platform.ts";
 import { ThemeColor } from "../../utils/themeConfigOptions.ts";
 import { PageSection } from "../atoms/pageSection.tsx";
 import { Body } from "../atoms/body.tsx";
+import { EMPTY_STATE_MARKER_ATTRIBUTE } from "./emptyStateMarker.tsx";
 
+/**
+ * Shared editor empty state shown when a section or cards wrapper is mapped to
+ * an entity field that resolves empty.
+ *
+ * This is used in two ways:
+ * - direct-data sections such as FAQ render it as the full editor replacement
+ *   for the hidden section
+ * - wrapper-backed sections such as Product, Team, Event, Insight,
+ *   Testimonial, and Photo Gallery render it from the nested wrapper so the
+ *   parent section can detect the empty-state marker and hide the live section
+ *
+ * When `showEmptyStateMarker` is true, the box also emits the shared
+ * `data-empty-state` marker that observer-based section shells watch for.
+ */
 export const EntityFieldSectionEmptyStateBox = ({
   showEmptyStateMarker = false,
 }: {
@@ -17,7 +32,11 @@ export const EntityFieldSectionEmptyStateBox = ({
   return (
     <div
       className="relative h-[300px] w-full bg-gray-100 rounded-lg border border-gray-200 flex flex-col items-center justify-center py-8 gap-2.5"
-      data-empty-state={showEmptyStateMarker ? "true" : undefined}
+      {...{
+        [EMPTY_STATE_MARKER_ATTRIBUTE]: showEmptyStateMarker
+          ? "true"
+          : undefined,
+      }}
       data-testid="entity-field-section-empty-state"
     >
       <CircleSlash2 className="w-12 h-12 text-gray-400" />

@@ -14,6 +14,11 @@ import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
 import { EntityFieldSectionEmptyStateBox } from "../EntityFieldSectionEmptyState.tsx";
 import { YextComponentConfig } from "../../../fields/fields.ts";
+import {
+  MappedEntityFieldConditionalRender,
+  withMappedEntityFieldConditionalRender,
+} from "../entityFieldSectionUtils.ts";
+import { EmptyStateMarker } from "../emptyStateMarker.tsx";
 
 export type EventCardsWrapperProps = CardWrapperType<EventSectionType> & {
   styles: {
@@ -24,9 +29,7 @@ export type EventCardsWrapperProps = CardWrapperType<EventSectionType> & {
   };
 
   /** @internal */
-  conditionalRender?: {
-    isMappedContentEmpty?: boolean;
-  };
+  conditionalRender?: MappedEntityFieldConditionalRender;
 };
 
 const eventCardsWrapperFields = {
@@ -124,15 +127,7 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
 
       if (!resolvedEvents?.length) {
         const updatedData = setDeep(data, "props.slots.CardSlot", []);
-        return {
-          ...updatedData,
-          props: {
-            ...updatedData.props,
-            conditionalRender: {
-              isMappedContentEmpty: true,
-            },
-          },
-        };
+        return withMappedEntityFieldConditionalRender(updatedData, true);
       }
 
       const requiredLength = resolvedEvents.length;
@@ -170,13 +165,7 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
         })
       );
 
-      return {
-        ...updatedData,
-        props: {
-          ...updatedData.props,
-          conditionalRender: undefined,
-        },
-      };
+      return withMappedEntityFieldConditionalRender(updatedData, false);
     }
 
     // STATIC VALUES
@@ -236,20 +225,14 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
       newSlots.map((card) => ({ id: card.props.id }))
     );
 
-    return {
-      ...updatedData,
-      props: {
-        ...updatedData.props,
-        conditionalRender: undefined,
-      },
-    };
+    return withMappedEntityFieldConditionalRender(updatedData, false);
   },
   render: (props) => {
     if (props.conditionalRender?.isMappedContentEmpty) {
       return props.puck.isEditing ? (
         <EntityFieldSectionEmptyStateBox showEmptyStateMarker />
       ) : (
-        <div data-empty-state="true" />
+        <EmptyStateMarker />
       );
     }
 

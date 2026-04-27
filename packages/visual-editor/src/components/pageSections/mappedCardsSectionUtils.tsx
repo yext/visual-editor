@@ -10,11 +10,20 @@ import { useMappedEntitySectionEmptyState } from "./useMappedEntitySectionEmptyS
 
 type CardWrapperSlot = Parameters<typeof isMappedCardWrapperSelected>[0];
 
+/**
+ * Section-level metadata used to determine whether a cards section should
+ * observe its nested wrapper for a mapped-empty state and what that initial
+ * empty state should be before observers run.
+ */
 export type MappedCardsSectionConditionalRender = {
   watchForMappedContentEmptyState: boolean;
   initialMappedContentEmpty?: boolean;
 };
 
+/**
+ * Derives the section-level mapped-empty observer state from the nested cards
+ * wrapper slot that owns the mapped entity field.
+ */
 export const getMappedCardsSectionConditionalRender = (
   cardsWrapperSlot: CardWrapperSlot
 ): MappedCardsSectionConditionalRender => ({
@@ -23,6 +32,10 @@ export const getMappedCardsSectionConditionalRender = (
   initialMappedContentEmpty: isMappedCardWrapperEmpty(cardsWrapperSlot),
 });
 
+/**
+ * Renders the shared cards-section layout: a section wrapper, an optional
+ * heading slot, and the cards wrapper slot inside the observed container.
+ */
 export const MappedCardsSectionContent = ({
   backgroundColor,
   showSectionHeading,
@@ -48,6 +61,11 @@ export const MappedCardsSectionContent = ({
   );
 };
 
+/**
+ * Keeps the nested cards wrapper mounted while mapped-empty detection is
+ * enabled, hiding the section on live when the wrapper reports an empty-state
+ * marker and otherwise rendering the visible section content.
+ */
 export const MappedCardsSectionShell = ({
   conditionalRender,
   isEditing,
