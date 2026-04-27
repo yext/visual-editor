@@ -4,9 +4,8 @@ import { ComponentFields } from "../../../types/fields.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
-import { ComponentData, PuckComponent, setDeep } from "@puckeditor/core";
+import { ComponentData, PuckComponent, setDeep, Slot } from "@puckeditor/core";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
-import { CardWrapperType } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 import {
   defaultProductCardSlotData,
   ProductCardProps,
@@ -26,11 +25,11 @@ import {
 } from "../../../utils/cardSlots/listSectionData.ts";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 
-export type ProductCardsWrapperProps = Omit<
-  CardWrapperType<ProductSectionType>,
-  "data"
-> & {
+export type ProductCardsWrapperProps = {
   data: ListSourceFieldValue;
+  slots: {
+    CardSlot: Slot;
+  };
   styles: {
     showImage: boolean;
     showBrow: boolean;

@@ -1,4 +1,4 @@
-import { ComponentData, PuckComponent, setDeep } from "@puckeditor/core";
+import { ComponentData, PuckComponent, setDeep, Slot } from "@puckeditor/core";
 import { InsightSectionType, InsightStruct } from "../../../types/types.ts";
 import { ComponentFields } from "../../../types/fields.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
@@ -13,7 +13,6 @@ import {
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
-import { CardWrapperType } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 import {
   createListSourceField,
   type ListSourceFieldValue,
@@ -24,11 +23,11 @@ import {
   resolveListSectionItems,
 } from "../../../utils/cardSlots/listSectionData.ts";
 
-export type InsightCardsWrapperProps = Omit<
-  CardWrapperType<InsightSectionType>,
-  "data"
-> & {
+export type InsightCardsWrapperProps = {
   data: ListSourceFieldValue;
+  slots: {
+    CardSlot: Slot;
+  };
   styles: {
     showImage: boolean;
     showCategory: boolean;

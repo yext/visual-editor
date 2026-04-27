@@ -1,4 +1,4 @@
-import { ComponentData, PuckComponent, setDeep } from "@puckeditor/core";
+import { ComponentData, PuckComponent, setDeep, Slot } from "@puckeditor/core";
 import {
   TestimonialSectionType,
   TestimonialStruct,
@@ -16,7 +16,6 @@ import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
-import { CardWrapperType } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 import {
   createListSourceField,
   type ListSourceFieldValue,
@@ -27,11 +26,11 @@ import {
   resolveListSectionItems,
 } from "../../../utils/cardSlots/listSectionData.ts";
 
-export type TestimonialCardsWrapperProps = Omit<
-  CardWrapperType<TestimonialSectionType>,
-  "data"
-> & {
+export type TestimonialCardsWrapperProps = {
   data: ListSourceFieldValue;
+  slots: {
+    CardSlot: Slot;
+  };
   styles: {
     /**
      * Whether to show the name slot in the testimonial cards.

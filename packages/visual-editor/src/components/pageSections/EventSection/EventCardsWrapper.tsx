@@ -1,4 +1,4 @@
-import { ComponentData, PuckComponent, setDeep } from "@puckeditor/core";
+import { ComponentData, PuckComponent, setDeep, Slot } from "@puckeditor/core";
 import { EventSectionType, EventStruct } from "../../../types/types.ts";
 import { ComponentFields } from "../../../types/fields.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
@@ -10,7 +10,6 @@ import { defaultEventCardSlotData, EventCardProps } from "./EventCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
-import { CardWrapperType } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 import {
   createListSourceField,
   type ListSourceFieldValue,
@@ -21,11 +20,11 @@ import {
   resolveListSectionItems,
 } from "../../../utils/cardSlots/listSectionData.ts";
 
-export type EventCardsWrapperProps = Omit<
-  CardWrapperType<EventSectionType>,
-  "data"
-> & {
+export type EventCardsWrapperProps = {
   data: ListSourceFieldValue;
+  slots: {
+    CardSlot: Slot;
+  };
   styles: {
     showImage: boolean;
     showDateTime: boolean;
