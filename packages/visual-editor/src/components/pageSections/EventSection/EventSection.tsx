@@ -21,8 +21,21 @@ import {
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 export interface EventSectionProps {
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
   styles: {
+    /**
+     * The background color of the section.
+     * @defaultValue Background Color 3
+     */
     backgroundColor?: ThemeColor;
+
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
     showSectionHeading: boolean;
   };
 
@@ -94,6 +107,10 @@ const eventSectionFields: YextFields<EventSectionProps> = {
   ),
 };
 
+/**
+ * The Events Section component is designed to display a curated list of events. It features a prominent section heading and renders each event as an individual card, making it ideal for showcasing upcoming activities, workshops, or promotions.
+ * Available on Location templates.
+ */
 export const EventSection: YextComponentConfig<EventSectionProps> = {
   label: msg("components.eventsSection", "Events Section"),
   fields: eventSectionFields,

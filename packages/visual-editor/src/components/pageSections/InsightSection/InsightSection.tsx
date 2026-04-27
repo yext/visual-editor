@@ -22,8 +22,21 @@ import {
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 export interface InsightSectionProps {
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
   styles: {
+    /**
+     * The background color for the entire section.
+     * @defaultValue Background Color 2
+     */
     backgroundColor?: ThemeColor;
+
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
     showSectionHeading: boolean;
   };
 
@@ -40,6 +53,10 @@ export interface InsightSectionProps {
   /** @internal */
   conditionalRender?: MappedCardsSectionConditionalRender;
 
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
   liveVisibility: boolean;
 }
 
@@ -90,6 +107,10 @@ const insightSectionFields: YextFields<InsightSectionProps> = {
   ),
 };
 
+/**
+ * The Insight Section is used to display a curated list of content such as articles, blog posts, or other informational blurbs. It features a main section heading and renders each insight as a distinct card, making it an effective way to showcase valuable content.
+ * Available on Location templates.
+ */
 export const InsightSection: YextComponentConfig<InsightSectionProps> = {
   label: msg("components.insightsSection", "Insights Section"),
   fields: insightSectionFields,

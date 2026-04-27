@@ -22,8 +22,21 @@ import {
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 export interface TeamSectionProps {
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
   styles: {
+    /**
+     * The background color of the section.
+     * @defaultValue Background Color 3
+     */
     backgroundColor?: ThemeColor;
+
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
     showSectionHeading: boolean;
   };
 
@@ -41,6 +54,10 @@ export interface TeamSectionProps {
   /** @internal */
   conditionalRender?: MappedCardsSectionConditionalRender;
 
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
   liveVisibility: boolean;
 }
 
@@ -91,6 +108,10 @@ const teamSectionFields: YextFields<TeamSectionProps> = {
   ),
 };
 
+/**
+ * The Team Section is designed to showcase a list of people, such as employees, executives, or other team members. It features a main section heading and renders each person's information—typically a photo, name, and title—as an individual card.
+ * Available on Location templates.
+ */
 export const TeamSection: YextComponentConfig<TeamSectionProps> = {
   label: msg("components.teamSection", "Team Section"),
   fields: teamSectionFields,

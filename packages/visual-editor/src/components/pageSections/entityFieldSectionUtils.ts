@@ -1,13 +1,10 @@
-type EntityFieldSelection = {
-  field?: string;
-  constantValueEnabled?: boolean;
-};
+import { type YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 
 type CardWrapperSlot = {
   id?: string;
   props?: {
     id?: string;
-    data?: EntityFieldSelection;
+    data?: YextEntityField<unknown>;
     slots?: {
       CardSlot?: unknown[];
     };
@@ -15,7 +12,7 @@ type CardWrapperSlot = {
 };
 
 export const isMappedEntityFieldSelected = (
-  entityField?: EntityFieldSelection
+  entityField?: YextEntityField<unknown>
 ): boolean => {
   return (
     Boolean(entityField?.field) && entityField?.constantValueEnabled === false
@@ -23,7 +20,7 @@ export const isMappedEntityFieldSelected = (
 };
 
 export const isMappedEntityFieldCollectionEmpty = (
-  entityField: EntityFieldSelection | undefined,
+  entityField: YextEntityField<unknown> | undefined,
   items: unknown[] | undefined
 ): boolean => {
   return isMappedEntityFieldSelected(entityField) && (items?.length ?? 0) === 0;

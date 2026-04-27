@@ -22,8 +22,21 @@ import {
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 export interface TestimonialSectionProps {
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
   styles: {
+    /**
+     * The background color of the section.
+     * @defaultValue Background Color 2
+     */
     backgroundColor?: ThemeColor;
+
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
     showSectionHeading: boolean;
   };
 
@@ -41,6 +54,10 @@ export interface TestimonialSectionProps {
   /** @internal */
   conditionalRender?: MappedCardsSectionConditionalRender;
 
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
   liveVisibility: boolean;
 }
 
@@ -91,6 +108,10 @@ const testimonialSectionFields: YextFields<TestimonialSectionProps> = {
   ),
 };
 
+/**
+ * The Testimonial Section is used to display a list of customer testimonials or reviews. It features a main section heading and renders each testimonial as an individual card, providing social proof and building trust with visitors.
+ * Available on Location templates.
+ */
 export const TestimonialSection: YextComponentConfig<TestimonialSectionProps> =
   {
     label: msg("components.testimonialsSection", "Testimonials Section"),

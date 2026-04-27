@@ -22,7 +22,16 @@ import { EntityFieldSectionEmptyState } from "../EntityFieldSectionEmptyState.ts
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 export interface FAQStyles {
+  /**
+   * The background color of the section.
+   * @defaultValue Background Color 3
+   */
   backgroundColor?: ThemeColor;
+
+  /**
+   * Whether to show the section heading.
+   * @defaultValue true
+   */
   showSectionHeading: boolean;
 }
 
@@ -33,6 +42,10 @@ export interface FAQSectionProps {
     }[];
   };
 
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
   styles: FAQStyles;
 
   slots: {
@@ -50,6 +63,10 @@ export interface FAQSectionProps {
     isMappedContentEmpty?: boolean;
   };
 
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
   liveVisibility: boolean;
 }
 
@@ -125,6 +142,11 @@ const FAQsSectionComponent: PuckComponent<FAQSectionProps> = ({
   );
 };
 
+/**
+ * The FAQ Section component displays a list of questions and answers in an organized format.
+ * It includes a main heading for the section and typically renders the FAQs as an accordion,
+ * where users can click on a question to reveal the answer.
+ */
 export const FAQSection: YextComponentConfig<FAQSectionProps> = {
   label: msg("components.faqsSection", "FAQs Section"),
   fields: FAQsSectionFields,
@@ -191,6 +213,7 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
       )?.faqs;
 
       if (!resolvedFAQs?.length) {
+        // Clear the rendered cards when the mapped FAQ field resolves empty.
         const updatedData = setDeep(data, "props.slots.CardSlot", []);
         return {
           ...updatedData,
@@ -224,11 +247,14 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
         ...cardsToAdd,
       ].slice(0, requiredLength) as ComponentData<FAQCardProps>[];
 
+      // Resize the card slot list to match the mapped FAQ count and attach each
+      // resolved FAQ to its corresponding card through parentData.
       const updatedData = setDeep(
         data,
         "props.slots.CardSlot",
         updatedCardSlot.map((card, i) => {
           card.props.index = i;
+          // Expose the resolved FAQ entry to the card so its child slots can resolve from it.
           return setDeep(card, "props.parentData", {
             field: data.props.data.field,
             faq: resolvedFAQs[i],
@@ -275,6 +301,7 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
         );
       }
 
+      // Normalize the reused card to the current constant-value position and detach any old mapped parent data.
       newCard = setDeep(newCard, "props.id", newId);
       newCard = setDeep(newCard, "props.index", i);
       newCard = setDeep(newCard, "props.parentData", undefined);
@@ -282,7 +309,9 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
       return newCard;
     });
 
+    // Replace the rendered cards with the normalized constant-value card list.
     updatedData = setDeep(updatedData, "props.slots.CardSlot", newSlots);
+    // Mirror the normalized card ids back into constantValue so the sidebar stays in sync.
     updatedData = setDeep(
       updatedData,
       "props.data.constantValue",

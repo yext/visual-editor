@@ -22,6 +22,7 @@ import {
 } from "./photoGalleryUtils.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
+// Generate 3 random placeholder images for the gallery
 export const PLACEHOLDER: AssetImageType = {
   ...getRandomPlaceholderImageObject({ width: 1000, height: 570 }),
   width: 1000,
@@ -32,12 +33,30 @@ export const PLACEHOLDER: AssetImageType = {
 };
 
 export interface PhotoGalleryStyles {
+  /**
+   * The background color for the entire section, selected from the theme.
+   * @defaultValue Background Color 1
+   */
   backgroundColor?: ThemeColor;
+
+  /**
+   * The layout style for displaying images in the gallery.
+   * @defaultValue "gallery"
+   */
   variant: "gallery" | "carousel";
+
+  /**
+   * Whether to show the section heading
+   * @defaultValue true
+   */
   showSectionHeading: boolean;
 }
 
 export interface PhotoGallerySectionProps {
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
   styles: PhotoGalleryStyles;
 
   /** @internal */
@@ -51,6 +70,10 @@ export interface PhotoGallerySectionProps {
     isMappedContentEmpty?: boolean;
   };
 
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
   liveVisibility: boolean;
 }
 
@@ -123,6 +146,10 @@ const PhotoGallerySectionComponent: PuckComponent<PhotoGallerySectionProps> = ({
   );
 };
 
+/**
+ * The Photo Gallery Section is designed to display a collection of images in a visually appealing format. It consists of a main heading for the section and a flexible grid of images, with options for styling the image presentation.
+ * Available on Location templates.
+ */
 export const PhotoGallerySection: YextComponentConfig<PhotoGallerySectionProps> =
   {
     label: msg("components.photoGallerySection", "Photo Gallery Section"),

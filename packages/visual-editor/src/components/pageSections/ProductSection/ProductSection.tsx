@@ -25,9 +25,27 @@ export type ProductSectionVariant = "immersive" | "classic" | "minimal";
 export type ProductSectionImageConstrain = "fill" | "fixed";
 
 export interface ProductSectionProps {
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
   styles: {
+    /**
+     * The background color for the entire section.
+     * @defaultValue Background Color 2
+     */
     backgroundColor?: ThemeColor;
+
+    /**
+     * The variant of the product cards.
+     * @defaultValue Immersive
+     */
     cardVariant?: ProductSectionVariant;
+
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
     showSectionHeading: boolean;
   };
 
@@ -44,6 +62,10 @@ export interface ProductSectionProps {
   /** @internal */
   conditionalRender?: MappedCardsSectionConditionalRender;
 
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
   liveVisibility: boolean;
 }
 
@@ -106,6 +128,10 @@ const productSectionFields: YextFields<ProductSectionProps> = {
   ),
 };
 
+/**
+ * The Product Section is used to display a curated list of products in a dedicated section. It features a main heading and renders each product as an individual card, making it ideal for showcasing featured items, new arrivals, or bestsellers.
+ * Available on Location templates.
+ */
 export const ProductSection: YextComponentConfig<ProductSectionProps> = {
   label: msg("components.productsSection", "Products Section"),
   fields: productSectionFields,

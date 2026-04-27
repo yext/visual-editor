@@ -21,7 +21,16 @@ import { YextComponentConfig } from "../../../fields/fields.ts";
 export type TestimonialCardsWrapperProps =
   CardWrapperType<TestimonialSectionType> & {
     styles: {
+      /**
+       * Whether to show the name slot in the testimonial cards.
+       * @defaultValue true
+       */
       showName: boolean;
+
+      /**
+       * Whether to show the date slot in the testimonial cards.
+       * @defaultValue true
+       */
       showDate: boolean;
     };
 
