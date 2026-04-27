@@ -47,28 +47,22 @@ describe("TeamCardsWrapper", () => {
     );
   });
 
-  it("when using a linked mapped list field then mapped people are resolved", async () => {
+  it("when using a linked section field then the first linked entity's people are resolved", async () => {
     const result = await resolveData(
       {
-        field: "c_linkedLocation.c_teamSection.people",
+        field: "c_linkedLocation.c_teamSection",
         constantValueEnabled: false,
-        itemFieldMappings: {
-          name: "name",
-          phoneNumber: "phoneNumber",
-          email: "email",
-        },
       },
       {
         c_linkedLocation: [
           {
             c_teamSection: {
-              people: [
-                {
-                  name: "Mapped Person",
-                  phoneNumber: "+12025550123",
-                  email: "person@example.com",
-                },
-              ],
+              people: [{ name: "Linked Person" }],
+            },
+          },
+          {
+            c_teamSection: {
+              people: [{ name: "Ignored Person" }],
             },
           },
         ],
@@ -78,12 +72,7 @@ describe("TeamCardsWrapper", () => {
     expect(result.props!.slots!.CardSlot!).toHaveLength(1);
     expect(result.props!.slots!.CardSlot![0]?.props.parentData?.person).toEqual(
       {
-        cta: undefined,
-        email: "person@example.com",
-        headshot: undefined,
-        name: "Mapped Person",
-        phoneNumber: "+12025550123",
-        title: undefined,
+        name: "Linked Person",
       }
     );
   });

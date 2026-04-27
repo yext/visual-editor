@@ -1,30 +1,22 @@
-import { ComponentData, PuckComponent, setDeep, Slot } from "@puckeditor/core";
+import { ComponentData, PuckComponent, setDeep } from "@puckeditor/core";
 import { PersonStruct, TeamSectionType } from "../../../types/types.ts";
 import { ComponentFields } from "../../../types/fields.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
+import {
+  cardWrapperFields,
+  CardWrapperType,
+} from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 import { defaultTeamCardSlotData, TeamCardProps } from "./TeamCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
-import {
-  createListSourceField,
-  type ListSourceFieldValue,
-} from "../../../editor/ListSourceField.tsx";
-import { TEAM_SECTION_CONSTANT_CONFIG } from "../../../internal/puck/constant-value-fields/TeamSection.tsx";
-import {
-  buildListSectionCards,
-  resolveListSectionItems,
-} from "../../../utils/cardSlots/listSectionData.ts";
+import { buildListSectionCards } from "../../../utils/cardSlots/listSectionData.ts";
 
-export type TeamCardsWrapperProps = {
-  data: ListSourceFieldValue;
-  slots: {
-    CardSlot: Slot;
-  };
+export type TeamCardsWrapperProps = CardWrapperType<TeamSectionType> & {
   styles: {
     showImage: boolean;
     showTitle: boolean;
@@ -35,56 +27,10 @@ export type TeamCardsWrapperProps = {
 };
 
 const teamCardsWrapperFields: YextFields<TeamCardsWrapperProps> = {
-  data: createListSourceField({
-    label: msg("components.team", "Team"),
-    legacySourceFilter: {
-      types: [ComponentFields.TeamSection.type],
-    },
-    constantField: TEAM_SECTION_CONSTANT_CONFIG,
-    mappingConfigs: [
-      {
-        key: "headshot",
-        label: msg("fields.options.image", "Image"),
-        preferredFieldNames: ["headshot", "image"],
-        required: false,
-        types: ["type.image"],
-      },
-      {
-        key: "name",
-        label: msg("fields.showTitle", "Title"),
-        preferredFieldNames: ["name"],
-        types: ["type.string"],
-      },
-      {
-        key: "title",
-        label: msg("fields.showTitle", "Show Title"),
-        preferredFieldNames: ["title", "jobTitle"],
-        required: false,
-        types: ["type.string", "type.rich_text_v2"],
-      },
-      {
-        key: "phoneNumber",
-        label: msg("fields.showPhone", "Show Phone"),
-        preferredFieldNames: ["phoneNumber", "mainPhone"],
-        required: false,
-        types: ["type.phone"],
-      },
-      {
-        key: "email",
-        label: msg("fields.showEmail", "Show Email"),
-        preferredFieldNames: ["email"],
-        required: false,
-        types: ["type.string"],
-      },
-      {
-        key: "cta",
-        label: msg("fields.showCTA", "CTA"),
-        preferredFieldNames: ["cta"],
-        required: false,
-        types: ["type.cta"],
-      },
-    ],
-  }),
+  ...cardWrapperFields<TeamSectionType>(
+    msg("components.team", "Team"),
+    ComponentFields.TeamSection.type
+  ),
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
@@ -115,13 +61,6 @@ const teamCardsWrapperFields: YextFields<TeamCardsWrapperProps> = {
       },
     },
   }),
-  slots: {
-    type: "object",
-    objectFields: {
-      CardSlot: { type: "slot", allow: [] },
-    },
-    visible: false,
-  },
 };
 
 const TeamCardsWrapperComponent: PuckComponent<TeamCardsWrapperProps> = (
@@ -161,7 +100,7 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
   },
   resolveData: (data, params) => {
     const streamDocument = params.metadata.streamDocument;
-    if (!streamDocument) {
+    if (!streamDocument || !data?.props?.data) {
       return data;
     }
     const sharedCardProps =
@@ -175,45 +114,17 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
             ),
           };
 
-    if (!data?.props?.data) {
-      return data;
-    }
-
     if (!data.props.data.constantValueEnabled && data.props.data.field) {
-      const { items: resolvedTeam, requiredLength } =
-        resolveListSectionItems<PersonStruct>({
-          buildMappedItem: (resolvedItemFields) => ({
-            headshot: resolvedItemFields.headshot as PersonStruct["headshot"],
-            name:
-              typeof resolvedItemFields.name === "string"
-                ? resolvedItemFields.name
-                : undefined,
-            title: resolvedItemFields.title as PersonStruct["title"],
-            phoneNumber:
-              typeof resolvedItemFields.phoneNumber === "string"
-                ? resolvedItemFields.phoneNumber
-                : undefined,
-            email:
-              typeof resolvedItemFields.email === "string"
-                ? resolvedItemFields.email
-                : undefined,
-            cta: resolvedItemFields.cta as PersonStruct["cta"],
-          }),
-          data: data.props.data,
-          isValidItem: (person) => Boolean(person.name),
-          resolveLegacyItems: () =>
-            resolveYextEntityField<Partial<TeamSectionType>>(
-              streamDocument,
-              {
-                ...data.props.data,
-                constantValue: { people: undefined },
-              },
-              i18nComponentsInstance.language || "en"
-            )?.people,
-          streamDocument,
-        });
+      const resolvedTeam = resolveYextEntityField<Partial<TeamSectionType>>(
+        streamDocument,
+        {
+          ...data.props.data,
+          constantValue: { people: undefined },
+        },
+        i18nComponentsInstance.language || "en"
+      )?.people;
 
-      if (!requiredLength || !resolvedTeam) {
+      if (!resolvedTeam?.length) {
         return setDeep(data, "props.slots.CardSlot", []);
       }
 
@@ -238,64 +149,62 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
           items: resolvedTeam,
         })
       );
-    } else {
-      let updatedData = data;
+    }
 
-      if (!Array.isArray(data.props.data.constantValue)) {
-        updatedData = setDeep(updatedData, "props.data.constantValue", []);
-        return updatedData;
-      }
+    let updatedData = data;
 
-      const inUseIds = new Set<string>();
-      const newSlots = data.props.data.constantValue.map(({ id }, i) => {
-        const existingCard = id
-          ? (data.props.slots.CardSlot.find(
-              (slot) => slot.props.id === id
-            ) as ComponentData<TeamCardProps>)
-          : (data.props.slots.CardSlot[i] as
-              | ComponentData<TeamCardProps>
-              | undefined);
-
-        let newCard = existingCard
-          ? (JSON.parse(JSON.stringify(existingCard)) as typeof existingCard)
-          : undefined;
-
-        let newId = newCard?.props.id || `TeamCard-${crypto.randomUUID()}`;
-
-        if (newCard && inUseIds.has(newId)) {
-          newId = `TeamCard-${crypto.randomUUID()}`;
-          Object.entries(newCard.props.slots).forEach(
-            ([slotKey, slotArray]) => {
-              slotArray[0].props.id = newId + "-" + slotKey;
-            }
-          );
-        }
-        inUseIds.add(newId);
-
-        if (!newCard) {
-          return defaultTeamCardSlotData(
-            newId,
-            i,
-            sharedCardProps?.backgroundColor,
-            sharedCardProps?.slotStyles
-          );
-        }
-
-        newCard = setDeep(newCard, "props.id", newId);
-        newCard = setDeep(newCard, "props.index", i);
-        newCard = setDeep(newCard, "props.parentData", undefined);
-
-        return newCard;
-      });
-
-      updatedData = setDeep(updatedData, "props.slots.CardSlot", newSlots);
-      updatedData = setDeep(
-        updatedData,
-        "props.data.constantValue",
-        newSlots.map((card) => ({ id: card.props.id }))
-      );
+    if (!Array.isArray(data.props.data.constantValue)) {
+      updatedData = setDeep(updatedData, "props.data.constantValue", []);
       return updatedData;
     }
+
+    const inUseIds = new Set<string>();
+    const newSlots = data.props.data.constantValue.map(({ id }, i) => {
+      const existingCard = id
+        ? (data.props.slots.CardSlot.find(
+            (slot) => slot.props.id === id
+          ) as ComponentData<TeamCardProps>)
+        : (data.props.slots.CardSlot[i] as
+            | ComponentData<TeamCardProps>
+            | undefined);
+
+      let newCard = existingCard
+        ? (JSON.parse(JSON.stringify(existingCard)) as typeof existingCard)
+        : undefined;
+
+      let newId = newCard?.props.id || `TeamCard-${crypto.randomUUID()}`;
+
+      if (newCard && inUseIds.has(newId)) {
+        newId = `TeamCard-${crypto.randomUUID()}`;
+        Object.entries(newCard.props.slots).forEach(([slotKey, slotArray]) => {
+          slotArray[0].props.id = newId + "-" + slotKey;
+        });
+      }
+      inUseIds.add(newId);
+
+      if (!newCard) {
+        return defaultTeamCardSlotData(
+          newId,
+          i,
+          sharedCardProps?.backgroundColor,
+          sharedCardProps?.slotStyles
+        );
+      }
+
+      newCard = setDeep(newCard, "props.id", newId);
+      newCard = setDeep(newCard, "props.index", i);
+      newCard = setDeep(newCard, "props.parentData", undefined);
+
+      return newCard;
+    });
+
+    updatedData = setDeep(updatedData, "props.slots.CardSlot", newSlots);
+    updatedData = setDeep(
+      updatedData,
+      "props.data.constantValue",
+      newSlots.map((card) => ({ id: card.props.id }))
+    );
+    return updatedData;
   },
   render: (props) => <TeamCardsWrapperComponent {...props} />,
 };

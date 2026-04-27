@@ -47,28 +47,22 @@ describe("InsightCardsWrapper", () => {
     });
   });
 
-  it("when using a linked mapped list field then mapped insights are resolved", async () => {
+  it("when using a linked section field then the first linked entity's insights are resolved", async () => {
     const result = await resolveData(
       {
-        field: "c_linkedLocation.c_insightSection.insights",
+        field: "c_linkedLocation.c_insightSection",
         constantValueEnabled: false,
-        itemFieldMappings: {
-          name: "name",
-          category: "category",
-          publishTime: "publishTime",
-        },
       },
       {
         c_linkedLocation: [
           {
             c_insightSection: {
-              insights: [
-                {
-                  name: "Mapped Insight",
-                  category: "News",
-                  publishTime: "2026-01-01T10:00:00Z",
-                },
-              ],
+              insights: [{ name: "Linked Insight" }],
+            },
+          },
+          {
+            c_insightSection: {
+              insights: [{ name: "Ignored Insight" }],
             },
           },
         ],
@@ -79,12 +73,7 @@ describe("InsightCardsWrapper", () => {
     expect(
       result.props!.slots!.CardSlot![0]?.props.parentData?.insight
     ).toEqual({
-      category: "News",
-      cta: undefined,
-      description: undefined,
-      image: undefined,
-      name: "Mapped Insight",
-      publishTime: "2026-01-01T10:00:00Z",
+      name: "Linked Insight",
     });
   });
 });

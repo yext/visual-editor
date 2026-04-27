@@ -20,14 +20,10 @@ import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 import {
-  createListSourceField,
-  type ListSourceFieldValue,
-} from "../../../editor/ListSourceField.tsx";
-import { FAQ_SECTION_CONSTANT_CONFIG } from "../../../internal/puck/constant-value-fields/FAQsSection.tsx";
-import {
-  buildListSectionCards,
-  resolveListSectionItems,
-} from "../../../utils/cardSlots/listSectionData.ts";
+  cardWrapperFields,
+  CardWrapperType,
+} from "../../../utils/cardSlots/cardWrapperHelpers.ts";
+import { buildListSectionCards } from "../../../utils/cardSlots/listSectionData.ts";
 
 export interface FAQStyles {
   /**
@@ -44,7 +40,7 @@ export interface FAQStyles {
 }
 
 export interface FAQSectionProps {
-  data: ListSourceFieldValue;
+  data: CardWrapperType<FAQSectionType>["data"];
 
   /**
    * This object contains properties for customizing the component's appearance.
@@ -70,27 +66,10 @@ export interface FAQSectionProps {
 }
 
 const FAQsSectionFields: YextFields<FAQSectionProps> = {
-  data: createListSourceField({
-    label: msg("fields.faqs", "FAQs"),
-    legacySourceFilter: {
-      types: [ComponentFields.FAQSection.type],
-    },
-    constantField: FAQ_SECTION_CONSTANT_CONFIG,
-    mappingConfigs: [
-      {
-        key: "question",
-        label: msg("fields.question", "Question"),
-        preferredFieldNames: ["question"],
-        types: ["type.string", "type.rich_text_v2"],
-      },
-      {
-        key: "answer",
-        label: msg("fields.answer", "Answer"),
-        preferredFieldNames: ["answer", "answerV2"],
-        types: ["type.rich_text_v2"],
-      },
-    ],
-  }),
+  data: cardWrapperFields<FAQSectionType>(
+    msg("fields.faqs", "FAQs"),
+    ComponentFields.FAQSection.type
+  ).data,
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
@@ -216,26 +195,16 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
 
     if (!data.props.data.constantValueEnabled && data.props.data.field) {
       // ENTITY VALUES
-      const { items: resolvedFAQs, requiredLength } =
-        resolveListSectionItems<FAQStruct>({
-          buildMappedItem: (resolvedItemFields) => ({
-            question: resolvedItemFields.question as FAQStruct["question"],
-            answer: resolvedItemFields.answer as FAQStruct["answer"],
-          }),
-          data: data.props.data,
-          resolveLegacyItems: () =>
-            resolveYextEntityField<Partial<FAQSectionType>>(
-              streamDocument,
-              {
-                ...data.props.data,
-                constantValue: { faqs: undefined },
-              },
-              i18nComponentsInstance.language || "en"
-            )?.faqs,
-          streamDocument,
-        });
+      const resolvedFAQs = resolveYextEntityField<Partial<FAQSectionType>>(
+        streamDocument,
+        {
+          ...data.props.data,
+          constantValue: { faqs: undefined },
+        },
+        i18nComponentsInstance.language || "en"
+      )?.faqs;
 
-      if (!requiredLength || !resolvedFAQs) {
+      if (!resolvedFAQs?.length) {
         return setDeep(data, "props.slots.CardSlot", []);
       }
 

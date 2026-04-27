@@ -45,26 +45,22 @@ describe("EventCardsWrapper", () => {
     });
   });
 
-  it("when using a linked mapped list field then mapped events are resolved", async () => {
+  it("when using a linked section field then the first linked entity's events are resolved", async () => {
     const result = await resolveData(
       {
-        field: "c_linkedLocation.c_eventSection.events",
+        field: "c_linkedLocation.c_eventSection",
         constantValueEnabled: false,
-        itemFieldMappings: {
-          title: "title",
-          dateTime: "dateTime",
-        },
       },
       {
         c_linkedLocation: [
           {
             c_eventSection: {
-              events: [
-                {
-                  title: "Mapped Event",
-                  dateTime: "2026-02-01T10:00:00Z",
-                },
-              ],
+              events: [{ title: "Linked Event" }],
+            },
+          },
+          {
+            c_eventSection: {
+              events: [{ title: "Ignored Event" }],
             },
           },
         ],
@@ -73,11 +69,7 @@ describe("EventCardsWrapper", () => {
 
     expect(result.props!.slots!.CardSlot!).toHaveLength(1);
     expect(result.props!.slots!.CardSlot![0]?.props.parentData?.event).toEqual({
-      cta: undefined,
-      dateTime: "2026-02-01T10:00:00Z",
-      description: undefined,
-      image: undefined,
-      title: "Mapped Event",
+      title: "Linked Event",
     });
   });
 });

@@ -31,7 +31,7 @@ export const cardWrapperFields = <T>(
   slots: {
     type: "object",
     objectFields: {
-      CardSlot: { type: "slot" },
+      CardSlot: { type: "slot", allow: [] },
     },
     visible: false,
   },

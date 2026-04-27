@@ -47,25 +47,25 @@ describe("TestimonialCardsWrapper", () => {
     });
   });
 
-  it("when using a linked mapped list field then mapped testimonials are resolved", async () => {
+  it("when using a linked section field then the first linked entity's testimonials are resolved", async () => {
     const result = await resolveData(
       {
-        field: "c_linkedLocation.c_testimonialSection.testimonials",
+        field: "c_linkedLocation.c_testimonialSection",
         constantValueEnabled: false,
-        itemFieldMappings: {
-          description: "description",
-          contributorName: "contributorName",
-        },
       },
       {
         c_linkedLocation: [
           {
             c_testimonialSection: {
               testimonials: [
-                {
-                  description: { html: "<p>Mapped Testimonial</p>" },
-                  contributorName: "Pat",
-                },
+                { description: { html: "<p>Linked Testimonial</p>" } },
+              ],
+            },
+          },
+          {
+            c_testimonialSection: {
+              testimonials: [
+                { description: { html: "<p>Ignored Testimonial</p>" } },
               ],
             },
           },
@@ -77,9 +77,7 @@ describe("TestimonialCardsWrapper", () => {
     expect(
       result.props!.slots!.CardSlot![0]?.props.parentData?.testimonial
     ).toEqual({
-      contributionDate: undefined,
-      contributorName: "Pat",
-      description: { html: "<p>Mapped Testimonial</p>" },
+      description: { html: "<p>Linked Testimonial</p>" },
     });
   });
 });
