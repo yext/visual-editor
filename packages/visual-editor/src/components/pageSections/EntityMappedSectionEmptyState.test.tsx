@@ -274,6 +274,7 @@ describe.each(directSectionCases)(
         ).toBeInTheDocument();
       });
       expect(result.getByText(/mapped field is empty/i)).toBeInTheDocument();
+      expect(result.getByText("Section Heading")).toBeInTheDocument();
     });
 
     it("renders normally when mapped data exists", async () => {

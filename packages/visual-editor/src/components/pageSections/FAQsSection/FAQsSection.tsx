@@ -1,4 +1,10 @@
-import { ComponentData, PuckComponent, setDeep, Slot } from "@puckeditor/core";
+import {
+  ComponentData,
+  PuckComponent,
+  setDeep,
+  Slot,
+  SlotComponent,
+} from "@puckeditor/core";
 import {
   backgroundColors,
   ThemeColor,
@@ -19,7 +25,7 @@ import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultFAQCardData, FAQCardProps } from "./FAQCard.tsx";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
-import { EntityFieldSectionEmptyState } from "../EntityFieldSectionEmptyState.tsx";
+import { EntityFieldSectionEmptyStateBox } from "../EntityFieldSectionEmptyState.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 import {
   MappedEntityFieldConditionalRender,
@@ -123,9 +129,17 @@ const FAQsSectionFields: YextFields<FAQSectionProps> = {
   },
 };
 
-const FAQsSectionComponent: PuckComponent<FAQSectionProps> = ({
+const FAQsSectionLayout = ({
   styles,
   slots,
+  cardsContent,
+}: {
+  styles: FAQSectionProps["styles"];
+  slots: {
+    HeadingSlot: SlotComponent;
+    CardSlot: SlotComponent;
+  };
+  cardsContent?: React.ReactNode;
 }) => {
   return (
     <PageSection
@@ -135,12 +149,19 @@ const FAQsSectionComponent: PuckComponent<FAQSectionProps> = ({
       {styles.showSectionHeading && (
         <slots.HeadingSlot style={{ height: "auto" }} />
       )}
-      <CardContextProvider>
-        <slots.CardSlot />
-      </CardContextProvider>
+      {cardsContent ?? (
+        <CardContextProvider>
+          <slots.CardSlot />
+        </CardContextProvider>
+      )}
     </PageSection>
   );
 };
+
+const FAQsSectionComponent: PuckComponent<FAQSectionProps> = ({
+  styles,
+  slots,
+}) => <FAQsSectionLayout styles={styles} slots={slots} />;
 
 /**
  * The FAQ Section component displays a list of questions and answers in an organized format.
@@ -320,8 +341,10 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
         >
           {props.conditionalRender?.isMappedContentEmpty ? (
             props.puck.isEditing ? (
-              <EntityFieldSectionEmptyState
-                backgroundColor={props.styles.backgroundColor}
+              <FAQsSectionLayout
+                styles={props.styles}
+                slots={props.slots}
+                cardsContent={<EntityFieldSectionEmptyStateBox />}
               />
             ) : (
               <></>
