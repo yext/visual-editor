@@ -13,9 +13,8 @@ import {
 } from "./generatedFiles.ts";
 import { writeFileIfChanged } from "./utils.ts";
 
-const LOCAL_EDITOR_STYLESHEET_HREFS_PLACEHOLDER = JSON.stringify(
-  "__LOCAL_EDITOR_STYLESHEET_HREFS__"
-);
+const LOCAL_EDITOR_STYLESHEET_HREFS_PLACEHOLDER =
+  "__LOCAL_EDITOR_STYLESHEET_HREFS__";
 
 type CreateLocalEditorArtifactsManagerOptions = {
   localEditorTemplateSource: string;
@@ -45,17 +44,16 @@ export const createLocalEditorArtifactsManager = ({
       "templates",
       "local-editor.tsx"
     );
-    let nextTemplateSource = localEditorTemplateSource;
+    let nextTemplateSource = injectLocalEditorStylesheetHrefs(
+      localEditorTemplateSource,
+      readLocalEditorStylesheetHrefs(rootDir)
+    );
     nextTemplateSource = buildEditorTemplateSource({
       rootDir,
       templatePath,
       templateSource: nextTemplateSource,
       templateNames: registryTemplateNames,
     });
-    nextTemplateSource = injectLocalEditorStylesheetHrefs(
-      nextTemplateSource,
-      readLocalEditorStylesheetHrefs(rootDir)
-    );
 
     fs.mkdirSync(path.dirname(templatePath), { recursive: true });
 

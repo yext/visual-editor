@@ -20,8 +20,7 @@ import {
 import tailwindConfig from "../../tailwind.config";
 
 const DEFAULT_LOCAL_EDITOR_ROUTE = "/local-editor";
-const localEditorStylesheetHrefs: string[] | string =
-  "__LOCAL_EDITOR_STYLESHEET_HREFS__";
+const localEditorStylesheetHrefs: string[] = __LOCAL_EDITOR_STYLESHEET_HREFS__;
 
 const componentRegistry: Record<string, Config<any>> = {
   directory: directoryConfig,
@@ -39,9 +38,7 @@ export const config: TemplateConfig = {
 export const getHeadConfig: GetHeadConfig<
   TemplateRenderProps
 > = (): HeadConfig => {
-  const stylesheetLinks = (
-    Array.isArray(localEditorStylesheetHrefs) ? localEditorStylesheetHrefs : []
-  ).map((href) => {
+  const stylesheetLinks = localEditorStylesheetHrefs.map((href) => {
     return `<link href="${href}" rel="stylesheet" data-visual-editor-font="true">`;
   });
 
