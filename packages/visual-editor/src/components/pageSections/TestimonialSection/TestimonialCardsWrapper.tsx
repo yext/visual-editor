@@ -1,61 +1,106 @@
 import { ComponentData, PuckComponent, setDeep } from "@puckeditor/core";
-import { TestimonialSectionType } from "../../../types/types.ts";
+import {
+  TestimonialSectionType,
+  TestimonialStruct,
+} from "../../../types/types.ts";
 import { ComponentFields } from "../../../types/fields.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import {
-  cardWrapperFields,
-  CardWrapperType,
-} from "../../../utils/cardSlots/cardWrapperHelpers.ts";
-import {
   defaultTestimonialCardSlotData,
   TestimonialCardProps,
 } from "./TestimonialCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
-import { YextComponentConfig } from "../../../fields/fields.ts";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
+import { CardWrapperType } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
+import {
+  createListSourceField,
+  type ListSourceFieldValue,
+} from "../../../editor/ListSourceField.tsx";
+import { TESTIMONIAL_SECTION_CONSTANT_CONFIG } from "../../../internal/puck/constant-value-fields/TestimonialSection.tsx";
+import {
+  buildListSectionCards,
+  resolveListSectionItems,
+} from "../../../utils/cardSlots/listSectionData.ts";
 
-export type TestimonialCardsWrapperProps =
-  CardWrapperType<TestimonialSectionType> & {
-    styles: {
-      /**
-       * Whether to show the name slot in the testimonial cards.
-       * @defaultValue true
-       */
-      showName: boolean;
+export type TestimonialCardsWrapperProps = Omit<
+  CardWrapperType<TestimonialSectionType>,
+  "data"
+> & {
+  data: ListSourceFieldValue;
+  styles: {
+    /**
+     * Whether to show the name slot in the testimonial cards.
+     * @defaultValue true
+     */
+    showName: boolean;
 
-      /**
-       * Whether to show the date slot in the testimonial cards.
-       * @defaultValue true
-       */
-      showDate: boolean;
-    };
+    /**
+     * Whether to show the date slot in the testimonial cards.
+     * @defaultValue true
+     */
+    showDate: boolean;
   };
-
-const testimonialCardsWrapperFields = {
-  ...cardWrapperFields<TestimonialCardsWrapperProps>(
-    msg("components.testimonial", "Testimonial"),
-    ComponentFields.TestimonialSection.type
-  ),
-  styles: YextField(msg("fields.styles", "Styles"), {
-    type: "object",
-    objectFields: {
-      showName: {
-        label: msg("fields.showName", "Show Name"),
-        type: "radio",
-        options: ThemeOptions.SHOW_HIDE,
-      },
-      showDate: {
-        label: msg("fields.showDate", "Show Date"),
-        type: "radio",
-        options: ThemeOptions.SHOW_HIDE,
-      },
-    },
-  }),
 };
+
+const testimonialCardsWrapperFields: YextFields<TestimonialCardsWrapperProps> =
+  {
+    data: createListSourceField({
+      label: msg("components.testimonial", "Testimonial"),
+      legacySourceFilter: {
+        types: [ComponentFields.TestimonialSection.type],
+      },
+      constantField: TESTIMONIAL_SECTION_CONSTANT_CONFIG,
+      mappingConfigs: [
+        {
+          key: "description",
+          label: msg("fields.showDescription", "Description"),
+          preferredFieldNames: ["description", "quote"],
+          types: ["type.rich_text_v2"],
+        },
+        {
+          key: "contributorName",
+          label: msg("fields.showName", "Show Name"),
+          preferredFieldNames: ["contributorName", "name"],
+          required: false,
+          types: ["type.string"],
+        },
+        {
+          key: "contributionDate",
+          label: msg("fields.showDate", "Show Date"),
+          preferredFieldNames: ["contributionDate", "date"],
+          required: false,
+          types: ["type.datetime"],
+        },
+      ],
+    }),
+    styles: YextField(msg("fields.styles", "Styles"), {
+      type: "object",
+      objectFields: {
+        showName: {
+          label: msg("fields.showName", "Show Name"),
+          type: "radio",
+          options: ThemeOptions.SHOW_HIDE,
+        },
+        showDate: {
+          label: msg("fields.showDate", "Show Date"),
+          type: "radio",
+          options: ThemeOptions.SHOW_HIDE,
+        },
+      },
+    }),
+    slots: {
+      type: "object",
+      objectFields: {
+        CardSlot: { type: "slot", allow: [] },
+      },
+      visible: false,
+    },
+  };
 
 const TestimonialCardsWrapperComponent: PuckComponent<
   TestimonialCardsWrapperProps
@@ -92,6 +137,9 @@ export const TestimonialCardsWrapper: YextComponentConfig<TestimonialCardsWrappe
     },
     resolveData: (data, params) => {
       const streamDocument = params.metadata.streamDocument;
+      if (!streamDocument) {
+        return data;
+      }
       const sharedCardProps =
         data.props.slots.CardSlot.length === 0
           ? undefined
@@ -108,50 +156,57 @@ export const TestimonialCardsWrapper: YextComponentConfig<TestimonialCardsWrappe
       }
 
       if (!data.props.data.constantValueEnabled && data.props.data.field) {
-        const resolvedTestimonials = resolveYextEntityField<
-          TestimonialSectionType | { testimonials: undefined }
-        >(
-          streamDocument,
-          {
-            ...data.props.data,
-            constantValue: { testimonials: undefined },
-          },
-          i18nComponentsInstance.language || "en"
-        )?.testimonials;
+        const { items: resolvedTestimonials, requiredLength } =
+          resolveListSectionItems<TestimonialStruct>({
+            buildMappedItem: (resolvedItemFields) => ({
+              description:
+                resolvedItemFields.description as TestimonialStruct["description"],
+              contributorName:
+                typeof resolvedItemFields.contributorName === "string"
+                  ? resolvedItemFields.contributorName
+                  : undefined,
+              contributionDate:
+                typeof resolvedItemFields.contributionDate === "string"
+                  ? resolvedItemFields.contributionDate
+                  : undefined,
+            }),
+            data: data.props.data,
+            isValidItem: (testimonial) => Boolean(testimonial.description),
+            resolveLegacyItems: () =>
+              resolveYextEntityField<Partial<TestimonialSectionType>>(
+                streamDocument,
+                {
+                  ...data.props.data,
+                  constantValue: { testimonials: undefined },
+                },
+                i18nComponentsInstance.language || "en"
+              )?.testimonials,
+            streamDocument,
+          });
 
-        if (!resolvedTestimonials?.length) {
+        if (!requiredLength || !resolvedTestimonials) {
           return setDeep(data, "props.slots.CardSlot", []);
         }
-
-        const requiredLength = resolvedTestimonials.length;
-        const currentLength = data.props.slots.CardSlot.length;
-        const cardsToAdd =
-          currentLength < requiredLength
-            ? Array(requiredLength - currentLength)
-                .fill(null)
-                .map(() =>
-                  defaultTestimonialCardSlotData(
-                    `TestimonialCard-${crypto.randomUUID()}`,
-                    undefined,
-                    sharedCardProps?.backgroundColor,
-                    sharedCardProps?.slotStyles
-                  )
-                )
-            : [];
-        const updatedCardSlot = [
-          ...data.props.slots.CardSlot,
-          ...cardsToAdd,
-        ].slice(0, requiredLength) as ComponentData<TestimonialCardProps>[];
 
         return setDeep(
           data,
           "props.slots.CardSlot",
-          updatedCardSlot.map((card, i) => {
-            card.props.index = i;
-            return setDeep(card, "props.parentData", {
-              field: data.props.data.field,
-              testimonial: resolvedTestimonials[i],
-            } satisfies TestimonialCardProps["parentData"]);
+          buildListSectionCards<TestimonialCardProps, TestimonialStruct>({
+            currentCards: data.props.slots
+              .CardSlot as ComponentData<TestimonialCardProps>[],
+            createCard: () =>
+              defaultTestimonialCardSlotData(
+                `TestimonialCard-${crypto.randomUUID()}`,
+                undefined,
+                sharedCardProps?.backgroundColor,
+                sharedCardProps?.slotStyles
+              ) as ComponentData<TestimonialCardProps>,
+            decorateCard: (card, testimonial, index) =>
+              setDeep(setDeep(card, "props.index", index), "props.parentData", {
+                field: data.props.data.field,
+                testimonial,
+              } satisfies TestimonialCardProps["parentData"]) as ComponentData<TestimonialCardProps>,
+            items: resolvedTestimonials,
           })
         );
       } else {

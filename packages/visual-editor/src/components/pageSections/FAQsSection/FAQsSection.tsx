@@ -224,7 +224,7 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
           }),
           data: data.props.data,
           resolveLegacyItems: () =>
-            resolveYextEntityField<FAQSectionType | { faqs: undefined }>(
+            resolveYextEntityField<Partial<FAQSectionType>>(
               streamDocument,
               {
                 ...data.props.data,

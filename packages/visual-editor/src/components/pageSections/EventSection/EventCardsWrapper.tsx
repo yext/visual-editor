@@ -1,21 +1,31 @@
 import { ComponentData, PuckComponent, setDeep } from "@puckeditor/core";
-import { EventSectionType } from "../../../types/types.ts";
+import { EventSectionType, EventStruct } from "../../../types/types.ts";
 import { ComponentFields } from "../../../types/fields.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
-import {
-  cardWrapperFields,
-  CardWrapperType,
-} from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 import { defaultEventCardSlotData, EventCardProps } from "./EventCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
-import { YextComponentConfig } from "../../../fields/fields.ts";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
+import { CardWrapperType } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
+import {
+  createListSourceField,
+  type ListSourceFieldValue,
+} from "../../../editor/ListSourceField.tsx";
+import { EVENT_SECTION_CONSTANT_CONFIG } from "../../../internal/puck/constant-value-fields/EventSection.tsx";
+import {
+  buildListSectionCards,
+  resolveListSectionItems,
+} from "../../../utils/cardSlots/listSectionData.ts";
 
-export type EventCardsWrapperProps = CardWrapperType<EventSectionType> & {
+export type EventCardsWrapperProps = Omit<
+  CardWrapperType<EventSectionType>,
+  "data"
+> & {
+  data: ListSourceFieldValue;
   styles: {
     showImage: boolean;
     showDateTime: boolean;
@@ -24,11 +34,50 @@ export type EventCardsWrapperProps = CardWrapperType<EventSectionType> & {
   };
 };
 
-const eventCardsWrapperFields = {
-  ...cardWrapperFields<EventCardsWrapperProps>(
-    msg("components.events", "Events"),
-    ComponentFields.EventSection.type
-  ),
+const eventCardsWrapperFields: YextFields<EventCardsWrapperProps> = {
+  data: createListSourceField({
+    label: msg("components.events", "Events"),
+    legacySourceFilter: {
+      types: [ComponentFields.EventSection.type],
+    },
+    constantField: EVENT_SECTION_CONSTANT_CONFIG,
+    mappingConfigs: [
+      {
+        key: "image",
+        label: msg("fields.options.image", "Image"),
+        preferredFieldNames: ["image"],
+        required: false,
+        types: ["type.image"],
+      },
+      {
+        key: "title",
+        label: msg("fields.showTitle", "Title"),
+        preferredFieldNames: ["title", "name"],
+        types: ["type.string"],
+      },
+      {
+        key: "dateTime",
+        label: msg("fields.showDateTime", "Show Date & Time"),
+        preferredFieldNames: ["dateTime", "start", "startDate"],
+        required: false,
+        types: ["type.datetime"],
+      },
+      {
+        key: "description",
+        label: msg("fields.showDescription", "Description"),
+        preferredFieldNames: ["description"],
+        required: false,
+        types: ["type.rich_text_v2"],
+      },
+      {
+        key: "cta",
+        label: msg("fields.showCTA", "CTA"),
+        preferredFieldNames: ["cta"],
+        required: false,
+        types: ["type.cta"],
+      },
+    ],
+  }),
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
@@ -54,6 +103,13 @@ const eventCardsWrapperFields = {
       },
     },
   }),
+  slots: {
+    type: "object",
+    objectFields: {
+      CardSlot: { type: "slot", allow: [] },
+    },
+    visible: false,
+  },
 };
 
 const EventCardsWrapperComponent: PuckComponent<EventCardsWrapperProps> = (
@@ -89,6 +145,9 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
   },
   resolveData: (data, params) => {
     const streamDocument = params.metadata.streamDocument;
+    if (!streamDocument) {
+      return data;
+    }
     const sharedCardProps =
       data.props.slots.CardSlot.length === 0
         ? undefined
@@ -103,54 +162,60 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
           };
 
     if (!data.props.data.constantValueEnabled && data.props.data.field) {
-      // ENTITY VALUES
-      const resolvedEvents = resolveYextEntityField<
-        EventSectionType | { events: undefined }
-      >(
-        streamDocument,
-        {
-          ...data.props.data,
-          constantValue: { events: undefined },
-        },
-        i18nComponentsInstance.language || "en"
-      )?.events;
+      const { items: resolvedEvents, requiredLength } =
+        resolveListSectionItems<EventStruct>({
+          buildMappedItem: (resolvedItemFields) => ({
+            image: resolvedItemFields.image as EventStruct["image"],
+            title:
+              typeof resolvedItemFields.title === "string"
+                ? resolvedItemFields.title
+                : undefined,
+            dateTime:
+              typeof resolvedItemFields.dateTime === "string"
+                ? resolvedItemFields.dateTime
+                : undefined,
+            description:
+              resolvedItemFields.description as EventStruct["description"],
+            cta: resolvedItemFields.cta as EventStruct["cta"],
+          }),
+          data: data.props.data,
+          isValidItem: (event) => Boolean(event.title),
+          resolveLegacyItems: () =>
+            resolveYextEntityField<Partial<EventSectionType>>(
+              streamDocument,
+              {
+                ...data.props.data,
+                constantValue: { events: undefined },
+              },
+              i18nComponentsInstance.language || "en"
+            )?.events,
+          streamDocument,
+        });
 
-      if (!resolvedEvents?.length) {
+      if (!requiredLength || !resolvedEvents) {
         return setDeep(data, "props.slots.CardSlot", []);
       }
-
-      const requiredLength = resolvedEvents.length;
-      const currentLength = data.props.slots.CardSlot.length;
-      // If CardSlot is shorter, create an array of placeholder cards and append them.
-      // If CardSlot is longer or equal, this will just be an empty array.
-      const cardsToAdd =
-        currentLength < requiredLength
-          ? Array(requiredLength - currentLength)
-              .fill(null)
-              .map(() =>
-                defaultEventCardSlotData(
-                  `EventCard-${crypto.randomUUID()}`,
-                  undefined,
-                  sharedCardProps?.backgroundColor,
-                  sharedCardProps?.truncateDescription,
-                  sharedCardProps?.slotStyles
-                )
-              )
-          : [];
-      const updatedCardSlot = [
-        ...data.props.slots.CardSlot,
-        ...cardsToAdd,
-      ].slice(0, requiredLength) as ComponentData<EventCardProps>[];
 
       return setDeep(
         data,
         "props.slots.CardSlot",
-        updatedCardSlot.map((card, i) => {
-          card.props.index = i;
-          return setDeep(card, "props.parentData", {
-            field: data.props.data.field,
-            event: resolvedEvents[i],
-          } satisfies EventCardProps["parentData"]);
+        buildListSectionCards<EventCardProps, EventStruct>({
+          currentCards: data.props.slots
+            .CardSlot as ComponentData<EventCardProps>[],
+          createCard: () =>
+            defaultEventCardSlotData(
+              `EventCard-${crypto.randomUUID()}`,
+              undefined,
+              sharedCardProps?.backgroundColor,
+              sharedCardProps?.truncateDescription,
+              sharedCardProps?.slotStyles
+            ) as ComponentData<EventCardProps>,
+          decorateCard: (card, event, index) =>
+            setDeep(setDeep(card, "props.index", index), "props.parentData", {
+              field: data.props.data.field,
+              event,
+            } satisfies EventCardProps["parentData"]) as ComponentData<EventCardProps>,
+          items: resolvedEvents,
         })
       );
     } else {

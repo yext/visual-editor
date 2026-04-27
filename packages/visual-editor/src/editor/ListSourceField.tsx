@@ -135,7 +135,7 @@ const ListSourceFieldInput = ({
       ...(selectorOptions.sourceOptionGroups
         ? {
             optionGroups: [
-              { options: [defaultOption] },
+              { title: "General", options: [defaultOption] },
               ...selectorOptions.sourceOptionGroups,
             ],
           }

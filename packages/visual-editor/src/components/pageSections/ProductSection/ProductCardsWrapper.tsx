@@ -139,7 +139,7 @@ const productCardsWrapperFields: YextFields<ProductCardsWrapperProps> = {
   slots: {
     type: "object",
     objectFields: {
-      CardSlot: { type: "slot" },
+      CardSlot: { type: "slot", allow: [] },
     },
     visible: false,
   },
@@ -219,9 +219,7 @@ export const ProductCardsWrapper: YextComponentConfig<ProductCardsWrapperProps> 
             data: data.props.data,
             isValidItem: (product) => Boolean(product.name),
             resolveLegacyItems: () =>
-              resolveYextEntityField<
-                ProductSectionType | { products: undefined }
-              >(
+              resolveYextEntityField<Partial<ProductSectionType>>(
                 streamDocument,
                 {
                   ...data.props.data,

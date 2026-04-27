@@ -1,21 +1,31 @@
 import { ComponentData, PuckComponent, setDeep } from "@puckeditor/core";
-import { TeamSectionType } from "../../../types/types.ts";
+import { PersonStruct, TeamSectionType } from "../../../types/types.ts";
 import { ComponentFields } from "../../../types/fields.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
-import {
-  cardWrapperFields,
-  CardWrapperType,
-} from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 import { defaultTeamCardSlotData, TeamCardProps } from "./TeamCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
-import { YextComponentConfig } from "../../../fields/fields.ts";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
+import { CardWrapperType } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
+import {
+  createListSourceField,
+  type ListSourceFieldValue,
+} from "../../../editor/ListSourceField.tsx";
+import { TEAM_SECTION_CONSTANT_CONFIG } from "../../../internal/puck/constant-value-fields/TeamSection.tsx";
+import {
+  buildListSectionCards,
+  resolveListSectionItems,
+} from "../../../utils/cardSlots/listSectionData.ts";
 
-export type TeamCardsWrapperProps = CardWrapperType<TeamSectionType> & {
+export type TeamCardsWrapperProps = Omit<
+  CardWrapperType<TeamSectionType>,
+  "data"
+> & {
+  data: ListSourceFieldValue;
   styles: {
     showImage: boolean;
     showTitle: boolean;
@@ -25,11 +35,57 @@ export type TeamCardsWrapperProps = CardWrapperType<TeamSectionType> & {
   };
 };
 
-const teamCardsWrapperFields = {
-  ...cardWrapperFields<TeamCardsWrapperProps>(
-    msg("components.team", "Team"),
-    ComponentFields.TeamSection.type
-  ),
+const teamCardsWrapperFields: YextFields<TeamCardsWrapperProps> = {
+  data: createListSourceField({
+    label: msg("components.team", "Team"),
+    legacySourceFilter: {
+      types: [ComponentFields.TeamSection.type],
+    },
+    constantField: TEAM_SECTION_CONSTANT_CONFIG,
+    mappingConfigs: [
+      {
+        key: "headshot",
+        label: msg("fields.options.image", "Image"),
+        preferredFieldNames: ["headshot", "image"],
+        required: false,
+        types: ["type.image"],
+      },
+      {
+        key: "name",
+        label: msg("fields.showTitle", "Title"),
+        preferredFieldNames: ["name"],
+        types: ["type.string"],
+      },
+      {
+        key: "title",
+        label: msg("fields.showTitle", "Show Title"),
+        preferredFieldNames: ["title", "jobTitle"],
+        required: false,
+        types: ["type.string", "type.rich_text_v2"],
+      },
+      {
+        key: "phoneNumber",
+        label: msg("fields.showPhone", "Show Phone"),
+        preferredFieldNames: ["phoneNumber", "mainPhone"],
+        required: false,
+        types: ["type.phone"],
+      },
+      {
+        key: "email",
+        label: msg("fields.showEmail", "Show Email"),
+        preferredFieldNames: ["email"],
+        required: false,
+        types: ["type.string"],
+      },
+      {
+        key: "cta",
+        label: msg("fields.showCTA", "CTA"),
+        preferredFieldNames: ["cta"],
+        required: false,
+        types: ["type.cta"],
+      },
+    ],
+  }),
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
@@ -60,6 +116,13 @@ const teamCardsWrapperFields = {
       },
     },
   }),
+  slots: {
+    type: "object",
+    objectFields: {
+      CardSlot: { type: "slot", allow: [] },
+    },
+    visible: false,
+  },
 };
 
 const TeamCardsWrapperComponent: PuckComponent<TeamCardsWrapperProps> = (
@@ -99,6 +162,9 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
   },
   resolveData: (data, params) => {
     const streamDocument = params.metadata.streamDocument;
+    if (!streamDocument) {
+      return data;
+    }
     const sharedCardProps =
       data.props.slots.CardSlot.length === 0
         ? undefined
@@ -115,50 +181,62 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
     }
 
     if (!data.props.data.constantValueEnabled && data.props.data.field) {
-      const resolvedTeam = resolveYextEntityField<
-        TeamSectionType | { people: undefined }
-      >(
-        streamDocument,
-        {
-          ...data.props.data,
-          constantValue: { people: undefined },
-        },
-        i18nComponentsInstance.language || "en"
-      )?.people;
+      const { items: resolvedTeam, requiredLength } =
+        resolveListSectionItems<PersonStruct>({
+          buildMappedItem: (resolvedItemFields) => ({
+            headshot: resolvedItemFields.headshot as PersonStruct["headshot"],
+            name:
+              typeof resolvedItemFields.name === "string"
+                ? resolvedItemFields.name
+                : undefined,
+            title: resolvedItemFields.title as PersonStruct["title"],
+            phoneNumber:
+              typeof resolvedItemFields.phoneNumber === "string"
+                ? resolvedItemFields.phoneNumber
+                : undefined,
+            email:
+              typeof resolvedItemFields.email === "string"
+                ? resolvedItemFields.email
+                : undefined,
+            cta: resolvedItemFields.cta as PersonStruct["cta"],
+          }),
+          data: data.props.data,
+          isValidItem: (person) => Boolean(person.name),
+          resolveLegacyItems: () =>
+            resolveYextEntityField<Partial<TeamSectionType>>(
+              streamDocument,
+              {
+                ...data.props.data,
+                constantValue: { people: undefined },
+              },
+              i18nComponentsInstance.language || "en"
+            )?.people,
+          streamDocument,
+        });
 
-      if (!resolvedTeam?.length) {
+      if (!requiredLength || !resolvedTeam) {
         return setDeep(data, "props.slots.CardSlot", []);
       }
-
-      const requiredLength = resolvedTeam.length;
-      const currentLength = data.props.slots.CardSlot.length;
-      const cardsToAdd =
-        currentLength < requiredLength
-          ? Array(requiredLength - currentLength)
-              .fill(null)
-              .map(() =>
-                defaultTeamCardSlotData(
-                  `TeamCard-${crypto.randomUUID()}`,
-                  undefined,
-                  sharedCardProps?.backgroundColor,
-                  sharedCardProps?.slotStyles
-                )
-              )
-          : [];
-      const updatedCardSlot = [
-        ...data.props.slots.CardSlot,
-        ...cardsToAdd,
-      ].slice(0, requiredLength) as ComponentData<TeamCardProps>[];
 
       return setDeep(
         data,
         "props.slots.CardSlot",
-        updatedCardSlot.map((card, i) => {
-          card.props.index = i;
-          return setDeep(card, "props.parentData", {
-            field: data.props.data.field,
-            person: resolvedTeam[i],
-          } satisfies TeamCardProps["parentData"]);
+        buildListSectionCards<TeamCardProps, PersonStruct>({
+          currentCards: data.props.slots
+            .CardSlot as ComponentData<TeamCardProps>[],
+          createCard: () =>
+            defaultTeamCardSlotData(
+              `TeamCard-${crypto.randomUUID()}`,
+              undefined,
+              sharedCardProps?.backgroundColor,
+              sharedCardProps?.slotStyles
+            ) as ComponentData<TeamCardProps>,
+          decorateCard: (card, person, index) =>
+            setDeep(setDeep(card, "props.index", index), "props.parentData", {
+              field: data.props.data.field,
+              person,
+            } satisfies TeamCardProps["parentData"]) as ComponentData<TeamCardProps>,
+          items: resolvedTeam,
         })
       );
     } else {
