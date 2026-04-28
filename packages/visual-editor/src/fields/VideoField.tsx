@@ -134,7 +134,7 @@ export const VideoFieldOverride = ({
                 className="ve-w-full aspect-video ve-object-cover ve-rounded-md ve-transition ve-duration-300 group-hover:ve-brightness-75"
               />
             )}
-            <div className="ve-absolute ve-top-1/2 ve-left-1/2 ve-transform -ve-translate-x-1/2 -ve-translate-y-1/2 ve-w-full ve-h-full ve-flex ve-flex-col ve-gap-3 ve-justify-center ve-items-center ve-opacity-0 hover:ve-opacity-100 ve-transition ve-duration-300">
+            <div className="ve-absolute ve-top-1/2 ve-left-1/2 ve-transform -ve-translate-x-1/2 -ve-translate-y-1/2 ve-w-full ve-h-full ve-flex ve-flex-col ve-gap-3 ve-justify-center ve-items-center ve-opacity-0 hover:ve-opacity-100 focus-within:ve-opacity-100 ve-transition ve-duration-300">
               {/* Change Button */}
               <Button
                 variant="secondary"
