@@ -139,6 +139,7 @@
     "presetImage": "Förinställning",
     "textAndLink": "Text & länk"
   },
+  "customColor": "Anpassad färg",
   "customSearchArea": "Anpassad sökområde",
   "dataAttribute": "Attribut",
   "date": "Datum",
@@ -205,6 +206,7 @@
     "ctaVariant": "CTA -variant",
     "currentPageLinkLabel": "Aktuell sidalänketikett",
     "customClass": "Anpassad klass",
+    "customColor": "Anpassad färg",
     "customId": "Anpassat ID",
     "customLimit": "Anpassad gräns",
     "data": "Data",
@@ -386,6 +388,7 @@
       "none": "Ingen",
       "normal": "Normal",
       "one": "En",
+      "other": "Andra",
       "phone": "Telefon",
       "regular": "Normal",
       "right_direction": "Höger",

@@ -85,31 +85,43 @@ type BasicSelectorFieldProps = FieldProps<BasicSelectorField>;
 
 const CUSTOM_COLOR_OPTION_VALUE = "__visual_editor_custom_color__";
 
-const isThemeOptionKey = (value: string): value is ThemeOptionKey =>
-  value in ThemeOptions;
+const isThemeOptionKey = (value: string): value is ThemeOptionKey => {
+  return value in ThemeOptions;
+};
 
-const isComboboxOptionGroup = (value: unknown): value is ComboboxOptionGroup =>
-  typeof value === "object" &&
-  value !== null &&
-  "options" in value &&
-  Array.isArray((value as ComboboxOptionGroup).options);
+const isComboboxOptionGroup = (
+  value: unknown
+): value is ComboboxOptionGroup => {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "options" in value &&
+    Array.isArray((value as ComboboxOptionGroup).options)
+  );
+};
 
 const isComboboxOptionGroupArray = (
   value: unknown
-): value is ComboboxOptionGroup[] =>
-  Array.isArray(value) && value.every((item) => isComboboxOptionGroup(item));
+): value is ComboboxOptionGroup[] => {
+  return (
+    Array.isArray(value) && value.every((item) => isComboboxOptionGroup(item))
+  );
+};
 
-const isThemeColorSelectorKey = (value: unknown): boolean =>
-  value === "SITE_COLOR" || value === "BACKGROUND_COLOR";
+const isThemeColorValue = (value: unknown): value is ThemeColor => {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "selectedColor" in value &&
+    typeof (value as ThemeColor).selectedColor === "string"
+  );
+};
 
-const isThemeColorValue = (value: unknown): value is ThemeColor =>
-  typeof value === "object" &&
-  value !== null &&
-  "selectedColor" in value &&
-  typeof (value as ThemeColor).selectedColor === "string";
-
-const isCustomThemeColorValue = (value: unknown): value is ThemeColor =>
-  isThemeColorValue(value) && isCustomThemeColorToken(value.selectedColor);
+const isCustomThemeColorValue = (value: unknown): value is ThemeColor => {
+  return (
+    isThemeColorValue(value) && isCustomThemeColorToken(value.selectedColor)
+  );
+};
 
 const toCustomThemeColor = (hexColor: string): ThemeColor => {
   const selectedColor = hexColor.toUpperCase();
@@ -184,7 +196,8 @@ export const BasicSelectorFieldOverride = ({
       : [{ options }]);
   const noOptionsMessage = providedNoOptionsMessage ?? undefined;
   const isThemeColorSelector =
-    field.optionGroups === undefined && isThemeColorSelectorKey(field.options);
+    field.optionGroups === undefined &&
+    (field.options === "SITE_COLOR" || field.options === "BACKGROUND_COLOR");
   const customColorHex =
     getThemeColorHexValue(
       isThemeColorValue(value) ? value.selectedColor : undefined,

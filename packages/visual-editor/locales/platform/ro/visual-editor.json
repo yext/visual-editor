@@ -139,6 +139,7 @@
     "presetImage": "Imagine prestabilită",
     "textAndLink": "Text și link"
   },
+  "customColor": "Culoare personalizată",
   "customSearchArea": "Zona de căutare personalizată",
   "dataAttribute": "Atribut de date",
   "date": "Data",
@@ -205,6 +206,7 @@
     "ctaVariant": "Varianta CTA",
     "currentPageLinkLabel": "Eticheta de link la pagina curentă",
     "customClass": "Clasă personalizată",
+    "customColor": "Culoare personalizată",
     "customId": "ID personalizat",
     "customLimit": "Limită personalizată",
     "data": "Date",
@@ -386,6 +388,7 @@
       "none": "Nici unul",
       "normal": "Normal",
       "one": "Unul",
+      "other": "Alte",
       "phone": "Telefon",
       "regular": "Regulat",
       "right_direction": "Dreapta",

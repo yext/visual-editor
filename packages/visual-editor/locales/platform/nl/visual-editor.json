@@ -139,6 +139,7 @@
     "presetImage": "Vooraf ingestelde afbeelding",
     "textAndLink": "Tekst en link"
   },
+  "customColor": "Aangepaste kleur",
   "customSearchArea": "Aangepast zoekgebied",
   "dataAttribute": "Attribuut",
   "date": "Datum",
@@ -205,6 +206,7 @@
     "ctaVariant": "CTA -variant",
     "currentPageLinkLabel": "Huidige paginalinklabel",
     "customClass": "Aangepaste klasse",
+    "customColor": "Aangepaste kleur",
     "customId": "Aangepaste ID",
     "customLimit": "Aangepaste limiet",
     "data": "Gegevens",
@@ -386,6 +388,7 @@
       "none": "Geen",
       "normal": "Normaal",
       "one": "Een",
+      "other": "Ander",
       "phone": "Telefoon",
       "regular": "Normaal",
       "right_direction": "Rechts",

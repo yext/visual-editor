@@ -139,6 +139,7 @@
     "presetImage": "Wstępnie ustawiony obraz",
     "textAndLink": "Tekst i link"
   },
+  "customColor": "Kolor niestandardowy",
   "customSearchArea": "Niestandardowy obszar wyszukiwania",
   "dataAttribute": "Atrybut",
   "date": "Data",
@@ -205,6 +206,7 @@
     "ctaVariant": "Wariant CTA",
     "currentPageLinkLabel": "Bieżąca etykieta łącza do strony",
     "customClass": "Klasa niestandardowa",
+    "customColor": "Kolor niestandardowy",
     "customId": "Niestandardowy identyfikator",
     "customLimit": "Limit niestandardowy",
     "data": "Dane",
@@ -386,6 +388,7 @@
       "none": "Nic",
       "normal": "Normalna",
       "one": "Jeden",
+      "other": "Inny",
       "phone": "Telefon",
       "regular": "Regularny",
       "right_direction": "Racja",

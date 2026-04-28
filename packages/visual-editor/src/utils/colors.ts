@@ -212,8 +212,9 @@ export const getThemeColorCssValue = (
   return `var(--colors-${colorToken})`;
 };
 
-export const isCustomThemeColorToken = (colorToken?: string): boolean =>
-  !!colorToken && colorToken.startsWith("[") && colorToken.endsWith("]");
+export const isCustomThemeColorToken = (colorToken?: string): boolean => {
+  return !!colorToken && colorToken.startsWith("[") && colorToken.endsWith("]");
+};
 
 /**
  * Normalizes a color string into an uppercase hex value when possible.

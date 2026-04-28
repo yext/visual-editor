@@ -139,6 +139,7 @@
     "presetImage": "Vordefiniertes Bild",
     "textAndLink": "Text & Link"
   },
+  "customColor": "Benutzerdefinierte Farbe",
   "customSearchArea": "Benutzerdefinierter Suchbereich",
   "dataAttribute": "Attribut",
   "date": "Datum",
@@ -205,6 +206,7 @@
     "ctaVariant": "CTA-Variante",
     "currentPageLinkLabel": "Aktuelles Link-Label der Seite",
     "customClass": "Benutzerdefinierte Klasse",
+    "customColor": "Benutzerdefinierte Farbe",
     "customId": "Benutzerdefinierte ID",
     "customLimit": "Benutzerdefiniertes Limit",
     "data": "Daten",
@@ -386,6 +388,7 @@
       "none": "Keine",
       "normal": "Normal",
       "one": "Eins",
+      "other": "Andere",
       "phone": "Telefon",
       "regular": "Regulär",
       "right_direction": "Rechts",

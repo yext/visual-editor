@@ -139,6 +139,7 @@
     "presetImage": "Iš anksto nustatytas vaizdas",
     "textAndLink": "Tekstas ir nuoroda"
   },
+  "customColor": "Pasirinktinė spalva",
   "customSearchArea": "Pasirinktinė paieškos sritis",
   "dataAttribute": "Atributas",
   "date": "Data",
@@ -205,6 +206,7 @@
     "ctaVariant": "CTA variantas",
     "currentPageLinkLabel": "Dabartinio puslapio nuorodos etiketė",
     "customClass": "Individualizuota klasė",
+    "customColor": "Pasirinktinė spalva",
     "customId": "Pasirinktinis ID",
     "customLimit": "Pasirinktinis limitas",
     "data": "Duomenys",
@@ -386,6 +388,7 @@
       "none": "Nėra",
       "normal": "Normalus",
       "one": "Vienas",
+      "other": "Kita",
       "phone": "Telefonas",
       "regular": "Reguliarus",
       "right_direction": "Dešinė",

@@ -139,6 +139,7 @@
     "presetImage": "Preset Image",
     "textAndLink": "Text & Link"
   },
+  "customColor": "Custom Color",
   "customSearchArea": "Custom Search Area",
   "dataAttribute": "Attribute",
   "date": "Date",
@@ -205,6 +206,7 @@
     "ctaVariant": "CTA Variant",
     "currentPageLinkLabel": "Current Page Link Label",
     "customClass": "Custom Class",
+    "customColor": "Custom Color",
     "customId": "Custom ID",
     "customLimit": "Custom Limit",
     "data": "Data",
@@ -386,6 +388,7 @@
       "none": "None",
       "normal": "Normal",
       "one": "One",
+      "other": "Other",
       "phone": "Phone",
       "regular": "Regular",
       "right_direction": "Right",

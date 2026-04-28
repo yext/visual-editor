@@ -139,6 +139,7 @@
     "presetImage": "Önceden ayarlanmış resim",
     "textAndLink": "Metin ve Bağlantı"
   },
+  "customColor": "Özel Renk",
   "customSearchArea": "Özel arama alanı",
   "dataAttribute": "Veri Niteliği",
   "date": "Tarih",
@@ -205,6 +206,7 @@
     "ctaVariant": "CTA varyantı",
     "currentPageLinkLabel": "Geçerli Sayfa Bağlantı Etiketi",
     "customClass": "Özel Sınıf",
+    "customColor": "Özel Renk",
     "customId": "Özel Kimlik",
     "customLimit": "Özel Sınır",
     "data": "Veri",
@@ -386,6 +388,7 @@
       "none": "Hiçbiri",
       "normal": "Normal",
       "one": "Bir",
+      "other": "Diğer",
       "phone": "Telefon",
       "regular": "Düzenli",
       "right_direction": "Doğru",

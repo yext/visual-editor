@@ -139,6 +139,7 @@
     "presetImage": "プリセット画像",
     "textAndLink": "テキストとリンク"
   },
+  "customColor": "カスタムカラー",
   "customSearchArea": "カスタム検索領域",
   "dataAttribute": "属性",
   "date": "日付",
@@ -205,6 +206,7 @@
     "ctaVariant": "CTAバリアント",
     "currentPageLinkLabel": "現在のページのリンクラベル",
     "customClass": "カスタムクラス",
+    "customColor": "カスタムカラー",
     "customId": "カスタムID",
     "customLimit": "カスタム制限",
     "data": "データ",
@@ -386,6 +388,7 @@
       "none": "なし",
       "normal": "普通",
       "one": "1つ",
+      "other": "他の",
       "phone": "電話",
       "regular": "通常",
       "right_direction": "右",

@@ -139,6 +139,7 @@
     "presetImage": "Forudindstillet billede",
     "textAndLink": "Tekst og link"
   },
+  "customColor": "Brugerdefineret farve",
   "customSearchArea": "Brugerdefineret søgeområde",
   "dataAttribute": "Attribut",
   "date": "Dato",
@@ -205,6 +206,7 @@
     "ctaVariant": "CTA -variant",
     "currentPageLinkLabel": "Aktuel sidelinketiket",
     "customClass": "Brugerdefineret klasse",
+    "customColor": "Brugerdefineret farve",
     "customId": "Brugerdefineret ID",
     "customLimit": "Brugerdefineret grænse",
     "data": "Data",
@@ -386,6 +388,7 @@
       "none": "Ingen",
       "normal": "Normal",
       "one": "En",
+      "other": "Andre",
       "phone": "Telefon",
       "regular": "Normal",
       "right_direction": "Højre",

@@ -139,6 +139,7 @@
     "presetImage": "Forhåndsinnstilt bilde",
     "textAndLink": "Tekst og lenke"
   },
+  "customColor": "Egendefinert farge",
   "customSearchArea": "Tilpasset søkeområde",
   "dataAttribute": "Dataattributt",
   "date": "Dato",
@@ -205,6 +206,7 @@
     "ctaVariant": "CTA -variant",
     "currentPageLinkLabel": "Gjeldende sidekoblingsetikett",
     "customClass": "Egendefinert klasse",
+    "customColor": "Egendefinert farge",
     "customId": "Egendefinert ID",
     "customLimit": "Egendefinert grense",
     "data": "Data",
@@ -386,6 +388,7 @@
       "none": "Ingen",
       "normal": "Normal",
       "one": "En",
+      "other": "Annen",
       "phone": "Telefon",
       "regular": "Normal",
       "right_direction": "Høyre",

@@ -139,6 +139,7 @@
     "presetImage": "Immagine preimpostata",
     "textAndLink": "Testo e collegamento"
   },
+  "customColor": "Colore personalizzato",
   "customSearchArea": "Area di ricerca personalizzata",
   "dataAttribute": "Attributo",
   "date": "Data",
@@ -205,6 +206,7 @@
     "ctaVariant": "Variante CTA",
     "currentPageLinkLabel": "Etichetta del collegamento alla pagina corrente",
     "customClass": "Classe personalizzata",
+    "customColor": "Colore personalizzato",
     "customId": "ID personalizzato",
     "customLimit": "Limite personalizzato",
     "data": "Dati",
@@ -386,6 +388,7 @@
       "none": "Nessuno",
       "normal": "Normale",
       "one": "Uno",
+      "other": "Altro",
       "phone": "Telefono",
       "regular": "Regolare",
       "right_direction": "A destra",

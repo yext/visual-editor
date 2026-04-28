@@ -139,6 +139,7 @@
     "presetImage": "Eelseade",
     "textAndLink": "Tekst ja link"
   },
+  "customColor": "Kohandatud värv",
   "customSearchArea": "Kohandatud otsinguala",
   "dataAttribute": "Atribuut",
   "date": "Kuupäev",
@@ -205,6 +206,7 @@
     "ctaVariant": "CTA variant",
     "currentPageLinkLabel": "Praeguse lehe lingi silt",
     "customClass": "Kohandatud klass",
+    "customColor": "Kohandatud värv",
     "customId": "Kohandatud ID",
     "customLimit": "Kohandatud limiit",
     "data": "Andmed",
@@ -386,6 +388,7 @@
       "none": "Mitte ühtegi",
       "normal": "Tavaline",
       "one": "Üks",
+      "other": "muud",
       "phone": "Telefon",
       "regular": "Regulaarne",
       "right_direction": "Õige",

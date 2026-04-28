@@ -139,6 +139,7 @@
     "presetImage": "Image prédéfinie",
     "textAndLink": "Texte et lien"
   },
+  "customColor": "Couleur personnalisée",
   "customSearchArea": "Zone de recherche personnalisée",
   "dataAttribute": "Attribut",
   "date": "Date",
@@ -205,6 +206,7 @@
     "ctaVariant": "Variante CTA",
     "currentPageLinkLabel": "Libellé du lien vers la page actuelle",
     "customClass": "Classe personnalisée",
+    "customColor": "Couleur personnalisée",
     "customId": "Identifiant personnalisé",
     "customLimit": "Limite personnalisée",
     "data": "Données",
@@ -386,6 +388,7 @@
       "none": "Aucun",
       "normal": "Normale",
       "one": "Un",
+      "other": "Autre",
       "phone": "Téléphone",
       "regular": "Régulier",
       "right_direction": "À droite",

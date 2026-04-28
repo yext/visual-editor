@@ -139,6 +139,7 @@
     "presetImage": "Predvolený obraz",
     "textAndLink": "Text a odkaz"
   },
+  "customColor": "Vlastná farba",
   "customSearchArea": "Oblasť vyhľadávania",
   "dataAttribute": "Atribút",
   "date": "Dátum",
@@ -205,6 +206,7 @@
     "ctaVariant": "Variant CTA",
     "currentPageLinkLabel": "Menovka odkazu na aktuálnu stránku",
     "customClass": "Vlastná trieda",
+    "customColor": "Vlastná farba",
     "customId": "Vlastné ID",
     "customLimit": "Vlastný limit",
     "data": "Údaje",
@@ -386,6 +388,7 @@
       "none": "Žiadne",
       "normal": "Normálne",
       "one": "Jeden",
+      "other": "Iné",
       "phone": "Telefón",
       "regular": "Normálne",
       "right_direction": "Vpravo",

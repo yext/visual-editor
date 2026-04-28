@@ -139,6 +139,7 @@
     "presetImage": "Unaprijed postavljena slika",
     "textAndLink": "Tekst i veza"
   },
+  "customColor": "Prilagođena boja",
   "customSearchArea": "Područje prilagođenog pretraživanja",
   "dataAttribute": "Atribut",
   "date": "Datum",
@@ -205,6 +206,7 @@
     "ctaVariant": "CTA varijanta",
     "currentPageLinkLabel": "Trenutna oznaka veze stranice",
     "customClass": "Prilagođena klasa",
+    "customColor": "Prilagođena boja",
     "customId": "Prilagođeni ID",
     "customLimit": "Prilagođeno ograničenje",
     "data": "Podaci",
@@ -386,6 +388,7 @@
       "none": "Nijedan",
       "normal": "Normalan",
       "one": "Jedan",
+      "other": "ostalo",
       "phone": "Telefon",
       "regular": "Obično",
       "right_direction": "Desno",

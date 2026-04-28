@@ -139,6 +139,7 @@
     "presetImage": "Esiasetettu kuva",
     "textAndLink": "Teksti ja linkki"
   },
+  "customColor": "Mukautettu väri",
   "customSearchArea": "Mukautettu hakualue",
   "dataAttribute": "Attribuutti",
   "date": "Päivämäärä",
@@ -205,6 +206,7 @@
     "ctaVariant": "CTA -variantti",
     "currentPageLinkLabel": "Nykyisen sivun linkin etiketti",
     "customClass": "Mukautettu luokka",
+    "customColor": "Mukautettu väri",
     "customId": "Muokattu tunnus",
     "customLimit": "Mukautettu raja",
     "data": "Tiedot",
@@ -386,6 +388,7 @@
       "none": "Ei mitään",
       "normal": "Normaali",
       "one": "Yksi",
+      "other": "muu",
       "phone": "Puhelin",
       "regular": "Normaali",
       "right_direction": "Oikea",

@@ -139,6 +139,7 @@
     "presetImage": "Előre beállított kép",
     "textAndLink": "Szöveg és link"
   },
+  "customColor": "Egyedi szín",
   "customSearchArea": "Egyedi keresési terület",
   "dataAttribute": "Adatattribútum",
   "date": "Dátum",
@@ -205,6 +206,7 @@
     "ctaVariant": "CTA -változat",
     "currentPageLinkLabel": "Jelenlegi oldalhivatkozás címke",
     "customClass": "Egyedi osztály",
+    "customColor": "Egyedi szín",
     "customId": "Egyéni azonosító",
     "customLimit": "Egyéni korlát",
     "data": "Adat",
@@ -386,6 +388,7 @@
       "none": "Egyik sem",
       "normal": "Normál",
       "one": "Egy",
+      "other": "Más",
       "phone": "Telefon",
       "regular": "Szabályos",
       "right_direction": "Jobb",
