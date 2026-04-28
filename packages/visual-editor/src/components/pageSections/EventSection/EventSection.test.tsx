@@ -2585,4 +2585,131 @@ describe("EventSection", async () => {
       }
     }
   );
+
+  it("when using a base entity section field then legacy events are resolved", async () => {
+    const streamDocument = {
+      c_eventsSection: {
+        events: [{ title: "Base Event" }],
+      },
+    };
+    const data = await resolveAllData(
+      migrate(
+        {
+          root: {
+            props: {
+              version: 74,
+            },
+          },
+          content: [
+            {
+              type: "EventSection",
+              props: {
+                ...version59Props,
+                slots: {
+                  ...version59Props.slots,
+                  CardsWrapperSlot: [
+                    {
+                      ...version59Props.slots.CardsWrapperSlot[0],
+                      props: {
+                        ...version59Props.slots.CardsWrapperSlot[0].props,
+                        data: {
+                          ...version59Props.slots.CardsWrapperSlot[0].props
+                            .data,
+                          field: "c_eventsSection",
+                          constantValueEnabled: false,
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
+        migrationRegistry,
+        puckConfig,
+        streamDocument
+      ),
+      puckConfig,
+      {
+        streamDocument,
+      }
+    );
+
+    const cardSlot =
+      data.content[0]?.props.slots?.CardsWrapperSlot?.[0]?.props.slots
+        ?.CardSlot;
+    expect(cardSlot).toHaveLength(1);
+    expect(cardSlot?.[0]?.props.parentData?.event).toEqual({
+      title: "Base Event",
+    });
+  });
+
+  it("when using a linked section field then the first linked entity's events are resolved", async () => {
+    const streamDocument = {
+      c_linkedLocation: [
+        {
+          c_eventsSection: {
+            events: [{ title: "Linked Event" }],
+          },
+        },
+        {
+          c_eventsSection: {
+            events: [{ title: "Ignored Event" }],
+          },
+        },
+      ],
+    };
+    const data = await resolveAllData(
+      migrate(
+        {
+          root: {
+            props: {
+              version: 74,
+            },
+          },
+          content: [
+            {
+              type: "EventSection",
+              props: {
+                ...version59Props,
+                slots: {
+                  ...version59Props.slots,
+                  CardsWrapperSlot: [
+                    {
+                      ...version59Props.slots.CardsWrapperSlot[0],
+                      props: {
+                        ...version59Props.slots.CardsWrapperSlot[0].props,
+                        data: {
+                          ...version59Props.slots.CardsWrapperSlot[0].props
+                            .data,
+                          field: "c_linkedLocation.c_eventsSection",
+                          constantValueEnabled: false,
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
+        migrationRegistry,
+        puckConfig,
+        streamDocument
+      ),
+      puckConfig,
+      {
+        streamDocument,
+      }
+    );
+
+    const cardSlot =
+      data.content[0]?.props.slots?.CardsWrapperSlot?.[0]?.props.slots
+        ?.CardSlot;
+    expect(cardSlot).toHaveLength(1);
+    expect(cardSlot?.[0]?.props.parentData?.event).toEqual({
+      title: "Linked Event",
+    });
+  });
 });

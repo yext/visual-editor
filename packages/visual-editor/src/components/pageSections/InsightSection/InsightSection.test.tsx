@@ -1528,4 +1528,131 @@ describe("InsightSection", async () => {
       }
     }
   );
+
+  it("when using a base entity section field then legacy insights are resolved", async () => {
+    const streamDocument = {
+      c_insightsSection: {
+        insights: [{ name: "Base Insight" }],
+      },
+    };
+    const data = await resolveAllData(
+      migrate(
+        {
+          root: {
+            props: {
+              version: 74,
+            },
+          },
+          content: [
+            {
+              type: "InsightSection",
+              props: {
+                ...version59Props,
+                slots: {
+                  ...version59Props.slots,
+                  CardsWrapperSlot: [
+                    {
+                      ...version59Props.slots.CardsWrapperSlot[0],
+                      props: {
+                        ...version59Props.slots.CardsWrapperSlot[0].props,
+                        data: {
+                          ...version59Props.slots.CardsWrapperSlot[0].props
+                            .data,
+                          field: "c_insightsSection",
+                          constantValueEnabled: false,
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
+        migrationRegistry,
+        puckConfig,
+        streamDocument
+      ),
+      puckConfig,
+      {
+        streamDocument,
+      }
+    );
+
+    const cardSlot =
+      data.content[0]?.props.slots?.CardsWrapperSlot?.[0]?.props.slots
+        ?.CardSlot;
+    expect(cardSlot).toHaveLength(1);
+    expect(cardSlot?.[0]?.props.parentData?.insight).toEqual({
+      name: "Base Insight",
+    });
+  });
+
+  it("when using a linked section field then the first linked entity's insights are resolved", async () => {
+    const streamDocument = {
+      c_linkedLocation: [
+        {
+          c_insightsSection: {
+            insights: [{ name: "Linked Insight" }],
+          },
+        },
+        {
+          c_insightsSection: {
+            insights: [{ name: "Ignored Insight" }],
+          },
+        },
+      ],
+    };
+    const data = await resolveAllData(
+      migrate(
+        {
+          root: {
+            props: {
+              version: 74,
+            },
+          },
+          content: [
+            {
+              type: "InsightSection",
+              props: {
+                ...version59Props,
+                slots: {
+                  ...version59Props.slots,
+                  CardsWrapperSlot: [
+                    {
+                      ...version59Props.slots.CardsWrapperSlot[0],
+                      props: {
+                        ...version59Props.slots.CardsWrapperSlot[0].props,
+                        data: {
+                          ...version59Props.slots.CardsWrapperSlot[0].props
+                            .data,
+                          field: "c_linkedLocation.c_insightsSection",
+                          constantValueEnabled: false,
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
+        migrationRegistry,
+        puckConfig,
+        streamDocument
+      ),
+      puckConfig,
+      {
+        streamDocument,
+      }
+    );
+
+    const cardSlot =
+      data.content[0]?.props.slots?.CardsWrapperSlot?.[0]?.props.slots
+        ?.CardSlot;
+    expect(cardSlot).toHaveLength(1);
+    expect(cardSlot?.[0]?.props.parentData?.insight).toEqual({
+      name: "Linked Insight",
+    });
+  });
 });
