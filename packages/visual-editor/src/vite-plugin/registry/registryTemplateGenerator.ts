@@ -93,6 +93,7 @@ type InsertNamedImportOptions = {
 
 const VALID_EXTENSIONS = new Set([".tsx", ".ts", ".jsx", ".js"]);
 const PRESERVED_EDIT_REGISTRY_KEYS = new Set(["directory", "locator"]);
+const PRIORITIZED_EDIT_TEMPLATE_NAMES = ["main", "directory", "locator"];
 const PROTECTED_TEMPLATE_FILE_NAMES = new Set([
   "edit",
   "directory",
@@ -1070,11 +1071,14 @@ function setEditComponentRegistry(
     return;
   }
 
+  const orderedTemplateNames =
+    getOrderedEditRegistryTemplateNames(templateNames);
+
   const initializer = declaration.getInitializerIfKind(
     SyntaxKind.ObjectLiteralExpression
   );
   if (!initializer) {
-    const registryEntries = templateNames
+    const registryEntries = orderedTemplateNames
       .map((templateName) => {
         return `  "${templateName}": ${getEditConfigIdentifier(templateName)},`;
       })
@@ -1085,6 +1089,8 @@ ${registryEntries}
     return;
   }
 
+  const preservedRegistryInitializers = new Map<string, string>();
+
   for (const property of initializer.getProperties()) {
     const propertyAssignment = property.asKind(SyntaxKind.PropertyAssignment);
     if (!propertyAssignment) {
@@ -1093,18 +1099,47 @@ ${registryEntries}
 
     const propertyName = propertyAssignment.getName();
     if (PRESERVED_EDIT_REGISTRY_KEYS.has(propertyName)) {
-      continue;
+      const propertyInitializer = propertyAssignment.getInitializer();
+      if (propertyInitializer) {
+        preservedRegistryInitializers.set(
+          propertyName,
+          propertyInitializer.getText()
+        );
+      }
     }
-
     propertyAssignment.remove();
   }
 
-  for (const templateName of templateNames) {
+  for (const templateName of orderedTemplateNames) {
+    const preservedInitializer =
+      preservedRegistryInitializers.get(templateName);
+    if (preservedInitializer) {
+      initializer.addPropertyAssignment({
+        name: `"${templateName}"`,
+        initializer: preservedInitializer,
+      });
+      continue;
+    }
+
     initializer.addPropertyAssignment({
       name: `"${templateName}"`,
       initializer: getEditConfigIdentifier(templateName),
     });
   }
+}
+
+function getOrderedEditRegistryTemplateNames(
+  templateNames: string[]
+): string[] {
+  const uniqueTemplateNames = [...new Set(templateNames)];
+  return [
+    ...PRIORITIZED_EDIT_TEMPLATE_NAMES.filter((templateName) => {
+      return uniqueTemplateNames.includes(templateName);
+    }),
+    ...uniqueTemplateNames.filter((templateName) => {
+      return !PRIORITIZED_EDIT_TEMPLATE_NAMES.includes(templateName);
+    }),
+  ];
 }
 
 function getTemplateConfigExportName(templateName: string): string {

@@ -13,6 +13,9 @@ import {
 } from "./generatedFiles.ts";
 import { writeFileIfChanged } from "./utils.ts";
 
+const LOCAL_EDITOR_STYLESHEET_HREFS_PLACEHOLDER =
+  "__LOCAL_EDITOR_STYLESHEET_HREFS__";
+
 type CreateLocalEditorArtifactsManagerOptions = {
   localEditorTemplateSource: string;
   localEditorDataTemplateSource: string;
@@ -41,7 +44,10 @@ export const createLocalEditorArtifactsManager = ({
       "templates",
       "local-editor.tsx"
     );
-    let nextTemplateSource = localEditorTemplateSource;
+    let nextTemplateSource = injectLocalEditorStylesheetHrefs(
+      localEditorTemplateSource,
+      readLocalEditorFontStylesheetHrefs(rootDir)
+    );
     nextTemplateSource = buildEditorTemplateSource({
       rootDir,
       templatePath,
@@ -198,4 +204,39 @@ export const createLocalEditorArtifactsManager = ({
     syncLocalEditorDataTemplates,
     syncLocalEditorTemplate,
   };
+};
+
+const readLocalEditorFontStylesheetHrefs = (rootDir: string): string[] => {
+  const fontsDirectory = path.join(rootDir, "public", "y-fonts");
+  if (!fs.existsSync(fontsDirectory)) {
+    return [];
+  }
+
+  return fs
+    .readdirSync(fontsDirectory, { withFileTypes: true })
+    .filter((entry) => {
+      return entry.isFile() && path.extname(entry.name) === ".css";
+    })
+    .map((entry) => {
+      return `/y-fonts/${entry.name}`;
+    })
+    .sort((leftHref, rightHref) => {
+      return leftHref.localeCompare(rightHref);
+    });
+};
+
+const injectLocalEditorStylesheetHrefs = (
+  templateSource: string,
+  stylesheetHrefs: string[]
+): string => {
+  if (!templateSource.includes(LOCAL_EDITOR_STYLESHEET_HREFS_PLACEHOLDER)) {
+    throw new Error(
+      "Failed to inject local editor stylesheet hrefs: missing stylesheet placeholder"
+    );
+  }
+
+  return templateSource.replace(
+    LOCAL_EDITOR_STYLESHEET_HREFS_PLACEHOLDER,
+    JSON.stringify(stylesheetHrefs)
+  );
 };

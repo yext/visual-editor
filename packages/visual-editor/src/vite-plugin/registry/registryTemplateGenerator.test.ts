@@ -300,6 +300,37 @@ describe.sequential("generateRegistryTemplateFiles", () => {
     expect(updatedEditTemplate).toContain('"demo-shop": demoShopConfig');
   });
 
+  it("dedupes preserved built-in registry keys when custom templates exist", () => {
+    const rootDir = createStarterFixture();
+    fs.writeFileSync(
+      path.join(rootDir, "src", "templates", "main.tsx"),
+      "export default function Main() { return null; }\n"
+    );
+    writeRegistryComponent(
+      rootDir,
+      "demo-shop",
+      "Hero.tsx",
+      "export const Hero = {};\n"
+    );
+
+    runGenerator(rootDir);
+
+    const updatedEditTemplate = fs.readFileSync(
+      path.join(rootDir, "src", "templates", "edit.tsx"),
+      "utf8"
+    );
+    expect(countOccurrences(updatedEditTemplate, '"main": mainConfig')).toBe(1);
+    expect(
+      countOccurrences(updatedEditTemplate, '"directory": directoryConfig')
+    ).toBe(1);
+    expect(
+      countOccurrences(updatedEditTemplate, '"locator": locatorConfig')
+    ).toBe(1);
+    expect(
+      countOccurrences(updatedEditTemplate, '"demo-shop": demoShopConfig')
+    ).toBe(1);
+  });
+
   it("refuses to overwrite a hand-authored template file", () => {
     const rootDir = createStarterFixture();
     writeRegistryComponent(
@@ -474,4 +505,8 @@ function readManifest(rootDir: string): { templates: unknown[] } {
   return JSON.parse(
     fs.readFileSync(path.join(rootDir, ".template-manifest.json"), "utf8")
   ) as { templates: unknown[] };
+}
+
+function countOccurrences(source: string, match: string): number {
+  return source.split(match).length - 1;
 }
