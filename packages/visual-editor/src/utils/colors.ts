@@ -418,6 +418,10 @@ export const getBackgroundColorClasses = (color?: ThemeColor): string => {
     .join(" ");
 };
 
+/**
+ * Resolves inline styles for bracketed custom colors in background contexts.
+ * Returns undefined for theme palette colors that should render with Tailwind classes.
+ */
 export const getBackgroundColorStyle = (
   color?: ThemeColor
 ): { backgroundColor?: string; color?: string } | undefined => {
@@ -451,6 +455,10 @@ export const getTextColorClass = (color?: ThemeColor): string | undefined => {
   return `text-${color.selectedColor}`;
 };
 
+/**
+ * Resolves inline styles for bracketed custom colors in text contexts.
+ * Returns undefined for theme palette colors that should render with Tailwind classes.
+ */
 export const getTextColorStyle = (
   color?: ThemeColor
 ): { color?: string } | undefined => {
