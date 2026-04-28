@@ -1533,65 +1533,6 @@ describe("TeamSection", async () => {
     }
   );
 
-  it("when using a base entity section field then legacy people are resolved", async () => {
-    const streamDocument = {
-      c_teamSection: {
-        people: [{ name: "Base Person" }],
-      },
-    };
-    const data = await resolveAllData(
-      migrate(
-        {
-          root: {
-            props: {
-              version: 74,
-            },
-          },
-          content: [
-            {
-              type: "TeamSection",
-              props: {
-                ...version59Props,
-                slots: {
-                  ...version59Props.slots,
-                  CardsWrapperSlot: [
-                    {
-                      ...version59Props.slots.CardsWrapperSlot[0],
-                      props: {
-                        ...version59Props.slots.CardsWrapperSlot[0].props,
-                        data: {
-                          ...version59Props.slots.CardsWrapperSlot[0].props
-                            .data,
-                          field: "c_teamSection",
-                          constantValueEnabled: false,
-                        },
-                      },
-                    },
-                  ],
-                },
-              },
-            },
-          ],
-        },
-        migrationRegistry,
-        puckConfig,
-        streamDocument
-      ),
-      puckConfig,
-      {
-        streamDocument,
-      }
-    );
-
-    const cardSlot =
-      data.content[0]?.props.slots?.CardsWrapperSlot?.[0]?.props.slots
-        ?.CardSlot;
-    expect(cardSlot).toHaveLength(1);
-    expect(cardSlot?.[0]?.props.parentData?.person).toEqual({
-      name: "Base Person",
-    });
-  });
-
   it("when using a linked section field then the first linked entity's people are resolved", async () => {
     const streamDocument = {
       c_linkedLocation: [

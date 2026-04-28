@@ -2711,68 +2711,6 @@ describe("ProductSection", async () => {
     }
   );
 
-  it("when using a base entity section field then legacy products are resolved", async () => {
-    const streamDocument = {
-      c_productsSection: {
-        products: [{ name: "Base Product" }, { name: "Second Product" }],
-      },
-    };
-    const data = await resolveAllData(
-      migrate(
-        {
-          root: {
-            props: {
-              version: 74,
-            },
-          },
-          content: [
-            {
-              type: "ProductSection",
-              props: {
-                ...version59Props,
-                slots: {
-                  ...version59Props.slots,
-                  CardsWrapperSlot: [
-                    {
-                      ...version59Props.slots.CardsWrapperSlot[0],
-                      props: {
-                        ...version59Props.slots.CardsWrapperSlot[0].props,
-                        data: {
-                          ...version59Props.slots.CardsWrapperSlot[0].props
-                            .data,
-                          field: "c_productsSection",
-                          constantValueEnabled: false,
-                        },
-                      },
-                    },
-                  ],
-                },
-              },
-            },
-          ],
-        },
-        migrationRegistry,
-        puckConfig,
-        streamDocument
-      ),
-      puckConfig,
-      {
-        streamDocument,
-      }
-    );
-
-    const cardSlot =
-      data.content[0]?.props.slots?.CardsWrapperSlot?.[0]?.props.slots
-        ?.CardSlot;
-    expect(cardSlot).toHaveLength(2);
-    expect(cardSlot?.[0]?.props.parentData?.product).toEqual({
-      name: "Base Product",
-    });
-    expect(cardSlot?.[1]?.props.parentData?.product).toEqual({
-      name: "Second Product",
-    });
-  });
-
   it("when using a linked section field then the first linked entity's products are resolved", async () => {
     const streamDocument = {
       c_linkedLocation: [

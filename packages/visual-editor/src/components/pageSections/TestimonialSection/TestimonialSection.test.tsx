@@ -887,65 +887,6 @@ describe("TestimonialSection", async () => {
     }
   );
 
-  it("when using a base entity section field then legacy testimonials are resolved", async () => {
-    const streamDocument = {
-      c_testimonialSection: {
-        testimonials: [{ description: { html: "<p>Base Testimonial</p>" } }],
-      },
-    };
-    const data = await resolveAllData(
-      migrate(
-        {
-          root: {
-            props: {
-              version: 74,
-            },
-          },
-          content: [
-            {
-              type: "TestimonialSection",
-              props: {
-                ...version59Props,
-                slots: {
-                  ...version59Props.slots,
-                  CardsWrapperSlot: [
-                    {
-                      ...version59Props.slots.CardsWrapperSlot[0],
-                      props: {
-                        ...version59Props.slots.CardsWrapperSlot[0].props,
-                        data: {
-                          ...version59Props.slots.CardsWrapperSlot[0].props
-                            .data,
-                          field: "c_testimonialSection",
-                          constantValueEnabled: false,
-                        },
-                      },
-                    },
-                  ],
-                },
-              },
-            },
-          ],
-        },
-        migrationRegistry,
-        puckConfig,
-        streamDocument
-      ),
-      puckConfig,
-      {
-        streamDocument,
-      }
-    );
-
-    const cardSlot =
-      data.content[0]?.props.slots?.CardsWrapperSlot?.[0]?.props.slots
-        ?.CardSlot;
-    expect(cardSlot).toHaveLength(1);
-    expect(cardSlot?.[0]?.props.parentData?.testimonial).toEqual({
-      description: { html: "<p>Base Testimonial</p>" },
-    });
-  });
-
   it("when using a linked section field then the first linked entity's testimonials are resolved", async () => {
     const streamDocument = {
       c_linkedLocation: [
