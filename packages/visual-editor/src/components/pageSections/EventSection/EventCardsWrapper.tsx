@@ -108,6 +108,7 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
       !data.props.data.constantValueEnabled &&
       data.props.data.field
     ) {
+      // ENTITY VALUES
       const resolvedEvents = resolveYextEntityField<Partial<EventSectionType>>(
         streamDocument,
         {
@@ -145,7 +146,10 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
       );
     }
 
+    // STATIC VALUES
     let updatedData = data;
+    // Rebuild the slot array from the saved ids, reusing existing cards when
+    // possible and de-duplicating ids to avoid collisions.
     const inUseIds = new Set<string>();
     const newSlots = data.props.data.constantValue.map(({ id }, i) => {
       const existingCard = id
@@ -154,6 +158,8 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
           ) as ComponentData<EventCardProps>)
         : undefined;
 
+      // Deep clone reused cards so id and parentData updates do not mutate the
+      // original slot entry in multiple places.
       let newCard = existingCard
         ? (JSON.parse(JSON.stringify(existingCard)) as typeof existingCard)
         : undefined;
@@ -185,6 +191,7 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
       return newCard;
     });
 
+    // Keep the rendered card slot and sidebar ids in sync.
     updatedData = setDeep(updatedData, "props.slots.CardSlot", newSlots);
     updatedData = setDeep(
       updatedData,

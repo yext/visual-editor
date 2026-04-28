@@ -235,10 +235,8 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
       // STATIC VALUES
       let updatedData = data;
 
-      // For each id in constantValue, check if there's already an existing card.
-      // If not, add a new default card.
-      // Also, de-duplicate ids to avoid conflicts.
-      // Finally, update the card slot and the constantValue object.
+      // Rebuild the slot array from the saved ids, reusing existing cards when
+      // possible and de-duplicating ids to avoid collisions.
       const inUseIds = new Set<string>();
       const newSlots = data.props.data.constantValue.map(({ id }, i) => {
         const existingCard = id
@@ -247,7 +245,8 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
             ) as ComponentData<FAQCardProps>)
           : undefined;
 
-        // Make a deep copy of existingCard to avoid mutating multiple cards
+        // Deep clone reused cards so id and parentData updates do not mutate
+        // the original slot entry in multiple places.
         let newCard = existingCard
           ? (JSON.parse(JSON.stringify(existingCard)) as typeof existingCard)
           : undefined;
@@ -276,9 +275,8 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
         return newCard;
       });
 
-      // update the  cards
+      // Keep the rendered card slot and sidebar ids in sync.
       updatedData = setDeep(updatedData, "props.slots.CardSlot", newSlots);
-      // update the constantValue for the sidebar
       updatedData = setDeep(
         updatedData,
         "props.data.constantValue",

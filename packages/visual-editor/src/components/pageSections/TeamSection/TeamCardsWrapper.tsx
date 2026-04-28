@@ -119,6 +119,7 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
       !data.props.data.constantValueEnabled &&
       data.props.data.field
     ) {
+      // ENTITY VALUES
       const resolvedTeam = resolveYextEntityField<Partial<TeamSectionType>>(
         streamDocument,
         {
@@ -155,6 +156,7 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
       );
     }
 
+    // STATIC VALUES
     let updatedData = data;
 
     if (!Array.isArray(data.props.data.constantValue)) {
@@ -162,6 +164,8 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
       return updatedData;
     }
 
+    // Rebuild the slot array from the saved ids, reusing existing cards when
+    // possible and de-duplicating ids to avoid collisions.
     const inUseIds = new Set<string>();
     const newSlots = data.props.data.constantValue.map(({ id }, i) => {
       const existingCard = id
@@ -172,6 +176,8 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
             | ComponentData<TeamCardProps>
             | undefined);
 
+      // Deep clone reused cards so id and parentData updates do not mutate the
+      // original slot entry in multiple places.
       let newCard = existingCard
         ? (JSON.parse(JSON.stringify(existingCard)) as typeof existingCard)
         : undefined;
@@ -202,6 +208,7 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
       return newCard;
     });
 
+    // Keep the rendered card slot and sidebar ids in sync.
     updatedData = setDeep(updatedData, "props.slots.CardSlot", newSlots);
     updatedData = setDeep(
       updatedData,
