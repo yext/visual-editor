@@ -227,7 +227,7 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
             setDeep(setDeep(card, "props.index", index), "props.parentData", {
               field: data.props.data.field,
               faq: faq,
-            } satisfies FAQCardProps["parentData"]) as ComponentData<FAQCardProps>,
+            }) as ComponentData<FAQCardProps>,
           items: resolvedFAQs,
         })
       );

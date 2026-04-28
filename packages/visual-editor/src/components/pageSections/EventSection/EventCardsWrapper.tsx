@@ -140,7 +140,7 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
             setDeep(setDeep(card, "props.index", index), "props.parentData", {
               field: data.props.data.field,
               event,
-            } satisfies EventCardProps["parentData"]) as ComponentData<EventCardProps>,
+            }) as ComponentData<EventCardProps>,
           items: resolvedEvents,
         })
       );

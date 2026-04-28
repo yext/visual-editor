@@ -150,7 +150,7 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
             setDeep(setDeep(card, "props.index", index), "props.parentData", {
               field: data.props.data.field,
               person,
-            } satisfies TeamCardProps["parentData"]) as ComponentData<TeamCardProps>,
+            }) as ComponentData<TeamCardProps>,
           items: resolvedTeam,
         })
       );

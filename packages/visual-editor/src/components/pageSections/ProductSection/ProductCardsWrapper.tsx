@@ -164,7 +164,7 @@ export const ProductCardsWrapper: YextComponentConfig<ProductCardsWrapperProps> 
               setDeep(setDeep(card, "props.index", index), "props.parentData", {
                 field: data.props.data.field,
                 product,
-              } satisfies ProductCardProps["parentData"]) as ComponentData<ProductCardProps>,
+              }) as ComponentData<ProductCardProps>,
             items: resolvedProducts,
           })
         );

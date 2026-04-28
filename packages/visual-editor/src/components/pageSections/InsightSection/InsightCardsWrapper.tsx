@@ -153,7 +153,7 @@ export const InsightCardsWrapper: YextComponentConfig<InsightCardsWrapperProps> 
               setDeep(setDeep(card, "props.index", index), "props.parentData", {
                 field: data.props.data.field,
                 insight,
-              } satisfies InsightCardProps["parentData"]) as ComponentData<InsightCardProps>,
+              }) as ComponentData<InsightCardProps>,
             items: resolvedInsights,
           })
         );

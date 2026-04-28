@@ -149,7 +149,7 @@ export const TestimonialCardsWrapper: YextComponentConfig<TestimonialCardsWrappe
               setDeep(setDeep(card, "props.index", index), "props.parentData", {
                 field: data.props.data.field,
                 testimonial,
-              } satisfies TestimonialCardProps["parentData"]) as ComponentData<TestimonialCardProps>,
+              }) as ComponentData<TestimonialCardProps>,
             items: resolvedTestimonials,
           })
         );
