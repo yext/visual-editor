@@ -110,6 +110,7 @@ export const VideoFieldOverride = ({
   return (
     <FieldLabel
       label={field?.label ? pt(field.label) : pt("fields.video", "Video")}
+      el="div"
     >
       <div className="ve-relative ve-group ve-mb-3">
         {/* FieldLabel grabs the onclick event for the first button in its children, 
