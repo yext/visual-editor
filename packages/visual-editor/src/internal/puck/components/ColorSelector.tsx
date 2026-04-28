@@ -6,11 +6,35 @@ import { pt } from "../../../utils/i18n/platform.ts";
 type RenderProps = Parameters<CustomField<any>["render"]>[0];
 
 export const ColorSelector = ({ field, value, onChange }: RenderProps) => {
+  return (
+    <FieldLabel
+      label={field.label || "Label is undefined"}
+      el="div"
+      className="ve-relative ve-mt-2.5"
+    >
+      <ColorPickerInput
+        ariaLabel={field.label || pt("colorPicker.open", "Open color picker")}
+        value={value}
+        onChange={onChange}
+      />
+    </FieldLabel>
+  );
+};
+
+export const ColorPickerInput = ({
+  ariaLabel,
+  value,
+  onChange,
+}: {
+  ariaLabel: string;
+  value?: Color;
+  onChange: (color: string) => void;
+}) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [draftColor, setDraftColor] = useState<Color>(value);
+  const [draftColor, setDraftColor] = useState<Color>(value ?? "#000000");
 
   useEffect(() => {
-    setDraftColor(value);
+    setDraftColor(value ?? "#000000");
   }, [value]);
 
   const handlePickerChange = (colorResult: ColorResult) => {
@@ -27,52 +51,44 @@ export const ColorSelector = ({ field, value, onChange }: RenderProps) => {
 
   const fieldStyles = colorPickerStyles(draftColor);
   return (
-    <>
-      <FieldLabel
-        label={field.label || "Label is undefined"}
-        el="div"
-        className="ve-relative ve-mt-2.5"
-      >
-        <button
-          type="button"
-          aria-label={
-            field.label || pt("colorPicker.open", "Open color picker")
+    <div className="ve-relative">
+      <button
+        type="button"
+        aria-label={ariaLabel}
+        style={fieldStyles.swatch}
+        onClick={() => {
+          if (isOpen) {
+            setIsOpen(false);
+            return;
           }
-          style={fieldStyles.swatch}
-          onClick={() => {
-            if (isOpen) {
-              setIsOpen(false);
-              return;
-            }
 
-            setIsOpen(true);
-          }}
+          setIsOpen(true);
+        }}
+      >
+        <div style={fieldStyles.color} />
+      </button>
+      {isOpen && (
+        <div
+          style={fieldStyles.popover}
+          onClick={(event) => event.stopPropagation()}
+          onPointerDown={(event) => event.stopPropagation()}
+          onPointerUp={(event) => event.stopPropagation()}
         >
-          <div style={fieldStyles.color} />
-        </button>
-        {isOpen && (
-          <div
-            style={fieldStyles.popover}
-            onClick={(event) => event.stopPropagation()}
-            onPointerDown={(event) => event.stopPropagation()}
-            onPointerUp={(event) => event.stopPropagation()}
-          >
-            <button
-              type="button"
-              aria-label={pt("colorPicker.close", "Close color picker")}
-              style={fieldStyles.cover}
-              onClick={() => setIsOpen(false)}
-            />
-            <SketchPicker
-              disableAlpha={true}
-              color={draftColor}
-              onChange={handlePickerChange}
-              onChangeComplete={handlePickerChangeComplete}
-            />
-          </div>
-        )}
-      </FieldLabel>
-    </>
+          <button
+            type="button"
+            aria-label={pt("colorPicker.close", "Close color picker")}
+            style={fieldStyles.cover}
+            onClick={() => setIsOpen(false)}
+          />
+          <SketchPicker
+            disableAlpha={true}
+            color={draftColor}
+            onChange={handlePickerChange}
+            onChangeComplete={handlePickerChangeComplete}
+          />
+        </div>
+      )}
+    </div>
   );
 };
 

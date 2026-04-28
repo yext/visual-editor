@@ -72,7 +72,9 @@ import {
 import { resolveLocatorResultUrl } from "../utils/urls/resolveLocatorResultUrl.ts";
 import {
   getBackgroundColorClasses,
+  getBackgroundColorStyle,
   getTextColorClass,
+  getTextColorStyle,
 } from "../utils/colors.ts";
 import { themeManagerCn } from "../utils/cn.ts";
 
@@ -910,6 +912,7 @@ export const LocatorResultCard = React.memo(
                               "components h-fit items-center w-fit underline gap-2 decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing flex font-bold",
                               getTextColorClass(resolvedAccentLinkColor)
                             )}
+                            style={getTextColorStyle(resolvedAccentLinkColor)}
                           >
                             {t("getDirections", "Get Directions")}
                             <FaAngleRight size={"12px"} />
@@ -1060,6 +1063,9 @@ const CardIcon: React.FC<{
       className={`h-10 w-10 flex justify-center rounded-full items-center ${getBackgroundColorClasses(
         backgroundColor ?? backgroundColors.background2.value
       )}`}
+      style={getBackgroundColorStyle(
+        backgroundColor ?? backgroundColors.background2.value
+      )}
     >
       {children}
     </div>

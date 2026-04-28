@@ -6,8 +6,15 @@ import {
   type ComboboxOption,
   type ComboboxOptionGroup,
 } from "../internal/types/combobox.ts";
-import { ThemeOptions } from "../utils/themeConfigOptions.ts";
-import { pt, type MsgString } from "../utils/i18n/platform.ts";
+import { ThemeOptions, type ThemeColor } from "../utils/themeConfigOptions.ts";
+import { msg, pt, type MsgString } from "../utils/i18n/platform.ts";
+import { ColorPickerInput } from "../internal/puck/components/ColorSelector.tsx";
+import {
+  getContrastingColor,
+  getThemeColorHexValue,
+  isCustomThemeColorToken,
+} from "../utils/colors.ts";
+import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 
 type ThemeOptionKey = keyof typeof ThemeOptions;
 
@@ -76,6 +83,8 @@ export type BasicSelectorField =
 
 type BasicSelectorFieldProps = FieldProps<BasicSelectorField>;
 
+const CUSTOM_COLOR_OPTION_VALUE = "__visual_editor_custom_color__";
+
 const isThemeOptionKey = (value: string): value is ThemeOptionKey =>
   value in ThemeOptions;
 
@@ -90,11 +99,38 @@ const isComboboxOptionGroupArray = (
 ): value is ComboboxOptionGroup[] =>
   Array.isArray(value) && value.every((item) => isComboboxOptionGroup(item));
 
+const isThemeColorSelectorKey = (value: unknown): boolean =>
+  value === "SITE_COLOR" || value === "BACKGROUND_COLOR";
+
+const isThemeColorValue = (value: unknown): value is ThemeColor =>
+  typeof value === "object" &&
+  value !== null &&
+  "selectedColor" in value &&
+  typeof (value as ThemeColor).selectedColor === "string";
+
+const isCustomThemeColorValue = (value: unknown): value is ThemeColor =>
+  isThemeColorValue(value) && isCustomThemeColorToken(value.selectedColor);
+
+const toCustomThemeColor = (hexColor: string): ThemeColor => {
+  const selectedColor = hexColor.toUpperCase();
+  const contrastingColor =
+    getContrastingColor(selectedColor, 12, 400) === "#FFFFFF"
+      ? "white"
+      : "black";
+
+  return {
+    selectedColor: `[${selectedColor}]`,
+    contrastingColor,
+    isDarkColor: contrastingColor === "white",
+  };
+};
+
 export const BasicSelectorFieldOverride = ({
   field,
   value,
   onChange,
 }: BasicSelectorFieldProps) => {
+  const templateProps = React.useContext(TemplatePropsContext);
   const {
     label,
     translateOptions = true,
@@ -147,9 +183,31 @@ export const BasicSelectorFieldOverride = ({
       ? resolvedOptionsSource
       : [{ options }]);
   const noOptionsMessage = providedNoOptionsMessage ?? undefined;
+  const isThemeColorSelector =
+    field.optionGroups === undefined && isThemeColorSelectorKey(field.options);
+  const customColorHex =
+    getThemeColorHexValue(
+      isThemeColorValue(value) ? value.selectedColor : undefined,
+      templateProps?.document
+    ) ?? "#000000";
+  const customColorOption: ComboboxOption = {
+    label: msg("fields.options.other", "Other"),
+    value: CUSTOM_COLOR_OPTION_VALUE,
+    colorStyle: { backgroundColor: customColorHex },
+  };
+  const optionGroupsWithCustomColor: ComboboxOptionGroup[] =
+    isThemeColorSelector
+      ? [
+          ...optionGroups,
+          {
+            title: msg("customColor", "Custom Color"),
+            options: [customColorOption],
+          },
+        ]
+      : optionGroups;
 
   const translatedOptionGroups = translateOptions
-    ? optionGroups.map((group) => ({
+    ? optionGroupsWithCustomColor.map((group) => ({
         title: group.title && pt(group.title),
         description: group.description && pt(group.description),
         options: group.options.map((option) => ({
@@ -157,7 +215,7 @@ export const BasicSelectorFieldOverride = ({
           label: pt(option.label),
         })),
       }))
-    : optionGroups;
+    : optionGroupsWithCustomColor;
 
   const serializedOptions = translatedOptionGroups.reduce(
     (allOptions, group) => allOptions.concat(group.options),
@@ -180,23 +238,54 @@ export const BasicSelectorFieldOverride = ({
     );
   }
 
+  const selectedOption =
+    isThemeColorSelector && isCustomThemeColorValue(value)
+      ? (serializedOptions.find(
+          (option) => option.value === CUSTOM_COLOR_OPTION_VALUE
+        ) ?? serializedOptions[0])
+      : (serializedOptions.find(
+          (option) => JSON.stringify(option.value) === JSON.stringify(value)
+        ) ?? serializedOptions[0]);
+
+  const handleChange = (nextValue: unknown) => {
+    if (isThemeColorSelector && nextValue === CUSTOM_COLOR_OPTION_VALUE) {
+      onChange(toCustomThemeColor(customColorHex));
+      return;
+    }
+
+    onChange(nextValue);
+  };
+
   const selector = (
     <Combobox
-      selectedOption={
-        serializedOptions.find(
-          (option) => JSON.stringify(option.value) === JSON.stringify(value)
-        ) ?? serializedOptions[0]
-      }
-      onChange={onChange}
+      selectedOption={selectedOption}
+      onChange={handleChange}
       optionGroups={translatedOptionGroups}
       disabled={noOptions}
       disableSearch={disableSearch}
     />
   );
+  const customColorPicker = isThemeColorSelector &&
+    isCustomThemeColorValue(value) && (
+      <div className="ve-mt-3">
+        <FieldLabel label={pt("fields.customColor", "Custom Color")} el="div">
+          <ColorPickerInput
+            ariaLabel={pt("colorPicker.open", "Open color picker")}
+            value={customColorHex}
+            onChange={(nextColor) => onChange(toCustomThemeColor(nextColor))}
+          />
+        </FieldLabel>
+      </div>
+    );
 
-  return translatedLabel ? (
-    <FieldLabel label={translatedLabel}>{selector}</FieldLabel>
-  ) : (
-    selector
+  return (
+    <>
+      {translatedLabel ? (
+        <FieldLabel label={translatedLabel}>{selector}</FieldLabel>
+      ) : (
+        selector
+      )}
+      {customColorPicker}
+    </>
   );
 };
