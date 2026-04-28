@@ -104,9 +104,6 @@ export const InsightCardsWrapper: YextComponentConfig<InsightCardsWrapperProps> 
     },
     resolveData: (data, params) => {
       const streamDocument = params.metadata.streamDocument;
-      if (!streamDocument) {
-        return data;
-      }
       const sharedCardProps =
         data.props.slots.CardSlot.length === 0
           ? undefined
@@ -118,7 +115,11 @@ export const InsightCardsWrapper: YextComponentConfig<InsightCardsWrapperProps> 
               ),
             };
 
-      if (!data.props.data.constantValueEnabled && data.props.data.field) {
+      if (
+        streamDocument &&
+        !data.props.data.constantValueEnabled &&
+        data.props.data.field
+      ) {
         const resolvedInsights = resolveYextEntityField<
           Partial<InsightSectionType>
         >(

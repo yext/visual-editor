@@ -97,7 +97,7 @@ export const TestimonialCardsWrapper: YextComponentConfig<TestimonialCardsWrappe
     },
     resolveData: (data, params) => {
       const streamDocument = params.metadata.streamDocument;
-      if (!streamDocument || !data?.props?.data) {
+      if (!data?.props?.data) {
         return data;
       }
       const sharedCardProps =
@@ -111,7 +111,11 @@ export const TestimonialCardsWrapper: YextComponentConfig<TestimonialCardsWrappe
               ),
             };
 
-      if (!data.props.data.constantValueEnabled && data.props.data.field) {
+      if (
+        streamDocument &&
+        !data.props.data.constantValueEnabled &&
+        data.props.data.field
+      ) {
         const resolvedTestimonials = resolveYextEntityField<
           Partial<TestimonialSectionType>
         >(
