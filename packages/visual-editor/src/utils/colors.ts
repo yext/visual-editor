@@ -420,7 +420,8 @@ export const getBackgroundColorClasses = (color?: ThemeColor): string => {
 
 /**
  * Resolves inline styles for bracketed custom colors in background contexts.
- * Returns undefined for theme palette colors that should render with Tailwind classes.
+ * @param color a ThemeColor object
+ * @returns inline background/text color styles, e.g. `{ backgroundColor: "#FF6D66" }`
  */
 export const getBackgroundColorStyle = (
   color?: ThemeColor
@@ -457,7 +458,8 @@ export const getTextColorClass = (color?: ThemeColor): string | undefined => {
 
 /**
  * Resolves inline styles for bracketed custom colors in text contexts.
- * Returns undefined for theme palette colors that should render with Tailwind classes.
+ * @param color a ThemeColor object
+ * @returns inline text color styles, e.g. `{ color: "#FF6D66" }`
  */
 export const getTextColorStyle = (
   color?: ThemeColor
