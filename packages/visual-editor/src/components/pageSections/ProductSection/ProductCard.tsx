@@ -26,7 +26,11 @@ import { TextProps } from "../../contentBlocks/Text.tsx";
 import { ProductSectionVariant } from "./ProductSection.tsx";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
-import { formatCurrency } from "../../../utils/productPrice.ts";
+import {
+  formatCurrency,
+  isCompleteProductPrice,
+  isInvalidProductPrice,
+} from "../../../utils/productPrice.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 
 /**
@@ -60,38 +64,6 @@ const defaultProductData = {
 
 const slotDefaultData = {
   priceText: { defaultValue: "$123.00" },
-};
-
-/**
- * Returns true when a price includes a value and currency code
- * and can be correctly formatted.
- */
-const isCompleteProductPrice = (
-  value: unknown,
-  locale: string
-): value is NonNullable<ProductStruct["price"]> => {
-  if (typeof value !== "object" || value === null) {
-    return false;
-  }
-
-  const price = value as Partial<NonNullable<ProductStruct["price"]>>;
-  return (
-    ("value" in price || "currencyCode" in price) &&
-    formatCurrency(price.value, price.currencyCode, locale) !== undefined
-  );
-};
-
-/**
- * Returns true when a value looks like a product price object but cannot be
- * formatted into a display string.
- */
-const isInvalidProductPrice = (value: unknown, locale: string) => {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    ("value" in value || "currencyCode" in value) &&
-    !isCompleteProductPrice(value, locale)
-  );
 };
 
 export const defaultProductCardSlotData = (
