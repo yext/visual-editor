@@ -1,10 +1,8 @@
 import React from "react";
 import { FieldLabel, Field, CustomField } from "@puckeditor/core";
 import { type BasicSelectorField } from "../fields/BasicSelectorField.tsx";
-import {
-  YextPuckFieldOverrides,
-  type YextPuckFields,
-} from "../fields/fields.ts";
+import { type YextFieldDefinition } from "./YextField.tsx";
+import { YextPuckFieldOverrides } from "../fields/fields.ts";
 import { YextAutoField } from "../fields/YextAutoField.tsx";
 import { DATE_TIME_CONSTANT_CONFIG } from "../fields/DateTimeSelectorField.tsx";
 import {
@@ -60,9 +58,7 @@ import { StreamDocument } from "../utils/types/StreamDocument.ts";
 const devLogger = new DevLogger();
 
 type RenderProps = Parameters<CustomField<any>["render"]>[0];
-type ConstantFieldConfig<ValueType = any> =
-  | Field<ValueType>
-  | YextPuckFields[keyof YextPuckFields];
+type ConstantFieldConfig<ValueType = any> = YextFieldDefinition<ValueType>;
 
 const isYextPuckFieldType = (
   type: string

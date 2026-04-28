@@ -1,9 +1,9 @@
-import { Field } from "@puckeditor/core";
 import { pt } from "../../../utils/i18n/platform.ts";
 import { IMAGE_CONSTANT_CONFIG } from "./Image.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
+import { type YextArrayField } from "../../../editor/YextField.tsx";
 
-export const IMAGE_LIST_CONSTANT_CONFIG = (): Field<any> => {
+export const IMAGE_LIST_CONSTANT_CONFIG = (): YextArrayField<any> => {
   return {
     label: "",
     type: "array",
