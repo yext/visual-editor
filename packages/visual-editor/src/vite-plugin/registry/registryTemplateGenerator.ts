@@ -1098,10 +1098,7 @@ ${registryEntries}
     }
 
     const propertyName = propertyAssignment.getName();
-    if (
-      PRESERVED_EDIT_REGISTRY_KEYS.has(propertyName) &&
-      !preservedRegistryInitializers.has(propertyName)
-    ) {
+    if (PRESERVED_EDIT_REGISTRY_KEYS.has(propertyName)) {
       const propertyInitializer = propertyAssignment.getInitializer();
       if (propertyInitializer) {
         preservedRegistryInitializers.set(
