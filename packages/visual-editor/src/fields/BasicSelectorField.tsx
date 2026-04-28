@@ -215,7 +215,7 @@ export const BasicSelectorFieldOverride = ({
       ? [
           ...optionGroups,
           {
-            title: msg("customColor", "Custom Color"),
+            title: msg("fields.customColor", "Custom Color"),
             options: [customColorOption],
           },
         ]
