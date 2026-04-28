@@ -179,9 +179,6 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
   },
   resolveData: (data, params) => {
     const streamDocument = params.metadata.streamDocument;
-    if (!streamDocument) {
-      return data;
-    }
     const sharedCardProps =
       data.props.slots.CardSlot.length === 0
         ? undefined
@@ -193,7 +190,11 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
             answerColor: data.props.slots.CardSlot[0].props.styles.answerColor,
           };
 
-    if (!data.props.data.constantValueEnabled && data.props.data.field) {
+    if (
+      streamDocument &&
+      !data.props.data.constantValueEnabled &&
+      data.props.data.field
+    ) {
       // ENTITY VALUES
       const resolvedFAQs = resolveYextEntityField<Partial<FAQSectionType>>(
         streamDocument,

@@ -115,9 +115,6 @@ export const ProductCardsWrapper: YextComponentConfig<ProductCardsWrapperProps> 
     },
     resolveData: (data, params) => {
       const streamDocument = params.metadata.streamDocument;
-      if (!streamDocument) {
-        return data;
-      }
       const sharedCardProps =
         data.props.slots.CardSlot.length === 0
           ? undefined
@@ -129,7 +126,11 @@ export const ProductCardsWrapper: YextComponentConfig<ProductCardsWrapperProps> 
               ),
             };
 
-      if (!data.props.data.constantValueEnabled && data.props.data.field) {
+      if (
+        streamDocument &&
+        !data.props.data.constantValueEnabled &&
+        data.props.data.field
+      ) {
         const resolvedProducts = resolveYextEntityField<
           Partial<ProductSectionType>
         >(
