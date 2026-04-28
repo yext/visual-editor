@@ -83,6 +83,8 @@ export type BasicSelectorField =
 
 type BasicSelectorFieldProps = FieldProps<BasicSelectorField>;
 
+// The combobox returns only option.value, so use a marker value to detect
+// the Other option before converting it to a ThemeColor.
 const CUSTOM_COLOR_OPTION_VALUE = "__visual_editor_custom_color__";
 
 const isThemeOptionKey = (value: string): value is ThemeOptionKey => {
