@@ -2,9 +2,8 @@ import * as React from "react";
 import { CircleSlash2 } from "lucide-react";
 import { useTemplateMetadata } from "../../internal/hooks/useMessageReceivers.ts";
 import { pt } from "../../utils/i18n/platform.ts";
-import { ThemeColor } from "../../utils/themeConfigOptions.ts";
-import { PageSection } from "../atoms/pageSection.tsx";
 import { Body } from "../atoms/body.tsx";
+import { EmptyStateMarker } from "./emptyStateMarker.tsx";
 import { EMPTY_STATE_MARKER_ATTRIBUTE } from "./emptyStateMarker.tsx";
 
 /**
@@ -69,14 +68,10 @@ export const EntityFieldSectionEmptyStateBox = ({
   );
 };
 
-export const EntityFieldSectionEmptyState = ({
-  backgroundColor,
-}: {
-  backgroundColor?: ThemeColor;
-}) => {
-  return (
-    <PageSection background={backgroundColor}>
-      <EntityFieldSectionEmptyStateBox />
-    </PageSection>
+export const renderMappedEntityFieldEmptyState = (isEditing: boolean) => {
+  return isEditing ? (
+    <EntityFieldSectionEmptyStateBox showEmptyStateMarker />
+  ) : (
+    <EmptyStateMarker />
   );
 };

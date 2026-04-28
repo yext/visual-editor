@@ -16,13 +16,12 @@ import {
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
 import { ProductSectionVariant } from "./ProductSection.tsx";
-import { EntityFieldSectionEmptyStateBox } from "../EntityFieldSectionEmptyState.tsx";
+import { renderMappedEntityFieldEmptyState } from "../EntityFieldSectionEmptyState.tsx";
 import { YextComponentConfig } from "../../../fields/fields.ts";
 import {
   MappedEntityFieldConditionalRender,
   withMappedEntityFieldConditionalRender,
 } from "../entityFieldSectionUtils.ts";
-import { EmptyStateMarker } from "../emptyStateMarker.tsx";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 
 export type ProductCardsWrapperProps = CardWrapperType<ProductSectionType> & {
@@ -236,11 +235,7 @@ export const ProductCardsWrapper: YextComponentConfig<ProductCardsWrapperProps> 
     },
     render: (props) => {
       if (props.conditionalRender?.isMappedContentEmpty) {
-        return props.puck.isEditing ? (
-          <EntityFieldSectionEmptyStateBox showEmptyStateMarker />
-        ) : (
-          <EmptyStateMarker />
-        );
+        return renderMappedEntityFieldEmptyState(props.puck.isEditing);
       }
 
       return <ProductCardsWrapperComponent {...props} />;
