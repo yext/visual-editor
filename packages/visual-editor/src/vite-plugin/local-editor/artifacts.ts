@@ -46,7 +46,7 @@ export const createLocalEditorArtifactsManager = ({
     );
     let nextTemplateSource = injectLocalEditorStylesheetHrefs(
       localEditorTemplateSource,
-      readLocalEditorStylesheetHrefs(rootDir)
+      readLocalEditorFontStylesheetHrefs(rootDir)
     );
     nextTemplateSource = buildEditorTemplateSource({
       rootDir,
@@ -206,7 +206,7 @@ export const createLocalEditorArtifactsManager = ({
   };
 };
 
-const readLocalEditorStylesheetHrefs = (rootDir: string): string[] => {
+const readLocalEditorFontStylesheetHrefs = (rootDir: string): string[] => {
   const fontsDirectory = path.join(rootDir, "public", "y-fonts");
   if (!fs.existsSync(fontsDirectory)) {
     return [];

@@ -93,6 +93,7 @@ type InsertNamedImportOptions = {
 
 const VALID_EXTENSIONS = new Set([".tsx", ".ts", ".jsx", ".js"]);
 const PRESERVED_EDIT_REGISTRY_KEYS = new Set(["directory", "locator"]);
+const PRIORITIZED_EDIT_TEMPLATE_NAMES = ["main", "directory", "locator"];
 const PROTECTED_TEMPLATE_FILE_NAMES = new Set([
   "edit",
   "directory",
@@ -1135,11 +1136,11 @@ function getOrderedEditRegistryTemplateNames(
 ): string[] {
   const uniqueTemplateNames = [...new Set(templateNames)];
   return [
-    ...["main", "directory", "locator"].filter((templateName) => {
+    ...PRIORITIZED_EDIT_TEMPLATE_NAMES.filter((templateName) => {
       return uniqueTemplateNames.includes(templateName);
     }),
     ...uniqueTemplateNames.filter((templateName) => {
-      return !["main", "directory", "locator"].includes(templateName);
+      return !PRIORITIZED_EDIT_TEMPLATE_NAMES.includes(templateName);
     }),
   ];
 }
