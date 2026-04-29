@@ -29,6 +29,7 @@ import {
   TranslatableStringField,
   TranslatableStringFieldOverride,
 } from "./TranslatableStringField.tsx";
+import { VideoField, VideoFieldOverride } from "./VideoField.tsx";
 
 export type YextPuckFields = {
   basicSelector: BasicSelectorField;
@@ -38,6 +39,7 @@ export type YextPuckFields = {
   fontSizeSelector: FontSizeSelectorField;
   optionalNumber: OptionalNumberField;
   translatableString: TranslatableStringField;
+  video: VideoField;
 };
 
 export type YextComponentConfig<
@@ -78,4 +80,5 @@ export const YextPuckFieldOverrides = {
   fontSizeSelector: FontSizeSelectorFieldOverride,
   optionalNumber: OptionalNumberFieldOverride,
   translatableString: TranslatableStringFieldOverride,
+  video: VideoFieldOverride,
 };
