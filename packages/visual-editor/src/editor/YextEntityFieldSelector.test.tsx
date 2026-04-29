@@ -501,6 +501,80 @@ describe("YextEntityFieldSelector", () => {
     expect(screen.queryByText("Description")).toBeNull();
   });
 
+  it("stores linked descendant selections as absolute paths while showing relative options", () => {
+    const onChange = vi.fn();
+
+    renderEntityFieldInput({
+      onChange,
+      entityFields: {
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_linkedLocation",
+            displayName: "LinkedLocation",
+            definition: {
+              name: "c_linkedLocation",
+              typeName: "type.list",
+              isList: true,
+              type: {},
+            },
+            children: {
+              fields: [
+                {
+                  name: "name",
+                  displayName: "Name",
+                  definition: {
+                    name: "name",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+      filter: {
+        types: ["type.string"],
+        descendantsOf: "c_linkedLocation",
+      },
+      linkedEntitySchemas: {
+        c_linkedLocation: {
+          displayName: "LinkedLocation",
+          fields: [
+            {
+              name: "name",
+              displayName: "Name",
+              definition: {
+                name: "name",
+                typeName: "type.string",
+                type: {},
+              },
+            },
+          ],
+        },
+      },
+      value: {
+        field: "c_linkedLocation.name",
+      },
+    });
+
+    expect(screen.getByRole("combobox").textContent).toContain("Name");
+    expect(screen.getByRole("combobox").textContent).not.toContain(
+      "LinkedLocation"
+    );
+
+    fireEvent.click(screen.getByRole("combobox"));
+    fireEvent.click(screen.getAllByText("Name")[1]!);
+
+    expect(onChange).toHaveBeenCalledWith(
+      {
+        field: "c_linkedLocation.name",
+      },
+      undefined
+    );
+  });
+
   it("falls back to the default entity field option when no matching entity fields exist", () => {
     renderEntityFieldInput({
       entityFields: {
@@ -642,5 +716,38 @@ describe("YextEntityFieldSelector", () => {
     expect(warningToast).toHaveBeenCalledWith(
       "Multiple linked entities were found for c_linkedLocation.name. Using the first linked entity."
     );
+  });
+
+  it("does not warn for linked descendant mapping selectors", () => {
+    renderEntityFieldInput({
+      filter: {
+        types: ["type.string"],
+        descendantsOf: "c_linkedLocation",
+      },
+      value: {
+        field: "c_linkedLocation.name",
+      },
+      document: {
+        c_linkedLocation: [{ name: "First" }, { name: "Second" }],
+      },
+      linkedEntitySchemas: {
+        c_linkedLocation: {
+          displayName: "LinkedLocation",
+          fields: [
+            {
+              name: "name",
+              displayName: "Name",
+              definition: {
+                name: "name",
+                typeName: "type.string",
+                type: {},
+              },
+            },
+          ],
+        },
+      },
+    });
+
+    expect(warningToast).not.toHaveBeenCalled();
   });
 });

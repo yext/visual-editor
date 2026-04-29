@@ -52,7 +52,10 @@ import {
 } from "./yextEntityFieldUtils.ts";
 import { useDocument } from "../hooks/useDocument.tsx";
 import { isLinkedEntityFieldPath } from "../utils/linkedEntityFieldUtils.ts";
-import { type LinkedEntitySourceFieldFilter } from "../utils/cardSlots/linkedEntityListWrapper.ts";
+import {
+  isTopLevelLinkedEntitySourceField,
+  type LinkedEntitySourceFieldFilter,
+} from "../utils/cardSlots/linkedEntityListWrapper.ts";
 import { warnOnMultiValueLinkedEntityTraversal } from "../utils/linkedEntityWarningUtils.ts";
 
 const devLogger = new DevLogger();
@@ -416,6 +419,14 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   const linkedEntitySchemas = useLinkedEntitySchemas();
   const templateMetadata = useTemplateMetadata();
   const streamDocument = useDocument();
+  const linkedEntityDescendantRoot =
+    filter.descendantsOf &&
+    isTopLevelLinkedEntitySourceField(
+      filter.descendantsOf,
+      linkedEntitySchemas ?? undefined
+    )
+      ? filter.descendantsOf
+      : undefined;
   const entityFieldSelector = React.useMemo<BasicSelectorField>(() => {
     const filteredEntityFields = getFieldsForSelector(
       entityFields,
@@ -424,7 +435,11 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     );
     const entityFieldOptions = filteredEntityFields.map((field) => ({
       label: field.displayName ?? field.name,
-      value: field.name,
+      value:
+        linkedEntityDescendantRoot &&
+        field.name.startsWith(`${linkedEntityDescendantRoot}.`)
+          ? field.name.slice(linkedEntityDescendantRoot.length + 1)
+          : field.name,
     }));
 
     const options = [
@@ -448,12 +463,14 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     entityFields,
     filter,
     label,
+    linkedEntityDescendantRoot,
     templateMetadata.entityTypeDisplayName,
     linkedEntitySchemas,
   ]);
 
   React.useEffect(() => {
     if (
+      linkedEntityDescendantRoot ||
       filter.includeListsOnly ||
       !value?.field ||
       !isLinkedEntityFieldPath(value.field, linkedEntitySchemas ?? undefined)
@@ -464,6 +481,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     warnOnMultiValueLinkedEntityTraversal(streamDocument, value.field);
   }, [
     filter.includeListsOnly,
+    linkedEntityDescendantRoot,
     linkedEntitySchemas,
     streamDocument,
     value?.field,
@@ -477,12 +495,24 @@ export const EntityFieldInput = <T extends Record<string, any>>({
           onChange(
             {
               ...value,
-              field: selectedEntityField,
+              field:
+                linkedEntityDescendantRoot &&
+                selectedEntityField &&
+                !selectedEntityField.startsWith(
+                  `${linkedEntityDescendantRoot}.`
+                )
+                  ? `${linkedEntityDescendantRoot}.${selectedEntityField}`
+                  : selectedEntityField,
             },
             uiState
           );
         }}
-        value={value?.field}
+        value={
+          linkedEntityDescendantRoot &&
+          value?.field?.startsWith(`${linkedEntityDescendantRoot}.`)
+            ? value.field.slice(linkedEntityDescendantRoot.length + 1)
+            : value?.field
+        }
       />
     </div>
   );
