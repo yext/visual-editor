@@ -6,15 +6,10 @@ import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { EntityField } from "../../../editor/EntityField.tsx";
 import { Image, imgSizesHelper } from "../../atoms/image.tsx";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
-import {
-  AssetImageType,
-  isLocalizedAssetImage,
-  resolveLocalizedAssetImage,
-  TranslatableAssetImage,
-} from "../../../types/images.ts";
-import { ComplexImageType, ImageType } from "@yext/pages-components";
+import { AssetImageType } from "../../../types/images.ts";
 import { updateFields } from "../../pageSections/HeroSection.tsx";
 import {
+  getImageUrl,
   imageDefaultProps,
   ImageWrapperFields,
   ImageWrapperProps,
@@ -31,30 +26,11 @@ const HeroImageComponent: PuckComponent<HeroImageProps> = (props) => {
   const { data, styles, className, puck, variant } = props;
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
-  const resolvedImage = resolveComponentData(
-    data.image,
-    i18n.language,
-    streamDocument
+  const resolvedImage = React.useMemo(
+    () => resolveComponentData(data.image, i18n.language, streamDocument),
+    [data.image, i18n.language, streamDocument]
   );
-
-  const getImageUrl = (
-    image: ImageType | ComplexImageType | TranslatableAssetImage | undefined
-  ): string | undefined => {
-    if (!image) {
-      return undefined;
-    }
-
-    if (isLocalizedAssetImage(image)) {
-      return resolveLocalizedAssetImage(image, i18n.language)?.url;
-    }
-
-    if ("image" in image) {
-      return image.image?.url;
-    }
-    return (image as ImageType | AssetImageType).url;
-  };
-
-  const imageUrl = getImageUrl(resolvedImage);
+  const imageUrl = getImageUrl(resolvedImage, i18n.language);
   const isEmpty =
     !resolvedImage ||
     !imageUrl ||
@@ -73,6 +49,7 @@ const HeroImageComponent: PuckComponent<HeroImageProps> = (props) => {
           className || "max-w-full rounded-image-borderRadius w-full h-full"
         }
         fullHeight={true}
+        dragRef={puck.dragRef ?? undefined}
         hasParentData={false}
       />
     );
@@ -84,6 +61,7 @@ const HeroImageComponent: PuckComponent<HeroImageProps> = (props) => {
       fieldId={data.image.field}
       constantValueEnabled={data.image.constantValueEnabled}
       fullHeight={true}
+      ref={puck.dragRef}
     >
       <Image
         image={resolvedImage}
