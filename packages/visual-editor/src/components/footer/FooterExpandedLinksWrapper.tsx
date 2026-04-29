@@ -29,16 +29,19 @@ const footerExpandedLinksWrapperFields = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      sections: YextField(
+      sections: YextField<FooterExpandedLinksWrapperProps["data"]["sections"]>(
         msg("fields.expandedFooterLinks", "Expanded Footer Links"),
         {
           type: "array",
           arrayFields: {
-            label: YextField(msg("fields.sectionLabel", "Section Label"), {
+            label: {
               type: "translatableString",
+              label: msg("fields.sectionLabel", "Section Label"),
               filter: { types: ["type.string"] },
-            }),
-            links: YextField(msg("fields.links", "Links"), {
+            },
+            links: YextField<
+              FooterExpandedLinksWrapperProps["data"]["sections"][number]["links"]
+            >(msg("fields.links", "Links"), {
               type: "array",
               arrayFields: {
                 linkType: {
@@ -56,10 +59,11 @@ const footerExpandedLinksWrapperFields = {
                     },
                   ],
                 },
-                label: YextField(msg("fields.linkLabel", "Link Label"), {
+                label: {
                   type: "translatableString",
+                  label: msg("fields.linkLabel", "Link Label"),
                   filter: { types: ["type.string"] },
-                }),
+                },
                 link: {
                   label: msg("fields.link", "Link"),
                   type: "text",

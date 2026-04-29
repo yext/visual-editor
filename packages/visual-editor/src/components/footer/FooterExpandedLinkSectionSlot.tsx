@@ -118,10 +118,11 @@ const footerExpandedLinkSectionSlotFields: YextFields<FooterExpandedLinkSectionS
     data: YextField(msg("fields.data", "Data"), {
       type: "object",
       objectFields: {
-        label: YextField(msg("fields.label", "Label"), {
+        label: {
           type: "translatableString",
+          label: msg("fields.label", "Label"),
           filter: { types: ["type.string"] },
-        }),
+        },
         links: YextField(msg("fields.links", "Links"), {
           type: "array",
           arrayFields: {
@@ -134,10 +135,11 @@ const footerExpandedLinkSectionSlotFields: YextFields<FooterExpandedLinkSectionS
                 { label: msg("fields.options.email", "Email"), value: "EMAIL" },
               ],
             },
-            label: YextField(msg("fields.label", "Label"), {
+            label: {
               type: "translatableString",
+              label: msg("fields.label", "Label"),
               filter: { types: ["type.string"] },
-            }),
+            },
             link: {
               label: msg("fields.link", "Link"),
               type: "text",
@@ -163,9 +165,7 @@ const footerExpandedLinkSectionSlotFields: YextFields<FooterExpandedLinkSectionS
           getItemSummary: (item: any, index?: number) => {
             const locale = i18nComponentsInstance.language || "en";
             const label =
-              typeof item.label === "string"
-                ? item.label
-                : item.label?.[locale];
+              typeof item.label === "string" ? item.label : item.label?.[locale];
             return label || pt("link", "Link") + " " + ((index ?? 0) + 1);
           },
         }),

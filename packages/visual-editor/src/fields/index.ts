@@ -25,3 +25,8 @@ export {
   OptionalNumberFieldOverride,
   type OptionalNumberField,
 } from "./OptionalNumberField.tsx";
+
+export {
+  TranslatableStringFieldOverride,
+  type TranslatableStringField,
+} from "./TranslatableStringField.tsx";

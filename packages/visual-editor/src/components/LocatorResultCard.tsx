@@ -44,7 +44,6 @@ import {
   HoursTableProps,
   HoursTableStyleFields,
 } from "./contentBlocks/HoursTable.tsx";
-import { TranslatableStringField } from "../editor/TranslatableStringField.tsx";
 import { getImageUrl } from "./contentBlocks/image/Image.tsx";
 import {
   Accordion,
@@ -388,11 +387,12 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
               />
             ),
           },
-          constantValue: TranslatableStringField<
-            TranslatableString | undefined
-          >(undefined, undefined, false, true, () =>
-            getDisplayFieldOptions("type.string")
-          ),
+          constantValue: {
+            type: "translatableString",
+            showApplyAllOption: false,
+            showFieldSelector: true,
+            getOptions: () => getDisplayFieldOptions("type.string"),
+          },
           field: DisplayFieldSelector("type.string"),
           headingLevel: {
             type: "basicSelector",
@@ -410,85 +410,89 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
         label: msg("fields.secondaryHeading", "Secondary Heading"),
         type: "object",
         objectFields: {
-          constantValueEnabled: {
-            type: "custom",
-            render: ({
-              value,
-              onChange,
-            }: YextCustomFieldRenderProps<boolean | undefined>) => (
-              <ConstantValueModeToggler
-                fieldTypeFilter={["type.string"]}
-                constantValueEnabled={value ?? false}
-                toggleConstantValueEnabled={(constantValueEnabled) =>
-                  onChange(constantValueEnabled)
-                }
-                label={pt(msg("fields.secondaryHeading", "Secondary Heading"))}
-                showLocale={true}
-              />
-            ),
+            constantValueEnabled: {
+              type: "custom",
+              render: ({
+                value,
+                onChange,
+              }: YextCustomFieldRenderProps<boolean | undefined>) => (
+                <ConstantValueModeToggler
+                  fieldTypeFilter={["type.string"]}
+                  constantValueEnabled={value ?? false}
+                  toggleConstantValueEnabled={(constantValueEnabled) =>
+                    onChange(constantValueEnabled)
+                  }
+                  label={pt(
+                    msg("fields.secondaryHeading", "Secondary Heading")
+                  )}
+                  showLocale={true}
+                />
+              ),
+            },
+            constantValue: {
+              type: "translatableString",
+              showApplyAllOption: false,
+              showFieldSelector: true,
+              getOptions: () => getDisplayFieldOptions("type.string"),
+            },
+            field: DisplayFieldSelector("type.string"),
+            variant: {
+              label: msg("fields.variant", "Variant"),
+              type: "radio",
+              options: ThemeOptions.BODY_VARIANT,
+            },
+            liveVisibility: {
+              label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+              type: "radio",
+              options: [
+                { label: msg("fields.options.show", "Show"), value: true },
+                { label: msg("fields.options.hide", "Hide"), value: false },
+              ],
+            },
           },
-          constantValue: TranslatableStringField<
-            TranslatableString | undefined
-          >(undefined, undefined, false, true, () =>
-            getDisplayFieldOptions("type.string")
-          ),
-          field: DisplayFieldSelector("type.string"),
-          variant: {
-            label: msg("fields.variant", "Variant"),
-            type: "radio",
-            options: ThemeOptions.BODY_VARIANT,
-          },
-          liveVisibility: {
-            label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
-            type: "radio",
-            options: [
-              { label: msg("fields.options.show", "Show"), value: true },
-              { label: msg("fields.options.hide", "Hide"), value: false },
-            ],
-          },
-        },
       },
       tertiaryHeading: {
         label: msg("fields.tertiaryHeading", "Tertiary Heading"),
         type: "object",
         objectFields: {
-          constantValueEnabled: {
-            type: "custom",
-            render: ({
-              value,
-              onChange,
-            }: YextCustomFieldRenderProps<boolean | undefined>) => (
-              <ConstantValueModeToggler
-                fieldTypeFilter={["type.string"]}
-                constantValueEnabled={value ?? false}
-                toggleConstantValueEnabled={(constantValueEnabled) =>
-                  onChange(constantValueEnabled)
-                }
-                label={pt(msg("fields.tertiaryHeading", "Tertiary Heading"))}
-                showLocale={true}
-              />
-            ),
+            constantValueEnabled: {
+              type: "custom",
+              render: ({
+                value,
+                onChange,
+              }: YextCustomFieldRenderProps<boolean | undefined>) => (
+                <ConstantValueModeToggler
+                  fieldTypeFilter={["type.string"]}
+                  constantValueEnabled={value ?? false}
+                  toggleConstantValueEnabled={(constantValueEnabled) =>
+                    onChange(constantValueEnabled)
+                  }
+                  label={pt(msg("fields.tertiaryHeading", "Tertiary Heading"))}
+                  showLocale={true}
+                />
+              ),
+            },
+            constantValue: {
+              type: "translatableString",
+              showApplyAllOption: false,
+              showFieldSelector: true,
+              getOptions: () => getDisplayFieldOptions("type.string"),
+            },
+            field: DisplayFieldSelector("type.string"),
+            variant: {
+              label: msg("fields.variant", "Variant"),
+              type: "radio",
+              options: ThemeOptions.BODY_VARIANT,
+            },
+            liveVisibility: {
+              label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+              type: "radio",
+              options: [
+                { label: msg("fields.options.show", "Show"), value: true },
+                { label: msg("fields.options.hide", "Hide"), value: false },
+              ],
+            },
           },
-          constantValue: TranslatableStringField<
-            TranslatableString | undefined
-          >(undefined, undefined, false, true, () =>
-            getDisplayFieldOptions("type.string")
-          ),
-          field: DisplayFieldSelector("type.string"),
-          variant: {
-            label: msg("fields.variant", "Variant"),
-            type: "radio",
-            options: ThemeOptions.BODY_VARIANT,
-          },
-          liveVisibility: {
-            label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
-            type: "radio",
-            options: [
-              { label: msg("fields.options.show", "Show"), value: true },
-              { label: msg("fields.options.hide", "Hide"), value: false },
-            ],
-          },
-        },
       },
       icons: {
         label: msg("fields.icons", "Icons"),
@@ -637,83 +641,83 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
         label: msg("fields.primaryCTA", "Primary CTA"),
         type: "object",
         objectFields: {
-          label: TranslatableStringField<TranslatableString>(
-            msg("fields.label", "Label"),
-            undefined,
-            false,
-            true,
-            () => getDisplayFieldOptions("type.string")
-          ),
-          variant: {
-            label: msg("fields.ctaVariant", "CTA Variant"),
-            type: "radio",
-            options: ThemeOptions.CTA_VARIANT,
-          },
-          liveVisibility: {
-            label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
-            type: "radio",
-            options: [
-              { label: msg("fields.options.show", "Show"), value: true },
-              { label: msg("fields.options.hide", "Hide"), value: false },
-            ],
-          },
-          link: TranslatableStringField<TranslatableString | undefined>(
-            msg("fields.link", "Link"),
-            undefined,
-            false,
-            true,
-            () => getDisplayFieldOptions("type.string")
-          ),
-          normalizeLink: {
-            label: msg("fields.normalizeLink", "Normalize Link"),
-            type: "radio",
-            options: [
+          label: {
+            type: "translatableString",
+            label: msg("fields.label", "Label"),
+              showApplyAllOption: false,
+              showFieldSelector: true,
+              getOptions: () => getDisplayFieldOptions("type.string"),
+            },
+            variant: {
+              label: msg("fields.ctaVariant", "CTA Variant"),
+              type: "radio",
+              options: ThemeOptions.CTA_VARIANT,
+            },
+            liveVisibility: {
+              label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+              type: "radio",
+              options: [
+                { label: msg("fields.options.show", "Show"), value: true },
+                { label: msg("fields.options.hide", "Hide"), value: false },
+              ],
+            },
+            link: {
+              type: "translatableString",
+              label: msg("fields.link", "Link"),
+              showApplyAllOption: false,
+              showFieldSelector: true,
+              getOptions: () => getDisplayFieldOptions("type.string"),
+            },
+            normalizeLink: {
+              label: msg("fields.normalizeLink", "Normalize Link"),
+              type: "radio",
+              options: [
               { label: msg("fields.options.yes", "Yes"), value: true },
               { label: msg("fields.options.no", "No"), value: false },
             ],
           },
-        },
+          },
       },
       secondaryCTA: {
         label: msg("fields.secondaryCTA", "Secondary CTA"),
         type: "object",
         objectFields: {
-          label: TranslatableStringField<TranslatableString>(
-            msg("fields.label", "Label"),
-            undefined,
-            false,
-            true,
-            () => getDisplayFieldOptions("type.string")
-          ),
-          link: TranslatableStringField<TranslatableString>(
-            msg("fields.link", "Link"),
-            undefined,
-            false,
-            true,
-            () => getDisplayFieldOptions("type.string")
-          ),
-          normalizeLink: {
-            label: msg("fields.normalizeLink", "Normalize Link"),
-            type: "radio",
-            options: [
-              { label: msg("fields.options.yes", "Yes"), value: true },
-              { label: msg("fields.options.no", "No"), value: false },
-            ],
+          label: {
+            type: "translatableString",
+            label: msg("fields.label", "Label"),
+              showApplyAllOption: false,
+              showFieldSelector: true,
+              getOptions: () => getDisplayFieldOptions("type.string"),
+            },
+            link: {
+              type: "translatableString",
+              label: msg("fields.link", "Link"),
+              showApplyAllOption: false,
+              showFieldSelector: true,
+              getOptions: () => getDisplayFieldOptions("type.string"),
+            },
+            normalizeLink: {
+              label: msg("fields.normalizeLink", "Normalize Link"),
+              type: "radio",
+              options: [
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
+              ],
+            },
+            variant: {
+              label: msg("fields.ctaVariant", "CTA Variant"),
+              type: "radio",
+              options: ThemeOptions.CTA_VARIANT,
+            },
+            liveVisibility: {
+              label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+              type: "radio",
+              options: [
+                { label: msg("fields.options.show", "Show"), value: true },
+                { label: msg("fields.options.hide", "Hide"), value: false },
+              ],
+            },
           },
-          variant: {
-            label: msg("fields.ctaVariant", "CTA Variant"),
-            type: "radio",
-            options: ThemeOptions.CTA_VARIANT,
-          },
-          liveVisibility: {
-            label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
-            type: "radio",
-            options: [
-              { label: msg("fields.options.show", "Show"), value: true },
-              { label: msg("fields.options.hide", "Hide"), value: false },
-            ],
-          },
-        },
       },
       image: {
         label: msg("fields.image", "Image"),

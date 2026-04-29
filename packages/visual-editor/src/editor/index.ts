@@ -9,7 +9,6 @@ export { SpacingSelector } from "./SpacingSelector.tsx";
 export { YextField } from "./YextField.tsx";
 export { YextAutoField } from "../fields/YextAutoField.tsx";
 export { KnowledgeGraphIcon } from "./KnowledgeGraphIcon.tsx";
-export { TranslatableStringField } from "./TranslatableStringField.tsx";
 export {
   TranslatableRichTextField,
   getDefaultRTF,
