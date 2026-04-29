@@ -1,5 +1,5 @@
 import { ComponentData, PuckComponent, setDeep } from "@puckeditor/core";
-import { EventSectionType } from "../../../types/types.ts";
+import { EventSectionType, EventStruct } from "../../../types/types.ts";
 import { ComponentFields } from "../../../types/fields.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
@@ -13,9 +13,24 @@ import {
 import { defaultEventCardSlotData, EventCardProps } from "./EventCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
-import { YextComponentConfig } from "../../../fields/fields.ts";
+import { toPuckFields, YextComponentConfig } from "../../../fields/fields.ts";
+import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
+import {
+  getLinkedEntityListSourceMode,
+  resolveLinkedEntityMappedField,
+  resolveLinkedEntitySourceItems,
+  syncCardSlotLength,
+} from "../../../utils/cardSlots/linkedEntityListWrapper.ts";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 
 export type EventCardsWrapperProps = CardWrapperType<EventSectionType> & {
+  cards?: {
+    title: YextEntityField<EventStruct["title"]>;
+    date: YextEntityField<string>;
+    description: YextEntityField<EventStruct["description"]>;
+    cta: YextEntityField<EventStruct["cta"]>;
+    image: YextEntityField<EventStruct["image"]>;
+  };
   styles: {
     showImage: boolean;
     showDateTime: boolean;
@@ -27,8 +42,49 @@ export type EventCardsWrapperProps = CardWrapperType<EventSectionType> & {
 const eventCardsWrapperFields = {
   ...cardWrapperFields<EventCardsWrapperProps>(
     msg("components.events", "Events"),
-    ComponentFields.EventSection.type
+    ComponentFields.EventSection.type,
+    true
   ),
+  cards: YextField(msg("fields.cards", "Cards"), {
+    type: "object",
+    objectFields: {
+      title: YextField(msg("fields.title", "Title"), {
+        type: "entityField",
+        disableConstantValueToggle: true,
+        filter: {
+          types: ["type.string"],
+        },
+      }),
+      date: YextField(msg("fields.date", "Date"), {
+        type: "entityField",
+        disableConstantValueToggle: true,
+        filter: {
+          types: ["type.datetime"],
+        },
+      }),
+      description: YextField(msg("fields.description", "Description"), {
+        type: "entityField",
+        disableConstantValueToggle: true,
+        filter: {
+          types: ["type.rich_text_v2"],
+        },
+      }),
+      cta: YextField(msg("fields.showCTA", "CTA"), {
+        type: "entityField",
+        disableConstantValueToggle: true,
+        filter: {
+          types: ["type.cta"],
+        },
+      }),
+      image: YextField(msg("fields.showImage", "Image"), {
+        type: "entityField",
+        disableConstantValueToggle: true,
+        filter: {
+          types: ["type.image"],
+        },
+      }),
+    },
+  }),
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
@@ -77,6 +133,42 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
       constantValueEnabled: true,
       field: "",
     },
+    cards: {
+      title: {
+        field: "",
+        constantValue: { defaultValue: "" },
+        constantValueEnabled: false,
+      },
+      date: {
+        field: "",
+        constantValue: "",
+        constantValueEnabled: false,
+      },
+      description: {
+        field: "",
+        constantValue: { defaultValue: "" },
+        constantValueEnabled: false,
+      },
+      cta: {
+        field: "",
+        constantValue: {
+          label: { defaultValue: "" },
+          link: "",
+          linkType: "URL",
+          ctaType: "textAndLink",
+        },
+        constantValueEnabled: false,
+      },
+      image: {
+        field: "",
+        constantValue: {
+          url: "",
+          width: 0,
+          height: 0,
+        },
+        constantValueEnabled: false,
+      },
+    },
     styles: {
       showImage: true,
       showDateTime: true,
@@ -87,8 +179,24 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
       CardSlot: [],
     },
   },
+  resolveFields: (data, params) => {
+    const streamDocument = params.metadata.streamDocument ?? {};
+    const isLinkedEntityListMode =
+      !data.props.data.constantValueEnabled &&
+      !!data.props.data.field &&
+      getLinkedEntityListSourceMode(
+        streamDocument,
+        data.props.data.field,
+        "events"
+      ) === "linkedEntityList";
+
+    return toPuckFields(
+      setDeep(eventCardsWrapperFields, "cards.visible", isLinkedEntityListMode)
+    );
+  },
   resolveData: (data, params) => {
-    const streamDocument = params.metadata.streamDocument;
+    const streamDocument = params.metadata.streamDocument ?? {};
+    const locale = i18nComponentsInstance.language || "en";
     const sharedCardProps =
       data.props.slots.CardSlot.length === 0
         ? undefined
@@ -103,6 +211,95 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
           };
 
     if (!data.props.data.constantValueEnabled && data.props.data.field) {
+      const sourceMode = getLinkedEntityListSourceMode(
+        streamDocument,
+        data.props.data.field,
+        "events"
+      );
+
+      if (sourceMode === "linkedEntityList") {
+        const resolvedLinkedEntities = resolveLinkedEntitySourceItems<
+          Record<string, unknown>
+        >(streamDocument, data.props.data.field);
+
+        if (!resolvedLinkedEntities.length) {
+          return setDeep(data, "props.slots.CardSlot", []);
+        }
+
+        const updatedCardSlot = syncCardSlotLength(
+          data.props.slots.CardSlot as ComponentData<EventCardProps>[],
+          resolvedLinkedEntities.length,
+          () =>
+            defaultEventCardSlotData(
+              `EventCard-${crypto.randomUUID()}`,
+              undefined,
+              sharedCardProps?.backgroundColor,
+              sharedCardProps?.truncateDescription,
+              sharedCardProps?.slotStyles
+            ) as ComponentData<EventCardProps>
+        );
+
+        return setDeep(
+          data,
+          "props.slots.CardSlot",
+          updatedCardSlot.map((card, i) => {
+            card.props.index = i;
+
+            const linkedEntity = resolvedLinkedEntities[i];
+            const mappedTitle = resolveLinkedEntityMappedField<
+              EventStruct["title"]
+            >(
+              linkedEntity,
+              data.props.data.field,
+              data.props.cards?.title.field
+            );
+
+            return setDeep(card, "props.parentData", {
+              field: data.props.data.field,
+              fields: {
+                image: data.props.cards?.image.field || undefined,
+                title: data.props.cards?.title.field || undefined,
+                dateTime: data.props.cards?.date.field || undefined,
+                description: data.props.cards?.description.field || undefined,
+                cta: data.props.cards?.cta.field || undefined,
+              },
+              event: {
+                image: resolveLinkedEntityMappedField<EventStruct["image"]>(
+                  linkedEntity,
+                  data.props.data.field,
+                  data.props.cards?.image.field
+                ),
+                title: mappedTitle
+                  ? resolveComponentData(mappedTitle, locale, linkedEntity)
+                  : undefined,
+                dateTime: resolveLinkedEntityMappedField<string>(
+                  linkedEntity,
+                  data.props.data.field,
+                  data.props.cards?.date.field
+                ),
+                description: resolveLinkedEntityMappedField<
+                  EventStruct["description"]
+                >(
+                  linkedEntity,
+                  data.props.data.field,
+                  data.props.cards?.description.field
+                ),
+                cta: resolveLinkedEntityMappedField<EventStruct["cta"]>(
+                  linkedEntity,
+                  data.props.data.field,
+                  data.props.cards?.cta.field
+                ) ?? {
+                  label: { defaultValue: "" },
+                  link: "",
+                  linkType: "URL",
+                  ctaType: "textAndLink",
+                },
+              },
+            } satisfies EventCardProps["parentData"]);
+          })
+        );
+      }
+
       // ENTITY VALUES
       const resolvedEvents = resolveYextEntityField<
         EventSectionType | { events: undefined }
@@ -112,35 +309,25 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
           ...data.props.data,
           constantValue: { events: undefined },
         },
-        i18nComponentsInstance.language || "en"
+        locale
       )?.events;
 
       if (!resolvedEvents?.length) {
         return setDeep(data, "props.slots.CardSlot", []);
       }
 
-      const requiredLength = resolvedEvents.length;
-      const currentLength = data.props.slots.CardSlot.length;
-      // If CardSlot is shorter, create an array of placeholder cards and append them.
-      // If CardSlot is longer or equal, this will just be an empty array.
-      const cardsToAdd =
-        currentLength < requiredLength
-          ? Array(requiredLength - currentLength)
-              .fill(null)
-              .map(() =>
-                defaultEventCardSlotData(
-                  `EventCard-${crypto.randomUUID()}`,
-                  undefined,
-                  sharedCardProps?.backgroundColor,
-                  sharedCardProps?.truncateDescription,
-                  sharedCardProps?.slotStyles
-                )
-              )
-          : [];
-      const updatedCardSlot = [
-        ...data.props.slots.CardSlot,
-        ...cardsToAdd,
-      ].slice(0, requiredLength) as ComponentData<EventCardProps>[];
+      const updatedCardSlot = syncCardSlotLength(
+        data.props.slots.CardSlot as ComponentData<EventCardProps>[],
+        resolvedEvents.length,
+        () =>
+          defaultEventCardSlotData(
+            `EventCard-${crypto.randomUUID()}`,
+            undefined,
+            sharedCardProps?.backgroundColor,
+            sharedCardProps?.truncateDescription,
+            sharedCardProps?.slotStyles
+          ) as ComponentData<EventCardProps>
+      );
 
       return setDeep(
         data,

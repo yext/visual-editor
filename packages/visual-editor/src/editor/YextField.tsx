@@ -20,10 +20,10 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
 } from "./YextEntityFieldSelector.tsx";
-import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
 import { MsgString } from "../utils/i18n/platform.ts";
 import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 import type { YextPuckFields } from "../fields/fields.ts";
+import { type LinkedEntitySourceFieldFilter } from "../utils/cardSlots/linkedEntityListWrapper.ts";
 
 /** Copied from Puck, do not change */
 export type FieldOption = {
@@ -97,7 +97,7 @@ type YextMaxWidthField = YextBaseField & {
 
 type YextTranslatableStringField = YextBaseField & {
   type: "translatableString";
-  filter?: RenderEntityFieldFilter<any>;
+  filter?: LinkedEntitySourceFieldFilter<any>;
   showApplyAllOption?: boolean;
 };
 

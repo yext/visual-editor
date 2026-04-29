@@ -30,6 +30,7 @@ type EntityFieldTypesFilter = {
   types?: EntityFieldTypes[];
   includeListsOnly?: boolean;
   directChildrenOf?: string;
+  descendantsOf?: string;
 };
 export type RenderEntityFieldFilter<T extends Record<string, any>> =
   EntityFieldTypesFilter & EitherOrNeither<AllowList<T>, DisallowList<T>>;
@@ -224,6 +225,14 @@ export const getFilteredEntityFields = <T extends Record<string, any>>(
           .length - 1;
       return numberOfChildren === 1;
     });
+  }
+
+  if (filter?.descendantsOf) {
+    filteredEntitySubFields = filteredEntitySubFields.filter(
+      (field) =>
+        field.name.startsWith(`${filter.descendantsOf}.`) &&
+        field.name !== filter.descendantsOf
+    );
   }
 
   if (filter?.types) {

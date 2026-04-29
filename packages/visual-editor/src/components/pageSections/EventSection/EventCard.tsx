@@ -213,6 +213,13 @@ export type EventCardProps = {
   parentData?: {
     field: string;
     event: EventStruct;
+    fields?: {
+      image?: string;
+      title?: string;
+      dateTime?: string;
+      description?: string;
+      cta?: string;
+    };
   };
 
   /** @internal styles from parent component */
@@ -554,12 +561,13 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
     if (data.props.parentData) {
       const event = data.props.parentData.event;
       const field = data.props.parentData.field;
+      const fields = data.props.parentData.fields;
 
       updatedData = setDeep(
         updatedData,
         "props.slots.ImageSlot[0].props.parentData",
         {
-          field: field,
+          field: fields?.image ?? field,
           image: event.image,
         } satisfies ImageWrapperProps["parentData"]
       );
@@ -567,7 +575,7 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
         updatedData,
         "props.slots.TitleSlot[0].props.parentData",
         {
-          field: field,
+          field: fields?.title ?? field,
           text: event.title as string, // will already be resolved
         } satisfies HeadingTextProps["parentData"]
       );
@@ -575,7 +583,7 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
         updatedData,
         "props.slots.DateTimeSlot[0].props.parentData",
         {
-          field: field,
+          field: fields?.dateTime ?? field,
           date: event.dateTime,
         } satisfies TimestampProps["parentData"]
       );
@@ -583,7 +591,7 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
         updatedData,
         "props.slots.DescriptionSlot[0].props.parentData",
         {
-          field: field,
+          field: fields?.description ?? field,
           richText: event.description,
         } satisfies BodyTextProps["parentData"]
       );
@@ -591,7 +599,7 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
         updatedData,
         "props.slots.CTASlot[0].props.parentData",
         {
-          field: field,
+          field: fields?.cta ?? field,
           cta: event.cta,
         } satisfies CTAWrapperProps["parentData"]
       );

@@ -20,12 +20,14 @@ export interface CardWrapperType<T> {
 
 export const cardWrapperFields = <T>(
   label: MsgString,
-  entityFieldType: EntityFieldTypes
+  entityFieldType: EntityFieldTypes,
+  includeLinkedEntityRoots = false
 ): Fields<CardWrapperType<T>> => ({
   data: YextField(label, {
     type: "entityField",
     filter: {
       types: [entityFieldType],
+      includeLinkedEntityRoots,
     },
   }),
   slots: {

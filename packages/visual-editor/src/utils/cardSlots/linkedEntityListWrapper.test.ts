@@ -1,0 +1,124 @@
+import { describe, expect, it } from "vitest";
+import { ComponentData } from "@puckeditor/core";
+import {
+  getLinkedEntityListSourceMode,
+  isTopLevelLinkedEntitySourceField,
+  resolveLinkedEntityMappedField,
+  resolveLinkedEntitySourceItems,
+  syncCardSlotLength,
+} from "./linkedEntityListWrapper.ts";
+import { type LinkedEntitySchemas } from "../linkedEntityFieldUtils.ts";
+
+describe("linkedEntityListWrapper", () => {
+  const linkedEntitySchemas: LinkedEntitySchemas = {
+    c_linkedLocation: {
+      displayName: "Linked Location",
+      fields: [
+        {
+          name: "name",
+          displayName: "Name",
+          definition: {
+            name: "name",
+            typeName: "type.string",
+            type: {},
+          },
+        },
+      ],
+    },
+  };
+
+  it("detects top-level linked entity source roots", () => {
+    expect(
+      isTopLevelLinkedEntitySourceField("c_linkedLocation", linkedEntitySchemas)
+    ).toBe(true);
+    expect(
+      isTopLevelLinkedEntitySourceField(
+        "c_linkedLocation.name",
+        linkedEntitySchemas
+      )
+    ).toBe(false);
+    expect(isTopLevelLinkedEntitySourceField("name", linkedEntitySchemas)).toBe(
+      false
+    );
+  });
+
+  it("detects linked list and section source modes", () => {
+    expect(
+      getLinkedEntityListSourceMode(
+        {
+          c_eventsSection: {
+            events: [{ title: "Cooking Class" }],
+          },
+        },
+        "c_eventsSection",
+        "events"
+      )
+    ).toBe("section");
+
+    expect(
+      getLinkedEntityListSourceMode(
+        {
+          c_linkedLocation: [{ name: "Downtown" }],
+        },
+        "c_linkedLocation",
+        "events"
+      )
+    ).toBe("linkedEntityList");
+  });
+
+  it("resolves linked entity source items for empty, single, and multiple values", () => {
+    expect(resolveLinkedEntitySourceItems({}, "c_linkedLocation")).toEqual([]);
+    expect(
+      resolveLinkedEntitySourceItems(
+        {
+          c_linkedLocation: {
+            name: "Downtown",
+          },
+        },
+        "c_linkedLocation"
+      )
+    ).toEqual([{ name: "Downtown" }]);
+    expect(
+      resolveLinkedEntitySourceItems(
+        {
+          c_linkedLocation: [{ name: "Downtown" }, { name: "Uptown" }],
+        },
+        "c_linkedLocation"
+      )
+    ).toEqual([{ name: "Downtown" }, { name: "Uptown" }]);
+  });
+
+  it("resolves mapped fields relative to the linked source root", () => {
+    expect(
+      resolveLinkedEntityMappedField(
+        {
+          name: "Downtown",
+          address: {
+            city: "New York",
+          },
+        },
+        "c_linkedLocation",
+        "c_linkedLocation.address.city"
+      )
+    ).toBe("New York");
+  });
+
+  it("syncs slot arrays to the required linked entity count", () => {
+    const existingCards = [
+      { type: "EventCard", props: { id: "one" } },
+    ] as ComponentData<{ id?: string }>[];
+
+    expect(
+      syncCardSlotLength(existingCards, 3, () => ({
+        type: "EventCard",
+        props: { id: "new" },
+      }))
+    ).toHaveLength(3);
+    expect(
+      syncCardSlotLength(existingCards, 0, () => ({
+        type: "EventCard",
+        props: { id: "new" },
+      }))
+    ).toEqual([]);
+  });
+});

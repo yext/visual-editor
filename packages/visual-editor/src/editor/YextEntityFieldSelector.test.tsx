@@ -192,6 +192,36 @@ describe("YextEntityFieldSelector", () => {
     expect(screen.queryByText("Linked Location > Name")).toBeNull();
   });
 
+  it("shows linked entity source roots when the selector opts into them", () => {
+    renderEntityFieldInput({
+      filter: {
+        types: ["type.events_section"],
+        includeLinkedEntityRoots: true,
+      },
+      linkedEntitySchemas: {
+        c_linkedLocation: {
+          displayName: "Linked Location",
+          fields: [
+            {
+              name: "name",
+              displayName: "Name",
+              definition: {
+                name: "name",
+                typeName: "type.string",
+                type: {},
+              },
+            },
+          ],
+        },
+      },
+    });
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(screen.getByText("Linked Location")).toBeDefined();
+    expect(screen.queryByText("Linked Location > Name")).toBeNull();
+  });
+
   it("falls back to the default entity field option when no matching entity fields exist", () => {
     renderEntityFieldInput({
       entityFields: {

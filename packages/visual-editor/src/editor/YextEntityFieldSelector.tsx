@@ -10,7 +10,6 @@ import { DATE_TIME_CONSTANT_CONFIG } from "../fields/DateTimeSelectorField.tsx";
 import {
   ConstantValueTypes,
   EntityFieldTypes,
-  RenderEntityFieldFilter,
 } from "../internal/utils/getFilteredEntityFields.ts";
 import { DevLogger } from "../utils/devLogger.ts";
 import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
@@ -56,6 +55,7 @@ import { resolveField } from "../utils/resolveYextEntityField.ts";
 import { toast } from "sonner";
 import { isLinkedEntityFieldPath } from "../utils/linkedEntityFieldUtils.ts";
 import { StreamDocument } from "../utils/types/StreamDocument.ts";
+import { type LinkedEntitySourceFieldFilter } from "../utils/cardSlots/linkedEntityListWrapper.ts";
 
 const devLogger = new DevLogger();
 
@@ -74,7 +74,7 @@ export type { YextEntityField } from "./yextEntityFieldUtils.ts";
 export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
   {
     label: string;
-    filter: RenderEntityFieldFilter<T>;
+    filter: LinkedEntitySourceFieldFilter<T>;
     disableConstantValueToggle?: boolean;
     disallowTranslation?: boolean;
   };
@@ -303,7 +303,7 @@ export const ConstantValueModeToggler = ({
 };
 
 type InputProps<T extends Record<string, any>> = {
-  filter: RenderEntityFieldFilter<T>;
+  filter: LinkedEntitySourceFieldFilter<T>;
   onChange: (value: any, uiState?: any) => void;
   value: any;
   className?: string;
