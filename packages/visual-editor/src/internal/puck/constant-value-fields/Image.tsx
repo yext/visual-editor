@@ -39,6 +39,8 @@ let pendingImageSession:
   | { messageId: string; apply: (payload: ImagePayload) => void }
   | undefined;
 
+const PIN_ICON_MAX_FILE_SIZE_BYTES = 128 * 1024;
+
 const buildLocatorDisplayOptions = (
   locatorDisplayFields?: Record<string, FieldTypeData>
 ): DynamicOption<string>[] => {
@@ -61,6 +63,8 @@ const createImageConstantConfig = (options?: {
   getAltTextOptions?: (
     templateMetadata: TemplateMetadata
   ) => DynamicOption<string>[];
+  hideAltTextField?: boolean;
+  maxFileSizeBytes?: number;
 }): CustomField<TranslatableAssetImage | undefined> => ({
   type: "custom",
   render: ({ onChange, value, field }) => {
@@ -157,6 +161,7 @@ const createImageConstantConfig = (options?: {
             type: "ImageAsset",
             value: resolvedValue,
             id: messageId,
+            maxFileSizeBytes: options?.maxFileSizeBytes,
           },
         });
       }
@@ -294,20 +299,22 @@ const createImageConstantConfig = (options?: {
         )}
 
         {/* Alt Text Field */}
-        <AutoField
-          field={altTextField}
-          value={resolvedValue?.alternateText}
-          onChange={(newValue) => {
-            const updatedImage = resolvedValue
-              ? { ...resolvedValue, alternateText: newValue }
-              : undefined;
-            onChange({
-              ...localizedContainer,
-              [locale]: updatedImage,
-              hasLocalizedValue: "true",
-            } as TranslatableAssetImage);
-          }}
-        />
+        {!options?.hideAltTextField && (
+          <AutoField
+            field={altTextField}
+            value={resolvedValue?.alternateText}
+            onChange={(newValue) => {
+              const updatedImage = resolvedValue
+                ? { ...resolvedValue, alternateText: newValue }
+                : undefined;
+              onChange({
+                ...localizedContainer,
+                [locale]: updatedImage,
+                hasLocalizedValue: "true",
+              } as TranslatableAssetImage);
+            }}
+          />
+        )}
       </>
     );
   },
@@ -321,4 +328,13 @@ export const LOCATOR_IMAGE_CONSTANT_CONFIG = {
       buildLocatorDisplayOptions(templateMetadata?.locatorDisplayFields),
   }),
   label: msg("fields.image", "Image"),
+};
+
+export const LOCATOR_PIN_ICON_CONSTANT_CONFIG = {
+  ...createImageConstantConfig({
+    hideAltTextField: true,
+    maxFileSizeBytes: PIN_ICON_MAX_FILE_SIZE_BYTES,
+  }),
+  label: msg("fields.icon", "Icon"),
+  maxFileSizeBytes: PIN_ICON_MAX_FILE_SIZE_BYTES,
 };
