@@ -113,9 +113,9 @@ describe("TranslatableStringField", () => {
         { label: "Slug", value: "slug" },
       ])
     );
-    expect(
-      screen.getByTestId("options-input").dataset.showFieldSelector
-    ).toBe("false");
+    expect(screen.getByTestId("options-input").dataset.showFieldSelector).toBe(
+      "false"
+    );
   });
 
   it("applies the current locale value to every page-set locale", () => {
@@ -139,7 +139,9 @@ describe("TranslatableStringField", () => {
       }
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "Apply to all locales" }));
+    fireEvent.click(
+      screen.getByRole("button", { name: "Apply to all locales" })
+    );
 
     expect(onChange).toHaveBeenCalledWith({
       en: "Hello",

@@ -165,7 +165,9 @@ const footerExpandedLinkSectionSlotFields: YextFields<FooterExpandedLinkSectionS
           getItemSummary: (item: any, index?: number) => {
             const locale = i18nComponentsInstance.language || "en";
             const label =
-              typeof item.label === "string" ? item.label : item.label?.[locale];
+              typeof item.label === "string"
+                ? item.label
+                : item.label?.[locale];
             return label || pt("link", "Link") + " " + ((index ?? 0) + 1);
           },
         }),

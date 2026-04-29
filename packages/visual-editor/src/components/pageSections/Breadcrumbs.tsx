@@ -92,7 +92,10 @@ const breadcrumbsSectionFields: YextFields<BreadcrumbsSectionProps> = {
     objectFields: {
       directoryRoot: {
         type: "translatableString",
-        label: msg("fields.directoryRootLinkLabel", "Directory Root Link Label"),
+        label: msg(
+          "fields.directoryRootLinkLabel",
+          "Directory Root Link Label"
+        ),
         filter: { types: ["type.string"] },
       },
       currentPage: YextField(

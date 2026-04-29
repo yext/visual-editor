@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  BaseField,
-  FieldLabel,
-  type FieldProps,
-} from "@puckeditor/core";
+import { BaseField, FieldLabel, type FieldProps } from "@puckeditor/core";
 import { useTranslation } from "react-i18next";
 import { useDocument } from "../hooks/useDocument.tsx";
 import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
@@ -112,6 +108,8 @@ export const TranslatableStringFieldOverride = ({
   }
 
   return (
-    <FieldLabel label={`${pt(field.label)} (${locale})`}>{fieldEditor}</FieldLabel>
+    <FieldLabel label={`${pt(field.label)} (${locale})`}>
+      {fieldEditor}
+    </FieldLabel>
   );
 };

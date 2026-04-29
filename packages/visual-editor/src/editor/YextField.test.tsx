@@ -8,9 +8,9 @@ import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Im
 
 const { dynamicOptionsSelectorMock, yextEntityFieldSelectorMock } = vi.hoisted(
   () => ({
-  dynamicOptionsSelectorMock: vi.fn(),
-  yextEntityFieldSelectorMock: vi.fn(),
-})
+    dynamicOptionsSelectorMock: vi.fn(),
+    yextEntityFieldSelectorMock: vi.fn(),
+  })
 );
 
 vi.mock("./DynamicOptionsSelector.tsx", () => ({

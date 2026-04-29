@@ -32,4 +32,3 @@ export {
 } from "./TranslatableStringField.tsx";
 
 export { VideoFieldOverride, type VideoField } from "./VideoField.tsx";
-
