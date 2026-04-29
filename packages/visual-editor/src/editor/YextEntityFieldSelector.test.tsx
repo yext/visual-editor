@@ -162,7 +162,7 @@ describe("YextEntityFieldSelector", () => {
 
     fireEvent.click(screen.getByRole("combobox"));
 
-    expect(screen.getByText("Name")).toBeDefined();
+    expect(screen.getAllByText("Name").length).toBeGreaterThan(0);
     expect(screen.getByText("Linked Location > Name")).toBeDefined();
   });
 

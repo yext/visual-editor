@@ -3,11 +3,11 @@ import {
   RenderEntityFieldFilter,
 } from "../internal/utils/getFilteredEntityFields.ts";
 import { StreamFields, YextSchemaField } from "../types/entityFields.ts";
-import { type LinkedEntitySchemas } from "../utils/linkedEntityFieldUtils.ts";
 import {
-  getLinkedEntitySourceRootFields,
-  type LinkedEntitySourceFieldFilter,
-} from "../utils/cardSlots/linkedEntityListWrapper.ts";
+  buildLinkedEntityStreamFields,
+  type LinkedEntitySchemas,
+} from "../utils/linkedEntityFieldUtils.ts";
+import { type LinkedEntitySourceFieldFilter } from "../utils/cardSlots/linkedEntityListWrapper.ts";
 
 /** Represents data that can either be from the Yext Knowledge Graph or statically defined */
 export type YextEntityField<T> = {
@@ -26,18 +26,15 @@ export const getFieldsForSelector = (
   filter: LinkedEntitySourceFieldFilter<any>,
   linkedEntitySchemas?: LinkedEntitySchemas
 ): YextSchemaField[] => {
+  const linkedEntityStreamFields =
+    buildLinkedEntityStreamFields(linkedEntitySchemas);
   let filteredEntityFields = getFilteredEntityFields(entityFields, filter);
   const linkedEntityRootFields = filter.includeLinkedEntityRoots
-    ? getLinkedEntitySourceRootFields(linkedEntitySchemas)
+    ? (linkedEntityStreamFields?.fields ?? [])
     : [];
   let linkedEntityFields =
-    !filter.includeListsOnly && linkedEntitySchemas
-      ? getFilteredEntityFields(
-          {
-            fields: getLinkedEntitySourceRootFields(linkedEntitySchemas),
-          },
-          filter
-        )
+    !filter.includeListsOnly && linkedEntityStreamFields
+      ? getFilteredEntityFields(linkedEntityStreamFields, filter)
       : [];
 
   // If there are no direct children, return the parent field if it is a list
@@ -53,13 +50,8 @@ export const getFieldsForSelector = (
       fallbackFilter
     );
     linkedEntityFields =
-      !filter.includeListsOnly && linkedEntitySchemas
-        ? getFilteredEntityFields(
-            {
-              fields: getLinkedEntitySourceRootFields(linkedEntitySchemas),
-            },
-            fallbackFilter
-          )
+      !filter.includeListsOnly && linkedEntityStreamFields
+        ? getFilteredEntityFields(linkedEntityStreamFields, fallbackFilter)
         : [];
   }
 

@@ -190,9 +190,13 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
         "events"
       ) === "linkedEntityList";
 
-    return toPuckFields(
-      setDeep(eventCardsWrapperFields, "cards.visible", isLinkedEntityListMode)
-    );
+    return toPuckFields({
+      ...(eventCardsWrapperFields as any),
+      cards: {
+        ...(eventCardsWrapperFields.cards as any),
+        visible: isLinkedEntityListMode,
+      },
+    });
   },
   resolveData: (data, params) => {
     const streamDocument = params.metadata.streamDocument ?? {};
