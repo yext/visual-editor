@@ -7,7 +7,11 @@ import {
   buildLinkedEntityStreamFields,
   type LinkedEntitySchemas,
 } from "../utils/linkedEntityFieldUtils.ts";
-import { type LinkedEntitySourceFieldFilter } from "../utils/cardSlots/linkedEntityListWrapper.ts";
+import {
+  getBaseEntityListSourceRootFields,
+  isTopLevelLinkedEntitySourceField,
+  type LinkedEntitySourceFieldFilter,
+} from "../utils/cardSlots/linkedEntityListWrapper.ts";
 
 /** Represents data that can either be from the Yext Knowledge Graph or statically defined */
 export type YextEntityField<T> = {
@@ -21,6 +25,45 @@ export type YextEntityField<T> = {
   disallowTranslation?: boolean;
 };
 
+const dedupeFieldsByName = (fields: YextSchemaField[]): YextSchemaField[] => {
+  const seenFieldNames = new Set<string>();
+  return fields.filter((field) => {
+    if (seenFieldNames.has(field.name)) {
+      return false;
+    }
+
+    seenFieldNames.add(field.name);
+    return true;
+  });
+};
+
+const sortFields = (fields: YextSchemaField[]): YextSchemaField[] => {
+  return fields.sort((entityFieldA, entityFieldB) => {
+    const nameA = (entityFieldA.displayName ?? entityFieldA.name).toUpperCase();
+    const nameB = (entityFieldB.displayName ?? entityFieldB.name).toUpperCase();
+    return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+  });
+};
+
+const trimLinkedEntityRootDisplayName = (
+  fields: YextSchemaField[],
+  linkedEntitySchemas: LinkedEntitySchemas | undefined,
+  linkedEntityRoot: string
+): YextSchemaField[] => {
+  const rootDisplayName = linkedEntitySchemas?.[linkedEntityRoot]?.displayName;
+  if (!rootDisplayName) {
+    return fields;
+  }
+
+  const rootPrefix = `${rootDisplayName} > `;
+  return fields.map((field) => {
+    const displayName = field.displayName ?? field.name;
+    return displayName.startsWith(rootPrefix)
+      ? { ...field, displayName: displayName.slice(rootPrefix.length) }
+      : field;
+  });
+};
+
 export const getFieldsForSelector = (
   entityFields: StreamFields | null,
   filter: LinkedEntitySourceFieldFilter<any>,
@@ -28,32 +71,57 @@ export const getFieldsForSelector = (
 ): YextSchemaField[] => {
   const linkedEntityStreamFields =
     buildLinkedEntityStreamFields(linkedEntitySchemas);
-  let filteredEntityFields = getFilteredEntityFields(entityFields, filter);
-  const linkedEntityRootFields = filter.includeLinkedEntityRoots
-    ? (linkedEntityStreamFields?.fields ?? [])
-    : [];
-  const listRootFilter = filter.allowList
-    ? ({
-        allowList: filter.allowList,
-        includeListsOnly: true,
-      } satisfies RenderEntityFieldFilter<any>)
-    : filter.disallowList
-      ? ({
-          disallowList: filter.disallowList,
-          includeListsOnly: true,
-        } satisfies RenderEntityFieldFilter<any>)
-      : ({ includeListsOnly: true } satisfies RenderEntityFieldFilter<any>);
-  const baseListRootFields = filter.includeBaseListRoots
-    ? getFilteredEntityFields(entityFields, listRootFilter).filter(
-        (field) =>
-          Array.isArray(field.children?.fields) &&
-          field.children.fields.length > 0
-      )
-    : [];
+  const isLinkedEntityDescendantFilter =
+    !!filter.descendantsOf &&
+    isTopLevelLinkedEntitySourceField(
+      filter.descendantsOf,
+      linkedEntitySchemas
+    );
+
+  if (filter.includeSourceRootsOnly) {
+    const rootEntityFields = getFilteredEntityFields(
+      entityFields,
+      filter
+    ).filter((field) => !field.name.includes("."));
+    const linkedEntityRootFields = filter.includeLinkedEntityRoots
+      ? (linkedEntityStreamFields?.fields ?? [])
+      : [];
+    const baseListRootFields = filter.includeBaseListRoots
+      ? getBaseEntityListSourceRootFields(entityFields)
+      : [];
+
+    return sortFields(
+      dedupeFieldsByName([
+        ...rootEntityFields,
+        ...linkedEntityRootFields,
+        ...baseListRootFields,
+      ])
+    );
+  }
+
+  let filteredEntityFields = isLinkedEntityDescendantFilter
+    ? []
+    : getFilteredEntityFields(entityFields, filter);
   let linkedEntityFields =
     !filter.includeListsOnly && linkedEntityStreamFields
       ? getFilteredEntityFields(linkedEntityStreamFields, filter)
       : [];
+  const linkedEntityRootFields =
+    !isLinkedEntityDescendantFilter && filter.includeLinkedEntityRoots
+      ? (linkedEntityStreamFields?.fields ?? [])
+      : [];
+  const baseListRootFields =
+    !isLinkedEntityDescendantFilter && filter.includeBaseListRoots
+      ? getBaseEntityListSourceRootFields(entityFields)
+      : [];
+
+  if (isLinkedEntityDescendantFilter) {
+    linkedEntityFields = trimLinkedEntityRootDisplayName(
+      linkedEntityFields,
+      linkedEntitySchemas,
+      filter.descendantsOf!
+    );
+  }
 
   // If there are no direct children, return the parent field if it is a list
   if (filter.directChildrenOf && filteredEntityFields.length === 0) {
@@ -73,14 +141,12 @@ export const getFieldsForSelector = (
         : [];
   }
 
-  return [
-    ...filteredEntityFields,
-    ...linkedEntityFields,
-    ...linkedEntityRootFields,
-    ...baseListRootFields,
-  ].sort((entityFieldA, entityFieldB) => {
-    const nameA = (entityFieldA.displayName ?? entityFieldA.name).toUpperCase();
-    const nameB = (entityFieldB.displayName ?? entityFieldB.name).toUpperCase();
-    return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
-  });
+  return sortFields(
+    dedupeFieldsByName([
+      ...filteredEntityFields,
+      ...linkedEntityFields,
+      ...linkedEntityRootFields,
+      ...baseListRootFields,
+    ])
+  );
 };

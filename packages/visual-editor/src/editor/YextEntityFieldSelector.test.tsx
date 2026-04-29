@@ -197,6 +197,7 @@ describe("YextEntityFieldSelector", () => {
       filter: {
         types: ["type.events_section"],
         includeLinkedEntityRoots: true,
+        includeSourceRootsOnly: true,
       },
       linkedEntitySchemas: {
         c_linkedLocation: {
@@ -218,7 +219,7 @@ describe("YextEntityFieldSelector", () => {
 
     fireEvent.click(screen.getByRole("combobox"));
 
-    expect(screen.getByText("Linked Location")).toBeDefined();
+    expect(screen.getAllByText("Linked Location")).toHaveLength(1);
     expect(screen.queryByText("Linked Location > Name")).toBeNull();
   });
 
@@ -255,12 +256,240 @@ describe("YextEntityFieldSelector", () => {
       filter: {
         types: ["type.events_section"],
         includeBaseListRoots: true,
+        includeSourceRootsOnly: true,
       },
     });
 
     fireEvent.click(screen.getByRole("combobox"));
 
     expect(screen.getByText("Custom Events")).toBeDefined();
+  });
+
+  it("limits event card source selectors to valid top-level roots", () => {
+    renderEntityFieldInput({
+      entityFields: {
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_eventsSection",
+            displayName: "Events Section",
+            definition: {
+              name: "c_eventsSection",
+              typeName: "type.events_section",
+              type: {},
+            },
+            children: {
+              fields: [
+                {
+                  name: "events",
+                  displayName: "Events",
+                  definition: {
+                    name: "events",
+                    isList: true,
+                    typeName: "type.list",
+                    type: {},
+                  },
+                  children: {
+                    fields: [
+                      {
+                        name: "title",
+                        displayName: "Title",
+                        definition: {
+                          name: "title",
+                          typeName: "type.string",
+                          type: {},
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            name: "c_faqSection",
+            displayName: "faqSection",
+            definition: {
+              name: "c_faqSection",
+              typeName: "type.faq_section",
+              type: {},
+            },
+            children: {
+              fields: [
+                {
+                  name: "faqs",
+                  displayName: "FAQs",
+                  definition: {
+                    name: "faqs",
+                    isList: true,
+                    typeName: "type.list",
+                    type: {},
+                  },
+                  children: {
+                    fields: [
+                      {
+                        name: "question",
+                        displayName: "Question",
+                        definition: {
+                          name: "question",
+                          typeName: "type.string",
+                          type: {},
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            name: "c_linkedLocation",
+            displayName: "Linked Location",
+            definition: {
+              name: "c_linkedLocation",
+              isList: true,
+              typeName: "type.list",
+              type: {},
+            },
+            children: {
+              fields: [
+                {
+                  name: "name",
+                  displayName: "Name",
+                  definition: {
+                    name: "name",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+      filter: {
+        types: ["type.events_section"],
+        includeLinkedEntityRoots: true,
+        includeBaseListRoots: true,
+        includeSourceRootsOnly: true,
+      },
+      linkedEntitySchemas: {
+        c_linkedLocation: {
+          displayName: "Linked Location",
+          fields: [
+            {
+              name: "name",
+              displayName: "Name",
+              definition: {
+                name: "name",
+                typeName: "type.string",
+                type: {},
+              },
+            },
+          ],
+        },
+      },
+    });
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(screen.getByText("Events Section")).toBeDefined();
+    expect(screen.getAllByText("Linked Location")).toHaveLength(1);
+    expect(screen.queryByText("faqSection > FAQs")).toBeNull();
+    expect(screen.queryByText("Events Section > Events")).toBeNull();
+    expect(screen.queryByText("Linked Location > Name")).toBeNull();
+  });
+
+  it("limits mapped linked-entity title fields to descendants of the selected source", () => {
+    renderEntityFieldInput({
+      entityFields: {
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "additionalHoursText",
+            displayName: "Additional Hours Text",
+            definition: {
+              name: "additionalHoursText",
+              typeName: "type.string",
+              type: {},
+            },
+          },
+          {
+            name: "c_linkedLocation",
+            displayName: "Linked Location",
+            definition: {
+              name: "c_linkedLocation",
+              typeName: "type.list",
+              isList: true,
+              type: {},
+            },
+            children: {
+              fields: [
+                {
+                  name: "name",
+                  displayName: "Name",
+                  definition: {
+                    name: "name",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+      filter: {
+        types: ["type.string"],
+        descendantsOf: "c_linkedLocation",
+      },
+      linkedEntitySchemas: {
+        c_linkedLocation: {
+          displayName: "Linked Location",
+          fields: [
+            {
+              name: "name",
+              displayName: "Name",
+              definition: {
+                name: "name",
+                typeName: "type.string",
+                type: {},
+              },
+            },
+            {
+              name: "address",
+              displayName: "Address",
+              definition: {
+                name: "address",
+                typeName: "type.address",
+                type: {},
+              },
+              children: {
+                fields: [
+                  {
+                    name: "city",
+                    displayName: "City",
+                    definition: {
+                      name: "city",
+                      typeName: "type.string",
+                      type: {},
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    });
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(screen.getAllByText("Name")).toHaveLength(1);
+    expect(screen.getByText("Address > City")).toBeDefined();
+    expect(screen.queryByText("Linked Location > Name")).toBeNull();
+    expect(screen.queryByText("Additional Hours Text")).toBeNull();
+    expect(screen.queryByText("Description")).toBeNull();
   });
 
   it("falls back to the default entity field option when no matching entity fields exist", () => {

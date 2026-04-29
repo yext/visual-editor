@@ -4,6 +4,10 @@ import {
   buildLinkedEntityStreamFields,
   type LinkedEntitySchemas,
 } from "../linkedEntityFieldUtils.ts";
+import {
+  type StreamFields,
+  type YextSchemaField,
+} from "../../types/entityFields.ts";
 import { type StreamDocument } from "../types/StreamDocument.ts";
 import { resolveField } from "../resolveYextEntityField.ts";
 
@@ -38,11 +42,8 @@ export const getLinkedEntitySourceRootFields = (
  * for wrapper-level field mapping, so scalar lists are excluded.
  */
 export const getBaseEntityListSourceRootFields = (
-  entityFields:
-    | Array<{ children?: { fields?: unknown[] } }>
-    | { fields?: Array<{ children?: { fields?: unknown[] } }> }
-    | null
-) =>
+  entityFields: StreamFields | YextSchemaField[] | null
+): YextSchemaField[] =>
   (Array.isArray(entityFields)
     ? entityFields
     : (entityFields?.fields ?? [])
@@ -145,4 +146,5 @@ export type LinkedEntitySourceFieldFilter<T extends Record<string, any>> =
   RenderEntityFieldFilter<T> & {
     includeLinkedEntityRoots?: boolean;
     includeBaseListRoots?: boolean;
+    includeSourceRootsOnly?: boolean;
   };

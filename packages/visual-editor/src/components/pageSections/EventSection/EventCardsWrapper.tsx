@@ -91,6 +91,7 @@ const createEventCardsWrapperFields = (sourceField?: string) => ({
     msg("components.events", "Events"),
     ComponentFields.EventSection.type,
     true,
+    true,
     true
   ),
   cards: createEventCardsMappingFields(sourceField),
@@ -270,23 +271,23 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
             >(
               linkedEntity,
               data.props.data.field,
-              data.props.cards?.title.field
+              data.props.cards?.title?.field
             );
 
             return setDeep(card, "props.parentData", {
               field: data.props.data.field,
               fields: {
-                image: data.props.cards?.image.field || undefined,
-                title: data.props.cards?.title.field || undefined,
-                dateTime: data.props.cards?.date.field || undefined,
-                description: data.props.cards?.description.field || undefined,
-                cta: data.props.cards?.cta.field || undefined,
+                image: data.props.cards?.image?.field || undefined,
+                title: data.props.cards?.title?.field || undefined,
+                dateTime: data.props.cards?.date?.field || undefined,
+                description: data.props.cards?.description?.field || undefined,
+                cta: data.props.cards?.cta?.field || undefined,
               },
               event: {
                 image: resolveLinkedEntityMappedField<EventStruct["image"]>(
                   linkedEntity,
                   data.props.data.field,
-                  data.props.cards?.image.field
+                  data.props.cards?.image?.field
                 ),
                 title: mappedTitle
                   ? resolveComponentData(mappedTitle, locale, linkedEntity)
@@ -294,19 +295,19 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
                 dateTime: resolveLinkedEntityMappedField<string>(
                   linkedEntity,
                   data.props.data.field,
-                  data.props.cards?.date.field
+                  data.props.cards?.date?.field
                 ),
                 description: resolveLinkedEntityMappedField<
                   EventStruct["description"]
                 >(
                   linkedEntity,
                   data.props.data.field,
-                  data.props.cards?.description.field
+                  data.props.cards?.description?.field
                 ),
                 cta: resolveLinkedEntityMappedField<EventStruct["cta"]>(
                   linkedEntity,
                   data.props.data.field,
-                  data.props.cards?.cta.field
+                  data.props.cards?.cta?.field
                 ) ?? {
                   label: { defaultValue: "" },
                   link: "",

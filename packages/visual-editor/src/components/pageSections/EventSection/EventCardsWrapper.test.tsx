@@ -148,6 +148,50 @@ describe("EventCardsWrapper", () => {
     expect(resolvedData.props!.slots!.CardSlot).toEqual([]);
   });
 
+  it("does not crash when only the title mapping is set for linked entity cards", async () => {
+    const data = createWrapperData();
+    data.props.data.constantValueEnabled = false;
+    data.props.data.field = "c_linkedLocation";
+    data.props.cards = {
+      title: {
+        field: "c_linkedLocation.name",
+        constantValue: { defaultValue: "" },
+        constantValueEnabled: false,
+      },
+    } as EventCardsWrapperProps["cards"];
+
+    const resolvedData = await EventCardsWrapper.resolveData!(
+      data,
+      resolveParams({
+        c_linkedLocation: [{ name: "Downtown" }],
+      })
+    );
+
+    expect(resolvedData.props!.slots!.CardSlot).toHaveLength(1);
+    expect(resolvedData.props!.slots!.CardSlot[0]?.props.parentData).toEqual({
+      field: "c_linkedLocation",
+      fields: {
+        image: undefined,
+        title: "c_linkedLocation.name",
+        dateTime: undefined,
+        description: undefined,
+        cta: undefined,
+      },
+      event: {
+        image: undefined,
+        title: "Downtown",
+        dateTime: undefined,
+        description: undefined,
+        cta: {
+          label: { defaultValue: "" },
+          link: "",
+          linkType: "URL",
+          ctaType: "textAndLink",
+        },
+      },
+    });
+  });
+
   it("preserves existing event section sources", async () => {
     const data = createWrapperData();
     data.props.data.constantValueEnabled = false;

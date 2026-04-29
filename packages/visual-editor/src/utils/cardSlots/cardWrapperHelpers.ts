@@ -22,7 +22,8 @@ export const cardWrapperFields = <T>(
   label: MsgString,
   entityFieldType: EntityFieldTypes,
   includeLinkedEntityRoots = false,
-  includeBaseListRoots = false
+  includeBaseListRoots = false,
+  includeSourceRootsOnly = false
 ): Fields<CardWrapperType<T>> => ({
   data: YextField(label, {
     type: "entityField",
@@ -30,6 +31,7 @@ export const cardWrapperFields = <T>(
       types: [entityFieldType],
       includeLinkedEntityRoots,
       includeBaseListRoots,
+      includeSourceRootsOnly,
     },
   }),
   slots: {
