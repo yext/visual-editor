@@ -69,7 +69,7 @@ export const defaultFAQCardData = (
 export type FAQCardProps = {
   data: {
     question: YextEntityField<TranslatableString | TranslatableRichText>;
-    answer: YextEntityField<TranslatableRichText>;
+    answer: YextEntityField<TranslatableString | TranslatableRichText>;
   };
 
   /** Styling for all the FAQ cards. */
@@ -105,7 +105,7 @@ const FAQCardFields: YextFields<FAQCardProps> = {
       answer: YextField(msg("fields.answer", "Answer"), {
         type: "entityField",
         filter: {
-          types: ["type.rich_text_v2"],
+          types: ["type.string", "type.rich_text_v2"],
         },
       }),
     },

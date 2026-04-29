@@ -144,7 +144,7 @@ export type FAQStruct = {
   /** The question (always visible on the page) */
   question: TranslatableString | TranslatableRichText;
   /** The answer (visible when the question is clicked) */
-  answer: TranslatableRichText;
+  answer: TranslatableString | TranslatableRichText;
 };
 
 /** Data for the TestimonialSection */

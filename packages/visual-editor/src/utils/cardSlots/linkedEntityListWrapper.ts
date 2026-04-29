@@ -6,6 +6,8 @@ import {
 } from "../../types/entityFields.ts";
 import { type StreamDocument } from "../types/StreamDocument.ts";
 import { resolveField } from "../resolveYextEntityField.ts";
+import { resolveYextEntityField } from "../resolveYextEntityField.ts";
+import { type YextEntityField } from "../../editor/yextEntityFieldUtils.ts";
 
 type MappedCardSourceMode = "section" | "itemList" | "unknown";
 export type SourceRootKind = "linkedEntityRoot" | "baseListRoot";
@@ -110,6 +112,37 @@ export const resolveLinkedEntityMappedField = <T>(
     : mappedFieldPath;
 
   return resolveField<T>(linkedEntity, relativeFieldPath).value;
+};
+
+/**
+ * Resolves a wrapper-level mapped entity field against a linked entity item.
+ * Field ids are stored as absolute editor paths, while constant values and
+ * embedded fields should resolve directly against the linked entity document.
+ */
+export const resolveLinkedEntityMappedData = <T>(
+  linkedEntity: StreamDocument,
+  sourceFieldPath: string,
+  entityField: YextEntityField<T> | undefined,
+  locale?: string
+): T | undefined => {
+  if (!entityField) {
+    return undefined;
+  }
+
+  if (!entityField.field || entityField.constantValueEnabled) {
+    return resolveYextEntityField(linkedEntity, entityField, locale);
+  }
+
+  return resolveYextEntityField(
+    linkedEntity,
+    {
+      ...entityField,
+      field: entityField.field.startsWith(`${sourceFieldPath}.`)
+        ? entityField.field.slice(sourceFieldPath.length + 1)
+        : entityField.field,
+    },
+    locale
+  );
 };
 
 export type LinkedEntitySourceFieldFilter<T extends Record<string, any>> =

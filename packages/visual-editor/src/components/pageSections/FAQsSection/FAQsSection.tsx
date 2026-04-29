@@ -19,7 +19,17 @@ import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultFAQCardData, FAQCardProps } from "./FAQCard.tsx";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
-import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  YextFields,
+} from "../../../fields/fields.ts";
+import { buildListSectionCards } from "../../../utils/cardSlots/listSectionData.ts";
+import {
+  getMappedCardSourceMode,
+  resolveLinkedEntityMappedData,
+  resolveLinkedEntitySourceItems,
+} from "../../../utils/cardSlots/linkedEntityListWrapper.ts";
 
 export interface FAQStyles {
   /**
@@ -40,6 +50,10 @@ export interface FAQSectionProps {
     constantValue: {
       id?: string;
     }[];
+  };
+  faqs?: {
+    question: YextEntityField<FAQSectionType["faqs"][number]["question"]>;
+    answer: YextEntityField<FAQSectionType["faqs"][number]["answer"]>;
   };
 
   /**
@@ -65,13 +79,41 @@ export interface FAQSectionProps {
   liveVisibility: boolean;
 }
 
-const FAQsSectionFields: YextFields<FAQSectionProps> = {
+const createFAQMappingFields = (sourceField?: string) =>
+  YextField(msg("fields.faqs", "FAQs"), {
+    type: "object",
+    objectFields: {
+      question: YextField(msg("fields.question", "Question"), {
+        type: "entityField",
+        disableConstantValueToggle: true,
+        filter: {
+          types: ["type.string", "type.rich_text_v2"],
+          ...(sourceField ? { descendantsOf: sourceField } : {}),
+        },
+      }),
+      answer: YextField(msg("fields.answer", "Answer"), {
+        type: "entityField",
+        disableConstantValueToggle: true,
+        filter: {
+          types: ["type.string", "type.rich_text_v2"],
+          ...(sourceField ? { descendantsOf: sourceField } : {}),
+        },
+      }),
+    },
+  });
+
+const createFAQsSectionFields = (
+  sourceField?: string
+): YextFields<FAQSectionProps> => ({
   data: YextField(msg("fields.faqs", "FAQs"), {
     type: "entityField",
     filter: {
       types: [ComponentFields.FAQSection.type],
+      sourceRootKinds: ["linkedEntityRoot", "baseListRoot"],
+      sourceRootsOnly: true,
     },
   }),
+  faqs: createFAQMappingFields(sourceField),
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
@@ -113,7 +155,9 @@ const FAQsSectionFields: YextFields<FAQSectionProps> = {
       { label: msg("fields.options.hide", "Hide"), value: false },
     ],
   },
-};
+});
+
+const FAQsSectionFields = createFAQsSectionFields();
 
 const FAQsSectionComponent: PuckComponent<FAQSectionProps> = ({
   styles,
@@ -170,6 +214,18 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
       constantValueEnabled: true,
       field: "",
     },
+    faqs: {
+      question: {
+        field: "",
+        constantValue: { defaultValue: "" },
+        constantValueEnabled: false,
+      },
+      answer: {
+        field: "",
+        constantValue: { defaultValue: "" },
+        constantValueEnabled: false,
+      },
+    },
     styles: {
       backgroundColor: backgroundColors.background2.value,
       showSectionHeading: true,
@@ -179,8 +235,29 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
       scope: "faqsSection",
     },
   },
+  resolveFields: (data, params) => {
+    const streamDocument = params.metadata.streamDocument ?? {};
+    const isMappedItemListMode =
+      !data.props.data.constantValueEnabled &&
+      !!data.props.data.field &&
+      getMappedCardSourceMode(streamDocument, data.props.data.field, "faqs") ===
+        "itemList";
+
+    return toPuckFields({
+      ...(createFAQsSectionFields(
+        isMappedItemListMode ? data.props.data.field : undefined
+      ) as any),
+      faqs: {
+        ...(createFAQMappingFields(
+          isMappedItemListMode ? data.props.data.field : undefined
+        ) as any),
+        visible: isMappedItemListMode,
+      },
+    });
+  },
   resolveData: (data, params) => {
-    const streamDocument = params.metadata.streamDocument;
+    const streamDocument = params.metadata.streamDocument ?? {};
+    const locale = i18nComponentsInstance.language || "en";
     const sharedCardProps =
       data.props.slots.CardSlot.length === 0
         ? undefined
@@ -193,6 +270,58 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
           };
 
     if (!data.props.data.constantValueEnabled && data.props.data.field) {
+      const sourceMode = getMappedCardSourceMode(
+        streamDocument,
+        data.props.data.field,
+        "faqs"
+      );
+
+      if (sourceMode === "itemList") {
+        const resolvedLinkedEntities = resolveLinkedEntitySourceItems<
+          Record<string, unknown>
+        >(streamDocument, data.props.data.field);
+
+        if (!resolvedLinkedEntities.length) {
+          return setDeep(data, "props.slots.CardSlot", []);
+        }
+
+        return setDeep(
+          data,
+          "props.slots.CardSlot",
+          buildListSectionCards<FAQCardProps, Record<string, unknown>>({
+            currentCards: data.props.slots
+              .CardSlot as ComponentData<FAQCardProps>[],
+            createCard: () =>
+              defaultFAQCardData(
+                `FAQCard-${crypto.randomUUID()}`,
+                undefined,
+                sharedCardProps?.questionVariant,
+                sharedCardProps?.answerVariant,
+                sharedCardProps?.answerColor
+              ) as ComponentData<FAQCardProps>,
+            decorateCard: (card, linkedEntity, index) =>
+              setDeep(setDeep(card, "props.index", index), "props.parentData", {
+                field: data.props.data.field,
+                faq: {
+                  question: resolveLinkedEntityMappedData(
+                    linkedEntity,
+                    data.props.data.field,
+                    data.props.faqs?.question,
+                    locale
+                  ) ?? { defaultValue: "" },
+                  answer: resolveLinkedEntityMappedData(
+                    linkedEntity,
+                    data.props.data.field,
+                    data.props.faqs?.answer,
+                    locale
+                  ) ?? { defaultValue: "" },
+                },
+              } satisfies FAQCardProps["parentData"]),
+            items: resolvedLinkedEntities,
+          })
+        );
+      }
+
       // ENTITY VALUES
       const resolvedFAQs = resolveYextEntityField<
         FAQSectionType | { faqs: undefined }
@@ -209,38 +338,26 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
         return setDeep(data, "props.slots.CardSlot", []);
       }
 
-      const requiredLength = resolvedFAQs.length;
-      const currentLength = data.props.slots.CardSlot.length;
-      // If CardSlot is shorter, create an array of placeholder cards and append them.
-      // If CardSlot is longer or equal, this will just be an empty array.
-      const cardsToAdd =
-        currentLength < requiredLength
-          ? Array(requiredLength - currentLength)
-              .fill(null)
-              .map(() =>
-                defaultFAQCardData(
-                  `FAQCard-${crypto.randomUUID()}`,
-                  undefined,
-                  sharedCardProps?.questionVariant,
-                  sharedCardProps?.answerVariant,
-                  sharedCardProps?.answerColor
-                )
-              )
-          : [];
-      const updatedCardSlot = [
-        ...data.props.slots.CardSlot,
-        ...cardsToAdd,
-      ].slice(0, requiredLength) as ComponentData<FAQCardProps>[];
-
       return setDeep(
         data,
         "props.slots.CardSlot",
-        updatedCardSlot.map((card, i) => {
-          card.props.index = i;
-          return setDeep(card, "props.parentData", {
-            field: data.props.data.field,
-            faq: resolvedFAQs[i],
-          } satisfies FAQCardProps["parentData"]);
+        buildListSectionCards<FAQCardProps, FAQSectionType["faqs"][number]>({
+          currentCards: data.props.slots
+            .CardSlot as ComponentData<FAQCardProps>[],
+          createCard: () =>
+            defaultFAQCardData(
+              `FAQCard-${crypto.randomUUID()}`,
+              undefined,
+              sharedCardProps?.questionVariant,
+              sharedCardProps?.answerVariant,
+              sharedCardProps?.answerColor
+            ) as ComponentData<FAQCardProps>,
+          decorateCard: (card, faq, index) =>
+            setDeep(setDeep(card, "props.index", index), "props.parentData", {
+              field: data.props.data.field,
+              faq,
+            } satisfies FAQCardProps["parentData"]),
+          items: resolvedFAQs,
         })
       );
     } else {
