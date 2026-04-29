@@ -24,6 +24,7 @@ import {
   OptionalNumberField,
   OptionalNumberFieldOverride,
 } from "./OptionalNumberField.tsx";
+import { VideoField, VideoFieldOverride } from "./VideoField.tsx";
 
 export type YextPuckFields = {
   basicSelector: BasicSelectorField;
@@ -32,6 +33,7 @@ export type YextPuckFields = {
   dateTimeSelector: DateTimeSelectorField;
   fontSizeSelector: FontSizeSelectorField;
   optionalNumber: OptionalNumberField;
+  video: VideoField;
 };
 
 export type YextComponentConfig<
@@ -60,4 +62,5 @@ export const YextPuckFieldOverrides = {
   dateTimeSelector: DateTimeSelectorFieldOverride,
   fontSizeSelector: FontSizeSelectorFieldOverride,
   optionalNumber: OptionalNumberFieldOverride,
+  video: VideoFieldOverride,
 };
