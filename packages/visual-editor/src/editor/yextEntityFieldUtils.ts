@@ -32,6 +32,24 @@ export const getFieldsForSelector = (
   const linkedEntityRootFields = filter.includeLinkedEntityRoots
     ? (linkedEntityStreamFields?.fields ?? [])
     : [];
+  const listRootFilter = filter.allowList
+    ? ({
+        allowList: filter.allowList,
+        includeListsOnly: true,
+      } satisfies RenderEntityFieldFilter<any>)
+    : filter.disallowList
+      ? ({
+          disallowList: filter.disallowList,
+          includeListsOnly: true,
+        } satisfies RenderEntityFieldFilter<any>)
+      : ({ includeListsOnly: true } satisfies RenderEntityFieldFilter<any>);
+  const baseListRootFields = filter.includeBaseListRoots
+    ? getFilteredEntityFields(entityFields, listRootFilter).filter(
+        (field) =>
+          Array.isArray(field.children?.fields) &&
+          field.children.fields.length > 0
+      )
+    : [];
   let linkedEntityFields =
     !filter.includeListsOnly && linkedEntityStreamFields
       ? getFilteredEntityFields(linkedEntityStreamFields, filter)
@@ -59,6 +77,7 @@ export const getFieldsForSelector = (
     ...filteredEntityFields,
     ...linkedEntityFields,
     ...linkedEntityRootFields,
+    ...baseListRootFields,
   ].sort((entityFieldA, entityFieldB) => {
     const nameA = (entityFieldA.displayName ?? entityFieldA.name).toUpperCase();
     const nameB = (entityFieldB.displayName ?? entityFieldB.name).toUpperCase();

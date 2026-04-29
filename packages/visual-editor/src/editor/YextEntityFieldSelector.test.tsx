@@ -222,6 +222,47 @@ describe("YextEntityFieldSelector", () => {
     expect(screen.queryByText("Linked Location > Name")).toBeNull();
   });
 
+  it("shows base entity list roots when the selector opts into them", () => {
+    renderEntityFieldInput({
+      entityFields: {
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_customEvents",
+            displayName: "Custom Events",
+            definition: {
+              name: "c_customEvents",
+              isList: true,
+              typeName: "type.list",
+              type: {},
+            },
+            children: {
+              fields: [
+                {
+                  name: "title",
+                  displayName: "Title",
+                  definition: {
+                    name: "title",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+      filter: {
+        types: ["type.events_section"],
+        includeBaseListRoots: true,
+      },
+    });
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(screen.getByText("Custom Events")).toBeDefined();
+  });
+
   it("falls back to the default entity field option when no matching entity fields exist", () => {
     renderEntityFieldInput({
       entityFields: {

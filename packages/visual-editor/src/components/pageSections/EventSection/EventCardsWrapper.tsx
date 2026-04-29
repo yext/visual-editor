@@ -16,7 +16,7 @@ import { YextField } from "../../../editor/YextField.tsx";
 import { toPuckFields, YextComponentConfig } from "../../../fields/fields.ts";
 import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import {
-  getLinkedEntityListSourceMode,
+  getMappedCardSourceMode,
   resolveLinkedEntityMappedField,
   resolveLinkedEntitySourceItems,
   syncCardSlotLength,
@@ -39,13 +39,8 @@ export type EventCardsWrapperProps = CardWrapperType<EventSectionType> & {
   };
 };
 
-const eventCardsWrapperFields = {
-  ...cardWrapperFields<EventCardsWrapperProps>(
-    msg("components.events", "Events"),
-    ComponentFields.EventSection.type,
-    true
-  ),
-  cards: YextField(msg("fields.cards", "Cards"), {
+const createEventCardsMappingFields = (sourceField?: string) =>
+  YextField(msg("fields.cards", "Cards"), {
     type: "object",
     objectFields: {
       title: YextField(msg("fields.title", "Title"), {
@@ -53,6 +48,7 @@ const eventCardsWrapperFields = {
         disableConstantValueToggle: true,
         filter: {
           types: ["type.string"],
+          ...(sourceField ? { descendantsOf: sourceField } : {}),
         },
       }),
       date: YextField(msg("fields.date", "Date"), {
@@ -60,6 +56,7 @@ const eventCardsWrapperFields = {
         disableConstantValueToggle: true,
         filter: {
           types: ["type.datetime"],
+          ...(sourceField ? { descendantsOf: sourceField } : {}),
         },
       }),
       description: YextField(msg("fields.description", "Description"), {
@@ -67,6 +64,7 @@ const eventCardsWrapperFields = {
         disableConstantValueToggle: true,
         filter: {
           types: ["type.rich_text_v2"],
+          ...(sourceField ? { descendantsOf: sourceField } : {}),
         },
       }),
       cta: YextField(msg("fields.showCTA", "CTA"), {
@@ -74,6 +72,7 @@ const eventCardsWrapperFields = {
         disableConstantValueToggle: true,
         filter: {
           types: ["type.cta"],
+          ...(sourceField ? { descendantsOf: sourceField } : {}),
         },
       }),
       image: YextField(msg("fields.showImage", "Image"), {
@@ -81,10 +80,20 @@ const eventCardsWrapperFields = {
         disableConstantValueToggle: true,
         filter: {
           types: ["type.image"],
+          ...(sourceField ? { descendantsOf: sourceField } : {}),
         },
       }),
     },
-  }),
+  });
+
+const eventCardsWrapperFields = {
+  ...cardWrapperFields<EventCardsWrapperProps>(
+    msg("components.events", "Events"),
+    ComponentFields.EventSection.type,
+    true,
+    true
+  ),
+  cards: createEventCardsMappingFields(),
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
@@ -181,20 +190,22 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
   },
   resolveFields: (data, params) => {
     const streamDocument = params.metadata.streamDocument ?? {};
-    const isLinkedEntityListMode =
+    const isMappedItemListMode =
       !data.props.data.constantValueEnabled &&
       !!data.props.data.field &&
-      getLinkedEntityListSourceMode(
+      getMappedCardSourceMode(
         streamDocument,
         data.props.data.field,
         "events"
-      ) === "linkedEntityList";
+      ) === "itemList";
 
     return toPuckFields({
       ...(eventCardsWrapperFields as any),
       cards: {
-        ...(eventCardsWrapperFields.cards as any),
-        visible: isLinkedEntityListMode,
+        ...(createEventCardsMappingFields(
+          isMappedItemListMode ? data.props.data.field : undefined
+        ) as any),
+        visible: isMappedItemListMode,
       },
     });
   },
@@ -215,13 +226,13 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
           };
 
     if (!data.props.data.constantValueEnabled && data.props.data.field) {
-      const sourceMode = getLinkedEntityListSourceMode(
+      const sourceMode = getMappedCardSourceMode(
         streamDocument,
         data.props.data.field,
         "events"
       );
 
-      if (sourceMode === "linkedEntityList") {
+      if (sourceMode === "itemList") {
         const resolvedLinkedEntities = resolveLinkedEntitySourceItems<
           Record<string, unknown>
         >(streamDocument, data.props.data.field);

@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { ComponentData } from "@puckeditor/core";
 import {
-  getLinkedEntityListSourceMode,
+  getMappedCardSourceMode,
+  getBaseEntityListSourceRootFields,
   isTopLevelLinkedEntitySourceField,
   resolveLinkedEntityMappedField,
   resolveLinkedEntitySourceItems,
@@ -44,7 +45,7 @@ describe("linkedEntityListWrapper", () => {
 
   it("detects linked list and section source modes", () => {
     expect(
-      getLinkedEntityListSourceMode(
+      getMappedCardSourceMode(
         {
           c_eventsSection: {
             events: [{ title: "Cooking Class" }],
@@ -56,14 +57,37 @@ describe("linkedEntityListWrapper", () => {
     ).toBe("section");
 
     expect(
-      getLinkedEntityListSourceMode(
+      getMappedCardSourceMode(
         {
           c_linkedLocation: [{ name: "Downtown" }],
         },
         "c_linkedLocation",
         "events"
       )
-    ).toBe("linkedEntityList");
+    ).toBe("itemList");
+  });
+
+  it("returns top-level list roots with nested fields for base entity sources", () => {
+    expect(
+      getBaseEntityListSourceRootFields([
+        {
+          name: "c_customEvents",
+          children: {
+            fields: [{ name: "title" }],
+          },
+        },
+        {
+          name: "photoGallery",
+        },
+      ] as any)
+    ).toEqual([
+      {
+        name: "c_customEvents",
+        children: {
+          fields: [{ name: "title" }],
+        },
+      },
+    ]);
   });
 
   it("resolves linked entity source items for empty, single, and multiple values", () => {

@@ -193,6 +193,102 @@ describe("EventCardsWrapper", () => {
     });
   });
 
+  it("resolves one card per base-entity struct item and maps card fields into parentData", async () => {
+    const data = createWrapperData();
+    data.props.data.constantValueEnabled = false;
+    data.props.data.field = "c_customEvents";
+    data.props.cards = {
+      title: {
+        field: "c_customEvents.title",
+        constantValue: { defaultValue: "" },
+        constantValueEnabled: false,
+      },
+      date: {
+        field: "c_customEvents.startDate",
+        constantValue: "",
+        constantValueEnabled: false,
+      },
+      description: {
+        field: "c_customEvents.summary",
+        constantValue: { defaultValue: "" },
+        constantValueEnabled: false,
+      },
+      cta: {
+        field: "c_customEvents.primaryCta",
+        constantValue: {
+          label: { defaultValue: "" },
+          link: "",
+          linkType: "URL",
+          ctaType: "textAndLink",
+        },
+        constantValueEnabled: false,
+      },
+      image: {
+        field: "c_customEvents.heroImage",
+        constantValue: {
+          url: "",
+          width: 0,
+          height: 0,
+        },
+        constantValueEnabled: false,
+      },
+    };
+
+    const resolvedData = await EventCardsWrapper.resolveData!(
+      data,
+      resolveParams({
+        c_customEvents: [
+          {
+            title: "Cooking Class",
+            startDate: "2026-05-01T12:00:00",
+            summary: {
+              html: "<p>Open house</p>",
+            },
+            primaryCta: {
+              label: "Reserve",
+              link: "https://example.com",
+              linkType: "URL",
+            },
+            heroImage: {
+              url: "https://example.com/image.jpg",
+              width: 640,
+              height: 360,
+            },
+          },
+        ],
+      })
+    );
+
+    expect(resolvedData.props!.slots!.CardSlot).toHaveLength(1);
+    expect(resolvedData.props!.slots!.CardSlot[0]?.props.parentData).toEqual({
+      field: "c_customEvents",
+      fields: {
+        image: "c_customEvents.heroImage",
+        title: "c_customEvents.title",
+        dateTime: "c_customEvents.startDate",
+        description: "c_customEvents.summary",
+        cta: "c_customEvents.primaryCta",
+      },
+      event: {
+        image: {
+          url: "https://example.com/image.jpg",
+          width: 640,
+          height: 360,
+        },
+        title: "Cooking Class",
+        dateTime: "2026-05-01T12:00:00",
+        description: {
+          html: "<p>Open house</p>",
+        },
+        cta: {
+          label: "Reserve",
+          link: "https://example.com",
+          linkType: "URL",
+        },
+      },
+    });
+  });
+
   it("preserves manual mode and keeps parentData unset", async () => {
     const data = createWrapperData();
 
@@ -209,21 +305,21 @@ describe("EventCardsWrapper", () => {
     ).toBe(true);
   });
 
-  it("shows cards mappings only for linked entity list mode", async () => {
+  it("shows cards mappings only for mapped item list mode", async () => {
     const data = createWrapperData();
     data.props.data.constantValueEnabled = false;
-    data.props.data.field = "c_linkedLocation";
+    data.props.data.field = "c_customEvents";
 
     const linkedFields = await EventCardsWrapper.resolveFields!(
       data,
       resolveParams({
-        c_linkedLocation: [{ name: "Downtown" }],
+        c_customEvents: [{ title: "Downtown" }],
       })
     );
     const sectionFields = await EventCardsWrapper.resolveFields!(
       data,
       resolveParams({
-        c_linkedLocation: {
+        c_customEvents: {
           events: [{ title: "Event" }],
         },
       })
