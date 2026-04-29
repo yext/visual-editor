@@ -14,7 +14,6 @@ import {
 } from "./DynamicOptionsSelector.tsx";
 import { getMaxWidthOptions } from "./MaxWidthSelector.tsx";
 import { msg } from "../utils/i18n/platform.ts";
-import { TranslatableStringField } from "./TranslatableStringField.tsx";
 import {
   RenderYextEntityFieldSelectorProps,
   YextEntityField,
@@ -22,7 +21,7 @@ import {
 } from "./YextEntityFieldSelector.tsx";
 import { MsgString } from "../utils/i18n/platform.ts";
 import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
-import type { YextPuckFields } from "../fields/fields.ts";
+import type { YextFieldMap, YextPuckFields } from "../fields/fields.ts";
 import { type LinkedEntitySourceFieldFilter } from "../utils/cardSlots/linkedEntityListWrapper.ts";
 
 /** Copied from Puck, do not change */
@@ -40,12 +39,6 @@ type YextBaseField = {
 };
 
 export type YextPuckField = YextPuckFields[keyof YextPuckFields];
-
-type YextFieldMap<Props extends Record<string, any>> = {
-  [PropName in keyof Props as PropName extends "editMode"
-    ? never
-    : PropName]: YextFieldDefinition<Props[PropName]>;
-};
 
 type YextArrayFieldConfig<
   Props extends { [key: string]: any }[] = { [key: string]: any }[],
@@ -100,7 +93,6 @@ type YextTranslatableStringField = YextBaseField & {
   filter?: LinkedEntitySourceFieldFilter<any>;
   showApplyAllOption?: boolean;
 };
-
 type YextImageField = YextBaseField & {
   type: "image";
 };
@@ -132,13 +124,23 @@ type YextFieldConfig<Props = any> =
   | YextDynamicSelectField<Props extends DynamicOptionValueTypes ? Props : any>
   | YextPuckFields[Exclude<
       keyof YextPuckFields,
-      "basicSelector" | "optionalNumber" | "video"
+      "basicSelector" | "optionalNumber" | "video" | "translatableString"
     >];
 
 export function YextField<T = any>(
   fieldName: MsgString,
   config: YextFieldConfig<T>
 ): Field<T>;
+
+export function YextField<T extends Record<string, any>[]>(
+  fieldName: MsgString,
+  config: YextArrayFieldConfig<T>
+): YextArrayField<T>;
+
+export function YextField<T extends Record<string, any>>(
+  fieldName: MsgString,
+  config: YextObjectFieldConfig<T>
+): YextObjectField<T>;
 
 export function YextField<T extends Record<string, any>, U = any>(
   fieldName: MsgString,
@@ -192,14 +194,6 @@ export function YextField<T, U>(
         },
       ],
     };
-  }
-
-  if (config.type === "translatableString") {
-    return TranslatableStringField(
-      fieldName,
-      config.filter,
-      config.showApplyAllOption
-    );
   }
 
   if (config.type === "image") {

@@ -72,9 +72,10 @@ export const ImageWrapperFields: YextFields<ImageWrapperProps> = {
           types: ["type.image"],
         },
       }),
-      link: YextField(msg("fields.link", "Link"), {
+      link: {
         type: "translatableString",
-      }),
+        label: msg("fields.link", "Link"),
+      },
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {

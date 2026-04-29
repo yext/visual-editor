@@ -7,7 +7,6 @@ import {
   TranslatableString,
 } from "../../types/types.ts";
 import { EntityField } from "../../editor/EntityField.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
@@ -102,10 +101,11 @@ const ctaWrapperFields: YextFields<CTAWrapperProps> = {
         ],
         visible: false,
       },
-      buttonText: YextField(msg("fields.buttonText", "Button Text"), {
+      buttonText: {
         type: "translatableString",
+        label: msg("fields.buttonText", "Button Text"),
         filter: { types: ["type.string"] },
-      }),
+      },
       customId: {
         label: msg("fields.customId", "Custom ID"),
         type: "text",
@@ -114,35 +114,37 @@ const ctaWrapperFields: YextFields<CTAWrapperProps> = {
         label: msg("fields.customClass", "Custom Class"),
         type: "text",
       },
-      dataAttributes: YextField(
-        msg("fields.dataAttributes", "Data Attributes"),
-        {
-          type: "array",
-          defaultItemProps: {
-            key: "",
-            value: "",
+      dataAttributes: {
+        label: msg("fields.dataAttributes", "Data Attributes"),
+        type: "array",
+        defaultItemProps: {
+          key: "",
+          value: "",
+        },
+        arrayFields: {
+          key: {
+            label: msg("fields.key", "Key"),
+            type: "text",
           },
-          arrayFields: {
-            key: {
-              label: msg("fields.key", "Key"),
-              type: "text",
-            },
-            value: {
-              label: msg("fields.value", "Value"),
-              type: "text",
-            },
+          value: {
+            label: msg("fields.value", "Value"),
+            type: "text",
           },
-          getItemSummary: (item, index) =>
-            item?.key?.trim()
-              ? item.key
-              : `${pt("dataAttribute", "Attribute")} ${(index ?? 0) + 1}`,
-        }
-      ),
-      ariaLabel: YextField(msg("fields.ariaLabel", "Aria Label"), {
+        },
+        getItemSummary: (
+          item: any,
+          index: number // TODO(SUMO-8378): remove typings
+        ) =>
+          item?.key?.trim()
+            ? item.key
+            : `${pt("dataAttribute", "Attribute")} ${(index ?? 0) + 1}`,
+      },
+      ariaLabel: {
         type: "translatableString",
+        label: msg("fields.ariaLabel", "Aria Label"),
         filter: { types: ["type.string"] },
-      }),
-    },
+      },
+    } as any, // TODO: remove `as any` once Puck fixes their objectField typing
   },
   styles: {
     type: "object",

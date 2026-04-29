@@ -6,27 +6,24 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { YextField } from "./YextField.tsx";
 import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 
-const {
-  dynamicOptionsSelectorMock,
-  translatableStringFieldMock,
-  yextEntityFieldSelectorMock,
-} = vi.hoisted(() => ({
-  dynamicOptionsSelectorMock: vi.fn(),
-  translatableStringFieldMock: vi.fn(),
-  yextEntityFieldSelectorMock: vi.fn(),
-}));
+const { dynamicOptionsSelectorMock, yextEntityFieldSelectorMock } = vi.hoisted(
+  () => ({
+    dynamicOptionsSelectorMock: vi.fn(),
+    yextEntityFieldSelectorMock: vi.fn(),
+  })
+);
 
 vi.mock("./DynamicOptionsSelector.tsx", () => ({
   DynamicOptionsSelector: dynamicOptionsSelectorMock,
 }));
 
-vi.mock("./TranslatableStringField.tsx", () => ({
-  TranslatableStringField: translatableStringFieldMock,
-}));
-
-vi.mock("./YextEntityFieldSelector.tsx", () => ({
-  YextEntityFieldSelector: yextEntityFieldSelectorMock,
-}));
+vi.mock("./YextEntityFieldSelector.tsx", async () => {
+  const actual = await vi.importActual("./YextEntityFieldSelector.tsx");
+  return {
+    ...actual,
+    YextEntityFieldSelector: yextEntityFieldSelectorMock,
+  };
+});
 
 const renderCustomField = (field: any, value?: any) => {
   const onChange = vi.fn();
@@ -204,27 +201,6 @@ describe("YextField", () => {
     ).toBeDefined();
 
     themeStyle.remove();
-  });
-
-  it("delegates translatableString configs to TranslatableStringField", () => {
-    const returnedField = createCustomField();
-    const fieldName = msg("fields.text", "Text");
-    const filter = { types: ["type.string"] };
-
-    translatableStringFieldMock.mockReturnValue(returnedField);
-
-    const field = YextField(fieldName, {
-      type: "translatableString",
-      filter,
-      showApplyAllOption: true,
-    } as any);
-
-    expect(translatableStringFieldMock).toHaveBeenCalledWith(
-      fieldName,
-      filter,
-      true
-    );
-    expect(field).toBe(returnedField);
   });
 
   it("returns image configs with the provided label", () => {

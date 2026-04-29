@@ -1,9 +1,6 @@
 import { CustomField, TextField } from "@puckeditor/core";
-import {
-  TranslatableRichText,
-  TranslatableString,
-} from "../../../types/types.ts";
-import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
+import { type TranslatableStringField } from "../../../fields/TranslatableStringField.tsx";
+import { TranslatableRichText } from "../../../types/types.ts";
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
 
 export const TEXT_CONSTANT_CONFIG: TextField = {
@@ -11,8 +8,10 @@ export const TEXT_CONSTANT_CONFIG: TextField = {
   label: "",
 };
 
-export const TRANSLATABLE_STRING_CONSTANT_CONFIG: CustomField<TranslatableString> =
-  TranslatableStringField(undefined, { types: ["type.string"] });
+export const TRANSLATABLE_STRING_CONSTANT_CONFIG: TranslatableStringField = {
+  type: "translatableString",
+  filter: { types: ["type.string"] },
+};
 
 export const TRANSLATABLE_RICH_TEXT_CONSTANT_CONFIG: CustomField<TranslatableRichText> =
   TranslatableRichTextField();

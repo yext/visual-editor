@@ -89,10 +89,11 @@ export const CopyrightMessageSlot: YextComponentConfig<CopyrightMessageSlotProps
       data: YextField(msg("fields.data", "Data"), {
         type: "object",
         objectFields: {
-          text: YextField(msg("fields.copyrightMessage", "Copyright Message"), {
+          text: {
             type: "translatableString",
+            label: msg("fields.copyrightMessage", "Copyright Message"),
             filter: { types: ["type.string"] },
-          }),
+          },
         },
       }),
     },

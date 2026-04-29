@@ -111,7 +111,7 @@ const createFAQsSectionFields = (
       sourceRootsOnly: true,
     },
   }),
-  faqs: createFAQMappingFields(sourceField),
+  faqs: createFAQMappingFields(sourceField) as any,
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {

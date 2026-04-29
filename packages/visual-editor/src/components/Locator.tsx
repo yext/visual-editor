@@ -798,20 +798,24 @@ const locatorFields: YextFields<LocatorProps> = {
       },
     }
   ),
-  pageHeading: YextField(msg("fields.pageHeading", "Page Heading"), {
-    type: "object",
-    objectFields: {
-      title: YextField(msg("fields.title", "Title"), {
-        type: "translatableString",
-        filter: { types: ["type.string"] },
-      }),
-      color: {
-        type: "basicSelector",
-        label: msg("fields.color", "Color"),
-        options: "SITE_COLOR",
+  pageHeading: YextField<LocatorProps["pageHeading"]>(
+    msg("fields.pageHeading", "Page Heading"),
+    {
+      type: "object",
+      objectFields: {
+        title: {
+          type: "translatableString",
+          label: msg("fields.title", "Title"),
+          filter: { types: ["type.string"] },
+        },
+        color: {
+          type: "basicSelector",
+          label: msg("fields.color", "Color"),
+          options: "SITE_COLOR",
+        },
       },
-    },
-  }),
+    }
+  ),
   resultCard: YextField<LocatorProps["resultCard"]>(
     msg("fields.resultCard", "Result Card"),
     {
