@@ -26,15 +26,21 @@ export type YextEntityField<T> = {
 };
 
 const dedupeFieldsByName = (fields: YextSchemaField[]): YextSchemaField[] => {
-  const seenFieldNames = new Set<string>();
-  return fields.filter((field) => {
-    if (seenFieldNames.has(field.name)) {
-      return false;
-    }
+  const fieldsByName = new Map<string, YextSchemaField>();
 
-    seenFieldNames.add(field.name);
-    return true;
+  fields.forEach((field) => {
+    const existingField = fieldsByName.get(field.name);
+    if (
+      !existingField ||
+      (!!field.displayName && !existingField.displayName) ||
+      (!!field.children?.fields?.length &&
+        !existingField.children?.fields?.length)
+    ) {
+      fieldsByName.set(field.name, field);
+    }
   });
+
+  return Array.from(fieldsByName.values());
 };
 
 const sortFields = (fields: YextSchemaField[]): YextSchemaField[] => {
@@ -71,6 +77,14 @@ export const getFieldsForSelector = (
 ): YextSchemaField[] => {
   const linkedEntityStreamFields =
     buildLinkedEntityStreamFields(linkedEntitySchemas);
+  const linkedEntityRootFields = filter.sourceRootKinds?.includes(
+    "linkedEntityRoot"
+  )
+    ? (linkedEntityStreamFields?.fields ?? [])
+    : [];
+  const baseListRootFields = filter.sourceRootKinds?.includes("baseListRoot")
+    ? getBaseEntityListSourceRootFields(entityFields)
+    : [];
   const isLinkedEntityDescendantFilter =
     !!filter.descendantsOf &&
     isTopLevelLinkedEntitySourceField(
@@ -78,17 +92,11 @@ export const getFieldsForSelector = (
       linkedEntitySchemas
     );
 
-  if (filter.includeSourceRootsOnly) {
+  if (filter.sourceRootsOnly) {
     const rootEntityFields = getFilteredEntityFields(
       entityFields,
       filter
     ).filter((field) => !field.name.includes("."));
-    const linkedEntityRootFields = filter.includeLinkedEntityRoots
-      ? (linkedEntityStreamFields?.fields ?? [])
-      : [];
-    const baseListRootFields = filter.includeBaseListRoots
-      ? getBaseEntityListSourceRootFields(entityFields)
-      : [];
 
     return sortFields(
       dedupeFieldsByName([
@@ -105,14 +113,6 @@ export const getFieldsForSelector = (
   let linkedEntityFields =
     !filter.includeListsOnly && linkedEntityStreamFields
       ? getFilteredEntityFields(linkedEntityStreamFields, filter)
-      : [];
-  const linkedEntityRootFields =
-    !isLinkedEntityDescendantFilter && filter.includeLinkedEntityRoots
-      ? (linkedEntityStreamFields?.fields ?? [])
-      : [];
-  const baseListRootFields =
-    !isLinkedEntityDescendantFilter && filter.includeBaseListRoots
-      ? getBaseEntityListSourceRootFields(entityFields)
       : [];
 
   if (isLinkedEntityDescendantFilter) {
@@ -145,8 +145,8 @@ export const getFieldsForSelector = (
     dedupeFieldsByName([
       ...filteredEntityFields,
       ...linkedEntityFields,
-      ...linkedEntityRootFields,
-      ...baseListRootFields,
+      ...(!isLinkedEntityDescendantFilter ? linkedEntityRootFields : []),
+      ...(!isLinkedEntityDescendantFilter ? baseListRootFields : []),
     ])
   );
 };

@@ -196,8 +196,8 @@ describe("YextEntityFieldSelector", () => {
     renderEntityFieldInput({
       filter: {
         types: ["type.events_section"],
-        includeLinkedEntityRoots: true,
-        includeSourceRootsOnly: true,
+        sourceRootKinds: ["linkedEntityRoot"],
+        sourceRootsOnly: true,
       },
       linkedEntitySchemas: {
         c_linkedLocation: {
@@ -255,8 +255,8 @@ describe("YextEntityFieldSelector", () => {
       },
       filter: {
         types: ["type.events_section"],
-        includeBaseListRoots: true,
-        includeSourceRootsOnly: true,
+        sourceRootKinds: ["baseListRoot"],
+        sourceRootsOnly: true,
       },
     });
 
@@ -362,6 +362,15 @@ describe("YextEntityFieldSelector", () => {
                     type: {},
                   },
                 },
+                {
+                  name: "instagramHandle",
+                  displayName: "Instagram Handle",
+                  definition: {
+                    name: "instagramHandle",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
               ],
             },
           },
@@ -369,9 +378,8 @@ describe("YextEntityFieldSelector", () => {
       },
       filter: {
         types: ["type.events_section"],
-        includeLinkedEntityRoots: true,
-        includeBaseListRoots: true,
-        includeSourceRootsOnly: true,
+        sourceRootKinds: ["linkedEntityRoot", "baseListRoot"],
+        sourceRootsOnly: true,
       },
       linkedEntitySchemas: {
         c_linkedLocation: {
@@ -488,6 +496,7 @@ describe("YextEntityFieldSelector", () => {
     expect(screen.getAllByText("Name")).toHaveLength(1);
     expect(screen.getByText("Address > City")).toBeDefined();
     expect(screen.queryByText("Linked Location > Name")).toBeNull();
+    expect(screen.queryByText("Instagram Handle")).toBeNull();
     expect(screen.queryByText("Additional Hours Text")).toBeNull();
     expect(screen.queryByText("Description")).toBeNull();
   });

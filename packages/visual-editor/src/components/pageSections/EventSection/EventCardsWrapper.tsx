@@ -19,9 +19,9 @@ import {
   getMappedCardSourceMode,
   resolveLinkedEntityMappedField,
   resolveLinkedEntitySourceItems,
-  syncCardSlotLength,
 } from "../../../utils/cardSlots/linkedEntityListWrapper.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+import { buildListSectionCards } from "../../../utils/cardSlots/listSectionData.ts";
 
 export type EventCardsWrapperProps = CardWrapperType<EventSectionType> & {
   cards?: {
@@ -90,8 +90,7 @@ const createEventCardsWrapperFields = (sourceField?: string) => ({
   ...cardWrapperFields<EventCardsWrapperProps>(
     msg("components.events", "Events"),
     ComponentFields.EventSection.type,
-    true,
-    true,
+    ["linkedEntityRoot", "baseListRoot"],
     true
   ),
   cards: createEventCardsMappingFields(sourceField),
@@ -246,76 +245,78 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
           return setDeep(data, "props.slots.CardSlot", []);
         }
 
-        const updatedCardSlot = syncCardSlotLength(
-          data.props.slots.CardSlot as ComponentData<EventCardProps>[],
-          resolvedLinkedEntities.length,
-          () =>
-            defaultEventCardSlotData(
-              `EventCard-${crypto.randomUUID()}`,
-              undefined,
-              sharedCardProps?.backgroundColor,
-              sharedCardProps?.truncateDescription,
-              sharedCardProps?.slotStyles
-            ) as ComponentData<EventCardProps>
-        );
-
         return setDeep(
           data,
           "props.slots.CardSlot",
-          updatedCardSlot.map((card, i) => {
-            card.props.index = i;
+          buildListSectionCards<EventCardProps, Record<string, unknown>>({
+            currentCards: data.props.slots
+              .CardSlot as ComponentData<EventCardProps>[],
+            createCard: () =>
+              defaultEventCardSlotData(
+                `EventCard-${crypto.randomUUID()}`,
+                undefined,
+                sharedCardProps?.backgroundColor,
+                sharedCardProps?.truncateDescription,
+                sharedCardProps?.slotStyles
+              ) as ComponentData<EventCardProps>,
+            decorateCard: (card, linkedEntity, index) => {
+              const mappedTitle = resolveLinkedEntityMappedField<
+                EventStruct["title"]
+              >(
+                linkedEntity,
+                data.props.data.field,
+                data.props.cards?.title?.field
+              );
 
-            const linkedEntity = resolvedLinkedEntities[i];
-            const mappedTitle = resolveLinkedEntityMappedField<
-              EventStruct["title"]
-            >(
-              linkedEntity,
-              data.props.data.field,
-              data.props.cards?.title?.field
-            );
-
-            return setDeep(card, "props.parentData", {
-              field: data.props.data.field,
-              fields: {
-                image: data.props.cards?.image?.field || undefined,
-                title: data.props.cards?.title?.field || undefined,
-                dateTime: data.props.cards?.date?.field || undefined,
-                description: data.props.cards?.description?.field || undefined,
-                cta: data.props.cards?.cta?.field || undefined,
-              },
-              event: {
-                image: resolveLinkedEntityMappedField<EventStruct["image"]>(
-                  linkedEntity,
-                  data.props.data.field,
-                  data.props.cards?.image?.field
-                ),
-                title: mappedTitle
-                  ? resolveComponentData(mappedTitle, locale, linkedEntity)
-                  : undefined,
-                dateTime: resolveLinkedEntityMappedField<string>(
-                  linkedEntity,
-                  data.props.data.field,
-                  data.props.cards?.date?.field
-                ),
-                description: resolveLinkedEntityMappedField<
-                  EventStruct["description"]
-                >(
-                  linkedEntity,
-                  data.props.data.field,
-                  data.props.cards?.description?.field
-                ),
-                cta: resolveLinkedEntityMappedField<EventStruct["cta"]>(
-                  linkedEntity,
-                  data.props.data.field,
-                  data.props.cards?.cta?.field
-                ) ?? {
-                  label: { defaultValue: "" },
-                  link: "",
-                  linkType: "URL",
-                  ctaType: "textAndLink",
-                },
-              },
-            } satisfies EventCardProps["parentData"]);
+              return setDeep(
+                setDeep(card, "props.index", index),
+                "props.parentData",
+                {
+                  field: data.props.data.field,
+                  fields: {
+                    image: data.props.cards?.image?.field || undefined,
+                    title: data.props.cards?.title?.field || undefined,
+                    dateTime: data.props.cards?.date?.field || undefined,
+                    description:
+                      data.props.cards?.description?.field || undefined,
+                    cta: data.props.cards?.cta?.field || undefined,
+                  },
+                  event: {
+                    image: resolveLinkedEntityMappedField<EventStruct["image"]>(
+                      linkedEntity,
+                      data.props.data.field,
+                      data.props.cards?.image?.field
+                    ),
+                    title: mappedTitle
+                      ? resolveComponentData(mappedTitle, locale, linkedEntity)
+                      : undefined,
+                    dateTime: resolveLinkedEntityMappedField<string>(
+                      linkedEntity,
+                      data.props.data.field,
+                      data.props.cards?.date?.field
+                    ),
+                    description: resolveLinkedEntityMappedField<
+                      EventStruct["description"]
+                    >(
+                      linkedEntity,
+                      data.props.data.field,
+                      data.props.cards?.description?.field
+                    ),
+                    cta: resolveLinkedEntityMappedField<EventStruct["cta"]>(
+                      linkedEntity,
+                      data.props.data.field,
+                      data.props.cards?.cta?.field
+                    ) ?? {
+                      label: { defaultValue: "" },
+                      link: "",
+                      linkType: "URL",
+                      ctaType: "textAndLink",
+                    },
+                  },
+                } satisfies EventCardProps["parentData"]
+              );
+            },
+            items: resolvedLinkedEntities,
           })
         );
       }
@@ -336,28 +337,26 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
         return setDeep(data, "props.slots.CardSlot", []);
       }
 
-      const updatedCardSlot = syncCardSlotLength(
-        data.props.slots.CardSlot as ComponentData<EventCardProps>[],
-        resolvedEvents.length,
-        () =>
-          defaultEventCardSlotData(
-            `EventCard-${crypto.randomUUID()}`,
-            undefined,
-            sharedCardProps?.backgroundColor,
-            sharedCardProps?.truncateDescription,
-            sharedCardProps?.slotStyles
-          ) as ComponentData<EventCardProps>
-      );
-
       return setDeep(
         data,
         "props.slots.CardSlot",
-        updatedCardSlot.map((card, i) => {
-          card.props.index = i;
-          return setDeep(card, "props.parentData", {
-            field: data.props.data.field,
-            event: resolvedEvents[i],
-          } satisfies EventCardProps["parentData"]);
+        buildListSectionCards<EventCardProps, EventStruct>({
+          currentCards: data.props.slots
+            .CardSlot as ComponentData<EventCardProps>[],
+          createCard: () =>
+            defaultEventCardSlotData(
+              `EventCard-${crypto.randomUUID()}`,
+              undefined,
+              sharedCardProps?.backgroundColor,
+              sharedCardProps?.truncateDescription,
+              sharedCardProps?.slotStyles
+            ) as ComponentData<EventCardProps>,
+          decorateCard: (card, event, index) =>
+            setDeep(setDeep(card, "props.index", index), "props.parentData", {
+              field: data.props.data.field,
+              event,
+            } satisfies EventCardProps["parentData"]),
+          items: resolvedEvents,
         })
       );
     } else {

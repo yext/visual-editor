@@ -3,6 +3,7 @@ import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { YextField } from "../../editor/YextField.tsx";
 import { MsgString } from "../i18n/platform.ts";
 import { EntityFieldTypes } from "../../internal/utils/getFilteredEntityFields.ts";
+import { SourceRootKind } from "./linkedEntityListWrapper.ts";
 
 export interface CardWrapperType<T> {
   data: Omit<YextEntityField<T>, "constantValue"> & {
@@ -21,17 +22,15 @@ export interface CardWrapperType<T> {
 export const cardWrapperFields = <T>(
   label: MsgString,
   entityFieldType: EntityFieldTypes,
-  includeLinkedEntityRoots = false,
-  includeBaseListRoots = false,
-  includeSourceRootsOnly = false
+  sourceRootKinds: SourceRootKind[] = [],
+  sourceRootsOnly = false
 ): Fields<CardWrapperType<T>> => ({
   data: YextField(label, {
     type: "entityField",
     filter: {
       types: [entityFieldType],
-      includeLinkedEntityRoots,
-      includeBaseListRoots,
-      includeSourceRootsOnly,
+      sourceRootKinds,
+      sourceRootsOnly,
     },
   }),
   slots: {

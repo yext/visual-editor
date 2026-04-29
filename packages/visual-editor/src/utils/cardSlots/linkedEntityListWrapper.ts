@@ -1,9 +1,5 @@
-import { ComponentData } from "@puckeditor/core";
 import { type RenderEntityFieldFilter } from "../../internal/utils/getFilteredEntityFields.ts";
-import {
-  buildLinkedEntityStreamFields,
-  type LinkedEntitySchemas,
-} from "../linkedEntityFieldUtils.ts";
+import { type LinkedEntitySchemas } from "../linkedEntityFieldUtils.ts";
 import {
   type StreamFields,
   type YextSchemaField,
@@ -12,6 +8,7 @@ import { type StreamDocument } from "../types/StreamDocument.ts";
 import { resolveField } from "../resolveYextEntityField.ts";
 
 type MappedCardSourceMode = "section" | "itemList" | "unknown";
+export type SourceRootKind = "linkedEntityRoot" | "baseListRoot";
 
 /**
  * Returns true when a field is a top-level linked entity reference root exposed
@@ -27,14 +24,6 @@ export const isTopLevelLinkedEntitySourceField = (
 
   return Object.hasOwn(linkedEntitySchemas, fieldPath);
 };
-
-/**
- * Returns linked entity reference roots so wrappers can include them alongside
- * section-shaped sources and base-entity list-of-struct sources.
- */
-export const getLinkedEntitySourceRootFields = (
-  linkedEntitySchemas?: LinkedEntitySchemas
-) => buildLinkedEntityStreamFields(linkedEntitySchemas)?.fields ?? [];
 
 /**
  * Returns top-level list fields on the base entity so wrappers can treat a
@@ -123,28 +112,8 @@ export const resolveLinkedEntityMappedField = <T>(
   return resolveField<T>(linkedEntity, relativeFieldPath).value;
 };
 
-/**
- * Appends placeholder cards when needed and trims the slot array to the number
- * of resolved linked entities or section items.
- */
-export const syncCardSlotLength = <T extends Record<string, any>>(
-  existingCards: ComponentData<T>[],
-  requiredLength: number,
-  createCard: () => ComponentData<T>
-): ComponentData<T>[] => {
-  const cardsToAdd =
-    existingCards.length < requiredLength
-      ? Array(requiredLength - existingCards.length)
-          .fill(null)
-          .map(createCard)
-      : [];
-
-  return [...existingCards, ...cardsToAdd].slice(0, requiredLength);
-};
-
 export type LinkedEntitySourceFieldFilter<T extends Record<string, any>> =
   RenderEntityFieldFilter<T> & {
-    includeLinkedEntityRoots?: boolean;
-    includeBaseListRoots?: boolean;
-    includeSourceRootsOnly?: boolean;
+    sourceRootKinds?: SourceRootKind[];
+    sourceRootsOnly?: boolean;
   };

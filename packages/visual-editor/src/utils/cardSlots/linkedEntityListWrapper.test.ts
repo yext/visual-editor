@@ -1,12 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { ComponentData } from "@puckeditor/core";
 import {
   getMappedCardSourceMode,
   getBaseEntityListSourceRootFields,
   isTopLevelLinkedEntitySourceField,
   resolveLinkedEntityMappedField,
   resolveLinkedEntitySourceItems,
-  syncCardSlotLength,
 } from "./linkedEntityListWrapper.ts";
 import { type LinkedEntitySchemas } from "../linkedEntityFieldUtils.ts";
 
@@ -125,24 +123,5 @@ describe("linkedEntityListWrapper", () => {
         "c_linkedLocation.address.city"
       )
     ).toBe("New York");
-  });
-
-  it("syncs slot arrays to the required linked entity count", () => {
-    const existingCards = [
-      { type: "EventCard", props: { id: "one" } },
-    ] as ComponentData<{ id?: string }>[];
-
-    expect(
-      syncCardSlotLength(existingCards, 3, () => ({
-        type: "EventCard",
-        props: { id: "new" },
-      }))
-    ).toHaveLength(3);
-    expect(
-      syncCardSlotLength(existingCards, 0, () => ({
-        type: "EventCard",
-        props: { id: "new" },
-      }))
-    ).toEqual([]);
   });
 });
