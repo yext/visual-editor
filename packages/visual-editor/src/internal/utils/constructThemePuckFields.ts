@@ -5,7 +5,7 @@ import {
   CustomField,
 } from "@puckeditor/core";
 import { CoreStyle, ThemeConfigSection } from "../../utils/themeResolver.ts";
-import { ColorSelector } from "../puck/components/ColorSelector.tsx";
+import { ColorSelector } from "../../fields/ColorSelector.tsx";
 import { ThemeData } from "../types/themeData.ts";
 import { FontSelector } from "../puck/components/FontSelector.tsx";
 import { FontStyleSelector } from "../puck/components/FontStyleSelector.tsx";

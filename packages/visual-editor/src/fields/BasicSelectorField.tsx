@@ -8,7 +8,7 @@ import {
 } from "../internal/types/combobox.ts";
 import { ThemeOptions, type ThemeColor } from "../utils/themeConfigOptions.ts";
 import { msg, pt, type MsgString } from "../utils/i18n/platform.ts";
-import { ColorPickerInput } from "../internal/puck/components/ColorSelector.tsx";
+import { ColorPickerInput } from "./ColorSelector.tsx";
 import {
   getContrastingColor,
   getThemeColorHexValue,

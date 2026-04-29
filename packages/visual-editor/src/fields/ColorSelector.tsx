@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { CustomField, FieldLabel } from "@puckeditor/core";
 import { Color, ColorResult, SketchPicker } from "react-color";
-import { pt } from "../../../utils/i18n/platform.ts";
+import { pt } from "../utils/i18n/platform.ts";
 
 type RenderProps = Parameters<CustomField<any>["render"]>[0];
 
