@@ -198,7 +198,8 @@ export const getCustomFontAssets = (
  */
 export const buildFontPreloadTags = (
   preloads: string[],
-  relativePrefixToRoot: string
+  relativePrefixToRoot: string,
+  pathPrefix: string = ""
 ): string => {
   if (preloads.length === 0) {
     return "";
@@ -216,7 +217,7 @@ export const buildFontPreloadTags = (
           ? PRELOAD_MIME_TYPE_BY_EXTENSION[extension]
           : undefined;
 
-        return `<link rel="preload" href="${normalizeAssetPath(href, relativePrefixToRoot)}" as="font"${
+        return `<link rel="preload" href="${normalizeAssetPath(href, relativePrefixToRoot, pathPrefix)}" as="font"${
           typeAttribute ? ` type="${typeAttribute}"` : ""
         } crossorigin="anonymous">`;
       })

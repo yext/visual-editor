@@ -62,21 +62,53 @@ export type FontLinkData = {
   crossOrigin?: "anonymous" | "use-credentials";
 };
 
-const isNormalizedAssetPath = (path: string): boolean => {
-  return (
-    path.startsWith("http://") ||
-    path.startsWith("https://") ||
-    path.startsWith("/") ||
-    path.startsWith("./") ||
-    path.startsWith("../")
-  );
+const isExternalAssetPath = (path: string): boolean => {
+  return path.startsWith("http://") || path.startsWith("https://");
+};
+
+const normalizePathPrefix = (pathPrefix: string): string => {
+  if (!pathPrefix) {
+    return "";
+  }
+
+  const normalizedPrefix = pathPrefix.startsWith("/")
+    ? pathPrefix
+    : `/${pathPrefix}`;
+  return normalizedPrefix.endsWith("/")
+    ? normalizedPrefix
+    : `${normalizedPrefix}/`;
+};
+
+export const getPathPrefixFromSiteDomain = (siteDomain?: string): string => {
+  if (!siteDomain) {
+    return "";
+  }
+
+  const domainPath = siteDomain
+    .split(/[?#]/, 1)[0]
+    .split("/")
+    .slice(1)
+    .join("/");
+  return normalizePathPrefix(domainPath);
 };
 
 export const normalizeAssetPath = (
   path: string,
-  relativePrefixToRoot: string
+  relativePrefixToRoot: string,
+  pathPrefix: string = ""
 ): string => {
-  return isNormalizedAssetPath(path) ? path : `${relativePrefixToRoot}${path}`;
+  if (isExternalAssetPath(path)) {
+    return path;
+  }
+
+  const normalizedPathPrefix = normalizePathPrefix(pathPrefix);
+  if (normalizedPathPrefix) {
+    return `${normalizedPathPrefix}${path.replace(/^\.?\//, "")}`;
+  }
+
+  return path.startsWith("/") || path.startsWith("./") || path.startsWith("../")
+    ? path
+    : `${relativePrefixToRoot}${path}`;
 };
 
 // Helper function to generate weight parameter for Google Fonts API
@@ -142,10 +174,11 @@ export const getFacePathsFromFonts = (fonts: FontRegistry): string[] => {
  */
 export const generateCustomFontLinkData = (
   facePaths: string[],
-  relativePrefixToRoot: string
+  relativePrefixToRoot: string,
+  pathPrefix: string = ""
 ): FontLinkData[] => {
   return facePaths.map((facePath) => ({
-    href: normalizeAssetPath(facePath, relativePrefixToRoot),
+    href: normalizeAssetPath(facePath, relativePrefixToRoot, pathPrefix),
     rel: "stylesheet",
   }));
 };

@@ -13,6 +13,7 @@ import {
   type FontRegistry,
   type FontLinkData,
   generateCustomFontLinkData,
+  getPathPrefixFromSiteDomain,
 } from "./fonts/visualEditorFonts.ts";
 import {
   buildFontPreloadTags,
@@ -78,6 +79,7 @@ export const applyTheme = (
   let fontLinkData: FontLinkData[];
   const fallbackFontFaceDefinitions: string[] = [];
   const customFontAssets = getCustomFontAssets(overrides);
+  const pathPrefix = getPathPrefixFromSiteDomain(document?.siteDomain);
   if (!overrides) {
     // No theme overrides, use only Open Sans (the default font)
     fontLinkData = generateGoogleFontLinkData({
@@ -93,7 +95,8 @@ export const applyTheme = (
     fontLinkData = [
       ...generateCustomFontLinkData(
         customFontAssets.stylesheetPaths,
-        relativePrefixToRoot
+        relativePrefixToRoot,
+        pathPrefix
       ),
       ...fontLinkData,
     ];
@@ -115,7 +118,8 @@ export const applyTheme = (
   if (Object.keys(themeConfig).length > 0) {
     const preloadTags = buildFontPreloadTags(
       customFontAssets.preloads,
-      relativePrefixToRoot
+      relativePrefixToRoot,
+      pathPrefix
     );
 
     return `${base ?? ""}${preloadTags}${fontLinkTags}<style type="text/css">${fallbackFontFaceDefinitions.join("\n")}</style><style id="${THEME_STYLE_TAG_ID}" type="text/css">${internalApplyTheme(overrides ?? {}, themeConfig)}</style>`;

@@ -149,6 +149,79 @@ describe("buildCssOverridesStyle", () => {
     expect(result).not.toContain("./y-fonts/ebbmelvynregular-regular.css");
   });
 
+  it("should prefix custom font assets with the path from siteDomain", () => {
+    const streamDocument: StreamDocument = {
+      siteId: 123,
+      siteDomain: "www.yext-cdntest.com/rptest",
+      __: {
+        theme: JSON.stringify({
+          "--fontFamily-h1-fontFamily":
+            "'Milkdays', 'Milkdays Fallback', sans-serif",
+          __customFontAssets: {
+            stylesheetPaths: [
+              "y-fonts/milkdays.css",
+              "/y-fonts/milkdays-italic.css",
+              "https://assets.example.com/fonts/milkdays.css",
+            ],
+            preloads: [
+              "y-fonts/milkdays-regular.woff2",
+              "/y-fonts/milkdays-italic.woff2",
+              "https://assets.example.com/fonts/milkdays-bold.woff2",
+            ],
+          },
+        }),
+      },
+    };
+
+    const result = applyTheme(streamDocument, "", themeConfig);
+
+    expect(result).toContain(
+      '<link href="/rptest/y-fonts/milkdays.css" rel="stylesheet">'
+    );
+    expect(result).toContain(
+      '<link href="/rptest/y-fonts/milkdays-italic.css" rel="stylesheet">'
+    );
+    expect(result).toContain(
+      '<link rel="preload" href="/rptest/y-fonts/milkdays-regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">'
+    );
+    expect(result).toContain(
+      '<link rel="preload" href="/rptest/y-fonts/milkdays-italic.woff2" as="font" type="font/woff2" crossorigin="anonymous">'
+    );
+    expect(result).toContain(
+      '<link href="https://assets.example.com/fonts/milkdays.css" rel="stylesheet">'
+    );
+    expect(result).toContain(
+      '<link rel="preload" href="https://assets.example.com/fonts/milkdays-bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">'
+    );
+    expect(result).not.toContain('href="/y-fonts/milkdays');
+  });
+
+  it("should not prefix custom font assets for siteDomains without paths", () => {
+    const streamDocument: StreamDocument = {
+      siteId: 123,
+      siteDomain: "www.yext-cdntest.com",
+      __: {
+        theme: JSON.stringify({
+          "--fontFamily-h1-fontFamily":
+            "'Milkdays', 'Milkdays Fallback', sans-serif",
+          __customFontAssets: {
+            stylesheetPaths: ["y-fonts/milkdays.css"],
+            preloads: ["/y-fonts/milkdays-regular.woff2"],
+          },
+        }),
+      },
+    };
+
+    const result = applyTheme(streamDocument, "./", themeConfig);
+
+    expect(result).toContain(
+      '<link href="./y-fonts/milkdays.css" rel="stylesheet">'
+    );
+    expect(result).toContain(
+      '<link rel="preload" href="/y-fonts/milkdays-regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">'
+    );
+  });
+
   it("should not infer custom font stylesheet urls when stylesheetPaths are empty", () => {
     const streamDocument: StreamDocument = {
       siteId: 123,
