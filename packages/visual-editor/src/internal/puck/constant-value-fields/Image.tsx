@@ -19,7 +19,6 @@ import {
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { type TranslatableStringField } from "../../../fields/TranslatableStringField.tsx";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
-import { TranslatableString } from "../../../types/types.ts";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import {
   FieldTypeData,

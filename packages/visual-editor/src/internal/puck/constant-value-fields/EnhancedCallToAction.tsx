@@ -2,10 +2,7 @@ import { CustomField, FieldLabel } from "@puckeditor/core";
 import { type TranslatableStringField } from "../../../fields/TranslatableStringField.tsx";
 import { YextAutoField } from "../../../fields/YextAutoField.tsx";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
-import {
-  EnhancedTranslatableCTA,
-  TranslatableString,
-} from "../../../types/types.ts";
+import { EnhancedTranslatableCTA } from "../../../types/types.ts";
 import { linkTypeOptions } from "./CallToAction.tsx";
 import { useMemo } from "react";
 import { ctaTypeOptions } from "../../../internal/utils/ctaFieldUtils.ts";

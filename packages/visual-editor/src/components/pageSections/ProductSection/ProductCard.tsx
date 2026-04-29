@@ -504,7 +504,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
               params.metadata.streamDocument,
               { output: "plainText" }
             );
-    const resolvedPrice = !!resolvedPriceFromEntity
+    const resolvedPrice = resolvedPriceFromEntity
       ? resolvedPriceFromEntity
       : resolvedFallbackPrice;
     const showPrice = Boolean(resolvedPrice);

@@ -1,9 +1,6 @@
 import { CustomField, TextField } from "@puckeditor/core";
 import { type TranslatableStringField } from "../../../fields/TranslatableStringField.tsx";
-import {
-  TranslatableRichText,
-  TranslatableString,
-} from "../../../types/types.ts";
+import { TranslatableRichText } from "../../../types/types.ts";
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
 
 export const TEXT_CONSTANT_CONFIG: TextField = {

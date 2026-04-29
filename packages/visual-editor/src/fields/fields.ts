@@ -3,7 +3,7 @@ import type {
   DefaultComponentProps,
   Fields,
 } from "@puckeditor/core";
-import type { YextFieldDefinition, YextPuckField } from "../editor/YextField.tsx";
+import type { YextFieldDefinition } from "../editor/YextField.tsx";
 import {
   BasicSelectorField,
   BasicSelectorFieldOverride,
