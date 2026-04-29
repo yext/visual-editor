@@ -190,11 +190,11 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
             answerColor: data.props.slots.CardSlot[0].props.styles.answerColor,
           };
 
-    if (
-      streamDocument &&
-      !data.props.data.constantValueEnabled &&
-      data.props.data.field
-    ) {
+    if (!data.props.data.constantValueEnabled) {
+      if (!streamDocument || !data.props.data.field) {
+        return data;
+      }
+
       // ENTITY VALUES
       const resolvedFAQs = resolveYextEntityField<Partial<FAQSectionType>>(
         streamDocument,
@@ -231,59 +231,59 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
           items: resolvedFAQs,
         })
       );
-    } else {
-      // STATIC VALUES
-      let updatedData = data;
-
-      // Rebuild the slot array from the saved ids, reusing existing cards when
-      // possible and de-duplicating ids to avoid collisions.
-      const inUseIds = new Set<string>();
-      const newSlots = data.props.data.constantValue.map(({ id }, i) => {
-        const existingCard = id
-          ? (data.props.slots.CardSlot.find(
-              (slot) => slot.props.id === id
-            ) as ComponentData<FAQCardProps>)
-          : undefined;
-
-        // Deep clone reused cards so id and parentData updates do not mutate
-        // the original slot entry in multiple places.
-        let newCard = existingCard
-          ? (JSON.parse(JSON.stringify(existingCard)) as typeof existingCard)
-          : undefined;
-
-        let newId = newCard?.props.id || `FAQCard-${crypto.randomUUID()}`;
-
-        if (newCard && inUseIds.has(newId)) {
-          newId = `FAQCard-${crypto.randomUUID()}`;
-        }
-        inUseIds.add(newId);
-
-        if (!newCard) {
-          return defaultFAQCardData(
-            newId,
-            i,
-            sharedCardProps?.questionVariant,
-            sharedCardProps?.answerVariant,
-            sharedCardProps?.answerColor
-          );
-        }
-
-        newCard = setDeep(newCard, "props.id", newId); // update the id
-        newCard = setDeep(newCard, "props.index", i); // update the index
-        newCard = setDeep(newCard, "props.parentData", undefined); // set to constant values
-
-        return newCard;
-      });
-
-      // Keep the rendered card slot and sidebar ids in sync.
-      updatedData = setDeep(updatedData, "props.slots.CardSlot", newSlots);
-      updatedData = setDeep(
-        updatedData,
-        "props.data.constantValue",
-        newSlots.map((card) => ({ id: card.props.id }))
-      );
-      return updatedData;
     }
+
+    // STATIC VALUES
+    let updatedData = data;
+
+    // Rebuild the slot array from the saved ids, reusing existing cards when
+    // possible and de-duplicating ids to avoid collisions.
+    const inUseIds = new Set<string>();
+    const newSlots = data.props.data.constantValue.map(({ id }, i) => {
+      const existingCard = id
+        ? (data.props.slots.CardSlot.find(
+            (slot) => slot.props.id === id
+          ) as ComponentData<FAQCardProps>)
+        : undefined;
+
+      // Deep clone reused cards so id and parentData updates do not mutate
+      // the original slot entry in multiple places.
+      let newCard = existingCard
+        ? (JSON.parse(JSON.stringify(existingCard)) as typeof existingCard)
+        : undefined;
+
+      let newId = newCard?.props.id || `FAQCard-${crypto.randomUUID()}`;
+
+      if (newCard && inUseIds.has(newId)) {
+        newId = `FAQCard-${crypto.randomUUID()}`;
+      }
+      inUseIds.add(newId);
+
+      if (!newCard) {
+        return defaultFAQCardData(
+          newId,
+          i,
+          sharedCardProps?.questionVariant,
+          sharedCardProps?.answerVariant,
+          sharedCardProps?.answerColor
+        );
+      }
+
+      newCard = setDeep(newCard, "props.id", newId); // update the id
+      newCard = setDeep(newCard, "props.index", i); // update the index
+      newCard = setDeep(newCard, "props.parentData", undefined); // set to constant values
+
+      return newCard;
+    });
+
+    // Keep the rendered card slot and sidebar ids in sync.
+    updatedData = setDeep(updatedData, "props.slots.CardSlot", newSlots);
+    updatedData = setDeep(
+      updatedData,
+      "props.data.constantValue",
+      newSlots.map((card) => ({ id: card.props.id }))
+    );
+    return updatedData;
   },
   render: (props) => (
     <ComponentErrorBoundary
