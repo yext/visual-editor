@@ -189,7 +189,10 @@ export const ImageFieldOverride = ({
     } as TranslatableAssetImage);
   };
 
-  const altTextOptions = field.getAltTextOptions?.(templateMetadata);
+  const altTextOptions = React.useMemo(
+    () => field.getAltTextOptions?.(templateMetadata),
+    [field.getAltTextOptions, templateMetadata]
+  );
   const altTextField = React.useMemo(() => {
     if (altTextOptions) {
       return TranslatableStringField<TranslatableString | undefined>(
@@ -268,24 +271,27 @@ export const ImageFieldOverride = ({
         </div>
       )}
 
-      <FieldLabel label="" el="div">
-        <AutoField
-          field={altTextField}
-          id="altText"
-          value={resolvedValue?.alternateText}
-          onChange={(newValue: TranslatableString | undefined) => {
-            const updatedImage = resolvedValue
-              ? { ...resolvedValue, alternateText: newValue }
-              : undefined;
+      {resolvedValue && (
+        <FieldLabel label="" el="div">
+          <AutoField
+            field={altTextField}
+            id="altText"
+            value={resolvedValue.alternateText}
+            onChange={(newValue: TranslatableString | undefined) => {
+              const updatedImage = {
+                ...resolvedValue,
+                alternateText: newValue,
+              };
 
-            onChange({
-              ...localizedContainer,
-              [locale]: updatedImage,
-              hasLocalizedValue: "true",
-            } as TranslatableAssetImage);
-          }}
-        />
-      </FieldLabel>
+              onChange({
+                ...localizedContainer,
+                [locale]: updatedImage,
+                hasLocalizedValue: "true",
+              } as TranslatableAssetImage);
+            }}
+          />
+        </FieldLabel>
+      )}
     </>
   );
 };

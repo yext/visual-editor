@@ -215,11 +215,11 @@ The `image` field type opens the asset selector and stores the selected image as
 
 ### Props
 
-| Name                | Type                                            | Description                                              |
-| ------------------- | ----------------------------------------------- | -------------------------------------------------------- |
-| `type`              | `"image"`                                       | Registers the field as the Visual Editor image selector. |
-| `label?`            | `string \| MsgString`                           | The field label shown in the editor.                     |
-| `getAltTextOptions` | `(templateMetadata) => DynamicOption<string>[]` | Optional locator-specific alt-text source options.       |
+| Name                 | Type                                            | Description                                              |
+| -------------------- | ----------------------------------------------- | -------------------------------------------------------- |
+| `type`               | `"image"`                                       | Registers the field as the Visual Editor image selector. |
+| `label?`             | `string \| MsgString`                           | The field label shown in the editor.                     |
+| `getAltTextOptions?` | `(templateMetadata) => DynamicOption<string>[]` | Optional locator-specific alt-text source options.       |
 
 ### Usage
 
