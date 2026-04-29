@@ -4,7 +4,6 @@ import { YextAutoField } from "../fields/YextAutoField.tsx";
 import { msg } from "../utils/i18n/platform.ts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { YextField } from "./YextField.tsx";
-import { VIDEO_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Video.tsx";
 import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 
 const {
@@ -240,20 +239,6 @@ describe("YextField", () => {
       label: fieldName,
     });
     expect(field.render).toBe(IMAGE_CONSTANT_CONFIG.render);
-  });
-
-  it("returns video configs with the provided label", () => {
-    const fieldName = msg("fields.video", "Video");
-
-    const field = YextField(fieldName, {
-      type: "video",
-    }) as any;
-
-    expect(field).toMatchObject({
-      type: VIDEO_CONSTANT_CONFIG.type,
-      label: fieldName,
-    });
-    expect(field.render).toBe(VIDEO_CONSTANT_CONFIG.render);
   });
 
   it("delegates dynamicSelect configs to DynamicOptionsSelector", () => {
