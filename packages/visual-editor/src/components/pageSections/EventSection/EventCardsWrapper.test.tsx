@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { EventCardsWrapper } from "./EventCardsWrapper.tsx";
 import { type ComponentData } from "@puckeditor/core";
 import { type EventCardsWrapperProps } from "./EventCardsWrapper.tsx";
+import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 
 const createWrapperData = (): ComponentData<EventCardsWrapperProps> => ({
   type: "EventCardsWrapper",
@@ -187,6 +188,57 @@ describe("EventCardsWrapper", () => {
           link: "",
           linkType: "URL",
           ctaType: "textAndLink",
+        },
+      },
+    });
+  });
+
+  it("resolves constant linked card mappings against each linked entity", async () => {
+    const data = createWrapperData();
+    data.props.data.constantValueEnabled = false;
+    data.props.data.field = "c_linkedLocation";
+    data.props.cards = {
+      title: {
+        field: "",
+        constantValue: { defaultValue: "Location: [[name]]" },
+        constantValueEnabled: true,
+      },
+      description: {
+        field: "",
+        constantValue: getDefaultRTF("Details: [[description]]"),
+        constantValueEnabled: true,
+      },
+    } as EventCardsWrapperProps["cards"];
+
+    const resolvedData = await EventCardsWrapper.resolveData!(
+      data,
+      resolveParams({
+        c_linkedLocation: [
+          { name: "Downtown", description: "Fresh daily" },
+          { name: "Uptown", description: "Open late" },
+        ],
+      })
+    );
+
+    expect(
+      resolvedData.props!.slots!.CardSlot[0]?.props.parentData
+    ).toMatchObject({
+      field: "c_linkedLocation",
+      event: {
+        title: "Location: Downtown",
+        description: {
+          html: expect.stringContaining("Details: Fresh daily"),
+        },
+      },
+    });
+    expect(
+      resolvedData.props!.slots!.CardSlot[1]?.props.parentData
+    ).toMatchObject({
+      field: "c_linkedLocation",
+      event: {
+        title: "Location: Uptown",
+        description: {
+          html: expect.stringContaining("Details: Open late"),
         },
       },
     });

@@ -4,8 +4,8 @@ import {
 } from "../internal/utils/getFilteredEntityFields.ts";
 import { StreamFields, YextSchemaField } from "../types/entityFields.ts";
 import {
-  buildLinkedEntityStreamFields,
-  type LinkedEntitySchemas,
+  getLinkedEntityRootDisplayName,
+  getTopLevelLinkedEntitySourceFields,
 } from "../utils/linkedEntityFieldUtils.ts";
 import {
   getBaseEntityListSourceRootFields,
@@ -53,10 +53,13 @@ const sortFields = (fields: YextSchemaField[]): YextSchemaField[] => {
 
 const trimLinkedEntityRootDisplayName = (
   fields: YextSchemaField[],
-  linkedEntitySchemas: LinkedEntitySchemas | undefined,
+  entityFields: StreamFields | null,
   linkedEntityRoot: string
 ): YextSchemaField[] => {
-  const rootDisplayName = linkedEntitySchemas?.[linkedEntityRoot]?.displayName;
+  const rootDisplayName = getLinkedEntityRootDisplayName(
+    entityFields,
+    linkedEntityRoot
+  );
   if (!rootDisplayName) {
     return fields;
   }
@@ -72,25 +75,19 @@ const trimLinkedEntityRootDisplayName = (
 
 export const getFieldsForSelector = (
   entityFields: StreamFields | null,
-  filter: LinkedEntitySourceFieldFilter<any>,
-  linkedEntitySchemas?: LinkedEntitySchemas
+  filter: LinkedEntitySourceFieldFilter<any>
 ): YextSchemaField[] => {
-  const linkedEntityStreamFields =
-    buildLinkedEntityStreamFields(linkedEntitySchemas);
   const linkedEntityRootFields = filter.sourceRootKinds?.includes(
     "linkedEntityRoot"
   )
-    ? (linkedEntityStreamFields?.fields ?? [])
+    ? getTopLevelLinkedEntitySourceFields(entityFields)
     : [];
   const baseListRootFields = filter.sourceRootKinds?.includes("baseListRoot")
     ? getBaseEntityListSourceRootFields(entityFields)
     : [];
   const isLinkedEntityDescendantFilter =
     !!filter.descendantsOf &&
-    isTopLevelLinkedEntitySourceField(
-      filter.descendantsOf,
-      linkedEntitySchemas
-    );
+    isTopLevelLinkedEntitySourceField(filter.descendantsOf, entityFields);
 
   if (filter.sourceRootsOnly) {
     const rootEntityFields = getFilteredEntityFields(
@@ -107,18 +104,12 @@ export const getFieldsForSelector = (
     );
   }
 
-  let filteredEntityFields = isLinkedEntityDescendantFilter
-    ? []
-    : getFilteredEntityFields(entityFields, filter);
-  let linkedEntityFields =
-    !filter.includeListsOnly && linkedEntityStreamFields
-      ? getFilteredEntityFields(linkedEntityStreamFields, filter)
-      : [];
+  let filteredEntityFields = getFilteredEntityFields(entityFields, filter);
 
   if (isLinkedEntityDescendantFilter) {
-    linkedEntityFields = trimLinkedEntityRootDisplayName(
-      linkedEntityFields,
-      linkedEntitySchemas,
+    filteredEntityFields = trimLinkedEntityRootDisplayName(
+      filteredEntityFields,
+      entityFields,
       filter.descendantsOf!
     );
   }
@@ -135,16 +126,11 @@ export const getFieldsForSelector = (
       entityFields,
       fallbackFilter
     );
-    linkedEntityFields =
-      !filter.includeListsOnly && linkedEntityStreamFields
-        ? getFilteredEntityFields(linkedEntityStreamFields, fallbackFilter)
-        : [];
   }
 
   return sortFields(
     dedupeFieldsByName([
       ...filteredEntityFields,
-      ...linkedEntityFields,
       ...(!isLinkedEntityDescendantFilter ? linkedEntityRootFields : []),
       ...(!isLinkedEntityDescendantFilter ? baseListRootFields : []),
     ])

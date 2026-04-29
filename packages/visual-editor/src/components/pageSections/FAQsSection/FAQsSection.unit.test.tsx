@@ -150,4 +150,50 @@ describe("FAQSection resolveData", () => {
       html: expect.stringContaining("Potato: Fresh daily"),
     });
   });
+
+  it("resolves constant faq questions against each linked entity", async () => {
+    const data = {
+      type: "FAQSection",
+      props: JSON.parse(JSON.stringify(FAQSection.defaultProps)),
+    } as ComponentData<FAQSectionProps>;
+
+    data.props.data.constantValueEnabled = false;
+    data.props.data.field = "c_linkedLocation";
+    data.props.faqs = {
+      question: {
+        field: "",
+        constantValue: { defaultValue: "Question: [[name]]" },
+        constantValueEnabled: true,
+      },
+      answer: {
+        field: "c_linkedLocation.description",
+        constantValue: { defaultValue: "" },
+        constantValueEnabled: false,
+      },
+    };
+
+    const resolvedData = await FAQSection.resolveData!(data, {
+      changed: {},
+      fields: {},
+      lastFields: null,
+      lastData: null,
+      metadata: {
+        streamDocument: {
+          c_linkedLocation: [{ name: "Downtown", description: "Fresh daily" }],
+        },
+      },
+      parent: null,
+      trigger: "initial",
+    } as any);
+
+    expect(resolvedData.props!.slots!.CardSlot[0]?.props.parentData).toEqual({
+      field: "c_linkedLocation",
+      faq: {
+        question: {
+          defaultValue: "Question: Downtown",
+        },
+        answer: "Fresh daily",
+      },
+    });
+  });
 });

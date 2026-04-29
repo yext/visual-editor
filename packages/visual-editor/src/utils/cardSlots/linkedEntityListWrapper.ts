@@ -1,5 +1,4 @@
 import { type RenderEntityFieldFilter } from "../../internal/utils/getFilteredEntityFields.ts";
-import { type LinkedEntitySchemas } from "../linkedEntityFieldUtils.ts";
 import {
   type StreamFields,
   type YextSchemaField,
@@ -8,23 +7,20 @@ import { type StreamDocument } from "../types/StreamDocument.ts";
 import { resolveField } from "../resolveYextEntityField.ts";
 import { resolveYextEntityField } from "../resolveYextEntityField.ts";
 import { type YextEntityField } from "../../editor/yextEntityFieldUtils.ts";
+import { isTopLevelLinkedEntityField } from "../linkedEntityFieldUtils.ts";
 
 type MappedCardSourceMode = "section" | "itemList" | "unknown";
 export type SourceRootKind = "linkedEntityRoot" | "baseListRoot";
 
 /**
- * Returns true when a field is a top-level linked entity reference root exposed
- * by the linked entity schema payload.
+ * Returns true when a field is a top-level linked entity reference root in the
+ * base entity schema.
  */
 export const isTopLevelLinkedEntitySourceField = (
   fieldPath: string | undefined,
-  linkedEntitySchemas?: LinkedEntitySchemas
+  entityFields: StreamFields | null
 ): boolean => {
-  if (!fieldPath || fieldPath.includes(".") || !linkedEntitySchemas) {
-    return false;
-  }
-
-  return Object.hasOwn(linkedEntitySchemas, fieldPath);
+  return isTopLevelLinkedEntityField(fieldPath, entityFields);
 };
 
 /**
@@ -40,7 +36,13 @@ export const getBaseEntityListSourceRootFields = (
     : (entityFields?.fields ?? [])
   ).filter(
     (field) =>
-      Array.isArray(field.children?.fields) && field.children.fields.length > 0
+      !isTopLevelLinkedEntityField(field.name, {
+        fields: Array.isArray(entityFields)
+          ? entityFields
+          : (entityFields?.fields ?? []),
+      }) &&
+      Array.isArray(field.children?.fields) &&
+      field.children.fields.length > 0
   );
 
 /**

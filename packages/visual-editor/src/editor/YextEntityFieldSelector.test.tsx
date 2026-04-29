@@ -2,7 +2,6 @@ import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { EntityFieldsContext } from "../hooks/useEntityFields.tsx";
-import { LinkedEntitySchemasContext } from "../hooks/useLinkedEntitySchemas.tsx";
 import { TemplateMetadataContext } from "../internal/hooks/useMessageReceivers.ts";
 import { generateTemplateMetadata } from "../internal/types/templateMetadata.ts";
 import { type RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
@@ -13,7 +12,6 @@ import {
 } from "./YextEntityFieldSelector.tsx";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { EmbeddedFieldStringInputFromEntity } from "./EmbeddedFieldStringInput.tsx";
-import { type LinkedEntitySchemas } from "../utils/linkedEntityFieldUtils.ts";
 
 const { warningToast } = vi.hoisted(() => ({
   warningToast: vi.fn(),
@@ -66,7 +64,6 @@ const renderEntityFieldInput = (
     onChange?: any;
     value?: Record<string, any>;
     document?: Record<string, unknown>;
-    linkedEntitySchemas?: LinkedEntitySchemas;
   } = {}
 ) => {
   const {
@@ -75,7 +72,6 @@ const renderEntityFieldInput = (
     onChange = vi.fn(),
     value = {},
     document = {},
-    linkedEntitySchemas,
   } = props;
   const templateMetadata = {
     ...generateTemplateMetadata(),
@@ -85,17 +81,9 @@ const renderEntityFieldInput = (
   const view = render(
     <TemplatePropsContext.Provider value={{ document }}>
       <TemplateMetadataContext.Provider value={templateMetadata}>
-        <LinkedEntitySchemasContext.Provider
-          value={linkedEntitySchemas ?? null}
-        >
-          <EntityFieldsContext.Provider value={entityFields}>
-            <EntityFieldInput
-              filter={filter}
-              onChange={onChange}
-              value={value}
-            />
-          </EntityFieldsContext.Provider>
-        </LinkedEntitySchemasContext.Provider>
+        <EntityFieldsContext.Provider value={entityFields}>
+          <EntityFieldInput filter={filter} onChange={onChange} value={value} />
+        </EntityFieldsContext.Provider>
       </TemplateMetadataContext.Provider>
     </TemplatePropsContext.Provider>
   );
@@ -106,29 +94,23 @@ const renderEntityFieldInput = (
 const renderEmbeddedFieldInput = ({
   entityFields = defaultEntityFields,
   filter = { types: ["type.string"] },
-  linkedEntitySchemas,
 }: {
   entityFields?: StreamFields | null;
   filter?: any;
-  linkedEntitySchemas?: LinkedEntitySchemas;
 } = {}) => {
   const templateMetadata = generateTemplateMetadata();
 
   render(
     <TemplatePropsContext.Provider value={{ document: {} }}>
       <TemplateMetadataContext.Provider value={templateMetadata}>
-        <LinkedEntitySchemasContext.Provider
-          value={linkedEntitySchemas ?? null}
-        >
-          <EntityFieldsContext.Provider value={entityFields}>
-            <EmbeddedFieldStringInputFromEntity
-              filter={filter}
-              onChange={vi.fn()}
-              showFieldSelector={true}
-              value=""
-            />
-          </EntityFieldsContext.Provider>
-        </LinkedEntitySchemasContext.Provider>
+        <EntityFieldsContext.Provider value={entityFields}>
+          <EmbeddedFieldStringInputFromEntity
+            filter={filter}
+            onChange={vi.fn()}
+            showFieldSelector={true}
+            value=""
+          />
+        </EntityFieldsContext.Provider>
       </TemplateMetadataContext.Provider>
     </TemplatePropsContext.Provider>
   );
@@ -141,23 +123,42 @@ describe("YextEntityFieldSelector", () => {
 
   it("shows linked entity fields for single-value selectors", () => {
     renderEntityFieldInput({
-      filter: { types: ["type.string"] },
-      linkedEntitySchemas: {
-        c_linkedLocation: {
-          displayName: "Linked Location",
-          fields: [
-            {
-              name: "name",
-              displayName: "Name",
-              definition: {
-                name: "name",
-                typeName: "type.string",
-                type: {},
+      entityFields: {
+        ...defaultEntityFields,
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_linkedLocation",
+            displayName: "Linked Location",
+            definition: {
+              name: "c_linkedLocation",
+              typeRegistryId: "type.entity_reference",
+              type: {
+                documentType: "DOCUMENT_TYPE_ENTITY",
               },
             },
-          ],
+            children: {
+              fields: [
+                {
+                  name: "name",
+                  displayName: "Name",
+                  definition: {
+                    name: "name",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+        ],
+        displayNames: {
+          ...defaultEntityFields.displayNames,
+          c_linkedLocation: "Linked Location",
+          "c_linkedLocation.name": "Linked Location > Name",
         },
       },
+      filter: { types: ["type.string"] },
     });
 
     fireEvent.click(screen.getByRole("combobox"));
@@ -168,23 +169,37 @@ describe("YextEntityFieldSelector", () => {
 
   it("does not show linked entity fields for list-only selectors", () => {
     renderEntityFieldInput({
-      filter: { types: ["type.string"], includeListsOnly: true },
-      linkedEntitySchemas: {
-        c_linkedLocation: {
-          displayName: "Linked Location",
-          fields: [
-            {
-              name: "name",
-              displayName: "Name",
-              definition: {
-                name: "name",
-                typeName: "type.string",
-                type: {},
+      entityFields: {
+        ...defaultEntityFields,
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_linkedLocation",
+            displayName: "Linked Location",
+            definition: {
+              name: "c_linkedLocation",
+              typeRegistryId: "type.entity_reference",
+              type: {
+                documentType: "DOCUMENT_TYPE_ENTITY",
               },
             },
-          ],
-        },
+            children: {
+              fields: [
+                {
+                  name: "name",
+                  displayName: "Name",
+                  definition: {
+                    name: "name",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+        ],
       },
+      filter: { types: ["type.string"], includeListsOnly: true },
     });
 
     fireEvent.click(screen.getByRole("combobox"));
@@ -194,26 +209,40 @@ describe("YextEntityFieldSelector", () => {
 
   it("shows linked entity source roots when the selector opts into them", () => {
     renderEntityFieldInput({
+      entityFields: {
+        ...defaultEntityFields,
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_linkedLocation",
+            displayName: "Linked Location",
+            definition: {
+              name: "c_linkedLocation",
+              typeRegistryId: "type.entity_reference",
+              type: {
+                documentType: "DOCUMENT_TYPE_ENTITY",
+              },
+            },
+            children: {
+              fields: [
+                {
+                  name: "name",
+                  displayName: "Name",
+                  definition: {
+                    name: "name",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
       filter: {
         types: ["type.events_section"],
         sourceRootKinds: ["linkedEntityRoot"],
         sourceRootsOnly: true,
-      },
-      linkedEntitySchemas: {
-        c_linkedLocation: {
-          displayName: "Linked Location",
-          fields: [
-            {
-              name: "name",
-              displayName: "Name",
-              definition: {
-                name: "name",
-                typeName: "type.string",
-                type: {},
-              },
-            },
-          ],
-        },
       },
     });
 
@@ -348,8 +377,10 @@ describe("YextEntityFieldSelector", () => {
             definition: {
               name: "c_linkedLocation",
               isList: true,
-              typeName: "type.list",
-              type: {},
+              typeRegistryId: "type.entity_reference",
+              type: {
+                documentType: "DOCUMENT_TYPE_ENTITY",
+              },
             },
             children: {
               fields: [
@@ -381,22 +412,6 @@ describe("YextEntityFieldSelector", () => {
         sourceRootKinds: ["linkedEntityRoot", "baseListRoot"],
         sourceRootsOnly: true,
       },
-      linkedEntitySchemas: {
-        c_linkedLocation: {
-          displayName: "Linked Location",
-          fields: [
-            {
-              name: "name",
-              displayName: "Name",
-              definition: {
-                name: "name",
-                typeName: "type.string",
-                type: {},
-              },
-            },
-          ],
-        },
-      },
     });
 
     fireEvent.click(screen.getByRole("combobox"));
@@ -427,9 +442,11 @@ describe("YextEntityFieldSelector", () => {
             displayName: "Linked Location",
             definition: {
               name: "c_linkedLocation",
-              typeName: "type.list",
               isList: true,
-              type: {},
+              typeRegistryId: "type.entity_reference",
+              type: {
+                documentType: "DOCUMENT_TYPE_ENTITY",
+              },
             },
             children: {
               fields: [
@@ -442,52 +459,44 @@ describe("YextEntityFieldSelector", () => {
                     type: {},
                   },
                 },
+                {
+                  name: "address",
+                  displayName: "Address",
+                  definition: {
+                    name: "address",
+                    typeName: "type.address",
+                    type: {},
+                  },
+                  children: {
+                    fields: [
+                      {
+                        name: "city",
+                        displayName: "City",
+                        definition: {
+                          name: "city",
+                          typeName: "type.string",
+                          type: {},
+                        },
+                      },
+                    ],
+                  },
+                },
               ],
             },
           },
         ],
+        displayNames: {
+          ...defaultEntityFields.displayNames,
+          additionalHoursText: "Additional Hours Text",
+          c_linkedLocation: "Linked Location",
+          "c_linkedLocation.name": "Linked Location > Name",
+          "c_linkedLocation.address": "Linked Location > Address",
+          "c_linkedLocation.address.city": "Linked Location > Address > City",
+        },
       },
       filter: {
         types: ["type.string"],
         descendantsOf: "c_linkedLocation",
-      },
-      linkedEntitySchemas: {
-        c_linkedLocation: {
-          displayName: "Linked Location",
-          fields: [
-            {
-              name: "name",
-              displayName: "Name",
-              definition: {
-                name: "name",
-                typeName: "type.string",
-                type: {},
-              },
-            },
-            {
-              name: "address",
-              displayName: "Address",
-              definition: {
-                name: "address",
-                typeName: "type.address",
-                type: {},
-              },
-              children: {
-                fields: [
-                  {
-                    name: "city",
-                    displayName: "City",
-                    definition: {
-                      name: "city",
-                      typeName: "type.string",
-                      type: {},
-                    },
-                  },
-                ],
-              },
-            },
-          ],
-        },
       },
     });
 
@@ -514,9 +523,11 @@ describe("YextEntityFieldSelector", () => {
             displayName: "LinkedLocation",
             definition: {
               name: "c_linkedLocation",
-              typeName: "type.list",
               isList: true,
-              type: {},
+              typeRegistryId: "type.entity_reference",
+              type: {
+                documentType: "DOCUMENT_TYPE_ENTITY",
+              },
             },
             children: {
               fields: [
@@ -533,26 +544,15 @@ describe("YextEntityFieldSelector", () => {
             },
           },
         ],
+        displayNames: {
+          ...defaultEntityFields.displayNames,
+          c_linkedLocation: "LinkedLocation",
+          "c_linkedLocation.name": "LinkedLocation > Name",
+        },
       },
       filter: {
         types: ["type.string"],
         descendantsOf: "c_linkedLocation",
-      },
-      linkedEntitySchemas: {
-        c_linkedLocation: {
-          displayName: "LinkedLocation",
-          fields: [
-            {
-              name: "name",
-              displayName: "Name",
-              definition: {
-                name: "name",
-                typeName: "type.string",
-                type: {},
-              },
-            },
-          ],
-        },
       },
       value: {
         field: "c_linkedLocation.name",
@@ -623,33 +623,53 @@ describe("YextEntityFieldSelector", () => {
 
   it("includes linked entity fields in the embedded field selector", () => {
     renderEmbeddedFieldInput({
-      linkedEntitySchemas: {
-        c_linkedLocation: {
-          displayName: "Linked Location",
-          fields: [
-            {
-              name: "address",
-              displayName: "Address",
-              definition: {
-                name: "address",
-                typeName: "type.address",
-                type: {},
-              },
-              children: {
-                fields: [
-                  {
-                    name: "city",
-                    displayName: "City",
-                    definition: {
-                      name: "city",
-                      typeName: "type.string",
-                      type: {},
-                    },
-                  },
-                ],
+      entityFields: {
+        ...defaultEntityFields,
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_linkedLocation",
+            displayName: "Linked Location",
+            definition: {
+              name: "c_linkedLocation",
+              typeRegistryId: "type.entity_reference",
+              type: {
+                documentType: "DOCUMENT_TYPE_ENTITY",
               },
             },
-          ],
+            children: {
+              fields: [
+                {
+                  name: "address",
+                  displayName: "Address",
+                  definition: {
+                    name: "address",
+                    typeName: "type.address",
+                    type: {},
+                  },
+                  children: {
+                    fields: [
+                      {
+                        name: "city",
+                        displayName: "City",
+                        definition: {
+                          name: "city",
+                          typeName: "type.string",
+                          type: {},
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+        displayNames: {
+          ...defaultEntityFields.displayNames,
+          c_linkedLocation: "Linked Location",
+          "c_linkedLocation.address": "Linked Location > Address",
+          "c_linkedLocation.address.city": "Linked Location > Address > City",
         },
       },
     });
@@ -661,6 +681,36 @@ describe("YextEntityFieldSelector", () => {
 
   it("warns once when a linked entity field resolves through multiple references", () => {
     const props = {
+      entityFields: {
+        ...defaultEntityFields,
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_linkedLocation",
+            displayName: "Linked Location",
+            definition: {
+              name: "c_linkedLocation",
+              typeRegistryId: "type.entity_reference",
+              type: {
+                documentType: "DOCUMENT_TYPE_ENTITY",
+              },
+            },
+            children: {
+              fields: [
+                {
+                  name: "name",
+                  displayName: "Name",
+                  definition: {
+                    name: "name",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
       filter: {
         types: ["type.string"],
       } satisfies RenderEntityFieldFilter<Record<string, any>>,
@@ -669,22 +719,6 @@ describe("YextEntityFieldSelector", () => {
       },
       document: {
         c_linkedLocation: [{ name: "First" }, { name: "Second" }],
-      },
-      linkedEntitySchemas: {
-        c_linkedLocation: {
-          displayName: "Linked Location",
-          fields: [
-            {
-              name: "name",
-              displayName: "Name",
-              definition: {
-                name: "name",
-                typeName: "type.string",
-                type: {},
-              },
-            },
-          ],
-        },
       },
     };
 
@@ -697,17 +731,13 @@ describe("YextEntityFieldSelector", () => {
             entityTypeDisplayName: "Location",
           }}
         >
-          <LinkedEntitySchemasContext.Provider
-            value={props.linkedEntitySchemas ?? null}
-          >
-            <EntityFieldsContext.Provider value={defaultEntityFields}>
-              <EntityFieldInput
-                filter={props.filter}
-                onChange={vi.fn()}
-                value={props.value}
-              />
-            </EntityFieldsContext.Provider>
-          </LinkedEntitySchemasContext.Provider>
+          <EntityFieldsContext.Provider value={props.entityFields}>
+            <EntityFieldInput
+              filter={props.filter}
+              onChange={vi.fn()}
+              value={props.value}
+            />
+          </EntityFieldsContext.Provider>
         </TemplateMetadataContext.Provider>
       </TemplatePropsContext.Provider>
     );
@@ -720,6 +750,36 @@ describe("YextEntityFieldSelector", () => {
 
   it("does not warn for linked descendant mapping selectors", () => {
     renderEntityFieldInput({
+      entityFields: {
+        ...defaultEntityFields,
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_linkedLocation",
+            displayName: "LinkedLocation",
+            definition: {
+              name: "c_linkedLocation",
+              typeRegistryId: "type.entity_reference",
+              type: {
+                documentType: "DOCUMENT_TYPE_ENTITY",
+              },
+            },
+            children: {
+              fields: [
+                {
+                  name: "name",
+                  displayName: "Name",
+                  definition: {
+                    name: "name",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
       filter: {
         types: ["type.string"],
         descendantsOf: "c_linkedLocation",
@@ -729,22 +789,6 @@ describe("YextEntityFieldSelector", () => {
       },
       document: {
         c_linkedLocation: [{ name: "First" }, { name: "Second" }],
-      },
-      linkedEntitySchemas: {
-        c_linkedLocation: {
-          displayName: "LinkedLocation",
-          fields: [
-            {
-              name: "name",
-              displayName: "Name",
-              definition: {
-                name: "name",
-                typeName: "type.string",
-                type: {},
-              },
-            },
-          ],
-        },
       },
     });
 

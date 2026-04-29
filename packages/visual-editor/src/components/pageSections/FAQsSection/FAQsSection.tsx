@@ -85,7 +85,6 @@ const createFAQMappingFields = (sourceField?: string) =>
     objectFields: {
       question: YextField(msg("fields.question", "Question"), {
         type: "entityField",
-        disableConstantValueToggle: true,
         filter: {
           types: ["type.string", "type.rich_text_v2"],
           ...(sourceField ? { descendantsOf: sourceField } : {}),
@@ -93,7 +92,6 @@ const createFAQMappingFields = (sourceField?: string) =>
       }),
       answer: YextField(msg("fields.answer", "Answer"), {
         type: "entityField",
-        disableConstantValueToggle: true,
         filter: {
           types: ["type.string", "type.rich_text_v2"],
           ...(sourceField ? { descendantsOf: sourceField } : {}),

@@ -6,39 +6,46 @@ import {
   resolveLinkedEntityMappedField,
   resolveLinkedEntitySourceItems,
 } from "./linkedEntityListWrapper.ts";
-import { type LinkedEntitySchemas } from "../linkedEntityFieldUtils.ts";
+import { type StreamFields } from "../../types/entityFields.ts";
 
 describe("linkedEntityListWrapper", () => {
-  const linkedEntitySchemas: LinkedEntitySchemas = {
-    c_linkedLocation: {
-      displayName: "Linked Location",
-      fields: [
-        {
-          name: "name",
-          displayName: "Name",
-          definition: {
-            name: "name",
-            typeName: "type.string",
-            type: {},
+  const entityFields: StreamFields = {
+    fields: [
+      {
+        name: "c_linkedLocation",
+        displayName: "Linked Location",
+        definition: {
+          name: "c_linkedLocation",
+          typeRegistryId: "type.entity_reference",
+          type: {
+            documentType: "DOCUMENT_TYPE_ENTITY",
           },
         },
-      ],
-    },
+        children: {
+          fields: [
+            {
+              name: "name",
+              displayName: "Name",
+              definition: {
+                name: "name",
+                typeName: "type.string",
+                type: {},
+              },
+            },
+          ],
+        },
+      },
+    ],
   };
 
   it("detects top-level linked entity source roots", () => {
     expect(
-      isTopLevelLinkedEntitySourceField("c_linkedLocation", linkedEntitySchemas)
+      isTopLevelLinkedEntitySourceField("c_linkedLocation", entityFields)
     ).toBe(true);
     expect(
-      isTopLevelLinkedEntitySourceField(
-        "c_linkedLocation.name",
-        linkedEntitySchemas
-      )
+      isTopLevelLinkedEntitySourceField("c_linkedLocation.name", entityFields)
     ).toBe(false);
-    expect(isTopLevelLinkedEntitySourceField("name", linkedEntitySchemas)).toBe(
-      false
-    );
+    expect(isTopLevelLinkedEntitySourceField("name", entityFields)).toBe(false);
   });
 
   it("detects linked list and section source modes", () => {

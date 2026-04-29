@@ -17,7 +17,7 @@ import { toPuckFields, YextComponentConfig } from "../../../fields/fields.ts";
 import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import {
   getMappedCardSourceMode,
-  resolveLinkedEntityMappedField,
+  resolveLinkedEntityMappedData,
   resolveLinkedEntitySourceItems,
 } from "../../../utils/cardSlots/linkedEntityListWrapper.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
@@ -45,7 +45,6 @@ const createEventCardsMappingFields = (sourceField?: string) =>
     objectFields: {
       title: YextField(msg("fields.title", "Title"), {
         type: "entityField",
-        disableConstantValueToggle: true,
         filter: {
           types: ["type.string"],
           ...(sourceField ? { descendantsOf: sourceField } : {}),
@@ -53,7 +52,6 @@ const createEventCardsMappingFields = (sourceField?: string) =>
       }),
       date: YextField(msg("fields.date", "Date"), {
         type: "entityField",
-        disableConstantValueToggle: true,
         filter: {
           types: ["type.datetime"],
           ...(sourceField ? { descendantsOf: sourceField } : {}),
@@ -61,15 +59,13 @@ const createEventCardsMappingFields = (sourceField?: string) =>
       }),
       description: YextField(msg("fields.description", "Description"), {
         type: "entityField",
-        disableConstantValueToggle: true,
         filter: {
-          types: ["type.rich_text_v2"],
+          types: ["type.string", "type.rich_text_v2"],
           ...(sourceField ? { descendantsOf: sourceField } : {}),
         },
       }),
       cta: YextField(msg("fields.showCTA", "CTA"), {
         type: "entityField",
-        disableConstantValueToggle: true,
         filter: {
           types: ["type.cta"],
           ...(sourceField ? { descendantsOf: sourceField } : {}),
@@ -77,7 +73,6 @@ const createEventCardsMappingFields = (sourceField?: string) =>
       }),
       image: YextField(msg("fields.showImage", "Image"), {
         type: "entityField",
-        disableConstantValueToggle: true,
         filter: {
           types: ["type.image"],
           ...(sourceField ? { descendantsOf: sourceField } : {}),
@@ -260,12 +255,13 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
                 sharedCardProps?.slotStyles
               ) as ComponentData<EventCardProps>,
             decorateCard: (card, linkedEntity, index) => {
-              const mappedTitle = resolveLinkedEntityMappedField<
+              const mappedTitle = resolveLinkedEntityMappedData<
                 EventStruct["title"]
               >(
                 linkedEntity,
                 data.props.data.field,
-                data.props.cards?.title?.field
+                data.props.cards?.title,
+                locale
               );
 
               return setDeep(
@@ -282,30 +278,34 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
                     cta: data.props.cards?.cta?.field || undefined,
                   },
                   event: {
-                    image: resolveLinkedEntityMappedField<EventStruct["image"]>(
+                    image: resolveLinkedEntityMappedData<EventStruct["image"]>(
                       linkedEntity,
                       data.props.data.field,
-                      data.props.cards?.image?.field
+                      data.props.cards?.image,
+                      locale
                     ),
                     title: mappedTitle
                       ? resolveComponentData(mappedTitle, locale, linkedEntity)
                       : undefined,
-                    dateTime: resolveLinkedEntityMappedField<string>(
+                    dateTime: resolveLinkedEntityMappedData<string>(
                       linkedEntity,
                       data.props.data.field,
-                      data.props.cards?.date?.field
+                      data.props.cards?.date,
+                      locale
                     ),
-                    description: resolveLinkedEntityMappedField<
+                    description: resolveLinkedEntityMappedData<
                       EventStruct["description"]
                     >(
                       linkedEntity,
                       data.props.data.field,
-                      data.props.cards?.description?.field
+                      data.props.cards?.description,
+                      locale
                     ),
-                    cta: resolveLinkedEntityMappedField<EventStruct["cta"]>(
+                    cta: resolveLinkedEntityMappedData<EventStruct["cta"]>(
                       linkedEntity,
                       data.props.data.field,
-                      data.props.cards?.cta?.field
+                      data.props.cards?.cta,
+                      locale
                     ) ?? {
                       label: { defaultValue: "" },
                       link: "",
