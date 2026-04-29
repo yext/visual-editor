@@ -3,6 +3,7 @@ import type {
   DefaultComponentProps,
   Fields,
 } from "@puckeditor/core";
+import type { YextFieldDefinition } from "../editor/YextField.tsx";
 import {
   BasicSelectorField,
   BasicSelectorFieldOverride,
@@ -24,6 +25,10 @@ import {
   OptionalNumberField,
   OptionalNumberFieldOverride,
 } from "./OptionalNumberField.tsx";
+import {
+  TranslatableStringField,
+  TranslatableStringFieldOverride,
+} from "./TranslatableStringField.tsx";
 import { VideoField, VideoFieldOverride } from "./VideoField.tsx";
 
 export type YextPuckFields = {
@@ -33,6 +38,7 @@ export type YextPuckFields = {
   dateTimeSelector: DateTimeSelectorField;
   fontSizeSelector: FontSizeSelectorField;
   optionalNumber: OptionalNumberField;
+  translatableString: TranslatableStringField;
   video: VideoField;
 };
 
@@ -43,16 +49,27 @@ export type YextComponentConfig<
   fields: YextPuckFields;
 }>;
 
+// TODO(SUMO-8378): Remove this and make YextFieldsInternal -> YextFields once Puck fixes their objectField typing
 export type YextFields<
   T extends DefaultComponentProps = DefaultComponentProps,
+> = YextFieldsInternal<T> & YextFieldMap<T>;
+
+type YextFieldsInternal<
+  T extends DefaultComponentProps = DefaultComponentProps,
 > = NonNullable<YextComponentConfig<T>["fields"]>;
+
+export type YextFieldMap<
+  T extends DefaultComponentProps = DefaultComponentProps,
+> = {
+  [PropName in keyof Omit<T, "editMode">]: YextFieldDefinition<T[PropName]>;
+};
 
 // For things like resolveFields, Puck does not currently let you override the return type
 // so we need this function to satisfy the typing.
 export const toPuckFields = <
   Props extends DefaultComponentProps = DefaultComponentProps,
 >(
-  fields: YextFields<Props>
+  fields: YextFields<Props> | YextFieldMap<Props>
 ): Fields<Props> => fields as unknown as Fields<Props>;
 
 export const YextPuckFieldOverrides = {
@@ -62,5 +79,6 @@ export const YextPuckFieldOverrides = {
   dateTimeSelector: DateTimeSelectorFieldOverride,
   fontSizeSelector: FontSizeSelectorFieldOverride,
   optionalNumber: OptionalNumberFieldOverride,
+  translatableString: TranslatableStringFieldOverride,
   video: VideoFieldOverride,
 };

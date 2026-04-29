@@ -44,7 +44,6 @@ import {
   HoursTableProps,
   HoursTableStyleFields,
 } from "./contentBlocks/HoursTable.tsx";
-import { TranslatableStringField } from "../editor/TranslatableStringField.tsx";
 import { getImageUrl } from "./contentBlocks/image/Image.tsx";
 import {
   Accordion,
@@ -388,11 +387,12 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
               />
             ),
           },
-          constantValue: TranslatableStringField<
-            TranslatableString | undefined
-          >(undefined, undefined, false, true, () =>
-            getDisplayFieldOptions("type.string")
-          ),
+          constantValue: {
+            type: "translatableString",
+            showApplyAllOption: false,
+            showFieldSelector: true,
+            getOptions: () => getDisplayFieldOptions("type.string"),
+          },
           field: DisplayFieldSelector("type.string"),
           headingLevel: {
             type: "basicSelector",
@@ -427,11 +427,12 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
               />
             ),
           },
-          constantValue: TranslatableStringField<
-            TranslatableString | undefined
-          >(undefined, undefined, false, true, () =>
-            getDisplayFieldOptions("type.string")
-          ),
+          constantValue: {
+            type: "translatableString",
+            showApplyAllOption: false,
+            showFieldSelector: true,
+            getOptions: () => getDisplayFieldOptions("type.string"),
+          },
           field: DisplayFieldSelector("type.string"),
           variant: {
             label: msg("fields.variant", "Variant"),
@@ -469,11 +470,12 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
               />
             ),
           },
-          constantValue: TranslatableStringField<
-            TranslatableString | undefined
-          >(undefined, undefined, false, true, () =>
-            getDisplayFieldOptions("type.string")
-          ),
+          constantValue: {
+            type: "translatableString",
+            showApplyAllOption: false,
+            showFieldSelector: true,
+            getOptions: () => getDisplayFieldOptions("type.string"),
+          },
           field: DisplayFieldSelector("type.string"),
           variant: {
             label: msg("fields.variant", "Variant"),
@@ -637,13 +639,13 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
         label: msg("fields.primaryCTA", "Primary CTA"),
         type: "object",
         objectFields: {
-          label: TranslatableStringField<TranslatableString>(
-            msg("fields.label", "Label"),
-            undefined,
-            false,
-            true,
-            () => getDisplayFieldOptions("type.string")
-          ),
+          label: {
+            type: "translatableString",
+            label: msg("fields.label", "Label"),
+            showApplyAllOption: false,
+            showFieldSelector: true,
+            getOptions: () => getDisplayFieldOptions("type.string"),
+          },
           variant: {
             label: msg("fields.ctaVariant", "CTA Variant"),
             type: "radio",
@@ -657,13 +659,13 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
               { label: msg("fields.options.hide", "Hide"), value: false },
             ],
           },
-          link: TranslatableStringField<TranslatableString | undefined>(
-            msg("fields.link", "Link"),
-            undefined,
-            false,
-            true,
-            () => getDisplayFieldOptions("type.string")
-          ),
+          link: {
+            type: "translatableString",
+            label: msg("fields.link", "Link"),
+            showApplyAllOption: false,
+            showFieldSelector: true,
+            getOptions: () => getDisplayFieldOptions("type.string"),
+          },
           normalizeLink: {
             label: msg("fields.normalizeLink", "Normalize Link"),
             type: "radio",
@@ -678,20 +680,20 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
         label: msg("fields.secondaryCTA", "Secondary CTA"),
         type: "object",
         objectFields: {
-          label: TranslatableStringField<TranslatableString>(
-            msg("fields.label", "Label"),
-            undefined,
-            false,
-            true,
-            () => getDisplayFieldOptions("type.string")
-          ),
-          link: TranslatableStringField<TranslatableString>(
-            msg("fields.link", "Link"),
-            undefined,
-            false,
-            true,
-            () => getDisplayFieldOptions("type.string")
-          ),
+          label: {
+            type: "translatableString",
+            label: msg("fields.label", "Label"),
+            showApplyAllOption: false,
+            showFieldSelector: true,
+            getOptions: () => getDisplayFieldOptions("type.string"),
+          },
+          link: {
+            type: "translatableString",
+            label: msg("fields.link", "Link"),
+            showApplyAllOption: false,
+            showFieldSelector: true,
+            getOptions: () => getDisplayFieldOptions("type.string"),
+          },
           normalizeLink: {
             label: msg("fields.normalizeLink", "Normalize Link"),
             type: "radio",

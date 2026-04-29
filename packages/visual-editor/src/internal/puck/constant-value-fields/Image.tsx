@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AutoField, CustomField, FieldLabel } from "@puckeditor/core";
+import { CustomField, FieldLabel } from "@puckeditor/core";
 import { useTranslation } from "react-i18next";
 import {
   TARGET_ORIGINS,
@@ -7,6 +7,7 @@ import {
   useSendMessageToParent,
 } from "../../hooks/useMessage.ts";
 import { Button } from "../ui/button.tsx";
+import { YextAutoField } from "../../../fields/YextAutoField.tsx";
 import {
   ImageContentData,
   TranslatableAssetImage,
@@ -16,9 +17,8 @@ import {
   resolveLocalizedAssetImage,
 } from "../../../types/images.ts";
 import { useDocument } from "../../../hooks/useDocument.tsx";
-import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
+import { type TranslatableStringField } from "../../../fields/TranslatableStringField.tsx";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
-import { TranslatableString } from "../../../types/types.ts";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import {
   FieldTypeData,
@@ -181,20 +181,22 @@ const createImageConstantConfig = (options?: {
     };
 
     const altTextOptions = options?.getAltTextOptions?.(templateMetadata);
-    const altTextField = React.useMemo(() => {
+    const altTextField = React.useMemo<TranslatableStringField>(() => {
       if (altTextOptions) {
-        return TranslatableStringField<TranslatableString | undefined>(
-          msg("altText", "Alt Text"),
-          undefined,
-          false,
-          true,
-          () => altTextOptions
-        );
+        return {
+          type: "translatableString",
+          label: msg("altText", "Alt Text"),
+          showApplyAllOption: false,
+          showFieldSelector: true,
+          getOptions: () => altTextOptions,
+        };
       }
-      return TranslatableStringField<TranslatableString | undefined>(
-        msg("altText", "Alt Text"),
-        { types: ["type.string"] }
-      );
+
+      return {
+        type: "translatableString",
+        label: msg("altText", "Alt Text"),
+        filter: { types: ["type.string"] },
+      };
     }, [altTextOptions]);
 
     const altText = resolveComponentData(
@@ -294,7 +296,7 @@ const createImageConstantConfig = (options?: {
         )}
 
         {/* Alt Text Field */}
-        <AutoField
+        <YextAutoField
           field={altTextField}
           value={resolvedValue?.alternateText}
           onChange={(newValue) => {
