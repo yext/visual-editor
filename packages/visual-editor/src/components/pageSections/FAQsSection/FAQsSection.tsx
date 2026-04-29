@@ -80,7 +80,7 @@ export interface FAQSectionProps {
 }
 
 const createFAQMappingFields = (sourceField?: string) =>
-  YextField(msg("fields.faqs", "FAQs"), {
+  YextField(msg("fields.faqMapping", "FAQ Mapping"), {
     type: "object",
     objectFields: {
       question: YextField(msg("fields.question", "Question"), {

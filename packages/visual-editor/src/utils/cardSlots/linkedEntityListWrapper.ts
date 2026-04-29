@@ -122,7 +122,7 @@ export const resolveLinkedEntityMappedField = <T>(
 export const resolveLinkedEntityMappedData = <T>(
   linkedEntity: StreamDocument,
   sourceFieldPath: string,
-  entityField: YextEntityField<T> | undefined,
+  entityField: Partial<YextEntityField<T>> | undefined,
   locale?: string
 ): T | undefined => {
   if (!entityField) {
@@ -130,13 +130,22 @@ export const resolveLinkedEntityMappedData = <T>(
   }
 
   if (!entityField.field || entityField.constantValueEnabled) {
-    return resolveYextEntityField(linkedEntity, entityField, locale);
+    return resolveYextEntityField(
+      linkedEntity,
+      {
+        field: entityField.field ?? "",
+        constantValue: entityField.constantValue as T,
+        constantValueEnabled: entityField.constantValueEnabled,
+      },
+      locale
+    );
   }
 
   return resolveYextEntityField(
     linkedEntity,
     {
       ...entityField,
+      constantValue: entityField.constantValue as T,
       field: entityField.field.startsWith(`${sourceFieldPath}.`)
         ? entityField.field.slice(sourceFieldPath.length + 1)
         : entityField.field,
