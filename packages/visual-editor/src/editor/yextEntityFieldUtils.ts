@@ -4,12 +4,11 @@ import {
 } from "../internal/utils/getFilteredEntityFields.ts";
 import { StreamFields, YextSchemaField } from "../types/entityFields.ts";
 import {
-  getLinkedEntityRootDisplayName,
   getTopLevelLinkedEntitySourceFields,
+  isTopLevelLinkedEntityField,
 } from "../utils/linkedEntityFieldUtils.ts";
 import {
   getBaseEntityListSourceRootFields,
-  isTopLevelLinkedEntitySourceField,
   type LinkedEntitySourceFieldFilter,
 } from "../utils/cardSlots/linkedEntityListWrapper.ts";
 
@@ -56,10 +55,11 @@ const trimLinkedEntityRootDisplayName = (
   entityFields: StreamFields | null,
   linkedEntityRoot: string
 ): YextSchemaField[] => {
-  const rootDisplayName = getLinkedEntityRootDisplayName(
-    entityFields,
-    linkedEntityRoot
-  );
+  const rootDisplayName =
+    entityFields?.displayNames?.[linkedEntityRoot] ??
+    getTopLevelLinkedEntitySourceFields(entityFields).find(
+      (field) => field.name === linkedEntityRoot
+    )?.displayName;
   if (!rootDisplayName) {
     return fields;
   }
@@ -87,7 +87,7 @@ export const getFieldsForSelector = (
     : [];
   const isLinkedEntityDescendantFilter =
     !!filter.descendantsOf &&
-    isTopLevelLinkedEntitySourceField(filter.descendantsOf, entityFields);
+    isTopLevelLinkedEntityField(filter.descendantsOf, entityFields);
 
   if (filter.sourceRootsOnly) {
     const rootEntityFields = getFilteredEntityFields(

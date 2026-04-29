@@ -2,11 +2,10 @@ import { describe, expect, it } from "vitest";
 import {
   getMappedCardSourceMode,
   getBaseEntityListSourceRootFields,
-  isTopLevelLinkedEntitySourceField,
-  resolveLinkedEntityMappedField,
   resolveLinkedEntitySourceItems,
 } from "./linkedEntityListWrapper.ts";
 import { type StreamFields } from "../../types/entityFields.ts";
+import { isTopLevelLinkedEntityField } from "../linkedEntityFieldUtils.ts";
 
 describe("linkedEntityListWrapper", () => {
   const entityFields: StreamFields = {
@@ -39,13 +38,13 @@ describe("linkedEntityListWrapper", () => {
   };
 
   it("detects top-level linked entity source roots", () => {
+    expect(isTopLevelLinkedEntityField("c_linkedLocation", entityFields)).toBe(
+      true
+    );
     expect(
-      isTopLevelLinkedEntitySourceField("c_linkedLocation", entityFields)
-    ).toBe(true);
-    expect(
-      isTopLevelLinkedEntitySourceField("c_linkedLocation.name", entityFields)
+      isTopLevelLinkedEntityField("c_linkedLocation.name", entityFields)
     ).toBe(false);
-    expect(isTopLevelLinkedEntitySourceField("name", entityFields)).toBe(false);
+    expect(isTopLevelLinkedEntityField("name", entityFields)).toBe(false);
   });
 
   it("detects linked list and section source modes", () => {
@@ -115,20 +114,5 @@ describe("linkedEntityListWrapper", () => {
         "c_linkedLocation"
       )
     ).toEqual([{ name: "Downtown" }, { name: "Uptown" }]);
-  });
-
-  it("resolves mapped fields relative to the linked source root", () => {
-    expect(
-      resolveLinkedEntityMappedField(
-        {
-          name: "Downtown",
-          address: {
-            city: "New York",
-          },
-        },
-        "c_linkedLocation",
-        "c_linkedLocation.address.city"
-      )
-    ).toBe("New York");
   });
 });

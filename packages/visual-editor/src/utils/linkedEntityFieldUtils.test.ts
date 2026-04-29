@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import {
-  getLinkedEntityRootDisplayName,
   getTopLevelLinkedEntitySourceFields,
   isLinkedEntityFieldPath,
   isTopLevelLinkedEntityField,
@@ -67,11 +66,5 @@ describe("linkedEntityFieldUtils", () => {
     ).toBe(false);
     expect(isLinkedEntityFieldPath("name", entityFields)).toBe(false);
     expect(isLinkedEntityFieldPath(undefined, entityFields)).toBe(false);
-  });
-
-  it("returns linked root display names from entity fields", () => {
-    expect(
-      getLinkedEntityRootDisplayName(entityFields, "c_linkedLocation")
-    ).toBe("Linked Location");
   });
 });

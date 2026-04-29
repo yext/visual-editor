@@ -7,21 +7,10 @@ import { type StreamDocument } from "../types/StreamDocument.ts";
 import { resolveField } from "../resolveYextEntityField.ts";
 import { resolveYextEntityField } from "../resolveYextEntityField.ts";
 import { type YextEntityField } from "../../editor/yextEntityFieldUtils.ts";
-import { isTopLevelLinkedEntityField } from "../linkedEntityFieldUtils.ts";
+import { getTopLevelLinkedEntitySourceFields } from "../linkedEntityFieldUtils.ts";
 
 type MappedCardSourceMode = "section" | "itemList" | "unknown";
 export type SourceRootKind = "linkedEntityRoot" | "baseListRoot";
-
-/**
- * Returns true when a field is a top-level linked entity reference root in the
- * base entity schema.
- */
-export const isTopLevelLinkedEntitySourceField = (
-  fieldPath: string | undefined,
-  entityFields: StreamFields | null
-): boolean => {
-  return isTopLevelLinkedEntityField(fieldPath, entityFields);
-};
 
 /**
  * Returns top-level list fields on the base entity so wrappers can treat a
@@ -30,20 +19,23 @@ export const isTopLevelLinkedEntitySourceField = (
  */
 export const getBaseEntityListSourceRootFields = (
   entityFields: StreamFields | YextSchemaField[] | null
-): YextSchemaField[] =>
-  (Array.isArray(entityFields)
+): YextSchemaField[] => {
+  const fields = Array.isArray(entityFields)
     ? entityFields
-    : (entityFields?.fields ?? [])
-  ).filter(
+    : (entityFields?.fields ?? []);
+  const linkedEntityRootNames = new Set(
+    getTopLevelLinkedEntitySourceFields(
+      Array.isArray(entityFields) ? null : entityFields
+    ).map((field) => field.name)
+  );
+
+  return fields.filter(
     (field) =>
-      !isTopLevelLinkedEntityField(field.name, {
-        fields: Array.isArray(entityFields)
-          ? entityFields
-          : (entityFields?.fields ?? []),
-      }) &&
+      !linkedEntityRootNames.has(field.name) &&
       Array.isArray(field.children?.fields) &&
       field.children.fields.length > 0
   );
+};
 
 /**
  * Detects whether the selected wrapper source resolves as a normal section
@@ -92,28 +84,6 @@ export const resolveLinkedEntitySourceItems = <T>(
   }
 
   return [];
-};
-
-/**
- * Resolves a wrapper-level field mapping against a linked entity item. Stored
- * field ids are absolute editor paths like `c_linkedLocation.name`, so this
- * strips the selected linked source root before resolving against the linked
- * entity document itself.
- */
-export const resolveLinkedEntityMappedField = <T>(
-  linkedEntity: StreamDocument,
-  sourceFieldPath: string,
-  mappedFieldPath: string | undefined
-): T | undefined => {
-  if (!mappedFieldPath) {
-    return undefined;
-  }
-
-  const relativeFieldPath = mappedFieldPath.startsWith(`${sourceFieldPath}.`)
-    ? mappedFieldPath.slice(sourceFieldPath.length + 1)
-    : mappedFieldPath;
-
-  return resolveField<T>(linkedEntity, relativeFieldPath).value;
 };
 
 /**

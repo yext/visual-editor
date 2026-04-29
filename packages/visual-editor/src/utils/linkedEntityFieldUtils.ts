@@ -40,12 +40,3 @@ export const isLinkedEntityFieldPath = (
 
   return isTopLevelLinkedEntityField(fieldPath.split(".")[0], entityFields);
 };
-
-export const getLinkedEntityRootDisplayName = (
-  entityFields: StreamFields | null,
-  linkedEntityRoot: string
-): string | undefined =>
-  entityFields?.displayNames?.[linkedEntityRoot] ??
-  getTopLevelLinkedEntitySourceFields(entityFields).find(
-    (field) => field.name === linkedEntityRoot
-  )?.displayName;

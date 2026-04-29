@@ -51,11 +51,9 @@ import {
 } from "./yextEntityFieldUtils.ts";
 import { useDocument } from "../hooks/useDocument.tsx";
 import { isLinkedEntityFieldPath } from "../utils/linkedEntityFieldUtils.ts";
-import {
-  isTopLevelLinkedEntitySourceField,
-  type LinkedEntitySourceFieldFilter,
-} from "../utils/cardSlots/linkedEntityListWrapper.ts";
+import { type LinkedEntitySourceFieldFilter } from "../utils/cardSlots/linkedEntityListWrapper.ts";
 import { warnOnMultiValueLinkedEntityTraversal } from "../utils/linkedEntityWarningUtils.ts";
+import { isTopLevelLinkedEntityField } from "../utils/linkedEntityFieldUtils.ts";
 
 const devLogger = new DevLogger();
 
@@ -419,7 +417,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   const streamDocument = useDocument();
   const linkedEntityDescendantRoot =
     filter.descendantsOf &&
-    isTopLevelLinkedEntitySourceField(filter.descendantsOf, entityFields)
+    isTopLevelLinkedEntityField(filter.descendantsOf, entityFields)
       ? filter.descendantsOf
       : undefined;
   const entityFieldSelector = React.useMemo<BasicSelectorField>(() => {
