@@ -306,7 +306,8 @@ const aboutSectionDetailsColumnFields: YextFields<AboutSectionDetailsColumnProps
           hoursStatus: defaultAboutSectionProps.hoursStatus,
         },
       },
-      getItemSummary: (item, i) => {
+      // TODO: remove typings
+      getItemSummary: (item: any, i?: number) => {
         const locale = i18nComponentsInstance.language;
         return (
           resolveComponentData(item.header, locale) ||
