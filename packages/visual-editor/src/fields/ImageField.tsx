@@ -31,7 +31,6 @@ import {
 } from "../internal/types/templateMetadata.ts";
 import { DynamicOption } from "../editor/DynamicOptionsSelector.tsx";
 import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
-import { getPageSetLocales } from "../utils/pageSetLocales.ts";
 import { isFakeStarterLocalDev } from "../utils/isFakeStarterLocalDev.ts";
 
 export type ImagePayload = {
@@ -79,8 +78,6 @@ export const ImageFieldOverride = ({
   const streamDocument = useDocument();
   const templateMetadata: TemplateMetadata = useTemplateMetadata();
   const locale = i18n.language;
-
-  const locales = getPageSetLocales(streamDocument);
 
   const localizedContainer = React.useMemo<LocalizedAssetImage | undefined>(
     () => (isLocalizedAssetImage(value) ? value : undefined),
@@ -264,12 +261,6 @@ export const ImageFieldOverride = ({
           )}
         </div>
       </FieldLabel>
-
-      {locales.length > 1 && (
-        <div className="ve-text-sm ve-text-gray-500 ve-mb-3">
-          {pt("currentLocale", "Current Locale")}: {locale}
-        </div>
-      )}
 
       {resolvedValue && (
         <FieldLabel label="" el="div">
