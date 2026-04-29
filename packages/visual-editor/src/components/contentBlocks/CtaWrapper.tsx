@@ -133,7 +133,7 @@ const ctaWrapperFields: YextFields<CTAWrapperProps> = {
         },
         getItemSummary: (
           item: any,
-          index: number // TODO: remove typings
+          index: number // TODO(SUMO-8378): remove typings
         ) =>
           item?.key?.trim()
             ? item.key

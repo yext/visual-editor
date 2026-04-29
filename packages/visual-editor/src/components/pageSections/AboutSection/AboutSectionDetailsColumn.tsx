@@ -306,7 +306,7 @@ const aboutSectionDetailsColumnFields: YextFields<AboutSectionDetailsColumnProps
           hoursStatus: defaultAboutSectionProps.hoursStatus,
         },
       },
-      // TODO: remove typings
+      // TODO(SUMO-8378): remove typings
       getItemSummary: (item: any, i?: number) => {
         const locale = i18nComponentsInstance.language;
         return (

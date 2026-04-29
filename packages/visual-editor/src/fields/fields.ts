@@ -49,7 +49,7 @@ export type YextComponentConfig<
   fields: YextPuckFields;
 }>;
 
-// TODO: Remove this and make YextFieldsInternal -> YextFields once Puck fixes their objectField typing
+// TODO(SUMO-8378): Remove this and make YextFieldsInternal -> YextFields once Puck fixes their objectField typing
 export type YextFields<
   T extends DefaultComponentProps = DefaultComponentProps,
 > = YextFieldsInternal<T> & YextFieldMap<T>;
