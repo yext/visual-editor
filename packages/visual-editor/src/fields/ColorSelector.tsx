@@ -6,14 +6,18 @@ import { pt } from "../utils/i18n/platform.ts";
 type RenderProps = Parameters<CustomField<any>["render"]>[0];
 
 export const ColorSelector = ({ field, value, onChange }: RenderProps) => {
+  const translatedLabel = field.label && pt(field.label);
+
   return (
     <FieldLabel
-      label={field.label || "Label is undefined"}
+      label={translatedLabel || "Label is undefined"}
       el="div"
       className="ve-relative ve-mt-2.5"
     >
       <ColorPickerInput
-        ariaLabel={field.label || pt("colorPicker.open", "Open color picker")}
+        ariaLabel={
+          translatedLabel || pt("colorPicker.open", "Open color picker")
+        }
         value={value}
         onChange={onChange}
       />

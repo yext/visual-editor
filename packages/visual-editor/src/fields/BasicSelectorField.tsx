@@ -7,7 +7,7 @@ import {
   type ComboboxOptionGroup,
 } from "../internal/types/combobox.ts";
 import { ThemeOptions, type ThemeColor } from "../utils/themeConfigOptions.ts";
-import { msg, pt, type MsgString } from "../utils/i18n/platform.ts";
+import { pt, type MsgString } from "../utils/i18n/platform.ts";
 import { ColorPickerInput } from "./ColorSelector.tsx";
 import {
   getContrastingColor,
@@ -205,24 +205,8 @@ export const BasicSelectorFieldOverride = ({
       isThemeColorValue(value) ? value.selectedColor : undefined,
       templateProps?.document
     ) ?? "#000000";
-  const customColorOption: ComboboxOption = {
-    label: msg("fields.options.other", "Other"),
-    value: CUSTOM_COLOR_OPTION_VALUE,
-    colorStyle: { backgroundColor: customColorHex },
-  };
-  const optionGroupsWithCustomColor: ComboboxOptionGroup[] =
-    isThemeColorSelector
-      ? [
-          ...optionGroups,
-          {
-            title: msg("fields.customColor", "Custom Color"),
-            options: [customColorOption],
-          },
-        ]
-      : optionGroups;
-
   const translatedOptionGroups = translateOptions
-    ? optionGroupsWithCustomColor.map((group) => ({
+    ? optionGroups.map((group) => ({
         title: group.title && pt(group.title),
         description: group.description && pt(group.description),
         options: group.options.map((option) => ({
@@ -230,9 +214,24 @@ export const BasicSelectorFieldOverride = ({
           label: pt(option.label),
         })),
       }))
-    : optionGroupsWithCustomColor;
+    : optionGroups;
+  const customColorOption: ComboboxOption = {
+    label: pt("fields.options.other", "Other"),
+    value: CUSTOM_COLOR_OPTION_VALUE,
+    colorStyle: { backgroundColor: customColorHex },
+  };
+  const optionGroupsWithCustomColor: ComboboxOptionGroup[] =
+    isThemeColorSelector
+      ? [
+          ...translatedOptionGroups,
+          {
+            title: pt("fields.customColor", "Custom Color"),
+            options: [customColorOption],
+          },
+        ]
+      : translatedOptionGroups;
 
-  const serializedOptions = translatedOptionGroups.reduce(
+  const serializedOptions = optionGroupsWithCustomColor.reduce(
     (allOptions, group) => allOptions.concat(group.options),
     [] as ComboboxOption[]
   );
@@ -275,7 +274,7 @@ export const BasicSelectorFieldOverride = ({
     <Combobox
       selectedOption={selectedOption}
       onChange={handleChange}
-      optionGroups={translatedOptionGroups}
+      optionGroups={optionGroupsWithCustomColor}
       disabled={noOptions}
       disableSearch={disableSearch}
     />
