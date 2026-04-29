@@ -103,11 +103,7 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
             ),
           };
 
-    if (!data.props.data.constantValueEnabled) {
-      if (!streamDocument || !data.props.data.field) {
-        return data;
-      }
-
+    if (!data.props.data.constantValueEnabled && data.props.data.field) {
       // ENTITY VALUES
       const resolvedEvents = resolveYextEntityField<Partial<EventSectionType>>(
         streamDocument,

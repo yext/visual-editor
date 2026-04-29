@@ -114,11 +114,7 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
             ),
           };
 
-    if (!data.props.data.constantValueEnabled) {
-      if (!streamDocument || !data.props.data.field) {
-        return data;
-      }
-
+    if (!data.props.data.constantValueEnabled && data.props.data.field) {
       // ENTITY VALUES
       const resolvedTeam = resolveYextEntityField<Partial<TeamSectionType>>(
         streamDocument,

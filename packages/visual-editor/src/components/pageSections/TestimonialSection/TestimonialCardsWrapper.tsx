@@ -111,11 +111,7 @@ export const TestimonialCardsWrapper: YextComponentConfig<TestimonialCardsWrappe
               ),
             };
 
-      if (!data.props.data.constantValueEnabled) {
-        if (!streamDocument || !data.props.data.field) {
-          return data;
-        }
-
+      if (!data.props.data.constantValueEnabled && data.props.data.field) {
         // ENTITY VALUES
         const resolvedTestimonials = resolveYextEntityField<
           Partial<TestimonialSectionType>

@@ -190,11 +190,7 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
             answerColor: data.props.slots.CardSlot[0].props.styles.answerColor,
           };
 
-    if (!data.props.data.constantValueEnabled) {
-      if (!streamDocument || !data.props.data.field) {
-        return data;
-      }
-
+    if (!data.props.data.constantValueEnabled && data.props.data.field) {
       // ENTITY VALUES
       const resolvedFAQs = resolveYextEntityField<Partial<FAQSectionType>>(
         streamDocument,

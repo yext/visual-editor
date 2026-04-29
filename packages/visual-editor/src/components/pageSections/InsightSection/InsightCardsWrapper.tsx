@@ -115,11 +115,7 @@ export const InsightCardsWrapper: YextComponentConfig<InsightCardsWrapperProps> 
               ),
             };
 
-      if (!data.props.data.constantValueEnabled) {
-        if (!streamDocument || !data.props.data.field) {
-          return data;
-        }
-
+      if (!data.props.data.constantValueEnabled && data.props.data.field) {
         // ENTITY VALUES
         const resolvedInsights = resolveYextEntityField<
           Partial<InsightSectionType>

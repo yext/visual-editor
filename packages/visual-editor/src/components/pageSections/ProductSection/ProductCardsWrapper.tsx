@@ -126,11 +126,7 @@ export const ProductCardsWrapper: YextComponentConfig<ProductCardsWrapperProps> 
               ),
             };
 
-      if (!data.props.data.constantValueEnabled) {
-        if (!streamDocument || !data.props.data.field) {
-          return data;
-        }
-
+      if (!data.props.data.constantValueEnabled && data.props.data.field) {
         // ENTITY VALUES
         const resolvedProducts = resolveYextEntityField<
           Partial<ProductSectionType>
