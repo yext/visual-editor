@@ -86,14 +86,14 @@ const createEventCardsMappingFields = (sourceField?: string) =>
     },
   });
 
-const eventCardsWrapperFields = {
+const createEventCardsWrapperFields = (sourceField?: string) => ({
   ...cardWrapperFields<EventCardsWrapperProps>(
     msg("components.events", "Events"),
     ComponentFields.EventSection.type,
     true,
     true
   ),
-  cards: createEventCardsMappingFields(),
+  cards: createEventCardsMappingFields(sourceField),
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
@@ -119,7 +119,9 @@ const eventCardsWrapperFields = {
       },
     },
   }),
-};
+});
+
+const eventCardsWrapperFields = createEventCardsWrapperFields();
 
 const EventCardsWrapperComponent: PuckComponent<EventCardsWrapperProps> = (
   props
@@ -200,7 +202,9 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
       ) === "itemList";
 
     return toPuckFields({
-      ...(eventCardsWrapperFields as any),
+      ...(createEventCardsWrapperFields(
+        isMappedItemListMode ? data.props.data.field : undefined
+      ) as any),
       cards: {
         ...(createEventCardsMappingFields(
           isMappedItemListMode ? data.props.data.field : undefined
