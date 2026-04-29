@@ -19,9 +19,10 @@ const videoFields: YextFields<VideoProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      assetVideo: YextField(msg("fields.video", "Video"), {
+      assetVideo: {
         type: "video",
-      }),
+        label: msg("fields.video", "Video"),
+      },
     },
   }),
 };

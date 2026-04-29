@@ -26,3 +26,5 @@ export {
   OptionalNumberFieldOverride,
   type OptionalNumberField,
 } from "./OptionalNumberField.tsx";
+
+export { VideoFieldOverride, type VideoField } from "./VideoField.tsx";

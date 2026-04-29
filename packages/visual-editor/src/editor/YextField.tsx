@@ -22,7 +22,6 @@ import {
 } from "./YextEntityFieldSelector.tsx";
 import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
 import { MsgString } from "../utils/i18n/platform.ts";
-import { VIDEO_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Video.tsx";
 import type { YextPuckFields } from "../fields/fields.ts";
 
 /** Copied from Puck, do not change */
@@ -101,10 +100,6 @@ type YextTranslatableStringField = YextBaseField & {
   showApplyAllOption?: boolean;
 };
 
-type YextVideoField = YextBaseField & {
-  type: "video";
-};
-
 type YextDynamicSelectField<T extends DynamicOptionValueTypes> =
   YextBaseField & {
     type: "dynamicSelect";
@@ -128,11 +123,10 @@ type YextFieldConfig<Props = any> =
   | YextEntitySelectorField<Props extends Record<string, any> ? Props : any>
   | YextMaxWidthField
   | YextTranslatableStringField
-  | YextVideoField
   | YextDynamicSelectField<Props extends DynamicOptionValueTypes ? Props : any>
   | YextPuckFields[Exclude<
       keyof YextPuckFields,
-      "basicSelector" | "image" | "optionalNumber"
+      "basicSelector" | "image" | "optionalNumber" | "video"
     >];
 
 export function YextField<T = any>(
@@ -200,13 +194,6 @@ export function YextField<T, U>(
       config.filter,
       config.showApplyAllOption
     );
-  }
-
-  if (config.type === "video") {
-    return {
-      ...VIDEO_CONSTANT_CONFIG,
-      label: fieldName,
-    };
   }
 
   if (config.type === "dynamicSelect") {
