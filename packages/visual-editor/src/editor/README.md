@@ -245,7 +245,7 @@ const myComponentFields: YextFields<MyComponentProps> = {
 
 ## YextField
 
-`YextField` provides a unified utility for creating typed field configurations in a [Puck](https://github.com/measuredco/puck) and Yext Visual Editor integration context. It abstracts over a subset of common field types and includes special handling for the internal `basicSelector` field type, [YextEntityFieldSelector](##YextEntityFieldSelector), and [TranslatableStringField](##TranslatableStringField).
+`YextField` provides a unified utility for creating typed field configurations in a [Puck](https://github.com/measuredco/puck) and Yext Visual Editor integration context. It abstracts over a subset of common field types and includes special handling for the internal `basicSelector` field type and [YextEntityFieldSelector](##YextEntityFieldSelector).
 
 ### Features
 
@@ -458,22 +458,27 @@ linkedEntity: YextField("Linked Entity", {
 
 #### Translatable String Field
 
-Creates a translatable string input with optional entity field embedding and locale management. [Additional documentation](##TranslatableStringField).
+Use the registered `translatableString` field type directly when you need locale-aware string entry with optional entity field embedding and locale management.
 
 ```tsx
-directoryRoot: YextField(msg("fields.directoryRoot", "Directory Root Link Label"), {
+directoryRoot: {
   type: "translatableString",
+  label: msg("fields.directoryRoot", "Directory Root Link Label"),
   filter: { types: ["type.string"] }
-}),
-title: YextField(msg("fields.title", "Page Title"), {
+},
+title: {
   type: "translatableString",
+  label: msg("fields.title", "Page Title"),
   filter: { types: ["type.string"] },
   showApplyAllOption: true
-}),
+},
 ```
 
 **Props:**
 
 - `type`: `"translatableString"`
+- `label?`: `string | MsgString`
 - `filter?`: `RenderEntityFieldFilter` — optional filter for entity fields that can be embedded
 - `showApplyAllOption?`: `boolean` — enables the "Apply to All Locales" button
+- `showFieldSelector?`: `boolean` — controls whether the entity field embed button is shown
+- `getOptions?`: `() => DynamicOption<string>[]` — optional options source for the embed selector
