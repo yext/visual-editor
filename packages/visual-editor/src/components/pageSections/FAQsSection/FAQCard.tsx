@@ -68,8 +68,8 @@ export const defaultFAQCardData = (
 
 export type FAQCardProps = {
   data: {
-    question: YextEntityField<TranslatableString | TranslatableRichText>;
-    answer: YextEntityField<TranslatableString | TranslatableRichText>;
+    question: YextEntityField<TranslatableString>;
+    answer: YextEntityField<TranslatableRichText>;
   };
 
   /** Styling for all the FAQ cards. */
