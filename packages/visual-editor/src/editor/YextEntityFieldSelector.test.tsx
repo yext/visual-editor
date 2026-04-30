@@ -2,12 +2,10 @@ import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { EntityFieldsContext } from "../hooks/useEntityFields.tsx";
-import { LinkedEntitySchemasContext } from "../hooks/useLinkedEntitySchemas.tsx";
 import { TemplateMetadataContext } from "../internal/hooks/useMessageReceivers.ts";
 import { generateTemplateMetadata } from "../internal/types/templateMetadata.ts";
 import { type RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
 import { type StreamFields } from "../types/entityFields.ts";
-import { type LinkedEntitySchemas } from "../utils/linkedEntityFieldUtils.ts";
 import {
   ConstantValueInput,
   EntityFieldInput,
@@ -62,45 +60,6 @@ const defaultEntityFields: StreamFields = {
   },
 };
 
-const linkedLocationSchemas: LinkedEntitySchemas = {
-  c_linkedLocation: {
-    displayName: "Linked Location",
-    fields: [
-      {
-        name: "name",
-        displayName: "Name",
-        definition: {
-          name: "name",
-          typeName: "type.string",
-          type: {},
-        },
-      },
-      {
-        name: "address",
-        displayName: "Address",
-        definition: {
-          name: "address",
-          typeName: "type.address",
-          type: {},
-        },
-        children: {
-          fields: [
-            {
-              name: "city",
-              displayName: "City",
-              definition: {
-                name: "city",
-                typeName: "type.string",
-                type: {},
-              },
-            },
-          ],
-        },
-      },
-    ],
-  },
-};
-
 const renderEntityFieldInput = (
   props: {
     entityFields?: StreamFields | null;
@@ -108,7 +67,6 @@ const renderEntityFieldInput = (
     onChange?: any;
     value?: Record<string, any>;
     document?: Record<string, unknown>;
-    linkedEntitySchemas?: LinkedEntitySchemas | null;
   } = {}
 ) => {
   const {
@@ -117,7 +75,6 @@ const renderEntityFieldInput = (
     onChange = vi.fn(),
     value = {},
     document = {},
-    linkedEntitySchemas = null,
   } = props;
   const templateMetadata = {
     ...generateTemplateMetadata(),
@@ -128,13 +85,7 @@ const renderEntityFieldInput = (
     <TemplatePropsContext.Provider value={{ document }}>
       <TemplateMetadataContext.Provider value={templateMetadata}>
         <EntityFieldsContext.Provider value={entityFields}>
-          <LinkedEntitySchemasContext.Provider value={linkedEntitySchemas}>
-            <EntityFieldInput
-              filter={filter}
-              onChange={onChange}
-              value={value}
-            />
-          </LinkedEntitySchemasContext.Provider>
+          <EntityFieldInput filter={filter} onChange={onChange} value={value} />
         </EntityFieldsContext.Provider>
       </TemplateMetadataContext.Provider>
     </TemplatePropsContext.Provider>
@@ -146,11 +97,9 @@ const renderEntityFieldInput = (
 const renderEmbeddedFieldInput = ({
   entityFields = defaultEntityFields,
   filter = { types: ["type.string"] },
-  linkedEntitySchemas = null,
 }: {
   entityFields?: StreamFields | null;
   filter?: any;
-  linkedEntitySchemas?: LinkedEntitySchemas | null;
 } = {}) => {
   const templateMetadata = generateTemplateMetadata();
 
@@ -158,14 +107,12 @@ const renderEmbeddedFieldInput = ({
     <TemplatePropsContext.Provider value={{ document: {} }}>
       <TemplateMetadataContext.Provider value={templateMetadata}>
         <EntityFieldsContext.Provider value={entityFields}>
-          <LinkedEntitySchemasContext.Provider value={linkedEntitySchemas}>
-            <EmbeddedFieldStringInputFromEntity
-              filter={filter}
-              onChange={vi.fn()}
-              showFieldSelector={true}
-              value=""
-            />
-          </LinkedEntitySchemasContext.Provider>
+          <EmbeddedFieldStringInputFromEntity
+            filter={filter}
+            onChange={vi.fn()}
+            showFieldSelector={true}
+            value=""
+          />
         </EntityFieldsContext.Provider>
       </TemplateMetadataContext.Provider>
     </TemplatePropsContext.Provider>
@@ -179,7 +126,6 @@ describe("YextEntityFieldSelector", () => {
 
   it("shows linked entity fields for single-value selectors", () => {
     renderEntityFieldInput({
-      linkedEntitySchemas: linkedLocationSchemas,
       entityFields: {
         ...defaultEntityFields,
         fields: [
@@ -226,9 +172,6 @@ describe("YextEntityFieldSelector", () => {
 
   it("does not show linked entity fields for list-only selectors", () => {
     renderEntityFieldInput({
-      linkedEntitySchemas: {
-        c_linkedLocation: linkedLocationSchemas.c_linkedLocation,
-      },
       entityFields: {
         ...defaultEntityFields,
         fields: [
@@ -269,7 +212,6 @@ describe("YextEntityFieldSelector", () => {
 
   it("shows linked entity source roots when the selector opts into them", () => {
     renderEntityFieldInput({
-      linkedEntitySchemas: linkedLocationSchemas,
       entityFields: {
         ...defaultEntityFields,
         fields: [
@@ -313,9 +255,8 @@ describe("YextEntityFieldSelector", () => {
     expect(screen.queryByText("Linked Location > Name")).toBeNull();
   });
 
-  it("falls back to entity fields for linked source roots when linked schemas are unavailable", () => {
+  it("shows linked source roots from entity fields", () => {
     renderEntityFieldInput({
-      linkedEntitySchemas: null,
       entityFields: {
         ...defaultEntityFields,
         fields: [
@@ -402,7 +343,6 @@ describe("YextEntityFieldSelector", () => {
 
   it("does not show single objects or scalar roots as base item-list sources", () => {
     renderEntityFieldInput({
-      linkedEntitySchemas: linkedLocationSchemas,
       entityFields: {
         fields: [
           ...defaultEntityFields.fields,
@@ -709,22 +649,6 @@ describe("YextEntityFieldSelector", () => {
 
   it("allows faq section and linked entity roots while hiding incompatible faq sources", () => {
     renderEntityFieldInput({
-      linkedEntitySchemas: {
-        c_linkedLocation: {
-          displayName: "Linked Location",
-          fields: [
-            {
-              name: "name",
-              displayName: "Name",
-              definition: {
-                name: "name",
-                typeName: "type.string",
-                type: {},
-              },
-            },
-          ],
-        },
-      },
       entityFields: {
         fields: [
           ...defaultEntityFields.fields,
@@ -828,7 +752,6 @@ describe("YextEntityFieldSelector", () => {
 
   it("limits event card source selectors to valid top-level roots", () => {
     renderEntityFieldInput({
-      linkedEntitySchemas: linkedLocationSchemas,
       entityFields: {
         fields: [
           ...defaultEntityFields.fields,
@@ -958,7 +881,6 @@ describe("YextEntityFieldSelector", () => {
 
   it("limits mapped linked-entity title fields to descendants of the selected source", () => {
     renderEntityFieldInput({
-      linkedEntitySchemas: linkedLocationSchemas,
       entityFields: {
         fields: [
           ...defaultEntityFields.fields,
@@ -1044,11 +966,20 @@ describe("YextEntityFieldSelector", () => {
     expect(screen.queryByText("Description")).toBeNull();
   });
 
-  it("does not fall back to entity fields when linked descendant schemas are unavailable", () => {
+  it("does not include base entity fields when scoped to linked descendants", () => {
     renderEntityFieldInput({
       entityFields: {
         fields: [
           ...defaultEntityFields.fields,
+          {
+            name: "youtubeChannelUrl",
+            displayName: "Youtube Channel URL",
+            definition: {
+              name: "youtubeChannelUrl",
+              typeName: "type.string",
+              type: {},
+            },
+          },
           {
             name: "c_linkedLocation",
             displayName: "Linked Location",
@@ -1063,10 +994,10 @@ describe("YextEntityFieldSelector", () => {
             children: {
               fields: [
                 {
-                  name: "youtubeChannelUrl",
-                  displayName: "Youtube Channel URL",
+                  name: "name",
+                  displayName: "Name",
                   definition: {
-                    name: "youtubeChannelUrl",
+                    name: "name",
                     typeName: "type.string",
                     type: {},
                   },
@@ -1085,46 +1016,13 @@ describe("YextEntityFieldSelector", () => {
     fireEvent.click(screen.getByRole("combobox"));
 
     expect(screen.getAllByText("Location Field")).toHaveLength(2);
+    expect(screen.getByText("Name")).toBeDefined();
     expect(screen.queryByText("Youtube Channel URL")).toBeNull();
     expect(screen.queryByText("Linked Location")).toBeNull();
   });
 
   it("limits descendant fields to those actually present on the resolved linked entity or struct", () => {
     renderEntityFieldInput({
-      linkedEntitySchemas: {
-        c_linkedLocation: {
-          displayName: "Linked Location",
-          fields: [
-            {
-              name: "name",
-              displayName: "Name",
-              definition: {
-                name: "name",
-                typeName: "type.string",
-                type: {},
-              },
-            },
-            {
-              name: "businessLogo",
-              displayName: "Business Logo",
-              definition: {
-                name: "businessLogo",
-                typeName: "type.image",
-                type: {},
-              },
-            },
-            {
-              name: "facebookPageUrl",
-              displayName: "Facebook Page URL",
-              definition: {
-                name: "facebookPageUrl",
-                typeName: "type.string",
-                type: {},
-              },
-            },
-          ],
-        },
-      },
       entityFields: {
         fields: [
           ...defaultEntityFields.fields,
@@ -1173,44 +1071,6 @@ describe("YextEntityFieldSelector", () => {
 
   it("does not show linked descendant options when the selected source resolves to no items", () => {
     renderEntityFieldInput({
-      linkedEntitySchemas: {
-        c_linkedLocation: {
-          displayName: "LinkedLocation",
-          fields: [
-            {
-              name: "name",
-              displayName: "Name",
-              definition: {
-                name: "name",
-                typeName: "type.string",
-                type: {},
-              },
-            },
-            {
-              name: "tripBranding",
-              displayName: "Trip Branding",
-              definition: {
-                name: "tripBranding",
-                typeName: "c_tripBranding",
-                type: {},
-              },
-              children: {
-                fields: [
-                  {
-                    name: "url",
-                    displayName: "URL",
-                    definition: {
-                      name: "url",
-                      typeName: "type.string",
-                      type: {},
-                    },
-                  },
-                ],
-              },
-            },
-          ],
-        },
-      },
       entityFields: {
         ...defaultEntityFields,
         fields: [
@@ -1249,22 +1109,6 @@ describe("YextEntityFieldSelector", () => {
     const onChange = vi.fn();
 
     renderEntityFieldInput({
-      linkedEntitySchemas: {
-        c_linkedLocation: {
-          displayName: "LinkedLocation",
-          fields: [
-            {
-              name: "name",
-              displayName: "Name",
-              definition: {
-                name: "name",
-                typeName: "type.string",
-                type: {},
-              },
-            },
-          ],
-        },
-      },
       onChange,
       entityFields: {
         fields: [
@@ -1467,22 +1311,20 @@ describe("YextEntityFieldSelector", () => {
           }}
         >
           <EntityFieldsContext.Provider value={defaultEntityFields}>
-            <LinkedEntitySchemasContext.Provider value={null}>
-              <YextAutoField
-                field={YextField(msg("fields.date", "Date"), {
-                  type: "entityField",
-                  disableConstantValueToggle: true,
-                  filter: { types: ["type.datetime"] },
-                })}
-                id="date-field"
-                onChange={onChange}
-                value={{
-                  field: "description",
-                  constantValue: "2026-04-15T09:30",
-                  constantValueEnabled: true,
-                }}
-              />
-            </LinkedEntitySchemasContext.Provider>
+            <YextAutoField
+              field={YextField(msg("fields.date", "Date"), {
+                type: "entityField",
+                disableConstantValueToggle: true,
+                filter: { types: ["type.datetime"] },
+              })}
+              id="date-field"
+              onChange={onChange}
+              value={{
+                field: "description",
+                constantValue: "2026-04-15T09:30",
+                constantValueEnabled: true,
+              }}
+            />
           </EntityFieldsContext.Provider>
         </TemplateMetadataContext.Provider>
       </TemplatePropsContext.Provider>
@@ -1494,7 +1336,6 @@ describe("YextEntityFieldSelector", () => {
 
   it("includes linked entity fields in the embedded field selector", () => {
     renderEmbeddedFieldInput({
-      linkedEntitySchemas: linkedLocationSchemas,
       entityFields: {
         ...defaultEntityFields,
         fields: [
@@ -1553,22 +1394,6 @@ describe("YextEntityFieldSelector", () => {
 
   it("warns once when a linked entity field resolves through multiple references", () => {
     const props = {
-      linkedEntitySchemas: {
-        c_linkedLocation: {
-          displayName: "Linked Location",
-          fields: [
-            {
-              name: "name",
-              displayName: "Name",
-              definition: {
-                name: "name",
-                typeName: "type.string",
-                type: {},
-              },
-            },
-          ],
-        },
-      },
       entityFields: {
         ...defaultEntityFields,
         fields: [
@@ -1620,15 +1445,11 @@ describe("YextEntityFieldSelector", () => {
           }}
         >
           <EntityFieldsContext.Provider value={props.entityFields}>
-            <LinkedEntitySchemasContext.Provider
-              value={props.linkedEntitySchemas}
-            >
-              <EntityFieldInput
-                filter={props.filter}
-                onChange={vi.fn()}
-                value={props.value}
-              />
-            </LinkedEntitySchemasContext.Provider>
+            <EntityFieldInput
+              filter={props.filter}
+              onChange={vi.fn()}
+              value={props.value}
+            />
           </EntityFieldsContext.Provider>
         </TemplateMetadataContext.Provider>
       </TemplatePropsContext.Provider>
@@ -1642,22 +1463,6 @@ describe("YextEntityFieldSelector", () => {
 
   it("does not warn for linked descendant mapping selectors", () => {
     renderEntityFieldInput({
-      linkedEntitySchemas: {
-        c_linkedLocation: {
-          displayName: "LinkedLocation",
-          fields: [
-            {
-              name: "name",
-              displayName: "Name",
-              definition: {
-                name: "name",
-                typeName: "type.string",
-                type: {},
-              },
-            },
-          ],
-        },
-      },
       entityFields: {
         ...defaultEntityFields,
         fields: [

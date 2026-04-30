@@ -4,11 +4,6 @@ export {
   usePlatformBridgeEntityFields,
 } from "./useEntityFields.tsx";
 export {
-  useLinkedEntitySchemas,
-  usePlatformBridgeLinkedEntitySchemas,
-  LinkedEntitySchemasContext,
-} from "./useLinkedEntitySchemas.tsx";
-export {
   useDocument,
   useTemplateProps,
   TemplatePropsContext,

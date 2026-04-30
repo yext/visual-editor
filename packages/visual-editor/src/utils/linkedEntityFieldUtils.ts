@@ -4,13 +4,6 @@ import {
   type YextSchemaField,
 } from "../types/entityFields.ts";
 
-export type LinkedEntitySchema = {
-  displayName: string;
-  fields: YextSchemaField[];
-};
-
-export type LinkedEntitySchemas = Record<string, LinkedEntitySchema>;
-
 const isLinkedEntityDefinition = (
   definition: YextFieldDefinition | undefined
 ): boolean =>
@@ -38,71 +31,25 @@ export const isTopLevelLinkedEntityField = (
 };
 
 export const buildLinkedEntityStreamFields = (
-  linkedEntitySchemas?: LinkedEntitySchemas
+  entityFields: StreamFields | null
 ): StreamFields | null => {
-  if (!linkedEntitySchemas) {
+  if (!entityFields) {
     return null;
   }
 
-  const fields: YextSchemaField[] = [];
-  const displayNames: Record<string, string> = {};
-
-  Object.entries(linkedEntitySchemas).forEach(
-    ([referenceFieldName, linkedEntitySchema]) => {
-      displayNames[referenceFieldName] = linkedEntitySchema.displayName;
-      fields.push({
-        name: referenceFieldName,
-        definition: {
-          name: referenceFieldName,
-          type: {},
-        },
-        children: {
-          fields: linkedEntitySchema.fields,
-        },
-        displayName: linkedEntitySchema.displayName,
-      });
-
-      populateLinkedEntityDisplayNames(
-        displayNames,
-        linkedEntitySchema.fields,
-        referenceFieldName,
-        linkedEntitySchema.displayName
-      );
-    }
-  );
-
-  return { fields, displayNames };
-};
-
-const populateLinkedEntityDisplayNames = (
-  displayNames: Record<string, string>,
-  fields: YextSchemaField[],
-  parentFieldName: string,
-  parentDisplayName: string
-) => {
-  fields.forEach((field) => {
-    const fieldName = `${parentFieldName}.${field.name}`;
-    const fieldDisplayName = field.displayName ?? field.name;
-    displayNames[fieldName] = `${parentDisplayName} > ${fieldDisplayName}`;
-
-    if (field.children?.fields?.length) {
-      populateLinkedEntityDisplayNames(
-        displayNames,
-        field.children.fields,
-        fieldName,
-        displayNames[fieldName]
-      );
-    }
-  });
+  return {
+    fields: getTopLevelLinkedEntitySourceFields(entityFields),
+    displayNames: entityFields.displayNames,
+  };
 };
 
 export const isLinkedEntityFieldPath = (
   fieldPath: string | undefined,
-  linkedEntitySchemas?: LinkedEntitySchemas
+  entityFields: StreamFields | null
 ): boolean => {
-  if (!fieldPath || !linkedEntitySchemas) {
+  if (!fieldPath) {
     return false;
   }
 
-  return Object.hasOwn(linkedEntitySchemas, fieldPath.split(".")[0]);
+  return isTopLevelLinkedEntityField(fieldPath.split(".")[0], entityFields);
 };

@@ -23,7 +23,6 @@ import {
 import { ENHANCED_CTA_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
 import { PHONE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Phone.tsx";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
-import { useLinkedEntitySchemas } from "../hooks/useLinkedEntitySchemas.tsx";
 import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 import { getRandomPlaceholderImageObject } from "../utils/imagePlaceholders.ts";
 import { EVENT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/EventSection.tsx";
@@ -49,7 +48,10 @@ import {
   type YextEntityField,
 } from "./yextEntityFieldUtils.ts";
 import { useDocument } from "../hooks/useDocument.tsx";
-import { isLinkedEntityFieldPath } from "../utils/linkedEntityFieldUtils.ts";
+import {
+  isLinkedEntityFieldPath,
+  isTopLevelLinkedEntityField,
+} from "../utils/linkedEntityFieldUtils.ts";
 import { type MappedSourceFieldFilter } from "../utils/cardSlots/mappedSource.ts";
 import { warnOnMultiValueLinkedEntityTraversal } from "../utils/linkedEntityWarningUtils.ts";
 
@@ -437,12 +439,12 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   label,
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
-  const linkedEntitySchemas = useLinkedEntitySchemas();
   const templateMetadata = useTemplateMetadata();
   const streamDocument = useDocument();
   const descendantRoot = filter.descendantsOf;
   const linkedEntityDescendantRoot =
-    filter.descendantsOf && linkedEntitySchemas?.[filter.descendantsOf]
+    filter.descendantsOf &&
+    isTopLevelLinkedEntityField(filter.descendantsOf, entityFields)
       ? filter.descendantsOf
       : undefined;
   const entityFieldSelector = React.useMemo<BasicSelectorField>(() => {
@@ -451,7 +453,6 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       {
         ...filter,
       },
-      linkedEntitySchemas ?? undefined,
       streamDocument
     );
     const entityFieldOptions = filteredEntityFields.map((field) => ({
@@ -484,7 +485,6 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     descendantRoot,
     filter,
     label,
-    linkedEntitySchemas,
     linkedEntityDescendantRoot,
     templateMetadata.entityTypeDisplayName,
   ]);
@@ -494,7 +494,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       linkedEntityDescendantRoot ||
       filter.includeListsOnly ||
       !value?.field ||
-      !isLinkedEntityFieldPath(value.field, linkedEntitySchemas ?? undefined)
+      !isLinkedEntityFieldPath(value.field, entityFields)
     ) {
       return;
     }
@@ -503,7 +503,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   }, [
     filter.includeListsOnly,
     linkedEntityDescendantRoot,
-    linkedEntitySchemas,
+    entityFields,
     streamDocument,
     value?.field,
   ]);

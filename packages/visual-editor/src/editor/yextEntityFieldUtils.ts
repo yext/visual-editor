@@ -9,7 +9,6 @@ import {
   buildLinkedEntityStreamFields,
   getTopLevelLinkedEntitySourceFields,
   isTopLevelLinkedEntityField,
-  type LinkedEntitySchemas,
 } from "../utils/linkedEntityFieldUtils.ts";
 import {
   getBaseEntityListSourceRootFields,
@@ -58,11 +57,9 @@ const sortFields = (fields: YextSchemaField[]): YextSchemaField[] => {
 export const getFieldsForSelector = (
   entityFields: StreamFields | null,
   filter: MappedSourceFieldFilter<any>,
-  linkedEntitySchemas?: LinkedEntitySchemas,
   streamDocument?: StreamDocument
 ): YextSchemaField[] => {
-  const linkedEntityStreamFields =
-    buildLinkedEntityStreamFields(linkedEntitySchemas);
+  const linkedEntityStreamFields = buildLinkedEntityStreamFields(entityFields);
   const resolvedDescendantFieldPaths = filter.descendantsOf
     ? getResolvedDescendantFieldPaths(streamDocument, filter.descendantsOf)
     : undefined;
@@ -110,14 +107,10 @@ export const getFieldsForSelector = (
       )
     : [];
   const isLinkedEntityDescendantFilter =
-    !!filter.descendantsOf && !!linkedEntitySchemas?.[filter.descendantsOf];
-  const isLinkedEntityDescendantWithoutSchema =
     !!filter.descendantsOf &&
-    isTopLevelLinkedEntityField(filter.descendantsOf, entityFields) &&
-    !linkedEntitySchemas?.[filter.descendantsOf];
+    isTopLevelLinkedEntityField(filter.descendantsOf, entityFields);
   const descendantRootDisplayName = filter.descendantsOf
-    ? (linkedEntitySchemas?.[filter.descendantsOf]?.displayName ??
-      entityFields?.displayNames?.[filter.descendantsOf] ??
+    ? (entityFields?.displayNames?.[filter.descendantsOf] ??
       entityFields?.fields.find((field) => field.name === filter.descendantsOf)
         ?.displayName)
     : undefined;
@@ -178,10 +171,6 @@ export const getFieldsForSelector = (
         ...validBaseListRootFields,
       ])
     );
-  }
-
-  if (isLinkedEntityDescendantWithoutSchema) {
-    return [];
   }
 
   let filteredEntityFields = getFilteredEntityFields(entityFields, filter);
