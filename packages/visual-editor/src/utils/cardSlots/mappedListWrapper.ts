@@ -19,6 +19,27 @@ const cloneCard = <TCardProps extends DefaultComponentProps>(
 ): ComponentData<TCardProps> =>
   JSON.parse(JSON.stringify(card)) as ComponentData<TCardProps>;
 
+const rewriteNestedSlotIds = <TCardProps extends DefaultComponentProps>(
+  card: ComponentData<TCardProps>,
+  newId: string
+): void => {
+  if (!card.props.slots || typeof card.props.slots !== "object") {
+    return;
+  }
+
+  Object.entries(card.props.slots).forEach(([slotKey, slotArray]) => {
+    if (!Array.isArray(slotArray)) {
+      return;
+    }
+
+    slotArray.forEach((slotItem) => {
+      if (slotItem?.props?.id) {
+        slotItem.props.id = `${newId}-${slotKey}`;
+      }
+    });
+  });
+};
+
 const resolveSectionFieldItems = <TItem>(
   streamDocument: StreamDocument,
   fieldPath: string,
@@ -48,17 +69,16 @@ export const syncManualListCards = <TCardProps extends DefaultComponentProps>({
   createId,
   createCard,
   fallbackToIndex = false,
-  rewriteChildSlotIds,
+  rewriteChildSlotIds = true,
 }: {
   currentCards: ComponentData<TCardProps>[];
   constantValue: { id?: string }[] | undefined;
   createId: () => string;
   createCard: (id: string, index: number) => ComponentData<TCardProps>;
   fallbackToIndex?: boolean;
-  rewriteChildSlotIds?: (
-    card: ComponentData<TCardProps>,
-    newId: string
-  ) => void;
+  rewriteChildSlotIds?:
+    | boolean
+    | ((card: ComponentData<TCardProps>, newId: string) => void);
 }): {
   slots: ComponentData<TCardProps>[];
   constantValue: { id?: string }[];
@@ -81,7 +101,11 @@ export const syncManualListCards = <TCardProps extends DefaultComponentProps>({
       }
 
       if (card && card.props.id !== nextId) {
-        rewriteChildSlotIds?.(card, nextId);
+        if (typeof rewriteChildSlotIds === "function") {
+          rewriteChildSlotIds(card, nextId);
+        } else if (rewriteChildSlotIds) {
+          rewriteNestedSlotIds(card, nextId);
+        }
       }
       inUseIds.add(nextId);
 
@@ -103,6 +127,14 @@ export const syncManualListCards = <TCardProps extends DefaultComponentProps>({
   };
 };
 
+/**
+ * Resolves a wrapper's cards from the selected source.
+ *
+ * 1. Classify the source as manual, section-backed, or mapped-item-list.
+ * 2. Keep manual cards and ids in sync while preserving existing card styling.
+ * 3. Resolve section-backed or mapped items and expand/trim cards to match.
+ * 4. Decorate each card with section-specific parent data for rendering.
+ */
 export const resolveMappedListWrapperData = <
   TWrapperProps extends CardWrapperType<any>,
   TCardProps extends DefaultComponentProps,
@@ -128,7 +160,7 @@ export const resolveMappedListWrapperData = <
   listFieldName: string;
   cardIdPrefix: string;
   getSharedCardProps: (
-    data: ComponentData<TWrapperProps>
+    card: ComponentData<TCardProps> | undefined
   ) => TSharedCardProps | undefined;
   createCard: (
     id: string,
@@ -146,10 +178,9 @@ export const resolveMappedListWrapperData = <
     index: number
   ) => ComponentData<TCardProps>;
   fallbackToIndex?: boolean;
-  rewriteChildSlotIds?: (
-    card: ComponentData<TCardProps>,
-    newId: string
-  ) => void;
+  rewriteChildSlotIds?:
+    | boolean
+    | ((card: ComponentData<TCardProps>, newId: string) => void);
 }): ComponentData<TWrapperProps> => {
   const sourceMode = classifyMappedSource({
     streamDocument,
@@ -158,14 +189,14 @@ export const resolveMappedListWrapperData = <
     listFieldName,
   });
   const currentCards = data.props.slots.CardSlot as ComponentData<TCardProps>[];
+  const sharedCardProps = getSharedCardProps(currentCards[0]);
 
   if (sourceMode === "manual") {
     const syncedCards = syncManualListCards({
       currentCards,
       constantValue: data.props.data.constantValue,
       createId: () => `${cardIdPrefix}-${crypto.randomUUID()}`,
-      createCard: (id, index) =>
-        createCard(id, index, getSharedCardProps(data)),
+      createCard: (id, index) => createCard(id, index, sharedCardProps),
       fallbackToIndex,
       rewriteChildSlotIds,
     });
@@ -176,7 +207,6 @@ export const resolveMappedListWrapperData = <
     ) as ComponentData<TWrapperProps>;
   }
 
-  const sharedCardProps = getSharedCardProps(data);
   const fieldPath = data.props.data.field;
   const items =
     sourceMode === "sectionField"

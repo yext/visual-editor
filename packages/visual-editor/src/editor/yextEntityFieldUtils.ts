@@ -12,7 +12,6 @@ import {
 } from "../utils/linkedEntityFieldUtils.ts";
 import {
   getBaseEntityListSourceRootFields,
-  classifyMappedSource,
   type MappedSourceFieldFilter,
 } from "../utils/cardSlots/mappedSource.ts";
 
@@ -53,6 +52,17 @@ const sortFields = (fields: YextSchemaField[]): YextSchemaField[] => {
     return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
   });
 };
+
+const isSectionFieldSourceValue = (value: unknown): boolean =>
+  value === undefined ||
+  value === null ||
+  (!!value && typeof value === "object" && !Array.isArray(value));
+
+const isMappedListSourceValue = (value: unknown): boolean =>
+  value === undefined ||
+  value === null ||
+  Array.isArray(value) ||
+  (!!value && typeof value === "object");
 
 export const getFieldsForSelector = (
   entityFields: StreamFields | null,
@@ -126,14 +136,7 @@ export const getFieldsForSelector = (
                 streamDocument,
                 field.name
               ).value;
-              return (
-                resolvedValue === undefined ||
-                classifyMappedSource({
-                  streamDocument,
-                  fieldPath: field.name,
-                  listFieldName: filter.listFieldName,
-                }) === "sectionField"
-              );
+              return isSectionFieldSourceValue(resolvedValue);
             })()
       );
     const validLinkedEntityRootFields = linkedEntityRootFields.filter(
@@ -145,11 +148,7 @@ export const getFieldsForSelector = (
                 streamDocument,
                 field.name
               ).value;
-              return (
-                resolvedValue === undefined ||
-                Array.isArray(resolvedValue) ||
-                (!!resolvedValue && typeof resolvedValue === "object")
-              );
+              return isMappedListSourceValue(resolvedValue);
             })()
     );
     const validBaseListRootFields = baseListRootFields.filter((field) =>
@@ -160,7 +159,11 @@ export const getFieldsForSelector = (
               streamDocument,
               field.name
             ).value;
-            return resolvedValue === undefined || Array.isArray(resolvedValue);
+            return (
+              resolvedValue === undefined ||
+              resolvedValue === null ||
+              Array.isArray(resolvedValue)
+            );
           })()
     );
 

@@ -230,18 +230,13 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
       locale,
       listFieldName: "events",
       cardIdPrefix: "EventCard",
-      getSharedCardProps: (currentData) =>
-        currentData.props.slots.CardSlot.length === 0
+      getSharedCardProps: (card) =>
+        !card
           ? undefined
           : {
-              backgroundColor:
-                currentData.props.slots.CardSlot[0].props.styles
-                  .backgroundColor,
-              truncateDescription:
-                currentData.props.slots.CardSlot[0].props.truncateDescription,
-              slotStyles: gatherSlotStyles(
-                currentData.props.slots.CardSlot[0].props.slots
-              ),
+              backgroundColor: card.props.styles.backgroundColor,
+              truncateDescription: card.props.styles.truncateDescription,
+              slotStyles: gatherSlotStyles(card.props.slots),
             },
       createCard: (id, index, sharedCardProps) =>
         defaultEventCardSlotData(
@@ -313,11 +308,6 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
           field: data.props.data.field,
           event,
         } satisfies EventCardProps["parentData"]),
-      rewriteChildSlotIds: (card, newId) => {
-        Object.entries(card.props.slots).forEach(([slotKey, slotArray]) => {
-          slotArray[0].props.id = `${newId}-${slotKey}`;
-        });
-      },
     });
   },
   render: (props) => <EventCardsWrapperComponent {...props} />,

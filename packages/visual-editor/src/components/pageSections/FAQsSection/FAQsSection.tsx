@@ -273,17 +273,13 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
       locale,
       listFieldName: "faqs",
       cardIdPrefix: "FAQCard",
-      getSharedCardProps: (currentData) =>
-        currentData.props.slots.CardSlot.length === 0
+      getSharedCardProps: (card) =>
+        !card
           ? undefined
           : {
-              questionVariant:
-                currentData.props.slots.CardSlot[0].props.styles
-                  .questionVariant,
-              answerVariant:
-                currentData.props.slots.CardSlot[0].props.styles.answerVariant,
-              answerColor:
-                currentData.props.slots.CardSlot[0].props.styles.answerColor,
+              questionVariant: card.props.styles.questionVariant,
+              answerVariant: card.props.styles.answerVariant,
+              answerColor: card.props.styles.answerColor,
             },
       createCard: (id, index, sharedCardProps) =>
         defaultFAQCardData(
