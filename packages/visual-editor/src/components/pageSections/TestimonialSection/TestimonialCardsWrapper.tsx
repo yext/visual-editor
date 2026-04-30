@@ -1,5 +1,8 @@
 import { ComponentData, PuckComponent, setDeep } from "@puckeditor/core";
-import { TestimonialSectionType } from "../../../types/types.ts";
+import {
+  TestimonialSectionType,
+  TestimonialStruct,
+} from "../../../types/types.ts";
 import { ComponentFields } from "../../../types/fields.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
@@ -15,8 +18,9 @@ import {
 } from "./TestimonialCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
-import { YextComponentConfig } from "../../../fields/fields.ts";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
+import { buildListSectionCards } from "../../../utils/cardSlots/listSectionData.ts";
 
 export type TestimonialCardsWrapperProps =
   CardWrapperType<TestimonialSectionType> & {
@@ -35,27 +39,28 @@ export type TestimonialCardsWrapperProps =
     };
   };
 
-const testimonialCardsWrapperFields = {
-  ...cardWrapperFields<TestimonialCardsWrapperProps>(
-    msg("components.testimonial", "Testimonial"),
-    ComponentFields.TestimonialSection.type
-  ),
-  styles: YextField(msg("fields.styles", "Styles"), {
-    type: "object",
-    objectFields: {
-      showName: {
-        label: msg("fields.showName", "Show Name"),
-        type: "radio",
-        options: ThemeOptions.SHOW_HIDE,
+const testimonialCardsWrapperFields: YextFields<TestimonialCardsWrapperProps> =
+  {
+    ...cardWrapperFields<TestimonialSectionType>(
+      msg("components.testimonial", "Testimonial"),
+      ComponentFields.TestimonialSection.type
+    ),
+    styles: YextField(msg("fields.styles", "Styles"), {
+      type: "object",
+      objectFields: {
+        showName: {
+          label: msg("fields.showName", "Show Name"),
+          type: "radio",
+          options: ThemeOptions.SHOW_HIDE,
+        },
+        showDate: {
+          label: msg("fields.showDate", "Show Date"),
+          type: "radio",
+          options: ThemeOptions.SHOW_HIDE,
+        },
       },
-      showDate: {
-        label: msg("fields.showDate", "Show Date"),
-        type: "radio",
-        options: ThemeOptions.SHOW_HIDE,
-      },
-    },
-  }),
-};
+    }),
+  };
 
 const TestimonialCardsWrapperComponent: PuckComponent<
   TestimonialCardsWrapperProps
@@ -92,6 +97,9 @@ export const TestimonialCardsWrapper: YextComponentConfig<TestimonialCardsWrappe
     },
     resolveData: (data, params) => {
       const streamDocument = params.metadata.streamDocument;
+      if (!data?.props?.data) {
+        return data;
+      }
       const sharedCardProps =
         data.props.slots.CardSlot.length === 0
           ? undefined
@@ -103,13 +111,10 @@ export const TestimonialCardsWrapper: YextComponentConfig<TestimonialCardsWrappe
               ),
             };
 
-      if (!data?.props?.data) {
-        return data;
-      }
-
       if (!data.props.data.constantValueEnabled && data.props.data.field) {
+        // ENTITY VALUES
         const resolvedTestimonials = resolveYextEntityField<
-          TestimonialSectionType | { testimonials: undefined }
+          Partial<TestimonialSectionType>
         >(
           streamDocument,
           {
@@ -123,96 +128,92 @@ export const TestimonialCardsWrapper: YextComponentConfig<TestimonialCardsWrappe
           return setDeep(data, "props.slots.CardSlot", []);
         }
 
-        const requiredLength = resolvedTestimonials.length;
-        const currentLength = data.props.slots.CardSlot.length;
-        const cardsToAdd =
-          currentLength < requiredLength
-            ? Array(requiredLength - currentLength)
-                .fill(null)
-                .map(() =>
-                  defaultTestimonialCardSlotData(
-                    `TestimonialCard-${crypto.randomUUID()}`,
-                    undefined,
-                    sharedCardProps?.backgroundColor,
-                    sharedCardProps?.slotStyles
-                  )
-                )
-            : [];
-        const updatedCardSlot = [
-          ...data.props.slots.CardSlot,
-          ...cardsToAdd,
-        ].slice(0, requiredLength) as ComponentData<TestimonialCardProps>[];
-
         return setDeep(
           data,
           "props.slots.CardSlot",
-          updatedCardSlot.map((card, i) => {
-            card.props.index = i;
-            return setDeep(card, "props.parentData", {
-              field: data.props.data.field,
-              testimonial: resolvedTestimonials[i],
-            } satisfies TestimonialCardProps["parentData"]);
+          buildListSectionCards<TestimonialCardProps, TestimonialStruct>({
+            currentCards: data.props.slots
+              .CardSlot as ComponentData<TestimonialCardProps>[],
+            createCard: () =>
+              defaultTestimonialCardSlotData(
+                `TestimonialCard-${crypto.randomUUID()}`,
+                undefined,
+                sharedCardProps?.backgroundColor,
+                sharedCardProps?.slotStyles
+              ) as ComponentData<TestimonialCardProps>,
+            decorateCard: (card, testimonial, index) =>
+              setDeep(setDeep(card, "props.index", index), "props.parentData", {
+                field: data.props.data.field,
+                testimonial,
+              }) as ComponentData<TestimonialCardProps>,
+            items: resolvedTestimonials,
           })
         );
-      } else {
-        let updatedData = data;
+      }
 
-        if (!Array.isArray(data.props.data.constantValue)) {
-          updatedData = setDeep(updatedData, "props.data.constantValue", []);
-          return updatedData;
-        }
+      // STATIC VALUES
+      let updatedData = data;
 
-        const inUseIds = new Set<string>();
-        const newSlots = data.props.data.constantValue.map(({ id }, i) => {
-          const existingCard = id
-            ? (data.props.slots.CardSlot.find(
-                (slot) => slot.props.id === id
-              ) as ComponentData<TestimonialCardProps>)
-            : (data.props.slots.CardSlot[i] as
-                | ComponentData<TestimonialCardProps>
-                | undefined);
-
-          let newCard = existingCard
-            ? (JSON.parse(JSON.stringify(existingCard)) as typeof existingCard)
-            : undefined;
-
-          let newId =
-            newCard?.props.id || `TestimonialCard-${crypto.randomUUID()}`;
-
-          if (newCard && inUseIds.has(newId)) {
-            newId = `TestimonialCard-${crypto.randomUUID()}`;
-            Object.entries(newCard.props.slots).forEach(
-              ([slotKey, slotArray]) => {
-                slotArray[0].props.id = newId + "-" + slotKey;
-              }
-            );
-          }
-          inUseIds.add(newId);
-
-          if (!newCard) {
-            return defaultTestimonialCardSlotData(
-              newId,
-              i,
-              sharedCardProps?.backgroundColor,
-              sharedCardProps?.slotStyles
-            );
-          }
-
-          newCard = setDeep(newCard, "props.id", newId);
-          newCard = setDeep(newCard, "props.index", i);
-          newCard = setDeep(newCard, "props.parentData", undefined);
-
-          return newCard;
-        });
-
-        updatedData = setDeep(updatedData, "props.slots.CardSlot", newSlots);
-        updatedData = setDeep(
-          updatedData,
-          "props.data.constantValue",
-          newSlots.map((card) => ({ id: card.props.id }))
-        );
+      if (!Array.isArray(data.props.data.constantValue)) {
+        updatedData = setDeep(updatedData, "props.data.constantValue", []);
         return updatedData;
       }
+
+      // Rebuild the slot array from the saved ids, reusing existing cards when
+      // possible and de-duplicating ids to avoid collisions.
+      const inUseIds = new Set<string>();
+      const newSlots = data.props.data.constantValue.map(({ id }, i) => {
+        const existingCard = id
+          ? (data.props.slots.CardSlot.find(
+              (slot) => slot.props.id === id
+            ) as ComponentData<TestimonialCardProps>)
+          : (data.props.slots.CardSlot[i] as
+              | ComponentData<TestimonialCardProps>
+              | undefined);
+
+        // Deep clone reused cards so id and parentData updates do not mutate
+        // the original slot entry in multiple places.
+        let newCard = existingCard
+          ? (JSON.parse(JSON.stringify(existingCard)) as typeof existingCard)
+          : undefined;
+
+        let newId =
+          newCard?.props.id || `TestimonialCard-${crypto.randomUUID()}`;
+
+        if (newCard && inUseIds.has(newId)) {
+          newId = `TestimonialCard-${crypto.randomUUID()}`;
+          Object.entries(newCard.props.slots).forEach(
+            ([slotKey, slotArray]) => {
+              slotArray[0].props.id = newId + "-" + slotKey;
+            }
+          );
+        }
+        inUseIds.add(newId);
+
+        if (!newCard) {
+          return defaultTestimonialCardSlotData(
+            newId,
+            i,
+            sharedCardProps?.backgroundColor,
+            sharedCardProps?.slotStyles
+          );
+        }
+
+        newCard = setDeep(newCard, "props.id", newId);
+        newCard = setDeep(newCard, "props.index", i);
+        newCard = setDeep(newCard, "props.parentData", undefined);
+
+        return newCard;
+      });
+
+      // Keep the rendered card slot and sidebar ids in sync.
+      updatedData = setDeep(updatedData, "props.slots.CardSlot", newSlots);
+      updatedData = setDeep(
+        updatedData,
+        "props.data.constantValue",
+        newSlots.map((card) => ({ id: card.props.id }))
+      );
+      return updatedData;
     },
     render: (props) => <TestimonialCardsWrapperComponent {...props} />,
   };
