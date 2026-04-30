@@ -15,11 +15,13 @@ const normalizeFooterLogoImage = (image: unknown) => {
 
   const { field, constantValue, constantValueEnabled, ...localizedImage } =
     image;
+  const hasActiveEntityField =
+    typeof field === "string" && field !== "" && constantValueEnabled === false;
 
   return {
-    field: typeof field === "string" ? field : "",
+    field: hasActiveEntityField ? field : "",
     constantValue: constantValue ?? localizedImage,
-    constantValueEnabled: constantValueEnabled ?? true,
+    constantValueEnabled: hasActiveEntityField ? false : true,
   };
 };
 

@@ -574,6 +574,103 @@ describe("migrate", () => {
     });
   });
 
+  it("preserves active ExpandedFooter logo slot entity image data while removing stale localized data", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+          },
+        },
+        content: [
+          {
+            type: "ExpandedFooter",
+            props: {
+              id: "ExpandedFooter-test",
+              slots: {
+                LogoSlot: [
+                  {
+                    type: "FooterLogoSlot",
+                    props: {
+                      id: "FooterLogoSlot-test",
+                      data: {
+                        image: {
+                          en: {
+                            url: "https://example.com/stale.png",
+                            height: 100,
+                            width: 100,
+                          },
+                          hasLocalizedValue: "true",
+                          field: "logo",
+                          constantValueEnabled: false,
+                          constantValue: {
+                            en: {
+                              url: "https://example.com/fallback.png",
+                              height: 200,
+                              width: 200,
+                            },
+                            hasLocalizedValue: "true",
+                          },
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [normalizeFooterLogoImageMigration],
+      {
+        components: {},
+      },
+      {}
+    );
+
+    expect(migratedData).toEqual({
+      root: {
+        props: {
+          version: 1,
+        },
+      },
+      content: [
+        {
+          type: "ExpandedFooter",
+          props: {
+            id: "ExpandedFooter-test",
+            slots: {
+              LogoSlot: [
+                {
+                  type: "FooterLogoSlot",
+                  props: {
+                    id: "FooterLogoSlot-test",
+                    data: {
+                      image: {
+                        field: "logo",
+                        constantValueEnabled: false,
+                        constantValue: {
+                          en: {
+                            url: "https://example.com/fallback.png",
+                            height: 200,
+                            width: 200,
+                          },
+                          hasLocalizedValue: "true",
+                        },
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        },
+      ],
+      zones: {},
+    });
+  });
+
   it("wraps legacy ExpandedFooter logo slot localized image data as a constant value", async () => {
     const migratedData = migrate(
       {
