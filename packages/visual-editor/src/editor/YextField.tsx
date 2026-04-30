@@ -18,7 +18,6 @@ import {
   YextEntityFieldSelector,
 } from "./YextEntityFieldSelector.tsx";
 import { MsgString } from "../utils/i18n/platform.ts";
-import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 import type { YextFieldMap, YextPuckFields } from "../fields/fields.ts";
 
 /** Copied from Puck, do not change */
@@ -81,10 +80,6 @@ export type YextFieldDefinition<ValueType = any> =
       ? YextObjectField<ValueType>
       : never);
 
-type YextImageField = YextBaseField & {
-  type: "image";
-};
-
 type YextDynamicSelectField<T extends DynamicOptionValueTypes> =
   YextBaseField & {
     type: "dynamicSelect";
@@ -106,12 +101,12 @@ type YextFieldConfig<Props = any> =
   | YextObjectFieldConfig<Props extends Record<string, any> ? Props : any>
   | YextNumberField
   | YextEntitySelectorField<Props extends Record<string, any> ? Props : any>
-  | YextImageField
   | YextDynamicSelectField<Props extends DynamicOptionValueTypes ? Props : any>
   | YextPuckFields[Exclude<
       keyof YextPuckFields,
       | "basicSelector"
       | "code"
+      | "image"
       | "optionalNumber"
       | "video"
       | "translatableString"
@@ -147,13 +142,6 @@ export function YextField<T, U>(
       disableConstantValueToggle: config.disableConstantValueToggle,
       disallowTranslation: config.disallowTranslation,
     });
-  }
-
-  if (config.type === "image") {
-    return {
-      ...IMAGE_CONSTANT_CONFIG,
-      label: fieldName,
-    };
   }
 
   if (config.type === "dynamicSelect") {

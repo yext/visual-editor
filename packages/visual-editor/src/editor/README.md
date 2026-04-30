@@ -209,6 +209,29 @@ const ToneField = ({
 
 When the field definition is part of a normal component `fields` config, Puck renders it through the registered Yext field override automatically. Use `YextAutoField` only when you are manually rendering a field definition inside a custom render path.
 
+## image Field
+
+The `image` field type opens the asset selector and stores the selected image as a localized asset image value. Define it directly in `YextFields` instead of routing it through `YextField`.
+
+### Props
+
+| Name                 | Type                                            | Description                                              |
+| -------------------- | ----------------------------------------------- | -------------------------------------------------------- |
+| `type`               | `"image"`                                       | Registers the field as the Visual Editor image selector. |
+| `label?`             | `string \| MsgString`                           | The field label shown in the editor.                     |
+| `getAltTextOptions?` | `(templateMetadata) => DynamicOption<string>[]` | Optional locator-specific alt-text source options.       |
+
+### Usage
+
+```tsx
+const myComponentFields: YextFields<MyComponentProps> = {
+  image: {
+    type: "image",
+    label: msg("fields.image", "Image"),
+  },
+};
+```
+
 ## optionalNumber Field
 
 This registered field type displays a radio group with two options. When one option is selected,
