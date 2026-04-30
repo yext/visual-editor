@@ -15,7 +15,11 @@ import {
   ImageWrapperProps,
 } from "./Image.tsx";
 import { EmptyImageState } from "./EmptyImageState.tsx";
-import { YextComponentConfig } from "../../../fields/fields.ts";
+import {
+  YextComponentConfig,
+  YextObjectField,
+} from "../../../fields/fields.ts";
+import { ImageStylingProps } from "./styling.ts";
 
 export interface HeroImageProps extends ImageWrapperProps {
   /** @internal from the parent Hero Section Component */
@@ -90,7 +94,8 @@ export const HeroImage: YextComponentConfig<HeroImageProps> = {
       true
     );
     const filteredAspectRatioOptions = (
-      ImageWrapperFields.styles.objectFields.aspectRatio.options as {
+      (ImageWrapperFields.styles as YextObjectField<ImageStylingProps>)
+        .objectFields.aspectRatio.options as {
         label: string;
         value: number;
       }[]
