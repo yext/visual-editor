@@ -14,6 +14,9 @@ import {
 } from "./YextEntityFieldSelector.tsx";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { EmbeddedFieldStringInputFromEntity } from "./EmbeddedFieldStringInput.tsx";
+import { YextAutoField } from "../fields/YextAutoField.tsx";
+import { YextField } from "./YextField.tsx";
+import { msg } from "../utils/i18n/platform.ts";
 
 const { warningToast } = vi.hoisted(() => ({
   warningToast: vi.fn(),
@@ -1376,6 +1379,43 @@ describe("YextEntityFieldSelector", () => {
       },
       undefined
     );
+  });
+
+  it("does not render constant mode when the entity field disables that toggle", () => {
+    const onChange = vi.fn();
+
+    render(
+      <TemplatePropsContext.Provider value={{ document: {} }}>
+        <TemplateMetadataContext.Provider
+          value={{
+            ...generateTemplateMetadata(),
+            entityTypeDisplayName: "Location",
+          }}
+        >
+          <EntityFieldsContext.Provider value={defaultEntityFields}>
+            <LinkedEntitySchemasContext.Provider value={null}>
+              <YextAutoField
+                field={YextField(msg("fields.date", "Date"), {
+                  type: "entityField",
+                  disableConstantValueToggle: true,
+                  filter: { types: ["type.datetime"] },
+                })}
+                id="date-field"
+                onChange={onChange}
+                value={{
+                  field: "description",
+                  constantValue: "2026-04-15T09:30",
+                  constantValueEnabled: true,
+                }}
+              />
+            </LinkedEntitySchemasContext.Provider>
+          </EntityFieldsContext.Provider>
+        </TemplateMetadataContext.Provider>
+      </TemplatePropsContext.Provider>
+    );
+
+    expect(screen.queryByDisplayValue("2026-04-15T09:30")).toBeNull();
+    expect(screen.getAllByRole("combobox").length).toBeGreaterThan(0);
   });
 
   it("includes linked entity fields in the embedded field selector", () => {

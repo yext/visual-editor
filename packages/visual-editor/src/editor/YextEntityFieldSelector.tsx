@@ -193,6 +193,9 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
   return {
     type: "custom",
     render: ({ value, onChange }: RenderProps) => {
+      const constantValueEnabled =
+        !props.disableConstantValueToggle && !!value?.constantValueEnabled;
+
       const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {
         onChange({
           ...value,
@@ -204,7 +207,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
         <>
           <ConstantValueModeToggler
             fieldTypeFilter={props.filter.types ?? []}
-            constantValueEnabled={value?.constantValueEnabled}
+            constantValueEnabled={constantValueEnabled}
             toggleConstantValueEnabled={toggleConstantValueEnabled}
             disableConstantValue={props.disableConstantValueToggle}
             label={pt(props.label)}
@@ -213,7 +216,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
               !props.disallowTranslation
             }
           />
-          {value?.constantValueEnabled && (
+          {constantValueEnabled && (
             <ConstantValueInput<T>
               onChange={onChange}
               value={value}
@@ -221,7 +224,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
               disallowTranslation={props.disallowTranslation}
             />
           )}
-          {!value?.constantValueEnabled && (
+          {!constantValueEnabled && (
             <EntityFieldInput<T>
               className="ve-pt-3"
               onChange={onChange}
