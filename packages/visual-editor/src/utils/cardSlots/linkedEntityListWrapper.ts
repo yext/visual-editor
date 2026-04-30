@@ -133,6 +133,7 @@ export const resolveLinkedEntityMappedData = <T>(
 
 export type LinkedEntitySourceFieldFilter<T extends Record<string, any>> =
   RenderEntityFieldFilter<T> & {
+    listFieldName?: string;
     requiredDescendantTypes?: EntityFieldTypes[][];
     sourceRootKinds?: SourceRootKind[];
     sourceRootsOnly?: boolean;

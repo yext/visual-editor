@@ -43,12 +43,14 @@ export const EmbeddedFieldStringInputFromEntity = <
 }) => {
   const entityFields = useEntityFields();
   const linkedEntitySchemas = useLinkedEntitySchemas();
+  const streamDocument = useDocument();
 
   const entityFieldOptions = React.useMemo(() => {
     const filteredEntityFields = getFieldsForSelector(
       entityFields,
       filter,
-      linkedEntitySchemas ?? undefined
+      linkedEntitySchemas ?? undefined,
+      streamDocument
     );
     return filteredEntityFields.map((field) => {
       return {
@@ -56,7 +58,7 @@ export const EmbeddedFieldStringInputFromEntity = <
         value: field.name,
       };
     });
-  }, [entityFields, filter, linkedEntitySchemas]);
+  }, [entityFields, filter, linkedEntitySchemas, streamDocument]);
 
   return (
     <EmbeddedFieldStringInputFromOptions

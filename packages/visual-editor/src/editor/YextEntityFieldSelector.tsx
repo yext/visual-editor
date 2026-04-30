@@ -427,7 +427,8 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       {
         ...filter,
       },
-      linkedEntitySchemas ?? undefined
+      linkedEntitySchemas ?? undefined,
+      streamDocument
     );
     const entityFieldOptions = filteredEntityFields.map((field) => ({
       label: field.displayName ?? field.name,

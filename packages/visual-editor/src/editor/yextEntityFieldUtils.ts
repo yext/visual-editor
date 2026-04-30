@@ -3,13 +3,17 @@ import {
   RenderEntityFieldFilter,
 } from "../internal/utils/getFilteredEntityFields.ts";
 import { StreamFields, YextSchemaField } from "../types/entityFields.ts";
+import { resolveField } from "../utils/resolveYextEntityField.ts";
+import { type StreamDocument } from "../utils/types/StreamDocument.ts";
 import {
   buildLinkedEntityStreamFields,
+  getTopLevelLinkedEntitySourceFields,
   isTopLevelLinkedEntityField,
   type LinkedEntitySchemas,
 } from "../utils/linkedEntityFieldUtils.ts";
 import {
   getBaseEntityListSourceRootFields,
+  getMappedCardSourceMode,
   type LinkedEntitySourceFieldFilter,
 } from "../utils/cardSlots/linkedEntityListWrapper.ts";
 
@@ -54,26 +58,51 @@ const sortFields = (fields: YextSchemaField[]): YextSchemaField[] => {
 export const getFieldsForSelector = (
   entityFields: StreamFields | null,
   filter: LinkedEntitySourceFieldFilter<any>,
-  linkedEntitySchemas?: LinkedEntitySchemas
+  linkedEntitySchemas?: LinkedEntitySchemas,
+  streamDocument?: StreamDocument
 ): YextSchemaField[] => {
   const linkedEntityStreamFields =
     buildLinkedEntityStreamFields(linkedEntitySchemas);
-  const hasRequiredDescendants = (field: YextSchemaField): boolean =>
-    !filter.requiredDescendantTypes?.length ||
-    filter.requiredDescendantTypes.every(
-      (requiredTypes) =>
-        getFilteredEntityFields(
-          { fields: [field], displayNames: entityFields?.displayNames },
-          {
-            descendantsOf: field.name,
-            types: requiredTypes,
-          }
-        ).length > 0
+  const resolvedDescendantFieldPaths = filter.descendantsOf
+    ? getResolvedDescendantFieldPaths(streamDocument, filter.descendantsOf)
+    : undefined;
+  const hasRequiredDescendants = (field: YextSchemaField): boolean => {
+    if (!filter.requiredDescendantTypes?.length) {
+      return true;
+    }
+
+    const availableFields = getFilteredEntityFields(
+      { fields: [field], displayNames: entityFields?.displayNames },
+      {
+        descendantsOf: field.name,
+      }
     );
+
+    return filter.requiredDescendantTypes.every((requiredTypes) => {
+      const matchingFieldIndex = availableFields.findIndex(
+        (availableField) =>
+          getFilteredEntityFields(
+            { fields: [availableField] },
+            {
+              allowList: [availableField.name],
+              types: requiredTypes,
+            }
+          ).length > 0
+      );
+
+      if (matchingFieldIndex < 0) {
+        return false;
+      }
+
+      availableFields.splice(matchingFieldIndex, 1);
+      return true;
+    });
+  };
   const linkedEntityRootFields = filter.sourceRootKinds?.includes(
     "linkedEntityRoot"
   )
-    ? (linkedEntityStreamFields?.fields ?? [])
+    ? (linkedEntityStreamFields?.fields ??
+      getTopLevelLinkedEntitySourceFields(entityFields))
     : [];
   const baseListRootFields = filter.sourceRootKinds?.includes("baseListRoot")
     ? getBaseEntityListSourceRootFields(entityFields).filter(
@@ -94,16 +123,59 @@ export const getFieldsForSelector = (
     : undefined;
 
   if (filter.sourceRootsOnly) {
-    const rootEntityFields = getFilteredEntityFields(
-      entityFields,
-      filter
-    ).filter((field) => !field.name.includes("."));
+    const rootEntityFields = getFilteredEntityFields(entityFields, filter)
+      .filter((field) => !field.name.includes("."))
+      .filter((field) =>
+        !streamDocument || !filter.listFieldName
+          ? true
+          : (() => {
+              const resolvedValue = resolveField<unknown>(
+                streamDocument,
+                field.name
+              ).value;
+              return (
+                resolvedValue === undefined ||
+                getMappedCardSourceMode(
+                  streamDocument,
+                  field.name,
+                  filter.listFieldName
+                ) === "section"
+              );
+            })()
+      );
+    const validLinkedEntityRootFields = linkedEntityRootFields.filter(
+      (field) =>
+        !streamDocument
+          ? true
+          : (() => {
+              const resolvedValue = resolveField<unknown>(
+                streamDocument,
+                field.name
+              ).value;
+              return (
+                resolvedValue === undefined ||
+                Array.isArray(resolvedValue) ||
+                (!!resolvedValue && typeof resolvedValue === "object")
+              );
+            })()
+    );
+    const validBaseListRootFields = baseListRootFields.filter((field) =>
+      !streamDocument
+        ? true
+        : (() => {
+            const resolvedValue = resolveField<unknown>(
+              streamDocument,
+              field.name
+            ).value;
+            return resolvedValue === undefined || Array.isArray(resolvedValue);
+          })()
+    );
 
     return sortFields(
       dedupeFieldsByName([
         ...rootEntityFields,
-        ...linkedEntityRootFields,
-        ...baseListRootFields,
+        ...validLinkedEntityRootFields,
+        ...validBaseListRootFields,
       ])
     );
   }
@@ -130,6 +202,12 @@ export const getFieldsForSelector = (
     });
   }
 
+  if (resolvedDescendantFieldPaths) {
+    filteredEntityFields = filteredEntityFields.filter((field) =>
+      resolvedDescendantFieldPaths.has(field.name)
+    );
+  }
+
   // If there are no direct children, return the parent field if it is a list
   if (filter.directChildrenOf && filteredEntityFields.length === 0) {
     const fallbackFilter = {
@@ -151,4 +229,51 @@ export const getFieldsForSelector = (
       ...(!isLinkedEntityDescendantFilter ? baseListRootFields : []),
     ])
   );
+};
+
+const getResolvedDescendantFieldPaths = (
+  streamDocument: StreamDocument | undefined,
+  rootFieldPath: string
+): Set<string> | undefined => {
+  if (!streamDocument) {
+    return undefined;
+  }
+
+  const resolvedValue = resolveField<unknown>(
+    streamDocument,
+    rootFieldPath
+  ).value;
+  const values = Array.isArray(resolvedValue)
+    ? resolvedValue
+    : resolvedValue && typeof resolvedValue === "object"
+      ? [resolvedValue]
+      : [];
+
+  if (!values.length) {
+    return undefined;
+  }
+
+  const fieldPaths = new Set<string>();
+
+  const collectFieldPaths = (value: unknown, parentFieldPath = ""): void => {
+    if (!value || typeof value !== "object") {
+      return;
+    }
+
+    if (Array.isArray(value)) {
+      value.forEach((item) => collectFieldPaths(item, parentFieldPath));
+      return;
+    }
+
+    Object.entries(value).forEach(([fieldName, childValue]) => {
+      const childFieldPath = parentFieldPath
+        ? `${parentFieldPath}.${fieldName}`
+        : fieldName;
+      fieldPaths.add(`${rootFieldPath}.${childFieldPath}`);
+      collectFieldPaths(childValue, childFieldPath);
+    });
+  };
+
+  values.forEach((value) => collectFieldPaths(value));
+  return fieldPaths;
 };

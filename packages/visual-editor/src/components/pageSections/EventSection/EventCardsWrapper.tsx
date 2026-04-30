@@ -87,6 +87,7 @@ const createEventCardsWrapperFields = (sourceField?: string) => ({
   ...cardWrapperFields<EventCardsWrapperProps>(
     msg("components.events", "Events"),
     ComponentFields.EventSection.type,
+    "events",
     ["linkedEntityRoot", "baseListRoot"],
     true,
     [

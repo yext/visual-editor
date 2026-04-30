@@ -106,8 +106,12 @@ const createFAQsSectionFields = (
   data: YextField(msg("fields.faqs", "FAQs"), {
     type: "entityField",
     filter: {
+      listFieldName: "faqs",
       types: [ComponentFields.FAQSection.type],
-      requiredDescendantTypes: [["type.string", "type.rich_text_v2"]],
+      requiredDescendantTypes: [
+        ["type.string", "type.rich_text_v2"],
+        ["type.string", "type.rich_text_v2"],
+      ],
       sourceRootKinds: ["linkedEntityRoot", "baseListRoot"],
       sourceRootsOnly: true,
     },

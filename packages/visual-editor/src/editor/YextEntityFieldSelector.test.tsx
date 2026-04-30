@@ -310,6 +310,51 @@ describe("YextEntityFieldSelector", () => {
     expect(screen.queryByText("Linked Location > Name")).toBeNull();
   });
 
+  it("falls back to entity fields for linked source roots when linked schemas are unavailable", () => {
+    renderEntityFieldInput({
+      linkedEntitySchemas: null,
+      entityFields: {
+        ...defaultEntityFields,
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_linkedLocation",
+            displayName: "Linked Location",
+            definition: {
+              name: "c_linkedLocation",
+              typeRegistryId: "type.entity_reference",
+              type: {
+                documentType: "DOCUMENT_TYPE_ENTITY",
+              },
+            },
+            children: {
+              fields: [
+                {
+                  name: "name",
+                  displayName: "Name",
+                  definition: {
+                    name: "name",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+      filter: {
+        types: ["type.events_section"],
+        sourceRootKinds: ["linkedEntityRoot"],
+        sourceRootsOnly: true,
+      },
+    });
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(screen.getAllByText("Linked Location")).toHaveLength(1);
+  });
+
   it("shows base entity list roots when the selector opts into them", () => {
     renderEntityFieldInput({
       entityFields: {
@@ -628,6 +673,15 @@ describe("YextEntityFieldSelector", () => {
                     type: {},
                   },
                 },
+                {
+                  name: "answer",
+                  displayName: "Answer",
+                  definition: {
+                    name: "answer",
+                    typeName: "type.rich_text_v2",
+                    type: {},
+                  },
+                },
               ],
             },
           },
@@ -635,7 +689,10 @@ describe("YextEntityFieldSelector", () => {
       },
       filter: {
         types: ["type.faq_section"],
-        requiredDescendantTypes: [["type.string", "type.rich_text_v2"]],
+        requiredDescendantTypes: [
+          ["type.string", "type.rich_text_v2"],
+          ["type.string", "type.rich_text_v2"],
+        ],
         sourceRootKinds: ["baseListRoot"],
         sourceRootsOnly: true,
       },
@@ -645,6 +702,125 @@ describe("YextEntityFieldSelector", () => {
 
     expect(screen.getByText("FAQ Items")).toBeDefined();
     expect(screen.queryByText("Referenced Listings")).toBeNull();
+  });
+
+  it("allows faq section and linked entity roots while hiding incompatible faq sources", () => {
+    renderEntityFieldInput({
+      linkedEntitySchemas: {
+        c_linkedLocation: {
+          displayName: "Linked Location",
+          fields: [
+            {
+              name: "name",
+              displayName: "Name",
+              definition: {
+                name: "name",
+                typeName: "type.string",
+                type: {},
+              },
+            },
+          ],
+        },
+      },
+      entityFields: {
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_faqSection",
+            displayName: "FAQ Section",
+            definition: {
+              name: "c_faqSection",
+              typeName: "type.faq_section",
+              type: {},
+            },
+            children: {
+              fields: [
+                {
+                  name: "faqs",
+                  displayName: "FAQs",
+                  definition: {
+                    name: "faqs",
+                    isList: true,
+                    typeName: "type.list",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+          {
+            name: "c_linkedLocation",
+            displayName: "Linked Location",
+            definition: {
+              name: "c_linkedLocation",
+              typeRegistryId: "type.entity_reference",
+              type: {
+                documentType: "DOCUMENT_TYPE_ENTITY",
+              },
+            },
+            children: {
+              fields: [
+                {
+                  name: "name",
+                  displayName: "Name",
+                  definition: {
+                    name: "name",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+          {
+            name: "appleActionLinks",
+            displayName: "Apple Action Links",
+            definition: {
+              name: "appleActionLinks",
+              isList: true,
+              typeName: "type.list",
+              type: {},
+            },
+            children: {
+              fields: [
+                {
+                  name: "url",
+                  displayName: "URL",
+                  definition: {
+                    name: "url",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+      filter: {
+        listFieldName: "faqs",
+        types: ["type.faq_section"],
+        requiredDescendantTypes: [
+          ["type.string", "type.rich_text_v2"],
+          ["type.string", "type.rich_text_v2"],
+        ],
+        sourceRootKinds: ["linkedEntityRoot", "baseListRoot"],
+        sourceRootsOnly: true,
+      },
+      document: {
+        c_faqSection: {
+          faqs: [{ question: "Q", answer: "A" }],
+        },
+        c_linkedLocation: [{ name: "Downtown" }],
+        appleActionLinks: [{ url: "https://example.com" }],
+      },
+    });
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(screen.getByText("FAQ Section")).toBeDefined();
+    expect(screen.getByText("Linked Location")).toBeDefined();
+    expect(screen.queryByText("Apple Action Links")).toBeNull();
   });
 
   it("limits event card source selectors to valid top-level roots", () => {
@@ -908,6 +1084,88 @@ describe("YextEntityFieldSelector", () => {
     expect(screen.getAllByText("Location Field")).toHaveLength(2);
     expect(screen.queryByText("Youtube Channel URL")).toBeNull();
     expect(screen.queryByText("Linked Location")).toBeNull();
+  });
+
+  it("limits descendant fields to those actually present on the resolved linked entity or struct", () => {
+    renderEntityFieldInput({
+      linkedEntitySchemas: {
+        c_linkedLocation: {
+          displayName: "Linked Location",
+          fields: [
+            {
+              name: "name",
+              displayName: "Name",
+              definition: {
+                name: "name",
+                typeName: "type.string",
+                type: {},
+              },
+            },
+            {
+              name: "businessLogo",
+              displayName: "Business Logo",
+              definition: {
+                name: "businessLogo",
+                typeName: "type.image",
+                type: {},
+              },
+            },
+            {
+              name: "facebookPageUrl",
+              displayName: "Facebook Page URL",
+              definition: {
+                name: "facebookPageUrl",
+                typeName: "type.string",
+                type: {},
+              },
+            },
+          ],
+        },
+      },
+      entityFields: {
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_linkedLocation",
+            displayName: "Linked Location",
+            definition: {
+              name: "c_linkedLocation",
+              isList: true,
+              typeRegistryId: "type.entity_reference",
+              type: {
+                documentType: "DOCUMENT_TYPE_ENTITY",
+              },
+            },
+            children: {
+              fields: [
+                {
+                  name: "name",
+                  displayName: "Name",
+                  definition: {
+                    name: "name",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+      filter: {
+        types: ["type.string"],
+        descendantsOf: "c_linkedLocation",
+      },
+      document: {
+        c_linkedLocation: [{ name: "Downtown" }],
+      },
+    });
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(screen.getAllByText("Name")).toHaveLength(1);
+    expect(screen.queryByText("Facebook Page URL")).toBeNull();
+    expect(screen.queryByText("Business Logo")).toBeNull();
   });
 
   it("stores linked descendant selections as absolute paths while showing relative options", () => {
