@@ -1,13 +1,13 @@
 import { describe, expect, it } from "vitest";
 import {
-  getMappedCardSourceMode,
+  classifyMappedSource,
   getBaseEntityListSourceRootFields,
-  resolveLinkedEntitySourceItems,
-} from "./linkedEntityListWrapper.ts";
+  resolveMappedSourceItems,
+} from "./mappedSource.ts";
 import { type StreamFields } from "../../types/entityFields.ts";
 import { isTopLevelLinkedEntityField } from "../linkedEntityFieldUtils.ts";
 
-describe("linkedEntityListWrapper", () => {
+describe("mappedSource", () => {
   const entityFields: StreamFields = {
     fields: [
       {
@@ -47,40 +47,66 @@ describe("linkedEntityListWrapper", () => {
     expect(isTopLevelLinkedEntityField("name", entityFields)).toBe(false);
   });
 
-  it("detects linked list and section source modes", () => {
+  it("classifies manual, section, mapped, unresolved, and empty sources", () => {
     expect(
-      getMappedCardSourceMode(
-        {
+      classifyMappedSource({
+        streamDocument: {},
+        constantValueEnabled: true,
+        fieldPath: "c_linkedLocation",
+        listFieldName: "events",
+      })
+    ).toBe("manual");
+
+    expect(
+      classifyMappedSource({
+        streamDocument: {
           c_eventsSection: {
             events: [{ title: "Cooking Class" }],
           },
         },
-        "c_eventsSection",
-        "events"
-      )
-    ).toBe("section");
+        fieldPath: "c_eventsSection",
+        listFieldName: "events",
+      })
+    ).toBe("sectionField");
 
     expect(
-      getMappedCardSourceMode(
-        {
+      classifyMappedSource({
+        streamDocument: {
           c_linkedLocation: [{ name: "Downtown" }],
         },
-        "c_linkedLocation",
-        "events"
-      )
-    ).toBe("itemList");
+        fieldPath: "c_linkedLocation",
+        listFieldName: "events",
+      })
+    ).toBe("mappedItemList");
 
     expect(
-      getMappedCardSourceMode(
-        {
-          heroSection: {
-            primaryCta: { label: "Learn More" },
-          },
+      classifyMappedSource({
+        streamDocument: {
+          c_linkedLocation: { name: "Downtown" },
         },
-        "heroSection",
-        "events"
-      )
-    ).toBe("unknown");
+        fieldPath: "c_linkedLocation",
+        listFieldName: "events",
+        allowSingleObjectItemSource: true,
+      })
+    ).toBe("mappedItemList");
+
+    expect(
+      classifyMappedSource({
+        streamDocument: {},
+        fieldPath: "c_linkedLocation",
+        listFieldName: "events",
+      })
+    ).toBe("mappedItemList");
+
+    expect(
+      classifyMappedSource({
+        streamDocument: {
+          c_linkedLocation: [],
+        },
+        fieldPath: "c_linkedLocation",
+        listFieldName: "events",
+      })
+    ).toBe("mappedItemList");
   });
 
   it("returns top-level list roots with nested fields for base entity sources", () => {
@@ -130,10 +156,10 @@ describe("linkedEntityListWrapper", () => {
     ]);
   });
 
-  it("resolves linked entity source items for empty, single, and multiple values", () => {
-    expect(resolveLinkedEntitySourceItems({}, "c_linkedLocation")).toEqual([]);
+  it("resolves mapped source items for empty, single, and multiple values", () => {
+    expect(resolveMappedSourceItems({}, "c_linkedLocation")).toEqual([]);
     expect(
-      resolveLinkedEntitySourceItems(
+      resolveMappedSourceItems(
         {
           c_linkedLocation: {
             name: "Downtown",
@@ -143,7 +169,7 @@ describe("linkedEntityListWrapper", () => {
       )
     ).toEqual([{ name: "Downtown" }]);
     expect(
-      resolveLinkedEntitySourceItems(
+      resolveMappedSourceItems(
         {
           c_linkedLocation: [{ name: "Downtown" }, { name: "Uptown" }],
         },

@@ -17,6 +17,8 @@ import {
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
 import { YextComponentConfig } from "../../../fields/fields.ts";
+import { buildListSectionCards } from "../../../utils/cardSlots/listSectionData.ts";
+import { syncManualListCards } from "../../../utils/cardSlots/mappedListWrapper.ts";
 
 export type InsightCardsWrapperProps = CardWrapperType<InsightSectionType> & {
   styles: {
@@ -130,89 +132,54 @@ export const InsightCardsWrapper: YextComponentConfig<InsightCardsWrapperProps> 
           return setDeep(data, "props.slots.CardSlot", []);
         }
 
-        const requiredLength = resolvedInsights.length;
-        const currentLength = data.props.slots.CardSlot.length;
-        const cardsToAdd =
-          currentLength < requiredLength
-            ? Array(requiredLength - currentLength)
-                .fill(null)
-                .map(() =>
-                  defaultInsightCardSlotData(
-                    `InsightCard-${crypto.randomUUID()}`,
-                    undefined,
-                    sharedCardProps?.backgroundColor,
-                    sharedCardProps?.slotStyles
-                  )
-                )
-            : [];
-        const updatedCardSlot = [
-          ...data.props.slots.CardSlot,
-          ...cardsToAdd,
-        ].slice(0, requiredLength);
-
         return setDeep(
           data,
           "props.slots.CardSlot",
-          updatedCardSlot
-            .map((card, i) => {
-              return setDeep(card, "props.index", i);
-            })
-            .map((card, i) => {
-              return setDeep(card, "props.parentData", {
+          buildListSectionCards<
+            InsightCardProps,
+            InsightSectionType["insights"][number]
+          >({
+            currentCards: data.props.slots
+              .CardSlot as ComponentData<InsightCardProps>[],
+            createCard: () =>
+              defaultInsightCardSlotData(
+                `InsightCard-${crypto.randomUUID()}`,
+                undefined,
+                sharedCardProps?.backgroundColor,
+                sharedCardProps?.slotStyles
+              ) as any,
+            decorateCard: (card, insight, index) =>
+              setDeep(setDeep(card, "props.index", index), "props.parentData", {
                 field: data.props.data.field,
-                insight: resolvedInsights[i],
-              } satisfies InsightCardProps["parentData"]);
-            })
+                insight,
+              } satisfies InsightCardProps["parentData"]),
+            items: resolvedInsights,
+          })
         );
       } else {
-        let updatedData = data;
-        const inUseIds = new Set<string>();
-        const newSlots = data.props.data.constantValue.map(({ id }, i) => {
-          const existingCard = id
-            ? (data.props.slots.CardSlot.find(
-                (slot) => slot.props.id === id
-              ) as ComponentData<InsightCardProps>)
-            : undefined;
-
-          let newCard = existingCard
-            ? (JSON.parse(JSON.stringify(existingCard)) as typeof existingCard)
-            : undefined;
-
-          let newId = newCard?.props.id || `InsightCard-${crypto.randomUUID()}`;
-
-          if (newCard && inUseIds.has(newId)) {
-            newId = `InsightCard-${crypto.randomUUID()}`;
-            Object.entries(newCard.props.slots).forEach(
-              ([slotKey, slotArray]) => {
-                slotArray[0].props.id = newId + "-" + slotKey;
-              }
-            );
-          }
-          inUseIds.add(newId);
-
-          if (!newCard) {
-            return defaultInsightCardSlotData(
-              newId,
-              i,
+        const syncedCards = syncManualListCards<InsightCardProps>({
+          currentCards: data.props.slots
+            .CardSlot as ComponentData<InsightCardProps>[],
+          constantValue: data.props.data.constantValue,
+          createId: () => `InsightCard-${crypto.randomUUID()}`,
+          createCard: (id, index) =>
+            defaultInsightCardSlotData(
+              id,
+              index,
               sharedCardProps?.backgroundColor,
               sharedCardProps?.slotStyles
-            );
-          }
-
-          newCard = setDeep(newCard, "props.id", newId);
-          newCard = setDeep(newCard, "props.index", i);
-          newCard = setDeep(newCard, "props.parentData", undefined);
-
-          return newCard;
+            ) as any,
+          rewriteChildSlotIds: (card, newId) => {
+            Object.entries(card.props.slots).forEach(([slotKey, slotArray]) => {
+              slotArray[0].props.id = `${newId}-${slotKey}`;
+            });
+          },
         });
-
-        updatedData = setDeep(updatedData, "props.slots.CardSlot", newSlots);
-        updatedData = setDeep(
-          updatedData,
+        return setDeep(
+          setDeep(data, "props.slots.CardSlot", syncedCards.slots),
           "props.data.constantValue",
-          newSlots.map((card) => ({ id: card.props.id }))
+          syncedCards.constantValue
         );
-        return updatedData;
       }
     },
     render: (props) => <InsightCardsWrapperComponent {...props} />,

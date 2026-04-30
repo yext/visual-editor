@@ -3,7 +3,7 @@ import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { YextField } from "../../editor/YextField.tsx";
 import { MsgString } from "../i18n/platform.ts";
 import { EntityFieldTypes } from "../../internal/utils/getFilteredEntityFields.ts";
-import { SourceRootKind } from "./linkedEntityListWrapper.ts";
+import { SourceRootKind } from "./mappedSource.ts";
 
 export interface CardWrapperType<T> {
   data: Omit<YextEntityField<T>, "constantValue"> & {

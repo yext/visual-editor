@@ -14,6 +14,8 @@ import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
 import { YextComponentConfig } from "../../../fields/fields.ts";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
+import { buildListSectionCards } from "../../../utils/cardSlots/listSectionData.ts";
+import { syncManualListCards } from "../../../utils/cardSlots/mappedListWrapper.ts";
 
 export type TeamCardsWrapperProps = CardWrapperType<TeamSectionType> & {
   styles: {
@@ -130,94 +132,58 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
         return setDeep(data, "props.slots.CardSlot", []);
       }
 
-      const requiredLength = resolvedTeam.length;
-      const currentLength = data.props.slots.CardSlot.length;
-      const cardsToAdd =
-        currentLength < requiredLength
-          ? Array(requiredLength - currentLength)
-              .fill(null)
-              .map(() =>
-                defaultTeamCardSlotData(
-                  `TeamCard-${crypto.randomUUID()}`,
-                  undefined,
-                  sharedCardProps?.backgroundColor,
-                  sharedCardProps?.slotStyles
-                )
-              )
-          : [];
-      const updatedCardSlot = [
-        ...data.props.slots.CardSlot,
-        ...cardsToAdd,
-      ].slice(0, requiredLength) as ComponentData<TeamCardProps>[];
-
       return setDeep(
         data,
         "props.slots.CardSlot",
-        updatedCardSlot.map((card, i) => {
-          card.props.index = i;
-          return setDeep(card, "props.parentData", {
-            field: data.props.data.field,
-            person: resolvedTeam[i],
-          } satisfies TeamCardProps["parentData"]);
-        })
+        buildListSectionCards<TeamCardProps, TeamSectionType["people"][number]>(
+          {
+            currentCards: data.props.slots
+              .CardSlot as ComponentData<TeamCardProps>[],
+            createCard: () =>
+              defaultTeamCardSlotData(
+                `TeamCard-${crypto.randomUUID()}`,
+                undefined,
+                sharedCardProps?.backgroundColor,
+                sharedCardProps?.slotStyles
+              ) as ComponentData<TeamCardProps>,
+            decorateCard: (card, person, index) =>
+              setDeep(setDeep(card, "props.index", index), "props.parentData", {
+                field: data.props.data.field,
+                person,
+              } satisfies TeamCardProps["parentData"]),
+            items: resolvedTeam,
+          }
+        )
       );
     } else {
-      let updatedData = data;
-
       if (!Array.isArray(data.props.data.constantValue)) {
-        updatedData = setDeep(updatedData, "props.data.constantValue", []);
-        return updatedData;
+        return setDeep(data, "props.data.constantValue", []);
       }
 
-      const inUseIds = new Set<string>();
-      const newSlots = data.props.data.constantValue.map(({ id }, i) => {
-        const existingCard = id
-          ? (data.props.slots.CardSlot.find(
-              (slot) => slot.props.id === id
-            ) as ComponentData<TeamCardProps>)
-          : (data.props.slots.CardSlot[i] as
-              | ComponentData<TeamCardProps>
-              | undefined);
-
-        let newCard = existingCard
-          ? (JSON.parse(JSON.stringify(existingCard)) as typeof existingCard)
-          : undefined;
-
-        let newId = newCard?.props.id || `TeamCard-${crypto.randomUUID()}`;
-
-        if (newCard && inUseIds.has(newId)) {
-          newId = `TeamCard-${crypto.randomUUID()}`;
-          Object.entries(newCard.props.slots).forEach(
-            ([slotKey, slotArray]) => {
-              slotArray[0].props.id = newId + "-" + slotKey;
-            }
-          );
-        }
-        inUseIds.add(newId);
-
-        if (!newCard) {
-          return defaultTeamCardSlotData(
-            newId,
-            i,
+      const syncedCards = syncManualListCards<TeamCardProps>({
+        currentCards: data.props.slots
+          .CardSlot as ComponentData<TeamCardProps>[],
+        constantValue: data.props.data.constantValue,
+        createId: () => `TeamCard-${crypto.randomUUID()}`,
+        createCard: (id, index) =>
+          defaultTeamCardSlotData(
+            id,
+            index,
             sharedCardProps?.backgroundColor,
             sharedCardProps?.slotStyles
-          );
-        }
-
-        newCard = setDeep(newCard, "props.id", newId);
-        newCard = setDeep(newCard, "props.index", i);
-        newCard = setDeep(newCard, "props.parentData", undefined);
-
-        return newCard;
+          ) as ComponentData<TeamCardProps>,
+        fallbackToIndex: true,
+        rewriteChildSlotIds: (card, newId) => {
+          Object.entries(card.props.slots).forEach(([slotKey, slotArray]) => {
+            slotArray[0].props.id = `${newId}-${slotKey}`;
+          });
+        },
       });
-
-      updatedData = setDeep(updatedData, "props.slots.CardSlot", newSlots);
-      updatedData = setDeep(
-        updatedData,
+      return setDeep(
+        setDeep(data, "props.slots.CardSlot", syncedCards.slots),
         "props.data.constantValue",
-        newSlots.map((card) => ({ id: card.props.id }))
+        syncedCards.constantValue
       );
-      return updatedData;
     }
   },
   render: (props) => <TeamCardsWrapperComponent {...props} />,

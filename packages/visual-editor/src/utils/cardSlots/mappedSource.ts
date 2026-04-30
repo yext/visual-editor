@@ -6,21 +6,21 @@ import {
   type StreamFields,
   type YextSchemaField,
 } from "../../types/entityFields.ts";
-import { type StreamDocument } from "../types/StreamDocument.ts";
+import { type YextEntityField } from "../../editor/yextEntityFieldUtils.ts";
 import {
   resolveField,
   resolveYextEntityField,
 } from "../resolveYextEntityField.ts";
-import { type YextEntityField } from "../../editor/yextEntityFieldUtils.ts";
+import { type StreamDocument } from "../types/StreamDocument.ts";
 import { getTopLevelLinkedEntitySourceFields } from "../linkedEntityFieldUtils.ts";
 
-type MappedCardSourceMode = "section" | "itemList" | "unknown";
+export type MappedSourceMode = "manual" | "sectionField" | "mappedItemList";
 export type SourceRootKind = "linkedEntityRoot" | "baseListRoot";
 
 /**
  * Returns top-level list fields on the base entity so wrappers can treat a
- * list of structs as a card/item source. Only lists with children are useful
- * for wrapper-level field mapping, so scalar lists are excluded.
+ * list of structs as a mapped item source. Only lists with children are
+ * useful for wrapper-level field mapping, so scalar lists are excluded.
  */
 export const getBaseEntityListSourceRootFields = (
   entityFields: StreamFields | YextSchemaField[] | null
@@ -43,38 +43,51 @@ export const getBaseEntityListSourceRootFields = (
 };
 
 /**
- * Detects whether the selected wrapper source resolves as a normal section
- * object or as a linked entity list/single linked entity source.
+ * Classifies the current wrapper source selection into manual, section-backed,
+ * or mapped-item-list behavior. Unresolved sources stay schema-eligible by
+ * default so mapped subfield UIs do not collapse while data is still loading.
  */
-export const getMappedCardSourceMode = (
-  streamDocument: StreamDocument,
-  fieldPath: string,
-  listFieldName: string
-): MappedCardSourceMode => {
+export const classifyMappedSource = ({
+  streamDocument,
+  constantValueEnabled,
+  fieldPath,
+  listFieldName,
+  allowSingleObjectItemSource = false,
+}: {
+  streamDocument: StreamDocument;
+  constantValueEnabled?: boolean;
+  fieldPath?: string;
+  listFieldName: string;
+  allowSingleObjectItemSource?: boolean;
+}): MappedSourceMode => {
+  if (constantValueEnabled || !fieldPath) {
+    return "manual";
+  }
+
   const resolvedSource = resolveField<unknown>(streamDocument, fieldPath).value;
 
-  if (Array.isArray(resolvedSource)) {
-    return "itemList";
+  if (resolvedSource === undefined || Array.isArray(resolvedSource)) {
+    return "mappedItemList";
   }
 
-  if (!resolvedSource || typeof resolvedSource !== "object") {
-    return "unknown";
+  if (resolvedSource && typeof resolvedSource === "object") {
+    return Array.isArray(
+      (resolvedSource as Record<string, unknown>)[listFieldName]
+    )
+      ? "sectionField"
+      : allowSingleObjectItemSource
+        ? "mappedItemList"
+        : "sectionField";
   }
 
-  if (
-    Array.isArray((resolvedSource as Record<string, unknown>)[listFieldName])
-  ) {
-    return "section";
-  }
-
-  return "unknown";
+  return "mappedItemList";
 };
 
 /**
- * Resolves the selected linked entity source into a list so wrappers can render
- * one card per linked entity.
+ * Resolves a mapped source into a list so wrappers can render one card per
+ * linked entity or object item.
  */
-export const resolveLinkedEntitySourceItems = <T>(
+export const resolveMappedSourceItems = <T>(
   streamDocument: StreamDocument,
   fieldPath: string
 ): T[] => {
@@ -92,12 +105,12 @@ export const resolveLinkedEntitySourceItems = <T>(
 };
 
 /**
- * Resolves a wrapper-level mapped entity field against a linked entity item.
- * Field ids are stored as absolute editor paths, while constant values and
- * embedded fields should resolve directly against the linked entity document.
+ * Resolves a wrapper-level mapped field against one mapped source item. Saved
+ * field ids remain absolute editor paths, while constant values and embedded
+ * fields resolve directly against the current item.
  */
-export const resolveLinkedEntityMappedData = <T>(
-  linkedEntity: StreamDocument,
+export const resolveMappedSourceField = <T>(
+  item: StreamDocument,
   sourceFieldPath: string,
   entityField: Partial<YextEntityField<T>> | undefined,
   locale?: string
@@ -108,7 +121,7 @@ export const resolveLinkedEntityMappedData = <T>(
 
   if (!entityField.field || entityField.constantValueEnabled) {
     return resolveYextEntityField(
-      linkedEntity,
+      item,
       {
         field: entityField.field ?? "",
         constantValue: entityField.constantValue as T,
@@ -119,7 +132,7 @@ export const resolveLinkedEntityMappedData = <T>(
   }
 
   return resolveYextEntityField(
-    linkedEntity,
+    item,
     {
       ...entityField,
       constantValue: entityField.constantValue as T,
@@ -131,7 +144,7 @@ export const resolveLinkedEntityMappedData = <T>(
   );
 };
 
-export type LinkedEntitySourceFieldFilter<T extends Record<string, any>> =
+export type MappedSourceFieldFilter<T extends Record<string, any>> =
   RenderEntityFieldFilter<T> & {
     listFieldName?: string;
     requiredDescendantTypes?: EntityFieldTypes[][];

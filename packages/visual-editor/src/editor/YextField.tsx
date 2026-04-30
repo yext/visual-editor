@@ -22,7 +22,7 @@ import {
 import { MsgString } from "../utils/i18n/platform.ts";
 import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 import type { YextFieldMap, YextPuckFields } from "../fields/fields.ts";
-import { type LinkedEntitySourceFieldFilter } from "../utils/cardSlots/linkedEntityListWrapper.ts";
+import { type MappedSourceFieldFilter } from "../utils/cardSlots/mappedSource.ts";
 
 /** Copied from Puck, do not change */
 export type FieldOption = {
@@ -90,7 +90,7 @@ type YextMaxWidthField = YextBaseField & {
 
 type YextTranslatableStringField = YextBaseField & {
   type: "translatableString";
-  filter?: LinkedEntitySourceFieldFilter<any>;
+  filter?: MappedSourceFieldFilter<any>;
   showApplyAllOption?: boolean;
 };
 type YextImageField = YextBaseField & {

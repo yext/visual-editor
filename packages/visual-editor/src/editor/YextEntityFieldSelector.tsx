@@ -52,7 +52,7 @@ import {
 } from "./yextEntityFieldUtils.ts";
 import { useDocument } from "../hooks/useDocument.tsx";
 import { isLinkedEntityFieldPath } from "../utils/linkedEntityFieldUtils.ts";
-import { type LinkedEntitySourceFieldFilter } from "../utils/cardSlots/linkedEntityListWrapper.ts";
+import { type MappedSourceFieldFilter } from "../utils/cardSlots/mappedSource.ts";
 import { warnOnMultiValueLinkedEntityTraversal } from "../utils/linkedEntityWarningUtils.ts";
 
 const devLogger = new DevLogger();
@@ -72,7 +72,7 @@ export type { YextEntityField } from "./yextEntityFieldUtils.ts";
 export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
   {
     label: string;
-    filter: LinkedEntitySourceFieldFilter<T>;
+    filter: MappedSourceFieldFilter<T>;
     disableConstantValueToggle?: boolean;
     disallowTranslation?: boolean;
   };
@@ -304,7 +304,7 @@ export const ConstantValueModeToggler = ({
 };
 
 type InputProps<T extends Record<string, any>> = {
-  filter: LinkedEntitySourceFieldFilter<T>;
+  filter: MappedSourceFieldFilter<T>;
   onChange: (value: any, uiState?: any) => void;
   value: any;
   className?: string;

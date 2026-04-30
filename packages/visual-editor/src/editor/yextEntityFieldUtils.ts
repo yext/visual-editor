@@ -13,9 +13,9 @@ import {
 } from "../utils/linkedEntityFieldUtils.ts";
 import {
   getBaseEntityListSourceRootFields,
-  getMappedCardSourceMode,
-  type LinkedEntitySourceFieldFilter,
-} from "../utils/cardSlots/linkedEntityListWrapper.ts";
+  classifyMappedSource,
+  type MappedSourceFieldFilter,
+} from "../utils/cardSlots/mappedSource.ts";
 
 /** Represents data that can either be from the Yext Knowledge Graph or statically defined */
 export type YextEntityField<T> = {
@@ -57,7 +57,7 @@ const sortFields = (fields: YextSchemaField[]): YextSchemaField[] => {
 
 export const getFieldsForSelector = (
   entityFields: StreamFields | null,
-  filter: LinkedEntitySourceFieldFilter<any>,
+  filter: MappedSourceFieldFilter<any>,
   linkedEntitySchemas?: LinkedEntitySchemas,
   streamDocument?: StreamDocument
 ): YextSchemaField[] => {
@@ -135,11 +135,11 @@ export const getFieldsForSelector = (
               ).value;
               return (
                 resolvedValue === undefined ||
-                getMappedCardSourceMode(
+                classifyMappedSource({
                   streamDocument,
-                  field.name,
-                  filter.listFieldName
-                ) === "section"
+                  fieldPath: field.name,
+                  listFieldName: filter.listFieldName,
+                }) === "sectionField"
               );
             })()
       );
