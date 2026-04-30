@@ -729,10 +729,6 @@ const locatorFields: YextFields<LocatorProps> = {
                         type === "icon"
                           ? (value?.iconName ?? DEFAULT_MAKI_ICON_NAME)
                           : undefined,
-                      width:
-                        type === "customImage"
-                          ? (value?.width ?? DEFAULT_PIN_ICON_WIDTH)
-                          : undefined,
                     })
                   }
                 />
