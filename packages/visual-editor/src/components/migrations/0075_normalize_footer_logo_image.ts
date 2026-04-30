@@ -47,45 +47,6 @@ const normalizeFooterLogoSlotProps = (
 };
 
 export const normalizeFooterLogoImageMigration: Migration = {
-  ExpandedFooter: {
-    action: "updated",
-    propTransformation: (props) => {
-      const logoSlot = props.slots?.LogoSlot;
-      if (!Array.isArray(logoSlot)) {
-        return props;
-      }
-
-      let changed = false;
-      const normalizedLogoSlot = logoSlot.map((slot) => {
-        if (slot?.type !== "FooterLogoSlot" || !isRecord(slot.props)) {
-          return slot;
-        }
-
-        const normalizedProps = normalizeFooterLogoSlotProps(slot.props);
-        if (normalizedProps === slot.props) {
-          return slot;
-        }
-
-        changed = true;
-        return {
-          ...slot,
-          props: normalizedProps,
-        };
-      });
-
-      if (!changed) {
-        return props;
-      }
-
-      return {
-        ...props,
-        slots: {
-          ...props.slots,
-          LogoSlot: normalizedLogoSlot,
-        },
-      };
-    },
-  },
   FooterLogoSlot: {
     action: "updated",
     propTransformation: normalizeFooterLogoSlotProps,

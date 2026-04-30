@@ -526,9 +526,7 @@ describe("migrate", () => {
         zones: {},
       },
       [normalizeFooterLogoImageMigration],
-      {
-        components: {},
-      },
+      footerLogoSlotMigrationConfig,
       {}
     );
 
@@ -623,9 +621,7 @@ describe("migrate", () => {
         zones: {},
       },
       [normalizeFooterLogoImageMigration],
-      {
-        components: {},
-      },
+      footerLogoSlotMigrationConfig,
       {}
     );
 
@@ -710,9 +706,7 @@ describe("migrate", () => {
         zones: {},
       },
       [normalizeFooterLogoImageMigration],
-      {
-        components: {},
-      },
+      footerLogoSlotMigrationConfig,
       {}
     );
 
@@ -788,6 +782,24 @@ export const migrationRegistry: MigrationRegistry = [
   alreadyAppliedMigration,
   migration,
 ];
+
+const footerLogoSlotMigrationConfig = {
+  components: {
+    ExpandedFooter: {
+      fields: {
+        slots: {
+          type: "object",
+          objectFields: {
+            LogoSlot: { type: "slot" },
+          },
+        },
+      },
+    },
+    FooterLogoSlot: {
+      fields: {},
+    },
+  },
+} as any;
 
 const exampleDataBefore = {
   root: {
