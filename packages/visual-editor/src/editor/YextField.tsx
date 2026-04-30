@@ -19,7 +19,6 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
 } from "./YextEntityFieldSelector.tsx";
-import { type RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
 import { MsgString } from "../utils/i18n/platform.ts";
 import type { YextFieldMap, YextPuckFields } from "../fields/fields.ts";
 
@@ -87,12 +86,6 @@ type YextMaxWidthField = YextBaseField & {
   type: "maxWidth";
 };
 
-type YextTranslatableStringField = YextBaseField & {
-  type: "translatableString";
-  filter?: RenderEntityFieldFilter<any>;
-  showApplyAllOption?: boolean;
-};
-
 type YextDynamicSelectField<T extends DynamicOptionValueTypes> =
   YextBaseField & {
     type: "dynamicSelect";
@@ -115,7 +108,6 @@ type YextFieldConfig<Props = any> =
   | YextNumberField
   | YextEntitySelectorField<Props extends Record<string, any> ? Props : any>
   | YextMaxWidthField
-  | YextTranslatableStringField
   | YextDynamicSelectField<Props extends DynamicOptionValueTypes ? Props : any>
   | YextPuckFields[Exclude<
       keyof YextPuckFields,
@@ -131,11 +123,6 @@ export function YextField<T extends Record<string, any>, U = any>(
   fieldName: MsgString,
   config: YextEntitySelectorField<T>
 ): Field<YextEntityField<U>>;
-
-export function YextField(
-  fieldName: MsgString,
-  config: YextTranslatableStringField
-): Field<any>;
 
 export function YextField<
   T extends DynamicOptionsSelectorType<U>,
