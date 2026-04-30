@@ -1,17 +1,17 @@
 import React from "react";
 import { FieldLabel, Field, CustomField } from "@puckeditor/core";
 import { type BasicSelectorField } from "../fields/BasicSelectorField.tsx";
-import { type YextFieldDefinition } from "./YextField.tsx";
+import { type YextArrayField, type YextFieldDefinition } from "./YextField.tsx";
 import { YextPuckFieldOverrides } from "../fields/fields.ts";
 import { YextAutoField } from "../fields/YextAutoField.tsx";
 import { DATE_TIME_CONSTANT_CONFIG } from "../fields/DateTimeSelectorField.tsx";
+import { type ImageField } from "../fields/ImageField.tsx";
 import {
   ConstantValueTypes,
   EntityFieldTypes,
   RenderEntityFieldFilter,
 } from "../internal/utils/getFilteredEntityFields.ts";
 import { DevLogger } from "../utils/devLogger.ts";
-import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 import {
   TEXT_CONSTANT_CONFIG,
   TRANSLATABLE_RICH_TEXT_CONSTANT_CONFIG,
@@ -26,7 +26,7 @@ import { PHONE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Ph
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
 import { useLinkedEntitySchemas } from "../hooks/useLinkedEntitySchemas.tsx";
 import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
-import { IMAGE_LIST_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/ImageList.tsx";
+import { getRandomPlaceholderImageObject } from "../utils/imagePlaceholders.ts";
 import { EVENT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/EventSection.tsx";
 import { INSIGHT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/InsightSection.tsx";
 import { PRODUCT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/ProductSection.tsx";
@@ -74,6 +74,31 @@ export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
     disableConstantValueToggle?: boolean;
     disallowTranslation?: boolean;
   };
+
+const IMAGE_CONSTANT_CONFIG: ImageField = {
+  type: "image",
+};
+
+const IMAGE_LIST_CONSTANT_CONFIG = (): YextArrayField<any> => {
+  return {
+    label: "",
+    type: "array",
+    arrayFields: {
+      assetImage: {
+        ...IMAGE_CONSTANT_CONFIG,
+        label: pt("fields.image", "Image"),
+      },
+    },
+    defaultItemProps: {
+      assetImage: {
+        ...getRandomPlaceholderImageObject({ width: 1000, height: 570 }),
+        width: 1000,
+        height: 570,
+      },
+    },
+    getItemSummary: (_, i) => pt("photo", "Photo") + " " + ((i ?? 0) + 1),
+  };
+};
 
 export const TYPE_TO_CONSTANT_CONFIG: Record<string, ConstantFieldConfig> = {
   "type.string": TRANSLATABLE_STRING_CONSTANT_CONFIG,

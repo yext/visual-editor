@@ -50,7 +50,6 @@ const HeroImageComponent: PuckComponent<HeroImageProps> = (props) => {
           className || "max-w-full rounded-image-borderRadius w-full h-full"
         }
         fullHeight={true}
-        dragRef={puck?.dragRef ?? undefined}
         hasParentData={false}
       />
     );
@@ -104,6 +103,7 @@ export const HeroImage: YextComponentConfig<HeroImageProps> = {
     switch (data.props.variant ?? "classic") {
       case "compact": {
         fields = setDeep(fields, "styles.objectFields.width.visible", false);
+        // compact should also remove the props removed by classic
       }
       case "classic": {
         fields = setDeep(

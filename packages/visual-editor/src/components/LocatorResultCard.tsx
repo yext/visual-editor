@@ -28,8 +28,11 @@ import {
   type YextObjectField,
 } from "../editor/YextField.tsx";
 import { type BasicSelectorField } from "../fields/BasicSelectorField.tsx";
+import {
+  buildLocatorDisplayOptions,
+  type ImageField,
+} from "../fields/ImageField.tsx";
 import { ConstantValueModeToggler } from "../editor/YextEntityFieldSelector.tsx";
-import { LOCATOR_IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 import { DynamicOption } from "../editor/DynamicOptionsSelector.tsx";
 import { TranslatableString } from "../types/types.ts";
 import { TranslatableAssetImage } from "../types/images.ts";
@@ -58,6 +61,13 @@ import {
   FaRegEnvelope,
 } from "react-icons/fa";
 import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
+
+const LOCATOR_IMAGE_CONSTANT_CONFIG: ImageField = {
+  type: "image",
+  label: msg("fields.image", "Image"),
+  getAltTextOptions: (templateMetadata) =>
+    buildLocatorDisplayOptions(templateMetadata?.locatorDisplayFields),
+};
 import { FieldTypeData } from "../internal/types/templateMetadata.ts";
 import {
   formatDistance,

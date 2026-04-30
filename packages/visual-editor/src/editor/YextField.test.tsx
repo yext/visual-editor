@@ -135,6 +135,39 @@ describe("YextField", () => {
     });
   });
 
+  it("passes code configs through with the provided label", () => {
+    const fieldName = msg("fields.code", "Code");
+
+    const field = YextField(fieldName, {
+      type: "code",
+      language: "html",
+    } as any);
+
+    expect(field).toEqual({
+      label: fieldName,
+      type: "code",
+      language: "html",
+    });
+  });
+
+  it("passes translatableString configs through with the provided label", () => {
+    const fieldName = msg("fields.text", "Text");
+    const filter = { types: ["type.string"] };
+
+    const field = YextField(fieldName, {
+      type: "translatableString",
+      filter,
+      showApplyAllOption: true,
+    } as any);
+
+    expect(field).toEqual({
+      label: fieldName,
+      type: "translatableString",
+      filter,
+      showApplyAllOption: true,
+    });
+  });
+
   it("renders the max width selector with grouped options and helper copy", () => {
     const themeStyle = document.createElement("style");
     themeStyle.id = "visual-editor-theme";
