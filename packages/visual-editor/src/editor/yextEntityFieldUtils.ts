@@ -51,12 +51,10 @@ const sortFields = (fields: YextSchemaField[]): YextSchemaField[] => {
   });
 };
 
-const trimLinkedEntityRootDisplayName = (
+const trimDescendantRootDisplayName = (
   fields: YextSchemaField[],
-  linkedEntitySchemas: LinkedEntitySchemas | undefined,
-  linkedEntityRoot: string
+  rootDisplayName: string | undefined
 ): YextSchemaField[] => {
-  const rootDisplayName = linkedEntitySchemas?.[linkedEntityRoot]?.displayName;
   if (!rootDisplayName) {
     return fields;
   }
@@ -68,6 +66,19 @@ const trimLinkedEntityRootDisplayName = (
       ? { ...field, displayName: displayName.slice(rootPrefix.length) }
       : field;
   });
+};
+
+const getRootDisplayName = (
+  entityFields: StreamFields | null,
+  rootFieldName: string,
+  linkedEntitySchemas?: LinkedEntitySchemas
+): string | undefined => {
+  return (
+    linkedEntitySchemas?.[rootFieldName]?.displayName ??
+    entityFields?.displayNames?.[rootFieldName] ??
+    entityFields?.fields.find((field) => field.name === rootFieldName)
+      ?.displayName
+  );
 };
 
 export const getFieldsForSelector = (
@@ -91,6 +102,13 @@ export const getFieldsForSelector = (
     !!filter.descendantsOf &&
     isTopLevelLinkedEntityField(filter.descendantsOf, entityFields) &&
     !linkedEntitySchemas?.[filter.descendantsOf];
+  const descendantRootDisplayName = filter.descendantsOf
+    ? getRootDisplayName(
+        entityFields,
+        filter.descendantsOf,
+        linkedEntitySchemas
+      )
+    : undefined;
 
   if (filter.sourceRootsOnly) {
     const rootEntityFields = getFilteredEntityFields(
@@ -117,10 +135,12 @@ export const getFieldsForSelector = (
     filteredEntityFields = getFilteredEntityFields(linkedEntityStreamFields, {
       ...filter,
     });
-    filteredEntityFields = trimLinkedEntityRootDisplayName(
+  }
+
+  if (filter.descendantsOf) {
+    filteredEntityFields = trimDescendantRootDisplayName(
       filteredEntityFields,
-      linkedEntitySchemas,
-      filter.descendantsOf!
+      descendantRootDisplayName
     );
   }
 

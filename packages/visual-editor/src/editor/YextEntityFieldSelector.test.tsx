@@ -352,6 +352,125 @@ describe("YextEntityFieldSelector", () => {
     expect(screen.getByText("Custom Events")).toBeDefined();
   });
 
+  it("does not show single objects or scalar roots as base item-list sources", () => {
+    renderEntityFieldInput({
+      linkedEntitySchemas: linkedLocationSchemas,
+      entityFields: {
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "address",
+            displayName: "Address",
+            definition: {
+              name: "address",
+              typeName: "type.address",
+              type: {},
+            },
+            children: {
+              fields: [
+                {
+                  name: "city",
+                  displayName: "City",
+                  definition: {
+                    name: "city",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+          {
+            name: "hours",
+            displayName: "Hours",
+            definition: {
+              name: "hours",
+              typeName: "type.hours",
+              type: {},
+            },
+          },
+          {
+            name: "heroSection",
+            displayName: "Hero Section",
+            definition: {
+              name: "heroSection",
+              typeName: "c_hero_section",
+              type: {},
+            },
+            children: {
+              fields: [
+                {
+                  name: "primaryCta",
+                  displayName: "Primary CTA",
+                  definition: {
+                    name: "primaryCta",
+                    typeName: "type.cta",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+          {
+            name: "accessHours",
+            displayName: "Access Hours",
+            definition: {
+              name: "accessHours",
+              typeName: "type.hours",
+              type: {},
+            },
+          },
+          {
+            name: "cityCoordinate",
+            displayName: "City Lat/Long",
+            definition: {
+              name: "cityCoordinate",
+              typeName: "type.coordinate",
+              type: {},
+            },
+          },
+          {
+            name: "c_customEvents",
+            displayName: "Custom Events",
+            definition: {
+              name: "c_customEvents",
+              isList: true,
+              typeName: "type.list",
+              type: {},
+            },
+            children: {
+              fields: [
+                {
+                  name: "title",
+                  displayName: "Title",
+                  definition: {
+                    name: "title",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+      filter: {
+        types: ["type.events_section"],
+        sourceRootKinds: ["linkedEntityRoot", "baseListRoot"],
+        sourceRootsOnly: true,
+      },
+    });
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(screen.getByText("Custom Events")).toBeDefined();
+    expect(screen.queryByText("Address")).toBeNull();
+    expect(screen.queryByText("Hours")).toBeNull();
+    expect(screen.queryByText("Hero Section")).toBeNull();
+    expect(screen.queryByText("Access Hours")).toBeNull();
+    expect(screen.queryByText("City Lat/Long")).toBeNull();
+  });
+
   it("limits event card source selectors to valid top-level roots", () => {
     renderEntityFieldInput({
       linkedEntitySchemas: linkedLocationSchemas,
@@ -691,6 +810,89 @@ describe("YextEntityFieldSelector", () => {
     expect(onChange).toHaveBeenCalledWith(
       {
         field: "c_linkedLocation.name",
+      },
+      undefined
+    );
+  });
+
+  it("stores base list descendant selections as absolute paths while showing relative options", () => {
+    const onChange = vi.fn();
+
+    renderEntityFieldInput({
+      onChange,
+      entityFields: {
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_customEvents",
+            displayName: "Custom Events",
+            definition: {
+              name: "c_customEvents",
+              isList: true,
+              typeName: "type.list",
+              type: {},
+            },
+            children: {
+              fields: [
+                {
+                  name: "primaryCta",
+                  displayName: "Primary CTA",
+                  definition: {
+                    name: "primaryCta",
+                    typeName: "type.cta",
+                    type: {},
+                  },
+                  children: {
+                    fields: [
+                      {
+                        name: "label",
+                        displayName: "Label",
+                        definition: {
+                          name: "label",
+                          typeName: "type.string",
+                          type: {},
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+        displayNames: {
+          ...defaultEntityFields.displayNames,
+          c_customEvents: "Custom Events",
+          "c_customEvents.primaryCta": "Custom Events > Primary CTA",
+          "c_customEvents.primaryCta.label":
+            "Custom Events > Primary CTA > Label",
+        },
+      },
+      filter: {
+        types: ["type.string"],
+        descendantsOf: "c_customEvents",
+      },
+      value: {
+        field: "c_customEvents.primaryCta.label",
+      },
+    });
+
+    expect(screen.getByRole("combobox").textContent).toContain(
+      "Primary CTA > Label"
+    );
+    expect(screen.getByRole("combobox").textContent).not.toContain(
+      "Custom Events"
+    );
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(screen.getAllByText("Primary CTA > Label")).toHaveLength(2);
+
+    fireEvent.click(screen.getAllByText("Primary CTA > Label")[1]!);
+
+    expect(onChange).toHaveBeenCalledWith(
+      {
+        field: "c_customEvents.primaryCta.label",
       },
       undefined
     );

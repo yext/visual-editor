@@ -32,6 +32,7 @@ export const getBaseEntityListSourceRootFields = (
   return fields.filter(
     (field) =>
       !linkedEntityRootNames.has(field.name) &&
+      !!field.definition.isList &&
       Array.isArray(field.children?.fields) &&
       field.children.fields.length > 0
   );
@@ -62,7 +63,7 @@ export const getMappedCardSourceMode = (
     return "section";
   }
 
-  return "itemList";
+  return "unknown";
 };
 
 /**

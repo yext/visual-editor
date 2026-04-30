@@ -64,14 +64,14 @@ const createEventCardsMappingFields = (sourceField?: string) =>
           ...(sourceField ? { descendantsOf: sourceField } : {}),
         },
       }),
-      cta: YextField(msg("fields.showCTA", "CTA"), {
+      cta: YextField(msg("fields.cta", "CTA"), {
         type: "entityField",
         filter: {
           types: ["type.cta"],
           ...(sourceField ? { descendantsOf: sourceField } : {}),
         },
       }),
-      image: YextField(msg("fields.showImage", "Image"), {
+      image: YextField(msg("fields.image", "Image"), {
         type: "entityField",
         filter: {
           types: ["type.image"],

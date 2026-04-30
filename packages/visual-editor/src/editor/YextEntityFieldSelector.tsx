@@ -416,6 +416,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   const linkedEntitySchemas = useLinkedEntitySchemas();
   const templateMetadata = useTemplateMetadata();
   const streamDocument = useDocument();
+  const descendantRoot = filter.descendantsOf;
   const linkedEntityDescendantRoot =
     filter.descendantsOf && linkedEntitySchemas?.[filter.descendantsOf]
       ? filter.descendantsOf
@@ -431,9 +432,8 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     const entityFieldOptions = filteredEntityFields.map((field) => ({
       label: field.displayName ?? field.name,
       value:
-        linkedEntityDescendantRoot &&
-        field.name.startsWith(`${linkedEntityDescendantRoot}.`)
-          ? field.name.slice(linkedEntityDescendantRoot.length + 1)
+        descendantRoot && field.name.startsWith(`${descendantRoot}.`)
+          ? field.name.slice(descendantRoot.length + 1)
           : field.name,
     }));
 
@@ -456,6 +456,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     };
   }, [
     entityFields,
+    descendantRoot,
     filter,
     label,
     linkedEntitySchemas,
@@ -491,21 +492,18 @@ export const EntityFieldInput = <T extends Record<string, any>>({
             {
               ...value,
               field:
-                linkedEntityDescendantRoot &&
+                descendantRoot &&
                 selectedEntityField &&
-                !selectedEntityField.startsWith(
-                  `${linkedEntityDescendantRoot}.`
-                )
-                  ? `${linkedEntityDescendantRoot}.${selectedEntityField}`
+                !selectedEntityField.startsWith(`${descendantRoot}.`)
+                  ? `${descendantRoot}.${selectedEntityField}`
                   : selectedEntityField,
             },
             uiState
           );
         }}
         value={
-          linkedEntityDescendantRoot &&
-          value?.field?.startsWith(`${linkedEntityDescendantRoot}.`)
-            ? value.field.slice(linkedEntityDescendantRoot.length + 1)
+          descendantRoot && value?.field?.startsWith(`${descendantRoot}.`)
+            ? value.field.slice(descendantRoot.length + 1)
             : value?.field
         }
       />
