@@ -239,13 +239,13 @@ const getResolvedDescendantFieldPaths = (
     return undefined;
   }
 
-  const values = Array.isArray(resolvedValue)
-    ? resolvedValue
+  const firstValue = Array.isArray(resolvedValue)
+    ? resolvedValue[0]
     : resolvedValue && typeof resolvedValue === "object"
-      ? [resolvedValue]
-      : [];
+      ? resolvedValue
+      : undefined;
 
-  if (!values.length) {
+  if (!firstValue || typeof firstValue !== "object") {
     return new Set();
   }
 
@@ -270,6 +270,6 @@ const getResolvedDescendantFieldPaths = (
     });
   };
 
-  values.forEach((value) => collectFieldPaths(value));
+  collectFieldPaths(firstValue);
   return fieldPaths;
 };

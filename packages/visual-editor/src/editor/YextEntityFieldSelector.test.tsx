@@ -1129,6 +1129,78 @@ describe("YextEntityFieldSelector", () => {
     expect(screen.queryByText("Business Logo")).toBeNull();
   });
 
+  it("limits linked descendant fields to those present on the first resolved linked entity", () => {
+    renderEntityFieldInput({
+      entityFields: {
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_linkedLocation",
+            displayName: "Linked Location",
+            definition: {
+              name: "c_linkedLocation",
+              isList: true,
+              typeRegistryId: "type.entity_reference",
+              type: {
+                documentType: "DOCUMENT_TYPE_ENTITY",
+              },
+            },
+            children: {
+              fields: [
+                {
+                  name: "name",
+                  displayName: "Name",
+                  definition: {
+                    name: "name",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+                {
+                  name: "tripBranding",
+                  displayName: "Trip Branding",
+                  definition: {
+                    name: "tripBranding",
+                    typeName: "type.struct",
+                    type: {},
+                  },
+                  children: {
+                    fields: [
+                      {
+                        name: "url",
+                        displayName: "URL",
+                        definition: {
+                          name: "url",
+                          typeName: "type.string",
+                          type: {},
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+      filter: {
+        types: ["type.string"],
+        descendantsOf: "c_linkedLocation",
+      },
+      document: {
+        c_linkedLocation: [
+          { name: "Downtown" },
+          { tripBranding: { url: "#" } },
+        ],
+      },
+    });
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(screen.getAllByText("Name").length).toBeGreaterThan(0);
+    expect(screen.queryByText("Trip Branding > URL")).toBeNull();
+  });
+
   it("does not show linked descendant options when the selected source resolves to no items", () => {
     renderEntityFieldInput({
       entityFields: {
@@ -1311,6 +1383,76 @@ describe("YextEntityFieldSelector", () => {
       },
       undefined
     );
+  });
+
+  it("limits base list descendant fields to those present on the first resolved item", () => {
+    renderEntityFieldInput({
+      entityFields: {
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_customEvents",
+            displayName: "Custom Events",
+            definition: {
+              name: "c_customEvents",
+              isList: true,
+              typeName: "type.list",
+              type: {},
+            },
+            children: {
+              fields: [
+                {
+                  name: "title",
+                  displayName: "Title",
+                  definition: {
+                    name: "title",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+                {
+                  name: "secondaryCta",
+                  displayName: "Secondary CTA",
+                  definition: {
+                    name: "secondaryCta",
+                    typeName: "type.cta",
+                    type: {},
+                  },
+                  children: {
+                    fields: [
+                      {
+                        name: "label",
+                        displayName: "Label",
+                        definition: {
+                          name: "label",
+                          typeName: "type.string",
+                          type: {},
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+      filter: {
+        types: ["type.string"],
+        descendantsOf: "c_customEvents",
+      },
+      document: {
+        c_customEvents: [
+          { title: "First" },
+          { secondaryCta: { label: "Later" } },
+        ],
+      },
+    });
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(screen.getAllByText("Title").length).toBeGreaterThan(0);
+    expect(screen.queryByText("Secondary CTA > Label")).toBeNull();
   });
 
   it("falls back to the default entity field option when no matching entity fields exist", () => {
