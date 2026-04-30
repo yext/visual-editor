@@ -1,6 +1,5 @@
 import { CustomField } from "@puckeditor/core";
 import { msg } from "../../utils/i18n/platform.ts";
-import { YextField } from "../../editor/YextField.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { YextAutoField } from "../../fields/YextAutoField.tsx";
 import React from "react";
@@ -57,10 +56,11 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
     // Use the schema value from root, or default schema if not set
     const schema = value || defaultSchema;
 
-    const codeField = YextField(msg("schemaMarkup", "Schema Markup"), {
-      type: "code",
-      codeLanguage: "json",
-    });
+    const codeField = {
+      label: msg("schemaMarkup", "Schema Markup"),
+      type: "code" as const,
+      codeLanguage: "json" as const,
+    };
 
     const handleClick = (e: React.MouseEvent) => {
       e.stopPropagation();

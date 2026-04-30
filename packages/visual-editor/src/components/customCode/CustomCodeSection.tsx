@@ -41,18 +41,21 @@ export interface CustomCodeSectionProps {
 }
 
 const customCodeSectionFields: YextFields<CustomCodeSectionProps> = {
-  html: YextField(msg("fields.html", "HTML"), {
+  html: {
+    label: msg("fields.html", "HTML"),
     type: "code",
     codeLanguage: "html",
-  }),
-  css: YextField(msg("fields.css", "CSS"), {
+  },
+  css: {
+    label: msg("fields.css", "CSS"),
     type: "code",
     codeLanguage: "css",
-  }),
-  javascript: YextField(msg("fields.javascript", "JavaScript"), {
+  },
+  javascript: {
+    label: msg("fields.javascript", "JavaScript"),
     type: "code",
     codeLanguage: "javascript",
-  }),
+  },
   liveVisibility: {
     label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
     type: "radio",
