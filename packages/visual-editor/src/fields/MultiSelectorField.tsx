@@ -112,10 +112,7 @@ const MultiSelectorArrayField = <T extends MultiSelectorOptionValue>(
   dropdownLabel: string | MsgString,
   placeholderOptionLabel?: string | MsgString
 ): YextArrayField<MultiSelectorOptionSelection<T>[]> => {
-  const dropdownOptions = options.map((opt) => ({
-    label: opt.label,
-    value: opt.value,
-  }));
+  const dropdownOptions = [...options];
   if (placeholderOptionLabel) {
     dropdownOptions.unshift({
       label: placeholderOptionLabel,
