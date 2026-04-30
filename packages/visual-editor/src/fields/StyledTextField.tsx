@@ -50,9 +50,8 @@ const getFontOptions = (customFonts: FontRegistry = {}) => [
   ),
 ];
 
-const translateOptions = (options: StyleSelectOption[]) =>
-  options.map((option) => ({ ...option, label: pt(option.label) }));
-
+// Font weight and style options depend on the selected font, so reset unsupported
+// values back to Default when the font changes.
 const correctStyledTextValue = (
   nextValue: StyledTextValue,
   availableFontWeights: StyleSelectOption[],
@@ -109,11 +108,17 @@ export const StyledTextFieldOverride = ({
     [customFonts]
   );
   const fontSizeOptions = React.useMemo(
-    () => withDefaultOption(translateOptions(ThemeOptions.FONT_SIZE())),
+    () => withDefaultOption(ThemeOptions.FONT_SIZE()),
     []
   );
   const textTransformOptions = React.useMemo(
-    () => withDefaultOption(translateOptions(ThemeOptions.TEXT_TRANSFORM)),
+    () =>
+      withDefaultOption(
+        ThemeOptions.TEXT_TRANSFORM.map((option) => ({
+          ...option,
+          label: pt(option.label),
+        }))
+      ),
     []
   );
   const getAvailableFontWeightOptions = React.useCallback(
