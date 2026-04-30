@@ -24,10 +24,10 @@ import {
   FieldTypeData,
   TemplateMetadata,
 } from "../internal/types/templateMetadata.ts";
-import { DynamicOption } from "../editor/DynamicOptionsSelector.tsx";
 import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 import { isFakeStarterLocalDev } from "../utils/isFakeStarterLocalDev.ts";
 import { YextAutoField } from "./YextAutoField.tsx";
+import { type EmbeddedStringOption } from "../editor/EmbeddedFieldStringInput.tsx";
 
 export type ImagePayload = {
   id: string;
@@ -45,14 +45,14 @@ export type ImageField = BaseField & {
   visible?: boolean;
   getAltTextOptions?: (
     templateMetadata: TemplateMetadata
-  ) => DynamicOption<string>[];
+  ) => EmbeddedStringOption[];
 };
 
 type ImageFieldOverrideProps = FieldProps<ImageField>;
 
 export const buildLocatorDisplayOptions = (
   locatorDisplayFields?: Record<string, FieldTypeData>
-): DynamicOption<string>[] => {
+): EmbeddedStringOption[] => {
   if (!locatorDisplayFields) {
     return [];
   }

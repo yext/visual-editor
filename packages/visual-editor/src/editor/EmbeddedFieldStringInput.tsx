@@ -28,6 +28,11 @@ import {
   type EntityFieldOptionGroup,
 } from "./entityFieldOptionGroups.ts";
 
+export type EmbeddedStringOption = {
+  label: string;
+  value: string;
+};
+
 /**
  * A debounced string input that allows embedding entity fields via a popover selector.
  */
