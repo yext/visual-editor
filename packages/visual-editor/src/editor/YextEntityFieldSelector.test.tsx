@@ -1176,7 +1176,7 @@ describe("YextEntityFieldSelector", () => {
       },
       filter: {
         types: ["type.string"],
-        descendantsOf: "c_linkedLocation",
+        subdocumentField: "c_linkedLocation",
       },
     });
 
@@ -1233,7 +1233,7 @@ describe("YextEntityFieldSelector", () => {
       },
       filter: {
         types: ["type.string"],
-        descendantsOf: "c_linkedLocation",
+        subdocumentField: "c_linkedLocation",
       },
     });
 
@@ -1279,7 +1279,7 @@ describe("YextEntityFieldSelector", () => {
       },
       filter: {
         types: ["type.string"],
-        descendantsOf: "c_linkedLocation",
+        subdocumentField: "c_linkedLocation",
       },
       document: {
         c_linkedLocation: [{ name: "Downtown" }],
@@ -1345,7 +1345,7 @@ describe("YextEntityFieldSelector", () => {
       },
       filter: {
         types: ["type.string", "type.image"],
-        descendantsOf: "c_linkedLocation",
+        subdocumentField: "c_linkedLocation",
       },
       document: {
         c_linkedLocation: [{ name: "Downtown" }],
@@ -1415,7 +1415,7 @@ describe("YextEntityFieldSelector", () => {
       },
       filter: {
         types: ["type.string"],
-        descendantsOf: "c_linkedLocation",
+        subdocumentField: "c_linkedLocation",
       },
       document: {
         c_linkedLocation: [
@@ -1478,7 +1478,7 @@ describe("YextEntityFieldSelector", () => {
       },
       filter: {
         types: ["type.string"],
-        descendantsOf: "c_linkedLocation",
+        subdocumentField: "c_linkedLocation",
       },
       document: {
         c_linkedLocation: [
@@ -1518,7 +1518,7 @@ describe("YextEntityFieldSelector", () => {
       },
       filter: {
         types: ["type.string", "type.rich_text_v2"],
-        descendantsOf: "c_linkedLocation",
+        subdocumentField: "c_linkedLocation",
       },
       document: {
         c_linkedLocation: [],
@@ -1574,7 +1574,7 @@ describe("YextEntityFieldSelector", () => {
       },
       filter: {
         types: ["type.string"],
-        descendantsOf: "c_linkedLocation",
+        subdocumentField: "c_linkedLocation",
       },
       value: {
         field: "c_linkedLocation.name",
@@ -1651,7 +1651,7 @@ describe("YextEntityFieldSelector", () => {
       },
       filter: {
         types: ["type.string"],
-        descendantsOf: "c_linkedLocation",
+        subdocumentField: "c_linkedLocation",
       },
       value: {
         field: "c_linkedLocation.tripBranding.url",
@@ -1717,7 +1717,7 @@ describe("YextEntityFieldSelector", () => {
       },
       filter: {
         types: ["type.image"],
-        descendantsOf: "c_linkedLocation",
+        subdocumentField: "c_linkedLocation",
       },
       value: {
         field: "logo",
@@ -1792,7 +1792,7 @@ describe("YextEntityFieldSelector", () => {
       },
       filter: {
         types: ["type.string"],
-        descendantsOf: "c_customEvents",
+        subdocumentField: "c_customEvents",
       },
       value: {
         field: "c_customEvents.primaryCta.label",
@@ -1874,7 +1874,7 @@ describe("YextEntityFieldSelector", () => {
       },
       filter: {
         types: ["type.string"],
-        descendantsOf: "c_customEvents",
+        subdocumentField: "c_customEvents",
       },
       document: {
         c_customEvents: [
@@ -2138,7 +2138,7 @@ describe("YextEntityFieldSelector", () => {
       },
       filter: {
         types: ["type.string"],
-        descendantsOf: "c_linkedLocation",
+        subdocumentField: "c_linkedLocation",
       },
       value: {
         field: "c_linkedLocation.name",

@@ -440,7 +440,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   const entityFields = useEntityFields();
   const templateMetadata = useTemplateMetadata();
   const streamDocument = useDocument();
-  const descendantRoot = filter.subdocumentField ?? filter.descendantsOf;
+  const descendantRoot = filter.subdocumentField;
   const currentFieldPath = value?.field as string | undefined;
   const hasValidDescendantSelection =
     !descendantRoot ||
@@ -454,19 +454,6 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       },
       streamDocument
     );
-    const descendantFilteredEntityFields = descendantRoot
-      ? filteredEntityFields.filter((field) =>
-          field.name.startsWith(`${descendantRoot}.`)
-        )
-      : filteredEntityFields;
-    if (
-      descendantRoot &&
-      descendantFilteredEntityFields.length !== filteredEntityFields.length
-    ) {
-      devLogger.log(
-        `Stripped non-descendant options from entity field selector for ${descendantRoot}`
-      );
-    }
     const descendantRootDisplayName = descendantRoot
       ? getEntityFieldDisplayName(descendantRoot, entityFields)
       : undefined;
@@ -474,7 +461,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       descendantRoot && hasValidDescendantSelection && currentFieldPath
         ? currentFieldPath.slice(descendantRoot.length + 1)
         : currentFieldPath;
-    const fieldOptions = descendantFilteredEntityFields.map((field) => {
+    const fieldOptions = filteredEntityFields.map((field) => {
       const displayName =
         getEntityFieldDisplayName(field.name, entityFields) ?? field.name;
 

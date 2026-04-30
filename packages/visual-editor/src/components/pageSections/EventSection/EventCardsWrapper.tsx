@@ -45,9 +45,7 @@ const createEventCardsMappingFields = (sourceField?: string) =>
         type: "entityField",
         filter: {
           types: ["type.string"],
-          ...(sourceField
-            ? { descendantsOf: sourceField, subdocumentField: sourceField }
-            : {}),
+          ...(sourceField ? { subdocumentField: sourceField } : {}),
         },
       }),
       date: YextField(msg("fields.date", "Date"), {
@@ -55,27 +53,21 @@ const createEventCardsMappingFields = (sourceField?: string) =>
         disableConstantValueToggle: true,
         filter: {
           types: ["type.datetime"],
-          ...(sourceField
-            ? { descendantsOf: sourceField, subdocumentField: sourceField }
-            : {}),
+          ...(sourceField ? { subdocumentField: sourceField } : {}),
         },
       }),
       description: YextField(msg("fields.description", "Description"), {
         type: "entityField",
         filter: {
           types: ["type.string", "type.rich_text_v2"],
-          ...(sourceField
-            ? { descendantsOf: sourceField, subdocumentField: sourceField }
-            : {}),
+          ...(sourceField ? { subdocumentField: sourceField } : {}),
         },
       }),
       cta: YextField(msg("fields.cta", "CTA"), {
         type: "entityField",
         filter: {
           types: ["type.cta"],
-          ...(sourceField
-            ? { descendantsOf: sourceField, subdocumentField: sourceField }
-            : {}),
+          ...(sourceField ? { subdocumentField: sourceField } : {}),
         },
       }),
       image: YextField(msg("fields.image", "Image"), {
@@ -83,9 +75,7 @@ const createEventCardsMappingFields = (sourceField?: string) =>
         disableConstantValueToggle: true,
         filter: {
           types: ["type.image"],
-          ...(sourceField
-            ? { descendantsOf: sourceField, subdocumentField: sourceField }
-            : {}),
+          ...(sourceField ? { subdocumentField: sourceField } : {}),
         },
       }),
     },

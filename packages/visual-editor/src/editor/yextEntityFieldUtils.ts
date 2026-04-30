@@ -5,10 +5,7 @@ import {
 import { StreamFields, YextSchemaField } from "../types/entityFields.ts";
 import { resolveField } from "../utils/resolveYextEntityField.ts";
 import { type StreamDocument } from "../utils/types/StreamDocument.ts";
-import {
-  buildLinkedEntityStreamFields,
-  getTopLevelLinkedEntitySourceFields,
-} from "../utils/linkedEntityFieldUtils.ts";
+import { getTopLevelLinkedEntitySourceFields } from "../utils/linkedEntityFieldUtils.ts";
 import {
   getBaseEntityListSourceRootFields,
   type MappedSourceFieldFilter,
@@ -134,8 +131,7 @@ export const getFieldsForSelector = (
   filter: MappedSourceFieldFilter<any>,
   streamDocument?: StreamDocument
 ): YextSchemaField[] => {
-  const linkedEntityStreamFields = buildLinkedEntityStreamFields(entityFields);
-  const scopedFieldPath = filter.subdocumentField ?? filter.descendantsOf;
+  const scopedFieldPath = filter.subdocumentField;
   const isDescendantFilter = !!scopedFieldPath;
   const resolvedDescendantFieldPaths = scopedFieldPath
     ? getResolvedDescendantFieldPaths(streamDocument, scopedFieldPath)
@@ -178,10 +174,9 @@ export const getFieldsForSelector = (
   const linkedEntityRootFields = filter.sourceRootKinds?.includes(
     "linkedEntityRoot"
   )
-    ? (
-        linkedEntityStreamFields?.fields ??
-        getTopLevelLinkedEntitySourceFields(entityFields)
-      ).filter(hasRequiredDescendants)
+    ? getTopLevelLinkedEntitySourceFields(entityFields).filter(
+        hasRequiredDescendants
+      )
     : [];
   const baseListRootFields = filter.sourceRootKinds?.includes("baseListRoot")
     ? getBaseEntityListSourceRootFields(entityFields).filter(
@@ -245,7 +240,6 @@ export const getFieldsForSelector = (
 
   const descendantFilter = {
     ...filter,
-    descendantsOf: undefined,
     subdocumentField: undefined,
   };
   let filteredEntityFields = scopedStreamFields
