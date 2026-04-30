@@ -47,7 +47,10 @@ export const Combobox = ({
                     className="ve-w-4 ve-h-4 ve-mr-2"
                   />
                 )}
-                <ColorIndicator color={selectedOption.color} />
+                <ColorIndicator
+                  color={selectedOption.color}
+                  colorStyle={selectedOption.colorStyle}
+                />
                 <div
                   className="ve-pr-2 ve-truncate ve-text-left"
                   title={selectedOption?.label}
@@ -114,6 +117,7 @@ export const Combobox = ({
                         />
                         <ColorIndicator
                           color={option.color}
+                          colorStyle={option.colorStyle}
                           setHexValue={setColorHexValue}
                         />
                         {option.icon && (
@@ -147,30 +151,33 @@ export const Combobox = ({
 
 const ColorIndicator = ({
   color,
+  colorStyle,
   setHexValue,
 }: {
   color?: string;
+  colorStyle?: React.CSSProperties;
   setHexValue?: (s: string) => void;
 }) => {
   const ref = React.useRef<HTMLDivElement>(null);
   let colorHexValue = undefined;
 
   React.useEffect(() => {
-    if (color && ref.current && setHexValue) {
+    if ((color || colorStyle) && ref.current && setHexValue) {
       colorHexValue = convertComputedStyleColorToHex(
         window.getComputedStyle(ref.current).backgroundColor
       );
       setHexValue(colorHexValue);
     }
-  }, [color, setHexValue]);
+  }, [color, colorStyle, setHexValue]);
 
-  if (!color) {
+  if (!color && !colorStyle) {
     return null;
   }
 
   return (
     <div
       ref={ref}
+      style={colorStyle}
       className={cn(
         "ve-ring-1 ve-ring-inset ve-ring-ring ve-w-5 ve-h-5 ve-rounded-sm ve-mr-2 components",
         color
