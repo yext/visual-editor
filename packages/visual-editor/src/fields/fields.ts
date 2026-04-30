@@ -14,10 +14,6 @@ import {
   DateTimeSelectorFieldOverride,
 } from "./DateTimeSelectorField.tsx";
 import {
-  DynamicMultiSelectField,
-  DynamicMultiSelectFieldOverride,
-} from "./DynamicMultiSelectField.tsx";
-import {
   FontSizeSelectorField,
   FontSizeSelectorFieldOverride,
 } from "./FontSizeSelectorField.tsx";
@@ -25,6 +21,10 @@ import {
   CTASelectorField,
   CTASelectorFieldOverride,
 } from "./CTASelectorField.tsx";
+import {
+  MultiSelectorField,
+  MultiSelectorFieldOverride,
+} from "./MultiSelectorField.tsx";
 import {
   OptionalNumberField,
   OptionalNumberFieldOverride,
@@ -40,7 +40,7 @@ export type YextPuckFields = {
   ctaSelector: CTASelectorField;
   code: CodeField;
   dateTimeSelector: DateTimeSelectorField;
-  dynamicMultiSelect: DynamicMultiSelectField;
+  multiSelector: MultiSelectorField;
   fontSizeSelector: FontSizeSelectorField;
   optionalNumber: OptionalNumberField;
   translatableString: TranslatableStringField;
@@ -82,7 +82,7 @@ export const YextPuckFieldOverrides = {
   ctaSelector: CTASelectorFieldOverride,
   code: CodeFieldOverride,
   dateTimeSelector: DateTimeSelectorFieldOverride,
-  dynamicMultiSelect: DynamicMultiSelectFieldOverride,
+  multiSelector: MultiSelectorFieldOverride,
   fontSizeSelector: FontSizeSelectorFieldOverride,
   optionalNumber: OptionalNumberFieldOverride,
   translatableString: TranslatableStringFieldOverride,

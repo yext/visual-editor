@@ -17,17 +17,18 @@ export {
 } from "./DateTimeSelectorField.tsx";
 
 export {
-  DynamicMultiSelectFieldOverride,
-  type DynamicOption,
-  type DynamicMultiSelectField,
-  type DynamicMultiSelectValue,
-  type DynamicOptionValueTypes,
-} from "./DynamicMultiSelectField.tsx";
-
-export {
   FontSizeSelectorFieldOverride,
   type FontSizeSelectorField,
 } from "./FontSizeSelectorField.tsx";
+
+export {
+  MultiSelectorFieldOverride,
+  type MultiSelectorOption,
+  type MultiSelectorField,
+  type MultiSelectorOptions,
+  type MultiSelectorValue,
+  type MultiSelectorOptionValue,
+} from "./MultiSelectorField.tsx";
 
 export {
   OptionalNumberFieldOverride,

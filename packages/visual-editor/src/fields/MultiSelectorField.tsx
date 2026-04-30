@@ -4,33 +4,38 @@ import { pt, type MsgString } from "../utils/i18n/platform.ts";
 import { type YextArrayField } from "../editor/YextField.tsx";
 import { type BasicSelectorField } from "./BasicSelectorField.tsx";
 
-export type DynamicOptionValueTypes = string | number | boolean;
+export type MultiSelectorOptionValue = string | number | boolean;
 
-type DynamicOptionSelection<T extends DynamicOptionValueTypes> = {
+type MultiSelectorOptionSelection<T extends MultiSelectorOptionValue> = {
   value: T | undefined;
 };
 
-export interface DynamicMultiSelectValue<T extends DynamicOptionValueTypes> {
-  selections: DynamicOptionSelection<T>[];
+export interface MultiSelectorValue<T extends MultiSelectorOptionValue> {
+  selections: MultiSelectorOptionSelection<T>[];
 }
 
-export interface DynamicOption<T extends DynamicOptionValueTypes> {
+export interface MultiSelectorOption<T extends MultiSelectorOptionValue> {
   label: string;
   value: T | undefined;
 }
 
+export type MultiSelectorOptions<T extends MultiSelectorOptionValue> =
+  | MultiSelectorOption<T>[]
+  | (() => MultiSelectorOption<T>[]);
+
 /**
- * A field type for selecting multiple values from options loaded at render time.
+ * A field type for selecting multiple values from a static or dynamic list of
+ * options.
  *
  * Example:
  *
  * ```tsx
  * const fields: YextFields<MyComponentProps> = {
  *   filters: {
- *     type: "dynamicMultiSelect",
+ *     type: "multiSelector",
  *     label: msg("fields.filters", "Filters"),
  *     dropdownLabel: msg("fields.field", "Field"),
- *     getOptions: () => [
+ *     options: [
  *       { label: msg("fields.city", "City"), value: "address.city" },
  *       { label: msg("fields.region", "Region"), value: "address.region" },
  *     ],
@@ -45,41 +50,36 @@ export interface DynamicOption<T extends DynamicOptionValueTypes> {
  * { selections: [{ value: "address.city" }] }
  * ```
  */
-export type DynamicMultiSelectField<T extends DynamicOptionValueTypes = any> =
+export type MultiSelectorField<T extends MultiSelectorOptionValue = any> =
   BaseField & {
-    type: "dynamicMultiSelect";
+    type: "multiSelector";
     label: string | MsgString;
     dropdownLabel: string | MsgString;
-    getOptions: () => DynamicOption<T>[];
+    options: MultiSelectorOptions<T>;
     placeholderOptionLabel?: string | MsgString;
   };
 
-type DynamicMultiSelectFieldProps<T extends DynamicOptionValueTypes> =
-  FieldProps<
-    DynamicMultiSelectField<T>,
-    DynamicMultiSelectValue<T> | undefined
-  >;
+type MultiSelectorFieldProps<T extends MultiSelectorOptionValue> = FieldProps<
+  MultiSelectorField<T>,
+  MultiSelectorValue<T> | undefined
+>;
 
 const getDefaultSelection = <
-  T extends DynamicOptionValueTypes,
->(): DynamicOptionSelection<T> => ({
+  T extends MultiSelectorOptionValue,
+>(): MultiSelectorOptionSelection<T> => ({
   value: undefined,
 });
 
-/**
- * A multi-select field whose options are loaded from a function. The options
- * function may use hooks.
- */
-export const DynamicMultiSelectFieldOverride = <
-  T extends DynamicOptionValueTypes,
->({
+/** A multi-select field whose options may be static or loaded from a function. */
+export const MultiSelectorFieldOverride = <T extends MultiSelectorOptionValue>({
   field,
   value,
   onChange,
   id,
   readOnly,
-}: DynamicMultiSelectFieldProps<T>) => {
-  const allOptions = field.getOptions();
+}: MultiSelectorFieldProps<T>) => {
+  const allOptions =
+    typeof field.options === "function" ? field.options() : field.options;
   const selectedValues = value?.selections ?? [];
 
   return (
@@ -90,7 +90,7 @@ export const DynamicMultiSelectFieldOverride = <
       <YextAutoField
         id={id ? `${id}_selections` : undefined}
         readOnly={readOnly}
-        field={DynamicMultiSelectArrayField(
+        field={MultiSelectorArrayField(
           allOptions,
           field.dropdownLabel,
           field.placeholderOptionLabel
@@ -107,11 +107,11 @@ export const DynamicMultiSelectFieldOverride = <
   );
 };
 
-const DynamicMultiSelectArrayField = <T extends DynamicOptionValueTypes>(
-  options: DynamicOption<T>[],
+const MultiSelectorArrayField = <T extends MultiSelectorOptionValue>(
+  options: MultiSelectorOption<T>[],
   dropdownLabel: string | MsgString,
   placeholderOptionLabel?: string | MsgString
-): YextArrayField<DynamicOptionSelection<T>[]> => {
+): YextArrayField<MultiSelectorOptionSelection<T>[]> => {
   const dropdownOptions = options.map((opt) => ({
     label: opt.label,
     value: opt.value,

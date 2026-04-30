@@ -481,4 +481,4 @@ title: {
 - `filter?`: `RenderEntityFieldFilter` — optional filter for entity fields that can be embedded
 - `showApplyAllOption?`: `boolean` — enables the "Apply to All Locales" button
 - `showFieldSelector?`: `boolean` — controls whether the entity field embed button is shown
-- `getOptions?`: `() => DynamicOption<string>[]` — optional options source for the embed selector
+- `getOptions?`: `() => EmbeddedStringOption[]` — optional options source for the embed selector

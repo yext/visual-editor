@@ -97,7 +97,7 @@ type YextFieldConfig<Props = any> =
       keyof YextPuckFields,
       | "basicSelector"
       | "code"
-      | "dynamicMultiSelect"
+      | "multiSelector"
       | "optionalNumber"
       | "video"
       | "translatableString"

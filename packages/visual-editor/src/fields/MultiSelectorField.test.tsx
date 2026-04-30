@@ -3,34 +3,34 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { YextAutoField } from "./YextAutoField.tsx";
 import {
-  type DynamicOption,
-  type DynamicMultiSelectField,
-  type DynamicMultiSelectValue,
-} from "./DynamicMultiSelectField.tsx";
+  type MultiSelectorOption,
+  type MultiSelectorField,
+  type MultiSelectorValue,
+} from "./MultiSelectorField.tsx";
 
-const baseOptions: DynamicOption<string>[] = [
+const baseOptions: MultiSelectorOption<string>[] = [
   { label: "Alpha", value: "alpha" },
   { label: "Beta", value: "beta" },
 ];
 
 const renderField = ({
   field = {
-    type: "dynamicMultiSelect",
+    type: "multiSelector",
     label: "Items",
     dropdownLabel: "Item",
-    getOptions: () => baseOptions,
-  } satisfies DynamicMultiSelectField<string>,
+    options: baseOptions,
+  } satisfies MultiSelectorField<string>,
   value = { selections: [{ value: "alpha" }] },
 }: {
-  field?: DynamicMultiSelectField<string>;
-  value?: DynamicMultiSelectValue<string>;
+  field?: MultiSelectorField<string>;
+  value?: MultiSelectorValue<string>;
 } = {}) => {
   const onChange = vi.fn();
 
   render(
     <YextAutoField
       field={field}
-      id="dynamic-multi-select-field"
+      id="multi-selector-field"
       onChange={onChange}
       value={value}
     />
@@ -43,7 +43,7 @@ const openArrayItem = (summary: string) => {
   fireEvent.click(screen.getByText(summary));
 };
 
-describe("DynamicMultiSelectField", () => {
+describe("MultiSelectorField", () => {
   it("renders the selected option and updates the selected value", () => {
     const { onChange } = renderField();
 
@@ -70,11 +70,11 @@ describe("DynamicMultiSelectField", () => {
     const DynamicField = () => {
       const [showAlternateOptions, setShowAlternateOptions] =
         React.useState(false);
-      const field: DynamicMultiSelectField<string> = {
-        type: "dynamicMultiSelect",
+      const field: MultiSelectorField<string> = {
+        type: "multiSelector",
         label: "Items",
         dropdownLabel: "Item",
-        getOptions: () =>
+        options: () =>
           showAlternateOptions
             ? [{ label: "Beta", value: "beta" }]
             : [{ label: "Alpha", value: "alpha" }],
@@ -87,7 +87,7 @@ describe("DynamicMultiSelectField", () => {
           </button>
           <YextAutoField
             field={field}
-            id="dynamic-multi-select-field"
+            id="multi-selector-field"
             onChange={onChange}
             value={{ selections: [{ value: "alpha" }] }}
           />
@@ -109,6 +109,19 @@ describe("DynamicMultiSelectField", () => {
     expect(screen.getAllByText("Beta").length).toBeGreaterThan(0);
   });
 
+  it("supports static options", () => {
+    renderField({
+      field: {
+        type: "multiSelector",
+        label: "Items",
+        dropdownLabel: "Item",
+        options: baseOptions,
+      },
+    });
+
+    expect(screen.getByText("Alpha")).toBeDefined();
+  });
+
   it("clears the field value when the last selection is removed", () => {
     const { onChange } = renderField();
 
@@ -120,10 +133,10 @@ describe("DynamicMultiSelectField", () => {
   it("uses the placeholder option for new selections", () => {
     renderField({
       field: {
-        type: "dynamicMultiSelect",
+        type: "multiSelector",
         label: "Items",
         dropdownLabel: "Item",
-        getOptions: () => baseOptions,
+        options: () => baseOptions,
         placeholderOptionLabel: "Select an item",
       },
       value: { selections: [{ value: undefined }] },

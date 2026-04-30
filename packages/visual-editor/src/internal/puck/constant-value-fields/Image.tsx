@@ -19,12 +19,12 @@ import {
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { type TranslatableStringField } from "../../../fields/TranslatableStringField.tsx";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+import { type EmbeddedStringOption } from "../../../editor/EmbeddedFieldStringInput.tsx";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import {
   FieldTypeData,
   TemplateMetadata,
 } from "../../types/templateMetadata.ts";
-import { type DynamicOption } from "../../../fields/DynamicMultiSelectField.tsx";
 import { useTemplateMetadata } from "../../hooks/useMessageReceivers.ts";
 import { getPageSetLocales } from "../../../utils/pageSetLocales.ts";
 import { isFakeStarterLocalDev } from "../../../utils/isFakeStarterLocalDev.ts";
@@ -41,7 +41,7 @@ let pendingImageSession:
 
 const buildLocatorDisplayOptions = (
   locatorDisplayFields?: Record<string, FieldTypeData>
-): DynamicOption<string>[] => {
+): EmbeddedStringOption[] => {
   if (!locatorDisplayFields) {
     return [];
   }
@@ -60,7 +60,7 @@ const buildLocatorDisplayOptions = (
 const createImageConstantConfig = (options?: {
   getAltTextOptions?: (
     templateMetadata: TemplateMetadata
-  ) => DynamicOption<string>[];
+  ) => EmbeddedStringOption[];
 }): CustomField<TranslatableAssetImage | undefined> => ({
   type: "custom",
   render: ({ onChange, value, field }) => {

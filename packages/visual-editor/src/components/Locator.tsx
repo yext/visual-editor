@@ -42,9 +42,9 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import {
-  type DynamicOption,
-  type DynamicMultiSelectValue,
-} from "../fields/DynamicMultiSelectField.tsx";
+  type MultiSelectorOption,
+  type MultiSelectorValue,
+} from "../fields/MultiSelectorField.tsx";
 import {
   YextField,
   type YextCustomFieldRenderProps,
@@ -263,8 +263,8 @@ const ResultCardPropsField = ({
 
 function getFacetFieldOptions(
   entityTypes: LocatorEntityType[]
-): DynamicOption<string>[] {
-  const facetFields: DynamicOption<string>[] = [];
+): MultiSelectorOption<string>[] {
+  const facetFields: MultiSelectorOption<string>[] = [];
   const addedValues: Set<string> = new Set<string>();
   entityTypes.forEach((entityType) =>
     getFacetFieldOptionsForEntityType(entityType).forEach((option) => {
@@ -279,8 +279,8 @@ function getFacetFieldOptions(
 
 function getFacetFieldOptionsForEntityType(
   entityType: LocatorEntityType
-): DynamicOption<string>[] {
-  let filterOptions: DynamicOption<string>[] = [
+): MultiSelectorOption<string>[] {
+  let filterOptions: MultiSelectorOption<string>[] = [
     {
       label: msg("fields.options.facets.city", "City"),
       value: "address.city",
@@ -588,7 +588,7 @@ export interface LocatorProps {
     /** Accent color for filter button and icons. */
     accentColor?: ThemeColor;
     /** Which fields are facetable in the search experience */
-    facetFields?: DynamicMultiSelectValue<string>;
+    facetFields?: MultiSelectorValue<string>;
   };
 
   /**
@@ -764,10 +764,10 @@ const locatorFields: YextFields<LocatorProps> = {
         options: "SITE_COLOR",
       },
       facetFields: {
-        type: "dynamicMultiSelect",
+        type: "multiSelector",
         label: msg("fields.dynamicFilters", "Dynamic Filters"),
         dropdownLabel: msg("fields.field", "Field"),
-        getOptions: () => {
+        options: () => {
           const entityTypeSourceMap = getLocatorEntityTypeSourceMap();
           const entityTypes =
             Object.keys(entityTypeSourceMap).filter(isLocatorEntityType);
