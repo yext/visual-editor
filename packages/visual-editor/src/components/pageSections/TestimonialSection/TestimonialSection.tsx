@@ -1,11 +1,10 @@
-import { PuckComponent, Slot } from "@puckeditor/core";
+import { Slot } from "@puckeditor/core";
 import {
   ThemeColor,
   backgroundColors,
   ThemeOptions,
 } from "../../../utils/themeConfigOptions.ts";
 import { YextField } from "../../../editor/YextField.tsx";
-import { PageSection } from "../../atoms/pageSection.tsx";
 import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
@@ -15,6 +14,12 @@ import { defaultTestimonialCardSlotData } from "./TestimonialCard.tsx";
 import { TestimonialCardsWrapperProps } from "./TestimonialCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import {
+  getMappedCardsSectionConditionalRender,
+  MappedCardsSectionConditionalRender,
+  MappedCardsSectionContent,
+  MappedCardsSectionShell,
+} from "../mappedCardsSectionUtils.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 export interface TestimonialSectionProps {
@@ -46,6 +51,9 @@ export interface TestimonialSectionProps {
   analytics: {
     scope?: string;
   };
+
+  /** @internal */
+  conditionalRender?: MappedCardsSectionConditionalRender;
 
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
@@ -96,24 +104,6 @@ const testimonialSectionFields: YextFields<TestimonialSectionProps> = {
       { label: msg("fields.options.hide", "Hide"), value: false },
     ],
   },
-};
-
-const TestimonialSectionWrapper: PuckComponent<TestimonialSectionProps> = (
-  props
-) => {
-  const { styles, slots } = props;
-
-  return (
-    <PageSection
-      background={styles?.backgroundColor}
-      className="flex flex-col gap-8"
-    >
-      {styles?.showSectionHeading && (
-        <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
-      )}
-      <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
-    </PageSection>
-  );
 };
 
 /**
@@ -175,7 +165,16 @@ export const TestimonialSection: YextComponentConfig<TestimonialSectionProps> =
       liveVisibility: true,
     },
     resolveData: (data) => {
-      return forwardHeadingLevel(data, "ContributorNameSlot");
+      const updatedData = forwardHeadingLevel(data, "ContributorNameSlot");
+      return {
+        ...updatedData,
+        props: {
+          ...updatedData.props,
+          conditionalRender: getMappedCardsSectionConditionalRender(
+            updatedData.props.slots.CardsWrapperSlot?.[0]
+          ),
+        },
+      };
     },
     render: (props) => (
       <ComponentErrorBoundary
@@ -189,7 +188,21 @@ export const TestimonialSection: YextComponentConfig<TestimonialSectionProps> =
             liveVisibility={props.liveVisibility}
             isEditing={props.puck.isEditing}
           >
-            <TestimonialSectionWrapper {...props} />
+            <MappedCardsSectionShell
+              conditionalRender={props.conditionalRender}
+              isEditing={props.puck.isEditing}
+              CardsWrapperSlot={props.slots.CardsWrapperSlot}
+            >
+              {(setCardsWrapperRef) => (
+                <MappedCardsSectionContent
+                  backgroundColor={props.styles?.backgroundColor}
+                  showSectionHeading={props.styles.showSectionHeading}
+                  SectionHeadingSlot={props.slots.SectionHeadingSlot}
+                  CardsWrapperSlot={props.slots.CardsWrapperSlot}
+                  setCardsWrapperRef={setCardsWrapperRef}
+                />
+              )}
+            </MappedCardsSectionShell>
           </VisibilityWrapper>
         </AnalyticsScopeProvider>
       </ComponentErrorBoundary>

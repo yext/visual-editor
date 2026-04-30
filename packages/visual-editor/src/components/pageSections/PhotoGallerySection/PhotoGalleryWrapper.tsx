@@ -15,8 +15,6 @@ import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { getThemeColorCssValue } from "../../../utils/colors.ts";
 import {
   AssetImageType,
-  isLocalizedAssetImage,
-  resolveLocalizedAssetImage,
   TranslatableAssetImage,
 } from "../../../types/images.ts";
 import { PuckComponent } from "@puckeditor/core";
@@ -37,6 +35,12 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { ImagePlus } from "lucide-react";
 import { Button } from "../../../internal/puck/ui/button.tsx";
 import { updateFields } from "../HeroSection.tsx";
+import { isMappedEntityFieldSelected } from "../entityFieldSectionUtils.ts";
+import { renderMappedEntityFieldEmptyState } from "../EntityFieldSectionEmptyState.tsx";
+import {
+  getPhotoGalleryImageData,
+  ResolvedGalleryImage,
+} from "./photoGalleryUtils.ts";
 import {
   toPuckFields,
   YextComponentConfig,
@@ -177,17 +181,8 @@ const DynamicChildColors = ({
   });
 };
 
-type ResolvedGalleryImage = {
-  isEmpty: boolean;
-  originalIndex: number;
-  image: ImageType | AssetImageType;
-  aspectRatio?: number;
-  width?: number;
-  originalImage: unknown;
-};
-
 type GalleryRenderProps = {
-  allImages: ResolvedGalleryImage[];
+  galleryImages: ResolvedGalleryImage[];
   imageWidth: number;
   isEditing: boolean;
   imagesFieldId: string;
@@ -302,7 +297,7 @@ const MobileImageItem = ({
 };
 
 const DesktopCarousel = ({
-  allImages,
+  galleryImages,
   imageWidth,
   carouselImageCount,
   isEditing,
@@ -336,7 +331,7 @@ const DesktopCarousel = ({
                 maxWidth: "100%",
               }}
             >
-              {allImages.map((imageData, idx) => {
+              {galleryImages.map((imageData, idx) => {
                 return (
                   <Slide index={idx} key={idx}>
                     <div
@@ -359,8 +354,8 @@ const DesktopCarousel = ({
             </Slider>
           </EntityField>
           <div className="hidden md:flex justify-center w-full max-w-full gap-2">
-            {allImages.length < 20 &&
-              allImages.map((_, idx) => {
+            {galleryImages.length < 20 &&
+              galleryImages.map((_, idx) => {
                 const afterStyles =
                   "after:content-[' '] after:py-2 after:block";
                 return (
@@ -393,7 +388,7 @@ const DesktopCarousel = ({
 };
 
 const MobileCarousel = ({
-  allImages,
+  galleryImages,
   isEditing,
   imagesFieldId,
   constantValueEnabled,
@@ -409,7 +404,7 @@ const MobileCarousel = ({
         className="max-w-full"
       >
         <Slider className="w-full">
-          {allImages.map((imageData, idx) => {
+          {galleryImages.map((imageData, idx) => {
             return (
               <Slide index={idx} key={idx}>
                 <div className="flex justify-center w-full max-w-full px-4">
@@ -431,7 +426,7 @@ const MobileCarousel = ({
           </ButtonBack>
         </DynamicChildColors>
         <div className="flex gap-2 justify-center flex-grow w-full">
-          {allImages.map((_, idx) => (
+          {galleryImages.map((_, idx) => (
             <DynamicChildColors
               category="slide"
               key={idx}
@@ -455,7 +450,7 @@ const MobileCarousel = ({
 };
 
 const GalleryGrid = ({
-  allImages,
+  galleryImages,
   imageWidth,
   isEditing,
   imagesFieldId,
@@ -468,7 +463,7 @@ const GalleryGrid = ({
       constantValueEnabled={constantValueEnabled}
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {allImages.map((imageData, idx) => (
+        {galleryImages.map((imageData, idx) => (
           <div key={idx} className="flex justify-center">
             <DesktopImageItem
               imageData={imageData}
@@ -542,70 +537,23 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
     locale,
     streamDocument
   );
+  const { galleryImages, hasRenderableImages } = getPhotoGalleryImageData({
+    resolvedImages,
+    locale,
+    streamDocument,
+    aspectRatio: styles.image?.aspectRatio,
+    width: styles.image?.width,
+    isEditing: Boolean(puck?.isEditing),
+  });
 
-  const allImages = (resolvedImages || [])
-    .map((rawImage, originalIndex) => {
-      let image: ImageType | AssetImageType | undefined;
-      let altText = "";
-
-      if ("assetImage" in rawImage) {
-        if (isLocalizedAssetImage(rawImage.assetImage)) {
-          image = resolveLocalizedAssetImage(rawImage.assetImage, locale);
-          altText = resolveComponentData(
-            image?.alternateText ?? "",
-            locale,
-            streamDocument
-          );
-        } else {
-          image = rawImage.assetImage;
-          altText = resolveComponentData(
-            rawImage.assetImage?.alternateText ?? "",
-            locale,
-            streamDocument
-          );
-        }
-      } else if ("image" in rawImage) {
-        image = rawImage.image;
-        altText = rawImage.image?.alternateText ?? "";
-      } else {
-        image = rawImage;
-        altText = rawImage.alternateText ?? "";
-      }
-
-      const url = image?.url;
-      const isEmpty = !url || (typeof url === "string" && url.trim() === "");
-
-      return {
-        isEmpty,
-        originalIndex,
-        image: isEmpty
-          ? {
-              url: "",
-              alternateText: altText,
-              height: 570,
-              width: 1000,
-            }
-          : {
-              url: url,
-              alternateText: altText,
-              height:
-                "height" in rawImage && rawImage.height ? rawImage.height : 570,
-              width:
-                "width" in rawImage && rawImage.width ? rawImage.width : 1000,
-            },
-        aspectRatio: styles.image?.aspectRatio,
-        width: styles.image?.width || 1000,
-        originalImage: rawImage,
-      };
-    })
-    .filter((i) => puck?.isEditing || !i.isEmpty);
-
-  const hasAnyImages = allImages.length > 0;
+  const hasAnyImages = isMappedEntityFieldSelected(data.images)
+    ? hasRenderableImages
+    : galleryImages.length > 0;
   const imageWidth = styles.image?.width || 1000;
 
   const isEditing = Boolean(puck?.isEditing);
   const sharedRenderProps: GalleryRenderProps = {
-    allImages,
+    galleryImages,
     imageWidth,
     isEditing,
     imagesFieldId: data.images.field,
@@ -646,7 +594,7 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
             className="flex flex-col gap-8"
             naturalSlideWidth={100}
             naturalSlideHeight={100}
-            totalSlides={allImages.length}
+            totalSlides={galleryImages.length}
             visibleSlides={visibleSlides}
             isIntrinsicHeight={true}
           >
@@ -662,9 +610,9 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
           </CarouselProvider>
         )
       ) : puck?.isEditing ? (
-        <div className="h-24"></div>
+        renderMappedEntityFieldEmptyState(true)
       ) : (
-        <></>
+        renderMappedEntityFieldEmptyState(false)
       )}
     </div>
   );
