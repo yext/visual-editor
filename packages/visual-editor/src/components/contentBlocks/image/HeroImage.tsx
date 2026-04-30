@@ -49,7 +49,7 @@ const HeroImageComponent: PuckComponent<HeroImageProps> = (props) => {
           className || "max-w-full rounded-image-borderRadius w-full h-full"
         }
         fullHeight={true}
-        dragRef={puck.dragRef ?? undefined}
+        dragRef={puck?.dragRef ?? undefined}
         hasParentData={false}
       />
     );
@@ -61,7 +61,7 @@ const HeroImageComponent: PuckComponent<HeroImageProps> = (props) => {
       fieldId={data.image.field}
       constantValueEnabled={data.image.constantValueEnabled}
       fullHeight={true}
-      ref={puck.dragRef}
+      ref={puck?.dragRef}
     >
       <Image
         image={resolvedImage}

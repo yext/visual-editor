@@ -238,6 +238,7 @@ export const ImageFieldOverride = ({
                 <Button
                   variant="secondary"
                   onClick={handleSelectImage}
+                  type="button"
                   className="ve-bg-transparent ve-text-primary ve-border-primary ve-border-solid ve-border-2"
                 >
                   {pt("change", "Change")}
@@ -245,6 +246,7 @@ export const ImageFieldOverride = ({
                 <Button
                   variant="destructive"
                   onClick={handleDeleteImage}
+                  type="button"
                   className="ve-text-white"
                 >
                   {pt("delete", "Delete")}
@@ -252,7 +254,11 @@ export const ImageFieldOverride = ({
               </div>
             </>
           ) : (
-            <Button variant="secondary" onClick={handleSelectImage}>
+            <Button
+              variant="secondary"
+              onClick={handleSelectImage}
+              type="button"
+            >
               {pt("chooseImage", "Choose Image")}
             </Button>
           )}
