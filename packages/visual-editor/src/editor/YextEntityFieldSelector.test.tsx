@@ -570,6 +570,51 @@ describe("YextEntityFieldSelector", () => {
     expect(screen.queryByText("Description")).toBeNull();
   });
 
+  it("does not fall back to entity fields when linked descendant schemas are unavailable", () => {
+    renderEntityFieldInput({
+      entityFields: {
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_linkedLocation",
+            displayName: "Linked Location",
+            definition: {
+              name: "c_linkedLocation",
+              isList: true,
+              typeRegistryId: "type.entity_reference",
+              type: {
+                documentType: "DOCUMENT_TYPE_ENTITY",
+              },
+            },
+            children: {
+              fields: [
+                {
+                  name: "youtubeChannelUrl",
+                  displayName: "Youtube Channel URL",
+                  definition: {
+                    name: "youtubeChannelUrl",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+      filter: {
+        types: ["type.string"],
+        descendantsOf: "c_linkedLocation",
+      },
+    });
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(screen.getAllByText("Location Field")).toHaveLength(2);
+    expect(screen.queryByText("Youtube Channel URL")).toBeNull();
+    expect(screen.queryByText("Linked Location")).toBeNull();
+  });
+
   it("stores linked descendant selections as absolute paths while showing relative options", () => {
     const onChange = vi.fn();
 

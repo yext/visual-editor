@@ -5,6 +5,7 @@ import {
 import { StreamFields, YextSchemaField } from "../types/entityFields.ts";
 import {
   buildLinkedEntityStreamFields,
+  isTopLevelLinkedEntityField,
   type LinkedEntitySchemas,
 } from "../utils/linkedEntityFieldUtils.ts";
 import {
@@ -86,6 +87,10 @@ export const getFieldsForSelector = (
     : [];
   const isLinkedEntityDescendantFilter =
     !!filter.descendantsOf && !!linkedEntitySchemas?.[filter.descendantsOf];
+  const isLinkedEntityDescendantWithoutSchema =
+    !!filter.descendantsOf &&
+    isTopLevelLinkedEntityField(filter.descendantsOf, entityFields) &&
+    !linkedEntitySchemas?.[filter.descendantsOf];
 
   if (filter.sourceRootsOnly) {
     const rootEntityFields = getFilteredEntityFields(
@@ -100,6 +105,10 @@ export const getFieldsForSelector = (
         ...baseListRootFields,
       ])
     );
+  }
+
+  if (isLinkedEntityDescendantWithoutSchema) {
+    return [];
   }
 
   let filteredEntityFields = getFilteredEntityFields(entityFields, filter);
