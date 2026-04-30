@@ -158,6 +158,21 @@ const LIST_TYPE_TO_NON_TRANSLATABLE_CONSTANT_CONFIG: Record<
   "type.rich_text_v2": TEXT_LIST_CONSTANT_CONFIG,
 };
 
+const LOCALIZED_CONSTANT_CONFIGS = new Set<ConstantFieldConfig>([
+  TRANSLATABLE_STRING_CONSTANT_CONFIG,
+  TRANSLATABLE_RICH_TEXT_CONSTANT_CONFIG,
+  TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG,
+]);
+
+const supportsLocalizedConstantValue = (
+  constantFieldConfig: ConstantFieldConfig | undefined
+): boolean => {
+  return (
+    constantFieldConfig !== undefined &&
+    LOCALIZED_CONSTANT_CONFIGS.has(constantFieldConfig)
+  );
+};
+
 export const getConstantConfigFromType = (
   type: ConstantValueTypes,
   isList?: boolean,
@@ -231,6 +246,21 @@ export const EntityFieldSelectorFieldOverride = ({
   onChange,
 }: EntityFieldSelectorFieldProps) => {
   const translatedLabel = field.label ? pt(field.label) : "";
+  const allowsListValues = !!field.filter.includeListsOnly;
+  const canUseEmbeddedStringConstantValue =
+    field.filter.types?.includes("type.string") &&
+    !allowsListValues &&
+    !field.disallowTranslation;
+
+  let constantFieldConfig = returnConstantFieldConfig(
+    field.filter.types,
+    allowsListValues,
+    !!field.disallowTranslation
+  );
+
+  if (!constantFieldConfig && canUseEmbeddedStringConstantValue) {
+    constantFieldConfig = getConstantConfigFromType("type.string");
+  }
 
   return (
     <>
@@ -245,10 +275,7 @@ export const EntityFieldSelectorFieldOverride = ({
         }
         disableConstantValue={field.disableConstantValueToggle}
         label={translatedLabel}
-        showLocale={
-          field.filter.types?.includes("type.string") &&
-          !field.disallowTranslation
-        }
+        showLocale={supportsLocalizedConstantValue(constantFieldConfig)}
       />
       {value?.constantValueEnabled && (
         <ConstantValueInput
@@ -349,7 +376,9 @@ export const ConstantValueInput = <T extends Record<string, any>>({
   disallowTranslation,
 }: InputProps<T>) => {
   const isSingleStringField =
-    filter.types?.includes("type.string") && !filter.includeListsOnly;
+    filter.types?.includes("type.string") &&
+    !filter.includeListsOnly &&
+    !disallowTranslation;
 
   let constantFieldConfig = returnConstantFieldConfig(
     filter.types,
