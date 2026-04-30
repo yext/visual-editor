@@ -69,6 +69,18 @@ describe("linkedEntityListWrapper", () => {
         "events"
       )
     ).toBe("itemList");
+
+    expect(
+      getMappedCardSourceMode(
+        {
+          heroSection: {
+            primaryCta: { label: "Learn More" },
+          },
+        },
+        "heroSection",
+        "events"
+      )
+    ).toBe("unknown");
   });
 
   it("returns top-level list roots with nested fields for base entity sources", () => {
@@ -76,17 +88,41 @@ describe("linkedEntityListWrapper", () => {
       getBaseEntityListSourceRootFields([
         {
           name: "c_customEvents",
+          definition: {
+            isList: true,
+            name: "c_customEvents",
+            type: {},
+          },
+          children: {
+            fields: [{ name: "title" }],
+          },
+        },
+        {
+          name: "heroSection",
+          definition: {
+            name: "heroSection",
+            type: {},
+          },
           children: {
             fields: [{ name: "title" }],
           },
         },
         {
           name: "photoGallery",
+          definition: {
+            name: "photoGallery",
+            type: {},
+          },
         },
       ] as any)
     ).toEqual([
       {
         name: "c_customEvents",
+        definition: {
+          isList: true,
+          name: "c_customEvents",
+          type: {},
+        },
         children: {
           fields: [{ name: "title" }],
         },

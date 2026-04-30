@@ -196,4 +196,36 @@ describe("FAQSection resolveData", () => {
       },
     });
   });
+
+  it("does not show faq mappings for single objects that are not faq sections", async () => {
+    const data = {
+      type: "FAQSection",
+      props: JSON.parse(JSON.stringify(FAQSection.defaultProps)),
+    } as ComponentData<FAQSectionProps>;
+
+    data.props.data.constantValueEnabled = false;
+    data.props.data.field = "heroSection";
+
+    const resolvedFields = await FAQSection.resolveFields!(data, {
+      changed: {},
+      fields: {},
+      lastFields: null,
+      lastData: null,
+      metadata: {
+        streamDocument: {
+          heroSection: {
+            primaryCta: {
+              label: "Learn More",
+              link: "https://example.com",
+              linkType: "URL",
+            },
+          },
+        },
+      },
+      parent: null,
+      trigger: "initial",
+    } as any);
+
+    expect(resolvedFields.faqs?.visible).toBe(false);
+  });
 });
