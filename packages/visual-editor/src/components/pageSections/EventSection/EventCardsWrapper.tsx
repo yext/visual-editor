@@ -52,6 +52,7 @@ const createEventCardsMappingFields = (sourceField?: string) =>
       }),
       date: YextField(msg("fields.date", "Date"), {
         type: "entityField",
+        disableConstantValueToggle: true,
         filter: {
           types: ["type.datetime"],
           ...(sourceField ? { descendantsOf: sourceField } : {}),
@@ -73,6 +74,7 @@ const createEventCardsMappingFields = (sourceField?: string) =>
       }),
       image: YextField(msg("fields.image", "Image"), {
         type: "entityField",
+        disableConstantValueToggle: true,
         filter: {
           types: ["type.image"],
           ...(sourceField ? { descendantsOf: sourceField } : {}),
