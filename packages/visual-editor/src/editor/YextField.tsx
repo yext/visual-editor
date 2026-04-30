@@ -7,6 +7,12 @@ import {
   ObjectField,
 } from "@puckeditor/core";
 import {
+  DynamicOption,
+  DynamicOptionsSelector,
+  DynamicOptionValueTypes,
+  DynamicOptionsSelectorType,
+} from "./DynamicOptionsSelector.tsx";
+import {
   RenderYextEntityFieldSelectorProps,
   YextEntityField,
   YextEntityFieldSelector,
@@ -74,6 +80,14 @@ export type YextFieldDefinition<ValueType = any> =
       ? YextObjectField<ValueType>
       : never);
 
+type YextDynamicSelectField<T extends DynamicOptionValueTypes> =
+  YextBaseField & {
+    type: "dynamicSelect";
+    dropdownLabel: string;
+    getOptions: () => DynamicOption<T>[];
+    placeholderOptionLabel?: string;
+  };
+
 // YextEntitySelectorField has same functionality as YextEntityFieldSelector
 type YextEntitySelectorField<
   T extends Record<string, any> = Record<string, any>,
@@ -87,10 +101,12 @@ type YextFieldConfig<Props = any> =
   | YextObjectFieldConfig<Props extends Record<string, any> ? Props : any>
   | YextNumberField
   | YextEntitySelectorField<Props extends Record<string, any> ? Props : any>
+  | YextDynamicSelectField<Props extends DynamicOptionValueTypes ? Props : any>
   | YextPuckFields[Exclude<
       keyof YextPuckFields,
       | "basicSelector"
       | "code"
+      | "image"
       | "optionalNumber"
       | "video"
       | "translatableString"
@@ -106,6 +122,14 @@ export function YextField<T extends Record<string, any>, U = any>(
   config: YextEntitySelectorField<T>
 ): Field<YextEntityField<U>>;
 
+export function YextField<
+  T extends DynamicOptionsSelectorType<U>,
+  U extends DynamicOptionValueTypes,
+>(
+  fieldName: MsgString,
+  config: YextDynamicSelectField<U>
+): Field<T | undefined>;
+
 export function YextField<T, U>(
   fieldName: MsgString,
   config: YextFieldConfig<T>
@@ -117,6 +141,15 @@ export function YextField<T, U>(
       filter: config.filter,
       disableConstantValueToggle: config.disableConstantValueToggle,
       disallowTranslation: config.disallowTranslation,
+    });
+  }
+
+  if (config.type === "dynamicSelect") {
+    return DynamicOptionsSelector({
+      label: fieldName,
+      dropdownLabel: config.dropdownLabel,
+      getOptions: config.getOptions,
+      placeholderOptionLabel: config.placeholderOptionLabel,
     });
   }
 

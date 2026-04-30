@@ -4,10 +4,10 @@ import { useTranslation } from "react-i18next";
 import { useDocument } from "../hooks/useDocument.tsx";
 import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
 import { Button } from "../internal/puck/ui/button.tsx";
+import { DynamicOption } from "../editor/DynamicOptionsSelector.tsx";
 import {
   EmbeddedFieldStringInputFromEntity,
   EmbeddedFieldStringInputFromOptions,
-  type EmbeddedStringOption,
 } from "../editor/EmbeddedFieldStringInput.tsx";
 import { TranslatableString } from "../types/types.ts";
 import { pt, type MsgString } from "../utils/i18n/platform.ts";
@@ -21,7 +21,7 @@ export type TranslatableStringField = BaseField & {
   filter?: RenderEntityFieldFilter<any>;
   showApplyAllOption?: boolean;
   showFieldSelector?: boolean;
-  getOptions?: () => EmbeddedStringOption[];
+  getOptions?: () => DynamicOption<string>[];
 };
 
 type TranslatableStringFieldProps = FieldProps<

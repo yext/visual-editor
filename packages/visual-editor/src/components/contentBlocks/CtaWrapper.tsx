@@ -144,7 +144,7 @@ const ctaWrapperFields: YextFields<CTAWrapperProps> = {
         label: msg("fields.ariaLabel", "Aria Label"),
         filter: { types: ["type.string"] },
       },
-    } as any, // TODO(SUMO-8378): remove `as any` once Puck fixes their objectField typing
+    } as any, // TODO: remove `as any` once Puck fixes their objectField typing
   },
   styles: {
     type: "object",

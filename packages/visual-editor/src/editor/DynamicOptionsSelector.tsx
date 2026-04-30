@@ -1,0 +1,123 @@
+import { UiState, Field } from "@puckeditor/core";
+import { YextAutoField } from "../fields/YextAutoField.tsx";
+import { pt } from "../utils/i18n/platform.ts";
+import { YextArrayField } from "./YextField.tsx";
+import { BasicSelectorField } from "../fields/BasicSelectorField.tsx";
+
+export type DynamicOptionValueTypes = string | number | boolean | object;
+
+type DynamicOptionsSelectorProps<T extends DynamicOptionValueTypes> = {
+  label: string;
+  dropdownLabel: string;
+  getOptions: () => DynamicOption<T>[];
+  placeholderOptionLabel?: string;
+};
+
+interface DynamicOptionSelection<T extends DynamicOptionValueTypes> {
+  value: T | undefined;
+}
+
+export interface DynamicOptionsSelectorType<T extends DynamicOptionValueTypes> {
+  selections: DynamicOptionSelection<T>[];
+}
+
+export interface DynamicOption<T extends DynamicOptionValueTypes> {
+  label: string;
+  value: T | undefined;
+}
+
+const getDefaultSelection = <
+  T extends DynamicOptionValueTypes,
+>(): DynamicOptionSelection<T> => ({
+  value: undefined,
+});
+
+/**
+ * A multi selector component for dynamic options. The options can be loaded from a function that
+ * uses hooks.
+ */
+export const DynamicOptionsSelector = <T extends DynamicOptionValueTypes>(
+  props: DynamicOptionsSelectorProps<T>
+): Field<DynamicOptionsSelectorType<T> | undefined> => {
+  return {
+    type: "custom",
+    render: ({
+      value,
+      onChange,
+      id,
+      readOnly,
+    }: {
+      value: DynamicOptionsSelectorType<T> | undefined;
+      onChange: (
+        value: DynamicOptionsSelectorType<T> | undefined,
+        uiState?: Partial<UiState>
+      ) => void;
+      id?: string;
+      readOnly?: boolean;
+    }) => {
+      const allOptions = props.getOptions();
+      const selectedValues = value?.selections ?? [];
+
+      return (
+        <div className="ve-pt-3">
+          <div className="ve-mb-2 ve-text-sm ve-font-medium ve-leading-none">
+            {pt(props.label)}
+          </div>
+          <YextAutoField
+            id={id ? `${id}_selections` : undefined}
+            readOnly={readOnly}
+            field={DynamicOptionsArrayField(
+              allOptions,
+              props.dropdownLabel,
+              props.placeholderOptionLabel
+            )}
+            value={selectedValues}
+            onChange={(newValue, uiState) =>
+              onChange(
+                newValue.length > 0 ? { selections: newValue } : undefined,
+                uiState
+              )
+            }
+          />
+        </div>
+      );
+    },
+  };
+};
+
+const DynamicOptionsArrayField = <T extends DynamicOptionValueTypes>(
+  options: DynamicOption<T>[],
+  dropdownLabel: string,
+  placeholderOptionLabel?: string
+): YextArrayField<DynamicOptionSelection<T>[]> => {
+  const dropdownOptions = options.map((opt) => ({
+    label: opt.label,
+    value: opt.value,
+  }));
+  if (placeholderOptionLabel) {
+    dropdownOptions.unshift({
+      label: placeholderOptionLabel,
+      value: undefined,
+    });
+  }
+  const dropdownField: BasicSelectorField = {
+    label: dropdownLabel,
+    type: "basicSelector",
+    options: dropdownOptions,
+  };
+
+  return {
+    type: "array",
+    arrayFields: {
+      value: dropdownField,
+    },
+    defaultItemProps: getDefaultSelection<T>(),
+    getItemSummary: (item, i) => {
+      const opt = options.find((opt) => opt.value === item.value);
+      if (opt) {
+        return pt(opt.label);
+      }
+      return pt(dropdownLabel) + " " + ((i ?? 0) + 1);
+    },
+  };
+};
