@@ -4,6 +4,7 @@ import { addIdToSchema } from "../components/migrations/0023_add_id_to_schema.ts
 import { updateSchemaIdAnchorFormat } from "../components/migrations/0069_update_schema_id_anchor_format.ts";
 import { themeColorPropertyKeyMigration } from "../components/migrations/0071_theme_color_property_keys.ts";
 import { mainContentWrapperMigration } from "../components/migrations/0073_main_content_wrapper.ts";
+import { normalizeFooterLogoImageMigration } from "../components/migrations/0075_normalize_footer_logo_image.ts";
 
 describe("migrate", () => {
   it("successfully applies a migration", async () => {
@@ -475,6 +476,189 @@ describe("migrate", () => {
     expect((migratedData.root.props as Record<string, any>)?.schemaMarkup).toBe(
       schemaMarkup
     );
+  });
+
+  it("normalizes malformed ExpandedFooter logo slot localized image data", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+          },
+        },
+        content: [
+          {
+            type: "ExpandedFooter",
+            props: {
+              id: "ExpandedFooter-test",
+              slots: {
+                LogoSlot: [
+                  {
+                    type: "FooterLogoSlot",
+                    props: {
+                      id: "FooterLogoSlot-test",
+                      data: {
+                        image: {
+                          en: {
+                            url: "https://example.com/stale.png",
+                            height: 100,
+                            width: 100,
+                          },
+                          hasLocalizedValue: "true",
+                          constantValueEnabled: true,
+                          constantValue: {
+                            en: {
+                              url: "https://example.com/current.png",
+                              height: 200,
+                              width: 200,
+                            },
+                            hasLocalizedValue: "true",
+                          },
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [normalizeFooterLogoImageMigration],
+      {
+        components: {},
+      },
+      {}
+    );
+
+    expect(migratedData).toEqual({
+      root: {
+        props: {
+          version: 1,
+        },
+      },
+      content: [
+        {
+          type: "ExpandedFooter",
+          props: {
+            id: "ExpandedFooter-test",
+            slots: {
+              LogoSlot: [
+                {
+                  type: "FooterLogoSlot",
+                  props: {
+                    id: "FooterLogoSlot-test",
+                    data: {
+                      image: {
+                        field: "",
+                        constantValueEnabled: true,
+                        constantValue: {
+                          en: {
+                            url: "https://example.com/current.png",
+                            height: 200,
+                            width: 200,
+                          },
+                          hasLocalizedValue: "true",
+                        },
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        },
+      ],
+      zones: {},
+    });
+  });
+
+  it("wraps legacy ExpandedFooter logo slot localized image data as a constant value", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+          },
+        },
+        content: [
+          {
+            type: "ExpandedFooter",
+            props: {
+              id: "ExpandedFooter-test",
+              slots: {
+                LogoSlot: [
+                  {
+                    type: "FooterLogoSlot",
+                    props: {
+                      id: "FooterLogoSlot-test",
+                      data: {
+                        image: {
+                          en: {
+                            url: "https://example.com/legacy.png",
+                            height: 100,
+                            width: 100,
+                          },
+                          hasLocalizedValue: "true",
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [normalizeFooterLogoImageMigration],
+      {
+        components: {},
+      },
+      {}
+    );
+
+    expect(migratedData).toEqual({
+      root: {
+        props: {
+          version: 1,
+        },
+      },
+      content: [
+        {
+          type: "ExpandedFooter",
+          props: {
+            id: "ExpandedFooter-test",
+            slots: {
+              LogoSlot: [
+                {
+                  type: "FooterLogoSlot",
+                  props: {
+                    id: "FooterLogoSlot-test",
+                    data: {
+                      image: {
+                        field: "",
+                        constantValue: {
+                          en: {
+                            url: "https://example.com/legacy.png",
+                            height: 100,
+                            width: 100,
+                          },
+                          hasLocalizedValue: "true",
+                        },
+                        constantValueEnabled: true,
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        },
+      ],
+      zones: {},
+    });
   });
 });
 
