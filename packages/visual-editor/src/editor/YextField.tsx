@@ -110,7 +110,11 @@ type YextFieldConfig<Props = any> =
   | YextDynamicSelectField<Props extends DynamicOptionValueTypes ? Props : any>
   | YextPuckFields[Exclude<
       keyof YextPuckFields,
-      "basicSelector" | "optionalNumber" | "video" | "translatableString"
+      | "basicSelector"
+      | "code"
+      | "optionalNumber"
+      | "video"
+      | "translatableString"
     >];
 
 export function YextField<T = any>(
@@ -143,15 +147,6 @@ export function YextField<T, U>(
       disableConstantValueToggle: config.disableConstantValueToggle,
       disallowTranslation: config.disallowTranslation,
     });
-  }
-
-  if (config.type === "code") {
-    return {
-      type: "code",
-      label: fieldName,
-      visible: config.visible,
-      codeLanguage: config.codeLanguage,
-    };
   }
 
   if (config.type === "image") {
