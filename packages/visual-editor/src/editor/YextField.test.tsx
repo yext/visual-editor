@@ -4,7 +4,6 @@ import { YextAutoField } from "../fields/YextAutoField.tsx";
 import { msg } from "../utils/i18n/platform.ts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { YextField } from "./YextField.tsx";
-
 const { dynamicOptionsSelectorMock, yextEntityFieldSelectorMock } = vi.hoisted(
   () => ({
     dynamicOptionsSelectorMock: vi.fn(),

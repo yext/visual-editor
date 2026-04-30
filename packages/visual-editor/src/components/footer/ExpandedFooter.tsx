@@ -8,6 +8,7 @@ import {
 } from "../../utils/themeConfigOptions.ts";
 import { msg } from "../../utils/i18n/platform.ts";
 import { YextField } from "../../editor/YextField.tsx";
+import { getMaxWidthOptions } from "../../editor/MaxWidthSelector.tsx";
 import { Background } from "../atoms/background.tsx";
 import { PageSection, PageSectionProps } from "../atoms/pageSection.tsx";
 import { themeManagerCn } from "../../utils/cn.ts";
@@ -237,9 +238,20 @@ const expandedFooterSectionFields: YextFields<ExpandedFooterProps> = {
           // Logo and utility image styles are controlled within their respective slots
         },
       }),
-      maxWidth: YextField(msg("fields.maxWidth", "Max Width"), {
-        type: "maxWidth",
-      }),
+      maxWidth: {
+        type: "basicSelector",
+        label: msg("fields.maxWidth", "Max Width"),
+        disableSearch: true,
+        optionGroups: [
+          {
+            description: msg(
+              "maxWidthTip",
+              "For optimal content alignment, we recommend setting the header and footer width to match or exceed the page content grid."
+            ),
+            options: getMaxWidthOptions(),
+          },
+        ],
+      },
     },
   }),
   slots: {
