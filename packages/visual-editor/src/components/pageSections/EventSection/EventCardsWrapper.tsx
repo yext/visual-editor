@@ -86,7 +86,14 @@ const createEventCardsWrapperFields = (sourceField?: string) => ({
     msg("components.events", "Events"),
     ComponentFields.EventSection.type,
     ["linkedEntityRoot", "baseListRoot"],
-    true
+    true,
+    [
+      ["type.string"],
+      ["type.datetime"],
+      ["type.string", "type.rich_text_v2"],
+      ["type.cta"],
+      ["type.image"],
+    ]
   ),
   cards: createEventCardsMappingFields(sourceField),
   styles: YextField(msg("fields.styles", "Styles"), {

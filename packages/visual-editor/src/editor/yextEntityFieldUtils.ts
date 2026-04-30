@@ -51,36 +51,6 @@ const sortFields = (fields: YextSchemaField[]): YextSchemaField[] => {
   });
 };
 
-const trimDescendantRootDisplayName = (
-  fields: YextSchemaField[],
-  rootDisplayName: string | undefined
-): YextSchemaField[] => {
-  if (!rootDisplayName) {
-    return fields;
-  }
-
-  const rootPrefix = `${rootDisplayName} > `;
-  return fields.map((field) => {
-    const displayName = field.displayName ?? field.name;
-    return displayName.startsWith(rootPrefix)
-      ? { ...field, displayName: displayName.slice(rootPrefix.length) }
-      : field;
-  });
-};
-
-const getRootDisplayName = (
-  entityFields: StreamFields | null,
-  rootFieldName: string,
-  linkedEntitySchemas?: LinkedEntitySchemas
-): string | undefined => {
-  return (
-    linkedEntitySchemas?.[rootFieldName]?.displayName ??
-    entityFields?.displayNames?.[rootFieldName] ??
-    entityFields?.fields.find((field) => field.name === rootFieldName)
-      ?.displayName
-  );
-};
-
 export const getFieldsForSelector = (
   entityFields: StreamFields | null,
   filter: LinkedEntitySourceFieldFilter<any>,
@@ -88,13 +58,27 @@ export const getFieldsForSelector = (
 ): YextSchemaField[] => {
   const linkedEntityStreamFields =
     buildLinkedEntityStreamFields(linkedEntitySchemas);
+  const hasRequiredDescendants = (field: YextSchemaField): boolean =>
+    !filter.requiredDescendantTypes?.length ||
+    filter.requiredDescendantTypes.every(
+      (requiredTypes) =>
+        getFilteredEntityFields(
+          { fields: [field], displayNames: entityFields?.displayNames },
+          {
+            descendantsOf: field.name,
+            types: requiredTypes,
+          }
+        ).length > 0
+    );
   const linkedEntityRootFields = filter.sourceRootKinds?.includes(
     "linkedEntityRoot"
   )
     ? (linkedEntityStreamFields?.fields ?? [])
     : [];
   const baseListRootFields = filter.sourceRootKinds?.includes("baseListRoot")
-    ? getBaseEntityListSourceRootFields(entityFields)
+    ? getBaseEntityListSourceRootFields(entityFields).filter(
+        hasRequiredDescendants
+      )
     : [];
   const isLinkedEntityDescendantFilter =
     !!filter.descendantsOf && !!linkedEntitySchemas?.[filter.descendantsOf];
@@ -103,11 +87,10 @@ export const getFieldsForSelector = (
     isTopLevelLinkedEntityField(filter.descendantsOf, entityFields) &&
     !linkedEntitySchemas?.[filter.descendantsOf];
   const descendantRootDisplayName = filter.descendantsOf
-    ? getRootDisplayName(
-        entityFields,
-        filter.descendantsOf,
-        linkedEntitySchemas
-      )
+    ? (linkedEntitySchemas?.[filter.descendantsOf]?.displayName ??
+      entityFields?.displayNames?.[filter.descendantsOf] ??
+      entityFields?.fields.find((field) => field.name === filter.descendantsOf)
+        ?.displayName)
     : undefined;
 
   if (filter.sourceRootsOnly) {
@@ -137,11 +120,14 @@ export const getFieldsForSelector = (
     });
   }
 
-  if (filter.descendantsOf) {
-    filteredEntityFields = trimDescendantRootDisplayName(
-      filteredEntityFields,
-      descendantRootDisplayName
-    );
+  if (descendantRootDisplayName) {
+    const rootPrefix = `${descendantRootDisplayName} > `;
+    filteredEntityFields = filteredEntityFields.map((field) => {
+      const displayName = field.displayName ?? field.name;
+      return displayName.startsWith(rootPrefix)
+        ? { ...field, displayName: displayName.slice(rootPrefix.length) }
+        : field;
+    });
   }
 
   // If there are no direct children, return the parent field if it is a list

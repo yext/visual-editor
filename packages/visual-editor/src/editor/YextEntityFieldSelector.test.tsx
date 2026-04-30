@@ -471,6 +471,182 @@ describe("YextEntityFieldSelector", () => {
     expect(screen.queryByText("City Lat/Long")).toBeNull();
   });
 
+  it("filters base list roots that cannot satisfy all event card mapping types", () => {
+    renderEntityFieldInput({
+      entityFields: {
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_partialEvents",
+            displayName: "Partial Events",
+            definition: {
+              name: "c_partialEvents",
+              isList: true,
+              typeName: "type.list",
+              type: {},
+            },
+            children: {
+              fields: [
+                {
+                  name: "title",
+                  displayName: "Title",
+                  definition: {
+                    name: "title",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+          {
+            name: "c_fullEvents",
+            displayName: "Full Events",
+            definition: {
+              name: "c_fullEvents",
+              isList: true,
+              typeName: "type.list",
+              type: {},
+            },
+            children: {
+              fields: [
+                {
+                  name: "title",
+                  displayName: "Title",
+                  definition: {
+                    name: "title",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+                {
+                  name: "startDate",
+                  displayName: "Start Date",
+                  definition: {
+                    name: "startDate",
+                    typeName: "type.datetime",
+                    type: {},
+                  },
+                },
+                {
+                  name: "description",
+                  displayName: "Description",
+                  definition: {
+                    name: "description",
+                    typeName: "type.rich_text_v2",
+                    type: {},
+                  },
+                },
+                {
+                  name: "primaryCta",
+                  displayName: "Primary CTA",
+                  definition: {
+                    name: "primaryCta",
+                    typeName: "type.cta",
+                    type: {},
+                  },
+                },
+                {
+                  name: "heroImage",
+                  displayName: "Hero Image",
+                  definition: {
+                    name: "heroImage",
+                    typeName: "type.image",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+      filter: {
+        types: ["type.events_section"],
+        requiredDescendantTypes: [
+          ["type.string"],
+          ["type.datetime"],
+          ["type.string", "type.rich_text_v2"],
+          ["type.cta"],
+          ["type.image"],
+        ],
+        sourceRootKinds: ["baseListRoot"],
+        sourceRootsOnly: true,
+      },
+    });
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(screen.getByText("Full Events")).toBeDefined();
+    expect(screen.queryByText("Partial Events")).toBeNull();
+  });
+
+  it("filters faq list roots that have no mappable question or answer fields", () => {
+    renderEntityFieldInput({
+      entityFields: {
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "ref_listings",
+            displayName: "Referenced Listings",
+            definition: {
+              name: "ref_listings",
+              isList: true,
+              typeName: "type.list",
+              type: {},
+            },
+            children: {
+              fields: [
+                {
+                  name: "photo",
+                  displayName: "Photo",
+                  definition: {
+                    name: "photo",
+                    typeName: "type.image",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+          {
+            name: "c_faqItems",
+            displayName: "FAQ Items",
+            definition: {
+              name: "c_faqItems",
+              isList: true,
+              typeName: "type.list",
+              type: {},
+            },
+            children: {
+              fields: [
+                {
+                  name: "question",
+                  displayName: "Question",
+                  definition: {
+                    name: "question",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+      filter: {
+        types: ["type.faq_section"],
+        requiredDescendantTypes: [["type.string", "type.rich_text_v2"]],
+        sourceRootKinds: ["baseListRoot"],
+        sourceRootsOnly: true,
+      },
+    });
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(screen.getByText("FAQ Items")).toBeDefined();
+    expect(screen.queryByText("Referenced Listings")).toBeNull();
+  });
+
   it("limits event card source selectors to valid top-level roots", () => {
     renderEntityFieldInput({
       linkedEntitySchemas: linkedLocationSchemas,

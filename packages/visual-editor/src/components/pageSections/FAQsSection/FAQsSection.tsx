@@ -107,6 +107,7 @@ const createFAQsSectionFields = (
     type: "entityField",
     filter: {
       types: [ComponentFields.FAQSection.type],
+      requiredDescendantTypes: [["type.string", "type.rich_text_v2"]],
       sourceRootKinds: ["linkedEntityRoot", "baseListRoot"],
       sourceRootsOnly: true,
     },

@@ -1,11 +1,16 @@
-import { type RenderEntityFieldFilter } from "../../internal/utils/getFilteredEntityFields.ts";
+import {
+  type EntityFieldTypes,
+  type RenderEntityFieldFilter,
+} from "../../internal/utils/getFilteredEntityFields.ts";
 import {
   type StreamFields,
   type YextSchemaField,
 } from "../../types/entityFields.ts";
 import { type StreamDocument } from "../types/StreamDocument.ts";
-import { resolveField } from "../resolveYextEntityField.ts";
-import { resolveYextEntityField } from "../resolveYextEntityField.ts";
+import {
+  resolveField,
+  resolveYextEntityField,
+} from "../resolveYextEntityField.ts";
 import { type YextEntityField } from "../../editor/yextEntityFieldUtils.ts";
 import { getTopLevelLinkedEntitySourceFields } from "../linkedEntityFieldUtils.ts";
 
@@ -20,13 +25,12 @@ export type SourceRootKind = "linkedEntityRoot" | "baseListRoot";
 export const getBaseEntityListSourceRootFields = (
   entityFields: StreamFields | YextSchemaField[] | null
 ): YextSchemaField[] => {
-  const fields = Array.isArray(entityFields)
-    ? entityFields
-    : (entityFields?.fields ?? []);
+  const isFieldList = Array.isArray(entityFields);
+  const fields = isFieldList ? entityFields : (entityFields?.fields ?? []);
   const linkedEntityRootNames = new Set(
-    getTopLevelLinkedEntitySourceFields(
-      Array.isArray(entityFields) ? null : entityFields
-    ).map((field) => field.name)
+    getTopLevelLinkedEntitySourceFields(isFieldList ? null : entityFields).map(
+      (field) => field.name
+    )
   );
 
   return fields.filter(
@@ -129,6 +133,7 @@ export const resolveLinkedEntityMappedData = <T>(
 
 export type LinkedEntitySourceFieldFilter<T extends Record<string, any>> =
   RenderEntityFieldFilter<T> & {
+    requiredDescendantTypes?: EntityFieldTypes[][];
     sourceRootKinds?: SourceRootKind[];
     sourceRootsOnly?: boolean;
   };

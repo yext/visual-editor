@@ -23,12 +23,14 @@ export const cardWrapperFields = <T>(
   label: MsgString,
   entityFieldType: EntityFieldTypes,
   sourceRootKinds: SourceRootKind[] = [],
-  sourceRootsOnly = false
+  sourceRootsOnly = false,
+  requiredDescendantTypes?: EntityFieldTypes[][]
 ): Fields<CardWrapperType<T>> => ({
   data: YextField(label, {
     type: "entityField",
     filter: {
       types: [entityFieldType],
+      requiredDescendantTypes,
       sourceRootKinds,
       sourceRootsOnly,
     },
