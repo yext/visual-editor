@@ -215,11 +215,11 @@ The `image` field type opens the asset selector and stores the selected image as
 
 ### Props
 
-| Name                 | Type                                            | Description                                              |
-| -------------------- | ----------------------------------------------- | -------------------------------------------------------- |
-| `type`               | `"image"`                                       | Registers the field as the Visual Editor image selector. |
-| `label?`             | `string \| MsgString`                           | The field label shown in the editor.                     |
-| `getAltTextOptions?` | `(templateMetadata) => DynamicOption<string>[]` | Optional locator-specific alt-text source options.       |
+| Name                 | Type                                           | Description                                              |
+| -------------------- | ---------------------------------------------- | -------------------------------------------------------- |
+| `type`               | `"image"`                                      | Registers the field as the Visual Editor image selector. |
+| `label?`             | `string \| MsgString`                          | The field label shown in the editor.                     |
+| `getAltTextOptions?` | `(templateMetadata) => EmbeddedStringOption[]` | Optional locator-specific alt-text source options.       |
 
 ### Usage
 
@@ -504,4 +504,4 @@ title: {
 - `filter?`: `RenderEntityFieldFilter` — optional filter for entity fields that can be embedded
 - `showApplyAllOption?`: `boolean` — enables the "Apply to All Locales" button
 - `showFieldSelector?`: `boolean` — controls whether the entity field embed button is shown
-- `getOptions?`: `() => DynamicOption<string>[]` — optional options source for the embed selector
+- `getOptions?`: `() => EmbeddedStringOption[]` — optional options source for the embed selector

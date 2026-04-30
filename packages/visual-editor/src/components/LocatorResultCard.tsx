@@ -33,7 +33,7 @@ import {
   type ImageField,
 } from "../fields/ImageField.tsx";
 import { ConstantValueModeToggler } from "../editor/YextEntityFieldSelector.tsx";
-import { DynamicOption } from "../editor/DynamicOptionsSelector.tsx";
+import { type EmbeddedStringOption } from "../editor/EmbeddedFieldStringInput.tsx";
 import { TranslatableString } from "../types/types.ts";
 import { TranslatableAssetImage } from "../types/images.ts";
 import {
@@ -340,7 +340,7 @@ const LOCATOR_IMAGE_CONSTANT_CONFIG: ImageField = {
 
 const getDisplayFieldOptions = (
   fieldTypeId: string | string[]
-): DynamicOption<string>[] => {
+): EmbeddedStringOption[] => {
   // TODO: This breaks the rule of hooks, refactor after YextField is converted to a fieldType
   const templateMetadata = useTemplateMetadata();
   if (!templateMetadata?.locatorDisplayFields) {

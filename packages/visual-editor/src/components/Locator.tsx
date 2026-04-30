@@ -42,9 +42,9 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import {
-  DynamicOption,
-  DynamicOptionsSelectorType,
-} from "../editor/DynamicOptionsSelector.tsx";
+  type MultiSelectorOption,
+  type MultiSelectorValue,
+} from "../fields/MultiSelectorField.tsx";
 import {
   YextField,
   type YextCustomFieldRenderProps,
@@ -278,8 +278,8 @@ const ResultCardPropsField = ({
 
 function getFacetFieldOptions(
   entityTypes: LocatorEntityType[]
-): DynamicOption<string>[] {
-  const facetFields: DynamicOption<string>[] = [];
+): MultiSelectorOption<string>[] {
+  const facetFields: MultiSelectorOption<string>[] = [];
   const addedValues: Set<string> = new Set<string>();
   entityTypes.forEach((entityType) =>
     getFacetFieldOptionsForEntityType(entityType).forEach((option) => {
@@ -294,8 +294,8 @@ function getFacetFieldOptions(
 
 function getFacetFieldOptionsForEntityType(
   entityType: LocatorEntityType
-): DynamicOption<string>[] {
-  let filterOptions: DynamicOption<string>[] = [
+): MultiSelectorOption<string>[] {
+  let filterOptions: MultiSelectorOption<string>[] = [
     {
       label: msg("fields.options.facets.city", "City"),
       value: "address.city",
@@ -609,7 +609,7 @@ export interface LocatorProps {
     /** Accent color for filter button and icons. */
     accentColor?: ThemeColor;
     /** Which fields are facetable in the search experience */
-    facetFields?: DynamicOptionsSelectorType<string>;
+    facetFields?: MultiSelectorValue<string>;
   };
 
   /**
@@ -831,23 +831,21 @@ const locatorFields: YextFields<LocatorProps> = {
         label: msg("fields.accentColor", "Accent Color"),
         options: "SITE_COLOR",
       },
-      facetFields: YextField<DynamicOptionsSelectorType<string>, string>(
-        msg("fields.dynamicFilters", "Dynamic Filters"),
-        {
-          type: "dynamicSelect",
-          dropdownLabel: msg("fields.field", "Field"),
-          getOptions: () => {
-            const entityTypeSourceMap = getLocatorEntityTypeSourceMap();
-            const entityTypes =
-              Object.keys(entityTypeSourceMap).filter(isLocatorEntityType);
-            return getFacetFieldOptions(entityTypes);
-          },
-          placeholderOptionLabel: msg(
-            "fields.options.selectAField",
-            "Select a field"
-          ),
-        }
-      ),
+      facetFields: {
+        type: "multiSelector",
+        label: msg("fields.dynamicFilters", "Dynamic Filters"),
+        dropdownLabel: msg("fields.field", "Field"),
+        options: () => {
+          const entityTypeSourceMap = getLocatorEntityTypeSourceMap();
+          const entityTypes =
+            Object.keys(entityTypeSourceMap).filter(isLocatorEntityType);
+          return getFacetFieldOptions(entityTypes);
+        },
+        placeholderOptionLabel: msg(
+          "fields.options.selectAField",
+          "Select a field"
+        ),
+      } as any, // TODO(SUMO-8378): remove 'as any' when puck fixes objectFields typing
     },
   },
   mapStartingLocation: YextField(
