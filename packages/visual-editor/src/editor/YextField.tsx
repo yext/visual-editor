@@ -106,6 +106,7 @@ type YextFieldConfig<Props = any> =
       keyof YextPuckFields,
       | "basicSelector"
       | "code"
+      | "image"
       | "optionalNumber"
       | "video"
       | "translatableString"
