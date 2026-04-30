@@ -104,7 +104,11 @@ type YextFieldConfig<Props = any> =
   | YextDynamicSelectField<Props extends DynamicOptionValueTypes ? Props : any>
   | YextPuckFields[Exclude<
       keyof YextPuckFields,
-      "basicSelector" | "image" | "optionalNumber" | "video"
+      | "basicSelector"
+      | "code"
+      | "optionalNumber"
+      | "video"
+      | "translatableString"
     >];
 
 export function YextField<T = any>(

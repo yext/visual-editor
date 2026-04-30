@@ -134,39 +134,6 @@ describe("YextField", () => {
     });
   });
 
-  it("passes code configs through with the provided label", () => {
-    const fieldName = msg("fields.code", "Code");
-
-    const field = YextField(fieldName, {
-      type: "code",
-      language: "html",
-    } as any);
-
-    expect(field).toEqual({
-      label: fieldName,
-      type: "code",
-      language: "html",
-    });
-  });
-
-  it("passes translatableString configs through with the provided label", () => {
-    const fieldName = msg("fields.text", "Text");
-    const filter = { types: ["type.string"] };
-
-    const field = YextField(fieldName, {
-      type: "translatableString",
-      filter,
-      showApplyAllOption: true,
-    } as any);
-
-    expect(field).toEqual({
-      label: fieldName,
-      type: "translatableString",
-      filter,
-      showApplyAllOption: true,
-    });
-  });
-
   it("delegates dynamicSelect configs to DynamicOptionsSelector", () => {
     const returnedField = createCustomField();
     const fieldName = msg("fields.items", "Items");
