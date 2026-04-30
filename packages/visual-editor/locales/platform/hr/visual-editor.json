@@ -306,6 +306,7 @@
         "primary": "Čvrsto",
         "secondary": "Obris"
       },
+      "customImage": "Prilagođena slika",
       "dark": "Tamna",
       "default": "Zadano",
       "distanceFromSearch": "Udaljenost od pretraživanja",

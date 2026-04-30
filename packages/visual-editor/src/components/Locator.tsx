@@ -582,7 +582,10 @@ export interface LocatorProps {
       iconName?: string;
       /** Image rendered within the pin when type is 'customImage'. */
       image?: TranslatableAssetImage;
-      /** Width of the custom image rendered within the pin. */
+      /**
+       * Width of the custom image rendered within the pin.
+       * @defaultValue 14
+       * */
       width?: number;
       /** Aspect ratio of the custom image rendered within the pin. */
       aspectRatio?: number;
