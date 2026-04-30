@@ -23,6 +23,15 @@ export {
 } from "./FontSizeSelectorField.tsx";
 
 export {
+  MultiSelectorFieldOverride,
+  type MultiSelectorOption,
+  type MultiSelectorField,
+  type MultiSelectorOptions,
+  type MultiSelectorValue,
+  type MultiSelectorOptionValue,
+} from "./MultiSelectorField.tsx";
+
+export {
   OptionalNumberFieldOverride,
   type OptionalNumberField,
 } from "./OptionalNumberField.tsx";

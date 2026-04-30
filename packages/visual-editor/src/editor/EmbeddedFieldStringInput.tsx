@@ -25,6 +25,11 @@ import { useEntityFields } from "../hooks/useEntityFields.tsx";
 import { useLinkedEntitySchemas } from "../hooks/useLinkedEntitySchemas.tsx";
 import { useDocument } from "../hooks/useDocument.tsx";
 
+export type EmbeddedStringOption = {
+  label: string;
+  value: string;
+};
+
 /**
  * A debounced string input that allows embedding entity fields via a popover selector.
  */
@@ -88,7 +93,7 @@ export const EmbeddedFieldStringInputFromOptions = ({
 }: {
   value: string;
   onChange: (value: string) => void;
-  options: { label: string; value: string }[];
+  options: EmbeddedStringOption[];
   showFieldSelector: boolean;
   useOptionValueSublabel?: boolean;
 }) => {
