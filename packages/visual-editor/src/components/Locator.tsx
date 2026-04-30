@@ -122,6 +122,20 @@ const DEFAULT_LOCATION_STYLE = {
 const DEFAULT_PIN_ICON_WIDTH = 14;
 const MAX_PIN_ICON_WIDTH = 27;
 const PIN_ICON_MAX_FILE_SIZE_BYTES = 128 * 1024;
+
+type LocationStyleConfig = Record<
+  string,
+  {
+    color?: ThemeColor;
+    icon?: string;
+    customImage?: {
+      url: string;
+      width?: number;
+      aspectRatio?: number;
+    };
+  }
+>;
+
 const LOCATOR_PIN_ICON_FIELD: ImageField = {
   type: "image",
   label: msg("fields.icon", "Icon"),
@@ -1428,18 +1442,7 @@ const LocatorInternal = ({
     React.useState<boolean>(false);
 
   const locationStylesConfig = React.useMemo(() => {
-    const config: Record<
-      string,
-      {
-        color?: ThemeColor;
-        icon?: string;
-        customImage?: {
-          url: string;
-          width?: number;
-          aspectRatio?: number;
-        };
-      }
-    > = {};
+    const config: LocationStyleConfig = {};
     (locationStyles ?? []).forEach((locationStyle) => {
       const entityType = locationStyle.entityType;
       if (!entityType) return;
@@ -2040,18 +2043,7 @@ interface MapProps {
   onDragHandler?: OnDragHandler;
   scrollToResult?: (result: Result<Location> | undefined) => void;
   markerOptionsOverride?: (selected: boolean) => MapMarkerOptions;
-  locationStyleConfig?: Record<
-    string,
-    {
-      color?: ThemeColor;
-      icon?: string;
-      customImage?: {
-        url: string;
-        width?: number;
-        aspectRatio?: number;
-      };
-    }
-  >;
+  locationStyleConfig?: LocationStyleConfig;
 }
 
 const Map: React.FC<MapProps> = ({
@@ -2135,18 +2127,7 @@ const Map: React.FC<MapProps> = ({
 };
 
 type LocatorMapPinProps<T> = PinComponentProps<T> & {
-  locationStyleConfig?: Record<
-    string,
-    {
-      color?: ThemeColor;
-      icon?: string;
-      customImage?: {
-        url: string;
-        width?: number;
-        aspectRatio?: number;
-      };
-    }
-  >;
+  locationStyleConfig?: LocationStyleConfig;
 };
 
 const LocatorMapPin = <T,>(props: LocatorMapPinProps<T>) => {
