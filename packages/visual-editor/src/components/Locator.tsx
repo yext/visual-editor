@@ -758,7 +758,7 @@ const locatorFields: YextFields<LocatorProps> = {
                       <YextAutoField
                         field={{
                           type: "number",
-                          min: 0,
+                          min: 1,
                           max: MAX_PIN_ICON_WIDTH,
                         }}
                         value={value?.width ?? DEFAULT_PIN_ICON_WIDTH}
