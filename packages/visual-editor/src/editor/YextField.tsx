@@ -12,8 +12,6 @@ import {
   DynamicOptionValueTypes,
   DynamicOptionsSelectorType,
 } from "./DynamicOptionsSelector.tsx";
-import { getMaxWidthOptions } from "./MaxWidthSelector.tsx";
-import { msg } from "../utils/i18n/platform.ts";
 import {
   RenderYextEntityFieldSelectorProps,
   YextEntityField,
@@ -82,10 +80,6 @@ export type YextFieldDefinition<ValueType = any> =
       ? YextObjectField<ValueType>
       : never);
 
-type YextMaxWidthField = YextBaseField & {
-  type: "maxWidth";
-};
-
 type YextDynamicSelectField<T extends DynamicOptionValueTypes> =
   YextBaseField & {
     type: "dynamicSelect";
@@ -107,7 +101,6 @@ type YextFieldConfig<Props = any> =
   | YextObjectFieldConfig<Props extends Record<string, any> ? Props : any>
   | YextNumberField
   | YextEntitySelectorField<Props extends Record<string, any> ? Props : any>
-  | YextMaxWidthField
   | YextDynamicSelectField<Props extends DynamicOptionValueTypes ? Props : any>
   | YextPuckFields[Exclude<
       keyof YextPuckFields,
@@ -144,24 +137,6 @@ export function YextField<T, U>(
       disableConstantValueToggle: config.disableConstantValueToggle,
       disallowTranslation: config.disallowTranslation,
     });
-  }
-
-  if (config.type === "maxWidth") {
-    const maxWidthOptions = getMaxWidthOptions();
-    return {
-      type: "basicSelector",
-      label: fieldName,
-      disableSearch: true,
-      optionGroups: [
-        {
-          description: msg(
-            "maxWidthTip",
-            "For optimal content alignment, we recommend setting the header and footer width to match or exceed the page content grid."
-          ),
-          options: maxWidthOptions,
-        },
-      ],
-    };
   }
 
   if (config.type === "dynamicSelect") {
