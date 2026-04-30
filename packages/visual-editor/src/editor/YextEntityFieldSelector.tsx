@@ -456,6 +456,16 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       },
       streamDocument
     );
+    const descendantRootDisplayName = descendantRoot
+      ? (entityFields?.displayNames?.[descendantRoot] ??
+        entityFields?.fields.find((field) => field.name === descendantRoot)
+          ?.displayName)
+      : undefined;
+    const currentFieldPath = value?.field as string | undefined;
+    const currentOptionValue =
+      descendantRoot && currentFieldPath?.startsWith(`${descendantRoot}.`)
+        ? currentFieldPath.slice(descendantRoot.length + 1)
+        : currentFieldPath;
     const fieldOptions = filteredEntityFields.map((field) => ({
       label: field.displayName ?? field.name,
       value:
@@ -464,6 +474,24 @@ export const EntityFieldInput = <T extends Record<string, any>>({
           : field.name,
       fieldPath: field.name,
     }));
+    if (
+      currentFieldPath &&
+      currentOptionValue &&
+      !fieldOptions.some((option) => option.value === currentOptionValue)
+    ) {
+      const savedFieldDisplayName =
+        entityFields?.displayNames?.[currentFieldPath] ?? currentOptionValue;
+
+      fieldOptions.push({
+        label:
+          descendantRootDisplayName &&
+          savedFieldDisplayName.startsWith(`${descendantRootDisplayName} > `)
+            ? savedFieldDisplayName.slice(descendantRootDisplayName.length + 3)
+            : savedFieldDisplayName,
+        value: currentOptionValue,
+        fieldPath: currentFieldPath,
+      });
+    }
 
     const optionGroups = buildEntityFieldOptionGroups({
       entityFields,
@@ -495,6 +523,8 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     label,
     linkedEntityDescendantRoot,
     templateMetadata.entityTypeDisplayName,
+    value?.field,
+    streamDocument,
   ]);
 
   React.useEffect(() => {

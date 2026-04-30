@@ -249,14 +249,6 @@ export const ImageWrapper: YextComponentConfig<ImageWrapperProps> = {
     let fields = resolveDataFromParent(ImageWrapperFields, data);
     const parentType = params.parent?.type;
 
-    if (data.props.parentData) {
-      fields = setDeep(
-        fields,
-        "data.objectFields.image.disableConstantValueToggle",
-        true
-      );
-    }
-
     if (
       data.props.hideWidthProp ||
       data.props.styles.imageConstrain === "fill"

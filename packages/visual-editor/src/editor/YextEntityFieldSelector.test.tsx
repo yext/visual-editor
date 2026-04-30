@@ -1302,6 +1302,78 @@ describe("YextEntityFieldSelector", () => {
     );
   });
 
+  it("keeps showing a saved linked descendant selection when it is filtered out at runtime", () => {
+    renderEntityFieldInput({
+      entityFields: {
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_linkedLocation",
+            displayName: "Linked Location",
+            definition: {
+              name: "c_linkedLocation",
+              isList: true,
+              typeRegistryId: "type.entity_reference",
+              type: {
+                documentType: "DOCUMENT_TYPE_ENTITY",
+              },
+            },
+            children: {
+              fields: [
+                {
+                  name: "tripBranding",
+                  displayName: "Trip Branding",
+                  definition: {
+                    name: "tripBranding",
+                    typeName: "type.struct",
+                    type: {},
+                  },
+                  children: {
+                    fields: [
+                      {
+                        name: "url",
+                        displayName: "URL",
+                        definition: {
+                          name: "url",
+                          typeName: "type.string",
+                          type: {},
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+        displayNames: {
+          ...defaultEntityFields.displayNames,
+          c_linkedLocation: "Linked Location",
+          "c_linkedLocation.tripBranding": "Linked Location > Trip Branding",
+          "c_linkedLocation.tripBranding.url":
+            "Linked Location > Trip Branding > URL",
+        },
+      },
+      filter: {
+        types: ["type.string"],
+        descendantsOf: "c_linkedLocation",
+      },
+      value: {
+        field: "c_linkedLocation.tripBranding.url",
+      },
+      document: {
+        c_linkedLocation: [{ name: "Downtown" }],
+      },
+    });
+
+    expect(screen.getByRole("combobox").textContent).toContain(
+      "Trip Branding > URL"
+    );
+    expect(screen.getByRole("combobox").textContent).not.toContain(
+      "Location Field"
+    );
+  });
+
   it("stores base list descendant selections as absolute paths while showing relative options", () => {
     const onChange = vi.fn();
 
