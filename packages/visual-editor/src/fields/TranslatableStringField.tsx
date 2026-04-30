@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useDocument } from "../hooks/useDocument.tsx";
 import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
 import { Button } from "../internal/puck/ui/button.tsx";
-import { DynamicOption } from "../editor/DynamicOptionsSelector.tsx";
+import { type DynamicOption } from "./DynamicMultiSelectField.tsx";
 import {
   EmbeddedFieldStringInputFromEntity,
   EmbeddedFieldStringInputFromOptions,

@@ -30,7 +30,7 @@ import {
 import { type BasicSelectorField } from "../fields/BasicSelectorField.tsx";
 import { ConstantValueModeToggler } from "../editor/YextEntityFieldSelector.tsx";
 import { LOCATOR_IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
-import { DynamicOption } from "../editor/DynamicOptionsSelector.tsx";
+import { type DynamicOption } from "../fields/DynamicMultiSelectField.tsx";
 import { TranslatableString } from "../types/types.ts";
 import { TranslatableAssetImage } from "../types/images.ts";
 import {

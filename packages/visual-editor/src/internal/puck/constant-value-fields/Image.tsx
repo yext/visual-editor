@@ -24,7 +24,7 @@ import {
   FieldTypeData,
   TemplateMetadata,
 } from "../../types/templateMetadata.ts";
-import { DynamicOption } from "../../../editor/DynamicOptionsSelector.tsx";
+import { type DynamicOption } from "../../../fields/DynamicMultiSelectField.tsx";
 import { useTemplateMetadata } from "../../hooks/useMessageReceivers.ts";
 import { getPageSetLocales } from "../../../utils/pageSetLocales.ts";
 import { isFakeStarterLocalDev } from "../../../utils/isFakeStarterLocalDev.ts";

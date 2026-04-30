@@ -42,9 +42,10 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import {
-  DynamicOption,
-  DynamicOptionsSelectorType,
-} from "../editor/DynamicOptionsSelector.tsx";
+  type DynamicOption,
+  type DynamicMultiSelectField,
+  type DynamicMultiSelectValue,
+} from "../fields/DynamicMultiSelectField.tsx";
 import {
   YextField,
   type YextCustomFieldRenderProps,
@@ -588,7 +589,7 @@ export interface LocatorProps {
     /** Accent color for filter button and icons. */
     accentColor?: ThemeColor;
     /** Which fields are facetable in the search experience */
-    facetFields?: DynamicOptionsSelectorType<string>;
+    facetFields?: DynamicMultiSelectValue<string>;
   };
 
   /**
@@ -735,38 +736,41 @@ const locatorFields: YextFields<LocatorProps> = {
       },
     }
   ),
-  filters: {
-    label: msg("fields.filters", "Filters"),
-    type: "object",
-    objectFields: {
-      openNowButton: {
-        label: msg("fields.options.includeOpenNow", "Include Open Now Button"),
-        type: "radio",
-        options: [
-          { label: msg("fields.options.yes", "Yes"), value: true },
-          { label: msg("fields.options.no", "No"), value: false },
-        ],
-      },
-      showDistanceOptions: {
-        label: msg(
-          "fields.options.showDistanceOptions",
-          "Include Distance Options"
-        ),
-        type: "radio",
-        options: [
-          { label: msg("fields.options.yes", "Yes"), value: true },
-          { label: msg("fields.options.no", "No"), value: false },
-        ],
-      },
-      accentColor: {
-        type: "basicSelector",
-        label: msg("fields.accentColor", "Accent Color"),
-        options: "SITE_COLOR",
-      },
-      facetFields: YextField<DynamicOptionsSelectorType<string>, string>(
-        msg("fields.dynamicFilters", "Dynamic Filters"),
-        {
-          type: "dynamicSelect",
+  filters: YextField<LocatorProps["filters"]>(
+    msg("fields.filters", "Filters"),
+    {
+      type: "object",
+      objectFields: {
+        openNowButton: {
+          label: msg(
+            "fields.options.includeOpenNow",
+            "Include Open Now Button"
+          ),
+          type: "radio",
+          options: [
+            { label: msg("fields.options.yes", "Yes"), value: true },
+            { label: msg("fields.options.no", "No"), value: false },
+          ],
+        },
+        showDistanceOptions: {
+          label: msg(
+            "fields.options.showDistanceOptions",
+            "Include Distance Options"
+          ),
+          type: "radio",
+          options: [
+            { label: msg("fields.options.yes", "Yes"), value: true },
+            { label: msg("fields.options.no", "No"), value: false },
+          ],
+        },
+        accentColor: {
+          type: "basicSelector",
+          label: msg("fields.accentColor", "Accent Color"),
+          options: "SITE_COLOR",
+        },
+        facetFields: {
+          type: "dynamicMultiSelect",
+          label: msg("fields.dynamicFilters", "Dynamic Filters"),
           dropdownLabel: msg("fields.field", "Field"),
           getOptions: () => {
             const entityTypeSourceMap = getLocatorEntityTypeSourceMap();
@@ -778,10 +782,10 @@ const locatorFields: YextFields<LocatorProps> = {
             "fields.options.selectAField",
             "Select a field"
           ),
-        }
-      ),
-    },
-  },
+        } satisfies DynamicMultiSelectField<string>,
+      },
+    }
+  ),
   mapStartingLocation: YextField(
     msg("fields.options.mapStartingLocation", "Map Starting Location"),
     {

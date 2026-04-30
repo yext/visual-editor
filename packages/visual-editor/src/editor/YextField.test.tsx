@@ -6,15 +6,8 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { YextField } from "./YextField.tsx";
 import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 
-const { dynamicOptionsSelectorMock, yextEntityFieldSelectorMock } = vi.hoisted(
-  () => ({
-    dynamicOptionsSelectorMock: vi.fn(),
-    yextEntityFieldSelectorMock: vi.fn(),
-  })
-);
-
-vi.mock("./DynamicOptionsSelector.tsx", () => ({
-  DynamicOptionsSelector: dynamicOptionsSelectorMock,
+const { yextEntityFieldSelectorMock } = vi.hoisted(() => ({
+  yextEntityFieldSelectorMock: vi.fn(),
 }));
 
 vi.mock("./YextEntityFieldSelector.tsx", async () => {
@@ -215,32 +208,6 @@ describe("YextField", () => {
       label: fieldName,
     });
     expect(field.render).toBe(IMAGE_CONSTANT_CONFIG.render);
-  });
-
-  it("delegates dynamicSelect configs to DynamicOptionsSelector", () => {
-    const returnedField = createCustomField();
-    const fieldName = msg("fields.items", "Items");
-    const getOptions = vi.fn(() => [
-      { label: "Alpha", value: "alpha" },
-      { label: "Beta", value: "beta" },
-    ]);
-
-    dynamicOptionsSelectorMock.mockReturnValue(returnedField);
-
-    const field = YextField(fieldName, {
-      type: "dynamicSelect",
-      dropdownLabel: "Items",
-      getOptions,
-      placeholderOptionLabel: "Select an item",
-    });
-
-    expect(dynamicOptionsSelectorMock).toHaveBeenCalledWith({
-      label: fieldName,
-      dropdownLabel: "Items",
-      getOptions,
-      placeholderOptionLabel: "Select an item",
-    });
-    expect(field).toBe(returnedField);
   });
 
   it.each([

@@ -19,9 +19,3 @@ export {
 } from "./EmbeddedFieldStringInput.tsx";
 export { getMaxWidthOptions, filterMaxWidths } from "./MaxWidthSelector.tsx";
 export { resolveDataFromParent } from "./ParentData.tsx";
-export {
-  type DynamicOption,
-  DynamicOptionsSelector,
-  type DynamicOptionsSelectorType,
-  type DynamicOptionValueTypes,
-} from "./DynamicOptionsSelector.tsx";
