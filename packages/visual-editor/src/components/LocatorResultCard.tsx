@@ -61,13 +61,6 @@ import {
   FaRegEnvelope,
 } from "react-icons/fa";
 import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
-
-const LOCATOR_IMAGE_CONSTANT_CONFIG: ImageField = {
-  type: "image",
-  label: msg("fields.image", "Image"),
-  getAltTextOptions: (templateMetadata) =>
-    buildLocatorDisplayOptions(templateMetadata?.locatorDisplayFields),
-};
 import { FieldTypeData } from "../internal/types/templateMetadata.ts";
 import {
   formatDistance,
@@ -336,6 +329,13 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
     constantValueEnabled: false,
     liveVisibility: false,
   },
+};
+
+const LOCATOR_IMAGE_CONSTANT_CONFIG: ImageField = {
+  type: "image",
+  label: msg("fields.image", "Image"),
+  getAltTextOptions: (templateMetadata) =>
+    buildLocatorDisplayOptions(templateMetadata?.locatorDisplayFields),
 };
 
 const getDisplayFieldOptions = (
