@@ -400,6 +400,7 @@ describe("getSchema - entity pages", () => {
         },
         ref_categories: [
           {
+            rootId: 370,
             fullDisplayName: "Automotive & Vehicles > Auto Repair",
           },
         ],
