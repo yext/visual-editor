@@ -59,56 +59,6 @@ describe("FAQSection resolveData", () => {
     });
   });
 
-  it("supports saved relative mapping fields without constant values", async () => {
-    const data = {
-      type: "FAQSection",
-      props: JSON.parse(JSON.stringify(FAQSection.defaultProps)),
-    } as ComponentData<FAQSectionProps>;
-
-    data.props.data.constantValueEnabled = false;
-    data.props.data.field = "c_linkedLocation";
-    data.props.faqs = {
-      question: {
-        field: "name",
-      },
-      answer: {
-        field: "description",
-      },
-    } as FAQSectionProps["faqs"];
-
-    const resolvedData = await FAQSection.resolveData!(data, {
-      changed: {},
-      fields: {},
-      lastFields: null,
-      lastData: null,
-      metadata: {
-        streamDocument: {
-          c_linkedLocation: [
-            { name: "Downtown", description: "Open late" },
-            { name: "Uptown", description: "Open early" },
-          ],
-        },
-      },
-      parent: null,
-      trigger: "initial",
-    } as any);
-
-    expect(resolvedData.props!.slots!.CardSlot[0]?.props.parentData).toEqual({
-      field: "c_linkedLocation",
-      faq: {
-        question: "Downtown",
-        answer: "Open late",
-      },
-    });
-    expect(resolvedData.props!.slots!.CardSlot[1]?.props.parentData).toEqual({
-      field: "c_linkedLocation",
-      faq: {
-        question: "Uptown",
-        answer: "Open early",
-      },
-    });
-  });
-
   it("resolves embedded fields in constant faq answers against each linked entity", async () => {
     const data = {
       type: "FAQSection",
@@ -195,37 +145,5 @@ describe("FAQSection resolveData", () => {
         answer: "Fresh daily",
       },
     });
-  });
-
-  it("does not show faq mappings for single objects that are not faq sections", async () => {
-    const data = {
-      type: "FAQSection",
-      props: JSON.parse(JSON.stringify(FAQSection.defaultProps)),
-    } as ComponentData<FAQSectionProps>;
-
-    data.props.data.constantValueEnabled = false;
-    data.props.data.field = "heroSection";
-
-    const resolvedFields = await FAQSection.resolveFields!(data, {
-      changed: {},
-      fields: {},
-      lastFields: null,
-      lastData: null,
-      metadata: {
-        streamDocument: {
-          heroSection: {
-            primaryCta: {
-              label: "Learn More",
-              link: "https://example.com",
-              linkType: "URL",
-            },
-          },
-        },
-      },
-      parent: null,
-      trigger: "initial",
-    } as any);
-
-    expect(resolvedFields.faqs?.visible).toBe(false);
   });
 });

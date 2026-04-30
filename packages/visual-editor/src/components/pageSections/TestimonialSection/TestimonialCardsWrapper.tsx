@@ -2,7 +2,6 @@ import { ComponentData, PuckComponent, setDeep } from "@puckeditor/core";
 import { TestimonialSectionType } from "../../../types/types.ts";
 import { ComponentFields } from "../../../types/fields.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
-import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import {
   cardWrapperFields,
@@ -103,7 +102,6 @@ export const TestimonialCardsWrapper: YextComponentConfig<TestimonialCardsWrappe
       >({
         data: data as ComponentData<TestimonialCardsWrapperProps>,
         streamDocument: params.metadata.streamDocument ?? {},
-        locale: i18nComponentsInstance.language || "en",
         listFieldName: "testimonials",
         cardIdPrefix: "TestimonialCard",
         getSharedCardProps: (card) =>

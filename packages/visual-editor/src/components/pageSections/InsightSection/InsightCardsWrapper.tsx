@@ -1,7 +1,6 @@
 import { InsightSectionType } from "../../../types/types.ts";
 import { ComponentFields } from "../../../types/fields.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
-import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import {
   cardWrapperFields,
   CardWrapperType,
@@ -114,7 +113,6 @@ export const InsightCardsWrapper: YextComponentConfig<InsightCardsWrapperProps> 
       >({
         data: data as ComponentData<InsightCardsWrapperProps>,
         streamDocument: params.metadata.streamDocument ?? {},
-        locale: i18nComponentsInstance.language || "en",
         listFieldName: "insights",
         cardIdPrefix: "InsightCard",
         getSharedCardProps: (card) =>

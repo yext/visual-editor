@@ -270,7 +270,6 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
     >({
       data: data as ComponentData<FAQSectionProps>,
       streamDocument,
-      locale,
       listFieldName: "faqs",
       cardIdPrefix: "FAQCard",
       getSharedCardProps: (card) =>

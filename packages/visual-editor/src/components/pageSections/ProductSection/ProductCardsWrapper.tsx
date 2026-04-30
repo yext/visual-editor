@@ -2,7 +2,6 @@ import * as React from "react";
 import { ProductSectionType } from "../../../types/types.ts";
 import { ComponentFields } from "../../../types/fields.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
-import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { ComponentData, PuckComponent, setDeep } from "@puckeditor/core";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import {
@@ -113,7 +112,6 @@ export const ProductCardsWrapper: YextComponentConfig<ProductCardsWrapperProps> 
       },
     },
     resolveData: (data, params) => {
-      const locale = i18nComponentsInstance.language || "en";
       return resolveMappedListWrapperData<
         ProductCardsWrapperProps,
         ProductCardProps,
@@ -126,7 +124,6 @@ export const ProductCardsWrapper: YextComponentConfig<ProductCardsWrapperProps> 
       >({
         data: data as ComponentData<ProductCardsWrapperProps>,
         streamDocument: params.metadata.streamDocument ?? {},
-        locale,
         listFieldName: "products",
         cardIdPrefix: "ProductCard",
         getSharedCardProps: (card) =>

@@ -3,8 +3,7 @@ import {
   type DefaultComponentProps,
   setDeep,
 } from "@puckeditor/core";
-import { type YextEntityField } from "../../editor/yextEntityFieldUtils.ts";
-import { resolveYextEntityField } from "../resolveYextEntityField.ts";
+import { resolveField } from "../resolveYextEntityField.ts";
 import { type StreamDocument } from "../types/StreamDocument.ts";
 import { type CardWrapperType } from "./cardWrapperHelpers.ts";
 import { buildListSectionCards } from "./listSectionData.ts";
@@ -43,24 +42,14 @@ const rewriteNestedSlotIds = <TCardProps extends DefaultComponentProps>(
 const resolveSectionFieldItems = <TItem>(
   streamDocument: StreamDocument,
   fieldPath: string,
-  listFieldName: string,
-  locale: string
+  listFieldName: string
 ): TItem[] => {
-  const resolvedValue = resolveYextEntityField<
-    Record<string, TItem[] | undefined> | undefined
-  >(
+  const resolvedValue = resolveField<Record<string, unknown> | undefined>(
     streamDocument,
-    {
-      field: fieldPath,
-      constantValue: { [listFieldName]: undefined } as Record<
-        string,
-        TItem[] | undefined
-      >,
-    } as YextEntityField<Record<string, TItem[] | undefined>>,
-    locale
-  );
-
-  return resolvedValue?.[listFieldName] ?? [];
+    fieldPath
+  ).value;
+  const items = resolvedValue?.[listFieldName];
+  return Array.isArray(items) ? (items as TItem[]) : [];
 };
 
 export const syncManualListCards = <TCardProps extends DefaultComponentProps>({
@@ -144,7 +133,6 @@ export const resolveMappedListWrapperData = <
 >({
   data,
   streamDocument,
-  locale,
   listFieldName,
   cardIdPrefix,
   getSharedCardProps,
@@ -156,7 +144,6 @@ export const resolveMappedListWrapperData = <
 }: {
   data: ComponentData<TWrapperProps>;
   streamDocument: StreamDocument;
-  locale: string;
   listFieldName: string;
   cardIdPrefix: string;
   getSharedCardProps: (
@@ -213,8 +200,7 @@ export const resolveMappedListWrapperData = <
       ? resolveSectionFieldItems<TSectionItem>(
           streamDocument,
           fieldPath,
-          listFieldName,
-          locale
+          listFieldName
         )
       : resolveMappedSourceItems<TMappedItem>(streamDocument, fieldPath);
 

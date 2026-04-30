@@ -134,21 +134,6 @@ describe("EventCardsWrapper", () => {
     });
   });
 
-  it("returns zero cards for an empty linked entity list", async () => {
-    const data = createWrapperData();
-    data.props.data.constantValueEnabled = false;
-    data.props.data.field = "c_linkedLocation";
-
-    const resolvedData = await EventCardsWrapper.resolveData!(
-      data,
-      resolveParams({
-        c_linkedLocation: [],
-      })
-    );
-
-    expect(resolvedData.props!.slots!.CardSlot).toEqual([]);
-  });
-
   it("does not crash when only the title mapping is set for linked entity cards", async () => {
     const data = createWrapperData();
     data.props.data.constantValueEnabled = false;

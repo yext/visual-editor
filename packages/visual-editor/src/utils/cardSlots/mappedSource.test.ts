@@ -4,49 +4,8 @@ import {
   getBaseEntityListSourceRootFields,
   resolveMappedSourceItems,
 } from "./mappedSource.ts";
-import { type StreamFields } from "../../types/entityFields.ts";
-import { isTopLevelLinkedEntityField } from "../linkedEntityFieldUtils.ts";
 
 describe("mappedSource", () => {
-  const entityFields: StreamFields = {
-    fields: [
-      {
-        name: "c_linkedLocation",
-        displayName: "Linked Location",
-        definition: {
-          name: "c_linkedLocation",
-          typeRegistryId: "type.entity_reference",
-          type: {
-            documentType: "DOCUMENT_TYPE_ENTITY",
-          },
-        },
-        children: {
-          fields: [
-            {
-              name: "name",
-              displayName: "Name",
-              definition: {
-                name: "name",
-                typeName: "type.string",
-                type: {},
-              },
-            },
-          ],
-        },
-      },
-    ],
-  };
-
-  it("detects top-level linked entity source roots", () => {
-    expect(isTopLevelLinkedEntityField("c_linkedLocation", entityFields)).toBe(
-      true
-    );
-    expect(
-      isTopLevelLinkedEntityField("c_linkedLocation.name", entityFields)
-    ).toBe(false);
-    expect(isTopLevelLinkedEntityField("name", entityFields)).toBe(false);
-  });
-
   it("classifies manual, section, mapped, unresolved, and empty sources", () => {
     expect(
       classifyMappedSource({
@@ -86,9 +45,8 @@ describe("mappedSource", () => {
         },
         fieldPath: "c_linkedLocation",
         listFieldName: "events",
-        allowSingleObjectItemSource: true,
       })
-    ).toBe("mappedItemList");
+    ).toBe("sectionField");
 
     expect(
       classifyMappedSource({

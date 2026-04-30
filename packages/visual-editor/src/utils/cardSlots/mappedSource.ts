@@ -52,13 +52,11 @@ export const classifyMappedSource = ({
   constantValueEnabled,
   fieldPath,
   listFieldName,
-  allowSingleObjectItemSource = false,
 }: {
   streamDocument: StreamDocument;
   constantValueEnabled?: boolean;
   fieldPath?: string;
   listFieldName: string;
-  allowSingleObjectItemSource?: boolean;
 }): MappedSourceMode => {
   if (constantValueEnabled || !fieldPath) {
     return "manual";
@@ -75,9 +73,7 @@ export const classifyMappedSource = ({
       (resolvedSource as Record<string, unknown>)[listFieldName]
     )
       ? "sectionField"
-      : allowSingleObjectItemSource
-        ? "mappedItemList"
-        : "sectionField";
+      : "sectionField";
   }
 
   return "mappedItemList";

@@ -2,7 +2,6 @@ import { ComponentData, PuckComponent, setDeep } from "@puckeditor/core";
 import { TeamSectionType } from "../../../types/types.ts";
 import { ComponentFields } from "../../../types/fields.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
-import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import {
   cardWrapperFields,
@@ -110,7 +109,6 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
     >({
       data: data as ComponentData<TeamCardsWrapperProps>,
       streamDocument: params.metadata.streamDocument ?? {},
-      locale: i18nComponentsInstance.language || "en",
       listFieldName: "people",
       cardIdPrefix: "TeamCard",
       getSharedCardProps: (card) =>

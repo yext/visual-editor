@@ -227,7 +227,6 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
     >({
       data: data as ComponentData<EventCardsWrapperProps>,
       streamDocument,
-      locale,
       listFieldName: "events",
       cardIdPrefix: "EventCard",
       getSharedCardProps: (card) =>
