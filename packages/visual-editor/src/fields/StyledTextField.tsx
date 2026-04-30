@@ -37,6 +37,11 @@ const defaultOption = {
   value: "default",
 };
 
+const withDefaultOption = (options: StyleSelectOption[]) => [
+  defaultOption,
+  ...options,
+];
+
 const getFontOptions = (customFonts: FontRegistry = {}) => [
   defaultOption,
   ...constructFontSelectOptions(customFonts),
@@ -47,6 +52,42 @@ const getFontOptions = (customFonts: FontRegistry = {}) => [
 
 const translateOptions = (options: StyleSelectOption[]) =>
   options.map((option) => ({ ...option, label: pt(option.label) }));
+
+const correctStyledTextValue = (
+  nextValue: StyledTextValue,
+  availableFontWeights: StyleSelectOption[],
+  availableFontStyles: StyleSelectOption[]
+) => {
+  let correctedValue = nextValue;
+
+  if (
+    nextValue.fontWeight &&
+    nextValue.fontWeight !== "default" &&
+    availableFontWeights.length > 0 &&
+    !availableFontWeights.some(
+      (option) => option.value === nextValue.fontWeight
+    )
+  ) {
+    correctedValue = {
+      ...correctedValue,
+      fontWeight: "default",
+    };
+  }
+
+  if (
+    nextValue.fontStyle &&
+    nextValue.fontStyle !== "default" &&
+    availableFontStyles.length > 0 &&
+    !availableFontStyles.some((option) => option.value === nextValue.fontStyle)
+  ) {
+    correctedValue = {
+      ...correctedValue,
+      fontStyle: "default",
+    };
+  }
+
+  return correctedValue;
+};
 
 export const StyledTextFieldOverride = ({
   field,
@@ -68,11 +109,11 @@ export const StyledTextFieldOverride = ({
     [customFonts]
   );
   const fontSizeOptions = React.useMemo(
-    () => [defaultOption, ...translateOptions(ThemeOptions.FONT_SIZE())],
+    () => withDefaultOption(translateOptions(ThemeOptions.FONT_SIZE())),
     []
   );
   const textTransformOptions = React.useMemo(
-    () => [defaultOption, ...translateOptions(ThemeOptions.TEXT_TRANSFORM)],
+    () => withDefaultOption(translateOptions(ThemeOptions.TEXT_TRANSFORM)),
     []
   );
   const getAvailableFontWeightOptions = React.useCallback(
@@ -98,66 +139,33 @@ export const StyledTextFieldOverride = ({
     [currentValue.fontFamily, getAvailableFontStyleOptions]
   );
   const translatedFontWeightOptions = React.useMemo(
-    () => [
-      defaultOption,
-      ...fontWeightOptions.map((option) => ({
-        ...option,
-        label: pt(option.label),
-      })),
-    ],
+    () =>
+      withDefaultOption(
+        fontWeightOptions.map((option) => ({
+          ...option,
+          label: pt(option.label),
+        }))
+      ),
     [fontWeightOptions]
   );
   const translatedFontStyleOptions = React.useMemo(
-    () => [
-      defaultOption,
-      ...fontStyleOptions.map((option) => ({
-        ...option,
-        label: pt(option.label),
-      })),
-    ],
+    () =>
+      withDefaultOption(
+        fontStyleOptions.map((option) => ({
+          ...option,
+          label: pt(option.label),
+        }))
+      ),
     [fontStyleOptions]
   );
 
   const correctFontSelections = React.useCallback(
-    (nextValue: StyledTextValue) => {
-      const availableFontWeights = getAvailableFontWeightOptions(
-        nextValue.fontFamily
-      );
-      const availableFontStyles = getAvailableFontStyleOptions(
-        nextValue.fontFamily
-      );
-      let correctedValue = nextValue;
-
-      if (
-        nextValue.fontWeight &&
-        nextValue.fontWeight !== "default" &&
-        availableFontWeights.length > 0 &&
-        !availableFontWeights.some(
-          (option) => option.value === nextValue.fontWeight
-        )
-      ) {
-        correctedValue = {
-          ...correctedValue,
-          fontWeight: "default",
-        };
-      }
-
-      if (
-        nextValue.fontStyle &&
-        nextValue.fontStyle !== "default" &&
-        availableFontStyles.length > 0 &&
-        !availableFontStyles.some(
-          (option) => option.value === nextValue.fontStyle
-        )
-      ) {
-        correctedValue = {
-          ...correctedValue,
-          fontStyle: "default",
-        };
-      }
-
-      return correctedValue;
-    },
+    (nextValue: StyledTextValue) =>
+      correctStyledTextValue(
+        nextValue,
+        getAvailableFontWeightOptions(nextValue.fontFamily),
+        getAvailableFontStyleOptions(nextValue.fontFamily)
+      ),
     [getAvailableFontStyleOptions, getAvailableFontWeightOptions]
   );
   const correctedValue = React.useMemo(
