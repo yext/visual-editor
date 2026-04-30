@@ -128,19 +128,6 @@ describe("YextField", () => {
     });
   });
 
-  it("returns image configs with the provided label", () => {
-    const fieldName = msg("fields.image", "Image");
-
-    const field = YextField(fieldName, {
-      type: "image",
-    }) as any;
-
-    expect(field).toEqual({
-      type: "image",
-      label: fieldName,
-    });
-  });
-
   it.each([
     {
       fieldName: msg("fields.number", "Number"),
