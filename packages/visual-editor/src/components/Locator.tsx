@@ -777,7 +777,7 @@ const locatorFields: YextFields<LocatorProps> = {
           "fields.options.selectAField",
           "Select a field"
         ),
-      } as any, // TODO: remove 'as any' when puck fixes objectFields typing
+      } as any, // TODO(SUMO-8378): remove 'as any' when puck fixes objectFields typing
     },
   },
   mapStartingLocation: YextField(
