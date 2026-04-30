@@ -6,9 +6,12 @@ import {
   isColorContrastWcagCompliant,
   convertComputedStyleColorToHex,
   getBackgroundColorClasses,
+  getBackgroundColorStyle,
   getThemeColorCssValue,
   getThemeColorHexValue,
   getTextColorClass,
+  getTextColorStyle,
+  isCustomThemeColorToken,
 } from "./colors.ts";
 
 describe("getContrastingColor", () => {
@@ -151,6 +154,35 @@ describe("getBackgroundColorClasses", () => {
   it("returns an empty string when color is undefined", () => {
     expect(getBackgroundColorClasses(undefined)).toBe("");
   });
+
+  it("omits custom selected color tokens from class output", () => {
+    expect(
+      getBackgroundColorClasses({
+        selectedColor: "[#FF6D66]",
+        contrastingColor: "black",
+      })
+    ).toBe("text-black");
+  });
+});
+
+describe("getBackgroundColorStyle", () => {
+  it("returns inline styles for custom selected color tokens", () => {
+    expect(
+      getBackgroundColorStyle({
+        selectedColor: "[#FF6D66]",
+        contrastingColor: "black",
+      })
+    ).toStrictEqual({ backgroundColor: "#FF6D66" });
+  });
+
+  it("returns undefined for theme colors", () => {
+    expect(
+      getBackgroundColorStyle({
+        selectedColor: "palette-primary",
+        contrastingColor: "palette-primary-contrast",
+      })
+    ).toBeUndefined();
+  });
 });
 
 describe("getTextColorClass", () => {
@@ -165,6 +197,43 @@ describe("getTextColorClass", () => {
 
   it("returns undefined when color is undefined", () => {
     expect(getTextColorClass(undefined)).toBeUndefined();
+  });
+
+  it("returns undefined for custom selected color tokens", () => {
+    expect(
+      getTextColorClass({
+        selectedColor: "[#00E5FF]",
+        contrastingColor: "black",
+      })
+    ).toBeUndefined();
+  });
+});
+
+describe("getTextColorStyle", () => {
+  it("returns inline styles for custom selected color tokens", () => {
+    expect(
+      getTextColorStyle({
+        selectedColor: "[#00E5FF]",
+        contrastingColor: "black",
+      })
+    ).toStrictEqual({ color: "#00E5FF" });
+  });
+
+  it("returns undefined for theme colors", () => {
+    expect(
+      getTextColorStyle({
+        selectedColor: "palette-secondary",
+        contrastingColor: "palette-secondary-contrast",
+      })
+    ).toBeUndefined();
+  });
+});
+
+describe("isCustomThemeColorToken", () => {
+  it("identifies bracketed custom color tokens", () => {
+    expect(isCustomThemeColorToken("[#FF6D66]")).toBe(true);
+    expect(isCustomThemeColorToken("palette-primary")).toBe(false);
+    expect(isCustomThemeColorToken(undefined)).toBe(false);
   });
 });
 

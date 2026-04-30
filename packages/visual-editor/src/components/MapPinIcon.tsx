@@ -1,32 +1,13 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { ThemeColor } from "../utils/themeConfigOptions.ts";
+import { getThemeColorCssValue } from "../utils/colors.ts";
 
 const resolveCssVarColor = (
   element: Element,
   varName: string
 ): string | undefined => {
   return window.getComputedStyle(element).getPropertyValue(varName).trim();
-};
-
-const resolvePinFillColor = (
-  backgroundToken: string
-): React.CSSProperties | undefined => {
-  if (backgroundToken === "white" || backgroundToken === "black") {
-    return { color: backgroundToken };
-  }
-
-  if (backgroundToken.endsWith("-light")) {
-    const baseToken = backgroundToken.replace(/-light$/, "");
-    return { color: `hsl(from var(--colors-${baseToken}) h s 98)` };
-  }
-
-  if (backgroundToken.endsWith("-dark")) {
-    const baseToken = backgroundToken.replace(/-dark$/, "");
-    return { color: `hsl(from var(--colors-${baseToken}) h s 20)` };
-  }
-
-  return { color: `var(--colors-${backgroundToken})` };
 };
 
 const resolveContrastColor = (
@@ -91,7 +72,10 @@ export const MapPinIcon = ({
 
   // SVG children use currentColor for the pin fill; apply contrast for text/icon.
   const svgStyle = React.useMemo<React.CSSProperties | undefined>(
-    () => (backgroundToken ? resolvePinFillColor(backgroundToken) : undefined),
+    () =>
+      backgroundToken
+        ? { color: getThemeColorCssValue(backgroundToken) }
+        : undefined,
     [backgroundToken]
   );
 

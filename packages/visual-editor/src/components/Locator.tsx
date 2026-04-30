@@ -49,9 +49,9 @@ import {
   YextField,
   type YextCustomFieldRenderProps,
 } from "../editor/YextField.tsx";
+import { ImageField } from "../fields/ImageField.tsx";
 import { YextAutoField } from "../fields/YextAutoField.tsx";
 import { useDocument } from "../hooks/useDocument.tsx";
-import { LOCATOR_PIN_ICON_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 import { Button } from "./atoms/button.tsx";
 import { ImageStylingFields } from "./contentBlocks/image/styling.ts";
 import { TranslatableString } from "../types/types.ts";
@@ -121,6 +121,13 @@ const DEFAULT_LOCATION_STYLE = {
 };
 const DEFAULT_PIN_ICON_WIDTH = 14;
 const MAX_PIN_ICON_WIDTH = 27;
+const PIN_ICON_MAX_FILE_SIZE_BYTES = 128 * 1024;
+const LOCATOR_PIN_ICON_FIELD: ImageField = {
+  type: "image",
+  label: msg("fields.icon", "Icon"),
+  hideAltTextField: true,
+  maxFileSizeBytes: PIN_ICON_MAX_FILE_SIZE_BYTES,
+};
 
 const getConfiguredMapCenterOrDefault = (mapStartingLocation?: {
   latitude: string;
@@ -746,8 +753,7 @@ const locatorFields: YextFields<LocatorProps> = {
                   <>
                     <YextAutoField
                       field={{
-                        ...LOCATOR_PIN_ICON_CONSTANT_CONFIG,
-                        label: msg("fields.icon", "Icon"),
+                        ...LOCATOR_PIN_ICON_FIELD,
                       }}
                       value={value?.image}
                       onChange={(image) =>
@@ -864,20 +870,24 @@ const locatorFields: YextFields<LocatorProps> = {
       },
     }
   ),
-  pageHeading: YextField(msg("fields.pageHeading", "Page Heading"), {
-    type: "object",
-    objectFields: {
-      title: YextField(msg("fields.title", "Title"), {
-        type: "translatableString",
-        filter: { types: ["type.string"] },
-      }),
-      color: {
-        type: "basicSelector",
-        label: msg("fields.color", "Color"),
-        options: "SITE_COLOR",
+  pageHeading: YextField<LocatorProps["pageHeading"]>(
+    msg("fields.pageHeading", "Page Heading"),
+    {
+      type: "object",
+      objectFields: {
+        title: {
+          type: "translatableString",
+          label: msg("fields.title", "Title"),
+          filter: { types: ["type.string"] },
+        },
+        color: {
+          type: "basicSelector",
+          label: msg("fields.color", "Color"),
+          options: "SITE_COLOR",
+        },
       },
-    },
-  }),
+    }
+  ),
   resultCard: YextField<LocatorProps["resultCard"]>(
     msg("fields.resultCard", "Result Card"),
     {

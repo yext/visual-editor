@@ -67,7 +67,7 @@ export const AddressDataField: YextFields<AddressProps["data"]> = {
     type: "entityField",
     filter: { types: ["type.address"] },
   }),
-} as any; // TODO: Update this once "entityField" is a registered YextFields fieldType
+} as any; // TODO(SUMO-8378): Update this once "entityField" is a registered YextFields fieldType
 
 // Address style fields used in Address and CoreInfoSection
 export const AddressStyleFields: YextFields<AddressProps["styles"]> = {

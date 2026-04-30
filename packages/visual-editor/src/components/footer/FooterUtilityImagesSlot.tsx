@@ -155,9 +155,10 @@ export const FooterUtilityImagesSlot: YextComponentConfig<FooterUtilityImagesSlo
             {
               type: "array",
               arrayFields: {
-                image: YextField(msg("fields.image", "Image"), {
+                image: {
                   type: "image",
-                }),
+                  label: msg("fields.image", "Image"),
+                },
                 linkTarget: {
                   label: msg("fields.linkTarget", "Link Target"),
                   type: "text",

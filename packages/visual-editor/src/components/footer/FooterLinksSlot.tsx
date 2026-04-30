@@ -280,10 +280,11 @@ const footerLinksSlotFields: YextFields<FooterLinksSlotProps> = {
               },
             ],
           },
-          label: YextField(msg("fields.label", "Label"), {
+          label: {
             type: "translatableString",
+            label: msg("fields.label", "Label"),
             filter: { types: ["type.string"] },
-          }),
+          },
           link: {
             label: msg("fields.link", "Link"),
             type: "text",
