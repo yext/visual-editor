@@ -2,6 +2,7 @@ import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { EntityFieldsContext } from "../hooks/useEntityFields.tsx";
+import { LinkedEntitySchemasContext } from "../hooks/useLinkedEntitySchemas.tsx";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { TemplateMetadataContext } from "../internal/hooks/useMessageReceivers.ts";
 import { generateTemplateMetadata } from "../internal/types/templateMetadata.ts";
@@ -59,12 +60,14 @@ const renderCTASelectorField = ({
     <TemplatePropsContext.Provider value={{ document: { locale: "en" } }}>
       <TemplateMetadataContext.Provider value={templateMetadata}>
         <EntityFieldsContext.Provider value={entityFields}>
-          <YextAutoField
-            field={field}
-            id="cta-selector-field"
-            onChange={onChange}
-            value={value}
-          />
+          <LinkedEntitySchemasContext.Provider value={null}>
+            <YextAutoField
+              field={field}
+              id="cta-selector-field"
+              onChange={onChange}
+              value={value}
+            />
+          </LinkedEntitySchemasContext.Provider>
         </EntityFieldsContext.Provider>
       </TemplateMetadataContext.Provider>
     </TemplatePropsContext.Provider>

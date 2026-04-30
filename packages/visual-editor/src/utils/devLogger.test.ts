@@ -14,6 +14,9 @@ describe("DevLogger", () => {
     const devLogger = new DevLogger();
 
     devLogger.logData("ENTITY_FIELDS", { fields: [] });
+    devLogger.logData("LINKED_ENTITY_SCHEMAS", {
+      c_linkedLocation: { displayName: "Linked Location", fields: [] },
+    });
 
     expect(consoleLogSpy).not.toHaveBeenCalled();
 
@@ -30,6 +33,15 @@ describe("DevLogger", () => {
       "-",
       {
         fields: [],
+      }
+    );
+    expect(consoleLogSpy).toHaveBeenNthCalledWith(
+      3,
+      "[DEBUG]",
+      "LINKED_ENTITY_SCHEMAS",
+      "-",
+      {
+        c_linkedLocation: { displayName: "Linked Location", fields: [] },
       }
     );
   });

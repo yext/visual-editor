@@ -4,8 +4,8 @@ import {
 } from "../internal/utils/getFilteredEntityFields.ts";
 import { StreamFields, YextSchemaField } from "../types/entityFields.ts";
 import {
-  getTopLevelLinkedEntitySourceFields,
-  isTopLevelLinkedEntityField,
+  buildLinkedEntityStreamFields,
+  type LinkedEntitySchemas,
 } from "../utils/linkedEntityFieldUtils.ts";
 import {
   getBaseEntityListSourceRootFields,
@@ -52,14 +52,10 @@ const sortFields = (fields: YextSchemaField[]): YextSchemaField[] => {
 
 const trimLinkedEntityRootDisplayName = (
   fields: YextSchemaField[],
-  entityFields: StreamFields | null,
+  linkedEntitySchemas: LinkedEntitySchemas | undefined,
   linkedEntityRoot: string
 ): YextSchemaField[] => {
-  const rootDisplayName =
-    entityFields?.displayNames?.[linkedEntityRoot] ??
-    getTopLevelLinkedEntitySourceFields(entityFields).find(
-      (field) => field.name === linkedEntityRoot
-    )?.displayName;
+  const rootDisplayName = linkedEntitySchemas?.[linkedEntityRoot]?.displayName;
   if (!rootDisplayName) {
     return fields;
   }
@@ -75,19 +71,21 @@ const trimLinkedEntityRootDisplayName = (
 
 export const getFieldsForSelector = (
   entityFields: StreamFields | null,
-  filter: LinkedEntitySourceFieldFilter<any>
+  filter: LinkedEntitySourceFieldFilter<any>,
+  linkedEntitySchemas?: LinkedEntitySchemas
 ): YextSchemaField[] => {
+  const linkedEntityStreamFields =
+    buildLinkedEntityStreamFields(linkedEntitySchemas);
   const linkedEntityRootFields = filter.sourceRootKinds?.includes(
     "linkedEntityRoot"
   )
-    ? getTopLevelLinkedEntitySourceFields(entityFields)
+    ? (linkedEntityStreamFields?.fields ?? [])
     : [];
   const baseListRootFields = filter.sourceRootKinds?.includes("baseListRoot")
     ? getBaseEntityListSourceRootFields(entityFields)
     : [];
   const isLinkedEntityDescendantFilter =
-    !!filter.descendantsOf &&
-    isTopLevelLinkedEntityField(filter.descendantsOf, entityFields);
+    !!filter.descendantsOf && !!linkedEntitySchemas?.[filter.descendantsOf];
 
   if (filter.sourceRootsOnly) {
     const rootEntityFields = getFilteredEntityFields(
@@ -107,9 +105,12 @@ export const getFieldsForSelector = (
   let filteredEntityFields = getFilteredEntityFields(entityFields, filter);
 
   if (isLinkedEntityDescendantFilter) {
+    filteredEntityFields = getFilteredEntityFields(linkedEntityStreamFields, {
+      ...filter,
+    });
     filteredEntityFields = trimLinkedEntityRootDisplayName(
       filteredEntityFields,
-      entityFields,
+      linkedEntitySchemas,
       filter.descendantsOf!
     );
   }

@@ -2,10 +2,12 @@ import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { EntityFieldsContext } from "../hooks/useEntityFields.tsx";
+import { LinkedEntitySchemasContext } from "../hooks/useLinkedEntitySchemas.tsx";
 import { TemplateMetadataContext } from "../internal/hooks/useMessageReceivers.ts";
 import { generateTemplateMetadata } from "../internal/types/templateMetadata.ts";
 import { type RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
 import { type StreamFields } from "../types/entityFields.ts";
+import { type LinkedEntitySchemas } from "../utils/linkedEntityFieldUtils.ts";
 import {
   ConstantValueInput,
   EntityFieldInput,
@@ -57,6 +59,45 @@ const defaultEntityFields: StreamFields = {
   },
 };
 
+const linkedLocationSchemas: LinkedEntitySchemas = {
+  c_linkedLocation: {
+    displayName: "Linked Location",
+    fields: [
+      {
+        name: "name",
+        displayName: "Name",
+        definition: {
+          name: "name",
+          typeName: "type.string",
+          type: {},
+        },
+      },
+      {
+        name: "address",
+        displayName: "Address",
+        definition: {
+          name: "address",
+          typeName: "type.address",
+          type: {},
+        },
+        children: {
+          fields: [
+            {
+              name: "city",
+              displayName: "City",
+              definition: {
+                name: "city",
+                typeName: "type.string",
+                type: {},
+              },
+            },
+          ],
+        },
+      },
+    ],
+  },
+};
+
 const renderEntityFieldInput = (
   props: {
     entityFields?: StreamFields | null;
@@ -64,6 +105,7 @@ const renderEntityFieldInput = (
     onChange?: any;
     value?: Record<string, any>;
     document?: Record<string, unknown>;
+    linkedEntitySchemas?: LinkedEntitySchemas | null;
   } = {}
 ) => {
   const {
@@ -72,6 +114,7 @@ const renderEntityFieldInput = (
     onChange = vi.fn(),
     value = {},
     document = {},
+    linkedEntitySchemas = null,
   } = props;
   const templateMetadata = {
     ...generateTemplateMetadata(),
@@ -82,7 +125,13 @@ const renderEntityFieldInput = (
     <TemplatePropsContext.Provider value={{ document }}>
       <TemplateMetadataContext.Provider value={templateMetadata}>
         <EntityFieldsContext.Provider value={entityFields}>
-          <EntityFieldInput filter={filter} onChange={onChange} value={value} />
+          <LinkedEntitySchemasContext.Provider value={linkedEntitySchemas}>
+            <EntityFieldInput
+              filter={filter}
+              onChange={onChange}
+              value={value}
+            />
+          </LinkedEntitySchemasContext.Provider>
         </EntityFieldsContext.Provider>
       </TemplateMetadataContext.Provider>
     </TemplatePropsContext.Provider>
@@ -94,9 +143,11 @@ const renderEntityFieldInput = (
 const renderEmbeddedFieldInput = ({
   entityFields = defaultEntityFields,
   filter = { types: ["type.string"] },
+  linkedEntitySchemas = null,
 }: {
   entityFields?: StreamFields | null;
   filter?: any;
+  linkedEntitySchemas?: LinkedEntitySchemas | null;
 } = {}) => {
   const templateMetadata = generateTemplateMetadata();
 
@@ -104,12 +155,14 @@ const renderEmbeddedFieldInput = ({
     <TemplatePropsContext.Provider value={{ document: {} }}>
       <TemplateMetadataContext.Provider value={templateMetadata}>
         <EntityFieldsContext.Provider value={entityFields}>
-          <EmbeddedFieldStringInputFromEntity
-            filter={filter}
-            onChange={vi.fn()}
-            showFieldSelector={true}
-            value=""
-          />
+          <LinkedEntitySchemasContext.Provider value={linkedEntitySchemas}>
+            <EmbeddedFieldStringInputFromEntity
+              filter={filter}
+              onChange={vi.fn()}
+              showFieldSelector={true}
+              value=""
+            />
+          </LinkedEntitySchemasContext.Provider>
         </EntityFieldsContext.Provider>
       </TemplateMetadataContext.Provider>
     </TemplatePropsContext.Provider>
@@ -123,6 +176,7 @@ describe("YextEntityFieldSelector", () => {
 
   it("shows linked entity fields for single-value selectors", () => {
     renderEntityFieldInput({
+      linkedEntitySchemas: linkedLocationSchemas,
       entityFields: {
         ...defaultEntityFields,
         fields: [
@@ -169,6 +223,9 @@ describe("YextEntityFieldSelector", () => {
 
   it("does not show linked entity fields for list-only selectors", () => {
     renderEntityFieldInput({
+      linkedEntitySchemas: {
+        c_linkedLocation: linkedLocationSchemas.c_linkedLocation,
+      },
       entityFields: {
         ...defaultEntityFields,
         fields: [
@@ -209,6 +266,7 @@ describe("YextEntityFieldSelector", () => {
 
   it("shows linked entity source roots when the selector opts into them", () => {
     renderEntityFieldInput({
+      linkedEntitySchemas: linkedLocationSchemas,
       entityFields: {
         ...defaultEntityFields,
         fields: [
@@ -296,6 +354,7 @@ describe("YextEntityFieldSelector", () => {
 
   it("limits event card source selectors to valid top-level roots", () => {
     renderEntityFieldInput({
+      linkedEntitySchemas: linkedLocationSchemas,
       entityFields: {
         fields: [
           ...defaultEntityFields.fields,
@@ -425,6 +484,7 @@ describe("YextEntityFieldSelector", () => {
 
   it("limits mapped linked-entity title fields to descendants of the selected source", () => {
     renderEntityFieldInput({
+      linkedEntitySchemas: linkedLocationSchemas,
       entityFields: {
         fields: [
           ...defaultEntityFields.fields,
@@ -514,6 +574,22 @@ describe("YextEntityFieldSelector", () => {
     const onChange = vi.fn();
 
     renderEntityFieldInput({
+      linkedEntitySchemas: {
+        c_linkedLocation: {
+          displayName: "LinkedLocation",
+          fields: [
+            {
+              name: "name",
+              displayName: "Name",
+              definition: {
+                name: "name",
+                typeName: "type.string",
+                type: {},
+              },
+            },
+          ],
+        },
+      },
       onChange,
       entityFields: {
         fields: [
@@ -623,6 +699,7 @@ describe("YextEntityFieldSelector", () => {
 
   it("includes linked entity fields in the embedded field selector", () => {
     renderEmbeddedFieldInput({
+      linkedEntitySchemas: linkedLocationSchemas,
       entityFields: {
         ...defaultEntityFields,
         fields: [
@@ -681,6 +758,22 @@ describe("YextEntityFieldSelector", () => {
 
   it("warns once when a linked entity field resolves through multiple references", () => {
     const props = {
+      linkedEntitySchemas: {
+        c_linkedLocation: {
+          displayName: "Linked Location",
+          fields: [
+            {
+              name: "name",
+              displayName: "Name",
+              definition: {
+                name: "name",
+                typeName: "type.string",
+                type: {},
+              },
+            },
+          ],
+        },
+      },
       entityFields: {
         ...defaultEntityFields,
         fields: [
@@ -732,11 +825,15 @@ describe("YextEntityFieldSelector", () => {
           }}
         >
           <EntityFieldsContext.Provider value={props.entityFields}>
-            <EntityFieldInput
-              filter={props.filter}
-              onChange={vi.fn()}
-              value={props.value}
-            />
+            <LinkedEntitySchemasContext.Provider
+              value={props.linkedEntitySchemas}
+            >
+              <EntityFieldInput
+                filter={props.filter}
+                onChange={vi.fn()}
+                value={props.value}
+              />
+            </LinkedEntitySchemasContext.Provider>
           </EntityFieldsContext.Provider>
         </TemplateMetadataContext.Provider>
       </TemplatePropsContext.Provider>
@@ -750,6 +847,22 @@ describe("YextEntityFieldSelector", () => {
 
   it("does not warn for linked descendant mapping selectors", () => {
     renderEntityFieldInput({
+      linkedEntitySchemas: {
+        c_linkedLocation: {
+          displayName: "LinkedLocation",
+          fields: [
+            {
+              name: "name",
+              displayName: "Name",
+              definition: {
+                name: "name",
+                typeName: "type.string",
+                type: {},
+              },
+            },
+          ],
+        },
+      },
       entityFields: {
         ...defaultEntityFields,
         fields: [
