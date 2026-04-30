@@ -1171,6 +1171,80 @@ describe("YextEntityFieldSelector", () => {
     expect(screen.queryByText("Business Logo")).toBeNull();
   });
 
+  it("does not show linked descendant options when the selected source resolves to no items", () => {
+    renderEntityFieldInput({
+      linkedEntitySchemas: {
+        c_linkedLocation: {
+          displayName: "LinkedLocation",
+          fields: [
+            {
+              name: "name",
+              displayName: "Name",
+              definition: {
+                name: "name",
+                typeName: "type.string",
+                type: {},
+              },
+            },
+            {
+              name: "tripBranding",
+              displayName: "Trip Branding",
+              definition: {
+                name: "tripBranding",
+                typeName: "c_tripBranding",
+                type: {},
+              },
+              children: {
+                fields: [
+                  {
+                    name: "url",
+                    displayName: "URL",
+                    definition: {
+                      name: "url",
+                      typeName: "type.string",
+                      type: {},
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+      entityFields: {
+        ...defaultEntityFields,
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_linkedLocation",
+            displayName: "LinkedLocation",
+            definition: {
+              name: "c_linkedLocation",
+              isList: true,
+              typeRegistryId: "type.entity_reference",
+              type: {
+                documentType: "DOCUMENT_TYPE_ENTITY",
+              },
+            },
+          },
+        ],
+      },
+      filter: {
+        types: ["type.string", "type.rich_text_v2"],
+        descendantsOf: "c_linkedLocation",
+      },
+      document: {
+        c_linkedLocation: [],
+      },
+    });
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(screen.getAllByText("Location Field")).toHaveLength(2);
+    expect(screen.queryByText("Name")).toBeNull();
+    expect(screen.queryByText("Trip Branding > URL")).toBeNull();
+  });
+
   it("stores linked descendant selections as absolute paths while showing relative options", () => {
     const onChange = vi.fn();
 

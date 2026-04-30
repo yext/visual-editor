@@ -243,6 +243,10 @@ const getResolvedDescendantFieldPaths = (
     streamDocument,
     rootFieldPath
   ).value;
+  if (resolvedValue === undefined) {
+    return undefined;
+  }
+
   const values = Array.isArray(resolvedValue)
     ? resolvedValue
     : resolvedValue && typeof resolvedValue === "object"
@@ -250,7 +254,7 @@ const getResolvedDescendantFieldPaths = (
       : [];
 
   if (!values.length) {
-    return undefined;
+    return new Set();
   }
 
   const fieldPaths = new Set<string>();

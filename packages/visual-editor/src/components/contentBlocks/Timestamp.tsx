@@ -138,6 +138,16 @@ export const Timestamp: YextComponentConfig<TimestampProps> = {
   resolveFields: (data) => {
     if (data.props.parentData) {
       let fields = resolveDataFromParent(timestampFields, data);
+      fields = setDeep(
+        fields,
+        "data.objectFields.date.disableConstantValueToggle",
+        true
+      );
+      fields = setDeep(
+        fields,
+        "data.objectFields.endDate.disableConstantValueToggle",
+        true
+      );
       return toPuckFields(
         setDeep(fields, "styles.objectFields.includeRange.visible", false)
       );
