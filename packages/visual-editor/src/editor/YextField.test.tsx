@@ -5,27 +5,24 @@ import { msg } from "../utils/i18n/platform.ts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { YextField } from "./YextField.tsx";
 
-const {
-  dynamicOptionsSelectorMock,
-  translatableStringFieldMock,
-  yextEntityFieldSelectorMock,
-} = vi.hoisted(() => ({
-  dynamicOptionsSelectorMock: vi.fn(),
-  translatableStringFieldMock: vi.fn(),
-  yextEntityFieldSelectorMock: vi.fn(),
-}));
+const { dynamicOptionsSelectorMock, yextEntityFieldSelectorMock } = vi.hoisted(
+  () => ({
+    dynamicOptionsSelectorMock: vi.fn(),
+    yextEntityFieldSelectorMock: vi.fn(),
+  })
+);
 
 vi.mock("./DynamicOptionsSelector.tsx", () => ({
   DynamicOptionsSelector: dynamicOptionsSelectorMock,
 }));
 
-vi.mock("./TranslatableStringField.tsx", () => ({
-  TranslatableStringField: translatableStringFieldMock,
-}));
-
-vi.mock("./YextEntityFieldSelector.tsx", () => ({
-  YextEntityFieldSelector: yextEntityFieldSelectorMock,
-}));
+vi.mock("./YextEntityFieldSelector.tsx", async () => {
+  const actual = await vi.importActual("./YextEntityFieldSelector.tsx");
+  return {
+    ...actual,
+    YextEntityFieldSelector: yextEntityFieldSelectorMock,
+  };
+});
 
 const renderCustomField = (field: any, value?: any) => {
   const onChange = vi.fn();
@@ -52,22 +49,6 @@ afterEach(() => {
 });
 
 describe("YextField", () => {
-  it("returns a code field and renders it through YextAutoField", () => {
-    const field = YextField<string>(msg("fields.html", "HTML"), {
-      type: "code",
-      codeLanguage: "html",
-    });
-
-    expect(field.type).toBe("code");
-
-    renderCustomField(field, "<div>Alpha</div>");
-
-    expect(screen.getByText("HTML")).toBeDefined();
-    expect(screen.getByRole("button").textContent).toContain(
-      "<div>Alpha</div>"
-    );
-  });
-
   it("renders native radio fields through YextAutoField", () => {
     renderCustomField(
       {
@@ -154,22 +135,6 @@ describe("YextField", () => {
     });
   });
 
-  it("maps code fields to Puck config", () => {
-    const fieldName = msg("fields.code", "Code");
-
-    const field = YextField(fieldName, {
-      type: "code",
-      codeLanguage: "typescript",
-    });
-
-    expect(field).toEqual({
-      type: "code",
-      label: fieldName,
-      visible: undefined,
-      codeLanguage: "typescript",
-    });
-  });
-
   it("renders the max width selector with grouped options and helper copy", () => {
     const themeStyle = document.createElement("style");
     themeStyle.id = "visual-editor-theme";
@@ -205,12 +170,9 @@ describe("YextField", () => {
     themeStyle.remove();
   });
 
-  it("delegates translatableString configs to TranslatableStringField", () => {
-    const returnedField = createCustomField();
+  it("passes translatableString configs through with the provided label", () => {
     const fieldName = msg("fields.text", "Text");
     const filter = { types: ["type.string"] };
-
-    translatableStringFieldMock.mockReturnValue(returnedField);
 
     const field = YextField(fieldName, {
       type: "translatableString",
@@ -218,12 +180,12 @@ describe("YextField", () => {
       showApplyAllOption: true,
     } as any);
 
-    expect(translatableStringFieldMock).toHaveBeenCalledWith(
-      fieldName,
+    expect(field).toEqual({
+      label: fieldName,
+      type: "translatableString",
       filter,
-      true
-    );
-    expect(field).toBe(returnedField);
+      showApplyAllOption: true,
+    });
   });
 
   it("delegates dynamicSelect configs to DynamicOptionsSelector", () => {

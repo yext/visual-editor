@@ -14,15 +14,14 @@ import {
 } from "./DynamicOptionsSelector.tsx";
 import { getMaxWidthOptions } from "./MaxWidthSelector.tsx";
 import { msg } from "../utils/i18n/platform.ts";
-import { TranslatableStringField } from "./TranslatableStringField.tsx";
 import {
   RenderYextEntityFieldSelectorProps,
   YextEntityField,
   YextEntityFieldSelector,
 } from "./YextEntityFieldSelector.tsx";
-import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
+import { type RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
 import { MsgString } from "../utils/i18n/platform.ts";
-import type { YextPuckFields } from "../fields/fields.ts";
+import type { YextFieldMap, YextPuckFields } from "../fields/fields.ts";
 
 /** Copied from Puck, do not change */
 export type FieldOption = {
@@ -39,12 +38,6 @@ type YextBaseField = {
 };
 
 export type YextPuckField = YextPuckFields[keyof YextPuckFields];
-
-type YextFieldMap<Props extends Record<string, any>> = {
-  [PropName in keyof Props as PropName extends "editMode"
-    ? never
-    : PropName]: YextFieldDefinition<Props[PropName]>;
-};
 
 type YextArrayFieldConfig<
   Props extends { [key: string]: any }[] = { [key: string]: any }[],
@@ -139,6 +132,11 @@ export function YextField<T extends Record<string, any>, U = any>(
   config: YextEntitySelectorField<T>
 ): Field<YextEntityField<U>>;
 
+export function YextField(
+  fieldName: MsgString,
+  config: YextTranslatableStringField
+): Field<any>;
+
 export function YextField<
   T extends DynamicOptionsSelectorType<U>,
   U extends DynamicOptionValueTypes,
@@ -161,15 +159,6 @@ export function YextField<T, U>(
     });
   }
 
-  if (config.type === "code") {
-    return {
-      type: "code",
-      label: fieldName,
-      visible: config.visible,
-      codeLanguage: config.codeLanguage,
-    };
-  }
-
   if (config.type === "maxWidth") {
     const maxWidthOptions = getMaxWidthOptions();
     return {
@@ -186,14 +175,6 @@ export function YextField<T, U>(
         },
       ],
     };
-  }
-
-  if (config.type === "translatableString") {
-    return TranslatableStringField(
-      fieldName,
-      config.filter,
-      config.showApplyAllOption
-    );
   }
 
   if (config.type === "dynamicSelect") {

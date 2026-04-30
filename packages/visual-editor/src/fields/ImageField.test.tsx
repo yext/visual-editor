@@ -44,9 +44,15 @@ vi.mock("../internal/hooks/useMessageReceivers.ts", () => ({
   }),
 }));
 
-vi.mock("../editor/TranslatableStringField.tsx", () => ({
-  TranslatableStringField: translatableStringFieldMock,
-}));
+vi.mock("./TranslatableStringField.tsx", async (importOriginal) => {
+  const actual =
+    await importOriginal<typeof import("./TranslatableStringField.tsx")>();
+
+  return {
+    ...actual,
+    TranslatableStringField: translatableStringFieldMock,
+  };
+});
 
 vi.mock("../utils/isFakeStarterLocalDev.ts", () => ({
   isFakeStarterLocalDev: () => true,
@@ -110,21 +116,42 @@ describe("ImageField", () => {
   });
 
   it("passes locator alt text options into the alt text field", () => {
-    renderImageField({
-      type: "image",
-      label: "Image",
-      getAltTextOptions: (templateMetadata) => [
-        {
-          label:
-            templateMetadata.locatorDisplayFields?.c_title?.field_name ?? "",
-          value: "c_title",
+    const getAltTextOptions = vi.fn((templateMetadata) => [
+      {
+        label: templateMetadata.locatorDisplayFields?.c_title?.field_name ?? "",
+        value: "c_title",
+      },
+    ]);
+
+    renderImageField(
+      {
+        type: "image",
+        label: "Image",
+        getAltTextOptions,
+      },
+      {
+        en: {
+          alternateText: "",
+          url: "https://example.com/image.jpg",
+          height: 1,
+          width: 1,
         },
-      ],
+        hasLocalizedValue: "true",
+      }
+    );
+
+    expect(getAltTextOptions).toHaveBeenCalledWith({
+      locatorDisplayFields: {
+        c_title: {
+          field_type_id: "type.string",
+          field_name: "Title",
+        },
+        c_photo: {
+          field_type_id: "type.image",
+          field_name: "Photo",
+        },
+      },
     });
-
-    expect(translatableStringFieldMock).toHaveBeenCalled();
-    const getOptions = translatableStringFieldMock.mock.calls[0][4];
-
-    expect(getOptions()).toEqual([{ label: "Title", value: "c_title" }]);
+    expect(screen.getByText("Alt Text (en)")).toBeDefined();
   });
 });

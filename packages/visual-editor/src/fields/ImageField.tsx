@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  AutoField,
-  BaseField,
-  FieldLabel,
-  type FieldProps,
-} from "@puckeditor/core";
+import { BaseField, FieldLabel, type FieldProps } from "@puckeditor/core";
 import { useTranslation } from "react-i18next";
 import {
   TARGET_ORIGINS,
@@ -21,7 +16,7 @@ import {
   resolveLocalizedAssetImage,
 } from "../types/images.ts";
 import { useDocument } from "../hooks/useDocument.tsx";
-import { TranslatableStringField } from "../editor/TranslatableStringField.tsx";
+import { type TranslatableStringField } from "./TranslatableStringField.tsx";
 import { resolveComponentData } from "../utils/resolveComponentData.tsx";
 import { TranslatableString } from "../types/types.ts";
 import { msg, pt, type MsgString } from "../utils/i18n/platform.ts";
@@ -32,6 +27,7 @@ import {
 import { DynamicOption } from "../editor/DynamicOptionsSelector.tsx";
 import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 import { isFakeStarterLocalDev } from "../utils/isFakeStarterLocalDev.ts";
+import { YextAutoField } from "./YextAutoField.tsx";
 
 export type ImagePayload = {
   id: string;
@@ -190,21 +186,22 @@ export const ImageFieldOverride = ({
     () => field.getAltTextOptions?.(templateMetadata),
     [field.getAltTextOptions, templateMetadata]
   );
-  const altTextField = React.useMemo(() => {
+  const altTextField = React.useMemo<TranslatableStringField>(() => {
     if (altTextOptions) {
-      return TranslatableStringField<TranslatableString | undefined>(
-        msg("altText", "Alt Text"),
-        undefined,
-        false,
-        true,
-        () => altTextOptions
-      );
+      return {
+        type: "translatableString",
+        label: msg("altText", "Alt Text"),
+        showApplyAllOption: false,
+        showFieldSelector: true,
+        getOptions: () => altTextOptions,
+      };
     }
 
-    return TranslatableStringField<TranslatableString | undefined>(
-      msg("altText", "Alt Text"),
-      { types: ["type.string"] }
-    );
+    return {
+      type: "translatableString",
+      label: msg("altText", "Alt Text"),
+      filter: { types: ["type.string"] },
+    };
   }, [altTextOptions]);
 
   const altText = resolveComponentData(
@@ -264,7 +261,7 @@ export const ImageFieldOverride = ({
 
       {resolvedValue && (
         <FieldLabel label="" el="div">
-          <AutoField
+          <YextAutoField
             field={altTextField}
             id="altText"
             value={resolvedValue.alternateText}

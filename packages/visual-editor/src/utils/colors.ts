@@ -212,6 +212,10 @@ export const getThemeColorCssValue = (
   return `var(--colors-${colorToken})`;
 };
 
+export const isCustomThemeColorToken = (colorToken?: string): boolean => {
+  return !!colorToken && colorToken.startsWith("[") && colorToken.endsWith("]");
+};
+
 /**
  * Normalizes a color string into an uppercase hex value when possible.
  * Supports the literal tokens `white` and `black`, 3/6-digit hex, and
@@ -403,11 +407,40 @@ export const getThemeColorHexValue = (
  */
 export const getBackgroundColorClasses = (color?: ThemeColor): string => {
   return [
-    color?.selectedColor ? `bg-${color.selectedColor}` : undefined,
-    color?.contrastingColor ? `text-${color.contrastingColor}` : undefined,
+    color?.selectedColor && !isCustomThemeColorToken(color.selectedColor)
+      ? `bg-${color.selectedColor}`
+      : undefined,
+    color?.contrastingColor && !isCustomThemeColorToken(color.contrastingColor)
+      ? `text-${color.contrastingColor}`
+      : undefined,
   ]
     .filter((value): value is string => !!value)
     .join(" ");
+};
+
+/**
+ * Resolves inline styles for bracketed custom colors in background contexts.
+ * @param color a ThemeColor object
+ * @returns inline background/text color styles, e.g. `{ backgroundColor: "#FF6D66" }`
+ */
+export const getBackgroundColorStyle = (
+  color?: ThemeColor
+): { backgroundColor?: string; color?: string } | undefined => {
+  const backgroundColor = isCustomThemeColorToken(color?.selectedColor)
+    ? getThemeColorCssValue(color?.selectedColor)
+    : undefined;
+  const textColor = isCustomThemeColorToken(color?.contrastingColor)
+    ? getThemeColorCssValue(color?.contrastingColor)
+    : undefined;
+
+  if (!backgroundColor && !textColor) {
+    return undefined;
+  }
+
+  return {
+    ...(backgroundColor ? { backgroundColor } : {}),
+    ...(textColor ? { color: textColor } : {}),
+  };
 };
 
 /**
@@ -416,9 +449,24 @@ export const getBackgroundColorClasses = (color?: ThemeColor): string => {
  * @returns the selected text color class, if present.
  */
 export const getTextColorClass = (color?: ThemeColor): string | undefined => {
-  if (!color?.selectedColor) {
+  if (!color?.selectedColor || isCustomThemeColorToken(color.selectedColor)) {
     return undefined;
   }
 
   return `text-${color.selectedColor}`;
+};
+
+/**
+ * Resolves inline styles for bracketed custom colors in text contexts.
+ * @param color a ThemeColor object
+ * @returns inline text color styles, e.g. `{ color: "#FF6D66" }`
+ */
+export const getTextColorStyle = (
+  color?: ThemeColor
+): { color?: string } | undefined => {
+  if (!isCustomThemeColorToken(color?.selectedColor)) {
+    return undefined;
+  }
+
+  return { color: getThemeColorCssValue(color?.selectedColor) };
 };

@@ -27,4 +27,9 @@ export {
   type OptionalNumberField,
 } from "./OptionalNumberField.tsx";
 
+export {
+  TranslatableStringFieldOverride,
+  type TranslatableStringField,
+} from "./TranslatableStringField.tsx";
+
 export { VideoFieldOverride, type VideoField } from "./VideoField.tsx";

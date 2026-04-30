@@ -1,11 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import {
-  ArrayField,
-  FieldLabel,
-  PuckComponent,
-  setDeep,
-} from "@puckeditor/core";
+import { FieldLabel, PuckComponent, setDeep } from "@puckeditor/core";
 import { CTA } from "../atoms/cta.tsx";
 import { i18nComponentsInstance } from "../../utils/i18n/components.ts";
 import { msg, pt } from "../../utils/i18n/platform.ts";
@@ -16,8 +11,8 @@ import { useOverflow } from "../../hooks/useOverflow.ts";
 import { usePreviewWindow } from "../../hooks/usePreviewWindow.ts";
 import {
   YextField,
+  type YextArrayField,
   type YextCustomFieldRenderProps,
-  type YextPuckField,
 } from "../../editor/YextField.tsx";
 import { YextAutoField } from "../../fields/YextAutoField.tsx";
 import { linkTypeOptions } from "../../internal/puck/constant-value-fields/CallToAction.tsx";
@@ -77,16 +72,18 @@ const defaultLink: TranslatableCTA = {
   openInNewTab: false,
 };
 
-const linkFieldConfig: ArrayField<TranslatableCTA[], YextPuckField> = {
+const linkFieldConfig: YextArrayField<TranslatableCTA[]> = {
   type: "array",
   arrayFields: {
-    label: YextField(msg("fields.label", "Label"), {
+    label: {
       type: "translatableString",
+      label: msg("fields.label", "Label"),
       filter: { types: ["type.string"] },
-    }),
-    link: YextField(msg("fields.link", "Link"), {
+    },
+    link: {
       type: "translatableString",
-    }),
+      label: msg("fields.link", "Link"),
+    },
     linkType: {
       type: "basicSelector",
       label: msg("fields.linkType", "Link Type"),
