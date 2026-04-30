@@ -81,12 +81,13 @@ const bannerSectionFields: YextFields<BannerSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      text: YextField<any, TranslatableRichText>(msg("fields.text", "Text"), {
+      text: {
         type: "entityField",
+        label: msg("fields.text", "Text"),
         filter: {
           types: ["type.rich_text_v2"],
         },
-      }),
+      },
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {

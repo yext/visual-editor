@@ -12,11 +12,6 @@ import {
   DynamicOptionValueTypes,
   DynamicOptionsSelectorType,
 } from "./DynamicOptionsSelector.tsx";
-import {
-  RenderYextEntityFieldSelectorProps,
-  YextEntityField,
-  YextEntityFieldSelector,
-} from "./YextEntityFieldSelector.tsx";
 import { MsgString } from "../utils/i18n/platform.ts";
 import type { YextFieldMap, YextPuckFields } from "../fields/fields.ts";
 
@@ -88,24 +83,16 @@ type YextDynamicSelectField<T extends DynamicOptionValueTypes> =
     placeholderOptionLabel?: string;
   };
 
-// YextEntitySelectorField has same functionality as YextEntityFieldSelector
-type YextEntitySelectorField<
-  T extends Record<string, any> = Record<string, any>,
-> = YextBaseField &
-  Omit<RenderYextEntityFieldSelectorProps<T>, "label"> & {
-    type: "entityField";
-  };
-
 type YextFieldConfig<Props = any> =
   | YextArrayFieldConfig<Props extends Record<string, any>[] ? Props : any>
   | YextObjectFieldConfig<Props extends Record<string, any> ? Props : any>
   | YextNumberField
-  | YextEntitySelectorField<Props extends Record<string, any> ? Props : any>
   | YextDynamicSelectField<Props extends DynamicOptionValueTypes ? Props : any>
   | YextPuckFields[Exclude<
       keyof YextPuckFields,
       | "basicSelector"
       | "code"
+      | "entityField"
       | "image"
       | "optionalNumber"
       | "video"
@@ -117,11 +104,6 @@ export function YextField<T = any>(
   config: YextFieldConfig<T>
 ): Field<T>;
 
-export function YextField<T extends Record<string, any>, U = any>(
-  fieldName: MsgString,
-  config: YextEntitySelectorField<T>
-): Field<YextEntityField<U>>;
-
 export function YextField<
   T extends DynamicOptionsSelectorType<U>,
   U extends DynamicOptionValueTypes,
@@ -130,20 +112,10 @@ export function YextField<
   config: YextDynamicSelectField<U>
 ): Field<T | undefined>;
 
-export function YextField<T, U>(
+export function YextField<T>(
   fieldName: MsgString,
   config: YextFieldConfig<T>
 ): any {
-  // use YextEntityFieldSelector
-  if (config.type === "entityField") {
-    return YextEntityFieldSelector<T extends Record<string, any> ? T : any, U>({
-      label: fieldName,
-      filter: config.filter,
-      disableConstantValueToggle: config.disableConstantValueToggle,
-      disallowTranslation: config.disallowTranslation,
-    });
-  }
-
   if (config.type === "dynamicSelect") {
     return DynamicOptionsSelector({
       label: fieldName,
