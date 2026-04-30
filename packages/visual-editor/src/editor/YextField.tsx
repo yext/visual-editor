@@ -6,12 +6,6 @@ import {
   NumberField,
   ObjectField,
 } from "@puckeditor/core";
-import {
-  DynamicOption,
-  DynamicOptionsSelector,
-  DynamicOptionValueTypes,
-  DynamicOptionsSelectorType,
-} from "./DynamicOptionsSelector.tsx";
 import { MsgString } from "../utils/i18n/platform.ts";
 import type { YextFieldMap, YextPuckFields } from "../fields/fields.ts";
 
@@ -75,25 +69,17 @@ export type YextFieldDefinition<ValueType = any> =
       ? YextObjectField<ValueType>
       : never);
 
-type YextDynamicSelectField<T extends DynamicOptionValueTypes> =
-  YextBaseField & {
-    type: "dynamicSelect";
-    dropdownLabel: string;
-    getOptions: () => DynamicOption<T>[];
-    placeholderOptionLabel?: string;
-  };
-
 type YextFieldConfig<Props = any> =
   | YextArrayFieldConfig<Props extends Record<string, any>[] ? Props : any>
   | YextObjectFieldConfig<Props extends Record<string, any> ? Props : any>
   | YextNumberField
-  | YextDynamicSelectField<Props extends DynamicOptionValueTypes ? Props : any>
   | YextPuckFields[Exclude<
       keyof YextPuckFields,
       | "basicSelector"
       | "code"
       | "entityField"
       | "image"
+      | "multiSelector"
       | "optionalNumber"
       | "video"
       | "translatableString"
@@ -103,28 +89,10 @@ export function YextField<T = any>(
   fieldName: MsgString,
   config: YextFieldConfig<T>
 ): Field<T>;
-
-export function YextField<
-  T extends DynamicOptionsSelectorType<U>,
-  U extends DynamicOptionValueTypes,
->(
-  fieldName: MsgString,
-  config: YextDynamicSelectField<U>
-): Field<T | undefined>;
-
 export function YextField<T>(
   fieldName: MsgString,
   config: YextFieldConfig<T>
 ): any {
-  if (config.type === "dynamicSelect") {
-    return DynamicOptionsSelector({
-      label: fieldName,
-      dropdownLabel: config.dropdownLabel,
-      getOptions: config.getOptions,
-      placeholderOptionLabel: config.placeholderOptionLabel,
-    });
-  }
-
   return {
     label: fieldName,
     ...config,
