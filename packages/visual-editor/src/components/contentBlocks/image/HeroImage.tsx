@@ -1,26 +1,21 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { PuckComponent } from "@puckeditor/core";
+import { PuckComponent, setDeep } from "@puckeditor/core";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { EntityField } from "../../../editor/EntityField.tsx";
 import { Image, imgSizesHelper } from "../../atoms/image.tsx";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
+import { AssetImageType } from "../../../types/images.ts";
+import { resolveDataFromParent } from "../../../editor/ParentData.tsx";
 import {
-  AssetImageType,
-  isLocalizedAssetImage,
-  resolveLocalizedAssetImage,
-  TranslatableAssetImage,
-} from "../../../types/images.ts";
-import { ComplexImageType, ImageType } from "@yext/pages-components";
-import { updateFields } from "../../pageSections/HeroSection.tsx";
-import {
+  getImageUrl,
   imageDefaultProps,
   ImageWrapperFields,
   ImageWrapperProps,
 } from "./Image.tsx";
 import { EmptyImageState } from "./EmptyImageState.tsx";
-import { toPuckFields, YextComponentConfig } from "../../../fields/fields.ts";
+import { YextComponentConfig } from "../../../fields/fields.ts";
 
 export interface HeroImageProps extends ImageWrapperProps {
   /** @internal from the parent Hero Section Component */
@@ -36,25 +31,7 @@ const HeroImageComponent: PuckComponent<HeroImageProps> = (props) => {
     i18n.language,
     streamDocument
   );
-
-  const getImageUrl = (
-    image: ImageType | ComplexImageType | TranslatableAssetImage | undefined
-  ): string | undefined => {
-    if (!image) {
-      return undefined;
-    }
-
-    if (isLocalizedAssetImage(image)) {
-      return resolveLocalizedAssetImage(image, i18n.language)?.url;
-    }
-
-    if ("image" in image) {
-      return image.image?.url;
-    }
-    return (image as ImageType | AssetImageType).url;
-  };
-
-  const imageUrl = getImageUrl(resolvedImage);
+  const imageUrl = getImageUrl(resolvedImage, i18n.language);
   const isEmpty =
     !resolvedImage ||
     !imageUrl ||
@@ -84,6 +61,7 @@ const HeroImageComponent: PuckComponent<HeroImageProps> = (props) => {
       fieldId={data.image.field}
       constantValueEnabled={data.image.constantValueEnabled}
       fullHeight={true}
+      ref={puck?.dragRef}
     >
       <Image
         image={resolvedImage}
@@ -105,27 +83,38 @@ export const HeroImage: YextComponentConfig<HeroImageProps> = {
   fields: ImageWrapperFields,
   defaultProps: imageDefaultProps,
   resolveFields: (data) => {
-    let fields = ImageWrapperFields;
+    let fields = setDeep(
+      resolveDataFromParent(ImageWrapperFields, data),
+      "styles.objectFields.width.visible",
+      true
+    );
+    const filteredAspectRatioOptions = (
+      ImageWrapperFields.styles as {
+        objectFields: {
+          aspectRatio: {
+            options: { label: string; value: number }[];
+          };
+        };
+      }
+    ).objectFields.aspectRatio.options.filter(
+      (option) => !["4:1", "3:1", "2:1", "9:16"].includes(option.label)
+    );
 
     switch (data.props.variant ?? "classic") {
       case "compact": {
-        fields = updateFields(fields, ["styles.objectFields.width"], undefined);
+        fields = setDeep(fields, "styles.objectFields.width.visible", false);
         // compact should also remove the props removed by classic
       }
       case "classic": {
-        fields = updateFields(
+        fields = setDeep(
           fields,
-          ["styles.objectFields.aspectRatio.options"],
-          // @ts-expect-error ts(2339) objectFields exists
-          fields.styles.objectFields.aspectRatio.options.filter(
-            (option: { label: string; value: string }) =>
-              !["4:1", "3:1", "2:1", "9:16"].includes(option.label)
-          )
+          "styles.objectFields.aspectRatio.options",
+          filteredAspectRatioOptions
         );
         break;
       }
     }
-    return toPuckFields(fields);
+    return fields;
   },
   render: (props) => <HeroImageComponent {...props} />,
 };

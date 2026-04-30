@@ -29,6 +29,7 @@ import {
   OptionalNumberField,
   OptionalNumberFieldOverride,
 } from "./OptionalNumberField.tsx";
+import { ImageField, ImageFieldOverride } from "./ImageField.tsx";
 import {
   TranslatableStringField,
   TranslatableStringFieldOverride,
@@ -42,6 +43,7 @@ export type YextPuckFields = {
   dateTimeSelector: DateTimeSelectorField;
   multiSelector: MultiSelectorField;
   fontSizeSelector: FontSizeSelectorField;
+  image: ImageField;
   optionalNumber: OptionalNumberField;
   translatableString: TranslatableStringField;
   video: VideoField;
@@ -84,6 +86,7 @@ export const YextPuckFieldOverrides = {
   dateTimeSelector: DateTimeSelectorFieldOverride,
   multiSelector: MultiSelectorFieldOverride,
   fontSizeSelector: FontSizeSelectorFieldOverride,
+  image: ImageFieldOverride,
   optionalNumber: OptionalNumberFieldOverride,
   translatableString: TranslatableStringFieldOverride,
   video: VideoFieldOverride,

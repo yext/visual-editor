@@ -1,0 +1,54 @@
+import { Migration } from "../../utils/migrate.ts";
+
+const isRecord = (value: unknown): value is Record<string, any> => {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+};
+
+const isLocalizedImageShape = (value: Record<string, any>) => {
+  return value.hasLocalizedValue === "true" || "defaultValue" in value;
+};
+
+const normalizeFooterLogoImage = (image: unknown) => {
+  if (!isRecord(image) || !isLocalizedImageShape(image)) {
+    return image;
+  }
+
+  const { field, constantValue, constantValueEnabled, ...localizedImage } =
+    image;
+  const hasActiveEntityField =
+    typeof field === "string" && field !== "" && constantValueEnabled === false;
+
+  return {
+    field: hasActiveEntityField ? field : "",
+    constantValue: constantValue ?? localizedImage,
+    constantValueEnabled: hasActiveEntityField ? false : true,
+  };
+};
+
+type MigrationProps = { id: string } & Record<string, any>;
+
+const normalizeFooterLogoSlotProps = (
+  props: MigrationProps
+): MigrationProps => {
+  const image = props.data?.image;
+  const normalizedImage = normalizeFooterLogoImage(image);
+
+  if (normalizedImage === image) {
+    return props;
+  }
+
+  return {
+    ...props,
+    data: {
+      ...props.data,
+      image: normalizedImage,
+    },
+  };
+};
+
+export const normalizeFooterLogoImageMigration: Migration = {
+  FooterLogoSlot: {
+    action: "updated",
+    propTransformation: normalizeFooterLogoSlotProps,
+  },
+};

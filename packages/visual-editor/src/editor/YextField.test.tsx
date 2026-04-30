@@ -4,7 +4,6 @@ import { YextAutoField } from "../fields/YextAutoField.tsx";
 import { msg } from "../utils/i18n/platform.ts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { YextField } from "./YextField.tsx";
-import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 
 const { yextEntityFieldSelectorMock } = vi.hoisted(() => ({
   yextEntityFieldSelectorMock: vi.fn(),
@@ -136,11 +135,10 @@ describe("YextField", () => {
       type: "image",
     }) as any;
 
-    expect(field).toMatchObject({
-      type: IMAGE_CONSTANT_CONFIG.type,
+    expect(field).toEqual({
+      type: "image",
       label: fieldName,
     });
-    expect(field.render).toBe(IMAGE_CONSTANT_CONFIG.render);
   });
 
   it.each([

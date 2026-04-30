@@ -28,8 +28,11 @@ import {
   type YextObjectField,
 } from "../editor/YextField.tsx";
 import { type BasicSelectorField } from "../fields/BasicSelectorField.tsx";
+import {
+  buildLocatorDisplayOptions,
+  type ImageField,
+} from "../fields/ImageField.tsx";
 import { ConstantValueModeToggler } from "../editor/YextEntityFieldSelector.tsx";
-import { LOCATOR_IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 import { type EmbeddedStringOption } from "../editor/EmbeddedFieldStringInput.tsx";
 import { TranslatableString } from "../types/types.ts";
 import { TranslatableAssetImage } from "../types/images.ts";
@@ -326,6 +329,13 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
     constantValueEnabled: false,
     liveVisibility: false,
   },
+};
+
+const LOCATOR_IMAGE_CONSTANT_CONFIG: ImageField = {
+  type: "image",
+  label: msg("fields.image", "Image"),
+  getAltTextOptions: (templateMetadata) =>
+    buildLocatorDisplayOptions(templateMetadata?.locatorDisplayFields),
 };
 
 const getDisplayFieldOptions = (
