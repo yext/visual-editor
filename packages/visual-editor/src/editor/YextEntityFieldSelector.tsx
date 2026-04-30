@@ -45,6 +45,7 @@ import { EmbeddedFieldStringInputFromEntity } from "./EmbeddedFieldStringInput.t
 import { FAQ_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/FAQsSection.tsx";
 import {
   getFieldsForSelector,
+  getEntityFieldDisplayName,
   type YextEntityField,
 } from "./yextEntityFieldUtils.ts";
 import { useDocument } from "../hooks/useDocument.tsx";
@@ -443,6 +444,11 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   const templateMetadata = useTemplateMetadata();
   const streamDocument = useDocument();
   const descendantRoot = filter.descendantsOf;
+  const currentFieldPath = value?.field as string | undefined;
+  const hasValidDescendantSelection =
+    !descendantRoot ||
+    !currentFieldPath ||
+    currentFieldPath.startsWith(`${descendantRoot}.`);
   const linkedEntityDescendantRoot =
     filter.descendantsOf &&
     isTopLevelLinkedEntityField(filter.descendantsOf, entityFields)
@@ -456,31 +462,52 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       },
       streamDocument
     );
+    const descendantFilteredEntityFields = descendantRoot
+      ? filteredEntityFields.filter((field) =>
+          field.name.startsWith(`${descendantRoot}.`)
+        )
+      : filteredEntityFields;
+    if (
+      descendantRoot &&
+      descendantFilteredEntityFields.length !== filteredEntityFields.length
+    ) {
+      devLogger.log(
+        `Stripped non-descendant options from entity field selector for ${descendantRoot}`
+      );
+    }
     const descendantRootDisplayName = descendantRoot
-      ? (entityFields?.displayNames?.[descendantRoot] ??
-        entityFields?.fields.find((field) => field.name === descendantRoot)
-          ?.displayName)
+      ? getEntityFieldDisplayName(descendantRoot, entityFields)
       : undefined;
-    const currentFieldPath = value?.field as string | undefined;
     const currentOptionValue =
-      descendantRoot && currentFieldPath?.startsWith(`${descendantRoot}.`)
+      descendantRoot && hasValidDescendantSelection && currentFieldPath
         ? currentFieldPath.slice(descendantRoot.length + 1)
         : currentFieldPath;
-    const fieldOptions = filteredEntityFields.map((field) => ({
-      label: field.displayName ?? field.name,
-      value:
-        descendantRoot && field.name.startsWith(`${descendantRoot}.`)
-          ? field.name.slice(descendantRoot.length + 1)
-          : field.name,
-      fieldPath: field.name,
-    }));
+    const fieldOptions = descendantFilteredEntityFields.map((field) => {
+      const displayName =
+        getEntityFieldDisplayName(field.name, entityFields) ?? field.name;
+
+      return {
+        label:
+          descendantRootDisplayName &&
+          displayName.startsWith(`${descendantRootDisplayName} > `)
+            ? displayName.slice(descendantRootDisplayName.length + 3)
+            : displayName,
+        value:
+          descendantRoot && field.name.startsWith(`${descendantRoot}.`)
+            ? field.name.slice(descendantRoot.length + 1)
+            : field.name,
+        fieldPath: field.name,
+      };
+    });
     if (
+      hasValidDescendantSelection &&
       currentFieldPath &&
       currentOptionValue &&
       !fieldOptions.some((option) => option.value === currentOptionValue)
     ) {
       const savedFieldDisplayName =
-        entityFields?.displayNames?.[currentFieldPath] ?? currentOptionValue;
+        getEntityFieldDisplayName(currentFieldPath, entityFields) ??
+        currentOptionValue;
 
       fieldOptions.push({
         label:
@@ -518,12 +545,13 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     };
   }, [
     entityFields,
+    hasValidDescendantSelection,
     descendantRoot,
     filter,
     label,
     linkedEntityDescendantRoot,
     templateMetadata.entityTypeDisplayName,
-    value?.field,
+    currentFieldPath,
     streamDocument,
   ]);
 

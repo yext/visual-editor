@@ -53,6 +53,38 @@ const sortFields = (fields: YextSchemaField[]): YextSchemaField[] => {
   });
 };
 
+export const getEntityFieldDisplayName = (
+  fieldPath: string | undefined,
+  entityFields: StreamFields | null
+): string | undefined => {
+  if (!fieldPath) {
+    return undefined;
+  }
+
+  const displayNameFromMap = entityFields?.displayNames?.[fieldPath];
+  if (displayNameFromMap) {
+    return displayNameFromMap;
+  }
+
+  const fieldPathSegments = fieldPath.split(".");
+  const displayNameSegments: string[] = [];
+  let currentFields = entityFields?.fields ?? [];
+
+  for (const segment of fieldPathSegments) {
+    const matchingField = currentFields.find((field) => field.name === segment);
+    if (!matchingField) {
+      return displayNameSegments.length
+        ? displayNameSegments.join(" > ")
+        : undefined;
+    }
+
+    displayNameSegments.push(matchingField.displayName ?? matchingField.name);
+    currentFields = matchingField.children?.fields ?? [];
+  }
+
+  return displayNameSegments.join(" > ");
+};
+
 const isSectionFieldSourceValue = (value: unknown): boolean =>
   value === undefined ||
   value === null ||
@@ -70,6 +102,7 @@ export const getFieldsForSelector = (
   streamDocument?: StreamDocument
 ): YextSchemaField[] => {
   const linkedEntityStreamFields = buildLinkedEntityStreamFields(entityFields);
+  const isDescendantFilter = !!filter.descendantsOf;
   const resolvedDescendantFieldPaths = filter.descendantsOf
     ? getResolvedDescendantFieldPaths(streamDocument, filter.descendantsOf)
     : undefined;
@@ -108,8 +141,10 @@ export const getFieldsForSelector = (
   const linkedEntityRootFields = filter.sourceRootKinds?.includes(
     "linkedEntityRoot"
   )
-    ? (linkedEntityStreamFields?.fields ??
-      getTopLevelLinkedEntitySourceFields(entityFields))
+    ? (
+        linkedEntityStreamFields?.fields ??
+        getTopLevelLinkedEntitySourceFields(entityFields)
+      ).filter(hasRequiredDescendants)
     : [];
   const baseListRootFields = filter.sourceRootKinds?.includes("baseListRoot")
     ? getBaseEntityListSourceRootFields(entityFields).filter(
@@ -120,9 +155,7 @@ export const getFieldsForSelector = (
     !!filter.descendantsOf &&
     isTopLevelLinkedEntityField(filter.descendantsOf, entityFields);
   const descendantRootDisplayName = filter.descendantsOf
-    ? (entityFields?.displayNames?.[filter.descendantsOf] ??
-      entityFields?.fields.find((field) => field.name === filter.descendantsOf)
-        ?.displayName)
+    ? getEntityFieldDisplayName(filter.descendantsOf, entityFields)
     : undefined;
 
   if (filter.sourceRootsOnly) {
@@ -195,6 +228,10 @@ export const getFieldsForSelector = (
   }
 
   if (resolvedDescendantFieldPaths) {
+    if (resolvedDescendantFieldPaths.size === 0) {
+      return [];
+    }
+
     filteredEntityFields = filteredEntityFields.filter((field) =>
       resolvedDescendantFieldPaths.has(field.name)
     );
@@ -215,11 +252,15 @@ export const getFieldsForSelector = (
   }
 
   return sortFields(
-    dedupeFieldsByName([
-      ...filteredEntityFields,
-      ...(!isLinkedEntityDescendantFilter ? linkedEntityRootFields : []),
-      ...(!isLinkedEntityDescendantFilter ? baseListRootFields : []),
-    ])
+    dedupeFieldsByName(
+      isDescendantFilter
+        ? filteredEntityFields
+        : [
+            ...filteredEntityFields,
+            ...linkedEntityRootFields,
+            ...baseListRootFields,
+          ]
+    )
   );
 };
 
