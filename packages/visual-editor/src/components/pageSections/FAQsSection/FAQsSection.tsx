@@ -85,14 +85,18 @@ const createFAQMappingFields = (sourceField?: string) =>
         type: "entityField",
         filter: {
           types: ["type.string", "type.rich_text_v2"],
-          ...(sourceField ? { descendantsOf: sourceField } : {}),
+          ...(sourceField
+            ? { descendantsOf: sourceField, subdocumentField: sourceField }
+            : {}),
         },
       }),
       answer: YextField(msg("fields.answer", "Answer"), {
         type: "entityField",
         filter: {
           types: ["type.string", "type.rich_text_v2"],
-          ...(sourceField ? { descendantsOf: sourceField } : {}),
+          ...(sourceField
+            ? { descendantsOf: sourceField, subdocumentField: sourceField }
+            : {}),
         },
       }),
     },

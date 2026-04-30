@@ -1359,7 +1359,7 @@ describe("YextEntityFieldSelector", () => {
     expect(screen.queryByText("LinkedIn URL")).toBeNull();
   });
 
-  it("limits linked descendant fields to those present on the first resolved linked entity", () => {
+  it("includes linked descendant fields present on any of the first three resolved linked entities", () => {
     renderEntityFieldInput({
       entityFields: {
         fields: [
@@ -1421,6 +1421,8 @@ describe("YextEntityFieldSelector", () => {
         c_linkedLocation: [
           { name: "Downtown" },
           { tripBranding: { url: "#" } },
+          { name: "Uptown" },
+          { hiddenField: "ignore me" },
         ],
       },
     });
@@ -1428,7 +1430,70 @@ describe("YextEntityFieldSelector", () => {
     fireEvent.click(screen.getByRole("combobox"));
 
     expect(screen.getAllByText("Name").length).toBeGreaterThan(0);
-    expect(screen.queryByText("Trip Branding > URL")).toBeNull();
+    expect(screen.getAllByText("Trip Branding > URL").length).toBeGreaterThan(
+      0
+    );
+  });
+
+  it("does not include linked descendant fields that are present only on the fourth resolved linked entity", () => {
+    renderEntityFieldInput({
+      entityFields: {
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_linkedLocation",
+            displayName: "Linked Location",
+            definition: {
+              name: "c_linkedLocation",
+              isList: true,
+              typeRegistryId: "type.entity_reference",
+              type: {
+                documentType: "DOCUMENT_TYPE_ENTITY",
+              },
+            },
+            children: {
+              fields: [
+                {
+                  name: "name",
+                  displayName: "Name",
+                  definition: {
+                    name: "name",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+                {
+                  name: "linkedInUrl",
+                  displayName: "LinkedIn URL",
+                  definition: {
+                    name: "linkedInUrl",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+      filter: {
+        types: ["type.string"],
+        descendantsOf: "c_linkedLocation",
+      },
+      document: {
+        c_linkedLocation: [
+          { name: "One" },
+          { name: "Two" },
+          { name: "Three" },
+          { linkedInUrl: "https://linkedin.com/in/four" },
+        ],
+      },
+    });
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(screen.getAllByText("Name").length).toBeGreaterThan(0);
+    expect(screen.queryByText("LinkedIn URL")).toBeNull();
   });
 
   it("does not show linked descendant options when the selected source resolves to no items", () => {
@@ -1755,7 +1820,7 @@ describe("YextEntityFieldSelector", () => {
     );
   });
 
-  it("limits base list descendant fields to those present on the first resolved item", () => {
+  it("includes base list descendant fields present on any of the first three resolved items", () => {
     renderEntityFieldInput({
       entityFields: {
         fields: [
@@ -1815,6 +1880,8 @@ describe("YextEntityFieldSelector", () => {
         c_customEvents: [
           { title: "First" },
           { secondaryCta: { label: "Later" } },
+          { title: "Third" },
+          { hiddenField: "ignore me" },
         ],
       },
     });
@@ -1822,7 +1889,9 @@ describe("YextEntityFieldSelector", () => {
     fireEvent.click(screen.getByRole("combobox"));
 
     expect(screen.getAllByText("Title").length).toBeGreaterThan(0);
-    expect(screen.queryByText("Secondary CTA > Label")).toBeNull();
+    expect(screen.getAllByText("Secondary CTA > Label").length).toBeGreaterThan(
+      0
+    );
   });
 
   it("falls back to the default entity field option when no matching entity fields exist", () => {

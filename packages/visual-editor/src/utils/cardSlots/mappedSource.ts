@@ -144,6 +144,7 @@ export type MappedSourceFieldFilter<T extends Record<string, any>> =
   RenderEntityFieldFilter<T> & {
     listFieldName?: string;
     requiredDescendantTypes?: EntityFieldTypes[][];
+    subdocumentField?: string;
     sourceRootKinds?: SourceRootKind[];
     sourceRootsOnly?: boolean;
   };

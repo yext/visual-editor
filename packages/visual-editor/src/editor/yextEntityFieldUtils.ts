@@ -8,7 +8,6 @@ import { type StreamDocument } from "../utils/types/StreamDocument.ts";
 import {
   buildLinkedEntityStreamFields,
   getTopLevelLinkedEntitySourceFields,
-  isTopLevelLinkedEntityField,
 } from "../utils/linkedEntityFieldUtils.ts";
 import {
   getBaseEntityListSourceRootFields,
@@ -96,16 +95,54 @@ const isMappedListSourceValue = (value: unknown): boolean =>
   Array.isArray(value) ||
   (!!value && typeof value === "object");
 
+const getSchemaFieldAtPath = (
+  entityFields: StreamFields | null,
+  fieldPath: string
+): YextSchemaField | undefined => {
+  const fieldPathSegments = fieldPath.split(".");
+  let currentFields = entityFields?.fields ?? [];
+  let matchingField: YextSchemaField | undefined;
+
+  for (const segment of fieldPathSegments) {
+    matchingField = currentFields.find((field) => field.name === segment);
+    if (!matchingField) {
+      return undefined;
+    }
+
+    currentFields = matchingField.children?.fields ?? [];
+  }
+
+  return matchingField;
+};
+
+const getSubdocumentStreamFields = (
+  entityFields: StreamFields | null,
+  fieldPath: string
+): StreamFields | null => {
+  const schemaField = getSchemaFieldAtPath(entityFields, fieldPath);
+  const fields = schemaField?.children?.fields;
+  return fields?.length
+    ? {
+        fields,
+        displayNames: entityFields?.displayNames,
+      }
+    : null;
+};
+
 export const getFieldsForSelector = (
   entityFields: StreamFields | null,
   filter: MappedSourceFieldFilter<any>,
   streamDocument?: StreamDocument
 ): YextSchemaField[] => {
   const linkedEntityStreamFields = buildLinkedEntityStreamFields(entityFields);
-  const isDescendantFilter = !!filter.descendantsOf;
-  const resolvedDescendantFieldPaths = filter.descendantsOf
-    ? getResolvedDescendantFieldPaths(streamDocument, filter.descendantsOf)
+  const scopedFieldPath = filter.subdocumentField ?? filter.descendantsOf;
+  const isDescendantFilter = !!scopedFieldPath;
+  const resolvedDescendantFieldPaths = scopedFieldPath
+    ? getResolvedDescendantFieldPaths(streamDocument, scopedFieldPath)
     : undefined;
+  const scopedStreamFields = scopedFieldPath
+    ? getSubdocumentStreamFields(entityFields, scopedFieldPath)
+    : null;
   const hasRequiredDescendants = (field: YextSchemaField): boolean => {
     if (!filter.requiredDescendantTypes?.length) {
       return true;
@@ -151,11 +188,8 @@ export const getFieldsForSelector = (
         hasRequiredDescendants
       )
     : [];
-  const isLinkedEntityDescendantFilter =
-    !!filter.descendantsOf &&
-    isTopLevelLinkedEntityField(filter.descendantsOf, entityFields);
-  const descendantRootDisplayName = filter.descendantsOf
-    ? getEntityFieldDisplayName(filter.descendantsOf, entityFields)
+  const descendantRootDisplayName = scopedFieldPath
+    ? getEntityFieldDisplayName(scopedFieldPath, entityFields)
     : undefined;
 
   if (filter.sourceRootsOnly) {
@@ -209,13 +243,19 @@ export const getFieldsForSelector = (
     );
   }
 
-  let filteredEntityFields = getFilteredEntityFields(entityFields, filter);
-
-  if (isLinkedEntityDescendantFilter) {
-    filteredEntityFields = getFilteredEntityFields(linkedEntityStreamFields, {
-      ...filter,
-    });
-  }
+  const descendantFilter = {
+    ...filter,
+    descendantsOf: undefined,
+    subdocumentField: undefined,
+  };
+  let filteredEntityFields = scopedStreamFields
+    ? getFilteredEntityFields(scopedStreamFields, descendantFilter).map(
+        (field) => ({
+          ...field,
+          name: `${scopedFieldPath}.${field.name}`,
+        })
+      )
+    : getFilteredEntityFields(entityFields, filter);
 
   if (descendantRootDisplayName) {
     const rootPrefix = `${descendantRootDisplayName} > `;
@@ -280,13 +320,15 @@ const getResolvedDescendantFieldPaths = (
     return undefined;
   }
 
-  const firstValue = Array.isArray(resolvedValue)
-    ? resolvedValue[0]
-    : resolvedValue && typeof resolvedValue === "object"
-      ? resolvedValue
-      : undefined;
+  const sampledValues = Array.isArray(resolvedValue)
+    ? resolvedValue.slice(0, 3)
+    : [resolvedValue];
+  const subdocuments = sampledValues.filter(
+    (value): value is Record<string, unknown> =>
+      !!value && typeof value === "object"
+  );
 
-  if (!firstValue || typeof firstValue !== "object") {
+  if (!subdocuments.length) {
     return new Set();
   }
 
@@ -311,6 +353,6 @@ const getResolvedDescendantFieldPaths = (
     });
   };
 
-  collectFieldPaths(firstValue);
+  subdocuments.forEach((subdocument) => collectFieldPaths(subdocument));
   return fieldPaths;
 };
