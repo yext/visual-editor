@@ -41,13 +41,12 @@ export const CompactHero: PuckComponent<HeroVariantProps> = (props) => {
             : "2xl:ml-[max(calc((100vw-var(--maxWidth-pageSection-contentWidth))/2),1.5rem)] mr-auto"
         )}
       >
+        {/* Desktop left image / Mobile top image */}
         <CompactHeroImage
           id={id + "-image"}
           className={themeManagerCn(
-            styles.mobileImagePosition === "top" ? "order-first" : "order-last",
-            styles.desktopImagePosition === "left"
-              ? "sm:order-first"
-              : "sm:order-last"
+            styles.mobileImagePosition === "bottom" && "hidden sm:block",
+            styles.desktopImagePosition === "right" && "sm:hidden"
           )}
           styles={styles}
           slots={slots}
@@ -80,6 +79,18 @@ export const CompactHero: PuckComponent<HeroVariantProps> = (props) => {
         >
           <HeroContent {...props} />
         </div>
+
+        {/* Desktop right image / Mobile bottom image */}
+        <CompactHeroImage
+          id={id + "-image"}
+          className={themeManagerCn(
+            styles.mobileImagePosition === "top" && "hidden sm:block",
+            styles.desktopImagePosition === "left" && "sm:hidden"
+          )}
+          styles={styles}
+          slots={slots}
+          puck={puck}
+        />
       </div>
     </Background>
   );

@@ -26,9 +26,10 @@ const HeroImageComponent: PuckComponent<HeroImageProps> = (props) => {
   const { data, styles, className, puck, variant } = props;
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
-  const resolvedImage = React.useMemo(
-    () => resolveComponentData(data.image, i18n.language, streamDocument),
-    [data.image, i18n.language, streamDocument]
+  const resolvedImage = resolveComponentData(
+    data.image,
+    i18n.language,
+    streamDocument
   );
   const imageUrl = getImageUrl(resolvedImage, i18n.language);
   const isEmpty =
@@ -89,14 +90,11 @@ export const HeroImage: YextComponentConfig<HeroImageProps> = {
       true
     );
     const filteredAspectRatioOptions = (
-      ImageWrapperFields.styles as {
-        objectFields: {
-          aspectRatio: {
-            options: { label: string; value: number }[];
-          };
-        };
-      }
-    ).objectFields.aspectRatio.options.filter(
+      ImageWrapperFields.styles.objectFields.aspectRatio.options as {
+        label: string;
+        value: number;
+      }[]
+    ).filter(
       (option: { label: string; value: number }) =>
         !["4:1", "3:1", "2:1", "9:16"].includes(option.label)
     );

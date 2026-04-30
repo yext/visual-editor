@@ -34,13 +34,12 @@ export const ClassicHero: PuckComponent<HeroVariantProps> = (props) => {
       aria-label={t("heroBanner", "Hero Banner")}
       className="flex flex-col sm:flex-row gap-6 md:gap-10"
     >
+      {/* Desktop left image / Mobile top image */}
       <ClassicHeroImage
         id={id + "-image"}
         className={themeManagerCn(
-          styles.mobileImagePosition === "top" ? "order-first" : "order-last",
-          styles.desktopImagePosition === "left"
-            ? "sm:order-first"
-            : "sm:order-last"
+          styles.mobileImagePosition === "bottom" && "hidden sm:block",
+          styles.desktopImagePosition === "right" && "sm:hidden"
         )}
         styles={styles}
         slots={slots}
@@ -53,6 +52,18 @@ export const ClassicHero: PuckComponent<HeroVariantProps> = (props) => {
       >
         <HeroContent {...props} />
       </div>
+
+      {/* Desktop right image / Mobile bottom image */}
+      <ClassicHeroImage
+        id={id + "-image"}
+        className={themeManagerCn(
+          styles.mobileImagePosition === "top" && "hidden sm:block",
+          styles.desktopImagePosition === "left" && "sm:hidden"
+        )}
+        styles={styles}
+        slots={slots}
+        puck={puck}
+      />
     </PageSection>
   );
 };
