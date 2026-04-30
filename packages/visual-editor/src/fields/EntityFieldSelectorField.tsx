@@ -261,23 +261,35 @@ export const EntityFieldSelectorFieldOverride = ({
   if (!constantFieldConfig && canUseEmbeddedStringConstantValue) {
     constantFieldConfig = getConstantConfigFromType("type.string");
   }
+  const constantValueModeSupported = !!constantFieldConfig;
+  const showConstantValueInput =
+    !!value?.constantValueEnabled && constantValueModeSupported;
 
   return (
     <>
-      <ConstantValueModeToggler
-        fieldTypeFilter={field.filter.types ?? []}
-        constantValueEnabled={value?.constantValueEnabled}
-        toggleConstantValueEnabled={(constantValueEnabled) =>
-          onChange({
-            ...value,
-            constantValueEnabled,
-          })
-        }
-        disableConstantValue={field.disableConstantValueToggle}
-        label={translatedLabel}
-        showLocale={supportsLocalizedConstantValue(constantFieldConfig)}
-      />
-      {value?.constantValueEnabled && (
+      {constantValueModeSupported ? (
+        <ConstantValueModeToggler
+          fieldTypeFilter={field.filter.types ?? []}
+          constantValueEnabled={value?.constantValueEnabled}
+          toggleConstantValueEnabled={(constantValueEnabled) =>
+            onChange({
+              ...value,
+              constantValueEnabled,
+            })
+          }
+          disableConstantValue={field.disableConstantValueToggle}
+          label={translatedLabel}
+          showLocale={supportsLocalizedConstantValue(constantFieldConfig)}
+        />
+      ) : (
+        <p
+          className="ve-self-center ve-text-sm ve-font-semibold"
+          style={{ color: "var(--puck-color-grey-04)" }}
+        >
+          {translatedLabel}
+        </p>
+      )}
+      {showConstantValueInput && (
         <ConstantValueInput
           onChange={onChange}
           value={value}
@@ -285,7 +297,7 @@ export const EntityFieldSelectorFieldOverride = ({
           disallowTranslation={field.disallowTranslation}
         />
       )}
-      {!value?.constantValueEnabled && (
+      {!showConstantValueInput && (
         <EntityFieldInput
           className="ve-pt-3"
           onChange={onChange}
