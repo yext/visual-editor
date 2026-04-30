@@ -4,7 +4,7 @@ import { pt, type MsgString } from "../utils/i18n/platform.ts";
 import { type YextArrayField } from "../editor/YextField.tsx";
 import { type BasicSelectorField } from "./BasicSelectorField.tsx";
 
-export type DynamicOptionValueTypes = string | number | boolean | object;
+export type DynamicOptionValueTypes = string | number | boolean;
 
 type DynamicOptionSelection<T extends DynamicOptionValueTypes> = {
   value: T | undefined;
