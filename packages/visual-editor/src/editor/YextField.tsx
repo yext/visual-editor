@@ -103,6 +103,7 @@ type YextFieldConfig<Props = any> =
   | YextPuckFields[Exclude<
       keyof YextPuckFields,
       | "basicSelector"
+      | "code"
       | "dynamicMultiSelect"
       | "optionalNumber"
       | "video"
@@ -131,15 +132,6 @@ export function YextField<T, U>(
       disableConstantValueToggle: config.disableConstantValueToggle,
       disallowTranslation: config.disallowTranslation,
     });
-  }
-
-  if (config.type === "code") {
-    return {
-      type: "code",
-      label: fieldName,
-      visible: config.visible,
-      codeLanguage: config.codeLanguage,
-    };
   }
 
   if (config.type === "maxWidth") {

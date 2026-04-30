@@ -43,22 +43,6 @@ afterEach(() => {
 });
 
 describe("YextField", () => {
-  it("returns a code field and renders it through YextAutoField", () => {
-    const field = YextField<string>(msg("fields.html", "HTML"), {
-      type: "code",
-      codeLanguage: "html",
-    });
-
-    expect(field.type).toBe("code");
-
-    renderCustomField(field, "<div>Alpha</div>");
-
-    expect(screen.getByText("HTML")).toBeDefined();
-    expect(screen.getByRole("button").textContent).toContain(
-      "<div>Alpha</div>"
-    );
-  });
-
   it("renders native radio fields through YextAutoField", () => {
     renderCustomField(
       {
@@ -142,22 +126,6 @@ describe("YextField", () => {
       label: fieldName,
       type: "ctaSelector",
       disableConstantValueToggle: true,
-    });
-  });
-
-  it("maps code fields to Puck config", () => {
-    const fieldName = msg("fields.code", "Code");
-
-    const field = YextField(fieldName, {
-      type: "code",
-      codeLanguage: "typescript",
-    });
-
-    expect(field).toEqual({
-      type: "code",
-      label: fieldName,
-      visible: undefined,
-      codeLanguage: "typescript",
     });
   });
 
