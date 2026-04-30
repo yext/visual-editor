@@ -38,6 +38,7 @@ describe("usePlatformBridgeEntityFields", () => {
     });
 
     expect(result.current?.fields[0]?.name).toBe("name");
+    expect(result.current?.fields[0]?.displayName).toBe("Name");
     expect(result.current?.displayNames?.name).toBe("Name");
   });
 
@@ -53,6 +54,7 @@ describe("usePlatformBridgeEntityFields", () => {
             payload: [
               {
                 name: "photo",
+                displayName: "Business Logo",
                 typeName: "type.image",
                 type: {},
               },
@@ -63,6 +65,8 @@ describe("usePlatformBridgeEntityFields", () => {
     });
 
     expect(result.current?.fields[0]?.name).toBe("photo");
+    expect(result.current?.fields[0]?.displayName).toBe("Business Logo");
     expect(result.current?.fields[0]?.definition.typeName).toBe("type.image");
+    expect(result.current?.displayNames?.photo).toBe("Business Logo");
   });
 });
