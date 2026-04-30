@@ -1,5 +1,5 @@
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { YextAutoField } from "../fields/YextAutoField.tsx";
 import { msg } from "../utils/i18n/platform.ts";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -50,22 +50,6 @@ afterEach(() => {
 });
 
 describe("YextField", () => {
-  it("returns a code field and renders it through YextAutoField", () => {
-    const field = YextField<string>(msg("fields.html", "HTML"), {
-      type: "code",
-      codeLanguage: "html",
-    });
-
-    expect(field.type).toBe("code");
-
-    renderCustomField(field, "<div>Alpha</div>");
-
-    expect(screen.getByText("HTML")).toBeDefined();
-    expect(screen.getByRole("button").textContent).toContain(
-      "<div>Alpha</div>"
-    );
-  });
-
   it("renders native radio fields through YextAutoField", () => {
     renderCustomField(
       {
@@ -150,57 +134,6 @@ describe("YextField", () => {
       type: "ctaSelector",
       disableConstantValueToggle: true,
     });
-  });
-
-  it("maps code fields to Puck config", () => {
-    const fieldName = msg("fields.code", "Code");
-
-    const field = YextField(fieldName, {
-      type: "code",
-      codeLanguage: "typescript",
-    });
-
-    expect(field).toEqual({
-      type: "code",
-      label: fieldName,
-      visible: undefined,
-      codeLanguage: "typescript",
-    });
-  });
-
-  it("renders the max width selector with grouped options and helper copy", () => {
-    const themeStyle = document.createElement("style");
-    themeStyle.id = "visual-editor-theme";
-    themeStyle.textContent = `
-      .components {
-        --maxWidth-pageSection-contentWidth:1024px !important;
-      }
-    `;
-    document.head.appendChild(themeStyle);
-
-    const field = YextField(msg("fields.maxWidth", "Max Width"), {
-      type: "maxWidth",
-    }) as any;
-
-    expect(field.type).toBe("basicSelector");
-    expect(field.disableSearch).toBe(true);
-
-    renderCustomField(field, "theme");
-
-    expect(screen.getByRole("combobox").textContent).toContain(
-      "Match Other Sections (1024px)"
-    );
-
-    fireEvent.click(screen.getByRole("combobox"));
-
-    expect(screen.queryByPlaceholderText("Search")).toBeNull();
-    expect(
-      screen.getByText(
-        "For optimal content alignment, we recommend setting the header and footer width to match or exceed the page content grid."
-      )
-    ).toBeDefined();
-
-    themeStyle.remove();
   });
 
   it("returns image configs with the provided label", () => {

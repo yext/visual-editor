@@ -2,7 +2,7 @@ import { ThemeColor, HeadingLevel } from "../../utils/themeConfigOptions.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
-import { getTextColorClass } from "../../utils/colors.ts";
+import { getTextColorClass, getTextColorStyle } from "../../utils/colors.ts";
 
 // Define the variants for the heading component
 export const headingVariants = cva("components", {
@@ -108,6 +108,7 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
           className
         )}
         style={{
+          ...getTextColorStyle(color),
           // @ts-ignore: the css variable here resolves to a valid enum value
           textTransform: `var(--textTransform-h${level}-textTransform)`,
           ...style,
