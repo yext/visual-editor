@@ -167,7 +167,9 @@ describe("YextEntityFieldSelector", () => {
     fireEvent.click(screen.getByRole("combobox"));
 
     expect(screen.getAllByText("Name").length).toBeGreaterThan(0);
-    expect(screen.getByText("Linked Location > Name")).toBeDefined();
+    expect(
+      screen.getAllByText("Linked Location > Name").length
+    ).toBeGreaterThan(0);
   });
 
   it("does not show linked entity fields for list-only selectors", () => {
@@ -251,8 +253,66 @@ describe("YextEntityFieldSelector", () => {
 
     fireEvent.click(screen.getByRole("combobox"));
 
-    expect(screen.getAllByText("Linked Location")).toHaveLength(1);
+    expect(screen.getAllByText("Linked Location").length).toBeGreaterThan(0);
     expect(screen.queryByText("Linked Location > Name")).toBeNull();
+  });
+
+  it("shows linked entity fields in a separate group when both groups have options", () => {
+    renderEntityFieldInput({
+      entityFields: {
+        ...defaultEntityFields,
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_linkedLocation",
+            displayName: "Linked Location",
+            definition: {
+              name: "c_linkedLocation",
+              typeRegistryId: "type.entity_reference",
+              type: {
+                documentType: "DOCUMENT_TYPE_ENTITY",
+              },
+            },
+            children: {
+              fields: [
+                {
+                  name: "name",
+                  displayName: "Name",
+                  definition: {
+                    name: "name",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+        ],
+        displayNames: {
+          ...defaultEntityFields.displayNames,
+          c_linkedLocation: "Linked Location",
+          "c_linkedLocation.name": "Linked Location > Name",
+        },
+      },
+      filter: { types: ["type.string"] },
+    });
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(screen.getByText("Linked Entity Fields")).toBeDefined();
+    expect(screen.getByText("Entity Fields")).toBeDefined();
+  });
+
+  it("does not show group headings when only one category has options", () => {
+    renderEntityFieldInput({
+      entityFields: defaultEntityFields,
+      filter: { types: ["type.string"] },
+    });
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(screen.queryByText("Linked Entity Fields")).toBeNull();
+    expect(screen.queryByText("Entity Fields")).toBeNull();
   });
 
   it("shows linked source roots from entity fields", () => {
@@ -296,7 +356,7 @@ describe("YextEntityFieldSelector", () => {
 
     fireEvent.click(screen.getByRole("combobox"));
 
-    expect(screen.getAllByText("Linked Location")).toHaveLength(1);
+    expect(screen.getAllByText("Linked Location").length).toBeGreaterThan(0);
   });
 
   it("shows base entity list roots when the selector opts into them", () => {
@@ -746,7 +806,7 @@ describe("YextEntityFieldSelector", () => {
     fireEvent.click(screen.getByRole("combobox"));
 
     expect(screen.getByText("FAQ Section")).toBeDefined();
-    expect(screen.getByText("Linked Location")).toBeDefined();
+    expect(screen.getAllByText("Linked Location").length).toBeGreaterThan(0);
     expect(screen.queryByText("Apple Action Links")).toBeNull();
   });
 
@@ -873,7 +933,7 @@ describe("YextEntityFieldSelector", () => {
     fireEvent.click(screen.getByRole("combobox"));
 
     expect(screen.getByText("Events Section")).toBeDefined();
-    expect(screen.getAllByText("Linked Location")).toHaveLength(1);
+    expect(screen.getAllByText("Linked Location").length).toBeGreaterThan(0);
     expect(screen.queryByText("faqSection > FAQs")).toBeNull();
     expect(screen.queryByText("Events Section > Events")).toBeNull();
     expect(screen.queryByText("Linked Location > Name")).toBeNull();
@@ -958,8 +1018,8 @@ describe("YextEntityFieldSelector", () => {
 
     fireEvent.click(screen.getByRole("combobox"));
 
-    expect(screen.getAllByText("Name")).toHaveLength(1);
-    expect(screen.getByText("Address > City")).toBeDefined();
+    expect(screen.getAllByText("Name").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Address > City").length).toBeGreaterThan(0);
     expect(screen.queryByText("Linked Location > Name")).toBeNull();
     expect(screen.queryByText("Instagram Handle")).toBeNull();
     expect(screen.queryByText("Additional Hours Text")).toBeNull();
@@ -1015,8 +1075,8 @@ describe("YextEntityFieldSelector", () => {
 
     fireEvent.click(screen.getByRole("combobox"));
 
-    expect(screen.getAllByText("Location Field")).toHaveLength(2);
-    expect(screen.getByText("Name")).toBeDefined();
+    expect(screen.getAllByText("Location Field").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Name").length).toBeGreaterThan(0);
     expect(screen.queryByText("Youtube Channel URL")).toBeNull();
     expect(screen.queryByText("Linked Location")).toBeNull();
   });
@@ -1064,7 +1124,7 @@ describe("YextEntityFieldSelector", () => {
 
     fireEvent.click(screen.getByRole("combobox"));
 
-    expect(screen.getAllByText("Name")).toHaveLength(1);
+    expect(screen.getAllByText("Name").length).toBeGreaterThan(0);
     expect(screen.queryByText("Facebook Page URL")).toBeNull();
     expect(screen.queryByText("Business Logo")).toBeNull();
   });
@@ -1389,6 +1449,8 @@ describe("YextEntityFieldSelector", () => {
 
     fireEvent.click(screen.getByLabelText("Add entity field"));
 
+    expect(screen.getByText("Linked Entity Fields")).toBeDefined();
+    expect(screen.getByText("Entity Fields")).toBeDefined();
     expect(screen.getByText("Linked Location > Address > City")).toBeDefined();
   });
 

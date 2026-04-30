@@ -54,6 +54,7 @@ import {
 } from "../utils/linkedEntityFieldUtils.ts";
 import { type MappedSourceFieldFilter } from "../utils/cardSlots/mappedSource.ts";
 import { warnOnMultiValueLinkedEntityTraversal } from "../utils/linkedEntityWarningUtils.ts";
+import { buildEntityFieldOptionGroups } from "./entityFieldOptionGroups.ts";
 
 const devLogger = new DevLogger();
 
@@ -455,28 +456,35 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       },
       streamDocument
     );
-    const entityFieldOptions = filteredEntityFields.map((field) => ({
+    const fieldOptions = filteredEntityFields.map((field) => ({
       label: field.displayName ?? field.name,
       value:
         descendantRoot && field.name.startsWith(`${descendantRoot}.`)
           ? field.name.slice(descendantRoot.length + 1)
           : field.name,
+      fieldPath: field.name,
     }));
 
-    const options = [
-      {
-        value: "",
-        label: pt("entityTypeField", "{{entityType}} Field", {
-          entityType: templateMetadata.entityTypeDisplayName,
-        }),
-      },
-      ...entityFieldOptions,
-    ];
+    const optionGroups = buildEntityFieldOptionGroups({
+      entityFields,
+      options: [
+        {
+          value: "",
+          label: pt("entityTypeField", "{{entityType}} Field", {
+            entityType: templateMetadata.entityTypeDisplayName,
+          }),
+          fieldPath: "",
+        },
+        ...fieldOptions,
+      ],
+      linkedGroupTitle: pt("linkedEntityFields", "Linked Entity Fields"),
+      entityGroupTitle: pt("entityFields", "Entity Fields"),
+    });
 
     return {
       type: "basicSelector",
       label,
-      options,
+      optionGroups,
       translateOptions: false,
       noOptionsPlaceholder: pt("noAvailableFields", "No available fields"),
     };
