@@ -184,12 +184,13 @@ const heroSectionFields: YextFields<HeroSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      backgroundImage: YextField(msg("fields.image", "Image"), {
+      backgroundImage: {
         type: "entityField",
+        label: msg("fields.image", "Image"),
         filter: {
           types: ["type.image"],
         },
-      }),
+      },
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {

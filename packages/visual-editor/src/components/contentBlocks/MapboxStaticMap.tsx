@@ -4,7 +4,6 @@ import { EntityField } from "../../editor/EntityField.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { type BasicSelectorField } from "../../fields/BasicSelectorField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
@@ -50,13 +49,11 @@ const mapboxFields: YextFields<MapboxStaticProps> = {
     label: msg("fields.apiKey", "API Key"),
     type: "text",
   },
-  coordinate: YextField<any, Coordinate>(
-    msg("fields.coordinates", "Coordinates"),
-    {
-      type: "entityField",
-      filter: { types: ["type.coordinate"] },
-    }
-  ),
+  coordinate: {
+    type: "entityField",
+    label: msg("fields.coordinates", "Coordinates"),
+    filter: { types: ["type.coordinate"] },
+  },
   mapStyle: mapStyleField,
 };
 

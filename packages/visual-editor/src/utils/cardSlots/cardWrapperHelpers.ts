@@ -1,6 +1,6 @@
-import { Fields, Slot } from "@puckeditor/core";
+import { Slot } from "@puckeditor/core";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
-import { YextField } from "../../editor/YextField.tsx";
+import { YextFields } from "../../fields/fields.ts";
 import { MsgString } from "../i18n/platform.ts";
 import { EntityFieldTypes } from "../../internal/utils/getFilteredEntityFields.ts";
 
@@ -21,13 +21,14 @@ export interface CardWrapperType<T> {
 export const cardWrapperFields = <T>(
   label: MsgString,
   entityFieldType: EntityFieldTypes
-): Fields<CardWrapperType<T>> => ({
-  data: YextField(label, {
+): YextFields<CardWrapperType<T>> => ({
+  data: {
     type: "entityField",
+    label,
     filter: {
       types: [entityFieldType],
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {

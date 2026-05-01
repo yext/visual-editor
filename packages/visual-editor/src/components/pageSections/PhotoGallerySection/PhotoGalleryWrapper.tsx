@@ -86,18 +86,14 @@ const photoGalleryWrapperFields: YextFields<PhotoGalleryWrapperProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      images: YextField<
-        any,
-        | ImageType[]
-        | ComplexImageType[]
-        | { assetImage: AssetImageType | TranslatableAssetImage }[]
-      >(msg("fields.images", "Images"), {
+      images: {
         type: "entityField",
+        label: msg("fields.images", "Images"),
         filter: {
           types: ["type.image"],
           includeListsOnly: true,
         },
-      }),
+      },
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {

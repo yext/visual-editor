@@ -23,7 +23,6 @@ import { LayoutHeader } from "../puck/components/LayoutHeader.tsx";
 import { MetaTitleField } from "../puck/components/meta-title/MetaTitleField.tsx";
 import { ValidationReporters } from "../puck/components/ValidationReporters.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
-import { YextEntityFieldSelector } from "../../editor/YextEntityFieldSelector.tsx";
 import { loadMapboxIntoIframe } from "../utils/loadMapboxIntoIframe.tsx";
 import * as lzstring from "lz-string";
 import { msg, pt, usePlatformTranslation } from "../../utils/i18n/platform.ts";
@@ -229,12 +228,13 @@ export const InternalLayoutEditor = ({
         ...puckConfig.root,
         fields: {
           title: MetaTitleField(),
-          description: YextEntityFieldSelector<any, string>({
+          description: {
+            type: "entityField",
             label: msg("fields.metaDescription", "Meta Description"),
             filter: {
               types: ["type.string"],
             },
-          }),
+          },
           ...puckConfig.root?.fields,
           __advancedSettingsLink: createAdvancedSettingsLink(),
         },

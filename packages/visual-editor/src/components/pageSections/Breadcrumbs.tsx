@@ -98,13 +98,11 @@ const breadcrumbsSectionFields: YextFields<BreadcrumbsSectionProps> = {
         ),
         filter: { types: ["type.string"] },
       },
-      currentPage: YextField(
-        msg("fields.currentPageLinkLabel", "Current Page Link Label"),
-        {
-          type: "entityField",
-          filter: { types: ["type.string"] },
-        }
-      ),
+      currentPage: {
+        type: "entityField",
+        label: msg("fields.currentPageLinkLabel", "Current Page Link Label"),
+        filter: { types: ["type.string"] },
+      },
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {

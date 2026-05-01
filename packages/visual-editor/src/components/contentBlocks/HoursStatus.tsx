@@ -44,12 +44,13 @@ export const hoursStatusWrapperFields: YextFields<HoursStatusProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      hours: YextField(msg("fields.hours", "Hours"), {
+      hours: {
         type: "entityField",
+        label: msg("fields.hours", "Hours"),
         filter: {
           types: ["type.hours"],
         },
-      }),
+      },
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {

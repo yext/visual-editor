@@ -18,6 +18,11 @@ export {
 } from "./DateTimeSelectorField.tsx";
 
 export {
+  EntityFieldSelectorFieldOverride,
+  type EntityFieldSelectorField,
+} from "./EntityFieldSelectorField.tsx";
+
+export {
   FontSizeSelectorFieldOverride,
   type FontSizeSelectorField,
 } from "./FontSizeSelectorField.tsx";
