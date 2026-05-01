@@ -30,6 +30,7 @@ type EntityFieldTypesFilter = {
   types?: EntityFieldTypes[];
   includeListsOnly?: boolean;
   directChildrenOf?: string;
+  descendantsOf?: string;
 };
 export type RenderEntityFieldFilter<T extends Record<string, any>> =
   EntityFieldTypesFilter & EitherOrNeither<AllowList<T>, DisallowList<T>>;
@@ -198,10 +199,11 @@ export const getFilteredEntityFields = <T extends Record<string, any>>(
 
   // Augment to include subfields
   let filteredEntitySubFields: YextSchemaField[] = [];
+  const includeNestedListChildren = true;
   for (const yextSchemaField of filteredEntityFields) {
     const entityFieldNames = getEntityFieldNames(
       yextSchemaField,
-      !!filter?.directChildrenOf?.length
+      includeNestedListChildren
     );
 
     for (const entityFieldName of entityFieldNames) {
@@ -226,10 +228,18 @@ export const getFilteredEntityFields = <T extends Record<string, any>>(
     });
   }
 
+  if (filter?.descendantsOf) {
+    filteredEntitySubFields = filteredEntitySubFields.filter(
+      (field) =>
+        field.name.startsWith(`${filter.descendantsOf}.`) &&
+        field.name !== filter.descendantsOf
+    );
+  }
+
   if (filter?.types) {
     const typeToFieldNames = getEntityTypeToFieldNames(
       filteredEntitySubFields,
-      !!filter?.directChildrenOf?.length
+      includeNestedListChildren
     );
 
     const updatedFilteredEntitySubFields: YextSchemaField[] = [];

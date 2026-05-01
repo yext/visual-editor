@@ -9,7 +9,7 @@ import { type ImageField } from "../fields/ImageField.tsx";
 import {
   ConstantValueTypes,
   EntityFieldTypes,
-  RenderEntityFieldFilter,
+  type RenderEntityFieldFilter,
 } from "../internal/utils/getFilteredEntityFields.ts";
 import { DevLogger } from "../utils/devLogger.ts";
 import {
@@ -24,7 +24,6 @@ import {
 import { ENHANCED_CTA_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
 import { PHONE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Phone.tsx";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
-import { useLinkedEntitySchemas } from "../hooks/useLinkedEntitySchemas.tsx";
 import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 import { getRandomPlaceholderImageObject } from "../utils/imagePlaceholders.ts";
 import { EVENT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/EventSection.tsx";
@@ -50,10 +49,10 @@ import {
   type YextEntityField,
 } from "./yextEntityFieldUtils.ts";
 import { useDocument } from "../hooks/useDocument.tsx";
-import { resolveField } from "../utils/resolveYextEntityField.ts";
-import { toast } from "sonner";
 import { isLinkedEntityFieldPath } from "../utils/linkedEntityFieldUtils.ts";
-import { StreamDocument } from "../utils/types/StreamDocument.ts";
+import { type MappedSourceFieldFilter } from "../utils/cardSlots/mappedSource.ts";
+import { warnOnMultiValueLinkedEntityTraversal } from "../utils/linkedEntityWarningUtils.ts";
+import { buildEntityFieldOptionGroups } from "./entityFieldOptionGroups.ts";
 
 const devLogger = new DevLogger();
 
@@ -70,7 +69,7 @@ export type { YextEntityField } from "./yextEntityFieldUtils.ts";
 export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
   {
     label: string;
-    filter: RenderEntityFieldFilter<T>;
+    filter: MappedSourceFieldFilter<T>;
     disableConstantValueToggle?: boolean;
     disallowTranslation?: boolean;
   };
@@ -176,7 +175,7 @@ export const getConstantConfigFromType = (
  * @param isList
  * @param disallowTranslation
  */
-const returnConstantFieldConfig = (
+export const returnConstantFieldConfig = (
   typeFilter: EntityFieldTypes[] | undefined,
   isList: boolean,
   disallowTranslation: boolean
@@ -216,6 +215,9 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
   return {
     type: "custom",
     render: ({ value, onChange }: RenderProps) => {
+      const constantValueEnabled =
+        !props.disableConstantValueToggle && !!value?.constantValueEnabled;
+
       const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {
         onChange({
           ...value,
@@ -227,7 +229,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
         <>
           <ConstantValueModeToggler
             fieldTypeFilter={props.filter.types ?? []}
-            constantValueEnabled={value?.constantValueEnabled}
+            constantValueEnabled={constantValueEnabled}
             toggleConstantValueEnabled={toggleConstantValueEnabled}
             disableConstantValue={props.disableConstantValueToggle}
             label={pt(props.label)}
@@ -236,7 +238,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
               !props.disallowTranslation
             }
           />
-          {value?.constantValueEnabled && (
+          {constantValueEnabled && (
             <ConstantValueInput<T>
               onChange={onChange}
               value={value}
@@ -244,7 +246,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
               disallowTranslation={props.disallowTranslation}
             />
           )}
-          {!value?.constantValueEnabled && (
+          {!constantValueEnabled && (
             <EntityFieldInput<T>
               className="ve-pt-3"
               onChange={onChange}
@@ -436,41 +438,37 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   label,
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
-  const linkedEntitySchemas = useLinkedEntitySchemas();
   const templateMetadata = useTemplateMetadata();
   const streamDocument = useDocument();
-  const lastWarnedLinkedEntityFieldRef = React.useRef<
-    | {
-        streamDocument: StreamDocument;
-        fieldPath: string;
-      }
-    | undefined
-  >(undefined);
   const entityFieldSelector = React.useMemo<BasicSelectorField>(() => {
     const filteredEntityFields = getFieldsForSelector(
       entityFields,
-      { ...filter },
-      linkedEntitySchemas ?? undefined
+      filter,
+      streamDocument
     );
-    const entityFieldOptions = filteredEntityFields.map((field) => ({
-      label: field.displayName ?? field.name,
-      value: field.name,
-    }));
-
-    const options = [
-      {
-        value: "",
-        label: pt("entityTypeField", "{{entityType}} Field", {
-          entityType: templateMetadata.entityTypeDisplayName,
-        }),
-      },
-      ...entityFieldOptions,
-    ];
 
     return {
       type: "basicSelector",
       label,
-      options,
+      optionGroups: buildEntityFieldOptionGroups({
+        entityFields,
+        options: [
+          {
+            value: "",
+            label: pt("entityTypeField", "{{entityType}} Field", {
+              entityType: templateMetadata.entityTypeDisplayName,
+            }),
+            fieldPath: "",
+          },
+          ...filteredEntityFields.map((field) => ({
+            label: field.displayName ?? field.name,
+            value: field.name,
+            fieldPath: field.name,
+          })),
+        ],
+        linkedGroupTitle: pt("linkedEntityFields", "Linked Entity Fields"),
+        entityGroupTitle: pt("entityFields", "Entity Fields"),
+      }),
       translateOptions: false,
       noOptionsPlaceholder: pt("noAvailableFields", "No available fields"),
     };
@@ -479,63 +477,34 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     filter,
     label,
     templateMetadata.entityTypeDisplayName,
-    linkedEntitySchemas,
+    streamDocument,
   ]);
 
-  // Warn once per document and linked field path when we resolve through a
-  // multi-value linked reference and fall back to the first linked entity.
   React.useEffect(() => {
     if (
       filter.includeListsOnly ||
       !value?.field ||
-      !isLinkedEntityFieldPath(value.field, linkedEntitySchemas ?? undefined)
+      !isLinkedEntityFieldPath(value.field, entityFields)
     ) {
       return;
     }
 
-    const resolution = resolveField(streamDocument, value.field);
-    if (
-      !resolution.traversedMultiValueReference ||
-      (lastWarnedLinkedEntityFieldRef.current?.streamDocument ===
-        streamDocument &&
-        lastWarnedLinkedEntityFieldRef.current.fieldPath === value.field)
-    ) {
-      return;
-    }
-
-    lastWarnedLinkedEntityFieldRef.current = {
-      streamDocument: streamDocument,
-      fieldPath: value.field,
-    };
-    toast.warning(
-      pt(
-        "linkedEntityMultiValueWarning",
-        "Multiple linked entities were found for {{fieldName}}. Using the first linked entity.",
-        {
-          fieldName: value.field,
-        }
-      )
-    );
-  }, [
-    filter.includeListsOnly,
-    linkedEntitySchemas,
-    streamDocument,
-    value?.field,
-  ]);
+    warnOnMultiValueLinkedEntityTraversal(streamDocument, value.field);
+  }, [filter.includeListsOnly, entityFields, streamDocument, value?.field]);
 
   return (
     <div className={"ve-inline-block ve-w-full " + className}>
       <YextAutoField
         field={entityFieldSelector}
-        onChange={(selectedEntityField, uiState) => {
+        onChange={(selectedEntityField, uiState) =>
           onChange(
             {
               ...value,
               field: selectedEntityField,
             },
             uiState
-          );
-        }}
+          )
+        }
         value={value?.field}
       />
     </div>

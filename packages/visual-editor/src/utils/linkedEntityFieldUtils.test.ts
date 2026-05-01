@@ -1,96 +1,78 @@
 import { describe, expect, it } from "vitest";
 import {
   buildLinkedEntityStreamFields,
+  getTopLevelLinkedEntitySourceFields,
   isLinkedEntityFieldPath,
-  type LinkedEntitySchemas,
+  isTopLevelLinkedEntityField,
 } from "./linkedEntityFieldUtils.ts";
+import { type StreamFields } from "../types/entityFields.ts";
 
 describe("linkedEntityFieldUtils", () => {
-  it("builds synthetic stream fields and display names from linked entity schemas", () => {
-    const linkedEntitySchemas: LinkedEntitySchemas = {
-      c_linkedLocation: {
+  const entityFields: StreamFields = {
+    fields: [
+      {
+        name: "c_linkedLocation",
         displayName: "Linked Location",
-        fields: [
-          {
-            name: "address",
-            displayName: "Address",
-            definition: {
-              name: "address",
-              typeName: "type.address",
-              type: {},
-            },
-            children: {
-              fields: [
-                {
-                  name: "city",
-                  displayName: "City",
-                  definition: {
-                    name: "city",
-                    typeName: "type.string",
-                    type: {},
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    };
-
-    const streamFields = buildLinkedEntityStreamFields(linkedEntitySchemas);
-
-    expect(streamFields).toEqual({
-      fields: [
-        {
+        definition: {
           name: "c_linkedLocation",
-          definition: {
-            name: "c_linkedLocation",
-            type: {},
+          typeRegistryId: "type.entity_reference",
+          type: {
+            documentType: "DOCUMENT_TYPE_ENTITY",
           },
-          children: {
-            fields: linkedEntitySchemas.c_linkedLocation.fields,
-          },
-          displayName: "Linked Location",
         },
-      ],
-      displayNames: {
-        c_linkedLocation: "Linked Location",
-        "c_linkedLocation.address": "Linked Location > Address",
-        "c_linkedLocation.address.city": "Linked Location > Address > City",
+        children: {
+          fields: [
+            {
+              name: "address",
+              displayName: "Address",
+              definition: {
+                name: "address",
+                typeName: "type.address",
+                type: {},
+              },
+            },
+          ],
+        },
       },
+      {
+        name: "name",
+        definition: {
+          name: "name",
+          typeName: "type.string",
+          type: {},
+        },
+      },
+    ],
+    displayNames: {
+      c_linkedLocation: "Linked Location",
+      "c_linkedLocation.address": "Linked Location > Address",
+    },
+  };
+
+  it("returns top-level linked entity source fields", () => {
+    expect(getTopLevelLinkedEntitySourceFields(entityFields)).toEqual([
+      entityFields.fields[0],
+    ]);
+  });
+
+  it("builds linked entity stream fields from entity fields", () => {
+    expect(buildLinkedEntityStreamFields(entityFields)).toEqual({
+      fields: [entityFields.fields[0]],
+      displayNames: entityFields.displayNames,
     });
   });
 
-  it("returns null when linked entity schemas are missing", () => {
-    expect(buildLinkedEntityStreamFields()).toBeNull();
-  });
-
-  it("returns true only for direct linked schema root keys", () => {
-    const linkedEntitySchemas = Object.create({
-      inheritedLinkedField: {
-        displayName: "Inherited Linked Field",
-        fields: [],
-      },
-    }) as LinkedEntitySchemas;
-
-    linkedEntitySchemas.c_linkedLocation = {
-      displayName: "Linked Location",
-      fields: [],
-    };
-
+  it("uses entity fields to detect linked paths", () => {
+    expect(isTopLevelLinkedEntityField("c_linkedLocation", entityFields)).toBe(
+      true
+    );
     expect(
-      isLinkedEntityFieldPath(
-        "c_linkedLocation.address.city",
-        linkedEntitySchemas
-      )
+      isLinkedEntityFieldPath("c_linkedLocation.address", entityFields)
     ).toBe(true);
     expect(
-      isLinkedEntityFieldPath(
-        "inheritedLinkedField.address.city",
-        linkedEntitySchemas
-      )
+      isLinkedEntityFieldPath("inheritedLinkedField.address.city", entityFields)
     ).toBe(false);
-    expect(isLinkedEntityFieldPath("name", linkedEntitySchemas)).toBe(false);
-    expect(isLinkedEntityFieldPath(undefined, linkedEntitySchemas)).toBe(false);
+    expect(isLinkedEntityFieldPath("name", entityFields)).toBe(false);
+    expect(isLinkedEntityFieldPath(undefined, entityFields)).toBe(false);
   });
 });

@@ -19,10 +19,10 @@ export const usePlatformBridgeEntityFields = () => {
   );
 
   useReceiveMessage("getTemplateStream", TARGET_ORIGINS, (send, payload) => {
-    const receivedValues = {
-      fields: payload.stream.schema.fields,
-      displayNames: payload.apiNamesToDisplayNames,
-    };
+    const receivedValues = normalizeStreamFields(
+      payload.stream.schema.fields,
+      payload.apiNamesToDisplayNames
+    );
 
     devLogger.logData("ENTITY_FIELDS", receivedValues);
 
@@ -37,7 +37,7 @@ export const usePlatformBridgeEntityFields = () => {
   });
 
   useReceiveMessage("getDevEntityFields", TARGET_ORIGINS, (send, payload) => {
-    const receivedValues = { fields: assignDefinitions(payload) };
+    const receivedValues = normalizeStreamFields(assignDefinitions(payload));
     devLogger.logData("ENTITY_FIELDS", receivedValues);
     setEntityFields(receivedValues);
     send({
@@ -49,10 +49,53 @@ export const usePlatformBridgeEntityFields = () => {
   return entityFields;
 };
 
+const normalizeStreamFields = (
+  fields: YextSchemaField[],
+  displayNames: Record<string, string> = {}
+): StreamFields => {
+  const normalizedDisplayNames = { ...displayNames };
+  const normalizedFields = fields.map((field) =>
+    normalizeField(field, normalizedDisplayNames)
+  );
+
+  return {
+    fields: normalizedFields,
+    displayNames: normalizedDisplayNames,
+  };
+};
+
+const normalizeField = (
+  field: YextSchemaField,
+  displayNames: Record<string, string>,
+  parentFieldName?: string
+): YextSchemaField => {
+  const fieldName = parentFieldName
+    ? `${parentFieldName}.${field.name}`
+    : field.name;
+  const displayName = displayNames[fieldName] ?? field.displayName;
+
+  if (displayName) {
+    displayNames[fieldName] = displayName;
+  }
+
+  return {
+    ...field,
+    ...(displayName ? { displayName } : {}),
+    children: field.children?.fields
+      ? {
+          fields: field.children.fields.map((childField) =>
+            normalizeField(childField, displayNames, fieldName)
+          ),
+        }
+      : field.children,
+  };
+};
+
 const assignDefinitions = (entityFields: any): YextSchemaField[] => {
   return entityFields.map((field: any) => {
     return {
       name: field.name,
+      displayName: field.displayName,
       definition: {
         name: field.name,
         typeName: field.typeName,

@@ -1,8 +1,6 @@
 import { InsightSectionType } from "../../../types/types.ts";
 import { ComponentFields } from "../../../types/fields.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
-import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
-import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import {
   cardWrapperFields,
   CardWrapperType,
@@ -17,6 +15,7 @@ import {
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
 import { YextComponentConfig } from "../../../fields/fields.ts";
+import { resolveMappedListWrapperData } from "../../../utils/cardSlots/mappedListWrapper.ts";
 
 export type InsightCardsWrapperProps = CardWrapperType<InsightSectionType> & {
   styles: {
@@ -102,118 +101,41 @@ export const InsightCardsWrapper: YextComponentConfig<InsightCardsWrapperProps> 
       },
     },
     resolveData: (data, params) => {
-      const streamDocument = params.metadata.streamDocument;
-      const sharedCardProps =
-        data.props.slots.CardSlot.length === 0
-          ? undefined
-          : {
-              backgroundColor:
-                data.props.slots.CardSlot[0].props.styles.backgroundColor,
-              slotStyles: gatherSlotStyles(
-                data.props.slots.CardSlot[0].props.slots
-              ),
-            };
-
-      if (!data.props.data.constantValueEnabled && data.props.data.field) {
-        const resolvedInsights = resolveYextEntityField<
-          InsightSectionType | { insights: undefined }
-        >(
-          streamDocument,
-          {
-            ...data.props.data,
-            constantValue: { insights: undefined },
-          },
-          i18nComponentsInstance.language || "en"
-        )?.insights;
-
-        if (!resolvedInsights?.length) {
-          return setDeep(data, "props.slots.CardSlot", []);
+      return resolveMappedListWrapperData<
+        InsightCardsWrapperProps,
+        InsightCardProps,
+        never,
+        InsightSectionType["insights"][number],
+        {
+          backgroundColor?: InsightCardProps["styles"]["backgroundColor"];
+          slotStyles?: Record<string, any>;
         }
-
-        const requiredLength = resolvedInsights.length;
-        const currentLength = data.props.slots.CardSlot.length;
-        const cardsToAdd =
-          currentLength < requiredLength
-            ? Array(requiredLength - currentLength)
-                .fill(null)
-                .map(() =>
-                  defaultInsightCardSlotData(
-                    `InsightCard-${crypto.randomUUID()}`,
-                    undefined,
-                    sharedCardProps?.backgroundColor,
-                    sharedCardProps?.slotStyles
-                  )
-                )
-            : [];
-        const updatedCardSlot = [
-          ...data.props.slots.CardSlot,
-          ...cardsToAdd,
-        ].slice(0, requiredLength);
-
-        return setDeep(
-          data,
-          "props.slots.CardSlot",
-          updatedCardSlot
-            .map((card, i) => {
-              return setDeep(card, "props.index", i);
-            })
-            .map((card, i) => {
-              return setDeep(card, "props.parentData", {
-                field: data.props.data.field,
-                insight: resolvedInsights[i],
-              } satisfies InsightCardProps["parentData"]);
-            })
-        );
-      } else {
-        let updatedData = data;
-        const inUseIds = new Set<string>();
-        const newSlots = data.props.data.constantValue.map(({ id }, i) => {
-          const existingCard = id
-            ? (data.props.slots.CardSlot.find(
-                (slot) => slot.props.id === id
-              ) as ComponentData<InsightCardProps>)
-            : undefined;
-
-          let newCard = existingCard
-            ? (JSON.parse(JSON.stringify(existingCard)) as typeof existingCard)
-            : undefined;
-
-          let newId = newCard?.props.id || `InsightCard-${crypto.randomUUID()}`;
-
-          if (newCard && inUseIds.has(newId)) {
-            newId = `InsightCard-${crypto.randomUUID()}`;
-            Object.entries(newCard.props.slots).forEach(
-              ([slotKey, slotArray]) => {
-                slotArray[0].props.id = newId + "-" + slotKey;
-              }
-            );
-          }
-          inUseIds.add(newId);
-
-          if (!newCard) {
-            return defaultInsightCardSlotData(
-              newId,
-              i,
-              sharedCardProps?.backgroundColor,
-              sharedCardProps?.slotStyles
-            );
-          }
-
-          newCard = setDeep(newCard, "props.id", newId);
-          newCard = setDeep(newCard, "props.index", i);
-          newCard = setDeep(newCard, "props.parentData", undefined);
-
-          return newCard;
-        });
-
-        updatedData = setDeep(updatedData, "props.slots.CardSlot", newSlots);
-        updatedData = setDeep(
-          updatedData,
-          "props.data.constantValue",
-          newSlots.map((card) => ({ id: card.props.id }))
-        );
-        return updatedData;
-      }
+      >({
+        data: data as ComponentData<InsightCardsWrapperProps>,
+        streamDocument: params.metadata.streamDocument ?? {},
+        listFieldName: "insights",
+        cardIdPrefix: "InsightCard",
+        getSharedCardProps: (card) =>
+          !card
+            ? undefined
+            : {
+                backgroundColor: card.props.styles.backgroundColor,
+                slotStyles: gatherSlotStyles(card.props.slots),
+              },
+        createCard: (id, index, sharedCardProps) =>
+          defaultInsightCardSlotData(
+            id,
+            index,
+            sharedCardProps?.backgroundColor,
+            sharedCardProps?.slotStyles
+          ) as any,
+        decorateMappedItemCard: (card, _item, _index) => card,
+        decorateSectionItemCard: (card, insight, index) =>
+          setDeep(setDeep(card, "props.index", index), "props.parentData", {
+            field: data.props.data.field,
+            insight,
+          } satisfies InsightCardProps["parentData"]),
+      });
     },
     render: (props) => <InsightCardsWrapperComponent {...props} />,
   };

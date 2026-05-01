@@ -7,10 +7,14 @@ import {
   ObjectField,
 } from "@puckeditor/core";
 import {
-  RenderYextEntityFieldSelectorProps,
+  type RenderYextEntityFieldSelectorProps,
   YextEntityField,
   YextEntityFieldSelector,
 } from "./YextEntityFieldSelector.tsx";
+import {
+  type RenderYextSubfieldSelectorProps,
+  YextSubfieldSelector,
+} from "./YextSubfieldSelector.tsx";
 import { MsgString } from "../utils/i18n/platform.ts";
 import type { YextFieldMap, YextPuckFields } from "../fields/fields.ts";
 
@@ -82,11 +86,19 @@ type YextEntitySelectorField<
     type: "entityField";
   };
 
+type YextSubfieldSelectorField<
+  T extends Record<string, any> = Record<string, any>,
+> = YextBaseField &
+  Omit<RenderYextSubfieldSelectorProps<T>, "label"> & {
+    type: "subfieldSelector";
+  };
+
 type YextFieldConfig<Props = any> =
   | YextArrayFieldConfig<Props extends Record<string, any>[] ? Props : any>
   | YextObjectFieldConfig<Props extends Record<string, any> ? Props : any>
   | YextNumberField
   | YextEntitySelectorField<Props extends Record<string, any> ? Props : any>
+  | YextSubfieldSelectorField<Props extends Record<string, any> ? Props : any>
   | YextPuckFields[Exclude<
       keyof YextPuckFields,
       | "basicSelector"
@@ -101,9 +113,24 @@ export function YextField<T = any>(
   config: YextFieldConfig<T>
 ): Field<T>;
 
+export function YextField<T extends Record<string, any>[]>(
+  fieldName: MsgString,
+  config: YextArrayFieldConfig<T>
+): YextArrayField<T>;
+
+export function YextField<T extends Record<string, any>>(
+  fieldName: MsgString,
+  config: YextObjectFieldConfig<T>
+): YextObjectField<T>;
+
 export function YextField<T extends Record<string, any>, U = any>(
   fieldName: MsgString,
   config: YextEntitySelectorField<T>
+): Field<YextEntityField<U>>;
+
+export function YextField<T extends Record<string, any>, U = any>(
+  fieldName: MsgString,
+  config: YextSubfieldSelectorField<T>
 ): Field<YextEntityField<U>>;
 
 export function YextField<T, U>(
@@ -114,6 +141,17 @@ export function YextField<T, U>(
   if (config.type === "entityField") {
     return YextEntityFieldSelector<T extends Record<string, any> ? T : any, U>({
       label: fieldName,
+      filter: config.filter,
+      disableConstantValueToggle: config.disableConstantValueToggle,
+      disallowTranslation: config.disallowTranslation,
+    });
+  }
+
+  if (config.type === "subfieldSelector") {
+    return YextSubfieldSelector<T extends Record<string, any> ? T : any, U>({
+      label: fieldName,
+      sourceField: config.sourceField,
+      sourceFieldPath: config.sourceFieldPath,
       filter: config.filter,
       disableConstantValueToggle: config.disableConstantValueToggle,
       disallowTranslation: config.disallowTranslation,

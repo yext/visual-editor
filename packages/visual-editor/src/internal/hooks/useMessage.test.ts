@@ -23,6 +23,11 @@ describe("isOriginAllowed", () => {
       expect(isOriginAllowed("https://app-qa.eu.yext.com")).toBe(true);
       expect(isOriginAllowed("https://app.eu.yext.com")).toBe(true);
     });
+
+    it("should allow localhost origins with ports", () => {
+      expect(isOriginAllowed("http://localhost:5173")).toBe(true);
+      expect(isOriginAllowed("http://localhost:3000")).toBe(true);
+    });
   });
 
   describe("optimizelocation.com pattern matching", () => {

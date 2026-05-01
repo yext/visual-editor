@@ -22,8 +22,11 @@ import { useTranslation } from "react-i18next";
 import { pt } from "../utils/i18n/platform.ts";
 import { resolveComponentData } from "../utils/resolveComponentData.tsx";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
-import { useLinkedEntitySchemas } from "../hooks/useLinkedEntitySchemas.tsx";
 import { useDocument } from "../hooks/useDocument.tsx";
+import {
+  buildEntityFieldOptionGroups,
+  type EntityFieldOptionGroup,
+} from "./entityFieldOptionGroups.ts";
 
 export type EmbeddedStringOption = {
   label: string;
@@ -47,27 +50,31 @@ export const EmbeddedFieldStringInputFromEntity = <
   showFieldSelector: boolean;
 }) => {
   const entityFields = useEntityFields();
-  const linkedEntitySchemas = useLinkedEntitySchemas();
+  const streamDocument = useDocument();
 
   const entityFieldOptions = React.useMemo(() => {
     const filteredEntityFields = getFieldsForSelector(
       entityFields,
       filter,
-      linkedEntitySchemas ?? undefined
+      streamDocument
     );
-    return filteredEntityFields.map((field) => {
-      return {
+    return buildEntityFieldOptionGroups({
+      entityFields,
+      options: filteredEntityFields.map((field) => ({
         label: field.displayName ?? field.name,
         value: field.name,
-      };
+        fieldPath: field.name,
+      })),
+      linkedGroupTitle: pt("linkedEntityFields", "Linked Entity Fields"),
+      entityGroupTitle: pt("entityFields", "Entity Fields"),
     });
-  }, [entityFields, filter, linkedEntitySchemas]);
+  }, [entityFields, filter, streamDocument]);
 
   return (
     <EmbeddedFieldStringInputFromOptions
       value={value}
       onChange={onChange}
-      options={entityFieldOptions}
+      optionGroups={entityFieldOptions}
       showFieldSelector={showFieldSelector}
       useOptionValueSublabel={false}
     />
@@ -87,13 +94,13 @@ const commitChanges = (
 export const EmbeddedFieldStringInputFromOptions = ({
   value,
   onChange,
-  options,
+  optionGroups,
   showFieldSelector,
   useOptionValueSublabel = false,
 }: {
   value: string;
   onChange: (value: string) => void;
-  options: EmbeddedStringOption[];
+  optionGroups: EntityFieldOptionGroup<{ label: string; value: string }>[];
   showFieldSelector: boolean;
   useOptionValueSublabel?: boolean;
 }) => {
@@ -140,10 +147,6 @@ export const EmbeddedFieldStringInputFromOptions = ({
       );
     };
   }, []);
-
-  const fieldOptions = React.useMemo(() => {
-    return options;
-  }, [options]);
 
   const handleFieldSelect = (fieldName: string) => {
     setOpen(false);
@@ -215,17 +218,19 @@ export const EmbeddedFieldStringInputFromOptions = ({
                   <CommandEmpty>
                     {pt("noMatchesFound", "No matches found.")}
                   </CommandEmpty>
-                  <CommandGroup>
-                    {fieldOptions.map((option) => (
-                      <CommandItemWithResolvedValue
-                        key={option.value}
-                        option={option}
-                        onSelect={() => handleFieldSelect(option.value)}
-                        isOpen={open}
-                        useOptionValue={useOptionValueSublabel}
-                      />
-                    ))}
-                  </CommandGroup>
+                  {optionGroups.map((group, index) => (
+                    <CommandGroup key={index} heading={group.title}>
+                      {group.options.map((option) => (
+                        <CommandItemWithResolvedValue
+                          key={option.value}
+                          option={option}
+                          onSelect={() => handleFieldSelect(option.value)}
+                          isOpen={open}
+                          useOptionValue={useOptionValueSublabel}
+                        />
+                      ))}
+                    </CommandGroup>
+                  ))}
                 </CommandList>
               </Command>
             </PopoverContent>
