@@ -306,6 +306,7 @@
         "primary": "Sólido",
         "secondary": "Describir"
       },
+      "customImage": "Imagen personalizada",
       "dark": "Oscuro",
       "default": "Por defecto",
       "distanceFromSearch": "Distancia desde la búsqueda",

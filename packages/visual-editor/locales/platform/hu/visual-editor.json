@@ -306,6 +306,7 @@
         "primary": "Szilárd",
         "secondary": "Vázlat"
       },
+      "customImage": "Egyedi kép",
       "dark": "Sötét",
       "default": "Mulasztás",
       "distanceFromSearch": "Távolság a kereséstől",

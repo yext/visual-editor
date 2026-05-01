@@ -306,6 +306,7 @@
         "primary": "Solid",
         "secondary": "Contur"
       },
+      "customImage": "Imagine personalizată",
       "dark": "Întuneric",
       "default": "Implicit",
       "distanceFromSearch": "Distanța de la Căutare",

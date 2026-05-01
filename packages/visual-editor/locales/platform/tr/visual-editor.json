@@ -306,6 +306,7 @@
         "primary": "Sağlam",
         "secondary": "Taslak"
       },
+      "customImage": "Özel resim",
       "dark": "Karanlık",
       "default": "Varsayılan",
       "distanceFromSearch": "Aramaya Uzaklık",

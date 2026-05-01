@@ -306,6 +306,7 @@
         "primary": "Fast",
         "secondary": "Disposisjon"
       },
+      "customImage": "Egendefinert bilde",
       "dark": "Mørk",
       "default": "Misligholde",
       "distanceFromSearch": "Avstand fra søk",

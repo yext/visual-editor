@@ -306,6 +306,7 @@
         "primary": "Solido",
         "secondary": "Contorno"
       },
+      "customImage": "Immagine personalizzata",
       "dark": "Buio",
       "default": "Predefinito",
       "distanceFromSearch": "Distanza dalla ricerca",

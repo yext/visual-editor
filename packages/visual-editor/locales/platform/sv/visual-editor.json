@@ -306,6 +306,7 @@
         "primary": "Fast",
         "secondary": "Skissera"
       },
+      "customImage": "Anpassad bild",
       "dark": "Mörk",
       "default": "Standard",
       "distanceFromSearch": "Avstånd från sökning",

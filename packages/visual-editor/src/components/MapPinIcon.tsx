@@ -34,11 +34,17 @@ export const MapPinIcon = ({
   color,
   resultIndex,
   icon,
+  iconWidth,
+  disableContrastIcon,
+  aspectRatio,
   selected,
 }: {
   color?: ThemeColor;
   resultIndex?: number;
   icon?: string;
+  iconWidth: number;
+  disableContrastIcon?: boolean;
+  aspectRatio?: number;
   selected?: boolean;
 }) => {
   const { t } = useTranslation();
@@ -48,7 +54,7 @@ export const MapPinIcon = ({
 
   const centerX = 13.5;
   const centerY = 13.5;
-  const iconSize = 14;
+  const iconHeight = aspectRatio ? iconWidth / aspectRatio : iconWidth;
 
   const backgroundToken = color?.selectedColor;
   const textToken = color?.contrastingColor;
@@ -123,18 +129,23 @@ export const MapPinIcon = ({
         {icon ? (
           <image
             href={icon}
-            x={centerX - iconSize / 2}
-            y={centerY - iconSize / 2}
-            width={iconSize}
-            height={iconSize}
-            filter={contrastColor === "#000000" ? "invert(0)" : "invert(1)"}
+            x={centerX - iconWidth / 2}
+            y={centerY - iconHeight / 2}
+            width={iconWidth}
+            height={iconHeight}
+            filter={
+              contrastColor === "#000000" || disableContrastIcon
+                ? "invert(0)"
+                : "invert(1)"
+            }
+            preserveAspectRatio="xMidYMid slice"
           />
         ) : (
           !!resultIndex && (
             <text
               textAnchor="middle"
               fontWeight="bold"
-              fontSize={iconSize}
+              fontSize={iconWidth}
               x="50%"
               y="50%"
               fill={contrastColor ?? "white"}

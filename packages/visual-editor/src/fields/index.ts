@@ -37,6 +37,12 @@ export {
 } from "./OptionalNumberField.tsx";
 
 export {
+  StyledTextFieldOverride,
+  type StyledTextField,
+  type StyledTextValue,
+} from "./StyledTextField.tsx";
+
+export {
   TranslatableStringFieldOverride,
   type TranslatableStringField,
 } from "./TranslatableStringField.tsx";

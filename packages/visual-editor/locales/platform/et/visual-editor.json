@@ -306,6 +306,7 @@
         "primary": "Tahke",
         "secondary": "Kontuur"
       },
+      "customImage": "Kohandatud pilt",
       "dark": "Tume",
       "default": "Täitmata jätmine",
       "distanceFromSearch": "Kaugus otsingust",
