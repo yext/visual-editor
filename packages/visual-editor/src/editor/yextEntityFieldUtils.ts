@@ -139,6 +139,9 @@ export const getFieldsForSelector = (
   const scopedStreamFields = scopedFieldPath
     ? getSubdocumentStreamFields(entityFields, scopedFieldPath)
     : null;
+  if (scopedFieldPath && !scopedStreamFields) {
+    return [];
+  }
   const hasRequiredDescendants = (field: YextSchemaField): boolean => {
     if (!filter.requiredDescendantTypes?.length) {
       return true;

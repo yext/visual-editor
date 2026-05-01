@@ -1532,6 +1532,34 @@ describe("YextEntityFieldSelector", () => {
     expect(screen.queryByText("Trip Branding > URL")).toBeNull();
   });
 
+  it("does not fall back to base entity fields when the scoped linked subtree is missing", () => {
+    renderEntityFieldInput({
+      entityFields: {
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "linkedInUrl",
+            displayName: "LinkedIn URL",
+            definition: {
+              name: "linkedInUrl",
+              typeName: "type.string",
+              type: {},
+            },
+          },
+        ],
+      },
+      filter: {
+        types: ["type.string"],
+        subdocumentField: "c_linkedLocation",
+      },
+    });
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(screen.queryByText("LinkedIn URL")).toBeNull();
+    expect(screen.getAllByText("Location Field")).toHaveLength(2);
+  });
+
   it("stores linked descendant selections as absolute paths while showing relative options", () => {
     const onChange = vi.fn();
 
