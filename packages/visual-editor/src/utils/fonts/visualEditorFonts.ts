@@ -244,12 +244,13 @@ type getFontStyleParams = {
 };
 
 /*
- * getFontWeightOptions returns the available font weights for a given CSS variable
- * for use in the theme.config.
- * Must return synchronously because the theme.config is processed synchronously
+ * getFontWeightOptions returns the available font weights for a CSS variable.
+ * It must return synchronously because theme.config processing needs options
+ * synchronously.
  */
 export const getFontWeightOptions = (options: getFontWeightParams) => {
   const { fontCssVariable, weightOptions = defaultWeightOptions } = options;
+
   if (!fontCssVariable || typeof window === "undefined") {
     // return all options if no variable provided, or not in browser
     return weightOptions;
@@ -270,8 +271,31 @@ export const getFontWeightOptions = (options: getFontWeightParams) => {
   return filterFontWeights(styleElement, options);
 };
 
+/*
+ * getFontWeightOptionsForFontFamily returns the available font weights for a
+ * concrete font-family value. It must return synchronously because field
+ * rendering needs options synchronously.
+ */
+export const getFontWeightOptionsForFontFamily = (
+  fontFamilyValue: string | undefined,
+  options: Omit<getFontWeightParams, "fontCssVariable"> = {}
+) => {
+  const { weightOptions = defaultWeightOptions, fontList = defaultFonts } =
+    options;
+  const fontName = fontFamilyValue
+    ? extractFontFamilyName(fontFamilyValue)
+    : undefined;
+  return filterFontWeightOptions(fontName, weightOptions, fontList);
+};
+
+/*
+ * getFontStyleOptions returns the available font styles for a CSS variable. It
+ * must return synchronously because theme.config processing needs options
+ * synchronously.
+ */
 export const getFontStyleOptions = (options: getFontStyleParams) => {
   const { fontCssVariable, styleOptions = fontStyleOptions } = options;
+
   if (!fontCssVariable || typeof window === "undefined") {
     return styleOptions;
   }
@@ -288,6 +312,22 @@ export const getFontStyleOptions = (options: getFontStyleParams) => {
   }
 
   return filterFontStyles(styleElement, options);
+};
+
+/*
+ * getFontStyleOptionsForFontFamily returns the available font styles for a
+ * concrete font-family value. It must return synchronously because field
+ * rendering needs options synchronously.
+ */
+export const getFontStyleOptionsForFontFamily = (
+  fontFamilyValue: string | undefined,
+  options: Omit<getFontStyleParams, "fontCssVariable"> = {}
+) => {
+  const { styleOptions = fontStyleOptions, fontList = defaultFonts } = options;
+  const fontName = fontFamilyValue
+    ? extractFontFamilyName(fontFamilyValue)
+    : undefined;
+  return filterFontStyleOptions(fontName, styleOptions, fontList);
 };
 
 /*
@@ -339,6 +379,14 @@ const filterFontWeights = (
   }: getFontWeightParams
 ) => {
   const fontName = getFontNameFromStyleElement(styleElement, fontCssVariable);
+  return filterFontWeightOptions(fontName, weightOptions, fontList);
+};
+
+const filterFontWeightOptions = (
+  fontName: string | undefined,
+  weightOptions: StyleSelectOption[],
+  fontList: FontRegistry
+) => {
   const font = fontName ? fontList[fontName] : undefined;
   if (!font) {
     return weightOptions;
@@ -366,6 +414,14 @@ const filterFontStyles = (
   }: getFontStyleParams
 ) => {
   const fontName = getFontNameFromStyleElement(styleElement, fontCssVariable);
+  return filterFontStyleOptions(fontName, styleOptions, fontList);
+};
+
+const filterFontStyleOptions = (
+  fontName: string | undefined,
+  styleOptions: StyleSelectOption[],
+  fontList: FontRegistry
+) => {
   const font = fontName ? fontList[fontName] : undefined;
   if (!font) {
     return styleOptions;
