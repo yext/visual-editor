@@ -126,6 +126,33 @@ const getSubdocumentStreamFields = (
     : null;
 };
 
+const isLinkedEntityDefinition = (
+  field: YextSchemaField | undefined
+): boolean =>
+  field?.definition.typeRegistryId === "type.entity_reference" ||
+  field?.definition.type.documentType === "DOCUMENT_TYPE_ENTITY";
+
+const hasNestedLinkedEntityAncestor = (
+  scopedStreamFields: StreamFields,
+  relativeFieldPath: string
+): boolean => {
+  const pathSegments = relativeFieldPath.split(".");
+  let currentFields = scopedStreamFields.fields;
+
+  for (const segment of pathSegments.slice(0, -1)) {
+    const matchingField = currentFields.find((field) => field.name === segment);
+    if (!matchingField) {
+      return false;
+    }
+    if (isLinkedEntityDefinition(matchingField)) {
+      return true;
+    }
+    currentFields = matchingField.children?.fields ?? [];
+  }
+
+  return false;
+};
+
 export const getFieldsForSelector = (
   entityFields: StreamFields | null,
   filter: MappedSourceFieldFilter<any>,
@@ -246,12 +273,15 @@ export const getFieldsForSelector = (
     subdocumentField: undefined,
   };
   let filteredEntityFields = scopedStreamFields
-    ? getFilteredEntityFields(scopedStreamFields, descendantFilter).map(
-        (field) => ({
+    ? getFilteredEntityFields(scopedStreamFields, descendantFilter)
+        .filter(
+          (field) =>
+            !hasNestedLinkedEntityAncestor(scopedStreamFields, field.name)
+        )
+        .map((field) => ({
           ...field,
           name: `${scopedFieldPath}.${field.name}`,
-        })
-      )
+        }))
     : getFilteredEntityFields(entityFields, filter);
 
   if (descendantRootDisplayName) {
@@ -313,8 +343,8 @@ const getResolvedDescendantFieldPaths = (
     streamDocument,
     rootFieldPath
   ).value;
-  if (resolvedValue === undefined) {
-    return undefined;
+  if (resolvedValue === undefined || resolvedValue === null) {
+    return new Set();
   }
 
   const sampledValues = Array.isArray(resolvedValue)

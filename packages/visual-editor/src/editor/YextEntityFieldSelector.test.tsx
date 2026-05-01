@@ -1178,6 +1178,9 @@ describe("YextEntityFieldSelector", () => {
         types: ["type.string"],
         subdocumentField: "c_linkedLocation",
       },
+      document: {
+        c_linkedLocation: [{ name: "Downtown", address: { city: "New York" } }],
+      },
     });
 
     fireEvent.click(screen.getByRole("combobox"));
@@ -1235,6 +1238,9 @@ describe("YextEntityFieldSelector", () => {
         types: ["type.string"],
         subdocumentField: "c_linkedLocation",
       },
+      document: {
+        c_linkedLocation: [{ name: "Downtown" }],
+      },
     });
 
     fireEvent.click(screen.getByRole("combobox"));
@@ -1280,6 +1286,9 @@ describe("YextEntityFieldSelector", () => {
       filter: {
         types: ["type.string"],
         subdocumentField: "c_linkedLocation",
+      },
+      document: {
+        c_linkedLocation: [{ linkedInUrl: "https://linkedin.com/in/example" }],
       },
     });
 
