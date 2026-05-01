@@ -5,6 +5,7 @@ node_modules/
 storybook-static
 jstest
 .pnpm-store
+testData/
 
 # Logs
 logs

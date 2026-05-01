@@ -199,8 +199,7 @@ export const getFilteredEntityFields = <T extends Record<string, any>>(
 
   // Augment to include subfields
   let filteredEntitySubFields: YextSchemaField[] = [];
-  const includeNestedListChildren =
-    !!filter?.directChildrenOf?.length || !!filter?.descendantsOf?.length;
+  const includeNestedListChildren = true;
   for (const yextSchemaField of filteredEntityFields) {
     const entityFieldNames = getEntityFieldNames(
       yextSchemaField,
