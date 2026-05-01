@@ -187,10 +187,12 @@ export const getSubfieldsForSelector = (
       ...field,
       name: `${sourceField}.${field.name}`,
     }));
+
   const resolvedDescendantFieldPaths = getResolvedDescendantFieldPaths(
     streamDocument,
     sourceField
   );
+
   const descendantRootDisplayName = getEntityFieldDisplayName(
     sourceField,
     entityFields

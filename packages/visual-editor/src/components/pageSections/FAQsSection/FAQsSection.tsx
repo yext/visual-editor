@@ -84,6 +84,7 @@ const createFAQMappingFields = (sourceField?: string) =>
       question: YextField(msg("fields.question", "Question"), {
         type: "subfieldSelector",
         sourceField: sourceField ?? "",
+        sourceFieldPath: "data.field",
         filter: {
           types: ["type.string", "type.rich_text_v2"],
         },
@@ -91,6 +92,7 @@ const createFAQMappingFields = (sourceField?: string) =>
       answer: YextField(msg("fields.answer", "Answer"), {
         type: "subfieldSelector",
         sourceField: sourceField ?? "",
+        sourceFieldPath: "data.field",
         filter: {
           types: ["type.string", "type.rich_text_v2"],
         },

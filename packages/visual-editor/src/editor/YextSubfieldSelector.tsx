@@ -1,5 +1,5 @@
 import React from "react";
-import { FieldLabel, Field } from "@puckeditor/core";
+import { FieldLabel, Field, createUsePuck, useGetPuck } from "@puckeditor/core";
 import { YextAutoField } from "../fields/YextAutoField.tsx";
 import { type RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
 import { pt } from "../utils/i18n/platform.ts";
@@ -23,6 +23,7 @@ import { YextPuckFieldOverrides } from "../fields/fields.ts";
 export type RenderYextSubfieldSelectorProps<T extends Record<string, any>> = {
   label: string;
   sourceField: string;
+  sourceFieldPath?: string;
   filter: RenderEntityFieldFilter<T>;
   disableConstantValueToggle?: boolean;
   disallowTranslation?: boolean;
@@ -36,6 +37,21 @@ type InputProps<T extends Record<string, any>> = {
   disallowTranslation?: boolean;
   label?: string;
   sourceField: string;
+};
+
+const usePuck = createUsePuck();
+
+const getValueAtPath = (value: unknown, path: string): unknown => {
+  if (!value || typeof value !== "object" || !path) {
+    return undefined;
+  }
+
+  return path.split(".").reduce<unknown>((currentValue, key) => {
+    if (!currentValue || typeof currentValue !== "object") {
+      return undefined;
+    }
+    return (currentValue as Record<string, unknown>)[key];
+  }, value);
 };
 
 const isYextPuckFieldType = (
@@ -83,6 +99,22 @@ export const YextSubfieldSelector = <T extends Record<string, any>, U>(
   return {
     type: "custom",
     render: ({ value, onChange }) => {
+      const getPuck = useGetPuck();
+      const itemSelector = usePuck((state) => state.appState.ui.itemSelector);
+      const sourceFieldFromSelectedComponent = React.useMemo(() => {
+        if (!props.sourceFieldPath || !itemSelector) {
+          return "";
+        }
+
+        const selectedComponent = getPuck().getItemBySelector(itemSelector);
+        const sourceFieldValue = getValueAtPath(
+          selectedComponent?.props,
+          props.sourceFieldPath
+        );
+
+        return typeof sourceFieldValue === "string" ? sourceFieldValue : "";
+      }, [getPuck, itemSelector, props.sourceFieldPath]);
+      const sourceField = props.sourceField || sourceFieldFromSelectedComponent;
       const constantValueEnabled =
         !props.disableConstantValueToggle && !!value?.constantValueEnabled;
 
@@ -109,7 +141,7 @@ export const YextSubfieldSelector = <T extends Record<string, any>, U>(
               className="ve-pt-3"
               filter={props.filter}
               onChange={onChange}
-              sourceField={props.sourceField}
+              sourceField={sourceField}
               value={value}
               disallowTranslation={props.disallowTranslation}
             />
@@ -118,7 +150,7 @@ export const YextSubfieldSelector = <T extends Record<string, any>, U>(
               className="ve-pt-3"
               filter={props.filter}
               onChange={onChange}
-              sourceField={props.sourceField}
+              sourceField={sourceField}
               value={value}
             />
           )}

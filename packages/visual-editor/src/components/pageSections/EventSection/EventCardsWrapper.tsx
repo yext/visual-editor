@@ -44,6 +44,7 @@ const createEventCardsMappingFields = (sourceField?: string) =>
       title: YextField(msg("fields.title", "Title"), {
         type: "subfieldSelector",
         sourceField: sourceField ?? "",
+        sourceFieldPath: "data.field",
         filter: {
           types: ["type.string"],
         },
@@ -51,6 +52,7 @@ const createEventCardsMappingFields = (sourceField?: string) =>
       date: YextField(msg("fields.date", "Date"), {
         type: "subfieldSelector",
         sourceField: sourceField ?? "",
+        sourceFieldPath: "data.field",
         disableConstantValueToggle: true,
         filter: {
           types: ["type.datetime"],
@@ -59,6 +61,7 @@ const createEventCardsMappingFields = (sourceField?: string) =>
       description: YextField(msg("fields.description", "Description"), {
         type: "subfieldSelector",
         sourceField: sourceField ?? "",
+        sourceFieldPath: "data.field",
         filter: {
           types: ["type.string", "type.rich_text_v2"],
         },
@@ -66,6 +69,7 @@ const createEventCardsMappingFields = (sourceField?: string) =>
       cta: YextField(msg("fields.cta", "CTA"), {
         type: "subfieldSelector",
         sourceField: sourceField ?? "",
+        sourceFieldPath: "data.field",
         filter: {
           types: ["type.cta"],
         },
@@ -73,6 +77,7 @@ const createEventCardsMappingFields = (sourceField?: string) =>
       image: YextField(msg("fields.image", "Image"), {
         type: "subfieldSelector",
         sourceField: sourceField ?? "",
+        sourceFieldPath: "data.field",
         disableConstantValueToggle: true,
         filter: {
           types: ["type.image"],

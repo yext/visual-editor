@@ -151,6 +151,7 @@ export function YextField<T, U>(
     return YextSubfieldSelector<T extends Record<string, any> ? T : any, U>({
       label: fieldName,
       sourceField: config.sourceField,
+      sourceFieldPath: config.sourceFieldPath,
       filter: config.filter,
       disableConstantValueToggle: config.disableConstantValueToggle,
       disallowTranslation: config.disallowTranslation,
