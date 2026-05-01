@@ -73,7 +73,7 @@ export const classifyMappedSource = ({
       (resolvedSource as Record<string, unknown>)[listFieldName]
     )
       ? "sectionField"
-      : "sectionField";
+      : "mappedItemList";
   }
 
   return "mappedItemList";

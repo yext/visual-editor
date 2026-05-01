@@ -1245,6 +1245,50 @@ describe("YextEntityFieldSelector", () => {
     expect(screen.queryByText("Linked Location")).toBeNull();
   });
 
+  it("uses scoped descendant display names even when there is no displayNames map entry", () => {
+    renderEntityFieldInput({
+      entityFields: {
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_linkedLocation",
+            displayName: "Linked Location",
+            definition: {
+              name: "c_linkedLocation",
+              isList: true,
+              typeRegistryId: "type.entity_reference",
+              type: {
+                documentType: "DOCUMENT_TYPE_ENTITY",
+              },
+            },
+            children: {
+              fields: [
+                {
+                  name: "linkedInUrl",
+                  displayName: "LinkedIn URL",
+                  definition: {
+                    name: "linkedInUrl",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+      filter: {
+        types: ["type.string"],
+        subdocumentField: "c_linkedLocation",
+      },
+    });
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(screen.getAllByText("LinkedIn URL").length).toBeGreaterThan(0);
+    expect(screen.queryByText("linkedInUrl")).toBeNull();
+  });
+
   it("limits descendant fields to those actually present on the resolved linked entity or struct", () => {
     renderEntityFieldInput({
       entityFields: {
@@ -1430,9 +1474,7 @@ describe("YextEntityFieldSelector", () => {
     fireEvent.click(screen.getByRole("combobox"));
 
     expect(screen.getAllByText("Name").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("Trip Branding > URL").length).toBeGreaterThan(
-      0
-    );
+    expect(screen.getAllByText("URL").length).toBeGreaterThan(0);
   });
 
   it("does not include linked descendant fields that are present only on the fourth resolved linked entity", () => {
@@ -1917,9 +1959,7 @@ describe("YextEntityFieldSelector", () => {
     fireEvent.click(screen.getByRole("combobox"));
 
     expect(screen.getAllByText("Title").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("Secondary CTA > Label").length).toBeGreaterThan(
-      0
-    );
+    expect(screen.getAllByText("Label").length).toBeGreaterThan(0);
   });
 
   it("falls back to the default entity field option when no matching entity fields exist", () => {

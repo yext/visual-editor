@@ -46,7 +46,7 @@ describe("mappedSource", () => {
         fieldPath: "c_linkedLocation",
         listFieldName: "events",
       })
-    ).toBe("sectionField");
+    ).toBe("mappedItemList");
 
     expect(
       classifyMappedSource({

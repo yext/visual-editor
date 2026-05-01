@@ -463,7 +463,9 @@ export const EntityFieldInput = <T extends Record<string, any>>({
         : currentFieldPath;
     const fieldOptions = filteredEntityFields.map((field) => {
       const displayName =
-        getEntityFieldDisplayName(field.name, entityFields) ?? field.name;
+        field.displayName ??
+        getEntityFieldDisplayName(field.name, entityFields) ??
+        field.name;
 
       return {
         label:
