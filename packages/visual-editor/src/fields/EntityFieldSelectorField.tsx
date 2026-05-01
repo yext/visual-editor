@@ -262,22 +262,6 @@ export const EntityFieldSelectorFieldOverride = ({
   const showConstantValueInput =
     !!value?.constantValueEnabled && constantValueModeSupported;
 
-  const input = showConstantValueInput ? (
-    <ConstantValueInput
-      onChange={onChange}
-      value={value}
-      filter={field.filter}
-      disallowTranslation={field.disallowTranslation}
-    />
-  ) : (
-    <EntityFieldInput
-      className="ve-pt-3"
-      onChange={onChange}
-      value={value}
-      filter={field.filter}
-    />
-  );
-
   return (
     <>
       {constantValueModeSupported ? (
@@ -295,7 +279,23 @@ export const EntityFieldSelectorFieldOverride = ({
           showLocale={supportsLocalizedConstantValue(constantFieldConfig)}
         />
       ) : (
-        <FieldLabel label={translatedLabel}>{input}</FieldLabel>
+        <FieldLabel label={translatedLabel} />
+      )}
+      {showConstantValueInput && (
+        <ConstantValueInput
+          onChange={onChange}
+          value={value}
+          filter={field.filter}
+          disallowTranslation={field.disallowTranslation}
+        />
+      )}
+      {!showConstantValueInput && (
+        <EntityFieldInput
+          className="ve-pt-3"
+          onChange={onChange}
+          value={value}
+          filter={field.filter}
+        />
       )}
     </>
   );
