@@ -1245,7 +1245,7 @@ describe("YextEntityFieldSelector", () => {
 
     fireEvent.click(screen.getByRole("combobox"));
 
-    expect(screen.getAllByText("Location Field").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Select a field").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Name").length).toBeGreaterThan(0);
     expect(screen.queryByText("Youtube Channel URL")).toBeNull();
     expect(screen.queryByText("Linked Location")).toBeNull();
@@ -1578,7 +1578,7 @@ describe("YextEntityFieldSelector", () => {
 
     fireEvent.click(screen.getByRole("combobox"));
 
-    expect(screen.getAllByText("Location Field")).toHaveLength(2);
+    expect(screen.getAllByText("Select a field")).toHaveLength(2);
     expect(screen.queryByText("Name")).toBeNull();
     expect(screen.queryByText("Trip Branding > URL")).toBeNull();
   });
@@ -1608,7 +1608,7 @@ describe("YextEntityFieldSelector", () => {
     fireEvent.click(screen.getByRole("combobox"));
 
     expect(screen.queryByText("LinkedIn URL")).toBeNull();
-    expect(screen.getAllByText("Location Field")).toHaveLength(2);
+    expect(screen.getAllByText("Select a field")).toHaveLength(2);
   });
 
   it("stores linked descendant selections as absolute paths while showing relative options", () => {

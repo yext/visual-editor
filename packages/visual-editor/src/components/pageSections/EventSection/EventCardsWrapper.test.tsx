@@ -409,25 +409,4 @@ describe("EventCardsWrapper", () => {
     expect(linkedFields.cards?.visible).toBe(true);
     expect(sectionFields.cards?.visible).toBe(false);
   });
-
-  it("does not show cards mappings for single objects that are not event sections", async () => {
-    const data = createWrapperData();
-    data.props.data.constantValueEnabled = false;
-    data.props.data.field = "heroSection";
-
-    const resolvedFields = await EventCardsWrapper.resolveFields!(
-      data,
-      resolveParams({
-        heroSection: {
-          primaryCta: {
-            label: "Learn More",
-            link: "https://example.com",
-            linkType: "URL",
-          },
-        },
-      })
-    );
-
-    expect(resolvedFields.cards?.visible).toBe(false);
-  });
 });

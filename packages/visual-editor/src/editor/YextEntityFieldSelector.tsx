@@ -480,17 +480,34 @@ export const EntityFieldInput = <T extends Record<string, any>>({
         fieldPath: field.name,
       };
     });
+    const scopedFieldOptions = descendantRoot
+      ? fieldOptions.filter((option) =>
+          option.fieldPath.startsWith(`${descendantRoot}.`)
+        )
+      : fieldOptions;
+    if (descendantRoot && scopedFieldOptions.length !== fieldOptions.length) {
+      devLogger.log(
+        `Scoped entity field options stripped for ${descendantRoot}: ${JSON.stringify(
+          {
+            originalFieldPaths: fieldOptions.map((option) => option.fieldPath),
+            keptFieldPaths: scopedFieldOptions.map(
+              (option) => option.fieldPath
+            ),
+          }
+        )}`
+      );
+    }
     if (
       hasValidDescendantSelection &&
       currentFieldPath &&
       currentOptionValue &&
-      !fieldOptions.some((option) => option.value === currentOptionValue)
+      !scopedFieldOptions.some((option) => option.value === currentOptionValue)
     ) {
       const savedFieldDisplayName =
         getEntityFieldDisplayName(currentFieldPath, entityFields) ??
         currentOptionValue;
 
-      fieldOptions.push({
+      scopedFieldOptions.push({
         label:
           descendantRootDisplayName &&
           savedFieldDisplayName.startsWith(`${descendantRootDisplayName} > `)
@@ -501,21 +518,35 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       });
     }
 
-    const optionGroups = buildEntityFieldOptionGroups({
-      entityFields,
-      options: [
-        {
-          value: "",
-          label: pt("entityTypeField", "{{entityType}} Field", {
-            entityType: templateMetadata.entityTypeDisplayName,
-          }),
-          fieldPath: "",
-        },
-        ...fieldOptions,
-      ],
-      linkedGroupTitle: pt("linkedEntityFields", "Linked Entity Fields"),
-      entityGroupTitle: pt("entityFields", "Entity Fields"),
-    });
+    const optionGroups = descendantRoot
+      ? [
+          {
+            options: [
+              {
+                value: "",
+                label: pt("fields.options.selectAField", "Select a field"),
+              },
+              ...scopedFieldOptions.map(
+                ({ fieldPath: _fieldPath, ...option }) => option
+              ),
+            ],
+          },
+        ]
+      : buildEntityFieldOptionGroups({
+          entityFields,
+          options: [
+            {
+              value: "",
+              label: pt("entityTypeField", "{{entityType}} Field", {
+                entityType: templateMetadata.entityTypeDisplayName,
+              }),
+              fieldPath: "",
+            },
+            ...scopedFieldOptions,
+          ],
+          linkedGroupTitle: pt("linkedEntityFields", "Linked Entity Fields"),
+          entityGroupTitle: pt("entityFields", "Entity Fields"),
+        });
 
     return {
       type: "basicSelector",
