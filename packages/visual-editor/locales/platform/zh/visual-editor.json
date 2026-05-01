@@ -306,6 +306,7 @@
         "primary": "坚硬的",
         "secondary": "大纲"
       },
+      "customImage": "自定义图片",
       "dark": "黑暗的",
       "default": "默认",
       "distanceFromSearch": "与搜索的距离",

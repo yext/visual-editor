@@ -49,10 +49,16 @@ import {
   YextField,
   type YextCustomFieldRenderProps,
 } from "../editor/YextField.tsx";
+import { ImageField } from "../fields/ImageField.tsx";
 import { YextAutoField } from "../fields/YextAutoField.tsx";
 import { useDocument } from "../hooks/useDocument.tsx";
 import { Button } from "./atoms/button.tsx";
+import { ImageStylingFields } from "./contentBlocks/image/styling.ts";
 import { TranslatableString } from "../types/types.ts";
+import {
+  resolveLocalizedAssetImage,
+  TranslatableAssetImage,
+} from "../types/images.ts";
 import {
   getPreferredDistanceUnit,
   toMeters,
@@ -112,6 +118,29 @@ const DEFAULT_DISTANCE_DISPLAY = "distanceFromUser";
 const DEFAULT_LOCATION_STYLE = {
   pinIcon: { type: "none" },
   pinColor: backgroundColors.background6.value,
+};
+const DEFAULT_PIN_ICON_WIDTH = 14;
+const MAX_PIN_ICON_WIDTH = 27;
+const PIN_ICON_MAX_FILE_SIZE_BYTES = 128 * 1024;
+
+type LocationStyleConfig = Record<
+  string,
+  {
+    color?: ThemeColor;
+    icon?: string;
+    customImage?: {
+      url: string;
+      width?: number;
+      aspectRatio?: number;
+    };
+  }
+>;
+
+const LOCATOR_PIN_ICON_FIELD: ImageField = {
+  type: "image",
+  label: msg("fields.icon", "Icon"),
+  hideAltTextField: true,
+  maxFileSizeBytes: PIN_ICON_MAX_FILE_SIZE_BYTES,
 };
 
 const getConfiguredMapCenterOrDefault = (mapStartingLocation?: {
@@ -562,9 +591,18 @@ export interface LocatorProps {
     entityType: LocatorEntityType;
     /** Whether to render an icon in the pin. */
     pinIcon?: {
-      type: "none" | "icon";
+      type: "none" | "icon" | "customImage";
       /** Defaults to the first available Maki icon when type is 'icon'. */
       iconName?: string;
+      /** Image rendered within the pin when type is 'customImage'. */
+      image?: TranslatableAssetImage;
+      /**
+       * Width of the custom image rendered within the pin.
+       * @defaultValue 14
+       * */
+      width?: number;
+      /** Aspect ratio of the custom image rendered within the pin. */
+      aspectRatio?: number;
     };
     /** The color applied to the pin. */
     pinColor?: ThemeColor;
@@ -677,34 +715,40 @@ const locatorFields: YextFields<LocatorProps> = {
             const selectedType = value?.type ?? "none";
             return (
               <div className="flex flex-col gap-3">
-                <FieldLabel label={pt("fields.pinIcon", "Pin Icon")}>
-                  <YextAutoField
-                    field={{
-                      type: "basicSelector",
-                      label: msg("fields.pinIcon", "Pin Icon"),
-                      options: [
-                        {
-                          label: msg("fields.options.none", "None"),
-                          value: "none",
-                        },
-                        {
-                          label: msg("fields.options.icon", "Icon"),
-                          value: "icon",
-                        },
-                      ],
-                    }}
-                    value={selectedType}
-                    onChange={(type) =>
-                      onChange({
-                        type,
-                        iconName:
-                          type === "icon"
-                            ? (value?.iconName ?? DEFAULT_MAKI_ICON_NAME)
-                            : value?.iconName,
-                      })
-                    }
-                  />
-                </FieldLabel>
+                <YextAutoField
+                  field={{
+                    type: "basicSelector",
+                    label: msg("fields.pinIcon", "Pin Icon"),
+                    options: [
+                      {
+                        label: msg("fields.options.none", "None"),
+                        value: "none",
+                      },
+                      {
+                        label: msg("fields.options.icon", "Icon"),
+                        value: "icon",
+                      },
+                      {
+                        label: msg(
+                          "fields.options.customImage",
+                          "Custom image"
+                        ),
+                        value: "customImage",
+                      },
+                    ],
+                  }}
+                  value={selectedType}
+                  onChange={(type) =>
+                    onChange({
+                      ...value,
+                      type,
+                      iconName:
+                        type === "icon"
+                          ? (value?.iconName ?? DEFAULT_MAKI_ICON_NAME)
+                          : undefined,
+                    })
+                  }
+                />
                 {selectedType === "icon" && (
                   <YextAutoField
                     field={{
@@ -714,9 +758,50 @@ const locatorFields: YextFields<LocatorProps> = {
                     }}
                     value={value?.iconName}
                     onChange={(iconName) =>
-                      onChange({ type: "icon", iconName })
+                      onChange({ ...value, type: "icon", iconName })
                     }
                   />
+                )}
+                {selectedType === "customImage" && (
+                  <>
+                    <YextAutoField
+                      field={{
+                        ...LOCATOR_PIN_ICON_FIELD,
+                      }}
+                      value={value?.image}
+                      onChange={(image) =>
+                        onChange({ ...value, type: "customImage", image })
+                      }
+                    />
+                    <FieldLabel label={pt("fields.options.width", "Width")}>
+                      <YextAutoField
+                        field={{
+                          type: "number",
+                          min: 1,
+                          max: MAX_PIN_ICON_WIDTH,
+                        }}
+                        value={value?.width ?? DEFAULT_PIN_ICON_WIDTH}
+                        onChange={(width) =>
+                          onChange({
+                            ...value,
+                            type: "customImage",
+                            width,
+                          })
+                        }
+                      />
+                    </FieldLabel>
+                    <YextAutoField
+                      field={ImageStylingFields.aspectRatio}
+                      value={value?.aspectRatio}
+                      onChange={(aspectRatio) =>
+                        onChange({
+                          ...value,
+                          type: "customImage",
+                          aspectRatio,
+                        })
+                      }
+                    />
+                  </>
                 )}
               </div>
             );
@@ -1357,7 +1442,7 @@ const LocatorInternal = ({
     React.useState<boolean>(false);
 
   const locationStylesConfig = React.useMemo(() => {
-    const config: Record<string, { color?: ThemeColor; icon?: string }> = {};
+    const config: LocationStyleConfig = {};
     (locationStyles ?? []).forEach((locationStyle) => {
       const entityType = locationStyle.entityType;
       if (!entityType) return;
@@ -1365,14 +1450,29 @@ const LocatorInternal = ({
         locationStyle.pinIcon?.type === "icon"
           ? locationStyle.pinIcon.iconName
           : undefined;
+      const customImageValue =
+        locationStyle.pinIcon?.type === "customImage"
+          ? resolveLocalizedAssetImage(
+              locationStyle.pinIcon.image,
+              i18n.language
+            )
+          : undefined;
+      const customImageUrl = customImageValue?.url?.trim();
       config[entityType] = {
         color: locationStyle.pinColor,
         icon:
           typeof iconValue === "string" ? makiIconMap[iconValue] : undefined,
+        customImage: customImageUrl
+          ? {
+              url: customImageUrl,
+              width: locationStyle.pinIcon?.width,
+              aspectRatio: locationStyle.pinIcon?.aspectRatio,
+            }
+          : undefined,
       };
     });
     return config;
-  }, [locationStyles]);
+  }, [i18n.language, locationStyles]);
 
   const initialMapCenter = React.useMemo(
     () => getConfiguredMapCenterOrDefault(mapStartingLocation),
@@ -1943,7 +2043,7 @@ interface MapProps {
   onDragHandler?: OnDragHandler;
   scrollToResult?: (result: Result<Location> | undefined) => void;
   markerOptionsOverride?: (selected: boolean) => MapMarkerOptions;
-  locationStyleConfig?: Record<string, { color?: ThemeColor; icon?: string }>;
+  locationStyleConfig?: LocationStyleConfig;
 }
 
 const Map: React.FC<MapProps> = ({
@@ -2027,7 +2127,7 @@ const Map: React.FC<MapProps> = ({
 };
 
 type LocatorMapPinProps<T> = PinComponentProps<T> & {
-  locationStyleConfig?: Record<string, { color?: ThemeColor; icon?: string }>;
+  locationStyleConfig?: LocationStyleConfig;
 };
 
 const LocatorMapPin = <T,>(props: LocatorMapPinProps<T>) => {
@@ -2041,7 +2141,12 @@ const LocatorMapPin = <T,>(props: LocatorMapPinProps<T>) => {
     <MapPinIcon
       color={entityLocationStyle?.color}
       resultIndex={result.index}
-      icon={entityLocationStyle?.icon}
+      icon={entityLocationStyle?.customImage?.url ?? entityLocationStyle?.icon}
+      iconWidth={
+        entityLocationStyle?.customImage?.width ?? DEFAULT_PIN_ICON_WIDTH
+      }
+      disableContrastIcon={!!entityLocationStyle?.customImage}
+      aspectRatio={entityLocationStyle?.customImage?.aspectRatio}
       selected={selected}
     />
   );

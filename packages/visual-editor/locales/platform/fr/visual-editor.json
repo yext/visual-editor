@@ -306,6 +306,7 @@
         "primary": "Solide",
         "secondary": "Contour"
       },
+      "customImage": "Image personnalisée",
       "dark": "Sombre",
       "default": "Défaut",
       "distanceFromSearch": "Distance de la recherche",
