@@ -1426,6 +1426,61 @@ describe("YextEntityFieldSelector", () => {
     expect(screen.queryByText("LinkedIn URL")).toBeNull();
   });
 
+  it("falls back to linked entity schema fields when runtime descendants are unavailable", () => {
+    renderEntityFieldInput({
+      entityFields: {
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_linkedLocation",
+            displayName: "Linked Location",
+            definition: {
+              name: "c_linkedLocation",
+              isList: true,
+              typeRegistryId: "type.entity_reference",
+              type: {
+                documentType: "DOCUMENT_TYPE_ENTITY",
+              },
+            },
+            children: {
+              fields: [
+                {
+                  name: "name",
+                  displayName: "Name",
+                  definition: {
+                    name: "name",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+                {
+                  name: "description",
+                  displayName: "Description",
+                  definition: {
+                    name: "description",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+      filter: {
+        types: ["type.string"],
+        subdocumentField: "c_linkedLocation",
+      },
+      document: {},
+    });
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(screen.getAllByText("Name").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Description").length).toBeGreaterThan(0);
+    expect(screen.queryByText("Photo")).toBeNull();
+  });
+
   it("includes linked descendant fields present on any of the first three resolved linked entities", () => {
     renderEntityFieldInput({
       entityFields: {

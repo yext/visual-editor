@@ -158,7 +158,9 @@ const hasNestedLinkedEntityAncestor = (
  * 1. Starts from the selected source subtree instead of the full entity tree.
  * 2. Drops nested linked-entity traversals so selectors stay on the current
  *    linked entity or list item.
- * 3. Samples runtime items to keep only fields that are actually present.
+ * 3. Samples runtime items to keep only fields that are actually present when
+ *    runtime data is available, while falling back to schema descendants when
+ *    the source cannot currently be resolved.
  */
 export const getSubfieldsForSelector = (
   entityFields: StreamFields | null,
@@ -359,7 +361,7 @@ const getResolvedDescendantFieldPaths = (
     rootFieldPath
   ).value;
   if (resolvedValue === undefined || resolvedValue === null) {
-    return new Set();
+    return undefined;
   }
 
   const sampledValues = Array.isArray(resolvedValue)
@@ -371,7 +373,7 @@ const getResolvedDescendantFieldPaths = (
   );
 
   if (!subdocuments.length) {
-    return new Set();
+    return undefined;
   }
 
   const fieldPaths = new Set<string>();
