@@ -13,6 +13,7 @@ import {
 import { EmbeddedFieldStringInputFromOptions } from "./EmbeddedFieldStringInput.tsx";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
 import { useDocument } from "../hooks/useDocument.tsx";
+import { type StreamDocument } from "../utils/types/StreamDocument.ts";
 import {
   getEntityFieldDisplayName,
   getSubfieldsForSelector,
@@ -46,7 +47,7 @@ const getSubfieldOptions = (
   entityFields: ReturnType<typeof useEntityFields>,
   sourceField: string,
   filter: RenderEntityFieldFilter<any>,
-  streamDocument: ReturnType<typeof useDocument>
+  streamDocument: StreamDocument
 ): { label: string; value: string }[] => {
   const rootDisplayName = getEntityFieldDisplayName(sourceField, entityFields);
   const rootPrefix = rootDisplayName ? `${rootDisplayName} > ` : undefined;
@@ -136,7 +137,7 @@ const SubfieldConstantValueInput = <T extends Record<string, any>>({
   sourceField,
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
-  const streamDocument = useDocument();
+  const streamDocument = useDocument<StreamDocument>();
   const subfieldOptions = React.useMemo(
     () => getSubfieldOptions(entityFields, sourceField, filter, streamDocument),
     [entityFields, filter, sourceField, streamDocument]
@@ -239,7 +240,7 @@ export const SubfieldInput = <T extends Record<string, any>>({
   sourceField,
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
-  const streamDocument = useDocument();
+  const streamDocument = useDocument<StreamDocument>();
   const currentFieldPath = value?.field as string | undefined;
   const currentSubfieldValue = currentFieldPath?.startsWith(`${sourceField}.`)
     ? currentFieldPath.slice(sourceField.length + 1)
