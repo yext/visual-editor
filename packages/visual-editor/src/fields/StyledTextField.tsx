@@ -17,11 +17,11 @@ import { pt, type MsgString } from "../utils/i18n/platform.ts";
 import type { StyleSelectOption } from "../utils/themeResolver.ts";
 
 export type StyledTextValue = {
-  fontFamily?: string | "default";
-  fontSize?: string | "default";
-  fontWeight?: string | "default";
-  fontStyle?: "normal" | "italic" | "default";
-  textTransform?: "none" | "uppercase" | "lowercase" | "capitalize" | "default";
+  fontFamily: string;
+  fontSize: string;
+  fontWeight: string;
+  fontStyle: "normal" | "italic" | "default";
+  textTransform: "none" | "uppercase" | "lowercase" | "capitalize" | "default";
 };
 
 export type StyledTextField = BaseField & {
@@ -31,6 +31,14 @@ export type StyledTextField = BaseField & {
 };
 
 type StyledTextFieldProps = FieldProps<StyledTextField, StyledTextValue>;
+
+const defaultStyledTextValue: StyledTextValue = {
+  fontFamily: "default",
+  fontSize: "default",
+  fontWeight: "default",
+  fontStyle: "default",
+  textTransform: "default",
+};
 
 const defaultOption = {
   label: pt("fontSizeDefaultLabel", "Default"),
@@ -94,88 +102,47 @@ export const StyledTextFieldOverride = ({
   onChange,
 }: StyledTextFieldProps) => {
   const templateMetadata = useTemplateMetadata();
-  const currentValue = value ?? {};
+  const currentValue: StyledTextValue = {
+    ...defaultStyledTextValue,
+    ...value,
+  };
   const customFonts = templateMetadata.customFonts ?? {};
-  const fontList = React.useMemo(
-    () => ({
-      ...defaultFonts,
-      ...customFonts,
-    }),
-    [customFonts]
+  const fontList = {
+    ...defaultFonts,
+    ...customFonts,
+  };
+  const fontOptions = getFontOptions(customFonts);
+  const fontSizeOptions = withDefaultOption(ThemeOptions.FONT_SIZE());
+  const textTransformOptions = withDefaultOption(
+    ThemeOptions.TEXT_TRANSFORM.map((option) => ({
+      ...option,
+      label: pt(option.label),
+    }))
   );
-  const fontOptions = React.useMemo(
-    () => getFontOptions(customFonts),
-    [customFonts]
+  const fontWeightOptions = getFontWeightOptionsForFontFamily(
+    currentValue.fontFamily,
+    { fontList }
   );
-  const fontSizeOptions = React.useMemo(
-    () => withDefaultOption(ThemeOptions.FONT_SIZE()),
-    []
+  const fontStyleOptions = getFontStyleOptionsForFontFamily(
+    currentValue.fontFamily,
+    { fontList }
   );
-  const textTransformOptions = React.useMemo(
-    () =>
-      withDefaultOption(
-        ThemeOptions.TEXT_TRANSFORM.map((option) => ({
-          ...option,
-          label: pt(option.label),
-        }))
-      ),
-    []
+  const translatedFontWeightOptions = withDefaultOption(
+    fontWeightOptions.map((option) => ({
+      ...option,
+      label: pt(option.label),
+    }))
   );
-  const getAvailableFontWeightOptions = React.useCallback(
-    (fontFamilyValue: string | undefined) =>
-      getFontWeightOptionsForFontFamily(fontFamilyValue, {
-        fontList,
-      }),
-    [fontList]
+  const translatedFontStyleOptions = withDefaultOption(
+    fontStyleOptions.map((option) => ({
+      ...option,
+      label: pt(option.label),
+    }))
   );
-  const getAvailableFontStyleOptions = React.useCallback(
-    (fontFamilyValue: string | undefined) =>
-      getFontStyleOptionsForFontFamily(fontFamilyValue, {
-        fontList,
-      }),
-    [fontList]
-  );
-  const fontWeightOptions = React.useMemo(
-    () => getAvailableFontWeightOptions(currentValue.fontFamily),
-    [currentValue.fontFamily, getAvailableFontWeightOptions]
-  );
-  const fontStyleOptions = React.useMemo(
-    () => getAvailableFontStyleOptions(currentValue.fontFamily),
-    [currentValue.fontFamily, getAvailableFontStyleOptions]
-  );
-  const translatedFontWeightOptions = React.useMemo(
-    () =>
-      withDefaultOption(
-        fontWeightOptions.map((option) => ({
-          ...option,
-          label: pt(option.label),
-        }))
-      ),
-    [fontWeightOptions]
-  );
-  const translatedFontStyleOptions = React.useMemo(
-    () =>
-      withDefaultOption(
-        fontStyleOptions.map((option) => ({
-          ...option,
-          label: pt(option.label),
-        }))
-      ),
-    [fontStyleOptions]
-  );
-
-  const correctFontSelections = React.useCallback(
-    (nextValue: StyledTextValue) =>
-      correctStyledTextValue(
-        nextValue,
-        getAvailableFontWeightOptions(nextValue.fontFamily),
-        getAvailableFontStyleOptions(nextValue.fontFamily)
-      ),
-    [getAvailableFontStyleOptions, getAvailableFontWeightOptions]
-  );
-  const correctedValue = React.useMemo(
-    () => correctFontSelections(currentValue),
-    [correctFontSelections, currentValue]
+  const correctedValue = correctStyledTextValue(
+    currentValue,
+    fontWeightOptions,
+    fontStyleOptions
   );
 
   React.useEffect(() => {
@@ -191,65 +158,89 @@ export const StyledTextFieldOverride = ({
     key: Key,
     nextValue: StyledTextValue[Key]
   ) => {
+    const nextStyledTextValue = {
+      ...currentValue,
+      [key]: nextValue,
+    };
+
+    const nextFontWeightOptions = getFontWeightOptionsForFontFamily(
+      nextStyledTextValue.fontFamily,
+      { fontList }
+    );
+    const nextFontStyleOptions = getFontStyleOptionsForFontFamily(
+      nextStyledTextValue.fontFamily,
+      { fontList }
+    );
+
     onChange(
-      correctFontSelections({
-        ...currentValue,
-        [key]: nextValue,
-      })
+      correctStyledTextValue(
+        nextStyledTextValue,
+        nextFontWeightOptions,
+        nextFontStyleOptions
+      )
     );
   };
 
   return (
-    <div className="ve-flex ve-flex-col ve-gap-3">
+    <div>
       {field.label && (
-        <div className="ve-text-sm ve-font-medium">{pt(field.label)}</div>
+        <div className="ve-mb-3 ve-text-sm ve-font-medium">
+          {pt(field.label)}
+        </div>
       )}
-      <FontSelector
-        label={pt("theme.font", "Font")}
-        options={fontOptions}
-        value={currentValue.fontFamily ?? ""}
-        onChange={(nextValue) => updateValue("fontFamily", nextValue)}
-      />
-      <FieldLabel label={pt("theme.fontSize", "Font Size")}>
-        <Combobox
-          selectedOption={
-            fontSizeOptions.find(
-              (option) => option.value === currentValue.fontSize
-            ) ?? fontSizeOptions[0]
-          }
-          onChange={(nextValue) => updateValue("fontSize", nextValue)}
-          optionGroups={[{ options: fontSizeOptions }]}
-          disableSearch
-        />
-      </FieldLabel>
-      <FontWeightSelector
-        label={pt("theme.fontWeight.fontWeight", "Font Weight")}
-        options={translatedFontWeightOptions}
-        value={correctedValue.fontWeight ?? ""}
-        onChange={(nextValue) => updateValue("fontWeight", nextValue)}
-      />
-      <FontStyleSelector
-        label={pt("fields.fontStyle", "Font Style")}
-        options={translatedFontStyleOptions}
-        value={correctedValue.fontStyle ?? ""}
-        onChange={(nextValue) =>
-          updateValue("fontStyle", nextValue as StyledTextValue["fontStyle"])
-        }
-      />
-      <FieldLabel
-        label={pt("theme.textTransform.textTransform", "Text Transform")}
-      >
-        <Combobox
-          selectedOption={
-            textTransformOptions.find(
-              (option) => option.value === currentValue.textTransform
-            ) ?? textTransformOptions[0]
-          }
-          onChange={(nextValue) => updateValue("textTransform", nextValue)}
-          optionGroups={[{ options: textTransformOptions }]}
-          disableSearch
-        />
-      </FieldLabel>
+      <div className="ObjectField">
+        <div className="ObjectField-fieldset ve-flex ve-flex-col ve-gap-3">
+          <FontSelector
+            label={pt("theme.font", "Font")}
+            options={fontOptions}
+            value={currentValue.fontFamily}
+            onChange={(nextValue) => updateValue("fontFamily", nextValue)}
+          />
+          <FieldLabel label={pt("theme.fontSize", "Font Size")}>
+            <Combobox
+              selectedOption={
+                fontSizeOptions.find(
+                  (option) => option.value === currentValue.fontSize
+                ) ?? fontSizeOptions[0]
+              }
+              onChange={(nextValue) => updateValue("fontSize", nextValue)}
+              optionGroups={[{ options: fontSizeOptions }]}
+              disableSearch
+            />
+          </FieldLabel>
+          <FontWeightSelector
+            label={pt("theme.fontWeight.fontWeight", "Font Weight")}
+            options={translatedFontWeightOptions}
+            value={correctedValue.fontWeight}
+            onChange={(nextValue) => updateValue("fontWeight", nextValue)}
+          />
+          <FontStyleSelector
+            label={pt("fields.fontStyle", "Font Style")}
+            options={translatedFontStyleOptions}
+            value={correctedValue.fontStyle}
+            onChange={(nextValue) =>
+              updateValue(
+                "fontStyle",
+                nextValue as StyledTextValue["fontStyle"]
+              )
+            }
+          />
+          <FieldLabel
+            label={pt("theme.textTransform.textTransform", "Text Transform")}
+          >
+            <Combobox
+              selectedOption={
+                textTransformOptions.find(
+                  (option) => option.value === currentValue.textTransform
+                ) ?? textTransformOptions[0]
+              }
+              onChange={(nextValue) => updateValue("textTransform", nextValue)}
+              optionGroups={[{ options: textTransformOptions }]}
+              disableSearch
+            />
+          </FieldLabel>
+        </div>
+      </div>
     </div>
   );
 };

@@ -50,7 +50,18 @@ const templateMetadata = {
   customFonts,
 } satisfies TemplateMetadata;
 
-const renderField = (value: StyledTextValue = {}) => {
+const styledTextValue = (
+  overrides: Partial<StyledTextValue> = {}
+): StyledTextValue => ({
+  fontFamily: "default",
+  fontSize: "default",
+  fontWeight: "default",
+  fontStyle: "default",
+  textTransform: "default",
+  ...overrides,
+});
+
+const renderField = (value: StyledTextValue = styledTextValue()) => {
   const onChange = vi.fn();
 
   render(
@@ -69,13 +80,15 @@ const renderField = (value: StyledTextValue = {}) => {
 
 describe("StyledTextField", () => {
   it("renders through YextAutoField as a registered field type", () => {
-    renderField({
-      fontFamily: "'Weights Only', 'Weights Only Fallback', sans-serif",
-      fontSize: "24px",
-      fontWeight: "700",
-      fontStyle: "italic",
-      textTransform: "uppercase",
-    });
+    renderField(
+      styledTextValue({
+        fontFamily: "'Weights Only', 'Weights Only Fallback', sans-serif",
+        fontSize: "24px",
+        fontWeight: "700",
+        fontStyle: "italic",
+        textTransform: "uppercase",
+      })
+    );
 
     expect(screen.getByText("Styled Text")).toBeDefined();
     expect(screen.getByText("Weights Only")).toBeDefined();
@@ -86,13 +99,13 @@ describe("StyledTextField", () => {
   });
 
   it("updates each control while preserving existing values", () => {
-    const initialValue: StyledTextValue = {
+    const initialValue: StyledTextValue = styledTextValue({
       fontFamily: "'Weights Only', 'Weights Only Fallback', sans-serif",
       fontSize: "24px",
       fontWeight: "700",
       fontStyle: "italic",
       textTransform: "uppercase",
-    };
+    });
     const { onChange } = renderField(initialValue);
 
     fireEvent.click(screen.getByText("Weights Only"));
@@ -136,10 +149,12 @@ describe("StyledTextField", () => {
   });
 
   it("filters font weights based on the selected font", () => {
-    renderField({
-      fontFamily: "'No Italic', 'No Italic Fallback', serif",
-      fontWeight: "400",
-    });
+    renderField(
+      styledTextValue({
+        fontFamily: "'No Italic', 'No Italic Fallback', serif",
+        fontWeight: "400",
+      })
+    );
 
     const fontWeightSelect = screen.getByDisplayValue("Normal (400)");
     const weightOptionLabels = within(fontWeightSelect)
@@ -149,10 +164,12 @@ describe("StyledTextField", () => {
   });
 
   it("filters font styles based on the selected font", () => {
-    renderField({
-      fontFamily: "'No Italic', 'No Italic Fallback', serif",
-      fontStyle: "normal",
-    });
+    renderField(
+      styledTextValue({
+        fontFamily: "'No Italic', 'No Italic Fallback', serif",
+        fontStyle: "normal",
+      })
+    );
 
     const fontStyleSelect = screen.getByDisplayValue("Normal");
     const styleOptionLabels = within(fontStyleSelect)
@@ -162,18 +179,21 @@ describe("StyledTextField", () => {
   });
 
   it("resets invalid font weight and font style values in a single update", async () => {
-    const { onChange } = renderField({
-      fontFamily: "'No Italic', 'No Italic Fallback', serif",
-      fontWeight: "700",
-      fontStyle: "italic",
-      textTransform: "uppercase",
-    });
+    const { onChange } = renderField(
+      styledTextValue({
+        fontFamily: "'No Italic', 'No Italic Fallback', serif",
+        fontWeight: "700",
+        fontStyle: "italic",
+        textTransform: "uppercase",
+      })
+    );
 
     await waitFor(() => {
       expect(onChange).toHaveBeenCalledWith({
         fontFamily: "'No Italic', 'No Italic Fallback', serif",
         fontWeight: "default",
         fontStyle: "default",
+        fontSize: "default",
         textTransform: "uppercase",
       });
     });
