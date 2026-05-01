@@ -4,7 +4,6 @@ import {
   ConstantValueInput,
   ConstantValueModeToggler,
   EntityFieldInput,
-  getConstantConfigFromType,
 } from "./EntityFieldSelectorField.tsx";
 import { type YextEntityField } from "../editor/yextEntityFieldUtils.ts";
 import {
@@ -43,10 +42,6 @@ export const CTASelectorFieldOverride = ({
   const translatedLabel = field.label
     ? pt(field.label)
     : pt("fields.cta", "CTA");
-  const constantFieldConfig = getConstantConfigFromType("type.cta");
-  const constantValueModeSupported = !!constantFieldConfig;
-  const showConstantValueInput =
-    !!value?.constantValueEnabled && constantValueModeSupported;
 
   const typeSelectorField = React.useMemo(
     () => ({
@@ -60,28 +55,19 @@ export const CTASelectorFieldOverride = ({
 
   return (
     <>
-      {constantValueModeSupported ? (
-        <ConstantValueModeToggler
-          fieldTypeFilter={["type.cta"]}
-          constantValueEnabled={value?.constantValueEnabled}
-          toggleConstantValueEnabled={(constantValueEnabled) =>
-            onChange({
-              ...value,
-              constantValueEnabled,
-            })
-          }
-          disableConstantValue={field.disableConstantValueToggle}
-          label={translatedLabel}
-        />
-      ) : (
-        <p
-          className="ve-self-center ve-text-sm ve-font-semibold"
-          style={{ color: "var(--puck-color-grey-04)" }}
-        >
-          {translatedLabel}
-        </p>
-      )}
-      {showConstantValueInput ? (
+      <ConstantValueModeToggler
+        fieldTypeFilter={["type.cta"]}
+        constantValueEnabled={value?.constantValueEnabled}
+        toggleConstantValueEnabled={(constantValueEnabled) =>
+          onChange({
+            ...value,
+            constantValueEnabled,
+          })
+        }
+        disableConstantValue={field.disableConstantValueToggle}
+        label={translatedLabel}
+      />
+      {value?.constantValueEnabled ? (
         <ConstantValueInput
           filter={CTA_FIELD_FILTER}
           onChange={onChange}
