@@ -9,8 +9,8 @@ import { type StreamFields } from "../types/entityFields.ts";
 import {
   ConstantValueInput,
   EntityFieldInput,
-  SubfieldInput,
 } from "./YextEntityFieldSelector.tsx";
+import { SubfieldInput } from "./YextSubfieldSelector.tsx";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { EmbeddedFieldStringInputFromEntity } from "./EmbeddedFieldStringInput.tsx";
 import { YextAutoField } from "../fields/YextAutoField.tsx";

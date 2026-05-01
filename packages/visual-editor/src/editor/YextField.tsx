@@ -7,12 +7,14 @@ import {
   ObjectField,
 } from "@puckeditor/core";
 import {
-  RenderYextEntityFieldSelectorProps,
-  RenderYextSubfieldSelectorProps,
+  type RenderYextEntityFieldSelectorProps,
   YextEntityField,
   YextEntityFieldSelector,
-  YextSubfieldSelector,
 } from "./YextEntityFieldSelector.tsx";
+import {
+  type RenderYextSubfieldSelectorProps,
+  YextSubfieldSelector,
+} from "./YextSubfieldSelector.tsx";
 import { MsgString } from "../utils/i18n/platform.ts";
 import type { YextFieldMap, YextPuckFields } from "../fields/fields.ts";
 
