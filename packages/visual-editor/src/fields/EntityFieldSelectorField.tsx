@@ -44,10 +44,7 @@ import { pt, type MsgString } from "../utils/i18n/platform.ts";
 import { useTranslation } from "react-i18next";
 import { EmbeddedFieldStringInputFromEntity } from "../editor/EmbeddedFieldStringInput.tsx";
 import { FAQ_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/FAQsSection.tsx";
-import {
-  getFieldsForSelector,
-  type YextEntityField,
-} from "../editor/yextEntityFieldUtils.ts";
+import { getFieldsForSelector } from "../editor/yextEntityFieldUtils.ts";
 import { useDocument } from "../hooks/useDocument.tsx";
 import { resolveField } from "../utils/resolveYextEntityField.ts";
 import { toast } from "sonner";
@@ -265,6 +262,22 @@ export const EntityFieldSelectorFieldOverride = ({
   const showConstantValueInput =
     !!value?.constantValueEnabled && constantValueModeSupported;
 
+  const input = showConstantValueInput ? (
+    <ConstantValueInput
+      onChange={onChange}
+      value={value}
+      filter={field.filter}
+      disallowTranslation={field.disallowTranslation}
+    />
+  ) : (
+    <EntityFieldInput
+      className="ve-pt-3"
+      onChange={onChange}
+      value={value}
+      filter={field.filter}
+    />
+  );
+
   return (
     <>
       {constantValueModeSupported ? (
@@ -282,28 +295,7 @@ export const EntityFieldSelectorFieldOverride = ({
           showLocale={supportsLocalizedConstantValue(constantFieldConfig)}
         />
       ) : (
-        <p
-          className="ve-self-center ve-text-sm ve-font-semibold"
-          style={{ color: "var(--puck-color-grey-04)" }}
-        >
-          {translatedLabel}
-        </p>
-      )}
-      {showConstantValueInput && (
-        <ConstantValueInput
-          onChange={onChange}
-          value={value}
-          filter={field.filter}
-          disallowTranslation={field.disallowTranslation}
-        />
-      )}
-      {!showConstantValueInput && (
-        <EntityFieldInput
-          className="ve-pt-3"
-          onChange={onChange}
-          value={value}
-          filter={field.filter}
-        />
+        <FieldLabel label={translatedLabel}>{input}</FieldLabel>
       )}
     </>
   );
@@ -575,7 +567,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   ]);
 
   return (
-    <div className={"ve-inline-block ve-w-full " + className}>
+    <div className={`ve-inline-block ve-w-full ${className ?? ""}`}>
       <YextAutoField
         field={entityFieldSelector}
         onChange={(selectedEntityField, uiState) => {
@@ -592,5 +584,3 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     </div>
   );
 };
-
-export type { YextEntityField } from "../editor/yextEntityFieldUtils.ts";
