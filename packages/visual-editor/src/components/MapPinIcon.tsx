@@ -138,6 +138,7 @@ export const MapPinIcon = ({
                 ? "invert(0)"
                 : "invert(1)"
             }
+            preserveAspectRatio="xMidYMid slice"
           />
         ) : (
           !!resultIndex && (
