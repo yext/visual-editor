@@ -9,6 +9,7 @@ import { type ImageField } from "../fields/ImageField.tsx";
 import {
   ConstantValueTypes,
   EntityFieldTypes,
+  type RenderEntityFieldFilter,
 } from "../internal/utils/getFilteredEntityFields.ts";
 import { DevLogger } from "../utils/devLogger.ts";
 import {
@@ -42,10 +43,12 @@ import { Switch } from "../internal/puck/ui/switch.tsx";
 import { pt } from "../utils/i18n/platform.ts";
 import { useTranslation } from "react-i18next";
 import { EmbeddedFieldStringInputFromEntity } from "./EmbeddedFieldStringInput.tsx";
+import { EmbeddedFieldStringInputFromOptions } from "./EmbeddedFieldStringInput.tsx";
 import { FAQ_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/FAQsSection.tsx";
 import {
   getFieldsForSelector,
   getEntityFieldDisplayName,
+  getSubfieldsForSelector,
   type YextEntityField,
 } from "./yextEntityFieldUtils.ts";
 import { useDocument } from "../hooks/useDocument.tsx";
@@ -73,6 +76,14 @@ export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
     disableConstantValueToggle?: boolean;
     disallowTranslation?: boolean;
   };
+
+export type RenderYextSubfieldSelectorProps<T extends Record<string, any>> = {
+  label: string;
+  sourceField: string;
+  filter: RenderEntityFieldFilter<T>;
+  disableConstantValueToggle?: boolean;
+  disallowTranslation?: boolean;
+};
 
 const IMAGE_CONSTANT_CONFIG: ImageField = {
   type: "image",
@@ -260,6 +271,61 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
   };
 };
 
+/**
+ * Allows the user to select only descendants of an already-selected mapped
+ * source such as a linked entity or list item.
+ */
+export const YextSubfieldSelector = <T extends Record<string, any>, U>(
+  props: RenderYextSubfieldSelectorProps<T>
+): Field<YextEntityField<U>> => {
+  return {
+    type: "custom",
+    render: ({ value, onChange }: RenderProps) => {
+      const constantValueEnabled =
+        !props.disableConstantValueToggle && !!value?.constantValueEnabled;
+
+      return (
+        <>
+          <ConstantValueModeToggler
+            fieldTypeFilter={props.filter.types ?? []}
+            constantValueEnabled={constantValueEnabled}
+            toggleConstantValueEnabled={(nextConstantValueEnabled) =>
+              onChange({
+                ...value,
+                constantValueEnabled: nextConstantValueEnabled,
+              })
+            }
+            disableConstantValue={props.disableConstantValueToggle}
+            label={pt(props.label)}
+            showLocale={
+              props.filter.types?.includes("type.string") &&
+              !props.disallowTranslation
+            }
+          />
+          {constantValueEnabled ? (
+            <SubfieldConstantValueInput<T>
+              className="ve-pt-3"
+              filter={props.filter}
+              onChange={onChange}
+              sourceField={props.sourceField}
+              value={value}
+              disallowTranslation={props.disallowTranslation}
+            />
+          ) : (
+            <SubfieldInput<T>
+              className="ve-pt-3"
+              filter={props.filter}
+              onChange={onChange}
+              sourceField={props.sourceField}
+              value={value}
+            />
+          )}
+        </>
+      );
+    },
+  };
+};
+
 export const ConstantValueModeToggler = ({
   fieldTypeFilter,
   constantValueEnabled,
@@ -326,12 +392,16 @@ export const ConstantValueModeToggler = ({
 };
 
 type InputProps<T extends Record<string, any>> = {
-  filter: MappedSourceFieldFilter<T>;
+  filter: RenderEntityFieldFilter<T>;
   onChange: (value: any, uiState?: any) => void;
   value: any;
   className?: string;
   disallowTranslation?: boolean;
   label?: string;
+};
+
+type SubfieldInputProps<T extends Record<string, any>> = InputProps<T> & {
+  sourceField: string;
 };
 
 export const ConstantValueInput = <T extends Record<string, any>>({
@@ -430,6 +500,36 @@ export const ConstantValueInput = <T extends Record<string, any>>({
   );
 };
 
+const getSubfieldOptions = (
+  entityFields: ReturnType<typeof useEntityFields>,
+  sourceField: string,
+  filter: RenderEntityFieldFilter<any>,
+  streamDocument: ReturnType<typeof useDocument>
+): { label: string; value: string }[] => {
+  const rootDisplayName = getEntityFieldDisplayName(sourceField, entityFields);
+  const rootPrefix = rootDisplayName ? `${rootDisplayName} > ` : undefined;
+
+  return getSubfieldsForSelector(
+    entityFields,
+    sourceField,
+    filter,
+    streamDocument
+  ).map((field) => {
+    const displayName =
+      field.displayName ??
+      getEntityFieldDisplayName(field.name, entityFields) ??
+      field.name;
+
+    return {
+      label:
+        rootPrefix && displayName.startsWith(rootPrefix)
+          ? displayName.slice(rootPrefix.length)
+          : displayName,
+      value: field.name.slice(sourceField.length + 1),
+    };
+  });
+};
+
 export const EntityFieldInput = <T extends Record<string, any>>({
   filter,
   onChange,
@@ -440,135 +540,48 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   const entityFields = useEntityFields();
   const templateMetadata = useTemplateMetadata();
   const streamDocument = useDocument();
-  const descendantRoot = filter.subdocumentField;
-  const currentFieldPath = value?.field as string | undefined;
-  const hasValidDescendantSelection =
-    !descendantRoot ||
-    !currentFieldPath ||
-    currentFieldPath.startsWith(`${descendantRoot}.`);
   const entityFieldSelector = React.useMemo<BasicSelectorField>(() => {
     const filteredEntityFields = getFieldsForSelector(
       entityFields,
-      {
-        ...filter,
-      },
+      filter,
       streamDocument
     );
-    const descendantRootDisplayName = descendantRoot
-      ? getEntityFieldDisplayName(descendantRoot, entityFields)
-      : undefined;
-    const currentOptionValue =
-      descendantRoot && hasValidDescendantSelection && currentFieldPath
-        ? currentFieldPath.slice(descendantRoot.length + 1)
-        : currentFieldPath;
-    const fieldOptions = filteredEntityFields.map((field) => {
-      const displayName =
-        field.displayName ??
-        getEntityFieldDisplayName(field.name, entityFields) ??
-        field.name;
-
-      return {
-        label:
-          descendantRootDisplayName &&
-          displayName.startsWith(`${descendantRootDisplayName} > `)
-            ? displayName.slice(descendantRootDisplayName.length + 3)
-            : displayName,
-        value:
-          descendantRoot && field.name.startsWith(`${descendantRoot}.`)
-            ? field.name.slice(descendantRoot.length + 1)
-            : field.name,
-        fieldPath: field.name,
-      };
-    });
-    const scopedFieldOptions = descendantRoot
-      ? fieldOptions.filter((option) =>
-          option.fieldPath.startsWith(`${descendantRoot}.`)
-        )
-      : fieldOptions;
-    if (descendantRoot && scopedFieldOptions.length !== fieldOptions.length) {
-      devLogger.log(
-        `Scoped entity field options stripped for ${descendantRoot}: ${JSON.stringify(
-          {
-            originalFieldPaths: fieldOptions.map((option) => option.fieldPath),
-            keptFieldPaths: scopedFieldOptions.map(
-              (option) => option.fieldPath
-            ),
-          }
-        )}`
-      );
-    }
-    if (
-      hasValidDescendantSelection &&
-      currentFieldPath &&
-      currentOptionValue &&
-      !scopedFieldOptions.some((option) => option.value === currentOptionValue)
-    ) {
-      const savedFieldDisplayName =
-        getEntityFieldDisplayName(currentFieldPath, entityFields) ??
-        currentOptionValue;
-
-      scopedFieldOptions.push({
-        label:
-          descendantRootDisplayName &&
-          savedFieldDisplayName.startsWith(`${descendantRootDisplayName} > `)
-            ? savedFieldDisplayName.slice(descendantRootDisplayName.length + 3)
-            : savedFieldDisplayName,
-        value: currentOptionValue,
-        fieldPath: currentFieldPath,
-      });
-    }
-
-    const optionGroups = descendantRoot
-      ? [
-          {
-            options: [
-              {
-                value: "",
-                label: pt("fields.options.selectAField", "Select a field"),
-              },
-              ...scopedFieldOptions.map(
-                ({ fieldPath: _fieldPath, ...option }) => option
-              ),
-            ],
-          },
-        ]
-      : buildEntityFieldOptionGroups({
-          entityFields,
-          options: [
-            {
-              value: "",
-              label: pt("entityTypeField", "{{entityType}} Field", {
-                entityType: templateMetadata.entityTypeDisplayName,
-              }),
-              fieldPath: "",
-            },
-            ...scopedFieldOptions,
-          ],
-          linkedGroupTitle: pt("linkedEntityFields", "Linked Entity Fields"),
-          entityGroupTitle: pt("entityFields", "Entity Fields"),
-        });
 
     return {
       type: "basicSelector",
       label,
-      optionGroups,
+      optionGroups: buildEntityFieldOptionGroups({
+        entityFields,
+        options: [
+          {
+            value: "",
+            label: pt("entityTypeField", "{{entityType}} Field", {
+              entityType: templateMetadata.entityTypeDisplayName,
+            }),
+            fieldPath: "",
+          },
+          ...filteredEntityFields.map((field) => ({
+            label: field.displayName ?? field.name,
+            value: field.name,
+            fieldPath: field.name,
+          })),
+        ],
+        linkedGroupTitle: pt("linkedEntityFields", "Linked Entity Fields"),
+        entityGroupTitle: pt("entityFields", "Entity Fields"),
+      }),
       translateOptions: false,
       noOptionsPlaceholder: pt("noAvailableFields", "No available fields"),
     };
   }, [
     entityFields,
-    hasValidDescendantSelection,
-    descendantRoot,
     filter,
     label,
     templateMetadata.entityTypeDisplayName,
-    currentFieldPath,
     streamDocument,
   ]);
 
   React.useEffect(() => {
     if (
-      descendantRoot ||
       filter.includeListsOnly ||
       !value?.field ||
       !isLinkedEntityFieldPath(value.field, entityFields)
@@ -577,37 +590,219 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     }
 
     warnOnMultiValueLinkedEntityTraversal(streamDocument, value.field);
-  }, [
-    descendantRoot,
-    filter.includeListsOnly,
-    entityFields,
-    streamDocument,
-    value?.field,
-  ]);
+  }, [filter.includeListsOnly, entityFields, streamDocument, value?.field]);
 
   return (
     <div className={"ve-inline-block ve-w-full " + className}>
       <YextAutoField
         field={entityFieldSelector}
-        onChange={(selectedEntityField, uiState) => {
+        onChange={(selectedEntityField, uiState) =>
           onChange(
             {
               ...value,
-              field:
-                descendantRoot &&
-                selectedEntityField &&
-                !selectedEntityField.startsWith(`${descendantRoot}.`)
-                  ? `${descendantRoot}.${selectedEntityField}`
-                  : selectedEntityField,
+              field: selectedEntityField,
             },
             uiState
-          );
-        }}
-        value={
-          descendantRoot && value?.field?.startsWith(`${descendantRoot}.`)
-            ? value.field.slice(descendantRoot.length + 1)
-            : value?.field
+          )
         }
+        value={value?.field}
+      />
+    </div>
+  );
+};
+
+const SubfieldConstantValueInput = <T extends Record<string, any>>({
+  filter,
+  onChange,
+  value,
+  className,
+  disallowTranslation,
+  sourceField,
+}: SubfieldInputProps<T>) => {
+  const entityFields = useEntityFields();
+  const streamDocument = useDocument();
+  const subfieldOptions = React.useMemo(
+    () => getSubfieldOptions(entityFields, sourceField, filter, streamDocument),
+    [entityFields, filter, sourceField, streamDocument]
+  );
+  const isSingleStringField =
+    filter.types?.includes("type.string") && !filter.includeListsOnly;
+  let constantFieldConfig = returnConstantFieldConfig(
+    filter.types,
+    !!filter.includeListsOnly,
+    !!disallowTranslation
+  );
+
+  if (!constantFieldConfig && isSingleStringField) {
+    constantFieldConfig = getConstantConfigFromType(
+      "type.string",
+      false,
+      !!disallowTranslation
+    );
+  }
+
+  const { i18n } = useTranslation();
+  const locale = i18n.language;
+  const constantValue = value?.constantValue;
+  const localizedConstantValue =
+    typeof constantValue === "string"
+      ? constantValue
+      : constantValue &&
+          typeof constantValue === "object" &&
+          !Array.isArray(constantValue)
+        ? (constantValue[locale] ?? constantValue.defaultValue ?? "")
+        : "";
+
+  if (!constantFieldConfig) {
+    return;
+  }
+
+  const fieldEditor = isSingleStringField ? (
+    <div className={className}>
+      <EmbeddedFieldStringInputFromOptions
+        value={
+          typeof localizedConstantValue === "string"
+            ? localizedConstantValue
+            : ""
+        }
+        onChange={(newInputValue) =>
+          onChange({
+            ...value,
+            constantValue: {
+              ...(typeof value?.constantValue === "object" &&
+              !Array.isArray(value?.constantValue)
+                ? value?.constantValue
+                : {}),
+              [locale]: newInputValue,
+              hasLocalizedValue: "true",
+            },
+          })
+        }
+        optionGroups={[{ options: subfieldOptions }]}
+        showFieldSelector={true}
+      />
+    </div>
+  ) : (
+    <YextAutoField
+      onChange={(newConstantValue, uiState) =>
+        onChange(
+          {
+            ...value,
+            constantValue: newConstantValue,
+          },
+          uiState
+        )
+      }
+      value={value?.constantValue}
+      field={constantFieldConfig}
+    />
+  );
+
+  return constantFieldConfig.type === "custom" ||
+    isYextPuckFieldType(constantFieldConfig.type) ? (
+    fieldEditor
+  ) : (
+    <FieldLabel
+      label={constantFieldConfig.label ?? "Value"}
+      el="div"
+      className={`ve-inline-block w-full ${
+        constantFieldConfig.label ? "ve-pt-3" : ""
+      }`}
+    >
+      {fieldEditor}
+    </FieldLabel>
+  );
+};
+
+export const SubfieldInput = <T extends Record<string, any>>({
+  filter,
+  onChange,
+  value,
+  className,
+  label,
+  sourceField,
+}: SubfieldInputProps<T>) => {
+  const entityFields = useEntityFields();
+  const streamDocument = useDocument();
+  const currentFieldPath = value?.field as string | undefined;
+  const currentSubfieldValue = currentFieldPath?.startsWith(`${sourceField}.`)
+    ? currentFieldPath.slice(sourceField.length + 1)
+    : "";
+  const subfieldOptions = React.useMemo(() => {
+    const nextSubfieldOptions = getSubfieldOptions(
+      entityFields,
+      sourceField,
+      filter,
+      streamDocument
+    );
+
+    if (
+      currentFieldPath?.startsWith(`${sourceField}.`) &&
+      currentSubfieldValue &&
+      !nextSubfieldOptions.some(
+        (option) => option.value === currentSubfieldValue
+      )
+    ) {
+      const rootDisplayName = getEntityFieldDisplayName(
+        sourceField,
+        entityFields
+      );
+      const rootPrefix = rootDisplayName ? `${rootDisplayName} > ` : undefined;
+      const currentDisplayName =
+        getEntityFieldDisplayName(currentFieldPath, entityFields) ??
+        currentSubfieldValue;
+
+      nextSubfieldOptions.push({
+        label:
+          rootPrefix && currentDisplayName.startsWith(rootPrefix)
+            ? currentDisplayName.slice(rootPrefix.length)
+            : currentDisplayName,
+        value: currentSubfieldValue,
+      });
+    }
+
+    return nextSubfieldOptions;
+  }, [
+    currentFieldPath,
+    currentSubfieldValue,
+    entityFields,
+    filter,
+    sourceField,
+    streamDocument,
+  ]);
+
+  return (
+    <div className={"ve-inline-block ve-w-full " + className}>
+      <YextAutoField
+        field={{
+          type: "basicSelector",
+          label,
+          optionGroups: [
+            {
+              options: [
+                {
+                  value: "",
+                  label: pt("fields.options.selectAField", "Select a field"),
+                },
+                ...subfieldOptions,
+              ],
+            },
+          ],
+          translateOptions: false,
+          noOptionsPlaceholder: pt("noAvailableFields", "No available fields"),
+        }}
+        onChange={(selectedSubfield, uiState) =>
+          onChange(
+            {
+              ...value,
+              field: selectedSubfield
+                ? `${sourceField}.${selectedSubfield}`
+                : "",
+            },
+            uiState
+          )
+        }
+        value={currentSubfieldValue}
       />
     </div>
   );

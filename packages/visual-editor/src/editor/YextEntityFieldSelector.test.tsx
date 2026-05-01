@@ -9,6 +9,7 @@ import { type StreamFields } from "../types/entityFields.ts";
 import {
   ConstantValueInput,
   EntityFieldInput,
+  SubfieldInput,
 } from "./YextEntityFieldSelector.tsx";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { EmbeddedFieldStringInputFromEntity } from "./EmbeddedFieldStringInput.tsx";
@@ -85,7 +86,20 @@ const renderEntityFieldInput = (
     <TemplatePropsContext.Provider value={{ document }}>
       <TemplateMetadataContext.Provider value={templateMetadata}>
         <EntityFieldsContext.Provider value={entityFields}>
-          <EntityFieldInput filter={filter} onChange={onChange} value={value} />
+          {"subdocumentField" in filter && filter.subdocumentField ? (
+            <SubfieldInput
+              filter={{ ...filter, subdocumentField: undefined }}
+              onChange={onChange}
+              sourceField={filter.subdocumentField}
+              value={value}
+            />
+          ) : (
+            <EntityFieldInput
+              filter={filter}
+              onChange={onChange}
+              value={value}
+            />
+          )}
         </EntityFieldsContext.Provider>
       </TemplateMetadataContext.Provider>
     </TemplatePropsContext.Provider>

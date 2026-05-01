@@ -153,22 +153,78 @@ const hasNestedLinkedEntityAncestor = (
   return false;
 };
 
+/**
+ * Returns only the selectable descendants for a scoped mapped-item source.
+ * 1. Starts from the selected source subtree instead of the full entity tree.
+ * 2. Drops nested linked-entity traversals so selectors stay on the current
+ *    linked entity or list item.
+ * 3. Samples runtime items to keep only fields that are actually present.
+ */
+export const getSubfieldsForSelector = (
+  entityFields: StreamFields | null,
+  sourceField: string,
+  filter: RenderEntityFieldFilter<any>,
+  streamDocument?: StreamDocument
+): YextSchemaField[] => {
+  const scopedStreamFields = getSubdocumentStreamFields(
+    entityFields,
+    sourceField
+  );
+  if (!scopedStreamFields) {
+    return [];
+  }
+
+  const filteredEntityFields = getFilteredEntityFields(
+    scopedStreamFields,
+    filter
+  )
+    .filter(
+      (field) => !hasNestedLinkedEntityAncestor(scopedStreamFields, field.name)
+    )
+    .map((field) => ({
+      ...field,
+      name: `${sourceField}.${field.name}`,
+    }));
+  const resolvedDescendantFieldPaths = getResolvedDescendantFieldPaths(
+    streamDocument,
+    sourceField
+  );
+  const descendantRootDisplayName = getEntityFieldDisplayName(
+    sourceField,
+    entityFields
+  );
+  const rootPrefix = descendantRootDisplayName
+    ? `${descendantRootDisplayName} > `
+    : undefined;
+
+  return sortFields(
+    dedupeFieldsByName(
+      (resolvedDescendantFieldPaths
+        ? resolvedDescendantFieldPaths.size === 0
+          ? []
+          : filteredEntityFields.filter((field) =>
+              resolvedDescendantFieldPaths.has(field.name)
+            )
+        : filteredEntityFields
+      ).map((field) => {
+        if (!rootPrefix) {
+          return field;
+        }
+
+        const displayName = field.displayName ?? field.name;
+        return displayName.startsWith(rootPrefix)
+          ? { ...field, displayName: displayName.slice(rootPrefix.length) }
+          : field;
+      })
+    )
+  );
+};
+
 export const getFieldsForSelector = (
   entityFields: StreamFields | null,
   filter: MappedSourceFieldFilter<any>,
   streamDocument?: StreamDocument
 ): YextSchemaField[] => {
-  const scopedFieldPath = filter.subdocumentField;
-  const isDescendantFilter = !!scopedFieldPath;
-  const resolvedDescendantFieldPaths = scopedFieldPath
-    ? getResolvedDescendantFieldPaths(streamDocument, scopedFieldPath)
-    : undefined;
-  const scopedStreamFields = scopedFieldPath
-    ? getSubdocumentStreamFields(entityFields, scopedFieldPath)
-    : null;
-  if (scopedFieldPath && !scopedStreamFields) {
-    return [];
-  }
   const hasRequiredDescendants = (field: YextSchemaField): boolean => {
     if (!filter.requiredDescendantTypes?.length) {
       return true;
@@ -213,9 +269,6 @@ export const getFieldsForSelector = (
         hasRequiredDescendants
       )
     : [];
-  const descendantRootDisplayName = scopedFieldPath
-    ? getEntityFieldDisplayName(scopedFieldPath, entityFields)
-    : undefined;
 
   if (filter.sourceRootsOnly) {
     const rootEntityFields = getFilteredEntityFields(entityFields, filter)
@@ -268,41 +321,7 @@ export const getFieldsForSelector = (
     );
   }
 
-  const descendantFilter = {
-    ...filter,
-    subdocumentField: undefined,
-  };
-  let filteredEntityFields = scopedStreamFields
-    ? getFilteredEntityFields(scopedStreamFields, descendantFilter)
-        .filter(
-          (field) =>
-            !hasNestedLinkedEntityAncestor(scopedStreamFields, field.name)
-        )
-        .map((field) => ({
-          ...field,
-          name: `${scopedFieldPath}.${field.name}`,
-        }))
-    : getFilteredEntityFields(entityFields, filter);
-
-  if (descendantRootDisplayName) {
-    const rootPrefix = `${descendantRootDisplayName} > `;
-    filteredEntityFields = filteredEntityFields.map((field) => {
-      const displayName = field.displayName ?? field.name;
-      return displayName.startsWith(rootPrefix)
-        ? { ...field, displayName: displayName.slice(rootPrefix.length) }
-        : field;
-    });
-  }
-
-  if (resolvedDescendantFieldPaths) {
-    if (resolvedDescendantFieldPaths.size === 0) {
-      return [];
-    }
-
-    filteredEntityFields = filteredEntityFields.filter((field) =>
-      resolvedDescendantFieldPaths.has(field.name)
-    );
-  }
+  let filteredEntityFields = getFilteredEntityFields(entityFields, filter);
 
   // If there are no direct children, return the parent field if it is a list
   if (filter.directChildrenOf && filteredEntityFields.length === 0) {
@@ -319,15 +338,11 @@ export const getFieldsForSelector = (
   }
 
   return sortFields(
-    dedupeFieldsByName(
-      isDescendantFilter
-        ? filteredEntityFields
-        : [
-            ...filteredEntityFields,
-            ...linkedEntityRootFields,
-            ...baseListRootFields,
-          ]
-    )
+    dedupeFieldsByName([
+      ...filteredEntityFields,
+      ...linkedEntityRootFields,
+      ...baseListRootFields,
+    ])
   );
 };
 

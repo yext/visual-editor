@@ -82,17 +82,17 @@ const createFAQMappingFields = (sourceField?: string) =>
     type: "object",
     objectFields: {
       question: YextField(msg("fields.question", "Question"), {
-        type: "entityField",
+        type: "subfieldSelector",
+        sourceField: sourceField ?? "",
         filter: {
           types: ["type.string", "type.rich_text_v2"],
-          ...(sourceField ? { subdocumentField: sourceField } : {}),
         },
       }),
       answer: YextField(msg("fields.answer", "Answer"), {
-        type: "entityField",
+        type: "subfieldSelector",
+        sourceField: sourceField ?? "",
         filter: {
           types: ["type.string", "type.rich_text_v2"],
-          ...(sourceField ? { subdocumentField: sourceField } : {}),
         },
       }),
     },
