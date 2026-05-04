@@ -142,6 +142,7 @@ export function YextField<T, U>(
     return YextEntityFieldSelector<T extends Record<string, any> ? T : any, U>({
       label: fieldName,
       filter: config.filter,
+      constantValueFilter: config.constantValueFilter,
       disableConstantValueToggle: config.disableConstantValueToggle,
       disallowTranslation: config.disallowTranslation,
     });
@@ -153,6 +154,7 @@ export function YextField<T, U>(
       sourceField: config.sourceField,
       sourceFieldPath: config.sourceFieldPath,
       filter: config.filter,
+      constantValueFilter: config.constantValueFilter,
       disableConstantValueToggle: config.disableConstantValueToggle,
       disallowTranslation: config.disallowTranslation,
     });

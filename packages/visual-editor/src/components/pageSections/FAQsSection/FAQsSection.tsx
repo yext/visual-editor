@@ -18,16 +18,13 @@ import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultFAQCardData, FAQCardProps } from "./FAQCard.tsx";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 import {
-  toPuckFields,
-  YextComponentConfig,
-  YextFields,
-} from "../../../fields/fields.ts";
-import {
-  getMappedListSourceMode,
   resolveMappedListWrapperData,
+  resolveMappedListFields,
 } from "../../../utils/cardSlots/mappedListWrapper.ts";
 import { resolveMappedSourceField } from "../../../utils/cardSlots/mappedSource.ts";
+import { createMappedSubfieldFields } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 
 export interface FAQStyles {
   /**
@@ -78,27 +75,20 @@ export interface FAQSectionProps {
 }
 
 const createFAQMappingFields = (sourceField?: string) =>
-  YextField(msg("fields.faqMapping", "FAQ Mapping"), {
-    type: "object",
-    objectFields: {
-      question: YextField(msg("fields.question", "Question"), {
-        type: "subfieldSelector",
-        sourceField: sourceField ?? "",
-        sourceFieldPath: "data.field",
-        filter: {
-          types: ["type.string", "type.rich_text_v2"],
-        },
-      }),
-      answer: YextField(msg("fields.answer", "Answer"), {
-        type: "subfieldSelector",
-        sourceField: sourceField ?? "",
-        sourceFieldPath: "data.field",
-        filter: {
-          types: ["type.string", "type.rich_text_v2"],
-        },
-      }),
-    },
-  });
+  createMappedSubfieldFields(
+    msg("fields.faqMapping", "FAQ Mapping"),
+    sourceField,
+    {
+      question: {
+        label: msg("fields.question", "Question"),
+        types: ["type.string", "type.rich_text_v2"],
+      },
+      answer: {
+        label: msg("fields.answer", "Answer"),
+        types: ["type.string", "type.rich_text_v2"],
+      },
+    }
+  );
 
 const createFAQsSectionFields = (
   sourceField?: string
@@ -240,20 +230,13 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
   },
   resolveFields: (data, params) => {
     const streamDocument = params.metadata.streamDocument ?? {};
-    const isMappedItemListMode =
-      getMappedListSourceMode(streamDocument, data.props.data, "faqs") ===
-      "mappedItemList";
-
-    return toPuckFields({
-      ...(createFAQsSectionFields(
-        isMappedItemListMode ? data.props.data.field : undefined
-      ) as any),
-      faqs: {
-        ...(createFAQMappingFields(
-          isMappedItemListMode ? data.props.data.field : undefined
-        ) as any),
-        visible: isMappedItemListMode,
-      },
+    return resolveMappedListFields({
+      data: data as ComponentData<FAQSectionProps>,
+      streamDocument,
+      listFieldName: "faqs",
+      createFields: createFAQsSectionFields as any,
+      mappingFieldName: "faqs",
+      createMappingFields: createFAQMappingFields,
     });
   },
   resolveData: (data, params) => {

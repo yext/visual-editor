@@ -25,6 +25,7 @@ export type RenderYextSubfieldSelectorProps<T extends Record<string, any>> = {
   sourceField: string;
   sourceFieldPath?: string;
   filter: RenderEntityFieldFilter<T>;
+  constantValueFilter?: RenderEntityFieldFilter<T>;
   disableConstantValueToggle?: boolean;
   disallowTranslation?: boolean;
 };
@@ -117,11 +118,12 @@ export const YextSubfieldSelector = <T extends Record<string, any>, U>(
       const sourceField = props.sourceField || sourceFieldFromSelectedComponent;
       const constantValueEnabled =
         !props.disableConstantValueToggle && !!value?.constantValueEnabled;
+      const constantValueFilter = props.constantValueFilter ?? props.filter;
 
       return (
         <>
           <ConstantValueModeToggler
-            fieldTypeFilter={props.filter.types ?? []}
+            fieldTypeFilter={constantValueFilter.types ?? []}
             constantValueEnabled={constantValueEnabled}
             toggleConstantValueEnabled={(nextConstantValueEnabled) =>
               onChange({
@@ -132,14 +134,14 @@ export const YextSubfieldSelector = <T extends Record<string, any>, U>(
             disableConstantValue={props.disableConstantValueToggle}
             label={pt(props.label)}
             showLocale={
-              props.filter.types?.includes("type.string") &&
+              constantValueFilter.types?.includes("type.string") &&
               !props.disallowTranslation
             }
           />
           {constantValueEnabled ? (
             <SubfieldConstantValueInput<T>
               className="ve-pt-3"
-              filter={props.filter}
+              filter={constantValueFilter}
               onChange={onChange}
               sourceField={sourceField}
               value={value}

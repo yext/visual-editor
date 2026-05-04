@@ -1,17 +1,19 @@
 import {
   type ComponentData,
   type DefaultComponentProps,
+  type Fields,
   setDeep,
 } from "@puckeditor/core";
-import { resolveField } from "../resolveYextEntityField.ts";
 import { type StreamDocument } from "../types/StreamDocument.ts";
 import { type CardWrapperType } from "./cardWrapperHelpers.ts";
 import { buildListSectionCards } from "./listSectionData.ts";
+import { resolveMappedListSource } from "./mappedSource.ts";
 import {
-  classifyMappedSource,
-  resolveMappedSourceItems,
-  type MappedSourceMode,
-} from "./mappedSource.ts";
+  toPuckFields,
+  type YextFieldMap,
+  type YextFields,
+} from "../../fields/fields.ts";
+import { type YextFieldDefinition } from "../../editor/YextField.tsx";
 
 /**
  * Deep-clones a card before reuse so slot synchronization can update ids,
@@ -46,24 +48,6 @@ const rewriteNestedSlotIds = <TCardProps extends DefaultComponentProps>(
       }
     });
   });
-};
-
-/**
- * Resolves the nested list from a section-backed source. Section-backed means
- * the selected source is an object that contains the repeated list field rather
- * than being the repeated item list itself.
- */
-const resolveSectionFieldItems = <TItem>(
-  streamDocument: StreamDocument,
-  fieldPath: string,
-  listFieldName: string
-): TItem[] => {
-  const resolvedValue = resolveField<Record<string, unknown> | undefined>(
-    streamDocument,
-    fieldPath
-  ).value;
-  const items = resolvedValue?.[listFieldName];
-  return Array.isArray(items) ? (items as TItem[]) : [];
 };
 
 /**
@@ -200,7 +184,7 @@ export const resolveMappedListWrapperData = <
     | boolean
     | ((card: ComponentData<TCardProps>, newId: string) => void);
 }): ComponentData<TWrapperProps> => {
-  const sourceMode = classifyMappedSource({
+  const source = resolveMappedListSource<TMappedItem, TSectionItem>({
     streamDocument,
     constantValueEnabled: data.props.data.constantValueEnabled,
     fieldPath: data.props.data.field,
@@ -209,7 +193,7 @@ export const resolveMappedListWrapperData = <
   const currentCards = data.props.slots.CardSlot as ComponentData<TCardProps>[];
   const sharedCardProps = getSharedCardProps(currentCards[0]);
 
-  if (sourceMode === "constantValue") {
+  if (source.mode === "constantValue") {
     const syncedCards = syncConstantValueListCards({
       currentCards,
       constantValue: data.props.data.constantValue,
@@ -225,17 +209,7 @@ export const resolveMappedListWrapperData = <
     ) as ComponentData<TWrapperProps>;
   }
 
-  const fieldPath = data.props.data.field;
-  const items =
-    sourceMode === "sectionField"
-      ? resolveSectionFieldItems<TSectionItem>(
-          streamDocument,
-          fieldPath,
-          listFieldName
-        )
-      : resolveMappedSourceItems<TMappedItem>(streamDocument, fieldPath);
-
-  if (!items.length) {
+  if (!source.items.length) {
     return setDeep(
       data,
       "props.slots.CardSlot",
@@ -255,26 +229,55 @@ export const resolveMappedListWrapperData = <
           sharedCardProps
         ),
       decorateCard: (card, item, index) =>
-        sourceMode === "sectionField"
+        source.itemSource === "sectionField"
           ? decorateSectionItemCard(card, item as TSectionItem, index)
           : decorateMappedItemCard(card, item as TMappedItem, index),
-      items,
+      items: source.items,
     })
   ) as ComponentData<TWrapperProps>;
 };
 
 /**
- * Returns the mapped source mode for a wrapper's current data without resolving
- * or mutating the wrapper slot tree.
+ * Rebuilds a wrapper's fields and toggles mapped subfield mapping visibility.
+ * Mapping fields are shown only when the selected source is a mapped item or
+ * item list; section-backed sources already have the component-shaped item
+ * fields, and constant value mode uses the saved card slots directly.
  */
-export const getMappedListSourceMode = (
-  streamDocument: StreamDocument,
-  data: Pick<CardWrapperType<any>["data"], "constantValueEnabled" | "field">,
-  listFieldName: string
-): MappedSourceMode =>
-  classifyMappedSource({
+export const resolveMappedListFields = <
+  TProps extends CardWrapperType<any> & DefaultComponentProps,
+>({
+  data,
+  streamDocument,
+  listFieldName,
+  createFields,
+  mappingFieldName,
+  createMappingFields,
+}: {
+  data: ComponentData<TProps>;
+  streamDocument: StreamDocument;
+  listFieldName: string;
+  createFields: (
+    sourceField?: string
+  ) => YextFields<TProps> | YextFieldMap<TProps>;
+  mappingFieldName: keyof TProps & string;
+  createMappingFields: (sourceField?: string) => YextFieldDefinition<any>;
+}): Fields<TProps> => {
+  const source = resolveMappedListSource({
     streamDocument,
-    constantValueEnabled: data.constantValueEnabled,
-    fieldPath: data.field,
+    constantValueEnabled: data.props.data.constantValueEnabled,
+    fieldPath: data.props.data.field,
     listFieldName,
   });
+  const sourceField =
+    source.mode === "resolvedItems" && source.itemSource === "mappedItemList"
+      ? data.props.data.field
+      : undefined;
+
+  return toPuckFields({
+    ...(createFields(sourceField) as YextFieldMap<TProps>),
+    [mappingFieldName]: {
+      ...(createMappingFields(sourceField) as object),
+      visible: !!sourceField,
+    },
+  } as YextFieldMap<TProps>);
+};

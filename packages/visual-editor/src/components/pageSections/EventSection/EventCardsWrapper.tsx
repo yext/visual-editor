@@ -8,15 +8,16 @@ import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 import {
   cardWrapperFields,
   CardWrapperType,
+  createMappedSubfieldFields,
 } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 import { defaultEventCardSlotData, EventCardProps } from "./EventCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
-import { toPuckFields, YextComponentConfig } from "../../../fields/fields.ts";
+import { YextComponentConfig } from "../../../fields/fields.ts";
 import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import {
   resolveMappedListWrapperData,
-  getMappedListSourceMode,
+  resolveMappedListFields,
 } from "../../../utils/cardSlots/mappedListWrapper.ts";
 import { resolveMappedSourceField } from "../../../utils/cardSlots/mappedSource.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
@@ -38,70 +39,47 @@ export type EventCardsWrapperProps = CardWrapperType<EventSectionType> & {
 };
 
 const createEventCardsMappingFields = (sourceField?: string) =>
-  YextField(msg("fields.cards", "Cards"), {
-    type: "object",
-    objectFields: {
-      title: YextField(msg("fields.title", "Title"), {
-        type: "subfieldSelector",
-        sourceField: sourceField ?? "",
-        sourceFieldPath: "data.field",
-        filter: {
-          types: ["type.string"],
-        },
-      }),
-      date: YextField(msg("fields.date", "Date"), {
-        type: "subfieldSelector",
-        sourceField: sourceField ?? "",
-        sourceFieldPath: "data.field",
-        disableConstantValueToggle: true,
-        filter: {
-          types: ["type.datetime"],
-        },
-      }),
-      description: YextField(msg("fields.description", "Description"), {
-        type: "subfieldSelector",
-        sourceField: sourceField ?? "",
-        sourceFieldPath: "data.field",
-        filter: {
-          types: ["type.string", "type.rich_text_v2"],
-        },
-      }),
-      cta: YextField(msg("fields.cta", "CTA"), {
-        type: "subfieldSelector",
-        sourceField: sourceField ?? "",
-        sourceFieldPath: "data.field",
-        filter: {
-          types: ["type.cta"],
-        },
-      }),
-      image: YextField(msg("fields.image", "Image"), {
-        type: "subfieldSelector",
-        sourceField: sourceField ?? "",
-        sourceFieldPath: "data.field",
-        disableConstantValueToggle: true,
-        filter: {
-          types: ["type.image"],
-        },
-      }),
+  createMappedSubfieldFields(msg("fields.cards", "Cards"), sourceField, {
+    title: {
+      label: msg("fields.title", "Title"),
+      types: ["type.string"],
+    },
+    date: {
+      label: msg("fields.date", "Date"),
+      types: ["type.datetime"],
+      disableConstantValueToggle: true,
+    },
+    description: {
+      label: msg("fields.description", "Description"),
+      types: ["type.string", "type.rich_text_v2"],
+    },
+    cta: {
+      label: msg("fields.cta", "CTA"),
+      types: ["type.cta"],
+    },
+    image: {
+      label: msg("fields.image", "Image"),
+      types: ["type.image"],
+      disableConstantValueToggle: true,
     },
   });
 
 const createEventCardsWrapperFields = (sourceField?: string) => ({
-  ...cardWrapperFields<EventCardsWrapperProps>(
-    msg("components.events", "Events"),
-    ComponentFields.EventSection.type,
-    "events",
-    ["linkedEntityRoot", "baseListRoot"],
-    true,
-    [
+  ...cardWrapperFields<EventCardsWrapperProps>({
+    label: msg("components.events", "Events"),
+    entityFieldType: ComponentFields.EventSection.type,
+    listFieldName: "events",
+    sourceRootKinds: ["linkedEntityRoot", "baseListRoot"],
+    sourceRootsOnly: true,
+    requiredDescendantTypes: [
       ["type.string"],
       ["type.datetime"],
       ["type.string", "type.rich_text_v2"],
       ["type.cta"],
       ["type.image"],
-    ]
-  ),
-  cards: createEventCardsMappingFields(sourceField),
+    ],
+  }),
+  cards: createEventCardsMappingFields(sourceField) as any,
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
@@ -200,20 +178,13 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
   },
   resolveFields: (data, params) => {
     const streamDocument = params.metadata.streamDocument ?? {};
-    const isMappedItemListMode =
-      getMappedListSourceMode(streamDocument, data.props.data, "events") ===
-      "mappedItemList";
-
-    return toPuckFields({
-      ...(createEventCardsWrapperFields(
-        isMappedItemListMode ? data.props.data.field : undefined
-      ) as any),
-      cards: {
-        ...(createEventCardsMappingFields(
-          isMappedItemListMode ? data.props.data.field : undefined
-        ) as any),
-        visible: isMappedItemListMode,
-      },
+    return resolveMappedListFields({
+      data: data as ComponentData<EventCardsWrapperProps>,
+      streamDocument,
+      listFieldName: "events",
+      createFields: createEventCardsWrapperFields,
+      mappingFieldName: "cards",
+      createMappingFields: createEventCardsMappingFields,
     });
   },
   resolveData: (data, params) => {

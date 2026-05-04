@@ -1,8 +1,14 @@
 import { Fields, Slot } from "@puckeditor/core";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
-import { YextField } from "../../editor/YextField.tsx";
+import {
+  YextField,
+  type YextFieldDefinition,
+} from "../../editor/YextField.tsx";
 import { MsgString } from "../i18n/platform.ts";
-import { EntityFieldTypes } from "../../internal/utils/getFilteredEntityFields.ts";
+import {
+  EntityFieldTypes,
+  RenderEntityFieldFilter,
+} from "../../internal/utils/getFilteredEntityFields.ts";
 import { SourceRootKind } from "./mappedSource.ts";
 
 export interface CardWrapperType<T> {
@@ -19,20 +25,29 @@ export interface CardWrapperType<T> {
   };
 }
 
+export type CardWrapperFieldsOptions = {
+  label: MsgString;
+  entityFieldType: EntityFieldTypes;
+  listFieldName?: string;
+  sourceRootKinds?: SourceRootKind[];
+  sourceRootsOnly?: boolean;
+  requiredDescendantTypes?: EntityFieldTypes[][];
+};
+
 /**
  * Builds the shared Puck field configuration for wrappers that render repeated
  * cards through a hidden `CardSlot`. The visible `data` field selects either a
  * constant value list or a mapped entity/list source, while `CardSlot` stores
  * the actual card component data.
  */
-export const cardWrapperFields = <T>(
-  label: MsgString,
-  entityFieldType: EntityFieldTypes,
+export const cardWrapperFields = <T>({
+  label,
+  entityFieldType,
   listFieldName = "",
-  sourceRootKinds: SourceRootKind[] = [],
+  sourceRootKinds = [],
   sourceRootsOnly = false,
-  requiredDescendantTypes?: EntityFieldTypes[][]
-): Fields<CardWrapperType<T>> => ({
+  requiredDescendantTypes,
+}: CardWrapperFieldsOptions): Fields<CardWrapperType<T>> => ({
   data: YextField(label, {
     type: "entityField",
     filter: {
@@ -51,3 +66,43 @@ export const cardWrapperFields = <T>(
     visible: false,
   },
 });
+
+type MappedSubfieldConfig = {
+  label: MsgString;
+  types: EntityFieldTypes[];
+  disableConstantValueToggle?: boolean;
+  disallowTranslation?: boolean;
+  filter?: Omit<RenderEntityFieldFilter<any>, "types">;
+};
+
+/**
+ * Builds the repeated subfield selector object used when a wrapper maps cards
+ * from arbitrary linked entities or base list items.
+ */
+export const createMappedSubfieldFields = <
+  TFields extends Record<string, MappedSubfieldConfig>,
+>(
+  label: MsgString,
+  sourceField: string | undefined,
+  fields: TFields,
+  sourceFieldPath = "data.field"
+): YextFieldDefinition<any> =>
+  YextField(label, {
+    type: "object",
+    objectFields: Object.fromEntries(
+      Object.entries(fields).map(([fieldName, fieldConfig]) => [
+        fieldName,
+        YextField(fieldConfig.label, {
+          type: "subfieldSelector",
+          sourceField: sourceField ?? "",
+          sourceFieldPath,
+          disableConstantValueToggle: fieldConfig.disableConstantValueToggle,
+          disallowTranslation: fieldConfig.disallowTranslation,
+          filter: {
+            ...fieldConfig.filter,
+            types: fieldConfig.types,
+          },
+        } as any),
+      ])
+    ),
+  } as any) as YextFieldDefinition<any>;

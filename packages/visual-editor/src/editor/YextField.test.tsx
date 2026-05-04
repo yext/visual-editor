@@ -94,12 +94,14 @@ describe("YextField", () => {
     const returnedField = createCustomField();
     const fieldName = msg("fields.entity", "Entity Field");
     const filter = { types: ["type.string"] };
+    const constantValueFilter = { types: ["type.rich_text_v2"] };
 
     yextEntityFieldSelectorMock.mockReturnValue(returnedField);
 
     const field = YextField(fieldName, {
       type: "entityField",
       filter,
+      constantValueFilter,
       disableConstantValueToggle: true,
       disallowTranslation: true,
     } as any);
@@ -107,6 +109,7 @@ describe("YextField", () => {
     expect(yextEntityFieldSelectorMock).toHaveBeenCalledWith({
       label: fieldName,
       filter,
+      constantValueFilter,
       disableConstantValueToggle: true,
       disallowTranslation: true,
     });

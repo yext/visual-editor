@@ -107,6 +107,9 @@ const FAQCardFields: YextFields<FAQCardProps> = {
         filter: {
           types: ["type.string", "type.rich_text_v2"],
         },
+        constantValueFilter: {
+          types: ["type.rich_text_v2"],
+        },
       }),
     },
   }),

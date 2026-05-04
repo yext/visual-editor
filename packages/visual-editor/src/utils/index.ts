@@ -19,6 +19,26 @@ export {
 export { resolveComponentData } from "./resolveComponentData.tsx";
 export { resolveYextEntityField } from "./resolveYextEntityField.ts";
 export {
+  cardWrapperFields,
+  createMappedSubfieldFields,
+  type CardWrapperFieldsOptions,
+  type CardWrapperType,
+} from "./cardSlots/cardWrapperHelpers.ts";
+export {
+  resolveMappedListFields,
+  resolveMappedListWrapperData,
+  syncConstantValueListCards,
+} from "./cardSlots/mappedListWrapper.ts";
+export {
+  resolveMappedListSource,
+  resolveMappedSourceField,
+  type MappedItemSource,
+  type MappedSourceFieldFilter,
+  type ResolvedMappedSource,
+  type ResolvedMappedSourceMode,
+  type SourceRootKind,
+} from "./cardSlots/mappedSource.ts";
+export {
   createSearchAnalyticsConfig,
   createSearchHeadlessConfig,
 } from "./searchHeadlessConfig.ts";

@@ -70,6 +70,7 @@ export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
   {
     label: string;
     filter: MappedSourceFieldFilter<T>;
+    constantValueFilter?: RenderEntityFieldFilter<T>;
     disableConstantValueToggle?: boolean;
     disallowTranslation?: boolean;
   };
@@ -217,6 +218,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
     render: ({ value, onChange }: RenderProps) => {
       const constantValueEnabled =
         !props.disableConstantValueToggle && !!value?.constantValueEnabled;
+      const constantValueFilter = props.constantValueFilter ?? props.filter;
 
       const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {
         onChange({
@@ -228,13 +230,13 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
       return (
         <>
           <ConstantValueModeToggler
-            fieldTypeFilter={props.filter.types ?? []}
+            fieldTypeFilter={constantValueFilter.types ?? []}
             constantValueEnabled={constantValueEnabled}
             toggleConstantValueEnabled={toggleConstantValueEnabled}
             disableConstantValue={props.disableConstantValueToggle}
             label={pt(props.label)}
             showLocale={
-              props.filter.types?.includes("type.string") &&
+              constantValueFilter.types?.includes("type.string") &&
               !props.disallowTranslation
             }
           />
@@ -242,7 +244,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
             <ConstantValueInput<T>
               onChange={onChange}
               value={value}
-              filter={props.filter}
+              filter={constantValueFilter}
               disallowTranslation={props.disallowTranslation}
             />
           )}

@@ -24,10 +24,24 @@ import { getTopLevelLinkedEntitySourceFields } from "../linkedEntityFieldUtils.t
  * - `mappedItemList`: the selected source is itself the repeatable item or
  *   list of repeatable items, such as a linked entity or linked entity list.
  */
-export type MappedSourceMode =
-  | "constantValue"
-  | "sectionField"
-  | "mappedItemList";
+export type ResolvedMappedSourceMode = "constantValue" | "resolvedItems";
+export type MappedItemSource = "sectionField" | "mappedItemList";
+
+export type ResolvedMappedSource<TMappedItem, TSectionItem> =
+  | {
+      mode: "constantValue";
+      items: [];
+    }
+  | {
+      mode: "resolvedItems";
+      itemSource: "sectionField";
+      items: TSectionItem[];
+    }
+  | {
+      mode: "resolvedItems";
+      itemSource: "mappedItemList";
+      items: TMappedItem[];
+    };
 
 /**
  * Identifies the kinds of top-level schema fields that can be offered as
@@ -61,21 +75,15 @@ export const getBaseEntityListSourceRootFields = (
 };
 
 /**
- * Classifies the current wrapper source selection into one of the wrapper
- * population modes:
+ * Resolves the selected wrapper source into either constant value mode or a
+ * list of stream items. Section-backed sources read the nested `listFieldName`
+ * array from a section object; mapped-item-list sources use the selected value
+ * itself as the repeatable item or item list.
  *
- * - constant value: the wrapper is driven by the editor's stored card ids
- *   instead of resolved stream data.
- * - section-backed: the selected field resolves to a section object that
- *   contains the wrapper's list field, so cards are built from that nested
- *   list.
- * - mapped-item-list: the selected field resolves directly to one item or a
- *   list of items, so cards are built from the selected value itself.
- *
- * Unresolved sources stay schema-eligible by default so mapped subfield UIs do
- * not collapse while data is still loading.
+ * Unresolved non-constant sources stay in mapped-item-list mode with no items
+ * so mapped subfield UIs do not collapse while data is still loading.
  */
-export const classifyMappedSource = ({
+export const resolveMappedListSource = <TMappedItem, TSectionItem>({
   streamDocument,
   constantValueEnabled,
   fieldPath,
@@ -85,47 +93,56 @@ export const classifyMappedSource = ({
   constantValueEnabled?: boolean;
   fieldPath?: string;
   listFieldName: string;
-}): MappedSourceMode => {
+}): ResolvedMappedSource<TMappedItem, TSectionItem> => {
   if (constantValueEnabled || !fieldPath) {
-    return "constantValue";
+    return {
+      mode: "constantValue",
+      items: [],
+    };
   }
 
-  const resolvedSource = resolveField<unknown>(streamDocument, fieldPath).value;
-
-  if (resolvedSource === undefined || Array.isArray(resolvedSource)) {
-    return "mappedItemList";
-  }
-
-  if (resolvedSource && typeof resolvedSource === "object") {
-    return Array.isArray(
-      (resolvedSource as Record<string, unknown>)[listFieldName]
-    )
-      ? "sectionField"
-      : "mappedItemList";
-  }
-
-  return "mappedItemList";
-};
-
-/**
- * Resolves a mapped source into a list so wrappers can render one card per
- * linked entity or object item.
- */
-export const resolveMappedSourceItems = <T>(
-  streamDocument: StreamDocument,
-  fieldPath: string
-): T[] => {
   const resolvedSource = resolveField<unknown>(streamDocument, fieldPath).value;
 
   if (Array.isArray(resolvedSource)) {
-    return resolvedSource as T[];
+    return {
+      mode: "resolvedItems",
+      itemSource: "mappedItemList",
+      items: resolvedSource as TMappedItem[],
+    };
+  }
+
+  if (resolvedSource === undefined) {
+    return {
+      mode: "resolvedItems",
+      itemSource: "mappedItemList",
+      items: [],
+    };
   }
 
   if (resolvedSource && typeof resolvedSource === "object") {
-    return [resolvedSource as T];
+    const sectionItems = (resolvedSource as Record<string, unknown>)[
+      listFieldName
+    ];
+    if (Array.isArray(sectionItems)) {
+      return {
+        mode: "resolvedItems",
+        itemSource: "sectionField",
+        items: sectionItems as TSectionItem[],
+      };
+    }
+
+    return {
+      mode: "resolvedItems",
+      itemSource: "mappedItemList",
+      items: [resolvedSource as TMappedItem],
+    };
   }
 
-  return [];
+  return {
+    mode: "resolvedItems",
+    itemSource: "mappedItemList",
+    items: [],
+  };
 };
 
 /**

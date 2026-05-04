@@ -240,6 +240,7 @@ export type ProductCardProps = {
   parentData?: {
     field: string;
     product: ProductStruct;
+    priceText?: string;
   };
 
   /** @internal */
@@ -481,6 +482,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       entityPrice?.currencyCode,
       locale
     );
+    const mappedPriceText = data.props.parentData?.priceText;
     const fallbackPriceCandidate = priceSlotProps
       ? resolveYextEntityField(
           params.metadata.streamDocument,
@@ -506,7 +508,9 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
             );
     const resolvedPrice = resolvedPriceFromEntity
       ? resolvedPriceFromEntity
-      : resolvedFallbackPrice;
+      : mappedPriceText
+        ? mappedPriceText
+        : resolvedFallbackPrice;
     const showPrice = Boolean(resolvedPrice);
 
     const browSlotProps = data.props.slots.BrowSlot?.[0]?.props as
@@ -610,6 +614,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
         product.price?.currencyCode,
         locale
       );
+      const priceText = formattedPrice ?? data.props.parentData.priceText;
 
       updatedData = setDeep(
         updatedData,
@@ -638,10 +643,10 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       updatedData = setDeep(
         updatedData,
         "props.slots.PriceSlot[0].props.parentData",
-        formattedPrice
+        priceText
           ? ({
               field: field,
-              text: formattedPrice,
+              text: priceText,
             } satisfies TextProps["parentData"])
           : undefined
       );

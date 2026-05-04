@@ -346,50 +346,6 @@ describe("YextEntityFieldSelector", () => {
     expect(screen.queryByText("Entity Fields")).toBeNull();
   });
 
-  it("shows linked source roots from entity fields", () => {
-    renderEntityFieldInput({
-      entityFields: {
-        ...defaultEntityFields,
-        fields: [
-          ...defaultEntityFields.fields,
-          {
-            name: "c_linkedLocation",
-            displayName: "Linked Location",
-            definition: {
-              name: "c_linkedLocation",
-              typeRegistryId: "type.entity_reference",
-              type: {
-                documentType: "DOCUMENT_TYPE_ENTITY",
-              },
-            },
-            children: {
-              fields: [
-                {
-                  name: "name",
-                  displayName: "Name",
-                  definition: {
-                    name: "name",
-                    typeName: "type.string",
-                    type: {},
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-      filter: {
-        types: ["type.events_section"],
-        sourceRootKinds: ["linkedEntityRoot"],
-        sourceRootsOnly: true,
-      },
-    });
-
-    fireEvent.click(screen.getByRole("combobox"));
-
-    expect(screen.getAllByText("Linked Location").length).toBeGreaterThan(0);
-  });
-
   it("shows base entity list roots when the selector opts into them", () => {
     renderEntityFieldInput({
       entityFields: {

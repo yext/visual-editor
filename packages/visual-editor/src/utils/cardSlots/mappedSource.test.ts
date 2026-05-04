@@ -1,23 +1,22 @@
 import { describe, expect, it } from "vitest";
 import {
-  classifyMappedSource,
   getBaseEntityListSourceRootFields,
-  resolveMappedSourceItems,
+  resolveMappedListSource,
 } from "./mappedSource.ts";
 
 describe("mappedSource", () => {
-  it("classifies constant value, section, mapped, unresolved, and empty sources", () => {
+  it("resolves constant value, section, mapped, unresolved, and empty sources", () => {
     expect(
-      classifyMappedSource({
+      resolveMappedListSource({
         streamDocument: {},
         constantValueEnabled: true,
         fieldPath: "c_linkedLocation",
         listFieldName: "events",
       })
-    ).toBe("constantValue");
+    ).toEqual({ mode: "constantValue", items: [] });
 
     expect(
-      classifyMappedSource({
+      resolveMappedListSource({
         streamDocument: {
           c_eventsSection: {
             events: [{ title: "Cooking Class" }],
@@ -26,45 +25,65 @@ describe("mappedSource", () => {
         fieldPath: "c_eventsSection",
         listFieldName: "events",
       })
-    ).toBe("sectionField");
+    ).toEqual({
+      mode: "resolvedItems",
+      itemSource: "sectionField",
+      items: [{ title: "Cooking Class" }],
+    });
 
     expect(
-      classifyMappedSource({
+      resolveMappedListSource({
         streamDocument: {
           c_linkedLocation: [{ name: "Downtown" }],
         },
         fieldPath: "c_linkedLocation",
         listFieldName: "events",
       })
-    ).toBe("mappedItemList");
+    ).toEqual({
+      mode: "resolvedItems",
+      itemSource: "mappedItemList",
+      items: [{ name: "Downtown" }],
+    });
 
     expect(
-      classifyMappedSource({
+      resolveMappedListSource({
         streamDocument: {
           c_linkedLocation: { name: "Downtown" },
         },
         fieldPath: "c_linkedLocation",
         listFieldName: "events",
       })
-    ).toBe("mappedItemList");
+    ).toEqual({
+      mode: "resolvedItems",
+      itemSource: "mappedItemList",
+      items: [{ name: "Downtown" }],
+    });
 
     expect(
-      classifyMappedSource({
+      resolveMappedListSource({
         streamDocument: {},
         fieldPath: "c_linkedLocation",
         listFieldName: "events",
       })
-    ).toBe("mappedItemList");
+    ).toEqual({
+      mode: "resolvedItems",
+      itemSource: "mappedItemList",
+      items: [],
+    });
 
     expect(
-      classifyMappedSource({
+      resolveMappedListSource({
         streamDocument: {
           c_linkedLocation: [],
         },
         fieldPath: "c_linkedLocation",
         listFieldName: "events",
       })
-    ).toBe("mappedItemList");
+    ).toEqual({
+      mode: "resolvedItems",
+      itemSource: "mappedItemList",
+      items: [],
+    });
   });
 
   it("returns top-level list roots with nested fields for base entity sources", () => {
@@ -114,25 +133,12 @@ describe("mappedSource", () => {
     ]);
   });
 
-  it("resolves mapped source items for empty, single, and multiple values", () => {
-    expect(resolveMappedSourceItems({}, "c_linkedLocation")).toEqual([]);
+  it("treats a missing source field as constant value mode", () => {
     expect(
-      resolveMappedSourceItems(
-        {
-          c_linkedLocation: {
-            name: "Downtown",
-          },
-        },
-        "c_linkedLocation"
-      )
-    ).toEqual([{ name: "Downtown" }]);
-    expect(
-      resolveMappedSourceItems(
-        {
-          c_linkedLocation: [{ name: "Downtown" }, { name: "Uptown" }],
-        },
-        "c_linkedLocation"
-      )
-    ).toEqual([{ name: "Downtown" }, { name: "Uptown" }]);
+      resolveMappedListSource({
+        streamDocument: {},
+        listFieldName: "events",
+      })
+    ).toEqual({ mode: "constantValue", items: [] });
   });
 });
