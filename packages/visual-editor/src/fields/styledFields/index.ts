@@ -15,3 +15,9 @@ export {
   type StyledLinkField,
   type StyledLinkValue,
 } from "./StyledLinkField.tsx";
+
+export {
+  StyledPageSectionFieldOverride,
+  type StyledPageSectionField,
+  type StyledPageSectionValue,
+} from "./StyledPageSection.tsx";
