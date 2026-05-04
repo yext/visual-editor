@@ -21,6 +21,10 @@ import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { TextProps } from "../../contentBlocks/Text.tsx";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
+import {
+  shouldRenderFieldWhenPresent,
+  shouldRenderToggledField,
+} from "../../../utils/cardSlots/fieldVisibility.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 const defaultPerson = {
@@ -279,21 +283,36 @@ const TeamCardComponent: PuckComponent<TeamCardProps> = (props) => {
     props.id
   );
 
-  const showName = Boolean(conditionalRender?.name || puck.isEditing);
-  const showTitle =
-    parentStyles?.showTitle &&
-    Boolean(conditionalRender?.title || puck.isEditing);
-  const showPhone =
-    parentStyles?.showPhone &&
-    Boolean(conditionalRender?.phone || puck.isEditing);
-  const showEmail =
-    parentStyles?.showEmail &&
-    Boolean(conditionalRender?.email || puck.isEditing);
-  const showCta =
-    parentStyles?.showCTA && Boolean(conditionalRender?.cta || puck.isEditing);
+  const showName = shouldRenderFieldWhenPresent({
+    isEditing: puck.isEditing,
+    hasData: !!conditionalRender?.name,
+  });
+  const showTitle = shouldRenderToggledField({
+    isEditing: puck.isEditing,
+    isEnabled: parentStyles?.showTitle,
+    hasData: !!conditionalRender?.title,
+  });
+  const showPhone = shouldRenderToggledField({
+    isEditing: puck.isEditing,
+    isEnabled: parentStyles?.showPhone,
+    hasData: !!conditionalRender?.phone,
+  });
+  const showEmail = shouldRenderToggledField({
+    isEditing: puck.isEditing,
+    isEnabled: parentStyles?.showEmail,
+    hasData: !!conditionalRender?.email,
+  });
+  const showCta = shouldRenderToggledField({
+    isEditing: puck.isEditing,
+    isEnabled: parentStyles?.showCTA,
+    hasData: !!conditionalRender?.cta,
+  });
 
-  const showImage =
-    parentStyles?.showImage && (conditionalRender?.image || puck.isEditing);
+  const showImage = shouldRenderToggledField({
+    isEditing: puck.isEditing,
+    isEnabled: parentStyles?.showImage,
+    hasData: !!conditionalRender?.image,
+  });
 
   const showTopSection = showImage || showName || showTitle;
 
@@ -471,65 +490,70 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
       | WithId<CTAWrapperProps>
       | undefined;
 
-    const showImage = Boolean(
-      person?.headshot ||
-        imageSlotProps?.parentData?.image ||
-        (imageSlotProps &&
-          (imageSlotProps?.data.image.field ||
-            (imageSlotProps.data.image.constantValue &&
-              "hasLocalizedValue" in imageSlotProps.data.image.constantValue) ||
-            (imageSlotProps.data.image.constantValue &&
-              "url" in imageSlotProps.data.image.constantValue &&
-              imageSlotProps.data.image.constantValue.url) ||
-            (imageSlotProps.data.image.constantValue &&
-              "image" in imageSlotProps.data.image.constantValue &&
-              imageSlotProps.data.image.constantValue.image?.url)))
-    );
-    const showName = Boolean(
-      person?.name ||
-        nameSlotProps?.parentData?.text ||
-        (nameSlotProps &&
-          resolveYextEntityField(
-            params.metadata.streamDocument,
-            nameSlotProps.data.text,
-            i18nComponentsInstance.language || "en"
-          ))
-    );
-    const showTitle = Boolean(
-      person?.title ||
-        titleSlotProps?.parentData?.text ||
-        (titleSlotProps &&
-          resolveYextEntityField(
-            params.metadata.streamDocument,
-            titleSlotProps.data.text,
-            i18nComponentsInstance.language || "en"
-          ))
-    );
-    const showPhone = Boolean(
-      person?.phoneNumber ||
-        phoneSlotProps?.parentData?.phoneNumbers?.length ||
-        (phoneSlotProps?.data?.phoneNumbers?.length &&
-          phoneSlotProps.data.phoneNumbers.some(
-            (phone: any) => phone.number?.constantValue || phone.number?.field
-          ))
-    );
-    const showEmail = Boolean(
-      person?.email ||
-        emailSlotProps?.parentData?.list?.length ||
-        emailSlotProps?.data?.list?.constantValue?.length ||
-        emailSlotProps?.data?.list?.field
-    );
-    const showCTA = Boolean(
-      person?.cta?.label ||
-        ctaSlotProps?.parentData?.cta?.label ||
-        ctaSlotProps?.data?.entityField?.constantValue?.label ||
-        ctaSlotProps?.data?.entityField?.field ||
-        (ctaSlotProps &&
-          resolveYextEntityField(
-            params.metadata.streamDocument,
-            ctaSlotProps.data.entityField
-          )?.label)
-    );
+    const hasParentData = !!data.props.parentData;
+    const showImage = hasParentData
+      ? Boolean(person?.headshot || imageSlotProps?.parentData?.image)
+      : Boolean(
+          imageSlotProps &&
+            (imageSlotProps?.data.image.field ||
+              (imageSlotProps.data.image.constantValue &&
+                "hasLocalizedValue" in
+                  imageSlotProps.data.image.constantValue) ||
+              (imageSlotProps.data.image.constantValue &&
+                "url" in imageSlotProps.data.image.constantValue &&
+                imageSlotProps.data.image.constantValue.url) ||
+              (imageSlotProps.data.image.constantValue &&
+                "image" in imageSlotProps.data.image.constantValue &&
+                imageSlotProps.data.image.constantValue.image?.url))
+        );
+    const showName = hasParentData
+      ? Boolean(person?.name || nameSlotProps?.parentData?.text)
+      : Boolean(
+          nameSlotProps &&
+            resolveYextEntityField(
+              params.metadata.streamDocument,
+              nameSlotProps.data.text,
+              i18nComponentsInstance.language || "en"
+            )
+        );
+    const showTitle = hasParentData
+      ? Boolean(person?.title || titleSlotProps?.parentData?.text)
+      : Boolean(
+          titleSlotProps &&
+            resolveYextEntityField(
+              params.metadata.streamDocument,
+              titleSlotProps.data.text,
+              i18nComponentsInstance.language || "en"
+            )
+        );
+    const showPhone = hasParentData
+      ? Boolean(
+          person?.phoneNumber ||
+            phoneSlotProps?.parentData?.phoneNumbers?.length
+        )
+      : Boolean(
+          phoneSlotProps?.data?.phoneNumbers?.length &&
+            phoneSlotProps.data.phoneNumbers.some(
+              (phone: any) => phone.number?.constantValue || phone.number?.field
+            )
+        );
+    const showEmail = hasParentData
+      ? Boolean(person?.email || emailSlotProps?.parentData?.list?.length)
+      : Boolean(
+          emailSlotProps?.data?.list?.constantValue?.length ||
+            emailSlotProps?.data?.list?.field
+        );
+    const showCTA = hasParentData
+      ? Boolean(person?.cta?.label || ctaSlotProps?.parentData?.cta?.label)
+      : Boolean(
+          ctaSlotProps?.data?.entityField?.constantValue?.label ||
+            ctaSlotProps?.data?.entityField?.field ||
+            (ctaSlotProps &&
+              resolveYextEntityField(
+                params.metadata.streamDocument,
+                ctaSlotProps.data.entityField
+              )?.label)
+        );
 
     let updatedData = {
       ...data,

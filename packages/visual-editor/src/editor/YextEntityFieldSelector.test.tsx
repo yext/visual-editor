@@ -1268,6 +1268,70 @@ describe("YextEntityFieldSelector", () => {
     expect(screen.queryByText("linkedInUrl")).toBeNull();
   });
 
+  it("builds linked descendant display names from display-name segments", () => {
+    renderEntityFieldInput({
+      entityFields: {
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_linkedLocation",
+            definition: {
+              name: "c_linkedLocation",
+              isList: true,
+              typeRegistryId: "type.entity_reference",
+              type: {
+                documentType: "DOCUMENT_TYPE_ENTITY",
+              },
+            },
+            children: {
+              fields: [
+                {
+                  name: "address",
+                  definition: {
+                    name: "address",
+                    typeName: "type.address",
+                    type: {},
+                  },
+                  children: {
+                    fields: [
+                      {
+                        name: "city",
+                        definition: {
+                          name: "city",
+                          typeName: "type.string",
+                          type: {},
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+        displayNames: {
+          ...defaultEntityFields.displayNames,
+          c_linkedLocation: "Linked Location",
+          "c_linkedLocation.address": "Linked Location > Address",
+          "c_linkedLocation.address.city": "Linked Location > Address > City",
+        },
+      },
+      filter: {
+        types: ["type.string"],
+        subdocumentField: "c_linkedLocation",
+      },
+      document: {
+        c_linkedLocation: [{ address: { city: "New York" } }],
+      },
+    });
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(screen.getAllByText("Address > City").length).toBeGreaterThan(0);
+    expect(screen.queryByText("address > city")).toBeNull();
+    expect(screen.queryByText("Linked Location > Address > City")).toBeNull();
+  });
+
   it("limits descendant fields to those actually present on the resolved linked entity or struct", () => {
     renderEntityFieldInput({
       entityFields: {

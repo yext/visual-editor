@@ -25,6 +25,7 @@ import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholder
 import { TextProps } from "../../contentBlocks/Text.tsx";
 import { ProductSectionVariant } from "./ProductSection.tsx";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
+import { shouldRenderToggledField } from "../../../utils/cardSlots/fieldVisibility.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 import {
   formatCurrency,
@@ -395,19 +396,36 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
     });
   }, [styles, slotStyles]);
 
-  const hasPrice =
-    parentStyles?.showPrice && (conditionalRender?.price || puck.isEditing);
-  const hasDescription =
-    parentStyles?.showDescription &&
-    (conditionalRender?.description || puck.isEditing);
-  const hasCTA =
-    parentStyles?.showCTA && (conditionalRender?.cta || puck.isEditing);
-  const hasBrow =
-    parentStyles?.showBrow && (conditionalRender?.brow || puck.isEditing);
-  const hasImage =
-    parentStyles?.showImage && (conditionalRender?.image || puck.isEditing);
-  const hasTitle =
-    parentStyles?.showTitle && (conditionalRender?.title || puck.isEditing);
+  const hasPrice = shouldRenderToggledField({
+    isEditing: puck.isEditing,
+    isEnabled: parentStyles?.showPrice,
+    hasData: !!conditionalRender?.price,
+  });
+  const hasDescription = shouldRenderToggledField({
+    isEditing: puck.isEditing,
+    isEnabled: parentStyles?.showDescription,
+    hasData: !!conditionalRender?.description,
+  });
+  const hasCTA = shouldRenderToggledField({
+    isEditing: puck.isEditing,
+    isEnabled: parentStyles?.showCTA,
+    hasData: !!conditionalRender?.cta,
+  });
+  const hasBrow = shouldRenderToggledField({
+    isEditing: puck.isEditing,
+    isEnabled: parentStyles?.showBrow,
+    hasData: !!conditionalRender?.brow,
+  });
+  const hasImage = shouldRenderToggledField({
+    isEditing: puck.isEditing,
+    isEnabled: parentStyles?.showImage,
+    hasData: !!conditionalRender?.image,
+  });
+  const hasTitle = shouldRenderToggledField({
+    isEditing: puck.isEditing,
+    isEnabled: parentStyles?.showTitle,
+    hasData: !!conditionalRender?.title,
+  });
   const bottomPadding = hasCTA ? "pb-8" : "pb-4";
 
   return (

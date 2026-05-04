@@ -18,6 +18,10 @@ import { TimestampProps } from "../../contentBlocks/Timestamp.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
+import {
+  shouldRenderFieldWhenPresent,
+  shouldRenderToggledField,
+} from "../../../utils/cardSlots/fieldVisibility.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 const defaultTestimonial = {
@@ -191,15 +195,20 @@ const TestimonialCardComponent: PuckComponent<TestimonialCardProps> = (
   const { slotStyles, getPuck, slotProps } =
     useGetCardSlots<TestimonialCardProps>(props.id);
 
-  const showDescription = Boolean(
-    conditionalRender?.description || puck.isEditing
-  );
-  const showContributorName =
-    parentStyles?.showName &&
-    Boolean(conditionalRender?.contributorName || puck.isEditing);
-  const showContributionDate =
-    parentStyles?.showDate &&
-    Boolean(conditionalRender?.contributionDate || puck.isEditing);
+  const showDescription = shouldRenderFieldWhenPresent({
+    isEditing: puck.isEditing,
+    hasData: !!conditionalRender?.description,
+  });
+  const showContributorName = shouldRenderToggledField({
+    isEditing: puck.isEditing,
+    isEnabled: parentStyles?.showName,
+    hasData: !!conditionalRender?.contributorName,
+  });
+  const showContributionDate = shouldRenderToggledField({
+    isEditing: puck.isEditing,
+    isEnabled: parentStyles?.showDate,
+    hasData: !!conditionalRender?.contributionDate,
+  });
 
   // sharedCardProps useEffect
   // When the context changes, dispatch an update to sync the changes to puck
@@ -340,32 +349,41 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
     const contributionDateSlotProps = data.props.slots.ContributionDateSlot?.[0]
       ?.props as WithId<any> | undefined;
 
-    const showDescription = Boolean(
-      testimonial?.description ||
-        descriptionSlotProps?.parentData?.richText ||
-        (descriptionSlotProps &&
-          resolveYextEntityField(
-            params.metadata.streamDocument,
-            descriptionSlotProps.data.text,
-            i18nComponentsInstance.language || "en"
-          ))
-    );
-    const showContributorName = Boolean(
-      testimonial?.contributorName ||
-        contributorNameSlotProps?.parentData?.text ||
-        (contributorNameSlotProps &&
-          resolveYextEntityField(
-            params.metadata.streamDocument,
-            contributorNameSlotProps.data.text,
-            i18nComponentsInstance.language || "en"
-          ))
-    );
-    const showContributionDate = Boolean(
-      testimonial?.contributionDate ||
-        contributionDateSlotProps?.parentData?.date ||
-        contributionDateSlotProps?.data?.date?.constantValue ||
-        contributionDateSlotProps?.data?.date?.field
-    );
+    const hasParentData = !!cardParentData;
+    const showDescription = hasParentData
+      ? Boolean(
+          testimonial?.description || descriptionSlotProps?.parentData?.richText
+        )
+      : Boolean(
+          descriptionSlotProps &&
+            resolveYextEntityField(
+              params.metadata.streamDocument,
+              descriptionSlotProps.data.text,
+              i18nComponentsInstance.language || "en"
+            )
+        );
+    const showContributorName = hasParentData
+      ? Boolean(
+          testimonial?.contributorName ||
+            contributorNameSlotProps?.parentData?.text
+        )
+      : Boolean(
+          contributorNameSlotProps &&
+            resolveYextEntityField(
+              params.metadata.streamDocument,
+              contributorNameSlotProps.data.text,
+              i18nComponentsInstance.language || "en"
+            )
+        );
+    const showContributionDate = hasParentData
+      ? Boolean(
+          testimonial?.contributionDate ||
+            contributionDateSlotProps?.parentData?.date
+        )
+      : Boolean(
+          contributionDateSlotProps?.data?.date?.constantValue ||
+            contributionDateSlotProps?.data?.date?.field
+        );
 
     let updatedData = {
       ...data,

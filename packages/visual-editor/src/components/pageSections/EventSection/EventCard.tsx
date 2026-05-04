@@ -23,6 +23,10 @@ import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
+import {
+  shouldRenderFieldWhenPresent,
+  shouldRenderToggledField,
+} from "../../../utils/cardSlots/fieldVisibility.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 const defaultEvent = {
@@ -287,18 +291,30 @@ const EventCardComponent: PuckComponent<EventCardProps> = (props) => {
     props.id
   );
 
-  const showImage =
-    parentStyles?.showImage &&
-    Boolean(conditionalRender?.image || puck.isEditing);
-  const showTitle = Boolean(conditionalRender?.title || puck.isEditing);
-  const showDateTime =
-    parentStyles?.showDateTime &&
-    Boolean(conditionalRender?.dateTime || puck.isEditing);
-  const showDescription =
-    parentStyles?.showDescription &&
-    (Boolean(conditionalRender?.description) || puck.isEditing);
-  const showCTA =
-    parentStyles?.showCTA && Boolean(conditionalRender?.cta || puck.isEditing);
+  const showImage = shouldRenderToggledField({
+    isEditing: puck.isEditing,
+    isEnabled: parentStyles?.showImage,
+    hasData: !!conditionalRender?.image,
+  });
+  const showTitle = shouldRenderFieldWhenPresent({
+    isEditing: puck.isEditing,
+    hasData: !!conditionalRender?.title,
+  });
+  const showDateTime = shouldRenderToggledField({
+    isEditing: puck.isEditing,
+    isEnabled: parentStyles?.showDateTime,
+    hasData: !!conditionalRender?.dateTime,
+  });
+  const showDescription = shouldRenderToggledField({
+    isEditing: puck.isEditing,
+    isEnabled: parentStyles?.showDescription,
+    hasData: !!conditionalRender?.description,
+  });
+  const showCTA = shouldRenderToggledField({
+    isEditing: puck.isEditing,
+    isEnabled: parentStyles?.showCTA,
+    hasData: !!conditionalRender?.cta,
+  });
 
   // sharedCardProps useEffect
   // When the context changes, dispatch an update to sync the changes to puck

@@ -65,8 +65,11 @@ export const getEntityFieldDisplayName = (
   const fieldPathSegments = fieldPath.split(".");
   const displayNameSegments: string[] = [];
   let currentFields = entityFields?.fields ?? [];
+  let currentPath = "";
+  let currentDisplayName = "";
 
   for (const segment of fieldPathSegments) {
+    currentPath = currentPath ? `${currentPath}.${segment}` : segment;
     const matchingField = currentFields.find((field) => field.name === segment);
     if (!matchingField) {
       return displayNameSegments.length
@@ -74,7 +77,16 @@ export const getEntityFieldDisplayName = (
         : undefined;
     }
 
-    displayNameSegments.push(matchingField.displayName ?? matchingField.name);
+    const mappedDisplayName = entityFields?.displayNames?.[currentPath];
+    const nextSegmentDisplayName = mappedDisplayName
+      ? currentDisplayName &&
+        mappedDisplayName.startsWith(`${currentDisplayName} > `)
+        ? mappedDisplayName.slice(currentDisplayName.length + 3)
+        : (mappedDisplayName.split(" > ").at(-1) ?? mappedDisplayName)
+      : (matchingField.displayName ?? matchingField.name);
+
+    displayNameSegments.push(nextSegmentDisplayName);
+    currentDisplayName = mappedDisplayName ?? displayNameSegments.join(" > ");
     currentFields = matchingField.children?.fields ?? [];
   }
 
