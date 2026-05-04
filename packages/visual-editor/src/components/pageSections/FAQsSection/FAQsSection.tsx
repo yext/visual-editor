@@ -93,7 +93,8 @@ const createFAQMappingFields = (sourceField?: string) =>
 const createFAQsSectionFields = (
   sourceField?: string
 ): YextFields<FAQSectionProps> => ({
-  data: YextField(msg("fields.faqs", "FAQs"), {
+  data: {
+    label: msg("fields.faqs", "FAQs"),
     type: "entityField",
     filter: {
       listFieldName: "faqs",
@@ -105,7 +106,7 @@ const createFAQsSectionFields = (
       sourceRootKinds: ["linkedEntityRoot", "baseListRoot"],
       sourceRootsOnly: true,
     },
-  }),
+  },
   faqs: createFAQMappingFields(sourceField) as any,
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",

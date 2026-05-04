@@ -32,7 +32,7 @@ import {
   buildLocatorDisplayOptions,
   type ImageField,
 } from "../fields/ImageField.tsx";
-import { ConstantValueModeToggler } from "../editor/YextEntityFieldSelector.tsx";
+import { ConstantValueModeToggler } from "../fields/EntityFieldSelectorField.tsx";
 import { type EmbeddedStringOption } from "../editor/EmbeddedFieldStringInput.tsx";
 import { TranslatableString } from "../types/types.ts";
 import { TranslatableAssetImage } from "../types/images.ts";

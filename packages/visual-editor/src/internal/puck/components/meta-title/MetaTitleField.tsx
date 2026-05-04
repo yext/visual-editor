@@ -1,10 +1,11 @@
 import React from "react";
-import { AutoField, type Field } from "@puckeditor/core";
+import { type Field } from "@puckeditor/core";
 import { useDocument } from "../../../../hooks/useDocument.tsx";
 import { msg, pt } from "../../../../utils/i18n/platform.ts";
 import { getPageSetLocales } from "../../../../utils/pageSetLocales.ts";
 import { type YextEntityField } from "../../../../editor/YextEntityFieldSelector.tsx";
-import { YextField } from "../../../../editor/YextField.tsx";
+import { YextAutoField } from "../../../../fields/YextAutoField.tsx";
+import type { YextFieldDefinition } from "../../../../editor/YextField.tsx";
 import { type TranslatableString } from "../../../../types/types.ts";
 import { getMetaTitleMissingLocales } from "./metaTitleValidation.ts";
 
@@ -24,20 +25,26 @@ export const MetaTitleField = (): Field<
         { locales: missingLocales.join(", ") }
       );
 
-      const metaTitleField = React.useMemo(
-        () =>
-          YextField(msg("fields.metaTitle", "Meta Title"), {
-            type: "entityField",
-            filter: {
-              types: ["type.string"],
-            },
-          }),
+      const metaTitleField = React.useMemo<
+        YextFieldDefinition<YextEntityField<TranslatableString>>
+      >(
+        () => ({
+          type: "entityField",
+          label: msg("fields.metaTitle", "Meta Title"),
+          filter: {
+            types: ["type.string"],
+          },
+        }),
         []
       );
 
       return (
         <div className="ve-w-full">
-          <AutoField field={metaTitleField} value={value} onChange={onChange} />
+          <YextAutoField
+            field={metaTitleField}
+            value={value}
+            onChange={onChange}
+          />
           {missingLocales.length > 0 && (
             <p className="ve-mt-2 ve-text-xs ve-text-red-600" role="alert">
               {errorMessage}

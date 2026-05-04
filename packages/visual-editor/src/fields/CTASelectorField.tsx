@@ -4,7 +4,7 @@ import {
   ConstantValueInput,
   ConstantValueModeToggler,
   EntityFieldInput,
-} from "../editor/YextEntityFieldSelector.tsx";
+} from "./EntityFieldSelectorField.tsx";
 import { type YextEntityField } from "../editor/yextEntityFieldUtils.ts";
 import {
   ctaTypeOptions,

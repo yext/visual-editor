@@ -1,9 +1,7 @@
-import { Fields, Slot } from "@puckeditor/core";
+import { Slot } from "@puckeditor/core";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
-import {
-  YextField,
-  type YextFieldDefinition,
-} from "../../editor/YextField.tsx";
+import { type YextFieldDefinition } from "../../editor/YextField.tsx";
+import { YextFields } from "../../fields/fields.ts";
 import { MsgString } from "../i18n/platform.ts";
 import {
   EntityFieldTypes,
@@ -47,8 +45,9 @@ export const cardWrapperFields = <T>({
   sourceRootKinds = [],
   sourceRootsOnly = false,
   requiredDescendantTypes,
-}: CardWrapperFieldsOptions): Fields<CardWrapperType<T>> => ({
-  data: YextField(label, {
+}: CardWrapperFieldsOptions): YextFields<CardWrapperType<T>> => ({
+  data: {
+    label,
     type: "entityField",
     filter: {
       listFieldName,
@@ -57,7 +56,7 @@ export const cardWrapperFields = <T>({
       sourceRootKinds,
       sourceRootsOnly,
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {
@@ -87,12 +86,14 @@ export const createMappedSubfieldFields = <
   fields: TFields,
   sourceFieldPath = "data.field"
 ): YextFieldDefinition<any> =>
-  YextField(label, {
+  ({
+    label,
     type: "object",
     objectFields: Object.fromEntries(
       Object.entries(fields).map(([fieldName, fieldConfig]) => [
         fieldName,
-        YextField(fieldConfig.label, {
+        {
+          label: fieldConfig.label,
           type: "subfieldSelector",
           sourceField: sourceField ?? "",
           sourceFieldPath,
@@ -102,7 +103,7 @@ export const createMappedSubfieldFields = <
             ...fieldConfig.filter,
             types: fieldConfig.types,
           },
-        } as any),
+        } as any,
       ])
     ),
-  } as any) as YextFieldDefinition<any>;
+  }) as any;

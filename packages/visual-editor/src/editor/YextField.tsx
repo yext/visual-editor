@@ -6,17 +6,14 @@ import {
   NumberField,
   ObjectField,
 } from "@puckeditor/core";
-import {
-  type RenderYextEntityFieldSelectorProps,
-  YextEntityField,
-  YextEntityFieldSelector,
-} from "./YextEntityFieldSelector.tsx";
+import { type EntityFieldSelectorField } from "../fields/EntityFieldSelectorField.tsx";
+import { MsgString } from "../utils/i18n/platform.ts";
+import type { YextFieldMap, YextPuckFields } from "../fields/fields.ts";
 import {
   type RenderYextSubfieldSelectorProps,
   YextSubfieldSelector,
 } from "./YextSubfieldSelector.tsx";
-import { MsgString } from "../utils/i18n/platform.ts";
-import type { YextFieldMap, YextPuckFields } from "../fields/fields.ts";
+import { type YextEntityField } from "./yextEntityFieldUtils.ts";
 
 /** Copied from Puck, do not change */
 export type FieldOption = {
@@ -78,11 +75,10 @@ export type YextFieldDefinition<ValueType = any> =
       ? YextObjectField<ValueType>
       : never);
 
-// YextEntitySelectorField has same functionality as YextEntityFieldSelector
 type YextEntitySelectorField<
   T extends Record<string, any> = Record<string, any>,
 > = YextBaseField &
-  Omit<RenderYextEntityFieldSelectorProps<T>, "label"> & {
+  Omit<EntityFieldSelectorField<T>, keyof BaseField | "label"> & {
     type: "entityField";
   };
 
@@ -103,6 +99,9 @@ type YextFieldConfig<Props = any> =
       keyof YextPuckFields,
       | "basicSelector"
       | "code"
+      | "entityField"
+      | "image"
+      | "multiSelector"
       | "optionalNumber"
       | "video"
       | "translatableString"
@@ -137,17 +136,6 @@ export function YextField<T, U>(
   fieldName: MsgString,
   config: YextFieldConfig<T>
 ): any {
-  // use YextEntityFieldSelector
-  if (config.type === "entityField") {
-    return YextEntityFieldSelector<T extends Record<string, any> ? T : any, U>({
-      label: fieldName,
-      filter: config.filter,
-      constantValueFilter: config.constantValueFilter,
-      disableConstantValueToggle: config.disableConstantValueToggle,
-      disallowTranslation: config.disallowTranslation,
-    });
-  }
-
   if (config.type === "subfieldSelector") {
     return YextSubfieldSelector<T extends Record<string, any> ? T : any, U>({
       label: fieldName,

@@ -45,15 +45,13 @@ const textFields: YextFields<TextProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      text: YextField<any, TranslatableString | TranslatableRichText>(
-        msg("fields.text", "Text"),
-        {
-          type: "entityField",
-          filter: {
-            types: ["type.string", "type.rich_text_v2"],
-          },
-        }
-      ),
+      text: {
+        type: "entityField",
+        label: msg("fields.text", "Text"),
+        filter: {
+          types: ["type.string", "type.rich_text_v2"],
+        },
+      },
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {

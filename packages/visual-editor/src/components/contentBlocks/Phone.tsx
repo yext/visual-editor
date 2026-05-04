@@ -44,12 +44,13 @@ export interface PhoneProps {
 
 // Phone field definitions used in Phone and CoreInfoSection
 export const PhoneDataFields: YextFields<PhoneProps["data"]> = {
-  number: YextField<any, string>(msg("fields.phoneNumber", "Phone Number"), {
+  number: {
     type: "entityField",
+    label: msg("fields.phoneNumber", "Phone Number"),
     filter: {
       types: ["type.phone"],
     },
-  }),
+  },
   label: {
     type: "translatableString",
     label: msg("fields.label", "Label"),

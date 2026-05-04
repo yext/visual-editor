@@ -10,10 +10,7 @@ import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
 import { ComponentFields } from "../../../types/fields.ts";
-import {
-  YextEntityField,
-  YextEntityFieldSelector,
-} from "../../../editor/YextEntityFieldSelector.tsx";
+import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
 import { BodyTextProps } from "../../contentBlocks/BodyText.tsx";
 import { CTAWrapperProps } from "../../contentBlocks/CtaWrapper.tsx";
@@ -172,12 +169,13 @@ const promoSectionFields: YextFields<PromoSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      promo: YextEntityFieldSelector<any, PromoSectionType | {}>({
+      promo: {
+        type: "entityField",
         label: msg("fields.promo", "Promo"),
         filter: {
           types: [ComponentFields.PromoSection.type],
         },
-      }),
+      },
       media: {
         label: msg("fields.media", "Media"),
         type: "radio",
@@ -186,12 +184,13 @@ const promoSectionFields: YextFields<PromoSectionProps> = {
           { label: msg("fields.options.video", "Video"), value: "video" },
         ],
       },
-      backgroundImage: YextField(msg("fields.image", "Image"), {
+      backgroundImage: {
         type: "entityField",
+        label: msg("fields.image", "Image"),
         filter: {
           types: ["type.image"],
         },
-      }),
+      },
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {

@@ -63,11 +63,12 @@ export interface AddressProps {
 
 // Address field definition used in Address and CoreInfoSection
 export const AddressDataField: YextFields<AddressProps["data"]> = {
-  address: YextField<AddressType>(msg("fields.address", "Address"), {
+  address: {
     type: "entityField",
+    label: msg("fields.address", "Address"),
     filter: { types: ["type.address"] },
-  }),
-} as any; // TODO(SUMO-8378): Update this once "entityField" is a registered YextFields fieldType
+  },
+};
 
 // Address style fields used in Address and CoreInfoSection
 export const AddressStyleFields: YextFields<AddressProps["styles"]> = {

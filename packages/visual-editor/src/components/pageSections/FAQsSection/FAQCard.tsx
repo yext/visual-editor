@@ -96,21 +96,23 @@ const FAQCardFields: YextFields<FAQCardProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      question: YextField(msg("fields.question", "Question"), {
+      question: {
         type: "entityField",
+        label: msg("fields.question", "Question"),
         filter: {
           types: ["type.string", "type.rich_text_v2"],
         },
-      }),
-      answer: YextField(msg("fields.answer", "Answer"), {
+      },
+      answer: {
         type: "entityField",
+        label: msg("fields.answer", "Answer"),
         filter: {
           types: ["type.string", "type.rich_text_v2"],
         },
         constantValueFilter: {
           types: ["type.rich_text_v2"],
         },
-      }),
+      },
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {
