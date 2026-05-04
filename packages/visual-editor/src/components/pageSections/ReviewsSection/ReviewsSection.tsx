@@ -17,7 +17,6 @@ import { PageSection } from "../../atoms/pageSection.tsx";
 import { TimestampAtom, TimestampOption } from "../../atoms/timestamp.tsx";
 import { useBackground } from "../../../hooks/useBackground.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
-import { YextField } from "../../../editor/YextField.tsx";
 import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 import { StreamDocument } from "../../../utils/types/StreamDocument.ts";
@@ -134,8 +133,9 @@ const ReviewsEmptyState: React.FC<{ backgroundColor: ThemeColor }> = ({
 };
 
 const reviewsFields: YextFields<ReviewsSectionProps> = {
-  styles: YextField(msg("fields.styles", "Styles"), {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
         type: "basicSelector",
@@ -153,7 +153,7 @@ const reviewsFields: YextFields<ReviewsSectionProps> = {
         options: ThemeOptions.SHOW_HIDE,
       },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {
@@ -161,8 +161,9 @@ const reviewsFields: YextFields<ReviewsSectionProps> = {
     },
     visible: false,
   },
-  analytics: YextField(msg("fields.analytics", "Analytics"), {
+  analytics: {
     type: "object",
+    label: msg("fields.analytics", "Analytics"),
     visible: false,
     objectFields: {
       scope: {
@@ -170,7 +171,7 @@ const reviewsFields: YextFields<ReviewsSectionProps> = {
         type: "text",
       },
     },
-  }),
+  },
   liveVisibility: {
     label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
     type: "radio",

@@ -53,3 +53,11 @@ export {
 } from "./TranslatableStringField.tsx";
 
 export { VideoFieldOverride, type VideoField } from "./VideoField.tsx";
+
+export {
+  type YextArrayField,
+  type YextCustomFieldRenderProps,
+  type YextFieldDefinition,
+  type YextObjectField,
+  type YextPuckField,
+} from "./fields.ts";

@@ -1,7 +1,7 @@
 import { BaseField, type FieldProps, type UiState } from "@puckeditor/core";
 import { YextAutoField } from "./YextAutoField.tsx";
 import { pt, type MsgString } from "../utils/i18n/platform.ts";
-import { type YextArrayField } from "../editor/YextField.tsx";
+import { type YextArrayField } from "./fields.ts";
 import { type BasicSelectorField } from "./BasicSelectorField.tsx";
 
 export type MultiSelectorOptionValue = string | number | boolean;

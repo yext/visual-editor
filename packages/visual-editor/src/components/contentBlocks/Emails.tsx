@@ -5,7 +5,6 @@ import { useDocument } from "../../hooks/useDocument.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { CTA } from "../atoms/cta.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { Background } from "../atoms/background.tsx";
@@ -46,8 +45,9 @@ export interface EmailsProps {
 
 // Email fields used in Emails and CoreInfoSection
 export const EmailsFields: YextFields<EmailsProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
       list: {
         type: "entityField",
@@ -60,16 +60,18 @@ export const EmailsFields: YextFields<EmailsProps> = {
         disallowTranslation: true,
       },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
-      listLength: YextField(msg("fields.listLength", "List Length"), {
+      listLength: {
         type: "number",
+        label: msg("fields.listLength", "List Length"),
         min: 1,
         max: 5,
         visible: false,
-      }),
+      },
       showIcon: {
         label: msg("fields.showIcon", "Show Icon"),
         type: "radio",
@@ -81,7 +83,7 @@ export const EmailsFields: YextFields<EmailsProps> = {
         options: "SITE_COLOR",
       },
     },
-  }),
+  },
 };
 
 const EmailsComponent: PuckComponent<EmailsProps> = (props) => {

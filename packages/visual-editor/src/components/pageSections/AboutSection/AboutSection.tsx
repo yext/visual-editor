@@ -13,7 +13,6 @@ import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { PageSection } from "../../atoms/pageSection.tsx";
 import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
-import { YextField } from "../../../editor/YextField.tsx";
 import { useTranslation } from "react-i18next";
 import { FaChevronDown } from "react-icons/fa";
 import {
@@ -68,8 +67,9 @@ export type AboutSectionProps = {
 };
 
 const aboutSectionFields: YextFields<AboutSectionProps> = {
-  styles: YextField(msg("fields.styles", "Styles"), {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
         type: "basicSelector",
@@ -87,7 +87,7 @@ const aboutSectionFields: YextFields<AboutSectionProps> = {
         options: ThemeOptions.SHOW_HIDE,
       },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {

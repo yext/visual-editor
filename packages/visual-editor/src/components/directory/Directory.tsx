@@ -5,7 +5,6 @@ import {
 } from "../../utils/themeConfigOptions.ts";
 import { PageSection } from "../atoms/pageSection.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
-import { YextField } from "../../editor/YextField.tsx";
 import { Background } from "../atoms/background.tsx";
 import { HeadingTextProps } from "../contentBlocks/HeadingText.tsx";
 import { BreadcrumbsSectionProps } from "../pageSections/Breadcrumbs.tsx";
@@ -60,8 +59,9 @@ export interface DirectoryProps {
 }
 
 const directoryFields: YextFields<DirectoryProps> = {
-  styles: YextField(msg("fields.styles", "Styles"), {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
         type: "basicSelector",
@@ -82,7 +82,7 @@ const directoryFields: YextFields<DirectoryProps> = {
         options: "SITE_COLOR",
       },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {
@@ -93,8 +93,9 @@ const directoryFields: YextFields<DirectoryProps> = {
     },
     visible: false,
   },
-  analytics: YextField(msg("fields.analytics", "Analytics"), {
+  analytics: {
     type: "object",
+    label: msg("fields.analytics", "Analytics"),
     visible: false,
     objectFields: {
       scope: {
@@ -102,7 +103,7 @@ const directoryFields: YextFields<DirectoryProps> = {
         type: "text",
       },
     },
-  }),
+  },
 };
 
 const DirectoryComponent: PuckComponent<DirectoryProps> = ({

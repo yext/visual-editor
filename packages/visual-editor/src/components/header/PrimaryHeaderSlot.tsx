@@ -15,7 +15,6 @@ import { msg } from "../../utils/i18n/platform.ts";
 import { PageSection, PageSectionProps } from "../atoms/pageSection.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { useOverflow } from "../../hooks/useOverflow.ts";
-import { YextField } from "../../editor/YextField.tsx";
 import { usePreviewWindow } from "../../hooks/usePreviewWindow.ts";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
@@ -60,8 +59,9 @@ export interface PrimaryHeaderSlotProps {
 }
 
 const primaryHeaderSlotFields: YextFields<PrimaryHeaderSlotProps> = {
-  styles: YextField(msg("fields.styles", "Styles"), {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
         type: "basicSelector",
@@ -69,7 +69,7 @@ const primaryHeaderSlotFields: YextFields<PrimaryHeaderSlotProps> = {
         options: "BACKGROUND_COLOR",
       },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {

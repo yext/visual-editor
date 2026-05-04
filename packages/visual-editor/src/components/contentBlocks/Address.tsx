@@ -15,7 +15,6 @@ import { EntityField } from "../../editor/EntityField.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { CTA, CTAVariant, isCtaVariantWithColor } from "../atoms/cta.tsx";
 import { pt, msg } from "../../utils/i18n/platform.ts";
-import { YextField } from "../../editor/YextField.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import {
   ThemeColor,
@@ -109,14 +108,16 @@ export const AddressStyleFields: YextFields<AddressProps["styles"]> = {
 };
 
 export const addressFields: YextFields<AddressProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: AddressDataField,
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: AddressStyleFields,
-  }),
+  },
 };
 
 const AddressComponent: PuckComponent<AddressProps> = (props) => {

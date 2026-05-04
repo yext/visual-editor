@@ -14,7 +14,6 @@ import {
   TestimonialCardProps,
 } from "./TestimonialCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
-import { YextField } from "../../../editor/YextField.tsx";
 import { YextComponentConfig } from "../../../fields/fields.ts";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 
@@ -40,8 +39,9 @@ const testimonialCardsWrapperFields = {
     msg("components.testimonial", "Testimonial"),
     ComponentFields.TestimonialSection.type
   ),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       showName: {
         label: msg("fields.showName", "Show Name"),
@@ -54,7 +54,7 @@ const testimonialCardsWrapperFields = {
         options: ThemeOptions.SHOW_HIDE,
       },
     },
-  }),
+  },
 };
 
 const TestimonialCardsWrapperComponent: PuckComponent<

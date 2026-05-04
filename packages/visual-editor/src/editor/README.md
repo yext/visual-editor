@@ -171,7 +171,7 @@ const Example = ({ myField }: ExampleProps) => {
 
 ## basicSelector Field Type
 
-The `basicSelector` field type renders a labeled combobox with optional search, grouped options, translated labels, and empty-state messaging. Use it when you need direct access to the selector behavior instead of going through `YextField({ type: "select", ... })`.
+The `basicSelector` field type renders a labeled combobox with optional search, grouped options, translated labels, and empty-state messaging.
 
 ### Props
 
@@ -215,7 +215,7 @@ When the field definition is part of a normal component `fields` config, Puck re
 
 ## image Field
 
-The `image` field type opens the asset selector and stores the selected image as a localized asset image value. Define it directly in `YextFields` instead of routing it through `YextField`.
+The `image` field type opens the asset selector and stores the selected image as a localized asset image value. Define it directly in `YextFields`.
 
 ### Props
 
@@ -270,38 +270,19 @@ const myComponentFields: YextFields<MyComponentProps> = {
 };
 ```
 
-## YextField
+## YextFields
 
-`YextField` provides a unified utility for creating typed field configurations in a [Puck](https://github.com/measuredco/puck) and Yext Visual Editor integration context. It abstracts over a subset of common field types and includes special handling for internal helper field types such as `dynamicSelect`.
+Author field definitions directly in `YextFields` using the registered Puck and Yext field types.
 
 ### Features
 
-- Strongly typed helper for defining field configs
 - Support for standard Puck field types such as `text`, `array`, and `object`
 - Native Puck fields like `radio` can be authored directly inside `YextFields`
 
 ### Props
 
-#### `YextField`
-
 ```tsx
-YextField(label: MsgString, config: YextFieldConfig): Field<any>
-```
-
-**Parameters:**
-
-- `label`: `MsgString` — The translated name of the field shown in the visual editor. Must use `msg()` function to ensure translation compliance.
-- `config`: `YextFieldConfig` — Configuration object describing the field type and its behavior.
-
-### Usage
-
-```tsx
-import {
-  YextField,
-  msg,
-  YextFields,
-  YextComponentConfig,
-} from "@yext/visual-editor";
+import { msg, YextFields, YextComponentConfig } from "@yext/visual-editor";
 
 const myComponentFields: YextFields<myComponentProps> = {
   address: {
@@ -327,7 +308,7 @@ export const MyComponent: YextComponentConfig<myComponentProps> = {
 
 ### Translation Requirements
 
-Use the `msg()` function for field labels to ensure proper internationalization, whether the field is authored directly in `YextFields` or created through `YextField`.
+Use the `msg()` function for field labels to ensure proper internationalization.
 
 ```tsx
 import { msg } from "@yext/visual-editor";
@@ -376,7 +357,7 @@ description: {
 
 #### Native Radio Field
 
-Define radio fields directly in `YextFields` instead of routing them through `YextField`.
+Define radio fields directly in `YextFields`.
 
 ```tsx
 alignment: {
@@ -396,7 +377,10 @@ alignment: {
 Creates a numeric input field with optional min and max values. [Additional documentation](https://puckeditor.com/docs/api-reference/fields/number)
 
 ```tsx
-spacing: YextField(msg("fields.spacing", "Spacing"), { type: "number" });
+spacing: {
+  label: msg("fields.spacing", "Spacing"),
+  type: "number",
+};
 ```
 
 **Props:**
@@ -412,7 +396,8 @@ spacing: YextField(msg("fields.spacing", "Spacing"), { type: "number" });
 Creates a repeatable field group (e.g., a list of items). Define inner fields using `arrayFields`. [Additional documentation](https://puckeditor.com/docs/api-reference/fields/array)
 
 ```tsx
-items: YextField(msg("fields.items", "Items"), {
+items: {
+  label: msg("fields.items", "Items"),
   type: "array",
   arrayFields: {
     title: {
@@ -424,7 +409,7 @@ items: YextField(msg("fields.items", "Items"), {
       type: "text",
     },
   },
-});
+};
 ```
 
 **Props:**
@@ -443,7 +428,8 @@ items: YextField(msg("fields.items", "Items"), {
 Creates a nested object field with multiple subfields. [Additional documentation](https://puckeditor.com/docs/api-reference/fields/object)
 
 ```tsx
-card: YextField(msg("fields.card", "Card"), {
+card: {
+  label: msg("fields.card", "Card"),
   type: "object",
   objectFields: {
     title: {
@@ -455,7 +441,7 @@ card: YextField(msg("fields.card", "Card"), {
       type: "textarea",
     },
   },
-});
+};
 ```
 
 **Props:**

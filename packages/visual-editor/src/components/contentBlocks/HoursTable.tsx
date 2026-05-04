@@ -7,7 +7,6 @@ import { HoursTableAtom } from "../atoms/hoursTable.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { Body } from "../atoms/body.tsx";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
@@ -74,14 +73,16 @@ export const HoursTableStyleFields: YextFields<HoursTableStyleFieldProps> = {
 };
 
 export const hoursTableFields: YextFields<HoursTableProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
       hours: HoursTableDataField,
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       ...HoursTableStyleFields,
       alignment: {
@@ -96,7 +97,7 @@ export const hoursTableFields: YextFields<HoursTableProps> = {
         ],
       },
     },
-  }),
+  },
 };
 
 const VisualEditorHoursTable: PuckComponent<HoursTableProps> = (props) => {

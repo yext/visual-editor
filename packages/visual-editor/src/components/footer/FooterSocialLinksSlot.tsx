@@ -1,6 +1,5 @@
 import * as React from "react";
 import { PuckComponent } from "@puckeditor/core";
-import { YextField } from "../../editor/YextField.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import { CTA } from "../atoms/cta.tsx";
 import { useBackground } from "../../hooks/useBackground.tsx";
@@ -46,8 +45,9 @@ type socialLink = {
 
 export const FooterSocialLinksSlotFields: YextFields<FooterSocialLinksSlotProps> =
   {
-    data: YextField(msg("fields.data", "Data"), {
+    data: {
       type: "object",
+      label: msg("fields.data", "Data"),
       objectFields: {
         xLink: {
           label: msg("fields.xLink", "X Link"),
@@ -78,9 +78,10 @@ export const FooterSocialLinksSlotFields: YextFields<FooterSocialLinksSlotProps>
           type: "text",
         },
       },
-    }),
-    styles: YextField(msg("fields.styles", "Styles"), {
+    },
+    styles: {
       type: "object",
+      label: msg("fields.styles", "Styles"),
       objectFields: {
         iconColor: {
           type: "basicSelector",
@@ -88,7 +89,7 @@ export const FooterSocialLinksSlotFields: YextFields<FooterSocialLinksSlotProps>
           options: "SITE_COLOR",
         },
       },
-    }),
+    },
   };
 
 const FooterSocialLinksSlotInternal: PuckComponent<

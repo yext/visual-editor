@@ -9,11 +9,6 @@ import { TranslatableCTA } from "../../types/types.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { useOverflow } from "../../hooks/useOverflow.ts";
 import { usePreviewWindow } from "../../hooks/usePreviewWindow.ts";
-import {
-  YextField,
-  type YextArrayField,
-  type YextCustomFieldRenderProps,
-} from "../../editor/YextField.tsx";
 import { YextAutoField } from "../../fields/YextAutoField.tsx";
 import { linkTypeOptions } from "../../internal/puck/constant-value-fields/CallToAction.tsx";
 import {
@@ -27,6 +22,8 @@ import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
 import {
   toPuckFields,
   YextComponentConfig,
+  type YextArrayField,
+  type YextCustomFieldRenderProps,
   YextFields,
 } from "../../fields/fields.ts";
 
@@ -116,8 +113,9 @@ const linkFieldConfig: YextArrayField<TranslatableCTA[]> = {
 };
 
 const headerLinksFields: YextFields<HeaderLinksProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
       links: {
         type: "custom",
@@ -147,14 +145,15 @@ const headerLinksFields: YextFields<HeaderLinksProps> = {
           );
         },
       },
-      collapsedLinks: YextField(
-        msg("fields.collapsedLinks", "Collapsed Links"),
-        linkFieldConfig
-      ),
+      collapsedLinks: {
+        ...linkFieldConfig,
+        label: msg("fields.collapsedLinks", "Collapsed Links"),
+      },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       align: {
         label: msg("fields.align", "Align"),
@@ -180,7 +179,7 @@ const headerLinksFields: YextFields<HeaderLinksProps> = {
         ],
       },
     },
-  }),
+  },
 };
 
 const useWindowWidth = (externalWindow?: Window | null) => {

@@ -15,7 +15,6 @@ import {
 } from "../../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
-import { YextField } from "../../../editor/YextField.tsx";
 import {
   formatDistance,
   getPreferredDistanceUnit,
@@ -128,22 +127,26 @@ export type NearbyLocationCardsWrapperProps = {
 
 const nearbyLocationCardsWrapperFields: YextFields<NearbyLocationCardsWrapperProps> =
   {
-    data: YextField(msg("fields.data", "Data"), {
+    data: {
       type: "object",
+      label: msg("fields.data", "Data"),
       objectFields: {
-        radius: YextField(msg("fields.radiusMiles", "Radius (Miles)"), {
+        radius: {
           type: "number",
+          label: msg("fields.radiusMiles", "Radius (Miles)"),
           min: 0,
-        }),
-        limit: YextField(msg("fields.limit", "Limit"), {
+        },
+        limit: {
           type: "number",
+          label: msg("fields.limit", "Limit"),
           min: 1,
           max: 50,
-        }),
+        },
       },
-    }),
-    styles: YextField(msg("fields.styles", "Styles"), {
+    },
+    styles: {
       type: "object",
+      label: msg("fields.styles", "Styles"),
       objectFields: {
         backgroundColor: {
           type: "basicSelector",
@@ -160,8 +163,9 @@ const nearbyLocationCardsWrapperFields: YextFields<NearbyLocationCardsWrapperPro
           label: msg("fields.cardTitleColor", "Card Title Color"),
           options: "SITE_COLOR",
         },
-        hours: YextField(msg("fields.hours", "Hours"), {
+        hours: {
           type: "object",
+          label: msg("fields.hours", "Hours"),
           objectFields: {
             showCurrentStatus: {
               label: msg("fields.showCurrentStatus", "Show Current Status"),
@@ -208,9 +212,10 @@ const nearbyLocationCardsWrapperFields: YextFields<NearbyLocationCardsWrapperPro
               ],
             },
           },
-        }),
-        phone: YextField(msg("fields.phone", "Phone"), {
+        },
+        phone: {
           type: "object",
+          label: msg("fields.phone", "Phone"),
           objectFields: {
             phoneNumberFormat: {
               label: msg("fields.phoneNumberFormat", "Phone Number Format"),
@@ -234,9 +239,10 @@ const nearbyLocationCardsWrapperFields: YextFields<NearbyLocationCardsWrapperPro
               options: "SITE_COLOR",
             },
           },
-        }),
-        address: YextField(msg("fields.address", "Address"), {
+        },
+        address: {
           type: "object",
+          label: msg("fields.address", "Address"),
           objectFields: {
             showRegion: {
               label: msg("fields.showRegion", "Show Region"),
@@ -255,7 +261,7 @@ const nearbyLocationCardsWrapperFields: YextFields<NearbyLocationCardsWrapperPro
               ],
             },
           },
-        }),
+        },
         showHours: {
           label: msg("fields.showHours", "Show Hours"),
           type: "radio",
@@ -272,7 +278,7 @@ const nearbyLocationCardsWrapperFields: YextFields<NearbyLocationCardsWrapperPro
           options: ThemeOptions.SHOW_HIDE,
         },
       },
-    }),
+    },
   };
 
 const NearbyLocationCardsWrapperComponent: PuckComponent<

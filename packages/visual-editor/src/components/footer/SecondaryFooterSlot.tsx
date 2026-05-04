@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Slot, PuckComponent, setDeep } from "@puckeditor/core";
-import { YextField } from "../../editor/YextField.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import { ThemeColor, ThemeOptions } from "../../utils/themeConfigOptions.ts";
 import { PageSection, PageSectionProps } from "../atoms/pageSection.tsx";
@@ -45,8 +44,9 @@ export interface SecondaryFooterSlotProps {
 }
 
 const secondaryFooterSlotFields: YextFields<SecondaryFooterSlotProps> = {
-  styles: YextField(msg("fields.styles", "Styles"), {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
         type: "basicSelector",
@@ -72,7 +72,7 @@ const secondaryFooterSlotFields: YextFields<SecondaryFooterSlotProps> = {
         options: ThemeOptions.SHOW_HIDE,
       },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {

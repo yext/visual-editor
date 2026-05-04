@@ -6,7 +6,6 @@ import {
 import { msg } from "../../utils/i18n/platform.ts";
 import { PageSection } from "../atoms/pageSection.tsx";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 export interface VideoSectionProps {
@@ -35,8 +34,9 @@ export interface VideoSectionProps {
 }
 
 const videoSectionFields: YextFields<VideoSectionProps> = {
-  styles: YextField(msg("fields.styles", "Styles"), {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
         type: "basicSelector",
@@ -44,7 +44,7 @@ const videoSectionFields: YextFields<VideoSectionProps> = {
         options: "BACKGROUND_COLOR",
       },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {

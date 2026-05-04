@@ -2,7 +2,6 @@ import * as React from "react";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { PuckComponent, setDeep, Slot } from "@puckeditor/core";
 import { msg } from "../../utils/i18n/platform.ts";
-import { YextField } from "../../editor/YextField.tsx";
 import { getMaxWidthOptions } from "../../editor/MaxWidthSelector.tsx";
 import { PageSectionProps } from "../atoms/pageSection.tsx";
 import { cva } from "class-variance-authority";
@@ -57,8 +56,9 @@ export interface ExpandedHeaderProps {
 }
 
 const expandedHeaderSectionFields: YextFields<ExpandedHeaderProps> = {
-  styles: YextField(msg("fields.styles", "Styles"), {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       maxWidth: {
         type: "basicSelector",
@@ -86,7 +86,7 @@ const expandedHeaderSectionFields: YextFields<ExpandedHeaderProps> = {
         ],
       },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {
@@ -95,8 +95,9 @@ const expandedHeaderSectionFields: YextFields<ExpandedHeaderProps> = {
     },
     visible: false,
   },
-  analytics: YextField(msg("fields.analytics", "Analytics"), {
+  analytics: {
     type: "object",
+    label: msg("fields.analytics", "Analytics"),
     visible: false,
     objectFields: {
       scope: {
@@ -104,7 +105,7 @@ const expandedHeaderSectionFields: YextFields<ExpandedHeaderProps> = {
         type: "text",
       },
     },
-  }),
+  },
 };
 
 const ExpandedHeaderWrapper: PuckComponent<ExpandedHeaderProps> = ({

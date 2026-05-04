@@ -1,6 +1,6 @@
 import React from "react";
 import { AutoField, type FieldProps } from "@puckeditor/core";
-import type { YextFieldDefinition } from "../editor/YextField.tsx";
+import type { YextFieldDefinition } from "./fields.ts";
 import { YextPuckFieldOverrides } from "./fields.ts";
 
 type YextAutoFieldProps<ValueType = any> = Omit<

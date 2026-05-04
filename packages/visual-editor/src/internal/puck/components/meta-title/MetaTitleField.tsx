@@ -5,7 +5,7 @@ import { msg, pt } from "../../../../utils/i18n/platform.ts";
 import { getPageSetLocales } from "../../../../utils/pageSetLocales.ts";
 import { type YextEntityField } from "../../../../editor/YextEntityFieldSelector.tsx";
 import { YextAutoField } from "../../../../fields/YextAutoField.tsx";
-import type { YextFieldDefinition } from "../../../../editor/YextField.tsx";
+import type { YextFieldDefinition } from "../../../../fields/fields.ts";
 import { type TranslatableString } from "../../../../types/types.ts";
 import { getMetaTitleMissingLocales } from "./metaTitleValidation.ts";
 

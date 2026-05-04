@@ -11,7 +11,6 @@ import {
 } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 import { defaultTeamCardSlotData, TeamCardProps } from "./TeamCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
-import { YextField } from "../../../editor/YextField.tsx";
 import { YextComponentConfig } from "../../../fields/fields.ts";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 
@@ -30,8 +29,9 @@ const teamCardsWrapperFields = {
     msg("components.team", "Team"),
     ComponentFields.TeamSection.type
   ),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       showImage: {
         label: msg("fields.showImage", "Show Image"),
@@ -59,7 +59,7 @@ const teamCardsWrapperFields = {
         options: ThemeOptions.SHOW_HIDE,
       },
     },
-  }),
+  },
 };
 
 const TeamCardsWrapperComponent: PuckComponent<TeamCardsWrapperProps> = (

@@ -45,10 +45,6 @@ import {
   type MultiSelectorOption,
   type MultiSelectorValue,
 } from "../fields/MultiSelectorField.tsx";
-import {
-  YextField,
-  type YextCustomFieldRenderProps,
-} from "../editor/YextField.tsx";
 import { ImageField } from "../fields/ImageField.tsx";
 import { YextAutoField } from "../fields/YextAutoField.tsx";
 import { useDocument } from "../hooks/useDocument.tsx";
@@ -99,6 +95,7 @@ import {
 import {
   toPuckFields,
   YextComponentConfig,
+  type YextCustomFieldRenderProps,
   YextFields,
 } from "../fields/fields.ts";
 import { isVisualEditorTestEnv } from "./testing/utils.ts";
@@ -693,133 +690,129 @@ const locatorFields: YextFields<LocatorProps> = {
       },
     ],
   },
-  locationStyles: YextField<LocatorProps["locationStyles"]>(
-    msg("fields.pinStyles", "Location styles"),
-    {
-      type: "array",
-      getItemSummary: (item) => getEntityTypeLabel(item.entityType),
-      arrayFields: {
-        entityType: {
-          label: msg("fields.entityType", "Entity Type"),
-          type: "text",
-          visible: false,
-        },
-        pinIcon: {
-          type: "custom",
-          render: ({
-            value,
-            onChange,
-          }: YextCustomFieldRenderProps<
-            LocatorProps["locationStyles"][number]["pinIcon"]
-          >) => {
-            const selectedType = value?.type ?? "none";
-            return (
-              <div className="flex flex-col gap-3">
+  locationStyles: {
+    type: "array",
+    label: msg("fields.pinStyles", "Location styles"),
+    getItemSummary: (item: LocatorProps["locationStyles"][number]) =>
+      getEntityTypeLabel(item.entityType),
+    arrayFields: {
+      entityType: {
+        label: msg("fields.entityType", "Entity Type"),
+        type: "text",
+        visible: false,
+      },
+      pinIcon: {
+        type: "custom",
+        render: ({
+          value,
+          onChange,
+        }: YextCustomFieldRenderProps<
+          LocatorProps["locationStyles"][number]["pinIcon"]
+        >) => {
+          const selectedType = value?.type ?? "none";
+          return (
+            <div className="flex flex-col gap-3">
+              <YextAutoField
+                field={{
+                  type: "basicSelector",
+                  label: msg("fields.pinIcon", "Pin Icon"),
+                  options: [
+                    {
+                      label: msg("fields.options.none", "None"),
+                      value: "none",
+                    },
+                    {
+                      label: msg("fields.options.icon", "Icon"),
+                      value: "icon",
+                    },
+                    {
+                      label: msg("fields.options.customImage", "Custom image"),
+                      value: "customImage",
+                    },
+                  ],
+                }}
+                value={selectedType}
+                onChange={(type) =>
+                  onChange({
+                    ...value,
+                    type,
+                    iconName:
+                      type === "icon"
+                        ? (value?.iconName ?? DEFAULT_MAKI_ICON_NAME)
+                        : undefined,
+                  })
+                }
+              />
+              {selectedType === "icon" && (
                 <YextAutoField
                   field={{
                     type: "basicSelector",
-                    label: msg("fields.pinIcon", "Pin Icon"),
-                    options: [
-                      {
-                        label: msg("fields.options.none", "None"),
-                        value: "none",
-                      },
-                      {
-                        label: msg("fields.options.icon", "Icon"),
-                        value: "icon",
-                      },
-                      {
-                        label: msg(
-                          "fields.options.customImage",
-                          "Custom image"
-                        ),
-                        value: "customImage",
-                      },
-                    ],
+                    label: msg("fields.icon", "Icon"),
+                    options: makiIconOptions,
                   }}
-                  value={selectedType}
-                  onChange={(type) =>
-                    onChange({
-                      ...value,
-                      type,
-                      iconName:
-                        type === "icon"
-                          ? (value?.iconName ?? DEFAULT_MAKI_ICON_NAME)
-                          : undefined,
-                    })
+                  value={value?.iconName}
+                  onChange={(iconName) =>
+                    onChange({ ...value, type: "icon", iconName })
                   }
                 />
-                {selectedType === "icon" && (
+              )}
+              {selectedType === "customImage" && (
+                <>
                   <YextAutoField
                     field={{
-                      type: "basicSelector",
-                      label: msg("fields.icon", "Icon"),
-                      options: makiIconOptions,
+                      ...LOCATOR_PIN_ICON_FIELD,
                     }}
-                    value={value?.iconName}
-                    onChange={(iconName) =>
-                      onChange({ ...value, type: "icon", iconName })
+                    value={value?.image}
+                    onChange={(image) =>
+                      onChange({ ...value, type: "customImage", image })
                     }
                   />
-                )}
-                {selectedType === "customImage" && (
-                  <>
+                  <FieldLabel label={pt("fields.options.width", "Width")}>
                     <YextAutoField
                       field={{
-                        ...LOCATOR_PIN_ICON_FIELD,
+                        type: "number",
+                        min: 1,
+                        max: MAX_PIN_ICON_WIDTH,
                       }}
-                      value={value?.image}
-                      onChange={(image) =>
-                        onChange({ ...value, type: "customImage", image })
-                      }
-                    />
-                    <FieldLabel label={pt("fields.options.width", "Width")}>
-                      <YextAutoField
-                        field={{
-                          type: "number",
-                          min: 1,
-                          max: MAX_PIN_ICON_WIDTH,
-                        }}
-                        value={value?.width ?? DEFAULT_PIN_ICON_WIDTH}
-                        onChange={(width) =>
-                          onChange({
-                            ...value,
-                            type: "customImage",
-                            width,
-                          })
-                        }
-                      />
-                    </FieldLabel>
-                    <YextAutoField
-                      field={ImageStylingFields.aspectRatio}
-                      value={value?.aspectRatio}
-                      onChange={(aspectRatio) =>
+                      value={value?.width ?? DEFAULT_PIN_ICON_WIDTH}
+                      onChange={(width) =>
                         onChange({
                           ...value,
                           type: "customImage",
-                          aspectRatio,
+                          width,
                         })
                       }
                     />
-                  </>
-                )}
-              </div>
-            );
-          },
-        },
-        pinColor: {
-          type: "basicSelector",
-          label: msg("fields.pinColor", "Pin Color"),
-          options: "BACKGROUND_COLOR",
+                  </FieldLabel>
+                  <YextAutoField
+                    field={ImageStylingFields.aspectRatio}
+                    value={value?.aspectRatio}
+                    onChange={(aspectRatio) =>
+                      onChange({
+                        ...value,
+                        type: "customImage",
+                        aspectRatio,
+                      })
+                    }
+                  />
+                </>
+              )}
+            </div>
+          );
         },
       },
-      defaultItemProps: {
-        entityType: DEFAULT_ENTITY_TYPE,
-        pinIcon: { type: "none" },
-        pinColor: backgroundColors.background6.value,
+      pinColor: {
+        type: "basicSelector",
+        label: msg("fields.pinColor", "Pin Color"),
+        options: "BACKGROUND_COLOR",
       },
-    }
-  ),
+    },
+    defaultItemProps: {
+      entityType: DEFAULT_ENTITY_TYPE,
+      pinIcon: { type: "none" },
+      pinColor: backgroundColors.background6.value,
+    },
+  },
   filters: {
     label: msg("fields.filters", "Filters"),
     type: "object",
@@ -865,58 +858,56 @@ const locatorFields: YextFields<LocatorProps> = {
       } as any, // TODO(SUMO-8378): remove 'as any' when puck fixes objectFields typing
     },
   },
-  mapStartingLocation: YextField(
-    msg("fields.options.mapStartingLocation", "Map Starting Location"),
-    {
-      type: "object",
-      objectFields: {
-        latitude: {
-          label: msg("fields.latitude", "Latitude"),
-          type: "text",
-        },
-        longitude: {
-          label: msg("fields.longitude", "Longitude"),
-          type: "text",
-        },
+  mapStartingLocation: {
+    type: "object",
+    label: msg("fields.options.mapStartingLocation", "Map Starting Location"),
+    objectFields: {
+      latitude: {
+        label: msg("fields.latitude", "Latitude"),
+        type: "text",
       },
-    }
-  ),
-  pageHeading: YextField<LocatorProps["pageHeading"]>(
-    msg("fields.pageHeading", "Page Heading"),
-    {
-      type: "object",
-      objectFields: {
-        title: {
-          type: "translatableString",
-          label: msg("fields.title", "Title"),
-          filter: { types: ["type.string"] },
-        },
-        color: {
-          type: "basicSelector",
-          label: msg("fields.color", "Color"),
-          options: "SITE_COLOR",
-        },
+      longitude: {
+        label: msg("fields.longitude", "Longitude"),
+        type: "text",
       },
-    }
-  ),
-  resultCard: YextField<LocatorProps["resultCard"]>(
-    msg("fields.resultCard", "Result Card"),
-    {
-      type: "array",
-      getItemSummary: (item) => getEntityTypeLabel(item.props.entityType),
-      arrayFields: {
-        props: {
-          type: "custom",
-          render: ({ value, onChange }) => (
-            <ResultCardPropsField value={value} onChange={onChange} />
-          ),
-        },
+    },
+  },
+  pageHeading: {
+    type: "object",
+    label: msg("fields.pageHeading", "Page Heading"),
+    objectFields: {
+      title: {
+        type: "translatableString",
+        label: msg("fields.title", "Title"),
+        filter: { types: ["type.string"] },
       },
-      defaultItemProps: {
-        props: DEFAULT_LOCATOR_RESULT_CARD_PROPS,
+      color: {
+        type: "basicSelector",
+        label: msg("fields.color", "Color"),
+        options: "SITE_COLOR",
       },
-    }
-  ),
+    },
+  },
+  resultCard: {
+    type: "array",
+    label: msg("fields.resultCard", "Result Card"),
+    getItemSummary: (item: LocatorProps["resultCard"][number]) =>
+      getEntityTypeLabel(item.props.entityType),
+    arrayFields: {
+      props: {
+        type: "custom",
+        render: ({
+          value,
+          onChange,
+        }: YextCustomFieldRenderProps<
+          LocatorProps["resultCard"][number]["props"]
+        >) => <ResultCardPropsField value={value} onChange={onChange} />,
+      },
+    },
+    defaultItemProps: {
+      props: DEFAULT_LOCATOR_RESULT_CARD_PROPS,
+    },
+  },
   distanceDisplay: {
     type: "basicSelector",
     label: msg("fields.distanceDisplay", "Distance Display"),

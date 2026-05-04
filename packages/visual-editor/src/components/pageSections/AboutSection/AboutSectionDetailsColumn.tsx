@@ -213,7 +213,7 @@ const aboutSectionDetailsColumnFields: YextFields<AboutSectionDetailsColumnProps
         content: {
           type: "custom",
           label: msg("fields.content", "Content"),
-          render: (props) => {
+          render: (props: any) => {
             const { value, onChange } = props;
 
             return (
@@ -226,7 +226,10 @@ const aboutSectionDetailsColumnFields: YextFields<AboutSectionDetailsColumnProps
                   <YextAutoField
                     value={value.type}
                     onChange={(v) => {
-                      onChange({ type: v, [v]: defaultAboutSectionProps[v] });
+                      onChange({
+                        type: v,
+                        [v]: (defaultAboutSectionProps as any)[v],
+                      });
                     }}
                     field={{
                       type: "basicSelector",
@@ -275,7 +278,8 @@ const aboutSectionDetailsColumnFields: YextFields<AboutSectionDetailsColumnProps
                 </FieldLabel>
                 <YextAutoField
                   value={
-                    value?.[value.type] ?? defaultAboutSectionProps[value.type]
+                    (value as any)?.[value.type] ??
+                    (defaultAboutSectionProps as any)[value.type]
                   }
                   onChange={(v) =>
                     onChange({ type: value.type, [value.type]: v })
