@@ -523,7 +523,6 @@
     "search": "Sök teckensnitt ..."
   },
   "fontSize": "Fontstorlek",
-  "fontSizeDefaultLabel": "Standard",
   "friday": "Fredag",
   "getDirections": "Få vägbeskrivning",
   "getDirectionsForLocation": "Få vägbeskrivningar för {{address}}",

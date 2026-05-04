@@ -523,7 +523,6 @@
     "search": "搜索字体..."
   },
   "fontSize": "字体大小",
-  "fontSizeDefaultLabel": "默认",
   "friday": "星期五",
   "getDirections": "获取指示",
   "getDirectionsForLocation": "获取 {{address}} 的路线",

@@ -523,7 +523,6 @@
     "search": "Meklēt fontus ..."
   },
   "fontSize": "Fonta lielums",
-  "fontSizeDefaultLabel": "Nepildīt",
   "friday": "Piektdiena",
   "getDirections": "Saņemt norādes",
   "getDirectionsForLocation": "Saņemiet norādes uz {{address}}",

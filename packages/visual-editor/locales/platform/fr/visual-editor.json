@@ -523,7 +523,6 @@
     "search": "Rechercher des polices ..."
   },
   "fontSize": "Taille de la police",
-  "fontSizeDefaultLabel": "Défaut",
   "friday": "Vendredi",
   "getDirections": "Obtenir des itinéraires",
   "getDirectionsForLocation": "Obtenir un itinéraire pour {{address}}",

@@ -523,7 +523,6 @@
     "search": "Pretražite fontove ..."
   },
   "fontSize": "Veličina fonta",
-  "fontSizeDefaultLabel": "Zadano",
   "friday": "petak",
   "getDirections": "Dobiti upute",
   "getDirectionsForLocation": "Preuzmite upute za {{address}}",

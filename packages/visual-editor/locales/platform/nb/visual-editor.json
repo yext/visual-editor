@@ -523,7 +523,6 @@
     "search": "Søkefonter ..."
   },
   "fontSize": "Fontstørrelse",
-  "fontSizeDefaultLabel": "Misligholde",
   "friday": "fredag",
   "getDirections": "Få veibeskrivelse",
   "getDirectionsForLocation": "Få veibeskrivelse for {{address}}",

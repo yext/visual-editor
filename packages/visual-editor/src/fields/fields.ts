@@ -33,11 +33,11 @@ import { ImageField, ImageFieldOverride } from "./ImageField.tsx";
 import {
   StyledButtonField,
   StyledButtonFieldOverride,
-} from "./StyledButtonField.tsx";
+} from "./styledFields/StyledButtonField.tsx";
 import {
   StyledTextField,
   StyledTextFieldOverride,
-} from "./StyledTextField.tsx";
+} from "./styledFields/StyledTextField.tsx";
 import {
   TranslatableStringField,
   TranslatableStringFieldOverride,
