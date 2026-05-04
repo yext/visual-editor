@@ -1,3 +1,5 @@
+export * from "./styledFields/index.ts";
+
 export {
   BasicSelectorFieldOverride,
   type BasicSelectorField,
