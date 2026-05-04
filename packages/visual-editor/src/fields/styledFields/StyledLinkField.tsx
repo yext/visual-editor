@@ -7,14 +7,13 @@ import {
   useTypographyOptions,
   withDefaultOption,
 } from "./baseText.tsx";
-import { msg, MsgString, pt } from "../../utils/i18n/platform.ts";
+import { MsgString, pt } from "../../utils/i18n/platform.ts";
 import { ThemeOptions } from "../../utils/themeConfigOptions.ts";
 import { Combobox } from "../../internal/puck/ui/Combobox.tsx";
-import { YextAutoField } from "../YextAutoField.tsx";
 
 export type StyledLinkValue = BaseTextStyles & {
   letterSpacing: string;
-  includeCaret: boolean;
+  includeCaret: string;
 };
 
 export type StyledLinkField = BaseField & {
@@ -28,7 +27,7 @@ type StyledLinkFieldProps = FieldProps<StyledLinkField, StyledLinkValue>;
 const defaultStyledLinkValue: StyledLinkValue = {
   ...defaultBaseTextStyles,
   letterSpacing: "default",
-  includeCaret: false,
+  includeCaret: "default",
 };
 
 /**
@@ -49,6 +48,11 @@ export const StyledLinkFieldOverride = ({
   const { updateValue } = typographyOptions;
 
   const letterSpacingOptions = withDefaultOption(ThemeOptions.LETTER_SPACING);
+  const includeCaretOptions = [
+    { label: pt("default", "Default"), value: "default" },
+    { label: pt("fields.options.yes", "Yes"), value: "block" },
+    { label: pt("fields.options.no", "No"), value: "none" },
+  ];
 
   return (
     <div>
@@ -78,16 +82,15 @@ export const StyledLinkFieldOverride = ({
             />
           </FieldLabel>
           <FieldLabel label={pt("theme.includeCaret", "Include Caret")}>
-            <YextAutoField
-              field={{
-                type: "radio",
-                options: [
-                  { label: msg("fields.options.yes", "Yes"), value: "block" },
-                  { label: msg("fields.options.no", "No"), value: "none" },
-                ],
-              }}
-              value={currentValue?.includeCaret}
+            <Combobox
+              selectedOption={
+                includeCaretOptions.find(
+                  (option) => option.value === currentValue.includeCaret
+                ) ?? includeCaretOptions[0]
+              }
               onChange={(nextValue) => updateValue("includeCaret", nextValue)}
+              optionGroups={[{ options: includeCaretOptions }]}
+              disableSearch
             />
           </FieldLabel>
         </div>
