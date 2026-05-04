@@ -94,7 +94,8 @@ export const YextPuckFieldOverrides = {
   ctaSelector: CTASelectorFieldOverride,
   code: CodeFieldOverride,
   dateTimeSelector: DateTimeSelectorFieldOverride,
-  entityField: EntityFieldSelectorFieldOverride,
+  entityField: (...args: Parameters<typeof EntityFieldSelectorFieldOverride>) =>
+    EntityFieldSelectorFieldOverride(...args),
   multiSelector: MultiSelectorFieldOverride,
   fontSizeSelector: FontSizeSelectorFieldOverride,
   image: ImageFieldOverride,

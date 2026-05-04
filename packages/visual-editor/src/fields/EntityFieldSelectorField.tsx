@@ -244,6 +244,8 @@ export const EntityFieldSelectorFieldOverride = ({
 }: EntityFieldSelectorFieldProps) => {
   const translatedLabel = field.label ? pt(field.label) : "";
   const constantValueFilter = field.constantValueFilter ?? field.filter;
+  const constantValueEnabled =
+    !field.disableConstantValueToggle && !!value?.constantValueEnabled;
   const allowsListValues = !!constantValueFilter.includeListsOnly;
   const canUseEmbeddedStringConstantValue =
     constantValueFilter.types?.includes("type.string") &&
@@ -261,14 +263,14 @@ export const EntityFieldSelectorFieldOverride = ({
   }
   const constantValueModeSupported = !!constantFieldConfig;
   const showConstantValueInput =
-    !!value?.constantValueEnabled && constantValueModeSupported;
+    constantValueEnabled && constantValueModeSupported;
 
   return (
     <>
       {constantValueModeSupported ? (
         <ConstantValueModeToggler
           fieldTypeFilter={constantValueFilter.types ?? []}
-          constantValueEnabled={value?.constantValueEnabled}
+          constantValueEnabled={constantValueEnabled}
           toggleConstantValueEnabled={(constantValueEnabled) =>
             onChange({
               ...value,
