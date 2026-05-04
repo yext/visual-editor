@@ -306,6 +306,7 @@
         "primary": "Stevig",
         "secondary": "Overzicht"
       },
+      "customImage": "Aangepaste afbeelding",
       "dark": "Donker",
       "default": "Standaard",
       "distanceFromSearch": "Afstand vanaf zoeken",

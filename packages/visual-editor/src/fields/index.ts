@@ -1,3 +1,5 @@
+export * from "./styledFields/index.ts";
+
 export {
   BasicSelectorFieldOverride,
   type BasicSelectorField,
@@ -16,6 +18,11 @@ export {
   DateTimeSelectorFieldOverride,
   type DateTimeSelectorField,
 } from "./DateTimeSelectorField.tsx";
+
+export {
+  EntityFieldSelectorFieldOverride,
+  type EntityFieldSelectorField,
+} from "./EntityFieldSelectorField.tsx";
 
 export {
   FontSizeSelectorFieldOverride,

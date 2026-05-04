@@ -5,18 +5,6 @@ import { msg } from "../utils/i18n/platform.ts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { YextField } from "./YextField.tsx";
 
-const { yextEntityFieldSelectorMock } = vi.hoisted(() => ({
-  yextEntityFieldSelectorMock: vi.fn(),
-}));
-
-vi.mock("./YextEntityFieldSelector.tsx", async () => {
-  const actual = await vi.importActual("./YextEntityFieldSelector.tsx");
-  return {
-    ...actual,
-    YextEntityFieldSelector: yextEntityFieldSelectorMock,
-  };
-});
-
 const renderCustomField = (field: any, value?: any) => {
   const onChange = vi.fn();
 
@@ -31,11 +19,6 @@ const renderCustomField = (field: any, value?: any) => {
 
   return { onChange };
 };
-
-const createCustomField = () => ({
-  type: "custom" as const,
-  render: vi.fn(() => null),
-});
 
 afterEach(() => {
   vi.resetAllMocks();
@@ -88,29 +71,6 @@ describe("YextField", () => {
 
     expect(document.querySelector("textarea")).toBeDefined();
     expect(screen.getByDisplayValue("Beta")).toBeDefined();
-  });
-
-  it("delegates entityField configs to YextEntityFieldSelector", () => {
-    const returnedField = createCustomField();
-    const fieldName = msg("fields.entity", "Entity Field");
-    const filter = { types: ["type.string"] };
-
-    yextEntityFieldSelectorMock.mockReturnValue(returnedField);
-
-    const field = YextField(fieldName, {
-      type: "entityField",
-      filter,
-      disableConstantValueToggle: true,
-      disallowTranslation: true,
-    } as any);
-
-    expect(yextEntityFieldSelectorMock).toHaveBeenCalledWith({
-      label: fieldName,
-      filter,
-      disableConstantValueToggle: true,
-      disallowTranslation: true,
-    });
-    expect(field).toBe(returnedField);
   });
 
   it("passes registered custom field configs through with the provided label", () => {

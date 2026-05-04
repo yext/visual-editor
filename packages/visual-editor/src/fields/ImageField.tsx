@@ -43,6 +43,8 @@ export type ImageField = BaseField & {
   type: "image";
   label?: string | MsgString;
   visible?: boolean;
+  hideAltTextField?: boolean;
+  maxFileSizeBytes?: number;
   getAltTextOptions?: (
     templateMetadata: TemplateMetadata
   ) => EmbeddedStringOption[];
@@ -162,6 +164,7 @@ export const ImageFieldOverride = ({
         type: "ImageAsset",
         value: resolvedValue,
         id: messageId,
+        maxFileSizeBytes: field.maxFileSizeBytes,
       },
     });
   };
@@ -265,7 +268,7 @@ export const ImageFieldOverride = ({
         </div>
       </FieldLabel>
 
-      {resolvedValue && (
+      {resolvedValue && !field.hideAltTextField && (
         <FieldLabel label="" el="div">
           <YextAutoField
             field={altTextField}

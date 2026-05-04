@@ -306,6 +306,7 @@
         "primary": "Solid",
         "secondary": "Disposition"
       },
+      "customImage": "Brugerdefineret billede",
       "dark": "Mørk",
       "default": "Misligholdelse",
       "distanceFromSearch": "Afstand fra søgning",

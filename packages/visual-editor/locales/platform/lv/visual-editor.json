@@ -306,6 +306,7 @@
         "primary": "Ciets",
         "secondary": "Kontūra"
       },
+      "customImage": "Pielāgots attēls",
       "dark": "Tumšs",
       "default": "Nepildīt",
       "distanceFromSearch": "Attālums no meklēšanas",

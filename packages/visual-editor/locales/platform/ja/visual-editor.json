@@ -306,6 +306,7 @@
         "primary": "固体",
         "secondary": "概要"
       },
+      "customImage": "カスタムイメージ",
       "dark": "暗い",
       "default": "デフォルト",
       "distanceFromSearch": "検索からの距離",

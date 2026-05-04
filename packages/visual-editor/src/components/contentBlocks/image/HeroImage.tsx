@@ -103,7 +103,7 @@ export const HeroImage: YextComponentConfig<HeroImageProps> = {
     switch (data.props.variant ?? "classic") {
       case "compact": {
         fields = setDeep(fields, "styles.objectFields.width.visible", false);
-        // compact should also remove the props removed by classic
+        // compact should also hide the props hidden by classic
       }
       case "classic": {
         fields = setDeep(

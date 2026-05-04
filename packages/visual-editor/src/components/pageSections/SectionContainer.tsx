@@ -40,15 +40,13 @@ const sectionContainerFields: YextFields<SectionContainerProps> = {
   sectionHeading: YextField(msg("fields.sectionHeading", "Section Heading"), {
     type: "object",
     objectFields: {
-      text: YextField<any, TranslatableString>(
-        msg("fields.sectionHeadingText", "Section Heading Text"),
-        {
-          type: "entityField",
-          filter: {
-            types: ["type.string"],
-          },
-        }
-      ),
+      text: {
+        type: "entityField",
+        label: msg("fields.sectionHeadingText", "Section Heading Text"),
+        filter: {
+          types: ["type.string"],
+        },
+      },
       level: {
         type: "basicSelector",
         label: msg("fields.headingLevel", "Heading Level"),

@@ -14,6 +14,10 @@ import {
   DateTimeSelectorFieldOverride,
 } from "./DateTimeSelectorField.tsx";
 import {
+  EntityFieldSelectorField,
+  EntityFieldSelectorFieldOverride,
+} from "./EntityFieldSelectorField.tsx";
+import {
   FontSizeSelectorField,
   FontSizeSelectorFieldOverride,
 } from "./FontSizeSelectorField.tsx";
@@ -49,6 +53,7 @@ export type YextPuckFields = {
   ctaSelector: CTASelectorField;
   code: CodeField;
   dateTimeSelector: DateTimeSelectorField;
+  entityField: EntityFieldSelectorField;
   multiSelector: MultiSelectorField;
   fontSizeSelector: FontSizeSelectorField;
   image: ImageField;
@@ -94,6 +99,7 @@ export const YextPuckFieldOverrides = {
   ctaSelector: CTASelectorFieldOverride,
   code: CodeFieldOverride,
   dateTimeSelector: DateTimeSelectorFieldOverride,
+  entityField: EntityFieldSelectorFieldOverride,
   multiSelector: MultiSelectorFieldOverride,
   fontSizeSelector: FontSizeSelectorFieldOverride,
   image: ImageFieldOverride,

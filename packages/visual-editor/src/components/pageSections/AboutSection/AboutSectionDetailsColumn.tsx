@@ -14,7 +14,6 @@ import { StreamDocument } from "../../../utils/types/StreamDocument.ts";
 import { TranslatableString } from "../../../types/types.ts";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
-import { YextField } from "../../../editor/YextField.tsx";
 import { YextAutoField } from "../../../fields/YextAutoField.tsx";
 import {
   HoursStatus,
@@ -204,15 +203,13 @@ const aboutSectionDetailsColumnFields: YextFields<AboutSectionDetailsColumnProps
       type: "array",
       label: msg("fields.sections", "Sections"),
       arrayFields: {
-        header: YextField<any, TranslatableString>(
-          msg("fields.header", "Header"),
-          {
-            type: "entityField",
-            filter: {
-              types: ["type.string"],
-            },
-          }
-        ),
+        header: {
+          type: "entityField",
+          label: msg("fields.header", "Header"),
+          filter: {
+            types: ["type.string"],
+          },
+        },
         content: {
           type: "custom",
           label: msg("fields.content", "Content"),

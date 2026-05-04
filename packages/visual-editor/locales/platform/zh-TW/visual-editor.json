@@ -306,6 +306,7 @@
         "primary": "堅硬的",
         "secondary": "大綱"
       },
+      "customImage": "自訂圖片",
       "dark": "黑暗的",
       "default": "預設",
       "distanceFromSearch": "與搜尋的距離",

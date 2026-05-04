@@ -306,6 +306,7 @@
         "primary": "Solide",
         "secondary": "Umrandet"
       },
+      "customImage": "Benutzerdefiniertes Bild",
       "dark": "Dunkel",
       "default": "Standard",
       "distanceFromSearch": "Entfernung von der Suche",

@@ -34,15 +34,14 @@ export interface HoursTableProps {
 }
 
 // HoursTable data field used in HoursTable and CoreInfoSection
-export const HoursTableDataField = YextField<any, HoursType>(
-  msg("fields.hours", "Hours"),
+export const HoursTableDataField: YextFields<HoursTableProps["data"]>["hours"] =
   {
     type: "entityField",
+    label: msg("fields.hours", "Hours"),
     filter: {
       types: ["type.hours"],
     },
-  }
-);
+  };
 
 type HoursTableStyleFieldProps = Omit<HoursTableProps["styles"], "alignment">;
 

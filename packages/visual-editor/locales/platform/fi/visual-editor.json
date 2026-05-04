@@ -306,6 +306,7 @@
         "primary": "Kiinteä",
         "secondary": "Outline"
       },
+      "customImage": "Mukautettu kuva",
       "dark": "Tumma",
       "default": "Oletus",
       "distanceFromSearch": "Etäisyys hausta",

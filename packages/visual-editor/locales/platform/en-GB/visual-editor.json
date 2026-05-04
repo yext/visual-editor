@@ -306,6 +306,7 @@
         "primary": "Solid",
         "secondary": "Outline"
       },
+      "customImage": "Custom image",
       "dark": "Dark",
       "default": "Default",
       "distanceFromSearch": "Distance from Search",

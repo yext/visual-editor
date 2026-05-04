@@ -306,6 +306,7 @@
         "primary": "Tvirtas",
         "secondary": "Kontūras"
       },
+      "customImage": "Pasirinktinis vaizdas",
       "dark": "Tamsu",
       "default": "Numatytasis",
       "distanceFromSearch": "Atstumas nuo paieškos",

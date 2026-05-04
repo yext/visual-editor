@@ -306,6 +306,7 @@
         "primary": "Pevné",
         "secondary": "Obrys"
       },
+      "customImage": "Vlastný obrázok",
       "dark": "Tmavý",
       "default": "Predvolený",
       "distanceFromSearch": "Vzdialenosť od vyhľadávania",

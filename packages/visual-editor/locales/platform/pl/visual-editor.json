@@ -306,6 +306,7 @@
         "primary": "Solidny",
         "secondary": "Zarys"
       },
+      "customImage": "Niestandardowy obraz",
       "dark": "Ciemny",
       "default": "Domyślny",
       "distanceFromSearch": "Odległość od wyszukiwania",
