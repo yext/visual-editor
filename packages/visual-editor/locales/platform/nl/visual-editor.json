@@ -528,7 +528,6 @@
     "search": "Zoek lettertypen ..."
   },
   "fontSize": "Lettergrootte",
-  "fontSizeDefaultLabel": "Standaard",
   "friday": "Vrijdag",
   "getDirections": "Routebeschrijving",
   "getDirectionsForLocation": "Routebeschrijving opvragen voor {{address}}",

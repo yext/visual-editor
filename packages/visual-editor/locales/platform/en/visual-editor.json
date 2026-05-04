@@ -528,7 +528,6 @@
     "search": "Search fonts..."
   },
   "fontSize": "Font Size",
-  "fontSizeDefaultLabel": "Default",
   "friday": "Friday",
   "getDirections": "Get Directions",
   "getDirectionsForLocation": "Get Directions for {{address}}",

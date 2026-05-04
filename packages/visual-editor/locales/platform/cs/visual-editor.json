@@ -528,7 +528,6 @@
     "search": "Hledat písma ..."
   },
   "fontSize": "Velikost písma",
-  "fontSizeDefaultLabel": "Výchozí",
   "friday": "pátek",
   "getDirections": "Získejte pokyny",
   "getDirectionsForLocation": "Získat trasu pro {{address}}",

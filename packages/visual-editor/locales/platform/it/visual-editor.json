@@ -528,7 +528,6 @@
     "search": "Cerca caratteri ..."
   },
   "fontSize": "Dimensione del carattere",
-  "fontSizeDefaultLabel": "Predefinito",
   "friday": "Venerdì",
   "getDirections": "Ottieni indicazioni",
   "getDirectionsForLocation": "Ottieni indicazioni per {{address}}",

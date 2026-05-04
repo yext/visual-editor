@@ -528,7 +528,6 @@
     "search": "Søg skrifttyper ..."
   },
   "fontSize": "Skrifttypestørrelse",
-  "fontSizeDefaultLabel": "Misligholdelse",
   "friday": "fredag",
   "getDirections": "Få rutevejledning",
   "getDirectionsForLocation": "Få rutevejledning til {{address}}",

@@ -528,7 +528,6 @@
     "search": "Wyszukaj czcionki ..."
   },
   "fontSize": "Rozmiar czcionki",
-  "fontSizeDefaultLabel": "Domyślny",
   "friday": "Piątek",
   "getDirections": "Uzyskaj wskazówki",
   "getDirectionsForLocation": "Uzyskaj wskazówki dojazdu do {{address}}",

@@ -528,7 +528,6 @@
     "search": "Fuentes de búsqueda ..."
   },
   "fontSize": "Tamaño de fuente",
-  "fontSizeDefaultLabel": "Por defecto",
   "friday": "Viernes",
   "getDirections": "Obtener instrucciones",
   "getDirectionsForLocation": "Obtener indicaciones para {{address}}",

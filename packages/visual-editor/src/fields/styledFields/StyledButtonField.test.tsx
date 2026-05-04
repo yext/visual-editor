@@ -7,13 +7,13 @@ import {
   within,
 } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { TemplateMetadataContext } from "../internal/hooks/useMessageReceivers.ts";
-import { type TemplateMetadata } from "../internal/types/templateMetadata.ts";
-import { YextAutoField } from "./YextAutoField.tsx";
+import { TemplateMetadataContext } from "../../internal/hooks/useMessageReceivers.ts";
+import { type TemplateMetadata } from "../../internal/types/templateMetadata.ts";
+import { YextAutoField } from "../YextAutoField.tsx";
 import {
-  type StyledTextField,
-  type StyledTextValue,
-} from "./StyledTextField.tsx";
+  type StyledButtonField,
+  type StyledButtonValue,
+} from "./StyledButtonField.tsx";
 
 const customFonts = {
   "Weights Only": {
@@ -28,9 +28,9 @@ const customFonts = {
   },
 } satisfies TemplateMetadata["customFonts"];
 
-const field: StyledTextField = {
-  type: "styledText",
-  label: "Styled Text",
+const field: StyledButtonField = {
+  type: "styledButton",
+  label: "Styled Button",
 };
 
 const templateMetadata = {
@@ -50,25 +50,27 @@ const templateMetadata = {
   customFonts,
 } satisfies TemplateMetadata;
 
-const styledTextValue = (
-  overrides: Partial<StyledTextValue> = {}
-): StyledTextValue => ({
+const styledButtonValue = (
+  overrides: Partial<StyledButtonValue> = {}
+): StyledButtonValue => ({
   fontFamily: "default",
   fontSize: "default",
   fontWeight: "default",
   fontStyle: "default",
   textTransform: "default",
+  borderRadius: "default",
+  letterSpacing: "default",
   ...overrides,
 });
 
-const renderField = (value: StyledTextValue = styledTextValue()) => {
+const renderField = (value: StyledButtonValue = styledButtonValue()) => {
   const onChange = vi.fn();
 
   render(
     <TemplateMetadataContext.Provider value={templateMetadata}>
       <YextAutoField
         field={field}
-        id="styled-text"
+        id="styled-button"
         onChange={onChange}
         value={value}
       />
@@ -78,33 +80,39 @@ const renderField = (value: StyledTextValue = styledTextValue()) => {
   return { onChange };
 };
 
-describe("StyledTextField", () => {
+describe("StyledButtonField", () => {
   it("renders through YextAutoField as a registered field type", () => {
     renderField(
-      styledTextValue({
+      styledButtonValue({
         fontFamily: "'Weights Only', 'Weights Only Fallback', sans-serif",
         fontSize: "24px",
         fontWeight: "700",
         fontStyle: "italic",
         textTransform: "uppercase",
+        borderRadius: "4px",
+        letterSpacing: "0.025em",
       })
     );
 
-    expect(screen.getByText("Styled Text")).toBeDefined();
+    expect(screen.getByText("Styled Button")).toBeDefined();
     expect(screen.getByText("Weights Only")).toBeDefined();
     expect(screen.getByText("2XL (24px)")).toBeDefined();
     expect(screen.getByDisplayValue("Bold (700)")).toBeDefined();
     expect(screen.getByDisplayValue("Italic")).toBeDefined();
     expect(screen.getByText("Uppercase")).toBeDefined();
+    expect(screen.getByText("SM (4px)")).toBeDefined();
+    expect(screen.getByText("Wide (0.025em)")).toBeDefined();
   });
 
   it("updates each control while preserving existing values", () => {
-    const initialValue: StyledTextValue = styledTextValue({
+    const initialValue: StyledButtonValue = styledButtonValue({
       fontFamily: "'Weights Only', 'Weights Only Fallback', sans-serif",
       fontSize: "24px",
       fontWeight: "700",
       fontStyle: "italic",
       textTransform: "uppercase",
+      borderRadius: "4px",
+      letterSpacing: "0.025em",
     });
     const { onChange } = renderField(initialValue);
 
@@ -146,11 +154,25 @@ describe("StyledTextField", () => {
       ...initialValue,
       textTransform: "lowercase",
     });
+
+    fireEvent.click(screen.getByText("SM (4px)"));
+    fireEvent.click(screen.getByText("LG (8px)"));
+    expect(onChange).toHaveBeenCalledWith({
+      ...initialValue,
+      borderRadius: "8px",
+    });
+
+    fireEvent.click(screen.getByText("Wide (0.025em)"));
+    fireEvent.click(screen.getByText("Wider (0.05em)"));
+    expect(onChange).toHaveBeenCalledWith({
+      ...initialValue,
+      letterSpacing: "0.05em",
+    });
   });
 
   it("filters font weights based on the selected font", () => {
     renderField(
-      styledTextValue({
+      styledButtonValue({
         fontFamily: "'No Italic', 'No Italic Fallback', serif",
         fontWeight: "400",
       })
@@ -165,7 +187,7 @@ describe("StyledTextField", () => {
 
   it("filters font styles based on the selected font", () => {
     renderField(
-      styledTextValue({
+      styledButtonValue({
         fontFamily: "'No Italic', 'No Italic Fallback', serif",
         fontStyle: "normal",
       })
@@ -180,21 +202,25 @@ describe("StyledTextField", () => {
 
   it("resets invalid font weight and font style values in a single update", async () => {
     const { onChange } = renderField(
-      styledTextValue({
+      styledButtonValue({
         fontFamily: "'No Italic', 'No Italic Fallback', serif",
         fontWeight: "700",
         fontStyle: "italic",
         textTransform: "uppercase",
+        borderRadius: "4px",
+        letterSpacing: "0.025em",
       })
     );
 
     await waitFor(() => {
       expect(onChange).toHaveBeenCalledWith({
         fontFamily: "'No Italic', 'No Italic Fallback', serif",
+        fontSize: "default",
         fontWeight: "default",
         fontStyle: "default",
-        fontSize: "default",
         textTransform: "uppercase",
+        borderRadius: "4px",
+        letterSpacing: "0.025em",
       });
     });
     expect(onChange).toHaveBeenCalledTimes(1);
