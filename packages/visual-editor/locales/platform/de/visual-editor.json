@@ -524,7 +524,6 @@
     "search": "Schriftarten suchen ..."
   },
   "fontSize": "Schriftgröße",
-  "fontSizeDefaultLabel": "Standard",
   "friday": "Freitag",
   "getDirections": "Route planen",
   "getDirectionsForLocation": "Wegbeschreibung für {{address}} abrufen",

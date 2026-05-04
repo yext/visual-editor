@@ -524,7 +524,6 @@
     "search": "Keresési betűtípusok ..."
   },
   "fontSize": "Betűkészlet",
-  "fontSizeDefaultLabel": "Mulasztás",
   "friday": "péntek",
   "getDirections": "Szerezzen útmutatásokat",
   "getDirectionsForLocation": "Útvonaltervezés ehhez: {{address}}",

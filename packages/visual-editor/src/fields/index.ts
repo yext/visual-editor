@@ -1,3 +1,5 @@
+export * from "./styledFields/index.ts";
+
 export {
   BasicSelectorFieldOverride,
   type BasicSelectorField,
@@ -40,12 +42,6 @@ export {
   OptionalNumberFieldOverride,
   type OptionalNumberField,
 } from "./OptionalNumberField.tsx";
-
-export {
-  StyledTextFieldOverride,
-  type StyledTextField,
-  type StyledTextValue,
-} from "./StyledTextField.tsx";
 
 export {
   TranslatableStringFieldOverride,

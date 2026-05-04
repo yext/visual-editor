@@ -524,7 +524,6 @@
     "search": "搜索字體..."
   },
   "fontSize": "字體大小",
-  "fontSizeDefaultLabel": "預設",
   "friday": "星期五",
   "getDirections": "獲取指示",
   "getDirectionsForLocation": "取得 {{address}} 的路線",

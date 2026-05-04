@@ -524,7 +524,6 @@
     "search": "Yazı tiplerini arama ..."
   },
   "fontSize": "Yazı tipi boyutu",
-  "fontSizeDefaultLabel": "Varsayılan",
   "friday": "Cuma",
   "getDirections": "Yol tarifi alın",
   "getDirectionsForLocation": "{{address}} için Yol Tarifi Alın",

@@ -524,7 +524,6 @@
     "search": "Haku fontit ..."
   },
   "fontSize": "Fontin koko",
-  "fontSizeDefaultLabel": "Laiminlyönti",
   "friday": "perjantai",
   "getDirections": "Hanki reittiohjeet",
   "getDirectionsForLocation": "Hanki reittiohjeet kohteeseen {{address}}",

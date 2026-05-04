@@ -524,7 +524,6 @@
     "search": "フォントを検索..."
   },
   "fontSize": "フォントサイズ",
-  "fontSizeDefaultLabel": "デフォルト",
   "friday": "金曜日",
   "getDirections": "道順を取得します",
   "getDirectionsForLocation": "{{address}} への行き方を調べる",
