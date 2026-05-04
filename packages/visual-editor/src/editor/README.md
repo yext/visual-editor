@@ -380,7 +380,7 @@ Creates a numeric input field with optional min and max values. [Additional docu
 spacing: {
   label: msg("fields.spacing", "Spacing"),
   type: "number",
-};
+},
 ```
 
 **Props:**
@@ -409,7 +409,7 @@ items: {
       type: "text",
     },
   },
-};
+},
 ```
 
 **Props:**
@@ -441,7 +441,7 @@ card: {
       type: "textarea",
     },
   },
-};
+},
 ```
 
 **Props:**

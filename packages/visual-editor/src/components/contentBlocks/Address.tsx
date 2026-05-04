@@ -204,16 +204,16 @@ export const resolveAddressFields = (
     "type"
   >
 ) => {
-  const updatedFields = resolveDataFromParent(addressFields, data);
+  let updatedFields = resolveDataFromParent(addressFields, data);
   const showGetDirectionsLink = data.props.styles.showGetDirectionsLink;
-  setDeep(
+  updatedFields = setDeep(
     updatedFields,
     "styles.objectFields.ctaVariant.visible",
     showGetDirectionsLink
   );
   const ctaVariant = data.props.styles.ctaVariant;
   const showColor = isCtaVariantWithColor(ctaVariant);
-  setDeep(
+  updatedFields = setDeep(
     updatedFields,
     "styles.objectFields.color.visible",
     showGetDirectionsLink && showColor

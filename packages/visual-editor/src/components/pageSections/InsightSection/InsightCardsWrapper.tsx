@@ -15,7 +15,7 @@ import {
   InsightCardProps,
 } from "./InsightCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
-import { YextComponentConfig } from "../../../fields/fields.ts";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 export type InsightCardsWrapperProps = CardWrapperType<InsightSectionType> & {
   styles: {
@@ -27,7 +27,7 @@ export type InsightCardsWrapperProps = CardWrapperType<InsightSectionType> & {
   };
 };
 
-const insightCardsWrapperFields = {
+const insightCardsWrapperFields: YextFields<InsightCardsWrapperProps> = {
   ...cardWrapperFields<InsightCardsWrapperProps>(
     msg("fields.insights", "Insights"),
     ComponentFields.InsightSection.type

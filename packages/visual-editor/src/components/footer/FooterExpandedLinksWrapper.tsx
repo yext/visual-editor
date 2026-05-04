@@ -17,113 +17,118 @@ import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
 import { ThemeColor } from "../../utils/themeConfigOptions.ts";
 import { cva } from "class-variance-authority";
 import { themeManagerCn } from "../../utils/cn.ts";
-import { YextComponentConfig } from "../../fields/fields.ts";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  YextFields,
+} from "../../fields/fields.ts";
 
 const defaultSection = {
   label: { defaultValue: "Footer Label" },
   links: defaultLinks,
 };
 
-const footerExpandedLinksWrapperFields = {
-  data: {
-    type: "object",
-    label: msg("fields.data", "Data"),
-    objectFields: {
-      sections: {
-        type: "array",
-        label: msg("fields.expandedFooterLinks", "Expanded Footer Links"),
-        arrayFields: {
-          label: {
-            type: "translatableString",
-            label: msg("fields.sectionLabel", "Section Label"),
-            filter: { types: ["type.string"] },
-          },
-          links: {
-            type: "array",
-            label: msg("fields.links", "Links"),
-            arrayFields: {
-              linkType: {
-                label: msg("fields.linkType", "Link Type"),
-                type: "radio",
-                options: [
-                  { label: msg("fields.options.url", "URL"), value: "URL" },
-                  {
-                    label: msg("fields.options.phone", "Phone"),
-                    value: "PHONE",
-                  },
-                  {
-                    label: msg("fields.options.email", "Email"),
-                    value: "EMAIL",
-                  },
-                ],
+const footerExpandedLinksWrapperFields: YextFields<FooterExpandedLinksWrapperProps> =
+  {
+    data: {
+      type: "object",
+      label: msg("fields.data", "Data"),
+      objectFields: {
+        sections: {
+          type: "array",
+          label: msg("fields.expandedFooterLinks", "Expanded Footer Links"),
+          arrayFields: {
+            label: {
+              type: "translatableString",
+              label: msg("fields.sectionLabel", "Section Label"),
+              filter: { types: ["type.string"] },
+            },
+            links: {
+              type: "array",
+              label: msg("fields.links", "Links"),
+              arrayFields: {
+                linkType: {
+                  label: msg("fields.linkType", "Link Type"),
+                  type: "radio",
+                  options: [
+                    { label: msg("fields.options.url", "URL"), value: "URL" },
+                    {
+                      label: msg("fields.options.phone", "Phone"),
+                      value: "PHONE",
+                    },
+                    {
+                      label: msg("fields.options.email", "Email"),
+                      value: "EMAIL",
+                    },
+                  ],
+                },
+                label: {
+                  type: "translatableString",
+                  label: msg("fields.linkLabel", "Link Label"),
+                  filter: { types: ["type.string"] },
+                },
+                link: {
+                  label: msg("fields.link", "Link"),
+                  type: "text",
+                },
+                normalizeLink: {
+                  label: msg("fields.normalizeLink", "Normalize Link"),
+                  type: "radio",
+                  options: [
+                    {
+                      label: msg("fields.options.yes", "Yes"),
+                      value: true,
+                    },
+                    {
+                      label: msg("fields.options.no", "No"),
+                      value: false,
+                    },
+                  ],
+                },
+                openInNewTab: {
+                  label: msg("fields.openInNewTab", "Open in new tab"),
+                  type: "radio",
+                  options: [
+                    {
+                      label: msg("fields.options.yes", "Yes"),
+                      value: true,
+                    },
+                    { label: msg("fields.options.no", "No"), value: false },
+                  ],
+                },
               },
-              label: {
-                type: "translatableString",
-                label: msg("fields.linkLabel", "Link Label"),
-                filter: { types: ["type.string"] },
-              },
-              link: {
-                label: msg("fields.link", "Link"),
-                type: "text",
-              },
-              normalizeLink: {
-                label: msg("fields.normalizeLink", "Normalize Link"),
-                type: "radio",
-                options: [
-                  {
-                    label: msg("fields.options.yes", "Yes"),
-                    value: true,
-                  },
-                  {
-                    label: msg("fields.options.no", "No"),
-                    value: false,
-                  },
-                ],
-              },
-              openInNewTab: {
-                label: msg("fields.openInNewTab", "Open in new tab"),
-                type: "radio",
-                options: [
-                  {
-                    label: msg("fields.options.yes", "Yes"),
-                    value: true,
-                  },
-                  { label: msg("fields.options.no", "No"), value: false },
-                ],
+              defaultItemProps: defaultLink,
+              getItemSummary: (item: TranslatableCTA, index?: number) => {
+                const locale = i18nComponentsInstance.language || "en";
+                const label = getDisplayValue(item.label, locale);
+                return label || pt("link", "Link") + " " + ((index ?? 0) + 1);
               },
             },
-            defaultItemProps: defaultLink,
-            getItemSummary: (item: TranslatableCTA, index?: number) => {
-              const locale = i18nComponentsInstance.language || "en";
-              const label = getDisplayValue(item.label, locale);
-              return label || pt("link", "Link") + " " + ((index ?? 0) + 1);
-            },
           },
-        },
-        defaultItemProps: defaultSection,
-        getItemSummary: (
-          item: FooterExpandedLinksWrapperProps["data"]["sections"][number],
-          index?: number
-        ) => {
-          const locale = i18nComponentsInstance.language || "en";
-          const label = getDisplayValue(item.label, locale);
-          return label || pt("section", "Section") + " " + ((index ?? 0) + 1);
+          defaultItemProps: defaultSection,
+          getItemSummary: (
+            item: FooterExpandedLinksWrapperProps["data"]["sections"][number],
+            index?: number
+          ) => {
+            const locale = i18nComponentsInstance.language || "en";
+            const label = getDisplayValue(item.label, locale);
+            return label || pt("section", "Section") + " " + ((index ?? 0) + 1);
+          },
         },
       },
     },
-  },
-  styles: {
-    type: "object",
-    label: msg("fields.styles", "Styles"),
-    objectFields: {
-      color: {
-        type: "basicSelector",
-        label: msg("fields.color", "Color"),
-        options: "SITE_COLOR",
+    styles: {
+      type: "object",
+      label: msg("fields.styles", "Styles"),
+      objectFields: {
+        color: {
+          type: "basicSelector",
+          label: msg("fields.color", "Color"),
+          options: "SITE_COLOR",
+        },
       },
     },
-  },
-};
+  };
 
 export interface FooterExpandedLinksWrapperProps {
   data: {
@@ -353,11 +358,13 @@ export const FooterExpandedLinksWrapper: YextComponentConfig<FooterExpandedLinks
     label: msg("components.expandedLinks", "Expanded Links"),
     fields: footerExpandedLinksWrapperFields,
     resolveFields: (data) =>
-      setDeep(
-        footerExpandedLinksWrapperFields,
-        "data.objectFields.sections.arrayFields.links.arrayFields.normalizeLink.visible",
-        shouldShowNormalizeLinkField(data.props.data.sections)
-      ) as any,
+      toPuckFields(
+        setDeep(
+          footerExpandedLinksWrapperFields,
+          "data.objectFields.sections.arrayFields.links.arrayFields.normalizeLink.visible",
+          shouldShowNormalizeLinkField(data.props.data.sections)
+        )
+      ),
     defaultProps: {
       data: {
         sections: [

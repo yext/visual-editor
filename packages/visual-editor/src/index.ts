@@ -4,4 +4,4 @@ export * from "./types/index.ts";
 export * from "./editor/index.ts";
 export * from "./components/index.ts";
 export * from "./fields/index.ts";
-export { type YextFieldDefinition } from "./fields/fields.ts";
+export { type YextFieldDefinition } from "./fields/index.ts";
