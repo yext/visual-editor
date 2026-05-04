@@ -13,11 +13,20 @@ import {
   type MappedSourceMode,
 } from "./mappedSource.ts";
 
+/**
+ * Deep-clones a card before reuse so slot synchronization can update ids,
+ * indices, and parent data without mutating the input Puck component tree.
+ */
 const cloneCard = <TCardProps extends DefaultComponentProps>(
   card: ComponentData<TCardProps>
 ): ComponentData<TCardProps> =>
   JSON.parse(JSON.stringify(card)) as ComponentData<TCardProps>;
 
+/**
+ * Rewrites immediate nested slot item ids when a reused constant value card
+ * receives a new id, keeping child component ids derived from the parent card
+ * id.
+ */
 const rewriteNestedSlotIds = <TCardProps extends DefaultComponentProps>(
   card: ComponentData<TCardProps>,
   newId: string
@@ -39,6 +48,11 @@ const rewriteNestedSlotIds = <TCardProps extends DefaultComponentProps>(
   });
 };
 
+/**
+ * Resolves the nested list from a section-backed source. Section-backed means
+ * the selected source is an object that contains the repeated list field rather
+ * than being the repeated item list itself.
+ */
 const resolveSectionFieldItems = <TItem>(
   streamDocument: StreamDocument,
   fieldPath: string,
@@ -52,7 +66,18 @@ const resolveSectionFieldItems = <TItem>(
   return Array.isArray(items) ? (items as TItem[]) : [];
 };
 
-export const syncManualListCards = <TCardProps extends DefaultComponentProps>({
+/**
+ * Synchronizes cards for constant value mode, where the wrapper's constant
+ * value stores only the card ids and the per-card content remains in the Puck
+ * slot tree.
+ *
+ * Existing cards are reused by id when possible, optionally by index for legacy
+ * data, and newly generated ids are written back to the returned constant
+ * value so future resolve passes can preserve card styling and content.
+ */
+export const syncConstantValueListCards = <
+  TCardProps extends DefaultComponentProps,
+>({
   currentCards,
   constantValue,
   createId,
@@ -119,10 +144,16 @@ export const syncManualListCards = <TCardProps extends DefaultComponentProps>({
 /**
  * Resolves a wrapper's cards from the selected source.
  *
- * 1. Classify the source as manual, section-backed, or mapped-item-list.
- * 2. Keep manual cards and ids in sync while preserving existing card styling.
+ * 1. Classify the source as constant value, section-backed, or
+ *    mapped-item-list.
+ * 2. Keep constant value cards and ids in sync while preserving existing card
+ *    styling.
  * 3. Resolve section-backed or mapped items and expand/trim cards to match.
  * 4. Decorate each card with section-specific parent data for rendering.
+ *
+ * Constant value sources use saved editor card ids. Section-backed sources use
+ * a nested list on a selected section object. Mapped-item-list sources use the
+ * selected value itself as the repeatable item or item list.
  */
 export const resolveMappedListWrapperData = <
   TWrapperProps extends CardWrapperType<any>,
@@ -178,8 +209,8 @@ export const resolveMappedListWrapperData = <
   const currentCards = data.props.slots.CardSlot as ComponentData<TCardProps>[];
   const sharedCardProps = getSharedCardProps(currentCards[0]);
 
-  if (sourceMode === "manual") {
-    const syncedCards = syncManualListCards({
+  if (sourceMode === "constantValue") {
+    const syncedCards = syncConstantValueListCards({
       currentCards,
       constantValue: data.props.data.constantValue,
       createId: () => `${cardIdPrefix}-${crypto.randomUUID()}`,
@@ -232,6 +263,10 @@ export const resolveMappedListWrapperData = <
   ) as ComponentData<TWrapperProps>;
 };
 
+/**
+ * Returns the mapped source mode for a wrapper's current data without resolving
+ * or mutating the wrapper slot tree.
+ */
 export const getMappedListSourceMode = (
   streamDocument: StreamDocument,
   data: Pick<CardWrapperType<any>["data"], "constantValueEnabled" | "field">,

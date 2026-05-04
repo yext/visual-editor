@@ -19,6 +19,12 @@ export interface CardWrapperType<T> {
   };
 }
 
+/**
+ * Builds the shared Puck field configuration for wrappers that render repeated
+ * cards through a hidden `CardSlot`. The visible `data` field selects either a
+ * constant value list or a mapped entity/list source, while `CardSlot` stores
+ * the actual card component data.
+ */
 export const cardWrapperFields = <T>(
   label: MsgString,
   entityFieldType: EntityFieldTypes,

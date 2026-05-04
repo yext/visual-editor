@@ -14,7 +14,25 @@ import {
 import { type StreamDocument } from "../types/StreamDocument.ts";
 import { getTopLevelLinkedEntitySourceFields } from "../linkedEntityFieldUtils.ts";
 
-export type MappedSourceMode = "manual" | "sectionField" | "mappedItemList";
+/**
+ * Describes how a card wrapper should populate its repeated card slot.
+ *
+ * - `constantValue`: the editor stores the card list as a constant value and
+ *   the wrapper keeps those explicit card ids in sync with the slot contents.
+ * - `sectionField`: the selected source is a section-shaped object that owns
+ *   the wrapper's list field, such as `{ events: [...] }`.
+ * - `mappedItemList`: the selected source is itself the repeatable item or
+ *   list of repeatable items, such as a linked entity or linked entity list.
+ */
+export type MappedSourceMode =
+  | "constantValue"
+  | "sectionField"
+  | "mappedItemList";
+
+/**
+ * Identifies the kinds of top-level schema fields that can be offered as
+ * wrapper-level source roots in mapped field selectors.
+ */
 export type SourceRootKind = "linkedEntityRoot" | "baseListRoot";
 
 /**
@@ -43,9 +61,19 @@ export const getBaseEntityListSourceRootFields = (
 };
 
 /**
- * Classifies the current wrapper source selection into manual, section-backed,
- * or mapped-item-list behavior. Unresolved sources stay schema-eligible by
- * default so mapped subfield UIs do not collapse while data is still loading.
+ * Classifies the current wrapper source selection into one of the wrapper
+ * population modes:
+ *
+ * - constant value: the wrapper is driven by the editor's stored card ids
+ *   instead of resolved stream data.
+ * - section-backed: the selected field resolves to a section object that
+ *   contains the wrapper's list field, so cards are built from that nested
+ *   list.
+ * - mapped-item-list: the selected field resolves directly to one item or a
+ *   list of items, so cards are built from the selected value itself.
+ *
+ * Unresolved sources stay schema-eligible by default so mapped subfield UIs do
+ * not collapse while data is still loading.
  */
 export const classifyMappedSource = ({
   streamDocument,
@@ -59,7 +87,7 @@ export const classifyMappedSource = ({
   listFieldName: string;
 }): MappedSourceMode => {
   if (constantValueEnabled || !fieldPath) {
-    return "manual";
+    return "constantValue";
   }
 
   const resolvedSource = resolveField<unknown>(streamDocument, fieldPath).value;

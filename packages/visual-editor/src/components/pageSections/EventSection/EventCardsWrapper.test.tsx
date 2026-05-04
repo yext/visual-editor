@@ -370,7 +370,7 @@ describe("EventCardsWrapper", () => {
     });
   });
 
-  it("preserves manual mode and keeps parentData unset", async () => {
+  it("preserves constant value mode and keeps parentData unset", async () => {
     const data = createWrapperData();
 
     const resolvedData = await EventCardsWrapper.resolveData!(

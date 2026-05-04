@@ -6,7 +6,7 @@ import {
 } from "./mappedSource.ts";
 
 describe("mappedSource", () => {
-  it("classifies manual, section, mapped, unresolved, and empty sources", () => {
+  it("classifies constant value, section, mapped, unresolved, and empty sources", () => {
     expect(
       classifyMappedSource({
         streamDocument: {},
@@ -14,7 +14,7 @@ describe("mappedSource", () => {
         fieldPath: "c_linkedLocation",
         listFieldName: "events",
       })
-    ).toBe("manual");
+    ).toBe("constantValue");
 
     expect(
       classifyMappedSource({

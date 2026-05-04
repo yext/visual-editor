@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { type ComponentData } from "@puckeditor/core";
-import { syncManualListCards } from "./mappedListWrapper.ts";
+import { syncConstantValueListCards } from "./mappedListWrapper.ts";
 
 type TestCardProps = {
   id?: string;
@@ -26,7 +26,7 @@ const createCard = (
 });
 
 describe("mappedListWrapper", () => {
-  it("syncs manual cards, clears parentData, and rewrites ids", () => {
+  it("syncs constant value cards, clears parentData, and rewrites ids", () => {
     let generatedId = 1;
     const currentCards = [
       {
@@ -53,7 +53,7 @@ describe("mappedListWrapper", () => {
       },
     ] as ComponentData<TestCardProps>[];
 
-    const syncedCards = syncManualListCards<TestCardProps>({
+    const syncedCards = syncConstantValueListCards<TestCardProps>({
       currentCards,
       constantValue: [{ id: "Card-1" }, { id: "Card-1" }, {}],
       createId: () => `Generated-Card-${generatedId++}`,
@@ -82,7 +82,7 @@ describe("mappedListWrapper", () => {
   it("falls back to index when requested", () => {
     const currentCards = [createCard("Card-1", 7), createCard("Card-2", 8)];
 
-    const syncedCards = syncManualListCards<TestCardProps>({
+    const syncedCards = syncConstantValueListCards<TestCardProps>({
       currentCards,
       constantValue: [{}, {}],
       createId: () => "Generated-Card",
