@@ -81,7 +81,6 @@ const correctTypographyValues = <T extends BaseTextStyles>(
 
   if (
     nextValue.fontWeight !== "default" &&
-    availableFontWeights.length > 0 &&
     !availableFontWeights.some((opt) => opt.value === nextValue.fontWeight)
   ) {
     correctedValue.fontWeight = "default";
@@ -89,7 +88,6 @@ const correctTypographyValues = <T extends BaseTextStyles>(
 
   if (
     nextValue.fontStyle !== "default" &&
-    availableFontStyles.length > 0 &&
     !availableFontStyles.some((opt) => opt.value === nextValue.fontStyle)
   ) {
     correctedValue.fontStyle = "default";
