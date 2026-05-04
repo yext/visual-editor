@@ -49,15 +49,16 @@ export const EmailsFields: YextFields<EmailsProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      list: YextField<any, string[]>(msg("fields.emails", "Emails"), {
+      list: {
         type: "entityField",
+        label: msg("fields.emails", "Emails"),
         filter: {
           types: ["type.string"],
           includeListsOnly: true,
           allowList: ["emails"],
         },
         disallowTranslation: true,
-      }),
+      },
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {
