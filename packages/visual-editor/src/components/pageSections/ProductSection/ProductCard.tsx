@@ -256,6 +256,8 @@ export type ProductCardProps = {
 
   /** @internal */
   conditionalRender?: {
+    image?: boolean;
+    title?: boolean;
     price?: boolean;
     brow?: boolean;
     description?: boolean;
@@ -402,6 +404,10 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
     parentStyles?.showCTA && (conditionalRender?.cta || puck.isEditing);
   const hasBrow =
     parentStyles?.showBrow && (conditionalRender?.brow || puck.isEditing);
+  const hasImage =
+    parentStyles?.showImage && (conditionalRender?.image || puck.isEditing);
+  const hasTitle =
+    parentStyles?.showTitle && (conditionalRender?.title || puck.isEditing);
   const bottomPadding = hasCTA ? "pb-8" : "pb-4";
 
   return (
@@ -413,7 +419,7 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
       background={variant === "minimal" ? undefined : styles.backgroundColor}
       ref={puck.dragRef}
     >
-      {parentStyles?.showImage && (
+      {hasImage && (
         <div className={variant === "classic" ? "px-8 pt-8" : ""}>
           <div className={"w-full"}>
             <slots.ImageSlot style={{ height: "fit-content" }} allow={[]} />
@@ -428,13 +434,13 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
         )}
       >
         <div className="gap-4 flex flex-col flex-grow">
-          {(hasBrow || parentStyles?.showTitle) && (
+          {(hasBrow || hasTitle) && (
             <div className="flex flex-col">
               {hasBrow && (
                 <slots.BrowSlot style={{ height: "auto" }} allow={[]} />
               )}
 
-              {parentStyles?.showTitle && (
+              {hasTitle && (
                 <slots.TitleSlot style={{ height: "auto" }} allow={[]} />
               )}
             </div>
@@ -513,6 +519,45 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
         : resolvedFallbackPrice;
     const showPrice = Boolean(resolvedPrice);
 
+    const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as
+      | (WithId<ImageWrapperProps> & {
+          styles?: { aspectRatio?: number; width?: number };
+        })
+      | undefined;
+    const resolvedImage =
+      data.props.parentData?.product.image ??
+      imageSlotProps?.parentData?.image ??
+      (imageSlotProps
+        ? resolveYextEntityField(
+            params.metadata.streamDocument,
+            imageSlotProps?.data?.image,
+            locale
+          )
+        : undefined);
+    const showImage = Boolean(resolvedImage);
+
+    const titleSlotProps = data.props.slots.TitleSlot?.[0]?.props as
+      | WithId<HeadingTextProps>
+      | undefined;
+    const resolvedTitle =
+      data.props.parentData?.product.name ??
+      titleSlotProps?.parentData?.text ??
+      (titleSlotProps
+        ? resolveYextEntityField(
+            params.metadata.streamDocument,
+            titleSlotProps?.data?.text,
+            locale
+          )
+        : undefined);
+    const showTitle = Boolean(
+      resolveComponentData(
+        resolvedTitle,
+        locale,
+        params.metadata.streamDocument,
+        { output: "plainText" }
+      )
+    );
+
     const browSlotProps = data.props.slots.BrowSlot?.[0]?.props as
       | WithId<TextProps>
       | undefined;
@@ -559,17 +604,13 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
           : undefined));
     const showCTA = Boolean(resolvedCTA);
 
-    const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as
-      | (WithId<ImageWrapperProps> & {
-          styles?: { aspectRatio?: number; width?: number };
-        })
-      | undefined;
-
     let updatedData = {
       ...data,
       props: {
         ...data.props,
         conditionalRender: {
+          image: showImage,
+          title: showTitle,
           price: showPrice,
           brow: showBrow,
           description: showDescription,
