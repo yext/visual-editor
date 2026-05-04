@@ -407,6 +407,9 @@ describe("EventCardsWrapper", () => {
     );
 
     expect(linkedFields.cards?.visible).toBe(true);
+    expect((linkedFields.cards as any)?.objectFields?.title?.type).toBe(
+      "custom"
+    );
     expect(sectionFields.cards?.visible).toBe(false);
   });
 });

@@ -1,6 +1,9 @@
 import { Slot } from "@puckeditor/core";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
-import { type YextFieldDefinition } from "../../editor/YextField.tsx";
+import {
+  YextField,
+  type YextFieldDefinition,
+} from "../../editor/YextField.tsx";
 import { YextFields } from "../../fields/fields.ts";
 import { MsgString } from "../i18n/platform.ts";
 import {
@@ -86,14 +89,12 @@ export const createMappedSubfieldFields = <
   fields: TFields,
   sourceFieldPath = "data.field"
 ): YextFieldDefinition<any> =>
-  ({
-    label,
+  YextField(label, {
     type: "object",
     objectFields: Object.fromEntries(
       Object.entries(fields).map(([fieldName, fieldConfig]) => [
         fieldName,
-        {
-          label: fieldConfig.label,
+        YextField(fieldConfig.label, {
           type: "subfieldSelector",
           sourceField: sourceField ?? "",
           sourceFieldPath,
@@ -103,7 +104,7 @@ export const createMappedSubfieldFields = <
             ...fieldConfig.filter,
             types: fieldConfig.types,
           },
-        } as any,
+        } as any),
       ])
     ),
-  }) as any;
+  } as any) as YextFieldDefinition<any>;
