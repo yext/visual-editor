@@ -1,5 +1,4 @@
-import React from "react";
-import { createUsePuck, useGetPuck } from "@puckeditor/core";
+import { createUsePuck } from "@puckeditor/core";
 import { resolveField } from "../utils/resolveYextEntityField.ts";
 import { type StreamDocument } from "../utils/types/StreamDocument.ts";
 
@@ -20,48 +19,46 @@ export const getValueAtPath = (value: unknown, path: string): unknown => {
 };
 
 export const useResolvedSourceField = (sourceFieldPath?: string): string => {
-  let getPuck: ReturnType<typeof useGetPuck> | undefined;
-  let itemSelector: any;
-
   try {
-    getPuck = useGetPuck();
-    itemSelector = usePuck((state) => state.appState.ui.itemSelector);
-  } catch {
-    getPuck = undefined;
-    itemSelector = undefined;
-  }
+    return usePuck((state) => {
+      if (!sourceFieldPath) {
+        return "";
+      }
 
-  return React.useMemo(() => {
-    if (!sourceFieldPath || !getPuck || !itemSelector) {
+      const itemSelector = state.appState.ui.itemSelector;
+      if (!itemSelector) {
+        return "";
+      }
+
+      const sourceFieldValue = getValueAtPath(
+        state.getItemBySelector(itemSelector)?.props,
+        sourceFieldPath
+      );
+
+      if (typeof sourceFieldValue === "string") {
+        return sourceFieldValue;
+      }
+
+      if (
+        sourceFieldValue &&
+        typeof sourceFieldValue === "object" &&
+        !Array.isArray(sourceFieldValue)
+      ) {
+        const sourceField = (sourceFieldValue as Record<string, unknown>).field;
+        const constantValueEnabled = (
+          sourceFieldValue as Record<string, unknown>
+        ).constantValueEnabled;
+
+        return !constantValueEnabled && typeof sourceField === "string"
+          ? sourceField
+          : "";
+      }
+
       return "";
-    }
-
-    const selectedComponent = getPuck().getItemBySelector(itemSelector);
-    const sourceFieldValue = getValueAtPath(
-      selectedComponent?.props,
-      sourceFieldPath
-    );
-
-    if (typeof sourceFieldValue === "string") {
-      return sourceFieldValue;
-    }
-
-    if (
-      sourceFieldValue &&
-      typeof sourceFieldValue === "object" &&
-      !Array.isArray(sourceFieldValue)
-    ) {
-      const sourceField = (sourceFieldValue as Record<string, unknown>).field;
-      const constantValueEnabled = (sourceFieldValue as Record<string, unknown>)
-        .constantValueEnabled;
-
-      return !constantValueEnabled && typeof sourceField === "string"
-        ? sourceField
-        : "";
-    }
-
+    });
+  } catch {
     return "";
-  }, [getPuck, itemSelector, sourceFieldPath]);
+  }
 };
 
 export const getCurrentDocumentContext = (
