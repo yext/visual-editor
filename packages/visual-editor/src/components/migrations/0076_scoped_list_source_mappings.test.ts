@@ -584,6 +584,56 @@ describe("scopedListSourceMappingsMigration", () => {
     ]);
   });
 
+  it("extracts manual legacy FAQ slot parentData into inline FAQ items", () => {
+    const migrated = runMigration({
+      type: "FAQSection",
+      props: {
+        id: "faq-section",
+        data: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: [{ id: "faq-card-1" }],
+        },
+        slots: {
+          CardSlot: [
+            {
+              type: "FAQCard",
+              props: {
+                slots: {
+                  QuestionSlot: [
+                    {
+                      props: {
+                        parentData: {
+                          richText: { defaultValue: "Legacy question?" },
+                        },
+                      },
+                    },
+                  ],
+                  AnswerSlot: [
+                    {
+                      props: {
+                        parentData: {
+                          richText: { html: "<p>Legacy answer</p>" },
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
+      },
+    });
+
+    expect(migrated.props.data.constantValue).toEqual([
+      {
+        question: { defaultValue: "Legacy question?" },
+        answer: { html: "<p>Legacy answer</p>" },
+      },
+    ]);
+  });
+
   it("extracts manual InsightCardsWrapper card values into inline constantValue items", () => {
     const migrated = runMigration({
       type: "InsightCardsWrapper",

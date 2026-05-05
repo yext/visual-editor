@@ -336,8 +336,17 @@ const faqConfig: LegacyListSourceConfig = {
     answer: "answer",
   },
   extractManualItem: (card) => ({
-    question: cloneValue(getPathValue(card, "props.data.question")),
-    answer: cloneValue(getPathValue(card, "props.data.answer")),
+    question: cloneValue(
+      getPathValue(card, "props.data.question") ??
+        getPathValue(
+          card,
+          "props.slots.QuestionSlot.0.props.parentData.richText"
+        )
+    ),
+    answer: cloneValue(
+      getPathValue(card, "props.data.answer") ??
+        getPathValue(card, "props.slots.AnswerSlot.0.props.parentData.richText")
+    ),
   }),
 };
 

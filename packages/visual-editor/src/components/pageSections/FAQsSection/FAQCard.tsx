@@ -61,6 +61,12 @@ export const defaultFAQCardData = (
 });
 
 export type FAQCardProps = {
+  /** @internal legacy authored data kept only for backwards compatibility */
+  data?: {
+    question?: FAQStruct["question"];
+    answer?: FAQStruct["answer"];
+  };
+
   /** Styling for all the FAQ cards. */
   styles: {
     questionVariant: BodyProps["variant"];
@@ -110,7 +116,7 @@ const FAQCardFields: YextFields<FAQCardProps> = {
 };
 
 const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
-  const { styles, itemData, index, puck } = props;
+  const { data, styles, itemData, index, puck } = props;
   const analytics = useAnalytics();
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
@@ -191,14 +197,16 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
     });
   }, [styles]);
 
-  const resolvedQuestion = itemData?.question
-    ? resolveComponentData(itemData.question, i18n.language, streamDocument, {
+  const sourceQuestion = itemData?.question ?? data?.question;
+  const resolvedQuestion = sourceQuestion
+    ? resolveComponentData(sourceQuestion, i18n.language, streamDocument, {
         output: "plainText",
       })
     : "";
 
-  const resolvedAnswer = itemData?.answer
-    ? resolveComponentData(itemData.answer, i18n.language, streamDocument, {
+  const sourceAnswer = itemData?.answer ?? data?.answer;
+  const resolvedAnswer = sourceAnswer
+    ? resolveComponentData(sourceAnswer, i18n.language, streamDocument, {
         variant: styles.answerVariant,
         isDarkBackground: background?.isDarkColor,
         color: styles.answerColor,

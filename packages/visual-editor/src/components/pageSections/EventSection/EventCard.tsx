@@ -482,6 +482,7 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
     },
   },
   resolveData: (data, params) => {
+    const eventItemData = data.props.itemData;
     const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as
       | WithId<ImageWrapperProps>
       | undefined;
@@ -496,15 +497,17 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
       | WithId<CTAWrapperProps>
       | undefined;
 
-    const resolvedImage = imageSlotProps?.parentData
-      ? imageSlotProps.parentData.image
-      : imageSlotProps
-        ? resolveYextEntityField(
-            params.metadata.streamDocument,
-            imageSlotProps.data.image,
-            i18nComponentsInstance.language || "en"
-          )
-        : undefined;
+    const resolvedImage = eventItemData?.image
+      ? eventItemData.image
+      : imageSlotProps?.parentData
+        ? imageSlotProps.parentData.image
+        : imageSlotProps
+          ? resolveYextEntityField(
+              params.metadata.streamDocument,
+              imageSlotProps.data.image,
+              i18nComponentsInstance.language || "en"
+            )
+          : undefined;
 
     const showImage = Boolean(
       (resolvedImage as any)?.url ||
@@ -513,28 +516,31 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
           (resolvedImage as any)?.[i18nComponentsInstance.language || "en"]
             ?.url)
     );
-    const showDescription = Boolean(
-      descriptionSlotProps &&
-        (descriptionSlotProps.parentData
-          ? descriptionSlotProps.parentData.richText
-          : resolveYextEntityField(
-              params.metadata.streamDocument,
-              descriptionSlotProps.data.text,
-              i18nComponentsInstance.language || "en"
-            ))
-    );
-    const showTitle = Boolean(
-      titleSlotProps &&
-        (titleSlotProps.parentData
-          ? titleSlotProps.parentData.text
-          : resolveYextEntityField(
-              params.metadata.streamDocument,
-              titleSlotProps.data.text,
-              i18nComponentsInstance.language || "en"
-            ))
-    );
+    const resolvedDescription =
+      eventItemData?.description ??
+      (descriptionSlotProps
+        ? (descriptionSlotProps.parentData?.richText ??
+          resolveYextEntityField(
+            params.metadata.streamDocument,
+            descriptionSlotProps.data.text,
+            i18nComponentsInstance.language || "en"
+          ))
+        : undefined);
+    const showDescription = Boolean(resolvedDescription);
+    const resolvedTitle =
+      eventItemData?.title ??
+      (titleSlotProps
+        ? (titleSlotProps.parentData?.text ??
+          resolveYextEntityField(
+            params.metadata.streamDocument,
+            titleSlotProps.data.text,
+            i18nComponentsInstance.language || "en"
+          ))
+        : undefined);
+    const showTitle = Boolean(resolvedTitle);
     const showDateTime = Boolean(
-      dateTimeSlotProps?.parentData?.date?.trim() ||
+      eventItemData?.dateTime?.trim() ||
+        dateTimeSlotProps?.parentData?.date?.trim() ||
         resolveYextEntityField(
           params.metadata.streamDocument,
           dateTimeSlotProps.data.date,
@@ -542,14 +548,15 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
         )?.trim()
     );
     const showCTA = Boolean(
-      ctaSlotProps &&
-        (ctaSlotProps.parentData
-          ? ctaSlotProps.parentData.cta?.label
-          : resolveComponentData(
-              ctaSlotProps.data.entityField,
-              i18nComponentsInstance.language || "en",
-              params.metadata.streamDocument
-            )?.label)
+      eventItemData?.cta?.label ??
+        (ctaSlotProps &&
+          (ctaSlotProps.parentData
+            ? ctaSlotProps.parentData.cta?.label
+            : resolveComponentData(
+                ctaSlotProps.data.entityField,
+                i18nComponentsInstance.language || "en",
+                params.metadata.streamDocument
+              )?.label))
     );
 
     let updatedData = {
