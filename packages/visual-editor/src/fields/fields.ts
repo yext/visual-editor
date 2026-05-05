@@ -43,6 +43,10 @@ import {
   StyledLinkFieldOverride,
 } from "./styledFields/StyledLinkField.tsx";
 import {
+  StyledPageSectionField,
+  StyledPageSectionFieldOverride,
+} from "./styledFields/StyledPageSection.tsx";
+import {
   StyledTextField,
   StyledTextFieldOverride,
 } from "./styledFields/StyledTextField.tsx";
@@ -64,6 +68,7 @@ export type YextPuckFields = {
   optionalNumber: OptionalNumberField;
   styledButton: StyledButtonField;
   styledLink: StyledLinkField;
+  styledPageSection: StyledPageSectionField;
   styledText: StyledTextField;
   translatableString: TranslatableStringField;
   video: VideoField;
@@ -111,6 +116,7 @@ export const YextPuckFieldOverrides = {
   optionalNumber: OptionalNumberFieldOverride,
   styledButton: StyledButtonFieldOverride,
   styledLink: StyledLinkFieldOverride,
+  styledPageSection: StyledPageSectionFieldOverride,
   styledText: StyledTextFieldOverride,
   translatableString: TranslatableStringFieldOverride,
   video: VideoFieldOverride,
