@@ -10,7 +10,6 @@ import {
   ConstantValueInput,
   EntityFieldInput,
 } from "./YextEntityFieldSelector.tsx";
-import { SubfieldInput } from "./YextSubfieldSelector.tsx";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { EmbeddedFieldStringInputFromEntity } from "./EmbeddedFieldStringInput.tsx";
 import { YextAutoField } from "../fields/YextAutoField.tsx";
@@ -86,20 +85,7 @@ const renderEntityFieldInput = (
     <TemplatePropsContext.Provider value={{ document }}>
       <TemplateMetadataContext.Provider value={templateMetadata}>
         <EntityFieldsContext.Provider value={entityFields}>
-          {"subdocumentField" in filter && filter.subdocumentField ? (
-            <SubfieldInput
-              filter={{ ...filter, subdocumentField: undefined }}
-              onChange={onChange}
-              sourceField={filter.subdocumentField}
-              value={value}
-            />
-          ) : (
-            <EntityFieldInput
-              filter={filter}
-              onChange={onChange}
-              value={value}
-            />
-          )}
+          <EntityFieldInput filter={filter} onChange={onChange} value={value} />
         </EntityFieldsContext.Provider>
       </TemplateMetadataContext.Provider>
     </TemplatePropsContext.Provider>
@@ -694,7 +680,7 @@ describe("YextEntityFieldSelector", () => {
     expect(screen.queryByText("Referenced Listings")).toBeNull();
   });
 
-  it("allows faq section and linked entity roots while hiding incompatible faq sources", () => {
+  it("shows only compatible linked or list roots for faq mappings", () => {
     renderEntityFieldInput({
       entityFields: {
         fields: [
@@ -792,7 +778,10 @@ describe("YextEntityFieldSelector", () => {
 
     fireEvent.click(screen.getByRole("combobox"));
 
-    expect(screen.getByText("FAQ Section")).toBeDefined();
+    expect(screen.getAllByText("Location Field").length).toBeGreaterThan(0);
+    expect(screen.queryByText("FAQ Section")).toBeNull();
+    expect(screen.queryByText("FAQ Section > FAQs")).toBeNull();
+    expect(screen.queryByText("Linked Location")).toBeNull();
     expect(screen.queryByText("Apple Action Links")).toBeNull();
   });
 
@@ -944,7 +933,7 @@ describe("YextEntityFieldSelector", () => {
     expect(screen.queryByText("Brand Reference")).toBeNull();
   });
 
-  it("limits event card source selectors to valid top-level roots", () => {
+  it("limits event card source selectors to valid compatible roots", () => {
     renderEntityFieldInput({
       entityFields: {
         fields: [
@@ -1066,10 +1055,9 @@ describe("YextEntityFieldSelector", () => {
 
     fireEvent.click(screen.getByRole("combobox"));
 
-    expect(screen.getByText("Events Section")).toBeDefined();
     expect(screen.getAllByText("Linked Location").length).toBeGreaterThan(0);
+    expect(screen.queryByText("Events Section")).toBeNull();
     expect(screen.queryByText("faqSection > FAQs")).toBeNull();
-    expect(screen.queryByText("Events Section > Events")).toBeNull();
     expect(screen.queryByText("Linked Location > Name")).toBeNull();
   });
 
@@ -1215,7 +1203,7 @@ describe("YextEntityFieldSelector", () => {
 
     fireEvent.click(screen.getByRole("combobox"));
 
-    expect(screen.getAllByText("Select a field").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Location Field").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Name").length).toBeGreaterThan(0);
     expect(screen.queryByText("Youtube Channel URL")).toBeNull();
     expect(screen.queryByText("Linked Location")).toBeNull();
@@ -1572,7 +1560,9 @@ describe("YextEntityFieldSelector", () => {
     fireEvent.click(screen.getByRole("combobox"));
 
     expect(screen.getAllByText("Name").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("URL").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Trip Branding > URL").length).toBeGreaterThan(
+      0
+    );
   });
 
   it("does not include linked descendant fields that are present only on the fourth resolved linked entity", () => {
@@ -1667,7 +1657,7 @@ describe("YextEntityFieldSelector", () => {
 
     fireEvent.click(screen.getByRole("combobox"));
 
-    expect(screen.getAllByText("Select a field")).toHaveLength(2);
+    expect(screen.getAllByText("Location Field")).toHaveLength(2);
     expect(screen.queryByText("Name")).toBeNull();
     expect(screen.queryByText("Trip Branding > URL")).toBeNull();
   });
@@ -1697,10 +1687,10 @@ describe("YextEntityFieldSelector", () => {
     fireEvent.click(screen.getByRole("combobox"));
 
     expect(screen.queryByText("LinkedIn URL")).toBeNull();
-    expect(screen.getAllByText("Select a field")).toHaveLength(2);
+    expect(screen.getAllByText("Location Field")).toHaveLength(2);
   });
 
-  it("stores linked descendant selections as absolute paths while showing relative options", () => {
+  it("stores linked descendant selections relative to the selected source", () => {
     const onChange = vi.fn();
 
     renderEntityFieldInput({
@@ -1745,7 +1735,7 @@ describe("YextEntityFieldSelector", () => {
         subdocumentField: "c_linkedLocation",
       },
       value: {
-        field: "c_linkedLocation.name",
+        field: "name",
       },
     });
 
@@ -1759,7 +1749,7 @@ describe("YextEntityFieldSelector", () => {
 
     expect(onChange).toHaveBeenCalledWith(
       {
-        field: "c_linkedLocation.name",
+        field: "name",
       },
       undefined
     );
@@ -1822,7 +1812,7 @@ describe("YextEntityFieldSelector", () => {
         subdocumentField: "c_linkedLocation",
       },
       value: {
-        field: "c_linkedLocation.tripBranding.url",
+        field: "tripBranding.url",
       },
       document: {
         c_linkedLocation: [{ name: "Downtown" }],
@@ -1905,7 +1895,7 @@ describe("YextEntityFieldSelector", () => {
     expect(screen.getAllByText("Image").length).toBeGreaterThan(0);
   });
 
-  it("stores base list descendant selections as absolute paths while showing relative options", () => {
+  it("stores base list descendant selections relative to the selected source", () => {
     const onChange = vi.fn();
 
     renderEntityFieldInput({
@@ -1963,7 +1953,7 @@ describe("YextEntityFieldSelector", () => {
         subdocumentField: "c_customEvents",
       },
       value: {
-        field: "c_customEvents.primaryCta.label",
+        field: "primaryCta.label",
       },
     });
 
@@ -1982,7 +1972,7 @@ describe("YextEntityFieldSelector", () => {
 
     expect(onChange).toHaveBeenCalledWith(
       {
-        field: "c_customEvents.primaryCta.label",
+        field: "primaryCta.label",
       },
       undefined
     );
@@ -2057,7 +2047,9 @@ describe("YextEntityFieldSelector", () => {
     fireEvent.click(screen.getByRole("combobox"));
 
     expect(screen.getAllByText("Title").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("Label").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Secondary CTA > Label").length).toBeGreaterThan(
+      0
+    );
   });
 
   it("falls back to the default entity field option when no matching entity fields exist", () => {
@@ -2307,7 +2299,7 @@ describe("YextEntityFieldSelector", () => {
         subdocumentField: "c_linkedLocation",
       },
       value: {
-        field: "c_linkedLocation.name",
+        field: "name",
       },
       document: {
         c_linkedLocation: [{ name: "First" }, { name: "Second" }],

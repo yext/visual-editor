@@ -1,4 +1,4 @@
-import { PuckComponent, Slot } from "@puckeditor/core";
+import { PuckComponent, Slot, setDeep } from "@puckeditor/core";
 import {
   ThemeColor,
   backgroundColors,
@@ -16,6 +16,7 @@ import { TeamCardsWrapperProps } from "./TeamCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
+import { hasResolvedMappedListSource } from "../../../utils/cardSlots/mappedSource.ts";
 
 export interface TeamSectionProps {
   /**
@@ -46,6 +47,9 @@ export interface TeamSectionProps {
   analytics: {
     scope?: string;
   };
+
+  /** @internal */
+  hasResolvedSource?: boolean;
 
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
@@ -99,7 +103,11 @@ const teamSectionFields: YextFields<TeamSectionProps> = {
 };
 
 const TeamSectionWrapper: PuckComponent<TeamSectionProps> = (props) => {
-  const { styles, slots } = props;
+  const { styles, slots, hasResolvedSource, puck } = props;
+
+  if (!puck.isEditing && hasResolvedSource === false) {
+    return <></>;
+  }
 
   return (
     <PageSection
@@ -174,8 +182,21 @@ export const TeamSection: YextComponentConfig<TeamSectionProps> = {
     },
     liveVisibility: true,
   },
-  resolveData: (data) => {
-    return forwardHeadingLevel(data, "TitleSlot");
+  resolveData: (data, params) => {
+    const updatedData = forwardHeadingLevel(data, "TitleSlot");
+    const wrapperProps = updatedData.props.slots.CardsWrapperSlot?.[0]
+      ?.props as TeamCardsWrapperProps | undefined;
+
+    return setDeep(
+      updatedData,
+      "props.hasResolvedSource",
+      !wrapperProps ||
+        hasResolvedMappedListSource({
+          streamDocument: params.metadata.streamDocument ?? {},
+          constantValueEnabled: wrapperProps.data.constantValueEnabled,
+          fieldPath: wrapperProps.data.field,
+        })
+    );
   },
   render: (props) => (
     <ComponentErrorBoundary

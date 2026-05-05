@@ -12,63 +12,60 @@ import {
   resolveYextEntityField,
 } from "../resolveYextEntityField.ts";
 import { type StreamDocument } from "../types/StreamDocument.ts";
-import { getTopLevelLinkedEntitySourceFields } from "../linkedEntityFieldUtils.ts";
 
 /**
  * Describes how a card wrapper should populate its repeated card slot.
  *
  * - `constantValue`: the editor stores the card list as a constant value and
  *   the wrapper keeps those explicit card ids in sync with the slot contents.
- * - `sectionField`: the selected source is a section-shaped object that owns
- *   the wrapper's list field, such as `{ events: [...] }`.
- * - `mappedItemList`: the selected source is itself the repeatable item or
- *   list of repeatable items, such as a linked entity or linked entity list.
+ * - `resolvedItems`: the selected value is itself the repeatable item or list
+ *   of repeatable items, such as a linked entity, linked entity list, or
+ *   nested list field.
  */
 export type ResolvedMappedSourceMode = "constantValue" | "resolvedItems";
-export type MappedItemSource = "sectionField" | "mappedItemList";
 
-export type ResolvedMappedSource<TMappedItem, TSectionItem> =
+export type ResolvedMappedSource<TMappedItem> =
   | {
       mode: "constantValue";
       items: [];
     }
   | {
       mode: "resolvedItems";
-      itemSource: "sectionField";
-      items: TSectionItem[];
-    }
-  | {
-      mode: "resolvedItems";
-      itemSource: "mappedItemList";
       items: TMappedItem[];
     };
 
 /**
- * Identifies the kinds of top-level schema fields that can be offered as
- * wrapper-level source roots in mapped field selectors.
+ * Identifies the kinds of schema fields that can be offered as wrapper-level
+ * source roots in mapped field selectors.
  */
 export type SourceRootKind = "linkedEntityRoot" | "baseListRoot";
 
+const getListFields = (
+  fields: YextSchemaField[],
+  parentPath = ""
+): YextSchemaField[] =>
+  fields.flatMap((field) => {
+    const name = parentPath ? `${parentPath}.${field.name}` : field.name;
+    return [
+      { ...field, name },
+      ...getListFields(field.children?.fields ?? [], name),
+    ];
+  });
+
 /**
- * Returns top-level list fields on the base entity so wrappers can treat a
- * list of structs as a mapped item source. Only lists with children are
- * useful for wrapper-level field mapping, so scalar lists are excluded.
+ * Returns every list field with nested children so wrappers can treat that
+ * list's item shape as a mapped source.
  */
-export const getBaseEntityListSourceRootFields = (
+export const getListSourceRootFields = (
   entityFields: StreamFields | YextSchemaField[] | null
 ): YextSchemaField[] => {
-  const isFieldList = Array.isArray(entityFields);
-  const fields = isFieldList ? entityFields : (entityFields?.fields ?? []);
-  const linkedEntityRootNames = new Set(
-    getTopLevelLinkedEntitySourceFields(isFieldList ? null : entityFields).map(
-      (field) => field.name
-    )
-  );
+  const fields = Array.isArray(entityFields)
+    ? entityFields
+    : (entityFields?.fields ?? []);
 
-  return fields.filter(
+  return getListFields(fields).filter(
     (field) =>
-      !linkedEntityRootNames.has(field.name) &&
-      !!field.definition.isList &&
+      !!field.definition?.isList &&
       Array.isArray(field.children?.fields) &&
       field.children.fields.length > 0
   );
@@ -76,24 +73,20 @@ export const getBaseEntityListSourceRootFields = (
 
 /**
  * Resolves the selected wrapper source into either constant value mode or a
- * list of stream items. Section-backed sources read the nested `listFieldName`
- * array from a section object; mapped-item-list sources use the selected value
- * itself as the repeatable item or item list.
+ * list of stream items.
  *
- * Unresolved non-constant sources stay in mapped-item-list mode with no items
- * so mapped subfield UIs do not collapse while data is still loading.
+ * Unresolved non-constant sources stay in resolved-items mode with no items so
+ * mapped subfield UIs do not collapse while data is still loading.
  */
-export const resolveMappedListSource = <TMappedItem, TSectionItem>({
+export const resolveMappedListSource = <TMappedItem>({
   streamDocument,
   constantValueEnabled,
   fieldPath,
-  listFieldName,
 }: {
   streamDocument: StreamDocument;
   constantValueEnabled?: boolean;
   fieldPath?: string;
-  listFieldName: string;
-}): ResolvedMappedSource<TMappedItem, TSectionItem> => {
+}): ResolvedMappedSource<TMappedItem> => {
   if (constantValueEnabled || !fieldPath) {
     return {
       mode: "constantValue",
@@ -106,53 +99,46 @@ export const resolveMappedListSource = <TMappedItem, TSectionItem>({
   if (Array.isArray(resolvedSource)) {
     return {
       mode: "resolvedItems",
-      itemSource: "mappedItemList",
       items: resolvedSource as TMappedItem[],
     };
   }
 
-  if (resolvedSource === undefined) {
-    return {
-      mode: "resolvedItems",
-      itemSource: "mappedItemList",
-      items: [],
-    };
-  }
-
   if (resolvedSource && typeof resolvedSource === "object") {
-    const sectionItems = (resolvedSource as Record<string, unknown>)[
-      listFieldName
-    ];
-    if (Array.isArray(sectionItems)) {
-      return {
-        mode: "resolvedItems",
-        itemSource: "sectionField",
-        items: sectionItems as TSectionItem[],
-      };
-    }
-
     return {
       mode: "resolvedItems",
-      itemSource: "mappedItemList",
       items: [resolvedSource as TMappedItem],
     };
   }
 
   return {
     mode: "resolvedItems",
-    itemSource: "mappedItemList",
     items: [],
   };
 };
 
+export const hasResolvedMappedListSource = ({
+  streamDocument,
+  constantValueEnabled,
+  fieldPath,
+}: {
+  streamDocument: StreamDocument;
+  constantValueEnabled?: boolean;
+  fieldPath?: string;
+}): boolean =>
+  !fieldPath ||
+  !!constantValueEnabled ||
+  resolveMappedListSource({
+    streamDocument,
+    constantValueEnabled,
+    fieldPath,
+  }).items.length > 0;
+
 /**
  * Resolves a wrapper-level mapped field against one mapped source item. Saved
- * field ids remain absolute editor paths, while constant values and embedded
- * fields resolve directly against the current item.
+ * field ids are interpreted against the current item context.
  */
 export const resolveMappedSourceField = <T>(
   item: StreamDocument,
-  sourceFieldPath: string,
   entityField: Partial<YextEntityField<T>> | undefined,
   locale?: string
 ): T | undefined => {
@@ -160,26 +146,12 @@ export const resolveMappedSourceField = <T>(
     return undefined;
   }
 
-  if (!entityField.field || entityField.constantValueEnabled) {
-    return resolveYextEntityField(
-      item,
-      {
-        field: entityField.field ?? "",
-        constantValue: entityField.constantValue as T,
-        constantValueEnabled: entityField.constantValueEnabled,
-      },
-      locale
-    );
-  }
-
   return resolveYextEntityField(
     item,
     {
-      ...entityField,
+      field: entityField.field ?? "",
       constantValue: entityField.constantValue as T,
-      field: entityField.field.startsWith(`${sourceFieldPath}.`)
-        ? entityField.field.slice(sourceFieldPath.length + 1)
-        : entityField.field,
+      constantValueEnabled: entityField.constantValueEnabled,
     },
     locale
   );

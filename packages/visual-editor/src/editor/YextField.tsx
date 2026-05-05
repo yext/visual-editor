@@ -1,7 +1,7 @@
 import {
   ArrayField,
   BaseField,
-  type CustomField,
+  CustomField,
   Field,
   NumberField,
   ObjectField,
@@ -9,10 +9,6 @@ import {
 import { type EntityFieldSelectorField } from "../fields/EntityFieldSelectorField.tsx";
 import { MsgString } from "../utils/i18n/platform.ts";
 import type { YextFieldMap, YextPuckFields } from "../fields/fields.ts";
-import {
-  type RenderYextSubfieldSelectorProps,
-  YextSubfieldSelector,
-} from "./YextSubfieldSelector.tsx";
 import { type YextEntityField } from "./yextEntityFieldUtils.ts";
 
 /** Copied from Puck, do not change */
@@ -82,19 +78,11 @@ type YextEntitySelectorField<
     type: "entityField";
   };
 
-type YextSubfieldSelectorField<
-  T extends Record<string, any> = Record<string, any>,
-> = YextBaseField &
-  Omit<RenderYextSubfieldSelectorProps<T>, "label"> & {
-    type: "subfieldSelector";
-  };
-
 type YextFieldConfig<Props = any> =
   | YextArrayFieldConfig<Props extends Record<string, any>[] ? Props : any>
   | YextObjectFieldConfig<Props extends Record<string, any> ? Props : any>
   | YextNumberField
   | YextEntitySelectorField<Props extends Record<string, any> ? Props : any>
-  | YextSubfieldSelectorField<Props extends Record<string, any> ? Props : any>
   | YextPuckFields[Exclude<
       keyof YextPuckFields,
       | "basicSelector"
@@ -127,27 +115,10 @@ export function YextField<T extends Record<string, any>, U = any>(
   config: YextEntitySelectorField<T>
 ): Field<YextEntityField<U>>;
 
-export function YextField<T extends Record<string, any>, U = any>(
-  fieldName: MsgString,
-  config: YextSubfieldSelectorField<T>
-): Field<YextEntityField<U>>;
-
-export function YextField<T, U>(
+export function YextField<T>(
   fieldName: MsgString,
   config: YextFieldConfig<T>
 ): any {
-  if (config.type === "subfieldSelector") {
-    return YextSubfieldSelector<T extends Record<string, any> ? T : any, U>({
-      label: fieldName,
-      sourceField: config.sourceField,
-      sourceFieldPath: config.sourceFieldPath,
-      filter: config.filter,
-      constantValueFilter: config.constantValueFilter,
-      disableConstantValueToggle: config.disableConstantValueToggle,
-      disallowTranslation: config.disallowTranslation,
-    });
-  }
-
   return {
     label: fieldName,
     ...config,

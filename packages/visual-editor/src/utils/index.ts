@@ -20,7 +20,7 @@ export { resolveComponentData } from "./resolveComponentData.tsx";
 export { resolveYextEntityField } from "./resolveYextEntityField.ts";
 export {
   cardWrapperFields,
-  createMappedSubfieldFields,
+  createScopedMappingFields,
   type CardWrapperFieldsOptions,
   type CardWrapperType,
 } from "./cardSlots/cardWrapperHelpers.ts";
@@ -32,7 +32,6 @@ export {
 export {
   resolveMappedListSource,
   resolveMappedSourceField,
-  type MappedItemSource,
   type MappedSourceFieldFilter,
   type ResolvedMappedSource,
   type ResolvedMappedSourceMode,

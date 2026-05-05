@@ -4,7 +4,7 @@ import { msg } from "../../../utils/i18n/platform.ts";
 import {
   cardWrapperFields,
   CardWrapperType,
-  createMappedSubfieldFields,
+  createScopedMappingFields,
 } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 import { ComponentData, PuckComponent, setDeep } from "@puckeditor/core";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
@@ -49,8 +49,8 @@ const defaultInsightCta = {
   ctaType: "textAndLink",
 } satisfies InsightStruct["cta"];
 
-const createInsightCardsMappingFields = (sourceField?: string) =>
-  createMappedSubfieldFields(msg("fields.cards", "Cards"), sourceField, {
+const createInsightCardsMappingFields = (sourceFieldPath?: string) =>
+  createScopedMappingFields(msg("fields.cards", "Cards"), sourceFieldPath, {
     image: {
       label: msg("fields.image", "Image"),
       types: ["type.image"],
@@ -79,16 +79,16 @@ const createInsightCardsMappingFields = (sourceField?: string) =>
     },
   });
 
-const createInsightCardsWrapperFields = (sourceField?: string) => ({
+const createInsightCardsWrapperFields = (sourceFieldPath?: string) => ({
   ...cardWrapperFields<InsightCardsWrapperProps>({
     label: msg("fields.insights", "Insights"),
-    entityFieldType: ComponentFields.InsightSection.type,
+    constantValueType: ComponentFields.InsightSection.type,
     listFieldName: "insights",
     sourceRootKinds: ["linkedEntityRoot", "baseListRoot"],
     sourceRootsOnly: true,
     requiredDescendantTypes: [["type.string"]],
   }),
-  cards: createInsightCardsMappingFields(sourceField) as any,
+  cards: createInsightCardsMappingFields(sourceFieldPath) as any,
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
@@ -123,11 +123,9 @@ const createInsightCardsWrapperFields = (sourceField?: string) => ({
 
 const insightCardsWrapperFields = createInsightCardsWrapperFields();
 
-const InsightCardsWrapperComponent: PuckComponent<InsightCardsWrapperProps> = (
-  props
-) => {
-  const { slots } = props;
-
+const InsightCardsWrapperComponent: PuckComponent<InsightCardsWrapperProps> = ({
+  slots,
+}) => {
   return (
     <CardContextProvider>
       <slots.CardSlot
@@ -191,22 +189,20 @@ export const InsightCardsWrapper: YextComponentConfig<InsightCardsWrapperProps> 
         CardSlot: [],
       },
     },
-    resolveFields: (data, params) =>
+    resolveFields: (data) =>
       resolveMappedListFields({
         data: data as ComponentData<InsightCardsWrapperProps>,
-        streamDocument: params.metadata.streamDocument ?? {},
-        listFieldName: "insights",
         createFields: createInsightCardsWrapperFields,
         mappingFieldName: "cards",
         createMappingFields: createInsightCardsMappingFields,
       }),
     resolveData: (data, params) => {
       const locale = i18nComponentsInstance.language || "en";
+
       return resolveMappedListWrapperData<
         InsightCardsWrapperProps,
         InsightCardProps,
         Record<string, unknown>,
-        InsightSectionType["insights"][number],
         {
           backgroundColor?: InsightCardProps["styles"]["backgroundColor"];
           slotStyles?: Record<string, any>;
@@ -214,7 +210,6 @@ export const InsightCardsWrapper: YextComponentConfig<InsightCardsWrapperProps> 
       >({
         data: data as ComponentData<InsightCardsWrapperProps>,
         streamDocument: params.metadata.streamDocument ?? {},
-        listFieldName: "insights",
         cardIdPrefix: "InsightCard",
         getSharedCardProps: (card) =>
           !card
@@ -236,51 +231,32 @@ export const InsightCardsWrapper: YextComponentConfig<InsightCardsWrapperProps> 
             insight: {
               image: resolveMappedSourceField<InsightStruct["image"]>(
                 item,
-                data.props.data.field,
                 data.props.cards?.image,
                 locale
               ),
               name: resolveMappedSourceField<InsightStruct["name"]>(
                 item,
-                data.props.data.field,
                 data.props.cards?.name,
                 locale
               ),
               category: resolveMappedSourceField<InsightStruct["category"]>(
                 item,
-                data.props.data.field,
                 data.props.cards?.category,
                 locale
               ),
               publishTime: resolveMappedSourceField<
                 InsightStruct["publishTime"]
-              >(
-                item,
-                data.props.data.field,
-                data.props.cards?.publishTime,
-                locale
-              ),
+              >(item, data.props.cards?.publishTime, locale),
               description: resolveMappedSourceField<
                 InsightStruct["description"]
-              >(
-                item,
-                data.props.data.field,
-                data.props.cards?.description,
-                locale
-              ),
+              >(item, data.props.cards?.description, locale),
               cta:
                 resolveMappedSourceField<InsightStruct["cta"]>(
                   item,
-                  data.props.data.field,
                   data.props.cards?.cta,
                   locale
                 ) ?? defaultInsightCta,
             },
-          } satisfies InsightCardProps["parentData"]),
-        decorateSectionItemCard: (card, insight, index) =>
-          setDeep(setDeep(card, "props.index", index), "props.parentData", {
-            field: data.props.data.field,
-            insight,
           } satisfies InsightCardProps["parentData"]),
       });
     },

@@ -16,6 +16,7 @@ import { ProductCardsWrapperProps } from "./ProductCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
+import { hasResolvedMappedListSource } from "../../../utils/cardSlots/mappedSource.ts";
 
 export type ProductSectionVariant = "immersive" | "classic" | "minimal";
 export type ProductSectionImageConstrain = "fill" | "fixed";
@@ -54,6 +55,9 @@ export interface ProductSectionProps {
   analytics: {
     scope?: string;
   };
+
+  /** @internal */
+  hasResolvedSource?: boolean;
 
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
@@ -119,7 +123,11 @@ const productSectionFields: YextFields<ProductSectionProps> = {
 };
 
 const ProductSectionComponent: PuckComponent<ProductSectionProps> = (props) => {
-  const { slots, styles } = props;
+  const { slots, styles, hasResolvedSource, puck } = props;
+
+  if (!puck.isEditing && hasResolvedSource === false) {
+    return <></>;
+  }
 
   return (
     <PageSection
@@ -199,7 +207,8 @@ export const ProductSection: YextComponentConfig<ProductSectionProps> = {
     },
     liveVisibility: true,
   },
-  resolveData: (data) => {
+  resolveData: (data, params) => {
+    const streamDocument = params.metadata.streamDocument ?? {};
     let updatedData = forwardHeadingLevel(data, "TitleSlot");
 
     if (
@@ -243,7 +252,19 @@ export const ProductSection: YextComponentConfig<ProductSectionProps> = {
       });
     }
 
-    return updatedData;
+    const wrapperProps = updatedData.props.slots.CardsWrapperSlot?.[0]
+      ?.props as ProductCardsWrapperProps | undefined;
+
+    return setDeep(
+      updatedData,
+      "props.hasResolvedSource",
+      !wrapperProps ||
+        hasResolvedMappedListSource({
+          streamDocument,
+          constantValueEnabled: wrapperProps.data.constantValueEnabled,
+          fieldPath: wrapperProps.data.field,
+        })
+    );
   },
   render: (props) => {
     return (

@@ -1,4 +1,4 @@
-import { PuckComponent, Slot } from "@puckeditor/core";
+import { PuckComponent, Slot, setDeep } from "@puckeditor/core";
 import {
   ThemeColor,
   backgroundColors,
@@ -16,6 +16,7 @@ import { TestimonialCardsWrapperProps } from "./TestimonialCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
+import { hasResolvedMappedListSource } from "../../../utils/cardSlots/mappedSource.ts";
 
 export interface TestimonialSectionProps {
   /**
@@ -46,6 +47,9 @@ export interface TestimonialSectionProps {
   analytics: {
     scope?: string;
   };
+
+  /** @internal */
+  hasResolvedSource?: boolean;
 
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
@@ -101,7 +105,11 @@ const testimonialSectionFields: YextFields<TestimonialSectionProps> = {
 const TestimonialSectionWrapper: PuckComponent<TestimonialSectionProps> = (
   props
 ) => {
-  const { styles, slots } = props;
+  const { styles, slots, hasResolvedSource, puck } = props;
+
+  if (!puck.isEditing && hasResolvedSource === false) {
+    return <></>;
+  }
 
   return (
     <PageSection
@@ -174,8 +182,21 @@ export const TestimonialSection: YextComponentConfig<TestimonialSectionProps> =
       },
       liveVisibility: true,
     },
-    resolveData: (data) => {
-      return forwardHeadingLevel(data, "ContributorNameSlot");
+    resolveData: (data, params) => {
+      const updatedData = forwardHeadingLevel(data, "ContributorNameSlot");
+      const wrapperProps = updatedData.props.slots.CardsWrapperSlot?.[0]
+        ?.props as TestimonialCardsWrapperProps | undefined;
+
+      return setDeep(
+        updatedData,
+        "props.hasResolvedSource",
+        !wrapperProps ||
+          hasResolvedMappedListSource({
+            streamDocument: params.metadata.streamDocument ?? {},
+            constantValueEnabled: wrapperProps.data.constantValueEnabled,
+            fieldPath: wrapperProps.data.field,
+          })
+      );
     },
     render: (props) => (
       <ComponentErrorBoundary

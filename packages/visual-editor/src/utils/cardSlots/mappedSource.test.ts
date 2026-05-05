@@ -1,17 +1,16 @@
 import { describe, expect, it } from "vitest";
 import {
-  getBaseEntityListSourceRootFields,
+  getListSourceRootFields,
   resolveMappedListSource,
 } from "./mappedSource.ts";
 
 describe("mappedSource", () => {
-  it("resolves constant value, section, mapped, unresolved, and empty sources", () => {
+  it("resolves constant, mapped, unresolved, and empty sources", () => {
     expect(
       resolveMappedListSource({
         streamDocument: {},
         constantValueEnabled: true,
         fieldPath: "c_linkedLocation",
-        listFieldName: "events",
       })
     ).toEqual({ mode: "constantValue", items: [] });
 
@@ -22,12 +21,10 @@ describe("mappedSource", () => {
             events: [{ title: "Cooking Class" }],
           },
         },
-        fieldPath: "c_eventsSection",
-        listFieldName: "events",
+        fieldPath: "c_eventsSection.events",
       })
     ).toEqual({
       mode: "resolvedItems",
-      itemSource: "sectionField",
       items: [{ title: "Cooking Class" }],
     });
 
@@ -37,11 +34,9 @@ describe("mappedSource", () => {
           c_linkedLocation: [{ name: "Downtown" }],
         },
         fieldPath: "c_linkedLocation",
-        listFieldName: "events",
       })
     ).toEqual({
       mode: "resolvedItems",
-      itemSource: "mappedItemList",
       items: [{ name: "Downtown" }],
     });
 
@@ -51,11 +46,9 @@ describe("mappedSource", () => {
           c_linkedLocation: { name: "Downtown" },
         },
         fieldPath: "c_linkedLocation",
-        listFieldName: "events",
       })
     ).toEqual({
       mode: "resolvedItems",
-      itemSource: "mappedItemList",
       items: [{ name: "Downtown" }],
     });
 
@@ -63,11 +56,9 @@ describe("mappedSource", () => {
       resolveMappedListSource({
         streamDocument: {},
         fieldPath: "c_linkedLocation",
-        listFieldName: "events",
       })
     ).toEqual({
       mode: "resolvedItems",
-      itemSource: "mappedItemList",
       items: [],
     });
 
@@ -77,18 +68,16 @@ describe("mappedSource", () => {
           c_linkedLocation: [],
         },
         fieldPath: "c_linkedLocation",
-        listFieldName: "events",
       })
     ).toEqual({
       mode: "resolvedItems",
-      itemSource: "mappedItemList",
       items: [],
     });
   });
 
-  it("returns top-level list roots with nested fields for base entity sources", () => {
+  it("returns descendant list roots with nested fields for mapped sources", () => {
     expect(
-      getBaseEntityListSourceRootFields([
+      getListSourceRootFields([
         {
           name: "c_customEvents",
           definition: {
@@ -107,14 +96,19 @@ describe("mappedSource", () => {
             type: {},
           },
           children: {
-            fields: [{ name: "title" }],
-          },
-        },
-        {
-          name: "photoGallery",
-          definition: {
-            name: "photoGallery",
-            type: {},
+            fields: [
+              {
+                name: "items",
+                definition: {
+                  isList: true,
+                  name: "items",
+                  type: {},
+                },
+                children: {
+                  fields: [{ name: "title" }],
+                },
+              },
+            ],
           },
         },
       ] as any)
@@ -130,6 +124,17 @@ describe("mappedSource", () => {
           fields: [{ name: "title" }],
         },
       },
+      {
+        name: "heroSection.items",
+        definition: {
+          isList: true,
+          name: "items",
+          type: {},
+        },
+        children: {
+          fields: [{ name: "title" }],
+        },
+      },
     ]);
   });
 
@@ -137,7 +142,6 @@ describe("mappedSource", () => {
     expect(
       resolveMappedListSource({
         streamDocument: {},
-        listFieldName: "events",
       })
     ).toEqual({ mode: "constantValue", items: [] });
   });

@@ -9,13 +9,14 @@ import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
-import { PuckComponent, Slot } from "@puckeditor/core";
+import { PuckComponent, Slot, setDeep } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { defaultInsightCardSlotData } from "./InsightCard.tsx";
 import { InsightCardsWrapperProps } from "./InsightCardsWrapper.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
+import { hasResolvedMappedListSource } from "../../../utils/cardSlots/mappedSource.ts";
 
 export interface InsightSectionProps {
   /**
@@ -45,6 +46,9 @@ export interface InsightSectionProps {
   analytics: {
     scope?: string;
   };
+
+  /** @internal */
+  hasResolvedSource?: boolean;
 
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
@@ -98,7 +102,11 @@ const insightSectionFields: YextFields<InsightSectionProps> = {
 };
 
 const InsightSectionComponent: PuckComponent<InsightSectionProps> = (props) => {
-  const { slots, styles } = props;
+  const { slots, styles, hasResolvedSource, puck } = props;
+
+  if (!puck.isEditing && hasResolvedSource === false) {
+    return <></>;
+  }
 
   return (
     <PageSection
@@ -176,8 +184,24 @@ export const InsightSection: YextComponentConfig<InsightSectionProps> = {
     },
     liveVisibility: true,
   },
-  resolveData: (data) => {
-    return forwardHeadingLevel<InsightCardsWrapperProps>(data, "TitleSlot");
+  resolveData: (data, params) => {
+    const updatedData = forwardHeadingLevel<InsightCardsWrapperProps>(
+      data,
+      "TitleSlot"
+    );
+    const wrapperProps = updatedData.props.slots.CardsWrapperSlot?.[0]
+      ?.props as InsightCardsWrapperProps | undefined;
+
+    return setDeep(
+      updatedData,
+      "props.hasResolvedSource",
+      !wrapperProps ||
+        hasResolvedMappedListSource({
+          streamDocument: params.metadata.streamDocument ?? {},
+          constantValueEnabled: wrapperProps.data.constantValueEnabled,
+          fieldPath: wrapperProps.data.field,
+        })
+    );
   },
   render: (props) => {
     return (

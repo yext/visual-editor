@@ -43,12 +43,16 @@ import { pt, type MsgString } from "../utils/i18n/platform.ts";
 import { useTranslation } from "react-i18next";
 import { EmbeddedFieldStringInputFromEntity } from "../editor/EmbeddedFieldStringInput.tsx";
 import { FAQ_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/FAQsSection.tsx";
-import { getFieldsForSelector } from "../editor/yextEntityFieldUtils.ts";
+import {
+  getEntityFieldDisplayName,
+  getFieldsForSelector,
+} from "../editor/yextEntityFieldUtils.ts";
 import { useDocument } from "../hooks/useDocument.tsx";
 import { isLinkedEntityFieldPath } from "../utils/linkedEntityFieldUtils.ts";
 import { warnOnMultiValueLinkedEntityTraversal } from "../utils/linkedEntityWarningUtils.ts";
 import { buildEntityFieldOptionGroups } from "../editor/entityFieldOptionGroups.ts";
 import { type MappedSourceFieldFilter } from "../utils/cardSlots/mappedSource.ts";
+import { useResolvedSourceField } from "../editor/currentDocumentContext.tsx";
 
 const devLogger = new DevLogger();
 
@@ -81,6 +85,7 @@ export type EntityFieldSelectorField<
   constantValueFilter?: RenderEntityFieldFilter<T>;
   disableConstantValueToggle?: boolean;
   disallowTranslation?: boolean;
+  sourceFieldPath?: string;
 };
 
 type EntityFieldSelectorFieldProps = FieldProps<EntityFieldSelectorField>;
@@ -290,6 +295,7 @@ export const EntityFieldSelectorFieldOverride = ({
           value={value}
           filter={constantValueFilter}
           disallowTranslation={field.disallowTranslation}
+          sourceFieldPath={field.sourceFieldPath}
         />
       )}
       {!showConstantValueInput && (
@@ -298,6 +304,7 @@ export const EntityFieldSelectorFieldOverride = ({
           onChange={onChange}
           value={value}
           filter={field.filter}
+          sourceFieldPath={field.sourceFieldPath}
         />
       )}
     </>
@@ -374,6 +381,7 @@ type InputProps<T extends Record<string, any>> = {
   className?: string;
   disallowTranslation?: boolean;
   label?: string;
+  sourceFieldPath?: string;
 };
 
 export const ConstantValueInput = <T extends Record<string, any>>({
@@ -381,6 +389,7 @@ export const ConstantValueInput = <T extends Record<string, any>>({
   onChange,
   value,
   disallowTranslation,
+  sourceFieldPath,
 }: InputProps<T>) => {
   const isSingleStringField =
     filter.types?.includes("type.string") &&
@@ -440,6 +449,7 @@ export const ConstantValueInput = <T extends Record<string, any>>({
         }}
         filter={filter}
         showFieldSelector={true}
+        sourceFieldPath={sourceFieldPath}
       />
     </div>
   ) : (
@@ -480,16 +490,54 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   value,
   className,
   label,
+  sourceFieldPath,
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
   const templateMetadata = useTemplateMetadata();
   const streamDocument = useDocument();
+  const sourceFieldFromProps = useResolvedSourceField(sourceFieldPath);
+  const sourceField =
+    sourceFieldFromProps ||
+    (filter as { subdocumentField?: string }).subdocumentField ||
+    "";
+  const currentFieldPath = value?.field as string | undefined;
   const entityFieldSelector = React.useMemo<BasicSelectorField>(() => {
     const filteredEntityFields = getFieldsForSelector(
       entityFields,
       filter as any,
-      streamDocument
+      streamDocument,
+      sourceField || undefined
     );
+    const options = filteredEntityFields.map((field) => ({
+      label:
+        field.displayName ??
+        getEntityFieldDisplayName(
+          sourceField ? `${sourceField}.${field.name}` : field.name,
+          entityFields
+        ) ??
+        field.name,
+      value: field.name,
+      fieldPath: sourceField ? `${sourceField}.${field.name}` : field.name,
+    }));
+
+    if (
+      currentFieldPath &&
+      !options.some((option) => option.value === currentFieldPath)
+    ) {
+      options.push({
+        label:
+          getEntityFieldDisplayName(
+            sourceField
+              ? `${sourceField}.${currentFieldPath}`
+              : currentFieldPath,
+            entityFields
+          ) ?? currentFieldPath,
+        value: currentFieldPath,
+        fieldPath: sourceField
+          ? `${sourceField}.${currentFieldPath}`
+          : currentFieldPath,
+      });
+    }
 
     return {
       type: "basicSelector",
@@ -504,11 +552,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
             }),
             fieldPath: "",
           },
-          ...filteredEntityFields.map((field) => ({
-            label: field.displayName ?? field.name,
-            value: field.name,
-            fieldPath: field.name,
-          })),
+          ...options,
         ],
         linkedGroupTitle: pt("linkedEntityFields", "Linked Entity Fields"),
         entityGroupTitle: pt("entityFields", "Entity Fields"),
@@ -520,12 +564,37 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     entityFields,
     filter,
     label,
+    currentFieldPath,
+    sourceField,
     templateMetadata.entityTypeDisplayName,
     streamDocument,
   ]);
 
+  const previousSourceField = React.useRef(sourceField);
+
   React.useEffect(() => {
     if (
+      !sourceFieldPath ||
+      previousSourceField.current === sourceField ||
+      !value?.field
+    ) {
+      previousSourceField.current = sourceField;
+      return;
+    }
+
+    previousSourceField.current = sourceField;
+    onChange(
+      {
+        ...value,
+        field: "",
+      },
+      undefined
+    );
+  }, [onChange, sourceField, sourceFieldPath, value]);
+
+  React.useEffect(() => {
+    if (
+      sourceField ||
       filter.includeListsOnly ||
       !value?.field ||
       !isLinkedEntityFieldPath(value.field, entityFields)
@@ -534,7 +603,13 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     }
 
     warnOnMultiValueLinkedEntityTraversal(streamDocument, value.field);
-  }, [filter.includeListsOnly, entityFields, streamDocument, value?.field]);
+  }, [
+    filter.includeListsOnly,
+    entityFields,
+    sourceField,
+    streamDocument,
+    value?.field,
+  ]);
 
   return (
     <div className={`ve-inline-block ve-w-full ${className ?? ""}`}>

@@ -27,22 +27,22 @@ describe("EventCardsWrapper", () => {
     data.props.data.field = "c_linkedLocation";
     data.props.cards = {
       title: {
-        field: "c_linkedLocation.name",
+        field: "name",
         constantValue: { defaultValue: "" },
         constantValueEnabled: false,
       },
       date: {
-        field: "c_linkedLocation.c_eventDate",
+        field: "c_eventDate",
         constantValue: "",
         constantValueEnabled: false,
       },
       description: {
-        field: "c_linkedLocation.c_eventDescription",
+        field: "c_eventDescription",
         constantValue: { defaultValue: "" },
         constantValueEnabled: false,
       },
       cta: {
-        field: "c_linkedLocation.c_eventCta",
+        field: "c_eventCta",
         constantValue: {
           label: { defaultValue: "" },
           link: "",
@@ -52,7 +52,7 @@ describe("EventCardsWrapper", () => {
         constantValueEnabled: false,
       },
       image: {
-        field: "c_linkedLocation.photo",
+        field: "photo",
         constantValue: {
           url: "",
           width: 0,
@@ -108,11 +108,11 @@ describe("EventCardsWrapper", () => {
     expect(resolvedData.props!.slots!.CardSlot[0]?.props.parentData).toEqual({
       field: "c_linkedLocation",
       fields: {
-        image: "c_linkedLocation.photo",
-        title: "c_linkedLocation.name",
-        dateTime: "c_linkedLocation.c_eventDate",
-        description: "c_linkedLocation.c_eventDescription",
-        cta: "c_linkedLocation.c_eventCta",
+        image: "photo",
+        title: "name",
+        dateTime: "c_eventDate",
+        description: "c_eventDescription",
+        cta: "c_eventCta",
       },
       event: {
         image: {
@@ -140,7 +140,7 @@ describe("EventCardsWrapper", () => {
     data.props.data.field = "c_linkedLocation";
     data.props.cards = {
       title: {
-        field: "c_linkedLocation.name",
+        field: "name",
         constantValue: { defaultValue: "" },
         constantValueEnabled: false,
       },
@@ -158,7 +158,7 @@ describe("EventCardsWrapper", () => {
       field: "c_linkedLocation",
       fields: {
         image: undefined,
-        title: "c_linkedLocation.name",
+        title: "name",
         dateTime: undefined,
         description: undefined,
         cta: undefined,
@@ -229,7 +229,7 @@ describe("EventCardsWrapper", () => {
     });
   });
 
-  it("preserves existing event section sources", async () => {
+  it("treats an object source as a single current document context", async () => {
     const data = createWrapperData();
     data.props.data.constantValueEnabled = false;
     data.props.data.field = "c_eventsSection";
@@ -259,16 +259,29 @@ describe("EventCardsWrapper", () => {
     expect(resolvedData.props!.slots!.CardSlot).toHaveLength(1);
     expect(resolvedData.props!.slots!.CardSlot[0]?.props.parentData).toEqual({
       field: "c_eventsSection",
+      fields: {
+        image: undefined,
+        title: undefined,
+        dateTime: undefined,
+        description: undefined,
+        cta: undefined,
+      },
       event: {
-        title: "Cooking Class",
-        dateTime: "2026-05-01T12:00:00",
+        image: {
+          url: "",
+          width: 0,
+          height: 0,
+        },
+        title: "",
+        dateTime: "",
         description: {
-          html: "<p>Open house</p>",
+          defaultValue: "",
         },
         cta: {
-          label: "Learn More",
-          link: "https://example.com",
+          label: { defaultValue: "" },
+          link: "",
           linkType: "URL",
+          ctaType: "textAndLink",
         },
       },
     });
@@ -280,22 +293,22 @@ describe("EventCardsWrapper", () => {
     data.props.data.field = "c_customEvents";
     data.props.cards = {
       title: {
-        field: "c_customEvents.title",
+        field: "title",
         constantValue: { defaultValue: "" },
         constantValueEnabled: false,
       },
       date: {
-        field: "c_customEvents.startDate",
+        field: "startDate",
         constantValue: "",
         constantValueEnabled: false,
       },
       description: {
-        field: "c_customEvents.summary",
+        field: "summary",
         constantValue: { defaultValue: "" },
         constantValueEnabled: false,
       },
       cta: {
-        field: "c_customEvents.primaryCta",
+        field: "primaryCta",
         constantValue: {
           label: { defaultValue: "" },
           link: "",
@@ -305,7 +318,7 @@ describe("EventCardsWrapper", () => {
         constantValueEnabled: false,
       },
       image: {
-        field: "c_customEvents.heroImage",
+        field: "heroImage",
         constantValue: {
           url: "",
           width: 0,
@@ -344,11 +357,11 @@ describe("EventCardsWrapper", () => {
     expect(resolvedData.props!.slots!.CardSlot[0]?.props.parentData).toEqual({
       field: "c_customEvents",
       fields: {
-        image: "c_customEvents.heroImage",
-        title: "c_customEvents.title",
-        dateTime: "c_customEvents.startDate",
-        description: "c_customEvents.summary",
-        cta: "c_customEvents.primaryCta",
+        image: "heroImage",
+        title: "title",
+        dateTime: "startDate",
+        description: "summary",
+        cta: "primaryCta",
       },
       event: {
         image: {
@@ -397,19 +410,9 @@ describe("EventCardsWrapper", () => {
         c_customEvents: [{ title: "Downtown" }],
       })
     );
-    const sectionFields = await EventCardsWrapper.resolveFields!(
-      data,
-      resolveParams({
-        c_customEvents: {
-          events: [{ title: "Event" }],
-        },
-      })
-    );
-
     expect(linkedFields.cards?.visible).toBe(true);
     expect((linkedFields.cards as any)?.objectFields?.title?.type).toBe(
-      "custom"
+      "entityField"
     );
-    expect(sectionFields.cards?.visible).toBe(false);
   });
 });

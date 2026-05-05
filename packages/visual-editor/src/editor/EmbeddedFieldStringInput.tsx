@@ -27,6 +27,10 @@ import {
   buildEntityFieldOptionGroups,
   type EntityFieldOptionGroup,
 } from "./entityFieldOptionGroups.ts";
+import {
+  getCurrentDocumentContext,
+  useResolvedSourceField,
+} from "./currentDocumentContext.tsx";
 
 export type EmbeddedStringOption = {
   label: string;
@@ -43,32 +47,36 @@ export const EmbeddedFieldStringInputFromEntity = <
   onChange,
   filter,
   showFieldSelector = true,
+  sourceFieldPath,
 }: {
   value: string;
   onChange: (value: string) => void;
   filter: RenderEntityFieldFilter<T>;
   showFieldSelector: boolean;
+  sourceFieldPath?: string;
 }) => {
   const entityFields = useEntityFields();
   const streamDocument = useDocument();
+  const sourceField = useResolvedSourceField(sourceFieldPath);
 
   const entityFieldOptions = React.useMemo(() => {
     const filteredEntityFields = getFieldsForSelector(
       entityFields,
       filter,
-      streamDocument
+      streamDocument,
+      sourceField || undefined
     );
     return buildEntityFieldOptionGroups({
       entityFields,
       options: filteredEntityFields.map((field) => ({
         label: field.displayName ?? field.name,
         value: field.name,
-        fieldPath: field.name,
+        fieldPath: sourceField ? `${sourceField}.${field.name}` : field.name,
       })),
       linkedGroupTitle: pt("linkedEntityFields", "Linked Entity Fields"),
       entityGroupTitle: pt("entityFields", "Entity Fields"),
     });
-  }, [entityFields, filter, streamDocument]);
+  }, [entityFields, filter, sourceField, streamDocument]);
 
   return (
     <EmbeddedFieldStringInputFromOptions
@@ -77,6 +85,7 @@ export const EmbeddedFieldStringInputFromEntity = <
       optionGroups={entityFieldOptions}
       showFieldSelector={showFieldSelector}
       useOptionValueSublabel={false}
+      sourceField={sourceField}
     />
   );
 };
@@ -97,12 +106,14 @@ export const EmbeddedFieldStringInputFromOptions = ({
   optionGroups,
   showFieldSelector,
   useOptionValueSublabel = false,
+  sourceField,
 }: {
   value: string;
   onChange: (value: string) => void;
   optionGroups: EntityFieldOptionGroup<{ label: string; value: string }>[];
   showFieldSelector: boolean;
   useOptionValueSublabel?: boolean;
+  sourceField?: string;
 }) => {
   const [open, setOpen] = React.useState(false);
   const [cursorPosition, setCursorPosition] = React.useState<number | null>(
@@ -227,6 +238,7 @@ export const EmbeddedFieldStringInputFromOptions = ({
                           onSelect={() => handleFieldSelect(option.value)}
                           isOpen={open}
                           useOptionValue={useOptionValueSublabel}
+                          sourceField={sourceField}
                         />
                       ))}
                     </CommandGroup>
@@ -246,15 +258,21 @@ const CommandItemWithResolvedValue = ({
   onSelect,
   isOpen,
   useOptionValue,
+  sourceField,
 }: {
   option: { label: string; value: string };
   onSelect: () => void;
   isOpen: boolean;
   useOptionValue?: boolean;
+  sourceField?: string;
 }) => {
   const { i18n } = useTranslation();
   const locale = i18n.language;
   const streamDocument = useDocument();
+  const currentDocument = React.useMemo(
+    () => getCurrentDocumentContext(streamDocument, sourceField),
+    [sourceField, streamDocument]
+  );
   const [resolvedValue, setResolvedValue] = React.useState<
     string | undefined
   >();
@@ -273,13 +291,20 @@ const CommandItemWithResolvedValue = ({
       const resolved = resolveComponentData(
         fieldToResolve,
         locale,
-        streamDocument
+        currentDocument
       );
       const finalValue =
         typeof resolved === "object" ? JSON.stringify(resolved) : resolved;
       setResolvedValue(String(finalValue ?? ""));
     }
-  }, [isOpen, option.value, streamDocument, resolvedValue, useOptionValue]);
+  }, [
+    currentDocument,
+    isOpen,
+    locale,
+    option.value,
+    resolvedValue,
+    useOptionValue,
+  ]);
 
   return (
     <CommandItem

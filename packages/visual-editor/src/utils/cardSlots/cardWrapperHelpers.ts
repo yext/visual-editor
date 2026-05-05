@@ -28,7 +28,7 @@ export interface CardWrapperType<T> {
 
 export type CardWrapperFieldsOptions = {
   label: MsgString;
-  entityFieldType: EntityFieldTypes;
+  constantValueType: EntityFieldTypes;
   listFieldName?: string;
   sourceRootKinds?: SourceRootKind[];
   sourceRootsOnly?: boolean;
@@ -43,7 +43,7 @@ export type CardWrapperFieldsOptions = {
  */
 export const cardWrapperFields = <T>({
   label,
-  entityFieldType,
+  constantValueType,
   listFieldName = "",
   sourceRootKinds = [],
   sourceRootsOnly = false,
@@ -54,10 +54,12 @@ export const cardWrapperFields = <T>({
     type: "entityField",
     filter: {
       listFieldName,
-      types: [entityFieldType],
       requiredDescendantTypes,
       sourceRootKinds,
       sourceRootsOnly,
+    },
+    constantValueFilter: {
+      types: [constantValueType],
     },
   },
   slots: {
@@ -81,13 +83,12 @@ type MappedSubfieldConfig = {
  * Builds the repeated subfield selector object used when a wrapper maps cards
  * from arbitrary linked entities or base list items.
  */
-export const createMappedSubfieldFields = <
+export const createScopedMappingFields = <
   TFields extends Record<string, MappedSubfieldConfig>,
 >(
   label: MsgString,
-  sourceField: string | undefined,
-  fields: TFields,
-  sourceFieldPath = "data.field"
+  sourceFieldPath = "data.field",
+  fields: TFields
 ): YextFieldDefinition<any> =>
   YextField(label, {
     type: "object",
@@ -95,8 +96,7 @@ export const createMappedSubfieldFields = <
       Object.entries(fields).map(([fieldName, fieldConfig]) => [
         fieldName,
         YextField(fieldConfig.label, {
-          type: "subfieldSelector",
-          sourceField: sourceField ?? "",
+          type: "entityField",
           sourceFieldPath,
           disableConstantValueToggle: fieldConfig.disableConstantValueToggle,
           disallowTranslation: fieldConfig.disallowTranslation,

@@ -23,8 +23,11 @@ import {
   resolveMappedListWrapperData,
   resolveMappedListFields,
 } from "../../../utils/cardSlots/mappedListWrapper.ts";
-import { resolveMappedSourceField } from "../../../utils/cardSlots/mappedSource.ts";
-import { createMappedSubfieldFields } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
+import {
+  hasResolvedMappedListSource,
+  resolveMappedSourceField,
+} from "../../../utils/cardSlots/mappedSource.ts";
+import { createScopedMappingFields } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 
 export interface FAQStyles {
   /**
@@ -67,6 +70,9 @@ export interface FAQSectionProps {
     scope?: string;
   };
 
+  /** @internal */
+  hasResolvedSource?: boolean;
+
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
    * @defaultValue true
@@ -74,10 +80,10 @@ export interface FAQSectionProps {
   liveVisibility: boolean;
 }
 
-const createFAQMappingFields = (sourceField?: string) =>
-  createMappedSubfieldFields(
+const createFAQMappingFields = (sourceFieldPath?: string) =>
+  createScopedMappingFields(
     msg("fields.faqMapping", "FAQ Mapping"),
-    sourceField,
+    sourceFieldPath,
     {
       question: {
         label: msg("fields.question", "Question"),
@@ -91,14 +97,13 @@ const createFAQMappingFields = (sourceField?: string) =>
   );
 
 const createFAQsSectionFields = (
-  sourceField?: string
+  sourceFieldPath?: string
 ): YextFields<FAQSectionProps> => ({
   data: {
     label: msg("fields.faqs", "FAQs"),
     type: "entityField",
     filter: {
       listFieldName: "faqs",
-      types: [ComponentFields.FAQSection.type],
       requiredDescendantTypes: [
         ["type.string", "type.rich_text_v2"],
         ["type.string", "type.rich_text_v2"],
@@ -106,8 +111,11 @@ const createFAQsSectionFields = (
       sourceRootKinds: ["linkedEntityRoot", "baseListRoot"],
       sourceRootsOnly: true,
     },
+    constantValueFilter: {
+      types: [ComponentFields.FAQSection.type],
+    },
   },
-  faqs: createFAQMappingFields(sourceField) as any,
+  faqs: createFAQMappingFields(sourceFieldPath) as any,
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
@@ -156,7 +164,13 @@ const FAQsSectionFields = createFAQsSectionFields();
 const FAQsSectionComponent: PuckComponent<FAQSectionProps> = ({
   styles,
   slots,
+  hasResolvedSource,
+  puck,
 }) => {
+  if (!puck.isEditing && hasResolvedSource === false) {
+    return <></>;
+  }
+
   return (
     <PageSection
       background={styles.backgroundColor}
@@ -229,25 +243,20 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
       scope: "faqsSection",
     },
   },
-  resolveFields: (data, params) => {
-    const streamDocument = params.metadata.streamDocument ?? {};
-    return resolveMappedListFields({
+  resolveFields: (data) =>
+    resolveMappedListFields({
       data: data as ComponentData<FAQSectionProps>,
-      streamDocument,
-      listFieldName: "faqs",
       createFields: createFAQsSectionFields as any,
       mappingFieldName: "faqs",
       createMappingFields: createFAQMappingFields,
-    });
-  },
+    }),
   resolveData: (data, params) => {
     const streamDocument = params.metadata.streamDocument ?? {};
     const locale = i18nComponentsInstance.language || "en";
-    return resolveMappedListWrapperData<
+    const resolvedData = resolveMappedListWrapperData<
       FAQSectionProps,
       FAQCardProps,
       Record<string, unknown>,
-      FAQSectionType["faqs"][number],
       {
         questionVariant?: FAQCardProps["styles"]["questionVariant"];
         answerVariant?: FAQCardProps["styles"]["answerVariant"];
@@ -256,7 +265,6 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
     >({
       data: data as ComponentData<FAQSectionProps>,
       streamDocument,
-      listFieldName: "faqs",
       cardIdPrefix: "FAQCard",
       getSharedCardProps: (card) =>
         !card
@@ -280,24 +288,27 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
           faq: {
             question: resolveMappedSourceField(
               item,
-              data.props.data.field,
               data.props.faqs?.question,
               locale
             ) ?? { defaultValue: "" },
             answer: resolveMappedSourceField(
               item,
-              data.props.data.field,
               data.props.faqs?.answer,
               locale
             ) ?? { defaultValue: "" },
           },
         } satisfies FAQCardProps["parentData"]),
-      decorateSectionItemCard: (card, faq, index) =>
-        setDeep(setDeep(card, "props.index", index), "props.parentData", {
-          field: data.props.data.field,
-          faq,
-        } satisfies FAQCardProps["parentData"]),
     });
+
+    return setDeep(
+      resolvedData,
+      "props.hasResolvedSource",
+      hasResolvedMappedListSource({
+        streamDocument,
+        constantValueEnabled: data.props.data.constantValueEnabled,
+        fieldPath: data.props.data.field,
+      })
+    );
   },
   render: (props) => (
     <ComponentErrorBoundary

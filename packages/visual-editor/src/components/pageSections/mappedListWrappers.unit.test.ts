@@ -41,32 +41,32 @@ describe("mapped list wrappers", () => {
     data.props.data.field = "c_linkedProducts";
     data.props.cards = {
       image: {
-        field: "c_linkedProducts.photo",
+        field: "photo",
         constantValue: undefined,
         constantValueEnabled: false,
       },
       brow: {
-        field: "c_linkedProducts.category",
+        field: "category",
         constantValue: { defaultValue: "" },
         constantValueEnabled: false,
       },
       name: {
-        field: "c_linkedProducts.name",
+        field: "name",
         constantValue: { defaultValue: "" },
         constantValueEnabled: false,
       },
       price: {
-        field: "c_linkedProducts.price",
+        field: "price",
         constantValue: "",
         constantValueEnabled: false,
       },
       description: {
-        field: "c_linkedProducts.description",
+        field: "description",
         constantValue: { defaultValue: "" },
         constantValueEnabled: false,
       },
       cta: {
-        field: "c_linkedProducts.cta",
+        field: "cta",
         constantValue: {
           label: { defaultValue: "" },
           link: "",
@@ -116,32 +116,32 @@ describe("mapped list wrappers", () => {
     data.props.data.field = "c_articles";
     data.props.cards = {
       image: {
-        field: "c_articles.image",
+        field: "image",
         constantValue: undefined,
         constantValueEnabled: false,
       },
       name: {
-        field: "c_articles.title",
+        field: "title",
         constantValue: { defaultValue: "" },
         constantValueEnabled: false,
       },
       category: {
-        field: "c_articles.category",
+        field: "category",
         constantValue: { defaultValue: "" },
         constantValueEnabled: false,
       },
       publishTime: {
-        field: "c_articles.publishDate",
+        field: "publishDate",
         constantValue: "",
         constantValueEnabled: false,
       },
       description: {
-        field: "c_articles.summary",
+        field: "summary",
         constantValue: { defaultValue: "" },
         constantValueEnabled: false,
       },
       cta: {
-        field: "c_articles.cta",
+        field: "cta",
         constantValue: {
           label: { defaultValue: "" },
           link: "",
@@ -190,17 +190,17 @@ describe("mapped list wrappers", () => {
     data.props.data.field = "c_reviews";
     data.props.cards = {
       description: {
-        field: "c_reviews.quote",
+        field: "quote",
         constantValue: { defaultValue: "" },
         constantValueEnabled: false,
       },
       contributorName: {
-        field: "c_reviews.author",
+        field: "author",
         constantValue: { defaultValue: "" },
         constantValueEnabled: false,
       },
       contributionDate: {
-        field: "c_reviews.date",
+        field: "date",
         constantValue: "",
         constantValueEnabled: false,
       },
@@ -238,32 +238,32 @@ describe("mapped list wrappers", () => {
     data.props.data.field = "c_teamMembers";
     data.props.cards = {
       headshot: {
-        field: "c_teamMembers.photo",
+        field: "photo",
         constantValue: undefined,
         constantValueEnabled: false,
       },
       name: {
-        field: "c_teamMembers.name",
+        field: "name",
         constantValue: { defaultValue: "" },
         constantValueEnabled: false,
       },
       title: {
-        field: "c_teamMembers.jobTitle",
+        field: "jobTitle",
         constantValue: { defaultValue: "" },
         constantValueEnabled: false,
       },
       phoneNumber: {
-        field: "c_teamMembers.phone",
+        field: "phone",
         constantValue: "",
         constantValueEnabled: false,
       },
       email: {
-        field: "c_teamMembers.email",
+        field: "email",
         constantValue: "",
         constantValueEnabled: false,
       },
       cta: {
-        field: "c_teamMembers.cta",
+        field: "cta",
         constantValue: {
           label: { defaultValue: "" },
           link: "",
