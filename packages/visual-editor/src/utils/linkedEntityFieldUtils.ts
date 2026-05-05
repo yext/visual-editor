@@ -30,19 +30,6 @@ export const isTopLevelLinkedEntityField = (
   );
 };
 
-export const buildLinkedEntityStreamFields = (
-  entityFields: StreamFields | null
-): StreamFields | null => {
-  if (!entityFields) {
-    return null;
-  }
-
-  return {
-    fields: getTopLevelLinkedEntitySourceFields(entityFields),
-    displayNames: entityFields.displayNames,
-  };
-};
-
 export const isLinkedEntityFieldPath = (
   fieldPath: string | undefined,
   entityFields: StreamFields | null

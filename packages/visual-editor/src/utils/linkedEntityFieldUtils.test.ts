@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import {
-  buildLinkedEntityStreamFields,
   getTopLevelLinkedEntitySourceFields,
   isLinkedEntityFieldPath,
   isTopLevelLinkedEntityField,
@@ -53,13 +52,6 @@ describe("linkedEntityFieldUtils", () => {
     expect(getTopLevelLinkedEntitySourceFields(entityFields)).toEqual([
       entityFields.fields[0],
     ]);
-  });
-
-  it("builds linked entity stream fields from entity fields", () => {
-    expect(buildLinkedEntityStreamFields(entityFields)).toEqual({
-      fields: [entityFields.fields[0]],
-      displayNames: entityFields.displayNames,
-    });
   });
 
   it("uses entity fields to detect linked paths", () => {
