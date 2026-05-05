@@ -22,7 +22,7 @@ import { type StreamDocument } from "../types/StreamDocument.ts";
 import { type MappedSourceFieldFilter } from "../cardSlots/mappedSource.ts";
 
 type NormalizeDataParams = {
-  lastData: { props: Record<string, unknown> } | null;
+  lastData: { props: Record<string, unknown> } | Record<string, unknown> | null;
 };
 
 type CreateItemSourceOptions<TItem extends Record<string, unknown>> = {
@@ -376,6 +376,22 @@ const hasEntityFieldBindings = (value: unknown): boolean => {
 };
 
 /**
+ * Normalizes the previous resolveData payload into a props object so source
+ * change cleanup works across the callback shapes Puck can provide.
+ */
+const getLastProps = (
+  lastData: NormalizeDataParams["lastData"]
+): Record<string, unknown> | undefined =>
+  !lastData
+    ? undefined
+    : "props" in lastData &&
+        lastData.props &&
+        typeof lastData.props === "object" &&
+        !Array.isArray(lastData.props)
+      ? (lastData.props as Record<string, unknown>)
+      : (lastData as Record<string, unknown>);
+
+/**
  * Resolves one item field into its render-ready value using either the current
  * source item or the root stream document, depending on field scope.
  */
@@ -545,18 +561,19 @@ export const createItemSource = <
       data: TData,
       params: NormalizeDataParams
     ) => {
+      const lastProps = getLastProps(params.lastData);
       const itemSource = getPathValue<ItemSourceValue<TItem>>(
         data.props,
         itemSourcePath
       );
       const lastItemSource = getPathValue<ItemSourceValue<TItem>>(
-        params.lastData?.props,
+        lastProps,
         itemSourcePath
       );
 
       if (
         itemSource?.constantValueEnabled ||
-        !params.lastData ||
+        !lastProps ||
         lastItemSource?.field === itemSource?.field
       ) {
         return data;

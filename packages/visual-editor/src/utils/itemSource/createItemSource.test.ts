@@ -186,6 +186,52 @@ describe("createItemSource", () => {
     ).toBe(data);
   });
 
+  it("clears mapping field bindings when resolveData provides lastData as raw props", () => {
+    const resolved = articleItems.normalizeData(
+      {
+        type: "ArticleList",
+        props: {
+          articleSource: {
+            field: "c_newArticles",
+            constantValueEnabled: false,
+            constantValue: [],
+          },
+          articleMappings: {
+            title: {
+              field: "title",
+              constantValueEnabled: false,
+              constantValue: { defaultValue: "Fallback title" },
+            },
+            description: {
+              field: "description",
+              constantValueEnabled: false,
+              constantValue: { defaultValue: "" },
+            },
+            eyebrow: "Featured",
+            rootTitle: {
+              field: "name",
+              constantValueEnabled: false,
+              constantValue: { defaultValue: "Root fallback" },
+            },
+          },
+        },
+      } as unknown as ComponentData<TestProps>,
+      {
+        lastData: {
+          articleSource: {
+            field: "c_oldArticles",
+            constantValueEnabled: false,
+            constantValue: [],
+          },
+        },
+      }
+    );
+
+    expect(resolved.props.articleMappings?.title.field).toBe("");
+    expect(resolved.props.articleMappings?.description.field).toBe("");
+    expect(resolved.props.articleMappings?.rootTitle.field).toBe("");
+  });
+
   it("resolves linked items against the current item and root-scoped fields against the page", () => {
     const resolved = articleItems.resolveItems(
       {

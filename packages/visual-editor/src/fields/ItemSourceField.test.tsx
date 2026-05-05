@@ -1,6 +1,7 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import { FAQSection } from "../components/pageSections/FAQsSection/FAQsSection.tsx";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { EntityFieldsContext } from "../hooks/useEntityFields.tsx";
 import { TemplateMetadataContext } from "../internal/hooks/useMessageReceivers.ts";
@@ -257,7 +258,110 @@ describe("ItemSourceField", () => {
     expect(screen.getAllByText("FAQs").length).toBeGreaterThan(0);
   });
 
-  it("uses display names for linked nested list sources", () => {
+  it("shows FAQ Section > FAQs in the real FAQs section item source field", () => {
+    const fields = FAQSection.resolveFields?.(
+      {
+        props: {
+          id: "FAQSection-test",
+          ...FAQSection.defaultProps,
+          data: {
+            field: "",
+            constantValueEnabled: false,
+            constantValue: [],
+          },
+        },
+      } as never,
+      {} as never
+    ) as Exclude<typeof FAQSection.resolveFields, undefined> extends (
+      ...args: any[]
+    ) => infer TResult
+      ? Awaited<TResult>
+      : never;
+
+    render(
+      <TemplatePropsContext.Provider
+        value={{ document: { c_faqSection: { faqs: [] } } }}
+      >
+        <TemplateMetadataContext.Provider
+          value={{
+            ...generateTemplateMetadata(),
+            entityTypeDisplayName: "Location",
+          }}
+        >
+          <EntityFieldsContext.Provider
+            value={{
+              fields: [
+                {
+                  name: "c_faqSection",
+                  definition: {
+                    name: "c_faqSection",
+                    typeRegistryId: "type.faq_section",
+                    type: {},
+                  },
+                  children: {
+                    fields: [
+                      {
+                        name: "faqs",
+                        definition: {
+                          name: "faqs",
+                          isList: true,
+                          typeRegistryId: "type.struct",
+                          type: {},
+                        },
+                        children: {
+                          fields: [
+                            {
+                              name: "question",
+                              definition: {
+                                name: "question",
+                                typeRegistryId: "type.string",
+                                type: {},
+                              },
+                            },
+                            {
+                              name: "answer",
+                              definition: {
+                                name: "answer",
+                                typeRegistryId: "type.rich_text_v2",
+                                type: {},
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+              displayNames: {
+                c_faqSection: "faqSection",
+                "c_faqSection.faqs": "faqSection > FAQs",
+                "c_faqSection.faqs.question": "faqSection > FAQs > Question",
+                "c_faqSection.faqs.answer": "faqSection > FAQs > Answer",
+              },
+            }}
+          >
+            <YextAutoField
+              field={fields.data!}
+              id="real-faq-item-source-field"
+              onChange={vi.fn()}
+              value={{
+                field: "",
+                constantValueEnabled: false,
+                constantValue: [],
+              }}
+            />
+          </EntityFieldsContext.Provider>
+        </TemplateMetadataContext.Provider>
+      </TemplatePropsContext.Provider>
+    );
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(screen.getAllByText("FAQ Section > FAQs").length).toBeGreaterThan(0);
+  });
+
+  it("uses ENTITY_FIELDS display names for linked nested list sources", () => {
     render(
       <TemplatePropsContext.Provider
         value={{ document: { c_linkedLocation: [] } }}
@@ -317,16 +421,49 @@ describe("ItemSourceField", () => {
                           ],
                         },
                       },
+                      {
+                        name: "c_faqSection",
+                        definition: {
+                          name: "c_faqSection",
+                          typeName: "type.faq_section",
+                          type: {},
+                        },
+                        children: {
+                          fields: [
+                            {
+                              name: "faqs",
+                              definition: {
+                                name: "faqs",
+                                isList: true,
+                                typeName: "type.struct",
+                                type: {},
+                              },
+                              children: {
+                                fields: [
+                                  {
+                                    name: "question",
+                                    definition: {
+                                      name: "question",
+                                      typeName: "type.string",
+                                      type: {},
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
                     ],
                   },
                 },
               ],
               displayNames: {
                 c_linkedLocation: "LinkedLocation",
-                "c_linkedLocation.c_eventsSection":
-                  "LinkedLocation > Events Section",
-                "c_linkedLocation.c_eventsSection.events":
-                  "LinkedLocation > Events Section > Events",
+                c_eventsSection: "Events Section",
+                "c_eventsSection.events": "Events Section > Events",
+                c_faqSection: "faqSection",
+                "c_faqSection.faqs": "faqSection > FAQs",
               },
             }}
           >
@@ -375,7 +512,13 @@ describe("ItemSourceField", () => {
       screen.getAllByText("LinkedLocation > Events Section > Events").length
     ).toBeGreaterThan(0);
     expect(
+      screen.getAllByText("LinkedLocation > FAQ Section > FAQs").length
+    ).toBeGreaterThan(0);
+    expect(
       screen.queryByText("LinkedLocation > c_eventsSection > events")
+    ).toBeNull();
+    expect(
+      screen.queryByText("LinkedLocation > c_faqSection > faqs")
     ).toBeNull();
   });
 });

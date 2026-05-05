@@ -49,17 +49,71 @@ const sortFields = (fields: YextSchemaField[]): YextSchemaField[] => {
   });
 };
 
+const getMappedDisplayName = (
+  fieldPath: string,
+  entityFields: StreamFields | null
+): string | undefined => {
+  const exactDisplayName = entityFields?.displayNames?.[fieldPath];
+  if (exactDisplayName) {
+    return exactDisplayName;
+  }
+
+  const fieldPathSegments = fieldPath.split(".");
+  for (let index = 1; index < fieldPathSegments.length; index += 1) {
+    const suffixPath = fieldPathSegments.slice(index).join(".");
+    const suffixDisplayName = entityFields?.displayNames?.[suffixPath];
+    if (suffixDisplayName) {
+      return suffixDisplayName;
+    }
+  }
+
+  return undefined;
+};
+
+const humanizeDisplayNameSegment = (displayName: string): string =>
+  displayName
+    .replace(/^c_/, "")
+    .split(/(?=[A-Z])|_/)
+    .filter(Boolean)
+    .map((segment) =>
+      /^[a-z]{1,3}$/.test(segment)
+        ? segment.toUpperCase()
+        : segment.charAt(0).toUpperCase() + segment.slice(1)
+    )
+    .join(" ");
+
+const normalizeDisplayNameSegment = (
+  displayName: string,
+  field: YextSchemaField
+): string => {
+  if (
+    displayName.includes(" ") ||
+    field.definition.typeRegistryId === "type.entity_reference" ||
+    field.definition.type.documentType === "DOCUMENT_TYPE_ENTITY"
+  ) {
+    return displayName;
+  }
+
+  const normalizedDisplayName = displayName.replace(/[^a-z0-9]/gi, "");
+  const normalizedFieldName = field.name
+    .replace(/^c_/, "")
+    .replace(/[^a-z0-9]/gi, "");
+
+  return normalizedDisplayName.toLowerCase() ===
+    normalizedFieldName.toLowerCase() &&
+    (displayName === field.name ||
+      displayName.startsWith("c_") ||
+      /^[a-z]/.test(displayName))
+    ? humanizeDisplayNameSegment(displayName)
+    : displayName;
+};
+
 export const getEntityFieldDisplayName = (
   fieldPath: string | undefined,
   entityFields: StreamFields | null
 ): string | undefined => {
   if (!fieldPath) {
     return undefined;
-  }
-
-  const displayNameFromMap = entityFields?.displayNames?.[fieldPath];
-  if (displayNameFromMap) {
-    return displayNameFromMap;
   }
 
   const fieldPathSegments = fieldPath.split(".");
@@ -77,15 +131,17 @@ export const getEntityFieldDisplayName = (
         : undefined;
     }
 
-    const mappedDisplayName = entityFields?.displayNames?.[currentPath];
+    const mappedDisplayName = getMappedDisplayName(currentPath, entityFields);
     const nextSegmentDisplayName = mappedDisplayName
       ? currentDisplayName &&
         mappedDisplayName.startsWith(`${currentDisplayName} > `)
         ? mappedDisplayName.slice(currentDisplayName.length + 3)
         : (mappedDisplayName.split(" > ").at(-1) ?? mappedDisplayName)
-      : (matchingField.displayName ?? matchingField.name);
+      : (matchingField.displayName?.split(" > ").at(-1) ?? matchingField.name);
 
-    displayNameSegments.push(nextSegmentDisplayName);
+    displayNameSegments.push(
+      normalizeDisplayNameSegment(nextSegmentDisplayName, matchingField)
+    );
     currentDisplayName = mappedDisplayName ?? displayNameSegments.join(" > ");
     currentFields = matchingField.children?.fields ?? [];
   }
