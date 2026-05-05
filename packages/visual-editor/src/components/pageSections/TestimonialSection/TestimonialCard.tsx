@@ -17,6 +17,7 @@ import { TimestampProps } from "../../contentBlocks/Timestamp.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import {
   shouldRenderFieldWhenPresent,
   shouldRenderToggledField,
@@ -420,7 +421,12 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
         "props.slots.ContributorNameSlot[0].props.parentData",
         {
           field: field,
-          text: testimonial.contributorName as string, // will already be resolved
+          text: resolveComponentData(
+            testimonial.contributorName,
+            i18nComponentsInstance.language || "en",
+            params.metadata.streamDocument,
+            { output: "plainText" }
+          ),
         } satisfies HeadingTextProps["parentData"]
       );
       updatedData = setDeep(

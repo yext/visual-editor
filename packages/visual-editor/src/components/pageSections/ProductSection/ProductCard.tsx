@@ -690,7 +690,12 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
         "props.slots.TitleSlot[0].props.parentData",
         {
           field: field,
-          text: product.name as string, // will already be resolved
+          text: resolveComponentData(
+            product.name,
+            locale,
+            params.metadata.streamDocument,
+            { output: "plainText" }
+          ),
         } satisfies HeadingTextProps["parentData"]
       );
       updatedData = setDeep(

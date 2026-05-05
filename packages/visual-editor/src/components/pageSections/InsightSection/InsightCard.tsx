@@ -470,7 +470,9 @@ export const InsightCard: YextComponentConfig<InsightCardProps> = {
         "props.slots.TitleSlot[0].props.parentData",
         {
           field: `${field}.name`,
-          text: insight.name,
+          text: resolveComponentData(insight.name, locale, streamDocument, {
+            output: "plainText",
+          }),
         }
       );
 

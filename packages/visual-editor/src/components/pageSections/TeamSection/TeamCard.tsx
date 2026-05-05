@@ -20,6 +20,7 @@ import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { TextProps } from "../../contentBlocks/Text.tsx";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import {
   shouldRenderFieldWhenPresent,
   shouldRenderToggledField,
@@ -625,7 +626,12 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
         "props.slots.NameSlot[0].props.parentData",
         {
           field: field,
-          text: person.name as string, // will already be resolved
+          text: resolveComponentData(
+            person.name,
+            i18nComponentsInstance.language || "en",
+            params.metadata.streamDocument,
+            { output: "plainText" }
+          ),
         } satisfies HeadingTextProps["parentData"]
       );
       updatedData = setDeep(

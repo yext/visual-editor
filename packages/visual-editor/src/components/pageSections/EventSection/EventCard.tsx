@@ -589,7 +589,12 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
         "props.slots.TitleSlot[0].props.parentData",
         {
           field: fields?.title ?? field,
-          text: event.title as string, // will already be resolved
+          text: resolveComponentData(
+            event.title,
+            i18nComponentsInstance.language || "en",
+            params.metadata.streamDocument,
+            { output: "plainText" }
+          ),
         } satisfies HeadingTextProps["parentData"]
       );
       updatedData = setDeep(
