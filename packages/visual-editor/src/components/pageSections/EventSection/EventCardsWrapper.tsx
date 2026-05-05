@@ -186,7 +186,7 @@ const toEventCardItemData = (
  */
 const syncCards = <TData extends { props: EventCardsWrapperProps }>(
   data: TData,
-  resolvedItems: Record<string, unknown>[]
+  items: Record<string, unknown>[]
 ): TData => {
   const currentCards =
     (data.props.slots.CardSlot as unknown as ComponentData<EventCardProps>[]) ??
@@ -197,7 +197,7 @@ const syncCards = <TData extends { props: EventCardsWrapperProps }>(
     "props.slots.CardSlot",
     buildListSectionCards<EventCardProps, Record<string, unknown>>({
       currentCards,
-      items: resolvedItems,
+      items,
       createCard: () => createEventCard(currentCards),
       decorateCard: (card, item, index) => ({
         ...card,
@@ -261,13 +261,13 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
     }),
   resolveData: (data, params) => {
     const normalizedData = eventCards.normalizeData(data, params);
-    const resolvedItems = eventCards.resolveItems(
+    const items = eventCards.resolveItems(
       normalizedData.props.data,
       normalizedData.props.cards,
       (params.metadata?.streamDocument ?? {}) as StreamDocument
     );
 
-    return syncCards(normalizedData, resolvedItems);
+    return syncCards(normalizedData, items);
   },
   render: (props) => <EventCardsWrapperComponent {...props} />,
 };

@@ -3,6 +3,10 @@ import {
   type DefaultComponentProps,
 } from "@puckeditor/core";
 import { describe, expect, it } from "vitest";
+import { EventCardsWrapper } from "./EventSection/EventCardsWrapper.tsx";
+import { type EventCardsWrapperProps } from "./EventSection/EventCardsWrapper.tsx";
+import { FAQSection } from "./FAQsSection/FAQsSection.tsx";
+import { type FAQSectionProps } from "./FAQsSection/FAQsSection.tsx";
 import { InsightCardsWrapper } from "./InsightSection/InsightCardsWrapper.tsx";
 import { type InsightCardsWrapperProps } from "./InsightSection/InsightCardsWrapper.tsx";
 import { ProductCardsWrapper } from "./ProductSection/ProductCardsWrapper.tsx";
@@ -32,6 +36,83 @@ const createWrapperData = <TProps extends DefaultComponentProps>(
 });
 
 describe("mapped list wrappers", () => {
+  it("maps manual events into event card itemData without rewriting slot data", async () => {
+    const data = createWrapperData<EventCardsWrapperProps>(
+      "EventCardsWrapper",
+      EventCardsWrapper.defaultProps!
+    );
+    data.props.data.constantValueEnabled = true;
+    data.props.data.field = "";
+    data.props.data.constantValue = [
+      {
+        title: {
+          field: "",
+          constantValue: { defaultValue: "Manual Event" },
+          constantValueEnabled: true,
+        },
+        date: {
+          field: "",
+          constantValue: "2026-05-01T12:00:00",
+          constantValueEnabled: true,
+        },
+        description: {
+          field: "",
+          constantValue: { html: "<p>Manual description</p>" },
+          constantValueEnabled: true,
+        },
+        cta: {
+          field: "",
+          constantValue: {
+            label: { defaultValue: "Learn More" },
+            link: "/events/manual",
+            linkType: "URL",
+            ctaType: "textAndLink",
+          },
+          constantValueEnabled: true,
+        },
+        image: {
+          field: "",
+          constantValue: {
+            url: "https://example.com/event.jpg",
+            width: 640,
+            height: 360,
+          },
+          constantValueEnabled: true,
+        },
+      },
+    ];
+
+    const resolvedData = await EventCardsWrapper.resolveData!(
+      data,
+      resolveParams({ locale: "en" })
+    );
+    const card = resolvedData.props!.slots!.CardSlot[0]!;
+
+    expect(card.props.itemData).toEqual({
+      field: "",
+      fields: {
+        image: undefined,
+        title: undefined,
+        dateTime: undefined,
+        description: undefined,
+        cta: undefined,
+      },
+      image: { url: "https://example.com/event.jpg", width: 640, height: 360 },
+      title: { defaultValue: "Manual Event" },
+      dateTime: "2026-05-01T12:00:00",
+      description: { html: "<p>Manual description</p>" },
+      cta: {
+        label: { defaultValue: "Learn More" },
+        link: "/events/manual",
+        linkType: "URL",
+        ctaType: "textAndLink",
+      },
+    });
+    expect(
+      card.props.slots.TitleSlot[0]?.props.data.text.constantValue
+    ).not.toEqual({ defaultValue: "Manual Event" });
+  });
+
   it("maps linked products into product card itemData", async () => {
     const data = createWrapperData<ProductCardsWrapperProps>(
       "ProductCardsWrapper",
@@ -293,5 +374,41 @@ describe("mapped list wrappers", () => {
       email: "jordan@example.com",
       cta: { label: "Profile", link: "/team/jordan", linkType: "URL" },
     });
+  });
+
+  it("maps manual FAQs into FAQ card itemData without keeping card data props", async () => {
+    const data = createWrapperData<FAQSectionProps>(
+      "FAQSection",
+      FAQSection.defaultProps!
+    );
+    data.props.data.constantValueEnabled = true;
+    data.props.data.field = "";
+    data.props.data.constantValue = [
+      {
+        question: {
+          field: "",
+          constantValue: { defaultValue: "Manual question?" },
+          constantValueEnabled: true,
+        },
+        answer: {
+          field: "",
+          constantValue: { html: "<p>Manual answer</p>" },
+          constantValueEnabled: true,
+        },
+      },
+    ];
+
+    const resolvedData = await FAQSection.resolveData!(
+      data,
+      resolveParams({ locale: "en" })
+    );
+    const card = resolvedData.props!.slots!.CardSlot[0]!;
+
+    expect(card.props.itemData).toEqual({
+      field: "",
+      question: { defaultValue: "Manual question?" },
+      answer: { html: "<p>Manual answer</p>" },
+    });
+    expect("data" in card.props).toBe(false);
   });
 });

@@ -144,7 +144,7 @@ const FAQsSectionFields: YextFields<FAQSectionProps> = {
  */
 const syncCards = <TData extends { props: FAQSectionProps }>(
   data: TData,
-  resolvedItems: Record<string, unknown>[]
+  items: Record<string, unknown>[]
 ): TData => {
   const currentCards =
     (data.props.slots.CardSlot as unknown as ComponentData<FAQCardProps>[]) ??
@@ -156,7 +156,7 @@ const syncCards = <TData extends { props: FAQSectionProps }>(
     "props.slots.CardSlot",
     buildListSectionCards<FAQCardProps, Record<string, unknown>>({
       currentCards,
-      items: resolvedItems,
+      items,
       createCard: () =>
         defaultFAQCardData(
           `FAQCard-${crypto.randomUUID()}`,
@@ -173,13 +173,8 @@ const syncCards = <TData extends { props: FAQSectionProps }>(
           itemData: {
             field: data.props.data.field,
             question:
-              (item.question as FAQSectionType["faqs"][number]["question"]) ?? {
-                defaultValue: "",
-              },
-            answer:
-              (item.answer as FAQSectionType["faqs"][number]["answer"]) ?? {
-                defaultValue: "",
-              },
+              item.question as FAQSectionType["faqs"][number]["question"],
+            answer: item.answer as FAQSectionType["faqs"][number]["answer"],
           },
         },
       }),

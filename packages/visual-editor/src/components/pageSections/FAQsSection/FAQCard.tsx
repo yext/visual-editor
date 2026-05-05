@@ -1,18 +1,12 @@
 import * as React from "react";
 import { PuckComponent } from "@puckeditor/core";
 import { Body, BodyProps } from "../../atoms/body.tsx";
-import {
-  FAQStruct,
-  TranslatableRichText,
-  TranslatableString,
-} from "../../../types/types.ts";
+import { FAQStruct } from "../../../types/types.ts";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
-import { resolveDataFromParent } from "../../../editor/ParentData.tsx";
 import { useBackground } from "../../../hooks/useBackground.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
-import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import {
   AccordionContent,
   AccordionItem,
@@ -58,18 +52,6 @@ export const defaultFAQCardData = (
   props: {
     ...(id && { id }),
     ...(index !== undefined && { index }),
-    data: {
-      question: {
-        constantValueEnabled: true,
-        constantValue: defaultFAQ.question,
-        field: "",
-      },
-      answer: {
-        constantValueEnabled: true,
-        constantValue: defaultFAQ.answer,
-        field: "",
-      },
-    },
     styles: {
       questionVariant: questionVariant || "base",
       answerVariant: answerVariant || "base",
@@ -79,11 +61,6 @@ export const defaultFAQCardData = (
 });
 
 export type FAQCardProps = {
-  data: {
-    question: YextEntityField<TranslatableString | TranslatableRichText>;
-    answer: YextEntityField<TranslatableRichText>;
-  };
-
   /** Styling for all the FAQ cards. */
   styles: {
     questionVariant: BodyProps["variant"];
@@ -104,26 +81,6 @@ export type FAQCardProps = {
 };
 
 const FAQCardFields: YextFields<FAQCardProps> = {
-  data: {
-    type: "object",
-    label: msg("fields.data", "Data"),
-    objectFields: {
-      question: {
-        type: "entityField",
-        label: msg("fields.question", "Question"),
-        filter: {
-          types: ["type.string", "type.rich_text_v2"],
-        },
-      },
-      answer: {
-        type: "entityField",
-        label: msg("fields.answer", "Answer"),
-        filter: {
-          types: ["type.rich_text_v2"],
-        },
-      },
-    },
-  },
   styles: {
     type: "object",
     label: msg("fields.styles", "Styles"),
@@ -153,7 +110,7 @@ const FAQCardFields: YextFields<FAQCardProps> = {
 };
 
 const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
-  const { data, styles, itemData, index, puck } = props;
+  const { styles, itemData, index, puck } = props;
   const analytics = useAnalytics();
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
@@ -234,16 +191,14 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
     });
   }, [styles]);
 
-  const sourceQuestion = itemData ? itemData.question : data.question;
-  const resolvedQuestion = sourceQuestion
-    ? resolveComponentData(sourceQuestion, i18n.language, streamDocument, {
+  const resolvedQuestion = itemData?.question
+    ? resolveComponentData(itemData.question, i18n.language, streamDocument, {
         output: "plainText",
       })
     : "";
 
-  const sourceAnswer = itemData ? itemData.answer : data.answer;
-  const resolvedAnswer = sourceAnswer
-    ? resolveComponentData(sourceAnswer, i18n.language, streamDocument, {
+  const resolvedAnswer = itemData?.answer
+    ? resolveComponentData(itemData.answer, i18n.language, streamDocument, {
         variant: styles.answerVariant,
         isDarkBackground: background?.isDarkColor,
         color: styles.answerColor,
@@ -285,24 +240,11 @@ export const FAQCard: YextComponentConfig<FAQCardProps> = {
   label: msg("faq", "FAQ"),
   fields: FAQCardFields,
   defaultProps: {
-    data: {
-      question: {
-        constantValueEnabled: true,
-        constantValue: defaultFAQ.question,
-        field: "",
-      },
-      answer: {
-        constantValueEnabled: true,
-        constantValue: defaultFAQ.answer,
-        field: "",
-      },
-    },
     styles: {
       questionVariant: "base",
       answerVariant: "base",
     },
     slots: {},
   },
-  resolveFields: (data) => resolveDataFromParent(FAQCardFields, data),
   render: (props) => <FAQCardComponent {...props} />,
 };

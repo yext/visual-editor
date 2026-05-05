@@ -488,61 +488,74 @@ export const InsightCard: YextComponentConfig<InsightCardProps> = {
 
     if (updatedData.props.itemData) {
       const { field, ...insight } = updatedData.props.itemData;
+      const shouldPreserveManualSlotData = !field;
 
       updatedData = setDeep(
         updatedData,
         "props.slots.ImageSlot[0].props.parentData",
-        {
-          field: `${field}.image`,
-          image: insight.image,
-        }
+        insight.image !== undefined || !shouldPreserveManualSlotData
+          ? {
+              field: field ? `${field}.image` : "",
+              image: insight.image,
+            }
+          : undefined
       );
 
       updatedData = setDeep(
         updatedData,
         "props.slots.TitleSlot[0].props.parentData",
-        {
-          field: `${field}.name`,
-          text: resolveComponentData(insight.name, locale, streamDocument, {
-            output: "plainText",
-          }),
-        }
+        insight.name !== undefined || !shouldPreserveManualSlotData
+          ? {
+              field: field ? `${field}.name` : "",
+              text: resolveComponentData(insight.name, locale, streamDocument, {
+                output: "plainText",
+              }),
+            }
+          : undefined
       );
 
       updatedData = setDeep(
         updatedData,
         "props.slots.CategorySlot[0].props.parentData",
-        {
-          field: `${field}.category`,
-          text: insight.category,
-        }
+        insight.category !== undefined || !shouldPreserveManualSlotData
+          ? {
+              field: field ? `${field}.category` : "",
+              text: insight.category,
+            }
+          : undefined
       );
 
       updatedData = setDeep(
         updatedData,
         "props.slots.DescriptionSlot[0].props.parentData",
-        {
-          field: `${field}.description`,
-          richText: insight.description,
-        }
+        insight.description !== undefined || !shouldPreserveManualSlotData
+          ? {
+              field: field ? `${field}.description` : "",
+              richText: insight.description,
+            }
+          : undefined
       );
 
       updatedData = setDeep(
         updatedData,
         "props.slots.PublishTimeSlot[0].props.parentData",
-        {
-          field: `${field}.publishTime`,
-          date: insight.publishTime || undefined,
-        }
+        insight.publishTime !== undefined || !shouldPreserveManualSlotData
+          ? {
+              field: field ? `${field}.publishTime` : "",
+              date: insight.publishTime || undefined,
+            }
+          : undefined
       );
 
       updatedData = setDeep(
         updatedData,
         "props.slots.CTASlot[0].props.parentData",
-        {
-          field: `${field}.cta`,
-          cta: insight.cta,
-        }
+        insight.cta !== undefined || !shouldPreserveManualSlotData
+          ? {
+              field: field ? `${field}.cta` : "",
+              cta: insight.cta,
+            }
+          : undefined
       );
 
       const category = resolveComponentData(

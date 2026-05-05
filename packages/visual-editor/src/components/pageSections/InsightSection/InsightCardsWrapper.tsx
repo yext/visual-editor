@@ -173,13 +173,26 @@ const createInsightCard = (
   ) as unknown as ComponentData<InsightCardProps>;
 };
 
+const toInsightCardItemData = (
+  item: Record<string, unknown>,
+  sourceField: string
+): InsightCardProps["itemData"] => ({
+  field: sourceField,
+  image: item.image as InsightStruct["image"],
+  name: item.name as InsightStruct["name"],
+  category: item.category as InsightStruct["category"],
+  publishTime: item.publishTime as InsightStruct["publishTime"],
+  description: item.description as InsightStruct["description"],
+  cta: (item.cta as InsightStruct["cta"] | undefined) ?? defaultInsightCta,
+});
+
 /**
  * Keeps the hidden CardSlot array aligned with the current linked or manual
  * item list while preserving existing card styling where possible.
  */
 const syncCards = <TData extends { props: InsightCardsWrapperProps }>(
   data: TData,
-  resolvedItems: Record<string, unknown>[]
+  items: Record<string, unknown>[]
 ): TData => {
   const currentCards =
     (data.props.slots
@@ -190,24 +203,14 @@ const syncCards = <TData extends { props: InsightCardsWrapperProps }>(
     "props.slots.CardSlot",
     buildListSectionCards<InsightCardProps, Record<string, unknown>>({
       currentCards,
-      items: resolvedItems,
+      items,
       createCard: () => createInsightCard(currentCards),
       decorateCard: (card, item, index) => ({
         ...card,
         props: {
           ...card.props,
           index,
-          itemData: {
-            field: data.props.data.field,
-            image: item.image as InsightStruct["image"],
-            name: item.name as InsightStruct["name"],
-            category: item.category as InsightStruct["category"],
-            publishTime: item.publishTime as InsightStruct["publishTime"],
-            description: item.description as InsightStruct["description"],
-            cta:
-              (item.cta as InsightStruct["cta"] | undefined) ??
-              defaultInsightCta,
-          },
+          itemData: toInsightCardItemData(item, data.props.data.field),
         },
       }),
     })
@@ -267,13 +270,13 @@ export const InsightCardsWrapper: YextComponentConfig<InsightCardsWrapperProps> 
       }),
     resolveData: (data, params) => {
       const normalizedData = insightCards.normalizeData(data, params);
-      const resolvedItems = insightCards.resolveItems(
+      const items = insightCards.resolveItems(
         normalizedData.props.data,
         normalizedData.props.cards,
         (params.metadata?.streamDocument ?? {}) as StreamDocument
       );
 
-      return syncCards(normalizedData, resolvedItems);
+      return syncCards(normalizedData, items);
     },
     render: (props) => <InsightCardsWrapperComponent {...props} />,
   };
