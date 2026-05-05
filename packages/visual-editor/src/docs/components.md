@@ -285,16 +285,16 @@ This object contains properties for customizing the appearance of both header ti
 
 #### Other Props
 
-| Prop                        | Type                                                                           | Description | Default |
-| :-------------------------- | :----------------------------------------------------------------------------- | :---------- | :------ |
-| `analytics`                 | `{ scope?: string; }`                                                          |             |         |
-| `conditionalRender`         | `MappedEntityFieldConditionalRender`                                           |             |         |
-| `data`                      | `{ field: string; constantValueEnabled?: boolean; constantValue: FAQItem[]; }` |             |         |
-| `faqs`                      | `FAQItem`                                                                      |             |         |
-| `liveVisibility`            | `boolean`                                                                      |             |         |
-| `slots`                     | `{ HeadingSlot: Slot; CardSlot: Slot; }`                                       |             |         |
-| `styles.backgroundColor`    | `ThemeColor`                                                                   |             |         |
-| `styles.showSectionHeading` | `boolean`                                                                      |             |         |
+| Prop                        | Type                                     | Description | Default |
+| :-------------------------- | :--------------------------------------- | :---------- | :------ |
+| `analytics`                 | `{ scope?: string; }`                    |             |         |
+| `conditionalRender`         | `MappedEntityFieldConditionalRender`     |             |         |
+| `data`                      | `ItemSourceValue<FAQItem>`               |             |         |
+| `faqs`                      | `FAQItem`                                |             |         |
+| `liveVisibility`            | `boolean`                                |             |         |
+| `slots`                     | `{ HeadingSlot: Slot; CardSlot: Slot; }` |             |         |
+| `styles.backgroundColor`    | `ThemeColor`                             |             |         |
+| `styles.showSectionHeading` | `boolean`                                |             |         |
 
 ---
 
