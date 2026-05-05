@@ -207,6 +207,7 @@ const cityDocument = {
       name: "Galaxy Grill Rosslyn",
       timezone: "America/New_York",
       slug: "arlington",
+      geomodifier: "2nd Floor",
     },
     {
       address: {
@@ -232,6 +233,7 @@ const cityDocument = {
       mainPhone: "+12025551012",
       name: "Galaxy Grill Clarendon",
       timezone: "America/New_York",
+      geomodifier: "Rooftop",
     },
     {
       address: {
@@ -274,6 +276,7 @@ const version40Props = {
       bgColor: "bg-palette-primary-dark",
       textColor: "text-white",
     },
+    showGeomodifier: true,
   },
   slots: {
     TitleSlot: [
@@ -612,7 +615,7 @@ const tests: ComponentTest[] = [
     version: 40,
   },
   {
-    name: "version 58 - Slotified Address with showGetDirectionsLink",
+    name: "version 58 - City with showGetDirectionsLink and showGeomodifier",
     document: cityDocument,
     props: {
       ...version40Props,
@@ -638,6 +641,9 @@ const tests: ComponentTest[] = [
                             },
                           },
                         ],
+                      },
+                      styles: {
+                        showGeomodifier: true,
                       },
                     },
                   },

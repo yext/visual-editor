@@ -34,6 +34,7 @@
         "entityType": { "id": "location", "uid": 12345 },
         "locale": "en"
       },
+      "geomodifier": "Geomodifier",
       "name": "Galaxy Grill",
       "timezone": "America/New_York",
       "slug": "va/arlington/1101-wilson-blvd"

@@ -1,4 +1,4 @@
-import { PuckComponent, Slot } from "@puckeditor/core";
+import { PuckComponent, setDeep, Slot } from "@puckeditor/core";
 import React from "react";
 import { useCardContext } from "../../hooks/useCardContext.tsx";
 import {
@@ -10,6 +10,7 @@ import { msg } from "../../utils/i18n/platform.ts";
 import {
   backgroundColors,
   ThemeColor,
+  ThemeOptions,
 } from "../../utils/themeConfigOptions.ts";
 import { deepMerge } from "../../utils/themeResolver.ts";
 import {
@@ -29,6 +30,7 @@ import {
   useDirectoryChildren,
 } from "./directoryChildReference.tsx";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
+import { resolveEmbeddedFieldsInString } from "../../utils/resolveYextEntityField.ts";
 
 export const defaultDirectoryCardSlotData = (
   id: string,
@@ -45,6 +47,7 @@ export const defaultDirectoryCardSlotData = (
       backgroundColor:
         existingCardStyle?.backgroundColor ??
         backgroundColors.background1.value,
+      showGeomodifier: existingCardStyle?.showGeomodifier ?? false,
     },
     slots: {
       HeadingSlot: [
@@ -181,6 +184,8 @@ export type DirectoryCardProps = {
   styles: {
     /** The background color of each directory card */
     backgroundColor?: ThemeColor;
+    /** Whether to include the geomodifier in the card's header */
+    showGeomodifier: boolean;
   };
 
   /** @internal */
@@ -305,6 +310,7 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
             backgroundColor:
               sharedCardProps?.cardStyles.backgroundColor ||
               backgroundColors.background1.value,
+            showGeomodifier: sharedCardProps?.cardStyles.showGeomodifier,
           },
           slots: newSlotData,
         } satisfies DirectoryCardProps,
@@ -373,6 +379,11 @@ const directoryCardFields: YextFields<DirectoryCardProps> = {
         label: msg("fields.backgroundColor", "Background Color"),
         options: "BACKGROUND_COLOR",
       },
+      showGeomodifier: {
+        label: msg("fields.showGeomodifier", "Show Geomodifier"),
+        type: "radio",
+        options: ThemeOptions.SHOW_HIDE,
+      },
     },
   },
   slots: {
@@ -390,9 +401,46 @@ const directoryCardFields: YextFields<DirectoryCardProps> = {
 export const DirectoryCard: YextComponentConfig<DirectoryCardProps> = {
   label: msg("slots.directoryCard", "Directory Card"),
   fields: directoryCardFields,
+  resolveData: (data, params) => {
+    const streamDocument = params.metadata?.streamDocument;
+    const locale = streamDocument?.locale;
+    if (!streamDocument || !locale) {
+      return data;
+    }
+
+    if (!data.props.styles.showGeomodifier) {
+      return setDeep(data, "props.slots.HeadingSlot[0].props.parentData", {
+        field: "profile.name",
+      });
+    }
+
+    const sortedDirectoryChildren = getSortedDirectoryChildren(
+      streamDocument.dm_directoryChildren
+    );
+    const resolvedChild = resolveDirectoryChildFromReference(
+      sortedDirectoryChildren,
+      data.props.parentData?.childRef
+    );
+    const geomodifier = resolvedChild?.geomodifier;
+    const headingText =
+      data.props.styles.showGeomodifier && geomodifier
+        ? resolveEmbeddedFieldsInString(
+            "[[name]] - [[geomodifier]]",
+            resolvedChild,
+            locale
+          )
+        : undefined;
+
+    return setDeep(
+      data,
+      "props.slots.HeadingSlot[0].props.parentData.text",
+      headingText
+    );
+  },
   defaultProps: {
     styles: {
       backgroundColor: backgroundColors.background1.value,
+      showGeomodifier: false,
     },
     slots: {
       HeadingSlot: [],
