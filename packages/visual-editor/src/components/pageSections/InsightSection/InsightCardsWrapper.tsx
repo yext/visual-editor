@@ -2,7 +2,7 @@ import { InsightSectionType, InsightStruct } from "../../../types/types.ts";
 import { ComponentFields } from "../../../types/fields.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { CardWrapperType } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
-import { ComponentData, PuckComponent, setDeep } from "@puckeditor/core";
+import { ComponentData, PuckComponent } from "@puckeditor/core";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 import {
@@ -12,10 +12,9 @@ import {
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
 import { toPuckFields, YextComponentConfig } from "../../../fields/fields.ts";
-import { resolveMappedListWrapperData } from "../../../utils/cardSlots/mappedListWrapper.ts";
 import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
-import { createMappedItemsConfig } from "../../../utils/cardSlots/createMappedItemsConfig.ts";
+import { createMappedItems } from "../../../utils/cardSlots/createMappedItems.ts";
 
 export type InsightCardsWrapperProps = CardWrapperType<InsightSectionType> & {
   cards?: {
@@ -42,16 +41,11 @@ const defaultInsightCta = {
   ctaType: "textAndLink",
 } satisfies InsightStruct["cta"];
 
-const insightCards = createMappedItemsConfig<InsightCardsWrapperProps>({
+const insightCards = createMappedItems<InsightCardsWrapperProps>({
   sourceFieldPath: "data.field",
   mappingGroupPath: "cards",
   sourceLabel: msg("fields.insights", "Insights"),
   mappingGroupLabel: msg("fields.cards", "Cards"),
-  constantValueType: ComponentFields.InsightSection.type,
-  listFieldName: "insights",
-  sourceRootKinds: ["linkedEntityRoot", "baseListRoot"],
-  sourceRootsOnly: true,
-  requiredDescendantTypes: [["type.string"]],
   mappings: {
     image: {
       label: msg("fields.image", "Image"),
@@ -86,7 +80,64 @@ const insightCards = createMappedItemsConfig<InsightCardsWrapperProps>({
       defaultValue: defaultInsightCta,
     },
   },
-});
+})
+  .withConstantValueMode({
+    constantValueType: ComponentFields.InsightSection.type,
+  })
+  .withRepeatedSlot({
+    slotPath: "slots.CardSlot",
+    itemIdPrefix: "InsightCard",
+    getSharedProps: (card) =>
+      !card
+        ? undefined
+        : {
+            backgroundColor: card.props.styles.backgroundColor,
+            slotStyles: gatherSlotStyles(card.props.slots),
+          },
+    createItem: (id, index, sharedCardProps) =>
+      defaultInsightCardSlotData(
+        id,
+        index,
+        sharedCardProps?.backgroundColor,
+        sharedCardProps?.slotStyles
+      ) as ComponentData<InsightCardProps>,
+    getParentData: (item, resolvedData) => {
+      const locale = i18nComponentsInstance.language || "en";
+
+      return {
+        field: resolvedData.props.data.field,
+        insight: {
+          image: insightCards.resolveMapping<InsightStruct["image"]>(
+            resolvedData.props.cards?.image,
+            item,
+            locale
+          ),
+          name: insightCards.resolveMapping<InsightStruct["name"]>(
+            resolvedData.props.cards?.name,
+            item,
+            locale
+          ),
+          category: insightCards.resolveMapping<InsightStruct["category"]>(
+            resolvedData.props.cards?.category,
+            item,
+            locale
+          ),
+          publishTime: insightCards.resolveMapping<
+            InsightStruct["publishTime"]
+          >(resolvedData.props.cards?.publishTime, item, locale),
+          description: insightCards.resolveMapping<
+            InsightStruct["description"]
+          >(resolvedData.props.cards?.description, item, locale),
+          cta:
+            insightCards.resolveMapping<InsightStruct["cta"]>(
+              resolvedData.props.cards?.cta,
+              item,
+              locale
+            ) ?? defaultInsightCta,
+        },
+      };
+    },
+  });
 
 const insightCardsWrapperFields = {
   ...insightCards.fields,
@@ -138,12 +189,9 @@ const InsightCardsWrapperComponent: PuckComponent<InsightCardsWrapperProps> = ({
 export const InsightCardsWrapper: YextComponentConfig<InsightCardsWrapperProps> =
   {
     label: msg("slots.insightCards", "Insight Cards"),
-    fields: insightCardsWrapperFields as any,
+    fields: insightCardsWrapperFields,
     defaultProps: {
-      ...(insightCards.defaultProps as Pick<
-        InsightCardsWrapperProps,
-        "data" | "cards"
-      >),
+      ...insightCards.defaultProps,
       styles: {
         showImage: true,
         showCategory: true,
@@ -158,77 +206,8 @@ export const InsightCardsWrapper: YextComponentConfig<InsightCardsWrapperProps> 
     resolveFields: (data) =>
       toPuckFields({
         ...insightCardsWrapperFields,
-        ...(insightCards.resolveFields(
-          data as ComponentData<InsightCardsWrapperProps>
-        ) as any),
+        ...insightCards.resolveFields(data),
       }),
-    resolveData: (data, params) => {
-      const locale = i18nComponentsInstance.language || "en";
-      const { data: nextData } = insightCards.resolve(
-        data as ComponentData<InsightCardsWrapperProps>,
-        params
-      );
-
-      return resolveMappedListWrapperData<
-        InsightCardsWrapperProps,
-        InsightCardProps,
-        Record<string, unknown>,
-        {
-          backgroundColor?: InsightCardProps["styles"]["backgroundColor"];
-          slotStyles?: Record<string, any>;
-        }
-      >({
-        data: nextData,
-        streamDocument: params.metadata.streamDocument ?? {},
-        cardIdPrefix: "InsightCard",
-        getSharedCardProps: (card) =>
-          !card
-            ? undefined
-            : {
-                backgroundColor: card.props.styles.backgroundColor,
-                slotStyles: gatherSlotStyles(card.props.slots),
-              },
-        createCard: (id, index, sharedCardProps) =>
-          defaultInsightCardSlotData(
-            id,
-            index,
-            sharedCardProps?.backgroundColor,
-            sharedCardProps?.slotStyles
-          ) as any,
-        decorateMappedItemCard: (card, item, index) =>
-          setDeep(setDeep(card, "props.index", index), "props.parentData", {
-            field: nextData.props.data.field,
-            insight: {
-              image: insightCards.resolveMapping<InsightStruct["image"]>(
-                nextData.props.cards?.image,
-                item,
-                locale
-              ),
-              name: insightCards.resolveMapping<InsightStruct["name"]>(
-                nextData.props.cards?.name,
-                item,
-                locale
-              ),
-              category: insightCards.resolveMapping<InsightStruct["category"]>(
-                nextData.props.cards?.category,
-                item,
-                locale
-              ),
-              publishTime: insightCards.resolveMapping<
-                InsightStruct["publishTime"]
-              >(nextData.props.cards?.publishTime, item, locale),
-              description: insightCards.resolveMapping<
-                InsightStruct["description"]
-              >(nextData.props.cards?.description, item, locale),
-              cta:
-                insightCards.resolveMapping<InsightStruct["cta"]>(
-                  nextData.props.cards?.cta,
-                  item,
-                  locale
-                ) ?? defaultInsightCta,
-            },
-          } satisfies InsightCardProps["parentData"]),
-      });
-    },
+    resolveData: (data, params) => insightCards.resolveItems(data, params).data,
     render: (props) => <InsightCardsWrapperComponent {...props} />,
   };

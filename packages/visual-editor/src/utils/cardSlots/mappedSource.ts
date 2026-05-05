@@ -34,12 +34,6 @@ export type ResolvedMappedSource<TMappedItem> =
       items: TMappedItem[];
     };
 
-/**
- * Identifies the kinds of schema fields that can be offered as wrapper-level
- * source roots in mapped field selectors.
- */
-export type SourceRootKind = "linkedEntityRoot" | "baseListRoot";
-
 const getListFields = (
   fields: YextSchemaField[],
   parentPath = ""
@@ -159,8 +153,5 @@ export const resolveMappedSourceField = <T>(
 
 export type MappedSourceFieldFilter<T extends Record<string, any>> =
   RenderEntityFieldFilter<T> & {
-    listFieldName?: string;
-    requiredDescendantTypes?: EntityFieldTypes[][];
-    sourceRootKinds?: SourceRootKind[];
-    sourceRootsOnly?: boolean;
+    mappedSourceTypes?: EntityFieldTypes[][];
   };

@@ -262,9 +262,7 @@ describe("YextEntityFieldSelector", () => {
         ],
       },
       filter: {
-        types: ["type.events_section"],
-        sourceRootKinds: ["linkedEntityRoot"],
-        sourceRootsOnly: true,
+        mappedSourceTypes: [["type.string"]],
       },
     });
 
@@ -363,9 +361,7 @@ describe("YextEntityFieldSelector", () => {
         ],
       },
       filter: {
-        types: ["type.events_section"],
-        sourceRootKinds: ["baseListRoot"],
-        sourceRootsOnly: true,
+        mappedSourceTypes: [["type.string"]],
       },
     });
 
@@ -476,9 +472,7 @@ describe("YextEntityFieldSelector", () => {
         ],
       },
       filter: {
-        types: ["type.events_section"],
-        sourceRootKinds: ["linkedEntityRoot", "baseListRoot"],
-        sourceRootsOnly: true,
+        mappedSourceTypes: [["type.string"]],
       },
     });
 
@@ -582,16 +576,13 @@ describe("YextEntityFieldSelector", () => {
         ],
       },
       filter: {
-        types: ["type.events_section"],
-        requiredDescendantTypes: [
+        mappedSourceTypes: [
           ["type.string"],
           ["type.datetime"],
           ["type.string", "type.rich_text_v2"],
           ["type.cta"],
           ["type.image"],
         ],
-        sourceRootKinds: ["baseListRoot"],
-        sourceRootsOnly: true,
       },
     });
 
@@ -664,13 +655,10 @@ describe("YextEntityFieldSelector", () => {
         ],
       },
       filter: {
-        types: ["type.faq_section"],
-        requiredDescendantTypes: [
+        mappedSourceTypes: [
           ["type.string", "type.rich_text_v2"],
           ["type.string", "type.rich_text_v2"],
         ],
-        sourceRootKinds: ["baseListRoot"],
-        sourceRootsOnly: true,
       },
     });
 
@@ -758,14 +746,10 @@ describe("YextEntityFieldSelector", () => {
         ],
       },
       filter: {
-        listFieldName: "faqs",
-        types: ["type.faq_section"],
-        requiredDescendantTypes: [
+        mappedSourceTypes: [
           ["type.string", "type.rich_text_v2"],
           ["type.string", "type.rich_text_v2"],
         ],
-        sourceRootKinds: ["linkedEntityRoot", "baseListRoot"],
-        sourceRootsOnly: true,
       },
       document: {
         c_faqSection: {
@@ -914,16 +898,13 @@ describe("YextEntityFieldSelector", () => {
         ],
       },
       filter: {
-        types: ["type.events_section"],
-        requiredDescendantTypes: [
+        mappedSourceTypes: [
           ["type.string"],
           ["type.datetime"],
           ["type.string", "type.rich_text_v2"],
           ["type.cta"],
           ["type.image"],
         ],
-        sourceRootKinds: ["linkedEntityRoot", "baseListRoot"],
-        sourceRootsOnly: true,
       },
     });
 
@@ -1047,9 +1028,7 @@ describe("YextEntityFieldSelector", () => {
         ],
       },
       filter: {
-        types: ["type.events_section"],
-        sourceRootKinds: ["linkedEntityRoot", "baseListRoot"],
-        sourceRootsOnly: true,
+        mappedSourceTypes: [["type.string"]],
       },
     });
 

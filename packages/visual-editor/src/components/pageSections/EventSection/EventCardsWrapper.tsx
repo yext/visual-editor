@@ -1,4 +1,4 @@
-import { ComponentData, PuckComponent, setDeep } from "@puckeditor/core";
+import { ComponentData, PuckComponent } from "@puckeditor/core";
 import { EventSectionType, EventStruct } from "../../../types/types.ts";
 import { ComponentFields } from "../../../types/fields.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
@@ -11,8 +11,7 @@ import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
 import { toPuckFields, YextComponentConfig } from "../../../fields/fields.ts";
 import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
-import { resolveMappedListWrapperData } from "../../../utils/cardSlots/mappedListWrapper.ts";
-import { createMappedItemsConfig } from "../../../utils/cardSlots/createMappedItemsConfig.ts";
+import { createMappedItems } from "../../../utils/cardSlots/createMappedItems.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 
 export type EventCardsWrapperProps = CardWrapperType<EventSectionType> & {
@@ -38,23 +37,11 @@ const defaultEventCta = {
   ctaType: "textAndLink",
 } satisfies EventStruct["cta"];
 
-const eventCards = createMappedItemsConfig<EventCardsWrapperProps>({
+const eventCards = createMappedItems<EventCardsWrapperProps>({
   sourceFieldPath: "data.field",
   mappingGroupPath: "cards",
   sourceLabel: msg("components.events", "Events"),
   mappingGroupLabel: msg("fields.cards", "Cards"),
-  constantValueType: ComponentFields.EventSection.type,
-  defaultConstantValue: [{}, {}, {}],
-  listFieldName: "events",
-  sourceRootKinds: ["linkedEntityRoot", "baseListRoot"],
-  sourceRootsOnly: true,
-  requiredDescendantTypes: [
-    ["type.string"],
-    ["type.datetime"],
-    ["type.string", "type.rich_text_v2"],
-    ["type.cta"],
-    ["type.image"],
-  ],
   mappings: {
     title: {
       label: msg("fields.title", "Title"),
@@ -88,7 +75,75 @@ const eventCards = createMappedItemsConfig<EventCardsWrapperProps>({
       disableConstantValueToggle: true,
     },
   },
-});
+})
+  .withConstantValueMode({
+    constantValueType: ComponentFields.EventSection.type,
+    defaultConstantValue: [{}, {}, {}],
+  })
+  .withRepeatedSlot({
+    slotPath: "slots.CardSlot",
+    itemIdPrefix: "EventCard",
+    getSharedProps: (card) =>
+      !card
+        ? undefined
+        : {
+            backgroundColor: card.props.styles.backgroundColor,
+            truncateDescription: card.props.styles.truncateDescription,
+            slotStyles: gatherSlotStyles(card.props.slots),
+          },
+    createItem: (id, index, sharedCardProps) =>
+      defaultEventCardSlotData(
+        id,
+        index,
+        sharedCardProps?.backgroundColor,
+        sharedCardProps?.truncateDescription,
+        sharedCardProps?.slotStyles
+      ) as ComponentData<EventCardProps>,
+    getParentData: (item, resolvedData) => {
+      const locale = i18nComponentsInstance.language || "en";
+      const title = eventCards.resolveMapping<EventStruct["title"]>(
+        resolvedData.props.cards?.title,
+        item,
+        locale
+      );
+
+      return {
+        field: resolvedData.props.data.field,
+        fields: {
+          image: resolvedData.props.cards?.image?.field || undefined,
+          title: resolvedData.props.cards?.title?.field || undefined,
+          dateTime: resolvedData.props.cards?.date?.field || undefined,
+          description:
+            resolvedData.props.cards?.description?.field || undefined,
+          cta: resolvedData.props.cards?.cta?.field || undefined,
+        },
+        event: {
+          image: eventCards.resolveMapping<EventStruct["image"]>(
+            resolvedData.props.cards?.image,
+            item,
+            locale
+          ),
+          title: title ? resolveComponentData(title, locale, item) : undefined,
+          dateTime: eventCards.resolveMapping<string>(
+            resolvedData.props.cards?.date,
+            item,
+            locale
+          ),
+          description: eventCards.resolveMapping<EventStruct["description"]>(
+            resolvedData.props.cards?.description,
+            item,
+            locale
+          ),
+          cta:
+            eventCards.resolveMapping<EventStruct["cta"]>(
+              resolvedData.props.cards?.cta,
+              item,
+              locale
+            ) ?? defaultEventCta,
+        },
+      } satisfies EventCardProps["parentData"];
+    },
+  });
 
 const eventCardsWrapperFields = {
   ...eventCards.fields,
@@ -131,12 +186,9 @@ const EventCardsWrapperComponent: PuckComponent<EventCardsWrapperProps> = ({
 
 export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
   label: msg("components.eventCardsWrapper", "Event Cards"),
-  fields: eventCardsWrapperFields as any,
+  fields: eventCardsWrapperFields,
   defaultProps: {
-    ...(eventCards.defaultProps as Pick<
-      EventCardsWrapperProps,
-      "data" | "cards"
-    >),
+    ...eventCards.defaultProps,
     styles: {
       showImage: true,
       showDateTime: true,
@@ -150,95 +202,8 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
   resolveFields: (data) =>
     toPuckFields({
       ...eventCardsWrapperFields,
-      ...(eventCards.resolveFields(
-        data as ComponentData<EventCardsWrapperProps>
-      ) as any),
+      ...eventCards.resolveFields(data),
     }),
-  resolveData: (data, params) => {
-    const streamDocument = params.metadata.streamDocument ?? {};
-    const locale = i18nComponentsInstance.language || "en";
-    const { data: nextData } = eventCards.resolve(
-      data as ComponentData<EventCardsWrapperProps>,
-      params
-    );
-
-    return resolveMappedListWrapperData<
-      EventCardsWrapperProps,
-      EventCardProps,
-      Record<string, unknown>,
-      {
-        backgroundColor?: EventCardProps["styles"]["backgroundColor"];
-        truncateDescription?: boolean;
-        slotStyles?: Record<string, any>;
-      }
-    >({
-      data: nextData,
-      streamDocument,
-      cardIdPrefix: "EventCard",
-      getSharedCardProps: (card) =>
-        !card
-          ? undefined
-          : {
-              backgroundColor: card.props.styles.backgroundColor,
-              truncateDescription: card.props.styles.truncateDescription,
-              slotStyles: gatherSlotStyles(card.props.slots),
-            },
-      createCard: (id, index, sharedCardProps) =>
-        defaultEventCardSlotData(
-          id,
-          index,
-          sharedCardProps?.backgroundColor,
-          sharedCardProps?.truncateDescription,
-          sharedCardProps?.slotStyles
-        ) as ComponentData<EventCardProps>,
-      decorateMappedItemCard: (card, item, index) => {
-        const title = eventCards.resolveMapping<EventStruct["title"]>(
-          nextData.props.cards?.title,
-          item,
-          locale
-        );
-
-        return setDeep(
-          setDeep(card, "props.index", index),
-          "props.parentData",
-          {
-            field: nextData.props.data.field,
-            fields: {
-              image: nextData.props.cards?.image?.field || undefined,
-              title: nextData.props.cards?.title?.field || undefined,
-              dateTime: nextData.props.cards?.date?.field || undefined,
-              description:
-                nextData.props.cards?.description?.field || undefined,
-              cta: nextData.props.cards?.cta?.field || undefined,
-            },
-            event: {
-              image: eventCards.resolveMapping<EventStruct["image"]>(
-                nextData.props.cards?.image,
-                item,
-                locale
-              ),
-              title: title
-                ? resolveComponentData(title, locale, item)
-                : undefined,
-              dateTime: eventCards.resolveMapping<string>(
-                nextData.props.cards?.date,
-                item,
-                locale
-              ),
-              description: eventCards.resolveMapping<
-                EventStruct["description"]
-              >(nextData.props.cards?.description, item, locale),
-              cta:
-                eventCards.resolveMapping<EventStruct["cta"]>(
-                  nextData.props.cards?.cta,
-                  item,
-                  locale
-                ) ?? defaultEventCta,
-            },
-          } satisfies EventCardProps["parentData"]
-        );
-      },
-    });
-  },
+  resolveData: (data, params) => eventCards.resolveItems(data, params).data,
   render: (props) => <EventCardsWrapperComponent {...props} />,
 };

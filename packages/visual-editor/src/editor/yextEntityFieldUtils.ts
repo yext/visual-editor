@@ -93,11 +93,6 @@ export const getEntityFieldDisplayName = (
   return displayNameSegments.join(" > ");
 };
 
-const isSectionFieldSourceValue = (value: unknown): boolean =>
-  value === undefined ||
-  value === null ||
-  (!!value && typeof value === "object" && !Array.isArray(value));
-
 const isMappedListSourceValue = (value: unknown): boolean =>
   value === undefined ||
   value === null ||
@@ -236,7 +231,7 @@ export const getFieldsForSelector = (
   }
 
   const hasRequiredDescendants = (field: YextSchemaField): boolean => {
-    if (!filter.requiredDescendantTypes?.length) {
+    if (!filter.mappedSourceTypes?.length) {
       return true;
     }
 
@@ -247,7 +242,7 @@ export const getFieldsForSelector = (
       }
     );
 
-    return filter.requiredDescendantTypes.every((requiredTypes) => {
+    return filter.mappedSourceTypes.every((requiredTypes) => {
       const matchingFieldIndex = availableFields.findIndex(
         (availableField) =>
           getFilteredEntityFields(
@@ -268,57 +263,38 @@ export const getFieldsForSelector = (
     });
   };
 
-  const linkedEntityRootFields = filter.sourceRootKinds?.includes(
-    "linkedEntityRoot"
-  )
-    ? getTopLevelLinkedEntitySourceFields(entityFields).filter(
-        hasRequiredDescendants
-      )
-    : [];
-  const listRootFields = filter.sourceRootKinds?.includes("baseListRoot")
-    ? getListSourceRootFields(entityFields).filter(hasRequiredDescendants)
-    : [];
-
-  if (filter.sourceRootsOnly) {
-    const rootEntityFields =
-      filter.types?.length && !filter.sourceRootKinds?.length
-        ? getFilteredEntityFields(entityFields, filter)
-            .filter((field) => !field.name.includes("."))
-            .filter((field) =>
-              !streamDocument
-                ? true
-                : isSectionFieldSourceValue(
-                    resolveField<unknown>(streamDocument, field.name).value
-                  )
-            )
-        : [];
-    const validLinkedEntityRootFields = linkedEntityRootFields.filter(
-      (field) =>
+  if (filter.mappedSourceTypes?.length) {
+    const validLinkedEntityRootFields = getTopLevelLinkedEntitySourceFields(
+      entityFields
+    )
+      .filter(hasRequiredDescendants)
+      .filter((field) =>
         !streamDocument
           ? true
           : isMappedListSourceValue(
               resolveField<unknown>(streamDocument, field.name).value
             )
-    );
-    const validListRootFields = listRootFields.filter((field) =>
-      !streamDocument
-        ? true
-        : (() => {
-            const resolvedValue = resolveField<unknown>(
-              streamDocument,
-              field.name
-            ).value;
-            return (
-              resolvedValue === undefined ||
-              resolvedValue === null ||
-              Array.isArray(resolvedValue)
-            );
-          })()
-    );
+      );
+    const validListRootFields = getListSourceRootFields(entityFields)
+      .filter(hasRequiredDescendants)
+      .filter((field) =>
+        !streamDocument
+          ? true
+          : (() => {
+              const resolvedValue = resolveField<unknown>(
+                streamDocument,
+                field.name
+              ).value;
+              return (
+                resolvedValue === undefined ||
+                resolvedValue === null ||
+                Array.isArray(resolvedValue)
+              );
+            })()
+      );
 
     return sortFields(
       dedupeFieldsByName([
-        ...rootEntityFields,
         ...validLinkedEntityRootFields,
         ...validListRootFields,
       ])
@@ -335,13 +311,7 @@ export const getFieldsForSelector = (
     } satisfies RenderEntityFieldFilter<any>);
   }
 
-  return sortFields(
-    dedupeFieldsByName([
-      ...filteredEntityFields,
-      ...linkedEntityRootFields,
-      ...listRootFields,
-    ])
-  );
+  return sortFields(dedupeFieldsByName([...filteredEntityFields]));
 };
 
 const getResolvedDescendantFieldPaths = (

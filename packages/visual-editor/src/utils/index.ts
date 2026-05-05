@@ -18,24 +18,15 @@ export {
 } from "./migrate.ts";
 export { resolveComponentData } from "./resolveComponentData.tsx";
 export { resolveYextEntityField } from "./resolveYextEntityField.ts";
-export {
-  cardWrapperFields,
-  createScopedMappingFields,
-  type CardWrapperFieldsOptions,
-  type CardWrapperType,
-} from "./cardSlots/cardWrapperHelpers.ts";
-export { createMappedItemsConfig } from "./cardSlots/createMappedItemsConfig.ts";
-export {
-  resolveMappedListWrapperData,
-  syncConstantValueListCards,
-} from "./cardSlots/mappedListWrapper.ts";
+export { type CardWrapperType } from "./cardSlots/cardWrapperHelpers.ts";
+export { createMappedItems } from "./cardSlots/createMappedItems.ts";
+export { syncConstantValueListCards } from "./cardSlots/mappedListWrapper.ts";
 export {
   resolveMappedListSource,
   resolveMappedSourceField,
   type MappedSourceFieldFilter,
   type ResolvedMappedSource,
   type ResolvedMappedSourceMode,
-  type SourceRootKind,
 } from "./cardSlots/mappedSource.ts";
 export {
   createSearchAnalyticsConfig,

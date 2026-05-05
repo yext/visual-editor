@@ -3,10 +3,6 @@ import {
   type DefaultComponentProps,
   setDeep,
 } from "@puckeditor/core";
-import { type StreamDocument } from "../types/StreamDocument.ts";
-import { type CardWrapperType } from "./cardWrapperHelpers.ts";
-import { buildListSectionCards } from "./listSectionData.ts";
-import { resolveMappedListSource } from "./mappedSource.ts";
 
 /**
  * Deep-clones a card before reuse so slot synchronization can update ids,
@@ -112,98 +108,4 @@ export const syncConstantValueListCards = <
     slots,
     constantValue: slots.map((card) => ({ id: card.props.id })),
   };
-};
-
-/**
- * Resolves a wrapper's cards from the selected source.
- *
- * 1. Classify the source as constant value or mapped items.
- * 2. Keep constant value cards and ids in sync while preserving existing card
- *    styling.
- * 3. Resolve mapped items and expand/trim cards to match.
- * 4. Decorate each card with parent data for rendering.
- */
-export const resolveMappedListWrapperData = <
-  TWrapperProps extends CardWrapperType<any>,
-  TCardProps extends DefaultComponentProps,
-  TMappedItem,
-  TSharedCardProps,
->({
-  data,
-  streamDocument,
-  cardIdPrefix,
-  getSharedCardProps,
-  createCard,
-  decorateMappedItemCard,
-  fallbackToIndex = false,
-  rewriteChildSlotIds,
-}: {
-  data: ComponentData<TWrapperProps>;
-  streamDocument: StreamDocument;
-  cardIdPrefix: string;
-  getSharedCardProps: (
-    card: ComponentData<TCardProps> | undefined
-  ) => TSharedCardProps | undefined;
-  createCard: (
-    id: string,
-    index: number | undefined,
-    sharedCardProps: TSharedCardProps | undefined
-  ) => ComponentData<TCardProps>;
-  decorateMappedItemCard: (
-    card: ComponentData<TCardProps>,
-    item: TMappedItem,
-    index: number
-  ) => ComponentData<TCardProps>;
-  fallbackToIndex?: boolean;
-  rewriteChildSlotIds?:
-    | boolean
-    | ((card: ComponentData<TCardProps>, newId: string) => void);
-}): ComponentData<TWrapperProps> => {
-  const source = resolveMappedListSource<TMappedItem>({
-    streamDocument,
-    constantValueEnabled: data.props.data.constantValueEnabled,
-    fieldPath: data.props.data.field,
-  });
-  const currentCards = data.props.slots.CardSlot as ComponentData<TCardProps>[];
-  const sharedCardProps = getSharedCardProps(currentCards[0]);
-
-  if (source.mode === "constantValue") {
-    const syncedCards = syncConstantValueListCards({
-      currentCards,
-      constantValue: data.props.data.constantValue,
-      createId: () => `${cardIdPrefix}-${crypto.randomUUID()}`,
-      createCard: (id, index) => createCard(id, index, sharedCardProps),
-      fallbackToIndex,
-      rewriteChildSlotIds,
-    });
-    return setDeep(
-      setDeep(data, "props.slots.CardSlot", syncedCards.slots),
-      "props.data.constantValue",
-      syncedCards.constantValue
-    ) as ComponentData<TWrapperProps>;
-  }
-
-  if (!source.items.length) {
-    return setDeep(
-      data,
-      "props.slots.CardSlot",
-      []
-    ) as ComponentData<TWrapperProps>;
-  }
-
-  return setDeep(
-    data,
-    "props.slots.CardSlot",
-    buildListSectionCards<TCardProps, TMappedItem>({
-      currentCards,
-      createCard: () =>
-        createCard(
-          `${cardIdPrefix}-${crypto.randomUUID()}`,
-          undefined,
-          sharedCardProps
-        ),
-      decorateCard: decorateMappedItemCard,
-      items: source.items,
-    })
-  ) as ComponentData<TWrapperProps>;
 };
