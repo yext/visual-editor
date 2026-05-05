@@ -18,6 +18,7 @@ import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { createMappedItems } from "../../../utils/cardSlots/createMappedItems.ts";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 
 export type TestimonialCardsWrapperProps =
   CardWrapperType<TestimonialSectionType> & {
@@ -79,6 +80,9 @@ const testimonialCards = createMappedItems<TestimonialCardsWrapperProps>({
       ) as ComponentData<TestimonialCardProps>,
     getParentData: (item, resolvedData) => {
       const locale = i18nComponentsInstance.language || "en";
+      const contributorName = testimonialCards.resolveMapping<
+        TestimonialStruct["contributorName"]
+      >(resolvedData.props.cards?.contributorName, item, locale);
 
       return {
         field: resolvedData.props.data.field,
@@ -86,9 +90,9 @@ const testimonialCards = createMappedItems<TestimonialCardsWrapperProps>({
           description: testimonialCards.resolveMapping<
             TestimonialStruct["description"]
           >(resolvedData.props.cards?.description, item, locale),
-          contributorName: testimonialCards.resolveMapping<
-            TestimonialStruct["contributorName"]
-          >(resolvedData.props.cards?.contributorName, item, locale),
+          contributorName: contributorName
+            ? resolveComponentData(contributorName, locale, item)
+            : undefined,
           contributionDate: testimonialCards.resolveMapping<
             TestimonialStruct["contributionDate"]
           >(resolvedData.props.cards?.contributionDate, item, locale),

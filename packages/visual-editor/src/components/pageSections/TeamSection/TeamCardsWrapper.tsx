@@ -12,6 +12,7 @@ import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { createMappedItems } from "../../../utils/cardSlots/createMappedItems.ts";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 
 export type TeamCardsWrapperProps = CardWrapperType<TeamSectionType> & {
   cards?: {
@@ -91,6 +92,11 @@ const teamCards = createMappedItems<TeamCardsWrapperProps>({
       ) as ComponentData<TeamCardProps>,
     getParentData: (item, resolvedData) => {
       const locale = i18nComponentsInstance.language || "en";
+      const name = teamCards.resolveMapping<PersonStruct["name"]>(
+        resolvedData.props.cards?.name,
+        item,
+        locale
+      );
 
       return {
         field: resolvedData.props.data.field,
@@ -100,11 +106,7 @@ const teamCards = createMappedItems<TeamCardsWrapperProps>({
             item,
             locale
           ),
-          name: teamCards.resolveMapping<PersonStruct["name"]>(
-            resolvedData.props.cards?.name,
-            item,
-            locale
-          ),
+          name: name ? resolveComponentData(name, locale, item) : undefined,
           title: teamCards.resolveMapping<PersonStruct["title"]>(
             resolvedData.props.cards?.title,
             item,

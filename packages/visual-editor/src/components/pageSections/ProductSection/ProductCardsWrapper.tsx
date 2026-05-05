@@ -16,6 +16,7 @@ import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { createMappedItems } from "../../../utils/cardSlots/createMappedItems.ts";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 
 export type ProductCardsWrapperProps = CardWrapperType<ProductSectionType> & {
   cards?: {
@@ -97,6 +98,11 @@ const productCards = createMappedItems<ProductCardsWrapperProps>({
       ) as ComponentData<ProductCardProps>,
     getParentData: (item, resolvedData) => {
       const locale = i18nComponentsInstance.language || "en";
+      const name = productCards.resolveMapping<ProductStruct["name"]>(
+        resolvedData.props.cards?.name,
+        item,
+        locale
+      );
 
       return {
         field: resolvedData.props.data.field,
@@ -111,11 +117,7 @@ const productCards = createMappedItems<ProductCardsWrapperProps>({
             item,
             locale
           ),
-          name: productCards.resolveMapping<ProductStruct["name"]>(
-            resolvedData.props.cards?.name,
-            item,
-            locale
-          ),
+          name: name ? resolveComponentData(name, locale, item) : undefined,
           description: productCards.resolveMapping<
             ProductStruct["description"]
           >(resolvedData.props.cards?.description, item, locale),

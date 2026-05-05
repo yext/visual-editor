@@ -15,6 +15,7 @@ import { toPuckFields, YextComponentConfig } from "../../../fields/fields.ts";
 import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { createMappedItems } from "../../../utils/cardSlots/createMappedItems.ts";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 
 export type InsightCardsWrapperProps = CardWrapperType<InsightSectionType> & {
   cards?: {
@@ -95,6 +96,11 @@ const insightCards = createMappedItems<InsightCardsWrapperProps>({
       ) as ComponentData<InsightCardProps>,
     getParentData: (item, resolvedData) => {
       const locale = i18nComponentsInstance.language || "en";
+      const name = insightCards.resolveMapping<InsightStruct["name"]>(
+        resolvedData.props.cards?.name,
+        item,
+        locale
+      );
 
       return {
         field: resolvedData.props.data.field,
@@ -104,11 +110,7 @@ const insightCards = createMappedItems<InsightCardsWrapperProps>({
             item,
             locale
           ),
-          name: insightCards.resolveMapping<InsightStruct["name"]>(
-            resolvedData.props.cards?.name,
-            item,
-            locale
-          ),
+          name: name ? resolveComponentData(name, locale, item) : undefined,
           category: insightCards.resolveMapping<InsightStruct["category"]>(
             resolvedData.props.cards?.category,
             item,
