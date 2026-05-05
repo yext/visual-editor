@@ -2,11 +2,14 @@ import React from "react";
 import { BaseField, FieldLabel, type FieldProps } from "@puckeditor/core";
 import { Combobox } from "../../internal/puck/ui/Combobox.tsx";
 import { pt, type MsgString } from "../../utils/i18n/platform.ts";
-import { ThemeOptions } from "../../utils/themeConfigOptions.ts";
+import {
+  type ImageBorderRadius,
+  ThemeOptions,
+} from "../../utils/themeConfigOptions.ts";
 import { withDefaultOption } from "./baseText.tsx";
 
 export type StyledImageValue = {
-  borderRadius: string;
+  borderRadius: ImageBorderRadius | "default";
 };
 
 export type StyledImageField = BaseField & {
