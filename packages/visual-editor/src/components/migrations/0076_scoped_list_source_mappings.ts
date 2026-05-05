@@ -1,6 +1,10 @@
 import { resolveField } from "../../utils/resolveYextEntityField.ts";
 import { Migration } from "../../utils/migrate.ts";
 
+/**
+ * Normalizes an old repeated-item source to the new scoped list field and seeds
+ * the mapping object expected by the mapped-items runtime.
+ */
 const migrateScopedMappings = (
   props: { id: string } & Record<string, any>,
   streamDocument: Record<string, unknown>,
@@ -43,6 +47,46 @@ const migrateScopedMappings = (
   };
 };
 
+/**
+ * Upgrades a repeated-item wrapper stored inside a section slot so old
+ * section-shaped fixtures still resolve into the new mapped-wrapper contract.
+ */
+const migrateScopedWrapperSlot = (
+  props: { id: string } & Record<string, any>,
+  streamDocument: Record<string, unknown>,
+  slotName: string,
+  wrapperType: string,
+  listFieldName: string,
+  mappings: Record<string, string>,
+  mappingFieldName = "cards"
+) => {
+  const slot = props.slots?.[slotName];
+  const wrapper = Array.isArray(slot) ? slot[0] : undefined;
+
+  if (!wrapper || wrapper.type !== wrapperType || !wrapper.props) {
+    return props;
+  }
+
+  return {
+    ...props,
+    slots: {
+      ...props.slots,
+      [slotName]: [
+        {
+          ...wrapper,
+          props: migrateScopedMappings(
+            wrapper.props,
+            streamDocument,
+            listFieldName,
+            mappings,
+            mappingFieldName
+          ),
+        },
+      ],
+    },
+  };
+};
+
 export const scopedListSourceMappingsMigration: Migration = {
   EventCardsWrapper: {
     action: "updated",
@@ -55,19 +99,50 @@ export const scopedListSourceMappingsMigration: Migration = {
         image: "image",
       }),
   },
+  EventSection: {
+    action: "updated",
+    propTransformation: (props, streamDocument) =>
+      migrateScopedWrapperSlot(
+        props,
+        streamDocument,
+        "CardsWrapperSlot",
+        "EventCardsWrapper",
+        "events",
+        {
+          title: "title",
+          date: "dateTime",
+          description: "description",
+          cta: "cta",
+          image: "image",
+        }
+      ),
+  },
   FAQSection: {
     action: "updated",
     propTransformation: (props, streamDocument) =>
-      migrateScopedMappings(
-        props,
-        streamDocument,
-        "faqs",
-        {
-          question: "question",
-          answer: "answer",
-        },
-        "faqs"
-      ),
+      props.slots?.FAQsWrapperSlot
+        ? migrateScopedWrapperSlot(
+            props,
+            streamDocument,
+            "FAQsWrapperSlot",
+            "FAQsWrapperSlot",
+            "faqs",
+            {
+              question: "question",
+              answer: "answer",
+            },
+            "faqs"
+          )
+        : migrateScopedMappings(
+            props,
+            streamDocument,
+            "faqs",
+            {
+              question: "question",
+              answer: "answer",
+            },
+            "faqs"
+          ),
   },
   ProductCardsWrapper: {
     action: "updated",
@@ -81,6 +156,25 @@ export const scopedListSourceMappingsMigration: Migration = {
         cta: "cta",
       }),
   },
+  ProductSection: {
+    action: "updated",
+    propTransformation: (props, streamDocument) =>
+      migrateScopedWrapperSlot(
+        props,
+        streamDocument,
+        "CardsWrapperSlot",
+        "ProductCardsWrapper",
+        "products",
+        {
+          image: "image",
+          brow: "brow",
+          name: "name",
+          price: "price.value",
+          description: "description",
+          cta: "cta",
+        }
+      ),
+  },
   InsightCardsWrapper: {
     action: "updated",
     propTransformation: (props, streamDocument) =>
@@ -92,6 +186,25 @@ export const scopedListSourceMappingsMigration: Migration = {
         description: "description",
         cta: "cta",
       }),
+  },
+  InsightSection: {
+    action: "updated",
+    propTransformation: (props, streamDocument) =>
+      migrateScopedWrapperSlot(
+        props,
+        streamDocument,
+        "CardsWrapperSlot",
+        "InsightCardsWrapper",
+        "insights",
+        {
+          image: "image",
+          name: "name",
+          category: "category",
+          publishTime: "publishTime",
+          description: "description",
+          cta: "cta",
+        }
+      ),
   },
   TeamCardsWrapper: {
     action: "updated",
@@ -105,6 +218,25 @@ export const scopedListSourceMappingsMigration: Migration = {
         cta: "cta",
       }),
   },
+  TeamSection: {
+    action: "updated",
+    propTransformation: (props, streamDocument) =>
+      migrateScopedWrapperSlot(
+        props,
+        streamDocument,
+        "CardsWrapperSlot",
+        "TeamCardsWrapper",
+        "people",
+        {
+          headshot: "headshot",
+          name: "name",
+          title: "title",
+          phoneNumber: "phoneNumber",
+          email: "email",
+          cta: "cta",
+        }
+      ),
+  },
   TestimonialCardsWrapper: {
     action: "updated",
     propTransformation: (props, streamDocument) =>
@@ -113,5 +245,21 @@ export const scopedListSourceMappingsMigration: Migration = {
         contributorName: "contributorName",
         contributionDate: "contributionDate",
       }),
+  },
+  TestimonialSection: {
+    action: "updated",
+    propTransformation: (props, streamDocument) =>
+      migrateScopedWrapperSlot(
+        props,
+        streamDocument,
+        "CardsWrapperSlot",
+        "TestimonialCardsWrapper",
+        "testimonials",
+        {
+          description: "description",
+          contributorName: "contributorName",
+          contributionDate: "contributionDate",
+        }
+      ),
   },
 };

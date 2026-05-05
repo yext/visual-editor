@@ -50,13 +50,9 @@ export const isOriginAllowed = (origin: string): boolean => {
     return true;
   }
 
+  // Check if origin matches *.optimizelocation.com pattern
   try {
     const url = new URL(origin);
-    if (url.hostname === "localhost") {
-      return true;
-    }
-
-    // Check if origin matches *.optimizelocation.com pattern
     if (
       url.hostname.endsWith(".optimizelocation.com") ||
       url.hostname === "optimizelocation.com"
