@@ -96,22 +96,13 @@ const faqs = createMappedItems<FAQSectionProps>({
   })
   .withRepeatedSlot({
     slotPath: "slots.CardSlot",
-    itemIdPrefix: "FAQCard",
-    getSharedProps: (card) =>
-      !card
-        ? undefined
-        : {
-            questionVariant: card.props.styles.questionVariant,
-            answerVariant: card.props.styles.answerVariant,
-            answerColor: card.props.styles.answerColor,
-          },
-    createItem: (id, index, sharedCardProps) =>
+    createItem: (id, index, existingItem) =>
       defaultFAQCardData(
         id,
         index,
-        sharedCardProps?.questionVariant,
-        sharedCardProps?.answerVariant,
-        sharedCardProps?.answerColor
+        existingItem?.props.styles.questionVariant,
+        existingItem?.props.styles.answerVariant,
+        existingItem?.props.styles.answerColor
       ) as ComponentData<FAQCardProps>,
     getParentData: (item, resolvedData) => {
       const locale = i18nComponentsInstance.language || "en";

@@ -82,22 +82,13 @@ const eventCards = createMappedItems<EventCardsWrapperProps>({
   })
   .withRepeatedSlot({
     slotPath: "slots.CardSlot",
-    itemIdPrefix: "EventCard",
-    getSharedProps: (card) =>
-      !card
-        ? undefined
-        : {
-            backgroundColor: card.props.styles.backgroundColor,
-            truncateDescription: card.props.styles.truncateDescription,
-            slotStyles: gatherSlotStyles(card.props.slots),
-          },
-    createItem: (id, index, sharedCardProps) =>
+    createItem: (id, index, existingItem) =>
       defaultEventCardSlotData(
         id,
         index,
-        sharedCardProps?.backgroundColor,
-        sharedCardProps?.truncateDescription,
-        sharedCardProps?.slotStyles
+        existingItem?.props.styles.backgroundColor,
+        existingItem?.props.styles.truncateDescription,
+        existingItem ? gatherSlotStyles(existingItem.props.slots) : undefined
       ) as ComponentData<EventCardProps>,
     getParentData: (item, resolvedData) => {
       const locale = i18nComponentsInstance.language || "en";

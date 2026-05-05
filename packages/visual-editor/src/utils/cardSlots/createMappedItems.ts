@@ -53,33 +53,18 @@ type ResolveMappedItemsParams = {
 type ResolveItemsOptions<
   TProps extends DefaultComponentProps,
   TItemProps extends DefaultComponentProps,
-  TSharedProps,
 > = {
   slotPath: string;
-  itemIdPrefix: string;
   createItem: (
     id: string,
     index: number | undefined,
-    sharedProps: TSharedProps | undefined
+    existingItem?: ComponentData<TItemProps>
   ) => ComponentData<TItemProps>;
-  getSharedProps?: (
-    existingItem: ComponentData<TItemProps> | undefined
-  ) => TSharedProps | undefined;
   getParentData: (
     item: StreamDocument,
     data: ComponentData<TProps>,
     index: number
   ) => unknown;
-  fallbackToIndex?: boolean;
-  rewriteChildSlotIds?:
-    | boolean
-    | ((item: ComponentData<TItemProps>, newId: string) => void);
-  decorateItem?: (
-    itemComponent: ComponentData<TItemProps>,
-    item: StreamDocument,
-    data: ComponentData<TProps>,
-    index: number
-  ) => ComponentData<TItemProps>;
 };
 
 type MappedItemsResolveResult<
@@ -105,11 +90,8 @@ type MappedItemsInstance<TProps extends DefaultComponentProps> = {
   withConstantValueMode: (
     options: WithConstantValueModeOptions
   ) => MappedItemsInstance<TProps>;
-  withRepeatedSlot: <
-    TItemProps extends DefaultComponentProps,
-    TSharedProps = undefined,
-  >(
-    options: ResolveItemsOptions<TProps, TItemProps, TSharedProps>
+  withRepeatedSlot: <TItemProps extends DefaultComponentProps>(
+    options: ResolveItemsOptions<TProps, TItemProps>
   ) => MappedItemsInstance<TProps> & {
     resolveItems: (
       data: { props: Record<string, unknown> },
@@ -422,11 +404,8 @@ const buildMappedItems = <TProps extends DefaultComponentProps>({
         mappings,
         constantValueMode: options,
       }),
-    withRepeatedSlot: <
-      TItemProps extends DefaultComponentProps,
-      TSharedProps = undefined,
-    >(
-      options: ResolveItemsOptions<TProps, TItemProps, TSharedProps>
+    withRepeatedSlot: <TItemProps extends DefaultComponentProps>(
+      options: ResolveItemsOptions<TProps, TItemProps>
     ) => {
       const resolveItems = (
         data: { props: Record<string, unknown> },
@@ -452,7 +431,7 @@ const buildMappedItems = <TProps extends DefaultComponentProps>({
             resolved.props,
             options.slotPath
           ) ?? [];
-        const sharedProps = options.getSharedProps?.(currentItems[0]);
+        const existingItem = currentItems[0];
 
         if (
           constantValueMode &&
@@ -463,11 +442,10 @@ const buildMappedItems = <TProps extends DefaultComponentProps>({
             constantValue: sourceFieldValue?.constantValue as
               | { id?: string }[]
               | undefined,
-            createId: () => `${options.itemIdPrefix}-${crypto.randomUUID()}`,
+            createId: () => `mapped-item-${crypto.randomUUID()}`,
             createCard: (id, index) =>
-              options.createItem(id, index, sharedProps),
-            fallbackToIndex: options.fallbackToIndex,
-            rewriteChildSlotIds: options.rewriteChildSlotIds,
+              options.createItem(id, index, existingItem),
+            fallbackToIndex: true,
           });
 
           return {
@@ -495,26 +473,16 @@ const buildMappedItems = <TProps extends DefaultComponentProps>({
               currentCards: currentItems,
               createCard: () =>
                 options.createItem(
-                  `${options.itemIdPrefix}-${crypto.randomUUID()}`,
+                  `mapped-item-${crypto.randomUUID()}`,
                   undefined,
-                  sharedProps
+                  existingItem
                 ),
-              decorateCard: (itemComponent, item, index) => {
-                const nextItemComponent = setPathValue(
+              decorateCard: (itemComponent, item, index) =>
+                setPathValue(
                   setPathValue(itemComponent, "index", index),
                   "parentData",
                   options.getParentData(item, resolved, index)
-                );
-
-                return options.decorateItem
-                  ? options.decorateItem(
-                      nextItemComponent,
-                      item,
-                      resolved,
-                      index
-                    )
-                  : nextItemComponent;
-              },
+                ),
               items,
             })
           ),

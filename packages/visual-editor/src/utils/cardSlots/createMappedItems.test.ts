@@ -43,7 +43,6 @@ const mappedItems = createMappedItems<TestProps>({
 
 const repeatedMappedItems = mappedItems.withRepeatedSlot({
   slotPath: "slots.ItemSlot",
-  itemIdPrefix: "ExampleItem",
   createItem: (id, index) =>
     ({
       type: "ExampleItem",
@@ -65,7 +64,6 @@ const repeatedMappedItemsWithConstantValueMode = mappedItems
   })
   .withRepeatedSlot({
     slotPath: "slots.ItemSlot",
-    itemIdPrefix: "ExampleItem",
     createItem: (id, index) =>
       ({
         type: "ExampleItem",

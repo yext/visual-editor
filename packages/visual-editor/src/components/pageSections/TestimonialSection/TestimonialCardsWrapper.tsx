@@ -70,20 +70,12 @@ const testimonialCards = createMappedItems<TestimonialCardsWrapperProps>({
   })
   .withRepeatedSlot({
     slotPath: "slots.CardSlot",
-    itemIdPrefix: "TestimonialCard",
-    getSharedProps: (card) =>
-      !card
-        ? undefined
-        : {
-            backgroundColor: card.props.styles.backgroundColor,
-            slotStyles: gatherSlotStyles(card.props.slots),
-          },
-    createItem: (id, index, sharedCardProps) =>
+    createItem: (id, index, existingItem) =>
       defaultTestimonialCardSlotData(
         id,
         index,
-        sharedCardProps?.backgroundColor,
-        sharedCardProps?.slotStyles
+        existingItem?.props.styles.backgroundColor,
+        existingItem ? gatherSlotStyles(existingItem.props.slots) : undefined
       ) as ComponentData<TestimonialCardProps>,
     getParentData: (item, resolvedData) => {
       const locale = i18nComponentsInstance.language || "en";
@@ -103,7 +95,6 @@ const testimonialCards = createMappedItems<TestimonialCardsWrapperProps>({
         },
       };
     },
-    fallbackToIndex: true,
   });
 
 const testimonialCardsWrapperFields = {
