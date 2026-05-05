@@ -8,6 +8,7 @@ import { type ProductStruct } from "../../../types/types.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import {
+  ProductCard,
   defaultProductCardSlotData,
   type ProductCardProps,
 } from "./ProductCard.tsx";
@@ -180,7 +181,10 @@ const createProductCard = (
 
 const syncCards = <TData extends { props: ProductCardsWrapperProps }>(
   data: TData,
-  items: Record<string, unknown>[]
+  items: Record<string, unknown>[],
+  resolveCard: (
+    card: ComponentData<ProductCardProps>
+  ) => ComponentData<ProductCardProps>
 ): TData => {
   const currentCards =
     (data.props.slots
@@ -211,6 +215,7 @@ const syncCards = <TData extends { props: ProductCardsWrapperProps }>(
           },
         },
       }),
+      finalizeCard: resolveCard,
     })
   ) as TData;
 };
@@ -270,7 +275,13 @@ export const ProductCardsWrapper: YextComponentConfig<ProductCardsWrapperProps> 
       );
 
       return withMappedEntityFieldConditionalRender(
-        syncCards(normalizedData, items),
+        syncCards(
+          normalizedData,
+          items,
+          (card) =>
+            (ProductCard.resolveData?.(card as any, params as any) ??
+              card) as ComponentData<ProductCardProps>
+        ),
         !normalizedData.props.data.constantValueEnabled &&
           Boolean(normalizedData.props.data.field) &&
           items.length === 0

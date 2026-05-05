@@ -8,6 +8,7 @@ import { type PersonStruct } from "../../../types/types.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import {
+  TeamCard,
   defaultTeamCardItemData,
   defaultTeamCardSlotData,
   type TeamCardProps,
@@ -176,7 +177,10 @@ const createTeamCard = (
 
 const syncCards = <TData extends { props: TeamCardsWrapperProps }>(
   data: TData,
-  items: Record<string, unknown>[]
+  items: Record<string, unknown>[],
+  resolveCard: (
+    card: ComponentData<TeamCardProps>
+  ) => ComponentData<TeamCardProps>
 ): TData => {
   const currentCards =
     (data.props.slots.CardSlot as unknown as ComponentData<TeamCardProps>[]) ??
@@ -206,6 +210,7 @@ const syncCards = <TData extends { props: TeamCardsWrapperProps }>(
           },
         },
       }),
+      finalizeCard: resolveCard,
     })
   ) as TData;
 };
@@ -267,7 +272,13 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
     );
 
     return withMappedEntityFieldConditionalRender(
-      syncCards(normalizedData, items),
+      syncCards(
+        normalizedData,
+        items,
+        (card) =>
+          (TeamCard.resolveData?.(card as any, params as any) ??
+            card) as ComponentData<TeamCardProps>
+      ),
       !normalizedData.props.data.constantValueEnabled &&
         Boolean(normalizedData.props.data.field) &&
         items.length === 0

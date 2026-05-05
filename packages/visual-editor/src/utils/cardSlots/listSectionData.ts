@@ -11,6 +11,7 @@ export const buildListSectionCards = <
   currentCards,
   createCard,
   decorateCard,
+  finalizeCard,
   items,
 }: {
   currentCards: ComponentData<TCardProps>[];
@@ -18,6 +19,10 @@ export const buildListSectionCards = <
   decorateCard: (
     card: ComponentData<TCardProps>,
     item: TItem,
+    index: number
+  ) => ComponentData<TCardProps>;
+  finalizeCard?: (
+    card: ComponentData<TCardProps>,
     index: number
   ) => ComponentData<TCardProps>;
   items: TItem[];
@@ -31,5 +36,6 @@ export const buildListSectionCards = <
 
   return [...currentCards, ...cardsToAdd]
     .slice(0, items.length)
-    .map((card, index) => decorateCard(card, items[index], index));
+    .map((card, index) => decorateCard(card, items[index], index))
+    .map((card, index) => finalizeCard?.(card, index) ?? card);
 };

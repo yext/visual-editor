@@ -12,6 +12,7 @@ import {
 import { msg } from "../../../utils/i18n/platform.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import {
+  TestimonialCard,
   defaultTestimonialCardItemData,
   defaultTestimonialCardSlotData,
   type TestimonialCardProps,
@@ -130,7 +131,10 @@ const createTestimonialCard = (
 
 const syncCards = <TData extends { props: TestimonialCardsWrapperProps }>(
   data: TData,
-  items: Record<string, unknown>[]
+  items: Record<string, unknown>[],
+  resolveCard: (
+    card: ComponentData<TestimonialCardProps>
+  ) => ComponentData<TestimonialCardProps>
 ): TData => {
   const currentCards =
     (data.props.slots
@@ -158,6 +162,7 @@ const syncCards = <TData extends { props: TestimonialCardsWrapperProps }>(
           },
         },
       }),
+      finalizeCard: resolveCard,
     })
   ) as TData;
 };
@@ -212,7 +217,13 @@ export const TestimonialCardsWrapper: YextComponentConfig<TestimonialCardsWrappe
       );
 
       return withMappedEntityFieldConditionalRender(
-        syncCards(normalizedData, items),
+        syncCards(
+          normalizedData,
+          items,
+          (card) =>
+            (TestimonialCard.resolveData?.(card as any, params as any) ??
+              card) as ComponentData<TestimonialCardProps>
+        ),
         !normalizedData.props.data.constantValueEnabled &&
           Boolean(normalizedData.props.data.field) &&
           items.length === 0

@@ -10,6 +10,7 @@ import { msg } from "../../../utils/i18n/platform.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 import {
+  EventCard,
   defaultEventCardItemData,
   defaultEventCardSlotData,
   type EventCardProps,
@@ -178,7 +179,10 @@ const toEventCardItemData = (
 
 const syncCards = <TData extends { props: EventCardsWrapperProps }>(
   data: TData,
-  items: Record<string, unknown>[]
+  items: Record<string, unknown>[],
+  resolveCard: (
+    card: ComponentData<EventCardProps>
+  ) => ComponentData<EventCardProps>
 ): TData => {
   const currentCards =
     (data.props.slots.CardSlot as unknown as ComponentData<EventCardProps>[]) ??
@@ -203,6 +207,7 @@ const syncCards = <TData extends { props: EventCardsWrapperProps }>(
           ),
         },
       }),
+      finalizeCard: resolveCard,
     })
   ) as TData;
 };
@@ -260,7 +265,13 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
     );
 
     return withMappedEntityFieldConditionalRender(
-      syncCards(normalizedData, items),
+      syncCards(
+        normalizedData,
+        items,
+        (card) =>
+          (EventCard.resolveData?.(card as any, params as any) ??
+            card) as ComponentData<EventCardProps>
+      ),
       !normalizedData.props.data.constantValueEnabled &&
         Boolean(normalizedData.props.data.field) &&
         items.length === 0

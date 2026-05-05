@@ -108,6 +108,17 @@ describe("mapped list wrappers", () => {
         ctaType: "textAndLink",
       },
     });
+    expect(card.props.conditionalRender).toEqual({
+      image: true,
+      title: true,
+      dateTime: true,
+      description: true,
+      cta: true,
+    });
+    expect(card.props.slots.ImageSlot[0]?.props.parentData).toEqual({
+      field: "",
+      image: { url: "https://example.com/event.jpg", width: 640, height: 360 },
+    });
     expect(
       card.props.slots.TitleSlot[0]?.props.data.text.constantValue
     ).not.toEqual({ defaultValue: "Manual Event" });
@@ -183,6 +194,16 @@ describe("mapped list wrappers", () => {
       description: { html: "<p>Lightweight</p>" },
       cta: { label: "Shop", link: "/shop", linkType: "URL" },
       priceText: "$120",
+    });
+    expect(
+      resolvedData.props!.slots!.CardSlot[0]?.props.conditionalRender
+    ).toEqual({
+      image: true,
+      title: true,
+      price: true,
+      brow: true,
+      description: true,
+      cta: true,
     });
   });
 

@@ -9,6 +9,7 @@ import { msg } from "../../../utils/i18n/platform.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 import {
+  InsightCard,
   defaultInsightCardItemData,
   defaultInsightCardSlotData,
   type InsightCardProps,
@@ -187,7 +188,10 @@ const toInsightCardItemData = (
 
 const syncCards = <TData extends { props: InsightCardsWrapperProps }>(
   data: TData,
-  items: Record<string, unknown>[]
+  items: Record<string, unknown>[],
+  resolveCard: (
+    card: ComponentData<InsightCardProps>
+  ) => ComponentData<InsightCardProps>
 ): TData => {
   const currentCards =
     (data.props.slots
@@ -208,6 +212,7 @@ const syncCards = <TData extends { props: InsightCardsWrapperProps }>(
           itemData: toInsightCardItemData(item, data.props.data.field),
         },
       }),
+      finalizeCard: resolveCard,
     })
   ) as TData;
 };
@@ -272,7 +277,13 @@ export const InsightCardsWrapper: YextComponentConfig<InsightCardsWrapperProps> 
       );
 
       return withMappedEntityFieldConditionalRender(
-        syncCards(normalizedData, items),
+        syncCards(
+          normalizedData,
+          items,
+          (card) =>
+            (InsightCard.resolveData?.(card as any, params as any) ??
+              card) as ComponentData<InsightCardProps>
+        ),
         !normalizedData.props.data.constantValueEnabled &&
           Boolean(normalizedData.props.data.field) &&
           items.length === 0
