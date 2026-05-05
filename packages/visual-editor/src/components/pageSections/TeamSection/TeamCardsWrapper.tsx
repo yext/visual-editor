@@ -11,7 +11,7 @@ import {
 } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 import { defaultTeamCardSlotData, TeamCardProps } from "./TeamCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
-import { YextComponentConfig } from "../../../fields/fields.ts";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 
 export type TeamCardsWrapperProps = CardWrapperType<TeamSectionType> & {
@@ -24,7 +24,7 @@ export type TeamCardsWrapperProps = CardWrapperType<TeamSectionType> & {
   };
 };
 
-const teamCardsWrapperFields = {
+const teamCardsWrapperFields: YextFields<TeamCardsWrapperProps> = {
   ...cardWrapperFields<TeamCardsWrapperProps>(
     msg("components.team", "Team"),
     ComponentFields.TeamSection.type

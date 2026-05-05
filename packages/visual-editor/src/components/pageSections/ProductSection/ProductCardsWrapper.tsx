@@ -16,7 +16,7 @@ import {
 } from "./ProductCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { ProductSectionVariant } from "./ProductSection.tsx";
-import { YextComponentConfig } from "../../../fields/fields.ts";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 
 export type ProductCardsWrapperProps = CardWrapperType<ProductSectionType> & {
@@ -32,7 +32,7 @@ export type ProductCardsWrapperProps = CardWrapperType<ProductSectionType> & {
   };
 };
 
-const productCardsWrapperFields = {
+const productCardsWrapperFields: YextFields<ProductCardsWrapperProps> = {
   ...cardWrapperFields<ProductCardsWrapperProps>(
     msg("components.products", "Products"),
     ComponentFields.ProductSection.type

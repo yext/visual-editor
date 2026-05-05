@@ -12,7 +12,7 @@ import {
 } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 import { defaultEventCardSlotData, EventCardProps } from "./EventCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
-import { YextComponentConfig } from "../../../fields/fields.ts";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 export type EventCardsWrapperProps = CardWrapperType<EventSectionType> & {
   styles: {
@@ -23,7 +23,7 @@ export type EventCardsWrapperProps = CardWrapperType<EventSectionType> & {
   };
 };
 
-const eventCardsWrapperFields = {
+const eventCardsWrapperFields: YextFields<EventCardsWrapperProps> = {
   ...cardWrapperFields<EventCardsWrapperProps>(
     msg("components.events", "Events"),
     ComponentFields.EventSection.type

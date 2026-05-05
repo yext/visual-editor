@@ -81,8 +81,8 @@ export type YextCustomFieldRenderProps<ValueType> = Parameters<
 >[0];
 
 export type YextFieldDefinition<ValueType = any> =
-  | Field<ValueType, any>
-  | Field<NonNullable<ValueType>, any>
+  | Field<ValueType, YextPuckField>
+  | Field<NonNullable<ValueType>, YextPuckField>
   | YextPuckField
   | (ValueType extends Record<string, any>[]
       ? YextArrayField<ValueType>
@@ -107,7 +107,12 @@ export type YextComponentConfig<
   }>["resolveFields"];
 };
 
+// TODO(SUMO-8378): Remove this and make YextFieldsInternal -> YextFields once Puck fixes their objectField typing
 export type YextFields<
+  T extends DefaultComponentProps = DefaultComponentProps,
+> = YextFieldsInternal<T> & YextFieldMap<T>;
+
+type YextFieldsInternal<
   T extends DefaultComponentProps = DefaultComponentProps,
 > = Fields<T, any>;
 
