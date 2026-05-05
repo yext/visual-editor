@@ -14,12 +14,12 @@ describe("FAQSection resolveData", () => {
     data.props.data.field = "c_linkedLocation";
     data.props.faqs = {
       question: {
-        field: "c_linkedLocation.name",
+        field: "name",
         constantValue: { defaultValue: "" },
         constantValueEnabled: false,
       },
       answer: {
-        field: "c_linkedLocation.description",
+        field: "answer",
         constantValue: { defaultValue: "" },
         constantValueEnabled: false,
       },
@@ -33,8 +33,8 @@ describe("FAQSection resolveData", () => {
       metadata: {
         streamDocument: {
           c_linkedLocation: [
-            { name: "Downtown", description: "Open late" },
-            { name: "Uptown", description: "Open early" },
+            { name: "Downtown", answer: getDefaultRTF("Open late") },
+            { name: "Uptown", answer: getDefaultRTF("Open early") },
           ],
         },
       },
@@ -47,14 +47,14 @@ describe("FAQSection resolveData", () => {
       field: "c_linkedLocation",
       faq: {
         question: "Downtown",
-        answer: "Open late",
+        answer: getDefaultRTF("Open late"),
       },
     });
     expect(resolvedData.props!.slots!.CardSlot[1]?.props.parentData).toEqual({
       field: "c_linkedLocation",
       faq: {
         question: "Uptown",
-        answer: "Open early",
+        answer: getDefaultRTF("Open early"),
       },
     });
   });
@@ -69,13 +69,13 @@ describe("FAQSection resolveData", () => {
     data.props.data.field = "c_linkedLocation";
     data.props.faqs = {
       question: {
-        field: "c_linkedLocation.name",
+        field: "name",
         constantValue: { defaultValue: "" },
         constantValueEnabled: false,
       },
       answer: {
         field: "",
-        constantValue: getDefaultRTF("Potato: [[description]]"),
+        constantValue: getDefaultRTF("Potato: [[name]]"),
         constantValueEnabled: true,
       },
     };
@@ -87,7 +87,7 @@ describe("FAQSection resolveData", () => {
       lastData: null,
       metadata: {
         streamDocument: {
-          c_linkedLocation: [{ name: "Downtown", description: "Fresh daily" }],
+          c_linkedLocation: [{ name: "Downtown" }],
         },
       },
       parent: null,
@@ -97,7 +97,7 @@ describe("FAQSection resolveData", () => {
     expect(
       resolvedData.props!.slots!.CardSlot[0]?.props.parentData?.faq.answer
     ).toMatchObject({
-      html: expect.stringContaining("Potato: Fresh daily"),
+      html: expect.stringContaining("Potato: Downtown"),
     });
   });
 
@@ -116,7 +116,7 @@ describe("FAQSection resolveData", () => {
         constantValueEnabled: true,
       },
       answer: {
-        field: "c_linkedLocation.description",
+        field: "answer",
         constantValue: { defaultValue: "" },
         constantValueEnabled: false,
       },
@@ -129,7 +129,9 @@ describe("FAQSection resolveData", () => {
       lastData: null,
       metadata: {
         streamDocument: {
-          c_linkedLocation: [{ name: "Downtown", description: "Fresh daily" }],
+          c_linkedLocation: [
+            { name: "Downtown", answer: getDefaultRTF("Fresh daily") },
+          ],
         },
       },
       parent: null,
@@ -142,7 +144,7 @@ describe("FAQSection resolveData", () => {
         question: {
           defaultValue: "Question: Downtown",
         },
-        answer: "Fresh daily",
+        answer: getDefaultRTF("Fresh daily"),
       },
     });
   });

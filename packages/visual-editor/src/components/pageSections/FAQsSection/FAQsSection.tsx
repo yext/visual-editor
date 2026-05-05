@@ -85,7 +85,7 @@ const faqs = createMappedItems<FAQSectionProps>({
     },
     answer: {
       label: msg("fields.answer", "Answer"),
-      types: ["type.string", "type.rich_text_v2"],
+      types: ["type.rich_text_v2"],
       defaultValue: { defaultValue: "" },
     },
   },
