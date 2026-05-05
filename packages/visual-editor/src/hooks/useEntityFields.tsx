@@ -10,8 +10,14 @@ import { DevLogger } from "../utils/devLogger.ts";
 const devLogger = new DevLogger();
 
 /**
- * Under the hood we receive a Stream for a template, but we expose
- * hooks with a more user-friendly name.
+ * Receives entity field metadata from the platform bridge and exposes it as a
+ * normalized `StreamFields` value for the editor.
+ *
+ * 1. Listen for the full template stream payload in platform editing mode.
+ * 2. Listen for the lightweight development payload used outside platform.
+ * 3. Normalize nested field display names into one shared `displayNames` map.
+ * 4. Store the latest field tree for consumers such as entity pickers and
+ *    linked item-source editors.
  */
 export const usePlatformBridgeEntityFields = () => {
   const [entityFields, setEntityFields] = React.useState<StreamFields | null>(
@@ -49,6 +55,10 @@ export const usePlatformBridgeEntityFields = () => {
   return entityFields;
 };
 
+/**
+ * Normalizes the raw platform field tree into the `StreamFields` shape used
+ * throughout the editor, preserving nested display names by full field path.
+ */
 const normalizeStreamFields = (
   fields: YextSchemaField[],
   displayNames: Record<string, string> = {}
@@ -64,6 +74,10 @@ const normalizeStreamFields = (
   };
 };
 
+/**
+ * Walks one schema field and its descendants, copying inherited display names
+ * into both the field objects and the flattened `displayNames` lookup.
+ */
 const normalizeField = (
   field: YextSchemaField,
   displayNames: Record<string, string>,
@@ -91,6 +105,10 @@ const normalizeField = (
   };
 };
 
+/**
+ * Adapts the development-only entity field payload into the schema shape used
+ * by the rest of the Visual Editor field-filtering pipeline.
+ */
 const assignDefinitions = (entityFields: any): YextSchemaField[] => {
   return entityFields.map((field: any) => {
     return {
@@ -115,6 +133,10 @@ const EntityFieldsContext = React.createContext<
   StreamFields | null | undefined
 >(undefined);
 
+/**
+ * Returns the current template's entity field metadata from
+ * `VisualEditorProvider`.
+ */
 const useEntityFields = () => {
   const context = React.useContext(EntityFieldsContext);
   // context === undefined means useEntityFields outside VisualEditorProvider
