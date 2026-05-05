@@ -134,4 +134,248 @@ describe("ItemSourceField", () => {
       undefined
     );
   });
+
+  it("shows FAQ list sources when item mappings require string and rich text fields", () => {
+    render(
+      <TemplatePropsContext.Provider
+        value={{ document: { c_faqSection: { faqs: [] } } }}
+      >
+        <TemplateMetadataContext.Provider
+          value={{
+            ...generateTemplateMetadata(),
+            entityTypeDisplayName: "Location",
+          }}
+        >
+          <EntityFieldsContext.Provider
+            value={{
+              fields: [
+                {
+                  name: "c_faqSection",
+                  definition: {
+                    name: "c_faqSection",
+                    typeName: "type.faq_section",
+                    type: {},
+                  },
+                  children: {
+                    fields: [
+                      {
+                        name: "faqs",
+                        displayName: "FAQs",
+                        definition: {
+                          name: "faqs",
+                          isList: true,
+                          typeName: "type.struct",
+                          type: {},
+                        },
+                        children: {
+                          fields: [
+                            {
+                              name: "question",
+                              definition: {
+                                name: "question",
+                                typeName: "type.string",
+                                type: {},
+                              },
+                            },
+                            {
+                              name: "answer",
+                              definition: {
+                                name: "answer",
+                                typeName: "type.rich_text_v2",
+                                type: {},
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+              displayNames: {
+                c_faqSection: "FAQ Section",
+                "c_faqSection.faqs": "FAQ Section > FAQs",
+              },
+            }}
+          >
+            <YextAutoField
+              field={
+                {
+                  type: "itemSource",
+                  label: "FAQs",
+                  filter: {
+                    itemSourceTypes: [["type.string"], ["type.rich_text_v2"]],
+                  },
+                  defaultItemValue: {
+                    question: {
+                      field: "",
+                      constantValueEnabled: true,
+                      constantValue: { defaultValue: "" },
+                    },
+                    answer: {
+                      field: "",
+                      constantValueEnabled: true,
+                      constantValue: { defaultValue: "" },
+                    },
+                  },
+                  itemFields: {
+                    question: {
+                      type: "entityField",
+                      label: "Question",
+                      filter: {
+                        types: ["type.string"],
+                      },
+                      constantValueFilter: {
+                        types: ["type.string", "type.rich_text_v2"],
+                      },
+                    },
+                    answer: {
+                      type: "entityField",
+                      label: "Answer",
+                      filter: {
+                        types: ["type.rich_text_v2"],
+                      },
+                    },
+                  },
+                } satisfies ItemSourceField<any, any>
+              }
+              id="faq-item-source-field"
+              onChange={vi.fn()}
+              value={{
+                field: "",
+                constantValueEnabled: false,
+                constantValue: [],
+              }}
+            />
+          </EntityFieldsContext.Provider>
+        </TemplateMetadataContext.Provider>
+      </TemplatePropsContext.Provider>
+    );
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(screen.getAllByText("FAQs").length).toBeGreaterThan(0);
+  });
+
+  it("uses display names for linked nested list sources", () => {
+    render(
+      <TemplatePropsContext.Provider
+        value={{ document: { c_linkedLocation: [] } }}
+      >
+        <TemplateMetadataContext.Provider
+          value={{
+            ...generateTemplateMetadata(),
+            entityTypeDisplayName: "Location",
+          }}
+        >
+          <EntityFieldsContext.Provider
+            value={{
+              fields: [
+                {
+                  name: "c_linkedLocation",
+                  displayName: "LinkedLocation",
+                  definition: {
+                    name: "c_linkedLocation",
+                    typeRegistryId: "type.entity_reference",
+                    type: {
+                      documentType: "DOCUMENT_TYPE_ENTITY",
+                    },
+                    isList: true,
+                  },
+                  children: {
+                    fields: [
+                      {
+                        name: "c_eventsSection",
+                        definition: {
+                          name: "c_eventsSection",
+                          typeName: "type.events_section",
+                          type: {},
+                        },
+                        children: {
+                          fields: [
+                            {
+                              name: "events",
+                              definition: {
+                                name: "events",
+                                isList: true,
+                                typeName: "type.struct",
+                                type: {},
+                              },
+                              children: {
+                                fields: [
+                                  {
+                                    name: "title",
+                                    definition: {
+                                      name: "title",
+                                      typeName: "type.string",
+                                      type: {},
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+              displayNames: {
+                c_linkedLocation: "LinkedLocation",
+                "c_linkedLocation.c_eventsSection":
+                  "LinkedLocation > Events Section",
+                "c_linkedLocation.c_eventsSection.events":
+                  "LinkedLocation > Events Section > Events",
+              },
+            }}
+          >
+            <YextAutoField
+              field={
+                {
+                  type: "itemSource",
+                  label: "Events",
+                  filter: {
+                    itemSourceTypes: [["type.string"]],
+                  },
+                  defaultItemValue: {
+                    title: {
+                      field: "",
+                      constantValueEnabled: true,
+                      constantValue: { defaultValue: "" },
+                    },
+                  },
+                  itemFields: {
+                    title: {
+                      type: "entityField",
+                      label: "Title",
+                      filter: {
+                        types: ["type.string"],
+                      },
+                    },
+                  },
+                } satisfies ItemSourceField<any, any>
+              }
+              id="linked-list-item-source-field"
+              onChange={vi.fn()}
+              value={{
+                field: "",
+                constantValueEnabled: false,
+                constantValue: [],
+              }}
+            />
+          </EntityFieldsContext.Provider>
+        </TemplateMetadataContext.Provider>
+      </TemplatePropsContext.Provider>
+    );
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(
+      screen.getAllByText("LinkedLocation > Events Section > Events").length
+    ).toBeGreaterThan(0);
+    expect(
+      screen.queryByText("LinkedLocation > c_eventsSection > events")
+    ).toBeNull();
+  });
 });

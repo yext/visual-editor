@@ -243,6 +243,20 @@ export const returnConstantFieldConfig = (
   return fieldConfiguration;
 };
 
+const supportsStringConstantFallback = (
+  typeFilter: EntityFieldTypes[] | undefined,
+  isList: boolean,
+  disallowTranslation: boolean
+): boolean =>
+  !isList &&
+  !disallowTranslation &&
+  !!typeFilter?.includes("type.string") &&
+  typeFilter.every(
+    (entityFieldType) =>
+      entityFieldType === "type.string" ||
+      entityFieldType === "type.rich_text_v2"
+  );
+
 export const EntityFieldSelectorFieldOverride = ({
   field,
   value,
@@ -253,20 +267,19 @@ export const EntityFieldSelectorFieldOverride = ({
   const constantValueEnabled =
     !field.disableConstantValueToggle && !!value?.constantValueEnabled;
   const allowsListValues = !!constantValueFilter.includeListsOnly;
-  const canUseEmbeddedStringConstantValue =
-    constantValueFilter.types?.includes("type.string") &&
-    !allowsListValues &&
-    !field.disallowTranslation;
-
-  let constantFieldConfig = returnConstantFieldConfig(
+  const canUseEmbeddedStringConstantValue = supportsStringConstantFallback(
     constantValueFilter.types,
     allowsListValues,
     !!field.disallowTranslation
   );
 
-  if (!constantFieldConfig && canUseEmbeddedStringConstantValue) {
-    constantFieldConfig = getConstantConfigFromType("type.string");
-  }
+  const constantFieldConfig = canUseEmbeddedStringConstantValue
+    ? getConstantConfigFromType("type.string")
+    : returnConstantFieldConfig(
+        constantValueFilter.types,
+        allowsListValues,
+        !!field.disallowTranslation
+      );
   const constantValueModeSupported = !!constantFieldConfig;
   const showConstantValueInput =
     constantValueEnabled && constantValueModeSupported;
@@ -396,26 +409,19 @@ export const ConstantValueInput = <T extends Record<string, any>>({
   disallowTranslation,
   sourceFieldPath,
 }: InputProps<T>) => {
-  const isSingleStringField =
-    filter.types?.includes("type.string") &&
-    !filter.includeListsOnly &&
-    !disallowTranslation;
-
-  let constantFieldConfig = returnConstantFieldConfig(
+  const isSingleStringField = supportsStringConstantFallback(
     filter.types,
     !!filter.includeListsOnly,
     !!disallowTranslation
   );
 
-  if (!constantFieldConfig && isSingleStringField) {
-    // Support mixed string/rich-text field filters while keeping a plain
-    // text constant input experience for components that opt into both.
-    constantFieldConfig = getConstantConfigFromType(
-      "type.string",
-      false,
-      !!disallowTranslation
-    );
-  }
+  const constantFieldConfig = isSingleStringField
+    ? getConstantConfigFromType("type.string", false, !!disallowTranslation)
+    : returnConstantFieldConfig(
+        filter.types,
+        !!filter.includeListsOnly,
+        !!disallowTranslation
+      );
 
   const { i18n } = useTranslation();
   const locale = i18n.language;

@@ -2648,4 +2648,151 @@ describe("EventSection", async () => {
       resolved.content[0]!.props.slots.CardsWrapperSlot[0]!.props.slots.CardSlot
     ).toHaveLength(2);
   });
+
+  it("resolves a linked event source before any card mappings are selected", async () => {
+    const data = {
+      root: {
+        props: {
+          version: migrationRegistry.length,
+        },
+      },
+      content: [
+        {
+          type: "EventSection",
+          props: {
+            ...EventSection.defaultProps,
+            slots: {
+              ...EventSection.defaultProps!.slots,
+              CardsWrapperSlot: [
+                {
+                  type: "EventCardsWrapper",
+                  props: {
+                    ...((EventSection.defaultProps!.slots as any)
+                      .CardsWrapperSlot[0].props as EventCardsWrapperProps),
+                    data: {
+                      field: "c_eventsSection.events",
+                      constantValueEnabled: false,
+                      constantValue: [],
+                    },
+                  } satisfies EventCardsWrapperProps,
+                },
+              ],
+            },
+          },
+        },
+      ],
+    } as any;
+
+    const resolved = await resolveAllData(data, puckConfig, {
+      streamDocument: {
+        c_eventsSection: {
+          events: [{ title: "First Event" }, { title: "Second Event" }],
+        },
+      },
+    });
+
+    expect(
+      resolved.content[0]!.props.slots.CardsWrapperSlot[0]!.props.slots.CardSlot
+    ).toHaveLength(2);
+  });
+
+  it("resolves a linked event source from the stale saved branch shape", async () => {
+    const data = {
+      root: {
+        props: {
+          version: migrationRegistry.length,
+        },
+      },
+      content: [
+        {
+          type: "EventSection",
+          props: {
+            ...EventSection.defaultProps,
+            hasResolvedSource: true,
+            slots: {
+              ...EventSection.defaultProps!.slots,
+              CardsWrapperSlot: [
+                {
+                  type: "EventCardsWrapper",
+                  props: {
+                    ...((EventSection.defaultProps!.slots as any)
+                      .CardsWrapperSlot[0].props as EventCardsWrapperProps),
+                    data: {
+                      field: "c_eventsSection.events",
+                      constantValueEnabled: false,
+                      constantValue: [{}, {}, {}],
+                    } as any,
+                    cards: {
+                      title: {
+                        field: "",
+                        constantValue: { defaultValue: "" },
+                        constantValueEnabled: false,
+                      },
+                      date: {
+                        field: "",
+                        constantValue: { defaultValue: "" },
+                        constantValueEnabled: false,
+                      },
+                      description: {
+                        field: "",
+                        constantValueEnabled: false,
+                      },
+                      image: {
+                        field: "",
+                        constantValue: { defaultValue: "" },
+                        constantValueEnabled: false,
+                      },
+                      cta: {
+                        field: "",
+                        constantValue: {
+                          link: "",
+                          label: { defaultValue: "" },
+                          ctaType: "textAndLink",
+                          linkType: "URL",
+                        },
+                        constantValueEnabled: false,
+                      },
+                    } as any,
+                  } satisfies EventCardsWrapperProps,
+                },
+              ],
+            },
+          },
+        },
+      ],
+    } as any;
+
+    const resolved = await resolveAllData(data, puckConfig, {
+      streamDocument: {
+        c_eventsSection: {
+          events: [
+            {
+              title: "First Event",
+              dateTime: "3025-01-01T09:00",
+              description: { html: "<p>Bread Party</p>" },
+              image: {
+                url: "https://example.com/1.jpg",
+                width: 228,
+                height: 240,
+              },
+            },
+            {
+              title: "Second Event",
+              dateTime: "3050-01-01T09:00",
+              description: { html: "<p>Tomato Party</p>" },
+              image: {
+                url: "https://example.com/2.jpg",
+                width: 228,
+                height: 259,
+              },
+            },
+          ],
+        },
+      },
+    });
+
+    expect(
+      resolved.content[0]!.props.slots.CardsWrapperSlot[0]!.props.slots.CardSlot
+    ).toHaveLength(2);
+  });
 });

@@ -75,6 +75,9 @@ const faqs = createItemSource<FAQSectionProps, FAQItem>({
       type: "entityField",
       label: msg("fields.question", "Question"),
       filter: {
+        types: ["type.string"],
+      },
+      constantValueFilter: {
         types: ["type.string", "type.rich_text_v2"],
       },
     },

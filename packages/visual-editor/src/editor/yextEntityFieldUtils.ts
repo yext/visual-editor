@@ -270,6 +270,13 @@ export const getFieldsForSelector = (
     return sortFields(
       dedupeFieldsByName(
         getListSourceRootFields(entityFields)
+          .map((field) => ({
+            ...field,
+            displayName:
+              getEntityFieldDisplayName(field.name, entityFields) ??
+              field.displayName ??
+              field.name,
+          }))
           .filter(hasRequiredDescendants)
           .filter((field) =>
             !streamDocument
@@ -294,6 +301,13 @@ export const getFieldsForSelector = (
     const validLinkedEntityRootFields = getTopLevelLinkedEntitySourceFields(
       entityFields
     )
+      .map((field) => ({
+        ...field,
+        displayName:
+          getEntityFieldDisplayName(field.name, entityFields) ??
+          field.displayName ??
+          field.name,
+      }))
       .filter(hasRequiredDescendants)
       .filter((field) =>
         !streamDocument
@@ -303,6 +317,13 @@ export const getFieldsForSelector = (
             )
       );
     const validListRootFields = getListSourceRootFields(entityFields)
+      .map((field) => ({
+        ...field,
+        displayName:
+          getEntityFieldDisplayName(field.name, entityFields) ??
+          field.displayName ??
+          field.name,
+      }))
       .filter(hasRequiredDescendants)
       .filter((field) =>
         !streamDocument

@@ -1035,7 +1035,7 @@ describe("YextEntityFieldSelector", () => {
 
     expect(screen.getAllByText("Linked Location").length).toBeGreaterThan(0);
     expect(screen.queryByText("Events Section")).toBeNull();
-    expect(screen.queryByText("faqSection > FAQs")).toBeNull();
+    expect(screen.getAllByText("faqSection > FAQs").length).toBeGreaterThan(0);
     expect(screen.queryByText("Linked Location > Name")).toBeNull();
   });
 

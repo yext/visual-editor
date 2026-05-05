@@ -141,6 +141,51 @@ describe("createItemSource", () => {
     expect(resolved.props.articleMappings?.eyebrow).toBe("Featured");
   });
 
+  it("does not rewrite data when the source changes but mappings are already blank", () => {
+    const data = {
+      type: "ArticleList",
+      props: {
+        articleSource: {
+          field: "c_newArticles",
+          constantValueEnabled: false,
+          constantValue: [],
+        },
+        articleMappings: {
+          title: {
+            field: "",
+            constantValueEnabled: false,
+            constantValue: { defaultValue: "" },
+          },
+          description: {
+            field: "",
+            constantValueEnabled: false,
+            constantValue: { defaultValue: "" },
+          },
+          eyebrow: "Featured",
+          rootTitle: {
+            field: "",
+            constantValueEnabled: false,
+            constantValue: { defaultValue: "" },
+          },
+        },
+      },
+    } as unknown as ComponentData<TestProps>;
+
+    expect(
+      articleItems.normalizeData(data, {
+        lastData: {
+          props: {
+            articleSource: {
+              field: "c_oldArticles",
+              constantValueEnabled: false,
+              constantValue: [],
+            },
+          },
+        },
+      })
+    ).toBe(data);
+  });
+
   it("resolves linked items against the current item and root-scoped fields against the page", () => {
     const resolved = articleItems.resolveItems(
       {

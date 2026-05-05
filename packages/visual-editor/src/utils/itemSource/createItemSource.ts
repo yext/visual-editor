@@ -359,6 +359,22 @@ const clearEntityFieldBindings = (value: unknown): unknown => {
   return value;
 };
 
+const hasEntityFieldBindings = (value: unknown): boolean => {
+  if (isYextEntityFieldValue(value)) {
+    return !!value.field;
+  }
+
+  if (Array.isArray(value)) {
+    return value.some(hasEntityFieldBindings);
+  }
+
+  if (value && typeof value === "object") {
+    return Object.values(value).some(hasEntityFieldBindings);
+  }
+
+  return false;
+};
+
 /**
  * Resolves one item field into its render-ready value using either the current
  * source item or the root stream document, depending on field scope.
@@ -552,6 +568,10 @@ export const createItemSource = <
       );
 
       if (!itemMappings) {
+        return data;
+      }
+
+      if (!hasEntityFieldBindings(itemMappings)) {
         return data;
       }
 
