@@ -422,14 +422,13 @@ export const DirectoryCard: YextComponentConfig<DirectoryCardProps> = {
       data.props.parentData?.childRef
     );
     const geomodifier = resolvedChild?.geomodifier;
-    const headingText =
-      data.props.styles.showGeomodifier && geomodifier
-        ? resolveEmbeddedFieldsInString(
-            "[[name]] - [[geomodifier]]",
-            resolvedChild,
-            locale
-          )
-        : undefined;
+    const headingText = geomodifier
+      ? resolveEmbeddedFieldsInString(
+          "[[name]] - [[geomodifier]]",
+          resolvedChild,
+          locale
+        )
+      : undefined;
 
     return setDeep(
       data,

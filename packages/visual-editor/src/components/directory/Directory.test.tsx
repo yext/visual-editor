@@ -276,7 +276,6 @@ const version40Props = {
       bgColor: "bg-palette-primary-dark",
       textColor: "text-white",
     },
-    showGeomodifier: true,
   },
   slots: {
     TitleSlot: [
