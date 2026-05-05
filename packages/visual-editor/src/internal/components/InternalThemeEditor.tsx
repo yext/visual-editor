@@ -86,7 +86,6 @@ export const InternalThemeEditor = ({
     }
 
     const currentThemeHistory = themeHistories.histories[themeHistories.index];
-
     publishTheme({
       payload: {
         saveThemeData: JSON.stringify(currentThemeHistory.data),
@@ -123,7 +122,12 @@ export const InternalThemeEditor = ({
         buildThemeLocalStorageKey(),
         lzstring.compress(JSON.stringify(newHistory.histories))
       );
-      updateThemeInEditor(newThemeValues, themeConfig, true);
+      updateThemeInEditor(
+        newThemeValues,
+        themeConfig,
+        true,
+        templateMetadata.customFonts
+      );
       setThemeHistories(newHistory);
       return;
     }
@@ -147,7 +151,12 @@ export const InternalThemeEditor = ({
       });
     }
 
-    updateThemeInEditor(newThemeValues, themeConfig, true);
+    updateThemeInEditor(
+      newThemeValues,
+      themeConfig,
+      true,
+      templateMetadata.customFonts
+    );
     setThemeHistories(newHistory);
   };
 
@@ -203,6 +212,7 @@ export const InternalThemeEditor = ({
               localDev={localDev}
               showLocalDevOverrideButtons={showLocalDevOverrideButtons}
               headDeployStatus={templateMetadata.headDeployStatus}
+              customFonts={templateMetadata.customFonts}
             />
           ),
           actionBar: () => <></>,

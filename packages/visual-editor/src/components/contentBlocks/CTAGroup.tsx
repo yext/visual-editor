@@ -1,24 +1,20 @@
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  setDeep,
-} from "@puckeditor/core";
-import { ThemeColor } from "../../utils/themeConfigOptions.ts";
+import { PuckComponent, setDeep } from "@puckeditor/core";
+import { ThemeColor, ThemeOptions } from "../../utils/themeConfigOptions.ts";
 import { CTA } from "../atoms/cta.tsx";
 import { PresetImageType } from "../../types/types.ts";
-import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { useTranslation } from "react-i18next";
-import {
-  ctaTypeOptions,
-  getCTAType,
-} from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
+import { getCTAType } from "../../internal/utils/ctaFieldUtils.ts";
 import { CTAVariant } from "../atoms/cta.tsx";
 import { CTAWrapperProps } from "./CtaWrapper.tsx";
 import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  YextFields,
+} from "../../fields/fields.ts";
 
 // TODO: re-enable CTA Group
 
@@ -53,49 +49,44 @@ export interface CTAGroupProps {
   buttons: BasicCTAProps[];
 }
 
-const ctaGroupFields: Fields<CTAGroupProps> = {
-  buttons: YextField(msg("fields.buttons", "Buttons"), {
+const ctaGroupFields: YextFields<CTAGroupProps> = {
+  buttons: {
     type: "array",
+    label: msg("fields.buttons", "Buttons"),
     max: 9,
     defaultItemProps: defaultButton,
     arrayFields: {
-      entityField: YextField(msg("fields.cta", "CTA"), {
-        type: "entityField",
-        filter: {
-          types: ["type.cta"],
-        },
-        typeSelectorConfig: {
-          typeLabel: msg("fields.ctaType", "CTA Type"),
-          fieldLabel: msg("fields.ctaField", "CTA Field"),
-          options: ctaTypeOptions(),
-          optionValueToEntityFieldType: {
-            presetImage: "type.cta",
-            textAndLink: "type.cta",
-          },
-        },
-      }),
-      normalizeLink: YextField(msg("fields.normalizeLink", "Normalize Link"), {
+      entityField: {
+        type: "ctaSelector",
+        label: msg("fields.cta", "CTA"),
+      },
+      normalizeLink: {
+        label: msg("fields.normalizeLink", "Normalize Link"),
         type: "radio",
         options: [
           { label: msg("fields.options.yes", "Yes"), value: true },
           { label: msg("fields.options.no", "No"), value: false },
         ],
-      }),
-      variant: YextField(msg("fields.variant", "Variant"), {
+      },
+      variant: {
+        label: msg("fields.variant", "Variant"),
         type: "radio",
-        options: "CTA_VARIANT",
-      }),
-      presetImage: YextField(msg("fields.presetImage", "Preset Image"), {
-        type: "select",
+        options: ThemeOptions.CTA_VARIANT,
+      },
+      presetImage: {
+        type: "basicSelector",
+        label: msg("fields.presetImage", "Preset Image"),
         options: "PRESET_IMAGE",
-      }),
-      color: YextField(msg("fields.color", "Color"), {
-        type: "select",
+      },
+      color: {
+        type: "basicSelector",
+        label: msg("fields.color", "Color"),
         options: "SITE_COLOR",
-      }),
+      },
     },
-    getItemSummary: (_, i) => pt("cta", "CTA") + " " + ((i ?? 0) + 1),
-  }),
+    getItemSummary: (_: BasicCTAProps, i?: number) =>
+      pt("cta", "CTA") + " " + ((i ?? 0) + 1),
+  },
 };
 
 const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
@@ -162,7 +153,7 @@ const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
   );
 };
 
-export const CTAGroup: ComponentConfig<{ props: CTAGroupProps }> = {
+export const CTAGroup: YextComponentConfig<CTAGroupProps> = {
   label: msg("components.ctaGroup", "CTA Group"),
   fields: ctaGroupFields,
   resolveFields: (data) => {
@@ -184,7 +175,7 @@ export const CTAGroup: ComponentConfig<{ props: CTAGroupProps }> = {
       showNormalizeLinkField
     );
 
-    return updatedFields;
+    return toPuckFields(updatedFields);
   },
   defaultProps: {
     buttons: [defaultButton, defaultButton],

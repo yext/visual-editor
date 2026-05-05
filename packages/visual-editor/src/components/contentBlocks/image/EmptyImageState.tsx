@@ -10,8 +10,8 @@ import {
   useSendMessageToParent,
   useReceiveMessage,
 } from "../../../internal/hooks/useMessage.ts";
-import { ImagePayload } from "../../../internal/puck/constant-value-fields/Image.tsx";
-import { shouldUseStandaloneLocalPrompt } from "../../../internal/utils/shouldUseStandaloneLocalPrompt.ts";
+import { type ImagePayload } from "../../../fields/ImageField.tsx";
+import { isFakeStarterLocalDev } from "../../../utils/isFakeStarterLocalDev.ts";
 
 let pendingEmptyImageSession:
   | { messageId: string; apply: (payload: ImagePayload) => void }
@@ -64,7 +64,7 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
 
   const handleImageSelection = React.useCallback(() => {
     if (!hasParentData && constantValueEnabled && isEditing) {
-      if (shouldUseStandaloneLocalPrompt()) {
+      if (isFakeStarterLocalDev()) {
         const userInput = prompt("Enter Image URL:");
         if (!userInput) {
           return;

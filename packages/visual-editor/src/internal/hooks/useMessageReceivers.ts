@@ -107,6 +107,53 @@ export const resolveTemplateConfig = ({
   };
 };
 
+const createEmptyLocalDevLayout: Data = {
+  root: {},
+  content: [],
+  zones: {},
+};
+
+export const getLocalDevLayoutData = (
+  puckConfig: Config,
+  streamDocument: StreamDocument,
+  initialLayoutData?: Record<string, unknown>
+) => {
+  if (initialLayoutData) {
+    return migrate(
+      initialLayoutData as Data,
+      migrationRegistry,
+      puckConfig,
+      streamDocument
+    );
+  }
+
+  const layout = streamDocument.__?.layout;
+  if (!layout) {
+    return migrate(
+      createEmptyLocalDevLayout,
+      migrationRegistry,
+      puckConfig,
+      streamDocument
+    );
+  }
+
+  try {
+    const parsedLayout = JSON.parse(layout) as Data;
+    return migrate(parsedLayout, migrationRegistry, puckConfig, streamDocument);
+  } catch (error) {
+    console.warn(
+      "Failed to parse local dev layout JSON. Falling back to empty layout.",
+      error
+    );
+    return migrate(
+      createEmptyLocalDevLayout,
+      migrationRegistry,
+      puckConfig,
+      streamDocument
+    );
+  }
+};
+
 export const useCommonMessageReceivers = (
   componentRegistry: Record<string, Config<any>>,
   localDev: boolean,
@@ -135,7 +182,10 @@ export const useCommonMessageReceivers = (
   // in localDev mode, return default data and mark all data as fetched
   useEffect(() => {
     if (localDev) {
-      const devMetadata = generateTemplateMetadata(localDevOptions);
+      const devMetadata = generateTemplateMetadata(
+        streamDocument,
+        localDevOptions
+      );
       setTemplateMetadata(devMetadata);
 
       const puckConfig = componentRegistry[devMetadata.templateId];
@@ -146,17 +196,11 @@ export const useCommonMessageReceivers = (
       }
       setPuckConfig(puckConfig);
 
-      // applies current migration version to empty data
       setLayoutData(
-        migrate(
-          (localDevOptions?.initialLayoutData as Data | undefined) ?? {
-            root: {},
-            content: [],
-            zones: {},
-          },
-          migrationRegistry,
+        getLocalDevLayoutData(
           puckConfig,
-          streamDocument
+          streamDocument,
+          localDevOptions?.initialLayoutData
         )
       );
       setLayoutDataFetched(true);

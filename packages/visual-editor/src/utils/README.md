@@ -675,7 +675,11 @@ const myComponentFields: Fields<MyComponentProps> = {
     type: "object",
     label: "Heading",
     objectFields: {
-      level: BasicSelector("Level", ThemeOptions.HEADING_LEVEL),
+      level: {
+        type: "basicSelector",
+        label: "Level",
+        options: ThemeOptions.HEADING_LEVEL,
+      },
     },
   },
   cta: {

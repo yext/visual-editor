@@ -23,7 +23,6 @@ import { LayoutHeader } from "../puck/components/LayoutHeader.tsx";
 import { MetaTitleField } from "../puck/components/meta-title/MetaTitleField.tsx";
 import { ValidationReporters } from "../puck/components/ValidationReporters.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
-import { YextEntityFieldSelector } from "../../editor/YextEntityFieldSelector.tsx";
 import { loadMapboxIntoIframe } from "../utils/loadMapboxIntoIframe.tsx";
 import * as lzstring from "lz-string";
 import { msg, pt, usePlatformTranslation } from "../../utils/i18n/platform.ts";
@@ -38,6 +37,7 @@ import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 import { clonePuckResolveData } from "../utils/clonePuckResolveData.ts";
+import { YextPuckFieldOverrides } from "../../fields/fields.ts";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -230,12 +230,13 @@ export const InternalLayoutEditor = ({
         ...puckConfig.root,
         fields: {
           title: MetaTitleField(),
-          description: YextEntityFieldSelector<any, string>({
+          description: {
+            type: "entityField",
             label: msg("fields.metaDescription", "Meta Description"),
             filter: {
               types: ["type.string"],
             },
-          }),
+          },
           ...puckConfig.root?.fields,
           __advancedSettingsLink: createAdvancedSettingsLink(),
         },
@@ -255,7 +256,7 @@ export const InternalLayoutEditor = ({
           __advancedSettingsLink: null,
         },
       },
-    } as Config;
+    };
   }, [puckConfig, i18n.language]);
 
   // Resolve all data and slots when the document changes
@@ -422,6 +423,7 @@ export const InternalLayoutEditor = ({
             select: TranslatePuckFieldLabels,
             text: TranslatePuckFieldLabels,
             textarea: TranslatePuckFieldLabels,
+            ...YextPuckFieldOverrides,
           },
           actionBar: ({ children, label, parentAction }) => {
             const getPuck = useGetPuck();

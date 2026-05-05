@@ -10,14 +10,14 @@ import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { OtherCategory } from "../categories/OtherCategory.tsx";
 import { PageSectionCategory } from "../categories/PageSectionCategory.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
 import { TranslatableString } from "../../types/types.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
-import { ComponentConfig, Fields, Slot, PuckComponent } from "@puckeditor/core";
+import { Slot, PuckComponent } from "@puckeditor/core";
 import { useTranslation } from "react-i18next";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export type SectionContainerProps = {
   background?: ThemeColor;
@@ -30,47 +30,46 @@ export type SectionContainerProps = {
   sectionContent: Slot;
 };
 
-const sectionContainerFields: Fields<SectionContainerProps> = {
-  background: YextField(msg("fields.backgroundColor", "Background Color"), {
-    type: "select",
+const sectionContainerFields: YextFields<SectionContainerProps> = {
+  background: {
+    type: "basicSelector",
+    label: msg("fields.backgroundColor", "Background Color"),
     options: "BACKGROUND_COLOR",
-  }),
-  sectionHeading: YextField(msg("fields.sectionHeading", "Section Heading"), {
+  },
+  sectionHeading: {
     type: "object",
+    label: msg("fields.sectionHeading", "Section Heading"),
     objectFields: {
-      text: YextField<any, TranslatableString>(
-        msg("fields.sectionHeadingText", "Section Heading Text"),
-        {
-          type: "entityField",
-          filter: {
-            types: ["type.string"],
-          },
-        }
-      ),
-      level: YextField(msg("fields.headingLevel", "Heading Level"), {
-        type: "select",
-        hasSearch: true,
+      text: {
+        type: "entityField",
+        label: msg("fields.sectionHeadingText", "Section Heading Text"),
+        filter: {
+          types: ["type.string"],
+        },
+      },
+      level: {
+        type: "basicSelector",
+        label: msg("fields.headingLevel", "Heading Level"),
         options: "HEADING_LEVEL",
-      }),
-      alignment: YextField(msg("fields.alignment", "Alignment"), {
+      },
+      alignment: {
+        label: msg("fields.alignment", "Alignment"),
         type: "radio",
         options: ThemeOptions.ALIGNMENT,
-      }),
+      },
     },
-  }),
+  },
   sectionContent: {
     type: "slot",
   },
-  liveVisibility: YextField(
-    msg("fields.liveVisibility", "Visible on Live Page"),
-    {
-      type: "radio",
-      options: [
-        { label: "Show", value: true },
-        { label: "Hide", value: false },
-      ],
-    }
-  ),
+  liveVisibility: {
+    label: msg("fields.liveVisibility", "Visible on Live Page"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.show", "Show"), value: true },
+      { label: msg("fields.options.hide", "Hide"), value: false },
+    ],
+  },
 };
 
 const SectionContainerComponent: PuckComponent<SectionContainerProps> = (
@@ -108,9 +107,7 @@ const SectionContainerComponent: PuckComponent<SectionContainerProps> = (
   );
 };
 
-export const SectionContainer: ComponentConfig<{
-  props: SectionContainerProps;
-}> = {
+export const SectionContainer: YextComponentConfig<SectionContainerProps> = {
   label: "Section Container",
   fields: sectionContainerFields,
   defaultProps: {

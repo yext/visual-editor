@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { Body, BodyProps } from "../../atoms/body.tsx";
 import {
   FAQStruct,
@@ -13,7 +13,6 @@ import { resolveDataFromParent } from "../../../editor/ParentData.tsx";
 import { useBackground } from "../../../hooks/useBackground.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
-import { YextField } from "../../../editor/YextField.tsx";
 import {
   AccordionContent,
   AccordionItem,
@@ -23,7 +22,8 @@ import { useAnalytics } from "@yext/pages-components";
 import { useTranslation } from "react-i18next";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
-import { ThemeColor } from "../../../utils/themeConfigOptions.ts";
+import { ThemeColor, ThemeOptions } from "../../../utils/themeConfigOptions.ts";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 const defaultFAQ = {
   question: { defaultValue: "Question Lorem ipsum dolor sit amet?" },
@@ -91,44 +91,48 @@ export type FAQCardProps = {
   index?: number;
 };
 
-const FAQCardFields: Fields<FAQCardProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+const FAQCardFields: YextFields<FAQCardProps> = {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
-      question: YextField(msg("fields.question", "Question"), {
+      question: {
         type: "entityField",
+        label: msg("fields.question", "Question"),
         filter: {
           types: ["type.string", "type.rich_text_v2"],
         },
-      }),
-      answer: YextField(msg("fields.answer", "Answer"), {
+      },
+      answer: {
         type: "entityField",
+        label: msg("fields.answer", "Answer"),
         filter: {
           types: ["type.rich_text_v2"],
         },
-      }),
+      },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
-      questionVariant: YextField(
-        msg("fields.questionVariant", "Question Variant"),
-        {
-          type: "radio",
-          options: "BODY_VARIANT",
-        }
-      ),
-      answerVariant: YextField(msg("fields.answerVariant", "Answer Variant"), {
+      questionVariant: {
+        label: msg("fields.questionVariant", "Question Variant"),
         type: "radio",
-        options: "BODY_VARIANT",
-      }),
-      answerColor: YextField(msg("fields.answerColor", "Answer Color"), {
-        type: "select",
+        options: ThemeOptions.BODY_VARIANT,
+      },
+      answerVariant: {
+        label: msg("fields.answerVariant", "Answer Variant"),
+        type: "radio",
+        options: ThemeOptions.BODY_VARIANT,
+      },
+      answerColor: {
+        type: "basicSelector",
+        label: msg("fields.answerColor", "Answer Color"),
         options: "SITE_COLOR",
-      }),
+      },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {},
@@ -265,7 +269,7 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
   );
 };
 
-export const FAQCard: ComponentConfig<{ props: FAQCardProps }> = {
+export const FAQCard: YextComponentConfig<FAQCardProps> = {
   label: msg("faq", "FAQ"),
   fields: FAQCardFields,
   defaultProps: {

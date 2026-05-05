@@ -1,6 +1,7 @@
 import { createFontStack } from "@capsizecss/core";
 import { fontFamilyToCamelCase } from "@capsizecss/metrics";
-import { defaultFonts } from "./font_registry.js";
+import type { FontRegistry } from "./visualEditorFonts.ts";
+import { defaultFonts as rawFontRegistry } from "./font_registry.js";
 import { writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
@@ -25,6 +26,8 @@ const systemFallbacks: Record<string, any> = {
   monospace: courierNew,
 };
 
+const defaultFonts = rawFontRegistry as FontRegistry;
+
 /**
  * This script generates a JSON mapping of font families to the corresponding
  * font transformations that minimizes layout shift during font loading.
@@ -34,8 +37,8 @@ const systemFallbacks: Record<string, any> = {
 const generate = async () => {
   const results: Record<string, string[]> = {};
 
-  for (const [displayName, config] of Object.entries(defaultFonts)) {
-    const camelName = fontFamilyToCamelCase(displayName);
+  for (const [fontFamily, config] of Object.entries(defaultFonts)) {
+    const camelName = fontFamilyToCamelCase(fontFamily);
 
     const fallbackMetrics = systemFallbacks[config.fallback] || arial;
 
@@ -48,7 +51,7 @@ const generate = async () => {
       }
     }
 
-    results[displayName] = [];
+    results[fontFamily] = [];
 
     for (const weight of weights) {
       const styles = config.italics ? ["regular", "italic"] : ["regular"];
@@ -74,10 +77,10 @@ const generate = async () => {
             `  font-weight: ${weight};\n  font-style: ${style};\n}`
           );
 
-          results[displayName].push(finalizedFontFace);
+          results[fontFamily].push(finalizedFontFace);
         } catch {
           console.warn(
-            `Could not find metrics for ${displayName} (${variantSuffix})`
+            `Could not find metrics for ${fontFamily} (${variantSuffix})`
           );
         }
       }

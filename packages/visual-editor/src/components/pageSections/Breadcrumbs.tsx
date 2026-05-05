@@ -2,20 +2,25 @@ import { useTranslation } from "react-i18next";
 import { useTemplateProps } from "../../hooks/useDocument.tsx";
 import { MaybeLink } from "../atoms/maybeLink.tsx";
 import { PageSection } from "../atoms/pageSection.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import { TranslatableString } from "../../types/types.ts";
 import {
   ThemeColor,
   backgroundColors,
+  ThemeOptions,
 } from "../../utils/themeConfigOptions.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
-import { ComponentConfig, Fields, setDeep } from "@puckeditor/core";
+import { setDeep } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 import { resolveBreadcrumbs } from "../../utils/urls/resolveBreadcrumbs.ts";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  YextFields,
+} from "../../fields/fields.ts";
 
 export interface BreadcrumbsData {
   /**
@@ -80,71 +85,69 @@ export interface BreadcrumbsSectionProps {
   liveVisibility: boolean;
 }
 
-const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+const breadcrumbsSectionFields: YextFields<BreadcrumbsSectionProps> = {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
-      directoryRoot: YextField(
-        msg("fields.directoryRootLinkLabel", "Directory Root Link Label"),
-        {
-          type: "translatableString",
-          filter: { types: ["type.string"] },
-        }
-      ),
-      currentPage: YextField(
-        msg("fields.currentPageLinkLabel", "Current Page Link Label"),
-        {
-          type: "entityField",
-          filter: { types: ["type.string"] },
-        }
-      ),
+      directoryRoot: {
+        type: "translatableString",
+        label: msg(
+          "fields.directoryRootLinkLabel",
+          "Directory Root Link Label"
+        ),
+        filter: { types: ["type.string"] },
+      },
+      currentPage: {
+        type: "entityField",
+        label: msg("fields.currentPageLinkLabel", "Current Page Link Label"),
+        filter: { types: ["type.string"] },
+      },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
-      linkColor: YextField(msg("fields.linkColor", "Link Color"), {
-        type: "select",
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
+      linkColor: {
+        type: "basicSelector",
+        label: msg("fields.linkColor", "Link Color"),
         options: "SITE_COLOR",
-      }),
-      showCurrentPage: YextField(
-        msg(
+      },
+      showCurrentPage: {
+        label: msg(
           "fields.showCurrentPagesLinkLabel",
           "Show Current Page's Link Label"
         ),
-        {
-          type: "radio",
-          options: "SHOW_HIDE",
-        }
-      ),
+        type: "radio",
+        options: ThemeOptions.SHOW_HIDE,
+      },
     },
-  }),
-  analytics: YextField(msg("fields.analytics", "Analytics"), {
+  },
+  analytics: {
     type: "object",
+    label: msg("fields.analytics", "Analytics"),
     visible: false,
     objectFields: {
-      scope: YextField(msg("fields.scope", "Scope"), {
+      scope: {
+        label: msg("fields.scope", "Scope"),
         type: "text",
-      }),
+      },
     },
-  }),
-  liveVisibility: YextField(
-    msg("fields.visibleOnLivePage", "Visible on Live Page"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: false },
-      ],
-    }
-  ),
+  },
+  liveVisibility: {
+    label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.show", "Show"), value: true },
+      { label: msg("fields.options.hide", "Hide"), value: false },
+    ],
+  },
 };
 
 // BreadcrumbsComponent renders breadcrumbs for DM related pages.
@@ -236,59 +239,60 @@ export const BreadcrumbsComponent = ({
  * The Breadcrumbs component automatically generates and displays a navigational hierarchy based on a page's position within a Yext directory structure. It renders a list of links showing the path from the main directory root to the current page, helping users understand their location on the site.
  * Available on Location templates.
  */
-export const BreadcrumbsSection: ComponentConfig<{
-  props: BreadcrumbsSectionProps;
-}> = {
-  label: msg("components.breadcrumbs", "Breadcrumbs"),
-  fields: breadcrumbsSectionFields,
-  resolveFields: (_data, params) => {
-    const streamDocument = params.metadata?.streamDocument;
-    if (!streamDocument) {
-      return breadcrumbsSectionFields;
-    }
+export const BreadcrumbsSection: YextComponentConfig<BreadcrumbsSectionProps> =
+  {
+    label: msg("components.breadcrumbs", "Breadcrumbs"),
+    fields: breadcrumbsSectionFields,
+    resolveFields: (_data, params) => {
+      const streamDocument = params.metadata?.streamDocument;
+      if (!streamDocument) {
+        return toPuckFields<BreadcrumbsSectionProps>(breadcrumbsSectionFields);
+      }
 
-    // On root pages there is only one breadcrumb, so "currentPage" duplicates "directoryRoot".
-    const breadcrumbCount = resolveBreadcrumbs(streamDocument).length;
-    return setDeep(
-      breadcrumbsSectionFields,
-      "data.objectFields.currentPage.visible",
-      breadcrumbCount !== 1
-    );
-  },
-  defaultProps: {
-    data: {
-      directoryRoot: { defaultValue: "Directory Root" },
-      currentPage: {
-        constantValue: { defaultValue: "[[name]]" },
-        field: "name",
-        constantValueEnabled: false,
+      // On root pages there is only one breadcrumb, so "currentPage" duplicates "directoryRoot".
+      const breadcrumbCount = resolveBreadcrumbs(streamDocument).length;
+      return setDeep(
+        toPuckFields<BreadcrumbsSectionProps>(breadcrumbsSectionFields),
+        "data.objectFields.currentPage.visible",
+        breadcrumbCount !== 1
+      );
+    },
+    defaultProps: {
+      data: {
+        directoryRoot: { defaultValue: "Directory Root" },
+        currentPage: {
+          constantValue: { defaultValue: "[[name]]" },
+          field: "name",
+          constantValueEnabled: false,
+        },
       },
+      styles: {
+        backgroundColor: backgroundColors.background1.value,
+        showCurrentPage: true,
+      },
+      analytics: {
+        scope: "breadcrumbs",
+      },
+      liveVisibility: true,
     },
-    styles: {
-      backgroundColor: backgroundColors.background1.value,
-      showCurrentPage: true,
-    },
-    analytics: {
-      scope: "breadcrumbs",
-    },
-    liveVisibility: true,
-  },
-  render: (props) => {
-    return (
-      <ComponentErrorBoundary
-        isEditing={props.puck.isEditing}
-        resetKeys={[props]}
-      >
-        <AnalyticsScopeProvider name={props?.analytics?.scope ?? "breadcrumbs"}>
-          <VisibilityWrapper
-            liveVisibility={props.liveVisibility}
-            isEditing={props.puck.isEditing}
-            iconSize="md"
+    render: (props) => {
+      return (
+        <ComponentErrorBoundary
+          isEditing={props.puck.isEditing}
+          resetKeys={[props]}
+        >
+          <AnalyticsScopeProvider
+            name={props?.analytics?.scope ?? "breadcrumbs"}
           >
-            <BreadcrumbsComponent {...props} />
-          </VisibilityWrapper>
-        </AnalyticsScopeProvider>
-      </ComponentErrorBoundary>
-    );
-  },
-};
+            <VisibilityWrapper
+              liveVisibility={props.liveVisibility}
+              isEditing={props.puck.isEditing}
+              iconSize="md"
+            >
+              <BreadcrumbsComponent {...props} />
+            </VisibilityWrapper>
+          </AnalyticsScopeProvider>
+        </ComponentErrorBoundary>
+      );
+    },
+  };

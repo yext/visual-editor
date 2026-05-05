@@ -4,22 +4,23 @@ import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { PageSection } from "../atoms/pageSection.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
 import { TranslatableRichText } from "../../types/types.ts";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { Body } from "../atoms/body.tsx";
 import { getDefaultRTF } from "../../editor/TranslatableRichTextField.tsx";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import {
   backgroundColors,
   ThemeColor,
+  ThemeOptions,
 } from "../../utils/themeConfigOptions.js";
 import { CircleSlash2 } from "lucide-react";
 import { useTemplateMetadata } from "../../internal/hooks/useMessageReceivers.ts";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export interface BannerData {
   /**
@@ -75,48 +76,49 @@ export interface BannerSectionProps {
   ignoreLocaleWarning?: string[];
 }
 
-const bannerSectionFields: Fields<BannerSectionProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+const bannerSectionFields: YextFields<BannerSectionProps> = {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
-      text: YextField<any, TranslatableRichText>(msg("fields.text", "Text"), {
+      text: {
         type: "entityField",
+        label: msg("fields.text", "Text"),
         filter: {
           types: ["type.rich_text_v2"],
         },
-      }),
+      },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
-      textColor: YextField(msg("fields.textColor", "Text Color"), {
-        type: "select",
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
+      textColor: {
+        type: "basicSelector",
+        label: msg("fields.textColor", "Text Color"),
         options: "SITE_COLOR",
-      }),
-      textAlignment: YextField(msg("fields.textAlignment", "Text Alignment"), {
+      },
+      textAlignment: {
+        label: msg("fields.textAlignment", "Text Alignment"),
         type: "radio",
-        options: "ALIGNMENT",
-      }),
+        options: ThemeOptions.ALIGNMENT,
+      },
     },
-  }),
-  liveVisibility: YextField(
-    msg("fields.visibleOnLivePage", "Visible on Live Page"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: false },
-      ],
-    }
-  ),
+  },
+  liveVisibility: {
+    label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.show", "Show"), value: true },
+      { label: msg("fields.options.hide", "Hide"), value: false },
+    ],
+  },
 };
 
 function isRichTextEmpty(value: any): boolean {
@@ -252,7 +254,7 @@ export const defaultBannerProps: BannerSectionProps = {
  * The Banner Section component displays a single, translatable line of rich text. It's designed to be used as a simple, full-width banner on a page.
  * Available on Location templates.
  */
-export const BannerSection: ComponentConfig<{ props: BannerSectionProps }> = {
+export const BannerSection: YextComponentConfig<BannerSectionProps> = {
   label: msg("components.bannerSection", "Banner Section"),
   fields: bannerSectionFields,
   defaultProps: defaultBannerProps,

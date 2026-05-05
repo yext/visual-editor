@@ -1,7 +1,10 @@
+import type React from "react";
+
 export type ComboboxOption = {
   label: string;
   value: any;
-  color?: string; // ex. "bg-palette-primary-light"
+  color?: string; // Tailwind class for known colors, e.g. "bg-palette-primary-light".
+  colorStyle?: React.CSSProperties; // Inline style for user-picked colors.
   icon?: string;
 };
 
@@ -13,7 +16,7 @@ export type ComboboxOptionGroup = {
 
 export type ComboboxProps = {
   selectedOption: ComboboxOption;
-  onChange: (value: string) => void;
+  onChange: (value: any) => void;
   optionGroups: Array<ComboboxOptionGroup>;
   disabled?: boolean;
   disableSearch?: boolean;

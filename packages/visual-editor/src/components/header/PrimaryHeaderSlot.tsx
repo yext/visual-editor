@@ -1,6 +1,4 @@
 import {
-  ComponentConfig,
-  Fields,
   PuckComponent,
   registerOverlayPortal,
   Slot,
@@ -11,14 +9,12 @@ import {
   ThemeColor,
 } from "../../utils/themeConfigOptions.ts";
 import { CTAWrapperProps } from "../contentBlocks/CtaWrapper.tsx";
-import { EnhancedTranslatableCTA, TranslatableCTA } from "../../types/types.ts";
+import { TranslatableCTA } from "../../types/types.ts";
 import { ImageWrapperProps } from "../contentBlocks/image/Image.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import { PageSection, PageSectionProps } from "../atoms/pageSection.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { useOverflow } from "../../hooks/useOverflow.ts";
-import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { usePreviewWindow } from "../../hooks/usePreviewWindow.ts";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
@@ -30,6 +26,8 @@ import {
 } from "./ExpandedHeaderMenuContext.tsx";
 import { getHeaderViewport } from "./viewport.ts";
 import { SlidePanel } from "./SlidePanel.tsx";
+import { type YextCTAField } from "../../fields/CTASelectorField.tsx";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 const HAMBURGER_RESERVE_PX = 48;
 
@@ -60,20 +58,18 @@ export interface PrimaryHeaderSlotProps {
   };
 }
 
-const primaryHeaderSlotFields: Fields<PrimaryHeaderSlotProps> = {
-  styles: YextField(msg("fields.styles", "Styles"), {
+const primaryHeaderSlotFields: YextFields<PrimaryHeaderSlotProps> = {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          hasSearch: true,
-          options: "BACKGROUND_COLOR",
-        }
-      ),
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {
@@ -476,9 +472,7 @@ export const defaultPrimaryHeaderProps: PrimaryHeaderSlotProps = {
   },
 };
 
-export const PrimaryHeaderSlot: ComponentConfig<{
-  props: PrimaryHeaderSlotProps;
-}> = {
+export const PrimaryHeaderSlot: YextComponentConfig<PrimaryHeaderSlotProps> = {
   label: msg("components.primaryHeader", "Primary Header"),
   fields: primaryHeaderSlotFields,
   resolveData: (data, params) => {
@@ -501,7 +495,7 @@ export const PrimaryHeaderSlot: ComponentConfig<{
     // Check if PrimaryCTA has data to display
     const primaryCTA = resolveComponentData(
       data.props.slots.PrimaryCTASlot[0]?.props.data
-        .entityField as YextEntityField<EnhancedTranslatableCTA>,
+        .entityField as YextCTAField,
       locale,
       streamDocument
     );
@@ -512,7 +506,7 @@ export const PrimaryHeaderSlot: ComponentConfig<{
 
     const secondaryCTA = resolveComponentData(
       data.props.slots.SecondaryCTASlot[0]?.props.data
-        .entityField as YextEntityField<EnhancedTranslatableCTA>,
+        .entityField as YextCTAField,
       locale,
       streamDocument
     );

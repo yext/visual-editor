@@ -4,15 +4,16 @@ import { EntityField } from "../../editor/EntityField.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
-import { YextField } from "../../editor/YextField.tsx";
+import { type BasicSelectorField } from "../../fields/BasicSelectorField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { Body } from "../atoms/body.tsx";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import mapboxLogo from "../assets/mapbox-logo-black.svg";
 import { Map } from "lucide-react";
 import { getThemeValue } from "../../utils/getThemeValue.ts";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export type MapboxStaticProps = {
   apiKey: string;
@@ -40,21 +41,23 @@ export const mapboxStaticMapStyleOptions = [
   },
 ];
 
-const mapboxFields: Fields<MapboxStaticProps> = {
-  apiKey: YextField(msg("fields.apiKey", "API Key"), {
+export const mapStyleField: BasicSelectorField = {
+  label: msg("fields.mapStyle", "Map Style"),
+  type: "basicSelector",
+  options: mapboxStaticMapStyleOptions,
+};
+
+const mapboxFields: YextFields<MapboxStaticProps> = {
+  apiKey: {
+    label: msg("fields.apiKey", "API Key"),
     type: "text",
-  }),
-  coordinate: YextField<any, Coordinate>(
-    msg("fields.coordinates", "Coordinates"),
-    {
-      type: "entityField",
-      filter: { types: ["type.coordinate"] },
-    }
-  ),
-  mapStyle: YextField(msg("fields.mapStyle", "Map Style"), {
-    type: "select",
-    options: mapboxStaticMapStyleOptions,
-  }),
+  },
+  coordinate: {
+    type: "entityField",
+    label: msg("fields.coordinates", "Coordinates"),
+    filter: { types: ["type.coordinate"] },
+  },
+  mapStyle: mapStyleField,
 };
 
 const getPrimaryColor = (streamDocument: StreamDocument) => {
@@ -181,7 +184,7 @@ export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
   );
 };
 
-export const MapboxStaticMap: ComponentConfig<{ props: MapboxStaticProps }> = {
+export const MapboxStaticMap: YextComponentConfig<MapboxStaticProps> = {
   label: msg("components.mapboxStaticMap", "Mapbox Static Map"),
   fields: mapboxFields,
   defaultProps: {

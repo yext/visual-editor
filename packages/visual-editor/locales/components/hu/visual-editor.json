@@ -32,6 +32,7 @@
   "findALocation": "Keressen egy helyet",
   "friday": "péntek",
   "getDirections": "Szerezzen útmutatásokat",
+  "getDirectionsForLocation": "Útvonaltervezés ehhez: {{address}}",
   "heroBanner": "Hős szalaghirdetés",
   "heroHeader": "Hős fejléc",
   "heroImage": "Hős kép",
@@ -75,7 +76,6 @@
   "reopenDate": "Újra megnyitja a dátumot",
   "responseFrom": "Válasz a {{businessName}}ból",
   "saturday": "szombat",
-  "searchDropdownHere": "Keresési legördülő bemenet",
   "searchHere": "Keressen itt ...",
   "searchThisArea": "Keresse meg ezt a területet",
   "secondaryHeaderLinks": "Másodlagos fejléc hivatkozások",
@@ -85,6 +85,8 @@
   "servicesSection": "Szolgáltatási szakasz",
   "showLess": "Mutasson kevesebbet",
   "showMore": "Mutasson többet",
+  "showPinDetails": "A tű {{number}} részleteinek megjelenítése",
+  "showPinDetailsDefault": "A gombostű részleteinek megjelenítése",
   "socialLinks": {
     "facebook": "Kövess minket a Facebookon",
     "instagram": "Kövess minket Instagramon",
@@ -102,5 +104,6 @@
   "tuesday": "kedd",
   "useOurLocatorToFindALocationNearYou": "Használja a lokátorunkat, hogy találjon egy helyet a közelben",
   "visitPage": "Látogasson el az oldalra",
+  "visitPageForName": "Látogassa meg a {{name}} oldalát",
   "wednesday": "szerda"
 }

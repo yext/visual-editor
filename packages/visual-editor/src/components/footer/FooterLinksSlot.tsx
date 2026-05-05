@@ -1,12 +1,6 @@
 import * as React from "react";
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  setDeep,
-} from "@puckeditor/core";
+import { PuckComponent, setDeep } from "@puckeditor/core";
 import { cva } from "class-variance-authority";
-import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
@@ -17,6 +11,11 @@ import { useTranslation } from "react-i18next";
 import { defaultLink, defaultLinks } from "./ExpandedFooter.tsx";
 import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
 import { ThemeColor } from "../../utils/themeConfigOptions.ts";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  YextFields,
+} from "../../fields/fields.ts";
 
 export interface FooterLinksSlotProps {
   data: {
@@ -258,14 +257,17 @@ const defaultFooterLinkProps: FooterLinksSlotProps = {
   mobileContentAlignment: "left",
 };
 
-const footerLinksSlotFields: Fields<FooterLinksSlotProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+const footerLinksSlotFields: YextFields<FooterLinksSlotProps> = {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
-      links: YextField(msg("fields.links", "Links"), {
+      links: {
         type: "array",
+        label: msg("fields.links", "Links"),
         arrayFields: {
-          linkType: YextField(msg("fields.linkType", "Link Type"), {
+          linkType: {
+            label: msg("fields.linkType", "Link Type"),
             type: "radio",
             options: [
               { label: msg("fields.options.url", "URL"), value: "URL" },
@@ -278,34 +280,32 @@ const footerLinksSlotFields: Fields<FooterLinksSlotProps> = {
                 value: "EMAIL",
               },
             ],
-          }),
-          label: YextField(msg("fields.label", "Label"), {
+          },
+          label: {
             type: "translatableString",
+            label: msg("fields.label", "Label"),
             filter: { types: ["type.string"] },
-          }),
-          link: YextField(msg("fields.link", "Link"), {
+          },
+          link: {
+            label: msg("fields.link", "Link"),
             type: "text",
-          }),
-          normalizeLink: YextField(
-            msg("fields.normalizeLink", "Normalize Link"),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.yes", "Yes"), value: true },
-                { label: msg("fields.options.no", "No"), value: false },
-              ],
-            }
-          ),
-          openInNewTab: YextField(
-            msg("fields.openInNewTab", "Open in new tab"),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.yes", "Yes"), value: true },
-                { label: msg("fields.options.no", "No"), value: false },
-              ],
-            }
-          ),
+          },
+          normalizeLink: {
+            label: msg("fields.normalizeLink", "Normalize Link"),
+            type: "radio",
+            options: [
+              { label: msg("fields.options.yes", "Yes"), value: true },
+              { label: msg("fields.options.no", "No"), value: false },
+            ],
+          },
+          openInNewTab: {
+            label: msg("fields.openInNewTab", "Open in new tab"),
+            type: "radio",
+            options: [
+              { label: msg("fields.options.yes", "Yes"), value: true },
+              { label: msg("fields.options.no", "No"), value: false },
+            ],
+          },
         },
         defaultItemProps: defaultLink,
         getItemSummary: (item: any, index?: number) => {
@@ -314,13 +314,14 @@ const footerLinksSlotFields: Fields<FooterLinksSlotProps> = {
             typeof item.label === "string" ? item.label : item.label?.[locale];
           return label || pt("link", "Link") + " " + ((index ?? 0) + 1);
         },
-      }),
+      },
     },
-  }),
-  color: YextField(msg("fields.color", "Color"), {
-    type: "select",
+  },
+  color: {
+    type: "basicSelector",
+    label: msg("fields.color", "Color"),
     options: "SITE_COLOR",
-  }),
+  },
   variant: {
     type: "radio",
     options: [
@@ -335,16 +336,15 @@ const footerLinksSlotFields: Fields<FooterLinksSlotProps> = {
   },
 };
 
-export const FooterLinksSlot: ComponentConfig<{ props: FooterLinksSlotProps }> =
-  {
-    label: msg("components.footerLinksSlot", "Links"),
-    fields: footerLinksSlotFields,
-    resolveFields: (data) =>
-      setDeep(
-        footerLinksSlotFields,
-        "data.objectFields.links.arrayFields.normalizeLink.visible",
-        shouldShowNormalizeLinkField(data.props.data.links)
-      ),
-    defaultProps: defaultFooterLinkProps,
-    render: (props) => <FooterLinksSlotInternal {...props} />,
-  };
+export const FooterLinksSlot: YextComponentConfig<FooterLinksSlotProps> = {
+  label: msg("components.footerLinksSlot", "Links"),
+  fields: footerLinksSlotFields,
+  resolveFields: (data) =>
+    setDeep(
+      toPuckFields(footerLinksSlotFields),
+      "data.objectFields.links.arrayFields.normalizeLink.visible",
+      shouldShowNormalizeLinkField(data.props.data.links)
+    ),
+  defaultProps: defaultFooterLinkProps,
+  render: (props) => <FooterLinksSlotInternal {...props} />,
+};

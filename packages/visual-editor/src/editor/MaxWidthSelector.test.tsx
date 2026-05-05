@@ -1,5 +1,10 @@
 import { ThemeOptions } from "../utils/themeConfigOptions.ts";
-import { filterMaxWidths } from "./MaxWidthSelector.tsx";
+import { msg } from "../utils/i18n/platform.ts";
+import { filterMaxWidths, getMaxWidthOptions } from "./MaxWidthSelector.tsx";
+
+afterEach(() => {
+  document.getElementById("visual-editor-theme")?.remove();
+});
 
 describe("filterMaxWidths", () => {
   it("filters maxWidth options correctly", () => {
@@ -52,5 +57,38 @@ describe("filterMaxWidths", () => {
 
     const options = filterMaxWidths(styleEl);
     expect(options).toMatchObject({ options: ThemeOptions.MAX_WIDTH });
+  });
+});
+
+describe("getMaxWidthOptions", () => {
+  it("returns grouped selector options using the current theme max width", () => {
+    const themeStyle = document.createElement("style");
+    themeStyle.id = "visual-editor-theme";
+    themeStyle.textContent = `
+      .components {
+        --maxWidth-pageSection-contentWidth:1024px !important;
+      }
+    `;
+    document.head.appendChild(themeStyle);
+
+    expect(getMaxWidthOptions()).toEqual([
+      {
+        label: msg(
+          "fields.options.matchOtherSections",
+          "Match Other Sections ({{value}})",
+          { value: "1024px" }
+        ),
+        value: "theme",
+      },
+      ...ThemeOptions.MAX_WIDTH.slice(3),
+      {
+        label: msg("fields.options.fullWidth", "Full Width"),
+        value: "fullWidth",
+      },
+    ]);
+  });
+
+  it("returns all max width options when the theme style element is unavailable", () => {
+    expect(getMaxWidthOptions()).toBe(ThemeOptions.MAX_WIDTH);
   });
 });

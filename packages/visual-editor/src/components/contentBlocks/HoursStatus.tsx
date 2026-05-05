@@ -1,14 +1,14 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { HoursType } from "@yext/pages-components";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { HoursStatusAtom } from "../atoms/hoursStatus.tsx";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export interface HoursStatusProps {
   data: {
@@ -39,57 +39,58 @@ export interface HoursStatusProps {
   };
 }
 
-export const hoursStatusWrapperFields: Fields<HoursStatusProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+export const hoursStatusWrapperFields: YextFields<HoursStatusProps> = {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
-      hours: YextField(msg("fields.hours", "Hours"), {
+      hours: {
         type: "entityField",
+        label: msg("fields.hours", "Hours"),
         filter: {
           types: ["type.hours"],
         },
-      }),
+      },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
-      showCurrentStatus: YextField(
-        msg("fields.showCurrentStatus", "Show Current Status"),
-        {
-          type: "radio",
-          options: [
-            { label: msg("fields.options.yes", "Yes"), value: true },
-            { label: msg("fields.options.no", "No"), value: false },
-          ],
-        }
-      ),
-      timeFormat: YextField(msg("fields.timeFormat", "Time Format"), {
-        type: "radio",
-        options: [
-          { label: msg("fields.options.hour12", "12-hour"), value: "12h" },
-          { label: msg("fields.options.hour24", "24-hour"), value: "24h" },
-        ],
-      }),
-      showDayNames: YextField(msg("fields.showDayNames", "Show Day Names"), {
+      showCurrentStatus: {
+        label: msg("fields.showCurrentStatus", "Show Current Status"),
         type: "radio",
         options: [
           { label: msg("fields.options.yes", "Yes"), value: true },
           { label: msg("fields.options.no", "No"), value: false },
         ],
-      }),
-      dayOfWeekFormat: YextField(
-        msg("fields.dayOfWeekFormat", "Day of Week Format"),
-        {
-          type: "radio",
-          options: [
-            { label: msg("fields.options.short", "Short"), value: "short" },
-            { label: msg("fields.options.long", "Long"), value: "long" },
-          ],
-        }
-      ),
+      },
+      timeFormat: {
+        label: msg("fields.timeFormat", "Time Format"),
+        type: "radio",
+        options: [
+          { label: msg("fields.options.hour12", "12-hour"), value: "12h" },
+          { label: msg("fields.options.hour24", "24-hour"), value: "24h" },
+        ],
+      },
+      showDayNames: {
+        label: msg("fields.showDayNames", "Show Day Names"),
+        type: "radio",
+        options: [
+          { label: msg("fields.options.yes", "Yes"), value: true },
+          { label: msg("fields.options.no", "No"), value: false },
+        ],
+      },
+      dayOfWeekFormat: {
+        label: msg("fields.dayOfWeekFormat", "Day of Week Format"),
+        type: "radio",
+        options: [
+          { label: msg("fields.options.short", "Short"), value: "short" },
+          { label: msg("fields.options.long", "Long"), value: "long" },
+        ],
+      },
     },
-  }),
+  },
 };
 
 const HoursStatusWrapper: PuckComponent<HoursStatusProps> = ({
@@ -129,7 +130,7 @@ const HoursStatusWrapper: PuckComponent<HoursStatusProps> = ({
   );
 };
 
-export const HoursStatus: ComponentConfig<HoursStatusProps> = {
+export const HoursStatus: YextComponentConfig<HoursStatusProps> = {
   label: msg("components.hoursStatus", "Hours Status"),
   fields: hoursStatusWrapperFields,
   defaultProps: {

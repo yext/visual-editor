@@ -1,20 +1,25 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { FaRegEnvelope } from "react-icons/fa";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { CTA } from "../atoms/cta.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { Background } from "../atoms/background.tsx";
 import {
   ThemeColor,
+  ThemeOptions,
   backgroundColors,
 } from "../../utils/themeConfigOptions.ts";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import { updateFields } from "../pageSections/HeroSection.tsx";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  YextFields,
+} from "../../fields/fields.ts";
 
 export interface EmailsProps {
   data: {
@@ -39,40 +44,46 @@ export interface EmailsProps {
 }
 
 // Email fields used in Emails and CoreInfoSection
-export const EmailsFields: Fields<EmailsProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+export const EmailsFields: YextFields<EmailsProps> = {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
-      list: YextField<any, string[]>(msg("fields.emails", "Emails"), {
+      list: {
         type: "entityField",
+        label: msg("fields.emails", "Emails"),
         filter: {
           types: ["type.string"],
           includeListsOnly: true,
           allowList: ["emails"],
         },
         disallowTranslation: true,
-      }),
+      },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
-      listLength: YextField(msg("fields.listLength", "List Length"), {
+      listLength: {
         type: "number",
+        label: msg("fields.listLength", "List Length"),
         min: 1,
         max: 5,
         visible: false,
-      }),
-      showIcon: YextField(msg("fields.showIcon", "Show Icon"), {
+      },
+      showIcon: {
+        label: msg("fields.showIcon", "Show Icon"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
-      color: YextField(msg("fields.color", "Color"), {
-        type: "select",
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      color: {
+        type: "basicSelector",
+        label: msg("fields.color", "Color"),
         options: "SITE_COLOR",
-      }),
+      },
     },
-  }),
+  },
 };
 
 const EmailsComponent: PuckComponent<EmailsProps> = (props) => {
@@ -139,7 +150,7 @@ const EmailsComponent: PuckComponent<EmailsProps> = (props) => {
   );
 };
 
-export const Emails: ComponentConfig<EmailsProps> = {
+export const Emails: YextComponentConfig<EmailsProps> = {
   label: msg("components.emails", "Emails"),
   fields: EmailsFields,
   resolveFields: (data) => {
@@ -149,7 +160,13 @@ export const Emails: ComponentConfig<EmailsProps> = {
       return updatedFields;
     }
 
-    return updateFields(updatedFields, ["styles.listLength.visible"], true);
+    return toPuckFields(
+      updateFields<EmailsProps>(
+        updatedFields,
+        ["styles.objectFields.listLength.visible"],
+        true
+      )
+    );
   },
   defaultProps: {
     data: {

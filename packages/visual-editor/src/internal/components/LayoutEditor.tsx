@@ -27,6 +27,7 @@ import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 import { getPublishErrorMessage } from "../../utils/publishErrors.ts";
 import { toast } from "sonner";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
+import { buildPuckHistoryState } from "../utils/buildPuckHistoryState.ts";
 
 const devLogger = new DevLogger();
 
@@ -124,13 +125,23 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
         sendDevThemeSaveStateData({
           payload: { devThemeSaveStateData: JSON.stringify(localThemeData) },
         });
-        updateThemeInEditor(localThemeData, themeConfig, false);
+        updateThemeInEditor(
+          localThemeData,
+          themeConfig,
+          false,
+          templateMetadata.customFonts
+        );
         return;
       }
     }
 
     if (themeData) {
-      updateThemeInEditor(themeData as ThemeData, themeConfig, false);
+      updateThemeInEditor(
+        themeData as ThemeData,
+        themeConfig,
+        false,
+        templateMetadata.customFonts
+      );
     }
   }, [themeData, themeConfig, templateMetadata]);
 
@@ -164,19 +175,25 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
         const localHistories = (
           JSON.parse(localHistoryArray) as History<AppState>[]
         )
-          .filter((history): history is History<AppState> => !!history?.state)
-          .map((history) => ({
-            id: history.id,
-            state: {
-              data: migrate(
-                history.state.data,
-                migrationRegistry,
-                puckConfig,
-                streamDocument
-              ),
-              ui: history.state.ui,
-            },
-          }));
+          .filter(
+            (
+              history
+            ): history is History<AppState> & { state: { data: Data } } =>
+              !!history?.state?.data
+          )
+          .map((history) => {
+            const migratedData = migrate(
+              history.state.data,
+              migrationRegistry,
+              puckConfig,
+              streamDocument
+            );
+
+            return {
+              id: history.id,
+              state: buildPuckHistoryState(migratedData, history.state.ui),
+            };
+          });
         const localHistoryIndex = localHistories.length - 1;
         if (localHistoryIndex >= 0) {
           setPuckInitialHistory({

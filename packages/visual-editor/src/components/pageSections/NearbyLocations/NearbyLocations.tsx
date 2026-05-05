@@ -1,24 +1,19 @@
 import * as React from "react";
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  setDeep,
-  Slot,
-  WithId,
-} from "@puckeditor/core";
+import { PuckComponent, setDeep, Slot, WithId } from "@puckeditor/core";
 import {
   ThemeColor,
   backgroundColors,
+  ThemeOptions,
 } from "../../../utils/themeConfigOptions.ts";
 import { PageSection } from "../../atoms/pageSection.tsx";
-import { YextField } from "../../../editor/YextField.tsx";
 import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultNearbyLocationsCardsProps } from "./NearbyLocationsCardsWrapper.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
+import { EMPTY_STATE_MARKER_SELECTOR } from "../emptyStateMarker.tsx";
 
 export interface NearbyLocationsSectionProps {
   /**
@@ -57,35 +52,34 @@ export interface NearbyLocationsSectionProps {
   liveVisibility: boolean;
 }
 
-const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
-  styles: YextField(msg("fields.styles", "Styles"), {
+const nearbyLocationsSectionFields: YextFields<NearbyLocationsSectionProps> = {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
-      showSectionHeading: YextField(
-        msg("fields.showSectionHeading", "Show Section Heading"),
-        {
-          type: "radio",
-          options: "SHOW_HIDE",
-        }
-      ),
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
+      showSectionHeading: {
+        label: msg("fields.showSectionHeading", "Show Section Heading"),
+        type: "radio",
+        options: ThemeOptions.SHOW_HIDE,
+      },
     },
-  }),
-  analytics: YextField(msg("fields.analytics", "Analytics"), {
+  },
+  analytics: {
     type: "object",
+    label: msg("fields.analytics", "Analytics"),
     visible: false,
     objectFields: {
-      scope: YextField(msg("fields.scope", "Scope"), {
+      scope: {
+        label: msg("fields.scope", "Scope"),
         type: "text",
-      }),
+      },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {
@@ -94,16 +88,14 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
     },
     visible: false,
   },
-  liveVisibility: YextField(
-    msg("fields.visibleOnLivePage", "Visible on Live Page"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: false },
-      ],
-    }
-  ),
+  liveVisibility: {
+    label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.show", "Show"), value: true },
+      { label: msg("fields.options.hide", "Hide"), value: false },
+    ],
+  },
 };
 
 const NearbyLocationsComponent: PuckComponent<NearbyLocationsSectionProps> = (
@@ -126,7 +118,7 @@ const NearbyLocationsComponent: PuckComponent<NearbyLocationsSectionProps> = (
 
     const checkIfEmptyState = () => {
       const hasEmptyStateMarker =
-        element.querySelector('[data-empty-state="true"]') !== null;
+        element.querySelector(EMPTY_STATE_MARKER_SELECTOR) !== null;
       const hasHeight = element.clientHeight > 0;
       const hasContent = element.querySelector('[id$="-wrapper"]') !== null; // Check for the cards wrapper div
       const isLoading = element.querySelector('[data-loading="true"]') !== null; // Check for loading state
@@ -183,72 +175,71 @@ const NearbyLocationsComponent: PuckComponent<NearbyLocationsSectionProps> = (
  * The Nearby Locations Section dynamically finds and displays a list of business locations within a specified radius of a central point. It's a powerful tool for helping users discover other relevant locations, rendering each result as a detailed card with contact information and business hours.
  * Available on Location templates.
  */
-export const NearbyLocationsSection: ComponentConfig<{
-  props: NearbyLocationsSectionProps;
-}> = {
-  label: msg("components.nearbyLocationsSection", "Nearby Locations Section"),
-  fields: nearbyLocationsSectionFields,
-  defaultProps: {
-    styles: {
-      backgroundColor: backgroundColors.background1.value,
-      showSectionHeading: true,
-    },
-    analytics: {
-      scope: "nearbyLocationsSection",
-    },
-    slots: {
-      SectionHeadingSlot: [
-        {
-          type: "HeadingTextSlot",
-          props: {
-            data: {
-              text: {
-                field: "",
-                constantValue: { defaultValue: "Nearby Locations" },
-                constantValueEnabled: true,
+export const NearbyLocationsSection: YextComponentConfig<NearbyLocationsSectionProps> =
+  {
+    label: msg("components.nearbyLocationsSection", "Nearby Locations Section"),
+    fields: nearbyLocationsSectionFields,
+    defaultProps: {
+      styles: {
+        backgroundColor: backgroundColors.background1.value,
+        showSectionHeading: true,
+      },
+      analytics: {
+        scope: "nearbyLocationsSection",
+      },
+      slots: {
+        SectionHeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              data: {
+                text: {
+                  field: "",
+                  constantValue: { defaultValue: "Nearby Locations" },
+                  constantValueEnabled: true,
+                },
               },
-            },
-            styles: {
-              level: 2,
-              align: "left",
-            },
-          } satisfies HeadingTextProps,
-        },
-      ],
-      CardsWrapperSlot: [
-        {
-          type: "NearbyLocationCardsWrapper",
-          props: defaultNearbyLocationsCardsProps,
-        },
-      ],
+              styles: {
+                level: 2,
+                align: "left",
+              },
+            } satisfies HeadingTextProps,
+          },
+        ],
+        CardsWrapperSlot: [
+          {
+            type: "NearbyLocationCardsWrapper",
+            props: defaultNearbyLocationsCardsProps,
+          },
+        ],
+      },
+      liveVisibility: true,
     },
-    liveVisibility: true,
-  },
-  resolveData: (data) => {
-    const sectionHeadingProps = data.props.slots.SectionHeadingSlot?.[0]
-      ?.props as WithId<HeadingTextProps> | undefined;
+    resolveData: (data) => {
+      const sectionHeadingProps = data.props.slots.SectionHeadingSlot?.[0]
+        ?.props as WithId<HeadingTextProps> | undefined;
 
-    return setDeep(
-      data,
-      "props.slots.CardsWrapperSlot[0].props.sectionHeadingLevel",
-      sectionHeadingProps?.styles?.level
-    );
-  },
-  render: (props) => (
-    <ComponentErrorBoundary
-      isEditing={props.puck.isEditing}
-      resetKeys={[props]}
-    >
-      <AnalyticsScopeProvider
-        name={props.analytics?.scope ?? "nearbyLocationsSection"}
+      return setDeep(
+        data,
+        "props.slots.CardsWrapperSlot[0].props.sectionHeadingLevel",
+        sectionHeadingProps?.styles?.level
+      );
+    },
+    render: (props) => (
+      <ComponentErrorBoundary
+        isEditing={props.puck.isEditing}
+        resetKeys={[props]}
       >
-        <VisibilityWrapper
-          liveVisibility={props.liveVisibility}
-          isEditing={props.puck.isEditing}
+        <AnalyticsScopeProvider
+          name={props.analytics?.scope ?? "nearbyLocationsSection"}
         >
-          <NearbyLocationsComponent {...props} />
-        </VisibilityWrapper>
-      </AnalyticsScopeProvider>
-    </ComponentErrorBoundary>
-  ),
-};
+          <VisibilityWrapper
+            liveVisibility={props.liveVisibility}
+            isEditing={props.puck.isEditing}
+          >
+            <NearbyLocationsComponent {...props} />
+          </VisibilityWrapper>
+        </AnalyticsScopeProvider>
+      </ComponentErrorBoundary>
+    ),
+  };

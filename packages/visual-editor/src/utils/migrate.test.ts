@@ -3,6 +3,8 @@ import { Migration, MigrationRegistry, migrate } from "./migrate.ts";
 import { addIdToSchema } from "../components/migrations/0023_add_id_to_schema.ts";
 import { updateSchemaIdAnchorFormat } from "../components/migrations/0069_update_schema_id_anchor_format.ts";
 import { themeColorPropertyKeyMigration } from "../components/migrations/0071_theme_color_property_keys.ts";
+import { mainContentWrapperMigration } from "../components/migrations/0073_main_content_wrapper.ts";
+import { normalizeFooterLogoImageMigration } from "../components/migrations/0075_normalize_footer_logo_image.ts";
 
 describe("migrate", () => {
   it("successfully applies a migration", async () => {
@@ -28,6 +30,219 @@ describe("migrate", () => {
     );
 
     expect(migratedData).toEqual(exampleRootDataAfter);
+  });
+
+  it("wraps header and footer siblings around a new MainContent component", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+          },
+        },
+        content: [
+          { type: "ExpandedHeader", props: { id: "header" } },
+          { type: "BannerSection", props: { id: "banner" } },
+          { type: "ExpandedFooter", props: { id: "footer" } },
+        ],
+        zones: {},
+      },
+      [mainContentWrapperMigration],
+      {
+        components: {},
+      },
+      {}
+    );
+
+    expect(migratedData).toEqual({
+      root: {
+        props: {
+          version: 1,
+        },
+      },
+      content: [
+        { type: "ExpandedHeader", props: { id: "header" } },
+        {
+          type: "MainContent",
+          props: {
+            id: "MainContent-default",
+            content: [{ type: "BannerSection", props: { id: "banner" } }],
+          },
+        },
+        { type: "ExpandedFooter", props: { id: "footer" } },
+      ],
+      zones: {},
+    });
+  });
+
+  it("wraps locator content in MainContent when there is no header or footer", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+          },
+        },
+        content: [{ type: "Locator", props: { id: "locator" } }],
+        zones: {},
+      },
+      [mainContentWrapperMigration],
+      {
+        components: {},
+      },
+      {}
+    );
+
+    expect(migratedData).toEqual({
+      root: {
+        props: {
+          version: 1,
+        },
+      },
+      content: [
+        {
+          type: "MainContent",
+          props: {
+            id: "MainContent-default",
+            content: [{ type: "Locator", props: { id: "locator" } }],
+          },
+        },
+      ],
+      zones: {},
+    });
+  });
+
+  it("wraps all top-level body components in MainContent when there is no page chrome", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+          },
+        },
+        content: [
+          { type: "BannerSection", props: { id: "banner" } },
+          { type: "CustomCodeSection", props: { id: "custom-code" } },
+        ],
+        zones: {},
+      },
+      [mainContentWrapperMigration],
+      {
+        components: {},
+      },
+      {}
+    );
+
+    expect(migratedData).toEqual({
+      root: {
+        props: {
+          version: 1,
+        },
+      },
+      content: [
+        {
+          type: "MainContent",
+          props: {
+            id: "MainContent-default",
+            content: [
+              { type: "BannerSection", props: { id: "banner" } },
+              { type: "CustomCodeSection", props: { id: "custom-code" } },
+            ],
+          },
+        },
+      ],
+      zones: {},
+    });
+  });
+
+  it("keeps non-edge headers inside MainContent to preserve content order", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+          },
+        },
+        content: [
+          { type: "BannerSection", props: { id: "banner" } },
+          { type: "ExpandedHeader", props: { id: "header" } },
+          { type: "HeroSection", props: { id: "hero" } },
+        ],
+        zones: {},
+      },
+      [mainContentWrapperMigration],
+      {
+        components: {},
+      },
+      {}
+    );
+
+    expect(migratedData).toEqual({
+      root: {
+        props: {
+          version: 1,
+        },
+      },
+      content: [
+        {
+          type: "MainContent",
+          props: {
+            id: "MainContent-default",
+            content: [
+              { type: "BannerSection", props: { id: "banner" } },
+              { type: "ExpandedHeader", props: { id: "header" } },
+              { type: "HeroSection", props: { id: "hero" } },
+            ],
+          },
+        },
+      ],
+      zones: {},
+    });
+  });
+
+  it("keeps trailing custom code outside MainContent without moving it ahead of the footer", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+          },
+        },
+        content: [
+          { type: "ExpandedHeader", props: { id: "header" } },
+          { type: "BannerSection", props: { id: "banner" } },
+          { type: "ExpandedFooter", props: { id: "footer" } },
+          { type: "CustomCodeSection", props: { id: "custom-code" } },
+        ],
+        zones: {},
+      },
+      [mainContentWrapperMigration],
+      {
+        components: {},
+      },
+      {}
+    );
+
+    expect(migratedData).toEqual({
+      root: {
+        props: {
+          version: 1,
+        },
+      },
+      content: [
+        { type: "ExpandedHeader", props: { id: "header" } },
+        {
+          type: "MainContent",
+          props: {
+            id: "MainContent-default",
+            content: [{ type: "BannerSection", props: { id: "banner" } }],
+          },
+        },
+        { type: "ExpandedFooter", props: { id: "footer" } },
+        { type: "CustomCodeSection", props: { id: "custom-code" } },
+      ],
+      zones: {},
+    });
   });
 
   it("successfully applies migration based on document data", async () => {
@@ -262,6 +477,280 @@ describe("migrate", () => {
       schemaMarkup
     );
   });
+
+  it("normalizes malformed ExpandedFooter logo slot localized image data", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+          },
+        },
+        content: [
+          {
+            type: "ExpandedFooter",
+            props: {
+              id: "ExpandedFooter-test",
+              slots: {
+                LogoSlot: [
+                  {
+                    type: "FooterLogoSlot",
+                    props: {
+                      id: "FooterLogoSlot-test",
+                      data: {
+                        image: {
+                          en: {
+                            url: "https://example.com/stale.png",
+                            height: 100,
+                            width: 100,
+                          },
+                          hasLocalizedValue: "true",
+                          constantValueEnabled: true,
+                          constantValue: {
+                            en: {
+                              url: "https://example.com/current.png",
+                              height: 200,
+                              width: 200,
+                            },
+                            hasLocalizedValue: "true",
+                          },
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [normalizeFooterLogoImageMigration],
+      footerLogoSlotMigrationConfig,
+      {}
+    );
+
+    expect(migratedData).toEqual({
+      root: {
+        props: {
+          version: 1,
+        },
+      },
+      content: [
+        {
+          type: "ExpandedFooter",
+          props: {
+            id: "ExpandedFooter-test",
+            slots: {
+              LogoSlot: [
+                {
+                  type: "FooterLogoSlot",
+                  props: {
+                    id: "FooterLogoSlot-test",
+                    data: {
+                      image: {
+                        field: "",
+                        constantValueEnabled: true,
+                        constantValue: {
+                          en: {
+                            url: "https://example.com/current.png",
+                            height: 200,
+                            width: 200,
+                          },
+                          hasLocalizedValue: "true",
+                        },
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        },
+      ],
+      zones: {},
+    });
+  });
+
+  it("preserves active ExpandedFooter logo slot entity image data while removing stale localized data", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+          },
+        },
+        content: [
+          {
+            type: "ExpandedFooter",
+            props: {
+              id: "ExpandedFooter-test",
+              slots: {
+                LogoSlot: [
+                  {
+                    type: "FooterLogoSlot",
+                    props: {
+                      id: "FooterLogoSlot-test",
+                      data: {
+                        image: {
+                          en: {
+                            url: "https://example.com/stale.png",
+                            height: 100,
+                            width: 100,
+                          },
+                          hasLocalizedValue: "true",
+                          field: "logo",
+                          constantValueEnabled: false,
+                          constantValue: {
+                            en: {
+                              url: "https://example.com/fallback.png",
+                              height: 200,
+                              width: 200,
+                            },
+                            hasLocalizedValue: "true",
+                          },
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [normalizeFooterLogoImageMigration],
+      footerLogoSlotMigrationConfig,
+      {}
+    );
+
+    expect(migratedData).toEqual({
+      root: {
+        props: {
+          version: 1,
+        },
+      },
+      content: [
+        {
+          type: "ExpandedFooter",
+          props: {
+            id: "ExpandedFooter-test",
+            slots: {
+              LogoSlot: [
+                {
+                  type: "FooterLogoSlot",
+                  props: {
+                    id: "FooterLogoSlot-test",
+                    data: {
+                      image: {
+                        field: "logo",
+                        constantValueEnabled: false,
+                        constantValue: {
+                          en: {
+                            url: "https://example.com/fallback.png",
+                            height: 200,
+                            width: 200,
+                          },
+                          hasLocalizedValue: "true",
+                        },
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        },
+      ],
+      zones: {},
+    });
+  });
+
+  it("wraps legacy ExpandedFooter logo slot localized image data as a constant value", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+          },
+        },
+        content: [
+          {
+            type: "ExpandedFooter",
+            props: {
+              id: "ExpandedFooter-test",
+              slots: {
+                LogoSlot: [
+                  {
+                    type: "FooterLogoSlot",
+                    props: {
+                      id: "FooterLogoSlot-test",
+                      data: {
+                        image: {
+                          en: {
+                            url: "https://example.com/legacy.png",
+                            height: 100,
+                            width: 100,
+                          },
+                          hasLocalizedValue: "true",
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [normalizeFooterLogoImageMigration],
+      footerLogoSlotMigrationConfig,
+      {}
+    );
+
+    expect(migratedData).toEqual({
+      root: {
+        props: {
+          version: 1,
+        },
+      },
+      content: [
+        {
+          type: "ExpandedFooter",
+          props: {
+            id: "ExpandedFooter-test",
+            slots: {
+              LogoSlot: [
+                {
+                  type: "FooterLogoSlot",
+                  props: {
+                    id: "FooterLogoSlot-test",
+                    data: {
+                      image: {
+                        field: "",
+                        constantValue: {
+                          en: {
+                            url: "https://example.com/legacy.png",
+                            height: 100,
+                            width: 100,
+                          },
+                          hasLocalizedValue: "true",
+                        },
+                        constantValueEnabled: true,
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        },
+      ],
+      zones: {},
+    });
+  });
 });
 
 const migration: Migration = {
@@ -293,6 +782,24 @@ export const migrationRegistry: MigrationRegistry = [
   alreadyAppliedMigration,
   migration,
 ];
+
+const footerLogoSlotMigrationConfig = {
+  components: {
+    ExpandedFooter: {
+      fields: {
+        slots: {
+          type: "object",
+          objectFields: {
+            LogoSlot: { type: "slot" },
+          },
+        },
+      },
+    },
+    FooterLogoSlot: {
+      fields: {},
+    },
+  },
+} as any;
 
 const exampleDataBefore = {
   root: {

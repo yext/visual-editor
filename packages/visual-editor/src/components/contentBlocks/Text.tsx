@@ -1,17 +1,17 @@
 import * as React from "react";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { Body, BodyProps } from "../atoms/body.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { TranslatableRichText, TranslatableString } from "../../types/types.ts";
 import { useTranslation } from "react-i18next";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
-import { ThemeColor } from "../../utils/themeConfigOptions.ts";
+import { ThemeColor, ThemeOptions } from "../../utils/themeConfigOptions.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export type TextProps = {
   data: {
@@ -40,42 +40,45 @@ export type TextProps = {
   };
 };
 
-const textFields: Fields<TextProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+const textFields: YextFields<TextProps> = {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
-      text: YextField<any, TranslatableString | TranslatableRichText>(
-        msg("fields.text", "Text"),
-        {
-          type: "entityField",
-          filter: {
-            types: ["type.string", "type.rich_text_v2"],
-          },
-        }
-      ),
+      text: {
+        type: "entityField",
+        label: msg("fields.text", "Text"),
+        filter: {
+          types: ["type.string", "type.rich_text_v2"],
+        },
+      },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
-      variant: YextField(msg("fields.textSize", "Text Size"), {
+      variant: {
+        label: msg("fields.textSize", "Text Size"),
         type: "radio",
-        options: "BODY_VARIANT",
-      }),
-      color: YextField(msg("fields.color", "Color"), {
-        type: "select",
+        options: ThemeOptions.BODY_VARIANT,
+      },
+      color: {
+        type: "basicSelector",
+        label: msg("fields.color", "Color"),
         options: "SITE_COLOR",
-      }),
-      fontStyle: YextField(msg("fields.fontStyle", "Font Style"), {
+      },
+      fontStyle: {
+        label: msg("fields.fontStyle", "Font Style"),
         type: "radio",
         options: [
           { label: msg("fields.options.regular", "Regular"), value: "regular" },
           { label: msg("fields.options.bold", "Bold"), value: "bold" },
           { label: msg("fields.options.italic", "Italic"), value: "italic" },
         ],
-      }),
+      },
     },
-  }),
+  },
 };
 
 const fontStyleToClassName: Record<
@@ -123,7 +126,7 @@ const TextComponent: PuckComponent<TextProps> = (props) => {
   );
 };
 
-export const Text: ComponentConfig<{ props: TextProps }> = {
+export const Text: YextComponentConfig<TextProps> = {
   label: msg("components.text", "Text"),
   fields: textFields,
   resolveFields: (data) => resolveDataFromParent(textFields, data),

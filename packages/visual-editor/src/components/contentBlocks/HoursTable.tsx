@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { DayOfWeekNames, HoursType } from "@yext/pages-components";
 import "@yext/pages-components/style.css";
 import { EntityField } from "../../editor/EntityField.tsx";
@@ -7,9 +7,9 @@ import { HoursTableAtom } from "../atoms/hoursTable.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { Body } from "../atoms/body.tsx";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 /** Props for the HoursTable component. */
 export interface HoursTableProps {
@@ -33,74 +33,71 @@ export interface HoursTableProps {
 }
 
 // HoursTable data field used in HoursTable and CoreInfoSection
-export const HoursTableDataField = YextField<any, HoursType>(
-  msg("fields.hours", "Hours"),
+export const HoursTableDataField: YextFields<HoursTableProps["data"]>["hours"] =
   {
     type: "entityField",
+    label: msg("fields.hours", "Hours"),
     filter: {
       types: ["type.hours"],
     },
-  }
-);
+  };
+
+type HoursTableStyleFieldProps = Omit<HoursTableProps["styles"], "alignment">;
 
 // HoursTable style fields used in HoursTable and CoreInfoSection
-export const HoursTableStyleFields = {
-  startOfWeek: YextField<keyof DayOfWeekNames | "today">(
-    msg("fields.startOfTheWeek", "Start of the Week"),
-    {
-      type: "select",
-      hasSearch: true,
-      options: "HOURS_OPTIONS",
-    }
-  ),
-  collapseDays: YextField<boolean>(
-    msg("fields.collapseDays", "Collapse Days"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.yes", "Yes"), value: true },
-        { label: msg("fields.options.no", "No"), value: false },
-      ],
-    }
-  ),
-  showAdditionalHoursText: YextField<boolean>(
-    msg("fields.options.showAdditionalHoursText", "Show Additional Hours Text"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.yes", "Yes"), value: true },
-        { label: msg("fields.options.no", "No"), value: false },
-      ],
-    }
-  ),
+export const HoursTableStyleFields: YextFields<HoursTableStyleFieldProps> = {
+  startOfWeek: {
+    type: "basicSelector",
+    label: msg("fields.startOfTheWeek", "Start of the Week"),
+    options: "HOURS_OPTIONS",
+  },
+  collapseDays: {
+    label: msg("fields.collapseDays", "Collapse Days"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.yes", "Yes"), value: true },
+      { label: msg("fields.options.no", "No"), value: false },
+    ],
+  },
+  showAdditionalHoursText: {
+    label: msg(
+      "fields.options.showAdditionalHoursText",
+      "Show Additional Hours Text"
+    ),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.yes", "Yes"), value: true },
+      { label: msg("fields.options.no", "No"), value: false },
+    ],
+  },
 };
 
-export const hoursTableFields: Fields<HoursTableProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+export const hoursTableFields: YextFields<HoursTableProps> = {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
       hours: HoursTableDataField,
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       ...HoursTableStyleFields,
-      alignment: YextField(
-        msg("fields.contentAlignment", "Content Alignment"),
-        {
-          type: "radio",
-          options: [
-            { label: msg("fields.options.left", "Left"), value: "items-start" },
-            {
-              label: msg("fields.options.center", "Center"),
-              value: "items-center",
-            },
-          ],
-        }
-      ),
+      alignment: {
+        label: msg("fields.contentAlignment", "Content Alignment"),
+        type: "radio",
+        options: [
+          { label: msg("fields.options.left", "Left"), value: "items-start" },
+          {
+            label: msg("fields.options.center", "Center"),
+            value: "items-center",
+          },
+        ],
+      },
     },
-  }),
+  },
 };
 
 const VisualEditorHoursTable: PuckComponent<HoursTableProps> = (props) => {
@@ -146,7 +143,7 @@ const VisualEditorHoursTable: PuckComponent<HoursTableProps> = (props) => {
   );
 };
 
-export const HoursTable: ComponentConfig<{ props: HoursTableProps }> = {
+export const HoursTable: YextComponentConfig<HoursTableProps> = {
   fields: hoursTableFields,
   defaultProps: {
     data: {

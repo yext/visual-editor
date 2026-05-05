@@ -1,22 +1,23 @@
-import {
-  ComponentConfig,
-  ComponentData,
-  PuckComponent,
-  setDeep,
-} from "@puckeditor/core";
+import { ComponentData, PuckComponent, setDeep } from "@puckeditor/core";
 import { EventSectionType } from "../../../types/types.ts";
 import { ComponentFields } from "../../../types/fields.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
+import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 import {
   cardWrapperFields,
   CardWrapperType,
 } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 import { defaultEventCardSlotData, EventCardProps } from "./EventCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
-import { YextField } from "../../../editor/YextField.tsx";
+import { renderMappedEntityFieldEmptyState } from "../EntityFieldSectionEmptyState.tsx";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
+import {
+  MappedEntityFieldConditionalRender,
+  withMappedEntityFieldConditionalRender,
+} from "../entityFieldSectionUtils.ts";
 
 export type EventCardsWrapperProps = CardWrapperType<EventSectionType> & {
   styles: {
@@ -25,37 +26,42 @@ export type EventCardsWrapperProps = CardWrapperType<EventSectionType> & {
     showDescription: boolean;
     showCTA: boolean;
   };
+
+  /** @internal */
+  conditionalRender?: MappedEntityFieldConditionalRender;
 };
 
-const eventCardsWrapperFields = {
+const eventCardsWrapperFields: YextFields<EventCardsWrapperProps> = {
   ...cardWrapperFields<EventCardsWrapperProps>(
     msg("components.events", "Events"),
     ComponentFields.EventSection.type
   ),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
-      showImage: YextField(msg("fields.showImage", "Show Image"), {
+      showImage: {
+        label: msg("fields.showImage", "Show Image"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
-      showDateTime: YextField(msg("fields.showDateTime", "Show Date & Time"), {
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showDateTime: {
+        label: msg("fields.showDateTime", "Show Date & Time"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
-      showDescription: YextField(
-        msg("fields.showDescription", "Show Description"),
-        {
-          type: "radio",
-          options: "SHOW_HIDE",
-        }
-      ),
-      showCTA: YextField(msg("fields.showCTA", "Show CTA"), {
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showDescription: {
+        label: msg("fields.showDescription", "Show Description"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showCTA: {
+        label: msg("fields.showCTA", "Show CTA"),
+        type: "radio",
+        options: ThemeOptions.SHOW_HIDE,
+      },
     },
-  }),
+  },
 };
 
 const EventCardsWrapperComponent: PuckComponent<EventCardsWrapperProps> = (
@@ -70,9 +76,7 @@ const EventCardsWrapperComponent: PuckComponent<EventCardsWrapperProps> = (
   );
 };
 
-export const EventCardsWrapper: ComponentConfig<{
-  props: EventCardsWrapperProps;
-}> = {
+export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
   label: msg("components.eventCardsWrapper", "Event Cards"),
   fields: eventCardsWrapperFields,
   defaultProps: {
@@ -91,6 +95,9 @@ export const EventCardsWrapper: ComponentConfig<{
       CardSlot: [],
     },
   },
+  // Keep the wrapper slot tree aligned with either mapped entity data or
+  // constant-value cards, and mark the mapped-empty case so the parent section
+  // can hide on live while still showing an editor empty state.
   resolveData: (data, params) => {
     const streamDocument = params.metadata.streamDocument;
     const sharedCardProps =
@@ -120,7 +127,8 @@ export const EventCardsWrapper: ComponentConfig<{
       )?.events;
 
       if (!resolvedEvents?.length) {
-        return setDeep(data, "props.slots.CardSlot", []);
+        const updatedData = setDeep(data, "props.slots.CardSlot", []);
+        return withMappedEntityFieldConditionalRender(updatedData, true);
       }
 
       const requiredLength = resolvedEvents.length;
@@ -146,7 +154,7 @@ export const EventCardsWrapper: ComponentConfig<{
         ...cardsToAdd,
       ].slice(0, requiredLength) as ComponentData<EventCardProps>[];
 
-      return setDeep(
+      const updatedData = setDeep(
         data,
         "props.slots.CardSlot",
         updatedCardSlot.map((card, i) => {
@@ -157,67 +165,74 @@ export const EventCardsWrapper: ComponentConfig<{
           } satisfies EventCardProps["parentData"]);
         })
       );
-    } else {
-      // STATIC VALUES
-      let updatedData = data;
 
-      // For each id in constantValue, check if there's already an existing card.
-      // If not, add a new default card.
-      // Also, de-duplicate ids to avoid conflicts.
-      // Finally, update the card slot and the constantValue object.
-      const inUseIds = new Set<string>();
-      const newSlots = data.props.data.constantValue.map(({ id }, i) => {
-        const existingCard = id
-          ? (data.props.slots.CardSlot.find(
-              (slot) => slot.props.id === id
-            ) as ComponentData<EventCardProps>)
-          : undefined;
-
-        // Make a deep copy of existingCard to avoid mutating multiple cards
-        let newCard = existingCard
-          ? (JSON.parse(JSON.stringify(existingCard)) as typeof existingCard)
-          : undefined;
-
-        let newId = newCard?.props.id || `EventCard-${crypto.randomUUID()}`;
-
-        if (newCard && inUseIds.has(newId)) {
-          newId = `EventCard-${crypto.randomUUID()}`;
-          // Update the ids of the components in the child slots as well
-          Object.entries(newCard.props.slots).forEach(
-            ([slotKey, slotArray]) => {
-              slotArray[0].props.id = newId + "-" + slotKey;
-            }
-          );
-        }
-        inUseIds.add(newId);
-
-        if (!newCard) {
-          return defaultEventCardSlotData(
-            newId,
-            i,
-            sharedCardProps?.backgroundColor,
-            sharedCardProps?.truncateDescription,
-            sharedCardProps?.slotStyles
-          );
-        }
-
-        newCard = setDeep(newCard, "props.id", newId); // update the id
-        newCard = setDeep(newCard, "props.index", i); // update the index
-        newCard = setDeep(newCard, "props.parentData", undefined); // set to constant values
-
-        return newCard;
-      });
-
-      // update the  cards
-      updatedData = setDeep(updatedData, "props.slots.CardSlot", newSlots);
-      // update the constantValue for the sidebar
-      updatedData = setDeep(
-        updatedData,
-        "props.data.constantValue",
-        newSlots.map((card) => ({ id: card.props.id }))
-      );
-      return updatedData;
+      return withMappedEntityFieldConditionalRender(updatedData, false);
     }
+
+    // STATIC VALUES
+    let updatedData = data;
+
+    // For each id in constantValue, check if there's already an existing card.
+    // If not, add a new default card.
+    // Also, de-duplicate ids to avoid conflicts.
+    // Finally, update the card slot and the constantValue object.
+    const inUseIds = new Set<string>();
+    const newSlots = data.props.data.constantValue.map(({ id }, i) => {
+      const existingCard = id
+        ? (data.props.slots.CardSlot.find(
+            (slot) => slot.props.id === id
+          ) as ComponentData<EventCardProps>)
+        : undefined;
+
+      // Make a deep copy of existingCard to avoid mutating multiple cards
+      let newCard = existingCard
+        ? (JSON.parse(JSON.stringify(existingCard)) as typeof existingCard)
+        : undefined;
+
+      let newId = newCard?.props.id || `EventCard-${crypto.randomUUID()}`;
+
+      if (newCard && inUseIds.has(newId)) {
+        newId = `EventCard-${crypto.randomUUID()}`;
+        // Update the ids of the components in the child slots as well
+        Object.entries(newCard.props.slots).forEach(([slotKey, slotArray]) => {
+          slotArray[0].props.id = newId + "-" + slotKey;
+        });
+      }
+      inUseIds.add(newId);
+
+      if (!newCard) {
+        return defaultEventCardSlotData(
+          newId,
+          i,
+          sharedCardProps?.backgroundColor,
+          sharedCardProps?.truncateDescription,
+          sharedCardProps?.slotStyles
+        );
+      }
+
+      newCard = setDeep(newCard, "props.id", newId); // update the id
+      newCard = setDeep(newCard, "props.index", i); // update the index
+      newCard = setDeep(newCard, "props.parentData", undefined); // set to constant values
+
+      return newCard;
+    });
+
+    // update the  cards
+    updatedData = setDeep(updatedData, "props.slots.CardSlot", newSlots);
+    // update the constantValue for the sidebar
+    updatedData = setDeep(
+      updatedData,
+      "props.data.constantValue",
+      newSlots.map((card) => ({ id: card.props.id }))
+    );
+
+    return withMappedEntityFieldConditionalRender(updatedData, false);
   },
-  render: (props) => <EventCardsWrapperComponent {...props} />,
+  render: (props) => {
+    if (props.conditionalRender?.isMappedContentEmpty) {
+      return renderMappedEntityFieldEmptyState(props.puck.isEditing);
+    }
+
+    return <EventCardsWrapperComponent {...props} />;
+  },
 };

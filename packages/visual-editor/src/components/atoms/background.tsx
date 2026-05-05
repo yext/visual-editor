@@ -7,7 +7,10 @@ import { BackgroundProvider } from "../../hooks/useBackground.tsx";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { getThemeValue } from "../../utils/getThemeValue.ts";
-import { getBackgroundColorClasses } from "../../utils/colors.ts";
+import {
+  getBackgroundColorClasses,
+  getBackgroundColorStyle,
+} from "../../utils/colors.ts";
 
 export interface BackgroundProps extends React.HTMLAttributes<HTMLDivElement> {
   background?: ThemeColor;
@@ -15,7 +18,7 @@ export interface BackgroundProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const Background = React.forwardRef<HTMLDivElement, BackgroundProps>(
-  ({ className, background, as, children, ...props }, ref) => {
+  ({ className, background, as, children, style, ...props }, ref) => {
     const streamDocument = useDocument();
     const Component = as ?? "div";
     const selectedBackground = background ?? backgroundColors.background1.value;
@@ -85,6 +88,10 @@ export const Background = React.forwardRef<HTMLDivElement, BackgroundProps>(
             getBackgroundColorClasses(background),
             className
           )}
+          style={{
+            ...getBackgroundColorStyle(background),
+            ...style,
+          }}
           ref={ref}
           {...props}
         >

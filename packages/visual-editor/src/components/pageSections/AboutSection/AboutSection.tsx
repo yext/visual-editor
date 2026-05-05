@@ -1,15 +1,10 @@
 import React from "react";
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  Slot,
-  WithId,
-} from "@puckeditor/core";
+import { PuckComponent, Slot, WithId } from "@puckeditor/core";
 import {
   backgroundColors,
   ThemeColor,
   HeadingLevel,
+  ThemeOptions,
 } from "../../../utils/themeConfigOptions.ts";
 import { getThemeColorCssValue } from "../../../utils/colors.ts";
 import { BodyTextProps } from "../../contentBlocks/BodyText.tsx";
@@ -18,7 +13,6 @@ import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { PageSection } from "../../atoms/pageSection.tsx";
 import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
-import { YextField } from "../../../editor/YextField.tsx";
 import { useTranslation } from "react-i18next";
 import { FaChevronDown } from "react-icons/fa";
 import {
@@ -26,6 +20,7 @@ import {
   defaultAboutSectionProps,
 } from "./AboutSectionDetailsColumn.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 const placeholderText = {
   defaultValue: {
@@ -71,33 +66,28 @@ export type AboutSectionProps = {
   liveVisibility: boolean;
 };
 
-const aboutSectionFields: Fields<AboutSectionProps> = {
-  styles: YextField(msg("fields.styles", "Styles"), {
+const aboutSectionFields: YextFields<AboutSectionProps> = {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
-      readMoreButtonColor: YextField(
-        msg("fields.readMoreButtonColor", "Read More Button Color"),
-        {
-          type: "select",
-          options: "SITE_COLOR",
-        }
-      ),
-      showDetailsColumn: YextField(
-        msg("fields.showDetailsColumn", "Show Details Column"),
-        {
-          type: "radio",
-          options: "SHOW_HIDE",
-        }
-      ),
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
+      readMoreButtonColor: {
+        type: "basicSelector",
+        label: msg("fields.readMoreButtonColor", "Read More Button Color"),
+        options: "SITE_COLOR",
+      },
+      showDetailsColumn: {
+        label: msg("fields.showDetailsColumn", "Show Details Column"),
+        type: "radio",
+        options: ThemeOptions.SHOW_HIDE,
+      },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {
@@ -113,16 +103,14 @@ const aboutSectionFields: Fields<AboutSectionProps> = {
     },
     visible: false,
   },
-  liveVisibility: YextField(
-    msg("fields.visibleOnLivePage", "Visible on Live Page"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: false },
-      ],
-    }
-  ),
+  liveVisibility: {
+    label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.show", "Show"), value: true },
+      { label: msg("fields.options.hide", "Hide"), value: false },
+    ],
+  },
 };
 
 const AboutComponent: PuckComponent<AboutSectionProps> = (props) => {
@@ -204,7 +192,7 @@ const AboutComponent: PuckComponent<AboutSectionProps> = (props) => {
   );
 };
 
-export const AboutSection: ComponentConfig<{ props: AboutSectionProps }> = {
+export const AboutSection: YextComponentConfig<AboutSectionProps> = {
   label: msg("components.aboutSection", "About Section"),
   fields: aboutSectionFields,
   defaultProps: {

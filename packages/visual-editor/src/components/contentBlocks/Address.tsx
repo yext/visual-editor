@@ -1,9 +1,7 @@
 import { useTranslation } from "react-i18next";
 import {
-  ComponentConfig,
   ComponentData,
   DefaultComponentProps,
-  Fields,
   PuckComponent,
   setDeep,
 } from "@puckeditor/core";
@@ -17,13 +15,14 @@ import { EntityField } from "../../editor/EntityField.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { CTA, CTAVariant, isCtaVariantWithColor } from "../atoms/cta.tsx";
 import { pt, msg } from "../../utils/i18n/platform.ts";
-import { YextField } from "../../editor/YextField.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import {
   ThemeColor,
+  ThemeOptions,
   backgroundColors,
 } from "../../utils/themeConfigOptions.ts";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 /** Props for the Address component */
 export interface AddressProps {
@@ -62,61 +61,63 @@ export interface AddressProps {
 }
 
 // Address field definition used in Address and CoreInfoSection
-export const AddressDataField = YextField<any, AddressType>(
-  msg("fields.address", "Address"),
-  {
+export const AddressDataField: YextFields<AddressProps["data"]> = {
+  address: {
     type: "entityField",
+    label: msg("fields.address", "Address"),
     filter: { types: ["type.address"] },
-  }
-);
-
-// Address style fields used in Address and CoreInfoSection
-export const AddressStyleFields: Fields<AddressProps["styles"]> = {
-  showRegion: YextField(msg("fields.showRegion", "Show Region"), {
-    type: "radio",
-    options: [
-      { label: msg("fields.options.yes", "Yes"), value: true },
-      { label: msg("fields.options.no", "No"), value: false },
-    ],
-  }),
-  showCountry: YextField(msg("fields.showCountry", "Show Country"), {
-    type: "radio",
-    options: [
-      { label: msg("fields.options.yes", "Yes"), value: true },
-      { label: msg("fields.options.no", "No"), value: false },
-    ],
-  }),
-  showGetDirectionsLink: YextField<boolean>(
-    msg("fields.showGetDirectionsLink", "Show Get Directions Link"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.yes", "Yes"), value: true },
-        { label: msg("fields.options.no", "No"), value: false },
-      ],
-    }
-  ),
-  ctaVariant: YextField<CTAVariant>(msg("fields.ctaVariant", "CTA Variant"), {
-    type: "radio",
-    options: "CTA_VARIANT",
-  }),
-  color: YextField(msg("fields.linkColor", "Link Color"), {
-    type: "select",
-    options: "SITE_COLOR",
-  }),
+  },
 };
 
-export const addressFields: Fields<AddressProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+// Address style fields used in Address and CoreInfoSection
+export const AddressStyleFields: YextFields<AddressProps["styles"]> = {
+  showRegion: {
+    label: msg("fields.showRegion", "Show Region"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.yes", "Yes"), value: true },
+      { label: msg("fields.options.no", "No"), value: false },
+    ],
+  },
+  showCountry: {
+    label: msg("fields.showCountry", "Show Country"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.yes", "Yes"), value: true },
+      { label: msg("fields.options.no", "No"), value: false },
+    ],
+  },
+  showGetDirectionsLink: {
+    label: msg("fields.showGetDirectionsLink", "Show Get Directions Link"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.yes", "Yes"), value: true },
+      { label: msg("fields.options.no", "No"), value: false },
+    ],
+  },
+  ctaVariant: {
+    label: msg("fields.ctaVariant", "CTA Variant"),
+    type: "radio",
+    options: ThemeOptions.CTA_VARIANT,
+  },
+  color: {
+    type: "basicSelector",
+    label: msg("fields.linkColor", "Link Color"),
+    options: "SITE_COLOR",
+  },
+};
+
+export const addressFields: YextFields<AddressProps> = {
+  data: {
     type: "object",
-    objectFields: {
-      address: AddressDataField,
-    },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+    label: msg("fields.data", "Data"),
+    objectFields: AddressDataField,
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: AddressStyleFields,
-  }),
+  },
 };
 
 const AddressComponent: PuckComponent<AddressProps> = (props) => {
@@ -203,16 +204,16 @@ export const resolveAddressFields = (
     "type"
   >
 ) => {
-  const updatedFields = resolveDataFromParent(addressFields, data);
+  let updatedFields = resolveDataFromParent(addressFields, data);
   const showGetDirectionsLink = data.props.styles.showGetDirectionsLink;
-  setDeep(
+  updatedFields = setDeep(
     updatedFields,
     "styles.objectFields.ctaVariant.visible",
     showGetDirectionsLink
   );
   const ctaVariant = data.props.styles.ctaVariant;
   const showColor = isCtaVariantWithColor(ctaVariant);
-  setDeep(
+  updatedFields = setDeep(
     updatedFields,
     "styles.objectFields.color.visible",
     showGetDirectionsLink && showColor
@@ -221,9 +222,7 @@ export const resolveAddressFields = (
   return updatedFields;
 };
 
-export const Address: ComponentConfig<{
-  props: AddressProps;
-}> = {
+export const Address: YextComponentConfig<AddressProps> = {
   label: msg("components.address", "Address"),
   fields: addressFields,
   defaultProps: {

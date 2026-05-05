@@ -1,10 +1,11 @@
 import { useTranslation } from "react-i18next";
 import { FaArrowLeft, FaArrowRight, FaChevronDown } from "react-icons/fa";
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
+import { PuckComponent, Slot } from "@puckeditor/core";
 import * as React from "react";
 import {
   backgroundColors,
   type ThemeColor,
+  ThemeOptions,
 } from "../../../utils/themeConfigOptions.ts";
 import { getThemeColorCssValue } from "../../../utils/colors.ts";
 import { Body } from "../../atoms/body.tsx";
@@ -16,7 +17,6 @@ import { PageSection } from "../../atoms/pageSection.tsx";
 import { TimestampAtom, TimestampOption } from "../../atoms/timestamp.tsx";
 import { useBackground } from "../../../hooks/useBackground.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
-import { YextField } from "../../../editor/YextField.tsx";
 import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 import { StreamDocument } from "../../../utils/types/StreamDocument.ts";
@@ -24,6 +24,7 @@ import { StarOff } from "lucide-react";
 import { AnalyticsScopeProvider, useAnalytics } from "@yext/pages-components";
 import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 type Review = {
   authorName: string;
@@ -131,30 +132,28 @@ const ReviewsEmptyState: React.FC<{ backgroundColor: ThemeColor }> = ({
   );
 };
 
-const reviewsFields: Fields<ReviewsSectionProps> = {
-  styles: YextField(msg("fields.styles", "Styles"), {
+const reviewsFields: YextFields<ReviewsSectionProps> = {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
-      accentColor: YextField(msg("fields.accentColor", "Accent Color"), {
-        type: "select",
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
+      accentColor: {
+        type: "basicSelector",
+        label: msg("fields.accentColor", "Accent Color"),
         options: "SITE_COLOR",
-      }),
-      showSectionHeading: YextField(
-        msg("fields.showSectionHeading", "Show Section Heading"),
-        {
-          type: "radio",
-          options: "SHOW_HIDE",
-        }
-      ),
+      },
+      showSectionHeading: {
+        label: msg("fields.showSectionHeading", "Show Section Heading"),
+        type: "radio",
+        options: ThemeOptions.SHOW_HIDE,
+      },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {
@@ -162,25 +161,25 @@ const reviewsFields: Fields<ReviewsSectionProps> = {
     },
     visible: false,
   },
-  analytics: YextField(msg("fields.analytics", "Analytics"), {
+  analytics: {
     type: "object",
+    label: msg("fields.analytics", "Analytics"),
     visible: false,
     objectFields: {
-      scope: YextField(msg("fields.scope", "Scope"), {
+      scope: {
+        label: msg("fields.scope", "Scope"),
         type: "text",
-      }),
+      },
     },
-  }),
-  liveVisibility: YextField(
-    msg("fields.visibleOnLivePage", "Visible on Live Page"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: false },
-      ],
-    }
-  ),
+  },
+  liveVisibility: {
+    label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.show", "Show"), value: true },
+      { label: msg("fields.options.hide", "Hide"), value: false },
+    ],
+  },
 };
 
 const ReviewsSectionInternal: PuckComponent<ReviewsSectionProps> = (props) => {
@@ -581,7 +580,7 @@ const ShowMoreButton: React.FC<{
  * The Reviews Section displays customer reviews fetched dynamically from the Yext Reviews API. It features a customizable section heading and shows review details including ratings, content, and timestamps.
  * Available on Location templates.
  */
-export const ReviewsSection: ComponentConfig<{ props: ReviewsSectionProps }> = {
+export const ReviewsSection: YextComponentConfig<ReviewsSectionProps> = {
   fields: reviewsFields,
   label: msg("components.reviewsSection", "Reviews Section"),
   defaultProps: {

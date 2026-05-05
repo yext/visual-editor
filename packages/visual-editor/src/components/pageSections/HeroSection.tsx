@@ -1,10 +1,4 @@
-import {
-  ComponentConfig,
-  DefaultComponentProps,
-  Fields,
-  setDeep,
-  Slot,
-} from "@puckeditor/core";
+import { DefaultComponentProps, Fields, setDeep, Slot } from "@puckeditor/core";
 import { AnalyticsScopeProvider, ImageType } from "@yext/pages-components";
 import {
   backgroundColors,
@@ -12,7 +6,6 @@ import {
   HeadingLevel,
   ThemeOptions,
 } from "../../utils/themeConfigOptions.ts";
-import { YextField } from "../../editor/YextField.tsx";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../utils/applyAnalytics.ts";
@@ -24,6 +17,7 @@ import { HoursStatusProps } from "../contentBlocks/HoursStatus.tsx";
 import { ImageWrapperProps } from "../contentBlocks/image/Image.tsx";
 import { CTAWrapperProps } from "../contentBlocks/CtaWrapper.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import type { YextPuckField } from "../../fields/fields.ts";
 import { TranslatableAssetImage, AssetImageType } from "../../types/images.ts";
 import { ClassicHero } from "./heroVariants/ClassicHero.js";
 import { CompactHero } from "./heroVariants/CompactHero.js";
@@ -31,6 +25,11 @@ import { SpotlightHero } from "./heroVariants/SpotlightHero.js";
 import { ImmersiveHero } from "./heroVariants/ImmersiveHero.js";
 import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders.ts";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  YextFields,
+} from "../../fields/fields.ts";
 
 export interface HeroData {
   backgroundImage: YextEntityField<
@@ -181,23 +180,27 @@ export type HeroImageProps = {
   slots: HeroSectionProps["slots"];
 };
 
-const heroSectionFields: Fields<HeroSectionProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+const heroSectionFields: YextFields<HeroSectionProps> = {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
-      backgroundImage: YextField(msg("fields.image", "Image"), {
+      backgroundImage: {
         type: "entityField",
+        label: msg("fields.image", "Image"),
         filter: {
           types: ["type.image"],
         },
-      }),
+      },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
-      variant: YextField(msg("fields.variant", "Variant"), {
-        type: "select",
+      variant: {
+        type: "basicSelector",
+        label: msg("fields.variant", "Variant"),
         options: [
           { label: msg("fields.options.classic", "Classic"), value: "classic" },
           {
@@ -213,140 +216,121 @@ const heroSectionFields: Fields<HeroSectionProps> = {
             value: "compact",
           },
         ],
-      }),
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
-      imageHeight: YextField(msg("fields.imageHeight", "Image Height"), {
+      },
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
+      imageHeight: {
         type: "number",
+        label: msg("fields.imageHeight", "Image Height"),
         min: 0,
-      }),
-      desktopContainerPosition: YextField(
-        msg("fields.desktopContainerPosition", "Desktop Container Position"),
-        {
-          type: "radio",
-          options: [
-            {
-              label: msg("fields.options.left", "Left", {
-                context: "direction",
-              }),
-              value: "left",
-            },
-            {
-              label: msg("fields.options.center", "Center", {
-                context: "direction",
-              }),
-              value: "center",
-            },
-          ],
-        }
-      ),
-      mobileContentAlignment: YextField(
-        msg("fields.mobileContentAlignment", "Mobile Content Alignment"),
-        {
-          type: "radio",
-          options: [
-            {
-              label: msg("fields.options.left", "Left", {
-                context: "direction",
-              }),
-              value: "left",
-            },
-            {
-              label: msg("fields.options.center", "Center", {
-                context: "direction",
-              }),
-              value: "center",
-            },
-          ],
-        }
-      ),
-      desktopImagePosition: YextField(
-        msg("fields.desktopImagePosition", "Desktop Image Position"),
-        {
-          type: "radio",
-          options: [
-            {
-              label: msg("fields.options.left", "Left", {
-                context: "direction",
-              }),
-              value: "left",
-            },
-            {
-              label: msg("fields.options.right", "Right", {
-                context: "direction",
-              }),
-              value: "right",
-            },
-          ],
-        }
-      ),
-      mobileImagePosition: YextField(
-        msg("fields.mobileImagePosition", "Mobile Image Position"),
-        {
-          type: "radio",
-          options: ThemeOptions.VERTICAL_POSITION,
-        }
-      ),
-      showBusinessName: YextField(
-        msg("fields.showBusinessName", "Show Business Name"),
-        {
-          type: "radio",
-          options: "SHOW_HIDE",
-        }
-      ),
-      showGeomodifier: YextField(
-        msg("fields.showGeomodifier", "Show Geomodifier"),
-        {
-          type: "radio",
-          options: "SHOW_HIDE",
-        }
-      ),
-      showHoursStatus: YextField(
-        msg("fields.showHoursStatus", "Show Hours Status"),
-        {
-          type: "radio",
-          options: "SHOW_HIDE",
-        }
-      ),
-      showAverageReview: YextField(
-        msg("fields.showAverageReview", "Show Average Review"),
-        {
-          type: "radio",
-          options: "SHOW_HIDE",
-        }
-      ),
-      reviewStarsColor: YextField(
-        msg("fields.reviewStarsColor", "Review Stars Color"),
-        {
-          type: "select",
-          options: "SITE_COLOR",
-        }
-      ),
-      showPrimaryCTA: YextField(
-        msg("fields.showPrimaryCTA", "Show Primary CTA"),
-        {
-          type: "radio",
-          options: "SHOW_HIDE",
-        }
-      ),
-      showSecondaryCTA: YextField(
-        msg("fields.showSecondaryCTA", "Show Secondary CTA"),
-        {
-          type: "radio",
-          options: "SHOW_HIDE",
-        }
-      ),
-      showImage: YextField(msg("fields.showImage", "Show Image"), {
+      },
+      desktopContainerPosition: {
+        label: msg(
+          "fields.desktopContainerPosition",
+          "Desktop Container Position"
+        ),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
+        options: [
+          {
+            label: msg("fields.options.left", "Left", {
+              context: "direction",
+            }),
+            value: "left",
+          },
+          {
+            label: msg("fields.options.center", "Center", {
+              context: "direction",
+            }),
+            value: "center",
+          },
+        ],
+      },
+      mobileContentAlignment: {
+        label: msg("fields.mobileContentAlignment", "Mobile Content Alignment"),
+        type: "radio",
+        options: [
+          {
+            label: msg("fields.options.left", "Left", {
+              context: "direction",
+            }),
+            value: "left",
+          },
+          {
+            label: msg("fields.options.center", "Center", {
+              context: "direction",
+            }),
+            value: "center",
+          },
+        ],
+      },
+      desktopImagePosition: {
+        label: msg("fields.desktopImagePosition", "Desktop Image Position"),
+        type: "radio",
+        options: [
+          {
+            label: msg("fields.options.left", "Left", {
+              context: "direction",
+            }),
+            value: "left",
+          },
+          {
+            label: msg("fields.options.right", "Right", {
+              context: "direction",
+            }),
+            value: "right",
+          },
+        ],
+      },
+      mobileImagePosition: {
+        label: msg("fields.mobileImagePosition", "Mobile Image Position"),
+        type: "radio",
+        options: ThemeOptions.VERTICAL_POSITION,
+      },
+      showBusinessName: {
+        label: msg("fields.showBusinessName", "Show Business Name"),
+        type: "radio",
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showGeomodifier: {
+        label: msg("fields.showGeomodifier", "Show Geomodifier"),
+        type: "radio",
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showHoursStatus: {
+        label: msg("fields.showHoursStatus", "Show Hours Status"),
+        type: "radio",
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showAverageReview: {
+        label: msg("fields.showAverageReview", "Show Average Review"),
+        type: "radio",
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      reviewStarsColor: {
+        type: "basicSelector",
+        label: msg("fields.reviewStarsColor", "Review Stars Color"),
+        options: "SITE_COLOR",
+      },
+      showPrimaryCTA: {
+        label: msg("fields.showPrimaryCTA", "Show Primary CTA"),
+        type: "radio",
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showSecondaryCTA: {
+        label: msg("fields.showSecondaryCTA", "Show Secondary CTA"),
+        type: "radio",
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showImage: {
+        label: msg("fields.showImage", "Show Image"),
+        type: "radio",
+        options: ThemeOptions.SHOW_HIDE,
+      },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {
@@ -359,28 +343,28 @@ const heroSectionFields: Fields<HeroSectionProps> = {
     },
     visible: false,
   },
-  analytics: YextField(msg("fields.analytics", "Analytics"), {
+  analytics: {
     type: "object",
+    label: msg("fields.analytics", "Analytics"),
     visible: false,
     objectFields: {
-      scope: YextField(msg("fields.scope", "Scope"), {
+      scope: {
+        label: msg("fields.scope", "Scope"),
         type: "text",
-      }),
+      },
     },
-  }),
-  liveVisibility: YextField(
-    msg("fields.visibleOnLivePage", "Visible on Live Page"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: false },
-      ],
-    }
-  ),
+  },
+  liveVisibility: {
+    label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.show", "Show"), value: true },
+      { label: msg("fields.options.hide", "Hide"), value: false },
+    ],
+  },
 };
 
-export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
+export const HeroSection: YextComponentConfig<HeroSectionProps> = {
   label: msg("components.heroSection", "Hero Section"),
   fields: heroSectionFields,
   defaultProps: {
@@ -682,7 +666,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
       }
     }
 
-    return fields;
+    return toPuckFields(fields);
   },
   render: (props) => {
     let HeroVariant = <ClassicHero {...props} />;
@@ -727,7 +711,7 @@ export const updateFields = <T extends DefaultComponentProps>(
   obj: Record<string, any>,
   paths: (string | undefined)[],
   value: any
-): Fields<T> => {
+): YextFields<T> => {
   const newObj = { ...obj };
 
   for (const path of paths) {
@@ -754,5 +738,5 @@ export const updateFields = <T extends DefaultComponentProps>(
     }
   }
 
-  return newObj as Fields<T>;
+  return newObj as Fields<T, YextPuckField>;
 };

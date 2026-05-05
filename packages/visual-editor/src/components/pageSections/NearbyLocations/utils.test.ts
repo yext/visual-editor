@@ -240,9 +240,9 @@ describe("fetchNearbyLocations", () => {
     });
 
     expect(result.response.docs.map((doc) => doc.id)).toEqual([
-      "charlie",
       "alpha",
       "bravo",
+      "charlie",
     ]);
   });
 

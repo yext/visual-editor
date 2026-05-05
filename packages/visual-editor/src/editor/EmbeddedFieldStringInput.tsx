@@ -22,7 +22,13 @@ import { useTranslation } from "react-i18next";
 import { pt } from "../utils/i18n/platform.ts";
 import { resolveComponentData } from "../utils/resolveComponentData.tsx";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
+import { useLinkedEntitySchemas } from "../hooks/useLinkedEntitySchemas.tsx";
 import { useDocument } from "../hooks/useDocument.tsx";
+
+export type EmbeddedStringOption = {
+  label: string;
+  value: string;
+};
 
 /**
  * A debounced string input that allows embedding entity fields via a popover selector.
@@ -41,16 +47,21 @@ export const EmbeddedFieldStringInputFromEntity = <
   showFieldSelector: boolean;
 }) => {
   const entityFields = useEntityFields();
+  const linkedEntitySchemas = useLinkedEntitySchemas();
 
   const entityFieldOptions = React.useMemo(() => {
-    const filteredEntityFields = getFieldsForSelector(entityFields, filter);
+    const filteredEntityFields = getFieldsForSelector(
+      entityFields,
+      filter,
+      linkedEntitySchemas ?? undefined
+    );
     return filteredEntityFields.map((field) => {
       return {
         label: field.displayName ?? field.name,
         value: field.name,
       };
     });
-  }, [entityFields, filter]);
+  }, [entityFields, filter, linkedEntitySchemas]);
 
   return (
     <EmbeddedFieldStringInputFromOptions
@@ -82,7 +93,7 @@ export const EmbeddedFieldStringInputFromOptions = ({
 }: {
   value: string;
   onChange: (value: string) => void;
-  options: { label: string; value: string }[];
+  options: EmbeddedStringOption[];
   showFieldSelector: boolean;
   useOptionValueSublabel?: boolean;
 }) => {

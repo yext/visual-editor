@@ -23,6 +23,8 @@ describe("createDefaultThemeConfig", () => {
         italics: true,
         weights: [400, 700],
         fallback: "sans-serif",
+        facePath: "y-fonts/custom-font.css",
+        variants: [],
       },
     };
 
@@ -46,6 +48,8 @@ describe("createDefaultThemeConfig", () => {
         italics: true,
         weights: [300, 400, 500],
         fallback: "serif",
+        facePath: "y-fonts/open-sans.css",
+        variants: [],
       },
     };
 
@@ -67,6 +71,8 @@ describe("createDefaultThemeConfig", () => {
         italics: false,
         weights: [400],
         fallback: "serif",
+        facePath: "y-fonts/custom-font.css",
+        variants: [],
       },
     };
 
@@ -100,5 +106,30 @@ describe("createDefaultThemeConfig", () => {
       label: "Open Sans",
       value: "'Open Sans', 'Open Sans Fallback', sans-serif",
     });
+  });
+
+  it("should include dynamic fontStyle controls for text styling sections", () => {
+    const result = createDefaultThemeConfig();
+
+    for (const sectionKey of [
+      "h1",
+      "h2",
+      "h3",
+      "h4",
+      "h5",
+      "h6",
+      "body",
+      "button",
+      "link",
+    ] as const) {
+      const fontStyle = (result[sectionKey].styles as any).fontStyle;
+      expect(fontStyle).toMatchObject({
+        label: "Font Style",
+        type: "select",
+        plugin: "fontStyle",
+        default: "normal",
+      });
+      expect(typeof fontStyle.options).toBe("function");
+    }
   });
 });

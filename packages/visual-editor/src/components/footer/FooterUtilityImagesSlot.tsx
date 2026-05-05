@@ -1,7 +1,6 @@
 import * as React from "react";
-import { ComponentConfig, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { cva } from "class-variance-authority";
-import { YextField } from "../../editor/YextField.tsx";
 import { AssetImageType } from "../../types/images.ts";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { MaybeLink } from "../atoms/maybeLink.tsx";
@@ -10,6 +9,7 @@ import { useDocument } from "../../hooks/useDocument.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { useTranslation } from "react-i18next";
 import { ImageStylingFields } from "../contentBlocks/image/styling.ts";
+import { YextComponentConfig } from "../../fields/fields.ts";
 
 export interface FooterUtilityImagesSlotProps {
   data: {
@@ -142,50 +142,53 @@ const FooterUtilityImagesSlotInternal: PuckComponent<
   );
 };
 
-export const FooterUtilityImagesSlot: ComponentConfig<{
-  props: FooterUtilityImagesSlotProps;
-}> = {
-  label: msg("components.footerUtilityImagesSlotLabel", "Utility Images"),
-  fields: {
-    data: YextField(msg("fields.data", "Data"), {
-      type: "object",
-      objectFields: {
-        utilityImages: YextField(
-          msg("fields.utilityImages", "Utility Images"),
-          {
+export const FooterUtilityImagesSlot: YextComponentConfig<FooterUtilityImagesSlotProps> =
+  {
+    label: msg("components.footerUtilityImagesSlotLabel", "Utility Images"),
+    fields: {
+      data: {
+        type: "object",
+        label: msg("fields.data", "Data"),
+        objectFields: {
+          utilityImages: {
             type: "array",
+            label: msg("fields.utilityImages", "Utility Images"),
             arrayFields: {
-              image: YextField(msg("fields.image", "Image"), {
+              image: {
                 type: "image",
-              }),
-              linkTarget: YextField(msg("fields.linkTarget", "Link Target"), {
+                label: msg("fields.image", "Image"),
+              },
+              linkTarget: {
+                label: msg("fields.linkTarget", "Link Target"),
                 type: "text",
-              }),
+              },
             },
-            getItemSummary: (item, index) =>
-              pt("utilityImage", "Utility Image") + " " + ((index ?? 0) + 1),
-          }
-        ),
+            getItemSummary: (
+              item: FooterUtilityImagesSlotProps["data"]["utilityImages"][number],
+              index?: number
+            ) => pt("utilityImage", "Utility Image") + " " + ((index ?? 0) + 1),
+          },
+        },
       },
-    }),
-    styles: YextField(msg("fields.styles", "Styles"), {
-      type: "object",
-      objectFields: {
-        width: ImageStylingFields.width,
-        aspectRatio: ImageStylingFields.aspectRatio as any,
+      styles: {
+        type: "object",
+        label: msg("fields.styles", "Styles"),
+        objectFields: {
+          width: ImageStylingFields.width,
+          aspectRatio: ImageStylingFields.aspectRatio,
+        },
       },
-    }),
-  },
-  defaultProps: {
-    data: {
-      utilityImages: [],
     },
-    styles: {
-      width: 0,
-      aspectRatio: 1,
+    defaultProps: {
+      data: {
+        utilityImages: [],
+      },
+      styles: {
+        width: 60,
+        aspectRatio: 1,
+      },
+      desktopContentAlignment: "left",
+      mobileContentAlignment: "left",
     },
-    desktopContentAlignment: "left",
-    mobileContentAlignment: "left",
-  },
-  render: (props) => <FooterUtilityImagesSlotInternal {...props} />,
-};
+    render: (props) => <FooterUtilityImagesSlotInternal {...props} />,
+  };

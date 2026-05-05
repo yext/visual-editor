@@ -79,6 +79,14 @@ export type ProductSectionType = {
   products: Array<ProductStruct>;
 };
 
+/** A structured product price with an amount and ISO currency code. */
+export type ProductPrice = {
+  /** The numeric price value. */
+  value?: number | string;
+  /** The ISO 4217 currency code, for example USD or GBP. */
+  currencyCode?: string;
+};
+
 /** An individual product in the ProductSection */
 export type ProductStruct = {
   /**
@@ -94,7 +102,7 @@ export type ProductStruct = {
   /**
    * The product's price
    */
-  price?: TranslatableString | TranslatableRichText;
+  price?: ProductPrice;
   /** The product's description */
   description?: TranslatableRichText;
   /**

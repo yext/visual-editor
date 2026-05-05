@@ -2,17 +2,12 @@ import React from "react";
 import { CodeXml } from "lucide-react";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
-import {
-  ComponentConfig,
-  Fields,
-  WithId,
-  WithPuckProps,
-} from "@puckeditor/core";
+import { WithId, WithPuckProps } from "@puckeditor/core";
 import { resolveEmbeddedFieldsInString } from "../../utils/resolveYextEntityField.ts";
 import { processHandlebarsTemplate } from "./customCodeHandlebars.ts";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export interface CustomCodeSectionProps {
   /**
@@ -44,38 +39,41 @@ export interface CustomCodeSectionProps {
   };
 }
 
-const customCodeSectionFields: Fields<CustomCodeSectionProps> = {
-  html: YextField(msg("fields.html", "HTML"), {
+const customCodeSectionFields: YextFields<CustomCodeSectionProps> = {
+  html: {
+    label: msg("fields.html", "HTML"),
     type: "code",
     codeLanguage: "html",
-  }),
-  css: YextField(msg("fields.css", "CSS"), {
+  },
+  css: {
+    label: msg("fields.css", "CSS"),
     type: "code",
     codeLanguage: "css",
-  }),
-  javascript: YextField(msg("fields.javascript", "JavaScript"), {
+  },
+  javascript: {
+    label: msg("fields.javascript", "JavaScript"),
     type: "code",
     codeLanguage: "javascript",
-  }),
-  liveVisibility: YextField(
-    msg("fields.visibleOnLivePage", "Visible on Live Page"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: false },
-      ],
-    }
-  ),
-  analytics: YextField(msg("fields.analytics", "Analytics"), {
+  },
+  liveVisibility: {
+    label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.show", "Show"), value: true },
+      { label: msg("fields.options.hide", "Hide"), value: false },
+    ],
+  },
+  analytics: {
     type: "object",
+    label: msg("fields.analytics", "Analytics"),
     visible: false,
     objectFields: {
-      scope: YextField(msg("fields.scope", "Scope"), {
+      scope: {
+        label: msg("fields.scope", "Scope"),
         type: "text",
-      }),
+      },
     },
-  }),
+  },
 };
 
 const EmptyCustomCodeSection = () => {
@@ -123,7 +121,7 @@ const CustomCodeSectionWrapper = ({
       const script = document.createElement("script");
       script.id = scriptTagId;
       script.type = "text/javascript";
-      script.innerHTML = processedJavascript;
+      script.text = processedJavascript;
       containerRef.current.appendChild(script);
     }
   }, [processedJavascript]);
@@ -147,9 +145,7 @@ const CustomCodeSectionWrapper = ({
  * The CustomCodeSection component allows you to add custom HTML, CSS, and JavaScript to your page.
  * It is useful for integrating third-party widgets or custom scripts that are not supported by the visual editor natively.
  */
-export const CustomCodeSection: ComponentConfig<{
-  props: CustomCodeSectionProps;
-}> = {
+export const CustomCodeSection: YextComponentConfig<CustomCodeSectionProps> = {
   label: msg("components.customCodeSection", "Custom Code Section"),
   fields: customCodeSectionFields,
   defaultProps: {

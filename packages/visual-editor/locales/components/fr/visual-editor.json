@@ -32,6 +32,7 @@
   "findALocation": "Trouver un emplacement",
   "friday": "Vendredi",
   "getDirections": "Obtenir des itinéraires",
+  "getDirectionsForLocation": "Obtenir un itinéraire pour {{address}}",
   "heroBanner": "Bannière de héros",
   "heroHeader": "En-tête principal",
   "heroImage": "Image du héros",
@@ -80,7 +81,6 @@
   "reopenDate": "Date de réouverture",
   "responseFrom": "Réponse de {{businessName}}",
   "saturday": "Samedi",
-  "searchDropdownHere": "Entrée déroulante de recherche",
   "searchHere": "Recherche ici ...",
   "searchThisArea": "Recherchez cette zone",
   "secondaryHeaderLinks": "Liens d'en-tête secondaires",
@@ -90,6 +90,8 @@
   "servicesSection": "Section des services",
   "showLess": "Montrer moins",
   "showMore": "Montrer plus",
+  "showPinDetails": "Afficher les détails de la broche {{number}}",
+  "showPinDetailsDefault": "Afficher les détails de l'épingle",
   "socialLinks": {
     "facebook": "Suivez-nous sur Facebook",
     "instagram": "Suivez-nous sur Instagram",
@@ -108,5 +110,6 @@
   "tuesday": "Mardi",
   "useOurLocatorToFindALocationNearYou": "Utilisez notre localisateur pour trouver un emplacement près de chez vous",
   "visitPage": "Page de visite",
+  "visitPageForName": "Visitez la page pour {{name}}",
   "wednesday": "Mercredi"
 }

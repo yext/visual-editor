@@ -1,5 +1,6 @@
 import React from "react";
-import { AutoField, Field, FieldLabel } from "@puckeditor/core";
+import { Field, FieldLabel } from "@puckeditor/core";
+import { YextAutoField } from "../fields/YextAutoField.tsx";
 import { useTailwindConfig } from "../hooks/useTailwindConfig.tsx";
 import { TailwindConfig } from "../utils/themeResolver.ts";
 import { pt } from "../utils/i18n/platform.ts";
@@ -66,11 +67,11 @@ export const SpacingSelector = <T,>(
 
       return (
         <FieldLabel label={label}>
-          <AutoField
+          <YextAutoField
             value={value}
             onChange={onChange}
             field={{
-              type: "select",
+              type: "basicSelector",
               options: convertDefaultSpacingsToOptions(
                 spacingType,
                 includeDefault

@@ -1,0 +1,71 @@
+.components.font-body-fontFamily,
+.components .font-body-fontFamily {
+  font-style: var(--fontStyle-body-fontStyle);
+}
+
+.components.font-button-fontFamily,
+.components .font-button-fontFamily {
+  font-style: var(--fontStyle-button-fontStyle);
+}
+
+.components.font-link-fontFamily,
+.components .font-link-fontFamily {
+  font-style: var(--fontStyle-link-fontStyle);
+}
+
+.components.font-h1-fontFamily,
+.components .font-h1-fontFamily {
+  font-style: var(--fontStyle-h1-fontStyle);
+}
+
+.components.font-h2-fontFamily,
+.components .font-h2-fontFamily {
+  font-style: var(--fontStyle-h2-fontStyle);
+}
+
+.components.font-h3-fontFamily,
+.components .font-h3-fontFamily {
+  font-style: var(--fontStyle-h3-fontStyle);
+}
+
+.components.font-h4-fontFamily,
+.components .font-h4-fontFamily {
+  font-style: var(--fontStyle-h4-fontStyle);
+}
+
+.components.font-h5-fontFamily,
+.components .font-h5-fontFamily {
+  font-style: var(--fontStyle-h5-fontStyle);
+}
+
+.components.font-h6-fontFamily,
+.components .font-h6-fontFamily {
+  font-style: var(--fontStyle-h6-fontStyle);
+}
+
+@media (min-width: 640px) {
+  .components.sm\:font-h1-fontFamily,
+  .components .sm\:font-h1-fontFamily {
+    font-style: var(--fontStyle-h1-fontStyle);
+  }
+
+  .components.sm\:font-h2-fontFamily,
+  .components .sm\:font-h2-fontFamily {
+    font-style: var(--fontStyle-h2-fontStyle);
+  }
+
+  .components.sm\:font-h3-fontFamily,
+  .components .sm\:font-h3-fontFamily {
+    font-style: var(--fontStyle-h3-fontStyle);
+  }
+
+  .components.sm\:font-h4-fontFamily,
+  .components .sm\:font-h4-fontFamily {
+    font-style: var(--fontStyle-h4-fontStyle);
+  }
+
+  .components.sm\:font-h5-fontFamily,
+  .components .sm\:font-h5-fontFamily {
+    font-style: var(--fontStyle-h5-fontStyle);
+  }
+}

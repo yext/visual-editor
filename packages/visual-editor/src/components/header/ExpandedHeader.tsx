@@ -1,19 +1,14 @@
 import * as React from "react";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  setDeep,
-  Slot,
-} from "@puckeditor/core";
+import { PuckComponent, setDeep, Slot } from "@puckeditor/core";
 import { msg } from "../../utils/i18n/platform.ts";
-import { YextField } from "../../editor/YextField.tsx";
+import { getMaxWidthOptions } from "../../editor/MaxWidthSelector.tsx";
 import { PageSectionProps } from "../atoms/pageSection.tsx";
 import { cva } from "class-variance-authority";
 import { defaultPrimaryHeaderProps } from "./PrimaryHeaderSlot.tsx";
 import { defaultSecondaryHeaderProps } from "./SecondaryHeaderSlot.tsx";
 import { ExpandedHeaderMenuProvider } from "./ExpandedHeaderMenuContext.tsx";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export const headerWrapper = cva("flex flex-col", {
   variants: {
@@ -60,28 +55,38 @@ export interface ExpandedHeaderProps {
   ignoreLocaleWarning?: string[];
 }
 
-const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
-  styles: YextField(msg("fields.styles", "Styles"), {
+const expandedHeaderSectionFields: YextFields<ExpandedHeaderProps> = {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
-      maxWidth: YextField(msg("fields.maxWidth", "Max Width"), {
-        type: "maxWidth",
-      }),
-      headerPosition: YextField(
-        msg("fields.headerPosition", "Header Position"),
-        {
-          type: "radio",
-          options: [
-            {
-              label: msg("fields.options.scrollsWithPage", "Scrolls with Page"),
-              value: "scrollsWithPage",
-            },
-            { label: msg("fields.options.fixed", "Fixed"), value: "fixed" },
-          ],
-        }
-      ),
+      maxWidth: {
+        type: "basicSelector",
+        label: msg("fields.maxWidth", "Max Width"),
+        disableSearch: true,
+        optionGroups: [
+          {
+            description: msg(
+              "maxWidthTip",
+              "For optimal content alignment, we recommend setting the header and footer width to match or exceed the page content grid."
+            ),
+            options: getMaxWidthOptions(),
+          },
+        ],
+      },
+      headerPosition: {
+        label: msg("fields.headerPosition", "Header Position"),
+        type: "radio",
+        options: [
+          {
+            label: msg("fields.options.scrollsWithPage", "Scrolls with Page"),
+            value: "scrollsWithPage",
+          },
+          { label: msg("fields.options.fixed", "Fixed"), value: "fixed" },
+        ],
+      },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {
@@ -90,15 +95,17 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
     },
     visible: false,
   },
-  analytics: YextField(msg("fields.analytics", "Analytics"), {
+  analytics: {
     type: "object",
+    label: msg("fields.analytics", "Analytics"),
     visible: false,
     objectFields: {
-      scope: YextField(msg("fields.scope", "Scope"), {
+      scope: {
+        label: msg("fields.scope", "Scope"),
         type: "text",
-      }),
+      },
     },
-  }),
+  },
 };
 
 const ExpandedHeaderWrapper: PuckComponent<ExpandedHeaderProps> = ({
@@ -107,7 +114,7 @@ const ExpandedHeaderWrapper: PuckComponent<ExpandedHeaderProps> = ({
 }) => {
   return (
     <ExpandedHeaderMenuProvider>
-      <div className={headerWrapper({ position: styles.headerPosition })}>
+      <header className={headerWrapper({ position: styles.headerPosition })}>
         {/* Secondary Header (Top Bar) */}
         <div className="hidden md:flex">
           <slots.SecondaryHeaderSlot
@@ -119,7 +126,7 @@ const ExpandedHeaderWrapper: PuckComponent<ExpandedHeaderProps> = ({
         <slots.PrimaryHeaderSlot
           style={{ height: "auto", position: "relative" }}
         />
-      </div>
+      </header>
     </ExpandedHeaderMenuProvider>
   );
 };
@@ -128,7 +135,7 @@ const ExpandedHeaderWrapper: PuckComponent<ExpandedHeaderProps> = ({
  * The Expanded Header is a two-tiered component for websites with complex navigation needs. It consists of a primary header for the main logo, navigation links, and calls-to-action, plus an optional secondary "top bar" for utility links (like "Contact Us" or "Log In") and a language selector.
  * Available on Location templates.
  */
-export const ExpandedHeader: ComponentConfig<{ props: ExpandedHeaderProps }> = {
+export const ExpandedHeader: YextComponentConfig<ExpandedHeaderProps> = {
   label: msg("components.expandedHeader", "Expanded Header"),
   fields: expandedHeaderSectionFields,
   defaultProps: {
