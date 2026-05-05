@@ -192,7 +192,7 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
       fullHeight
       ref={puck.dragRef}
     >
-      <div className="w-full h-full">
+      <div className="w-full">
         <MaybeLink
           className="w-auto"
           eventName="logoLink"
@@ -209,7 +209,7 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
                 : styles.width
             }
             className={
-              className || "max-w-full rounded-image-borderRadius w-full h-full"
+              className || "max-w-full rounded-image-borderRadius w-full"
             }
             sizes={transformedSizes}
           />
