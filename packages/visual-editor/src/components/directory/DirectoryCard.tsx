@@ -430,11 +430,10 @@ export const DirectoryCard: YextComponentConfig<DirectoryCardProps> = {
         )
       : undefined;
 
-    return setDeep(
-      data,
-      "props.slots.HeadingSlot[0].props.parentData.text",
-      headingText
-    );
+    return setDeep(data, "props.slots.HeadingSlot[0].props.parentData", {
+      field: "profile.name",
+      text: headingText,
+    });
   },
   defaultProps: {
     styles: {

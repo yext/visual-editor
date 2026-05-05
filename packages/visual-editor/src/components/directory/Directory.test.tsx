@@ -15,6 +15,7 @@ import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 import { MainContent } from "../structure/MainContent.tsx";
+import { backgroundColors } from "../../utils/themeConfigOptions.ts";
 
 const rootDocument = {
   locale: "en",
@@ -614,7 +615,7 @@ const tests: ComponentTest[] = [
     version: 40,
   },
   {
-    name: "version 58 - City with showGetDirectionsLink and showGeomodifier",
+    name: "version 58 - Slotified Address with showGetDirectionsLink",
     document: cityDocument,
     props: {
       ...version40Props,
@@ -624,6 +625,48 @@ const tests: ComponentTest[] = [
           {
             type: "DirectoryGrid",
             props: {
+              slots: {
+                CardSlot: [
+                  {
+                    type: "DirectoryCard",
+                    props: {
+                      slots: {
+                        AddressSlot: [
+                          {
+                            type: "AddressSlot",
+                            props: {
+                              styles: {
+                                showGetDirectionsLink: true,
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
+    },
+    version: 58,
+  },
+  {
+    name: "version 75 - city with showGeomodifier",
+    document: cityDocument,
+    props: {
+      ...version40Props,
+      slots: {
+        ...version40Props.slots,
+        DirectoryGrid: [
+          {
+            type: "DirectoryGrid",
+            props: {
+              styles: {
+                backgroundColor: backgroundColors.background2.value,
+              },
               slots: {
                 CardSlot: [
                   {
@@ -653,7 +696,7 @@ const tests: ComponentTest[] = [
         ],
       },
     },
-    version: 58,
+    version: 75,
   },
 ];
 
