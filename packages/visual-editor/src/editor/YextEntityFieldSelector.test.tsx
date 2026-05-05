@@ -13,7 +13,6 @@ import {
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { EmbeddedFieldStringInputFromEntity } from "./EmbeddedFieldStringInput.tsx";
 import { YextAutoField } from "../fields/YextAutoField.tsx";
-import { YextField } from "./YextField.tsx";
 import { msg } from "../utils/i18n/platform.ts";
 
 const { warningToast } = vi.hoisted(() => ({
@@ -2090,11 +2089,12 @@ describe("YextEntityFieldSelector", () => {
         >
           <EntityFieldsContext.Provider value={defaultEntityFields}>
             <YextAutoField
-              field={YextField(msg("fields.date", "Date"), {
+              field={{
                 type: "entityField",
+                label: msg("fields.date", "Date"),
                 disableConstantValueToggle: true,
                 filter: { types: ["type.datetime"] },
-              })}
+              }}
               id="date-field"
               onChange={onChange}
               value={{

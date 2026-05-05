@@ -9,7 +9,6 @@ import { msg } from "../../../utils/i18n/platform.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import { defaultTeamCardSlotData, type TeamCardProps } from "./TeamCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
-import { YextField } from "../../../editor/YextField.tsx";
 import {
   toPuckFields,
   type YextComponentConfig,
@@ -62,50 +61,57 @@ const teamCards = createItemSource<TeamCardsWrapperProps, TeamCardItem>({
   itemSourceLabel: msg("components.team", "Team"),
   itemMappingsLabel: msg("fields.cards", "Cards"),
   itemFields: {
-    headshot: YextField(msg("fields.headshot", "Headshot"), {
+    headshot: {
       type: "entityField",
+      label: msg("fields.headshot", "Headshot"),
       disableConstantValueToggle: true,
       filter: {
         types: ["type.image"],
       },
-    }),
-    name: YextField(msg("fields.name", "Name"), {
+    },
+    name: {
       type: "entityField",
+      label: msg("fields.name", "Name"),
       filter: {
         types: ["type.string"],
       },
-    }),
-    title: YextField(msg("fields.title", "Title"), {
+    },
+    title: {
       type: "entityField",
+      label: msg("fields.title", "Title"),
       filter: {
         types: ["type.string", "type.rich_text_v2"],
       },
-    }),
-    phoneNumber: YextField(msg("fields.phone", "Phone"), {
+    },
+    phoneNumber: {
       type: "entityField",
+      label: msg("fields.phone", "Phone"),
       filter: {
         types: ["type.phone", "type.string"],
       },
-    }),
-    email: YextField(msg("fields.email", "Email"), {
+    },
+    email: {
       type: "entityField",
+      label: msg("fields.email", "Email"),
       filter: {
         types: ["type.string"],
       },
-    }),
-    cta: YextField(msg("fields.cta", "CTA"), {
+    },
+    cta: {
       type: "entityField",
+      label: msg("fields.cta", "CTA"),
       filter: {
         types: ["type.cta"],
       },
-    }),
+    },
   },
 });
 
 const teamCardsWrapperFields: YextFields<TeamCardsWrapperProps> = {
   ...teamCards.fields,
-  styles: YextField(msg("fields.styles", "Styles"), {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       showImage: {
         label: msg("fields.showImage", "Show Image"),
@@ -133,7 +139,7 @@ const teamCardsWrapperFields: YextFields<TeamCardsWrapperProps> = {
         options: ThemeOptions.SHOW_HIDE,
       },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {

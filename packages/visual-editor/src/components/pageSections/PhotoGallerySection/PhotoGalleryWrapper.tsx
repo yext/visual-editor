@@ -9,7 +9,6 @@ import { themeManagerCn } from "../../../utils/cn.ts";
 import { useBackground } from "../../../hooks/useBackground.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
-import { YextField } from "../../../editor/YextField.tsx";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { getThemeColorCssValue } from "../../../utils/colors.ts";
@@ -83,8 +82,9 @@ export interface PhotoGalleryWrapperProps {
 }
 
 const photoGalleryWrapperFields: YextFields<PhotoGalleryWrapperProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
       images: {
         type: "entityField",
@@ -95,14 +95,16 @@ const photoGalleryWrapperFields: YextFields<PhotoGalleryWrapperProps> = {
         },
       },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
-      image: YextField(msg("fields.image", "Image"), {
+      image: {
         type: "object",
+        label: msg("fields.image", "Image"),
         objectFields: ImageStylingFields,
-      }),
+      },
       imageFillType: {
         type: "basicSelector",
         label: msg("fields.imageFillType", "Image Fill Type"),
@@ -128,7 +130,7 @@ const photoGalleryWrapperFields: YextFields<PhotoGalleryWrapperProps> = {
         visible: false,
       },
     },
-  }),
+  },
 };
 
 interface DynamicChildColorsProps {

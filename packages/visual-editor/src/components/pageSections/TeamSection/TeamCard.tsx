@@ -4,7 +4,6 @@ import {
   ThemeColor,
   backgroundColors,
 } from "../../../utils/themeConfigOptions.ts";
-import { YextField } from "../../../editor/YextField.tsx";
 import { Background } from "../../atoms/background.tsx";
 import { PersonStruct } from "../../../types/types.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
@@ -246,8 +245,9 @@ export type TeamCardProps = {
 };
 
 const teamCardFields: YextFields<TeamCardProps> = {
-  styles: YextField(msg("fields.styles", "Styles"), {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
         type: "basicSelector",
@@ -255,7 +255,7 @@ const teamCardFields: YextFields<TeamCardProps> = {
         options: "BACKGROUND_COLOR",
       },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {

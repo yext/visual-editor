@@ -3,9 +3,12 @@ import {
   type DefaultComponentProps,
   type Fields,
 } from "@puckeditor/core";
-import { type YextFieldDefinition } from "../../editor/YextField.tsx";
 import { type YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
-import { toPuckFields, type YextFieldMap } from "../../fields/fields.ts";
+import {
+  toPuckFields,
+  type YextFieldDefinition,
+  type YextFieldMap,
+} from "../../fields/fields.ts";
 import {
   returnConstantFieldConfig,
   type EntityFieldSelectorField,

@@ -5,7 +5,6 @@ import {
   ThemeColor,
   ThemeOptions,
 } from "../../utils/themeConfigOptions.ts";
-import { YextField } from "../../editor/YextField.tsx";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../utils/applyAnalytics.ts";
@@ -275,8 +274,9 @@ const ProfessionalHero: PuckComponent<ProfessionalHeroSectionProps> = (
 
 const professionalHeroSectionFields: YextFields<ProfessionalHeroSectionProps> =
   {
-    styles: YextField(msg("fields.styles", "Styles"), {
+    styles: {
       type: "object",
+      label: msg("fields.styles", "Styles"),
       objectFields: {
         backgroundColor: {
           type: "basicSelector",
@@ -376,7 +376,7 @@ const professionalHeroSectionFields: YextFields<ProfessionalHeroSectionProps> =
           options: ThemeOptions.SHOW_HIDE,
         },
       },
-    }),
+    },
     slots: {
       type: "object",
       objectFields: {
@@ -394,8 +394,9 @@ const professionalHeroSectionFields: YextFields<ProfessionalHeroSectionProps> =
       },
       visible: false,
     },
-    analytics: YextField(msg("fields.analytics", "Analytics"), {
+    analytics: {
       type: "object",
+      label: msg("fields.analytics", "Analytics"),
       visible: false,
       objectFields: {
         scope: {
@@ -403,7 +404,7 @@ const professionalHeroSectionFields: YextFields<ProfessionalHeroSectionProps> =
           type: "text",
         },
       },
-    }),
+    },
     liveVisibility: {
       label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
       type: "radio",

@@ -46,7 +46,12 @@ import {
   hoursTableFields,
   HoursTable,
 } from "../../contentBlocks/HoursTable.tsx";
-import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
+import {
+  YextComponentConfig,
+  YextCustomFieldRenderProps,
+  YextFieldDefinition,
+  YextFields,
+} from "../../../fields/fields.ts";
 
 export type AboutSectionDetailsColumnProps = {
   sections: DetailSection[];
@@ -79,6 +84,10 @@ type DetailSection = {
     socialMedia?: FooterSocialLinksSlotProps;
   };
 };
+
+type DetailSectionContentValue = NonNullable<
+  Omit<DetailSection["content"], "type">[DetailSection["content"]["type"]]
+>;
 
 export const defaultAboutSectionProps: Omit<DetailSection["content"], "type"> =
   {
@@ -182,7 +191,7 @@ const typeToFields = (
   type: DetailSection["content"]["type"],
   data: DetailSection["content"]
 ) => {
-  const fields: Record<DetailSection["content"]["type"], YextFields<any>> = {
+  const fields: Record<DetailSection["content"]["type"], YextFields> = {
     hoursStatus: hoursStatusWrapperFields,
     hoursTable: hoursTableFields,
     address:
@@ -213,8 +222,14 @@ const aboutSectionDetailsColumnFields: YextFields<AboutSectionDetailsColumnProps
         content: {
           type: "custom",
           label: msg("fields.content", "Content"),
-          render: (props) => {
-            const { value, onChange } = props;
+          render: ({
+            value,
+            onChange,
+          }: YextCustomFieldRenderProps<DetailSection["content"]>) => {
+            const content = value ?? {
+              type: "hoursStatus",
+              hoursStatus: defaultAboutSectionProps.hoursStatus,
+            };
 
             return (
               <div>
@@ -224,9 +239,12 @@ const aboutSectionDetailsColumnFields: YextFields<AboutSectionDetailsColumnProps
                   className="mb-3"
                 >
                   <YextAutoField
-                    value={value.type}
-                    onChange={(v) => {
-                      onChange({ type: v, [v]: defaultAboutSectionProps[v] });
+                    value={content.type}
+                    onChange={(v: DetailSection["content"]["type"]) => {
+                      onChange({
+                        type: v,
+                        [v]: defaultAboutSectionProps[v],
+                      } as DetailSection["content"]);
                     }}
                     field={{
                       type: "basicSelector",
@@ -275,16 +293,22 @@ const aboutSectionDetailsColumnFields: YextFields<AboutSectionDetailsColumnProps
                 </FieldLabel>
                 <YextAutoField
                   value={
-                    value?.[value.type] ?? defaultAboutSectionProps[value.type]
+                    (content[content.type] ??
+                      defaultAboutSectionProps[
+                        content.type
+                      ]) as DetailSectionContentValue
                   }
                   onChange={(v) =>
-                    onChange({ type: value.type, [value.type]: v })
+                    onChange({
+                      type: content.type,
+                      [content.type]: v,
+                    } as DetailSection["content"])
                   }
                   field={
                     {
                       type: "object",
-                      objectFields: typeToFields(value.type, value),
-                    } as any
+                      objectFields: typeToFields(content.type, content),
+                    } as YextFieldDefinition<DetailSectionContentValue>
                   }
                 />
               </div>
@@ -303,8 +327,7 @@ const aboutSectionDetailsColumnFields: YextFields<AboutSectionDetailsColumnProps
           hoursStatus: defaultAboutSectionProps.hoursStatus,
         },
       },
-      // TODO(SUMO-8378): remove typings
-      getItemSummary: (item: any, i?: number) => {
+      getItemSummary: (item: DetailSection, i?: number) => {
         const locale = i18nComponentsInstance.language;
         return (
           resolveComponentData(item.header, locale) ||

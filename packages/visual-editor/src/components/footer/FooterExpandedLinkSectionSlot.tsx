@@ -1,6 +1,5 @@
 import * as React from "react";
 import { PuckComponent, setDeep } from "@puckeditor/core";
-import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
@@ -115,16 +114,18 @@ const shouldShowNormalizeLinkField = (links?: TranslatableCTA[]) => {
 
 const footerExpandedLinkSectionSlotFields: YextFields<FooterExpandedLinkSectionSlotProps> =
   {
-    data: YextField(msg("fields.data", "Data"), {
+    data: {
       type: "object",
+      label: msg("fields.data", "Data"),
       objectFields: {
         label: {
           type: "translatableString",
           label: msg("fields.label", "Label"),
           filter: { types: ["type.string"] },
         },
-        links: YextField(msg("fields.links", "Links"), {
+        links: {
           type: "array",
+          label: msg("fields.links", "Links"),
           arrayFields: {
             linkType: {
               label: msg("fields.linkType", "Link Type"),
@@ -170,11 +171,12 @@ const footerExpandedLinkSectionSlotFields: YextFields<FooterExpandedLinkSectionS
                 : item.label?.[locale];
             return label || pt("link", "Link") + " " + ((index ?? 0) + 1);
           },
-        }),
+        },
       },
-    }),
-    styles: YextField(msg("fields.styles", "Styles"), {
+    },
+    styles: {
       type: "object",
+      label: msg("fields.styles", "Styles"),
       objectFields: {
         color: {
           type: "basicSelector",
@@ -182,7 +184,7 @@ const footerExpandedLinkSectionSlotFields: YextFields<FooterExpandedLinkSectionS
           options: "SITE_COLOR",
         },
       },
-    }),
+    },
     index: {
       type: "number",
       visible: false,

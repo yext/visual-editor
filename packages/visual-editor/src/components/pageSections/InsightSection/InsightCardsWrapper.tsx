@@ -13,7 +13,6 @@ import {
   type InsightCardProps,
 } from "./InsightCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
-import { YextField } from "../../../editor/YextField.tsx";
 import {
   toPuckFields,
   type YextComponentConfig,
@@ -68,51 +67,58 @@ const insightCards = createItemSource<
   itemSourceLabel: msg("fields.insights", "Insights"),
   itemMappingsLabel: msg("fields.cards", "Cards"),
   itemFields: {
-    image: YextField(msg("fields.image", "Image"), {
+    image: {
       type: "entityField",
+      label: msg("fields.image", "Image"),
       disableConstantValueToggle: true,
       filter: {
         types: ["type.image"],
       },
-    }),
-    name: YextField(msg("fields.name", "Name"), {
+    },
+    name: {
       type: "entityField",
+      label: msg("fields.name", "Name"),
       filter: {
         types: ["type.string"],
       },
-    }),
-    category: YextField(msg("fields.category", "Category"), {
+    },
+    category: {
       type: "entityField",
+      label: msg("fields.category", "Category"),
       filter: {
         types: ["type.string", "type.rich_text_v2"],
       },
-    }),
-    publishTime: YextField(msg("fields.publishTime", "Publish Time"), {
+    },
+    publishTime: {
       type: "entityField",
+      label: msg("fields.publishTime", "Publish Time"),
       disableConstantValueToggle: true,
       filter: {
         types: ["type.datetime"],
       },
-    }),
-    description: YextField(msg("fields.description", "Description"), {
+    },
+    description: {
       type: "entityField",
+      label: msg("fields.description", "Description"),
       filter: {
         types: ["type.string", "type.rich_text_v2"],
       },
-    }),
-    cta: YextField(msg("fields.cta", "CTA"), {
+    },
+    cta: {
       type: "entityField",
+      label: msg("fields.cta", "CTA"),
       filter: {
         types: ["type.cta"],
       },
-    }),
+    },
   },
 });
 
 const insightCardsWrapperFields: YextFields<InsightCardsWrapperProps> = {
   ...insightCards.fields,
-  styles: YextField(msg("fields.styles", "Styles"), {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       showImage: {
         label: msg("fields.showImage", "Show Image"),
@@ -140,7 +146,7 @@ const insightCardsWrapperFields: YextFields<InsightCardsWrapperProps> = {
         options: ThemeOptions.SHOW_HIDE,
       },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {

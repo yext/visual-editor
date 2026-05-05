@@ -318,6 +318,12 @@ type BorderRadiusOption = {
   value: string;
 };
 
+const defineBorderRadiusOptions = <
+  const T extends readonly BorderRadiusOption[],
+>(
+  options: T
+) => [...options];
+
 const buttonBorderRadiusOptions: BorderRadiusOption[] = [
   { label: msg("theme.options.none", "None"), value: "0px" },
   { label: "XS (2px)", value: "2px" },
@@ -328,7 +334,7 @@ const buttonBorderRadiusOptions: BorderRadiusOption[] = [
   { label: msg("theme.options.pill", "Pill"), value: "9999px" },
 ];
 
-const imageBorderRadiusOptions: BorderRadiusOption[] = [
+const imageBorderRadiusOptions = defineBorderRadiusOptions([
   { label: msg("theme.options.none", "None"), value: "0px" },
   { label: "XS (2px)", value: "2px" },
   { label: "SM (4px)", value: "4px" },
@@ -342,7 +348,10 @@ const imageBorderRadiusOptions: BorderRadiusOption[] = [
     label: msg("theme.options.circle", "Circle"),
     value: "9999px",
   },
-];
+] satisfies readonly BorderRadiusOption[]);
+
+export type ImageBorderRadius =
+  (typeof imageBorderRadiusOptions)[number]["value"];
 
 const ctaVariantOptions = [
   {

@@ -22,12 +22,11 @@ import { useTemplateProps } from "../hooks/useDocument.tsx";
 import { resolveComponentData } from "../utils/resolveComponentData.tsx";
 import { HoursStatusAtom } from "./atoms/hoursStatus.tsx";
 import { HoursTableAtom } from "./atoms/hoursTable.tsx";
-import {
-  YextField,
-  type YextCustomFieldRenderProps,
-  type YextObjectField,
-} from "../editor/YextField.tsx";
 import { type BasicSelectorField } from "../fields/BasicSelectorField.tsx";
+import type {
+  YextCustomFieldRenderProps,
+  YextObjectField,
+} from "../fields/fields.ts";
 import {
   buildLocatorDisplayOptions,
   type ImageField,
@@ -341,7 +340,7 @@ const LOCATOR_IMAGE_CONSTANT_CONFIG: ImageField = {
 const getDisplayFieldOptions = (
   fieldTypeId: string | string[]
 ): EmbeddedStringOption[] => {
-  // TODO: This breaks the rule of hooks, refactor after YextField is converted to a fieldType
+  // TODO: This breaks the rule of hooks, refactor the custom render path
   const templateMetadata = useTemplateMetadata();
   if (!templateMetadata?.locatorDisplayFields) {
     return [];
@@ -522,10 +521,11 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
         type: "object",
         objectFields: {
           field: DisplayFieldSelector("type.hours"),
-          table: YextField(msg("fields.hoursColumn", "Hours Column"), {
+          table: {
             type: "object",
+            label: msg("fields.hoursColumn", "Hours Column"),
             objectFields: HoursTableStyleFields,
-          }),
+          },
           liveVisibility: {
             label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
             type: "radio",

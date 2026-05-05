@@ -5,7 +5,6 @@ import { EntityField } from "../../editor/EntityField.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { PhoneAtom } from "../atoms/phone.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
-import { YextField } from "../../editor/YextField.tsx";
 import { TranslatableString } from "../../types/types.ts";
 import {
   ThemeColor,
@@ -95,14 +94,16 @@ export const defaultPhoneDataProps: PhoneProps["data"] = {
 };
 
 export const PhoneFields: YextFields<PhoneProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: PhoneDataFields,
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: PhoneStyleFields,
-  }),
+  },
 };
 
 const PhoneComponent = ({ data, styles, parentData }: PhoneProps) => {

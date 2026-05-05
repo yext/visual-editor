@@ -4,7 +4,6 @@ import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { PageSection } from "../atoms/pageSection.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
 import { TranslatableRichText } from "../../types/types.ts";
@@ -78,8 +77,9 @@ export interface BannerSectionProps {
 }
 
 const bannerSectionFields: YextFields<BannerSectionProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
       text: {
         type: "entityField",
@@ -89,9 +89,10 @@ const bannerSectionFields: YextFields<BannerSectionProps> = {
         },
       },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
         type: "basicSelector",
@@ -109,7 +110,7 @@ const bannerSectionFields: YextFields<BannerSectionProps> = {
         options: ThemeOptions.ALIGNMENT,
       },
     },
-  }),
+  },
   liveVisibility: {
     label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
     type: "radio",

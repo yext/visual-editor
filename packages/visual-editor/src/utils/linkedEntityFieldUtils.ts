@@ -1,11 +1,11 @@
 import {
   type StreamFields,
-  type YextFieldDefinition,
   type YextSchemaField,
+  type YextSchemaFieldDefinition,
 } from "../types/entityFields.ts";
 
 const isLinkedEntityDefinition = (
-  definition: YextFieldDefinition | undefined
+  definition: YextSchemaFieldDefinition | undefined
 ): boolean =>
   definition?.typeRegistryId === "type.entity_reference" ||
   definition?.type?.documentType === "DOCUMENT_TYPE_ENTITY";

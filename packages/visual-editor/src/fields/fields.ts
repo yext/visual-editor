@@ -1,9 +1,12 @@
 import type {
+  ArrayField,
+  CustomField,
   ComponentConfig,
   DefaultComponentProps,
+  Field,
   Fields,
+  ObjectField,
 } from "@puckeditor/core";
-import type { YextFieldDefinition } from "../editor/YextField.tsx";
 import {
   BasicSelectorField,
   BasicSelectorFieldOverride,
@@ -43,6 +46,10 @@ import {
   StyledButtonFieldOverride,
 } from "./styledFields/StyledButtonField.tsx";
 import {
+  StyledImageField,
+  StyledImageFieldOverride,
+} from "./styledFields/StyledImageField.tsx";
+import {
   StyledLinkField,
   StyledLinkFieldOverride,
 } from "./styledFields/StyledLinkField.tsx";
@@ -72,6 +79,7 @@ export type YextPuckFields = {
   itemSource: ItemSourceField;
   optionalNumber: OptionalNumberField;
   styledButton: StyledButtonField;
+  styledImage: StyledImageField;
   styledLink: StyledLinkField;
   styledPageSection: StyledPageSectionField;
   styledText: StyledTextField;
@@ -79,12 +87,50 @@ export type YextPuckFields = {
   video: VideoField;
 };
 
+export type YextPuckField = YextPuckFields[keyof YextPuckFields];
+
+export type YextArrayField<
+  Props extends { [key: string]: any }[] = { [key: string]: any }[],
+> = Omit<ArrayField<Props, YextPuckField>, "arrayFields"> & {
+  arrayFields: YextFieldMap<Props[0]>;
+};
+
+export type YextObjectField<
+  Props extends { [key: string]: any } = { [key: string]: any },
+> = Omit<ObjectField<Props, YextPuckField>, "objectFields"> & {
+  objectFields: YextFieldMap<Props>;
+};
+
+export type YextCustomFieldRenderProps<ValueType> = Parameters<
+  CustomField<ValueType>["render"]
+>[0];
+
+export type YextFieldDefinition<ValueType = any> =
+  | Field<ValueType, YextPuckField>
+  | Field<NonNullable<ValueType>, YextPuckField>
+  | YextPuckField
+  | (ValueType extends Record<string, any>[]
+      ? YextArrayField<ValueType>
+      : never)
+  | (ValueType extends Record<string, any>
+      ? YextObjectField<ValueType>
+      : never);
+
 export type YextComponentConfig<
   Props extends DefaultComponentProps = DefaultComponentProps,
-> = ComponentConfig<{
-  props: Props;
-  fields: YextPuckFields;
-}>;
+> = Omit<
+  ComponentConfig<{
+    props: Props;
+    fields: YextPuckFields;
+  }>,
+  "fields" | "resolveFields"
+> & {
+  fields?: YextFields<Props>;
+  resolveFields?: ComponentConfig<{
+    props: Props;
+    fields: YextPuckFields;
+  }>["resolveFields"];
+};
 
 // TODO(SUMO-8378): Remove this and make YextFieldsInternal -> YextFields once Puck fixes their objectField typing
 export type YextFields<
@@ -93,7 +139,7 @@ export type YextFields<
 
 type YextFieldsInternal<
   T extends DefaultComponentProps = DefaultComponentProps,
-> = NonNullable<YextComponentConfig<T>["fields"]>;
+> = Fields<T, any>;
 
 export type YextFieldMap<
   T extends DefaultComponentProps = DefaultComponentProps,
@@ -122,6 +168,7 @@ export const YextPuckFieldOverrides = {
   itemSource: ItemSourceFieldOverride,
   optionalNumber: OptionalNumberFieldOverride,
   styledButton: StyledButtonFieldOverride,
+  styledImage: StyledImageFieldOverride,
   styledLink: StyledLinkFieldOverride,
   styledPageSection: StyledPageSectionFieldOverride,
   styledText: StyledTextFieldOverride,

@@ -11,6 +11,12 @@ export {
 } from "./StyledButtonField.tsx";
 
 export {
+  StyledImageFieldOverride,
+  type StyledImageField,
+  type StyledImageValue,
+} from "./StyledImageField.tsx";
+
+export {
   StyledLinkFieldOverride,
   type StyledLinkField,
   type StyledLinkValue,

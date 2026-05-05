@@ -15,7 +15,6 @@ import {
 import { MaybeLink } from "../../atoms/maybeLink.tsx";
 import { TranslatableString } from "../../../types/types.ts";
 import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
-import { YextField } from "../../../editor/YextField.tsx";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { resolveDataFromParent } from "../../../editor/ParentData.tsx";
@@ -60,8 +59,9 @@ export interface ImageWrapperProps {
 }
 
 export const ImageWrapperFields: YextFields<ImageWrapperProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
       image: {
         type: "entityField",
@@ -75,13 +75,14 @@ export const ImageWrapperFields: YextFields<ImageWrapperProps> = {
         label: msg("fields.link", "Link"),
       },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       ...ImageStylingFields,
     },
-  }),
+  },
   showImageConstrain: {
     label: msg("fields.showImageConstrain", "Show Image Constrain"),
     type: "radio",

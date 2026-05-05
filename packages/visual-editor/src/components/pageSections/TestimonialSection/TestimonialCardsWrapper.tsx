@@ -16,7 +16,6 @@ import {
   type TestimonialCardProps,
 } from "./TestimonialCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
-import { YextField } from "../../../editor/YextField.tsx";
 import {
   toPuckFields,
   type YextComponentConfig,
@@ -69,39 +68,37 @@ const testimonialCards = createItemSource<
   itemSourceLabel: msg("components.testimonial", "Testimonial"),
   itemMappingsLabel: msg("fields.cards", "Cards"),
   itemFields: {
-    description: YextField(msg("fields.description", "Description"), {
+    description: {
       type: "entityField",
+      label: msg("fields.description", "Description"),
       filter: {
         types: ["type.string", "type.rich_text_v2"],
       },
-    }),
-    contributorName: YextField(
-      msg("fields.contributorName", "Contributor Name"),
-      {
-        type: "entityField",
-        filter: {
-          types: ["type.string"],
-        },
-      }
-    ),
-    contributionDate: YextField(
-      msg("fields.contributionDate", "Contribution Date"),
-      {
-        type: "entityField",
-        disableConstantValueToggle: true,
-        filter: {
-          types: ["type.datetime"],
-        },
-      }
-    ),
+    },
+    contributorName: {
+      type: "entityField",
+      label: msg("fields.contributorName", "Contributor Name"),
+      filter: {
+        types: ["type.string"],
+      },
+    },
+    contributionDate: {
+      type: "entityField",
+      label: msg("fields.contributionDate", "Contribution Date"),
+      disableConstantValueToggle: true,
+      filter: {
+        types: ["type.datetime"],
+      },
+    },
   },
 });
 
 const testimonialCardsWrapperFields: YextFields<TestimonialCardsWrapperProps> =
   {
     ...testimonialCards.fields,
-    styles: YextField(msg("fields.styles", "Styles"), {
+    styles: {
       type: "object",
+      label: msg("fields.styles", "Styles"),
       objectFields: {
         showName: {
           label: msg("fields.showName", "Show Name"),
@@ -114,7 +111,7 @@ const testimonialCardsWrapperFields: YextFields<TestimonialCardsWrapperProps> =
           options: ThemeOptions.SHOW_HIDE,
         },
       },
-    }),
+    },
     slots: {
       type: "object",
       objectFields: {
@@ -123,7 +120,6 @@ const testimonialCardsWrapperFields: YextFields<TestimonialCardsWrapperProps> =
       visible: false,
     },
   };
-
 const createTestimonialCard = (
   currentCards: ComponentData<TestimonialCardProps>[]
 ): ComponentData<TestimonialCardProps> => {

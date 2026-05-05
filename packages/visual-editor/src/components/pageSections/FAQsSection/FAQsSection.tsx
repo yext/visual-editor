@@ -10,7 +10,6 @@ import {
   ThemeOptions,
 } from "../../../utils/themeConfigOptions.ts";
 import { PageSection } from "../../atoms/pageSection.tsx";
-import { YextField } from "../../../editor/YextField.tsx";
 import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
@@ -69,25 +68,28 @@ const faqs = createItemSource<FAQSectionProps, FAQItem>({
   itemSourceLabel: msg("fields.faqs", "FAQs"),
   itemMappingsLabel: msg("fields.faqMapping", "FAQ Mapping"),
   itemFields: {
-    question: YextField(msg("fields.question", "Question"), {
+    question: {
       type: "entityField",
+      label: msg("fields.question", "Question"),
       filter: {
         types: ["type.string", "type.rich_text_v2"],
       },
-    }),
-    answer: YextField(msg("fields.answer", "Answer"), {
+    },
+    answer: {
       type: "entityField",
+      label: msg("fields.answer", "Answer"),
       filter: {
         types: ["type.rich_text_v2"],
       },
-    }),
+    },
   },
 });
 
 const FAQsSectionFields: YextFields<FAQSectionProps> = {
   ...faqs.fields,
-  styles: YextField(msg("fields.styles", "Styles"), {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
         type: "basicSelector",
@@ -100,7 +102,7 @@ const FAQsSectionFields: YextFields<FAQSectionProps> = {
         options: ThemeOptions.SHOW_HIDE,
       },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {
@@ -109,8 +111,9 @@ const FAQsSectionFields: YextFields<FAQSectionProps> = {
     },
     visible: false,
   },
-  analytics: YextField(msg("fields.analytics", "Analytics"), {
+  analytics: {
     type: "object",
+    label: msg("fields.analytics", "Analytics"),
     visible: false,
     objectFields: {
       scope: {
@@ -118,7 +121,7 @@ const FAQsSectionFields: YextFields<FAQSectionProps> = {
         type: "text",
       },
     },
-  }),
+  },
   liveVisibility: {
     label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
     type: "radio",

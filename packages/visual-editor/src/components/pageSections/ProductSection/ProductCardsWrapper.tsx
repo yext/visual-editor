@@ -12,7 +12,6 @@ import {
   type ProductCardProps,
 } from "./ProductCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
-import { YextField } from "../../../editor/YextField.tsx";
 import {
   toPuckFields,
   type YextComponentConfig,
@@ -71,50 +70,57 @@ const productCards = createItemSource<
   itemSourceLabel: msg("components.products", "Products"),
   itemMappingsLabel: msg("fields.cards", "Cards"),
   itemFields: {
-    image: YextField(msg("fields.image", "Image"), {
+    image: {
       type: "entityField",
+      label: msg("fields.image", "Image"),
       disableConstantValueToggle: true,
       filter: {
         types: ["type.image"],
       },
-    }),
-    brow: YextField(msg("fields.browText", "Brow Text"), {
+    },
+    brow: {
       type: "entityField",
+      label: msg("fields.browText", "Brow Text"),
       filter: {
         types: ["type.string", "type.rich_text_v2"],
       },
-    }),
-    name: YextField(msg("fields.name", "Name"), {
+    },
+    name: {
       type: "entityField",
+      label: msg("fields.name", "Name"),
       filter: {
         types: ["type.string"],
       },
-    }),
-    price: YextField(msg("fields.price", "Price"), {
+    },
+    price: {
       type: "entityField",
+      label: msg("fields.price", "Price"),
       filter: {
         types: ["type.string"],
       },
-    }),
-    description: YextField(msg("fields.description", "Description"), {
+    },
+    description: {
       type: "entityField",
+      label: msg("fields.description", "Description"),
       filter: {
         types: ["type.string", "type.rich_text_v2"],
       },
-    }),
-    cta: YextField(msg("fields.cta", "CTA"), {
+    },
+    cta: {
       type: "entityField",
+      label: msg("fields.cta", "CTA"),
       filter: {
         types: ["type.cta"],
       },
-    }),
+    },
   },
 });
 
 const productCardsWrapperFields: YextFields<ProductCardsWrapperProps> = {
   ...productCards.fields,
-  styles: YextField(msg("fields.styles", "Styles"), {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       showImage: {
         label: msg("fields.showImage", "Show Image"),
@@ -147,7 +153,7 @@ const productCardsWrapperFields: YextFields<ProductCardsWrapperProps> = {
         options: ThemeOptions.SHOW_HIDE,
       },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {

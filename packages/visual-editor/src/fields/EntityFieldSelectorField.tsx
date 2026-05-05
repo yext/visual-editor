@@ -1,6 +1,6 @@
 import React from "react";
 import { BaseField, FieldLabel, type FieldProps } from "@puckeditor/core";
-import { type YextFieldDefinition } from "../editor/YextField.tsx";
+import { type YextFieldDefinition } from "./fields.ts";
 import { type BasicSelectorField } from "./BasicSelectorField.tsx";
 import { YextAutoField } from "./YextAutoField.tsx";
 import { DATE_TIME_CONSTANT_CONFIG } from "./DateTimeSelectorField.tsx";

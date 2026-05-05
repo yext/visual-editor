@@ -13,7 +13,6 @@ import { MaybeLink } from "../atoms/maybeLink.tsx";
 import { PageSection } from "../atoms/pageSection.tsx";
 import { backgroundColors } from "../../utils/themeConfigOptions.ts";
 import { Background } from "../atoms/background.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { Image } from "../atoms/image.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { FaTimes, FaBars } from "react-icons/fa";
@@ -53,10 +52,11 @@ export interface HeaderProps {
 }
 
 const headerFields: YextFields<HeaderProps> = {
-  logoWidth: YextField(msg("fields.logoWidth", "Logo Width"), {
+  logoWidth: {
     type: "number",
+    label: msg("fields.logoWidth", "Logo Width"),
     min: 0,
-  }),
+  },
   enableLanguageSelector: {
     label: msg("fields.enableLanguageSelector", "Enable Language Selector"),
     type: "radio",
@@ -65,8 +65,9 @@ const headerFields: YextFields<HeaderProps> = {
       { label: msg("fields.options.no", "No"), value: false },
     ],
   },
-  analytics: YextField(msg("fields.analytics", "Analytics"), {
+  analytics: {
     type: "object",
+    label: msg("fields.analytics", "Analytics"),
     visible: false,
     objectFields: {
       scope: {
@@ -74,7 +75,7 @@ const headerFields: YextFields<HeaderProps> = {
         type: "text",
       },
     },
-  }),
+  },
 };
 
 /**

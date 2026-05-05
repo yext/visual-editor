@@ -1,6 +1,5 @@
 import React from "react";
 import { BaseField, FieldLabel, type FieldProps } from "@puckeditor/core";
-import { type YextFieldDefinition } from "../editor/YextField.tsx";
 import { pt, type MsgString } from "../utils/i18n/platform.ts";
 import {
   ConstantValueModeToggler,
@@ -8,7 +7,7 @@ import {
 } from "./EntityFieldSelectorField.tsx";
 import { YextAutoField } from "./YextAutoField.tsx";
 import { type MappedSourceFieldFilter } from "../utils/cardSlots/mappedSource.ts";
-import { type YextFieldMap } from "./fields.ts";
+import { type YextFieldDefinition, type YextFieldMap } from "./fields.ts";
 
 export type ItemSourceValue<TItem extends Record<string, unknown>> = {
   field: string;

@@ -11,7 +11,6 @@ import {
   backgroundColors,
 } from "../../utils/themeConfigOptions.ts";
 import { PageSection } from "../atoms/pageSection.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import {
   FaFacebook,
@@ -51,8 +50,9 @@ const footerFields: YextFields<FooterProps> = {
     label: msg("fields.backgroundColor", "Background Color"),
     options: "BACKGROUND_COLOR",
   },
-  analytics: YextField(msg("fields.analytics", "Analytics"), {
+  analytics: {
     type: "object",
+    label: msg("fields.analytics", "Analytics"),
     visible: false,
     objectFields: {
       scope: {
@@ -60,7 +60,7 @@ const footerFields: YextFields<FooterProps> = {
         type: "text",
       },
     },
-  }),
+  },
 };
 
 /**

@@ -3,7 +3,6 @@ import {
   ThemeColor,
   backgroundColors,
 } from "../../../utils/themeConfigOptions.ts";
-import { YextField } from "../../../editor/YextField.tsx";
 import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { Background } from "../../atoms/background.tsx";
@@ -275,8 +274,9 @@ export type ProductCardProps = {
 };
 
 const ProductCardFields: YextFields<ProductCardProps> = {
-  styles: YextField(msg("fields.styles", "Styles"), {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
         type: "basicSelector",
@@ -284,7 +284,7 @@ const ProductCardFields: YextFields<ProductCardProps> = {
         options: "BACKGROUND_COLOR",
       },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {
