@@ -17,11 +17,16 @@ import {
   type YextComponentConfig,
   type YextFields,
 } from "../../../fields/fields.ts";
+import { ProductSectionVariant } from "./ProductSection.tsx";
+import { renderMappedEntityFieldEmptyState } from "../EntityFieldSectionEmptyState.tsx";
+import {
+  MappedEntityFieldConditionalRender,
+  withMappedEntityFieldConditionalRender,
+} from "../entityFieldSectionUtils.ts";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 import { type YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { type StreamDocument, createItemSource } from "../../../utils/index.ts";
 import { buildListSectionCards } from "../../../utils/cardSlots/listSectionData.ts";
-import { type ProductSectionVariant } from "./ProductSection.tsx";
 
 type ProductCardItem = {
   image: YextEntityField<ProductStruct["image"]>;
@@ -51,6 +56,7 @@ export type ProductCardsWrapperProps = {
   slots: {
     CardSlot: Slot;
   };
+  conditionalRender?: MappedEntityFieldConditionalRender;
 };
 
 const defaultProductCta = {
@@ -162,10 +168,6 @@ const productCardsWrapperFields: YextFields<ProductCardsWrapperProps> = {
   },
 };
 
-/**
- * Creates a new ProductCard shell using the first existing card as the styling
- * template for newly synced cards.
- */
 const createProductCard = (
   currentCards: ComponentData<ProductCardProps>[]
 ): ComponentData<ProductCardProps> => {
@@ -179,13 +181,9 @@ const createProductCard = (
   ) as unknown as ComponentData<ProductCardProps>;
 };
 
-/**
- * Keeps the hidden CardSlot array aligned with the current linked or manual
- * item list while preserving existing card styling where possible.
- */
 const syncCards = <TData extends { props: ProductCardsWrapperProps }>(
   data: TData,
-  resolvedItems: Record<string, unknown>[]
+  items: Record<string, unknown>[]
 ): TData => {
   const currentCards =
     (data.props.slots
@@ -196,7 +194,7 @@ const syncCards = <TData extends { props: ProductCardsWrapperProps }>(
     "props.slots.CardSlot",
     buildListSectionCards<ProductCardProps, Record<string, unknown>>({
       currentCards,
-      items: resolvedItems,
+      items,
       createCard: () => createProductCard(currentCards),
       decorateCard: (card, item, index) => ({
         ...card,
@@ -268,13 +266,23 @@ export const ProductCardsWrapper: YextComponentConfig<ProductCardsWrapperProps> 
       }),
     resolveData: (data, params) => {
       const normalizedData = productCards.normalizeData(data, params);
-      const resolvedItems = productCards.resolveItems(
+      const items = productCards.resolveItems(
         normalizedData.props.data,
         normalizedData.props.cards,
         (params.metadata?.streamDocument ?? {}) as StreamDocument
       );
 
-      return syncCards(normalizedData, resolvedItems);
+      return withMappedEntityFieldConditionalRender(
+        syncCards(normalizedData, items),
+        !normalizedData.props.data.constantValueEnabled &&
+          Boolean(normalizedData.props.data.field) &&
+          items.length === 0
+      );
     },
-    render: (props) => <ProductCardsWrapperComponent {...props} />,
+    render: (props) =>
+      props.conditionalRender?.isMappedContentEmpty ? (
+        renderMappedEntityFieldEmptyState(props.puck.isEditing)
+      ) : (
+        <ProductCardsWrapperComponent {...props} />
+      ),
   };

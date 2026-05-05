@@ -1,14 +1,13 @@
+import { Slot, setDeep } from "@puckeditor/core";
 import {
   ThemeColor,
   backgroundColors,
   ThemeOptions,
 } from "../../../utils/themeConfigOptions.ts";
-import { PageSection } from "../../atoms/pageSection.tsx";
 import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
-import { PuckComponent, Slot, setDeep } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import {
   ProductCardsWrapper,
@@ -16,54 +15,31 @@ import {
 } from "./ProductCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import {
+  getMappedCardsSectionConditionalRender,
+  MappedCardsSectionConditionalRender,
+  MappedCardsSectionContent,
+  MappedCardsSectionShell,
+} from "../mappedCardsSectionUtils.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
-import { hasResolvedMappedListSource } from "../../../utils/cardSlots/mappedSource.ts";
 
 export type ProductSectionVariant = "immersive" | "classic" | "minimal";
 export type ProductSectionImageConstrain = "fill" | "fixed";
 
 export interface ProductSectionProps {
-  /**
-   * This object contains properties for customizing the component's appearance.
-   * @propCategory Style Props
-   */
   styles: {
-    /**
-     * The background color for the entire section.
-     * @defaultValue Background Color 2
-     */
     backgroundColor?: ThemeColor;
-
-    /**
-     * The variant of the product cards.
-     * @defaultValue Immersive
-     */
     cardVariant?: ProductSectionVariant;
-
-    /**
-     * Whether to show the section heading.
-     * @defaultValue true
-     */
     showSectionHeading: boolean;
   };
-
   slots: {
     SectionHeadingSlot: Slot;
     CardsWrapperSlot: Slot;
   };
-
-  /** @internal  */
   analytics: {
     scope?: string;
   };
-
-  /** @internal */
-  hasResolvedSource?: boolean;
-
-  /**
-   * If 'true', the component is visible on the live page; if 'false', it's hidden.
-   * @defaultValue true
-   */
+  conditionalRender?: MappedCardsSectionConditionalRender;
   liveVisibility: boolean;
 }
 
@@ -125,30 +101,6 @@ const productSectionFields: YextFields<ProductSectionProps> = {
   },
 };
 
-const ProductSectionComponent: PuckComponent<ProductSectionProps> = (props) => {
-  const { slots, styles, hasResolvedSource, puck } = props;
-
-  if (!puck.isEditing && hasResolvedSource === false) {
-    return <></>;
-  }
-
-  return (
-    <PageSection
-      background={styles?.backgroundColor}
-      className="flex flex-col gap-8"
-    >
-      {styles.showSectionHeading && (
-        <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
-      )}
-      <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
-    </PageSection>
-  );
-};
-
-/**
- * The Product Section is used to display a curated list of products in a dedicated section. It features a main heading and renders each product as an individual card, making it ideal for showcasing featured items, new arrivals, or bestsellers.
- * Available on Location templates.
- */
 export const ProductSection: YextComponentConfig<ProductSectionProps> = {
   label: msg("components.productsSection", "Products Section"),
   fields: productSectionFields,
@@ -191,8 +143,7 @@ export const ProductSection: YextComponentConfig<ProductSectionProps> = {
     },
     liveVisibility: true,
   },
-  resolveData: (data, params) => {
-    const streamDocument = params.metadata.streamDocument ?? {};
+  resolveData: (data) => {
     let updatedData = forwardHeadingLevel(data, "TitleSlot");
 
     if (
@@ -207,66 +158,63 @@ export const ProductSection: YextComponentConfig<ProductSectionProps> = {
     }
 
     const isImmersive = updatedData.props.styles.cardVariant === "immersive";
-    const showImageConstrain = !isImmersive;
-
     const cards =
       updatedData.props.slots.CardsWrapperSlot?.[0]?.props?.slots?.CardSlot;
 
     if (cards) {
-      cards.forEach((_: any, i: number) => {
+      cards.forEach((_: unknown, i: number) => {
         updatedData = setDeep(
           updatedData,
           `props.slots.CardsWrapperSlot[0].props.slots.CardSlot[${i}].props.slots.ImageSlot[0].props.showImageConstrain`,
-          showImageConstrain
+          !isImmersive
         );
-
-        if (isImmersive) {
-          updatedData = setDeep(
-            updatedData,
-            `props.slots.CardsWrapperSlot[0].props.slots.CardSlot[${i}].props.slots.ImageSlot[0].props.hideWidthProp`,
-            true
-          );
-        } else {
-          updatedData = setDeep(
-            updatedData,
-            `props.slots.CardsWrapperSlot[0].props.slots.CardSlot[${i}].props.slots.ImageSlot[0].props.hideWidthProp`,
-            false
-          );
-        }
+        updatedData = setDeep(
+          updatedData,
+          `props.slots.CardsWrapperSlot[0].props.slots.CardSlot[${i}].props.slots.ImageSlot[0].props.hideWidthProp`,
+          isImmersive
+        );
       });
     }
 
-    const wrapperProps = updatedData.props.slots.CardsWrapperSlot?.[0]
-      ?.props as ProductCardsWrapperProps | undefined;
-
-    return setDeep(
-      updatedData,
-      "props.hasResolvedSource",
-      !wrapperProps ||
-        hasResolvedMappedListSource({
-          streamDocument,
-          constantValueEnabled: wrapperProps.data.constantValueEnabled,
-          fieldPath: wrapperProps.data.field,
-        })
-    );
+    return {
+      ...updatedData,
+      props: {
+        ...updatedData.props,
+        conditionalRender: getMappedCardsSectionConditionalRender(
+          updatedData.props.slots.CardsWrapperSlot?.[0]
+        ),
+      },
+    };
   },
-  render: (props) => {
-    return (
-      <ComponentErrorBoundary
-        isEditing={props.puck.isEditing}
-        resetKeys={[props]}
+  render: (props) => (
+    <ComponentErrorBoundary
+      isEditing={props.puck.isEditing}
+      resetKeys={[props]}
+    >
+      <AnalyticsScopeProvider
+        name={`${props.analytics?.scope ?? "productsSection"}${getAnalyticsScopeHash(props.id)}`}
       >
-        <AnalyticsScopeProvider
-          name={`${props.analytics?.scope ?? "productsSection"}${getAnalyticsScopeHash(props.id)}`}
+        <VisibilityWrapper
+          liveVisibility={props.liveVisibility}
+          isEditing={props.puck.isEditing}
         >
-          <VisibilityWrapper
-            liveVisibility={props.liveVisibility}
+          <MappedCardsSectionShell
+            conditionalRender={props.conditionalRender}
             isEditing={props.puck.isEditing}
+            CardsWrapperSlot={props.slots.CardsWrapperSlot}
           >
-            <ProductSectionComponent {...props} />
-          </VisibilityWrapper>
-        </AnalyticsScopeProvider>
-      </ComponentErrorBoundary>
-    );
-  },
+            {(setCardsWrapperRef) => (
+              <MappedCardsSectionContent
+                backgroundColor={props.styles?.backgroundColor}
+                showSectionHeading={props.styles.showSectionHeading}
+                SectionHeadingSlot={props.slots.SectionHeadingSlot}
+                CardsWrapperSlot={props.slots.CardsWrapperSlot}
+                setCardsWrapperRef={setCardsWrapperRef}
+              />
+            )}
+          </MappedCardsSectionShell>
+        </VisibilityWrapper>
+      </AnalyticsScopeProvider>
+    </ComponentErrorBoundary>
+  ),
 };

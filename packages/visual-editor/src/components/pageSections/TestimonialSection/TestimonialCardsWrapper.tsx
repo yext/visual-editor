@@ -22,6 +22,11 @@ import {
   type YextComponentConfig,
   type YextFields,
 } from "../../../fields/fields.ts";
+import { renderMappedEntityFieldEmptyState } from "../EntityFieldSectionEmptyState.tsx";
+import {
+  MappedEntityFieldConditionalRender,
+  withMappedEntityFieldConditionalRender,
+} from "../entityFieldSectionUtils.ts";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 import { type YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { type StreamDocument } from "../../../utils/index.ts";
@@ -42,21 +47,13 @@ export type TestimonialCardsWrapperProps = {
   };
   cards?: TestimonialCardItem;
   styles: {
-    /**
-     * Whether to show the name slot in the testimonial cards.
-     * @defaultValue true
-     */
     showName: boolean;
-
-    /**
-     * Whether to show the date slot in the testimonial cards.
-     * @defaultValue true
-     */
     showDate: boolean;
   };
   slots: {
     CardSlot: Slot;
   };
+  conditionalRender?: MappedEntityFieldConditionalRender;
 };
 
 const testimonialCards = createItemSource<
@@ -121,10 +118,6 @@ const testimonialCardsWrapperFields: YextFields<TestimonialCardsWrapperProps> =
     },
   };
 
-/**
- * Creates a new TestimonialCard shell using the first existing card as the
- * styling template for newly synced cards.
- */
 const createTestimonialCard = (
   currentCards: ComponentData<TestimonialCardProps>[]
 ): ComponentData<TestimonialCardProps> => {
@@ -138,13 +131,9 @@ const createTestimonialCard = (
   ) as unknown as ComponentData<TestimonialCardProps>;
 };
 
-/**
- * Keeps the hidden CardSlot array aligned with the current linked or manual
- * item list while preserving existing card styling where possible.
- */
 const syncCards = <TData extends { props: TestimonialCardsWrapperProps }>(
   data: TData,
-  resolvedItems: Record<string, unknown>[]
+  items: Record<string, unknown>[]
 ): TData => {
   const currentCards =
     (data.props.slots
@@ -155,7 +144,7 @@ const syncCards = <TData extends { props: TestimonialCardsWrapperProps }>(
     "props.slots.CardSlot",
     buildListSectionCards<TestimonialCardProps, Record<string, unknown>>({
       currentCards,
-      items: resolvedItems,
+      items,
       createCard: () => createTestimonialCard(currentCards),
       decorateCard: (card, item, index) => ({
         ...card,
@@ -178,16 +167,14 @@ const syncCards = <TData extends { props: TestimonialCardsWrapperProps }>(
 
 const TestimonialCardsWrapperComponent: PuckComponent<
   TestimonialCardsWrapperProps
-> = ({ slots }) => {
-  return (
-    <CardContextProvider>
-      <slots.CardSlot
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-center"
-        allow={[]}
-      />
-    </CardContextProvider>
-  );
-};
+> = ({ slots }) => (
+  <CardContextProvider>
+    <slots.CardSlot
+      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-center"
+      allow={[]}
+    />
+  </CardContextProvider>
+);
 
 export const TestimonialCardsWrapper: YextComponentConfig<TestimonialCardsWrapperProps> =
   {
@@ -221,13 +208,23 @@ export const TestimonialCardsWrapper: YextComponentConfig<TestimonialCardsWrappe
       }),
     resolveData: (data, params) => {
       const normalizedData = testimonialCards.normalizeData(data, params);
-      const resolvedItems = testimonialCards.resolveItems(
+      const items = testimonialCards.resolveItems(
         normalizedData.props.data,
         normalizedData.props.cards,
         (params.metadata?.streamDocument ?? {}) as StreamDocument
       );
 
-      return syncCards(normalizedData, resolvedItems);
+      return withMappedEntityFieldConditionalRender(
+        syncCards(normalizedData, items),
+        !normalizedData.props.data.constantValueEnabled &&
+          Boolean(normalizedData.props.data.field) &&
+          items.length === 0
+      );
     },
-    render: (props) => <TestimonialCardsWrapperComponent {...props} />,
+    render: (props) =>
+      props.conditionalRender?.isMappedContentEmpty ? (
+        renderMappedEntityFieldEmptyState(props.puck.isEditing)
+      ) : (
+        <TestimonialCardsWrapperComponent {...props} />
+      ),
   };

@@ -22,6 +22,11 @@ import {
 } from "../../../fields/fields.ts";
 import { type YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { buildListSectionCards } from "../../../utils/cardSlots/listSectionData.ts";
+import { renderMappedEntityFieldEmptyState } from "../EntityFieldSectionEmptyState.tsx";
+import {
+  MappedEntityFieldConditionalRender,
+  withMappedEntityFieldConditionalRender,
+} from "../entityFieldSectionUtils.ts";
 
 type EventCardItem = {
   title: YextEntityField<EventStruct["title"]>;
@@ -47,6 +52,7 @@ export type EventCardsWrapperProps = {
   slots: {
     CardSlot: Slot;
   };
+  conditionalRender?: MappedEntityFieldConditionalRender;
 };
 
 const defaultEventCta = {
@@ -139,10 +145,6 @@ const eventCardsWrapperFields: YextFields<EventCardsWrapperProps> = {
   },
 };
 
-/**
- * Creates a new EventCard shell using the first existing card as the styling
- * template for newly synced cards.
- */
 const createEventCard = (
   currentCards: ComponentData<EventCardProps>[]
 ): ComponentData<EventCardProps> => {
@@ -157,9 +159,6 @@ const createEventCard = (
   ) as unknown as ComponentData<EventCardProps>;
 };
 
-/**
- * Converts one resolved item into the itemData shape consumed by EventCard.
- */
 const toEventCardItemData = (
   item: Record<string, unknown>,
   sourceField: string,
@@ -180,10 +179,6 @@ const toEventCardItemData = (
   cta: (item.cta as EventStruct["cta"] | undefined) ?? defaultEventCta,
 });
 
-/**
- * Keeps the hidden CardSlot array aligned with the current linked or manual
- * item list while preserving existing card styling where possible.
- */
 const syncCards = <TData extends { props: EventCardsWrapperProps }>(
   data: TData,
   items: Record<string, unknown>[]
@@ -267,7 +262,17 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
       (params.metadata?.streamDocument ?? {}) as StreamDocument
     );
 
-    return syncCards(normalizedData, items);
+    return withMappedEntityFieldConditionalRender(
+      syncCards(normalizedData, items),
+      !normalizedData.props.data.constantValueEnabled &&
+        Boolean(normalizedData.props.data.field) &&
+        items.length === 0
+    );
   },
-  render: (props) => <EventCardsWrapperComponent {...props} />,
+  render: (props) =>
+    props.conditionalRender?.isMappedContentEmpty ? (
+      renderMappedEntityFieldEmptyState(props.puck.isEditing)
+    ) : (
+      <EventCardsWrapperComponent {...props} />
+    ),
 };

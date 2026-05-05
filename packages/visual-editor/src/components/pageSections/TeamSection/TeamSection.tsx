@@ -1,10 +1,9 @@
-import { PuckComponent, Slot, setDeep } from "@puckeditor/core";
+import { Slot } from "@puckeditor/core";
 import {
   ThemeColor,
   backgroundColors,
   ThemeOptions,
 } from "../../../utils/themeConfigOptions.ts";
-import { PageSection } from "../../atoms/pageSection.tsx";
 import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
@@ -16,46 +15,27 @@ import {
 } from "./TeamCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import {
+  getMappedCardsSectionConditionalRender,
+  MappedCardsSectionConditionalRender,
+  MappedCardsSectionContent,
+  MappedCardsSectionShell,
+} from "../mappedCardsSectionUtils.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
-import { hasResolvedMappedListSource } from "../../../utils/cardSlots/mappedSource.ts";
 
 export interface TeamSectionProps {
-  /**
-   * This object contains properties for customizing the component's appearance.
-   * @propCategory Style Props
-   */
   styles: {
-    /**
-     * The background color of the section.
-     * @defaultValue Background Color 3
-     */
     backgroundColor?: ThemeColor;
-
-    /**
-     * Whether to show the section heading.
-     * @defaultValue true
-     */
     showSectionHeading: boolean;
   };
-
-  /** @internal */
   slots: {
     SectionHeadingSlot: Slot;
     CardsWrapperSlot: Slot;
   };
-
-  /** @internal */
   analytics: {
     scope?: string;
   };
-
-  /** @internal */
-  hasResolvedSource?: boolean;
-
-  /**
-   * If 'true', the component is visible on the live page; if 'false', it's hidden.
-   * @defaultValue true
-   */
+  conditionalRender?: MappedCardsSectionConditionalRender;
   liveVisibility: boolean;
 }
 
@@ -105,30 +85,6 @@ const teamSectionFields: YextFields<TeamSectionProps> = {
   },
 };
 
-const TeamSectionWrapper: PuckComponent<TeamSectionProps> = (props) => {
-  const { styles, slots, hasResolvedSource, puck } = props;
-
-  if (!puck.isEditing && hasResolvedSource === false) {
-    return <></>;
-  }
-
-  return (
-    <PageSection
-      background={styles?.backgroundColor}
-      className="flex flex-col gap-8"
-    >
-      {styles.showSectionHeading && (
-        <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
-      )}
-      <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
-    </PageSection>
-  );
-};
-
-/**
- * The Team Section is designed to showcase a list of people, such as employees, executives, or other team members. It features a main section heading and renders each person's information—typically a photo, name, and title—as an individual card.
- * Available on Location templates.
- */
 export const TeamSection: YextComponentConfig<TeamSectionProps> = {
   label: msg("components.teamSection", "Team Section"),
   fields: teamSectionFields,
@@ -158,7 +114,7 @@ export const TeamSection: YextComponentConfig<TeamSectionProps> = {
           type: "TeamCardsWrapper",
           props: {
             ...(TeamCardsWrapper.defaultProps as TeamCardsWrapperProps),
-          } satisfies TeamCardsWrapperProps,
+          },
         },
       ],
     },
@@ -167,21 +123,17 @@ export const TeamSection: YextComponentConfig<TeamSectionProps> = {
     },
     liveVisibility: true,
   },
-  resolveData: (data, params) => {
+  resolveData: (data) => {
     const updatedData = forwardHeadingLevel(data, "TitleSlot");
-    const wrapperProps = updatedData.props.slots.CardsWrapperSlot?.[0]
-      ?.props as TeamCardsWrapperProps | undefined;
-
-    return setDeep(
-      updatedData,
-      "props.hasResolvedSource",
-      !wrapperProps ||
-        hasResolvedMappedListSource({
-          streamDocument: params.metadata.streamDocument ?? {},
-          constantValueEnabled: wrapperProps.data.constantValueEnabled,
-          fieldPath: wrapperProps.data.field,
-        })
-    );
+    return {
+      ...updatedData,
+      props: {
+        ...updatedData.props,
+        conditionalRender: getMappedCardsSectionConditionalRender(
+          updatedData.props.slots.CardsWrapperSlot?.[0]
+        ),
+      },
+    };
   },
   render: (props) => (
     <ComponentErrorBoundary
@@ -195,7 +147,21 @@ export const TeamSection: YextComponentConfig<TeamSectionProps> = {
           liveVisibility={props.liveVisibility}
           isEditing={props.puck.isEditing}
         >
-          <TeamSectionWrapper {...props} />
+          <MappedCardsSectionShell
+            conditionalRender={props.conditionalRender}
+            isEditing={props.puck.isEditing}
+            CardsWrapperSlot={props.slots.CardsWrapperSlot}
+          >
+            {(setCardsWrapperRef) => (
+              <MappedCardsSectionContent
+                backgroundColor={props.styles?.backgroundColor}
+                showSectionHeading={props.styles.showSectionHeading}
+                SectionHeadingSlot={props.slots.SectionHeadingSlot}
+                CardsWrapperSlot={props.slots.CardsWrapperSlot}
+                setCardsWrapperRef={setCardsWrapperRef}
+              />
+            )}
+          </MappedCardsSectionShell>
         </VisibilityWrapper>
       </AnalyticsScopeProvider>
     </ComponentErrorBoundary>

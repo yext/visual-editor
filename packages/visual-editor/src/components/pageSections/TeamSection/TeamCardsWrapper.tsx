@@ -18,6 +18,11 @@ import {
   type YextComponentConfig,
   type YextFields,
 } from "../../../fields/fields.ts";
+import { renderMappedEntityFieldEmptyState } from "../EntityFieldSectionEmptyState.tsx";
+import {
+  MappedEntityFieldConditionalRender,
+  withMappedEntityFieldConditionalRender,
+} from "../entityFieldSectionUtils.ts";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 import { type YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { type StreamDocument, createItemSource } from "../../../utils/index.ts";
@@ -49,6 +54,7 @@ export type TeamCardsWrapperProps = {
   slots: {
     CardSlot: Slot;
   };
+  conditionalRender?: MappedEntityFieldConditionalRender;
 };
 
 const defaultPersonCta = {
@@ -158,10 +164,6 @@ const teamCardsWrapperFields: YextFields<TeamCardsWrapperProps> = {
   },
 };
 
-/**
- * Creates a new TeamCard shell using the first existing card as the styling
- * template for newly synced cards.
- */
 const createTeamCard = (
   currentCards: ComponentData<TeamCardProps>[]
 ): ComponentData<TeamCardProps> => {
@@ -175,13 +177,9 @@ const createTeamCard = (
   ) as unknown as ComponentData<TeamCardProps>;
 };
 
-/**
- * Keeps the hidden CardSlot array aligned with the current linked or manual
- * item list while preserving existing card styling where possible.
- */
 const syncCards = <TData extends { props: TeamCardsWrapperProps }>(
   data: TData,
-  resolvedItems: Record<string, unknown>[]
+  items: Record<string, unknown>[]
 ): TData => {
   const currentCards =
     (data.props.slots.CardSlot as unknown as ComponentData<TeamCardProps>[]) ??
@@ -192,7 +190,7 @@ const syncCards = <TData extends { props: TeamCardsWrapperProps }>(
     "props.slots.CardSlot",
     buildListSectionCards<TeamCardProps, Record<string, unknown>>({
       currentCards,
-      items: resolvedItems,
+      items,
       createCard: () => createTeamCard(currentCards),
       decorateCard: (card, item, index) => ({
         ...card,
@@ -265,13 +263,23 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
     }),
   resolveData: (data, params) => {
     const normalizedData = teamCards.normalizeData(data, params);
-    const resolvedItems = teamCards.resolveItems(
+    const items = teamCards.resolveItems(
       normalizedData.props.data,
       normalizedData.props.cards,
       (params.metadata?.streamDocument ?? {}) as StreamDocument
     );
 
-    return syncCards(normalizedData, resolvedItems);
+    return withMappedEntityFieldConditionalRender(
+      syncCards(normalizedData, items),
+      !normalizedData.props.data.constantValueEnabled &&
+        Boolean(normalizedData.props.data.field) &&
+        items.length === 0
+    );
   },
-  render: (props) => <TeamCardsWrapperComponent {...props} />,
+  render: (props) =>
+    props.conditionalRender?.isMappedContentEmpty ? (
+      renderMappedEntityFieldEmptyState(props.puck.isEditing)
+    ) : (
+      <TeamCardsWrapperComponent {...props} />
+    ),
 };

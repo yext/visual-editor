@@ -22,6 +22,11 @@ import {
 import { type YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { buildListSectionCards } from "../../../utils/cardSlots/listSectionData.ts";
 import { type StreamDocument, createItemSource } from "../../../utils/index.ts";
+import { renderMappedEntityFieldEmptyState } from "../EntityFieldSectionEmptyState.tsx";
+import {
+  MappedEntityFieldConditionalRender,
+  withMappedEntityFieldConditionalRender,
+} from "../entityFieldSectionUtils.ts";
 
 type InsightCardItem = {
   image: YextEntityField<InsightStruct["image"]>;
@@ -49,6 +54,7 @@ export type InsightCardsWrapperProps = {
   slots: {
     CardSlot: Slot;
   };
+  conditionalRender?: MappedEntityFieldConditionalRender;
 };
 
 const defaultInsightCta = {
@@ -156,10 +162,6 @@ const insightCardsWrapperFields: YextFields<InsightCardsWrapperProps> = {
   },
 };
 
-/**
- * Creates a new InsightCard shell using the first existing card as the styling
- * template for newly synced cards.
- */
 const createInsightCard = (
   currentCards: ComponentData<InsightCardProps>[]
 ): ComponentData<InsightCardProps> => {
@@ -186,10 +188,6 @@ const toInsightCardItemData = (
   cta: (item.cta as InsightStruct["cta"] | undefined) ?? defaultInsightCta,
 });
 
-/**
- * Keeps the hidden CardSlot array aligned with the current linked or manual
- * item list while preserving existing card styling where possible.
- */
 const syncCards = <TData extends { props: InsightCardsWrapperProps }>(
   data: TData,
   items: Record<string, unknown>[]
@@ -276,7 +274,17 @@ export const InsightCardsWrapper: YextComponentConfig<InsightCardsWrapperProps> 
         (params.metadata?.streamDocument ?? {}) as StreamDocument
       );
 
-      return syncCards(normalizedData, items);
+      return withMappedEntityFieldConditionalRender(
+        syncCards(normalizedData, items),
+        !normalizedData.props.data.constantValueEnabled &&
+          Boolean(normalizedData.props.data.field) &&
+          items.length === 0
+      );
     },
-    render: (props) => <InsightCardsWrapperComponent {...props} />,
+    render: (props) =>
+      props.conditionalRender?.isMappedContentEmpty ? (
+        renderMappedEntityFieldEmptyState(props.puck.isEditing)
+      ) : (
+        <InsightCardsWrapperComponent {...props} />
+      ),
   };

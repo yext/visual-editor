@@ -3,6 +3,7 @@ import {
   PuckComponent,
   setDeep,
   type Slot,
+  type SlotComponent,
 } from "@puckeditor/core";
 import {
   backgroundColors,
@@ -28,6 +29,7 @@ import {
 } from "./FAQCard.tsx";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import { EntityFieldSectionEmptyStateBox } from "../EntityFieldSectionEmptyState.tsx";
 import {
   toPuckFields,
   type YextComponentConfig,
@@ -35,6 +37,10 @@ import {
 } from "../../../fields/fields.ts";
 import { type StreamDocument, createItemSource } from "../../../utils/index.ts";
 import { buildListSectionCards } from "../../../utils/cardSlots/listSectionData.ts";
+import {
+  MappedEntityFieldConditionalRender,
+  withMappedEntityFieldConditionalRender,
+} from "../entityFieldSectionUtils.ts";
 
 type FAQItem = {
   question: YextEntityField<TranslatableString | TranslatableRichText>;
@@ -61,7 +67,7 @@ export interface FAQSectionProps {
   analytics: {
     scope?: string;
   };
-  hasResolvedSource?: boolean;
+  conditionalRender?: MappedEntityFieldConditionalRender;
   liveVisibility: boolean;
 }
 
@@ -138,10 +144,6 @@ const FAQsSectionFields: YextFields<FAQSectionProps> = {
   },
 };
 
-/**
- * Keeps the hidden FAQ CardSlot array synchronized with the current linked or
- * manual item list while preserving the first card's presentation styles.
- */
 const syncCards = <TData extends { props: FAQSectionProps }>(
   data: TData,
   items: Record<string, unknown>[]
@@ -182,30 +184,37 @@ const syncCards = <TData extends { props: FAQSectionProps }>(
   ) as TData;
 };
 
-const FAQsSectionComponent: PuckComponent<FAQSectionProps> = ({
+const FAQsSectionLayout = ({
   styles,
   slots,
-  hasResolvedSource,
-  puck,
-}) => {
-  if (!puck.isEditing && hasResolvedSource === false) {
-    return <></>;
-  }
-
-  return (
-    <PageSection
-      background={styles.backgroundColor}
-      className="flex flex-col gap-8 md:gap-12"
-    >
-      {styles.showSectionHeading && (
-        <slots.HeadingSlot style={{ height: "auto" }} />
-      )}
+  cardsContent,
+}: {
+  styles: FAQSectionProps["styles"];
+  slots: {
+    HeadingSlot: SlotComponent;
+    CardSlot: SlotComponent;
+  };
+  cardsContent?: React.ReactNode;
+}) => (
+  <PageSection
+    background={styles.backgroundColor}
+    className="flex flex-col gap-8 md:gap-12"
+  >
+    {styles.showSectionHeading && (
+      <slots.HeadingSlot style={{ height: "auto" }} />
+    )}
+    {cardsContent ?? (
       <CardContextProvider>
         <slots.CardSlot />
       </CardContextProvider>
-    </PageSection>
-  );
-};
+    )}
+  </PageSection>
+);
+
+const FAQsSectionComponent: PuckComponent<FAQSectionProps> = ({
+  styles,
+  slots,
+}) => <FAQsSectionLayout styles={styles} slots={slots} />;
 
 export const FAQSection: YextComponentConfig<FAQSectionProps> = {
   label: msg("components.faqsSection", "FAQs Section"),
@@ -266,17 +275,17 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
     }),
   resolveData: (data, params) => {
     const normalizedData = faqs.normalizeData(data, params);
-    const resolvedItems = faqs.resolveItems(
+    const items = faqs.resolveItems(
       normalizedData.props.data,
       normalizedData.props.faqs,
       (params.metadata?.streamDocument ?? {}) as StreamDocument
     );
-    const syncedData = syncCards(normalizedData, resolvedItems);
 
-    return setDeep(
-      syncedData,
-      "props.hasResolvedSource",
-      syncedData.props.data.constantValueEnabled || resolvedItems.length > 0
+    return withMappedEntityFieldConditionalRender(
+      syncCards(normalizedData, items),
+      !normalizedData.props.data.constantValueEnabled &&
+        Boolean(normalizedData.props.data.field) &&
+        items.length === 0
     );
   },
   render: (props) => (
@@ -291,7 +300,19 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
           liveVisibility={props.liveVisibility}
           isEditing={props.puck.isEditing}
         >
-          <FAQsSectionComponent {...props} />
+          {props.conditionalRender?.isMappedContentEmpty ? (
+            props.puck.isEditing ? (
+              <FAQsSectionLayout
+                styles={props.styles}
+                slots={props.slots}
+                cardsContent={<EntityFieldSectionEmptyStateBox />}
+              />
+            ) : (
+              <></>
+            )
+          ) : (
+            <FAQsSectionComponent {...props} />
+          )}
         </VisibilityWrapper>
       </AnalyticsScopeProvider>
     </ComponentErrorBoundary>
