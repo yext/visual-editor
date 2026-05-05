@@ -5,7 +5,6 @@ import {
   ThemeColor,
   ThemeOptions,
 } from "../../../utils/themeConfigOptions.ts";
-import { YextField } from "../../../editor/YextField.tsx";
 import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
@@ -166,8 +165,9 @@ export type PromoVariantProps = Pick<
 >;
 
 const promoSectionFields: YextFields<PromoSectionProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
       promo: {
         type: "entityField",
@@ -192,9 +192,10 @@ const promoSectionFields: YextFields<PromoSectionProps> = {
         },
       },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       variant: {
         type: "basicSelector",
@@ -248,10 +249,11 @@ const promoSectionFields: YextFields<PromoSectionProps> = {
         type: "radio",
         options: ThemeOptions.ALIGNMENT,
       },
-      imageHeight: YextField(msg("fields.imageHeight", "Image Height"), {
+      imageHeight: {
         type: "number",
+        label: msg("fields.imageHeight", "Image Height"),
         min: 0,
-      }),
+      },
       showMedia: {
         label: msg("fields.showMedia", "Show Media"),
         type: "radio",
@@ -273,7 +275,7 @@ const promoSectionFields: YextFields<PromoSectionProps> = {
         options: ThemeOptions.SHOW_HIDE,
       },
     },
-  }),
+  },
   slots: {
     type: "object",
     visible: false,
@@ -285,8 +287,9 @@ const promoSectionFields: YextFields<PromoSectionProps> = {
       CTASlot: { type: "slot" },
     },
   },
-  analytics: YextField(msg("fields.analytics", "Analytics"), {
+  analytics: {
     type: "object",
+    label: msg("fields.analytics", "Analytics"),
     visible: false,
     objectFields: {
       scope: {
@@ -294,7 +297,7 @@ const promoSectionFields: YextFields<PromoSectionProps> = {
         type: "text",
       },
     },
-  }),
+  },
   liveVisibility: {
     label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
     type: "radio",

@@ -6,7 +6,6 @@ import {
   ThemeOptions,
 } from "../../utils/themeConfigOptions.ts";
 import { PageSection } from "../atoms/pageSection.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
 import { getAnalyticsScopeHash } from "../../utils/applyAnalytics.ts";
 import { msg } from "../../utils/i18n/platform.ts";
@@ -99,8 +98,9 @@ const gridSectionFields: YextFields<GridProps> = {
     type: "radio",
     options: ThemeOptions.ALIGNMENT,
   },
-  analytics: YextField(msg("fields.analytics", "Analytics"), {
+  analytics: {
     type: "object",
+    label: msg("fields.analytics", "Analytics"),
     visible: false,
     objectFields: {
       scope: {
@@ -108,7 +108,7 @@ const gridSectionFields: YextFields<GridProps> = {
         type: "text",
       },
     },
-  }),
+  },
   liveVisibility: {
     label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
     type: "radio",

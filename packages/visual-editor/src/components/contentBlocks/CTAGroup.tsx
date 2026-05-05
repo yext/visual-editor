@@ -2,7 +2,6 @@ import { PuckComponent, setDeep } from "@puckeditor/core";
 import { ThemeColor, ThemeOptions } from "../../utils/themeConfigOptions.ts";
 import { CTA } from "../atoms/cta.tsx";
 import { PresetImageType } from "../../types/types.ts";
-import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
@@ -51,8 +50,9 @@ export interface CTAGroupProps {
 }
 
 const ctaGroupFields: YextFields<CTAGroupProps> = {
-  buttons: YextField(msg("fields.buttons", "Buttons"), {
+  buttons: {
     type: "array",
+    label: msg("fields.buttons", "Buttons"),
     max: 9,
     defaultItemProps: defaultButton,
     arrayFields: {
@@ -84,8 +84,9 @@ const ctaGroupFields: YextFields<CTAGroupProps> = {
         options: "SITE_COLOR",
       },
     },
-    getItemSummary: (_, i) => pt("cta", "CTA") + " " + ((i ?? 0) + 1),
-  }),
+    getItemSummary: (_: BasicCTAProps, i?: number) =>
+      pt("cta", "CTA") + " " + ((i ?? 0) + 1),
+  },
 };
 
 const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {

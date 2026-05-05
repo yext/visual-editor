@@ -1,5 +1,4 @@
 import { PuckComponent, Slot } from "@puckeditor/core";
-import { YextField } from "../../editor/YextField.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import {
   ThemeColor,
@@ -42,8 +41,9 @@ export interface SecondaryHeaderSlotProps {
 }
 
 const secondaryHeaderSlotFields: YextFields<SecondaryHeaderSlotProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
       show: {
         label: msg("fields.showSecondaryHeader", "Show Secondary Header"),
@@ -62,9 +62,10 @@ const secondaryHeaderSlotFields: YextFields<SecondaryHeaderSlotProps> = {
         ],
       },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
         type: "basicSelector",
@@ -72,7 +73,7 @@ const secondaryHeaderSlotFields: YextFields<SecondaryHeaderSlotProps> = {
         options: "BACKGROUND_COLOR",
       },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {

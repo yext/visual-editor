@@ -1,6 +1,5 @@
 import React from "react";
 import { PuckComponent, setDeep, Slot } from "@puckeditor/core";
-import { YextField } from "../../editor/YextField.tsx";
 import {
   backgroundColors,
   ThemeColor,
@@ -121,8 +120,9 @@ export const DirectoryList = ({
 };
 
 const directoryGridFields: YextFields<DirectoryGridProps> = {
-  styles: YextField(msg("fields.styles", "Styles"), {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
         type: "basicSelector",
@@ -130,7 +130,7 @@ const directoryGridFields: YextFields<DirectoryGridProps> = {
         options: "BACKGROUND_COLOR",
       },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {

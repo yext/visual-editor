@@ -14,8 +14,7 @@ import {
   TestimonialCardProps,
 } from "./TestimonialCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
-import { YextField } from "../../../editor/YextField.tsx";
-import { YextComponentConfig } from "../../../fields/fields.ts";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 
 export type TestimonialCardsWrapperProps =
@@ -35,27 +34,29 @@ export type TestimonialCardsWrapperProps =
     };
   };
 
-const testimonialCardsWrapperFields = {
-  ...cardWrapperFields<TestimonialCardsWrapperProps>(
-    msg("components.testimonial", "Testimonial"),
-    ComponentFields.TestimonialSection.type
-  ),
-  styles: YextField(msg("fields.styles", "Styles"), {
-    type: "object",
-    objectFields: {
-      showName: {
-        label: msg("fields.showName", "Show Name"),
-        type: "radio",
-        options: ThemeOptions.SHOW_HIDE,
-      },
-      showDate: {
-        label: msg("fields.showDate", "Show Date"),
-        type: "radio",
-        options: ThemeOptions.SHOW_HIDE,
+const testimonialCardsWrapperFields: YextFields<TestimonialCardsWrapperProps> =
+  {
+    ...cardWrapperFields<TestimonialCardsWrapperProps>(
+      msg("components.testimonial", "Testimonial"),
+      ComponentFields.TestimonialSection.type
+    ),
+    styles: {
+      type: "object",
+      label: msg("fields.styles", "Styles"),
+      objectFields: {
+        showName: {
+          label: msg("fields.showName", "Show Name"),
+          type: "radio",
+          options: ThemeOptions.SHOW_HIDE,
+        },
+        showDate: {
+          label: msg("fields.showDate", "Show Date"),
+          type: "radio",
+          options: ThemeOptions.SHOW_HIDE,
+        },
       },
     },
-  }),
-};
+  };
 
 const TestimonialCardsWrapperComponent: PuckComponent<
   TestimonialCardsWrapperProps

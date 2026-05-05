@@ -15,9 +15,8 @@ import {
   ProductCardProps,
 } from "./ProductCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
-import { YextField } from "../../../editor/YextField.tsx";
 import { ProductSectionVariant } from "./ProductSection.tsx";
-import { YextComponentConfig } from "../../../fields/fields.ts";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 
 export type ProductCardsWrapperProps = CardWrapperType<ProductSectionType> & {
@@ -33,13 +32,14 @@ export type ProductCardsWrapperProps = CardWrapperType<ProductSectionType> & {
   };
 };
 
-const productCardsWrapperFields = {
+const productCardsWrapperFields: YextFields<ProductCardsWrapperProps> = {
   ...cardWrapperFields<ProductCardsWrapperProps>(
     msg("components.products", "Products"),
     ComponentFields.ProductSection.type
   ),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       showImage: {
         label: msg("fields.showImage", "Show Image"),
@@ -72,7 +72,7 @@ const productCardsWrapperFields = {
         options: ThemeOptions.SHOW_HIDE,
       },
     },
-  }),
+  },
 };
 
 const ProductCardsWrapperComponent: PuckComponent<ProductCardsWrapperProps> = (

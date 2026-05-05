@@ -1,7 +1,7 @@
 import {
   StreamFields,
   YextSchemaField,
-  type YextFieldDefinition,
+  type YextSchemaFieldDefinition,
 } from "../types/entityFields.ts";
 
 export type LinkedEntitySchema = {
@@ -99,7 +99,7 @@ export const isLinkedEntityFieldPath = (
  */
 const createLinkedEntityRootDefinition = (
   referenceFieldName: string
-): YextFieldDefinition => {
+): YextSchemaFieldDefinition => {
   return {
     name: referenceFieldName,
     type: {},

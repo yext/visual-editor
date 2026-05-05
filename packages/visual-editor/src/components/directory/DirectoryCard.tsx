@@ -1,6 +1,5 @@
 import { PuckComponent, Slot } from "@puckeditor/core";
 import React from "react";
-import { YextField } from "../../editor/YextField.tsx";
 import { useCardContext } from "../../hooks/useCardContext.tsx";
 import {
   TemplatePropsContext,
@@ -365,8 +364,9 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
 };
 
 const directoryCardFields: YextFields<DirectoryCardProps> = {
-  styles: YextField(msg("fields.styles", "Styles"), {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
         type: "basicSelector",
@@ -374,7 +374,7 @@ const directoryCardFields: YextFields<DirectoryCardProps> = {
         options: "BACKGROUND_COLOR",
       },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {

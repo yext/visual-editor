@@ -10,7 +10,6 @@ import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { OtherCategory } from "../categories/OtherCategory.tsx";
 import { PageSectionCategory } from "../categories/PageSectionCategory.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
 import { TranslatableString } from "../../types/types.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
@@ -37,8 +36,9 @@ const sectionContainerFields: YextFields<SectionContainerProps> = {
     label: msg("fields.backgroundColor", "Background Color"),
     options: "BACKGROUND_COLOR",
   },
-  sectionHeading: YextField(msg("fields.sectionHeading", "Section Heading"), {
+  sectionHeading: {
     type: "object",
+    label: msg("fields.sectionHeading", "Section Heading"),
     objectFields: {
       text: {
         type: "entityField",
@@ -58,7 +58,7 @@ const sectionContainerFields: YextFields<SectionContainerProps> = {
         options: ThemeOptions.ALIGNMENT,
       },
     },
-  }),
+  },
   sectionContent: {
     type: "slot",
   },

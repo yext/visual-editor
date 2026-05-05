@@ -6,7 +6,6 @@ import {
   HeadingLevel,
   ThemeOptions,
 } from "../../utils/themeConfigOptions.ts";
-import { YextField, type YextPuckField } from "../../editor/YextField.tsx";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../utils/applyAnalytics.ts";
@@ -18,6 +17,7 @@ import { HoursStatusProps } from "../contentBlocks/HoursStatus.tsx";
 import { ImageWrapperProps } from "../contentBlocks/image/Image.tsx";
 import { CTAWrapperProps } from "../contentBlocks/CtaWrapper.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import type { YextPuckField } from "../../fields/fields.ts";
 import { TranslatableAssetImage, AssetImageType } from "../../types/images.ts";
 import { ClassicHero } from "./heroVariants/ClassicHero.js";
 import { CompactHero } from "./heroVariants/CompactHero.js";
@@ -181,8 +181,9 @@ export type HeroImageProps = {
 };
 
 const heroSectionFields: YextFields<HeroSectionProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
       backgroundImage: {
         type: "entityField",
@@ -192,9 +193,10 @@ const heroSectionFields: YextFields<HeroSectionProps> = {
         },
       },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       variant: {
         type: "basicSelector",
@@ -220,10 +222,11 @@ const heroSectionFields: YextFields<HeroSectionProps> = {
         label: msg("fields.backgroundColor", "Background Color"),
         options: "BACKGROUND_COLOR",
       },
-      imageHeight: YextField(msg("fields.imageHeight", "Image Height"), {
+      imageHeight: {
         type: "number",
+        label: msg("fields.imageHeight", "Image Height"),
         min: 0,
-      }),
+      },
       desktopContainerPosition: {
         label: msg(
           "fields.desktopContainerPosition",
@@ -327,7 +330,7 @@ const heroSectionFields: YextFields<HeroSectionProps> = {
         options: ThemeOptions.SHOW_HIDE,
       },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {
@@ -340,8 +343,9 @@ const heroSectionFields: YextFields<HeroSectionProps> = {
     },
     visible: false,
   },
-  analytics: YextField(msg("fields.analytics", "Analytics"), {
+  analytics: {
     type: "object",
+    label: msg("fields.analytics", "Analytics"),
     visible: false,
     objectFields: {
       scope: {
@@ -349,7 +353,7 @@ const heroSectionFields: YextFields<HeroSectionProps> = {
         type: "text",
       },
     },
-  }),
+  },
   liveVisibility: {
     label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
     type: "radio",
