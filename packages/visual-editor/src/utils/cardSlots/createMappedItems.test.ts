@@ -20,7 +20,7 @@ type TestProps = {
     ItemSlot: ComponentData<{
       id: string;
       index?: number;
-      parentData?: {
+      itemData?: {
         title?: string;
       };
     }>[];
@@ -50,9 +50,9 @@ const repeatedMappedItems = mappedItems.withRepeatedSlot({
     }) as ComponentData<{
       id: string;
       index?: number;
-      parentData?: { title?: string };
+      itemData?: { title?: string };
     }>,
-  getParentData: (item, data) => ({
+  getItemData: (item, data) => ({
     title: mappedItems.resolveMapping(data.props.cards?.title, item),
   }),
 });
@@ -71,9 +71,9 @@ const repeatedMappedItemsWithConstantValueMode = mappedItems
       }) as ComponentData<{
         id: string;
         index?: number;
-        parentData?: { title?: string };
+        itemData?: { title?: string };
       }>,
-    getParentData: () => ({
+    getItemData: () => ({
       title: "unused",
     }),
   });
@@ -186,7 +186,7 @@ describe("createMappedItems", () => {
     expect(resolved.items).toEqual([{ title: "New title" }]);
   });
 
-  it("resolves repeated items, index, and parentData through resolveItems", () => {
+  it("resolves repeated items, index, and itemData through resolveItems", () => {
     const resolved = repeatedMappedItems.resolveItems(
       {
         type: "Test",
@@ -222,11 +222,11 @@ describe("createMappedItems", () => {
     expect(resolved.items).toEqual([{ title: "First" }, { title: "Second" }]);
     expect(resolved.data.props.slots.ItemSlot).toHaveLength(2);
     expect(resolved.data.props.slots.ItemSlot[0]?.props.index).toBe(0);
-    expect(resolved.data.props.slots.ItemSlot[0]?.props.parentData).toEqual({
+    expect(resolved.data.props.slots.ItemSlot[0]?.props.itemData).toEqual({
       title: "First",
     });
     expect(resolved.data.props.slots.ItemSlot[1]?.props.index).toBe(1);
-    expect(resolved.data.props.slots.ItemSlot[1]?.props.parentData).toEqual({
+    expect(resolved.data.props.slots.ItemSlot[1]?.props.itemData).toEqual({
       title: "Second",
     });
   });
@@ -257,7 +257,7 @@ describe("createMappedItems", () => {
               } as ComponentData<{
                 id: string;
                 index?: number;
-                parentData?: { title?: string };
+                itemData?: { title?: string };
               }>,
             ],
           },
@@ -301,7 +301,7 @@ describe("createMappedItems", () => {
               } as ComponentData<{
                 id: string;
                 index?: number;
-                parentData?: { title?: string };
+                itemData?: { title?: string };
               }>,
             ],
           },

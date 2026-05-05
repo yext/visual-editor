@@ -78,7 +78,7 @@ const testimonialCards = testimonialCardsBase.withRepeatedSlot({
       existingItem?.props.styles.backgroundColor,
       existingItem ? gatherSlotStyles(existingItem.props.slots) : undefined
     ) as unknown as ComponentData<TestimonialCardProps>,
-  getParentData: (item, resolvedData) => {
+  getItemData: (item, resolvedData) => {
     const locale = i18nComponentsInstance.language || "en";
     const contributorName = testimonialCardsBase.resolveMapping<
       TestimonialStruct["contributorName"]
@@ -86,17 +86,15 @@ const testimonialCards = testimonialCardsBase.withRepeatedSlot({
 
     return {
       field: resolvedData.props.data.field,
-      testimonial: {
-        description: testimonialCardsBase.resolveMapping<
-          TestimonialStruct["description"]
-        >(resolvedData.props.cards?.description, item, locale),
-        contributorName: contributorName
-          ? resolveComponentData(contributorName, locale, item)
-          : undefined,
-        contributionDate: testimonialCardsBase.resolveMapping<
-          TestimonialStruct["contributionDate"]
-        >(resolvedData.props.cards?.contributionDate, item, locale),
-      },
+      description: testimonialCardsBase.resolveMapping<
+        TestimonialStruct["description"]
+      >(resolvedData.props.cards?.description, item, locale),
+      contributorName: contributorName
+        ? resolveComponentData(contributorName, locale, item)
+        : undefined,
+      contributionDate: testimonialCardsBase.resolveMapping<
+        TestimonialStruct["contributionDate"]
+      >(resolvedData.props.cards?.contributionDate, item, locale),
     };
   },
 });

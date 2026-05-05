@@ -94,7 +94,7 @@ const insightCards = insightCardsBase.withRepeatedSlot({
       existingItem?.props.styles.backgroundColor,
       existingItem ? gatherSlotStyles(existingItem.props.slots) : undefined
     ) as unknown as ComponentData<InsightCardProps>,
-  getParentData: (item, resolvedData) => {
+  getItemData: (item, resolvedData) => {
     const locale = i18nComponentsInstance.language || "en";
     const name = insightCardsBase.resolveMapping<InsightStruct["name"]>(
       resolvedData.props.cards?.name,
@@ -104,31 +104,29 @@ const insightCards = insightCardsBase.withRepeatedSlot({
 
     return {
       field: resolvedData.props.data.field,
-      insight: {
-        image: insightCardsBase.resolveMapping<InsightStruct["image"]>(
-          resolvedData.props.cards?.image,
+      image: insightCardsBase.resolveMapping<InsightStruct["image"]>(
+        resolvedData.props.cards?.image,
+        item,
+        locale
+      ),
+      name: name ? resolveComponentData(name, locale, item) : undefined,
+      category: insightCardsBase.resolveMapping<InsightStruct["category"]>(
+        resolvedData.props.cards?.category,
+        item,
+        locale
+      ),
+      publishTime: insightCardsBase.resolveMapping<
+        InsightStruct["publishTime"]
+      >(resolvedData.props.cards?.publishTime, item, locale),
+      description: insightCardsBase.resolveMapping<
+        InsightStruct["description"]
+      >(resolvedData.props.cards?.description, item, locale),
+      cta:
+        insightCardsBase.resolveMapping<InsightStruct["cta"]>(
+          resolvedData.props.cards?.cta,
           item,
           locale
-        ),
-        name: name ? resolveComponentData(name, locale, item) : undefined,
-        category: insightCardsBase.resolveMapping<InsightStruct["category"]>(
-          resolvedData.props.cards?.category,
-          item,
-          locale
-        ),
-        publishTime: insightCardsBase.resolveMapping<
-          InsightStruct["publishTime"]
-        >(resolvedData.props.cards?.publishTime, item, locale),
-        description: insightCardsBase.resolveMapping<
-          InsightStruct["description"]
-        >(resolvedData.props.cards?.description, item, locale),
-        cta:
-          insightCardsBase.resolveMapping<InsightStruct["cta"]>(
-            resolvedData.props.cards?.cta,
-            item,
-            locale
-          ) ?? defaultInsightCta,
-      },
+        ) ?? defaultInsightCta,
     };
   },
 });

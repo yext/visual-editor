@@ -218,10 +218,9 @@ export type TeamCardProps = {
   };
 
   /** @internal */
-  parentData?: {
+  itemData?: {
     field: string;
-    person: PersonStruct;
-  };
+  } & PersonStruct;
 
   /** @internal */
   parentStyles?: {
@@ -467,9 +466,9 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
     },
   },
   resolveData: (data, params) => {
-    // Check card-level parentData first for entity data
-    const cardParentData = data.props.parentData;
-    const person = cardParentData?.person;
+    // Check card-level itemData first for entity data
+    const cardItemData = data.props.itemData;
+    const person = cardItemData;
 
     const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as
       | WithId<ImageWrapperProps>
@@ -490,8 +489,8 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
       | WithId<CTAWrapperProps>
       | undefined;
 
-    const hasParentData = !!data.props.parentData;
-    const showImage = hasParentData
+    const hasItemData = !!data.props.itemData;
+    const showImage = hasItemData
       ? Boolean(person?.headshot || imageSlotProps?.parentData?.image)
       : Boolean(
           imageSlotProps &&
@@ -506,7 +505,7 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
                 "image" in imageSlotProps.data.image.constantValue &&
                 imageSlotProps.data.image.constantValue.image?.url))
         );
-    const showName = hasParentData
+    const showName = hasItemData
       ? Boolean(person?.name || nameSlotProps?.parentData?.text)
       : Boolean(
           nameSlotProps &&
@@ -516,7 +515,7 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
               i18nComponentsInstance.language || "en"
             )
         );
-    const showTitle = hasParentData
+    const showTitle = hasItemData
       ? Boolean(person?.title || titleSlotProps?.parentData?.text)
       : Boolean(
           titleSlotProps &&
@@ -526,7 +525,7 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
               i18nComponentsInstance.language || "en"
             )
         );
-    const showPhone = hasParentData
+    const showPhone = hasItemData
       ? Boolean(
           person?.phoneNumber ||
             phoneSlotProps?.parentData?.phoneNumbers?.length
@@ -537,13 +536,13 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
               (phone: any) => phone.number?.constantValue || phone.number?.field
             )
         );
-    const showEmail = hasParentData
+    const showEmail = hasItemData
       ? Boolean(person?.email || emailSlotProps?.parentData?.list?.length)
       : Boolean(
           emailSlotProps?.data?.list?.constantValue?.length ||
             emailSlotProps?.data?.list?.field
         );
-    const showCTA = hasParentData
+    const showCTA = hasItemData
       ? Boolean(person?.cta?.label || ctaSlotProps?.parentData?.cta?.label)
       : Boolean(
           ctaSlotProps?.data?.entityField?.constantValue?.label ||
@@ -609,10 +608,9 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
       "showCTA",
     ]);
 
-    // Set parentData for all slots if parentData is provided
-    if (data.props.parentData) {
-      const person = data.props.parentData.person;
-      const field = data.props.parentData.field;
+    // Set slot parentData from card itemData when the wrapper provides it.
+    if (data.props.itemData) {
+      const { field, ...person } = data.props.itemData;
 
       updatedData = setDeep(
         updatedData,

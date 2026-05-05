@@ -21,7 +21,7 @@ describe("EventCardsWrapper", () => {
       parent: null,
     }) as any;
 
-  it("resolves one card per linked entity and maps card fields into parentData", async () => {
+  it("resolves one card per linked entity and maps card fields into itemData", async () => {
     const data = createWrapperData();
     data.props.data.constantValueEnabled = false;
     data.props.data.field = "c_linkedLocation";
@@ -105,7 +105,7 @@ describe("EventCardsWrapper", () => {
     );
 
     expect(resolvedData.props!.slots!.CardSlot).toHaveLength(2);
-    expect(resolvedData.props!.slots!.CardSlot[0]?.props.parentData).toEqual({
+    expect(resolvedData.props!.slots!.CardSlot[0]?.props.itemData).toEqual({
       field: "c_linkedLocation",
       fields: {
         image: "photo",
@@ -114,22 +114,20 @@ describe("EventCardsWrapper", () => {
         description: "c_eventDescription",
         cta: "c_eventCta",
       },
-      event: {
-        image: {
-          url: "https://example.com/image.jpg",
-          width: 640,
-          height: 360,
-        },
-        title: "Downtown",
-        dateTime: "2026-05-01T12:00:00",
-        description: {
-          html: "<p>Open house</p>",
-        },
-        cta: {
-          label: "Learn More",
-          link: "https://example.com",
-          linkType: "URL",
-        },
+      image: {
+        url: "https://example.com/image.jpg",
+        width: 640,
+        height: 360,
+      },
+      title: "Downtown",
+      dateTime: "2026-05-01T12:00:00",
+      description: {
+        html: "<p>Open house</p>",
+      },
+      cta: {
+        label: "Learn More",
+        link: "https://example.com",
+        linkType: "URL",
       },
     });
   });
@@ -154,7 +152,7 @@ describe("EventCardsWrapper", () => {
     );
 
     expect(resolvedData.props!.slots!.CardSlot).toHaveLength(1);
-    expect(resolvedData.props!.slots!.CardSlot[0]?.props.parentData).toEqual({
+    expect(resolvedData.props!.slots!.CardSlot[0]?.props.itemData).toEqual({
       field: "c_linkedLocation",
       fields: {
         image: undefined,
@@ -163,17 +161,15 @@ describe("EventCardsWrapper", () => {
         description: undefined,
         cta: undefined,
       },
-      event: {
-        image: undefined,
-        title: "Downtown",
-        dateTime: undefined,
-        description: undefined,
-        cta: {
-          label: { defaultValue: "" },
-          link: "",
-          linkType: "URL",
-          ctaType: "textAndLink",
-        },
+      image: undefined,
+      title: "Downtown",
+      dateTime: undefined,
+      description: undefined,
+      cta: {
+        label: { defaultValue: "" },
+        link: "",
+        linkType: "URL",
+        ctaType: "textAndLink",
       },
     });
   });
@@ -206,25 +202,21 @@ describe("EventCardsWrapper", () => {
     );
 
     expect(
-      resolvedData.props!.slots!.CardSlot[0]?.props.parentData
+      resolvedData.props!.slots!.CardSlot[0]?.props.itemData
     ).toMatchObject({
       field: "c_linkedLocation",
-      event: {
-        title: "Location: Downtown",
-        description: {
-          html: expect.stringContaining("Details: Fresh daily"),
-        },
+      title: "Location: Downtown",
+      description: {
+        html: expect.stringContaining("Details: Fresh daily"),
       },
     });
     expect(
-      resolvedData.props!.slots!.CardSlot[1]?.props.parentData
+      resolvedData.props!.slots!.CardSlot[1]?.props.itemData
     ).toMatchObject({
       field: "c_linkedLocation",
-      event: {
-        title: "Location: Uptown",
-        description: {
-          html: expect.stringContaining("Details: Open late"),
-        },
+      title: "Location: Uptown",
+      description: {
+        html: expect.stringContaining("Details: Open late"),
       },
     });
   });
@@ -257,7 +249,7 @@ describe("EventCardsWrapper", () => {
     );
 
     expect(resolvedData.props!.slots!.CardSlot).toHaveLength(1);
-    expect(resolvedData.props!.slots!.CardSlot[0]?.props.parentData).toEqual({
+    expect(resolvedData.props!.slots!.CardSlot[0]?.props.itemData).toEqual({
       field: "c_eventsSection",
       fields: {
         image: undefined,
@@ -266,28 +258,26 @@ describe("EventCardsWrapper", () => {
         description: undefined,
         cta: undefined,
       },
-      event: {
-        image: {
-          url: "",
-          width: 0,
-          height: 0,
-        },
-        title: "",
-        dateTime: "",
-        description: {
-          defaultValue: "",
-        },
-        cta: {
-          label: { defaultValue: "" },
-          link: "",
-          linkType: "URL",
-          ctaType: "textAndLink",
-        },
+      image: {
+        url: "",
+        width: 0,
+        height: 0,
+      },
+      title: "",
+      dateTime: "",
+      description: {
+        defaultValue: "",
+      },
+      cta: {
+        label: { defaultValue: "" },
+        link: "",
+        linkType: "URL",
+        ctaType: "textAndLink",
       },
     });
   });
 
-  it("resolves one card per base-entity struct item and maps card fields into parentData", async () => {
+  it("resolves one card per base-entity struct item and maps card fields into itemData", async () => {
     const data = createWrapperData();
     data.props.data.constantValueEnabled = false;
     data.props.data.field = "c_customEvents";
@@ -354,7 +344,7 @@ describe("EventCardsWrapper", () => {
     );
 
     expect(resolvedData.props!.slots!.CardSlot).toHaveLength(1);
-    expect(resolvedData.props!.slots!.CardSlot[0]?.props.parentData).toEqual({
+    expect(resolvedData.props!.slots!.CardSlot[0]?.props.itemData).toEqual({
       field: "c_customEvents",
       fields: {
         image: "heroImage",
@@ -363,27 +353,25 @@ describe("EventCardsWrapper", () => {
         description: "summary",
         cta: "primaryCta",
       },
-      event: {
-        image: {
-          url: "https://example.com/image.jpg",
-          width: 640,
-          height: 360,
-        },
-        title: "Cooking Class",
-        dateTime: "2026-05-01T12:00:00",
-        description: {
-          html: "<p>Open house</p>",
-        },
-        cta: {
-          label: "Reserve",
-          link: "https://example.com",
-          linkType: "URL",
-        },
+      image: {
+        url: "https://example.com/image.jpg",
+        width: 640,
+        height: 360,
+      },
+      title: "Cooking Class",
+      dateTime: "2026-05-01T12:00:00",
+      description: {
+        html: "<p>Open house</p>",
+      },
+      cta: {
+        label: "Reserve",
+        link: "https://example.com",
+        linkType: "URL",
       },
     });
   });
 
-  it("preserves constant value mode and keeps parentData unset", async () => {
+  it("preserves constant value mode and keeps itemData unset", async () => {
     const data = createWrapperData();
 
     const resolvedData = await EventCardsWrapper.resolveData!(
@@ -394,7 +382,7 @@ describe("EventCardsWrapper", () => {
     expect(resolvedData.props!.data!.constantValue).toHaveLength(3);
     expect(
       resolvedData.props!.slots!.CardSlot.every(
-        (card: any) => card.props.parentData === undefined
+        (card: any) => card.props.itemData === undefined
       )
     ).toBe(true);
   });

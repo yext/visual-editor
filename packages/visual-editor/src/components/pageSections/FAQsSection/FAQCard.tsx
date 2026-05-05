@@ -83,10 +83,9 @@ export type FAQCardProps = {
   slots: {};
 
   /** @internal */
-  parentData?: {
+  itemData?: {
     field: string;
-    faq: FAQStruct;
-  };
+  } & FAQStruct;
 
   /** @internal */
   index?: number;
@@ -140,7 +139,7 @@ const FAQCardFields: YextFields<FAQCardProps> = {
 };
 
 const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
-  const { data, styles, parentData, index, puck } = props;
+  const { data, styles, itemData, index, puck } = props;
   const analytics = useAnalytics();
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
@@ -221,14 +220,14 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
     });
   }, [styles]);
 
-  const sourceQuestion = parentData ? parentData?.faq.question : data.question;
+  const sourceQuestion = itemData ? itemData.question : data.question;
   const resolvedQuestion = sourceQuestion
     ? resolveComponentData(sourceQuestion, i18n.language, streamDocument, {
         output: "plainText",
       })
     : "";
 
-  const sourceAnswer = parentData ? parentData?.faq.answer : data.answer;
+  const sourceAnswer = itemData ? itemData.answer : data.answer;
   const resolvedAnswer = sourceAnswer
     ? resolveComponentData(sourceAnswer, i18n.language, streamDocument, {
         variant: styles.answerVariant,

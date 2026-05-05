@@ -90,7 +90,7 @@ const eventCards = eventCardsBase.withRepeatedSlot({
       existingItem?.props.styles.truncateDescription,
       existingItem ? gatherSlotStyles(existingItem.props.slots) : undefined
     ) as unknown as ComponentData<EventCardProps>,
-  getParentData: (item, resolvedData) => {
+  getItemData: (item, resolvedData) => {
     const locale = i18nComponentsInstance.language || "en";
     const title = eventCardsBase.resolveMapping<EventStruct["title"]>(
       resolvedData.props.cards?.title,
@@ -107,31 +107,29 @@ const eventCards = eventCardsBase.withRepeatedSlot({
         description: resolvedData.props.cards?.description?.field || undefined,
         cta: resolvedData.props.cards?.cta?.field || undefined,
       },
-      event: {
-        image: eventCardsBase.resolveMapping<EventStruct["image"]>(
-          resolvedData.props.cards?.image,
+      image: eventCardsBase.resolveMapping<EventStruct["image"]>(
+        resolvedData.props.cards?.image,
+        item,
+        locale
+      ),
+      title: title ? resolveComponentData(title, locale, item) : undefined,
+      dateTime: eventCardsBase.resolveMapping<string>(
+        resolvedData.props.cards?.date,
+        item,
+        locale
+      ),
+      description: eventCardsBase.resolveMapping<EventStruct["description"]>(
+        resolvedData.props.cards?.description,
+        item,
+        locale
+      ),
+      cta:
+        eventCardsBase.resolveMapping<EventStruct["cta"]>(
+          resolvedData.props.cards?.cta,
           item,
           locale
-        ),
-        title: title ? resolveComponentData(title, locale, item) : undefined,
-        dateTime: eventCardsBase.resolveMapping<string>(
-          resolvedData.props.cards?.date,
-          item,
-          locale
-        ),
-        description: eventCardsBase.resolveMapping<EventStruct["description"]>(
-          resolvedData.props.cards?.description,
-          item,
-          locale
-        ),
-        cta:
-          eventCardsBase.resolveMapping<EventStruct["cta"]>(
-            resolvedData.props.cards?.cta,
-            item,
-            locale
-          ) ?? defaultEventCta,
-      },
-    } satisfies EventCardProps["parentData"];
+        ) ?? defaultEventCta,
+    } satisfies EventCardProps["itemData"];
   },
 });
 

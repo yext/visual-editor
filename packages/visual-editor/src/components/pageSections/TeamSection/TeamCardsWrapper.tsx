@@ -90,7 +90,7 @@ const teamCards = teamCardsBase.withRepeatedSlot({
       existingItem?.props.styles.backgroundColor,
       existingItem ? gatherSlotStyles(existingItem.props.slots) : undefined
     ) as unknown as ComponentData<TeamCardProps>,
-  getParentData: (item, resolvedData) => {
+  getItemData: (item, resolvedData) => {
     const locale = i18nComponentsInstance.language || "en";
     const name = teamCardsBase.resolveMapping<PersonStruct["name"]>(
       resolvedData.props.cards?.name,
@@ -100,35 +100,33 @@ const teamCards = teamCardsBase.withRepeatedSlot({
 
     return {
       field: resolvedData.props.data.field,
-      person: {
-        headshot: teamCardsBase.resolveMapping<PersonStruct["headshot"]>(
-          resolvedData.props.cards?.headshot,
+      headshot: teamCardsBase.resolveMapping<PersonStruct["headshot"]>(
+        resolvedData.props.cards?.headshot,
+        item,
+        locale
+      ),
+      name: name ? resolveComponentData(name, locale, item) : undefined,
+      title: teamCardsBase.resolveMapping<PersonStruct["title"]>(
+        resolvedData.props.cards?.title,
+        item,
+        locale
+      ),
+      phoneNumber: teamCardsBase.resolveMapping<PersonStruct["phoneNumber"]>(
+        resolvedData.props.cards?.phoneNumber,
+        item,
+        locale
+      ),
+      email: teamCardsBase.resolveMapping<PersonStruct["email"]>(
+        resolvedData.props.cards?.email,
+        item,
+        locale
+      ),
+      cta:
+        teamCardsBase.resolveMapping<PersonStruct["cta"]>(
+          resolvedData.props.cards?.cta,
           item,
           locale
-        ),
-        name: name ? resolveComponentData(name, locale, item) : undefined,
-        title: teamCardsBase.resolveMapping<PersonStruct["title"]>(
-          resolvedData.props.cards?.title,
-          item,
-          locale
-        ),
-        phoneNumber: teamCardsBase.resolveMapping<PersonStruct["phoneNumber"]>(
-          resolvedData.props.cards?.phoneNumber,
-          item,
-          locale
-        ),
-        email: teamCardsBase.resolveMapping<PersonStruct["email"]>(
-          resolvedData.props.cards?.email,
-          item,
-          locale
-        ),
-        cta:
-          teamCardsBase.resolveMapping<PersonStruct["cta"]>(
-            resolvedData.props.cards?.cta,
-            item,
-            locale
-          ) ?? defaultPersonCta,
-      },
+        ) ?? defaultPersonCta,
     };
   },
 });

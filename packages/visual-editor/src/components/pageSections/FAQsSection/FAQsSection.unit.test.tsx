@@ -43,19 +43,15 @@ describe("FAQSection resolveData", () => {
     } as any);
 
     expect(resolvedData.props!.slots!.CardSlot).toHaveLength(2);
-    expect(resolvedData.props!.slots!.CardSlot[0]?.props.parentData).toEqual({
+    expect(resolvedData.props!.slots!.CardSlot[0]?.props.itemData).toEqual({
       field: "c_linkedLocation",
-      faq: {
-        question: "Downtown",
-        answer: getDefaultRTF("Open late"),
-      },
+      question: "Downtown",
+      answer: getDefaultRTF("Open late"),
     });
-    expect(resolvedData.props!.slots!.CardSlot[1]?.props.parentData).toEqual({
+    expect(resolvedData.props!.slots!.CardSlot[1]?.props.itemData).toEqual({
       field: "c_linkedLocation",
-      faq: {
-        question: "Uptown",
-        answer: getDefaultRTF("Open early"),
-      },
+      question: "Uptown",
+      answer: getDefaultRTF("Open early"),
     });
   });
 
@@ -95,7 +91,7 @@ describe("FAQSection resolveData", () => {
     } as any);
 
     expect(
-      resolvedData.props!.slots!.CardSlot[0]?.props.parentData?.faq.answer
+      resolvedData.props!.slots!.CardSlot[0]?.props.itemData?.answer
     ).toMatchObject({
       html: expect.stringContaining("Potato: Downtown"),
     });
@@ -138,14 +134,12 @@ describe("FAQSection resolveData", () => {
       trigger: "initial",
     } as any);
 
-    expect(resolvedData.props!.slots!.CardSlot[0]?.props.parentData).toEqual({
+    expect(resolvedData.props!.slots!.CardSlot[0]?.props.itemData).toEqual({
       field: "c_linkedLocation",
-      faq: {
-        question: {
-          defaultValue: "Question: Downtown",
-        },
-        answer: getDefaultRTF("Fresh daily"),
+      question: {
+        defaultValue: "Question: Downtown",
       },
+      answer: getDefaultRTF("Fresh daily"),
     });
   });
 });

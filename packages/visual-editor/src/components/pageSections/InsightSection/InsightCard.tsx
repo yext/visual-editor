@@ -227,10 +227,9 @@ export type InsightCardProps = {
   };
 
   /** @internal */
-  parentData?: {
+  itemData?: {
     field: string;
-    insight: InsightStruct;
-  };
+  } & InsightStruct;
 
   /** @internal styles from parent component */
   parentStyles?: {
@@ -454,8 +453,8 @@ export const InsightCard: YextComponentConfig<InsightCardProps> = {
 
     let updatedData = data;
 
-    if (updatedData.props.parentData) {
-      const { field, insight } = updatedData.props.parentData;
+    if (updatedData.props.itemData) {
+      const { field, ...insight } = updatedData.props.itemData;
 
       updatedData = setDeep(
         updatedData,

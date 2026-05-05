@@ -138,10 +138,9 @@ export type TestimonialCardProps = {
   };
 
   /** @internal */
-  parentData?: {
+  itemData?: {
     field: string;
-    testimonial: TestimonialStruct;
-  };
+  } & TestimonialStruct;
 
   /** @internal */
   parentStyles?: {
@@ -338,9 +337,9 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
     },
   },
   resolveData: (data, params) => {
-    // Check card-level parentData first for entity data
-    const cardParentData = data.props.parentData;
-    const testimonial = cardParentData?.testimonial;
+    // Check card-level itemData first for entity data
+    const cardItemData = data.props.itemData;
+    const testimonial = cardItemData;
 
     const descriptionSlotProps = data.props.slots.DescriptionSlot?.[0]
       ?.props as WithId<BodyTextProps> | undefined;
@@ -349,8 +348,8 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
     const contributionDateSlotProps = data.props.slots.ContributionDateSlot?.[0]
       ?.props as WithId<any> | undefined;
 
-    const hasParentData = !!cardParentData;
-    const showDescription = hasParentData
+    const hasItemData = !!cardItemData;
+    const showDescription = hasItemData
       ? Boolean(
           testimonial?.description || descriptionSlotProps?.parentData?.richText
         )
@@ -362,7 +361,7 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
               i18nComponentsInstance.language || "en"
             )
         );
-    const showContributorName = hasParentData
+    const showContributorName = hasItemData
       ? Boolean(
           testimonial?.contributorName ||
             contributorNameSlotProps?.parentData?.text
@@ -375,7 +374,7 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
               i18nComponentsInstance.language || "en"
             )
         );
-    const showContributionDate = hasParentData
+    const showContributionDate = hasItemData
       ? Boolean(
           testimonial?.contributionDate ||
             contributionDateSlotProps?.parentData?.date
@@ -404,10 +403,9 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
       "showIcon",
     ]);
 
-    // Set parentData for all slots if parentData is provided
-    if (data.props.parentData) {
-      const testimonial = data.props.parentData.testimonial;
-      const field = data.props.parentData.field;
+    // Set slot parentData from card itemData when the wrapper provides it.
+    if (data.props.itemData) {
+      const { field, ...testimonial } = data.props.itemData;
 
       updatedData = setDeep(
         updatedData,

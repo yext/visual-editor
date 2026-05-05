@@ -108,23 +108,21 @@ const faqs = faqsBase.withRepeatedSlot({
       existingItem?.props.styles.answerVariant,
       existingItem?.props.styles.answerColor
     ) as unknown as ComponentData<FAQCardProps>,
-  getParentData: (item, resolvedData) => {
+  getItemData: (item, resolvedData) => {
     const locale = i18nComponentsInstance.language || "en";
 
     return {
       field: resolvedData.props.data.field,
-      faq: {
-        question: faqsBase.resolveMapping(
-          resolvedData.props.faqs?.question,
-          item,
-          locale
-        ) ?? { defaultValue: "" },
-        answer: faqsBase.resolveMapping(
-          resolvedData.props.faqs?.answer,
-          item,
-          locale
-        ) ?? { defaultValue: "" },
-      },
+      question: faqsBase.resolveMapping(
+        resolvedData.props.faqs?.question,
+        item,
+        locale
+      ) ?? { defaultValue: "" },
+      answer: faqsBase.resolveMapping(
+        resolvedData.props.faqs?.answer,
+        item,
+        locale
+      ) ?? { defaultValue: "" },
     };
   },
 });

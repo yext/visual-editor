@@ -32,7 +32,7 @@ const createWrapperData = <TProps extends DefaultComponentProps>(
 });
 
 describe("mapped list wrappers", () => {
-  it("maps linked products into product card parentData", async () => {
+  it("maps linked products into product card itemData", async () => {
     const data = createWrapperData<ProductCardsWrapperProps>(
       "ProductCardsWrapper",
       ProductCardsWrapper.defaultProps!
@@ -94,20 +94,18 @@ describe("mapped list wrappers", () => {
     );
 
     expect(resolvedData.props!.slots!.CardSlot).toHaveLength(1);
-    expect(resolvedData.props!.slots!.CardSlot[0]?.props.parentData).toEqual({
+    expect(resolvedData.props!.slots!.CardSlot[0]?.props.itemData).toEqual({
       field: "c_linkedProducts",
-      product: {
-        image: { url: "https://example.com/product.jpg" },
-        brow: "Featured",
-        name: "Trail Shoe",
-        description: { html: "<p>Lightweight</p>" },
-        cta: { label: "Shop", link: "/shop", linkType: "URL" },
-      },
+      image: { url: "https://example.com/product.jpg" },
+      brow: "Featured",
+      name: "Trail Shoe",
+      description: { html: "<p>Lightweight</p>" },
+      cta: { label: "Shop", link: "/shop", linkType: "URL" },
       priceText: "$120",
     });
   });
 
-  it("maps linked insights into insight card parentData", async () => {
+  it("maps linked insights into insight card itemData", async () => {
     const data = createWrapperData<InsightCardsWrapperProps>(
       "InsightCardsWrapper",
       InsightCardsWrapper.defaultProps!
@@ -168,20 +166,18 @@ describe("mapped list wrappers", () => {
       })
     );
 
-    expect(resolvedData.props!.slots!.CardSlot[0]?.props.parentData).toEqual({
+    expect(resolvedData.props!.slots!.CardSlot[0]?.props.itemData).toEqual({
       field: "c_articles",
-      insight: {
-        image: { url: "https://example.com/article.jpg" },
-        name: "Market Trends",
-        category: "Research",
-        publishTime: "2026-05-01",
-        description: { html: "<p>Analysis</p>" },
-        cta: { label: "Read", link: "/read", linkType: "URL" },
-      },
+      image: { url: "https://example.com/article.jpg" },
+      name: "Market Trends",
+      category: "Research",
+      publishTime: "2026-05-01",
+      description: { html: "<p>Analysis</p>" },
+      cta: { label: "Read", link: "/read", linkType: "URL" },
     });
   });
 
-  it("maps linked testimonials into testimonial card parentData", async () => {
+  it("maps linked testimonials into testimonial card itemData", async () => {
     const data = createWrapperData<TestimonialCardsWrapperProps>(
       "TestimonialCardsWrapper",
       TestimonialCardsWrapper.defaultProps!
@@ -219,17 +215,15 @@ describe("mapped list wrappers", () => {
       })
     );
 
-    expect(resolvedData.props!.slots!.CardSlot[0]?.props.parentData).toEqual({
+    expect(resolvedData.props!.slots!.CardSlot[0]?.props.itemData).toEqual({
       field: "c_reviews",
-      testimonial: {
-        description: { html: "<p>Great service</p>" },
-        contributorName: "Avery",
-        contributionDate: "2026-04-15",
-      },
+      description: { html: "<p>Great service</p>" },
+      contributorName: "Avery",
+      contributionDate: "2026-04-15",
     });
   });
 
-  it("maps linked team members into team card parentData", async () => {
+  it("maps linked team members into team card itemData", async () => {
     const data = createWrapperData<TeamCardsWrapperProps>(
       "TeamCardsWrapper",
       TeamCardsWrapper.defaultProps!
@@ -290,16 +284,14 @@ describe("mapped list wrappers", () => {
       })
     );
 
-    expect(resolvedData.props!.slots!.CardSlot[0]?.props.parentData).toEqual({
+    expect(resolvedData.props!.slots!.CardSlot[0]?.props.itemData).toEqual({
       field: "c_teamMembers",
-      person: {
-        headshot: { url: "https://example.com/headshot.jpg" },
-        name: "Jordan",
-        title: "Advisor",
-        phoneNumber: "+12025550123",
-        email: "jordan@example.com",
-        cta: { label: "Profile", link: "/team/jordan", linkType: "URL" },
-      },
+      headshot: { url: "https://example.com/headshot.jpg" },
+      name: "Jordan",
+      title: "Advisor",
+      phoneNumber: "+12025550123",
+      email: "jordan@example.com",
+      cta: { label: "Profile", link: "/team/jordan", linkType: "URL" },
     });
   });
 });

@@ -238,11 +238,10 @@ export type ProductCardProps = {
   };
 
   /** @internal */
-  parentData?: {
+  itemData?: {
     field: string;
-    product: ProductStruct;
     priceText?: string;
-  };
+  } & ProductStruct;
 
   /** @internal */
   parentStyles?: {
@@ -492,7 +491,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       | YextEntityField<ProductStruct["price"]>
       | undefined;
     const entityPrice =
-      data.props.parentData?.product.price ??
+      data.props.itemData?.price ??
       (priceEntityField
         ? resolveYextEntityField<ProductStruct["price"]>(
             params.metadata.streamDocument,
@@ -506,7 +505,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       entityPrice?.currencyCode,
       locale
     );
-    const mappedPriceText = data.props.parentData?.priceText;
+    const mappedPriceText = data.props.itemData?.priceText;
     const fallbackPriceCandidate = priceSlotProps
       ? resolveYextEntityField(
           params.metadata.streamDocument,
@@ -543,7 +542,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
         })
       | undefined;
     const resolvedImage =
-      data.props.parentData?.product.image ??
+      data.props.itemData?.image ??
       imageSlotProps?.parentData?.image ??
       (imageSlotProps
         ? resolveYextEntityField(
@@ -558,7 +557,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       | WithId<HeadingTextProps>
       | undefined;
     const resolvedTitle =
-      data.props.parentData?.product.name ??
+      data.props.itemData?.name ??
       titleSlotProps?.parentData?.text ??
       (titleSlotProps
         ? resolveYextEntityField(
@@ -581,7 +580,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       | undefined;
 
     const resolvedBrow =
-      data.props.parentData?.product.brow ??
+      data.props.itemData?.brow ??
       browSlotProps?.parentData?.text ??
       (browSlotProps
         ? resolveYextEntityField(
@@ -596,7 +595,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       ?.props as WithId<BodyTextProps> | undefined;
 
     const resolvedDescription =
-      data.props.parentData?.product.description ??
+      data.props.itemData?.description ??
       descriptionSlotProps?.parentData?.richText ??
       (descriptionSlotProps
         ? resolveYextEntityField(
@@ -610,8 +609,8 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
     const ctaSlotProps = data.props.slots.CTASlot?.[0]?.props as
       | WithId<CTAWrapperProps>
       | undefined;
-    const resolvedCTA = data.props.parentData
-      ? (data.props.parentData.product.cta ?? ctaSlotProps?.parentData?.cta)
+    const resolvedCTA = data.props.itemData
+      ? (data.props.itemData.cta ?? ctaSlotProps?.parentData?.cta)
       : (ctaSlotProps?.parentData?.cta ??
         (ctaSlotProps
           ? resolveYextEntityField(
@@ -665,15 +664,18 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       `cta${data.props.index}`
     );
 
-    if (data.props.parentData) {
-      const product = data.props.parentData.product;
-      const field = data.props.parentData.field;
+    if (data.props.itemData) {
+      const {
+        field,
+        priceText: mappedPriceText,
+        ...product
+      } = data.props.itemData;
       const formattedPrice = formatCurrency(
         product.price?.value,
         product.price?.currencyCode,
         locale
       );
-      const priceText = formattedPrice ?? data.props.parentData.priceText;
+      const priceText = formattedPrice ?? mappedPriceText;
 
       updatedData = setDeep(
         updatedData,

@@ -60,7 +60,7 @@ type ResolveItemsOptions<
     index: number | undefined,
     existingItem?: ComponentData<TItemProps>
   ) => ComponentData<TItemProps>;
-  getParentData: (
+  getItemData: (
     item: StreamDocument,
     data: ComponentData<TProps>,
     index: number
@@ -442,7 +442,7 @@ const buildMappedItems = <TProps extends DefaultComponentProps>({
       }),
     /**
      * Connects mapped items to a repeated Puck slot, automatically syncing slot
-     * children, `index`, and `parentData` from the resolved source items.
+     * children, `index`, and `itemData` from the resolved source items.
      */
     withRepeatedSlot: <TItemProps extends DefaultComponentProps>(
       options: ResolveItemsOptions<TProps, TItemProps>
@@ -520,8 +520,8 @@ const buildMappedItems = <TProps extends DefaultComponentProps>({
               decorateCard: (itemComponent, item, index) =>
                 setPathValue(
                   setPathValue(itemComponent, "index", index),
-                  "parentData",
-                  options.getParentData(item, resolved, index)
+                  "itemData",
+                  options.getItemData(item, resolved, index)
                 ),
               items,
             })

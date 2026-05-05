@@ -213,10 +213,9 @@ export type EventCardProps = {
     CTASlot: Slot;
   };
 
-  /** @internal data from parent component */
-  parentData?: {
+  /** @internal item data resolved by the wrapper */
+  itemData?: {
     field: string;
-    event: EventStruct;
     fields?: {
       image?: string;
       title?: string;
@@ -224,7 +223,7 @@ export type EventCardProps = {
       description?: string;
       cta?: string;
     };
-  };
+  } & EventStruct;
 
   /** @internal styles from parent component */
   parentStyles?: {
@@ -573,11 +572,9 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
       "showCTA",
     ]);
 
-    // Set parentData for all slots if parentData is provided
-    if (data.props.parentData) {
-      const event = data.props.parentData.event;
-      const field = data.props.parentData.field;
-      const fields = data.props.parentData.fields;
+    // Set slot parentData from card itemData when the wrapper provides it.
+    if (data.props.itemData) {
+      const { field, fields, ...event } = data.props.itemData;
 
       updatedData = setDeep(
         updatedData,

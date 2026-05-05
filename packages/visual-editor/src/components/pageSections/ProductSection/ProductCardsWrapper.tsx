@@ -96,7 +96,7 @@ const productCards = productCardsBase.withRepeatedSlot({
       existingItem?.props.styles.backgroundColor,
       existingItem ? gatherSlotStyles(existingItem.props.slots) : undefined
     ) as unknown as ComponentData<ProductCardProps>,
-  getParentData: (item, resolvedData) => {
+  getItemData: (item, resolvedData) => {
     const locale = i18nComponentsInstance.language || "en";
     const name = productCardsBase.resolveMapping<ProductStruct["name"]>(
       resolvedData.props.cards?.name,
@@ -106,28 +106,26 @@ const productCards = productCardsBase.withRepeatedSlot({
 
     return {
       field: resolvedData.props.data.field,
-      product: {
-        image: productCardsBase.resolveMapping<ProductStruct["image"]>(
-          resolvedData.props.cards?.image,
+      image: productCardsBase.resolveMapping<ProductStruct["image"]>(
+        resolvedData.props.cards?.image,
+        item,
+        locale
+      ),
+      brow: productCardsBase.resolveMapping<ProductStruct["brow"]>(
+        resolvedData.props.cards?.brow,
+        item,
+        locale
+      ),
+      name: name ? resolveComponentData(name, locale, item) : undefined,
+      description: productCardsBase.resolveMapping<
+        ProductStruct["description"]
+      >(resolvedData.props.cards?.description, item, locale),
+      cta:
+        productCardsBase.resolveMapping<ProductStruct["cta"]>(
+          resolvedData.props.cards?.cta,
           item,
           locale
-        ),
-        brow: productCardsBase.resolveMapping<ProductStruct["brow"]>(
-          resolvedData.props.cards?.brow,
-          item,
-          locale
-        ),
-        name: name ? resolveComponentData(name, locale, item) : undefined,
-        description: productCardsBase.resolveMapping<
-          ProductStruct["description"]
-        >(resolvedData.props.cards?.description, item, locale),
-        cta:
-          productCardsBase.resolveMapping<ProductStruct["cta"]>(
-            resolvedData.props.cards?.cta,
-            item,
-            locale
-          ) ?? defaultProductCta,
-      },
+        ) ?? defaultProductCta,
       priceText: productCardsBase.resolveMapping<string>(
         resolvedData.props.cards?.price,
         item,
