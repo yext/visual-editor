@@ -468,9 +468,13 @@ const tests: ComponentTest[] = [
       ],
     },
     props: {
-      ...FAQSection.defaultProps,
+      ...(FAQSection.defaultProps as NonNullable<
+        typeof FAQSection.defaultProps
+      >),
       data: {
-        ...FAQSection.defaultProps.data,
+        ...(
+          FAQSection.defaultProps as NonNullable<typeof FAQSection.defaultProps>
+        ).data,
         field: "c_linkedLocation",
         constantValueEnabled: false,
         constantValue: [{}, {}],
@@ -509,9 +513,13 @@ const tests: ComponentTest[] = [
       ],
     },
     props: {
-      ...FAQSection.defaultProps,
+      ...(FAQSection.defaultProps as NonNullable<
+        typeof FAQSection.defaultProps
+      >),
       data: {
-        ...FAQSection.defaultProps.data,
+        ...(
+          FAQSection.defaultProps as NonNullable<typeof FAQSection.defaultProps>
+        ).data,
         field: "c_linkedLocation",
         constantValueEnabled: false,
         constantValue: [{}],

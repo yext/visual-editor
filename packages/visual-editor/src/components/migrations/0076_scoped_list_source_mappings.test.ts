@@ -3,7 +3,7 @@ import { migrate } from "../../utils/migrate.ts";
 import { scopedListSourceMappingsMigration } from "./0076_scoped_list_source_mappings.ts";
 
 const runMigration = (
-  content: Record<string, any>,
+  content: { type: string; props: Record<string, any> },
   streamDocument: Record<string, unknown> = {}
 ): Record<string, any> =>
   migrate(

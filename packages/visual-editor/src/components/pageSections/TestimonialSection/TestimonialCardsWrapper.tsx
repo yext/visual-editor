@@ -132,10 +132,10 @@ const createTestimonialCard = (
   ) as unknown as ComponentData<TestimonialCardProps>;
 };
 
-const syncCards = (
-  data: ComponentData<TestimonialCardsWrapperProps>,
+const syncCards = <TData extends { props: TestimonialCardsWrapperProps }>(
+  data: TData,
   resolvedItems: Record<string, unknown>[]
-): ComponentData<TestimonialCardsWrapperProps> => {
+): TData => {
   const currentCards =
     (data.props.slots
       .CardSlot as unknown as ComponentData<TestimonialCardProps>[]) ?? [];
@@ -163,7 +163,7 @@ const syncCards = (
         },
       }),
     })
-  );
+  ) as TData;
 };
 
 const TestimonialCardsWrapperComponent: PuckComponent<
@@ -191,20 +191,7 @@ export const TestimonialCardsWrapper: YextComponentConfig<TestimonialCardsWrappe
       },
       cards: testimonialCards.defaultProps.cards as TestimonialCardItem,
       slots: {
-        CardSlot: [
-          defaultTestimonialCardSlotData(
-            undefined,
-            0
-          ) as unknown as ComponentData<TestimonialCardProps>,
-          defaultTestimonialCardSlotData(
-            undefined,
-            1
-          ) as unknown as ComponentData<TestimonialCardProps>,
-          defaultTestimonialCardSlotData(
-            undefined,
-            2
-          ) as unknown as ComponentData<TestimonialCardProps>,
-        ],
+        CardSlot: [],
       },
       styles: {
         showName: true,

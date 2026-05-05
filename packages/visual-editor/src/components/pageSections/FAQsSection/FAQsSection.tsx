@@ -131,10 +131,10 @@ const FAQsSectionFields: YextFields<FAQSectionProps> = {
   },
 };
 
-const syncCards = (
-  data: ComponentData<FAQSectionProps>,
+const syncCards = <TData extends { props: FAQSectionProps }>(
+  data: TData,
   resolvedItems: Record<string, unknown>[]
-): ComponentData<FAQSectionProps> => {
+): TData => {
   const currentCards =
     (data.props.slots.CardSlot as unknown as ComponentData<FAQCardProps>[]) ??
     [];
@@ -173,7 +173,7 @@ const syncCards = (
         },
       }),
     })
-  );
+  ) as TData;
 };
 
 const FAQsSectionComponent: PuckComponent<FAQSectionProps> = ({

@@ -169,10 +169,10 @@ const toEventCardItemData = (
   cta: (item.cta as EventStruct["cta"] | undefined) ?? defaultEventCta,
 });
 
-const syncCards = (
-  data: ComponentData<EventCardsWrapperProps>,
+const syncCards = <TData extends { props: EventCardsWrapperProps }>(
+  data: TData,
   resolvedItems: Record<string, unknown>[]
-): ComponentData<EventCardsWrapperProps> => {
+): TData => {
   const currentCards =
     (data.props.slots.CardSlot as unknown as ComponentData<EventCardProps>[]) ??
     [];
@@ -197,7 +197,7 @@ const syncCards = (
         },
       }),
     })
-  );
+  ) as TData;
 };
 
 const EventCardsWrapperComponent: PuckComponent<EventCardsWrapperProps> = ({
@@ -232,20 +232,7 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
       showCTA: true,
     },
     slots: {
-      CardSlot: [
-        defaultEventCardSlotData(
-          undefined,
-          0
-        ) as unknown as ComponentData<EventCardProps>,
-        defaultEventCardSlotData(
-          undefined,
-          1
-        ) as unknown as ComponentData<EventCardProps>,
-        defaultEventCardSlotData(
-          undefined,
-          2
-        ) as unknown as ComponentData<EventCardProps>,
-      ],
+      CardSlot: [],
     },
   },
   resolveFields: (data) =>

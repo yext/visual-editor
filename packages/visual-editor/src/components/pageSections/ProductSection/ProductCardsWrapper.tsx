@@ -175,10 +175,10 @@ const createProductCard = (
   ) as unknown as ComponentData<ProductCardProps>;
 };
 
-const syncCards = (
-  data: ComponentData<ProductCardsWrapperProps>,
+const syncCards = <TData extends { props: ProductCardsWrapperProps }>(
+  data: TData,
   resolvedItems: Record<string, unknown>[]
-): ComponentData<ProductCardsWrapperProps> => {
+): TData => {
   const currentCards =
     (data.props.slots
       .CardSlot as unknown as ComponentData<ProductCardProps>[]) ?? [];
@@ -209,7 +209,7 @@ const syncCards = (
         },
       }),
     })
-  );
+  ) as TData;
 };
 
 const ProductCardsWrapperComponent: PuckComponent<ProductCardsWrapperProps> = ({
@@ -250,11 +250,7 @@ export const ProductCardsWrapper: YextComponentConfig<ProductCardsWrapperProps> 
         showCTA: true,
       },
       slots: {
-        CardSlot: [
-          defaultProductCardSlotData() as unknown as ComponentData<ProductCardProps>,
-          defaultProductCardSlotData() as unknown as ComponentData<ProductCardProps>,
-          defaultProductCardSlotData() as unknown as ComponentData<ProductCardProps>,
-        ],
+        CardSlot: [],
       },
     },
     resolveFields: (data) =>

@@ -87,7 +87,7 @@ const migrateLegacyListSourceProps = (
       data: {
         ...props.data,
         constantValue: cards.length
-          ? cards.map((card) => extractManualItem(card))
+          ? cards.map((card: Record<string, any>) => extractManualItem(card))
           : createEmptyItems(fallbackLength),
       },
     };

@@ -168,10 +168,10 @@ const createInsightCard = (
   ) as unknown as ComponentData<InsightCardProps>;
 };
 
-const syncCards = (
-  data: ComponentData<InsightCardsWrapperProps>,
+const syncCards = <TData extends { props: InsightCardsWrapperProps }>(
+  data: TData,
   resolvedItems: Record<string, unknown>[]
-): ComponentData<InsightCardsWrapperProps> => {
+): TData => {
   const currentCards =
     (data.props.slots
       .CardSlot as unknown as ComponentData<InsightCardProps>[]) ?? [];
@@ -202,7 +202,7 @@ const syncCards = (
         },
       }),
     })
-  );
+  ) as TData;
 };
 
 const InsightCardsWrapperComponent: PuckComponent<InsightCardsWrapperProps> = ({
@@ -242,20 +242,7 @@ export const InsightCardsWrapper: YextComponentConfig<InsightCardsWrapperProps> 
         showCTA: true,
       },
       slots: {
-        CardSlot: [
-          defaultInsightCardSlotData(
-            undefined,
-            0
-          ) as unknown as ComponentData<InsightCardProps>,
-          defaultInsightCardSlotData(
-            undefined,
-            1
-          ) as unknown as ComponentData<InsightCardProps>,
-          defaultInsightCardSlotData(
-            undefined,
-            2
-          ) as unknown as ComponentData<InsightCardProps>,
-        ],
+        CardSlot: [],
       },
     },
     resolveFields: (data) =>

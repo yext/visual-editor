@@ -10,7 +10,10 @@ import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { TestimonialCardsWrapperProps } from "./TestimonialCardsWrapper.tsx";
+import {
+  TestimonialCardsWrapper,
+  TestimonialCardsWrapperProps,
+} from "./TestimonialCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";

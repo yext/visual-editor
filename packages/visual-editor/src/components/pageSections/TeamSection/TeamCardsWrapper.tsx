@@ -161,10 +161,10 @@ const createTeamCard = (
   ) as unknown as ComponentData<TeamCardProps>;
 };
 
-const syncCards = (
-  data: ComponentData<TeamCardsWrapperProps>,
+const syncCards = <TData extends { props: TeamCardsWrapperProps }>(
+  data: TData,
   resolvedItems: Record<string, unknown>[]
-): ComponentData<TeamCardsWrapperProps> => {
+): TData => {
   const currentCards =
     (data.props.slots.CardSlot as unknown as ComponentData<TeamCardProps>[]) ??
     [];
@@ -194,7 +194,7 @@ const syncCards = (
         },
       }),
     })
-  );
+  ) as TData;
 };
 
 const TeamCardsWrapperComponent: PuckComponent<TeamCardsWrapperProps> = ({
@@ -233,20 +233,7 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
       showCTA: true,
     },
     slots: {
-      CardSlot: [
-        defaultTeamCardSlotData(
-          undefined,
-          0
-        ) as unknown as ComponentData<TeamCardProps>,
-        defaultTeamCardSlotData(
-          undefined,
-          1
-        ) as unknown as ComponentData<TeamCardProps>,
-        defaultTeamCardSlotData(
-          undefined,
-          2
-        ) as unknown as ComponentData<TeamCardProps>,
-      ],
+      CardSlot: [],
     },
   },
   resolveFields: (data) =>
