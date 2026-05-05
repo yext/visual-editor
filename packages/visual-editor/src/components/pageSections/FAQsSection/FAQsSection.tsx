@@ -35,6 +35,7 @@ import {
   type YextComponentConfig,
   type YextFields,
 } from "../../../fields/fields.ts";
+import { type ItemSourceValue } from "../../../fields/ItemSourceField.tsx";
 import { type StreamDocument, createItemSource } from "../../../utils/index.ts";
 import { buildListSectionCards } from "../../../utils/cardSlots/listSectionData.ts";
 import {
@@ -53,11 +54,7 @@ export interface FAQStyles {
 }
 
 export interface FAQSectionProps {
-  data: {
-    field: string;
-    constantValueEnabled?: boolean;
-    constantValue: FAQItem[];
-  };
+  data: ItemSourceValue<FAQItem>;
   faqs?: FAQItem;
   styles: FAQStyles;
   slots: {

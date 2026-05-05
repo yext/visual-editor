@@ -18,6 +18,7 @@ import {
   type YextComponentConfig,
   type YextFields,
 } from "../../../fields/fields.ts";
+import { type ItemSourceValue } from "../../../fields/ItemSourceField.tsx";
 import { renderMappedEntityFieldEmptyState } from "../EntityFieldSectionEmptyState.tsx";
 import {
   MappedEntityFieldConditionalRender,
@@ -38,11 +39,7 @@ type TeamCardItem = {
 };
 
 export type TeamCardsWrapperProps = {
-  data: {
-    field: string;
-    constantValueEnabled?: boolean;
-    constantValue: TeamCardItem[];
-  };
+  data: ItemSourceValue<TeamCardItem>;
   cards?: TeamCardItem;
   styles: {
     showImage: boolean;

@@ -20,6 +20,7 @@ import {
   type YextComponentConfig,
   type YextFields,
 } from "../../../fields/fields.ts";
+import { type ItemSourceValue } from "../../../fields/ItemSourceField.tsx";
 import { type YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { buildListSectionCards } from "../../../utils/cardSlots/listSectionData.ts";
 import { renderMappedEntityFieldEmptyState } from "../EntityFieldSectionEmptyState.tsx";
@@ -37,11 +38,7 @@ type EventCardItem = {
 };
 
 export type EventCardsWrapperProps = {
-  data: {
-    field: string;
-    constantValueEnabled?: boolean;
-    constantValue: EventCardItem[];
-  };
+  data: ItemSourceValue<EventCardItem>;
   cards?: EventCardItem;
   styles: {
     showImage: boolean;

@@ -9,6 +9,10 @@ import { YextAutoField } from "./YextAutoField.tsx";
 import { type MappedSourceFieldFilter } from "../utils/cardSlots/mappedSource.ts";
 import { type YextFieldDefinition, type YextFieldMap } from "./fields.ts";
 
+/**
+ * Shared value shape for repeated item sources that can either resolve from a
+ * linked list field or fall back to manually authored items.
+ */
 export type ItemSourceValue<TItem extends Record<string, unknown>> = {
   field: string;
   constantValueEnabled?: boolean;

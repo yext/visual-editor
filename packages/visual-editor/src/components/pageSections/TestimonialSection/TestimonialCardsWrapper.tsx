@@ -22,6 +22,7 @@ import {
   type YextComponentConfig,
   type YextFields,
 } from "../../../fields/fields.ts";
+import { type ItemSourceValue } from "../../../fields/ItemSourceField.tsx";
 import { renderMappedEntityFieldEmptyState } from "../EntityFieldSectionEmptyState.tsx";
 import {
   MappedEntityFieldConditionalRender,
@@ -40,11 +41,7 @@ type TestimonialCardItem = {
 };
 
 export type TestimonialCardsWrapperProps = {
-  data: {
-    field: string;
-    constantValueEnabled?: boolean;
-    constantValue: TestimonialCardItem[];
-  };
+  data: ItemSourceValue<TestimonialCardItem>;
   cards?: TestimonialCardItem;
   styles: {
     showName: boolean;

@@ -19,6 +19,7 @@ import {
   type YextComponentConfig,
   type YextFields,
 } from "../../../fields/fields.ts";
+import { type ItemSourceValue } from "../../../fields/ItemSourceField.tsx";
 import { type YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { buildListSectionCards } from "../../../utils/cardSlots/listSectionData.ts";
 import { type StreamDocument, createItemSource } from "../../../utils/index.ts";
@@ -38,11 +39,7 @@ type InsightCardItem = {
 };
 
 export type InsightCardsWrapperProps = {
-  data: {
-    field: string;
-    constantValueEnabled?: boolean;
-    constantValue: InsightCardItem[];
-  };
+  data: ItemSourceValue<InsightCardItem>;
   cards?: InsightCardItem;
   styles: {
     showImage: boolean;

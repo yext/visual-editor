@@ -17,6 +17,7 @@ import {
   type YextComponentConfig,
   type YextFields,
 } from "../../../fields/fields.ts";
+import { type ItemSourceValue } from "../../../fields/ItemSourceField.tsx";
 import { ProductSectionVariant } from "./ProductSection.tsx";
 import { renderMappedEntityFieldEmptyState } from "../EntityFieldSectionEmptyState.tsx";
 import {
@@ -38,11 +39,7 @@ type ProductCardItem = {
 };
 
 export type ProductCardsWrapperProps = {
-  data: {
-    field: string;
-    constantValueEnabled?: boolean;
-    constantValue: ProductCardItem[];
-  };
+  data: ItemSourceValue<ProductCardItem>;
   cards?: ProductCardItem;
   styles: {
     showImage: boolean;
