@@ -93,50 +93,17 @@ export const Combobox = ({
                     </p>
                   )}
                   {group.options.map((option) => {
-                    const [colorHexValue, setColorHexValue] = React.useState<
-                      string | undefined
-                    >(undefined);
-
                     return (
-                      <CommandItem
+                      <ComboboxCommandItem
                         className="ve-cursor-pointer"
                         key={option.label}
-                        value={option.value}
                         onSelect={() => {
                           onChange(option.value);
                           setOpen(false);
                         }}
-                      >
-                        <Check
-                          className={cn(
-                            "ve-mr-2 ve-h-4 ve-w-4",
-                            selectedOption.value === option.value
-                              ? "ve-opacity-100"
-                              : "ve-opacity-0"
-                          )}
-                        />
-                        <ColorIndicator
-                          color={option.color}
-                          colorStyle={option.colorStyle}
-                          setHexValue={setColorHexValue}
-                        />
-                        {option.icon && (
-                          <img
-                            src={option.icon}
-                            alt=""
-                            aria-hidden="true"
-                            className="ve-w-4 ve-h-4 ve-mr-2"
-                          />
-                        )}
-                        <div className="ve-flex ve-flex-col ve-gap-0.5">
-                          {option.label}
-                          {colorHexValue && (
-                            <span className="ve-text-sm ve-text-[#5B5D60]">
-                              {colorHexValue}
-                            </span>
-                          )}
-                        </div>
-                      </CommandItem>
+                        option={option}
+                        selected={selectedOption.value === option.value}
+                      />
                     );
                   })}
                 </CommandGroup>
@@ -146,6 +113,52 @@ export const Combobox = ({
         </Command>
       </PopoverContent>
     </Popover>
+  );
+};
+
+const ComboboxCommandItem = ({
+  className,
+  onSelect,
+  option,
+  selected,
+}: {
+  className?: string;
+  onSelect: () => void;
+  option: ComboboxProps["optionGroups"][number]["options"][number];
+  selected: boolean;
+}) => {
+  const [colorHexValue, setColorHexValue] = React.useState<string | undefined>(
+    undefined
+  );
+
+  return (
+    <CommandItem className={className} value={option.value} onSelect={onSelect}>
+      <Check
+        className={cn(
+          "ve-mr-2 ve-h-4 ve-w-4",
+          selected ? "ve-opacity-100" : "ve-opacity-0"
+        )}
+      />
+      <ColorIndicator
+        color={option.color}
+        colorStyle={option.colorStyle}
+        setHexValue={setColorHexValue}
+      />
+      {option.icon && (
+        <img
+          src={option.icon}
+          alt=""
+          aria-hidden="true"
+          className="ve-w-4 ve-h-4 ve-mr-2"
+        />
+      )}
+      <div className="ve-flex ve-flex-col ve-gap-0.5">
+        {option.label}
+        {colorHexValue && (
+          <span className="ve-text-sm ve-text-[#5B5D60]">{colorHexValue}</span>
+        )}
+      </div>
+    </CommandItem>
   );
 };
 

@@ -497,11 +497,41 @@ describe("scopedListSourceMappingsMigration", () => {
       },
     });
 
-    expect(migrated.props.data.constantValue[0]?.email).toEqual({
-      field: "",
-      constantValueEnabled: true,
-      constantValue: "alex@example.com",
-    });
+    expect(migrated.props.data.constantValue).toEqual([
+      {
+        headshot: {
+          constantValue: {
+            url: "https://example.com/headshot.jpg",
+          },
+        },
+        name: {
+          constantValue: { defaultValue: "Alex Agent" },
+        },
+        title: {
+          constantValue: { defaultValue: "Broker" },
+        },
+        phoneNumber: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: "+12025550123",
+        },
+        email: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: "alex@example.com",
+        },
+        cta: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: {
+            label: { defaultValue: "View Profile" },
+            link: "/team/alex",
+            linkType: "URL",
+            ctaType: "textAndLink",
+          },
+        },
+      },
+    ]);
   });
 
   it("extracts manual FAQSection card values into inline FAQ items", () => {
@@ -549,6 +579,390 @@ describe("scopedListSourceMappingsMigration", () => {
           field: "",
           constantValueEnabled: true,
           constantValue: { html: "<p>9 to 5</p>" },
+        },
+      },
+    ]);
+  });
+
+  it("extracts manual InsightCardsWrapper card values into inline constantValue items", () => {
+    const migrated = runMigration({
+      type: "InsightCardsWrapper",
+      props: {
+        id: "insight-wrapper",
+        data: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: [{ id: "insight-card-1" }],
+        },
+        slots: {
+          CardSlot: [
+            {
+              type: "InsightCard",
+              props: {
+                slots: {
+                  ImageSlot: [
+                    {
+                      props: {
+                        data: {
+                          image: {
+                            field: "",
+                            constantValueEnabled: true,
+                            constantValue: {
+                              url: "https://example.com/insight.jpg",
+                            },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                  TitleSlot: [
+                    {
+                      props: {
+                        data: {
+                          text: {
+                            field: "",
+                            constantValueEnabled: true,
+                            constantValue: { defaultValue: "Fresh Flavors" },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                  CategorySlot: [
+                    {
+                      props: {
+                        data: {
+                          text: {
+                            field: "",
+                            constantValueEnabled: true,
+                            constantValue: { defaultValue: "News" },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                  PublishTimeSlot: [
+                    {
+                      props: {
+                        data: {
+                          date: {
+                            field: "",
+                            constantValueEnabled: true,
+                            constantValue: "2026-05-01T12:00:00",
+                          },
+                        },
+                      },
+                    },
+                  ],
+                  DescriptionSlot: [
+                    {
+                      props: {
+                        data: {
+                          text: {
+                            field: "",
+                            constantValueEnabled: true,
+                            constantValue: { defaultValue: "Read this now." },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                  CTASlot: [
+                    {
+                      props: {
+                        data: {
+                          entityField: {
+                            field: "",
+                            constantValueEnabled: true,
+                            constantValue: {
+                              label: { defaultValue: "Read More" },
+                              link: "/insights/fresh-flavors",
+                              linkType: "URL",
+                              ctaType: "textAndLink",
+                            },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
+      },
+    });
+
+    expect(migrated.props.data.constantValue).toEqual([
+      {
+        image: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: { url: "https://example.com/insight.jpg" },
+        },
+        name: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: { defaultValue: "Fresh Flavors" },
+        },
+        category: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: { defaultValue: "News" },
+        },
+        publishTime: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: "2026-05-01T12:00:00",
+        },
+        description: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: { defaultValue: "Read this now." },
+        },
+        cta: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: {
+            label: { defaultValue: "Read More" },
+            link: "/insights/fresh-flavors",
+            linkType: "URL",
+            ctaType: "textAndLink",
+          },
+        },
+      },
+    ]);
+  });
+
+  it("extracts manual ProductCardsWrapper card values into inline constantValue items", () => {
+    const migrated = runMigration({
+      type: "ProductCardsWrapper",
+      props: {
+        id: "product-wrapper",
+        data: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: [{ id: "product-card-1" }],
+        },
+        slots: {
+          CardSlot: [
+            {
+              type: "ProductCard",
+              props: {
+                slots: {
+                  ImageSlot: [
+                    {
+                      props: {
+                        data: {
+                          image: {
+                            field: "",
+                            constantValueEnabled: true,
+                            constantValue: {
+                              url: "https://example.com/product.jpg",
+                            },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                  BrowSlot: [
+                    {
+                      props: {
+                        data: {
+                          text: {
+                            field: "",
+                            constantValueEnabled: true,
+                            constantValue: { defaultValue: "Featured" },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                  TitleSlot: [
+                    {
+                      props: {
+                        data: {
+                          text: {
+                            field: "",
+                            constantValueEnabled: true,
+                            constantValue: { defaultValue: "Galaxy Burger" },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                  PriceSlot: [
+                    {
+                      props: {
+                        data: {
+                          text: {
+                            field: "",
+                            constantValueEnabled: true,
+                            constantValue: { defaultValue: "$12.99" },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                  DescriptionSlot: [
+                    {
+                      props: {
+                        data: {
+                          text: {
+                            field: "",
+                            constantValueEnabled: true,
+                            constantValue: { defaultValue: "Our bestseller." },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                  CTASlot: [
+                    {
+                      props: {
+                        data: {
+                          entityField: {
+                            field: "",
+                            constantValueEnabled: true,
+                            constantValue: {
+                              label: { defaultValue: "Order Now" },
+                              link: "/order/galaxy-burger",
+                              linkType: "URL",
+                              ctaType: "textAndLink",
+                            },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
+      },
+    });
+
+    expect(migrated.props.data.constantValue).toEqual([
+      {
+        image: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: { url: "https://example.com/product.jpg" },
+        },
+        brow: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: { defaultValue: "Featured" },
+        },
+        name: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: { defaultValue: "Galaxy Burger" },
+        },
+        price: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: { defaultValue: "$12.99" },
+        },
+        description: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: { defaultValue: "Our bestseller." },
+        },
+        cta: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: {
+            label: { defaultValue: "Order Now" },
+            link: "/order/galaxy-burger",
+            linkType: "URL",
+            ctaType: "textAndLink",
+          },
+        },
+      },
+    ]);
+  });
+
+  it("extracts manual TestimonialCardsWrapper card values into inline constantValue items", () => {
+    const migrated = runMigration({
+      type: "TestimonialCardsWrapper",
+      props: {
+        id: "testimonial-wrapper",
+        data: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: [{ id: "testimonial-card-1" }],
+        },
+        slots: {
+          CardSlot: [
+            {
+              type: "TestimonialCard",
+              props: {
+                slots: {
+                  DescriptionSlot: [
+                    {
+                      props: {
+                        data: {
+                          text: {
+                            field: "",
+                            constantValueEnabled: true,
+                            constantValue: { defaultValue: "Five stars." },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                  ContributorNameSlot: [
+                    {
+                      props: {
+                        data: {
+                          text: {
+                            field: "",
+                            constantValueEnabled: true,
+                            constantValue: { defaultValue: "Jamie" },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                  ContributionDateSlot: [
+                    {
+                      props: {
+                        data: {
+                          date: {
+                            field: "",
+                            constantValueEnabled: true,
+                            constantValue: "2026-04-20T12:00:00",
+                          },
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
+      },
+    });
+
+    expect(migrated.props.data.constantValue).toEqual([
+      {
+        description: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: { defaultValue: "Five stars." },
+        },
+        contributorName: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: { defaultValue: "Jamie" },
+        },
+        contributionDate: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: "2026-04-20T12:00:00",
         },
       },
     ]);
