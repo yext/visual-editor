@@ -83,6 +83,9 @@ const teamCards = createItemSource<TeamCardsWrapperProps, TeamCardItem>({
       type: "entityField",
       label: msg("fields.title", "Title"),
       filter: {
+        types: ["type.string"],
+      },
+      constantValueFilter: {
         types: ["type.string", "type.rich_text_v2"],
       },
     },
@@ -90,6 +93,9 @@ const teamCards = createItemSource<TeamCardsWrapperProps, TeamCardItem>({
       type: "entityField",
       label: msg("fields.phone", "Phone"),
       filter: {
+        types: ["type.phone"],
+      },
+      constantValueFilter: {
         types: ["type.phone", "type.string"],
       },
     },
