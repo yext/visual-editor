@@ -554,6 +554,8 @@
   "informationSection": "Sekcia",
   "inheritedDataMsg": "Údaje sa dedia z nadradenej sekcie.",
   "insight": "Nahliadnutie",
+  "item": "Položka",
+  "itemSourceFieldHelper": "Vyberte pole prepojeného zoznamu alebo prepnite na manuálne položky.",
   "kilometer_zero": "kilometer",
   "kilometer_one": "kilometer",
   "kilometer_few": "kilometre",

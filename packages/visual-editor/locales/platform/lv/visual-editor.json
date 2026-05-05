@@ -554,6 +554,8 @@
   "informationSection": "Informācijas sadaļa",
   "inheritedDataMsg": "Dati tiek mantoti no vecāku sadaļas.",
   "insight": "Ieskats",
+  "item": "Vienums",
+  "itemSourceFieldHelper": "Atlasiet saistītā saraksta lauku vai pārslēdzieties uz manuāliem vienumiem.",
   "kilometer_zero": "kilometri",
   "kilometer_one": "kilometrs",
   "kilometer_other": "kilometri",

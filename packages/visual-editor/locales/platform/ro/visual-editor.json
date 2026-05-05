@@ -554,6 +554,8 @@
   "informationSection": "Secțiune de informații",
   "inheritedDataMsg": "Datele sunt moștenite din secțiunea părinte.",
   "insight": "Perspectivă",
+  "item": "Articol",
+  "itemSourceFieldHelper": "Selectați un câmp de listă conectat sau comutați la articole manuale.",
   "kilometer_zero": "kilometru",
   "kilometer_one": "kilometru",
   "kilometer_few": "kilometri",

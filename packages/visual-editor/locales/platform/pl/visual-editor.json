@@ -554,6 +554,8 @@
   "informationSection": "Sekcja informacji",
   "inheritedDataMsg": "Dane są dziedziczone z sekcji nadrzędnej.",
   "insight": "Wgląd",
+  "item": "Przedmiot",
+  "itemSourceFieldHelper": "Wybierz połączone pole listy lub przejdź do elementów ręcznych.",
   "kilometer_zero": "kilometr",
   "kilometer_one": "kilometr",
   "kilometer_few": "kilometry",

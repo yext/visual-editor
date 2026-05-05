@@ -554,6 +554,8 @@
   "informationSection": "情報セクション",
   "inheritedDataMsg": "データは親セクションから継承されます。",
   "insight": "洞察力",
+  "item": "アイテム",
+  "itemSourceFieldHelper": "リンクされたリスト フィールドを選択するか、手動アイテムに切り替えます。",
   "kilometer_zero": "キロメートル",
   "kilometer_one": "キロメートル",
   "kilometer_other": "キロメートル",

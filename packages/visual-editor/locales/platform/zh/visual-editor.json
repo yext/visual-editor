@@ -554,6 +554,8 @@
   "informationSection": "信息部分",
   "inheritedDataMsg": "数据是从父节继承的。",
   "insight": "洞察力",
+  "item": "物品",
+  "itemSourceFieldHelper": "选择链接列表字段或切换到手动项目。",
   "kilometer_zero": "公里",
   "kilometer_one": "公里",
   "kilometer_other": "公里",

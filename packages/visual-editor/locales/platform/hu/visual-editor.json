@@ -554,6 +554,8 @@
   "informationSection": "Információs szakasz",
   "inheritedDataMsg": "Az adatok a szülő szakaszból származnak.",
   "insight": "Betekintés",
+  "item": "Tétel",
+  "itemSourceFieldHelper": "Válasszon egy csatolt listamezőt, vagy váltson kézi tételekre.",
   "kilometer_zero": "kilométer",
   "kilometer_one": "kilométer",
   "kilometer_other": "kilométer",

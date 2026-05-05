@@ -554,6 +554,8 @@
   "informationSection": "Informacijos skyrius",
   "inheritedDataMsg": "Duomenys paveldimi iš pirminės sekcijos.",
   "insight": "Įžvalga",
+  "item": "Prekė",
+  "itemSourceFieldHelper": "Pasirinkite susieto sąrašo lauką arba perjunkite į rankinius elementus.",
   "kilometer_zero": "kilometrų",
   "kilometer_one": "kilometras",
   "kilometer_few": "kilometrų",

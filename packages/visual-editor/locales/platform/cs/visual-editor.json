@@ -554,6 +554,8 @@
   "informationSection": "Sekce informací",
   "inheritedDataMsg": "Data jsou zděděna z nadřazené části.",
   "insight": "Vhled",
+  "item": "Položka",
+  "itemSourceFieldHelper": "Vyberte pole propojeného seznamu nebo přepněte na ruční položky.",
   "kilometer_zero": "kilometr",
   "kilometer_one": "kilometr",
   "kilometer_few": "kilometry",

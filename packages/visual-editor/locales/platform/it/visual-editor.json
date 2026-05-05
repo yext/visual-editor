@@ -554,6 +554,8 @@
   "informationSection": "Sezione di informazioni",
   "inheritedDataMsg": "I dati vengono ereditati dalla sezione principale.",
   "insight": "Intuizione",
+  "item": "Articolo",
+  "itemSourceFieldHelper": "Seleziona un campo di elenco collegato o passa agli elementi manuali.",
   "kilometer_zero": "chilometri",
   "kilometer_one": "chilometro",
   "kilometer_many": "chilometri",

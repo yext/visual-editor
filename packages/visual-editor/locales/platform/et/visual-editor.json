@@ -554,6 +554,8 @@
   "informationSection": "Infosektsioon",
   "inheritedDataMsg": "Andmed päritakse emasektsioonist.",
   "insight": "Ülevaade",
+  "item": "Üksus",
+  "itemSourceFieldHelper": "Valige lingitud loendi väli või lülituge käsitsi üksustele.",
   "kilometer_zero": "kilomeetrit",
   "kilometer_one": "kilomeeter",
   "kilometer_other": "kilomeetrit",

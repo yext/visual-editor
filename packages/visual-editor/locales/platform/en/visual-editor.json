@@ -554,6 +554,8 @@
   "informationSection": "Information Section",
   "inheritedDataMsg": "Data is inherited from the parent section.",
   "insight": "Insight",
+  "item": "Item",
+  "itemSourceFieldHelper": "Select a linked list field or switch to manual items.",
   "kilometer_zero": "kilometers",
   "kilometer_one": "kilometer",
   "kilometer_other": "kilometers",
