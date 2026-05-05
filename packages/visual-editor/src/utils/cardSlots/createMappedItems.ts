@@ -100,6 +100,10 @@ type MappedItemsInstance<TProps extends DefaultComponentProps> = {
   };
 };
 
+/**
+ * Builds a nested hidden object tree so dotted prop paths can be emitted as
+ * normal Puck field definitions.
+ */
 const buildNestedFieldTree = (
   path: string,
   field: YextFieldDefinition<any>
@@ -122,6 +126,9 @@ const buildNestedFieldTree = (
   };
 };
 
+/**
+ * Builds a nested object value for a dotted prop path.
+ */
 const buildNestedValueTree = (
   path: string,
   value: unknown
@@ -140,6 +147,10 @@ const buildNestedValueTree = (
   };
 };
 
+/**
+ * Deep-merges two plain object trees while preserving non-object leaves from
+ * the incoming tree.
+ */
 const mergeTrees = <
   TTree extends Record<string, unknown>,
   TOtherTree extends Record<string, unknown>,
@@ -167,6 +178,9 @@ const mergeTrees = <
     { ...tree } as Record<string, unknown>
   ) as TTree & TOtherTree;
 
+/**
+ * Reads a nested property from an unknown object using a dotted path.
+ */
 const getPathValue = <T>(value: unknown, path: string): T | undefined => {
   let currentValue: unknown = value;
 
@@ -181,6 +195,9 @@ const getPathValue = <T>(value: unknown, path: string): T | undefined => {
   return currentValue as T | undefined;
 };
 
+/**
+ * Writes a nested prop path on Puck component data without mutating the input.
+ */
 const setPathValue = <T>(
   value: ComponentData<T>,
   path: string,
@@ -188,6 +205,10 @@ const setPathValue = <T>(
 ): ComponentData<T> =>
   setDeep(value, `props.${path}`, nextValue) as ComponentData<T>;
 
+/**
+ * Returns the active mapped source path when the wrapper is in linked-field
+ * mode, or `undefined` when constant/manual mode is active.
+ */
 const getScopedSourceFieldPath = (
   sourceField: Partial<YextEntityField<unknown>> | undefined
 ): string | undefined =>
@@ -195,6 +216,10 @@ const getScopedSourceFieldPath = (
     ? undefined
     : sourceField.field;
 
+/**
+ * Clears scoped mapping field bindings when the selected mapped source changes
+ * so saved relative paths are not silently reinterpreted against a new source.
+ */
 const clearMappingFieldsOnSourceChange = <TProps extends DefaultComponentProps>(
   data: ComponentData<TProps>,
   lastData: { props: Record<string, unknown> } | null,
@@ -249,6 +274,9 @@ const clearMappingFieldsOnSourceChange = <TProps extends DefaultComponentProps>(
   } as ComponentData<TProps>;
 };
 
+/**
+ * Turns a dotted config path into a readable fallback label.
+ */
 const getDefaultLabel = (path: string): string =>
   path
     .split(".")
@@ -256,6 +284,10 @@ const getDefaultLabel = (path: string): string =>
     ?.replace(/([a-z0-9])([A-Z])/g, "$1 $2")
     .replace(/^./, (value) => value.toUpperCase()) ?? path;
 
+/**
+ * Derives the mapped-source compatibility requirements directly from the
+ * declared mapping field types.
+ */
 const getMappedSourceTypes = (
   mappings: Record<string, MappedItemFieldConfig>
 ): EntityFieldTypes[][] =>
@@ -395,6 +427,10 @@ const buildMappedItems = <TProps extends DefaultComponentProps>({
       item: StreamDocument,
       locale?: string
     ): T | undefined => resolveMappedSourceField(item, entityField, locale),
+    /**
+     * Enables wrapper-level constant/manual repeated-content mode while keeping
+     * the mapped-items field structure unchanged.
+     */
     withConstantValueMode: (options: WithConstantValueModeOptions) =>
       buildMappedItems<TProps>({
         sourceFieldPath,
@@ -404,6 +440,10 @@ const buildMappedItems = <TProps extends DefaultComponentProps>({
         mappings,
         constantValueMode: options,
       }),
+    /**
+     * Connects mapped items to a repeated Puck slot, automatically syncing slot
+     * children, `index`, and `parentData` from the resolved source items.
+     */
     withRepeatedSlot: <TItemProps extends DefaultComponentProps>(
       options: ResolveItemsOptions<TProps, TItemProps>
     ) => {
@@ -500,6 +540,11 @@ const buildMappedItems = <TProps extends DefaultComponentProps>({
   return mappedItems;
 };
 
+/**
+ * Creates the shared mapped-items field model used by repeated linked-item
+ * components. Consumers can use it directly, or opt into wrapper-level
+ * constant mode and repeated-slot orchestration with the chained helpers.
+ */
 export const createMappedItems = <
   TProps extends DefaultComponentProps = DefaultComponentProps,
 >(

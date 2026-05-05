@@ -138,12 +138,9 @@ export const Timestamp: YextComponentConfig<TimestampProps> = {
   },
   resolveFields: (data) => {
     if (data.props.parentData) {
+      let fields = resolveDataFromParent(timestampFields, data);
       return toPuckFields(
-        setDeep(
-          resolveDataFromParent(timestampFields, data),
-          "styles.objectFields.includeRange.visible",
-          false
-        )
+        setDeep(fields, "styles.objectFields.includeRange.visible", false)
       );
     }
 
