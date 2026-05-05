@@ -185,6 +185,8 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
   fields: teamCardsWrapperFields,
   defaultProps: {
     ...teamCards.defaultProps,
+    data: teamCards.defaultProps.data!,
+    cards: teamCards.defaultProps.cards!,
     styles: {
       showImage: true,
       showTitle: true,

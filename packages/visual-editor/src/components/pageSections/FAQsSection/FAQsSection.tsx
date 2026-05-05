@@ -18,7 +18,11 @@ import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultFAQCardData, FAQCardProps } from "./FAQCard.tsx";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
-import { toPuckFields, YextComponentConfig } from "../../../fields/fields.ts";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  type YextFields,
+} from "../../../fields/fields.ts";
 import { createMappedItems } from "../../../utils/cardSlots/createMappedItems.ts";
 
 export interface FAQStyles {
@@ -125,7 +129,7 @@ const faqs = faqsBase.withRepeatedSlot({
   },
 });
 
-const FAQsSectionFields = {
+const FAQsSectionFields: YextFields<FAQSectionProps> = {
   ...faqs.fields,
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
@@ -227,6 +231,8 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
       ],
     },
     ...faqs.defaultProps,
+    data: faqs.defaultProps.data!,
+    faqs: faqs.defaultProps.faqs!,
     styles: {
       backgroundColor: backgroundColors.background2.value,
       showSectionHeading: true,

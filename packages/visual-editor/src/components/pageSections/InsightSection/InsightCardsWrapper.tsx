@@ -186,6 +186,8 @@ export const InsightCardsWrapper: YextComponentConfig<InsightCardsWrapperProps> 
     fields: insightCardsWrapperFields,
     defaultProps: {
       ...insightCards.defaultProps,
+      data: insightCards.defaultProps.data!,
+      cards: insightCards.defaultProps.cards!,
       styles: {
         showImage: true,
         showCategory: true,

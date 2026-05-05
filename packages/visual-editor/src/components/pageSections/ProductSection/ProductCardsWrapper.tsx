@@ -195,6 +195,8 @@ export const ProductCardsWrapper: YextComponentConfig<ProductCardsWrapperProps> 
     fields: productCardsWrapperFields,
     defaultProps: {
       ...productCards.defaultProps,
+      data: productCards.defaultProps.data!,
+      cards: productCards.defaultProps.cards!,
       styles: {
         showImage: true,
         showBrow: true,

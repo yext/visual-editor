@@ -139,6 +139,8 @@ export const TestimonialCardsWrapper: YextComponentConfig<TestimonialCardsWrappe
     fields: testimonialCardsWrapperFields,
     defaultProps: {
       ...testimonialCards.defaultProps,
+      data: testimonialCards.defaultProps.data!,
+      cards: testimonialCards.defaultProps.cards!,
       slots: {
         CardSlot: [],
       },

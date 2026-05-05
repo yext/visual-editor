@@ -179,6 +179,8 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
   fields: eventCardsWrapperFields,
   defaultProps: {
     ...eventCards.defaultProps,
+    data: eventCards.defaultProps.data!,
+    cards: eventCards.defaultProps.cards!,
     styles: {
       showImage: true,
       showDateTime: true,
