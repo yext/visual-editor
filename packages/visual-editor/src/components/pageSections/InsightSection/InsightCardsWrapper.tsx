@@ -21,7 +21,6 @@ import {
 import { type YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { buildListSectionCards } from "../../../utils/cardSlots/listSectionData.ts";
 import { type StreamDocument, createItemSource } from "../../../utils/index.ts";
-import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 
 type InsightCardItem = {
   image: YextEntityField<InsightStruct["image"]>;
@@ -269,8 +268,7 @@ export const InsightCardsWrapper: YextComponentConfig<InsightCardsWrapperProps> 
       const resolvedItems = insightCards.resolveItems(
         normalizedData.props.data,
         normalizedData.props.cards,
-        (params.metadata?.streamDocument ?? {}) as StreamDocument,
-        i18nComponentsInstance.language || "en"
+        (params.metadata?.streamDocument ?? {}) as StreamDocument
       );
 
       return syncCards(normalizedData, resolvedItems);

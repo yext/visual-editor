@@ -23,7 +23,6 @@ import {
 } from "../../../fields/fields.ts";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 import { type YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
-import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { type StreamDocument } from "../../../utils/index.ts";
 import { createItemSource } from "../../../utils/itemSource/createItemSource.ts";
 import { buildListSectionCards } from "../../../utils/cardSlots/listSectionData.ts";
@@ -222,8 +221,7 @@ export const TestimonialCardsWrapper: YextComponentConfig<TestimonialCardsWrappe
       const resolvedItems = testimonialCards.resolveItems(
         normalizedData.props.data,
         normalizedData.props.cards,
-        (params.metadata?.streamDocument ?? {}) as StreamDocument,
-        i18nComponentsInstance.language || "en"
+        (params.metadata?.streamDocument ?? {}) as StreamDocument
       );
 
       return syncCards(normalizedData, resolvedItems);

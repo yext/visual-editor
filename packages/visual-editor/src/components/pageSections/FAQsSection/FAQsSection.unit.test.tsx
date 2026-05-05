@@ -125,6 +125,7 @@ describe("FAQSection resolveData", () => {
       lastData: null,
       metadata: {
         streamDocument: {
+          locale: "en",
           c_linkedLocation: [
             { name: "Downtown", answer: getDefaultRTF("Fresh daily") },
           ],

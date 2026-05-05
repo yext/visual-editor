@@ -1,8 +1,4 @@
-import {
-  type ComponentData,
-  type DefaultComponentProps,
-  type Fields,
-} from "@puckeditor/core";
+import { type DefaultComponentProps, type Fields } from "@puckeditor/core";
 import { type YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import {
   toPuckFields,
@@ -37,6 +33,15 @@ type CreateItemSourceOptions<TItem extends Record<string, unknown>> = {
   itemFields: YextFieldMap<TItem>;
 };
 
+type ResolvedItemField<TValue> =
+  TValue extends YextEntityField<infer TResolved>
+    ? TResolved | undefined
+    : TValue extends Array<infer TItem>
+      ? ResolvedItemField<TItem>[]
+      : TValue extends Record<string, unknown>
+        ? { [TKey in keyof TValue]: ResolvedItemField<TValue[TKey]> }
+        : TValue;
+
 type ItemSourceInstance<
   TProps extends DefaultComponentProps,
   TItem extends Record<string, unknown>,
@@ -44,16 +49,15 @@ type ItemSourceInstance<
   fields: Fields<TProps>;
   defaultProps: Partial<TProps>;
   resolveFields: (data: { props: Record<string, unknown> }) => Fields<TProps>;
-  normalizeData: (
-    data: ComponentData<TProps>,
+  normalizeData: <TData extends { props: Record<string, unknown> }>(
+    data: TData,
     params: NormalizeDataParams
-  ) => ComponentData<TProps>;
+  ) => TData;
   resolveItems: (
     itemSource: ItemSourceValue<TItem> | undefined,
     itemMappings: TItem | undefined,
-    streamDocument: StreamDocument,
-    locale?: string
-  ) => Record<string, unknown>[];
+    streamDocument: StreamDocument
+  ) => ResolvedItemField<TItem>[];
 };
 
 const buildNestedFieldTree = (
@@ -269,7 +273,7 @@ const applySourceEntityPath = <TValue>(
 const getItemSourceTypes = (
   itemFields: YextFieldMap<Record<string, unknown>>
 ): EntityFieldTypes[][] =>
-  Object.values(itemFields).flatMap((field) => {
+  (Object.values(itemFields) as YextFieldDefinition<any>[]).flatMap((field) => {
     if (!isEntityFieldDefinition(field)) {
       return [];
     }
@@ -311,13 +315,12 @@ const clearEntityFieldBindings = (value: unknown): unknown => {
   return value;
 };
 
-const resolveItemValue = (
-  field: YextFieldDefinition<any>,
+const resolveItemValue = <TValue>(
+  field: YextFieldDefinition<TValue>,
   value: unknown,
   streamDocument: StreamDocument,
-  locale: string | undefined,
   itemDocument?: StreamDocument
-): unknown => {
+): ResolvedItemField<TValue> => {
   if (isEntityFieldDefinition(field)) {
     const entityField = value as Partial<YextEntityField<unknown>> | undefined;
     const resolutionDocument =
@@ -330,8 +333,10 @@ const resolveItemValue = (
         constantValue: entityField?.constantValue,
         constantValueEnabled: entityField?.constantValueEnabled,
       },
-      locale
-    );
+      streamDocument.locale ??
+        streamDocument.meta?.locale ??
+        streamDocument.__?.pathInfo?.primaryLocale
+    ) as ResolvedItemField<TValue>;
   }
 
   if (field.type === "object" && "objectFields" in field) {
@@ -347,11 +352,10 @@ const resolveItemValue = (
           nestedField as YextFieldDefinition<any>,
           objectValue[key],
           streamDocument,
-          locale,
           itemDocument
         ),
       ])
-    );
+    ) as ResolvedItemField<TValue>;
   }
 
   if (
@@ -367,15 +371,14 @@ const resolveItemValue = (
             nestedField as YextFieldDefinition<any>,
             item?.[key],
             streamDocument,
-            locale,
             itemDocument
           ),
         ])
       )
-    );
+    ) as ResolvedItemField<TValue>;
   }
 
-  return value;
+  return value as ResolvedItemField<TValue>;
 };
 
 export const createItemSource = <
@@ -394,7 +397,7 @@ export const createItemSource = <
       applySourceEntityPath(field as YextFieldDefinition<any>, itemSourcePath),
     ])
   ) as YextFieldMap<TItem>;
-  const itemSourceField: ItemSourceField<any, TItem> = {
+  const itemSourceField = {
     type: "itemSource",
     label: itemSourceLabel,
     filter: {
@@ -409,7 +412,7 @@ export const createItemSource = <
         getDefaultValueForField(field as YextFieldDefinition<any>, true),
       ])
     ) as TItem,
-  };
+  } as ItemSourceField<any, TItem>;
   const itemMappingsField: YextFieldDefinition<any> = {
     type: "object",
     label: itemMappingsLabel,
@@ -417,7 +420,10 @@ export const createItemSource = <
     objectFields: scopedItemFields,
   };
   const rawFields = mergeTrees(
-    buildNestedFieldTree(itemSourcePath, itemSourceField),
+    buildNestedFieldTree(
+      itemSourcePath,
+      itemSourceField as unknown as YextFieldDefinition<any>
+    ),
     buildNestedFieldTree(itemMappingsPath, itemMappingsField)
   ) as YextFieldMap<TProps>;
   const defaultItemValue = itemSourceField.defaultItemValue;
@@ -457,7 +463,10 @@ export const createItemSource = <
         ) as YextFieldMap<any>
       ) as Fields<TProps>;
     },
-    normalizeData: (data, params) => {
+    normalizeData: <TData extends { props: Record<string, unknown> }>(
+      data: TData,
+      params: NormalizeDataParams
+    ) => {
       const itemSource = getPathValue<ItemSourceValue<TItem>>(
         data.props,
         itemSourcePath
@@ -492,10 +501,10 @@ export const createItemSource = <
             itemMappingsPath,
             clearEntityFieldBindings(itemMappings)
           )
-        ) as TProps,
-      };
+        ) as TData["props"],
+      } as TData;
     },
-    resolveItems: (itemSource, itemMappings, streamDocument, locale) => {
+    resolveItems: (itemSource, itemMappings, streamDocument) => {
       if (!itemSource) {
         return [];
       }
@@ -508,12 +517,11 @@ export const createItemSource = <
               resolveItemValue(
                 field as YextFieldDefinition<any>,
                 item?.[key as keyof TItem],
-                streamDocument,
-                locale
+                streamDocument
               ),
             ])
           )
-        );
+        ) as ResolvedItemField<TItem>[];
       }
 
       const resolvedSource = resolveField<unknown>(
@@ -533,14 +541,13 @@ export const createItemSource = <
               field as YextFieldDefinition<any>,
               itemMappings?.[key as keyof TItem],
               streamDocument,
-              locale,
               item && typeof item === "object"
                 ? (item as StreamDocument)
                 : undefined
             ),
           ])
         )
-      );
+      ) as ResolvedItemField<TItem>[];
     },
   };
 };

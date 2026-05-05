@@ -119,7 +119,7 @@ describe("createItemSource", () => {
             },
           },
         },
-      } as ComponentData<TestProps>,
+      } as unknown as ComponentData<TestProps>,
       {
         lastData: {
           props: {
@@ -167,6 +167,7 @@ describe("createItemSource", () => {
         },
       },
       {
+        locale: "en",
         name: "Root name",
         c_articles: [
           {
@@ -178,8 +179,7 @@ describe("createItemSource", () => {
             summary: { html: "<p>Summary two</p>" },
           },
         ],
-      },
-      "en"
+      }
     );
 
     expect(resolved).toEqual([
@@ -228,9 +228,9 @@ describe("createItemSource", () => {
       },
       articleItems.defaultProps.articleMappings,
       {
+        locale: "en",
         name: "Root fallback",
-      },
-      "en"
+      }
     );
 
     expect(resolved).toEqual([

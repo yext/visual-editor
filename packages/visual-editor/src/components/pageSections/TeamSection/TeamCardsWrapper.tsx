@@ -18,7 +18,6 @@ import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 import { type YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { type StreamDocument, createItemSource } from "../../../utils/index.ts";
 import { buildListSectionCards } from "../../../utils/cardSlots/listSectionData.ts";
-import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 
 type TeamCardItem = {
   headshot: YextEntityField<PersonStruct["headshot"]>;
@@ -260,8 +259,7 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
     const resolvedItems = teamCards.resolveItems(
       normalizedData.props.data,
       normalizedData.props.cards,
-      (params.metadata?.streamDocument ?? {}) as StreamDocument,
-      i18nComponentsInstance.language || "en"
+      (params.metadata?.streamDocument ?? {}) as StreamDocument
     );
 
     return syncCards(normalizedData, resolvedItems);

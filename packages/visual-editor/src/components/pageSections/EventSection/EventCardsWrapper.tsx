@@ -7,7 +7,6 @@ import {
 import { type StreamDocument, createItemSource } from "../../../utils/index.ts";
 import { EventStruct } from "../../../types/types.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
-import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 import { defaultEventCardSlotData, type EventCardProps } from "./EventCard.tsx";
@@ -259,8 +258,7 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
     const resolvedItems = eventCards.resolveItems(
       normalizedData.props.data,
       normalizedData.props.cards,
-      (params.metadata?.streamDocument ?? {}) as StreamDocument,
-      i18nComponentsInstance.language || "en"
+      (params.metadata?.streamDocument ?? {}) as StreamDocument
     );
 
     return syncCards(normalizedData, resolvedItems);

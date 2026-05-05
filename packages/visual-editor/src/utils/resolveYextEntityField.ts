@@ -8,11 +8,22 @@ export type FieldResolution<T> = {
   traversedMultiValueReference: boolean;
 };
 
+const getStreamDocumentLocale = (
+  streamDocument: StreamDocument | undefined,
+  locale: string | undefined
+): string | undefined =>
+  locale ??
+  streamDocument?.locale ??
+  streamDocument?.meta?.locale ??
+  streamDocument?.__?.pathInfo?.primaryLocale;
+
 export const resolveYextEntityField = <T>(
-  streamDocument: any,
+  streamDocument: StreamDocument | undefined,
   entityField: YextEntityField<T>,
   locale?: string
 ): T | undefined => {
+  const resolvedLocale = getStreamDocumentLocale(streamDocument, locale);
+
   if (
     !entityField ||
     typeof entityField !== "object" ||
@@ -31,12 +42,16 @@ export const resolveYextEntityField = <T>(
     return resolveEmbeddedFieldsRecursively(
       entityField.constantValue,
       streamDocument,
-      locale
+      resolvedLocale
     ) as T;
   }
 
   if (!entityField.field) {
     return entityField.constantValue as T;
+  }
+
+  if (!streamDocument) {
+    return undefined;
   }
 
   return resolveField<T>(streamDocument, entityField.field).value;
@@ -50,9 +65,11 @@ export const resolveYextEntityField = <T>(
  */
 export const resolveEmbeddedFieldsInString = (
   stringToResolve: string,
-  streamDocument: any,
+  streamDocument: StreamDocument | undefined,
   locale?: string
 ): string => {
+  const resolvedLocale = getStreamDocumentLocale(streamDocument, locale);
+
   return stringToResolve.replace(embeddedFieldRegex, (match, fieldName) => {
     const trimmedFieldName = fieldName.trim();
     if (!trimmedFieldName) {
@@ -69,7 +86,7 @@ export const resolveEmbeddedFieldsInString = (
     const resolvedValue = resolveYextEntityField(
       streamDocument,
       embeddedEntityField,
-      locale
+      resolvedLocale
     );
 
     if (resolvedValue === undefined || resolvedValue === null) {
@@ -95,12 +112,14 @@ export const resolveEmbeddedFieldsInString = (
  */
 export const resolveEmbeddedFieldsRecursively = (
   data: any,
-  streamDocument: any,
+  streamDocument: StreamDocument | undefined,
   locale?: string
 ): any => {
+  const resolvedLocale = getStreamDocumentLocale(streamDocument, locale);
+
   // If data is a string, resolve any embedded fields within it.
   if (typeof data === "string") {
-    return resolveEmbeddedFieldsInString(data, streamDocument, locale);
+    return resolveEmbeddedFieldsInString(data, streamDocument, resolvedLocale);
   }
 
   // If data is not an object (e.g., string, number, boolean), return it as is.
@@ -117,8 +136,8 @@ export const resolveEmbeddedFieldsRecursively = (
 
   // First, check if the object itself is a translatable shape that needs resolution.
   if (data.hasLocalizedValue === "true" || "defaultValue" in data) {
-    if (locale) {
-      const localeValue = data[locale];
+    if (resolvedLocale) {
+      const localeValue = data[resolvedLocale];
       const usesDefaultValue = localeValue === undefined;
       const localizedValue = usesDefaultValue ? data.defaultValue : localeValue;
       // Handle TranslatableString
@@ -126,12 +145,12 @@ export const resolveEmbeddedFieldsRecursively = (
         const resolvedString = resolveEmbeddedFieldsInString(
           localizedValue,
           streamDocument,
-          locale
+          resolvedLocale
         );
         if ("defaultValue" in data && usesDefaultValue) {
           return { ...data, defaultValue: resolvedString };
         }
-        return { ...data, [locale]: resolvedString };
+        return { ...data, [resolvedLocale]: resolvedString };
       }
 
       // Handle TranslatableRichText
@@ -143,7 +162,7 @@ export const resolveEmbeddedFieldsRecursively = (
         const resolvedHtml = resolveEmbeddedFieldsInString(
           localizedValue.html,
           streamDocument,
-          locale
+          resolvedLocale
         );
         if ("defaultValue" in data && usesDefaultValue) {
           return {
@@ -153,7 +172,7 @@ export const resolveEmbeddedFieldsRecursively = (
         }
         return {
           ...data,
-          [locale]: { ...localizedValue, html: resolvedHtml },
+          [resolvedLocale]: { ...localizedValue, html: resolvedHtml },
         };
       }
 
@@ -163,12 +182,12 @@ export const resolveEmbeddedFieldsRecursively = (
         const resolvedNonTextValue = resolveEmbeddedFieldsRecursively(
           localizedValue,
           streamDocument,
-          locale
+          resolvedLocale
         );
         if ("defaultValue" in data && usesDefaultValue) {
           return { ...data, defaultValue: resolvedNonTextValue };
         }
-        return { ...data, [locale]: resolvedNonTextValue };
+        return { ...data, [resolvedLocale]: resolvedNonTextValue };
       }
 
       return data.hasLocalizedValue === "true" ? "" : data;

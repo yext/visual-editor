@@ -304,6 +304,33 @@ describe("resolveYextEntityField with embedded fields", () => {
     );
   });
 
+  it("uses the locale on the streamDocument when no locale is passed", () => {
+    assert.deepEqual(
+      resolveYextEntityField(
+        {
+          locale: "fr",
+          name: "Yext",
+          fieldValue: {
+            defaultValue: "Hello [[name]]",
+            fr: "Bonjour [[name]]",
+          },
+        },
+        {
+          field: "",
+          constantValue: {
+            defaultValue: "Hello [[name]]",
+            fr: "Bonjour [[name]]",
+          },
+          constantValueEnabled: true,
+        }
+      ),
+      {
+        defaultValue: "Hello [[name]]",
+        fr: "Bonjour Yext",
+      }
+    );
+  });
+
   it("resolves embedded fields in defaultValue when locale key is missing", () => {
     assert.deepEqual(
       resolveYextEntityField(

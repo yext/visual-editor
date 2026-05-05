@@ -20,7 +20,6 @@ import {
   type TranslatableString,
 } from "../../../types/types.ts";
 import { type YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
-import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultFAQCardData, type FAQCardProps } from "./FAQCard.tsx";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
@@ -261,8 +260,7 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
     const resolvedItems = faqs.resolveItems(
       normalizedData.props.data,
       normalizedData.props.faqs,
-      (params.metadata?.streamDocument ?? {}) as StreamDocument,
-      i18nComponentsInstance.language || "en"
+      (params.metadata?.streamDocument ?? {}) as StreamDocument
     );
     const syncedData = syncCards(normalizedData, resolvedItems);
 
