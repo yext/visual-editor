@@ -430,6 +430,8 @@ export const ConstantValueInput = <T extends Record<string, any>>({
     !!disallowTranslation
   );
 
+  // Support mixed string/rich-text field filters while keeping a plain
+  // text constant input experience for components that opt into both.
   const constantFieldConfig = isSingleStringField
     ? getConstantConfigFromType("type.string", false, !!disallowTranslation)
     : returnConstantFieldConfig(
