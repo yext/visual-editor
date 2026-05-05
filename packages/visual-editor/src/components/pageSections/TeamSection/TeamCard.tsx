@@ -47,6 +47,39 @@ const defaultPerson = {
   },
 } satisfies PersonStruct;
 
+export const defaultTeamCardItemData = {
+  headshot: {
+    field: "",
+    constantValue: defaultPerson.headshot,
+    constantValueEnabled: true,
+  },
+  name: {
+    field: "",
+    constantValue: defaultPerson.name,
+    constantValueEnabled: true,
+  },
+  title: {
+    field: "",
+    constantValue: defaultPerson.title,
+    constantValueEnabled: true,
+  },
+  phoneNumber: {
+    field: "",
+    constantValue: defaultPerson.phoneNumber,
+    constantValueEnabled: true,
+  },
+  email: {
+    field: "",
+    constantValue: defaultPerson.email,
+    constantValueEnabled: true,
+  },
+  cta: {
+    field: "",
+    constantValue: defaultPerson.cta,
+    constantValueEnabled: true,
+  },
+};
+
 export const defaultTeamCardSlotData = (
   id?: string,
   index?: number,

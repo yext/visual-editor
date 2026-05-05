@@ -12,6 +12,7 @@ import {
 import { msg } from "../../../utils/i18n/platform.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import {
+  defaultTestimonialCardItemData,
   defaultTestimonialCardSlotData,
   type TestimonialCardProps,
 } from "./TestimonialCard.tsx";
@@ -196,7 +197,13 @@ export const TestimonialCardsWrapper: YextComponentConfig<TestimonialCardsWrappe
       ...testimonialCards.defaultProps,
       data: {
         ...testimonialCards.defaultProps.data!,
-        constantValue: [{}, {}, {}] as TestimonialCardItem[],
+        constantValue: Array.from(
+          { length: 3 },
+          () =>
+            JSON.parse(
+              JSON.stringify(defaultTestimonialCardItemData)
+            ) as TestimonialCardItem
+        ),
       },
       cards: testimonialCards.defaultProps.cards as TestimonialCardItem,
       slots: {

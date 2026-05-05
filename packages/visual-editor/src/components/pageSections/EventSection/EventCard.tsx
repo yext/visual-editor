@@ -49,6 +49,34 @@ const defaultEvent = {
   },
 } satisfies EventStruct;
 
+export const defaultEventCardItemData = {
+  image: {
+    field: "",
+    constantValue: defaultEvent.image,
+    constantValueEnabled: true,
+  },
+  title: {
+    field: "",
+    constantValue: defaultEvent.title,
+    constantValueEnabled: true,
+  },
+  date: {
+    field: "",
+    constantValue: defaultEvent.dateTime,
+    constantValueEnabled: true,
+  },
+  description: {
+    field: "",
+    constantValue: defaultEvent.description,
+    constantValueEnabled: true,
+  },
+  cta: {
+    field: "",
+    constantValue: defaultEvent.cta,
+    constantValueEnabled: true,
+  },
+};
+
 export const defaultEventCardSlotData = (
   id?: string,
   index?: number,

@@ -7,7 +7,11 @@ import {
 import { type PersonStruct } from "../../../types/types.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
-import { defaultTeamCardSlotData, type TeamCardProps } from "./TeamCard.tsx";
+import {
+  defaultTeamCardItemData,
+  defaultTeamCardSlotData,
+  type TeamCardProps,
+} from "./TeamCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import {
   toPuckFields,
@@ -223,7 +227,11 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
     ...teamCards.defaultProps,
     data: {
       ...teamCards.defaultProps.data!,
-      constantValue: [{}, {}, {}] as TeamCardItem[],
+      constantValue: Array.from(
+        { length: 3 },
+        () =>
+          JSON.parse(JSON.stringify(defaultTeamCardItemData)) as TeamCardItem
+      ),
     },
     cards: {
       ...(teamCards.defaultProps.cards as TeamCardItem),

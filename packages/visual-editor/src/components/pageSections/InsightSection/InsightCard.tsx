@@ -44,6 +44,39 @@ const defaultInsight = {
   },
 } satisfies InsightStruct;
 
+export const defaultInsightCardItemData = {
+  image: {
+    field: "",
+    constantValue: defaultInsight.image,
+    constantValueEnabled: true,
+  },
+  name: {
+    field: "",
+    constantValue: defaultInsight.name,
+    constantValueEnabled: true,
+  },
+  category: {
+    field: "",
+    constantValue: defaultInsight.category,
+    constantValueEnabled: true,
+  },
+  publishTime: {
+    field: "",
+    constantValue: defaultInsight.publishTime,
+    constantValueEnabled: true,
+  },
+  description: {
+    field: "",
+    constantValue: defaultInsight.description,
+    constantValueEnabled: true,
+  },
+  cta: {
+    field: "",
+    constantValue: defaultInsight.cta,
+    constantValueEnabled: true,
+  },
+};
+
 export const defaultInsightCardSlotData = (
   id?: string,
   index?: number,

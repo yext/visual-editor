@@ -34,6 +34,24 @@ const defaultTestimonial = {
   contributionDate: "2022-08-02T14:00:00",
 } satisfies TestimonialStruct;
 
+export const defaultTestimonialCardItemData = {
+  description: {
+    field: "",
+    constantValue: defaultTestimonial.description,
+    constantValueEnabled: true,
+  },
+  contributorName: {
+    field: "",
+    constantValue: defaultTestimonial.contributorName,
+    constantValueEnabled: true,
+  },
+  contributionDate: {
+    field: "",
+    constantValue: defaultTestimonial.contributionDate,
+    constantValueEnabled: true,
+  },
+};
+
 export const defaultTestimonialCardSlotData = (
   id?: string,
   index?: number,

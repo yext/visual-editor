@@ -9,6 +9,7 @@ import { msg } from "../../../utils/i18n/platform.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 import {
+  defaultInsightCardItemData,
   defaultInsightCardSlotData,
   type InsightCardProps,
 } from "./InsightCard.tsx";
@@ -232,7 +233,13 @@ export const InsightCardsWrapper: YextComponentConfig<InsightCardsWrapperProps> 
       ...insightCards.defaultProps,
       data: {
         ...insightCards.defaultProps.data!,
-        constantValue: [{}, {}, {}] as InsightCardItem[],
+        constantValue: Array.from(
+          { length: 3 },
+          () =>
+            JSON.parse(
+              JSON.stringify(defaultInsightCardItemData)
+            ) as InsightCardItem
+        ),
       },
       cards: {
         ...(insightCards.defaultProps.cards as InsightCardItem),

@@ -34,6 +34,19 @@ const defaultFAQ = {
   },
 } satisfies FAQStruct;
 
+export const defaultFAQCardItemData = {
+  question: {
+    field: "",
+    constantValue: defaultFAQ.question,
+    constantValueEnabled: true,
+  },
+  answer: {
+    field: "",
+    constantValue: defaultFAQ.answer,
+    constantValueEnabled: true,
+  },
+};
+
 export const defaultFAQCardData = (
   id?: string,
   index?: number,

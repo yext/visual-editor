@@ -9,7 +9,11 @@ import { EventStruct } from "../../../types/types.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
-import { defaultEventCardSlotData, type EventCardProps } from "./EventCard.tsx";
+import {
+  defaultEventCardItemData,
+  defaultEventCardSlotData,
+  type EventCardProps,
+} from "./EventCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import {
   toPuckFields,
@@ -226,7 +230,11 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
     ...eventCards.defaultProps,
     data: {
       ...eventCards.defaultProps.data!,
-      constantValue: [{}, {}, {}] as EventCardItem[],
+      constantValue: Array.from(
+        { length: 3 },
+        () =>
+          JSON.parse(JSON.stringify(defaultEventCardItemData)) as EventCardItem
+      ),
     },
     cards: {
       ...(eventCards.defaultProps.cards as EventCardItem),

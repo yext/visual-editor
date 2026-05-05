@@ -21,7 +21,11 @@ import {
 } from "../../../types/types.ts";
 import { type YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { defaultFAQCardData, type FAQCardProps } from "./FAQCard.tsx";
+import {
+  defaultFAQCardData,
+  defaultFAQCardItemData,
+  type FAQCardProps,
+} from "./FAQCard.tsx";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import {
@@ -243,7 +247,10 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
     ...faqs.defaultProps,
     data: {
       ...faqs.defaultProps.data!,
-      constantValue: [{}, {}, {}] as FAQItem[],
+      constantValue: Array.from(
+        { length: 3 },
+        () => JSON.parse(JSON.stringify(defaultFAQCardItemData)) as FAQItem
+      ),
     },
     styles: {
       backgroundColor: backgroundColors.background2.value,
