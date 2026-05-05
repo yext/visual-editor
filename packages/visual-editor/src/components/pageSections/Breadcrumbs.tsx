@@ -90,20 +90,19 @@ const breadcrumbsSectionFields: YextFields<BreadcrumbsSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      directoryRoot: YextField(
-        msg("fields.directoryRootLinkLabel", "Directory Root Link Label"),
-        {
-          type: "translatableString",
-          filter: { types: ["type.string"] },
-        }
-      ),
-      currentPage: YextField(
-        msg("fields.currentPageLinkLabel", "Current Page Link Label"),
-        {
-          type: "entityField",
-          filter: { types: ["type.string"] },
-        }
-      ),
+      directoryRoot: {
+        type: "translatableString",
+        label: msg(
+          "fields.directoryRootLinkLabel",
+          "Directory Root Link Label"
+        ),
+        filter: { types: ["type.string"] },
+      },
+      currentPage: {
+        type: "entityField",
+        label: msg("fields.currentPageLinkLabel", "Current Page Link Label"),
+        filter: { types: ["type.string"] },
+      },
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {

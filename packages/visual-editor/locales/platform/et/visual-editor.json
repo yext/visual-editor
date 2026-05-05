@@ -205,6 +205,7 @@
     "ctaVariant": "CTA variant",
     "currentPageLinkLabel": "Praeguse lehe lingi silt",
     "customClass": "Kohandatud klass",
+    "customColor": "Kohandatud värv",
     "customId": "Kohandatud ID",
     "customLimit": "Kohandatud limiit",
     "data": "Andmed",
@@ -305,6 +306,7 @@
         "primary": "Tahke",
         "secondary": "Kontuur"
       },
+      "customImage": "Kohandatud pilt",
       "dark": "Tume",
       "default": "Täitmata jätmine",
       "distanceFromSearch": "Kaugus otsingust",
@@ -386,6 +388,7 @@
       "none": "Mitte ühtegi",
       "normal": "Tavaline",
       "one": "Üks",
+      "other": "muud",
       "phone": "Telefon",
       "regular": "Regulaarne",
       "right_direction": "Õige",
@@ -521,7 +524,6 @@
     "search": "Otsingufondid ..."
   },
   "fontSize": "Fondi suurus",
-  "fontSizeDefaultLabel": "Täitmata jätmine",
   "friday": "Reede",
   "getDirections": "Hankige juhiseid",
   "getDirectionsForLocation": "Hankige juhised {{address}}",

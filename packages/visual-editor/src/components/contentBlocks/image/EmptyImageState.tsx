@@ -10,7 +10,7 @@ import {
   useSendMessageToParent,
   useReceiveMessage,
 } from "../../../internal/hooks/useMessage.ts";
-import { ImagePayload } from "../../../internal/puck/constant-value-fields/Image.tsx";
+import { type ImagePayload } from "../../../fields/ImageField.tsx";
 
 let pendingEmptyImageSession:
   | { messageId: string; apply: (payload: ImagePayload) => void }

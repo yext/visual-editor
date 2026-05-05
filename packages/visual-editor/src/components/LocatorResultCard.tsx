@@ -28,9 +28,12 @@ import {
   type YextObjectField,
 } from "../editor/YextField.tsx";
 import { type BasicSelectorField } from "../fields/BasicSelectorField.tsx";
-import { ConstantValueModeToggler } from "../editor/YextEntityFieldSelector.tsx";
-import { LOCATOR_IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
-import { DynamicOption } from "../editor/DynamicOptionsSelector.tsx";
+import {
+  buildLocatorDisplayOptions,
+  type ImageField,
+} from "../fields/ImageField.tsx";
+import { ConstantValueModeToggler } from "../fields/EntityFieldSelectorField.tsx";
+import { type EmbeddedStringOption } from "../editor/EmbeddedFieldStringInput.tsx";
 import { TranslatableString } from "../types/types.ts";
 import { TranslatableAssetImage } from "../types/images.ts";
 import {
@@ -44,7 +47,6 @@ import {
   HoursTableProps,
   HoursTableStyleFields,
 } from "./contentBlocks/HoursTable.tsx";
-import { TranslatableStringField } from "../editor/TranslatableStringField.tsx";
 import { getImageUrl } from "./contentBlocks/image/Image.tsx";
 import {
   Accordion,
@@ -72,7 +74,9 @@ import {
 import { resolveLocatorResultUrl } from "../utils/urls/resolveLocatorResultUrl.ts";
 import {
   getBackgroundColorClasses,
+  getBackgroundColorStyle,
   getTextColorClass,
+  getTextColorStyle,
 } from "../utils/colors.ts";
 import { themeManagerCn } from "../utils/cn.ts";
 
@@ -327,9 +331,16 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
   },
 };
 
+const LOCATOR_IMAGE_CONSTANT_CONFIG: ImageField = {
+  type: "image",
+  label: msg("fields.image", "Image"),
+  getAltTextOptions: (templateMetadata) =>
+    buildLocatorDisplayOptions(templateMetadata?.locatorDisplayFields),
+};
+
 const getDisplayFieldOptions = (
   fieldTypeId: string | string[]
-): DynamicOption<string>[] => {
+): EmbeddedStringOption[] => {
   // TODO: This breaks the rule of hooks, refactor after YextField is converted to a fieldType
   const templateMetadata = useTemplateMetadata();
   if (!templateMetadata?.locatorDisplayFields) {
@@ -388,11 +399,12 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
               />
             ),
           },
-          constantValue: TranslatableStringField<
-            TranslatableString | undefined
-          >(undefined, undefined, false, true, () =>
-            getDisplayFieldOptions("type.string")
-          ),
+          constantValue: {
+            type: "translatableString",
+            showApplyAllOption: false,
+            showFieldSelector: true,
+            getOptions: () => getDisplayFieldOptions("type.string"),
+          },
           field: DisplayFieldSelector("type.string"),
           headingLevel: {
             type: "basicSelector",
@@ -427,11 +439,12 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
               />
             ),
           },
-          constantValue: TranslatableStringField<
-            TranslatableString | undefined
-          >(undefined, undefined, false, true, () =>
-            getDisplayFieldOptions("type.string")
-          ),
+          constantValue: {
+            type: "translatableString",
+            showApplyAllOption: false,
+            showFieldSelector: true,
+            getOptions: () => getDisplayFieldOptions("type.string"),
+          },
           field: DisplayFieldSelector("type.string"),
           variant: {
             label: msg("fields.variant", "Variant"),
@@ -469,11 +482,12 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
               />
             ),
           },
-          constantValue: TranslatableStringField<
-            TranslatableString | undefined
-          >(undefined, undefined, false, true, () =>
-            getDisplayFieldOptions("type.string")
-          ),
+          constantValue: {
+            type: "translatableString",
+            showApplyAllOption: false,
+            showFieldSelector: true,
+            getOptions: () => getDisplayFieldOptions("type.string"),
+          },
           field: DisplayFieldSelector("type.string"),
           variant: {
             label: msg("fields.variant", "Variant"),
@@ -637,13 +651,13 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
         label: msg("fields.primaryCTA", "Primary CTA"),
         type: "object",
         objectFields: {
-          label: TranslatableStringField<TranslatableString>(
-            msg("fields.label", "Label"),
-            undefined,
-            false,
-            true,
-            () => getDisplayFieldOptions("type.string")
-          ),
+          label: {
+            type: "translatableString",
+            label: msg("fields.label", "Label"),
+            showApplyAllOption: false,
+            showFieldSelector: true,
+            getOptions: () => getDisplayFieldOptions("type.string"),
+          },
           variant: {
             label: msg("fields.ctaVariant", "CTA Variant"),
             type: "radio",
@@ -657,13 +671,13 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
               { label: msg("fields.options.hide", "Hide"), value: false },
             ],
           },
-          link: TranslatableStringField<TranslatableString | undefined>(
-            msg("fields.link", "Link"),
-            undefined,
-            false,
-            true,
-            () => getDisplayFieldOptions("type.string")
-          ),
+          link: {
+            type: "translatableString",
+            label: msg("fields.link", "Link"),
+            showApplyAllOption: false,
+            showFieldSelector: true,
+            getOptions: () => getDisplayFieldOptions("type.string"),
+          },
           normalizeLink: {
             label: msg("fields.normalizeLink", "Normalize Link"),
             type: "radio",
@@ -678,20 +692,20 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
         label: msg("fields.secondaryCTA", "Secondary CTA"),
         type: "object",
         objectFields: {
-          label: TranslatableStringField<TranslatableString>(
-            msg("fields.label", "Label"),
-            undefined,
-            false,
-            true,
-            () => getDisplayFieldOptions("type.string")
-          ),
-          link: TranslatableStringField<TranslatableString>(
-            msg("fields.link", "Link"),
-            undefined,
-            false,
-            true,
-            () => getDisplayFieldOptions("type.string")
-          ),
+          label: {
+            type: "translatableString",
+            label: msg("fields.label", "Label"),
+            showApplyAllOption: false,
+            showFieldSelector: true,
+            getOptions: () => getDisplayFieldOptions("type.string"),
+          },
+          link: {
+            type: "translatableString",
+            label: msg("fields.link", "Link"),
+            showApplyAllOption: false,
+            showFieldSelector: true,
+            getOptions: () => getDisplayFieldOptions("type.string"),
+          },
           normalizeLink: {
             label: msg("fields.normalizeLink", "Normalize Link"),
             type: "radio",
@@ -910,6 +924,7 @@ export const LocatorResultCard = React.memo(
                               "components h-fit items-center w-fit underline gap-2 decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing flex font-bold",
                               getTextColorClass(resolvedAccentLinkColor)
                             )}
+                            style={getTextColorStyle(resolvedAccentLinkColor)}
                           >
                             {t("getDirections", "Get Directions")}
                             <FaAngleRight size={"12px"} />
@@ -1060,6 +1075,9 @@ const CardIcon: React.FC<{
       className={`h-10 w-10 flex justify-center rounded-full items-center ${getBackgroundColorClasses(
         backgroundColor ?? backgroundColors.background2.value
       )}`}
+      style={getBackgroundColorStyle(
+        backgroundColor ?? backgroundColors.background2.value
+      )}
     >
       {children}
     </div>

@@ -86,30 +86,33 @@ import { EntityField } from "@yext/visual-editor";
 </EntityField>;
 ```
 
-## YextEntityFieldSelector
+## entityField Field Type
 
-Use this to allow Visual Editor users to choose an entity field or constant value that will populate data into a component.
+Use the registered `entityField` field type to allow Visual Editor users to choose an entity field or a constant value that will populate data into a component.
 The user can choose an entity field from a dropdown or use a constant value. Regardless, the user should always
 enter a constant value as it will be used as a fallback value in the case that the entity is missing the selected entity field.
+`YextEntityFieldSelector(...)` remains available as a compatibility wrapper, but new configs should author `entityField` directly in `YextFields`.
 
 The constant value field currently has limited functionality with complex object entity types. When using complex
 object types, ensure your render function handles undefined fields.
 
 ### Props
 
-| Name                 | Type            | Description                                                    |
-| -------------------- | --------------- | -------------------------------------------------------------- |
-| label?               | string          | The user-facing label for the field.                           |
-| filter.types         | string[]        | Determines which fields will be available based on field type. |
-| filter.allowList?    | types: string[] | Field names to include. Cannot be combined with disallowList.  |
-| filter.disallowList? | types: string[] | Field names to exclude. Cannot be combined with allowList.     |
+| Name                       | Type                | Description                                                    |
+| -------------------------- | ------------------- | -------------------------------------------------------------- |
+| type                       | `"entityField"`     | Registers the field as the entity/constant selector.           |
+| label?                     | string \| MsgString | The user-facing label for the field.                           |
+| filter.types               | string[]            | Determines which fields will be available based on field type. |
+| filter.allowList?          | string[]            | Field names to include. Cannot be combined with disallowList.  |
+| filter.disallowList?       | string[]            | Field names to exclude. Cannot be combined with allowList.     |
+| disableConstantValueToggle | boolean             | Disables static-content mode when true.                        |
+| disallowTranslation        | boolean             | Uses non-localized constant editors when supported.            |
 
 ### Usage
 
 ```tsx
 import {
   EntityFieldType,
-  YextEntityFieldSelector,
   resolveYextEntityField,
   useDocument,
   YextComponentConfig
@@ -129,14 +132,15 @@ const exampleFields: YextFields<ExampleProps> = {
     type: "object",
     label: "Example Parent Field", // top-level sidebar label
     objectFields: {
-      entityField: YextEntityFieldSelector<typeof config>({
+      entityField: {
+        type: "entityField",
         label: "Example Field", // sidebar label for the sub field
         filter: {
           types: ["type.string"],
           disallowList: ["exampleField"],
           //allowList: ["exampleField"],
         },
-      }),
+      },
     },
   },
 };
@@ -209,6 +213,29 @@ const ToneField = ({
 
 When the field definition is part of a normal component `fields` config, Puck renders it through the registered Yext field override automatically. Use `YextAutoField` only when you are manually rendering a field definition inside a custom render path.
 
+## image Field
+
+The `image` field type opens the asset selector and stores the selected image as a localized asset image value. Define it directly in `YextFields` instead of routing it through `YextField`.
+
+### Props
+
+| Name                 | Type                                           | Description                                              |
+| -------------------- | ---------------------------------------------- | -------------------------------------------------------- |
+| `type`               | `"image"`                                      | Registers the field as the Visual Editor image selector. |
+| `label?`             | `string \| MsgString`                          | The field label shown in the editor.                     |
+| `getAltTextOptions?` | `(templateMetadata) => EmbeddedStringOption[]` | Optional locator-specific alt-text source options.       |
+
+### Usage
+
+```tsx
+const myComponentFields: YextFields<MyComponentProps> = {
+  image: {
+    type: "image",
+    label: msg("fields.image", "Image"),
+  },
+};
+```
+
 ## optionalNumber Field
 
 This registered field type displays a radio group with two options. When one option is selected,
@@ -245,13 +272,12 @@ const myComponentFields: YextFields<MyComponentProps> = {
 
 ## YextField
 
-`YextField` provides a unified utility for creating typed field configurations in a [Puck](https://github.com/measuredco/puck) and Yext Visual Editor integration context. It abstracts over a subset of common field types and includes special handling for the internal `basicSelector` field type, [YextEntityFieldSelector](##YextEntityFieldSelector), and [TranslatableStringField](##TranslatableStringField).
+`YextField` provides a unified utility for creating typed field configurations in a [Puck](https://github.com/measuredco/puck) and Yext Visual Editor integration context. It abstracts over a subset of common field types and includes special handling for internal helper field types such as `dynamicSelect`.
 
 ### Features
 
 - Strongly typed helper for defining field configs
 - Support for standard Puck field types such as `text`, `array`, and `object`
-- Extended support for Yext-specific entity selectors
 - Native Puck fields like `radio` can be authored directly inside `YextFields`
 
 ### Props
@@ -278,10 +304,11 @@ import {
 } from "@yext/visual-editor";
 
 const myComponentFields: YextFields<myComponentProps> = {
-  address: YextField<any, AddressType>(msg("fields.address", "Address"), {
+  address: {
     type: "entityField",
+    label: msg("fields.address", "Address"),
     filter: { types: ["type.address"] },
-  }),
+  },
   showGetDirections: {
     label: msg("fields.showGetDirections", "Show Get Directions Link"),
     type: "radio",
@@ -440,40 +467,47 @@ card: YextField(msg("fields.card", "Card"), {
 
 #### Entity Selector Field
 
-Renders a Yext entity selector with filtering capabilities.
+Use the registered `entityField` type to render the entity selector with filtering capabilities.
 
 ```tsx
-linkedEntity: YextField("Linked Entity", {
+linkedEntity: {
   type: "entityField",
-  filter: { entityType: "faq" },
-});
+  label: msg("fields.linkedEntity", "Linked Entity"),
+  filter: { types: ["type.string"] },
+},
 ```
 
 **Props:**
 
 - `type`: `"entityField"`
-- `filter`: `any` — passed to [YextEntityFieldSelector](##YextEntityFieldSelector)
+- `label?`: `string | MsgString`
+- `filter`: `RenderEntityFieldFilter`
 
 ---
 
 #### Translatable String Field
 
-Creates a translatable string input with optional entity field embedding and locale management. [Additional documentation](##TranslatableStringField).
+Use the registered `translatableString` field type directly when you need locale-aware string entry with optional entity field embedding and locale management.
 
 ```tsx
-directoryRoot: YextField(msg("fields.directoryRoot", "Directory Root Link Label"), {
+directoryRoot: {
   type: "translatableString",
+  label: msg("fields.directoryRoot", "Directory Root Link Label"),
   filter: { types: ["type.string"] }
-}),
-title: YextField(msg("fields.title", "Page Title"), {
+},
+title: {
   type: "translatableString",
+  label: msg("fields.title", "Page Title"),
   filter: { types: ["type.string"] },
   showApplyAllOption: true
-}),
+},
 ```
 
 **Props:**
 
 - `type`: `"translatableString"`
+- `label?`: `string | MsgString`
 - `filter?`: `RenderEntityFieldFilter` — optional filter for entity fields that can be embedded
 - `showApplyAllOption?`: `boolean` — enables the "Apply to All Locales" button
+- `showFieldSelector?`: `boolean` — controls whether the entity field embed button is shown
+- `getOptions?`: `() => EmbeddedStringOption[]` — optional options source for the embed selector

@@ -205,6 +205,7 @@
     "ctaVariant": "CTA -variant",
     "currentPageLinkLabel": "Gjeldende sidekoblingsetikett",
     "customClass": "Egendefinert klasse",
+    "customColor": "Egendefinert farge",
     "customId": "Egendefinert ID",
     "customLimit": "Egendefinert grense",
     "data": "Data",
@@ -305,6 +306,7 @@
         "primary": "Fast",
         "secondary": "Disposisjon"
       },
+      "customImage": "Egendefinert bilde",
       "dark": "Mørk",
       "default": "Misligholde",
       "distanceFromSearch": "Avstand fra søk",
@@ -386,6 +388,7 @@
       "none": "Ingen",
       "normal": "Normal",
       "one": "En",
+      "other": "Annen",
       "phone": "Telefon",
       "regular": "Normal",
       "right_direction": "Høyre",
@@ -521,7 +524,6 @@
     "search": "Søkefonter ..."
   },
   "fontSize": "Fontstørrelse",
-  "fontSizeDefaultLabel": "Misligholde",
   "friday": "fredag",
   "getDirections": "Få veibeskrivelse",
   "getDirectionsForLocation": "Få veibeskrivelse for {{address}}",

@@ -205,6 +205,7 @@
     "ctaVariant": "CTA varijanta",
     "currentPageLinkLabel": "Trenutna oznaka veze stranice",
     "customClass": "Prilagođena klasa",
+    "customColor": "Prilagođena boja",
     "customId": "Prilagođeni ID",
     "customLimit": "Prilagođeno ograničenje",
     "data": "Podaci",
@@ -305,6 +306,7 @@
         "primary": "Čvrsto",
         "secondary": "Obris"
       },
+      "customImage": "Prilagođena slika",
       "dark": "Tamna",
       "default": "Zadano",
       "distanceFromSearch": "Udaljenost od pretraživanja",
@@ -386,6 +388,7 @@
       "none": "Nijedan",
       "normal": "Normalan",
       "one": "Jedan",
+      "other": "ostalo",
       "phone": "Telefon",
       "regular": "Obično",
       "right_direction": "Desno",
@@ -521,7 +524,6 @@
     "search": "Pretražite fontove ..."
   },
   "fontSize": "Veličina fonta",
-  "fontSizeDefaultLabel": "Zadano",
   "friday": "petak",
   "getDirections": "Dobiti upute",
   "getDirectionsForLocation": "Preuzmite upute za {{address}}",

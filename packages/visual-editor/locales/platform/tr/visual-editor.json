@@ -205,6 +205,7 @@
     "ctaVariant": "CTA varyantı",
     "currentPageLinkLabel": "Geçerli Sayfa Bağlantı Etiketi",
     "customClass": "Özel Sınıf",
+    "customColor": "Özel Renk",
     "customId": "Özel Kimlik",
     "customLimit": "Özel Sınır",
     "data": "Veri",
@@ -305,6 +306,7 @@
         "primary": "Sağlam",
         "secondary": "Taslak"
       },
+      "customImage": "Özel resim",
       "dark": "Karanlık",
       "default": "Varsayılan",
       "distanceFromSearch": "Aramaya Uzaklık",
@@ -386,6 +388,7 @@
       "none": "Hiçbiri",
       "normal": "Normal",
       "one": "Bir",
+      "other": "Diğer",
       "phone": "Telefon",
       "regular": "Düzenli",
       "right_direction": "Doğru",
@@ -521,7 +524,6 @@
     "search": "Yazı tiplerini arama ..."
   },
   "fontSize": "Yazı tipi boyutu",
-  "fontSizeDefaultLabel": "Varsayılan",
   "friday": "Cuma",
   "getDirections": "Yol tarifi alın",
   "getDirectionsForLocation": "{{address}} için Yol Tarifi Alın",

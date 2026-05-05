@@ -205,6 +205,7 @@
     "ctaVariant": "CTA variants",
     "currentPageLinkLabel": "Pašreizējās lapas saites etiķete",
     "customClass": "Pielāgota klase",
+    "customColor": "Pielāgota krāsa",
     "customId": "Pielāgots ID",
     "customLimit": "Pielāgots ierobežojums",
     "data": "Dati",
@@ -305,6 +306,7 @@
         "primary": "Ciets",
         "secondary": "Kontūra"
       },
+      "customImage": "Pielāgots attēls",
       "dark": "Tumšs",
       "default": "Nepildīt",
       "distanceFromSearch": "Attālums no meklēšanas",
@@ -386,6 +388,7 @@
       "none": "Nav",
       "normal": "Normāls",
       "one": "Viens",
+      "other": "Cits",
       "phone": "Tālrunis",
       "regular": "Parasts",
       "right_direction": "Pa labi",
@@ -521,7 +524,6 @@
     "search": "Meklēt fontus ..."
   },
   "fontSize": "Fonta lielums",
-  "fontSizeDefaultLabel": "Nepildīt",
   "friday": "Piektdiena",
   "getDirections": "Saņemt norādes",
   "getDirectionsForLocation": "Saņemiet norādes uz {{address}}",

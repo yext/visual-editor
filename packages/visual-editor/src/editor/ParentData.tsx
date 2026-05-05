@@ -1,9 +1,9 @@
 import { ComponentData, DefaultComponentProps, Fields } from "@puckeditor/core";
 import { msg, pt } from "../utils/i18n/platform.ts";
-import { toPuckFields, YextFields } from "../fields/fields.ts";
+import { toPuckFields, YextFieldMap, YextFields } from "../fields/fields.ts";
 
 export const resolveDataFromParent = <T extends DefaultComponentProps>(
-  fields: YextFields<T>,
+  fields: YextFields<T> | YextFieldMap<T>,
   data: Omit<
     ComponentData<T, string, Record<string, DefaultComponentProps>>,
     "type"

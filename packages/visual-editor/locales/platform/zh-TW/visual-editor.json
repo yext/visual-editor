@@ -205,6 +205,7 @@
     "ctaVariant": "CTA變體",
     "currentPageLinkLabel": "目前頁面連結標籤",
     "customClass": "自定義類別",
+    "customColor": "客製化顏色",
     "customId": "自定義ID",
     "customLimit": "自訂限額",
     "data": "數據",
@@ -305,6 +306,7 @@
         "primary": "堅硬的",
         "secondary": "大綱"
       },
+      "customImage": "自訂圖片",
       "dark": "黑暗的",
       "default": "預設",
       "distanceFromSearch": "與搜尋的距離",
@@ -386,6 +388,7 @@
       "none": "沒有任何",
       "normal": "普通的",
       "one": "一",
+      "other": "其他",
       "phone": "電話",
       "regular": "常規的",
       "right_direction": "正確",
@@ -521,7 +524,6 @@
     "search": "搜索字體..."
   },
   "fontSize": "字體大小",
-  "fontSizeDefaultLabel": "預設",
   "friday": "星期五",
   "getDirections": "獲取指示",
   "getDirectionsForLocation": "取得 {{address}} 的路線",

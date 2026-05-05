@@ -6,25 +6,8 @@ import {
   NumberField,
   ObjectField,
 } from "@puckeditor/core";
-import {
-  DynamicOption,
-  DynamicOptionsSelector,
-  DynamicOptionValueTypes,
-  DynamicOptionsSelectorType,
-} from "./DynamicOptionsSelector.tsx";
-import { getMaxWidthOptions } from "./MaxWidthSelector.tsx";
-import { msg } from "../utils/i18n/platform.ts";
-import { TranslatableStringField } from "./TranslatableStringField.tsx";
-import {
-  RenderYextEntityFieldSelectorProps,
-  YextEntityField,
-  YextEntityFieldSelector,
-} from "./YextEntityFieldSelector.tsx";
-import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
 import { MsgString } from "../utils/i18n/platform.ts";
-import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
-import { VIDEO_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Video.tsx";
-import type { YextPuckFields } from "../fields/fields.ts";
+import type { YextFieldMap, YextPuckFields } from "../fields/fields.ts";
 
 /** Copied from Puck, do not change */
 export type FieldOption = {
@@ -41,12 +24,6 @@ type YextBaseField = {
 };
 
 export type YextPuckField = YextPuckFields[keyof YextPuckFields];
-
-type YextFieldMap<Props extends Record<string, any>> = {
-  [PropName in keyof Props as PropName extends "editMode"
-    ? never
-    : PropName]: YextFieldDefinition<Props[PropName]>;
-};
 
 type YextArrayFieldConfig<
   Props extends { [key: string]: any }[] = { [key: string]: any }[],
@@ -92,145 +69,30 @@ export type YextFieldDefinition<ValueType = any> =
       ? YextObjectField<ValueType>
       : never);
 
-type YextMaxWidthField = YextBaseField & {
-  type: "maxWidth";
-};
-
-type YextTranslatableStringField = YextBaseField & {
-  type: "translatableString";
-  filter?: RenderEntityFieldFilter<any>;
-  showApplyAllOption?: boolean;
-};
-
-type YextImageField = YextBaseField & {
-  type: "image";
-};
-
-type YextVideoField = YextBaseField & {
-  type: "video";
-};
-
-type YextDynamicSelectField<T extends DynamicOptionValueTypes> =
-  YextBaseField & {
-    type: "dynamicSelect";
-    dropdownLabel: string;
-    getOptions: () => DynamicOption<T>[];
-    placeholderOptionLabel?: string;
-  };
-
-// YextEntitySelectorField has same functionality as YextEntityFieldSelector
-type YextEntitySelectorField<
-  T extends Record<string, any> = Record<string, any>,
-> = YextBaseField &
-  Omit<RenderYextEntityFieldSelectorProps<T>, "label"> & {
-    type: "entityField";
-  };
-
 type YextFieldConfig<Props = any> =
   | YextArrayFieldConfig<Props extends Record<string, any>[] ? Props : any>
   | YextObjectFieldConfig<Props extends Record<string, any> ? Props : any>
   | YextNumberField
-  | YextEntitySelectorField<Props extends Record<string, any> ? Props : any>
-  | YextMaxWidthField
-  | YextTranslatableStringField
-  | YextImageField
-  | YextVideoField
-  | YextDynamicSelectField<Props extends DynamicOptionValueTypes ? Props : any>
   | YextPuckFields[Exclude<
       keyof YextPuckFields,
-      "basicSelector" | "optionalNumber"
+      | "basicSelector"
+      | "code"
+      | "entityField"
+      | "image"
+      | "multiSelector"
+      | "optionalNumber"
+      | "video"
+      | "translatableString"
     >];
 
 export function YextField<T = any>(
   fieldName: MsgString,
   config: YextFieldConfig<T>
 ): Field<T>;
-
-export function YextField<T extends Record<string, any>, U = any>(
-  fieldName: MsgString,
-  config: YextEntitySelectorField<T>
-): Field<YextEntityField<U>>;
-
-export function YextField<
-  T extends DynamicOptionsSelectorType<U>,
-  U extends DynamicOptionValueTypes,
->(
-  fieldName: MsgString,
-  config: YextDynamicSelectField<U>
-): Field<T | undefined>;
-
-export function YextField<T, U>(
+export function YextField<T>(
   fieldName: MsgString,
   config: YextFieldConfig<T>
 ): any {
-  // use YextEntityFieldSelector
-  if (config.type === "entityField") {
-    return YextEntityFieldSelector<T extends Record<string, any> ? T : any, U>({
-      label: fieldName,
-      filter: config.filter,
-      disableConstantValueToggle: config.disableConstantValueToggle,
-      disallowTranslation: config.disallowTranslation,
-    });
-  }
-
-  if (config.type === "code") {
-    return {
-      type: "code",
-      label: fieldName,
-      visible: config.visible,
-      codeLanguage: config.codeLanguage,
-    };
-  }
-
-  if (config.type === "maxWidth") {
-    const maxWidthOptions = getMaxWidthOptions();
-    return {
-      type: "basicSelector",
-      label: fieldName,
-      disableSearch: true,
-      optionGroups: [
-        {
-          description: msg(
-            "maxWidthTip",
-            "For optimal content alignment, we recommend setting the header and footer width to match or exceed the page content grid."
-          ),
-          options: maxWidthOptions,
-        },
-      ],
-    };
-  }
-
-  if (config.type === "translatableString") {
-    return TranslatableStringField(
-      fieldName,
-      config.filter,
-      config.showApplyAllOption
-    );
-  }
-
-  if (config.type === "image") {
-    return {
-      ...IMAGE_CONSTANT_CONFIG,
-      label: fieldName,
-    };
-  }
-
-  if (config.type === "video") {
-    return {
-      ...VIDEO_CONSTANT_CONFIG,
-      label: fieldName,
-    };
-  }
-
-  if (config.type === "dynamicSelect") {
-    return DynamicOptionsSelector({
-      label: fieldName,
-      dropdownLabel: config.dropdownLabel,
-      getOptions: config.getOptions,
-      placeholderOptionLabel: config.placeholderOptionLabel,
-    });
-  }
-
   return {
     label: fieldName,
     ...config,

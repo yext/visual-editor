@@ -205,6 +205,7 @@
     "ctaVariant": "CTA-Variante",
     "currentPageLinkLabel": "Aktuelles Link-Label der Seite",
     "customClass": "Benutzerdefinierte Klasse",
+    "customColor": "Benutzerdefinierte Farbe",
     "customId": "Benutzerdefinierte ID",
     "customLimit": "Benutzerdefiniertes Limit",
     "data": "Daten",
@@ -305,6 +306,7 @@
         "primary": "Solide",
         "secondary": "Umrandet"
       },
+      "customImage": "Benutzerdefiniertes Bild",
       "dark": "Dunkel",
       "default": "Standard",
       "distanceFromSearch": "Entfernung von der Suche",
@@ -386,6 +388,7 @@
       "none": "Keine",
       "normal": "Normal",
       "one": "Eins",
+      "other": "Andere",
       "phone": "Telefon",
       "regular": "Regulär",
       "right_direction": "Rechts",
@@ -521,7 +524,6 @@
     "search": "Schriftarten suchen ..."
   },
   "fontSize": "Schriftgröße",
-  "fontSizeDefaultLabel": "Standard",
   "friday": "Freitag",
   "getDirections": "Route planen",
   "getDirectionsForLocation": "Wegbeschreibung für {{address}} abrufen",

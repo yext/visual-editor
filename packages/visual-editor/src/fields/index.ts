@@ -1,3 +1,5 @@
+export * from "./styledFields/index.ts";
+
 export {
   BasicSelectorFieldOverride,
   type BasicSelectorField,
@@ -10,6 +12,7 @@ export {
 } from "./CTASelectorField.tsx";
 
 export { CodeFieldOverride, type CodeField } from "./CodeField.tsx";
+export { ImageFieldOverride, type ImageField } from "./ImageField.tsx";
 
 export {
   DateTimeSelectorFieldOverride,
@@ -17,11 +20,32 @@ export {
 } from "./DateTimeSelectorField.tsx";
 
 export {
+  EntityFieldSelectorFieldOverride,
+  type EntityFieldSelectorField,
+} from "./EntityFieldSelectorField.tsx";
+
+export {
   FontSizeSelectorFieldOverride,
   type FontSizeSelectorField,
 } from "./FontSizeSelectorField.tsx";
 
 export {
+  MultiSelectorFieldOverride,
+  type MultiSelectorOption,
+  type MultiSelectorField,
+  type MultiSelectorOptions,
+  type MultiSelectorValue,
+  type MultiSelectorOptionValue,
+} from "./MultiSelectorField.tsx";
+
+export {
   OptionalNumberFieldOverride,
   type OptionalNumberField,
 } from "./OptionalNumberField.tsx";
+
+export {
+  TranslatableStringFieldOverride,
+  type TranslatableStringField,
+} from "./TranslatableStringField.tsx";
+
+export { VideoFieldOverride, type VideoField } from "./VideoField.tsx";

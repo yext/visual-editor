@@ -205,6 +205,7 @@
     "ctaVariant": "CTA variantas",
     "currentPageLinkLabel": "Dabartinio puslapio nuorodos etiketė",
     "customClass": "Individualizuota klasė",
+    "customColor": "Pasirinktinė spalva",
     "customId": "Pasirinktinis ID",
     "customLimit": "Pasirinktinis limitas",
     "data": "Duomenys",
@@ -305,6 +306,7 @@
         "primary": "Tvirtas",
         "secondary": "Kontūras"
       },
+      "customImage": "Pasirinktinis vaizdas",
       "dark": "Tamsu",
       "default": "Numatytasis",
       "distanceFromSearch": "Atstumas nuo paieškos",
@@ -386,6 +388,7 @@
       "none": "Nėra",
       "normal": "Normalus",
       "one": "Vienas",
+      "other": "Kita",
       "phone": "Telefonas",
       "regular": "Reguliarus",
       "right_direction": "Dešinė",
@@ -521,7 +524,6 @@
     "search": "Ieškokite šriftų ..."
   },
   "fontSize": "Šrifto dydis",
-  "fontSizeDefaultLabel": "Numatytasis",
   "friday": "Penktadienis",
   "getDirections": "Gaukite nurodymus",
   "getDirectionsForLocation": "Gaukite nuorodas į {{address}}",

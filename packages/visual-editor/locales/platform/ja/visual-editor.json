@@ -205,6 +205,7 @@
     "ctaVariant": "CTAバリアント",
     "currentPageLinkLabel": "現在のページのリンクラベル",
     "customClass": "カスタムクラス",
+    "customColor": "カスタムカラー",
     "customId": "カスタムID",
     "customLimit": "カスタム制限",
     "data": "データ",
@@ -305,6 +306,7 @@
         "primary": "固体",
         "secondary": "概要"
       },
+      "customImage": "カスタムイメージ",
       "dark": "暗い",
       "default": "デフォルト",
       "distanceFromSearch": "検索からの距離",
@@ -386,6 +388,7 @@
       "none": "なし",
       "normal": "普通",
       "one": "1つ",
+      "other": "他の",
       "phone": "電話",
       "regular": "通常",
       "right_direction": "右",
@@ -521,7 +524,6 @@
     "search": "フォントを検索..."
   },
   "fontSize": "フォントサイズ",
-  "fontSizeDefaultLabel": "デフォルト",
   "friday": "金曜日",
   "getDirections": "道順を取得します",
   "getDirectionsForLocation": "{{address}} への行き方を調べる",

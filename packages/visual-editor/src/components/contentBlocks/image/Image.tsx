@@ -63,18 +63,17 @@ export const ImageWrapperFields: YextFields<ImageWrapperProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      image: YextField<
-        any,
-        ImageType | ComplexImageType | TranslatableAssetImage
-      >(msg("fields.options.image", "Image"), {
+      image: {
         type: "entityField",
+        label: msg("fields.options.image", "Image"),
         filter: {
           types: ["type.image"],
         },
-      }),
-      link: YextField(msg("fields.link", "Link"), {
+      },
+      link: {
         type: "translatableString",
-      }),
+        label: msg("fields.link", "Link"),
+      },
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {

@@ -205,6 +205,7 @@
     "ctaVariant": "CTA -variant",
     "currentPageLinkLabel": "Aktuel sidelinketiket",
     "customClass": "Brugerdefineret klasse",
+    "customColor": "Brugerdefineret farve",
     "customId": "Brugerdefineret ID",
     "customLimit": "Brugerdefineret grænse",
     "data": "Data",
@@ -305,6 +306,7 @@
         "primary": "Solid",
         "secondary": "Disposition"
       },
+      "customImage": "Brugerdefineret billede",
       "dark": "Mørk",
       "default": "Misligholdelse",
       "distanceFromSearch": "Afstand fra søgning",
@@ -386,6 +388,7 @@
       "none": "Ingen",
       "normal": "Normal",
       "one": "En",
+      "other": "Andre",
       "phone": "Telefon",
       "regular": "Normal",
       "right_direction": "Højre",
@@ -521,7 +524,6 @@
     "search": "Søg skrifttyper ..."
   },
   "fontSize": "Skrifttypestørrelse",
-  "fontSizeDefaultLabel": "Misligholdelse",
   "friday": "fredag",
   "getDirections": "Få rutevejledning",
   "getDirectionsForLocation": "Få rutevejledning til {{address}}",

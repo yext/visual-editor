@@ -73,6 +73,7 @@ import { themeColorPropertyKeyMigration } from "./0071_theme_color_property_keys
 import { footerAlignmentAndVisibilityPropsMigration } from "./0072_footer_alignment_and_visibility_props.ts";
 import { mainContentWrapperMigration } from "./0073_main_content_wrapper.ts";
 import { flattenLocatorResultCardSingleSelectFields } from "./0074_flatten_locator_result_card_single_select_fields.ts";
+import { normalizeFooterLogoImageMigration } from "./0075_normalize_footer_logo_image.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -154,4 +155,5 @@ export const migrationRegistry: MigrationRegistry = [
   footerAlignmentAndVisibilityPropsMigration,
   mainContentWrapperMigration,
   flattenLocatorResultCardSingleSelectFields,
+  normalizeFooterLogoImageMigration,
 ];

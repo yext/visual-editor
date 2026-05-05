@@ -80,12 +80,13 @@ export interface FAQSectionProps {
 }
 
 const FAQsSectionFields: YextFields<FAQSectionProps> = {
-  data: YextField(msg("fields.faqs", "FAQs"), {
+  data: {
     type: "entityField",
+    label: msg("fields.faqs", "FAQs"),
     filter: {
       types: [ComponentFields.FAQSection.type],
     },
-  }),
+  },
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {

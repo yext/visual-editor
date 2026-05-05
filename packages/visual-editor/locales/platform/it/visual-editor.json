@@ -205,6 +205,7 @@
     "ctaVariant": "Variante CTA",
     "currentPageLinkLabel": "Etichetta del collegamento alla pagina corrente",
     "customClass": "Classe personalizzata",
+    "customColor": "Colore personalizzato",
     "customId": "ID personalizzato",
     "customLimit": "Limite personalizzato",
     "data": "Dati",
@@ -305,6 +306,7 @@
         "primary": "Solido",
         "secondary": "Contorno"
       },
+      "customImage": "Immagine personalizzata",
       "dark": "Buio",
       "default": "Predefinito",
       "distanceFromSearch": "Distanza dalla ricerca",
@@ -386,6 +388,7 @@
       "none": "Nessuno",
       "normal": "Normale",
       "one": "Uno",
+      "other": "Altro",
       "phone": "Telefono",
       "regular": "Regolare",
       "right_direction": "A destra",
@@ -521,7 +524,6 @@
     "search": "Cerca caratteri ..."
   },
   "fontSize": "Dimensione del carattere",
-  "fontSizeDefaultLabel": "Predefinito",
   "friday": "Venerdì",
   "getDirections": "Ottieni indicazioni",
   "getDirectionsForLocation": "Ottieni indicazioni per {{address}}",
