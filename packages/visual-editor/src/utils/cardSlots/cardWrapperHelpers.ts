@@ -1,9 +1,6 @@
 import { Slot } from "@puckeditor/core";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
-import {
-  YextField,
-  type YextFieldDefinition,
-} from "../../editor/YextField.tsx";
+import { type YextFieldDefinition } from "../../editor/YextField.tsx";
 import { YextFields } from "../../fields/fields.ts";
 import { MsgString } from "../i18n/platform.ts";
 import {
@@ -90,12 +87,14 @@ export const createScopedMappingFields = <
   sourceFieldPath = "data.field",
   fields: TFields
 ): YextFieldDefinition<any> =>
-  YextField(label, {
+  ({
+    label,
     type: "object",
     objectFields: Object.fromEntries(
       Object.entries(fields).map(([fieldName, fieldConfig]) => [
         fieldName,
-        YextField(fieldConfig.label, {
+        {
+          label: fieldConfig.label,
           type: "entityField",
           sourceFieldPath,
           disableConstantValueToggle: fieldConfig.disableConstantValueToggle,
@@ -104,7 +103,7 @@ export const createScopedMappingFields = <
             ...fieldConfig.filter,
             types: fieldConfig.types,
           },
-        } as any),
+        },
       ])
     ),
-  } as any) as YextFieldDefinition<any>;
+  }) as YextFieldDefinition<any>;
