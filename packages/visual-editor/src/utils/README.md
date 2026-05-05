@@ -58,6 +58,37 @@ Used in a component's render function to pull in the selected entity field's val
 
 See [YextEntityFieldSelector](../editor/README.md#YextEntityFieldSelector)
 
+## createItemSource
+
+Creates the field definitions and authored-state helpers for a repeated list
+component backed by either a linked list field or manual items.
+
+### Input
+
+| Name               | Type                  | Description                                          |
+| ------------------ | --------------------- | ---------------------------------------------------- |
+| itemSourcePath     | string                | Dotted props path for the parent `itemSource` value. |
+| itemMappingsPath   | string                | Dotted props path for the per-item mapping fields.   |
+| itemSourceLabel?   | string                | Optional editor label for the source selector.       |
+| itemMappingsLabel? | string                | Optional editor label for the mapping group.         |
+| itemFields         | `YextFieldMap<TItem>` | Field definitions for one repeated item.             |
+
+### Returns
+
+`createItemSource(...)` returns an object with:
+
+- `fields`: generated Puck fields for `itemSource` and `itemMappings`
+- `defaultProps`: default authored state for linked and manual modes
+- `resolveFields(data)`: dynamic field visibility for mappings
+- `normalizeData(data, { lastData })`: source-change cleanup for stale field bindings
+- `resolveItems(itemSource, itemMappings, streamDocument)`: render-ready repeated items
+
+### Usage
+
+Use this helper when a component needs repeated linked-entity content but wants
+to render the repeated UI directly instead of syncing slot children. See the
+full example in [editor/README.md](../editor/README.md#linked-entity-item-sources).
+
 ## ThemeConfig
 
 The ThemeConfig object defines the styles available for editing in Theme Manager. It is used

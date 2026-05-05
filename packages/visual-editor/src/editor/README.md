@@ -169,6 +169,195 @@ const Example = ({ myField }: ExampleProps) => {
 };
 ```
 
+## Linked Entity Item Sources
+
+Use `itemSource` plus `createItemSource(...)` when a component needs to render
+repeated content from a linked list field. This keeps the source selection, per-
+item mappings, and manual fallback items in one place.
+
+### Pattern
+
+1. Add an `itemSource: ItemSourceValue<TItem>` prop for the repeated source.
+2. Add an optional `itemMappings?: TItem` prop that describes how one source
+   item maps into your rendered card shape.
+3. Call `createItemSource(...)` to generate fields, defaults, and editor-time
+   field visibility.
+4. Use `useDocument()` plus `itemSourceConfig.resolveItems(...)` in render to
+   resolve the current list without storing derived output back onto props.
+
+### Example
+
+`ArticleCard.tsx`
+
+```tsx
+import { type PuckComponent } from "@puckeditor/core";
+import {
+  type TranslatableRichText,
+  type TranslatableString,
+} from "@yext/visual-editor";
+
+export type ArticleCardProps = {
+  title?: TranslatableString | TranslatableRichText;
+  description?: TranslatableRichText;
+  image?: {
+    url?: string;
+    alternateText?: string;
+  };
+};
+
+const getTextValue = (
+  value?: TranslatableString | TranslatableRichText
+): string => value?.defaultValue ?? "";
+
+export const ArticleCard: PuckComponent<ArticleCardProps> = ({
+  title,
+  description,
+  image,
+}) => (
+  <article>
+    {image?.url && <img src={image.url} alt={image.alternateText ?? ""} />}
+    <h3>{getTextValue(title)}</h3>
+    <p>{getTextValue(description)}</p>
+  </article>
+);
+```
+
+`ArticleList.tsx`
+
+```tsx
+import { type PuckComponent } from "@puckeditor/core";
+import {
+  createItemSource,
+  msg,
+  type ItemSourceValue,
+  type StreamDocument,
+  type TranslatableRichText,
+  type TranslatableString,
+  type YextComponentConfig,
+  type YextEntityField,
+  YextField,
+  toPuckFields,
+  useDocument,
+} from "@yext/visual-editor";
+import { ArticleCard } from "./ArticleCard.tsx";
+
+type ArticleItem = {
+  title: YextEntityField<TranslatableString | TranslatableRichText>;
+  description: YextEntityField<TranslatableRichText>;
+  image: YextEntityField<{
+    url?: string;
+    alternateText?: string;
+  }>;
+};
+
+type ArticleListProps = {
+  itemSource: ItemSourceValue<ArticleItem>;
+  itemMappings?: ArticleItem;
+  heading: {
+    text: string;
+  };
+};
+
+const articleItems = createItemSource<ArticleListProps, ArticleItem>({
+  itemSourcePath: "itemSource",
+  itemMappingsPath: "itemMappings",
+  itemSourceLabel: msg("fields.articles", "Articles"),
+  itemMappingsLabel: msg("fields.articleMappings", "Article Mappings"),
+  itemFields: {
+    title: {
+      type: "entityField",
+      label: msg("fields.title", "Title"),
+      filter: {
+        types: ["type.string", "type.rich_text_v2"],
+      },
+    },
+    description: {
+      type: "entityField",
+      label: msg("fields.description", "Description"),
+      filter: {
+        types: ["type.rich_text_v2"],
+      },
+    },
+    image: {
+      type: "entityField",
+      label: msg("fields.image", "Image"),
+      filter: {
+        types: ["type.image"],
+      },
+    },
+  },
+});
+
+const fields = {
+  ...articleItems.fields,
+  heading: YextField(msg("fields.heading", "Heading"), {
+    type: "object",
+    objectFields: {
+      text: {
+        type: "text",
+        label: msg("fields.text", "Text"),
+      },
+    },
+  }),
+};
+
+const ArticleListComponent: PuckComponent<ArticleListProps> = ({
+  itemSource,
+  itemMappings,
+  heading,
+}) => {
+  const streamDocument = useDocument<StreamDocument>();
+  const items = articleItems.resolveItems(
+    itemSource,
+    itemMappings,
+    streamDocument
+  );
+
+  return (
+    <section>
+      <h2>{heading.text}</h2>
+      <div>
+        {items.map((item, index) => (
+          <ArticleCard
+            key={index}
+            title={item.title}
+            description={item.description}
+            image={item.image}
+          />
+        ))}
+      </div>
+    </section>
+  );
+};
+
+export const ArticleList: YextComponentConfig<ArticleListProps> = {
+  label: msg("components.articleList", "Article List"),
+  fields,
+  defaultProps: {
+    ...articleItems.defaultProps,
+    itemSource: articleItems.defaultProps.itemSource!,
+    itemMappings: articleItems.defaultProps.itemMappings!,
+    heading: {
+      text: "Featured Articles",
+    },
+  },
+  resolveFields: (data) =>
+    toPuckFields({
+      ...fields,
+      ...articleItems.resolveFields(data),
+    }),
+  resolveData: (data, params) =>
+    articleItems.normalizeData(data, {
+      lastData: params.lastData,
+    }),
+  render: (props) => <ArticleListComponent {...props} />,
+};
+```
+
+Use this pattern when the repeated UI is rendered directly by the component. If
+you need each item to become a nested slot child instead, build that on top of
+the same `itemSource` and `itemMappings` contract.
+
 ## basicSelector Field Type
 
 The `basicSelector` field type renders a labeled combobox with optional search, grouped options, translated labels, and empty-state messaging.
