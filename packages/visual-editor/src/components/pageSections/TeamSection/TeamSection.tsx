@@ -9,10 +9,8 @@ import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import {
-  TeamCardsWrapper,
-  type TeamCardsWrapperProps,
-} from "./TeamCardsWrapper.tsx";
+import { defaultTeamCardSlotData } from "./TeamCard.tsx";
+import { TeamCardsWrapperProps } from "./TeamCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import {
@@ -24,18 +22,42 @@ import {
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 export interface TeamSectionProps {
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
   styles: {
+    /**
+     * The background color of the section.
+     * @defaultValue Background Color 3
+     */
     backgroundColor?: ThemeColor;
+
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
     showSectionHeading: boolean;
   };
+
+  /** @internal */
   slots: {
     SectionHeadingSlot: Slot;
     CardsWrapperSlot: Slot;
   };
+
+  /** @internal */
   analytics: {
     scope?: string;
   };
+
+  /** @internal */
   conditionalRender?: MappedCardsSectionConditionalRender;
+
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
   liveVisibility: boolean;
 }
 
@@ -85,6 +107,10 @@ const teamSectionFields: YextFields<TeamSectionProps> = {
   },
 };
 
+/**
+ * The Team Section is designed to showcase a list of people, such as employees, executives, or other team members. It features a main section heading and renders each person's information—typically a photo, name, and title—as an individual card.
+ * Available on Location templates.
+ */
 export const TeamSection: YextComponentConfig<TeamSectionProps> = {
   label: msg("components.teamSection", "Team Section"),
   fields: teamSectionFields,
@@ -113,8 +139,26 @@ export const TeamSection: YextComponentConfig<TeamSectionProps> = {
         {
           type: "TeamCardsWrapper",
           props: {
-            ...(TeamCardsWrapper.defaultProps as TeamCardsWrapperProps),
-          },
+            data: {
+              field: "",
+              constantValueEnabled: true,
+              constantValue: [{}, {}, {}],
+            },
+            styles: {
+              showImage: true,
+              showTitle: true,
+              showPhone: true,
+              showEmail: true,
+              showCTA: true,
+            },
+            slots: {
+              CardSlot: [
+                defaultTeamCardSlotData(undefined, 0),
+                defaultTeamCardSlotData(undefined, 1),
+                defaultTeamCardSlotData(undefined, 2),
+              ],
+            },
+          } satisfies TeamCardsWrapperProps,
         },
       ],
     },

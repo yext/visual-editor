@@ -17,11 +17,6 @@ import { TimestampProps } from "../../contentBlocks/Timestamp.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
-import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
-import {
-  shouldRenderFieldWhenPresent,
-  shouldRenderToggledField,
-} from "../../../utils/cardSlots/fieldVisibility.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 const defaultTestimonial = {
@@ -33,24 +28,6 @@ const defaultTestimonial = {
   contributorName: { defaultValue: "Name" },
   contributionDate: "2022-08-02T14:00:00",
 } satisfies TestimonialStruct;
-
-export const defaultTestimonialCardItemData = {
-  description: {
-    field: "",
-    constantValue: defaultTestimonial.description,
-    constantValueEnabled: true,
-  },
-  contributorName: {
-    field: "",
-    constantValue: defaultTestimonial.contributorName,
-    constantValueEnabled: true,
-  },
-  contributionDate: {
-    field: "",
-    constantValue: defaultTestimonial.contributionDate,
-    constantValueEnabled: true,
-  },
-};
 
 export const defaultTestimonialCardSlotData = (
   id?: string,
@@ -156,9 +133,10 @@ export type TestimonialCardProps = {
   };
 
   /** @internal */
-  itemData?: {
+  parentData?: {
     field: string;
-  } & TestimonialStruct;
+    testimonial: TestimonialStruct;
+  };
 
   /** @internal */
   parentStyles?: {
@@ -213,20 +191,15 @@ const TestimonialCardComponent: PuckComponent<TestimonialCardProps> = (
   const { slotStyles, getPuck, slotProps } =
     useGetCardSlots<TestimonialCardProps>(props.id);
 
-  const showDescription = shouldRenderFieldWhenPresent({
-    isEditing: puck.isEditing,
-    hasData: !!conditionalRender?.description,
-  });
-  const showContributorName = shouldRenderToggledField({
-    isEditing: puck.isEditing,
-    isEnabled: parentStyles?.showName,
-    hasData: !!conditionalRender?.contributorName,
-  });
-  const showContributionDate = shouldRenderToggledField({
-    isEditing: puck.isEditing,
-    isEnabled: parentStyles?.showDate,
-    hasData: !!conditionalRender?.contributionDate,
-  });
+  const showDescription = Boolean(
+    conditionalRender?.description || puck.isEditing
+  );
+  const showContributorName =
+    parentStyles?.showName &&
+    Boolean(conditionalRender?.contributorName || puck.isEditing);
+  const showContributionDate =
+    parentStyles?.showDate &&
+    Boolean(conditionalRender?.contributionDate || puck.isEditing);
 
   // sharedCardProps useEffect
   // When the context changes, dispatch an update to sync the changes to puck
@@ -356,9 +329,9 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
     },
   },
   resolveData: (data, params) => {
-    // Check card-level itemData first for entity data
-    const cardItemData = data.props.itemData;
-    const testimonial = cardItemData;
+    // Check card-level parentData first for entity data
+    const cardParentData = data.props.parentData;
+    const testimonial = cardParentData?.testimonial;
 
     const descriptionSlotProps = data.props.slots.DescriptionSlot?.[0]
       ?.props as WithId<BodyTextProps> | undefined;
@@ -367,41 +340,32 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
     const contributionDateSlotProps = data.props.slots.ContributionDateSlot?.[0]
       ?.props as WithId<any> | undefined;
 
-    const hasItemData = !!cardItemData;
-    const showDescription = hasItemData
-      ? Boolean(
-          testimonial?.description || descriptionSlotProps?.parentData?.richText
-        )
-      : Boolean(
-          descriptionSlotProps &&
-            resolveYextEntityField(
-              params.metadata.streamDocument,
-              descriptionSlotProps.data.text,
-              i18nComponentsInstance.language || "en"
-            )
-        );
-    const showContributorName = hasItemData
-      ? Boolean(
-          testimonial?.contributorName ||
-            contributorNameSlotProps?.parentData?.text
-        )
-      : Boolean(
-          contributorNameSlotProps &&
-            resolveYextEntityField(
-              params.metadata.streamDocument,
-              contributorNameSlotProps.data.text,
-              i18nComponentsInstance.language || "en"
-            )
-        );
-    const showContributionDate = hasItemData
-      ? Boolean(
-          testimonial?.contributionDate ||
-            contributionDateSlotProps?.parentData?.date
-        )
-      : Boolean(
-          contributionDateSlotProps?.data?.date?.constantValue ||
-            contributionDateSlotProps?.data?.date?.field
-        );
+    const showDescription = Boolean(
+      testimonial?.description ||
+        descriptionSlotProps?.parentData?.richText ||
+        (descriptionSlotProps &&
+          resolveYextEntityField(
+            params.metadata.streamDocument,
+            descriptionSlotProps.data.text,
+            i18nComponentsInstance.language || "en"
+          ))
+    );
+    const showContributorName = Boolean(
+      testimonial?.contributorName ||
+        contributorNameSlotProps?.parentData?.text ||
+        (contributorNameSlotProps &&
+          resolveYextEntityField(
+            params.metadata.streamDocument,
+            contributorNameSlotProps.data.text,
+            i18nComponentsInstance.language || "en"
+          ))
+    );
+    const showContributionDate = Boolean(
+      testimonial?.contributionDate ||
+        contributionDateSlotProps?.parentData?.date ||
+        contributionDateSlotProps?.data?.date?.constantValue ||
+        contributionDateSlotProps?.data?.date?.field
+    );
 
     let updatedData = {
       ...data,
@@ -422,9 +386,10 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
       "showIcon",
     ]);
 
-    // Set slot parentData from card itemData when the wrapper provides it.
-    if (data.props.itemData) {
-      const { field, ...testimonial } = data.props.itemData;
+    // Set parentData for all slots if parentData is provided
+    if (data.props.parentData) {
+      const testimonial = data.props.parentData.testimonial;
+      const field = data.props.parentData.field;
 
       updatedData = setDeep(
         updatedData,
@@ -439,12 +404,7 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
         "props.slots.ContributorNameSlot[0].props.parentData",
         {
           field: field,
-          text: resolveComponentData(
-            testimonial.contributorName,
-            i18nComponentsInstance.language || "en",
-            params.metadata.streamDocument,
-            { output: "plainText" }
-          ),
+          text: testimonial.contributorName as string, // will already be resolved
         } satisfies HeadingTextProps["parentData"]
       );
       updatedData = setDeep(

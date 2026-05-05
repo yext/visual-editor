@@ -8,10 +8,9 @@ import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import {
-  EventCardsWrapper,
-  type EventCardsWrapperProps,
-} from "./EventCardsWrapper.tsx";
+import { defaultEventCardSlotData } from "./EventCard.tsx";
+import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import { EventCardsWrapperProps } from "./EventCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import {
   getMappedCardsSectionConditionalRender,
@@ -19,22 +18,45 @@ import {
   MappedCardsSectionContent,
   MappedCardsSectionShell,
 } from "../mappedCardsSectionUtils.tsx";
-import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 export interface EventSectionProps {
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
   styles: {
+    /**
+     * The background color of the section.
+     * @defaultValue Background Color 3
+     */
     backgroundColor?: ThemeColor;
+
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
     showSectionHeading: boolean;
   };
+
+  /** @internal */
   slots: {
     SectionHeadingSlot: Slot;
     CardsWrapperSlot: Slot;
   };
+
+  /** @internal */
   analytics: {
     scope?: string;
   };
+
+  /** @internal */
   conditionalRender?: MappedCardsSectionConditionalRender;
+
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
   liveVisibility: boolean;
 }
 
@@ -84,6 +106,10 @@ const eventSectionFields: YextFields<EventSectionProps> = {
   },
 };
 
+/**
+ * The Events Section component is designed to display a curated list of events. It features a prominent section heading and renders each event as an individual card, making it ideal for showcasing upcoming activities, workshops, or promotions.
+ * Available on Location templates.
+ */
 export const EventSection: YextComponentConfig<EventSectionProps> = {
   label: msg("components.eventsSection", "Events Section"),
   fields: eventSectionFields,
@@ -112,8 +138,25 @@ export const EventSection: YextComponentConfig<EventSectionProps> = {
         {
           type: "EventCardsWrapper",
           props: {
-            ...(EventCardsWrapper.defaultProps as EventCardsWrapperProps),
-          },
+            data: {
+              field: "",
+              constantValueEnabled: true,
+              constantValue: [{}, {}, {}],
+            },
+            styles: {
+              showImage: true,
+              showDateTime: true,
+              showDescription: true,
+              showCTA: true,
+            },
+            slots: {
+              CardSlot: [
+                defaultEventCardSlotData(undefined, 0),
+                defaultEventCardSlotData(undefined, 1),
+                defaultEventCardSlotData(undefined, 2),
+              ],
+            },
+          } satisfies EventCardsWrapperProps,
         },
       ],
     },

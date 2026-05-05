@@ -1,7 +1,6 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { FAQSection } from "../components/pageSections/FAQsSection/FAQsSection.tsx";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { EntityFieldsContext } from "../hooks/useEntityFields.tsx";
 import { TemplateMetadataContext } from "../internal/hooks/useMessageReceivers.ts";
@@ -256,109 +255,6 @@ describe("ItemSourceField", () => {
     fireEvent.click(screen.getByRole("combobox"));
 
     expect(screen.getAllByText("FAQs").length).toBeGreaterThan(0);
-  });
-
-  it("shows FAQ Section > FAQs in the real FAQs section item source field", () => {
-    const fields = FAQSection.resolveFields?.(
-      {
-        props: {
-          id: "FAQSection-test",
-          ...FAQSection.defaultProps,
-          data: {
-            field: "",
-            constantValueEnabled: false,
-            constantValue: [],
-          },
-        },
-      } as never,
-      {} as never
-    ) as Exclude<typeof FAQSection.resolveFields, undefined> extends (
-      ...args: any[]
-    ) => infer TResult
-      ? Awaited<TResult>
-      : never;
-
-    render(
-      <TemplatePropsContext.Provider
-        value={{ document: { c_faqSection: { faqs: [] } } }}
-      >
-        <TemplateMetadataContext.Provider
-          value={{
-            ...generateTemplateMetadata(),
-            entityTypeDisplayName: "Location",
-          }}
-        >
-          <EntityFieldsContext.Provider
-            value={{
-              fields: [
-                {
-                  name: "c_faqSection",
-                  definition: {
-                    name: "c_faqSection",
-                    typeRegistryId: "type.faq_section",
-                    type: {},
-                  },
-                  children: {
-                    fields: [
-                      {
-                        name: "faqs",
-                        definition: {
-                          name: "faqs",
-                          isList: true,
-                          typeRegistryId: "type.struct",
-                          type: {},
-                        },
-                        children: {
-                          fields: [
-                            {
-                              name: "question",
-                              definition: {
-                                name: "question",
-                                typeRegistryId: "type.string",
-                                type: {},
-                              },
-                            },
-                            {
-                              name: "answer",
-                              definition: {
-                                name: "answer",
-                                typeRegistryId: "type.rich_text_v2",
-                                type: {},
-                              },
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-              displayNames: {
-                c_faqSection: "faqSection",
-                "c_faqSection.faqs": "faqSection > FAQs",
-                "c_faqSection.faqs.question": "faqSection > FAQs > Question",
-                "c_faqSection.faqs.answer": "faqSection > FAQs > Answer",
-              },
-            }}
-          >
-            <YextAutoField
-              field={fields.data!}
-              id="real-faq-item-source-field"
-              onChange={vi.fn()}
-              value={{
-                field: "",
-                constantValueEnabled: false,
-                constantValue: [],
-              }}
-            />
-          </EntityFieldsContext.Provider>
-        </TemplateMetadataContext.Provider>
-      </TemplatePropsContext.Provider>
-    );
-
-    fireEvent.click(screen.getByRole("combobox"));
-
-    expect(screen.getAllByText("FAQ Section > FAQs").length).toBeGreaterThan(0);
   });
 
   it("uses ENTITY_FIELDS display names for linked nested list sources", () => {

@@ -1,5 +1,5 @@
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { EntityFieldsContext } from "../hooks/useEntityFields.tsx";
 import { TemplateMetadataContext } from "../internal/hooks/useMessageReceivers.ts";
@@ -1340,76 +1340,11 @@ describe("YextEntityFieldSelector", () => {
     });
 
     fireEvent.click(screen.getByRole("combobox"));
+    const listbox = screen.getByRole("listbox");
 
     expect(screen.getAllByText("Name").length).toBeGreaterThan(0);
-    expect(screen.queryByText("Facebook Page URL")).toBeNull();
-    expect(screen.queryByText("Business Logo")).toBeNull();
-  });
-
-  it("does not show broad linked schema fields that are absent from the first resolved linked entity", () => {
-    renderEntityFieldInput({
-      entityFields: {
-        fields: [
-          ...defaultEntityFields.fields,
-          {
-            name: "c_linkedLocation",
-            displayName: "Linked Location",
-            definition: {
-              name: "c_linkedLocation",
-              isList: true,
-              typeRegistryId: "type.entity_reference",
-              type: {
-                documentType: "DOCUMENT_TYPE_ENTITY",
-              },
-            },
-            children: {
-              fields: [
-                {
-                  name: "name",
-                  displayName: "Name",
-                  definition: {
-                    name: "name",
-                    typeName: "type.string",
-                    type: {},
-                  },
-                },
-                {
-                  name: "logo",
-                  displayName: "Business Logo",
-                  definition: {
-                    name: "logo",
-                    typeName: "type.image",
-                    type: {},
-                  },
-                },
-                {
-                  name: "linkedInUrl",
-                  displayName: "LinkedIn URL",
-                  definition: {
-                    name: "linkedInUrl",
-                    typeName: "type.string",
-                    type: {},
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-      filter: {
-        types: ["type.string", "type.image"],
-        subdocumentField: "c_linkedLocation",
-      },
-      document: {
-        c_linkedLocation: [{ name: "Downtown" }],
-      },
-    });
-
-    fireEvent.click(screen.getByRole("combobox"));
-
-    expect(screen.getAllByText("Name").length).toBeGreaterThan(0);
-    expect(screen.queryByText("Business Logo")).toBeNull();
-    expect(screen.queryByText("LinkedIn URL")).toBeNull();
+    expect(within(listbox).queryByText("Facebook Page URL")).toBeNull();
+    expect(within(listbox).queryByText("Business Logo")).toBeNull();
   });
 
   it("falls back to linked entity schema fields when runtime descendants are unavailable", () => {
@@ -1543,67 +1478,6 @@ describe("YextEntityFieldSelector", () => {
     );
   });
 
-  it("does not include linked descendant fields that are present only on the fourth resolved linked entity", () => {
-    renderEntityFieldInput({
-      entityFields: {
-        fields: [
-          ...defaultEntityFields.fields,
-          {
-            name: "c_linkedLocation",
-            displayName: "Linked Location",
-            definition: {
-              name: "c_linkedLocation",
-              isList: true,
-              typeRegistryId: "type.entity_reference",
-              type: {
-                documentType: "DOCUMENT_TYPE_ENTITY",
-              },
-            },
-            children: {
-              fields: [
-                {
-                  name: "name",
-                  displayName: "Name",
-                  definition: {
-                    name: "name",
-                    typeName: "type.string",
-                    type: {},
-                  },
-                },
-                {
-                  name: "linkedInUrl",
-                  displayName: "LinkedIn URL",
-                  definition: {
-                    name: "linkedInUrl",
-                    typeName: "type.string",
-                    type: {},
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-      filter: {
-        types: ["type.string"],
-        subdocumentField: "c_linkedLocation",
-      },
-      document: {
-        c_linkedLocation: [
-          { name: "One" },
-          { name: "Two" },
-          { name: "Three" },
-          { linkedInUrl: "https://linkedin.com/in/four" },
-        ],
-      },
-    });
-
-    fireEvent.click(screen.getByRole("combobox"));
-
-    expect(screen.getAllByText("Name").length).toBeGreaterThan(0);
-    expect(screen.queryByText("LinkedIn URL")).toBeNull();
-  });
-
   it("does not show linked descendant options when the selected source resolves to no items", () => {
     renderEntityFieldInput({
       entityFields: {
@@ -1663,8 +1537,9 @@ describe("YextEntityFieldSelector", () => {
     });
 
     fireEvent.click(screen.getByRole("combobox"));
+    const listbox = screen.getByRole("listbox");
 
-    expect(screen.queryByText("LinkedIn URL")).toBeNull();
+    expect(within(listbox).queryByText("LinkedIn URL")).toBeNull();
     expect(screen.getAllByText("Location Field")).toHaveLength(2);
   });
 

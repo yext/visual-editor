@@ -44,39 +44,6 @@ const defaultInsight = {
   },
 } satisfies InsightStruct;
 
-export const defaultInsightCardItemData = {
-  image: {
-    field: "",
-    constantValue: defaultInsight.image,
-    constantValueEnabled: true,
-  },
-  name: {
-    field: "",
-    constantValue: defaultInsight.name,
-    constantValueEnabled: true,
-  },
-  category: {
-    field: "",
-    constantValue: defaultInsight.category,
-    constantValueEnabled: true,
-  },
-  publishTime: {
-    field: "",
-    constantValue: defaultInsight.publishTime,
-    constantValueEnabled: true,
-  },
-  description: {
-    field: "",
-    constantValue: defaultInsight.description,
-    constantValueEnabled: true,
-  },
-  cta: {
-    field: "",
-    constantValue: defaultInsight.cta,
-    constantValueEnabled: true,
-  },
-};
-
 export const defaultInsightCardSlotData = (
   id?: string,
   index?: number,
@@ -259,9 +226,10 @@ export type InsightCardProps = {
   };
 
   /** @internal */
-  itemData?: {
+  parentData?: {
     field: string;
-  } & InsightStruct;
+    insight: InsightStruct;
+  };
 
   /** @internal styles from parent component */
   parentStyles?: {
@@ -486,76 +454,61 @@ export const InsightCard: YextComponentConfig<InsightCardProps> = {
 
     let updatedData = data;
 
-    if (updatedData.props.itemData) {
-      const { field, ...insight } = updatedData.props.itemData;
-      const shouldPreserveManualSlotData = !field;
+    if (updatedData.props.parentData) {
+      const { field, insight } = updatedData.props.parentData;
 
       updatedData = setDeep(
         updatedData,
         "props.slots.ImageSlot[0].props.parentData",
-        insight.image !== undefined || !shouldPreserveManualSlotData
-          ? {
-              field: field ? `${field}.image` : "",
-              image: insight.image,
-            }
-          : undefined
+        {
+          field: `${field}.image`,
+          image: insight.image,
+        }
       );
 
       updatedData = setDeep(
         updatedData,
         "props.slots.TitleSlot[0].props.parentData",
-        insight.name !== undefined || !shouldPreserveManualSlotData
-          ? {
-              field: field ? `${field}.name` : "",
-              text: resolveComponentData(insight.name, locale, streamDocument, {
-                output: "plainText",
-              }),
-            }
-          : undefined
+        {
+          field: `${field}.name`,
+          text: insight.name,
+        }
       );
 
       updatedData = setDeep(
         updatedData,
         "props.slots.CategorySlot[0].props.parentData",
-        insight.category !== undefined || !shouldPreserveManualSlotData
-          ? {
-              field: field ? `${field}.category` : "",
-              text: insight.category,
-            }
-          : undefined
+        {
+          field: `${field}.category`,
+          text: insight.category,
+        }
       );
 
       updatedData = setDeep(
         updatedData,
         "props.slots.DescriptionSlot[0].props.parentData",
-        insight.description !== undefined || !shouldPreserveManualSlotData
-          ? {
-              field: field ? `${field}.description` : "",
-              richText: insight.description,
-            }
-          : undefined
+        {
+          field: `${field}.description`,
+          richText: insight.description,
+        }
       );
 
       updatedData = setDeep(
         updatedData,
         "props.slots.PublishTimeSlot[0].props.parentData",
-        insight.publishTime !== undefined || !shouldPreserveManualSlotData
-          ? {
-              field: field ? `${field}.publishTime` : "",
-              date: insight.publishTime || undefined,
-            }
-          : undefined
+        {
+          field: `${field}.publishTime`,
+          date: insight.publishTime || undefined,
+        }
       );
 
       updatedData = setDeep(
         updatedData,
         "props.slots.CTASlot[0].props.parentData",
-        insight.cta !== undefined || !shouldPreserveManualSlotData
-          ? {
-              field: field ? `${field}.cta` : "",
-              cta: insight.cta,
-            }
-          : undefined
+        {
+          field: `${field}.cta`,
+          cta: insight.cta,
+        }
       );
 
       const category = resolveComponentData(

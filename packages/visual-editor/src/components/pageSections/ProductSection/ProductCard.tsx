@@ -24,7 +24,6 @@ import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholder
 import { TextProps } from "../../contentBlocks/Text.tsx";
 import { ProductSectionVariant } from "./ProductSection.tsx";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
-import { shouldRenderToggledField } from "../../../utils/cardSlots/fieldVisibility.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 import {
   formatCurrency,
@@ -64,39 +63,6 @@ const defaultProductData = {
 
 const slotDefaultData = {
   priceText: { defaultValue: "$123.00" },
-};
-
-export const defaultProductCardItemData = {
-  image: {
-    field: "",
-    constantValue: defaultProductData.image,
-    constantValueEnabled: true,
-  },
-  brow: {
-    field: "",
-    constantValue: defaultProductData.brow,
-    constantValueEnabled: true,
-  },
-  name: {
-    field: "",
-    constantValue: defaultProductData.name,
-    constantValueEnabled: true,
-  },
-  price: {
-    field: "",
-    constantValue: defaultProductData.price,
-    constantValueEnabled: true,
-  },
-  description: {
-    field: "",
-    constantValue: defaultProductData.description,
-    constantValueEnabled: true,
-  },
-  cta: {
-    field: "",
-    constantValue: defaultProductData.cta,
-    constantValueEnabled: true,
-  },
 };
 
 export const defaultProductCardSlotData = (
@@ -270,10 +236,10 @@ export type ProductCardProps = {
   };
 
   /** @internal */
-  itemData?: {
+  parentData?: {
     field: string;
-    priceText?: string;
-  } & ProductStruct;
+    product: ProductStruct;
+  };
 
   /** @internal */
   parentStyles?: {
@@ -288,8 +254,6 @@ export type ProductCardProps = {
 
   /** @internal */
   conditionalRender?: {
-    image?: boolean;
-    title?: boolean;
     price?: boolean;
     brow?: boolean;
     description?: boolean;
@@ -428,36 +392,15 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
     });
   }, [styles, slotStyles]);
 
-  const hasPrice = shouldRenderToggledField({
-    isEditing: puck.isEditing,
-    isEnabled: parentStyles?.showPrice,
-    hasData: !!conditionalRender?.price,
-  });
-  const hasDescription = shouldRenderToggledField({
-    isEditing: puck.isEditing,
-    isEnabled: parentStyles?.showDescription,
-    hasData: !!conditionalRender?.description,
-  });
-  const hasCTA = shouldRenderToggledField({
-    isEditing: puck.isEditing,
-    isEnabled: parentStyles?.showCTA,
-    hasData: !!conditionalRender?.cta,
-  });
-  const hasBrow = shouldRenderToggledField({
-    isEditing: puck.isEditing,
-    isEnabled: parentStyles?.showBrow,
-    hasData: !!conditionalRender?.brow,
-  });
-  const hasImage = shouldRenderToggledField({
-    isEditing: puck.isEditing,
-    isEnabled: parentStyles?.showImage,
-    hasData: !!conditionalRender?.image,
-  });
-  const hasTitle = shouldRenderToggledField({
-    isEditing: puck.isEditing,
-    isEnabled: parentStyles?.showTitle,
-    hasData: !!conditionalRender?.title,
-  });
+  const hasPrice =
+    parentStyles?.showPrice && (conditionalRender?.price || puck.isEditing);
+  const hasDescription =
+    parentStyles?.showDescription &&
+    (conditionalRender?.description || puck.isEditing);
+  const hasCTA =
+    parentStyles?.showCTA && (conditionalRender?.cta || puck.isEditing);
+  const hasBrow =
+    parentStyles?.showBrow && (conditionalRender?.brow || puck.isEditing);
   const bottomPadding = hasCTA ? "pb-8" : "pb-4";
 
   return (
@@ -469,7 +412,7 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
       background={variant === "minimal" ? undefined : styles.backgroundColor}
       ref={puck.dragRef}
     >
-      {hasImage && (
+      {parentStyles?.showImage && (
         <div className={variant === "classic" ? "px-8 pt-8" : ""}>
           <div className={"w-full"}>
             <slots.ImageSlot style={{ height: "fit-content" }} allow={[]} />
@@ -484,13 +427,13 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
         )}
       >
         <div className="gap-4 flex flex-col flex-grow">
-          {(hasBrow || hasTitle) && (
+          {(hasBrow || parentStyles?.showTitle) && (
             <div className="flex flex-col">
               {hasBrow && (
                 <slots.BrowSlot style={{ height: "auto" }} allow={[]} />
               )}
 
-              {hasTitle && (
+              {parentStyles?.showTitle && (
                 <slots.TitleSlot style={{ height: "auto" }} allow={[]} />
               )}
             </div>
@@ -524,10 +467,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       | YextEntityField<ProductStruct["price"]>
       | undefined;
     const entityPrice =
-      (data.props.itemData?.price &&
-      typeof data.props.itemData.price === "object"
-        ? data.props.itemData.price
-        : undefined) ??
+      data.props.parentData?.product.price ??
       (priceEntityField
         ? resolveYextEntityField<ProductStruct["price"]>(
             params.metadata.streamDocument,
@@ -541,11 +481,6 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       entityPrice?.currencyCode,
       locale
     );
-    const mappedPriceText =
-      data.props.itemData?.priceText ??
-      (typeof data.props.itemData?.price === "string"
-        ? data.props.itemData.price
-        : undefined);
     const fallbackPriceCandidate = priceSlotProps
       ? resolveYextEntityField(
           params.metadata.streamDocument,
@@ -571,56 +506,15 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
             );
     const resolvedPrice = resolvedPriceFromEntity
       ? resolvedPriceFromEntity
-      : mappedPriceText
-        ? mappedPriceText
-        : resolvedFallbackPrice;
+      : resolvedFallbackPrice;
     const showPrice = Boolean(resolvedPrice);
-
-    const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as
-      | (WithId<ImageWrapperProps> & {
-          styles?: { aspectRatio?: number; width?: number };
-        })
-      | undefined;
-    const resolvedImage =
-      data.props.itemData?.image ??
-      imageSlotProps?.parentData?.image ??
-      (imageSlotProps
-        ? resolveYextEntityField(
-            params.metadata.streamDocument,
-            imageSlotProps?.data?.image,
-            locale
-          )
-        : undefined);
-    const showImage = Boolean(resolvedImage);
-
-    const titleSlotProps = data.props.slots.TitleSlot?.[0]?.props as
-      | WithId<HeadingTextProps>
-      | undefined;
-    const resolvedTitle =
-      data.props.itemData?.name ??
-      titleSlotProps?.parentData?.text ??
-      (titleSlotProps
-        ? resolveYextEntityField(
-            params.metadata.streamDocument,
-            titleSlotProps?.data?.text,
-            locale
-          )
-        : undefined);
-    const showTitle = Boolean(
-      resolveComponentData(
-        resolvedTitle,
-        locale,
-        params.metadata.streamDocument,
-        { output: "plainText" }
-      )
-    );
 
     const browSlotProps = data.props.slots.BrowSlot?.[0]?.props as
       | WithId<TextProps>
       | undefined;
 
     const resolvedBrow =
-      data.props.itemData?.brow ??
+      data.props.parentData?.product.brow ??
       browSlotProps?.parentData?.text ??
       (browSlotProps
         ? resolveYextEntityField(
@@ -635,7 +529,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       ?.props as WithId<BodyTextProps> | undefined;
 
     const resolvedDescription =
-      data.props.itemData?.description ??
+      data.props.parentData?.product.description ??
       descriptionSlotProps?.parentData?.richText ??
       (descriptionSlotProps
         ? resolveYextEntityField(
@@ -649,8 +543,8 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
     const ctaSlotProps = data.props.slots.CTASlot?.[0]?.props as
       | WithId<CTAWrapperProps>
       | undefined;
-    const resolvedCTA = data.props.itemData
-      ? (data.props.itemData.cta ?? ctaSlotProps?.parentData?.cta)
+    const resolvedCTA = data.props.parentData
+      ? (data.props.parentData.product.cta ?? ctaSlotProps?.parentData?.cta)
       : (ctaSlotProps?.parentData?.cta ??
         (ctaSlotProps
           ? resolveYextEntityField(
@@ -661,13 +555,17 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
           : undefined));
     const showCTA = Boolean(resolvedCTA);
 
+    const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as
+      | (WithId<ImageWrapperProps> & {
+          styles?: { aspectRatio?: number; width?: number };
+        })
+      | undefined;
+
     let updatedData = {
       ...data,
       props: {
         ...data.props,
         conditionalRender: {
-          image: showImage,
-          title: showTitle,
           price: showPrice,
           brow: showBrow,
           description: showDescription,
@@ -704,18 +602,14 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       `cta${data.props.index}`
     );
 
-    if (data.props.itemData) {
-      const {
-        field,
-        priceText: mappedPriceText,
-        ...product
-      } = data.props.itemData;
+    if (data.props.parentData) {
+      const product = data.props.parentData.product;
+      const field = data.props.parentData.field;
       const formattedPrice = formatCurrency(
         product.price?.value,
         product.price?.currencyCode,
         locale
       );
-      const priceText = formattedPrice ?? mappedPriceText;
 
       updatedData = setDeep(
         updatedData,
@@ -730,12 +624,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
         "props.slots.TitleSlot[0].props.parentData",
         {
           field: field,
-          text: resolveComponentData(
-            product.name,
-            locale,
-            params.metadata.streamDocument,
-            { output: "plainText" }
-          ),
+          text: product.name as string, // will already be resolved
         } satisfies HeadingTextProps["parentData"]
       );
       updatedData = setDeep(
@@ -749,10 +638,10 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       updatedData = setDeep(
         updatedData,
         "props.slots.PriceSlot[0].props.parentData",
-        priceText
+        formattedPrice
           ? ({
               field: field,
-              text: priceText,
+              text: formattedPrice,
             } satisfies TextProps["parentData"])
           : undefined
       );

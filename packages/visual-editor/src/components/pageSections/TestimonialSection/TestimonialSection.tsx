@@ -9,10 +9,8 @@ import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import {
-  TestimonialCardsWrapper,
-  type TestimonialCardsWrapperProps,
-} from "./TestimonialCardsWrapper.tsx";
+import { defaultTestimonialCardSlotData } from "./TestimonialCard.tsx";
+import { TestimonialCardsWrapperProps } from "./TestimonialCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import {
@@ -24,18 +22,42 @@ import {
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 export interface TestimonialSectionProps {
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
   styles: {
+    /**
+     * The background color of the section.
+     * @defaultValue Background Color 2
+     */
     backgroundColor?: ThemeColor;
+
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
     showSectionHeading: boolean;
   };
+
+  /** @internal */
   slots: {
     SectionHeadingSlot: Slot;
     CardsWrapperSlot: Slot;
   };
+
+  /** @internal */
   analytics: {
     scope?: string;
   };
+
+  /** @internal */
   conditionalRender?: MappedCardsSectionConditionalRender;
+
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
   liveVisibility: boolean;
 }
 
@@ -85,6 +107,10 @@ const testimonialSectionFields: YextFields<TestimonialSectionProps> = {
   },
 };
 
+/**
+ * The Testimonial Section is used to display a list of customer testimonials or reviews. It features a main section heading and renders each testimonial as an individual card, providing social proof and building trust with visitors.
+ * Available on Location templates.
+ */
 export const TestimonialSection: YextComponentConfig<TestimonialSectionProps> =
   {
     label: msg("components.testimonialsSection", "Testimonials Section"),
@@ -114,7 +140,22 @@ export const TestimonialSection: YextComponentConfig<TestimonialSectionProps> =
           {
             type: "TestimonialCardsWrapper",
             props: {
-              ...(TestimonialCardsWrapper.defaultProps as TestimonialCardsWrapperProps),
+              data: {
+                field: "",
+                constantValueEnabled: true,
+                constantValue: [{}, {}, {}],
+              },
+              slots: {
+                CardSlot: [
+                  defaultTestimonialCardSlotData(undefined, 0),
+                  defaultTestimonialCardSlotData(undefined, 1),
+                  defaultTestimonialCardSlotData(undefined, 2),
+                ],
+              },
+              styles: {
+                showName: true,
+                showDate: true,
+              },
             } satisfies TestimonialCardsWrapperProps,
           },
         ],

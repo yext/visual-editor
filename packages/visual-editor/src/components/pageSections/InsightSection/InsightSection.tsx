@@ -1,4 +1,3 @@
-import { Slot } from "@puckeditor/core";
 import {
   ThemeColor,
   backgroundColors,
@@ -8,13 +7,12 @@ import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
+import { Slot } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
-import {
-  InsightCardsWrapper,
-  type InsightCardsWrapperProps,
-} from "./InsightCardsWrapper.tsx";
+import { defaultInsightCardSlotData } from "./InsightCard.tsx";
+import { InsightCardsWrapperProps } from "./InsightCardsWrapper.tsx";
 import {
   getMappedCardsSectionConditionalRender,
   MappedCardsSectionConditionalRender,
@@ -24,18 +22,41 @@ import {
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 export interface InsightSectionProps {
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
   styles: {
+    /**
+     * The background color for the entire section.
+     * @defaultValue Background Color 2
+     */
     backgroundColor?: ThemeColor;
+
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
     showSectionHeading: boolean;
   };
+
   slots: {
     SectionHeadingSlot: Slot;
     CardsWrapperSlot: Slot;
   };
+
+  /** @internal  */
   analytics: {
     scope?: string;
   };
+
+  /** @internal */
   conditionalRender?: MappedCardsSectionConditionalRender;
+
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
   liveVisibility: boolean;
 }
 
@@ -85,6 +106,10 @@ const insightSectionFields: YextFields<InsightSectionProps> = {
   },
 };
 
+/**
+ * The Insight Section is used to display a curated list of content such as articles, blog posts, or other informational blurbs. It features a main section heading and renders each insight as a distinct card, making it an effective way to showcase valuable content.
+ * Available on Location templates.
+ */
 export const InsightSection: YextComponentConfig<InsightSectionProps> = {
   label: msg("components.insightsSection", "Insights Section"),
   fields: insightSectionFields,
@@ -116,8 +141,26 @@ export const InsightSection: YextComponentConfig<InsightSectionProps> = {
         {
           type: "InsightCardsWrapper",
           props: {
-            ...(InsightCardsWrapper.defaultProps as InsightCardsWrapperProps),
-          },
+            data: {
+              field: "",
+              constantValueEnabled: true,
+              constantValue: [{}, {}, {}],
+            },
+            styles: {
+              showImage: true,
+              showCategory: true,
+              showPublishTime: true,
+              showDescription: true,
+              showCTA: true,
+            },
+            slots: {
+              CardSlot: [
+                defaultInsightCardSlotData(undefined, 0),
+                defaultInsightCardSlotData(undefined, 1),
+                defaultInsightCardSlotData(undefined, 2),
+              ],
+            },
+          } satisfies InsightCardsWrapperProps,
         },
       ],
     },
