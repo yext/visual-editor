@@ -4,6 +4,9 @@ import { type StreamDocument } from "../utils/types/StreamDocument.ts";
 
 const usePuck = createUsePuck();
 
+/**
+ * Reads a dotted path from an unknown value tree.
+ */
 export const getValueAtPath = (value: unknown, path: string): unknown => {
   if (!value || typeof value !== "object" || !path) {
     return undefined;
@@ -18,6 +21,19 @@ export const getValueAtPath = (value: unknown, path: string): unknown => {
   }, value);
 };
 
+/**
+ * Reads the currently selected linked source field from the active Puck item.
+ *
+ * This is used by editor-only controls, such as embedded field pickers, that
+ * need to scope their available fields relative to a parent `itemSource` or
+ * `entityField` value while the user is editing that item.
+ *
+ * Returns an empty string when:
+ * - no source field path was provided
+ * - there is no active item selector in Puck state
+ * - the source field is in manual/constant mode
+ * - the stored value does not contain a linked field path
+ */
 export const useResolvedSourceField = (sourceFieldPath?: string): string => {
   try {
     return usePuck((state) => {
@@ -61,7 +77,15 @@ export const useResolvedSourceField = (sourceFieldPath?: string): string => {
   }
 };
 
-export const getCurrentDocumentContext = (
+/**
+ * Resolves the object scope that embedded linked-field previews should read
+ * from.
+ *
+ * Without a source field this returns the full stream document. With a source
+ * field it resolves that path and returns the selected object, or the first
+ * item when the source resolves to a list of objects.
+ */
+export const getSubDocument = (
   streamDocument: StreamDocument | Record<string, unknown> | undefined,
   sourceField?: string
 ): Record<string, unknown> | undefined => {

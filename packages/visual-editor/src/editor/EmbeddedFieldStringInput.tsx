@@ -28,7 +28,7 @@ import {
   type EntityFieldOptionGroup,
 } from "./entityFieldOptionGroups.ts";
 import {
-  getCurrentDocumentContext,
+  getSubDocument,
   useResolvedSourceField,
 } from "./currentDocumentContext.tsx";
 
@@ -269,8 +269,8 @@ const CommandItemWithResolvedValue = ({
   const { i18n } = useTranslation();
   const locale = i18n.language;
   const streamDocument = useDocument();
-  const currentDocument = React.useMemo(
-    () => getCurrentDocumentContext(streamDocument, sourceField),
+  const subDocument = React.useMemo(
+    () => getSubDocument(streamDocument, sourceField),
     [sourceField, streamDocument]
   );
   const [resolvedValue, setResolvedValue] = React.useState<
@@ -291,18 +291,18 @@ const CommandItemWithResolvedValue = ({
       const resolved = resolveComponentData(
         fieldToResolve,
         locale,
-        currentDocument
+        subDocument
       );
       const finalValue =
         typeof resolved === "object" ? JSON.stringify(resolved) : resolved;
       setResolvedValue(String(finalValue ?? ""));
     }
   }, [
-    currentDocument,
     isOpen,
     locale,
     option.value,
     resolvedValue,
+    subDocument,
     useOptionValue,
   ]);
 
