@@ -131,6 +131,10 @@ const FAQsSectionFields: YextFields<FAQSectionProps> = {
   },
 };
 
+/**
+ * Keeps the hidden FAQ CardSlot array synchronized with the current linked or
+ * manual item list while preserving the first card's presentation styles.
+ */
 const syncCards = <TData extends { props: FAQSectionProps }>(
   data: TData,
   resolvedItems: Record<string, unknown>[]

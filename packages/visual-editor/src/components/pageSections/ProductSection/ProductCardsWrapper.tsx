@@ -162,6 +162,10 @@ const productCardsWrapperFields: YextFields<ProductCardsWrapperProps> = {
   },
 };
 
+/**
+ * Creates a new ProductCard shell using the first existing card as the styling
+ * template for newly synced cards.
+ */
 const createProductCard = (
   currentCards: ComponentData<ProductCardProps>[]
 ): ComponentData<ProductCardProps> => {
@@ -175,6 +179,10 @@ const createProductCard = (
   ) as unknown as ComponentData<ProductCardProps>;
 };
 
+/**
+ * Keeps the hidden CardSlot array aligned with the current linked or manual
+ * item list while preserving existing card styling where possible.
+ */
 const syncCards = <TData extends { props: ProductCardsWrapperProps }>(
   data: TData,
   resolvedItems: Record<string, unknown>[]

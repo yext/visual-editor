@@ -148,6 +148,10 @@ const teamCardsWrapperFields: YextFields<TeamCardsWrapperProps> = {
   },
 };
 
+/**
+ * Creates a new TeamCard shell using the first existing card as the styling
+ * template for newly synced cards.
+ */
 const createTeamCard = (
   currentCards: ComponentData<TeamCardProps>[]
 ): ComponentData<TeamCardProps> => {
@@ -161,6 +165,10 @@ const createTeamCard = (
   ) as unknown as ComponentData<TeamCardProps>;
 };
 
+/**
+ * Keeps the hidden CardSlot array aligned with the current linked or manual
+ * item list while preserving existing card styling where possible.
+ */
 const syncCards = <TData extends { props: TeamCardsWrapperProps }>(
   data: TData,
   resolvedItems: Record<string, unknown>[]

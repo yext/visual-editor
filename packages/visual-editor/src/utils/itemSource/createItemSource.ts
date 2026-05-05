@@ -60,6 +60,10 @@ type ItemSourceInstance<
   ) => ResolvedItemField<TItem>[];
 };
 
+/**
+ * Builds the nested field-definition tree that Puck expects for a dotted props
+ * path like `articleSource` or `articleMappings.title`.
+ */
 const buildNestedFieldTree = (
   path: string,
   field: YextFieldDefinition<any>
@@ -82,6 +86,9 @@ const buildNestedFieldTree = (
   };
 };
 
+/**
+ * Builds the nested value object that matches a dotted props path.
+ */
 const buildNestedValueTree = (
   path: string,
   value: unknown
@@ -100,6 +107,9 @@ const buildNestedValueTree = (
   };
 };
 
+/**
+ * Deep-merges two plain-object trees while preserving non-object leaf values.
+ */
 const mergeTrees = <
   TTree extends Record<string, unknown>,
   TOtherTree extends Record<string, unknown>,
@@ -128,6 +138,9 @@ const mergeTrees = <
     { ...tree } as Record<string, unknown>
   ) as TTree & TOtherTree;
 
+/**
+ * Reads a dotted path out of an unknown value tree.
+ */
 const getPathValue = <T>(value: unknown, path: string): T | undefined => {
   let currentValue: unknown = value;
 
@@ -142,6 +155,9 @@ const getPathValue = <T>(value: unknown, path: string): T | undefined => {
   return currentValue as T | undefined;
 };
 
+/**
+ * Derives a human-readable fallback label from a dotted props path.
+ */
 const getDefaultLabel = (path: string): string =>
   path
     .split(".")
@@ -149,10 +165,18 @@ const getDefaultLabel = (path: string): string =>
     ?.replace(/([a-z0-9])([A-Z])/g, "$1 $2")
     .replace(/^./, (value) => value.toUpperCase()) ?? path;
 
+/**
+ * Narrows a generic field definition to the entity-field variant used for
+ * source-relative mapping and manual constants.
+ */
 const isEntityFieldDefinition = (
   field: YextFieldDefinition<any>
 ): field is EntityFieldSelectorField<any> => field.type === "entityField";
 
+/**
+ * Infers the default constant value shape that matches an entity field's
+ * configured filter and translation behavior.
+ */
 const inferEntityFieldConstantValue = (
   field: EntityFieldSelectorField<any>
 ): unknown => {
@@ -182,6 +206,10 @@ const inferEntityFieldConstantValue = (
   return { defaultValue: "" };
 };
 
+/**
+ * Creates the authored default value for one item field in either shared
+ * mapping mode or manual-item mode.
+ */
 const getDefaultValueForField = (
   field: YextFieldDefinition<any>,
   constantValueEnabled: boolean
@@ -223,6 +251,10 @@ const getDefaultValueForField = (
   return undefined;
 };
 
+/**
+ * Propagates the parent item source path into nested entity fields so linked
+ * mode resolves them relative to each source item by default.
+ */
 const applySourceEntityPath = <TValue>(
   field: YextFieldDefinition<TValue>,
   itemSourcePath: string
@@ -270,6 +302,10 @@ const applySourceEntityPath = <TValue>(
   return field;
 };
 
+/**
+ * Collects the entity-field type filters that the parent item source picker
+ * must satisfy for linked mode to be valid.
+ */
 const getItemSourceTypes = (
   itemFields: YextFieldMap<Record<string, unknown>>
 ): EntityFieldTypes[][] =>
@@ -283,6 +319,10 @@ const getItemSourceTypes = (
       : [];
   });
 
+/**
+ * Detects authored entity-field values so source changes can clear only the
+ * linked field bindings while preserving constants.
+ */
 const isYextEntityFieldValue = (
   value: unknown
 ): value is Partial<YextEntityField<unknown>> =>
@@ -291,6 +331,10 @@ const isYextEntityFieldValue = (
   "field" in value &&
   "constantValue" in value;
 
+/**
+ * Recursively clears selected field paths from an authored mapping tree while
+ * preserving any constants that the editor entered.
+ */
 const clearEntityFieldBindings = (value: unknown): unknown => {
   if (isYextEntityFieldValue(value)) {
     return {
@@ -315,6 +359,10 @@ const clearEntityFieldBindings = (value: unknown): unknown => {
   return value;
 };
 
+/**
+ * Resolves one item field into its render-ready value using either the current
+ * source item or the root stream document, depending on field scope.
+ */
 const resolveItemValue = <TValue>(
   field: YextFieldDefinition<TValue>,
   value: unknown,
@@ -381,6 +429,17 @@ const resolveItemValue = <TValue>(
   return value as ResolvedItemField<TValue>;
 };
 
+/**
+ * Creates the authored-state contract for a list-backed component.
+ *
+ * 1. Builds the parent `itemSource` field and shared mapping fields from one
+ *    item schema.
+ * 2. Generates default props for linked mode and inline manual items.
+ * 3. Exposes editor-time helpers for showing mappings and clearing stale field
+ *    bindings when the selected source changes.
+ * 4. Resolves linked or manual items into render-ready values without writing
+ *    derived data back onto component props.
+ */
 export const createItemSource = <
   TProps extends DefaultComponentProps,
   TItem extends Record<string, unknown>,

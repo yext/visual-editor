@@ -8,6 +8,9 @@ export type FieldResolution<T> = {
   traversedMultiValueReference: boolean;
 };
 
+/**
+ * Chooses the locale to use for embedded-field and constant-value resolution.
+ */
 const getStreamDocumentLocale = (
   streamDocument: StreamDocument | undefined,
   locale: string | undefined
@@ -17,6 +20,10 @@ const getStreamDocumentLocale = (
   streamDocument?.meta?.locale ??
   streamDocument?.__?.pathInfo?.primaryLocale;
 
+/**
+ * Resolves a Yext entity field from either a selected field path or a constant
+ * value, including embedded field interpolation inside constants.
+ */
 export const resolveYextEntityField = <T>(
   streamDocument: StreamDocument | undefined,
   entityField: YextEntityField<T>,

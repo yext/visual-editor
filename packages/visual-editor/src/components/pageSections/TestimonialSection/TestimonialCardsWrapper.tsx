@@ -119,6 +119,11 @@ const testimonialCardsWrapperFields: YextFields<TestimonialCardsWrapperProps> =
       visible: false,
     },
   };
+
+/**
+ * Creates a new TestimonialCard shell using the first existing card as the
+ * styling template for newly synced cards.
+ */
 const createTestimonialCard = (
   currentCards: ComponentData<TestimonialCardProps>[]
 ): ComponentData<TestimonialCardProps> => {
@@ -132,6 +137,10 @@ const createTestimonialCard = (
   ) as unknown as ComponentData<TestimonialCardProps>;
 };
 
+/**
+ * Keeps the hidden CardSlot array aligned with the current linked or manual
+ * item list while preserving existing card styling where possible.
+ */
 const syncCards = <TData extends { props: TestimonialCardsWrapperProps }>(
   data: TData,
   resolvedItems: Record<string, unknown>[]

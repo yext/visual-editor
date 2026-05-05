@@ -135,6 +135,10 @@ const eventCardsWrapperFields: YextFields<EventCardsWrapperProps> = {
   },
 };
 
+/**
+ * Creates a new EventCard shell using the first existing card as the styling
+ * template for newly synced cards.
+ */
 const createEventCard = (
   currentCards: ComponentData<EventCardProps>[]
 ): ComponentData<EventCardProps> => {
@@ -149,6 +153,9 @@ const createEventCard = (
   ) as unknown as ComponentData<EventCardProps>;
 };
 
+/**
+ * Converts one resolved item into the itemData shape consumed by EventCard.
+ */
 const toEventCardItemData = (
   item: Record<string, unknown>,
   sourceField: string,
@@ -169,6 +176,10 @@ const toEventCardItemData = (
   cta: (item.cta as EventStruct["cta"] | undefined) ?? defaultEventCta,
 });
 
+/**
+ * Keeps the hidden CardSlot array aligned with the current linked or manual
+ * item list while preserving existing card styling where possible.
+ */
 const syncCards = <TData extends { props: EventCardsWrapperProps }>(
   data: TData,
   resolvedItems: Record<string, unknown>[]

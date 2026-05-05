@@ -10,6 +10,9 @@ type LegacyListSourceConfig = {
   extractManualItem: (card: Record<string, any>) => Record<string, unknown>;
 };
 
+/**
+ * Reads a dotted props path out of a legacy component or card payload.
+ */
 const getPathValue = (value: unknown, path: string): unknown =>
   path
     .split(".")
@@ -21,9 +24,17 @@ const getPathValue = (value: unknown, path: string): unknown =>
       value
     );
 
+/**
+ * Deep-clones legacy authored values before they are moved into the new inline
+ * manual-item structure.
+ */
 const cloneValue = <T>(value: T): T =>
   value === undefined ? value : JSON.parse(JSON.stringify(value));
 
+/**
+ * Converts an old list-valued entity field into the new scalar shape used by
+ * manual team email items.
+ */
 const toScalarEntityField = (
   entityField: Record<string, any> | undefined
 ): Record<string, unknown> => ({
@@ -33,9 +44,16 @@ const toScalarEntityField = (
     : entityField?.constantValue,
 });
 
+/**
+ * Preserves the authored manual-item count when the old slots are empty.
+ */
 const createEmptyItems = (length: number): Record<string, unknown>[] =>
   Array.from({ length }, () => ({}));
 
+/**
+ * Retargets an old parent field to the nested list source when the resolved
+ * source document still uses the wrapper object shape from `origin/main`.
+ */
 const getNextSourceField = (
   field: string,
   streamDocument: Record<string, unknown>,
@@ -119,6 +137,10 @@ const migrateLegacyListSourceProps = (
   };
 };
 
+/**
+ * Applies the list-source migration to a wrapper slot that still embeds a
+ * list-backed cards component.
+ */
 const migrateWrapperSlot = (
   props: LegacyProps,
   streamDocument: Record<string, unknown>,

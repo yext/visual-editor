@@ -155,6 +155,10 @@ const insightCardsWrapperFields: YextFields<InsightCardsWrapperProps> = {
   },
 };
 
+/**
+ * Creates a new InsightCard shell using the first existing card as the styling
+ * template for newly synced cards.
+ */
 const createInsightCard = (
   currentCards: ComponentData<InsightCardProps>[]
 ): ComponentData<InsightCardProps> => {
@@ -168,6 +172,10 @@ const createInsightCard = (
   ) as unknown as ComponentData<InsightCardProps>;
 };
 
+/**
+ * Keeps the hidden CardSlot array aligned with the current linked or manual
+ * item list while preserving existing card styling where possible.
+ */
 const syncCards = <TData extends { props: InsightCardsWrapperProps }>(
   data: TData,
   resolvedItems: Record<string, unknown>[]
