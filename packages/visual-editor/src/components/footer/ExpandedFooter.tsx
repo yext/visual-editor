@@ -7,7 +7,7 @@ import {
   ThemeOptions,
 } from "../../utils/themeConfigOptions.ts";
 import { msg } from "../../utils/i18n/platform.ts";
-import { YextField } from "../../editor/YextField.tsx";
+import { getMaxWidthOptions } from "../../editor/MaxWidthSelector.tsx";
 import { Background } from "../atoms/background.tsx";
 import { PageSection, PageSectionProps } from "../atoms/pageSection.tsx";
 import { themeManagerCn } from "../../utils/cn.ts";
@@ -140,11 +140,13 @@ export interface ExpandedFooterProps {
 }
 
 const expandedFooterSectionFields: YextFields<ExpandedFooterProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
-      primaryFooter: YextField(msg("fields.primaryFooter", "Primary Footer"), {
+      primaryFooter: {
         type: "object",
+        label: msg("fields.primaryFooter", "Primary Footer"),
         objectFields: {
           expandedFooter: {
             label: msg("fields.expandFooter", "Expand Footer"),
@@ -170,30 +172,30 @@ const expandedFooterSectionFields: YextFields<ExpandedFooterProps> = {
             options: ThemeOptions.SHOW_HIDE,
           },
         },
-      }),
-      secondaryFooter: YextField(
-        msg("fields.secondaryFooter", "Secondary Footer"),
-        {
-          type: "object",
-          objectFields: {
-            show: {
-              label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
-              type: "radio",
-              options: [
-                { label: msg("fields.options.yes", "Yes"), value: true },
-                { label: msg("fields.options.no", "No"), value: false },
-              ],
-            },
-          },
-        }
-      ),
-    },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
-    type: "object",
-    objectFields: {
-      primaryFooter: YextField(msg("fields.primaryFooter", "Primary Footer"), {
+      },
+      secondaryFooter: {
         type: "object",
+        label: msg("fields.secondaryFooter", "Secondary Footer"),
+        objectFields: {
+          show: {
+            label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+            type: "radio",
+            options: [
+              { label: msg("fields.options.yes", "Yes"), value: true },
+              { label: msg("fields.options.no", "No"), value: false },
+            ],
+          },
+        },
+      },
+    },
+  },
+  styles: {
+    type: "object",
+    label: msg("fields.styles", "Styles"),
+    objectFields: {
+      primaryFooter: {
+        type: "object",
+        label: msg("fields.primaryFooter", "Primary Footer"),
         objectFields: {
           backgroundColor: {
             type: "basicSelector",
@@ -236,12 +238,23 @@ const expandedFooterSectionFields: YextFields<ExpandedFooterProps> = {
           },
           // Logo and utility image styles are controlled within their respective slots
         },
-      }),
-      maxWidth: YextField(msg("fields.maxWidth", "Max Width"), {
-        type: "maxWidth",
-      }),
+      },
+      maxWidth: {
+        type: "basicSelector",
+        label: msg("fields.maxWidth", "Max Width"),
+        disableSearch: true,
+        optionGroups: [
+          {
+            description: msg(
+              "maxWidthTip",
+              "For optimal content alignment, we recommend setting the header and footer width to match or exceed the page content grid."
+            ),
+            options: getMaxWidthOptions(),
+          },
+        ],
+      },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {
@@ -254,8 +267,9 @@ const expandedFooterSectionFields: YextFields<ExpandedFooterProps> = {
     },
     visible: false,
   },
-  analytics: YextField(msg("fields.analytics", "Analytics"), {
+  analytics: {
     type: "object",
+    label: msg("fields.analytics", "Analytics"),
     visible: false,
     objectFields: {
       scope: {
@@ -263,7 +277,7 @@ const expandedFooterSectionFields: YextFields<ExpandedFooterProps> = {
         type: "text",
       },
     },
-  }),
+  },
 };
 
 const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = (props) => {

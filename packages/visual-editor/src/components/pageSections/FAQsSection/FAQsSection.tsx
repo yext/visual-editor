@@ -11,7 +11,6 @@ import {
   ThemeOptions,
 } from "../../../utils/themeConfigOptions.ts";
 import { PageSection } from "../../atoms/pageSection.tsx";
-import { YextField } from "../../../editor/YextField.tsx";
 import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
@@ -80,14 +79,16 @@ export interface FAQSectionProps {
 }
 
 const FAQsSectionFields: YextFields<FAQSectionProps> = {
-  data: YextField(msg("fields.faqs", "FAQs"), {
+  data: {
     type: "entityField",
+    label: msg("fields.faqs", "FAQs"),
     filter: {
       types: [ComponentFields.FAQSection.type],
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
         type: "basicSelector",
@@ -100,7 +101,7 @@ const FAQsSectionFields: YextFields<FAQSectionProps> = {
         options: ThemeOptions.SHOW_HIDE,
       },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {
@@ -109,8 +110,9 @@ const FAQsSectionFields: YextFields<FAQSectionProps> = {
     },
     visible: false,
   },
-  analytics: YextField(msg("fields.analytics", "Analytics"), {
+  analytics: {
     type: "object",
+    label: msg("fields.analytics", "Analytics"),
     visible: false,
     objectFields: {
       scope: {
@@ -118,7 +120,7 @@ const FAQsSectionFields: YextFields<FAQSectionProps> = {
         type: "text",
       },
     },
-  }),
+  },
   liveVisibility: {
     label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
     type: "radio",

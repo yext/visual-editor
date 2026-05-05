@@ -205,6 +205,7 @@
     "ctaVariant": "Varianta CTA",
     "currentPageLinkLabel": "Eticheta de link la pagina curentă",
     "customClass": "Clasă personalizată",
+    "customColor": "Culoare personalizată",
     "customId": "ID personalizat",
     "customLimit": "Limită personalizată",
     "data": "Date",
@@ -305,6 +306,7 @@
         "primary": "Solid",
         "secondary": "Contur"
       },
+      "customImage": "Imagine personalizată",
       "dark": "Întuneric",
       "default": "Implicit",
       "distanceFromSearch": "Distanța de la Căutare",
@@ -386,6 +388,7 @@
       "none": "Nici unul",
       "normal": "Normal",
       "one": "Unul",
+      "other": "Alte",
       "phone": "Telefon",
       "regular": "Regulat",
       "right_direction": "Dreapta",
@@ -521,7 +524,6 @@
     "search": "Căutați fonturi ..."
   },
   "fontSize": "Dimensiunea fontului",
-  "fontSizeDefaultLabel": "Implicit",
   "friday": "vineri",
   "getDirections": "Obțineți indicații",
   "getDirectionsForLocation": "Obțineți indicații pentru {{address}}",

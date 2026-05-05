@@ -4,7 +4,6 @@ import { useDocument } from "../../hooks/useDocument.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { Heading, HeadingProps } from "../atoms/heading.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { TranslatableString } from "../../types/types.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { pt, msg } from "../../utils/i18n/platform.ts";
@@ -95,12 +94,13 @@ const headingTextFields: YextFields<HeadingTextProps> = {
     label: msg("fields.data", "Data"),
     type: "object",
     objectFields: {
-      text: YextField<any, TranslatableString>(msg("fields.text", "Text"), {
+      text: {
         type: "entityField",
+        label: msg("fields.text", "Text"),
         filter: {
           types: ["type.string"],
         },
-      }),
+      },
     },
   },
   styles: {

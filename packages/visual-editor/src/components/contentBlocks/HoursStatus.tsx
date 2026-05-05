@@ -5,7 +5,6 @@ import { useDocument } from "../../hooks/useDocument.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { HoursStatusAtom } from "../atoms/hoursStatus.tsx";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
@@ -41,19 +40,22 @@ export interface HoursStatusProps {
 }
 
 export const hoursStatusWrapperFields: YextFields<HoursStatusProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
-      hours: YextField(msg("fields.hours", "Hours"), {
+      hours: {
         type: "entityField",
+        label: msg("fields.hours", "Hours"),
         filter: {
           types: ["type.hours"],
         },
-      }),
+      },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       showCurrentStatus: {
         label: msg("fields.showCurrentStatus", "Show Current Status"),
@@ -88,7 +90,7 @@ export const hoursStatusWrapperFields: YextFields<HoursStatusProps> = {
         ],
       },
     },
-  }),
+  },
 };
 
 const HoursStatusWrapper: PuckComponent<HoursStatusProps> = ({

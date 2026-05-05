@@ -205,6 +205,7 @@
     "ctaVariant": "Variante CTA",
     "currentPageLinkLabel": "Libellé du lien vers la page actuelle",
     "customClass": "Classe personnalisée",
+    "customColor": "Couleur personnalisée",
     "customId": "Identifiant personnalisé",
     "customLimit": "Limite personnalisée",
     "data": "Données",
@@ -305,6 +306,7 @@
         "primary": "Solide",
         "secondary": "Contour"
       },
+      "customImage": "Image personnalisée",
       "dark": "Sombre",
       "default": "Défaut",
       "distanceFromSearch": "Distance de la recherche",
@@ -386,6 +388,7 @@
       "none": "Aucun",
       "normal": "Normale",
       "one": "Un",
+      "other": "Autre",
       "phone": "Téléphone",
       "regular": "Régulier",
       "right_direction": "À droite",
@@ -521,7 +524,6 @@
     "search": "Rechercher des polices ..."
   },
   "fontSize": "Taille de la police",
-  "fontSizeDefaultLabel": "Défaut",
   "friday": "Vendredi",
   "getDirections": "Obtenir des itinéraires",
   "getDirectionsForLocation": "Obtenir un itinéraire pour {{address}}",

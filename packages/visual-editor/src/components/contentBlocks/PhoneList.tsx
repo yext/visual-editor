@@ -6,7 +6,6 @@ import { PhoneAtom } from "../atoms/phone.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import {
   defaultPhoneDataProps,
   PhoneDataFields,
@@ -37,14 +36,16 @@ export interface PhoneListProps {
 }
 
 export const phoneListFields: YextFields<PhoneListProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
-      phoneNumbers: YextField(msg("fields.phoneNumbers", "Phone Numbers"), {
+      phoneNumbers: {
         type: "array",
+        label: msg("fields.phoneNumbers", "Phone Numbers"),
         arrayFields: PhoneDataFields,
         defaultItemProps: defaultPhoneDataProps,
-        getItemSummary: (item) => {
+        getItemSummary: (item: PhoneProps["data"]) => {
           const locale = i18nComponentsInstance.language;
           const resolvedValue = resolveComponentData(item.label, locale);
 
@@ -53,15 +54,16 @@ export const phoneListFields: YextFields<PhoneListProps> = {
           }
           return pt("phone", "Phone");
         },
-      }),
+      },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       ...PhoneStyleFields,
     },
-  }),
+  },
 };
 
 type ResolvedPhoneNumber = {

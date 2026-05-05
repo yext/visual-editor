@@ -1,7 +1,6 @@
 import * as React from "react";
 import { PuckComponent, setDeep } from "@puckeditor/core";
 import { cva } from "class-variance-authority";
-import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
@@ -259,11 +258,13 @@ const defaultFooterLinkProps: FooterLinksSlotProps = {
 };
 
 const footerLinksSlotFields: YextFields<FooterLinksSlotProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
-      links: YextField(msg("fields.links", "Links"), {
+      links: {
         type: "array",
+        label: msg("fields.links", "Links"),
         arrayFields: {
           linkType: {
             label: msg("fields.linkType", "Link Type"),
@@ -280,10 +281,11 @@ const footerLinksSlotFields: YextFields<FooterLinksSlotProps> = {
               },
             ],
           },
-          label: YextField(msg("fields.label", "Label"), {
+          label: {
             type: "translatableString",
+            label: msg("fields.label", "Label"),
             filter: { types: ["type.string"] },
-          }),
+          },
           link: {
             label: msg("fields.link", "Link"),
             type: "text",
@@ -312,9 +314,9 @@ const footerLinksSlotFields: YextFields<FooterLinksSlotProps> = {
             typeof item.label === "string" ? item.label : item.label?.[locale];
           return label || pt("link", "Link") + " " + ((index ?? 0) + 1);
         },
-      }),
+      },
     },
-  }),
+  },
   color: {
     type: "basicSelector",
     label: msg("fields.color", "Color"),

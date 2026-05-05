@@ -2,7 +2,6 @@ import { useTranslation } from "react-i18next";
 import { useTemplateProps } from "../../hooks/useDocument.tsx";
 import { MaybeLink } from "../atoms/maybeLink.tsx";
 import { PageSection } from "../atoms/pageSection.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import { TranslatableString } from "../../types/types.ts";
@@ -87,27 +86,28 @@ export interface BreadcrumbsSectionProps {
 }
 
 const breadcrumbsSectionFields: YextFields<BreadcrumbsSectionProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
-      directoryRoot: YextField(
-        msg("fields.directoryRootLinkLabel", "Directory Root Link Label"),
-        {
-          type: "translatableString",
-          filter: { types: ["type.string"] },
-        }
-      ),
-      currentPage: YextField(
-        msg("fields.currentPageLinkLabel", "Current Page Link Label"),
-        {
-          type: "entityField",
-          filter: { types: ["type.string"] },
-        }
-      ),
+      directoryRoot: {
+        type: "translatableString",
+        label: msg(
+          "fields.directoryRootLinkLabel",
+          "Directory Root Link Label"
+        ),
+        filter: { types: ["type.string"] },
+      },
+      currentPage: {
+        type: "entityField",
+        label: msg("fields.currentPageLinkLabel", "Current Page Link Label"),
+        filter: { types: ["type.string"] },
+      },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
         type: "basicSelector",
@@ -128,9 +128,10 @@ const breadcrumbsSectionFields: YextFields<BreadcrumbsSectionProps> = {
         options: ThemeOptions.SHOW_HIDE,
       },
     },
-  }),
-  analytics: YextField(msg("fields.analytics", "Analytics"), {
+  },
+  analytics: {
     type: "object",
+    label: msg("fields.analytics", "Analytics"),
     visible: false,
     objectFields: {
       scope: {
@@ -138,7 +139,7 @@ const breadcrumbsSectionFields: YextFields<BreadcrumbsSectionProps> = {
         type: "text",
       },
     },
-  }),
+  },
   liveVisibility: {
     label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
     type: "radio",

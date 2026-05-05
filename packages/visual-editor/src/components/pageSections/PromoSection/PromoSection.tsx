@@ -5,15 +5,11 @@ import {
   ThemeColor,
   ThemeOptions,
 } from "../../../utils/themeConfigOptions.ts";
-import { YextField } from "../../../editor/YextField.tsx";
 import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
 import { ComponentFields } from "../../../types/fields.ts";
-import {
-  YextEntityField,
-  YextEntityFieldSelector,
-} from "../../../editor/YextEntityFieldSelector.tsx";
+import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
 import { BodyTextProps } from "../../contentBlocks/BodyText.tsx";
 import { CTAWrapperProps } from "../../contentBlocks/CtaWrapper.tsx";
@@ -169,15 +165,17 @@ export type PromoVariantProps = Pick<
 >;
 
 const promoSectionFields: YextFields<PromoSectionProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
-      promo: YextEntityFieldSelector<any, PromoSectionType | {}>({
+      promo: {
+        type: "entityField",
         label: msg("fields.promo", "Promo"),
         filter: {
           types: [ComponentFields.PromoSection.type],
         },
-      }),
+      },
       media: {
         label: msg("fields.media", "Media"),
         type: "radio",
@@ -186,16 +184,18 @@ const promoSectionFields: YextFields<PromoSectionProps> = {
           { label: msg("fields.options.video", "Video"), value: "video" },
         ],
       },
-      backgroundImage: YextField(msg("fields.image", "Image"), {
+      backgroundImage: {
         type: "entityField",
+        label: msg("fields.image", "Image"),
         filter: {
           types: ["type.image"],
         },
-      }),
+      },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       variant: {
         type: "basicSelector",
@@ -249,10 +249,11 @@ const promoSectionFields: YextFields<PromoSectionProps> = {
         type: "radio",
         options: ThemeOptions.ALIGNMENT,
       },
-      imageHeight: YextField(msg("fields.imageHeight", "Image Height"), {
+      imageHeight: {
         type: "number",
+        label: msg("fields.imageHeight", "Image Height"),
         min: 0,
-      }),
+      },
       showMedia: {
         label: msg("fields.showMedia", "Show Media"),
         type: "radio",
@@ -274,7 +275,7 @@ const promoSectionFields: YextFields<PromoSectionProps> = {
         options: ThemeOptions.SHOW_HIDE,
       },
     },
-  }),
+  },
   slots: {
     type: "object",
     visible: false,
@@ -286,8 +287,9 @@ const promoSectionFields: YextFields<PromoSectionProps> = {
       CTASlot: { type: "slot" },
     },
   },
-  analytics: YextField(msg("fields.analytics", "Analytics"), {
+  analytics: {
     type: "object",
+    label: msg("fields.analytics", "Analytics"),
     visible: false,
     objectFields: {
       scope: {
@@ -295,7 +297,7 @@ const promoSectionFields: YextFields<PromoSectionProps> = {
         type: "text",
       },
     },
-  }),
+  },
   liveVisibility: {
     label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
     type: "radio",

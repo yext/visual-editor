@@ -7,7 +7,6 @@ import {
   ThemeOptions,
 } from "../../../utils/themeConfigOptions.ts";
 import { PageSection } from "../../atoms/pageSection.tsx";
-import { YextField } from "../../../editor/YextField.tsx";
 import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
@@ -81,8 +80,9 @@ export interface PhotoGallerySectionProps {
 }
 
 const photoGallerySectionFields: YextFields<PhotoGallerySectionProps> = {
-  styles: YextField(msg("fields.styles", "Styles"), {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
         type: "basicSelector",
@@ -106,7 +106,7 @@ const photoGallerySectionFields: YextFields<PhotoGallerySectionProps> = {
         options: ThemeOptions.SHOW_HIDE,
       },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {

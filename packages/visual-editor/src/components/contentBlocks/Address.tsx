@@ -15,7 +15,6 @@ import { EntityField } from "../../editor/EntityField.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { CTA, CTAVariant, isCtaVariantWithColor } from "../atoms/cta.tsx";
 import { pt, msg } from "../../utils/i18n/platform.ts";
-import { YextField } from "../../editor/YextField.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import {
   ThemeColor,
@@ -63,11 +62,12 @@ export interface AddressProps {
 
 // Address field definition used in Address and CoreInfoSection
 export const AddressDataField: YextFields<AddressProps["data"]> = {
-  address: YextField<AddressType>(msg("fields.address", "Address"), {
+  address: {
     type: "entityField",
+    label: msg("fields.address", "Address"),
     filter: { types: ["type.address"] },
-  }),
-} as any; // TODO: Update this once "entityField" is a registered YextFields fieldType
+  },
+};
 
 // Address style fields used in Address and CoreInfoSection
 export const AddressStyleFields: YextFields<AddressProps["styles"]> = {
@@ -108,14 +108,16 @@ export const AddressStyleFields: YextFields<AddressProps["styles"]> = {
 };
 
 export const addressFields: YextFields<AddressProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: AddressDataField,
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: AddressStyleFields,
-  }),
+  },
 };
 
 const AddressComponent: PuckComponent<AddressProps> = (props) => {
@@ -202,16 +204,16 @@ export const resolveAddressFields = (
     "type"
   >
 ) => {
-  const updatedFields = resolveDataFromParent(addressFields, data);
+  let updatedFields = resolveDataFromParent(addressFields, data);
   const showGetDirectionsLink = data.props.styles.showGetDirectionsLink;
-  setDeep(
+  updatedFields = setDeep(
     updatedFields,
     "styles.objectFields.ctaVariant.visible",
     showGetDirectionsLink
   );
   const ctaVariant = data.props.styles.ctaVariant;
   const showColor = isCtaVariantWithColor(ctaVariant);
-  setDeep(
+  updatedFields = setDeep(
     updatedFields,
     "styles.objectFields.color.visible",
     showGetDirectionsLink && showColor

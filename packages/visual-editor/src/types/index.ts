@@ -1,6 +1,6 @@
 export {
   type YextSchemaField,
-  type YextFieldDefinition,
+  type YextSchemaFieldDefinition,
 } from "./entityFields.ts";
 export * from "./types.ts";
 export * from "./fields.ts";

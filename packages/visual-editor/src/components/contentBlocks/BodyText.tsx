@@ -6,7 +6,6 @@ import { useDocument } from "../../hooks/useDocument.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { pt, msg } from "../../utils/i18n/platform.ts";
 import { TranslatableRichText } from "../../types/types.ts";
 import { useBackground } from "../../hooks/useBackground.tsx";
@@ -43,19 +42,22 @@ export type BodyTextProps = {
 };
 
 const bodyTextFields: YextFields<BodyTextProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
-      text: YextField(msg("fields.text", "Text"), {
+      text: {
         type: "entityField",
+        label: msg("fields.text", "Text"),
         filter: {
           types: ["type.rich_text_v2"],
         },
-      }),
+      },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       variant: {
         label: msg("fields.variant", "Variant"),
@@ -68,7 +70,7 @@ const bodyTextFields: YextFields<BodyTextProps> = {
         options: "SITE_COLOR",
       },
     },
-  }),
+  },
 };
 
 const BodyTextComponent: PuckComponent<BodyTextProps> = (props) => {

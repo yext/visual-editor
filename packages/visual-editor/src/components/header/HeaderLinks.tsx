@@ -1,11 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import {
-  ArrayField,
-  FieldLabel,
-  PuckComponent,
-  setDeep,
-} from "@puckeditor/core";
+import { FieldLabel, PuckComponent, setDeep } from "@puckeditor/core";
 import { CTA } from "../atoms/cta.tsx";
 import { i18nComponentsInstance } from "../../utils/i18n/components.ts";
 import { msg, pt } from "../../utils/i18n/platform.ts";
@@ -14,11 +9,6 @@ import { TranslatableCTA } from "../../types/types.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { useOverflow } from "../../hooks/useOverflow.ts";
 import { usePreviewWindow } from "../../hooks/usePreviewWindow.ts";
-import {
-  YextField,
-  type YextCustomFieldRenderProps,
-  type YextPuckField,
-} from "../../editor/YextField.tsx";
 import { YextAutoField } from "../../fields/YextAutoField.tsx";
 import { linkTypeOptions } from "../../internal/puck/constant-value-fields/CallToAction.tsx";
 import {
@@ -32,6 +22,8 @@ import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
 import {
   toPuckFields,
   YextComponentConfig,
+  type YextArrayField,
+  type YextCustomFieldRenderProps,
   YextFields,
 } from "../../fields/fields.ts";
 
@@ -77,16 +69,18 @@ const defaultLink: TranslatableCTA = {
   openInNewTab: false,
 };
 
-const linkFieldConfig: ArrayField<TranslatableCTA[], YextPuckField> = {
+const linkFieldConfig: YextArrayField<TranslatableCTA[]> = {
   type: "array",
   arrayFields: {
-    label: YextField(msg("fields.label", "Label"), {
+    label: {
       type: "translatableString",
+      label: msg("fields.label", "Label"),
       filter: { types: ["type.string"] },
-    }),
-    link: YextField(msg("fields.link", "Link"), {
+    },
+    link: {
       type: "translatableString",
-    }),
+      label: msg("fields.link", "Link"),
+    },
     linkType: {
       type: "basicSelector",
       label: msg("fields.linkType", "Link Type"),
@@ -119,8 +113,9 @@ const linkFieldConfig: ArrayField<TranslatableCTA[], YextPuckField> = {
 };
 
 const headerLinksFields: YextFields<HeaderLinksProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
       links: {
         type: "custom",
@@ -150,14 +145,15 @@ const headerLinksFields: YextFields<HeaderLinksProps> = {
           );
         },
       },
-      collapsedLinks: YextField(
-        msg("fields.collapsedLinks", "Collapsed Links"),
-        linkFieldConfig
-      ),
+      collapsedLinks: {
+        ...linkFieldConfig,
+        label: msg("fields.collapsedLinks", "Collapsed Links"),
+      },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       align: {
         label: msg("fields.align", "Align"),
@@ -183,7 +179,7 @@ const headerLinksFields: YextFields<HeaderLinksProps> = {
         ],
       },
     },
-  }),
+  },
 };
 
 const useWindowWidth = (externalWindow?: Window | null) => {

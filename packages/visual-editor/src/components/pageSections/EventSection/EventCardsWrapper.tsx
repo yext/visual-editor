@@ -12,9 +12,8 @@ import {
 } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 import { defaultEventCardSlotData, EventCardProps } from "./EventCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
-import { YextField } from "../../../editor/YextField.tsx";
 import { renderMappedEntityFieldEmptyState } from "../EntityFieldSectionEmptyState.tsx";
-import { YextComponentConfig } from "../../../fields/fields.ts";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 import {
   MappedEntityFieldConditionalRender,
   withMappedEntityFieldConditionalRender,
@@ -32,13 +31,14 @@ export type EventCardsWrapperProps = CardWrapperType<EventSectionType> & {
   conditionalRender?: MappedEntityFieldConditionalRender;
 };
 
-const eventCardsWrapperFields = {
+const eventCardsWrapperFields: YextFields<EventCardsWrapperProps> = {
   ...cardWrapperFields<EventCardsWrapperProps>(
     msg("components.events", "Events"),
     ComponentFields.EventSection.type
   ),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       showImage: {
         label: msg("fields.showImage", "Show Image"),
@@ -61,7 +61,7 @@ const eventCardsWrapperFields = {
         options: ThemeOptions.SHOW_HIDE,
       },
     },
-  }),
+  },
 };
 
 const EventCardsWrapperComponent: PuckComponent<EventCardsWrapperProps> = (

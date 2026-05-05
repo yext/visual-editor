@@ -89,7 +89,7 @@ export const FontSizeSelectorFieldOverride = ({
   const options = convertDefaultFontSizesToOptions(
     [
       {
-        label: pt("fontSizeDefaultLabel", "Default"),
+        label: pt("default", "Default"),
         value: "default",
         px: "",
       },

@@ -205,6 +205,7 @@
     "ctaVariant": "Variant CTA",
     "currentPageLinkLabel": "Menovka odkazu na aktuálnu stránku",
     "customClass": "Vlastná trieda",
+    "customColor": "Vlastná farba",
     "customId": "Vlastné ID",
     "customLimit": "Vlastný limit",
     "data": "Údaje",
@@ -305,6 +306,7 @@
         "primary": "Pevné",
         "secondary": "Obrys"
       },
+      "customImage": "Vlastný obrázok",
       "dark": "Tmavý",
       "default": "Predvolený",
       "distanceFromSearch": "Vzdialenosť od vyhľadávania",
@@ -386,6 +388,7 @@
       "none": "Žiadne",
       "normal": "Normálne",
       "one": "Jeden",
+      "other": "Iné",
       "phone": "Telefón",
       "regular": "Normálne",
       "right_direction": "Vpravo",
@@ -521,7 +524,6 @@
     "search": "Vyhľadajte písma ..."
   },
   "fontSize": "Veľkosť písma",
-  "fontSizeDefaultLabel": "Predvolený",
   "friday": "Piatok",
   "getDirections": "Získajte pokyny",
   "getDirectionsForLocation": "Získať trasu pre {{address}}",

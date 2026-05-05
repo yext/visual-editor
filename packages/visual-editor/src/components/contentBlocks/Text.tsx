@@ -5,7 +5,6 @@ import { useDocument } from "../../hooks/useDocument.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { TranslatableRichText, TranslatableString } from "../../types/types.ts";
 import { useTranslation } from "react-i18next";
@@ -42,22 +41,22 @@ export type TextProps = {
 };
 
 const textFields: YextFields<TextProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
-      text: YextField<any, TranslatableString | TranslatableRichText>(
-        msg("fields.text", "Text"),
-        {
-          type: "entityField",
-          filter: {
-            types: ["type.string", "type.rich_text_v2"],
-          },
-        }
-      ),
+      text: {
+        type: "entityField",
+        label: msg("fields.text", "Text"),
+        filter: {
+          types: ["type.string", "type.rich_text_v2"],
+        },
+      },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       variant: {
         label: msg("fields.textSize", "Text Size"),
@@ -79,7 +78,7 @@ const textFields: YextFields<TextProps> = {
         ],
       },
     },
-  }),
+  },
 };
 
 const fontStyleToClassName: Record<

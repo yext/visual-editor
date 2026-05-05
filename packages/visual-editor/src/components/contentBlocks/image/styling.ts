@@ -1,4 +1,3 @@
-import { YextField } from "../../../editor/YextField.tsx";
 import { YextFields } from "../../../fields/fields.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
 
@@ -26,10 +25,11 @@ export const ImageStylingFields: YextFields<ImageStylingProps> = {
     ],
     visible: false,
   },
-  width: YextField(msg("fields.options.width", "Width"), {
+  width: {
     type: "number",
+    label: msg("fields.options.width", "Width"),
     min: 0,
-  }),
+  },
   aspectRatio: {
     type: "basicSelector",
     label: msg("fields.options.aspectRatio", "Aspect Ratio"),

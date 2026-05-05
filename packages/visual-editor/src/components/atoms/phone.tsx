@@ -3,7 +3,10 @@ import { CTA } from "./cta.tsx";
 import { Body } from "./body.tsx";
 import { parsePhoneNumber } from "awesome-phonenumber";
 import { ThemeColor } from "../../utils/themeConfigOptions.ts";
-import { getBackgroundColorClasses } from "../../utils/colors.ts";
+import {
+  getBackgroundColorClasses,
+  getBackgroundColorStyle,
+} from "../../utils/colors.ts";
 
 export type PhoneAtomProps = {
   phoneNumber: string;
@@ -38,6 +41,7 @@ export const PhoneAtom = (props: PhoneAtomProps) => {
             className={`h-10 w-10 flex justify-center rounded-full items-center ${getBackgroundColorClasses(
               props.backgroundColor
             )}`}
+            style={getBackgroundColorStyle(props.backgroundColor)}
           >
             <FaPhone className="w-4 h-4" />
           </div>

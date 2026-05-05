@@ -5,7 +5,6 @@ import {
 import { msg } from "../../utils/i18n/platform.ts";
 import { PageSection } from "../atoms/pageSection.tsx";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import {
   MapboxStaticMapComponent,
   mapStyleField,
@@ -57,15 +56,16 @@ export interface StaticMapSectionProps {
 }
 
 const staticMapSectionFields: YextFields<StaticMapSectionProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
       apiKey: {
         label: msg("fields.apiKey", "API Key"),
         type: "text",
       },
     },
-  }),
+  },
   liveVisibility: {
     label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
     type: "radio",
@@ -74,8 +74,9 @@ const staticMapSectionFields: YextFields<StaticMapSectionProps> = {
       { label: msg("fields.options.hide", "Hide"), value: false },
     ],
   },
-  styles: YextField(msg("fields.styles", "Styles"), {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
         type: "basicSelector",
@@ -84,7 +85,7 @@ const staticMapSectionFields: YextFields<StaticMapSectionProps> = {
       },
       mapStyle: mapStyleField,
     },
-  }),
+  },
 };
 
 const StaticMapSectionWrapper: PuckComponent<StaticMapSectionProps> = ({

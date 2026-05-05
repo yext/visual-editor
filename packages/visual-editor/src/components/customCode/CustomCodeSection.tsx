@@ -2,7 +2,6 @@ import React from "react";
 import { CodeXml } from "lucide-react";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { WithId, WithPuckProps } from "@puckeditor/core";
@@ -41,18 +40,21 @@ export interface CustomCodeSectionProps {
 }
 
 const customCodeSectionFields: YextFields<CustomCodeSectionProps> = {
-  html: YextField(msg("fields.html", "HTML"), {
+  html: {
+    label: msg("fields.html", "HTML"),
     type: "code",
     codeLanguage: "html",
-  }),
-  css: YextField(msg("fields.css", "CSS"), {
+  },
+  css: {
+    label: msg("fields.css", "CSS"),
     type: "code",
     codeLanguage: "css",
-  }),
-  javascript: YextField(msg("fields.javascript", "JavaScript"), {
+  },
+  javascript: {
+    label: msg("fields.javascript", "JavaScript"),
     type: "code",
     codeLanguage: "javascript",
-  }),
+  },
   liveVisibility: {
     label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
     type: "radio",
@@ -61,8 +63,9 @@ const customCodeSectionFields: YextFields<CustomCodeSectionProps> = {
       { label: msg("fields.options.hide", "Hide"), value: false },
     ],
   },
-  analytics: YextField(msg("fields.analytics", "Analytics"), {
+  analytics: {
     type: "object",
+    label: msg("fields.analytics", "Analytics"),
     visible: false,
     objectFields: {
       scope: {
@@ -70,7 +73,7 @@ const customCodeSectionFields: YextFields<CustomCodeSectionProps> = {
         type: "text",
       },
     },
-  }),
+  },
 };
 
 const EmptyCustomCodeSection = () => {

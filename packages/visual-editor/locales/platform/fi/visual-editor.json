@@ -205,6 +205,7 @@
     "ctaVariant": "CTA -variantti",
     "currentPageLinkLabel": "Nykyisen sivun linkin etiketti",
     "customClass": "Mukautettu luokka",
+    "customColor": "Mukautettu väri",
     "customId": "Muokattu tunnus",
     "customLimit": "Mukautettu raja",
     "data": "Tiedot",
@@ -305,6 +306,7 @@
         "primary": "Kiinteä",
         "secondary": "Outline"
       },
+      "customImage": "Mukautettu kuva",
       "dark": "Tumma",
       "default": "Oletus",
       "distanceFromSearch": "Etäisyys hausta",
@@ -386,6 +388,7 @@
       "none": "Ei mitään",
       "normal": "Normaali",
       "one": "Yksi",
+      "other": "muu",
       "phone": "Puhelin",
       "regular": "Normaali",
       "right_direction": "Oikea",
@@ -521,7 +524,6 @@
     "search": "Haku fontit ..."
   },
   "fontSize": "Fontin koko",
-  "fontSizeDefaultLabel": "Laiminlyönti",
   "friday": "perjantai",
   "getDirections": "Hanki reittiohjeet",
   "getDirectionsForLocation": "Hanki reittiohjeet kohteeseen {{address}}",

@@ -3,7 +3,6 @@ import { PuckComponent } from "@puckeditor/core";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { TranslatableString } from "../../types/types.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
@@ -15,13 +14,14 @@ export interface TextListProps {
 }
 
 export const textListFields: YextFields<TextListProps> = {
-  list: YextField(msg("fields.values", "Values"), {
+  list: {
     type: "entityField",
+    label: msg("fields.values", "Values"),
     filter: {
       types: ["type.string"],
       includeListsOnly: true,
     },
-  }),
+  },
   commaSeparated: {
     label: msg("fields.commaSeparated", "Comma Separated"),
     type: "radio",

@@ -5,7 +5,6 @@ import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { TimestampAtom, TimestampOption } from "../atoms/timestamp.tsx";
 import {
   toPuckFields,
@@ -43,18 +42,20 @@ const timestampFields: YextFields<TimestampProps> = {
     type: "object",
     label: msg("fields.data", "Data"),
     objectFields: {
-      date: YextField<any, string>(msg("fields.date", "Date"), {
+      date: {
         type: "entityField",
+        label: msg("fields.date", "Date"),
         filter: {
           types: ["type.datetime"],
         },
-      }),
-      endDate: YextField<any, string>(msg("fields.endDate", "End Date"), {
+      },
+      endDate: {
         type: "entityField",
+        label: msg("fields.endDate", "End Date"),
         filter: {
           types: ["type.datetime"],
         },
-      }),
+      },
     },
   },
   styles: {

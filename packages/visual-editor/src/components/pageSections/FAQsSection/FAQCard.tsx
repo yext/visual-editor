@@ -13,7 +13,6 @@ import { resolveDataFromParent } from "../../../editor/ParentData.tsx";
 import { useBackground } from "../../../hooks/useBackground.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
-import { YextField } from "../../../editor/YextField.tsx";
 import {
   AccordionContent,
   AccordionItem,
@@ -93,25 +92,29 @@ export type FAQCardProps = {
 };
 
 const FAQCardFields: YextFields<FAQCardProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
-      question: YextField(msg("fields.question", "Question"), {
+      question: {
         type: "entityField",
+        label: msg("fields.question", "Question"),
         filter: {
           types: ["type.string", "type.rich_text_v2"],
         },
-      }),
-      answer: YextField(msg("fields.answer", "Answer"), {
+      },
+      answer: {
         type: "entityField",
+        label: msg("fields.answer", "Answer"),
         filter: {
           types: ["type.rich_text_v2"],
         },
-      }),
+      },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       questionVariant: {
         label: msg("fields.questionVariant", "Question Variant"),
@@ -129,7 +132,7 @@ const FAQCardFields: YextFields<FAQCardProps> = {
         options: "SITE_COLOR",
       },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {},

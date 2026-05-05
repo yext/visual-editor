@@ -1,6 +1,5 @@
 import * as React from "react";
 import { PuckComponent } from "@puckeditor/core";
-import { YextField } from "../../editor/YextField.tsx";
 import {
   AssetImageType,
   isLocalizedAssetImage,
@@ -95,28 +94,31 @@ const FooterLogoSlotInternal: PuckComponent<FooterLogoSlotProps> = (props) => {
 export const FooterLogoSlot: YextComponentConfig<FooterLogoSlotProps> = {
   label: msg("components.footerLogoSlot", "Logo"),
   fields: {
-    data: YextField(msg("fields.data", "Data"), {
+    data: {
       type: "object",
+      label: msg("fields.data", "Data"),
       objectFields: {
-        image: YextField(msg("fields.image", "Image"), {
+        image: {
           type: "entityField",
+          label: msg("fields.image", "Image"),
           filter: {
             types: ["type.image"],
           },
-        }),
+        },
         linkTarget: {
           label: msg("fields.linkTarget", "Link Target"),
           type: "text",
         },
       },
-    }),
-    styles: YextField(msg("fields.styles", "Styles"), {
+    },
+    styles: {
       type: "object",
+      label: msg("fields.styles", "Styles"),
       objectFields: {
         width: ImageStylingFields.width,
         aspectRatio: ImageStylingFields.aspectRatio,
       },
-    }),
+    },
   },
   defaultProps: {
     data: {

@@ -1,7 +1,6 @@
 import * as React from "react";
 import { PuckComponent } from "@puckeditor/core";
 import { cva } from "class-variance-authority";
-import { YextField } from "../../editor/YextField.tsx";
 import { AssetImageType } from "../../types/images.ts";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { MaybeLink } from "../atoms/maybeLink.tsx";
@@ -147,35 +146,38 @@ export const FooterUtilityImagesSlot: YextComponentConfig<FooterUtilityImagesSlo
   {
     label: msg("components.footerUtilityImagesSlotLabel", "Utility Images"),
     fields: {
-      data: YextField(msg("fields.data", "Data"), {
+      data: {
         type: "object",
+        label: msg("fields.data", "Data"),
         objectFields: {
-          utilityImages: YextField(
-            msg("fields.utilityImages", "Utility Images"),
-            {
-              type: "array",
-              arrayFields: {
-                image: YextField(msg("fields.image", "Image"), {
-                  type: "image",
-                }),
-                linkTarget: {
-                  label: msg("fields.linkTarget", "Link Target"),
-                  type: "text",
-                },
+          utilityImages: {
+            type: "array",
+            label: msg("fields.utilityImages", "Utility Images"),
+            arrayFields: {
+              image: {
+                type: "image",
+                label: msg("fields.image", "Image"),
               },
-              getItemSummary: (item, index) =>
-                pt("utilityImage", "Utility Image") + " " + ((index ?? 0) + 1),
-            }
-          ),
+              linkTarget: {
+                label: msg("fields.linkTarget", "Link Target"),
+                type: "text",
+              },
+            },
+            getItemSummary: (
+              item: FooterUtilityImagesSlotProps["data"]["utilityImages"][number],
+              index?: number
+            ) => pt("utilityImage", "Utility Image") + " " + ((index ?? 0) + 1),
+          },
         },
-      }),
-      styles: YextField(msg("fields.styles", "Styles"), {
+      },
+      styles: {
         type: "object",
+        label: msg("fields.styles", "Styles"),
         objectFields: {
           width: ImageStylingFields.width,
           aspectRatio: ImageStylingFields.aspectRatio,
         },
-      }),
+      },
     },
     defaultProps: {
       data: {

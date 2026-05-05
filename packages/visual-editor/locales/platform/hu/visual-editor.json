@@ -205,6 +205,7 @@
     "ctaVariant": "CTA -változat",
     "currentPageLinkLabel": "Jelenlegi oldalhivatkozás címke",
     "customClass": "Egyedi osztály",
+    "customColor": "Egyedi szín",
     "customId": "Egyéni azonosító",
     "customLimit": "Egyéni korlát",
     "data": "Adat",
@@ -305,6 +306,7 @@
         "primary": "Szilárd",
         "secondary": "Vázlat"
       },
+      "customImage": "Egyedi kép",
       "dark": "Sötét",
       "default": "Mulasztás",
       "distanceFromSearch": "Távolság a kereséstől",
@@ -386,6 +388,7 @@
       "none": "Egyik sem",
       "normal": "Normál",
       "one": "Egy",
+      "other": "Más",
       "phone": "Telefon",
       "regular": "Szabályos",
       "right_direction": "Jobb",
@@ -521,7 +524,6 @@
     "search": "Keresési betűtípusok ..."
   },
   "fontSize": "Betűkészlet",
-  "fontSizeDefaultLabel": "Mulasztás",
   "friday": "péntek",
   "getDirections": "Szerezzen útmutatásokat",
   "getDirectionsForLocation": "Útvonaltervezés ehhez: {{address}}",

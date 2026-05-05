@@ -5,7 +5,6 @@ import { EntityField } from "../../editor/EntityField.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { PhoneAtom } from "../atoms/phone.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
-import { YextField } from "../../editor/YextField.tsx";
 import { TranslatableString } from "../../types/types.ts";
 import {
   ThemeColor,
@@ -43,17 +42,19 @@ export interface PhoneProps {
 }
 
 // Phone field definitions used in Phone and CoreInfoSection
-export const PhoneDataFields = {
-  number: YextField<any, string>(msg("fields.phoneNumber", "Phone Number"), {
+export const PhoneDataFields: YextFields<PhoneProps["data"]> = {
+  number: {
     type: "entityField",
+    label: msg("fields.phoneNumber", "Phone Number"),
     filter: {
       types: ["type.phone"],
     },
-  }),
-  label: YextField<TranslatableString>(msg("fields.label", "Label"), {
+  },
+  label: {
     type: "translatableString",
+    label: msg("fields.label", "Label"),
     filter: { types: ["type.string"] },
-  }),
+  },
 };
 
 // Phone style definitions used in Phone and CoreInfoSection
@@ -93,14 +94,16 @@ export const defaultPhoneDataProps: PhoneProps["data"] = {
 };
 
 export const PhoneFields: YextFields<PhoneProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: PhoneDataFields,
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: PhoneStyleFields,
-  }),
+  },
 };
 
 const PhoneComponent = ({ data, styles, parentData }: PhoneProps) => {
