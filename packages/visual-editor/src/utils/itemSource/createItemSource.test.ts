@@ -141,6 +141,57 @@ describe("createItemSource", () => {
     expect(resolved.props.articleMappings?.eyebrow).toBe("Featured");
   });
 
+  it("clears mapping field bindings when switching from linked mode to manual mode", () => {
+    const resolved = articleItems.normalizeData(
+      {
+        type: "ArticleList",
+        props: {
+          articleSource: {
+            field: "c_oldArticles",
+            constantValueEnabled: true,
+            constantValue: [],
+          },
+          articleMappings: {
+            title: {
+              field: "title",
+              constantValueEnabled: false,
+              constantValue: { defaultValue: "Fallback title" },
+            },
+            description: {
+              field: "description",
+              constantValueEnabled: false,
+              constantValue: { defaultValue: "" },
+            },
+            eyebrow: "Featured",
+            rootTitle: {
+              field: "name",
+              constantValueEnabled: false,
+              constantValue: { defaultValue: "Root fallback" },
+            },
+          },
+        },
+      } as unknown as ComponentData<TestProps>,
+      {
+        lastData: {
+          props: {
+            articleSource: {
+              field: "c_oldArticles",
+              constantValueEnabled: false,
+              constantValue: [],
+            },
+          },
+        },
+      }
+    );
+
+    expect(resolved.props.articleMappings?.title.field).toBe("");
+    expect(resolved.props.articleMappings?.description.field).toBe("");
+    expect(resolved.props.articleMappings?.rootTitle.field).toBe("");
+    expect(resolved.props.articleMappings?.title.constantValue).toEqual({
+      defaultValue: "Fallback title",
+    });
+  });
+
   it("does not rewrite data when the source changes but mappings are already blank", () => {
     const data = {
       type: "ArticleList",

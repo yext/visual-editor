@@ -375,6 +375,15 @@ const hasEntityFieldBindings = (value: unknown): boolean => {
   return false;
 };
 
+const getItemSourceSelection = (
+  itemSource: ItemSourceValue<Record<string, unknown>> | undefined
+): string =>
+  itemSource?.constantValueEnabled
+    ? "manual"
+    : itemSource?.field
+      ? `linked:${itemSource.field}`
+      : "unselected";
+
 /**
  * Normalizes the previous resolveData payload into a props object so source
  * change cleanup works across the callback shapes Puck can provide.
@@ -572,9 +581,13 @@ export const createItemSource = <
       );
 
       if (
-        itemSource?.constantValueEnabled ||
         !lastProps ||
-        lastItemSource?.field === itemSource?.field
+        getItemSourceSelection(
+          lastItemSource as ItemSourceValue<Record<string, unknown>> | undefined
+        ) ===
+          getItemSourceSelection(
+            itemSource as ItemSourceValue<Record<string, unknown>> | undefined
+          )
       ) {
         return data;
       }
