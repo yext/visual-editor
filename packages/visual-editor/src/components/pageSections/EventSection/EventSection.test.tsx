@@ -677,6 +677,12 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
   },
   {
+    name: "version 76 with linked entity source data",
+    document: { c_events: eventsData },
+    props: { ...EventSection.defaultProps },
+    version: 76,
+  },
+  {
     name: "version 26 props with constant values",
     document: { c_events: eventsData, name: "Galaxy Grill" },
     props: {

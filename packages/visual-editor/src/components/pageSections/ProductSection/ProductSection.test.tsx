@@ -760,6 +760,12 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
   },
   {
+    name: "version 76 with linked entity source data",
+    document: { c_products: productsData },
+    props: { ...ProductSection.defaultProps },
+    version: 76,
+  },
+  {
     name: "version 32 props with static values",
     document: { c_products: productsData, name: "Test" },
     props: {

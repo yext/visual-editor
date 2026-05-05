@@ -731,6 +731,12 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
   },
   {
+    name: "version 76 with linked entity source data",
+    document: { c_insights: insightsData, name: "test name" },
+    props: { ...InsightSection.defaultProps },
+    version: 76,
+  },
+  {
     name: "version 33 props with entity values",
     document: { c_insights: insightsData, name: "test name" },
     props: {
