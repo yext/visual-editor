@@ -5,9 +5,41 @@ import { ThemeOptions } from "../../utils/themeConfigOptions.ts";
 import { withDefaultOption } from "./baseText.tsx";
 
 export type StyledPageSectionValue = {
-  contentWidth: string;
-  verticalPadding: string;
+  contentWidth: ContentWidthValue;
+  verticalPadding: VerticalPaddingValue;
 };
+
+type ContentWidthValue =
+  | "default"
+  | "768px"
+  | "960px"
+  | "1024px"
+  | "1280px"
+  | "1440px";
+
+type VerticalPaddingValue =
+  | "default"
+  | "0px"
+  | "2px"
+  | "4px"
+  | "6px"
+  | "8px"
+  | "10px"
+  | "12px"
+  | "14px"
+  | "16px"
+  | "20px"
+  | "24px"
+  | "28px"
+  | "32px"
+  | "36px"
+  | "40px"
+  | "44px"
+  | "48px"
+  | "56px"
+  | "64px"
+  | "80px"
+  | "96px";
 
 export type StyledPageSectionField = BaseField & {
   type: "styledPageSection";
