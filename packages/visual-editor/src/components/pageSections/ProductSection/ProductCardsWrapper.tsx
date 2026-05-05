@@ -9,6 +9,7 @@ import { msg } from "../../../utils/i18n/platform.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import {
   ProductCard,
+  defaultProductCardItemData,
   defaultProductCardSlotData,
   type ProductCardProps,
 } from "./ProductCard.tsx";
@@ -34,7 +35,7 @@ type ProductCardItem = {
   image: YextEntityField<ProductStruct["image"]>;
   brow: YextEntityField<ProductStruct["brow"]>;
   name: YextEntityField<ProductStruct["name"]>;
-  price: YextEntityField<string>;
+  price: YextEntityField<ProductStruct["price"] | string>;
   description: YextEntityField<ProductStruct["description"]>;
   cta: YextEntityField<ProductStruct["cta"]>;
 };
@@ -99,7 +100,7 @@ const productCards = createItemSource<
       type: "entityField",
       label: msg("fields.price", "Price"),
       filter: {
-        types: ["type.string"],
+        types: ["type.price"],
       },
     },
     description: {
@@ -211,7 +212,11 @@ const syncCards = <TData extends { props: ProductCardsWrapperProps }>(
             cta:
               (item.cta as ProductStruct["cta"] | undefined) ??
               defaultProductCta,
-            priceText: item.price as string | undefined,
+            price:
+              typeof item.price === "object"
+                ? (item.price as ProductStruct["price"])
+                : undefined,
+            priceText: typeof item.price === "string" ? item.price : undefined,
           },
         },
       }),
@@ -239,7 +244,13 @@ export const ProductCardsWrapper: YextComponentConfig<ProductCardsWrapperProps> 
       ...productCards.defaultProps,
       data: {
         ...productCards.defaultProps.data!,
-        constantValue: [{}, {}, {}] as ProductCardItem[],
+        constantValue: Array.from(
+          { length: 3 },
+          () =>
+            JSON.parse(
+              JSON.stringify(defaultProductCardItemData)
+            ) as ProductCardItem
+        ),
       },
       cards: {
         ...(productCards.defaultProps.cards as ProductCardItem),

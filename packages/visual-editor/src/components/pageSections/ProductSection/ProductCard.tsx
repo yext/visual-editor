@@ -66,6 +66,39 @@ const slotDefaultData = {
   priceText: { defaultValue: "$123.00" },
 };
 
+export const defaultProductCardItemData = {
+  image: {
+    field: "",
+    constantValue: defaultProductData.image,
+    constantValueEnabled: true,
+  },
+  brow: {
+    field: "",
+    constantValue: defaultProductData.brow,
+    constantValueEnabled: true,
+  },
+  name: {
+    field: "",
+    constantValue: defaultProductData.name,
+    constantValueEnabled: true,
+  },
+  price: {
+    field: "",
+    constantValue: defaultProductData.price,
+    constantValueEnabled: true,
+  },
+  description: {
+    field: "",
+    constantValue: defaultProductData.description,
+    constantValueEnabled: true,
+  },
+  cta: {
+    field: "",
+    constantValue: defaultProductData.cta,
+    constantValueEnabled: true,
+  },
+};
+
 export const defaultProductCardSlotData = (
   id?: string,
   index?: number,
@@ -491,7 +524,10 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       | YextEntityField<ProductStruct["price"]>
       | undefined;
     const entityPrice =
-      data.props.itemData?.price ??
+      (data.props.itemData?.price &&
+      typeof data.props.itemData.price === "object"
+        ? data.props.itemData.price
+        : undefined) ??
       (priceEntityField
         ? resolveYextEntityField<ProductStruct["price"]>(
             params.metadata.streamDocument,
@@ -505,7 +541,11 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       entityPrice?.currencyCode,
       locale
     );
-    const mappedPriceText = data.props.itemData?.priceText;
+    const mappedPriceText =
+      data.props.itemData?.priceText ??
+      (typeof data.props.itemData?.price === "string"
+        ? data.props.itemData.price
+        : undefined);
     const fallbackPriceCandidate = priceSlotProps
       ? resolveYextEntityField(
           params.metadata.streamDocument,

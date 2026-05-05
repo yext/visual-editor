@@ -93,7 +93,7 @@ describe("scopedListSourceMappingsMigration", () => {
         image: "image",
         brow: "brow",
         name: "name",
-        price: "price.value",
+        price: "price",
         description: "description",
         cta: "cta",
       },

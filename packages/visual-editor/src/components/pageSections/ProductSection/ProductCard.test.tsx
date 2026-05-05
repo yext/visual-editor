@@ -13,7 +13,7 @@ describe("ProductCard", () => {
       },
       brow: { defaultValue: "Featured" },
       name: { defaultValue: "Galaxy Burger" },
-      priceText: "$12.00",
+      price: { value: "12", currencyCode: "USD" },
       description: { html: "<p>Product description</p>" },
       cta: {
         label: { defaultValue: "Order now" },

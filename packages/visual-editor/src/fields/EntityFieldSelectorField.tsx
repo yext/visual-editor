@@ -116,11 +116,26 @@ const IMAGE_LIST_CONSTANT_CONFIG = () => {
   } satisfies YextFieldDefinition;
 };
 
+const PRODUCT_PRICE_CONSTANT_CONFIG = {
+  type: "object",
+  objectFields: {
+    value: {
+      type: "text",
+      label: pt("fields.value", "Value"),
+    },
+    currencyCode: {
+      type: "text",
+      label: pt("fields.currency", "Currency"),
+    },
+  },
+} satisfies YextFieldDefinition;
+
 export const TYPE_TO_CONSTANT_CONFIG: Record<string, ConstantFieldConfig> = {
   "type.string": TRANSLATABLE_STRING_CONSTANT_CONFIG,
   "type.rich_text_v2": TRANSLATABLE_RICH_TEXT_CONSTANT_CONFIG,
   "type.phone": PHONE_CONSTANT_CONFIG,
   "type.image": IMAGE_CONSTANT_CONFIG,
+  "type.price": PRODUCT_PRICE_CONSTANT_CONFIG,
   "type.cta": ENHANCED_CTA_CONSTANT_CONFIG,
   "type.datetime": DATE_TIME_CONSTANT_CONFIG,
   "type.events_section": EVENT_SECTION_CONSTANT_CONFIG,

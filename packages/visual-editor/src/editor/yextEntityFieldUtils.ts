@@ -219,8 +219,7 @@ const hasNestedLinkedEntityAncestor = (
 const getScopedFieldsForSelector = (
   entityFields: StreamFields | null,
   sourceField: string,
-  filter: RenderEntityFieldFilter<any>,
-  streamDocument?: StreamDocument
+  filter: RenderEntityFieldFilter<any>
 ): YextSchemaField[] => {
   const scopedStreamFields = getSubdocumentStreamFields(
     entityFields,
@@ -230,43 +229,33 @@ const getScopedFieldsForSelector = (
     return [];
   }
 
-  const resolvedDescendantFieldPaths = getResolvedDescendantFieldPaths(
-    streamDocument,
-    sourceField,
-    true
-  );
   const rootDisplayName = getEntityFieldDisplayName(sourceField, entityFields);
   const rootPrefix = rootDisplayName ? `${rootDisplayName} > ` : undefined;
 
   return sortFields(
     dedupeFieldsByName(
-      (resolvedDescendantFieldPaths
-        ? getFilteredEntityFields(scopedStreamFields, filter).filter(
-            (field) =>
-              !hasNestedLinkedEntityAncestor(scopedStreamFields, field.name) &&
-              resolvedDescendantFieldPaths.has(field.name)
-          )
-        : getFilteredEntityFields(scopedStreamFields, filter).filter(
-            (field) =>
-              !hasNestedLinkedEntityAncestor(scopedStreamFields, field.name)
-          )
-      ).map((field) => {
-        const displayName =
-          getEntityFieldDisplayName(
-            `${sourceField}.${field.name}`,
-            entityFields
-          ) ??
-          field.displayName ??
-          field.name;
+      getFilteredEntityFields(scopedStreamFields, filter)
+        .filter(
+          (field) =>
+            !hasNestedLinkedEntityAncestor(scopedStreamFields, field.name)
+        )
+        .map((field) => {
+          const displayName =
+            getEntityFieldDisplayName(
+              `${sourceField}.${field.name}`,
+              entityFields
+            ) ??
+            field.displayName ??
+            field.name;
 
-        return {
-          ...field,
-          displayName:
-            rootPrefix && displayName.startsWith(rootPrefix)
-              ? displayName.slice(rootPrefix.length)
-              : displayName,
-        };
-      })
+          return {
+            ...field,
+            displayName:
+              rootPrefix && displayName.startsWith(rootPrefix)
+                ? displayName.slice(rootPrefix.length)
+                : displayName,
+          };
+        })
     )
   );
 };
@@ -278,12 +267,7 @@ export const getFieldsForSelector = (
   sourceField?: string
 ): YextSchemaField[] => {
   if (sourceField) {
-    return getScopedFieldsForSelector(
-      entityFields,
-      sourceField,
-      filter,
-      streamDocument
-    );
+    return getScopedFieldsForSelector(entityFields, sourceField, filter);
   }
 
   const requiredDescendantTypes =
@@ -416,60 +400,4 @@ export const getFieldsForSelector = (
   }
 
   return sortFields(dedupeFieldsByName([...filteredEntityFields]));
-};
-
-const getResolvedDescendantFieldPaths = (
-  streamDocument: StreamDocument | undefined,
-  rootFieldPath: string,
-  relativeToRoot = false
-): Set<string> | undefined => {
-  if (!streamDocument) {
-    return undefined;
-  }
-
-  const resolvedValue = resolveField<unknown>(
-    streamDocument,
-    rootFieldPath
-  ).value;
-  if (resolvedValue === undefined || resolvedValue === null) {
-    return undefined;
-  }
-
-  const sampledValues = Array.isArray(resolvedValue)
-    ? resolvedValue.slice(0, 3)
-    : [resolvedValue];
-  const subdocuments = sampledValues.filter(
-    (value): value is Record<string, unknown> =>
-      !!value && typeof value === "object"
-  );
-
-  if (!subdocuments.length) {
-    return undefined;
-  }
-
-  const fieldPaths = new Set<string>();
-
-  const collectFieldPaths = (value: unknown, parentFieldPath = ""): void => {
-    if (!value || typeof value !== "object") {
-      return;
-    }
-
-    if (Array.isArray(value)) {
-      value.forEach((item) => collectFieldPaths(item, parentFieldPath));
-      return;
-    }
-
-    Object.entries(value).forEach(([fieldName, childValue]) => {
-      const childFieldPath = parentFieldPath
-        ? `${parentFieldPath}.${fieldName}`
-        : fieldName;
-      fieldPaths.add(
-        relativeToRoot ? childFieldPath : `${rootFieldPath}.${childFieldPath}`
-      );
-      collectFieldPaths(childValue, childFieldPath);
-    });
-  };
-
-  subdocuments.forEach((subdocument) => collectFieldPaths(subdocument));
-  return fieldPaths;
 };

@@ -41,6 +41,7 @@ export type EntityFieldTypes =
   | "type.hours"
   | "type.address"
   | "type.phone"
+  | "type.price"
   | "type.coordinate"
   | "type.cta"
   | "type.boolean"

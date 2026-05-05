@@ -149,7 +149,7 @@ describe("mapped list wrappers", () => {
       },
       price: {
         field: "price",
-        constantValue: "",
+        constantValue: { value: "", currencyCode: "" },
         constantValueEnabled: false,
       },
       description: {
@@ -177,7 +177,7 @@ describe("mapped list wrappers", () => {
             photo: { url: "https://example.com/product.jpg" },
             category: "Featured",
             name: "Trail Shoe",
-            price: "$120",
+            price: { value: "120", currencyCode: "USD" },
             description: { html: "<p>Lightweight</p>" },
             cta: { label: "Shop", link: "/shop", linkType: "URL" },
           },
@@ -191,9 +191,9 @@ describe("mapped list wrappers", () => {
       image: { url: "https://example.com/product.jpg" },
       brow: "Featured",
       name: "Trail Shoe",
+      price: { value: "120", currencyCode: "USD" },
       description: { html: "<p>Lightweight</p>" },
       cta: { label: "Shop", link: "/shop", linkType: "URL" },
-      priceText: "$120",
     });
     expect(
       resolvedData.props!.slots!.CardSlot[0]?.props.conditionalRender
