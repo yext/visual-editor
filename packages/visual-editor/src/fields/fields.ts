@@ -39,6 +39,10 @@ import {
   StyledButtonFieldOverride,
 } from "./styledFields/StyledButtonField.tsx";
 import {
+  StyledImageField,
+  StyledImageFieldOverride,
+} from "./styledFields/StyledImageField.tsx";
+import {
   StyledLinkField,
   StyledLinkFieldOverride,
 } from "./styledFields/StyledLinkField.tsx";
@@ -67,6 +71,7 @@ export type YextPuckFields = {
   image: ImageField;
   optionalNumber: OptionalNumberField;
   styledButton: StyledButtonField;
+  styledImage: StyledImageField;
   styledLink: StyledLinkField;
   styledPageSection: StyledPageSectionField;
   styledText: StyledTextField;
@@ -115,6 +120,7 @@ export const YextPuckFieldOverrides = {
   image: ImageFieldOverride,
   optionalNumber: OptionalNumberFieldOverride,
   styledButton: StyledButtonFieldOverride,
+  styledImage: StyledImageFieldOverride,
   styledLink: StyledLinkFieldOverride,
   styledPageSection: StyledPageSectionFieldOverride,
   styledText: StyledTextFieldOverride,
