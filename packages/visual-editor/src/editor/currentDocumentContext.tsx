@@ -42,7 +42,25 @@ export const useResolvedSourceField = (sourceFieldPath?: string): string => {
       sourceFieldPath
     );
 
-    return typeof sourceFieldValue === "string" ? sourceFieldValue : "";
+    if (typeof sourceFieldValue === "string") {
+      return sourceFieldValue;
+    }
+
+    if (
+      sourceFieldValue &&
+      typeof sourceFieldValue === "object" &&
+      !Array.isArray(sourceFieldValue)
+    ) {
+      const sourceField = (sourceFieldValue as Record<string, unknown>).field;
+      const constantValueEnabled = (sourceFieldValue as Record<string, unknown>)
+        .constantValueEnabled;
+
+      return !constantValueEnabled && typeof sourceField === "string"
+        ? sourceField
+        : "";
+    }
+
+    return "";
   }, [getPuck, itemSelector, sourceFieldPath]);
 };
 

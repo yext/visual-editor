@@ -1,34 +1,51 @@
-import { ComponentData, PuckComponent } from "@puckeditor/core";
-import { PersonStruct, TeamSectionType } from "../../../types/types.ts";
-import { ComponentFields } from "../../../types/fields.ts";
+import {
+  type ComponentData,
+  PuckComponent,
+  type Slot,
+  setDeep,
+} from "@puckeditor/core";
+import { type PersonStruct } from "../../../types/types.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
-import { CardWrapperType } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
-import { defaultTeamCardSlotData, TeamCardProps } from "./TeamCard.tsx";
+import { defaultTeamCardSlotData, type TeamCardProps } from "./TeamCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
-import { toPuckFields, YextComponentConfig } from "../../../fields/fields.ts";
+import {
+  toPuckFields,
+  type YextComponentConfig,
+  type YextFields,
+} from "../../../fields/fields.ts";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
-import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
+import { type YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
+import { type StreamDocument, createItemSource } from "../../../utils/index.ts";
+import { buildListSectionCards } from "../../../utils/cardSlots/listSectionData.ts";
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
-import { createMappedItems } from "../../../utils/cardSlots/createMappedItems.ts";
-import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 
-export type TeamCardsWrapperProps = CardWrapperType<TeamSectionType> & {
-  cards?: {
-    headshot: YextEntityField<PersonStruct["headshot"]>;
-    name: YextEntityField<PersonStruct["name"]>;
-    title: YextEntityField<PersonStruct["title"]>;
-    phoneNumber: YextEntityField<PersonStruct["phoneNumber"]>;
-    email: YextEntityField<PersonStruct["email"]>;
-    cta: YextEntityField<PersonStruct["cta"]>;
+type TeamCardItem = {
+  headshot: YextEntityField<PersonStruct["headshot"]>;
+  name: YextEntityField<PersonStruct["name"]>;
+  title: YextEntityField<PersonStruct["title"]>;
+  phoneNumber: YextEntityField<PersonStruct["phoneNumber"]>;
+  email: YextEntityField<PersonStruct["email"]>;
+  cta: YextEntityField<PersonStruct["cta"]>;
+};
+
+export type TeamCardsWrapperProps = {
+  data: {
+    field: string;
+    constantValueEnabled?: boolean;
+    constantValue: TeamCardItem[];
   };
+  cards?: TeamCardItem;
   styles: {
     showImage: boolean;
     showTitle: boolean;
     showPhone: boolean;
     showEmail: boolean;
     showCTA: boolean;
+  };
+  slots: {
+    CardSlot: Slot;
   };
 };
 
@@ -39,99 +56,53 @@ const defaultPersonCta = {
   ctaType: "textAndLink",
 } satisfies PersonStruct["cta"];
 
-const teamCardsBase = createMappedItems<TeamCardsWrapperProps>({
-  sourceFieldPath: "data.field",
-  mappingGroupPath: "cards",
-  sourceLabel: msg("components.team", "Team"),
-  mappingGroupLabel: msg("fields.cards", "Cards"),
-  mappings: {
-    headshot: {
-      label: msg("fields.headshot", "Headshot"),
-      types: ["type.image"],
-      defaultValue: undefined,
+const teamCards = createItemSource<TeamCardsWrapperProps, TeamCardItem>({
+  itemSourcePath: "data",
+  itemMappingsPath: "cards",
+  itemSourceLabel: msg("components.team", "Team"),
+  itemMappingsLabel: msg("fields.cards", "Cards"),
+  itemFields: {
+    headshot: YextField(msg("fields.headshot", "Headshot"), {
+      type: "entityField",
       disableConstantValueToggle: true,
-    },
-    name: {
-      label: msg("fields.name", "Name"),
-      types: ["type.string"],
-      defaultValue: { defaultValue: "" },
-    },
-    title: {
-      label: msg("fields.title", "Title"),
-      types: ["type.string", "type.rich_text_v2"],
-      defaultValue: { defaultValue: "" },
-    },
-    phoneNumber: {
-      label: msg("fields.phone", "Phone"),
-      types: ["type.phone", "type.string"],
-      defaultValue: "",
-    },
-    email: {
-      label: msg("fields.email", "Email"),
-      types: ["type.string"],
-      defaultValue: "",
-    },
-    cta: {
-      label: msg("fields.cta", "CTA"),
-      types: ["type.cta"],
-      defaultValue: defaultPersonCta,
-    },
-  },
-}).withConstantValueMode({
-  constantValueType: ComponentFields.TeamSection.type,
-});
-
-const teamCards = teamCardsBase.withRepeatedSlot({
-  slotPath: "slots.CardSlot",
-  createItem: (id, index, existingItem) =>
-    defaultTeamCardSlotData(
-      id,
-      index,
-      existingItem?.props.styles.backgroundColor,
-      existingItem ? gatherSlotStyles(existingItem.props.slots) : undefined
-    ) as unknown as ComponentData<TeamCardProps>,
-  getItemData: (item, resolvedData) => {
-    const locale = i18nComponentsInstance.language || "en";
-    const name = teamCardsBase.resolveMapping<PersonStruct["name"]>(
-      resolvedData.props.cards?.name,
-      item,
-      locale
-    );
-
-    return {
-      field: resolvedData.props.data.field,
-      headshot: teamCardsBase.resolveMapping<PersonStruct["headshot"]>(
-        resolvedData.props.cards?.headshot,
-        item,
-        locale
-      ),
-      name: name ? resolveComponentData(name, locale, item) : undefined,
-      title: teamCardsBase.resolveMapping<PersonStruct["title"]>(
-        resolvedData.props.cards?.title,
-        item,
-        locale
-      ),
-      phoneNumber: teamCardsBase.resolveMapping<PersonStruct["phoneNumber"]>(
-        resolvedData.props.cards?.phoneNumber,
-        item,
-        locale
-      ),
-      email: teamCardsBase.resolveMapping<PersonStruct["email"]>(
-        resolvedData.props.cards?.email,
-        item,
-        locale
-      ),
-      cta:
-        teamCardsBase.resolveMapping<PersonStruct["cta"]>(
-          resolvedData.props.cards?.cta,
-          item,
-          locale
-        ) ?? defaultPersonCta,
-    };
+      filter: {
+        types: ["type.image"],
+      },
+    }),
+    name: YextField(msg("fields.name", "Name"), {
+      type: "entityField",
+      filter: {
+        types: ["type.string"],
+      },
+    }),
+    title: YextField(msg("fields.title", "Title"), {
+      type: "entityField",
+      filter: {
+        types: ["type.string", "type.rich_text_v2"],
+      },
+    }),
+    phoneNumber: YextField(msg("fields.phone", "Phone"), {
+      type: "entityField",
+      filter: {
+        types: ["type.phone", "type.string"],
+      },
+    }),
+    email: YextField(msg("fields.email", "Email"), {
+      type: "entityField",
+      filter: {
+        types: ["type.string"],
+      },
+    }),
+    cta: YextField(msg("fields.cta", "CTA"), {
+      type: "entityField",
+      filter: {
+        types: ["type.cta"],
+      },
+    }),
   },
 });
 
-const teamCardsWrapperFields = {
+const teamCardsWrapperFields: YextFields<TeamCardsWrapperProps> = {
   ...teamCards.fields,
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
@@ -163,28 +134,92 @@ const teamCardsWrapperFields = {
       },
     },
   }),
+  slots: {
+    type: "object",
+    objectFields: {
+      CardSlot: { type: "slot", allow: [] },
+    },
+    visible: false,
+  },
+};
+
+const createTeamCard = (
+  currentCards: ComponentData<TeamCardProps>[]
+): ComponentData<TeamCardProps> => {
+  const existingCard = currentCards[0];
+
+  return defaultTeamCardSlotData(
+    `TeamCard-${crypto.randomUUID()}`,
+    undefined,
+    existingCard?.props.styles.backgroundColor,
+    existingCard ? gatherSlotStyles(existingCard.props.slots) : undefined
+  ) as unknown as ComponentData<TeamCardProps>;
+};
+
+const syncCards = (
+  data: ComponentData<TeamCardsWrapperProps>,
+  resolvedItems: Record<string, unknown>[]
+): ComponentData<TeamCardsWrapperProps> => {
+  const currentCards =
+    (data.props.slots.CardSlot as unknown as ComponentData<TeamCardProps>[]) ??
+    [];
+
+  return setDeep(
+    data,
+    "props.slots.CardSlot",
+    buildListSectionCards<TeamCardProps, Record<string, unknown>>({
+      currentCards,
+      items: resolvedItems,
+      createCard: () => createTeamCard(currentCards),
+      decorateCard: (card, item, index) => ({
+        ...card,
+        props: {
+          ...card.props,
+          index,
+          itemData: {
+            field: data.props.data.field,
+            headshot: item.headshot as PersonStruct["headshot"],
+            name: item.name as PersonStruct["name"],
+            title: item.title as PersonStruct["title"],
+            phoneNumber: item.phoneNumber as PersonStruct["phoneNumber"],
+            email: item.email as PersonStruct["email"],
+            cta:
+              (item.cta as PersonStruct["cta"] | undefined) ?? defaultPersonCta,
+          },
+        },
+      }),
+    })
+  );
 };
 
 const TeamCardsWrapperComponent: PuckComponent<TeamCardsWrapperProps> = ({
   slots,
-}) => {
-  return (
-    <CardContextProvider>
-      <slots.CardSlot
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-center"
-        allow={[]}
-      />
-    </CardContextProvider>
-  );
-};
+}) => (
+  <CardContextProvider>
+    <slots.CardSlot
+      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-center"
+      allow={[]}
+    />
+  </CardContextProvider>
+);
 
 export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
   label: msg("components.teamCardsWrapper", "Team Cards"),
   fields: teamCardsWrapperFields,
   defaultProps: {
     ...teamCards.defaultProps,
-    data: teamCards.defaultProps.data!,
-    cards: teamCards.defaultProps.cards!,
+    data: {
+      ...teamCards.defaultProps.data!,
+      constantValue: [{}, {}, {}] as TeamCardItem[],
+    },
+    cards: {
+      ...(teamCards.defaultProps.cards as TeamCardItem),
+      cta: {
+        field: "",
+        constantValueEnabled: false,
+        constantValue: defaultPersonCta,
+      },
+    },
     styles: {
       showImage: true,
       showTitle: true,
@@ -193,7 +228,20 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
       showCTA: true,
     },
     slots: {
-      CardSlot: [],
+      CardSlot: [
+        defaultTeamCardSlotData(
+          undefined,
+          0
+        ) as unknown as ComponentData<TeamCardProps>,
+        defaultTeamCardSlotData(
+          undefined,
+          1
+        ) as unknown as ComponentData<TeamCardProps>,
+        defaultTeamCardSlotData(
+          undefined,
+          2
+        ) as unknown as ComponentData<TeamCardProps>,
+      ],
     },
   },
   resolveFields: (data) =>
@@ -201,6 +249,16 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
       ...teamCardsWrapperFields,
       ...teamCards.resolveFields(data),
     }),
-  resolveData: (data, params) => teamCards.resolveItems(data, params).data,
+  resolveData: (data, params) => {
+    const normalizedData = teamCards.normalizeData(data, params);
+    const resolvedItems = teamCards.resolveItems(
+      normalizedData.props.data,
+      normalizedData.props.cards,
+      (params.metadata?.streamDocument ?? {}) as StreamDocument,
+      i18nComponentsInstance.language || "en"
+    );
+
+    return syncCards(normalizedData, resolvedItems);
+  },
   render: (props) => <TeamCardsWrapperComponent {...props} />,
 };

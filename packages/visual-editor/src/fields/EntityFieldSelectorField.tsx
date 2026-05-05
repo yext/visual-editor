@@ -86,6 +86,7 @@ export type EntityFieldSelectorField<
   disableConstantValueToggle?: boolean;
   disallowTranslation?: boolean;
   sourceFieldPath?: string;
+  sourceEntityPath?: string | null;
 };
 
 type EntityFieldSelectorFieldProps = FieldProps<EntityFieldSelectorField>;
@@ -295,7 +296,9 @@ export const EntityFieldSelectorFieldOverride = ({
           value={value}
           filter={constantValueFilter}
           disallowTranslation={field.disallowTranslation}
-          sourceFieldPath={field.sourceFieldPath}
+          sourceFieldPath={
+            field.sourceFieldPath ?? field.sourceEntityPath ?? undefined
+          }
         />
       )}
       {!showConstantValueInput && (
@@ -304,7 +307,9 @@ export const EntityFieldSelectorFieldOverride = ({
           onChange={onChange}
           value={value}
           filter={field.filter}
-          sourceFieldPath={field.sourceFieldPath}
+          sourceFieldPath={
+            field.sourceFieldPath ?? field.sourceEntityPath ?? undefined
+          }
         />
       )}
     </>

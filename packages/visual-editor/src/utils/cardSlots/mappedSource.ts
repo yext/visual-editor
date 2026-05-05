@@ -6,18 +6,13 @@ import {
   type StreamFields,
   type YextSchemaField,
 } from "../../types/entityFields.ts";
-import { type YextEntityField } from "../../editor/yextEntityFieldUtils.ts";
-import {
-  resolveField,
-  resolveYextEntityField,
-} from "../resolveYextEntityField.ts";
+import { resolveField } from "../resolveYextEntityField.ts";
 import { type StreamDocument } from "../types/StreamDocument.ts";
 
 /**
  * Describes how a card wrapper should populate its repeated card slot.
  *
- * - `constantValue`: the editor stores the card list as a constant value and
- *   the wrapper keeps those explicit card ids in sync with the slot contents.
+ * - `constantValue`: the editor stores the list inline as manual items.
  * - `resolvedItems`: the selected value is itself the repeatable item or list
  *   of repeatable items, such as a linked entity, linked entity list, or
  *   nested list field.
@@ -127,31 +122,8 @@ export const hasResolvedMappedListSource = ({
     fieldPath,
   }).items.length > 0;
 
-/**
- * Resolves a wrapper-level mapped field against one mapped source item. Saved
- * field ids are interpreted against the current item context.
- */
-export const resolveMappedSourceField = <T>(
-  item: StreamDocument,
-  entityField: Partial<YextEntityField<T>> | undefined,
-  locale?: string
-): T | undefined => {
-  if (!entityField) {
-    return undefined;
-  }
-
-  return resolveYextEntityField(
-    item,
-    {
-      field: entityField.field ?? "",
-      constantValue: entityField.constantValue as T,
-      constantValueEnabled: entityField.constantValueEnabled,
-    },
-    locale
-  );
-};
-
 export type MappedSourceFieldFilter<T extends Record<string, any>> =
   RenderEntityFieldFilter<T> & {
     mappedSourceTypes?: EntityFieldTypes[][];
+    itemSourceTypes?: EntityFieldTypes[][];
   };

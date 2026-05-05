@@ -1,121 +1,174 @@
-import { ComponentData, PuckComponent } from "@puckeditor/core";
 import {
-  TestimonialSectionType,
+  type ComponentData,
+  PuckComponent,
+  type Slot,
+  setDeep,
+} from "@puckeditor/core";
+import {
   TestimonialStruct,
+  type TranslatableRichText,
+  type TranslatableString,
 } from "../../../types/types.ts";
-import { ComponentFields } from "../../../types/fields.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
-import { CardWrapperType } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 import {
   defaultTestimonialCardSlotData,
-  TestimonialCardProps,
+  type TestimonialCardProps,
 } from "./TestimonialCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
-import { toPuckFields, YextComponentConfig } from "../../../fields/fields.ts";
+import {
+  toPuckFields,
+  type YextComponentConfig,
+  type YextFields,
+} from "../../../fields/fields.ts";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
-import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
+import { type YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
-import { createMappedItems } from "../../../utils/cardSlots/createMappedItems.ts";
-import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+import { type StreamDocument } from "../../../utils/index.ts";
+import { createItemSource } from "../../../utils/itemSource/createItemSource.ts";
+import { buildListSectionCards } from "../../../utils/cardSlots/listSectionData.ts";
 
-export type TestimonialCardsWrapperProps =
-  CardWrapperType<TestimonialSectionType> & {
-    cards?: {
-      description: YextEntityField<TestimonialStruct["description"]>;
-      contributorName: YextEntityField<TestimonialStruct["contributorName"]>;
-      contributionDate: YextEntityField<TestimonialStruct["contributionDate"]>;
-    };
-    styles: {
-      /**
-       * Whether to show the name slot in the testimonial cards.
-       * @defaultValue true
-       */
-      showName: boolean;
+type TestimonialCardItem = {
+  description: YextEntityField<TranslatableRichText>;
+  contributorName: YextEntityField<TranslatableString>;
+  contributionDate: YextEntityField<string>;
+};
 
-      /**
-       * Whether to show the date slot in the testimonial cards.
-       * @defaultValue true
-       */
-      showDate: boolean;
-    };
+export type TestimonialCardsWrapperProps = {
+  data: {
+    field: string;
+    constantValueEnabled?: boolean;
+    constantValue: TestimonialCardItem[];
+  };
+  cards?: TestimonialCardItem;
+  styles: {
+    /**
+     * Whether to show the name slot in the testimonial cards.
+     * @defaultValue true
+     */
+    showName: boolean;
+
+    /**
+     * Whether to show the date slot in the testimonial cards.
+     * @defaultValue true
+     */
+    showDate: boolean;
+  };
+  slots: {
+    CardSlot: Slot;
+  };
+};
+
+const testimonialCards = createItemSource<
+  TestimonialCardsWrapperProps,
+  TestimonialCardItem
+>({
+  itemSourcePath: "data",
+  itemMappingsPath: "cards",
+  itemSourceLabel: msg("components.testimonial", "Testimonial"),
+  itemMappingsLabel: msg("fields.cards", "Cards"),
+  itemFields: {
+    description: YextField(msg("fields.description", "Description"), {
+      type: "entityField",
+      filter: {
+        types: ["type.string", "type.rich_text_v2"],
+      },
+    }),
+    contributorName: YextField(
+      msg("fields.contributorName", "Contributor Name"),
+      {
+        type: "entityField",
+        filter: {
+          types: ["type.string"],
+        },
+      }
+    ),
+    contributionDate: YextField(
+      msg("fields.contributionDate", "Contribution Date"),
+      {
+        type: "entityField",
+        disableConstantValueToggle: true,
+        filter: {
+          types: ["type.datetime"],
+        },
+      }
+    ),
+  },
+});
+
+const testimonialCardsWrapperFields: YextFields<TestimonialCardsWrapperProps> =
+  {
+    ...testimonialCards.fields,
+    styles: YextField(msg("fields.styles", "Styles"), {
+      type: "object",
+      objectFields: {
+        showName: {
+          label: msg("fields.showName", "Show Name"),
+          type: "radio",
+          options: ThemeOptions.SHOW_HIDE,
+        },
+        showDate: {
+          label: msg("fields.showDate", "Show Date"),
+          type: "radio",
+          options: ThemeOptions.SHOW_HIDE,
+        },
+      },
+    }),
+    slots: {
+      type: "object",
+      objectFields: {
+        CardSlot: { type: "slot", allow: [] },
+      },
+      visible: false,
+    },
   };
 
-const testimonialCardsBase = createMappedItems<TestimonialCardsWrapperProps>({
-  sourceFieldPath: "data.field",
-  mappingGroupPath: "cards",
-  sourceLabel: msg("components.testimonial", "Testimonial"),
-  mappingGroupLabel: msg("fields.cards", "Cards"),
-  mappings: {
-    description: {
-      label: msg("fields.description", "Description"),
-      types: ["type.string", "type.rich_text_v2"],
-      defaultValue: { defaultValue: "" },
-    },
-    contributorName: {
-      label: msg("fields.contributorName", "Contributor Name"),
-      types: ["type.string"],
-      defaultValue: { defaultValue: "" },
-    },
-    contributionDate: {
-      label: msg("fields.contributionDate", "Contribution Date"),
-      types: ["type.datetime"],
-      defaultValue: "",
-      disableConstantValueToggle: true,
-    },
-  },
-}).withConstantValueMode({
-  constantValueType: ComponentFields.TestimonialSection.type,
-});
+const createTestimonialCard = (
+  currentCards: ComponentData<TestimonialCardProps>[]
+): ComponentData<TestimonialCardProps> => {
+  const existingCard = currentCards[0];
 
-const testimonialCards = testimonialCardsBase.withRepeatedSlot({
-  slotPath: "slots.CardSlot",
-  createItem: (id, index, existingItem) =>
-    defaultTestimonialCardSlotData(
-      id,
-      index,
-      existingItem?.props.styles.backgroundColor,
-      existingItem ? gatherSlotStyles(existingItem.props.slots) : undefined
-    ) as unknown as ComponentData<TestimonialCardProps>,
-  getItemData: (item, resolvedData) => {
-    const locale = i18nComponentsInstance.language || "en";
-    const contributorName = testimonialCardsBase.resolveMapping<
-      TestimonialStruct["contributorName"]
-    >(resolvedData.props.cards?.contributorName, item, locale);
+  return defaultTestimonialCardSlotData(
+    `TestimonialCard-${crypto.randomUUID()}`,
+    undefined,
+    existingCard?.props.styles.backgroundColor,
+    existingCard ? gatherSlotStyles(existingCard.props.slots) : undefined
+  ) as unknown as ComponentData<TestimonialCardProps>;
+};
 
-    return {
-      field: resolvedData.props.data.field,
-      description: testimonialCardsBase.resolveMapping<
-        TestimonialStruct["description"]
-      >(resolvedData.props.cards?.description, item, locale),
-      contributorName: contributorName
-        ? resolveComponentData(contributorName, locale, item)
-        : undefined,
-      contributionDate: testimonialCardsBase.resolveMapping<
-        TestimonialStruct["contributionDate"]
-      >(resolvedData.props.cards?.contributionDate, item, locale),
-    };
-  },
-});
+const syncCards = (
+  data: ComponentData<TestimonialCardsWrapperProps>,
+  resolvedItems: Record<string, unknown>[]
+): ComponentData<TestimonialCardsWrapperProps> => {
+  const currentCards =
+    (data.props.slots
+      .CardSlot as unknown as ComponentData<TestimonialCardProps>[]) ?? [];
 
-const testimonialCardsWrapperFields = {
-  ...testimonialCards.fields,
-  styles: YextField(msg("fields.styles", "Styles"), {
-    type: "object",
-    objectFields: {
-      showName: {
-        label: msg("fields.showName", "Show Name"),
-        type: "radio",
-        options: ThemeOptions.SHOW_HIDE,
-      },
-      showDate: {
-        label: msg("fields.showDate", "Show Date"),
-        type: "radio",
-        options: ThemeOptions.SHOW_HIDE,
-      },
-    },
-  }),
+  return setDeep(
+    data,
+    "props.slots.CardSlot",
+    buildListSectionCards<TestimonialCardProps, Record<string, unknown>>({
+      currentCards,
+      items: resolvedItems,
+      createCard: () => createTestimonialCard(currentCards),
+      decorateCard: (card, item, index) => ({
+        ...card,
+        props: {
+          ...card.props,
+          index,
+          itemData: {
+            field: data.props.data.field,
+            description: item.description as TestimonialStruct["description"],
+            contributorName:
+              item.contributorName as TestimonialStruct["contributorName"],
+            contributionDate:
+              item.contributionDate as TestimonialStruct["contributionDate"],
+          },
+        },
+      }),
+    })
+  );
 };
 
 const TestimonialCardsWrapperComponent: PuckComponent<
@@ -137,10 +190,26 @@ export const TestimonialCardsWrapper: YextComponentConfig<TestimonialCardsWrappe
     fields: testimonialCardsWrapperFields,
     defaultProps: {
       ...testimonialCards.defaultProps,
-      data: testimonialCards.defaultProps.data!,
-      cards: testimonialCards.defaultProps.cards!,
+      data: {
+        ...testimonialCards.defaultProps.data!,
+        constantValue: [{}, {}, {}] as TestimonialCardItem[],
+      },
+      cards: testimonialCards.defaultProps.cards as TestimonialCardItem,
       slots: {
-        CardSlot: [],
+        CardSlot: [
+          defaultTestimonialCardSlotData(
+            undefined,
+            0
+          ) as unknown as ComponentData<TestimonialCardProps>,
+          defaultTestimonialCardSlotData(
+            undefined,
+            1
+          ) as unknown as ComponentData<TestimonialCardProps>,
+          defaultTestimonialCardSlotData(
+            undefined,
+            2
+          ) as unknown as ComponentData<TestimonialCardProps>,
+        ],
       },
       styles: {
         showName: true,
@@ -152,7 +221,16 @@ export const TestimonialCardsWrapper: YextComponentConfig<TestimonialCardsWrappe
         ...testimonialCardsWrapperFields,
         ...testimonialCards.resolveFields(data),
       }),
-    resolveData: (data, params) =>
-      testimonialCards.resolveItems(data, params).data,
+    resolveData: (data, params) => {
+      const normalizedData = testimonialCards.normalizeData(data, params);
+      const resolvedItems = testimonialCards.resolveItems(
+        normalizedData.props.data,
+        normalizedData.props.cards,
+        (params.metadata?.streamDocument ?? {}) as StreamDocument,
+        i18nComponentsInstance.language || "en"
+      );
+
+      return syncCards(normalizedData, resolvedItems);
+    },
     render: (props) => <TestimonialCardsWrapperComponent {...props} />,
   };

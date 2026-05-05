@@ -13,6 +13,11 @@ export {
 
 export { CodeFieldOverride, type CodeField } from "./CodeField.tsx";
 export { ImageFieldOverride, type ImageField } from "./ImageField.tsx";
+export {
+  ItemSourceFieldOverride,
+  type ItemSourceField,
+  type ItemSourceValue,
+} from "./ItemSourceField.tsx";
 
 export {
   DateTimeSelectorFieldOverride,

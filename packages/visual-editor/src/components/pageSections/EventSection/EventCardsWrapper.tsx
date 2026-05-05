@@ -1,32 +1,49 @@
-import { ComponentData, PuckComponent } from "@puckeditor/core";
-import { EventSectionType, EventStruct } from "../../../types/types.ts";
-import { ComponentFields } from "../../../types/fields.ts";
+import {
+  type ComponentData,
+  PuckComponent,
+  type Slot,
+  setDeep,
+} from "@puckeditor/core";
+import { type StreamDocument, createItemSource } from "../../../utils/index.ts";
+import { EventStruct } from "../../../types/types.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
-import { CardWrapperType } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
-import { defaultEventCardSlotData, EventCardProps } from "./EventCard.tsx";
+import { defaultEventCardSlotData, type EventCardProps } from "./EventCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
-import { toPuckFields, YextComponentConfig } from "../../../fields/fields.ts";
-import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
-import { createMappedItems } from "../../../utils/cardSlots/createMappedItems.ts";
-import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+import {
+  toPuckFields,
+  type YextComponentConfig,
+  type YextFields,
+} from "../../../fields/fields.ts";
+import { type YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
+import { buildListSectionCards } from "../../../utils/cardSlots/listSectionData.ts";
 
-export type EventCardsWrapperProps = CardWrapperType<EventSectionType> & {
-  cards?: {
-    title: YextEntityField<EventStruct["title"]>;
-    date: YextEntityField<string>;
-    description: YextEntityField<EventStruct["description"]>;
-    cta: YextEntityField<EventStruct["cta"]>;
-    image: YextEntityField<EventStruct["image"]>;
+type EventCardItem = {
+  title: YextEntityField<EventStruct["title"]>;
+  date: YextEntityField<string>;
+  description: YextEntityField<EventStruct["description"]>;
+  cta: YextEntityField<EventStruct["cta"]>;
+  image: YextEntityField<EventStruct["image"]>;
+};
+
+export type EventCardsWrapperProps = {
+  data: {
+    field: string;
+    constantValueEnabled?: boolean;
+    constantValue: EventCardItem[];
   };
+  cards?: EventCardItem;
   styles: {
     showImage: boolean;
     showDateTime: boolean;
     showDescription: boolean;
     showCTA: boolean;
+  };
+  slots: {
+    CardSlot: Slot;
   };
 };
 
@@ -37,103 +54,48 @@ const defaultEventCta = {
   ctaType: "textAndLink",
 } satisfies EventStruct["cta"];
 
-const eventCardsBase = createMappedItems<EventCardsWrapperProps>({
-  sourceFieldPath: "data.field",
-  mappingGroupPath: "cards",
-  sourceLabel: msg("components.events", "Events"),
-  mappingGroupLabel: msg("fields.cards", "Cards"),
-  mappings: {
-    title: {
-      label: msg("fields.title", "Title"),
-      types: ["type.string"],
-      defaultValue: { defaultValue: "" },
-    },
-    date: {
-      label: msg("fields.date", "Date"),
-      types: ["type.datetime"],
-      defaultValue: "",
-      disableConstantValueToggle: true,
-    },
-    description: {
-      label: msg("fields.description", "Description"),
-      types: ["type.string", "type.rich_text_v2"],
-      defaultValue: { defaultValue: "" },
-    },
-    cta: {
-      label: msg("fields.cta", "CTA"),
-      types: ["type.cta"],
-      defaultValue: defaultEventCta,
-    },
-    image: {
-      label: msg("fields.image", "Image"),
-      types: ["type.image"],
-      defaultValue: {
-        url: "",
-        width: 0,
-        height: 0,
+const eventCards = createItemSource<EventCardsWrapperProps, EventCardItem>({
+  itemSourcePath: "data",
+  itemMappingsPath: "cards",
+  itemSourceLabel: msg("components.events", "Events"),
+  itemMappingsLabel: msg("fields.cards", "Cards"),
+  itemFields: {
+    title: YextField(msg("fields.title", "Title"), {
+      type: "entityField",
+      filter: {
+        types: ["type.string"],
       },
+    }),
+    date: YextField(msg("fields.date", "Date"), {
+      type: "entityField",
       disableConstantValueToggle: true,
-    },
-  },
-}).withConstantValueMode({
-  constantValueType: ComponentFields.EventSection.type,
-  defaultConstantValue: [{}, {}, {}],
-});
-
-const eventCards = eventCardsBase.withRepeatedSlot({
-  slotPath: "slots.CardSlot",
-  createItem: (id, index, existingItem) =>
-    defaultEventCardSlotData(
-      id,
-      index,
-      existingItem?.props.styles.backgroundColor,
-      existingItem?.props.styles.truncateDescription,
-      existingItem ? gatherSlotStyles(existingItem.props.slots) : undefined
-    ) as unknown as ComponentData<EventCardProps>,
-  getItemData: (item, resolvedData) => {
-    const locale = i18nComponentsInstance.language || "en";
-    const title = eventCardsBase.resolveMapping<EventStruct["title"]>(
-      resolvedData.props.cards?.title,
-      item,
-      locale
-    );
-
-    return {
-      field: resolvedData.props.data.field,
-      fields: {
-        image: resolvedData.props.cards?.image?.field || undefined,
-        title: resolvedData.props.cards?.title?.field || undefined,
-        dateTime: resolvedData.props.cards?.date?.field || undefined,
-        description: resolvedData.props.cards?.description?.field || undefined,
-        cta: resolvedData.props.cards?.cta?.field || undefined,
+      filter: {
+        types: ["type.datetime"],
       },
-      image: eventCardsBase.resolveMapping<EventStruct["image"]>(
-        resolvedData.props.cards?.image,
-        item,
-        locale
-      ),
-      title: title ? resolveComponentData(title, locale, item) : undefined,
-      dateTime: eventCardsBase.resolveMapping<string>(
-        resolvedData.props.cards?.date,
-        item,
-        locale
-      ),
-      description: eventCardsBase.resolveMapping<EventStruct["description"]>(
-        resolvedData.props.cards?.description,
-        item,
-        locale
-      ),
-      cta:
-        eventCardsBase.resolveMapping<EventStruct["cta"]>(
-          resolvedData.props.cards?.cta,
-          item,
-          locale
-        ) ?? defaultEventCta,
-    } satisfies EventCardProps["itemData"];
+    }),
+    description: YextField(msg("fields.description", "Description"), {
+      type: "entityField",
+      filter: {
+        types: ["type.string", "type.rich_text_v2"],
+      },
+    }),
+    cta: YextField(msg("fields.cta", "CTA"), {
+      type: "entityField",
+      filter: {
+        types: ["type.cta"],
+      },
+    }),
+    image: YextField(msg("fields.image", "Image"), {
+      type: "entityField",
+      disableConstantValueToggle: true,
+      filter: {
+        types: ["type.image"],
+      },
+    }),
   },
 });
 
-const eventCardsWrapperFields = {
+const eventCardsWrapperFields: YextFields<EventCardsWrapperProps> = {
   ...eventCards.fields,
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
@@ -160,25 +122,105 @@ const eventCardsWrapperFields = {
       },
     },
   }),
+  slots: {
+    type: "object",
+    objectFields: {
+      CardSlot: { type: "slot", allow: [] },
+    },
+    visible: false,
+  },
+};
+
+const createEventCard = (
+  currentCards: ComponentData<EventCardProps>[]
+): ComponentData<EventCardProps> => {
+  const existingCard = currentCards[0];
+
+  return defaultEventCardSlotData(
+    `EventCard-${crypto.randomUUID()}`,
+    undefined,
+    existingCard?.props.styles.backgroundColor,
+    existingCard?.props.styles.truncateDescription,
+    existingCard ? gatherSlotStyles(existingCard.props.slots) : undefined
+  ) as unknown as ComponentData<EventCardProps>;
+};
+
+const toEventCardItemData = (
+  item: Record<string, unknown>,
+  sourceField: string,
+  cardMappings?: EventCardItem
+): EventCardProps["itemData"] => ({
+  field: sourceField,
+  fields: {
+    image: cardMappings?.image.field || undefined,
+    title: cardMappings?.title.field || undefined,
+    dateTime: cardMappings?.date.field || undefined,
+    description: cardMappings?.description.field || undefined,
+    cta: cardMappings?.cta.field || undefined,
+  },
+  image: item.image as EventStruct["image"],
+  title: item.title as EventStruct["title"],
+  dateTime: item.date as string | undefined,
+  description: item.description as EventStruct["description"],
+  cta: (item.cta as EventStruct["cta"] | undefined) ?? defaultEventCta,
+});
+
+const syncCards = (
+  data: ComponentData<EventCardsWrapperProps>,
+  resolvedItems: Record<string, unknown>[]
+): ComponentData<EventCardsWrapperProps> => {
+  const currentCards =
+    (data.props.slots.CardSlot as unknown as ComponentData<EventCardProps>[]) ??
+    [];
+
+  return setDeep(
+    data,
+    "props.slots.CardSlot",
+    buildListSectionCards<EventCardProps, Record<string, unknown>>({
+      currentCards,
+      items: resolvedItems,
+      createCard: () => createEventCard(currentCards),
+      decorateCard: (card, item, index) => ({
+        ...card,
+        props: {
+          ...card.props,
+          index,
+          itemData: toEventCardItemData(
+            item,
+            data.props.data.field,
+            data.props.cards
+          ),
+        },
+      }),
+    })
+  );
 };
 
 const EventCardsWrapperComponent: PuckComponent<EventCardsWrapperProps> = ({
   slots,
-}) => {
-  return (
-    <CardContextProvider>
-      <slots.CardSlot className="flex flex-col gap-8" allow={[]} />
-    </CardContextProvider>
-  );
-};
+}) => (
+  <CardContextProvider>
+    <slots.CardSlot className="flex flex-col gap-8" allow={[]} />
+  </CardContextProvider>
+);
 
 export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
   label: msg("components.eventCardsWrapper", "Event Cards"),
   fields: eventCardsWrapperFields,
   defaultProps: {
     ...eventCards.defaultProps,
-    data: eventCards.defaultProps.data!,
-    cards: eventCards.defaultProps.cards!,
+    data: {
+      ...eventCards.defaultProps.data!,
+      constantValue: [{}, {}, {}] as EventCardItem[],
+    },
+    cards: {
+      ...(eventCards.defaultProps.cards as EventCardItem),
+      cta: {
+        field: "",
+        constantValueEnabled: false,
+        constantValue: defaultEventCta,
+      },
+    },
     styles: {
       showImage: true,
       showDateTime: true,
@@ -186,7 +228,20 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
       showCTA: true,
     },
     slots: {
-      CardSlot: [],
+      CardSlot: [
+        defaultEventCardSlotData(
+          undefined,
+          0
+        ) as unknown as ComponentData<EventCardProps>,
+        defaultEventCardSlotData(
+          undefined,
+          1
+        ) as unknown as ComponentData<EventCardProps>,
+        defaultEventCardSlotData(
+          undefined,
+          2
+        ) as unknown as ComponentData<EventCardProps>,
+      ],
     },
   },
   resolveFields: (data) =>
@@ -194,6 +249,16 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
       ...eventCardsWrapperFields,
       ...eventCards.resolveFields(data),
     }),
-  resolveData: (data, params) => eventCards.resolveItems(data, params).data,
+  resolveData: (data, params) => {
+    const normalizedData = eventCards.normalizeData(data, params);
+    const resolvedItems = eventCards.resolveItems(
+      normalizedData.props.data,
+      normalizedData.props.cards,
+      (params.metadata?.streamDocument ?? {}) as StreamDocument,
+      i18nComponentsInstance.language || "en"
+    );
+
+    return syncCards(normalizedData, resolvedItems);
+  },
   render: (props) => <EventCardsWrapperComponent {...props} />,
 };

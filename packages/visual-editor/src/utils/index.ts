@@ -18,7 +18,7 @@ export {
 } from "./migrate.ts";
 export { resolveComponentData } from "./resolveComponentData.tsx";
 export { resolveYextEntityField } from "./resolveYextEntityField.ts";
-export { createMappedItems } from "./cardSlots/createMappedItems.ts";
+export { createItemSource } from "./itemSource/createItemSource.ts";
 export {
   createSearchAnalyticsConfig,
   createSearchHeadlessConfig,

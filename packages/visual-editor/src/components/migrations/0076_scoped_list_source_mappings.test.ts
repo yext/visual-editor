@@ -2,6 +2,27 @@ import { describe, expect, it } from "vitest";
 import { migrate } from "../../utils/migrate.ts";
 import { scopedListSourceMappingsMigration } from "./0076_scoped_list_source_mappings.ts";
 
+const runMigration = (
+  content: Record<string, any>,
+  streamDocument: Record<string, unknown> = {}
+): Record<string, any> =>
+  migrate(
+    {
+      root: {
+        props: {
+          version: 0,
+        },
+      },
+      content: [content],
+      zones: {},
+    },
+    [scopedListSourceMappingsMigration],
+    {
+      components: {},
+    },
+    streamDocument
+  ).content[0];
+
 describe("scopedListSourceMappingsMigration", () => {
   it.each([
     {
@@ -28,9 +49,10 @@ describe("scopedListSourceMappingsMigration", () => {
           },
         },
       },
-      getWrapper: (props: Record<string, any>) =>
+      getProps: (props: Record<string, any>) =>
         props.slots.CardsWrapperSlot[0].props,
       expectedField: "c_events.events",
+      mappingFieldName: "cards",
       expectedMappings: {
         title: "title",
         date: "dateTime",
@@ -63,9 +85,10 @@ describe("scopedListSourceMappingsMigration", () => {
           },
         },
       },
-      getWrapper: (props: Record<string, any>) =>
+      getProps: (props: Record<string, any>) =>
         props.slots.CardsWrapperSlot[0].props,
       expectedField: "c_products.products",
+      mappingFieldName: "cards",
       expectedMappings: {
         image: "image",
         brow: "brow",
@@ -101,9 +124,10 @@ describe("scopedListSourceMappingsMigration", () => {
           },
         },
       },
-      getWrapper: (props: Record<string, any>) =>
+      getProps: (props: Record<string, any>) =>
         props.slots.CardsWrapperSlot[0].props,
       expectedField: "c_insights.insights",
+      mappingFieldName: "cards",
       expectedMappings: {
         image: "image",
         name: "name",
@@ -137,9 +161,10 @@ describe("scopedListSourceMappingsMigration", () => {
           },
         },
       },
-      getWrapper: (props: Record<string, any>) =>
+      getProps: (props: Record<string, any>) =>
         props.slots.CardsWrapperSlot[0].props,
       expectedField: "c_team.people",
+      mappingFieldName: "cards",
       expectedMappings: {
         headshot: "headshot",
         name: "name",
@@ -175,9 +200,10 @@ describe("scopedListSourceMappingsMigration", () => {
           },
         },
       },
-      getWrapper: (props: Record<string, any>) =>
+      getProps: (props: Record<string, any>) =>
         props.slots.CardsWrapperSlot[0].props,
       expectedField: "c_testimonials.testimonials",
+      mappingFieldName: "cards",
       expectedMappings: {
         description: "description",
         contributorName: "contributorName",
@@ -185,7 +211,7 @@ describe("scopedListSourceMappingsMigration", () => {
       },
     },
     {
-      name: "legacy FAQSection wrapper slot",
+      name: "FAQSection",
       streamDocument: {
         c_faq: { faqs: [{ question: "Q", answer: { html: "<p>A</p>" } }] },
       },
@@ -193,63 +219,37 @@ describe("scopedListSourceMappingsMigration", () => {
         type: "FAQSection",
         props: {
           id: "faq-section",
-          slots: {
-            FAQsWrapperSlot: [
-              {
-                type: "FAQsWrapperSlot",
-                props: {
-                  id: "faq-wrapper",
-                  data: {
-                    field: "c_faq",
-                    constantValueEnabled: false,
-                    constantValue: [],
-                  },
-                },
-              },
-            ],
+          data: {
+            field: "c_faq",
+            constantValueEnabled: false,
+            constantValue: [],
           },
         },
       },
-      getWrapper: (props: Record<string, any>) =>
-        props.slots.FAQsWrapperSlot[0].props,
+      getProps: (props: Record<string, any>) => props,
       expectedField: "c_faq.faqs",
+      mappingFieldName: "faqs",
       expectedMappings: {
         question: "question",
         answer: "answer",
       },
-      mappingFieldName: "faqs",
     },
   ])(
-    "migrates old $name source-driven wrapper props to scoped mappings",
+    "migrates linked $name props from main to the item source schema",
     ({
       content,
       expectedField,
       expectedMappings,
-      getWrapper,
-      mappingFieldName = "cards",
+      getProps,
+      mappingFieldName,
       streamDocument,
     }) => {
-      const migratedData = migrate(
-        {
-          root: {
-            props: {
-              version: 0,
-            },
-          },
-          content: [content],
-          zones: {},
-        },
-        [scopedListSourceMappingsMigration],
-        {
-          components: {},
-        },
-        streamDocument
+      const migratedProps = getProps(
+        runMigration(content, streamDocument).props
       );
 
-      const wrapperProps = getWrapper(migratedData.content[0].props);
-
-      expect(wrapperProps.data.field).toBe(expectedField);
-      expect(wrapperProps[mappingFieldName]).toEqual(
+      expect(migratedProps.data.field).toBe(expectedField);
+      expect(migratedProps[mappingFieldName]).toEqual(
         Object.fromEntries(
           Object.entries(expectedMappings).map(([key, field]) => [
             key,
@@ -259,4 +259,298 @@ describe("scopedListSourceMappingsMigration", () => {
       );
     }
   );
+
+  it("extracts manual EventCardsWrapper card values into inline constantValue items", () => {
+    const migrated = runMigration({
+      type: "EventCardsWrapper",
+      props: {
+        id: "event-wrapper",
+        data: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: [{ id: "event-card-1" }],
+        },
+        slots: {
+          CardSlot: [
+            {
+              type: "EventCard",
+              props: {
+                slots: {
+                  TitleSlot: [
+                    {
+                      props: {
+                        data: {
+                          text: {
+                            field: "",
+                            constantValueEnabled: true,
+                            constantValue: { defaultValue: "Summer Social" },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                  DateTimeSlot: [
+                    {
+                      props: {
+                        data: {
+                          date: {
+                            field: "",
+                            constantValueEnabled: true,
+                            constantValue: "2026-06-01T12:00:00",
+                          },
+                        },
+                      },
+                    },
+                  ],
+                  DescriptionSlot: [
+                    {
+                      props: {
+                        data: {
+                          text: {
+                            field: "",
+                            constantValueEnabled: true,
+                            constantValue: { defaultValue: "Join us." },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                  CTASlot: [
+                    {
+                      props: {
+                        data: {
+                          entityField: {
+                            field: "",
+                            constantValueEnabled: true,
+                            constantValue: {
+                              label: { defaultValue: "RSVP" },
+                              link: "/rsvp",
+                              linkType: "URL",
+                              ctaType: "textAndLink",
+                            },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                  ImageSlot: [
+                    {
+                      props: {
+                        data: {
+                          image: {
+                            field: "",
+                            constantValueEnabled: true,
+                            constantValue: {
+                              url: "https://example.com/event.jpg",
+                            },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
+      },
+    });
+
+    expect(migrated.props.data.constantValue).toEqual([
+      {
+        title: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: { defaultValue: "Summer Social" },
+        },
+        date: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: "2026-06-01T12:00:00",
+        },
+        description: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: { defaultValue: "Join us." },
+        },
+        cta: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: {
+            label: { defaultValue: "RSVP" },
+            link: "/rsvp",
+            linkType: "URL",
+            ctaType: "textAndLink",
+          },
+        },
+        image: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: { url: "https://example.com/event.jpg" },
+        },
+      },
+    ]);
+  });
+
+  it("extracts manual TeamCardsWrapper email values from the legacy email list field", () => {
+    const migrated = runMigration({
+      type: "TeamCardsWrapper",
+      props: {
+        id: "team-wrapper",
+        data: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: [{ id: "team-card-1" }],
+        },
+        slots: {
+          CardSlot: [
+            {
+              type: "TeamCard",
+              props: {
+                slots: {
+                  ImageSlot: [
+                    {
+                      props: {
+                        data: {
+                          image: {
+                            constantValue: {
+                              url: "https://example.com/headshot.jpg",
+                            },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                  NameSlot: [
+                    {
+                      props: {
+                        data: {
+                          text: {
+                            constantValue: { defaultValue: "Alex Agent" },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                  TitleSlot: [
+                    {
+                      props: {
+                        data: {
+                          text: { constantValue: { defaultValue: "Broker" } },
+                        },
+                      },
+                    },
+                  ],
+                  PhoneSlot: [
+                    {
+                      props: {
+                        data: {
+                          phoneNumbers: [
+                            {
+                              number: {
+                                field: "",
+                                constantValueEnabled: true,
+                                constantValue: "+12025550123",
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    },
+                  ],
+                  EmailSlot: [
+                    {
+                      props: {
+                        data: {
+                          list: {
+                            field: "",
+                            constantValueEnabled: true,
+                            constantValue: ["alex@example.com"],
+                          },
+                        },
+                      },
+                    },
+                  ],
+                  CTASlot: [
+                    {
+                      props: {
+                        data: {
+                          entityField: {
+                            field: "",
+                            constantValueEnabled: true,
+                            constantValue: {
+                              label: { defaultValue: "View Profile" },
+                              link: "/team/alex",
+                              linkType: "URL",
+                              ctaType: "textAndLink",
+                            },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
+      },
+    });
+
+    expect(migrated.props.data.constantValue[0]?.email).toEqual({
+      field: "",
+      constantValueEnabled: true,
+      constantValue: "alex@example.com",
+    });
+  });
+
+  it("extracts manual FAQSection card values into inline FAQ items", () => {
+    const migrated = runMigration({
+      type: "FAQSection",
+      props: {
+        id: "faq-section",
+        data: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: [{ id: "faq-card-1" }],
+        },
+        slots: {
+          CardSlot: [
+            {
+              type: "FAQCard",
+              props: {
+                data: {
+                  question: {
+                    field: "",
+                    constantValueEnabled: true,
+                    constantValue: { defaultValue: "What are your hours?" },
+                  },
+                  answer: {
+                    field: "",
+                    constantValueEnabled: true,
+                    constantValue: { html: "<p>9 to 5</p>" },
+                  },
+                },
+              },
+            },
+          ],
+        },
+      },
+    });
+
+    expect(migrated.props.data.constantValue).toEqual([
+      {
+        question: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: { defaultValue: "What are your hours?" },
+        },
+        answer: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: { html: "<p>9 to 5</p>" },
+        },
+      },
+    ]);
+  });
 });

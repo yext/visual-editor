@@ -11,7 +11,6 @@ import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { defaultTestimonialCardSlotData } from "./TestimonialCard.tsx";
 import { TestimonialCardsWrapperProps } from "./TestimonialCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
@@ -157,22 +156,7 @@ export const TestimonialSection: YextComponentConfig<TestimonialSectionProps> =
           {
             type: "TestimonialCardsWrapper",
             props: {
-              data: {
-                field: "",
-                constantValueEnabled: true,
-                constantValue: [{}, {}, {}],
-              },
-              slots: {
-                CardSlot: [
-                  defaultTestimonialCardSlotData(undefined, 0),
-                  defaultTestimonialCardSlotData(undefined, 1),
-                  defaultTestimonialCardSlotData(undefined, 2),
-                ],
-              },
-              styles: {
-                showName: true,
-                showDate: true,
-              },
+              ...(TestimonialCardsWrapper.defaultProps as TestimonialCardsWrapperProps),
             } satisfies TestimonialCardsWrapperProps,
           },
         ],

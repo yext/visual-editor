@@ -1,32 +1,46 @@
-import { ProductSectionType, ProductStruct } from "../../../types/types.ts";
-import { ComponentFields } from "../../../types/fields.ts";
+import {
+  type ComponentData,
+  PuckComponent,
+  type Slot,
+  setDeep,
+} from "@puckeditor/core";
+import { type ProductStruct } from "../../../types/types.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
-import { ComponentData, PuckComponent } from "@puckeditor/core";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
-import { CardWrapperType } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 import {
   defaultProductCardSlotData,
-  ProductCardProps,
+  type ProductCardProps,
 } from "./ProductCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
-import { ProductSectionVariant } from "./ProductSection.tsx";
-import { toPuckFields, YextComponentConfig } from "../../../fields/fields.ts";
+import {
+  toPuckFields,
+  type YextComponentConfig,
+  type YextFields,
+} from "../../../fields/fields.ts";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
-import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
+import { type YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
+import { type StreamDocument, createItemSource } from "../../../utils/index.ts";
+import { buildListSectionCards } from "../../../utils/cardSlots/listSectionData.ts";
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
-import { createMappedItems } from "../../../utils/cardSlots/createMappedItems.ts";
-import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+import { type ProductSectionVariant } from "./ProductSection.tsx";
 
-export type ProductCardsWrapperProps = CardWrapperType<ProductSectionType> & {
-  cards?: {
-    image: YextEntityField<ProductStruct["image"]>;
-    brow: YextEntityField<ProductStruct["brow"]>;
-    name: YextEntityField<ProductStruct["name"]>;
-    price: YextEntityField<string>;
-    description: YextEntityField<ProductStruct["description"]>;
-    cta: YextEntityField<ProductStruct["cta"]>;
+type ProductCardItem = {
+  image: YextEntityField<ProductStruct["image"]>;
+  brow: YextEntityField<ProductStruct["brow"]>;
+  name: YextEntityField<ProductStruct["name"]>;
+  price: YextEntityField<string>;
+  description: YextEntityField<ProductStruct["description"]>;
+  cta: YextEntityField<ProductStruct["cta"]>;
+};
+
+export type ProductCardsWrapperProps = {
+  data: {
+    field: string;
+    constantValueEnabled?: boolean;
+    constantValue: ProductCardItem[];
   };
+  cards?: ProductCardItem;
   styles: {
     showImage: boolean;
     showBrow: boolean;
@@ -35,6 +49,9 @@ export type ProductCardsWrapperProps = CardWrapperType<ProductSectionType> & {
     showDescription: boolean;
     showCTA: boolean;
     variant?: ProductSectionVariant;
+  };
+  slots: {
+    CardSlot: Slot;
   };
 };
 
@@ -45,97 +62,56 @@ const defaultProductCta = {
   ctaType: "textAndLink",
 } satisfies ProductStruct["cta"];
 
-const productCardsBase = createMappedItems<ProductCardsWrapperProps>({
-  sourceFieldPath: "data.field",
-  mappingGroupPath: "cards",
-  sourceLabel: msg("components.products", "Products"),
-  mappingGroupLabel: msg("fields.cards", "Cards"),
-  mappings: {
-    image: {
-      label: msg("fields.image", "Image"),
-      types: ["type.image"],
-      defaultValue: undefined,
+const productCards = createItemSource<
+  ProductCardsWrapperProps,
+  ProductCardItem
+>({
+  itemSourcePath: "data",
+  itemMappingsPath: "cards",
+  itemSourceLabel: msg("components.products", "Products"),
+  itemMappingsLabel: msg("fields.cards", "Cards"),
+  itemFields: {
+    image: YextField(msg("fields.image", "Image"), {
+      type: "entityField",
       disableConstantValueToggle: true,
-    },
-    brow: {
-      label: msg("fields.browText", "Brow Text"),
-      types: ["type.string", "type.rich_text_v2"],
-      defaultValue: { defaultValue: "" },
-    },
-    name: {
-      label: msg("fields.name", "Name"),
-      types: ["type.string"],
-      defaultValue: { defaultValue: "" },
-    },
-    price: {
-      label: msg("fields.price", "Price"),
-      types: ["type.string"],
-      defaultValue: "",
-    },
-    description: {
-      label: msg("fields.description", "Description"),
-      types: ["type.string", "type.rich_text_v2"],
-      defaultValue: { defaultValue: "" },
-    },
-    cta: {
-      label: msg("fields.cta", "CTA"),
-      types: ["type.cta"],
-      defaultValue: defaultProductCta,
-    },
-  },
-}).withConstantValueMode({
-  constantValueType: ComponentFields.ProductSection.type,
-});
-
-const productCards = productCardsBase.withRepeatedSlot({
-  slotPath: "slots.CardSlot",
-  createItem: (id, index, existingItem) =>
-    defaultProductCardSlotData(
-      id,
-      index,
-      existingItem?.props.styles.backgroundColor,
-      existingItem ? gatherSlotStyles(existingItem.props.slots) : undefined
-    ) as unknown as ComponentData<ProductCardProps>,
-  getItemData: (item, resolvedData) => {
-    const locale = i18nComponentsInstance.language || "en";
-    const name = productCardsBase.resolveMapping<ProductStruct["name"]>(
-      resolvedData.props.cards?.name,
-      item,
-      locale
-    );
-
-    return {
-      field: resolvedData.props.data.field,
-      image: productCardsBase.resolveMapping<ProductStruct["image"]>(
-        resolvedData.props.cards?.image,
-        item,
-        locale
-      ),
-      brow: productCardsBase.resolveMapping<ProductStruct["brow"]>(
-        resolvedData.props.cards?.brow,
-        item,
-        locale
-      ),
-      name: name ? resolveComponentData(name, locale, item) : undefined,
-      description: productCardsBase.resolveMapping<
-        ProductStruct["description"]
-      >(resolvedData.props.cards?.description, item, locale),
-      cta:
-        productCardsBase.resolveMapping<ProductStruct["cta"]>(
-          resolvedData.props.cards?.cta,
-          item,
-          locale
-        ) ?? defaultProductCta,
-      priceText: productCardsBase.resolveMapping<string>(
-        resolvedData.props.cards?.price,
-        item,
-        locale
-      ),
-    };
+      filter: {
+        types: ["type.image"],
+      },
+    }),
+    brow: YextField(msg("fields.browText", "Brow Text"), {
+      type: "entityField",
+      filter: {
+        types: ["type.string", "type.rich_text_v2"],
+      },
+    }),
+    name: YextField(msg("fields.name", "Name"), {
+      type: "entityField",
+      filter: {
+        types: ["type.string"],
+      },
+    }),
+    price: YextField(msg("fields.price", "Price"), {
+      type: "entityField",
+      filter: {
+        types: ["type.string"],
+      },
+    }),
+    description: YextField(msg("fields.description", "Description"), {
+      type: "entityField",
+      filter: {
+        types: ["type.string", "type.rich_text_v2"],
+      },
+    }),
+    cta: YextField(msg("fields.cta", "CTA"), {
+      type: "entityField",
+      filter: {
+        types: ["type.cta"],
+      },
+    }),
   },
 });
 
-const productCardsWrapperFields = {
+const productCardsWrapperFields: YextFields<ProductCardsWrapperProps> = {
   ...productCards.fields,
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
@@ -172,20 +148,75 @@ const productCardsWrapperFields = {
       },
     },
   }),
+  slots: {
+    type: "object",
+    objectFields: {
+      CardSlot: { type: "slot", allow: [] },
+    },
+    visible: false,
+  },
+};
+
+const createProductCard = (
+  currentCards: ComponentData<ProductCardProps>[]
+): ComponentData<ProductCardProps> => {
+  const existingCard = currentCards[0];
+
+  return defaultProductCardSlotData(
+    `ProductCard-${crypto.randomUUID()}`,
+    undefined,
+    existingCard?.props.styles.backgroundColor,
+    existingCard ? gatherSlotStyles(existingCard.props.slots) : undefined
+  ) as unknown as ComponentData<ProductCardProps>;
+};
+
+const syncCards = (
+  data: ComponentData<ProductCardsWrapperProps>,
+  resolvedItems: Record<string, unknown>[]
+): ComponentData<ProductCardsWrapperProps> => {
+  const currentCards =
+    (data.props.slots
+      .CardSlot as unknown as ComponentData<ProductCardProps>[]) ?? [];
+
+  return setDeep(
+    data,
+    "props.slots.CardSlot",
+    buildListSectionCards<ProductCardProps, Record<string, unknown>>({
+      currentCards,
+      items: resolvedItems,
+      createCard: () => createProductCard(currentCards),
+      decorateCard: (card, item, index) => ({
+        ...card,
+        props: {
+          ...card.props,
+          index,
+          itemData: {
+            field: data.props.data.field,
+            image: item.image as ProductStruct["image"],
+            brow: item.brow as ProductStruct["brow"],
+            name: item.name as ProductStruct["name"],
+            description: item.description as ProductStruct["description"],
+            cta:
+              (item.cta as ProductStruct["cta"] | undefined) ??
+              defaultProductCta,
+            priceText: item.price as string | undefined,
+          },
+        },
+      }),
+    })
+  );
 };
 
 const ProductCardsWrapperComponent: PuckComponent<ProductCardsWrapperProps> = ({
   slots,
-}) => {
-  return (
-    <CardContextProvider>
-      <slots.CardSlot
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 align-stretch"
-        allow={[]}
-      />
-    </CardContextProvider>
-  );
-};
+}) => (
+  <CardContextProvider>
+    <slots.CardSlot
+      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 align-stretch"
+      allow={[]}
+    />
+  </CardContextProvider>
+);
 
 export const ProductCardsWrapper: YextComponentConfig<ProductCardsWrapperProps> =
   {
@@ -193,8 +224,18 @@ export const ProductCardsWrapper: YextComponentConfig<ProductCardsWrapperProps> 
     fields: productCardsWrapperFields,
     defaultProps: {
       ...productCards.defaultProps,
-      data: productCards.defaultProps.data!,
-      cards: productCards.defaultProps.cards!,
+      data: {
+        ...productCards.defaultProps.data!,
+        constantValue: [{}, {}, {}] as ProductCardItem[],
+      },
+      cards: {
+        ...(productCards.defaultProps.cards as ProductCardItem),
+        cta: {
+          field: "",
+          constantValueEnabled: false,
+          constantValue: defaultProductCta,
+        },
+      },
       styles: {
         showImage: true,
         showBrow: true,
@@ -204,7 +245,11 @@ export const ProductCardsWrapper: YextComponentConfig<ProductCardsWrapperProps> 
         showCTA: true,
       },
       slots: {
-        CardSlot: [],
+        CardSlot: [
+          defaultProductCardSlotData() as unknown as ComponentData<ProductCardProps>,
+          defaultProductCardSlotData() as unknown as ComponentData<ProductCardProps>,
+          defaultProductCardSlotData() as unknown as ComponentData<ProductCardProps>,
+        ],
       },
     },
     resolveFields: (data) =>
@@ -212,6 +257,16 @@ export const ProductCardsWrapper: YextComponentConfig<ProductCardsWrapperProps> 
         ...productCardsWrapperFields,
         ...productCards.resolveFields(data),
       }),
-    resolveData: (data, params) => productCards.resolveItems(data, params).data,
+    resolveData: (data, params) => {
+      const normalizedData = productCards.normalizeData(data, params);
+      const resolvedItems = productCards.resolveItems(
+        normalizedData.props.data,
+        normalizedData.props.cards,
+        (params.metadata?.streamDocument ?? {}) as StreamDocument,
+        i18nComponentsInstance.language || "en"
+      );
+
+      return syncCards(normalizedData, resolvedItems);
+    },
     render: (props) => <ProductCardsWrapperComponent {...props} />,
   };

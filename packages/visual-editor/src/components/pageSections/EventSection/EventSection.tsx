@@ -10,9 +10,11 @@ import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { defaultEventCardSlotData } from "./EventCard.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
-import { EventCardsWrapperProps } from "./EventCardsWrapper.tsx";
+import {
+  EventCardsWrapper,
+  type EventCardsWrapperProps,
+} from "./EventCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 import { hasResolvedMappedListSource } from "../../../utils/cardSlots/mappedSource.ts";
@@ -153,24 +155,7 @@ export const EventSection: YextComponentConfig<EventSectionProps> = {
         {
           type: "EventCardsWrapper",
           props: {
-            data: {
-              field: "",
-              constantValueEnabled: true,
-              constantValue: [{}, {}, {}], // leave ids blank to auto-generate
-            },
-            styles: {
-              showImage: true,
-              showDateTime: true,
-              showDescription: true,
-              showCTA: true,
-            },
-            slots: {
-              CardSlot: [
-                defaultEventCardSlotData(undefined, 0),
-                defaultEventCardSlotData(undefined, 1),
-                defaultEventCardSlotData(undefined, 2),
-              ],
-            },
+            ...(EventCardsWrapper.defaultProps as EventCardsWrapperProps),
           } satisfies EventCardsWrapperProps,
         },
       ],

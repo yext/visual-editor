@@ -13,8 +13,10 @@ import { PuckComponent, Slot, setDeep } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
-import { defaultInsightCardSlotData } from "./InsightCard.tsx";
-import { InsightCardsWrapperProps } from "./InsightCardsWrapper.tsx";
+import {
+  InsightCardsWrapper,
+  type InsightCardsWrapperProps,
+} from "./InsightCardsWrapper.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 import { hasResolvedMappedListSource } from "../../../utils/cardSlots/mappedSource.ts";
 
@@ -156,25 +158,7 @@ export const InsightSection: YextComponentConfig<InsightSectionProps> = {
         {
           type: "InsightCardsWrapper",
           props: {
-            data: {
-              field: "",
-              constantValueEnabled: true,
-              constantValue: [{}, {}, {}], // leave ids blank to auto-generate
-            },
-            styles: {
-              showImage: true,
-              showCategory: true,
-              showPublishTime: true,
-              showDescription: true,
-              showCTA: true,
-            },
-            slots: {
-              CardSlot: [
-                defaultInsightCardSlotData(undefined, 0),
-                defaultInsightCardSlotData(undefined, 1),
-                defaultInsightCardSlotData(undefined, 2),
-              ],
-            },
+            ...(InsightCardsWrapper.defaultProps as InsightCardsWrapperProps),
           } satisfies InsightCardsWrapperProps,
         },
       ],

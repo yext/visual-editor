@@ -1,7 +1,12 @@
-import { ComponentData, PuckComponent, setDeep, Slot } from "@puckeditor/core";
+import {
+  type ComponentData,
+  PuckComponent,
+  setDeep,
+  type Slot,
+} from "@puckeditor/core";
 import {
   backgroundColors,
-  ThemeColor,
+  type ThemeColor,
   ThemeOptions,
 } from "../../../utils/themeConfigOptions.ts";
 import { PageSection } from "../../atoms/pageSection.tsx";
@@ -9,121 +14,73 @@ import { YextField } from "../../../editor/YextField.tsx";
 import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
-import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
-import { FAQSectionType } from "../../../types/types.ts";
-import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
-import { ComponentFields } from "../../../types/fields.ts";
+import { type HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
+import {
+  type FAQSectionType,
+  type TranslatableRichText,
+  type TranslatableString,
+} from "../../../types/types.ts";
+import { type YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { defaultFAQCardData, FAQCardProps } from "./FAQCard.tsx";
+import { defaultFAQCardData, type FAQCardProps } from "./FAQCard.tsx";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import {
   toPuckFields,
-  YextComponentConfig,
+  type YextComponentConfig,
   type YextFields,
 } from "../../../fields/fields.ts";
-import { createMappedItems } from "../../../utils/cardSlots/createMappedItems.ts";
+import { type StreamDocument, createItemSource } from "../../../utils/index.ts";
+import { buildListSectionCards } from "../../../utils/cardSlots/listSectionData.ts";
+
+type FAQItem = {
+  question: YextEntityField<TranslatableString | TranslatableRichText>;
+  answer: YextEntityField<TranslatableRichText>;
+};
 
 export interface FAQStyles {
-  /**
-   * The background color of the section.
-   * @defaultValue Background Color 3
-   */
   backgroundColor?: ThemeColor;
-
-  /**
-   * Whether to show the section heading.
-   * @defaultValue true
-   */
   showSectionHeading: boolean;
 }
 
 export interface FAQSectionProps {
-  data: Omit<YextEntityField<FAQSectionType>, "constantValue"> & {
-    constantValue: {
-      id?: string;
-    }[];
+  data: {
+    field: string;
+    constantValueEnabled?: boolean;
+    constantValue: FAQItem[];
   };
-  faqs?: {
-    question: YextEntityField<FAQSectionType["faqs"][number]["question"]>;
-    answer: YextEntityField<FAQSectionType["faqs"][number]["answer"]>;
-  };
-
-  /**
-   * This object contains properties for customizing the component's appearance.
-   * @propCategory Style Props
-   */
+  faqs?: FAQItem;
   styles: FAQStyles;
-
   slots: {
     HeadingSlot: Slot;
     CardSlot: Slot;
   };
-
-  /** @internal */
   analytics: {
     scope?: string;
   };
-
-  /** @internal */
   hasResolvedSource?: boolean;
-
-  /**
-   * If 'true', the component is visible on the live page; if 'false', it's hidden.
-   * @defaultValue true
-   */
   liveVisibility: boolean;
 }
 
-const faqsBase = createMappedItems<FAQSectionProps>({
-  sourceFieldPath: "data.field",
-  mappingGroupPath: "faqs",
-  sourceLabel: msg("fields.faqs", "FAQs"),
-  mappingGroupLabel: msg("fields.faqMapping", "FAQ Mapping"),
-  mappings: {
-    question: {
-      label: msg("fields.question", "Question"),
-      types: ["type.string", "type.rich_text_v2"],
-      defaultValue: { defaultValue: "" },
-    },
-    answer: {
-      label: msg("fields.answer", "Answer"),
-      types: ["type.rich_text_v2"],
-      defaultValue: { defaultValue: "" },
-    },
-  },
-}).withConstantValueMode({
-  constantValueType: ComponentFields.FAQSection.type,
-  defaultConstantValue: [{}, {}, {}],
-});
-
-const faqs = faqsBase.withRepeatedSlot({
-  slotPath: "slots.CardSlot",
-  createItem: (id, index, existingItem) =>
-    defaultFAQCardData(
-      id,
-      index,
-      existingItem?.props.styles.questionVariant,
-      existingItem?.props.styles.answerVariant,
-      existingItem?.props.styles.answerColor
-    ) as unknown as ComponentData<FAQCardProps>,
-  getItemData: (item, resolvedData) => {
-    const locale = i18nComponentsInstance.language || "en";
-
-    return {
-      field: resolvedData.props.data.field,
-      question: faqsBase.resolveMapping(
-        resolvedData.props.faqs?.question,
-        item,
-        locale
-      ) ?? { defaultValue: "" },
-      answer: faqsBase.resolveMapping(
-        resolvedData.props.faqs?.answer,
-        item,
-        locale
-      ) ?? { defaultValue: "" },
-    };
+const faqs = createItemSource<FAQSectionProps, FAQItem>({
+  itemSourcePath: "data",
+  itemMappingsPath: "faqs",
+  itemSourceLabel: msg("fields.faqs", "FAQs"),
+  itemMappingsLabel: msg("fields.faqMapping", "FAQ Mapping"),
+  itemFields: {
+    question: YextField(msg("fields.question", "Question"), {
+      type: "entityField",
+      filter: {
+        types: ["type.string", "type.rich_text_v2"],
+      },
+    }),
+    answer: YextField(msg("fields.answer", "Answer"), {
+      type: "entityField",
+      filter: {
+        types: ["type.rich_text_v2"],
+      },
+    }),
   },
 });
 
@@ -172,6 +129,51 @@ const FAQsSectionFields: YextFields<FAQSectionProps> = {
   },
 };
 
+const syncCards = (
+  data: ComponentData<FAQSectionProps>,
+  resolvedItems: Record<string, unknown>[]
+): ComponentData<FAQSectionProps> => {
+  const currentCards =
+    (data.props.slots.CardSlot as unknown as ComponentData<FAQCardProps>[]) ??
+    [];
+  const existingCard = currentCards[0];
+
+  return setDeep(
+    data,
+    "props.slots.CardSlot",
+    buildListSectionCards<FAQCardProps, Record<string, unknown>>({
+      currentCards,
+      items: resolvedItems,
+      createCard: () =>
+        defaultFAQCardData(
+          `FAQCard-${crypto.randomUUID()}`,
+          undefined,
+          existingCard?.props.styles.questionVariant,
+          existingCard?.props.styles.answerVariant,
+          existingCard?.props.styles.answerColor
+        ) as unknown as ComponentData<FAQCardProps>,
+      decorateCard: (card, item, index) => ({
+        ...card,
+        props: {
+          ...card.props,
+          index,
+          itemData: {
+            field: data.props.data.field,
+            question:
+              (item.question as FAQSectionType["faqs"][number]["question"]) ?? {
+                defaultValue: "",
+              },
+            answer:
+              (item.answer as FAQSectionType["faqs"][number]["answer"]) ?? {
+                defaultValue: "",
+              },
+          },
+        },
+      }),
+    })
+  );
+};
+
 const FAQsSectionComponent: PuckComponent<FAQSectionProps> = ({
   styles,
   slots,
@@ -197,11 +199,6 @@ const FAQsSectionComponent: PuckComponent<FAQSectionProps> = ({
   );
 };
 
-/**
- * The FAQ Section component displays a list of questions and answers in an organized format.
- * It includes a main heading for the section and typically renders the FAQs as an accordion,
- * where users can click on a question to reveal the answer.
- */
 export const FAQSection: YextComponentConfig<FAQSectionProps> = {
   label: msg("components.faqsSection", "FAQs Section"),
   fields: FAQsSectionFields,
@@ -223,14 +220,25 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
         },
       ],
       CardSlot: [
-        defaultFAQCardData(undefined, 0),
-        defaultFAQCardData(undefined, 1),
-        defaultFAQCardData(undefined, 2),
+        defaultFAQCardData(
+          undefined,
+          0
+        ) as unknown as ComponentData<FAQCardProps>,
+        defaultFAQCardData(
+          undefined,
+          1
+        ) as unknown as ComponentData<FAQCardProps>,
+        defaultFAQCardData(
+          undefined,
+          2
+        ) as unknown as ComponentData<FAQCardProps>,
       ],
     },
     ...faqs.defaultProps,
-    data: faqs.defaultProps.data!,
-    faqs: faqs.defaultProps.faqs!,
+    data: {
+      ...faqs.defaultProps.data!,
+      constantValue: [{}, {}, {}] as FAQItem[],
+    },
     styles: {
       backgroundColor: backgroundColors.background2.value,
       showSectionHeading: true,
@@ -246,12 +254,19 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
       ...faqs.resolveFields(data),
     }),
   resolveData: (data, params) => {
-    const { data: nextData, items } = faqs.resolveItems(data, params);
+    const normalizedData = faqs.normalizeData(data, params);
+    const resolvedItems = faqs.resolveItems(
+      normalizedData.props.data,
+      normalizedData.props.faqs,
+      (params.metadata?.streamDocument ?? {}) as StreamDocument,
+      i18nComponentsInstance.language || "en"
+    );
+    const syncedData = syncCards(normalizedData, resolvedItems);
 
     return setDeep(
-      nextData,
+      syncedData,
       "props.hasResolvedSource",
-      nextData.props.data.constantValueEnabled || items.length > 0
+      syncedData.props.data.constantValueEnabled || resolvedItems.length > 0
     );
   },
   render: (props) => (

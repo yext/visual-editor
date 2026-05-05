@@ -11,8 +11,10 @@ import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 import { PuckComponent, Slot, setDeep } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { defaultProductCardSlotData } from "./ProductCard.tsx";
-import { ProductCardsWrapperProps } from "./ProductCardsWrapper.tsx";
+import {
+  ProductCardsWrapper,
+  type ProductCardsWrapperProps,
+} from "./ProductCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
@@ -178,26 +180,7 @@ export const ProductSection: YextComponentConfig<ProductSectionProps> = {
         {
           type: "ProductCardsWrapper",
           props: {
-            data: {
-              field: "",
-              constantValueEnabled: true,
-              constantValue: [{}, {}, {}], // leave ids blank to auto-generate
-            },
-            styles: {
-              showImage: true,
-              showBrow: true,
-              showTitle: true,
-              showPrice: true,
-              showDescription: true,
-              showCTA: true,
-            },
-            slots: {
-              CardSlot: [
-                defaultProductCardSlotData(),
-                defaultProductCardSlotData(),
-                defaultProductCardSlotData(),
-              ],
-            },
+            ...(ProductCardsWrapper.defaultProps as ProductCardsWrapperProps),
           } satisfies ProductCardsWrapperProps,
         },
       ],

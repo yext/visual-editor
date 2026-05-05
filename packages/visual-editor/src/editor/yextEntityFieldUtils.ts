@@ -230,8 +230,11 @@ export const getFieldsForSelector = (
     );
   }
 
+  const requiredDescendantTypes =
+    filter.itemSourceTypes ?? filter.mappedSourceTypes;
+
   const hasRequiredDescendants = (field: YextSchemaField): boolean => {
-    if (!filter.mappedSourceTypes?.length) {
+    if (!requiredDescendantTypes?.length) {
       return true;
     }
 
@@ -242,7 +245,7 @@ export const getFieldsForSelector = (
       }
     );
 
-    return filter.mappedSourceTypes.every((requiredTypes) => {
+    return requiredDescendantTypes.every((requiredTypes) => {
       const matchingFieldIndex = availableFields.findIndex(
         (availableField) =>
           getFilteredEntityFields(
@@ -262,6 +265,30 @@ export const getFieldsForSelector = (
       return true;
     });
   };
+
+  if (filter.itemSourceTypes?.length) {
+    return sortFields(
+      dedupeFieldsByName(
+        getListSourceRootFields(entityFields)
+          .filter(hasRequiredDescendants)
+          .filter((field) =>
+            !streamDocument
+              ? true
+              : (() => {
+                  const resolvedValue = resolveField<unknown>(
+                    streamDocument,
+                    field.name
+                  ).value;
+                  return (
+                    resolvedValue === undefined ||
+                    resolvedValue === null ||
+                    Array.isArray(resolvedValue)
+                  );
+                })()
+          )
+      )
+    );
+  }
 
   if (filter.mappedSourceTypes?.length) {
     const validLinkedEntityRootFields = getTopLevelLinkedEntitySourceFields(

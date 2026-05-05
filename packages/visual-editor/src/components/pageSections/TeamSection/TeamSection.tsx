@@ -11,8 +11,10 @@ import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { defaultTeamCardSlotData } from "./TeamCard.tsx";
-import { TeamCardsWrapperProps } from "./TeamCardsWrapper.tsx";
+import {
+  TeamCardsWrapper,
+  type TeamCardsWrapperProps,
+} from "./TeamCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
@@ -154,25 +156,7 @@ export const TeamSection: YextComponentConfig<TeamSectionProps> = {
         {
           type: "TeamCardsWrapper",
           props: {
-            data: {
-              field: "",
-              constantValueEnabled: true,
-              constantValue: [{}, {}, {}], // leave ids blank to auto-generate
-            },
-            styles: {
-              showImage: true,
-              showTitle: true,
-              showPhone: true,
-              showEmail: true,
-              showCTA: true,
-            },
-            slots: {
-              CardSlot: [
-                defaultTeamCardSlotData(undefined, 0),
-                defaultTeamCardSlotData(undefined, 1),
-                defaultTeamCardSlotData(undefined, 2),
-              ],
-            },
+            ...(TeamCardsWrapper.defaultProps as TeamCardsWrapperProps),
           } satisfies TeamCardsWrapperProps,
         },
       ],
