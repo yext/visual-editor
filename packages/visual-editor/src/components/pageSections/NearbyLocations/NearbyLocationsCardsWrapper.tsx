@@ -33,6 +33,10 @@ import {
   YextComponentConfig,
   YextFields,
 } from "../../../fields/fields.ts";
+import {
+  EMPTY_STATE_MARKER_ATTRIBUTE,
+  EmptyStateMarker,
+} from "../emptyStateMarker.tsx";
 
 export type NearbyLocationCardsWrapperProps = {
   /** The search parameters for finding nearby locations. */
@@ -334,7 +338,7 @@ const NearbyLocationCardsWrapperComponent: PuckComponent<
     if (puck.isEditing) {
       return <NearbyLocationsEmptyState radius={data.radius} />;
     } else {
-      return <div data-empty-state="true" />;
+      return <EmptyStateMarker />;
     }
   }
 
@@ -437,7 +441,7 @@ const NearbyLocationsEmptyState: React.FC<{
 
   return (
     <div
-      data-empty-state="true"
+      {...{ [EMPTY_STATE_MARKER_ATTRIBUTE]: "true" }}
       className="relative h-[300px] w-full bg-gray-100 rounded-lg border border-gray-200 flex flex-col items-center justify-center py-8 gap-2.5"
     >
       <MapPinOff className="w-12 h-12 text-gray-400" />
