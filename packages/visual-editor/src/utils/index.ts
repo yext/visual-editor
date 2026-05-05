@@ -24,8 +24,8 @@ export {
   type CardWrapperFieldsOptions,
   type CardWrapperType,
 } from "./cardSlots/cardWrapperHelpers.ts";
+export { createMappedItemsConfig } from "./cardSlots/createMappedItemsConfig.ts";
 export {
-  resolveMappedListFields,
   resolveMappedListWrapperData,
   syncConstantValueListCards,
 } from "./cardSlots/mappedListWrapper.ts";

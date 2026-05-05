@@ -415,4 +415,47 @@ describe("EventCardsWrapper", () => {
       "entityField"
     );
   });
+
+  it("clears scoped card field mappings when the source field changes", async () => {
+    const data = createWrapperData();
+    data.props.data.constantValueEnabled = false;
+    data.props.data.field = "c_locations";
+    data.props.cards = {
+      title: {
+        field: "name",
+        constantValue: { defaultValue: "" },
+        constantValueEnabled: false,
+      },
+      date: {
+        field: "eventDate",
+        constantValue: "",
+        constantValueEnabled: false,
+      },
+    } as EventCardsWrapperProps["cards"];
+
+    const resolvedData = await EventCardsWrapper.resolveData!(data, {
+      ...resolveParams({
+        c_locations: [{ name: "Downtown", eventDate: "2026-05-01T12:00:00" }],
+      }),
+      lastData: {
+        type: "EventCardsWrapper",
+        props: {
+          ...JSON.parse(JSON.stringify(EventCardsWrapper.defaultProps)),
+          data: {
+            field: "c_oldLocations",
+            constantValueEnabled: false,
+            constantValue: [{}, {}, {}],
+          },
+        },
+      },
+      trigger: "data",
+      changed: { data: true },
+    } as any);
+
+    expect(resolvedData.props!.cards?.title.field).toBe("");
+    expect(resolvedData.props!.cards?.date.field).toBe("");
+    expect(resolvedData.props!.cards?.title.constantValue).toEqual({
+      defaultValue: "",
+    });
+  });
 });

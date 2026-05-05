@@ -5,21 +5,14 @@ import { msg } from "../../../utils/i18n/platform.ts";
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
-import {
-  cardWrapperFields,
-  CardWrapperType,
-  createScopedMappingFields,
-} from "../../../utils/cardSlots/cardWrapperHelpers.ts";
+import { CardWrapperType } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 import { defaultEventCardSlotData, EventCardProps } from "./EventCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
-import { YextComponentConfig } from "../../../fields/fields.ts";
+import { toPuckFields, YextComponentConfig } from "../../../fields/fields.ts";
 import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
-import {
-  resolveMappedListFields,
-  resolveMappedListWrapperData,
-} from "../../../utils/cardSlots/mappedListWrapper.ts";
-import { resolveMappedSourceField } from "../../../utils/cardSlots/mappedSource.ts";
+import { resolveMappedListWrapperData } from "../../../utils/cardSlots/mappedListWrapper.ts";
+import { createMappedItemsConfig } from "../../../utils/cardSlots/createMappedItemsConfig.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 
 export type EventCardsWrapperProps = CardWrapperType<EventSectionType> & {
@@ -45,48 +38,60 @@ const defaultEventCta = {
   ctaType: "textAndLink",
 } satisfies EventStruct["cta"];
 
-const createEventCardsMappingFields = (sourceFieldPath?: string) =>
-  createScopedMappingFields(msg("fields.cards", "Cards"), sourceFieldPath, {
+const eventCards = createMappedItemsConfig<EventCardsWrapperProps>({
+  sourceFieldPath: "data.field",
+  mappingGroupPath: "cards",
+  sourceLabel: msg("components.events", "Events"),
+  mappingGroupLabel: msg("fields.cards", "Cards"),
+  constantValueType: ComponentFields.EventSection.type,
+  defaultConstantValue: [{}, {}, {}],
+  listFieldName: "events",
+  sourceRootKinds: ["linkedEntityRoot", "baseListRoot"],
+  sourceRootsOnly: true,
+  requiredDescendantTypes: [
+    ["type.string"],
+    ["type.datetime"],
+    ["type.string", "type.rich_text_v2"],
+    ["type.cta"],
+    ["type.image"],
+  ],
+  mappings: {
     title: {
       label: msg("fields.title", "Title"),
       types: ["type.string"],
+      defaultValue: { defaultValue: "" },
     },
     date: {
       label: msg("fields.date", "Date"),
       types: ["type.datetime"],
+      defaultValue: "",
       disableConstantValueToggle: true,
     },
     description: {
       label: msg("fields.description", "Description"),
       types: ["type.string", "type.rich_text_v2"],
+      defaultValue: { defaultValue: "" },
     },
     cta: {
       label: msg("fields.cta", "CTA"),
       types: ["type.cta"],
+      defaultValue: defaultEventCta,
     },
     image: {
       label: msg("fields.image", "Image"),
       types: ["type.image"],
+      defaultValue: {
+        url: "",
+        width: 0,
+        height: 0,
+      },
       disableConstantValueToggle: true,
     },
-  });
+  },
+});
 
-const createEventCardsWrapperFields = (sourceFieldPath?: string) => ({
-  ...cardWrapperFields<EventCardsWrapperProps>({
-    label: msg("components.events", "Events"),
-    constantValueType: ComponentFields.EventSection.type,
-    listFieldName: "events",
-    sourceRootKinds: ["linkedEntityRoot", "baseListRoot"],
-    sourceRootsOnly: true,
-    requiredDescendantTypes: [
-      ["type.string"],
-      ["type.datetime"],
-      ["type.string", "type.rich_text_v2"],
-      ["type.cta"],
-      ["type.image"],
-    ],
-  }),
-  cards: createEventCardsMappingFields(sourceFieldPath) as any,
+const eventCardsWrapperFields = {
+  ...eventCards.fields,
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
@@ -112,9 +117,7 @@ const createEventCardsWrapperFields = (sourceFieldPath?: string) => ({
       },
     },
   }),
-});
-
-const eventCardsWrapperFields = createEventCardsWrapperFields();
+};
 
 const EventCardsWrapperComponent: PuckComponent<EventCardsWrapperProps> = ({
   slots,
@@ -128,44 +131,12 @@ const EventCardsWrapperComponent: PuckComponent<EventCardsWrapperProps> = ({
 
 export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
   label: msg("components.eventCardsWrapper", "Event Cards"),
-  fields: eventCardsWrapperFields,
+  fields: eventCardsWrapperFields as any,
   defaultProps: {
-    data: {
-      constantValue: [{}, {}, {}],
-      constantValueEnabled: true,
-      field: "",
-    },
-    cards: {
-      title: {
-        field: "",
-        constantValue: { defaultValue: "" },
-        constantValueEnabled: false,
-      },
-      date: {
-        field: "",
-        constantValue: "",
-        constantValueEnabled: false,
-      },
-      description: {
-        field: "",
-        constantValue: { defaultValue: "" },
-        constantValueEnabled: false,
-      },
-      cta: {
-        field: "",
-        constantValue: defaultEventCta,
-        constantValueEnabled: false,
-      },
-      image: {
-        field: "",
-        constantValue: {
-          url: "",
-          width: 0,
-          height: 0,
-        },
-        constantValueEnabled: false,
-      },
-    },
+    ...(eventCards.defaultProps as Pick<
+      EventCardsWrapperProps,
+      "data" | "cards"
+    >),
     styles: {
       showImage: true,
       showDateTime: true,
@@ -177,15 +148,19 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
     },
   },
   resolveFields: (data) =>
-    resolveMappedListFields({
-      data: data as ComponentData<EventCardsWrapperProps>,
-      createFields: createEventCardsWrapperFields,
-      mappingFieldName: "cards",
-      createMappingFields: createEventCardsMappingFields,
+    toPuckFields({
+      ...eventCardsWrapperFields,
+      ...(eventCards.resolveFields(
+        data as ComponentData<EventCardsWrapperProps>
+      ) as any),
     }),
   resolveData: (data, params) => {
     const streamDocument = params.metadata.streamDocument ?? {};
     const locale = i18nComponentsInstance.language || "en";
+    const { data: nextData } = eventCards.resolve(
+      data as ComponentData<EventCardsWrapperProps>,
+      params
+    );
 
     return resolveMappedListWrapperData<
       EventCardsWrapperProps,
@@ -197,7 +172,7 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
         slotStyles?: Record<string, any>;
       }
     >({
-      data: data as ComponentData<EventCardsWrapperProps>,
+      data: nextData,
       streamDocument,
       cardIdPrefix: "EventCard",
       getSharedCardProps: (card) =>
@@ -217,9 +192,9 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
           sharedCardProps?.slotStyles
         ) as ComponentData<EventCardProps>,
       decorateMappedItemCard: (card, item, index) => {
-        const title = resolveMappedSourceField<EventStruct["title"]>(
+        const title = eventCards.resolveMapping<EventStruct["title"]>(
+          nextData.props.cards?.title,
           item,
-          data.props.cards?.title,
           locale
         );
 
@@ -227,37 +202,36 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
           setDeep(card, "props.index", index),
           "props.parentData",
           {
-            field: data.props.data.field,
+            field: nextData.props.data.field,
             fields: {
-              image: data.props.cards?.image?.field || undefined,
-              title: data.props.cards?.title?.field || undefined,
-              dateTime: data.props.cards?.date?.field || undefined,
-              description: data.props.cards?.description?.field || undefined,
-              cta: data.props.cards?.cta?.field || undefined,
+              image: nextData.props.cards?.image?.field || undefined,
+              title: nextData.props.cards?.title?.field || undefined,
+              dateTime: nextData.props.cards?.date?.field || undefined,
+              description:
+                nextData.props.cards?.description?.field || undefined,
+              cta: nextData.props.cards?.cta?.field || undefined,
             },
             event: {
-              image: resolveMappedSourceField<EventStruct["image"]>(
+              image: eventCards.resolveMapping<EventStruct["image"]>(
+                nextData.props.cards?.image,
                 item,
-                data.props.cards?.image,
                 locale
               ),
               title: title
                 ? resolveComponentData(title, locale, item)
                 : undefined,
-              dateTime: resolveMappedSourceField<string>(
+              dateTime: eventCards.resolveMapping<string>(
+                nextData.props.cards?.date,
                 item,
-                data.props.cards?.date,
                 locale
               ),
-              description: resolveMappedSourceField<EventStruct["description"]>(
-                item,
-                data.props.cards?.description,
-                locale
-              ),
+              description: eventCards.resolveMapping<
+                EventStruct["description"]
+              >(nextData.props.cards?.description, item, locale),
               cta:
-                resolveMappedSourceField<EventStruct["cta"]>(
+                eventCards.resolveMapping<EventStruct["cta"]>(
+                  nextData.props.cards?.cta,
                   item,
-                  data.props.cards?.cta,
                   locale
                 ) ?? defaultEventCta,
             },

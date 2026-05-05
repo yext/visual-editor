@@ -1,19 +1,12 @@
 import {
   type ComponentData,
   type DefaultComponentProps,
-  type Fields,
   setDeep,
 } from "@puckeditor/core";
 import { type StreamDocument } from "../types/StreamDocument.ts";
 import { type CardWrapperType } from "./cardWrapperHelpers.ts";
 import { buildListSectionCards } from "./listSectionData.ts";
 import { resolveMappedListSource } from "./mappedSource.ts";
-import {
-  toPuckFields,
-  type YextFieldMap,
-  type YextFields,
-} from "../../fields/fields.ts";
-import { type YextFieldDefinition } from "../../editor/YextField.tsx";
 
 /**
  * Deep-clones a card before reuse so slot synchronization can update ids,
@@ -213,36 +206,4 @@ export const resolveMappedListWrapperData = <
       items: source.items,
     })
   ) as ComponentData<TWrapperProps>;
-};
-
-/**
- * Rebuilds a wrapper's fields and toggles mapping visibility.
- */
-export const resolveMappedListFields = <
-  TProps extends CardWrapperType<any> & DefaultComponentProps,
->({
-  data,
-  createFields,
-  mappingFieldName,
-  createMappingFields,
-}: {
-  data: ComponentData<TProps>;
-  createFields: (
-    sourceFieldPath?: string
-  ) => YextFields<TProps> | YextFieldMap<TProps>;
-  mappingFieldName: keyof TProps & string;
-  createMappingFields: (sourceFieldPath?: string) => YextFieldDefinition<any>;
-}): Fields<TProps> => {
-  const sourceFieldPath =
-    data.props.data.constantValueEnabled || !data.props.data.field
-      ? undefined
-      : "data.field";
-
-  return toPuckFields({
-    ...(createFields(sourceFieldPath) as YextFieldMap<TProps>),
-    [mappingFieldName]: {
-      ...(createMappingFields(sourceFieldPath) as object),
-      visible: !!sourceFieldPath,
-    },
-  });
 };
