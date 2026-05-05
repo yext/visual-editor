@@ -203,7 +203,7 @@ const inferEntityFieldConstantValue = (
     return { defaultValue: "" };
   }
 
-  return { defaultValue: "" };
+  return undefined;
 };
 
 /**
@@ -371,6 +371,9 @@ const resolveItemValue = <TValue>(
 ): ResolvedItemField<TValue> => {
   if (isEntityFieldDefinition(field)) {
     const entityField = value as Partial<YextEntityField<unknown>> | undefined;
+    if (!entityField?.constantValueEnabled && !entityField?.field) {
+      return undefined as ResolvedItemField<TValue>;
+    }
     const resolutionDocument =
       field.sourceEntityPath && itemDocument ? itemDocument : streamDocument;
 

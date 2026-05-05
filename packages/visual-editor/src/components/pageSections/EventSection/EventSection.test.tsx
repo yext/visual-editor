@@ -7,6 +7,7 @@ import {
 } from "../../testing/componentTests.setup.ts";
 import { render as reactRender, waitFor } from "@testing-library/react";
 import { EventSection } from "./EventSection.tsx";
+import { type EventCardsWrapperProps } from "./EventCardsWrapper.tsx";
 import { migrate } from "../../../utils/migrate.ts";
 import { migrationRegistry } from "../../migrations/migrationRegistry.ts";
 import { SlotsCategoryComponents } from "../../categories/SlotsCategory.tsx";
@@ -2591,4 +2592,60 @@ describe("EventSection", async () => {
       }
     }
   );
+
+  it("resolves linked event title mappings without hanging", async () => {
+    const data = {
+      root: {
+        props: {
+          version: migrationRegistry.length,
+        },
+      },
+      content: [
+        {
+          type: "EventSection",
+          props: {
+            ...EventSection.defaultProps,
+            slots: {
+              ...EventSection.defaultProps!.slots,
+              CardsWrapperSlot: [
+                {
+                  type: "EventCardsWrapper",
+                  props: {
+                    ...((EventSection.defaultProps!.slots as any)
+                      .CardsWrapperSlot[0].props as EventCardsWrapperProps),
+                    data: {
+                      field: "c_eventsSection.events",
+                      constantValueEnabled: false,
+                      constantValue: [],
+                    },
+                    cards: {
+                      ...((EventSection.defaultProps!.slots as any)
+                        .CardsWrapperSlot[0].props.cards as any),
+                      title: {
+                        field: "title",
+                        constantValue: { defaultValue: "" },
+                        constantValueEnabled: false,
+                      },
+                    } as EventCardsWrapperProps["cards"],
+                  } satisfies EventCardsWrapperProps,
+                },
+              ],
+            },
+          },
+        },
+      ],
+    } as any;
+
+    const resolved = await resolveAllData(data, puckConfig, {
+      streamDocument: {
+        c_eventsSection: {
+          events: [{ title: "First Event" }, { title: "Second Event" }],
+        },
+      },
+    });
+
+    expect(
+      resolved.content[0]!.props.slots.CardsWrapperSlot[0]!.props.slots.CardSlot
+    ).toHaveLength(2);
+  });
 });
