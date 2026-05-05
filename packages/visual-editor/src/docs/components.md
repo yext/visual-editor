@@ -289,27 +289,20 @@ This object contains properties for customizing the appearance of both header ti
 
 ## FAQSection
 
-The FAQ Section component displays a list of questions and answers in an organized format. It includes a main heading for the section and typically renders the FAQs as an accordion, where users can click on a question to reveal the answer.
-
 ### Props
-
-#### Style Props
-
-This object contains properties for customizing the component's appearance.
-
-| Prop                        | Type         | Description                          | Default              |
-| :-------------------------- | :----------- | :----------------------------------- | :------------------- |
-| `styles.backgroundColor`    | `ThemeColor` | The background color of the section. | `Background Color 3` |
-| `styles.showSectionHeading` | `boolean`    | Whether to show the section heading. | `true`               |
 
 #### Other Props
 
-| Prop             | Type                                                                                                                                            | Description                                                                    | Default |
-| :--------------- | :---------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------- | :------ |
-| `data`           | `Omit<YextEntityField<FAQSectionType>, "constantValue"> & { constantValue: { id?: string; }[]; }`                                               |                                                                                |         |
-| `faqs`           | `{ question: YextEntityField<FAQSectionType["faqs"][number]["question"]>; answer: YextEntityField<FAQSectionType["faqs"][number]["answer"]>; }` |                                                                                |         |
-| `liveVisibility` | `boolean`                                                                                                                                       | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
-| `slots`          | `{ HeadingSlot: Slot; CardSlot: Slot; }`                                                                                                        |                                                                                |         |
+| Prop                        | Type                                                                           | Description | Default |
+| :-------------------------- | :----------------------------------------------------------------------------- | :---------- | :------ |
+| `analytics`                 | `{ scope?: string; }`                                                          |             |         |
+| `data`                      | `{ field: string; constantValueEnabled?: boolean; constantValue: FAQItem[]; }` |             |         |
+| `faqs`                      | `FAQItem`                                                                      |             |         |
+| `hasResolvedSource`         | `boolean`                                                                      |             |         |
+| `liveVisibility`            | `boolean`                                                                      |             |         |
+| `slots`                     | `{ HeadingSlot: Slot; CardSlot: Slot; }`                                       |             |         |
+| `styles.backgroundColor`    | `ThemeColor`                                                                   |             |         |
+| `styles.showSectionHeading` | `boolean`                                                                      |             |         |
 
 ---
 
