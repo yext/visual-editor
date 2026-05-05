@@ -45,7 +45,7 @@ const defaultProductCta = {
   ctaType: "textAndLink",
 } satisfies ProductStruct["cta"];
 
-const productCards = createMappedItems<ProductCardsWrapperProps>({
+const productCardsBase = createMappedItems<ProductCardsWrapperProps>({
   sourceFieldPath: "data.field",
   mappingGroupPath: "cards",
   sourceLabel: msg("components.products", "Products"),
@@ -83,59 +83,59 @@ const productCards = createMappedItems<ProductCardsWrapperProps>({
       defaultValue: defaultProductCta,
     },
   },
-})
-  .withConstantValueMode({
-    constantValueType: ComponentFields.ProductSection.type,
-  })
-  .withRepeatedSlot({
-    slotPath: "slots.CardSlot",
-    createItem: (id, index, existingItem) =>
-      defaultProductCardSlotData(
-        id,
-        index,
-        existingItem?.props.styles.backgroundColor,
-        existingItem ? gatherSlotStyles(existingItem.props.slots) : undefined
-      ) as ComponentData<ProductCardProps>,
-    getParentData: (item, resolvedData) => {
-      const locale = i18nComponentsInstance.language || "en";
-      const name = productCards.resolveMapping<ProductStruct["name"]>(
-        resolvedData.props.cards?.name,
-        item,
-        locale
-      );
+}).withConstantValueMode({
+  constantValueType: ComponentFields.ProductSection.type,
+});
 
-      return {
-        field: resolvedData.props.data.field,
-        product: {
-          image: productCards.resolveMapping<ProductStruct["image"]>(
-            resolvedData.props.cards?.image,
-            item,
-            locale
-          ),
-          brow: productCards.resolveMapping<ProductStruct["brow"]>(
-            resolvedData.props.cards?.brow,
-            item,
-            locale
-          ),
-          name: name ? resolveComponentData(name, locale, item) : undefined,
-          description: productCards.resolveMapping<
-            ProductStruct["description"]
-          >(resolvedData.props.cards?.description, item, locale),
-          cta:
-            productCards.resolveMapping<ProductStruct["cta"]>(
-              resolvedData.props.cards?.cta,
-              item,
-              locale
-            ) ?? defaultProductCta,
-        },
-        priceText: productCards.resolveMapping<string>(
-          resolvedData.props.cards?.price,
+const productCards = productCardsBase.withRepeatedSlot({
+  slotPath: "slots.CardSlot",
+  createItem: (id, index, existingItem) =>
+    defaultProductCardSlotData(
+      id,
+      index,
+      existingItem?.props.styles.backgroundColor,
+      existingItem ? gatherSlotStyles(existingItem.props.slots) : undefined
+    ) as unknown as ComponentData<ProductCardProps>,
+  getParentData: (item, resolvedData) => {
+    const locale = i18nComponentsInstance.language || "en";
+    const name = productCardsBase.resolveMapping<ProductStruct["name"]>(
+      resolvedData.props.cards?.name,
+      item,
+      locale
+    );
+
+    return {
+      field: resolvedData.props.data.field,
+      product: {
+        image: productCardsBase.resolveMapping<ProductStruct["image"]>(
+          resolvedData.props.cards?.image,
           item,
           locale
         ),
-      };
-    },
-  });
+        brow: productCardsBase.resolveMapping<ProductStruct["brow"]>(
+          resolvedData.props.cards?.brow,
+          item,
+          locale
+        ),
+        name: name ? resolveComponentData(name, locale, item) : undefined,
+        description: productCardsBase.resolveMapping<
+          ProductStruct["description"]
+        >(resolvedData.props.cards?.description, item, locale),
+        cta:
+          productCardsBase.resolveMapping<ProductStruct["cta"]>(
+            resolvedData.props.cards?.cta,
+            item,
+            locale
+          ) ?? defaultProductCta,
+      },
+      priceText: productCardsBase.resolveMapping<string>(
+        resolvedData.props.cards?.price,
+        item,
+        locale
+      ),
+    };
+  },
+});
 
 const productCardsWrapperFields = {
   ...productCards.fields,

@@ -72,7 +72,7 @@ export interface FAQSectionProps {
   liveVisibility: boolean;
 }
 
-const faqs = createMappedItems<FAQSectionProps>({
+const faqsBase = createMappedItems<FAQSectionProps>({
   sourceFieldPath: "data.field",
   mappingGroupPath: "faqs",
   sourceLabel: msg("fields.faqs", "FAQs"),
@@ -89,41 +89,41 @@ const faqs = createMappedItems<FAQSectionProps>({
       defaultValue: { defaultValue: "" },
     },
   },
-})
-  .withConstantValueMode({
-    constantValueType: ComponentFields.FAQSection.type,
-    defaultConstantValue: [{}, {}, {}],
-  })
-  .withRepeatedSlot({
-    slotPath: "slots.CardSlot",
-    createItem: (id, index, existingItem) =>
-      defaultFAQCardData(
-        id,
-        index,
-        existingItem?.props.styles.questionVariant,
-        existingItem?.props.styles.answerVariant,
-        existingItem?.props.styles.answerColor
-      ) as ComponentData<FAQCardProps>,
-    getParentData: (item, resolvedData) => {
-      const locale = i18nComponentsInstance.language || "en";
+}).withConstantValueMode({
+  constantValueType: ComponentFields.FAQSection.type,
+  defaultConstantValue: [{}, {}, {}],
+});
 
-      return {
-        field: resolvedData.props.data.field,
-        faq: {
-          question: faqs.resolveMapping(
-            resolvedData.props.faqs?.question,
-            item,
-            locale
-          ) ?? { defaultValue: "" },
-          answer: faqs.resolveMapping(
-            resolvedData.props.faqs?.answer,
-            item,
-            locale
-          ) ?? { defaultValue: "" },
-        },
-      };
-    },
-  });
+const faqs = faqsBase.withRepeatedSlot({
+  slotPath: "slots.CardSlot",
+  createItem: (id, index, existingItem) =>
+    defaultFAQCardData(
+      id,
+      index,
+      existingItem?.props.styles.questionVariant,
+      existingItem?.props.styles.answerVariant,
+      existingItem?.props.styles.answerColor
+    ) as unknown as ComponentData<FAQCardProps>,
+  getParentData: (item, resolvedData) => {
+    const locale = i18nComponentsInstance.language || "en";
+
+    return {
+      field: resolvedData.props.data.field,
+      faq: {
+        question: faqsBase.resolveMapping(
+          resolvedData.props.faqs?.question,
+          item,
+          locale
+        ) ?? { defaultValue: "" },
+        answer: faqsBase.resolveMapping(
+          resolvedData.props.faqs?.answer,
+          item,
+          locale
+        ) ?? { defaultValue: "" },
+      },
+    };
+  },
+});
 
 const FAQsSectionFields = {
   ...faqs.fields,

@@ -198,7 +198,7 @@ const getPathValue = <T>(value: unknown, path: string): T | undefined => {
 /**
  * Writes a nested prop path on Puck component data without mutating the input.
  */
-const setPathValue = <T>(
+const setPathValue = <T extends DefaultComponentProps>(
   value: ComponentData<T>,
   path: string,
   nextValue: unknown
@@ -376,7 +376,7 @@ const buildMappedItems = <TProps extends DefaultComponentProps>({
     )
   ) as Partial<TProps>;
 
-  const mappedItems = {
+  const mappedItems: MappedItemsInstance<TProps> = {
     fields: toPuckFields(rawFields as YextFieldMap<any>) as Fields<TProps>,
     defaultProps,
     resolveFields: (data: {

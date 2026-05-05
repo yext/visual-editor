@@ -42,7 +42,7 @@ export type TestimonialCardsWrapperProps =
     };
   };
 
-const testimonialCards = createMappedItems<TestimonialCardsWrapperProps>({
+const testimonialCardsBase = createMappedItems<TestimonialCardsWrapperProps>({
   sourceFieldPath: "data.field",
   mappingGroupPath: "cards",
   sourceLabel: msg("components.testimonial", "Testimonial"),
@@ -65,41 +65,41 @@ const testimonialCards = createMappedItems<TestimonialCardsWrapperProps>({
       disableConstantValueToggle: true,
     },
   },
-})
-  .withConstantValueMode({
-    constantValueType: ComponentFields.TestimonialSection.type,
-  })
-  .withRepeatedSlot({
-    slotPath: "slots.CardSlot",
-    createItem: (id, index, existingItem) =>
-      defaultTestimonialCardSlotData(
-        id,
-        index,
-        existingItem?.props.styles.backgroundColor,
-        existingItem ? gatherSlotStyles(existingItem.props.slots) : undefined
-      ) as ComponentData<TestimonialCardProps>,
-    getParentData: (item, resolvedData) => {
-      const locale = i18nComponentsInstance.language || "en";
-      const contributorName = testimonialCards.resolveMapping<
-        TestimonialStruct["contributorName"]
-      >(resolvedData.props.cards?.contributorName, item, locale);
+}).withConstantValueMode({
+  constantValueType: ComponentFields.TestimonialSection.type,
+});
 
-      return {
-        field: resolvedData.props.data.field,
-        testimonial: {
-          description: testimonialCards.resolveMapping<
-            TestimonialStruct["description"]
-          >(resolvedData.props.cards?.description, item, locale),
-          contributorName: contributorName
-            ? resolveComponentData(contributorName, locale, item)
-            : undefined,
-          contributionDate: testimonialCards.resolveMapping<
-            TestimonialStruct["contributionDate"]
-          >(resolvedData.props.cards?.contributionDate, item, locale),
-        },
-      };
-    },
-  });
+const testimonialCards = testimonialCardsBase.withRepeatedSlot({
+  slotPath: "slots.CardSlot",
+  createItem: (id, index, existingItem) =>
+    defaultTestimonialCardSlotData(
+      id,
+      index,
+      existingItem?.props.styles.backgroundColor,
+      existingItem ? gatherSlotStyles(existingItem.props.slots) : undefined
+    ) as unknown as ComponentData<TestimonialCardProps>,
+  getParentData: (item, resolvedData) => {
+    const locale = i18nComponentsInstance.language || "en";
+    const contributorName = testimonialCardsBase.resolveMapping<
+      TestimonialStruct["contributorName"]
+    >(resolvedData.props.cards?.contributorName, item, locale);
+
+    return {
+      field: resolvedData.props.data.field,
+      testimonial: {
+        description: testimonialCardsBase.resolveMapping<
+          TestimonialStruct["description"]
+        >(resolvedData.props.cards?.description, item, locale),
+        contributorName: contributorName
+          ? resolveComponentData(contributorName, locale, item)
+          : undefined,
+        contributionDate: testimonialCardsBase.resolveMapping<
+          TestimonialStruct["contributionDate"]
+        >(resolvedData.props.cards?.contributionDate, item, locale),
+      },
+    };
+  },
+});
 
 const testimonialCardsWrapperFields = {
   ...testimonialCards.fields,

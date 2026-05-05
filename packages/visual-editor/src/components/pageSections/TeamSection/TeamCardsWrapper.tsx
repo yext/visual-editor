@@ -39,7 +39,7 @@ const defaultPersonCta = {
   ctaType: "textAndLink",
 } satisfies PersonStruct["cta"];
 
-const teamCards = createMappedItems<TeamCardsWrapperProps>({
+const teamCardsBase = createMappedItems<TeamCardsWrapperProps>({
   sourceFieldPath: "data.field",
   mappingGroupPath: "cards",
   sourceLabel: msg("components.team", "Team"),
@@ -77,61 +77,61 @@ const teamCards = createMappedItems<TeamCardsWrapperProps>({
       defaultValue: defaultPersonCta,
     },
   },
-})
-  .withConstantValueMode({
-    constantValueType: ComponentFields.TeamSection.type,
-  })
-  .withRepeatedSlot({
-    slotPath: "slots.CardSlot",
-    createItem: (id, index, existingItem) =>
-      defaultTeamCardSlotData(
-        id,
-        index,
-        existingItem?.props.styles.backgroundColor,
-        existingItem ? gatherSlotStyles(existingItem.props.slots) : undefined
-      ) as ComponentData<TeamCardProps>,
-    getParentData: (item, resolvedData) => {
-      const locale = i18nComponentsInstance.language || "en";
-      const name = teamCards.resolveMapping<PersonStruct["name"]>(
-        resolvedData.props.cards?.name,
-        item,
-        locale
-      );
+}).withConstantValueMode({
+  constantValueType: ComponentFields.TeamSection.type,
+});
 
-      return {
-        field: resolvedData.props.data.field,
-        person: {
-          headshot: teamCards.resolveMapping<PersonStruct["headshot"]>(
-            resolvedData.props.cards?.headshot,
+const teamCards = teamCardsBase.withRepeatedSlot({
+  slotPath: "slots.CardSlot",
+  createItem: (id, index, existingItem) =>
+    defaultTeamCardSlotData(
+      id,
+      index,
+      existingItem?.props.styles.backgroundColor,
+      existingItem ? gatherSlotStyles(existingItem.props.slots) : undefined
+    ) as unknown as ComponentData<TeamCardProps>,
+  getParentData: (item, resolvedData) => {
+    const locale = i18nComponentsInstance.language || "en";
+    const name = teamCardsBase.resolveMapping<PersonStruct["name"]>(
+      resolvedData.props.cards?.name,
+      item,
+      locale
+    );
+
+    return {
+      field: resolvedData.props.data.field,
+      person: {
+        headshot: teamCardsBase.resolveMapping<PersonStruct["headshot"]>(
+          resolvedData.props.cards?.headshot,
+          item,
+          locale
+        ),
+        name: name ? resolveComponentData(name, locale, item) : undefined,
+        title: teamCardsBase.resolveMapping<PersonStruct["title"]>(
+          resolvedData.props.cards?.title,
+          item,
+          locale
+        ),
+        phoneNumber: teamCardsBase.resolveMapping<PersonStruct["phoneNumber"]>(
+          resolvedData.props.cards?.phoneNumber,
+          item,
+          locale
+        ),
+        email: teamCardsBase.resolveMapping<PersonStruct["email"]>(
+          resolvedData.props.cards?.email,
+          item,
+          locale
+        ),
+        cta:
+          teamCardsBase.resolveMapping<PersonStruct["cta"]>(
+            resolvedData.props.cards?.cta,
             item,
             locale
-          ),
-          name: name ? resolveComponentData(name, locale, item) : undefined,
-          title: teamCards.resolveMapping<PersonStruct["title"]>(
-            resolvedData.props.cards?.title,
-            item,
-            locale
-          ),
-          phoneNumber: teamCards.resolveMapping<PersonStruct["phoneNumber"]>(
-            resolvedData.props.cards?.phoneNumber,
-            item,
-            locale
-          ),
-          email: teamCards.resolveMapping<PersonStruct["email"]>(
-            resolvedData.props.cards?.email,
-            item,
-            locale
-          ),
-          cta:
-            teamCards.resolveMapping<PersonStruct["cta"]>(
-              resolvedData.props.cards?.cta,
-              item,
-              locale
-            ) ?? defaultPersonCta,
-        },
-      };
-    },
-  });
+          ) ?? defaultPersonCta,
+      },
+    };
+  },
+});
 
 const teamCardsWrapperFields = {
   ...teamCards.fields,

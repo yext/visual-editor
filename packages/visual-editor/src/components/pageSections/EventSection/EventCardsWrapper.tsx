@@ -37,7 +37,7 @@ const defaultEventCta = {
   ctaType: "textAndLink",
 } satisfies EventStruct["cta"];
 
-const eventCards = createMappedItems<EventCardsWrapperProps>({
+const eventCardsBase = createMappedItems<EventCardsWrapperProps>({
   sourceFieldPath: "data.field",
   mappingGroupPath: "cards",
   sourceLabel: msg("components.events", "Events"),
@@ -75,66 +75,65 @@ const eventCards = createMappedItems<EventCardsWrapperProps>({
       disableConstantValueToggle: true,
     },
   },
-})
-  .withConstantValueMode({
-    constantValueType: ComponentFields.EventSection.type,
-    defaultConstantValue: [{}, {}, {}],
-  })
-  .withRepeatedSlot({
-    slotPath: "slots.CardSlot",
-    createItem: (id, index, existingItem) =>
-      defaultEventCardSlotData(
-        id,
-        index,
-        existingItem?.props.styles.backgroundColor,
-        existingItem?.props.styles.truncateDescription,
-        existingItem ? gatherSlotStyles(existingItem.props.slots) : undefined
-      ) as ComponentData<EventCardProps>,
-    getParentData: (item, resolvedData) => {
-      const locale = i18nComponentsInstance.language || "en";
-      const title = eventCards.resolveMapping<EventStruct["title"]>(
-        resolvedData.props.cards?.title,
-        item,
-        locale
-      );
+}).withConstantValueMode({
+  constantValueType: ComponentFields.EventSection.type,
+  defaultConstantValue: [{}, {}, {}],
+});
 
-      return {
-        field: resolvedData.props.data.field,
-        fields: {
-          image: resolvedData.props.cards?.image?.field || undefined,
-          title: resolvedData.props.cards?.title?.field || undefined,
-          dateTime: resolvedData.props.cards?.date?.field || undefined,
-          description:
-            resolvedData.props.cards?.description?.field || undefined,
-          cta: resolvedData.props.cards?.cta?.field || undefined,
-        },
-        event: {
-          image: eventCards.resolveMapping<EventStruct["image"]>(
-            resolvedData.props.cards?.image,
+const eventCards = eventCardsBase.withRepeatedSlot({
+  slotPath: "slots.CardSlot",
+  createItem: (id, index, existingItem) =>
+    defaultEventCardSlotData(
+      id,
+      index,
+      existingItem?.props.styles.backgroundColor,
+      existingItem?.props.styles.truncateDescription,
+      existingItem ? gatherSlotStyles(existingItem.props.slots) : undefined
+    ) as unknown as ComponentData<EventCardProps>,
+  getParentData: (item, resolvedData) => {
+    const locale = i18nComponentsInstance.language || "en";
+    const title = eventCardsBase.resolveMapping<EventStruct["title"]>(
+      resolvedData.props.cards?.title,
+      item,
+      locale
+    );
+
+    return {
+      field: resolvedData.props.data.field,
+      fields: {
+        image: resolvedData.props.cards?.image?.field || undefined,
+        title: resolvedData.props.cards?.title?.field || undefined,
+        dateTime: resolvedData.props.cards?.date?.field || undefined,
+        description: resolvedData.props.cards?.description?.field || undefined,
+        cta: resolvedData.props.cards?.cta?.field || undefined,
+      },
+      event: {
+        image: eventCardsBase.resolveMapping<EventStruct["image"]>(
+          resolvedData.props.cards?.image,
+          item,
+          locale
+        ),
+        title: title ? resolveComponentData(title, locale, item) : undefined,
+        dateTime: eventCardsBase.resolveMapping<string>(
+          resolvedData.props.cards?.date,
+          item,
+          locale
+        ),
+        description: eventCardsBase.resolveMapping<EventStruct["description"]>(
+          resolvedData.props.cards?.description,
+          item,
+          locale
+        ),
+        cta:
+          eventCardsBase.resolveMapping<EventStruct["cta"]>(
+            resolvedData.props.cards?.cta,
             item,
             locale
-          ),
-          title: title ? resolveComponentData(title, locale, item) : undefined,
-          dateTime: eventCards.resolveMapping<string>(
-            resolvedData.props.cards?.date,
-            item,
-            locale
-          ),
-          description: eventCards.resolveMapping<EventStruct["description"]>(
-            resolvedData.props.cards?.description,
-            item,
-            locale
-          ),
-          cta:
-            eventCards.resolveMapping<EventStruct["cta"]>(
-              resolvedData.props.cards?.cta,
-              item,
-              locale
-            ) ?? defaultEventCta,
-        },
-      } satisfies EventCardProps["parentData"];
-    },
-  });
+          ) ?? defaultEventCta,
+      },
+    } satisfies EventCardProps["parentData"];
+  },
+});
 
 const eventCardsWrapperFields = {
   ...eventCards.fields,

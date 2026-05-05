@@ -42,7 +42,7 @@ const defaultInsightCta = {
   ctaType: "textAndLink",
 } satisfies InsightStruct["cta"];
 
-const insightCards = createMappedItems<InsightCardsWrapperProps>({
+const insightCardsBase = createMappedItems<InsightCardsWrapperProps>({
   sourceFieldPath: "data.field",
   mappingGroupPath: "cards",
   sourceLabel: msg("fields.insights", "Insights"),
@@ -81,57 +81,57 @@ const insightCards = createMappedItems<InsightCardsWrapperProps>({
       defaultValue: defaultInsightCta,
     },
   },
-})
-  .withConstantValueMode({
-    constantValueType: ComponentFields.InsightSection.type,
-  })
-  .withRepeatedSlot({
-    slotPath: "slots.CardSlot",
-    createItem: (id, index, existingItem) =>
-      defaultInsightCardSlotData(
-        id,
-        index,
-        existingItem?.props.styles.backgroundColor,
-        existingItem ? gatherSlotStyles(existingItem.props.slots) : undefined
-      ) as ComponentData<InsightCardProps>,
-    getParentData: (item, resolvedData) => {
-      const locale = i18nComponentsInstance.language || "en";
-      const name = insightCards.resolveMapping<InsightStruct["name"]>(
-        resolvedData.props.cards?.name,
-        item,
-        locale
-      );
+}).withConstantValueMode({
+  constantValueType: ComponentFields.InsightSection.type,
+});
 
-      return {
-        field: resolvedData.props.data.field,
-        insight: {
-          image: insightCards.resolveMapping<InsightStruct["image"]>(
-            resolvedData.props.cards?.image,
+const insightCards = insightCardsBase.withRepeatedSlot({
+  slotPath: "slots.CardSlot",
+  createItem: (id, index, existingItem) =>
+    defaultInsightCardSlotData(
+      id,
+      index,
+      existingItem?.props.styles.backgroundColor,
+      existingItem ? gatherSlotStyles(existingItem.props.slots) : undefined
+    ) as unknown as ComponentData<InsightCardProps>,
+  getParentData: (item, resolvedData) => {
+    const locale = i18nComponentsInstance.language || "en";
+    const name = insightCardsBase.resolveMapping<InsightStruct["name"]>(
+      resolvedData.props.cards?.name,
+      item,
+      locale
+    );
+
+    return {
+      field: resolvedData.props.data.field,
+      insight: {
+        image: insightCardsBase.resolveMapping<InsightStruct["image"]>(
+          resolvedData.props.cards?.image,
+          item,
+          locale
+        ),
+        name: name ? resolveComponentData(name, locale, item) : undefined,
+        category: insightCardsBase.resolveMapping<InsightStruct["category"]>(
+          resolvedData.props.cards?.category,
+          item,
+          locale
+        ),
+        publishTime: insightCardsBase.resolveMapping<
+          InsightStruct["publishTime"]
+        >(resolvedData.props.cards?.publishTime, item, locale),
+        description: insightCardsBase.resolveMapping<
+          InsightStruct["description"]
+        >(resolvedData.props.cards?.description, item, locale),
+        cta:
+          insightCardsBase.resolveMapping<InsightStruct["cta"]>(
+            resolvedData.props.cards?.cta,
             item,
             locale
-          ),
-          name: name ? resolveComponentData(name, locale, item) : undefined,
-          category: insightCards.resolveMapping<InsightStruct["category"]>(
-            resolvedData.props.cards?.category,
-            item,
-            locale
-          ),
-          publishTime: insightCards.resolveMapping<
-            InsightStruct["publishTime"]
-          >(resolvedData.props.cards?.publishTime, item, locale),
-          description: insightCards.resolveMapping<
-            InsightStruct["description"]
-          >(resolvedData.props.cards?.description, item, locale),
-          cta:
-            insightCards.resolveMapping<InsightStruct["cta"]>(
-              resolvedData.props.cards?.cta,
-              item,
-              locale
-            ) ?? defaultInsightCta,
-        },
-      };
-    },
-  });
+          ) ?? defaultInsightCta,
+      },
+    };
+  },
+});
 
 const insightCardsWrapperFields = {
   ...insightCards.fields,
