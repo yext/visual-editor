@@ -307,5 +307,101 @@ describe("createItemSource", () => {
       (imageItems.fields as any).itemMappings.objectFields.cta
         .disableConstantValueToggle
     ).toBe(false);
+    expect(
+      (imageItems.fields as any).itemMappings.objectFields.title.sourceFieldPath
+    ).toBe("itemSource");
+    expect(
+      (imageItems.fields as any).itemSource.itemFields.title.sourceFieldPath
+    ).toBeUndefined();
+  });
+
+  it("collects nested entity field types for the parent source selector", () => {
+    const nestedItems = createItemSource<
+      {
+        itemSource: {
+          field: string;
+          constantValueEnabled?: boolean;
+          constantValue: {
+            content: {
+              title: {
+                field: string;
+                constantValueEnabled?: boolean;
+                constantValue: TranslatableString;
+              };
+            };
+            highlights: {
+              text: {
+                field: string;
+                constantValueEnabled?: boolean;
+                constantValue: TranslatableString;
+              };
+            }[];
+          }[];
+        };
+        itemMappings?: {
+          content: {
+            title: {
+              field: string;
+              constantValueEnabled?: boolean;
+              constantValue: TranslatableString;
+            };
+          };
+          highlights: {
+            text: {
+              field: string;
+              constantValueEnabled?: boolean;
+              constantValue: TranslatableString;
+            };
+          }[];
+        };
+      },
+      {
+        content: {
+          title: {
+            field: string;
+            constantValueEnabled?: boolean;
+            constantValue: TranslatableString;
+          };
+        };
+        highlights: {
+          text: {
+            field: string;
+            constantValueEnabled?: boolean;
+            constantValue: TranslatableString;
+          };
+        }[];
+      }
+    >({
+      sourcePath: "itemSource",
+      mappingsPath: "itemMappings",
+      mappingFields: {
+        content: {
+          type: "object",
+          label: "Content",
+          objectFields: {
+            title: {
+              type: "entityField",
+              label: "Title",
+              filter: { types: ["type.string"] },
+            },
+          },
+        },
+        highlights: {
+          type: "array",
+          label: "Highlights",
+          arrayFields: {
+            text: {
+              type: "entityField",
+              label: "Text",
+              filter: { types: ["type.string"] },
+            },
+          },
+        },
+      },
+    });
+
+    expect(
+      (nestedItems.fields as any).itemSource.filter.itemSourceTypes
+    ).toEqual([["type.string"], ["type.string"]]);
   });
 });

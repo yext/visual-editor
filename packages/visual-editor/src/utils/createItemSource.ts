@@ -313,8 +313,11 @@ const getManualItemField = <TValue>(
   field: YextFieldDefinition<TValue>
 ): YextFieldDefinition<TValue> => {
   if (isEntityFieldDefinition(field)) {
-    const { disableConstantValueToggle: _disableConstantValueToggle, ...rest } =
-      field;
+    const {
+      disableConstantValueToggle: _disableConstantValueToggle,
+      sourceFieldPath: _sourceFieldPath,
+      ...rest
+    } = field;
 
     return rest as YextFieldDefinition<TValue>;
   }
@@ -398,16 +401,34 @@ const applySourceFieldPath = <TValue>(
  * Collects the entity-field type filters that the parent item source picker
  * must satisfy for linked mode to be valid.
  */
+const getNestedItemSourceTypes = (
+  field: YextFieldDefinition<any>
+): EntityFieldTypes[][] => {
+  if (isEntityFieldDefinition(field)) {
+    return field.filter.types?.length ? [field.filter.types] : [];
+  }
+
+  if (field.type === "object" && "objectFields" in field) {
+    return Object.values(field.objectFields).flatMap((nestedField) =>
+      getNestedItemSourceTypes(nestedField as YextFieldDefinition<any>)
+    );
+  }
+
+  if (field.type === "array" && "arrayFields" in field) {
+    return Object.values(field.arrayFields).flatMap((nestedField) =>
+      getNestedItemSourceTypes(nestedField as YextFieldDefinition<any>)
+    );
+  }
+
+  return [];
+};
+
 const getItemSourceTypes = (
   itemFields: YextFieldMap<Record<string, unknown>>
 ): EntityFieldTypes[][] =>
-  (Object.values(itemFields) as YextFieldDefinition<any>[]).flatMap((field) => {
-    if (!isEntityFieldDefinition(field)) {
-      return [];
-    }
-
-    return field.filter.types?.length ? [field.filter.types] : [];
-  });
+  (Object.values(itemFields) as YextFieldDefinition<any>[]).flatMap(
+    getNestedItemSourceTypes
+  );
 
 /**
  * Resolves one item field into its render-ready value using the current source
