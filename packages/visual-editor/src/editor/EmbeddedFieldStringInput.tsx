@@ -30,6 +30,7 @@ import {
   buildEntityFieldOptionGroups,
   type EntityFieldOptionGroup,
 } from "./entityFieldOptionGroups.ts";
+import { TemplateMetadataContext } from "../internal/hooks/useMessageReceivers.ts";
 
 export type EmbeddedStringOption = {
   label: string;
@@ -96,8 +97,14 @@ export const EmbeddedFieldStringInputFromEntity = <
 }) => {
   const entityFields = useEntityFields();
   const streamDocument = useDocument();
+  const templateMetadata = React.useContext(TemplateMetadataContext);
   const sourceFieldFromPath = useCurrentSourceField(sourceFieldPath);
   const sourceField = sourceFieldFromInputProps || sourceFieldFromPath;
+  const entityGroupTitle = templateMetadata?.entityTypeDisplayName
+    ? pt("entityTypeField", "{{entityType}} Fields", {
+        entityType: templateMetadata.entityTypeDisplayName,
+      })
+    : pt("entityFields", "Entity Fields");
 
   const entityFieldOptions = React.useMemo(() => {
     const filteredEntityFields = getFieldsForSelector(
@@ -121,9 +128,9 @@ export const EmbeddedFieldStringInputFromEntity = <
         fieldPath: sourceField ? `${sourceField}.${field.name}` : field.name,
       })),
       linkedGroupTitle: pt("linkedEntityFields", "Linked Entity Fields"),
-      entityGroupTitle: pt("entityFields", "Entity Fields"),
+      entityGroupTitle,
     });
-  }, [entityFields, filter, sourceField, streamDocument]);
+  }, [entityFields, entityGroupTitle, filter, sourceField, streamDocument]);
 
   return (
     <EmbeddedFieldStringInputFromOptions

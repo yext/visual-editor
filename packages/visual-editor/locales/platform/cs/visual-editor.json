@@ -154,6 +154,7 @@
   "emptyStateSectionHidden": "Sekce skrytá pro tuto {{entityType}}",
   "enableCookies": "Povolit soubory cookie",
   "entityFields": "Pole entity",
+  "entityTypeField": "{{entityType}} Fields",
   "event": "Událost",
   "events": "Události",
   "expandedMenu": "Rozšířené menu",

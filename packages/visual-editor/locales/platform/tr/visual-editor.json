@@ -154,6 +154,7 @@
   "emptyStateSectionHidden": "Bu {{entityType}} için bölüm gizlendi",
   "enableCookies": "Çerezleri Etkinleştir",
   "entityFields": "Varlık Alanları",
+  "entityTypeField": "{{entityType}} Fields",
   "event": "Etkinlik",
   "events": "Olaylar",
   "expandedMenu": "Genişletilmiş menü",

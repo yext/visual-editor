@@ -154,6 +154,7 @@
   "emptyStateSectionHidden": "Sectie verborgen voor deze {{entityType}}",
   "enableCookies": "Cookies inschakelen",
   "entityFields": "Entiteitsvelden",
+  "entityTypeField": "{{entityType}} Fields",
   "event": "Evenement",
   "events": "Evenementen",
   "expandedMenu": "Uitgebreid menu",

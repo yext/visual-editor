@@ -154,6 +154,7 @@
   "emptyStateSectionHidden": "Šio {{entityType}} skyrius paslėptas",
   "enableCookies": "Įgalinti slapukus",
   "entityFields": "Esybės laukai",
+  "entityTypeField": "{{entityType}} Fields",
   "event": "Įvykis",
   "events": "Renginiai",
   "expandedMenu": "Išplėstas meniu",

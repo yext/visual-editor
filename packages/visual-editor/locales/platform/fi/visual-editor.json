@@ -154,6 +154,7 @@
   "emptyStateSectionHidden": "Osio piilotettu tälle {{entityType}}",
   "enableCookies": "Ota evästeet käyttöön",
   "entityFields": "Entiteettikentät",
+  "entityTypeField": "{{entityType}} Fields",
   "event": "Tapahtuma",
   "events": "Tapahtumat",
   "expandedMenu": "Laajennettu valikko",

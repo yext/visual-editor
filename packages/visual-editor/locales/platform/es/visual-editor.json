@@ -154,6 +154,7 @@
   "emptyStateSectionHidden": "Sección oculta para este {{entityType}}",
   "enableCookies": "Habilitar cookies",
   "entityFields": "Campos de entidad",
+  "entityTypeField": "{{entityType}} Fields",
   "event": "Evento",
   "events": "Eventos",
   "expandedMenu": "Menú ampliado",

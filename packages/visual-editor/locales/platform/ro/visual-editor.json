@@ -154,6 +154,7 @@
   "emptyStateSectionHidden": "Secțiune ascunsă pentru acest {{entityType}}",
   "enableCookies": "Activați cookie-urile",
   "entityFields": "Câmpuri de entitate",
+  "entityTypeField": "{{entityType}} Fields",
   "event": "Eveniment",
   "events": "Evenimente",
   "expandedMenu": "Meniu extins",

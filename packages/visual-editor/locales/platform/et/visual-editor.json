@@ -154,6 +154,7 @@
   "emptyStateSectionHidden": "Selle {{entityType}} jaoks peidetud jaotis",
   "enableCookies": "Luba küpsised",
   "entityFields": "Olemi väljad",
+  "entityTypeField": "{{entityType}} Fields",
   "event": "Sündmus",
   "events": "Sündmused",
   "expandedMenu": "Laiendatud menüü",

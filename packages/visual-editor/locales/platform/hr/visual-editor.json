@@ -154,6 +154,7 @@
   "emptyStateSectionHidden": "Odjeljak skriven za ovaj {{entityType}}",
   "enableCookies": "Omogući kolačiće",
   "entityFields": "Polja entiteta",
+  "entityTypeField": "{{entityType}} Fields",
   "event": "Događaj",
   "events": "Događaji",
   "expandedMenu": "Prošireni izbornik",

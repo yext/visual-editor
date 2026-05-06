@@ -154,6 +154,7 @@
   "emptyStateSectionHidden": "Avsnittet är dolt för denna {{entityType}}",
   "enableCookies": "Aktivera cookies",
   "entityFields": "Entitetsfält",
+  "entityTypeField": "{{entityType}} Fields",
   "event": "Händelse",
   "events": "Händelser",
   "expandedMenu": "Utökad meny",

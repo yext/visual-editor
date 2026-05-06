@@ -51,6 +51,7 @@ import { warnOnMultiValueLinkedEntityTraversal } from "../utils/linkedEntityWarn
 import { buildEntityFieldOptionGroups } from "../editor/entityFieldOptionGroups.ts";
 import { type MappedSourceFieldFilter } from "../utils/cardSlots/mappedSource.ts";
 import { useCurrentSourceField } from "../hooks/useCurrentSourceField.tsx";
+import { TemplateMetadataContext } from "../internal/hooks/useMessageReceivers.ts";
 
 const devLogger = new DevLogger();
 
@@ -448,6 +449,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
   const streamDocument = useDocument();
+  const templateMetadata = React.useContext(TemplateMetadataContext);
   const sourceFieldFromProps = useCurrentSourceField(sourceFieldPath);
   const sourceField =
     sourceFieldFromInputProps ||
@@ -455,6 +457,11 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     filter.subdocumentField ||
     "";
   const currentFieldPath = value?.field as string | undefined;
+  const entityGroupTitle = templateMetadata?.entityTypeDisplayName
+    ? pt("entityTypeField", "{{entityType}} Fields", {
+        entityType: templateMetadata.entityTypeDisplayName,
+      })
+    : pt("entityFields", "Entity Fields");
   const entityFieldSelector = React.useMemo<BasicSelectorField>(() => {
     const filteredEntityFields = getFieldsForSelector(
       entityFields,
@@ -509,12 +516,13 @@ export const EntityFieldInput = <T extends Record<string, any>>({
           ...options,
         ],
         linkedGroupTitle: pt("linkedEntityFields", "Linked Entity Fields"),
-        entityGroupTitle: pt("entityFields", "Entity Fields"),
+        entityGroupTitle,
       }),
       translateOptions: false,
       noOptionsPlaceholder: pt("noAvailableFields", "No available fields"),
     };
   }, [
+    entityGroupTitle,
     entityFields,
     filter,
     label,

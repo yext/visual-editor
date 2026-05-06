@@ -154,6 +154,7 @@
   "emptyStateSectionHidden": "Sekcja ukryta dla tego elementu {{entityType}}",
   "enableCookies": "Włącz pliki cookie",
   "entityFields": "Pola encji",
+  "entityTypeField": "{{entityType}} Fields",
   "event": "Wydarzenie",
   "events": "Wydarzenia",
   "expandedMenu": "Rozbudowane menu",
