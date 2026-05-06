@@ -351,7 +351,7 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
       slotStyles: slotStyles,
       headingText,
     });
-  }, [headingText, styles, slotStyles]);
+  }, [styles, slotStyles, headingText]);
 
   return (
     <Background
