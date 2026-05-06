@@ -15,6 +15,7 @@ import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 import { MainContent } from "../structure/MainContent.tsx";
+import { backgroundColors } from "../../utils/themeConfigOptions.ts";
 
 const rootDocument = {
   locale: "en",
@@ -207,6 +208,7 @@ const cityDocument = {
       name: "Galaxy Grill Rosslyn",
       timezone: "America/New_York",
       slug: "arlington",
+      geomodifier: "2nd Floor",
     },
     {
       address: {
@@ -232,6 +234,7 @@ const cityDocument = {
       mainPhone: "+12025551012",
       name: "Galaxy Grill Clarendon",
       timezone: "America/New_York",
+      geomodifier: "Rooftop",
     },
     {
       address: {
@@ -649,6 +652,54 @@ const tests: ComponentTest[] = [
       },
     },
     version: 58,
+  },
+  {
+    name: "version 76 - City with custom card titles",
+    document: cityDocument,
+    props: {
+      ...version40Props,
+      slots: {
+        ...version40Props.slots,
+        DirectoryGrid: [
+          {
+            type: "DirectoryGrid",
+            props: {
+              styles: {
+                backgroundColor: backgroundColors.background1.value,
+              },
+              slots: {
+                CardSlot: [
+                  {
+                    type: "DirectoryCard",
+                    props: {
+                      slots: {
+                        AddressSlot: [
+                          {
+                            type: "AddressSlot",
+                            props: {
+                              styles: {
+                                showGetDirectionsLink: true,
+                              },
+                            },
+                          },
+                        ],
+                      },
+                      data: {
+                        cardTitle: {
+                          defaultValue: "[[name]]",
+                          en: "[[name]] [[geomodifier]]",
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
+    },
+    version: 76,
   },
 ];
 

@@ -217,6 +217,7 @@ export const DirectoryGrid: YextComponentConfig<DirectoryGridProps> = {
           `DirectoryCard-${crypto.randomUUID()}`,
           i,
           createDirectoryChildReference(sortedDirectoryChildren[i], i),
+          data.props.slots?.CardSlot?.[0]?.props.data,
           data.props.slots?.CardSlot?.[0]?.props.styles,
           data.props.slots?.CardSlot?.[0]?.props.slots
         )
