@@ -1,25 +1,25 @@
 import { type DefaultComponentProps, type Fields } from "@puckeditor/core";
-import { type YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { type YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
 import {
   toPuckFields,
   type YextFieldDefinition,
   type YextFieldMap,
-} from "../../fields/fields.ts";
+} from "../fields/fields.ts";
 import {
   returnConstantFieldConfig,
   type EntityFieldSelectorField,
-} from "../../fields/EntityFieldSelectorField.tsx";
+} from "../fields/EntityFieldSelectorField.tsx";
 import {
   type ItemSourceField,
   type ItemSourceValue,
-} from "../../fields/ItemSourceField.tsx";
-import { type EntityFieldTypes } from "../../internal/utils/getFilteredEntityFields.ts";
+} from "../fields/ItemSourceField.tsx";
+import { type EntityFieldTypes } from "../internal/utils/getFilteredEntityFields.ts";
 import {
   resolveYextEntityField,
   resolveField,
-} from "../resolveYextEntityField.ts";
-import { type StreamDocument } from "../types/StreamDocument.ts";
-import { type MappedSourceFieldFilter } from "../cardSlots/mappedSource.ts";
+} from "./resolveYextEntityField.ts";
+import { type StreamDocument } from "./types/StreamDocument.ts";
+import { type MappedSourceFieldFilter } from "./cardSlots/mappedSource.ts";
 
 type CreateItemSourceOptions<TItem extends Record<string, unknown>> = {
   itemSourcePath: string;
@@ -336,9 +336,7 @@ const resolveItemValue = <TValue>(
         constantValue: entityField?.constantValue,
         constantValueEnabled: entityField?.constantValueEnabled,
       },
-      streamDocument.locale ??
-        streamDocument.meta?.locale ??
-        streamDocument.__?.pathInfo?.primaryLocale
+      streamDocument.locale
     ) as ResolvedItemField<TValue>;
   }
 

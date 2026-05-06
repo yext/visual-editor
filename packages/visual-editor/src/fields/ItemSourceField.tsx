@@ -241,7 +241,7 @@ export const ItemSourceFieldOverride = ({
           {!value?.field && (
             <FieldLabel
               label={pt(
-                "itemSourceFieldHelper",
+                "itemSourceFieldHint",
                 "Select a linked list field or switch to manual items."
               )}
               className="ve-pt-2"

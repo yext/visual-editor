@@ -6,7 +6,6 @@ import {
   EntityFieldInput,
   TYPE_TO_CONSTANT_CONFIG,
   getConstantConfigFromType,
-  returnConstantFieldConfig,
 } from "../fields/EntityFieldSelectorField.tsx";
 import { type YextEntityField } from "./yextEntityFieldUtils.ts";
 
@@ -42,5 +41,4 @@ export {
   EntityFieldInput,
   TYPE_TO_CONSTANT_CONFIG,
   getConstantConfigFromType,
-  returnConstantFieldConfig,
-} from "../fields/EntityFieldSelectorField.tsx";
+};

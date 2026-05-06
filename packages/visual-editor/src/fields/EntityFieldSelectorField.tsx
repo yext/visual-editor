@@ -465,7 +465,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   const entityFieldSelector = React.useMemo<BasicSelectorField>(() => {
     const filteredEntityFields = getFieldsForSelector(
       entityFields,
-      filter as any,
+      filter,
       streamDocument,
       sourceField || undefined
     );

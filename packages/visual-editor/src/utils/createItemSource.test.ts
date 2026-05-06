@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   type TranslatableRichText,
   type TranslatableString,
-} from "../../types/types.ts";
+} from "../types/types.ts";
 import { createItemSource } from "./createItemSource.ts";
 
 type ArticleItem = {
