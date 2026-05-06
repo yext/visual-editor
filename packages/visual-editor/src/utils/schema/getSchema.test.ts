@@ -400,8 +400,9 @@ describe("getSchema - entity pages", () => {
         },
         ref_categories: [
           {
-            rootId: 370,
-            fullDisplayName: "Automotive & Vehicles > Auto Repair",
+            categoryRootAncestorId: 370,
+            fullDisplayName:
+              "Automóviles y vehículos > Reparación de automóviles",
           },
         ],
         mainPhone: "123-456-7890",

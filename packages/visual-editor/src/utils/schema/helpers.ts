@@ -132,7 +132,7 @@ const primaryCategoryIdToLocalBusinessSubtype: Record<number, string> = {
 export const getLocalBusinessSubtype = (
   streamDocument: StreamDocument
 ): string => {
-  const categoryRootAncestorId = streamDocument?.ref_categories?.[0]?.rootId;
+  const categoryRootAncestorId = streamDocument?.__?.categoryRootAncestorId;
 
   return (
     primaryCategoryIdToLocalBusinessSubtype[categoryRootAncestorId] ||
