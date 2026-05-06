@@ -96,7 +96,7 @@ const renderItemSource = ({
   puckState.dispatch.mockReset();
   puckState.getItemBySelector.mockReset();
   puckState.getItemBySelector.mockReturnValue({
-    type: "ArticleList",
+    type: "LinkedItemsSection",
     props: {
       itemSource: value,
       ...selectedComponentProps,
@@ -207,7 +207,7 @@ describe("ItemSourceField", () => {
       destinationZone: "root",
       destinationIndex: 0,
       data: {
-        type: "ArticleList",
+        type: "LinkedItemsSection",
         props: {
           itemSource: {
             field: "c_articles",
