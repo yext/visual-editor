@@ -36,17 +36,12 @@ export const ArticleCard = ({
         : undefined;
 
   return (
-    <article className="ve-flex ve-flex-col ve-gap-4">
-      {image && (
-        <Image
-          image={image}
-          className="ve-w-full ve-rounded-image-borderRadius"
-        />
-      )}
-      <div className="ve-flex ve-flex-col ve-gap-2">
+    <article className="ve-flex ve-h-full ve-flex-col ve-overflow-hidden ve-rounded-xl ve-border ve-border-gray-200 ve-bg-white ve-shadow-sm">
+      {image && <Image image={image} className="ve-w-full" />}
+      <div className="ve-flex ve-flex-1 ve-flex-col ve-gap-2 ve-p-5">
         <h3 className="ve-text-lg ve-font-semibold">{resolvedTitle}</h3>
         {typeof resolvedDescription === "string" ? (
-          <p>{resolvedDescription}</p>
+          <p className="ve-text-sm ve-text-gray-700">{resolvedDescription}</p>
         ) : (
           resolvedDescription
         )}
