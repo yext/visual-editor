@@ -22,7 +22,7 @@ export {
   createItemSource,
   type CreateItemSourceOptions,
   type ItemSourceInstance,
-} from "./createItemSource.ts";
+} from "./itemSource/index.ts";
 export {
   createSearchAnalyticsConfig,
   createSearchHeadlessConfig,

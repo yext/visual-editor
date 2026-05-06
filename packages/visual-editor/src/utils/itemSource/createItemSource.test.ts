@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 import {
   type TranslatableRichText,
   type TranslatableString,
-} from "../types/types.ts";
-import { createItemSource } from "./createItemSource.ts";
+} from "../../types/types.ts";
+import { createItemSource } from "./index.ts";
 
 type ArticleItem = {
   title: {
