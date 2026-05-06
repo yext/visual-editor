@@ -265,8 +265,12 @@ const getDefaultValueForField = (
     return [];
   }
 
-  if (field.type === "text" || field.type === "translatableString") {
+  if (field.type === "text") {
     return "";
+  }
+
+  if (field.type === "translatableString") {
+    return { defaultValue: "" };
   }
 
   if (field.type === "radio" && "options" in field) {
