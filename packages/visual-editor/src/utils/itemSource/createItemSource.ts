@@ -21,10 +21,6 @@ import {
 import { type StreamDocument } from "../types/StreamDocument.ts";
 import { type MappedSourceFieldFilter } from "../cardSlots/mappedSource.ts";
 
-type NormalizeDataParams = {
-  lastData: { props: Record<string, unknown> } | Record<string, unknown> | null;
-};
-
 type CreateItemSourceOptions<TItem extends Record<string, unknown>> = {
   itemSourcePath: string;
   itemMappingsPath: string;
@@ -49,10 +45,6 @@ type ItemSourceInstance<
   fields: Fields<TProps>;
   defaultProps: Partial<TProps>;
   resolveFields: (data: { props: Record<string, unknown> }) => Fields<TProps>;
-  normalizeData: <TData extends { props: Record<string, unknown> }>(
-    data: TData,
-    params: NormalizeDataParams
-  ) => TData;
   resolveItems: (
     itemSource: ItemSourceValue<TItem> | undefined,
     itemMappings: TItem | undefined,
@@ -320,87 +312,6 @@ const getItemSourceTypes = (
   });
 
 /**
- * Detects authored entity-field values so source changes can clear only the
- * linked field bindings while preserving constants.
- */
-const isYextEntityFieldValue = (
-  value: unknown
-): value is Partial<YextEntityField<unknown>> =>
-  !!value &&
-  typeof value === "object" &&
-  "field" in value &&
-  "constantValue" in value;
-
-/**
- * Recursively clears selected field paths from an authored mapping tree while
- * preserving any constants that the editor entered.
- */
-const clearEntityFieldBindings = (value: unknown): unknown => {
-  if (isYextEntityFieldValue(value)) {
-    return {
-      ...value,
-      field: "",
-    };
-  }
-
-  if (Array.isArray(value)) {
-    return value.map(clearEntityFieldBindings);
-  }
-
-  if (value && typeof value === "object") {
-    return Object.fromEntries(
-      Object.entries(value).map(([key, nestedValue]) => [
-        key,
-        clearEntityFieldBindings(nestedValue),
-      ])
-    );
-  }
-
-  return value;
-};
-
-const hasEntityFieldBindings = (value: unknown): boolean => {
-  if (isYextEntityFieldValue(value)) {
-    return !!value.field;
-  }
-
-  if (Array.isArray(value)) {
-    return value.some(hasEntityFieldBindings);
-  }
-
-  if (value && typeof value === "object") {
-    return Object.values(value).some(hasEntityFieldBindings);
-  }
-
-  return false;
-};
-
-const getItemSourceSelection = (
-  itemSource: ItemSourceValue<Record<string, unknown>> | undefined
-): string =>
-  itemSource?.constantValueEnabled
-    ? "manual"
-    : itemSource?.field
-      ? `linked:${itemSource.field}`
-      : "unselected";
-
-/**
- * Normalizes the previous resolveData payload into a props object so source
- * change cleanup works across the callback shapes Puck can provide.
- */
-const getLastProps = (
-  lastData: NormalizeDataParams["lastData"]
-): Record<string, unknown> | undefined =>
-  !lastData
-    ? undefined
-    : "props" in lastData &&
-        lastData.props &&
-        typeof lastData.props === "object" &&
-        !Array.isArray(lastData.props)
-      ? (lastData.props as Record<string, unknown>)
-      : (lastData as Record<string, unknown>);
-
-/**
  * Resolves one item field into its render-ready value using either the current
  * source item or the root stream document, depending on field scope.
  */
@@ -479,8 +390,8 @@ const resolveItemValue = <TValue>(
  * 1. Builds the parent `itemSource` field and shared mapping fields from one
  *    item schema.
  * 2. Generates default props for linked mode and inline manual items.
- * 3. Exposes editor-time helpers for showing mappings and clearing stale field
- *    bindings when the selected source changes.
+ * 3. Exposes editor-time helpers for showing mappings when linked mode is
+ *    active.
  * 4. Resolves linked or manual items into render-ready values without writing
  *    derived data back onto component props.
  */
@@ -503,6 +414,8 @@ export const createItemSource = <
   const itemSourceField = {
     type: "itemSource",
     label: itemSourceLabel,
+    itemSourcePath,
+    itemMappingsPath,
     filter: {
       itemSourceTypes: getItemSourceTypes(
         scopedItemFields as YextFieldMap<Record<string, unknown>>
@@ -565,56 +478,6 @@ export const createItemSource = <
           })
         ) as YextFieldMap<any>
       ) as Fields<TProps>;
-    },
-    normalizeData: <TData extends { props: Record<string, unknown> }>(
-      data: TData,
-      params: NormalizeDataParams
-    ) => {
-      const lastProps = getLastProps(params.lastData);
-      const itemSource = getPathValue<ItemSourceValue<TItem>>(
-        data.props,
-        itemSourcePath
-      );
-      const lastItemSource = getPathValue<ItemSourceValue<TItem>>(
-        lastProps,
-        itemSourcePath
-      );
-
-      if (
-        !lastProps ||
-        getItemSourceSelection(
-          lastItemSource as ItemSourceValue<Record<string, unknown>> | undefined
-        ) ===
-          getItemSourceSelection(
-            itemSource as ItemSourceValue<Record<string, unknown>> | undefined
-          )
-      ) {
-        return data;
-      }
-
-      const itemMappings = getPathValue<Record<string, unknown>>(
-        data.props,
-        itemMappingsPath
-      );
-
-      if (!itemMappings) {
-        return data;
-      }
-
-      if (!hasEntityFieldBindings(itemMappings)) {
-        return data;
-      }
-
-      return {
-        ...data,
-        props: mergeTrees(
-          data.props,
-          buildNestedValueTree(
-            itemMappingsPath,
-            clearEntityFieldBindings(itemMappings)
-          )
-        ) as TData["props"],
-      } as TData;
     },
     resolveItems: (itemSource, itemMappings, streamDocument) => {
       if (!itemSource) {

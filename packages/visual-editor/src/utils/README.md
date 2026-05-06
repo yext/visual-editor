@@ -80,7 +80,6 @@ component backed by either a linked list field or manual items.
 - `fields`: generated Puck fields for `itemSource` and `itemMappings`
 - `defaultProps`: default authored state for linked and manual modes
 - `resolveFields(data)`: dynamic field visibility for mappings
-- `normalizeData(data, { lastData })`: source-change cleanup for stale field bindings
 - `resolveItems(itemSource, itemMappings, streamDocument)`: render-ready repeated items
 
 ### Usage
@@ -88,6 +87,8 @@ component backed by either a linked list field or manual items.
 Use this helper when a component needs repeated linked-entity content but wants
 to render the repeated UI directly instead of syncing slot children. See the
 full example in [editor/README.md](../editor/README.md#linked-entity-item-sources).
+The editor clears stale linked mapping selections automatically when the parent
+linked source changes.
 
 ## ThemeConfig
 

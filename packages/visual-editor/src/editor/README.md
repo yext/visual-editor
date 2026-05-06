@@ -185,6 +185,10 @@ item mappings, and manual fallback items in one place.
 4. Use `useDocument()` plus `itemSourceConfig.resolveItems(...)` in render to
    resolve the current list without storing derived output back onto props.
 
+When the user switches from one linked parent source to another, the editor
+automatically clears stale `itemMappings.*.field` selections while preserving
+any constant fallback values.
+
 ### Example
 
 `ArticleCard.tsx`
@@ -349,10 +353,6 @@ export const ArticleList: YextComponentConfig<ArticleListProps> = {
     toPuckFields({
       ...fields,
       ...articleItems.resolveFields(data),
-    }),
-  resolveData: (data, params) =>
-    articleItems.normalizeData(data, {
-      lastData: params.lastData,
     }),
   render: (props) => <ArticleListComponent {...props} />,
 };

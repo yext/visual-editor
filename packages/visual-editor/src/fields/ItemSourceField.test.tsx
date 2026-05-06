@@ -1,6 +1,35 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+
+const puckState = {
+  appState: {
+    ui: {
+      itemSelector: { index: 0, zone: "root" },
+    },
+  },
+  dispatch: vi.fn(),
+  getItemBySelector: vi.fn(),
+};
+
+vi.mock("@puckeditor/core", async () => {
+  const actual =
+    await vi.importActual<typeof import("@puckeditor/core")>(
+      "@puckeditor/core"
+    );
+
+  return {
+    ...actual,
+    createUsePuck: () => (selector: (state: typeof puckState) => unknown) =>
+      selector(puckState),
+    useGetPuck: () => () => ({
+      appState: puckState.appState,
+      dispatch: puckState.dispatch,
+      getItemBySelector: puckState.getItemBySelector,
+    }),
+  };
+});
+
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { EntityFieldsContext } from "../hooks/useEntityFields.tsx";
 import { TemplateMetadataContext } from "../internal/hooks/useMessageReceivers.ts";
@@ -53,8 +82,26 @@ const renderItemSource = ({
       },
     ],
   },
+  selectedComponentProps = {
+    itemMappings: {
+      title: {
+        field: "name",
+        constantValueEnabled: false,
+        constantValue: { defaultValue: "" },
+      },
+    },
+  },
 } = {}) => {
   const onChange = vi.fn();
+  puckState.dispatch.mockReset();
+  puckState.getItemBySelector.mockReset();
+  puckState.getItemBySelector.mockReturnValue({
+    type: "ArticleList",
+    props: {
+      itemSource: value,
+      ...selectedComponentProps,
+    },
+  });
 
   render(
     <TemplatePropsContext.Provider value={{ document: {} }}>
@@ -70,6 +117,8 @@ const renderItemSource = ({
               {
                 type: "itemSource",
                 label: "Articles",
+                itemSourcePath: "itemSource",
+                itemMappingsPath: "itemMappings",
                 filter: {
                   itemSourceTypes: [["type.string"]],
                 },
@@ -116,7 +165,35 @@ describe("ItemSourceField", () => {
   it("renders the linked source selector when KG mode is enabled", () => {
     const { onChange } = renderItemSource({
       value: {
-        field: "",
+        field: "c_featuredArticles",
+        constantValueEnabled: false,
+        constantValue: [],
+      },
+      selectedComponentProps: {
+        itemMappings: {
+          title: {
+            field: "",
+            constantValueEnabled: false,
+            constantValue: { defaultValue: "" },
+          },
+        },
+      },
+    });
+
+    fireEvent.click(screen.getByRole("combobox"));
+    fireEvent.click(screen.getAllByText("Articles")[1]!);
+
+    expect(onChange).toHaveBeenCalledWith({
+      field: "c_articles",
+      constantValueEnabled: false,
+      constantValue: [],
+    });
+  });
+
+  it("clears stale mappings when switching between linked sources", () => {
+    renderItemSource({
+      value: {
+        field: "c_featuredArticles",
         constantValueEnabled: false,
         constantValue: [],
       },
@@ -125,14 +202,47 @@ describe("ItemSourceField", () => {
     fireEvent.click(screen.getByRole("combobox"));
     fireEvent.click(screen.getAllByText("Articles")[1]!);
 
-    expect(onChange).toHaveBeenCalledWith(
-      {
-        field: "c_articles",
+    expect(puckState.dispatch).toHaveBeenCalledWith({
+      type: "replace",
+      destinationZone: "root",
+      destinationIndex: 0,
+      data: {
+        type: "ArticleList",
+        props: {
+          itemSource: {
+            field: "c_articles",
+            constantValueEnabled: false,
+            constantValue: [],
+          },
+          itemMappings: {
+            title: {
+              field: "",
+              constantValueEnabled: false,
+              constantValue: { defaultValue: "" },
+            },
+          },
+        },
+      },
+    });
+  });
+
+  it("does not clear mappings when switching from linked mode to manual mode", () => {
+    const { onChange } = renderItemSource({
+      value: {
+        field: "c_featuredArticles",
         constantValueEnabled: false,
         constantValue: [],
       },
-      undefined
-    );
+    });
+
+    fireEvent.click(screen.getByRole("switch"));
+
+    expect(puckState.dispatch).not.toHaveBeenCalled();
+    expect(onChange).toHaveBeenCalledWith({
+      field: "c_featuredArticles",
+      constantValueEnabled: true,
+      constantValue: [],
+    });
   });
 
   it("shows FAQ list sources when item mappings require string and rich text fields", () => {
