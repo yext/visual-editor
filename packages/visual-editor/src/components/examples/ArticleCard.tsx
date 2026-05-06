@@ -28,56 +28,59 @@ export const ArticleCard = ({
 }: ArticleCardProps) => {
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
-  const resolvedTitle = resolveComponentData(
-    title,
-    i18n.language,
-    streamDocument,
-    {
-      output: "plainText",
-    }
-  );
-  const resolvedDescription = description
-    ? resolveComponentData(description, i18n.language, streamDocument)
-    : undefined;
-  const resolvedHighlights =
-    highlights?.map((highlight) =>
-      resolveComponentData(highlight, i18n.language, streamDocument, {
-        output: "plainText",
-      })
-    ) ?? [];
-  const resolvedCtaLabel = cta
-    ? resolveComponentData(cta.label, i18n.language, streamDocument, {
-        output: "plainText",
-      })
-    : "";
-  const resolvedCtaLink = cta
-    ? resolveComponentData(cta.link, i18n.language, streamDocument, {
-        output: "plainText",
-      })
-    : "";
 
   return (
     <article className="ve-flex ve-h-full ve-flex-col ve-overflow-hidden ve-rounded-xl ve-border ve-border-gray-200 ve-bg-white ve-shadow-sm">
       {image && <Image image={image} className="ve-w-full" />}
-      <div className="ve-flex ve-flex-1 ve-flex-col ve-gap-2 ve-p-5">
-        <h3 className="ve-text-lg ve-font-semibold">{resolvedTitle}</h3>
-        {typeof resolvedDescription === "string" ? (
-          <p className="ve-text-sm ve-text-gray-700">{resolvedDescription}</p>
+      <div className="ve-flex ve-flex-1 ve-flex-col ve-gap-3 ve-p-5">
+        <h3 className="ve-text-lg ve-font-semibold ve-text-gray-900">
+          {resolveComponentData(title, i18n.language, streamDocument, {
+            output: "plainText",
+          })}
+        </h3>
+        {typeof description === "string" ? (
+          <p className="ve-text-sm ve-leading-6 ve-text-gray-700">
+            {description}
+          </p>
         ) : (
-          resolvedDescription
+          description &&
+          resolveComponentData(description, i18n.language, streamDocument)
         )}
-        {!!resolvedHighlights.length && (
-          <ul className="ve-list-disc ve-pl-5 ve-text-sm ve-text-gray-700">
-            {resolvedHighlights.map((highlight, index) => (
-              <li key={index}>{highlight}</li>
+        {!!highlights?.length && (
+          <ul className="ve-list-disc ve-space-y-1 ve-pl-5 ve-text-sm ve-leading-6 ve-text-gray-700">
+            {highlights.map((highlight, index) => (
+              <li key={index}>
+                {resolveComponentData(
+                  highlight,
+                  i18n.language,
+                  streamDocument,
+                  {
+                    output: "plainText",
+                  }
+                )}
+              </li>
             ))}
           </ul>
         )}
-        {resolvedCtaLabel && resolvedCtaLink && (
+        {cta?.label && cta.link && (
           <div className="ve-mt-auto ve-pt-3">
             <CTA
-              label={resolvedCtaLabel}
-              link={resolvedCtaLink}
+              label={resolveComponentData(
+                cta.label,
+                i18n.language,
+                streamDocument,
+                {
+                  output: "plainText",
+                }
+              )}
+              link={resolveComponentData(
+                cta.link,
+                i18n.language,
+                streamDocument,
+                {
+                  output: "plainText",
+                }
+              )}
               linkType={cta?.linkType}
               normalizeLink={cta?.normalizeLink ?? true}
               openInNewTab={cta?.openInNewTab}
