@@ -956,7 +956,7 @@ describe("YextEntityFieldSelector", () => {
           },
           {
             name: "c_faqSection",
-            displayName: "faqSection",
+            displayName: "FAQ Section",
             definition: {
               name: "c_faqSection",
               typeName: "type.faq_section",

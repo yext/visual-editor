@@ -358,8 +358,8 @@ describe("ItemSourceField", () => {
                 c_linkedLocation: "LinkedLocation",
                 c_eventsSection: "Events Section",
                 "c_eventsSection.events": "Events Section > Events",
-                c_faqSection: "faqSection",
-                "c_faqSection.faqs": "faqSection > FAQs",
+                c_faqSection: "FAQ Section",
+                "c_faqSection.faqs": "FAQ Section > FAQs",
               },
             }}
           >

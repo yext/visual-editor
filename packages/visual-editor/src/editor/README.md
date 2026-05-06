@@ -192,9 +192,12 @@ item mappings, and manual fallback items in one place.
 ```tsx
 import { type PuckComponent } from "@puckeditor/core";
 import {
+  resolveComponentData,
+  useDocument,
   type TranslatableRichText,
   type TranslatableString,
 } from "@yext/visual-editor";
+import { useTranslation } from "react-i18next";
 
 export type ArticleCardProps = {
   title?: TranslatableString | TranslatableRichText;
@@ -205,21 +208,22 @@ export type ArticleCardProps = {
   };
 };
 
-const getTextValue = (
-  value?: TranslatableString | TranslatableRichText
-): string => value?.defaultValue ?? "";
-
 export const ArticleCard: PuckComponent<ArticleCardProps> = ({
   title,
   description,
   image,
-}) => (
-  <article>
-    {image?.url && <img src={image.url} alt={image.alternateText ?? ""} />}
-    <h3>{getTextValue(title)}</h3>
-    <p>{getTextValue(description)}</p>
-  </article>
-);
+}) => {
+  const { i18n } = useTranslation();
+  const streamDocument = useDocument();
+
+  return (
+    <article>
+      {image?.url && <img src={image.url} alt={image.alternateText ?? ""} />}
+      <h3>{resolveComponentData(title, i18n.language, streamDocument)}</h3>
+      <p>{resolveComponentData(description, i18n.language, streamDocument)}</p>
+    </article>
+  );
+};
 ```
 
 `ArticleList.tsx`

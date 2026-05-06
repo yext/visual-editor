@@ -23,6 +23,10 @@ export type YextEntityField<T> = {
   disallowTranslation?: boolean;
 };
 
+/**
+ * Merges duplicate schema fields by API name, preferring entries that include
+ * display names or nested children.
+ */
 const dedupeFieldsByName = (fields: YextSchemaField[]): YextSchemaField[] => {
   const fieldsByName = new Map<string, YextSchemaField>();
 
@@ -41,6 +45,10 @@ const dedupeFieldsByName = (fields: YextSchemaField[]): YextSchemaField[] => {
   return Array.from(fieldsByName.values());
 };
 
+/**
+ * Sorts fields by their display label so selector options render in a stable,
+ * user-friendly order.
+ */
 const sortFields = (fields: YextSchemaField[]): YextSchemaField[] => {
   return fields.sort((entityFieldA, entityFieldB) => {
     const nameA = (entityFieldA.displayName ?? entityFieldA.name).toUpperCase();
@@ -49,6 +57,11 @@ const sortFields = (fields: YextSchemaField[]): YextSchemaField[] => {
   });
 };
 
+/**
+ * Looks up the best known display name for a field path from the flattened
+ * `ENTITY_FIELDS` display-name map, falling back to suffix paths when the
+ * scoped path is not present directly.
+ */
 const getMappedDisplayName = (
   fieldPath: string,
   entityFields: StreamFields | null
@@ -70,44 +83,10 @@ const getMappedDisplayName = (
   return undefined;
 };
 
-const humanizeDisplayNameSegment = (displayName: string): string =>
-  displayName
-    .replace(/^c_/, "")
-    .split(/(?=[A-Z])|_/)
-    .filter(Boolean)
-    .map((segment) =>
-      /^[a-z]{1,3}$/.test(segment)
-        ? segment.toUpperCase()
-        : segment.charAt(0).toUpperCase() + segment.slice(1)
-    )
-    .join(" ");
-
-const normalizeDisplayNameSegment = (
-  displayName: string,
-  field: YextSchemaField
-): string => {
-  if (
-    displayName.includes(" ") ||
-    field.definition.typeRegistryId === "type.entity_reference" ||
-    field.definition.type.documentType === "DOCUMENT_TYPE_ENTITY"
-  ) {
-    return displayName;
-  }
-
-  const normalizedDisplayName = displayName.replace(/[^a-z0-9]/gi, "");
-  const normalizedFieldName = field.name
-    .replace(/^c_/, "")
-    .replace(/[^a-z0-9]/gi, "");
-
-  return normalizedDisplayName.toLowerCase() ===
-    normalizedFieldName.toLowerCase() &&
-    (displayName === field.name ||
-      displayName.startsWith("c_") ||
-      /^[a-z]/.test(displayName))
-    ? humanizeDisplayNameSegment(displayName)
-    : displayName;
-};
-
+/**
+ * Builds the display label for a field path by walking the schema tree and
+ * combining each segment's display name.
+ */
 export const getEntityFieldDisplayName = (
   fieldPath: string | undefined,
   entityFields: StreamFields | null
@@ -139,9 +118,7 @@ export const getEntityFieldDisplayName = (
         : (mappedDisplayName.split(" > ").at(-1) ?? mappedDisplayName)
       : (matchingField.displayName?.split(" > ").at(-1) ?? matchingField.name);
 
-    displayNameSegments.push(
-      normalizeDisplayNameSegment(nextSegmentDisplayName, matchingField)
-    );
+    displayNameSegments.push(nextSegmentDisplayName);
     currentDisplayName = mappedDisplayName ?? displayNameSegments.join(" > ");
     currentFields = matchingField.children?.fields ?? [];
   }
@@ -149,12 +126,19 @@ export const getEntityFieldDisplayName = (
   return displayNameSegments.join(" > ");
 };
 
+/**
+ * Returns whether a resolved mapped-source root is compatible with linked-item
+ * source selection: undefined, null, arrays, and object values are all valid.
+ */
 const isMappedListSourceValue = (value: unknown): boolean =>
   value === undefined ||
   value === null ||
   Array.isArray(value) ||
   (!!value && typeof value === "object");
 
+/**
+ * Resolves one schema field definition from a dotted field path.
+ */
 const getSchemaFieldAtPath = (
   entityFields: StreamFields | null,
   fieldPath: string
@@ -175,6 +159,10 @@ const getSchemaFieldAtPath = (
   return matchingField;
 };
 
+/**
+ * Returns the nested schema subtree for one selected source field so descendant
+ * pickers can operate relative to that item's shape.
+ */
 const getSubdocumentStreamFields = (
   entityFields: StreamFields | null,
   fieldPath: string
@@ -189,12 +177,20 @@ const getSubdocumentStreamFields = (
     : null;
 };
 
+/**
+ * Returns whether a schema field represents a linked entity reference.
+ */
 const isLinkedEntityDefinition = (
   field: YextSchemaField | undefined
 ): boolean =>
   field?.definition.typeRegistryId === "type.entity_reference" ||
   field?.definition.type.documentType === "DOCUMENT_TYPE_ENTITY";
 
+/**
+ * Detects whether a scoped descendant path passes through another linked
+ * entity reference, which would otherwise leak unrelated nested fields into the
+ * current picker scope.
+ */
 const hasNestedLinkedEntityAncestor = (
   scopedStreamFields: StreamFields,
   relativeFieldPath: string
@@ -216,6 +212,11 @@ const hasNestedLinkedEntityAncestor = (
   return false;
 };
 
+/**
+ * Returns selector fields relative to a selected source item, removing nested
+ * linked-entity descendants and trimming the repeated root label from each
+ * option.
+ */
 const getScopedFieldsForSelector = (
   entityFields: StreamFields | null,
   sourceField: string,
@@ -260,6 +261,16 @@ const getScopedFieldsForSelector = (
   );
 };
 
+/**
+ * Returns the schema fields that should appear in an entity field selector.
+ *
+ * 1. Scope to a selected source item when `sourceField` is provided.
+ * 2. For item-source and mapped-source pickers, restrict roots to fields that
+ *    can satisfy the required descendant type sets.
+ * 3. Filter incompatible resolved values out when a stream document is
+ *    available.
+ * 4. Fall back to normal entity-field filtering for standard field selectors.
+ */
 export const getFieldsForSelector = (
   entityFields: StreamFields | null,
   filter: MappedSourceFieldFilter<any>,
