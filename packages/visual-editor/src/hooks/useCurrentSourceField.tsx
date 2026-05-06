@@ -33,39 +33,53 @@ const getValueAtPath = (value: unknown, path: string): unknown => {
  * - the stored value does not contain a linked field path
  */
 export const useCurrentSourceField = (sourceFieldPath?: string): string => {
-  return usePuck((state) => {
-    if (!sourceFieldPath) {
+  try {
+    return usePuck((state) => {
+      if (!sourceFieldPath) {
+        return "";
+      }
+
+      const itemSelector = state.appState.ui.itemSelector;
+      if (!itemSelector) {
+        return "";
+      }
+
+      const sourceFieldValue = getValueAtPath(
+        state.getItemBySelector(itemSelector)?.props,
+        sourceFieldPath
+      );
+
+      if (typeof sourceFieldValue === "string") {
+        return sourceFieldValue;
+      }
+
+      if (
+        sourceFieldValue &&
+        typeof sourceFieldValue === "object" &&
+        !Array.isArray(sourceFieldValue)
+      ) {
+        const sourceField = (sourceFieldValue as Record<string, unknown>).field;
+        const constantValueEnabled = (
+          sourceFieldValue as Record<string, unknown>
+        ).constantValueEnabled;
+
+        return !constantValueEnabled && typeof sourceField === "string"
+          ? sourceField
+          : "";
+      }
+
       return "";
-    }
-
-    const itemSelector = state.appState.ui.itemSelector;
-    if (!itemSelector) {
-      return "";
-    }
-
-    const sourceFieldValue = getValueAtPath(
-      state.getItemBySelector(itemSelector)?.props,
-      sourceFieldPath
-    );
-
-    if (typeof sourceFieldValue === "string") {
-      return sourceFieldValue;
-    }
-
+    });
+  } catch (error) {
     if (
-      sourceFieldValue &&
-      typeof sourceFieldValue === "object" &&
-      !Array.isArray(sourceFieldValue)
+      error instanceof Error &&
+      error.message === "usePuck must be used inside <Puck>."
     ) {
-      const sourceField = (sourceFieldValue as Record<string, unknown>).field;
-      const constantValueEnabled = (sourceFieldValue as Record<string, unknown>)
-        .constantValueEnabled;
-
-      return !constantValueEnabled && typeof sourceField === "string"
-        ? sourceField
-        : "";
+      console.warn("useCurrentSourceField: usePuck must be used inside <Puck>");
+      return "";
     }
 
-    return "";
-  });
+    console.error(error);
+    throw error;
+  }
 };
