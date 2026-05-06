@@ -15,6 +15,7 @@ describe("ArticleList", () => {
               {
                 name: "Article one",
                 summary: { html: "<p>Summary one</p>" },
+                highlights: ["Point one", "Point two"],
               },
             ],
           },
@@ -37,14 +38,31 @@ describe("ArticleList", () => {
               constantValueEnabled: false,
               constantValue: { defaultValue: { html: "" } },
             },
+            highlights: {
+              field: "highlights",
+              constantValueEnabled: false,
+              constantValue: [],
+            },
             image: {
               field: "",
               constantValueEnabled: false,
               constantValue: { url: "", width: 1, height: 1 },
             },
+            cta: {
+              field: "",
+              constantValueEnabled: true,
+              constantValue: {
+                label: { defaultValue: "Read more" },
+                link: { defaultValue: "/article-one" },
+                linkType: "URL",
+                ctaType: "textAndLink",
+                normalizeLink: false,
+                openInNewTab: false,
+              },
+            },
           },
           heading: {
-            text: "Featured Articles",
+            text: { defaultValue: "Featured Articles" },
           },
           styles: {
             showHeading: true,
@@ -64,5 +82,8 @@ describe("ArticleList", () => {
     expect(screen.getByText("Featured Articles")).toBeDefined();
     expect(screen.getByText("Article one")).toBeDefined();
     expect(screen.getByText("Summary one")).toBeDefined();
+    expect(screen.getByText("Point one")).toBeDefined();
+    expect(screen.getByText("Point two")).toBeDefined();
+    expect(screen.getByText("Read more")).toBeDefined();
   });
 });

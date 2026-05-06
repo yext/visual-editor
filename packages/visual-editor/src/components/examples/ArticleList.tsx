@@ -1,5 +1,7 @@
 import { type PuckComponent } from "@puckeditor/core";
+import { useTranslation } from "react-i18next";
 import { ArticleCard } from "./ArticleCard.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import {
   toPuckFields,
   type YextFields,
@@ -12,21 +14,24 @@ import { createItemSource } from "../../utils/createItemSource.ts";
 import { type StreamDocument } from "../../utils/types/StreamDocument.ts";
 import { type TranslatableAssetImage } from "../../types/images.ts";
 import {
+  type EnhancedTranslatableCTA,
   type TranslatableRichText,
   type TranslatableString,
 } from "../../types/types.ts";
 
 type ArticleItem = {
-  title: YextEntityField<TranslatableString | TranslatableRichText>;
+  title: YextEntityField<TranslatableString>;
   description: YextEntityField<TranslatableRichText>;
+  highlights: YextEntityField<TranslatableString[]>;
   image: YextEntityField<TranslatableAssetImage>;
+  cta: YextEntityField<EnhancedTranslatableCTA>;
 };
 
 export type ArticleListProps = {
   itemSource: ItemSourceValue<ArticleItem>;
   itemMappings?: ArticleItem;
   heading: {
-    text: string;
+    text: TranslatableString;
   };
   styles: {
     showHeading: boolean;
@@ -44,7 +49,7 @@ const articleItems = createItemSource<ArticleListProps, ArticleItem>({
       type: "entityField",
       label: "Title",
       filter: {
-        types: ["type.string", "type.rich_text_v2"],
+        types: ["type.string"],
       },
     },
     description: {
@@ -54,11 +59,26 @@ const articleItems = createItemSource<ArticleListProps, ArticleItem>({
         types: ["type.rich_text_v2"],
       },
     },
+    highlights: {
+      type: "entityField",
+      label: "Highlights",
+      filter: {
+        types: ["type.string"],
+        includeListsOnly: true,
+      },
+    },
     image: {
       type: "entityField",
       label: "Image",
       filter: {
         types: ["type.image"],
+      },
+    },
+    cta: {
+      type: "entityField",
+      label: "CTA",
+      filter: {
+        types: ["type.cta"],
       },
     },
   },
@@ -71,7 +91,7 @@ const articleListFields: YextFields<ArticleListProps> = {
     label: "Heading",
     objectFields: {
       text: {
-        type: "text",
+        type: "translatableString",
         label: "Text",
       },
     },
@@ -102,17 +122,26 @@ const ArticleListComponent: PuckComponent<ArticleListProps> = ({
   itemMappings,
   styles,
 }) => {
+  const { i18n } = useTranslation();
   const streamDocument = useDocument<StreamDocument>();
   const items = articleItems.resolveItems(
     itemSource,
     itemMappings,
     streamDocument
   );
+  const resolvedHeadingText = resolveComponentData(
+    heading.text,
+    i18n.language,
+    streamDocument,
+    {
+      output: "plainText",
+    }
+  );
 
   return (
     <section className="ve-flex ve-flex-col ve-gap-6">
       {styles.showHeading && (
-        <h2 className="ve-text-2xl ve-font-semibold">{heading.text}</h2>
+        <h2 className="ve-text-2xl ve-font-semibold">{resolvedHeadingText}</h2>
       )}
       <div
         className="ve-grid ve-gap-6"
@@ -125,7 +154,9 @@ const ArticleListComponent: PuckComponent<ArticleListProps> = ({
             key={index}
             title={item.title}
             description={item.description}
+            highlights={item.highlights}
             image={item.image}
+            cta={item.cta}
           />
         ))}
       </div>
@@ -141,7 +172,7 @@ export const ArticleList: YextComponentConfig<ArticleListProps> = {
     itemSource: articleItems.defaultProps.itemSource!,
     itemMappings: articleItems.defaultProps.itemMappings!,
     heading: {
-      text: "Featured Articles",
+      text: { defaultValue: "Featured Articles" },
     },
     styles: {
       showHeading: true,

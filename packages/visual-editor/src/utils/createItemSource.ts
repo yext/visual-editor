@@ -166,6 +166,28 @@ const isEntityFieldDefinition = (
 ): field is EntityFieldSelectorField<any> => field.type === "entityField";
 
 /**
+ * Returns whether a linked mapping field should expose constant-value mode.
+ * Mappings default to authored constants only for field editors that can
+ * meaningfully author embedded content, such as strings, rich text, and CTAs.
+ */
+const shouldEnableMappingConstantValue = (
+  field: EntityFieldSelectorField<any>
+): boolean => {
+  const constantValueFilter = field.constantValueFilter ?? field.filter;
+
+  return (
+    !constantValueFilter.includeListsOnly &&
+    !!constantValueFilter.types?.length &&
+    constantValueFilter.types.every(
+      (entityFieldType) =>
+        entityFieldType === "type.string" ||
+        entityFieldType === "type.rich_text_v2" ||
+        entityFieldType === "type.cta"
+    )
+  );
+};
+
+/**
  * Infers the default constant value shape that matches an entity field's
  * configured filter and translation behavior.
  */
@@ -241,6 +263,71 @@ const getDefaultValueForField = (
   }
 
   return undefined;
+};
+
+/**
+ * Applies item-mapping defaults before the same schema is reused for manual
+ * items and source-relative linked mappings.
+ */
+const getMappingItemField = <TValue>(
+  field: YextFieldDefinition<TValue>,
+  itemSourcePath: string
+): YextFieldDefinition<TValue> => {
+  const sourceScopedField = applySourceEntityPath(field, itemSourcePath);
+
+  if (
+    isEntityFieldDefinition(sourceScopedField) &&
+    sourceScopedField.disableConstantValueToggle === undefined
+  ) {
+    return {
+      ...sourceScopedField,
+      disableConstantValueToggle:
+        !shouldEnableMappingConstantValue(sourceScopedField),
+    } as YextFieldDefinition<TValue>;
+  }
+
+  return sourceScopedField;
+};
+
+/**
+ * Removes mapping-only entity-field restrictions from the manual item editor
+ * so authored fallback items can still use constant values.
+ */
+const getManualItemField = <TValue>(
+  field: YextFieldDefinition<TValue>
+): YextFieldDefinition<TValue> => {
+  if (isEntityFieldDefinition(field)) {
+    const { disableConstantValueToggle: _disableConstantValueToggle, ...rest } =
+      field;
+
+    return rest as YextFieldDefinition<TValue>;
+  }
+
+  if (field.type === "object" && "objectFields" in field) {
+    return {
+      ...field,
+      objectFields: Object.fromEntries(
+        Object.entries(field.objectFields).map(([key, nestedField]) => [
+          key,
+          getManualItemField(nestedField as YextFieldDefinition<any>),
+        ])
+      ),
+    } as YextFieldDefinition<TValue>;
+  }
+
+  if (field.type === "array" && "arrayFields" in field) {
+    return {
+      ...field,
+      arrayFields: Object.fromEntries(
+        Object.entries(field.arrayFields).map(([key, nestedField]) => [
+          key,
+          getManualItemField(nestedField as YextFieldDefinition<any>),
+        ])
+      ),
+    } as YextFieldDefinition<TValue>;
+  }
+
+  return field;
 };
 
 /**
@@ -406,7 +493,13 @@ export const createItemSource = <
   const scopedItemFields = Object.fromEntries(
     Object.entries(itemFields).map(([key, field]) => [
       key,
-      applySourceEntityPath(field as YextFieldDefinition<any>, itemSourcePath),
+      getMappingItemField(field as YextFieldDefinition<any>, itemSourcePath),
+    ])
+  ) as YextFieldMap<TItem>;
+  const manualItemFields = Object.fromEntries(
+    Object.entries(scopedItemFields).map(([key, field]) => [
+      key,
+      getManualItemField(field as YextFieldDefinition<any>),
     ])
   ) as YextFieldMap<TItem>;
   const itemSourceField = {
@@ -419,9 +512,9 @@ export const createItemSource = <
         scopedItemFields as YextFieldMap<Record<string, unknown>>
       ),
     } as MappedSourceFieldFilter<any>,
-    itemFields: scopedItemFields,
+    itemFields: manualItemFields,
     defaultItemValue: Object.fromEntries(
-      Object.entries(scopedItemFields).map(([key, field]) => [
+      Object.entries(manualItemFields).map(([key, field]) => [
         key,
         getDefaultValueForField(field as YextFieldDefinition<any>, true),
       ])

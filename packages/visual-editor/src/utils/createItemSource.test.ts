@@ -190,4 +190,102 @@ describe("createItemSource", () => {
       },
     ]);
   });
+
+  it("keeps mapping-only constant toggle restrictions out of manual items", () => {
+    const imageItems = createItemSource<
+      {
+        itemSource: {
+          field: string;
+          constantValueEnabled?: boolean;
+          constantValue: {
+            image: {
+              field: string;
+              constantValueEnabled?: boolean;
+              constantValue: { url?: string };
+            };
+          }[];
+        };
+        itemMappings?: {
+          image: {
+            field: string;
+            constantValueEnabled?: boolean;
+            constantValue: { url?: string };
+          };
+          title: {
+            field: string;
+            constantValueEnabled?: boolean;
+            constantValue: TranslatableString;
+          };
+          cta: {
+            field: string;
+            constantValueEnabled?: boolean;
+            constantValue: {
+              label?: TranslatableString;
+              link?: TranslatableString;
+            };
+          };
+        };
+      },
+      {
+        image: {
+          field: string;
+          constantValueEnabled?: boolean;
+          constantValue: { url?: string };
+        };
+        title: {
+          field: string;
+          constantValueEnabled?: boolean;
+          constantValue: TranslatableString;
+        };
+        cta: {
+          field: string;
+          constantValueEnabled?: boolean;
+          constantValue: {
+            label?: TranslatableString;
+            link?: TranslatableString;
+          };
+        };
+      }
+    >({
+      itemSourcePath: "itemSource",
+      itemMappingsPath: "itemMappings",
+      itemFields: {
+        image: {
+          type: "entityField",
+          label: "Image",
+          filter: { types: ["type.image"] },
+        },
+        title: {
+          type: "entityField",
+          label: "Title",
+          filter: { types: ["type.string"] },
+        },
+        cta: {
+          type: "entityField",
+          label: "CTA",
+          filter: { types: ["type.cta"] },
+        },
+      },
+    });
+
+    expect(
+      imageItems.defaultProps.itemSource?.constantValue?.[0]?.image
+        ?.constantValueEnabled
+    ).toBe(true);
+    expect(
+      imageItems.defaultProps.itemMappings?.image?.constantValueEnabled
+    ).toBe(false);
+    expect(
+      (imageItems.fields as any).itemMappings.objectFields.image
+        .disableConstantValueToggle
+    ).toBe(true);
+    expect(
+      (imageItems.fields as any).itemMappings.objectFields.title
+        .disableConstantValueToggle
+    ).toBe(false);
+    expect(
+      (imageItems.fields as any).itemMappings.objectFields.cta
+        .disableConstantValueToggle
+    ).toBe(false);
+  });
 });
