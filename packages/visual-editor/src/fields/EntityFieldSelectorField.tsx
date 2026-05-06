@@ -508,9 +508,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
         options: [
           {
             value: "",
-            label: pt("entityTypeField", "{{entityType}} Field", {
-              entityType: templateMetadata.entityTypeDisplayName,
-            }),
+            label: pt("fields.options.selectAField", "Select a Field"),
             fieldPath: "",
           },
           ...options,

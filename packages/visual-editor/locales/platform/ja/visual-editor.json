@@ -154,7 +154,6 @@
   "emptyStateSectionHidden": "この {{entityType}} に対して非表示のセクション",
   "enableCookies": "Cookieを有効にする",
   "entityFields": "エンティティフィールド",
-  "entityTypeField": "{{entityType}}フィールド",
   "event": "イベント",
   "events": "イベント",
   "expandedMenu": "拡張メニュー",

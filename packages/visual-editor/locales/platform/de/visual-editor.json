@@ -154,7 +154,6 @@
   "emptyStateSectionHidden": "Modul für diesen {{entityType}} ausgeblendet",
   "enableCookies": "Cookies aktivieren",
   "entityFields": "Entitätsfelder",
-  "entityTypeField": "{{entityType}}-Feld",
   "event": "Event",
   "events": "Veranstaltungen",
   "expandedMenu": "Erweitertes Menü",

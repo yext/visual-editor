@@ -313,11 +313,12 @@ describe("YextEntityFieldSelector", () => {
 
     fireEvent.click(screen.getByRole("combobox"));
 
+    expect(screen.getAllByText("Select a Field").length).toBeGreaterThan(0);
     expect(screen.getByText("Linked Entity Fields")).toBeDefined();
     expect(screen.getByText("Entity Fields")).toBeDefined();
   });
 
-  it("does not show group headings when only one category has options", () => {
+  it("shows only the entity-fields heading when linked fields are unavailable", () => {
     renderEntityFieldInput({
       entityFields: defaultEntityFields,
       filter: { types: ["type.string"] },
@@ -325,8 +326,9 @@ describe("YextEntityFieldSelector", () => {
 
     fireEvent.click(screen.getByRole("combobox"));
 
+    expect(screen.getAllByText("Select a Field").length).toBeGreaterThan(0);
     expect(screen.queryByText("Linked Entity Fields")).toBeNull();
-    expect(screen.queryByText("Entity Fields")).toBeNull();
+    expect(screen.getByText("Entity Fields")).toBeDefined();
   });
 
   it("shows base entity list roots when the selector opts into them", () => {
@@ -761,7 +763,7 @@ describe("YextEntityFieldSelector", () => {
 
     fireEvent.click(screen.getByRole("combobox"));
 
-    expect(screen.getAllByText("Location Field").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Select a Field").length).toBeGreaterThan(0);
     expect(screen.queryByText("FAQ Section")).toBeNull();
     expect(screen.queryByText("FAQ Section > FAQs")).toBeNull();
     expect(screen.queryByText("Linked Location")).toBeNull();
@@ -1181,7 +1183,7 @@ describe("YextEntityFieldSelector", () => {
 
     fireEvent.click(screen.getByRole("combobox"));
 
-    expect(screen.getAllByText("Location Field").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Select a Field").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Name").length).toBeGreaterThan(0);
     expect(screen.queryByText("Youtube Channel URL")).toBeNull();
     expect(screen.queryByText("Linked Location")).toBeNull();
@@ -1509,7 +1511,7 @@ describe("YextEntityFieldSelector", () => {
 
     fireEvent.click(screen.getByRole("combobox"));
 
-    expect(screen.getAllByText("Location Field")).toHaveLength(2);
+    expect(screen.getAllByText("Select a Field")).toHaveLength(2);
     expect(screen.queryByText("Name")).toBeNull();
     expect(screen.queryByText("Trip Branding > URL")).toBeNull();
   });
@@ -1540,7 +1542,7 @@ describe("YextEntityFieldSelector", () => {
     const listbox = screen.getByRole("listbox");
 
     expect(within(listbox).queryByText("LinkedIn URL")).toBeNull();
-    expect(screen.getAllByText("Location Field")).toHaveLength(2);
+    expect(screen.getAllByText("Select a Field")).toHaveLength(2);
   });
 
   it("stores linked descendant selections relative to the selected source", () => {
@@ -1676,7 +1678,7 @@ describe("YextEntityFieldSelector", () => {
       "Trip Branding > URL"
     );
     expect(screen.getByRole("combobox").textContent).not.toContain(
-      "Location Field"
+      "Select a Field"
     );
   });
 
@@ -1914,12 +1916,12 @@ describe("YextEntityFieldSelector", () => {
 
     expect(screen.getAllByRole("combobox")).toHaveLength(1);
     expect(screen.getAllByRole("combobox")[0]?.textContent).toContain(
-      "Location Field"
+      "Select a Field"
     );
 
     fireEvent.click(screen.getAllByRole("combobox")[0]);
 
-    expect(screen.getAllByText("Location Field").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Select a Field").length).toBeGreaterThan(0);
     expect(screen.queryByText("Name")).toBeNull();
   });
 

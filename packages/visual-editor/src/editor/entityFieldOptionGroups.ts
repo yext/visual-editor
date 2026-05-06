@@ -22,10 +22,12 @@ export type EntityFieldOptionGroup<TOption> = {
  * Groups entity field selector options into linked-entity and root-entity
  * sections for display.
  *
- * 1. Partition options by whether their full field path starts from a linked
- *    entity source field.
- * 2. Drop the internal `fieldPath` metadata once grouping is decided.
- * 3. Omit empty groups and collapse to a single untitled group when only one
+ * 1. Pull the empty-selection option into its own ungrouped section so it
+ *    always renders at the top of the picker.
+ * 2. Partition the remaining options by whether their full field path starts
+ *    from a linked entity source field.
+ * 3. Drop the internal `fieldPath` metadata once grouping is decided.
+ * 4. Omit empty groups and collapse to a single untitled group when only one
  *    section has options.
  */
 export const buildEntityFieldOptionGroups = <
@@ -41,10 +43,16 @@ export const buildEntityFieldOptionGroups = <
   linkedGroupTitle: string;
   entityGroupTitle: string;
 }): EntityFieldOptionGroup<Omit<TOption, "fieldPath">>[] => {
+  const topOptions: Omit<TOption, "fieldPath">[] = [];
   const linkedOptions: Omit<TOption, "fieldPath">[] = [];
   const entityOptions: Omit<TOption, "fieldPath">[] = [];
 
   options.forEach(({ fieldPath, ...option }) => {
+    if (option.value === "" && !fieldPath) {
+      topOptions.push(option);
+      return;
+    }
+
     if (isLinkedEntityFieldPath(fieldPath, entityFields)) {
       linkedOptions.push(option);
       return;
@@ -54,6 +62,7 @@ export const buildEntityFieldOptionGroups = <
   });
 
   const nonEmptyGroups = [
+    topOptions.length ? { options: topOptions } : undefined,
     linkedOptions.length
       ? { title: linkedGroupTitle, options: linkedOptions }
       : undefined,

@@ -154,7 +154,6 @@
   "emptyStateSectionHidden": "Seksjon skjult for denne {{entityType}}",
   "enableCookies": "Aktiver informasjonskapsler",
   "entityFields": "Entitetsfelt",
-  "entityTypeField": "{{entityType}} felt",
   "event": "Hendelse",
   "events": "Hendelser",
   "expandedMenu": "Utvidet meny",
