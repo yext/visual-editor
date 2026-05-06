@@ -511,6 +511,8 @@
     "video": "Video",
     "visibleOnLivePage": "Redzams tiešraides lapā",
     "weight": "Svars",
+    "whenFalse": "Kad viltus",
+    "whenTrue": "Kad patiesība",
     "wrap": "Ietīt",
     "xLink": "X saite",
     "youtubeLink": "YouTube saite"

@@ -511,6 +511,8 @@
     "video": "Wideo",
     "visibleOnLivePage": "Widoczne na stronie na żywo",
     "weight": "Waga",
+    "whenFalse": "Kiedy fałszywe",
+    "whenTrue": "Kiedy prawda",
     "wrap": "Zawinąć",
     "xLink": "X link",
     "youtubeLink": "Link YouTube"
