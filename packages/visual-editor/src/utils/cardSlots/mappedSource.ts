@@ -44,5 +44,4 @@ export type MappedSourceFieldFilter<T extends Record<string, any>> =
     itemSourceTypes?: EntityFieldTypes[][];
     /** Used only when itemSourceTypes is not provided. */
     mappedSourceTypes?: EntityFieldTypes[][];
-    subdocumentField?: string;
   };

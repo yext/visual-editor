@@ -31,6 +31,7 @@ type EntityFieldTypesFilter = {
   includeListsOnly?: boolean;
   directChildrenOf?: string;
   descendantsOf?: string;
+  subdocumentField?: string;
 };
 export type RenderEntityFieldFilter<T extends Record<string, any>> =
   EntityFieldTypesFilter & EitherOrNeither<AllowList<T>, DisallowList<T>>;

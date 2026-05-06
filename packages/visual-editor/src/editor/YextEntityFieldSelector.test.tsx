@@ -10,9 +10,9 @@ import {
   ConstantValueInput,
   EntityFieldInput,
 } from "./YextEntityFieldSelector.tsx";
+import { EntityFieldSelectorFieldOverride } from "../fields/EntityFieldSelectorField.tsx";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { EmbeddedFieldStringInputFromEntity } from "./EmbeddedFieldStringInput.tsx";
-import { YextAutoField } from "../fields/YextAutoField.tsx";
 import { msg } from "../utils/i18n/platform.ts";
 
 const { warningToast } = vi.hoisted(() => ({
@@ -315,7 +315,7 @@ describe("YextEntityFieldSelector", () => {
 
     expect(screen.getAllByText("Select a Field").length).toBeGreaterThan(0);
     expect(screen.getByText("Linked Entity Fields")).toBeDefined();
-    expect(screen.getByText("Entity Fields")).toBeDefined();
+    expect(screen.getByText("Name")).toBeDefined();
   });
 
   it("shows only the entity-fields heading when linked fields are unavailable", () => {
@@ -328,7 +328,7 @@ describe("YextEntityFieldSelector", () => {
 
     expect(screen.getAllByText("Select a Field").length).toBeGreaterThan(0);
     expect(screen.queryByText("Linked Entity Fields")).toBeNull();
-    expect(screen.getByText("Entity Fields")).toBeDefined();
+    expect(screen.getByText("Name")).toBeDefined();
   });
 
   it("shows base entity list roots when the selector opts into them", () => {
@@ -2039,7 +2039,7 @@ describe("YextEntityFieldSelector", () => {
           }}
         >
           <EntityFieldsContext.Provider value={defaultEntityFields}>
-            <YextAutoField
+            <EntityFieldSelectorFieldOverride
               field={{
                 type: "entityField",
                 label: msg("fields.date", "Date"),

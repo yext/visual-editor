@@ -379,9 +379,7 @@ export const ConstantValueModeToggler = ({
 };
 
 type InputProps<T extends Record<string, any>> = {
-  filter: RenderEntityFieldFilter<T> & {
-    subdocumentField?: string;
-  };
+  filter: RenderEntityFieldFilter<T>;
   onChange: (value: any, uiState?: any) => void;
   value: any;
   className?: string;

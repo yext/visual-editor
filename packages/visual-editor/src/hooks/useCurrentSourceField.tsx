@@ -75,6 +75,7 @@ export const useCurrentSourceField = (sourceFieldPath?: string): string => {
       error instanceof Error &&
       error.message === "usePuck must be used inside <Puck>."
     ) {
+      // this hook intentionally supports non-Puck render paths used by tests and standalone field rendering
       console.warn("useCurrentSourceField: usePuck must be used inside <Puck>");
       return "";
     }

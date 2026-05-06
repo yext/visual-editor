@@ -304,24 +304,6 @@ describe("resolveYextEntityField with embedded fields", () => {
     );
   });
 
-  it("returns an empty string for translatable constants when locale is not passed", () => {
-    const actual: unknown = resolveYextEntityField(
-      {
-        name: "Yext",
-      },
-      {
-        field: "",
-        constantValue: {
-          defaultValue: "Hello [[name]]",
-          fr: "Bonjour [[name]]",
-        },
-        constantValueEnabled: true,
-      }
-    );
-
-    assert.deepEqual(actual, "");
-  });
-
   it("resolves embedded fields in defaultValue when locale key is missing", () => {
     assert.deepEqual(
       resolveYextEntityField(

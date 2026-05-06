@@ -19,7 +19,6 @@ import {
   resolveField,
 } from "./resolveYextEntityField.ts";
 import { type StreamDocument } from "./types/StreamDocument.ts";
-import { type MappedSourceFieldFilter } from "./cardSlots/mappedSource.ts";
 
 export type CreateItemSourceOptions<TItem extends Record<string, unknown>> = {
   sourcePath: string;
@@ -512,7 +511,7 @@ export const createItemSource = <
       getManualItemField(field as YextFieldDefinition<any>),
     ])
   ) as YextFieldMap<TItem>;
-  const itemSourceField = {
+  const itemSourceField: ItemSourceField<any, TItem> = {
     type: "itemSource",
     label: sourceLabel,
     itemSourcePath: sourcePath,
@@ -521,7 +520,7 @@ export const createItemSource = <
       itemSourceTypes: getItemSourceTypes(
         scopedItemFields as YextFieldMap<Record<string, unknown>>
       ),
-    } as MappedSourceFieldFilter<any>,
+    },
     itemFields: manualItemFields,
     defaultItemValue: Object.fromEntries(
       Object.entries(manualItemFields).map(([key, field]) => [
@@ -529,7 +528,7 @@ export const createItemSource = <
         getDefaultValueForField(field as YextFieldDefinition<any>, true),
       ])
     ) as TItem,
-  } as ItemSourceField<any, TItem>;
+  };
   const itemMappingsField: YextFieldDefinition<any> = {
     type: "object",
     label: mappingsLabel,
@@ -562,7 +561,7 @@ export const createItemSource = <
   ) as Partial<TProps>;
 
   return {
-    fields: toPuckFields(rawFields as YextFieldMap<any>) as Fields<TProps>,
+    fields: toPuckFields(rawFields) as Fields<TProps>,
     defaultProps,
     resolveFields: (data) => {
       const itemSource = getPathValue<ItemSourceValue<TItem>>(
