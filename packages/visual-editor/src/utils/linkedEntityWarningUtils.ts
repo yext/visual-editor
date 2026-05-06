@@ -23,10 +23,11 @@ export const warnOnMultiValueLinkedEntityTraversal = (
     return;
   }
 
-  warnedFieldsByDocument.set(
-    streamDocument,
-    warnedFields ? warnedFields.add(fieldPath) : new Set([fieldPath])
-  );
+  if (warnedFields) {
+    warnedFields.add(fieldPath);
+  } else {
+    warnedFieldsByDocument.set(streamDocument, new Set([fieldPath]));
+  }
 
   toast.warning(
     pt(

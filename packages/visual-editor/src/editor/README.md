@@ -185,6 +185,9 @@ item mappings, and manual fallback items in one place.
 4. Use `useDocument()` plus `itemSourceConfig.resolveItems(...)` in render to
    resolve the current list without storing derived output back onto props.
 
+Mapped `entityField` values inside one repeated item always resolve relative to
+that current mapped item.
+
 When the user switches from one linked parent source to another, the editor
 automatically clears stale `itemMappings.*.field` selections while preserving
 any constant fallback values.
@@ -268,11 +271,11 @@ type ArticleListProps = {
 };
 
 const articleItems = createItemSource<ArticleListProps, ArticleItem>({
-  itemSourcePath: "itemSource",
-  itemMappingsPath: "itemMappings",
-  itemSourceLabel: "Articles",
-  itemMappingsLabel: "Article Mappings",
-  itemFields: {
+  sourcePath: "itemSource",
+  mappingsPath: "itemMappings",
+  sourceLabel: "Articles",
+  mappingsLabel: "Article Mappings",
+  mappingFields: {
     title: {
       type: "entityField",
       label: "Title",
@@ -358,7 +361,7 @@ export const ArticleList: YextComponentConfig<ArticleListProps> = {
   },
   resolveFields: (data) =>
     toPuckFields({
-      ...fields,
+      ...articleListFields,
       ...articleItems.resolveFields(data),
     }),
   render: (props) => <ArticleListComponent {...props} />,

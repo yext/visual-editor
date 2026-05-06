@@ -128,6 +128,11 @@ export const ItemSourceFieldOverride = ({
   const itemSelector = usePuck((state) => state.appState.ui.itemSelector);
   const translatedLabel = field.label ? pt(field.label) : "";
   const constantValueEnabled = !!value?.constantValueEnabled;
+  const baseValue = value ?? {
+    field: "",
+    constantValueEnabled: true,
+    constantValue: [],
+  };
   const itemListField = React.useMemo<YextFieldDefinition<any[]>>(
     () => ({
       type: "array",
@@ -211,7 +216,7 @@ export const ItemSourceFieldOverride = ({
         constantValueEnabled={constantValueEnabled}
         toggleConstantValueEnabled={(nextConstantValueEnabled) =>
           onChange({
-            ...(value as ItemSourceValue<Record<string, unknown>>),
+            ...baseValue,
             constantValueEnabled: nextConstantValueEnabled,
           })
         }
@@ -223,7 +228,7 @@ export const ItemSourceFieldOverride = ({
             field={itemListField}
             onChange={(constantValue) =>
               onChange({
-                ...(value as ItemSourceValue<Record<string, unknown>>),
+                ...baseValue,
                 constantValue,
               })
             }

@@ -127,6 +127,45 @@ export const getEntityFieldDisplayName = (
 };
 
 /**
+ * Resolves the display label for a field that is stored relative to a scoped
+ * source selection.
+ *
+ * 1. Rebuild the full field path from the scoped source and relative value.
+ * 2. Resolve the exact full-path display name from `ENTITY_FIELDS` or schema.
+ * 3. Trim the scoped source prefix so the rendered label matches the stored
+ *    relative field value.
+ */
+export const getScopedEntityFieldDisplayName = (
+  sourceField: string | undefined,
+  relativeFieldPath: string | undefined,
+  entityFields: StreamFields | null
+): string | undefined => {
+  if (!relativeFieldPath) {
+    return undefined;
+  }
+
+  if (!sourceField) {
+    return getEntityFieldDisplayName(relativeFieldPath, entityFields);
+  }
+
+  const fullFieldPath = `${sourceField}.${relativeFieldPath}`;
+  const fullDisplayName = getEntityFieldDisplayName(
+    fullFieldPath,
+    entityFields
+  );
+  const rootDisplayName = getEntityFieldDisplayName(sourceField, entityFields);
+  const rootPrefix = rootDisplayName ? `${rootDisplayName} > ` : undefined;
+
+  if (!fullDisplayName) {
+    return relativeFieldPath;
+  }
+
+  return rootPrefix && fullDisplayName.startsWith(rootPrefix)
+    ? fullDisplayName.slice(rootPrefix.length)
+    : fullDisplayName;
+};
+
+/**
  * Returns whether a resolved mapped-source root is compatible with linked-item
  * source selection: undefined, null, arrays, and object values are all valid.
  */
@@ -135,6 +174,18 @@ const isMappedListSourceValue = (value: unknown): boolean =>
   value === null ||
   Array.isArray(value) ||
   (!!value && typeof value === "object");
+
+const hasListSourceValueInDocument = (
+  streamDocument: StreamDocument,
+  fieldName: string
+): boolean => {
+  const resolvedValue = resolveField<unknown>(streamDocument, fieldName).value;
+  return (
+    resolvedValue === undefined ||
+    resolvedValue === null ||
+    Array.isArray(resolvedValue)
+  );
+};
 
 /**
  * Resolves one schema field definition from a dotted field path.
@@ -266,7 +317,8 @@ const getScopedFieldsForSelector = (
  *
  * 1. Scope to a selected source item when `sourceField` is provided.
  * 2. For item-source and mapped-source pickers, restrict roots to fields that
- *    can satisfy the required descendant type sets.
+ *    can satisfy the required descendant type sets. `itemSourceTypes` takes
+ *    precedence over `mappedSourceTypes` when both are present.
  * 3. Filter incompatible resolved values out when a stream document is
  *    available.
  * 4. Fall back to normal entity-field filtering for standard field selectors.
@@ -332,17 +384,7 @@ export const getFieldsForSelector = (
           .filter((field) =>
             !streamDocument
               ? true
-              : (() => {
-                  const resolvedValue = resolveField<unknown>(
-                    streamDocument,
-                    field.name
-                  ).value;
-                  return (
-                    resolvedValue === undefined ||
-                    resolvedValue === null ||
-                    Array.isArray(resolvedValue)
-                  );
-                })()
+              : hasListSourceValueInDocument(streamDocument, field.name)
           )
       )
     );
@@ -379,17 +421,7 @@ export const getFieldsForSelector = (
       .filter((field) =>
         !streamDocument
           ? true
-          : (() => {
-              const resolvedValue = resolveField<unknown>(
-                streamDocument,
-                field.name
-              ).value;
-              return (
-                resolvedValue === undefined ||
-                resolvedValue === null ||
-                Array.isArray(resolvedValue)
-              );
-            })()
+          : hasListSourceValueInDocument(streamDocument, field.name)
       );
 
     return sortFields(
@@ -410,5 +442,15 @@ export const getFieldsForSelector = (
     } satisfies RenderEntityFieldFilter<any>);
   }
 
-  return sortFields(dedupeFieldsByName([...filteredEntityFields]));
+  return sortFields(
+    dedupeFieldsByName(
+      filteredEntityFields.map((field) => ({
+        ...field,
+        displayName:
+          getEntityFieldDisplayName(field.name, entityFields) ??
+          field.displayName ??
+          field.name,
+      }))
+    )
+  );
 };

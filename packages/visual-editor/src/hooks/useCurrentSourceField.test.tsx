@@ -23,17 +23,17 @@ vi.mock("@puckeditor/core", () => ({
     selector(puckState),
 }));
 
-import { useResolvedSourceField } from "./currentDocumentContext.tsx";
+import { useCurrentSourceField } from "./useCurrentSourceField.tsx";
 
-const ResolvedSourceField = ({
+const CurrentSourceField = ({
   sourceFieldPath,
 }: {
   sourceFieldPath: string;
-}) => <div>{useResolvedSourceField(sourceFieldPath)}</div>;
+}) => <div>{useCurrentSourceField(sourceFieldPath)}</div>;
 
-describe("useResolvedSourceField", () => {
+describe("useCurrentSourceField", () => {
   it("updates when the selected component source field changes", () => {
-    const { rerender } = render(<ResolvedSourceField sourceFieldPath="data" />);
+    const { rerender } = render(<CurrentSourceField sourceFieldPath="data" />);
 
     expect(screen.getByText("c_eventsSection.events")).toBeDefined();
 
@@ -46,7 +46,7 @@ describe("useResolvedSourceField", () => {
       },
     });
 
-    rerender(<ResolvedSourceField sourceFieldPath="data" />);
+    rerender(<CurrentSourceField sourceFieldPath="data" />);
 
     expect(screen.getByText("c_faqSection.faqs")).toBeDefined();
   });

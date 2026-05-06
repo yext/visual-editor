@@ -1,13 +1,11 @@
 import { createUsePuck } from "@puckeditor/core";
-import { resolveField } from "../utils/resolveYextEntityField.ts";
-import { type StreamDocument } from "../utils/types/StreamDocument.ts";
 
 const usePuck = createUsePuck();
 
 /**
  * Reads a dotted path from an unknown value tree.
  */
-export const getValueAtPath = (value: unknown, path: string): unknown => {
+const getValueAtPath = (value: unknown, path: string): unknown => {
   if (!value || typeof value !== "object" || !path) {
     return undefined;
   }
@@ -34,7 +32,7 @@ export const getValueAtPath = (value: unknown, path: string): unknown => {
  * - the source field is in manual/constant mode
  * - the stored value does not contain a linked field path
  */
-export const useResolvedSourceField = (sourceFieldPath?: string): string => {
+export const useCurrentSourceField = (sourceFieldPath?: string): string => {
   try {
     return usePuck((state) => {
       if (!sourceFieldPath) {
@@ -75,37 +73,4 @@ export const useResolvedSourceField = (sourceFieldPath?: string): string => {
   } catch {
     return "";
   }
-};
-
-/**
- * Resolves the object scope that embedded linked-field previews should read
- * from.
- *
- * Without a source field this returns the full stream document. With a source
- * field it resolves that path and returns the selected object, or the first
- * item when the source resolves to a list of objects.
- */
-export const getSubDocument = (
-  streamDocument: StreamDocument | Record<string, unknown> | undefined,
-  sourceField?: string
-): Record<string, unknown> | undefined => {
-  if (!streamDocument || !sourceField) {
-    return streamDocument as Record<string, unknown> | undefined;
-  }
-
-  const resolvedValue = resolveField<unknown>(
-    streamDocument as StreamDocument,
-    sourceField
-  ).value;
-
-  if (Array.isArray(resolvedValue)) {
-    const firstItem = resolvedValue[0];
-    return firstItem && typeof firstItem === "object"
-      ? (firstItem as Record<string, unknown>)
-      : undefined;
-  }
-
-  return resolvedValue && typeof resolvedValue === "object"
-    ? (resolvedValue as Record<string, unknown>)
-    : undefined;
 };

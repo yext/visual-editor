@@ -65,13 +65,13 @@ component backed by either a linked list field or manual items.
 
 ### Input
 
-| Name               | Type                  | Description                                          |
-| ------------------ | --------------------- | ---------------------------------------------------- |
-| itemSourcePath     | string                | Dotted props path for the parent `itemSource` value. |
-| itemMappingsPath   | string                | Dotted props path for the per-item mapping fields.   |
-| itemSourceLabel?   | string                | Optional editor label for the source selector.       |
-| itemMappingsLabel? | string                | Optional editor label for the mapping group.         |
-| itemFields         | `YextFieldMap<TItem>` | Field definitions for one repeated item.             |
+| Name           | Type                  | Description                                          |
+| -------------- | --------------------- | ---------------------------------------------------- |
+| sourcePath     | string                | Dotted props path for the parent `itemSource` value. |
+| mappingsPath   | string                | Dotted props path for the per-item mapping fields.   |
+| sourceLabel?   | string                | Optional editor label for the source selector.       |
+| mappingsLabel? | string                | Optional editor label for the mapping group.         |
+| mappingFields  | `YextFieldMap<TItem>` | Field definitions for one repeated item.             |
 
 ### Returns
 

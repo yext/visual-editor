@@ -1,5 +1,5 @@
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 const puckState = {
@@ -133,7 +133,7 @@ const renderItemSource = ({
                   title: {
                     type: "entityField",
                     label: "Title",
-                    sourceEntityPath: "articleSource",
+                    sourceFieldPath: "articleSource",
                     filter: {
                       types: ["type.string"],
                     },
@@ -181,7 +181,7 @@ describe("ItemSourceField", () => {
     });
 
     fireEvent.click(screen.getByRole("combobox"));
-    fireEvent.click(screen.getAllByText("Articles")[1]!);
+    fireEvent.click(within(screen.getByRole("listbox")).getByText("Articles"));
 
     expect(onChange).toHaveBeenCalledWith({
       field: "c_articles",
@@ -200,7 +200,7 @@ describe("ItemSourceField", () => {
     });
 
     fireEvent.click(screen.getByRole("combobox"));
-    fireEvent.click(screen.getAllByText("Articles")[1]!);
+    fireEvent.click(within(screen.getByRole("listbox")).getByText("Articles"));
 
     expect(puckState.dispatch).toHaveBeenCalledWith({
       type: "replace",

@@ -1,6 +1,7 @@
 import React from "react";
 import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
 import {
+  getScopedEntityFieldDisplayName,
   getFieldsForSelector,
   type YextEntityField,
 } from "./yextEntityFieldUtils.ts";
@@ -21,20 +22,52 @@ import { SquarePlus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { pt } from "../utils/i18n/platform.ts";
 import { resolveComponentData } from "../utils/resolveComponentData.tsx";
+import { resolveField } from "../utils/resolveYextEntityField.ts";
+import { type StreamDocument } from "../utils/types/StreamDocument.ts";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
+import { useCurrentSourceField } from "../hooks/useCurrentSourceField.tsx";
 import { useDocument } from "../hooks/useDocument.tsx";
 import {
   buildEntityFieldOptionGroups,
   type EntityFieldOptionGroup,
 } from "./entityFieldOptionGroups.ts";
-import {
-  getSubDocument,
-  useResolvedSourceField,
-} from "./currentDocumentContext.tsx";
 
 export type EmbeddedStringOption = {
   label: string;
   value: string;
+};
+
+/**
+ * Resolves the object scope that embedded linked-field previews should read
+ * from.
+ *
+ * Without a source field this returns the full stream document. With a source
+ * field it resolves that path and returns the selected object, or the first
+ * item when the source resolves to a list of objects.
+ */
+const getSubDocument = (
+  streamDocument: StreamDocument | Record<string, unknown> | undefined,
+  sourceField?: string
+): Record<string, unknown> | undefined => {
+  if (!streamDocument || !sourceField) {
+    return streamDocument as Record<string, unknown> | undefined;
+  }
+
+  const resolvedValue = resolveField<unknown>(
+    streamDocument as StreamDocument,
+    sourceField
+  ).value;
+
+  if (Array.isArray(resolvedValue)) {
+    const firstItem = resolvedValue[0];
+    return firstItem && typeof firstItem === "object"
+      ? (firstItem as Record<string, unknown>)
+      : undefined;
+  }
+
+  return resolvedValue && typeof resolvedValue === "object"
+    ? (resolvedValue as Record<string, unknown>)
+    : undefined;
 };
 
 /**
@@ -59,7 +92,7 @@ export const EmbeddedFieldStringInputFromEntity = <
 }) => {
   const entityFields = useEntityFields();
   const streamDocument = useDocument();
-  const sourceFieldFromPath = useResolvedSourceField(sourceFieldPath);
+  const sourceFieldFromPath = useCurrentSourceField(sourceFieldPath);
   const sourceField = sourceFieldFromInputProps || sourceFieldFromPath;
 
   const entityFieldOptions = React.useMemo(() => {
@@ -72,7 +105,14 @@ export const EmbeddedFieldStringInputFromEntity = <
     return buildEntityFieldOptionGroups({
       entityFields,
       options: filteredEntityFields.map((field) => ({
-        label: field.displayName ?? field.name,
+        label:
+          getScopedEntityFieldDisplayName(
+            sourceField || undefined,
+            field.name,
+            entityFields
+          ) ??
+          field.displayName ??
+          field.name,
         value: field.name,
         fieldPath: sourceField ? `${sourceField}.${field.name}` : field.name,
       })),
@@ -284,30 +324,20 @@ const CommandItemWithResolvedValue = ({
     if (useOptionValue) {
       return;
     }
-    // Only resolve the value if the popover is open and we haven't resolved it yet.
-    if (isOpen && resolvedValue === undefined) {
-      const fieldToResolve: YextEntityField<unknown> = {
-        field: option.value,
-        constantValue: undefined,
-        constantValueEnabled: false,
-      };
-      const resolved = resolveComponentData(
-        fieldToResolve,
-        locale,
-        subDocument
-      );
-      const finalValue =
-        typeof resolved === "object" ? JSON.stringify(resolved) : resolved;
-      setResolvedValue(String(finalValue ?? ""));
+    if (!isOpen) {
+      return;
     }
-  }, [
-    isOpen,
-    locale,
-    option.value,
-    resolvedValue,
-    subDocument,
-    useOptionValue,
-  ]);
+
+    const fieldToResolve: YextEntityField<unknown> = {
+      field: option.value,
+      constantValue: undefined,
+      constantValueEnabled: false,
+    };
+    const resolved = resolveComponentData(fieldToResolve, locale, subDocument);
+    const finalValue =
+      typeof resolved === "object" ? JSON.stringify(resolved) : resolved;
+    setResolvedValue(String(finalValue ?? ""));
+  }, [isOpen, locale, option.value, subDocument, useOptionValue]);
 
   return (
     <CommandItem

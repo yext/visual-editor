@@ -17,7 +17,7 @@ type ArticleItem = {
     constantValue: TranslatableRichText;
   };
   eyebrow: string;
-  rootTitle: {
+  secondaryTitle: {
     field: string;
     constantValueEnabled?: boolean;
     constantValue: TranslatableString;
@@ -34,11 +34,11 @@ type TestProps = {
 };
 
 const articleItems = createItemSource<TestProps, ArticleItem>({
-  itemSourcePath: "articleSource",
-  itemMappingsPath: "articleMappings",
-  itemSourceLabel: "Articles",
-  itemMappingsLabel: "Article Mappings",
-  itemFields: {
+  sourcePath: "articleSource",
+  mappingsPath: "articleMappings",
+  sourceLabel: "Articles",
+  mappingsLabel: "Article Mappings",
+  mappingFields: {
     title: {
       type: "entityField",
       label: "Title",
@@ -53,10 +53,9 @@ const articleItems = createItemSource<TestProps, ArticleItem>({
       type: "text",
       label: "Eyebrow",
     },
-    rootTitle: {
+    secondaryTitle: {
       type: "entityField",
-      label: "Root Title",
-      sourceEntityPath: null,
+      label: "Secondary Title",
       filter: { types: ["type.string"] },
     },
   },
@@ -89,7 +88,7 @@ describe("createItemSource", () => {
     expect(linkedFields.articleMappings.visible).toBe(true);
   });
 
-  it("resolves linked items against the current item and root-scoped fields against the page", () => {
+  it("resolves linked items against the current mapped item", () => {
     const resolved = articleItems.resolveItems(
       {
         field: "c_articles",
@@ -108,8 +107,8 @@ describe("createItemSource", () => {
           constantValue: { defaultValue: "" },
         },
         eyebrow: "Featured",
-        rootTitle: {
-          field: "name",
+        secondaryTitle: {
+          field: "headline",
           constantValueEnabled: false,
           constantValue: { defaultValue: "" },
         },
@@ -120,10 +119,12 @@ describe("createItemSource", () => {
         c_articles: [
           {
             name: "Article one",
+            headline: "Headline one",
             summary: { html: "<p>Summary one</p>" },
           },
           {
             name: "Article two",
+            headline: "Headline two",
             summary: { html: "<p>Summary two</p>" },
           },
         ],
@@ -135,13 +136,13 @@ describe("createItemSource", () => {
         title: "Article one",
         description: { html: "<p>Summary one</p>" },
         eyebrow: "Featured",
-        rootTitle: "Root name",
+        secondaryTitle: "Headline one",
       },
       {
         title: "Article two",
         description: { html: "<p>Summary two</p>" },
         eyebrow: "Featured",
-        rootTitle: "Root name",
+        secondaryTitle: "Headline two",
       },
     ]);
   });
@@ -166,7 +167,7 @@ describe("createItemSource", () => {
               },
             },
             eyebrow: "Manual",
-            rootTitle: {
+            secondaryTitle: {
               field: "name",
               constantValueEnabled: false,
               constantValue: { defaultValue: "" },
@@ -186,7 +187,7 @@ describe("createItemSource", () => {
         title: { defaultValue: "Manual title" },
         description: { defaultValue: { html: "<p>Manual summary</p>" } },
         eyebrow: "Manual",
-        rootTitle: "Root fallback",
+        secondaryTitle: "Root fallback",
       },
     ]);
   });
@@ -257,9 +258,9 @@ describe("createItemSource", () => {
         };
       }
     >({
-      itemSourcePath: "itemSource",
-      itemMappingsPath: "itemMappings",
-      itemFields: {
+      sourcePath: "itemSource",
+      mappingsPath: "itemMappings",
+      mappingFields: {
         image: {
           type: "entityField",
           label: "Image",

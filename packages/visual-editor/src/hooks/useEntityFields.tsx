@@ -45,7 +45,9 @@ export const usePlatformBridgeEntityFields = () => {
   useReceiveMessage("getDevEntityFields", TARGET_ORIGINS, (send, payload) => {
     const receivedValues = normalizeStreamFields(assignDefinitions(payload));
     devLogger.logData("ENTITY_FIELDS", receivedValues);
-    setEntityFields(receivedValues);
+    if (!isDeepEqual(receivedValues, entityFields)) {
+      setEntityFields(receivedValues);
+    }
     send({
       status: "success",
       payload: { message: "getDevEntityFields received" },

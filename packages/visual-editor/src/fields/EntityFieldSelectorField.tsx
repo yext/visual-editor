@@ -23,7 +23,6 @@ import {
 import { ENHANCED_CTA_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
 import { PHONE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Phone.tsx";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
-import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 import { getRandomPlaceholderImageObject } from "../utils/imagePlaceholders.ts";
 import { EVENT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/EventSection.tsx";
 import { INSIGHT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/InsightSection.tsx";
@@ -43,15 +42,15 @@ import { pt, type MsgString } from "../utils/i18n/platform.ts";
 import { useTranslation } from "react-i18next";
 import { FAQ_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/FAQsSection.tsx";
 import {
-  getEntityFieldDisplayName,
   getFieldsForSelector,
+  getScopedEntityFieldDisplayName,
 } from "../editor/yextEntityFieldUtils.ts";
 import { useDocument } from "../hooks/useDocument.tsx";
 import { isLinkedEntityFieldPath } from "../utils/linkedEntityFieldUtils.ts";
 import { warnOnMultiValueLinkedEntityTraversal } from "../utils/linkedEntityWarningUtils.ts";
 import { buildEntityFieldOptionGroups } from "../editor/entityFieldOptionGroups.ts";
 import { type MappedSourceFieldFilter } from "../utils/cardSlots/mappedSource.ts";
-import { useResolvedSourceField } from "../editor/currentDocumentContext.tsx";
+import { useCurrentSourceField } from "../hooks/useCurrentSourceField.tsx";
 
 const devLogger = new DevLogger();
 
@@ -85,7 +84,6 @@ export type EntityFieldSelectorField<
   disableConstantValueToggle?: boolean;
   disallowTranslation?: boolean;
   sourceFieldPath?: string;
-  sourceEntityPath?: string | null;
 };
 
 type EntityFieldSelectorFieldProps = FieldProps<EntityFieldSelectorField>;
@@ -299,9 +297,8 @@ export const EntityFieldSelectorFieldOverride = ({
           value={value}
           filter={constantValueFilter}
           disallowTranslation={field.disallowTranslation}
-          sourceFieldPath={
-            field.sourceFieldPath ?? field.sourceEntityPath ?? undefined
-          }
+          sourceField={field.filter.subdocumentField}
+          sourceFieldPath={field.sourceFieldPath}
         />
       )}
       {!showConstantValueInput && (
@@ -310,9 +307,8 @@ export const EntityFieldSelectorFieldOverride = ({
           onChange={onChange}
           value={value}
           filter={field.filter}
-          sourceFieldPath={
-            field.sourceFieldPath ?? field.sourceEntityPath ?? undefined
-          }
+          sourceField={field.filter.subdocumentField}
+          sourceFieldPath={field.sourceFieldPath}
         />
       )}
     </>
@@ -453,9 +449,8 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   sourceField: sourceFieldFromInputProps,
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
-  const templateMetadata = useTemplateMetadata();
   const streamDocument = useDocument();
-  const sourceFieldFromProps = useResolvedSourceField(sourceFieldPath);
+  const sourceFieldFromProps = useCurrentSourceField(sourceFieldPath);
   const sourceField =
     sourceFieldFromInputProps ||
     sourceFieldFromProps ||
@@ -469,17 +464,20 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       streamDocument,
       sourceField || undefined
     );
-    const options = filteredEntityFields.map((field) => ({
-      label:
-        field.displayName ??
-        getEntityFieldDisplayName(
-          sourceField ? `${sourceField}.${field.name}` : field.name,
-          entityFields
-        ) ??
-        field.name,
-      value: field.name,
-      fieldPath: sourceField ? `${sourceField}.${field.name}` : field.name,
-    }));
+    const options = filteredEntityFields.map((field) => {
+      return {
+        label:
+          getScopedEntityFieldDisplayName(
+            sourceField || undefined,
+            field.name,
+            entityFields
+          ) ??
+          field.displayName ??
+          field.name,
+        value: field.name,
+        fieldPath: sourceField ? `${sourceField}.${field.name}` : field.name,
+      };
+    });
 
     if (
       currentFieldPath &&
@@ -487,10 +485,9 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     ) {
       options.push({
         label:
-          getEntityFieldDisplayName(
-            sourceField
-              ? `${sourceField}.${currentFieldPath}`
-              : currentFieldPath,
+          getScopedEntityFieldDisplayName(
+            sourceField || undefined,
+            currentFieldPath,
             entityFields
           ) ?? currentFieldPath,
         value: currentFieldPath,
@@ -525,11 +522,12 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     label,
     currentFieldPath,
     sourceField,
-    templateMetadata.entityTypeDisplayName,
     streamDocument,
   ]);
 
   const previousSourceField = React.useRef(sourceField);
+  const valueRef = React.useRef(value);
+  valueRef.current = value;
 
   React.useEffect(() => {
     if (
@@ -544,12 +542,12 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     previousSourceField.current = sourceField;
     onChange(
       {
-        ...value,
+        ...valueRef.current,
         field: "",
       },
       undefined
     );
-  }, [onChange, sourceField, sourceFieldPath, value]);
+  }, [onChange, sourceField, sourceFieldPath, value?.field]);
 
   React.useEffect(() => {
     if (

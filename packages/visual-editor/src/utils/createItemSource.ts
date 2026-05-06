@@ -22,11 +22,11 @@ import { type StreamDocument } from "./types/StreamDocument.ts";
 import { type MappedSourceFieldFilter } from "./cardSlots/mappedSource.ts";
 
 type CreateItemSourceOptions<TItem extends Record<string, unknown>> = {
-  itemSourcePath: string;
-  itemMappingsPath: string;
-  itemSourceLabel?: string;
-  itemMappingsLabel?: string;
-  itemFields: YextFieldMap<TItem>;
+  sourcePath: string;
+  mappingsPath: string;
+  sourceLabel?: string;
+  mappingsLabel?: string;
+  mappingFields: YextFieldMap<TItem>;
 };
 
 type ResolvedItemField<TValue> =
@@ -150,12 +150,16 @@ const getPathValue = <T>(value: unknown, path: string): T | undefined => {
 /**
  * Derives a human-readable fallback label from a dotted props path.
  */
-const getDefaultLabel = (path: string): string =>
-  path
-    .split(".")
-    .at(-1)
-    ?.replace(/([a-z0-9])([A-Z])/g, "$1 $2")
-    .replace(/^./, (value) => value.toUpperCase()) ?? path;
+const getDefaultLabel = (path: string): string => {
+  const lastSegment = path.split(".").at(-1);
+  if (!lastSegment) {
+    return path;
+  }
+
+  return lastSegment
+    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+    .replace(/^./, (value) => value.toUpperCase());
+};
 
 /**
  * Narrows a generic field definition to the entity-field variant used for
@@ -280,7 +284,7 @@ const getMappingItemField = <TValue>(
   field: YextFieldDefinition<TValue>,
   itemSourcePath: string
 ): YextFieldDefinition<TValue> => {
-  const sourceScopedField = applySourceEntityPath(field, itemSourcePath);
+  const sourceScopedField = applySourceFieldPath(field, itemSourcePath);
 
   if (
     isEntityFieldDefinition(sourceScopedField) &&
@@ -341,17 +345,14 @@ const getManualItemField = <TValue>(
  * Propagates the parent item source path into nested entity fields so linked
  * mode resolves them relative to each source item by default.
  */
-const applySourceEntityPath = <TValue>(
+const applySourceFieldPath = <TValue>(
   field: YextFieldDefinition<TValue>,
   itemSourcePath: string
 ): YextFieldDefinition<TValue> => {
   if (isEntityFieldDefinition(field)) {
     return {
       ...field,
-      sourceEntityPath:
-        field.sourceEntityPath === undefined
-          ? itemSourcePath
-          : field.sourceEntityPath,
+      sourceFieldPath: field.sourceFieldPath ?? itemSourcePath,
     } as YextFieldDefinition<TValue>;
   }
 
@@ -361,7 +362,7 @@ const applySourceEntityPath = <TValue>(
       objectFields: Object.fromEntries(
         Object.entries(field.objectFields).map(([key, nestedField]) => [
           key,
-          applySourceEntityPath(
+          applySourceFieldPath(
             nestedField as YextFieldDefinition<any>,
             itemSourcePath
           ),
@@ -376,7 +377,7 @@ const applySourceEntityPath = <TValue>(
       arrayFields: Object.fromEntries(
         Object.entries(field.arrayFields).map(([key, nestedField]) => [
           key,
-          applySourceEntityPath(
+          applySourceFieldPath(
             nestedField as YextFieldDefinition<any>,
             itemSourcePath
           ),
@@ -400,14 +401,12 @@ const getItemSourceTypes = (
       return [];
     }
 
-    return field.sourceEntityPath !== null && field.filter.types?.length
-      ? [field.filter.types]
-      : [];
+    return field.filter.types?.length ? [field.filter.types] : [];
   });
 
 /**
- * Resolves one item field into its render-ready value using either the current
- * source item or the root stream document, depending on field scope.
+ * Resolves one item field into its render-ready value using the current source
+ * item for mapped entity fields.
  */
 const resolveItemValue = <TValue>(
   field: YextFieldDefinition<TValue>,
@@ -420,11 +419,9 @@ const resolveItemValue = <TValue>(
     if (!entityField?.constantValueEnabled && !entityField?.field) {
       return undefined as ResolvedItemField<TValue>;
     }
-    const resolutionDocument =
-      field.sourceEntityPath && itemDocument ? itemDocument : streamDocument;
 
     return resolveYextEntityField(
-      resolutionDocument,
+      itemDocument ?? streamDocument,
       {
         field: entityField?.field ?? "",
         constantValue: entityField?.constantValue,
@@ -491,16 +488,16 @@ export const createItemSource = <
   TProps extends DefaultComponentProps,
   TItem extends Record<string, unknown>,
 >({
-  itemSourcePath,
-  itemMappingsPath,
-  itemSourceLabel = getDefaultLabel(itemSourcePath),
-  itemMappingsLabel = getDefaultLabel(itemMappingsPath),
-  itemFields,
+  sourcePath,
+  mappingsPath,
+  sourceLabel = getDefaultLabel(sourcePath),
+  mappingsLabel = getDefaultLabel(mappingsPath),
+  mappingFields,
 }: CreateItemSourceOptions<TItem>): ItemSourceInstance<TProps, TItem> => {
   const scopedItemFields = Object.fromEntries(
-    Object.entries(itemFields).map(([key, field]) => [
+    Object.entries(mappingFields).map(([key, field]) => [
       key,
-      getMappingItemField(field as YextFieldDefinition<any>, itemSourcePath),
+      getMappingItemField(field as YextFieldDefinition<any>, sourcePath),
     ])
   ) as YextFieldMap<TItem>;
   const manualItemFields = Object.fromEntries(
@@ -511,9 +508,9 @@ export const createItemSource = <
   ) as YextFieldMap<TItem>;
   const itemSourceField = {
     type: "itemSource",
-    label: itemSourceLabel,
-    itemSourcePath,
-    itemMappingsPath,
+    label: sourceLabel,
+    itemSourcePath: sourcePath,
+    itemMappingsPath: mappingsPath,
     filter: {
       itemSourceTypes: getItemSourceTypes(
         scopedItemFields as YextFieldMap<Record<string, unknown>>
@@ -529,26 +526,26 @@ export const createItemSource = <
   } as ItemSourceField<any, TItem>;
   const itemMappingsField: YextFieldDefinition<any> = {
     type: "object",
-    label: itemMappingsLabel,
+    label: mappingsLabel,
     visible: false,
     objectFields: scopedItemFields,
   };
   const rawFields = mergeTrees(
     buildNestedFieldTree(
-      itemSourcePath,
+      sourcePath,
       itemSourceField as unknown as YextFieldDefinition<any>
     ),
-    buildNestedFieldTree(itemMappingsPath, itemMappingsField)
+    buildNestedFieldTree(mappingsPath, itemMappingsField)
   ) as YextFieldMap<TProps>;
   const defaultItemValue = itemSourceField.defaultItemValue;
   const defaultProps = mergeTrees(
-    buildNestedValueTree(itemSourcePath, {
+    buildNestedValueTree(sourcePath, {
       field: "",
       constantValueEnabled: true,
       constantValue: [defaultItemValue],
     }),
     buildNestedValueTree(
-      itemMappingsPath,
+      mappingsPath,
       Object.fromEntries(
         Object.entries(scopedItemFields).map(([key, field]) => [
           key,
@@ -564,13 +561,13 @@ export const createItemSource = <
     resolveFields: (data) => {
       const itemSource = getPathValue<ItemSourceValue<TItem>>(
         data.props,
-        itemSourcePath
+        sourcePath
       );
 
       return toPuckFields(
         mergeTrees(
           rawFields as Record<string, unknown>,
-          buildNestedFieldTree(itemMappingsPath, {
+          buildNestedFieldTree(mappingsPath, {
             ...itemMappingsField,
             visible: !itemSource?.constantValueEnabled && !!itemSource?.field,
           })

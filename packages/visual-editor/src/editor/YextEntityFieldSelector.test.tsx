@@ -1089,7 +1089,7 @@ describe("YextEntityFieldSelector", () => {
                     fields: [
                       {
                         name: "city",
-                        displayName: "City",
+                        displayName: "Wrong City",
                         definition: {
                           name: "city",
                           typeName: "type.string",
@@ -1682,6 +1682,80 @@ describe("YextEntityFieldSelector", () => {
     );
   });
 
+  it("uses the exact ENTITY_FIELDS display name for a saved scoped selection", () => {
+    renderEntityFieldInput({
+      entityFields: {
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_linkedLocation",
+            displayName: "Linked Location",
+            definition: {
+              name: "c_linkedLocation",
+              isList: true,
+              typeRegistryId: "type.entity_reference",
+              type: {
+                documentType: "DOCUMENT_TYPE_ENTITY",
+              },
+            },
+            children: {
+              fields: [
+                {
+                  name: "address",
+                  displayName: "Wrong Address",
+                  definition: {
+                    name: "address",
+                    typeName: "type.address",
+                    type: {},
+                  },
+                  children: {
+                    fields: [
+                      {
+                        name: "city",
+                        displayName: "Wrong City",
+                        definition: {
+                          name: "city",
+                          typeName: "type.string",
+                          type: {},
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+        displayNames: {
+          ...defaultEntityFields.displayNames,
+          c_linkedLocation: "Linked Location",
+          "c_linkedLocation.address": "Linked Location > Address",
+          "c_linkedLocation.address.city": "Linked Location > Address > City",
+        },
+      },
+      filter: {
+        types: ["type.string"],
+        subdocumentField: "c_linkedLocation",
+      },
+      value: {
+        field: "address.city",
+      },
+      document: {
+        c_linkedLocation: [{ name: "Downtown" }],
+      },
+    });
+
+    expect(screen.getByRole("combobox").textContent).toContain(
+      "Address > City"
+    );
+    expect(screen.getByRole("combobox").textContent).not.toContain(
+      "Wrong City"
+    );
+    expect(screen.getByRole("combobox").textContent).not.toContain(
+      "Linked Location > Address > City"
+    );
+  });
+
   it("does not preserve a saved base entity field in a linked descendant picker", () => {
     renderEntityFieldInput({
       entityFields: {
@@ -2047,6 +2121,7 @@ describe("YextEntityFieldSelector", () => {
     expect(screen.getByText("Linked Entity Fields")).toBeDefined();
     expect(screen.getByText("Entity Fields")).toBeDefined();
     expect(screen.getByText("Linked Location > Address > City")).toBeDefined();
+    expect(screen.queryByText("Wrong City")).toBeNull();
   });
 
   it("warns once when a linked entity field resolves through multiple references", () => {
