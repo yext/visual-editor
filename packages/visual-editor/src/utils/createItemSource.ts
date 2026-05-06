@@ -165,6 +165,14 @@ const isEntityFieldDefinition = (
   field: YextFieldDefinition<any>
 ): field is EntityFieldSelectorField<any> => field.type === "entityField";
 
+const MAPPING_CONSTANT_VALUE_TYPES: EntityFieldTypes[] = [
+  "type.string",
+  "type.rich_text_v2",
+  "type.cta",
+];
+
+const MAPPING_CONSTANT_VALUE_LIST_TYPES: EntityFieldTypes[] = ["type.string"];
+
 /**
  * Returns whether a linked mapping field should expose constant-value mode.
  * Mappings default to authored constants only for field editors that can
@@ -176,13 +184,12 @@ const shouldEnableMappingConstantValue = (
   const constantValueFilter = field.constantValueFilter ?? field.filter;
 
   return (
-    !constantValueFilter.includeListsOnly &&
     !!constantValueFilter.types?.length &&
-    constantValueFilter.types.every(
-      (entityFieldType) =>
-        entityFieldType === "type.string" ||
-        entityFieldType === "type.rich_text_v2" ||
-        entityFieldType === "type.cta"
+    constantValueFilter.types.every((entityFieldType) =>
+      (constantValueFilter.includeListsOnly
+        ? MAPPING_CONSTANT_VALUE_LIST_TYPES
+        : MAPPING_CONSTANT_VALUE_TYPES
+      ).includes(entityFieldType)
     )
   );
 };

@@ -211,6 +211,11 @@ describe("createItemSource", () => {
             constantValueEnabled?: boolean;
             constantValue: { url?: string };
           };
+          highlights: {
+            field: string;
+            constantValueEnabled?: boolean;
+            constantValue: TranslatableString[];
+          };
           title: {
             field: string;
             constantValueEnabled?: boolean;
@@ -231,6 +236,11 @@ describe("createItemSource", () => {
           field: string;
           constantValueEnabled?: boolean;
           constantValue: { url?: string };
+        };
+        highlights: {
+          field: string;
+          constantValueEnabled?: boolean;
+          constantValue: TranslatableString[];
         };
         title: {
           field: string;
@@ -254,6 +264,11 @@ describe("createItemSource", () => {
           type: "entityField",
           label: "Image",
           filter: { types: ["type.image"] },
+        },
+        highlights: {
+          type: "entityField",
+          label: "Highlights",
+          filter: { types: ["type.string"], includeListsOnly: true },
         },
         title: {
           type: "entityField",
@@ -281,6 +296,10 @@ describe("createItemSource", () => {
     ).toBe(true);
     expect(
       (imageItems.fields as any).itemMappings.objectFields.title
+        .disableConstantValueToggle
+    ).toBe(false);
+    expect(
+      (imageItems.fields as any).itemMappings.objectFields.highlights
         .disableConstantValueToggle
     ).toBe(false);
     expect(
