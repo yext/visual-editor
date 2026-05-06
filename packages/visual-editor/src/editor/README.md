@@ -198,18 +198,16 @@ import { type PuckComponent } from "@puckeditor/core";
 import {
   resolveComponentData,
   useDocument,
+  type TranslatableAssetImage,
   type TranslatableRichText,
   type TranslatableString,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 
 export type ArticleCardProps = {
-  title?: TranslatableString | TranslatableRichText;
+  title?: TranslatableString;
   description?: TranslatableRichText;
-  image?: {
-    url?: string;
-    alternateText?: string;
-  };
+  image?: TranslatableAssetImage;
 };
 
 export const ArticleCard: PuckComponent<ArticleCardProps> = ({
@@ -223,8 +221,13 @@ export const ArticleCard: PuckComponent<ArticleCardProps> = ({
   return (
     <article>
       {image?.url && <img src={image.url} alt={image.alternateText ?? ""} />}
-      <h3>{resolveComponentData(title, i18n.language, streamDocument)}</h3>
-      <p>{resolveComponentData(description, i18n.language, streamDocument)}</p>
+      <h3>
+        {resolveComponentData(title, i18n.language, streamDocument, {
+          output: "plainText",
+        })}
+      </h3>
+      {description &&
+        resolveComponentData(description, i18n.language, streamDocument)}
     </article>
   );
 };
@@ -236,59 +239,57 @@ export const ArticleCard: PuckComponent<ArticleCardProps> = ({
 import { type PuckComponent } from "@puckeditor/core";
 import {
   createItemSource,
-  msg,
   type ItemSourceValue,
   type StreamDocument,
+  type TranslatableAssetImage,
   type TranslatableRichText,
   type TranslatableString,
   type YextComponentConfig,
   type YextEntityField,
-  YextField,
+  resolveComponentData,
   toPuckFields,
   useDocument,
 } from "@yext/visual-editor";
+import { useTranslation } from "react-i18next";
 import { ArticleCard } from "./ArticleCard.tsx";
 
 type ArticleItem = {
-  title: YextEntityField<TranslatableString | TranslatableRichText>;
+  title: YextEntityField<TranslatableString>;
   description: YextEntityField<TranslatableRichText>;
-  image: YextEntityField<{
-    url?: string;
-    alternateText?: string;
-  }>;
+  image: YextEntityField<TranslatableAssetImage>;
 };
 
 type ArticleListProps = {
   itemSource: ItemSourceValue<ArticleItem>;
   itemMappings?: ArticleItem;
   heading: {
-    text: string;
+    text: TranslatableString;
   };
 };
 
 const articleItems = createItemSource<ArticleListProps, ArticleItem>({
   itemSourcePath: "itemSource",
   itemMappingsPath: "itemMappings",
-  itemSourceLabel: msg("fields.articles", "Articles"),
-  itemMappingsLabel: msg("fields.articleMappings", "Article Mappings"),
+  itemSourceLabel: "Articles",
+  itemMappingsLabel: "Article Mappings",
   itemFields: {
     title: {
       type: "entityField",
-      label: msg("fields.title", "Title"),
+      label: "Title",
       filter: {
-        types: ["type.string", "type.rich_text_v2"],
+        types: ["type.string"],
       },
     },
     description: {
       type: "entityField",
-      label: msg("fields.description", "Description"),
+      label: "Description",
       filter: {
         types: ["type.rich_text_v2"],
       },
     },
     image: {
       type: "entityField",
-      label: msg("fields.image", "Image"),
+      label: "Image",
       filter: {
         types: ["type.image"],
       },
@@ -296,17 +297,18 @@ const articleItems = createItemSource<ArticleListProps, ArticleItem>({
   },
 });
 
-const fields = {
+const articleListFields = {
   ...articleItems.fields,
-  heading: YextField(msg("fields.heading", "Heading"), {
+  heading: {
     type: "object",
+    label: "Heading",
     objectFields: {
       text: {
-        type: "text",
-        label: msg("fields.text", "Text"),
+        type: "translatableString",
+        label: "Text",
       },
     },
-  }),
+  },
 };
 
 const ArticleListComponent: PuckComponent<ArticleListProps> = ({
@@ -314,6 +316,7 @@ const ArticleListComponent: PuckComponent<ArticleListProps> = ({
   itemMappings,
   heading,
 }) => {
+  const { i18n } = useTranslation();
   const streamDocument = useDocument<StreamDocument>();
   const items = articleItems.resolveItems(
     itemSource,
@@ -323,7 +326,11 @@ const ArticleListComponent: PuckComponent<ArticleListProps> = ({
 
   return (
     <section>
-      <h2>{heading.text}</h2>
+      <h2>
+        {resolveComponentData(heading.text, i18n.language, streamDocument, {
+          output: "plainText",
+        })}
+      </h2>
       <div>
         {items.map((item, index) => (
           <ArticleCard
@@ -339,14 +346,14 @@ const ArticleListComponent: PuckComponent<ArticleListProps> = ({
 };
 
 export const ArticleList: YextComponentConfig<ArticleListProps> = {
-  label: msg("components.articleList", "Article List"),
-  fields,
+  label: "Article List",
+  fields: articleListFields,
   defaultProps: {
     ...articleItems.defaultProps,
     itemSource: articleItems.defaultProps.itemSource!,
     itemMappings: articleItems.defaultProps.itemMappings!,
     heading: {
-      text: "Featured Articles",
+      text: { defaultValue: "Featured Articles" },
     },
   },
   resolveFields: (data) =>
