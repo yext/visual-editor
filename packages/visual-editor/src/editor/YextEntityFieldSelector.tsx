@@ -30,6 +30,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
     constantValueFilter: props.constantValueFilter,
     disableConstantValueToggle: props.disableConstantValueToggle,
     disallowTranslation: props.disallowTranslation,
+    sourceFieldPath: props.sourceFieldPath,
   };
 
   return field as unknown as Field<YextEntityField<U>>;

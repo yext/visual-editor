@@ -2,7 +2,6 @@ import React from "react";
 import {
   BaseField,
   FieldLabel,
-  createUsePuck,
   setDeep,
   type FieldProps,
   useGetPuck,
@@ -15,8 +14,6 @@ import {
 import { YextAutoField } from "./YextAutoField.tsx";
 import { type MappedSourceFieldFilter } from "../utils/cardSlots/mappedSource.ts";
 import { type YextFieldDefinition, type YextFieldMap } from "./fields.ts";
-
-const usePuck = createUsePuck();
 
 /**
  * Shared value shape for repeated item sources that can either resolve from a
@@ -119,13 +116,20 @@ const hasEntityFieldBindings = (value: unknown): boolean => {
   return false;
 };
 
+/**
+ * Renders the repeated-item source editor.
+ *
+ * 1. Lets the user switch between linked-list mode and manual-item mode.
+ * 2. Shows either the linked source selector or the inline manual item editor.
+ * 3. Clears stale linked mapping selections when the user switches between
+ *    linked parent sources while preserving any authored constant values.
+ */
 export const ItemSourceFieldOverride = ({
   field,
   value,
   onChange,
 }: ItemSourceFieldProps) => {
   const getPuck = useGetPuck();
-  const itemSelector = usePuck((state) => state.appState.ui.itemSelector);
   const translatedLabel = field.label ? pt(field.label) : "";
   const constantValueEnabled = !!value?.constantValueEnabled;
   const baseValue = value ?? {
@@ -144,11 +148,35 @@ export const ItemSourceFieldOverride = ({
     }),
     [field.defaultItemValue, field.itemFields]
   );
+
+  /**
+   * Applies one linked-source change to the selected component.
+   *
+   * When the parent linked field changes, any nested `itemMappings.*.field`
+   * selections become stale because they are scoped relative to that parent
+   * source. In that case we replace the selected component in Puck with the
+   * new item source and a cleared mapping tree, while preserving existing
+   * constant fallback values.
+   */
   const updateItemSource = React.useCallback(
     (nextValue: ItemSourceValue<Record<string, unknown>>) => {
+      const { appState, dispatch, getItemBySelector } = getPuck();
+      const itemSelector = appState.ui.itemSelector;
+      const selectedComponent =
+        itemSelector?.zone !== undefined && itemSelector.index !== undefined
+          ? getItemBySelector(itemSelector)
+          : undefined;
+      const previousSourceValue = field.itemSourcePath
+        ? getPathValue(selectedComponent?.props, field.itemSourcePath)
+        : undefined;
       const previousField =
-        !value?.constantValueEnabled && typeof value?.field === "string"
-          ? value.field
+        previousSourceValue &&
+        typeof previousSourceValue === "object" &&
+        !Array.isArray(previousSourceValue) &&
+        !(previousSourceValue as { constantValueEnabled?: boolean })
+          .constantValueEnabled &&
+        typeof (previousSourceValue as { field?: unknown }).field === "string"
+          ? ((previousSourceValue as { field: string }).field ?? "")
           : "";
       const nextField =
         !nextValue.constantValueEnabled && typeof nextValue.field === "string"
@@ -168,8 +196,6 @@ export const ItemSourceFieldOverride = ({
         return;
       }
 
-      const { dispatch, getItemBySelector } = getPuck();
-      const selectedComponent = getItemBySelector(itemSelector);
       const itemMappings = getPathValue(
         selectedComponent?.props,
         field.itemMappingsPath
@@ -198,15 +224,7 @@ export const ItemSourceFieldOverride = ({
         data: updatedComponent,
       });
     },
-    [
-      field.itemMappingsPath,
-      field.itemSourcePath,
-      getPuck,
-      itemSelector,
-      onChange,
-      value?.constantValueEnabled,
-      value?.field,
-    ]
+    [field.itemMappingsPath, field.itemSourcePath, getPuck, onChange]
   );
 
   return (

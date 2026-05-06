@@ -18,7 +18,11 @@ export {
 } from "./migrate.ts";
 export { resolveComponentData } from "./resolveComponentData.tsx";
 export { resolveYextEntityField } from "./resolveYextEntityField.ts";
-export { createItemSource } from "./createItemSource.ts";
+export {
+  createItemSource,
+  type CreateItemSourceOptions,
+  type ItemSourceInstance,
+} from "./createItemSource.ts";
 export {
   createSearchAnalyticsConfig,
   createSearchHeadlessConfig,

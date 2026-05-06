@@ -215,10 +215,8 @@ export const getFilteredEntityFields = <T extends Record<string, any>>(
   }
 
   if (filter?.descendantsOf) {
-    filteredEntitySubFields = filteredEntitySubFields.filter(
-      (field) =>
-        field.name.startsWith(`${filter.descendantsOf}.`) &&
-        field.name !== filter.descendantsOf
+    filteredEntitySubFields = filteredEntitySubFields.filter((field) =>
+      field.name.startsWith(`${filter.descendantsOf}.`)
     );
   }
 

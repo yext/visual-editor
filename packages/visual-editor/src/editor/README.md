@@ -353,8 +353,6 @@ export const ArticleList: YextComponentConfig<ArticleListProps> = {
   fields: articleListFields,
   defaultProps: {
     ...articleItems.defaultProps,
-    itemSource: articleItems.defaultProps.itemSource!,
-    itemMappings: articleItems.defaultProps.itemMappings!,
     heading: {
       text: { defaultValue: "Featured Articles" },
     },

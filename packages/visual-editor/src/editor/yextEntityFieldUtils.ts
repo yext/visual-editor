@@ -11,6 +11,8 @@ import {
   type MappedSourceFieldFilter,
 } from "../utils/cardSlots/mappedSource.ts";
 
+const DISPLAY_NAME_SEPARATOR = " > ";
+
 /** Represents data that can either be from the Yext Knowledge Graph or statically defined */
 export type YextEntityField<T> = {
   /** The api name of the Yext field */
@@ -50,7 +52,7 @@ const dedupeFieldsByName = (fields: YextSchemaField[]): YextSchemaField[] => {
  * user-friendly order.
  */
 const sortFields = (fields: YextSchemaField[]): YextSchemaField[] => {
-  return fields.sort((entityFieldA, entityFieldB) => {
+  return [...fields].sort((entityFieldA, entityFieldB) => {
     const nameA = (entityFieldA.displayName ?? entityFieldA.name).toUpperCase();
     const nameB = (entityFieldB.displayName ?? entityFieldB.name).toUpperCase();
     return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
@@ -106,24 +108,31 @@ export const getEntityFieldDisplayName = (
     const matchingField = currentFields.find((field) => field.name === segment);
     if (!matchingField) {
       return displayNameSegments.length
-        ? displayNameSegments.join(" > ")
+        ? displayNameSegments.join(DISPLAY_NAME_SEPARATOR)
         : undefined;
     }
 
     const mappedDisplayName = getMappedDisplayName(currentPath, entityFields);
     const nextSegmentDisplayName = mappedDisplayName
       ? currentDisplayName &&
-        mappedDisplayName.startsWith(`${currentDisplayName} > `)
-        ? mappedDisplayName.slice(currentDisplayName.length + 3)
-        : (mappedDisplayName.split(" > ").at(-1) ?? mappedDisplayName)
-      : (matchingField.displayName?.split(" > ").at(-1) ?? matchingField.name);
+        mappedDisplayName.startsWith(
+          `${currentDisplayName}${DISPLAY_NAME_SEPARATOR}`
+        )
+        ? mappedDisplayName.slice(
+            currentDisplayName.length + DISPLAY_NAME_SEPARATOR.length
+          )
+        : (mappedDisplayName.split(DISPLAY_NAME_SEPARATOR).at(-1) ??
+          mappedDisplayName)
+      : (matchingField.displayName?.split(DISPLAY_NAME_SEPARATOR).at(-1) ??
+        matchingField.name);
 
     displayNameSegments.push(nextSegmentDisplayName);
-    currentDisplayName = mappedDisplayName ?? displayNameSegments.join(" > ");
+    currentDisplayName =
+      mappedDisplayName ?? displayNameSegments.join(DISPLAY_NAME_SEPARATOR);
     currentFields = matchingField.children?.fields ?? [];
   }
 
-  return displayNameSegments.join(" > ");
+  return displayNameSegments.join(DISPLAY_NAME_SEPARATOR);
 };
 
 /**
@@ -154,7 +163,9 @@ export const getScopedEntityFieldDisplayName = (
     entityFields
   );
   const rootDisplayName = getEntityFieldDisplayName(sourceField, entityFields);
-  const rootPrefix = rootDisplayName ? `${rootDisplayName} > ` : undefined;
+  const rootPrefix = rootDisplayName
+    ? `${rootDisplayName}${DISPLAY_NAME_SEPARATOR}`
+    : undefined;
 
   if (!fullDisplayName) {
     return relativeFieldPath;
@@ -424,12 +435,10 @@ export const getFieldsForSelector = (
           : hasListSourceValueInDocument(streamDocument, field.name)
       );
 
-    return sortFields(
-      dedupeFieldsByName([
-        ...validLinkedEntityRootFields,
-        ...validListRootFields,
-      ])
-    );
+    return sortFields([
+      ...dedupeFieldsByName(validLinkedEntityRootFields),
+      ...dedupeFieldsByName(validListRootFields),
+    ]);
   }
 
   let filteredEntityFields = getFilteredEntityFields(entityFields, filter);

@@ -21,7 +21,7 @@ import {
 import { type StreamDocument } from "./types/StreamDocument.ts";
 import { type MappedSourceFieldFilter } from "./cardSlots/mappedSource.ts";
 
-type CreateItemSourceOptions<TItem extends Record<string, unknown>> = {
+export type CreateItemSourceOptions<TItem extends Record<string, unknown>> = {
   sourcePath: string;
   mappingsPath: string;
   sourceLabel?: string;
@@ -38,7 +38,7 @@ type ResolvedItemField<TValue> =
         ? { [TKey in keyof TValue]: ResolvedItemField<TValue[TKey]> }
         : TValue;
 
-type ItemSourceInstance<
+export type ItemSourceInstance<
   TProps extends DefaultComponentProps,
   TItem extends Record<string, unknown>,
 > = {
@@ -157,8 +157,10 @@ const getDefaultLabel = (path: string): string => {
   }
 
   return lastSegment
+    .replace(/^[_-]+/, "")
+    .replace(/[_-]+/g, " ")
     .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
-    .replace(/^./, (value) => value.toUpperCase());
+    .replace(/\b\w/g, (value) => value.toUpperCase());
 };
 
 /**

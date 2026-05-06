@@ -22,7 +22,6 @@ import { SquarePlus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { pt } from "../utils/i18n/platform.ts";
 import { resolveComponentData } from "../utils/resolveComponentData.tsx";
-import { resolveField } from "../utils/resolveYextEntityField.ts";
 import { type StreamDocument } from "../utils/types/StreamDocument.ts";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
 import { useCurrentSourceField } from "../hooks/useCurrentSourceField.tsx";
@@ -53,10 +52,15 @@ const getSubDocument = (
     return streamDocument as Record<string, unknown> | undefined;
   }
 
-  const resolvedValue = resolveField<unknown>(
-    streamDocument as StreamDocument,
-    sourceField
-  ).value;
+  const resolvedValue = sourceField
+    .split(".")
+    .reduce<unknown>((currentValue, segment) => {
+      if (!currentValue || typeof currentValue !== "object") {
+        return undefined;
+      }
+
+      return (currentValue as Record<string, unknown>)[segment];
+    }, streamDocument);
 
   if (Array.isArray(resolvedValue)) {
     const firstItem = resolvedValue[0];

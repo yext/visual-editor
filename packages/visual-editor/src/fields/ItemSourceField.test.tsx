@@ -1,6 +1,6 @@
 import React from "react";
 import { fireEvent, render, screen, within } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const puckState = {
   appState: {
@@ -11,6 +11,12 @@ const puckState = {
   dispatch: vi.fn(),
   getItemBySelector: vi.fn(),
 };
+
+beforeEach(() => {
+  puckState.appState.ui.itemSelector = { index: 0, zone: "root" };
+  puckState.dispatch.mockReset();
+  puckState.getItemBySelector.mockReset();
+});
 
 vi.mock("@puckeditor/core", async () => {
   const actual =
@@ -93,8 +99,6 @@ const renderItemSource = ({
   },
 } = {}) => {
   const onChange = vi.fn();
-  puckState.dispatch.mockReset();
-  puckState.getItemBySelector.mockReset();
   puckState.getItemBySelector.mockReturnValue({
     type: "LinkedItemsSection",
     props: {

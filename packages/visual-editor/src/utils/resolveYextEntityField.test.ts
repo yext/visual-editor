@@ -307,12 +307,7 @@ describe("resolveYextEntityField with embedded fields", () => {
   it("returns an empty string for translatable constants when locale is not passed", () => {
     const actual: unknown = resolveYextEntityField(
       {
-        locale: "fr",
         name: "Yext",
-        fieldValue: {
-          defaultValue: "Hello [[name]]",
-          fr: "Bonjour [[name]]",
-        },
       },
       {
         field: "",

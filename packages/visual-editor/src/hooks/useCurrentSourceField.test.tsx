@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const puckState = {
   appState: {
@@ -30,6 +30,17 @@ const CurrentSourceField = ({
 }: {
   sourceFieldPath: string;
 }) => <div>{useCurrentSourceField(sourceFieldPath)}</div>;
+
+beforeEach(() => {
+  puckState.getItemBySelector = () => ({
+    props: {
+      data: {
+        field: "c_eventsSection.events",
+        constantValueEnabled: false,
+      },
+    },
+  });
+});
 
 describe("useCurrentSourceField", () => {
   it("updates when the selected component source field changes", () => {
