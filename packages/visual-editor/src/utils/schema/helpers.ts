@@ -129,13 +129,18 @@ const primaryCategoryIdToLocalBusinessSubtype: Record<number, string> = {
   392: "TravelAgency", // Travel
 };
 
+const defaultLocalBusinessSchemaType = "LocalBusiness";
+
 export const getLocalBusinessSubtype = (
   streamDocument: StreamDocument
 ): string => {
   const categoryRootAncestorId = streamDocument?.__?.categoryRootAncestorId;
+  if (!categoryRootAncestorId) {
+    return defaultLocalBusinessSchemaType;
+  }
 
   return (
     primaryCategoryIdToLocalBusinessSubtype[categoryRootAncestorId] ||
-    "LocalBusiness"
+    defaultLocalBusinessSchemaType
   );
 };
