@@ -543,7 +543,7 @@
   "inheritedDataMsg": "Data er arvet fra overordnede sektion.",
   "insight": "Indsigt",
   "item": "Punkt",
-  "itemSourceFieldHint": "Vælg et linket listefelt, eller skift til manuelle elementer.",
+  "itemSourceFieldHint": "Vælg et tilknyttet listefelt, eller skift til manuelle elementer.",
   "kilometer_zero": "kilometer",
   "kilometer_one": "kilometer",
   "kilometer_other": "kilometer",
