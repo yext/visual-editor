@@ -549,7 +549,7 @@
   "kilometer_one": "kilometre",
   "kilometer_other": "kilometre",
   "knowledgeGraphContent": "Bilgi Grafik İçeriği",
-  "link": "bağlantı",
+  "link": "Bağlantı",
   "linkedEntityFields": "Bağlantılı Varlık Alanları",
   "linkedEntityMultiValueWarning": "{{fieldName}} için birden fazla bağlantılı varlık bulundu. İlk bağlantılı varlığın kullanılması.",
   "linkTypes": {
