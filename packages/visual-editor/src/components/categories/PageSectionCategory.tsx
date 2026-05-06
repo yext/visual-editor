@@ -64,9 +64,14 @@ import {
   ProfessionalHeroSection,
   ProfessionalHeroSectionProps,
 } from "../pageSections/ProfessionalHeroSection.tsx";
+import {
+  ArticleList,
+  type ArticleListProps,
+} from "../examples/ArticleList.tsx";
 
 export interface PageSectionCategoryProps {
   AboutSection: AboutSectionProps;
+  ArticleList: ArticleListProps;
   BannerSection: BannerSectionProps;
   BreadcrumbsSection: BreadcrumbsSectionProps;
   CoreInfoSection: CoreInfoSectionProps;
@@ -88,6 +93,7 @@ export interface PageSectionCategoryProps {
 
 export const PageSectionCategoryComponents = {
   AboutSection,
+  ArticleList,
   BannerSection,
   BreadcrumbsSection,
   CoreInfoSection,
