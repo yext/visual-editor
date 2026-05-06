@@ -1,4 +1,4 @@
-import { PuckComponent, setDeep, Slot } from "@puckeditor/core";
+import { PuckComponent, Slot } from "@puckeditor/core";
 import React from "react";
 import { useCardContext } from "../../hooks/useCardContext.tsx";
 import {
@@ -6,7 +6,7 @@ import {
   useTemplateProps,
 } from "../../hooks/useDocument.tsx";
 import { useGetCardSlots } from "../../hooks/useGetCardSlots.tsx";
-import { msg, pt } from "../../utils/i18n/platform.ts";
+import { msg } from "../../utils/i18n/platform.ts";
 import {
   backgroundColors,
   ThemeColor,
@@ -20,7 +20,6 @@ import { TranslatableString } from "../../types/types.ts";
 import { Background } from "../atoms/background.tsx";
 import { MaybeLink } from "../atoms/maybeLink.tsx";
 import { AddressProps } from "../contentBlocks/Address.tsx";
-import { HeadingTextProps } from "../contentBlocks/HeadingText.tsx";
 import { HoursStatusProps } from "../contentBlocks/HoursStatus.tsx";
 import { PhoneProps } from "../contentBlocks/Phone.tsx";
 import {
@@ -30,6 +29,7 @@ import {
   useDirectoryChildren,
 } from "./directoryChildReference.tsx";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
+import { DirectoryCardTitleSlotProps } from "./DirectoryCardTitleSlot.tsx";
 
 const defaultCardTitle: TranslatableString = { defaultValue: "[[name]]" };
 
@@ -37,7 +37,6 @@ export const defaultDirectoryCardSlotData = (
   id: string,
   index: number,
   childRef: DirectoryChildReference,
-  existingCardData?: DirectoryCardProps["data"],
   existingCardStyle?: DirectoryCardProps["styles"],
   existingSlots?: DirectoryCardProps["slots"]
 ) => ({
@@ -45,9 +44,6 @@ export const defaultDirectoryCardSlotData = (
   props: {
     id,
     index,
-    data: {
-      cardTitle: existingCardData?.cardTitle ?? defaultCardTitle,
-    },
     styles: {
       backgroundColor:
         existingCardStyle?.backgroundColor ??
@@ -56,25 +52,20 @@ export const defaultDirectoryCardSlotData = (
     slots: {
       HeadingSlot: [
         {
-          type: "HeadingTextSlot",
+          type: "DirectoryCardTitleSlot",
           props: {
             ...(id && { id: `${id}-heading` }),
             data: {
-              text: {
-                field: "",
-                constantValue: existingCardData?.cardTitle ?? defaultCardTitle,
-                constantValueEnabled: true,
-              },
+              text:
+                existingSlots?.HeadingSlot?.[0]?.props?.data?.text ??
+                defaultCardTitle,
             },
             styles: {
               level: existingSlots?.HeadingSlot?.[0]?.props?.styles?.level ?? 3,
               align:
                 existingSlots?.HeadingSlot?.[0]?.props?.styles?.align ?? "left",
             },
-            parentData: {
-              field: "profile.name",
-            },
-          } satisfies HeadingTextProps,
+          } satisfies DirectoryCardTitleSlotProps,
         },
       ],
       AddressSlot: [
@@ -185,11 +176,6 @@ export const defaultDirectoryCardSlotData = (
 });
 
 export type DirectoryCardProps = {
-  data: {
-    /** The title for each card */
-    cardTitle: TranslatableString;
-  };
-
   /** Styling for all the cards. */
   styles: {
     /** The background color of each directory card */
@@ -214,7 +200,7 @@ export type DirectoryCardProps = {
 };
 
 const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
-  const { data, styles, slots, parentData, index, puck } = props;
+  const { styles, slots, parentData, index, puck } = props;
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
   const directoryChildrenFromContext = useDirectoryChildren();
   const sortedDirectoryChildren = React.useMemo(
@@ -260,13 +246,14 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
     : undefined;
 
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
-    cardData: DirectoryCardProps["data"];
     cardStyles: DirectoryCardProps["styles"];
     slotStyles: Record<string, DirectoryCardProps["styles"]>;
+    headingText?: DirectoryCardTitleSlotProps["data"]["text"];
   }>();
 
   const { slotStyles, getPuck, slotProps } =
     useGetCardSlots<DirectoryCardProps>(props.id);
+  const headingText = slotProps?.HeadingSlot?.[0]?.props?.data?.text;
 
   // sharedCardProps useEffect
   // When the context changes, dispatch an update to sync the changes to puck
@@ -276,9 +263,11 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
     }
 
     if (
-      JSON.stringify(sharedCardProps?.cardData) === JSON.stringify(data) &&
       JSON.stringify(sharedCardProps?.cardStyles) === JSON.stringify(styles) &&
-      JSON.stringify(slotStyles) === JSON.stringify(sharedCardProps?.slotStyles)
+      JSON.stringify(slotStyles) ===
+        JSON.stringify(sharedCardProps?.slotStyles) &&
+      JSON.stringify(sharedCardProps?.headingText) ===
+        JSON.stringify(headingText)
     ) {
       return;
     }
@@ -296,22 +285,21 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
       AddressSlot: [],
     };
     Object.entries(slotProps).forEach(([key, value]) => {
-      const nextSlotValue = deepMerge(
+      let nextSlotValue = deepMerge(
         { props: { styles: { ...sharedCardProps?.slotStyles?.[key] } } },
         value[0]
       );
       if (key === "HeadingSlot") {
-        nextSlotValue.props = {
-          ...nextSlotValue.props,
-          data: {
-            ...nextSlotValue.props?.data,
-            text: {
-              field: "",
-              constantValue: sharedCardProps.cardData.cardTitle,
-              constantValueEnabled: true,
+        nextSlotValue = deepMerge(
+          {
+            props: {
+              data: {
+                text: sharedCardProps.headingText ?? defaultCardTitle,
+              },
             },
           },
-        };
+          nextSlotValue
+        );
       }
       newSlotData[key as keyof DirectoryCardProps["slots"]] = [
         {
@@ -330,7 +318,6 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
         type: "DirectoryCard",
         props: {
           ...otherProps,
-          data: sharedCardProps.cardData,
           styles: {
             backgroundColor:
               sharedCardProps?.cardStyles.backgroundColor ||
@@ -350,19 +337,21 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
     }
 
     if (
-      JSON.stringify(sharedCardProps?.cardData) === JSON.stringify(data) &&
       JSON.stringify(sharedCardProps?.cardStyles) === JSON.stringify(styles) &&
-      JSON.stringify(sharedCardProps?.slotStyles) === JSON.stringify(slotStyles)
+      JSON.stringify(sharedCardProps?.slotStyles) ===
+        JSON.stringify(slotStyles) &&
+      JSON.stringify(sharedCardProps?.headingText) ===
+        JSON.stringify(headingText)
     ) {
       return;
     }
 
     setSharedCardProps({
-      cardData: data,
       cardStyles: styles,
       slotStyles: slotStyles,
+      headingText,
     });
-  }, [data, styles, slotStyles]);
+  }, [headingText, styles, slotStyles]);
 
   return (
     <Background
@@ -396,53 +385,6 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
 };
 
 const directoryCardFields: YextFields<DirectoryCardProps> = {
-  data: {
-    type: "object",
-    label: msg("fields.data", "Data"),
-    objectFields: {
-      cardTitle: {
-        type: "translatableString",
-        label: msg("fields.title", "Title"),
-        filter: {
-          types: ["type.string"],
-        },
-        showApplyAllOption: true,
-        getOptions: () => {
-          return [
-            { label: pt("name", "Name"), value: "name" },
-            { label: pt("slug", "Slug"), value: "slug" },
-            { label: pt("geomodifier", "Geomodifier"), value: "geomodifier" },
-            { label: pt("id", "ID"), value: "id" },
-            {
-              label: pt("addressLine1", "Address > Line 1"),
-              value: "address.line1",
-            },
-            {
-              label: pt("addressLine2", "Address > Line 2"),
-              value: "address.line2",
-            },
-
-            {
-              label: pt("city", "Address > City"),
-              value: "address.city",
-            },
-            {
-              label: pt("region", "Address > Region"),
-              value: "address.region",
-            },
-            {
-              label: pt("country", "Address > Country"),
-              value: "address.country",
-            },
-            {
-              label: pt("postalCode", "Address > Postal Code"),
-              value: "address.postalCode",
-            },
-          ];
-        },
-      },
-    },
-  },
   styles: {
     type: "object",
     label: msg("fields.styles", "Styles"),
@@ -470,9 +412,6 @@ export const DirectoryCard: YextComponentConfig<DirectoryCardProps> = {
   label: msg("slots.directoryCard", "Directory Card"),
   fields: directoryCardFields,
   defaultProps: {
-    data: {
-      cardTitle: defaultCardTitle,
-    },
     styles: {
       backgroundColor: backgroundColors.background1.value,
     },
@@ -482,18 +421,6 @@ export const DirectoryCard: YextComponentConfig<DirectoryCardProps> = {
       HoursSlot: [],
       AddressSlot: [],
     },
-  },
-  resolveData: (data) => {
-    const headingSlot = data.props.slots.HeadingSlot?.[0];
-    if (!headingSlot) {
-      return data;
-    }
-
-    return setDeep(data, "props.slots.HeadingSlot[0].props.data.text", {
-      field: "",
-      constantValue: data.props.data.cardTitle,
-      constantValueEnabled: true,
-    } satisfies HeadingTextProps["data"]["text"]);
   },
   render: (props) => <DirectoryCardComponent {...props} />,
 };

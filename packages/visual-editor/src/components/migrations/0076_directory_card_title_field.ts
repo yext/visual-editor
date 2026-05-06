@@ -6,34 +6,31 @@ export const directoryCardTitleField: Migration = {
   DirectoryCard: {
     action: "updated",
     propTransformation: (props) => {
-      const existingHeadingSlot = props.slots?.HeadingSlot?.[0];
+      const headingSlot = props.slots?.HeadingSlot?.[0];
+      const cardTitle = props.data?.cardTitle ?? defaultCardTitle;
+      const { data: _data, ...restProps } = props;
+
+      if (!headingSlot) {
+        return restProps;
+      }
 
       return {
-        ...props,
-        data: {
-          ...props.data,
-          cardTitle: defaultCardTitle,
-        },
+        ...restProps,
         slots: {
           ...props.slots,
-          HeadingSlot: existingHeadingSlot
-            ? [
-                {
-                  ...existingHeadingSlot,
-                  props: {
-                    ...existingHeadingSlot.props,
-                    data: {
-                      ...existingHeadingSlot.props.data,
-                      text: {
-                        field: "",
-                        constantValue: defaultCardTitle,
-                        constantValueEnabled: true,
-                      },
-                    },
-                  },
+          HeadingSlot: [
+            {
+              ...headingSlot,
+              type: "DirectoryCardTitleSlot",
+              props: {
+                id: headingSlot.props?.id,
+                styles: headingSlot.props?.styles,
+                data: {
+                  text: cardTitle,
                 },
-              ]
-            : props.slots?.HeadingSlot,
+              },
+            },
+          ],
         },
       };
     },

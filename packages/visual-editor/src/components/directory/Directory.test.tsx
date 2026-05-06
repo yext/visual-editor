@@ -673,6 +673,22 @@ const tests: ComponentTest[] = [
                     type: "DirectoryCard",
                     props: {
                       slots: {
+                        HeadingSlot: [
+                          {
+                            type: "DirectoryCardTitleSlot",
+                            props: {
+                              data: {
+                                text: {
+                                  defaultValue: "[[name]] [[geomodifier]]",
+                                },
+                              },
+                              styles: {
+                                level: 3,
+                                align: "left",
+                              },
+                            },
+                          },
+                        ],
                         AddressSlot: [
                           {
                             type: "AddressSlot",
@@ -683,12 +699,6 @@ const tests: ComponentTest[] = [
                             },
                           },
                         ],
-                      },
-                      data: {
-                        cardTitle: {
-                          defaultValue: "[[name]]",
-                          en: "[[name]] [[geomodifier]]",
-                        },
                       },
                     },
                   },
