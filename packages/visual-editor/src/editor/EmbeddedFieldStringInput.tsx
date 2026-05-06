@@ -48,16 +48,19 @@ export const EmbeddedFieldStringInputFromEntity = <
   filter,
   showFieldSelector = true,
   sourceFieldPath,
+  sourceField: sourceFieldFromInputProps,
 }: {
   value: string;
   onChange: (value: string) => void;
   filter: RenderEntityFieldFilter<T>;
   showFieldSelector: boolean;
   sourceFieldPath?: string;
+  sourceField?: string;
 }) => {
   const entityFields = useEntityFields();
   const streamDocument = useDocument();
-  const sourceField = useResolvedSourceField(sourceFieldPath);
+  const sourceFieldFromPath = useResolvedSourceField(sourceFieldPath);
+  const sourceField = sourceFieldFromInputProps || sourceFieldFromPath;
 
   const entityFieldOptions = React.useMemo(() => {
     const filteredEntityFields = getFieldsForSelector(

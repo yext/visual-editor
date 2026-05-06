@@ -41,7 +41,6 @@ import { KnowledgeGraphIcon } from "../editor/KnowledgeGraphIcon.tsx";
 import { Switch } from "../internal/puck/ui/switch.tsx";
 import { pt, type MsgString } from "../utils/i18n/platform.ts";
 import { useTranslation } from "react-i18next";
-import { EmbeddedFieldStringInputFromEntity } from "../editor/EmbeddedFieldStringInput.tsx";
 import { FAQ_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/FAQsSection.tsx";
 import {
   getEntityFieldDisplayName,
@@ -217,6 +216,19 @@ export const returnConstantFieldConfig = (
     return undefined;
   }
 
+  if (
+    !isList &&
+    !disallowTranslation &&
+    typeFilter.includes("type.rich_text_v2") &&
+    typeFilter.every(
+      (entityFieldType) =>
+        entityFieldType === "type.string" ||
+        entityFieldType === "type.rich_text_v2"
+    )
+  ) {
+    return getConstantConfigFromType("type.rich_text_v2");
+  }
+
   let fieldConfiguration: ConstantFieldConfig | undefined;
   for (const entityFieldType of typeFilter) {
     const mappedConfiguration = getConstantConfigFromType(
@@ -243,20 +255,6 @@ export const returnConstantFieldConfig = (
   return fieldConfiguration;
 };
 
-const supportsStringConstantFallback = (
-  typeFilter: EntityFieldTypes[] | undefined,
-  isList: boolean,
-  disallowTranslation: boolean
-): boolean =>
-  !isList &&
-  !disallowTranslation &&
-  !!typeFilter?.includes("type.string") &&
-  typeFilter.every(
-    (entityFieldType) =>
-      entityFieldType === "type.string" ||
-      entityFieldType === "type.rich_text_v2"
-  );
-
 export const EntityFieldSelectorFieldOverride = ({
   field,
   value,
@@ -267,19 +265,11 @@ export const EntityFieldSelectorFieldOverride = ({
   const constantValueEnabled =
     !field.disableConstantValueToggle && !!value?.constantValueEnabled;
   const allowsListValues = !!constantValueFilter.includeListsOnly;
-  const canUseEmbeddedStringConstantValue = supportsStringConstantFallback(
+  const constantFieldConfig = returnConstantFieldConfig(
     constantValueFilter.types,
     allowsListValues,
     !!field.disallowTranslation
   );
-
-  const constantFieldConfig = canUseEmbeddedStringConstantValue
-    ? getConstantConfigFromType("type.string")
-    : returnConstantFieldConfig(
-        constantValueFilter.types,
-        allowsListValues,
-        !!field.disallowTranslation
-      );
   const constantValueModeSupported = !!constantFieldConfig;
   const showConstantValueInput =
     constantValueEnabled && constantValueModeSupported;
@@ -393,13 +383,16 @@ export const ConstantValueModeToggler = ({
 };
 
 type InputProps<T extends Record<string, any>> = {
-  filter: RenderEntityFieldFilter<T>;
+  filter: RenderEntityFieldFilter<T> & {
+    subdocumentField?: string;
+  };
   onChange: (value: any, uiState?: any) => void;
   value: any;
   className?: string;
   disallowTranslation?: boolean;
   label?: string;
   sourceFieldPath?: string;
+  sourceField?: string;
 };
 
 export const ConstantValueInput = <T extends Record<string, any>>({
@@ -407,65 +400,18 @@ export const ConstantValueInput = <T extends Record<string, any>>({
   onChange,
   value,
   disallowTranslation,
-  sourceFieldPath,
 }: InputProps<T>) => {
-  const isSingleStringField = supportsStringConstantFallback(
+  const constantFieldConfig = returnConstantFieldConfig(
     filter.types,
     !!filter.includeListsOnly,
     !!disallowTranslation
   );
 
-  // Support mixed string/rich-text field filters while keeping a plain
-  // text constant input experience for components that opt into both.
-  const constantFieldConfig = isSingleStringField
-    ? getConstantConfigFromType("type.string", false, !!disallowTranslation)
-    : returnConstantFieldConfig(
-        filter.types,
-        !!filter.includeListsOnly,
-        !!disallowTranslation
-      );
-
-  const { i18n } = useTranslation();
-  const locale = i18n.language;
-  const constantValue = value?.constantValue;
-  const localizedConstantValue =
-    typeof constantValue === "string"
-      ? constantValue
-      : constantValue &&
-          typeof constantValue === "object" &&
-          !Array.isArray(constantValue)
-        ? (constantValue[locale] ?? constantValue.defaultValue ?? "")
-        : "";
-  const singleStringInputValue =
-    typeof localizedConstantValue === "string" ? localizedConstantValue : "";
-
   if (!constantFieldConfig) {
     return;
   }
 
-  const fieldEditor = isSingleStringField ? (
-    <div className="ve-pt-3">
-      <EmbeddedFieldStringInputFromEntity
-        value={singleStringInputValue}
-        onChange={(newInputValue) => {
-          onChange({
-            ...value,
-            constantValue: {
-              ...(typeof value?.constantValue === "object" &&
-              !Array.isArray(value?.constantValue)
-                ? value?.constantValue
-                : {}),
-              [locale]: newInputValue,
-              hasLocalizedValue: "true",
-            },
-          });
-        }}
-        filter={filter}
-        showFieldSelector={true}
-        sourceFieldPath={sourceFieldPath}
-      />
-    </div>
-  ) : (
+  const fieldEditor = (
     <YextAutoField
       onChange={(newConstantValue, uiState) =>
         onChange(
@@ -504,14 +450,16 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   className,
   label,
   sourceFieldPath,
+  sourceField: sourceFieldFromInputProps,
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
   const templateMetadata = useTemplateMetadata();
   const streamDocument = useDocument();
   const sourceFieldFromProps = useResolvedSourceField(sourceFieldPath);
   const sourceField =
+    sourceFieldFromInputProps ||
     sourceFieldFromProps ||
-    (filter as { subdocumentField?: string }).subdocumentField ||
+    filter.subdocumentField ||
     "";
   const currentFieldPath = value?.field as string | undefined;
   const entityFieldSelector = React.useMemo<BasicSelectorField>(() => {

@@ -7,7 +7,11 @@ import { TemplateMetadataContext } from "../internal/hooks/useMessageReceivers.t
 import { generateTemplateMetadata } from "../internal/types/templateMetadata.ts";
 import { type StreamFields } from "../types/entityFields.ts";
 import { YextAutoField } from "./YextAutoField.tsx";
-import { type EntityFieldSelectorField } from "./EntityFieldSelectorField.tsx";
+import {
+  getConstantConfigFromType,
+  returnConstantFieldConfig,
+  type EntityFieldSelectorField,
+} from "./EntityFieldSelectorField.tsx";
 
 const defaultEntityFields: StreamFields = {
   fields: [
@@ -98,6 +102,16 @@ describe("EntityFieldSelectorField", () => {
     });
 
     expect(screen.getByText("Meta Description")).toBeDefined();
+  });
+
+  it("prefers the rich text constant editor for mixed string and rich text filters", () => {
+    expect(
+      returnConstantFieldConfig(
+        ["type.string", "type.rich_text_v2"],
+        false,
+        false
+      )
+    ).toBe(getConstantConfigFromType("type.rich_text_v2", false, false));
   });
 
   it("toggles between KG and static modes", () => {
