@@ -1,6 +1,29 @@
 import React from "react";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const puckState = {
+  appState: {
+    ui: {
+      itemSelector: null,
+    },
+  },
+  getItemBySelector: () => undefined,
+};
+
+vi.mock("@puckeditor/core", async () => {
+  const actual =
+    await vi.importActual<typeof import("@puckeditor/core")>(
+      "@puckeditor/core"
+    );
+
+  return {
+    ...actual,
+    createUsePuck: () => (selector: (state: typeof puckState) => unknown) =>
+      selector(puckState),
+  };
+});
+
 import { EntityFieldsContext } from "../hooks/useEntityFields.tsx";
 import { TemplateMetadataContext } from "../internal/hooks/useMessageReceivers.ts";
 import { generateTemplateMetadata } from "../internal/types/templateMetadata.ts";
@@ -766,8 +789,8 @@ describe("YextEntityFieldSelector", () => {
     expect(screen.getAllByText("Select a Field").length).toBeGreaterThan(0);
     expect(screen.queryByText("FAQ Section")).toBeNull();
     expect(screen.queryByText("FAQ Section > FAQs")).toBeNull();
-    expect(screen.queryByText("Linked Location")).toBeNull();
-    expect(screen.queryByText("Apple Action Links")).toBeNull();
+    expect(screen.getByText("Linked Location")).toBeDefined();
+    expect(screen.getByText("Apple Action Links")).toBeDefined();
   });
 
   it("filters linked entity roots that cannot satisfy all event card mapping types", () => {

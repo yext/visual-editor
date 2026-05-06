@@ -359,8 +359,8 @@ export const getFieldsForSelector = (
       }
     );
 
-    return requiredDescendantTypes.every((requiredTypes) => {
-      const matchingFieldIndex = availableFields.findIndex(
+    return requiredDescendantTypes.every((requiredTypes) =>
+      availableFields.some(
         (availableField) =>
           getFilteredEntityFields(
             { fields: [availableField] },
@@ -369,15 +369,8 @@ export const getFieldsForSelector = (
               types: requiredTypes,
             }
           ).length > 0
-      );
-
-      if (matchingFieldIndex < 0) {
-        return false;
-      }
-
-      availableFields.splice(matchingFieldIndex, 1);
-      return true;
-    });
+      )
+    );
   };
 
   if (filter.itemSourceTypes?.length) {
