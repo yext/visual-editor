@@ -43,8 +43,9 @@ If your component needs to render a repeated list from a linked field, prefer
 `createItemSource(...)` instead of wiring multiple `YextEntityField` props by
 hand. It generates one repeated `entityField` plus the matching default value
 and `resolveItems(...)` helper, so components can store a single prop like
-`articles: typeof articleSource.value`. See the linked-entity example in
-[editor/README.md](../editor/README.md#linked-entity-item-sources).
+`articles: typeof articleSource.value`. See the
+[Linked Entity Item Sources](../editor/README.md#linked-entity-item-sources)
+example.
 
 ## Registering the Component
 
