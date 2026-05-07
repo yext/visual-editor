@@ -36,14 +36,27 @@ const dedupeFieldsByName = (fields: YextSchemaField[]): YextSchemaField[] => {
 
   fields.forEach((field) => {
     const existingField = fieldsByName.get(field.name);
-    if (
-      !existingField ||
-      (!!field.displayName && !existingField.displayName) ||
-      (!!field.children?.fields?.length &&
-        !existingField.children?.fields?.length)
-    ) {
+    if (!existingField) {
       fieldsByName.set(field.name, field);
+      return;
     }
+
+    fieldsByName.set(field.name, {
+      ...existingField,
+      ...field,
+      displayName: existingField.displayName ?? field.displayName,
+      children:
+        existingField.children?.fields?.length && field.children?.fields?.length
+          ? {
+              ...existingField.children,
+              ...field.children,
+              fields: dedupeFieldsByName([
+                ...existingField.children.fields,
+                ...field.children.fields,
+              ]),
+            }
+          : (existingField.children ?? field.children),
+    });
   });
 
   return Array.from(fieldsByName.values());
