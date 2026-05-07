@@ -43,10 +43,6 @@ export const resolveYextEntityField = <T>(
     return entityField.constantValue as T;
   }
 
-  if (!streamDocument) {
-    return undefined;
-  }
-
   return resolveField<T>(streamDocument, entityField.field).value;
 };
 
