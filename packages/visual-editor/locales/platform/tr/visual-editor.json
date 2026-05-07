@@ -154,7 +154,7 @@
   "emptyStateSectionHidden": "Bu {{entityType}} için bölüm gizlendi",
   "enableCookies": "Çerezleri Etkinleştir",
   "entityFields": "Varlık Alanları",
-  "entityTypeField": "{{entityType}} Fields",
+  "entityTypeField": "{{entityType}} alanı",
   "event": "Etkinlik",
   "events": "Olaylar",
   "expandedMenu": "Genişletilmiş menü",
@@ -549,7 +549,7 @@
   "kilometer_one": "kilometre",
   "kilometer_other": "kilometre",
   "knowledgeGraphContent": "Bilgi Grafik İçeriği",
-  "link": "Bağlantı",
+  "link": "bağlantı",
   "linkedEntityFields": "Bağlantılı Varlık Alanları",
   "linkedEntityMultiValueWarning": "{{fieldName}} için birden fazla bağlantılı varlık bulundu. İlk bağlantılı varlığın kullanılması.",
   "linkTypes": {

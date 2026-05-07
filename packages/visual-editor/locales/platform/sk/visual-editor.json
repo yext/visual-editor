@@ -154,7 +154,7 @@
   "emptyStateSectionHidden": "Sekcia skrytá pre túto {{entityType}}",
   "enableCookies": "Povoliť súbory cookie",
   "entityFields": "Polia entity",
-  "entityTypeField": "{{entityType}} Fields",
+  "entityTypeField": "{{entityType}} pole",
   "event": "Udalosť",
   "events": "Udalosti",
   "expandedMenu": "Rozšírené menu",

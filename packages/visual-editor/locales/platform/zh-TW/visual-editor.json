@@ -154,7 +154,7 @@
   "emptyStateSectionHidden": "此 {{entityType}} 的部分已隱藏",
   "enableCookies": "啟用 Cookie",
   "entityFields": "實體字段",
-  "entityTypeField": "{{entityType}} Fields",
+  "entityTypeField": "{{entityType}}字段",
   "event": "事件",
   "events": "活動",
   "expandedMenu": "擴展菜單",
