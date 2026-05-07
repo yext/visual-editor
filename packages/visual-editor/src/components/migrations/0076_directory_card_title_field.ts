@@ -8,14 +8,13 @@ export const directoryCardTitleField: Migration = {
     propTransformation: (props) => {
       const headingSlot = props.slots?.HeadingSlot?.[0];
       const cardTitle = props.data?.cardTitle ?? defaultCardTitle;
-      const { data: _data, ...restProps } = props;
 
       if (!headingSlot) {
-        return restProps;
+        return props;
       }
 
       return {
-        ...restProps,
+        ...props,
         slots: {
           ...props.slots,
           HeadingSlot: [

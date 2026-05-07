@@ -48,19 +48,19 @@ const directoryCardTitleSlotFields: YextFields<DirectoryCardTitleSlotProps> = {
               value: "address.line2",
             },
             {
-              label: pt("city", "Address > City"),
+              label: pt("addressCity", "Address > City"),
               value: "address.city",
             },
             {
-              label: pt("region", "Address > Region"),
+              label: pt("addressRegion", "Address > Region"),
               value: "address.region",
             },
             {
-              label: pt("country", "Address > Country"),
+              label: pt("addressCountry", "Address > Country"),
               value: "address.country",
             },
             {
-              label: pt("postalCode", "Address > Postal Code"),
+              label: pt("addressPostalCode", "Address > Postal Code"),
               value: "address.postalCode",
             },
           ];
