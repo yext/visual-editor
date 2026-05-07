@@ -544,7 +544,6 @@
   "inheritedDataMsg": "Los datos se heredan de la sección principal.",
   "insight": "Conocimiento",
   "item": "Artículo",
-  "itemSourceFieldHint": "Seleccione un campo de lista vinculado o cambie a elementos manuales.",
   "kilometer_zero": "kilómetro",
   "kilometer_one": "kilómetro",
   "kilometer_many": "kilómetros",
