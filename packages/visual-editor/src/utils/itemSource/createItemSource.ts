@@ -2,7 +2,6 @@ import {
   type YextFieldDefinition,
   type YextFieldMap,
 } from "../../fields/fields.ts";
-import { type MappedSourceFieldFilter } from "../cardSlots/mappedSource.ts";
 import {
   getDefaultValueForField,
   getItemSourceTypes,
@@ -54,21 +53,19 @@ export function createItemSource<TItemProps extends Record<string, unknown>>({
       getDefaultValueForField(field as YextFieldDefinition<any>, false),
     ])
   ) as TItemProps;
-  const field: RepeatedEntityFieldDefinition<TItemProps> = {
+  const field = {
     type: "entityField",
     label,
     filter: {
-      itemSourceTypes: getItemSourceTypes(
-        scopedMappingFields as YextFieldMap<Record<string, unknown>>
-      ),
-    } as MappedSourceFieldFilter<any>,
+      itemSourceTypes: getItemSourceTypes(scopedMappingFields),
+    },
     repeated: {
       mappingFields: scopedMappingFields,
       manualItemFields,
       defaultItemValue,
       defaultMappings,
     },
-  };
+  } satisfies RepeatedEntityFieldDefinition<TItemProps>;
   const defaultValue: RepeatedEntityFieldValue<TItemProps> = {
     field: "",
     constantValueEnabled: true,

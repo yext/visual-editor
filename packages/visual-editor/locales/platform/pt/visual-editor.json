@@ -153,7 +153,7 @@
   "emptyStateFieldEmpty": "O campo mapeado de {{entityType}} está vazio",
   "emptyStateSectionHidden": "Seção oculta para este {{entityType}}",
   "enableCookies": "Habilitar Cookies",
-  "entityFields": "Campos de Entidade",
+  "entityFields": "Campos de entidade",
   "entityTypeField": "{{entityType}} campo",
   "event": "Evento",
   "events": "Eventos",

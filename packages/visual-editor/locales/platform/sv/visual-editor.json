@@ -153,7 +153,7 @@
   "emptyStateFieldEmpty": "Det mappade fältet för {{entityType}} är tomt",
   "emptyStateSectionHidden": "Avsnittet är dolt för denna {{entityType}}",
   "enableCookies": "Aktivera cookies",
-  "entityFields": "Entitetsfält",
+  "entityFields": "Enhetsfält",
   "entityTypeField": "{{entityType}} Fältet",
   "event": "Händelse",
   "events": "Händelser",

@@ -106,8 +106,8 @@ export function getManualItemField<TValue>(
  * Collects the descendant field-type requirements that a parent item-source
  * root must satisfy in linked mode.
  */
-export function getItemSourceTypes(
-  itemFields: YextFieldMap<Record<string, unknown>>
+export function getItemSourceTypes<TItemProps extends Record<string, unknown>>(
+  itemFields: YextFieldMap<TItemProps>
 ): EntityFieldTypes[][] {
   return (Object.values(itemFields) as YextFieldDefinition<any>[]).flatMap(
     getNestedItemSourceTypes

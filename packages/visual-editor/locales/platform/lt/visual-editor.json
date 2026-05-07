@@ -551,7 +551,7 @@
   "kilometer_other": "kilometrų",
   "knowledgeGraphContent": "Žinių grafiko turinys",
   "link": "nuoroda",
-  "linkedEntityFields": "Susieti objektų laukai",
+  "linkedEntityFields": "Susieti esybių laukai",
   "linkedEntityMultiValueWarning": "Rasti keli susieti objektai, skirti {{fieldName}}. Naudojant pirmąjį susietą objektą.",
   "linkTypes": {
     "clickToWebsite": "Spustelėkite svetainę",

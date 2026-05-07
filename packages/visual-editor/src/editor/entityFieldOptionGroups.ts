@@ -2,7 +2,7 @@ import { type StreamFields } from "../types/entityFields.ts";
 import { isLinkedEntityFieldPath } from "../utils/linkedEntityFieldUtils.ts";
 
 /**
- * One selectable field option before it is grouped for display.
+ * A selectable field option before it is grouped for display.
  */
 export type EntityFieldOption = {
   label: string;
@@ -11,7 +11,7 @@ export type EntityFieldOption = {
 };
 
 /**
- * One rendered combobox group of entity field options.
+ * A rendered combobox group of entity field options.
  */
 export type EntityFieldOptionGroup<TOption> = {
   title?: string;

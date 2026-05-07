@@ -46,11 +46,11 @@ export type EmbeddedStringOption = {
  * item when the source resolves to a list of objects.
  */
 const getSubDocument = (
-  streamDocument: StreamDocument | Record<string, unknown> | undefined,
+  streamDocument: StreamDocument,
   sourceField?: string
 ): Record<string, unknown> | undefined => {
-  if (!streamDocument || !sourceField) {
-    return streamDocument as Record<string, unknown> | undefined;
+  if (!sourceField) {
+    return streamDocument;
   }
 
   const resolvedValue = sourceField
@@ -115,18 +115,22 @@ export const EmbeddedFieldStringInputFromEntity = <
     );
     return buildEntityFieldOptionGroups({
       entityFields,
-      options: filteredEntityFields.map((field) => ({
-        label:
+      options: filteredEntityFields.map((field) => {
+        const label =
           getScopedEntityFieldDisplayName(
-            sourceField || undefined,
+            sourceField,
             field.name,
             entityFields
           ) ??
           field.displayName ??
-          field.name,
-        value: field.name,
-        fieldPath: sourceField ? `${sourceField}.${field.name}` : field.name,
-      })),
+          field.name;
+
+        return {
+          label,
+          value: field.name,
+          fieldPath: sourceField ? `${sourceField}.${field.name}` : field.name,
+        };
+      }),
       linkedGroupTitle: pt("linkedEntityFields", "Linked Entity Fields"),
       entityGroupTitle,
     });
