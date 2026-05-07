@@ -517,6 +517,54 @@ describe("EntityFieldSelectorField", () => {
     expect(screen.getByRole("button", { name: "Delete" })).toBeDefined();
   });
 
+  it("renders slot editing guidance instead of inline repeated item editors", () => {
+    renderRepeatedEntityField({
+      field: {
+        type: "entityField",
+        label: "Articles",
+        filter: {
+          itemSourceTypes: [["type.string"]],
+        },
+        repeated: {
+          defaultItemValue: {},
+          defaultMappings: {
+            title: {
+              field: "",
+              constantValueEnabled: false,
+              constantValue: { defaultValue: "" },
+            },
+          },
+          manualItemFields: {},
+          mappingFields: {
+            title: {
+              type: "entityField",
+              label: "Title",
+              filter: { types: ["type.string"] },
+            },
+          },
+          manualModeEditor: "slots",
+        },
+      },
+      value: {
+        field: "",
+        constantValueEnabled: true,
+        constantValue: [{ id: "ArticleCard-1" }],
+        mappings: {
+          title: {
+            field: "name",
+            constantValueEnabled: false,
+            constantValue: { defaultValue: "" },
+          },
+        },
+      },
+    });
+
+    expect(
+      screen.getByText("Edit and reorder cards in the slots.")
+    ).toBeDefined();
+    expect(screen.queryByRole("button", { name: "Delete" })).toBeNull();
+  });
+
   it("renders the linked source selector when repeated KG mode is enabled", () => {
     const { onChange } = renderRepeatedEntityField({
       value: {

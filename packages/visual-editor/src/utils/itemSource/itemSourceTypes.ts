@@ -32,6 +32,7 @@ export type RepeatedEntityFieldMetadata<
   manualItemFields: YextFieldMap<TItemProps>;
   defaultItemValue: TItemProps;
   defaultMappings: TItemProps;
+  manualModeEditor?: "items" | "slots";
 };
 
 export type RepeatedEntityFieldDefinition<
@@ -64,4 +65,26 @@ export type ItemSourceInstance<TItemProps extends Record<string, unknown>> = {
     value: RepeatedEntityFieldValue<TItemProps> | undefined,
     streamDocument: StreamDocument
   ) => ResolvedItemField<TItemProps>[];
+};
+
+export type SlotMappedCardsData<TMappings extends Record<string, unknown>> =
+  YextEntityField<Array<{ id?: string }>, TMappings>;
+
+export type CreateSlotMappedCardsSourceOptions<
+  TMappings extends Record<string, unknown>,
+> = {
+  label: string;
+  mappingFields: YextFieldMap<TMappings>;
+};
+
+export type SlotMappedCardsSourceInstance<
+  TMappings extends Record<string, unknown>,
+> = {
+  field: YextFieldDefinition<SlotMappedCardsData<TMappings>>;
+  defaultValue: SlotMappedCardsData<TMappings>;
+  value: SlotMappedCardsData<TMappings>;
+  resolveMappedItems: (
+    value: SlotMappedCardsData<TMappings> | undefined,
+    streamDocument: StreamDocument
+  ) => ResolvedItemField<TMappings>[];
 };

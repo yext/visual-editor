@@ -5,6 +5,7 @@ import { updateSchemaIdAnchorFormat } from "../components/migrations/0069_update
 import { themeColorPropertyKeyMigration } from "../components/migrations/0071_theme_color_property_keys.ts";
 import { mainContentWrapperMigration } from "../components/migrations/0073_main_content_wrapper.ts";
 import { normalizeFooterLogoImageMigration } from "../components/migrations/0075_normalize_footer_logo_image.ts";
+import { slotMappedCardsMigration } from "../components/migrations/0076_slot_mapped_cards.ts";
 
 describe("migrate", () => {
   it("successfully applies a migration", async () => {
@@ -749,6 +750,261 @@ describe("migrate", () => {
         },
       ],
       zones: {},
+    });
+  });
+
+  it("migrates linked EventCardsWrapper data to slot-mapped cards while preserving card ids", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+          },
+        },
+        content: [
+          {
+            type: "EventCardsWrapper",
+            props: {
+              id: "EventCardsWrapper-test",
+              data: {
+                field: "c_eventsSection",
+                constantValueEnabled: false,
+                constantValue: [{ id: "EventCard-1" }, { id: "EventCard-2" }],
+              },
+              slots: {
+                CardSlot: [
+                  {
+                    type: "EventCard",
+                    props: { id: "EventCard-1", slots: {} },
+                  },
+                  {
+                    type: "EventCard",
+                    props: { id: "EventCard-2", slots: {} },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [slotMappedCardsMigration],
+      {
+        components: {},
+      },
+      {}
+    );
+
+    expect(migratedData.content[0]?.props.data).toEqual({
+      field: "c_eventsSection.events",
+      constantValueEnabled: false,
+      constantValue: [{ id: "EventCard-1" }, { id: "EventCard-2" }],
+      mappings: {
+        image: {
+          field: "image",
+          constantValueEnabled: false,
+          constantValue: undefined,
+        },
+        title: {
+          field: "title",
+          constantValueEnabled: false,
+          constantValue: undefined,
+        },
+        dateTime: {
+          field: "dateTime",
+          constantValueEnabled: false,
+          constantValue: undefined,
+        },
+        description: {
+          field: "description",
+          constantValueEnabled: false,
+          constantValue: undefined,
+        },
+        cta: {
+          field: "cta",
+          constantValueEnabled: false,
+          constantValue: undefined,
+        },
+      },
+    });
+    expect(migratedData.content[0]?.props.slots.CardSlot).toEqual([
+      { type: "EventCard", props: { id: "EventCard-1", slots: {} } },
+      { type: "EventCard", props: { id: "EventCard-2", slots: {} } },
+    ]);
+  });
+
+  it("leaves manual EventCardsWrapper data unchanged", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+          },
+        },
+        content: [
+          {
+            type: "EventCardsWrapper",
+            props: {
+              id: "EventCardsWrapper-test",
+              data: {
+                field: "",
+                constantValueEnabled: true,
+                constantValue: [{ id: "EventCard-1" }],
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [slotMappedCardsMigration],
+      {
+        components: {},
+      },
+      {}
+    );
+
+    expect(migratedData.content[0]?.props.data).toEqual({
+      field: "",
+      constantValueEnabled: true,
+      constantValue: [{ id: "EventCard-1" }],
+    });
+  });
+
+  it("migrates linked FAQSection data to slot-mapped cards while preserving slot content", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+          },
+        },
+        content: [
+          {
+            type: "FAQSection",
+            props: {
+              id: "FAQSection-test",
+              data: {
+                field: "c_faqSection",
+                constantValueEnabled: false,
+                constantValue: [{ id: "FAQCard-1" }],
+              },
+              slots: {
+                CardSlot: [
+                  {
+                    type: "FAQCard",
+                    props: {
+                      id: "FAQCard-1",
+                      data: {
+                        question: {
+                          field: "",
+                          constantValueEnabled: true,
+                          constantValue: { defaultValue: "Manual question" },
+                        },
+                        answer: {
+                          field: "",
+                          constantValueEnabled: true,
+                          constantValue: {
+                            defaultValue: { html: "<p>Manual answer</p>" },
+                          },
+                        },
+                      },
+                      slots: {},
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [slotMappedCardsMigration],
+      {
+        components: {},
+      },
+      {}
+    );
+
+    expect(migratedData.content[0]?.props.data).toEqual({
+      field: "c_faqSection.faqs",
+      constantValueEnabled: false,
+      constantValue: [{ id: "FAQCard-1" }],
+      mappings: {
+        question: {
+          field: "question",
+          constantValueEnabled: false,
+          constantValue: undefined,
+        },
+        answer: {
+          field: "answer",
+          constantValueEnabled: false,
+          constantValue: undefined,
+        },
+      },
+    });
+    expect(migratedData.content[0]?.props.slots.CardSlot[0]?.props.id).toBe(
+      "FAQCard-1"
+    );
+  });
+
+  it("leaves already migrated FAQSection data unchanged", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+          },
+        },
+        content: [
+          {
+            type: "FAQSection",
+            props: {
+              id: "FAQSection-test",
+              data: {
+                field: "c_faqSection.faqs",
+                constantValueEnabled: false,
+                constantValue: [],
+                mappings: {
+                  question: {
+                    field: "question",
+                    constantValueEnabled: false,
+                    constantValue: undefined,
+                  },
+                  answer: {
+                    field: "answer",
+                    constantValueEnabled: false,
+                    constantValue: undefined,
+                  },
+                },
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [slotMappedCardsMigration],
+      {
+        components: {},
+      },
+      {}
+    );
+
+    expect(migratedData.content[0]?.props.data).toEqual({
+      field: "c_faqSection.faqs",
+      constantValueEnabled: false,
+      constantValue: [],
+      mappings: {
+        question: {
+          field: "question",
+          constantValueEnabled: false,
+          constantValue: undefined,
+        },
+        answer: {
+          field: "answer",
+          constantValueEnabled: false,
+          constantValue: undefined,
+        },
+      },
     });
   });
 });

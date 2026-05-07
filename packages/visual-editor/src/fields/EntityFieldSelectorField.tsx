@@ -219,18 +219,30 @@ const RepeatedEntityFieldSelector = ({
         label={translatedLabel}
       />
       {constantValueEnabled ? (
-        <div className="ve-pt-3">
-          <YextAutoField
-            field={itemListField}
-            onChange={(constantValue) =>
-              onChange({
-                ...baseValue,
-                constantValue,
-              })
-            }
-            value={baseValue.constantValue ?? []}
-          />
-        </div>
+        repeated.manualModeEditor === "slots" ? (
+          <p
+            className="ve-pt-3 ve-text-sm"
+            style={{ color: "var(--puck-color-grey-04)" }}
+          >
+            {pt(
+              "editRepeatedItemsInSlots",
+              "Edit and reorder cards in the slots."
+            )}
+          </p>
+        ) : (
+          <div className="ve-pt-3">
+            <YextAutoField
+              field={itemListField}
+              onChange={(constantValue) =>
+                onChange({
+                  ...baseValue,
+                  constantValue,
+                })
+              }
+              value={baseValue.constantValue ?? []}
+            />
+          </div>
+        )
       ) : (
         <>
           <EntityFieldInput
