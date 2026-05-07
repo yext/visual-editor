@@ -150,6 +150,7 @@
     "warning": "Šis veiksmas pašalins jūsų vietinius pakeitimus. To negalima panaikinti."
   },
   "distance": "Atstumas",
+  "editRepeatedItemsInSlots": "Redaguokite ir pertvarkykite korteles lizduose.",
   "emptyStateFieldEmpty": "{{entityType}} susietas laukas tuščias",
   "emptyStateSectionHidden": "Šio {{entityType}} skyrius paslėptas",
   "enableCookies": "Įgalinti slapukus",
@@ -212,7 +213,9 @@
     "data": "Duomenys",
     "dataAttributes": "Duomenų atributai",
     "date": "Data",
+    "dateTime": "Data ir laikas",
     "dayOfWeekFormat": "Savaitės dienos formatas",
+    "description": "Aprašymas",
     "desktopContainerPosition": "Stalinio konteinerio padėtis",
     "desktopContentAlignment": "Darbalaukio turinio derinimas",
     "desktopImagePosition": "Darbalaukio vaizdo padėtis",

@@ -150,6 +150,7 @@
     "warning": "此操作將消除您的本地更改。它不能撤消。"
   },
   "distance": "距離",
+  "editRepeatedItemsInSlots": "編輯和重新排序插槽中的卡牌。",
   "emptyStateFieldEmpty": "{{entityType}} 的映射字段為空",
   "emptyStateSectionHidden": "此 {{entityType}} 的部分已隱藏",
   "enableCookies": "啟用 Cookie",
@@ -212,7 +213,9 @@
     "data": "數據",
     "dataAttributes": "數據屬性",
     "date": "日期",
+    "dateTime": "日期和時間",
     "dayOfWeekFormat": "週的格式",
+    "description": "描述",
     "desktopContainerPosition": "桌面容器位置",
     "desktopContentAlignment": "桌面內容對齊",
     "desktopImagePosition": "桌面圖像位置",

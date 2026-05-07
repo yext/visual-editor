@@ -150,6 +150,7 @@
     "warning": "Ez a művelet eltávolítja a helyi változtatásokat. Nem lehet visszavonni."
   },
   "distance": "Távolság",
+  "editRepeatedItemsInSlots": "Szerkessze és rendezze át a kártyákat a nyílásokban.",
   "emptyStateFieldEmpty": "A(z) {{entityType}} leképezett mezője üres",
   "emptyStateSectionHidden": "A szakasz elrejtve ehhez a(z) {{entityType}}",
   "enableCookies": "Cookie-k engedélyezése",
@@ -212,7 +213,9 @@
     "data": "Adat",
     "dataAttributes": "Adatattribútumok",
     "date": "Dátum",
+    "dateTime": "Dátum és idő",
     "dayOfWeekFormat": "A hét napi formátuma",
+    "description": "Leírás",
     "desktopContainerPosition": "Asztali tartály helyzete",
     "desktopContentAlignment": "Asztali tartalom igazítása",
     "desktopImagePosition": "Asztali képpozíció",

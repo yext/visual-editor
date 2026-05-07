@@ -150,6 +150,7 @@
     "warning": "Deze actie zal uw lokale wijzigingen verwijderen. Het kan niet ongedaan worden gemaakt."
   },
   "distance": "Afstand",
+  "editRepeatedItemsInSlots": "Bewerk en herschik kaarten in de slots.",
   "emptyStateFieldEmpty": "Het toegewezen veld van {{entityType}} is leeg",
   "emptyStateSectionHidden": "Sectie verborgen voor deze {{entityType}}",
   "enableCookies": "Cookies inschakelen",
@@ -212,7 +213,9 @@
     "data": "Gegevens",
     "dataAttributes": "Gegevensattributen",
     "date": "Datum",
+    "dateTime": "Datum en tijd",
     "dayOfWeekFormat": "Dag van de week formaat",
+    "description": "Beschrijving",
     "desktopContainerPosition": "Bureaubladcontainerpositie",
     "desktopContentAlignment": "Uitlijning van bureaubladinhoud",
     "desktopImagePosition": "De bureaubladafbeeldingspositie",

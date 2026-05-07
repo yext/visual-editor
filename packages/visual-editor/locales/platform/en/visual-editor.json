@@ -150,6 +150,7 @@
     "warning": "This action will remove your local changes. It cannot be undone."
   },
   "distance": "Distance",
+  "editRepeatedItemsInSlots": "Edit and reorder cards in the slots.",
   "emptyStateFieldEmpty": "{{entityType}}'s mapped field is empty",
   "emptyStateSectionHidden": "Section hidden for this {{entityType}}",
   "enableCookies": "Enable Cookies",
@@ -212,7 +213,9 @@
     "data": "Data",
     "dataAttributes": "Data Attributes",
     "date": "Date",
+    "dateTime": "Date & Time",
     "dayOfWeekFormat": "Day of Week Format",
+    "description": "Description",
     "desktopContainerPosition": "Desktop Container Position",
     "desktopContentAlignment": "Desktop Content Alignment",
     "desktopImagePosition": "Desktop Image Position",

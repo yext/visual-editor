@@ -150,6 +150,7 @@
     "warning": "Denne handling fjerner dine lokale ændringer. Det kan ikke fortrydes."
   },
   "distance": "Afstand",
+  "editRepeatedItemsInSlots": "Rediger og genbestil kort i slots.",
   "emptyStateFieldEmpty": "Det tilknyttede felt for {{entityType}} er tomt",
   "emptyStateSectionHidden": "Sektion skjult for denne {{entityType}}",
   "enableCookies": "Aktiver cookies",
@@ -212,7 +213,9 @@
     "data": "Data",
     "dataAttributes": "Dataattributter",
     "date": "Dato",
+    "dateTime": "Dato og tid",
     "dayOfWeekFormat": "Ugeformat",
+    "description": "Beskrivelse",
     "desktopContainerPosition": "Placering af skrivebordscontainer",
     "desktopContentAlignment": "Justering af skrivebordsindhold",
     "desktopImagePosition": "Placering af skrivebordsbillede",

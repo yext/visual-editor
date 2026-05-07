@@ -150,6 +150,7 @@
     "warning": "See toiming eemaldab teie kohalikud muudatused. Seda ei saa teha."
   },
   "distance": "Kaugus",
+  "editRepeatedItemsInSlots": "Redigeerige ja järjestage kaarte pesades.",
   "emptyStateFieldEmpty": "{{entityType}} kaardistatud väli on tühi",
   "emptyStateSectionHidden": "Selle {{entityType}} jaoks peidetud jaotis",
   "enableCookies": "Luba küpsised",
@@ -212,7 +213,9 @@
     "data": "Andmed",
     "dataAttributes": "Andmete atribuudid",
     "date": "Kuupäev",
+    "dateTime": "Kuupäev ja kellaaeg",
     "dayOfWeekFormat": "Nädalapäeva vorming",
+    "description": "Kirjeldus",
     "desktopContainerPosition": "Lauaarvuti konteineri asend",
     "desktopContentAlignment": "Töölaua sisu joondamine",
     "desktopImagePosition": "Töölaua pildipositsioon",

@@ -150,6 +150,7 @@
     "warning": "Ova će radnja ukloniti vaše lokalne promjene. Ne može se poništiti."
   },
   "distance": "Udaljenost",
+  "editRepeatedItemsInSlots": "Uredite i promijenite raspored kartica u utorima.",
   "emptyStateFieldEmpty": "Mapirano polje {{entityType}} je prazno",
   "emptyStateSectionHidden": "Odjeljak skriven za ovaj {{entityType}}",
   "enableCookies": "Omogući kolačiće",
@@ -212,7 +213,9 @@
     "data": "Podaci",
     "dataAttributes": "Atributi podataka",
     "date": "Datum",
+    "dateTime": "Datum i vrijeme",
     "dayOfWeekFormat": "Format Dana tjedna",
+    "description": "Opis",
     "desktopContainerPosition": "Položaj kontejnera radne površine",
     "desktopContentAlignment": "Usklađivanje sadržaja radne površine",
     "desktopImagePosition": "Položaj slike radne površine",

@@ -150,6 +150,7 @@
     "warning": "Esta acción eliminará sus cambios locales. No se puede deshacer."
   },
   "distance": "Distancia",
+  "editRepeatedItemsInSlots": "Edite y reordene las tarjetas en las ranuras.",
   "emptyStateFieldEmpty": "El campo asignado de {{entityType}} está vacío",
   "emptyStateSectionHidden": "Sección oculta para este {{entityType}}",
   "enableCookies": "Habilitar cookies",
@@ -212,7 +213,9 @@
     "data": "Datos",
     "dataAttributes": "Atributos de datos",
     "date": "Fecha",
+    "dateTime": "Fecha y hora",
     "dayOfWeekFormat": "Formato de día de semana",
+    "description": "Descripción",
     "desktopContainerPosition": "Posición de contenedor de escritorio",
     "desktopContentAlignment": "Alineación de contenido de escritorio",
     "desktopImagePosition": "Posición de imagen de escritorio",

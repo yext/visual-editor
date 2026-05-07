@@ -150,6 +150,7 @@
     "warning": "Bu eylem yerel değişikliklerinizi kaldıracaktır. Geri alınamaz."
   },
   "distance": "Mesafe",
+  "editRepeatedItemsInSlots": "Yuvalardaki kartları düzenleyin ve yeniden sıralayın.",
   "emptyStateFieldEmpty": "{{entityType}}'ın eşlenen alanı boş",
   "emptyStateSectionHidden": "Bu {{entityType}} için bölüm gizlendi",
   "enableCookies": "Çerezleri Etkinleştir",
@@ -212,7 +213,9 @@
     "data": "Veri",
     "dataAttributes": "Veri Nitelikleri",
     "date": "Tarih",
+    "dateTime": "Tarih ve Saat",
     "dayOfWeekFormat": "Haftanın Günü Biçimi",
+    "description": "Tanım",
     "desktopContainerPosition": "Masaüstü konteyner konumu",
     "desktopContentAlignment": "Masaüstü İçerik Hizalaması",
     "desktopImagePosition": "Masaüstü görüntü konumu",

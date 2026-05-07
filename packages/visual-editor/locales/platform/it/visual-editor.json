@@ -150,6 +150,7 @@
     "warning": "Questa azione rimuoverà le modifiche locali. Non può essere annullato."
   },
   "distance": "Distanza",
+  "editRepeatedItemsInSlots": "Modifica e riordina le carte negli slot.",
   "emptyStateFieldEmpty": "Il campo mappato di {{entityType}} è vuoto",
   "emptyStateSectionHidden": "Sezione nascosta per questo {{entityType}}",
   "enableCookies": "Abilita i cookie",
@@ -212,7 +213,9 @@
     "data": "Dati",
     "dataAttributes": "Attributi dei dati",
     "date": "Data",
+    "dateTime": "Data e ora",
     "dayOfWeekFormat": "Formato giorno della settimana",
+    "description": "Descrizione",
     "desktopContainerPosition": "Posizione del contenitore desktop",
     "desktopContentAlignment": "Allineamento dei contenuti del desktop",
     "desktopImagePosition": "Posizione dell'immagine desktop",

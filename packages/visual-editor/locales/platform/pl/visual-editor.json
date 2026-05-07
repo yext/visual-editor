@@ -150,6 +150,7 @@
     "warning": "Ta akcja usunie twoje lokalne zmiany. Nie można go cofnąć."
   },
   "distance": "Dystans",
+  "editRepeatedItemsInSlots": "Edytuj i zmieniaj kolejność kart w automatach.",
   "emptyStateFieldEmpty": "Mapowane pole elementu {{entityType}} jest puste",
   "emptyStateSectionHidden": "Sekcja ukryta dla tego elementu {{entityType}}",
   "enableCookies": "Włącz pliki cookie",
@@ -212,7 +213,9 @@
     "data": "Dane",
     "dataAttributes": "Atrybuty danych",
     "date": "Data",
+    "dateTime": "Data i godzina",
     "dayOfWeekFormat": "Format dnia tygodnia",
+    "description": "Opis",
     "desktopContainerPosition": "Pozycja pojemnika na komputery stacjonarne",
     "desktopContentAlignment": "Wyrównanie zawartości pulpitu",
     "desktopImagePosition": "Pozycja obrazu stacjonarnego",

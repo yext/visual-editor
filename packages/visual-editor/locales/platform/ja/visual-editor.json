@@ -150,6 +150,7 @@
     "warning": "このアクションにより、地元の変更が削除されます。元に戻すことはできません。"
   },
   "distance": "距離",
+  "editRepeatedItemsInSlots": "スロット内のカードを編集して並べ替えます。",
   "emptyStateFieldEmpty": "{{entityType}} のマップされたフィールドが空です",
   "emptyStateSectionHidden": "この {{entityType}} に対して非表示のセクション",
   "enableCookies": "Cookieを有効にする",
@@ -212,7 +213,9 @@
     "data": "データ",
     "dataAttributes": "データの属性",
     "date": "日付",
+    "dateTime": "日付と時刻",
     "dayOfWeekFormat": "曜日の形式",
+    "description": "説明",
     "desktopContainerPosition": "デスクトップコンテナ位置",
     "desktopContentAlignment": "デスクトップコンテンツの配置",
     "desktopImagePosition": "デスクトップ画像位置",

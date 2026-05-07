@@ -150,6 +150,7 @@
     "warning": "Această acțiune vă va elimina modificările locale. Nu poate fi anulat."
   },
   "distance": "Distanţă",
+  "editRepeatedItemsInSlots": "Editați și reordonați cardurile în sloturi.",
   "emptyStateFieldEmpty": "Câmpul mapat al lui {{entityType}} este gol",
   "emptyStateSectionHidden": "Secțiune ascunsă pentru acest {{entityType}}",
   "enableCookies": "Activați cookie-urile",
@@ -212,7 +213,9 @@
     "data": "Date",
     "dataAttributes": "Atribute de date",
     "date": "Data",
+    "dateTime": "Data și ora",
     "dayOfWeekFormat": "Format Day of Week",
+    "description": "Descriere",
     "desktopContainerPosition": "Poziția containerului desktop",
     "desktopContentAlignment": "Alinierea conținutului desktop",
     "desktopImagePosition": "Poziția imaginii desktop",

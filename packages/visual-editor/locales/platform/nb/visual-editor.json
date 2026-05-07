@@ -150,6 +150,7 @@
     "warning": "Denne handlingen vil fjerne dine lokale endringer. Det kan ikke angre."
   },
   "distance": "Avstand",
+  "editRepeatedItemsInSlots": "Rediger og omorganiser kortene i sporene.",
   "emptyStateFieldEmpty": "Det kartlagte feltet til {{entityType}} er tomt",
   "emptyStateSectionHidden": "Seksjon skjult for denne {{entityType}}",
   "enableCookies": "Aktiver informasjonskapsler",
@@ -212,7 +213,9 @@
     "data": "Data",
     "dataAttributes": "Dataattributter",
     "date": "Dato",
+    "dateTime": "Dato og tid",
     "dayOfWeekFormat": "Dag i ukens format",
+    "description": "Beskrivelse",
     "desktopContainerPosition": "Desktop Container Position",
     "desktopContentAlignment": "Innholdsjustering på skrivebordet",
     "desktopImagePosition": "Desktop bildeposisjon",

@@ -150,6 +150,7 @@
     "warning": "Tato akce odstraní vaše místní změny. Nelze to vrátit."
   },
   "distance": "Vzdálenost",
+  "editRepeatedItemsInSlots": "Upravte a změňte pořadí karet ve slotech.",
   "emptyStateFieldEmpty": "Mapované pole {{entityType}} je prázdné",
   "emptyStateSectionHidden": "Sekce skrytá pro tuto {{entityType}}",
   "enableCookies": "Povolit soubory cookie",
@@ -212,7 +213,9 @@
     "data": "Data",
     "dataAttributes": "Atributy dat",
     "date": "Datum",
+    "dateTime": "Datum a čas",
     "dayOfWeekFormat": "Formát dne týdne",
+    "description": "Popis",
     "desktopContainerPosition": "Pozice kontejneru pro stolní počítače",
     "desktopContentAlignment": "Zarovnání obsahu plochy",
     "desktopImagePosition": "Pozice obrázku na plochu",

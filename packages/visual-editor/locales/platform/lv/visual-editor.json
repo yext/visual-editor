@@ -150,6 +150,7 @@
     "warning": "Šī darbība noņems jūsu vietējās izmaiņas. To nevar atsaukt."
   },
   "distance": "Attālums",
+  "editRepeatedItemsInSlots": "Rediģējiet un pārkārtojiet kartes slotos.",
   "emptyStateFieldEmpty": "{{entityType}} kartētais lauks ir tukšs",
   "emptyStateSectionHidden": "Sadaļa paslēpta šim {{entityType}}",
   "enableCookies": "Iespējot sīkfailus",
@@ -212,7 +213,9 @@
     "data": "Dati",
     "dataAttributes": "Datu atribūti",
     "date": "Datums",
+    "dateTime": "Datums un laiks",
     "dayOfWeekFormat": "Nedēļas dienas formāts",
+    "description": "Apraksts",
     "desktopContainerPosition": "Darbvirsmas konteinera pozīcija",
     "desktopContentAlignment": "Darbvirsmas satura līdzināšana",
     "desktopImagePosition": "Darbvirsmas attēla pozīcija",

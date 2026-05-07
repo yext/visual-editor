@@ -150,6 +150,7 @@
     "warning": "Diese Aktion wird Ihre lokalen Änderungen entfernen. Dies kann nicht rückgängig gemacht werden."
   },
   "distance": "Distanz",
+  "editRepeatedItemsInSlots": "Bearbeiten Sie die Karten in den Steckplätzen und ordnen Sie sie neu an.",
   "emptyStateFieldEmpty": "Das zugeordnete Feld von {{entityType}} ist leer",
   "emptyStateSectionHidden": "Modul für diesen {{entityType}} ausgeblendet",
   "enableCookies": "Cookies aktivieren",
@@ -212,7 +213,9 @@
     "data": "Daten",
     "dataAttributes": "Datenattribute",
     "date": "Datum",
+    "dateTime": "Datum und Uhrzeit",
     "dayOfWeekFormat": "Wochentagsformat",
+    "description": "Beschreibung",
     "desktopContainerPosition": "Container-Position (Desktop)",
     "desktopContentAlignment": "Ausrichtung von Desktop-Inhalten",
     "desktopImagePosition": "Bild-Position (Desktop)",

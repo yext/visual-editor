@@ -150,6 +150,7 @@
     "warning": "Denna åtgärd kommer att ta bort dina lokala förändringar. Det kan inte ångras."
   },
   "distance": "Avstånd",
+  "editRepeatedItemsInSlots": "Redigera och ändra ordning på kort i kortplatserna.",
   "emptyStateFieldEmpty": "Det mappade fältet för {{entityType}} är tomt",
   "emptyStateSectionHidden": "Avsnittet är dolt för denna {{entityType}}",
   "enableCookies": "Aktivera cookies",
@@ -212,7 +213,9 @@
     "data": "Data",
     "dataAttributes": "Dataattribut",
     "date": "Datum",
+    "dateTime": "Datum & tid",
     "dayOfWeekFormat": "Veckodagsformat",
+    "description": "Beskrivning",
     "desktopContainerPosition": "Skrivbordsbehållare",
     "desktopContentAlignment": "Justering av skrivbordsinnehåll",
     "desktopImagePosition": "Skrivbordsbilden",
