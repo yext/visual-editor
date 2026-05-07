@@ -12,6 +12,7 @@ import { migrationRegistry } from "../migrations/migrationRegistry.ts";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { Render, Config } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
+import { MainContent } from "../structure/MainContent.tsx";
 
 const tests: ComponentTest[] = [
   {
@@ -196,11 +197,66 @@ const tests: ComponentTest[] = [
     },
     version: 71,
   },
+  {
+    name: "version 71 props with linked entity embedded field",
+    document: {
+      name: "Galaxy Grill",
+      c_linkedLocation: [
+        {
+          address: {
+            city: "Houston",
+            countryCode: "US",
+            line1: "1600 East Nasa Parkway",
+            postalCode: "77058",
+            region: "TX",
+          },
+        },
+        {
+          address: {
+            city: "Seattle",
+            countryCode: "US",
+            line1: "400 Broad Street",
+            postalCode: "98109",
+            region: "WA",
+          },
+        },
+      ],
+    },
+    props: {
+      data: {
+        text: {
+          field: "",
+          constantValue: {
+            defaultValue: {
+              json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Linked city: [[c_linkedLocation.address.city]]","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+              html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Linked city: [[c_linkedLocation.address.city]]</span></p>',
+            },
+            en: {
+              json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Linked city: [[c_linkedLocation.address.city]]","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+              html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Linked city: [[c_linkedLocation.address.city]]</span></p>',
+            },
+            hasLocalizedValue: "true",
+          },
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        backgroundColor: {
+          selectedColor: "palette-secondary-dark",
+          contrastingColor: "white",
+        },
+        textAlignment: "center",
+      },
+      liveVisibility: true,
+      ignoreLocaleWarning: ["data.text"],
+    },
+    version: 71,
+  },
 ];
 
 describe("BannerSection", async () => {
   const puckConfig: Config = {
-    components: { BannerSection },
+    components: { BannerSection, MainContent },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;

@@ -32,6 +32,7 @@
   "findALocation": "Najděte polohu",
   "friday": "pátek",
   "getDirections": "Získejte pokyny",
+  "getDirectionsForLocation": "Získat trasu pro {{address}}",
   "heroBanner": "Hrdinový banner",
   "heroHeader": "Hlavní záhlaví",
   "heroImage": "Hrdinový obrázek",
@@ -85,7 +86,6 @@
   "reopenDate": "Znovu otevřít datum",
   "responseFrom": "Odpověď od {{businessName}}",
   "saturday": "sobota",
-  "searchDropdownHere": "Rozbalovací vstup pro vyhledávání",
   "searchHere": "Hledejte zde ...",
   "searchThisArea": "Prohledejte tuto oblast",
   "secondaryHeaderLinks": "Sekundární odkazy záhlaví",
@@ -95,6 +95,8 @@
   "servicesSection": "Sekce služeb",
   "showLess": "Ukázat méně",
   "showMore": "Ukázat více",
+  "showPinDetails": "Zobrazit podrobnosti pinu {{number}}",
+  "showPinDetailsDefault": "Zobrazit podrobnosti špendlíku",
   "socialLinks": {
     "facebook": "Sledujte nás na Facebooku",
     "instagram": "Sledujte nás na Instagramu",
@@ -114,5 +116,6 @@
   "tuesday": "úterý",
   "useOurLocatorToFindALocationNearYou": "Pomocí našeho lokátoru najdete místo ve vašem okolí",
   "visitPage": "Navštivte stránku",
+  "visitPageForName": "Navštivte stránku pro {{name}}",
   "wednesday": "středa"
 }

@@ -1,19 +1,15 @@
-import { ComponentConfig, Fields, setDeep, Slot } from "@puckeditor/core";
+import { setDeep, Slot } from "@puckeditor/core";
 import { PromoSectionType } from "../../../types/types.ts";
 import {
   backgroundColors,
   ThemeColor,
   ThemeOptions,
 } from "../../../utils/themeConfigOptions.ts";
-import { YextField } from "../../../editor/YextField.tsx";
 import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
 import { ComponentFields } from "../../../types/fields.ts";
-import {
-  YextEntityField,
-  YextEntityFieldSelector,
-} from "../../../editor/YextEntityFieldSelector.tsx";
+import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
 import { BodyTextProps } from "../../contentBlocks/BodyText.tsx";
 import { CTAWrapperProps } from "../../contentBlocks/CtaWrapper.tsx";
@@ -38,6 +34,11 @@ import { CompactPromo } from "./CompactPromo.tsx";
 import { useTranslation } from "react-i18next";
 import { PromoEmptyState } from "./PromoEmptyState.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  YextFields,
+} from "../../../fields/fields.ts";
 
 export interface PromoData {
   /**
@@ -163,36 +164,42 @@ export type PromoVariantProps = Pick<
   "data" | "styles" | "slots"
 >;
 
-const promoSectionFields: Fields<PromoSectionProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+const promoSectionFields: YextFields<PromoSectionProps> = {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
-      promo: YextEntityFieldSelector<any, PromoSectionType | {}>({
+      promo: {
+        type: "entityField",
         label: msg("fields.promo", "Promo"),
         filter: {
           types: [ComponentFields.PromoSection.type],
         },
-      }),
-      media: YextField(msg("fields.media", "Media"), {
+      },
+      media: {
+        label: msg("fields.media", "Media"),
         type: "radio",
         options: [
           { label: msg("fields.options.image", "Image"), value: "image" },
           { label: msg("fields.options.video", "Video"), value: "video" },
         ],
-      }),
-      backgroundImage: YextField(msg("fields.image", "Image"), {
+      },
+      backgroundImage: {
         type: "entityField",
+        label: msg("fields.image", "Image"),
         filter: {
           types: ["type.image"],
         },
-      }),
+      },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
-      variant: YextField(msg("fields.variant", "Variant"), {
-        type: "select",
+      variant: {
+        type: "basicSelector",
+        label: msg("fields.variant", "Variant"),
         options: [
           { label: msg("fields.options.classic", "Classic"), value: "classic" },
           {
@@ -208,73 +215,67 @@ const promoSectionFields: Fields<PromoSectionProps> = {
             value: "compact",
           },
         ],
-      }),
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
-      desktopImagePosition: YextField(
-        msg("fields.desktopMediaPosition", "Desktop Media Position"),
-        {
-          type: "radio",
-          options: [
-            {
-              label: msg("fields.options.left", "Left", {
-                context: "direction",
-              }),
-              value: "left",
-            },
-            {
-              label: msg("fields.options.right", "Right", {
-                context: "direction",
-              }),
-              value: "right",
-            },
-          ],
-        }
-      ),
-      mobileImagePosition: YextField(
-        msg("fields.mobileMediaPosition", "Mobile Media Position"),
-        {
-          type: "radio",
-          options: ThemeOptions.VERTICAL_POSITION,
-        }
-      ),
-      containerAlignment: YextField(
-        msg("fields.containerAlignment", "Container Alignment"),
-        {
-          type: "radio",
-          options: ThemeOptions.ALIGNMENT,
-        }
-      ),
-      imageHeight: YextField(msg("fields.imageHeight", "Image Height"), {
+      },
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
+      desktopImagePosition: {
+        label: msg("fields.desktopMediaPosition", "Desktop Media Position"),
+        type: "radio",
+        options: [
+          {
+            label: msg("fields.options.left", "Left", {
+              context: "direction",
+            }),
+            value: "left",
+          },
+          {
+            label: msg("fields.options.right", "Right", {
+              context: "direction",
+            }),
+            value: "right",
+          },
+        ],
+      },
+      mobileImagePosition: {
+        label: msg("fields.mobileMediaPosition", "Mobile Media Position"),
+        type: "radio",
+        options: ThemeOptions.VERTICAL_POSITION,
+      },
+      containerAlignment: {
+        label: msg("fields.containerAlignment", "Container Alignment"),
+        type: "radio",
+        options: ThemeOptions.ALIGNMENT,
+      },
+      imageHeight: {
         type: "number",
+        label: msg("fields.imageHeight", "Image Height"),
         min: 0,
-      }),
-      showMedia: YextField(msg("fields.showMedia", "Show Media"), {
+      },
+      showMedia: {
+        label: msg("fields.showMedia", "Show Media"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
-      showHeading: YextField(msg("fields.showHeading", "Show Heading"), {
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showHeading: {
+        label: msg("fields.showHeading", "Show Heading"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
-      showDescription: YextField(
-        msg("fields.showDescription", "Show Description"),
-        {
-          type: "radio",
-          options: "SHOW_HIDE",
-        }
-      ),
-      showCTA: YextField(msg("fields.showCTA", "Show CTA"), {
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showDescription: {
+        label: msg("fields.showDescription", "Show Description"),
         type: "radio",
-        options: "SHOW_HIDE",
-      }),
+        options: ThemeOptions.SHOW_HIDE,
+      },
+      showCTA: {
+        label: msg("fields.showCTA", "Show CTA"),
+        type: "radio",
+        options: ThemeOptions.SHOW_HIDE,
+      },
     },
-  }),
+  },
   slots: {
     type: "object",
     visible: false,
@@ -286,32 +287,32 @@ const promoSectionFields: Fields<PromoSectionProps> = {
       CTASlot: { type: "slot" },
     },
   },
-  analytics: YextField(msg("fields.analytics", "Analytics"), {
+  analytics: {
     type: "object",
+    label: msg("fields.analytics", "Analytics"),
     visible: false,
     objectFields: {
-      scope: YextField(msg("fields.scope", "Scope"), {
+      scope: {
+        label: msg("fields.scope", "Scope"),
         type: "text",
-      }),
+      },
     },
-  }),
-  liveVisibility: YextField(
-    msg("fields.visibleOnLivePage", "Visible on Live Page"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: false },
-      ],
-    }
-  ),
+  },
+  liveVisibility: {
+    label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.show", "Show"), value: true },
+      { label: msg("fields.options.hide", "Hide"), value: false },
+    ],
+  },
 };
 
 /**
  * The Promo Section is a flexible content component designed to highlight a single, specific promotion. It combines an image with a title, description, and a call-to-action button in a customizable, split-column layout, making it perfect for drawing attention to special offers or announcements.
  * Available on Location templates.
  */
-export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
+export const PromoSection: YextComponentConfig<PromoSectionProps> = {
   label: msg("components.promoSection", "Promo Section"),
   fields: promoSectionFields,
   defaultProps: {
@@ -499,7 +500,7 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
       fields = updateFields(fields, ["data.objectFields.media"], undefined);
     }
 
-    return fields;
+    return toPuckFields(fields);
   },
   resolveData: (data, params) => {
     let updatedData = { ...data };

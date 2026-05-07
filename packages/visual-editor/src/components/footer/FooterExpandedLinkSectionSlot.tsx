@@ -1,11 +1,5 @@
 import * as React from "react";
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  setDeep,
-} from "@puckeditor/core";
-import { YextField } from "../../editor/YextField.tsx";
+import { PuckComponent, setDeep } from "@puckeditor/core";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
@@ -19,6 +13,11 @@ import { useTranslation } from "react-i18next";
 import { defaultLink, defaultLinks } from "./ExpandedFooter.tsx";
 import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
 import { ThemeColor } from "../../utils/themeConfigOptions.ts";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  YextFields,
+} from "../../fields/fields.ts";
 
 export interface FooterExpandedLinkSectionSlotProps {
   data: {
@@ -113,53 +112,55 @@ const shouldShowNormalizeLinkField = (links?: TranslatableCTA[]) => {
   );
 };
 
-const footerExpandedLinkSectionSlotFields: Fields<FooterExpandedLinkSectionSlotProps> =
+const footerExpandedLinkSectionSlotFields: YextFields<FooterExpandedLinkSectionSlotProps> =
   {
-    data: YextField(msg("fields.data", "Data"), {
+    data: {
       type: "object",
+      label: msg("fields.data", "Data"),
       objectFields: {
-        label: YextField(msg("fields.label", "Label"), {
+        label: {
           type: "translatableString",
+          label: msg("fields.label", "Label"),
           filter: { types: ["type.string"] },
-        }),
-        links: YextField(msg("fields.links", "Links"), {
+        },
+        links: {
           type: "array",
+          label: msg("fields.links", "Links"),
           arrayFields: {
-            linkType: YextField(msg("fields.linkType", "Link Type"), {
+            linkType: {
+              label: msg("fields.linkType", "Link Type"),
               type: "radio",
               options: [
                 { label: msg("fields.options.url", "URL"), value: "URL" },
                 { label: msg("fields.options.phone", "Phone"), value: "PHONE" },
                 { label: msg("fields.options.email", "Email"), value: "EMAIL" },
               ],
-            }),
-            label: YextField(msg("fields.label", "Label"), {
+            },
+            label: {
               type: "translatableString",
+              label: msg("fields.label", "Label"),
               filter: { types: ["type.string"] },
-            }),
-            link: YextField(msg("fields.link", "Link"), {
+            },
+            link: {
+              label: msg("fields.link", "Link"),
               type: "text",
-            }),
-            normalizeLink: YextField(
-              msg("fields.normalizeLink", "Normalize Link"),
-              {
-                type: "radio",
-                options: [
-                  { label: msg("fields.options.yes", "Yes"), value: true },
-                  { label: msg("fields.options.no", "No"), value: false },
-                ],
-              }
-            ),
-            openInNewTab: YextField(
-              msg("fields.openInNewTab", "Open in new tab"),
-              {
-                type: "radio",
-                options: [
-                  { label: msg("fields.options.yes", "Yes"), value: true },
-                  { label: msg("fields.options.no", "No"), value: false },
-                ],
-              }
-            ),
+            },
+            normalizeLink: {
+              label: msg("fields.normalizeLink", "Normalize Link"),
+              type: "radio",
+              options: [
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
+              ],
+            },
+            openInNewTab: {
+              label: msg("fields.openInNewTab", "Open in new tab"),
+              type: "radio",
+              options: [
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
+              ],
+            },
           },
           defaultItemProps: defaultLink,
           getItemSummary: (item: any, index?: number) => {
@@ -170,38 +171,39 @@ const footerExpandedLinkSectionSlotFields: Fields<FooterExpandedLinkSectionSlotP
                 : item.label?.[locale];
             return label || pt("link", "Link") + " " + ((index ?? 0) + 1);
           },
-        }),
+        },
       },
-    }),
-    styles: YextField(msg("fields.styles", "Styles"), {
+    },
+    styles: {
       type: "object",
+      label: msg("fields.styles", "Styles"),
       objectFields: {
-        color: YextField(msg("fields.color", "Color"), {
-          type: "select",
+        color: {
+          type: "basicSelector",
+          label: msg("fields.color", "Color"),
           options: "SITE_COLOR",
-        }),
+        },
       },
-    }),
+    },
     index: {
       type: "number",
       visible: false,
     },
   };
 
-export const FooterExpandedLinkSectionSlot: ComponentConfig<{
-  props: FooterExpandedLinkSectionSlotProps;
-}> = {
-  label: msg(
-    "components.footerExpandedLinkSectionSlot",
-    "Expanded Link Section"
-  ),
-  fields: footerExpandedLinkSectionSlotFields,
-  resolveFields: (data) =>
-    setDeep(
-      footerExpandedLinkSectionSlotFields,
-      "data.objectFields.links.arrayFields.normalizeLink.visible",
-      shouldShowNormalizeLinkField(data.props.data.links)
+export const FooterExpandedLinkSectionSlot: YextComponentConfig<FooterExpandedLinkSectionSlotProps> =
+  {
+    label: msg(
+      "components.footerExpandedLinkSectionSlot",
+      "Expanded Link Section"
     ),
-  defaultProps: defaultFooterExpandedLinkSectionProps,
-  render: (props) => <FooterExpandedLinkSectionSlotInternal {...props} />,
-};
+    fields: footerExpandedLinkSectionSlotFields,
+    resolveFields: (data) =>
+      setDeep(
+        toPuckFields(footerExpandedLinkSectionSlotFields),
+        "data.objectFields.links.arrayFields.normalizeLink.visible",
+        shouldShowNormalizeLinkField(data.props.data.links)
+      ),
+    defaultProps: defaultFooterExpandedLinkSectionProps,
+    render: (props) => <FooterExpandedLinkSectionSlotInternal {...props} />,
+  };

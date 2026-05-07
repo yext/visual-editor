@@ -23,6 +23,8 @@ jobs:
   unit_tests:
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/playwright:v1.55.1
+    env:
+      SCREENSHOT_AUTOCOMMIT_TRAILER: "auto-screenshot-update: true"
     strategy:
       matrix:
         node-version: [20.x, 22.x, 24.x]
@@ -37,30 +39,52 @@ jobs:
       - name: Mark repository as safe
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
+      - name: Detect screenshot auto-update rerun
+        id: detect_screenshot_autocommit
+        env:
+          PACKAGE_INPUT: ${{ inputs.package }}
+        run: |
+          LAST_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+          if printf '%s\n' "$LAST_COMMIT_MESSAGE" | grep -Fq "$SCREENSHOT_AUTOCOMMIT_TRAILER"; then
+            echo "skip_workflow=true" >> "$GITHUB_OUTPUT"
+            echo "Detected screenshot auto-update commit for $PACKAGE_INPUT. Skipping rerun to avoid an infinite loop."
+          else
+            echo "skip_workflow=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Skip rerun for screenshot auto-update commit
+        if: steps.detect_screenshot_autocommit.outputs.skip_workflow == 'true'
+        run: echo "Skipping tests for screenshot auto-update commit."
+
       - name: Use Node.js ${{ matrix.node-version }}
+        if: steps.detect_screenshot_autocommit.outputs.skip_workflow != 'true'
         uses: actions/setup-node@v4.0.2
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install pnpm
+        if: steps.detect_screenshot_autocommit.outputs.skip_workflow != 'true'
         uses: pnpm/action-setup@v4.0.0
 
       - name: Install deps
+        if: steps.detect_screenshot_autocommit.outputs.skip_workflow != 'true'
         run: pnpm i --frozen-lockfile --ignore-scripts
         working-directory: ./packages/${{ inputs.package }}
 
       - name: Download build artifact
+        if: steps.detect_screenshot_autocommit.outputs.skip_workflow != 'true'
         uses: actions/download-artifact@v4.1.7
         with:
           name: build-output-${{ matrix.node-version }}
           path: "./packages/${{ inputs.package }}/dist"
 
       - name: Run editor tests
+        if: steps.detect_screenshot_autocommit.outputs.skip_workflow != 'true'
         run: pnpm run test:editor
         working-directory: ./packages/${{ inputs.package }}
 
       - name: Run component tests (Node 20 only)
         id: run_component_tests
-        if: matrix.node-version == '20.x'
+        if: steps.detect_screenshot_autocommit.outputs.skip_workflow != 'true' && matrix.node-version == '20.x'
         continue-on-error: true
         env:
           COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY: ${{secrets.COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY}}
@@ -80,7 +104,7 @@ jobs:
           echo "test_exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
       - name: Detect new/modified screenshots
         id: check_screenshots
-        if: matrix.node-version == '20.x'
+        if: steps.detect_screenshot_autocommit.outputs.skip_workflow != 'true' && matrix.node-version == '20.x'
         env:
           TEST_EXIT_CODE: ${{ steps.run_component_tests.outputs.test_exit_code }}
         working-directory: ./packages/${{ inputs.package }}
@@ -96,7 +120,7 @@ jobs:
           fi
 
       - name: Commit new screenshots and Fail if found
-        if: matrix.node-version == '20.x' && (steps.run_component_tests.outputs.test_exit_code != '0' || steps.check_screenshots.outputs.new_screenshots_found == 'true')
+        if: steps.detect_screenshot_autocommit.outputs.skip_workflow != 'true' && matrix.node-version == '20.x' && (steps.run_component_tests.outputs.test_exit_code != '0' || steps.check_screenshots.outputs.new_screenshots_found == 'true')
         env:
           PACKAGE_INPUT: ${{ inputs.package }}
           TEST_EXIT_CODE: ${{ steps.run_component_tests.outputs.test_exit_code }}
@@ -109,7 +133,9 @@ jobs:
           git add "packages/$PACKAGE_INPUT/src/components/testing/screenshots"
 
           if ! git diff --cached --exit-code --quiet; then
-            git commit -m "Update component screenshots for $PACKAGE_INPUT"
+            git commit \
+              -m "Update component screenshots for $PACKAGE_INPUT" \
+              -m "$SCREENSHOT_AUTOCOMMIT_TRAILER"
             git push
             echo "Successfully committed and pushed new/updated screenshots."
           else

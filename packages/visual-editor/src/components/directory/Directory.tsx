@@ -5,20 +5,18 @@ import {
 } from "../../utils/themeConfigOptions.ts";
 import { PageSection } from "../atoms/pageSection.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
-import { YextField } from "../../editor/YextField.tsx";
 import { Background } from "../atoms/background.tsx";
 import { HeadingTextProps } from "../contentBlocks/HeadingText.tsx";
 import { BreadcrumbsSectionProps } from "../pageSections/Breadcrumbs.tsx";
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  setDeep,
-  Slot,
-} from "@puckeditor/core";
+import { PuckComponent, setDeep, Slot } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { DirectoryList } from "./DirectoryWrapper.tsx";
 import { isDirectoryGrid } from "../../utils/directory/utils.ts";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  YextFields,
+} from "../../fields/fields.ts";
 
 export interface DirectoryStyles {
   /**
@@ -60,33 +58,31 @@ export interface DirectoryProps {
   };
 }
 
-const directoryFields: Fields<DirectoryProps> = {
-  styles: YextField(msg("fields.styles", "Styles"), {
+const directoryFields: YextFields<DirectoryProps> = {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.headingBackgroundColor", "Heading Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
-      listBackgroundColor: YextField(
-        msg(
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.headingBackgroundColor", "Heading Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
+      listBackgroundColor: {
+        type: "basicSelector",
+        label: msg(
           "fields.directoryListBackgroundColor",
           "Directory List Background Color"
         ),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
-      linkColor: YextField(msg("fields.linkColor", "Link Color"), {
-        type: "select",
+        options: "BACKGROUND_COLOR",
+      },
+      linkColor: {
+        type: "basicSelector",
+        label: msg("fields.linkColor", "Link Color"),
         options: "SITE_COLOR",
-      }),
+      },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {
@@ -97,15 +93,17 @@ const directoryFields: Fields<DirectoryProps> = {
     },
     visible: false,
   },
-  analytics: YextField(msg("fields.analytics", "Analytics"), {
+  analytics: {
     type: "object",
+    label: msg("fields.analytics", "Analytics"),
     visible: false,
     objectFields: {
-      scope: YextField(msg("fields.scope", "Scope"), {
+      scope: {
+        label: msg("fields.scope", "Scope"),
         type: "text",
-      }),
+      },
     },
-  }),
+  },
 };
 
 const DirectoryComponent: PuckComponent<DirectoryProps> = ({
@@ -146,7 +144,7 @@ const DirectoryComponent: PuckComponent<DirectoryProps> = ({
  * It includes breadcrumbs for easy navigation and renders each child item as a distinct card.
  * Available on Directory templates.
  */
-export const Directory: ComponentConfig<{ props: DirectoryProps }> = {
+export const Directory: YextComponentConfig<DirectoryProps> = {
   label: msg("components.directory", "Directory"),
   fields: directoryFields,
   resolveFields: (data, params) => {
@@ -159,13 +157,11 @@ export const Directory: ComponentConfig<{ props: DirectoryProps }> = {
         "styles.objectFields.listBackgroundColor.visible",
         false
       );
-      return setDeep(
-        updatedFields,
-        "styles.objectFields.linkColor.visible",
-        false
+      return toPuckFields(
+        setDeep(updatedFields, "styles.objectFields.linkColor.visible", false)
       );
     }
-    return directoryFields;
+    return toPuckFields(directoryFields);
   },
   defaultProps: {
     styles: {

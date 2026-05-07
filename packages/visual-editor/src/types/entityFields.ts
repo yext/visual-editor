@@ -1,14 +1,14 @@
 export type YextSchemaField = {
   name: string;
   displayName?: string;
-  definition: YextFieldDefinition;
+  definition: YextSchemaFieldDefinition;
   children?: {
     fields: YextSchemaField[];
   };
   optionFormat?: "OPTION_FORMAT_EXPANDED";
 };
 
-export type YextFieldDefinition = {
+export type YextSchemaFieldDefinition = {
   name: string;
   isList?: boolean;
   registryId?: string;

@@ -225,18 +225,30 @@ function generateMarkdown() {
 
   // Iterate over all exports to find the component configurations.
   for (const apiMember of entryPoint.members) {
-    // Find variables whose type is `ComponentConfig<...>`
-    if (
-      apiMember.kind !== "Variable" ||
-      !apiMember.variableTypeExcerpt.text.startsWith("ComponentConfig")
-    ) {
+    if (apiMember.kind !== "Variable") {
       continue;
     }
 
-    // This regex handles both `ComponentConfig<TypeName>` and `ComponentConfig<{ props: TypeName }>`.
-    const match = /ComponentConfig<\s*(?:{\s*props:\s*)?(\w+)/i.exec(
-      apiMember.variableTypeExcerpt.text
-    );
+    const variableTypeText = apiMember.variableTypeExcerpt.text;
+    const isSupportedComponentConfig =
+      variableTypeText.startsWith("ComponentConfig") ||
+      variableTypeText.startsWith("YextComponentConfig");
+
+    // Find variables whose type is `ComponentConfig<...>` or `YextComponentConfig<...>`
+    if (!isSupportedComponentConfig) {
+      continue;
+    }
+
+    // This regex handles:
+    // - ComponentConfig<TypeName>
+    // - ComponentConfig<{ props: TypeName }>
+    // - YextComponentConfig<TypeName>
+    // - YextComponentConfig<{ props: TypeName }>
+    const match =
+      /(?:ComponentConfig|YextComponentConfig)<\s*(?:{\s*props:\s*)?(\w+)/i.exec(
+        variableTypeText
+      );
+
     const propsTypeName = match?.[1];
     if (!propsTypeName || !allInterfaces.has(propsTypeName)) {
       continue;

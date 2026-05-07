@@ -1,17 +1,17 @@
 import { useTranslation } from "react-i18next";
 import * as React from "react";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { BodyProps, Body } from "../atoms/body.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { pt, msg } from "../../utils/i18n/platform.ts";
 import { TranslatableRichText } from "../../types/types.ts";
 import { useBackground } from "../../hooks/useBackground.tsx";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
-import { ThemeColor } from "../../utils/themeConfigOptions.ts";
+import { ThemeColor, ThemeOptions } from "../../utils/themeConfigOptions.ts";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export type BodyTextProps = {
   data: {
@@ -41,31 +41,36 @@ export type BodyTextProps = {
   };
 };
 
-const bodyTextFields: Fields<BodyTextProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+const bodyTextFields: YextFields<BodyTextProps> = {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
-      text: YextField(msg("fields.text", "Text"), {
+      text: {
         type: "entityField",
+        label: msg("fields.text", "Text"),
         filter: {
           types: ["type.rich_text_v2"],
         },
-      }),
+      },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
-      variant: YextField(msg("fields.variant", "Variant"), {
+      variant: {
+        label: msg("fields.variant", "Variant"),
         type: "radio",
-        options: "BODY_VARIANT",
-      }),
-      color: YextField(msg("fields.color", "Color"), {
-        type: "select",
+        options: ThemeOptions.BODY_VARIANT,
+      },
+      color: {
+        type: "basicSelector",
+        label: msg("fields.color", "Color"),
         options: "SITE_COLOR",
-      }),
+      },
     },
-  }),
+  },
 };
 
 const BodyTextComponent: PuckComponent<BodyTextProps> = (props) => {
@@ -107,7 +112,7 @@ const BodyTextComponent: PuckComponent<BodyTextProps> = (props) => {
   );
 };
 
-export const BodyText: ComponentConfig<{ props: BodyTextProps }> = {
+export const BodyText: YextComponentConfig<BodyTextProps> = {
   label: msg("components.richText", "Rich Text"),
   fields: bodyTextFields,
   resolveFields: (data) => resolveDataFromParent(bodyTextFields, data),

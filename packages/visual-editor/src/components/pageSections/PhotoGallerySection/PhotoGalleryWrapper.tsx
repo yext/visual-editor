@@ -9,17 +9,14 @@ import { themeManagerCn } from "../../../utils/cn.ts";
 import { useBackground } from "../../../hooks/useBackground.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
-import { YextField } from "../../../editor/YextField.tsx";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { getThemeColorCssValue } from "../../../utils/colors.ts";
 import {
   AssetImageType,
-  isLocalizedAssetImage,
-  resolveLocalizedAssetImage,
   TranslatableAssetImage,
 } from "../../../types/images.ts";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { PLACEHOLDER } from "./PhotoGallerySection.tsx";
 import React, { cloneElement } from "react";
 import { useTranslation } from "react-i18next";
@@ -37,6 +34,17 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { ImagePlus } from "lucide-react";
 import { Button } from "../../../internal/puck/ui/button.tsx";
 import { updateFields } from "../HeroSection.tsx";
+import { isMappedEntityFieldSelected } from "../entityFieldSectionUtils.ts";
+import { renderMappedEntityFieldEmptyState } from "../EntityFieldSectionEmptyState.tsx";
+import {
+  getPhotoGalleryImageData,
+  ResolvedGalleryImage,
+} from "./photoGalleryUtils.ts";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  YextFields,
+} from "../../../fields/fields.ts";
 
 export interface PhotoGalleryWrapperProps {
   data: {
@@ -53,6 +61,12 @@ export interface PhotoGalleryWrapperProps {
   styles: {
     /** Styling options for the gallery images, such as aspect ratio. */
     image: ImageStylingProps;
+
+    /**
+     * Determines whether carousel images should fill or fit within the frame.
+     * @defaultValue "fill"
+     */
+    imageFillType?: "fill" | "fit";
 
     /** Accent color used for carousel arrows and slide indicators. */
     accentColor?: ThemeColor;
@@ -71,49 +85,56 @@ export interface PhotoGalleryWrapperProps {
   };
 }
 
-const photoGalleryWrapperFields: Fields<PhotoGalleryWrapperProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+const photoGalleryWrapperFields: YextFields<PhotoGalleryWrapperProps> = {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
-      images: YextField<
-        any,
-        | ImageType[]
-        | ComplexImageType[]
-        | { assetImage: AssetImageType | TranslatableAssetImage }[]
-      >(msg("fields.images", "Images"), {
+      images: {
         type: "entityField",
+        label: msg("fields.images", "Images"),
         filter: {
           types: ["type.image"],
           includeListsOnly: true,
         },
-      }),
+      },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
-      image: YextField(msg("fields.image", "Image"), {
+      image: {
         type: "object",
+        label: msg("fields.image", "Image"),
         objectFields: ImageStylingFields,
-      }),
-      accentColor: YextField(msg("fields.accentColor", "Accent Color"), {
-        type: "select",
+      },
+      imageFillType: {
+        type: "basicSelector",
+        label: msg("fields.imageFillType", "Image Fill Type"),
+        options: [
+          { label: msg("fields.options.fill", "Fill"), value: "fill" },
+          { label: msg("fields.options.fit", "Fit"), value: "fit" },
+        ],
+        visible: false,
+      },
+      accentColor: {
+        type: "basicSelector",
+        label: msg("fields.accentColor", "Accent Color"),
         options: "SITE_COLOR",
-      }),
-      carouselImageCount: YextField(
-        msg("fields.carouselImageCount", "Carousel Image Count"),
-        {
-          type: "radio",
-          options: [
-            { label: "1", value: 1 },
-            { label: "2", value: 2 },
-            { label: "3", value: 3 },
-          ],
-          visible: false,
-        }
-      ),
+      },
+      carouselImageCount: {
+        label: msg("fields.carouselImageCount", "Carousel Image Count"),
+        type: "radio",
+        options: [
+          { label: "1", value: 1 },
+          { label: "2", value: 2 },
+          { label: "3", value: 3 },
+        ],
+        visible: false,
+      },
     },
-  }),
+  },
 };
 
 interface DynamicChildColorsProps {
@@ -158,17 +179,8 @@ const DynamicChildColors = ({
   });
 };
 
-type ResolvedGalleryImage = {
-  isEmpty: boolean;
-  originalIndex: number;
-  image: ImageType | AssetImageType;
-  aspectRatio?: number;
-  width?: number;
-  originalImage: unknown;
-};
-
 type GalleryRenderProps = {
-  allImages: ResolvedGalleryImage[];
+  galleryImages: ResolvedGalleryImage[];
   imageWidth: number;
   isEditing: boolean;
   imagesFieldId: string;
@@ -210,11 +222,13 @@ const DesktopImageItem = ({
   isEditing,
   sizes,
   constrainToParent = false,
+  imageFillType = "fill",
 }: {
   imageData: ResolvedGalleryImage;
   isEditing: boolean;
   sizes: string;
   constrainToParent?: boolean;
+  imageFillType?: "fill" | "fit";
 }) => {
   if (imageData.isEmpty && isEditing) {
     return <EmptyImage imageData={imageData} />;
@@ -230,6 +244,7 @@ const DesktopImageItem = ({
         constrainToParent && "w-full h-auto object-contain max-w-full"
       )}
       sizes={sizes}
+      style={{ objectFit: imageFillType === "fit" ? "contain" : "cover" }}
     />
   );
 
@@ -250,9 +265,11 @@ const DesktopImageItem = ({
 const MobileImageItem = ({
   imageData,
   isEditing,
+  imageFillType = "fill",
 }: {
   imageData: ResolvedGalleryImage;
   isEditing: boolean;
+  imageFillType?: "fill" | "fit";
 }) => {
   if (imageData.isEmpty && isEditing) {
     return <EmptyImage imageData={imageData} />;
@@ -271,20 +288,25 @@ const MobileImageItem = ({
         aspectRatio={imageData.aspectRatio}
         className="w-full h-auto object-contain"
         sizes={`100vw`}
+        style={{ objectFit: imageFillType === "fit" ? "contain" : "cover" }}
       />
     </div>
   );
 };
 
 const DesktopCarousel = ({
-  allImages,
+  galleryImages,
   imageWidth,
   carouselImageCount,
   isEditing,
   imagesFieldId,
   constantValueEnabled,
   accentColor,
-}: GalleryRenderProps & { carouselImageCount: number }) => {
+  imageFillType = "fill",
+}: GalleryRenderProps & {
+  carouselImageCount: number;
+  imageFillType?: "fill" | "fit";
+}) => {
   const hasCarouselGap = carouselImageCount > 1;
   return (
     <div className="hidden md:flex justify-center w-full">
@@ -307,7 +329,7 @@ const DesktopCarousel = ({
                 maxWidth: "100%",
               }}
             >
-              {allImages.map((imageData, idx) => {
+              {galleryImages.map((imageData, idx) => {
                 return (
                   <Slide index={idx} key={idx}>
                     <div
@@ -321,6 +343,7 @@ const DesktopCarousel = ({
                         isEditing={isEditing}
                         sizes={`min(${imageWidth}px, calc((100vw - 6rem) / ${carouselImageCount}))`}
                         constrainToParent
+                        imageFillType={imageFillType}
                       />
                     </div>
                   </Slide>
@@ -329,8 +352,8 @@ const DesktopCarousel = ({
             </Slider>
           </EntityField>
           <div className="hidden md:flex justify-center w-full max-w-full gap-2">
-            {allImages.length < 20 &&
-              allImages.map((_, idx) => {
+            {galleryImages.length < 20 &&
+              galleryImages.map((_, idx) => {
                 const afterStyles =
                   "after:content-[' '] after:py-2 after:block";
                 return (
@@ -363,12 +386,13 @@ const DesktopCarousel = ({
 };
 
 const MobileCarousel = ({
-  allImages,
+  galleryImages,
   isEditing,
   imagesFieldId,
   constantValueEnabled,
   accentColor,
-}: GalleryRenderProps) => {
+  imageFillType = "fill",
+}: GalleryRenderProps & { imageFillType?: "fill" | "fit" }) => {
   return (
     <div className="flex flex-col gap-y-8 items-center justify-center md:hidden w-full">
       <EntityField
@@ -378,13 +402,14 @@ const MobileCarousel = ({
         className="max-w-full"
       >
         <Slider className="w-full">
-          {allImages.map((imageData, idx) => {
+          {galleryImages.map((imageData, idx) => {
             return (
               <Slide index={idx} key={idx}>
                 <div className="flex justify-center w-full max-w-full px-4">
                   <MobileImageItem
                     imageData={imageData}
                     isEditing={isEditing}
+                    imageFillType={imageFillType}
                   />
                 </div>
               </Slide>
@@ -399,7 +424,7 @@ const MobileCarousel = ({
           </ButtonBack>
         </DynamicChildColors>
         <div className="flex gap-2 justify-center flex-grow w-full">
-          {allImages.map((_, idx) => (
+          {galleryImages.map((_, idx) => (
             <DynamicChildColors
               category="slide"
               key={idx}
@@ -423,7 +448,7 @@ const MobileCarousel = ({
 };
 
 const GalleryGrid = ({
-  allImages,
+  galleryImages,
   imageWidth,
   isEditing,
   imagesFieldId,
@@ -436,7 +461,7 @@ const GalleryGrid = ({
       constantValueEnabled={constantValueEnabled}
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {allImages.map((imageData, idx) => (
+        {galleryImages.map((imageData, idx) => (
           <div key={idx} className="flex justify-center">
             <DesktopImageItem
               imageData={imageData}
@@ -450,43 +475,45 @@ const GalleryGrid = ({
   );
 };
 
-export const PhotoGalleryWrapper: ComponentConfig<{
-  props: PhotoGalleryWrapperProps;
-}> = {
-  label: msg("components.gallery", "Gallery"),
-  fields: photoGalleryWrapperFields,
-  defaultProps: {
-    data: {
-      images: {
-        field: "",
-        constantValue: [
-          { assetImage: PLACEHOLDER },
-          { assetImage: PLACEHOLDER },
-          { assetImage: PLACEHOLDER },
+export const PhotoGalleryWrapper: YextComponentConfig<PhotoGalleryWrapperProps> =
+  {
+    label: msg("components.gallery", "Gallery"),
+    fields: photoGalleryWrapperFields,
+    defaultProps: {
+      data: {
+        images: {
+          field: "",
+          constantValue: [
+            { assetImage: PLACEHOLDER },
+            { assetImage: PLACEHOLDER },
+            { assetImage: PLACEHOLDER },
+          ],
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        image: {
+          aspectRatio: 1.78,
+        },
+        imageFillType: "fill",
+        carouselImageCount: 1,
+      },
+    },
+    resolveFields: (data) => {
+      const isCarousel = data.props.parentData?.variant === "carousel";
+      const fields = updateFields<PhotoGalleryWrapperProps>(
+        photoGalleryWrapperFields,
+        [
+          "styles.objectFields.carouselImageCount.visible",
+          "styles.objectFields.imageFillType.visible",
+          "styles.objectFields.accentColor.visible",
         ],
-        constantValueEnabled: true,
-      },
+        isCarousel
+      );
+      return toPuckFields(fields);
     },
-    styles: {
-      image: {
-        aspectRatio: 1.78,
-      },
-      carouselImageCount: 1,
-    },
-  },
-  resolveFields: (data) => {
-    const isCarousel = data.props.parentData?.variant === "carousel";
-    return updateFields(
-      photoGalleryWrapperFields,
-      [
-        "styles.objectFields.carouselImageCount.visible",
-        "styles.objectFields.accentColor.visible",
-      ],
-      isCarousel
-    );
-  },
-  render: (props) => <PhotoGalleryWrapperComponent {...props} />,
-};
+    render: (props) => <PhotoGalleryWrapperComponent {...props} />,
+  };
 
 const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
   data,
@@ -508,70 +535,23 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
     locale,
     streamDocument
   );
+  const { galleryImages, hasRenderableImages } = getPhotoGalleryImageData({
+    resolvedImages,
+    locale,
+    streamDocument,
+    aspectRatio: styles.image?.aspectRatio,
+    width: styles.image?.width,
+    isEditing: Boolean(puck?.isEditing),
+  });
 
-  const allImages = (resolvedImages || [])
-    .map((rawImage, originalIndex) => {
-      let image: ImageType | AssetImageType | undefined;
-      let altText = "";
-
-      if ("assetImage" in rawImage) {
-        if (isLocalizedAssetImage(rawImage.assetImage)) {
-          image = resolveLocalizedAssetImage(rawImage.assetImage, locale);
-          altText = resolveComponentData(
-            image?.alternateText ?? "",
-            locale,
-            streamDocument
-          );
-        } else {
-          image = rawImage.assetImage;
-          altText = resolveComponentData(
-            rawImage.assetImage?.alternateText ?? "",
-            locale,
-            streamDocument
-          );
-        }
-      } else if ("image" in rawImage) {
-        image = rawImage.image;
-        altText = rawImage.image?.alternateText ?? "";
-      } else {
-        image = rawImage;
-        altText = rawImage.alternateText ?? "";
-      }
-
-      const url = image?.url;
-      const isEmpty = !url || (typeof url === "string" && url.trim() === "");
-
-      return {
-        isEmpty,
-        originalIndex,
-        image: isEmpty
-          ? {
-              url: "",
-              alternateText: altText,
-              height: 570,
-              width: 1000,
-            }
-          : {
-              url: url,
-              alternateText: altText,
-              height:
-                "height" in rawImage && rawImage.height ? rawImage.height : 570,
-              width:
-                "width" in rawImage && rawImage.width ? rawImage.width : 1000,
-            },
-        aspectRatio: styles.image?.aspectRatio,
-        width: styles.image?.width || 1000,
-        originalImage: rawImage,
-      };
-    })
-    .filter((i) => puck?.isEditing || !i.isEmpty);
-
-  const hasAnyImages = allImages.length > 0;
+  const hasAnyImages = isMappedEntityFieldSelected(data.images)
+    ? hasRenderableImages
+    : galleryImages.length > 0;
   const imageWidth = styles.image?.width || 1000;
 
   const isEditing = Boolean(puck?.isEditing);
   const sharedRenderProps: GalleryRenderProps = {
-    allImages,
+    galleryImages,
     imageWidth,
     isEditing,
     imagesFieldId: data.images.field,
@@ -612,21 +592,25 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
             className="flex flex-col gap-8"
             naturalSlideWidth={100}
             naturalSlideHeight={100}
-            totalSlides={allImages.length}
+            totalSlides={galleryImages.length}
             visibleSlides={visibleSlides}
             isIntrinsicHeight={true}
           >
             <DesktopCarousel
               {...sharedRenderProps}
               carouselImageCount={styles.carouselImageCount}
+              imageFillType={styles.imageFillType ?? "fill"}
             />
-            <MobileCarousel {...sharedRenderProps} />
+            <MobileCarousel
+              {...sharedRenderProps}
+              imageFillType={styles.imageFillType ?? "fill"}
+            />
           </CarouselProvider>
         )
       ) : puck?.isEditing ? (
-        <div className="h-24"></div>
+        renderMappedEntityFieldEmptyState(true)
       ) : (
-        <></>
+        renderMappedEntityFieldEmptyState(false)
       )}
     </div>
   );

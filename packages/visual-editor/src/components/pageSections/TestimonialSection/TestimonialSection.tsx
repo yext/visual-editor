@@ -1,10 +1,9 @@
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
+import { Slot } from "@puckeditor/core";
 import {
   ThemeColor,
   backgroundColors,
+  ThemeOptions,
 } from "../../../utils/themeConfigOptions.ts";
-import { YextField } from "../../../editor/YextField.tsx";
-import { PageSection } from "../../atoms/pageSection.tsx";
 import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
@@ -14,6 +13,13 @@ import { defaultTestimonialCardSlotData } from "./TestimonialCard.tsx";
 import { TestimonialCardsWrapperProps } from "./TestimonialCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import {
+  getMappedCardsSectionConditionalRender,
+  MappedCardsSectionConditionalRender,
+  MappedCardsSectionContent,
+  MappedCardsSectionShell,
+} from "../mappedCardsSectionUtils.tsx";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 export interface TestimonialSectionProps {
   /**
@@ -45,6 +51,9 @@ export interface TestimonialSectionProps {
     scope?: string;
   };
 
+  /** @internal */
+  conditionalRender?: MappedCardsSectionConditionalRender;
+
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
    * @defaultValue true
@@ -52,26 +61,23 @@ export interface TestimonialSectionProps {
   liveVisibility: boolean;
 }
 
-const testimonialSectionFields: Fields<TestimonialSectionProps> = {
-  styles: YextField(msg("fields.styles", "Styles"), {
+const testimonialSectionFields: YextFields<TestimonialSectionProps> = {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
-      showSectionHeading: YextField(
-        msg("fields.showSectionHeading", "Show Section Heading"),
-        {
-          type: "radio",
-          options: "SHOW_HIDE",
-        }
-      ),
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
+      showSectionHeading: {
+        label: msg("fields.showSectionHeading", "Show Section Heading"),
+        type: "radio",
+        options: ThemeOptions.SHOW_HIDE,
+      },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {
@@ -80,122 +86,126 @@ const testimonialSectionFields: Fields<TestimonialSectionProps> = {
     },
     visible: false,
   },
-  analytics: YextField(msg("fields.analytics", "Analytics"), {
+  analytics: {
     type: "object",
+    label: msg("fields.analytics", "Analytics"),
     visible: false,
     objectFields: {
-      scope: YextField(msg("fields.scope", "Scope"), {
+      scope: {
+        label: msg("fields.scope", "Scope"),
         type: "text",
-      }),
+      },
     },
-  }),
-  liveVisibility: YextField(
-    msg("fields.visibleOnLivePage", "Visible on Live Page"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: false },
-      ],
-    }
-  ),
-};
-
-const TestimonialSectionWrapper: PuckComponent<TestimonialSectionProps> = (
-  props
-) => {
-  const { styles, slots } = props;
-
-  return (
-    <PageSection
-      background={styles?.backgroundColor}
-      className="flex flex-col gap-8"
-    >
-      {styles?.showSectionHeading && (
-        <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
-      )}
-      <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
-    </PageSection>
-  );
+  },
+  liveVisibility: {
+    label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.show", "Show"), value: true },
+      { label: msg("fields.options.hide", "Hide"), value: false },
+    ],
+  },
 };
 
 /**
  * The Testimonial Section is used to display a list of customer testimonials or reviews. It features a main section heading and renders each testimonial as an individual card, providing social proof and building trust with visitors.
  * Available on Location templates.
  */
-export const TestimonialSection: ComponentConfig<{
-  props: TestimonialSectionProps;
-}> = {
-  label: msg("components.testimonialsSection", "Testimonials Section"),
-  fields: testimonialSectionFields,
-  defaultProps: {
-    styles: {
-      backgroundColor: backgroundColors.background2.value,
-      showSectionHeading: true,
-    },
-    slots: {
-      SectionHeadingSlot: [
-        {
-          type: "HeadingTextSlot",
-          props: {
-            data: {
-              text: {
-                constantValue: { defaultValue: "Featured Testimonials" },
-                constantValueEnabled: true,
-                field: "",
+export const TestimonialSection: YextComponentConfig<TestimonialSectionProps> =
+  {
+    label: msg("components.testimonialsSection", "Testimonials Section"),
+    fields: testimonialSectionFields,
+    defaultProps: {
+      styles: {
+        backgroundColor: backgroundColors.background2.value,
+        showSectionHeading: true,
+      },
+      slots: {
+        SectionHeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              data: {
+                text: {
+                  constantValue: { defaultValue: "Featured Testimonials" },
+                  constantValueEnabled: true,
+                  field: "",
+                },
               },
-            },
-            styles: { level: 2, align: "left" },
-          } satisfies HeadingTextProps,
-        },
-      ],
-      CardsWrapperSlot: [
-        {
-          type: "TestimonialCardsWrapper",
-          props: {
-            data: {
-              field: "",
-              constantValueEnabled: true,
-              constantValue: [{}, {}, {}],
-            },
-            slots: {
-              CardSlot: [
-                defaultTestimonialCardSlotData(undefined, 0),
-                defaultTestimonialCardSlotData(undefined, 1),
-                defaultTestimonialCardSlotData(undefined, 2),
-              ],
-            },
-            styles: {
-              showName: true,
-              showDate: true,
-            },
-          } satisfies TestimonialCardsWrapperProps,
-        },
-      ],
+              styles: { level: 2, align: "left" },
+            } satisfies HeadingTextProps,
+          },
+        ],
+        CardsWrapperSlot: [
+          {
+            type: "TestimonialCardsWrapper",
+            props: {
+              data: {
+                field: "",
+                constantValueEnabled: true,
+                constantValue: [{}, {}, {}],
+              },
+              slots: {
+                CardSlot: [
+                  defaultTestimonialCardSlotData(undefined, 0),
+                  defaultTestimonialCardSlotData(undefined, 1),
+                  defaultTestimonialCardSlotData(undefined, 2),
+                ],
+              },
+              styles: {
+                showName: true,
+                showDate: true,
+              },
+            } satisfies TestimonialCardsWrapperProps,
+          },
+        ],
+      },
+      analytics: {
+        scope: "testimonialSection",
+      },
+      liveVisibility: true,
     },
-    analytics: {
-      scope: "testimonialSection",
+    resolveData: (data) => {
+      const updatedData = forwardHeadingLevel(data, "ContributorNameSlot");
+      return {
+        ...updatedData,
+        props: {
+          ...updatedData.props,
+          conditionalRender: getMappedCardsSectionConditionalRender(
+            updatedData.props.slots.CardsWrapperSlot?.[0]
+          ),
+        },
+      };
     },
-    liveVisibility: true,
-  },
-  resolveData: (data) => {
-    return forwardHeadingLevel(data, "ContributorNameSlot");
-  },
-  render: (props) => (
-    <ComponentErrorBoundary
-      isEditing={props.puck.isEditing}
-      resetKeys={[props]}
-    >
-      <AnalyticsScopeProvider
-        name={`${props.analytics?.scope ?? "testimonialSection"}${getAnalyticsScopeHash(props.id)}`}
+    render: (props) => (
+      <ComponentErrorBoundary
+        isEditing={props.puck.isEditing}
+        resetKeys={[props]}
       >
-        <VisibilityWrapper
-          liveVisibility={props.liveVisibility}
-          isEditing={props.puck.isEditing}
+        <AnalyticsScopeProvider
+          name={`${props.analytics?.scope ?? "testimonialSection"}${getAnalyticsScopeHash(props.id)}`}
         >
-          <TestimonialSectionWrapper {...props} />
-        </VisibilityWrapper>
-      </AnalyticsScopeProvider>
-    </ComponentErrorBoundary>
-  ),
-};
+          <VisibilityWrapper
+            liveVisibility={props.liveVisibility}
+            isEditing={props.puck.isEditing}
+          >
+            <MappedCardsSectionShell
+              conditionalRender={props.conditionalRender}
+              isEditing={props.puck.isEditing}
+              CardsWrapperSlot={props.slots.CardsWrapperSlot}
+            >
+              {(setCardsWrapperRef) => (
+                <MappedCardsSectionContent
+                  backgroundColor={props.styles?.backgroundColor}
+                  showSectionHeading={props.styles.showSectionHeading}
+                  SectionHeadingSlot={props.slots.SectionHeadingSlot}
+                  CardsWrapperSlot={props.slots.CardsWrapperSlot}
+                  setCardsWrapperRef={setCardsWrapperRef}
+                />
+              )}
+            </MappedCardsSectionShell>
+          </VisibilityWrapper>
+        </AnalyticsScopeProvider>
+      </ComponentErrorBoundary>
+    ),
+  };

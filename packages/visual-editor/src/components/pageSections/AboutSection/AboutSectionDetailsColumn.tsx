@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  AutoField,
-  ComponentConfig,
-  FieldLabel,
-  Fields,
-  PuckComponent,
-} from "@puckeditor/core";
+import { FieldLabel, PuckComponent } from "@puckeditor/core";
 import { useTranslation } from "react-i18next";
 import { Body } from "../../atoms/body.tsx";
 import { EntityField } from "../../../editor/EntityField.tsx";
@@ -20,7 +14,7 @@ import { StreamDocument } from "../../../utils/types/StreamDocument.ts";
 import { TranslatableString } from "../../../types/types.ts";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
-import { YextField } from "../../../editor/YextField.tsx";
+import { YextAutoField } from "../../../fields/YextAutoField.tsx";
 import {
   HoursStatus,
   HoursStatusProps,
@@ -52,6 +46,12 @@ import {
   hoursTableFields,
   HoursTable,
 } from "../../contentBlocks/HoursTable.tsx";
+import {
+  YextComponentConfig,
+  YextCustomFieldRenderProps,
+  YextFieldDefinition,
+  YextFields,
+} from "../../../fields/fields.ts";
 
 export type AboutSectionDetailsColumnProps = {
   sections: DetailSection[];
@@ -84,6 +84,10 @@ type DetailSection = {
     socialMedia?: FooterSocialLinksSlotProps;
   };
 };
+
+type DetailSectionContentValue = NonNullable<
+  Omit<DetailSection["content"], "type">[DetailSection["content"]["type"]]
+>;
 
 export const defaultAboutSectionProps: Omit<DetailSection["content"], "type"> =
   {
@@ -187,7 +191,7 @@ const typeToFields = (
   type: DetailSection["content"]["type"],
   data: DetailSection["content"]
 ) => {
-  const fields: Record<DetailSection["content"]["type"], Fields<any>> = {
+  const fields: Record<DetailSection["content"]["type"], YextFields> = {
     hoursStatus: hoursStatusWrapperFields,
     hoursTable: hoursTableFields,
     address:
@@ -202,26 +206,30 @@ const typeToFields = (
   return fields[type];
 };
 
-const aboutSectionDetailsColumnFields: Fields<AboutSectionDetailsColumnProps> =
+const aboutSectionDetailsColumnFields: YextFields<AboutSectionDetailsColumnProps> =
   {
     sections: {
       type: "array",
       label: msg("fields.sections", "Sections"),
       arrayFields: {
-        header: YextField<any, TranslatableString>(
-          msg("fields.header", "Header"),
-          {
-            type: "entityField",
-            filter: {
-              types: ["type.string"],
-            },
-          }
-        ),
+        header: {
+          type: "entityField",
+          label: msg("fields.header", "Header"),
+          filter: {
+            types: ["type.string"],
+          },
+        },
         content: {
           type: "custom",
           label: msg("fields.content", "Content"),
-          render: (props) => {
-            const { value, onChange } = props;
+          render: ({
+            value,
+            onChange,
+          }: YextCustomFieldRenderProps<DetailSection["content"]>) => {
+            const content = value ?? {
+              type: "hoursStatus",
+              hoursStatus: defaultAboutSectionProps.hoursStatus,
+            };
 
             return (
               <div>
@@ -230,13 +238,16 @@ const aboutSectionDetailsColumnFields: Fields<AboutSectionDetailsColumnProps> =
                   el="div"
                   className="mb-3"
                 >
-                  <AutoField
-                    value={value.type}
-                    onChange={(v) => {
-                      onChange({ type: v, [v]: defaultAboutSectionProps[v] });
+                  <YextAutoField
+                    value={content.type}
+                    onChange={(v: DetailSection["content"]["type"]) => {
+                      onChange({
+                        type: v,
+                        [v]: defaultAboutSectionProps[v],
+                      } as DetailSection["content"]);
                     }}
                     field={{
-                      type: "select",
+                      type: "basicSelector",
                       label: msg("fields.contentType", "Content Type"),
                       options: [
                         {
@@ -280,17 +291,25 @@ const aboutSectionDetailsColumnFields: Fields<AboutSectionDetailsColumnProps> =
                     }}
                   />
                 </FieldLabel>
-                <AutoField
+                <YextAutoField
                   value={
-                    value?.[value.type] ?? defaultAboutSectionProps[value.type]
+                    (content[content.type] ??
+                      defaultAboutSectionProps[
+                        content.type
+                      ]) as DetailSectionContentValue
                   }
                   onChange={(v) =>
-                    onChange({ type: value.type, [value.type]: v })
+                    onChange({
+                      type: content.type,
+                      [content.type]: v,
+                    } as DetailSection["content"])
                   }
-                  field={{
-                    type: "object",
-                    objectFields: typeToFields(value.type, value),
-                  }}
+                  field={
+                    {
+                      type: "object",
+                      objectFields: typeToFields(content.type, content),
+                    } as YextFieldDefinition<DetailSectionContentValue>
+                  }
                 />
               </div>
             );
@@ -308,7 +327,7 @@ const aboutSectionDetailsColumnFields: Fields<AboutSectionDetailsColumnProps> =
           hoursStatus: defaultAboutSectionProps.hoursStatus,
         },
       },
-      getItemSummary: (item, i) => {
+      getItemSummary: (item: DetailSection, i?: number) => {
         const locale = i18nComponentsInstance.language;
         return (
           resolveComponentData(item.header, locale) ||
@@ -506,13 +525,12 @@ const AboutSectionDetailsColumnComponent: PuckComponent<
   );
 };
 
-export const AboutSectionDetailsColumn: ComponentConfig<{
-  props: AboutSectionDetailsColumnProps;
-}> = {
-  label: msg("components.aboutSectionDetailsColumn", "Details Column"),
-  fields: aboutSectionDetailsColumnFields,
-  defaultProps: {
-    sections: [],
-  },
-  render: (props) => <AboutSectionDetailsColumnComponent {...props} />,
-};
+export const AboutSectionDetailsColumn: YextComponentConfig<AboutSectionDetailsColumnProps> =
+  {
+    label: msg("components.aboutSectionDetailsColumn", "Details Column"),
+    fields: aboutSectionDetailsColumnFields,
+    defaultProps: {
+      sections: [],
+    },
+    render: (props) => <AboutSectionDetailsColumnComponent {...props} />,
+  };

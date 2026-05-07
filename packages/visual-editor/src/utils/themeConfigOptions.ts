@@ -164,7 +164,7 @@ export const backgroundColors: Record<
   },
 };
 
-// When used in BasicSelector, the color is displayed in the dropdown.
+// When used in the basicSelector field, the color is displayed in the dropdown.
 const backgroundColorOptions: ComboboxOptionGroup[] = [
   {
     title: msg("recommendedColors", "Recommended Colors"),
@@ -234,7 +234,7 @@ export const siteColorOptions: ComboboxOptionGroup[] = [
 /** Corresponds to the different semantic heading levels */
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
-// Provides a mapping of label to value for BasicSelector
+// Provides a mapping of label to value for the basicSelector field
 const headingLevelOptions: { label: string; value: HeadingLevel }[] = [
   { label: "H1", value: 1 },
   { label: "H2", value: 2 },
@@ -308,10 +308,21 @@ const textTransformOptions = [
   },
 ];
 
+export const fontStyleOptions = [
+  { label: msg("fields.options.normal", "Normal"), value: "normal" },
+  { label: msg("fields.options.italic", "Italic"), value: "italic" },
+];
+
 type BorderRadiusOption = {
   label: string;
   value: string;
 };
+
+const defineBorderRadiusOptions = <
+  const T extends readonly BorderRadiusOption[],
+>(
+  options: T
+) => [...options];
 
 const buttonBorderRadiusOptions: BorderRadiusOption[] = [
   { label: msg("theme.options.none", "None"), value: "0px" },
@@ -323,7 +334,7 @@ const buttonBorderRadiusOptions: BorderRadiusOption[] = [
   { label: msg("theme.options.pill", "Pill"), value: "9999px" },
 ];
 
-const imageBorderRadiusOptions: BorderRadiusOption[] = [
+const imageBorderRadiusOptions = defineBorderRadiusOptions([
   { label: msg("theme.options.none", "None"), value: "0px" },
   { label: "XS (2px)", value: "2px" },
   { label: "SM (4px)", value: "4px" },
@@ -337,7 +348,10 @@ const imageBorderRadiusOptions: BorderRadiusOption[] = [
     label: msg("theme.options.circle", "Circle"),
     value: "9999px",
   },
-];
+] satisfies readonly BorderRadiusOption[]);
+
+export type ImageBorderRadius =
+  (typeof imageBorderRadiusOptions)[number]["value"];
 
 const ctaVariantOptions = [
   {
@@ -490,6 +504,7 @@ const showHideOptions = [
 export const ThemeOptions = {
   HEADING_LEVEL: headingLevelOptions,
   TEXT_TRANSFORM: textTransformOptions,
+  FONT_STYLE: fontStyleOptions,
   LETTER_SPACING: letterSpacingOptions,
   BACKGROUND_COLOR: backgroundColorOptions,
   SITE_COLOR: siteColorOptions,

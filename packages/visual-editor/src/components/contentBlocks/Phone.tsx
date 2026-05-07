@@ -1,18 +1,18 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields } from "@puckeditor/core";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { PhoneAtom } from "../atoms/phone.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
-import { YextField } from "../../editor/YextField.tsx";
 import { TranslatableString } from "../../types/types.ts";
 import {
   ThemeColor,
+  ThemeOptions,
   backgroundColors,
 } from "../../utils/themeConfigOptions.ts";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 /** The props for the Phone component */
 export interface PhoneProps {
@@ -42,47 +42,47 @@ export interface PhoneProps {
 }
 
 // Phone field definitions used in Phone and CoreInfoSection
-export const PhoneDataFields = {
-  number: YextField<any, string>(msg("fields.phoneNumber", "Phone Number"), {
+export const PhoneDataFields: YextFields<PhoneProps["data"]> = {
+  number: {
     type: "entityField",
+    label: msg("fields.phoneNumber", "Phone Number"),
     filter: {
       types: ["type.phone"],
     },
-  }),
-  label: YextField<TranslatableString>(msg("fields.label", "Label"), {
+  },
+  label: {
     type: "translatableString",
+    label: msg("fields.label", "Label"),
     filter: { types: ["type.string"] },
-  }),
+  },
 };
 
 // Phone style definitions used in Phone and CoreInfoSection
-export const PhoneStyleFields = {
-  phoneFormat: YextField<"domestic" | "international">(
-    msg("fields.phoneFormat", "Phone Format"),
-    {
-      type: "radio",
-      options: "PHONE_OPTIONS",
-    }
-  ),
-  // By adding `<boolean>`, we make the type explicit.
-  includePhoneHyperlink: YextField<boolean>(
-    msg("fields.includePhoneHyperlink", "Include Phone Hyperlink"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.yes", "Yes"), value: true },
-        { label: msg("fields.options.no", "No"), value: false },
-      ],
-    }
-  ),
-  includeIcon: YextField(msg("fields.showIcon", "Show Icon"), {
+export const PhoneStyleFields: YextFields<PhoneProps["styles"]> = {
+  phoneFormat: {
+    label: msg("fields.phoneFormat", "Phone Format"),
     type: "radio",
-    options: "SHOW_HIDE",
-  }),
-  color: YextField(msg("fields.color", "Color"), {
-    type: "select",
+    options: ThemeOptions.PHONE_OPTIONS,
+  },
+  // By adding `<boolean>`, we make the type explicit.
+  includePhoneHyperlink: {
+    label: msg("fields.includePhoneHyperlink", "Include Phone Hyperlink"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.yes", "Yes"), value: true },
+      { label: msg("fields.options.no", "No"), value: false },
+    ],
+  },
+  includeIcon: {
+    label: msg("fields.showIcon", "Show Icon"),
+    type: "radio",
+    options: ThemeOptions.SHOW_HIDE,
+  },
+  color: {
+    type: "basicSelector",
+    label: msg("fields.color", "Color"),
     options: "SITE_COLOR",
-  }),
+  },
 };
 
 export const defaultPhoneDataProps: PhoneProps["data"] = {
@@ -93,15 +93,17 @@ export const defaultPhoneDataProps: PhoneProps["data"] = {
   label: { defaultValue: "Phone" },
 };
 
-export const PhoneFields: Fields<PhoneProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+export const PhoneFields: YextFields<PhoneProps> = {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: PhoneDataFields,
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: PhoneStyleFields,
-  }),
+  },
 };
 
 const PhoneComponent = ({ data, styles, parentData }: PhoneProps) => {
@@ -137,7 +139,7 @@ const PhoneComponent = ({ data, styles, parentData }: PhoneProps) => {
   );
 };
 
-export const Phone: ComponentConfig<{ props: PhoneProps }> = {
+export const Phone: YextComponentConfig<PhoneProps> = {
   label: msg("components.phone", "Phone"),
   fields: PhoneFields,
   defaultProps: {

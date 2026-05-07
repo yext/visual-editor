@@ -1,17 +1,9 @@
 import * as React from "react";
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  Slot,
-  WithId,
-  setDeep,
-} from "@puckeditor/core";
+import { PuckComponent, Slot, WithId, setDeep } from "@puckeditor/core";
 import {
   ThemeColor,
   backgroundColors,
 } from "../../../utils/themeConfigOptions.ts";
-import { YextField } from "../../../editor/YextField.tsx";
 import { Background } from "../../atoms/background.tsx";
 import { PersonStruct } from "../../../types/types.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
@@ -28,6 +20,7 @@ import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { TextProps } from "../../contentBlocks/Text.tsx";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 const defaultPerson = {
   name: { defaultValue: "First Last" },
@@ -248,19 +241,18 @@ export type TeamCardProps = {
   index?: number;
 };
 
-const teamCardFields: Fields<TeamCardProps> = {
-  styles: YextField(msg("fields.styles", "Styles"), {
+const teamCardFields: YextFields<TeamCardProps> = {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {
@@ -438,7 +430,7 @@ const TeamCardComponent: PuckComponent<TeamCardProps> = (props) => {
   );
 };
 
-export const TeamCard: ComponentConfig<{ props: TeamCardProps }> = {
+export const TeamCard: YextComponentConfig<TeamCardProps> = {
   label: msg("components.teamCard", "Team Card"),
   fields: teamCardFields,
   inline: true,

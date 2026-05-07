@@ -4,3 +4,4 @@ export * from "./types/index.ts";
 export * from "./editor/index.ts";
 export * from "./components/index.ts";
 export { LocalEditorShell } from "./local-editor/LocalEditorShell.tsx";
+export * from "./fields/index.ts";

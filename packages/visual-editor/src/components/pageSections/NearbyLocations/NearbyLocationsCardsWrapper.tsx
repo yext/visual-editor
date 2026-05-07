@@ -1,10 +1,11 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import {
   backgroundColors,
   ThemeColor,
   HeadingLevel,
+  ThemeOptions,
 } from "../../../utils/themeConfigOptions.ts";
 import { Body } from "../../atoms/body.tsx";
 import {
@@ -14,7 +15,6 @@ import {
 } from "../../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
-import { YextField } from "../../../editor/YextField.tsx";
 import {
   formatDistance,
   getPreferredDistanceUnit,
@@ -28,6 +28,15 @@ import { NearbyLocationCard } from "./NearbyLocationCard.tsx";
 import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers.ts";
 import { MapPinOff } from "lucide-react";
 import { updateFields } from "../HeroSection.tsx";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  YextFields,
+} from "../../../fields/fields.ts";
+import {
+  EMPTY_STATE_MARKER_ATTRIBUTE,
+  EmptyStateMarker,
+} from "../emptyStateMarker.tsx";
 
 export type NearbyLocationCardsWrapperProps = {
   /** The search parameters for finding nearby locations. */
@@ -120,55 +129,58 @@ export type NearbyLocationCardsWrapperProps = {
   sectionHeadingLevel?: HeadingLevel;
 };
 
-const nearbyLocationCardsWrapperFields: Fields<NearbyLocationCardsWrapperProps> =
+const nearbyLocationCardsWrapperFields: YextFields<NearbyLocationCardsWrapperProps> =
   {
-    data: YextField(msg("fields.data", "Data"), {
+    data: {
       type: "object",
+      label: msg("fields.data", "Data"),
       objectFields: {
-        radius: YextField(msg("fields.radiusMiles", "Radius (Miles)"), {
+        radius: {
           type: "number",
+          label: msg("fields.radiusMiles", "Radius (Miles)"),
           min: 0,
-        }),
-        limit: YextField(msg("fields.limit", "Limit"), {
+        },
+        limit: {
           type: "number",
+          label: msg("fields.limit", "Limit"),
           min: 1,
           max: 50,
-        }),
+        },
       },
-    }),
-    styles: YextField(msg("fields.styles", "Styles"), {
+    },
+    styles: {
       type: "object",
+      label: msg("fields.styles", "Styles"),
       objectFields: {
-        backgroundColor: YextField(
-          msg("fields.backgroundColor", "Background Color"),
-          {
-            type: "select",
-            options: "BACKGROUND_COLOR",
-          }
-        ),
-        headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
-          type: "select",
-          hasSearch: true,
+        backgroundColor: {
+          type: "basicSelector",
+          label: msg("fields.backgroundColor", "Background Color"),
+          options: "BACKGROUND_COLOR",
+        },
+        headingLevel: {
+          type: "basicSelector",
+          label: msg("fields.headingLevel", "Heading Level"),
           options: "HEADING_LEVEL",
-        }),
-        color: YextField(msg("fields.cardTitleColor", "Card Title Color"), {
-          type: "select",
+        },
+        color: {
+          type: "basicSelector",
+          label: msg("fields.cardTitleColor", "Card Title Color"),
           options: "SITE_COLOR",
-        }),
-        hours: YextField(msg("fields.hours", "Hours"), {
+        },
+        hours: {
           type: "object",
+          label: msg("fields.hours", "Hours"),
           objectFields: {
-            showCurrentStatus: YextField(
-              msg("fields.showCurrentStatus", "Show Current Status"),
-              {
-                type: "radio",
-                options: [
-                  { label: msg("fields.options.yes", "Yes"), value: true },
-                  { label: msg("fields.options.no", "No"), value: false },
-                ],
-              }
-            ),
-            timeFormat: YextField(msg("fields.timeFormat", "Time Format"), {
+            showCurrentStatus: {
+              label: msg("fields.showCurrentStatus", "Show Current Status"),
+              type: "radio",
+              options: [
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
+              ],
+            },
+            timeFormat: {
+              label: msg("fields.timeFormat", "Time Format"),
               type: "radio",
               options: [
                 {
@@ -180,94 +192,97 @@ const nearbyLocationCardsWrapperFields: Fields<NearbyLocationCardsWrapperProps> 
                   value: "24h",
                 },
               ],
-            }),
-            showDayNames: YextField(
-              msg("fields.showDayNames", "Show Day Names"),
-              {
-                type: "radio",
-                options: [
-                  { label: msg("fields.options.yes", "Yes"), value: true },
-                  { label: msg("fields.options.no", "No"), value: false },
-                ],
-              }
-            ),
-            dayOfWeekFormat: YextField(
-              msg("fields.dayOfWeekFormat", "Day of Week Format"),
-              {
-                type: "radio",
-                options: [
-                  {
-                    label: msg("fields.options.short", "Short"),
-                    value: "short",
-                  },
-                  {
-                    label: msg("fields.options.long", "Long"),
-                    value: "long",
-                  },
-                ],
-              }
-            ),
+            },
+            showDayNames: {
+              label: msg("fields.showDayNames", "Show Day Names"),
+              type: "radio",
+              options: [
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
+              ],
+            },
+            dayOfWeekFormat: {
+              label: msg("fields.dayOfWeekFormat", "Day of Week Format"),
+              type: "radio",
+              options: [
+                {
+                  label: msg("fields.options.short", "Short"),
+                  value: "short",
+                },
+                {
+                  label: msg("fields.options.long", "Long"),
+                  value: "long",
+                },
+              ],
+            },
           },
-        }),
-        phone: YextField(msg("fields.phone", "Phone"), {
+        },
+        phone: {
           type: "object",
+          label: msg("fields.phone", "Phone"),
           objectFields: {
-            phoneNumberFormat: YextField(
-              msg("fields.phoneNumberFormat", "Phone Number Format"),
-              {
-                type: "radio",
-                options: "PHONE_OPTIONS",
-              }
-            ),
-            phoneNumberLink: YextField(
-              msg("fields.includePhoneHyperlink", "Include Phone Hyperlink"),
-              {
-                type: "radio",
-                options: [
-                  { label: msg("fields.options.yes", "Yes"), value: true },
-                  { label: msg("fields.options.no", "No"), value: false },
-                ],
-              }
-            ),
-            color: YextField(msg("fields.color", "Color"), {
-              type: "select",
+            phoneNumberFormat: {
+              label: msg("fields.phoneNumberFormat", "Phone Number Format"),
+              type: "radio",
+              options: ThemeOptions.PHONE_OPTIONS,
+            },
+            phoneNumberLink: {
+              label: msg(
+                "fields.includePhoneHyperlink",
+                "Include Phone Hyperlink"
+              ),
+              type: "radio",
+              options: [
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
+              ],
+            },
+            color: {
+              type: "basicSelector",
+              label: msg("fields.color", "Color"),
               options: "SITE_COLOR",
-            }),
+            },
           },
-        }),
-        address: YextField(msg("fields.address", "Address"), {
+        },
+        address: {
           type: "object",
+          label: msg("fields.address", "Address"),
           objectFields: {
-            showRegion: YextField(msg("fields.showRegion", "Show Region"), {
+            showRegion: {
+              label: msg("fields.showRegion", "Show Region"),
               type: "radio",
               options: [
                 { label: msg("fields.options.yes", "Yes"), value: true },
                 { label: msg("fields.options.no", "No"), value: false },
               ],
-            }),
-            showCountry: YextField(msg("fields.showCountry", "Show Country"), {
+            },
+            showCountry: {
+              label: msg("fields.showCountry", "Show Country"),
               type: "radio",
               options: [
                 { label: msg("fields.options.yes", "Yes"), value: true },
                 { label: msg("fields.options.no", "No"), value: false },
               ],
-            }),
+            },
           },
-        }),
-        showHours: YextField(msg("fields.showHours", "Show Hours"), {
+        },
+        showHours: {
+          label: msg("fields.showHours", "Show Hours"),
           type: "radio",
-          options: "SHOW_HIDE",
-        }),
-        showPhone: YextField(msg("fields.showPhone", "Show Phone"), {
+          options: ThemeOptions.SHOW_HIDE,
+        },
+        showPhone: {
+          label: msg("fields.showPhone", "Show Phone"),
           type: "radio",
-          options: "SHOW_HIDE",
-        }),
-        showAddress: YextField(msg("fields.showAddress", "Show Address"), {
+          options: ThemeOptions.SHOW_HIDE,
+        },
+        showAddress: {
+          label: msg("fields.showAddress", "Show Address"),
           type: "radio",
-          options: "SHOW_HIDE",
-        }),
+          options: ThemeOptions.SHOW_HIDE,
+        },
       },
-    }),
+    },
   };
 
 const NearbyLocationCardsWrapperComponent: PuckComponent<
@@ -323,7 +338,7 @@ const NearbyLocationCardsWrapperComponent: PuckComponent<
     if (puck.isEditing) {
       return <NearbyLocationsEmptyState radius={data.radius} />;
     } else {
-      return <div data-empty-state="true" />;
+      return <EmptyStateMarker />;
     }
   }
 
@@ -382,31 +397,30 @@ export const defaultNearbyLocationsCardsProps: NearbyLocationCardsWrapperProps =
     },
   };
 
-export const NearbyLocationCardsWrapper: ComponentConfig<{
-  props: NearbyLocationCardsWrapperProps;
-}> = {
-  label: msg("slots.nearbyLocationCards", "Nearby Location Cards"),
-  fields: nearbyLocationCardsWrapperFields,
-  defaultProps: defaultNearbyLocationsCardsProps,
-  resolveFields: (data) => {
-    let fields = nearbyLocationCardsWrapperFields;
+export const NearbyLocationCardsWrapper: YextComponentConfig<NearbyLocationCardsWrapperProps> =
+  {
+    label: msg("slots.nearbyLocationCards", "Nearby Location Cards"),
+    fields: nearbyLocationCardsWrapperFields,
+    defaultProps: defaultNearbyLocationsCardsProps,
+    resolveFields: (data) => {
+      let fields = nearbyLocationCardsWrapperFields;
 
-    if (!data.props.styles.showHours) {
-      fields = updateFields(fields, ["styles.hours.visible"], false);
-    }
+      if (!data.props.styles.showHours) {
+        fields = updateFields(fields, ["styles.hours.visible"], false);
+      }
 
-    if (!data.props.styles.showPhone) {
-      fields = updateFields(fields, ["styles.phone.visible"], false);
-    }
+      if (!data.props.styles.showPhone) {
+        fields = updateFields(fields, ["styles.phone.visible"], false);
+      }
 
-    if (!data.props.styles.showAddress) {
-      fields = updateFields(fields, ["styles.address.visible"], false);
-    }
+      if (!data.props.styles.showAddress) {
+        fields = updateFields(fields, ["styles.address.visible"], false);
+      }
 
-    return fields;
-  },
-  render: (props) => <NearbyLocationCardsWrapperComponent {...props} />,
-};
+      return toPuckFields(fields);
+    },
+    render: (props) => <NearbyLocationCardsWrapperComponent {...props} />,
+  };
 
 /** @internal */
 const NearbyLocationsEmptyState: React.FC<{
@@ -427,7 +441,7 @@ const NearbyLocationsEmptyState: React.FC<{
 
   return (
     <div
-      data-empty-state="true"
+      {...{ [EMPTY_STATE_MARKER_ATTRIBUTE]: "true" }}
       className="relative h-[300px] w-full bg-gray-100 rounded-lg border border-gray-200 flex flex-col items-center justify-center py-8 gap-2.5"
     >
       <MapPinOff className="w-12 h-12 text-gray-400" />

@@ -1,8 +1,8 @@
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { AssetVideo } from "../../types/videos.ts";
 import { msg } from "../../utils/i18n/platform.ts";
-import { YextField } from "../../editor/YextField.tsx";
 import { VideoAtom } from "../atoms/video.tsx";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export type VideoProps = {
   data: {
@@ -14,15 +14,17 @@ export type VideoProps = {
   className?: string;
 };
 
-const videoFields: Fields<VideoProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+const videoFields: YextFields<VideoProps> = {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
-      assetVideo: YextField(msg("fields.video", "Video"), {
+      assetVideo: {
         type: "video",
-      }),
+        label: msg("fields.video", "Video"),
+      },
     },
-  }),
+  },
 };
 
 const VideoComponent: PuckComponent<VideoProps> = (props) => {
@@ -46,9 +48,7 @@ const VideoComponent: PuckComponent<VideoProps> = (props) => {
   );
 };
 
-export const Video: ComponentConfig<{
-  props: VideoProps;
-}> = {
+export const Video: YextComponentConfig<VideoProps> = {
   fields: videoFields,
   label: msg("components.video", "Video"),
   inline: true,

@@ -15,6 +15,7 @@ import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
 import { SlotsCategoryComponents } from "../../categories/SlotsCategory.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
+import { MainContent } from "../../structure/MainContent.tsx";
 
 const promoData = {
   cta: {
@@ -1942,7 +1943,7 @@ const isBrandColorTest = (props: any) => {
 
 describe("PromoSection", async () => {
   const puckConfig: Config = {
-    components: { PromoSection, ...SlotsCategoryComponents },
+    components: { PromoSection, MainContent, ...SlotsCategoryComponents },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;

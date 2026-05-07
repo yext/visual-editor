@@ -14,6 +14,7 @@ import {
   transformTests,
 } from "../testing/componentTests.setup.ts";
 import { AdvancedCoreInfoCategoryComponents } from "../categories/AdvancedCoreInfoCategory.tsx";
+import { MainContent } from "../structure/MainContent.tsx";
 
 const testAddress = {
   city: "Brooklyn",
@@ -2140,11 +2141,107 @@ const tests: ComponentTest[] = [
     },
     version: 61,
   },
+  {
+    name: "version 74 - CTA Group custom colors on dark background",
+    document: {
+      locale: "en",
+    },
+    props: {
+      columns: 1,
+      slots: [
+        {
+          Column: [
+            {
+              type: "CTAGroup",
+              props: {
+                buttons: [
+                  {
+                    entityField: {
+                      field: "",
+                      constantValueEnabled: true,
+                      constantValue: {
+                        ctaType: "textAndLink",
+                        label: {
+                          en: "Solid CTA",
+                          hasLocalizedValue: "true",
+                        },
+                        link: "#",
+                        linkType: "URL",
+                      },
+                    },
+                    normalizeLink: false,
+                    variant: "primary",
+                    color: {
+                      selectedColor: "[#FF6D66]",
+                      contrastingColor: "black",
+                    },
+                  },
+                  {
+                    entityField: {
+                      field: "",
+                      constantValueEnabled: true,
+                      constantValue: {
+                        ctaType: "textAndLink",
+                        label: {
+                          en: "Readable Outline",
+                          hasLocalizedValue: "true",
+                        },
+                        link: "#",
+                        linkType: "URL",
+                      },
+                    },
+                    normalizeLink: false,
+                    variant: "secondary",
+                    color: {
+                      selectedColor: "[#00E5FF]",
+                      contrastingColor: "black",
+                    },
+                  },
+                  {
+                    entityField: {
+                      field: "",
+                      constantValueEnabled: true,
+                      constantValue: {
+                        ctaType: "textAndLink",
+                        label: {
+                          en: "Low Contrast Outline",
+                          hasLocalizedValue: "true",
+                        },
+                        link: "#",
+                        linkType: "URL",
+                      },
+                    },
+                    normalizeLink: false,
+                    variant: "secondary",
+                    color: {
+                      selectedColor: "[#4A2A2A]",
+                      contrastingColor: "white",
+                    },
+                  },
+                ],
+                id: "CTAGroup-custom-colors-dark-background",
+              },
+            },
+          ],
+        },
+        { Column: [] },
+        { Column: [] },
+      ],
+      backgroundColor: {
+        selectedColor: "black",
+        contrastingColor: "white",
+      },
+      liveVisibility: true,
+      analytics: { scope: "gridSection" },
+      align: "left",
+    },
+    version: migrationRegistry.length,
+  },
 ];
 
 describe("Grid", async () => {
   const puckConfig: Config = {
-    components: AdvancedCoreInfoCategoryComponents,
+    components: { ...AdvancedCoreInfoCategoryComponents, MainContent },
     root: {
       render: ({ children }: { children: React.ReactNode }) => <>{children}</>,
     },

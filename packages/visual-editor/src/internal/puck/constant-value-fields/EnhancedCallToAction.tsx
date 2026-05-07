@@ -1,68 +1,35 @@
-import { AutoField, CustomField, FieldLabel } from "@puckeditor/core";
+import { CustomField, FieldLabel } from "@puckeditor/core";
+import { type TranslatableStringField } from "../../../fields/TranslatableStringField.tsx";
+import { YextAutoField } from "../../../fields/YextAutoField.tsx";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
-import {
-  EnhancedTranslatableCTA,
-  TranslatableString,
-} from "../../../types/types.ts";
-import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
+import { EnhancedTranslatableCTA } from "../../../types/types.ts";
 import { linkTypeOptions } from "./CallToAction.tsx";
 import { useMemo } from "react";
-import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
-
-export const ctaTypeOptions = () => {
-  return [
-    {
-      label: pt("ctaTypes.textAndLink", "Text & Link"),
-      value: "textAndLink",
-    },
-    {
-      label: pt("ctaTypes.getDirections", "Get Directions"),
-      value: "getDirections",
-    },
-    {
-      label: pt("ctaTypes.presetImage", "Preset Image"),
-      value: "presetImage",
-    },
-  ];
-};
-
-/**
- * Determines the CTA type
- *
- * @param entityField - The Yext entity field containing CTA configuration.
- * @returns An object containing the CTA type
- */
-export const getCTAType = <T extends Record<string, any>>(
-  entityField: YextEntityField<T>
-): {
-  ctaType: "textAndLink" | "getDirections" | "presetImage" | undefined;
-} => {
-  const ctaType = entityField.constantValueEnabled
-    ? entityField.constantValue.ctaType
-    : entityField.selectedType;
-
-  return { ctaType };
-};
+import { ctaTypeOptions } from "../../../internal/utils/ctaFieldUtils.ts";
 
 export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> =
   {
     type: "custom",
     render: ({ onChange, value }) => {
-      const labelField = useMemo(() => {
-        return TranslatableStringField<TranslatableString>(
-          msg("fields.label", "Label"),
-          { types: ["type.string"] }
-        );
-      }, []);
+      const labelField = useMemo<TranslatableStringField>(
+        () => ({
+          type: "translatableString",
+          label: msg("fields.label", "Label"),
+          filter: { types: ["type.string"] },
+        }),
+        []
+      );
 
-      const linkField = useMemo(() => {
-        return TranslatableStringField<TranslatableString>(
-          msg("fields.link", "Link"),
-          { types: ["type.string"] },
-          true,
-          false
-        );
-      }, []);
+      const linkField = useMemo<TranslatableStringField>(
+        () => ({
+          type: "translatableString",
+          label: msg("fields.link", "Link"),
+          filter: { types: ["type.string"] },
+          showApplyAllOption: true,
+          showFieldSelector: false,
+        }),
+        []
+      );
 
       const showLabel = value?.ctaType !== "presetImage";
       const showLinkFields = value?.ctaType !== "getDirections";
@@ -71,9 +38,9 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
         <div className={"ve-mt-3"}>
           <div className="ve-mb-3">
             <FieldLabel label={pt("fields.ctaType", "CTA Type")}>
-              <AutoField
+              <YextAutoField
                 field={{
-                  type: "select",
+                  type: "basicSelector",
                   options: ctaTypeOptions(),
                 }}
                 value={value?.ctaType || "textAndLink"}
@@ -100,7 +67,7 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
           </div>
           {showLabel && (
             <div className="ve-mb-3">
-              <AutoField
+              <YextAutoField
                 field={labelField}
                 value={value?.label}
                 onChange={(newValue) => onChange({ ...value, label: newValue })}
@@ -110,7 +77,7 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
           {showLinkFields && (
             <>
               <div className="ve-mb-3">
-                <AutoField
+                <YextAutoField
                   field={linkField}
                   value={value?.link || ""}
                   onChange={(newValue) =>
@@ -120,9 +87,9 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
               </div>
               <div className="ve-mb-3">
                 <FieldLabel label={pt("fields.linkType", "Link Type")}>
-                  <AutoField
+                  <YextAutoField
                     field={{
-                      type: "select",
+                      type: "basicSelector",
                       options: linkTypeOptions(),
                     }}
                     value={value?.linkType || "URL"}

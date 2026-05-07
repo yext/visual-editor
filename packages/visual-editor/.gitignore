@@ -89,3 +89,5 @@ dist/
 
 .vitepress/cache
 .vitepress/dist
+
+etc/visual-editor.api.md

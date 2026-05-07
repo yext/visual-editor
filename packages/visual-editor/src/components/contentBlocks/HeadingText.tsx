@@ -1,10 +1,9 @@
 import * as React from "react";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { Heading, HeadingProps } from "../atoms/heading.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { TranslatableString } from "../../types/types.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { pt, msg } from "../../utils/i18n/platform.ts";
@@ -15,6 +14,7 @@ import {
 } from "../../utils/themeConfigOptions.ts";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import { useTranslation } from "react-i18next";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export type HeadingTextProps = {
   /** The heading text value */
@@ -89,41 +89,44 @@ const HeadingTextWrapper: PuckComponent<HeadingTextProps> = (props) => {
   );
 };
 
-const headingTextFields: Fields<HeadingTextProps> = {
+const headingTextFields: YextFields<HeadingTextProps> = {
   data: {
     label: msg("fields.data", "Data"),
     type: "object",
     objectFields: {
-      text: YextField<any, TranslatableString>(msg("fields.text", "Text"), {
+      text: {
         type: "entityField",
+        label: msg("fields.text", "Text"),
         filter: {
           types: ["type.string"],
         },
-      }),
+      },
     },
   },
   styles: {
     label: msg("fields.styles", "Styles"),
     type: "object",
     objectFields: {
-      level: YextField(msg("fields.headingLevel", "Heading Level"), {
-        type: "select",
-        hasSearch: true,
+      level: {
+        type: "basicSelector",
+        label: msg("fields.headingLevel", "Heading Level"),
         options: "HEADING_LEVEL",
-      }),
-      align: YextField(msg("fields.headingAlign", "Heading Align"), {
+      },
+      align: {
+        label: msg("fields.headingAlign", "Heading Align"),
         type: "radio",
         options: ThemeOptions.ALIGNMENT,
-      }),
-      color: YextField(msg("fields.color", "Color"), {
-        type: "select",
+      },
+      color: {
+        type: "basicSelector",
+        label: msg("fields.color", "Color"),
         options: "SITE_COLOR",
-      }),
+      },
     },
   },
 };
 
-export const HeadingText: ComponentConfig<{ props: HeadingTextProps }> = {
+export const HeadingText: YextComponentConfig<HeadingTextProps> = {
   label: msg("components.headingText", "Heading Text"),
   fields: headingTextFields,
   resolveFields: (data) => resolveDataFromParent(headingTextFields, data),

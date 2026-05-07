@@ -21,6 +21,7 @@ import { useCommonMessageSenders } from "../hooks/useMessageSenders.ts";
 import { useProgress } from "../hooks/useProgress.ts";
 import * as lzstring from "lz-string";
 import { Metadata } from "../../editor/Editor.tsx";
+import { updateThemeWithCustomFontAssets } from "../utils/customFontAssets.ts";
 
 const devLogger = new DevLogger();
 
@@ -137,6 +138,9 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     devLogger.logData("THEME_DATA", themeData);
     devLogger.logData("THEME_SAVE_STATE", themeSaveState);
 
+    let histories: ThemeHistory[] | undefined;
+    let index = 0;
+
     if (templateMetadata.isDevMode && !templateMetadata.devOverride) {
       // Check localStorage for existing theme history
       const localHistoryArray = lzstring.decompress(
@@ -146,59 +150,54 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       // Use localStorage directly if it exists
       if (localHistoryArray) {
         devLogger.log("Theme Dev Mode - Using theme localStorage");
-        const localHistories = JSON.parse(localHistoryArray) as ThemeHistory[];
-        const localHistoryIndex = localHistories.length - 1;
-        setThemeHistories({
-          histories: localHistories,
-          index: localHistoryIndex,
-        });
-        setThemeHistoryFetched(true);
-        return;
+        histories = JSON.parse(localHistoryArray) as ThemeHistory[];
+        index = histories.length - 1;
+      } else {
+        // Otherwise start fresh from Content
+        devLogger.log(
+          "Theme Dev Mode - No localStorage. Using theme data from Content"
+        );
+        if (themeData) {
+          histories = [{ id: "root", data: themeData }];
+        }
       }
-
-      // Otherwise start fresh from Content
-      devLogger.log(
-        "Theme Dev Mode - No localStorage. Using theme data from Content"
-      );
-      if (themeData) {
-        setThemeHistories({
-          histories: [{ id: "root", data: themeData }],
-          index: 0,
-        });
-      }
-      setThemeHistoryFetched(true);
-      return;
-    }
-
-    // Nothing in theme_save_state table, start fresh from Content
-    if (!themeSaveState) {
+    } else if (!themeSaveState) {
+      // Nothing in theme_save_state table, start fresh from Content
       devLogger.log(
         "Theme Prod Mode - No saveState. Using theme data from Content"
       );
       if (themeData) {
-        setThemeHistories({
-          histories: [{ id: "root", data: themeData }],
-          index: 0,
-        });
+        histories = [{ id: "root", data: themeData }];
       }
-      setThemeHistoryFetched(true);
-
-      return;
-    }
-
-    // Start from themeSaveState
-    devLogger.log("Theme Prod Mode - Using themeSaveState");
-    setThemeHistories({
-      histories: themeData
+    } else {
+      // Start from themeSaveState
+      devLogger.log("Theme Prod Mode - Using themeSaveState");
+      histories = themeData
         ? [
             { id: "root", data: themeData },
             { id: themeSaveState.hash, data: themeSaveState.history.data },
           ]
-        : [{ id: themeSaveState.hash, data: themeSaveState.history.data }],
-      index: themeData ? 1 : 0,
-    });
+        : [{ id: themeSaveState.hash, data: themeSaveState.history.data }];
+      index = themeData ? 1 : 0;
+    }
+
+    if (histories) {
+      setThemeHistories({
+        histories: histories.map((themeHistory) => ({
+          ...themeHistory,
+          data: themeConfig
+            ? updateThemeWithCustomFontAssets({
+                themeConfig,
+                themeValues: themeHistory.data,
+                customFonts: templateMetadata.customFonts,
+              })
+            : themeHistory.data,
+        })),
+        index,
+      });
+    }
+
     setThemeHistoryFetched(true);
-    return;
   }, [
     setThemeHistories,
     setThemeHistoryFetched,
@@ -213,7 +212,8 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       updateThemeInEditor(
         themeHistories.histories[themeHistories.index]?.data as ThemeData,
         themeConfig,
-        true
+        true,
+        templateMetadata.customFonts
       );
     }
   }, [themeHistories, themeConfig]);

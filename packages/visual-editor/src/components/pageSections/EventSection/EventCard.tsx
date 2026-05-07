@@ -1,17 +1,9 @@
 import * as React from "react";
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  Slot,
-  WithId,
-  setDeep,
-} from "@puckeditor/core";
+import { PuckComponent, Slot, WithId, setDeep } from "@puckeditor/core";
 import {
   ThemeColor,
   backgroundColors,
 } from "../../../utils/themeConfigOptions.ts";
-import { YextField } from "../../../editor/YextField.tsx";
 import { Background } from "../../atoms/background.tsx";
 import { EventStruct } from "../../../types/types.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
@@ -30,6 +22,7 @@ import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 const defaultEvent = {
   image: {
@@ -242,29 +235,26 @@ export type EventCardProps = {
   index?: number;
 };
 
-const eventCardFields: Fields<EventCardProps> = {
-  styles: YextField(msg("fields.styles", "Styles"), {
+const eventCardFields: YextFields<EventCardProps> = {
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
-      truncateDescription: YextField(
-        msg("fields.truncateDescription", "Truncate Description"),
-        {
-          type: "radio",
-          options: [
-            { label: msg("fields.options.yes", "Yes"), value: true },
-            { label: msg("fields.options.no", "No"), value: false },
-          ],
-        }
-      ),
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
+      truncateDescription: {
+        label: msg("fields.truncateDescription", "Truncate Description"),
+        type: "radio",
+        options: [
+          { label: msg("fields.options.yes", "Yes"), value: true },
+          { label: msg("fields.options.no", "No"), value: false },
+        ],
+      },
     },
-  }),
+  },
   slots: {
     type: "object",
     objectFields: {
@@ -425,7 +415,7 @@ const EventCardComponent: PuckComponent<EventCardProps> = (props) => {
   );
 };
 
-export const EventCard: ComponentConfig<{ props: EventCardProps }> = {
+export const EventCard: YextComponentConfig<EventCardProps> = {
   label: msg("components.eventCard", "Event Card"),
   fields: eventCardFields,
   defaultProps: {

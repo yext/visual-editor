@@ -6,15 +6,15 @@ import { PhoneAtom } from "../atoms/phone.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import {
   defaultPhoneDataProps,
   PhoneDataFields,
   PhoneStyleFields,
   PhoneProps,
 } from "./Phone.tsx";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { useTranslation } from "react-i18next";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export interface PhoneListProps {
   data: {
@@ -35,15 +35,17 @@ export interface PhoneListProps {
   };
 }
 
-export const phoneListFields: Fields<PhoneListProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+export const phoneListFields: YextFields<PhoneListProps> = {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
-      phoneNumbers: YextField(msg("fields.phoneNumbers", "Phone Numbers"), {
+      phoneNumbers: {
         type: "array",
+        label: msg("fields.phoneNumbers", "Phone Numbers"),
         arrayFields: PhoneDataFields,
         defaultItemProps: defaultPhoneDataProps,
-        getItemSummary: (item) => {
+        getItemSummary: (item: PhoneProps["data"]) => {
           const locale = i18nComponentsInstance.language;
           const resolvedValue = resolveComponentData(item.label, locale);
 
@@ -52,15 +54,16 @@ export const phoneListFields: Fields<PhoneListProps> = {
           }
           return pt("phone", "Phone");
         },
-      }),
+      },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
       ...PhoneStyleFields,
     },
-  }),
+  },
 };
 
 type ResolvedPhoneNumber = {
@@ -149,7 +152,7 @@ export const PhoneListComponent: PuckComponent<PhoneListProps> = (props) => {
   );
 };
 
-export const PhoneList: ComponentConfig<{ props: PhoneListProps }> = {
+export const PhoneList: YextComponentConfig<PhoneListProps> = {
   label: msg("components.phoneList", "Phone List"),
   fields: phoneListFields,
   resolveFields: (data) => resolveDataFromParent(phoneListFields, data),

@@ -1,18 +1,22 @@
 import * as React from "react";
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
+import { PuckComponent, Slot } from "@puckeditor/core";
 import { themeManagerCn } from "../../utils/cn.ts";
 import {
   backgroundColors,
   ThemeOptions,
 } from "../../utils/themeConfigOptions.ts";
 import { PageSection } from "../atoms/pageSection.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
 import { getAnalyticsScopeHash } from "../../utils/applyAnalytics.ts";
 import { msg } from "../../utils/i18n/platform.ts";
 import { AdvancedCoreInfoCategory } from "../categories/AdvancedCoreInfoCategory.tsx";
 import { layoutProps, layoutVariants } from "../Layout.tsx";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  YextFields,
+} from "../../fields/fields.ts";
 
 export interface GridProps extends layoutProps {
   columns: number;
@@ -67,15 +71,16 @@ const GridSection = React.forwardRef<
 
 GridSection.displayName = "GridSection";
 
-const gridSectionFields: Fields<GridProps> = {
-  columns: YextField(msg("fields.columns", "Columns"), {
+const gridSectionFields: YextFields<GridProps> = {
+  columns: {
+    label: msg("fields.columns", "Columns"),
     type: "radio",
     options: [
       { label: msg("fields.options.one", "One"), value: 1 },
       { label: msg("fields.options.two", "Two"), value: 2 },
       { label: msg("fields.options.three", "Three"), value: 3 },
     ],
-  }),
+  },
   slots: {
     type: "array",
     arrayFields: {
@@ -83,42 +88,41 @@ const gridSectionFields: Fields<GridProps> = {
     },
     visible: false,
   },
-  backgroundColor: YextField(
-    msg("fields.backgroundColor", "Background Color"),
-    {
-      type: "select",
-      options: "BACKGROUND_COLOR",
-    }
-  ),
-  align: YextField(msg("fields.alignContent", "Align Content"), {
+  backgroundColor: {
+    type: "basicSelector",
+    label: msg("fields.backgroundColor", "Background Color"),
+    options: "BACKGROUND_COLOR",
+  },
+  align: {
+    label: msg("fields.alignContent", "Align Content"),
     type: "radio",
     options: ThemeOptions.ALIGNMENT,
-  }),
-  analytics: YextField(msg("fields.analytics", "Analytics"), {
+  },
+  analytics: {
     type: "object",
+    label: msg("fields.analytics", "Analytics"),
     visible: false,
     objectFields: {
-      scope: YextField(msg("fields.scope", "Scope"), {
+      scope: {
+        label: msg("fields.scope", "Scope"),
         type: "text",
-      }),
+      },
     },
-  }),
-  liveVisibility: YextField(
-    msg("fields.visibleOnLivePage", "Visible on Live Page"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: false },
-      ],
-    }
-  ),
+  },
+  liveVisibility: {
+    label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.show", "Show"), value: true },
+      { label: msg("fields.options.hide", "Hide"), value: false },
+    ],
+  },
 };
 
 /**
  * The Grid Section component presents a series of columns into which a variety of smaller content blocks may be dragged, allowing for a higher degree of customization.
  */
-export const Grid: ComponentConfig<{ props: GridProps }> = {
+export const Grid: YextComponentConfig<GridProps> = {
   label: msg("components.gridSection", "Grid Section"),
   fields: gridSectionFields,
   defaultProps: {
@@ -133,13 +137,13 @@ export const Grid: ComponentConfig<{ props: GridProps }> = {
   },
   resolveFields: (data) => {
     if (data.props.columns === 1) {
-      return gridSectionFields;
+      return toPuckFields(gridSectionFields);
     }
 
     const rest = { ...gridSectionFields };
     delete rest.align;
 
-    return rest;
+    return toPuckFields(rest);
   },
   render: (props) => (
     <AnalyticsScopeProvider

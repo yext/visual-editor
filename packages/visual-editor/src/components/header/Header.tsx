@@ -6,7 +6,6 @@ import {
   ComplexImageType,
   useAnalytics,
 } from "@yext/pages-components";
-import { ComponentConfig, Fields } from "@puckeditor/core";
 import { CTA } from "../atoms/cta.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
@@ -14,7 +13,6 @@ import { MaybeLink } from "../atoms/maybeLink.tsx";
 import { PageSection } from "../atoms/pageSection.tsx";
 import { backgroundColors } from "../../utils/themeConfigOptions.ts";
 import { Background } from "../atoms/background.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { Image } from "../atoms/image.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { FaTimes, FaBars } from "react-icons/fa";
@@ -23,6 +21,7 @@ import {
   LanguageDropdownProps,
   parseDocumentForLanguageDropdown,
 } from "./languageDropdown.tsx";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 const PLACEHOLDER_IMAGE: ComplexImageType = {
   image: {
@@ -52,37 +51,38 @@ export interface HeaderProps {
   };
 }
 
-const headerFields: Fields<HeaderProps> = {
-  logoWidth: YextField(msg("fields.logoWidth", "Logo Width"), {
+const headerFields: YextFields<HeaderProps> = {
+  logoWidth: {
     type: "number",
+    label: msg("fields.logoWidth", "Logo Width"),
     min: 0,
-  }),
-  enableLanguageSelector: YextField(
-    msg("fields.enableLanguageSelector", "Enable Language Selector"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.yes", "Yes"), value: true },
-        { label: msg("fields.options.no", "No"), value: false },
-      ],
-    }
-  ),
-  analytics: YextField(msg("fields.analytics", "Analytics"), {
+  },
+  enableLanguageSelector: {
+    label: msg("fields.enableLanguageSelector", "Enable Language Selector"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.yes", "Yes"), value: true },
+      { label: msg("fields.options.no", "No"), value: false },
+    ],
+  },
+  analytics: {
     type: "object",
+    label: msg("fields.analytics", "Analytics"),
     visible: false,
     objectFields: {
-      scope: YextField(msg("fields.scope", "Scope"), {
+      scope: {
+        label: msg("fields.scope", "Scope"),
         type: "text",
-      }),
+      },
     },
-  }),
+  },
 };
 
 /**
  * The Header component appears at the top of pages. It serves as the primary navigation and branding element, containing the site logo and optionally a language selector. See [Expanded Header](#expanded-header) for the newest header component.
  * Available on Directory and Locator templates.
  */
-export const Header: ComponentConfig<{ props: HeaderProps }> = {
+export const Header: YextComponentConfig<HeaderProps> = {
   label: msg("components.header", "Header"),
   fields: headerFields,
   defaultProps: {

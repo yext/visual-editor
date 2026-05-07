@@ -1,4 +1,47 @@
-#### 1.2.0 (2026-04-01)
+#### 1.2.2 (2026-04-17)
+
+##### Chores
+
+- export breadcrumb and nearby location utils ([#1157](https://github.com/yext/visual-editor/pull/1157)) ([6bfa8ea6](https://github.com/yext/visual-editor/commit/6bfa8ea6cfb9a0942f0d76405c74a0ef26623f51))
+- add aria fields to locator hours ([#1155](https://github.com/yext/visual-editor/pull/1155)) ([9a8b5abe](https://github.com/yext/visual-editor/commit/9a8b5abe174d44b19f2ec442fdc603b40f30f33a))
+- upgrade to Puck 0.21.2 ([#1145](https://github.com/yext/visual-editor/pull/1145)) ([3c82a5a1](https://github.com/yext/visual-editor/commit/3c82a5a1a5b5ee4edb049999b63096eafd146b2f))
+
+##### New Features
+
+- use paths for custom fonts ([#1146](https://github.com/yext/visual-editor/pull/1146)) ([122261da](https://github.com/yext/visual-editor/commit/122261daf17b547e5681d2479d2647043aa9a333))
+- get locator working in local dev fake starter ([#1156](https://github.com/yext/visual-editor/pull/1156)) ([19ffc41c](https://github.com/yext/visual-editor/commit/19ffc41ce9ccb19010bd407f4e1d9cffad33e72f))
+- add brand reference as a facet option ([#1152](https://github.com/yext/visual-editor/pull/1152)) ([879a7dbf](https://github.com/yext/visual-editor/commit/879a7dbfcfad7b854b74844aa8ea2d646c225cba))
+- add main landmark ([#1147](https://github.com/yext/visual-editor/pull/1147)) ([5243a112](https://github.com/yext/visual-editor/commit/5243a11231e9bbe7b87aebf1149800dd34d3019e))
+- add font style option to theme ([#1142](https://github.com/yext/visual-editor/pull/1142)) ([b572a7fc](https://github.com/yext/visual-editor/commit/b572a7fca487da9d1035313570807727eda956f4))
+
+##### Bug Fixes
+
+- locator accessibility improvements ([#1144](https://github.com/yext/visual-editor/pull/1144)) ([b8091d3c](https://github.com/yext/visual-editor/commit/b8091d3c7d32017a9257a704b07e39044061128b))
+
+##### Refactors
+
+- dateTimeSelector fieldType ([#1160](https://github.com/yext/visual-editor/pull/1160)) ([e533d064](https://github.com/yext/visual-editor/commit/e533d064d71a2467300a8b83a3406be649875c93))
+- merge dynamicSingleSelect into basicSelector ([#1158](https://github.com/yext/visual-editor/pull/1158)) ([1b0c6cf6](https://github.com/yext/visual-editor/commit/1b0c6cf65f525840c11c5a556f8324ceaac018fa))
+- fontSizeSelector fieldType ([#1153](https://github.com/yext/visual-editor/pull/1153)) ([99b1364f](https://github.com/yext/visual-editor/commit/99b1364f24571475851d7552e6a9504206791059))
+- code fieldType ([#1151](https://github.com/yext/visual-editor/pull/1151)) ([3d81b129](https://github.com/yext/visual-editor/commit/3d81b129d68a6a5220fa8bdf107398946d567295))
+- basicSelector fieldType ([#1148](https://github.com/yext/visual-editor/pull/1148)) ([112b8498](https://github.com/yext/visual-editor/commit/112b8498b4daa35e560149d10662fe9fb714f476))
+
+#### 1.2.1 (2026-04-03)
+
+##### Chores
+
+- fix innerHtml vulnerability in CustomCode component ([#1141](https://github.com/yext/visual-editor/pull/1141)) ([8e5eeb18](https://github.com/yext/visual-editor/commit/8e5eeb1861d9ead1243002175afa86635d3894c6))
+
+##### New Features
+
+- additional style options for Photo Gallery ([#1136](https://github.com/yext/visual-editor/pull/1136)) ([0ba74935](https://github.com/yext/visual-editor/commit/0ba74935935cd017e9c2020117665d7a6bf86f8b))
+
+##### Bug Fixes
+
+- debounce color picker ([#1139](https://github.com/yext/visual-editor/pull/1139)) ([9ed648e6](https://github.com/yext/visual-editor/commit/9ed648e641f18b7cb40406069413cdbab45db9d5))
+- ensure breadcrumbs are readable ([#1137](https://github.com/yext/visual-editor/pull/1137)) ([b0e3fc2c](https://github.com/yext/visual-editor/commit/b0e3fc2c32866b8085280080cd028d23924e63cf))
+
+#### 1.2.0-alpha.1 (2026-04-01)
 
 ##### Chores
 

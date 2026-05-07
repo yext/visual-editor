@@ -86,32 +86,37 @@ import { EntityField } from "@yext/visual-editor";
 </EntityField>;
 ```
 
-## YextEntityFieldSelector
+## entityField Field Type
 
-Use this to allow Visual Editor users to choose an entity field or constant value that will populate data into a component.
+Use the registered `entityField` field type to allow Visual Editor users to choose an entity field or a constant value that will populate data into a component.
 The user can choose an entity field from a dropdown or use a constant value. Regardless, the user should always
 enter a constant value as it will be used as a fallback value in the case that the entity is missing the selected entity field.
+`YextEntityFieldSelector(...)` remains available as a compatibility wrapper, but new configs should author `entityField` directly in `YextFields`.
 
 The constant value field currently has limited functionality with complex object entity types. When using complex
 object types, ensure your render function handles undefined fields.
 
 ### Props
 
-| Name                 | Type            | Description                                                    |
-| -------------------- | --------------- | -------------------------------------------------------------- |
-| label?               | string          | The user-facing label for the field.                           |
-| filter.types         | string[]        | Determines which fields will be available based on field type. |
-| filter.allowList?    | types: string[] | Field names to include. Cannot be combined with disallowList.  |
-| filter.disallowList? | types: string[] | Field names to exclude. Cannot be combined with allowList.     |
+| Name                       | Type                | Description                                                    |
+| -------------------------- | ------------------- | -------------------------------------------------------------- |
+| type                       | `"entityField"`     | Registers the field as the entity/constant selector.           |
+| label?                     | string \| MsgString | The user-facing label for the field.                           |
+| filter.types               | string[]            | Determines which fields will be available based on field type. |
+| filter.allowList?          | string[]            | Field names to include. Cannot be combined with disallowList.  |
+| filter.disallowList?       | string[]            | Field names to exclude. Cannot be combined with allowList.     |
+| disableConstantValueToggle | boolean             | Disables static-content mode when true.                        |
+| disallowTranslation        | boolean             | Uses non-localized constant editors when supported.            |
 
 ### Usage
 
 ```tsx
 import {
   EntityFieldType,
-  YextEntityFieldSelector,
   resolveYextEntityField,
   useDocument,
+  YextComponentConfig
+  YextFields
 } from "@yext/visual-editor";
 import { MyFieldType, TemplateStream } from "../types/autogen";
 import { config } from "../templates/myTemplate";
@@ -122,24 +127,25 @@ export type ExampleProps = {
   };
 };
 
-const exampleFields: Fields<ExampleProps> = {
+const exampleFields: YextFields<ExampleProps> = {
   myField: {
     type: "object",
     label: "Example Parent Field", // top-level sidebar label
     objectFields: {
-      entityField: YextEntityFieldSelector<typeof config>({
+      entityField: {
+        type: "entityField",
         label: "Example Field", // sidebar label for the sub field
         filter: {
           types: ["type.string"],
           disallowList: ["exampleField"],
           //allowList: ["exampleField"],
         },
-      }),
+      },
     },
   },
 };
 
-export const ExampleComponent: ComponentConfig<ExampleProps> = {
+export const ExampleComponent: YextComponentConfig<ExampleProps> = {
   fields: exampleFields,
   defaultProps: {
     myField: {
@@ -163,59 +169,88 @@ const Example = ({ myField }: ExampleProps) => {
 };
 ```
 
-## BasicSelector
+## basicSelector Field Type
 
-`BasicSelector` creates a labeled field and searchable dropdown with the provided options. Each option consists of a label, value, and an optional color. This can be used when creating the Fields for a new component.
+The `basicSelector` field type renders a labeled combobox with optional search, grouped options, translated labels, and empty-state messaging.
 
 ### Props
 
-| Name    | Type          | Description                       |
-| ------- | ------------- | --------------------------------- |
-| label   | `string`      | The label for the selector field. |
-| options | `Option<T>[]` | An array of selectable options.   |
-
-#### `Option<T>` Object
-
-| Name   | Type      | Description                                                                           |
-| ------ | --------- | ------------------------------------------------------------------------------------- |
-| label  | `string`  | The display label of the option.                                                      |
-| value  | `T`       | The associated value of the option.                                                   |
-| color? | `string?` | (Optional) A tailwind color class. Will be used to display the color in the dropdown. |
+| Name                    | Type                    | Description                                                                 |
+| ----------------------- | ----------------------- | --------------------------------------------------------------------------- |
+| `type`                  | `"basicSelector"`       | Registers the field as the Yext combobox selector.                          |
+| `label?`                | `string \| MsgString`   | The field label shown in the editor.                                        |
+| `options`               | `ComboboxOption[]`      | Flat list of selectable options. Cannot be combined with `optionGroups`.    |
+| `optionGroups`          | `ComboboxOptionGroup[]` | Grouped options with optional titles and descriptions.                      |
+| `translateOptions?`     | `boolean`               | Whether option labels, group titles, and descriptions should be translated. |
+| `noOptionsPlaceholder?` | `string \| MsgString`   | Button text shown when no options are available.                            |
+| `noOptionsMessage?`     | `string \| MsgString`   | Optional helper text shown below the disabled selector.                     |
+| `disableSearch?`        | `boolean`               | Disables the combobox search input.                                         |
 
 ### Usage
 
 ```tsx
-const myComponentFields: Fields<MyComponentProps> = {
-  heading: {
-    type: "object",
-    label: "Heading",
-    objectFields: {
-      level: BasicSelector("Level", [
-        { label: "H1", value: 1 },
-        { label: "H2", value: 2 },
-        { label: "H3", value: 3 },
-        { label: "H4", value: 4 },
-        { label: "H5", value: 5 },
-        { label: "H6", value: 6 },
-      ]),
-    },
-  },
+import { YextAutoField, msg } from "@yext/visual-editor";
+
+const toneField = {
+  type: "basicSelector" as const,
+  label: msg("fields.tone", "Tone"),
+  options: [
+    { label: "Neutral", value: "neutral" },
+    { label: "Bold", value: "bold" },
+  ],
+};
+
+const ToneField = ({
+  value,
+  onChange,
+}: {
+  value?: string;
+  onChange: (value: string) => void;
+}) => {
+  return <YextAutoField field={toneField} value={value} onChange={onChange} />;
+};
 ```
 
-## OptionalNumberField
+When the field definition is part of a normal component `fields` config, Puck renders it through the registered Yext field override automatically. Use `YextAutoField` only when you are manually rendering a field definition inside a custom render path.
 
-This field displays a radio group with two options. When one option is selected, a number input is also
-rendered. When the other option is selected, the number input is hidden. This could be used
-for a number field with an "all" or "default" option.
+## image Field
+
+The `image` field type opens the asset selector and stores the selected image as a localized asset image value. Define it directly in `YextFields`.
 
 ### Props
 
-| Name                      | Type     | Description                                                               |
-| ------------------------- | -------- | ------------------------------------------------------------------------- |
-| fieldLabel                | `string` | The label for the field.                                                  |
-| hideNumberFieldRadioLabel | `string` | The label for the radio option corresponding to hiding the number field.  |
-| showNumberFieldRadioLabel | `string` | The label for the radio option corresponding to showing the number field. |
-| defaultCustomValue        | `number` | The default number if the number field is shown.                          |
+| Name                 | Type                                           | Description                                              |
+| -------------------- | ---------------------------------------------- | -------------------------------------------------------- |
+| `type`               | `"image"`                                      | Registers the field as the Visual Editor image selector. |
+| `label?`             | `string \| MsgString`                          | The field label shown in the editor.                     |
+| `getAltTextOptions?` | `(templateMetadata) => EmbeddedStringOption[]` | Optional locator-specific alt-text source options.       |
+
+### Usage
+
+```tsx
+const myComponentFields: YextFields<MyComponentProps> = {
+  image: {
+    type: "image",
+    label: msg("fields.image", "Image"),
+  },
+};
+```
+
+## optionalNumber Field
+
+This registered field type displays a radio group with two options. When one option is selected,
+a number input is also rendered. When the other option is selected, the number input is hidden.
+This could be used for a number field with an "all" or "default" option.
+
+### Props
+
+| Name                      | Type                  | Description                                                               |
+| ------------------------- | --------------------- | ------------------------------------------------------------------------- |
+| type                      | `"optionalNumber"`    | The registered field type.                                                |
+| label                     | `string \| MsgString` | The label for the field.                                                  |
+| hideNumberFieldRadioLabel | `string \| MsgString` | The label for the radio option corresponding to hiding the number field.  |
+| showNumberFieldRadioLabel | `string \| MsgString` | The label for the radio option corresponding to showing the number field. |
+| defaultCustomValue        | `number`              | The default number if the number field is shown.                          |
 
 #### Usage
 
@@ -224,63 +259,48 @@ type MyComponentProps = {
   limit: number | string;
 };
 
-const myComponentFields: Fields<MyComponentProps> = {
-  limit: OptionalNumberField({
-    fieldLabel: "Number of Items",
-    hideNumberFieldRadioLabel: "Show All",
-    showNumberFieldRadioLabel: "Limit Items",
+const myComponentFields: YextFields<MyComponentProps> = {
+  limit: {
+    type: "optionalNumber",
+    label: msg("fields.limit", "Limit"),
+    hideNumberFieldRadioLabel: msg("fields.options.all", "All"),
+    showNumberFieldRadioLabel: msg("fields.options.limit", "Limit"),
     defaultCustomValue: 3,
-  }),
+  },
 };
 ```
 
-## YextField
+## YextFields
 
-`YextField` provides a unified utility for creating typed field configurations in a [Puck](https://github.com/measuredco/puck) and Yext Visual Editor integration context. It abstracts over common field types and includes special handling for Yext's [BasicSelector](##BasicSelector), [OptionalNumberField](##OptionalNumberField), [YextEntityFieldSelector](##YextEntityFieldSelector), and [TranslatableStringField](##TranslatableStringField).
+Author field definitions directly in `YextFields` using the registered Puck and Yext field types.
 
 ### Features
 
-- Strongly typed helper for defining field configs
-- Support for standard Puck field types (`text`, `radio`, `select`, `array`, etc.)
-- Extended support for Yext-specific entity selectors
-- Intelligent handling of options from `@yext/visual-editor` theme options
+- Support for standard Puck field types such as `text`, `array`, and `object`
+- Native Puck fields like `radio` can be authored directly inside `YextFields`
 
 ### Props
 
-#### `YextField`
-
 ```tsx
-YextField(label: MsgString, config: YextFieldConfig): Field<any>
-```
+import { msg, YextFields, YextComponentConfig } from "@yext/visual-editor";
 
-**Parameters:**
-
-- `label`: `MsgString` — The translated name of the field shown in the visual editor. Must use `msg()` function to ensure translation compliance.
-- `config`: `YextFieldConfig` — Configuration object describing the field type and its behavior.
-
-### Usage
-
-```tsx
-import { YextField, msg } from "@yext/visual-editor";
-
-const myComponentFields: Fields<myComponentProps> = {
-  address: YextField<any, AddressType>(msg("fields.address", "Address"), {
+const myComponentFields: YextFields<myComponentProps> = {
+  address: {
     type: "entityField",
+    label: msg("fields.address", "Address"),
     filter: { types: ["type.address"] },
-  }),
-  showGetDirections: YextField(
-    msg("fields.showGetDirections", "Show Get Directions Link"),
-    {
-      type: "radio",
-      options: [
-        { label: "Yes", value: true },
-        { label: "No", value: false },
-      ],
-    }
-  ),
+  },
+  showGetDirections: {
+    label: msg("fields.showGetDirections", "Show Get Directions Link"),
+    type: "radio",
+    options: [
+      { label: "Yes", value: true },
+      { label: "No", value: false },
+    ],
+  },
 };
 
-export const MyComponent: ComponentConfig<myComponentProps> = {
+export const MyComponent: YextComponentConfig<myComponentProps> = {
   fields: myComponentFields,
   render: (props) => <SomeComponent {...props} />,
 };
@@ -288,16 +308,22 @@ export const MyComponent: ComponentConfig<myComponentProps> = {
 
 ### Translation Requirements
 
-All field labels in `YextField` must use the `msg()` function to ensure proper internationalization. This enforces translation compliance at compile time through TypeScript's type system.
+Use the `msg()` function for field labels to ensure proper internationalization.
 
 ```tsx
 import { msg } from "@yext/visual-editor";
 
-// Correct - uses msg() function
-title: YextField(msg("fields.title", "Title"), { type: "text" });
+// Correct - uses msg() for a native field
+title: {
+  label: msg("fields.title", "Title"),
+  type: "text",
+};
 
-// Incorrect - plain string will cause TypeScript error
-title: YextField("Title", { type: "text" });
+// Incorrect - plain string label will not be translated
+title: {
+  label: "Title",
+  type: "text",
+};
 ```
 
 The `msg()` function takes two parameters:
@@ -307,77 +333,42 @@ The `msg()` function takes two parameters:
 
 ### Supported Field Types
 
-#### Text Field
+#### Native Text Fields
 
-Creates a simple string input. Supports multi-line input.
+Define plain string inputs directly in `YextFields`. Use `text` for a single-line input and `textarea` for multiline input.
 
 ```tsx
-title: YextField(msg("fields.title", "Title"), {
+title: {
+  label: msg("fields.title", "Title"),
   type: "text",
-}),
-description: YextField(msg("fields.description", "Description"), {
-  type: "text",
-  isMultiline: true
-})
+},
+description: {
+  label: msg("fields.description", "Description"),
+  type: "textarea",
+},
 ```
 
 **Props:**
 
 - `type`: `"text"`
-- `isMultiline?`: `boolean` — if true, renders a `<textarea>` for the multiline input.
+- `type`: `"textarea"`
 
 ---
 
-#### Select Field
+#### Native Radio Field
 
-Creates a dropdown select input. Options can be passed directly or as a string key from `ThemeOptions`. Optional search behavior uses the [BasicSelector](##BasicSelector).
-
-```tsx
-variant: YextField(msg("fields.variant", "CTA Variant"), {
-  type: "select",
-  options: "CTA_VARIANT",
-  hasSearch: true,
-}),
-aspectRatio: YextField(msg("fields.aspectRatio", "Aspect Ratio"), {
-  type: "select",
-  options: [
-    { label: "1:1", value: 1 },
-    { label: "5:4", value: 1.25 },
-    { label: "4:3", value: 1.33 },
-  ],
-}),
-```
-
-**Props:**
-
-- `type`: `"select"`
-- `options`: `FieldOptions | keyof ThemeOptions`
-- `hasSearch?`: `boolean` — enables searchable dropdown
-
----
-
-#### Radio Field
-
-Creates a radio button group. Options can be passed directly or via a `ThemeOptions` key.
+Define radio fields directly in `YextFields`.
 
 ```tsx
-alignment: YextField(msg("fields.alignment", "Alignment"), {
-  type: "radio",
-  options: "ALIGNMENT",
-}),
-includeHyperlink: YextField(msg("fields.includeHyperlink", "Include Hyperlink"), {
+alignment: {
+  label: msg("fields.alignment", "Alignment"),
   type: "radio",
   options: [
-    { label: "Yes", value: true },
-    { label: "No", value: false },
+    { label: "Left", value: "left" },
+    { label: "Center", value: "center" },
   ],
-}),
+},
 ```
-
-**Props:**
-
-- `type`: `"radio"`
-- `options`: `FieldOptions | keyof ThemeOptions`
 
 ---
 
@@ -386,7 +377,10 @@ includeHyperlink: YextField(msg("fields.includeHyperlink", "Include Hyperlink"),
 Creates a numeric input field with optional min and max values. [Additional documentation](https://puckeditor.com/docs/api-reference/fields/number)
 
 ```tsx
-spacing: YextField(msg("fields.spacing", "Spacing"), { type: "number" });
+spacing: {
+  label: msg("fields.spacing", "Spacing"),
+  type: "number",
+},
 ```
 
 **Props:**
@@ -402,13 +396,20 @@ spacing: YextField(msg("fields.spacing", "Spacing"), { type: "number" });
 Creates a repeatable field group (e.g., a list of items). Define inner fields using `arrayFields`. [Additional documentation](https://puckeditor.com/docs/api-reference/fields/array)
 
 ```tsx
-items: YextField(msg("fields.items", "Items"), {
+items: {
+  label: msg("fields.items", "Items"),
   type: "array",
   arrayFields: {
-    title: YextField(msg("fields.title", "Title"), { type: "text" }),
-    url: YextField(msg("fields.url", "URL"), { type: "text" }),
+    title: {
+      label: msg("fields.title", "Title"),
+      type: "text",
+    },
+    url: {
+      label: msg("fields.url", "URL"),
+      type: "text",
+    },
   },
-});
+},
 ```
 
 **Props:**
@@ -427,16 +428,20 @@ items: YextField(msg("fields.items", "Items"), {
 Creates a nested object field with multiple subfields. [Additional documentation](https://puckeditor.com/docs/api-reference/fields/object)
 
 ```tsx
-card: YextField(msg("fields.card", "Card"), {
+card: {
+  label: msg("fields.card", "Card"),
   type: "object",
   objectFields: {
-    title: YextField(msg("fields.title", "Title"), { type: "text" }),
-    description: YextField(msg("fields.description", "Description"), {
+    title: {
+      label: msg("fields.title", "Title"),
       type: "text",
-      isMultiline: true,
-    }),
+    },
+    description: {
+      label: msg("fields.description", "Description"),
+      type: "textarea",
+    },
   },
-});
+},
 ```
 
 **Props:**
@@ -448,62 +453,47 @@ card: YextField(msg("fields.card", "Card"), {
 
 #### Entity Selector Field
 
-Renders a Yext entity selector with filtering capabilities.
+Use the registered `entityField` type to render the entity selector with filtering capabilities.
 
 ```tsx
-linkedEntity: YextField("Linked Entity", {
+linkedEntity: {
   type: "entityField",
-  filter: { entityType: "faq" },
-});
+  label: msg("fields.linkedEntity", "Linked Entity"),
+  filter: { types: ["type.string"] },
+},
 ```
 
 **Props:**
 
 - `type`: `"entityField"`
-- `filter`: `any` — passed to [YextEntityFieldSelector](##YextEntityFieldSelector)
-
----
-
-#### Optional Number Selector Field
-
-[Additional documentation](##OptionalNumberField)
-
-```tsx
-limit: YextField("Items Limit", {
-  type: "optionalNumber",
-  hideNumberFieldRadioLabel: "All",
-  showNumberFieldRadioLabel: "Limit",
-  defaultCustomValue: 3,
-}),
-```
-
-**Props:**
-
-- `type`: `"optionalNumber"`
-- `hideNumberFieldRadioLabel`: `boolean`
-- `showNumberFieldRadioLabel`: `boolean`
-- `defaultCustomValue `: `number`
+- `label?`: `string | MsgString`
+- `filter`: `RenderEntityFieldFilter`
 
 ---
 
 #### Translatable String Field
 
-Creates a translatable string input with optional entity field embedding and locale management. [Additional documentation](##TranslatableStringField).
+Use the registered `translatableString` field type directly when you need locale-aware string entry with optional entity field embedding and locale management.
 
 ```tsx
-directoryRoot: YextField(msg("fields.directoryRoot", "Directory Root Link Label"), {
+directoryRoot: {
   type: "translatableString",
+  label: msg("fields.directoryRoot", "Directory Root Link Label"),
   filter: { types: ["type.string"] }
-}),
-title: YextField(msg("fields.title", "Page Title"), {
+},
+title: {
   type: "translatableString",
+  label: msg("fields.title", "Page Title"),
   filter: { types: ["type.string"] },
   showApplyAllOption: true
-}),
+},
 ```
 
 **Props:**
 
 - `type`: `"translatableString"`
+- `label?`: `string | MsgString`
 - `filter?`: `RenderEntityFieldFilter` — optional filter for entity fields that can be embedded
 - `showApplyAllOption?`: `boolean` — enables the "Apply to All Locales" button
+- `showFieldSelector?`: `boolean` — controls whether the entity field embed button is shown
+- `getOptions?`: `() => EmbeddedStringOption[]` — optional options source for the embed selector

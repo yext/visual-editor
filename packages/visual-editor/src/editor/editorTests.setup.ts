@@ -7,6 +7,10 @@ try {
       disconnect() {}
     };
   }
+
+  if (typeof HTMLElement !== "undefined") {
+    HTMLElement.prototype.scrollIntoView ??= () => {};
+  }
 } catch {
   // browser environment
 }

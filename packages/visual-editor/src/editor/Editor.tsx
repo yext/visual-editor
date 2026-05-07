@@ -5,6 +5,10 @@ import { LoadingScreen } from "../internal/puck/components/LoadingScreen.tsx";
 import { Toaster } from "../internal/puck/ui/Toaster.tsx";
 import { type Config } from "@puckeditor/core";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
+import {
+  LinkedEntitySchemasContext,
+  usePlatformBridgeLinkedEntitySchemas,
+} from "../hooks/useLinkedEntitySchemas.tsx";
 import { DevLogger } from "../utils/devLogger.ts";
 import { ThemeConfig } from "../utils/themeResolver.ts";
 import { useQuickFindShortcut } from "../internal/hooks/useQuickFindShortcut.ts";
@@ -32,7 +36,8 @@ import {
 import { migrate } from "../utils/migrate.ts";
 import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";
-import { LocalDevOptions } from "./types.ts";
+import type { LocalDevOptions } from "./types.ts";
+import type { LinkedEntitySchemas } from "../utils/linkedEntityFieldUtils.ts";
 
 const devLogger = new DevLogger();
 
@@ -63,6 +68,7 @@ export type EditorProps = {
   document: any;
   componentRegistry: Record<string, Config<any>>;
   themeConfig?: ThemeConfig;
+  linkedEntitySchemas?: LinkedEntitySchemas;
   // localDev is used for running VE outside of the platform
   localDev?: boolean;
   localDevOptions?: LocalDevOptions;
@@ -75,6 +81,7 @@ export const Editor = ({
   document,
   componentRegistry,
   themeConfig,
+  linkedEntitySchemas: localDevLinkedEntitySchemas,
   localDev,
   localDevOptions,
   forceThemeMode,
@@ -88,6 +95,9 @@ export const Editor = ({
   const [devSiteStream, setDevSiteStream] = useState<any>(undefined);
   const [parentLoaded, setParentLoaded] = useState<boolean>(false);
   const entityFields = useEntityFields();
+  const platformLinkedEntitySchemas = usePlatformBridgeLinkedEntitySchemas();
+  const linkedEntitySchemas =
+    localDevLinkedEntitySchemas ?? platformLinkedEntitySchemas;
 
   const {
     templateMetadata,
@@ -219,42 +229,44 @@ export const Editor = ({
   return (
     <ErrorProvider>
       <TemplateMetadataContext.Provider value={templateMetadata!}>
-        <ErrorBoundary fallback={<></>} onError={logError}>
-          {!isLoading ? (
-            templateMetadata?.isThemeMode || forceThemeMode ? (
-              <ThemeEditor
-                puckConfig={puckConfig!}
-                templateMetadata={templateMetadata!}
-                layoutData={migratedData!}
-                themeData={themeData!}
-                themeConfig={finalThemeConfig}
-                localDev={!!localDev}
-                showLocalDevOverrideButtons={showLocalDevOverrideButtons}
-                metadata={{ ...metadata, streamDocument: document }}
-              />
+        <LinkedEntitySchemasContext.Provider value={linkedEntitySchemas}>
+          <ErrorBoundary fallback={<></>} onError={logError}>
+            {!isLoading ? (
+              templateMetadata?.isThemeMode || forceThemeMode ? (
+                <ThemeEditor
+                  puckConfig={puckConfig!}
+                  templateMetadata={templateMetadata!}
+                  layoutData={migratedData!}
+                  themeData={themeData!}
+                  themeConfig={finalThemeConfig}
+                  localDev={!!localDev}
+                  showLocalDevOverrideButtons={showLocalDevOverrideButtons}
+                  metadata={{ ...metadata, streamDocument: document }}
+                />
+              ) : (
+                <LayoutEditor
+                  puckConfig={puckConfig!}
+                  templateMetadata={templateMetadata!}
+                  layoutData={migratedData!}
+                  themeData={themeData!}
+                  themeConfig={finalThemeConfig}
+                  localDev={!!localDev}
+                  showLocalDevOverrideButtons={showLocalDevOverrideButtons}
+                  metadata={{ ...metadata, streamDocument: document }}
+                  streamDocument={document}
+                />
+              )
             ) : (
-              <LayoutEditor
-                puckConfig={puckConfig!}
-                templateMetadata={templateMetadata!}
-                layoutData={migratedData!}
-                themeData={themeData!}
-                themeConfig={finalThemeConfig}
-                localDev={!!localDev}
-                showLocalDevOverrideButtons={showLocalDevOverrideButtons}
-                metadata={{ ...metadata, streamDocument: document }}
-                streamDocument={document}
-              />
-            )
-          ) : (
-            parentLoaded && (
-              <LoadingScreen
-                progress={progress}
-                platformLanguageIsSet={!!templateMetadata?.platformLocale}
-              />
-            )
-          )}
-          <Toaster closeButton richColors />
-        </ErrorBoundary>
+              parentLoaded && (
+                <LoadingScreen
+                  progress={progress}
+                  platformLanguageIsSet={!!templateMetadata?.platformLocale}
+                />
+              )
+            )}
+            <Toaster closeButton richColors />
+          </ErrorBoundary>
+        </LinkedEntitySchemasContext.Provider>
       </TemplateMetadataContext.Provider>
     </ErrorProvider>
   );

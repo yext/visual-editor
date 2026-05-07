@@ -1,6 +1,12 @@
 import { type YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
+import { type StreamDocument } from "./types/StreamDocument.ts";
 
 export const embeddedFieldRegex = /\[\[([a-zA-Z0-9._]+)\]\]/g;
+
+export type FieldResolution<T> = {
+  value: T | undefined;
+  traversedMultiValueReference: boolean;
+};
 
 export const resolveYextEntityField = <T>(
   streamDocument: any,
@@ -33,7 +39,7 @@ export const resolveYextEntityField = <T>(
     return entityField.constantValue as T;
   }
 
-  return findField<T>(streamDocument, entityField.field);
+  return resolveField<T>(streamDocument, entityField.field).value;
 };
 
 /**
@@ -186,30 +192,52 @@ export const resolveEmbeddedFieldsRecursively = (
 };
 
 export const findField = <T>(
-  document: any,
+  streamDocument: StreamDocument,
   fieldName: string
 ): T | undefined => {
+  return resolveField<T>(streamDocument, fieldName).value;
+};
+
+export const resolveField = <T>(
+  streamDocument: StreamDocument,
+  fieldName: string
+): FieldResolution<T> => {
   if (fieldName === "") {
-    return undefined;
+    return { value: undefined, traversedMultiValueReference: false };
   }
 
+  let traversedMultiValueReference = false;
   try {
     const levels: string[] = fieldName.split(".");
-    let levelsExist = true;
-    let current = document;
+    let current: unknown = streamDocument;
     for (let i = 0; i < levels.length; i++) {
-      if (current?.[levels[i]] !== undefined) {
-        current = current[levels[i]];
-      } else {
-        levelsExist = false;
-        break;
+      if (Array.isArray(current)) {
+        if (current.length === 0) {
+          return { value: undefined, traversedMultiValueReference };
+        }
+
+        if (current.length > 1) {
+          traversedMultiValueReference = true;
+        }
+
+        current = current[0];
       }
+
+      if (typeof current !== "object" || current === null) {
+        return { value: undefined, traversedMultiValueReference };
+      }
+
+      const currentRecord = current as Record<string, unknown>;
+      if (currentRecord[levels[i]] === undefined) {
+        return { value: undefined, traversedMultiValueReference };
+      }
+
+      current = currentRecord[levels[i]];
     }
-    if (levelsExist) {
-      return current;
-    }
+
+    return { value: current as T | undefined, traversedMultiValueReference };
   } catch (e) {
-    console.error("Error in findField:", e);
+    console.error("Error in resolveField:", e);
   }
-  return undefined;
+  return { value: undefined, traversedMultiValueReference };
 };

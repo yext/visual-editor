@@ -25,13 +25,17 @@ import {
   SlotsCategoryComponents,
   SlotsCategoryProps,
 } from "../categories/SlotsCategory.tsx";
+import { MainContent, MainContentProps } from "../structure/MainContent.tsx";
+import { rootAllowedComponents } from "./rootAllowedComponents.ts";
 
 export interface MainConfigProps
   extends PageSectionCategoryProps,
     DeprecatedCategoryProps,
     OtherCategoryProps,
     AdvancedCoreInfoCategoryProps,
-    SlotsCategoryProps {}
+    SlotsCategoryProps {
+  MainContent: MainContentProps;
+}
 
 const components: Config<MainConfigProps>["components"] = {
   ...PageSectionCategoryComponents,
@@ -39,6 +43,7 @@ const components: Config<MainConfigProps>["components"] = {
   ...OtherCategoryComponents,
   ...AdvancedCoreInfoCategoryComponents,
   ...SlotsCategoryComponents,
+  MainContent,
 };
 
 // The config used for base entities (locations, financial professionals, etc.)
@@ -61,6 +66,10 @@ export const mainConfig: Config<MainConfigProps> = {
       components: SlotsCategory,
       visible: false,
     },
+    structure: {
+      components: ["MainContent"],
+      visible: false,
+    },
     // deprecated components are hidden in the sidebar but still render if used in the page
     deprecatedComponents: {
       visible: false,
@@ -77,7 +86,9 @@ export const mainConfig: Config<MainConfigProps> = {
             flexDirection: "column",
             minHeight: "100vh",
           }}
-          disallow={AdvancedCoreInfoCategory.filter((k) => k !== "Grid")}
+          disallow={Object.keys(components).filter(
+            (componentName) => !rootAllowedComponents.includes(componentName)
+          )}
         />
       );
     },

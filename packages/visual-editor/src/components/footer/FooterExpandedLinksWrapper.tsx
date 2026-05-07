@@ -1,6 +1,5 @@
 import * as React from "react";
-import { ComponentConfig, PuckComponent, setDeep } from "@puckeditor/core";
-import { YextField } from "../../editor/YextField.tsx";
+import { PuckComponent, setDeep } from "@puckeditor/core";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { TranslatableString, TranslatableCTA } from "../../types/types.ts";
 import { i18nComponentsInstance } from "../../utils/i18n/components.ts";
@@ -18,29 +17,38 @@ import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
 import { ThemeColor } from "../../utils/themeConfigOptions.ts";
 import { cva } from "class-variance-authority";
 import { themeManagerCn } from "../../utils/cn.ts";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  YextFields,
+} from "../../fields/fields.ts";
 
 const defaultSection = {
   label: { defaultValue: "Footer Label" },
   links: defaultLinks,
 };
 
-const footerExpandedLinksWrapperFields = {
-  data: YextField(msg("fields.data", "Data"), {
-    type: "object",
-    objectFields: {
-      sections: YextField(
-        msg("fields.expandedFooterLinks", "Expanded Footer Links"),
-        {
+const footerExpandedLinksWrapperFields: YextFields<FooterExpandedLinksWrapperProps> =
+  {
+    data: {
+      type: "object",
+      label: msg("fields.data", "Data"),
+      objectFields: {
+        sections: {
           type: "array",
+          label: msg("fields.expandedFooterLinks", "Expanded Footer Links"),
           arrayFields: {
-            label: YextField(msg("fields.sectionLabel", "Section Label"), {
+            label: {
               type: "translatableString",
+              label: msg("fields.sectionLabel", "Section Label"),
               filter: { types: ["type.string"] },
-            }),
-            links: YextField(msg("fields.links", "Links"), {
+            },
+            links: {
               type: "array",
+              label: msg("fields.links", "Links"),
               arrayFields: {
-                linkType: YextField(msg("fields.linkType", "Link Type"), {
+                linkType: {
+                  label: msg("fields.linkType", "Link Type"),
                   type: "radio",
                   options: [
                     { label: msg("fields.options.url", "URL"), value: "URL" },
@@ -53,72 +61,74 @@ const footerExpandedLinksWrapperFields = {
                       value: "EMAIL",
                     },
                   ],
-                }),
-                label: YextField(msg("fields.linkLabel", "Link Label"), {
+                },
+                label: {
                   type: "translatableString",
+                  label: msg("fields.linkLabel", "Link Label"),
                   filter: { types: ["type.string"] },
-                }),
-                link: YextField(msg("fields.link", "Link"), {
+                },
+                link: {
+                  label: msg("fields.link", "Link"),
                   type: "text",
-                }),
-                normalizeLink: YextField(
-                  msg("fields.normalizeLink", "Normalize Link"),
-                  {
-                    type: "radio",
-                    options: [
-                      {
-                        label: msg("fields.options.yes", "Yes"),
-                        value: true,
-                      },
-                      {
-                        label: msg("fields.options.no", "No"),
-                        value: false,
-                      },
-                    ],
-                  }
-                ),
-                openInNewTab: YextField(
-                  msg("fields.openInNewTab", "Open in new tab"),
-                  {
-                    type: "radio",
-                    options: [
-                      {
-                        label: msg("fields.options.yes", "Yes"),
-                        value: true,
-                      },
-                      { label: msg("fields.options.no", "No"), value: false },
-                    ],
-                  }
-                ),
+                },
+                normalizeLink: {
+                  label: msg("fields.normalizeLink", "Normalize Link"),
+                  type: "radio",
+                  options: [
+                    {
+                      label: msg("fields.options.yes", "Yes"),
+                      value: true,
+                    },
+                    {
+                      label: msg("fields.options.no", "No"),
+                      value: false,
+                    },
+                  ],
+                },
+                openInNewTab: {
+                  label: msg("fields.openInNewTab", "Open in new tab"),
+                  type: "radio",
+                  options: [
+                    {
+                      label: msg("fields.options.yes", "Yes"),
+                      value: true,
+                    },
+                    { label: msg("fields.options.no", "No"), value: false },
+                  ],
+                },
               },
               defaultItemProps: defaultLink,
-              getItemSummary: (item, index) => {
+              getItemSummary: (item: TranslatableCTA, index?: number) => {
                 const locale = i18nComponentsInstance.language || "en";
                 const label = getDisplayValue(item.label, locale);
                 return label || pt("link", "Link") + " " + ((index ?? 0) + 1);
               },
-            }),
+            },
           },
           defaultItemProps: defaultSection,
-          getItemSummary: (item, index) => {
+          getItemSummary: (
+            item: FooterExpandedLinksWrapperProps["data"]["sections"][number],
+            index?: number
+          ) => {
             const locale = i18nComponentsInstance.language || "en";
             const label = getDisplayValue(item.label, locale);
             return label || pt("section", "Section") + " " + ((index ?? 0) + 1);
           },
-        }
-      ),
+        },
+      },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
-    type: "object",
-    objectFields: {
-      color: YextField(msg("fields.color", "Color"), {
-        type: "select",
-        options: "SITE_COLOR",
-      }),
+    styles: {
+      type: "object",
+      label: msg("fields.styles", "Styles"),
+      objectFields: {
+        color: {
+          type: "basicSelector",
+          label: msg("fields.color", "Color"),
+          options: "SITE_COLOR",
+        },
+      },
     },
-  }),
-};
+  };
 
 export interface FooterExpandedLinksWrapperProps {
   data: {
@@ -343,26 +353,27 @@ const FooterExpandedLinksWrapperInternal: PuckComponent<
   );
 };
 
-export const FooterExpandedLinksWrapper: ComponentConfig<{
-  props: FooterExpandedLinksWrapperProps;
-}> = {
-  label: msg("components.expandedLinks", "Expanded Links"),
-  fields: footerExpandedLinksWrapperFields,
-  resolveFields: (data) =>
-    setDeep(
-      footerExpandedLinksWrapperFields,
-      "data.objectFields.sections.arrayFields.links.arrayFields.normalizeLink.visible",
-      shouldShowNormalizeLinkField(data.props.data.sections)
-    ),
-  defaultProps: {
-    data: {
-      sections: [
-        { ...defaultSection },
-        { ...defaultSection },
-        { ...defaultSection },
-        { ...defaultSection },
-      ],
+export const FooterExpandedLinksWrapper: YextComponentConfig<FooterExpandedLinksWrapperProps> =
+  {
+    label: msg("components.expandedLinks", "Expanded Links"),
+    fields: footerExpandedLinksWrapperFields,
+    resolveFields: (data) =>
+      toPuckFields(
+        setDeep(
+          footerExpandedLinksWrapperFields,
+          "data.objectFields.sections.arrayFields.links.arrayFields.normalizeLink.visible",
+          shouldShowNormalizeLinkField(data.props.data.sections)
+        )
+      ),
+    defaultProps: {
+      data: {
+        sections: [
+          { ...defaultSection },
+          { ...defaultSection },
+          { ...defaultSection },
+          { ...defaultSection },
+        ],
+      },
     },
-  },
-  render: (props) => <FooterExpandedLinksWrapperInternal {...props} />,
-};
+    render: (props) => <FooterExpandedLinksWrapperInternal {...props} />,
+  };

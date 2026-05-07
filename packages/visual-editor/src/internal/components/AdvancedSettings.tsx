@@ -1,15 +1,16 @@
-import { ComponentConfig, Fields, CustomField } from "@puckeditor/core";
+import { CustomField } from "@puckeditor/core";
 import { msg } from "../../utils/i18n/platform.ts";
-import { YextField } from "../../editor/YextField.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
+import { YextAutoField } from "../../fields/YextAutoField.tsx";
 import React from "react";
 import {
   useSendMessageToParent,
   useReceiveMessage,
   TARGET_ORIGINS,
 } from "../hooks/useMessage.ts";
-import { shouldUseStandaloneLocalPrompt } from "../utils/shouldUseStandaloneLocalPrompt.ts";
 import { getSchemaTemplate } from "../../utils/schema/defaultSchemas.ts";
+import { isFakeStarterLocalDev } from "../../utils/isFakeStarterLocalDev.ts";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 let pendingSchemaMarkupSession:
   | { messageId: string; apply: (payload: any) => void }
@@ -55,17 +56,18 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
     // Use the schema value from root, or default schema if not set
     const schema = value || defaultSchema;
 
-    const codeField = YextField(msg("schemaMarkup", "Schema Markup"), {
-      type: "code",
-      codeLanguage: "json",
-    });
+    const codeField = {
+      label: msg("schemaMarkup", "Schema Markup"),
+      type: "code" as const,
+      codeLanguage: "json" as const,
+    };
 
     const handleClick = (e: React.MouseEvent) => {
       e.stopPropagation();
       e.preventDefault();
 
       /** Handles local development testing outside of Storm */
-      if (shouldUseStandaloneLocalPrompt()) {
+      if (isFakeStarterLocalDev()) {
         const userInput = prompt("Enter Schema Markup:", schema);
         if (userInput !== null) {
           onChange(userInput);
@@ -103,22 +105,19 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
           onMouseUp={(e) => e.stopPropagation()}
           style={{ pointerEvents: "none" }}
         >
-          {(codeField as any).render({
-            onChange: (newValue: string | number) => {
-              onChange(String(newValue));
-            },
-            value: schema,
-            field: codeField,
-            name: "schemaMarkup",
-            id: "schemaMarkup",
-          })}
+          <YextAutoField
+            field={codeField}
+            id="schemaMarkup"
+            onChange={onChange}
+            value={schema}
+          />
         </div>
       </div>
     );
   },
 };
 
-const advancedSettingsFields: Fields<AdvancedSettingsProps> = {
+const advancedSettingsFields: YextFields<AdvancedSettingsProps> = {
   data: {
     type: "object",
     objectFields: {
@@ -132,9 +131,7 @@ const advancedSettingsFields: Fields<AdvancedSettingsProps> = {
  * This component provides access to advanced page settings like schema markup.
  * It includes breadcrumb navigation to show "Page > Advanced Settings".
  */
-export const AdvancedSettings: ComponentConfig<{
-  props: AdvancedSettingsProps;
-}> = {
+export const AdvancedSettings: YextComponentConfig<AdvancedSettingsProps> = {
   label: msg("advancedSettings", "Advanced Settings"),
   fields: advancedSettingsFields,
   defaultProps: {

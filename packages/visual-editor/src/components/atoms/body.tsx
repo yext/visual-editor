@@ -2,7 +2,7 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { ThemeColor } from "../../utils/themeConfigOptions.ts";
-import { getTextColorClass } from "../../utils/colors.ts";
+import { getTextColorClass, getTextColorStyle } from "../../utils/colors.ts";
 
 // Define the variants for the body component
 export const bodyVariants = cva(
@@ -41,6 +41,7 @@ export const Body = React.forwardRef<HTMLParagraphElement, BodyProps>(
           className
         )}
         style={{
+          ...getTextColorStyle(color),
           // @ts-ignore: the css variable here resolves to a valid enum value
           textTransform: `var(--textTransform-body-textTransform)`,
           ...style,

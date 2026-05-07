@@ -1,13 +1,16 @@
 import * as React from "react";
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
+import { PuckComponent, Slot } from "@puckeditor/core";
 import { layoutFields, layoutProps, layoutVariants } from "../Layout.tsx";
-import { backgroundColors } from "../../utils/themeConfigOptions.ts";
+import {
+  backgroundColors,
+  ThemeOptions,
+} from "../../utils/themeConfigOptions.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { Background } from "../atoms/background.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
 import { AdvancedCoreInfoCategory } from "../categories/AdvancedCoreInfoCategory.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export interface FlexProps extends layoutProps {
   justifyContent: "start" | "center" | "end";
@@ -67,46 +70,48 @@ const FlexContainer = React.forwardRef<
 
 FlexContainer.displayName = "Flex";
 
-const flexContainerFields: Fields<FlexProps> = {
-  direction: YextField(msg("fields.direction", "Direction"), {
+const flexContainerFields: YextFields<FlexProps> = {
+  direction: {
+    label: msg("fields.direction", "Direction"),
     type: "radio",
     options: [
       { label: "Horizontal", value: "flex-row" },
       { label: "Vertical", value: "flex-col" },
     ],
-  }),
-  justifyContent: YextField(msg("fields.justifyContent", "Justify Content"), {
+  },
+  justifyContent: {
+    label: msg("fields.justifyContent", "Justify Content"),
     type: "radio",
-    options: "JUSTIFY_CONTENT",
-  }),
-  alignItems: YextField(msg("fields.alignItems", "Align Items"), {
+    options: ThemeOptions.JUSTIFY_CONTENT,
+  },
+  alignItems: {
+    label: msg("fields.alignItems", "Align Items"),
     type: "radio",
-    options: "JUSTIFY_CONTENT",
-  }),
-  wrap: YextField(msg("fields.wrap", "Wrap"), {
+    options: ThemeOptions.JUSTIFY_CONTENT,
+  },
+  wrap: {
+    label: msg("fields.wrap", "Wrap"),
     type: "radio",
     options: [
       { label: "No Wrap", value: "nowrap" },
       { label: "Wrap", value: "wrap" },
     ],
-  }),
+  },
   flexZone: {
     type: "slot",
   },
   ...layoutFields,
-  liveVisibility: YextField(
-    msg("fields.liveVisibility", "Visible on Live Page"),
-    {
-      type: "radio",
-      options: [
-        { label: "Show", value: true },
-        { label: "Hide", value: false },
-      ],
-    }
-  ),
+  liveVisibility: {
+    label: msg("fields.liveVisibility", "Visible on Live Page"),
+    type: "radio",
+    options: [
+      { label: "Show", value: true },
+      { label: "Hide", value: false },
+    ],
+  },
 };
 
-export const Flex: ComponentConfig<{ props: FlexProps }> = {
+export const Flex: YextComponentConfig<FlexProps> = {
   label: "Flex",
   fields: flexContainerFields,
   defaultProps: {

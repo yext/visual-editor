@@ -1,14 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import {
-  ArrayField,
-  AutoField,
-  ComponentConfig,
-  FieldLabel,
-  Fields,
-  PuckComponent,
-  setDeep,
-} from "@puckeditor/core";
+import { FieldLabel, PuckComponent, setDeep } from "@puckeditor/core";
 import { CTA } from "../atoms/cta.tsx";
 import { i18nComponentsInstance } from "../../utils/i18n/components.ts";
 import { msg, pt } from "../../utils/i18n/platform.ts";
@@ -17,16 +9,23 @@ import { TranslatableCTA } from "../../types/types.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { useOverflow } from "../../hooks/useOverflow.ts";
 import { usePreviewWindow } from "../../hooks/usePreviewWindow.ts";
-import { YextField } from "../../editor/YextField.tsx";
+import { YextAutoField } from "../../fields/YextAutoField.tsx";
 import { linkTypeOptions } from "../../internal/puck/constant-value-fields/CallToAction.tsx";
 import {
   useExpandedHeaderMenu,
   useHeaderLinksDisplayMode,
 } from "./ExpandedHeaderMenuContext.tsx";
 import { getHeaderViewport } from "./viewport.ts";
-import { ThemeColor } from "../../utils/themeConfigOptions.ts";
+import { ThemeColor, ThemeOptions } from "../../utils/themeConfigOptions.ts";
 import { BodyProps } from "../atoms/body.tsx";
 import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  type YextArrayField,
+  type YextCustomFieldRenderProps,
+  YextFields,
+} from "../../fields/fields.ts";
 
 export type HeaderLinksProps = {
   data: {
@@ -70,34 +69,39 @@ const defaultLink: TranslatableCTA = {
   openInNewTab: false,
 };
 
-const linkFieldConfig: ArrayField<TranslatableCTA[]> = {
+const linkFieldConfig: YextArrayField<TranslatableCTA[]> = {
   type: "array",
   arrayFields: {
-    label: YextField(msg("fields.label", "Label"), {
+    label: {
       type: "translatableString",
+      label: msg("fields.label", "Label"),
       filter: { types: ["type.string"] },
-    }),
-    link: YextField(msg("fields.link", "Link"), {
+    },
+    link: {
       type: "translatableString",
-    }),
-    linkType: YextField(msg("fields.linkType", "Link Type"), {
-      type: "select",
+      label: msg("fields.link", "Link"),
+    },
+    linkType: {
+      type: "basicSelector",
+      label: msg("fields.linkType", "Link Type"),
       options: linkTypeOptions(),
-    }),
-    normalizeLink: YextField(msg("fields.normalizeLink", "Normalize Link"), {
+    },
+    normalizeLink: {
+      label: msg("fields.normalizeLink", "Normalize Link"),
       type: "radio",
       options: [
         { label: msg("fields.options.yes", "Yes"), value: true },
         { label: msg("fields.options.no", "No"), value: false },
       ],
-    }),
-    openInNewTab: YextField(msg("fields.openInNewTab", "Open in new tab"), {
+    },
+    openInNewTab: {
+      label: msg("fields.openInNewTab", "Open in new tab"),
       type: "radio",
       options: [
         { label: msg("fields.options.yes", "Yes"), value: true },
         { label: msg("fields.options.no", "No"), value: false },
       ],
-    }),
+    },
   },
   defaultItemProps: defaultLink satisfies TranslatableCTA,
   getItemSummary: (item, i) => {
@@ -108,13 +112,17 @@ const linkFieldConfig: ArrayField<TranslatableCTA[]> = {
   },
 };
 
-const headerLinksFields: Fields<HeaderLinksProps> = {
-  data: YextField(msg("fields.data", "Data"), {
+const headerLinksFields: YextFields<HeaderLinksProps> = {
+  data: {
     type: "object",
+    label: msg("fields.data", "Data"),
     objectFields: {
       links: {
         type: "custom",
-        render: ({ onChange, value }) => {
+        render: ({
+          onChange,
+          value,
+        }: YextCustomFieldRenderProps<HeaderLinksProps["data"]["links"]>) => {
           const tooltip = pt(
             "fields.linksTooltip",
             "Links will automatically collapse if the viewport is too narrow"
@@ -127,7 +135,7 @@ const headerLinksFields: Fields<HeaderLinksProps> = {
                 className="mb-3"
               >
                 <p className="ve-text-xs ve-mb-3">{tooltip}</p>
-                <AutoField
+                <YextAutoField
                   value={value}
                   onChange={onChange}
                   field={linkFieldConfig}
@@ -137,36 +145,41 @@ const headerLinksFields: Fields<HeaderLinksProps> = {
           );
         },
       },
-      collapsedLinks: YextField(
-        msg("fields.collapsedLinks", "Collapsed Links"),
-        linkFieldConfig
-      ),
+      collapsedLinks: {
+        ...linkFieldConfig,
+        label: msg("fields.collapsedLinks", "Collapsed Links"),
+      },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
+  },
+  styles: {
     type: "object",
+    label: msg("fields.styles", "Styles"),
     objectFields: {
-      align: YextField(msg("fields.align", "Align"), {
+      align: {
+        label: msg("fields.align", "Align"),
         type: "radio",
-        options: "ALIGNMENT",
-      }),
-      variant: YextField(msg("fields.variant", "Variant"), {
+        options: ThemeOptions.ALIGNMENT,
+      },
+      variant: {
+        label: msg("fields.variant", "Variant"),
         type: "radio",
-        options: "BODY_VARIANT",
-      }),
-      color: YextField(msg("fields.color", "Color"), {
-        type: "select",
+        options: ThemeOptions.BODY_VARIANT,
+      },
+      color: {
+        type: "basicSelector",
+        label: msg("fields.color", "Color"),
         options: "SITE_COLOR",
-      }),
-      weight: YextField(msg("fields.weight", "Weight"), {
+      },
+      weight: {
+        label: msg("fields.weight", "Weight"),
         type: "radio",
         options: [
           { label: msg("fields.options.normal", "Normal"), value: "normal" },
           { label: msg("fields.options.bold", "Bold"), value: "bold" },
         ],
-      }),
+      },
     },
-  }),
+  },
 };
 
 const useWindowWidth = (externalWindow?: Window | null) => {
@@ -358,14 +371,14 @@ export const defaultHeaderLinkProps: HeaderLinksProps = {
   },
 };
 
-export const HeaderLinks: ComponentConfig<{ props: HeaderLinksProps }> = {
+export const HeaderLinks: YextComponentConfig<HeaderLinksProps> = {
   label: msg("components.headerLinks", "Header Links"),
   fields: headerLinksFields,
   resolveFields: (data, params) => {
     let updatedFields = headerLinksFields;
 
     updatedFields = setDeep(
-      headerLinksFields,
+      updatedFields,
       "styles.objectFields.align.visible",
       params.parent?.type !== "PrimaryHeaderSlot"
     );
@@ -394,7 +407,7 @@ export const HeaderLinks: ComponentConfig<{ props: HeaderLinksProps }> = {
         )
     );
 
-    return updatedFields;
+    return toPuckFields(updatedFields);
   },
   defaultProps: defaultHeaderLinkProps,
   render: (props) => <HeaderLinksComponent {...props} />,

@@ -1,36 +1,35 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
-import { YextField } from "../../editor/YextField.tsx";
 import { TranslatableString } from "../../types/types.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
+import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export interface TextListProps {
   list: YextEntityField<TranslatableString[]>;
   commaSeparated: boolean;
 }
 
-export const textListFields: Fields<TextListProps> = {
-  list: YextField(msg("fields.values", "Values"), {
+export const textListFields: YextFields<TextListProps> = {
+  list: {
     type: "entityField",
+    label: msg("fields.values", "Values"),
     filter: {
       types: ["type.string"],
       includeListsOnly: true,
     },
-  }),
-  commaSeparated: YextField<boolean>(
-    msg("fields.commaSeparated", "Comma Separated"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.yes", "Yes"), value: true },
-        { label: msg("fields.options.no", "No"), value: false },
-      ],
-    }
-  ),
+  },
+  commaSeparated: {
+    label: msg("fields.commaSeparated", "Comma Separated"),
+    type: "radio",
+    options: [
+      { label: msg("fields.options.yes", "Yes"), value: true },
+      { label: msg("fields.options.no", "No"), value: false },
+    ],
+  },
 };
 
 const TextListComponent: PuckComponent<TextListProps> = ({
@@ -86,7 +85,7 @@ const TextListComponent: PuckComponent<TextListProps> = ({
   );
 };
 
-export const TextList: ComponentConfig<{ props: TextListProps }> = {
+export const TextList: YextComponentConfig<TextListProps> = {
   label: msg("components.textList", "Text List"),
   fields: textListFields,
   defaultProps: {
