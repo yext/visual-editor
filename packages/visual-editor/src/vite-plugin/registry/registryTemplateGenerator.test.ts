@@ -104,10 +104,25 @@ describe.sequential("generateRegistryTemplateFiles", () => {
       path.join(rootDir, "src", "registry", "main", "config.tsx"),
       "utf8"
     );
-    expect(generatedConfig).toContain("export const MainConfig: Config = {");
+    expect(generatedConfig).toContain(
+      'import { mainConfig, type MainConfigProps } from "@yext/visual-editor";'
+    );
+    expect(generatedConfig).toContain(
+      'type GeneratedMainConfigProps = Pick<MainConfigProps, "MainContent"> & {'
+    );
+    expect(generatedConfig).toContain(
+      "export const MainConfig: Config<GeneratedMainConfigProps> = {"
+    );
+    expect(generatedConfig).toContain(
+      '"MainContent": mainConfig.components.MainContent'
+    );
     expect(generatedConfig).toContain("import { Hero as MainComponentHero }");
     expect(generatedConfig).toContain(
       "import { Header as MainComponentHeader }"
+    );
+    expect(generatedConfig).toContain('"structure": {');
+    expect(generatedConfig).toMatch(
+      /"structure": \{[\s\S]*"components": \[\s*"MainContent"\s*\][\s\S]*"visible": false/
     );
     expect(generatedConfig).toContain('"title": "Components"');
     expect(generatedConfig).toMatch(
