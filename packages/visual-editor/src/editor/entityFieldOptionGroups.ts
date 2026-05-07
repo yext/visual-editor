@@ -63,11 +63,11 @@ export const buildEntityFieldOptionGroups = <
 
   const nonEmptyGroups = [
     topOptions.length ? { options: topOptions } : undefined,
-    linkedOptions.length
-      ? { title: linkedGroupTitle, options: linkedOptions }
-      : undefined,
     entityOptions.length
       ? { title: entityGroupTitle, options: entityOptions }
+      : undefined,
+    linkedOptions.length
+      ? { title: linkedGroupTitle, options: linkedOptions }
       : undefined,
   ].filter((group) => !!group);
 
