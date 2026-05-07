@@ -5,7 +5,10 @@ import {
 import { StreamFields, YextSchemaField } from "../types/entityFields.ts";
 import { resolveField } from "../utils/resolveYextEntityField.ts";
 import { type StreamDocument } from "../utils/types/StreamDocument.ts";
-import { getTopLevelLinkedEntitySourceFields } from "../utils/linkedEntityFieldUtils.ts";
+import {
+  getTopLevelLinkedEntitySourceFields,
+  isLinkedEntityDefinition,
+} from "../utils/linkedEntityFieldUtils.ts";
 import {
   getListSourceRootFields,
   type MappedSourceFieldFilter,
@@ -255,15 +258,6 @@ const getSubdocumentStreamFields = (
 };
 
 /**
- * Returns whether a schema field represents a linked entity reference.
- */
-const isLinkedEntityDefinition = (
-  field: YextSchemaField | undefined
-): boolean =>
-  field?.definition.typeRegistryId === "type.entity_reference" ||
-  field?.definition.type.documentType === "DOCUMENT_TYPE_ENTITY";
-
-/**
  * Detects whether a scoped descendant path passes through another linked
  * entity reference, which would otherwise leak unrelated nested fields into the
  * current picker scope.
@@ -280,7 +274,7 @@ const hasNestedLinkedEntityAncestor = (
     if (!matchingField) {
       return false;
     }
-    if (isLinkedEntityDefinition(matchingField)) {
+    if (isLinkedEntityDefinition(matchingField.definition)) {
       return true;
     }
     currentFields = matchingField.children?.fields ?? [];

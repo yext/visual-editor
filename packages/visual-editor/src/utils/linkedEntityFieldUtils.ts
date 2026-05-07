@@ -4,7 +4,7 @@ import {
   type YextSchemaFieldDefinition,
 } from "../types/entityFields.ts";
 
-const isLinkedEntityDefinition = (
+export const isLinkedEntityDefinition = (
   definition: YextSchemaFieldDefinition | undefined
 ): boolean =>
   definition?.typeRegistryId === "type.entity_reference" ||
