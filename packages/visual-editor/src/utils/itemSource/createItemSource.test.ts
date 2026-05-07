@@ -68,13 +68,159 @@ describe("createItemSource", () => {
     expect(articleSource.defaultValue).toMatchObject({
       field: "",
       constantValueEnabled: true,
-      constantValue: [
+      constantValue: [],
+      mappings: {
+        eyebrow: undefined,
+      },
+    });
+  });
+
+  it("uses the first default value as the add-item template and seeds manual items", () => {
+    const customizedSource = createItemSource<ArticleItemProps>({
+      label: "Articles",
+      mappingFields: {
+        title: {
+          type: "entityField",
+          label: "Title",
+          filter: { types: ["type.string"] },
+        },
+        description: {
+          type: "entityField",
+          label: "Description",
+          filter: { types: ["type.rich_text_v2"] },
+        },
+        eyebrow: {
+          type: "text",
+          label: "Eyebrow",
+        },
+        secondaryTitle: {
+          type: "entityField",
+          label: "Secondary Title",
+          filter: { types: ["type.string"] },
+        },
+      },
+      defaultValues: [
         {
-          eyebrow: "",
+          title: {
+            field: "",
+            constantValueEnabled: true,
+            constantValue: { defaultValue: "Seeded title" },
+          },
+          description: {
+            field: "",
+            constantValueEnabled: true,
+            constantValue: {
+              defaultValue: { html: "<p>Seeded summary</p>" },
+            },
+          },
+          eyebrow: "Manual",
+          secondaryTitle: {
+            field: "",
+            constantValueEnabled: true,
+            constantValue: { defaultValue: "" },
+          },
+        },
+        {
+          title: {
+            field: "",
+            constantValueEnabled: true,
+            constantValue: { defaultValue: "Second title" },
+          },
+          description: {
+            field: "",
+            constantValueEnabled: true,
+            constantValue: {
+              defaultValue: { html: "<p>Second summary</p>" },
+            },
+          },
+          eyebrow: "Secondary",
+          secondaryTitle: {
+            field: "",
+            constantValueEnabled: true,
+            constantValue: { defaultValue: "" },
+          },
         },
       ],
-      mappings: {
-        eyebrow: "",
+    });
+
+    expect((customizedSource.field as any).repeated.defaultItemValue).toEqual({
+      title: {
+        field: "",
+        constantValueEnabled: true,
+        constantValue: { defaultValue: "Seeded title" },
+      },
+      description: {
+        field: "",
+        constantValueEnabled: true,
+        constantValue: {
+          defaultValue: { html: "<p>Seeded summary</p>" },
+        },
+      },
+      eyebrow: "Manual",
+      secondaryTitle: {
+        field: "",
+        constantValueEnabled: true,
+        constantValue: { defaultValue: "" },
+      },
+    });
+    expect(customizedSource.defaultValue.constantValue).toEqual([
+      {
+        title: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: { defaultValue: "Seeded title" },
+        },
+        description: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: {
+            defaultValue: { html: "<p>Seeded summary</p>" },
+          },
+        },
+        eyebrow: "Manual",
+        secondaryTitle: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: { defaultValue: "" },
+        },
+      },
+      {
+        title: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: { defaultValue: "Second title" },
+        },
+        description: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: {
+            defaultValue: { html: "<p>Second summary</p>" },
+          },
+        },
+        eyebrow: "Secondary",
+        secondaryTitle: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: { defaultValue: "" },
+        },
+      },
+    ]);
+    expect(customizedSource.defaultValue.mappings).toEqual({
+      title: {
+        field: "",
+        constantValueEnabled: false,
+        constantValue: undefined,
+      },
+      description: {
+        field: "",
+        constantValueEnabled: false,
+        constantValue: undefined,
+      },
+      eyebrow: undefined,
+      secondaryTitle: {
+        field: "",
+        constantValueEnabled: false,
+        constantValue: undefined,
       },
     });
   });
@@ -130,12 +276,14 @@ describe("createItemSource", () => {
       },
     });
 
-    expect(
-      imageSource.defaultValue.constantValue[0].image.constantValueEnabled
-    ).toBe(true);
+    expect(imageSource.defaultValue.constantValue).toEqual([]);
     expect(imageSource.defaultValue.mappings?.image.constantValueEnabled).toBe(
       false
     );
+    expect(
+      (imageSource.field as any).repeated?.defaultItemValue.image
+        .constantValueEnabled
+    ).toBe(true);
     expect(
       (imageSource.field as any).repeated?.mappingFields.image
         .disableConstantValueToggle

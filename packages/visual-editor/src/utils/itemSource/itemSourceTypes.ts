@@ -18,6 +18,7 @@ export type CreateItemSourceOptions<
 > = {
   label: string;
   mappingFields: YextFieldMap<TItemProps>;
+  defaultValues?: TItemProps[];
 };
 
 export type RepeatedEntityFieldValue<

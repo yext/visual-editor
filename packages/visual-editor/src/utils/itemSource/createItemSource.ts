@@ -28,6 +28,7 @@ import { resolveItemValue } from "./itemSourceResolution.ts";
 export function createItemSource<TItemProps extends Record<string, unknown>>({
   label,
   mappingFields,
+  defaultValues,
 }: CreateItemSourceOptions<TItemProps>): ItemSourceInstance<TItemProps> {
   const scopedMappingFields = Object.fromEntries(
     Object.entries(mappingFields).map(([key, field]) => [
@@ -41,18 +42,20 @@ export function createItemSource<TItemProps extends Record<string, unknown>>({
       getManualItemField(field as YextFieldDefinition<any>),
     ])
   ) as YextFieldMap<TItemProps>;
-  const defaultItemValue = Object.fromEntries(
+  const generatedDefaultItemValue = Object.fromEntries(
     Object.entries(manualItemFields).map(([key, field]) => [
       key,
       getDefaultValueForField(field as YextFieldDefinition<any>, true),
     ])
   ) as TItemProps;
-  const defaultMappings = Object.fromEntries(
+  const generatedDefaultMappings = Object.fromEntries(
     Object.entries(scopedMappingFields).map(([key, field]) => [
       key,
       getDefaultValueForField(field as YextFieldDefinition<any>, false),
     ])
   ) as TItemProps;
+  const defaultItemValue = defaultValues?.[0] ?? generatedDefaultItemValue;
+  const defaultMappings = generatedDefaultMappings;
   const field = {
     type: "entityField",
     label,
@@ -69,7 +72,7 @@ export function createItemSource<TItemProps extends Record<string, unknown>>({
   const defaultValue: RepeatedEntityFieldValue<TItemProps> = {
     field: "",
     constantValueEnabled: true,
-    constantValue: [defaultItemValue],
+    constantValue: defaultValues ?? [],
     mappings: defaultMappings,
   };
   const sourceField = {

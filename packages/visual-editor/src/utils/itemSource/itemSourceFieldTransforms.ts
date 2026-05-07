@@ -3,7 +3,6 @@ import {
   type YextFieldDefinition,
   type YextFieldMap,
 } from "../../fields/fields.ts";
-import { returnConstantFieldConfig } from "../../fields/entityFieldConstantConfig.ts";
 import { type EntityFieldTypes } from "../../internal/utils/getFilteredEntityFields.ts";
 
 /**
@@ -150,26 +149,9 @@ function inferEntityFieldConstantValue(
   field: EntityFieldSelectorField<any>
 ): unknown {
   const allowsListValues = !!field.filter.includeListsOnly;
-  const constantFieldConfig = returnConstantFieldConfig(
-    field.filter.types,
-    allowsListValues,
-    !!field.disallowTranslation
-  );
 
   if (allowsListValues) {
     return [];
-  }
-
-  if (!constantFieldConfig) {
-    return undefined;
-  }
-
-  if (constantFieldConfig.type === "text") {
-    return "";
-  }
-
-  if (constantFieldConfig.type === "translatableString") {
-    return { defaultValue: "" };
   }
 
   return undefined;
@@ -206,18 +188,6 @@ export function getDefaultValueForField(
 
   if (field.type === "array") {
     return [];
-  }
-
-  if (field.type === "text") {
-    return "";
-  }
-
-  if (field.type === "translatableString") {
-    return { defaultValue: "" };
-  }
-
-  if (field.type === "radio" && "options" in field) {
-    return field.options?.[0]?.value;
   }
 
   return undefined;
