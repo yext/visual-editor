@@ -1,4 +1,5 @@
 import { createUsePuck } from "@puckeditor/core";
+import { isPlainObject } from "../internal/utils/isPlainObject.ts";
 
 const usePuck = createUsePuck();
 
@@ -6,16 +7,16 @@ const usePuck = createUsePuck();
  * Reads a dotted path from an unknown value tree.
  */
 const getValueAtPath = (value: unknown, path: string): unknown => {
-  if (!value || typeof value !== "object" || !path) {
+  if (!isPlainObject(value) || !path) {
     return undefined;
   }
 
   return path.split(".").reduce<unknown>((currentValue, key) => {
-    if (!currentValue || typeof currentValue !== "object") {
+    if (!isPlainObject(currentValue)) {
       return undefined;
     }
 
-    return (currentValue as Record<string, unknown>)[key];
+    return currentValue[key];
   }, value);
 };
 
@@ -52,14 +53,9 @@ export const useCurrentSourceField = (sourceFieldPath?: string): string => {
       return sourceFieldValue;
     }
 
-    if (
-      sourceFieldValue &&
-      typeof sourceFieldValue === "object" &&
-      !Array.isArray(sourceFieldValue)
-    ) {
-      const sourceField = (sourceFieldValue as Record<string, unknown>).field;
-      const constantValueEnabled = (sourceFieldValue as Record<string, unknown>)
-        .constantValueEnabled;
+    if (isPlainObject(sourceFieldValue)) {
+      const sourceField = sourceFieldValue.field;
+      const constantValueEnabled = sourceFieldValue.constantValueEnabled;
 
       return !constantValueEnabled && typeof sourceField === "string"
         ? sourceField
