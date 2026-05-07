@@ -38,10 +38,6 @@ import {
 } from "./OptionalNumberField.tsx";
 import { ImageField, ImageFieldOverride } from "./ImageField.tsx";
 import {
-  ItemSourceField,
-  ItemSourceFieldOverride,
-} from "./ItemSourceField.tsx";
-import {
   StyledButtonField,
   StyledButtonFieldOverride,
 } from "./styledFields/StyledButtonField.tsx";
@@ -76,7 +72,6 @@ export type YextPuckFields = {
   multiSelector: MultiSelectorField;
   fontSizeSelector: FontSizeSelectorField;
   image: ImageField;
-  itemSource: ItemSourceField;
   optionalNumber: OptionalNumberField;
   styledButton: StyledButtonField;
   styledImage: StyledImageField;
@@ -164,7 +159,6 @@ export const YextPuckFieldOverrides = {
   multiSelector: MultiSelectorFieldOverride,
   fontSizeSelector: FontSizeSelectorFieldOverride,
   image: ImageFieldOverride,
-  itemSource: ItemSourceFieldOverride,
   optionalNumber: OptionalNumberFieldOverride,
   styledButton: StyledButtonFieldOverride,
   styledImage: StyledImageFieldOverride,

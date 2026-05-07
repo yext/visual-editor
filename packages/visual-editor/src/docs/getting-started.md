@@ -34,16 +34,16 @@ Make sure to export your Puck component with the name you actually want the comp
 Fields are a configuration of your component’s props to get them to display on the right side panel. Puck has a handful of [built-in fields](https://puckeditor.com/docs/api-reference/fields) you can use, defined by the `type` property. This will automatically render out the field. Each component prop should have a corresponding field.  
 We have a custom prop type called `YextEntityField` and a corresponding custom field called `YextEntityFieldSelector`.
 
-| export type YextEntityField\<T\> \= { field: string; constantValue: T; constantValueEnabled?: boolean;}; |
-| :------------------------------------------------------------------------------------------------------- |
+| export type YextEntityField\<TValue, TMappings = never\> \= { field: string; constantValue: TValue; constantValueEnabled?: boolean; disallowTranslation?: boolean; mappings?: TMappings;}; |
+| :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
 YextEntityField allows a user to set either a KG field (one from the document) or use a constant value instead. YextEntityFieldSelector properly renders these selection options for you. It also has some configuration options to filter to specific fields.
 
 If your component needs to render a repeated list from a linked field, prefer
-the newer `itemSource` pattern instead of wiring multiple `YextEntityField`
-props by hand. Use `createItemSource(...)` to generate the `itemSource` and
-`itemMappings` fields, then call `resolveItems(...)` from a component that uses
-`useDocument()`. See the linked-entity example in
+`createItemSource(...)` instead of wiring multiple `YextEntityField` props by
+hand. It generates one repeated `entityField` plus the matching default value
+and `resolveItems(...)` helper, so components can store a single prop like
+`articles: typeof articleSource.value`. See the linked-entity example in
 [editor/README.md](../editor/README.md#linked-entity-item-sources).
 
 ## Registering the Component

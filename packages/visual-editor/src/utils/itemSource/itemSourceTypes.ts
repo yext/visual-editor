@@ -1,22 +1,42 @@
-import { type DefaultComponentProps, type Fields } from "@puckeditor/core";
 import { type YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
-import { type ItemSource } from "../../fields/ItemSourceField.tsx";
-import { type YextFieldMap } from "../../fields/fields.ts";
+import { type EntityFieldSelectorField } from "../../fields/EntityFieldSelectorField.tsx";
+import {
+  type YextFieldDefinition,
+  type YextFieldMap,
+} from "../../fields/fields.ts";
 import { type StreamDocument } from "../types/StreamDocument.ts";
 
 /**
  * Public item-source types.
  *
  * 1. Define the authored configuration accepted by `createItemSource(...)`.
- * 2. Define the resolved item shape returned by `resolveItems(...)`.
- * 3. Define the public instance contract shared with callers.
+ * 2. Define the repeated entity-field value shape returned to consumers.
+ * 3. Define the resolved item shape returned by `resolveItems(...)`.
  */
-export type CreateItemSourceOptions<TItem extends Record<string, unknown>> = {
-  sourcePath: string;
-  mappingsPath: string;
-  sourceLabel?: string;
-  mappingsLabel?: string;
-  mappingFields: YextFieldMap<TItem>;
+export type CreateItemSourceOptions<
+  TItemProps extends Record<string, unknown>,
+> = {
+  label: string;
+  mappingFields: YextFieldMap<TItemProps>;
+};
+
+export type RepeatedEntityFieldValue<
+  TItemProps extends Record<string, unknown>,
+> = YextEntityField<TItemProps[], TItemProps>;
+
+export type RepeatedEntityFieldMetadata<
+  TItemProps extends Record<string, unknown>,
+> = {
+  mappingFields: YextFieldMap<TItemProps>;
+  manualItemFields: YextFieldMap<TItemProps>;
+  defaultItemValue: TItemProps;
+  defaultMappings: TItemProps;
+};
+
+export type RepeatedEntityFieldDefinition<
+  TItemProps extends Record<string, unknown>,
+> = EntityFieldSelectorField<any> & {
+  repeated: RepeatedEntityFieldMetadata<TItemProps>;
 };
 
 /**
@@ -24,7 +44,7 @@ export type CreateItemSourceOptions<TItem extends Record<string, unknown>> = {
  * from `ItemSourceInstance.resolveItems(...)`.
  */
 export type ResolvedItemField<TValue> =
-  TValue extends YextEntityField<infer TResolved>
+  TValue extends YextEntityField<infer TResolved, any>
     ? TResolved | undefined
     : TValue extends Array<infer TItem>
       ? ResolvedItemField<TItem>[]
@@ -35,16 +55,12 @@ export type ResolvedItemField<TValue> =
 /**
  * Public contract returned by `createItemSource(...)`.
  */
-export type ItemSourceInstance<
-  TProps extends DefaultComponentProps,
-  TItem extends Record<string, unknown>,
-> = {
-  fields: Fields<TProps>;
-  defaultProps: Partial<TProps>;
-  resolveFields: (data: { props: Record<string, unknown> }) => Fields<TProps>;
+export type ItemSourceInstance<TItemProps extends Record<string, unknown>> = {
+  field: YextFieldDefinition<RepeatedEntityFieldValue<TItemProps>>;
+  defaultValue: RepeatedEntityFieldValue<TItemProps>;
+  value: RepeatedEntityFieldValue<TItemProps>;
   resolveItems: (
-    itemSource: ItemSource<TItem> | undefined,
-    itemMappings: TItem | undefined,
+    value: RepeatedEntityFieldValue<TItemProps> | undefined,
     streamDocument: StreamDocument
-  ) => ResolvedItemField<TItem>[];
+  ) => ResolvedItemField<TItemProps>[];
 };

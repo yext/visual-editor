@@ -1,5 +1,5 @@
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 const puckState = {
@@ -114,6 +114,126 @@ const renderEntityField = ({
   return { onChange };
 };
 
+const renderRepeatedEntityField = ({
+  field = {
+    type: "entityField",
+    label: "Articles",
+    filter: {
+      itemSourceTypes: [["type.string"]],
+    },
+    repeated: {
+      defaultItemValue: {
+        title: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: { defaultValue: "" },
+        },
+      },
+      defaultMappings: {
+        title: {
+          field: "",
+          constantValueEnabled: false,
+          constantValue: { defaultValue: "" },
+        },
+      },
+      manualItemFields: {
+        title: {
+          type: "entityField",
+          label: "Title",
+          filter: { types: ["type.string"] },
+        },
+      },
+      mappingFields: {
+        title: {
+          type: "entityField",
+          label: "Title",
+          filter: { types: ["type.string"] },
+        },
+      },
+    },
+  } satisfies EntityFieldSelectorField,
+  value = {
+    field: "",
+    constantValueEnabled: true,
+    constantValue: [
+      {
+        title: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: { defaultValue: "" },
+        },
+      },
+    ],
+    mappings: {
+      title: {
+        field: "name",
+        constantValueEnabled: false,
+        constantValue: { defaultValue: "" },
+      },
+    },
+  },
+  entityFields = {
+    ...defaultEntityFields,
+    fields: [
+      {
+        name: "c_articles",
+        definition: {
+          name: "c_articles",
+          typeName: "c_articles",
+          isList: true,
+          type: {},
+        },
+        children: {
+          fields: [
+            {
+              name: "name",
+              definition: {
+                name: "name",
+                typeName: "type.string",
+                type: {},
+              },
+            },
+          ],
+        },
+      },
+      ...defaultEntityFields.fields,
+    ],
+    displayNames: {
+      ...defaultEntityFields.displayNames,
+      c_articles: "Articles",
+      "c_articles.name": "Articles > Name",
+    },
+  } satisfies StreamFields,
+}: {
+  field?: EntityFieldSelectorField;
+  value?: Record<string, any>;
+  entityFields?: StreamFields | null;
+} = {}) => {
+  const onChange = vi.fn();
+
+  render(
+    <TemplatePropsContext.Provider value={{ document: {} }}>
+      <TemplateMetadataContext.Provider
+        value={{
+          ...generateTemplateMetadata(),
+          entityTypeDisplayName: "Location",
+        }}
+      >
+        <EntityFieldsContext.Provider value={entityFields}>
+          <YextAutoField
+            field={field}
+            id="repeated-entity-selector-field"
+            onChange={onChange}
+            value={value}
+          />
+        </EntityFieldsContext.Provider>
+      </TemplateMetadataContext.Provider>
+    </TemplatePropsContext.Provider>
+  );
+
+  return { onChange };
+};
+
 describe("EntityFieldSelectorField", () => {
   it("renders the configured label", () => {
     renderEntityField({
@@ -208,7 +328,7 @@ describe("EntityFieldSelectorField", () => {
       },
     });
 
-    fireEvent.click(screen.getByRole("combobox"));
+    fireEvent.click(screen.getAllByRole("combobox")[0]);
     fireEvent.click(screen.getByText("Name"));
 
     expect(onChange).toHaveBeenCalledWith(
@@ -259,5 +379,115 @@ describe("EntityFieldSelectorField", () => {
     );
 
     expect(screen.getByText("Title")).toBeDefined();
+  });
+
+  it("renders inline repeated item editors in manual mode", () => {
+    renderRepeatedEntityField();
+
+    expect(screen.getByText("Articles")).toBeDefined();
+    expect(screen.getByRole("switch")).toBeDefined();
+    expect(screen.getByRole("button", { name: "Delete" })).toBeDefined();
+  });
+
+  it("renders the linked source selector when repeated KG mode is enabled", () => {
+    const { onChange } = renderRepeatedEntityField({
+      value: {
+        field: "c_featuredArticles",
+        constantValueEnabled: false,
+        constantValue: [],
+        mappings: {
+          title: {
+            field: "",
+            constantValueEnabled: false,
+            constantValue: { defaultValue: "" },
+          },
+        },
+      },
+    });
+
+    fireEvent.click(screen.getAllByRole("combobox")[0]);
+    fireEvent.click(
+      within(screen.getByRole("listbox")).getAllByText("Articles")[0]
+    );
+
+    expect(onChange).toHaveBeenCalledWith({
+      field: "c_articles",
+      constantValueEnabled: false,
+      constantValue: [],
+      mappings: {
+        title: {
+          field: "",
+          constantValueEnabled: false,
+          constantValue: { defaultValue: "" },
+        },
+      },
+    });
+  });
+
+  it("clears stale repeated mappings when switching between linked sources", () => {
+    const { onChange } = renderRepeatedEntityField({
+      value: {
+        field: "c_featuredArticles",
+        constantValueEnabled: false,
+        constantValue: [],
+        mappings: {
+          title: {
+            field: "name",
+            constantValueEnabled: false,
+            constantValue: { defaultValue: "" },
+          },
+        },
+      },
+    });
+
+    fireEvent.click(screen.getAllByRole("combobox")[0]);
+    fireEvent.click(
+      within(screen.getByRole("listbox")).getAllByText("Articles")[0]
+    );
+
+    expect(onChange).toHaveBeenCalledWith({
+      field: "c_articles",
+      constantValueEnabled: false,
+      constantValue: [],
+      mappings: {
+        title: {
+          field: "",
+          constantValueEnabled: false,
+          constantValue: { defaultValue: "" },
+        },
+      },
+    });
+  });
+
+  it("preserves repeated mappings when switching from linked mode to manual mode", () => {
+    const { onChange } = renderRepeatedEntityField({
+      value: {
+        field: "c_featuredArticles",
+        constantValueEnabled: false,
+        constantValue: [],
+        mappings: {
+          title: {
+            field: "name",
+            constantValueEnabled: false,
+            constantValue: { defaultValue: "" },
+          },
+        },
+      },
+    });
+
+    fireEvent.click(screen.getAllByRole("switch")[0]);
+
+    expect(onChange).toHaveBeenCalledWith({
+      field: "c_featuredArticles",
+      constantValueEnabled: true,
+      constantValue: [],
+      mappings: {
+        title: {
+          field: "name",
+          constantValueEnabled: false,
+          constantValue: { defaultValue: "" },
+        },
+      },
+    });
   });
 });

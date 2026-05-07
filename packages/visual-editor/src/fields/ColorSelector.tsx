@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { CustomField, FieldLabel } from "@puckeditor/core";
-import { Color, ColorResult, SketchPicker } from "react-color";
+import reactColor from "react-color";
+import type { Color, ColorResult } from "react-color";
 import { pt } from "../utils/i18n/platform.ts";
 
 type RenderProps = Parameters<CustomField<any>["render"]>[0];
@@ -80,7 +81,7 @@ export const ColorPickerInput = ({
             style={fieldStyles.cover}
             onClick={() => setIsOpen(false)}
           />
-          <SketchPicker
+          <reactColor.SketchPicker
             disableAlpha={true}
             color={draftColor}
             onChange={handlePickerChange}

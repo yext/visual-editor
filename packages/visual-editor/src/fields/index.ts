@@ -13,11 +13,6 @@ export {
 
 export { CodeFieldOverride, type CodeField } from "./CodeField.tsx";
 export { ImageFieldOverride, type ImageField } from "./ImageField.tsx";
-export {
-  ItemSourceFieldOverride,
-  type ItemSourceField,
-  type ItemSource,
-} from "./ItemSourceField.tsx";
 
 export {
   DateTimeSelectorFieldOverride,
@@ -56,7 +51,11 @@ export {
 export { VideoFieldOverride, type VideoField } from "./VideoField.tsx";
 
 export {
+  toPuckFields,
+  type YextComponentConfig,
   type YextArrayField,
+  type YextFields,
+  type YextFieldMap,
   type YextCustomFieldRenderProps,
   type YextFieldDefinition,
   type YextObjectField,

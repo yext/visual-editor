@@ -5,7 +5,7 @@ import {
 } from "../../types/types.ts";
 import { createItemSource } from "./index.ts";
 
-type ArticleItem = {
+type ArticleItemProps = {
   title: {
     field: string;
     constantValueEnabled?: boolean;
@@ -24,20 +24,8 @@ type ArticleItem = {
   };
 };
 
-type TestProps = {
-  articleSource: {
-    field: string;
-    constantValueEnabled?: boolean;
-    constantValue: ArticleItem[];
-  };
-  articleMappings?: ArticleItem;
-};
-
-const articleItems = createItemSource<TestProps, ArticleItem>({
-  sourcePath: "articleSource",
-  mappingsPath: "articleMappings",
-  sourceLabel: "Articles",
-  mappingsLabel: "Article Mappings",
+const articleSource = createItemSource<ArticleItemProps>({
+  label: "Articles",
   mappingFields: {
     title: {
       type: "entityField",
@@ -62,55 +50,129 @@ const articleItems = createItemSource<TestProps, ArticleItem>({
 });
 
 describe("createItemSource", () => {
-  it("shows shared mappings only when linked mode is active", () => {
-    const manualFields = articleItems.resolveFields({
-      props: {
-        articleSource: {
-          field: "",
-          constantValueEnabled: true,
-          constantValue: [],
-        },
-        articleMappings: articleItems.defaultProps.articleMappings,
+  it("returns a repeated entity field with helper-owned defaults", () => {
+    expect(articleSource).toHaveProperty("field");
+    expect(articleSource).toHaveProperty("defaultValue");
+    expect(articleSource).toHaveProperty("value");
+    expect(articleSource.field).toMatchObject({
+      type: "entityField",
+      label: "Articles",
+      filter: {
+        itemSourceTypes: [
+          ["type.string"],
+          ["type.rich_text_v2"],
+          ["type.string"],
+        ],
       },
-    }) as any;
-    const linkedFields = articleItems.resolveFields({
-      props: {
-        articleSource: {
-          field: "c_articles",
-          constantValueEnabled: false,
-          constantValue: [],
+    });
+    expect(articleSource.defaultValue).toMatchObject({
+      field: "",
+      constantValueEnabled: true,
+      constantValue: [
+        {
+          eyebrow: "",
         },
-        articleMappings: articleItems.defaultProps.articleMappings,
+      ],
+      mappings: {
+        eyebrow: "",
       },
-    }) as any;
+    });
+  });
 
-    expect(manualFields.articleMappings.visible).toBe(false);
-    expect(linkedFields.articleMappings.visible).toBe(true);
+  it("keeps mapping-only constant toggle restrictions out of manual items", () => {
+    const imageSource = createItemSource<{
+      image: {
+        field: string;
+        constantValueEnabled?: boolean;
+        constantValue: { url?: string };
+      };
+      highlights: {
+        field: string;
+        constantValueEnabled?: boolean;
+        constantValue: TranslatableString[];
+      };
+      title: {
+        field: string;
+        constantValueEnabled?: boolean;
+        constantValue: TranslatableString;
+      };
+      cta: {
+        field: string;
+        constantValueEnabled?: boolean;
+        constantValue: {
+          label?: TranslatableString;
+          link?: TranslatableString;
+        };
+      };
+    }>({
+      label: "Images",
+      mappingFields: {
+        image: {
+          type: "entityField",
+          label: "Image",
+          filter: { types: ["type.image"] },
+        },
+        highlights: {
+          type: "entityField",
+          label: "Highlights",
+          filter: { types: ["type.string"], includeListsOnly: true },
+        },
+        title: {
+          type: "entityField",
+          label: "Title",
+          filter: { types: ["type.string"] },
+        },
+        cta: {
+          type: "entityField",
+          label: "CTA",
+          filter: { types: ["type.cta"] },
+        },
+      },
+    });
+
+    expect(
+      imageSource.defaultValue.constantValue[0].image.constantValueEnabled
+    ).toBe(true);
+    expect(imageSource.defaultValue.mappings?.image.constantValueEnabled).toBe(
+      false
+    );
+    expect(
+      (imageSource.field as any).repeated?.mappingFields.image
+        .disableConstantValueToggle
+    ).toBe(true);
+    expect(
+      (imageSource.field as any).repeated?.mappingFields.title
+        .disableConstantValueToggle
+    ).toBe(false);
+    expect(
+      (imageSource.field as any).repeated?.manualItemFields.title
+        .sourceFieldPath
+    ).toBeUndefined();
   });
 
   it("resolves linked items against the current mapped item", () => {
-    const resolved = articleItems.resolveItems(
+    const resolved = articleSource.resolveItems(
       {
         field: "c_articles",
         constantValueEnabled: false,
         constantValue: [],
-      },
-      {
-        title: {
-          field: "name",
-          constantValueEnabled: false,
-          constantValue: { defaultValue: "" },
-        },
-        description: {
-          field: "summary",
-          constantValueEnabled: false,
-          constantValue: { defaultValue: "" },
-        },
-        eyebrow: "Featured",
-        secondaryTitle: {
-          field: "headline",
-          constantValueEnabled: false,
-          constantValue: { defaultValue: "" },
+        mappings: {
+          title: {
+            field: "name",
+            constantValueEnabled: false,
+            constantValue: { defaultValue: "" },
+          },
+          description: {
+            field: "summary",
+            constantValueEnabled: false,
+            constantValue: { defaultValue: "" },
+          },
+          eyebrow: "Featured",
+          secondaryTitle: {
+            field: "headline",
+            constantValueEnabled: false,
+            constantValue: { defaultValue: "" },
+          },
         },
       },
       {
@@ -147,8 +209,8 @@ describe("createItemSource", () => {
     ]);
   });
 
-  it("resolves manual items without requiring a derived output prop", () => {
-    const resolved = articleItems.resolveItems(
+  it("resolves manual items from constantValue", () => {
+    const resolved = articleSource.resolveItems(
       {
         field: "",
         constantValueEnabled: true,
@@ -174,8 +236,8 @@ describe("createItemSource", () => {
             },
           },
         ],
+        mappings: articleSource.defaultValue.mappings,
       },
-      articleItems.defaultProps.articleMappings,
       {
         locale: "en",
         name: "Root fallback",
@@ -190,218 +252,5 @@ describe("createItemSource", () => {
         secondaryTitle: "Root fallback",
       },
     ]);
-  });
-
-  it("keeps mapping-only constant toggle restrictions out of manual items", () => {
-    const imageItems = createItemSource<
-      {
-        itemSource: {
-          field: string;
-          constantValueEnabled?: boolean;
-          constantValue: {
-            image: {
-              field: string;
-              constantValueEnabled?: boolean;
-              constantValue: { url?: string };
-            };
-          }[];
-        };
-        itemMappings?: {
-          image: {
-            field: string;
-            constantValueEnabled?: boolean;
-            constantValue: { url?: string };
-          };
-          highlights: {
-            field: string;
-            constantValueEnabled?: boolean;
-            constantValue: TranslatableString[];
-          };
-          title: {
-            field: string;
-            constantValueEnabled?: boolean;
-            constantValue: TranslatableString;
-          };
-          cta: {
-            field: string;
-            constantValueEnabled?: boolean;
-            constantValue: {
-              label?: TranslatableString;
-              link?: TranslatableString;
-            };
-          };
-        };
-      },
-      {
-        image: {
-          field: string;
-          constantValueEnabled?: boolean;
-          constantValue: { url?: string };
-        };
-        highlights: {
-          field: string;
-          constantValueEnabled?: boolean;
-          constantValue: TranslatableString[];
-        };
-        title: {
-          field: string;
-          constantValueEnabled?: boolean;
-          constantValue: TranslatableString;
-        };
-        cta: {
-          field: string;
-          constantValueEnabled?: boolean;
-          constantValue: {
-            label?: TranslatableString;
-            link?: TranslatableString;
-          };
-        };
-      }
-    >({
-      sourcePath: "itemSource",
-      mappingsPath: "itemMappings",
-      mappingFields: {
-        image: {
-          type: "entityField",
-          label: "Image",
-          filter: { types: ["type.image"] },
-        },
-        highlights: {
-          type: "entityField",
-          label: "Highlights",
-          filter: { types: ["type.string"], includeListsOnly: true },
-        },
-        title: {
-          type: "entityField",
-          label: "Title",
-          filter: { types: ["type.string"] },
-        },
-        cta: {
-          type: "entityField",
-          label: "CTA",
-          filter: { types: ["type.cta"] },
-        },
-      },
-    });
-
-    expect(
-      imageItems.defaultProps.itemSource?.constantValue?.[0]?.image
-        ?.constantValueEnabled
-    ).toBe(true);
-    expect(
-      imageItems.defaultProps.itemMappings?.image?.constantValueEnabled
-    ).toBe(false);
-    expect(
-      (imageItems.fields as any).itemMappings.objectFields.image
-        .disableConstantValueToggle
-    ).toBe(true);
-    expect(
-      (imageItems.fields as any).itemMappings.objectFields.title
-        .disableConstantValueToggle
-    ).toBe(false);
-    expect(
-      (imageItems.fields as any).itemMappings.objectFields.highlights
-        .disableConstantValueToggle
-    ).toBe(false);
-    expect(
-      (imageItems.fields as any).itemMappings.objectFields.cta
-        .disableConstantValueToggle
-    ).toBe(false);
-    expect(
-      (imageItems.fields as any).itemMappings.objectFields.title.sourceFieldPath
-    ).toBe("itemSource");
-    expect(
-      (imageItems.fields as any).itemSource.itemFields.title.sourceFieldPath
-    ).toBeUndefined();
-  });
-
-  it("collects nested entity field types for the parent source selector", () => {
-    const nestedItems = createItemSource<
-      {
-        itemSource: {
-          field: string;
-          constantValueEnabled?: boolean;
-          constantValue: {
-            content: {
-              title: {
-                field: string;
-                constantValueEnabled?: boolean;
-                constantValue: TranslatableString;
-              };
-            };
-            highlights: {
-              text: {
-                field: string;
-                constantValueEnabled?: boolean;
-                constantValue: TranslatableString;
-              };
-            }[];
-          }[];
-        };
-        itemMappings?: {
-          content: {
-            title: {
-              field: string;
-              constantValueEnabled?: boolean;
-              constantValue: TranslatableString;
-            };
-          };
-          highlights: {
-            text: {
-              field: string;
-              constantValueEnabled?: boolean;
-              constantValue: TranslatableString;
-            };
-          }[];
-        };
-      },
-      {
-        content: {
-          title: {
-            field: string;
-            constantValueEnabled?: boolean;
-            constantValue: TranslatableString;
-          };
-        };
-        highlights: {
-          text: {
-            field: string;
-            constantValueEnabled?: boolean;
-            constantValue: TranslatableString;
-          };
-        }[];
-      }
-    >({
-      sourcePath: "itemSource",
-      mappingsPath: "itemMappings",
-      mappingFields: {
-        content: {
-          type: "object",
-          label: "Content",
-          objectFields: {
-            title: {
-              type: "entityField",
-              label: "Title",
-              filter: { types: ["type.string"] },
-            },
-          },
-        },
-        highlights: {
-          type: "array",
-          label: "Highlights",
-          arrayFields: {
-            text: {
-              type: "entityField",
-              label: "Text",
-              filter: { types: ["type.string"] },
-            },
-          },
-        },
-      },
-    });
-
-    expect(
-      (nestedItems.fields as any).itemSource.filter.itemSourceTypes
-    ).toEqual([["type.string"], ["type.string"]]);
   });
 });

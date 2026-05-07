@@ -23,8 +23,8 @@ const getValueAtPath = (value: unknown, path: string): unknown => {
  * Reads the currently selected linked source field from the active Puck item.
  *
  * This is used by editor-only controls, such as embedded field pickers, that
- * need to scope their available fields relative to a parent `itemSource` or
- * `entityField` value while the user is editing that item.
+ * need to scope their available fields relative to a parent repeated or
+ * single-value `entityField` while the user is editing that item.
  *
  * Returns an empty string when:
  * - no source field path was provided

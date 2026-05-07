@@ -20,9 +20,13 @@ export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
  * @deprecated Prefer authoring `{ type: "entityField", ... }` directly in
  * `YextFields`. This wrapper remains for backwards compatibility.
  */
-export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
+export const YextEntityFieldSelector = <
+  T extends Record<string, any>,
+  TValue,
+  TMappings = never,
+>(
   props: RenderYextEntityFieldSelectorProps<T>
-): Field<YextEntityField<U>> => {
+): Field<YextEntityField<TValue, TMappings>> => {
   const field: EntityFieldSelectorField<T> = {
     type: "entityField",
     label: props.label,
@@ -33,7 +37,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
     sourceFieldPath: props.sourceFieldPath,
   };
 
-  return field as unknown as Field<YextEntityField<U>>;
+  return field as unknown as Field<YextEntityField<TValue, TMappings>>;
 };
 
 export {

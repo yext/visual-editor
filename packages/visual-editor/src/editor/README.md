@@ -171,26 +171,25 @@ const Example = ({ myField }: ExampleProps) => {
 
 ## Linked Entity Item Sources
 
-Use `itemSource` plus `createItemSource(...)` when a component needs to render
-repeated content from a linked list field. This keeps the source selection, per-
-item mappings, and manual fallback items in one place.
+Use `createItemSource(...)` when a component needs to render repeated content
+from a linked list field. This keeps the source selection, per-item mappings,
+and manual fallback items in one repeated `entityField` value.
 
 ### Pattern
 
-1. Add an `itemSource: ItemSource<TItem>` prop for the repeated source.
-2. Add an optional `itemMappings?: TItem` prop that describes how one source
-   item maps into your rendered card shape.
-3. Call `createItemSource(...)` to generate fields, defaults, and editor-time
-   field visibility.
-4. Use `useDocument()` plus `itemSourceConfig.resolveItems(...)` in render to
+1. Define one authored item-props shape whose leaves are `YextEntityField`
+   values.
+2. Call `createItemSource(...)` with that props shape and `mappingFields`.
+3. Store one prop shaped like `typeof articleSource.value`.
+4. Use `useDocument()` plus `articleSource.resolveItems(...)` in render to
    resolve the current list without storing derived output back onto props.
 
 Mapped `entityField` values inside one repeated item always resolve relative to
 that current mapped item.
 
 When the user switches from one linked parent source to another, the editor
-automatically clears stale `itemMappings.*.field` selections while preserving
-any constant fallback values.
+automatically clears stale `mappings.*.field` selections while preserving any
+constant fallback values.
 
 ### Example
 
@@ -201,7 +200,6 @@ import { type PuckComponent } from "@puckeditor/core";
 import {
   resolveComponentData,
   useDocument,
-  type TranslatableAssetImage,
   type TranslatableRichText,
   type TranslatableString,
 } from "@yext/visual-editor";
@@ -210,20 +208,17 @@ import { useTranslation } from "react-i18next";
 export type ArticleCardProps = {
   title?: TranslatableString;
   description?: TranslatableRichText;
-  image?: TranslatableAssetImage;
 };
 
 export const ArticleCard: PuckComponent<ArticleCardProps> = ({
   title,
   description,
-  image,
 }) => {
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
 
   return (
     <article>
-      {image?.url && <img src={image.url} alt={image.alternateText ?? ""} />}
       <h3>
         {resolveComponentData(title, i18n.language, streamDocument, {
           output: "plainText",
@@ -242,39 +237,25 @@ export const ArticleCard: PuckComponent<ArticleCardProps> = ({
 import { type PuckComponent } from "@puckeditor/core";
 import {
   createItemSource,
-  type ItemSource,
-  type StreamDocument,
-  type TranslatableAssetImage,
   type TranslatableRichText,
-  type TranslatableString,
-  type YextComponentConfig,
   type YextEntityField,
   resolveComponentData,
+  type StreamDocument,
+  type TranslatableString,
   toPuckFields,
+  type YextComponentConfig,
   useDocument,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 import { ArticleCard } from "./ArticleCard.tsx";
 
-type ArticleItem = {
+type ArticleCardFields = {
   title: YextEntityField<TranslatableString>;
   description: YextEntityField<TranslatableRichText>;
-  image: YextEntityField<TranslatableAssetImage>;
 };
 
-type ArticleListProps = {
-  itemSource: ItemSource<ArticleItem>;
-  itemMappings?: ArticleItem;
-  heading: {
-    text: TranslatableString;
-  };
-};
-
-const articleItems = createItemSource<ArticleListProps, ArticleItem>({
-  sourcePath: "itemSource",
-  mappingsPath: "itemMappings",
-  sourceLabel: "Articles",
-  mappingsLabel: "Article Mappings",
+const articleSource = createItemSource<ArticleCardFields>({
+  label: "Articles",
   mappingFields: {
     title: {
       type: "entityField",
@@ -290,18 +271,18 @@ const articleItems = createItemSource<ArticleListProps, ArticleItem>({
         types: ["type.rich_text_v2"],
       },
     },
-    image: {
-      type: "entityField",
-      label: "Image",
-      filter: {
-        types: ["type.image"],
-      },
-    },
   },
 });
 
+type ArticleListProps = {
+  articles: typeof articleSource.value;
+  heading: {
+    text: TranslatableString;
+  };
+};
+
 const articleListFields = {
-  ...articleItems.fields,
+  articles: articleSource.field,
   heading: {
     type: "object",
     label: "Heading",
@@ -315,17 +296,12 @@ const articleListFields = {
 };
 
 const ArticleListComponent: PuckComponent<ArticleListProps> = ({
-  itemSource,
-  itemMappings,
+  articles,
   heading,
 }) => {
   const { i18n } = useTranslation();
   const streamDocument = useDocument<StreamDocument>();
-  const items = articleItems.resolveItems(
-    itemSource,
-    itemMappings,
-    streamDocument
-  );
+  const items = articleSource.resolveItems(articles, streamDocument);
 
   return (
     <section>
@@ -336,12 +312,7 @@ const ArticleListComponent: PuckComponent<ArticleListProps> = ({
       </h2>
       <div>
         {items.map((item, index) => (
-          <ArticleCard
-            key={index}
-            title={item.title}
-            description={item.description}
-            image={item.image}
-          />
+          <ArticleCard key={index} {...item} />
         ))}
       </div>
     </section>
@@ -350,25 +321,20 @@ const ArticleListComponent: PuckComponent<ArticleListProps> = ({
 
 export const ArticleList: YextComponentConfig<ArticleListProps> = {
   label: "Article List",
-  fields: articleListFields,
+  fields: toPuckFields(articleListFields),
   defaultProps: {
-    ...articleItems.defaultProps,
+    articles: articleSource.defaultValue,
     heading: {
-      text: { defaultValue: "Featured Articles" },
+      text: { defaultValue: "Linked Articles" },
     },
   },
-  resolveFields: (data) =>
-    toPuckFields({
-      ...articleListFields,
-      ...articleItems.resolveFields(data),
-    }),
   render: (props) => <ArticleListComponent {...props} />,
 };
 ```
 
 Use this pattern when the repeated UI is rendered directly by the component. If
 you need each item to become a nested slot child instead, build that on top of
-the same `itemSource` and `itemMappings` contract.
+the same repeated `entityField` contract.
 
 ## basicSelector Field Type
 

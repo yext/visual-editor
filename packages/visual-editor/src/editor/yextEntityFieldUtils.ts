@@ -14,15 +14,17 @@ import {
 const DISPLAY_NAME_SEPARATOR = " > ";
 
 /** Represents data that can either be from the Yext Knowledge Graph or statically defined */
-export type YextEntityField<T> = {
+export type YextEntityField<TValue, TMappings = never> = {
   /** The api name of the Yext field */
   field: string;
   /** The static value of the field */
-  constantValue: T;
+  constantValue: TValue;
   /** Whether to use the Yext field or the constant value */
   constantValueEnabled?: boolean;
   /** Whether the field can be translated or not. */
   disallowTranslation?: boolean;
+  /** Nested mappings used by repeated linked-item sources. */
+  mappings?: TMappings;
 };
 
 /**

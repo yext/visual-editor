@@ -60,35 +60,33 @@ See [YextEntityFieldSelector](../editor/README.md#YextEntityFieldSelector)
 
 ## createItemSource
 
-Creates the field definitions and authored-state helpers for a repeated list
+Creates the field definition and authored-state helpers for a repeated list
 component backed by either a linked list field or manual items.
 
 ### Input
 
-| Name           | Type                  | Description                                          |
-| -------------- | --------------------- | ---------------------------------------------------- |
-| sourcePath     | string                | Dotted props path for the parent `itemSource` value. |
-| mappingsPath   | string                | Dotted props path for the per-item mapping fields.   |
-| sourceLabel?   | string                | Optional editor label for the source selector.       |
-| mappingsLabel? | string                | Optional editor label for the mapping group.         |
-| mappingFields  | `YextFieldMap<TItem>` | Field definitions for one repeated item.             |
+| Name          | Type                       | Description                                                    |
+| ------------- | -------------------------- | -------------------------------------------------------------- |
+| label         | string                     | Editor label for the repeated source selector.                 |
+| mappingFields | `YextFieldMap<TItemProps>` | Field definitions for one authored repeated item mapping tree. |
 
 ### Returns
 
 `createItemSource(...)` returns an object with:
 
-- `fields`: generated Puck fields for `itemSource` and `itemMappings`
-- `defaultProps`: default authored state for linked and manual modes
-- `resolveFields(data)`: dynamic field visibility for mappings
-- `resolveItems(itemSource, itemMappings, streamDocument)`: render-ready repeated items
+- `field`: one repeated `entityField` definition
+- `defaultValue`: default authored state for linked and manual modes
+- `value`: helper-owned prop type marker for `typeof articleSource.value`
+- `resolveItems(value, streamDocument)`: render-ready repeated items
 
 ### Usage
 
 Use this helper when a component needs repeated linked-entity content but wants
-to render the repeated UI directly instead of syncing slot children. See the
+to render the repeated UI directly instead of syncing slot children. The
+component keeps a single repeated `entityField` prop, for example
+`articles: typeof articleSource.value`, and the editor clears stale linked
+mapping selections automatically when the parent linked source changes. See the
 full example in [editor/README.md](../editor/README.md#linked-entity-item-sources).
-The editor clears stale linked mapping selections automatically when the parent
-linked source changes.
 
 ## ThemeConfig
 

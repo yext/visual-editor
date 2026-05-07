@@ -2,59 +2,61 @@ import {
   returnConstantFieldConfig,
   type EntityFieldSelectorField,
 } from "../../fields/EntityFieldSelectorField.tsx";
-import { type ItemSourceField } from "../../fields/ItemSourceField.tsx";
 import {
   type YextFieldDefinition,
   type YextFieldMap,
 } from "../../fields/fields.ts";
 import { type EntityFieldTypes } from "../../internal/utils/getFilteredEntityFields.ts";
-import { type MappedSourceFieldFilter } from "../cardSlots/mappedSource.ts";
 
 /**
  * Authoring-time item-source field transforms.
  *
  * 1. Shape one repeated-item schema into linked-mapping and manual-item forms.
  * 2. Derive source-selector compatibility requirements from mapping fields.
- * 3. Build the parent `itemSource` field config consumed by `createItemSource(...)`.
+ * 3. Build default authored values for linked mappings and manual items.
  */
-
-/**
- * Derives a human-readable fallback label from a dotted props path.
- */
-export function getDefaultLabel(path: string): string {
-  const lastSegment = path.split(".").at(-1);
-  if (!lastSegment) {
-    return path;
-  }
-
-  return lastSegment
-    .replace(/^[_-]+/, "")
-    .replace(/[_-]+/g, " ")
-    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
-    .replace(/\b\w/g, (value) => value.toUpperCase());
-}
 
 /**
  * Applies linked-mapping defaults to one item field definition.
  */
 export function getMappingItemField<TValue>(
-  field: YextFieldDefinition<TValue>,
-  sourcePath: string
+  field: YextFieldDefinition<TValue>
 ): YextFieldDefinition<TValue> {
-  const sourceScopedField = applySourceFieldPath(field, sourcePath);
-
   if (
-    isEntityFieldDefinition(sourceScopedField) &&
-    sourceScopedField.disableConstantValueToggle === undefined
+    isEntityFieldDefinition(field) &&
+    field.disableConstantValueToggle === undefined
   ) {
     return {
-      ...sourceScopedField,
-      disableConstantValueToggle:
-        !shouldEnableMappingConstantValue(sourceScopedField),
+      ...field,
+      disableConstantValueToggle: !shouldEnableMappingConstantValue(field),
     } as YextFieldDefinition<TValue>;
   }
 
-  return sourceScopedField;
+  if (field.type === "object" && "objectFields" in field) {
+    return {
+      ...field,
+      objectFields: Object.fromEntries(
+        Object.entries(field.objectFields).map(([key, nestedField]) => [
+          key,
+          getMappingItemField(nestedField as YextFieldDefinition<any>),
+        ])
+      ),
+    } as YextFieldDefinition<TValue>;
+  }
+
+  if (field.type === "array" && "arrayFields" in field) {
+    return {
+      ...field,
+      arrayFields: Object.fromEntries(
+        Object.entries(field.arrayFields).map(([key, nestedField]) => [
+          key,
+          getMappingItemField(nestedField as YextFieldDefinition<any>),
+        ])
+      ),
+    } as YextFieldDefinition<TValue>;
+  }
+
+  return field;
 }
 
 /**
@@ -113,37 +115,6 @@ export function getItemSourceTypes(
 }
 
 /**
- * Builds the parent `itemSource` field config from linked and manual item
- * field variants.
- */
-export function createItemSourceField<TItem extends Record<string, unknown>>(
-  sourcePath: string,
-  mappingsPath: string,
-  sourceLabel: string,
-  scopedItemFields: YextFieldMap<TItem>,
-  manualItemFields: YextFieldMap<TItem>
-): ItemSourceField<any, TItem> {
-  return {
-    type: "itemSource",
-    label: sourceLabel,
-    sourcePath,
-    mappingsPath,
-    filter: {
-      itemSourceTypes: getItemSourceTypes(
-        scopedItemFields as YextFieldMap<Record<string, unknown>>
-      ),
-    } as MappedSourceFieldFilter<any>,
-    itemFields: manualItemFields,
-    defaultItemValue: Object.fromEntries(
-      Object.entries(manualItemFields).map(([key, field]) => [
-        key,
-        getDefaultValueForField(field as YextFieldDefinition<any>, true),
-      ])
-    ) as TItem,
-  };
-}
-
-/**
  * Narrows a generic field definition to the entity-field variant used for
  * source-relative mapping and manual constants.
  */
@@ -160,10 +131,6 @@ const MAPPING_CONSTANT_VALUE_TYPES: EntityFieldTypes[] = [
 ];
 
 const MAPPING_CONSTANT_VALUE_LIST_TYPES: EntityFieldTypes[] = ["type.string"];
-
-/**
- * Shared helpers used by the public transforms above.
- */
 
 function shouldEnableMappingConstantValue(
   field: EntityFieldSelectorField<any>
@@ -256,50 +223,6 @@ export function getDefaultValueForField(
   }
 
   return undefined;
-}
-
-function applySourceFieldPath<TValue>(
-  field: YextFieldDefinition<TValue>,
-  sourcePath: string
-): YextFieldDefinition<TValue> {
-  if (isEntityFieldDefinition(field)) {
-    return {
-      ...field,
-      sourceFieldPath: field.sourceFieldPath ?? sourcePath,
-    } as YextFieldDefinition<TValue>;
-  }
-
-  if (field.type === "object" && "objectFields" in field) {
-    return {
-      ...field,
-      objectFields: Object.fromEntries(
-        Object.entries(field.objectFields).map(([key, nestedField]) => [
-          key,
-          applySourceFieldPath(
-            nestedField as YextFieldDefinition<any>,
-            sourcePath
-          ),
-        ])
-      ),
-    } as YextFieldDefinition<TValue>;
-  }
-
-  if (field.type === "array" && "arrayFields" in field) {
-    return {
-      ...field,
-      arrayFields: Object.fromEntries(
-        Object.entries(field.arrayFields).map(([key, nestedField]) => [
-          key,
-          applySourceFieldPath(
-            nestedField as YextFieldDefinition<any>,
-            sourcePath
-          ),
-        ])
-      ),
-    } as YextFieldDefinition<TValue>;
-  }
-
-  return field;
 }
 
 function getNestedItemSourceTypes(
