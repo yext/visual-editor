@@ -13,7 +13,7 @@ export type FieldResolution<T> = {
  * value, including embedded field interpolation inside constants.
  */
 export const resolveYextEntityField = <T>(
-  streamDocument: StreamDocument,
+  streamDocument: StreamDocument | undefined,
   entityField: YextEntityField<T>,
   locale?: string
 ): T | undefined => {
@@ -41,6 +41,10 @@ export const resolveYextEntityField = <T>(
 
   if (!entityField.field) {
     return entityField.constantValue as T;
+  }
+
+  if (!streamDocument) {
+    return undefined;
   }
 
   return resolveField<T>(streamDocument, entityField.field).value;
