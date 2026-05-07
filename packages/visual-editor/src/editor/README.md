@@ -91,6 +91,7 @@ import { EntityField } from "@yext/visual-editor";
 Use the registered `entityField` field type to allow Visual Editor users to choose an entity field or a constant value that will populate data into a component.
 The user can choose an entity field from a dropdown or use a constant value. Regardless, the user should always
 enter a constant value as it will be used as a fallback value in the case that the entity is missing the selected entity field.
+`YextEntityFieldSelector(...)` remains available as a compatibility wrapper, but new configs should author `entityField` directly in `YextFields`.
 
 The constant value field currently has limited functionality with complex object entity types. When using complex
 object types, ensure your render function handles undefined fields.

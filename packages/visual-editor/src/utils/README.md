@@ -56,7 +56,7 @@ Used in a component's render function to pull in the selected entity field's val
 
 ### Usage
 
-See [entityField Field Type](../editor/README.md#entityfield-field-type)
+See [YextEntityFieldSelector](../editor/README.md#YextEntityFieldSelector)
 
 ## createItemSource
 
@@ -81,12 +81,10 @@ component backed by either a linked list field or manual items.
 
 ### Usage
 
-Use this helper when a component needs repeated linked-entity content but wants
-to render the repeated UI directly instead of syncing slot children. The
-component keeps a single repeated `entityField` prop, for example
-`articles: typeof articleSource.value`, and the editor clears stale linked
-mapping selections automatically when the parent linked source changes. See the
-full example in [editor/README.md](../editor/README.md#linked-entity-item-sources).
+Use this helper when a component needs to render a repeated list from a linked
+field while keeping source selection, per-item mappings, and manual fallback
+items in a single prop. See the full `ArticleList` / `ArticleCard` example in
+[editor/README.md](../editor/README.md#linked-entity-item-sources).
 
 ## ThemeConfig
 
