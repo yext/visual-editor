@@ -341,6 +341,134 @@ describe("EntityFieldSelectorField", () => {
     );
   });
 
+  it("shows linked entity fields for single-value selectors", () => {
+    renderEntityField({
+      field: {
+        type: "entityField",
+        label: "Entity Field",
+        filter: {
+          types: ["type.string"],
+        },
+      },
+      entityFields: {
+        ...defaultEntityFields,
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_linkedLocation",
+            displayName: "Linked Location",
+            definition: {
+              name: "c_linkedLocation",
+              typeRegistryId: "type.entity_reference",
+              type: {
+                documentType: "DOCUMENT_TYPE_ENTITY",
+              },
+            },
+            children: {
+              fields: [
+                {
+                  name: "name",
+                  displayName: "Name",
+                  definition: {
+                    name: "name",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+        ],
+        displayNames: {
+          ...defaultEntityFields.displayNames,
+          c_linkedLocation: "Linked Location",
+          "c_linkedLocation.name": "Linked Location > Name",
+        },
+      },
+    });
+
+    fireEvent.click(screen.getAllByRole("combobox")[0]);
+
+    expect(screen.getAllByText("Name").length).toBeGreaterThan(0);
+    expect(screen.getByText("Linked Location > Name")).toBeDefined();
+  });
+
+  it("does not show linked entity fields for list-only selectors", () => {
+    renderEntityField({
+      field: {
+        type: "entityField",
+        label: "Entity Field",
+        filter: {
+          types: ["type.string"],
+          includeListsOnly: true,
+        },
+      },
+      entityFields: {
+        ...defaultEntityFields,
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_linkedLocation",
+            displayName: "Linked Location",
+            definition: {
+              name: "c_linkedLocation",
+              typeRegistryId: "type.entity_reference",
+              type: {
+                documentType: "DOCUMENT_TYPE_ENTITY",
+              },
+            },
+            children: {
+              fields: [
+                {
+                  name: "name",
+                  displayName: "Name",
+                  definition: {
+                    name: "name",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+        ],
+        displayNames: {
+          ...defaultEntityFields.displayNames,
+          c_linkedLocation: "Linked Location",
+          "c_linkedLocation.name": "Linked Location > Name",
+        },
+      },
+    });
+
+    fireEvent.click(screen.getAllByRole("combobox")[0]);
+
+    expect(screen.queryByText("Linked Location > Name")).toBeNull();
+  });
+
+  it("falls back to the default entity field option when no matching entity fields exist", () => {
+    renderEntityField({
+      entityFields: {
+        fields: [],
+        displayNames: {},
+      },
+      value: {
+        field: "",
+        constantValue: "",
+        constantValueEnabled: false,
+      },
+    });
+
+    expect(screen.getAllByRole("combobox")).toHaveLength(1);
+    expect(screen.getAllByRole("combobox")[0]?.textContent).toContain(
+      "Select a Field"
+    );
+
+    fireEvent.click(screen.getAllByRole("combobox")[0]);
+
+    expect(screen.getAllByText("Select a Field").length).toBeGreaterThan(0);
+    expect(screen.queryByText("Name")).toBeNull();
+  });
+
   it("renders nested entityField configs through YextAutoField normalization", () => {
     render(
       <TemplatePropsContext.Provider value={{ document: {} }}>
