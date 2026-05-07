@@ -177,7 +177,7 @@ item mappings, and manual fallback items in one place.
 
 ### Pattern
 
-1. Add an `itemSource: ItemSourceValue<TItem>` prop for the repeated source.
+1. Add an `itemSource: ItemSource<TItem>` prop for the repeated source.
 2. Add an optional `itemMappings?: TItem` prop that describes how one source
    item maps into your rendered card shape.
 3. Call `createItemSource(...)` to generate fields, defaults, and editor-time
@@ -242,7 +242,7 @@ export const ArticleCard: PuckComponent<ArticleCardProps> = ({
 import { type PuckComponent } from "@puckeditor/core";
 import {
   createItemSource,
-  type ItemSourceValue,
+  type ItemSource,
   type StreamDocument,
   type TranslatableAssetImage,
   type TranslatableRichText,
@@ -263,7 +263,7 @@ type ArticleItem = {
 };
 
 type ArticleListProps = {
-  itemSource: ItemSourceValue<ArticleItem>;
+  itemSource: ItemSource<ArticleItem>;
   itemMappings?: ArticleItem;
   heading: {
     text: TranslatableString;

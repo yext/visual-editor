@@ -19,7 +19,7 @@ import { type YextFieldDefinition, type YextFieldMap } from "./fields.ts";
  * Shared value shape for repeated item sources that can either resolve from a
  * linked list field or fall back to manually authored items.
  */
-export type ItemSourceValue<TItem extends Record<string, unknown>> = {
+export type ItemSource<TItem extends Record<string, unknown>> = {
   field: string;
   constantValueEnabled?: boolean;
   constantValue: TItem[];
@@ -35,8 +35,8 @@ export type ItemSourceField<
   filter: MappedSourceFieldFilter<T>;
   itemFields: YextFieldMap<TItem>;
   defaultItemValue: TItem;
-  itemSourcePath?: string;
-  itemMappingsPath?: string;
+  sourcePath?: string;
+  mappingsPath?: string;
 };
 
 type ItemSourceFieldProps = FieldProps<ItemSourceField<any, any>>;
@@ -159,15 +159,15 @@ export const ItemSourceFieldOverride = ({
    * constant fallback values.
    */
   const updateItemSource = React.useCallback(
-    (nextValue: ItemSourceValue<Record<string, unknown>>) => {
+    (nextValue: ItemSource<Record<string, unknown>>) => {
       const { appState, dispatch, getItemBySelector } = getPuck();
       const itemSelector = appState.ui.itemSelector;
       const selectedComponent =
         itemSelector?.zone !== undefined && itemSelector.index !== undefined
           ? getItemBySelector(itemSelector)
           : undefined;
-      const previousSourceValue = field.itemSourcePath
-        ? getPathValue(selectedComponent?.props, field.itemSourcePath)
+      const previousSourceValue = field.sourcePath
+        ? getPathValue(selectedComponent?.props, field.sourcePath)
         : undefined;
       const previousField =
         previousSourceValue &&
@@ -184,8 +184,8 @@ export const ItemSourceFieldOverride = ({
           : "";
 
       if (
-        !field.itemSourcePath ||
-        !field.itemMappingsPath ||
+        !field.sourcePath ||
+        !field.mappingsPath ||
         !previousField ||
         !nextField ||
         previousField === nextField ||
@@ -198,7 +198,7 @@ export const ItemSourceFieldOverride = ({
 
       const itemMappings = getPathValue(
         selectedComponent?.props,
-        field.itemMappingsPath
+        field.mappingsPath
       );
 
       if (!selectedComponent || !hasEntityFieldBindings(itemMappings)) {
@@ -208,12 +208,12 @@ export const ItemSourceFieldOverride = ({
 
       let updatedComponent = setDeep(
         selectedComponent,
-        `props.${field.itemSourcePath}`,
+        `props.${field.sourcePath}`,
         nextValue
       );
       updatedComponent = setDeep(
         updatedComponent,
-        `props.${field.itemMappingsPath}`,
+        `props.${field.mappingsPath}`,
         clearEntityFieldBindings(itemMappings)
       );
 
@@ -224,7 +224,7 @@ export const ItemSourceFieldOverride = ({
         data: updatedComponent,
       });
     },
-    [field.itemMappingsPath, field.itemSourcePath, getPuck, onChange]
+    [field.mappingsPath, field.sourcePath, getPuck, onChange]
   );
 
   return (

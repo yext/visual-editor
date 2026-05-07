@@ -121,8 +121,8 @@ const renderItemSource = ({
               {
                 type: "itemSource",
                 label: "Articles",
-                itemSourcePath: "itemSource",
-                itemMappingsPath: "itemMappings",
+                sourcePath: "itemSource",
+                mappingsPath: "itemMappings",
                 filter: {
                   itemSourceTypes: [["type.string"]],
                 },

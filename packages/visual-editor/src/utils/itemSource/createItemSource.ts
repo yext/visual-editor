@@ -4,7 +4,7 @@ import {
   type YextFieldDefinition,
   type YextFieldMap,
 } from "../../fields/fields.ts";
-import { type ItemSourceValue } from "../../fields/ItemSourceField.tsx";
+import { type ItemSource } from "../../fields/ItemSourceField.tsx";
 import { type StreamDocument } from "../types/StreamDocument.ts";
 import {
   createItemSourceField,
@@ -100,7 +100,7 @@ export function createItemSource<
     fields: toPuckFields(rawFields),
     defaultProps,
     resolveFields: (data) => {
-      const itemSource = getPathValue<ItemSourceValue<TItem>>(
+      const itemSource = getPathValue<ItemSource<TItem>>(
         data.props,
         sourcePath
       );

@@ -1,6 +1,6 @@
 import { type DefaultComponentProps, type Fields } from "@puckeditor/core";
 import { type YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
-import { type ItemSourceValue } from "../../fields/ItemSourceField.tsx";
+import { type ItemSource } from "../../fields/ItemSourceField.tsx";
 import { type YextFieldMap } from "../../fields/fields.ts";
 import { type StreamDocument } from "../types/StreamDocument.ts";
 
@@ -43,7 +43,7 @@ export type ItemSourceInstance<
   defaultProps: Partial<TProps>;
   resolveFields: (data: { props: Record<string, unknown> }) => Fields<TProps>;
   resolveItems: (
-    itemSource: ItemSourceValue<TItem> | undefined,
+    itemSource: ItemSource<TItem> | undefined,
     itemMappings: TItem | undefined,
     streamDocument: StreamDocument
   ) => ResolvedItemField<TItem>[];

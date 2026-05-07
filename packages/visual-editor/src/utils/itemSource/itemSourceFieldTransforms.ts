@@ -39,9 +39,9 @@ export function getDefaultLabel(path: string): string {
  */
 export function getMappingItemField<TValue>(
   field: YextFieldDefinition<TValue>,
-  itemSourcePath: string
+  sourcePath: string
 ): YextFieldDefinition<TValue> {
-  const sourceScopedField = applySourceFieldPath(field, itemSourcePath);
+  const sourceScopedField = applySourceFieldPath(field, sourcePath);
 
   if (
     isEntityFieldDefinition(sourceScopedField) &&
@@ -126,8 +126,8 @@ export function createItemSourceField<TItem extends Record<string, unknown>>(
   return {
     type: "itemSource",
     label: sourceLabel,
-    itemSourcePath: sourcePath,
-    itemMappingsPath: mappingsPath,
+    sourcePath,
+    mappingsPath,
     filter: {
       itemSourceTypes: getItemSourceTypes(
         scopedItemFields as YextFieldMap<Record<string, unknown>>
@@ -260,12 +260,12 @@ export function getDefaultValueForField(
 
 function applySourceFieldPath<TValue>(
   field: YextFieldDefinition<TValue>,
-  itemSourcePath: string
+  sourcePath: string
 ): YextFieldDefinition<TValue> {
   if (isEntityFieldDefinition(field)) {
     return {
       ...field,
-      sourceFieldPath: field.sourceFieldPath ?? itemSourcePath,
+      sourceFieldPath: field.sourceFieldPath ?? sourcePath,
     } as YextFieldDefinition<TValue>;
   }
 
@@ -277,7 +277,7 @@ function applySourceFieldPath<TValue>(
           key,
           applySourceFieldPath(
             nestedField as YextFieldDefinition<any>,
-            itemSourcePath
+            sourcePath
           ),
         ])
       ),
@@ -292,7 +292,7 @@ function applySourceFieldPath<TValue>(
           key,
           applySourceFieldPath(
             nestedField as YextFieldDefinition<any>,
-            itemSourcePath
+            sourcePath
           ),
         ])
       ),

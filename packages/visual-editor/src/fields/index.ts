@@ -16,7 +16,7 @@ export { ImageFieldOverride, type ImageField } from "./ImageField.tsx";
 export {
   ItemSourceFieldOverride,
   type ItemSourceField,
-  type ItemSourceValue,
+  type ItemSource,
 } from "./ItemSourceField.tsx";
 
 export {
