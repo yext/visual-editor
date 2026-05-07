@@ -33,38 +33,36 @@ const directoryCardTitleSlotFields: YextFields<DirectoryCardTitleSlotProps> = {
           types: ["type.string"],
         },
         showApplyAllOption: true,
-        getOptions: () => {
-          return [
-            { label: pt("name", "Name"), value: "name" },
-            { label: pt("slug", "Slug"), value: "slug" },
-            { label: pt("geomodifier", "Geomodifier"), value: "geomodifier" },
-            { label: pt("id", "ID"), value: "id" },
-            {
-              label: pt("addressLine1", "Address > Line 1"),
-              value: "address.line1",
-            },
-            {
-              label: pt("addressLine2", "Address > Line 2"),
-              value: "address.line2",
-            },
-            {
-              label: pt("addressCity", "Address > City"),
-              value: "address.city",
-            },
-            {
-              label: pt("addressRegion", "Address > Region"),
-              value: "address.region",
-            },
-            {
-              label: pt("addressCountry", "Address > Country"),
-              value: "address.country",
-            },
-            {
-              label: pt("addressPostalCode", "Address > Postal Code"),
-              value: "address.postalCode",
-            },
-          ];
-        },
+        getOptions: () => [
+          { label: pt("name", "Name"), value: "name" },
+          { label: pt("slug", "Slug"), value: "slug" },
+          { label: pt("geomodifier", "Geomodifier"), value: "geomodifier" },
+          { label: pt("id", "ID"), value: "id" },
+          {
+            label: pt("addressLine1", "Address > Line 1"),
+            value: "address.line1",
+          },
+          {
+            label: pt("addressLine2", "Address > Line 2"),
+            value: "address.line2",
+          },
+          {
+            label: pt("addressCity", "Address > City"),
+            value: "address.city",
+          },
+          {
+            label: pt("addressRegion", "Address > Region"),
+            value: "address.region",
+          },
+          {
+            label: pt("addressCountry", "Address > Country"),
+            value: "address.country",
+          },
+          {
+            label: pt("addressPostalCode", "Address > Postal Code"),
+            value: "address.postalCode",
+          },
+        ],
       },
     },
   },
