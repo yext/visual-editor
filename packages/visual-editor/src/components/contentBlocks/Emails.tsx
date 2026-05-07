@@ -3,7 +3,7 @@ import { PuckComponent } from "@puckeditor/core";
 import { FaRegEnvelope } from "react-icons/fa";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
-import { type YextEntityField } from "../../editor/yextEntityFieldUtils.ts";
+import { type YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { CTA } from "../atoms/cta.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";

@@ -2,7 +2,7 @@ import React from "react";
 import { describe, it, expect, expectTypeOf, vi } from "vitest";
 import { resolveComponentData } from "./resolveComponentData.tsx";
 import { TranslatableRichText, TranslatableString } from "../types/types.ts";
-import { type YextEntityField } from "../editor/yextEntityFieldUtils.ts";
+import { type YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
 
 // Mock the MaybeRTF component to inspect its props
 vi.mock("../components/atoms/maybeRTF", () => ({

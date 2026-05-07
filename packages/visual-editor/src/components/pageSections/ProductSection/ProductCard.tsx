@@ -3,7 +3,7 @@ import {
   ThemeColor,
   backgroundColors,
 } from "../../../utils/themeConfigOptions.ts";
-import { type YextEntityField } from "../../../editor/yextEntityFieldUtils.ts";
+import { type YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { Background } from "../../atoms/background.tsx";
 import { CTAWrapperProps } from "../../contentBlocks/CtaWrapper.tsx";

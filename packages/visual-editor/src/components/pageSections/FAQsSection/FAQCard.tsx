@@ -12,7 +12,7 @@ import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { resolveDataFromParent } from "../../../editor/ParentData.tsx";
 import { useBackground } from "../../../hooks/useBackground.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
-import { type YextEntityField } from "../../../editor/yextEntityFieldUtils.ts";
+import { type YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import {
   AccordionContent,
   AccordionItem,

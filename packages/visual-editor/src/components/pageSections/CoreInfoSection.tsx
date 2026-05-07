@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { PuckComponent, Slot } from "@puckeditor/core";
 import { AddressType, AnalyticsScopeProvider } from "@yext/pages-components";
-import { type YextEntityField } from "../../editor/yextEntityFieldUtils.ts";
+import { type YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import {
   ThemeColor,
   backgroundColors,

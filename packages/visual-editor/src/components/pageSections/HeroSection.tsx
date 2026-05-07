@@ -9,7 +9,7 @@ import {
 import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../utils/applyAnalytics.ts";
-import { type YextEntityField } from "../../editor/yextEntityFieldUtils.ts";
+import { type YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { CTAVariant } from "../atoms/cta.tsx";
 import { HeadingTextProps } from "../contentBlocks/HeadingText.tsx";

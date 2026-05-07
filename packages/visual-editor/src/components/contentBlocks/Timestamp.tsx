@@ -4,7 +4,7 @@ import { msg } from "../../utils/i18n/platform.ts";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
-import { type YextEntityField } from "../../editor/yextEntityFieldUtils.ts";
+import { type YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { TimestampAtom, TimestampOption } from "../atoms/timestamp.tsx";
 import {
   toPuckFields,

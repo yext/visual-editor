@@ -9,7 +9,7 @@ import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
 import { ComponentFields } from "../../../types/fields.ts";
-import { type YextEntityField } from "../../../editor/yextEntityFieldUtils.ts";
+import { type YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
 import { BodyTextProps } from "../../contentBlocks/BodyText.tsx";
 import { CTAWrapperProps } from "../../contentBlocks/CtaWrapper.tsx";

@@ -1,4 +1,4 @@
-import { type YextEntityField } from "../../editor/yextEntityFieldUtils.ts";
+import { type YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { type YextFieldDefinition } from "../../fields/fields.ts";
 import { resolveYextEntityField } from "../resolveYextEntityField.ts";
 import { type StreamDocument } from "../types/StreamDocument.ts";

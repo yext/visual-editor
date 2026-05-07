@@ -1,5 +1,5 @@
 import { Slot } from "@puckeditor/core";
-import { type YextEntityField } from "../../editor/yextEntityFieldUtils.ts";
+import { type YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { YextFields } from "../../fields/fields.ts";
 import { MsgString } from "../i18n/platform.ts";
 import { EntityFieldTypes } from "../../internal/utils/getFilteredEntityFields.ts";

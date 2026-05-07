@@ -15,7 +15,7 @@ import { setDeep } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 import { resolveBreadcrumbs } from "../../utils/urls/resolveBreadcrumbs.ts";
-import { type YextEntityField } from "../../editor/yextEntityFieldUtils.ts";
+import { type YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import {
   toPuckFields,
   YextComponentConfig,

@@ -1,5 +1,5 @@
 import { TranslatableString } from "../../../../types/types.ts";
-import { type YextEntityField } from "../../../../editor/yextEntityFieldUtils.ts";
+import { type YextEntityField } from "../../../../editor/YextEntityFieldSelector.tsx";
 import { DEFAULT_LOCALE } from "../../../../utils/pageSetLocales.ts";
 
 const normalizeLocales = (locales: string[] | undefined): string[] => {

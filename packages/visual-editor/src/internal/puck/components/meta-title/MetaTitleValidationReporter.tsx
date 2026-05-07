@@ -3,7 +3,7 @@ import { createUsePuck } from "@puckeditor/core";
 import { useErrorContext } from "../../../../contexts/ErrorContext.tsx";
 import { useDocument } from "../../../../hooks/useDocument.tsx";
 import { getPageSetLocales } from "../../../../utils/pageSetLocales.ts";
-import { type YextEntityField } from "../../../../editor/yextEntityFieldUtils.ts";
+import { type YextEntityField } from "../../../../editor/YextEntityFieldSelector.tsx";
 import { type TranslatableString } from "../../../../types/types.ts";
 import { getMetaTitleMissingLocales } from "./metaTitleValidation.ts";
 

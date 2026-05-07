@@ -1,4 +1,4 @@
-import { type YextEntityField } from "../../editor/yextEntityFieldUtils.ts";
+import { type YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 
 type CardWrapperSlot = {
   id?: string;
