@@ -252,32 +252,33 @@ const ResultCardPropsField = ({
     // For each section, show either the field selector or the constant value editor.
     BOOLEAN_SUPPORTED_FIELDS.forEach((key) => {
       const headingConfig = value[key];
-      const enabled = headingConfig?.constantValueEnabled ?? false;
+      const constantValueEnabled = headingConfig?.constantValueEnabled ?? false;
       const field = headingConfig?.field;
       const fieldTypeId = field
         ? templateMetadata?.locatorDisplayFields?.[field]?.field_type_id
         : undefined;
-      const isBooleanFieldSelected = !enabled && fieldTypeId === "type.boolean";
+      const booleanFieldSelected =
+        !constantValueEnabled && fieldTypeId === "type.boolean";
 
       fields = setDeep(
         fields,
         `objectFields.${key}.objectFields.field.visible`,
-        !enabled
+        !constantValueEnabled
       );
       fields = setDeep(
         fields,
         `objectFields.${key}.objectFields.constantValue.visible`,
-        enabled
+        constantValueEnabled
       );
       fields = setDeep(
         fields,
         `objectFields.${key}.objectFields.trueDisplayText.visible`,
-        !enabled && isBooleanFieldSelected
+        !constantValueEnabled && booleanFieldSelected
       );
       fields = setDeep(
         fields,
         `objectFields.${key}.objectFields.falseDisplayText.visible`,
-        isBooleanFieldSelected
+        booleanFieldSelected
       );
     });
 
