@@ -471,13 +471,13 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
           field: DisplayFieldSelector(["type.string", "type.boolean"]),
           trueDisplayText: {
             type: "translatableString",
-            label: msg("fields.whenTrue", "When True"),
+            label: msg("fields.whenTrue", "When true"),
             showApplyAllOption: false,
             showFieldSelector: false,
           },
           falseDisplayText: {
             type: "translatableString",
-            label: msg("fields.whenFalse", "When False"),
+            label: msg("fields.whenFalse", "When false"),
             showApplyAllOption: false,
             showFieldSelector: false,
           },
@@ -526,13 +526,13 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
           field: DisplayFieldSelector(["type.string", "type.boolean"]),
           trueDisplayText: {
             type: "translatableString",
-            label: msg("fields.whenTrue", "When True"),
+            label: msg("fields.whenTrue", "When true"),
             showApplyAllOption: false,
             showFieldSelector: false,
           },
           falseDisplayText: {
             type: "translatableString",
-            label: msg("fields.whenFalse", "When False"),
+            label: msg("fields.whenFalse", "When false"),
             showApplyAllOption: false,
             showFieldSelector: false,
           },
