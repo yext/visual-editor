@@ -6,7 +6,7 @@ import {
   type TranslatableString,
 } from "../types/types.ts";
 import { TranslatableAssetImage } from "../types/images.ts";
-import { type YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
+import { type YextEntityField } from "../editor/yextEntityFieldUtils.ts";
 import React from "react";
 import {
   resolveEmbeddedFieldsRecursively,

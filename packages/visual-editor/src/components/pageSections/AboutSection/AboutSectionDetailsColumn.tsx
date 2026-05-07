@@ -13,7 +13,7 @@ import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts
 import { StreamDocument } from "../../../utils/types/StreamDocument.ts";
 import { TranslatableString } from "../../../types/types.ts";
 import { useDocument } from "../../../hooks/useDocument.tsx";
-import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
+import { type YextEntityField } from "../../../editor/yextEntityFieldUtils.ts";
 import { YextAutoField } from "../../../fields/YextAutoField.tsx";
 import {
   HoursStatus,

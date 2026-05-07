@@ -13,11 +13,10 @@ This library provides components necessary to set up a Pages repository that can
 
 ## Components
 
-| Component                                                               |
-| ----------------------------------------------------------------------- |
-| [Editor](src/editor/README.md#editor)                                   |
-| [EntityField](src/editor/README.md#entityfield)                         |
-| [YextEntityFieldSelector](src/editor/README.md#YextEntityFieldSelector) |
+| Component                                       |
+| ----------------------------------------------- |
+| [Editor](src/editor/README.md#editor)           |
+| [EntityField](src/editor/README.md#entityfield) |
 
 ## Utils
 

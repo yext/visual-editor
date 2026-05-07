@@ -1,11 +1,9 @@
-import {
-  returnConstantFieldConfig,
-  type EntityFieldSelectorField,
-} from "../../fields/EntityFieldSelectorField.tsx";
+import { type EntityFieldSelectorField } from "../../fields/EntityFieldSelectorField.tsx";
 import {
   type YextFieldDefinition,
   type YextFieldMap,
 } from "../../fields/fields.ts";
+import { returnConstantFieldConfig } from "../../fields/entityFieldConstantConfig.ts";
 import { type EntityFieldTypes } from "../../internal/utils/getFilteredEntityFields.ts";
 
 /**

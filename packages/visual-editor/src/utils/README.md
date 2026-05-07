@@ -56,7 +56,7 @@ Used in a component's render function to pull in the selected entity field's val
 
 ### Usage
 
-See [YextEntityFieldSelector](../editor/README.md#YextEntityFieldSelector)
+See [entityField Field Type](../editor/README.md#entityfield-field-type)
 
 ## createItemSource
 

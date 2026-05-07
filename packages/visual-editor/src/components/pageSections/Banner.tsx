@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import * as React from "react";
-import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { type YextEntityField } from "../../editor/yextEntityFieldUtils.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { PageSection } from "../atoms/pageSection.tsx";

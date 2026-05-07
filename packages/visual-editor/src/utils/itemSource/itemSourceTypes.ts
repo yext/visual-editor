@@ -1,4 +1,4 @@
-import { type YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { type YextEntityField } from "../../editor/yextEntityFieldUtils.ts";
 import { type EntityFieldSelectorField } from "../../fields/EntityFieldSelectorField.tsx";
 import {
   type YextFieldDefinition,

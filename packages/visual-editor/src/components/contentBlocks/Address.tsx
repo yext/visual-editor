@@ -12,7 +12,7 @@ import {
 } from "@yext/pages-components";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
-import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { type YextEntityField } from "../../editor/yextEntityFieldUtils.ts";
 import { CTA, CTAVariant, isCtaVariantWithColor } from "../atoms/cta.tsx";
 import { pt, msg } from "../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";

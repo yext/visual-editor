@@ -32,12 +32,12 @@ Make sure to export your Puck component with the name you actually want the comp
 ## Defining Puck Fields
 
 Fields are a configuration of your component’s props to get them to display on the right side panel. Puck has a handful of [built-in fields](https://puckeditor.com/docs/api-reference/fields) you can use, defined by the `type` property. This will automatically render out the field. Each component prop should have a corresponding field.  
-We have a custom prop type called `YextEntityField` and a corresponding custom field called `YextEntityFieldSelector`.
+We have a custom prop type called `YextEntityField` and a corresponding custom field type called `entityField`.
 
 | export type YextEntityField\<TValue, TMappings = never\> \= { field: string; constantValue: TValue; constantValueEnabled?: boolean; disallowTranslation?: boolean; mappings?: TMappings;}; |
 | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
-YextEntityField allows a user to set either a KG field (one from the document) or use a constant value instead. YextEntityFieldSelector properly renders these selection options for you. It also has some configuration options to filter to specific fields.
+YextEntityField allows a user to set either a KG field (one from the document) or use a constant value instead. The `entityField` field type renders these selection options and supports filtering to specific fields.
 
 If your component needs to render a repeated list from a linked field, prefer
 `createItemSource(...)` instead of wiring multiple `YextEntityField` props by

@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
-import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { type YextEntityField } from "../../editor/yextEntityFieldUtils.ts";
 import { PhoneAtom } from "../atoms/phone.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { TranslatableString } from "../../types/types.ts";

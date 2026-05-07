@@ -3,7 +3,7 @@ import { type Field } from "@puckeditor/core";
 import { useDocument } from "../../../../hooks/useDocument.tsx";
 import { msg, pt } from "../../../../utils/i18n/platform.ts";
 import { getPageSetLocales } from "../../../../utils/pageSetLocales.ts";
-import { type YextEntityField } from "../../../../editor/YextEntityFieldSelector.tsx";
+import { type YextEntityField } from "../../../../editor/yextEntityFieldUtils.ts";
 import { YextAutoField } from "../../../../fields/YextAutoField.tsx";
 import type { YextFieldDefinition } from "../../../../fields/fields.ts";
 import { type TranslatableString } from "../../../../types/types.ts";

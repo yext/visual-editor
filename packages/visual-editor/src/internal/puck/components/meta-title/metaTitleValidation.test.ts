@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { getMetaTitleMissingLocales } from "./metaTitleValidation.ts";
 import { getPageSetLocales } from "../../../../utils/pageSetLocales.ts";
 import { type StreamDocument } from "../../../../utils/types/StreamDocument.ts";
-import { type YextEntityField } from "../../../../editor/YextEntityFieldSelector.tsx";
+import { type YextEntityField } from "../../../../editor/yextEntityFieldUtils.ts";
 import { type TranslatableString } from "../../../../types/types.ts";
 
 const makeTitleField = (

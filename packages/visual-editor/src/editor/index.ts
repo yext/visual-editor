@@ -1,10 +1,6 @@
 export { type Metadata, Editor } from "./Editor.tsx";
 export { EntityField } from "./EntityField.tsx";
-export {
-  YextEntityFieldSelector,
-  type RenderYextEntityFieldSelectorProps,
-  type YextEntityField,
-} from "./YextEntityFieldSelector.tsx";
+export { type YextEntityField } from "./yextEntityFieldUtils.ts";
 export { SpacingSelector } from "./SpacingSelector.tsx";
 export { YextAutoField } from "../fields/YextAutoField.tsx";
 export { KnowledgeGraphIcon } from "./KnowledgeGraphIcon.tsx";

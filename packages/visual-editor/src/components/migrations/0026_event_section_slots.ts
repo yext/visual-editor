@@ -1,7 +1,7 @@
 import { Migration } from "../../utils/migrate.ts";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
 import { EventSectionType } from "../../types/types.ts";
-import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { type YextEntityField } from "../../editor/yextEntityFieldUtils.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 
 export const eventSectionSlots: Migration = {
