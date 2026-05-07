@@ -72,6 +72,11 @@ export function createItemSource<TItemProps extends Record<string, unknown>>({
     constantValue: [defaultItemValue],
     mappings: defaultMappings,
   };
+  const sourceField = {
+    type: "entityField",
+    label,
+    filter: { itemSourceTypes: [] },
+  } satisfies YextFieldDefinition<unknown>;
 
   return {
     field,
@@ -98,11 +103,7 @@ export function createItemSource<TItemProps extends Record<string, unknown>>({
       }
 
       const resolvedSourceItems = resolveItemValue(
-        {
-          type: "entityField",
-          label,
-          filter: { itemSourceTypes: [] },
-        } as YextFieldDefinition<any>,
+        sourceField,
         {
           field: value.field,
           constantValue: value.constantValue,
