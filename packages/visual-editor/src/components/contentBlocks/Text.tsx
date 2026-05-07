@@ -4,7 +4,7 @@ import { Body, BodyProps } from "../atoms/body.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
-import { type YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { TranslatableRichText, TranslatableString } from "../../types/types.ts";
 import { useTranslation } from "react-i18next";

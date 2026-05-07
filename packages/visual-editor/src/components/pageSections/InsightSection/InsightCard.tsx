@@ -12,7 +12,7 @@ import { ImageWrapperProps } from "../../contentBlocks/image/Image.tsx";
 import { InsightStruct, TranslatableRichText } from "../../../types/types.ts";
 import { deepMerge } from "../../../utils/themeResolver.ts";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
-import { type YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
+import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";

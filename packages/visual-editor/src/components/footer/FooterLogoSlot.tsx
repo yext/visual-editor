@@ -11,7 +11,7 @@ import { useDocument } from "../../hooks/useDocument.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { MaybeLink } from "../atoms/maybeLink.tsx";
 import { getImageAltText, Image } from "../atoms/image.tsx";
-import { type YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { useTranslation } from "react-i18next";
 import { ImageStylingFields } from "../contentBlocks/image/styling.ts";
 import { ComplexImageType, ImageType } from "@yext/pages-components";

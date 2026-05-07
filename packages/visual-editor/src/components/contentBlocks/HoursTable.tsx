@@ -6,7 +6,7 @@ import { EntityField } from "../../editor/EntityField.tsx";
 import { HoursTableAtom } from "../atoms/hoursTable.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
-import { type YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { Body } from "../atoms/body.tsx";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";

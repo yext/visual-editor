@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { PuckComponent } from "@puckeditor/core";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
-import { type YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { TranslatableString } from "../../types/types.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";

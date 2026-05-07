@@ -8,7 +8,7 @@ import { Image } from "../../atoms/image.tsx";
 import { themeManagerCn } from "../../../utils/cn.ts";
 import { useBackground } from "../../../hooks/useBackground.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
-import { type YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
+import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { getThemeColorCssValue } from "../../../utils/colors.ts";

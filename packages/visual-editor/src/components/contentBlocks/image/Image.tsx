@@ -14,7 +14,7 @@ import {
 } from "../../atoms/image.tsx";
 import { MaybeLink } from "../../atoms/maybeLink.tsx";
 import { TranslatableString } from "../../../types/types.ts";
-import { type YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
+import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { resolveDataFromParent } from "../../../editor/ParentData.tsx";

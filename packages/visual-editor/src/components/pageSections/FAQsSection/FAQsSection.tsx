@@ -16,7 +16,7 @@ import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 import { FAQSectionType } from "../../../types/types.ts";
-import { type YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
+import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { ComponentFields } from "../../../types/fields.ts";
 import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";

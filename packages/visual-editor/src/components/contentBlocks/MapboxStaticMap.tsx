@@ -3,7 +3,7 @@ import { Coordinate } from "@yext/pages-components";
 import { EntityField } from "../../editor/EntityField.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
-import { type YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { type BasicSelectorField } from "../../fields/BasicSelectorField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { themeManagerCn } from "../../utils/cn.ts";

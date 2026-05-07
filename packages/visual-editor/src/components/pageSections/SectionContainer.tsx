@@ -6,7 +6,7 @@ import {
   ThemeOptions,
   backgroundColors,
 } from "../../utils/themeConfigOptions.ts";
-import { type YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { OtherCategory } from "../categories/OtherCategory.tsx";
 import { PageSectionCategory } from "../categories/PageSectionCategory.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
