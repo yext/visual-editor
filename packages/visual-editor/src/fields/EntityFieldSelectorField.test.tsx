@@ -517,7 +517,7 @@ describe("EntityFieldSelectorField", () => {
     expect(screen.getByRole("button", { name: "Delete" })).toBeDefined();
   });
 
-  it("renders slot editing guidance instead of inline repeated item editors", () => {
+  it("renders repeated card controls for slot-backed manual mode", () => {
     renderRepeatedEntityField({
       field: {
         type: "entityField",
@@ -542,7 +542,7 @@ describe("EntityFieldSelectorField", () => {
               filter: { types: ["type.string"] },
             },
           },
-          manualModeEditor: "slots",
+          manualItemSummary: (_, index) => `Event ${String((index ?? 0) + 1)}`,
         },
       },
       value: {
@@ -559,10 +559,8 @@ describe("EntityFieldSelectorField", () => {
       },
     });
 
-    expect(
-      screen.getByText("Edit and reorder cards in the slots.")
-    ).toBeDefined();
-    expect(screen.queryByRole("button", { name: "Delete" })).toBeNull();
+    expect(screen.getByText("Event 1")).toBeDefined();
+    expect(screen.getByRole("button", { name: "Delete" })).toBeDefined();
   });
 
   it("renders the linked source selector when repeated KG mode is enabled", () => {

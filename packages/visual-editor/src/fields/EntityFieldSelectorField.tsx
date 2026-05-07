@@ -162,10 +162,15 @@ const RepeatedEntityFieldSelector = ({
       label: "",
       arrayFields: repeated.manualItemFields,
       defaultItemProps: repeated.defaultItemValue,
-      getItemSummary: (_, index) =>
-        pt("item", "Item") + " " + String((index ?? 0) + 1),
+      getItemSummary:
+        repeated.manualItemSummary ??
+        ((_, index) => pt("item", "Item") + " " + String((index ?? 0) + 1)),
     }),
-    [repeated.defaultItemValue, repeated.manualItemFields]
+    [
+      repeated.defaultItemValue,
+      repeated.manualItemFields,
+      repeated.manualItemSummary,
+    ]
   );
   const mappingsField = React.useMemo<YextFieldDefinition<any>>(
     () => ({
@@ -219,30 +224,18 @@ const RepeatedEntityFieldSelector = ({
         label={translatedLabel}
       />
       {constantValueEnabled ? (
-        repeated.manualModeEditor === "slots" ? (
-          <p
-            className="ve-pt-3 ve-text-sm"
-            style={{ color: "var(--puck-color-grey-04)" }}
-          >
-            {pt(
-              "editRepeatedItemsInSlots",
-              "Edit and reorder cards in the slots."
-            )}
-          </p>
-        ) : (
-          <div className="ve-pt-3">
-            <YextAutoField
-              field={itemListField}
-              onChange={(constantValue) =>
-                onChange({
-                  ...baseValue,
-                  constantValue,
-                })
-              }
-              value={baseValue.constantValue ?? []}
-            />
-          </div>
-        )
+        <div className="ve-pt-3">
+          <YextAutoField
+            field={itemListField}
+            onChange={(constantValue) =>
+              onChange({
+                ...baseValue,
+                constantValue,
+              })
+            }
+            value={baseValue.constantValue ?? []}
+          />
+        </div>
       ) : (
         <>
           <EntityFieldInput

@@ -32,7 +32,7 @@ export type RepeatedEntityFieldMetadata<
   manualItemFields: YextFieldMap<TItemProps>;
   defaultItemValue: TItemProps;
   defaultMappings: TItemProps;
-  manualModeEditor?: "items" | "slots";
+  manualItemSummary?: (item: unknown, index?: number) => string;
 };
 
 export type RepeatedEntityFieldDefinition<
@@ -75,6 +75,7 @@ export type CreateSlotMappedCardsSourceOptions<
 > = {
   label: string;
   mappingFields: YextFieldMap<TMappings>;
+  manualItemLabel: string;
 };
 
 export type SlotMappedCardsSourceInstance<

@@ -28,6 +28,7 @@ type EventCardMappings = {
 
 export const eventCardsSource = createSlotMappedCardsSource<EventCardMappings>({
   label: msg("components.events", "Events"),
+  manualItemLabel: "Event",
   mappingFields: {
     image: {
       type: "entityField",

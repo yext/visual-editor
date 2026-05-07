@@ -82,6 +82,7 @@ type FAQCardMappings = {
 
 export const faqCardsSource = createSlotMappedCardsSource<FAQCardMappings>({
   label: msg("fields.faqs", "FAQs"),
+  manualItemLabel: "FAQ",
   mappingFields: {
     question: {
       type: "entityField",

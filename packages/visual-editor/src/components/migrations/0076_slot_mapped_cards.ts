@@ -3,6 +3,7 @@ import { createSlotMappedCardsSource } from "../../utils/itemSource/index.ts";
 
 const eventDefaultMappings = createSlotMappedCardsSource({
   label: "Events",
+  manualItemLabel: "Event",
   mappingFields: {
     image: {
       type: "entityField",
@@ -33,6 +34,7 @@ const eventDefaultMappings = createSlotMappedCardsSource({
 }).defaultValue.mappings!;
 const faqDefaultMappings = createSlotMappedCardsSource({
   label: "FAQs",
+  manualItemLabel: "FAQ",
   mappingFields: {
     question: {
       type: "entityField",

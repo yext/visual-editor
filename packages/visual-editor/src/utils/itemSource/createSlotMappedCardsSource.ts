@@ -14,6 +14,7 @@ import {
   type SlotMappedCardsData,
   type SlotMappedCardsSourceInstance,
 } from "./itemSourceTypes.ts";
+import { pt } from "../i18n/platform.ts";
 
 /**
  * Slot-backed repeated source assembly.
@@ -27,6 +28,7 @@ export function createSlotMappedCardsSource<
 >({
   label,
   mappingFields,
+  manualItemLabel,
 }: CreateSlotMappedCardsSourceOptions<TMappings>): SlotMappedCardsSourceInstance<TMappings> {
   const scopedMappingFields = Object.fromEntries(
     Object.entries(mappingFields).map(([key, field]) => [
@@ -51,7 +53,8 @@ export function createSlotMappedCardsSource<
       manualItemFields: {},
       defaultItemValue: {} as TMappings,
       defaultMappings,
-      manualModeEditor: "slots",
+      manualItemSummary: (_, index) =>
+        `${pt(manualItemLabel, manualItemLabel)} ${String((index ?? 0) + 1)}`,
     },
   } satisfies YextFieldDefinition<SlotMappedCardsData<TMappings>>;
   const defaultValue: SlotMappedCardsData<TMappings> = {
