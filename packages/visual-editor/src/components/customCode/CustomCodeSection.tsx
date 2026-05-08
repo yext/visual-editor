@@ -96,6 +96,7 @@ const CustomCodeSectionWrapper = ({
   puck,
 }: WithId<WithPuckProps<CustomCodeSectionProps>>) => {
   const streamDocument = useDocument();
+  const locale = streamDocument?.locale;
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const scriptIdRef = React.useRef<number>(Math.floor(Math.random() * 1e9));
@@ -104,7 +105,8 @@ const CustomCodeSectionWrapper = ({
   const processedHtml = processHandlebarsTemplate(html, streamDocument);
   const processedJavascript = resolveEmbeddedFieldsInString(
     javascript,
-    streamDocument
+    streamDocument,
+    locale
   );
 
   React.useEffect(() => {

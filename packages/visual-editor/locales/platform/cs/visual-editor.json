@@ -153,6 +153,7 @@
   "emptyStateFieldEmpty": "Mapované pole {{entityType}} je prázdné",
   "emptyStateSectionHidden": "Sekce skrytá pro tuto {{entityType}}",
   "enableCookies": "Povolit soubory cookie",
+  "entityFields": "Pole entity",
   "entityTypeField": "{{entityType}} pole",
   "event": "Událost",
   "events": "Události",
@@ -544,6 +545,7 @@
   "informationSection": "Sekce informací",
   "inheritedDataMsg": "Data jsou zděděna z nadřazené části.",
   "insight": "Vhled",
+  "item": "Položka",
   "kilometer_zero": "kilometr",
   "kilometer_one": "kilometr",
   "kilometer_few": "kilometry",
@@ -551,6 +553,7 @@
   "kilometer_other": "kilometrů",
   "knowledgeGraphContent": "Obsah grafu znalostí",
   "link": "odkaz",
+  "linkedEntityFields": "Pole propojených entit",
   "linkedEntityMultiValueWarning": "Pro {{fieldName}} bylo nalezeno více propojených entit. Pomocí první propojené entity.",
   "linkTypes": {
     "clickToWebsite": "Klikněte na web",

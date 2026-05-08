@@ -153,6 +153,7 @@
   "emptyStateFieldEmpty": "Mapowane pole elementu {{entityType}} jest puste",
   "emptyStateSectionHidden": "Sekcja ukryta dla tego elementu {{entityType}}",
   "enableCookies": "Włącz pliki cookie",
+  "entityFields": "Pola encji",
   "entityTypeField": "Pole {{entityType}}",
   "event": "Wydarzenie",
   "events": "Wydarzenia",
@@ -544,6 +545,7 @@
   "informationSection": "Sekcja informacji",
   "inheritedDataMsg": "Dane są dziedziczone z sekcji nadrzędnej.",
   "insight": "Wgląd",
+  "item": "Przedmiot",
   "kilometer_zero": "kilometr",
   "kilometer_one": "kilometr",
   "kilometer_few": "kilometry",
@@ -551,6 +553,7 @@
   "kilometer_other": "kilometry",
   "knowledgeGraphContent": "Treść wykresu wiedzy",
   "link": "Link",
+  "linkedEntityFields": "Pola encji połączonych",
   "linkedEntityMultiValueWarning": "Znaleziono wiele połączonych jednostek dla {{fieldName}}. Korzystanie z pierwszego połączonego elementu.",
   "linkTypes": {
     "clickToWebsite": "Kliknij na stronę internetową",

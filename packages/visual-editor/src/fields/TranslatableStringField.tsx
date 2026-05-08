@@ -78,16 +78,20 @@ export const TranslatableStringFieldOverride = ({
         <EmbeddedFieldStringInputFromOptions
           value={resolvedValue ?? ""}
           onChange={handleChange}
-          options={field
-            .getOptions()
-            .filter(
-              (option): option is { label: string; value: string } =>
-                option.value !== undefined
-            )
-            .map((option) => ({
-              label: option.label,
-              value: option.value,
-            }))}
+          optionGroups={[
+            {
+              options: field
+                .getOptions()
+                .filter(
+                  (option): option is { label: string; value: string } =>
+                    option.value !== undefined
+                )
+                .map((option) => ({
+                  label: option.label,
+                  value: option.value,
+                })),
+            },
+          ]}
           showFieldSelector={field.showFieldSelector ?? true}
           useOptionValueSublabel={true}
         />

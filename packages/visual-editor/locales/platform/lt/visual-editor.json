@@ -153,6 +153,7 @@
   "emptyStateFieldEmpty": "{{entityType}} susietas laukas tuščias",
   "emptyStateSectionHidden": "Šio {{entityType}} skyrius paslėptas",
   "enableCookies": "Įgalinti slapukus",
+  "entityFields": "Esybės laukai",
   "entityTypeField": "{{entityType}} laukas",
   "event": "Įvykis",
   "events": "Renginiai",
@@ -544,6 +545,7 @@
   "informationSection": "Informacijos skyrius",
   "inheritedDataMsg": "Duomenys paveldimi iš pirminės sekcijos.",
   "insight": "Įžvalga",
+  "item": "Prekė",
   "kilometer_zero": "kilometrų",
   "kilometer_one": "kilometras",
   "kilometer_few": "kilometrų",
@@ -551,6 +553,7 @@
   "kilometer_other": "kilometrų",
   "knowledgeGraphContent": "Žinių grafiko turinys",
   "link": "nuoroda",
+  "linkedEntityFields": "Susieti esybių laukai",
   "linkedEntityMultiValueWarning": "Rasti keli susieti objektai, skirti {{fieldName}}. Naudojant pirmąjį susietą objektą.",
   "linkTypes": {
     "clickToWebsite": "Spustelėkite svetainę",
