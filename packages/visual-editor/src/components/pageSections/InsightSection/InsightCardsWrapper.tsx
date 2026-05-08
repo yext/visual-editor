@@ -15,7 +15,12 @@ import {
   InsightCardProps,
 } from "./InsightCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
+import { renderMappedEntityFieldEmptyState } from "../EntityFieldSectionEmptyState.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
+import {
+  MappedEntityFieldConditionalRender,
+  withMappedEntityFieldConditionalRender,
+} from "../entityFieldSectionUtils.ts";
 
 export type InsightCardsWrapperProps = CardWrapperType<InsightSectionType> & {
   styles: {
@@ -25,6 +30,9 @@ export type InsightCardsWrapperProps = CardWrapperType<InsightSectionType> & {
     showDescription: boolean;
     showCTA: boolean;
   };
+
+  /** @internal */
+  conditionalRender?: MappedEntityFieldConditionalRender;
 };
 
 const insightCardsWrapperFields: YextFields<InsightCardsWrapperProps> = {
@@ -127,7 +135,8 @@ export const InsightCardsWrapper: YextComponentConfig<InsightCardsWrapperProps> 
         )?.insights;
 
         if (!resolvedInsights?.length) {
-          return setDeep(data, "props.slots.CardSlot", []);
+          const updatedData = setDeep(data, "props.slots.CardSlot", []);
+          return withMappedEntityFieldConditionalRender(updatedData, true);
         }
 
         const requiredLength = resolvedInsights.length;
@@ -150,70 +159,77 @@ export const InsightCardsWrapper: YextComponentConfig<InsightCardsWrapperProps> 
           ...cardsToAdd,
         ].slice(0, requiredLength);
 
-        return setDeep(
+        const updatedData = setDeep(
           data,
           "props.slots.CardSlot",
           updatedCardSlot
-            .map((card, i) => {
-              return setDeep(card, "props.index", i);
-            })
-            .map((card, i) => {
-              return setDeep(card, "props.parentData", {
+            .map((card, i) => setDeep(card, "props.index", i))
+            .map((card, i) =>
+              setDeep(card, "props.parentData", {
                 field: data.props.data.field,
                 insight: resolvedInsights[i],
-              } satisfies InsightCardProps["parentData"]);
-            })
+              } satisfies InsightCardProps["parentData"])
+            )
         );
-      } else {
-        let updatedData = data;
-        const inUseIds = new Set<string>();
-        const newSlots = data.props.data.constantValue.map(({ id }, i) => {
-          const existingCard = id
-            ? (data.props.slots.CardSlot.find(
-                (slot) => slot.props.id === id
-              ) as ComponentData<InsightCardProps>)
-            : undefined;
 
-          let newCard = existingCard
-            ? (JSON.parse(JSON.stringify(existingCard)) as typeof existingCard)
-            : undefined;
-
-          let newId = newCard?.props.id || `InsightCard-${crypto.randomUUID()}`;
-
-          if (newCard && inUseIds.has(newId)) {
-            newId = `InsightCard-${crypto.randomUUID()}`;
-            Object.entries(newCard.props.slots).forEach(
-              ([slotKey, slotArray]) => {
-                slotArray[0].props.id = newId + "-" + slotKey;
-              }
-            );
-          }
-          inUseIds.add(newId);
-
-          if (!newCard) {
-            return defaultInsightCardSlotData(
-              newId,
-              i,
-              sharedCardProps?.backgroundColor,
-              sharedCardProps?.slotStyles
-            );
-          }
-
-          newCard = setDeep(newCard, "props.id", newId);
-          newCard = setDeep(newCard, "props.index", i);
-          newCard = setDeep(newCard, "props.parentData", undefined);
-
-          return newCard;
-        });
-
-        updatedData = setDeep(updatedData, "props.slots.CardSlot", newSlots);
-        updatedData = setDeep(
-          updatedData,
-          "props.data.constantValue",
-          newSlots.map((card) => ({ id: card.props.id }))
-        );
-        return updatedData;
+        return withMappedEntityFieldConditionalRender(updatedData, false);
       }
+
+      let updatedData = data;
+      const inUseIds = new Set<string>();
+      const newSlots = data.props.data.constantValue.map(({ id }, i) => {
+        const existingCard = id
+          ? (data.props.slots.CardSlot.find(
+              (slot) => slot.props.id === id
+            ) as ComponentData<InsightCardProps>)
+          : undefined;
+
+        let newCard = existingCard
+          ? (JSON.parse(JSON.stringify(existingCard)) as typeof existingCard)
+          : undefined;
+
+        let newId = newCard?.props.id || `InsightCard-${crypto.randomUUID()}`;
+
+        if (newCard && inUseIds.has(newId)) {
+          newId = `InsightCard-${crypto.randomUUID()}`;
+          Object.entries(newCard.props.slots).forEach(
+            ([slotKey, slotArray]) => {
+              slotArray[0].props.id = newId + "-" + slotKey;
+            }
+          );
+        }
+        inUseIds.add(newId);
+
+        if (!newCard) {
+          return defaultInsightCardSlotData(
+            newId,
+            i,
+            sharedCardProps?.backgroundColor,
+            sharedCardProps?.slotStyles
+          );
+        }
+
+        newCard = setDeep(newCard, "props.id", newId);
+        newCard = setDeep(newCard, "props.index", i);
+        newCard = setDeep(newCard, "props.parentData", undefined);
+
+        return newCard;
+      });
+
+      updatedData = setDeep(updatedData, "props.slots.CardSlot", newSlots);
+      updatedData = setDeep(
+        updatedData,
+        "props.data.constantValue",
+        newSlots.map((card) => ({ id: card.props.id }))
+      );
+
+      return withMappedEntityFieldConditionalRender(updatedData, false);
     },
-    render: (props) => <InsightCardsWrapperComponent {...props} />,
+    render: (props) => {
+      if (props.conditionalRender?.isMappedContentEmpty) {
+        return renderMappedEntityFieldEmptyState(props.puck.isEditing);
+      }
+
+      return <InsightCardsWrapperComponent {...props} />;
+    },
   };

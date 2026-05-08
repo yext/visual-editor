@@ -58,6 +58,34 @@ Used in a component's render function to pull in the selected entity field's val
 
 See [YextEntityFieldSelector](../editor/README.md#YextEntityFieldSelector)
 
+## createItemSource
+
+Creates the field definition and authored-state helpers for a repeated list
+component backed by either a linked list field or manual items.
+
+### Input
+
+| Name          | Type                       | Description                                                    |
+| ------------- | -------------------------- | -------------------------------------------------------------- |
+| label         | string                     | Editor label for the repeated source selector.                 |
+| mappingFields | `YextFieldMap<TItemProps>` | Field definitions for one authored repeated item mapping tree. |
+
+### Returns
+
+`createItemSource(...)` returns an object with:
+
+- `field`: one repeated `entityField` definition
+- `defaultValue`: default authored state for linked and manual modes
+- `value`: helper-owned prop type marker for `typeof articleSource.value`
+- `resolveItems(value, streamDocument)`: render-ready repeated items
+
+### Usage
+
+Use this helper when a component needs to render a repeated list from a linked
+field while keeping source selection, per-item mappings, and manual fallback
+items in a single prop. See the full `ArticleList` / `ArticleCard` example in
+[editor/README.md](../editor/README.md#linked-entity-item-sources).
+
 ## ThemeConfig
 
 The ThemeConfig object defines the styles available for editing in Theme Manager. It is used

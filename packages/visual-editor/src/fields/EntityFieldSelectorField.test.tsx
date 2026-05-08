@@ -1,14 +1,40 @@
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+
+const puckState = {
+  appState: {
+    ui: {
+      itemSelector: null,
+    },
+  },
+  getItemBySelector: () => undefined,
+};
+
+vi.mock("@puckeditor/core", async () => {
+  const actual =
+    await vi.importActual<typeof import("@puckeditor/core")>(
+      "@puckeditor/core"
+    );
+
+  return {
+    ...actual,
+    createUsePuck: () => (selector: (state: typeof puckState) => unknown) =>
+      selector(puckState),
+  };
+});
+
 import { EntityFieldsContext } from "../hooks/useEntityFields.tsx";
-import { LinkedEntitySchemasContext } from "../hooks/useLinkedEntitySchemas.tsx";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { TemplateMetadataContext } from "../internal/hooks/useMessageReceivers.ts";
 import { generateTemplateMetadata } from "../internal/types/templateMetadata.ts";
 import { type StreamFields } from "../types/entityFields.ts";
 import { YextAutoField } from "./YextAutoField.tsx";
-import { type EntityFieldSelectorField } from "./EntityFieldSelectorField.tsx";
+import {
+  getConstantConfigFromType,
+  returnConstantFieldConfig,
+  type EntityFieldSelectorField,
+} from "./EntityFieldSelectorField.tsx";
 
 const defaultEntityFields: StreamFields = {
   fields: [
@@ -73,16 +99,134 @@ const renderEntityField = ({
           entityTypeDisplayName: "Location",
         }}
       >
-        <LinkedEntitySchemasContext.Provider value={null}>
-          <EntityFieldsContext.Provider value={entityFields}>
-            <YextAutoField
-              field={field}
-              id="entity-selector-field"
-              onChange={onChange}
-              value={value}
-            />
-          </EntityFieldsContext.Provider>
-        </LinkedEntitySchemasContext.Provider>
+        <EntityFieldsContext.Provider value={entityFields}>
+          <YextAutoField
+            field={field}
+            id="entity-selector-field"
+            onChange={onChange}
+            value={value}
+          />
+        </EntityFieldsContext.Provider>
+      </TemplateMetadataContext.Provider>
+    </TemplatePropsContext.Provider>
+  );
+
+  return { onChange };
+};
+
+const renderRepeatedEntityField = ({
+  field = {
+    type: "entityField",
+    label: "Articles",
+    filter: {
+      itemSourceTypes: [["type.string"]],
+    },
+    repeated: {
+      defaultItemValue: {
+        title: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: { defaultValue: "" },
+        },
+      },
+      defaultMappings: {
+        title: {
+          field: "",
+          constantValueEnabled: false,
+          constantValue: { defaultValue: "" },
+        },
+      },
+      manualItemFields: {
+        title: {
+          type: "entityField",
+          label: "Title",
+          filter: { types: ["type.string"] },
+        },
+      },
+      mappingFields: {
+        title: {
+          type: "entityField",
+          label: "Title",
+          filter: { types: ["type.string"] },
+        },
+      },
+    },
+  } satisfies EntityFieldSelectorField,
+  value = {
+    field: "",
+    constantValueEnabled: true,
+    constantValue: [
+      {
+        title: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: { defaultValue: "" },
+        },
+      },
+    ],
+    mappings: {
+      title: {
+        field: "name",
+        constantValueEnabled: false,
+        constantValue: { defaultValue: "" },
+      },
+    },
+  },
+  entityFields = {
+    ...defaultEntityFields,
+    fields: [
+      {
+        name: "c_articles",
+        definition: {
+          name: "c_articles",
+          typeName: "c_articles",
+          isList: true,
+          type: {},
+        },
+        children: {
+          fields: [
+            {
+              name: "name",
+              definition: {
+                name: "name",
+                typeName: "type.string",
+                type: {},
+              },
+            },
+          ],
+        },
+      },
+      ...defaultEntityFields.fields,
+    ],
+    displayNames: {
+      ...defaultEntityFields.displayNames,
+      c_articles: "Articles",
+      "c_articles.name": "Articles > Name",
+    },
+  } satisfies StreamFields,
+}: {
+  field?: EntityFieldSelectorField;
+  value?: Record<string, any>;
+  entityFields?: StreamFields | null;
+} = {}) => {
+  const onChange = vi.fn();
+
+  render(
+    <TemplatePropsContext.Provider value={{ document: {} }}>
+      <TemplateMetadataContext.Provider
+        value={{
+          ...generateTemplateMetadata(),
+          entityTypeDisplayName: "Location",
+        }}
+      >
+        <EntityFieldsContext.Provider value={entityFields}>
+          <YextAutoField
+            field={field}
+            id="repeated-entity-selector-field"
+            onChange={onChange}
+            value={value}
+          />
+        </EntityFieldsContext.Provider>
       </TemplateMetadataContext.Provider>
     </TemplatePropsContext.Provider>
   );
@@ -101,6 +245,16 @@ describe("EntityFieldSelectorField", () => {
     });
 
     expect(screen.getByText("Meta Description")).toBeDefined();
+  });
+
+  it("prefers the rich text constant editor for mixed string and rich text filters", () => {
+    expect(
+      returnConstantFieldConfig(
+        ["type.string", "type.rich_text_v2"],
+        false,
+        false
+      )
+    ).toBe(getConstantConfigFromType("type.rich_text_v2", false, false));
   });
 
   it("toggles between KG and static modes", () => {
@@ -174,7 +328,7 @@ describe("EntityFieldSelectorField", () => {
       },
     });
 
-    fireEvent.click(screen.getByRole("combobox"));
+    fireEvent.click(screen.getAllByRole("combobox")[0]);
     fireEvent.click(screen.getByText("Name"));
 
     expect(onChange).toHaveBeenCalledWith(
@@ -187,6 +341,134 @@ describe("EntityFieldSelectorField", () => {
     );
   });
 
+  it("shows linked entity fields for single-value selectors", () => {
+    renderEntityField({
+      field: {
+        type: "entityField",
+        label: "Entity Field",
+        filter: {
+          types: ["type.string"],
+        },
+      },
+      entityFields: {
+        ...defaultEntityFields,
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_linkedLocation",
+            displayName: "Linked Location",
+            definition: {
+              name: "c_linkedLocation",
+              typeRegistryId: "type.entity_reference",
+              type: {
+                documentType: "DOCUMENT_TYPE_ENTITY",
+              },
+            },
+            children: {
+              fields: [
+                {
+                  name: "name",
+                  displayName: "Name",
+                  definition: {
+                    name: "name",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+        ],
+        displayNames: {
+          ...defaultEntityFields.displayNames,
+          c_linkedLocation: "Linked Location",
+          "c_linkedLocation.name": "Linked Location > Name",
+        },
+      },
+    });
+
+    fireEvent.click(screen.getAllByRole("combobox")[0]);
+
+    expect(screen.getAllByText("Name").length).toBeGreaterThan(0);
+    expect(screen.getByText("Linked Location > Name")).toBeDefined();
+  });
+
+  it("does not show linked entity fields for list-only selectors", () => {
+    renderEntityField({
+      field: {
+        type: "entityField",
+        label: "Entity Field",
+        filter: {
+          types: ["type.string"],
+          includeListsOnly: true,
+        },
+      },
+      entityFields: {
+        ...defaultEntityFields,
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "c_linkedLocation",
+            displayName: "Linked Location",
+            definition: {
+              name: "c_linkedLocation",
+              typeRegistryId: "type.entity_reference",
+              type: {
+                documentType: "DOCUMENT_TYPE_ENTITY",
+              },
+            },
+            children: {
+              fields: [
+                {
+                  name: "name",
+                  displayName: "Name",
+                  definition: {
+                    name: "name",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+        ],
+        displayNames: {
+          ...defaultEntityFields.displayNames,
+          c_linkedLocation: "Linked Location",
+          "c_linkedLocation.name": "Linked Location > Name",
+        },
+      },
+    });
+
+    fireEvent.click(screen.getAllByRole("combobox")[0]);
+
+    expect(screen.queryByText("Linked Location > Name")).toBeNull();
+  });
+
+  it("falls back to the default entity field option when no matching entity fields exist", () => {
+    renderEntityField({
+      entityFields: {
+        fields: [],
+        displayNames: {},
+      },
+      value: {
+        field: "",
+        constantValue: "",
+        constantValueEnabled: false,
+      },
+    });
+
+    expect(screen.getAllByRole("combobox")).toHaveLength(1);
+    expect(screen.getAllByRole("combobox")[0]?.textContent).toContain(
+      "Select a Field"
+    );
+
+    fireEvent.click(screen.getAllByRole("combobox")[0]);
+
+    expect(screen.getAllByText("Select a Field").length).toBeGreaterThan(0);
+    expect(screen.queryByText("Name")).toBeNull();
+  });
+
   it("renders nested entityField configs through YextAutoField normalization", () => {
     render(
       <TemplatePropsContext.Provider value={{ document: {} }}>
@@ -196,36 +478,144 @@ describe("EntityFieldSelectorField", () => {
             entityTypeDisplayName: "Location",
           }}
         >
-          <LinkedEntitySchemasContext.Provider value={null}>
-            <EntityFieldsContext.Provider value={defaultEntityFields}>
-              <YextAutoField
-                field={{
-                  type: "object",
-                  label: "Data",
-                  objectFields: {
-                    title: {
-                      type: "entityField",
-                      label: "Title",
-                      filter: { types: ["type.string"] },
-                    },
-                  },
-                }}
-                id="nested-entity-selector-field"
-                onChange={vi.fn()}
-                value={{
+          <EntityFieldsContext.Provider value={defaultEntityFields}>
+            <YextAutoField
+              field={{
+                type: "object",
+                label: "Data",
+                objectFields: {
                   title: {
-                    field: "name",
-                    constantValue: "",
-                    constantValueEnabled: false,
+                    type: "entityField",
+                    label: "Title",
+                    filter: { types: ["type.string"] },
                   },
-                }}
-              />
-            </EntityFieldsContext.Provider>
-          </LinkedEntitySchemasContext.Provider>
+                },
+              }}
+              id="nested-entity-selector-field"
+              onChange={vi.fn()}
+              value={{
+                title: {
+                  field: "name",
+                  constantValue: "",
+                  constantValueEnabled: false,
+                },
+              }}
+            />
+          </EntityFieldsContext.Provider>
         </TemplateMetadataContext.Provider>
       </TemplatePropsContext.Provider>
     );
 
     expect(screen.getByText("Title")).toBeDefined();
+  });
+
+  it("renders inline repeated item editors in manual mode", () => {
+    renderRepeatedEntityField();
+
+    expect(screen.getByText("Articles")).toBeDefined();
+    expect(screen.getByRole("switch")).toBeDefined();
+    expect(screen.getByRole("button", { name: "Delete" })).toBeDefined();
+  });
+
+  it("renders the linked source selector when repeated KG mode is enabled", () => {
+    const { onChange } = renderRepeatedEntityField({
+      value: {
+        field: "c_featuredArticles",
+        constantValueEnabled: false,
+        constantValue: [],
+        mappings: {
+          title: {
+            field: "",
+            constantValueEnabled: false,
+            constantValue: { defaultValue: "" },
+          },
+        },
+      },
+    });
+
+    fireEvent.click(screen.getAllByRole("combobox")[0]);
+    fireEvent.click(
+      within(screen.getByRole("listbox")).getAllByText("Articles")[0]
+    );
+
+    expect(onChange).toHaveBeenCalledWith({
+      field: "c_articles",
+      constantValueEnabled: false,
+      constantValue: [],
+      mappings: {
+        title: {
+          field: "",
+          constantValueEnabled: false,
+          constantValue: { defaultValue: "" },
+        },
+      },
+    });
+  });
+
+  it("clears stale repeated mappings when switching between linked sources", () => {
+    const { onChange } = renderRepeatedEntityField({
+      value: {
+        field: "c_featuredArticles",
+        constantValueEnabled: false,
+        constantValue: [],
+        mappings: {
+          title: {
+            field: "name",
+            constantValueEnabled: false,
+            constantValue: { defaultValue: "" },
+          },
+        },
+      },
+    });
+
+    fireEvent.click(screen.getAllByRole("combobox")[0]);
+    fireEvent.click(
+      within(screen.getByRole("listbox")).getAllByText("Articles")[0]
+    );
+
+    expect(onChange).toHaveBeenCalledWith({
+      field: "c_articles",
+      constantValueEnabled: false,
+      constantValue: [],
+      mappings: {
+        title: {
+          field: "",
+          constantValueEnabled: false,
+          constantValue: { defaultValue: "" },
+        },
+      },
+    });
+  });
+
+  it("preserves repeated mappings when switching from linked mode to manual mode", () => {
+    const { onChange } = renderRepeatedEntityField({
+      value: {
+        field: "c_featuredArticles",
+        constantValueEnabled: false,
+        constantValue: [],
+        mappings: {
+          title: {
+            field: "name",
+            constantValueEnabled: false,
+            constantValue: { defaultValue: "" },
+          },
+        },
+      },
+    });
+
+    fireEvent.click(screen.getAllByRole("switch")[0]);
+
+    expect(onChange).toHaveBeenCalledWith({
+      field: "c_featuredArticles",
+      constantValueEnabled: true,
+      constantValue: [],
+      mappings: {
+        title: {
+          field: "name",
+          constantValueEnabled: false,
+          constantValue: { defaultValue: "" },
+        },
+      },
+    });
   });
 });

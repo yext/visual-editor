@@ -37,21 +37,24 @@ vi.mock("../editor/EmbeddedFieldStringInput.tsx", () => ({
   ),
   EmbeddedFieldStringInputFromOptions: ({
     onChange,
-    options,
+    optionGroups,
     showFieldSelector,
     value,
-  }: any) => (
-    <button
-      type="button"
-      data-options={JSON.stringify(options)}
-      data-show-field-selector={String(showFieldSelector)}
-      data-value={value}
-      data-testid="options-input"
-      onClick={() => onChange("Selected")}
-    >
-      options-input
-    </button>
-  ),
+  }: any) => {
+    const options = optionGroups?.flatMap((group: any) => group.options);
+    return (
+      <button
+        type="button"
+        data-options={JSON.stringify(options)}
+        data-show-field-selector={String(showFieldSelector)}
+        data-value={value}
+        data-testid="options-input"
+        onClick={() => onChange("Selected")}
+      >
+        options-input
+      </button>
+    );
+  },
 }));
 
 const renderField = (

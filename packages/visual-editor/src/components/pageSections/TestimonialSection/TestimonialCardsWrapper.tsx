@@ -14,7 +14,12 @@ import {
   TestimonialCardProps,
 } from "./TestimonialCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
+import { renderMappedEntityFieldEmptyState } from "../EntityFieldSectionEmptyState.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
+import {
+  MappedEntityFieldConditionalRender,
+  withMappedEntityFieldConditionalRender,
+} from "../entityFieldSectionUtils.ts";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 
 export type TestimonialCardsWrapperProps =
@@ -32,6 +37,9 @@ export type TestimonialCardsWrapperProps =
        */
       showDate: boolean;
     };
+
+    /** @internal */
+    conditionalRender?: MappedEntityFieldConditionalRender;
   };
 
 const testimonialCardsWrapperFields: YextFields<TestimonialCardsWrapperProps> =
@@ -121,7 +129,8 @@ export const TestimonialCardsWrapper: YextComponentConfig<TestimonialCardsWrappe
         )?.testimonials;
 
         if (!resolvedTestimonials?.length) {
-          return setDeep(data, "props.slots.CardSlot", []);
+          const updatedData = setDeep(data, "props.slots.CardSlot", []);
+          return withMappedEntityFieldConditionalRender(updatedData, true);
         }
 
         const requiredLength = resolvedTestimonials.length;
@@ -144,7 +153,7 @@ export const TestimonialCardsWrapper: YextComponentConfig<TestimonialCardsWrappe
           ...cardsToAdd,
         ].slice(0, requiredLength) as ComponentData<TestimonialCardProps>[];
 
-        return setDeep(
+        const updatedData = setDeep(
           data,
           "props.slots.CardSlot",
           updatedCardSlot.map((card, i) => {
@@ -155,65 +164,74 @@ export const TestimonialCardsWrapper: YextComponentConfig<TestimonialCardsWrappe
             } satisfies TestimonialCardProps["parentData"]);
           })
         );
-      } else {
-        let updatedData = data;
 
-        if (!Array.isArray(data.props.data.constantValue)) {
-          updatedData = setDeep(updatedData, "props.data.constantValue", []);
-          return updatedData;
+        return withMappedEntityFieldConditionalRender(updatedData, false);
+      }
+
+      let updatedData = data;
+
+      if (!Array.isArray(data.props.data.constantValue)) {
+        updatedData = setDeep(updatedData, "props.data.constantValue", []);
+        return withMappedEntityFieldConditionalRender(updatedData, false);
+      }
+
+      const inUseIds = new Set<string>();
+      const newSlots = data.props.data.constantValue.map(({ id }, i) => {
+        const existingCard = id
+          ? (data.props.slots.CardSlot.find(
+              (slot) => slot.props.id === id
+            ) as ComponentData<TestimonialCardProps>)
+          : (data.props.slots.CardSlot[i] as
+              | ComponentData<TestimonialCardProps>
+              | undefined);
+
+        let newCard = existingCard
+          ? (JSON.parse(JSON.stringify(existingCard)) as typeof existingCard)
+          : undefined;
+
+        let newId =
+          newCard?.props.id || `TestimonialCard-${crypto.randomUUID()}`;
+
+        if (newCard && inUseIds.has(newId)) {
+          newId = `TestimonialCard-${crypto.randomUUID()}`;
+          Object.entries(newCard.props.slots).forEach(
+            ([slotKey, slotArray]) => {
+              slotArray[0].props.id = newId + "-" + slotKey;
+            }
+          );
+        }
+        inUseIds.add(newId);
+
+        if (!newCard) {
+          return defaultTestimonialCardSlotData(
+            newId,
+            i,
+            sharedCardProps?.backgroundColor,
+            sharedCardProps?.slotStyles
+          );
         }
 
-        const inUseIds = new Set<string>();
-        const newSlots = data.props.data.constantValue.map(({ id }, i) => {
-          const existingCard = id
-            ? (data.props.slots.CardSlot.find(
-                (slot) => slot.props.id === id
-              ) as ComponentData<TestimonialCardProps>)
-            : (data.props.slots.CardSlot[i] as
-                | ComponentData<TestimonialCardProps>
-                | undefined);
+        newCard = setDeep(newCard, "props.id", newId);
+        newCard = setDeep(newCard, "props.index", i);
+        newCard = setDeep(newCard, "props.parentData", undefined);
 
-          let newCard = existingCard
-            ? (JSON.parse(JSON.stringify(existingCard)) as typeof existingCard)
-            : undefined;
+        return newCard;
+      });
 
-          let newId =
-            newCard?.props.id || `TestimonialCard-${crypto.randomUUID()}`;
+      updatedData = setDeep(updatedData, "props.slots.CardSlot", newSlots);
+      updatedData = setDeep(
+        updatedData,
+        "props.data.constantValue",
+        newSlots.map((card) => ({ id: card.props.id }))
+      );
 
-          if (newCard && inUseIds.has(newId)) {
-            newId = `TestimonialCard-${crypto.randomUUID()}`;
-            Object.entries(newCard.props.slots).forEach(
-              ([slotKey, slotArray]) => {
-                slotArray[0].props.id = newId + "-" + slotKey;
-              }
-            );
-          }
-          inUseIds.add(newId);
-
-          if (!newCard) {
-            return defaultTestimonialCardSlotData(
-              newId,
-              i,
-              sharedCardProps?.backgroundColor,
-              sharedCardProps?.slotStyles
-            );
-          }
-
-          newCard = setDeep(newCard, "props.id", newId);
-          newCard = setDeep(newCard, "props.index", i);
-          newCard = setDeep(newCard, "props.parentData", undefined);
-
-          return newCard;
-        });
-
-        updatedData = setDeep(updatedData, "props.slots.CardSlot", newSlots);
-        updatedData = setDeep(
-          updatedData,
-          "props.data.constantValue",
-          newSlots.map((card) => ({ id: card.props.id }))
-        );
-        return updatedData;
-      }
+      return withMappedEntityFieldConditionalRender(updatedData, false);
     },
-    render: (props) => <TestimonialCardsWrapperComponent {...props} />,
+    render: (props) => {
+      if (props.conditionalRender?.isMappedContentEmpty) {
+        return renderMappedEntityFieldEmptyState(props.puck.isEditing);
+      }
+
+      return <TestimonialCardsWrapperComponent {...props} />;
+    },
   };
