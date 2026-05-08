@@ -512,6 +512,8 @@
     "video": "影片",
     "visibleOnLivePage": "在現場頁面上可見",
     "weight": "字重",
+    "whenFalse": "當假時",
+    "whenTrue": "當為真時",
     "wrap": "裹",
     "xLink": "x鏈接",
     "youtubeLink": "YouTube鏈接"

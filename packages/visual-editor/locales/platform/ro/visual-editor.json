@@ -512,6 +512,8 @@
     "video": "Video",
     "visibleOnLivePage": "Vizibil pe pagina live",
     "weight": "Greutate",
+    "whenFalse": "Când este fals",
+    "whenTrue": "Când adevărat",
     "wrap": "Înveliș",
     "xLink": "X Link",
     "youtubeLink": "Link YouTube"

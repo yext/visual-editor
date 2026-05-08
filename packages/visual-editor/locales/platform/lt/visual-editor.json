@@ -512,6 +512,8 @@
     "video": "Vaizdo įrašas",
     "visibleOnLivePage": "Matomas tiesioginiame puslapyje",
     "weight": "Svoris",
+    "whenFalse": "Kai netikra",
+    "whenTrue": "Kai tiesa",
     "wrap": "Apvynioti",
     "xLink": "X nuoroda",
     "youtubeLink": "„YouTube“ nuoroda"

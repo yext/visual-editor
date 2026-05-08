@@ -512,6 +512,8 @@
     "video": "Video",
     "visibleOnLivePage": "Canlı sayfada görünür",
     "weight": "Ağırlık",
+    "whenFalse": "Yanlış olduğunda",
+    "whenTrue": "Doğru olduğunda",
     "wrap": "Dürüm",
     "xLink": "X Bağlantı",
     "youtubeLink": "YouTube bağlantısı"

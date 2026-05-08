@@ -512,6 +512,8 @@
     "video": "Videó",
     "visibleOnLivePage": "Látható az élő oldalon",
     "weight": "Súly",
+    "whenFalse": "Amikor hamis",
+    "whenTrue": "Amikor igaz",
     "wrap": "Betakar",
     "xLink": "X link",
     "youtubeLink": "YouTube link"

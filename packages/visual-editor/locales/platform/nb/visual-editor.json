@@ -512,6 +512,8 @@
     "video": "Video",
     "visibleOnLivePage": "Synlig på live side",
     "weight": "Vekt",
+    "whenFalse": "Når falsk",
+    "whenTrue": "Når sant",
     "wrap": "Pakk",
     "xLink": "X lenke",
     "youtubeLink": "YouTube -lenke"

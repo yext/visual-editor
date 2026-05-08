@@ -512,6 +512,8 @@
     "video": "Video",
     "visibleOnLivePage": "Zichtbaar op live pagina",
     "weight": "Gewicht",
+    "whenFalse": "Wanneer vals",
+    "whenTrue": "Wanneer waar",
     "wrap": "Wrap",
     "xLink": "X Link",
     "youtubeLink": "YouTube -link"

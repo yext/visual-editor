@@ -512,6 +512,8 @@
     "video": "Video",
     "visibleOnLivePage": "Viditelné na živé stránce",
     "weight": "Hmotnost",
+    "whenFalse": "Když nepravda",
+    "whenTrue": "Když je to pravda",
     "wrap": "Zabalit",
     "xLink": "X odkaz",
     "youtubeLink": "Odkaz na YouTube"
