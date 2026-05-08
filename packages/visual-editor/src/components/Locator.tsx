@@ -85,6 +85,7 @@ import {
 } from "./LocatorResultCard.tsx";
 import { MapPinIcon } from "./MapPinIcon.js";
 import { useAnalytics } from "@yext/pages-components";
+import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 import {
   DEFAULT_ENTITY_TYPE,
   LocatorEntityType,
@@ -119,6 +120,11 @@ const DEFAULT_LOCATION_STYLE = {
 const DEFAULT_PIN_ICON_WIDTH = 14;
 const MAX_PIN_ICON_WIDTH = 27;
 const PIN_ICON_MAX_FILE_SIZE_BYTES = 128 * 1024;
+const BOOLEAN_SUPPORTED_FIELDS = [
+  "primaryHeading",
+  "secondaryHeading",
+  "tertiaryHeading",
+] as const;
 
 type LocationStyleConfig = Record<
   string,
@@ -214,6 +220,7 @@ const ResultCardPropsField = ({
   onChange: (value: LocatorResultCardProps) => void;
 }) => {
   const streamDocument = useDocument();
+  const templateMetadata = useTemplateMetadata();
   const entityTypeSourceMap = getLocatorEntityTypeSourceMap();
   const entityTypeScopes = React.useMemo(() => {
     const locatorConfig = getLocatorConfigFromPageSet(streamDocument?._pageset);
@@ -243,40 +250,53 @@ const ResultCardPropsField = ({
     );
 
     // For each section, show either the field selector or the constant value editor.
-    const constantValueFieldConfigs = [
-      {
-        key: "primaryHeading",
-        enabled: value.primaryHeading?.constantValueEnabled ?? false,
-      },
-      {
-        key: "secondaryHeading",
-        enabled: value.secondaryHeading?.constantValueEnabled ?? false,
-      },
-      {
-        key: "tertiaryHeading",
-        enabled: value.tertiaryHeading?.constantValueEnabled ?? false,
-      },
-      {
-        key: "image",
-        enabled: value.image?.constantValueEnabled ?? false,
-      },
-    ];
+    BOOLEAN_SUPPORTED_FIELDS.forEach((key) => {
+      const headingConfig = value[key];
+      const constantValueEnabled = headingConfig?.constantValueEnabled ?? false;
+      const field = headingConfig?.field;
+      const fieldTypeId = field
+        ? templateMetadata?.locatorDisplayFields?.[field]?.field_type_id
+        : undefined;
+      const booleanFieldSelected =
+        !constantValueEnabled && fieldTypeId === "type.boolean";
 
-    constantValueFieldConfigs.forEach(({ key, enabled }) => {
       fields = setDeep(
         fields,
         `objectFields.${key}.objectFields.field.visible`,
-        !enabled
+        !constantValueEnabled
       );
       fields = setDeep(
         fields,
         `objectFields.${key}.objectFields.constantValue.visible`,
-        enabled
+        constantValueEnabled
+      );
+      fields = setDeep(
+        fields,
+        `objectFields.${key}.objectFields.trueDisplayText.visible`,
+        !constantValueEnabled && booleanFieldSelected
+      );
+      fields = setDeep(
+        fields,
+        `objectFields.${key}.objectFields.falseDisplayText.visible`,
+        booleanFieldSelected
       );
     });
 
+    const imageConstantValueEnabled =
+      value.image?.constantValueEnabled ?? false;
+    fields = setDeep(
+      fields,
+      "objectFields.image.objectFields.field.visible",
+      !imageConstantValueEnabled
+    );
+    fields = setDeep(
+      fields,
+      "objectFields.image.objectFields.constantValue.visible",
+      imageConstantValueEnabled
+    );
+
     return fields;
-  }, [entityTypeSourceMap, entityTypeScopes, value]);
+  }, [entityTypeSourceMap, entityTypeScopes, templateMetadata, value]);
 
   return (
     <YextAutoField

@@ -511,6 +511,8 @@
     "video": "Video",
     "visibleOnLivePage": "Vidljivo na stranici uživo",
     "weight": "Težina",
+    "whenFalse": "Kada je lažno",
+    "whenTrue": "Kada je istina",
     "wrap": "Zamotati",
     "xLink": "X Link",
     "youtubeLink": "YouTube veza"
