@@ -12,7 +12,7 @@ import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 import { HeadingTextProps } from "../contentBlocks/HeadingText.tsx";
 
 export type DirectoryCardTitleSlotProps = {
-  /** The title text value. Supports the subset of embedded fields available on directory children. */
+  /** The title text value. Supports embedded fields available on directory children. */
   data: {
     text: TranslatableString;
   };
@@ -32,37 +32,8 @@ const directoryCardTitleSlotFields: YextFields<DirectoryCardTitleSlotProps> = {
         filter: {
           types: ["type.string"],
         },
+        sourceField: "dm_directoryChildren",
         showApplyAllOption: true,
-        getOptions: () => [
-          { label: pt("name", "Name"), value: "name" },
-          { label: pt("slug", "Slug"), value: "slug" },
-          { label: pt("geomodifier", "Geomodifier"), value: "geomodifier" },
-          { label: pt("id", "ID"), value: "id" },
-          {
-            label: pt("addressLine1", "Address > Line 1"),
-            value: "address.line1",
-          },
-          {
-            label: pt("addressLine2", "Address > Line 2"),
-            value: "address.line2",
-          },
-          {
-            label: pt("addressCity", "Address > City"),
-            value: "address.city",
-          },
-          {
-            label: pt("addressRegion", "Address > Region"),
-            value: "address.region",
-          },
-          {
-            label: pt("addressCountry", "Address > Country"),
-            value: "address.country",
-          },
-          {
-            label: pt("addressPostalCode", "Address > Postal Code"),
-            value: "address.postalCode",
-          },
-        ],
       },
     },
   },
