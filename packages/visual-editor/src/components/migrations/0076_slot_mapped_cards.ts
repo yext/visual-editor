@@ -1,9 +1,9 @@
 import { Migration } from "../../utils/migrate.ts";
-import { createSlotMappedCardsSource } from "../../utils/itemSource/index.ts";
+import { createSlottedItemSource } from "../../utils/itemSource/index.ts";
 
-const eventDefaultMappings = createSlotMappedCardsSource({
+const eventDefaultMappings = createSlottedItemSource({
   label: "Events",
-  manualItemLabel: "Event",
+  itemLabel: "Event",
   mappingFields: {
     image: {
       type: "entityField",
@@ -32,9 +32,9 @@ const eventDefaultMappings = createSlotMappedCardsSource({
     },
   },
 }).defaultValue.mappings!;
-const faqDefaultMappings = createSlotMappedCardsSource({
+const faqDefaultMappings = createSlottedItemSource({
   label: "FAQs",
-  manualItemLabel: "FAQ",
+  itemLabel: "FAQ",
   mappingFields: {
     question: {
       type: "entityField",

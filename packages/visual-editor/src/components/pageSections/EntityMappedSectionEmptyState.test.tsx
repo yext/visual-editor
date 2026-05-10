@@ -80,7 +80,7 @@ const directSectionCases: DirectSectionCase[] = [
     sectionConfig: FAQSection,
     createMappedProps: () => {
       const props = cloneValue(FAQSection.defaultProps!);
-      props.data.field = "c_faq";
+      props.data.field = "c_faq.faqs";
       props.data.constantValueEnabled = false;
       props.data.constantValue = [];
       return props;
@@ -364,7 +364,7 @@ const wrapperCases: WrapperCase[] = [
     sectionConfig: EventSection,
     wrapperName: "Event Cards Wrapper",
     wrapperConfig: EventCardsWrapper,
-    mappedField: "c_events",
+    mappedField: "c_events.events",
     populatedDocument: {
       locale: "en",
       c_events: {

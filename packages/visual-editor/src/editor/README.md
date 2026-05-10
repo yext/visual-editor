@@ -332,9 +332,159 @@ export const ArticleList: YextComponentConfig<ArticleListProps> = {
 };
 ```
 
-Use this pattern when the repeated UI is rendered directly by the component. If
-you need each item to become a nested slot child instead, build that on top of
-the same repeated `entityField` contract.
+Use this pattern when the repeated UI is rendered directly by the component.
+
+### Slotted Example
+
+Use `createSlottedItemSource(...)` when each repeated item should become a slot
+child instead of being rendered inline.
+
+`ItemCard.tsx`
+
+```tsx
+import { type PuckComponent, type Slot } from "@puckeditor/core";
+import {
+  bindSlots,
+  type TranslatableRichText,
+  type TranslatableString,
+  type YextComponentConfig,
+} from "@yext/visual-editor";
+
+export type ItemCardProps = {
+  id?: string;
+  index?: number;
+  title?: TranslatableString;
+  description?: TranslatableRichText;
+  slots: {
+    TitleSlot: Slot;
+    DescriptionSlot: Slot;
+  };
+};
+
+const ItemCardComponent: PuckComponent<ItemCardProps> = ({ slots }) => (
+  <article className="flex flex-col gap-3">
+    <slots.TitleSlot />
+    <slots.DescriptionSlot />
+  </article>
+);
+
+export const Item: YextComponentConfig<ItemCardProps> = {
+  label: "Item",
+  fields: {
+    slots: {
+      type: "object",
+      objectFields: {
+        TitleSlot: { type: "slot" },
+        DescriptionSlot: { type: "slot" },
+      },
+      visible: false,
+    },
+  },
+  resolveData: (data) =>
+    bindSlots(data, {
+      TitleSlot: data.props.title,
+      DescriptionSlot: data.props.description,
+    }),
+  render: (props) => <ItemCardComponent {...props} />,
+};
+```
+
+`FeaturedItems.tsx`
+
+```tsx
+import { type ComponentData } from "@puckeditor/core";
+import {
+  createSlottedItemSource,
+  resolveComponentData,
+  type StreamDocument,
+  type TranslatableRichText,
+  type TranslatableString,
+  toPuckFields,
+  type YextComponentConfig,
+  useDocument,
+} from "@yext/visual-editor";
+import { useTranslation } from "react-i18next";
+import { type ItemCardProps } from "./ItemCard.tsx";
+
+type FeaturedItemMappings = {
+  title: TranslatableString;
+  description: TranslatableRichText;
+};
+
+const featuredItemsSource = createSlottedItemSource<FeaturedItemMappings>({
+  label: "Featured Items",
+  itemLabel: "Item",
+  mappingFields: {
+    title: {
+      type: "entityField",
+      label: "Title",
+      filter: {
+        types: ["type.string"],
+      },
+    },
+    description: {
+      type: "entityField",
+      label: "Description",
+      filter: {
+        types: ["type.rich_text_v2"],
+      },
+    },
+  },
+});
+
+type FeaturedItemsProps = {
+  data: typeof featuredItemsSource.value;
+  header: TranslatableString;
+  slots: {
+    CardSlot: ComponentData<ItemCardProps>[];
+  };
+};
+
+const featuredItemsFields = {
+  data: featuredItemsSource.field,
+  header: {
+    type: "translatableString",
+    label: "Header",
+  },
+  slots: {
+    type: "object",
+    objectFields: {
+      CardSlot: { type: "slot" },
+    },
+    visible: false,
+  },
+};
+
+export const FeaturedItems: YextComponentConfig<FeaturedItemsProps> = {
+  label: "Featured Items",
+  fields: toPuckFields(featuredItemsFields),
+  defaultProps: {
+    ...featuredItemsSource.defaultWrapperProps,
+    header: {
+      defaultValue: "Featured Items",
+    },
+  },
+  resolveData: (data, params) =>
+    featuredItemsSource.populateSlots(data, params.metadata.streamDocument!),
+  render: ({ header, slots }) => {
+    const { i18n } = useTranslation();
+    const streamDocument = useDocument<StreamDocument>();
+
+    return (
+      <section className="flex flex-col gap-6">
+        <h2>
+          {resolveComponentData(header, i18n.language, streamDocument, {
+            output: "plainText",
+          })}
+        </h2>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <slots.CardSlot allow={[]} />
+        </div>
+      </section>
+    );
+  },
+};
+```
 
 ## basicSelector Field Type
 

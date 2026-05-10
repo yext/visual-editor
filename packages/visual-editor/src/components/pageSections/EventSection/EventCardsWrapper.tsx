@@ -1,22 +1,14 @@
-import { ComponentData, PuckComponent, setDeep } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { EventStruct } from "../../../types/types.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 import { SlotMappedCardWrapperType } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 import { defaultEventCardSlotData, EventCardProps } from "./EventCard.tsx";
-import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { renderMappedEntityFieldEmptyState } from "../EntityFieldSectionEmptyState.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
-import {
-  MappedEntityFieldConditionalRender,
-  withMappedEntityFieldConditionalRender,
-} from "../entityFieldSectionUtils.ts";
-import { createSlotMappedCardsSource } from "../../../utils/itemSource/index.ts";
-import {
-  syncLinkedSlotMappedCards,
-  syncManualSlotMappedCards,
-} from "../../../utils/cardSlots/slotMappedCards.ts";
+import { MappedEntityFieldConditionalRender } from "../entityFieldSectionUtils.ts";
+import { createSlottedItemSource } from "../../../utils/itemSource/index.ts";
 
 type EventCardMappings = {
   image: EventStruct["image"];
@@ -26,9 +18,14 @@ type EventCardMappings = {
   cta: EventStruct["cta"];
 };
 
-export const eventCardsSource = createSlotMappedCardsSource<EventCardMappings>({
+export const eventCardsSource = createSlottedItemSource<
+  EventCardMappings,
+  EventCardProps
+>({
   label: msg("components.events", "Events"),
-  manualItemLabel: "Event",
+  itemLabel: "Event",
+  cardName: "EventCard",
+  defaultItemProps: defaultEventCardSlotData().props,
   mappingFields: {
     image: {
       type: "entityField",
@@ -124,104 +121,16 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
   label: msg("components.eventCardsWrapper", "Event Cards"),
   fields: eventCardsWrapperFields,
   defaultProps: {
-    data: {
-      ...eventCardsSource.defaultValue,
-      constantValue: [{}, {}, {}],
-    },
+    ...eventCardsSource.defaultWrapperProps,
     styles: {
       showImage: true,
       showDateTime: true,
       showDescription: true,
       showCTA: true,
     },
-    slots: {
-      CardSlot: [],
-    },
   },
-  // Keep the wrapper slot tree aligned with either mapped entity data or
-  // constant-value cards, and mark the mapped-empty case so the parent section
-  // can hide on live while still showing an editor empty state.
-  resolveData: (data, params) => {
-    const sharedCardProps =
-      data.props.slots.CardSlot.length === 0
-        ? undefined
-        : {
-            backgroundColor:
-              data.props.slots.CardSlot[0].props.styles.backgroundColor,
-            truncateDescription:
-              data.props.slots.CardSlot[0].props.truncateDescription,
-            slotStyles: gatherSlotStyles(
-              data.props.slots.CardSlot[0].props.slots
-            ),
-          };
-
-    if (!data.props.data.constantValueEnabled && data.props.data.field) {
-      const resolvedEvents = eventCardsSource.resolveMappedItems(
-        data.props.data,
-        params.metadata.streamDocument!
-      );
-
-      if (!resolvedEvents?.length) {
-        const updatedData = setDeep(data, "props.slots.CardSlot", []);
-        return withMappedEntityFieldConditionalRender(updatedData, true);
-      }
-
-      const updatedData = setDeep(
-        data,
-        "props.slots.CardSlot",
-        syncLinkedSlotMappedCards({
-          items: resolvedEvents,
-          currentCards: data.props.slots
-            .CardSlot as ComponentData<EventCardProps>[],
-          createCard: (id, index) =>
-            defaultEventCardSlotData(
-              id,
-              index,
-              sharedCardProps?.backgroundColor,
-              sharedCardProps?.truncateDescription,
-              sharedCardProps?.slotStyles
-            ) as ComponentData<EventCardProps>,
-          toParentData: (event) => ({
-            field: data.props.data.field,
-            event: event as EventStruct,
-          }),
-          normalizeId: (id) => `EventCard-${id}`,
-        })
-      );
-
-      return withMappedEntityFieldConditionalRender(updatedData, false);
-    }
-
-    const normalizedCards = syncManualSlotMappedCards({
-      cardReferences: data.props.data.constantValue,
-      currentCards: data.props.slots
-        .CardSlot as ComponentData<EventCardProps>[],
-      createCard: (id, index) =>
-        defaultEventCardSlotData(
-          id,
-          index,
-          sharedCardProps?.backgroundColor,
-          sharedCardProps?.truncateDescription,
-          sharedCardProps?.slotStyles
-        ) as ComponentData<EventCardProps>,
-      syncChildSlotIds: (card, id) => {
-        Object.entries(card.props.slots).forEach(([slotKey, slotArray]) => {
-          slotArray[0].props.id = `${id}-${slotKey}`;
-        });
-        return card;
-      },
-      normalizeId: (id) => `EventCard-${id}`,
-    });
-
-    return withMappedEntityFieldConditionalRender(
-      setDeep(
-        setDeep(data, "props.slots.CardSlot", normalizedCards.cards),
-        "props.data.constantValue",
-        normalizedCards.cardReferences
-      ),
-      false
-    );
-  },
+  resolveData: (data, params) =>
+    eventCardsSource.populateSlots(data, params.metadata.streamDocument!),
   render: (props) => {
     if (props.conditionalRender?.isMappedContentEmpty) {
       return renderMappedEntityFieldEmptyState(props.puck.isEditing);

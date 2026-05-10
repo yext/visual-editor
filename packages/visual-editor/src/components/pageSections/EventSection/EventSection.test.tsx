@@ -2656,13 +2656,12 @@ describe("EventSection", async () => {
 
     const cardsWrapper = data.content[0]!.props.slots.CardsWrapperSlot[0];
     expect(cardsWrapper.props.slots.CardSlot).toHaveLength(2);
-    expect(cardsWrapper.props.slots.CardSlot[0].props.parentData).toMatchObject(
-      {
-        field: "c_eventsSection.events",
-        event: {
-          title: "Cooking Class",
-        },
-      }
+    expect(cardsWrapper.props.slots.CardSlot[0].props).toMatchObject({
+      field: "c_eventsSection.events",
+      title: "Cooking Class",
+    });
+    expect(cardsWrapper.props.slots.CardSlot[0].props).not.toHaveProperty(
+      "parentData"
     );
   });
 

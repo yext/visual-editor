@@ -576,14 +576,12 @@ describe("FAQSection", async () => {
     );
 
     expect(updatedData.content[0]!.props.slots.CardSlot).toHaveLength(2);
-    expect(
-      updatedData.content[0]!.props.slots.CardSlot[0].props.parentData
-    ).toMatchObject({
-      field: "c_faqSection.faqs",
-      faq: {
+    expect(updatedData.content[0]!.props.slots.CardSlot[0].props).toMatchObject(
+      {
+        field: "c_faqSection.faqs",
         question: "What services do you offer?",
-      },
-    });
+      }
+    );
   });
 
   it("preserves manual FAQ card content and leaves parent data undefined", async () => {

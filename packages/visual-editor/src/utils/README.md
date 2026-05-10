@@ -86,6 +86,41 @@ field while keeping source selection, per-item mappings, and manual fallback
 items in a single prop. See the full `ArticleList` / `ArticleCard` example in
 [editor/README.md](../editor/README.md#linked-entity-item-sources).
 
+## createSlottedItemSource
+
+Creates the field definition and authored-state helpers for a repeated slot
+wrapper whose `CardSlot` children should stay aligned with a linked list field
+or manual item order.
+
+### Input
+
+| Name             | Type                       | Description                                                    |
+| ---------------- | -------------------------- | -------------------------------------------------------------- |
+| label            | string                     | Editor label for the repeated source selector.                 |
+| itemLabel        | string                     | Singular item label used for manual add-item summaries.        |
+| cardName         | string                     | Optional slot child type. Defaults to `itemLabel`.             |
+| defaultItemProps | `Record<string, unknown>`  | Optional starter props used when the helper creates new cards. |
+| defaultItems     | number                     | Optional manual-mode seed count. Defaults to 3.                |
+| mappingFields    | `YextFieldMap<TItemProps>` | Field definitions for one mapped item.                         |
+
+### Returns
+
+`createSlottedItemSource(...)` returns an object with:
+
+- `field`: one repeated `entityField` definition
+- `defaultValue`: default authored state for linked and manual modes
+- `defaultWrapperProps`: helper-owned default wrapper props for `data` and `CardSlot`
+- `value`: helper-owned prop type marker for `typeof itemSource.value`
+- `resolveItems(value, streamDocument)`: render-ready repeated items
+- `populateSlots(data, streamDocument)`: updated wrapper data with `CardSlot`
+  populated for linked or manual mode
+
+### Usage
+
+Use this helper when the wrapper owns one repeated `CardSlot` and each item
+should become a nested card component. See the `FeaturedItems` / `ItemCard`
+example in [editor/README.md](../editor/README.md#linked-entity-item-sources).
+
 ## ThemeConfig
 
 The ThemeConfig object defines the styles available for editing in Theme Manager. It is used

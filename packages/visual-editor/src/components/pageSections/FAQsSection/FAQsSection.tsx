@@ -1,10 +1,4 @@
-import {
-  ComponentData,
-  PuckComponent,
-  setDeep,
-  Slot,
-  SlotComponent,
-} from "@puckeditor/core";
+import { PuckComponent, Slot, SlotComponent } from "@puckeditor/core";
 import {
   backgroundColors,
   ThemeColor,
@@ -15,22 +9,15 @@ import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
-import { FAQSectionType, FAQStruct } from "../../../types/types.ts";
+import { FAQStruct } from "../../../types/types.ts";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultFAQCardData, FAQCardProps } from "./FAQCard.tsx";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { EntityFieldSectionEmptyStateBox } from "../EntityFieldSectionEmptyState.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
-import {
-  MappedEntityFieldConditionalRender,
-  withMappedEntityFieldConditionalRender,
-} from "../entityFieldSectionUtils.ts";
-import { createSlotMappedCardsSource } from "../../../utils/itemSource/index.ts";
-import {
-  syncLinkedSlotMappedCards,
-  syncManualSlotMappedCards,
-} from "../../../utils/cardSlots/slotMappedCards.ts";
+import { MappedEntityFieldConditionalRender } from "../entityFieldSectionUtils.ts";
+import { createSlottedItemSource } from "../../../utils/itemSource/index.ts";
 
 export interface FAQStyles {
   /**
@@ -80,9 +67,17 @@ type FAQCardMappings = {
   answer: FAQStruct["answer"];
 };
 
-export const faqCardsSource = createSlotMappedCardsSource<FAQCardMappings>({
+export const faqCardsSource = createSlottedItemSource<
+  FAQCardMappings,
+  FAQCardProps
+>({
   label: msg("fields.faqs", "FAQs"),
-  manualItemLabel: "FAQ",
+  itemLabel: "FAQ",
+  cardName: "FAQCard",
+  defaultItemProps: {
+    ...defaultFAQCardData().props,
+    slots: {},
+  },
   mappingFields: {
     question: {
       type: "entityField",
@@ -191,6 +186,7 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
   label: msg("components.faqsSection", "FAQs Section"),
   fields: FAQsSectionFields,
   defaultProps: {
+    ...faqCardsSource.defaultWrapperProps,
     slots: {
       HeadingSlot: [
         {
@@ -207,15 +203,7 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
           } satisfies HeadingTextProps,
         },
       ],
-      CardSlot: [
-        defaultFAQCardData(undefined, 0),
-        defaultFAQCardData(undefined, 1),
-        defaultFAQCardData(undefined, 2),
-      ],
-    },
-    data: {
-      ...faqCardsSource.defaultValue,
-      constantValue: [{}, {}, {}],
+      CardSlot: faqCardsSource.defaultWrapperProps.slots.CardSlot,
     },
     styles: {
       backgroundColor: backgroundColors.background2.value,
@@ -226,79 +214,8 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
       scope: "faqsSection",
     },
   },
-  resolveData: (data, params) => {
-    const sharedCardProps =
-      data.props.slots.CardSlot.length === 0
-        ? undefined
-        : {
-            questionVariant:
-              data.props.slots.CardSlot[0].props.styles.questionVariant,
-            answerVariant:
-              data.props.slots.CardSlot[0].props.styles.answerVariant,
-            answerColor: data.props.slots.CardSlot[0].props.styles.answerColor,
-          };
-
-    if (!data.props.data.constantValueEnabled && data.props.data.field) {
-      const resolvedFAQs = faqCardsSource.resolveMappedItems(
-        data.props.data,
-        params.metadata.streamDocument!
-      );
-
-      if (!resolvedFAQs?.length) {
-        // Clear the rendered cards when the mapped FAQ field resolves empty.
-        const updatedData = setDeep(data, "props.slots.CardSlot", []);
-        return withMappedEntityFieldConditionalRender(updatedData, true);
-      }
-
-      const updatedData = setDeep(
-        data,
-        "props.slots.CardSlot",
-        syncLinkedSlotMappedCards({
-          items: resolvedFAQs,
-          currentCards: data.props.slots
-            .CardSlot as ComponentData<FAQCardProps>[],
-          createCard: (id, index) =>
-            defaultFAQCardData(
-              id,
-              index,
-              sharedCardProps?.questionVariant,
-              sharedCardProps?.answerVariant,
-              sharedCardProps?.answerColor
-            ) as ComponentData<FAQCardProps>,
-          toParentData: (faq) => ({
-            field: data.props.data.field,
-            faq: faq as FAQSectionType["faqs"][number],
-          }),
-          normalizeId: (id) => `FAQCard-${id}`,
-        })
-      );
-
-      return withMappedEntityFieldConditionalRender(updatedData, false);
-    }
-
-    const normalizedCards = syncManualSlotMappedCards({
-      cardReferences: data.props.data.constantValue,
-      currentCards: data.props.slots.CardSlot as ComponentData<FAQCardProps>[],
-      createCard: (id, index) =>
-        defaultFAQCardData(
-          id,
-          index,
-          sharedCardProps?.questionVariant,
-          sharedCardProps?.answerVariant,
-          sharedCardProps?.answerColor
-        ) as ComponentData<FAQCardProps>,
-      normalizeId: (id) => `FAQCard-${id}`,
-    });
-
-    return withMappedEntityFieldConditionalRender(
-      setDeep(
-        setDeep(data, "props.slots.CardSlot", normalizedCards.cards),
-        "props.data.constantValue",
-        normalizedCards.cardReferences
-      ),
-      false
-    );
-  },
+  resolveData: (data, params) =>
+    faqCardsSource.populateSlots(data, params.metadata.streamDocument!),
   render: (props) => (
     <ComponentErrorBoundary
       isEditing={props.puck.isEditing}

@@ -70,22 +70,41 @@ export type ItemSourceInstance<TItemProps extends Record<string, unknown>> = {
 export type SlotMappedCardsData<TMappings extends Record<string, unknown>> =
   YextEntityField<Array<{ id?: string }>, TMappings>;
 
-export type CreateSlotMappedCardsSourceOptions<
+export type CreateSlottedItemSourceOptions<
   TMappings extends Record<string, unknown>,
+  TCardProps extends Record<string, unknown> = Record<string, unknown>,
 > = {
   label: string;
   mappingFields: YextFieldMap<TMappings>;
-  manualItemLabel: string;
+  itemLabel: string;
+  cardName?: string;
+  defaultItemProps?: TCardProps;
+  defaultItems?: number;
 };
 
-export type SlotMappedCardsSourceInstance<
+export type SlottedItemSourceInstance<
   TMappings extends Record<string, unknown>,
 > = {
   field: YextFieldDefinition<SlotMappedCardsData<TMappings>>;
   defaultValue: SlotMappedCardsData<TMappings>;
+  defaultWrapperProps: {
+    data: SlotMappedCardsData<TMappings>;
+    slots: {
+      CardSlot: [];
+    };
+  };
   value: SlotMappedCardsData<TMappings>;
-  resolveMappedItems: (
+  resolveItems: (
     value: SlotMappedCardsData<TMappings> | undefined,
     streamDocument: StreamDocument
   ) => ResolvedItemField<TMappings>[];
+  populateSlots: <TData>(data: TData, streamDocument: StreamDocument) => TData;
 };
+
+export type CreateSlotMappedCardsSourceOptions<
+  TMappings extends Record<string, unknown>,
+> = CreateSlottedItemSourceOptions<TMappings>;
+
+export type SlotMappedCardsSourceInstance<
+  TMappings extends Record<string, unknown>,
+> = SlottedItemSourceInstance<TMappings>;
