@@ -19,6 +19,7 @@ import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
 import { TextProps } from "../../contentBlocks/Text.tsx";
 import { PuckComponent, setDeep, Slot } from "@puckeditor/core";
+import { bindSlots } from "../../../utils/cardSlots/bindSlots.ts";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
@@ -209,6 +210,14 @@ export const defaultInsightCardSlotData = (
 };
 
 export type InsightCardProps = {
+  /** @internal */
+  field?: string;
+  image?: InsightStruct["image"];
+  name?: InsightStruct["name"];
+  category?: InsightStruct["category"];
+  description?: InsightStruct["description"];
+  publishTime?: InsightStruct["publishTime"];
+  cta?: InsightStruct["cta"];
   /** Styling for all the cards. */
   styles: {
     /** The background color of each insight card */
@@ -454,65 +463,27 @@ export const InsightCard: YextComponentConfig<InsightCardProps> = {
 
     let updatedData = data;
 
-    if (updatedData.props.parentData) {
-      const { field, insight } = updatedData.props.parentData;
+    const field =
+      updatedData.props.field ?? updatedData.props.parentData?.field;
+    const image =
+      updatedData.props.image ?? updatedData.props.parentData?.insight.image;
+    const name =
+      updatedData.props.name ?? updatedData.props.parentData?.insight.name;
+    const categoryValue =
+      updatedData.props.category ??
+      updatedData.props.parentData?.insight.category;
+    const description =
+      updatedData.props.description ??
+      updatedData.props.parentData?.insight.description;
+    const publishTime =
+      updatedData.props.publishTime ??
+      updatedData.props.parentData?.insight.publishTime;
+    const cta =
+      updatedData.props.cta ?? updatedData.props.parentData?.insight.cta;
 
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.ImageSlot[0].props.parentData",
-        {
-          field: `${field}.image`,
-          image: insight.image,
-        }
-      );
-
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.TitleSlot[0].props.parentData",
-        {
-          field: `${field}.name`,
-          text: insight.name,
-        }
-      );
-
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.CategorySlot[0].props.parentData",
-        {
-          field: `${field}.category`,
-          text: insight.category,
-        }
-      );
-
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.DescriptionSlot[0].props.parentData",
-        {
-          field: `${field}.description`,
-          richText: insight.description,
-        }
-      );
-
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.PublishTimeSlot[0].props.parentData",
-        {
-          field: `${field}.publishTime`,
-          date: insight.publishTime || undefined,
-        }
-      );
-
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.CTASlot[0].props.parentData",
-        {
-          field: `${field}.cta`,
-          cta: insight.cta,
-        }
-      );
-
+    if (field) {
       const category = resolveComponentData(
-        insight.category,
+        categoryValue,
         locale,
         streamDocument,
         {
@@ -526,7 +497,7 @@ export const InsightCard: YextComponentConfig<InsightCardProps> = {
           ...updatedData.props,
           conditionalRender: {
             hasCategory: !!category,
-            hasPublishTime: !!insight.publishTime,
+            hasPublishTime: !!publishTime,
           },
         },
       };
@@ -598,7 +569,25 @@ export const InsightCard: YextComponentConfig<InsightCardProps> = {
       "showCTA",
     ]);
 
-    return updatedData;
+    return bindSlots(updatedData as typeof data, {
+      ImageSlot:
+        field && image ? { field: `${field}.image`, image } : undefined,
+      TitleSlot:
+        field && name ? { field: `${field}.name`, text: name } : undefined,
+      CategorySlot:
+        field && categoryValue
+          ? { field: `${field}.category`, text: categoryValue }
+          : undefined,
+      DescriptionSlot:
+        field && description
+          ? { field: `${field}.description`, richText: description }
+          : undefined,
+      PublishTimeSlot:
+        field && publishTime
+          ? { field: `${field}.publishTime`, date: publishTime }
+          : undefined,
+      CTASlot: field && cta ? { field: `${field}.cta`, cta } : undefined,
+    });
   },
   render: (props) => <InsightCardComponent {...props} />,
 };

@@ -1,45 +1,92 @@
-import { InsightSectionType } from "../../../types/types.ts";
-import { ComponentFields } from "../../../types/fields.ts";
+import { InsightStruct } from "../../../types/types.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
-import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
-import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
-import {
-  cardWrapperFields,
-  CardWrapperType,
-} from "../../../utils/cardSlots/cardWrapperHelpers.ts";
-import { ComponentData, PuckComponent, setDeep } from "@puckeditor/core";
+import { SlotMappedCardWrapperType } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
+import { PuckComponent } from "@puckeditor/core";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 import {
   defaultInsightCardSlotData,
   InsightCardProps,
 } from "./InsightCard.tsx";
-import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { renderMappedEntityFieldEmptyState } from "../EntityFieldSectionEmptyState.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
-import {
-  MappedEntityFieldConditionalRender,
-  withMappedEntityFieldConditionalRender,
-} from "../entityFieldSectionUtils.ts";
+import { MappedEntityFieldConditionalRender } from "../entityFieldSectionUtils.ts";
+import { createSlottedItemSource } from "../../../utils/itemSource/index.ts";
 
-export type InsightCardsWrapperProps = CardWrapperType<InsightSectionType> & {
-  styles: {
-    showImage: boolean;
-    showCategory: boolean;
-    showPublishTime: boolean;
-    showDescription: boolean;
-    showCTA: boolean;
-  };
-
-  /** @internal */
-  conditionalRender?: MappedEntityFieldConditionalRender;
+type InsightCardMappings = {
+  image: InsightStruct["image"];
+  name: InsightStruct["name"];
+  category: InsightStruct["category"];
+  publishTime: InsightStruct["publishTime"];
+  description: InsightStruct["description"];
+  cta: InsightStruct["cta"];
 };
 
+export const insightCardsSource = createSlottedItemSource<
+  InsightCardMappings,
+  InsightCardProps
+>({
+  label: msg("fields.insights", "Insights"),
+  itemLabel: "Insight",
+  cardName: "InsightCard",
+  defaultItemProps: defaultInsightCardSlotData().props,
+  mappingFields: {
+    image: {
+      type: "entityField",
+      label: msg("fields.image", "Image"),
+      filter: { types: ["type.image"] },
+    },
+    name: {
+      type: "entityField",
+      label: msg("fields.title", "Title"),
+      filter: { types: ["type.string"] },
+    },
+    category: {
+      type: "entityField",
+      label: msg("fields.category", "Category"),
+      filter: { types: ["type.string", "type.rich_text_v2"] },
+    },
+    publishTime: {
+      type: "entityField",
+      label: msg("fields.publishTime", "Publish Time"),
+      filter: { types: ["type.datetime"] },
+    },
+    description: {
+      type: "entityField",
+      label: msg("fields.description", "Description"),
+      filter: { types: ["type.rich_text_v2"] },
+    },
+    cta: {
+      type: "entityField",
+      label: msg("fields.cta", "CTA"),
+      filter: { types: ["type.cta"] },
+    },
+  },
+});
+
+export type InsightCardsWrapperProps =
+  SlotMappedCardWrapperType<InsightCardMappings> & {
+    styles: {
+      showImage: boolean;
+      showCategory: boolean;
+      showPublishTime: boolean;
+      showDescription: boolean;
+      showCTA: boolean;
+    };
+
+    /** @internal */
+    conditionalRender?: MappedEntityFieldConditionalRender;
+  };
+
 const insightCardsWrapperFields: YextFields<InsightCardsWrapperProps> = {
-  ...cardWrapperFields<InsightCardsWrapperProps>(
-    msg("fields.insights", "Insights"),
-    ComponentFields.InsightSection.type
-  ),
+  data: insightCardsSource.field,
+  slots: {
+    type: "object",
+    objectFields: {
+      CardSlot: { type: "slot" },
+    },
+    visible: false,
+  },
   styles: {
     type: "object",
     label: msg("fields.styles", "Styles"),
@@ -93,11 +140,7 @@ export const InsightCardsWrapper: YextComponentConfig<InsightCardsWrapperProps> 
     label: msg("slots.insightCards", "Insight Cards"),
     fields: insightCardsWrapperFields,
     defaultProps: {
-      data: {
-        field: "",
-        constantValueEnabled: true,
-        constantValue: [],
-      },
+      ...insightCardsSource.defaultWrapperProps,
       styles: {
         showImage: true,
         showCategory: true,
@@ -105,126 +148,9 @@ export const InsightCardsWrapper: YextComponentConfig<InsightCardsWrapperProps> 
         showDescription: true,
         showCTA: true,
       },
-      slots: {
-        CardSlot: [],
-      },
     },
-    resolveData: (data, params) => {
-      const streamDocument = params.metadata.streamDocument;
-      const sharedCardProps =
-        data.props.slots.CardSlot.length === 0
-          ? undefined
-          : {
-              backgroundColor:
-                data.props.slots.CardSlot[0].props.styles.backgroundColor,
-              slotStyles: gatherSlotStyles(
-                data.props.slots.CardSlot[0].props.slots
-              ),
-            };
-
-      if (!data.props.data.constantValueEnabled && data.props.data.field) {
-        const resolvedInsights = resolveYextEntityField<
-          InsightSectionType | { insights: undefined }
-        >(
-          streamDocument,
-          {
-            ...data.props.data,
-            constantValue: { insights: undefined },
-          },
-          i18nComponentsInstance.language || "en"
-        )?.insights;
-
-        if (!resolvedInsights?.length) {
-          const updatedData = setDeep(data, "props.slots.CardSlot", []);
-          return withMappedEntityFieldConditionalRender(updatedData, true);
-        }
-
-        const requiredLength = resolvedInsights.length;
-        const currentLength = data.props.slots.CardSlot.length;
-        const cardsToAdd =
-          currentLength < requiredLength
-            ? Array(requiredLength - currentLength)
-                .fill(null)
-                .map(() =>
-                  defaultInsightCardSlotData(
-                    `InsightCard-${crypto.randomUUID()}`,
-                    undefined,
-                    sharedCardProps?.backgroundColor,
-                    sharedCardProps?.slotStyles
-                  )
-                )
-            : [];
-        const updatedCardSlot = [
-          ...data.props.slots.CardSlot,
-          ...cardsToAdd,
-        ].slice(0, requiredLength);
-
-        const updatedData = setDeep(
-          data,
-          "props.slots.CardSlot",
-          updatedCardSlot
-            .map((card, i) => setDeep(card, "props.index", i))
-            .map((card, i) =>
-              setDeep(card, "props.parentData", {
-                field: data.props.data.field,
-                insight: resolvedInsights[i],
-              } satisfies InsightCardProps["parentData"])
-            )
-        );
-
-        return withMappedEntityFieldConditionalRender(updatedData, false);
-      }
-
-      let updatedData = data;
-      const inUseIds = new Set<string>();
-      const newSlots = data.props.data.constantValue.map(({ id }, i) => {
-        const existingCard = id
-          ? (data.props.slots.CardSlot.find(
-              (slot) => slot.props.id === id
-            ) as ComponentData<InsightCardProps>)
-          : undefined;
-
-        let newCard = existingCard
-          ? (JSON.parse(JSON.stringify(existingCard)) as typeof existingCard)
-          : undefined;
-
-        let newId = newCard?.props.id || `InsightCard-${crypto.randomUUID()}`;
-
-        if (newCard && inUseIds.has(newId)) {
-          newId = `InsightCard-${crypto.randomUUID()}`;
-          Object.entries(newCard.props.slots).forEach(
-            ([slotKey, slotArray]) => {
-              slotArray[0].props.id = newId + "-" + slotKey;
-            }
-          );
-        }
-        inUseIds.add(newId);
-
-        if (!newCard) {
-          return defaultInsightCardSlotData(
-            newId,
-            i,
-            sharedCardProps?.backgroundColor,
-            sharedCardProps?.slotStyles
-          );
-        }
-
-        newCard = setDeep(newCard, "props.id", newId);
-        newCard = setDeep(newCard, "props.index", i);
-        newCard = setDeep(newCard, "props.parentData", undefined);
-
-        return newCard;
-      });
-
-      updatedData = setDeep(updatedData, "props.slots.CardSlot", newSlots);
-      updatedData = setDeep(
-        updatedData,
-        "props.data.constantValue",
-        newSlots.map((card) => ({ id: card.props.id }))
-      );
-
-      return withMappedEntityFieldConditionalRender(updatedData, false);
-    },
+    resolveData: (data, params) =>
+      insightCardsSource.populateSlots(data, params.metadata.streamDocument!),
     render: (props) => {
       if (props.conditionalRender?.isMappedContentEmpty) {
         return renderMappedEntityFieldEmptyState(props.puck.isEditing);

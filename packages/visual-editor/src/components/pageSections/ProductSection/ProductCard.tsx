@@ -24,6 +24,7 @@ import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholder
 import { TextProps } from "../../contentBlocks/Text.tsx";
 import { ProductSectionVariant } from "./ProductSection.tsx";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
+import { bindSlots } from "../../../utils/cardSlots/bindSlots.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 import {
   formatCurrency,
@@ -218,6 +219,14 @@ export const defaultProductCardSlotData = (
 };
 
 export type ProductCardProps = {
+  /** @internal */
+  field?: string;
+  image?: ProductStruct["image"];
+  brow?: ProductStruct["brow"];
+  name?: ProductStruct["name"];
+  price?: ProductStruct["price"];
+  description?: ProductStruct["description"];
+  cta?: ProductStruct["cta"];
   styles: {
     /** The background color of each individual card
      * @defaultValue Background Color 1
@@ -467,6 +476,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       | YextEntityField<ProductStruct["price"]>
       | undefined;
     const entityPrice =
+      data.props.price ??
       data.props.parentData?.product.price ??
       (priceEntityField
         ? resolveYextEntityField<ProductStruct["price"]>(
@@ -514,6 +524,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       | undefined;
 
     const resolvedBrow =
+      data.props.brow ??
       data.props.parentData?.product.brow ??
       browSlotProps?.parentData?.text ??
       (browSlotProps
@@ -529,6 +540,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       ?.props as WithId<BodyTextProps> | undefined;
 
     const resolvedDescription =
+      data.props.description ??
       data.props.parentData?.product.description ??
       descriptionSlotProps?.parentData?.richText ??
       (descriptionSlotProps
@@ -543,16 +555,18 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
     const ctaSlotProps = data.props.slots.CTASlot?.[0]?.props as
       | WithId<CTAWrapperProps>
       | undefined;
-    const resolvedCTA = data.props.parentData
-      ? (data.props.parentData.product.cta ?? ctaSlotProps?.parentData?.cta)
-      : (ctaSlotProps?.parentData?.cta ??
-        (ctaSlotProps
-          ? resolveYextEntityField(
-              params.metadata.streamDocument,
-              ctaSlotProps?.data?.entityField,
-              locale
-            )
-          : undefined));
+    const resolvedCTA = data.props.cta
+      ? data.props.cta
+      : data.props.parentData
+        ? (data.props.parentData.product.cta ?? ctaSlotProps?.parentData?.cta)
+        : (ctaSlotProps?.parentData?.cta ??
+          (ctaSlotProps
+            ? resolveYextEntityField(
+                params.metadata.streamDocument,
+                ctaSlotProps?.data?.entityField,
+                locale
+              )
+            : undefined));
     const showCTA = Boolean(resolvedCTA);
 
     const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as
@@ -602,101 +616,49 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       `cta${data.props.index}`
     );
 
-    if (data.props.parentData) {
-      const product = data.props.parentData.product;
-      const field = data.props.parentData.field;
-      const formattedPrice = formatCurrency(
-        product.price?.value,
-        product.price?.currencyCode,
-        locale
-      );
+    const field = data.props.field ?? data.props.parentData?.field ?? "";
+    const image = data.props.image ?? data.props.parentData?.product.image;
+    const name = data.props.name ?? data.props.parentData?.product.name;
+    const brow =
+      data.props.brow ??
+      data.props.parentData?.product.brow ??
+      data.props.parentData?.product.category;
+    const price = data.props.price ?? data.props.parentData?.product.price;
+    const formattedPrice = formatCurrency(
+      price?.value,
+      price?.currencyCode,
+      locale
+    );
+    const description =
+      data.props.description ?? data.props.parentData?.product.description;
+    const cta = data.props.cta ?? data.props.parentData?.product.cta;
 
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.ImageSlot[0].props.parentData",
-        {
-          field: field,
-          image: product.image,
-        } satisfies ImageWrapperProps["parentData"]
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.TitleSlot[0].props.parentData",
-        {
-          field: field,
-          text: product.name as string, // will already be resolved
-        } satisfies HeadingTextProps["parentData"]
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.BrowSlot[0].props.parentData",
-        {
-          field: field,
-          text: product.brow ?? product.category, // will already be resolved
-        } satisfies TextProps["parentData"]
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.PriceSlot[0].props.parentData",
-        formattedPrice
-          ? ({
-              field: field,
-              text: formattedPrice,
-            } satisfies TextProps["parentData"])
-          : undefined
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.DescriptionSlot[0].props.parentData",
-        {
-          field: field,
-          richText: product.description,
-        } satisfies BodyTextProps["parentData"]
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.CTASlot[0].props.parentData",
-        {
-          field: field,
-          cta: product.cta,
-        } satisfies CTAWrapperProps["parentData"]
-      );
-
-      return updatedData;
-    } else {
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.ImageSlot[0].props.parentData",
-        undefined
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.TitleSlot[0].props.parentData",
-        undefined
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.BrowSlot[0].props.parentData",
-        undefined
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.PriceSlot[0].props.parentData",
-        undefined
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.DescriptionSlot[0].props.parentData",
-        undefined
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.CTASlot[0].props.parentData",
-        undefined
-      );
-    }
-
-    return updatedData;
+    return bindSlots(updatedData as typeof data, {
+      ImageSlot: image
+        ? ({ field, image } satisfies ImageWrapperProps["parentData"])
+        : undefined,
+      TitleSlot: name
+        ? ({
+            field,
+            text: name as string,
+          } satisfies HeadingTextProps["parentData"])
+        : undefined,
+      BrowSlot: brow
+        ? ({ field, text: brow } satisfies TextProps["parentData"])
+        : undefined,
+      PriceSlot: formattedPrice
+        ? ({ field, text: formattedPrice } satisfies TextProps["parentData"])
+        : undefined,
+      DescriptionSlot: description
+        ? ({
+            field,
+            richText: description,
+          } satisfies BodyTextProps["parentData"])
+        : undefined,
+      CTASlot: cta
+        ? ({ field, cta } satisfies CTAWrapperProps["parentData"])
+        : undefined,
+    });
   },
   defaultProps: {
     styles: {

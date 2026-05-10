@@ -1007,6 +1007,164 @@ describe("migrate", () => {
       },
     });
   });
+
+  it("migrates linked ProductCardsWrapper data to slot-mapped cards", async () => {
+    const migratedData = migrate(
+      {
+        root: { props: { version: 0 } },
+        content: [
+          {
+            type: "ProductCardsWrapper",
+            props: {
+              id: "ProductCardsWrapper-test",
+              data: {
+                field: "c_productsSection",
+                constantValueEnabled: false,
+                constantValue: [{ id: "ProductCard-1" }],
+              },
+              slots: {
+                CardSlot: [
+                  {
+                    type: "ProductCard",
+                    props: { id: "ProductCard-1", slots: {} },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [slotMappedCardsMigration],
+      { components: {} },
+      {}
+    );
+
+    expect(migratedData.content[0]?.props.data).toMatchObject({
+      field: "c_productsSection.products",
+      constantValueEnabled: false,
+      constantValue: [{ id: "ProductCard-1" }],
+      mappings: {
+        image: { field: "image" },
+        brow: { field: "brow" },
+        name: { field: "name" },
+        price: {
+          value: { field: "price.value" },
+          currencyCode: { field: "price.currencyCode" },
+        },
+        description: { field: "description" },
+        cta: { field: "cta" },
+      },
+    });
+  });
+
+  it("migrates linked TestimonialCardsWrapper data to slot-mapped cards", async () => {
+    const migratedData = migrate(
+      {
+        root: { props: { version: 0 } },
+        content: [
+          {
+            type: "TestimonialCardsWrapper",
+            props: {
+              id: "TestimonialCardsWrapper-test",
+              data: {
+                field: "c_testimonialsSection",
+                constantValueEnabled: false,
+                constantValue: [{ id: "TestimonialCard-1" }],
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [slotMappedCardsMigration],
+      { components: {} },
+      {}
+    );
+
+    expect(migratedData.content[0]?.props.data).toMatchObject({
+      field: "c_testimonialsSection.testimonials",
+      mappings: {
+        description: { field: "description" },
+        contributorName: { field: "contributorName" },
+        contributionDate: { field: "contributionDate" },
+      },
+    });
+  });
+
+  it("migrates linked InsightCardsWrapper data to slot-mapped cards", async () => {
+    const migratedData = migrate(
+      {
+        root: { props: { version: 0 } },
+        content: [
+          {
+            type: "InsightCardsWrapper",
+            props: {
+              id: "InsightCardsWrapper-test",
+              data: {
+                field: "c_insightsSection",
+                constantValueEnabled: false,
+                constantValue: [{ id: "InsightCard-1" }],
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [slotMappedCardsMigration],
+      { components: {} },
+      {}
+    );
+
+    expect(migratedData.content[0]?.props.data).toMatchObject({
+      field: "c_insightsSection.insights",
+      mappings: {
+        image: { field: "image" },
+        name: { field: "name" },
+        category: { field: "category" },
+        publishTime: { field: "publishTime" },
+        description: { field: "description" },
+        cta: { field: "cta" },
+      },
+    });
+  });
+
+  it("migrates linked TeamCardsWrapper data to slot-mapped cards", async () => {
+    const migratedData = migrate(
+      {
+        root: { props: { version: 0 } },
+        content: [
+          {
+            type: "TeamCardsWrapper",
+            props: {
+              id: "TeamCardsWrapper-test",
+              data: {
+                field: "c_teamSection",
+                constantValueEnabled: false,
+                constantValue: [{ id: "TeamCard-1" }],
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [slotMappedCardsMigration],
+      { components: {} },
+      {}
+    );
+
+    expect(migratedData.content[0]?.props.data).toMatchObject({
+      field: "c_teamSection.people",
+      mappings: {
+        headshot: { field: "headshot" },
+        name: { field: "name" },
+        title: { field: "title" },
+        phoneNumber: { field: "phoneNumber" },
+        email: { field: "email" },
+        cta: { field: "cta" },
+      },
+    });
+  });
 });
 
 const migration: Migration = {

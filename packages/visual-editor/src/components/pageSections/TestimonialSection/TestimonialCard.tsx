@@ -1,5 +1,5 @@
 import * as React from "react";
-import { PuckComponent, Slot, WithId, setDeep } from "@puckeditor/core";
+import { PuckComponent, Slot, WithId } from "@puckeditor/core";
 import {
   ThemeColor,
   backgroundColors,
@@ -17,6 +17,7 @@ import { TimestampProps } from "../../contentBlocks/Timestamp.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
+import { bindSlots } from "../../../utils/cardSlots/bindSlots.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 const defaultTestimonial = {
@@ -119,6 +120,11 @@ export const defaultTestimonialCardSlotData = (
 };
 
 export type TestimonialCardProps = {
+  /** @internal */
+  field?: string;
+  description?: TestimonialStruct["description"];
+  contributorName?: TestimonialStruct["contributorName"];
+  contributionDate?: TestimonialStruct["contributionDate"];
   /** Styling for all the cards. */
   styles: {
     /** The background color of each testimonial card */
@@ -341,7 +347,8 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
       ?.props as WithId<any> | undefined;
 
     const showDescription = Boolean(
-      testimonial?.description ||
+      data.props.description ||
+        testimonial?.description ||
         descriptionSlotProps?.parentData?.richText ||
         (descriptionSlotProps &&
           resolveYextEntityField(
@@ -351,7 +358,8 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
           ))
     );
     const showContributorName = Boolean(
-      testimonial?.contributorName ||
+      data.props.contributorName ||
+        testimonial?.contributorName ||
         contributorNameSlotProps?.parentData?.text ||
         (contributorNameSlotProps &&
           resolveYextEntityField(
@@ -361,7 +369,8 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
           ))
     );
     const showContributionDate = Boolean(
-      testimonial?.contributionDate ||
+      data.props.contributionDate ||
+        testimonial?.contributionDate ||
         contributionDateSlotProps?.parentData?.date ||
         contributionDateSlotProps?.data?.date?.constantValue ||
         contributionDateSlotProps?.data?.date?.field
@@ -386,56 +395,36 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
       "showIcon",
     ]);
 
-    // Set parentData for all slots if parentData is provided
-    if (data.props.parentData) {
-      const testimonial = data.props.parentData.testimonial;
-      const field = data.props.parentData.field;
+    const field = data.props.field ?? data.props.parentData?.field ?? "";
+    const description =
+      data.props.description ?? data.props.parentData?.testimonial.description;
+    const contributorName =
+      data.props.contributorName ??
+      data.props.parentData?.testimonial.contributorName;
+    const contributionDate =
+      data.props.contributionDate ??
+      data.props.parentData?.testimonial.contributionDate;
 
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.DescriptionSlot[0].props.parentData",
-        {
-          field: field,
-          richText: testimonial.description,
-        } satisfies BodyTextProps["parentData"]
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.ContributorNameSlot[0].props.parentData",
-        {
-          field: field,
-          text: testimonial.contributorName as string, // will already be resolved
-        } satisfies HeadingTextProps["parentData"]
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.ContributionDateSlot[0].props.parentData",
-        {
-          field: field,
-          date: testimonial.contributionDate,
-        }
-      );
-
-      return updatedData;
-    } else {
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.DescriptionSlot[0].props.parentData",
-        undefined
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.ContributorNameSlot[0].props.parentData",
-        undefined
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.ContributionDateSlot[0].props.parentData",
-        undefined
-      );
-    }
-
-    return updatedData;
+    return bindSlots(updatedData as typeof data, {
+      DescriptionSlot: description
+        ? ({
+            field,
+            richText: description,
+          } satisfies BodyTextProps["parentData"])
+        : undefined,
+      ContributorNameSlot: contributorName
+        ? ({
+            field,
+            text: contributorName as string,
+          } satisfies HeadingTextProps["parentData"])
+        : undefined,
+      ContributionDateSlot: contributionDate
+        ? ({
+            field,
+            date: contributionDate,
+          } satisfies TimestampProps["parentData"])
+        : undefined,
+    });
   },
   render: (props) => <TestimonialCardComponent {...props} />,
 };
