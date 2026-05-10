@@ -515,6 +515,8 @@
     "video": "Video",
     "visibleOnLivePage": "Nähtav live -lehel",
     "weight": "Kaal",
+    "whenFalse": "Kui vale",
+    "whenTrue": "Kui tõsi",
     "wrap": "Mähis",
     "xLink": "X Link",
     "youtubeLink": "YouTube'i link"

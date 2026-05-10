@@ -515,6 +515,8 @@
     "video": "Video",
     "visibleOnLivePage": "Näkyvissä live -sivulla",
     "weight": "Paino",
+    "whenFalse": "Kun väärä",
+    "whenTrue": "Kun totta",
     "wrap": "Kääriä",
     "xLink": "X -linkki",
     "youtubeLink": "YouTube -linkki"

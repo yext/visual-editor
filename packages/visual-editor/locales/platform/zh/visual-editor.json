@@ -515,6 +515,8 @@
     "video": "视频",
     "visibleOnLivePage": "在现场页面上可见",
     "weight": "字重",
+    "whenFalse": "当假时",
+    "whenTrue": "当为真时",
     "wrap": "裹",
     "xLink": "x链接",
     "youtubeLink": "YouTube链接"

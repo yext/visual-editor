@@ -515,6 +515,8 @@
     "video": "ビデオ",
     "visibleOnLivePage": "ライブページに表示されます",
     "weight": "太さ",
+    "whenFalse": "falseの場合",
+    "whenTrue": "本当の場合",
     "wrap": "包む",
     "xLink": "Xリンク",
     "youtubeLink": "YouTubeリンク"

@@ -562,7 +562,6 @@ describe("EntityFieldSelectorField", () => {
     expect(screen.getByText("Event 1")).toBeDefined();
     expect(screen.getByRole("button", { name: "Delete" })).toBeDefined();
   });
-
   it("renders the linked source selector when repeated KG mode is enabled", () => {
     const { onChange } = renderRepeatedEntityField({
       value: {
