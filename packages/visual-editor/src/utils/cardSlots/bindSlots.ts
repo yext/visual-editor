@@ -20,19 +20,20 @@ const slotChildTypeToParentDataKey: Record<string, string> = {
  *    `slotChildTypeToParentDataKey`.
  * 3. Normalizes raw values like `title` or `image` into the child component's
  *    expected `parentData` shape.
- * 4. Optionally clears missing shorthand values in linked mode so authored
- *    fallback constants do not bleed through.
+ * 4. Detects linked mode from `props.field` / `props.parentData.field` and
+ *    clears missing shorthand values so authored fallback constants do not
+ *    bleed through.
  * 5. Writes the resulting `parentData` back onto the slot child.
  *
  * Pass a full parent-data object when a slot needs custom shape like
  * `{ field, text }`. For common slot child types, raw values can be passed and
  * this helper will wrap them automatically.
  *
- * When `clearMissingValues` is enabled and a linked slot receives no value, the
- * helper still writes an empty parent-data object for supported slot child
- * types so authored fallback constants do not bleed through. By default,
- * missing values are left untouched so manual/default cards keep their authored
- * slot content.
+ * In linked mode, a missing value still writes an empty parent-data object for
+ * supported slot child types so authored fallback constants do not bleed
+ * through. In manual/default mode, missing values are left untouched so the
+ * authored slot content stays visible and can reappear when the card is
+ * switched back from linked mode.
  *
  * Example:
  * ```ts
@@ -58,6 +59,10 @@ const slotChildTypeToParentDataKey: Record<string, string> = {
 export const bindSlots = <
   TData extends {
     props: {
+      field?: string;
+      parentData?: {
+        field?: string;
+      };
       slots?: Record<
         string,
         Array<{ props?: Record<string, unknown>; type?: string }>
@@ -66,10 +71,12 @@ export const bindSlots = <
   },
 >(
   data: TData,
-  slotBindings: Record<string, unknown>,
-  options?: { clearMissingValues?: boolean }
+  slotBindings: Record<string, unknown>
 ) => {
   let updatedData = data;
+  const isLinkedMode = Boolean(
+    data.props.field ?? data.props.parentData?.field
+  );
 
   Object.entries(slotBindings).forEach(([slotKey, parentData]) => {
     const slotChild = data.props.slots?.[slotKey]?.[0];
@@ -86,12 +93,12 @@ export const bindSlots = <
       parentData !== null &&
       !Array.isArray(parentData);
 
-    if (parentData === undefined && !options?.clearMissingValues) {
+    if (parentData === undefined && !isLinkedMode) {
       return;
     }
 
     const resolvedParentData =
-      options?.clearMissingValues && parentDataKey && parentData === undefined
+      isLinkedMode && parentDataKey && parentData === undefined
         ? { [parentDataKey]: undefined }
         : parentData &&
             parentDataKey &&

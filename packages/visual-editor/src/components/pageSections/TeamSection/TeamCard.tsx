@@ -458,9 +458,8 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
     },
   },
   resolveData: (data, params) => {
-    // Check card-level parentData first for entity data
-    const cardParentData = data.props.parentData;
-    const person = cardParentData?.person;
+    const field = data.props.field ?? "";
+    const isLinkedMode = Boolean(field);
 
     const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as
       | WithId<ImageWrapperProps>
@@ -482,69 +481,71 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
       | undefined;
 
     const showImage = Boolean(
-      data.props.headshot ||
-        person?.headshot ||
-        imageSlotProps?.parentData?.image ||
-        (imageSlotProps &&
-          (imageSlotProps?.data.image.field ||
-            (imageSlotProps.data.image.constantValue &&
-              "hasLocalizedValue" in imageSlotProps.data.image.constantValue) ||
-            (imageSlotProps.data.image.constantValue &&
-              "url" in imageSlotProps.data.image.constantValue &&
-              imageSlotProps.data.image.constantValue.url) ||
-            (imageSlotProps.data.image.constantValue &&
-              "image" in imageSlotProps.data.image.constantValue &&
-              imageSlotProps.data.image.constantValue.image?.url)))
+      isLinkedMode
+        ? data.props.headshot
+        : imageSlotProps?.parentData?.image ||
+            (imageSlotProps &&
+              (imageSlotProps?.data.image.field ||
+                (imageSlotProps.data.image.constantValue &&
+                  "hasLocalizedValue" in
+                    imageSlotProps.data.image.constantValue) ||
+                (imageSlotProps.data.image.constantValue &&
+                  "url" in imageSlotProps.data.image.constantValue &&
+                  imageSlotProps.data.image.constantValue.url) ||
+                (imageSlotProps.data.image.constantValue &&
+                  "image" in imageSlotProps.data.image.constantValue &&
+                  imageSlotProps.data.image.constantValue.image?.url)))
     );
     const showName = Boolean(
-      data.props.name ||
-        person?.name ||
-        nameSlotProps?.parentData?.text ||
-        (nameSlotProps &&
-          resolveYextEntityField(
-            params.metadata.streamDocument,
-            nameSlotProps.data.text,
-            i18nComponentsInstance.language || "en"
-          ))
+      isLinkedMode
+        ? data.props.name
+        : nameSlotProps?.parentData?.text ||
+            (nameSlotProps &&
+              resolveYextEntityField(
+                params.metadata.streamDocument,
+                nameSlotProps.data.text,
+                i18nComponentsInstance.language || "en"
+              ))
     );
     const showTitle = Boolean(
-      data.props.title ||
-        person?.title ||
-        titleSlotProps?.parentData?.text ||
-        (titleSlotProps &&
-          resolveYextEntityField(
-            params.metadata.streamDocument,
-            titleSlotProps.data.text,
-            i18nComponentsInstance.language || "en"
-          ))
+      isLinkedMode
+        ? data.props.title
+        : titleSlotProps?.parentData?.text ||
+            (titleSlotProps &&
+              resolveYextEntityField(
+                params.metadata.streamDocument,
+                titleSlotProps.data.text,
+                i18nComponentsInstance.language || "en"
+              ))
     );
     const showPhone = Boolean(
-      data.props.phoneNumber ||
-        person?.phoneNumber ||
-        phoneSlotProps?.parentData?.phoneNumbers?.length ||
-        (phoneSlotProps?.data?.phoneNumbers?.length &&
-          phoneSlotProps.data.phoneNumbers.some(
-            (phone: any) => phone.number?.constantValue || phone.number?.field
-          ))
+      isLinkedMode
+        ? data.props.phoneNumber
+        : phoneSlotProps?.parentData?.phoneNumbers?.length ||
+            (phoneSlotProps?.data?.phoneNumbers?.length &&
+              phoneSlotProps.data.phoneNumbers.some(
+                (phone: any) =>
+                  phone.number?.constantValue || phone.number?.field
+              ))
     );
     const showEmail = Boolean(
-      data.props.email ||
-        person?.email ||
-        emailSlotProps?.parentData?.list?.length ||
-        emailSlotProps?.data?.list?.constantValue?.length ||
-        emailSlotProps?.data?.list?.field
+      isLinkedMode
+        ? data.props.email
+        : emailSlotProps?.parentData?.list?.length ||
+            emailSlotProps?.data?.list?.constantValue?.length ||
+            emailSlotProps?.data?.list?.field
     );
     const showCTA = Boolean(
-      data.props.cta?.label ||
-        person?.cta?.label ||
-        ctaSlotProps?.parentData?.cta?.label ||
-        ctaSlotProps?.data?.entityField?.constantValue?.label ||
-        ctaSlotProps?.data?.entityField?.field ||
-        (ctaSlotProps &&
-          resolveYextEntityField(
-            params.metadata.streamDocument,
-            ctaSlotProps.data.entityField
-          )?.label)
+      isLinkedMode
+        ? data.props.cta?.label
+        : ctaSlotProps?.parentData?.cta?.label ||
+            ctaSlotProps?.data?.entityField?.constantValue?.label ||
+            ctaSlotProps?.data?.entityField?.field ||
+            (ctaSlotProps &&
+              resolveYextEntityField(
+                params.metadata.streamDocument,
+                ctaSlotProps.data.entityField
+              )?.label)
     );
 
     let updatedData = {
@@ -601,10 +602,8 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
       "showCTA",
     ]);
 
-    const field = data.props.field ?? data.props.parentData?.field ?? "";
-    const headshot =
-      data.props.headshot ?? data.props.parentData?.person.headshot;
-    const name = data.props.name ?? data.props.parentData?.person.name;
+    const headshot = data.props.headshot;
+    const name = data.props.name;
     const resolvedName =
       name &&
       resolveComponentData(
@@ -615,51 +614,45 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
           output: "plainText",
         }
       );
-    const title = data.props.title ?? data.props.parentData?.person.title;
-    const phoneNumber =
-      data.props.phoneNumber ?? data.props.parentData?.person.phoneNumber;
-    const email = data.props.email ?? data.props.parentData?.person.email;
-    const cta = data.props.cta ?? data.props.parentData?.person.cta;
-    const isLinkedMode = Boolean(field);
+    const title = data.props.title;
+    const phoneNumber = data.props.phoneNumber;
+    const email = data.props.email;
+    const cta = data.props.cta;
 
-    return bindSlots(
-      updatedData as typeof data,
-      {
-        ImageSlot: headshot
-          ? ({
-              field,
-              image: headshot,
-            } satisfies ImageWrapperProps["parentData"])
-          : undefined,
-        NameSlot: resolvedName
-          ? ({
-              field,
-              text: resolvedName,
-            } satisfies HeadingTextProps["parentData"])
-          : undefined,
-        TitleSlot: title
-          ? ({ field, text: title } satisfies TextProps["parentData"])
-          : undefined,
-        PhoneSlot: isLinkedMode
-          ? {
-              field,
-              phoneNumbers: phoneNumber
-                ? [{ number: phoneNumber, label: "" }]
-                : [],
-            }
-          : undefined,
-        EmailSlot: isLinkedMode
-          ? {
-              field,
-              list: email ? [email] : [],
-            }
-          : undefined,
-        CTASlot: cta
-          ? ({ field, cta } satisfies CTAWrapperProps["parentData"])
-          : undefined,
-      },
-      { clearMissingValues: isLinkedMode }
-    );
+    return bindSlots(updatedData as typeof data, {
+      ImageSlot: headshot
+        ? ({
+            field,
+            image: headshot,
+          } satisfies ImageWrapperProps["parentData"])
+        : undefined,
+      NameSlot: resolvedName
+        ? ({
+            field,
+            text: resolvedName,
+          } satisfies HeadingTextProps["parentData"])
+        : undefined,
+      TitleSlot: title
+        ? ({ field, text: title } satisfies TextProps["parentData"])
+        : undefined,
+      PhoneSlot: isLinkedMode
+        ? {
+            field,
+            phoneNumbers: phoneNumber
+              ? [{ number: phoneNumber, label: "" }]
+              : [],
+          }
+        : undefined,
+      EmailSlot: isLinkedMode
+        ? {
+            field,
+            list: email ? [email] : [],
+          }
+        : undefined,
+      CTASlot: cta
+        ? ({ field, cta } satisfies CTAWrapperProps["parentData"])
+        : undefined,
+    });
   },
   render: (props) => <TeamCardComponent {...props} />,
 };

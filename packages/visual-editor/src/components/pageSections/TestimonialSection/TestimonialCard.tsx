@@ -336,20 +336,17 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
     },
   },
   resolveData: (data, params) => {
+    const field = data.props.field ?? "";
+    const isLinkedMode = Boolean(field);
     const descriptionSlotProps = data.props.slots.DescriptionSlot?.[0]
       ?.props as WithId<BodyTextProps> | undefined;
     const contributorNameSlotProps = data.props.slots.ContributorNameSlot?.[0]
       ?.props as WithId<HeadingTextProps> | undefined;
     const contributionDateSlotProps = data.props.slots.ContributionDateSlot?.[0]
       ?.props as WithId<any> | undefined;
-    const description =
-      data.props.description ?? data.props.parentData?.testimonial.description;
-    const contributorName =
-      data.props.contributorName ??
-      data.props.parentData?.testimonial.contributorName;
-    const contributionDate =
-      data.props.contributionDate ??
-      data.props.parentData?.testimonial.contributionDate;
+    const description = data.props.description;
+    const contributorName = data.props.contributorName;
+    const contributionDate = data.props.contributionDate;
     const resolvedContributorNameFromItem =
       contributorName &&
       resolveComponentData(
@@ -360,31 +357,31 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
           output: "plainText",
         }
       );
-    const resolvedDescription =
-      description ??
-      descriptionSlotProps?.parentData?.richText ??
-      (descriptionSlotProps
-        ? resolveYextEntityField(
-            params.metadata.streamDocument,
-            descriptionSlotProps.data.text,
-            i18nComponentsInstance.language || "en"
-          )
-        : undefined);
-    const resolvedContributorName =
-      resolvedContributorNameFromItem ??
-      contributorNameSlotProps?.parentData?.text ??
-      (contributorNameSlotProps
-        ? resolveYextEntityField(
-            params.metadata.streamDocument,
-            contributorNameSlotProps.data.text,
-            i18nComponentsInstance.language || "en"
-          )
-        : undefined);
-    const resolvedContributionDate =
-      contributionDate ??
-      contributionDateSlotProps?.parentData?.date ??
-      contributionDateSlotProps?.data?.date?.constantValue ??
-      contributionDateSlotProps?.data?.date?.field;
+    const resolvedDescription = isLinkedMode
+      ? description
+      : (descriptionSlotProps?.parentData?.richText ??
+        (descriptionSlotProps
+          ? resolveYextEntityField(
+              params.metadata.streamDocument,
+              descriptionSlotProps.data.text,
+              i18nComponentsInstance.language || "en"
+            )
+          : undefined));
+    const resolvedContributorName = isLinkedMode
+      ? resolvedContributorNameFromItem
+      : (contributorNameSlotProps?.parentData?.text ??
+        (contributorNameSlotProps
+          ? resolveYextEntityField(
+              params.metadata.streamDocument,
+              contributorNameSlotProps.data.text,
+              i18nComponentsInstance.language || "en"
+            )
+          : undefined));
+    const resolvedContributionDate = isLinkedMode
+      ? contributionDate
+      : (contributionDateSlotProps?.parentData?.date ??
+        contributionDateSlotProps?.data?.date?.constantValue ??
+        contributionDateSlotProps?.data?.date?.field);
 
     const showDescription = Boolean(resolvedDescription);
     const showContributorName = Boolean(resolvedContributorName);
@@ -409,32 +406,26 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
       "showIcon",
     ]);
 
-    const field = data.props.field ?? data.props.parentData?.field ?? "";
-
-    return bindSlots(
-      updatedData as typeof data,
-      {
-        DescriptionSlot: description
-          ? ({
-              field,
-              richText: description,
-            } satisfies BodyTextProps["parentData"])
-          : undefined,
-        ContributorNameSlot: resolvedContributorNameFromItem
-          ? ({
-              field,
-              text: resolvedContributorNameFromItem,
-            } satisfies HeadingTextProps["parentData"])
-          : undefined,
-        ContributionDateSlot: contributionDate
-          ? ({
-              field,
-              date: contributionDate,
-            } satisfies TimestampProps["parentData"])
-          : undefined,
-      },
-      { clearMissingValues: Boolean(field) }
-    );
+    return bindSlots(updatedData as typeof data, {
+      DescriptionSlot: description
+        ? ({
+            field,
+            richText: description,
+          } satisfies BodyTextProps["parentData"])
+        : undefined,
+      ContributorNameSlot: resolvedContributorNameFromItem
+        ? ({
+            field,
+            text: resolvedContributorNameFromItem,
+          } satisfies HeadingTextProps["parentData"])
+        : undefined,
+      ContributionDateSlot: contributionDate
+        ? ({
+            field,
+            date: contributionDate,
+          } satisfies TimestampProps["parentData"])
+        : undefined,
+    });
   },
   render: (props) => <TestimonialCardComponent {...props} />,
 };

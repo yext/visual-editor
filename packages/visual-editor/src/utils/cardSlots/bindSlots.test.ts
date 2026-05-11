@@ -102,6 +102,7 @@ describe("bindSlots", () => {
   it("writes empty parent-data objects for missing shorthand values in linked mode", () => {
     const data = {
       props: {
+        field: "c_items.0",
         slots: {
           TitleSlot: [
             { type: "HeadingTextSlot", props: { parentData: { text: "Old" } } },
@@ -116,14 +117,10 @@ describe("bindSlots", () => {
       },
     };
 
-    const updatedData = bindSlots(
-      data,
-      {
-        TitleSlot: undefined,
-        ImageSlot: undefined,
-      },
-      { clearMissingValues: true }
-    );
+    const updatedData = bindSlots(data, {
+      TitleSlot: undefined,
+      ImageSlot: undefined,
+    });
 
     expect(updatedData.props.slots.TitleSlot[0]?.props.parentData).toEqual({
       text: undefined,

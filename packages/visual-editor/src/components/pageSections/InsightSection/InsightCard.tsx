@@ -463,23 +463,13 @@ export const InsightCard: YextComponentConfig<InsightCardProps> = {
 
     let updatedData = data;
 
-    const field =
-      updatedData.props.field ?? updatedData.props.parentData?.field;
-    const image =
-      updatedData.props.image ?? updatedData.props.parentData?.insight.image;
-    const name =
-      updatedData.props.name ?? updatedData.props.parentData?.insight.name;
-    const categoryValue =
-      updatedData.props.category ??
-      updatedData.props.parentData?.insight.category;
-    const description =
-      updatedData.props.description ??
-      updatedData.props.parentData?.insight.description;
-    const publishTime =
-      updatedData.props.publishTime ??
-      updatedData.props.parentData?.insight.publishTime;
-    const cta =
-      updatedData.props.cta ?? updatedData.props.parentData?.insight.cta;
+    const field = updatedData.props.field;
+    const image = updatedData.props.image;
+    const name = updatedData.props.name;
+    const categoryValue = updatedData.props.category;
+    const description = updatedData.props.description;
+    const publishTime = updatedData.props.publishTime;
+    const cta = updatedData.props.cta;
 
     if (field) {
       const category = resolveComponentData(
@@ -569,37 +559,33 @@ export const InsightCard: YextComponentConfig<InsightCardProps> = {
       "showCTA",
     ]);
 
-    return bindSlots(
-      updatedData as typeof data,
-      {
-        ImageSlot: image
-          ? { field: field ? `${field}.image` : "", image }
-          : undefined,
-        TitleSlot: name
-          ? { field: field ? `${field}.name` : "", text: name }
-          : undefined,
-        CategorySlot: categoryValue
-          ? {
-              field: field ? `${field}.category` : "",
-              text: categoryValue,
-            }
-          : undefined,
-        DescriptionSlot: description
-          ? {
-              field: field ? `${field}.description` : "",
-              richText: description,
-            }
-          : undefined,
-        PublishTimeSlot: publishTime
-          ? {
-              field: field ? `${field}.publishTime` : "",
-              date: publishTime,
-            }
-          : undefined,
-        CTASlot: cta ? { field: field ? `${field}.cta` : "", cta } : undefined,
-      },
-      { clearMissingValues: Boolean(field) }
-    );
+    return bindSlots(updatedData as typeof data, {
+      ImageSlot: image
+        ? { field: field ? `${field}.image` : "", image }
+        : undefined,
+      TitleSlot: name
+        ? { field: field ? `${field}.name` : "", text: name }
+        : undefined,
+      CategorySlot: categoryValue
+        ? {
+            field: field ? `${field}.category` : "",
+            text: categoryValue,
+          }
+        : undefined,
+      DescriptionSlot: description
+        ? {
+            field: field ? `${field}.description` : "",
+            richText: description,
+          }
+        : undefined,
+      PublishTimeSlot: publishTime
+        ? {
+            field: field ? `${field}.publishTime` : "",
+            date: publishTime,
+          }
+        : undefined,
+      CTASlot: cta ? { field: field ? `${field}.cta` : "", cta } : undefined,
+    });
   },
   render: (props) => <InsightCardComponent {...props} />,
 };
