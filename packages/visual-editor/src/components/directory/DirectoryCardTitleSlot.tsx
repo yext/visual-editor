@@ -12,12 +12,15 @@ import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 import { HeadingTextProps } from "../contentBlocks/HeadingText.tsx";
 
 export type DirectoryCardTitleSlotProps = {
-  /** The title text value. Supports embedded fields available on directory children. */
+  /**
+   * The title text value.
+   * Supports embedding the subfields of dm_directoryChildren.
+   */
   data: {
     text: TranslatableString;
   };
 
-  /** Styling for the heading. */
+  /** Styling for the title (same options as HeadingText). */
   styles: HeadingTextProps["styles"];
 };
 

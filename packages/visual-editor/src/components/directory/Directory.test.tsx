@@ -15,7 +15,6 @@ import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 import { MainContent } from "../structure/MainContent.tsx";
-import { backgroundColors } from "../../utils/themeConfigOptions.ts";
 
 const rootDocument = {
   locale: "en",
@@ -665,7 +664,10 @@ const tests: ComponentTest[] = [
             type: "DirectoryGrid",
             props: {
               styles: {
-                backgroundColor: backgroundColors.background1.value,
+                backgroundColor: {
+                  selectedColor: "white",
+                  contrastingColor: "black",
+                },
               },
               slots: {
                 CardSlot: [
