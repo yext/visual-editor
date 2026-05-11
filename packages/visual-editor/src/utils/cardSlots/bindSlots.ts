@@ -15,9 +15,41 @@ const slotChildTypeToParentDataKey: Record<string, string> = {
 /**
  * Binds parent data into the first child of each named slot.
  *
+ * 1. Looks up the first child in each named slot.
+ * 2. Detects whether that child supports shorthand binding through
+ *    `slotChildTypeToParentDataKey`.
+ * 3. Normalizes raw values like `title` or `image` into the child component's
+ *    expected `parentData` shape.
+ * 4. Writes the resulting `parentData` back onto the slot child.
+ *
  * Pass a full parent-data object when a slot needs custom shape like
  * `{ field, text }`. For common slot child types, raw values can be passed and
  * this helper will wrap them automatically.
+ *
+ * When a linked slot receives no value, the helper still writes an empty
+ * parent-data object for supported slot child types so authored fallback
+ * constants do not bleed through in linked mode.
+ *
+ * Example:
+ * ```ts
+ * bindSlots(data, {
+ *   TitleSlot: data.props.title,
+ *   DescriptionSlot: data.props.description,
+ *   ImageSlot: data.props.image,
+ *   CTASlot: data.props.cta,
+ * })
+ * ```
+ *
+ * If the first child types are `HeadingTextSlot`, `BodyTextSlot`, `ImageSlot`,
+ * and `CTASlot`, that example resolves to parent-data payloads like:
+ * ```ts
+ * {
+ *   TitleSlot: { text: data.props.title },
+ *   DescriptionSlot: { richText: data.props.description },
+ *   ImageSlot: { image: data.props.image },
+ *   CTASlot: { cta: data.props.cta },
+ * }
+ * ```
  */
 export const bindSlots = <
   TData extends {
@@ -49,12 +81,14 @@ export const bindSlots = <
       parentData !== null &&
       !Array.isArray(parentData);
     const resolvedParentData =
-      parentData &&
-      parentDataKey &&
-      (!isPlainParentDataObject ||
-        (!(parentDataKey in parentData) && !("field" in parentData)))
-        ? { [parentDataKey]: parentData }
-        : parentData;
+      parentDataKey && parentData === undefined
+        ? { [parentDataKey]: undefined }
+        : parentData &&
+            parentDataKey &&
+            (!isPlainParentDataObject ||
+              (!(parentDataKey in parentData) && !("field" in parentData)))
+          ? { [parentDataKey]: parentData }
+          : parentData;
 
     updatedData = setDeep(
       updatedData,

@@ -7,9 +7,26 @@ type CardWithId = ComponentData<{
   slots?: Record<string, Array<{ props?: Record<string, unknown> }>>;
 }>;
 
+/**
+ * Deep-clones one card before reconciliation mutates ids, indexes, or slot
+ * parent data.
+ */
 const cloneCard = <TCard extends CardWithId>(card: TCard): TCard =>
   JSON.parse(JSON.stringify(card)) as TCard;
 
+/**
+ * Reconciles manual slot-backed cards against the parent field's stored card
+ * references.
+ *
+ * 1. Reuse existing cards by matching stored ids, or fall back to positional
+ *    reuse for legacy manual cards that never had ids.
+ * 2. Generate or normalize card ids so the returned list has a stable, unique
+ *    order.
+ * 3. Clear stale parent-data on the card and all direct slot children so
+ *    manual content remains authoritative.
+ * 4. Return both the normalized cards and the updated parent references that
+ *    should be stored in `constantValue`.
+ */
 export const syncManualSlotMappedCards = <TCard extends CardWithId>({
   cardReferences,
   currentCards,
@@ -24,11 +41,23 @@ export const syncManualSlotMappedCards = <TCard extends CardWithId>({
   normalizeId?: (id: string) => string;
 }) => {
   const inUseIds = new Set<string>();
+  const usedCardIndices = new Set<number>();
   const cards = cardReferences.map(({ id }, index) => {
-    const existingCard = id
-      ? currentCards.find((card) => card.props.id === id)
-      : undefined;
+    const existingCardIndex = id
+      ? currentCards.findIndex((card) => card.props.id === id)
+      : usedCardIndices.has(index)
+        ? currentCards.findIndex(
+            (_, cardIndex) => !usedCardIndices.has(cardIndex)
+          )
+        : index;
+    const existingCard =
+      existingCardIndex >= 0 ? currentCards[existingCardIndex] : undefined;
     let card = existingCard ? cloneCard(existingCard as TCard) : undefined;
+
+    if (existingCard && existingCardIndex >= 0) {
+      usedCardIndices.add(existingCardIndex);
+    }
+
     let nextId =
       card?.props.id ||
       normalizeId?.(crypto.randomUUID()) ||
@@ -70,6 +99,16 @@ export const syncManualSlotMappedCards = <TCard extends CardWithId>({
   };
 };
 
+/**
+ * Reconciles linked slot-backed cards against the resolved item list.
+ *
+ * 1. Grow or shrink the current card list to match the number of resolved
+ *    linked items.
+ * 2. Preserve existing card instances when possible so slot-level styling and
+ *    structure survive linked-data updates.
+ * 3. Update each card's index and card-level `parentData` so downstream card
+ *    components can bind the resolved item into their internal slots.
+ */
 export const syncLinkedSlotMappedCards = <
   TMappedItem,
   TCard extends CardWithId,

@@ -68,4 +68,34 @@ describe("bindSlots", () => {
       text: "Title",
     });
   });
+
+  it("writes empty parent-data objects for missing shorthand values", () => {
+    const data = {
+      props: {
+        slots: {
+          TitleSlot: [
+            { type: "HeadingTextSlot", props: { parentData: { text: "Old" } } },
+          ],
+          ImageSlot: [
+            {
+              type: "ImageSlot",
+              props: { parentData: { image: { url: "/old.png" } } },
+            },
+          ],
+        },
+      },
+    };
+
+    const updatedData = bindSlots(data, {
+      TitleSlot: undefined,
+      ImageSlot: undefined,
+    });
+
+    expect(updatedData.props.slots.TitleSlot[0]?.props.parentData).toEqual({
+      text: undefined,
+    });
+    expect(updatedData.props.slots.ImageSlot[0]?.props.parentData).toEqual({
+      image: undefined,
+    });
+  });
 });

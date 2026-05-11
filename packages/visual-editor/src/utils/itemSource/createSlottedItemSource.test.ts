@@ -1,9 +1,6 @@
 import { type ComponentData } from "@puckeditor/core";
 import { describe, expect, it } from "vitest";
-import {
-  createSlotMappedCardsSource,
-  createSlottedItemSource,
-} from "./index.ts";
+import { createSlottedItemSource } from "./index.ts";
 
 type FeaturedItemMappings = {
   title: {
@@ -18,7 +15,7 @@ type FeaturedItemMappings = {
   };
 };
 
-const featuredItemsSource = createSlotMappedCardsSource<FeaturedItemMappings>({
+const featuredItemsSource = createSlottedItemSource<FeaturedItemMappings>({
   label: "Featured Items",
   itemLabel: "Featured Item",
   mappingFields: {
@@ -35,11 +32,7 @@ const featuredItemsSource = createSlotMappedCardsSource<FeaturedItemMappings>({
   },
 });
 
-describe("createSlotMappedCardsSource", () => {
-  it("returns the slotted item source alias", () => {
-    expect(createSlotMappedCardsSource).toBe(createSlottedItemSource);
-  });
-
+describe("createSlottedItemSource", () => {
   it("returns a repeated entity field with item-labeled manual summaries", () => {
     expect(featuredItemsSource.field).toMatchObject({
       type: "entityField",

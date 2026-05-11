@@ -620,6 +620,7 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
       data.props.phoneNumber ?? data.props.parentData?.person.phoneNumber;
     const email = data.props.email ?? data.props.parentData?.person.email;
     const cta = data.props.cta ?? data.props.parentData?.person.cta;
+    const isLinkedMode = Boolean(field);
 
     return bindSlots(updatedData as typeof data, {
       ImageSlot: headshot
@@ -634,14 +635,20 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
       TitleSlot: title
         ? ({ field, text: title } satisfies TextProps["parentData"])
         : undefined,
-      PhoneSlot: {
-        field,
-        phoneNumbers: phoneNumber ? [{ number: phoneNumber, label: "" }] : [],
-      },
-      EmailSlot: {
-        field,
-        list: email ? [email] : [],
-      },
+      PhoneSlot: isLinkedMode
+        ? {
+            field,
+            phoneNumbers: phoneNumber
+              ? [{ number: phoneNumber, label: "" }]
+              : [],
+          }
+        : undefined,
+      EmailSlot: isLinkedMode
+        ? {
+            field,
+            list: email ? [email] : [],
+          }
+        : undefined,
       CTASlot: cta
         ? ({ field, cta } satisfies CTAWrapperProps["parentData"])
         : undefined,

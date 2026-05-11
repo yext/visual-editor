@@ -1,6 +1,5 @@
 import { Migration } from "../../utils/migrate.ts";
-// Snapshot the 0076-time mapping defaults here so this append-only migration
-// stays deterministic even if createSlottedItemSource changes later.
+
 const defaultEntityFieldMapping = {
   field: "",
   constantValueEnabled: false,

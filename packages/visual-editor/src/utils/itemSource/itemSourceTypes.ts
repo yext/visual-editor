@@ -110,11 +110,3 @@ export type SlottedItemSourceInstance<
     streamDocument: StreamDocument | undefined
   ) => TData;
 };
-
-export type CreateSlotMappedCardsSourceOptions<
-  TMappings extends Record<string, unknown>,
-> = CreateSlottedItemSourceOptions<TMappings>;
-
-export type SlotMappedCardsSourceInstance<
-  TMappings extends Record<string, unknown>,
-> = SlottedItemSourceInstance<TMappings>;

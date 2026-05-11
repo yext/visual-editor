@@ -21,13 +21,10 @@ export { resolveComponentData } from "./resolveComponentData.tsx";
 export { resolveYextEntityField } from "./resolveYextEntityField.ts";
 export {
   createItemSource,
-  createSlotMappedCardsSource,
   createSlottedItemSource,
   type CreateItemSourceOptions,
-  type CreateSlotMappedCardsSourceOptions,
   type CreateSlottedItemSourceOptions,
   type ItemSourceInstance,
-  type SlotMappedCardsSourceInstance,
   type SlottedItemSourceInstance,
 } from "./itemSource/index.ts";
 export {

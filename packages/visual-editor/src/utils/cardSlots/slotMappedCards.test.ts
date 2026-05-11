@@ -11,7 +11,9 @@ type TestCard = ComponentData<{
   parentData?: unknown;
   slots: Record<
     string,
-    Array<{ props: { id?: string; parentData?: unknown } }>
+    Array<{
+      props: { id?: string; parentData?: unknown } & Record<string, unknown>;
+    }>
   >;
 }>;
 
@@ -73,5 +75,42 @@ describe("slotMappedCards", () => {
     expect(reconciled.cardReferences).toEqual(
       reconciled.cards.map((card) => ({ id: card.props.id }))
     );
+  });
+
+  it("reuses legacy manual cards without ids by index", () => {
+    const existingCard: TestCard = {
+      type: "TestCard",
+      props: {
+        id: "",
+        index: 0,
+        slots: {
+          TitleSlot: [{ props: { parentData: { text: "legacy" } } }],
+          ImageSlot: [{ props: { id: "legacy-image", customHeight: 900 } }],
+        },
+      },
+    };
+
+    const reconciled = syncManualSlotMappedCards({
+      cardReferences: [{}],
+      currentCards: [existingCard],
+      createCard,
+      syncChildSlotIds: (card, id) => {
+        card.props.slots.TitleSlot[0]!.props.id = `${id}-TitleSlot`;
+        if (card.props.slots.ImageSlot?.[0]?.props) {
+          card.props.slots.ImageSlot[0]!.props.id = `${id}-ImageSlot`;
+        }
+        return card;
+      },
+      normalizeId: (id) => `Card-${id}`,
+    });
+
+    expect(reconciled.cards).toHaveLength(1);
+    expect(reconciled.cards[0]?.props.id).toBeDefined();
+    expect(
+      reconciled.cards[0]?.props.slots.ImageSlot?.[0]?.props.customHeight
+    ).toBe(900);
+    expect(
+      reconciled.cards[0]?.props.slots.TitleSlot[0]?.props.parentData
+    ).toBeUndefined();
   });
 });
