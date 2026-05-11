@@ -622,37 +622,44 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
     const cta = data.props.cta ?? data.props.parentData?.person.cta;
     const isLinkedMode = Boolean(field);
 
-    return bindSlots(updatedData as typeof data, {
-      ImageSlot: headshot
-        ? ({ field, image: headshot } satisfies ImageWrapperProps["parentData"])
-        : undefined,
-      NameSlot: resolvedName
-        ? ({
-            field,
-            text: resolvedName,
-          } satisfies HeadingTextProps["parentData"])
-        : undefined,
-      TitleSlot: title
-        ? ({ field, text: title } satisfies TextProps["parentData"])
-        : undefined,
-      PhoneSlot: isLinkedMode
-        ? {
-            field,
-            phoneNumbers: phoneNumber
-              ? [{ number: phoneNumber, label: "" }]
-              : [],
-          }
-        : undefined,
-      EmailSlot: isLinkedMode
-        ? {
-            field,
-            list: email ? [email] : [],
-          }
-        : undefined,
-      CTASlot: cta
-        ? ({ field, cta } satisfies CTAWrapperProps["parentData"])
-        : undefined,
-    });
+    return bindSlots(
+      updatedData as typeof data,
+      {
+        ImageSlot: headshot
+          ? ({
+              field,
+              image: headshot,
+            } satisfies ImageWrapperProps["parentData"])
+          : undefined,
+        NameSlot: resolvedName
+          ? ({
+              field,
+              text: resolvedName,
+            } satisfies HeadingTextProps["parentData"])
+          : undefined,
+        TitleSlot: title
+          ? ({ field, text: title } satisfies TextProps["parentData"])
+          : undefined,
+        PhoneSlot: isLinkedMode
+          ? {
+              field,
+              phoneNumbers: phoneNumber
+                ? [{ number: phoneNumber, label: "" }]
+                : [],
+            }
+          : undefined,
+        EmailSlot: isLinkedMode
+          ? {
+              field,
+              list: email ? [email] : [],
+            }
+          : undefined,
+        CTASlot: cta
+          ? ({ field, cta } satisfies CTAWrapperProps["parentData"])
+          : undefined,
+      },
+      { clearMissingValues: isLinkedMode }
+    );
   },
   render: (props) => <TeamCardComponent {...props} />,
 };

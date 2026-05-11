@@ -569,33 +569,37 @@ export const InsightCard: YextComponentConfig<InsightCardProps> = {
       "showCTA",
     ]);
 
-    return bindSlots(updatedData as typeof data, {
-      ImageSlot: image
-        ? { field: field ? `${field}.image` : "", image }
-        : undefined,
-      TitleSlot: name
-        ? { field: field ? `${field}.name` : "", text: name }
-        : undefined,
-      CategorySlot: categoryValue
-        ? {
-            field: field ? `${field}.category` : "",
-            text: categoryValue,
-          }
-        : undefined,
-      DescriptionSlot: description
-        ? {
-            field: field ? `${field}.description` : "",
-            richText: description,
-          }
-        : undefined,
-      PublishTimeSlot: publishTime
-        ? {
-            field: field ? `${field}.publishTime` : "",
-            date: publishTime,
-          }
-        : undefined,
-      CTASlot: cta ? { field: field ? `${field}.cta` : "", cta } : undefined,
-    });
+    return bindSlots(
+      updatedData as typeof data,
+      {
+        ImageSlot: image
+          ? { field: field ? `${field}.image` : "", image }
+          : undefined,
+        TitleSlot: name
+          ? { field: field ? `${field}.name` : "", text: name }
+          : undefined,
+        CategorySlot: categoryValue
+          ? {
+              field: field ? `${field}.category` : "",
+              text: categoryValue,
+            }
+          : undefined,
+        DescriptionSlot: description
+          ? {
+              field: field ? `${field}.description` : "",
+              richText: description,
+            }
+          : undefined,
+        PublishTimeSlot: publishTime
+          ? {
+              field: field ? `${field}.publishTime` : "",
+              date: publishTime,
+            }
+          : undefined,
+        CTASlot: cta ? { field: field ? `${field}.cta` : "", cta } : undefined,
+      },
+      { clearMissingValues: Boolean(field) }
+    );
   },
   render: (props) => <InsightCardComponent {...props} />,
 };

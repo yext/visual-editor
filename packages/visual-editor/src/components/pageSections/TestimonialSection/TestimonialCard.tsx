@@ -411,26 +411,30 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
 
     const field = data.props.field ?? data.props.parentData?.field ?? "";
 
-    return bindSlots(updatedData as typeof data, {
-      DescriptionSlot: description
-        ? ({
-            field,
-            richText: description,
-          } satisfies BodyTextProps["parentData"])
-        : undefined,
-      ContributorNameSlot: resolvedContributorNameFromItem
-        ? ({
-            field,
-            text: resolvedContributorNameFromItem,
-          } satisfies HeadingTextProps["parentData"])
-        : undefined,
-      ContributionDateSlot: contributionDate
-        ? ({
-            field,
-            date: contributionDate,
-          } satisfies TimestampProps["parentData"])
-        : undefined,
-    });
+    return bindSlots(
+      updatedData as typeof data,
+      {
+        DescriptionSlot: description
+          ? ({
+              field,
+              richText: description,
+            } satisfies BodyTextProps["parentData"])
+          : undefined,
+        ContributorNameSlot: resolvedContributorNameFromItem
+          ? ({
+              field,
+              text: resolvedContributorNameFromItem,
+            } satisfies HeadingTextProps["parentData"])
+          : undefined,
+        ContributionDateSlot: contributionDate
+          ? ({
+              field,
+              date: contributionDate,
+            } satisfies TimestampProps["parentData"])
+          : undefined,
+      },
+      { clearMissingValues: Boolean(field) }
+    );
   },
   render: (props) => <TestimonialCardComponent {...props} />,
 };

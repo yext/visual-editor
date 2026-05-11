@@ -584,29 +584,33 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
       data.props.description ?? data.props.parentData?.event.description;
     const cta = data.props.cta ?? data.props.parentData?.event.cta;
 
-    return bindSlots(updatedData as typeof data, {
-      ImageSlot: image
-        ? ({ field, image } satisfies ImageWrapperProps["parentData"])
-        : undefined,
-      TitleSlot: resolvedTitle
-        ? ({
-            field,
-            text: resolvedTitle,
-          } satisfies HeadingTextProps["parentData"])
-        : undefined,
-      DateTimeSlot: dateTime
-        ? ({ field, date: dateTime } satisfies TimestampProps["parentData"])
-        : undefined,
-      DescriptionSlot: description
-        ? ({
-            field,
-            richText: description,
-          } satisfies BodyTextProps["parentData"])
-        : undefined,
-      CTASlot: cta
-        ? ({ field, cta } satisfies CTAWrapperProps["parentData"])
-        : undefined,
-    });
+    return bindSlots(
+      updatedData as typeof data,
+      {
+        ImageSlot: image
+          ? ({ field, image } satisfies ImageWrapperProps["parentData"])
+          : undefined,
+        TitleSlot: resolvedTitle
+          ? ({
+              field,
+              text: resolvedTitle,
+            } satisfies HeadingTextProps["parentData"])
+          : undefined,
+        DateTimeSlot: dateTime
+          ? ({ field, date: dateTime } satisfies TimestampProps["parentData"])
+          : undefined,
+        DescriptionSlot: description
+          ? ({
+              field,
+              richText: description,
+            } satisfies BodyTextProps["parentData"])
+          : undefined,
+        CTASlot: cta
+          ? ({ field, cta } satisfies CTAWrapperProps["parentData"])
+          : undefined,
+      },
+      { clearMissingValues: Boolean(field) }
+    );
   },
   render: (props) => <EventCardComponent {...props} />,
 };

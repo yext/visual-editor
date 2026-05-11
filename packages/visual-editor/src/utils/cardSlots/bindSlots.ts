@@ -20,15 +20,19 @@ const slotChildTypeToParentDataKey: Record<string, string> = {
  *    `slotChildTypeToParentDataKey`.
  * 3. Normalizes raw values like `title` or `image` into the child component's
  *    expected `parentData` shape.
- * 4. Writes the resulting `parentData` back onto the slot child.
+ * 4. Optionally clears missing shorthand values in linked mode so authored
+ *    fallback constants do not bleed through.
+ * 5. Writes the resulting `parentData` back onto the slot child.
  *
  * Pass a full parent-data object when a slot needs custom shape like
  * `{ field, text }`. For common slot child types, raw values can be passed and
  * this helper will wrap them automatically.
  *
- * When a linked slot receives no value, the helper still writes an empty
- * parent-data object for supported slot child types so authored fallback
- * constants do not bleed through in linked mode.
+ * When `clearMissingValues` is enabled and a linked slot receives no value, the
+ * helper still writes an empty parent-data object for supported slot child
+ * types so authored fallback constants do not bleed through. By default,
+ * missing values are left untouched so manual/default cards keep their authored
+ * slot content.
  *
  * Example:
  * ```ts
@@ -62,7 +66,8 @@ export const bindSlots = <
   },
 >(
   data: TData,
-  slotBindings: Record<string, unknown>
+  slotBindings: Record<string, unknown>,
+  options?: { clearMissingValues?: boolean }
 ) => {
   let updatedData = data;
 
@@ -80,8 +85,13 @@ export const bindSlots = <
       typeof parentData === "object" &&
       parentData !== null &&
       !Array.isArray(parentData);
+
+    if (parentData === undefined && !options?.clearMissingValues) {
+      return;
+    }
+
     const resolvedParentData =
-      parentDataKey && parentData === undefined
+      options?.clearMissingValues && parentDataKey && parentData === undefined
         ? { [parentDataKey]: undefined }
         : parentData &&
             parentDataKey &&
