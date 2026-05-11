@@ -1,7 +1,10 @@
 import React from "react";
 import { AutoField, type FieldProps } from "@puckeditor/core";
 import type { YextFieldDefinition } from "./fields.ts";
-import { isYextOverrideType, YextPuckFieldOverrides } from "./fieldOverrides.ts";
+import {
+  isYextOverrideType,
+  YextPuckFieldOverrides,
+} from "./fieldOverrides.ts";
 import { adaptYextField } from "./yextFieldAdapter.ts";
 
 type YextAutoFieldProps<ValueType = any> = Omit<
@@ -24,8 +27,9 @@ const normalizeField = (
     return {
       ...yextField,
       type: "custom",
-      render: ({ field: _, ...props }) =>
-        <FieldOverride field={yextField} {...(props as any)} />,
+      render: ({ field: _, ...props }) => (
+        <FieldOverride field={yextField} {...(props as any)} />
+      ),
     };
   });
 };

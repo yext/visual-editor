@@ -96,9 +96,9 @@ describe("toPuckFields", () => {
     >;
 
     expect(arrayField.arrayFields.choice.type).toBe("custom");
-    expect((arrayField.arrayFields.choice as CustomField<string>).render).toEqual(
-      expect.any(Function)
-    );
+    expect(
+      (arrayField.arrayFields.choice as CustomField<string>).render
+    ).toEqual(expect.any(Function));
   });
 
   it("passes the original Yext field to YextAutoField from custom render", () => {
