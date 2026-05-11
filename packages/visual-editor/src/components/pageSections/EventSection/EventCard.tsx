@@ -459,15 +459,13 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
 
     const resolvedImage = isLinkedMode
       ? data.props.image
-      : imageSlotProps?.parentData
-        ? imageSlotProps.parentData.image
-        : imageSlotProps
-          ? resolveYextEntityField(
-              params.metadata.streamDocument,
-              imageSlotProps.data.image,
-              i18nComponentsInstance.language || "en"
-            )
-          : undefined;
+      : imageSlotProps
+        ? resolveYextEntityField(
+            params.metadata.streamDocument,
+            imageSlotProps.data.image,
+            i18nComponentsInstance.language || "en"
+          )
+        : undefined;
 
     const showImage = Boolean(
       (resolvedImage as any)?.url ||
@@ -480,48 +478,41 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
       isLinkedMode
         ? data.props.description
         : descriptionSlotProps &&
-            (descriptionSlotProps.parentData
-              ? descriptionSlotProps.parentData.richText
-              : resolveYextEntityField(
-                  params.metadata.streamDocument,
-                  descriptionSlotProps.data.text,
-                  i18nComponentsInstance.language || "en"
-                ))
+            resolveYextEntityField(
+              params.metadata.streamDocument,
+              descriptionSlotProps.data.text,
+              i18nComponentsInstance.language || "en"
+            )
     );
     const showTitle = Boolean(
       isLinkedMode
         ? data.props.title
         : titleSlotProps &&
-            (titleSlotProps.parentData
-              ? titleSlotProps.parentData.text
-              : resolveYextEntityField(
-                  params.metadata.streamDocument,
-                  titleSlotProps.data.text,
-                  i18nComponentsInstance.language || "en"
-                ))
+            resolveYextEntityField(
+              params.metadata.streamDocument,
+              titleSlotProps.data.text,
+              i18nComponentsInstance.language || "en"
+            )
     );
     const showDateTime = Boolean(
       isLinkedMode
         ? data.props.dateTime?.trim()
-        : dateTimeSlotProps?.parentData?.date?.trim() ||
-            (dateTimeSlotProps &&
-              resolveYextEntityField(
-                params.metadata.streamDocument,
-                dateTimeSlotProps.data.date,
-                i18nComponentsInstance.language || "en"
-              )?.trim())
+        : dateTimeSlotProps &&
+            resolveYextEntityField(
+              params.metadata.streamDocument,
+              dateTimeSlotProps.data.date,
+              i18nComponentsInstance.language || "en"
+            )?.trim()
     );
     const showCTA = Boolean(
       isLinkedMode
         ? data.props.cta?.label
         : ctaSlotProps &&
-            (ctaSlotProps.parentData
-              ? ctaSlotProps.parentData.cta?.label
-              : resolveComponentData(
-                  ctaSlotProps.data.entityField,
-                  i18nComponentsInstance.language || "en",
-                  params.metadata.streamDocument
-                )?.label)
+            resolveComponentData(
+              ctaSlotProps.data.entityField,
+              i18nComponentsInstance.language || "en",
+              params.metadata.streamDocument
+            )?.label
     );
 
     let updatedData = {

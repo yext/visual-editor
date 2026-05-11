@@ -359,28 +359,25 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
       );
     const resolvedDescription = isLinkedMode
       ? description
-      : (descriptionSlotProps?.parentData?.richText ??
-        (descriptionSlotProps
-          ? resolveYextEntityField(
-              params.metadata.streamDocument,
-              descriptionSlotProps.data.text,
-              i18nComponentsInstance.language || "en"
-            )
-          : undefined));
+      : descriptionSlotProps
+        ? resolveYextEntityField(
+            params.metadata.streamDocument,
+            descriptionSlotProps.data.text,
+            i18nComponentsInstance.language || "en"
+          )
+        : undefined;
     const resolvedContributorName = isLinkedMode
       ? resolvedContributorNameFromItem
-      : (contributorNameSlotProps?.parentData?.text ??
-        (contributorNameSlotProps
-          ? resolveYextEntityField(
-              params.metadata.streamDocument,
-              contributorNameSlotProps.data.text,
-              i18nComponentsInstance.language || "en"
-            )
-          : undefined));
+      : contributorNameSlotProps
+        ? resolveYextEntityField(
+            params.metadata.streamDocument,
+            contributorNameSlotProps.data.text,
+            i18nComponentsInstance.language || "en"
+          )
+        : undefined;
     const resolvedContributionDate = isLinkedMode
       ? contributionDate
-      : (contributionDateSlotProps?.parentData?.date ??
-        contributionDateSlotProps?.data?.date?.constantValue ??
+      : (contributionDateSlotProps?.data?.date?.constantValue ??
         contributionDateSlotProps?.data?.date?.field);
 
     const showDescription = Boolean(resolvedDescription);

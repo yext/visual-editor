@@ -531,14 +531,13 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       | undefined;
     const resolvedBrow = isLinkedMode
       ? data.props.brow
-      : (browSlotProps?.parentData?.text ??
-        (browSlotProps
-          ? resolveYextEntityField(
-              params.metadata.streamDocument,
-              browSlotProps?.data?.text,
-              locale
-            )
-          : undefined));
+      : browSlotProps
+        ? resolveYextEntityField(
+            params.metadata.streamDocument,
+            browSlotProps.data.text,
+            locale
+          )
+        : undefined;
     const showBrow = Boolean(resolvedBrow);
 
     const descriptionSlotProps = data.props.slots.DescriptionSlot?.[0]
@@ -546,14 +545,13 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
 
     const resolvedDescription = isLinkedMode
       ? data.props.description
-      : (descriptionSlotProps?.parentData?.richText ??
-        (descriptionSlotProps
-          ? resolveYextEntityField(
-              params.metadata.streamDocument,
-              descriptionSlotProps?.data?.text,
-              locale
-            )
-          : undefined));
+      : descriptionSlotProps
+        ? resolveYextEntityField(
+            params.metadata.streamDocument,
+            descriptionSlotProps.data.text,
+            locale
+          )
+        : undefined;
     const showDescription = Boolean(resolvedDescription);
 
     const ctaSlotProps = data.props.slots.CTASlot?.[0]?.props as
@@ -561,14 +559,13 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       | undefined;
     const resolvedCTA = isLinkedMode
       ? data.props.cta
-      : (ctaSlotProps?.parentData?.cta ??
-        (ctaSlotProps
-          ? resolveYextEntityField(
-              params.metadata.streamDocument,
-              ctaSlotProps?.data?.entityField,
-              locale
-            )
-          : undefined));
+      : ctaSlotProps
+        ? resolveYextEntityField(
+            params.metadata.streamDocument,
+            ctaSlotProps.data.entityField,
+            locale
+          )
+        : undefined;
     const showCTA = Boolean(resolvedCTA);
 
     let updatedData = {

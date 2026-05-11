@@ -482,63 +482,56 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
     const showImage = Boolean(
       isLinkedMode
         ? data.props.headshot
-        : imageSlotProps?.parentData?.image ||
-            (imageSlotProps &&
-              (imageSlotProps?.data.image.field ||
-                (imageSlotProps.data.image.constantValue &&
-                  "hasLocalizedValue" in
-                    imageSlotProps.data.image.constantValue) ||
-                (imageSlotProps.data.image.constantValue &&
-                  "url" in imageSlotProps.data.image.constantValue &&
-                  imageSlotProps.data.image.constantValue.url) ||
-                (imageSlotProps.data.image.constantValue &&
-                  "image" in imageSlotProps.data.image.constantValue &&
-                  imageSlotProps.data.image.constantValue.image?.url)))
+        : imageSlotProps &&
+            (imageSlotProps.data.image.field ||
+              (imageSlotProps.data.image.constantValue &&
+                "hasLocalizedValue" in
+                  imageSlotProps.data.image.constantValue) ||
+              (imageSlotProps.data.image.constantValue &&
+                "url" in imageSlotProps.data.image.constantValue &&
+                imageSlotProps.data.image.constantValue.url) ||
+              (imageSlotProps.data.image.constantValue &&
+                "image" in imageSlotProps.data.image.constantValue &&
+                imageSlotProps.data.image.constantValue.image?.url))
     );
     const showName = Boolean(
       isLinkedMode
         ? data.props.name
-        : nameSlotProps?.parentData?.text ||
-            (nameSlotProps &&
-              resolveYextEntityField(
-                params.metadata.streamDocument,
-                nameSlotProps.data.text,
-                i18nComponentsInstance.language || "en"
-              ))
+        : nameSlotProps &&
+            resolveYextEntityField(
+              params.metadata.streamDocument,
+              nameSlotProps.data.text,
+              i18nComponentsInstance.language || "en"
+            )
     );
     const showTitle = Boolean(
       isLinkedMode
         ? data.props.title
-        : titleSlotProps?.parentData?.text ||
-            (titleSlotProps &&
-              resolveYextEntityField(
-                params.metadata.streamDocument,
-                titleSlotProps.data.text,
-                i18nComponentsInstance.language || "en"
-              ))
+        : titleSlotProps &&
+            resolveYextEntityField(
+              params.metadata.streamDocument,
+              titleSlotProps.data.text,
+              i18nComponentsInstance.language || "en"
+            )
     );
     const showPhone = Boolean(
       isLinkedMode
         ? data.props.phoneNumber
-        : phoneSlotProps?.parentData?.phoneNumbers?.length ||
-            (phoneSlotProps?.data?.phoneNumbers?.length &&
-              phoneSlotProps.data.phoneNumbers.some(
-                (phone: any) =>
-                  phone.number?.constantValue || phone.number?.field
-              ))
+        : phoneSlotProps?.data?.phoneNumbers?.length &&
+            phoneSlotProps.data.phoneNumbers.some(
+              (phone: any) => phone.number?.constantValue || phone.number?.field
+            )
     );
     const showEmail = Boolean(
       isLinkedMode
         ? data.props.email
-        : emailSlotProps?.parentData?.list?.length ||
-            emailSlotProps?.data?.list?.constantValue?.length ||
+        : emailSlotProps?.data?.list?.constantValue?.length ||
             emailSlotProps?.data?.list?.field
     );
     const showCTA = Boolean(
       isLinkedMode
         ? data.props.cta?.label
-        : ctaSlotProps?.parentData?.cta?.label ||
-            ctaSlotProps?.data?.entityField?.constantValue?.label ||
+        : ctaSlotProps?.data?.entityField?.constantValue?.label ||
             ctaSlotProps?.data?.entityField?.field ||
             (ctaSlotProps &&
               resolveYextEntityField(

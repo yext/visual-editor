@@ -1204,6 +1204,91 @@ describe("migrate", () => {
     });
   });
 
+  it("leaves manual slot-mapped wrapper data unchanged for upgraded sections", async () => {
+    const cases = [
+      {
+        wrapperType: "ProductCardsWrapper",
+        wrapperId: "ProductCardsWrapper-test",
+      },
+      {
+        wrapperType: "TestimonialCardsWrapper",
+        wrapperId: "TestimonialCardsWrapper-test",
+      },
+      {
+        wrapperType: "InsightCardsWrapper",
+        wrapperId: "InsightCardsWrapper-test",
+      },
+      {
+        wrapperType: "TeamCardsWrapper",
+        wrapperId: "TeamCardsWrapper-test",
+      },
+    ];
+
+    cases.forEach(({ wrapperType, wrapperId }) => {
+      const migratedData = migrate(
+        {
+          root: { props: { version: 0 } },
+          content: [
+            {
+              type: wrapperType,
+              props: {
+                id: wrapperId,
+                data: {
+                  field: "",
+                  constantValueEnabled: true,
+                  constantValue: [{ id: "Card-1" }],
+                },
+                slots: {
+                  CardSlot: [
+                    {
+                      type: "SomeCard",
+                      props: {
+                        id: "Card-1",
+                        slots: {},
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+          zones: {},
+        },
+        [slotMappedCardsMigration],
+        { components: {} },
+        {}
+      );
+
+      expect(migratedData.content[0]?.props.data).toEqual({
+        field: "",
+        constantValueEnabled: true,
+        constantValue: [{ id: "Card-1" }],
+      });
+      expect(migratedData.content[0]?.props.slots).toEqual({
+        CardSlot: [
+          {
+            type: "SomeCard",
+            props: {
+              id: "Card-1",
+              slots: {},
+            },
+          },
+        ],
+      });
+      expect(migratedData.content[0]?.props.manualSlots).toEqual({
+        CardSlot: [
+          {
+            type: "SomeCard",
+            props: {
+              id: "Card-1",
+              slots: {},
+            },
+          },
+        ],
+      });
+    });
+  });
+
   it("migrates linked TestimonialCardsWrapper data to slot-mapped cards", async () => {
     const migratedData = migrate(
       {
@@ -1236,6 +1321,83 @@ describe("migrate", () => {
         contributionDate: { field: "contributionDate" },
       },
     });
+  });
+
+  it("migrates linked upgraded wrappers when constantValueEnabled is omitted", async () => {
+    const cases = [
+      {
+        wrapperType: "TestimonialCardsWrapper",
+        wrapperId: "TestimonialCardsWrapper-test",
+        sourceField: "c_testimonialsSection",
+        repeatedField: "c_testimonialsSection.testimonials",
+        mappings: {
+          description: { field: "description" },
+          contributorName: { field: "contributorName" },
+          contributionDate: { field: "contributionDate" },
+        },
+      },
+      {
+        wrapperType: "InsightCardsWrapper",
+        wrapperId: "InsightCardsWrapper-test",
+        sourceField: "c_insightsSection",
+        repeatedField: "c_insightsSection.insights",
+        mappings: {
+          image: { field: "image" },
+          name: { field: "name" },
+          category: { field: "category" },
+          publishTime: { field: "publishTime" },
+          description: { field: "description" },
+          cta: { field: "cta" },
+        },
+      },
+      {
+        wrapperType: "TeamCardsWrapper",
+        wrapperId: "TeamCardsWrapper-test",
+        sourceField: "c_teamSection",
+        repeatedField: "c_teamSection.people",
+        mappings: {
+          headshot: { field: "headshot" },
+          name: { field: "name" },
+          title: { field: "title" },
+          phoneNumber: { field: "phoneNumber" },
+          email: { field: "email" },
+          cta: { field: "cta" },
+        },
+      },
+    ];
+
+    cases.forEach(
+      ({ wrapperType, wrapperId, sourceField, repeatedField, mappings }) => {
+        const migratedData = migrate(
+          {
+            root: { props: { version: 0 } },
+            content: [
+              {
+                type: wrapperType,
+                props: {
+                  id: wrapperId,
+                  data: {
+                    field: sourceField,
+                    constantValue: [{ id: "Card-1" }],
+                  },
+                },
+              },
+            ],
+            zones: {},
+          },
+          [slotMappedCardsMigration],
+          { components: {} },
+          {}
+        );
+
+        expect(migratedData.content[0]?.props.data).toMatchObject({
+          field: repeatedField,
+          constantValueEnabled: false,
+          constantValue: [{ id: "Card-1" }],
+          mappings,
+        });
+      }
+    );
   });
 
   it("migrates linked InsightCardsWrapper data to slot-mapped cards", async () => {
