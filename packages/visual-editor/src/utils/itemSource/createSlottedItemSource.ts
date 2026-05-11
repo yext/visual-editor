@@ -21,11 +21,26 @@ import {
 } from "./itemSourceTypes.ts";
 import { pt } from "../i18n/platform.ts";
 
+/**
+ * Slotted item source helper.
+ *
+ * 1. Builds the repeated entity-field config for choosing a linked item source.
+ * 2. Resolves mapped item values from the chosen repeated field.
+ * 3. Preserves authored manual cards in hidden `manualSlots.CardSlot`.
+ * 4. Reconciles visible `slots.CardSlot` between linked and manual mode.
+ */
+
+/**
+ * Deep-clones helper-owned values before reconciliation mutates card data.
+ */
 const cloneValue = <T>(value: T): T =>
   typeof structuredClone === "function"
     ? structuredClone(value)
     : (JSON.parse(JSON.stringify(value)) as T);
 
+/**
+ * Assigns stable child-slot ids for one card and clears stale slot parent data.
+ */
 const setChildSlotIds = (
   card: ComponentData<Record<string, unknown>>,
   cardId: string
@@ -52,12 +67,7 @@ const setChildSlotIds = (
 };
 
 /**
- * Slotted-item source assembly.
- *
- * 1. Builds one repeated `entityField` config for linked-mode source selection.
- * 2. Resolves mapped items from that source just like `createItemSource(...)`.
- * 3. Preserves authored manual cards in hidden `manualSlots.CardSlot`.
- * 4. Populates a wrapper's visible `CardSlot` with linked or manual cards.
+ * Creates the helper API for one slot-backed repeated-item wrapper.
  */
 export function createSlottedItemSource<
   TMappings extends Record<string, unknown>,

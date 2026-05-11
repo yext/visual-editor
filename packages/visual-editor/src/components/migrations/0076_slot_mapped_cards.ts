@@ -1,5 +1,17 @@
 import { Migration } from "../../utils/migrate.ts";
 
+/**
+ * Slot-mapped cards migration.
+ *
+ * 1. Rewrites old section wrapper fields to repeated-child field paths.
+ * 2. Installs the canonical mapping set for each upgraded section type.
+ * 3. Preserves authored manual slot content in hidden `manualSlots`.
+ * 4. Scrubs old linked runtime residue like card `parentData` and child `field`s.
+ */
+
+/**
+ * Base mapping shape used when constructing canonical linked-field mappings.
+ */
 const defaultEntityFieldMapping = Object.freeze({
   field: "",
   constantValueEnabled: false,
@@ -53,11 +65,17 @@ const teamDefaultMappings = {
   cta: { ...defaultEntityFieldMapping, field: "cta" },
 };
 
+/**
+ * Deep-clones migration input before mutating preserved slot content.
+ */
 const cloneValue = <T>(value: T): T =>
   typeof structuredClone === "function"
     ? structuredClone(value)
     : (JSON.parse(JSON.stringify(value)) as T);
 
+/**
+ * Appends the repeated child field once when migrating an old wrapper source.
+ */
 const appendChildField = (field: string, childField: string): string => {
   if (!field || field.endsWith(`.${childField}`)) {
     return field;
@@ -66,6 +84,9 @@ const appendChildField = (field: string, childField: string): string => {
   return `${field}.${childField}`;
 };
 
+/**
+ * Clears nested linked `field` values while preserving sibling manual content.
+ */
 const clearNestedFieldValues = (value: unknown): unknown => {
   if (Array.isArray(value)) {
     return value.map(clearNestedFieldValues);

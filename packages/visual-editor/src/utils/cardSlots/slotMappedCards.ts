@@ -1,5 +1,13 @@
 import { type ComponentData, setDeep } from "@puckeditor/core";
 
+/**
+ * Slot-mapped card reconciliation helpers.
+ *
+ * 1. Reconcile manual cards against stored card references and preserve authored slots.
+ * 2. Reconcile linked cards against resolved item counts while preserving card structure.
+ * 3. Normalize ids and clear stale `parentData` at the card and child-slot levels.
+ */
+
 type CardWithId = ComponentData<{
   id?: string;
   index?: number;
