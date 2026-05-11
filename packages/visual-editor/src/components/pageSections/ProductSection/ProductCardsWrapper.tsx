@@ -50,7 +50,7 @@ export const productCardsSource = createSlottedItemSource<
     price: {
       type: "entityField",
       label: msg("fields.price", "Price"),
-      filter: { types: [] },
+      filter: { types: ["type.price"] },
     },
     description: {
       type: "entityField",
