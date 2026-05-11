@@ -344,9 +344,7 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
       ?.props as WithId<HeadingTextProps> | undefined;
     const contributionDateSlotProps = data.props.slots.ContributionDateSlot?.[0]
       ?.props as WithId<any> | undefined;
-    const description = data.props.description;
-    const contributorName = data.props.contributorName;
-    const contributionDate = data.props.contributionDate;
+    const { description, contributorName, contributionDate } = data.props;
     const resolvedContributorNameFromItem =
       contributorName &&
       resolveComponentData(

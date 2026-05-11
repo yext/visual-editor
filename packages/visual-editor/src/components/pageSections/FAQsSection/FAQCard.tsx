@@ -62,6 +62,7 @@ export const defaultFAQCardData = (
       answerVariant: answerVariant || "base",
       answerColor: answerColor,
     },
+    slots: {},
   },
 });
 
@@ -79,15 +80,15 @@ export type FAQCardProps = {
     answer: YextEntityField<TranslatableRichText>;
   };
 
+  /** @internal */
+  slots: {};
+
   /** Styling for all the FAQ cards. */
   styles: {
     questionVariant: BodyProps["variant"];
     answerVariant: BodyProps["variant"];
     answerColor?: ThemeColor;
   };
-
-  /** @internal */
-  slots: {};
 
   /** @internal */
   index?: number;
@@ -274,25 +275,7 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
 export const FAQCard: YextComponentConfig<FAQCardProps> = {
   label: msg("faq", "FAQ"),
   fields: FAQCardFields,
-  defaultProps: {
-    data: {
-      question: {
-        constantValueEnabled: true,
-        constantValue: defaultFAQ.question,
-        field: "",
-      },
-      answer: {
-        constantValueEnabled: true,
-        constantValue: defaultFAQ.answer,
-        field: "",
-      },
-    },
-    styles: {
-      questionVariant: "base",
-      answerVariant: "base",
-    },
-    slots: {},
-  },
+  defaultProps: defaultFAQCardData().props,
   resolveFields: (data) =>
     resolveDataFromParent(
       FAQCardFields,

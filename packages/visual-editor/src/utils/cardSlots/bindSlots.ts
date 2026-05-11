@@ -69,7 +69,7 @@ export const bindSlots = <
   data: TData,
   slotBindings: Record<string, unknown>
 ) => {
-  let updatedData = data;
+  let updatedData: TData = { ...data };
   const isLinkedMode = Boolean(data.props.field);
 
   Object.entries(slotBindings).forEach(([slotKey, parentData]) => {

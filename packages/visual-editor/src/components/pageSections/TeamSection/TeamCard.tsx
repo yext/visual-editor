@@ -611,8 +611,8 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
       "showCTA",
     ]);
 
-    const headshot = data.props.headshot;
-    const name = data.props.name;
+    const { headshot, name, title, phoneNumber, email, cta } =
+      updatedData.props;
     const resolvedName =
       name &&
       resolveComponentData(
@@ -623,11 +623,6 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
           output: "plainText",
         }
       );
-    const title = data.props.title;
-    const phoneNumber = data.props.phoneNumber;
-    const email = data.props.email;
-    const cta = data.props.cta;
-
     return bindSlots(updatedData as typeof data, {
       ImageSlot: headshot
         ? ({

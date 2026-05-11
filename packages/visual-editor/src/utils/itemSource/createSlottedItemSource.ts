@@ -116,15 +116,16 @@ export function createSlottedItemSource<
     constantValue: Array.from({ length: defaultItems }, () => ({})),
     mappings: defaultMappings,
   };
-  const defaultWrapperProps = {
-    data: defaultValue,
-    slots: {
-      CardSlot: [] as [],
-    },
-    manualSlots: {
-      CardSlot: [] as [],
-    },
-  };
+  const defaultWrapperProps: SlottedItemSourceInstance<TMappings>["defaultWrapperProps"] =
+    {
+      data: defaultValue,
+      slots: {
+        CardSlot: [],
+      },
+      manualSlots: {
+        CardSlot: [],
+      },
+    };
   const sourceField = {
     type: "entityField",
     label,

@@ -563,8 +563,7 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
       "showCTA",
     ]);
 
-    const image = data.props.image;
-    const title = data.props.title;
+    const { image, title, dateTime, description, cta } = updatedData.props;
     const resolvedTitle =
       title &&
       resolveComponentData(
@@ -573,9 +572,6 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
         params.metadata.streamDocument,
         { output: "plainText" }
       );
-    const dateTime = data.props.dateTime;
-    const description = data.props.description;
-    const cta = data.props.cta;
 
     return bindSlots(updatedData as typeof data, {
       ImageSlot: image

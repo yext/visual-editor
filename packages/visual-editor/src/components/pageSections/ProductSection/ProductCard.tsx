@@ -609,8 +609,13 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       `cta${data.props.index}`
     );
 
-    const image = isLinkedMode ? data.props.image : undefined;
-    const name = isLinkedMode ? data.props.name : undefined;
+    const {
+      image: linkedImage,
+      name: linkedName,
+      cta: linkedCTA,
+    } = updatedData.props;
+    const image = isLinkedMode ? linkedImage : undefined;
+    const name = isLinkedMode ? linkedName : undefined;
     const resolvedName =
       name &&
       resolveComponentData(name, locale, params.metadata.streamDocument, {
@@ -618,7 +623,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       });
     const brow = resolvedBrow;
     const description = resolvedDescription;
-    const cta = resolvedCTA;
+    const cta = resolvedCTA ?? (isLinkedMode ? linkedCTA : undefined);
 
     return bindSlots(updatedData as typeof data, {
       ImageSlot: image

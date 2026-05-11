@@ -1,4 +1,4 @@
-import { type ComponentData, setDeep } from "@puckeditor/core";
+import { type ComponentData } from "@puckeditor/core";
 
 /**
  * Slot-mapped card reconciliation helpers.
@@ -98,11 +98,15 @@ export const syncManualSlotMappedCards = <TCard extends CardWithId>({
       return createCard(nextId, index);
     }
 
-    return setDeep(
-      setDeep(setDeep(card, "props.id", nextId), "props.index", index),
-      "props.parentData",
-      undefined
-    ) as TCard;
+    return {
+      ...card,
+      props: {
+        ...card.props,
+        id: nextId,
+        index,
+        parentData: undefined,
+      },
+    };
   });
 
   return {
@@ -153,11 +157,12 @@ export const syncLinkedSlotMappedCards = <
     items.length
   ) as TCard[];
 
-  return updatedCards.map((card, index) =>
-    setDeep(
-      setDeep(card, "props.index", index),
-      "props.parentData",
-      toParentData(items[index]!)
-    )
-  ) as TCard[];
+  return updatedCards.map((card, index) => ({
+    ...card,
+    props: {
+      ...card.props,
+      index,
+      parentData: toParentData(items[index]!),
+    },
+  }));
 };

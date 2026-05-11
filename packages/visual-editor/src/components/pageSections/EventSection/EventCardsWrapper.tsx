@@ -10,16 +10,8 @@ import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 import { MappedEntityFieldConditionalRender } from "../entityFieldSectionUtils.ts";
 import { createSlottedItemSource } from "../../../utils/itemSource/index.ts";
 
-type EventCardMappings = {
-  image: EventStruct["image"];
-  title: EventStruct["title"];
-  dateTime: EventStruct["dateTime"];
-  description: EventStruct["description"];
-  cta: EventStruct["cta"];
-};
-
 export const eventCardsSource = createSlottedItemSource<
-  EventCardMappings,
+  EventStruct,
   EventCardProps
 >({
   label: msg("components.events", "Events"),
@@ -55,18 +47,17 @@ export const eventCardsSource = createSlottedItemSource<
   },
 });
 
-export type EventCardsWrapperProps =
-  SlotMappedCardWrapperType<EventCardMappings> & {
-    styles: {
-      showImage: boolean;
-      showDateTime: boolean;
-      showDescription: boolean;
-      showCTA: boolean;
-    };
-
-    /** @internal */
-    conditionalRender?: MappedEntityFieldConditionalRender;
+export type EventCardsWrapperProps = SlotMappedCardWrapperType<EventStruct> & {
+  styles: {
+    showImage: boolean;
+    showDateTime: boolean;
+    showDescription: boolean;
+    showCTA: boolean;
   };
+
+  /** @internal */
+  conditionalRender?: MappedEntityFieldConditionalRender;
+};
 
 const eventCardsWrapperFields: YextFields<EventCardsWrapperProps> = {
   data: eventCardsSource.field,

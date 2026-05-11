@@ -954,6 +954,32 @@ const mainDefaultLayout = {
                             id: "ProductCard-a7549442-809c-489f-9f73-4cd5c6038f51",
                           },
                         ],
+                        mappings: {
+                          image: {
+                            field: "",
+                            constantValueEnabled: false,
+                          },
+                          brow: {
+                            field: "",
+                            constantValueEnabled: false,
+                          },
+                          name: {
+                            field: "",
+                            constantValueEnabled: false,
+                          },
+                          price: {
+                            field: "",
+                            constantValueEnabled: false,
+                          },
+                          description: {
+                            field: "",
+                            constantValueEnabled: false,
+                          },
+                          cta: {
+                            field: "",
+                            constantValueEnabled: false,
+                          },
+                        },
                       },
                       styles: {
                         showImage: true,
@@ -1492,6 +1518,9 @@ const mainDefaultLayout = {
                           },
                         ],
                       },
+                      manualSlots: {
+                        CardSlot: [],
+                      },
                     },
                   },
                 ],
@@ -1554,6 +1583,20 @@ const mainDefaultLayout = {
                             id: "TestimonialCard-1898bde5-72bb-4eef-97dc-c6c6aea0ecd5",
                           },
                         ],
+                        mappings: {
+                          description: {
+                            field: "",
+                            constantValueEnabled: false,
+                          },
+                          contributorName: {
+                            field: "",
+                            constantValueEnabled: false,
+                          },
+                          contributionDate: {
+                            field: "",
+                            constantValueEnabled: false,
+                          },
+                        },
                       },
                       styles: {
                         showName: true,
@@ -1824,6 +1867,9 @@ const mainDefaultLayout = {
                           },
                         ],
                       },
+                      manualSlots: {
+                        CardSlot: [],
+                      },
                     },
                   },
                 ],
@@ -1864,6 +1910,16 @@ const mainDefaultLayout = {
                     id: "FAQCard-19a25060-a7af-4f17-80a3-c63cceb619ad",
                   },
                 ],
+                mappings: {
+                  question: {
+                    field: "",
+                    constantValueEnabled: false,
+                  },
+                  answer: {
+                    field: "",
+                    constantValueEnabled: false,
+                  },
+                },
               },
               slots: {
                 HeadingSlot: [
@@ -1983,6 +2039,9 @@ const mainDefaultLayout = {
                   },
                 ],
               },
+              manualSlots: {
+                CardSlot: [],
+              },
             },
           },
           {
@@ -2034,6 +2093,32 @@ const mainDefaultLayout = {
                             id: "TeamCard-1486b519-8c1a-4e71-9622-eda626ba72ad",
                           },
                         ],
+                        mappings: {
+                          headshot: {
+                            field: "",
+                            constantValueEnabled: false,
+                          },
+                          name: {
+                            field: "",
+                            constantValueEnabled: false,
+                          },
+                          title: {
+                            field: "",
+                            constantValueEnabled: false,
+                          },
+                          phoneNumber: {
+                            field: "",
+                            constantValueEnabled: false,
+                          },
+                          email: {
+                            field: "",
+                            constantValueEnabled: false,
+                          },
+                          cta: {
+                            field: "",
+                            constantValueEnabled: false,
+                          },
+                        },
                       },
                       styles: {
                         showImage: true,
@@ -2580,6 +2665,9 @@ const mainDefaultLayout = {
                           },
                         ],
                       },
+                      manualSlots: {
+                        CardSlot: [],
+                      },
                     },
                   },
                 ],
@@ -2640,6 +2728,32 @@ const mainDefaultLayout = {
                             id: "InsightCard-3",
                           },
                         ],
+                        mappings: {
+                          image: {
+                            field: "",
+                            constantValueEnabled: false,
+                          },
+                          name: {
+                            field: "",
+                            constantValueEnabled: false,
+                          },
+                          category: {
+                            field: "",
+                            constantValueEnabled: false,
+                          },
+                          publishTime: {
+                            field: "",
+                            constantValueEnabled: false,
+                          },
+                          description: {
+                            field: "",
+                            constantValueEnabled: false,
+                          },
+                          cta: {
+                            field: "",
+                            constantValueEnabled: false,
+                          },
+                        },
                       },
                       styles: {
                         showImage: true,
@@ -3165,6 +3279,9 @@ const mainDefaultLayout = {
                           },
                         ],
                       },
+                      manualSlots: {
+                        CardSlot: [],
+                      },
                     },
                   },
                 ],
@@ -3316,6 +3433,28 @@ const mainDefaultLayout = {
                             id: "EventCard-90968d53-5878-4459-b3dc-0b9b75e028ea",
                           },
                         ],
+                        mappings: {
+                          image: {
+                            field: "",
+                            constantValueEnabled: false,
+                          },
+                          title: {
+                            field: "",
+                            constantValueEnabled: false,
+                          },
+                          dateTime: {
+                            field: "",
+                            constantValueEnabled: false,
+                          },
+                          description: {
+                            field: "",
+                            constantValueEnabled: false,
+                          },
+                          cta: {
+                            field: "",
+                            constantValueEnabled: false,
+                          },
+                        },
                       },
                       styles: {
                         showImage: true,
@@ -3809,6 +3948,9 @@ const mainDefaultLayout = {
                             },
                           },
                         ],
+                      },
+                      manualSlots: {
+                        CardSlot: [],
                       },
                     },
                   },

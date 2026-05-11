@@ -74,10 +74,7 @@ export const faqCardsSource = createSlottedItemSource<
   label: msg("fields.faqs", "FAQs"),
   itemLabel: "FAQ",
   cardName: "FAQCard",
-  defaultItemProps: {
-    ...defaultFAQCardData().props,
-    slots: {},
-  },
+  defaultItemProps: defaultFAQCardData().props,
   mappingFields: {
     question: {
       type: "entityField",

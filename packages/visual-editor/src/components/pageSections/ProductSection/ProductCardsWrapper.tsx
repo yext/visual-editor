@@ -16,7 +16,7 @@ import { createSlottedItemSource } from "../../../utils/itemSource/index.ts";
 
 type ProductCardMappings = {
   image: ProductStruct["image"];
-  brow: ProductStruct["brow"];
+  brow: ProductStruct["category"];
   name: ProductStruct["name"];
   price: ProductStruct["price"];
   description: ProductStruct["description"];
