@@ -13,17 +13,8 @@ import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 import { MappedEntityFieldConditionalRender } from "../entityFieldSectionUtils.ts";
 import { createSlottedItemSource } from "../../../utils/itemSource/index.ts";
 
-type InsightCardMappings = {
-  image: InsightStruct["image"];
-  name: InsightStruct["name"];
-  category: InsightStruct["category"];
-  publishTime: InsightStruct["publishTime"];
-  description: InsightStruct["description"];
-  cta: InsightStruct["cta"];
-};
-
 export const insightCardsSource = createSlottedItemSource<
-  InsightCardMappings,
+  InsightStruct,
   InsightCardProps
 >({
   label: msg("components.insights", "Insights"),
@@ -65,7 +56,7 @@ export const insightCardsSource = createSlottedItemSource<
 });
 
 export type InsightCardsWrapperProps =
-  SlotMappedCardWrapperType<InsightCardMappings> & {
+  SlotMappedCardWrapperType<InsightStruct> & {
     styles: {
       showImage: boolean;
       showCategory: boolean;

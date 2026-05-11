@@ -10,17 +10,8 @@ import { MappedEntityFieldConditionalRender } from "../entityFieldSectionUtils.t
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 import { createSlottedItemSource } from "../../../utils/itemSource/index.ts";
 
-type TeamCardMappings = {
-  headshot: PersonStruct["headshot"];
-  name: PersonStruct["name"];
-  title: PersonStruct["title"];
-  phoneNumber: PersonStruct["phoneNumber"];
-  email: PersonStruct["email"];
-  cta: PersonStruct["cta"];
-};
-
 export const teamCardsSource = createSlottedItemSource<
-  TeamCardMappings,
+  PersonStruct,
   TeamCardProps
 >({
   label: msg("components.team", "Team"),
@@ -61,19 +52,18 @@ export const teamCardsSource = createSlottedItemSource<
   },
 });
 
-export type TeamCardsWrapperProps =
-  SlotMappedCardWrapperType<TeamCardMappings> & {
-    styles: {
-      showImage: boolean;
-      showTitle: boolean;
-      showPhone: boolean;
-      showEmail: boolean;
-      showCTA: boolean;
-    };
-
-    /** @internal */
-    conditionalRender?: MappedEntityFieldConditionalRender;
+export type TeamCardsWrapperProps = SlotMappedCardWrapperType<PersonStruct> & {
+  styles: {
+    showImage: boolean;
+    showTitle: boolean;
+    showPhone: boolean;
+    showEmail: boolean;
+    showCTA: boolean;
   };
+
+  /** @internal */
+  conditionalRender?: MappedEntityFieldConditionalRender;
+};
 
 const teamCardsWrapperFields: YextFields<TeamCardsWrapperProps> = {
   data: teamCardsSource.field,

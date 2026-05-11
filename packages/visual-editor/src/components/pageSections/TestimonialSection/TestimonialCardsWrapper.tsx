@@ -13,14 +13,8 @@ import { MappedEntityFieldConditionalRender } from "../entityFieldSectionUtils.t
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 import { createSlottedItemSource } from "../../../utils/itemSource/index.ts";
 
-type TestimonialCardMappings = {
-  description: TestimonialStruct["description"];
-  contributorName: TestimonialStruct["contributorName"];
-  contributionDate: TestimonialStruct["contributionDate"];
-};
-
 export const testimonialCardsSource = createSlottedItemSource<
-  TestimonialCardMappings,
+  TestimonialStruct,
   TestimonialCardProps
 >({
   label: msg("components.testimonial", "Testimonial"),
@@ -47,7 +41,7 @@ export const testimonialCardsSource = createSlottedItemSource<
 });
 
 export type TestimonialCardsWrapperProps =
-  SlotMappedCardWrapperType<TestimonialCardMappings> & {
+  SlotMappedCardWrapperType<TestimonialStruct> & {
     styles: {
       /**
        * Whether to show the name slot in the testimonial cards.

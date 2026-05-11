@@ -14,17 +14,8 @@ import { MappedEntityFieldConditionalRender } from "../entityFieldSectionUtils.t
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 import { createSlottedItemSource } from "../../../utils/itemSource/index.ts";
 
-type ProductCardMappings = {
-  image: ProductStruct["image"];
-  brow: ProductStruct["category"];
-  name: ProductStruct["name"];
-  price: ProductStruct["price"];
-  description: ProductStruct["description"];
-  cta: ProductStruct["cta"];
-};
-
 export const productCardsSource = createSlottedItemSource<
-  ProductCardMappings,
+  ProductStruct,
   ProductCardProps
 >({
   label: msg("components.products", "Products"),
@@ -37,7 +28,7 @@ export const productCardsSource = createSlottedItemSource<
       label: msg("fields.image", "Image"),
       filter: { types: ["type.image"] },
     },
-    brow: {
+    category: {
       type: "entityField",
       label: msg("fields.browText", "Brow Text"),
       filter: { types: ["type.string", "type.rich_text_v2"] },
@@ -66,7 +57,7 @@ export const productCardsSource = createSlottedItemSource<
 });
 
 export type ProductCardsWrapperProps =
-  SlotMappedCardWrapperType<ProductCardMappings> & {
+  SlotMappedCardWrapperType<ProductStruct> & {
     styles: {
       showImage: boolean;
       showBrow: boolean;

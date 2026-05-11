@@ -31,7 +31,7 @@ const faqDefaultMappings = {
 };
 const productDefaultMappings = {
   image: { ...defaultEntityFieldMapping, field: "image" },
-  brow: { ...defaultEntityFieldMapping, field: "category" },
+  category: { ...defaultEntityFieldMapping, field: "category" },
   name: { ...defaultEntityFieldMapping, field: "name" },
   price: { ...defaultEntityFieldMapping, field: "price" },
   description: { ...defaultEntityFieldMapping, field: "description" },

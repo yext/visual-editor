@@ -959,7 +959,7 @@ const mainDefaultLayout = {
                             field: "",
                             constantValueEnabled: false,
                           },
-                          brow: {
+                          category: {
                             field: "",
                             constantValueEnabled: false,
                           },

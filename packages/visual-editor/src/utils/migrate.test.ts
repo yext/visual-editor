@@ -1099,7 +1099,7 @@ describe("migrate", () => {
       constantValue: [{ id: "ProductCard-1" }],
       mappings: {
         image: { field: "image" },
-        brow: { field: "category" },
+        category: { field: "category" },
         name: { field: "name" },
         price: { field: "price" },
         description: { field: "description" },
@@ -1145,7 +1145,7 @@ describe("migrate", () => {
       constantValue: [{ id: "ProductCard-1" }],
       mappings: {
         image: { field: "image" },
-        brow: { field: "category" },
+        category: { field: "category" },
         name: { field: "name" },
         price: { field: "price" },
         description: { field: "description" },
@@ -1169,7 +1169,7 @@ describe("migrate", () => {
                 constantValue: [{ id: "ProductCard-1" }],
                 mappings: {
                   image: { field: "image" },
-                  brow: { field: "category" },
+                  category: { field: "category" },
                   name: { field: "name" },
                   price: {
                     value: { field: "price.value" },
@@ -1195,7 +1195,7 @@ describe("migrate", () => {
       constantValue: [{ id: "ProductCard-1" }],
       mappings: {
         image: { field: "image" },
-        brow: { field: "category" },
+        category: { field: "category" },
         name: { field: "name" },
         price: { field: "price" },
         description: { field: "description" },

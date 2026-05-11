@@ -62,15 +62,7 @@ export interface FAQSectionProps {
   liveVisibility: boolean;
 }
 
-type FAQCardMappings = {
-  question: FAQStruct["question"];
-  answer: FAQStruct["answer"];
-};
-
-export const faqCardsSource = createSlottedItemSource<
-  FAQCardMappings,
-  FAQCardProps
->({
+export const faqCardsSource = createSlottedItemSource<FAQStruct, FAQCardProps>({
   label: msg("fields.faqs", "FAQs"),
   itemLabel: "FAQ",
   cardName: "FAQCard",

@@ -46,7 +46,7 @@ const defaultProductData = {
     height: 360,
     width: 640,
   },
-  brow: { defaultValue: "Category" },
+  category: { defaultValue: "Category" },
   name: { defaultValue: "Product Name" },
   price: {
     value: 123,
@@ -119,7 +119,7 @@ export const defaultProductCardSlotData = (
               data: {
                 text: {
                   field: "",
-                  constantValue: defaultProductData.brow,
+                  constantValue: defaultProductData.category,
                   constantValueEnabled: true,
                 },
               },
@@ -225,7 +225,7 @@ export type ProductCardProps = {
   /** @internal */
   field?: string;
   image?: ProductStruct["image"];
-  brow?: ProductStruct["brow"];
+  category?: ProductStruct["category"];
   name?: ProductStruct["name"];
   price?: ProductStruct["price"];
   description?: ProductStruct["description"];
@@ -530,7 +530,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       | WithId<TextProps>
       | undefined;
     const resolvedBrow = isLinkedMode
-      ? data.props.brow
+      ? data.props.category
       : browSlotProps
         ? resolveYextEntityField(
             params.metadata.streamDocument,
@@ -611,7 +611,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
 
     const {
       image: linkedImage,
-      brow: linkedBrow,
+      category: linkedCategory,
       name: linkedName,
       description: linkedDescription,
       price: linkedPrice,
@@ -624,7 +624,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       resolveComponentData(name, locale, params.metadata.streamDocument, {
         output: "plainText",
       });
-    const brow = isLinkedMode ? linkedBrow : undefined;
+    const brow = isLinkedMode ? linkedCategory : undefined;
     const description = isLinkedMode ? linkedDescription : undefined;
     const cta = isLinkedMode ? linkedCTA : undefined;
 
