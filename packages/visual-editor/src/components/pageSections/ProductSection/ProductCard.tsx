@@ -611,7 +611,10 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
 
     const {
       image: linkedImage,
+      brow: linkedBrow,
       name: linkedName,
+      description: linkedDescription,
+      price: linkedPrice,
       cta: linkedCTA,
     } = updatedData.props;
     const image = isLinkedMode ? linkedImage : undefined;
@@ -621,9 +624,9 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       resolveComponentData(name, locale, params.metadata.streamDocument, {
         output: "plainText",
       });
-    const brow = resolvedBrow;
-    const description = resolvedDescription;
-    const cta = resolvedCTA ?? (isLinkedMode ? linkedCTA : undefined);
+    const brow = isLinkedMode ? linkedBrow : undefined;
+    const description = isLinkedMode ? linkedDescription : undefined;
+    const cta = isLinkedMode ? linkedCTA : undefined;
 
     return bindSlots(updatedData as typeof data, {
       ImageSlot: image
@@ -638,9 +641,13 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       BrowSlot: brow
         ? ({ field, text: brow } satisfies TextProps["parentData"])
         : undefined,
-      PriceSlot: resolvedPrice
-        ? ({ field, text: resolvedPrice } satisfies TextProps["parentData"])
-        : undefined,
+      PriceSlot:
+        linkedPrice && resolvedPriceFromEntity
+          ? ({
+              field,
+              text: resolvedPriceFromEntity,
+            } satisfies TextProps["parentData"])
+          : undefined,
       DescriptionSlot: description
         ? ({
             field,

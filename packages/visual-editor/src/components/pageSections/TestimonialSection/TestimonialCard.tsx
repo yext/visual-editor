@@ -375,8 +375,13 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
         : undefined;
     const resolvedContributionDate = isLinkedMode
       ? contributionDate
-      : (contributionDateSlotProps?.data?.date?.constantValue ??
-        contributionDateSlotProps?.data?.date?.field);
+      : contributionDateSlotProps
+        ? resolveYextEntityField(
+            params.metadata.streamDocument,
+            contributionDateSlotProps.data.date,
+            i18nComponentsInstance.language || "en"
+          )
+        : undefined;
 
     const showDescription = Boolean(resolvedDescription);
     const showContributorName = Boolean(resolvedContributorName);
@@ -397,8 +402,6 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
     updatedData = syncParentStyles(params, updatedData, [
       "showName",
       "showDate",
-      "showHeading",
-      "showIcon",
     ]);
 
     return bindSlots(updatedData as typeof data, {

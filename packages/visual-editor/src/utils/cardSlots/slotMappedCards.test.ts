@@ -106,6 +106,9 @@ describe("slotMappedCards", () => {
 
     expect(reconciled.cards).toHaveLength(1);
     expect(reconciled.cards[0]?.props.id).toBeDefined();
+    expect(reconciled.cards[0]?.props.slots.ImageSlot?.[0]?.props.id).toBe(
+      `${reconciled.cards[0]?.props.id}-ImageSlot`
+    );
     expect(
       reconciled.cards[0]?.props.slots.ImageSlot?.[0]?.props.customHeight
     ).toBe(900);
