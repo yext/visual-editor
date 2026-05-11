@@ -20,7 +20,7 @@ export const testimonialCardsSource = createSlottedItemSource<
   label: msg("components.testimonial", "Testimonial"),
   itemLabel: "Testimonial",
   cardName: "TestimonialCard",
-  defaultItemProps: defaultTestimonialCardSlotData().props,
+  defaultItemProps: () => defaultTestimonialCardSlotData().props,
   mappingFields: {
     description: {
       type: "entityField",

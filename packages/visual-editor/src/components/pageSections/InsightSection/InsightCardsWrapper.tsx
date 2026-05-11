@@ -20,7 +20,7 @@ export const insightCardsSource = createSlottedItemSource<
   label: msg("components.insights", "Insights"),
   itemLabel: "Insight",
   cardName: "InsightCard",
-  defaultItemProps: defaultInsightCardSlotData().props,
+  defaultItemProps: () => defaultInsightCardSlotData().props,
   mappingFields: {
     image: {
       type: "entityField",

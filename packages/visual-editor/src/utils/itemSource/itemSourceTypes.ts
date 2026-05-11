@@ -78,7 +78,7 @@ export type CreateSlottedItemSourceOptions<
   mappingFields: YextFieldMap<TMappings>;
   itemLabel: string;
   cardName?: string;
-  defaultItemProps?: TCardProps;
+  defaultItemProps?: TCardProps | (() => TCardProps);
   defaultItems?: number;
 };
 

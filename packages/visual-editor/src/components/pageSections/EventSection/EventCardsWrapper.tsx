@@ -17,7 +17,7 @@ export const eventCardsSource = createSlottedItemSource<
   label: msg("components.events", "Events"),
   itemLabel: "Event",
   cardName: "EventCard",
-  defaultItemProps: defaultEventCardSlotData().props,
+  defaultItemProps: () => defaultEventCardSlotData().props,
   mappingFields: {
     image: {
       type: "entityField",

@@ -21,7 +21,7 @@ export const productCardsSource = createSlottedItemSource<
   label: msg("components.products", "Products"),
   itemLabel: "Product",
   cardName: "ProductCard",
-  defaultItemProps: defaultProductCardSlotData().props,
+  defaultItemProps: () => defaultProductCardSlotData().props,
   mappingFields: {
     image: {
       type: "entityField",

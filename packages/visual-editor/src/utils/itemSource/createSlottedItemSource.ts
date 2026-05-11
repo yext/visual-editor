@@ -28,6 +28,7 @@ import { pt } from "../i18n/platform.ts";
  * 2. Resolves mapped item values from the chosen repeated field.
  * 3. Preserves authored manual cards in hidden `manualSlots.CardSlot`.
  * 4. Reconciles visible `slots.CardSlot` between linked and manual mode.
+ * 5. Supports either static or lazily generated default card props.
  */
 
 /**
@@ -234,10 +235,11 @@ export function createSlottedItemSource<
           {
             type: resolvedCardName,
             props: {
-              ...(cloneValue(defaultItemProps ?? {}) as Record<
-                string,
-                unknown
-              >),
+              ...(cloneValue(
+                typeof defaultItemProps === "function"
+                  ? defaultItemProps()
+                  : (defaultItemProps ?? {})
+              ) as Record<string, unknown>),
               id,
               index,
             },

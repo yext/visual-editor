@@ -17,7 +17,7 @@ export const teamCardsSource = createSlottedItemSource<
   label: msg("components.team", "Team"),
   itemLabel: "Team",
   cardName: "TeamCard",
-  defaultItemProps: defaultTeamCardSlotData().props,
+  defaultItemProps: () => defaultTeamCardSlotData().props,
   mappingFields: {
     headshot: {
       type: "entityField",
