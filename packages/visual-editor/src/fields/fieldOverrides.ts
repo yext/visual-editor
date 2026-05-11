@@ -37,4 +37,4 @@ export const YextPuckFieldOverrides = {
 export type YextOverrideType = keyof typeof YextPuckFieldOverrides;
 
 export const isYextOverrideType = (type: string): type is YextOverrideType =>
-  type in YextPuckFieldOverrides;
+  Object.hasOwn(YextPuckFieldOverrides, type);
