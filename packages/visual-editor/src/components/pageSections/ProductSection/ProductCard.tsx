@@ -18,7 +18,10 @@ import { themeManagerCn } from "../../../utils/cn.ts";
 import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { PuckComponent, setDeep, Slot, WithId } from "@puckeditor/core";
-import { useCardContext } from "../../../hooks/useCardContext.tsx";
+import {
+  useCardContext,
+  useParentCardStyles,
+} from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
 import { TextProps } from "../../contentBlocks/Text.tsx";
@@ -300,13 +303,16 @@ const ProductCardFields: YextFields<ProductCardProps> = {
 };
 
 const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
-  const { styles, puck, conditionalRender, slots, parentStyles } = props;
+  const { styles, puck, conditionalRender, slots } = props;
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
     cardBackground: ThemeColor | undefined;
     slotStyles: Record<string, ProductCardProps["styles"]>;
   }>();
+  const inheritedParentStyles =
+    useParentCardStyles<ProductCardProps["parentStyles"]>();
 
-  const variant = props.parentStyles?.variant ?? "immersive";
+  const parentStyles = inheritedParentStyles ?? props.parentStyles;
+  const variant = parentStyles?.variant ?? "immersive";
 
   const { slotStyles, getPuck, slotProps } = useGetCardSlots<ProductCardProps>(
     props.id

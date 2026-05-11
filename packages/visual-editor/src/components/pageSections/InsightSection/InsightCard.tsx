@@ -14,7 +14,10 @@ import { deepMerge } from "../../../utils/themeResolver.ts";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
-import { useCardContext } from "../../../hooks/useCardContext.tsx";
+import {
+  useCardContext,
+  useParentCardStyles,
+} from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
 import { TextProps } from "../../contentBlocks/Text.tsx";
@@ -280,11 +283,14 @@ const insightCardFields: YextFields<InsightCardProps> = {
 };
 
 const InsightCardComponent: PuckComponent<InsightCardProps> = (props) => {
-  const { styles, slots, puck, conditionalRender, parentStyles } = props;
+  const { styles, slots, puck, conditionalRender } = props;
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
     cardBackground: ThemeColor | undefined;
     slotStyles: Record<string, InsightCardProps["styles"]>;
   }>();
+  const parentStyles =
+    useParentCardStyles<InsightCardProps["parentStyles"]>() ??
+    props.parentStyles;
 
   const {
     slotStyles,

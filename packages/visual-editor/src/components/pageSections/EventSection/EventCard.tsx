@@ -18,7 +18,10 @@ import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
-import { useCardContext } from "../../../hooks/useCardContext.tsx";
+import {
+  useCardContext,
+  useParentCardStyles,
+} from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
 import { bindSlots } from "../../../utils/cardSlots/bindSlots.ts";
@@ -273,12 +276,14 @@ const eventCardFields: YextFields<EventCardProps> = {
 };
 
 const EventCardComponent: PuckComponent<EventCardProps> = (props) => {
-  const { styles, slots, puck, conditionalRender, parentStyles } = props;
+  const { styles, slots, puck, conditionalRender } = props;
 
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
     cardStyles: EventCardProps["styles"];
     slotStyles: Record<string, EventCardProps["styles"]>;
   }>();
+  const parentStyles =
+    useParentCardStyles<EventCardProps["parentStyles"]>() ?? props.parentStyles;
 
   const { slotStyles, getPuck, slotProps } = useGetCardSlots<EventCardProps>(
     props.id

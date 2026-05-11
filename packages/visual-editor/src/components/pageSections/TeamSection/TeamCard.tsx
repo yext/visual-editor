@@ -16,7 +16,10 @@ import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { EmailsProps } from "../../contentBlocks/Emails.tsx";
 import { PhoneListProps } from "../../contentBlocks/PhoneList.tsx";
-import { useCardContext } from "../../../hooks/useCardContext.tsx";
+import {
+  useCardContext,
+  useParentCardStyles,
+} from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { TextProps } from "../../contentBlocks/Text.tsx";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
@@ -272,12 +275,14 @@ const teamCardFields: YextFields<TeamCardProps> = {
 };
 
 const TeamCardComponent: PuckComponent<TeamCardProps> = (props) => {
-  const { styles, slots, puck, conditionalRender, parentStyles } = props;
+  const { styles, slots, puck, conditionalRender } = props;
 
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
     cardStyles: TeamCardProps["styles"];
     slotStyles: Record<string, TeamCardProps["styles"]>;
   }>();
+  const parentStyles =
+    useParentCardStyles<TeamCardProps["parentStyles"]>() ?? props.parentStyles;
 
   const { slotStyles, getPuck, slotProps } = useGetCardSlots<TeamCardProps>(
     props.id

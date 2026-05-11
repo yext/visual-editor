@@ -14,7 +14,10 @@ import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 import { TimestampProps } from "../../contentBlocks/Timestamp.tsx";
-import { useCardContext } from "../../../hooks/useCardContext.tsx";
+import {
+  useCardContext,
+  useParentCardStyles,
+} from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
 import { bindSlots } from "../../../utils/cardSlots/bindSlots.ts";
@@ -182,12 +185,15 @@ const testimonialCardFields: YextFields<TestimonialCardProps> = {
 const TestimonialCardComponent: PuckComponent<TestimonialCardProps> = (
   props
 ) => {
-  const { styles, slots, puck, conditionalRender, parentStyles } = props;
+  const { styles, slots, puck, conditionalRender } = props;
 
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
     cardStyles: TestimonialCardProps["styles"];
     slotStyles: Record<string, TestimonialCardProps["styles"]>;
   }>();
+  const parentStyles =
+    useParentCardStyles<TestimonialCardProps["parentStyles"]>() ??
+    props.parentStyles;
 
   const { slotStyles, getPuck, slotProps } =
     useGetCardSlots<TestimonialCardProps>(props.id);

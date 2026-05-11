@@ -111,7 +111,7 @@ const EventCardsWrapperComponent: PuckComponent<EventCardsWrapperProps> = (
   const { slots } = props;
 
   return (
-    <CardContextProvider>
+    <CardContextProvider parentStyles={props.styles}>
       <slots.CardSlot className="flex flex-col gap-8" allow={[]} />
     </CardContextProvider>
   );
