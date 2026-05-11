@@ -188,15 +188,38 @@ export function createSlottedItemSource<
       const hasManualSlots = Array.isArray(
         wrapperData.props.manualSlots?.CardSlot
       );
-      const manualCards = hasManualSlots
+      const persistedManualCards = hasManualSlots
         ? wrapperData.props.manualSlots!.CardSlot
+        : undefined;
+      const hasPersistedManualCards =
+        Array.isArray(persistedManualCards) && persistedManualCards.length > 0;
+      const manualCards = hasPersistedManualCards
+        ? persistedManualCards
         : visibleCards;
+      const shouldBootstrapLegacyManualCards =
+        wrapperData.props.data.constantValueEnabled &&
+        !wrapperData.props.data.field &&
+        Array.isArray(wrapperData.props.data.constantValue) &&
+        wrapperData.props.data.constantValue.length > 0 &&
+        wrapperData.props.data.constantValue.every(
+          (cardReference) => !cardReference?.id
+        ) &&
+        manualCards.every((card) => !card.props.id);
+      const sharedVisibleCardProps = visibleCards[0]?.props as
+        | {
+            styles?: Record<string, unknown>;
+            slots?: Record<
+              string,
+              Array<{ props?: { styles?: Record<string, unknown> } }>
+            >;
+          }
+        | undefined;
 
       const createCard = (
         id: string,
         index: number
-      ): ComponentData<Record<string, unknown>> =>
-        setChildSlotIds(
+      ): ComponentData<Record<string, unknown>> => {
+        const card = setChildSlotIds(
           {
             type: resolvedCardName,
             props: {
@@ -210,6 +233,35 @@ export function createSlottedItemSource<
           },
           id
         );
+
+        if (sharedVisibleCardProps?.styles) {
+          card.props.styles = cloneValue(sharedVisibleCardProps.styles);
+        }
+
+        const cardSlots = card.props.slots as
+          | Record<
+              string,
+              Array<{ props?: { styles?: Record<string, unknown> } }>
+            >
+          | undefined;
+
+        Object.entries(sharedVisibleCardProps?.slots ?? {}).forEach(
+          ([slotKey, slotArray]) => {
+            if (
+              !cardSlots?.[slotKey]?.[0]?.props?.styles ||
+              !slotArray[0]?.props?.styles
+            ) {
+              return;
+            }
+
+            cardSlots[slotKey][0]!.props!.styles = cloneValue(
+              slotArray[0].props.styles
+            );
+          }
+        );
+
+        return card;
+      };
 
       if (
         !wrapperData.props.data.constantValueEnabled &&
@@ -289,7 +341,8 @@ export function createSlottedItemSource<
         createCard,
         syncChildSlotIds: (card, id) => setChildSlotIds(card, id),
         normalizeId: (id) => `${resolvedCardName}-${id}`,
-        reuseIdlessCards: hasManualSlots,
+        reuseIdlessCards:
+          hasPersistedManualCards && !shouldBootstrapLegacyManualCards,
       }).cards.map((card) => {
         const cardProps = { ...card.props } as Record<string, unknown>;
 

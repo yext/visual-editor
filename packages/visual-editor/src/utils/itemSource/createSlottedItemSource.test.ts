@@ -217,7 +217,7 @@ describe("createSlottedItemSource", () => {
     );
   });
 
-  it("recreates legacy id-less manual cards on first pass", () => {
+  it("recreates legacy id-less manual cards when preserved manual slots are empty", () => {
     const populated = featuredItemsSource.populateSlots(
       {
         type: "FeaturedItems",
@@ -227,13 +227,25 @@ describe("createSlottedItemSource", () => {
             ...featuredItemsSource.defaultValue,
             constantValue: [{}],
           },
+          manualSlots: {
+            CardSlot: [],
+          },
           slots: {
             CardSlot: [
               {
                 type: "Featured Item",
                 props: {
                   customText: "legacy placeholder",
-                  slots: {},
+                  styles: { backgroundColor: "bg-blue-100" },
+                  slots: {
+                    ImageSlot: [
+                      {
+                        props: {
+                          styles: { aspectRatio: 0.5 },
+                        },
+                      },
+                    ],
+                  },
                 },
               },
             ],
@@ -253,6 +265,9 @@ describe("createSlottedItemSource", () => {
 
     expect(populated.props.slots.CardSlot).toHaveLength(1);
     expect(populated.props.slots.CardSlot[0]?.props.customText).toBeUndefined();
+    expect(populated.props.slots.CardSlot[0]?.props.styles).toEqual({
+      backgroundColor: "bg-blue-100",
+    });
     expect(populated.props.manualSlots?.CardSlot).toEqual(
       populated.props.slots.CardSlot
     );
