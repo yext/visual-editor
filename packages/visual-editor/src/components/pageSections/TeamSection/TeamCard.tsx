@@ -23,6 +23,16 @@ import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
 import { bindSlots } from "../../../utils/cardSlots/bindSlots.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
+
+const resolveLinkedSlotField = <T,>(
+  streamDocument: Parameters<typeof resolveYextEntityField>[0],
+  entityField: YextEntityField<T> | undefined,
+  locale?: string
+): T | undefined =>
+  entityField?.field
+    ? resolveYextEntityField<T>(streamDocument, entityField, locale)
+    : undefined;
 
 const defaultPerson = {
   name: { defaultValue: "First Last" },
@@ -483,7 +493,14 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
 
     const showImage = Boolean(
       isLinkedMode
-        ? (data.props.headshot ?? linkedPerson?.headshot)
+        ? (data.props.headshot ??
+            linkedPerson?.headshot ??
+            resolveLinkedSlotField(
+              params.metadata.streamDocument,
+              imageSlotProps?.data.image,
+              i18nComponentsInstance.language || "en"
+            ) ??
+            imageSlotProps?.data.image.field)
         : imageSlotProps?.parentData?.image ||
             (imageSlotProps &&
               (imageSlotProps?.data.image.field ||
@@ -499,7 +516,13 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
     );
     const showName = Boolean(
       isLinkedMode
-        ? (data.props.name ?? linkedPerson?.name)
+        ? (data.props.name ??
+            linkedPerson?.name ??
+            resolveLinkedSlotField(
+              params.metadata.streamDocument,
+              nameSlotProps?.data.text,
+              i18nComponentsInstance.language || "en"
+            ))
         : nameSlotProps?.parentData?.text ||
             (nameSlotProps &&
               resolveYextEntityField(
@@ -510,7 +533,13 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
     );
     const showTitle = Boolean(
       isLinkedMode
-        ? (data.props.title ?? linkedPerson?.title)
+        ? (data.props.title ??
+            linkedPerson?.title ??
+            resolveLinkedSlotField(
+              params.metadata.streamDocument,
+              titleSlotProps?.data.text,
+              i18nComponentsInstance.language || "en"
+            ))
         : titleSlotProps?.parentData?.text ||
             (titleSlotProps &&
               resolveYextEntityField(
@@ -521,7 +550,11 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
     );
     const showPhone = Boolean(
       isLinkedMode
-        ? (data.props.phoneNumber ?? linkedPerson?.phoneNumber)
+        ? (data.props.phoneNumber ??
+            linkedPerson?.phoneNumber ??
+            phoneSlotProps?.data?.phoneNumbers?.some(
+              (phone: any) => phone.number?.field
+            ))
         : phoneSlotProps?.parentData?.phoneNumbers?.length ||
             (phoneSlotProps?.data?.phoneNumbers?.length &&
               phoneSlotProps.data.phoneNumbers.some(
@@ -531,14 +564,23 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
     );
     const showEmail = Boolean(
       isLinkedMode
-        ? (data.props.email ?? linkedPerson?.email)
+        ? (data.props.email ??
+            linkedPerson?.email ??
+            emailSlotProps?.data?.list?.field)
         : emailSlotProps?.parentData?.list?.length ||
             emailSlotProps?.data?.list?.constantValue?.length ||
             emailSlotProps?.data?.list?.field
     );
     const showCTA = Boolean(
       isLinkedMode
-        ? (data.props.cta ?? linkedPerson?.cta)?.label
+        ? (
+            data.props.cta ??
+            linkedPerson?.cta ??
+            resolveLinkedSlotField(
+              params.metadata.streamDocument,
+              ctaSlotProps?.data.entityField
+            )
+          )?.label
         : ctaSlotProps?.parentData?.cta?.label ||
             ctaSlotProps?.data?.entityField?.constantValue?.label ||
             ctaSlotProps?.data?.entityField?.field ||
@@ -603,8 +645,22 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
       "showCTA",
     ]);
 
-    const headshot = data.props.headshot ?? linkedPerson?.headshot;
-    const name = data.props.name ?? linkedPerson?.name;
+    const headshot =
+      data.props.headshot ??
+      linkedPerson?.headshot ??
+      resolveLinkedSlotField(
+        params.metadata.streamDocument,
+        imageSlotProps?.data.image,
+        i18nComponentsInstance.language || "en"
+      );
+    const name =
+      data.props.name ??
+      linkedPerson?.name ??
+      resolveLinkedSlotField(
+        params.metadata.streamDocument,
+        nameSlotProps?.data.text,
+        i18nComponentsInstance.language || "en"
+      );
     const resolvedName =
       name &&
       resolveComponentData(
@@ -615,10 +671,23 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
           output: "plainText",
         }
       );
-    const title = data.props.title ?? linkedPerson?.title;
+    const title =
+      data.props.title ??
+      linkedPerson?.title ??
+      resolveLinkedSlotField(
+        params.metadata.streamDocument,
+        titleSlotProps?.data.text,
+        i18nComponentsInstance.language || "en"
+      );
     const phoneNumber = data.props.phoneNumber ?? linkedPerson?.phoneNumber;
     const email = data.props.email ?? linkedPerson?.email;
-    const cta = data.props.cta ?? linkedPerson?.cta;
+    const cta =
+      data.props.cta ??
+      linkedPerson?.cta ??
+      resolveLinkedSlotField(
+        params.metadata.streamDocument,
+        ctaSlotProps?.data.entityField
+      );
 
     return bindSlots(updatedData as typeof data, {
       ImageSlot: headshot

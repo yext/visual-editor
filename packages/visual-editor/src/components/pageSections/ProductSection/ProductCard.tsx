@@ -66,6 +66,15 @@ const slotDefaultData = {
   priceText: { defaultValue: "$123.00" },
 };
 
+const resolveLinkedSlotField = <T,>(
+  streamDocument: Parameters<typeof resolveYextEntityField>[0],
+  entityField: YextEntityField<T> | undefined,
+  locale: string
+): T | undefined =>
+  entityField?.field
+    ? resolveYextEntityField(streamDocument, entityField, locale)
+    : undefined;
+
 export const defaultProductCardSlotData = (
   id?: string,
   index?: number,
@@ -501,13 +510,14 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       entityPrice?.currencyCode,
       locale
     );
-    const fallbackPriceCandidate = priceSlotProps
-      ? resolveYextEntityField(
-          params.metadata.streamDocument,
-          priceSlotProps?.data?.text,
-          locale
-        )
-      : undefined;
+    const fallbackPriceCandidate =
+      !isLinkedMode && priceSlotProps
+        ? resolveYextEntityField(
+            params.metadata.streamDocument,
+            priceSlotProps?.data?.text,
+            locale
+          )
+        : undefined;
     const resolvedFallbackPrice = !fallbackPriceCandidate
       ? fallbackPriceCandidate
       : isCompleteProductPrice(fallbackPriceCandidate, locale)
@@ -535,37 +545,31 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
     const linkedImage = isLinkedMode
       ? (data.props.image ??
         linkedProduct?.image ??
-        (imageSlotProps
-          ? resolveYextEntityField(
-              params.metadata.streamDocument,
-              imageSlotProps.data.image,
-              locale
-            )
-          : undefined))
+        resolveLinkedSlotField(
+          params.metadata.streamDocument,
+          imageSlotProps?.data.image,
+          locale
+        ))
       : undefined;
     const linkedName = isLinkedMode
       ? (data.props.name ??
         linkedProduct?.name ??
-        (titleSlotProps
-          ? resolveYextEntityField(
-              params.metadata.streamDocument,
-              titleSlotProps.data.text,
-              locale
-            )
-          : undefined))
+        resolveLinkedSlotField(
+          params.metadata.streamDocument,
+          titleSlotProps?.data.text,
+          locale
+        ))
       : undefined;
 
     const resolvedBrow = isLinkedMode
       ? (data.props.brow ??
         linkedProduct?.brow ??
         linkedProduct?.category ??
-        (browSlotProps
-          ? resolveYextEntityField(
-              params.metadata.streamDocument,
-              browSlotProps?.data?.text,
-              locale
-            )
-          : undefined))
+        resolveLinkedSlotField(
+          params.metadata.streamDocument,
+          browSlotProps?.data?.text,
+          locale
+        ))
       : (browSlotProps?.parentData?.text ??
         (browSlotProps
           ? resolveYextEntityField(
@@ -582,13 +586,11 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
     const resolvedDescription = isLinkedMode
       ? (data.props.description ??
         linkedProduct?.description ??
-        (descriptionSlotProps
-          ? resolveYextEntityField(
-              params.metadata.streamDocument,
-              descriptionSlotProps?.data?.text,
-              locale
-            )
-          : undefined))
+        resolveLinkedSlotField(
+          params.metadata.streamDocument,
+          descriptionSlotProps?.data?.text,
+          locale
+        ))
       : (descriptionSlotProps?.parentData?.richText ??
         (descriptionSlotProps
           ? resolveYextEntityField(
@@ -605,13 +607,11 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
     const resolvedCTA = isLinkedMode
       ? (data.props.cta ??
         linkedProduct?.cta ??
-        (ctaSlotProps
-          ? resolveYextEntityField(
-              params.metadata.streamDocument,
-              ctaSlotProps?.data?.entityField,
-              locale
-            )
-          : undefined))
+        resolveLinkedSlotField(
+          params.metadata.streamDocument,
+          ctaSlotProps?.data?.entityField,
+          locale
+        ))
       : (ctaSlotProps?.parentData?.cta ??
         (ctaSlotProps
           ? resolveYextEntityField(
