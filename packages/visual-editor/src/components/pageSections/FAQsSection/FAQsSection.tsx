@@ -215,7 +215,7 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
     },
   },
   resolveData: (data, params) =>
-    faqCardsSource.populateSlots(data, params.metadata.streamDocument!),
+    faqCardsSource.populateSlots(data, params.metadata.streamDocument),
   render: (props) => (
     <ComponentErrorBoundary
       isEditing={props.puck.isEditing}

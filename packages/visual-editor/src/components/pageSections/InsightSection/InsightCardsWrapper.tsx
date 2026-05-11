@@ -150,9 +150,7 @@ export const InsightCardsWrapper: YextComponentConfig<InsightCardsWrapperProps> 
       },
     },
     resolveData: (data, params) =>
-      params.metadata.streamDocument
-        ? insightCardsSource.populateSlots(data, params.metadata.streamDocument)
-        : data,
+      insightCardsSource.populateSlots(data, params.metadata.streamDocument),
     render: (props) => {
       if (props.conditionalRender?.isMappedContentEmpty) {
         return renderMappedEntityFieldEmptyState(props.puck.isEditing);

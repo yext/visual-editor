@@ -19,6 +19,7 @@ import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
 import { bindSlots } from "../../../utils/cardSlots/bindSlots.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 
 const defaultTestimonial = {
   description: {
@@ -349,6 +350,16 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
     const contributionDate =
       data.props.contributionDate ??
       data.props.parentData?.testimonial.contributionDate;
+    const resolvedContributorNameFromItem =
+      contributorName &&
+      resolveComponentData(
+        contributorName,
+        i18nComponentsInstance.language || "en",
+        params.metadata.streamDocument,
+        {
+          output: "plainText",
+        }
+      );
     const resolvedDescription =
       description ??
       descriptionSlotProps?.parentData?.richText ??
@@ -360,7 +371,7 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
           )
         : undefined);
     const resolvedContributorName =
-      contributorName ??
+      resolvedContributorNameFromItem ??
       contributorNameSlotProps?.parentData?.text ??
       (contributorNameSlotProps
         ? resolveYextEntityField(
@@ -407,10 +418,10 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
             richText: description,
           } satisfies BodyTextProps["parentData"])
         : undefined,
-      ContributorNameSlot: contributorName
+      ContributorNameSlot: resolvedContributorNameFromItem
         ? ({
             field,
-            text: contributorName as string,
+            text: resolvedContributorNameFromItem,
           } satisfies HeadingTextProps["parentData"])
         : undefined,
       ContributionDateSlot: contributionDate

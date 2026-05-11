@@ -107,7 +107,7 @@ export type SlottedItemSourceInstance<
     },
   >(
     data: TData,
-    streamDocument: StreamDocument
+    streamDocument: StreamDocument | undefined
   ) => TData;
 };
 

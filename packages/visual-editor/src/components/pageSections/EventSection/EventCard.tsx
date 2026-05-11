@@ -570,6 +570,14 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
     const field = data.props.field ?? data.props.parentData?.field ?? "";
     const image = data.props.image ?? data.props.parentData?.event.image;
     const title = data.props.title ?? data.props.parentData?.event.title;
+    const resolvedTitle =
+      title &&
+      resolveComponentData(
+        title,
+        i18nComponentsInstance.language || "en",
+        params.metadata.streamDocument,
+        { output: "plainText" }
+      );
     const dateTime =
       data.props.dateTime ?? data.props.parentData?.event.dateTime;
     const description =
@@ -580,10 +588,10 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
       ImageSlot: image
         ? ({ field, image } satisfies ImageWrapperProps["parentData"])
         : undefined,
-      TitleSlot: title
+      TitleSlot: resolvedTitle
         ? ({
             field,
-            text: title as string,
+            text: resolvedTitle,
           } satisfies HeadingTextProps["parentData"])
         : undefined,
       DateTimeSlot: dateTime

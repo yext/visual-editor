@@ -130,7 +130,7 @@ export const EventCardsWrapper: YextComponentConfig<EventCardsWrapperProps> = {
     },
   },
   resolveData: (data, params) =>
-    eventCardsSource.populateSlots(data, params.metadata.streamDocument!),
+    eventCardsSource.populateSlots(data, params.metadata.streamDocument),
   render: (props) => {
     if (props.conditionalRender?.isMappedContentEmpty) {
       return renderMappedEntityFieldEmptyState(props.puck.isEditing);

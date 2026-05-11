@@ -163,6 +163,10 @@ export function createSlottedItemSource<
     value: undefined as unknown as SlotMappedCardsData<TMappings>,
     resolveItems,
     populateSlots: (data, streamDocument) => {
+      if (!streamDocument) {
+        return data;
+      }
+
       const wrapperData = data as unknown as ComponentData<{
         data: SlotMappedCardsData<TMappings>;
         slots: { CardSlot: ComponentData<Record<string, unknown>>[] };

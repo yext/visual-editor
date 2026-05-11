@@ -123,7 +123,7 @@ export const TestimonialCardsWrapper: YextComponentConfig<TestimonialCardsWrappe
     resolveData: (data, params) =>
       testimonialCardsSource.populateSlots(
         data,
-        params.metadata.streamDocument!
+        params.metadata.streamDocument
       ),
     render: (props) => {
       if (props.conditionalRender?.isMappedContentEmpty) {

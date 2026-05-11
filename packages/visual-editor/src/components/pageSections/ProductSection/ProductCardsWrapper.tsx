@@ -170,9 +170,7 @@ export const ProductCardsWrapper: YextComponentConfig<ProductCardsWrapperProps> 
       },
     },
     resolveData: (data, params) =>
-      params.metadata.streamDocument
-        ? productCardsSource.populateSlots(data, params.metadata.streamDocument)
-        : data,
+      productCardsSource.populateSlots(data, params.metadata.streamDocument),
     render: (props) => {
       if (props.conditionalRender?.isMappedContentEmpty) {
         return renderMappedEntityFieldEmptyState(props.puck.isEditing);
