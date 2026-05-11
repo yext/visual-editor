@@ -444,6 +444,7 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
   resolveData: (data, params) => {
     const field = data.props.field ?? "";
     const isLinkedMode = Boolean(field);
+    const linkedEvent = data.props.parentData?.event;
     const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as
       | WithId<ImageWrapperProps>
       | undefined;
@@ -459,7 +460,7 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
       | undefined;
 
     const resolvedImage = isLinkedMode
-      ? data.props.image
+      ? (data.props.image ?? linkedEvent?.image)
       : imageSlotProps?.parentData
         ? imageSlotProps.parentData.image
         : imageSlotProps
@@ -479,7 +480,7 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
     );
     const showDescription = Boolean(
       isLinkedMode
-        ? data.props.description
+        ? (data.props.description ?? linkedEvent?.description)
         : descriptionSlotProps &&
             (descriptionSlotProps.parentData
               ? descriptionSlotProps.parentData.richText
@@ -491,7 +492,7 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
     );
     const showTitle = Boolean(
       isLinkedMode
-        ? data.props.title
+        ? (data.props.title ?? linkedEvent?.title)
         : titleSlotProps &&
             (titleSlotProps.parentData
               ? titleSlotProps.parentData.text
@@ -503,7 +504,7 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
     );
     const showDateTime = Boolean(
       isLinkedMode
-        ? data.props.dateTime?.trim()
+        ? (data.props.dateTime ?? linkedEvent?.dateTime)?.trim()
         : dateTimeSlotProps?.parentData?.date?.trim() ||
             (dateTimeSlotProps &&
               resolveYextEntityField(
@@ -514,7 +515,7 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
     );
     const showCTA = Boolean(
       isLinkedMode
-        ? data.props.cta?.label
+        ? (data.props.cta ?? linkedEvent?.cta)?.label
         : ctaSlotProps &&
             (ctaSlotProps.parentData
               ? ctaSlotProps.parentData.cta?.label
@@ -573,8 +574,8 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
       "showCTA",
     ]);
 
-    const image = data.props.image;
-    const title = data.props.title;
+    const image = data.props.image ?? linkedEvent?.image;
+    const title = data.props.title ?? linkedEvent?.title;
     const resolvedTitle =
       title &&
       resolveComponentData(
@@ -583,9 +584,9 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
         params.metadata.streamDocument,
         { output: "plainText" }
       );
-    const dateTime = data.props.dateTime;
-    const description = data.props.description;
-    const cta = data.props.cta;
+    const dateTime = data.props.dateTime ?? linkedEvent?.dateTime;
+    const description = data.props.description ?? linkedEvent?.description;
+    const cta = data.props.cta ?? linkedEvent?.cta;
 
     return bindSlots(updatedData as typeof data, {
       ImageSlot: image

@@ -462,14 +462,17 @@ export const InsightCard: YextComponentConfig<InsightCardProps> = {
     }
 
     let updatedData = data;
+    const linkedInsight = updatedData.props.parentData?.insight;
 
     const field = updatedData.props.field;
-    const image = updatedData.props.image;
-    const name = updatedData.props.name;
-    const categoryValue = updatedData.props.category;
-    const description = updatedData.props.description;
-    const publishTime = updatedData.props.publishTime;
-    const cta = updatedData.props.cta;
+    const image = updatedData.props.image ?? linkedInsight?.image;
+    const name = updatedData.props.name ?? linkedInsight?.name;
+    const categoryValue = updatedData.props.category ?? linkedInsight?.category;
+    const description =
+      updatedData.props.description ?? linkedInsight?.description;
+    const publishTime =
+      updatedData.props.publishTime ?? linkedInsight?.publishTime;
+    const cta = updatedData.props.cta ?? linkedInsight?.cta;
 
     if (field) {
       const category = resolveComponentData(

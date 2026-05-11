@@ -471,6 +471,15 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
     const locale = i18nComponentsInstance.language || "en";
     const field = data.props.field ?? "";
     const isLinkedMode = Boolean(field);
+    const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as
+      | (WithId<ImageWrapperProps> & {
+          styles?: { aspectRatio?: number; width?: number };
+        })
+      | undefined;
+    const titleSlotProps = data.props.slots.TitleSlot?.[0]?.props as
+      | WithId<HeadingTextProps>
+      | undefined;
+    const linkedProduct = data.props.parentData?.product;
     const priceSlotProps = data.props.slots.PriceSlot?.[0]?.props as
       | WithId<TextProps>
       | undefined;
@@ -478,7 +487,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       | YextEntityField<ProductStruct["price"]>
       | undefined;
     const entityPrice = isLinkedMode
-      ? data.props.price
+      ? (data.props.price ?? linkedProduct?.price)
       : priceEntityField
         ? resolveYextEntityField<ProductStruct["price"]>(
             params.metadata.streamDocument,
@@ -523,9 +532,40 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
     const browSlotProps = data.props.slots.BrowSlot?.[0]?.props as
       | WithId<TextProps>
       | undefined;
+    const linkedImage = isLinkedMode
+      ? (data.props.image ??
+        linkedProduct?.image ??
+        (imageSlotProps
+          ? resolveYextEntityField(
+              params.metadata.streamDocument,
+              imageSlotProps.data.image,
+              locale
+            )
+          : undefined))
+      : undefined;
+    const linkedName = isLinkedMode
+      ? (data.props.name ??
+        linkedProduct?.name ??
+        (titleSlotProps
+          ? resolveYextEntityField(
+              params.metadata.streamDocument,
+              titleSlotProps.data.text,
+              locale
+            )
+          : undefined))
+      : undefined;
 
     const resolvedBrow = isLinkedMode
-      ? data.props.brow
+      ? (data.props.brow ??
+        linkedProduct?.brow ??
+        linkedProduct?.category ??
+        (browSlotProps
+          ? resolveYextEntityField(
+              params.metadata.streamDocument,
+              browSlotProps?.data?.text,
+              locale
+            )
+          : undefined))
       : (browSlotProps?.parentData?.text ??
         (browSlotProps
           ? resolveYextEntityField(
@@ -540,7 +580,15 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       ?.props as WithId<BodyTextProps> | undefined;
 
     const resolvedDescription = isLinkedMode
-      ? data.props.description
+      ? (data.props.description ??
+        linkedProduct?.description ??
+        (descriptionSlotProps
+          ? resolveYextEntityField(
+              params.metadata.streamDocument,
+              descriptionSlotProps?.data?.text,
+              locale
+            )
+          : undefined))
       : (descriptionSlotProps?.parentData?.richText ??
         (descriptionSlotProps
           ? resolveYextEntityField(
@@ -555,7 +603,15 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       | WithId<CTAWrapperProps>
       | undefined;
     const resolvedCTA = isLinkedMode
-      ? data.props.cta
+      ? (data.props.cta ??
+        linkedProduct?.cta ??
+        (ctaSlotProps
+          ? resolveYextEntityField(
+              params.metadata.streamDocument,
+              ctaSlotProps?.data?.entityField,
+              locale
+            )
+          : undefined))
       : (ctaSlotProps?.parentData?.cta ??
         (ctaSlotProps
           ? resolveYextEntityField(
@@ -565,12 +621,6 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
             )
           : undefined));
     const showCTA = Boolean(resolvedCTA);
-
-    const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as
-      | (WithId<ImageWrapperProps> & {
-          styles?: { aspectRatio?: number; width?: number };
-        })
-      | undefined;
 
     let updatedData = {
       ...data,
@@ -613,22 +663,16 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       `cta${data.props.index}`
     );
 
-    const image = data.props.image;
-    const name = data.props.name;
+    const image = linkedImage;
+    const name = linkedName;
     const resolvedName =
       name &&
       resolveComponentData(name, locale, params.metadata.streamDocument, {
         output: "plainText",
       });
-    const brow = data.props.brow;
-    const price = data.props.price;
-    const formattedPrice = formatCurrency(
-      price?.value,
-      price?.currencyCode,
-      locale
-    );
-    const description = data.props.description;
-    const cta = data.props.cta;
+    const brow = resolvedBrow;
+    const description = resolvedDescription;
+    const cta = resolvedCTA;
 
     return bindSlots(updatedData as typeof data, {
       ImageSlot: image
@@ -643,8 +687,8 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       BrowSlot: brow
         ? ({ field, text: brow } satisfies TextProps["parentData"])
         : undefined,
-      PriceSlot: formattedPrice
-        ? ({ field, text: formattedPrice } satisfies TextProps["parentData"])
+      PriceSlot: resolvedPrice
+        ? ({ field, text: resolvedPrice } satisfies TextProps["parentData"])
         : undefined,
       DescriptionSlot: description
         ? ({

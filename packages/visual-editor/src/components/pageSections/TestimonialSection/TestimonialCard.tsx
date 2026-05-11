@@ -338,15 +338,19 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
   resolveData: (data, params) => {
     const field = data.props.field ?? "";
     const isLinkedMode = Boolean(field);
+    const linkedTestimonial = data.props.parentData?.testimonial;
     const descriptionSlotProps = data.props.slots.DescriptionSlot?.[0]
       ?.props as WithId<BodyTextProps> | undefined;
     const contributorNameSlotProps = data.props.slots.ContributorNameSlot?.[0]
       ?.props as WithId<HeadingTextProps> | undefined;
     const contributionDateSlotProps = data.props.slots.ContributionDateSlot?.[0]
       ?.props as WithId<any> | undefined;
-    const description = data.props.description;
-    const contributorName = data.props.contributorName;
-    const contributionDate = data.props.contributionDate;
+    const description =
+      data.props.description ?? linkedTestimonial?.description;
+    const contributorName =
+      data.props.contributorName ?? linkedTestimonial?.contributorName;
+    const contributionDate =
+      data.props.contributionDate ?? linkedTestimonial?.contributionDate;
     const resolvedContributorNameFromItem =
       contributorName &&
       resolveComponentData(

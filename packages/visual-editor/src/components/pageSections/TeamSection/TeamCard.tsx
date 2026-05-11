@@ -460,6 +460,7 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
   resolveData: (data, params) => {
     const field = data.props.field ?? "";
     const isLinkedMode = Boolean(field);
+    const linkedPerson = data.props.parentData?.person;
 
     const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as
       | WithId<ImageWrapperProps>
@@ -482,7 +483,7 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
 
     const showImage = Boolean(
       isLinkedMode
-        ? data.props.headshot
+        ? (data.props.headshot ?? linkedPerson?.headshot)
         : imageSlotProps?.parentData?.image ||
             (imageSlotProps &&
               (imageSlotProps?.data.image.field ||
@@ -498,7 +499,7 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
     );
     const showName = Boolean(
       isLinkedMode
-        ? data.props.name
+        ? (data.props.name ?? linkedPerson?.name)
         : nameSlotProps?.parentData?.text ||
             (nameSlotProps &&
               resolveYextEntityField(
@@ -509,7 +510,7 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
     );
     const showTitle = Boolean(
       isLinkedMode
-        ? data.props.title
+        ? (data.props.title ?? linkedPerson?.title)
         : titleSlotProps?.parentData?.text ||
             (titleSlotProps &&
               resolveYextEntityField(
@@ -520,7 +521,7 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
     );
     const showPhone = Boolean(
       isLinkedMode
-        ? data.props.phoneNumber
+        ? (data.props.phoneNumber ?? linkedPerson?.phoneNumber)
         : phoneSlotProps?.parentData?.phoneNumbers?.length ||
             (phoneSlotProps?.data?.phoneNumbers?.length &&
               phoneSlotProps.data.phoneNumbers.some(
@@ -530,14 +531,14 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
     );
     const showEmail = Boolean(
       isLinkedMode
-        ? data.props.email
+        ? (data.props.email ?? linkedPerson?.email)
         : emailSlotProps?.parentData?.list?.length ||
             emailSlotProps?.data?.list?.constantValue?.length ||
             emailSlotProps?.data?.list?.field
     );
     const showCTA = Boolean(
       isLinkedMode
-        ? data.props.cta?.label
+        ? (data.props.cta ?? linkedPerson?.cta)?.label
         : ctaSlotProps?.parentData?.cta?.label ||
             ctaSlotProps?.data?.entityField?.constantValue?.label ||
             ctaSlotProps?.data?.entityField?.field ||
@@ -602,8 +603,8 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
       "showCTA",
     ]);
 
-    const headshot = data.props.headshot;
-    const name = data.props.name;
+    const headshot = data.props.headshot ?? linkedPerson?.headshot;
+    const name = data.props.name ?? linkedPerson?.name;
     const resolvedName =
       name &&
       resolveComponentData(
@@ -614,10 +615,10 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
           output: "plainText",
         }
       );
-    const title = data.props.title;
-    const phoneNumber = data.props.phoneNumber;
-    const email = data.props.email;
-    const cta = data.props.cta;
+    const title = data.props.title ?? linkedPerson?.title;
+    const phoneNumber = data.props.phoneNumber ?? linkedPerson?.phoneNumber;
+    const email = data.props.email ?? linkedPerson?.email;
+    const cta = data.props.cta ?? linkedPerson?.cta;
 
     return bindSlots(updatedData as typeof data, {
       ImageSlot: headshot
