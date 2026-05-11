@@ -570,23 +570,31 @@ export const InsightCard: YextComponentConfig<InsightCardProps> = {
     ]);
 
     return bindSlots(updatedData as typeof data, {
-      ImageSlot:
-        field && image ? { field: `${field}.image`, image } : undefined,
-      TitleSlot:
-        field && name ? { field: `${field}.name`, text: name } : undefined,
-      CategorySlot:
-        field && categoryValue
-          ? { field: `${field}.category`, text: categoryValue }
-          : undefined,
-      DescriptionSlot:
-        field && description
-          ? { field: `${field}.description`, richText: description }
-          : undefined,
-      PublishTimeSlot:
-        field && publishTime
-          ? { field: `${field}.publishTime`, date: publishTime }
-          : undefined,
-      CTASlot: field && cta ? { field: `${field}.cta`, cta } : undefined,
+      ImageSlot: image
+        ? { field: field ? `${field}.image` : "", image }
+        : undefined,
+      TitleSlot: name
+        ? { field: field ? `${field}.name` : "", text: name }
+        : undefined,
+      CategorySlot: categoryValue
+        ? {
+            field: field ? `${field}.category` : "",
+            text: categoryValue,
+          }
+        : undefined,
+      DescriptionSlot: description
+        ? {
+            field: field ? `${field}.description` : "",
+            richText: description,
+          }
+        : undefined,
+      PublishTimeSlot: publishTime
+        ? {
+            field: field ? `${field}.publishTime` : "",
+            date: publishTime,
+          }
+        : undefined,
+      CTASlot: cta ? { field: field ? `${field}.cta` : "", cta } : undefined,
     });
   },
   render: (props) => <InsightCardComponent {...props} />,

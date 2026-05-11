@@ -22,6 +22,7 @@ import { TextProps } from "../../contentBlocks/Text.tsx";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
 import { bindSlots } from "../../../utils/cardSlots/bindSlots.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 
 const defaultPerson = {
   name: { defaultValue: "First Last" },
@@ -604,6 +605,16 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
     const headshot =
       data.props.headshot ?? data.props.parentData?.person.headshot;
     const name = data.props.name ?? data.props.parentData?.person.name;
+    const resolvedName =
+      name &&
+      resolveComponentData(
+        name,
+        i18nComponentsInstance.language || "en",
+        params.metadata.streamDocument,
+        {
+          output: "plainText",
+        }
+      );
     const title = data.props.title ?? data.props.parentData?.person.title;
     const phoneNumber =
       data.props.phoneNumber ?? data.props.parentData?.person.phoneNumber;
@@ -614,10 +625,10 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
       ImageSlot: headshot
         ? ({ field, image: headshot } satisfies ImageWrapperProps["parentData"])
         : undefined,
-      NameSlot: name
+      NameSlot: resolvedName
         ? ({
             field,
-            text: name as string,
+            text: resolvedName,
           } satisfies HeadingTextProps["parentData"])
         : undefined,
       TitleSlot: title

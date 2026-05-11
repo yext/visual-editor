@@ -335,46 +335,49 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
     },
   },
   resolveData: (data, params) => {
-    // Check card-level parentData first for entity data
-    const cardParentData = data.props.parentData;
-    const testimonial = cardParentData?.testimonial;
-
     const descriptionSlotProps = data.props.slots.DescriptionSlot?.[0]
       ?.props as WithId<BodyTextProps> | undefined;
     const contributorNameSlotProps = data.props.slots.ContributorNameSlot?.[0]
       ?.props as WithId<HeadingTextProps> | undefined;
     const contributionDateSlotProps = data.props.slots.ContributionDateSlot?.[0]
       ?.props as WithId<any> | undefined;
-
-    const showDescription = Boolean(
-      data.props.description ||
-        testimonial?.description ||
-        descriptionSlotProps?.parentData?.richText ||
-        (descriptionSlotProps &&
-          resolveYextEntityField(
+    const description =
+      data.props.description ?? data.props.parentData?.testimonial.description;
+    const contributorName =
+      data.props.contributorName ??
+      data.props.parentData?.testimonial.contributorName;
+    const contributionDate =
+      data.props.contributionDate ??
+      data.props.parentData?.testimonial.contributionDate;
+    const resolvedDescription =
+      description ??
+      descriptionSlotProps?.parentData?.richText ??
+      (descriptionSlotProps
+        ? resolveYextEntityField(
             params.metadata.streamDocument,
             descriptionSlotProps.data.text,
             i18nComponentsInstance.language || "en"
-          ))
-    );
-    const showContributorName = Boolean(
-      data.props.contributorName ||
-        testimonial?.contributorName ||
-        contributorNameSlotProps?.parentData?.text ||
-        (contributorNameSlotProps &&
-          resolveYextEntityField(
+          )
+        : undefined);
+    const resolvedContributorName =
+      contributorName ??
+      contributorNameSlotProps?.parentData?.text ??
+      (contributorNameSlotProps
+        ? resolveYextEntityField(
             params.metadata.streamDocument,
             contributorNameSlotProps.data.text,
             i18nComponentsInstance.language || "en"
-          ))
-    );
-    const showContributionDate = Boolean(
-      data.props.contributionDate ||
-        testimonial?.contributionDate ||
-        contributionDateSlotProps?.parentData?.date ||
-        contributionDateSlotProps?.data?.date?.constantValue ||
-        contributionDateSlotProps?.data?.date?.field
-    );
+          )
+        : undefined);
+    const resolvedContributionDate =
+      contributionDate ??
+      contributionDateSlotProps?.parentData?.date ??
+      contributionDateSlotProps?.data?.date?.constantValue ??
+      contributionDateSlotProps?.data?.date?.field;
+
+    const showDescription = Boolean(resolvedDescription);
+    const showContributorName = Boolean(resolvedContributorName);
+    const showContributionDate = Boolean(resolvedContributionDate);
 
     let updatedData = {
       ...data,
@@ -396,14 +399,6 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
     ]);
 
     const field = data.props.field ?? data.props.parentData?.field ?? "";
-    const description =
-      data.props.description ?? data.props.parentData?.testimonial.description;
-    const contributorName =
-      data.props.contributorName ??
-      data.props.parentData?.testimonial.contributorName;
-    const contributionDate =
-      data.props.contributionDate ??
-      data.props.parentData?.testimonial.contributionDate;
 
     return bindSlots(updatedData as typeof data, {
       DescriptionSlot: description

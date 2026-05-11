@@ -26,7 +26,7 @@ export const insightCardsSource = createSlottedItemSource<
   InsightCardMappings,
   InsightCardProps
 >({
-  label: msg("fields.insights", "Insights"),
+  label: msg("components.insights", "Insights"),
   itemLabel: "Insight",
   cardName: "InsightCard",
   defaultItemProps: defaultInsightCardSlotData().props,
@@ -150,7 +150,9 @@ export const InsightCardsWrapper: YextComponentConfig<InsightCardsWrapperProps> 
       },
     },
     resolveData: (data, params) =>
-      insightCardsSource.populateSlots(data, params.metadata.streamDocument!),
+      params.metadata.streamDocument
+        ? insightCardsSource.populateSlots(data, params.metadata.streamDocument)
+        : data,
     render: (props) => {
       if (props.conditionalRender?.isMappedContentEmpty) {
         return renderMappedEntityFieldEmptyState(props.puck.isEditing);

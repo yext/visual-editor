@@ -1,197 +1,55 @@
 import { Migration } from "../../utils/migrate.ts";
-import { createSlottedItemSource } from "../../utils/itemSource/index.ts";
+// Snapshot the 0076-time mapping defaults here so this append-only migration
+// stays deterministic even if createSlottedItemSource changes later.
+const defaultEntityFieldMapping = {
+  field: "",
+  constantValueEnabled: false,
+  constantValue: undefined,
+};
 
-const eventDefaultMappings = createSlottedItemSource({
-  label: "Events",
-  itemLabel: "Event",
-  mappingFields: {
-    image: {
-      type: "entityField",
-      label: "Image",
-      filter: { types: ["type.image"] },
-    },
-    title: {
-      type: "entityField",
-      label: "Title",
-      filter: { types: ["type.string"] },
-    },
-    dateTime: {
-      type: "entityField",
-      label: "Date & Time",
-      filter: { types: ["type.datetime"] },
-    },
-    description: {
-      type: "entityField",
-      label: "Description",
-      filter: { types: ["type.rich_text_v2"] },
-    },
-    cta: {
-      type: "entityField",
-      label: "CTA",
-      filter: { types: ["type.cta"] },
-    },
+const eventDefaultMappings = {
+  image: { ...defaultEntityFieldMapping },
+  title: { ...defaultEntityFieldMapping },
+  dateTime: { ...defaultEntityFieldMapping },
+  description: { ...defaultEntityFieldMapping },
+  cta: { ...defaultEntityFieldMapping },
+};
+const faqDefaultMappings = {
+  question: { ...defaultEntityFieldMapping },
+  answer: { ...defaultEntityFieldMapping },
+};
+const productDefaultMappings = {
+  image: { ...defaultEntityFieldMapping },
+  brow: { ...defaultEntityFieldMapping },
+  name: { ...defaultEntityFieldMapping },
+  price: {
+    value: { ...defaultEntityFieldMapping },
+    currencyCode: { ...defaultEntityFieldMapping },
   },
-}).defaultValue.mappings!;
-const faqDefaultMappings = createSlottedItemSource({
-  label: "FAQs",
-  itemLabel: "FAQ",
-  mappingFields: {
-    question: {
-      type: "entityField",
-      label: "Question",
-      filter: {
-        types: ["type.string", "type.rich_text_v2"],
-      },
-    },
-    answer: {
-      type: "entityField",
-      label: "Answer",
-      filter: {
-        types: ["type.rich_text_v2"],
-      },
-    },
-  },
-}).defaultValue.mappings!;
-const productDefaultMappings = createSlottedItemSource({
-  label: "Products",
-  itemLabel: "Product",
-  mappingFields: {
-    image: {
-      type: "entityField",
-      label: "Image",
-      filter: { types: ["type.image"] },
-    },
-    brow: {
-      type: "entityField",
-      label: "Brow Text",
-      filter: { types: ["type.string", "type.rich_text_v2"] },
-    },
-    name: {
-      type: "entityField",
-      label: "Title",
-      filter: { types: ["type.string"] },
-    },
-    price: {
-      type: "object",
-      label: "Price",
-      objectFields: {
-        value: {
-          type: "entityField",
-          label: "Value",
-          filter: { types: [] },
-        },
-        currencyCode: {
-          type: "entityField",
-          label: "Currency Code",
-          filter: { types: ["type.string"] },
-        },
-      },
-    },
-    description: {
-      type: "entityField",
-      label: "Description",
-      filter: { types: ["type.rich_text_v2"] },
-    },
-    cta: {
-      type: "entityField",
-      label: "CTA",
-      filter: { types: ["type.cta"] },
-    },
-  },
-}).defaultValue.mappings!;
-const testimonialDefaultMappings = createSlottedItemSource({
-  label: "Testimonial",
-  itemLabel: "Testimonial",
-  mappingFields: {
-    description: {
-      type: "entityField",
-      label: "Description",
-      filter: { types: ["type.rich_text_v2"] },
-    },
-    contributorName: {
-      type: "entityField",
-      label: "Contributor Name",
-      filter: { types: ["type.string"] },
-    },
-    contributionDate: {
-      type: "entityField",
-      label: "Contribution Date",
-      filter: { types: ["type.datetime"] },
-    },
-  },
-}).defaultValue.mappings!;
-const insightDefaultMappings = createSlottedItemSource({
-  label: "Insights",
-  itemLabel: "Insight",
-  mappingFields: {
-    image: {
-      type: "entityField",
-      label: "Image",
-      filter: { types: ["type.image"] },
-    },
-    name: {
-      type: "entityField",
-      label: "Title",
-      filter: { types: ["type.string"] },
-    },
-    category: {
-      type: "entityField",
-      label: "Category",
-      filter: { types: ["type.string", "type.rich_text_v2"] },
-    },
-    publishTime: {
-      type: "entityField",
-      label: "Publish Time",
-      filter: { types: ["type.datetime"] },
-    },
-    description: {
-      type: "entityField",
-      label: "Description",
-      filter: { types: ["type.rich_text_v2"] },
-    },
-    cta: {
-      type: "entityField",
-      label: "CTA",
-      filter: { types: ["type.cta"] },
-    },
-  },
-}).defaultValue.mappings!;
-const teamDefaultMappings = createSlottedItemSource({
-  label: "Team",
-  itemLabel: "Team",
-  mappingFields: {
-    headshot: {
-      type: "entityField",
-      label: "Image",
-      filter: { types: ["type.image"] },
-    },
-    name: {
-      type: "entityField",
-      label: "Name",
-      filter: { types: ["type.string"] },
-    },
-    title: {
-      type: "entityField",
-      label: "Title",
-      filter: { types: ["type.string", "type.rich_text_v2"] },
-    },
-    phoneNumber: {
-      type: "entityField",
-      label: "Phone",
-      filter: { types: ["type.phone"] },
-    },
-    email: {
-      type: "entityField",
-      label: "Email",
-      filter: { types: ["type.string"] },
-    },
-    cta: {
-      type: "entityField",
-      label: "CTA",
-      filter: { types: ["type.cta"] },
-    },
-  },
-}).defaultValue.mappings!;
+  description: { ...defaultEntityFieldMapping },
+  cta: { ...defaultEntityFieldMapping },
+};
+const testimonialDefaultMappings = {
+  description: { ...defaultEntityFieldMapping },
+  contributorName: { ...defaultEntityFieldMapping },
+  contributionDate: { ...defaultEntityFieldMapping },
+};
+const insightDefaultMappings = {
+  image: { ...defaultEntityFieldMapping },
+  name: { ...defaultEntityFieldMapping },
+  category: { ...defaultEntityFieldMapping },
+  publishTime: { ...defaultEntityFieldMapping },
+  description: { ...defaultEntityFieldMapping },
+  cta: { ...defaultEntityFieldMapping },
+};
+const teamDefaultMappings = {
+  headshot: { ...defaultEntityFieldMapping },
+  name: { ...defaultEntityFieldMapping },
+  title: { ...defaultEntityFieldMapping },
+  phoneNumber: { ...defaultEntityFieldMapping },
+  email: { ...defaultEntityFieldMapping },
+  cta: { ...defaultEntityFieldMapping },
+};
 const eventImageMapping = eventDefaultMappings.image as unknown as Record<
   string,
   unknown

@@ -619,6 +619,11 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
     const field = data.props.field ?? data.props.parentData?.field ?? "";
     const image = data.props.image ?? data.props.parentData?.product.image;
     const name = data.props.name ?? data.props.parentData?.product.name;
+    const resolvedName =
+      name &&
+      resolveComponentData(name, locale, params.metadata.streamDocument, {
+        output: "plainText",
+      });
     const brow =
       data.props.brow ??
       data.props.parentData?.product.brow ??
@@ -637,10 +642,10 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       ImageSlot: image
         ? ({ field, image } satisfies ImageWrapperProps["parentData"])
         : undefined,
-      TitleSlot: name
+      TitleSlot: resolvedName
         ? ({
             field,
-            text: name as string,
+            text: resolvedName,
           } satisfies HeadingTextProps["parentData"])
         : undefined,
       BrowSlot: brow

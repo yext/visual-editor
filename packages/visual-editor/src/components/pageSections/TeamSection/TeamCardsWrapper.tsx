@@ -146,7 +146,9 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
     },
   },
   resolveData: (data, params) =>
-    teamCardsSource.populateSlots(data, params.metadata.streamDocument!),
+    params.metadata.streamDocument
+      ? teamCardsSource.populateSlots(data, params.metadata.streamDocument)
+      : data,
   render: (props) => {
     if (props.conditionalRender?.isMappedContentEmpty) {
       return renderMappedEntityFieldEmptyState(props.puck.isEditing);
