@@ -353,6 +353,7 @@ import {
 export type ItemCardProps = {
   id?: string;
   index?: number;
+  field?: string;
   title?: TranslatableString;
   description?: TranslatableRichText;
   slots: {
@@ -399,8 +400,8 @@ import {
   type StreamDocument,
   type TranslatableRichText,
   type TranslatableString,
-  toPuckFields,
   type YextComponentConfig,
+  type YextFields,
   useDocument,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
@@ -440,7 +441,7 @@ type FeaturedItemsProps = {
   };
 };
 
-const featuredItemsFields = {
+const featuredItemsFields: YextFields<FeaturedItemsProps> = {
   data: featuredItemsSource.field,
   header: {
     type: "translatableString",
@@ -457,7 +458,7 @@ const featuredItemsFields = {
 
 export const FeaturedItems: YextComponentConfig<FeaturedItemsProps> = {
   label: "Featured Items",
-  fields: toPuckFields(featuredItemsFields),
+  fields: featuredItemsFields,
   defaultProps: {
     ...featuredItemsSource.defaultWrapperProps,
     header: {
@@ -465,7 +466,7 @@ export const FeaturedItems: YextComponentConfig<FeaturedItemsProps> = {
     },
   },
   resolveData: (data, params) =>
-    featuredItemsSource.populateSlots(data, params.metadata.streamDocument!),
+    featuredItemsSource.populateSlots(data, params.metadata.streamDocument),
   render: ({ header, slots }) => {
     const { i18n } = useTranslation();
     const streamDocument = useDocument<StreamDocument>();
