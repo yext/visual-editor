@@ -476,7 +476,7 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
 
     const showImage = Boolean(
       isLinkedMode
-        ? data.props.parentStyles?.showImage
+        ? data.props.headshot
         : imageSlotProps?.parentData?.image ||
             (imageSlotProps &&
               (imageSlotProps?.data.image.field ||

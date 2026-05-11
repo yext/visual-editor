@@ -184,9 +184,10 @@ export function createSlottedItemSource<
         );
       }
 
+      const visibleCards = wrapperData.props.slots.CardSlot;
       const manualCards = Array.isArray(wrapperData.props.manualSlots?.CardSlot)
         ? wrapperData.props.manualSlots.CardSlot
-        : wrapperData.props.slots.CardSlot;
+        : visibleCards;
 
       const createCard = (
         id: string,
@@ -237,7 +238,7 @@ export function createSlottedItemSource<
 
         const cards = syncLinkedSlotMappedCards({
           items,
-          currentCards: wrapperData.props.slots.CardSlot,
+          currentCards: visibleCards,
           createCard,
           toParentData: () => undefined,
           normalizeId: (id) => `${resolvedCardName}-${id}`,
@@ -276,7 +277,12 @@ export function createSlottedItemSource<
         cardReferences: Array.isArray(wrapperData.props.data.constantValue)
           ? wrapperData.props.data.constantValue
           : [],
-        currentCards: manualCards,
+        currentCards: visibleCards.some(
+          (card) =>
+            typeof card.props.field === "string" && card.props.field.length > 0
+        )
+          ? manualCards
+          : visibleCards,
         createCard,
         syncChildSlotIds: (card, id) => setChildSlotIds(card, id),
         normalizeId: (id) => `${resolvedCardName}-${id}`,

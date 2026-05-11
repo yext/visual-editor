@@ -216,4 +216,59 @@ describe("createSlottedItemSource", () => {
       populated.props.slots.CardSlot.map((card) => ({ id: card.props.id }))
     );
   });
+
+  it("preserves visible manual card edits while reordering", () => {
+    const populated = featuredItemsSource.populateSlots(
+      {
+        type: "FeaturedItems",
+        props: {
+          id: "FeaturedItems-test",
+          data: {
+            ...featuredItemsSource.defaultValue,
+            constantValue: [{ id: "Card-2" }, { id: "Card-1" }],
+          },
+          manualSlots: {
+            CardSlot: [
+              {
+                type: "Featured Item",
+                props: { id: "Card-1", customText: "stale first", slots: {} },
+              },
+              {
+                type: "Featured Item",
+                props: { id: "Card-2", customText: "stale second", slots: {} },
+              },
+            ],
+          },
+          slots: {
+            CardSlot: [
+              {
+                type: "Featured Item",
+                props: { id: "Card-2", customText: "edited second", slots: {} },
+              },
+              {
+                type: "Featured Item",
+                props: { id: "Card-1", customText: "edited first", slots: {} },
+              },
+            ],
+          },
+        },
+      } as unknown as ComponentData<{
+        data: typeof featuredItemsSource.value;
+        manualSlots: {
+          CardSlot: ComponentData<Record<string, unknown>>[];
+        };
+        slots: {
+          CardSlot: ComponentData<Record<string, unknown>>[];
+        };
+      }>,
+      { locale: "en" }
+    );
+
+    expect(
+      populated.props.slots.CardSlot.map((card) => card.props.customText)
+    ).toEqual(["edited second", "edited first"]);
+    expect(
+      populated.props.manualSlots.CardSlot.map((card) => card.props.customText)
+    ).toEqual(["edited second", "edited first"]);
+  });
 });

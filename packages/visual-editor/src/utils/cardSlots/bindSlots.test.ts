@@ -69,7 +69,7 @@ describe("bindSlots", () => {
     });
   });
 
-  it("preserves existing slot parentData for missing shorthand values by default", () => {
+  it("clears existing slot parentData for missing shorthand values in manual mode", () => {
     const data = {
       props: {
         slots: {
@@ -91,12 +91,12 @@ describe("bindSlots", () => {
       ImageSlot: undefined,
     });
 
-    expect(updatedData.props.slots.TitleSlot[0]?.props.parentData).toEqual({
-      text: "Old",
-    });
-    expect(updatedData.props.slots.ImageSlot[0]?.props.parentData).toEqual({
-      image: { url: "/old.png" },
-    });
+    expect(updatedData.props.slots.TitleSlot[0]?.props.parentData).toBe(
+      undefined
+    );
+    expect(updatedData.props.slots.ImageSlot[0]?.props.parentData).toBe(
+      undefined
+    );
   });
 
   it("writes empty parent-data objects for missing shorthand values in linked mode", () => {

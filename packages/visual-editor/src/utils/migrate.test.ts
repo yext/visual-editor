@@ -1108,6 +1108,52 @@ describe("migrate", () => {
     });
   });
 
+  it("migrates linked ProductCardsWrapper data when constantValueEnabled is omitted", async () => {
+    const migratedData = migrate(
+      {
+        root: { props: { version: 0 } },
+        content: [
+          {
+            type: "ProductCardsWrapper",
+            props: {
+              id: "ProductCardsWrapper-test",
+              data: {
+                field: "c_productsSection",
+                constantValue: [{ id: "ProductCard-1" }],
+              },
+              slots: {
+                CardSlot: [
+                  {
+                    type: "ProductCard",
+                    props: { id: "ProductCard-1", slots: {} },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [slotMappedCardsMigration],
+      { components: {} },
+      {}
+    );
+
+    expect(migratedData.content[0]?.props.data).toMatchObject({
+      field: "c_productsSection.products",
+      constantValueEnabled: false,
+      constantValue: [{ id: "ProductCard-1" }],
+      mappings: {
+        image: { field: "image" },
+        brow: { field: "brow" },
+        name: { field: "name" },
+        price: { field: "price" },
+        description: { field: "description" },
+        cta: { field: "cta" },
+      },
+    });
+  });
+
   it("normalizes existing linked ProductCardsWrapper price mappings to the price field", async () => {
     const migratedData = migrate(
       {

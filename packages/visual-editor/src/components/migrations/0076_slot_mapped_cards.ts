@@ -160,13 +160,9 @@ const buildSlotMappedTransform =
     )
       ? ((props.slots as { CardSlot?: unknown }).CardSlot as unknown[])
       : [];
-    const isLinked =
-      (
-        props.data as
-          | { constantValueEnabled?: boolean; field?: string }
-          | undefined
-      )?.constantValueEnabled === false &&
-      Boolean((props.data as { field?: string } | undefined)?.field);
+    const isLinked = Boolean(
+      (props.data as { field?: string } | undefined)?.field
+    );
     const manualCards = isLinked
       ? scrubLinkedCardState(visibleCards)
       : visibleCards;
@@ -180,6 +176,7 @@ const buildSlotMappedTransform =
               (props.data as { field: string }).field,
               childField
             ),
+            constantValueEnabled: false,
             mappings,
           }
         : props.data,

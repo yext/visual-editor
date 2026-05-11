@@ -20,9 +20,8 @@ const slotChildTypeToParentDataKey: Record<string, string> = {
  *    `slotChildTypeToParentDataKey`.
  * 3. Normalizes raw values like `title` or `image` into the child component's
  *    expected `parentData` shape.
- * 4. Detects linked mode from `props.field` / `props.parentData.field` and
- *    clears missing shorthand values so authored fallback constants do not
- *    bleed through.
+ * 4. Detects linked mode from `props.field` and clears missing shorthand
+ *    values so authored fallback constants do not bleed through.
  * 5. Writes the resulting `parentData` back onto the slot child.
  *
  * Pass a full parent-data object when a slot needs custom shape like
@@ -31,9 +30,9 @@ const slotChildTypeToParentDataKey: Record<string, string> = {
  *
  * In linked mode, a missing value still writes an empty parent-data object for
  * supported slot child types so authored fallback constants do not bleed
- * through. In manual/default mode, missing values are left untouched so the
- * authored slot content stays visible and can reappear when the card is
- * switched back from linked mode.
+ * through. In manual/default mode, missing values clear any stale
+ * `parentData`, so authored slot content stays visible and cards unlock when
+ * switching back from linked mode.
  *
  * Example:
  * ```ts
@@ -60,9 +59,6 @@ export const bindSlots = <
   TData extends {
     props: {
       field?: string;
-      parentData?: {
-        field?: string;
-      };
       slots?: Record<
         string,
         Array<{ props?: Record<string, unknown>; type?: string }>
@@ -74,9 +70,7 @@ export const bindSlots = <
   slotBindings: Record<string, unknown>
 ) => {
   let updatedData = data;
-  const isLinkedMode = Boolean(
-    data.props.field ?? data.props.parentData?.field
-  );
+  const isLinkedMode = Boolean(data.props.field);
 
   Object.entries(slotBindings).forEach(([slotKey, parentData]) => {
     const slotChild = data.props.slots?.[slotKey]?.[0];
@@ -92,10 +86,6 @@ export const bindSlots = <
       typeof parentData === "object" &&
       parentData !== null &&
       !Array.isArray(parentData);
-
-    if (parentData === undefined && !isLinkedMode) {
-      return;
-    }
 
     const resolvedParentData =
       isLinkedMode && parentDataKey && parentData === undefined
