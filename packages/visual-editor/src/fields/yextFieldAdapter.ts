@@ -29,6 +29,15 @@ export const adaptYextField = (
   return field as Field<any>;
 };
 
+/**
+ * Recursively adapts a Yext field map into Puck-compatible fields.
+ *
+ * Puck's native `object` and `array` fields render their nested fields through
+ * Puck's default field registry, so any nested Yext-only field type must be
+ * converted before Puck sees it. The caller provides `renderYextField` because
+ * different entrypoints need different custom renderers while sharing the same
+ * recursive traversal.
+ */
 export const adaptYextFieldMap = (
   fields: Record<string, YextFieldDefinition<any>>,
   renderYextField: YextFieldRender

@@ -106,6 +106,17 @@ export type YextFieldMap<
   [PropName in keyof Omit<T, "editMode">]: YextFieldDefinition<T[PropName]>;
 };
 
+/**
+ * Converts Yext field definitions into a runtime `Fields` object that Puck can
+ * render safely.
+ *
+ * Yext field types are registered as Puck overrides, but Puck still asks its
+ * internal default field registry to render child fields inside native `object`
+ * and `array` fields. Since field types like `basicSelector` do not exist in
+ * that registry, this wraps each Yext-specific field as a Puck `custom` field
+ * rendered by `YextAutoField`, including nested `objectFields` and
+ * `arrayFields`. Normal Puck field types are left unchanged.
+ */
 export const toPuckFields = <
   Props extends DefaultComponentProps = DefaultComponentProps,
 >(
