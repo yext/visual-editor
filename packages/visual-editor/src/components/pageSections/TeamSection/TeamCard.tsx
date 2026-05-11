@@ -481,7 +481,15 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
 
     const showImage = Boolean(
       isLinkedMode
-        ? data.props.headshot
+        ? data.props.headshot ||
+            (imageSlotProps?.data.image.constantValue &&
+              "hasLocalizedValue" in imageSlotProps.data.image.constantValue) ||
+            (imageSlotProps?.data.image.constantValue &&
+              "url" in imageSlotProps.data.image.constantValue &&
+              imageSlotProps.data.image.constantValue.url) ||
+            (imageSlotProps?.data.image.constantValue &&
+              "image" in imageSlotProps.data.image.constantValue &&
+              imageSlotProps.data.image.constantValue.image?.url)
         : imageSlotProps &&
             (imageSlotProps.data.image.field ||
               (imageSlotProps.data.image.constantValue &&
@@ -516,7 +524,12 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
     );
     const showPhone = Boolean(
       isLinkedMode
-        ? data.props.phoneNumber
+        ? data.props.phoneNumber ||
+            (phoneSlotProps?.data?.phoneNumbers?.length &&
+              phoneSlotProps.data.phoneNumbers.some(
+                (phone: any) =>
+                  phone.number?.constantValue || phone.number?.field
+              ))
         : phoneSlotProps?.data?.phoneNumbers?.length &&
             phoneSlotProps.data.phoneNumbers.some(
               (phone: any) => phone.number?.constantValue || phone.number?.field
@@ -524,13 +537,17 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
     );
     const showEmail = Boolean(
       isLinkedMode
-        ? data.props.email
+        ? data.props.email ||
+            emailSlotProps?.data?.list?.constantValue?.length ||
+            emailSlotProps?.data?.list?.field
         : emailSlotProps?.data?.list?.constantValue?.length ||
             emailSlotProps?.data?.list?.field
     );
     const showCTA = Boolean(
       isLinkedMode
-        ? data.props.cta?.label
+        ? data.props.cta?.label ||
+            ctaSlotProps?.data?.entityField?.constantValue?.label ||
+            ctaSlotProps?.data?.entityField?.field
         : ctaSlotProps?.data?.entityField?.constantValue?.label ||
             ctaSlotProps?.data?.entityField?.field ||
             (ctaSlotProps &&

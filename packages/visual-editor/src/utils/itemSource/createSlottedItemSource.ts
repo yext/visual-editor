@@ -185,8 +185,11 @@ export function createSlottedItemSource<
       }
 
       const visibleCards = wrapperData.props.slots.CardSlot;
-      const manualCards = Array.isArray(wrapperData.props.manualSlots?.CardSlot)
-        ? wrapperData.props.manualSlots.CardSlot
+      const hasManualSlots = Array.isArray(
+        wrapperData.props.manualSlots?.CardSlot
+      );
+      const manualCards = hasManualSlots
+        ? wrapperData.props.manualSlots!.CardSlot
         : visibleCards;
 
       const createCard = (
@@ -286,6 +289,7 @@ export function createSlottedItemSource<
         createCard,
         syncChildSlotIds: (card, id) => setChildSlotIds(card, id),
         normalizeId: (id) => `${resolvedCardName}-${id}`,
+        reuseIdlessCards: hasManualSlots,
       }).cards.map((card) => {
         const cardProps = { ...card.props } as Record<string, unknown>;
 

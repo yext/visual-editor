@@ -33,23 +33,27 @@ export const syncManualSlotMappedCards = <TCard extends CardWithId>({
   createCard,
   syncChildSlotIds,
   normalizeId,
+  reuseIdlessCards = true,
 }: {
   cardReferences: Array<{ id?: string }>;
   currentCards: TCard[];
   createCard: (id: string, index: number) => TCard;
   syncChildSlotIds?: (card: TCard, id: string) => TCard;
   normalizeId?: (id: string) => string;
+  reuseIdlessCards?: boolean;
 }) => {
   const inUseIds = new Set<string>();
   const usedCardIndices = new Set<number>();
   const cards = cardReferences.map(({ id }, index) => {
     const existingCardIndex = id
       ? currentCards.findIndex((card) => card.props.id === id)
-      : usedCardIndices.has(index)
-        ? currentCards.findIndex(
-            (_, cardIndex) => !usedCardIndices.has(cardIndex)
-          )
-        : index;
+      : !reuseIdlessCards
+        ? -1
+        : usedCardIndices.has(index)
+          ? currentCards.findIndex(
+              (_, cardIndex) => !usedCardIndices.has(cardIndex)
+            )
+          : index;
     const existingCard =
       existingCardIndex >= 0 ? currentCards[existingCardIndex] : undefined;
     let card = existingCard ? cloneCard(existingCard as TCard) : undefined;

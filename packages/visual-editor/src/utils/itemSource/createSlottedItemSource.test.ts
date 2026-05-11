@@ -209,7 +209,51 @@ describe("createSlottedItemSource", () => {
     );
 
     expect(populated.props.slots.CardSlot).toHaveLength(3);
-    expect(populated.props.manualSlots.CardSlot).toEqual(
+    expect(populated.props.manualSlots?.CardSlot).toEqual(
+      populated.props.slots.CardSlot
+    );
+    expect(populated.props.data.constantValue).toEqual(
+      populated.props.slots.CardSlot.map((card) => ({ id: card.props.id }))
+    );
+  });
+
+  it("recreates legacy id-less manual cards on first pass", () => {
+    const populated = featuredItemsSource.populateSlots(
+      {
+        type: "FeaturedItems",
+        props: {
+          id: "FeaturedItems-test",
+          data: {
+            ...featuredItemsSource.defaultValue,
+            constantValue: [{}],
+          },
+          slots: {
+            CardSlot: [
+              {
+                type: "Featured Item",
+                props: {
+                  customText: "legacy placeholder",
+                  slots: {},
+                },
+              },
+            ],
+          },
+        },
+      } as unknown as ComponentData<{
+        data: typeof featuredItemsSource.value;
+        manualSlots?: {
+          CardSlot: ComponentData<Record<string, unknown>>[];
+        };
+        slots: {
+          CardSlot: ComponentData<Record<string, unknown>>[];
+        };
+      }>,
+      { locale: "en" }
+    );
+
+    expect(populated.props.slots.CardSlot).toHaveLength(1);
+    expect(populated.props.slots.CardSlot[0]?.props.customText).toBeUndefined();
+    expect(populated.props.manualSlots?.CardSlot).toEqual(
       populated.props.slots.CardSlot
     );
     expect(populated.props.data.constantValue).toEqual(
