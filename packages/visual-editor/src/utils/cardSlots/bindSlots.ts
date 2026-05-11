@@ -1,5 +1,7 @@
 import { setDeep } from "@puckeditor/core";
 
+// Common slot child components declare one primary parent-data field, and
+// bindSlots uses that convention to support the shorthand raw-value API.
 const slotChildTypeToParentDataKey: Record<string, string> = {
   BodyTextSlot: "richText",
   CTASlot: "cta",

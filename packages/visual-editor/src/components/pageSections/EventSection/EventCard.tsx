@@ -21,7 +21,7 @@ import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
-import { bindSlots } from "../../../utils/index.ts";
+import { bindSlots } from "../../../utils/cardSlots/bindSlots.ts";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
@@ -500,11 +500,12 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
     const showDateTime = Boolean(
       data.props.dateTime?.trim() ||
         dateTimeSlotProps?.parentData?.date?.trim() ||
-        resolveYextEntityField(
-          params.metadata.streamDocument,
-          dateTimeSlotProps.data.date,
-          i18nComponentsInstance.language || "en"
-        )?.trim()
+        (dateTimeSlotProps &&
+          resolveYextEntityField(
+            params.metadata.streamDocument,
+            dateTimeSlotProps.data.date,
+            i18nComponentsInstance.language || "en"
+          )?.trim())
     );
     const showCTA = Boolean(
       data.props.cta?.label ||

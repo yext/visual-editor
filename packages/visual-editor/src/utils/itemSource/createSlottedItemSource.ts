@@ -21,7 +21,10 @@ import {
 } from "./itemSourceTypes.ts";
 import { pt } from "../i18n/platform.ts";
 
-const cloneValue = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
+const cloneValue = <T>(value: T): T =>
+  typeof structuredClone === "function"
+    ? structuredClone(value)
+    : (JSON.parse(JSON.stringify(value)) as T);
 
 const setChildSlotIds = (
   card: ComponentData<Record<string, unknown>>,
@@ -41,6 +44,7 @@ const setChildSlotIds = (
         slotChild.props = {};
       }
       slotChild.props.id = `${cardId}-${slotKey}-${index}`;
+      delete slotChild.props.parentData;
     });
   });
 
@@ -159,7 +163,7 @@ export function createSlottedItemSource<
     value: undefined as unknown as SlotMappedCardsData<TMappings>,
     resolveItems,
     populateSlots: (data, streamDocument) => {
-      const wrapperData = data as ComponentData<{
+      const wrapperData = data as unknown as ComponentData<{
         data: SlotMappedCardsData<TMappings>;
         slots: { CardSlot: ComponentData<Record<string, unknown>>[] };
         conditionalRender?: { isMappedContentEmpty?: boolean };

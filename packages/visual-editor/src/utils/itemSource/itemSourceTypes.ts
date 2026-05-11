@@ -37,7 +37,7 @@ export type RepeatedEntityFieldMetadata<
 
 export type RepeatedEntityFieldDefinition<
   TItemProps extends Record<string, unknown>,
-> = EntityFieldSelectorField<any> & {
+> = EntityFieldSelectorField<RepeatedEntityFieldValue<TItemProps>> & {
   repeated: RepeatedEntityFieldMetadata<TItemProps>;
 };
 
@@ -98,7 +98,17 @@ export type SlottedItemSourceInstance<
     value: SlotMappedCardsData<TMappings> | undefined,
     streamDocument: StreamDocument
   ) => ResolvedItemField<TMappings>[];
-  populateSlots: <TData>(data: TData, streamDocument: StreamDocument) => TData;
+  populateSlots: <
+    TData extends {
+      props: {
+        data: SlotMappedCardsData<TMappings>;
+        slots: { CardSlot: unknown };
+      };
+    },
+  >(
+    data: TData,
+    streamDocument: StreamDocument
+  ) => TData;
 };
 
 export type CreateSlotMappedCardsSourceOptions<

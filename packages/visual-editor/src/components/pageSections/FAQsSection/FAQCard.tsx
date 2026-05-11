@@ -69,7 +69,9 @@ export type FAQCardProps = {
   /** @internal */
   field?: string;
 
+  /** @internal */
   question?: FAQStruct["question"];
+  /** @internal */
   answer?: FAQStruct["answer"];
 
   data: {

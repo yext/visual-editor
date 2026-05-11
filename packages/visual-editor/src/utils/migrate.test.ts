@@ -870,6 +870,41 @@ describe("migrate", () => {
     });
   });
 
+  it("leaves legacy manual EventCardsWrapper data unchanged when constantValueEnabled is omitted", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+          },
+        },
+        content: [
+          {
+            type: "EventCardsWrapper",
+            props: {
+              id: "EventCardsWrapper-test",
+              data: {
+                field: "",
+                constantValue: [{ id: "EventCard-1" }],
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [slotMappedCardsMigration],
+      {
+        components: {},
+      },
+      {}
+    );
+
+    expect(migratedData.content[0]?.props.data).toEqual({
+      field: "",
+      constantValue: [{ id: "EventCard-1" }],
+    });
+  });
+
   it("migrates linked FAQSection data to slot-mapped cards while preserving slot content", async () => {
     const migratedData = migrate(
       {

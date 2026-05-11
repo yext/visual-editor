@@ -9,7 +9,10 @@ type TestCard = ComponentData<{
   id?: string;
   index?: number;
   parentData?: unknown;
-  slots: Record<string, Array<{ props: { id?: string } }>>;
+  slots: Record<
+    string,
+    Array<{ props: { id?: string; parentData?: unknown } }>
+  >;
 }>;
 
 const createCard = (id: string, index: number): TestCard => ({
@@ -41,9 +44,12 @@ describe("slotMappedCards", () => {
   });
 
   it("normalizes manual ids and returns parent card references", () => {
+    const existingCard = createCard("Card-1", 0);
+    existingCard.props.slots.TitleSlot[0]!.props.parentData = { text: "stale" };
+
     const reconciled = syncManualSlotMappedCards({
       cardReferences: [{ id: "Card-1" }, { id: "Card-1" }],
-      currentCards: [createCard("Card-1", 0)],
+      currentCards: [existingCard],
       createCard,
       syncChildSlotIds: (card, id) => {
         card.props.slots.TitleSlot[0]!.props.id = `${id}-TitleSlot`;
@@ -55,7 +61,12 @@ describe("slotMappedCards", () => {
     expect(reconciled.cards).toHaveLength(2);
     expect(reconciled.cards[0]?.props.id).toBe("Card-1");
     expect(reconciled.cards[0]?.props.parentData).toBeUndefined();
-    expect(reconciled.cards[1]?.props.id).not.toBe("Card-1");
+    expect(
+      reconciled.cards[0]?.props.slots.TitleSlot[0]?.props.parentData
+    ).toBe(undefined);
+    expect(reconciled.cards[1]?.props.id).not.toBe(
+      reconciled.cards[0]?.props.id
+    );
     expect(reconciled.cards[1]?.props.slots.TitleSlot[0]?.props.id).toBe(
       `${reconciled.cards[1]?.props.id}-TitleSlot`
     );

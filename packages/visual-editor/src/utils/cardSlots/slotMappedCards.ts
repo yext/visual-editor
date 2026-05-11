@@ -4,6 +4,7 @@ type CardWithId = ComponentData<{
   id?: string;
   index?: number;
   parentData?: unknown;
+  slots?: Record<string, Array<{ props?: Record<string, unknown> }>>;
 }>;
 
 const cloneCard = <TCard extends CardWithId>(card: TCard): TCard =>
@@ -35,7 +36,19 @@ export const syncManualSlotMappedCards = <TCard extends CardWithId>({
 
     if (card && inUseIds.has(nextId)) {
       nextId = normalizeId?.(crypto.randomUUID()) || `${crypto.randomUUID()}`;
+    }
+
+    if (card) {
       card = syncChildSlotIds ? syncChildSlotIds(card, nextId) : card;
+      const slots = card.props.slots as
+        | Record<string, Array<{ props?: Record<string, unknown> }>>
+        | undefined;
+
+      Object.values(slots ?? {}).forEach((slotArray) => {
+        slotArray.forEach((slotChild) => {
+          delete slotChild.props?.parentData;
+        });
+      });
     }
 
     inUseIds.add(nextId);

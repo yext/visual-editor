@@ -150,7 +150,7 @@
     "warning": "此操作将消除您的本地更改。它不能撤消。"
   },
   "distance": "距离",
-  "editRepeatedItemsInSlots": "编辑和重新排序插槽中的卡牌。",
+  "editRepeatedItemsInSlots": "编辑并重新排序插槽中的卡片",
   "emptyStateFieldEmpty": "{{entityType}} 的映射字段为空",
   "emptyStateSectionHidden": "此 {{entityType}} 的部分已隐藏",
   "enableCookies": "启用 Cookie",
