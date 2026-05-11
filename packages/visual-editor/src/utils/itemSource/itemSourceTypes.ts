@@ -92,6 +92,9 @@ export type SlottedItemSourceInstance<
     slots: {
       CardSlot: [];
     };
+    manualSlots: {
+      CardSlot: [];
+    };
   };
   value: SlotMappedCardsData<TMappings>;
   resolveItems: (
@@ -103,6 +106,7 @@ export type SlottedItemSourceInstance<
       props: {
         data: SlotMappedCardsData<TMappings>;
         slots: { CardSlot: unknown };
+        manualSlots?: { CardSlot: unknown };
       };
     },
   >(

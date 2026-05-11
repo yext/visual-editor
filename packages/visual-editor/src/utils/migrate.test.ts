@@ -831,6 +831,12 @@ describe("migrate", () => {
       { type: "EventCard", props: { id: "EventCard-1", slots: {} } },
       { type: "EventCard", props: { id: "EventCard-2", slots: {} } },
     ]);
+    expect(migratedData.content[0]?.props.manualSlots).toEqual({
+      CardSlot: [
+        { type: "EventCard", props: { id: "EventCard-1", slots: {} } },
+        { type: "EventCard", props: { id: "EventCard-2", slots: {} } },
+      ],
+    });
   });
 
   it("leaves manual EventCardsWrapper data unchanged", async () => {
@@ -868,6 +874,9 @@ describe("migrate", () => {
       constantValueEnabled: true,
       constantValue: [{ id: "EventCard-1" }],
     });
+    expect(migratedData.content[0]?.props.manualSlots).toEqual({
+      CardSlot: [],
+    });
   });
 
   it("leaves legacy manual EventCardsWrapper data unchanged when constantValueEnabled is omitted", async () => {
@@ -902,6 +911,9 @@ describe("migrate", () => {
     expect(migratedData.content[0]?.props.data).toEqual({
       field: "",
       constantValue: [{ id: "EventCard-1" }],
+    });
+    expect(migratedData.content[0]?.props.manualSlots).toEqual({
+      CardSlot: [],
     });
   });
 
@@ -980,6 +992,9 @@ describe("migrate", () => {
     expect(migratedData.content[0]?.props.slots.CardSlot[0]?.props.id).toBe(
       "FAQCard-1"
     );
+    expect(
+      migratedData.content[0]?.props.manualSlots.CardSlot[0]?.props.id
+    ).toBe("FAQCard-1");
   });
 
   it("leaves already migrated FAQSection data unchanged", async () => {
@@ -1040,6 +1055,9 @@ describe("migrate", () => {
           constantValue: undefined,
         },
       },
+    });
+    expect(migratedData.content[0]?.props.manualSlots).toEqual({
+      CardSlot: [],
     });
   });
 

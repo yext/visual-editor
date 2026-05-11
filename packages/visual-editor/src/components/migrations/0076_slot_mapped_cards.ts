@@ -1,151 +1,62 @@
 import { Migration } from "../../utils/migrate.ts";
 
-const defaultEntityFieldMapping = {
+const defaultEntityFieldMapping = Object.freeze({
   field: "",
   constantValueEnabled: false,
   constantValue: undefined,
-};
+});
 
 const eventDefaultMappings = {
-  image: { ...defaultEntityFieldMapping },
-  title: { ...defaultEntityFieldMapping },
-  dateTime: { ...defaultEntityFieldMapping },
-  description: { ...defaultEntityFieldMapping },
-  cta: { ...defaultEntityFieldMapping },
+  image: { ...defaultEntityFieldMapping, field: "image" },
+  title: { ...defaultEntityFieldMapping, field: "title" },
+  dateTime: { ...defaultEntityFieldMapping, field: "dateTime" },
+  description: { ...defaultEntityFieldMapping, field: "description" },
+  cta: { ...defaultEntityFieldMapping, field: "cta" },
 };
 const faqDefaultMappings = {
-  question: { ...defaultEntityFieldMapping },
-  answer: { ...defaultEntityFieldMapping },
+  question: { ...defaultEntityFieldMapping, field: "question" },
+  answer: { ...defaultEntityFieldMapping, field: "answer" },
 };
 const productDefaultMappings = {
-  image: { ...defaultEntityFieldMapping },
-  brow: { ...defaultEntityFieldMapping },
-  name: { ...defaultEntityFieldMapping },
-  price: { ...defaultEntityFieldMapping },
-  description: { ...defaultEntityFieldMapping },
-  cta: { ...defaultEntityFieldMapping },
+  image: { ...defaultEntityFieldMapping, field: "image" },
+  brow: { ...defaultEntityFieldMapping, field: "brow" },
+  name: { ...defaultEntityFieldMapping, field: "name" },
+  price: { ...defaultEntityFieldMapping, field: "price" },
+  description: { ...defaultEntityFieldMapping, field: "description" },
+  cta: { ...defaultEntityFieldMapping, field: "cta" },
 };
 const testimonialDefaultMappings = {
-  description: { ...defaultEntityFieldMapping },
-  contributorName: { ...defaultEntityFieldMapping },
-  contributionDate: { ...defaultEntityFieldMapping },
+  description: { ...defaultEntityFieldMapping, field: "description" },
+  contributorName: {
+    ...defaultEntityFieldMapping,
+    field: "contributorName",
+  },
+  contributionDate: {
+    ...defaultEntityFieldMapping,
+    field: "contributionDate",
+  },
 };
 const insightDefaultMappings = {
-  image: { ...defaultEntityFieldMapping },
-  name: { ...defaultEntityFieldMapping },
-  category: { ...defaultEntityFieldMapping },
-  publishTime: { ...defaultEntityFieldMapping },
-  description: { ...defaultEntityFieldMapping },
-  cta: { ...defaultEntityFieldMapping },
+  image: { ...defaultEntityFieldMapping, field: "image" },
+  name: { ...defaultEntityFieldMapping, field: "name" },
+  category: { ...defaultEntityFieldMapping, field: "category" },
+  publishTime: { ...defaultEntityFieldMapping, field: "publishTime" },
+  description: { ...defaultEntityFieldMapping, field: "description" },
+  cta: { ...defaultEntityFieldMapping, field: "cta" },
 };
 const teamDefaultMappings = {
-  headshot: { ...defaultEntityFieldMapping },
-  name: { ...defaultEntityFieldMapping },
-  title: { ...defaultEntityFieldMapping },
-  phoneNumber: { ...defaultEntityFieldMapping },
-  email: { ...defaultEntityFieldMapping },
-  cta: { ...defaultEntityFieldMapping },
+  headshot: { ...defaultEntityFieldMapping, field: "headshot" },
+  name: { ...defaultEntityFieldMapping, field: "name" },
+  title: { ...defaultEntityFieldMapping, field: "title" },
+  phoneNumber: { ...defaultEntityFieldMapping, field: "phoneNumber" },
+  email: { ...defaultEntityFieldMapping, field: "email" },
+  cta: { ...defaultEntityFieldMapping, field: "cta" },
 };
-const eventImageMapping = eventDefaultMappings.image as unknown as Record<
-  string,
-  unknown
->;
-const eventTitleMapping = eventDefaultMappings.title as unknown as Record<
-  string,
-  unknown
->;
-const eventDateTimeMapping = eventDefaultMappings.dateTime as unknown as Record<
-  string,
-  unknown
->;
-const eventDescriptionMapping =
-  eventDefaultMappings.description as unknown as Record<string, unknown>;
-const eventCtaMapping = eventDefaultMappings.cta as unknown as Record<
-  string,
-  unknown
->;
-const faqQuestionMapping = faqDefaultMappings.question as unknown as Record<
-  string,
-  unknown
->;
-const faqAnswerMapping = faqDefaultMappings.answer as unknown as Record<
-  string,
-  unknown
->;
-const productImageMapping = productDefaultMappings.image as unknown as Record<
-  string,
-  unknown
->;
-const productBrowMapping = productDefaultMappings.brow as unknown as Record<
-  string,
-  unknown
->;
-const productNameMapping = productDefaultMappings.name as unknown as Record<
-  string,
-  unknown
->;
-const productPriceMapping = productDefaultMappings.price as unknown as Record<
-  string,
-  unknown
->;
-const productDescriptionMapping =
-  productDefaultMappings.description as unknown as Record<string, unknown>;
-const productCtaMapping = productDefaultMappings.cta as unknown as Record<
-  string,
-  unknown
->;
-const testimonialDescriptionMapping =
-  testimonialDefaultMappings.description as unknown as Record<string, unknown>;
-const testimonialContributorNameMapping =
-  testimonialDefaultMappings.contributorName as unknown as Record<
-    string,
-    unknown
-  >;
-const testimonialContributionDateMapping =
-  testimonialDefaultMappings.contributionDate as unknown as Record<
-    string,
-    unknown
-  >;
-const insightImageMapping = insightDefaultMappings.image as unknown as Record<
-  string,
-  unknown
->;
-const insightNameMapping = insightDefaultMappings.name as unknown as Record<
-  string,
-  unknown
->;
-const insightCategoryMapping =
-  insightDefaultMappings.category as unknown as Record<string, unknown>;
-const insightPublishTimeMapping =
-  insightDefaultMappings.publishTime as unknown as Record<string, unknown>;
-const insightDescriptionMapping =
-  insightDefaultMappings.description as unknown as Record<string, unknown>;
-const insightCtaMapping = insightDefaultMappings.cta as unknown as Record<
-  string,
-  unknown
->;
-const teamHeadshotMapping = teamDefaultMappings.headshot as unknown as Record<
-  string,
-  unknown
->;
-const teamNameMapping = teamDefaultMappings.name as unknown as Record<
-  string,
-  unknown
->;
-const teamTitleMapping = teamDefaultMappings.title as unknown as Record<
-  string,
-  unknown
->;
-const teamPhoneNumberMapping =
-  teamDefaultMappings.phoneNumber as unknown as Record<string, unknown>;
-const teamEmailMapping = teamDefaultMappings.email as unknown as Record<
-  string,
-  unknown
->;
-const teamCtaMapping = teamDefaultMappings.cta as unknown as Record<
-  string,
-  unknown
->;
+
+const cloneValue = <T>(value: T): T =>
+  typeof structuredClone === "function"
+    ? structuredClone(value)
+    : (JSON.parse(JSON.stringify(value)) as T);
 
 const appendChildField = (field: string, childField: string): string => {
   if (!field || field.endsWith(`.${childField}`)) {
@@ -155,262 +66,168 @@ const appendChildField = (field: string, childField: string): string => {
   return `${field}.${childField}`;
 };
 
+const clearNestedFieldValues = (value: unknown): unknown => {
+  if (Array.isArray(value)) {
+    return value.map(clearNestedFieldValues);
+  }
+
+  if (!value || typeof value !== "object") {
+    return value;
+  }
+
+  return Object.fromEntries(
+    Object.entries(value).map(([key, nestedValue]) => [
+      key,
+      key === "field" && typeof nestedValue === "string"
+        ? ""
+        : clearNestedFieldValues(nestedValue),
+    ])
+  );
+};
+
+/**
+ * Removes the old linked runtime residue from saved cards while preserving the
+ * authored manual constants and styles.
+ *
+ * 1. Clears card-level `parentData`.
+ * 2. Clears child-slot `props.parentData`.
+ * 3. Clears linked `field` values inside each slot child's `props.data`.
+ */
+const scrubLinkedCardState = (cards: unknown): unknown => {
+  if (!Array.isArray(cards)) {
+    return cards;
+  }
+
+  return cards.map((card) => {
+    if (!card || typeof card !== "object") {
+      return card;
+    }
+
+    const cardClone = cloneValue(card) as {
+      props?: {
+        parentData?: unknown;
+        slots?: Record<
+          string,
+          Array<{
+            props?: {
+              data?: unknown;
+              parentData?: unknown;
+            };
+          }>
+        >;
+      };
+    };
+
+    if (!cardClone.props) {
+      return cardClone;
+    }
+
+    delete cardClone.props.parentData;
+
+    Object.values(cardClone.props.slots ?? {}).forEach((slotArray) => {
+      slotArray.forEach((slotChild) => {
+        if (!slotChild.props) {
+          return;
+        }
+
+        delete slotChild.props.parentData;
+        slotChild.props.data = clearNestedFieldValues(slotChild.props.data);
+      });
+    });
+
+    return cardClone;
+  });
+};
+
+/**
+ * Converts an old section-field wrapper into the new slotted-item shape while
+ * preserving authored manual cards in hidden `manualSlots`.
+ *
+ * 1. Initializes `manualSlots.CardSlot` from the saved visible cards.
+ * 2. Rewrites the wrapper field to the repeated-child field path in linked mode.
+ * 3. Installs the canonical mapping set for that section type.
+ * 4. Scrubs old linked `parentData` and child-slot `field` residue in linked mode.
+ */
+const buildSlotMappedTransform =
+  (childField: string, mappings: Record<string, unknown>) =>
+  <T extends { id: string } & Record<string, any>>(props: T): T => {
+    if ((props.manualSlots as { CardSlot?: unknown } | undefined)?.CardSlot) {
+      return props;
+    }
+
+    const visibleCards = Array.isArray(
+      (props.slots as { CardSlot?: unknown } | undefined)?.CardSlot
+    )
+      ? ((props.slots as { CardSlot?: unknown }).CardSlot as unknown[])
+      : [];
+    const isLinked =
+      (
+        props.data as
+          | { constantValueEnabled?: boolean; field?: string }
+          | undefined
+      )?.constantValueEnabled === false &&
+      Boolean((props.data as { field?: string } | undefined)?.field);
+    const manualCards = isLinked
+      ? scrubLinkedCardState(visibleCards)
+      : visibleCards;
+
+    return {
+      ...props,
+      data: isLinked
+        ? {
+            ...(props.data as Record<string, unknown>),
+            field: appendChildField(
+              (props.data as { field: string }).field,
+              childField
+            ),
+            mappings,
+          }
+        : props.data,
+      slots: {
+        ...((props.slots as Record<string, unknown> | undefined) ?? {}),
+        CardSlot: manualCards,
+      },
+      manualSlots: {
+        CardSlot: manualCards,
+      },
+    } as T;
+  };
+
 export const slotMappedCardsMigration: Migration = {
   EventCardsWrapper: {
     action: "updated",
-    propTransformation: (props) => {
-      if (props.data?.constantValueEnabled !== false || !props.data?.field) {
-        return props;
-      }
-
-      if (props.data?.mappings) {
-        return {
-          ...props,
-          data: {
-            ...props.data,
-            field: appendChildField(props.data.field, "events"),
-          },
-        };
-      }
-
-      return {
-        ...props,
-        data: {
-          ...props.data,
-          field: appendChildField(props.data.field, "events"),
-          mappings: {
-            ...eventDefaultMappings,
-            image: {
-              ...eventImageMapping,
-              field: "image",
-            },
-            title: {
-              ...eventTitleMapping,
-              field: "title",
-            },
-            dateTime: {
-              ...eventDateTimeMapping,
-              field: "dateTime",
-            },
-            description: {
-              ...eventDescriptionMapping,
-              field: "description",
-            },
-            cta: {
-              ...eventCtaMapping,
-              field: "cta",
-            },
-          },
-        },
-      };
-    },
+    propTransformation: buildSlotMappedTransform(
+      "events",
+      eventDefaultMappings
+    ),
   },
   FAQSection: {
     action: "updated",
-    propTransformation: (props) => {
-      if (props.data?.constantValueEnabled !== false || !props.data?.field) {
-        return props;
-      }
-
-      if (props.data?.mappings) {
-        return {
-          ...props,
-          data: {
-            ...props.data,
-            field: appendChildField(props.data.field, "faqs"),
-          },
-        };
-      }
-
-      return {
-        ...props,
-        data: {
-          ...props.data,
-          field: appendChildField(props.data.field, "faqs"),
-          mappings: {
-            ...faqDefaultMappings,
-            question: {
-              ...faqQuestionMapping,
-              field: "question",
-            },
-            answer: {
-              ...faqAnswerMapping,
-              field: "answer",
-            },
-          },
-        },
-      };
-    },
+    propTransformation: buildSlotMappedTransform("faqs", faqDefaultMappings),
   },
   ProductCardsWrapper: {
     action: "updated",
-    propTransformation: (props) => {
-      if (props.data?.constantValueEnabled !== false || !props.data?.field) {
-        return props;
-      }
-
-      if (props.data?.mappings) {
-        return {
-          ...props,
-          data: {
-            ...props.data,
-            field: appendChildField(props.data.field, "products"),
-            mappings: {
-              ...props.data.mappings,
-              price:
-                props.data.mappings.price &&
-                typeof props.data.mappings.price === "object" &&
-                ("value" in props.data.mappings.price ||
-                  "currencyCode" in props.data.mappings.price)
-                  ? {
-                      ...productPriceMapping,
-                      field: "price",
-                    }
-                  : props.data.mappings.price,
-            },
-          },
-        };
-      }
-
-      return {
-        ...props,
-        data: {
-          ...props.data,
-          field: appendChildField(props.data.field, "products"),
-          mappings: {
-            ...productDefaultMappings,
-            image: { ...productImageMapping, field: "image" },
-            brow: { ...productBrowMapping, field: "brow" },
-            name: { ...productNameMapping, field: "name" },
-            price: { ...productPriceMapping, field: "price" },
-            description: {
-              ...productDescriptionMapping,
-              field: "description",
-            },
-            cta: { ...productCtaMapping, field: "cta" },
-          },
-        },
-      };
-    },
+    propTransformation: buildSlotMappedTransform(
+      "products",
+      productDefaultMappings
+    ),
   },
   TestimonialCardsWrapper: {
     action: "updated",
-    propTransformation: (props) => {
-      if (props.data?.constantValueEnabled !== false || !props.data?.field) {
-        return props;
-      }
-
-      if (props.data?.mappings) {
-        return {
-          ...props,
-          data: {
-            ...props.data,
-            field: appendChildField(props.data.field, "testimonials"),
-          },
-        };
-      }
-
-      return {
-        ...props,
-        data: {
-          ...props.data,
-          field: appendChildField(props.data.field, "testimonials"),
-          mappings: {
-            ...testimonialDefaultMappings,
-            description: {
-              ...testimonialDescriptionMapping,
-              field: "description",
-            },
-            contributorName: {
-              ...testimonialContributorNameMapping,
-              field: "contributorName",
-            },
-            contributionDate: {
-              ...testimonialContributionDateMapping,
-              field: "contributionDate",
-            },
-          },
-        },
-      };
-    },
+    propTransformation: buildSlotMappedTransform(
+      "testimonials",
+      testimonialDefaultMappings
+    ),
   },
   InsightCardsWrapper: {
     action: "updated",
-    propTransformation: (props) => {
-      if (props.data?.constantValueEnabled !== false || !props.data?.field) {
-        return props;
-      }
-
-      if (props.data?.mappings) {
-        return {
-          ...props,
-          data: {
-            ...props.data,
-            field: appendChildField(props.data.field, "insights"),
-          },
-        };
-      }
-
-      return {
-        ...props,
-        data: {
-          ...props.data,
-          field: appendChildField(props.data.field, "insights"),
-          mappings: {
-            ...insightDefaultMappings,
-            image: { ...insightImageMapping, field: "image" },
-            name: { ...insightNameMapping, field: "name" },
-            category: { ...insightCategoryMapping, field: "category" },
-            publishTime: {
-              ...insightPublishTimeMapping,
-              field: "publishTime",
-            },
-            description: {
-              ...insightDescriptionMapping,
-              field: "description",
-            },
-            cta: { ...insightCtaMapping, field: "cta" },
-          },
-        },
-      };
-    },
+    propTransformation: buildSlotMappedTransform(
+      "insights",
+      insightDefaultMappings
+    ),
   },
   TeamCardsWrapper: {
     action: "updated",
-    propTransformation: (props) => {
-      if (props.data?.constantValueEnabled !== false || !props.data?.field) {
-        return props;
-      }
-
-      if (props.data?.mappings) {
-        return {
-          ...props,
-          data: {
-            ...props.data,
-            field: appendChildField(props.data.field, "people"),
-          },
-        };
-      }
-
-      return {
-        ...props,
-        data: {
-          ...props.data,
-          field: appendChildField(props.data.field, "people"),
-          mappings: {
-            ...teamDefaultMappings,
-            headshot: { ...teamHeadshotMapping, field: "headshot" },
-            name: { ...teamNameMapping, field: "name" },
-            title: { ...teamTitleMapping, field: "title" },
-            phoneNumber: {
-              ...teamPhoneNumberMapping,
-              field: "phoneNumber",
-            },
-            email: { ...teamEmailMapping, field: "email" },
-            cta: { ...teamCtaMapping, field: "cta" },
-          },
-        },
-      };
-    },
+    propTransformation: buildSlotMappedTransform("people", teamDefaultMappings),
   },
 };

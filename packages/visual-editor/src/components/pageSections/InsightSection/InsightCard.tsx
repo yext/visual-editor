@@ -18,7 +18,7 @@ import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
 import { TextProps } from "../../contentBlocks/Text.tsx";
-import { PuckComponent, setDeep, Slot } from "@puckeditor/core";
+import { PuckComponent, Slot } from "@puckeditor/core";
 import { bindSlots } from "../../../utils/cardSlots/bindSlots.ts";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
@@ -232,12 +232,6 @@ export type InsightCardProps = {
     DescriptionSlot: Slot;
     PublishTimeSlot: Slot;
     CTASlot: Slot;
-  };
-
-  /** @internal */
-  parentData?: {
-    field: string;
-    insight: InsightStruct;
   };
 
   /** @internal styles from parent component */
@@ -462,17 +456,13 @@ export const InsightCard: YextComponentConfig<InsightCardProps> = {
     }
 
     let updatedData = data;
-    const linkedInsight = updatedData.props.parentData?.insight;
-
     const field = updatedData.props.field;
-    const image = updatedData.props.image ?? linkedInsight?.image;
-    const name = updatedData.props.name ?? linkedInsight?.name;
-    const categoryValue = updatedData.props.category ?? linkedInsight?.category;
-    const description =
-      updatedData.props.description ?? linkedInsight?.description;
-    const publishTime =
-      updatedData.props.publishTime ?? linkedInsight?.publishTime;
-    const cta = updatedData.props.cta ?? linkedInsight?.cta;
+    const image = updatedData.props.image;
+    const name = updatedData.props.name;
+    const categoryValue = updatedData.props.category;
+    const description = updatedData.props.description;
+    const publishTime = updatedData.props.publishTime;
+    const cta = updatedData.props.cta;
 
     if (field) {
       const category = resolveComponentData(
@@ -495,37 +485,6 @@ export const InsightCard: YextComponentConfig<InsightCardProps> = {
         },
       };
     } else {
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.ImageSlot[0].props.parentData",
-        undefined
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.TitleSlot[0].props.parentData",
-        undefined
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.CategorySlot[0].props.parentData",
-        undefined
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.DescriptionSlot[0].props.parentData",
-        undefined
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.PublishTimeSlot[0].props.parentData",
-        undefined
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.CTASlot[0].props.parentData",
-        undefined
-      );
-
       const category = resolveComponentData(
         updatedData.props.slots.CategorySlot[0]?.props.data
           .text as YextEntityField<TranslatableRichText>,

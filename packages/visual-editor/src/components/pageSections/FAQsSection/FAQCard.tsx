@@ -90,12 +90,6 @@ export type FAQCardProps = {
   slots: {};
 
   /** @internal */
-  parentData?: {
-    field: string;
-    faq: FAQStruct;
-  };
-
-  /** @internal */
   index?: number;
 };
 
@@ -149,7 +143,7 @@ const FAQCardFields: YextFields<FAQCardProps> = {
 };
 
 const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
-  const { data, styles, parentData, index, puck } = props;
+  const { data, styles, index, puck } = props;
   const analytics = useAnalytics();
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
@@ -230,15 +224,14 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
     });
   }, [styles]);
 
-  const sourceQuestion =
-    props.question ?? parentData?.faq.question ?? data.question;
+  const sourceQuestion = props.question ?? data.question;
   const resolvedQuestion = sourceQuestion
     ? resolveComponentData(sourceQuestion, i18n.language, streamDocument, {
         output: "plainText",
       })
     : "";
 
-  const sourceAnswer = props.answer ?? parentData?.faq.answer ?? data.answer;
+  const sourceAnswer = props.answer ?? data.answer;
   const resolvedAnswer = sourceAnswer
     ? resolveComponentData(sourceAnswer, i18n.language, streamDocument, {
         variant: styles.answerVariant,
@@ -308,7 +301,7 @@ export const FAQCard: YextComponentConfig<FAQCardProps> = {
             ...data,
             props: {
               ...data.props,
-              parentData: { field: data.props.field, faq: {} as FAQStruct },
+              parentData: { field: data.props.field },
             },
           } as typeof data)
         : data

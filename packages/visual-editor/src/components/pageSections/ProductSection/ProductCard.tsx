@@ -66,15 +66,6 @@ const slotDefaultData = {
   priceText: { defaultValue: "$123.00" },
 };
 
-const resolveLinkedSlotField = <T,>(
-  streamDocument: Parameters<typeof resolveYextEntityField>[0],
-  entityField: YextEntityField<T> | undefined,
-  locale: string
-): T | undefined =>
-  entityField?.field
-    ? resolveYextEntityField(streamDocument, entityField, locale)
-    : undefined;
-
 export const defaultProductCardSlotData = (
   id?: string,
   index?: number,
@@ -251,12 +242,6 @@ export type ProductCardProps = {
     PriceSlot: Slot;
     DescriptionSlot: Slot;
     CTASlot: Slot;
-  };
-
-  /** @internal */
-  parentData?: {
-    field: string;
-    product: ProductStruct;
   };
 
   /** @internal */
@@ -485,18 +470,14 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
           styles?: { aspectRatio?: number; width?: number };
         })
       | undefined;
-    const titleSlotProps = data.props.slots.TitleSlot?.[0]?.props as
-      | WithId<HeadingTextProps>
-      | undefined;
-    const linkedProduct = data.props.parentData?.product;
     const priceSlotProps = data.props.slots.PriceSlot?.[0]?.props as
       | WithId<TextProps>
       | undefined;
-    const priceEntityField = priceSlotProps?.data?.text as
+    const priceEntityField = priceSlotProps?.data.text as
       | YextEntityField<ProductStruct["price"]>
       | undefined;
     const entityPrice = isLinkedMode
-      ? (data.props.price ?? linkedProduct?.price)
+      ? data.props.price
       : priceEntityField
         ? resolveYextEntityField<ProductStruct["price"]>(
             params.metadata.streamDocument,
@@ -542,34 +523,8 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
     const browSlotProps = data.props.slots.BrowSlot?.[0]?.props as
       | WithId<TextProps>
       | undefined;
-    const linkedImage = isLinkedMode
-      ? (data.props.image ??
-        linkedProduct?.image ??
-        resolveLinkedSlotField(
-          params.metadata.streamDocument,
-          imageSlotProps?.data.image,
-          locale
-        ))
-      : undefined;
-    const linkedName = isLinkedMode
-      ? (data.props.name ??
-        linkedProduct?.name ??
-        resolveLinkedSlotField(
-          params.metadata.streamDocument,
-          titleSlotProps?.data.text,
-          locale
-        ))
-      : undefined;
-
     const resolvedBrow = isLinkedMode
-      ? (data.props.brow ??
-        linkedProduct?.brow ??
-        linkedProduct?.category ??
-        resolveLinkedSlotField(
-          params.metadata.streamDocument,
-          browSlotProps?.data?.text,
-          locale
-        ))
+      ? data.props.brow
       : (browSlotProps?.parentData?.text ??
         (browSlotProps
           ? resolveYextEntityField(
@@ -584,13 +539,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       ?.props as WithId<BodyTextProps> | undefined;
 
     const resolvedDescription = isLinkedMode
-      ? (data.props.description ??
-        linkedProduct?.description ??
-        resolveLinkedSlotField(
-          params.metadata.streamDocument,
-          descriptionSlotProps?.data?.text,
-          locale
-        ))
+      ? data.props.description
       : (descriptionSlotProps?.parentData?.richText ??
         (descriptionSlotProps
           ? resolveYextEntityField(
@@ -605,13 +554,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       | WithId<CTAWrapperProps>
       | undefined;
     const resolvedCTA = isLinkedMode
-      ? (data.props.cta ??
-        linkedProduct?.cta ??
-        resolveLinkedSlotField(
-          params.metadata.streamDocument,
-          ctaSlotProps?.data?.entityField,
-          locale
-        ))
+      ? data.props.cta
       : (ctaSlotProps?.parentData?.cta ??
         (ctaSlotProps
           ? resolveYextEntityField(
@@ -663,8 +606,8 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       `cta${data.props.index}`
     );
 
-    const image = linkedImage;
-    const name = linkedName;
+    const image = isLinkedMode ? data.props.image : undefined;
+    const name = isLinkedMode ? data.props.name : undefined;
     const resolvedName =
       name &&
       resolveComponentData(name, locale, params.metadata.streamDocument, {

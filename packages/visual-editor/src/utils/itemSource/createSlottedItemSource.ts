@@ -56,7 +56,8 @@ const setChildSlotIds = (
  *
  * 1. Builds one repeated `entityField` config for linked-mode source selection.
  * 2. Resolves mapped items from that source just like `createItemSource(...)`.
- * 3. Populates a wrapper's `CardSlot` with cards for linked or manual mode.
+ * 3. Preserves authored manual cards in hidden `manualSlots.CardSlot`.
+ * 4. Populates a wrapper's visible `CardSlot` with linked or manual cards.
  */
 export function createSlottedItemSource<
   TMappings extends Record<string, unknown>,
@@ -108,6 +109,9 @@ export function createSlottedItemSource<
   const defaultWrapperProps = {
     data: defaultValue,
     slots: {
+      CardSlot: [] as [],
+    },
+    manualSlots: {
       CardSlot: [] as [],
     },
   };
@@ -170,6 +174,7 @@ export function createSlottedItemSource<
       const wrapperData = data as unknown as ComponentData<{
         data: SlotMappedCardsData<TMappings>;
         slots: { CardSlot: ComponentData<Record<string, unknown>>[] };
+        manualSlots?: { CardSlot: ComponentData<Record<string, unknown>>[] };
         conditionalRender?: { isMappedContentEmpty?: boolean };
       }>;
 
@@ -178,6 +183,10 @@ export function createSlottedItemSource<
           "createSlottedItemSource.populateSlots requires props.slots.CardSlot"
         );
       }
+
+      const manualCards = Array.isArray(wrapperData.props.manualSlots?.CardSlot)
+        ? wrapperData.props.manualSlots.CardSlot
+        : wrapperData.props.slots.CardSlot;
 
       const createCard = (
         id: string,
@@ -214,6 +223,9 @@ export function createSlottedItemSource<
             ...wrapperData,
             props: {
               ...wrapperData.props,
+              manualSlots: {
+                CardSlot: manualCards,
+              },
               slots: {
                 ...wrapperData.props.slots,
                 CardSlot: [],
@@ -248,6 +260,9 @@ export function createSlottedItemSource<
           ...wrapperData,
           props: {
             ...wrapperData.props,
+            manualSlots: {
+              CardSlot: manualCards,
+            },
             slots: {
               ...wrapperData.props.slots,
               CardSlot: cards,
@@ -261,7 +276,7 @@ export function createSlottedItemSource<
         cardReferences: Array.isArray(wrapperData.props.data.constantValue)
           ? wrapperData.props.data.constantValue
           : [],
-        currentCards: wrapperData.props.slots.CardSlot,
+        currentCards: manualCards,
         createCard,
         syncChildSlotIds: (card, id) => setChildSlotIds(card, id),
         normalizeId: (id) => `${resolvedCardName}-${id}`,
@@ -289,6 +304,9 @@ export function createSlottedItemSource<
             constantValue: normalizedCards.map((card) => ({
               id: card.props.id as string | undefined,
             })),
+          },
+          manualSlots: {
+            CardSlot: normalizedCards,
           },
           slots: {
             ...wrapperData.props.slots,
