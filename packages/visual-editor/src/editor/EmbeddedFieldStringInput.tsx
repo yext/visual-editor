@@ -1,6 +1,7 @@
 import React from "react";
 import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
 import {
+  getEntityFieldScopeDisplayName,
   getScopedEntityFieldDisplayName,
   getFieldsForSelector,
   type YextEntityField,
@@ -96,11 +97,19 @@ export const EmbeddedFieldStringInputFromEntity = <
   const templateMetadata = React.useContext(TemplateMetadataContext);
   const sourceFieldFromPath = useCurrentSourceField(sourceFieldPath);
   const sourceField = sourceFieldFromInputProps || sourceFieldFromPath;
-  const entityGroupTitle = templateMetadata?.entityTypeDisplayName
+  const sourceFieldDisplayName = getEntityFieldScopeDisplayName(
+    sourceField,
+    entityFields
+  );
+  const entityGroupTitle = sourceFieldDisplayName
     ? pt("entityTypeField", "{{entityType}} Fields", {
-        entityType: templateMetadata.entityTypeDisplayName,
+        entityType: sourceFieldDisplayName,
       })
-    : pt("entityFields", "Entity Fields");
+    : templateMetadata?.entityTypeDisplayName
+      ? pt("entityTypeField", "{{entityType}} Fields", {
+          entityType: templateMetadata.entityTypeDisplayName,
+        })
+      : pt("entityFields", "Entity Fields");
 
   const entityFieldOptions = React.useMemo(() => {
     const filteredEntityFields = getFieldsForSelector(

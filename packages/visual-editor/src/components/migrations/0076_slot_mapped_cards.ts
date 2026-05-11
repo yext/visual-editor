@@ -22,10 +22,7 @@ const productDefaultMappings = {
   image: { ...defaultEntityFieldMapping },
   brow: { ...defaultEntityFieldMapping },
   name: { ...defaultEntityFieldMapping },
-  price: {
-    value: { ...defaultEntityFieldMapping },
-    currencyCode: { ...defaultEntityFieldMapping },
-  },
+  price: { ...defaultEntityFieldMapping },
   description: { ...defaultEntityFieldMapping },
   cta: { ...defaultEntityFieldMapping },
 };
@@ -92,10 +89,6 @@ const productPriceMapping = productDefaultMappings.price as unknown as Record<
   string,
   unknown
 >;
-const productPriceValueMapping =
-  (productPriceMapping.value as Record<string, unknown>) ?? {};
-const productPriceCurrencyCodeMapping =
-  (productPriceMapping.currencyCode as Record<string, unknown>) ?? {};
 const productDescriptionMapping =
   productDefaultMappings.description as unknown as Record<string, unknown>;
 const productCtaMapping = productDefaultMappings.cta as unknown as Record<
@@ -263,6 +256,19 @@ export const slotMappedCardsMigration: Migration = {
           data: {
             ...props.data,
             field: appendChildField(props.data.field, "products"),
+            mappings: {
+              ...props.data.mappings,
+              price:
+                props.data.mappings.price &&
+                typeof props.data.mappings.price === "object" &&
+                ("value" in props.data.mappings.price ||
+                  "currencyCode" in props.data.mappings.price)
+                  ? {
+                      ...productPriceMapping,
+                      field: "price",
+                    }
+                  : props.data.mappings.price,
+            },
           },
         };
       }
@@ -277,14 +283,7 @@ export const slotMappedCardsMigration: Migration = {
             image: { ...productImageMapping, field: "image" },
             brow: { ...productBrowMapping, field: "brow" },
             name: { ...productNameMapping, field: "name" },
-            price: {
-              ...productPriceMapping,
-              value: { ...productPriceValueMapping, field: "price.value" },
-              currencyCode: {
-                ...productPriceCurrencyCodeMapping,
-                field: "price.currencyCode",
-              },
-            },
+            price: { ...productPriceMapping, field: "price" },
             description: {
               ...productDescriptionMapping,
               field: "description",

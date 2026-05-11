@@ -48,20 +48,9 @@ export const productCardsSource = createSlottedItemSource<
       filter: { types: ["type.string"] },
     },
     price: {
-      type: "object",
+      type: "entityField",
       label: msg("fields.price", "Price"),
-      objectFields: {
-        value: {
-          type: "entityField",
-          label: msg("fields.value", "Value"),
-          filter: { types: [] },
-        },
-        currencyCode: {
-          type: "entityField",
-          label: msg("fields.currencyCode", "Currency Code"),
-          filter: { types: ["type.string"] },
-        },
-      },
+      filter: { types: [] },
     },
     description: {
       type: "entityField",

@@ -22,6 +22,7 @@ import { pt, type MsgString } from "../utils/i18n/platform.ts";
 import { useTranslation } from "react-i18next";
 import {
   getFieldsForSelector,
+  getEntityFieldScopeDisplayName,
   getScopedEntityFieldDisplayName,
 } from "../editor/yextEntityFieldUtils.ts";
 import { useDocument } from "../hooks/useDocument.tsx";
@@ -461,6 +462,16 @@ export const ConstantValueInput = <T extends Record<string, any>>({
   );
 };
 
+/**
+ * Renders the KG field picker for one entity-field value.
+ *
+ * 1. Resolves the active source-field scope from explicit props, repeated-item
+ *    context, the current source-field path, or the field filter.
+ * 2. Builds option labels relative to that scope so repeated-item mappings show
+ *    labels like "Products Fields" instead of the template entity type.
+ * 3. Preserves the current selection in the option list even when the active
+ *    filter would otherwise exclude it.
+ */
 export const EntityFieldInput = <T extends Record<string, any>>({
   filter,
   onChange,
@@ -484,11 +495,19 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     filter.subdocumentField ||
     "";
   const currentFieldPath = value?.field as string | undefined;
-  const entityGroupTitle = templateMetadata?.entityTypeDisplayName
+  const sourceFieldDisplayName = getEntityFieldScopeDisplayName(
+    sourceField,
+    entityFields
+  );
+  const entityGroupTitle = sourceFieldDisplayName
     ? pt("entityTypeField", "{{entityType}} Fields", {
-        entityType: templateMetadata.entityTypeDisplayName,
+        entityType: sourceFieldDisplayName,
       })
-    : pt("entityFields", "Entity Fields");
+    : templateMetadata?.entityTypeDisplayName
+      ? pt("entityTypeField", "{{entityType}} Fields", {
+          entityType: templateMetadata.entityTypeDisplayName,
+        })
+      : pt("entityFields", "Entity Fields");
   const entityFieldSelector = React.useMemo<BasicSelectorField>(() => {
     const filteredEntityFields = getFieldsForSelector(
       entityFields,

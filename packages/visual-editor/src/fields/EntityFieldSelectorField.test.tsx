@@ -597,6 +597,73 @@ describe("EntityFieldSelectorField", () => {
     });
   });
 
+  it("uses the scoped source name for repeated mapping field groups", () => {
+    renderRepeatedEntityField({
+      value: {
+        field: "c_productsSection.products",
+        constantValueEnabled: false,
+        constantValue: [],
+        mappings: {
+          title: {
+            field: "",
+            constantValueEnabled: false,
+            constantValue: { defaultValue: "" },
+          },
+        },
+      },
+      entityFields: {
+        ...defaultEntityFields,
+        fields: [
+          {
+            name: "c_productsSection",
+            definition: {
+              name: "c_productsSection",
+              typeName: "type.products_section",
+              type: {},
+            },
+            children: {
+              fields: [
+                {
+                  name: "products",
+                  definition: {
+                    name: "products",
+                    typeName: "c_products",
+                    isList: true,
+                    type: {},
+                  },
+                  children: {
+                    fields: [
+                      {
+                        name: "name",
+                        definition: {
+                          name: "name",
+                          typeName: "type.string",
+                          type: {},
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          ...defaultEntityFields.fields,
+        ],
+        displayNames: {
+          ...defaultEntityFields.displayNames,
+          c_productsSection: "Products Section",
+          "c_productsSection.products": "Products Section > Products",
+          "c_productsSection.products.name":
+            "Products Section > Products > Name",
+        },
+      },
+    });
+
+    fireEvent.click(screen.getAllByRole("combobox")[1]);
+
+    expect(screen.getByText("Products Fields")).toBeDefined();
+  });
+
   it("clears stale repeated mappings when switching between linked sources", () => {
     const { onChange } = renderRepeatedEntityField({
       value: {
