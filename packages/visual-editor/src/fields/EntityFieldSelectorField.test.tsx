@@ -517,6 +517,51 @@ describe("EntityFieldSelectorField", () => {
     expect(screen.getByRole("button", { name: "Delete" })).toBeDefined();
   });
 
+  it("renders repeated card controls for slot-backed manual mode", () => {
+    renderRepeatedEntityField({
+      field: {
+        type: "entityField",
+        label: "Articles",
+        filter: {
+          itemSourceTypes: [["type.string"]],
+        },
+        repeated: {
+          defaultItemValue: {},
+          defaultMappings: {
+            title: {
+              field: "",
+              constantValueEnabled: false,
+              constantValue: { defaultValue: "" },
+            },
+          },
+          manualItemFields: {},
+          mappingFields: {
+            title: {
+              type: "entityField",
+              label: "Title",
+              filter: { types: ["type.string"] },
+            },
+          },
+          manualItemSummary: (_, index) => `Event ${String((index ?? 0) + 1)}`,
+        },
+      },
+      value: {
+        field: "",
+        constantValueEnabled: true,
+        constantValue: [{ id: "ArticleCard-1" }],
+        mappings: {
+          title: {
+            field: "name",
+            constantValueEnabled: false,
+            constantValue: { defaultValue: "" },
+          },
+        },
+      },
+    });
+
+    expect(screen.getByText("Event 1")).toBeDefined();
+    expect(screen.getByRole("button", { name: "Delete" })).toBeDefined();
+  });
   it("renders the linked source selector when repeated KG mode is enabled", () => {
     const { onChange } = renderRepeatedEntityField({
       value: {
@@ -550,6 +595,73 @@ describe("EntityFieldSelectorField", () => {
         },
       },
     });
+  });
+
+  it("uses the scoped source name for repeated mapping field groups", () => {
+    renderRepeatedEntityField({
+      value: {
+        field: "c_productsSection.products",
+        constantValueEnabled: false,
+        constantValue: [],
+        mappings: {
+          title: {
+            field: "",
+            constantValueEnabled: false,
+            constantValue: { defaultValue: "" },
+          },
+        },
+      },
+      entityFields: {
+        ...defaultEntityFields,
+        fields: [
+          {
+            name: "c_productsSection",
+            definition: {
+              name: "c_productsSection",
+              typeName: "type.products_section",
+              type: {},
+            },
+            children: {
+              fields: [
+                {
+                  name: "products",
+                  definition: {
+                    name: "products",
+                    typeName: "c_products",
+                    isList: true,
+                    type: {},
+                  },
+                  children: {
+                    fields: [
+                      {
+                        name: "name",
+                        definition: {
+                          name: "name",
+                          typeName: "type.string",
+                          type: {},
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          ...defaultEntityFields.fields,
+        ],
+        displayNames: {
+          ...defaultEntityFields.displayNames,
+          c_productsSection: "Products Section",
+          "c_productsSection.products": "Products Section > Products",
+          "c_productsSection.products.name":
+            "Products Section > Products > Name",
+        },
+      },
+    });
+
+    fireEvent.click(screen.getAllByRole("combobox")[1]);
+
+    expect(screen.getByText("Products Fields")).toBeDefined();
   });
 
   it("clears stale repeated mappings when switching between linked sources", () => {

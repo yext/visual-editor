@@ -195,6 +195,19 @@ export const getScopedEntityFieldDisplayName = (
 };
 
 /**
+ * Returns the terminal display-name segment for a selected source field so UI
+ * labels can say things like "Products Fields" instead of the template entity
+ * type when a picker is scoped to a repeated subfield.
+ */
+export const getEntityFieldScopeDisplayName = (
+  sourceField: string | undefined,
+  entityFields: StreamFields | null
+): string | undefined => {
+  const displayName = getEntityFieldDisplayName(sourceField, entityFields);
+  return displayName?.split(DISPLAY_NAME_SEPARATOR).at(-1);
+};
+
+/**
  * Returns whether a resolved mapped-source root is compatible with linked-item
  * source selection: undefined, null, arrays, and object values are all valid.
  */

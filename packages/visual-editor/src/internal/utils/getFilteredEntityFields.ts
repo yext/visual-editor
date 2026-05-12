@@ -47,6 +47,7 @@ export type EntityFieldTypes =
   | "type.boolean"
   | "type.option"
   | "type.datetime"
+  | "type.price"
   | "type.faq_section"
   | "type.testimonials_section"
   | "type.products_section"

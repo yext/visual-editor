@@ -62,29 +62,32 @@ export const defaultFAQCardData = (
       answerVariant: answerVariant || "base",
       answerColor: answerColor,
     },
+    slots: {},
   },
 });
 
 export type FAQCardProps = {
+  /** @internal */
+  field?: string;
+
+  /** @internal */
+  question?: FAQStruct["question"];
+  /** @internal */
+  answer?: FAQStruct["answer"];
+
   data: {
     question: YextEntityField<TranslatableString | TranslatableRichText>;
     answer: YextEntityField<TranslatableRichText>;
   };
+
+  /** @internal */
+  slots: {};
 
   /** Styling for all the FAQ cards. */
   styles: {
     questionVariant: BodyProps["variant"];
     answerVariant: BodyProps["variant"];
     answerColor?: ThemeColor;
-  };
-
-  /** @internal */
-  slots: {};
-
-  /** @internal */
-  parentData?: {
-    field: string;
-    faq: FAQStruct;
   };
 
   /** @internal */
@@ -141,7 +144,7 @@ const FAQCardFields: YextFields<FAQCardProps> = {
 };
 
 const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
-  const { data, styles, parentData, index, puck } = props;
+  const { data, styles, index, puck } = props;
   const analytics = useAnalytics();
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
@@ -222,14 +225,14 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
     });
   }, [styles]);
 
-  const sourceQuestion = parentData ? parentData?.faq.question : data.question;
+  const sourceQuestion = props.question ?? data.question;
   const resolvedQuestion = sourceQuestion
     ? resolveComponentData(sourceQuestion, i18n.language, streamDocument, {
         output: "plainText",
       })
     : "";
 
-  const sourceAnswer = parentData ? parentData?.faq.answer : data.answer;
+  const sourceAnswer = props.answer ?? data.answer;
   const resolvedAnswer = sourceAnswer
     ? resolveComponentData(sourceAnswer, i18n.language, streamDocument, {
         variant: styles.answerVariant,
@@ -272,25 +275,19 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
 export const FAQCard: YextComponentConfig<FAQCardProps> = {
   label: msg("faq", "FAQ"),
   fields: FAQCardFields,
-  defaultProps: {
-    data: {
-      question: {
-        constantValueEnabled: true,
-        constantValue: defaultFAQ.question,
-        field: "",
-      },
-      answer: {
-        constantValueEnabled: true,
-        constantValue: defaultFAQ.answer,
-        field: "",
-      },
-    },
-    styles: {
-      questionVariant: "base",
-      answerVariant: "base",
-    },
-    slots: {},
-  },
-  resolveFields: (data) => resolveDataFromParent(FAQCardFields, data),
+  defaultProps: defaultFAQCardData().props,
+  resolveFields: (data) =>
+    resolveDataFromParent(
+      FAQCardFields,
+      data.props.field
+        ? ({
+            ...data,
+            props: {
+              ...data.props,
+              parentData: { field: data.props.field },
+            },
+          } as typeof data)
+        : data
+    ),
   render: (props) => <FAQCardComponent {...props} />,
 };

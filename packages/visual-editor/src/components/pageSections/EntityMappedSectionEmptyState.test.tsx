@@ -80,7 +80,7 @@ const directSectionCases: DirectSectionCase[] = [
     sectionConfig: FAQSection,
     createMappedProps: () => {
       const props = cloneValue(FAQSection.defaultProps!);
-      props.data.field = "c_faq";
+      props.data.field = "c_faq.faqs";
       props.data.constantValueEnabled = false;
       props.data.constantValue = [];
       return props;
@@ -319,7 +319,7 @@ const wrapperCases: WrapperCase[] = [
     sectionConfig: TestimonialSection,
     wrapperName: "Testimonial Cards Wrapper",
     wrapperConfig: TestimonialCardsWrapper,
-    mappedField: "c_testimonials",
+    mappedField: "c_testimonials.testimonials",
     populatedDocument: {
       locale: "en",
       c_testimonials: {
@@ -338,7 +338,7 @@ const wrapperCases: WrapperCase[] = [
     sectionConfig: ProductSection,
     wrapperName: "Product Cards Wrapper",
     wrapperConfig: ProductCardsWrapper,
-    mappedField: "c_products",
+    mappedField: "c_products.products",
     populatedDocument: {
       locale: "en",
       c_products: {
@@ -351,7 +351,7 @@ const wrapperCases: WrapperCase[] = [
     sectionConfig: TeamSection,
     wrapperName: "Team Cards Wrapper",
     wrapperConfig: TeamCardsWrapper,
-    mappedField: "c_team",
+    mappedField: "c_team.people",
     populatedDocument: {
       locale: "en",
       c_team: {
@@ -364,7 +364,7 @@ const wrapperCases: WrapperCase[] = [
     sectionConfig: EventSection,
     wrapperName: "Event Cards Wrapper",
     wrapperConfig: EventCardsWrapper,
-    mappedField: "c_events",
+    mappedField: "c_events.events",
     populatedDocument: {
       locale: "en",
       c_events: {
@@ -377,11 +377,11 @@ const wrapperCases: WrapperCase[] = [
     sectionConfig: InsightSection,
     wrapperName: "Insight Cards Wrapper",
     wrapperConfig: InsightCardsWrapper,
-    mappedField: "c_insights",
+    mappedField: "c_insights.insights",
     populatedDocument: {
       locale: "en",
       c_insights: {
-        insights: [{ title: "Menu Trends" }],
+        insights: [{ name: "Menu Trends" }],
       },
     },
   },
