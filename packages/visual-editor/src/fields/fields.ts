@@ -1,3 +1,4 @@
+import { createElement } from "react";
 import type {
   ArrayField,
   CustomField,
@@ -7,61 +8,24 @@ import type {
   Fields,
   ObjectField,
 } from "@puckeditor/core";
-import {
-  BasicSelectorField,
-  BasicSelectorFieldOverride,
-} from "./BasicSelectorField.tsx";
-import { CodeField, CodeFieldOverride } from "./CodeField.tsx";
-import {
-  DateTimeSelectorField,
-  DateTimeSelectorFieldOverride,
-} from "./DateTimeSelectorField.tsx";
-import {
-  EntityFieldSelectorField,
-  EntityFieldSelectorFieldOverride,
-} from "./EntityFieldSelectorField.tsx";
-import {
-  FontSizeSelectorField,
-  FontSizeSelectorFieldOverride,
-} from "./FontSizeSelectorField.tsx";
-import {
-  CTASelectorField,
-  CTASelectorFieldOverride,
-} from "./CTASelectorField.tsx";
-import {
-  MultiSelectorField,
-  MultiSelectorFieldOverride,
-} from "./MultiSelectorField.tsx";
-import {
-  OptionalNumberField,
-  OptionalNumberFieldOverride,
-} from "./OptionalNumberField.tsx";
-import { ImageField, ImageFieldOverride } from "./ImageField.tsx";
-import {
-  StyledButtonField,
-  StyledButtonFieldOverride,
-} from "./styledFields/StyledButtonField.tsx";
-import {
-  StyledImageField,
-  StyledImageFieldOverride,
-} from "./styledFields/StyledImageField.tsx";
-import {
-  StyledLinkField,
-  StyledLinkFieldOverride,
-} from "./styledFields/StyledLinkField.tsx";
-import {
-  StyledPageSectionField,
-  StyledPageSectionFieldOverride,
-} from "./styledFields/StyledPageSection.tsx";
-import {
-  StyledTextField,
-  StyledTextFieldOverride,
-} from "./styledFields/StyledTextField.tsx";
-import {
-  TranslatableStringField,
-  TranslatableStringFieldOverride,
-} from "./TranslatableStringField.tsx";
-import { VideoField, VideoFieldOverride } from "./VideoField.tsx";
+import type { BasicSelectorField } from "./BasicSelectorField.tsx";
+import type { CodeField } from "./CodeField.tsx";
+import type { DateTimeSelectorField } from "./DateTimeSelectorField.tsx";
+import type { EntityFieldSelectorField } from "./EntityFieldSelectorField.tsx";
+import type { FontSizeSelectorField } from "./FontSizeSelectorField.tsx";
+import type { CTASelectorField } from "./CTASelectorField.tsx";
+import type { MultiSelectorField } from "./MultiSelectorField.tsx";
+import type { OptionalNumberField } from "./OptionalNumberField.tsx";
+import type { ImageField } from "./ImageField.tsx";
+import type { StyledButtonField } from "./styledFields/StyledButtonField.tsx";
+import type { StyledImageField } from "./styledFields/StyledImageField.tsx";
+import type { StyledLinkField } from "./styledFields/StyledLinkField.tsx";
+import type { StyledPageSectionField } from "./styledFields/StyledPageSection.tsx";
+import type { StyledTextField } from "./styledFields/StyledTextField.tsx";
+import type { TranslatableStringField } from "./TranslatableStringField.tsx";
+import type { VideoField } from "./VideoField.tsx";
+import { YextAutoField } from "./YextAutoField.tsx";
+import { adaptYextFieldMap } from "./yextFieldAdapter.ts";
 
 export type YextPuckFields = {
   basicSelector: BasicSelectorField;
@@ -142,29 +106,31 @@ export type YextFieldMap<
   [PropName in keyof Omit<T, "editMode">]: YextFieldDefinition<T[PropName]>;
 };
 
-// For things like resolveFields, Puck does not currently let you override the return type
-// so we need this function to satisfy the typing.
+/**
+ * Converts Yext field definitions into a runtime `Fields` object that Puck can
+ * render safely.
+ *
+ * Yext field types are registered as Puck overrides, but Puck still asks its
+ * internal default field registry to render child fields inside native `object`
+ * and `array` fields. Since field types like `basicSelector` do not exist in
+ * that registry, this wraps each Yext-specific field as a Puck `custom` field
+ * rendered by `YextAutoField`, including nested `objectFields` and
+ * `arrayFields`. Normal Puck field types are left unchanged.
+ */
 export const toPuckFields = <
   Props extends DefaultComponentProps = DefaultComponentProps,
 >(
   fields: YextFields<Props> | YextFieldMap<Props>
-): Fields<Props> => fields as unknown as Fields<Props>;
-
-export const YextPuckFieldOverrides = {
-  basicSelector: BasicSelectorFieldOverride,
-  ctaSelector: CTASelectorFieldOverride,
-  code: CodeFieldOverride,
-  dateTimeSelector: DateTimeSelectorFieldOverride,
-  entityField: EntityFieldSelectorFieldOverride,
-  multiSelector: MultiSelectorFieldOverride,
-  fontSizeSelector: FontSizeSelectorFieldOverride,
-  image: ImageFieldOverride,
-  optionalNumber: OptionalNumberFieldOverride,
-  styledButton: StyledButtonFieldOverride,
-  styledImage: StyledImageFieldOverride,
-  styledLink: StyledLinkFieldOverride,
-  styledPageSection: StyledPageSectionFieldOverride,
-  styledText: StyledTextFieldOverride,
-  translatableString: TranslatableStringFieldOverride,
-  video: VideoFieldOverride,
-};
+): Fields<Props> =>
+  adaptYextFieldMap(
+    fields as Record<string, YextFieldDefinition<any>>,
+    (yextField) => ({
+      ...yextField,
+      type: "custom",
+      render: ({ field: _, ...props }) =>
+        createElement(YextAutoField, {
+          ...(props as any),
+          field: yextField,
+        }),
+    })
+  ) as Fields<Props>;

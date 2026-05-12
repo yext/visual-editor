@@ -18,12 +18,16 @@ import { themeManagerCn } from "../../../utils/cn.ts";
 import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { PuckComponent, setDeep, Slot, WithId } from "@puckeditor/core";
-import { useCardContext } from "../../../hooks/useCardContext.tsx";
+import {
+  useCardContext,
+  useParentCardStyles,
+} from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
 import { TextProps } from "../../contentBlocks/Text.tsx";
 import { ProductSectionVariant } from "./ProductSection.tsx";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
+import { bindSlots } from "../../../utils/cardSlots/bindSlots.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 import {
   formatCurrency,
@@ -42,7 +46,7 @@ const defaultProductData = {
     height: 360,
     width: 640,
   },
-  brow: { defaultValue: "Category" },
+  category: { defaultValue: "Category" },
   name: { defaultValue: "Product Name" },
   price: {
     value: 123,
@@ -115,7 +119,7 @@ export const defaultProductCardSlotData = (
               data: {
                 text: {
                   field: "",
-                  constantValue: defaultProductData.brow,
+                  constantValue: defaultProductData.category,
                   constantValueEnabled: true,
                 },
               },
@@ -218,6 +222,14 @@ export const defaultProductCardSlotData = (
 };
 
 export type ProductCardProps = {
+  /** @internal */
+  field?: string;
+  image?: ProductStruct["image"];
+  category?: ProductStruct["category"];
+  name?: ProductStruct["name"];
+  price?: ProductStruct["price"];
+  description?: ProductStruct["description"];
+  cta?: ProductStruct["cta"];
   styles: {
     /** The background color of each individual card
      * @defaultValue Background Color 1
@@ -233,12 +245,6 @@ export type ProductCardProps = {
     PriceSlot: Slot;
     DescriptionSlot: Slot;
     CTASlot: Slot;
-  };
-
-  /** @internal */
-  parentData?: {
-    field: string;
-    product: ProductStruct;
   };
 
   /** @internal */
@@ -297,13 +303,16 @@ const ProductCardFields: YextFields<ProductCardProps> = {
 };
 
 const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
-  const { styles, puck, conditionalRender, slots, parentStyles } = props;
+  const { styles, puck, conditionalRender, slots } = props;
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
     cardBackground: ThemeColor | undefined;
     slotStyles: Record<string, ProductCardProps["styles"]>;
   }>();
+  const inheritedParentStyles =
+    useParentCardStyles<ProductCardProps["parentStyles"]>();
 
-  const variant = props.parentStyles?.variant ?? "immersive";
+  const parentStyles = inheritedParentStyles ?? props.parentStyles;
+  const variant = parentStyles?.variant ?? "immersive";
 
   const { slotStyles, getPuck, slotProps } = useGetCardSlots<ProductCardProps>(
     props.id
@@ -460,34 +469,42 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
   inline: true,
   resolveData: (data, params) => {
     const locale = i18nComponentsInstance.language || "en";
+    const field = data.props.field ?? "";
+    const isLinkedMode = Boolean(field);
+    const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as
+      | (WithId<ImageWrapperProps> & {
+          styles?: { aspectRatio?: number; width?: number };
+        })
+      | undefined;
     const priceSlotProps = data.props.slots.PriceSlot?.[0]?.props as
       | WithId<TextProps>
       | undefined;
-    const priceEntityField = priceSlotProps?.data?.text as
+    const priceEntityField = priceSlotProps?.data.text as
       | YextEntityField<ProductStruct["price"]>
       | undefined;
-    const entityPrice =
-      data.props.parentData?.product.price ??
-      (priceEntityField
+    const entityPrice = isLinkedMode
+      ? data.props.price
+      : priceEntityField
         ? resolveYextEntityField<ProductStruct["price"]>(
             params.metadata.streamDocument,
             priceEntityField,
             locale
           )
-        : undefined);
+        : undefined;
 
     const resolvedPriceFromEntity = formatCurrency(
       entityPrice?.value,
       entityPrice?.currencyCode,
       locale
     );
-    const fallbackPriceCandidate = priceSlotProps
-      ? resolveYextEntityField(
-          params.metadata.streamDocument,
-          priceSlotProps?.data?.text,
-          locale
-        )
-      : undefined;
+    const fallbackPriceCandidate =
+      !isLinkedMode && priceSlotProps
+        ? resolveYextEntityField(
+            params.metadata.streamDocument,
+            priceSlotProps?.data?.text,
+            locale
+          )
+        : undefined;
     const resolvedFallbackPrice = !fallbackPriceCandidate
       ? fallbackPriceCandidate
       : isCompleteProductPrice(fallbackPriceCandidate, locale)
@@ -512,54 +529,44 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
     const browSlotProps = data.props.slots.BrowSlot?.[0]?.props as
       | WithId<TextProps>
       | undefined;
-
-    const resolvedBrow =
-      data.props.parentData?.product.brow ??
-      browSlotProps?.parentData?.text ??
-      (browSlotProps
+    const resolvedBrow = isLinkedMode
+      ? data.props.category
+      : browSlotProps
         ? resolveYextEntityField(
             params.metadata.streamDocument,
-            browSlotProps?.data?.text,
+            browSlotProps.data.text,
             locale
           )
-        : undefined);
+        : undefined;
     const showBrow = Boolean(resolvedBrow);
 
     const descriptionSlotProps = data.props.slots.DescriptionSlot?.[0]
       ?.props as WithId<BodyTextProps> | undefined;
 
-    const resolvedDescription =
-      data.props.parentData?.product.description ??
-      descriptionSlotProps?.parentData?.richText ??
-      (descriptionSlotProps
+    const resolvedDescription = isLinkedMode
+      ? data.props.description
+      : descriptionSlotProps
         ? resolveYextEntityField(
             params.metadata.streamDocument,
-            descriptionSlotProps?.data?.text,
+            descriptionSlotProps.data.text,
             locale
           )
-        : undefined);
+        : undefined;
     const showDescription = Boolean(resolvedDescription);
 
     const ctaSlotProps = data.props.slots.CTASlot?.[0]?.props as
       | WithId<CTAWrapperProps>
       | undefined;
-    const resolvedCTA = data.props.parentData
-      ? (data.props.parentData.product.cta ?? ctaSlotProps?.parentData?.cta)
-      : (ctaSlotProps?.parentData?.cta ??
-        (ctaSlotProps
-          ? resolveYextEntityField(
-              params.metadata.streamDocument,
-              ctaSlotProps?.data?.entityField,
-              locale
-            )
-          : undefined));
+    const resolvedCTA = isLinkedMode
+      ? data.props.cta
+      : ctaSlotProps
+        ? resolveYextEntityField(
+            params.metadata.streamDocument,
+            ctaSlotProps.data.entityField,
+            locale
+          )
+        : undefined;
     const showCTA = Boolean(resolvedCTA);
-
-    const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as
-      | (WithId<ImageWrapperProps> & {
-          styles?: { aspectRatio?: number; width?: number };
-        })
-      | undefined;
 
     let updatedData = {
       ...data,
@@ -602,101 +609,55 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
       `cta${data.props.index}`
     );
 
-    if (data.props.parentData) {
-      const product = data.props.parentData.product;
-      const field = data.props.parentData.field;
-      const formattedPrice = formatCurrency(
-        product.price?.value,
-        product.price?.currencyCode,
-        locale
-      );
+    const {
+      image: linkedImage,
+      category: linkedCategory,
+      name: linkedName,
+      description: linkedDescription,
+      price: linkedPrice,
+      cta: linkedCTA,
+    } = updatedData.props;
+    const image = isLinkedMode ? linkedImage : undefined;
+    const name = isLinkedMode ? linkedName : undefined;
+    const resolvedName =
+      name &&
+      resolveComponentData(name, locale, params.metadata.streamDocument, {
+        output: "plainText",
+      });
+    const brow = isLinkedMode ? linkedCategory : undefined;
+    const description = isLinkedMode ? linkedDescription : undefined;
+    const cta = isLinkedMode ? linkedCTA : undefined;
 
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.ImageSlot[0].props.parentData",
-        {
-          field: field,
-          image: product.image,
-        } satisfies ImageWrapperProps["parentData"]
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.TitleSlot[0].props.parentData",
-        {
-          field: field,
-          text: product.name as string, // will already be resolved
-        } satisfies HeadingTextProps["parentData"]
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.BrowSlot[0].props.parentData",
-        {
-          field: field,
-          text: product.brow ?? product.category, // will already be resolved
-        } satisfies TextProps["parentData"]
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.PriceSlot[0].props.parentData",
-        formattedPrice
+    return bindSlots(updatedData as typeof data, {
+      ImageSlot: image
+        ? ({ field, image } satisfies ImageWrapperProps["parentData"])
+        : undefined,
+      TitleSlot: resolvedName
+        ? ({
+            field,
+            text: resolvedName,
+          } satisfies HeadingTextProps["parentData"])
+        : undefined,
+      BrowSlot: brow
+        ? ({ field, text: brow } satisfies TextProps["parentData"])
+        : undefined,
+      PriceSlot:
+        linkedPrice && resolvedPriceFromEntity
           ? ({
-              field: field,
-              text: formattedPrice,
+              field,
+              text: resolvedPriceFromEntity,
             } satisfies TextProps["parentData"])
-          : undefined
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.DescriptionSlot[0].props.parentData",
-        {
-          field: field,
-          richText: product.description,
-        } satisfies BodyTextProps["parentData"]
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.CTASlot[0].props.parentData",
-        {
-          field: field,
-          cta: product.cta,
-        } satisfies CTAWrapperProps["parentData"]
-      );
-
-      return updatedData;
-    } else {
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.ImageSlot[0].props.parentData",
-        undefined
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.TitleSlot[0].props.parentData",
-        undefined
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.BrowSlot[0].props.parentData",
-        undefined
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.PriceSlot[0].props.parentData",
-        undefined
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.DescriptionSlot[0].props.parentData",
-        undefined
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.CTASlot[0].props.parentData",
-        undefined
-      );
-    }
-
-    return updatedData;
+          : undefined,
+      DescriptionSlot: description
+        ? ({
+            field,
+            richText: description,
+          } satisfies BodyTextProps["parentData"])
+        : undefined,
+      CTASlot: cta
+        ? ({ field, cta } satisfies CTAWrapperProps["parentData"])
+        : undefined,
+    });
   },
   defaultProps: {
     styles: {

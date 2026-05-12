@@ -22,6 +22,12 @@ export type DirectoryCardTitleSlotProps = {
 
   /** Styling for the title (same options as HeadingText). */
   styles: HeadingTextProps["styles"];
+
+  /** @internal Controlled data from the parent card. */
+  parentData?: {
+    field?: string;
+    text?: TranslatableString;
+  };
 };
 
 const directoryCardTitleSlotFields: YextFields<DirectoryCardTitleSlotProps> = {
@@ -66,7 +72,7 @@ const directoryCardTitleSlotFields: YextFields<DirectoryCardTitleSlotProps> = {
 const DirectoryCardTitleSlotComponent: PuckComponent<
   DirectoryCardTitleSlotProps
 > = (props) => {
-  const { data, styles, puck } = props;
+  const { data, styles, puck, parentData } = props;
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
 
@@ -87,7 +93,7 @@ const DirectoryCardTitleSlotComponent: PuckComponent<
     : "text-left";
 
   const resolvedHeadingText = resolveComponentData(
-    data.text,
+    parentData?.text ?? data.text,
     i18n.language,
     streamDocument
   );
@@ -96,7 +102,8 @@ const DirectoryCardTitleSlotComponent: PuckComponent<
     <div className={`flex w-full ${justifyClass}`}>
       <EntityField
         displayName={pt("heading", "Heading") + " " + styles.level}
-        constantValueEnabled={true}
+        fieldId={parentData?.field}
+        constantValueEnabled={!parentData}
       >
         <Heading
           level={styles.level}

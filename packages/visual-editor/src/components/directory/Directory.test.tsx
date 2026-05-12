@@ -653,7 +653,7 @@ const tests: ComponentTest[] = [
     version: 58,
   },
   {
-    name: "version 76 - City with custom card titles",
+    name: "version 77 - City with custom card titles",
     document: cityDocument,
     props: {
       ...version40Props,
@@ -711,7 +711,7 @@ const tests: ComponentTest[] = [
         ],
       },
     },
-    version: 76,
+    version: 77,
   },
 ];
 

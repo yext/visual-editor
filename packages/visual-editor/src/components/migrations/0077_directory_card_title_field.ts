@@ -7,14 +7,27 @@ export const directoryCardTitleField: Migration = {
     action: "updated",
     propTransformation: (props) => {
       const headingSlot = props.slots?.HeadingSlot?.[0];
-      const cardTitle = props.data?.cardTitle ?? defaultCardTitle;
+      const cardTitle =
+        props.data?.cardTitle ??
+        headingSlot?.props?.data?.text ??
+        defaultCardTitle;
 
       if (!headingSlot) {
-        return props;
+        return {
+          ...props,
+          data: {
+            ...props.data,
+            cardTitle,
+          },
+        };
       }
 
       return {
         ...props,
+        data: {
+          ...props.data,
+          cardTitle,
+        },
         slots: {
           ...props.slots,
           HeadingSlot: [
@@ -22,9 +35,9 @@ export const directoryCardTitleField: Migration = {
               ...headingSlot,
               type: "DirectoryCardTitleSlot",
               props: {
-                id: headingSlot.props?.id,
-                styles: headingSlot.props?.styles,
+                ...headingSlot.props,
                 data: {
+                  ...headingSlot.props?.data,
                   text: cardTitle,
                 },
               },

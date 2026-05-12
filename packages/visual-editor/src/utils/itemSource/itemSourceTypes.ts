@@ -32,11 +32,12 @@ export type RepeatedEntityFieldMetadata<
   manualItemFields: YextFieldMap<TItemProps>;
   defaultItemValue: TItemProps;
   defaultMappings: TItemProps;
+  manualItemSummary?: (item: unknown, index?: number) => string;
 };
 
 export type RepeatedEntityFieldDefinition<
   TItemProps extends Record<string, unknown>,
-> = EntityFieldSelectorField<any> & {
+> = EntityFieldSelectorField<RepeatedEntityFieldValue<TItemProps>> & {
   repeated: RepeatedEntityFieldMetadata<TItemProps>;
 };
 
@@ -64,4 +65,52 @@ export type ItemSourceInstance<TItemProps extends Record<string, unknown>> = {
     value: RepeatedEntityFieldValue<TItemProps> | undefined,
     streamDocument: StreamDocument
   ) => ResolvedItemField<TItemProps>[];
+};
+
+export type SlotMappedCardsData<TMappings extends Record<string, unknown>> =
+  YextEntityField<Array<{ id?: string }>, TMappings>;
+
+export type CreateSlottedItemSourceOptions<
+  TMappings extends Record<string, unknown>,
+  TCardProps extends Record<string, unknown> = Record<string, unknown>,
+> = {
+  label: string;
+  mappingFields: YextFieldMap<TMappings>;
+  itemLabel: string;
+  cardName?: string;
+  defaultItemProps?: TCardProps | (() => TCardProps);
+  defaultItems?: number;
+};
+
+export type SlottedItemSourceInstance<
+  TMappings extends Record<string, unknown>,
+> = {
+  field: YextFieldDefinition<SlotMappedCardsData<TMappings>>;
+  defaultValue: SlotMappedCardsData<TMappings>;
+  defaultWrapperProps: {
+    data: SlotMappedCardsData<TMappings>;
+    slots: {
+      CardSlot: [];
+    };
+    manualSlots: {
+      CardSlot: [];
+    };
+  };
+  value: SlotMappedCardsData<TMappings>;
+  resolveItems: (
+    value: SlotMappedCardsData<TMappings> | undefined,
+    streamDocument: StreamDocument
+  ) => ResolvedItemField<TMappings>[];
+  populateSlots: <
+    TData extends {
+      props: {
+        data: SlotMappedCardsData<TMappings>;
+        slots: { CardSlot: unknown };
+        manualSlots?: { CardSlot: unknown };
+      };
+    },
+  >(
+    data: TData,
+    streamDocument: StreamDocument | undefined
+  ) => TData;
 };

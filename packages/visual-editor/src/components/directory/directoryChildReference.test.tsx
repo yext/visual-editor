@@ -113,7 +113,11 @@ describe("directoryChildReference", () => {
       childRef: { childIndex: 0 },
     });
     expect(firstCard?.props?.parentData?.profile).toBeUndefined();
-    expect(firstCard?.props?.data).toBeUndefined();
+    expect(firstCard?.props?.data).toEqual({
+      cardTitle: {
+        defaultValue: "[[name]]",
+      },
+    });
     expect(firstCard?.props?.slots?.HeadingSlot?.[0]?.type).toBe(
       "DirectoryCardTitleSlot"
     );

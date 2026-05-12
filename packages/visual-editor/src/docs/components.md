@@ -304,11 +304,11 @@ This object contains properties for customizing the component's appearance.
 
 #### Other Props
 
-| Prop             | Type                                                                                              | Description                                                                    | Default |
-| :--------------- | :------------------------------------------------------------------------------------------------ | :----------------------------------------------------------------------------- | :------ |
-| `data`           | `Omit<YextEntityField<FAQSectionType>, "constantValue"> & { constantValue: { id?: string; }[]; }` |                                                                                |         |
-| `liveVisibility` | `boolean`                                                                                         | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
-| `slots`          | `{ HeadingSlot: Slot; CardSlot: Slot; }`                                                          |                                                                                |         |
+| Prop             | Type                                     | Description                                                                    | Default |
+| :--------------- | :--------------------------------------- | :----------------------------------------------------------------------------- | :------ |
+| `data`           | `typeof faqCardsSource.value`            |                                                                                |         |
+| `liveVisibility` | `boolean`                                | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| `slots`          | `{ HeadingSlot: Slot; CardSlot: Slot; }` |                                                                                |         |
 
 ---
 

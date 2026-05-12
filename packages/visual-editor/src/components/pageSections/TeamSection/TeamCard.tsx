@@ -16,11 +16,16 @@ import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { EmailsProps } from "../../contentBlocks/Emails.tsx";
 import { PhoneListProps } from "../../contentBlocks/PhoneList.tsx";
-import { useCardContext } from "../../../hooks/useCardContext.tsx";
+import {
+  useCardContext,
+  useParentCardStyles,
+} from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { TextProps } from "../../contentBlocks/Text.tsx";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
+import { bindSlots } from "../../../utils/cardSlots/bindSlots.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 
 const defaultPerson = {
   name: { defaultValue: "First Last" },
@@ -196,6 +201,14 @@ export const defaultTeamCardSlotData = (
 };
 
 export type TeamCardProps = {
+  /** @internal */
+  field?: string;
+  headshot?: PersonStruct["headshot"];
+  name?: PersonStruct["name"];
+  title?: PersonStruct["title"];
+  phoneNumber?: PersonStruct["phoneNumber"];
+  email?: PersonStruct["email"];
+  cta?: PersonStruct["cta"];
   /** Styling for all the cards. */
   styles: {
     /** The background color of each team card */
@@ -210,12 +223,6 @@ export type TeamCardProps = {
     PhoneSlot: Slot;
     EmailSlot: Slot;
     CTASlot: Slot;
-  };
-
-  /** @internal */
-  parentData?: {
-    field: string;
-    person: PersonStruct;
   };
 
   /** @internal */
@@ -268,12 +275,14 @@ const teamCardFields: YextFields<TeamCardProps> = {
 };
 
 const TeamCardComponent: PuckComponent<TeamCardProps> = (props) => {
-  const { styles, slots, puck, conditionalRender, parentStyles } = props;
+  const { styles, slots, puck, conditionalRender } = props;
 
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
     cardStyles: TeamCardProps["styles"];
     slotStyles: Record<string, TeamCardProps["styles"]>;
   }>();
+  const parentStyles =
+    useParentCardStyles<TeamCardProps["parentStyles"]>() ?? props.parentStyles;
 
   const { slotStyles, getPuck, slotProps } = useGetCardSlots<TeamCardProps>(
     props.id
@@ -448,9 +457,8 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
     },
   },
   resolveData: (data, params) => {
-    // Check card-level parentData first for entity data
-    const cardParentData = data.props.parentData;
-    const person = cardParentData?.person;
+    const field = data.props.field ?? "";
+    const isLinkedMode = Boolean(field);
 
     const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as
       | WithId<ImageWrapperProps>
@@ -472,63 +480,81 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
       | undefined;
 
     const showImage = Boolean(
-      person?.headshot ||
-        imageSlotProps?.parentData?.image ||
-        (imageSlotProps &&
-          (imageSlotProps?.data.image.field ||
-            (imageSlotProps.data.image.constantValue &&
+      isLinkedMode
+        ? data.props.headshot ||
+            (imageSlotProps?.data.image.constantValue &&
               "hasLocalizedValue" in imageSlotProps.data.image.constantValue) ||
-            (imageSlotProps.data.image.constantValue &&
+            (imageSlotProps?.data.image.constantValue &&
               "url" in imageSlotProps.data.image.constantValue &&
               imageSlotProps.data.image.constantValue.url) ||
-            (imageSlotProps.data.image.constantValue &&
+            (imageSlotProps?.data.image.constantValue &&
               "image" in imageSlotProps.data.image.constantValue &&
-              imageSlotProps.data.image.constantValue.image?.url)))
+              imageSlotProps.data.image.constantValue.image?.url)
+        : imageSlotProps &&
+            (imageSlotProps.data.image.field ||
+              (imageSlotProps.data.image.constantValue &&
+                "hasLocalizedValue" in
+                  imageSlotProps.data.image.constantValue) ||
+              (imageSlotProps.data.image.constantValue &&
+                "url" in imageSlotProps.data.image.constantValue &&
+                imageSlotProps.data.image.constantValue.url) ||
+              (imageSlotProps.data.image.constantValue &&
+                "image" in imageSlotProps.data.image.constantValue &&
+                imageSlotProps.data.image.constantValue.image?.url))
     );
     const showName = Boolean(
-      person?.name ||
-        nameSlotProps?.parentData?.text ||
-        (nameSlotProps &&
-          resolveYextEntityField(
-            params.metadata.streamDocument,
-            nameSlotProps.data.text,
-            i18nComponentsInstance.language || "en"
-          ))
+      isLinkedMode
+        ? data.props.name
+        : nameSlotProps &&
+            resolveYextEntityField(
+              params.metadata.streamDocument,
+              nameSlotProps.data.text,
+              i18nComponentsInstance.language || "en"
+            )
     );
     const showTitle = Boolean(
-      person?.title ||
-        titleSlotProps?.parentData?.text ||
-        (titleSlotProps &&
-          resolveYextEntityField(
-            params.metadata.streamDocument,
-            titleSlotProps.data.text,
-            i18nComponentsInstance.language || "en"
-          ))
+      isLinkedMode
+        ? data.props.title
+        : titleSlotProps &&
+            resolveYextEntityField(
+              params.metadata.streamDocument,
+              titleSlotProps.data.text,
+              i18nComponentsInstance.language || "en"
+            )
     );
     const showPhone = Boolean(
-      person?.phoneNumber ||
-        phoneSlotProps?.parentData?.phoneNumbers?.length ||
-        (phoneSlotProps?.data?.phoneNumbers?.length &&
-          phoneSlotProps.data.phoneNumbers.some(
-            (phone: any) => phone.number?.constantValue || phone.number?.field
-          ))
+      isLinkedMode
+        ? data.props.phoneNumber ||
+            (phoneSlotProps?.data?.phoneNumbers?.length &&
+              phoneSlotProps.data.phoneNumbers.some(
+                (phone: any) =>
+                  phone.number?.constantValue || phone.number?.field
+              ))
+        : phoneSlotProps?.data?.phoneNumbers?.length &&
+            phoneSlotProps.data.phoneNumbers.some(
+              (phone: any) => phone.number?.constantValue || phone.number?.field
+            )
     );
     const showEmail = Boolean(
-      person?.email ||
-        emailSlotProps?.parentData?.list?.length ||
-        emailSlotProps?.data?.list?.constantValue?.length ||
-        emailSlotProps?.data?.list?.field
+      isLinkedMode
+        ? data.props.email ||
+            emailSlotProps?.data?.list?.constantValue?.length ||
+            emailSlotProps?.data?.list?.field
+        : emailSlotProps?.data?.list?.constantValue?.length ||
+            emailSlotProps?.data?.list?.field
     );
     const showCTA = Boolean(
-      person?.cta?.label ||
-        ctaSlotProps?.parentData?.cta?.label ||
-        ctaSlotProps?.data?.entityField?.constantValue?.label ||
-        ctaSlotProps?.data?.entityField?.field ||
-        (ctaSlotProps &&
-          resolveYextEntityField(
-            params.metadata.streamDocument,
-            ctaSlotProps.data.entityField
-          )?.label)
+      isLinkedMode
+        ? data.props.cta?.label ||
+            ctaSlotProps?.data?.entityField?.constantValue?.label ||
+            ctaSlotProps?.data?.entityField?.field
+        : ctaSlotProps?.data?.entityField?.constantValue?.label ||
+            ctaSlotProps?.data?.entityField?.field ||
+            (ctaSlotProps &&
+              resolveYextEntityField(
+                params.metadata.streamDocument,
+                ctaSlotProps.data.entityField
+              )?.label)
     );
 
     let updatedData = {
@@ -585,102 +611,52 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
       "showCTA",
     ]);
 
-    // Set parentData for all slots if parentData is provided
-    if (data.props.parentData) {
-      const person = data.props.parentData.person;
-      const field = data.props.parentData.field;
-
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.ImageSlot[0].props.parentData",
+    const { headshot, name, title, phoneNumber, email, cta } =
+      updatedData.props;
+    const resolvedName =
+      name &&
+      resolveComponentData(
+        name,
+        i18nComponentsInstance.language || "en",
+        params.metadata.streamDocument,
         {
-          field: field,
-          image: person.headshot,
-        } satisfies ImageWrapperProps["parentData"]
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.NameSlot[0].props.parentData",
-        {
-          field: field,
-          text: person.name as string, // will already be resolved
-        } satisfies HeadingTextProps["parentData"]
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.TitleSlot[0].props.parentData",
-        {
-          field: field,
-          text: person.title,
-        } satisfies TextProps["parentData"]
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.PhoneSlot[0].props.parentData",
-        {
-          field: field,
-          phoneNumbers: person.phoneNumber
-            ? [
-                {
-                  number: person.phoneNumber,
-                  label: "",
-                },
-              ]
-            : [],
+          output: "plainText",
         }
       );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.EmailSlot[0].props.parentData",
-        {
-          field: field,
-          list: person.email ? [person.email] : [],
-        }
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.CTASlot[0].props.parentData",
-        {
-          field: field,
-          cta: person.cta,
-        } satisfies CTAWrapperProps["parentData"]
-      );
-
-      return updatedData;
-    } else {
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.ImageSlot[0].props.parentData",
-        undefined
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.NameSlot[0].props.parentData",
-        undefined
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.TitleSlot[0].props.parentData",
-        undefined
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.PhoneSlot[0].props.parentData",
-        undefined
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.EmailSlot[0].props.parentData",
-        undefined
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.CTASlot[0].props.parentData",
-        undefined
-      );
-    }
-
-    return updatedData;
+    return bindSlots(updatedData as typeof data, {
+      ImageSlot: headshot
+        ? ({
+            field,
+            image: headshot,
+          } satisfies ImageWrapperProps["parentData"])
+        : undefined,
+      NameSlot: resolvedName
+        ? ({
+            field,
+            text: resolvedName,
+          } satisfies HeadingTextProps["parentData"])
+        : undefined,
+      TitleSlot: title
+        ? ({ field, text: title } satisfies TextProps["parentData"])
+        : undefined,
+      PhoneSlot: isLinkedMode
+        ? {
+            field,
+            phoneNumbers: phoneNumber
+              ? [{ number: phoneNumber, label: "" }]
+              : [],
+          }
+        : undefined,
+      EmailSlot: isLinkedMode
+        ? {
+            field,
+            list: email ? [email] : [],
+          }
+        : undefined,
+      CTASlot: cta
+        ? ({ field, cta } satisfies CTAWrapperProps["parentData"])
+        : undefined,
+    });
   },
   render: (props) => <TeamCardComponent {...props} />,
 };

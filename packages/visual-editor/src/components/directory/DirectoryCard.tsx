@@ -12,6 +12,7 @@ import {
   ThemeColor,
 } from "../../utils/themeConfigOptions.ts";
 import { deepMerge } from "../../utils/themeResolver.ts";
+import { bindSlots } from "../../utils/cardSlots/bindSlots.ts";
 import {
   mergeMeta,
   resolveUrlTemplateOfChild,
@@ -44,6 +45,10 @@ export const defaultDirectoryCardSlotData = (
   props: {
     id,
     index,
+    data: {
+      cardTitle:
+        existingSlots?.HeadingSlot?.[0]?.props?.data?.text ?? defaultCardTitle,
+    },
     styles: {
       backgroundColor:
         existingCardStyle?.backgroundColor ??
@@ -176,6 +181,10 @@ export const defaultDirectoryCardSlotData = (
 });
 
 export type DirectoryCardProps = {
+  data: {
+    cardTitle: TranslatableString;
+  };
+
   /** Styling for all the cards. */
   styles: {
     /** The background color of each directory card */
@@ -253,7 +262,8 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
 
   const { slotStyles, getPuck, slotProps } =
     useGetCardSlots<DirectoryCardProps>(props.id);
-  const headingText = slotProps?.HeadingSlot?.[0]?.props?.data?.text;
+  const headingText =
+    props.data?.cardTitle ?? slotProps?.HeadingSlot?.[0]?.props?.data?.text;
 
   // sharedCardProps useEffect
   // When the context changes, dispatch an update to sync the changes to puck
@@ -318,6 +328,9 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
         type: "DirectoryCard",
         props: {
           ...otherProps,
+          data: {
+            cardTitle: sharedCardProps.headingText ?? defaultCardTitle,
+          },
           styles: {
             backgroundColor:
               sharedCardProps?.cardStyles.backgroundColor ||
@@ -385,6 +398,21 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
 };
 
 const directoryCardFields: YextFields<DirectoryCardProps> = {
+  data: {
+    label: msg("fields.data", "Data"),
+    type: "object",
+    objectFields: {
+      cardTitle: {
+        type: "translatableString",
+        label: msg("fields.title", "Title"),
+        filter: {
+          types: ["type.string"],
+        },
+        sourceField: "dm_directoryChildren",
+        showApplyAllOption: true,
+      },
+    },
+  },
   styles: {
     type: "object",
     label: msg("fields.styles", "Styles"),
@@ -412,6 +440,9 @@ export const DirectoryCard: YextComponentConfig<DirectoryCardProps> = {
   label: msg("slots.directoryCard", "Directory Card"),
   fields: directoryCardFields,
   defaultProps: {
+    data: {
+      cardTitle: defaultCardTitle,
+    },
     styles: {
       backgroundColor: backgroundColors.background1.value,
     },
@@ -422,5 +453,12 @@ export const DirectoryCard: YextComponentConfig<DirectoryCardProps> = {
       AddressSlot: [],
     },
   },
+  resolveData: (data) =>
+    bindSlots(data, {
+      HeadingSlot: {
+        field: "name",
+        text: data.props.data?.cardTitle ?? defaultCardTitle,
+      } satisfies DirectoryCardTitleSlotProps["parentData"],
+    }),
   render: (props) => <DirectoryCardComponent {...props} />,
 };
