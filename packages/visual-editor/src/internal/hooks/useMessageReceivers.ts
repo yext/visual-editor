@@ -204,7 +204,7 @@ export const useCommonMessageReceivers = (
         )
       );
       setLayoutDataFetched(true);
-      setThemeData({});
+      setThemeData(localDevOptions?.initialThemeData ?? {});
       setThemeDataFetched(true);
     }
   }, [

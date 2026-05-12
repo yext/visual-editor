@@ -1,9 +1,13 @@
 import path from "node:path";
 import fs from "fs-extra";
-import { buildLocalEditorScaffoldSource } from "./scaffold.ts";
+import {
+  buildLocalEditorScaffoldSource,
+  buildLocalEditorThemeScaffoldSource,
+} from "./scaffold.ts";
 
 export const DEFAULT_LOCAL_EDITOR_ROUTE = "/local-editor";
 export const DEFAULT_LOCAL_EDITOR_STREAM_CONFIG_PATH = "stream.config.ts";
+export const DEFAULT_LOCAL_EDITOR_THEME_PATH = "localEditorTheme.ts";
 export const LOCAL_EDITOR_API_BASE_PATH = "/__yext_visual_editor/local-editor";
 export const LOCAL_EDITOR_DATA_TEMPLATE_PREFIX = "local-editor-data-";
 export const LEGACY_LOCAL_EDITOR_DATA_TEMPLATE_PATH =
@@ -103,4 +107,22 @@ export const ensureLocalEditorStreamConfig = async (
     absoluteStreamConfigPath,
     buildLocalEditorScaffoldSource(rootDir)
   );
+};
+
+/**
+ * Ensures the root `localEditorTheme.ts` file exists by scaffolding it on demand.
+ */
+export const ensureLocalEditorTheme = async (
+  rootDir: string
+): Promise<void> => {
+  const absoluteThemePath = toAbsoluteLocalEditorPath(
+    rootDir,
+    DEFAULT_LOCAL_EDITOR_THEME_PATH
+  );
+  if (fs.existsSync(absoluteThemePath)) {
+    return;
+  }
+
+  fs.ensureDirSync(path.dirname(absoluteThemePath));
+  fs.writeFileSync(absoluteThemePath, buildLocalEditorThemeScaffoldSource());
 };

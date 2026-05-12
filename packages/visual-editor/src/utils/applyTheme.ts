@@ -145,14 +145,12 @@ const internalApplyTheme = (
 
   devLogger.logData("THEME_VALUES_TO_APPLY", themeValuesToApply);
 
-  return (
-    `.components{` +
-    Object.entries(themeValuesToApply)
-      .filter(([key]) => key.startsWith("--"))
-      .map(([key, value]) => `${key}:${value} !important`)
-      .join(";") +
-    "}"
-  );
+  const cssVariables = Object.entries(themeValuesToApply)
+    .filter(([key]) => key.startsWith("--"))
+    .map(([key, value]) => `${key}:${value} !important`)
+    .join(";");
+
+  return `.components{${cssVariables}}:root{${cssVariables}}`;
 };
 
 /**
@@ -196,6 +194,19 @@ const updateFontLinksInDocument = (
   }
 };
 
+const ensureThemeStyleTag = (document: Document): HTMLStyleElement => {
+  const existingStyleTag = document.getElementById(THEME_STYLE_TAG_ID);
+  if (existingStyleTag instanceof HTMLStyleElement) {
+    return existingStyleTag;
+  }
+
+  const styleTag = document.createElement("style");
+  styleTag.id = THEME_STYLE_TAG_ID;
+  styleTag.type = "text/css";
+  document.head.appendChild(styleTag);
+  return styleTag;
+};
+
 // Used to avoid creating multiple observers in updateThemeInEditor
 let pendingObserver: MutationObserver | null = null;
 
@@ -215,10 +226,7 @@ export const updateThemeInEditor = async (
   );
 
   const newThemeTag = internalApplyTheme(newTheme, themeConfig);
-  const editorStyleTag = window.document.getElementById(THEME_STYLE_TAG_ID);
-  if (editorStyleTag) {
-    editorStyleTag.innerText = newThemeTag;
-  }
+  ensureThemeStyleTag(window.document).textContent = newThemeTag;
 
   // In the theme editor, all fonts are already loaded
   // In the layout editor, we need to load the in-use fonts after the Puck iframe has loaded
@@ -233,15 +241,14 @@ export const updateThemeInEditor = async (
       const iframe = document.getElementById(
         PUCK_PREVIEW_IFRAME_ID
       ) as HTMLIFrameElement;
-      const pagePreviewStyleTag =
-        iframe?.contentDocument?.getElementById(THEME_STYLE_TAG_ID);
-      if (pagePreviewStyleTag) {
+      const iframeDocument = iframe?.contentDocument;
+      if (iframeDocument) {
         observer.disconnect();
         pendingObserver = null;
 
-        pagePreviewStyleTag.innerText = newThemeTag;
+        ensureThemeStyleTag(iframeDocument).textContent = newThemeTag;
         updateFontLinksInDocument(
-          iframe.contentDocument!,
+          iframeDocument,
           googleFontsToLoad,
           inUseCustomFonts
         );

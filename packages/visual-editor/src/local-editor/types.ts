@@ -1,4 +1,5 @@
 import type { Config } from "@puckeditor/core";
+import type { ThemeData } from "../internal/types/themeData.ts";
 import type { TailwindConfig, ThemeConfig } from "../utils/themeResolver.ts";
 import type {
   LocalEditorDocumentResponse,
@@ -20,6 +21,7 @@ export type LocalEditorShellProps = {
   componentRegistry: Record<string, Config<any>>;
   tailwindConfig: TailwindConfig;
   themeConfig?: ThemeConfig;
+  simulatedThemeData?: ThemeData;
 };
 
 export type BuildEditorLocalDevOptionsArgs = {
@@ -27,4 +29,5 @@ export type BuildEditorLocalDevOptionsArgs = {
   selectedEntity?: LocalEditorEntityOption;
   selectedLocale: string;
   selectedTemplateDefaults?: LocalEditorTemplateDefaults;
+  simulatedThemeData?: ThemeData;
 };

@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { applyTheme } from "./applyTheme.ts";
+import {
+  applyTheme,
+  THEME_STYLE_TAG_ID,
+  updateThemeInEditor,
+} from "./applyTheme.ts";
 import { ThemeConfig } from "./themeResolver.ts";
 import { StreamDocument } from "./types/StreamDocument.ts";
 
@@ -267,6 +271,25 @@ describe("buildCssOverridesStyle", () => {
     );
     expect(result).toContain(
       "--colors-palette-secondary-contrast:#FFFFFF !important"
+    );
+  });
+
+  it("creates the theme style tag when updating the editor without one", async () => {
+    document.getElementById(THEME_STYLE_TAG_ID)?.remove();
+
+    await updateThemeInEditor(
+      {
+        "--colors-palette-primary": "#CF0A2C",
+      },
+      themeConfig,
+      true
+    );
+
+    const styleTag = document.getElementById(THEME_STYLE_TAG_ID);
+    expect(styleTag).not.toBeNull();
+    expect(styleTag?.textContent).toContain(".components{");
+    expect(styleTag?.textContent).toContain(
+      "--colors-palette-primary:#CF0A2C !important"
     );
   });
 });
