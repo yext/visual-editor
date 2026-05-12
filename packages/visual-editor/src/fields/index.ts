@@ -61,3 +61,7 @@ export {
   type YextObjectField,
   type YextPuckField,
 } from "./fields.ts";
+
+export { YextPuckFieldOverrides } from "./fieldOverrides.ts";
+
+export { YextAutoField } from "./YextAutoField.tsx";
