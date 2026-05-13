@@ -1,18 +1,175 @@
 import { Migration } from "../../utils/migrate.ts";
-import {
-  defaultDirectoryCardSlotData,
-  DirectoryCardProps,
-} from "../directory/DirectoryCard.tsx";
 
 const defaultCardTitle = { defaultValue: "[[name]]" };
+
+type LegacySlotChild = {
+  props?: {
+    data?: Record<string, unknown>;
+    styles?: Record<string, unknown>;
+    parentData?: unknown;
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+};
+
+type LegacySlots = {
+  HeadingSlot?: LegacySlotChild[];
+  AddressSlot?: LegacySlotChild[];
+  PhoneSlot?: LegacySlotChild[];
+  HoursSlot?: LegacySlotChild[];
+};
 
 type LegacyDirectoryCardProps = {
   id?: string;
   index?: number;
-  styles?: DirectoryCardProps["styles"];
+  styles?: {
+    backgroundColor?: unknown;
+  };
   data?: { cardTitle?: unknown };
-  slots?: DirectoryCardProps["slots"];
+  slots?: LegacySlots;
 };
+
+const defaultDirectoryCardSlotData = (
+  id: string,
+  index: number,
+  existingCardStyle?: LegacyDirectoryCardProps["styles"],
+  existingSlots?: LegacyDirectoryCardProps["slots"]
+) => ({
+  type: "DirectoryCard",
+  props: {
+    id,
+    index,
+    data: {
+      cardTitle: defaultCardTitle,
+    },
+    styles: {
+      backgroundColor: existingCardStyle?.backgroundColor ?? {
+        selectedColor: "white",
+        contrastingColor: "black",
+      },
+    },
+    slots: {
+      HeadingSlot: [
+        {
+          type: "HeadingTextSlot",
+          props: {
+            ...(id && { id: `${id}-heading` }),
+            data: {
+              text:
+                existingSlots?.HeadingSlot?.[0]?.props?.data?.text ??
+                defaultCardTitle,
+            },
+            styles: {
+              level: existingSlots?.HeadingSlot?.[0]?.props?.styles?.level ?? 3,
+              align:
+                existingSlots?.HeadingSlot?.[0]?.props?.styles?.align ?? "left",
+            },
+          },
+        },
+      ],
+      AddressSlot: [
+        {
+          type: "AddressSlot",
+          props: {
+            ...(id && { id: `${id}-address` }),
+            data: {
+              address: {
+                field: "address",
+                constantValue: {
+                  line1: "",
+                  city: "",
+                  postalCode: "",
+                  countryCode: "",
+                },
+              },
+            },
+            styles: {
+              showRegion:
+                existingSlots?.AddressSlot?.[0]?.props?.styles?.showRegion ??
+                true,
+              showCountry:
+                existingSlots?.AddressSlot?.[0]?.props?.styles?.showCountry ??
+                true,
+              showGetDirectionsLink:
+                existingSlots?.AddressSlot?.[0]?.props?.styles
+                  ?.showGetDirectionsLink ?? false,
+              ctaVariant:
+                existingSlots?.AddressSlot?.[0]?.props?.styles?.ctaVariant ??
+                "link",
+            },
+            parentData: {
+              field: "profile.address",
+            },
+          },
+        },
+      ],
+      PhoneSlot: [
+        {
+          type: "PhoneSlot",
+          props: {
+            ...(id && { id: `${id}-phone` }),
+            data: {
+              number: {
+                constantValue: "",
+                field: "mainPhone",
+              },
+              label: {
+                constantValue: "",
+                hasLocalizedValue: "true",
+                field: "",
+              },
+            },
+            styles: {
+              phoneFormat:
+                existingSlots?.PhoneSlot?.[0]?.props?.styles?.phoneFormat ??
+                "domestic",
+              includePhoneHyperlink:
+                existingSlots?.PhoneSlot?.[0]?.props?.styles
+                  ?.includePhoneHyperlink ?? true,
+              includeIcon:
+                existingSlots?.PhoneSlot?.[0]?.props?.styles?.includeIcon ??
+                false,
+            },
+            parentData: {
+              field: "profile.mainPhone",
+            },
+          },
+        },
+      ],
+      HoursSlot: [
+        {
+          type: "HoursStatusSlot",
+          props: {
+            ...(id && { id: `${id}-hours` }),
+            data: {
+              hours: {
+                constantValue: {},
+                field: "hours",
+              },
+            },
+            styles: {
+              dayOfWeekFormat:
+                existingSlots?.HoursSlot?.[0]?.props?.styles?.dayOfWeekFormat ??
+                "long",
+              showDayNames:
+                existingSlots?.HoursSlot?.[0]?.props?.styles?.showDayNames ??
+                true,
+              showCurrentStatus:
+                existingSlots?.HoursSlot?.[0]?.props?.styles
+                  ?.showCurrentStatus ?? true,
+              className:
+                existingSlots?.HoursSlot?.[0]?.props?.styles?.className ??
+                "mb-2 font-semibold font-body-fontFamily text-body-fontSize h-full",
+            },
+            parentData: {
+              field: "profile.hours",
+            },
+          },
+        },
+      ],
+    },
+  },
+});
 
 const isEntityFieldValue = (
   value: unknown
@@ -129,7 +286,6 @@ const normalizeDirectoryCards = (cards: unknown) => {
     const normalizedCard = defaultDirectoryCardSlotData(
       cardProps?.id ?? "",
       cardProps?.index ?? index,
-      undefined,
       cardProps?.styles,
       cardProps?.slots
     );

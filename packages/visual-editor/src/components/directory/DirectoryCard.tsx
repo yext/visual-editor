@@ -31,8 +31,13 @@ import {
   useDirectoryChildren,
 } from "./directoryChildReference.tsx";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
+import { YextEntityField } from "../../editor/yextEntityFieldUtils.ts";
 
-const defaultCardTitle: TranslatableString = { defaultValue: "[[name]]" };
+const defaultCardTitle: YextEntityField<TranslatableString> = {
+  field: "name",
+  constantValue: { defaultValue: "[[name]]" },
+  constantValueEnabled: false,
+};
 
 const isHeadingTextField = (
   value: unknown
@@ -57,15 +62,6 @@ export const defaultDirectoryCardSlotData = (
         constantValue: existingHeadingText ?? defaultCardTitle,
         constantValueEnabled: true,
       };
-  const cardTitle =
-    typeof existingHeadingText === "object" &&
-    existingHeadingText !== null &&
-    "constantValue" in existingHeadingText
-      ? ((existingHeadingText.constantValue as
-          | TranslatableString
-          | undefined) ?? defaultCardTitle)
-      : ((existingHeadingText as TranslatableString | undefined) ??
-        defaultCardTitle);
 
   return {
     type: "DirectoryCard",
@@ -73,7 +69,7 @@ export const defaultDirectoryCardSlotData = (
       id,
       index,
       data: {
-        cardTitle,
+        cardTitle: defaultCardTitle,
       },
       styles: {
         backgroundColor:
@@ -216,7 +212,7 @@ export type DirectoryCardProps = {
   field?: string;
 
   data: {
-    cardTitle: TranslatableString;
+    cardTitle: YextEntityField<TranslatableString>;
   };
 
   /** Styling for all the cards. */

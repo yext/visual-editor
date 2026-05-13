@@ -28,9 +28,7 @@ import {
 } from "./directoryChildReference.tsx";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 import { createSlottedItemSource } from "../../utils/itemSource/index.ts";
-import { TranslatableString } from "../../types/types.ts";
 import { syncLinkedSlotMappedCards } from "../../utils/cardSlots/slotMappedCards.ts";
-import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 
 export type DirectoryGridProps = {
@@ -48,9 +46,7 @@ export type DirectoryGridProps = {
 };
 
 const directoryCardsSource = createSlottedItemSource<
-  {
-    cardTitle: YextEntityField<TranslatableString>;
-  },
+  DirectoryCardProps["data"],
   DirectoryCardProps
 >({
   label: msg("components.directoryChildren", "Directory Children"),
@@ -69,6 +65,8 @@ const directoryCardsSource = createSlottedItemSource<
   },
 });
 
+// The linked entity slot helper allows field selection and constant values
+// however the directory should be locked to the dm_directoryChildren field.
 const getNormalizedDirectoryGridData = (
   value: typeof directoryCardsSource.value | undefined
 ): typeof directoryCardsSource.value => ({
@@ -82,43 +80,11 @@ const getNormalizedDirectoryGridData = (
     ...value?.mappings,
     cardTitle: {
       ...directoryCardsSource.defaultValue.mappings!.cardTitle,
-      ...(value?.mappings?.cardTitle === undefined ? { field: "name" } : {}),
       ...value?.mappings?.cardTitle,
+      field: value?.mappings?.cardTitle?.field || "name",
     },
   },
 });
-
-const getDefaultDirectoryGridData = () =>
-  getNormalizedDirectoryGridData({
-    ...directoryCardsSource.defaultValue,
-    mappings: {
-      ...directoryCardsSource.defaultValue.mappings!,
-      cardTitle: {
-        ...directoryCardsSource.defaultValue.mappings!.cardTitle,
-        field: "name",
-      },
-    },
-  });
-
-const getDirectoryCardTitleField = (
-  data: typeof directoryCardsSource.value
-): string =>
-  data.mappings!.cardTitle.constantValueEnabled
-    ? ""
-    : data.mappings!.cardTitle.field || "name";
-
-const getResolvedDirectoryCardTitle = (
-  resolvedTitle: TranslatableString | undefined,
-  streamDocument: StreamDocument
-): string =>
-  resolvedTitle !== undefined
-    ? resolveComponentData(
-        resolvedTitle,
-        streamDocument.locale || "en",
-        streamDocument,
-        { output: "plainText" }
-      )
-    : "[[name]]";
 
 export const DirectoryList = ({
   streamDocument,
@@ -269,7 +235,7 @@ export const DirectoryGrid: YextComponentConfig<DirectoryGridProps> = {
   fields: directoryGridFields,
   defaultProps: {
     ...directoryCardsSource.defaultWrapperProps,
-    data: getDefaultDirectoryGridData(),
+    data: getNormalizedDirectoryGridData(directoryCardsSource.defaultValue),
     styles: {
       backgroundColor: backgroundColors.background1.value,
     },
@@ -288,7 +254,9 @@ export const DirectoryGrid: YextComponentConfig<DirectoryGridProps> = {
       streamDocument.dm_directoryChildren
     );
     const normalizedData = getNormalizedDirectoryGridData(data.props.data);
-    const titleField = getDirectoryCardTitleField(normalizedData);
+    const titleField = normalizedData.mappings?.cardTitle.constantValueEnabled
+      ? ""
+      : normalizedData.mappings?.cardTitle.field || "name";
     const titleItems = directoryCardsSource.resolveItems(normalizedData, {
       ...streamDocument,
       dm_directoryChildren: sortedDirectoryChildren,
@@ -318,10 +286,15 @@ export const DirectoryGrid: YextComponentConfig<DirectoryGridProps> = {
         ...card.props,
         field: titleField,
         data: {
-          cardTitle: getResolvedDirectoryCardTitle(
-            titleItems[index]?.cardTitle,
-            streamDocument
-          ),
+          cardTitle:
+            titleItems[index]?.cardTitle !== undefined
+              ? resolveComponentData(
+                  titleItems[index].cardTitle,
+                  streamDocument.locale || "en",
+                  streamDocument,
+                  { output: "plainText" }
+                )
+              : "[[name]]",
         },
       },
     }));
