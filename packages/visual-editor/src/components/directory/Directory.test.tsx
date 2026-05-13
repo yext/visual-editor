@@ -663,6 +663,20 @@ const tests: ComponentTest[] = [
           {
             type: "DirectoryGrid",
             props: {
+              data: {
+                field: "dm_directoryChildren",
+                constantValueEnabled: false,
+                constantValue: [],
+                mappings: {
+                  cardTitle: {
+                    field: "",
+                    constantValueEnabled: true,
+                    constantValue: {
+                      defaultValue: "[[name]] [[geomodifier]]",
+                    },
+                  },
+                },
+              },
               styles: {
                 backgroundColor: {
                   selectedColor: "white",
@@ -674,14 +688,29 @@ const tests: ComponentTest[] = [
                   {
                     type: "DirectoryCard",
                     props: {
+                      data: {
+                        cardTitle: {
+                          defaultValue: "[[name]]",
+                        },
+                      },
+                      styles: {
+                        backgroundColor: {
+                          selectedColor: "white",
+                          contrastingColor: "black",
+                        },
+                      },
                       slots: {
                         HeadingSlot: [
                           {
-                            type: "DirectoryCardTitleSlot",
+                            type: "HeadingTextSlot",
                             props: {
                               data: {
                                 text: {
-                                  defaultValue: "[[name]] [[geomodifier]]",
+                                  field: "",
+                                  constantValueEnabled: true,
+                                  constantValue: {
+                                    defaultValue: "[[name]]",
+                                  },
                                 },
                               },
                               styles: {
@@ -695,8 +724,65 @@ const tests: ComponentTest[] = [
                           {
                             type: "AddressSlot",
                             props: {
+                              data: {
+                                address: {
+                                  field: "address",
+                                  constantValue: {
+                                    line1: "",
+                                    city: "",
+                                    postalCode: "",
+                                    countryCode: "",
+                                  },
+                                },
+                              },
                               styles: {
                                 showGetDirectionsLink: true,
+                                showRegion: true,
+                                showCountry: true,
+                                ctaVariant: "link",
+                              },
+                            },
+                          },
+                        ],
+                        PhoneSlot: [
+                          {
+                            type: "PhoneSlot",
+                            props: {
+                              data: {
+                                number: {
+                                  constantValue: "",
+                                  field: "mainPhone",
+                                },
+                                label: {
+                                  constantValue: "",
+                                  hasLocalizedValue: "true",
+                                  field: "",
+                                },
+                              },
+                              styles: {
+                                phoneFormat: "domestic",
+                                includePhoneHyperlink: true,
+                                includeIcon: false,
+                              },
+                            },
+                          },
+                        ],
+                        HoursSlot: [
+                          {
+                            type: "HoursStatusSlot",
+                            props: {
+                              data: {
+                                hours: {
+                                  constantValue: {},
+                                  field: "hours",
+                                },
+                              },
+                              styles: {
+                                dayOfWeekFormat: "long",
+                                showDayNames: true,
+                                showCurrentStatus: true,
+                                className:
+                                  "mb-2 font-semibold font-body-fontFamily text-body-fontSize h-full",
                               },
                             },
                           },

@@ -114,21 +114,27 @@ describe("directoryChildReference", () => {
     });
     expect(firstCard?.props?.parentData?.profile).toBeUndefined();
     expect(firstCard?.props?.data).toEqual({
-      cardTitle: {
-        defaultValue: "[[name]]",
-      },
+      cardTitle: "Galaxy Grill Ballston",
     });
+    expect(firstCard?.props?.field).toBe("name");
     expect(firstCard?.props?.slots?.HeadingSlot?.[0]?.type).toBe(
-      "DirectoryCardTitleSlot"
+      "HeadingTextSlot"
     );
     expect(
       firstCard?.props?.slots?.HeadingSlot?.[0]?.props?.data?.text
     ).toEqual({
-      defaultValue: "[[name]]",
+      field: "",
+      constantValue: {
+        defaultValue: "[[name]]",
+      },
+      constantValueEnabled: true,
     });
-    expect(firstCard?.props?.slots?.HeadingSlot?.[0]?.props?.parentData).toBe(
-      undefined
-    );
+    expect(
+      firstCard?.props?.slots?.HeadingSlot?.[0]?.props?.parentData
+    ).toEqual({
+      field: "name",
+      text: "Galaxy Grill Ballston",
+    });
     expect(
       firstCard?.props?.slots?.AddressSlot?.[0]?.props?.data?.address?.field
     ).toBe("address");

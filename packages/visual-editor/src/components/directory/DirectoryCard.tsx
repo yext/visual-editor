@@ -21,6 +21,7 @@ import { TranslatableString } from "../../types/types.ts";
 import { Background } from "../atoms/background.tsx";
 import { MaybeLink } from "../atoms/maybeLink.tsx";
 import { AddressProps } from "../contentBlocks/Address.tsx";
+import { HeadingTextProps } from "../contentBlocks/HeadingText.tsx";
 import { HoursStatusProps } from "../contentBlocks/HoursStatus.tsx";
 import { PhoneProps } from "../contentBlocks/Phone.tsx";
 import {
@@ -30,157 +31,190 @@ import {
   useDirectoryChildren,
 } from "./directoryChildReference.tsx";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
-import { DirectoryCardTitleSlotProps } from "./DirectoryCardTitleSlot.tsx";
 
 const defaultCardTitle: TranslatableString = { defaultValue: "[[name]]" };
+
+const isHeadingTextField = (
+  value: unknown
+): value is HeadingTextProps["data"]["text"] =>
+  typeof value === "object" &&
+  value !== null &&
+  ("field" in value || "constantValue" in value);
 
 export const defaultDirectoryCardSlotData = (
   id: string,
   index: number,
-  childRef: DirectoryChildReference,
+  childRef?: DirectoryChildReference,
   existingCardStyle?: DirectoryCardProps["styles"],
   existingSlots?: DirectoryCardProps["slots"]
-) => ({
-  type: "DirectoryCard",
-  props: {
-    id,
-    index,
-    data: {
-      cardTitle:
-        existingSlots?.HeadingSlot?.[0]?.props?.data?.text ?? defaultCardTitle,
-    },
-    styles: {
-      backgroundColor:
-        existingCardStyle?.backgroundColor ??
-        backgroundColors.background1.value,
-    },
-    slots: {
-      HeadingSlot: [
-        {
-          type: "DirectoryCardTitleSlot",
-          props: {
-            ...(id && { id: `${id}-heading` }),
-            data: {
-              text:
-                existingSlots?.HeadingSlot?.[0]?.props?.data?.text ??
-                defaultCardTitle,
-            },
-            styles: {
-              level: existingSlots?.HeadingSlot?.[0]?.props?.styles?.level ?? 3,
-              align:
-                existingSlots?.HeadingSlot?.[0]?.props?.styles?.align ?? "left",
-            },
-          } satisfies DirectoryCardTitleSlotProps,
-        },
-      ],
-      AddressSlot: [
-        {
-          type: "AddressSlot",
-          props: {
-            ...(id && { id: `${id}-address` }),
-            data: {
-              address: {
-                field: "address",
-                constantValue: {
-                  line1: "",
-                  city: "",
-                  postalCode: "",
-                  countryCode: "",
+) => {
+  const existingHeadingText =
+    existingSlots?.HeadingSlot?.[0]?.props?.data?.text;
+  const headingTextField = isHeadingTextField(existingHeadingText)
+    ? existingHeadingText
+    : {
+        field: "",
+        constantValue: existingHeadingText ?? defaultCardTitle,
+        constantValueEnabled: true,
+      };
+  const cardTitle =
+    typeof existingHeadingText === "object" &&
+    existingHeadingText !== null &&
+    "constantValue" in existingHeadingText
+      ? ((existingHeadingText.constantValue as
+          | TranslatableString
+          | undefined) ?? defaultCardTitle)
+      : ((existingHeadingText as TranslatableString | undefined) ??
+        defaultCardTitle);
+
+  return {
+    type: "DirectoryCard",
+    props: {
+      id,
+      index,
+      data: {
+        cardTitle,
+      },
+      styles: {
+        backgroundColor:
+          existingCardStyle?.backgroundColor ??
+          backgroundColors.background1.value,
+      },
+      slots: {
+        HeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              ...(id && { id: `${id}-heading` }),
+              data: {
+                text: headingTextField,
+              },
+              styles: {
+                level:
+                  existingSlots?.HeadingSlot?.[0]?.props?.styles?.level ?? 3,
+                align:
+                  existingSlots?.HeadingSlot?.[0]?.props?.styles?.align ??
+                  "left",
+              },
+            } satisfies HeadingTextProps,
+          },
+        ],
+        AddressSlot: [
+          {
+            type: "AddressSlot",
+            props: {
+              ...(id && { id: `${id}-address` }),
+              data: {
+                address: {
+                  field: "address",
+                  constantValue: {
+                    line1: "",
+                    city: "",
+                    postalCode: "",
+                    countryCode: "",
+                  },
                 },
               },
-            },
-            styles: {
-              showRegion:
-                existingSlots?.AddressSlot?.[0]?.props?.styles?.showRegion ??
-                true,
-              showCountry:
-                existingSlots?.AddressSlot?.[0]?.props?.styles?.showCountry ??
-                true,
-              showGetDirectionsLink:
-                existingSlots?.AddressSlot?.[0]?.props?.styles
-                  ?.showGetDirectionsLink ?? false,
-              ctaVariant:
-                existingSlots?.AddressSlot?.[0]?.props?.styles?.ctaVariant ??
-                "link",
-            },
-            parentData: {
-              field: "profile.address",
-            },
-          } satisfies AddressProps,
-        },
-      ],
-      PhoneSlot: [
-        {
-          type: "PhoneSlot",
-          props: {
-            ...(id && { id: `${id}-phone` }),
-            data: {
-              number: {
-                constantValue: "",
-                field: "mainPhone",
+              styles: {
+                showRegion:
+                  existingSlots?.AddressSlot?.[0]?.props?.styles?.showRegion ??
+                  true,
+                showCountry:
+                  existingSlots?.AddressSlot?.[0]?.props?.styles?.showCountry ??
+                  true,
+                showGetDirectionsLink:
+                  existingSlots?.AddressSlot?.[0]?.props?.styles
+                    ?.showGetDirectionsLink ?? false,
+                ctaVariant:
+                  existingSlots?.AddressSlot?.[0]?.props?.styles?.ctaVariant ??
+                  "link",
               },
-              label: {
-                constantValue: "",
-                hasLocalizedValue: "true",
-                field: "",
+              parentData: {
+                field: "profile.address",
               },
-            },
-            styles: {
-              phoneFormat:
-                existingSlots?.PhoneSlot?.[0]?.props?.styles?.phoneFormat ??
-                "domestic",
-              includePhoneHyperlink:
-                existingSlots?.PhoneSlot?.[0]?.props?.styles
-                  ?.includePhoneHyperlink ?? true,
-              includeIcon:
-                existingSlots?.PhoneSlot?.[0]?.props?.styles?.includeIcon ??
-                false,
-            },
-            parentData: {
-              field: "profile.mainPhone",
-            },
-          } satisfies PhoneProps,
-        },
-      ],
-      HoursSlot: [
-        {
-          type: "HoursStatusSlot",
-          props: {
-            ...(id && { id: `${id}-hours` }),
-            data: {
-              hours: {
-                constantValue: {},
-                field: "hours",
+            } satisfies AddressProps,
+          },
+        ],
+        PhoneSlot: [
+          {
+            type: "PhoneSlot",
+            props: {
+              ...(id && { id: `${id}-phone` }),
+              data: {
+                number: {
+                  constantValue: "",
+                  field: "mainPhone",
+                },
+                label: {
+                  constantValue: "",
+                  hasLocalizedValue: "true",
+                  field: "",
+                },
               },
-            },
-            styles: {
-              dayOfWeekFormat:
-                existingSlots?.HoursSlot?.[0]?.props?.styles?.dayOfWeekFormat ??
-                "long",
-              showDayNames:
-                existingSlots?.HoursSlot?.[0]?.props?.styles?.showDayNames ??
-                true,
-              showCurrentStatus:
-                existingSlots?.HoursSlot?.[0]?.props?.styles
-                  ?.showCurrentStatus ?? true,
-              className:
-                existingSlots?.HoursSlot?.[0]?.props?.styles?.className ??
-                "mb-2 font-semibold font-body-fontFamily text-body-fontSize h-full",
-            },
+              styles: {
+                phoneFormat:
+                  existingSlots?.PhoneSlot?.[0]?.props?.styles?.phoneFormat ??
+                  "domestic",
+                includePhoneHyperlink:
+                  existingSlots?.PhoneSlot?.[0]?.props?.styles
+                    ?.includePhoneHyperlink ?? true,
+                includeIcon:
+                  existingSlots?.PhoneSlot?.[0]?.props?.styles?.includeIcon ??
+                  false,
+              },
+              parentData: {
+                field: "profile.mainPhone",
+              },
+            } satisfies PhoneProps,
+          },
+        ],
+        HoursSlot: [
+          {
+            type: "HoursStatusSlot",
+            props: {
+              ...(id && { id: `${id}-hours` }),
+              data: {
+                hours: {
+                  constantValue: {},
+                  field: "hours",
+                },
+              },
+              styles: {
+                dayOfWeekFormat:
+                  existingSlots?.HoursSlot?.[0]?.props?.styles
+                    ?.dayOfWeekFormat ?? "long",
+                showDayNames:
+                  existingSlots?.HoursSlot?.[0]?.props?.styles?.showDayNames ??
+                  true,
+                showCurrentStatus:
+                  existingSlots?.HoursSlot?.[0]?.props?.styles
+                    ?.showCurrentStatus ?? true,
+                className:
+                  existingSlots?.HoursSlot?.[0]?.props?.styles?.className ??
+                  "mb-2 font-semibold font-body-fontFamily text-body-fontSize h-full",
+              },
+              parentData: {
+                field: "profile.hours",
+              },
+            } satisfies HoursStatusProps,
+          },
+        ],
+      },
+      ...(childRef
+        ? {
             parentData: {
-              field: "profile.hours",
+              childRef,
             },
-          } satisfies HoursStatusProps,
-        },
-      ],
+          }
+        : {}),
     },
-    parentData: {
-      childRef,
-    },
-  },
-});
+  };
+};
 
 export type DirectoryCardProps = {
+  /** @internal */
+  field?: string;
+
   data: {
     cardTitle: TranslatableString;
   };
@@ -257,13 +291,10 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
     cardStyles: DirectoryCardProps["styles"];
     slotStyles: Record<string, DirectoryCardProps["styles"]>;
-    headingText?: DirectoryCardTitleSlotProps["data"]["text"];
   }>();
 
   const { slotStyles, getPuck, slotProps } =
     useGetCardSlots<DirectoryCardProps>(props.id);
-  const headingText =
-    props.data?.cardTitle ?? slotProps?.HeadingSlot?.[0]?.props?.data?.text;
 
   // sharedCardProps useEffect
   // When the context changes, dispatch an update to sync the changes to puck
@@ -274,10 +305,7 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
 
     if (
       JSON.stringify(sharedCardProps?.cardStyles) === JSON.stringify(styles) &&
-      JSON.stringify(slotStyles) ===
-        JSON.stringify(sharedCardProps?.slotStyles) &&
-      JSON.stringify(sharedCardProps?.headingText) ===
-        JSON.stringify(headingText)
+      JSON.stringify(slotStyles) === JSON.stringify(sharedCardProps?.slotStyles)
     ) {
       return;
     }
@@ -295,22 +323,10 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
       AddressSlot: [],
     };
     Object.entries(slotProps).forEach(([key, value]) => {
-      let nextSlotValue = deepMerge(
+      const nextSlotValue = deepMerge(
         { props: { styles: { ...sharedCardProps?.slotStyles?.[key] } } },
         value[0]
       );
-      if (key === "HeadingSlot") {
-        nextSlotValue = deepMerge(
-          {
-            props: {
-              data: {
-                text: sharedCardProps.headingText ?? defaultCardTitle,
-              },
-            },
-          },
-          nextSlotValue
-        );
-      }
       newSlotData[key as keyof DirectoryCardProps["slots"]] = [
         {
           ...nextSlotValue,
@@ -328,9 +344,7 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
         type: "DirectoryCard",
         props: {
           ...otherProps,
-          data: {
-            cardTitle: sharedCardProps.headingText ?? defaultCardTitle,
-          },
+          data: props.data,
           styles: {
             backgroundColor:
               sharedCardProps?.cardStyles.backgroundColor ||
@@ -351,10 +365,7 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
 
     if (
       JSON.stringify(sharedCardProps?.cardStyles) === JSON.stringify(styles) &&
-      JSON.stringify(sharedCardProps?.slotStyles) ===
-        JSON.stringify(slotStyles) &&
-      JSON.stringify(sharedCardProps?.headingText) ===
-        JSON.stringify(headingText)
+      JSON.stringify(sharedCardProps?.slotStyles) === JSON.stringify(slotStyles)
     ) {
       return;
     }
@@ -362,9 +373,8 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
     setSharedCardProps({
       cardStyles: styles,
       slotStyles: slotStyles,
-      headingText,
     });
-  }, [styles, slotStyles, headingText]);
+  }, [styles, slotStyles]);
 
   return (
     <Background
@@ -401,6 +411,7 @@ const directoryCardFields: YextFields<DirectoryCardProps> = {
   data: {
     label: msg("fields.data", "Data"),
     type: "object",
+    visible: false,
     objectFields: {
       cardTitle: {
         type: "translatableString",
@@ -455,10 +466,13 @@ export const DirectoryCard: YextComponentConfig<DirectoryCardProps> = {
   },
   resolveData: (data) =>
     bindSlots(data, {
-      HeadingSlot: {
-        field: "name",
-        text: data.props.data?.cardTitle ?? defaultCardTitle,
-      } satisfies DirectoryCardTitleSlotProps["parentData"],
+      HeadingSlot:
+        typeof data.props.data?.cardTitle === "string"
+          ? ({
+              field: data.props.field ?? "name",
+              text: data.props.data.cardTitle,
+            } satisfies HeadingTextProps["parentData"])
+          : undefined,
     }),
   render: (props) => <DirectoryCardComponent {...props} />,
 };
