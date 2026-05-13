@@ -33,6 +33,7 @@ const LOCAL_EDITOR_TEMPLATE_SOURCE = readFileSync(
   path.join(TEMPLATES_DIRECTORY, "local-editor.tsx"),
   "utf8"
 );
+const DEFAULT_LAYOUT_STRING = JSON.stringify(DEFAULT_LAYOUT);
 
 const tempRoots: string[] = [];
 
@@ -78,7 +79,7 @@ describe.sequential("generateRegistryTemplateFiles", () => {
     expect(manifest.templates).toEqual([
       expect.objectContaining({
         name: "main",
-        defaultLayoutData: DEFAULT_LAYOUT,
+        defaultLayoutData: DEFAULT_LAYOUT_STRING,
       }),
     ]);
   });
@@ -150,7 +151,7 @@ describe.sequential("generateRegistryTemplateFiles", () => {
     expect(manifest.templates).toEqual([
       expect.objectContaining({
         name: "main",
-        defaultLayoutData: DEFAULT_LAYOUT,
+        defaultLayoutData: DEFAULT_LAYOUT_STRING,
       }),
     ]);
 
@@ -250,7 +251,7 @@ describe.sequential("generateRegistryTemplateFiles", () => {
     expect(manifest.templates).toEqual([
       expect.objectContaining({
         name: "main",
-        defaultLayoutData: DEFAULT_LAYOUT,
+        defaultLayoutData: DEFAULT_LAYOUT_STRING,
       }),
     ]);
   });
@@ -283,7 +284,7 @@ describe.sequential("generateRegistryTemplateFiles", () => {
     expect(manifest.templates).toEqual([
       expect.objectContaining({
         name: "demo-shop",
-        defaultLayoutData: DEFAULT_LAYOUT,
+        defaultLayoutData: DEFAULT_LAYOUT_STRING,
       }),
     ]);
   });
