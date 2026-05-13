@@ -114,10 +114,6 @@ import {
   DirectoryCardProps,
 } from "../directory/DirectoryCard.tsx";
 import {
-  DirectoryCardTitleSlot,
-  DirectoryCardTitleSlotProps,
-} from "../directory/DirectoryCardTitleSlot.tsx";
-import {
   DirectoryGrid,
   DirectoryGridProps,
 } from "../directory/DirectoryWrapper.tsx";
@@ -144,7 +140,6 @@ export interface SlotsCategoryProps {
   CopyrightMessageSlot: CopyrightMessageSlotProps;
   CTASlot: CTAWrapperProps;
   DirectoryCard: DirectoryCardProps;
-  DirectoryCardTitleSlot: DirectoryCardTitleSlotProps;
   DirectoryGrid: DirectoryGridProps;
   EmailsSlot: EmailsProps;
   EventCard: EventCardProps;
@@ -213,10 +208,6 @@ export const SlotsCategoryComponents = {
   },
   CTASlot: { ...CTAWrapper, permissions: lockedPermissions },
   DirectoryCard: { ...DirectoryCard, permissions: lockedPermissions },
-  DirectoryCardTitleSlot: {
-    ...DirectoryCardTitleSlot,
-    permissions: lockedPermissions,
-  },
   DirectoryGrid: { ...DirectoryGrid, permissions: lockedPermissions },
   EmailsSlot: { ...Emails, permissions: lockedPermissions },
   EventCard: { ...EventCard, permissions: lockedPermissions },

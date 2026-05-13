@@ -5,7 +5,6 @@ import { setDeep } from "@puckeditor/core";
 const slotChildTypeToParentDataKey: Record<string, string> = {
   BodyTextSlot: "richText",
   CTASlot: "cta",
-  DirectoryCardTitleSlot: "text",
   HeadingTextSlot: "text",
   HeroImageSlot: "image",
   ImageSlot: "image",
