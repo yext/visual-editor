@@ -22,6 +22,8 @@ export type TranslatableStringField = BaseField & {
   showApplyAllOption?: boolean;
   showFieldSelector?: boolean;
   getOptions?: () => EmbeddedStringOption[];
+  sourceField?: string;
+  sourceFieldPath?: string;
 };
 
 type TranslatableStringFieldProps = FieldProps<
@@ -101,6 +103,8 @@ export const TranslatableStringFieldOverride = ({
           onChange={handleChange}
           filter={field.filter ?? { types: ["type.string"] }}
           showFieldSelector={field.showFieldSelector ?? true}
+          sourceField={field.sourceField}
+          sourceFieldPath={field.sourceFieldPath}
         />
       )}
       {applyAllButton}

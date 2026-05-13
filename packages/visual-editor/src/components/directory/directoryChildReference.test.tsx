@@ -77,7 +77,7 @@ const directoryProps = {
 };
 
 describe("directoryChildReference", () => {
-  it("stores directory cards as child references and keeps slot bindings field-based", async () => {
+  it("stores directory cards as child references and keeps card titles in the title slot", async () => {
     const puckConfig: Config = {
       components: { Directory, ...SlotsCategoryComponents },
       root: {
@@ -113,13 +113,27 @@ describe("directoryChildReference", () => {
       childRef: { childIndex: 0 },
     });
     expect(firstCard?.props?.parentData?.profile).toBeUndefined();
+    expect(firstCard?.props?.data).toEqual({
+      cardTitle: "Galaxy Grill Ballston",
+    });
+    expect(firstCard?.props?.field).toBe("name");
+    expect(firstCard?.props?.slots?.HeadingSlot?.[0]?.type).toBe(
+      "HeadingTextSlot"
+    );
     expect(
-      firstCard?.props?.slots?.HeadingSlot?.[0]?.props?.data?.text?.field
-    ).toBe("name");
+      firstCard?.props?.slots?.HeadingSlot?.[0]?.props?.data?.text
+    ).toEqual({
+      field: "",
+      constantValue: {
+        defaultValue: "[[name]]",
+      },
+      constantValueEnabled: true,
+    });
     expect(
       firstCard?.props?.slots?.HeadingSlot?.[0]?.props?.parentData
     ).toEqual({
-      field: "profile.name",
+      field: "name",
+      text: "Galaxy Grill Ballston",
     });
     expect(
       firstCard?.props?.slots?.AddressSlot?.[0]?.props?.data?.address?.field

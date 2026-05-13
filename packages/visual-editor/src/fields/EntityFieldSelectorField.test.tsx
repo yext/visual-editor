@@ -664,6 +664,102 @@ describe("EntityFieldSelectorField", () => {
     expect(screen.getByText("Products Fields")).toBeDefined();
   });
 
+  it("hides the repeated source selector when the source field is fixed", () => {
+    renderRepeatedEntityField({
+      field: {
+        type: "entityField",
+        label: "Directory Children",
+        filter: {
+          itemSourceTypes: [["type.string"]],
+        },
+        disableConstantValueToggle: true,
+        fixedRepeatedField: "dm_directoryChildren",
+        repeated: {
+          defaultItemValue: {
+            title: {
+              field: "",
+              constantValueEnabled: true,
+              constantValue: { defaultValue: "" },
+            },
+          },
+          defaultMappings: {
+            title: {
+              field: "",
+              constantValueEnabled: false,
+              constantValue: { defaultValue: "" },
+            },
+          },
+          manualItemFields: {
+            title: {
+              type: "entityField",
+              label: "Title",
+              filter: { types: ["type.string"] },
+            },
+          },
+          mappingFields: {
+            title: {
+              type: "entityField",
+              label: "Title",
+              filter: { types: ["type.string"] },
+            },
+          },
+        },
+      },
+      value: {
+        field: "dm_directoryChildren",
+        constantValueEnabled: false,
+        constantValue: [],
+        mappings: {
+          title: {
+            field: "name",
+            constantValueEnabled: false,
+            constantValue: { defaultValue: "" },
+          },
+        },
+      },
+      entityFields: {
+        ...defaultEntityFields,
+        fields: [
+          {
+            name: "dm_directoryChildren",
+            definition: {
+              name: "dm_directoryChildren",
+              typeName: "dm_directoryChildren",
+              isList: true,
+              type: {},
+            },
+            children: {
+              fields: [
+                {
+                  name: "name",
+                  definition: {
+                    name: "name",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+          ...defaultEntityFields.fields,
+        ],
+        displayNames: {
+          ...defaultEntityFields.displayNames,
+          dm_directoryChildren: "Directory Children",
+          "dm_directoryChildren.name": "Directory Children > Name",
+        },
+      },
+    });
+
+    expect(screen.getAllByRole("switch")).toHaveLength(1);
+    expect(screen.getAllByRole("combobox")).toHaveLength(1);
+
+    fireEvent.click(screen.getAllByRole("combobox")[0]);
+
+    expect(screen.getByText("Directory Children Fields")).toBeDefined();
+    expect(screen.queryByText("Location Fields")).toBeNull();
+  });
+
   it("clears stale repeated mappings when switching between linked sources", () => {
     const { onChange } = renderRepeatedEntityField({
       value: {

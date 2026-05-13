@@ -4416,7 +4416,7 @@ const mainDefaultLayout = {
 const directoryDefaultLayout = {
   root: {
     props: {
-      version: 73,
+      version: 76,
       title: {
         field: "",
         constantValue: { defaultValue: "PLACEHOLDER" },

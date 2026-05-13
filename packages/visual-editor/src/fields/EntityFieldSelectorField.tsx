@@ -74,6 +74,7 @@ export type EntityFieldSelectorField<
   disableConstantValueToggle?: boolean;
   disallowTranslation?: boolean;
   sourceFieldPath?: string;
+  fixedRepeatedField?: string;
   repeated?: RepeatedEntityFieldMetadata<any>;
 };
 
@@ -152,7 +153,7 @@ const RepeatedEntityFieldSelector = ({
   const translatedLabel = field.label ? pt(field.label) : "";
   const constantValueEnabled = !!value?.constantValueEnabled;
   const baseValue: RepeatedEntityFieldValue<Record<string, unknown>> = {
-    field: value?.field ?? "",
+    field: field.fixedRepeatedField || value?.field || "",
     constantValueEnabled: value?.constantValueEnabled ?? true,
     constantValue: value?.constantValue ?? [repeated.defaultItemValue],
     mappings: value?.mappings ?? repeated.defaultMappings,
@@ -222,6 +223,7 @@ const RepeatedEntityFieldSelector = ({
             constantValueEnabled: nextConstantValueEnabled,
           })
         }
+        disableConstantValue={field.disableConstantValueToggle}
         label={translatedLabel}
       />
       {constantValueEnabled ? (
@@ -239,13 +241,15 @@ const RepeatedEntityFieldSelector = ({
         </div>
       ) : (
         <>
-          <EntityFieldInput
-            className="ve-pt-3"
-            onChange={updateRepeatedValue}
-            value={baseValue}
-            filter={field.filter}
-          />
-          {!!baseValue.field && (
+          {!field.fixedRepeatedField && (
+            <EntityFieldInput
+              className="ve-pt-3"
+              onChange={updateRepeatedValue}
+              value={baseValue}
+              filter={field.filter}
+            />
+          )}
+          {!!(field.fixedRepeatedField || baseValue.field) && (
             <RepeatedEntitySourceFieldContext.Provider value={baseValue.field}>
               <div className="ve-pt-3">
                 <YextAutoField
