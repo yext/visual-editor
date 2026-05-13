@@ -37,7 +37,7 @@ import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 import { clonePuckResolveData } from "../utils/clonePuckResolveData.ts";
-import { YextPuckFieldOverrides } from "../../fields/fields.ts";
+import { YextPuckFieldOverrides } from "../../fields/fieldOverrides.ts";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();

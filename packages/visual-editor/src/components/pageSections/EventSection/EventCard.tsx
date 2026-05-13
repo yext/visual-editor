@@ -18,9 +18,13 @@ import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
-import { useCardContext } from "../../../hooks/useCardContext.tsx";
+import {
+  useCardContext,
+  useParentCardStyles,
+} from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
+import { bindSlots } from "../../../utils/cardSlots/bindSlots.ts";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
@@ -191,6 +195,15 @@ export const defaultEventCardSlotData = (
 };
 
 export type EventCardProps = {
+  /** @internal */
+  field?: string;
+
+  image?: EventStruct["image"];
+  title?: EventStruct["title"];
+  dateTime?: EventStruct["dateTime"];
+  description?: EventStruct["description"];
+  cta?: EventStruct["cta"];
+
   /** Styling for all the cards. */
   styles: {
     /** The background color of each event card */
@@ -206,12 +219,6 @@ export type EventCardProps = {
     DateTimeSlot: Slot;
     DescriptionSlot: Slot;
     CTASlot: Slot;
-  };
-
-  /** @internal data from parent component */
-  parentData?: {
-    field: string;
-    event: EventStruct;
   };
 
   /** @internal styles from parent component */
@@ -269,12 +276,14 @@ const eventCardFields: YextFields<EventCardProps> = {
 };
 
 const EventCardComponent: PuckComponent<EventCardProps> = (props) => {
-  const { styles, slots, puck, conditionalRender, parentStyles } = props;
+  const { styles, slots, puck, conditionalRender } = props;
 
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
     cardStyles: EventCardProps["styles"];
     slotStyles: Record<string, EventCardProps["styles"]>;
   }>();
+  const parentStyles =
+    useParentCardStyles<EventCardProps["parentStyles"]>() ?? props.parentStyles;
 
   const { slotStyles, getPuck, slotProps } = useGetCardSlots<EventCardProps>(
     props.id
@@ -432,6 +441,8 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
     },
   },
   resolveData: (data, params) => {
+    const field = data.props.field ?? "";
+    const isLinkedMode = Boolean(field);
     const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as
       | WithId<ImageWrapperProps>
       | undefined;
@@ -446,8 +457,8 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
       | WithId<CTAWrapperProps>
       | undefined;
 
-    const resolvedImage = imageSlotProps?.parentData
-      ? imageSlotProps.parentData.image
+    const resolvedImage = isLinkedMode
+      ? data.props.image
       : imageSlotProps
         ? resolveYextEntityField(
             params.metadata.streamDocument,
@@ -464,42 +475,44 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
             ?.url)
     );
     const showDescription = Boolean(
-      descriptionSlotProps &&
-        (descriptionSlotProps.parentData
-          ? descriptionSlotProps.parentData.richText
-          : resolveYextEntityField(
+      isLinkedMode
+        ? data.props.description
+        : descriptionSlotProps &&
+            resolveYextEntityField(
               params.metadata.streamDocument,
               descriptionSlotProps.data.text,
               i18nComponentsInstance.language || "en"
-            ))
+            )
     );
     const showTitle = Boolean(
-      titleSlotProps &&
-        (titleSlotProps.parentData
-          ? titleSlotProps.parentData.text
-          : resolveYextEntityField(
+      isLinkedMode
+        ? data.props.title
+        : titleSlotProps &&
+            resolveYextEntityField(
               params.metadata.streamDocument,
               titleSlotProps.data.text,
               i18nComponentsInstance.language || "en"
-            ))
+            )
     );
     const showDateTime = Boolean(
-      dateTimeSlotProps?.parentData?.date?.trim() ||
-        resolveYextEntityField(
-          params.metadata.streamDocument,
-          dateTimeSlotProps.data.date,
-          i18nComponentsInstance.language || "en"
-        )?.trim()
+      isLinkedMode
+        ? data.props.dateTime?.trim()
+        : dateTimeSlotProps &&
+            resolveYextEntityField(
+              params.metadata.streamDocument,
+              dateTimeSlotProps.data.date,
+              i18nComponentsInstance.language || "en"
+            )?.trim()
     );
     const showCTA = Boolean(
-      ctaSlotProps &&
-        (ctaSlotProps.parentData
-          ? ctaSlotProps.parentData.cta?.label
-          : resolveComponentData(
+      isLinkedMode
+        ? data.props.cta?.label
+        : ctaSlotProps &&
+            resolveComponentData(
               ctaSlotProps.data.entityField,
               i18nComponentsInstance.language || "en",
               params.metadata.streamDocument
-            )?.label)
+            )?.label
     );
 
     let updatedData = {
@@ -550,82 +563,39 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
       "showCTA",
     ]);
 
-    // Set parentData for all slots if parentData is provided
-    if (data.props.parentData) {
-      const event = data.props.parentData.event;
-      const field = data.props.parentData.field;
-
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.ImageSlot[0].props.parentData",
-        {
-          field: field,
-          image: event.image,
-        } satisfies ImageWrapperProps["parentData"]
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.TitleSlot[0].props.parentData",
-        {
-          field: field,
-          text: event.title as string, // will already be resolved
-        } satisfies HeadingTextProps["parentData"]
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.DateTimeSlot[0].props.parentData",
-        {
-          field: field,
-          date: event.dateTime,
-        } satisfies TimestampProps["parentData"]
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.DescriptionSlot[0].props.parentData",
-        {
-          field: field,
-          richText: event.description,
-        } satisfies BodyTextProps["parentData"]
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.CTASlot[0].props.parentData",
-        {
-          field: field,
-          cta: event.cta,
-        } satisfies CTAWrapperProps["parentData"]
+    const { image, title, dateTime, description, cta } = updatedData.props;
+    const resolvedTitle =
+      title &&
+      resolveComponentData(
+        title,
+        i18nComponentsInstance.language || "en",
+        params.metadata.streamDocument,
+        { output: "plainText" }
       );
 
-      return updatedData;
-    } else {
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.ImageSlot[0].props.parentData",
-        undefined
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.TitleSlot[0].props.parentData",
-        undefined
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.DateTimeSlot[0].props.parentData",
-        undefined
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.DescriptionSlot[0].props.parentData",
-        undefined
-      );
-      updatedData = setDeep(
-        updatedData,
-        "props.slots.CTASlot[0].props.parentData",
-        undefined
-      );
-    }
-
-    return updatedData;
+    return bindSlots(updatedData as typeof data, {
+      ImageSlot: image
+        ? ({ field, image } satisfies ImageWrapperProps["parentData"])
+        : undefined,
+      TitleSlot: resolvedTitle
+        ? ({
+            field,
+            text: resolvedTitle,
+          } satisfies HeadingTextProps["parentData"])
+        : undefined,
+      DateTimeSlot: dateTime
+        ? ({ field, date: dateTime } satisfies TimestampProps["parentData"])
+        : undefined,
+      DescriptionSlot: description
+        ? ({
+            field,
+            richText: description,
+          } satisfies BodyTextProps["parentData"])
+        : undefined,
+      CTASlot: cta
+        ? ({ field, cta } satisfies CTAWrapperProps["parentData"])
+        : undefined,
+    });
   },
   render: (props) => <EventCardComponent {...props} />,
 };

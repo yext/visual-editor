@@ -1,8 +1,30 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+
+const puckState = {
+  appState: {
+    ui: {
+      itemSelector: null,
+    },
+  },
+  getItemBySelector: () => undefined,
+};
+
+vi.mock("@puckeditor/core", async () => {
+  const actual =
+    await vi.importActual<typeof import("@puckeditor/core")>(
+      "@puckeditor/core"
+    );
+
+  return {
+    ...actual,
+    createUsePuck: () => (selector: (state: typeof puckState) => unknown) =>
+      selector(puckState),
+  };
+});
+
 import { EntityFieldsContext } from "../hooks/useEntityFields.tsx";
-import { LinkedEntitySchemasContext } from "../hooks/useLinkedEntitySchemas.tsx";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { TemplateMetadataContext } from "../internal/hooks/useMessageReceivers.ts";
 import { generateTemplateMetadata } from "../internal/types/templateMetadata.ts";
@@ -59,16 +81,14 @@ const renderCTASelectorField = ({
   render(
     <TemplatePropsContext.Provider value={{ document: { locale: "en" } }}>
       <TemplateMetadataContext.Provider value={templateMetadata}>
-        <LinkedEntitySchemasContext.Provider value={null}>
-          <EntityFieldsContext.Provider value={entityFields}>
-            <YextAutoField
-              field={field}
-              id="cta-selector-field"
-              onChange={onChange}
-              value={value}
-            />
-          </EntityFieldsContext.Provider>
-        </LinkedEntitySchemasContext.Provider>
+        <EntityFieldsContext.Provider value={entityFields}>
+          <YextAutoField
+            field={field}
+            id="cta-selector-field"
+            onChange={onChange}
+            value={value}
+          />
+        </EntityFieldsContext.Provider>
       </TemplateMetadataContext.Provider>
     </TemplatePropsContext.Provider>
   );

@@ -19,6 +19,7 @@ export type StreamDocument = {
     isPrimaryLocale?: boolean; // deprecated, use pathInfo.primaryLocale instead
     entityPageSetUrlTemplates?: string;
     locatorSourcePageSets?: string; //JSON-stringified locator source page sets
+    categoryRootAncestorId?: number;
   };
 };
 

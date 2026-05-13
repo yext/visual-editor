@@ -39,6 +39,14 @@ We have a custom prop type called `YextEntityField` and a corresponding custom f
 
 YextEntityField allows a user to set either a KG field (one from the document) or use a constant value instead. YextEntityFieldSelector properly renders these selection options for you. It also has some configuration options to filter to specific fields.
 
+If your component needs to render a repeated list from a linked field, prefer
+`createItemSource(...)` instead of wiring multiple `YextEntityField` props by
+hand. It generates one repeated `entityField` plus the matching default value
+and `resolveItems(...)` helper, so components can store a single prop like
+`articles: typeof articleSource.value`. See the
+[Linked Entity Item Sources](../editor/README.md#linked-entity-item-sources)
+example.
+
 ## Registering the Component
 
 Now that the Puck component is created we need to make it available for users.

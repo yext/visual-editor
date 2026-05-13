@@ -2585,4 +2585,191 @@ describe("EventSection", async () => {
       }
     }
   );
+
+  it("resolves linked event card mappings through wrapper parent data", async () => {
+    const data = await resolveAllData(
+      {
+        root: {
+          props: {
+            version: migrationRegistry.length,
+          },
+        },
+        content: [
+          {
+            type: "EventSection",
+            props: {
+              ...EventSection.defaultProps,
+              slots: {
+                ...EventSection.defaultProps!.slots,
+                CardsWrapperSlot: [
+                  {
+                    ...EventSection.defaultProps!.slots.CardsWrapperSlot[0],
+                    props: {
+                      ...EventSection.defaultProps!.slots.CardsWrapperSlot[0]
+                        .props,
+                      data: {
+                        field: "c_eventsSection.events",
+                        constantValueEnabled: false,
+                        constantValue: [{ id: "EventCard-1" }],
+                        mappings: {
+                          image: {
+                            field: "image",
+                            constantValueEnabled: false,
+                            constantValue: undefined,
+                          },
+                          title: {
+                            field: "title",
+                            constantValueEnabled: false,
+                            constantValue: undefined,
+                          },
+                          dateTime: {
+                            field: "dateTime",
+                            constantValueEnabled: false,
+                            constantValue: undefined,
+                          },
+                          description: {
+                            field: "description",
+                            constantValueEnabled: false,
+                            constantValue: undefined,
+                          },
+                          cta: {
+                            field: "cta",
+                            constantValueEnabled: false,
+                            constantValue: undefined,
+                          },
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        zones: {},
+      } as any,
+      puckConfig,
+      {
+        streamDocument: { c_eventsSection: eventsData },
+      }
+    );
+
+    const cardsWrapper = data.content[0]!.props.slots.CardsWrapperSlot[0];
+    expect(cardsWrapper.props.slots.CardSlot).toHaveLength(2);
+    expect(cardsWrapper.props.slots.CardSlot[0].props).toMatchObject({
+      field: "c_eventsSection.events",
+      title: "Cooking Class",
+    });
+    expect(cardsWrapper.props.slots.CardSlot[0].props).not.toHaveProperty(
+      "parentData"
+    );
+  });
+
+  it("preserves manual event card content and does not attach linked parent data", async () => {
+    const data = await resolveAllData(
+      {
+        root: {
+          props: {
+            version: migrationRegistry.length,
+          },
+        },
+        content: [
+          {
+            type: "EventSection",
+            props: {
+              ...EventSection.defaultProps,
+            },
+          },
+        ],
+        zones: {},
+      } as any,
+      puckConfig,
+      {
+        streamDocument: { c_eventsSection: eventsData },
+      }
+    );
+
+    const firstCard =
+      data.content[0]!.props.slots.CardsWrapperSlot[0].props.slots.CardSlot[0];
+    expect(firstCard.props.parentData).toBeUndefined();
+    expect(
+      firstCard.props.slots.TitleSlot[0].props.data.text.constantValue
+        .defaultValue
+    ).toBe("Event Title");
+  });
+
+  it("marks linked event sections empty when the mapped list resolves empty", async () => {
+    const data = await resolveAllData(
+      {
+        root: {
+          props: {
+            version: migrationRegistry.length,
+          },
+        },
+        content: [
+          {
+            type: "EventSection",
+            props: {
+              ...EventSection.defaultProps,
+              slots: {
+                ...EventSection.defaultProps!.slots,
+                CardsWrapperSlot: [
+                  {
+                    ...EventSection.defaultProps!.slots.CardsWrapperSlot[0],
+                    props: {
+                      ...EventSection.defaultProps!.slots.CardsWrapperSlot[0]
+                        .props,
+                      data: {
+                        field: "c_eventsSection.events",
+                        constantValueEnabled: false,
+                        constantValue: [],
+                        mappings: {
+                          image: {
+                            field: "image",
+                            constantValueEnabled: false,
+                            constantValue: undefined,
+                          },
+                          title: {
+                            field: "title",
+                            constantValueEnabled: false,
+                            constantValue: undefined,
+                          },
+                          dateTime: {
+                            field: "dateTime",
+                            constantValueEnabled: false,
+                            constantValue: undefined,
+                          },
+                          description: {
+                            field: "description",
+                            constantValueEnabled: false,
+                            constantValue: undefined,
+                          },
+                          cta: {
+                            field: "cta",
+                            constantValueEnabled: false,
+                            constantValue: undefined,
+                          },
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        zones: {},
+      } as any,
+      puckConfig,
+      {
+        streamDocument: { c_eventsSection: { events: [] } },
+      }
+    );
+
+    expect(
+      data.content[0]!.props.slots.CardsWrapperSlot[0].props.conditionalRender
+    ).toEqual({
+      isMappedContentEmpty: true,
+    });
+  });
 });

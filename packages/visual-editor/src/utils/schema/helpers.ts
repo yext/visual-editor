@@ -103,36 +103,44 @@ export const removeEmptyValues = (
   return obj;
 };
 
-const primaryCategoryToLocalBusinessSubtype: Record<string, string> = {
-  "Arts & Entertainment": "EntertainmentBusiness",
-  "Automotive & Vehicles": "AutomotiveBusiness",
-  "Beauty & Spas": "HealthAndBeautyBusiness",
-  "Business Services": "ProfessionalService",
-  "Computers & Software": "Store",
-  "Consumer Electronics": "Store",
-  Contractors: "HomeAndConstructionBusiness",
-  "Financial Services": "FinancialService",
-  "Food & Dining": "FoodEstablishment",
-  Government: "GovernmentOffice",
-  "Health & Medicine": "MedicalBusiness",
-  "Home & Garden": "Store",
-  Insurance: "FinancialService",
-  "Telecommunication Services": "Store",
-  Legal: "LegalService",
-  "Moving & Transport": "ProfessionalService",
-  Pets: "Store",
-  "Real Estate": "RealEstateAgent",
-  Shopping: "Store",
-  "Sports & Recreation": "SportsActivityLocation",
-  Travel: "TravelAgency",
+// Mapping of primary category root ancestor IDs to LocalBusiness subtypes based on schema.org
+// The name of the top-level category is shown in the comments.
+const primaryCategoryIdToLocalBusinessSubtype: Record<number, string> = {
+  369: "EntertainmentBusiness", // Arts & Entertainment
+  370: "AutomotiveBusiness", // Automotive & Vehicles
+  371: "HealthAndBeautyBusiness", // Beauty & Spas
+  372: "ProfessionalService", // Business Services
+  373: "Store", // Computers & Software
+  374: "Store", // Consumer Electronics
+  375: "HomeAndConstructionBusiness", // Contractors
+  378: "FinancialService", // Financial Services
+  379: "FoodEstablishment", // Food & Dining
+  380: "GovernmentOffice", // Government
+  381: "MedicalBusiness", // Health & Medicine
+  382: "Store", // Home & Garden
+  383: "FinancialService", // Insurance
+  384: "Store", // Telecommunication Services
+  385: "LegalService", // Legal
+  386: "ProfessionalService", // Moving & Transport
+  387: "Store", // Pets
+  388: "RealEstateAgent", // Real Estate
+  389: "Store", // Shopping
+  390: "SportsActivityLocation", // Sports & Recreation
+  392: "TravelAgency", // Travel
 };
+
+const defaultLocalBusinessSchemaType = "LocalBusiness";
 
 export const getLocalBusinessSubtype = (
   streamDocument: StreamDocument
 ): string => {
-  const categoryDisplayName =
-    streamDocument?.ref_categories?.[0]?.fullDisplayName;
-  const category = categoryDisplayName?.split(" > ")?.[0].trim();
+  const categoryRootAncestorId = streamDocument?.__?.categoryRootAncestorId;
+  if (!categoryRootAncestorId) {
+    return defaultLocalBusinessSchemaType;
+  }
 
-  return primaryCategoryToLocalBusinessSubtype[category] || "LocalBusiness";
+  return (
+    primaryCategoryIdToLocalBusinessSubtype[categoryRootAncestorId] ||
+    defaultLocalBusinessSchemaType
+  );
 };

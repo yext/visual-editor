@@ -1,25 +1,58 @@
-import { ComponentData, PuckComponent, setDeep } from "@puckeditor/core";
-import { TeamSectionType } from "../../../types/types.ts";
-import { ComponentFields } from "../../../types/fields.ts";
+import { PuckComponent } from "@puckeditor/core";
+import { PersonStruct } from "../../../types/types.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
-import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
-import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
-import {
-  cardWrapperFields,
-  CardWrapperType,
-} from "../../../utils/cardSlots/cardWrapperHelpers.ts";
+import { SlotMappedCardWrapperType } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 import { defaultTeamCardSlotData, TeamCardProps } from "./TeamCard.tsx";
-import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { renderMappedEntityFieldEmptyState } from "../EntityFieldSectionEmptyState.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
-import {
-  MappedEntityFieldConditionalRender,
-  withMappedEntityFieldConditionalRender,
-} from "../entityFieldSectionUtils.ts";
+import { MappedEntityFieldConditionalRender } from "../entityFieldSectionUtils.ts";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
+import { createSlottedItemSource } from "../../../utils/itemSource/index.ts";
 
-export type TeamCardsWrapperProps = CardWrapperType<TeamSectionType> & {
+export const teamCardsSource = createSlottedItemSource<
+  PersonStruct,
+  TeamCardProps
+>({
+  label: msg("components.team", "Team"),
+  itemLabel: "Team",
+  cardName: "TeamCard",
+  defaultItemProps: () => defaultTeamCardSlotData().props,
+  mappingFields: {
+    headshot: {
+      type: "entityField",
+      label: msg("fields.image", "Image"),
+      filter: { types: ["type.image"] },
+    },
+    name: {
+      type: "entityField",
+      label: msg("fields.name", "Name"),
+      filter: { types: ["type.string"] },
+    },
+    title: {
+      type: "entityField",
+      label: msg("fields.title", "Title"),
+      filter: { types: ["type.string", "type.rich_text_v2"] },
+    },
+    phoneNumber: {
+      type: "entityField",
+      label: msg("fields.phone", "Phone"),
+      filter: { types: ["type.phone"] },
+    },
+    email: {
+      type: "entityField",
+      label: msg("fields.email", "Email"),
+      filter: { types: ["type.string"] },
+    },
+    cta: {
+      type: "entityField",
+      label: msg("fields.cta", "CTA"),
+      filter: { types: ["type.cta"] },
+    },
+  },
+});
+
+export type TeamCardsWrapperProps = SlotMappedCardWrapperType<PersonStruct> & {
   styles: {
     showImage: boolean;
     showTitle: boolean;
@@ -33,10 +66,14 @@ export type TeamCardsWrapperProps = CardWrapperType<TeamSectionType> & {
 };
 
 const teamCardsWrapperFields: YextFields<TeamCardsWrapperProps> = {
-  ...cardWrapperFields<TeamCardsWrapperProps>(
-    msg("components.team", "Team"),
-    ComponentFields.TeamSection.type
-  ),
+  data: teamCardsSource.field,
+  slots: {
+    type: "object",
+    objectFields: {
+      CardSlot: { type: "slot" },
+    },
+    visible: false,
+  },
   styles: {
     type: "object",
     label: msg("fields.styles", "Styles"),
@@ -76,7 +113,7 @@ const TeamCardsWrapperComponent: PuckComponent<TeamCardsWrapperProps> = (
   const { slots } = props;
 
   return (
-    <CardContextProvider>
+    <CardContextProvider parentStyles={props.styles}>
       <slots.CardSlot
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-center"
         allow={[]}
@@ -89,11 +126,7 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
   label: msg("components.teamCardsWrapper", "Team Cards"),
   fields: teamCardsWrapperFields,
   defaultProps: {
-    data: {
-      field: "",
-      constantValueEnabled: true,
-      constantValue: [],
-    },
+    ...teamCardsSource.defaultWrapperProps,
     styles: {
       showImage: true,
       showTitle: true,
@@ -101,135 +134,9 @@ export const TeamCardsWrapper: YextComponentConfig<TeamCardsWrapperProps> = {
       showEmail: true,
       showCTA: true,
     },
-    slots: {
-      CardSlot: [],
-    },
   },
-  resolveData: (data, params) => {
-    const streamDocument = params.metadata.streamDocument;
-    const sharedCardProps =
-      data.props.slots.CardSlot.length === 0
-        ? undefined
-        : {
-            backgroundColor:
-              data.props.slots.CardSlot[0].props.styles.backgroundColor,
-            slotStyles: gatherSlotStyles(
-              data.props.slots.CardSlot[0].props.slots
-            ),
-          };
-
-    if (!data?.props?.data) {
-      return data;
-    }
-
-    if (!data.props.data.constantValueEnabled && data.props.data.field) {
-      const resolvedTeam = resolveYextEntityField<
-        TeamSectionType | { people: undefined }
-      >(
-        streamDocument,
-        {
-          ...data.props.data,
-          constantValue: { people: undefined },
-        },
-        i18nComponentsInstance.language || "en"
-      )?.people;
-
-      if (!resolvedTeam?.length) {
-        const updatedData = setDeep(data, "props.slots.CardSlot", []);
-        return withMappedEntityFieldConditionalRender(updatedData, true);
-      }
-
-      const requiredLength = resolvedTeam.length;
-      const currentLength = data.props.slots.CardSlot.length;
-      const cardsToAdd =
-        currentLength < requiredLength
-          ? Array(requiredLength - currentLength)
-              .fill(null)
-              .map(() =>
-                defaultTeamCardSlotData(
-                  `TeamCard-${crypto.randomUUID()}`,
-                  undefined,
-                  sharedCardProps?.backgroundColor,
-                  sharedCardProps?.slotStyles
-                )
-              )
-          : [];
-      const updatedCardSlot = [
-        ...data.props.slots.CardSlot,
-        ...cardsToAdd,
-      ].slice(0, requiredLength) as ComponentData<TeamCardProps>[];
-
-      const updatedData = setDeep(
-        data,
-        "props.slots.CardSlot",
-        updatedCardSlot.map((card, i) => {
-          card.props.index = i;
-          return setDeep(card, "props.parentData", {
-            field: data.props.data.field,
-            person: resolvedTeam[i],
-          } satisfies TeamCardProps["parentData"]);
-        })
-      );
-
-      return withMappedEntityFieldConditionalRender(updatedData, false);
-    }
-
-    let updatedData = data;
-
-    if (!Array.isArray(data.props.data.constantValue)) {
-      updatedData = setDeep(updatedData, "props.data.constantValue", []);
-      return withMappedEntityFieldConditionalRender(updatedData, false);
-    }
-
-    const inUseIds = new Set<string>();
-    const newSlots = data.props.data.constantValue.map(({ id }, i) => {
-      const existingCard = id
-        ? (data.props.slots.CardSlot.find(
-            (slot) => slot.props.id === id
-          ) as ComponentData<TeamCardProps>)
-        : (data.props.slots.CardSlot[i] as
-            | ComponentData<TeamCardProps>
-            | undefined);
-
-      let newCard = existingCard
-        ? (JSON.parse(JSON.stringify(existingCard)) as typeof existingCard)
-        : undefined;
-
-      let newId = newCard?.props.id || `TeamCard-${crypto.randomUUID()}`;
-
-      if (newCard && inUseIds.has(newId)) {
-        newId = `TeamCard-${crypto.randomUUID()}`;
-        Object.entries(newCard.props.slots).forEach(([slotKey, slotArray]) => {
-          slotArray[0].props.id = newId + "-" + slotKey;
-        });
-      }
-      inUseIds.add(newId);
-
-      if (!newCard) {
-        return defaultTeamCardSlotData(
-          newId,
-          i,
-          sharedCardProps?.backgroundColor,
-          sharedCardProps?.slotStyles
-        );
-      }
-
-      newCard = setDeep(newCard, "props.id", newId);
-      newCard = setDeep(newCard, "props.index", i);
-      newCard = setDeep(newCard, "props.parentData", undefined);
-
-      return newCard;
-    });
-
-    updatedData = setDeep(updatedData, "props.slots.CardSlot", newSlots);
-    updatedData = setDeep(
-      updatedData,
-      "props.data.constantValue",
-      newSlots.map((card) => ({ id: card.props.id }))
-    );
-
-    return withMappedEntityFieldConditionalRender(updatedData, false);
-  },
+  resolveData: (data, params) =>
+    teamCardsSource.populateSlots(data, params.metadata.streamDocument),
   render: (props) => {
     if (props.conditionalRender?.isMappedContentEmpty) {
       return renderMappedEntityFieldEmptyState(props.puck.isEditing);

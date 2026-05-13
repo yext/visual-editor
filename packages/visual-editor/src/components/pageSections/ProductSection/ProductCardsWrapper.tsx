@@ -1,48 +1,86 @@
-import { ProductSectionType } from "../../../types/types.ts";
-import { ComponentFields } from "../../../types/fields.ts";
+import { ProductStruct } from "../../../types/types.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
-import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
-import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
-import { ComponentData, PuckComponent, setDeep } from "@puckeditor/core";
+import { PuckComponent } from "@puckeditor/core";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
-import {
-  CardWrapperType,
-  cardWrapperFields,
-} from "../../../utils/cardSlots/cardWrapperHelpers.ts";
+import { SlotMappedCardWrapperType } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 import {
   defaultProductCardSlotData,
   ProductCardProps,
 } from "./ProductCard.tsx";
-import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 import { ProductSectionVariant } from "./ProductSection.tsx";
 import { renderMappedEntityFieldEmptyState } from "../EntityFieldSectionEmptyState.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
-import {
-  MappedEntityFieldConditionalRender,
-  withMappedEntityFieldConditionalRender,
-} from "../entityFieldSectionUtils.ts";
+import { MappedEntityFieldConditionalRender } from "../entityFieldSectionUtils.ts";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
+import { createSlottedItemSource } from "../../../utils/itemSource/index.ts";
 
-export type ProductCardsWrapperProps = CardWrapperType<ProductSectionType> & {
-  styles: {
-    showImage: boolean;
-    showBrow: boolean;
-    showTitle: boolean;
-    showPrice: boolean;
-    showDescription: boolean;
-    showCTA: boolean;
-    variant?: ProductSectionVariant;
+export const productCardsSource = createSlottedItemSource<
+  ProductStruct,
+  ProductCardProps
+>({
+  label: msg("components.products", "Products"),
+  itemLabel: "Product",
+  cardName: "ProductCard",
+  defaultItemProps: () => defaultProductCardSlotData().props,
+  mappingFields: {
+    image: {
+      type: "entityField",
+      label: msg("fields.image", "Image"),
+      filter: { types: ["type.image"] },
+    },
+    category: {
+      type: "entityField",
+      label: msg("fields.browText", "Brow Text"),
+      filter: { types: ["type.string", "type.rich_text_v2"] },
+    },
+    name: {
+      type: "entityField",
+      label: msg("fields.title", "Title"),
+      filter: { types: ["type.string"] },
+    },
+    price: {
+      type: "entityField",
+      label: msg("fields.price", "Price"),
+      filter: { types: ["type.price"] },
+    },
+    description: {
+      type: "entityField",
+      label: msg("fields.description", "Description"),
+      filter: { types: ["type.rich_text_v2"] },
+    },
+    cta: {
+      type: "entityField",
+      label: msg("fields.cta", "CTA"),
+      filter: { types: ["type.cta"] },
+    },
+  },
+});
+
+export type ProductCardsWrapperProps =
+  SlotMappedCardWrapperType<ProductStruct> & {
+    styles: {
+      showImage: boolean;
+      showBrow: boolean;
+      showTitle: boolean;
+      showPrice: boolean;
+      showDescription: boolean;
+      showCTA: boolean;
+      variant?: ProductSectionVariant;
+    };
+
+    /** @internal */
+    conditionalRender?: MappedEntityFieldConditionalRender;
   };
 
-  /** @internal */
-  conditionalRender?: MappedEntityFieldConditionalRender;
-};
-
 const productCardsWrapperFields: YextFields<ProductCardsWrapperProps> = {
-  ...cardWrapperFields<ProductCardsWrapperProps>(
-    msg("components.products", "Products"),
-    ComponentFields.ProductSection.type
-  ),
+  data: productCardsSource.field,
+  slots: {
+    type: "object",
+    objectFields: {
+      CardSlot: { type: "slot" },
+    },
+    visible: false,
+  },
   styles: {
     type: "object",
     label: msg("fields.styles", "Styles"),
@@ -87,7 +125,7 @@ const ProductCardsWrapperComponent: PuckComponent<ProductCardsWrapperProps> = (
   const { slots } = props;
 
   return (
-    <CardContextProvider>
+    <CardContextProvider parentStyles={props.styles}>
       <slots.CardSlot
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 align-stretch"
         allow={[]}
@@ -101,11 +139,7 @@ export const ProductCardsWrapper: YextComponentConfig<ProductCardsWrapperProps> 
     label: msg("slots.productCards", "Product Cards"),
     fields: productCardsWrapperFields,
     defaultProps: {
-      data: {
-        field: "",
-        constantValueEnabled: true,
-        constantValue: [],
-      },
+      ...productCardsSource.defaultWrapperProps,
       styles: {
         showImage: true,
         showBrow: true,
@@ -114,125 +148,9 @@ export const ProductCardsWrapper: YextComponentConfig<ProductCardsWrapperProps> 
         showDescription: true,
         showCTA: true,
       },
-      slots: {
-        CardSlot: [],
-      },
     },
-    resolveData: (data, params) => {
-      const streamDocument = params.metadata.streamDocument;
-      const sharedCardProps =
-        data.props.slots.CardSlot.length === 0
-          ? undefined
-          : {
-              backgroundColor:
-                data.props.slots.CardSlot[0].props.styles.backgroundColor,
-              slotStyles: gatherSlotStyles(
-                data.props.slots.CardSlot[0].props.slots
-              ),
-            };
-
-      if (!data.props.data.constantValueEnabled && data.props.data.field) {
-        const resolvedProducts = resolveYextEntityField<
-          ProductSectionType | { products: undefined }
-        >(
-          streamDocument,
-          {
-            ...data.props.data,
-            constantValue: { products: undefined },
-          },
-          i18nComponentsInstance.language || "en"
-        )?.products;
-
-        if (!resolvedProducts?.length) {
-          const updatedData = setDeep(data, "props.slots.CardSlot", []);
-          return withMappedEntityFieldConditionalRender(updatedData, true);
-        }
-
-        const requiredLength = resolvedProducts.length;
-        const currentLength = data.props.slots.CardSlot.length;
-        const cardsToAdd =
-          currentLength < requiredLength
-            ? Array(requiredLength - currentLength)
-                .fill(null)
-                .map(() =>
-                  defaultProductCardSlotData(
-                    `ProductCard-${crypto.randomUUID()}`,
-                    undefined,
-                    sharedCardProps?.backgroundColor,
-                    sharedCardProps?.slotStyles
-                  )
-                )
-            : [];
-        const updatedCardSlot = [
-          ...data.props.slots.CardSlot,
-          ...cardsToAdd,
-        ].slice(0, requiredLength) as ComponentData<ProductCardProps>[];
-
-        const updatedData = setDeep(
-          data,
-          "props.slots.CardSlot",
-          updatedCardSlot.map((card, i) => {
-            card.props.index = i;
-            return setDeep(card, "props.parentData", {
-              field: data.props.data.field,
-              product: resolvedProducts[i],
-            } satisfies ProductCardProps["parentData"]);
-          })
-        );
-
-        return withMappedEntityFieldConditionalRender(updatedData, false);
-      }
-
-      let updatedData = data;
-      const inUseIds = new Set<string>();
-      const newSlots = data.props.data.constantValue.map(({ id }, i) => {
-        const existingCard = id
-          ? (data.props.slots.CardSlot.find(
-              (slot) => slot.props.id === id
-            ) as ComponentData<ProductCardProps>)
-          : undefined;
-
-        let newCard = existingCard
-          ? (JSON.parse(JSON.stringify(existingCard)) as typeof existingCard)
-          : undefined;
-
-        let newId = newCard?.props.id || `ProductCard-${crypto.randomUUID()}`;
-
-        if (newCard && inUseIds.has(newId)) {
-          newId = `ProductCard-${crypto.randomUUID()}`;
-          Object.entries(newCard.props.slots).forEach(
-            ([slotKey, slotArray]) => {
-              slotArray[0].props.id = newId + "-" + slotKey;
-            }
-          );
-        }
-        inUseIds.add(newId);
-
-        if (!newCard) {
-          return defaultProductCardSlotData(
-            newId,
-            i,
-            sharedCardProps?.backgroundColor,
-            sharedCardProps?.slotStyles
-          );
-        }
-
-        newCard = setDeep(newCard, "props.id", newId);
-        newCard = setDeep(newCard, "props.index", i);
-        newCard = setDeep(newCard, "props.parentData", undefined);
-
-        return newCard;
-      });
-
-      updatedData = setDeep(updatedData, "props.slots.CardSlot", newSlots);
-      updatedData = setDeep(
-        updatedData,
-        "props.data.constantValue",
-        newSlots.map((card) => ({ id: card.props.id }))
-      );
-
-      return withMappedEntityFieldConditionalRender(updatedData, false);
-    },
+    resolveData: (data, params) =>
+      productCardsSource.populateSlots(data, params.metadata.streamDocument),
     render: (props) => {
       if (props.conditionalRender?.isMappedContentEmpty) {
         return renderMappedEntityFieldEmptyState(props.puck.isEditing);

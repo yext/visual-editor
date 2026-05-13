@@ -7,6 +7,7 @@ export { applyCertifiedFacts } from "./applyCertifiedFacts.ts";
 export { applyTheme } from "./applyTheme.ts";
 export { getCanonicalUrl } from "./canonicalUrl.ts";
 export { themeManagerCn, themeManagerTwMergeConfiguration } from "./cn.ts";
+export { bindSlots } from "./cardSlots/bindSlots.ts";
 export { getPageMetadata } from "./getPageMetadata.ts";
 export { normalizeLink } from "./normalizeLink.ts";
 export { formatCurrency } from "./productPrice.ts";
@@ -18,6 +19,14 @@ export {
 } from "./migrate.ts";
 export { resolveComponentData } from "./resolveComponentData.tsx";
 export { resolveYextEntityField } from "./resolveYextEntityField.ts";
+export {
+  createItemSource,
+  createSlottedItemSource,
+  type CreateItemSourceOptions,
+  type CreateSlottedItemSourceOptions,
+  type ItemSourceInstance,
+  type SlottedItemSourceInstance,
+} from "./itemSource/index.ts";
 export {
   createSearchAnalyticsConfig,
   createSearchHeadlessConfig,
