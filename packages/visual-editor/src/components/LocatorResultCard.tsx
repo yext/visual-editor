@@ -94,6 +94,10 @@ export interface LocatorResultCardProps {
     constantValue?: TranslatableString;
     /** Whether to use the static value for the primary heading */
     constantValueEnabled?: boolean;
+    /** Static text to display when the selected boolean field is true */
+    trueDisplayText?: TranslatableString;
+    /** Static text to display when the selected boolean field is false */
+    falseDisplayText?: TranslatableString;
     /** The heading level for the primary heading */
     headingLevel: HeadingLevel;
     /**
@@ -111,6 +115,10 @@ export interface LocatorResultCardProps {
     constantValue?: TranslatableString;
     /** Whether to use the static value for the secondary heading */
     constantValueEnabled?: boolean;
+    /** Static text to display when the selected boolean field is true */
+    trueDisplayText?: TranslatableString;
+    /** Static text to display when the selected boolean field is false */
+    falseDisplayText?: TranslatableString;
     /** The variant for the secondary heading */
     variant: BodyProps["variant"];
     /** Whether the secondary heading is visible in live mode */
@@ -125,6 +133,10 @@ export interface LocatorResultCardProps {
     constantValue?: TranslatableString;
     /** Whether to use the static value for the tertiary heading */
     constantValueEnabled?: boolean;
+    /** Static text to display when the selected boolean field is true */
+    trueDisplayText?: TranslatableString;
+    /** Static text to display when the selected boolean field is false */
+    falseDisplayText?: TranslatableString;
     /** The variant for the tertiary heading */
     variant: BodyProps["variant"];
     /** Whether the tertiary heading is visible in live mode */
@@ -402,9 +414,21 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
             type: "translatableString",
             showApplyAllOption: false,
             showFieldSelector: true,
-            getOptions: () => getDisplayFieldOptions("type.string"),
+            getOptions: () => getDisplayFieldOptions(["type.string"]),
           },
-          field: DisplayFieldSelector("type.string"),
+          field: DisplayFieldSelector(["type.string", "type.boolean"]),
+          trueDisplayText: {
+            type: "translatableString",
+            label: msg("fields.whenTrue", "When true"),
+            showApplyAllOption: false,
+            showFieldSelector: false,
+          },
+          falseDisplayText: {
+            type: "translatableString",
+            label: msg("fields.whenFalse", "When false"),
+            showApplyAllOption: false,
+            showFieldSelector: false,
+          },
           headingLevel: {
             type: "basicSelector",
             label: msg("fields.headingLevel", "Heading Level"),
@@ -442,9 +466,21 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
             type: "translatableString",
             showApplyAllOption: false,
             showFieldSelector: true,
-            getOptions: () => getDisplayFieldOptions("type.string"),
+            getOptions: () => getDisplayFieldOptions(["type.string"]),
           },
-          field: DisplayFieldSelector("type.string"),
+          field: DisplayFieldSelector(["type.string", "type.boolean"]),
+          trueDisplayText: {
+            type: "translatableString",
+            label: msg("fields.whenTrue", "When true"),
+            showApplyAllOption: false,
+            showFieldSelector: false,
+          },
+          falseDisplayText: {
+            type: "translatableString",
+            label: msg("fields.whenFalse", "When false"),
+            showApplyAllOption: false,
+            showFieldSelector: false,
+          },
           variant: {
             label: msg("fields.variant", "Variant"),
             type: "radio",
@@ -485,9 +521,21 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
             type: "translatableString",
             showApplyAllOption: false,
             showFieldSelector: true,
-            getOptions: () => getDisplayFieldOptions("type.string"),
+            getOptions: () => getDisplayFieldOptions(["type.string"]),
           },
-          field: DisplayFieldSelector("type.string"),
+          field: DisplayFieldSelector(["type.string", "type.boolean"]),
+          trueDisplayText: {
+            type: "translatableString",
+            label: msg("fields.whenTrue", "When true"),
+            showApplyAllOption: false,
+            showFieldSelector: false,
+          },
+          falseDisplayText: {
+            type: "translatableString",
+            label: msg("fields.whenFalse", "When false"),
+            showApplyAllOption: false,
+            showFieldSelector: false,
+          },
           variant: {
             label: msg("fields.variant", "Variant"),
             type: "radio",
@@ -1364,6 +1412,8 @@ const resolveText = (params: {
   config: {
     constantValue?: TranslatableString;
     constantValueEnabled?: boolean;
+    trueDisplayText?: TranslatableString;
+    falseDisplayText?: TranslatableString;
   };
   location: Location;
   language: string;
@@ -1376,10 +1426,25 @@ const resolveText = (params: {
     config.constantValueEnabled && config.constantValue
       ? resolveComponentData(config.constantValue, language, location)
       : undefined;
-  const resolvedText =
-    typeof resolvedConstantValue === "string"
-      ? resolvedConstantValue
-      : parseStringFromLocation(location, fieldId);
+  if (typeof resolvedConstantValue === "string") {
+    return resolvedConstantValue || fallback;
+  }
+
+  let resolvedText: string | undefined;
+  const projectedValue = resolveProjectedField(location, fieldId);
+  if (typeof projectedValue === "boolean") {
+    const resolvedTrueDisplayText = config.trueDisplayText
+      ? resolveComponentData(config.trueDisplayText, language, location)
+      : undefined;
+    const resolvedFalseDisplayText = config.falseDisplayText
+      ? resolveComponentData(config.falseDisplayText, language, location)
+      : undefined;
+    resolvedText = projectedValue
+      ? resolvedTrueDisplayText
+      : resolvedFalseDisplayText;
+  } else {
+    resolvedText = parseStringFromLocation(location, fieldId);
+  }
 
   return resolvedText ?? fallback;
 };

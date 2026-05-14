@@ -5,6 +5,7 @@ import { updateSchemaIdAnchorFormat } from "../components/migrations/0069_update
 import { themeColorPropertyKeyMigration } from "../components/migrations/0071_theme_color_property_keys.ts";
 import { mainContentWrapperMigration } from "../components/migrations/0073_main_content_wrapper.ts";
 import { normalizeFooterLogoImageMigration } from "../components/migrations/0075_normalize_footer_logo_image.ts";
+import { slotMappedCardsMigration } from "../components/migrations/0076_slot_mapped_cards.ts";
 
 describe("migrate", () => {
   it("successfully applies a migration", async () => {
@@ -749,6 +750,727 @@ describe("migrate", () => {
         },
       ],
       zones: {},
+    });
+  });
+
+  it("migrates linked EventCardsWrapper data to slot-mapped cards while preserving card ids", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+          },
+        },
+        content: [
+          {
+            type: "EventCardsWrapper",
+            props: {
+              id: "EventCardsWrapper-test",
+              data: {
+                field: "c_eventsSection",
+                constantValueEnabled: false,
+                constantValue: [{ id: "EventCard-1" }, { id: "EventCard-2" }],
+              },
+              slots: {
+                CardSlot: [
+                  {
+                    type: "EventCard",
+                    props: { id: "EventCard-1", slots: {} },
+                  },
+                  {
+                    type: "EventCard",
+                    props: { id: "EventCard-2", slots: {} },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [slotMappedCardsMigration],
+      {
+        components: {},
+      },
+      {}
+    );
+
+    expect(migratedData.content[0]?.props.data).toEqual({
+      field: "c_eventsSection.events",
+      constantValueEnabled: false,
+      constantValue: [{ id: "EventCard-1" }, { id: "EventCard-2" }],
+      mappings: {
+        image: {
+          field: "image",
+          constantValueEnabled: false,
+          constantValue: undefined,
+        },
+        title: {
+          field: "title",
+          constantValueEnabled: false,
+          constantValue: undefined,
+        },
+        dateTime: {
+          field: "dateTime",
+          constantValueEnabled: false,
+          constantValue: undefined,
+        },
+        description: {
+          field: "description",
+          constantValueEnabled: false,
+          constantValue: undefined,
+        },
+        cta: {
+          field: "cta",
+          constantValueEnabled: false,
+          constantValue: undefined,
+        },
+      },
+    });
+    expect(migratedData.content[0]?.props.slots.CardSlot).toEqual([
+      { type: "EventCard", props: { id: "EventCard-1", slots: {} } },
+      { type: "EventCard", props: { id: "EventCard-2", slots: {} } },
+    ]);
+    expect(migratedData.content[0]?.props.manualSlots).toEqual({
+      CardSlot: [
+        { type: "EventCard", props: { id: "EventCard-1", slots: {} } },
+        { type: "EventCard", props: { id: "EventCard-2", slots: {} } },
+      ],
+    });
+  });
+
+  it("leaves manual EventCardsWrapper data unchanged", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+          },
+        },
+        content: [
+          {
+            type: "EventCardsWrapper",
+            props: {
+              id: "EventCardsWrapper-test",
+              data: {
+                field: "",
+                constantValueEnabled: true,
+                constantValue: [{ id: "EventCard-1" }],
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [slotMappedCardsMigration],
+      {
+        components: {},
+      },
+      {}
+    );
+
+    expect(migratedData.content[0]?.props.data).toEqual({
+      field: "",
+      constantValueEnabled: true,
+      constantValue: [{ id: "EventCard-1" }],
+    });
+    expect(migratedData.content[0]?.props.manualSlots).toEqual({
+      CardSlot: [],
+    });
+  });
+
+  it("leaves legacy manual EventCardsWrapper data unchanged when constantValueEnabled is omitted", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+          },
+        },
+        content: [
+          {
+            type: "EventCardsWrapper",
+            props: {
+              id: "EventCardsWrapper-test",
+              data: {
+                field: "",
+                constantValue: [{ id: "EventCard-1" }],
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [slotMappedCardsMigration],
+      {
+        components: {},
+      },
+      {}
+    );
+
+    expect(migratedData.content[0]?.props.data).toEqual({
+      field: "",
+      constantValue: [{ id: "EventCard-1" }],
+    });
+    expect(migratedData.content[0]?.props.manualSlots).toEqual({
+      CardSlot: [],
+    });
+  });
+
+  it("migrates linked FAQSection data to slot-mapped cards while preserving slot content", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+          },
+        },
+        content: [
+          {
+            type: "FAQSection",
+            props: {
+              id: "FAQSection-test",
+              data: {
+                field: "c_faqSection",
+                constantValueEnabled: false,
+                constantValue: [{ id: "FAQCard-1" }],
+              },
+              slots: {
+                CardSlot: [
+                  {
+                    type: "FAQCard",
+                    props: {
+                      id: "FAQCard-1",
+                      data: {
+                        question: {
+                          field: "",
+                          constantValueEnabled: true,
+                          constantValue: { defaultValue: "Manual question" },
+                        },
+                        answer: {
+                          field: "",
+                          constantValueEnabled: true,
+                          constantValue: {
+                            defaultValue: { html: "<p>Manual answer</p>" },
+                          },
+                        },
+                      },
+                      slots: {},
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [slotMappedCardsMigration],
+      {
+        components: {},
+      },
+      {}
+    );
+
+    expect(migratedData.content[0]?.props.data).toEqual({
+      field: "c_faqSection.faqs",
+      constantValueEnabled: false,
+      constantValue: [{ id: "FAQCard-1" }],
+      mappings: {
+        question: {
+          field: "question",
+          constantValueEnabled: false,
+          constantValue: undefined,
+        },
+        answer: {
+          field: "answer",
+          constantValueEnabled: false,
+          constantValue: undefined,
+        },
+      },
+    });
+    expect(migratedData.content[0]?.props.slots.CardSlot[0]?.props.id).toBe(
+      "FAQCard-1"
+    );
+    expect(
+      migratedData.content[0]?.props.manualSlots.CardSlot[0]?.props.id
+    ).toBe("FAQCard-1");
+  });
+
+  it("leaves already migrated FAQSection data unchanged", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+          },
+        },
+        content: [
+          {
+            type: "FAQSection",
+            props: {
+              id: "FAQSection-test",
+              data: {
+                field: "c_faqSection.faqs",
+                constantValueEnabled: false,
+                constantValue: [],
+                mappings: {
+                  question: {
+                    field: "question",
+                    constantValueEnabled: false,
+                    constantValue: undefined,
+                  },
+                  answer: {
+                    field: "answer",
+                    constantValueEnabled: false,
+                    constantValue: undefined,
+                  },
+                },
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [slotMappedCardsMigration],
+      {
+        components: {},
+      },
+      {}
+    );
+
+    expect(migratedData.content[0]?.props.data).toEqual({
+      field: "c_faqSection.faqs",
+      constantValueEnabled: false,
+      constantValue: [],
+      mappings: {
+        question: {
+          field: "question",
+          constantValueEnabled: false,
+          constantValue: undefined,
+        },
+        answer: {
+          field: "answer",
+          constantValueEnabled: false,
+          constantValue: undefined,
+        },
+      },
+    });
+    expect(migratedData.content[0]?.props.manualSlots).toEqual({
+      CardSlot: [],
+    });
+  });
+
+  it("migrates linked ProductCardsWrapper data to slot-mapped cards", async () => {
+    const migratedData = migrate(
+      {
+        root: { props: { version: 0 } },
+        content: [
+          {
+            type: "ProductCardsWrapper",
+            props: {
+              id: "ProductCardsWrapper-test",
+              data: {
+                field: "c_productsSection",
+                constantValueEnabled: false,
+                constantValue: [{ id: "ProductCard-1" }],
+              },
+              slots: {
+                CardSlot: [
+                  {
+                    type: "ProductCard",
+                    props: { id: "ProductCard-1", slots: {} },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [slotMappedCardsMigration],
+      { components: {} },
+      {}
+    );
+
+    expect(migratedData.content[0]?.props.data).toMatchObject({
+      field: "c_productsSection.products",
+      constantValueEnabled: false,
+      constantValue: [{ id: "ProductCard-1" }],
+      mappings: {
+        image: { field: "image" },
+        category: { field: "category" },
+        name: { field: "name" },
+        price: { field: "price" },
+        description: { field: "description" },
+        cta: { field: "cta" },
+      },
+    });
+  });
+
+  it("migrates linked ProductCardsWrapper data when constantValueEnabled is omitted", async () => {
+    const migratedData = migrate(
+      {
+        root: { props: { version: 0 } },
+        content: [
+          {
+            type: "ProductCardsWrapper",
+            props: {
+              id: "ProductCardsWrapper-test",
+              data: {
+                field: "c_productsSection",
+                constantValue: [{ id: "ProductCard-1" }],
+              },
+              slots: {
+                CardSlot: [
+                  {
+                    type: "ProductCard",
+                    props: { id: "ProductCard-1", slots: {} },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [slotMappedCardsMigration],
+      { components: {} },
+      {}
+    );
+
+    expect(migratedData.content[0]?.props.data).toMatchObject({
+      field: "c_productsSection.products",
+      constantValueEnabled: false,
+      constantValue: [{ id: "ProductCard-1" }],
+      mappings: {
+        image: { field: "image" },
+        category: { field: "category" },
+        name: { field: "name" },
+        price: { field: "price" },
+        description: { field: "description" },
+        cta: { field: "cta" },
+      },
+    });
+  });
+
+  it("normalizes existing linked ProductCardsWrapper price mappings to the price field", async () => {
+    const migratedData = migrate(
+      {
+        root: { props: { version: 0 } },
+        content: [
+          {
+            type: "ProductCardsWrapper",
+            props: {
+              id: "ProductCardsWrapper-test",
+              data: {
+                field: "c_productsSection",
+                constantValueEnabled: false,
+                constantValue: [{ id: "ProductCard-1" }],
+                mappings: {
+                  image: { field: "image" },
+                  category: { field: "category" },
+                  name: { field: "name" },
+                  price: {
+                    value: { field: "price.value" },
+                    currencyCode: { field: "price.currencyCode" },
+                  },
+                  description: { field: "description" },
+                  cta: { field: "cta" },
+                },
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [slotMappedCardsMigration],
+      { components: {} },
+      {}
+    );
+
+    expect(migratedData.content[0]?.props.data).toMatchObject({
+      field: "c_productsSection.products",
+      constantValueEnabled: false,
+      constantValue: [{ id: "ProductCard-1" }],
+      mappings: {
+        image: { field: "image" },
+        category: { field: "category" },
+        name: { field: "name" },
+        price: { field: "price" },
+        description: { field: "description" },
+        cta: { field: "cta" },
+      },
+    });
+  });
+
+  it("leaves manual slot-mapped wrapper data unchanged for upgraded sections", async () => {
+    const cases = [
+      {
+        wrapperType: "ProductCardsWrapper",
+        wrapperId: "ProductCardsWrapper-test",
+      },
+      {
+        wrapperType: "TestimonialCardsWrapper",
+        wrapperId: "TestimonialCardsWrapper-test",
+      },
+      {
+        wrapperType: "InsightCardsWrapper",
+        wrapperId: "InsightCardsWrapper-test",
+      },
+      {
+        wrapperType: "TeamCardsWrapper",
+        wrapperId: "TeamCardsWrapper-test",
+      },
+    ];
+
+    cases.forEach(({ wrapperType, wrapperId }) => {
+      const migratedData = migrate(
+        {
+          root: { props: { version: 0 } },
+          content: [
+            {
+              type: wrapperType,
+              props: {
+                id: wrapperId,
+                data: {
+                  field: "",
+                  constantValueEnabled: true,
+                  constantValue: [{ id: "Card-1" }],
+                },
+                slots: {
+                  CardSlot: [
+                    {
+                      type: "SomeCard",
+                      props: {
+                        id: "Card-1",
+                        slots: {},
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+          zones: {},
+        },
+        [slotMappedCardsMigration],
+        { components: {} },
+        {}
+      );
+
+      expect(migratedData.content[0]?.props.data).toEqual({
+        field: "",
+        constantValueEnabled: true,
+        constantValue: [{ id: "Card-1" }],
+      });
+      expect(migratedData.content[0]?.props.slots).toEqual({
+        CardSlot: [
+          {
+            type: "SomeCard",
+            props: {
+              id: "Card-1",
+              slots: {},
+            },
+          },
+        ],
+      });
+      expect(migratedData.content[0]?.props.manualSlots).toEqual({
+        CardSlot: [
+          {
+            type: "SomeCard",
+            props: {
+              id: "Card-1",
+              slots: {},
+            },
+          },
+        ],
+      });
+    });
+  });
+
+  it("migrates linked TestimonialCardsWrapper data to slot-mapped cards", async () => {
+    const migratedData = migrate(
+      {
+        root: { props: { version: 0 } },
+        content: [
+          {
+            type: "TestimonialCardsWrapper",
+            props: {
+              id: "TestimonialCardsWrapper-test",
+              data: {
+                field: "c_testimonialsSection",
+                constantValueEnabled: false,
+                constantValue: [{ id: "TestimonialCard-1" }],
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [slotMappedCardsMigration],
+      { components: {} },
+      {}
+    );
+
+    expect(migratedData.content[0]?.props.data).toMatchObject({
+      field: "c_testimonialsSection.testimonials",
+      mappings: {
+        description: { field: "description" },
+        contributorName: { field: "contributorName" },
+        contributionDate: { field: "contributionDate" },
+      },
+    });
+  });
+
+  it("migrates linked upgraded wrappers when constantValueEnabled is omitted", async () => {
+    const cases = [
+      {
+        wrapperType: "TestimonialCardsWrapper",
+        wrapperId: "TestimonialCardsWrapper-test",
+        sourceField: "c_testimonialsSection",
+        repeatedField: "c_testimonialsSection.testimonials",
+        mappings: {
+          description: { field: "description" },
+          contributorName: { field: "contributorName" },
+          contributionDate: { field: "contributionDate" },
+        },
+      },
+      {
+        wrapperType: "InsightCardsWrapper",
+        wrapperId: "InsightCardsWrapper-test",
+        sourceField: "c_insightsSection",
+        repeatedField: "c_insightsSection.insights",
+        mappings: {
+          image: { field: "image" },
+          name: { field: "name" },
+          category: { field: "category" },
+          publishTime: { field: "publishTime" },
+          description: { field: "description" },
+          cta: { field: "cta" },
+        },
+      },
+      {
+        wrapperType: "TeamCardsWrapper",
+        wrapperId: "TeamCardsWrapper-test",
+        sourceField: "c_teamSection",
+        repeatedField: "c_teamSection.people",
+        mappings: {
+          headshot: { field: "headshot" },
+          name: { field: "name" },
+          title: { field: "title" },
+          phoneNumber: { field: "phoneNumber" },
+          email: { field: "email" },
+          cta: { field: "cta" },
+        },
+      },
+    ];
+
+    cases.forEach(
+      ({ wrapperType, wrapperId, sourceField, repeatedField, mappings }) => {
+        const migratedData = migrate(
+          {
+            root: { props: { version: 0 } },
+            content: [
+              {
+                type: wrapperType,
+                props: {
+                  id: wrapperId,
+                  data: {
+                    field: sourceField,
+                    constantValue: [{ id: "Card-1" }],
+                  },
+                },
+              },
+            ],
+            zones: {},
+          },
+          [slotMappedCardsMigration],
+          { components: {} },
+          {}
+        );
+
+        expect(migratedData.content[0]?.props.data).toMatchObject({
+          field: repeatedField,
+          constantValueEnabled: false,
+          constantValue: [{ id: "Card-1" }],
+          mappings,
+        });
+      }
+    );
+  });
+
+  it("migrates linked InsightCardsWrapper data to slot-mapped cards", async () => {
+    const migratedData = migrate(
+      {
+        root: { props: { version: 0 } },
+        content: [
+          {
+            type: "InsightCardsWrapper",
+            props: {
+              id: "InsightCardsWrapper-test",
+              data: {
+                field: "c_insightsSection",
+                constantValueEnabled: false,
+                constantValue: [{ id: "InsightCard-1" }],
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [slotMappedCardsMigration],
+      { components: {} },
+      {}
+    );
+
+    expect(migratedData.content[0]?.props.data).toMatchObject({
+      field: "c_insightsSection.insights",
+      mappings: {
+        image: { field: "image" },
+        name: { field: "name" },
+        category: { field: "category" },
+        publishTime: { field: "publishTime" },
+        description: { field: "description" },
+        cta: { field: "cta" },
+      },
+    });
+  });
+
+  it("migrates linked TeamCardsWrapper data to slot-mapped cards", async () => {
+    const migratedData = migrate(
+      {
+        root: { props: { version: 0 } },
+        content: [
+          {
+            type: "TeamCardsWrapper",
+            props: {
+              id: "TeamCardsWrapper-test",
+              data: {
+                field: "c_teamSection",
+                constantValueEnabled: false,
+                constantValue: [{ id: "TeamCard-1" }],
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [slotMappedCardsMigration],
+      { components: {} },
+      {}
+    );
+
+    expect(migratedData.content[0]?.props.data).toMatchObject({
+      field: "c_teamSection.people",
+      mappings: {
+        headshot: { field: "headshot" },
+        name: { field: "name" },
+        title: { field: "title" },
+        phoneNumber: { field: "phoneNumber" },
+        email: { field: "email" },
+        cta: { field: "cta" },
+      },
     });
   });
 });

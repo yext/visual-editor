@@ -169,6 +169,324 @@ const Example = ({ myField }: ExampleProps) => {
 };
 ```
 
+## Linked Entity Item Sources
+
+Use `createItemSource(...)` when a component needs to render repeated content
+from a linked list field. This keeps the source selection, per-item mappings,
+and manual fallback items in one repeated `entityField` value.
+
+### Pattern
+
+1. Define one authored item-props shape whose leaves are `YextEntityField`
+   values.
+2. Call `createItemSource(...)` with that props shape and `mappingFields`.
+3. Store one prop shaped like `typeof articleSource.value`.
+4. Use `useDocument()` plus `articleSource.resolveItems(...)` in render to
+   resolve the current list without storing derived output back onto props.
+
+Mapped `entityField` values inside one repeated item always resolve relative to
+that current mapped item.
+
+When the user switches from one linked parent source to another, the editor
+automatically clears stale `mappings.*.field` selections while preserving any
+constant fallback values.
+
+### Example
+
+`ArticleCard.tsx`
+
+```tsx
+import { type PuckComponent } from "@puckeditor/core";
+import {
+  resolveComponentData,
+  useDocument,
+  type TranslatableRichText,
+  type TranslatableString,
+} from "@yext/visual-editor";
+import { useTranslation } from "react-i18next";
+
+export type ArticleCardProps = {
+  title?: TranslatableString;
+  description?: TranslatableRichText;
+};
+
+export const ArticleCard: PuckComponent<ArticleCardProps> = ({
+  title,
+  description,
+}) => {
+  const { i18n } = useTranslation();
+  const streamDocument = useDocument();
+
+  return (
+    <article>
+      <h3>
+        {resolveComponentData(title, i18n.language, streamDocument, {
+          output: "plainText",
+        })}
+      </h3>
+      {description &&
+        resolveComponentData(description, i18n.language, streamDocument)}
+    </article>
+  );
+};
+```
+
+`ArticleList.tsx`
+
+```tsx
+import { type PuckComponent } from "@puckeditor/core";
+import {
+  createItemSource,
+  type TranslatableRichText,
+  type YextEntityField,
+  resolveComponentData,
+  type StreamDocument,
+  type TranslatableString,
+  toPuckFields,
+  type YextComponentConfig,
+  useDocument,
+} from "@yext/visual-editor";
+import { useTranslation } from "react-i18next";
+import { ArticleCard } from "./ArticleCard.tsx";
+
+type ArticleCardFields = {
+  title: YextEntityField<TranslatableString>;
+  description: YextEntityField<TranslatableRichText>;
+};
+
+const articleSource = createItemSource<ArticleCardFields>({
+  label: "Articles",
+  mappingFields: {
+    title: {
+      type: "entityField",
+      label: "Title",
+      filter: {
+        types: ["type.string"],
+      },
+    },
+    description: {
+      type: "entityField",
+      label: "Description",
+      filter: {
+        types: ["type.rich_text_v2"],
+      },
+    },
+  },
+});
+
+type ArticleListProps = {
+  articles: typeof articleSource.value;
+  heading: {
+    text: TranslatableString;
+  };
+};
+
+const articleListFields = {
+  articles: articleSource.field,
+  heading: {
+    type: "object",
+    label: "Heading",
+    objectFields: {
+      text: {
+        type: "translatableString",
+        label: "Text",
+      },
+    },
+  },
+};
+
+const ArticleListComponent: PuckComponent<ArticleListProps> = ({
+  articles,
+  heading,
+}) => {
+  const { i18n } = useTranslation();
+  const streamDocument = useDocument<StreamDocument>();
+  const items = articleSource.resolveItems(articles, streamDocument);
+
+  return (
+    <section>
+      <h2>
+        {resolveComponentData(heading.text, i18n.language, streamDocument, {
+          output: "plainText",
+        })}
+      </h2>
+      <div>
+        {items.map((item, index) => (
+          <ArticleCard key={index} {...item} />
+        ))}
+      </div>
+    </section>
+  );
+};
+
+export const ArticleList: YextComponentConfig<ArticleListProps> = {
+  label: "Article List",
+  fields: toPuckFields(articleListFields),
+  defaultProps: {
+    articles: articleSource.defaultValue,
+    heading: {
+      text: { defaultValue: "Linked Articles" },
+    },
+  },
+  render: (props) => <ArticleListComponent {...props} />,
+};
+```
+
+Use this pattern when the repeated UI is rendered directly by the component.
+
+### Slotted Example
+
+Use `createSlottedItemSource(...)` when each repeated item should become a slot
+child instead of being rendered inline.
+
+`ItemCard.tsx`
+
+```tsx
+import { type PuckComponent, type Slot } from "@puckeditor/core";
+import {
+  bindSlots,
+  type TranslatableRichText,
+  type TranslatableString,
+  type YextComponentConfig,
+} from "@yext/visual-editor";
+
+export type ItemCardProps = {
+  id?: string;
+  index?: number;
+  field?: string;
+  title?: TranslatableString;
+  description?: TranslatableRichText;
+  slots: {
+    TitleSlot: Slot;
+    DescriptionSlot: Slot;
+  };
+};
+
+const ItemCardComponent: PuckComponent<ItemCardProps> = ({ slots }) => (
+  <article className="flex flex-col gap-3">
+    <slots.TitleSlot />
+    <slots.DescriptionSlot />
+  </article>
+);
+
+export const Item: YextComponentConfig<ItemCardProps> = {
+  label: "Item",
+  fields: {
+    slots: {
+      type: "object",
+      objectFields: {
+        TitleSlot: { type: "slot" },
+        DescriptionSlot: { type: "slot" },
+      },
+      visible: false,
+    },
+  },
+  resolveData: (data) =>
+    bindSlots(data, {
+      TitleSlot: data.props.title,
+      DescriptionSlot: data.props.description,
+    }),
+  render: (props) => <ItemCardComponent {...props} />,
+};
+```
+
+`FeaturedItems.tsx`
+
+```tsx
+import { type ComponentData } from "@puckeditor/core";
+import {
+  createSlottedItemSource,
+  resolveComponentData,
+  type StreamDocument,
+  type TranslatableRichText,
+  type TranslatableString,
+  type YextComponentConfig,
+  type YextFields,
+  useDocument,
+} from "@yext/visual-editor";
+import { useTranslation } from "react-i18next";
+import { type ItemCardProps } from "./ItemCard.tsx";
+
+type FeaturedItemMappings = {
+  title: TranslatableString;
+  description: TranslatableRichText;
+};
+
+const featuredItemsSource = createSlottedItemSource<FeaturedItemMappings>({
+  label: "Featured Items",
+  itemLabel: "Item",
+  mappingFields: {
+    title: {
+      type: "entityField",
+      label: "Title",
+      filter: {
+        types: ["type.string"],
+      },
+    },
+    description: {
+      type: "entityField",
+      label: "Description",
+      filter: {
+        types: ["type.rich_text_v2"],
+      },
+    },
+  },
+});
+
+type FeaturedItemsProps = {
+  data: typeof featuredItemsSource.value;
+  header: TranslatableString;
+  slots: {
+    CardSlot: ComponentData<ItemCardProps>[];
+  };
+};
+
+const featuredItemsFields: YextFields<FeaturedItemsProps> = {
+  data: featuredItemsSource.field,
+  header: {
+    type: "translatableString",
+    label: "Header",
+  },
+  slots: {
+    type: "object",
+    objectFields: {
+      CardSlot: { type: "slot" },
+    },
+    visible: false,
+  },
+};
+
+export const FeaturedItems: YextComponentConfig<FeaturedItemsProps> = {
+  label: "Featured Items",
+  fields: featuredItemsFields,
+  defaultProps: {
+    ...featuredItemsSource.defaultWrapperProps,
+    header: {
+      defaultValue: "Featured Items",
+    },
+  },
+  resolveData: (data, params) =>
+    featuredItemsSource.populateSlots(data, params.metadata.streamDocument),
+  render: ({ header, slots }) => {
+    const { i18n } = useTranslation();
+    const streamDocument = useDocument<StreamDocument>();
+
+    return (
+      <section className="flex flex-col gap-6">
+        <h2>
+          {resolveComponentData(header, i18n.language, streamDocument, {
+            output: "plainText",
+          })}
+        </h2>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <slots.CardSlot allow={[]} />
+        </div>
+      </section>
+    );
+  },
+};
+```
+
 ## basicSelector Field Type
 
 The `basicSelector` field type renders a labeled combobox with optional search, grouped options, translated labels, and empty-state messaging.
