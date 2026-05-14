@@ -1,3 +1,52 @@
+#### 1.3.0-alpha.1 (2026-05-14)
+
+##### Chores
+
+- make toPuckFields a runtime adapter instead of a TS cast ([#1211](https://github.com/yext/visual-editor/pull/1211)) ([360d9e2a](https://github.com/yext/visual-editor/commit/360d9e2a8b08099f58792b320b4ab8297c21bfa5))
+- prevent shell injection in github action (vuln-44055) ([#1185](https://github.com/yext/visual-editor/pull/1185)) ([ebec8fb8](https://github.com/yext/visual-editor/commit/ebec8fb8f7aa02ea8b942a97bc4b52641c62e628))
+- upgrade pnpm to 10.33.0 ([#1171](https://github.com/yext/visual-editor/pull/1171)) ([1507a012](https://github.com/yext/visual-editor/commit/1507a012408950026da5456891db5a614170b423))
+
+##### New Features
+
+- allow editing of the directory card's title ([#1208](https://github.com/yext/visual-editor/pull/1208)) ([838faf32](https://github.com/yext/visual-editor/commit/838faf32e31a45d8686271fe265ac13b7619d4cb))
+- add support for Linked Entity Slots ([#1210](https://github.com/yext/visual-editor/pull/1210)) ([80a193e3](https://github.com/yext/visual-editor/commit/80a193e342691a3d094bfa3799b81619734b64ef))
+- add framework for linked entity mapping ([#1206](https://github.com/yext/visual-editor/pull/1206)) ([a736d119](https://github.com/yext/visual-editor/commit/a736d11927b324760cbd791daea4c95d6278388a))
+- allow boolean display fields in locator ([#1207](https://github.com/yext/visual-editor/pull/1207)) ([5fef9a82](https://github.com/yext/visual-editor/commit/5fef9a822175f250c92585f3311d6ce37ea3d872))
+- add styledImage option for fields ([#1202](https://github.com/yext/visual-editor/pull/1202)) ([a296e4b0](https://github.com/yext/visual-editor/commit/a296e4b0d3029f52b48925730cb5aa02f8769990))
+- add styledPageSection option to field ([#1200](https://github.com/yext/visual-editor/pull/1200)) ([cc682be7](https://github.com/yext/visual-editor/commit/cc682be73c8315f11fdd5b4fab4a000a0c7e7c49))
+- add styledLink option for fields ([#1199](https://github.com/yext/visual-editor/pull/1199)) ([cd5c81d8](https://github.com/yext/visual-editor/commit/cd5c81d8eb2487691ea8fb1d73a1413fa0cbc10a))
+- add styledButton option for fields ([#1198](https://github.com/yext/visual-editor/pull/1198)) ([cf6564c3](https://github.com/yext/visual-editor/commit/cf6564c332abae30b1b1ace622cc173789bd4900))
+- support using custom image for map pin icon in locator ([#1194](https://github.com/yext/visual-editor/pull/1194)) ([9b796aed](https://github.com/yext/visual-editor/commit/9b796aed2ab39cb825102936d00a1e59811110c2))
+- add 'styledText' fieldType ([#1197](https://github.com/yext/visual-editor/pull/1197)) ([f881e026](https://github.com/yext/visual-editor/commit/f881e026bb9256b59bbd92bae74b2f2d91045915))
+- allow Other color option in basicSelector ([#1183](https://github.com/yext/visual-editor/pull/1183)) ([d3bf7394](https://github.com/yext/visual-editor/commit/d3bf7394f1865c994717ae2a8c3043da25a11f62))
+- handle single linked entity field ([#1167](https://github.com/yext/visual-editor/pull/1167)) ([2e76a4be](https://github.com/yext/visual-editor/commit/2e76a4be74ebeb2e7aae56556c1d573a7a80af5a))
+
+##### Bug Fixes
+
+- use ids to map categories to schema ([#1187](https://github.com/yext/visual-editor/pull/1187)) ([77cdb111](https://github.com/yext/visual-editor/commit/77cdb11163e16e869506b9132bd50bb3a5021d5b))
+- images in Grid would stretch to fit the container ([#1204](https://github.com/yext/visual-editor/pull/1204)) ([54bd67c8](https://github.com/yext/visual-editor/commit/54bd67c8ad24da71702a6e822bb7155e34ba42b4))
+- hide components with missing entity data ([#1159](https://github.com/yext/visual-editor/pull/1159)) ([1f82905a](https://github.com/yext/visual-editor/commit/1f82905aa577487f277ceb15a443ea0464231059))
+- footer logo migration ([#1193](https://github.com/yext/visual-editor/pull/1193)) ([9aee0a65](https://github.com/yext/visual-editor/commit/9aee0a65a4ace3bcb1830ef1b945a3426bb1ddd1))
+- handle product price struct ([#1175](https://github.com/yext/visual-editor/pull/1175)) ([67fd06ca](https://github.com/yext/visual-editor/commit/67fd06ca54f9cdae107455760056bd0662538de6))
+- localStorage history state not loading ([#1173](https://github.com/yext/visual-editor/pull/1173)) ([73592275](https://github.com/yext/visual-editor/commit/7359227574c603c9b440290b019d1477b89e0a82))
+- cta outline variant colors ([#1165](https://github.com/yext/visual-editor/pull/1165)) ([f9c30fef](https://github.com/yext/visual-editor/commit/f9c30feff4d87e81ebcd8c0c5a2adc9e6f8e8d80))
+
+##### Refactors
+
+- remove YextField ([#1201](https://github.com/yext/visual-editor/pull/1201)) ([37f1f542](https://github.com/yext/visual-editor/commit/37f1f542b96b23004693ef478b0821755c2a0ed2))
+- add entityField type ([#1196](https://github.com/yext/visual-editor/pull/1196)) ([a3fe737e](https://github.com/yext/visual-editor/commit/a3fe737ea4bf230cd38e25de33de6ea398b4efe5))
+- update dynamicOptionsSelector ([#1195](https://github.com/yext/visual-editor/pull/1195)) ([86b14389](https://github.com/yext/visual-editor/commit/86b143899be8da63daec69668ed3201bd427a7a6))
+- add image fieldType ([#1184](https://github.com/yext/visual-editor/pull/1184)) ([9ebdce19](https://github.com/yext/visual-editor/commit/9ebdce19c93425b33d6ea44cab62dc36b44c8d5e))
+- use 'basicSelector' for maxWidth ([#1192](https://github.com/yext/visual-editor/pull/1192)) ([23e21bc3](https://github.com/yext/visual-editor/commit/23e21bc3d784033456acc425ac7421cd315409a7))
+- update callers to use the 'code' fieldType ([#1191](https://github.com/yext/visual-editor/pull/1191)) ([3ae2db9a](https://github.com/yext/visual-editor/commit/3ae2db9a63927c7e70c880fcf5322a9e9d2891d8))
+- add 'translatableString' fieldType ([#1190](https://github.com/yext/visual-editor/pull/1190)) ([be8bf3a9](https://github.com/yext/visual-editor/commit/be8bf3a92cfc92998f8f6f40f4243cf057b36536))
+- remove video from YextField ([#1186](https://github.com/yext/visual-editor/pull/1186)) ([4ffb1402](https://github.com/yext/visual-editor/commit/4ffb14022dbfde632f7c35c456ba6e1248c228cd))
+- remove text from YextField ([#1182](https://github.com/yext/visual-editor/pull/1182)) ([f633ff8b](https://github.com/yext/visual-editor/commit/f633ff8ba3a798af4e672bfbb6189e0c0ce398ad))
+- remove radio from YextField ([#1179](https://github.com/yext/visual-editor/pull/1179)) ([cd397a29](https://github.com/yext/visual-editor/commit/cd397a294f83bf9b190bfe22e2e80305dad5068e))
+- add 'optionalNumber' a fieldType ([#1174](https://github.com/yext/visual-editor/pull/1174)) ([cba35157](https://github.com/yext/visual-editor/commit/cba3515713b8bc16bae5f6cb1eac985625c86d23))
+- add 'ctaSelector' fieldType ([#1170](https://github.com/yext/visual-editor/pull/1170)) ([143da776](https://github.com/yext/visual-editor/commit/143da7766c4435b58df7d29f1e1c71736347e7f4))
+- use 'basicSelector' everywhere ([#1166](https://github.com/yext/visual-editor/pull/1166)) ([b7c0370e](https://github.com/yext/visual-editor/commit/b7c0370ea692e80d7c7f4fe645b8c790a2ea4110))
+
 #### 1.2.2 (2026-04-17)
 
 ##### Chores
