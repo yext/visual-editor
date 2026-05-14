@@ -142,6 +142,7 @@ export const buildEditorLocalDevOptions = ({
   selectedEntity,
   selectedLocale,
   selectedTemplateDefaults,
+  simulatedThemeData,
 }: BuildEditorLocalDevOptionsArgs): LocalDevOptions | undefined => {
   if (!selectedTemplateId) {
     return undefined;
@@ -158,6 +159,7 @@ export const buildEditorLocalDevOptions = ({
     initialLayoutData: selectedTemplateDefaults?.defaultLayoutData as
       | Record<string, unknown>
       | undefined,
+    initialThemeData: simulatedThemeData,
     showOverrideButtons: false,
   };
 };

@@ -20,6 +20,7 @@ export const LocalEditorShell = ({
   componentRegistry,
   tailwindConfig,
   themeConfig,
+  simulatedThemeData,
 }: LocalEditorShellProps) => {
   const [locationSearch, setLocationSearch] = React.useState(() => {
     return typeof window === "undefined" ? "" : window.location.search;
@@ -102,10 +103,12 @@ export const LocalEditorShell = ({
       selectedEntity,
       selectedLocale,
       selectedTemplateDefaults,
+      simulatedThemeData,
     });
   }, [
     selectedEntity,
     selectedLocale,
+    simulatedThemeData,
     selectedTemplateDefaults,
     selectedTemplateId,
   ]);
