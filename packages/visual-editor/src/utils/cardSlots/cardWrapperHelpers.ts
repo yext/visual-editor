@@ -3,6 +3,7 @@ import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { YextFields } from "../../fields/fields.ts";
 import { MsgString } from "../i18n/platform.ts";
 import { EntityFieldTypes } from "../../internal/utils/getFilteredEntityFields.ts";
+import { type SlotMappedCardsData } from "../itemSource/itemSourceTypes.ts";
 
 export interface CardWrapperType<T> {
   data: Omit<YextEntityField<T>, "constantValue"> & {
@@ -13,6 +14,15 @@ export interface CardWrapperType<T> {
       id?: string;
     }[];
   };
+  slots: {
+    CardSlot: Slot;
+  };
+}
+
+export interface SlotMappedCardWrapperType<
+  TMappings extends Record<string, unknown>,
+> {
+  data: SlotMappedCardsData<TMappings>;
   slots: {
     CardSlot: Slot;
   };

@@ -3,34 +3,12 @@ import { BaseField, FieldLabel, type FieldProps } from "@puckeditor/core";
 import { type YextFieldDefinition } from "./fields.ts";
 import { type BasicSelectorField } from "./BasicSelectorField.tsx";
 import { YextAutoField } from "./YextAutoField.tsx";
-import { DATE_TIME_CONSTANT_CONFIG } from "./DateTimeSelectorField.tsx";
-import { type ImageField } from "./ImageField.tsx";
 import {
   ConstantValueTypes,
   EntityFieldTypes,
   RenderEntityFieldFilter,
 } from "../internal/utils/getFilteredEntityFields.ts";
-import { DevLogger } from "../utils/devLogger.ts";
-import {
-  TEXT_CONSTANT_CONFIG,
-  TRANSLATABLE_RICH_TEXT_CONSTANT_CONFIG,
-  TRANSLATABLE_STRING_CONSTANT_CONFIG,
-} from "../internal/puck/constant-value-fields/Text.tsx";
-import {
-  TEXT_LIST_CONSTANT_CONFIG,
-  TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG,
-} from "../internal/puck/constant-value-fields/TextList.tsx";
-import { ENHANCED_CTA_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
-import { PHONE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Phone.tsx";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
-import { useLinkedEntitySchemas } from "../hooks/useLinkedEntitySchemas.tsx";
-import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
-import { getRandomPlaceholderImageObject } from "../utils/imagePlaceholders.ts";
-import { EVENT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/EventSection.tsx";
-import { INSIGHT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/InsightSection.tsx";
-import { PRODUCT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/ProductSection.tsx";
-import { TEAM_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/TeamSection.tsx";
-import { TESTIMONIAL_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/TestimonialSection.tsx";
 import {
   Tooltip,
   TooltipArrow,
@@ -42,18 +20,31 @@ import { KnowledgeGraphIcon } from "../editor/KnowledgeGraphIcon.tsx";
 import { Switch } from "../internal/puck/ui/switch.tsx";
 import { pt, type MsgString } from "../utils/i18n/platform.ts";
 import { useTranslation } from "react-i18next";
-import { EmbeddedFieldStringInputFromEntity } from "../editor/EmbeddedFieldStringInput.tsx";
-import { FAQ_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/FAQsSection.tsx";
-import { getFieldsForSelector } from "../editor/yextEntityFieldUtils.ts";
+import {
+  getFieldsForSelector,
+  getEntityFieldScopeDisplayName,
+  getScopedEntityFieldDisplayName,
+} from "../editor/yextEntityFieldUtils.ts";
 import { useDocument } from "../hooks/useDocument.tsx";
-import { resolveField } from "../utils/resolveYextEntityField.ts";
-import { toast } from "sonner";
 import { isLinkedEntityFieldPath } from "../utils/linkedEntityFieldUtils.ts";
-import { StreamDocument } from "../utils/types/StreamDocument.ts";
-
-const devLogger = new DevLogger();
-
-type ConstantFieldConfig<ValueType = any> = YextFieldDefinition<ValueType>;
+import { warnOnMultiValueLinkedEntityTraversal } from "../utils/linkedEntityWarningUtils.ts";
+import { buildEntityFieldOptionGroups } from "../editor/entityFieldOptionGroups.ts";
+import { type MappedSourceFieldFilter } from "../utils/cardSlots/mappedSource.ts";
+import { useCurrentSourceField } from "../hooks/useCurrentSourceField.tsx";
+import { TemplateMetadataContext } from "../internal/hooks/useMessageReceivers.ts";
+import {
+  type RepeatedEntityFieldMetadata,
+  type RepeatedEntityFieldValue,
+} from "../utils/itemSource/itemSourceTypes.ts";
+import {
+  getConstantConfigFromType,
+  returnConstantFieldConfig,
+  supportsLocalizedConstantValue,
+} from "./entityFieldConstantConfig.ts";
+export {
+  getConstantConfigFromType,
+  returnConstantFieldConfig,
+} from "./entityFieldConstantConfig.ts";
 
 const YEXT_FIELD_OVERRIDE_TYPES = new Set([
   "basicSelector",
@@ -78,163 +69,202 @@ export type EntityFieldSelectorField<
   type: "entityField";
   label?: string | MsgString;
   visible?: boolean;
-  filter: RenderEntityFieldFilter<T>;
+  filter: MappedSourceFieldFilter<T>;
+  constantValueFilter?: RenderEntityFieldFilter<T>;
   disableConstantValueToggle?: boolean;
   disallowTranslation?: boolean;
+  sourceFieldPath?: string;
+  repeated?: RepeatedEntityFieldMetadata<any>;
 };
 
 type EntityFieldSelectorFieldProps = FieldProps<EntityFieldSelectorField>;
 
-const IMAGE_CONSTANT_CONFIG: ImageField = {
-  type: "image",
-};
+const RepeatedEntitySourceFieldContext = React.createContext<
+  string | undefined
+>(undefined);
 
-const IMAGE_LIST_CONSTANT_CONFIG = () => {
-  return {
-    label: "",
-    type: "array",
-    arrayFields: {
-      assetImage: {
-        ...IMAGE_CONSTANT_CONFIG,
-        label: pt("fields.image", "Image"),
-      },
-    },
-    defaultItemProps: {
-      assetImage: {
-        ...getRandomPlaceholderImageObject({ width: 1000, height: 570 }),
-        width: 1000,
-        height: 570,
-      },
-    },
-    getItemSummary: (_, i) => pt("photo", "Photo") + " " + ((i ?? 0) + 1),
-  } satisfies YextFieldDefinition;
-};
-
-export const TYPE_TO_CONSTANT_CONFIG: Record<string, ConstantFieldConfig> = {
-  "type.string": TRANSLATABLE_STRING_CONSTANT_CONFIG,
-  "type.rich_text_v2": TRANSLATABLE_RICH_TEXT_CONSTANT_CONFIG,
-  "type.phone": PHONE_CONSTANT_CONFIG,
-  "type.image": IMAGE_CONSTANT_CONFIG,
-  "type.cta": ENHANCED_CTA_CONSTANT_CONFIG,
-  "type.datetime": DATE_TIME_CONSTANT_CONFIG,
-  "type.events_section": EVENT_SECTION_CONSTANT_CONFIG,
-  "type.insights_section": INSIGHT_SECTION_CONSTANT_CONFIG,
-  "type.products_section": PRODUCT_SECTION_CONSTANT_CONFIG,
-  "type.faq_section": FAQ_SECTION_CONSTANT_CONFIG,
-  "type.team_section": TEAM_SECTION_CONSTANT_CONFIG,
-  "type.testimonials_section": TESTIMONIAL_SECTION_CONSTANT_CONFIG,
-  "type.promo_section": {
-    type: "custom",
-    render: () => <></>,
-  },
-};
-
-const LIST_TYPE_TO_CONSTANT_CONFIG = (): Record<
-  string,
-  ConstantFieldConfig
-> => {
-  return {
-    "type.string": TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG,
-    "type.image": IMAGE_LIST_CONSTANT_CONFIG(),
-  };
-};
-
-const TYPE_TO_NON_TRANSLATABLE_CONSTANT_CONFIG: Record<
-  string,
-  ConstantFieldConfig
-> = {
-  "type.string": TEXT_CONSTANT_CONFIG,
-  "type.rich_text_v2": TEXT_CONSTANT_CONFIG,
-};
-
-const LIST_TYPE_TO_NON_TRANSLATABLE_CONSTANT_CONFIG: Record<
-  string,
-  ConstantFieldConfig
-> = {
-  "type.string": TEXT_LIST_CONSTANT_CONFIG,
-  "type.rich_text_v2": TEXT_LIST_CONSTANT_CONFIG,
-};
-
-const LOCALIZED_CONSTANT_CONFIGS = new Set<ConstantFieldConfig>([
-  TRANSLATABLE_STRING_CONSTANT_CONFIG,
-  TRANSLATABLE_RICH_TEXT_CONSTANT_CONFIG,
-  TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG,
-]);
-
-const supportsLocalizedConstantValue = (
-  constantFieldConfig: ConstantFieldConfig | undefined
-): boolean => {
-  return (
-    constantFieldConfig !== undefined &&
-    LOCALIZED_CONSTANT_CONFIGS.has(constantFieldConfig)
-  );
-};
-
-export const getConstantConfigFromType = (
-  type: ConstantValueTypes,
-  isList?: boolean,
-  disallowTranslation?: boolean
-): ConstantFieldConfig | undefined => {
-  if (isList) {
-    if (disallowTranslation) {
-      return (
-        LIST_TYPE_TO_NON_TRANSLATABLE_CONSTANT_CONFIG[type] ??
-        LIST_TYPE_TO_CONSTANT_CONFIG()[type]
-      );
-    }
-    return LIST_TYPE_TO_CONSTANT_CONFIG()[type];
+const clearEntityFieldBindings = (value: unknown): unknown => {
+  if (
+    value &&
+    typeof value === "object" &&
+    "field" in value &&
+    "constantValue" in value
+  ) {
+    return {
+      ...value,
+      field: "",
+    };
   }
 
-  const constantConfig = disallowTranslation
-    ? (TYPE_TO_NON_TRANSLATABLE_CONSTANT_CONFIG[type] ??
-      TYPE_TO_CONSTANT_CONFIG[type])
-    : TYPE_TO_CONSTANT_CONFIG[type];
-
-  if (!constantConfig) {
-    devLogger.log(`No constant configuration for ${type}`);
-    return;
+  if (Array.isArray(value)) {
+    return value.map(clearEntityFieldBindings);
   }
 
-  return constantConfig;
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, nestedValue]) => [
+        key,
+        clearEntityFieldBindings(nestedValue),
+      ])
+    );
+  }
+
+  return value;
+};
+
+const hasEntityFieldBindings = (value: unknown): boolean => {
+  if (
+    value &&
+    typeof value === "object" &&
+    "field" in value &&
+    "constantValue" in value
+  ) {
+    return !!(value as { field?: string }).field;
+  }
+
+  if (Array.isArray(value)) {
+    return value.some(hasEntityFieldBindings);
+  }
+
+  if (value && typeof value === "object") {
+    return Object.values(value).some(hasEntityFieldBindings);
+  }
+
+  return false;
 };
 
 /**
- * Returns the constant type configuration when all field-type filters map to
- * a single compatible constant-input configuration.
+ * Renders repeated linked-item editing on top of one `entityField` value.
+ *
+ * 1. Lets the user switch between linked-list mode and manual-item mode.
+ * 2. Shows either the linked source selector or the inline manual item editor.
+ * 3. Clears stale linked mapping selections when the user switches between
+ *    linked parent sources while preserving any authored constant values.
  */
-const returnConstantFieldConfig = (
-  typeFilter: EntityFieldTypes[] | undefined,
-  isList: boolean,
-  disallowTranslation: boolean
-): ConstantFieldConfig | undefined => {
-  if (!typeFilter) {
-    return undefined;
-  }
+const RepeatedEntityFieldSelector = ({
+  field,
+  repeated,
+  onChange,
+  value,
+}: EntityFieldSelectorFieldProps & {
+  repeated: RepeatedEntityFieldMetadata<Record<string, unknown>>;
+}) => {
+  const translatedLabel = field.label ? pt(field.label) : "";
+  const constantValueEnabled = !!value?.constantValueEnabled;
+  const baseValue: RepeatedEntityFieldValue<Record<string, unknown>> = {
+    field: value?.field ?? "",
+    constantValueEnabled: value?.constantValueEnabled ?? true,
+    constantValue: value?.constantValue ?? [repeated.defaultItemValue],
+    mappings: value?.mappings ?? repeated.defaultMappings,
+  };
+  const itemListField = React.useMemo<YextFieldDefinition<any[]>>(
+    () => ({
+      type: "array",
+      label: "",
+      arrayFields: repeated.manualItemFields,
+      defaultItemProps: repeated.defaultItemValue,
+      getItemSummary:
+        repeated.manualItemSummary ??
+        ((_, index) => pt("item", "Item") + " " + String((index ?? 0) + 1)),
+    }),
+    [
+      repeated.defaultItemValue,
+      repeated.manualItemFields,
+      repeated.manualItemSummary,
+    ]
+  );
+  const mappingsField = React.useMemo<YextFieldDefinition<any>>(
+    () => ({
+      type: "object",
+      label: "",
+      objectFields: repeated.mappingFields,
+    }),
+    [repeated.mappingFields]
+  );
 
-  let fieldConfiguration: ConstantFieldConfig | undefined;
-  for (const entityFieldType of typeFilter) {
-    const mappedConfiguration = getConstantConfigFromType(
-      entityFieldType,
-      isList,
-      disallowTranslation
-    );
+  const updateRepeatedValue = React.useCallback(
+    (nextValue: RepeatedEntityFieldValue<Record<string, unknown>>) => {
+      const previousField =
+        !baseValue.constantValueEnabled && typeof baseValue.field === "string"
+          ? baseValue.field
+          : "";
+      const nextField =
+        !nextValue.constantValueEnabled && typeof nextValue.field === "string"
+          ? nextValue.field
+          : "";
 
-    if (!mappedConfiguration) {
-      devLogger.log(`No mapped configuration for ${entityFieldType}`);
-      return;
-    }
+      if (
+        !previousField ||
+        !nextField ||
+        previousField === nextField ||
+        !hasEntityFieldBindings(baseValue.mappings)
+      ) {
+        onChange(nextValue);
+        return;
+      }
 
-    if (!fieldConfiguration) {
-      fieldConfiguration = mappedConfiguration;
-    }
+      onChange({
+        ...nextValue,
+        mappings: clearEntityFieldBindings(baseValue.mappings),
+      });
+    },
+    [baseValue, onChange]
+  );
 
-    if (fieldConfiguration !== mappedConfiguration) {
-      devLogger.log(`Could not resolve configuration for ${entityFieldType}`);
-      return;
-    }
-  }
-
-  return fieldConfiguration;
+  return (
+    <>
+      <ConstantValueModeToggler
+        fieldTypeFilter={["type.string"]}
+        constantValueEnabled={constantValueEnabled}
+        toggleConstantValueEnabled={(nextConstantValueEnabled) =>
+          onChange({
+            ...baseValue,
+            constantValueEnabled: nextConstantValueEnabled,
+          })
+        }
+        label={translatedLabel}
+      />
+      {constantValueEnabled ? (
+        <div className="ve-pt-3">
+          <YextAutoField
+            field={itemListField}
+            onChange={(constantValue) =>
+              onChange({
+                ...baseValue,
+                constantValue,
+              })
+            }
+            value={baseValue.constantValue ?? []}
+          />
+        </div>
+      ) : (
+        <>
+          <EntityFieldInput
+            className="ve-pt-3"
+            onChange={updateRepeatedValue}
+            value={baseValue}
+            filter={field.filter}
+          />
+          {!!baseValue.field && (
+            <RepeatedEntitySourceFieldContext.Provider value={baseValue.field}>
+              <div className="ve-pt-3">
+                <YextAutoField
+                  field={mappingsField}
+                  onChange={(mappings) =>
+                    onChange({
+                      ...baseValue,
+                      mappings,
+                    })
+                  }
+                  value={baseValue.mappings ?? repeated.defaultMappings}
+                />
+              </div>
+            </RepeatedEntitySourceFieldContext.Provider>
+          )}
+        </>
+      )}
+    </>
+  );
 };
 
 export const EntityFieldSelectorFieldOverride = ({
@@ -242,32 +272,37 @@ export const EntityFieldSelectorFieldOverride = ({
   value,
   onChange,
 }: EntityFieldSelectorFieldProps) => {
-  const translatedLabel = field.label ? pt(field.label) : "";
-  const allowsListValues = !!field.filter.includeListsOnly;
-  const canUseEmbeddedStringConstantValue =
-    field.filter.types?.includes("type.string") &&
-    !allowsListValues &&
-    !field.disallowTranslation;
+  if (field.repeated) {
+    return (
+      <RepeatedEntityFieldSelector
+        field={field}
+        repeated={field.repeated}
+        value={value}
+        onChange={onChange}
+      />
+    );
+  }
 
-  let constantFieldConfig = returnConstantFieldConfig(
-    field.filter.types,
+  const translatedLabel = field.label ? pt(field.label) : "";
+  const constantValueFilter = field.constantValueFilter ?? field.filter;
+  const constantValueEnabled =
+    !field.disableConstantValueToggle && !!value?.constantValueEnabled;
+  const allowsListValues = !!constantValueFilter.includeListsOnly;
+  const constantFieldConfig = returnConstantFieldConfig(
+    constantValueFilter.types,
     allowsListValues,
     !!field.disallowTranslation
   );
-
-  if (!constantFieldConfig && canUseEmbeddedStringConstantValue) {
-    constantFieldConfig = getConstantConfigFromType("type.string");
-  }
   const constantValueModeSupported = !!constantFieldConfig;
   const showConstantValueInput =
-    !!value?.constantValueEnabled && constantValueModeSupported;
+    constantValueEnabled && constantValueModeSupported;
 
   return (
     <>
       {constantValueModeSupported ? (
         <ConstantValueModeToggler
-          fieldTypeFilter={field.filter.types ?? []}
-          constantValueEnabled={value?.constantValueEnabled}
+          fieldTypeFilter={constantValueFilter.types ?? []}
+          constantValueEnabled={constantValueEnabled}
           toggleConstantValueEnabled={(constantValueEnabled) =>
             onChange({
               ...value,
@@ -285,8 +320,10 @@ export const EntityFieldSelectorFieldOverride = ({
         <ConstantValueInput
           onChange={onChange}
           value={value}
-          filter={field.filter}
+          filter={constantValueFilter}
           disallowTranslation={field.disallowTranslation}
+          sourceField={field.filter.subdocumentField}
+          sourceFieldPath={field.sourceFieldPath}
         />
       )}
       {!showConstantValueInput && (
@@ -295,6 +332,8 @@ export const EntityFieldSelectorFieldOverride = ({
           onChange={onChange}
           value={value}
           filter={field.filter}
+          sourceField={field.filter.subdocumentField}
+          sourceFieldPath={field.sourceFieldPath}
         />
       )}
     </>
@@ -320,8 +359,8 @@ export const ConstantValueModeToggler = ({
     !disableConstantValue &&
     fieldTypeFilter.some(
       (fieldType) =>
-        Object.keys(TYPE_TO_CONSTANT_CONFIG).includes(fieldType) ||
-        Object.keys(LIST_TYPE_TO_CONSTANT_CONFIG()).includes(fieldType)
+        !!getConstantConfigFromType(fieldType as ConstantValueTypes) ||
+        !!getConstantConfigFromType(fieldType as ConstantValueTypes, true)
     );
   const { i18n } = useTranslation();
   const locale = i18n.language;
@@ -371,6 +410,8 @@ type InputProps<T extends Record<string, any>> = {
   className?: string;
   disallowTranslation?: boolean;
   label?: string;
+  sourceFieldPath?: string;
+  sourceField?: string;
 };
 
 export const ConstantValueInput = <T extends Record<string, any>>({
@@ -379,67 +420,17 @@ export const ConstantValueInput = <T extends Record<string, any>>({
   value,
   disallowTranslation,
 }: InputProps<T>) => {
-  const isSingleStringField =
-    filter.types?.includes("type.string") &&
-    !filter.includeListsOnly &&
-    !disallowTranslation;
-
-  let constantFieldConfig = returnConstantFieldConfig(
+  const constantFieldConfig = returnConstantFieldConfig(
     filter.types,
     !!filter.includeListsOnly,
     !!disallowTranslation
   );
 
-  if (!constantFieldConfig && isSingleStringField) {
-    // Support mixed string/rich-text field filters while keeping a plain
-    // text constant input experience for components that opt into both.
-    constantFieldConfig = getConstantConfigFromType(
-      "type.string",
-      false,
-      !!disallowTranslation
-    );
-  }
-
-  const { i18n } = useTranslation();
-  const locale = i18n.language;
-  const constantValue = value?.constantValue;
-  const localizedConstantValue =
-    typeof constantValue === "string"
-      ? constantValue
-      : constantValue &&
-          typeof constantValue === "object" &&
-          !Array.isArray(constantValue)
-        ? (constantValue[locale] ?? constantValue.defaultValue ?? "")
-        : "";
-  const singleStringInputValue =
-    typeof localizedConstantValue === "string" ? localizedConstantValue : "";
-
   if (!constantFieldConfig) {
     return;
   }
 
-  const fieldEditor = isSingleStringField ? (
-    <div className="ve-pt-3">
-      <EmbeddedFieldStringInputFromEntity
-        value={singleStringInputValue}
-        onChange={(newInputValue) => {
-          onChange({
-            ...value,
-            constantValue: {
-              ...(typeof value?.constantValue === "object" &&
-              !Array.isArray(value?.constantValue)
-                ? value?.constantValue
-                : {}),
-              [locale]: newInputValue,
-              hasLocalizedValue: "true",
-            },
-          });
-        }}
-        filter={filter}
-        showFieldSelector={true}
-      />
-    </div>
-  ) : (
+  const fieldEditor = (
     <YextAutoField
       onChange={(newConstantValue, uiState) =>
         onChange(
@@ -471,97 +462,160 @@ export const ConstantValueInput = <T extends Record<string, any>>({
   );
 };
 
+/**
+ * Renders the KG field picker for one entity-field value.
+ *
+ * 1. Resolves the active source-field scope from explicit props, repeated-item
+ *    context, the current source-field path, or the field filter.
+ * 2. Builds option labels relative to that scope so repeated-item mappings show
+ *    labels like "Products Fields" instead of the template entity type.
+ * 3. Preserves the current selection in the option list even when the active
+ *    filter would otherwise exclude it.
+ */
 export const EntityFieldInput = <T extends Record<string, any>>({
   filter,
   onChange,
   value,
   className,
   label,
+  sourceFieldPath,
+  sourceField: sourceFieldFromInputProps,
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
-  const linkedEntitySchemas = useLinkedEntitySchemas();
-  const templateMetadata = useTemplateMetadata();
   const streamDocument = useDocument();
-  const lastWarnedLinkedEntityFieldRef = React.useRef<
-    | {
-        streamDocument: StreamDocument;
-        fieldPath: string;
-      }
-    | undefined
-  >(undefined);
+  const templateMetadata = React.useContext(TemplateMetadataContext);
+  const sourceFieldFromContext = React.useContext(
+    RepeatedEntitySourceFieldContext
+  );
+  const sourceFieldFromProps = useCurrentSourceField(sourceFieldPath);
+  const sourceField =
+    sourceFieldFromInputProps ||
+    sourceFieldFromContext ||
+    sourceFieldFromProps ||
+    filter.subdocumentField ||
+    "";
+  const currentFieldPath = value?.field as string | undefined;
+  const sourceFieldDisplayName = getEntityFieldScopeDisplayName(
+    sourceField,
+    entityFields
+  );
+  const entityGroupTitle = sourceFieldDisplayName
+    ? pt("entityTypeField", "{{entityType}} Fields", {
+        entityType: sourceFieldDisplayName,
+      })
+    : templateMetadata?.entityTypeDisplayName
+      ? pt("entityTypeField", "{{entityType}} Fields", {
+          entityType: templateMetadata.entityTypeDisplayName,
+        })
+      : pt("entityFields", "Entity Fields");
   const entityFieldSelector = React.useMemo<BasicSelectorField>(() => {
     const filteredEntityFields = getFieldsForSelector(
       entityFields,
-      { ...filter },
-      linkedEntitySchemas ?? undefined
+      filter,
+      streamDocument,
+      sourceField || undefined
     );
-    const entityFieldOptions = filteredEntityFields.map((field) => ({
-      label: field.displayName ?? field.name,
-      value: field.name,
-    }));
+    const options = filteredEntityFields.map((field) => {
+      return {
+        label:
+          getScopedEntityFieldDisplayName(
+            sourceField || undefined,
+            field.name,
+            entityFields
+          ) ??
+          field.displayName ??
+          field.name,
+        value: field.name,
+        fieldPath: sourceField ? `${sourceField}.${field.name}` : field.name,
+      };
+    });
 
-    const options = [
-      {
-        value: "",
-        label: pt("entityTypeField", "{{entityType}} Field", {
-          entityType: templateMetadata.entityTypeDisplayName,
-        }),
-      },
-      ...entityFieldOptions,
-    ];
+    if (
+      currentFieldPath &&
+      !options.some((option) => option.value === currentFieldPath)
+    ) {
+      options.push({
+        label:
+          getScopedEntityFieldDisplayName(
+            sourceField || undefined,
+            currentFieldPath,
+            entityFields
+          ) ?? currentFieldPath,
+        value: currentFieldPath,
+        fieldPath: sourceField
+          ? `${sourceField}.${currentFieldPath}`
+          : currentFieldPath,
+      });
+    }
 
     return {
       type: "basicSelector",
       label,
-      options,
+      optionGroups: buildEntityFieldOptionGroups({
+        entityFields,
+        options: [
+          {
+            value: "",
+            label: pt("fields.options.selectAField", "Select a Field"),
+            fieldPath: "",
+          },
+          ...options,
+        ],
+        linkedGroupTitle: pt("linkedEntityFields", "Linked Entity Fields"),
+        entityGroupTitle,
+      }),
       translateOptions: false,
       noOptionsPlaceholder: pt("noAvailableFields", "No available fields"),
     };
   }, [
+    entityGroupTitle,
     entityFields,
     filter,
     label,
-    templateMetadata.entityTypeDisplayName,
-    linkedEntitySchemas,
+    currentFieldPath,
+    sourceField,
+    streamDocument,
   ]);
 
-  // Warn once per document and linked field path when we resolve through a
-  // multi-value linked reference and fall back to the first linked entity.
+  const previousSourceField = React.useRef(sourceField);
+  const valueRef = React.useRef(value);
+  valueRef.current = value;
+
   React.useEffect(() => {
     if (
+      !sourceFieldPath ||
+      previousSourceField.current === sourceField ||
+      !value?.field
+    ) {
+      previousSourceField.current = sourceField;
+      return;
+    }
+
+    previousSourceField.current = sourceField;
+    onChange(
+      {
+        ...valueRef.current,
+        field: "",
+      },
+      undefined
+    );
+  }, [onChange, sourceField, sourceFieldPath, value?.field]);
+
+  React.useEffect(() => {
+    if (
+      sourceField ||
       filter.includeListsOnly ||
       !value?.field ||
-      !isLinkedEntityFieldPath(value.field, linkedEntitySchemas ?? undefined)
+      !isLinkedEntityFieldPath(value.field, entityFields)
     ) {
       return;
     }
 
-    const resolution = resolveField(streamDocument, value.field);
-    if (
-      !resolution.traversedMultiValueReference ||
-      (lastWarnedLinkedEntityFieldRef.current?.streamDocument ===
-        streamDocument &&
-        lastWarnedLinkedEntityFieldRef.current.fieldPath === value.field)
-    ) {
-      return;
-    }
-
-    lastWarnedLinkedEntityFieldRef.current = {
-      streamDocument,
-      fieldPath: value.field,
-    };
-    toast.warning(
-      pt(
-        "linkedEntityMultiValueWarning",
-        "Multiple linked entities were found for {{fieldName}}. Using the first linked entity.",
-        {
-          fieldName: value.field,
-        }
-      )
-    );
+    warnOnMultiValueLinkedEntityTraversal(streamDocument, value.field);
   }, [
     filter.includeListsOnly,
-    linkedEntitySchemas,
+    entityFields,
+    sourceField,
     streamDocument,
     value?.field,
   ]);

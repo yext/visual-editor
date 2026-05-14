@@ -400,12 +400,14 @@ describe("getSchema - entity pages", () => {
         },
         ref_categories: [
           {
-            fullDisplayName: "Automotive & Vehicles > Auto Repair",
+            fullDisplayName:
+              "Automóviles y vehículos > Reparación de automóviles",
           },
         ],
         mainPhone: "123-456-7890",
         description: "test description",
         __: {
+          categoryRootAncestorId: 370,
           layout: JSON.stringify({
             root: {
               props: {

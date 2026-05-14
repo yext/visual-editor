@@ -533,4 +533,131 @@ describe("FAQSection", async () => {
       }
     }
   );
+
+  it("resolves linked FAQ mappings through section parent data", async () => {
+    const updatedData = await resolveAllData(
+      {
+        root: {
+          props: {
+            version: migrationRegistry.length,
+          },
+        },
+        content: [
+          {
+            type: "FAQSection",
+            props: {
+              ...FAQSection.defaultProps,
+              data: {
+                field: "c_faqSection.faqs",
+                constantValueEnabled: false,
+                constantValue: [{ id: "FAQCard-1" }],
+                mappings: {
+                  question: {
+                    field: "question",
+                    constantValueEnabled: false,
+                    constantValue: undefined,
+                  },
+                  answer: {
+                    field: "answer",
+                    constantValueEnabled: false,
+                    constantValue: undefined,
+                  },
+                },
+              },
+            },
+          },
+        ],
+        zones: {},
+      } as any,
+      puckConfig,
+      {
+        streamDocument: { locale: "en", c_faqSection: faqData },
+      }
+    );
+
+    expect(updatedData.content[0]!.props.slots.CardSlot).toHaveLength(2);
+    expect(updatedData.content[0]!.props.slots.CardSlot[0].props).toMatchObject(
+      {
+        field: "c_faqSection.faqs",
+        question: "What services do you offer?",
+      }
+    );
+  });
+
+  it("preserves manual FAQ card content and leaves parent data undefined", async () => {
+    const updatedData = await resolveAllData(
+      {
+        root: {
+          props: {
+            version: migrationRegistry.length,
+          },
+        },
+        content: [
+          {
+            type: "FAQSection",
+            props: {
+              ...FAQSection.defaultProps,
+            },
+          },
+        ],
+        zones: {},
+      } as any,
+      puckConfig,
+      {
+        streamDocument: { locale: "en", c_faqSection: faqData },
+      }
+    );
+
+    const firstCard = updatedData.content[0]!.props.slots.CardSlot[0];
+    expect(firstCard.props.parentData).toBeUndefined();
+    expect(firstCard.props.data.question.constantValue.defaultValue).toBe(
+      "Question Lorem ipsum dolor sit amet?"
+    );
+  });
+
+  it("marks linked FAQ sections empty when the mapped list resolves empty", async () => {
+    const updatedData = await resolveAllData(
+      {
+        root: {
+          props: {
+            version: migrationRegistry.length,
+          },
+        },
+        content: [
+          {
+            type: "FAQSection",
+            props: {
+              ...FAQSection.defaultProps,
+              data: {
+                field: "c_faqSection.faqs",
+                constantValueEnabled: false,
+                constantValue: [],
+                mappings: {
+                  question: {
+                    field: "question",
+                    constantValueEnabled: false,
+                    constantValue: undefined,
+                  },
+                  answer: {
+                    field: "answer",
+                    constantValueEnabled: false,
+                    constantValue: undefined,
+                  },
+                },
+              },
+            },
+          },
+        ],
+        zones: {},
+      } as any,
+      puckConfig,
+      {
+        streamDocument: { locale: "en", c_faqSection: { faqs: [] } },
+      }
+    );
+
+    expect(updatedData.content[0]!.props.conditionalRender).toEqual({
+      isMappedContentEmpty: true,
+    });
+  });
 });

@@ -7,8 +7,10 @@ interface CardWrapper {
 }
 
 /**
- * Reads the section heading level from the SectionHeadingSlot
- * and pass a semanticLevelOverride into each card's TitleSlot
+ * Reads the section heading level from `SectionHeadingSlot` and passes the
+ * next semantic level into each card's destination heading slot. When the
+ * section heading is already `h6`, card headings are rendered as `span` so the
+ * document outline does not exceed valid heading levels.
  */
 export const forwardHeadingLevel = <T extends CardWrapper>(
   data: Record<string, any>,

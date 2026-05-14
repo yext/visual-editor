@@ -2235,7 +2235,74 @@ const tests: ComponentTest[] = [
       analytics: { scope: "gridSection" },
       align: "left",
     },
-    version: migrationRegistry.length,
+    version: 74,
+  },
+  {
+    name: "version 75 - image does not stretch with taller sibling column",
+    document: {
+      address: testAddress,
+      id: "test-id",
+      name: "Galaxy Grill",
+    },
+    props: {
+      columns: 2,
+      slots: [
+        {
+          Column: [
+            {
+              type: "BodyText",
+              props: {
+                id: "BodyText-grid-image-stretch-regression",
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: {
+                        html: rtfHtml,
+                      },
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: { variant: "base" },
+              },
+            },
+          ],
+        },
+        {
+          Column: [
+            {
+              type: "ImageWrapper",
+              props: {
+                id: "ImageWrapper-grid-image-stretch-regression",
+                data: {
+                  image: {
+                    field: "",
+                    constantValue: {
+                      url: "https://placehold.co/640x360",
+                      height: 360,
+                      width: 640,
+                    },
+                    constantValueEnabled: true,
+                  },
+                  link: { defaultValue: "#" },
+                },
+                styles: {
+                  aspectRatio: 1.78,
+                  width: 640,
+                },
+              },
+            },
+          ],
+        },
+        { Column: [] },
+      ],
+      backgroundColor: backgroundColors.background1.value,
+      liveVisibility: true,
+      analytics: { scope: "gridSection" },
+    },
+    version: 75,
   },
 ];
 

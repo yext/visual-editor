@@ -1,10 +1,4 @@
-import {
-  ComponentData,
-  PuckComponent,
-  setDeep,
-  Slot,
-  SlotComponent,
-} from "@puckeditor/core";
+import { PuckComponent, Slot, SlotComponent } from "@puckeditor/core";
 import {
   backgroundColors,
   ThemeColor,
@@ -15,21 +9,15 @@ import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
-import { FAQSectionType } from "../../../types/types.ts";
-import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
-import { ComponentFields } from "../../../types/fields.ts";
-import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
-import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
+import { FAQStruct } from "../../../types/types.ts";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultFAQCardData, FAQCardProps } from "./FAQCard.tsx";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { EntityFieldSectionEmptyStateBox } from "../EntityFieldSectionEmptyState.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
-import {
-  MappedEntityFieldConditionalRender,
-  withMappedEntityFieldConditionalRender,
-} from "../entityFieldSectionUtils.ts";
+import { MappedEntityFieldConditionalRender } from "../entityFieldSectionUtils.ts";
+import { createSlottedItemSource } from "../../../utils/itemSource/index.ts";
 
 export interface FAQStyles {
   /**
@@ -46,11 +34,7 @@ export interface FAQStyles {
 }
 
 export interface FAQSectionProps {
-  data: Omit<YextEntityField<FAQSectionType>, "constantValue"> & {
-    constantValue: {
-      id?: string;
-    }[];
-  };
+  data: typeof faqCardsSource.value;
 
   /**
    * This object contains properties for customizing the component's appearance.
@@ -78,14 +62,31 @@ export interface FAQSectionProps {
   liveVisibility: boolean;
 }
 
-const FAQsSectionFields: YextFields<FAQSectionProps> = {
-  data: {
-    type: "entityField",
-    label: msg("fields.faqs", "FAQs"),
-    filter: {
-      types: [ComponentFields.FAQSection.type],
+export const faqCardsSource = createSlottedItemSource<FAQStruct, FAQCardProps>({
+  label: msg("fields.faqs", "FAQs"),
+  itemLabel: "FAQ",
+  cardName: "FAQCard",
+  defaultItemProps: defaultFAQCardData().props,
+  mappingFields: {
+    question: {
+      type: "entityField",
+      label: msg("fields.question", "Question"),
+      filter: {
+        types: ["type.string", "type.rich_text_v2"],
+      },
+    },
+    answer: {
+      type: "entityField",
+      label: msg("fields.answer", "Answer"),
+      filter: {
+        types: ["type.rich_text_v2"],
+      },
     },
   },
+});
+
+const FAQsSectionFields: YextFields<FAQSectionProps> = {
+  data: faqCardsSource.field,
   styles: {
     type: "object",
     label: msg("fields.styles", "Styles"),
@@ -174,6 +175,7 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
   label: msg("components.faqsSection", "FAQs Section"),
   fields: FAQsSectionFields,
   defaultProps: {
+    ...faqCardsSource.defaultWrapperProps,
     slots: {
       HeadingSlot: [
         {
@@ -190,16 +192,7 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
           } satisfies HeadingTextProps,
         },
       ],
-      CardSlot: [
-        defaultFAQCardData(undefined, 0),
-        defaultFAQCardData(undefined, 1),
-        defaultFAQCardData(undefined, 2),
-      ],
-    },
-    data: {
-      constantValue: [{}, {}, {}],
-      constantValueEnabled: true,
-      field: "",
+      CardSlot: faqCardsSource.defaultWrapperProps.slots.CardSlot,
     },
     styles: {
       backgroundColor: backgroundColors.background2.value,
@@ -210,125 +203,8 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
       scope: "faqsSection",
     },
   },
-  resolveData: (data, params) => {
-    const streamDocument = params.metadata.streamDocument;
-    const sharedCardProps =
-      data.props.slots.CardSlot.length === 0
-        ? undefined
-        : {
-            questionVariant:
-              data.props.slots.CardSlot[0].props.styles.questionVariant,
-            answerVariant:
-              data.props.slots.CardSlot[0].props.styles.answerVariant,
-            answerColor: data.props.slots.CardSlot[0].props.styles.answerColor,
-          };
-
-    if (!data.props.data.constantValueEnabled && data.props.data.field) {
-      const resolvedFAQs = resolveYextEntityField<
-        FAQSectionType | { faqs: undefined }
-      >(
-        streamDocument,
-        {
-          ...data.props.data,
-          constantValue: { faqs: undefined },
-        },
-        i18nComponentsInstance.language || "en"
-      )?.faqs;
-
-      if (!resolvedFAQs?.length) {
-        // Clear the rendered cards when the mapped FAQ field resolves empty.
-        const updatedData = setDeep(data, "props.slots.CardSlot", []);
-        return withMappedEntityFieldConditionalRender(updatedData, true);
-      }
-
-      const requiredLength = resolvedFAQs.length;
-      const currentLength = data.props.slots.CardSlot.length;
-      const cardsToAdd =
-        currentLength < requiredLength
-          ? Array(requiredLength - currentLength)
-              .fill(null)
-              .map(() =>
-                defaultFAQCardData(
-                  `FAQCard-${crypto.randomUUID()}`,
-                  undefined,
-                  sharedCardProps?.questionVariant,
-                  sharedCardProps?.answerVariant,
-                  sharedCardProps?.answerColor
-                )
-              )
-          : [];
-      const updatedCardSlot = [
-        ...data.props.slots.CardSlot,
-        ...cardsToAdd,
-      ].slice(0, requiredLength) as ComponentData<FAQCardProps>[];
-
-      // Resize the card slot list to match the mapped FAQ count and attach each
-      // resolved FAQ to its corresponding card through parentData.
-      const updatedData = setDeep(
-        data,
-        "props.slots.CardSlot",
-        updatedCardSlot.map((card, i) => {
-          card.props.index = i;
-          // Expose the resolved FAQ entry to the card so its child slots can resolve from it.
-          return setDeep(card, "props.parentData", {
-            field: data.props.data.field,
-            faq: resolvedFAQs[i],
-          } satisfies FAQCardProps["parentData"]);
-        })
-      );
-
-      return withMappedEntityFieldConditionalRender(updatedData, false);
-    }
-
-    let updatedData = data;
-    const inUseIds = new Set<string>();
-    const newSlots = data.props.data.constantValue.map(({ id }, i) => {
-      const existingCard = id
-        ? (data.props.slots.CardSlot.find(
-            (slot) => slot.props.id === id
-          ) as ComponentData<FAQCardProps>)
-        : undefined;
-
-      let newCard = existingCard
-        ? (JSON.parse(JSON.stringify(existingCard)) as typeof existingCard)
-        : undefined;
-
-      let newId = newCard?.props.id || `FAQCard-${crypto.randomUUID()}`;
-
-      if (newCard && inUseIds.has(newId)) {
-        newId = `FAQCard-${crypto.randomUUID()}`;
-      }
-      inUseIds.add(newId);
-
-      if (!newCard) {
-        return defaultFAQCardData(
-          newId,
-          i,
-          sharedCardProps?.questionVariant,
-          sharedCardProps?.answerVariant,
-          sharedCardProps?.answerColor
-        );
-      }
-
-      // Normalize the reused card to the current constant-value position and detach any old mapped parent data.
-      newCard = setDeep(newCard, "props.id", newId);
-      newCard = setDeep(newCard, "props.index", i);
-      newCard = setDeep(newCard, "props.parentData", undefined);
-
-      return newCard;
-    });
-
-    // Replace the rendered cards with the normalized constant-value card list.
-    updatedData = setDeep(updatedData, "props.slots.CardSlot", newSlots);
-    // Mirror the normalized card ids back into constantValue so the sidebar stays in sync.
-    updatedData = setDeep(
-      updatedData,
-      "props.data.constantValue",
-      newSlots.map((card) => ({ id: card.props.id }))
-    );
-
-    return withMappedEntityFieldConditionalRender(updatedData, false);
-  },
+  resolveData: (data, params) =>
+    faqCardsSource.populateSlots(data, params.metadata.streamDocument),
   render: (props) => (
     <ComponentErrorBoundary
       isEditing={props.puck.isEditing}

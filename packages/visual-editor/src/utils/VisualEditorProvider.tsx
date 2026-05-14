@@ -1,7 +1,6 @@
 import React from "react";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { EntityFieldsContext } from "../hooks/useEntityFields.tsx";
-import { LinkedEntitySchemasContext } from "../hooks/useLinkedEntitySchemas.tsx";
 import { TailwindConfig } from "./themeResolver.ts";
 import { StreamFields } from "../types/entityFields.ts";
 import { TailwindConfigContext } from "../hooks/useTailwindConfig.tsx";
@@ -13,7 +12,6 @@ import {
 } from "./i18n/components.ts";
 import { normalizeLocalesInObject } from "./normalizeLocale.ts";
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";
-import type { LinkedEntitySchemas } from "./linkedEntityFieldUtils.ts";
 
 type AllOrNothing<T extends Record<string, any>> =
   | T
@@ -26,7 +24,6 @@ type UniversalProps<T> = {
 
 type EditorProps = {
   entityFields: StreamFields | null;
-  linkedEntitySchemas?: LinkedEntitySchemas | null;
   tailwindConfig: TailwindConfig;
 };
 
@@ -36,7 +33,6 @@ type VisualEditorProviderProps<T> = UniversalProps<T> &
 const VisualEditorProvider = <T extends Record<string, any>>({
   templateProps,
   entityFields,
-  linkedEntitySchemas,
   tailwindConfig,
   children,
 }: VisualEditorProviderProps<T>) => {
@@ -65,11 +61,9 @@ const VisualEditorProvider = <T extends Record<string, any>>({
         <QueryClientProvider client={queryClient}>
           <TemplatePropsContext.Provider value={normalizedTemplateProps}>
             <EntityFieldsContext.Provider value={entityFields}>
-              <LinkedEntitySchemasContext.Provider value={linkedEntitySchemas}>
-                <TailwindConfigContext.Provider value={tailwindConfig}>
-                  {children}
-                </TailwindConfigContext.Provider>
-              </LinkedEntitySchemasContext.Provider>
+              <TailwindConfigContext.Provider value={tailwindConfig}>
+                {children}
+              </TailwindConfigContext.Provider>
             </EntityFieldsContext.Provider>
           </TemplatePropsContext.Provider>
         </QueryClientProvider>

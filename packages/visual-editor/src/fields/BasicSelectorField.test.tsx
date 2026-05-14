@@ -87,6 +87,52 @@ describe("BasicSelectorField", () => {
     expect(screen.getByRole("combobox").textContent).toContain("Beta");
   });
 
+  it("does not crash when the number of options changes between renders", () => {
+    const onChange = vi.fn();
+
+    const DynamicField = () => {
+      const [showExtraOption, setShowExtraOption] = React.useState(false);
+
+      const field: BasicSelectorField = {
+        type: "basicSelector",
+        label: "Field",
+        options: () =>
+          showExtraOption
+            ? [
+                { label: "Alpha", value: "alpha" },
+                { label: "Beta", value: "beta" },
+              ]
+            : [{ label: "Alpha", value: "alpha" }],
+        translateOptions: false,
+      };
+
+      return (
+        <>
+          <button onClick={() => setShowExtraOption(true)} type="button">
+            Add option
+          </button>
+          <YextAutoField
+            field={field}
+            id="dynamic-field-with-extra-option"
+            onChange={onChange}
+            value="alpha"
+          />
+        </>
+      );
+    };
+
+    render(<DynamicField />);
+
+    expect(screen.getByRole("combobox").textContent).toContain("Alpha");
+
+    fireEvent.click(screen.getByText("Add option"));
+
+    expect(screen.getByRole("combobox").textContent).toContain("Alpha");
+
+    fireEvent.click(screen.getByRole("combobox"));
+    expect(screen.getByText("Beta")).toBeDefined();
+  });
+
   it("resolves ThemeOptions keys passed to basicSelector", () => {
     const field: BasicSelectorField = {
       type: "basicSelector",
