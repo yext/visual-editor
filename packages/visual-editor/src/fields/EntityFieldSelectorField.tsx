@@ -41,6 +41,7 @@ import {
   returnConstantFieldConfig,
   supportsLocalizedConstantValue,
 } from "./entityFieldConstantConfig.ts";
+import { RepeatedSourceFieldContext } from "./repeatedSourceFieldContext.ts";
 export {
   getConstantConfigFromType,
   returnConstantFieldConfig,
@@ -79,10 +80,6 @@ export type EntityFieldSelectorField<
 };
 
 type EntityFieldSelectorFieldProps = FieldProps<EntityFieldSelectorField>;
-
-const RepeatedSourceFieldContext = React.createContext<string | undefined>(
-  undefined
-);
 
 const clearEntityFieldBindings = (value: unknown): unknown => {
   if (
