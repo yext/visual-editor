@@ -107,4 +107,98 @@ describe("EmbeddedFieldStringInput", () => {
 
     expect(screen.getByText("Linked Location > Address > City")).toBeDefined();
   });
+
+  it("scopes mapped-item embedded fields to one entity group and excludes nested linked descendants", () => {
+    render(
+      <TemplatePropsContext.Provider value={{ document: {} }}>
+        <TemplateMetadataContext.Provider value={generateTemplateMetadata()}>
+          <EntityFieldsContext.Provider
+            value={{
+              fields: [
+                {
+                  name: "c_articles",
+                  displayName: "Articles",
+                  definition: {
+                    name: "c_articles",
+                    typeName: "c_articles",
+                    isList: true,
+                    type: {},
+                  },
+                  children: {
+                    fields: [
+                      {
+                        name: "name",
+                        displayName: "Name",
+                        definition: {
+                          name: "name",
+                          typeName: "type.string",
+                          type: {},
+                        },
+                      },
+                      {
+                        name: "description",
+                        displayName: "Description",
+                        definition: {
+                          name: "description",
+                          typeName: "type.string",
+                          type: {},
+                        },
+                      },
+                      {
+                        name: "c_linkedLocation",
+                        displayName: "Linked Location",
+                        definition: {
+                          name: "c_linkedLocation",
+                          typeRegistryId: "type.entity_reference",
+                          type: {
+                            documentType: "DOCUMENT_TYPE_ENTITY",
+                          },
+                        },
+                        children: {
+                          fields: [
+                            {
+                              name: "name",
+                              displayName: "Name",
+                              definition: {
+                                name: "name",
+                                typeName: "type.string",
+                                type: {},
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+              displayNames: {
+                c_articles: "Articles",
+                "c_articles.name": "Articles > Name",
+                "c_articles.description": "Articles > Description",
+                "c_articles.c_linkedLocation": "Articles > Linked Location",
+                "c_articles.c_linkedLocation.name":
+                  "Articles > Linked Location > Name",
+              },
+            }}
+          >
+            <EmbeddedFieldStringInputFromEntity
+              filter={{ types: ["type.string"] }}
+              onChange={() => undefined}
+              showFieldSelector={true}
+              sourceField="c_articles"
+              value=""
+            />
+          </EntityFieldsContext.Provider>
+        </TemplateMetadataContext.Provider>
+      </TemplatePropsContext.Provider>
+    );
+
+    fireEvent.click(screen.getByLabelText("Add entity field"));
+
+    expect(screen.queryByText("Linked Entity Fields")).toBeNull();
+    expect(screen.getByText("Name")).toBeDefined();
+    expect(screen.getByText("Description")).toBeDefined();
+    expect(screen.queryByText("Linked Location > Name")).toBeNull();
+  });
 });
