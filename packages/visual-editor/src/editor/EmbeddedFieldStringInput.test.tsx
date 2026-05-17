@@ -108,7 +108,7 @@ describe("EmbeddedFieldStringInput", () => {
     expect(screen.getByText("Linked Location > Address > City")).toBeDefined();
   });
 
-  it("scopes mapped-item embedded fields to one entity group and excludes nested linked descendants", () => {
+  it("scopes mapped-item embedded fields to one entity group and includes nested linked descendants", () => {
     render(
       <TemplatePropsContext.Provider value={{ document: {} }}>
         <TemplateMetadataContext.Provider value={generateTemplateMetadata()}>
@@ -199,6 +199,6 @@ describe("EmbeddedFieldStringInput", () => {
     expect(screen.queryByText("Linked Entity Fields")).toBeNull();
     expect(screen.getByText("Name")).toBeDefined();
     expect(screen.getByText("Description")).toBeDefined();
-    expect(screen.queryByText("Linked Location > Name")).toBeNull();
+    expect(screen.getByText("Linked Location > Name")).toBeDefined();
   });
 });

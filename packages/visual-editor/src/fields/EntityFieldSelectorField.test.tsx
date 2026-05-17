@@ -699,6 +699,29 @@ describe("EntityFieldSelectorField", () => {
                     type: {},
                   },
                 },
+                {
+                  name: "c_linkedLocation",
+                  displayName: "Linked Location",
+                  definition: {
+                    name: "c_linkedLocation",
+                    typeRegistryId: "type.entity_reference",
+                    type: {
+                      documentType: "DOCUMENT_TYPE_ENTITY",
+                    },
+                  },
+                  children: {
+                    fields: [
+                      {
+                        name: "name",
+                        definition: {
+                          name: "name",
+                          typeName: "type.string",
+                          type: {},
+                        },
+                      },
+                    ],
+                  },
+                },
               ],
             },
           },
@@ -708,6 +731,9 @@ describe("EntityFieldSelectorField", () => {
           ...defaultEntityFields.displayNames,
           c_articles: "Articles",
           "c_articles.name": "Articles > Name",
+          "c_articles.c_linkedLocation": "Articles > Linked Location",
+          "c_articles.c_linkedLocation.name":
+            "Articles > Linked Location > Name",
         },
       },
     });
@@ -718,6 +744,7 @@ describe("EntityFieldSelectorField", () => {
     expect(screen.queryByText("Description")).toBeNull();
     expect(screen.queryByText("Location Fields")).toBeNull();
     expect(screen.queryByText("Linked Entity Fields")).toBeNull();
+    expect(screen.getByText("Linked Location > Name")).toBeDefined();
   });
 
   it("hides the repeated source selector when the source field is fixed", () => {
