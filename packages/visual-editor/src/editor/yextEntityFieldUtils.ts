@@ -5,10 +5,7 @@ import {
 import { StreamFields, YextSchemaField } from "../types/entityFields.ts";
 import { resolveField } from "../utils/resolveYextEntityField.ts";
 import { type StreamDocument } from "../utils/types/StreamDocument.ts";
-import {
-  getTopLevelLinkedEntitySourceFields,
-  isLinkedEntityDefinition,
-} from "../utils/linkedEntityFieldUtils.ts";
+import { getTopLevelLinkedEntitySourceFields } from "../utils/linkedEntityFieldUtils.ts";
 import {
   getListSourceRootFields,
   type MappedSourceFieldFilter,
@@ -271,35 +268,8 @@ const getSubdocumentStreamFields = (
 };
 
 /**
- * Detects whether a scoped descendant path passes through another linked
- * entity reference, which would otherwise leak unrelated nested fields into the
- * current picker scope.
- */
-const hasNestedLinkedEntityAncestor = (
-  scopedStreamFields: StreamFields,
-  relativeFieldPath: string
-): boolean => {
-  const pathSegments = relativeFieldPath.split(".");
-  let currentFields = scopedStreamFields.fields;
-
-  for (const segment of pathSegments.slice(0, -1)) {
-    const matchingField = currentFields.find((field) => field.name === segment);
-    if (!matchingField) {
-      return false;
-    }
-    if (isLinkedEntityDefinition(matchingField.definition)) {
-      return true;
-    }
-    currentFields = matchingField.children?.fields ?? [];
-  }
-
-  return false;
-};
-
-/**
- * Returns selector fields relative to a selected source item, removing nested
- * linked-entity descendants and trimming the repeated root label from each
- * option.
+ * Returns selector fields relative to a selected source item and trims the
+ * repeated root label from each option.
  */
 const getScopedFieldsForSelector = (
   entityFields: StreamFields | null,
@@ -319,28 +289,23 @@ const getScopedFieldsForSelector = (
 
   return sortFields(
     dedupeFieldsByName(
-      getFilteredEntityFields(scopedStreamFields, filter)
-        .filter(
-          (field) =>
-            !hasNestedLinkedEntityAncestor(scopedStreamFields, field.name)
-        )
-        .map((field) => {
-          const displayName =
-            getEntityFieldDisplayName(
-              `${sourceField}.${field.name}`,
-              entityFields
-            ) ??
-            field.displayName ??
-            field.name;
+      getFilteredEntityFields(scopedStreamFields, filter).map((field) => {
+        const displayName =
+          getEntityFieldDisplayName(
+            `${sourceField}.${field.name}`,
+            entityFields
+          ) ??
+          field.displayName ??
+          field.name;
 
-          return {
-            ...field,
-            displayName:
-              rootPrefix && displayName.startsWith(rootPrefix)
-                ? displayName.slice(rootPrefix.length)
-                : displayName,
-          };
-        })
+        return {
+          ...field,
+          displayName:
+            rootPrefix && displayName.startsWith(rootPrefix)
+              ? displayName.slice(rootPrefix.length)
+              : displayName,
+        };
+      })
     )
   );
 };

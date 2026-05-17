@@ -10,6 +10,7 @@ import {
   useSendMessageToParent,
 } from "../internal/hooks/useMessage.ts";
 import { useTranslation } from "react-i18next";
+import { RepeatedSourceFieldContext } from "../fields/repeatedSourceFieldContext.ts";
 
 let pendingRichTextSession:
   | { messageId: string; apply: (payload: any) => void }
@@ -29,6 +30,7 @@ export function TranslatableRichTextField<
       const locale = i18n.language;
       const resolvedValue = value && resolveComponentData(value, locale);
       const fieldLabel = label ? `${pt(label)} (${locale})` : "";
+      const sourceField = React.useContext(RepeatedSourceFieldContext);
 
       const { sendToParent: openConstantValueEditor } = useSendMessageToParent(
         "constantValueEditorOpened",
@@ -71,6 +73,7 @@ export function TranslatableRichTextField<
             id: messageId,
             fieldName: fieldLabel,
             locale: locale,
+            sourceField: sourceField,
           },
         });
 
