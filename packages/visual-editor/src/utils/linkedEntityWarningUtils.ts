@@ -6,8 +6,9 @@ import { type StreamDocument } from "./types/StreamDocument.ts";
 const warnedFieldsByDocument = new WeakMap<StreamDocument, Set<string>>();
 
 /**
- * Warns once per document and field path when linked entity resolution falls
- * back to the first value after traversing a multi-value reference.
+ * Warns once per document and requested field path when linked entity
+ * resolution falls back to the first value after traversing a multi-value
+ * reference.
  */
 export const warnOnMultiValueLinkedEntityTraversal = (
   streamDocument: StreamDocument,
@@ -32,9 +33,10 @@ export const warnOnMultiValueLinkedEntityTraversal = (
   toast.warning(
     pt(
       "linkedEntityMultiValueWarning",
-      "Multiple linked entities were found for {{fieldName}}. Using the first linked entity.",
+      "{{linkedField}} contains multiple linked entities. Using the first one for {{resolvedField}}.",
       {
-        fieldName: fieldPath,
+        linkedField: resolution.multiValueReferenceField ?? fieldPath,
+        resolvedField: fieldPath,
       }
     )
   );
