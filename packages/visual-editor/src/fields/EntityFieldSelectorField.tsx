@@ -630,7 +630,11 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       return;
     }
 
-    warnOnMultiValueLinkedEntityTraversal(streamDocument, value.field);
+    warnOnMultiValueLinkedEntityTraversal(
+      streamDocument,
+      value.field,
+      entityFields
+    );
   }, [
     filter.includeListsOnly,
     entityFields,
