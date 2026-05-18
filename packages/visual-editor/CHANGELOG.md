@@ -1,3 +1,9 @@
+#### 1.3.0 (2026-05-18)
+
+##### Bug Fixes
+
+- use display name for multiple linked entities warning ([#1217](https://github.com/yext/visual-editor/pull/1217)) ([c253d9ef](https://github.com/yext/visual-editor/commit/c253d9ef3a0c1d2f3648d284eb3247fe53456e34))
+
 #### 1.3.0-alpha.2 (2026-05-18)
 
 ##### New Features
