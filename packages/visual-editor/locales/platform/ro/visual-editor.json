@@ -563,7 +563,7 @@
   "knowledgeGraphContent": "Conținut grafic de cunoștințe",
   "link": "legătură",
   "linkedEntityFields": "Câmpurile de entitate conectate",
-  "linkedEntityMultiValueWarning": "Au fost găsite mai multe entități conectate pentru {{fieldName}}. Folosind prima entitate conectată.",
+  "linkedEntityMultiValueWarning": "{{linkedField}} conține mai multe entități legate. Folosind primul pentru {{resolvedField}}.",
   "linkTypes": {
     "clickToWebsite": "Faceți clic pe site -ul web",
     "drivingDirections": "Direcții de conducere",

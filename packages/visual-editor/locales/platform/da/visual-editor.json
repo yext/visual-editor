@@ -562,7 +562,7 @@
   "knowledgeGraphContent": "Videngrafindhold",
   "link": "forbindelse",
   "linkedEntityFields": "Tilknyttede enhedsfelter",
-  "linkedEntityMultiValueWarning": "Der blev fundet flere sammenkædede enheder for {{fieldName}}. Brug af den første linkede enhed.",
+  "linkedEntityMultiValueWarning": "{{linkedField}} indeholder flere sammenkædede enheder. Brug af den første til {{resolvedField}}.",
   "linkTypes": {
     "clickToWebsite": "Klik på webstedet",
     "drivingDirections": "Kørselsvejledning",
