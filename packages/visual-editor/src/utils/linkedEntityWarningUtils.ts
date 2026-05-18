@@ -49,12 +49,11 @@ export const warnOnMultiValueLinkedEntityTraversal = (
       "linkedEntityMultiValueWarning",
       "{{linkedField}} contains multiple linked entities. Using the first one for {{resolvedField}}.",
       {
-        linkedField:
-          getEntityFieldDisplayName(linkedFieldPath, entityFields) ??
-          linkedFieldPath,
-        resolvedField:
-          getEntityFieldDisplayName(warningFieldPath, entityFields) ??
+        linkedField: getEntityFieldDisplayName(linkedFieldPath, entityFields),
+        resolvedField: getEntityFieldDisplayName(
           warningFieldPath,
+          entityFields
+        ),
       }
     )
   );

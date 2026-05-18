@@ -124,7 +124,7 @@ export const getEntityFieldDisplayName = (
     if (!matchingField) {
       return displayNameSegments.length
         ? displayNameSegments.join(DISPLAY_NAME_SEPARATOR)
-        : undefined;
+        : fieldPathSegments[0];
     }
 
     const mappedDisplayName = getMappedDisplayName(currentPath, entityFields);

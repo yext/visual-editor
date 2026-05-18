@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { getFieldsForSelector } from "./yextEntityFieldUtils.ts";
+import {
+  getEntityFieldDisplayName,
+  getFieldsForSelector,
+} from "./yextEntityFieldUtils.ts";
 
 describe("getFieldsForSelector", () => {
   it("allows one descendant to satisfy multiple compatible mapping requirements", () => {
@@ -122,5 +125,16 @@ describe("getFieldsForSelector", () => {
         }),
       ])
     );
+  });
+});
+
+describe("getEntityFieldDisplayName", () => {
+  it("falls back to the first field-path segment when the schema path is unknown", () => {
+    expect(
+      getEntityFieldDisplayName("c_linkedEntity.unknownField", {
+        fields: [],
+        displayNames: {},
+      })
+    ).toBe("c_linkedEntity");
   });
 });
