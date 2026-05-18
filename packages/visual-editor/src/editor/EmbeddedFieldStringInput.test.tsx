@@ -6,6 +6,7 @@ import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { TemplateMetadataContext } from "../internal/hooks/useMessageReceivers.ts";
 import { generateTemplateMetadata } from "../internal/types/templateMetadata.ts";
 import { EmbeddedFieldStringInputFromEntity } from "./EmbeddedFieldStringInput.tsx";
+import { toast } from "sonner";
 
 const puckState = {
   appState: {
@@ -28,6 +29,12 @@ vi.mock("@puckeditor/core", async () => {
       selector(puckState),
   };
 });
+
+vi.mock("sonner", () => ({
+  toast: {
+    warning: vi.fn(),
+  },
+}));
 
 describe("EmbeddedFieldStringInput", () => {
   it("includes linked entity fields in the embedded field selector", () => {
@@ -200,5 +207,68 @@ describe("EmbeddedFieldStringInput", () => {
     expect(screen.getByText("Name")).toBeDefined();
     expect(screen.getByText("Description")).toBeDefined();
     expect(screen.getByText("Linked Location > Name")).toBeDefined();
+  });
+
+  it("warns when selecting an embedded field through multiple linked entities", () => {
+    render(
+      <TemplatePropsContext.Provider
+        value={{
+          document: {
+            c_linkedLocation: [{ name: "First" }, { name: "Second" }],
+          },
+        }}
+      >
+        <TemplateMetadataContext.Provider value={generateTemplateMetadata()}>
+          <EntityFieldsContext.Provider
+            value={{
+              fields: [
+                {
+                  name: "c_linkedLocation",
+                  displayName: "Linked Location",
+                  definition: {
+                    name: "c_linkedLocation",
+                    typeRegistryId: "type.entity_reference",
+                    type: {
+                      documentType: "DOCUMENT_TYPE_ENTITY",
+                    },
+                  },
+                  children: {
+                    fields: [
+                      {
+                        name: "name",
+                        displayName: "Name",
+                        definition: {
+                          name: "name",
+                          typeName: "type.string",
+                          type: {},
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+              displayNames: {
+                c_linkedLocation: "Linked Location",
+                "c_linkedLocation.name": "Linked Location > Name",
+              },
+            }}
+          >
+            <EmbeddedFieldStringInputFromEntity
+              filter={{ types: ["type.string"] }}
+              onChange={() => undefined}
+              showFieldSelector={true}
+              value=""
+            />
+          </EntityFieldsContext.Provider>
+        </TemplateMetadataContext.Provider>
+      </TemplatePropsContext.Provider>
+    );
+
+    fireEvent.click(screen.getByLabelText("Add entity field"));
+    fireEvent.click(screen.getByText("Linked Location > Name"));
+
+    expect(toast.warning).toHaveBeenCalledWith(
+      "Linked Location contains multiple linked entities. Using the first one for Linked Location > Name."
+    );
   });
 });

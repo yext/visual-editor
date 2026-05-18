@@ -33,6 +33,7 @@ import {
   type EntityFieldOptionGroup,
 } from "./entityFieldOptionGroups.ts";
 import { TemplateMetadataContext } from "../internal/hooks/useMessageReceivers.ts";
+import { warnOnMultiValueLinkedEntityTraversal } from "../utils/linkedEntityWarningUtils.ts";
 
 export type EmbeddedStringOption = {
   label: string;
@@ -149,6 +150,13 @@ export const EmbeddedFieldStringInputFromEntity = <
       showFieldSelector={showFieldSelector}
       useOptionValueSublabel={false}
       sourceField={sourceField}
+      onFieldSelect={(fieldPath) =>
+        warnOnMultiValueLinkedEntityTraversal(
+          streamDocument,
+          fieldPath,
+          entityFields
+        )
+      }
     />
   );
 };
@@ -170,6 +178,7 @@ export const EmbeddedFieldStringInputFromOptions = ({
   showFieldSelector,
   useOptionValueSublabel = false,
   sourceField,
+  onFieldSelect,
 }: {
   value: string;
   onChange: (value: string) => void;
@@ -177,6 +186,7 @@ export const EmbeddedFieldStringInputFromOptions = ({
   showFieldSelector: boolean;
   useOptionValueSublabel?: boolean;
   sourceField?: string;
+  onFieldSelect?: (fieldPath: string) => void;
 }) => {
   const [open, setOpen] = React.useState(false);
   const [cursorPosition, setCursorPosition] = React.useState<number | null>(
@@ -225,6 +235,7 @@ export const EmbeddedFieldStringInputFromOptions = ({
   const handleFieldSelect = (fieldName: string) => {
     setOpen(false);
     if (!fieldName) return;
+    onFieldSelect?.(sourceField ? `${sourceField}.${fieldName}` : fieldName);
     const textToInsert = `[[${fieldName}]]`;
     let insertionPoint = cursorPosition ?? inputValue.length;
 
