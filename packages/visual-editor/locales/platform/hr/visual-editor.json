@@ -563,7 +563,7 @@
   "knowledgeGraphContent": "Sadržaj grafikona znanja",
   "link": "link",
   "linkedEntityFields": "Polja povezanih entiteta",
-  "linkedEntityMultiValueWarning": "Pronađeno je više povezanih entiteta za {{fieldName}}. Korištenje prvog povezanog entiteta.",
+  "linkedEntityMultiValueWarning": "{{linkedField}} sadrži više povezanih entiteta. Korištenje prvog za {{resolvedField}}.",
   "linkTypes": {
     "clickToWebsite": "Kliknite na web mjesto",
     "drivingDirections": "Upute za vožnju",

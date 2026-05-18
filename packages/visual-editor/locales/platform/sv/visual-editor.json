@@ -562,7 +562,7 @@
   "knowledgeGraphContent": "Kunskapgrafinnehåll",
   "link": "länk",
   "linkedEntityFields": "Länkade enhetsfält",
-  "linkedEntityMultiValueWarning": "Flera länkade enheter hittades för {{fieldName}}. Använder den första länkade enheten.",
+  "linkedEntityMultiValueWarning": "{{linkedField}} innehåller flera länkade enheter. Använder den första för {{resolvedField}}.",
   "linkTypes": {
     "clickToWebsite": "Klicka på webbplatsen",
     "drivingDirections": "Vägbeskrivning",

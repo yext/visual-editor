@@ -6,6 +6,7 @@ export const embeddedFieldRegex = /\[\[([a-zA-Z0-9._]+)\]\]/g;
 export type FieldResolution<T> = {
   value: T | undefined;
   traversedMultiValueReference: boolean;
+  multiValueReferenceField?: string;
 };
 
 /**
@@ -211,41 +212,68 @@ export const resolveField = <T>(
   fieldName: string
 ): FieldResolution<T> => {
   if (fieldName === "") {
-    return { value: undefined, traversedMultiValueReference: false };
+    return {
+      value: undefined,
+      traversedMultiValueReference: false,
+    };
   }
 
   let traversedMultiValueReference = false;
+  let multiValueReferenceField: string | undefined;
   try {
     const levels: string[] = fieldName.split(".");
     let current: unknown = streamDocument;
+    let currentPath = "";
     for (let i = 0; i < levels.length; i++) {
       if (Array.isArray(current)) {
         if (current.length === 0) {
-          return { value: undefined, traversedMultiValueReference };
+          return {
+            value: undefined,
+            traversedMultiValueReference,
+            multiValueReferenceField,
+          };
         }
 
         if (current.length > 1) {
           traversedMultiValueReference = true;
+          multiValueReferenceField ||= currentPath;
         }
 
         current = current[0];
       }
 
       if (typeof current !== "object" || current === null) {
-        return { value: undefined, traversedMultiValueReference };
+        return {
+          value: undefined,
+          traversedMultiValueReference,
+          multiValueReferenceField,
+        };
       }
 
       const currentRecord = current as Record<string, unknown>;
       if (currentRecord[levels[i]] === undefined) {
-        return { value: undefined, traversedMultiValueReference };
+        return {
+          value: undefined,
+          traversedMultiValueReference,
+          multiValueReferenceField,
+        };
       }
 
+      currentPath = currentPath ? `${currentPath}.${levels[i]}` : levels[i];
       current = currentRecord[levels[i]];
     }
 
-    return { value: current as T | undefined, traversedMultiValueReference };
+    return {
+      value: current as T | undefined,
+      traversedMultiValueReference,
+      multiValueReferenceField,
+    };
   } catch (e) {
     console.error("Error in resolveField:", e);
   }
-  return { value: undefined, traversedMultiValueReference };
+  return {
+    value: undefined,
+    traversedMultiValueReference,
+    multiValueReferenceField,
+  };
 };

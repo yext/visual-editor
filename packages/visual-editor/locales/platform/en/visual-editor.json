@@ -562,7 +562,7 @@
   "knowledgeGraphContent": "Knowledge Graph content",
   "link": "Link",
   "linkedEntityFields": "Linked Entity Fields",
-  "linkedEntityMultiValueWarning": "Multiple linked entities were found for {{fieldName}}. Using the first linked entity.",
+  "linkedEntityMultiValueWarning": "{{linkedField}} contains multiple linked entities. Using the first one for {{resolvedField}}.",
   "linkTypes": {
     "clickToWebsite": "Click to Website",
     "drivingDirections": "Driving Directions",

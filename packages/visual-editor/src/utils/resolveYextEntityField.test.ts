@@ -123,6 +123,7 @@ describe("resolveYextEntityField", () => {
       {
         value: "First",
         traversedMultiValueReference: true,
+        multiValueReferenceField: "c_linkedLocation",
       }
     );
   });

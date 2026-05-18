@@ -563,7 +563,7 @@
   "knowledgeGraphContent": "Contenido del gráfico de conocimiento",
   "link": "enlace",
   "linkedEntityFields": "Campos de entidad vinculados",
-  "linkedEntityMultiValueWarning": "Se encontraron varias entidades vinculadas para {{fieldName}}. Usando la primera entidad vinculada.",
+  "linkedEntityMultiValueWarning": "{{linkedField}} contiene varias entidades vinculadas. Usando el primero para {{resolvedField}}.",
   "linkTypes": {
     "clickToWebsite": "Haga clic en el sitio web",
     "drivingDirections": "Instrucciones de conducción",

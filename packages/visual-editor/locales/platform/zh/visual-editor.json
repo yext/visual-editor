@@ -562,7 +562,7 @@
   "knowledgeGraphContent": "知识图内容",
   "link": "关联",
   "linkedEntityFields": "链接实体字段",
-  "linkedEntityMultiValueWarning": "找到了 {{fieldName}} 的多个链接实体。使用第一个链接实体。",
+  "linkedEntityMultiValueWarning": "{{linkedField}} 包含多个链接实体。将第一个用于 {{resolvedField}}。",
   "linkTypes": {
     "clickToWebsite": "单击网站",
     "drivingDirections": "行驶方向",

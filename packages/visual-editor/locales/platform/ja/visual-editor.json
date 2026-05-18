@@ -562,7 +562,7 @@
   "knowledgeGraphContent": "ナレッジグラフコンテンツ",
   "link": "リンク",
   "linkedEntityFields": "リンクされたエンティティフィールド",
-  "linkedEntityMultiValueWarning": "{{fieldName}} に対して複数のリンクされたエンティティが見つかりました。最初にリンクされたエンティティを使用します。",
+  "linkedEntityMultiValueWarning": "{{linkedField}} には、複数のリンクされたエンティティが含まれています。最初のものを {{resolvedField}} に使用します。",
   "linkTypes": {
     "clickToWebsite": "Webサイトをクリックしてください",
     "drivingDirections": "運転方向",

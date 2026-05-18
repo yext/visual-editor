@@ -562,7 +562,7 @@
   "knowledgeGraphContent": "Teadmiste graafi sisu",
   "link": "link",
   "linkedEntityFields": "Lingitud olemiväljad",
-  "linkedEntityMultiValueWarning": "{{fieldName}} jaoks leiti mitu lingitud olemit. Kasutades esimest lingitud olemit.",
+  "linkedEntityMultiValueWarning": "{{linkedField}} sisaldab mitut lingitud olemit. Kasutades esimest {{resolvedField}} jaoks.",
   "linkTypes": {
     "clickToWebsite": "Klõpsake veebisaidil",
     "drivingDirections": "Juhtimissuunad",

@@ -562,7 +562,7 @@
   "knowledgeGraphContent": "Tietokaavion sisältö",
   "link": "linkki",
   "linkedEntityFields": "Linkitetyt entiteettikentät",
-  "linkedEntityMultiValueWarning": "Kohdalle {{fieldName}} löydettiin useita linkitettyjä entiteettejä. Ensimmäisen linkitetyn entiteetin käyttäminen.",
+  "linkedEntityMultiValueWarning": "{{linkedField}} sisältää useita linkitettyjä kokonaisuuksia. Ensimmäistä käytetään mallille {{resolvedField}}.",
   "linkTypes": {
     "clickToWebsite": "Napsauta verkkosivustoa",
     "drivingDirections": "Ajo -ohjeet",

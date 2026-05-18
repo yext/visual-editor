@@ -562,7 +562,7 @@
   "knowledgeGraphContent": "Zināšanu grafika saturs",
   "link": "saite",
   "linkedEntityFields": "Saistītie entītiju lauki",
-  "linkedEntityMultiValueWarning": "{{fieldName}} tika atrastas vairākas saistītās entītijas. Izmantojot pirmo saistīto entītiju.",
+  "linkedEntityMultiValueWarning": "{{linkedField}} satur vairākas saistītas entītijas. Izmantojot pirmo {{resolvedField}}.",
   "linkTypes": {
     "clickToWebsite": "Noklikšķiniet uz vietni",
     "drivingDirections": "Braukšanas norādījumi",

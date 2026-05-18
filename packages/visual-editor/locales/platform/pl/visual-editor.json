@@ -564,7 +564,7 @@
   "knowledgeGraphContent": "Treść wykresu wiedzy",
   "link": "Link",
   "linkedEntityFields": "Pola encji połączonych",
-  "linkedEntityMultiValueWarning": "Znaleziono wiele połączonych jednostek dla {{fieldName}}. Korzystanie z pierwszego połączonego elementu.",
+  "linkedEntityMultiValueWarning": "{{linkedField}} zawiera wiele połączonych jednostek. Używanie pierwszego dla {{resolvedField}}.",
   "linkTypes": {
     "clickToWebsite": "Kliknij na stronę internetową",
     "drivingDirections": "Kierunki jazdy",
