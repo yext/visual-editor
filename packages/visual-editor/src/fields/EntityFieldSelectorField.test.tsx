@@ -664,6 +664,89 @@ describe("EntityFieldSelectorField", () => {
     expect(screen.getByText("Products Fields")).toBeDefined();
   });
 
+  it("uses the repeated source scope for mapping constant-mode embedded pickers", () => {
+    renderRepeatedEntityField({
+      value: {
+        field: "c_articles",
+        constantValueEnabled: false,
+        constantValue: [],
+        mappings: {
+          title: {
+            field: "",
+            constantValueEnabled: true,
+            constantValue: { defaultValue: "" },
+          },
+        },
+      },
+      entityFields: {
+        ...defaultEntityFields,
+        fields: [
+          {
+            name: "c_articles",
+            definition: {
+              name: "c_articles",
+              typeName: "c_articles",
+              isList: true,
+              type: {},
+            },
+            children: {
+              fields: [
+                {
+                  name: "name",
+                  definition: {
+                    name: "name",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+                {
+                  name: "c_linkedLocation",
+                  displayName: "Linked Location",
+                  definition: {
+                    name: "c_linkedLocation",
+                    typeRegistryId: "type.entity_reference",
+                    type: {
+                      documentType: "DOCUMENT_TYPE_ENTITY",
+                    },
+                  },
+                  children: {
+                    fields: [
+                      {
+                        name: "name",
+                        definition: {
+                          name: "name",
+                          typeName: "type.string",
+                          type: {},
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          ...defaultEntityFields.fields,
+        ],
+        displayNames: {
+          ...defaultEntityFields.displayNames,
+          c_articles: "Articles",
+          "c_articles.name": "Articles > Name",
+          "c_articles.c_linkedLocation": "Articles > Linked Location",
+          "c_articles.c_linkedLocation.name":
+            "Articles > Linked Location > Name",
+        },
+      },
+    });
+
+    fireEvent.click(screen.getByLabelText("Add entity field"));
+
+    expect(screen.getByText("Name")).toBeDefined();
+    expect(screen.queryByText("Description")).toBeNull();
+    expect(screen.queryByText("Location Fields")).toBeNull();
+    expect(screen.queryByText("Linked Entity Fields")).toBeNull();
+    expect(screen.getByText("Linked Location > Name")).toBeDefined();
+  });
+
   it("hides the repeated source selector when the source field is fixed", () => {
     renderRepeatedEntityField({
       field: {
