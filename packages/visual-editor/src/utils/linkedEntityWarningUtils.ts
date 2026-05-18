@@ -1,4 +1,6 @@
 import { toast } from "sonner";
+import { getEntityFieldDisplayName } from "../editor/yextEntityFieldUtils.ts";
+import { type StreamFields } from "../types/entityFields.ts";
 import { pt } from "./i18n/platform.ts";
 import { resolveField } from "./resolveYextEntityField.ts";
 import { type StreamDocument } from "./types/StreamDocument.ts";
@@ -12,7 +14,8 @@ const warnedFieldsByDocument = new WeakMap<StreamDocument, Set<string>>();
  */
 export const warnOnMultiValueLinkedEntityTraversal = (
   streamDocument: StreamDocument,
-  fieldPath: string
+  fieldPath: string,
+  entityFields: StreamFields | null
 ): void => {
   const resolution = resolveField(streamDocument, fieldPath);
   if (!resolution.traversedMultiValueReference) {
@@ -35,8 +38,15 @@ export const warnOnMultiValueLinkedEntityTraversal = (
       "linkedEntityMultiValueWarning",
       "{{linkedField}} contains multiple linked entities. Using the first one for {{resolvedField}}.",
       {
-        linkedField: resolution.multiValueReferenceField ?? fieldPath,
-        resolvedField: fieldPath,
+        linkedField:
+          getEntityFieldDisplayName(
+            resolution.multiValueReferenceField ?? fieldPath,
+            entityFields
+          ) ??
+          resolution.multiValueReferenceField ??
+          fieldPath,
+        resolvedField:
+          getEntityFieldDisplayName(fieldPath, entityFields) ?? fieldPath,
       }
     )
   );
