@@ -150,11 +150,12 @@ export const EmbeddedFieldStringInputFromEntity = <
       showFieldSelector={showFieldSelector}
       useOptionValueSublabel={false}
       sourceField={sourceField}
-      onFieldSelect={(fieldPath) =>
+      onFieldSelect={(fieldPath, resolutionFieldPath, resolutionDocument) =>
         warnOnMultiValueLinkedEntityTraversal(
-          streamDocument,
-          fieldPath,
-          entityFields
+          resolutionDocument ?? streamDocument,
+          resolutionFieldPath ?? fieldPath,
+          entityFields,
+          fieldPath
         )
       }
     />
@@ -186,7 +187,11 @@ export const EmbeddedFieldStringInputFromOptions = ({
   showFieldSelector: boolean;
   useOptionValueSublabel?: boolean;
   sourceField?: string;
-  onFieldSelect?: (fieldPath: string) => void;
+  onFieldSelect?: (
+    fieldPath: string,
+    resolutionFieldPath?: string,
+    resolutionDocument?: Record<string, unknown>
+  ) => void;
 }) => {
   const [open, setOpen] = React.useState(false);
   const [cursorPosition, setCursorPosition] = React.useState<number | null>(
@@ -194,6 +199,7 @@ export const EmbeddedFieldStringInputFromOptions = ({
   );
   const [inputValue, setInputValue] = React.useState(value);
   const [prevPropValue, setPrevPropValue] = React.useState(value);
+  const streamDocument = useDocument();
 
   if (value !== prevPropValue) {
     setPrevPropValue(value);
@@ -235,7 +241,11 @@ export const EmbeddedFieldStringInputFromOptions = ({
   const handleFieldSelect = (fieldName: string) => {
     setOpen(false);
     if (!fieldName) return;
-    onFieldSelect?.(sourceField ? `${sourceField}.${fieldName}` : fieldName);
+    onFieldSelect?.(
+      sourceField ? `${sourceField}.${fieldName}` : fieldName,
+      fieldName,
+      sourceField ? getSubDocument(streamDocument, sourceField) : undefined
+    );
     const textToInsert = `[[${fieldName}]]`;
     let insertionPoint = cursorPosition ?? inputValue.length;
 
