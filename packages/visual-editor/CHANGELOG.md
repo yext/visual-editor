@@ -1,3 +1,13 @@
+#### 1.3.0-alpha.2 (2026-05-18)
+
+##### New Features
+
+- improve warning message for multiple linked entities ([#1216](https://github.com/yext/visual-editor/pull/1216)) ([517ed851](https://github.com/yext/visual-editor/commit/517ed851aa92ada6b750bd84285073beebe93607))
+
+##### Bug Fixes
+
+- embedded field pickers in mapping are not scoped ([#1215](https://github.com/yext/visual-editor/pull/1215)) ([38be7643](https://github.com/yext/visual-editor/commit/38be7643f9ecc57d664b62c3990eab9094999dce))
+
 #### 1.3.0-alpha.1 (2026-05-14)
 
 ##### Chores
