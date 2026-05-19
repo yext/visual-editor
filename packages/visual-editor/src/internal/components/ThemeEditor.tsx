@@ -88,9 +88,17 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       const localHistoryArray = lzstring.decompress(
         window.localStorage.getItem(buildVisualConfigLocalStorageKey()) || ""
       );
-      const localHistories = (
-        localHistoryArray ? JSON.parse(localHistoryArray) : []
-      ) as History<AppState>[];
+      let localHistories: History<AppState>[] = [];
+      if (localHistoryArray) {
+        try {
+          localHistories = JSON.parse(localHistoryArray) as History<AppState>[];
+        } catch (error) {
+          console.warn(
+            "Failed to parse local theme editor layout history. Falling back to template layout data.",
+            error
+          );
+        }
+      }
       const histories = localHistories
         .filter((h) => h?.state)
         .map((h) => {
@@ -108,6 +116,12 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
         const layoutToSend = histories[histories.length - 1]?.state?.data;
         sendDevLayoutSaveStateData({
           payload: { devSaveStateData: JSON.stringify(layoutToSend) },
+        });
+      } else if (layoutData) {
+        devLogger.log("Theme Dev Mode - Using layout data from Content");
+        setPuckInitialHistory({
+          histories: [{ id: "root", state: { data: layoutData } }],
+          appendData: false,
         });
       }
       setPuckInitialHistoryFetched(true);
@@ -150,13 +164,23 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       // Use localStorage directly if it exists
       if (localHistoryArray) {
         devLogger.log("Theme Dev Mode - Using theme localStorage");
-        histories = JSON.parse(localHistoryArray) as ThemeHistory[];
-        index = histories.length - 1;
-      } else {
+        try {
+          histories = JSON.parse(localHistoryArray) as ThemeHistory[];
+          index = histories.length - 1;
+        } catch (error) {
+          console.warn(
+            "Failed to parse local theme history. Falling back to theme data from Content.",
+            error
+          );
+        }
+      }
+
+      if (!histories?.length) {
         // Otherwise start fresh from Content
         devLogger.log(
           "Theme Dev Mode - No localStorage. Using theme data from Content"
         );
+        index = 0;
         if (themeData) {
           histories = [{ id: "root", data: themeData }];
         }
