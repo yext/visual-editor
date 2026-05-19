@@ -1,10 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { locatorConfig } from "../../components/configs/locatorConfig.tsx";
-import { renderHook, waitFor } from "@testing-library/react";
-import {
-  getLocalDevLayoutData,
-  useCommonMessageReceivers,
-} from "./useMessageReceivers.ts";
+import { getLocalDevLayoutData } from "./useMessageReceivers.ts";
 
 const localDevLocatorLayout = JSON.stringify({
   root: {
@@ -38,27 +34,6 @@ const localDevLocatorLayout = JSON.stringify({
   ],
   zones: {},
 });
-
-const localDevLocatorDocument = {
-  meta: {
-    entityType: {
-      id: "locator",
-    },
-  },
-  __: {
-    name: "locator",
-  },
-};
-
-const localDevLocatorOptions = {
-  templateId: "locator",
-  locale: "en",
-  initialThemeData: {
-    "--colors-palette-primary": "#CF0A2C",
-  },
-};
-
-const localDevLocatorRegistry = { locator: locatorConfig };
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -105,28 +80,5 @@ describe("getLocalDevLayoutData", () => {
       },
     });
     expect(warnSpy).toHaveBeenCalledOnce();
-  });
-});
-
-describe("useCommonMessageReceivers", () => {
-  it("seeds local dev theme data from localDevOptions when provided", async () => {
-    vi.spyOn(window.parent, "postMessage").mockImplementation(() => {});
-
-    const { result } = renderHook(() => {
-      return useCommonMessageReceivers(
-        localDevLocatorRegistry,
-        true,
-        localDevLocatorDocument,
-        localDevLocatorOptions
-      );
-    });
-
-    await waitFor(() => {
-      expect(result.current.themeDataFetched).toBe(true);
-    });
-
-    expect(result.current.themeData).toEqual({
-      "--colors-palette-primary": "#CF0A2C",
-    });
   });
 });

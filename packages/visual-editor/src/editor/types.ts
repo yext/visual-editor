@@ -1,5 +1,3 @@
-import type { ThemeData } from "../internal/types/themeData.ts";
-
 export type LocalDevOptions = {
   templateId?: string;
   entityId?: string | number;
@@ -8,6 +6,5 @@ export type LocalDevOptions = {
   layoutScopeKey?: string;
   themeScopeKey?: string;
   initialLayoutData?: Record<string, unknown>;
-  initialThemeData?: ThemeData;
   showOverrideButtons?: boolean;
 };
