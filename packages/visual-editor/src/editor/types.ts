@@ -6,6 +6,7 @@ export type LocalDevOptions = {
   locale?: string;
   locales?: string[];
   layoutScopeKey?: string;
+  themeScopeKey?: string;
   initialLayoutData?: Record<string, unknown>;
   initialThemeData?: ThemeData;
   showOverrideButtons?: boolean;

@@ -20,7 +20,6 @@ export const LocalEditorShell = ({
   componentRegistry,
   tailwindConfig,
   themeConfig,
-  simulatedThemeData,
 }: LocalEditorShellProps) => {
   const [locationSearch, setLocationSearch] = React.useState(() => {
     return typeof window === "undefined" ? "" : window.location.search;
@@ -54,13 +53,24 @@ export const LocalEditorShell = ({
     selectedTemplateDefaults,
     selectedEntity,
     selectedLocale,
+    selectedMode,
   } = React.useMemo(() => {
     return buildLocalEditorSelection(manifest, componentRegistry, searchParams);
   }, [componentRegistry, manifest, searchParams]);
 
   React.useEffect(() => {
-    syncSelectionToUrl(selectedTemplateId, selectedEntity, selectedLocale);
-  }, [selectedEntity?.entityId, selectedLocale, selectedTemplateId]);
+    syncSelectionToUrl(
+      selectedTemplateId,
+      selectedEntity,
+      selectedLocale,
+      selectedMode
+    );
+  }, [
+    selectedEntity?.entityId,
+    selectedLocale,
+    selectedMode,
+    selectedTemplateId,
+  ]);
 
   const documentRequestPath = React.useMemo(() => {
     return buildLocalEditorDocumentRequestPath({
@@ -94,7 +104,7 @@ export const LocalEditorShell = ({
     );
   }, [manifest?.entitiesByTemplate]);
   const controlsDisabled = isManifestLoading || !activeTemplateOptions.length;
-  const editorKey = `${selectedTemplateId}:${selectedLocale}`;
+  const editorKey = `${selectedTemplateId}:${selectedLocale}:${selectedMode}`;
   const shouldRenderEditorFrame =
     isDocumentLoading || (!!documentResponse?.document && !!selectedTemplateId);
   const editorLocalDevOptions = React.useMemo(() => {
@@ -103,12 +113,10 @@ export const LocalEditorShell = ({
       selectedEntity,
       selectedLocale,
       selectedTemplateDefaults,
-      simulatedThemeData,
     });
   }, [
     selectedEntity,
     selectedLocale,
-    simulatedThemeData,
     selectedTemplateDefaults,
     selectedTemplateId,
   ]);
@@ -155,12 +163,16 @@ export const LocalEditorShell = ({
         controlsDisabled={controlsDisabled}
         selectedEntityId={selectedEntity?.entityId}
         selectedLocale={selectedLocale}
+        selectedMode={selectedMode}
         selectedTemplateId={selectedTemplateId}
         onEntityChange={(entityId) => {
           updateSearchParam("entityId", entityId);
         }}
         onLocaleChange={(locale) => {
           updateSearchParam("locale", locale);
+        }}
+        onModeChange={(mode) => {
+          updateSearchParam("mode", mode);
         }}
         onTemplateChange={(templateId) => {
           updateSearchParam("templateId", templateId);
@@ -252,6 +264,7 @@ export const LocalEditorShell = ({
                 themeConfig={themeConfig}
                 localDev={true}
                 localDevOptions={editorLocalDevOptions}
+                forceThemeMode={selectedMode === "theme"}
               />
             </VisualEditorProvider>
           )}

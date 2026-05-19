@@ -39,6 +39,27 @@ const localDevLocatorLayout = JSON.stringify({
   zones: {},
 });
 
+const localDevLocatorDocument = {
+  meta: {
+    entityType: {
+      id: "locator",
+    },
+  },
+  __: {
+    name: "locator",
+  },
+};
+
+const localDevLocatorOptions = {
+  templateId: "locator",
+  locale: "en",
+  initialThemeData: {
+    "--colors-palette-primary": "#CF0A2C",
+  },
+};
+
+const localDevLocatorRegistry = { locator: locatorConfig };
+
 afterEach(() => {
   vi.restoreAllMocks();
 });
@@ -93,25 +114,10 @@ describe("useCommonMessageReceivers", () => {
 
     const { result } = renderHook(() => {
       return useCommonMessageReceivers(
-        { locator: locatorConfig },
+        localDevLocatorRegistry,
         true,
-        {
-          meta: {
-            entityType: {
-              id: "locator",
-            },
-          },
-          __: {
-            name: "locator",
-          },
-        },
-        {
-          templateId: "locator",
-          locale: "en",
-          initialThemeData: {
-            "--colors-palette-primary": "#CF0A2C",
-          },
-        }
+        localDevLocatorDocument,
+        localDevLocatorOptions
       );
     });
 

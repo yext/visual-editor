@@ -133,6 +133,7 @@ export function generateTemplateMetadata(
       entityId: localDevOptions?.entityId ?? cleanString,
       locale,
     });
+  const themeScopeKey = localDevOptions?.themeScopeKey;
   const locales = localDevOptions?.locales?.length
     ? localDevOptions.locales
     : ["en", "es", "fr"];
@@ -141,6 +142,7 @@ export function generateTemplateMetadata(
     siteId: 1337,
     templateId,
     entityId,
+    themeEntityId: themeScopeKey ? hashCode(themeScopeKey) : undefined,
     layoutId: hashCode(layoutScopeKey),
     assignment: "ALL",
     isDevMode: true,

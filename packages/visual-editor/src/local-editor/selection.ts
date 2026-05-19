@@ -1,6 +1,7 @@
 import type { Config } from "@puckeditor/core";
 import type { LocalDevOptions } from "../editor/types.ts";
 import type {
+  LocalEditorMode,
   LocalEditorEntityOption,
   LocalEditorManifestResponse,
   BuildEditorLocalDevOptionsArgs,
@@ -13,6 +14,7 @@ type SelectionResult = {
   selectedTemplateDefaults?: BuildEditorLocalDevOptionsArgs["selectedTemplateDefaults"];
   selectedEntity?: LocalEditorEntityOption;
   selectedLocale: string;
+  selectedMode: LocalEditorMode;
 };
 
 export const updateSearchParam = (key: string, value: string) => {
@@ -68,6 +70,8 @@ export const buildLocalEditorSelection = (
       selectedTemplateDefaults?.locale,
       manifest?.defaults.locale
     ) ?? "";
+  const selectedMode =
+    searchParams.get("mode") === "theme" ? "theme" : "layout";
 
   return {
     supportedTemplateIds,
@@ -76,13 +80,15 @@ export const buildLocalEditorSelection = (
     selectedTemplateDefaults,
     selectedEntity,
     selectedLocale,
+    selectedMode,
   };
 };
 
 export const syncSelectionToUrl = (
   selectedTemplateId: string,
   selectedEntity: LocalEditorEntityOption | undefined,
-  selectedLocale: string
+  selectedLocale: string,
+  selectedMode: LocalEditorMode
 ) => {
   if (typeof window === "undefined" || !selectedTemplateId) {
     return;
@@ -90,6 +96,7 @@ export const syncSelectionToUrl = (
 
   const nextSearchParams = new URLSearchParams(window.location.search);
   nextSearchParams.set("templateId", selectedTemplateId);
+  nextSearchParams.set("mode", selectedMode);
 
   if (selectedEntity?.entityId) {
     nextSearchParams.set("entityId", selectedEntity.entityId);
@@ -142,7 +149,6 @@ export const buildEditorLocalDevOptions = ({
   selectedEntity,
   selectedLocale,
   selectedTemplateDefaults,
-  simulatedThemeData,
 }: BuildEditorLocalDevOptionsArgs): LocalDevOptions | undefined => {
   if (!selectedTemplateId) {
     return undefined;
@@ -156,10 +162,10 @@ export const buildEditorLocalDevOptions = ({
     locale: selectedLocale,
     locales: selectedEntity?.locales ?? [],
     layoutScopeKey: `${selectedTemplateId}:${selectedLocale}`,
+    themeScopeKey: "local-editor",
     initialLayoutData: selectedTemplateDefaults?.defaultLayoutData as
       | Record<string, unknown>
       | undefined,
-    initialThemeData: simulatedThemeData,
     showOverrideButtons: false,
   };
 };

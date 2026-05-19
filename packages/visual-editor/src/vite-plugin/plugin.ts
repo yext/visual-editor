@@ -17,10 +17,7 @@ import { getEffectiveEditorTemplateNames } from "./routing/editorTemplateNames.t
 import { syncGeneratedEditorFiles } from "./generated/editorFiles.ts";
 import { hasExplicitLocalMainTemplate } from "./generated/templateFiles.ts";
 import { createLocalEditorArtifactsManager } from "./local-editor/artifacts.ts";
-import {
-  ensureLocalEditorStreamConfig,
-  ensureLocalEditorTheme,
-} from "./local-editor/generatedFiles.ts";
+import { ensureLocalEditorStreamConfig } from "./local-editor/generatedFiles.ts";
 import {
   handleLocalEditorRequest,
   sendJsonResponse,
@@ -190,7 +187,6 @@ export const yextVisualEditorPlugin = (
 
       if (!isBuildMode && localEditorOptions?.enabled) {
         await ensureLocalEditorStreamConfig(process.cwd());
-        await ensureLocalEditorTheme(process.cwd());
         await localEditorArtifacts.syncLocalEditorDataTemplates();
       }
 
