@@ -562,7 +562,7 @@
   "knowledgeGraphContent": "Bilgi Grafik İçeriği",
   "link": "bağlantı",
   "linkedEntityFields": "Bağlantılı Varlık Alanları",
-  "linkedEntityMultiValueWarning": "{{linkedField}} birden fazla bağlantılı varlık içerir. {{resolvedField}} için ilkini kullanma.",
+  "linkedEntityMultiValueWarning": "{{linkedField}} birden fazla bağlantılı varlık içerir. {{resolvedField}} için ilkini kullan.",
   "linkTypes": {
     "clickToWebsite": "Web sitesine tıklayın",
     "drivingDirections": "Yol Tarifi",
