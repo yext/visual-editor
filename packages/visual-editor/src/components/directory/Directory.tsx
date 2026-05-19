@@ -226,6 +226,18 @@ export const Directory: YextComponentConfig<DirectoryProps> = {
         {
           type: "DirectoryGrid",
           props: {
+            data: {
+              field: "dm_directoryChildren",
+              constantValueEnabled: false,
+              constantValue: [],
+              mappings: {
+                cardTitle: {
+                  field: "name",
+                  constantValueEnabled: false,
+                  constantValue: undefined,
+                },
+              },
+            },
             styles: {
               backgroundColor: backgroundColors.background1.value,
             },

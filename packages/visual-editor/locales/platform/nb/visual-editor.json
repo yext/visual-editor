@@ -68,6 +68,7 @@
     "ctaGroup": "CTA gruppe",
     "customCodeSection": "Tilpasset kodeseksjon",
     "directory": "Katalog",
+    "directoryChildren": "Katalog barn",
     "directoryGrid": "Katalognett",
     "emails": "E-post",
     "eventCard": "Eventkort",
@@ -561,7 +562,7 @@
   "knowledgeGraphContent": "Kunnskapsgrafinnhold",
   "link": "lenke",
   "linkedEntityFields": "Koblede enhetsfelt",
-  "linkedEntityMultiValueWarning": "Det ble funnet flere koblede enheter for {{fieldName}}. Bruker den første koblede enheten.",
+  "linkedEntityMultiValueWarning": "{{linkedField}} inneholder flere koblede enheter. Bruker den første for {{resolvedField}}.",
   "linkTypes": {
     "clickToWebsite": "Klikk til nettstedet",
     "drivingDirections": "Veibeskrivelse",

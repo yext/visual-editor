@@ -68,6 +68,7 @@
     "ctaGroup": "CTA組",
     "customCodeSection": "自定義代碼部分",
     "directory": "目錄",
+    "directoryChildren": "目錄兒童",
     "directoryGrid": "目錄網格",
     "emails": "電子郵件",
     "eventCard": "活動卡",
@@ -561,7 +562,7 @@
   "knowledgeGraphContent": "知識圖內容",
   "link": "鏈接",
   "linkedEntityFields": "連結實體字段",
-  "linkedEntityMultiValueWarning": "找到了 {{fieldName}} 的多個連結實體。使用第一個連結實體。",
+  "linkedEntityMultiValueWarning": "{{linkedField}} 包含多個連結實體。將第一個用於 {{resolvedField}}。",
   "linkTypes": {
     "clickToWebsite": "單擊網站",
     "drivingDirections": "行駛方向",

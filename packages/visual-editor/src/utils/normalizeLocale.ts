@@ -28,7 +28,10 @@ export function normalizeLocalesInObject(obj: any): any {
   } else if (obj && typeof obj === "object") {
     const result: any = {};
     for (const [key, value] of Object.entries(obj)) {
-      if (key === "locale" && typeof value === "string") {
+      if (
+        (key === "locale" || key === "primaryLocale") &&
+        typeof value === "string"
+      ) {
         result[key] = normalizeLocale(value);
       } else if (key === "locales" && Array.isArray(value)) {
         result[key] = value.map((v) =>

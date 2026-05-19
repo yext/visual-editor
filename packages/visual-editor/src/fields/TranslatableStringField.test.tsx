@@ -22,12 +22,16 @@ vi.mock("../editor/EmbeddedFieldStringInput.tsx", () => ({
     filter,
     onChange,
     showFieldSelector,
+    sourceField,
+    sourceFieldPath,
     value,
   }: any) => (
     <button
       type="button"
       data-filter={JSON.stringify(filter)}
       data-show-field-selector={String(showFieldSelector)}
+      data-source-field={sourceField ?? ""}
+      data-source-field-path={sourceFieldPath ?? ""}
       data-value={value}
       data-testid="entity-input"
       onClick={() => onChange("Updated")}
@@ -96,6 +100,22 @@ describe("TranslatableStringField", () => {
     expect(container.querySelector(".ve-pt-3")).toBeDefined();
     expect(screen.getByTestId("entity-input").dataset.filter).toBe(
       JSON.stringify({ types: ["type.string"] })
+    );
+  });
+
+  it("passes scoped source-field settings to entity-backed embedding", () => {
+    renderField({
+      type: "translatableString",
+      filter: { types: ["type.string"] },
+      sourceField: "dm_directoryChildren",
+      sourceFieldPath: "data.source.field",
+    });
+
+    expect(screen.getByTestId("entity-input").dataset.sourceField).toBe(
+      "dm_directoryChildren"
+    );
+    expect(screen.getByTestId("entity-input").dataset.sourceFieldPath).toBe(
+      "data.source.field"
     );
   });
 

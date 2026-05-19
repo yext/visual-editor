@@ -8988,9 +8988,21 @@ export const devTemplateStream = {
           children: {
             fields: [
               {
+                name: "mainPhone",
+                definition: {
+                  name: "mainPhone",
+                  registryId: "location.main_phone",
+                  typeRegistryId: "type.phone",
+                  type: {
+                    stringType: "STRING_TYPE_PHONE",
+                  },
+                },
+              },
+              {
                 name: "name",
                 definition: {
                   name: "name",
+                  registryId: "location.business_name",
                   typeRegistryId: "type.string",
                   type: {
                     stringType: "STRING_TYPE_DEFAULT",
@@ -8998,9 +9010,725 @@ export const devTemplateStream = {
                 },
               },
               {
+                name: "hours",
+                definition: {
+                  name: "hours",
+                  registryId: "location.business_hours",
+                  typeRegistryId: "type.hours",
+                  type: {
+                    objectType: "OBJECT_TYPE_DEFAULT",
+                  },
+                },
+                children: {
+                  fields: [
+                    {
+                      name: "monday",
+                      definition: {
+                        name: "monday",
+                        typeRegistryId: "type.day_hour",
+                        type: {
+                          objectType: "OBJECT_TYPE_DEFAULT",
+                        },
+                      },
+                      children: {
+                        fields: [
+                          {
+                            name: "openIntervals",
+                            definition: {
+                              name: "openIntervals",
+                              typeRegistryId: "type.interval",
+                              type: {
+                                objectType: "OBJECT_TYPE_DEFAULT",
+                              },
+                              isList: true,
+                            },
+                            children: {
+                              fields: [
+                                {
+                                  name: "start",
+                                  definition: {
+                                    name: "start",
+                                    typeRegistryId: "type.time",
+                                    type: {
+                                      stringType: "STRING_TYPE_LOCAL_TIME",
+                                    },
+                                  },
+                                },
+                                {
+                                  name: "end",
+                                  definition: {
+                                    name: "end",
+                                    typeRegistryId: "type.time",
+                                    type: {
+                                      stringType: "STRING_TYPE_LOCAL_TIME",
+                                    },
+                                  },
+                                },
+                              ],
+                            },
+                          },
+                          {
+                            name: "isClosed",
+                            definition: {
+                              name: "isClosed",
+                              typeRegistryId: "type.boolean",
+                              type: {
+                                booleanType: "BOOLEAN_TYPE_DEFAULT",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      name: "tuesday",
+                      definition: {
+                        name: "tuesday",
+                        typeRegistryId: "type.day_hour",
+                        type: {
+                          objectType: "OBJECT_TYPE_DEFAULT",
+                        },
+                      },
+                      children: {
+                        fields: [
+                          {
+                            name: "openIntervals",
+                            definition: {
+                              name: "openIntervals",
+                              typeRegistryId: "type.interval",
+                              type: {
+                                objectType: "OBJECT_TYPE_DEFAULT",
+                              },
+                              isList: true,
+                            },
+                            children: {
+                              fields: [
+                                {
+                                  name: "start",
+                                  definition: {
+                                    name: "start",
+                                    typeRegistryId: "type.time",
+                                    type: {
+                                      stringType: "STRING_TYPE_LOCAL_TIME",
+                                    },
+                                  },
+                                },
+                                {
+                                  name: "end",
+                                  definition: {
+                                    name: "end",
+                                    typeRegistryId: "type.time",
+                                    type: {
+                                      stringType: "STRING_TYPE_LOCAL_TIME",
+                                    },
+                                  },
+                                },
+                              ],
+                            },
+                          },
+                          {
+                            name: "isClosed",
+                            definition: {
+                              name: "isClosed",
+                              typeRegistryId: "type.boolean",
+                              type: {
+                                booleanType: "BOOLEAN_TYPE_DEFAULT",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      name: "wednesday",
+                      definition: {
+                        name: "wednesday",
+                        typeRegistryId: "type.day_hour",
+                        type: {
+                          objectType: "OBJECT_TYPE_DEFAULT",
+                        },
+                      },
+                      children: {
+                        fields: [
+                          {
+                            name: "openIntervals",
+                            definition: {
+                              name: "openIntervals",
+                              typeRegistryId: "type.interval",
+                              type: {
+                                objectType: "OBJECT_TYPE_DEFAULT",
+                              },
+                              isList: true,
+                            },
+                            children: {
+                              fields: [
+                                {
+                                  name: "start",
+                                  definition: {
+                                    name: "start",
+                                    typeRegistryId: "type.time",
+                                    type: {
+                                      stringType: "STRING_TYPE_LOCAL_TIME",
+                                    },
+                                  },
+                                },
+                                {
+                                  name: "end",
+                                  definition: {
+                                    name: "end",
+                                    typeRegistryId: "type.time",
+                                    type: {
+                                      stringType: "STRING_TYPE_LOCAL_TIME",
+                                    },
+                                  },
+                                },
+                              ],
+                            },
+                          },
+                          {
+                            name: "isClosed",
+                            definition: {
+                              name: "isClosed",
+                              typeRegistryId: "type.boolean",
+                              type: {
+                                booleanType: "BOOLEAN_TYPE_DEFAULT",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      name: "thursday",
+                      definition: {
+                        name: "thursday",
+                        typeRegistryId: "type.day_hour",
+                        type: {
+                          objectType: "OBJECT_TYPE_DEFAULT",
+                        },
+                      },
+                      children: {
+                        fields: [
+                          {
+                            name: "openIntervals",
+                            definition: {
+                              name: "openIntervals",
+                              typeRegistryId: "type.interval",
+                              type: {
+                                objectType: "OBJECT_TYPE_DEFAULT",
+                              },
+                              isList: true,
+                            },
+                            children: {
+                              fields: [
+                                {
+                                  name: "start",
+                                  definition: {
+                                    name: "start",
+                                    typeRegistryId: "type.time",
+                                    type: {
+                                      stringType: "STRING_TYPE_LOCAL_TIME",
+                                    },
+                                  },
+                                },
+                                {
+                                  name: "end",
+                                  definition: {
+                                    name: "end",
+                                    typeRegistryId: "type.time",
+                                    type: {
+                                      stringType: "STRING_TYPE_LOCAL_TIME",
+                                    },
+                                  },
+                                },
+                              ],
+                            },
+                          },
+                          {
+                            name: "isClosed",
+                            definition: {
+                              name: "isClosed",
+                              typeRegistryId: "type.boolean",
+                              type: {
+                                booleanType: "BOOLEAN_TYPE_DEFAULT",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      name: "friday",
+                      definition: {
+                        name: "friday",
+                        typeRegistryId: "type.day_hour",
+                        type: {
+                          objectType: "OBJECT_TYPE_DEFAULT",
+                        },
+                      },
+                      children: {
+                        fields: [
+                          {
+                            name: "openIntervals",
+                            definition: {
+                              name: "openIntervals",
+                              typeRegistryId: "type.interval",
+                              type: {
+                                objectType: "OBJECT_TYPE_DEFAULT",
+                              },
+                              isList: true,
+                            },
+                            children: {
+                              fields: [
+                                {
+                                  name: "start",
+                                  definition: {
+                                    name: "start",
+                                    typeRegistryId: "type.time",
+                                    type: {
+                                      stringType: "STRING_TYPE_LOCAL_TIME",
+                                    },
+                                  },
+                                },
+                                {
+                                  name: "end",
+                                  definition: {
+                                    name: "end",
+                                    typeRegistryId: "type.time",
+                                    type: {
+                                      stringType: "STRING_TYPE_LOCAL_TIME",
+                                    },
+                                  },
+                                },
+                              ],
+                            },
+                          },
+                          {
+                            name: "isClosed",
+                            definition: {
+                              name: "isClosed",
+                              typeRegistryId: "type.boolean",
+                              type: {
+                                booleanType: "BOOLEAN_TYPE_DEFAULT",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      name: "saturday",
+                      definition: {
+                        name: "saturday",
+                        typeRegistryId: "type.day_hour",
+                        type: {
+                          objectType: "OBJECT_TYPE_DEFAULT",
+                        },
+                      },
+                      children: {
+                        fields: [
+                          {
+                            name: "openIntervals",
+                            definition: {
+                              name: "openIntervals",
+                              typeRegistryId: "type.interval",
+                              type: {
+                                objectType: "OBJECT_TYPE_DEFAULT",
+                              },
+                              isList: true,
+                            },
+                            children: {
+                              fields: [
+                                {
+                                  name: "start",
+                                  definition: {
+                                    name: "start",
+                                    typeRegistryId: "type.time",
+                                    type: {
+                                      stringType: "STRING_TYPE_LOCAL_TIME",
+                                    },
+                                  },
+                                },
+                                {
+                                  name: "end",
+                                  definition: {
+                                    name: "end",
+                                    typeRegistryId: "type.time",
+                                    type: {
+                                      stringType: "STRING_TYPE_LOCAL_TIME",
+                                    },
+                                  },
+                                },
+                              ],
+                            },
+                          },
+                          {
+                            name: "isClosed",
+                            definition: {
+                              name: "isClosed",
+                              typeRegistryId: "type.boolean",
+                              type: {
+                                booleanType: "BOOLEAN_TYPE_DEFAULT",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      name: "sunday",
+                      definition: {
+                        name: "sunday",
+                        typeRegistryId: "type.day_hour",
+                        type: {
+                          objectType: "OBJECT_TYPE_DEFAULT",
+                        },
+                      },
+                      children: {
+                        fields: [
+                          {
+                            name: "openIntervals",
+                            definition: {
+                              name: "openIntervals",
+                              typeRegistryId: "type.interval",
+                              type: {
+                                objectType: "OBJECT_TYPE_DEFAULT",
+                              },
+                              isList: true,
+                            },
+                            children: {
+                              fields: [
+                                {
+                                  name: "start",
+                                  definition: {
+                                    name: "start",
+                                    typeRegistryId: "type.time",
+                                    type: {
+                                      stringType: "STRING_TYPE_LOCAL_TIME",
+                                    },
+                                  },
+                                },
+                                {
+                                  name: "end",
+                                  definition: {
+                                    name: "end",
+                                    typeRegistryId: "type.time",
+                                    type: {
+                                      stringType: "STRING_TYPE_LOCAL_TIME",
+                                    },
+                                  },
+                                },
+                              ],
+                            },
+                          },
+                          {
+                            name: "isClosed",
+                            definition: {
+                              name: "isClosed",
+                              typeRegistryId: "type.boolean",
+                              type: {
+                                booleanType: "BOOLEAN_TYPE_DEFAULT",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      name: "holidayHours",
+                      definition: {
+                        name: "holidayHours",
+                        typeRegistryId: "type.holiday_hour",
+                        type: {
+                          objectType: "OBJECT_TYPE_DEFAULT",
+                        },
+                        isList: true,
+                      },
+                      children: {
+                        fields: [
+                          {
+                            name: "date",
+                            definition: {
+                              name: "date",
+                              typeRegistryId: "type.date",
+                              type: {
+                                stringType: "STRING_TYPE_DATE",
+                              },
+                            },
+                          },
+                          {
+                            name: "openIntervals",
+                            definition: {
+                              name: "openIntervals",
+                              typeRegistryId: "type.interval",
+                              type: {
+                                objectType: "OBJECT_TYPE_DEFAULT",
+                              },
+                              isList: true,
+                            },
+                            children: {
+                              fields: [
+                                {
+                                  name: "start",
+                                  definition: {
+                                    name: "start",
+                                    typeRegistryId: "type.time",
+                                    type: {
+                                      stringType: "STRING_TYPE_LOCAL_TIME",
+                                    },
+                                  },
+                                },
+                                {
+                                  name: "end",
+                                  definition: {
+                                    name: "end",
+                                    typeRegistryId: "type.time",
+                                    type: {
+                                      stringType: "STRING_TYPE_LOCAL_TIME",
+                                    },
+                                  },
+                                },
+                              ],
+                            },
+                          },
+                          {
+                            name: "isClosed",
+                            definition: {
+                              name: "isClosed",
+                              typeRegistryId: "type.boolean",
+                              type: {
+                                booleanType: "BOOLEAN_TYPE_DEFAULT",
+                              },
+                            },
+                          },
+                          {
+                            name: "isRegularHours",
+                            definition: {
+                              name: "isRegularHours",
+                              typeRegistryId: "type.boolean",
+                              type: {
+                                booleanType: "BOOLEAN_TYPE_DEFAULT",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      name: "reopenDate",
+                      definition: {
+                        name: "reopenDate",
+                        typeRegistryId: "type.date",
+                        type: {
+                          stringType: "STRING_TYPE_DATE",
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+              {
                 name: "slug",
                 definition: {
                   name: "slug",
+                  registryId: "entity.slug",
+                  typeRegistryId: "type.string",
+                  type: {
+                    stringType: "STRING_TYPE_DEFAULT",
+                  },
+                },
+              },
+              {
+                name: "dm_addressRegionDisplayName",
+                definition: {
+                  name: "dm_addressRegionDisplayName",
+                  registryId:
+                    "location.custom.1000152098.address_region_display_name.10",
+                  typeRegistryId: "type.string",
+                  type: {
+                    stringType: "STRING_TYPE_DEFAULT",
+                  },
+                },
+              },
+              {
+                name: "address",
+                definition: {
+                  name: "address",
+                  registryId: "location.address",
+                  typeRegistryId: "type.address",
+                  type: {
+                    objectType: "OBJECT_TYPE_DEFAULT",
+                  },
+                },
+                children: {
+                  fields: [
+                    {
+                      name: "line1",
+                      definition: {
+                        name: "line1",
+                        typeRegistryId: "type.string",
+                        type: {
+                          stringType: "STRING_TYPE_DEFAULT",
+                        },
+                      },
+                    },
+                    {
+                      name: "line2",
+                      definition: {
+                        name: "line2",
+                        typeRegistryId: "type.string",
+                        type: {
+                          stringType: "STRING_TYPE_DEFAULT",
+                        },
+                      },
+                    },
+                    {
+                      name: "line3",
+                      definition: {
+                        name: "line3",
+                        typeRegistryId: "type.string",
+                        type: {
+                          stringType: "STRING_TYPE_DEFAULT",
+                        },
+                      },
+                    },
+                    {
+                      name: "sublocality",
+                      definition: {
+                        name: "sublocality",
+                        typeRegistryId: "type.string",
+                        type: {
+                          stringType: "STRING_TYPE_DEFAULT",
+                        },
+                      },
+                    },
+                    {
+                      name: "city",
+                      definition: {
+                        name: "city",
+                        typeRegistryId: "type.string",
+                        type: {
+                          stringType: "STRING_TYPE_DEFAULT",
+                        },
+                      },
+                    },
+                    {
+                      name: "region",
+                      definition: {
+                        name: "region",
+                        typeRegistryId: "type.string",
+                        type: {
+                          stringType: "STRING_TYPE_DEFAULT",
+                        },
+                      },
+                    },
+                    {
+                      name: "postalCode",
+                      definition: {
+                        name: "postalCode",
+                        typeRegistryId: "type.string",
+                        type: {
+                          stringType: "STRING_TYPE_DEFAULT",
+                        },
+                      },
+                    },
+                    {
+                      name: "extraDescription",
+                      definition: {
+                        name: "extraDescription",
+                        typeRegistryId: "type.string",
+                        type: {
+                          stringType: "STRING_TYPE_DEFAULT",
+                        },
+                      },
+                    },
+                    {
+                      name: "countryCode",
+                      definition: {
+                        name: "countryCode",
+                        typeRegistryId: "type.string",
+                        type: {
+                          stringType: "STRING_TYPE_DEFAULT",
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                name: "id",
+                definition: {
+                  name: "id",
+                  registryId: "location.store_id",
+                  typeRegistryId: "type.string",
+                  type: {
+                    stringType: "STRING_TYPE_ID",
+                  },
+                },
+              },
+              {
+                name: "meta",
+                definition: {
+                  name: "meta",
+                  type: {
+                    objectType: "OBJECT_TYPE_DEFAULT",
+                  },
+                },
+                children: {
+                  fields: [
+                    {
+                      name: "entityType",
+                      definition: {
+                        name: "entityType",
+                        type: {
+                          objectType: "OBJECT_TYPE_DEFAULT",
+                        },
+                      },
+                      children: {
+                        fields: [
+                          {
+                            name: "id",
+                            definition: {
+                              name: "id",
+                              type: {
+                                stringType: "STRING_TYPE_ID",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                name: "timezone",
+                definition: {
+                  name: "timezone",
+                  registryId: "location.time_zone",
+                  typeRegistryId: "type.time_zone",
+                  type: {
+                    stringType: "STRING_TYPE_TIME_ZONE",
+                  },
+                },
+              },
+              {
+                name: "geomodifier",
+                definition: {
+                  name: "geomodifier",
+                  registryId: "entity.geomodifier",
+                  typeRegistryId: "type.string",
+                  type: {
+                    stringType: "STRING_TYPE_DEFAULT",
+                  },
+                },
+              },
+              {
+                name: "dm_addressCountryDisplayName",
+                definition: {
+                  name: "dm_addressCountryDisplayName",
+                  registryId:
+                    "location.custom.1000152098.address_country_display_name.10",
                   typeRegistryId: "type.string",
                   type: {
                     stringType: "STRING_TYPE_DEFAULT",

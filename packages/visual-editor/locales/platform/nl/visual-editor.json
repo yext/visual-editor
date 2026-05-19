@@ -68,6 +68,7 @@
     "ctaGroup": "CTA -groep",
     "customCodeSection": "Aangepaste codesectie",
     "directory": "Directory",
+    "directoryChildren": "Adresboek Kinderen",
     "directoryGrid": "Directoryraster",
     "emails": "E -mails",
     "eventCard": "Evenementkaart",
@@ -561,7 +562,7 @@
   "knowledgeGraphContent": "Kennisgrafiekinhoud",
   "link": "link",
   "linkedEntityFields": "Gekoppelde entiteitsvelden",
-  "linkedEntityMultiValueWarning": "Er zijn meerdere gekoppelde entiteiten gevonden voor {{fieldName}}. Met behulp van de eerste gekoppelde entiteit.",
+  "linkedEntityMultiValueWarning": "{{linkedField}} bevat meerdere gekoppelde entiteiten. Gebruik de eerste voor {{resolvedField}}.",
   "linkTypes": {
     "clickToWebsite": "Klik op de website",
     "drivingDirections": "Routebeschrijving",

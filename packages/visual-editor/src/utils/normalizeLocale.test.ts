@@ -154,6 +154,7 @@ describe("normalizeLocale", () => {
             fallback: {
               locale: "pt_br",
             },
+            primaryLocale: "en_gb",
           },
         },
       },
@@ -165,6 +166,7 @@ describe("normalizeLocale", () => {
             fallback: {
               locale: "pt-BR",
             },
+            primaryLocale: "en-GB",
           },
         },
       },

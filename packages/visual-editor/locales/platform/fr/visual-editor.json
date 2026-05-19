@@ -68,6 +68,7 @@
     "ctaGroup": "Groupe CTA",
     "customCodeSection": "Section de code personnalisé",
     "directory": "Annuaire",
+    "directoryChildren": "Annuaire Enfants",
     "directoryGrid": "Grille de répertoire",
     "emails": "E-mails",
     "eventCard": "Carte d'événement",
@@ -562,7 +563,7 @@
   "knowledgeGraphContent": "Contenu du graphique de connaissances",
   "link": "lien",
   "linkedEntityFields": "Champs d'entité liée",
-  "linkedEntityMultiValueWarning": "Plusieurs entités liées ont été trouvées pour {{fieldName}}. Utilisation de la première entité liée.",
+  "linkedEntityMultiValueWarning": "{{linkedField}} contient plusieurs entités liées. Utilisation du premier pour {{resolvedField}}.",
   "linkTypes": {
     "clickToWebsite": "Cliquez sur le site Web",
     "drivingDirections": "Itinéraires",
