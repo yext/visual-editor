@@ -1,4 +1,5 @@
 import { resolveEmbeddedFieldsInString } from "../resolveYextEntityField.ts";
+import { normalizeLocale } from "../normalizeLocale.ts";
 import { normalizeSlug } from "../slugifier.ts";
 import { StreamDocument } from "../types/StreamDocument.ts";
 
@@ -54,7 +55,9 @@ export const isPrimaryLocale = (streamDocument: StreamDocument): boolean => {
   const pathInfoJson = streamDocument.__?.pathInfo;
   const locale = streamDocument?.locale || streamDocument?.meta?.locale || "";
   if (pathInfoJson?.primaryLocale) {
-    return pathInfoJson?.primaryLocale === locale;
+    return (
+      normalizeLocale(pathInfoJson.primaryLocale) === normalizeLocale(locale)
+    );
   }
 
   if (streamDocument.__?.isPrimaryLocale !== undefined) {

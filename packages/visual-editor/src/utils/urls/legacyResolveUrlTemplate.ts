@@ -1,3 +1,4 @@
+import { normalizeLocale } from "../normalizeLocale.ts";
 import { resolveEmbeddedFieldsInString } from "../resolveYextEntityField.ts";
 import { normalizeSlug } from "../slugifier.ts";
 import { getLocationPath, LocationDocument } from "./getLocationPath.ts";
@@ -81,7 +82,7 @@ const legacyResolveUrlTemplateWithTemplates = (
   // will use the legacy URL template resolution but include the new primary locale handling
   if (
     urlTemplates.primaryLocale &&
-    (urlTemplates.primaryLocale !== locale ||
+    (normalizeLocale(urlTemplates.primaryLocale) !== normalizeLocale(locale) ||
       urlTemplates.includeLocalePrefixForPrimaryLocale)
   ) {
     return `${relativePrefixToRoot}${normalizeSlug(locale)}/${resolvedUrl}`;
