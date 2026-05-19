@@ -1,3 +1,9 @@
+#### 1.3.1 (2026-05-19)
+
+##### Bug Fixes
+
+- primary locale url normalization ([#1219](https://github.com/yext/visual-editor/pull/1219)) ([f1c1465c](https://github.com/yext/visual-editor/commit/f1c1465c42242fd5bd2318dda8c88fe79c3910cd))
+
 #### 1.3.0 (2026-05-18)
 
 ##### Bug Fixes
