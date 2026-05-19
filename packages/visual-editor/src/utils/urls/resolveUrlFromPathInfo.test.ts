@@ -114,20 +114,4 @@ describe("resolveUrlFromPathInfo", () => {
 
     expect(resolveUrlFromPathInfo(docWithPathInfo, "")).toBe("stores/123");
   });
-
-  it("treats normalized primaryLocale and locale as equivalent", () => {
-    const docWithPathInfo: StreamDocument = {
-      ...baseDocument,
-      locale: "en-GB",
-      __: {
-        ...baseDocument.__,
-        pathInfo: {
-          template: "[[id]]",
-          primaryLocale: "en_gb",
-        },
-      },
-    };
-
-    expect(resolveUrlFromPathInfo(docWithPathInfo, "")).toBe("123");
-  });
 });

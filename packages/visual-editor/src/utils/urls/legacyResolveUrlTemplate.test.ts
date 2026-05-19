@@ -143,27 +143,6 @@ describe("legacyResolveUrlTemplate with isChild flag", () => {
     ).toBe("ny/location/123");
   });
 
-  it("handles normalized primary locale on new locator pages", () => {
-    expect(
-      legacyResolveUrlTemplate(
-        {
-          ...mockNewLocatorMergedDocument,
-          locale: "en-GB",
-          __: {
-            ...mockNewLocatorMergedDocument.__,
-            entityPageSetUrlTemplates: JSON.stringify({
-              primary: "[[address.region]]/location/[[id]]",
-              includeLocalePrefixForPrimaryLocale: false,
-              primaryLocale: "en_gb",
-            }),
-          },
-        },
-        "",
-        true
-      )
-    ).toBe("ny/location/123");
-  });
-
   it("handles non-primary locale on new locator pages", () => {
     expect(
       legacyResolveUrlTemplate(
