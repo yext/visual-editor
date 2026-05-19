@@ -194,7 +194,7 @@ const updateFontLinksInDocument = (
   }
 };
 
-const ensureThemeStyleTag = (document: Document): HTMLStyleElement => {
+const getOrCreateThemeStyleTag = (document: Document): HTMLStyleElement => {
   const existingStyleTag = document.getElementById(THEME_STYLE_TAG_ID);
   if (existingStyleTag instanceof HTMLStyleElement) {
     return existingStyleTag;
@@ -226,7 +226,7 @@ export const updateThemeInEditor = async (
   );
 
   const newThemeTag = internalApplyTheme(newTheme, themeConfig);
-  ensureThemeStyleTag(window.document).textContent = newThemeTag;
+  getOrCreateThemeStyleTag(window.document).textContent = newThemeTag;
 
   // In the theme editor, all fonts are already loaded
   // In the layout editor, we need to load the in-use fonts after the Puck iframe has loaded
@@ -246,7 +246,7 @@ export const updateThemeInEditor = async (
         observer.disconnect();
         pendingObserver = null;
 
-        ensureThemeStyleTag(iframeDocument).textContent = newThemeTag;
+        getOrCreateThemeStyleTag(iframeDocument).textContent = newThemeTag;
         updateFontLinksInDocument(
           iframeDocument,
           googleFontsToLoad,
