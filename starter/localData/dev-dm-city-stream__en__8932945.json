@@ -36,7 +36,8 @@
       },
       "name": "Galaxy Grill",
       "timezone": "America/New_York",
-      "slug": "va/arlington/1101-wilson-blvd"
+      "slug": "va/arlington/1101-wilson-blvd",
+      "geomodifier": "2nd Floor"
     },
     {
       "__": {
@@ -95,7 +96,8 @@
       },
       "name": "Galaxy Grill 2",
       "timezone": "America/New_York",
-      "slug": "va/arlington/3101-wilson-blvd"
+      "slug": "va/arlington/3101-wilson-blvd",
+      "geomodifier": "Rooftop"
     },
     {
       "__": {

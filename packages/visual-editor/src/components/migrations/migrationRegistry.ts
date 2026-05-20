@@ -75,6 +75,7 @@ import { mainContentWrapperMigration } from "./0073_main_content_wrapper.ts";
 import { flattenLocatorResultCardSingleSelectFields } from "./0074_flatten_locator_result_card_single_select_fields.ts";
 import { normalizeFooterLogoImageMigration } from "./0075_normalize_footer_logo_image.ts";
 import { slotMappedCardsMigration } from "./0076_slot_mapped_cards.ts";
+import { directoryCardTitleField } from "./0077_directory_card_title_field.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -158,4 +159,5 @@ export const migrationRegistry: MigrationRegistry = [
   flattenLocatorResultCardSingleSelectFields,
   normalizeFooterLogoImageMigration,
   slotMappedCardsMigration,
+  directoryCardTitleField,
 ];

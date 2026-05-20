@@ -68,6 +68,7 @@
     "ctaGroup": "CTA grupė",
     "customCodeSection": "Pasirinktinio kodo skyrius",
     "directory": "Katalogas",
+    "directoryChildren": "Katalogas Vaikai",
     "directoryGrid": "Katalogų tinklelis",
     "emails": "El. El. laiškai",
     "eventCard": "Renginio kortelė",
@@ -563,7 +564,7 @@
   "knowledgeGraphContent": "Žinių grafiko turinys",
   "link": "nuoroda",
   "linkedEntityFields": "Susieti esybių laukai",
-  "linkedEntityMultiValueWarning": "Rasti keli susieti objektai, skirti {{fieldName}}. Naudojant pirmąjį susietą objektą.",
+  "linkedEntityMultiValueWarning": "{{linkedField}} yra keli susieti objektai. Naudojamas pirmasis, skirtas {{resolvedField}}.",
   "linkTypes": {
     "clickToWebsite": "Spustelėkite svetainę",
     "drivingDirections": "Važiavimo kryptys",

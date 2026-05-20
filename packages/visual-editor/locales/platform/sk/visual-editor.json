@@ -68,6 +68,7 @@
     "ctaGroup": "Skupina CTA",
     "customCodeSection": "Vlastná sekcia kódu",
     "directory": "Adresár",
+    "directoryChildren": "Adresár Deti",
     "directoryGrid": "Mriežka adresára",
     "emails": "E-maily",
     "eventCard": "Karta udalosti",
@@ -563,7 +564,7 @@
   "knowledgeGraphContent": "Obsah grafov vedomostí",
   "link": "prepojiť",
   "linkedEntityFields": "Polia prepojených entít",
-  "linkedEntityMultiValueWarning": "Pre {{fieldName}} sa našlo viacero prepojených entít. Pomocou prvej prepojenej entity.",
+  "linkedEntityMultiValueWarning": "{{linkedField}} obsahuje viacero prepojených entít. Používa sa prvý pre {{resolvedField}}.",
   "linkTypes": {
     "clickToWebsite": "Kliknite na webovú stránku",
     "drivingDirections": "Riadenie",

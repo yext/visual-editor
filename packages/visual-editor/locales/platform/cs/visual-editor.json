@@ -68,6 +68,7 @@
     "ctaGroup": "Skupina CTA",
     "customCodeSection": "Vlastní sekce kódu",
     "directory": "Adresář",
+    "directoryChildren": "Adresář Děti",
     "directoryGrid": "Adresářová mřížka",
     "emails": "E -maily",
     "eventCard": "Karta událostí",
@@ -563,7 +564,7 @@
   "knowledgeGraphContent": "Obsah grafu znalostí",
   "link": "odkaz",
   "linkedEntityFields": "Pole propojených entit",
-  "linkedEntityMultiValueWarning": "Pro {{fieldName}} bylo nalezeno více propojených entit. Pomocí první propojené entity.",
+  "linkedEntityMultiValueWarning": "{{linkedField}} obsahuje několik propojených entit. Používá se první pro {{resolvedField}}.",
   "linkTypes": {
     "clickToWebsite": "Klikněte na web",
     "drivingDirections": "Směry jízdy",

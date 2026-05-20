@@ -68,6 +68,7 @@
     "ctaGroup": "Grupa CTA",
     "customCodeSection": "Sekcja kodu niestandardowego",
     "directory": "Informator",
+    "directoryChildren": "Katalog Dzieci",
     "directoryGrid": "Siatka katalogów",
     "emails": "E -maile",
     "eventCard": "Karta wydarzenia",
@@ -563,7 +564,7 @@
   "knowledgeGraphContent": "Treść wykresu wiedzy",
   "link": "Link",
   "linkedEntityFields": "Pola encji połączonych",
-  "linkedEntityMultiValueWarning": "Znaleziono wiele połączonych jednostek dla {{fieldName}}. Korzystanie z pierwszego połączonego elementu.",
+  "linkedEntityMultiValueWarning": "{{linkedField}} zawiera wiele połączonych jednostek. Używanie pierwszego dla {{resolvedField}}.",
   "linkTypes": {
     "clickToWebsite": "Kliknij na stronę internetową",
     "drivingDirections": "Kierunki jazdy",

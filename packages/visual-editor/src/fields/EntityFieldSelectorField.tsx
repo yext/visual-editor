@@ -41,6 +41,7 @@ import {
   returnConstantFieldConfig,
   supportsLocalizedConstantValue,
 } from "./entityFieldConstantConfig.ts";
+import { RepeatedSourceFieldContext } from "./repeatedSourceFieldContext.ts";
 export {
   getConstantConfigFromType,
   returnConstantFieldConfig,
@@ -74,14 +75,11 @@ export type EntityFieldSelectorField<
   disableConstantValueToggle?: boolean;
   disallowTranslation?: boolean;
   sourceFieldPath?: string;
+  fixedRepeatedField?: string;
   repeated?: RepeatedEntityFieldMetadata<any>;
 };
 
 type EntityFieldSelectorFieldProps = FieldProps<EntityFieldSelectorField>;
-
-const RepeatedEntitySourceFieldContext = React.createContext<
-  string | undefined
->(undefined);
 
 const clearEntityFieldBindings = (value: unknown): unknown => {
   if (
@@ -138,7 +136,9 @@ const hasEntityFieldBindings = (value: unknown): boolean => {
  *
  * 1. Lets the user switch between linked-list mode and manual-item mode.
  * 2. Shows either the linked source selector or the inline manual item editor.
- * 3. Clears stale linked mapping selections when the user switches between
+ * 3. Shares the active repeated source field with both KG pickers and
+ *    constant-mode embedded pickers inside the mapping editor.
+ * 4. Clears stale linked mapping selections when the user switches between
  *    linked parent sources while preserving any authored constant values.
  */
 const RepeatedEntityFieldSelector = ({
@@ -152,7 +152,7 @@ const RepeatedEntityFieldSelector = ({
   const translatedLabel = field.label ? pt(field.label) : "";
   const constantValueEnabled = !!value?.constantValueEnabled;
   const baseValue: RepeatedEntityFieldValue<Record<string, unknown>> = {
-    field: value?.field ?? "",
+    field: field.fixedRepeatedField || value?.field || "",
     constantValueEnabled: value?.constantValueEnabled ?? true,
     constantValue: value?.constantValue ?? [repeated.defaultItemValue],
     mappings: value?.mappings ?? repeated.defaultMappings,
@@ -222,6 +222,7 @@ const RepeatedEntityFieldSelector = ({
             constantValueEnabled: nextConstantValueEnabled,
           })
         }
+        disableConstantValue={field.disableConstantValueToggle}
         label={translatedLabel}
       />
       {constantValueEnabled ? (
@@ -239,14 +240,16 @@ const RepeatedEntityFieldSelector = ({
         </div>
       ) : (
         <>
-          <EntityFieldInput
-            className="ve-pt-3"
-            onChange={updateRepeatedValue}
-            value={baseValue}
-            filter={field.filter}
-          />
-          {!!baseValue.field && (
-            <RepeatedEntitySourceFieldContext.Provider value={baseValue.field}>
+          {!field.fixedRepeatedField && (
+            <EntityFieldInput
+              className="ve-pt-3"
+              onChange={updateRepeatedValue}
+              value={baseValue}
+              filter={field.filter}
+            />
+          )}
+          {!!(field.fixedRepeatedField || baseValue.field) && (
+            <RepeatedSourceFieldContext.Provider value={baseValue.field}>
               <div className="ve-pt-3">
                 <YextAutoField
                   field={mappingsField}
@@ -259,7 +262,7 @@ const RepeatedEntityFieldSelector = ({
                   value={baseValue.mappings ?? repeated.defaultMappings}
                 />
               </div>
-            </RepeatedEntitySourceFieldContext.Provider>
+            </RepeatedSourceFieldContext.Provider>
           )}
         </>
       )}
@@ -419,6 +422,7 @@ export const ConstantValueInput = <T extends Record<string, any>>({
   onChange,
   value,
   disallowTranslation,
+  sourceField,
 }: InputProps<T>) => {
   const constantFieldConfig = returnConstantFieldConfig(
     filter.types,
@@ -430,6 +434,22 @@ export const ConstantValueInput = <T extends Record<string, any>>({
     return;
   }
 
+  // Reuse the active repeated source for nested constant editors so embedded
+  // field pickers stay scoped to the current mapped item unless the config
+  // already authored an explicit sourceField.
+  const sourceFieldFromContext = React.useContext(RepeatedSourceFieldContext);
+  const resolvedSourceField =
+    ("sourceField" in constantFieldConfig
+      ? constantFieldConfig.sourceField
+      : undefined) ??
+    sourceField ??
+    sourceFieldFromContext;
+  const scopedConstantField = resolvedSourceField
+    ? ({
+        ...constantFieldConfig,
+        sourceField: resolvedSourceField,
+      } as YextFieldDefinition<any>)
+    : constantFieldConfig;
   const fieldEditor = (
     <YextAutoField
       onChange={(newConstantValue, uiState) =>
@@ -442,7 +462,7 @@ export const ConstantValueInput = <T extends Record<string, any>>({
         )
       }
       value={value?.constantValue}
-      field={constantFieldConfig}
+      field={scopedConstantField}
     />
   );
 
@@ -484,9 +504,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   const entityFields = useEntityFields();
   const streamDocument = useDocument();
   const templateMetadata = React.useContext(TemplateMetadataContext);
-  const sourceFieldFromContext = React.useContext(
-    RepeatedEntitySourceFieldContext
-  );
+  const sourceFieldFromContext = React.useContext(RepeatedSourceFieldContext);
   const sourceFieldFromProps = useCurrentSourceField(sourceFieldPath);
   const sourceField =
     sourceFieldFromInputProps ||
@@ -611,7 +629,11 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       return;
     }
 
-    warnOnMultiValueLinkedEntityTraversal(streamDocument, value.field);
+    warnOnMultiValueLinkedEntityTraversal(
+      streamDocument,
+      value.field,
+      entityFields
+    );
   }, [
     filter.includeListsOnly,
     entityFields,

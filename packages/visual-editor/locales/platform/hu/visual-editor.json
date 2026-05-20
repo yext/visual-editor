@@ -68,6 +68,7 @@
     "ctaGroup": "CTA -csoport",
     "customCodeSection": "Egyedi kód szakasz",
     "directory": "Könyvtár",
+    "directoryChildren": "Címtár Gyermekek",
     "directoryGrid": "Címtárrács",
     "emails": "E -mailek",
     "eventCard": "Rendezvénykártya",
@@ -561,7 +562,7 @@
   "knowledgeGraphContent": "Tudás grafikon tartalma",
   "link": "link",
   "linkedEntityFields": "Kapcsolt entitásmezők",
-  "linkedEntityMultiValueWarning": "Több összekapcsolt entitás található a következőhöz: {{fieldName}}. Az első kapcsolt entitás használata.",
+  "linkedEntityMultiValueWarning": "A {{linkedField}} több összekapcsolt entitást tartalmaz. Az első használata a következőhöz: {{resolvedField}}.",
   "linkTypes": {
     "clickToWebsite": "Kattintson a weboldalra",
     "drivingDirections": "Vezetési útmutatások",

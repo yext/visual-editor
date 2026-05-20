@@ -33,6 +33,7 @@ import {
   type EntityFieldOptionGroup,
 } from "./entityFieldOptionGroups.ts";
 import { TemplateMetadataContext } from "../internal/hooks/useMessageReceivers.ts";
+import { warnOnMultiValueLinkedEntityTraversal } from "../utils/linkedEntityWarningUtils.ts";
 
 export type EmbeddedStringOption = {
   label: string;
@@ -149,6 +150,14 @@ export const EmbeddedFieldStringInputFromEntity = <
       showFieldSelector={showFieldSelector}
       useOptionValueSublabel={false}
       sourceField={sourceField}
+      onFieldSelect={(fieldPath, resolutionFieldPath, resolutionDocument) =>
+        warnOnMultiValueLinkedEntityTraversal(
+          resolutionDocument ?? streamDocument,
+          resolutionFieldPath ?? fieldPath,
+          entityFields,
+          fieldPath
+        )
+      }
     />
   );
 };
@@ -170,6 +179,7 @@ export const EmbeddedFieldStringInputFromOptions = ({
   showFieldSelector,
   useOptionValueSublabel = false,
   sourceField,
+  onFieldSelect,
 }: {
   value: string;
   onChange: (value: string) => void;
@@ -177,6 +187,11 @@ export const EmbeddedFieldStringInputFromOptions = ({
   showFieldSelector: boolean;
   useOptionValueSublabel?: boolean;
   sourceField?: string;
+  onFieldSelect?: (
+    fieldPath: string,
+    resolutionFieldPath?: string,
+    resolutionDocument?: Record<string, unknown>
+  ) => void;
 }) => {
   const [open, setOpen] = React.useState(false);
   const [cursorPosition, setCursorPosition] = React.useState<number | null>(
@@ -184,6 +199,7 @@ export const EmbeddedFieldStringInputFromOptions = ({
   );
   const [inputValue, setInputValue] = React.useState(value);
   const [prevPropValue, setPrevPropValue] = React.useState(value);
+  const streamDocument = useDocument();
 
   if (value !== prevPropValue) {
     setPrevPropValue(value);
@@ -225,6 +241,13 @@ export const EmbeddedFieldStringInputFromOptions = ({
   const handleFieldSelect = (fieldName: string) => {
     setOpen(false);
     if (!fieldName) return;
+    const resolutionPath = sourceField
+      ? `${sourceField}.${fieldName}`
+      : fieldName;
+    const resolutionDocument = sourceField
+      ? (getSubDocument(streamDocument, sourceField) ?? streamDocument)
+      : undefined;
+    onFieldSelect?.(resolutionPath, resolutionPath, resolutionDocument);
     const textToInsert = `[[${fieldName}]]`;
     let insertionPoint = cursorPosition ?? inputValue.length;
 

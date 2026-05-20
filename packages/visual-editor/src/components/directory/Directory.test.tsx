@@ -207,6 +207,7 @@ const cityDocument = {
       name: "Galaxy Grill Rosslyn",
       timezone: "America/New_York",
       slug: "arlington",
+      geomodifier: "2nd Floor",
     },
     {
       address: {
@@ -232,6 +233,7 @@ const cityDocument = {
       mainPhone: "+12025551012",
       name: "Galaxy Grill Clarendon",
       timezone: "America/New_York",
+      geomodifier: "Rooftop",
     },
     {
       address: {
@@ -649,6 +651,153 @@ const tests: ComponentTest[] = [
       },
     },
     version: 58,
+  },
+  {
+    name: "version 77 - City with custom card titles",
+    document: cityDocument,
+    props: {
+      ...version40Props,
+      slots: {
+        ...version40Props.slots,
+        DirectoryGrid: [
+          {
+            type: "DirectoryGrid",
+            props: {
+              data: {
+                field: "dm_directoryChildren",
+                constantValueEnabled: false,
+                constantValue: [],
+                mappings: {
+                  cardTitle: {
+                    field: "",
+                    constantValueEnabled: true,
+                    constantValue: {
+                      defaultValue: "[[name]] [[geomodifier]]",
+                    },
+                  },
+                },
+              },
+              styles: {
+                backgroundColor: {
+                  selectedColor: "white",
+                  contrastingColor: "black",
+                },
+              },
+              slots: {
+                CardSlot: [
+                  {
+                    type: "DirectoryCard",
+                    props: {
+                      data: {
+                        cardTitle: {
+                          defaultValue: "[[name]]",
+                        },
+                      },
+                      styles: {
+                        backgroundColor: {
+                          selectedColor: "white",
+                          contrastingColor: "black",
+                        },
+                      },
+                      slots: {
+                        HeadingSlot: [
+                          {
+                            type: "HeadingTextSlot",
+                            props: {
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValueEnabled: true,
+                                  constantValue: {
+                                    defaultValue: "[[name]]",
+                                  },
+                                },
+                              },
+                              styles: {
+                                level: 3,
+                                align: "left",
+                              },
+                            },
+                          },
+                        ],
+                        AddressSlot: [
+                          {
+                            type: "AddressSlot",
+                            props: {
+                              data: {
+                                address: {
+                                  field: "address",
+                                  constantValue: {
+                                    line1: "",
+                                    city: "",
+                                    postalCode: "",
+                                    countryCode: "",
+                                  },
+                                },
+                              },
+                              styles: {
+                                showGetDirectionsLink: true,
+                                showRegion: true,
+                                showCountry: true,
+                                ctaVariant: "link",
+                              },
+                            },
+                          },
+                        ],
+                        PhoneSlot: [
+                          {
+                            type: "PhoneSlot",
+                            props: {
+                              data: {
+                                number: {
+                                  constantValue: "",
+                                  field: "mainPhone",
+                                },
+                                label: {
+                                  constantValue: "",
+                                  hasLocalizedValue: "true",
+                                  field: "",
+                                },
+                              },
+                              styles: {
+                                phoneFormat: "domestic",
+                                includePhoneHyperlink: true,
+                                includeIcon: false,
+                              },
+                            },
+                          },
+                        ],
+                        HoursSlot: [
+                          {
+                            type: "HoursStatusSlot",
+                            props: {
+                              data: {
+                                hours: {
+                                  constantValue: {},
+                                  field: "hours",
+                                },
+                              },
+                              styles: {
+                                dayOfWeekFormat: "long",
+                                showDayNames: true,
+                                showCurrentStatus: true,
+                                className:
+                                  "mb-2 font-semibold font-body-fontFamily text-body-fontSize h-full",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
+    },
+    version: 77,
   },
 ];
 
