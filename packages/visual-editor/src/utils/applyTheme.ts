@@ -150,7 +150,7 @@ const internalApplyTheme = (
     .map(([key, value]) => `${key}:${value} !important`)
     .join(";");
 
-  return `.components{${cssVariables}}:root{${cssVariables}}`;
+  return `:root{${cssVariables}}`;
 };
 
 /**

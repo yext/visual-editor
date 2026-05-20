@@ -206,9 +206,9 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
         }
       }
 
-      // Otherwise start fresh from Content
+      // Otherwise start fresh from published layout data
       devLogger.log(
-        "Layout Dev Mode - No localStorage. Using layout data from Content"
+        "Layout Dev Mode - No localStorage. Using published layout data"
       );
       if (layoutData) {
         setPuckInitialHistory({
@@ -221,12 +221,12 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       return;
     }
 
-    // Nothing in save_state table, start fresh from Content
+    // Nothing in save_state table, start fresh from published layout data
     if (!layoutSaveState) {
       clearVisualConfigLocalStorage();
 
       devLogger.log(
-        "Layout Prod Mode - No saveState. Using layout data from Content"
+        "Layout Prod Mode - No saveState. Using published layout data"
       );
       if (layoutData) {
         setPuckInitialHistory({

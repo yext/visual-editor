@@ -118,7 +118,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
           payload: { devSaveStateData: JSON.stringify(layoutToSend) },
         });
       } else if (layoutData) {
-        devLogger.log("Theme Dev Mode - Using layout data from Content");
+        devLogger.log("Theme Dev Mode - Using published layout data");
         setPuckInitialHistory({
           histories: [{ id: "root", state: { data: layoutData } }],
           appendData: false,
