@@ -184,6 +184,8 @@ describe.sequential("generateRegistryTemplateFiles", () => {
     expect(localEditorTemplate).toContain(
       'const DEFAULT_LOCAL_EDITOR_ROUTE = "/local-editor";'
     );
+    expect(localEditorTemplate).not.toContain("localEditorTheme");
+    expect(localEditorTemplate).not.toContain("simulatedThemeData");
     expect(localEditorTemplate).not.toContain("../local-editor/generatedFiles");
   });
 

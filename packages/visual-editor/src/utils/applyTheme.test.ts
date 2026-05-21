@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { applyTheme } from "./applyTheme.ts";
+import {
+  applyTheme,
+  THEME_STYLE_TAG_ID,
+  updateThemeInEditor,
+} from "./applyTheme.ts";
 import { ThemeConfig } from "./themeResolver.ts";
 import { StreamDocument } from "./types/StreamDocument.ts";
 
@@ -16,7 +20,7 @@ describe("buildCssOverridesStyle", () => {
     // Should include Google Font links and the CSS style tag
     expect(result).toContain("fonts.googleapis.com");
     expect(result).toContain(
-      '<style id="visual-editor-theme" type="text/css">.components{'
+      '<style id="visual-editor-theme" type="text/css">:root{'
     );
     expect(result).toContain("--colors-palette-text:red !important;");
     expect(result).toContain(
@@ -58,7 +62,7 @@ describe("buildCssOverridesStyle", () => {
       '<link href="./y-fonts/yextcustom.css" rel="stylesheet">'
     );
     expect(result).toContain(
-      '<style id="visual-editor-theme" type="text/css">.components{'
+      '<style id="visual-editor-theme" type="text/css">:root{'
     );
     expect(result).toContain("--colors-palette-text:black !important;");
     expect(result).toContain(
@@ -76,7 +80,7 @@ describe("buildCssOverridesStyle", () => {
 
     expect(result).toContain("fonts.googleapis.com");
     expect(result).toContain(
-      '<style id="visual-editor-theme" type="text/css">.components{' +
+      '<style id="visual-editor-theme" type="text/css">:root{' +
         "--colors-palette-text:black !important;" +
         "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
         "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
@@ -113,7 +117,7 @@ describe("buildCssOverridesStyle", () => {
         '<link href="https://fonts.googleapis.com/css2?family=Adamina:wght@400&display=swap" rel="stylesheet">' +
         '<style type="text/css">@font-face {\n  font-family: "Adamina Fallback";\n  src: local(\'Georgia\');\n  ' +
         "ascent-override: 100.1884%;\n  descent-override: 27.1032%;\n  size-adjust: 106.9985%;\n  font-weight: 400;\n  font-style: regular;\n}</style>" +
-        '<style id="visual-editor-theme" type="text/css">.components{' +
+        '<style id="visual-editor-theme" type="text/css">:root{' +
         "--colors-palette-text:black !important;" +
         "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
         "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
@@ -214,7 +218,7 @@ describe("buildCssOverridesStyle", () => {
     // Should include Google Font links and the CSS style tag
     expect(result).toContain("fonts.googleapis.com");
     expect(result).toContain(
-      '<style id="visual-editor-theme" type="text/css">.components{'
+      '<style id="visual-editor-theme" type="text/css">:root{'
     );
     expect(result).toContain("--colors-palette-text:black !important;");
     expect(result).toContain(
@@ -259,7 +263,7 @@ describe("buildCssOverridesStyle", () => {
     // Should include Google Font links and the CSS style tag
     expect(result).toContain("fonts.googleapis.com");
     expect(result).toContain(
-      '<style id="visual-editor-theme" type="text/css">.components{'
+      '<style id="visual-editor-theme" type="text/css">:root{'
     );
     expect(result).toContain("--colors-palette-primary:#7ED321 !important");
     expect(result).toContain(
@@ -267,6 +271,25 @@ describe("buildCssOverridesStyle", () => {
     );
     expect(result).toContain(
       "--colors-palette-secondary-contrast:#FFFFFF !important"
+    );
+  });
+
+  it("creates the theme style tag when updating the editor without one", async () => {
+    document.getElementById(THEME_STYLE_TAG_ID)?.remove();
+
+    await updateThemeInEditor(
+      {
+        "--colors-palette-primary": "#CF0A2C",
+      },
+      themeConfig,
+      true
+    );
+
+    const styleTag = document.getElementById(THEME_STYLE_TAG_ID);
+    expect(styleTag).not.toBeNull();
+    expect(styleTag?.textContent).toContain(":root{");
+    expect(styleTag?.textContent).toContain(
+      "--colors-palette-primary:#CF0A2C !important"
     );
   });
 });

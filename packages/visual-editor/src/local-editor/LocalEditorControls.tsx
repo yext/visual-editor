@@ -1,5 +1,5 @@
 import React from "react";
-import type { LocalEditorEntityOption } from "./types.ts";
+import type { LocalEditorEntityOption, LocalEditorMode } from "./types.ts";
 
 type LocalEditorControlsProps = {
   activeEntities: LocalEditorEntityOption[];
@@ -7,9 +7,11 @@ type LocalEditorControlsProps = {
   controlsDisabled: boolean;
   selectedEntityId?: string;
   selectedLocale: string;
+  selectedMode: LocalEditorMode;
   selectedTemplateId: string;
   onEntityChange: (entityId: string) => void;
   onLocaleChange: (locale: string) => void;
+  onModeChange: (mode: LocalEditorMode) => void;
   onTemplateChange: (templateId: string) => void;
 };
 
@@ -19,9 +21,11 @@ export const LocalEditorControls = ({
   controlsDisabled,
   selectedEntityId,
   selectedLocale,
+  selectedMode,
   selectedTemplateId,
   onEntityChange,
   onLocaleChange,
+  onModeChange,
   onTemplateChange,
 }: LocalEditorControlsProps) => {
   const selectedEntity = activeEntities.find((entity) => {
@@ -51,6 +55,30 @@ export const LocalEditorControls = ({
             </option>
           ))}
         </select>
+      </ControlGroup>
+
+      <ControlGroup label="Editor">
+        <button
+          type="button"
+          disabled={controlsDisabled}
+          onClick={() => {
+            onModeChange(selectedMode === "layout" ? "theme" : "layout");
+          }}
+          style={{
+            appearance: "none",
+            background: controlsDisabled ? "#f5f5f5" : "#111",
+            border: "1px solid #111",
+            borderRadius: "6px",
+            color: controlsDisabled ? "#777" : "#fff",
+            cursor: controlsDisabled ? "not-allowed" : "pointer",
+            font: "inherit",
+            minHeight: "34px",
+            padding: "6px 10px",
+            textAlign: "left",
+          }}
+        >
+          {selectedMode === "layout" ? "Layout Editor" : "Theme Editor"}
+        </button>
       </ControlGroup>
 
       <ControlGroup label="Entity">

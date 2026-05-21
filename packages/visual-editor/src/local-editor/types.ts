@@ -22,6 +22,8 @@ export type LocalEditorShellProps = {
   themeConfig?: ThemeConfig;
 };
 
+export type LocalEditorMode = "layout" | "theme";
+
 export type BuildEditorLocalDevOptionsArgs = {
   selectedTemplateId: string;
   selectedEntity?: LocalEditorEntityOption;
