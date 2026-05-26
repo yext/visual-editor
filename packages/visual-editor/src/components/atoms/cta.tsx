@@ -33,7 +33,7 @@ export type CTAProps = {
   // ctaType specific props
   link?: string;
   linkType?: LinkType;
-  normalizeLink: boolean;
+  normalizeLink?: boolean;
   presetImageType?: PresetImageType;
 
   // button actionType specific props
@@ -113,7 +113,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
     className,
     alwaysHideCaret,
     ariaLabel,
-    normalizeLink: shouldNormalizeLink,
+    normalizeLink: shouldNormalizeLink = true,
   } = props;
   const { t } = useTranslation();
   const streamDocument = useDocument();

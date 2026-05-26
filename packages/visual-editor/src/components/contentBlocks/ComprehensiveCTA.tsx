@@ -52,7 +52,6 @@ const defaultComprehensiveCTAValue: ComprehensiveCTAValue = {
       },
       selectedType: "textAndLink",
     },
-    normalizeLink: true,
     openInNewTab: false,
     buttonText: { defaultValue: "Button" },
     customId: "",
@@ -310,7 +309,6 @@ export const ComprehensiveCTA = ({
       linkType={
         actionType === "link" && resolvedCta ? resolvedCta.linkType : undefined
       }
-      normalizeLink={currentValue.data.normalizeLink}
       onClick={onClick}
       openInNewTab={
         actionType === "link" ? currentValue.data.openInNewTab : undefined
