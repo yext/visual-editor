@@ -16,25 +16,44 @@ import { type StyledLinkValue } from "./StyledLinkField.tsx";
 
 export type ComprehensiveCTAValue = {
   data: {
+    /**
+     * Whether to render the <a> or <button> tag under the hood.
+     * Normal CTAs are "link".
+     * Custom implementations can use "button" to integrate with custom JS.
+     */
     actionType: "link" | "button";
+    /** The data source for the CTA. */
     cta: YextCTAField;
-    normalizeLink: boolean;
+    /** Whether to open the link in a new tab for actionType: "link". */
     openInNewTab: boolean;
+    /** The label for actionType: "button". */
     buttonText?: TranslatableString;
+    /** The id for actionType: "button". */
     customId?: string;
+    /** The class names for actionType: "button". */
     customClass?: string;
+    /** The data attributes for actionType: "button". */
     dataAttributes?: Array<{ key: string; value: string }>;
+    /** The aria label for actionType: "button". */
     ariaLabel?: TranslatableString;
   };
   styles: {
+    /** The visual variant of the CTA. */
     variant: CTAVariant;
+    /** The preset image to use when cta.selectedType is "presetImage". */
     presetImage?: PresetImageType;
+    /** The color of the button or link when cta.selectedType is not "presetImage". */
     color?: ThemeColor;
+    /** The theme styling when the variant is "primary" or "secondary" */
     button?: StyledButtonValue;
+    /** The theme styling when the variant is "link". */
     link?: StyledLinkValue;
   };
+  /** @internal Additional class names to pass to the underlying component. */
   className?: string;
+  /** @internal Additional styles to pass to the underlying component. */
   sx?: React.CSSProperties;
+  /** @internal The event name to use for Yext Analytics. */
   eventName?: string;
 };
 
@@ -75,7 +94,6 @@ const defaultComprehensiveCTAValue: ComprehensiveCTAValue = {
       },
       selectedType: "textAndLink",
     },
-    normalizeLink: true,
     openInNewTab: false,
     buttonText: { defaultValue: "Button" },
     customId: "",
@@ -146,15 +164,6 @@ export const ComprehensiveCTAFieldOverride = ({
           label: pt("fields.cta", "CTA"),
           disableConstantValueToggle: field.disableConstantValueToggle,
           visible: !showButtonFields,
-        },
-        normalizeLink: {
-          type: "radio" as const,
-          label: pt("fields.normalizeLink", "Normalize Link"),
-          options: [
-            { label: pt("fields.options.yes", "Yes"), value: true },
-            { label: pt("fields.options.no", "No"), value: false },
-          ],
-          visible: false,
         },
         openInNewTab: {
           type: "radio" as const,
