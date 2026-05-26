@@ -281,7 +281,7 @@
     "linkLabel": "Koblingsetikett",
     "links": "Lenker",
     "linksTooltip": "Lenker vil automatisk kollapse hvis visningsporten er for smal",
-    "linkStyles": "Koble stiler",
+    "linkStyles": "Lenkestiler",
     "linkTarget": "Linkmål",
     "linkType": "Koblingstype",
     "listLength": "Listelengde",
