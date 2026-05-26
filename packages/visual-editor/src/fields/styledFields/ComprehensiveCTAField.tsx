@@ -1,0 +1,301 @@
+import React from "react";
+import { BaseField, FieldLabel, type FieldProps } from "@puckeditor/core";
+import {
+  isCtaVariantWithColor,
+  type CTAVariant,
+} from "../../components/atoms/cta.tsx";
+import { getCTAType } from "../../internal/utils/ctaFieldUtils.ts";
+import { type MsgString, pt } from "../../utils/i18n/platform.ts";
+import { ThemeColor, ThemeOptions } from "../../utils/themeConfigOptions.ts";
+import { PresetImageType, TranslatableString } from "../../types/types.ts";
+import { type YextCTAField } from "../CTASelectorField.tsx";
+import { YextAutoField } from "../YextAutoField.tsx";
+import { defaultBaseTextStyles } from "./baseText.tsx";
+import { type StyledButtonValue } from "./StyledButtonField.tsx";
+import { type StyledLinkValue } from "./StyledLinkField.tsx";
+
+export type ComprehensiveCTAValue = {
+  data: {
+    actionType: "link" | "button";
+    cta: YextCTAField;
+    normalizeLink: boolean;
+    openInNewTab: boolean;
+    buttonText?: TranslatableString;
+    customId?: string;
+    customClass?: string;
+    dataAttributes?: Array<{ key: string; value: string }>;
+    ariaLabel?: TranslatableString;
+  };
+  styles: {
+    variant: CTAVariant;
+    presetImage?: PresetImageType;
+    color?: ThemeColor;
+    button?: StyledButtonValue;
+    link?: StyledLinkValue;
+  };
+  className?: string;
+  sx?: React.CSSProperties;
+  eventName?: string;
+};
+
+export type ComprehensiveCTAField = BaseField & {
+  type: "comprehensiveCTA";
+  label?: string | MsgString;
+  visible?: boolean;
+  disableConstantValueToggle?: boolean;
+};
+
+type ComprehensiveCTAFieldProps = FieldProps<
+  ComprehensiveCTAField,
+  ComprehensiveCTAValue
+>;
+
+const defaultStyledButtonValue: StyledButtonValue = {
+  ...defaultBaseTextStyles,
+  borderRadius: "default",
+  letterSpacing: "default",
+};
+
+const defaultStyledLinkValue: StyledLinkValue = {
+  ...defaultBaseTextStyles,
+  letterSpacing: "default",
+  includeCaret: "default",
+};
+
+const defaultComprehensiveCTAValue: ComprehensiveCTAValue = {
+  data: {
+    actionType: "link",
+    cta: {
+      field: "",
+      constantValue: {
+        ctaType: "textAndLink",
+        label: "Call to Action",
+        link: "#",
+        linkType: "URL",
+      },
+      selectedType: "textAndLink",
+    },
+    normalizeLink: true,
+    openInNewTab: false,
+    buttonText: { defaultValue: "Button" },
+    customId: "",
+    customClass: "",
+    dataAttributes: [],
+    ariaLabel: { defaultValue: "Button" },
+  },
+  styles: {
+    variant: "primary",
+    presetImage: "app-store",
+    button: defaultStyledButtonValue,
+    link: defaultStyledLinkValue,
+  },
+};
+
+export const ComprehensiveCTAFieldOverride = ({
+  field,
+  value,
+  onChange,
+}: ComprehensiveCTAFieldProps) => {
+  const currentValue: ComprehensiveCTAValue = {
+    ...defaultComprehensiveCTAValue,
+    ...value,
+    data: {
+      ...defaultComprehensiveCTAValue.data,
+      ...value?.data,
+    },
+    styles: {
+      ...defaultComprehensiveCTAValue.styles,
+      ...value?.styles,
+      button: {
+        ...defaultStyledButtonValue,
+        ...value?.styles?.button,
+      },
+      link: {
+        ...defaultStyledLinkValue,
+        ...value?.styles?.link,
+      },
+    },
+  };
+
+  const actionType = currentValue.data.actionType;
+  const ctaType = getCTAType(currentValue.data.cta).ctaType;
+  const effectiveCtaType = actionType === "button" ? "textAndLink" : ctaType;
+  const showButtonFields = actionType === "button";
+  const showPresetImageField = effectiveCtaType === "presetImage";
+  const showColorField =
+    isCtaVariantWithColor(currentValue.styles.variant) && !showPresetImageField;
+  const showButtonStyleFields =
+    !showPresetImageField && currentValue.styles.variant !== "link";
+  const showLinkStyleFields =
+    !showPresetImageField && currentValue.styles.variant === "link";
+
+  const dataField = React.useMemo(
+    () => ({
+      type: "object" as const,
+      objectFields: {
+        actionType: {
+          type: "radio" as const,
+          label: pt("fields.actionType", "Action Type"),
+          options: [
+            { label: pt("fields.options.link", "Link"), value: "link" },
+            { label: pt("fields.options.button", "Button"), value: "button" },
+          ],
+        },
+        cta: {
+          type: "ctaSelector" as const,
+          label: pt("fields.cta", "CTA"),
+          disableConstantValueToggle: field.disableConstantValueToggle,
+          visible: !showButtonFields,
+        },
+        normalizeLink: {
+          type: "radio" as const,
+          label: pt("fields.normalizeLink", "Normalize Link"),
+          options: [
+            { label: pt("fields.options.yes", "Yes"), value: true },
+            { label: pt("fields.options.no", "No"), value: false },
+          ],
+          visible: false,
+        },
+        openInNewTab: {
+          type: "radio" as const,
+          label: pt("fields.openInNewTab", "Open in New Tab"),
+          options: [
+            { label: pt("fields.options.yes", "Yes"), value: true },
+            { label: pt("fields.options.no", "No"), value: false },
+          ],
+          visible: !showButtonFields,
+        },
+        buttonText: {
+          type: "translatableString" as const,
+          label: pt("fields.buttonText", "Button Text"),
+          filter: { types: ["type.string" as const] },
+          visible: showButtonFields,
+        },
+        customId: {
+          type: "text" as const,
+          label: pt("fields.customId", "Custom ID"),
+          visible: showButtonFields,
+        },
+        customClass: {
+          type: "text" as const,
+          label: pt("fields.customClass", "Custom Class"),
+          visible: showButtonFields,
+        },
+        dataAttributes: {
+          type: "array" as const,
+          label: pt("fields.dataAttributes", "Data Attributes"),
+          defaultItemProps: {
+            key: "",
+            value: "",
+          },
+          arrayFields: {
+            key: {
+              label: pt("fields.key", "Key"),
+              type: "text" as const,
+            },
+            value: {
+              label: pt("fields.value", "Value"),
+              type: "text" as const,
+            },
+          },
+          getItemSummary: (item: { key?: string }, index?: number) =>
+            item?.key?.trim()
+              ? item.key
+              : `${pt("dataAttribute", "Attribute")} ${(index ?? 0) + 1}`,
+          visible: showButtonFields,
+        },
+        ariaLabel: {
+          type: "translatableString" as const,
+          label: pt("fields.ariaLabel", "Aria Label"),
+          filter: { types: ["type.string" as const] },
+          visible: showButtonFields,
+        },
+      },
+    }),
+    [field.disableConstantValueToggle, showButtonFields]
+  );
+
+  const stylesField = React.useMemo(
+    () => ({
+      type: "object" as const,
+      objectFields: {
+        variant: {
+          type: "radio" as const,
+          label: pt("fields.variant", "Variant"),
+          options: ThemeOptions.CTA_VARIANT,
+          visible: !showPresetImageField,
+        },
+        presetImage: {
+          type: "basicSelector" as const,
+          label: pt("fields.presetImage", "Preset Image"),
+          options: "PRESET_IMAGE" as const,
+          visible: showPresetImageField,
+        },
+        color: {
+          type: "basicSelector" as const,
+          label: pt("fields.color", "Color"),
+          options: "SITE_COLOR" as const,
+          visible: showColorField,
+        },
+        button: {
+          type: "styledButton" as const,
+          label: pt("fields.buttonStyles", "Button Styles"),
+          visible: showButtonStyleFields,
+        },
+        link: {
+          type: "styledLink" as const,
+          label: pt("fields.linkStyles", "Link Styles"),
+          visible: showLinkStyleFields,
+        },
+      },
+    }),
+    [
+      showButtonStyleFields,
+      showColorField,
+      showLinkStyleFields,
+      showPresetImageField,
+    ]
+  );
+
+  return (
+    <div>
+      {field.label && <FieldLabel label={pt(field.label)} />}
+      <div className="ObjectField">
+        <div className="ObjectField-fieldset ve-flex ve-flex-col ve-gap-3">
+          <div>
+            <FieldLabel label={pt("fields.data", "Data")} />
+            <YextAutoField
+              field={dataField}
+              onChange={(nextValue, uiState) =>
+                onChange(
+                  {
+                    ...currentValue,
+                    data: nextValue,
+                  },
+                  uiState
+                )
+              }
+              value={currentValue.data}
+            />
+          </div>
+          <div>
+            <FieldLabel label={pt("fields.styles", "Styles")} />
+            <YextAutoField
+              field={stylesField}
+              onChange={(nextValue, uiState) =>
+                onChange(
+                  {
+                    ...currentValue,
+                    styles: nextValue,
+                  },
+                  uiState
+                )
+              }
+              value={currentValue.styles}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};

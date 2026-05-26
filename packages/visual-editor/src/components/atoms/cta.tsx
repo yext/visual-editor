@@ -43,6 +43,7 @@ export type CTAProps = {
   // Styling and behavior props
   variant?: ButtonProps["variant"];
   className?: string;
+  style?: React.CSSProperties;
   eventName?: string;
   target?: "_self" | "_blank" | "_parent" | "_top";
   alwaysHideCaret?: boolean;
@@ -237,6 +238,7 @@ export const CTA = (props: CTAProps) => {
     eventName,
     target,
     variant,
+    style,
     ctaType,
     onClick,
     disabled = false,
@@ -381,6 +383,7 @@ export const CTA = (props: CTAProps) => {
           textTransform: buttonVariant?.toLowerCase().includes("link")
             ? LINK_TEXT_TRANSFORM_CSS_VAR
             : BUTTON_TEXT_TRANSFORM_CSS_VAR,
+          ...style,
         }}
       >
         {linkContent}
@@ -409,6 +412,7 @@ export const CTA = (props: CTAProps) => {
           textTransform: buttonVariant?.toLowerCase().includes("link")
             ? LINK_TEXT_TRANSFORM_CSS_VAR
             : BUTTON_TEXT_TRANSFORM_CSS_VAR,
+          ...style,
         }}
         className={buttonClassName}
         variant={buttonVariant}
@@ -424,7 +428,10 @@ export const CTA = (props: CTAProps) => {
 
   return (
     <Button
-      style={ctaType !== "presetImage" ? dynamicStyle : undefined}
+      style={{
+        ...(ctaType !== "presetImage" ? dynamicStyle : undefined),
+        ...style,
+      }}
       asChild
       className={buttonClassName}
       variant={buttonVariant}
@@ -444,6 +451,7 @@ export const CTA = (props: CTAProps) => {
           textTransform: buttonVariant?.toLowerCase().includes("link")
             ? LINK_TEXT_TRANSFORM_CSS_VAR
             : BUTTON_TEXT_TRANSFORM_CSS_VAR,
+          ...style,
         }}
       >
         {linkContent}
