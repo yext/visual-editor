@@ -9,6 +9,7 @@ import { type MsgString, pt } from "../../utils/i18n/platform.ts";
 import { ThemeColor, ThemeOptions } from "../../utils/themeConfigOptions.ts";
 import { PresetImageType, TranslatableString } from "../../types/types.ts";
 import { type YextCTAField } from "../CTASelectorField.tsx";
+import { type YextObjectField } from "../fields.ts";
 import { YextAutoField } from "../YextAutoField.tsx";
 import { defaultBaseTextStyles } from "./baseText.tsx";
 import { type StyledButtonValue } from "./StyledButtonField.tsx";
@@ -147,12 +148,14 @@ export const ComprehensiveCTAFieldOverride = ({
   const showLinkStyleFields =
     !showPresetImageField && currentValue.styles.variant === "link";
 
-  const dataField = React.useMemo(
+  const dataField = React.useMemo<
+    YextObjectField<ComprehensiveCTAValue["data"]>
+  >(
     () => ({
-      type: "object" as const,
+      type: "object",
       objectFields: {
         actionType: {
-          type: "radio" as const,
+          type: "radio",
           label: pt("fields.actionType", "Action Type"),
           options: [
             { label: pt("fields.options.link", "Link"), value: "link" },
@@ -160,13 +163,13 @@ export const ComprehensiveCTAFieldOverride = ({
           ],
         },
         cta: {
-          type: "ctaSelector" as const,
+          type: "ctaSelector",
           label: pt("fields.cta", "CTA"),
           disableConstantValueToggle: field.disableConstantValueToggle,
           visible: !showButtonFields,
         },
         openInNewTab: {
-          type: "radio" as const,
+          type: "radio",
           label: pt("fields.openInNewTab", "Open in New Tab"),
           options: [
             { label: pt("fields.options.yes", "Yes"), value: true },
@@ -175,23 +178,23 @@ export const ComprehensiveCTAFieldOverride = ({
           visible: !showButtonFields,
         },
         buttonText: {
-          type: "translatableString" as const,
+          type: "translatableString",
           label: pt("fields.buttonText", "Button Text"),
-          filter: { types: ["type.string" as const] },
+          filter: { types: ["type.string"] },
           visible: showButtonFields,
         },
         customId: {
-          type: "text" as const,
+          type: "text",
           label: pt("fields.customId", "Custom ID"),
           visible: showButtonFields,
         },
         customClass: {
-          type: "text" as const,
+          type: "text",
           label: pt("fields.customClass", "Custom Class"),
           visible: showButtonFields,
         },
         dataAttributes: {
-          type: "array" as const,
+          type: "array",
           label: pt("fields.dataAttributes", "Data Attributes"),
           defaultItemProps: {
             key: "",
@@ -200,11 +203,11 @@ export const ComprehensiveCTAFieldOverride = ({
           arrayFields: {
             key: {
               label: pt("fields.key", "Key"),
-              type: "text" as const,
+              type: "text",
             },
             value: {
               label: pt("fields.value", "Value"),
-              type: "text" as const,
+              type: "text",
             },
           },
           getItemSummary: (item: { key?: string }, index?: number) =>
@@ -214,9 +217,9 @@ export const ComprehensiveCTAFieldOverride = ({
           visible: showButtonFields,
         },
         ariaLabel: {
-          type: "translatableString" as const,
+          type: "translatableString",
           label: pt("fields.ariaLabel", "Aria Label"),
-          filter: { types: ["type.string" as const] },
+          filter: { types: ["type.string"] },
           visible: showButtonFields,
         },
       },
@@ -224,35 +227,37 @@ export const ComprehensiveCTAFieldOverride = ({
     [field.disableConstantValueToggle, showButtonFields]
   );
 
-  const stylesField = React.useMemo(
+  const stylesField = React.useMemo<
+    YextObjectField<ComprehensiveCTAValue["styles"]>
+  >(
     () => ({
-      type: "object" as const,
+      type: "object",
       objectFields: {
         variant: {
-          type: "radio" as const,
+          type: "radio",
           label: pt("fields.variant", "Variant"),
           options: ThemeOptions.CTA_VARIANT,
           visible: !showPresetImageField,
         },
         presetImage: {
-          type: "basicSelector" as const,
+          type: "basicSelector",
           label: pt("fields.presetImage", "Preset Image"),
-          options: "PRESET_IMAGE" as const,
+          options: "PRESET_IMAGE",
           visible: showPresetImageField,
         },
         color: {
-          type: "basicSelector" as const,
+          type: "basicSelector",
           label: pt("fields.color", "Color"),
-          options: "SITE_COLOR" as const,
+          options: "SITE_COLOR",
           visible: showColorField,
         },
         button: {
-          type: "styledButton" as const,
+          type: "styledButton",
           label: pt("fields.buttonStyles", "Button Styles"),
           visible: showButtonStyleFields,
         },
         link: {
-          type: "styledLink" as const,
+          type: "styledLink",
           label: pt("fields.linkStyles", "Link Styles"),
           visible: showLinkStyleFields,
         },
