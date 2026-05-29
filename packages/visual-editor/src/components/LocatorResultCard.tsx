@@ -1243,7 +1243,7 @@ const HoursSection = (props: {
   const contentId = React.useId();
 
   const hoursData = parseHoursFromLocation(location, hoursProps.field);
-  const comingSoon = resolveProjectedField(location, "comingSoon");
+  const comingSoon = location["comingSoon"];
   const showHoursSection =
     (hoursData || comingSoon) && hoursProps.liveVisibility;
   return (
