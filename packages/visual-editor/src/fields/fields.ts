@@ -17,6 +17,7 @@ import type { CTASelectorField } from "./CTASelectorField.tsx";
 import type { MultiSelectorField } from "./MultiSelectorField.tsx";
 import type { OptionalNumberField } from "./OptionalNumberField.tsx";
 import type { ImageField } from "./ImageField.tsx";
+import type { ComprehensiveCTAField } from "./styledFields/ComprehensiveCTAField.tsx";
 import type { StyledButtonField } from "./styledFields/StyledButtonField.tsx";
 import type { StyledImageField } from "./styledFields/StyledImageField.tsx";
 import type { StyledLinkField } from "./styledFields/StyledLinkField.tsx";
@@ -31,6 +32,7 @@ export type YextPuckFields = {
   basicSelector: BasicSelectorField;
   ctaSelector: CTASelectorField;
   code: CodeField;
+  comprehensiveCTA: ComprehensiveCTAField;
   dateTimeSelector: DateTimeSelectorField;
   entityField: EntityFieldSelectorField;
   multiSelector: MultiSelectorField;
