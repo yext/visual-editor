@@ -18,6 +18,7 @@
   "closed": "Cerrado",
   "closesAtTime": "Cierra a las {{time}}",
   "closesAtTimeWeek": "Cierra a las {{time}} {{dayOfWeek}}",
+  "comingSoon": "Muy pronto",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "Imagen de utilidad {{number}}"
@@ -67,7 +68,6 @@
   "openHeaderMenu": "Abrir menú de encabezado",
   "openMenu": "Menú abierto",
   "openNow": "Abierto ahora",
-  "comingSoon": "Próximamente",
   "opensAtTime": "Abre a las {{time}}",
   "opensAtTimeWeek": "Abre a las {{time}} {{dayOfWeek}}",
   "phone": "Teléfono",

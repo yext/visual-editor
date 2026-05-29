@@ -51,6 +51,7 @@
     "close": "Renk seçiciyi kapat",
     "open": "Renk seçiciyi aç"
   },
+  "comingSoon": "Yakında gelecek",
   "componentErrorBoundary": {
     "error": "Hata",
     "message": "Bu bölüm oluşturulamıyor. Bileşen kitaplığınızı güncellemeyi deneyin."

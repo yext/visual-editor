@@ -51,6 +51,7 @@
     "close": "Lukk fargevelgeren",
     "open": "Åpne fargevelgeren"
   },
+  "comingSoon": "Kommer snart",
   "componentErrorBoundary": {
     "error": "Feil",
     "message": "Kan ikke gjengi denne delen. Prøv å oppdatere komponentbiblioteket."

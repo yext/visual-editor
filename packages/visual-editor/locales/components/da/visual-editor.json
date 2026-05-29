@@ -18,6 +18,7 @@
   "closed": "Lukket",
   "closesAtTime": "Lukker kl. {{time}}",
   "closesAtTimeWeek": "Lukker kl. {{time}} {{dayOfWeek}}",
+  "comingSoon": "Kommer snart",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "Hjælpebillede {{number}}"
@@ -62,7 +63,6 @@
   "openHeaderMenu": "Åben header -menu",
   "openMenu": "Åben menu",
   "openNow": "Åben nu",
-  "comingSoon": "Kommer snart",
   "opensAtTime": "Åbner kl. {{time}}",
   "opensAtTimeWeek": "Åbner kl. {{time}} {{dayOfWeek}}",
   "phone": "Telefon",

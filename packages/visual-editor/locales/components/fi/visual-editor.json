@@ -18,6 +18,7 @@
   "closed": "Suljettu",
   "closesAtTime": "Suljetaan {{time}}",
   "closesAtTimeWeek": "Suljetaan klo {{time}} {{dayOfWeek}}",
+  "comingSoon": "Tulossa pian",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "Hyötykuva {{number}}"
@@ -62,7 +63,6 @@
   "openHeaderMenu": "Avaa otsikkovalikko",
   "openMenu": "Avaa valikko",
   "openNow": "Avoinna nyt",
-  "comingSoon": "Tulossa pian",
   "opensAtTime": "Avautuu {{time}}",
   "opensAtTimeWeek": "Avautuu {{time}} {{dayOfWeek}}",
   "phone": "Puhelin",

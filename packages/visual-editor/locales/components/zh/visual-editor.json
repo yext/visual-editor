@@ -18,6 +18,7 @@
   "closed": "关闭",
   "closesAtTime": "于 {{time}} 关闭",
   "closesAtTimeWeek": "于 {{time}} {{dayOfWeek}} 关闭",
+  "comingSoon": "即将推出",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "实用程序图像 {{number}}"
@@ -62,7 +63,6 @@
   "openHeaderMenu": "打开标题菜单",
   "openMenu": "开放菜单",
   "openNow": "现在打开",
-  "comingSoon": "即将推出",
   "opensAtTime": "开放时间：{{time}}",
   "opensAtTimeWeek": "开放时间：{{time}} {{dayOfWeek}}",
   "phone": "电话",

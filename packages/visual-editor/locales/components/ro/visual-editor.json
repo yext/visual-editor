@@ -18,6 +18,7 @@
   "closed": "Închis",
   "closesAtTime": "Se închide la {{time}}",
   "closesAtTimeWeek": "Se închide la {{time}} {{dayOfWeek}}",
+  "comingSoon": "În curând",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "Imagine utilitar {{number}}"
@@ -67,7 +68,6 @@
   "openHeaderMenu": "Deschideți meniul antetului",
   "openMenu": "Meniu Deschide",
   "openNow": "Deschide acum",
-  "comingSoon": "În curând",
   "opensAtTime": "Se deschide la {{time}}",
   "opensAtTimeWeek": "Se deschide la {{time}} {{dayOfWeek}}",
   "phone": "Telefon",

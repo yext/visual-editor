@@ -51,6 +51,7 @@
     "close": "Cerrar selector de color",
     "open": "Abrir selector de color"
   },
+  "comingSoon": "Muy pronto",
   "componentErrorBoundary": {
     "error": "Error",
     "message": "No se puede renderizar esta sección. Intente actualizar su biblioteca de componentes."
