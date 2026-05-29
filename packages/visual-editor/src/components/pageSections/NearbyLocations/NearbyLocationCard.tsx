@@ -1,6 +1,6 @@
 import React from "react";
 import { PuckContext } from "@puckeditor/core";
-import { Address } from "@yext/pages-components";
+import { Address, HoursType } from "@yext/pages-components";
 import { Background } from "../../atoms/background.tsx";
 import { Heading } from "../../atoms/heading.tsx";
 import { HeadingLevel } from "../../../utils/themeConfigOptions.ts";
@@ -42,7 +42,8 @@ export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
     return <></>;
   }
 
-  const { name, hours, address, timezone, mainPhone } = locationData;
+  const { name, hours, comingSoon, address, timezone, mainPhone } =
+    locationData;
 
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
 
@@ -80,12 +81,13 @@ export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
           {name}
         </Heading>
       </MaybeLink>
-      {styles.showHours && hours && (
+      {styles.showHours && (hours || comingSoon) && (
         <div
           className={`font-semibold font-body-fontFamily text-body-fontSize ${showPhone || showAddress ? "mb-2" : ""}`}
         >
           <HoursStatusAtom
-            hours={hours}
+            hours={(hours ?? {}) as HoursType}
+            comingSoon={comingSoon}
             className="h-full"
             timezone={timezone}
             showCurrentStatus={styles?.hours?.showCurrentStatus}

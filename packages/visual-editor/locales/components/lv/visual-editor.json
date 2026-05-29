@@ -65,6 +65,7 @@
   "openHeaderMenu": "Atveriet galvenes izvēlni",
   "openMenu": "Atvērta ēdienkarte",
   "openNow": "Atvērts tagad",
+  "comingSoon": "Drīzumā",
   "opensAtTime": "Tiek atvērts plkst. {{time}}",
   "opensAtTimeWeek": "Tiek atvērts plkst. {{time}} {{dayOfWeek}}",
   "phone": "Telefons",

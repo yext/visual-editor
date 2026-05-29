@@ -62,6 +62,7 @@
   "openHeaderMenu": "ヘッダーを開くメニュー",
   "openMenu": "メニューを開きます",
   "openNow": "営業中",
+  "comingSoon": "近日公開",
   "opensAtTime": "{{time}}に開店",
   "opensAtTimeWeek": "{{time}} {{dayOfWeek}} に開店",
   "phone": "電話",
