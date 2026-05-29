@@ -51,6 +51,7 @@
     "close": "Luk farvevælgeren",
     "open": "Åbn farvevælgeren"
   },
+  "comingSoon": "Kommer snart",
   "componentErrorBoundary": {
     "error": "Fejl",
     "message": "Kan ikke gengive denne sektion. Prøv at opdatere dit komponentbibliotek."

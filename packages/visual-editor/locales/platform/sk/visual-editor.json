@@ -51,6 +51,7 @@
     "close": "Zavrieť výber farieb",
     "open": "Otvorte výber farieb"
   },
+  "comingSoon": "Už čoskoro",
   "componentErrorBoundary": {
     "error": "Chyba",
     "message": "Túto sekciu nie je možné vykresliť. Skúste aktualizovať knižnicu komponentov."

@@ -12,7 +12,14 @@ export interface HoursTableAtomProps
 }
 
 export const HoursTableAtom = (props: HoursTableAtomProps) => {
-  const { hours, className, startOfWeek, collapseDays, timeOptions } = props;
+  const {
+    hours,
+    className,
+    startOfWeek,
+    collapseDays,
+    timeOptions,
+    comingSoon,
+  } = props;
 
   const { t, i18n } = useTranslation();
 
@@ -29,6 +36,7 @@ export const HoursTableAtom = (props: HoursTableAtomProps) => {
   return (
     <HoursTable
       hours={hours}
+      comingSoon={comingSoon}
       dayOfWeekNames={dayOfWeekNames}
       startOfWeek={startOfWeek}
       collapseDays={collapseDays}

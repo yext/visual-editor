@@ -51,6 +51,7 @@
     "close": "Zamknij selektor kolorów",
     "open": "Otwórz selektor kolorów"
   },
+  "comingSoon": "Już wkrótce",
   "componentErrorBoundary": {
     "error": "Błąd",
     "message": "Nie można wyrenderować tej sekcji. Spróbuj zaktualizować bibliotekę komponentów."

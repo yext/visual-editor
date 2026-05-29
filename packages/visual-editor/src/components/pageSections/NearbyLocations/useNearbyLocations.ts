@@ -16,6 +16,7 @@ export type NearbyLocationDoc = {
   name?: string;
   /** The hours of the location */
   hours?: HoursType;
+  comingSoon?: boolean;
   /** The address of the location */
   address?: AddressType;
   /** The timezone of the location */

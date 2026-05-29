@@ -51,6 +51,7 @@
     "close": "Farbauswahl schließen",
     "open": "Farbauswahl öffnen"
   },
+  "comingSoon": "Demnächst erhältlich",
   "componentErrorBoundary": {
     "error": "Fehler",
     "message": "Dieses Modul kann nicht gerendert werden. Versuchen Sie, Ihre Komponentenbibliothek zu aktualisieren."

@@ -18,6 +18,7 @@
   "closed": "閉店",
   "closesAtTime": "{{time}}に閉まります",
   "closesAtTimeWeek": "{{time}} {{dayOfWeek}} に閉店",
+  "comingSoon": "近日公開",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "ユーティリティ イメージ {{number}}"

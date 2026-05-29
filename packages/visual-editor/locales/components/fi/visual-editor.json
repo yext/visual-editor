@@ -18,6 +18,7 @@
   "closed": "Suljettu",
   "closesAtTime": "Suljetaan {{time}}",
   "closesAtTimeWeek": "Suljetaan klo {{time}} {{dayOfWeek}}",
+  "comingSoon": "Tulossa pian",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "Hyötykuva {{number}}"

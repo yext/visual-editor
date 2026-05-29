@@ -51,6 +51,7 @@
     "close": "Chiudi il selettore colori",
     "open": "Apri il selettore colori"
   },
+  "comingSoon": "Prossimamente",
   "componentErrorBoundary": {
     "error": "Errore",
     "message": "Impossibile eseguire il rendering di questa sezione. Prova ad aggiornare la libreria dei componenti."

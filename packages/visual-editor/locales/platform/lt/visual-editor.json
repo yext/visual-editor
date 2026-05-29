@@ -51,6 +51,7 @@
     "close": "Uždarykite spalvų parinkiklį",
     "open": "Atidarykite spalvų rinkiklį"
   },
+  "comingSoon": "Netrukus",
   "componentErrorBoundary": {
     "error": "Klaida",
     "message": "Nepavyko pateikti šios skilties. Pabandykite atnaujinti komponentų biblioteką."

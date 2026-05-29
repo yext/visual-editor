@@ -18,6 +18,7 @@
   "closed": "Închis",
   "closesAtTime": "Se închide la {{time}}",
   "closesAtTimeWeek": "Se închide la {{time}} {{dayOfWeek}}",
+  "comingSoon": "În curând",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "Imagine utilitar {{number}}"
