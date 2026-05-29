@@ -119,7 +119,7 @@ const VisualEditorHoursTable: PuckComponent<HoursTableProps> = (props) => {
         constantValueEnabled={data.hours.constantValueEnabled}
       >
         <HoursTableAtom
-          hours={hours}
+          hours={hours ?? {}}
           comingSoon={comingSoon}
           startOfWeek={styles.startOfWeek}
           collapseDays={styles.collapseDays}

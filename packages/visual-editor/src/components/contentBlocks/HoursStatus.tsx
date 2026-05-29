@@ -115,7 +115,7 @@ const HoursStatusWrapper: PuckComponent<HoursStatusProps> = ({
       constantValueEnabled={!parentData && data.hours.constantValueEnabled}
     >
       <HoursStatusAtom
-        hours={hours}
+        hours={hours ?? {}}
         comingSoon={comingSoon}
         timezone={timezone}
         className={styles.className}
