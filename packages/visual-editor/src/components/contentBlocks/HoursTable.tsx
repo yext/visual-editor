@@ -104,27 +104,27 @@ const VisualEditorHoursTable: PuckComponent<HoursTableProps> = (props) => {
   const { data, styles, puck } = props;
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
+  const comingSoon = !!streamDocument.comingSoon;
   const hours = resolveComponentData(data.hours, i18n.language, streamDocument);
 
   const { additionalHoursText } = streamDocument as {
     additionalHoursText: string;
   };
 
-  return hours ? (
+  return hours || comingSoon ? (
     <div className={`flex flex-col ${styles.alignment}`}>
-      {hours && (
-        <EntityField
-          displayName={pt("hours", "Hours")}
-          fieldId="hours"
-          constantValueEnabled={data.hours.constantValueEnabled}
-        >
-          <HoursTableAtom
-            hours={hours}
-            startOfWeek={styles.startOfWeek}
-            collapseDays={styles.collapseDays}
-          />
-        </EntityField>
-      )}
+      <EntityField
+        displayName={pt("hours", "Hours")}
+        fieldId="hours"
+        constantValueEnabled={data.hours.constantValueEnabled}
+      >
+        <HoursTableAtom
+          hours={hours ?? {}}
+          comingSoon={comingSoon}
+          startOfWeek={styles.startOfWeek}
+          collapseDays={styles.collapseDays}
+        />
+      </EntityField>
       {additionalHoursText && styles.showAdditionalHoursText && (
         <EntityField
           displayName={pt("hoursText", "Hours Text")}

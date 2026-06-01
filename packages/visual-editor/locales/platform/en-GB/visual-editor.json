@@ -51,6 +51,7 @@
     "close": "Close color picker",
     "open": "Open color picker"
   },
+  "comingSoon": "Coming Soon",
   "componentErrorBoundary": {
     "error": "Error",
     "message": "Can't render this section. Try updating your component library."

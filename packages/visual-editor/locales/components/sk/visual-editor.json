@@ -18,6 +18,7 @@
   "closed": "Zatvorené",
   "closesAtTime": "Zatvára sa o {{time}}",
   "closesAtTimeWeek": "Zatvára sa o {{time}} {{dayOfWeek}}",
+  "comingSoon": "Už čoskoro",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "Pomocný obrázok {{number}}"

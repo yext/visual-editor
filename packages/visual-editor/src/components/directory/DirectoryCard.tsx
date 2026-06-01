@@ -59,7 +59,7 @@ export const defaultDirectoryCardSlotData = (
     ? existingHeadingText
     : {
         field: "",
-        constantValue: existingHeadingText ?? defaultCardTitle,
+        constantValue: existingHeadingText ?? defaultCardTitle.constantValue,
         constantValueEnabled: true,
       };
 

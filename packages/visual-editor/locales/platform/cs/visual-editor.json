@@ -51,6 +51,7 @@
     "close": "Zavřete výběr barvy",
     "open": "Otevřete výběr barvy"
   },
+  "comingSoon": "Již brzy",
   "componentErrorBoundary": {
     "error": "Chyba",
     "message": "Tuto sekci nelze vykreslit. Zkuste aktualizovat knihovnu komponent."

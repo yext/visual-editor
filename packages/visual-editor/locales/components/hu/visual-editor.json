@@ -18,6 +18,7 @@
   "closed": "Zárt",
   "closesAtTime": "Zárás: {{time}}",
   "closesAtTimeWeek": "Zárás: {{time}} {{dayOfWeek}}",
+  "comingSoon": "Hamarosan",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "Segédkép {{number}}"

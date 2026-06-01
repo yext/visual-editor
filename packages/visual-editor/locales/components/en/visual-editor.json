@@ -18,6 +18,7 @@
   "closed": "Closed",
   "closesAtTime": "Closes at {{time}}",
   "closesAtTimeWeek": "Closes at {{time}} {{dayOfWeek}}",
+  "comingSoon": "Coming Soon",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "Utility Image {{number}}"

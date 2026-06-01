@@ -42,7 +42,8 @@ export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
     return <></>;
   }
 
-  const { name, hours, address, timezone, mainPhone } = locationData;
+  const { name, hours, comingSoon, address, timezone, mainPhone } =
+    locationData;
 
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
 
@@ -80,12 +81,13 @@ export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
           {name}
         </Heading>
       </MaybeLink>
-      {styles.showHours && hours && (
+      {styles.showHours && (hours || comingSoon) && (
         <div
           className={`font-semibold font-body-fontFamily text-body-fontSize ${showPhone || showAddress ? "mb-2" : ""}`}
         >
           <HoursStatusAtom
-            hours={hours}
+            hours={hours ?? {}}
+            comingSoon={comingSoon}
             className="h-full"
             timezone={timezone}
             showCurrentStatus={styles?.hours?.showCurrentStatus}

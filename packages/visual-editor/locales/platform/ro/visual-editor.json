@@ -51,6 +51,7 @@
     "close": "Închideți selectorul de culori",
     "open": "Deschideți selectorul de culori"
   },
+  "comingSoon": "În curând",
   "componentErrorBoundary": {
     "error": "Eroare",
     "message": "Nu se poate reda această secțiune. Încercați să vă actualizați biblioteca de componente."

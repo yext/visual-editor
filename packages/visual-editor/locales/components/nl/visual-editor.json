@@ -18,6 +18,7 @@
   "closed": "Gesloten",
   "closesAtTime": "Sluit om {{time}}",
   "closesAtTimeWeek": "Sluit om {{time}} {{dayOfWeek}}",
+  "comingSoon": "Binnenkort beschikbaar",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "Hulpprogramma-afbeelding {{number}}"

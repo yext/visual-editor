@@ -51,6 +51,7 @@
     "close": "Zárja be a színválasztót",
     "open": "Nyissa meg a színválasztót"
   },
+  "comingSoon": "Hamarosan",
   "componentErrorBoundary": {
     "error": "Hiba",
     "message": "Ez a szakasz nem jeleníthető meg. Próbálja meg frissíteni az összetevőkönyvtárat."

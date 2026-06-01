@@ -18,6 +18,7 @@
   "closed": "Suletud",
   "closesAtTime": "Suletakse {{time}}",
   "closesAtTimeWeek": "Suletakse kell {{time}} {{dayOfWeek}}",
+  "comingSoon": "Varsti",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "Kasulik pilt {{number}}"

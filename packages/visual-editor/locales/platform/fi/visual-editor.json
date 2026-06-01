@@ -51,6 +51,7 @@
     "close": "Sulje värivalitsin",
     "open": "Avaa värivalitsin"
   },
+  "comingSoon": "Tulossa pian",
   "componentErrorBoundary": {
     "error": "Virhe",
     "message": "Tätä osiota ei voi renderöidä. Yritä päivittää komponenttikirjastosi."

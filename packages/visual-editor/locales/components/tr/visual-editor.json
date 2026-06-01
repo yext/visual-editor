@@ -18,6 +18,7 @@
   "closed": "Kapalı",
   "closesAtTime": "{{time}} itibarıyla kapanıyor",
   "closesAtTimeWeek": "{{time}} {{dayOfWeek}} itibarıyla kapanıyor",
+  "comingSoon": "Yakında gelecek",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "Yardımcı Resim {{number}}"
