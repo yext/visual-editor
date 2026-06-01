@@ -3,15 +3,16 @@ import "@yext/visual-editor/editor.css";
 import "../index.css";
 import * as React from "react";
 import { type Config, Render, resolveAllData } from "@puckeditor/core";
-import * as lzstring from "lz-string";
 import {
   applyTheme,
+  buildLocalEditorDocumentRequestPath,
   defaultThemeConfig,
   directoryConfig,
   Editor,
   locatorConfig,
   migrate,
   migrationRegistry,
+  readLocalEditorPreviewLayoutData,
   usePlatformBridgeDocument,
   usePlatformBridgeEntityFields,
   VisualEditorProvider,
@@ -233,91 +234,6 @@ const Edit: () => JSX.Element = () => {
 };
 
 export default Edit;
-
-const buildLocalEditorDocumentRequestPath = ({
-  apiBasePath,
-  templateId,
-  entityId,
-  locale,
-}: {
-  apiBasePath: string;
-  templateId: string;
-  entityId?: string;
-  locale: string;
-}): string | null => {
-  if (!templateId || !entityId || !locale) {
-    return null;
-  }
-
-  const documentParams = new URLSearchParams({
-    templateId,
-    entityId,
-    locale,
-  });
-  return `${apiBasePath}/document?${documentParams.toString()}`;
-};
-
-const readLocalEditorPreviewLayoutData = ({
-  previewStorageKey,
-  document,
-}: {
-  previewStorageKey: string | null;
-  document: Record<string, unknown>;
-}): Record<string, unknown> => {
-  const publishedLayoutData = readDocumentLayoutData(document);
-  if (typeof window === "undefined" || !previewStorageKey) {
-    return publishedLayoutData;
-  }
-
-  const compressedHistories = window.localStorage.getItem(previewStorageKey);
-  if (!compressedHistories) {
-    return publishedLayoutData;
-  }
-
-  const decompressedHistories = lzstring.decompress(compressedHistories);
-  if (!decompressedHistories) {
-    return publishedLayoutData;
-  }
-
-  try {
-    const histories = JSON.parse(decompressedHistories) as Array<{
-      state?: { data?: Record<string, unknown> };
-    }>;
-    const latestHistory = histories
-      .slice()
-      .reverse()
-      .find((history) => {
-        return !!history?.state?.data;
-      });
-
-    return latestHistory?.state?.data ?? publishedLayoutData;
-  } catch {
-    return publishedLayoutData;
-  }
-};
-
-const readDocumentLayoutData = (
-  document: Record<string, unknown>
-): Record<string, unknown> => {
-  const layoutJson = (document as { __?: { layout?: string } }).__?.layout;
-  if (typeof layoutJson !== "string" || !layoutJson.length) {
-    return {
-      root: {},
-      content: [],
-      zones: {},
-    };
-  }
-
-  try {
-    return JSON.parse(layoutJson) as Record<string, unknown>;
-  } catch {
-    return {
-      root: {},
-      content: [],
-      zones: {},
-    };
-  }
-};
 
 const fullStorySnippet = `<script>
 window['_fs_run_in_iframe'] = true;

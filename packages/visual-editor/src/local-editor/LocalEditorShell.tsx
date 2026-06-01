@@ -7,7 +7,7 @@ import { LocalEditorNotice } from "./LocalEditorNotice.tsx";
 import {
   buildEditorLocalDevOptions,
   buildLocalEditorDocumentRequestPath,
-  buildLocalEditorPreviewUrl as buildLocalEditorPreviewUrl,
+  buildLocalEditorPreviewUrl,
   buildLocalEditorSelection,
   syncSelectionToUrl,
   updateSearchParam,

@@ -7,6 +7,7 @@ import type {
   LocalEditorManifestResponse,
   BuildEditorLocalDevOptionsArgs,
 } from "./types.ts";
+import type { StreamDocument } from "../utils/types/StreamDocument.ts";
 
 type SelectionResult = {
   supportedTemplateIds: string[];
@@ -289,27 +290,27 @@ const buildLocalEditorLayoutStorageKey = (
   return `devTEMPLATE_${templateId}LAYOUT_${hashCode(layoutScopeKey)}`;
 };
 
-const readDocumentLayoutData = (
-  document: Record<string, unknown>
+export const readDocumentLayoutData = (
+  streamDocument: StreamDocument
 ): Record<string, unknown> => {
-  const layoutJson = (document as { __?: { layout?: string } }).__?.layout;
+  const layoutJson = streamDocument?.__?.layout;
   if (typeof layoutJson !== "string" || !layoutJson.length) {
-    return createEmptyLayoutData();
+    return {
+      root: {},
+      content: [],
+      zones: {},
+    };
   }
 
   try {
     return JSON.parse(layoutJson) as Record<string, unknown>;
   } catch {
-    return createEmptyLayoutData();
+    return {
+      root: {},
+      content: [],
+      zones: {},
+    };
   }
-};
-
-const createEmptyLayoutData = (): Record<string, unknown> => {
-  return {
-    root: {},
-    content: [],
-    zones: {},
-  };
 };
 
 const hashCode = (value: string): number => {
