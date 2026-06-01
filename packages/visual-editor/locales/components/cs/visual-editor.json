@@ -18,6 +18,7 @@
   "closed": "ZAVŘENO",
   "closesAtTime": "Zavírá v {{time}}",
   "closesAtTimeWeek": "Zavírá v {{time}} {{dayOfWeek}}",
+  "comingSoon": "Již brzy",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "Obslužný obrázek {{number}}"
@@ -38,7 +39,6 @@
   "heroImage": "Hrdinový obrázek",
   "hours": "Hodiny",
   "hoursSection": "Sekce hodin",
-  "comingSoon": "Již brzy",
   "informationSection": "Sekce informací",
   "kilometer_few": "kilometry",
   "kilometer_many": "kilometrů",

@@ -51,6 +51,7 @@
     "close": "Sluit de kleurkiezer",
     "open": "Kleurkiezer openen"
   },
+  "comingSoon": "Binnenkort beschikbaar",
   "componentErrorBoundary": {
     "error": "Fout",
     "message": "Kan deze sectie niet weergeven. Probeer uw componentenbibliotheek bij te werken."
@@ -550,7 +551,6 @@
   "hotels": "Hotels",
   "hours": "Uren",
   "hoursSection": "Uren sectie",
-  "comingSoon": "Binnenkort beschikbaar",
   "hoursText": "Uren tekst",
   "image": "Afbeelding",
   "informationSection": "Informatiegedeelte",

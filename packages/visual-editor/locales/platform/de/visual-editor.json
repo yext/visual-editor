@@ -51,6 +51,7 @@
     "close": "Farbauswahl schließen",
     "open": "Farbauswahl öffnen"
   },
+  "comingSoon": "Demnächst erhältlich",
   "componentErrorBoundary": {
     "error": "Fehler",
     "message": "Dieses Modul kann nicht gerendert werden. Versuchen Sie, Ihre Komponentenbibliothek zu aktualisieren."
@@ -550,7 +551,6 @@
   "hotels": "Hotels",
   "hours": "Öffnungszeiten",
   "hoursSection": "Öffnungszeiten Modul",
-  "comingSoon": "Demnächst erhältlich",
   "hoursText": "Text für Öffnungszeiten",
   "image": "Bild",
   "informationSection": "Informations-Modul",

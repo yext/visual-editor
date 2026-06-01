@@ -51,6 +51,7 @@
     "close": "Stäng färgväljaren",
     "open": "Öppna färgväljaren"
   },
+  "comingSoon": "Kommer snart",
   "componentErrorBoundary": {
     "error": "Fel",
     "message": "Det går inte att återge detta avsnitt. Testa att uppdatera ditt komponentbibliotek."
@@ -550,7 +551,6 @@
   "hotels": "Hotell",
   "hours": "Timme",
   "hoursSection": "Timmarssektion",
-  "comingSoon": "Kommer snart",
   "hoursText": "Timmars text",
   "image": "Bild",
   "informationSection": "Informationsavsnitt",

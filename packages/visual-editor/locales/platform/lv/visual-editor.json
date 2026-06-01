@@ -51,6 +51,7 @@
     "close": "Aizvērt krāsu atlasītāju",
     "open": "Atveriet krāsu atlasītāju"
   },
+  "comingSoon": "Drīzumā",
   "componentErrorBoundary": {
     "error": "Kļūda",
     "message": "Nevar atveidot šo sadaļu. Mēģiniet atjaunināt savu komponentu bibliotēku."
@@ -550,7 +551,6 @@
   "hotels": "Viesnīcas",
   "hours": "Laiks",
   "hoursSection": "Stundu sadaļa",
-  "comingSoon": "Drīzumā",
   "hoursText": "Stundu teksts",
   "image": "Attēls",
   "informationSection": "Informācijas sadaļa",

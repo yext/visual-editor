@@ -18,6 +18,7 @@
   "closed": "Lukket",
   "closesAtTime": "Stenger kl. {{time}}",
   "closesAtTimeWeek": "Stenger kl. {{time}} {{dayOfWeek}}",
+  "comingSoon": "Kommer snart",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "Verktøybilde {{number}}"
@@ -38,7 +39,6 @@
   "heroImage": "Heltbilde",
   "hours": "Timer",
   "hoursSection": "Timeseksjon",
-  "comingSoon": "Kommer snart",
   "informationSection": "Informasjonsdel",
   "kilometer_one": "kilometer",
   "kilometer_other": "kilometer",

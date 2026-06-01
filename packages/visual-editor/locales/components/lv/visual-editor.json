@@ -18,6 +18,7 @@
   "closed": "Slēgts",
   "closesAtTime": "Tiek slēgts plkst. {{time}}",
   "closesAtTimeWeek": "Tiek slēgts plkst. {{time}} {{dayOfWeek}}",
+  "comingSoon": "Drīzumā",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "Lietderības attēls {{number}}"
@@ -38,7 +39,6 @@
   "heroImage": "Varoņa attēls",
   "hours": "Laiks",
   "hoursSection": "Stundu sadaļa",
-  "comingSoon": "Drīzumā",
   "informationSection": "Informācijas sadaļa",
   "kilometer_one": "kilometrs",
   "kilometer_other": "kilometri",

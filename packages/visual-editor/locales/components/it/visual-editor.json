@@ -18,6 +18,7 @@
   "closed": "Chiuso",
   "closesAtTime": "Chiude alle {{time}}",
   "closesAtTimeWeek": "Chiude alle {{time}} {{dayOfWeek}}",
+  "comingSoon": "Prossimamente",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "Immagine utilità {{number}}"
@@ -38,7 +39,6 @@
   "heroImage": "Immagine di eroe",
   "hours": "Ore",
   "hoursSection": "Ore sezione",
-  "comingSoon": "Prossimamente",
   "informationSection": "Sezione di informazioni",
   "kilometer_many": "chilometri",
   "kilometer_one": "chilometro",

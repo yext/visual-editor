@@ -51,6 +51,7 @@
     "close": "Renk seçiciyi kapat",
     "open": "Renk seçiciyi aç"
   },
+  "comingSoon": "Yakında gelecek",
   "componentErrorBoundary": {
     "error": "Hata",
     "message": "Bu bölüm oluşturulamıyor. Bileşen kitaplığınızı güncellemeyi deneyin."
@@ -550,7 +551,6 @@
   "hotels": "Oteller",
   "hours": "Saat",
   "hoursSection": "Saatler Bölümü",
-  "comingSoon": "Yakında gelecek",
   "hoursText": "Saat Metni",
   "image": "İmaj",
   "informationSection": "Bilgi bölümü",

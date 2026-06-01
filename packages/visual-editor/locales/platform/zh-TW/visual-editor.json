@@ -51,6 +51,7 @@
     "close": "關閉顏色選擇器",
     "open": "打開顏色選擇器"
   },
+  "comingSoon": "即將推出",
   "componentErrorBoundary": {
     "error": "錯誤",
     "message": "無法渲染此部分。嘗試更新您的組件庫。"
@@ -550,7 +551,6 @@
   "hotels": "飯店",
   "hours": "小時",
   "hoursSection": "小時部分",
-  "comingSoon": "即將推出",
   "hoursText": "小時文字",
   "image": "圖像",
   "informationSection": "信息部分",

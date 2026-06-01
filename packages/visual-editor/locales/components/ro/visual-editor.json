@@ -18,6 +18,7 @@
   "closed": "Închis",
   "closesAtTime": "Se închide la {{time}}",
   "closesAtTimeWeek": "Se închide la {{time}} {{dayOfWeek}}",
+  "comingSoon": "În curând",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "Imagine utilitar {{number}}"
@@ -38,7 +39,6 @@
   "heroImage": "Imaginea eroului",
   "hours": "Ore",
   "hoursSection": "Secțiune de ore",
-  "comingSoon": "În curând",
   "informationSection": "Secțiune de informații",
   "kilometer_few": "kilometri",
   "kilometer_one": "kilometru",

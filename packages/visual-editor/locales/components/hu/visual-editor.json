@@ -18,6 +18,7 @@
   "closed": "Zárt",
   "closesAtTime": "Zárás: {{time}}",
   "closesAtTimeWeek": "Zárás: {{time}} {{dayOfWeek}}",
+  "comingSoon": "Hamarosan",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "Segédkép {{number}}"
@@ -38,7 +39,6 @@
   "heroImage": "Hős kép",
   "hours": "Órák",
   "hoursSection": "Órás szakasz",
-  "comingSoon": "Hamarosan",
   "informationSection": "Információs szakasz",
   "kilometer_one": "kilométer",
   "kilometer_other": "kilométer",

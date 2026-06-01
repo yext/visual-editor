@@ -51,6 +51,7 @@
     "close": "Sulgege värvivalija",
     "open": "Ava värvivalija"
   },
+  "comingSoon": "Varsti",
   "componentErrorBoundary": {
     "error": "Viga",
     "message": "Seda jaotist ei saa renderdada. Proovige oma komponentide teeki värskendada."
@@ -550,7 +551,6 @@
   "hotels": "Hotellid",
   "hours": "Tööaeg",
   "hoursSection": "Tundide sektsioon",
-  "comingSoon": "Varsti",
   "hoursText": "Tundidekst",
   "image": "Pilt",
   "informationSection": "Infosektsioon",

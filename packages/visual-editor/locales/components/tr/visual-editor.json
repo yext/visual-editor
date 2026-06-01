@@ -18,6 +18,7 @@
   "closed": "Kapalı",
   "closesAtTime": "{{time}} itibarıyla kapanıyor",
   "closesAtTimeWeek": "{{time}} {{dayOfWeek}} itibarıyla kapanıyor",
+  "comingSoon": "Yakında gelecek",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "Yardımcı Resim {{number}}"
@@ -38,7 +39,6 @@
   "heroImage": "Kahraman görüntüsü",
   "hours": "Saat",
   "hoursSection": "Saatler Bölümü",
-  "comingSoon": "Yakında gelecek",
   "informationSection": "Bilgi bölümü",
   "kilometer_one": "kilometre",
   "kilometer_other": "kilometre",

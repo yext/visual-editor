@@ -18,6 +18,7 @@
   "closed": "Uždarytas",
   "closesAtTime": "Uždaroma {{time}}",
   "closesAtTimeWeek": "Uždaroma {{time}} {{dayOfWeek}}",
+  "comingSoon": "Netrukus",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "Naudingumo vaizdas {{number}}"
@@ -38,7 +39,6 @@
   "heroImage": "Herojaus įvaizdis",
   "hours": "Valandos",
   "hoursSection": "Valandų skyrius",
-  "comingSoon": "Netrukus",
   "informationSection": "Informacijos skyrius",
   "kilometer_few": "kilometrų",
   "kilometer_many": "kilometrų",

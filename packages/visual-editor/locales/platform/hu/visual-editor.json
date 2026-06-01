@@ -51,6 +51,7 @@
     "close": "Zárja be a színválasztót",
     "open": "Nyissa meg a színválasztót"
   },
+  "comingSoon": "Hamarosan",
   "componentErrorBoundary": {
     "error": "Hiba",
     "message": "Ez a szakasz nem jeleníthető meg. Próbálja meg frissíteni az összetevőkönyvtárat."
@@ -550,7 +551,6 @@
   "hotels": "Szállodák",
   "hours": "Órák",
   "hoursSection": "Órás szakasz",
-  "comingSoon": "Hamarosan",
   "hoursText": "Órás szöveg",
   "image": "Kép",
   "informationSection": "Információs szakasz",

@@ -18,6 +18,7 @@
   "closed": "Zatvoreno",
   "closesAtTime": "Zatvara se u {{time}}",
   "closesAtTimeWeek": "Zatvara se u {{time}} {{dayOfWeek}}",
+  "comingSoon": "Dolazi uskoro",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "Uslužna slika {{number}}"
@@ -38,7 +39,6 @@
   "heroImage": "Herojska slika",
   "hours": "Sati",
   "hoursSection": "Odjeljak radnog vremena",
-  "comingSoon": "Dolazi uskoro",
   "informationSection": "Odjeljak s informacijama",
   "kilometer_few": "kilometra",
   "kilometer_one": "kilometar",

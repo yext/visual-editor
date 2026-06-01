@@ -18,6 +18,7 @@
   "closed": "Suletud",
   "closesAtTime": "Suletakse {{time}}",
   "closesAtTimeWeek": "Suletakse kell {{time}} {{dayOfWeek}}",
+  "comingSoon": "Varsti",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "Kasulik pilt {{number}}"
@@ -38,7 +39,6 @@
   "heroImage": "Kangelasepilt",
   "hours": "Tööaeg",
   "hoursSection": "Tundide sektsioon",
-  "comingSoon": "Varsti",
   "informationSection": "Infosektsioon",
   "kilometer_one": "kilomeeter",
   "kilometer_other": "kilomeetrit",

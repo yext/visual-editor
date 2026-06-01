@@ -51,6 +51,7 @@
     "close": "Închideți selectorul de culori",
     "open": "Deschideți selectorul de culori"
   },
+  "comingSoon": "În curând",
   "componentErrorBoundary": {
     "error": "Eroare",
     "message": "Nu se poate reda această secțiune. Încercați să vă actualizați biblioteca de componente."
@@ -550,7 +551,6 @@
   "hotels": "Hoteluri",
   "hours": "Ore",
   "hoursSection": "Secțiune de ore",
-  "comingSoon": "În curând",
   "hoursText": "Text text",
   "image": "Imagine",
   "informationSection": "Secțiune de informații",

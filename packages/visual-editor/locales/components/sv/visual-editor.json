@@ -18,6 +18,7 @@
   "closed": "Stängd",
   "closesAtTime": "Stänger kl. {{time}}",
   "closesAtTimeWeek": "Stänger kl. {{time}} {{dayOfWeek}}",
+  "comingSoon": "Kommer snart",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "Verktygsbild {{number}}"
@@ -38,7 +39,6 @@
   "heroImage": "Hjältebild",
   "hours": "Timme",
   "hoursSection": "Timmarssektion",
-  "comingSoon": "Kommer snart",
   "informationSection": "Informationsavsnitt",
   "kilometer_one": "kilometer",
   "kilometer_other": "kilometer",

@@ -51,6 +51,7 @@
     "close": "Fermer le sélecteur de couleurs",
     "open": "Ouvrir le sélecteur de couleurs"
   },
+  "comingSoon": "À venir",
   "componentErrorBoundary": {
     "error": "Erreur",
     "message": "Impossible de restituer cette section. Essayez de mettre à jour votre bibliothèque de composants."
@@ -550,7 +551,6 @@
   "hotels": "Hôtels",
   "hours": "Heures",
   "hoursSection": "Section des heures",
-  "comingSoon": "À venir",
   "hoursText": "Texte des heures",
   "image": "Image",
   "informationSection": "Section d'information",

@@ -51,6 +51,7 @@
     "close": "Fechar seletor de cores",
     "open": "Abrir seletor de cores"
   },
+  "comingSoon": "Em breve",
   "componentErrorBoundary": {
     "error": "Erro",
     "message": "Não é possível renderizar esta seção. Tente atualizar sua biblioteca de componentes."
@@ -550,7 +551,6 @@
   "hotels": "Hotéis",
   "hours": "Horas",
   "hoursSection": "Seção de horas",
-  "comingSoon": "Em breve",
   "hoursText": "Texto de horas",
   "image": "Imagem",
   "informationSection": "Seção de informações",

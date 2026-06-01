@@ -51,6 +51,7 @@
     "close": "Zatvori birač boja",
     "open": "Otvori birač boja"
   },
+  "comingSoon": "Dolazi uskoro",
   "componentErrorBoundary": {
     "error": "Greška",
     "message": "Nije moguće prikazati ovaj odjeljak. Pokušajte ažurirati biblioteku komponenti."
@@ -550,7 +551,6 @@
   "hotels": "Hoteli",
   "hours": "Sati",
   "hoursSection": "Odjeljak radnog vremena",
-  "comingSoon": "Dolazi uskoro",
   "hoursText": "Sati teksta",
   "image": "Slika",
   "informationSection": "Odjeljak s informacijama",

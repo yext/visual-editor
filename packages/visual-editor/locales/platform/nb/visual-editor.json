@@ -51,6 +51,7 @@
     "close": "Lukk fargevelgeren",
     "open": "Åpne fargevelgeren"
   },
+  "comingSoon": "Kommer snart",
   "componentErrorBoundary": {
     "error": "Feil",
     "message": "Kan ikke gjengi denne delen. Prøv å oppdatere komponentbiblioteket."
@@ -550,7 +551,6 @@
   "hotels": "Hoteller",
   "hours": "Timer",
   "hoursSection": "Timeseksjon",
-  "comingSoon": "Kommer snart",
   "hoursText": "Timeseks",
   "image": "Bilde",
   "informationSection": "Informasjonsdel",

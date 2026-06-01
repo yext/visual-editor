@@ -18,6 +18,7 @@
   "closed": "Geschlossen",
   "closesAtTime": "Schließt um {{time}} Uhr",
   "closesAtTimeWeek": "Schließt am {{dayOfWeek}} um {{time}} Uhr",
+  "comingSoon": "Demnächst erhältlich",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "Utility-Bilder {{number}}"
@@ -38,7 +39,6 @@
   "heroImage": "Hero Image",
   "hours": "Öffnungszeiten",
   "hoursSection": "Öffnungszeiten Modul",
-  "comingSoon": "Demnächst erhältlich",
   "informationSection": "Informations-Modul",
   "kilometer_one": "Kilometer",
   "kilometer_other": "Kilometer",
