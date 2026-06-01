@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 export interface HoursStatusAtomProps {
   hours: HoursType;
   className?: string;
+  comingSoon?: boolean;
   showCurrentStatus?: boolean;
   showDayNames?: boolean;
   timeFormat?: "12h" | "24h";
@@ -24,6 +25,7 @@ export const HoursStatusAtom = React.memo(
   ({
     hours,
     className,
+    comingSoon,
     showCurrentStatus = true,
     showDayNames = true,
     timeFormat,
@@ -47,8 +49,10 @@ export const HoursStatusAtom = React.memo(
     return (
       <HoursStatusJS
         hours={hours}
+        comingSoon={comingSoon}
         className={classNameResolved}
         statusTemplate={(params: HoursStatusParams) => {
+          const isComingSoon = !!params.comingSoon;
           const isFuture = !isOpen24h(params) && !isIndefinitelyClosed(params);
           let time = "";
           if (params.isOpen) {
@@ -112,10 +116,12 @@ export const HoursStatusAtom = React.memo(
 
           return (
             <div className={themeManagerCn("HoursStatus", classNameResolved)}>
-              {showCurrentStatus &&
+              {(showCurrentStatus || isComingSoon) &&
                 hoursCurrentTemplateOverride(params, t, boldCurrentStatus)}
-              {showCurrentStatus && defaultSeparatorTemplate(params)}
-              {statusText && (
+              {!isComingSoon &&
+                showCurrentStatus &&
+                defaultSeparatorTemplate(params)}
+              {!isComingSoon && statusText && (
                 <span className="HoursStatus-future">{statusText}</span>
               )}
             </div>
@@ -141,6 +147,14 @@ function hoursCurrentTemplateOverride(
   boldCurrentStatus: boolean
 ): React.ReactNode {
   const style = boldCurrentStatus ? { fontWeight: "bolder" } : undefined;
+
+  if (params.comingSoon) {
+    return (
+      <span className="HoursStatus-current" style={style}>
+        {t("comingSoon", "Coming Soon")}
+      </span>
+    );
+  }
 
   if (isOpen24h(params)) {
     return (
@@ -179,6 +193,7 @@ function defaultSeparatorTemplate(params: StatusParams): React.ReactNode {
 }
 interface HoursStatusParams {
   isOpen: boolean;
+  comingSoon?: boolean;
   currentInterval: any | null;
   futureInterval: any | null;
   timeOptions?: Intl.DateTimeFormatOptions;

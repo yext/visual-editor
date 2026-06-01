@@ -1243,7 +1243,9 @@ const HoursSection = (props: {
   const contentId = React.useId();
 
   const hoursData = parseHoursFromLocation(location, hoursProps.field);
-  const showHoursSection = hoursData && hoursProps.liveVisibility;
+  const comingSoon = location["comingSoon"];
+  const showHoursSection =
+    (hoursData || comingSoon) && hoursProps.liveVisibility;
   return (
     showHoursSection && (
       <div className="font-body-fontFamily text-body-fontSize gap-8">
@@ -1267,7 +1269,8 @@ const HoursSection = (props: {
                   </CardIcon>
                 )}
                 <HoursStatusAtom
-                  hours={hoursData}
+                  hours={hoursData ?? {}}
+                  comingSoon={comingSoon}
                   timezone={location.timezone}
                   className="text-body-fontSize mb-0"
                   showDayNames={false}
@@ -1282,7 +1285,8 @@ const HoursSection = (props: {
             >
               <div className="flex flex-col gap-2">
                 <HoursTableAtom
-                  hours={hoursData}
+                  hours={hoursData ?? {}}
+                  comingSoon={comingSoon}
                   startOfWeek={hoursProps.table.startOfWeek}
                   collapseDays={hoursProps.table.collapseDays}
                   className="[&_.HoursTable-row]:w-fit"
