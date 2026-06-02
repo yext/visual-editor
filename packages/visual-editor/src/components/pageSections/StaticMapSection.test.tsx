@@ -14,19 +14,11 @@ import { page } from "@vitest/browser/context";
 import { StaticMapSection } from "./StaticMapSection.tsx";
 import { MainContent } from "../structure/MainContent.tsx";
 
-const STATIC_MAP_TEST_API_KEY = "fixture-static-map-api-key";
-
 const tests: ComponentTest[] = [
   {
     name: "default props with no coordinate",
-    document: {},
-    props: {
-      ...StaticMapSection.defaultProps,
-      data: {
-        ...StaticMapSection.defaultProps?.data,
-        apiKey: STATIC_MAP_TEST_API_KEY,
-      },
-    },
+    document: { _env: { YEXT_MAPBOX_API_KEY: "fixture-static-map-api-key" } },
+    props: { ...StaticMapSection.defaultProps },
     version: migrationRegistry.length,
   },
   {
@@ -41,31 +33,21 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
   },
   {
-    name: "default props with coordinate - with api key",
+    name: "default props with coordinate - with env api key",
     document: {
+      _env: { YEXT_MAPBOX_API_KEY: "fixture-static-map-api-key" },
       yextDisplayCoordinate: {
         latitude: 38.895546,
         longitude: -77.069915,
       },
     },
-    props: {
-      ...StaticMapSection.defaultProps,
-      data: {
-        ...StaticMapSection.defaultProps?.data,
-        apiKey: STATIC_MAP_TEST_API_KEY,
-      },
-    },
+    props: { ...StaticMapSection.defaultProps },
     version: migrationRegistry.length,
   },
   {
     name: "version 10 props with no coordinate",
-    document: {},
-    props: {
-      data: {
-        apiKey: STATIC_MAP_TEST_API_KEY,
-      },
-      liveVisibility: true,
-    },
+    document: { _env: { YEXT_MAPBOX_API_KEY: "fixture-static-map-api-key" } },
+    props: { liveVisibility: true },
     version: 10,
   },
   {
@@ -76,26 +58,19 @@ const tests: ComponentTest[] = [
         longitude: -77.069915,
       },
     },
-    props: {
-      data: {
-        apiKey: "",
-      },
-      liveVisibility: true,
-    },
+    props: { liveVisibility: true },
     version: 10,
   },
   {
-    name: "version 10 props with coordinate - with api key",
+    name: "version 10 props with coordinate - with env api key",
     document: {
+      _env: { YEXT_MAPBOX_API_KEY: "fixture-static-map-api-key" },
       yextDisplayCoordinate: {
         latitude: 38.895546,
         longitude: -77.069915,
       },
     },
     props: {
-      data: {
-        apiKey: STATIC_MAP_TEST_API_KEY,
-      },
       liveVisibility: true,
       styles: {
         backgroundColor: {
