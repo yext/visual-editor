@@ -1246,25 +1246,29 @@ const HoursSection = (props: {
   const comingSoon = location["comingSoon"];
   const showHoursSection =
     (hoursData || comingSoon) && hoursProps.liveVisibility;
+  const hoursStatusRow = (
+    <div className="flex flex-row items-center gap-2">
+      {showIcons && (
+        <CardIcon backgroundColor={accentColor}>
+          <FaRegClock className="w-4 h-4" />
+        </CardIcon>
+      )}
+      <HoursStatusAtom
+        hours={hoursData ?? {}}
+        comingSoon={comingSoon}
+        timezone={location.timezone}
+        className="text-body-fontSize mb-0"
+        showDayNames={false}
+        boldCurrentStatus={true}
+      />
+    </div>
+  );
+
   return (
     showHoursSection && (
       <div className="font-body-fontFamily text-body-fontSize gap-8">
         {comingSoon ? (
-          <div className="flex flex-row items-center gap-2">
-            {showIcons && (
-              <CardIcon backgroundColor={accentColor}>
-                <FaRegClock className="w-4 h-4" />
-              </CardIcon>
-            )}
-            <HoursStatusAtom
-              hours={hoursData ?? {}}
-              comingSoon={comingSoon}
-              timezone={location.timezone}
-              className="text-body-fontSize mb-0"
-              showDayNames={false}
-              boldCurrentStatus={true}
-            />
-          </div>
+          hoursStatusRow
         ) : (
           <Accordion>
             <AccordionItem
@@ -1279,21 +1283,7 @@ const HoursSection = (props: {
                 className="justify-start"
                 role="button"
               >
-                <div className="flex flex-row items-center gap-2">
-                  {showIcons && (
-                    <CardIcon backgroundColor={accentColor}>
-                      <FaRegClock className="w-4 h-4" />
-                    </CardIcon>
-                  )}
-                  <HoursStatusAtom
-                    hours={hoursData ?? {}}
-                    comingSoon={comingSoon}
-                    timezone={location.timezone}
-                    className="text-body-fontSize mb-0"
-                    showDayNames={false}
-                    boldCurrentStatus={true}
-                  />
-                </div>
+                {hoursStatusRow}
               </AccordionTrigger>
               <AccordionContent
                 id={contentId}
