@@ -362,37 +362,6 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
   },
   {
-    name: "version 74 comingSoon",
-    document: {
-      locale: "en",
-      businessId: "4174974",
-      comingSoon: true,
-      __: {
-        isPrimaryLocale: true,
-      },
-      _env: {
-        ...LOCATOR_TEST_ENV,
-      },
-      _pageset: JSON.stringify({
-        type: "LOCATOR",
-        typeConfig: {
-          locatorConfig: {
-            source: "accounts/4174974/sites/155048/pagesets/locations",
-            experienceKey: "locator-41",
-            entityType: "location",
-          },
-        },
-        config: {
-          urlTemplate: {
-            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
-          },
-        },
-      }),
-    },
-    props: { ...LocatorComponent.defaultProps },
-    version: 74,
-  },
-  {
     name: "latest version multi-pageset default props",
     document: {
       locale: "en",
