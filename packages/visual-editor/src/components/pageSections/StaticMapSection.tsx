@@ -92,8 +92,8 @@ const StaticMapSectionWrapper: PuckComponent<StaticMapSectionProps> = ({
 
 /**
  * The Static Map Section displays a non-interactive map image of a business's location.
- * It uses the entity's address or coordinates to generate the map and requires
- * YEXT_MAPBOX_API_KEY to be available in env.
+ * It uses the entity's address or coordinates to generate the map.
+ *
  * Available on Location templates.
  */
 export const StaticMapSection: YextComponentConfig<StaticMapSectionProps> = {
