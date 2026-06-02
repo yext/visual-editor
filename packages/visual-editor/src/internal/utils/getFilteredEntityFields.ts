@@ -61,6 +61,11 @@ export type EntityFieldTypes =
 export type ConstantValueTypes = EntityFieldTypes | "imageOrVideo";
 
 const DEFAULT_DISALLOWED_ENTITY_FIELDS = ["uid", "meta", "slug"];
+const ENTITY_FIELD_TYPE_COMPATIBILITY: Partial<
+  Record<EntityFieldTypes, EntityFieldTypes[]>
+> = {
+  "type.rich_text_v2": ["type.string"],
+};
 
 // Populate this with fields that aren't allowed to have subfields.
 const TOP_LEVEL_ONLY_FIELD_TYPES: string[] = ["type.hours"];
@@ -156,6 +161,19 @@ const getEntityTypeToFieldNames = (
   }, new Map<string, string[]>());
 };
 
+/**
+ * Returns the set of acceptable schema types for one requested selector type,
+ * including one-way compatibility used by rich-text pickers.
+ */
+export const getCompatibleEntityFieldTypes = (
+  entityFieldType: EntityFieldTypes
+): EntityFieldTypes[] => {
+  return [
+    entityFieldType,
+    ...(ENTITY_FIELD_TYPE_COMPATIBILITY[entityFieldType] ?? []),
+  ];
+};
+
 export const getFilteredEntityFields = <T extends Record<string, any>>(
   streamFields: StreamFields | null,
   filter: RenderEntityFieldFilter<T>
@@ -228,9 +246,11 @@ export const getFilteredEntityFields = <T extends Record<string, any>>(
     const updatedFilteredEntitySubFields: YextSchemaField[] = [];
     filter.types.forEach((type) => {
       updatedFilteredEntitySubFields.push(
-        ...filteredEntitySubFields.filter((field) => {
-          return typeToFieldNames.get(type)?.includes(field.name);
-        })
+        ...getCompatibleEntityFieldTypes(type).flatMap((compatibleType) =>
+          filteredEntitySubFields.filter((field) =>
+            typeToFieldNames.get(compatibleType)?.includes(field.name)
+          )
+        )
       );
     });
     filteredEntitySubFields = updatedFilteredEntitySubFields;

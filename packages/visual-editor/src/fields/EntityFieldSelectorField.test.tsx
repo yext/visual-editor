@@ -393,6 +393,46 @@ describe("EntityFieldSelectorField", () => {
     expect(screen.getByText("Linked Location > Name")).toBeDefined();
   });
 
+  it("shows string fields for rich text selectors", () => {
+    renderEntityField({
+      field: {
+        type: "entityField",
+        label: "Body",
+        filter: {
+          types: ["type.rich_text_v2"],
+        },
+      },
+      value: {
+        field: "",
+        constantValue: { defaultValue: { html: "" } },
+        constantValueEnabled: false,
+      },
+      entityFields: {
+        ...defaultEntityFields,
+        fields: [
+          ...defaultEntityFields.fields,
+          {
+            name: "longDescription",
+            definition: {
+              name: "longDescription",
+              typeName: "type.rich_text_v2",
+              type: {},
+            },
+          },
+        ],
+        displayNames: {
+          ...defaultEntityFields.displayNames,
+          longDescription: "Long Description",
+        },
+      },
+    });
+
+    fireEvent.click(screen.getAllByRole("combobox")[0]);
+
+    expect(screen.getByText("Description")).toBeDefined();
+    expect(screen.getByText("Long Description")).toBeDefined();
+  });
+
   it("does not show linked entity fields for list-only selectors", () => {
     renderEntityField({
       field: {
