@@ -1246,61 +1246,69 @@ const HoursSection = (props: {
   const comingSoon = location["comingSoon"];
   const showHoursSection =
     (hoursData || comingSoon) && hoursProps.liveVisibility;
+  const hoursStatusRow = (
+    <div className="flex flex-row items-center gap-2">
+      {showIcons && (
+        <CardIcon backgroundColor={accentColor}>
+          <FaRegClock className="w-4 h-4" />
+        </CardIcon>
+      )}
+      <HoursStatusAtom
+        hours={hoursData ?? {}}
+        comingSoon={comingSoon}
+        timezone={location.timezone}
+        className="text-body-fontSize mb-0"
+        showDayNames={false}
+        boldCurrentStatus={true}
+      />
+    </div>
+  );
+
   return (
     showHoursSection && (
       <div className="font-body-fontFamily text-body-fontSize gap-8">
-        <Accordion>
-          <AccordionItem
-            key={`result-${result.index}-hours`}
-            className="py-0"
-            onToggle={(event) => setIsExpanded(event.currentTarget.open)}
-          >
-            <AccordionTrigger
-              id={triggerId}
-              aria-controls={contentId}
-              aria-expanded={isExpanded}
-              className="justify-start"
-              role="button"
+        {comingSoon ? (
+          hoursStatusRow
+        ) : (
+          <Accordion>
+            <AccordionItem
+              key={`result-${result.index}-hours`}
+              className="py-0"
+              onToggle={(event) => setIsExpanded(event.currentTarget.open)}
             >
-              <div className="flex flex-row items-center gap-2">
-                {showIcons && (
-                  <CardIcon backgroundColor={accentColor}>
-                    <FaRegClock className="w-4 h-4" />
-                  </CardIcon>
-                )}
-                <HoursStatusAtom
-                  hours={hoursData ?? {}}
-                  comingSoon={comingSoon}
-                  timezone={location.timezone}
-                  className="text-body-fontSize mb-0"
-                  showDayNames={false}
-                  boldCurrentStatus={true}
-                />
-              </div>
-            </AccordionTrigger>
-            <AccordionContent
-              id={contentId}
-              aria-labelledby={triggerId}
-              role="region"
-            >
-              <div className="flex flex-col gap-2">
-                <HoursTableAtom
-                  hours={hoursData ?? {}}
-                  comingSoon={comingSoon}
-                  startOfWeek={hoursProps.table.startOfWeek}
-                  collapseDays={hoursProps.table.collapseDays}
-                  className="[&_.HoursTable-row]:w-fit"
-                />
-                {location.additionalHoursText &&
-                  hoursProps.table.showAdditionalHoursText && (
-                    <div className="text-body-sm-fontSize">
-                      {location.additionalHoursText}
-                    </div>
-                  )}
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+              <AccordionTrigger
+                id={triggerId}
+                aria-controls={contentId}
+                aria-expanded={isExpanded}
+                className="justify-start"
+                role="button"
+              >
+                {hoursStatusRow}
+              </AccordionTrigger>
+              <AccordionContent
+                id={contentId}
+                aria-labelledby={triggerId}
+                role="region"
+              >
+                <div className="flex flex-col gap-2">
+                  <HoursTableAtom
+                    hours={hoursData ?? {}}
+                    comingSoon={comingSoon}
+                    startOfWeek={hoursProps.table.startOfWeek}
+                    collapseDays={hoursProps.table.collapseDays}
+                    className="[&_.HoursTable-row]:w-fit"
+                  />
+                  {location.additionalHoursText &&
+                    hoursProps.table.showAdditionalHoursText && (
+                      <div className="text-body-sm-fontSize">
+                        {location.additionalHoursText}
+                      </div>
+                    )}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        )}
       </div>
     )
   );

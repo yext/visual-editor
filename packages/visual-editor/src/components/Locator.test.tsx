@@ -78,6 +78,7 @@ const createLocatorApiResult = ({
   distance,
   distanceFromFilter,
   services,
+  comingSoon = false,
 }: {
   id: string;
   name: string;
@@ -91,6 +92,7 @@ const createLocatorApiResult = ({
   distance: number;
   distanceFromFilter: number;
   services: string[];
+  comingSoon?: boolean;
 }) => ({
   data: {
     id,
@@ -107,6 +109,7 @@ const createLocatorApiResult = ({
     },
     additionalHoursText: "Holiday hours may vary",
     hours: LOCATOR_TEST_HOURS,
+    comingSoon,
     mainPhone: "+12025550101",
     emails: [`${id}@example.com`],
     services,
@@ -286,7 +289,19 @@ const createLocatorFetchMock = (document: Record<string, any>) => {
 
     if (url.includes("/search/vertical/query")) {
       return new Response(
-        JSON.stringify(createLocatorVerticalSearchResponse(results)),
+        JSON.stringify(
+          createLocatorVerticalSearchResponse(
+            document.comingSoon
+              ? results.map((result: any) => ({
+                  ...result,
+                  data: {
+                    ...result.data,
+                    comingSoon: true,
+                  },
+                }))
+              : results
+          )
+        ),
         {
           status: 200,
         }
@@ -345,6 +360,37 @@ const tests: ComponentTest[] = [
     },
     props: { ...LocatorComponent.defaultProps },
     version: migrationRegistry.length,
+  },
+  {
+    name: "version 74 comingSoon",
+    document: {
+      locale: "en",
+      businessId: "4174974",
+      comingSoon: true,
+      __: {
+        isPrimaryLocale: true,
+      },
+      _env: {
+        ...LOCATOR_TEST_ENV,
+      },
+      _pageset: JSON.stringify({
+        type: "LOCATOR",
+        typeConfig: {
+          locatorConfig: {
+            source: "accounts/4174974/sites/155048/pagesets/locations",
+            experienceKey: "locator-41",
+            entityType: "location",
+          },
+        },
+        config: {
+          urlTemplate: {
+            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+          },
+        },
+      }),
+    },
+    props: { ...LocatorComponent.defaultProps },
+    version: 74,
   },
   {
     name: "latest version multi-pageset default props",
