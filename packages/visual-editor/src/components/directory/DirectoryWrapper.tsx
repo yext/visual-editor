@@ -69,31 +69,22 @@ const directoryCardsSource = createSlottedItemSource<
 // however the directory should be locked to the dm_directoryChildren field.
 const getNormalizedDirectoryGridData = (
   value: typeof directoryCardsSource.value | undefined
-): typeof directoryCardsSource.value => {
-  const defaultMappings = (directoryCardsSource.defaultValue.mappings ??
-    {}) as NonNullable<typeof directoryCardsSource.defaultValue.mappings>;
-  const mappings = (value?.mappings ?? {}) as NonNullable<
-    typeof directoryCardsSource.defaultValue.mappings
-  >;
-  const defaultCardTitle = defaultMappings.cardTitle ?? {};
-
-  return {
-    ...directoryCardsSource.defaultValue,
-    ...value,
-    field: "dm_directoryChildren",
-    constantValueEnabled: false,
-    constantValue: [],
-    mappings: {
-      ...defaultMappings,
-      ...mappings,
-      cardTitle: {
-        ...defaultCardTitle,
-        ...mappings.cardTitle,
-        field: mappings.cardTitle?.field || "name",
-      },
+): typeof directoryCardsSource.value => ({
+  ...directoryCardsSource.defaultValue,
+  ...value,
+  field: "dm_directoryChildren",
+  constantValueEnabled: false,
+  constantValue: [],
+  mappings: {
+    ...directoryCardsSource.defaultValue.mappings!,
+    ...value?.mappings,
+    cardTitle: {
+      ...directoryCardsSource.defaultValue.mappings!.cardTitle,
+      ...value?.mappings?.cardTitle,
+      field: value?.mappings?.cardTitle?.field || "name",
     },
-  };
-};
+  },
+});
 
 export const DirectoryList = ({
   streamDocument,

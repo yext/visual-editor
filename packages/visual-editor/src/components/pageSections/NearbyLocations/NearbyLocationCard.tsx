@@ -1,6 +1,6 @@
 import React from "react";
 import { PuckContext } from "@puckeditor/core";
-import { Address, HoursType } from "@yext/pages-components";
+import { Address } from "@yext/pages-components";
 import { Background } from "../../atoms/background.tsx";
 import { Heading } from "../../atoms/heading.tsx";
 import { HeadingLevel } from "../../../utils/themeConfigOptions.ts";
@@ -86,7 +86,7 @@ export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
           className={`font-semibold font-body-fontFamily text-body-fontSize ${showPhone || showAddress ? "mb-2" : ""}`}
         >
           <HoursStatusAtom
-            hours={(hours ?? {}) as HoursType}
+            hours={hours ?? {}}
             comingSoon={comingSoon}
             className="h-full"
             timezone={timezone}
