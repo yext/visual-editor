@@ -801,7 +801,9 @@ Styling configuration for the secondary footer.
 
 ## StaticMapSection
 
-The Static Map Section displays a non-interactive map image of a business's location. It uses the entity's address or coordinates to generate the map. Available on Location templates.
+The Static Map Section displays a non-interactive map image of a business's location. It uses the entity's address or coordinates to generate the map.
+
+Available on Location templates.
 
 ![Preview of the StaticMapSection component](../components/testing/screenshots/StaticMapSection/%5Bdesktop%5D%20default%20props%20with%20coordinate%20-%20with%20api%20key.png)
 
