@@ -1,3 +1,13 @@
+#### 1.3.2 (2026-06-02)
+
+##### New Features
+
+- pass comingSoon into HoursTable and HoursStatus ([#1223](https://github.com/yext/visual-editor/pull/1223)) ([d48f1dbc](https://github.com/yext/visual-editor/commit/d48f1dbc0c51a54cc952ef67dd64a86ed5c0d3b7))
+
+##### Bug Fixes
+
+- comingSoon in locator results ([#1225](https://github.com/yext/visual-editor/pull/1225)) ([3768f5d3](https://github.com/yext/visual-editor/commit/3768f5d3a0b7436a28b19693911da050002ef8f9))
+
 #### 1.3.1 (2026-05-19)
 
 ##### Bug Fixes

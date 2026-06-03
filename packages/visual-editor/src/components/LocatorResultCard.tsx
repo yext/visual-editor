@@ -1254,7 +1254,7 @@ const HoursSection = (props: {
         </CardIcon>
       )}
       <HoursStatusAtom
-        hours={(hoursData ?? {}) as HoursType}
+        hours={hoursData ?? {}}
         comingSoon={comingSoon}
         timezone={location.timezone}
         className="text-body-fontSize mb-0"
@@ -1292,7 +1292,7 @@ const HoursSection = (props: {
               >
                 <div className="flex flex-col gap-2">
                   <HoursTableAtom
-                    hours={(hoursData ?? {}) as HoursType}
+                    hours={hoursData ?? {}}
                     comingSoon={comingSoon}
                     startOfWeek={hoursProps.table.startOfWeek}
                     collapseDays={hoursProps.table.collapseDays}

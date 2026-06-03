@@ -241,13 +241,11 @@ export const EmbeddedFieldStringInputFromOptions = ({
   const handleFieldSelect = (fieldName: string) => {
     setOpen(false);
     if (!fieldName) return;
-    const resolutionPath = sourceField
-      ? `${sourceField}.${fieldName}`
-      : fieldName;
-    const resolutionDocument = sourceField
-      ? (getSubDocument(streamDocument, sourceField) ?? streamDocument)
-      : undefined;
-    onFieldSelect?.(resolutionPath, resolutionPath, resolutionDocument);
+    onFieldSelect?.(
+      sourceField ? `${sourceField}.${fieldName}` : fieldName,
+      fieldName,
+      sourceField ? getSubDocument(streamDocument, sourceField) : undefined
+    );
     const textToInsert = `[[${fieldName}]]`;
     let insertionPoint = cursorPosition ?? inputValue.length;
 
