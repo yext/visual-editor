@@ -16,7 +16,6 @@ import { getThemeValue } from "../../utils/getThemeValue.ts";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export type MapboxStaticProps = {
-  apiKey: string;
   coordinate: YextEntityField<Coordinate>;
   mapStyle: string;
   height?: string;
@@ -48,10 +47,6 @@ export const mapStyleField: BasicSelectorField = {
 };
 
 const mapboxFields: YextFields<MapboxStaticProps> = {
-  apiKey: {
-    label: msg("fields.apiKey", "API Key"),
-    type: "text",
-  },
   coordinate: {
     type: "entityField",
     label: msg("fields.coordinates", "Coordinates"),
@@ -69,7 +64,6 @@ const getPrimaryColor = (streamDocument: StreamDocument) => {
 };
 
 export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
-  apiKey,
   coordinate: coordinateField,
   height = "300px",
   zoom = 14,
@@ -85,8 +79,21 @@ export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
     streamDocument
   );
 
+  // If we are in the layout editor, use the non-URL-restricted Mapbox API key
+  const iframe =
+    typeof document === "undefined"
+      ? undefined
+      : (document.getElementById("preview-frame") as HTMLIFrameElement);
+  let mapboxApiKey = streamDocument._env?.YEXT_MAPBOX_API_KEY;
+  if (
+    iframe?.contentDocument &&
+    streamDocument._env?.YEXT_EDIT_LAYOUT_MODE_MAPBOX_API_KEY
+  ) {
+    mapboxApiKey = streamDocument._env.YEXT_EDIT_LAYOUT_MODE_MAPBOX_API_KEY;
+  }
+
   // Show empty state in editor mode when API key is missing
-  if (!apiKey) {
+  if (!mapboxApiKey) {
     if (puck?.isEditing) {
       return (
         <div
@@ -105,15 +112,15 @@ export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
             </Body>
             <Body variant="base" className="text-gray-500 font-normal">
               {pt(
-                "staticMapEmptyStateAddApiKey",
-                "Add an API key to preview your map"
+                "staticMapEmptyStateMissingApiKey",
+                "Failed to load YEXT_MAPBOX_API_KEY. Please check your site's advanced configuration."
               )}
             </Body>
           </div>
         </div>
       );
     }
-    console.warn("API Key is required for MapboxStaticMap");
+    console.warn("YEXT_MAPBOX_API_KEY is required for MapboxStaticMap");
     return <></>;
   }
 
@@ -133,7 +140,7 @@ export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
   type StaticImageSize = keyof typeof staticImageSizes;
 
   const getMapboxStaticImageUrl = (size: StaticImageSize) => {
-    return `https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/${staticImageSizes[size]}?access_token=${apiKey}&logo=false&attribution=false`;
+    return `https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/${staticImageSizes[size]}?access_token=${mapboxApiKey}&logo=false&attribution=false`;
   };
 
   return (
@@ -188,7 +195,6 @@ export const MapboxStaticMap: YextComponentConfig<MapboxStaticProps> = {
   label: msg("components.mapboxStaticMap", "Mapbox Static Map"),
   fields: mapboxFields,
   defaultProps: {
-    apiKey: "",
     coordinate: {
       field: "yextDisplayCoordinate",
       constantValue: {
