@@ -108,7 +108,7 @@ export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
             <Body variant="base" className="text-gray-500 font-normal">
               {pt(
                 "staticMapEmptyStateMissingApiKey",
-                "Failed to load YEXT_MAPBOX_API_KEY. Please check your Site Settings."
+                "Failed to load YEXT_MAPBOX_API_KEY. Please check your site's advanced configuration."
               )}
             </Body>
           </div>

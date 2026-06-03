@@ -677,7 +677,7 @@
   },
   "spacingDefaultLabel": "Täitmata jätmine",
   "staticContent": "Staatiline sisu",
-  "staticMapEmptyStateMissingApiKey": "YEXT_MAPBOX_API_KEY laadimine ebaõnnestus. Kontrollige oma saidi seadeid.",
+  "staticMapEmptyStateMissingApiKey": "YEXT_MAPBOX_API_KEY laadimine ebaõnnestus. Kontrollige oma saidi täpsemat konfiguratsiooni.",
   "staticMapEmptyStateSectionHidden": "Jaotis on peidetud kõigi asukohtade jaoks",
   "sunday": "Pühapäev",
   "teamMember": "Meeskonnaliige",

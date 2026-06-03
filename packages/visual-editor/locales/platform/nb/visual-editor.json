@@ -677,7 +677,7 @@
   },
   "spacingDefaultLabel": "Misligholde",
   "staticContent": "Statisk innhold",
-  "staticMapEmptyStateMissingApiKey": "Kunne ikke laste inn YEXT_MAPBOX_API_KEY. Vennligst sjekk sideinnstillingene.",
+  "staticMapEmptyStateMissingApiKey": "Kunne ikke laste inn YEXT_MAPBOX_API_KEY. Vennligst sjekk nettstedets avanserte konfigurasjon.",
   "staticMapEmptyStateSectionHidden": "Seksjon skjult for alle lokasjoner",
   "sunday": "søndag",
   "teamMember": "Teammedlem",

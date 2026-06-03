@@ -677,7 +677,7 @@
   },
   "spacingDefaultLabel": "デフォルト",
   "staticContent": "静的コンテンツ",
-  "staticMapEmptyStateMissingApiKey": "YEXT_MAPBOX_API_KEY のロードに失敗しました。サイトの設定を確認してください。",
+  "staticMapEmptyStateMissingApiKey": "YEXT_MAPBOX_API_KEY のロードに失敗しました。サイトの詳細設定を確認してください。",
   "staticMapEmptyStateSectionHidden": "すべての場所で非表示のセクション",
   "sunday": "日曜日",
   "teamMember": "チームメンバー",

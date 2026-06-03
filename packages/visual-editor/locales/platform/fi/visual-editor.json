@@ -677,7 +677,7 @@
   },
   "spacingDefaultLabel": "Oletus",
   "staticContent": "Staattinen sisältö",
-  "staticMapEmptyStateMissingApiKey": "YEXT_MAPBOX_API_KEY lataus epäonnistui. Tarkista sivustosi asetukset.",
+  "staticMapEmptyStateMissingApiKey": "YEXT_MAPBOX_API_KEY lataus epäonnistui. Tarkista sivustosi lisäasetukset.",
   "staticMapEmptyStateSectionHidden": "Osio piilotettu kaikille sijainneille",
   "sunday": "sunnuntai",
   "teamMember": "Tiimin jäsen",

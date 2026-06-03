@@ -682,7 +682,7 @@
   },
   "spacingDefaultLabel": "Por defecto",
   "staticContent": "Contenido estático",
-  "staticMapEmptyStateMissingApiKey": "No se pudo cargar YEXT_MAPBOX_API_KEY. Por favor verifique la configuración de su sitio.",
+  "staticMapEmptyStateMissingApiKey": "No se pudo cargar YEXT_MAPBOX_API_KEY. Por favor verifique la configuración avanzada de su sitio.",
   "staticMapEmptyStateSectionHidden": "Sección oculta para todas las ubicaciones.",
   "sunday": "Domingo",
   "teamMember": "Miembro del equipo",

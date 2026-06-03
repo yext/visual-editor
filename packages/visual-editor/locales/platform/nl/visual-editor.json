@@ -677,7 +677,7 @@
   },
   "spacingDefaultLabel": "Standaard",
   "staticContent": "Statische inhoud",
-  "staticMapEmptyStateMissingApiKey": "Kan YEXT_MAPBOX_API_KEY niet laden. Controleer uw site-instellingen.",
+  "staticMapEmptyStateMissingApiKey": "Kan YEXT_MAPBOX_API_KEY niet laden. Controleer de geavanceerde configuratie van uw site.",
   "staticMapEmptyStateSectionHidden": "Sectie verborgen voor alle locaties",
   "sunday": "Zondag",
   "teamMember": "Teamlid",

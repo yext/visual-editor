@@ -680,7 +680,7 @@
   },
   "spacingDefaultLabel": "Nepildīt",
   "staticContent": "Statisks saturs",
-  "staticMapEmptyStateMissingApiKey": "Neizdevās ielādēt YEXT_MAPBOX_API_KEY. Lūdzu, pārbaudiet vietnes iestatījumus.",
+  "staticMapEmptyStateMissingApiKey": "Neizdevās ielādēt YEXT_MAPBOX_API_KEY. Lūdzu, pārbaudiet savas vietnes papildu konfigurāciju.",
   "staticMapEmptyStateSectionHidden": "Sadaļa ir paslēpta visām atrašanās vietām",
   "sunday": "Svētdiena",
   "teamMember": "Komandas loceklis",

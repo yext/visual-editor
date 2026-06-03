@@ -677,7 +677,7 @@
   },
   "spacingDefaultLabel": "Varsayılan",
   "staticContent": "Statik içerik",
-  "staticMapEmptyStateMissingApiKey": "YEXT_MAPBOX_API_KEY yüklenemedi. Lütfen Site Ayarlarınızı kontrol edin.",
+  "staticMapEmptyStateMissingApiKey": "YEXT_MAPBOX_API_KEY yüklenemedi. Lütfen sitenizin gelişmiş yapılandırmasını kontrol edin.",
   "staticMapEmptyStateSectionHidden": "Bölüm tüm konumlar için gizlendi",
   "sunday": "Pazar",
   "teamMember": "Ekip üyesi",

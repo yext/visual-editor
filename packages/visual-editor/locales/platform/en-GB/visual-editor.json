@@ -677,7 +677,7 @@
   },
   "spacingDefaultLabel": "Default",
   "staticContent": "Static content",
-  "staticMapEmptyStateMissingApiKey": "Failed to load YEXT_MAPBOX_API_KEY. Please check your Site Settings.",
+  "staticMapEmptyStateMissingApiKey": "Failed to load YEXT_MAPBOX_API_KEY. Please check your site's advanced configuration.",
   "staticMapEmptyStateSectionHidden": "Section hidden for all locations",
   "sunday": "Sunday",
   "teamMember": "Team Member",

@@ -677,7 +677,7 @@
   },
   "spacingDefaultLabel": "Standard",
   "staticContent": "Statiskt innehåll",
-  "staticMapEmptyStateMissingApiKey": "Det gick inte att ladda YEXT_MAPBOX_API_KEY. Kontrollera dina webbplatsinställningar.",
+  "staticMapEmptyStateMissingApiKey": "Det gick inte att ladda YEXT_MAPBOX_API_KEY. Kontrollera din webbplats avancerade konfiguration.",
   "staticMapEmptyStateSectionHidden": "Avsnittet är dolt för alla platser",
   "sunday": "Söndag",
   "teamMember": "Teammedlem",

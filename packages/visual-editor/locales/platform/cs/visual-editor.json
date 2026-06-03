@@ -687,7 +687,7 @@
   },
   "spacingDefaultLabel": "Výchozí",
   "staticContent": "Statický obsah",
-  "staticMapEmptyStateMissingApiKey": "Načtení YEXT_MAPBOX_API_KEY se nezdařilo. Zkontrolujte prosím nastavení webu.",
+  "staticMapEmptyStateMissingApiKey": "Načtení YEXT_MAPBOX_API_KEY se nezdařilo. Zkontrolujte pokročilou konfiguraci svého webu.",
   "staticMapEmptyStateSectionHidden": "Sekce skrytá pro všechna umístění",
   "sunday": "neděle",
   "teamMember": "Člen týmu",

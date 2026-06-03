@@ -677,7 +677,7 @@
   },
   "spacingDefaultLabel": "Standard",
   "staticContent": "Statischer Inhalt",
-  "staticMapEmptyStateMissingApiKey": "YEXT_MAPBOX_API_KEY konnte nicht geladen werden. Bitte überprüfen Sie Ihre Site-Einstellungen.",
+  "staticMapEmptyStateMissingApiKey": "YEXT_MAPBOX_API_KEY konnte nicht geladen werden. Bitte überprüfen Sie die erweiterte Konfiguration Ihrer Site.",
   "staticMapEmptyStateSectionHidden": "Modul für alle Standorte ausgeblendet",
   "sunday": "Sonntag",
   "teamMember": "Teammitglied",

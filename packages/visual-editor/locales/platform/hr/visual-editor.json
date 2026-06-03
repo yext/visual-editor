@@ -682,7 +682,7 @@
   },
   "spacingDefaultLabel": "Zadano",
   "staticContent": "Statički sadržaj",
-  "staticMapEmptyStateMissingApiKey": "Nije uspjelo učitavanje YEXT_MAPBOX_API_KEY. Provjerite svoje postavke stranice.",
+  "staticMapEmptyStateMissingApiKey": "Nije uspjelo učitavanje YEXT_MAPBOX_API_KEY. Provjerite naprednu konfiguraciju svoje stranice.",
   "staticMapEmptyStateSectionHidden": "Odjeljak skriven za sve lokacije",
   "sunday": "nedjelja",
   "teamMember": "Član tima",
