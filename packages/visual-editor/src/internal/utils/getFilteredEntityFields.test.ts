@@ -64,6 +64,20 @@ describe("getFilteredEntityFields", () => {
     );
   });
 
+  test("treats string fields as compatible with rich text filters", () => {
+    const result = getFilteredEntityFields(mockStreamFields, {
+      types: ["type.rich_text_v2"],
+    });
+
+    expect(result.map((field) => field.name)).toEqual(
+      expect.arrayContaining([
+        "c_deliveryPromo.description",
+        "name",
+        "additionalHoursText",
+      ])
+    );
+  });
+
   test("handles nested fields correctly", () => {
     const result = getFilteredEntityFields(mockStreamFields, {
       allowList: ["address"],
