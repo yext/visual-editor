@@ -76,6 +76,7 @@ import { flattenLocatorResultCardSingleSelectFields } from "./0074_flatten_locat
 import { normalizeFooterLogoImageMigration } from "./0075_normalize_footer_logo_image.ts";
 import { slotMappedCardsMigration } from "./0076_slot_mapped_cards.ts";
 import { directoryCardTitleField } from "./0077_directory_card_title_field.ts";
+import { removeMapboxApiKeyPropsMigration } from "./0078_remove_mapbox_api_key_props.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -160,4 +161,5 @@ export const migrationRegistry: MigrationRegistry = [
   normalizeFooterLogoImageMigration,
   slotMappedCardsMigration,
   directoryCardTitleField,
+  removeMapboxApiKeyPropsMigration,
 ];

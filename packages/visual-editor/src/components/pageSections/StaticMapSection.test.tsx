@@ -130,4 +130,59 @@ describe("StaticMapSection", async () => {
       }
     }
   );
+
+  it("migrates version 77 by removing the legacy data prop", async () => {
+    const data = migrate(
+      {
+        root: {
+          props: {
+            version: 77,
+          },
+        },
+        content: [
+          {
+            type: "StaticMapSection",
+            props: {
+              id: "static-map-section",
+              liveVisibility: true,
+              data: {
+                apiKey: "fixture-static-map-api-key",
+              },
+              styles: {
+                backgroundColor: {
+                  selectedColor: "white",
+                  contrastingColor: "black",
+                },
+                mapStyle: "streets-v12",
+              },
+            },
+          },
+        ],
+      },
+      migrationRegistry,
+      puckConfig,
+      {
+        _env: { YEXT_MAPBOX_API_KEY: "fixture-static-map-api-key" },
+        yextDisplayCoordinate: {
+          latitude: 38.895546,
+          longitude: -77.069915,
+        },
+      }
+    );
+
+    expect(data.content[0]).toEqual({
+      type: "StaticMapSection",
+      props: {
+        id: "static-map-section",
+        liveVisibility: true,
+        styles: {
+          backgroundColor: {
+            selectedColor: "white",
+            contrastingColor: "black",
+          },
+          mapStyle: "streets-v12",
+        },
+      },
+    });
+  });
 });
