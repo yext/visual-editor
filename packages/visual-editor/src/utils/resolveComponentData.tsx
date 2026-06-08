@@ -17,14 +17,16 @@ import {
   isRichText,
   richTextToPlainText,
 } from "./plainText.ts";
-import { ThemeColor } from "./themeConfigOptions.ts";
-import { getThemeColorCssValue } from "./colors.ts";
+import type { ThemeColor } from "./themeConfigOptions.ts";
+import { getThemeColorCssValue, normalizeThemeColorToken } from "./colors.ts";
+import type { RichTextStyleOverrides } from "../components/atoms/maybeRTF.tsx";
 
 type ResolveComponentDataOptions = {
   variant?: BodyProps["variant"];
   isDarkBackground?: boolean;
   className?: string;
   color?: ThemeColor;
+  richTextStyleOverrides?: RichTextStyleOverrides;
   output?: "render" | "plainText";
 };
 
@@ -98,7 +100,7 @@ export function resolveComponentData<T>(
 
   // Fully resolve the resulting value, converting any translatable
   // objects into their final string or React element form.
-  const resolved = resolveTranslatableType(rawValue, locale);
+  const resolved = resolveTranslatableType(rawValue, locale, options);
 
   // If the resolved value is a RTF react element, wrap it in a div with tailwind classes
   if (React.isValidElement(resolved)) {
@@ -109,7 +111,9 @@ export function resolveComponentData<T>(
     if (options?.className) {
       rtfClass += ` ${options.className}`;
     }
-    const rtfColor = getThemeColorCssValue(options?.color?.selectedColor);
+    const rtfColor = getThemeColorCssValue(
+      normalizeThemeColorToken(options?.color?.selectedColor)
+    );
 
     return (
       <div
@@ -130,7 +134,8 @@ export function resolveComponentData<T>(
  */
 const resolveTranslatableType = (
   value: any,
-  locale: string
+  locale: string,
+  options?: ResolveComponentDataOptions
 ): any | string | React.ReactElement => {
   // If the value is already a React element, return it immediately.
   if (React.isValidElement(value)) {
@@ -143,7 +148,7 @@ const resolveTranslatableType = (
 
   // Handle a direct RichText object that is not inside a Translatable object.
   if (isRichText(value)) {
-    return toStringOrElement(value);
+    return toStringOrElement(value, options);
   }
 
   const localizedValue = value[locale] ?? value.defaultValue;
@@ -152,7 +157,7 @@ const resolveTranslatableType = (
 
   if (isTranslatableContainer) {
     if (isRichText(localizedValue)) {
-      return toStringOrElement(localizedValue);
+      return toStringOrElement(localizedValue, options);
     }
 
     if (
@@ -163,17 +168,17 @@ const resolveTranslatableType = (
       return localizedValue ?? "";
     }
 
-    return resolveTranslatableType(localizedValue, locale);
+    return resolveTranslatableType(localizedValue, locale, options);
   }
 
   if (Array.isArray(value)) {
-    return value.map((item) => resolveTranslatableType(item, locale));
+    return value.map((item) => resolveTranslatableType(item, locale, options));
   }
 
   // If it's an object, recursively resolve each property.
   const newValue: { [key: string]: any } = {};
   for (const key in value) {
-    newValue[key] = resolveTranslatableType(value[key], locale);
+    newValue[key] = resolveTranslatableType(value[key], locale, options);
   }
   return newValue;
 };
@@ -254,13 +259,20 @@ function richTextToString(rtf: RichText): string {
  * @param value
  */
 function toStringOrElement(
-  value: string | RichText
+  value: string | RichText,
+  options?: ResolveComponentDataOptions
 ): string | React.ReactElement {
   if (isRichText(value)) {
     if (value.html?.trim() === "") {
       return "";
     }
-    return <MaybeRTF data={value} />;
+    return (
+      <MaybeRTF
+        bodyVariant={options?.variant}
+        data={value}
+        richTextStyleOverrides={options?.richTextStyleOverrides}
+      />
+    );
   }
   return value;
 }
