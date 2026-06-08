@@ -430,7 +430,7 @@ export const isDarkColor = (
   color?: ThemeColor | string,
   streamDocument?: StreamDocument | Record<string, any>
 ): boolean => {
-  if (typeof color === "object") {
+  if (color !== null && typeof color === "object") {
     if (color.isDarkColor !== undefined) {
       return color.isDarkColor;
     }

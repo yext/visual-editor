@@ -39,6 +39,7 @@ describe("MaybeRTF", () => {
       <MaybeRTF
         data={{ html: "<p>Hello <strong>world</strong></p>" }}
         richTextStyleOverrides={typography}
+        className="custom-class"
       />
     );
 
@@ -46,6 +47,7 @@ describe("MaybeRTF", () => {
 
     expect(wrapper).toBeTruthy();
     expect(wrapper.className).toContain("rtf-theme");
+    expect(wrapper.className).toContain("custom-class");
     expect(wrapper.style.getPropertyValue("--fontFamily-body-fontFamily")).toBe(
       typography.fontFamily
     );
@@ -85,11 +87,13 @@ describe("MaybeRTF", () => {
         richTextStyleOverrides={{
           color: "[#123456]",
         }}
+        className="custom-class"
       />
     );
 
     const wrapper = container.firstElementChild as HTMLElement;
 
+    expect(wrapper.className).toContain("custom-class");
     expect(wrapper.style.color).toBe("rgb(18, 52, 86)");
   });
 });

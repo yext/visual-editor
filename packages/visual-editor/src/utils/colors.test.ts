@@ -437,6 +437,10 @@ describe("isDarkColor", () => {
     ).toBe(true);
   });
 
+  it("fails safe for null input", () => {
+    expect(isDarkColor(null as any)).toBe(false);
+  });
+
   it("fails safe when the color cannot be resolved", () => {
     expect(
       isDarkColor({
