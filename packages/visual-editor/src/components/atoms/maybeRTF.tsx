@@ -68,9 +68,23 @@ const getTextStyles = (
   return Object.keys(styles).length ? styles : undefined;
 };
 
+const isResolvedCssColor = (color?: string): boolean =>
+  !!color &&
+  (color.startsWith("#") ||
+    color.startsWith("var(") ||
+    color.startsWith("rgb(") ||
+    color.startsWith("rgba(") ||
+    color.startsWith("hsl(") ||
+    color === "transparent" ||
+    color === "inherit");
+
 const getRichTextColorStyle = (
   color?: ThemeColor | string
 ): React.CSSProperties | undefined => {
+  if (typeof color === "string" && isResolvedCssColor(color)) {
+    return { color };
+  }
+
   const normalizedColor = normalizeThemeColorToken(color);
   if (!normalizedColor) {
     return undefined;
