@@ -375,6 +375,35 @@ describe("resolveComponentData", () => {
         );
       }
     });
+    it("forwards typography props to MaybeRTF", () => {
+      const data: TranslatableRichText = {
+        hasLocalizedValue: "true",
+        en: { html: "Hello <strong>World</strong>" },
+      };
+      const typography = {
+        fontFamily: "'Weights Only', sans-serif",
+        fontSize: "20px",
+        fontWeight: "700",
+        fontStyle: "italic",
+        textTransform: "uppercase",
+      } as const;
+
+      const result = resolveComponentData(data, "en", mockDocument, {
+        richTextStyleOverrides: typography,
+      });
+
+      expect(React.isValidElement(result)).toBe(true);
+      if (React.isValidElement(result)) {
+        const element = result as React.ReactElement<{
+          children?: React.ReactElement<{
+            richTextStyleOverrides?: typeof typography;
+          }>;
+        }>;
+        expect(element.props.children?.props.richTextStyleOverrides).toEqual(
+          typography
+        );
+      }
+    });
   });
 });
 

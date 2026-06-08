@@ -217,6 +217,24 @@ export const isCustomThemeColorToken = (colorToken?: string): boolean => {
 };
 
 /**
+ * Normalizes a ThemeColor or color token for shared callers.
+ * Treats the literal string `"default"` as unset.
+ */
+export const normalizeThemeColorToken = (
+  color?: ThemeColor | string
+): string | undefined => {
+  if (!color) {
+    return undefined;
+  }
+
+  if (typeof color === "string") {
+    return color === "default" ? undefined : color;
+  }
+
+  return color.selectedColor === "default" ? undefined : color.selectedColor;
+};
+
+/**
  * Normalizes a color string into an uppercase hex value when possible.
  * Supports the literal tokens `white` and `black`, 3/6-digit hex, and
  * 8-digit hex values where the alpha channel is dropped for contrast checks.
@@ -367,23 +385,27 @@ const getDerivedPaletteHexColor = (
  * Resolves a ThemeColor token to a concrete hex color value in both browser and SSR contexts.
  */
 export const getThemeColorHexValue = (
-  colorToken?: string,
+  colorToken?: ThemeColor | string,
   streamDocument?: StreamDocument | Record<string, any>
 ): string | undefined => {
-  if (!colorToken) {
+  const normalizedColorToken = normalizeThemeColorToken(colorToken);
+  if (!normalizedColorToken) {
     return undefined;
   }
 
-  if (colorToken.startsWith("[") && colorToken.endsWith("]")) {
-    return normalizeHexColor(colorToken.slice(1, -1));
+  if (
+    normalizedColorToken.startsWith("[") &&
+    normalizedColorToken.endsWith("]")
+  ) {
+    return normalizeHexColor(normalizedColorToken.slice(1, -1));
   }
 
-  const directHex = normalizeHexColor(colorToken);
+  const directHex = normalizeHexColor(normalizedColorToken);
   if (directHex) {
     return directHex;
   }
 
-  const derivedPaletteMatch = colorToken.match(
+  const derivedPaletteMatch = normalizedColorToken.match(
     /^palette-(primary|secondary|tertiary|quaternary)-(light|dark)$/
   );
   if (derivedPaletteMatch) {
@@ -396,8 +418,76 @@ export const getThemeColorHexValue = (
   }
 
   return normalizeHexColor(
-    getThemeValue(`--colors-${colorToken}`, streamDocument)
+    getThemeValue(`--colors-${normalizedColorToken}`, streamDocument)
   );
+};
+
+/**
+ * Determines whether a ThemeColor should be treated as dark for background-aware rendering.
+ * Falls back safely to `false` when the color cannot be resolved.
+ */
+export const isDarkColor = (
+  color?: ThemeColor | string,
+  streamDocument?: StreamDocument | Record<string, any>
+): boolean => {
+  if (typeof color === "object") {
+    if (color.isDarkColor !== undefined) {
+      return color.isDarkColor;
+    }
+
+    if (color.contrastingColor === "white") {
+      return true;
+    }
+
+    if (color.contrastingColor === "black") {
+      return false;
+    }
+  }
+
+  const normalizedColorToken = normalizeThemeColorToken(color);
+  if (!normalizedColorToken) {
+    return false;
+  }
+
+  const selectedColorHex = getThemeColorHexValue(
+    normalizedColorToken,
+    streamDocument
+  );
+  if (selectedColorHex) {
+    const selectedRgb = hexToRGB(selectedColorHex);
+    const selectedLuminance = selectedRgb
+      ? luminanceFromRGB(selectedRgb)
+      : undefined;
+
+    if (selectedLuminance !== undefined) {
+      const whiteContrast = (1 + 0.05) / (selectedLuminance + 0.05);
+      const blackContrast = (selectedLuminance + 0.05) / 0.05;
+
+      return whiteContrast >= blackContrast;
+    }
+  }
+
+  const paletteColorContrastCSSVariable = `--colors-${normalizedColorToken}-contrast`;
+  const contrastColor = getThemeValue(
+    paletteColorContrastCSSVariable,
+    streamDocument
+  );
+
+  if (contrastColor) {
+    return contrastColor.toUpperCase() === "#FFFFFF";
+  }
+
+  // Ultimate fallback for unset theme variables (based on default theme)
+  switch (normalizedColorToken) {
+    case "palette-primary":
+    case "palette-secondary":
+    case "palette-quaternary":
+      return true;
+    case "palette-tertiary":
+    case "default":
+    default:
+      return false;
+  }
 };
 
 /**

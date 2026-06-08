@@ -12,6 +12,7 @@ import {
   getTextColorClass,
   getTextColorStyle,
   isCustomThemeColorToken,
+  isDarkColor,
 } from "./colors.ts";
 
 describe("getContrastingColor", () => {
@@ -309,5 +310,139 @@ describe("getThemeColorHexValue", () => {
     expect(
       getThemeColorHexValue("palette-primary", { __: { theme: "{}" } })
     ).toBeUndefined();
+  });
+});
+
+describe("isDarkColor", () => {
+  const streamDocument = {
+    __: {
+      theme: JSON.stringify({
+        "--colors-palette-primary": "#111111",
+        "--colors-palette-secondary": "#EEEEEE",
+        "--colors-palette-primary-contrast": "#FFFFFF",
+        "--colors-palette-secondary-contrast": "#000000",
+      }),
+    },
+  };
+
+  it("returns true or false for built-in contrast colors", () => {
+    expect(
+      isDarkColor({
+        selectedColor: "palette-primary",
+        contrastingColor: "white",
+      })
+    ).toBe(true);
+    expect(
+      isDarkColor({
+        selectedColor: "palette-primary",
+        contrastingColor: "black",
+      })
+    ).toBe(false);
+  });
+
+  it("accepts string tokens and treats default as unset", () => {
+    expect(isDarkColor("default")).toBe(false);
+    expect(isDarkColor("palette-primary", streamDocument)).toBe(true);
+    expect(isDarkColor("palette-secondary", streamDocument)).toBe(false);
+  });
+
+  it("uses the published theme when available", () => {
+    expect(
+      isDarkColor(
+        {
+          selectedColor: "palette-primary",
+          contrastingColor: "palette-primary-contrast",
+        },
+        streamDocument
+      )
+    ).toBe(true);
+    expect(
+      isDarkColor(
+        {
+          selectedColor: "palette-secondary",
+          contrastingColor: "palette-secondary-contrast",
+        },
+        streamDocument
+      )
+    ).toBe(false);
+  });
+
+  it("falls back to the legacy palette defaults when the theme has no contrast value", () => {
+    const emptyThemeDocument = {
+      __: {
+        theme: "{}",
+      },
+    };
+
+    expect(
+      isDarkColor(
+        {
+          selectedColor: "palette-primary",
+          contrastingColor: "palette-primary-contrast",
+        },
+        emptyThemeDocument
+      )
+    ).toBe(true);
+    expect(
+      isDarkColor(
+        {
+          selectedColor: "palette-secondary",
+          contrastingColor: "palette-secondary-contrast",
+        },
+        emptyThemeDocument
+      )
+    ).toBe(true);
+    expect(
+      isDarkColor(
+        {
+          selectedColor: "palette-tertiary",
+          contrastingColor: "palette-tertiary-contrast",
+        },
+        emptyThemeDocument
+      )
+    ).toBe(false);
+    expect(
+      isDarkColor(
+        {
+          selectedColor: "palette-quaternary",
+          contrastingColor: "palette-quaternary-contrast",
+        },
+        emptyThemeDocument
+      )
+    ).toBe(true);
+  });
+
+  it("uses the browser-resolved css color when available", () => {
+    expect(
+      isDarkColor({
+        selectedColor: "[#0d2140]",
+        contrastingColor: "[#ffffff]",
+      })
+    ).toBe(true);
+    expect(
+      isDarkColor({
+        selectedColor: "[#f5f5f5]",
+        contrastingColor: "[#000000]",
+      })
+    ).toBe(false);
+  });
+
+  it("preserves explicit dark metadata on ThemeColor objects", () => {
+    expect(
+      isDarkColor({
+        selectedColor: "default",
+        contrastingColor: "black",
+        isDarkColor: true,
+      })
+    ).toBe(true);
+  });
+
+  it("fails safe when the color cannot be resolved", () => {
+    expect(
+      isDarkColor({
+        selectedColor: "palette-missing",
+        contrastingColor: "palette-missing-contrast",
+      })
+    ).toBe(false);
   });
 });
