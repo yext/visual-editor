@@ -120,11 +120,11 @@ const EmailsComponent: PuckComponent<EmailsProps> = (props) => {
     >
       <ul className="list-inside flex flex-col gap-4">
         {filteredEmailList.map((email, index) => (
-          <li key={index} className={`flex items-center gap-3`}>
+          <li key={index} className="flex items-center gap-3 min-w-0">
             {showEmailIcon && (
               <Background
                 background={styles?.color ?? backgroundColors.background2.value}
-                className={`h-10 w-10 flex justify-center rounded-full items-center`}
+                className="h-10 w-10 shrink-0 flex justify-center rounded-full items-center"
               >
                 <FaRegEnvelope className="w-4 h-4" />
               </Background>
@@ -138,6 +138,7 @@ const EmailsComponent: PuckComponent<EmailsProps> = (props) => {
               variant="link"
               color={styles?.color}
               alwaysHideCaret={true}
+              className="min-w-0 w-full justify-start whitespace-normal break-all text-left"
             />
           </li>
         ))}
