@@ -122,13 +122,16 @@ describe("injectEditorTemplateInfo", () => {
     expect(
       injectEditorTemplateInfo(
         `const editPath = "${EDIT_PATH_PLACEHOLDER}";
-const editTemplateName = "${EDIT_TEMPLATE_NAME_PLACEHOLDER}";`,
+export const config = { name: "${EDIT_TEMPLATE_NAME_PLACEHOLDER}" };
+export const getHeadConfig = () => ({ title: "${EDIT_TEMPLATE_NAME_PLACEHOLDER}" });`,
         {
           path: "edit",
           configName: "edit",
         }
       )
-    ).toBe('const editPath = "edit";\nconst editTemplateName = "edit";');
+    ).toBe(`const editPath = "edit";
+export const config = { name: "edit" };
+export const getHeadConfig = () => ({ title: "edit" });`);
   });
 
   it("replaces all occurrences of both placeholders", () => {
@@ -136,8 +139,9 @@ const editTemplateName = "${EDIT_TEMPLATE_NAME_PLACEHOLDER}";`,
       injectEditorTemplateInfo(
         `const editPath = "${EDIT_PATH_PLACEHOLDER}";
 const duplicateEditPath = "${EDIT_PATH_PLACEHOLDER}";
-const editTemplateName = "${EDIT_TEMPLATE_NAME_PLACEHOLDER}";
-const duplicateEditTemplateName = "${EDIT_TEMPLATE_NAME_PLACEHOLDER}";`,
+export const config = { name: "${EDIT_TEMPLATE_NAME_PLACEHOLDER}" };
+export const duplicateConfig = { name: "${EDIT_TEMPLATE_NAME_PLACEHOLDER}" };
+export const getHeadConfig = () => ({ title: "${EDIT_TEMPLATE_NAME_PLACEHOLDER}" });`,
         {
           path: "edit/demo-shop",
           configName: "edit-demo-shop",
@@ -145,8 +149,9 @@ const duplicateEditTemplateName = "${EDIT_TEMPLATE_NAME_PLACEHOLDER}";`,
       )
     ).toBe(`const editPath = "edit/demo-shop";
 const duplicateEditPath = "edit/demo-shop";
-const editTemplateName = "edit-demo-shop";
-const duplicateEditTemplateName = "edit-demo-shop";`);
+export const config = { name: "edit-demo-shop" };
+export const duplicateConfig = { name: "edit-demo-shop" };
+export const getHeadConfig = () => ({ title: "edit-demo-shop" });`);
   });
 
   it("throws when the path placeholder is missing", () => {
@@ -162,7 +167,7 @@ const duplicateEditTemplateName = "edit-demo-shop";`);
     expect(() =>
       injectEditorTemplateInfo(
         `const editPath = "${EDIT_PATH_PLACEHOLDER}";
-const editTemplateName = "edit";`,
+export const config = { name: "edit" };`,
         {
           path: "edit/demo-shop",
           configName: "edit-demo-shop",
