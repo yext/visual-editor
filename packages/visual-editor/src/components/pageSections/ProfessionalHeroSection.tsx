@@ -74,6 +74,18 @@ export interface ProfessionalHeroStyles {
   showSubtitle?: boolean;
 
   /**
+   * The horizontal alignment of the subtitle slot on mobile.
+   * @defaultValue center
+   */
+  subtitleMobileAlignment: "left" | "center" | "right";
+
+  /**
+   * The horizontal alignment of the subtitle slot on desktop.
+   * @defaultValue left
+   */
+  subtitleDesktopAlignment: "left" | "center" | "right";
+
+  /**
    * Whether to show the business name slot.
    * @defaultValue true
    */
@@ -165,6 +177,18 @@ const ProfessionalHero: PuckComponent<ProfessionalHeroSectionProps> = (
   const showImage = styles.showImage ?? true;
   const desktopImageRight = styles.desktopImagePosition === "right";
   const mobileImageTop = styles.mobileImagePosition === "top";
+  const subtitleMobileAlignment = styles.subtitleMobileAlignment ?? "center";
+  const subtitleDesktopAlignment = styles.subtitleDesktopAlignment ?? "left";
+  const subtitleMobileAlignmentClass = {
+    left: "text-left",
+    center: "text-center",
+    right: "text-right",
+  }[subtitleMobileAlignment];
+  const subtitleDesktopAlignmentClass = {
+    left: "lg:text-left",
+    center: "lg:text-center",
+    right: "lg:text-right",
+  }[subtitleDesktopAlignment];
 
   const containerClasses = themeManagerCn(
     "flex gap-8 lg:gap-16",
@@ -224,7 +248,13 @@ const ProfessionalHero: PuckComponent<ProfessionalHeroSectionProps> = (
             </div>
           )}
           {styles.showSubtitle && (
-            <div className="[&_p]:font-bold text-center lg:text-left">
+            <div
+              className={themeManagerCn(
+                "[&_p]:font-bold",
+                subtitleMobileAlignmentClass,
+                subtitleDesktopAlignmentClass
+              )}
+            >
               <slots.SubtitleSlot style={{ height: "auto" }} allow={[]} />
             </div>
           )}
@@ -340,6 +370,22 @@ const professionalHeroSectionFields: YextFields<ProfessionalHeroSectionProps> =
           type: "radio",
           options: ThemeOptions.SHOW_HIDE,
         },
+        subtitleMobileAlignment: {
+          label: msg(
+            "fields.subtitleAlignmentMobile",
+            "Subtitle Alignment in Mobile"
+          ),
+          type: "radio",
+          options: ThemeOptions.ALIGNMENT,
+        },
+        subtitleDesktopAlignment: {
+          label: msg(
+            "fields.subtitleAlignmentDesktop",
+            "Subtitle Alignment in Desktop"
+          ),
+          type: "radio",
+          options: ThemeOptions.ALIGNMENT,
+        },
         showAverageReview: {
           label: msg("fields.showAverageReview", "Show Average Review"),
           type: "radio",
@@ -432,6 +478,8 @@ export const ProfessionalHeroSection: YextComponentConfig<ProfessionalHeroSectio
         showCredentials: true,
         showProfessionalTitle: true,
         showSubtitle: true,
+        subtitleMobileAlignment: "center",
+        subtitleDesktopAlignment: "left",
         showAverageReview: true,
         showAddress: true,
         showPrimaryCTA: true,
