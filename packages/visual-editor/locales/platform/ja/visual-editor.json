@@ -505,6 +505,8 @@
     "showUtilityImages": "ユーティリティ画像を表示",
     "startOfTheWeek": "今週の始まり",
     "styles": "スタイル",
+    "subtitleAlignmentDesktop": "デスクトップでの字幕の配置",
+    "subtitleAlignmentMobile": "モバイルでの字幕の配置",
     "tertiaryHeading": "第 3 見出し",
     "text": "文章",
     "textAlignment": "テキストアライメント",
