@@ -1,4 +1,3 @@
-import * as lzstring from "lz-string";
 import type { Config } from "@puckeditor/core";
 import type { LocalDevOptions } from "../editor/types.ts";
 import type {
@@ -7,7 +6,6 @@ import type {
   LocalEditorManifestResponse,
   BuildEditorLocalDevOptionsArgs,
 } from "./types.ts";
-import type { StreamDocument } from "../utils/types/StreamDocument.ts";
 
 type SelectionResult = {
   supportedTemplateIds: string[];
@@ -18,8 +16,6 @@ type SelectionResult = {
   selectedLocale: string;
   selectedMode: LocalEditorMode;
 };
-
-export const LOCAL_EDITOR_API_BASE_PATH = "/__yext_visual_editor/local-editor";
 
 export const updateSearchParam = (key: string, value: string) => {
   if (typeof window === "undefined") {
@@ -148,74 +144,6 @@ export const buildLocalEditorDocumentRequestPath = ({
   return `${apiBasePath}/document?${documentParams.toString()}`;
 };
 
-export const buildLocalEditorPreviewUrl = ({
-  origin,
-  templateId,
-  entityId,
-  locale,
-}: {
-  origin: string;
-  templateId: string;
-  entityId?: string;
-  locale: string;
-}): string => {
-  const previewStorageKey = buildLocalEditorLayoutStorageKey(
-    templateId,
-    locale
-  );
-  const previewUrl = new URL(`/edit/${encodeURIComponent(templateId)}`, origin);
-
-  previewUrl.searchParams.set("preview", "1");
-  previewUrl.searchParams.set("templateId", templateId);
-  previewUrl.searchParams.set("locale", locale);
-  previewUrl.searchParams.set("previewStorageKey", previewStorageKey);
-
-  if (entityId) {
-    previewUrl.searchParams.set("entityId", entityId);
-  }
-
-  return previewUrl.toString();
-};
-
-export const readLocalEditorPreviewLayoutData = ({
-  previewStorageKey,
-  document,
-}: {
-  previewStorageKey: string | null;
-  document: Record<string, unknown>;
-}): Record<string, unknown> => {
-  const publishedLayoutData = readDocumentLayoutData(document);
-  if (typeof window === "undefined" || !previewStorageKey) {
-    return publishedLayoutData;
-  }
-
-  const compressedHistories = window.localStorage.getItem(previewStorageKey);
-  if (!compressedHistories) {
-    return publishedLayoutData;
-  }
-
-  const decompressedHistories = lzstring.decompress(compressedHistories);
-  if (!decompressedHistories) {
-    return publishedLayoutData;
-  }
-
-  try {
-    const histories = JSON.parse(decompressedHistories) as Array<{
-      state?: { data?: Record<string, unknown> };
-    }>;
-    const latestHistory = histories
-      .slice()
-      .reverse()
-      .find((history) => {
-        return !!history?.state?.data;
-      });
-
-    return latestHistory?.state?.data ?? publishedLayoutData;
-  } catch {
-    return publishedLayoutData;
-  }
-};
-
 export const buildEditorLocalDevOptions = ({
   selectedTemplateId,
   selectedEntity,
@@ -280,47 +208,4 @@ const pickPreferredEntity = (
   }
 
   return entities[0];
-};
-
-const buildLocalEditorLayoutStorageKey = (
-  templateId: string,
-  locale: string
-): string => {
-  const layoutScopeKey = `${templateId}:${locale}`;
-  return `devTEMPLATE_${templateId}LAYOUT_${hashCode(layoutScopeKey)}`;
-};
-
-export const readDocumentLayoutData = (
-  streamDocument: StreamDocument
-): Record<string, unknown> => {
-  const layoutJson = streamDocument?.__?.layout;
-  if (typeof layoutJson !== "string" || !layoutJson.length) {
-    return {
-      root: {},
-      content: [],
-      zones: {},
-    };
-  }
-
-  try {
-    return JSON.parse(layoutJson) as Record<string, unknown>;
-  } catch {
-    return {
-      root: {},
-      content: [],
-      zones: {},
-    };
-  }
-};
-
-const hashCode = (value: string): number => {
-  let hash = 0;
-
-  for (let index = 0; index < value.length; index += 1) {
-    const characterCode = value.charCodeAt(index);
-    hash = (hash << 5) - hash + characterCode;
-    hash |= 0;
-  }
-
-  return Math.abs(hash);
 };
