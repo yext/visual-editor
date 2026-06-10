@@ -1,5 +1,4 @@
 import React from "react";
-import { ExternalLink } from "lucide-react";
 import { Editor } from "../editor/Editor.tsx";
 import { VisualEditorProvider } from "../utils/VisualEditorProvider.tsx";
 import { LocalEditorControls } from "./LocalEditorControls.tsx";
@@ -7,7 +6,6 @@ import { LocalEditorNotice } from "./LocalEditorNotice.tsx";
 import {
   buildEditorLocalDevOptions,
   buildLocalEditorDocumentRequestPath,
-  buildLocalEditorPreviewUrl,
   buildLocalEditorSelection,
   syncSelectionToUrl,
   updateSearchParam,
@@ -122,8 +120,6 @@ export const LocalEditorShell = ({
     selectedTemplateDefaults,
     selectedTemplateId,
   ]);
-  const canOpenPreview =
-    !isDocumentLoading && !!documentResponse?.document && !!selectedTemplateId;
 
   return (
     <div
@@ -149,54 +145,16 @@ export const LocalEditorShell = ({
             Switch templates, entities, and locales against local snapshot data.
           </p>
         </div>
-        <button
-          type="button"
-          disabled={!canOpenPreview}
-          onClick={() => {
-            if (
-              typeof window === "undefined" ||
-              !canOpenPreview ||
-              !selectedTemplateId ||
-              !selectedLocale
-            ) {
-              return;
-            }
-
-            const previewUrl = buildLocalEditorPreviewUrl({
-              origin: window.location.origin,
-              templateId: selectedTemplateId,
-              entityId: selectedEntity?.entityId,
-              locale: selectedLocale,
-            });
-
-            window.open(previewUrl, "_blank", "noopener,noreferrer");
-          }}
+        <code
           style={{
-            appearance: "none",
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "8px",
             background: "#111",
-            border: "1px solid #111",
             color: "#fff",
-            cursor: canOpenPreview ? "pointer" : "not-allowed",
-            font: "inherit",
-            fontWeight: 600,
-            opacity: canOpenPreview ? 1 : 0.55,
-            padding: "8px 14px",
+            padding: "6px 10px",
             borderRadius: "999px",
-            lineHeight: 1,
           }}
-          title={routePath}
         >
-          Open Preview
-          <ExternalLink
-            aria-hidden="true"
-            size={15}
-            style={{ flexShrink: 0 }}
-          />
-        </button>
+          {routePath}
+        </code>
       </div>
 
       <LocalEditorControls
