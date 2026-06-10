@@ -33,7 +33,6 @@ const componentRegistry: Record<string, Config<any>> = {
 };
 
 const editPath = "__YEXT_VISUAL_EDITOR_PATH__";
-const editTemplateName = "__YEXT_VISUAL_EDITOR_TEMPLATE_NAME__";
 const previewModeParam = "preview";
 const previewStorageKeyParam = "previewStorageKey";
 const localEditorApiBasePath = "/__yext_visual_editor/local-editor";
@@ -44,14 +43,14 @@ export const getPath: GetPath<TemplateProps> = () => {
 };
 
 export const config: TemplateConfig = {
-  name: editTemplateName,
+  name: "__YEXT_VISUAL_EDITOR_TEMPLATE_NAME__",
 };
 
 export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
   document,
 }): HeadConfig => {
   return {
-    title: editTemplateName,
+    title: "__YEXT_VISUAL_EDITOR_TEMPLATE_NAME__",
     other: fullStorySnippet + applyTheme(document, "./", defaultThemeConfig),
   };
 };
