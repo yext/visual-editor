@@ -507,6 +507,8 @@
     "showUtilityImages": "显示实用程序图像",
     "startOfTheWeek": "一周开始",
     "styles": "样式",
+    "subtitleAlignmentDesktop": "桌面中的字幕对齐",
+    "subtitleAlignmentMobile": "移动设备中的字幕对齐方式",
     "tertiaryHeading": "第三标题",
     "text": "文本",
     "textAlignment": "文字对齐",
