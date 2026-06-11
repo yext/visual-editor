@@ -54,7 +54,7 @@
   "comingSoon": "即將推出",
   "componentErrorBoundary": {
     "error": "錯誤",
-    "message": "無法渲染此部分。"
+    "message": "無法使用目前配置渲染此​​部分。請刪除此部分，重新​​新增並重新配置。"
   },
   "components": {
     "aboutSection": "關於部分",

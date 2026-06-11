@@ -54,7 +54,7 @@
   "comingSoon": "Drīzumā",
   "componentErrorBoundary": {
     "error": "Kļūda",
-    "message": "Nevar atveidot šo sadaļu."
+    "message": "Nevar atveidot šo sadaļu ar pašreizējo konfigurāciju. Lūdzu, izdzēsiet šo sadaļu, pievienojiet to atkārtoti un no jauna konfigurējiet."
   },
   "components": {
     "aboutSection": "Par sadaļu",

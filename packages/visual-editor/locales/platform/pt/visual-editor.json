@@ -54,7 +54,7 @@
   "comingSoon": "Em breve",
   "componentErrorBoundary": {
     "error": "Erro",
-    "message": "Não é possível renderizar esta seção."
+    "message": "Não é possível renderizar esta seção com a configuração atual. Exclua esta seção, adicione-a novamente e reconfigure-a."
   },
   "components": {
     "aboutSection": "Sobre a seção",

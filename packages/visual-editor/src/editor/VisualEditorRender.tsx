@@ -1,4 +1,4 @@
-import { Config, Data, Metadata, Render as PuckRender } from "@puckeditor/core";
+import { Config, Data, Metadata, Render } from "@puckeditor/core";
 import React from "react";
 import { wrapConfigWithComponentErrorBoundary } from "../internal/utils/wrapConfigWithComponentErrorBoundary.tsx";
 
@@ -17,5 +17,5 @@ export const VisualEditorRender = <T extends Config>({
     return wrapConfigWithComponentErrorBoundary(config);
   }, [config]);
 
-  return <PuckRender config={wrappedConfig} data={data} metadata={metadata} />;
+  return <Render config={wrappedConfig} data={data} metadata={metadata} />;
 };

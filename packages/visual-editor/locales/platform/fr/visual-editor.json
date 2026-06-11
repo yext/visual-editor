@@ -54,7 +54,7 @@
   "comingSoon": "À venir",
   "componentErrorBoundary": {
     "error": "Erreur",
-    "message": "Impossible de restituer cette section."
+    "message": "Impossible de restituer cette section avec la configuration actuelle. Veuillez supprimer cette section, l'ajouter à nouveau et la reconfigurer."
   },
   "components": {
     "aboutSection": "À propos de la section",

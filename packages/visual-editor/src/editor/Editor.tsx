@@ -33,7 +33,6 @@ import { migrate } from "../utils/migrate.ts";
 import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";
 import type { LocalDevOptions } from "./types.ts";
-import { wrapConfigWithComponentErrorBoundary } from "../internal/utils/wrapConfigWithComponentErrorBoundary.tsx";
 
 const devLogger = new DevLogger();
 
@@ -89,14 +88,6 @@ export const Editor = ({
   const [devSiteStream, setDevSiteStream] = useState<any>(undefined);
   const [parentLoaded, setParentLoaded] = useState<boolean>(false);
   const entityFields = useEntityFields();
-  const wrappedComponentRegistry = React.useMemo(() => {
-    return Object.fromEntries(
-      Object.entries(componentRegistry).map(([templateId, config]) => [
-        templateId,
-        wrapConfigWithComponentErrorBoundary(config),
-      ])
-    ) as Record<string, Config<any>>;
-  }, [componentRegistry]);
 
   const {
     templateMetadata,
@@ -106,7 +97,7 @@ export const Editor = ({
     themeData,
     themeDataFetched,
   } = useCommonMessageReceivers(
-    wrappedComponentRegistry,
+    componentRegistry,
     !!localDev,
     document,
     localDevOptions

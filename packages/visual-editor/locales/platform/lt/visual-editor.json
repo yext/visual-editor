@@ -54,7 +54,7 @@
   "comingSoon": "Netrukus",
   "componentErrorBoundary": {
     "error": "Klaida",
-    "message": "Nepavyko pateikti šios skilties."
+    "message": "Neįmanoma pateikti šios sekcijos naudojant dabartinę konfigūraciją. Ištrinkite šį skyrių, pridėkite jį iš naujo ir iš naujo sukonfigūruokite."
   },
   "components": {
     "aboutSection": "Apie skyrių",

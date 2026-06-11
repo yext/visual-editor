@@ -54,7 +54,7 @@
   "comingSoon": "Kommer snart",
   "componentErrorBoundary": {
     "error": "Fel",
-    "message": "Det går inte att återge detta avsnitt."
+    "message": "Det går inte att återge detta avsnitt med den aktuella konfigurationen. Ta bort det här avsnittet, lägg till det igen och konfigurera det igen."
   },
   "components": {
     "aboutSection": "Om avsnitt",

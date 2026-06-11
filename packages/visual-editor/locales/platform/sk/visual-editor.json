@@ -54,7 +54,7 @@
   "comingSoon": "Už čoskoro",
   "componentErrorBoundary": {
     "error": "Chyba",
-    "message": "Túto sekciu nie je možné vykresliť."
+    "message": "Túto sekciu nie je možné vykresliť s aktuálnou konfiguráciou. Odstráňte túto sekciu, znova ju pridajte a znova nakonfigurujte."
   },
   "components": {
     "aboutSection": "O sekcii",

@@ -38,6 +38,7 @@ import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 import { clonePuckResolveData } from "../utils/clonePuckResolveData.ts";
 import { YextPuckFieldOverrides } from "../../fields/fieldOverrides.ts";
+import { wrapConfigWithComponentErrorBoundary } from "../utils/wrapConfigWithComponentErrorBoundary.tsx";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -198,9 +199,13 @@ export const InternalLayoutEditor = ({
     });
   };
 
+  const wrappedPuckConfig = React.useMemo(() => {
+    return wrapConfigWithComponentErrorBoundary(puckConfig);
+  }, [puckConfig]);
+
   const translatedPuckConfigWithRootFields = React.useMemo(() => {
     const translatedComponents: Config["components"] = {};
-    Object.entries(puckConfig.components).forEach(
+    Object.entries(wrappedPuckConfig.components).forEach(
       ([componentKey, component]) => {
         translatedComponents[componentKey] = {
           ...component,
@@ -224,10 +229,10 @@ export const InternalLayoutEditor = ({
     };
 
     return {
-      categories: puckConfig.categories,
+      categories: wrappedPuckConfig.categories,
       components: translatedComponents,
       root: {
-        ...puckConfig.root,
+        ...wrappedPuckConfig.root,
         fields: {
           title: MetaTitleField(),
           description: {
@@ -237,7 +242,7 @@ export const InternalLayoutEditor = ({
               types: ["type.string"],
             },
           },
-          ...puckConfig.root?.fields,
+          ...wrappedPuckConfig.root?.fields,
           __advancedSettingsLink: createAdvancedSettingsLink(),
         },
         defaultProps: {
@@ -252,12 +257,12 @@ export const InternalLayoutEditor = ({
             constantValueEnabled: false,
           },
           schemaMarkup: "",
-          ...puckConfig.root?.defaultProps,
+          ...wrappedPuckConfig.root?.defaultProps,
           __advancedSettingsLink: null,
         },
       },
     };
-  }, [puckConfig, i18n.language]);
+  }, [wrappedPuckConfig, i18n.language]);
 
   // Resolve all data and slots when the document changes
   // Implemented as an override so that the getPuck hook is available
