@@ -1,10 +1,13 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
-import { Config } from "@puckeditor/core";
+import { Config, PuckComponent } from "@puckeditor/core";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { ComponentErrorBoundary } from "../components/ComponentErrorBoundary.tsx";
-import { wrapConfigWithComponentErrorBoundary } from "./wrapConfigWithComponentErrorBoundary.tsx";
+import {
+  wrapComponentConfigWithErrorBoundary,
+  wrapConfigWithComponentErrorBoundary,
+} from "./wrapConfigWithComponentErrorBoundary.tsx";
 
 vi.mock("../hooks/useMessageSenders.ts", () => ({
   useCommonMessageSenders: () => ({
@@ -85,5 +88,30 @@ describe("wrapConfigWithComponentErrorBoundary", () => {
         "Cannot render this section with the current configuration. Please delete this section, re-add it, and re-configure it."
       )
     ).not.toBeNull();
+  });
+});
+
+describe("wrapComponentConfigWithErrorBoundary", () => {
+  beforeEach(() => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("wraps a single component config with the error boundary", () => {
+    const component = {
+      label: "Banner",
+      render: ((_: any) => <div>Banner</div>) as PuckComponent<any>,
+    };
+
+    const wrappedComponent = wrapComponentConfigWithErrorBoundary(component);
+    const wrappedElement = wrappedComponent.render({
+      puck: { isEditing: true },
+    } as any) as React.ReactElement;
+
+    expect(wrappedComponent).not.toBe(component);
+    expect(wrappedElement.type).toBe(ComponentErrorBoundary);
   });
 });
