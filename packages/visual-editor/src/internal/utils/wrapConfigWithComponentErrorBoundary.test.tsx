@@ -80,6 +80,10 @@ describe("wrapConfigWithComponentErrorBoundary", () => {
     );
 
     expect(screen.getByText("Error")).not.toBeNull();
-    expect(screen.getByText("Can't render this section.")).not.toBeNull();
+    expect(
+      screen.getByText(
+        "Cannot render this section with the current configuration. Please delete this section, re-add it, and re-configure it."
+      )
+    ).not.toBeNull();
   });
 });
