@@ -16,7 +16,6 @@ import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import { Slot, PuckComponent } from "@puckeditor/core";
 import { useTranslation } from "react-i18next";
-import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export type SectionContainerProps = {
@@ -125,16 +124,11 @@ export const SectionContainer: YextComponentConfig<SectionContainerProps> = {
     liveVisibility: true,
   },
   render: (props) => (
-    <ComponentErrorBoundary
+    <VisibilityWrapper
+      liveVisibility={props.liveVisibility}
       isEditing={props.puck.isEditing}
-      resetKeys={[props]}
     >
-      <VisibilityWrapper
-        liveVisibility={props.liveVisibility}
-        isEditing={props.puck.isEditing}
-      >
-        <SectionContainerComponent {...props} />
-      </VisibilityWrapper>
-    </ComponentErrorBoundary>
+      <SectionContainerComponent {...props} />
+    </VisibilityWrapper>
   ),
 };

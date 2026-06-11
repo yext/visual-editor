@@ -11,10 +11,11 @@ import {
   TagType,
   TransformProps,
 } from "@yext/pages";
-import { Config, Render, resolveAllData } from "@puckeditor/core";
+import { Config, resolveAllData } from "@puckeditor/core";
 import {
   applyTheme,
   VisualEditorProvider,
+  VisualEditorRender,
   getPageMetadata,
   applyAnalytics,
   applyHeaderScript,
@@ -150,7 +151,7 @@ const Base: Template<TemplateRenderProps> = (props) => {
     >
       <VisualEditorProvider templateProps={props}>
         <GTMBody>
-          <Render
+          <VisualEditorRender
             config={baseConfig}
             data={data}
             metadata={{ streamDocument: document }}

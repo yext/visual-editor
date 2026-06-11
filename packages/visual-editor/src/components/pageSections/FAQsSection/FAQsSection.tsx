@@ -13,7 +13,6 @@ import { FAQStruct } from "../../../types/types.ts";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultFAQCardData, FAQCardProps } from "./FAQCard.tsx";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
-import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { EntityFieldSectionEmptyStateBox } from "../EntityFieldSectionEmptyState.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 import { MappedEntityFieldConditionalRender } from "../entityFieldSectionUtils.ts";
@@ -206,32 +205,27 @@ export const FAQSection: YextComponentConfig<FAQSectionProps> = {
   resolveData: (data, params) =>
     faqCardsSource.populateSlots(data, params.metadata.streamDocument),
   render: (props) => (
-    <ComponentErrorBoundary
-      isEditing={props.puck.isEditing}
-      resetKeys={[props]}
+    <AnalyticsScopeProvider
+      name={`${props.analytics?.scope ?? "faqsSection"}${getAnalyticsScopeHash(props.id)}`}
     >
-      <AnalyticsScopeProvider
-        name={`${props.analytics?.scope ?? "faqsSection"}${getAnalyticsScopeHash(props.id)}`}
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
       >
-        <VisibilityWrapper
-          liveVisibility={props.liveVisibility}
-          isEditing={props.puck.isEditing}
-        >
-          {props.conditionalRender?.isMappedContentEmpty ? (
-            props.puck.isEditing ? (
-              <FAQsSectionLayout
-                styles={props.styles}
-                slots={props.slots}
-                cardsContent={<EntityFieldSectionEmptyStateBox />}
-              />
-            ) : (
-              <></>
-            )
+        {props.conditionalRender?.isMappedContentEmpty ? (
+          props.puck.isEditing ? (
+            <FAQsSectionLayout
+              styles={props.styles}
+              slots={props.slots}
+              cardsContent={<EntityFieldSectionEmptyStateBox />}
+            />
           ) : (
-            <FAQsSectionComponent {...props} />
-          )}
-        </VisibilityWrapper>
-      </AnalyticsScopeProvider>
-    </ComponentErrorBoundary>
+            <></>
+          )
+        ) : (
+          <FAQsSectionComponent {...props} />
+        )}
+      </VisibilityWrapper>
+    </AnalyticsScopeProvider>
   ),
 };

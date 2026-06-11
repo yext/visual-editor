@@ -13,7 +13,6 @@ import {
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { setDeep } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 import { resolveBreadcrumbs } from "../../utils/urls/resolveBreadcrumbs.ts";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import {
@@ -277,22 +276,15 @@ export const BreadcrumbsSection: YextComponentConfig<BreadcrumbsSectionProps> =
     },
     render: (props) => {
       return (
-        <ComponentErrorBoundary
-          isEditing={props.puck.isEditing}
-          resetKeys={[props]}
-        >
-          <AnalyticsScopeProvider
-            name={props?.analytics?.scope ?? "breadcrumbs"}
+        <AnalyticsScopeProvider name={props?.analytics?.scope ?? "breadcrumbs"}>
+          <VisibilityWrapper
+            liveVisibility={props.liveVisibility}
+            isEditing={props.puck.isEditing}
+            iconSize="md"
           >
-            <VisibilityWrapper
-              liveVisibility={props.liveVisibility}
-              isEditing={props.puck.isEditing}
-              iconSize="md"
-            >
-              <BreadcrumbsComponent {...props} />
-            </VisibilityWrapper>
-          </AnalyticsScopeProvider>
-        </ComponentErrorBoundary>
+            <BreadcrumbsComponent {...props} />
+          </VisibilityWrapper>
+        </AnalyticsScopeProvider>
       );
     },
   };

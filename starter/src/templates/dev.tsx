@@ -1,5 +1,5 @@
 import React from "react";
-import { Data, Render } from "@puckeditor/core";
+import { Data } from "@puckeditor/core";
 import * as lzstring from "lz-string";
 import { MantineProvider } from "@mantine/core";
 import {
@@ -15,6 +15,7 @@ import {
 import {
   applyTheme,
   Editor,
+  VisualEditorRender,
   VisualEditorProvider,
   YextSchemaField,
   defaultThemeConfig,
@@ -285,7 +286,7 @@ const Dev: Template<TemplateRenderProps> = (props) => {
             tailwindConfig={tailwindConfig}
           >
             {isPreviewMode ? (
-              <Render
+              <VisualEditorRender
                 config={puckConfig}
                 data={currentPuckData}
                 metadata={{ streamDocument: document }}

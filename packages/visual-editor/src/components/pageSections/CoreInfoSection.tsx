@@ -21,7 +21,6 @@ import {
   PhoneListProps,
   resolvePhoneNumbers,
 } from "../contentBlocks/PhoneList.tsx";
-import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export interface CoreInfoStyles {
@@ -412,20 +411,15 @@ export const CoreInfoSection: YextComponentConfig<CoreInfoSectionProps> = {
     };
   },
   render: (props) => (
-    <ComponentErrorBoundary
-      isEditing={props.puck.isEditing}
-      resetKeys={[props]}
+    <AnalyticsScopeProvider
+      name={`${props.analytics?.scope ?? "coreInfoSection"}${getAnalyticsScopeHash(props.id)}`}
     >
-      <AnalyticsScopeProvider
-        name={`${props.analytics?.scope ?? "coreInfoSection"}${getAnalyticsScopeHash(props.id)}`}
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
       >
-        <VisibilityWrapper
-          liveVisibility={props.liveVisibility}
-          isEditing={props.puck.isEditing}
-        >
-          <CoreInfoSectionWrapper {...props} />
-        </VisibilityWrapper>
-      </AnalyticsScopeProvider>
-    </ComponentErrorBoundary>
+        <CoreInfoSectionWrapper {...props} />
+      </VisibilityWrapper>
+    </AnalyticsScopeProvider>
   ),
 };
