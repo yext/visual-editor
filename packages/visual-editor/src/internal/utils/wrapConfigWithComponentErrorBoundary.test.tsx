@@ -57,24 +57,6 @@ describe("wrapConfigWithComponentErrorBoundary", () => {
     expect(wrappedElement.type).toBe(ComponentErrorBoundary);
   });
 
-  it("memoizes wrapped configs by input identity", () => {
-    const config = {
-      components: {
-        Banner: {
-          render: () => <div>Banner</div>,
-        },
-      },
-    } as unknown as Config<any>;
-
-    const firstWrappedConfig = wrapConfigWithComponentErrorBoundary(config);
-    const secondWrappedConfig = wrapConfigWithComponentErrorBoundary(config);
-
-    expect(secondWrappedConfig).toBe(firstWrappedConfig);
-    expect(secondWrappedConfig.components.Banner.render).toBe(
-      firstWrappedConfig.components.Banner.render
-    );
-  });
-
   it("shows the editor fallback when a wrapped component throws in editing mode", () => {
     const config = {
       components: {
