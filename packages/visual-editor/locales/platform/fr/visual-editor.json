@@ -54,7 +54,7 @@
   "comingSoon": "À venir",
   "componentErrorBoundary": {
     "error": "Erreur",
-    "message": "Impossible de restituer cette section. Essayez de mettre à jour votre bibliothèque de composants."
+    "message": "Impossible de restituer cette section."
   },
   "components": {
     "aboutSection": "À propos de la section",

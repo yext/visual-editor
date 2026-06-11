@@ -54,7 +54,7 @@
   "comingSoon": "Již brzy",
   "componentErrorBoundary": {
     "error": "Chyba",
-    "message": "Tuto sekci nelze vykreslit. Zkuste aktualizovat knihovnu komponent."
+    "message": "Tuto sekci nelze vykreslit."
   },
   "components": {
     "aboutSection": "Sekce O nás",

@@ -54,7 +54,7 @@
   "comingSoon": "Prossimamente",
   "componentErrorBoundary": {
     "error": "Errore",
-    "message": "Impossibile eseguire il rendering di questa sezione. Prova ad aggiornare la libreria dei componenti."
+    "message": "Impossibile eseguire il rendering di questa sezione."
   },
   "components": {
     "aboutSection": "Informazioni sulla sezione",

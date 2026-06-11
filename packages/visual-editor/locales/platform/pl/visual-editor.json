@@ -54,7 +54,7 @@
   "comingSoon": "Już wkrótce",
   "componentErrorBoundary": {
     "error": "Błąd",
-    "message": "Nie można wyrenderować tej sekcji. Spróbuj zaktualizować bibliotekę komponentów."
+    "message": "Nie można wyrenderować tej sekcji."
   },
   "components": {
     "aboutSection": "Sekcja o nas",

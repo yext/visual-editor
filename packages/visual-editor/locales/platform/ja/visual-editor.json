@@ -54,7 +54,7 @@
   "comingSoon": "近日公開",
   "componentErrorBoundary": {
     "error": "エラー",
-    "message": "このセクションをレンダリングできません。コンポーネント ライブラリを更新してみてください。"
+    "message": "このセクションをレンダリングできません。"
   },
   "components": {
     "aboutSection": "概要セクション",

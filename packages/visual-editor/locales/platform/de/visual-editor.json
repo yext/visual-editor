@@ -54,7 +54,7 @@
   "comingSoon": "Demnächst erhältlich",
   "componentErrorBoundary": {
     "error": "Fehler",
-    "message": "Dieses Modul kann nicht gerendert werden. Versuchen Sie, Ihre Komponentenbibliothek zu aktualisieren."
+    "message": "Dieses Modul kann nicht gerendert werden."
   },
   "components": {
     "aboutSection": "Über uns- Modul",

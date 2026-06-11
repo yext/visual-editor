@@ -98,10 +98,6 @@ describe("wrapConfigWithComponentErrorBoundary", () => {
     );
 
     expect(screen.getByText("Error")).not.toBeNull();
-    expect(
-      screen.getByText(
-        "Can't render this section. Try updating your component library."
-      )
-    ).not.toBeNull();
+    expect(screen.getByText("Can't render this section.")).not.toBeNull();
   });
 });

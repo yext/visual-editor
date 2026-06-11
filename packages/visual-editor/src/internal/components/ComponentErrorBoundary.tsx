@@ -82,7 +82,7 @@ export const ComponentErrorBoundary = ({
                 <p className="text-gray-500 text-sm">
                   {pt(
                     "componentErrorBoundary.message",
-                    "Can't render this section. Try updating your component library."
+                    "Can't render this section."
                   )}
                 </p>
               </div>

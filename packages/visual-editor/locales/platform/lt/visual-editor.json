@@ -54,7 +54,7 @@
   "comingSoon": "Netrukus",
   "componentErrorBoundary": {
     "error": "Klaida",
-    "message": "Nepavyko pateikti šios skilties. Pabandykite atnaujinti komponentų biblioteką."
+    "message": "Nepavyko pateikti šios skilties."
   },
   "components": {
     "aboutSection": "Apie skyrių",

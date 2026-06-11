@@ -54,7 +54,7 @@
   "comingSoon": "Yakında gelecek",
   "componentErrorBoundary": {
     "error": "Hata",
-    "message": "Bu bölüm oluşturulamıyor. Bileşen kitaplığınızı güncellemeyi deneyin."
+    "message": "Bu bölüm oluşturulamıyor."
   },
   "components": {
     "aboutSection": "Hakkında Bölümü",

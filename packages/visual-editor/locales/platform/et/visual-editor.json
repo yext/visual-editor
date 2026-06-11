@@ -54,7 +54,7 @@
   "comingSoon": "Varsti",
   "componentErrorBoundary": {
     "error": "Viga",
-    "message": "Seda jaotist ei saa renderdada. Proovige oma komponentide teeki värskendada."
+    "message": "Seda jaotist ei saa renderdada."
   },
   "components": {
     "aboutSection": "Sektsiooni kohta",
