@@ -86,6 +86,7 @@
   "servicesSection": "Palvelusosasto",
   "showLess": "Näytä vähemmän",
   "showMore": "Näytä enemmän",
+  "showMoreLocations": "Näytä lisää paikkoja",
   "showPinDetails": "Näytä pin {{number}} tiedot",
   "showPinDetailsDefault": "Näytä merkin tiedot",
   "socialLinks": {
