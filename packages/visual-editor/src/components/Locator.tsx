@@ -28,8 +28,8 @@ import {
   Pagination,
   PinComponentProps,
   SearchI18nextProvider,
-  VerticalResults,
   useAnalytics as useSearchAnalytics,
+  VerticalResults,
 } from "@yext/search-ui-react";
 import React, { useEffect } from "react";
 import { useCollapse } from "react-collapsed";
@@ -48,6 +48,8 @@ import {
 import { ImageField } from "../fields/ImageField.tsx";
 import { YextAutoField } from "../fields/YextAutoField.tsx";
 import { useDocument } from "../hooks/useDocument.tsx";
+import { usePreviewWindow } from "../hooks/usePreviewWindow.ts";
+import { getViewport, useWindowWidth } from "../hooks/useViewport.ts";
 import { Button } from "./atoms/button.tsx";
 import { ImageStylingFields } from "./contentBlocks/image/styling.ts";
 import { TranslatableString } from "../types/types.ts";
@@ -1176,6 +1178,9 @@ const LocatorInternal = ({
   }, [searchAnalytics, pagesAnalytics]);
 
   const { t, i18n } = useTranslation();
+  const previewWindow = usePreviewWindow();
+  const windowWidth = useWindowWidth(previewWindow);
+  const { isMobile } = getViewport(windowWidth);
   const preferredUnit = getPreferredDistanceUnit(i18n.language);
   const streamDocument = useDocument();
   const entityTypeSourceMap = getLocatorEntityTypeSourceMap(streamDocument);
@@ -1183,6 +1188,9 @@ const LocatorInternal = ({
     Object.keys(entityTypeSourceMap).filter(isLocatorEntityType);
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
+  );
+  const searchResults = useSearchState(
+    (state) => (state.vertical.results || []) as Result<Location>[]
   );
   const queryParamString =
     typeof window === "undefined" ? "" : window.location.search;
@@ -1268,6 +1276,7 @@ const LocatorInternal = ({
   };
 
   const searchActions = useSearchActions();
+
   const selectedFacets: string[] = React.useMemo(
     () =>
       facetFields?.selections
@@ -1358,6 +1367,9 @@ const LocatorInternal = ({
 
   const resultsRef = React.useRef<Array<HTMLDivElement | null>>([]);
   const resultsContainer = React.useRef<HTMLDivElement>(null);
+  const [mobileResults, setMobileResults] = React.useState<Result<Location>[]>(
+    []
+  );
   // Tracks the selected pin index to highlight the corresponding result card.
   const [selectedResultIndex, setSelectedResultIndex] = React.useState<
     number | null
@@ -1493,6 +1505,8 @@ const LocatorInternal = ({
     React.useState<Coordinate>(initialMapCenter);
   const [isInitialMapLocationResolved, setIsInitialMapLocationResolved] =
     React.useState(false);
+  const canShowMoreMobileResults =
+    isMobile && mobileResults.length < resultCount;
 
   const mapProps = React.useMemo(
     () => ({
@@ -1696,10 +1710,12 @@ const LocatorInternal = ({
   const searchFilters = useSearchState((state) => state.filters);
   const currentOffset = useSearchState((state) => state.vertical.offset);
   const previousOffset = React.useRef<number | undefined>(undefined);
+  const prevIsMobile = React.useRef(isMobile);
 
   // Scroll to top when pagination changes
   React.useEffect(() => {
     if (
+      !isMobile &&
       currentOffset !== previousOffset.current &&
       previousOffset.current !== undefined
     ) {
@@ -1709,7 +1725,37 @@ const LocatorInternal = ({
       });
     }
     previousOffset.current = currentOffset;
-  }, [currentOffset]);
+  }, [currentOffset, isMobile]);
+
+  React.useEffect(() => {
+    const switchedToMobile = isMobile && !prevIsMobile.current;
+
+    prevIsMobile.current = isMobile;
+
+    if (!switchedToMobile || searchLoading || (currentOffset ?? 0) === 0) {
+      return;
+    }
+
+    // Always reload from offset 0 if switching to mobile
+    setMobileResults([]);
+    searchActions.setOffset(0);
+    executeSearch(searchActions);
+    setSearchState("loading");
+  }, [currentOffset, isMobile, searchActions, searchLoading]);
+
+  React.useEffect(() => {
+    if (!isMobile || searchLoading) {
+      return;
+    }
+
+    setMobileResults((previousResults) => {
+      // Mobile keeps a single growing list: later offsets append, while
+      // offset 0 replaces the list after a fresh search.
+      return (currentOffset ?? 0) > 0 && searchResults.length > 0
+        ? [...previousResults, ...searchResults]
+        : searchResults;
+    });
+  }, [currentOffset, isMobile, searchLoading, searchResults]);
 
   const handleDistanceClick = (
     distance: number,
@@ -1899,15 +1945,36 @@ const LocatorInternal = ({
               />
             </div>
           </div>
-          <div id="innerDiv" className="overflow-y-auto" ref={resultsContainer}>
-            {resultCount > 0 && (
-              <VerticalResults
-                CardComponent={CardComponent}
-                setResultsRef={setResultsRef}
-              />
-            )}
-          </div>
-          {resultCount > RESULTS_LIMIT && (
+          {resultCount > 0 && (
+            <div
+              id="innerDiv"
+              className="md:flex-1 md:overflow-y-auto"
+              ref={resultsContainer}
+            >
+              {isMobile ? (
+                <MobileLocatorResultsSection
+                  CardComponent={CardComponent}
+                  results={mobileResults}
+                  hasMoreResults={canShowMoreMobileResults}
+                  handleShowMoreResults={() => {
+                    if (searchLoading || mobileResults.length >= resultCount) {
+                      return;
+                    }
+
+                    searchActions.setOffset(mobileResults.length);
+                    executeSearch(searchActions);
+                    setSearchState("loading");
+                  }}
+                />
+              ) : (
+                <VerticalResults
+                  CardComponent={CardComponent}
+                  setResultsRef={setResultsRef}
+                />
+              )}
+            </div>
+          )}
+          {!isMobile && resultCount > RESULTS_LIMIT && (
             <div className="border-t border-gray-300 pt-4">
               <Pagination
                 customCssClasses={{
@@ -1974,6 +2041,53 @@ const LocatorInternal = ({
         )}
       </div>
     </div>
+  );
+};
+
+interface MobileLocatorResultsSectionProps {
+  CardComponent: React.ComponentType<CardProps<Location>>;
+  results: Result<Location>[];
+  hasMoreResults: boolean;
+  handleShowMoreResults: () => void;
+}
+
+const MobileLocatorResultsSection = ({
+  CardComponent,
+  results,
+  hasMoreResults,
+  handleShowMoreResults,
+}: MobileLocatorResultsSectionProps) => {
+  const { t } = useTranslation();
+
+  return (
+    <>
+      {results.length > 0 && (
+        <div>
+          {results.map((result, position) => (
+            <div
+              key={
+                result.rawData?.id ??
+                result.id ??
+                `${result.index ?? "result"}-${position}`
+              }
+            >
+              <CardComponent result={result} />
+            </div>
+          ))}
+        </div>
+      )}
+      {hasMoreResults && (
+        // Mobile replaces numbered pagination with incremental loading.
+        <div className="px-8 py-4">
+          <Button
+            className="w-full justify-center"
+            onClick={handleShowMoreResults}
+          >
+            {t("showMoreLocations", "Show more locations")}
+          </Button>
+        </div>
+      )}
+    </>
   );
 };
 

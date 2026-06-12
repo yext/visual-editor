@@ -16,6 +16,7 @@ import { PageSection, PageSectionProps } from "../atoms/pageSection.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { useOverflow } from "../../hooks/useOverflow.ts";
 import { usePreviewWindow } from "../../hooks/usePreviewWindow.ts";
+import { getViewport } from "../../hooks/useViewport.ts";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { FaBars, FaTimes } from "react-icons/fa";
@@ -24,7 +25,6 @@ import {
   HeaderLinksDisplayModeProvider,
   useExpandedHeaderMenu,
 } from "./ExpandedHeaderMenuContext.tsx";
-import { getHeaderViewport } from "./viewport.ts";
 import { SlidePanel } from "./SlidePanel.tsx";
 import { type YextCTAField } from "../../fields/CTASelectorField.tsx";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
@@ -142,7 +142,7 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
 
   const showCTAs = puck.isEditing || conditionalRender?.CTAs;
   const showNavContent = puck.isEditing || conditionalRender?.navContent;
-  const { isTablet, isDesktop } = getHeaderViewport(layout.viewportWidth);
+  const { isTablet, isDesktop } = getViewport(layout.viewportWidth);
 
   const primaryOverflow = useOverflow(
     containerRef,
