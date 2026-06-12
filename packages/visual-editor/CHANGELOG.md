@@ -1,3 +1,16 @@
+#### 1.3.3 (2026-06-12)
+
+##### New Features
+
+- add additional fields in Professional Hero ([#1234](https://github.com/yext/visual-editor/pull/1234)) ([d03f15f4](https://github.com/yext/visual-editor/commit/d03f15f405f3d71f1a24dbf980ac08dcdc5a7f19))
+- mapbox uses YEXT_MAPBOX_API_KEY ([#1227](https://github.com/yext/visual-editor/pull/1227)) ([9467295b](https://github.com/yext/visual-editor/commit/9467295beb7a57acbdd2a2cf45786df587c745ef))
+- text satisfies rich_text selectors ([#1229](https://github.com/yext/visual-editor/pull/1229)) ([18d19723](https://github.com/yext/visual-editor/commit/18d197233b6b5c76b1f1d576b97466194ff6d69b))
+
+##### Bug Fixes
+
+- remove separate locator results scrollbar for mobile ([#1237](https://github.com/yext/visual-editor/pull/1237)) ([e211f13c](https://github.com/yext/visual-editor/commit/e211f13c5bad860aecc76623ff1f6e816854ef3c))
+- squished email icon ([#1232](https://github.com/yext/visual-editor/pull/1232)) ([67e03aa2](https://github.com/yext/visual-editor/commit/67e03aa2d04e2410f49d1fe3127ad8ec91652726))
+
 #### 1.3.2 (2026-06-02)
 
 ##### New Features
