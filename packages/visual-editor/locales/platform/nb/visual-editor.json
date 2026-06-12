@@ -54,7 +54,7 @@
   "comingSoon": "Kommer snart",
   "componentErrorBoundary": {
     "error": "Feil",
-    "message": "Kan ikke gjengi denne delen. Prøv å oppdatere komponentbiblioteket."
+    "message": "Kan ikke gjengi denne delen med gjeldende konfigurasjon. Vennligst slett denne delen, legg den til på nytt og konfigurer den på nytt."
   },
   "components": {
     "aboutSection": "Om seksjon",

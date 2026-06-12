@@ -54,7 +54,7 @@
   "comingSoon": "Kommer snart",
   "componentErrorBoundary": {
     "error": "Fejl",
-    "message": "Kan ikke gengive denne sektion. Prøv at opdatere dit komponentbibliotek."
+    "message": "Kan ikke gengive denne sektion med den aktuelle konfiguration. Slet venligst denne sektion, tilføj den igen og konfigurer den igen."
   },
   "components": {
     "aboutSection": "Om afsnittet",

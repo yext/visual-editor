@@ -33,7 +33,6 @@ import { ImmersivePromo } from "./ImmersivePromo.tsx";
 import { CompactPromo } from "./CompactPromo.tsx";
 import { useTranslation } from "react-i18next";
 import { PromoEmptyState } from "./PromoEmptyState.tsx";
-import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import {
   toPuckFields,
   YextComponentConfig,
@@ -663,21 +662,16 @@ export const PromoSection: YextComponentConfig<PromoSectionProps> = {
     }
 
     return (
-      <ComponentErrorBoundary
-        isEditing={props.puck.isEditing}
-        resetKeys={[props]}
+      <AnalyticsScopeProvider
+        name={`${props.analytics?.scope ?? "promoSection"}${getAnalyticsScopeHash(props.id)}`}
       >
-        <AnalyticsScopeProvider
-          name={`${props.analytics?.scope ?? "promoSection"}${getAnalyticsScopeHash(props.id)}`}
+        <VisibilityWrapper
+          liveVisibility={!!props.liveVisibility}
+          isEditing={props.puck.isEditing}
         >
-          <VisibilityWrapper
-            liveVisibility={!!props.liveVisibility}
-            isEditing={props.puck.isEditing}
-          >
-            {PromoVariant}
-          </VisibilityWrapper>
-        </AnalyticsScopeProvider>
-      </ComponentErrorBoundary>
+          {PromoVariant}
+        </VisibilityWrapper>
+      </AnalyticsScopeProvider>
     );
   },
 };

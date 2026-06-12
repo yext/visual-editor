@@ -54,7 +54,7 @@
   "comingSoon": "Tulossa pian",
   "componentErrorBoundary": {
     "error": "Virhe",
-    "message": "Tätä osiota ei voi renderöidä. Yritä päivittää komponenttikirjastosi."
+    "message": "Tätä osaa ei voi renderöidä nykyisellä kokoonpanolla. Poista tämä osio, lisää se uudelleen ja määritä se uudelleen."
   },
   "components": {
     "aboutSection": "Tietoja osiosta",

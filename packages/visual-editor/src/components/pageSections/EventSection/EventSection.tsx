@@ -9,7 +9,6 @@ import { msg } from "../../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultEventCardSlotData } from "./EventCard.tsx";
-import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { EventCardsWrapperProps } from "./EventCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import {
@@ -178,34 +177,29 @@ export const EventSection: YextComponentConfig<EventSectionProps> = {
     };
   },
   render: (props) => (
-    <ComponentErrorBoundary
-      isEditing={props.puck.isEditing}
-      resetKeys={[props]}
+    <AnalyticsScopeProvider
+      name={`${props.analytics?.scope ?? "eventsSection"}${getAnalyticsScopeHash(props.id)}`}
     >
-      <AnalyticsScopeProvider
-        name={`${props.analytics?.scope ?? "eventsSection"}${getAnalyticsScopeHash(props.id)}`}
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
       >
-        <VisibilityWrapper
-          liveVisibility={props.liveVisibility}
+        <MappedCardsSectionShell
+          conditionalRender={props.conditionalRender}
           isEditing={props.puck.isEditing}
+          CardsWrapperSlot={props.slots.CardsWrapperSlot}
         >
-          <MappedCardsSectionShell
-            conditionalRender={props.conditionalRender}
-            isEditing={props.puck.isEditing}
-            CardsWrapperSlot={props.slots.CardsWrapperSlot}
-          >
-            {(setCardsWrapperRef) => (
-              <MappedCardsSectionContent
-                backgroundColor={props.styles?.backgroundColor}
-                showSectionHeading={props.styles.showSectionHeading}
-                SectionHeadingSlot={props.slots.SectionHeadingSlot}
-                CardsWrapperSlot={props.slots.CardsWrapperSlot}
-                setCardsWrapperRef={setCardsWrapperRef}
-              />
-            )}
-          </MappedCardsSectionShell>
-        </VisibilityWrapper>
-      </AnalyticsScopeProvider>
-    </ComponentErrorBoundary>
+          {(setCardsWrapperRef) => (
+            <MappedCardsSectionContent
+              backgroundColor={props.styles?.backgroundColor}
+              showSectionHeading={props.styles.showSectionHeading}
+              SectionHeadingSlot={props.slots.SectionHeadingSlot}
+              CardsWrapperSlot={props.slots.CardsWrapperSlot}
+              setCardsWrapperRef={setCardsWrapperRef}
+            />
+          )}
+        </MappedCardsSectionShell>
+      </VisibilityWrapper>
+    </AnalyticsScopeProvider>
   ),
 };

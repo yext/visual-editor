@@ -54,7 +54,7 @@
   "comingSoon": "Coming Soon",
   "componentErrorBoundary": {
     "error": "Error",
-    "message": "Can't render this section. Try updating your component library."
+    "message": "Cannot render this section with the current configuration. Please delete this section, re-add it, and re-configure it."
   },
   "components": {
     "aboutSection": "About Section",

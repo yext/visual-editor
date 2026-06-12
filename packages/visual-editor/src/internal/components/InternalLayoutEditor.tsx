@@ -38,6 +38,7 @@ import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 import { clonePuckResolveData } from "../utils/clonePuckResolveData.ts";
 import { YextPuckFieldOverrides } from "../../fields/fieldOverrides.ts";
+import { wrapComponentConfigWithErrorBoundary } from "../utils/wrapConfigWithComponentErrorBoundary.tsx";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -203,7 +204,7 @@ export const InternalLayoutEditor = ({
     Object.entries(puckConfig.components).forEach(
       ([componentKey, component]) => {
         translatedComponents[componentKey] = {
-          ...component,
+          ...wrapComponentConfigWithErrorBoundary(component),
           label: pt(component.label ?? ""),
         };
       }

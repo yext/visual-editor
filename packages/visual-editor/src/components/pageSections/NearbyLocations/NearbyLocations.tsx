@@ -11,7 +11,6 @@ import { msg } from "../../../utils/i18n/platform.ts";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultNearbyLocationsCardsProps } from "./NearbyLocationsCardsWrapper.tsx";
-import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 import { EMPTY_STATE_MARKER_SELECTOR } from "../emptyStateMarker.tsx";
 
@@ -226,20 +225,15 @@ export const NearbyLocationsSection: YextComponentConfig<NearbyLocationsSectionP
       );
     },
     render: (props) => (
-      <ComponentErrorBoundary
-        isEditing={props.puck.isEditing}
-        resetKeys={[props]}
+      <AnalyticsScopeProvider
+        name={props.analytics?.scope ?? "nearbyLocationsSection"}
       >
-        <AnalyticsScopeProvider
-          name={props.analytics?.scope ?? "nearbyLocationsSection"}
+        <VisibilityWrapper
+          liveVisibility={props.liveVisibility}
+          isEditing={props.puck.isEditing}
         >
-          <VisibilityWrapper
-            liveVisibility={props.liveVisibility}
-            isEditing={props.puck.isEditing}
-          >
-            <NearbyLocationsComponent {...props} />
-          </VisibilityWrapper>
-        </AnalyticsScopeProvider>
-      </ComponentErrorBoundary>
+          <NearbyLocationsComponent {...props} />
+        </VisibilityWrapper>
+      </AnalyticsScopeProvider>
     ),
   };

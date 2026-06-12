@@ -54,7 +54,7 @@
   "comingSoon": "Hamarosan",
   "componentErrorBoundary": {
     "error": "Hiba",
-    "message": "Ez a szakasz nem jeleníthető meg. Próbálja meg frissíteni az összetevőkönyvtárat."
+    "message": "Ez a szakasz nem jeleníthető meg a jelenlegi konfigurációval. Kérjük, törölje ezt a részt, adja hozzá újra, majd konfigurálja újra."
   },
   "components": {
     "aboutSection": "A szakaszról",

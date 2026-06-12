@@ -54,7 +54,7 @@
   "comingSoon": "Dolazi uskoro",
   "componentErrorBoundary": {
     "error": "Greška",
-    "message": "Nije moguće prikazati ovaj odjeljak. Pokušajte ažurirati biblioteku komponenti."
+    "message": "Nije moguće prikazati ovaj odjeljak s trenutnom konfiguracijom. Molimo izbrišite ovaj odjeljak, ponovno ga dodajte i ponovno ga konfigurirajte."
   },
   "components": {
     "aboutSection": "O odjeljku",

@@ -6,7 +6,6 @@ import {
 import { msg } from "../../utils/i18n/platform.ts";
 import { PageSection } from "../atoms/pageSection.tsx";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
-import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 export interface VideoSectionProps {
   /**
@@ -115,16 +114,11 @@ export const VideoSection: YextComponentConfig<VideoSectionProps> = {
     liveVisibility: true,
   },
   render: (props) => (
-    <ComponentErrorBoundary
+    <VisibilityWrapper
+      liveVisibility={props.liveVisibility}
       isEditing={props.puck.isEditing}
-      resetKeys={[props]}
     >
-      <VisibilityWrapper
-        liveVisibility={props.liveVisibility}
-        isEditing={props.puck.isEditing}
-      >
-        <VideoSectionComponent {...props} />
-      </VisibilityWrapper>
-    </ComponentErrorBoundary>
+      <VideoSectionComponent {...props} />
+    </VisibilityWrapper>
   ),
 };

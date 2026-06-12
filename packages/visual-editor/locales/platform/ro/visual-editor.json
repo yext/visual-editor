@@ -54,7 +54,7 @@
   "comingSoon": "În curând",
   "componentErrorBoundary": {
     "error": "Eroare",
-    "message": "Nu se poate reda această secțiune. Încercați să vă actualizați biblioteca de componente."
+    "message": "Nu se poate reda această secțiune cu configurația curentă. Vă rugăm să ștergeți această secțiune, să o adăugați din nou și să o reconfigurați."
   },
   "components": {
     "aboutSection": "Secțiunea Despre",

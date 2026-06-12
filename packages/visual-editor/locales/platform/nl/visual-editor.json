@@ -54,7 +54,7 @@
   "comingSoon": "Binnenkort beschikbaar",
   "componentErrorBoundary": {
     "error": "Fout",
-    "message": "Kan deze sectie niet weergeven. Probeer uw componentenbibliotheek bij te werken."
+    "message": "Kan deze sectie niet weergeven met de huidige configuratie. Verwijder deze sectie, voeg deze opnieuw toe en configureer deze opnieuw."
   },
   "components": {
     "aboutSection": "Over Sectie",

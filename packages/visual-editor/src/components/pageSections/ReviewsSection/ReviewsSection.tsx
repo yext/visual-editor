@@ -23,7 +23,6 @@ import { StreamDocument } from "../../../utils/types/StreamDocument.ts";
 import { StarOff } from "lucide-react";
 import { AnalyticsScopeProvider, useAnalytics } from "@yext/pages-components";
 import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers.ts";
-import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 type Review = {
@@ -638,20 +637,15 @@ export const ReviewsSection: YextComponentConfig<ReviewsSectionProps> = {
     liveVisibility: true,
   },
   render: (props) => (
-    <ComponentErrorBoundary
-      isEditing={props.puck.isEditing}
-      resetKeys={[props]}
+    <AnalyticsScopeProvider
+      name={`${props.analytics?.scope ?? "reviewsSection"}${getAnalyticsScopeHash(props.id)}`}
     >
-      <AnalyticsScopeProvider
-        name={`${props.analytics?.scope ?? "reviewsSection"}${getAnalyticsScopeHash(props.id)}`}
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
       >
-        <VisibilityWrapper
-          liveVisibility={props.liveVisibility}
-          isEditing={props.puck.isEditing}
-        >
-          <ReviewsSectionInternal {...props} />
-        </VisibilityWrapper>
-      </AnalyticsScopeProvider>
-    </ComponentErrorBoundary>
+        <ReviewsSectionInternal {...props} />
+      </VisibilityWrapper>
+    </AnalyticsScopeProvider>
   ),
 };
