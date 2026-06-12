@@ -1180,7 +1180,7 @@ const LocatorInternal = ({
   const { t, i18n } = useTranslation();
   const previewWindow = usePreviewWindow();
   const windowWidth = useWindowWidth(previewWindow);
-  const { isMobile: isMobileViewport } = getViewport(windowWidth);
+  const { isMobile } = getViewport(windowWidth);
   const preferredUnit = getPreferredDistanceUnit(i18n.language);
   const streamDocument = useDocument();
   const entityTypeSourceMap = getLocatorEntityTypeSourceMap(streamDocument);
@@ -1506,7 +1506,7 @@ const LocatorInternal = ({
   const [isInitialMapLocationResolved, setIsInitialMapLocationResolved] =
     React.useState(false);
   const canShowMoreMobileResults =
-    isMobileViewport && mobileResults.length < resultCount;
+    isMobile && mobileResults.length < resultCount;
 
   const mapProps = React.useMemo(
     () => ({
@@ -1710,11 +1710,12 @@ const LocatorInternal = ({
   const searchFilters = useSearchState((state) => state.filters);
   const currentOffset = useSearchState((state) => state.vertical.offset);
   const previousOffset = React.useRef<number | undefined>(undefined);
+  const prevIsMobile = React.useRef(isMobile);
 
   // Scroll to top when pagination changes
   React.useEffect(() => {
     if (
-      !isMobileViewport &&
+      !isMobile &&
       currentOffset !== previousOffset.current &&
       previousOffset.current !== undefined
     ) {
@@ -1724,19 +1725,37 @@ const LocatorInternal = ({
       });
     }
     previousOffset.current = currentOffset;
-  }, [currentOffset, isMobileViewport]);
+  }, [currentOffset, isMobile]);
 
   React.useEffect(() => {
-    if (!isMobileViewport || searchLoading) {
+    const switchedToMobile = isMobile && !prevIsMobile.current;
+
+    prevIsMobile.current = isMobile;
+
+    if (!switchedToMobile || searchLoading || (currentOffset ?? 0) === 0) {
+      return;
+    }
+
+    // Always reload from offset 0 if switching to mobile
+    setMobileResults([]);
+    searchActions.setOffset(0);
+    executeSearch(searchActions);
+    setSearchState("loading");
+  }, [currentOffset, isMobile, searchActions, searchLoading]);
+
+  React.useEffect(() => {
+    if (!isMobile || searchLoading) {
       return;
     }
 
     setMobileResults((previousResults) => {
+      // Mobile keeps a single growing list: later offsets append, while
+      // offset 0 replaces the list after a fresh search.
       return (currentOffset ?? 0) > 0 && searchResults.length > 0
         ? [...previousResults, ...searchResults]
         : searchResults;
     });
-  }, [currentOffset, isMobileViewport, searchLoading, searchResults]);
+  }, [currentOffset, isMobile, searchLoading, searchResults]);
 
   const handleDistanceClick = (
     distance: number,
@@ -1932,7 +1951,7 @@ const LocatorInternal = ({
               className="md:flex-1 md:overflow-y-auto"
               ref={resultsContainer}
             >
-              {isMobileViewport ? (
+              {isMobile ? (
                 <MobileLocatorResultsSection
                   CardComponent={CardComponent}
                   results={mobileResults}
@@ -1955,7 +1974,7 @@ const LocatorInternal = ({
               )}
             </div>
           )}
-          {!isMobileViewport && resultCount > RESULTS_LIMIT && (
+          {!isMobile && resultCount > RESULTS_LIMIT && (
             <div className="border-t border-gray-300 pt-4">
               <Pagination
                 customCssClasses={{
@@ -2058,6 +2077,7 @@ const MobileLocatorResultsSection = ({
         </div>
       )}
       {hasMoreResults && (
+        // Mobile replaces numbered pagination with incremental loading.
         <div className="px-8 py-4">
           <Button
             className="w-full justify-center"
