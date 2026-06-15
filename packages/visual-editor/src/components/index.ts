@@ -11,10 +11,7 @@ export {
   type DirectoryProps,
   type DirectoryStyles,
 } from "./directory/Directory.tsx";
-export {
-  LocatorComponent,
-  type LocatorProps,
-} from "./locator/Locator.tsx";
+export { LocatorComponent, type LocatorProps } from "./locator/Locator.tsx";
 export {
   LocatorResultCard,
   type Location,
