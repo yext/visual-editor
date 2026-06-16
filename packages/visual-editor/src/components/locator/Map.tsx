@@ -8,17 +8,93 @@ import {
 import { Result } from "@yext/search-headless-react";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { ImageField } from "../../fields/ImageField.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
+import { msg } from "../../utils/i18n/platform.ts";
+import {
+  backgroundColors,
+  ThemeColor,
+} from "../../utils/themeConfigOptions.ts";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import { Body } from "../atoms/body.tsx";
 import { MapPinIcon } from "../MapPinIcon.tsx";
 import { isVisualEditorTestEnv } from "../testing/utils.ts";
 import { Location } from "./LocatorResultCard.tsx";
-import {
-  DEFAULT_PIN_ICON_WIDTH,
-  getMapboxMapPadding,
-  LocationStyleConfig,
-} from "./locatorUtils.ts";
+
+export const DEFAULT_MAP_CENTER: Coordinate = {
+  latitude: 40.741611,
+  longitude: -74.005371,
+}; // New York City
+export const DEFAULT_RADIUS = 25;
+export const DEFAULT_PIN_ICON_WIDTH = 14;
+export const DEFAULT_LOCATION_STYLE = {
+  pinIcon: { type: "none" },
+  pinColor: backgroundColors.background6.value,
+};
+export const MAX_PIN_ICON_WIDTH = 27;
+const PIN_ICON_MAX_FILE_SIZE_BYTES = 128 * 1024;
+
+export type LocationStyleConfig = Record<
+  string,
+  {
+    color?: ThemeColor;
+    icon?: string;
+    customImage?: {
+      url: string;
+      width?: number;
+      aspectRatio?: number;
+    };
+  }
+>;
+
+export const LOCATOR_PIN_ICON_FIELD: ImageField = {
+  type: "image",
+  label: msg("fields.icon", "Icon"),
+  hideAltTextField: true,
+  maxFileSizeBytes: PIN_ICON_MAX_FILE_SIZE_BYTES,
+};
+
+export const getConfiguredMapCenterOrDefault = (mapStartingLocation?: {
+  latitude: string;
+  longitude: string;
+}): Coordinate => {
+  if (mapStartingLocation?.latitude && mapStartingLocation.longitude) {
+    try {
+      return parseMapStartingLocation(mapStartingLocation);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  return DEFAULT_MAP_CENTER;
+};
+
+const makiIconModules = import.meta.glob(
+  "../../../node_modules/@mapbox/maki/icons/*.svg",
+  {
+    eager: true,
+    import: "default",
+  }
+) as Record<string, string>;
+
+const makiIconEntries = Object.entries(makiIconModules).map(([path, icon]) => {
+  const name = path.split("/").pop()?.replace(".svg", "") || path;
+  return [name, icon] as const;
+});
+
+export const makiIconMap: Record<string, string> =
+  Object.fromEntries(makiIconEntries);
+
+const formatMakiIconLabel = (name: string) =>
+  name.replace(/[-_]/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+
+export const makiIconOptions = makiIconEntries.map(([name, icon]) => ({
+  label: formatMakiIconLabel(name),
+  value: name,
+  icon,
+}));
+
+export const DEFAULT_MAKI_ICON_NAME = makiIconOptions[0]?.value;
 
 export const LoadingMapPlaceholder = () => {
   const { t } = useTranslation();
@@ -174,3 +250,55 @@ const LocatorMapPin = <T,>({
     />
   );
 };
+
+export const getMapboxMapPadding = (divElement: HTMLDivElement | null) => {
+  if (!divElement) {
+    return 50;
+  }
+
+  const { width, height } = divElement.getBoundingClientRect();
+  const mapVerticalPadding = Math.max(50, height * 0.2);
+  const mapHorizontalPadding = Math.max(50, width * 0.2);
+  return {
+    top: mapVerticalPadding,
+    bottom: mapVerticalPadding,
+    left: mapHorizontalPadding,
+    right: mapHorizontalPadding,
+  };
+};
+
+export const parseMapStartingLocation = (mapStartingLocation: {
+  latitude: string;
+  longitude: string;
+}): Coordinate => {
+  const lat = parseFloat(mapStartingLocation.latitude);
+  const lng = parseFloat(mapStartingLocation.longitude);
+
+  const err: string[] = [];
+  if (isNaN(lat) || lat < -90 || lat > 90) {
+    err.push("Latitude must be a number between -90 and 90.");
+  }
+  if (isNaN(lng) || lng < -180 || lng > 180) {
+    err.push("Longitude must be a number between -180 and 180.");
+  }
+  if (err.length) {
+    throw new Error(err.join("\n"));
+  }
+
+  return {
+    latitude: lat,
+    longitude: lng,
+  };
+};
+
+/** Checks whether a given lat and lng are valid coordinates */
+export function areValidCoordinates(lat: number, lng: number): boolean {
+  return (
+    !isNaN(lat) &&
+    !isNaN(lng) &&
+    lat >= -90 &&
+    lat <= 90 &&
+    lng >= -180 &&
+    lng <= 180
+  );
+}

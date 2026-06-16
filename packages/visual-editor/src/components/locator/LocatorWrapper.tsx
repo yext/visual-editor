@@ -62,29 +62,33 @@ import {
 } from "./LocatorResultCard.tsx";
 import type { LocatorProps } from "./Locator.tsx";
 import {
-  areValidCoordinates,
+  COUNTRY_CODE_FIELD,
+  FilterModal,
+  LOCATION_FIELD,
   buildEqualsLocationFilter,
   buildNearLocationFilterFromCoords,
   buildNearLocationFilterFromPrevious,
-  COUNTRY_CODE_FIELD,
-  DEFAULT_RADIUS,
   deselectOpenNowFilters,
-  getConfiguredMapCenterOrDefault,
   HOURS_FIELD,
-  INITIAL_LOCATION_KEY,
-  LOCATION_FIELD,
+  updateRadiusInNearFiltersOnLocationField,
+} from "./Filters.tsx";
+import {
+  areValidCoordinates,
+  DEFAULT_RADIUS,
+  getConfiguredMapCenterOrDefault,
+  LocatorMap,
+  LoadingMapPlaceholder,
   LocationStyleConfig,
   makiIconMap,
-  RESULTS_LIMIT,
-  updateRadiusInNearFiltersOnLocationField,
-} from "./locatorUtils.ts";
-import { FilterModal } from "./LocatorFilters.tsx";
-import { LocatorMap, LoadingMapPlaceholder } from "./LocatorMap.tsx";
+} from "./Map.tsx";
 import {
   MobileLocatorResultsSection,
   ResultsCountSummary,
+  RESULTS_LIMIT,
   SearchState,
-} from "./LocatorResults.tsx";
+} from "./Results.tsx";
+
+export const INITIAL_LOCATION_KEY = "initialLocation";
 
 export const LocatorWrapper = (props: WithPuckProps<LocatorProps>) => {
   const streamDocument = useDocument();
