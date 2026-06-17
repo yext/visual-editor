@@ -17,10 +17,11 @@ export default defineConfig(() => ({
   },
   optimizeDeps: {
     esbuildOptions: {
-      target: "es2020",
+      target: "es2022",
     },
   },
   build: {
+    target: "es2022",
     cssCodeSplit: true,
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),
