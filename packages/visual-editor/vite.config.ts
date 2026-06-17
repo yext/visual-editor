@@ -16,6 +16,7 @@ export default defineConfig(() => ({
     },
   },
   build: {
+    target: "es2022",
     cssCodeSplit: true,
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),
