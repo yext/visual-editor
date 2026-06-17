@@ -173,12 +173,6 @@ importers:
       next-themes:
         specifier: ^0.3.0
         version: 0.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      picocolors:
-        specifier: ^1.0.1
-        version: 1.1.1
-      prompts:
-        specifier: ^2.4.2
-        version: 2.4.2
       pure-react-carousel:
         specifier: ^1.32.0
         version: 1.32.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -279,18 +273,12 @@ importers:
       axe-core:
         specifier: ^4.10.3
         version: 4.10.3
-      execa:
-        specifier: ^8.0.1
-        version: 8.0.1
       fs-extra:
         specifier: ^11.2.0
         version: 11.3.1
       generate-license-file:
         specifier: ^3.5.0
         version: 3.8.1(typescript@5.9.2)
-      gray-matter:
-        specifier: ^4.0.3
-        version: 4.0.3
       husky:
         specifier: ^9.1.4
         version: 9.1.7
@@ -306,9 +294,6 @@ importers:
       lint-staged:
         specifier: ^15.2.7
         version: 15.5.2
-      minimist:
-        specifier: ^1.2.8
-        version: 1.2.8
       pixelmatch:
         specifier: ^7.1.0
         version: 7.1.0
@@ -324,9 +309,6 @@ importers:
       react-icons:
         specifier: ^5.2.1
         version: 5.5.0(react@18.3.1)
-      semver:
-        specifier: ^7.6.3
-        version: 7.7.2
       tailwindcss:
         specifier: ^3.4.6
         version: 3.4.17(ts-node@10.9.2(@swc/core@1.15.11(@swc/helpers@0.5.17))(@types/node@24.13.2)(typescript@5.9.2))
@@ -5738,14 +5720,6 @@ packages:
       }
     engines: { node: ">=10" }
 
-  esprima@4.0.1:
-    resolution:
-      {
-        integrity: sha512-eGuFFw7Upda+g4p+QHvnW0RyTX/SVeJBDM/gCtMARO0cLuT2HcEKnTPvhjV6aGeqrCB/sbNop0Kszm0jsaWU4A==,
-      }
-    engines: { node: ">=4" }
-    hasBin: true
-
   estree-walker@2.0.2:
     resolution:
       {
@@ -5824,13 +5798,6 @@ packages:
         integrity: sha512-28HqgMZAmih1Czt9ny7qr6ek2qddF4FclbMzwhCREB6OFfH+rXAnuNCwo1/wFvrtbgsQDb4kSbX9de9lFbrXnA==,
       }
     engines: { node: ">= 0.10.0" }
-
-  extend-shallow@2.0.1:
-    resolution:
-      {
-        integrity: sha512-zCnTtlxNoAiDc3gqY2aYAWFx7XWWiasuF2K8Me5WbN8otHKTUKBwjPtNpRs/rbUZm7KxWAaNj7P1a/p52GbVug==,
-      }
-    engines: { node: ">=0.10.0" }
 
   extend@3.0.2:
     resolution:
@@ -6169,13 +6136,6 @@ packages:
       {
         integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==,
       }
-
-  gray-matter@4.0.3:
-    resolution:
-      {
-        integrity: sha512-5v6yZd4JK3eMI3FqqCouswVqwugaA9r4dNZB1wwcmrD02QkV5H0y7XBQW8QwQqEaZY1pM9aqORSORhJRdNK44Q==,
-      }
-    engines: { node: ">=6.0" }
 
   grid-index@1.1.0:
     resolution:
@@ -6635,13 +6595,6 @@ packages:
     engines: { node: ^12.20.0 || ^14.13.1 || >=16.0.0 }
     hasBin: true
 
-  is-extendable@0.1.1:
-    resolution:
-      {
-        integrity: sha512-5BMULNob1vgFX6EjQw5izWDxrecWK9AM72rugNr0TFldMOi0fj6Jk+zeKIt0xGj4cEfQIJth4w3OKWOJ4f+AFw==,
-      }
-    engines: { node: ">=0.10.0" }
-
   is-extglob@2.1.1:
     resolution:
       {
@@ -6976,13 +6929,6 @@ packages:
         integrity: sha512-mxa9E9ITFOt0ban3j6L5MpjwegGz6lBQmM1IJkWeBZGcMxto50+eWdjC/52xDbS2vy0k7vIMK0Fe2wfL9OQSpQ==,
       }
 
-  js-yaml@3.14.1:
-    resolution:
-      {
-        integrity: sha512-okMH7OXXJ7YrN9Ok3/SXrnu4iX9yOk+25nqX4imS2npuvTYDmo/QEZoqwZkYaIDk3jVvBOTOIEgEhaLOynBS9g==,
-      }
-    hasBin: true
-
   js-yaml@4.1.0:
     resolution:
       {
@@ -7079,13 +7025,6 @@ packages:
       {
         integrity: sha512-WbCVYJ27Sz8zi9Q7Q0xHC+05iwkm3Znipc2XTlrnJbsHMYktW4hPhXUE8Ys1engBrvffoSCqbil1JQAa7clRpA==,
       }
-
-  kind-of@6.0.3:
-    resolution:
-      {
-        integrity: sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==,
-      }
-    engines: { node: ">=0.10.0" }
 
   kleur@3.0.3:
     resolution:
@@ -9508,13 +9447,6 @@ packages:
         integrity: sha512-RQPdCYTa8A68uM2jwxoY842xDhvx3E5LFL1LxvxCNMev4o5mLuokczhzjAgGwUZBAmOKZknArSxLKmXtIi2AxQ==,
       }
 
-  section-matter@1.0.0:
-    resolution:
-      {
-        integrity: sha512-vfD3pmTzGpufjScBh50YHKzEu2lxBWhVEHsNGoEXmCmn2hKGfeNLYMzCJpe8cD7gqX7TJluOVpBkAequ6dgMmA==,
-      }
-    engines: { node: ">=4" }
-
   semver@6.3.1:
     resolution:
       {
@@ -9932,13 +9864,6 @@ packages:
         integrity: sha512-iq6eVVI64nQQTRYq2KtEg2d2uU7LElhTJwsH4YzIHZshxlgZms/wIc4VoDQTlG/IvVIrBKG06CrZnp0qv7hkcQ==,
       }
     engines: { node: ">=12" }
-
-  strip-bom-string@1.0.0:
-    resolution:
-      {
-        integrity: sha512-uCC2VHvQRYu+lMh4My/sFNmF2klFymLX1wHJeXnbEJERpV/ZsVuonzerjfrGpIGF7LBVa1O7i9kjiWvJiFck8g==,
-      }
-    engines: { node: ">=0.10.0" }
 
   strip-final-newline@3.0.0:
     resolution:
@@ -14679,8 +14604,6 @@ snapshots:
 
   escape-string-regexp@4.0.0: {}
 
-  esprima@4.0.1: {}
-
   estree-walker@2.0.2: {}
 
   estree-walker@3.0.3:
@@ -14773,10 +14696,6 @@ snapshots:
       vary: 1.1.2
     transitivePeerDependencies:
       - supports-color
-
-  extend-shallow@2.0.1:
-    dependencies:
-      is-extendable: 0.1.1
 
   extend@3.0.2: {}
 
@@ -14976,13 +14895,6 @@ snapshots:
   graceful-fs@4.2.10: {}
 
   graceful-fs@4.2.11: {}
-
-  gray-matter@4.0.3:
-    dependencies:
-      js-yaml: 3.14.1
-      kind-of: 6.0.3
-      section-matter: 1.0.0
-      strip-bom-string: 1.0.0
 
   grid-index@1.1.0: {}
 
@@ -15299,8 +15211,6 @@ snapshots:
 
   is-docker@3.0.0: {}
 
-  is-extendable@0.1.1: {}
-
   is-extglob@2.1.1: {}
 
   is-fullwidth-code-point@3.0.0: {}
@@ -15472,11 +15382,6 @@ snapshots:
 
   js-tokens@9.0.1: {}
 
-  js-yaml@3.14.1:
-    dependencies:
-      argparse: 1.0.10
-      esprima: 4.0.1
-
   js-yaml@4.1.0:
     dependencies:
       argparse: 2.0.1
@@ -15536,8 +15441,6 @@ snapshots:
   just-diff@6.0.2: {}
 
   kdbush@4.0.2: {}
-
-  kind-of@6.0.3: {}
 
   kleur@3.0.3: {}
 
@@ -17141,11 +17044,6 @@ snapshots:
 
   search-insights@2.17.3: {}
 
-  section-matter@1.0.0:
-    dependencies:
-      extend-shallow: 2.0.1
-      kind-of: 6.0.3
-
   semver@6.3.1: {}
 
   semver@7.7.2: {}
@@ -17420,8 +17318,6 @@ snapshots:
   strip-ansi@7.1.0:
     dependencies:
       ansi-regex: 6.2.0
-
-  strip-bom-string@1.0.0: {}
 
   strip-final-newline@3.0.0: {}
 
