@@ -9,13 +9,13 @@ import { TranslatableCTA } from "../../types/types.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { useOverflow } from "../../hooks/useOverflow.ts";
 import { usePreviewWindow } from "../../hooks/usePreviewWindow.ts";
+import { getViewport, useWindowWidth } from "../../hooks/useViewport.ts";
 import { YextAutoField } from "../../fields/YextAutoField.tsx";
 import { linkTypeOptions } from "../../internal/puck/constant-value-fields/CallToAction.tsx";
 import {
   useExpandedHeaderMenu,
   useHeaderLinksDisplayMode,
 } from "./ExpandedHeaderMenuContext.tsx";
-import { getHeaderViewport } from "./viewport.ts";
 import { ThemeColor, ThemeOptions } from "../../utils/themeConfigOptions.ts";
 import { BodyProps } from "../atoms/body.tsx";
 import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
@@ -182,20 +182,6 @@ const headerLinksFields: YextFields<HeaderLinksProps> = {
   },
 };
 
-const useWindowWidth = (externalWindow?: Window | null) => {
-  const [width, setWidth] = React.useState(externalWindow?.innerWidth ?? 1024);
-
-  React.useLayoutEffect(() => {
-    const win = externalWindow || window;
-    const handleResize = () => setWidth(win.innerWidth);
-    handleResize();
-    win.addEventListener("resize", handleResize);
-    return () => win.removeEventListener("resize", handleResize);
-  }, [externalWindow]);
-
-  return width;
-};
-
 const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
   data,
   styles,
@@ -212,7 +198,7 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
   const menuContext = useExpandedHeaderMenu();
 
   const windowWidth = useWindowWidth(previewWindow);
-  const { isMobile, isDesktop } = getHeaderViewport(windowWidth);
+  const { isMobile, isDesktop } = getViewport(windowWidth);
   const isOverflow = useOverflow(navRef, measureContainerRef, 0);
 
   const type = parentData?.type || "Primary";

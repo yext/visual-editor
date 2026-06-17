@@ -1,5 +1,6 @@
 import {
   getFilteredEntityFields,
+  getCompatibleEntityFieldTypes,
   RenderEntityFieldFilter,
 } from "../internal/utils/getFilteredEntityFields.ts";
 import { StreamFields, YextSchemaField } from "../types/entityFields.ts";
@@ -353,7 +354,7 @@ export const getFieldsForSelector = (
             { fields: [availableField] },
             {
               allowList: [availableField.name],
-              types: requiredTypes,
+              types: requiredTypes.flatMap(getCompatibleEntityFieldTypes),
             }
           ).length > 0
       )

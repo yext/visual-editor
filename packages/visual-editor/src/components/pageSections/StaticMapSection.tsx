@@ -12,14 +12,6 @@ import {
 import { PuckComponent } from "@puckeditor/core";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
-export interface StaticMapData {
-  /**
-   * The API key used to generate the map image.
-   * @defaultValue ""
-   */
-  apiKey: string;
-}
-
 export interface StaticMapStyles {
   /**
    * The background color of the section.
@@ -36,12 +28,6 @@ export interface StaticMapStyles {
 
 export interface StaticMapSectionProps {
   /**
-   * This object contains the configuration needed to generate the map.
-   * @propCategory Data Props
-   */
-  data: StaticMapData;
-
-  /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
    * @defaultValue true
    */
@@ -55,16 +41,6 @@ export interface StaticMapSectionProps {
 }
 
 const staticMapSectionFields: YextFields<StaticMapSectionProps> = {
-  data: {
-    type: "object",
-    label: msg("fields.data", "Data"),
-    objectFields: {
-      apiKey: {
-        label: msg("fields.apiKey", "API Key"),
-        type: "text",
-      },
-    },
-  },
   liveVisibility: {
     label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
     type: "radio",
@@ -88,7 +64,6 @@ const staticMapSectionFields: YextFields<StaticMapSectionProps> = {
 };
 
 const StaticMapSectionWrapper: PuckComponent<StaticMapSectionProps> = ({
-  data,
   styles,
   puck,
   id,
@@ -99,7 +74,6 @@ const StaticMapSectionWrapper: PuckComponent<StaticMapSectionProps> = ({
       className={`flex items-center`}
     >
       <MapboxStaticMapComponent
-        apiKey={data.apiKey}
         coordinate={{
           field: "yextDisplayCoordinate",
           constantValue: {
@@ -116,16 +90,15 @@ const StaticMapSectionWrapper: PuckComponent<StaticMapSectionProps> = ({
 };
 
 /**
- * The Static Map Section displays a non-interactive map image of a business's location. It uses the entity's address or coordinates to generate the map and requires a valid API key from mapbox.
+ * The Static Map Section displays a non-interactive map image of a business's location.
+ * It uses the entity's address or coordinates to generate the map.
+ *
  * Available on Location templates.
  */
 export const StaticMapSection: YextComponentConfig<StaticMapSectionProps> = {
   label: msg("components.staticMapSection", "Static Map Section"),
   fields: staticMapSectionFields,
   defaultProps: {
-    data: {
-      apiKey: "",
-    },
     liveVisibility: true,
     styles: {
       backgroundColor: backgroundColors.background1.value,

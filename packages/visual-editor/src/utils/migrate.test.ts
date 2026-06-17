@@ -6,6 +6,7 @@ import { themeColorPropertyKeyMigration } from "../components/migrations/0071_th
 import { mainContentWrapperMigration } from "../components/migrations/0073_main_content_wrapper.ts";
 import { normalizeFooterLogoImageMigration } from "../components/migrations/0075_normalize_footer_logo_image.ts";
 import { slotMappedCardsMigration } from "../components/migrations/0076_slot_mapped_cards.ts";
+import { removeMapboxApiKeyPropsMigration } from "../components/migrations/0078_remove_mapbox_api_key_props.ts";
 
 describe("migrate", () => {
   it("successfully applies a migration", async () => {
@@ -106,6 +107,97 @@ describe("migrate", () => {
           props: {
             id: "MainContent-default",
             content: [{ type: "Locator", props: { id: "locator" } }],
+          },
+        },
+      ],
+      zones: {},
+    });
+  });
+
+  it("removes Mapbox API key props that now come from environment config", async () => {
+    const migratedData = migrate(
+      {
+        root: {
+          props: {
+            version: 0,
+          },
+        },
+        content: [
+          {
+            type: "MapboxStaticMap",
+            props: {
+              id: "mapbox-static-map",
+              apiKey: "fixture-mapbox-api-key",
+              coordinate: {
+                field: "yextDisplayCoordinate",
+                constantValue: {
+                  latitude: 38.895546,
+                  longitude: -77.069915,
+                },
+              },
+              mapStyle: "streets-v12",
+            },
+          },
+          {
+            type: "StaticMapSection",
+            props: {
+              id: "static-map-section",
+              liveVisibility: true,
+              data: {
+                apiKey: "fixture-mapbox-api-key",
+              },
+              styles: {
+                backgroundColor: {
+                  selectedColor: "white",
+                  contrastingColor: "black",
+                },
+                mapStyle: "streets-v12",
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [removeMapboxApiKeyPropsMigration],
+      {
+        components: {},
+      },
+      {}
+    );
+
+    expect(migratedData).toEqual({
+      root: {
+        props: {
+          version: 1,
+        },
+      },
+      content: [
+        {
+          type: "MapboxStaticMap",
+          props: {
+            id: "mapbox-static-map",
+            coordinate: {
+              field: "yextDisplayCoordinate",
+              constantValue: {
+                latitude: 38.895546,
+                longitude: -77.069915,
+              },
+            },
+            mapStyle: "streets-v12",
+          },
+        },
+        {
+          type: "StaticMapSection",
+          props: {
+            id: "static-map-section",
+            liveVisibility: true,
+            styles: {
+              backgroundColor: {
+                selectedColor: "white",
+                contrastingColor: "black",
+              },
+              mapStyle: "streets-v12",
+            },
           },
         },
       ],

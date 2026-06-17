@@ -1390,13 +1390,13 @@ describe("Locator", async () => {
       const translations = await injectTranslations(document);
       vi.stubGlobal("fetch", createLocatorFetchMock(document));
 
+      await page.viewport(width, height);
+
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document, translations }}>
           <Render config={puckConfig} data={data} />
         </VisualEditorProvider>
       );
-
-      await page.viewport(width, height);
 
       // Unless testing empty state, wait for search to load
       if (!name.includes("empty document")) {

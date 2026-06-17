@@ -684,23 +684,25 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                           | Type                | Description                                                              | Default              |
-| :----------------------------- | :------------------ | :----------------------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor`       | `ThemeColor`        | The background color for the section.                                    | `Background Color 1` |
-| `styles.desktopImagePosition`  | `"left" \| "right"` | Positions the image to the left or right of the hero content on desktop. | `left`               |
-| `styles.mobileImagePosition`   | `"bottom" \| "top"` | Positions the image to the top or bottom of the hero content on mobile.  | `top`                |
-| `styles.reviewStarsColor`      | `ThemeColor`        | The color applied to review stars when average review is shown.          |                      |
-| `styles.showAddress`           | `boolean`           | Whether to show the address slot.                                        | `true`               |
-| `styles.showAverageReview`     | `boolean`           | If 'true', displays the entity's average review rating.                  | `true`               |
-| `styles.showBusinessName`      | `boolean`           | Whether to show the business name slot.                                  | `true`               |
-| `styles.showCredentials`       | `boolean`           | Whether to show the credentials slot.                                    | `true`               |
-| `styles.showEmail`             | `boolean`           | Whether to show the email slot.                                          | `true`               |
-| `styles.showImage`             | `boolean`           | Whether to show the hero image.                                          | `true`               |
-| `styles.showPhone`             | `boolean`           | Whether to show the phone slot.                                          | `true`               |
-| `styles.showPrimaryCTA`        | `boolean`           | Whether to show the primary CTA slot.                                    | `true`               |
-| `styles.showProfessionalTitle` | `boolean`           | Whether to show the professional title slot.                             | `true`               |
-| `styles.showSecondaryCTA`      | `boolean`           | Whether to show the secondary CTA slot.                                  | `true`               |
-| `styles.showSubtitle`          | `boolean`           | Whether to show the subtitle slot.                                       | `true`               |
+| Prop                              | Type                            | Description                                                              | Default              |
+| :-------------------------------- | :------------------------------ | :----------------------------------------------------------------------- | :------------------- |
+| `styles.backgroundColor`          | `ThemeColor`                    | The background color for the section.                                    | `Background Color 1` |
+| `styles.desktopImagePosition`     | `"left" \| "right"`             | Positions the image to the left or right of the hero content on desktop. | `left`               |
+| `styles.mobileImagePosition`      | `"bottom" \| "top"`             | Positions the image to the top or bottom of the hero content on mobile.  | `top`                |
+| `styles.reviewStarsColor`         | `ThemeColor`                    | The color applied to review stars when average review is shown.          |                      |
+| `styles.showAddress`              | `boolean`                       | Whether to show the address slot.                                        | `true`               |
+| `styles.showAverageReview`        | `boolean`                       | If 'true', displays the entity's average review rating.                  | `true`               |
+| `styles.showBusinessName`         | `boolean`                       | Whether to show the business name slot.                                  | `true`               |
+| `styles.showCredentials`          | `boolean`                       | Whether to show the credentials slot.                                    | `true`               |
+| `styles.showEmail`                | `boolean`                       | Whether to show the email slot.                                          | `true`               |
+| `styles.showImage`                | `boolean`                       | Whether to show the hero image.                                          | `true`               |
+| `styles.showPhone`                | `boolean`                       | Whether to show the phone slot.                                          | `true`               |
+| `styles.showPrimaryCTA`           | `boolean`                       | Whether to show the primary CTA slot.                                    | `true`               |
+| `styles.showProfessionalTitle`    | `boolean`                       | Whether to show the professional title slot.                             | `true`               |
+| `styles.showSecondaryCTA`         | `boolean`                       | Whether to show the secondary CTA slot.                                  | `true`               |
+| `styles.showSubtitle`             | `boolean`                       | Whether to show the subtitle slot.                                       | `true`               |
+| `styles.subtitleDesktopAlignment` | `"left" \| "center" \| "right"` | The horizontal alignment of the subtitle slot on desktop.                | `left`               |
+| `styles.subtitleMobileAlignment`  | `"left" \| "center" \| "right"` | The horizontal alignment of the subtitle slot on mobile.                 | `center`             |
 
 #### Other Props
 
@@ -801,19 +803,13 @@ Styling configuration for the secondary footer.
 
 ## StaticMapSection
 
-The Static Map Section displays a non-interactive map image of a business's location. It uses the entity's address or coordinates to generate the map and requires a valid API key from mapbox. Available on Location templates.
+The Static Map Section displays a non-interactive map image of a business's location. It uses the entity's address or coordinates to generate the map.
+
+Available on Location templates.
 
 ![Preview of the StaticMapSection component](../components/testing/screenshots/StaticMapSection/%5Bdesktop%5D%20default%20props%20with%20coordinate%20-%20with%20api%20key.png)
 
 ### Props
-
-#### Data Props
-
-This object contains the configuration needed to generate the map.
-
-| Prop   | Type            | Description                                                        | Default |
-| :----- | :-------------- | :----------------------------------------------------------------- | :------ |
-| `data` | `StaticMapData` | This object contains the configuration needed to generate the map. |         |
 
 #### Styles Props
 
