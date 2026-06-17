@@ -86,15 +86,6 @@ importers:
       "@mapbox/maki":
         specifier: ^8.2.0
         version: 8.2.0
-      "@microsoft/api-documenter":
-        specifier: ^7.30.7
-        version: 7.30.7(@types/node@24.13.2)
-      "@microsoft/api-extractor":
-        specifier: ^7.58.9
-        version: 7.58.9(@types/node@24.13.2)
-      "@microsoft/api-extractor-model":
-        specifier: ^7.33.8
-        version: 7.33.8(@types/node@24.13.2)
       "@puckeditor/core":
         specifier: 0.21.2
         version: 0.21.2(@floating-ui/dom@1.7.4)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.6.0(react@18.3.1))
@@ -218,9 +209,6 @@ importers:
       tailwind-merge:
         specifier: ^2.4.0
         version: 2.6.0
-      tsx:
-        specifier: ^4.22.4
-        version: 4.22.4
     devDependencies:
       "@capsizecss/core":
         specifier: ^4.1.3
@@ -228,6 +216,12 @@ importers:
       "@capsizecss/metrics":
         specifier: ^3.6.2
         version: 3.6.2
+      "@microsoft/api-extractor":
+        specifier: ^7.58.9
+        version: 7.58.9(@types/node@24.13.2)
+      "@microsoft/api-extractor-model":
+        specifier: ^7.33.8
+        version: 7.33.8(@types/node@24.13.2)
       "@testing-library/dom":
         specifier: ^10.4.0
         version: 10.4.1
@@ -339,6 +333,9 @@ importers:
       tsup:
         specifier: 8.3.5
         version: 8.3.5(@microsoft/api-extractor@7.58.9(@types/node@24.13.2))(@swc/core@1.15.11(@swc/helpers@0.5.17))(jiti@2.6.1)(postcss@8.5.6)(tsx@4.22.4)(typescript@5.9.2)(yaml@2.8.2)
+      tsx:
+        specifier: ^4.22.4
+        version: 4.22.4
       typescript:
         specifier: ^5.5.4
         version: 5.9.2
@@ -1701,13 +1698,6 @@ packages:
       {
         integrity: sha512-AkOLcbgGTdXScosBWwmmD7cDlvOjkg/DetGva26pIRiZPdeJYjYKarIlb4uxVzi6bwHO6EWH82eZ5Nuv4T5DUg==,
       }
-
-  "@microsoft/api-documenter@7.30.7":
-    resolution:
-      {
-        integrity: sha512-z4G2sH/XEOpNAICnczckl39Jx8PsQp7g59FuNch3lRJ5ZjNjswh7s/aRq/ZI0NpwPqwSy5JDWg8kTsfSKU1M0Q==,
-      }
-    hasBin: true
 
   "@microsoft/api-extractor-model@7.33.8":
     resolution:
@@ -11973,18 +11963,6 @@ snapshots:
       "@mapbox/point-geometry": 1.1.0
       "@types/geojson": 7946.0.16
       pbf: 4.0.1
-
-  "@microsoft/api-documenter@7.30.7(@types/node@24.13.2)":
-    dependencies:
-      "@microsoft/api-extractor-model": 7.33.8(@types/node@24.13.2)
-      "@microsoft/tsdoc": 0.16.0
-      "@rushstack/node-core-library": 5.23.1(@types/node@24.13.2)
-      "@rushstack/terminal": 0.24.0(@types/node@24.13.2)
-      "@rushstack/ts-command-line": 5.3.10(@types/node@24.13.2)
-      js-yaml: 4.1.0
-      resolve: 1.22.10
-    transitivePeerDependencies:
-      - "@types/node"
 
   "@microsoft/api-extractor-model@7.33.8(@types/node@24.13.2)":
     dependencies:
