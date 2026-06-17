@@ -28,7 +28,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-toast": "^1.1.5",
     "@radix-ui/react-tooltip": "^1.1.2",
-    "@types/node": "^24.0.0",
+    "@types/node": "^20.0.0",
     "@yext/search-headless-react": "^2.7.1",
     "@yext/search-ui-react": "^3.0.0",
     "@yext/visual-editor": "workspace:*",
