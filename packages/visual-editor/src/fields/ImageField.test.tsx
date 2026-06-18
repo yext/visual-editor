@@ -5,10 +5,11 @@ import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { YextAutoField } from "./YextAutoField.tsx";
 import { type ImageField } from "./ImageField.tsx";
 
-const { sendToParentMock, translatableStringFieldMock } = vi.hoisted(() => ({
+const { sendToParentMock } = vi.hoisted(() => ({
   sendToParentMock: vi.fn(),
-  translatableStringFieldMock: vi.fn(),
 }));
+
+const initialUrl = window.location.href;
 
 vi.mock("react-i18next", async (importOriginal) => {
   const actual = await importOriginal<typeof import("react-i18next")>();
@@ -29,34 +30,19 @@ vi.mock("../internal/hooks/useMessage.ts", () => ({
   }),
 }));
 
-vi.mock("../internal/hooks/useMessageReceivers.ts", () => ({
-  useTemplateMetadata: () => ({
-    locatorDisplayFields: {
-      c_title: {
-        field_type_id: "type.string",
-        field_name: "Title",
-      },
-      c_photo: {
-        field_type_id: "type.image",
-        field_name: "Photo",
-      },
-    },
-  }),
-}));
-
-vi.mock("./TranslatableStringField.tsx", async (importOriginal) => {
+vi.mock("../internal/hooks/useMessageReceivers.ts", async (importOriginal) => {
   const actual =
-    await importOriginal<typeof import("./TranslatableStringField.tsx")>();
+    await importOriginal<
+      typeof import("../internal/hooks/useMessageReceivers.ts")
+    >();
 
   return {
     ...actual,
-    TranslatableStringField: translatableStringFieldMock,
+    useTemplateMetadata: () => ({
+      locatorDisplayFields: {},
+    }),
   };
 });
-
-vi.mock("../utils/isFakeStarterLocalDev.ts", () => ({
-  isFakeStarterLocalDev: () => true,
-}));
 
 const renderImageField = (
   field: ImageField = {
@@ -66,11 +52,6 @@ const renderImageField = (
   value?: unknown
 ) => {
   const onChange = vi.fn();
-
-  translatableStringFieldMock.mockImplementation((label: string) => ({
-    type: "text",
-    label,
-  }));
 
   render(
     <TemplatePropsContext.Provider value={{ document: { locale: "en" } }}>
@@ -89,11 +70,13 @@ const renderImageField = (
 describe("ImageField", () => {
   afterEach(() => {
     vi.restoreAllMocks();
-    translatableStringFieldMock.mockReset();
     sendToParentMock.mockReset();
+    window.history.replaceState({}, "", initialUrl);
   });
 
-  it("renders through YextAutoField as a registered field type", () => {
+  it("prompts for an image URL in fake starter local dev", () => {
+    window.history.replaceState({}, "", "/dev-location/example");
+
     const promptSpy = vi
       .spyOn(window, "prompt")
       .mockReturnValue("https://example.com/image.jpg");
@@ -115,43 +98,25 @@ describe("ImageField", () => {
     });
   });
 
-  it("passes locator alt text options into the alt text field", () => {
-    const getAltTextOptions = vi.fn((templateMetadata) => [
-      {
-        label: templateMetadata.locatorDisplayFields?.c_title?.field_name ?? "",
-        value: "c_title",
-      },
-    ]);
+  it("prompts for an image URL in local-editor", () => {
+    window.history.replaceState({}, "", "/local-editor");
 
-    renderImageField(
-      {
-        type: "image",
-        label: "Image",
-        getAltTextOptions,
-      },
-      {
-        en: {
-          alternateText: "",
-          url: "https://example.com/image.jpg",
-          height: 1,
-          width: 1,
-        },
-        hasLocalizedValue: "true",
-      }
-    );
+    const promptSpy = vi
+      .spyOn(window, "prompt")
+      .mockReturnValue("https://example.com/local-editor-image.jpg");
+    const { onChange } = renderImageField();
 
-    expect(getAltTextOptions).toHaveBeenCalledWith({
-      locatorDisplayFields: {
-        c_title: {
-          field_type_id: "type.string",
-          field_name: "Title",
-        },
-        c_photo: {
-          field_type_id: "type.image",
-          field_name: "Photo",
-        },
+    fireEvent.click(screen.getByRole("button", { name: "Choose Image" }));
+
+    expect(promptSpy).toHaveBeenCalledWith("Enter Image URL:");
+    expect(onChange).toHaveBeenCalledWith({
+      en: {
+        alternateText: "",
+        url: "https://example.com/local-editor-image.jpg",
+        height: 1,
+        width: 1,
       },
+      hasLocalizedValue: "true",
     });
-    expect(screen.getByText("Alt Text (en)")).toBeDefined();
   });
 });

@@ -16,6 +16,10 @@ export const isFakeStarterLocalDevRoute = (locationLike: LocationLike) => {
   return getPathname(locationLike).startsWith("/dev-");
 };
 
+export const isLocalEditorRoute = (locationLike: LocationLike) => {
+  return getPathname(locationLike) === "/local-editor";
+};
+
 export const isFakeStarterLocalDev = () => {
   if (typeof window === "undefined") {
     return false;
