@@ -455,7 +455,7 @@ export const CTA = (props: CTAProps) => {
         }}
       >
         {linkContent}
-        {openInNewTab && (
+        {openInNewTab && ctaType !== "presetImage" && (
           <FaExternalLinkAlt
             aria-hidden="true"
             className="inline-block ml-1 w-3 h-3 align-middle relative -top-px"
