@@ -1,29 +1,26 @@
 type LocationLike = string | URL | { pathname: string };
 
-const getPathname = (locationLike: LocationLike) => {
+export const isFakeStarterLocalDevRoute = (locationLike: LocationLike) => {
   if (typeof locationLike === "string") {
-    return new URL(locationLike, "http://localhost").pathname;
+    return new URL(locationLike, "http://localhost").pathname.startsWith(
+      "/dev-"
+    );
   }
 
   if (locationLike instanceof URL) {
-    return locationLike.pathname;
+    return locationLike.pathname.startsWith("/dev-");
   }
 
-  return locationLike.pathname;
+  return locationLike.pathname.startsWith("/dev-");
 };
 
-export const isFakeStarterLocalDevRoute = (locationLike: LocationLike) => {
-  return getPathname(locationLike).startsWith("/dev-");
-};
-
-export const isLocalEditorRoute = (locationLike: LocationLike) => {
-  return getPathname(locationLike) === "/local-editor";
-};
-
-export const isFakeStarterLocalDev = () => {
+export const isLocalDev = () => {
   if (typeof window === "undefined") {
     return false;
   }
 
-  return isFakeStarterLocalDevRoute(window.location);
+  return (
+    isFakeStarterLocalDevRoute(window.location) ||
+    window.location.pathname === "/local-editor"
+  );
 };

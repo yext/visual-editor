@@ -30,7 +30,7 @@ vi.mock("../internal/hooks/useMessage.ts", () => ({
 }));
 
 vi.mock("../utils/isFakeStarterLocalDev.ts", () => ({
-  isFakeStarterLocalDev: () => false,
+  isLocalDev: () => false,
 }));
 
 vi.mock("../internal/utils/shouldUseStandaloneLocalPrompt.ts", () => ({

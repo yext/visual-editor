@@ -8,7 +8,7 @@ import {
 import { Button } from "../internal/puck/ui/button.tsx";
 import { type AssetVideo } from "../types/videos.ts";
 import { pt, type MsgString } from "../utils/i18n/platform.ts";
-import { isFakeStarterLocalDev } from "../utils/isFakeStarterLocalDev.ts";
+import { isLocalDev } from "../utils/isFakeStarterLocalDev.ts";
 
 export type VideoField = BaseField & {
   type: "video";
@@ -56,7 +56,7 @@ export const VideoFieldOverride = ({
     e.preventDefault();
 
     /** Handles local development testing outside of Storm */
-    if (isFakeStarterLocalDev()) {
+    if (isLocalDev()) {
       const userInput = prompt("Enter Video URL:");
       if (!userInput) {
         return;

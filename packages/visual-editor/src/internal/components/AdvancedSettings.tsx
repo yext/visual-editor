@@ -9,7 +9,7 @@ import {
   TARGET_ORIGINS,
 } from "../hooks/useMessage.ts";
 import { getSchemaTemplate } from "../../utils/schema/defaultSchemas.ts";
-import { isFakeStarterLocalDev } from "../../utils/isFakeStarterLocalDev.ts";
+import { isLocalDev } from "../../utils/isFakeStarterLocalDev.ts";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 let pendingSchemaMarkupSession:
@@ -67,7 +67,7 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
       e.preventDefault();
 
       /** Handles local development testing outside of Storm */
-      if (isFakeStarterLocalDev()) {
+      if (isLocalDev()) {
         const userInput = prompt("Enter Schema Markup:", schema);
         if (userInput !== null) {
           onChange(userInput);

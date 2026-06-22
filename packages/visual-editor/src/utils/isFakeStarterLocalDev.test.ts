@@ -1,8 +1,7 @@
 import { afterEach, describe, expect, it } from "vitest";
 import {
-  isFakeStarterLocalDev,
+  isLocalDev,
   isFakeStarterLocalDevRoute,
-  isLocalEditorRoute,
 } from "./isFakeStarterLocalDev.ts";
 
 const initialUrl = window.location.href;
@@ -27,24 +26,18 @@ describe("isFakeStarterLocalDevRoute", () => {
   });
 });
 
-describe("isLocalEditorRoute", () => {
-  it("matches the local editor route", () => {
-    expect(isLocalEditorRoute("http://localhost:5173/local-editor")).toBe(true);
-    expect(isLocalEditorRoute("/local-editor")).toBe(true);
-  });
-
-  it("does not match other routes", () => {
-    expect(isLocalEditorRoute("http://localhost:5173/edit")).toBe(false);
-    expect(isLocalEditorRoute("/dev-location/example")).toBe(false);
-  });
-});
-
-describe("isFakeStarterLocalDev", () => {
+describe("isLocalDev", () => {
   it("checks the current window location", () => {
-    window.history.replaceState({}, "", "/dev-locator/locator-slug");
-    expect(isFakeStarterLocalDev()).toBe(true);
+    window.history.replaceState({}, "", "/local-editor");
+    expect(isLocalDev()).toBe(true);
 
     window.history.replaceState({}, "", "/edit");
-    expect(isFakeStarterLocalDev()).toBe(false);
+    expect(isLocalDev()).toBe(false);
+
+    window.history.replaceState({}, "", "/dev-locator/locator-slug");
+    expect(isLocalDev()).toBe(true);
+
+    window.history.replaceState({}, "", "/edit");
+    expect(isLocalDev()).toBe(false);
   });
 });
