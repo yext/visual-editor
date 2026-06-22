@@ -19,8 +19,9 @@ export const isLocalDev = () => {
     return false;
   }
 
+  // `/local-editor` should use the same local-only fallbacks as the fake starter.
   return (
-    isFakeStarterLocalDevRoute(window.location) ||
-    window.location.pathname === "/local-editor"
+    window.location.pathname === "/local-editor" ||
+    isFakeStarterLocalDevRoute(window.location)
   );
 };

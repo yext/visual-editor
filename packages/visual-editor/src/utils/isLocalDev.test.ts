@@ -1,8 +1,5 @@
 import { afterEach, describe, expect, it } from "vitest";
-import {
-  isLocalDev,
-  isFakeStarterLocalDevRoute,
-} from "./isFakeStarterLocalDev.ts";
+import { isLocalDev, isFakeStarterLocalDevRoute } from "./isLocalDev.ts";
 
 const initialUrl = window.location.href;
 

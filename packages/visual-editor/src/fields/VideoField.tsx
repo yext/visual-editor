@@ -8,7 +8,7 @@ import {
 import { Button } from "../internal/puck/ui/button.tsx";
 import { type AssetVideo } from "../types/videos.ts";
 import { pt, type MsgString } from "../utils/i18n/platform.ts";
-import { isLocalDev } from "../utils/isFakeStarterLocalDev.ts";
+import { isLocalDev } from "../utils/isLocalDev.ts";
 
 export type VideoField = BaseField & {
   type: "video";

@@ -8,7 +8,7 @@ import {
   Dispatch,
   SetStateAction,
 } from "react";
-import { isLocalDev } from "../../utils/isFakeStarterLocalDev.ts";
+import { isLocalDev } from "../../utils/isLocalDev.ts";
 
 export type Payload = Record<string, any>;
 export type Status = "success" | "error";

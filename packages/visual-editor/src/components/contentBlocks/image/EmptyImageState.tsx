@@ -11,7 +11,7 @@ import {
   useReceiveMessage,
 } from "../../../internal/hooks/useMessage.ts";
 import { type ImagePayload } from "../../../fields/ImageField.tsx";
-import { isLocalDev } from "../../../utils/isFakeStarterLocalDev.ts";
+import { isLocalDev } from "../../../utils/isLocalDev.ts";
 
 let pendingEmptyImageSession:
   | { messageId: string; apply: (payload: ImagePayload) => void }

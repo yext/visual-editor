@@ -9,7 +9,7 @@ import {
   TARGET_ORIGINS,
 } from "../hooks/useMessage.ts";
 import { getSchemaTemplate } from "../../utils/schema/defaultSchemas.ts";
-import { isLocalDev } from "../../utils/isFakeStarterLocalDev.ts";
+import { isLocalDev } from "../../utils/isLocalDev.ts";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 let pendingSchemaMarkupSession:

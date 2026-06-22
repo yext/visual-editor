@@ -25,7 +25,7 @@ import {
   TemplateMetadata,
 } from "../internal/types/templateMetadata.ts";
 import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
-import { isLocalDev } from "../utils/isFakeStarterLocalDev.ts";
+import { isLocalDev } from "../utils/isLocalDev.ts";
 import { YextAutoField } from "./YextAutoField.tsx";
 import { type EmbeddedStringOption } from "../editor/EmbeddedFieldStringInput.tsx";
 
