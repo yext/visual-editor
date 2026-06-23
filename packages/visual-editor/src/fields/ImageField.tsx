@@ -25,7 +25,7 @@ import {
   TemplateMetadata,
 } from "../internal/types/templateMetadata.ts";
 import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
-import { isFakeStarterLocalDev } from "../utils/isFakeStarterLocalDev.ts";
+import { isLocalDev } from "../utils/isLocalDev.ts";
 import { YextAutoField } from "./YextAutoField.tsx";
 import { type EmbeddedStringOption } from "../editor/EmbeddedFieldStringInput.tsx";
 
@@ -110,7 +110,7 @@ export const ImageFieldOverride = ({
     e.preventDefault();
 
     /** Handles local development testing outside of Storm */
-    if (isFakeStarterLocalDev()) {
+    if (isLocalDev()) {
       const userInput = prompt("Enter Image URL:");
       if (!userInput) {
         return;

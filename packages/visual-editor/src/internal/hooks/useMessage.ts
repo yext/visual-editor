@@ -8,7 +8,7 @@ import {
   Dispatch,
   SetStateAction,
 } from "react";
-import { isFakeStarterLocalDev } from "../../utils/isFakeStarterLocalDev.ts";
+import { isLocalDev } from "../../utils/isLocalDev.ts";
 
 export type Payload = Record<string, any>;
 export type Status = "success" | "error";
@@ -199,7 +199,7 @@ export const getOriginsForSending = (targetOrigins: string[]): string[] => {
   // Initialize the global tracker to ensure we capture the parent origin early
   initializeGlobalOriginTracker();
 
-  if (typeof window !== "undefined" && isFakeStarterLocalDev()) {
+  if (isLocalDev()) {
     return [window.location.origin];
   }
 

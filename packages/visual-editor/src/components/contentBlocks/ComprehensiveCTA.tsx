@@ -302,7 +302,7 @@ export const ComprehensiveCTA = ({
       id={actionType === "button" ? currentValue.data.customId : undefined}
       label={effectiveLabel}
       link={
-        actionType === "link" && resolvedCta
+        actionType === "link" && ctaType !== "getDirections" && resolvedCta
           ? resolveComponentData(resolvedCta.link, locale, streamDocument)
           : undefined
       }
