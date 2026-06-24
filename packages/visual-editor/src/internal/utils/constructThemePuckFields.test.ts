@@ -7,8 +7,10 @@ import {
   convertStyleToPuckField,
 } from "./constructThemePuckFields.ts";
 
-vi.mock("react", async () => {
+vi.mock("react", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("react")>();
   return {
+    ...actual,
     useCallback: (fn: any) => fn,
   };
 });

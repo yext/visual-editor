@@ -201,7 +201,6 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
               updateThemeInEditor(
                 themeHistories?.histories?.[0]?.data as ThemeData,
                 themeConfig,
-                true,
                 customFonts
               );
             }

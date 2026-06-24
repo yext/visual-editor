@@ -2,16 +2,19 @@ import { describe, it, expect } from "vitest";
 import { ThemeData } from "../../internal/types/themeData.ts";
 import {
   constructFontSelectOptions,
-  filterInUseFontRegistries,
+  extractFontFamiliesFromTheme,
+  filterFontRegistries,
   type FontRegistry,
   defaultFonts,
   constructGoogleFontLinkTags,
+  extractFontFamiliesFromLayout,
   generateCustomFontLinkData,
   getFacePathsFromFonts,
   getFontStyleOptions,
+  createFontLinkElements,
 } from "./visualEditorFonts.ts";
 
-describe("filterInUseFontRegistries", () => {
+describe("filterFontRegistries", () => {
   it("returns the specifications for all built-in fonts used in the theme", () => {
     const themeData: ThemeData = {
       "--fontFamily-h1-fontFamily": "'Oi', sans-serif",
@@ -31,8 +34,8 @@ describe("filterInUseFontRegistries", () => {
       },
     };
 
-    const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
-      themeData,
+    const { inUseGoogleFonts, inUseCustomFonts } = filterFontRegistries(
+      extractFontFamiliesFromTheme(themeData),
       defaultFonts
     );
     expect(inUseGoogleFonts).toEqual(expected);
@@ -40,7 +43,7 @@ describe("filterInUseFontRegistries", () => {
   });
 
   it("returns empty registries when theme data is empty", () => {
-    expect(filterInUseFontRegistries({}, defaultFonts)).toEqual({
+    expect(filterFontRegistries([], defaultFonts)).toEqual({
       inUseGoogleFonts: {},
       inUseCustomFonts: {},
     });
@@ -52,8 +55,8 @@ describe("filterInUseFontRegistries", () => {
       "--fontSize-h1-fontSize": "48px",
     };
 
-    const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
-      themeData,
+    const { inUseGoogleFonts, inUseCustomFonts } = filterFontRegistries(
+      extractFontFamiliesFromTheme(themeData),
       defaultFonts
     );
     expect(inUseGoogleFonts).toEqual({});
@@ -65,8 +68,8 @@ describe("filterInUseFontRegistries", () => {
       "--fontFamily-h1-fontFamily": "'Open Sans', sans-serif",
     };
 
-    const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
-      themeData,
+    const { inUseGoogleFonts, inUseCustomFonts } = filterFontRegistries(
+      extractFontFamiliesFromTheme(themeData),
       {}
     );
     expect(inUseGoogleFonts).toEqual({});
@@ -80,8 +83,8 @@ describe("filterInUseFontRegistries", () => {
       "--fontFamily-button-fontFamily": "'Adamina', serif",
     };
 
-    const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
-      themeData,
+    const { inUseGoogleFonts, inUseCustomFonts } = filterFontRegistries(
+      extractFontFamiliesFromTheme(themeData),
       defaultFonts
     );
     expect(inUseGoogleFonts).toEqual({
@@ -101,8 +104,8 @@ describe("filterInUseFontRegistries", () => {
       "--fontFamily-body-fontFamily": "'Open Sans', sans-serif",
     };
 
-    const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
-      themeData,
+    const { inUseGoogleFonts, inUseCustomFonts } = filterFontRegistries(
+      extractFontFamiliesFromTheme(themeData),
       defaultFonts
     );
     expect(inUseGoogleFonts).toEqual({
@@ -131,8 +134,8 @@ describe("filterInUseFontRegistries", () => {
       },
     };
 
-    const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
-      themeData,
+    const { inUseGoogleFonts, inUseCustomFonts } = filterFontRegistries(
+      extractFontFamiliesFromTheme(themeData),
       defaultFonts,
       customFonts
     );
@@ -153,8 +156,8 @@ describe("filterInUseFontRegistries", () => {
       "--fontFamily-h1-fontFamily": "var(--fontFamily-headers-defaultFont)",
     };
 
-    const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
-      themeData,
+    const { inUseGoogleFonts, inUseCustomFonts } = filterFontRegistries(
+      extractFontFamiliesFromTheme(themeData),
       defaultFonts
     );
     expect(inUseGoogleFonts).toEqual({
@@ -170,6 +173,34 @@ describe("filterInUseFontRegistries", () => {
 });
 
 describe("custom font helpers", () => {
+  it("extracts font families from layout fontFamily fields", () => {
+    expect(
+      extractFontFamiliesFromLayout({
+        root: {
+          props: {
+            fontFamily: "default",
+          },
+        },
+        content: [
+          {
+            props: {
+              typography: {
+                fontFamily: "'Adamina', 'Adamina Fallback', serif",
+              },
+            },
+          },
+          {
+            props: {
+              styles: {
+                fontFamily: "'Open Sans', sans-serif",
+              },
+            },
+          },
+        ],
+      })
+    ).toEqual(["Adamina", "Open Sans"]);
+  });
+
   it("builds font select options from family names", () => {
     const customFonts: FontRegistry = {
       EBB_Melvyn_Regular: {
@@ -233,6 +264,27 @@ describe("custom font helpers", () => {
         rel: "stylesheet",
       },
     ]);
+  });
+
+  it("creates editor custom font links with root-relative hrefs by default", () => {
+    const [customFontLink] = createFontLinkElements(
+      document,
+      {},
+      {
+        "Chillax Variable": {
+          italics: false,
+          minWeight: 200,
+          maxWeight: 700,
+          fallback: "sans-serif",
+          facePath: "y-fonts/chillaxvariable.css",
+          variants: [],
+        },
+      }
+    );
+
+    expect(customFontLink?.getAttribute("href")).toBe(
+      "/y-fonts/chillaxvariable.css"
+    );
   });
 });
 

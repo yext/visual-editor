@@ -125,7 +125,6 @@ export const InternalThemeEditor = ({
       updateThemeInEditor(
         newThemeValues,
         themeConfig,
-        true,
         templateMetadata.customFonts
       );
       setThemeHistories(newHistory);
@@ -154,7 +153,6 @@ export const InternalThemeEditor = ({
     updateThemeInEditor(
       newThemeValues,
       themeConfig,
-      true,
       templateMetadata.customFonts
     );
     setThemeHistories(newHistory);

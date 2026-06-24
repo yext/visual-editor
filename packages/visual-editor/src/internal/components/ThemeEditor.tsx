@@ -233,14 +233,25 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
   useEffect(() => {
     devLogger.logData("THEME_HISTORIES", themeHistories);
     if (themeHistories && themeConfig) {
+      const layoutHistories = puckInitialHistory?.histories;
+      const layoutHistoryIndex =
+        puckInitialHistory?.index ?? (layoutHistories?.length ?? 1) - 1;
+      const previewLayoutData =
+        layoutHistories?.[layoutHistoryIndex]?.state?.data;
+
       updateThemeInEditor(
         themeHistories.histories[themeHistories.index]?.data as ThemeData,
         themeConfig,
-        true,
-        templateMetadata.customFonts
+        templateMetadata.customFonts,
+        previewLayoutData
       );
     }
-  }, [themeHistories, themeConfig]);
+  }, [
+    themeHistories,
+    themeConfig,
+    templateMetadata.customFonts,
+    puckInitialHistory,
+  ]);
 
   useEffect(() => {
     if (!themeSaveStateFetched) {

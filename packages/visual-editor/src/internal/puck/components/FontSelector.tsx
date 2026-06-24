@@ -4,6 +4,11 @@ import { StyleSelectOption } from "../../../utils/themeResolver.ts";
 import "../ui/puck.css";
 import { Search } from "lucide-react";
 import { pt } from "../../../utils/i18n/platform.ts";
+import {
+  defaultFonts,
+  loadFontsIntoDOM,
+} from "../../../utils/fonts/visualEditorFonts.ts";
+import { useTemplateMetadata } from "../../hooks/useMessageReceivers.ts";
 
 type FontSelectorProps = {
   label: string;
@@ -21,6 +26,8 @@ export const FontSelector = ({
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const searchInputRef = React.useRef<HTMLInputElement>(null);
+  const loadedCustomFontsRef = React.useRef<string>("");
+  const templateMetadata = useTemplateMetadata();
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -41,9 +48,21 @@ export const FontSelector = ({
 
   React.useEffect(() => {
     if (isOpen) {
+      const customFontsKey = JSON.stringify(templateMetadata.customFonts ?? {});
+      if (loadedCustomFontsRef.current !== customFontsKey) {
+        document
+          .querySelectorAll('link[id^="visual-editor-default-fonts-"]')
+          .forEach((link) => link.remove());
+        loadedCustomFontsRef.current = customFontsKey;
+      }
+      loadFontsIntoDOM(
+        defaultFonts,
+        templateMetadata.customFonts ?? {},
+        "visual-editor-default-fonts"
+      );
       searchInputRef.current?.focus();
     }
-  }, [isOpen]);
+  }, [isOpen, templateMetadata.customFonts]);
 
   const filteredOptions = options.filter((option) =>
     option.label.toLowerCase().includes(searchTerm.toLowerCase())
