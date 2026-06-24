@@ -26,6 +26,7 @@ export const FontSelector = ({
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const searchInputRef = React.useRef<HTMLInputElement>(null);
+  const loadedCustomFontsRef = React.useRef<string>("");
   const templateMetadata = useTemplateMetadata();
 
   const toggleDropdown = () => {
@@ -47,6 +48,13 @@ export const FontSelector = ({
 
   React.useEffect(() => {
     if (isOpen) {
+      const customFontsKey = JSON.stringify(templateMetadata.customFonts ?? {});
+      if (loadedCustomFontsRef.current !== customFontsKey) {
+        document
+          .querySelectorAll('link[id^="visual-editor-default-fonts-"]')
+          .forEach((link) => link.remove());
+        loadedCustomFontsRef.current = customFontsKey;
+      }
       loadFontsIntoDOM(
         document,
         defaultFonts,

@@ -100,9 +100,7 @@ export const applyTheme = (
     layoutData?.root?.props?.[CUSTOM_FONT_ASSETS_KEY]
   );
 
-  const themeFonts = themeData
-    ? resolveFontsToLoad(themeData, themeConfig)
-    : { inUseGoogleFonts: {} };
+  const themeFonts = resolveFontsToLoad(themeData ?? {}, themeConfig);
 
   const layoutFonts = filterFontRegistries(
     extractFontFamiliesFromLayout(layoutData),
@@ -147,7 +145,12 @@ export const applyTheme = (
 
   if (Object.keys(themeConfig).length > 0) {
     const preloadTags = buildFontPreloadTags(
-      themeCustomFontAssets.preloads,
+      [
+        ...new Set([
+          ...themeCustomFontAssets.preloads,
+          ...layoutCustomFontAssets.preloads,
+        ]),
+      ],
       relativePrefixToRoot
     );
 

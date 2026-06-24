@@ -181,7 +181,7 @@ describe("buildCssOverridesStyle", () => {
             props: {
               __customFontAssets: {
                 stylesheetPaths: ["y-fonts/layout-font.css"],
-                preloads: [],
+                preloads: ["/y-fonts/layout-font-regular.woff2"],
               },
             },
           },
@@ -201,6 +201,36 @@ describe("buildCssOverridesStyle", () => {
     );
     expect(result).toContain(
       '<link rel="preload" href="/y-fonts/theme-font-bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">'
+    );
+    expect(result).toContain(
+      '<link rel="preload" href="/y-fonts/layout-font-regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">'
+    );
+  });
+
+  it("should load theme default fonts when theme data is missing", () => {
+    const result = applyTheme(
+      {
+        siteId: 123,
+      } as StreamDocument,
+      "./",
+      {
+        body: {
+          label: "Body",
+          styles: {
+            fontFamily: {
+              label: "Font",
+              plugin: "fontFamily",
+              type: "select",
+              options: [],
+              default: "'Adamina', serif",
+            },
+          },
+        },
+      }
+    );
+
+    expect(result).toContain(
+      '<link href="https://fonts.googleapis.com/css2?family=Adamina:wght@400&display=swap" rel="stylesheet">'
     );
   });
 
