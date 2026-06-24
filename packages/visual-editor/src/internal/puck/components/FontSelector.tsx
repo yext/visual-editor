@@ -56,7 +56,6 @@ export const FontSelector = ({
         loadedCustomFontsRef.current = customFontsKey;
       }
       loadFontsIntoDOM(
-        document,
         defaultFonts,
         templateMetadata.customFonts ?? {},
         "visual-editor-default-fonts"

@@ -201,7 +201,6 @@ export const createFontLinkElements = (
  * to avoid appending duplicate font tags across rerenders.
  */
 export const loadFontsIntoDOM = (
-  document: Document,
   googleFonts: FontRegistry,
   customFonts: FontRegistry,
   idPrefix: string = "visual-editor-fonts"
@@ -528,10 +527,12 @@ export const extractFontFamiliesFromTheme = (data: ThemeData): string[] => {
 /**
  * Extracts and parses the font family names from the LayoutData.
  */
-export const extractFontFamiliesFromLayout = (data: unknown): string[] => {
+export const extractFontFamiliesFromLayout = (
+  data: Record<string, any> | undefined
+): string[] => {
   const fontFamilies = new Set<string>();
 
-  const visit = (value: unknown) => {
+  const visit = (value: Record<string, any> | undefined) => {
     if (!value || typeof value !== "object") {
       return;
     }

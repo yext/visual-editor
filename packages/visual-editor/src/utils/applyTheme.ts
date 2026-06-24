@@ -250,7 +250,7 @@ export const updateThemeInEditor = async (
   newTheme: ThemeData,
   themeConfig: ThemeConfig,
   customFonts: FontRegistry = {},
-  layoutData?: unknown
+  layoutData?: Record<string, any>
 ) => {
   devLogger.logFunc("updateThemeInEditor");
   pendingObserver?.disconnect();
