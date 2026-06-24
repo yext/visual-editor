@@ -1,8 +1,10 @@
+import { Data } from "@puckeditor/core";
 import {
   type FontRegistry,
   type Font,
   type FontVariant,
   getFontFamilyFromThemeValue,
+  extractFontFamiliesFromLayout,
   normalizeAssetPath,
 } from "../../utils/fonts/visualEditorFonts.ts";
 import { ThemeConfig } from "../../utils/themeResolver.ts";
@@ -23,6 +25,10 @@ export type CustomFontAssets = {
   stylesheetPaths: string[];
   preloads: string[];
 };
+
+type LayoutRootProps = NonNullable<NonNullable<Data["root"]>["props"]>;
+type LayoutRootPropsWithCustomFontAssets = LayoutRootProps &
+  Partial<Record<typeof CUSTOM_FONT_ASSETS_KEY, CustomFontAssets>>;
 
 const PRELOAD_MIME_TYPE_BY_EXTENSION: Record<string, string> = {
   woff2: "font/woff2",
@@ -159,38 +165,66 @@ export const updateThemeWithCustomFontAssets = ({
 };
 
 /**
- * Reads the saved custom font assets from theme data.
+ * updateLayoutWithCustomFontAssets scans the layout for custom fonts
+ * and adds the asset information for any fonts that are found to data.root.props.
  */
-export const getCustomFontAssets = (
-  themeValues: ThemeData | undefined
-): CustomFontAssets => {
-  if (!themeValues) {
-    return {
-      stylesheetPaths: [],
-      preloads: [],
-    };
-  }
-
-  const assets = themeValues[CUSTOM_FONT_ASSETS_KEY];
-  if (!assets || typeof assets !== "object") {
-    return {
-      stylesheetPaths: [],
-      preloads: [],
-    };
-  }
-
-  return {
-    stylesheetPaths: Array.isArray((assets as CustomFontAssets).stylesheetPaths)
-      ? (assets as CustomFontAssets).stylesheetPaths.filter(
-          (entry): entry is string => typeof entry === "string"
-        )
-      : [],
-    preloads: Array.isArray((assets as CustomFontAssets).preloads)
-      ? (assets as CustomFontAssets).preloads.filter(
-          (entry): entry is string => typeof entry === "string"
-        )
-      : [],
+export const updateLayoutWithCustomFontAssets = ({
+  layoutData,
+  customFonts,
+}: {
+  layoutData: Data;
+  customFonts?: FontRegistry;
+}): Data => {
+  const rootProps: LayoutRootPropsWithCustomFontAssets = {
+    ...layoutData.root?.props,
   };
+
+  if (!customFonts || Object.keys(customFonts).length === 0) {
+    if (!(CUSTOM_FONT_ASSETS_KEY in rootProps)) {
+      return layoutData;
+    }
+
+    const nextRootProps: LayoutRootPropsWithCustomFontAssets = {
+      ...rootProps,
+    };
+    delete nextRootProps[CUSTOM_FONT_ASSETS_KEY];
+    const nextLayoutData: Data = {
+      ...layoutData,
+      root: {
+        ...layoutData.root,
+        props: nextRootProps,
+      },
+    };
+
+    return nextLayoutData;
+  }
+
+  const stylesheetPaths = new Set<string>();
+
+  for (const fontFamily of extractFontFamiliesFromLayout(layoutData)) {
+    const customFont = customFonts[fontFamily];
+    if (customFont?.facePath) {
+      stylesheetPaths.add(customFont.facePath);
+    }
+  }
+
+  const customFontAssets: CustomFontAssets = {
+    stylesheetPaths: [...stylesheetPaths],
+    preloads: [],
+  };
+  const nextRootProps: LayoutRootPropsWithCustomFontAssets = {
+    ...rootProps,
+    [CUSTOM_FONT_ASSETS_KEY]: customFontAssets,
+  };
+  const nextLayoutData: Data = {
+    ...layoutData,
+    root: {
+      ...layoutData.root,
+      props: nextRootProps,
+    },
+  };
+
+  return nextLayoutData;
 };
 
 /**
@@ -222,4 +256,26 @@ export const buildFontPreloadTags = (
       })
       .join("\n") + "\n"
   );
+};
+
+export const readCustomFontAssets = (value: unknown): CustomFontAssets => {
+  if (!value || typeof value !== "object") {
+    return {
+      stylesheetPaths: [],
+      preloads: [],
+    };
+  }
+
+  const { stylesheetPaths, preloads } = value as Partial<CustomFontAssets>;
+
+  return {
+    stylesheetPaths: Array.isArray(stylesheetPaths)
+      ? stylesheetPaths.filter(
+          (entry): entry is string => typeof entry === "string"
+        )
+      : [],
+    preloads: Array.isArray(preloads)
+      ? preloads.filter((entry): entry is string => typeof entry === "string")
+      : [],
+  };
 };

@@ -175,13 +175,14 @@ export const googleFontLinkTags = fontLinkDataToHTML(
  * they can be appended directly into a document.
  */
 export const createFontLinkElements = (
+  document: Document,
   googleFonts: FontRegistry,
   customFonts: FontRegistry
 ): HTMLLinkElement[] => {
   const googleFontLinkData = generateGoogleFontLinkData(googleFonts);
   const customFontLinkData = generateCustomFontLinkData(
     getFacePathsFromFonts(customFonts),
-    "./"
+    "/"
   );
 
   return [...customFontLinkData, ...googleFontLinkData].map((link) => {
@@ -206,7 +207,7 @@ export const loadFontsIntoDOM = (
   idPrefix: string = "visual-editor-fonts"
 ) => {
   if (!document.getElementById(`${idPrefix}-0`)) {
-    const links = createFontLinkElements(googleFonts, customFonts);
+    const links = createFontLinkElements(document, googleFonts, customFonts);
 
     links.forEach((link, index) => {
       link.id = `${idPrefix}-${index}`;
@@ -525,17 +526,43 @@ export const extractFontFamiliesFromTheme = (data: ThemeData): string[] => {
 };
 
 /**
- * Filters the available fonts and custom fonts to only include those actually referenced by the theme.
- * Custom fonts are optional. If provided, the filtered custom fonts are returned.
- *
- * @param data the ThemeData
- * @param availableFonts built-in Google fonts from the repository
- * @param customFonts custom fonts from FontAPIServer
- * @return An object containing two font registries: inUseGoogleFonts and inUseCustomFonts.
+ * Extracts and parses the font family names from the LayoutData.
  */
-export const filterInUseFontRegistries = (
-  data: ThemeData,
-  availableFonts: FontRegistry,
+export const extractFontFamiliesFromLayout = (data: unknown): string[] => {
+  const fontFamilies = new Set<string>();
+
+  const visit = (value: unknown) => {
+    if (!value || typeof value !== "object") {
+      return;
+    }
+
+    if (Array.isArray(value)) {
+      value.forEach(visit);
+      return;
+    }
+
+    Object.entries(value).forEach(([key, nestedValue]) => {
+      if (
+        key === "fontFamily" &&
+        typeof nestedValue === "string" &&
+        nestedValue.length > 0 &&
+        nestedValue !== "default"
+      ) {
+        fontFamilies.add(extractFontFamilyName(nestedValue));
+      }
+
+      visit(nestedValue);
+    });
+  };
+
+  visit(data);
+
+  return [...fontFamilies];
+};
+
+export const filterFontRegistries = (
+  fontFamilies: string[],
+  googleFonts: FontRegistry,
   customFonts: FontRegistry = {}
 ): {
   inUseGoogleFonts: FontRegistry;
@@ -544,9 +571,8 @@ export const filterInUseFontRegistries = (
   const inUseGoogleFonts: FontRegistry = {};
   const inUseCustomFonts: FontRegistry = {};
 
-  // For each unique font family found, look it up in the availableFonts map.
-  for (const fontName of extractFontFamiliesFromTheme(data)) {
-    const font = availableFonts[fontName];
+  for (const fontName of fontFamilies) {
+    const font = googleFonts[fontName];
     if (font) {
       inUseGoogleFonts[fontName] = font;
       continue;

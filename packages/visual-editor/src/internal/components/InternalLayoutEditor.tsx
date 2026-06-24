@@ -39,6 +39,7 @@ import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 import { clonePuckResolveData } from "../utils/clonePuckResolveData.ts";
 import { YextPuckFieldOverrides } from "../../fields/fieldOverrides.ts";
 import { wrapComponentConfigWithErrorBoundary } from "../utils/wrapConfigWithComponentErrorBoundary.tsx";
+import { updateLayoutWithCustomFontAssets } from "../utils/customFontAssets.ts";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -114,6 +115,18 @@ export const InternalLayoutEditor = ({
   const { i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
   const { errorCount, errorSources, errorDetails } = useErrorContext();
+  const withCustomFontAssets = React.useCallback(
+    (data: Data | undefined): Record<string, any> => {
+      if (!data) {
+        return {};
+      }
+      return updateLayoutWithCustomFontAssets({
+        layoutData: data,
+        customFonts: templateMetadata.customFonts,
+      });
+    },
+    [templateMetadata.customFonts]
+  );
 
   /**
    * When the Puck history changes save it to localStorage and send a message
@@ -148,12 +161,14 @@ export const InternalLayoutEditor = ({
           return;
         }
 
+        const dataToSave = withCustomFontAssets(current.state.data);
+
         if (layoutSaveState?.hash !== current.id) {
           if (templateMetadata.isDevMode && !templateMetadata.devOverride) {
             devLogger.logFunc("sendDevSaveStateData");
             sendDevSaveStateData({
               payload: {
-                devSaveStateData: JSON.stringify(current.state.data),
+                devSaveStateData: JSON.stringify(dataToSave),
               },
             });
           } else {
@@ -162,7 +177,7 @@ export const InternalLayoutEditor = ({
               payload: {
                 hash: current.id,
                 history: JSON.stringify({
-                  data: current.state.data,
+                  data: dataToSave,
                   ui: current.state.ui,
                 }),
               },
@@ -176,6 +191,7 @@ export const InternalLayoutEditor = ({
       buildVisualConfigLocalStorageKey,
       layoutSaveState,
       saveLayoutSaveState,
+      withCustomFontAssets,
     ]
   );
 
@@ -186,14 +202,14 @@ export const InternalLayoutEditor = ({
 
   const handlePublishLayout = async (data: Data) => {
     publishLayout({
-      payload: { layoutData: JSON.stringify(data) },
+      payload: { layoutData: JSON.stringify(withCustomFontAssets(data)) },
     });
   };
 
   const handleSendLayoutForApproval = async (data: Data, comment: string) => {
     sendLayoutForApproval({
       payload: {
-        layoutData: JSON.stringify(data),
+        layoutData: JSON.stringify(withCustomFontAssets(data)),
         comment: comment,
       },
     });

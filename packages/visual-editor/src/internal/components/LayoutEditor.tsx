@@ -104,12 +104,17 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
   };
 
   /**
-   * Apply the themes from Content
+   * Apply the published theme
    */
   useEffect(() => {
     if (!themeConfig) {
       return;
     }
+
+    const histories = puckInitialHistory?.histories;
+    const historyIndex =
+      puckInitialHistory?.index ?? (histories?.length ?? 1) - 1;
+    const previewLayoutData = histories?.[historyIndex]?.state?.data;
 
     // use theme from localStorage when in dev mode
     if (templateMetadata.isDevMode) {
@@ -128,8 +133,8 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
         updateThemeInEditor(
           localThemeData,
           themeConfig,
-          false,
-          templateMetadata.customFonts
+          templateMetadata.customFonts,
+          previewLayoutData
         );
         return;
       }
@@ -139,11 +144,11 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       updateThemeInEditor(
         themeData as ThemeData,
         themeConfig,
-        false,
-        templateMetadata.customFonts
+        templateMetadata.customFonts,
+        previewLayoutData
       );
     }
-  }, [themeData, themeConfig, templateMetadata]);
+  }, [themeData, themeConfig, templateMetadata, puckInitialHistory]);
 
   /**
    * Determines the initialHistory to send to Puck. It is based on a combination

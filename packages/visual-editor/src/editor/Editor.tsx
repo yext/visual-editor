@@ -25,10 +25,6 @@ import {
   createDefaultThemeConfig,
   defaultThemeConfig,
 } from "../components/DefaultThemeConfig.ts";
-import {
-  defaultFonts,
-  loadFontsIntoDOM,
-} from "../utils/fonts/visualEditorFonts.ts";
 import { migrate } from "../utils/migrate.ts";
 import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";
@@ -123,18 +119,6 @@ export const Editor = ({
       }
     }
   }, []);
-
-  // Loads all Google and custom fonts in the theme editor for the font dropdown
-  useEffect(() => {
-    if (typeof window !== "undefined" && templateMetadata?.isThemeMode) {
-      loadFontsIntoDOM(
-        window.document,
-        defaultFonts,
-        templateMetadata?.customFonts ?? {},
-        "visual-editor-default-fonts"
-      );
-    }
-  }, [templateMetadata?.customFonts, templateMetadata?.isThemeMode]);
 
   useEffect(() => {
     // templateMetadata.isDevMode indicates in-platform dev mode

@@ -7,6 +7,14 @@ import {
 import { ThemeConfig } from "./themeResolver.ts";
 import { StreamDocument } from "./types/StreamDocument.ts";
 
+const createPreviewIframe = () => {
+  document.body.replaceChildren();
+  const iframe = document.createElement("iframe");
+  iframe.id = "preview-frame";
+  document.body.appendChild(iframe);
+  return iframe;
+};
+
 describe("buildCssOverridesStyle", () => {
   it("should generate correct CSS with one override in c_theme", () => {
     const streamDocument: StreamDocument = {
@@ -126,6 +134,73 @@ describe("buildCssOverridesStyle", () => {
         "--fontFamily-button-fontFamily:'Adamina', 'Adamina Fallback', serif !important;" +
         "--fontFamily-h2-fontFamily:'Yext Custom', 'Yext Custom Fallback', serif !important" +
         "}</style>"
+    );
+  });
+
+  it("should load Google fonts referenced by layout fontFamily fields", () => {
+    const streamDocument: StreamDocument = {
+      __: {
+        layout: JSON.stringify({
+          root: { props: {} },
+          content: [
+            {
+              type: "Text",
+              props: {
+                typography: {
+                  fontFamily: "'Adamina', 'Adamina Fallback', serif",
+                },
+              },
+            },
+          ],
+          zones: {},
+        }),
+      },
+    };
+
+    const result = applyTheme(streamDocument, "./", themeConfig);
+
+    expect(result).toContain(
+      '<link href="https://fonts.googleapis.com/css2?family=Adamina:wght@400&display=swap" rel="stylesheet">'
+    );
+    expect(result).not.toContain("family=Open+Sans");
+  });
+
+  it("should union theme and layout custom font assets", () => {
+    const streamDocument: StreamDocument = {
+      __: {
+        theme: JSON.stringify({
+          "--fontFamily-h2-fontFamily":
+            "'Yext Custom', 'Yext Custom Fallback', serif",
+          __customFontAssets: {
+            stylesheetPaths: ["y-fonts/theme-font.css"],
+            preloads: ["/y-fonts/theme-font-bold.woff2"],
+          },
+        }),
+        layout: JSON.stringify({
+          root: {
+            props: {
+              __customFontAssets: {
+                stylesheetPaths: ["y-fonts/layout-font.css"],
+                preloads: [],
+              },
+            },
+          },
+          content: [],
+          zones: {},
+        }),
+      },
+    };
+
+    const result = applyTheme(streamDocument, "./", themeConfig);
+
+    expect(result).toContain(
+      '<link href="./y-fonts/theme-font.css" rel="stylesheet">'
+    );
+    expect(result).toContain(
+      '<link href="./y-fonts/layout-font.css" rel="stylesheet">'
+    );
+    expect(result).toContain(
+      '<link rel="preload" href="/y-fonts/theme-font-bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">'
     );
   });
 
@@ -281,8 +356,7 @@ describe("buildCssOverridesStyle", () => {
       {
         "--colors-palette-primary": "#CF0A2C",
       },
-      themeConfig,
-      true
+      themeConfig
     );
 
     const styleTag = document.getElementById(THEME_STYLE_TAG_ID);
@@ -291,6 +365,79 @@ describe("buildCssOverridesStyle", () => {
     expect(styleTag?.textContent).toContain(
       "--colors-palette-primary:#CF0A2C !important"
     );
+  });
+
+  it("loads layout Google fonts when updating the editor preview", async () => {
+    const iframe = createPreviewIframe();
+
+    await updateThemeInEditor(
+      {
+        "--colors-palette-primary": "#CF0A2C",
+      },
+      themeConfig,
+      {},
+      {
+        root: { props: {} },
+        content: [
+          {
+            type: "Text",
+            props: {
+              typography: {
+                fontFamily: "'Adamina', 'Adamina Fallback', serif",
+              },
+            },
+          },
+        ],
+        zones: {},
+      }
+    );
+
+    expect(
+      document.head.querySelector('link[href*="family=Adamina"]')
+    ).not.toBeNull();
+    expect(
+      iframe.contentDocument?.head.querySelector('link[href*="family=Adamina"]')
+    ).not.toBeNull();
+  });
+
+  it("loads custom font stylesheets in the editor from theme data", async () => {
+    const iframe = createPreviewIframe();
+
+    await updateThemeInEditor(
+      {
+        "--fontFamily-body-fontFamily":
+          "'Chillax Variable', 'Chillax Variable Fallback', sans-serif",
+      },
+      themeConfig,
+      {
+        "Chillax Variable": {
+          fallback: "sans-serif",
+          italics: false,
+          facePath: "y-fonts/chillaxvariable.css",
+          minWeight: 200,
+          maxWeight: 700,
+          variants: [
+            {
+              style: "normal",
+              filePath: "y-fonts/chillaxvariable-bold.woff2",
+              minWeight: 200,
+              maxWeight: 700,
+            },
+          ],
+        },
+      }
+    );
+
+    expect(
+      document.head
+        .querySelector('link[href*="chillaxvariable.css"]')
+        ?.getAttribute("href")
+    ).toBe("/y-fonts/chillaxvariable.css");
+    expect(
+      iframe.contentDocument?.head
+        .querySelector('link[href*="chillaxvariable.css"]')
+        ?.getAttribute("href")
+    ).toBe("/y-fonts/chillaxvariable.css");
   });
 });
 
