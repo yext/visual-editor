@@ -227,12 +227,16 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
           >
             {pt("pasteLayout", "Paste Layout")}
           </Button>
+
+          {/* TODO: re-enable EntityFieldsToggle */}
+          {/*
           <Separator
             orientation="vertical"
             decorative
             className="ve-mx-4 ve-h-7 ve-w-px ve-bg-gray-300 ve-my-auto"
           />
-          {/* TODO: re-enable <EntityFieldsToggle /> */}
+          <EntityFieldsToggle /> 
+          */}
           {localDev && showLocalDevOverrideButtons && (
             <LocalDevOverrideButtons />
           )}
