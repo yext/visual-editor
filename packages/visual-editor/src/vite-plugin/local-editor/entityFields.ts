@@ -231,7 +231,11 @@ const isImageValue = (value: Record<string, unknown>): boolean => {
 };
 
 const isCtaValue = (value: Record<string, unknown>): boolean => {
-  return typeof value.label === "string" && typeof value.link === "string";
+  return (
+    typeof value.label === "string" &&
+    typeof value.link === "string" &&
+    typeof value.linkType === "string"
+  );
 };
 
 const inferScalarType = (value: unknown): string => {
