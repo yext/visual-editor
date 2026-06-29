@@ -216,11 +216,29 @@ const inferStructuredObjectType = (
 };
 
 const isRichTextValue = (value: Record<string, unknown>): boolean => {
-  return (
-    ("json" in value &&
-      (typeof value.json === "string" || isPlainObject(value.json))) ||
-    ("html" in value && typeof value.html === "string")
-  );
+  if ("html" in value && typeof value.html === "string") {
+    return true;
+  }
+
+  if (!("json" in value)) {
+    return false;
+  }
+
+  const { json } = value;
+  if (isPlainObject(json)) {
+    return isPlainObject(json.root);
+  }
+
+  if (typeof json !== "string") {
+    return false;
+  }
+
+  try {
+    const parsedJson = JSON.parse(json);
+    return isPlainObject(parsedJson) && isPlainObject(parsedJson.root);
+  } catch {
+    return false;
+  }
 };
 
 const isImageValue = (value: Record<string, unknown>): boolean => {
@@ -276,10 +294,10 @@ const pickPreferredType = (
 
 const toDisplayName = (pathName: string): string => {
   return pathName
-    .replace("c_", "")
     .split(".")
     .map((segment) => {
       return segment
+        .replace(/^c_/, "")
         .replace(/[_-]+/g, " ")
         .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
         .replace(/\b\w/g, (character) => character.toUpperCase());

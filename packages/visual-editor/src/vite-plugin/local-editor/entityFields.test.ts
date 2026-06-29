@@ -73,6 +73,27 @@ describe("inferEntityFields", () => {
     );
   });
 
+  it("does not classify unrelated json-shaped objects as rich text", () => {
+    const inferred = inferEntityFields({
+      analyticsPayload: {
+        json: {
+          foo: "bar",
+        },
+      },
+    });
+
+    expect(inferred.fields).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          name: "analyticsPayload",
+          definition: expect.objectContaining({
+            typeRegistryId: "type.object",
+          }),
+        }),
+      ])
+    );
+  });
+
   it("merges inferred schema across multiple local snapshots", () => {
     const inferred = inferEntityFields([
       {
@@ -146,6 +167,32 @@ describe("inferEntityFields", () => {
           definition: expect.objectContaining({
             typeRegistryId: "type.image",
           }),
+        }),
+      ])
+    );
+  });
+
+  it("strips c_ from each path segment when building display names", () => {
+    const inferred = inferEntityFields({
+      c_parentField: {
+        c_childField: "value",
+      },
+    });
+
+    expect(inferred.displayNames).toEqual({});
+    expect(inferred.fields).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          name: "c_parentField",
+          displayName: "Parent Field",
+          children: {
+            fields: [
+              expect.objectContaining({
+                name: "c_childField",
+                displayName: "Parent Field > Child Field",
+              }),
+            ],
+          },
         }),
       ])
     );
