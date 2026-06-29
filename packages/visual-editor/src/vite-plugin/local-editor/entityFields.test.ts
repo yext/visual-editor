@@ -6,11 +6,7 @@ describe("inferEntityFields", () => {
   it("recognizes structured local-editor rich text, CTA, and image values", () => {
     const inferred = inferEntityFields({
       description: {
-        json: {
-          root: {
-            children: [],
-          },
-        },
+        html: "",
       },
       cta: {
         label: "Order",
@@ -102,11 +98,7 @@ describe("inferEntityFields", () => {
             {
               name: "Latte",
               description: {
-                json: {
-                  root: {
-                    children: [],
-                  },
-                },
+                html: "",
               },
               cta: {
                 label: "Order",
