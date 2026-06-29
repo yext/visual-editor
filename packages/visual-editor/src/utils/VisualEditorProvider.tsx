@@ -14,8 +14,7 @@ import { normalizeLocalesInObject } from "./normalizeLocale.ts";
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";
 
 type AllOrNothing<T extends Record<string, any>> =
-  | T
-  | Partial<Record<keyof T, never>>;
+  T | Partial<Record<keyof T, never>>;
 
 type UniversalProps<T> = {
   templateProps: T;

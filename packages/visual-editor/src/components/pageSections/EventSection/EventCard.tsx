@@ -444,18 +444,15 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
     const field = data.props.field ?? "";
     const isLinkedMode = Boolean(field);
     const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as
-      | WithId<ImageWrapperProps>
-      | undefined;
+      WithId<ImageWrapperProps> | undefined;
     const titleSlotProps = data.props.slots.TitleSlot?.[0]?.props as
-      | WithId<HeadingTextProps>
-      | undefined;
+      WithId<HeadingTextProps> | undefined;
     const dateTimeSlotProps = data.props.slots.DateTimeSlot?.[0]
       ?.props as WithId<TimestampProps | undefined>;
     const descriptionSlotProps = data.props.slots.DescriptionSlot?.[0]
       ?.props as WithId<BodyTextProps | undefined>;
     const ctaSlotProps = data.props.slots.CTASlot?.[0]?.props as
-      | WithId<CTAWrapperProps>
-      | undefined;
+      WithId<CTAWrapperProps> | undefined;
 
     const resolvedImage = isLinkedMode
       ? data.props.image
@@ -469,10 +466,9 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
 
     const showImage = Boolean(
       (resolvedImage as any)?.url ||
-        (resolvedImage as any)?.image?.url ||
-        ((resolvedImage as any)?.hasLocalizedValue &&
-          (resolvedImage as any)?.[i18nComponentsInstance.language || "en"]
-            ?.url)
+      (resolvedImage as any)?.image?.url ||
+      ((resolvedImage as any)?.hasLocalizedValue &&
+        (resolvedImage as any)?.[i18nComponentsInstance.language || "en"]?.url)
     );
     const showDescription = Boolean(
       isLinkedMode

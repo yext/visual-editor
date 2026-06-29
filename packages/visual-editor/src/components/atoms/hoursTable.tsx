@@ -3,11 +3,10 @@ import { HoursTable, HoursTableProps } from "@yext/pages-components";
 import { useTranslation } from "react-i18next";
 import { themeManagerCn } from "../../utils/cn.ts";
 
-export interface HoursTableAtomProps
-  extends Omit<
-    HoursTableProps,
-    "dayOfWeekNames" | "intervalStringsBuilderFn" | "intervalTranslations"
-  > {
+export interface HoursTableAtomProps extends Omit<
+  HoursTableProps,
+  "dayOfWeekNames" | "intervalStringsBuilderFn" | "intervalTranslations"
+> {
   className?: string;
 }
 

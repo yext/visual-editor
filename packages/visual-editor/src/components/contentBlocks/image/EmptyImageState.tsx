@@ -14,8 +14,7 @@ import { type ImagePayload } from "../../../fields/ImageField.tsx";
 import { isLocalDev } from "../../../utils/isLocalDev.ts";
 
 let pendingEmptyImageSession:
-  | { messageId: string; apply: (payload: ImagePayload) => void }
-  | undefined;
+  { messageId: string; apply: (payload: ImagePayload) => void } | undefined;
 
 interface EmptyImageStateProps {
   isEmpty: boolean;

@@ -69,8 +69,7 @@ export const applyTheme = (
   const publishedLayout = document?.__?.layout;
   let themeData: ThemeData | undefined;
   let layoutData:
-    | Data<any, { [CUSTOM_FONT_ASSETS_KEY]?: CustomFontAssets }>
-    | undefined;
+    Data<any, { [CUSTOM_FONT_ASSETS_KEY]?: CustomFontAssets }> | undefined;
 
   if (publishedTheme) {
     try {

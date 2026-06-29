@@ -13,8 +13,7 @@ import { useTranslation } from "react-i18next";
 import { RepeatedSourceFieldContext } from "../fields/repeatedSourceFieldContext.ts";
 
 let pendingRichTextSession:
-  | { messageId: string; apply: (payload: any) => void }
-  | undefined;
+  { messageId: string; apply: (payload: any) => void } | undefined;
 
 /**
  * Generates a translatableRichText field config

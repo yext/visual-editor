@@ -12,8 +12,7 @@ import {
 } from "@yext/pages";
 
 const entryMode = "__YEXT_VISUAL_EDITOR_DEV_TEMPLATE_PICKER_MODE__" as
-  | "redirect"
-  | "chooser";
+  "redirect" | "chooser";
 const redirectTargetPath =
   "__YEXT_VISUAL_EDITOR_DEV_TEMPLATE_PICKER_TARGET_PATH__";
 const templateIds = JSON.parse(

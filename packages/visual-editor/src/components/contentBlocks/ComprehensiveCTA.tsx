@@ -215,8 +215,7 @@ export const ComprehensiveCTA = ({
   const resolvedCta =
     actionType === "link"
       ? (resolveComponentData(currentValue.data.cta, locale, streamDocument) as
-          | EnhancedTranslatableCTA
-          | undefined)
+          EnhancedTranslatableCTA | undefined)
       : undefined;
 
   const resolvedButtonLabel = currentValue.data.buttonText

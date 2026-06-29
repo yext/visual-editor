@@ -20,8 +20,7 @@ export interface MultiSelectorOption<T extends MultiSelectorOptionValue> {
 }
 
 export type MultiSelectorOptions<T extends MultiSelectorOptionValue> =
-  | MultiSelectorOption<T>[]
-  | (() => MultiSelectorOption<T>[]);
+  MultiSelectorOption<T>[] | (() => MultiSelectorOption<T>[]);
 
 /**
  * A field type for selecting multiple values from a static or dynamic list of

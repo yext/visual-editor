@@ -106,11 +106,7 @@ export const translatableToPlainText = (
 
 export const getLocalizedPlainText = (
   value:
-    | TranslatableString
-    | TranslatableRichText
-    | string
-    | RichText
-    | undefined,
+    TranslatableString | TranslatableRichText | string | RichText | undefined,
   locale: string
 ): string => {
   if (!value) {

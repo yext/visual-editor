@@ -29,7 +29,8 @@ import { MainContent, MainContentProps } from "../structure/MainContent.tsx";
 import { rootAllowedComponents } from "./rootAllowedComponents.ts";
 
 export interface MainConfigProps
-  extends PageSectionCategoryProps,
+  extends
+    PageSectionCategoryProps,
     DeprecatedCategoryProps,
     OtherCategoryProps,
     AdvancedCoreInfoCategoryProps,

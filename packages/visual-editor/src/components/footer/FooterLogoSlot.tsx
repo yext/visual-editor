@@ -37,14 +37,8 @@ const FooterLogoSlotInternal: PuckComponent<FooterLogoSlotProps> = (props) => {
   const { i18n, t } = useTranslation();
 
   const resolvedImage:
-    | ImageType
-    | ComplexImageType
-    | TranslatableAssetImage
-    | undefined = resolveComponentData(
-    data.image,
-    i18n.language,
-    streamDocument
-  );
+    ImageType | ComplexImageType | TranslatableAssetImage | undefined =
+    resolveComponentData(data.image, i18n.language, streamDocument);
   const simplifiedImage: ImageType | AssetImageType | undefined =
     resolvedImage && "image" in resolvedImage
       ? resolvedImage.image

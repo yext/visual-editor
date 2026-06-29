@@ -224,8 +224,7 @@ export const PhotoGallerySection: YextComponentConfig<PhotoGallerySectionProps> 
 
       const photoGalleryWrapperProps = updatedData.props.slots
         .PhotoGalleryWrapper[0]?.props as unknown as
-        | PhotoGalleryWrapperProps
-        | undefined;
+        PhotoGalleryWrapperProps | undefined;
       const streamDocument = params.metadata.streamDocument;
       const locale = streamDocument?.locale ?? "en";
       const resolvedImages = photoGalleryWrapperProps?.data?.images
