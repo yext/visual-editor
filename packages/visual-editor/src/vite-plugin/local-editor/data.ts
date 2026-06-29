@@ -112,8 +112,19 @@ export const getLocalEditorDocument = async (
     selectedDocumentEntry.filePath,
     `local editor snapshot ${selectedDocumentEntry.fileName}`
   );
+  // Read all of the template documents to find fields that may be missing in any single entity
+  const templateDocuments = context.documents
+    .filter((documentEntry) => {
+      return documentEntry.templateId === selectedDocumentEntry.templateId;
+    })
+    .map((documentEntry) => {
+      return readJsonFile<Record<string, unknown>>(
+        documentEntry.filePath,
+        `local editor snapshot ${documentEntry.fileName}`
+      );
+    });
   const entityFields = inferEntityFields(
-    document,
+    templateDocuments,
     context.templateStreams[selectedDocumentEntry.templateId]
   );
 

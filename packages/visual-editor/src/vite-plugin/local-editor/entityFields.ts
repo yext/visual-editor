@@ -18,7 +18,7 @@ type MutableFieldNode = {
  * data.
  */
 export const inferEntityFields = (
-  document: Record<string, unknown>,
+  document: Record<string, unknown> | Record<string, unknown>[],
   stream?: LocalEditorStreamDefinition
 ): {
   fields: YextSchemaField[];
@@ -27,12 +27,14 @@ export const inferEntityFields = (
   const configuredDisplayNames = buildConfiguredDisplayNames(stream);
   const rootNodes = new Map<string, MutableFieldNode>();
 
-  for (const [key, value] of Object.entries(document)) {
-    if (shouldSkipField(key)) {
-      continue;
-    }
+  for (const documentEntry of Array.isArray(document) ? document : [document]) {
+    for (const [key, value] of Object.entries(documentEntry)) {
+      if (shouldSkipField(key)) {
+        continue;
+      }
 
-    mergeFieldNode(rootNodes, inferFieldNode(key, value));
+      mergeFieldNode(rootNodes, inferFieldNode(key, value));
+    }
   }
 
   const fields = Array.from(rootNodes.values())
@@ -82,6 +84,15 @@ const inferFieldNode = (name: string, value: unknown): MutableFieldNode => {
   }
 
   if (isPlainObject(value)) {
+    const inferredStructuredType = inferStructuredObjectType(value);
+    if (inferredStructuredType) {
+      return {
+        name,
+        typeRegistryId: inferredStructuredType,
+        children: new Map(),
+      };
+    }
+
     return {
       name,
       typeRegistryId: "type.object",
@@ -189,6 +200,51 @@ const shouldSkipField = (fieldName: string): boolean => {
   return fieldName.startsWith("_");
 };
 
+const inferStructuredObjectType = (
+  value: Record<string, unknown>
+): string | undefined => {
+  if (isRichTextValue(value)) {
+    return "type.rich_text_v2";
+  }
+  if (isImageValue(value)) {
+    return "type.image";
+  }
+  if (isCtaValue(value)) {
+    return "type.cta";
+  }
+  return undefined;
+};
+
+const isRichTextValue = (value: Record<string, unknown>): boolean => {
+  return (
+    ("json" in value &&
+      (typeof value.json === "string" || isPlainObject(value.json))) ||
+    ("html" in value && typeof value.html === "string")
+  );
+};
+
+const isImageValue = (value: Record<string, unknown>): boolean => {
+  const nestedImage = value.image;
+  if (isPlainObject(nestedImage) && isImageValue(nestedImage)) {
+    return true;
+  }
+
+  return (
+    typeof value.url === "string" &&
+    (typeof value.alternateText === "string" ||
+      typeof value.width === "number" ||
+      typeof value.height === "number")
+  );
+};
+
+const isCtaValue = (value: Record<string, unknown>): boolean => {
+  return (
+    typeof value.label === "string" &&
+    typeof value.link === "string" &&
+    typeof value.linkType === "string"
+  );
+};
+
 const inferScalarType = (value: unknown): string => {
   if (typeof value === "boolean") {
     return "type.boolean";
@@ -220,6 +276,7 @@ const pickPreferredType = (
 
 const toDisplayName = (pathName: string): string => {
   return pathName
+    .replace("c_", "")
     .split(".")
     .map((segment) => {
       return segment
