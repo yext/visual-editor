@@ -723,7 +723,7 @@ const LocatorInternal = ({
   }, [currentOffset, isMobile, searchActions, searchLoading]);
 
   React.useEffect(() => {
-    if (!isMobile || searchLoading) {
+    if (!isMobile || searchLoading !== false) {
       return;
     }
 
