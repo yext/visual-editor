@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, LinkType } from "@yext/pages-components";
+import { getDirections, Link, LinkType } from "@yext/pages-components";
 import { Button, ButtonProps } from "./button.js";
 import { ThemeColor } from "../../utils/themeConfigOptions.ts";
 import { normalizeLink } from "../../utils/normalizeLink.ts";
@@ -9,14 +9,15 @@ import { themeManagerCn } from "../../utils/cn.ts";
 import { useBackground } from "../../hooks/useBackground.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { FaAngleRight, FaExternalLinkAlt } from "react-icons/fa";
-import { getDirections } from "@yext/pages-components";
 import { PresetImageType, FOOD_DELIVERY_SERVICES } from "../../types/types.ts";
 import { presetImageIcons } from "../../utils/presetImageIcons.tsx";
 import {
+  getDefaultForegroundColor,
   getThemeColorCssValue,
   getThemeColorHexValue,
   hexToRGB,
   isColorContrastWcagCompliant,
+  normalizeThemeColorToken,
 } from "../../utils/colors.ts";
 
 const LINK_TEXT_TRANSFORM_CSS_VAR =
@@ -270,6 +271,11 @@ export const CTA = (props: CTAProps) => {
     background,
   } = resolvedProps;
   const isDarkBackground = background?.isDarkColor;
+  const hasExplicitColor = !!normalizeThemeColorToken(color);
+  const defaultSurfaceForeground = React.useMemo(
+    () => getDefaultForegroundColor(background, streamDocument),
+    [background, streamDocument]
+  );
   const resolvedCtaColorHex = React.useMemo(
     () => getThemeColorHexValue(color?.selectedColor, streamDocument),
     [color?.selectedColor, streamDocument]
@@ -285,7 +291,7 @@ export const CTA = (props: CTAProps) => {
     ? hexToRGB(resolvedBackgroundColorHex)
     : undefined;
   const shouldUseConfiguredSecondaryColor =
-    !!color?.selectedColor &&
+    hasExplicitColor &&
     !!resolvedCtaColorHex &&
     (!isDarkBackground ||
       (!!resolvedCtaColorRgb &&
@@ -300,8 +306,11 @@ export const CTA = (props: CTAProps) => {
     const bg = getThemeColorCssValue(color?.selectedColor);
     const textColor = getThemeColorCssValue(color?.contrastingColor);
     const border = bg;
+    const defaultForegroundColor = getThemeColorCssValue(
+      defaultSurfaceForeground
+    );
 
-    if (variant === "primary") {
+    if (variant === "primary" && hasExplicitColor) {
       return {
         backgroundColor: bg,
         color: textColor,
@@ -310,12 +319,20 @@ export const CTA = (props: CTAProps) => {
     }
 
     if (
+      hasExplicitColor &&
       variant === "secondary" &&
       (shouldUseConfiguredSecondaryColor || !isDarkBackground)
     ) {
       return {
         borderColor: border,
         color: border,
+      };
+    }
+
+    if (variant === "secondary" && defaultForegroundColor) {
+      return {
+        borderColor: defaultForegroundColor,
+        color: defaultForegroundColor,
       };
     }
 
@@ -326,7 +343,7 @@ export const CTA = (props: CTAProps) => {
       variant === "headerFooterSecondaryLink"
     ) {
       return {
-        color: bg,
+        color: hasExplicitColor ? bg : defaultForegroundColor,
       };
     }
 

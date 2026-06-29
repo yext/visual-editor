@@ -186,21 +186,25 @@ export const getContrastingColor = (
  * literal white/black, and bracketed custom colors.
  */
 export const getThemeColorCssValue = (
-  colorToken?: string
+  colorToken?: ThemeColor | string
 ): string | undefined => {
-  if (!colorToken) {
+  const normalizedColorToken = normalizeThemeColorToken(colorToken);
+  if (!normalizedColorToken) {
     return undefined;
   }
 
-  if (colorToken === "white" || colorToken === "black") {
-    return colorToken;
+  if (normalizedColorToken === "white" || normalizedColorToken === "black") {
+    return normalizedColorToken;
   }
 
-  if (colorToken.startsWith("[") && colorToken.endsWith("]")) {
-    return colorToken.slice(1, -1);
+  if (
+    normalizedColorToken.startsWith("[") &&
+    normalizedColorToken.endsWith("]")
+  ) {
+    return normalizedColorToken.slice(1, -1);
   }
 
-  const paletteMatch = colorToken.match(
+  const paletteMatch = normalizedColorToken.match(
     /^palette-(primary|secondary|tertiary|quaternary)-(light|dark)$/
   );
   if (paletteMatch) {
@@ -209,7 +213,7 @@ export const getThemeColorCssValue = (
     return `hsl(from var(--colors-palette-${palette}) h s ${lightness})`;
   }
 
-  return `var(--colors-${colorToken})`;
+  return `var(--colors-${normalizedColorToken})`;
 };
 
 export const isCustomThemeColorToken = (colorToken?: string): boolean => {
@@ -268,6 +272,19 @@ const normalizeHexColor = (colorValue?: string): string | undefined => {
 
   const computedStyleHex = convertComputedStyleColorToHex(colorValue);
   return computedStyleHex || undefined;
+};
+
+const getColorLuminance = (
+  color?: ThemeColor | string,
+  streamDocument?: StreamDocument | Record<string, any>
+): number | undefined => {
+  const colorHex = getThemeColorHexValue(color, streamDocument);
+  if (!colorHex) {
+    return undefined;
+  }
+
+  const rgb = hexToRGB(colorHex);
+  return rgb ? luminanceFromRGB(rgb) : undefined;
 };
 
 const rgbToHsl = (rgb: number[]) => {
@@ -371,6 +388,7 @@ const getDerivedPaletteHexColor = (
   const baseColorHex = normalizeHexColor(
     getThemeValue(`--colors-${baseColorToken}`, streamDocument)
   );
+  console.log("base color hex is", baseColorHex);
   const baseColorRgb = baseColorHex ? hexToRGB(baseColorHex) : undefined;
 
   if (!baseColorRgb) {
@@ -420,6 +438,41 @@ export const getThemeColorHexValue = (
   return normalizeHexColor(
     getThemeValue(`--colors-${normalizedColorToken}`, streamDocument)
   );
+};
+
+/**
+ * Resolves the default foreground color for a surface by computing whether the
+ * background should use black or white text.
+ */
+export const getDefaultForegroundColor = (
+  surfaceColor?: ThemeColor | string,
+  streamDocument?: StreamDocument | Record<string, any>
+): ThemeColor => {
+  const normalizedSurfaceColor = normalizeThemeColorToken(surfaceColor);
+  if (!normalizedSurfaceColor) {
+    return { selectedColor: "black", contrastingColor: "white" };
+  }
+
+  const luminance = getColorLuminance(surfaceColor, streamDocument);
+  if (luminance !== undefined) {
+    return luminance >= 0.5
+      ? { selectedColor: "black", contrastingColor: "white" }
+      : { selectedColor: "white", contrastingColor: "black" };
+  }
+
+  if (surfaceColor !== null && typeof surfaceColor === "object") {
+    if (surfaceColor.contrastingColor === "black") {
+      return { selectedColor: "black", contrastingColor: "white" };
+    }
+
+    if (surfaceColor.contrastingColor === "white") {
+      return { selectedColor: "white", contrastingColor: "black" };
+    }
+  }
+
+  return isDarkColor(surfaceColor, streamDocument)
+    ? { selectedColor: "white", contrastingColor: "black" }
+    : { selectedColor: "black", contrastingColor: "white" };
 };
 
 /**
@@ -530,6 +583,30 @@ export const getBackgroundColorStyle = (
   return {
     ...(backgroundColor ? { backgroundColor } : {}),
     ...(textColor ? { color: textColor } : {}),
+  };
+};
+
+/**
+ * Resolves inline surface styles using a shared dynamic foreground color.
+ * This is primarily intended for custom templates and components that need
+ * consistent default text contrast behavior.
+ */
+export const getSurfaceColorStyle = (
+  surfaceColor?: ThemeColor | string,
+  streamDocument?: StreamDocument | Record<string, any>
+): { backgroundColor?: string; color?: string } | undefined => {
+  const backgroundColor = getThemeColorCssValue(surfaceColor);
+  const foregroundColor = getThemeColorCssValue(
+    getDefaultForegroundColor(surfaceColor, streamDocument)
+  );
+
+  if (!backgroundColor && !foregroundColor) {
+    return undefined;
+  }
+
+  return {
+    ...(backgroundColor ? { backgroundColor } : {}),
+    ...(foregroundColor ? { color: foregroundColor } : {}),
   };
 };
 
