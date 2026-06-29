@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  type EnhancedTranslatableCTA,
   type TranslatableRichText,
   type TranslatableString,
 } from "../../types/types.ts";
@@ -45,6 +46,49 @@ const articleSource = createItemSource<ArticleItemProps>({
       type: "entityField",
       label: "Secondary Title",
       filter: { types: ["type.string"] },
+    },
+  },
+});
+
+type CTAItemProps = {
+  title: {
+    field: string;
+    constantValueEnabled?: boolean;
+    constantValue: TranslatableString;
+  };
+  cta: {
+    data: {
+      actionType: "link" | "button";
+      cta: {
+        field: string;
+        constantValueEnabled?: boolean;
+        constantValue?: EnhancedTranslatableCTA;
+        selectedType?: "textAndLink" | "getDirections" | "presetImage";
+      };
+      openInNewTab: boolean;
+      buttonText?: TranslatableString;
+      customId?: string;
+      customClass?: string;
+      dataAttributes?: Array<{ key: string; value: string }>;
+      ariaLabel?: TranslatableString;
+    };
+    styles: {
+      variant: string;
+    };
+  };
+};
+
+const ctaSource = createItemSource<CTAItemProps>({
+  label: "CTA Items",
+  mappingFields: {
+    title: {
+      type: "entityField",
+      label: "Title",
+      filter: { types: ["type.string"] },
+    },
+    cta: {
+      type: "comprehensiveCTA",
+      label: "CTA",
     },
   },
 });
@@ -398,6 +442,103 @@ describe("createItemSource", () => {
         description: { defaultValue: { html: "<p>Manual summary</p>" } },
         eyebrow: "Manual",
         secondaryTitle: "Root fallback",
+      },
+    ]);
+  });
+
+  it("resolves comprehensive CTA mappings against the current linked item", () => {
+    const resolved = ctaSource.resolveItems(
+      {
+        field: "c_items",
+        constantValueEnabled: false,
+        constantValue: [],
+        mappings: {
+          title: {
+            field: "name",
+            constantValueEnabled: false,
+            constantValue: { defaultValue: "" },
+          },
+          cta: {
+            data: {
+              actionType: "link",
+              cta: {
+                field: "cta",
+                constantValue: {
+                  ctaType: "textAndLink",
+                  label: "Call to Action",
+                  link: "#",
+                  linkType: "URL",
+                },
+                selectedType: "textAndLink",
+              },
+              openInNewTab: false,
+              buttonText: {
+                defaultValue: "Button",
+              },
+              customId: "",
+              customClass: "",
+              dataAttributes: [],
+              ariaLabel: {
+                defaultValue: "Button",
+              },
+            },
+            styles: {
+              variant: "primary",
+            },
+          },
+        },
+      },
+      {
+        locale: "en",
+        cta: {
+          label: { defaultValue: "Root CTA" },
+          link: { defaultValue: "/root" },
+          linkType: "URL",
+        },
+        c_items: [
+          {
+            name: "Item one",
+            cta: {
+              label: { defaultValue: "Item CTA" },
+              link: { defaultValue: "/order" },
+              linkType: "OTHER",
+            },
+          },
+        ],
+      }
+    );
+
+    expect(resolved).toEqual([
+      {
+        title: "Item one",
+        cta: {
+          data: {
+            actionType: "link",
+            cta: {
+              field: "",
+              constantValueEnabled: true,
+              constantValue: {
+                label: { defaultValue: "Item CTA" },
+                link: { defaultValue: "/order" },
+                linkType: "OTHER",
+              },
+              selectedType: "textAndLink",
+            },
+            openInNewTab: false,
+            buttonText: {
+              defaultValue: "Button",
+            },
+            customId: "",
+            customClass: "",
+            dataAttributes: [],
+            ariaLabel: {
+              defaultValue: "Button",
+            },
+          },
+          styles: {
+            variant: "primary",
+          },
+        },
       },
     ]);
   });

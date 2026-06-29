@@ -1,9 +1,52 @@
 import { type YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { type YextCTAField } from "../../fields/CTASelectorField.tsx";
+import { type ComprehensiveCTAValue } from "../../fields/styledFields/ComprehensiveCTAField.tsx";
 import { type YextFieldDefinition } from "../../fields/fields.ts";
 import { resolveYextEntityField } from "../resolveYextEntityField.ts";
 import { type StreamDocument } from "../types/StreamDocument.ts";
 import { isEntityFieldDefinition } from "./itemSourceFieldTransforms.ts";
 import { type ResolvedItemField } from "./itemSourceTypes.ts";
+
+const comprehensiveCTADataField = {
+  type: "object",
+  objectFields: {
+    actionType: {
+      type: "text",
+    },
+    cta: {
+      type: "ctaSelector",
+    },
+    openInNewTab: {
+      type: "radio",
+      options: [],
+    },
+    buttonText: {
+      type: "translatableString",
+      filter: { types: ["type.string"] },
+    },
+    customId: {
+      type: "text",
+    },
+    customClass: {
+      type: "text",
+    },
+    dataAttributes: {
+      type: "array",
+      arrayFields: {
+        key: {
+          type: "text",
+        },
+        value: {
+          type: "text",
+        },
+      },
+    },
+    ariaLabel: {
+      type: "translatableString",
+      filter: { types: ["type.string"] },
+    },
+  },
+} satisfies YextFieldDefinition<ComprehensiveCTAValue["data"]>;
 
 /**
  * Runtime item resolution.
@@ -22,6 +65,49 @@ export const resolveItemValue = <TValue>(
   streamDocument: StreamDocument,
   itemDocument?: StreamDocument
 ): ResolvedItemField<TValue> => {
+  if (field.type === "ctaSelector") {
+    const ctaField = value as Partial<YextCTAField> | undefined;
+
+    if (!ctaField?.constantValueEnabled && !ctaField?.field) {
+      return undefined as ResolvedItemField<TValue>;
+    }
+
+    const resolvedCTA: Partial<NonNullable<YextCTAField["constantValue"]>> =
+      (resolveYextEntityField<YextCTAField["constantValue"] | undefined>(
+        itemDocument ?? streamDocument,
+        {
+          field: ctaField?.field ?? "",
+          constantValue: ctaField?.constantValue,
+          constantValueEnabled: ctaField?.constantValueEnabled,
+        },
+        streamDocument.locale
+      ) ?? {}) as Partial<NonNullable<YextCTAField["constantValue"]>>;
+
+    return {
+      field: "",
+      constantValueEnabled: true,
+      constantValue: resolvedCTA,
+      selectedType: ctaField?.selectedType,
+    } as ResolvedItemField<TValue>;
+  }
+
+  if (field.type === "comprehensiveCTA") {
+    const ctaValue =
+      value && typeof value === "object" && !Array.isArray(value)
+        ? (value as Partial<ComprehensiveCTAValue>)
+        : {};
+
+    return {
+      ...ctaValue,
+      data: resolveItemValue(
+        comprehensiveCTADataField,
+        ctaValue.data,
+        streamDocument,
+        itemDocument
+      ),
+    } as ResolvedItemField<TValue>;
+  }
+
   if (isEntityFieldDefinition(field)) {
     const entityField = value as Partial<YextEntityField<unknown>> | undefined;
     if (!entityField?.constantValueEnabled && !entityField?.field) {
