@@ -463,18 +463,12 @@ export const getDefaultForegroundColor = (
   if (luminance !== undefined) {
     return prefersWhiteForeground(luminance)
       ? { selectedColor: "white", contrastingColor: "black" }
-      : {
-          selectedColor: "palette-primary-dark",
-          contrastingColor: "white",
-        };
+      : { selectedColor: "black", contrastingColor: "white" };
   }
 
   if (surfaceColor !== null && typeof surfaceColor === "object") {
     if (surfaceColor.contrastingColor === "black") {
-      return {
-        selectedColor: "palette-primary-dark",
-        contrastingColor: "white",
-      };
+      return { selectedColor: "black", contrastingColor: "white" };
     }
 
     if (surfaceColor.contrastingColor === "white") {
@@ -484,10 +478,7 @@ export const getDefaultForegroundColor = (
 
   return isDarkColor(surfaceColor, streamDocument)
     ? { selectedColor: "white", contrastingColor: "black" }
-    : {
-        selectedColor: "palette-primary-dark",
-        contrastingColor: "white",
-      };
+    : { selectedColor: "black", contrastingColor: "white" };
 };
 
 /**
