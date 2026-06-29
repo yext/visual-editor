@@ -20,6 +20,7 @@ export type StyledLinkField = BaseField & {
   type: "styledLink";
   label?: string | MsgString;
   visible?: boolean;
+  showIncludeCaretField?: boolean;
 };
 
 type StyledLinkFieldProps = FieldProps<StyledLinkField, StyledLinkValue>;
@@ -53,6 +54,7 @@ export const StyledLinkFieldOverride = ({
     { label: pt("fields.options.yes", "Yes"), value: "block" },
     { label: pt("fields.options.no", "No"), value: "none" },
   ];
+  const showIncludeCaretField = field.showIncludeCaretField ?? true;
 
   return (
     <div>
@@ -81,18 +83,20 @@ export const StyledLinkFieldOverride = ({
               disableSearch
             />
           </FieldLabel>
-          <FieldLabel label={pt("theme.includeCaret", "Include Caret")}>
-            <Combobox
-              selectedOption={
-                includeCaretOptions.find(
-                  (option) => option.value === currentValue.includeCaret
-                ) ?? includeCaretOptions[0]
-              }
-              onChange={(nextValue) => updateValue("includeCaret", nextValue)}
-              optionGroups={[{ options: includeCaretOptions }]}
-              disableSearch
-            />
-          </FieldLabel>
+          {showIncludeCaretField && (
+            <FieldLabel label={pt("theme.includeCaret", "Include Caret")}>
+              <Combobox
+                selectedOption={
+                  includeCaretOptions.find(
+                    (option) => option.value === currentValue.includeCaret
+                  ) ?? includeCaretOptions[0]
+                }
+                onChange={(nextValue) => updateValue("includeCaret", nextValue)}
+                optionGroups={[{ options: includeCaretOptions }]}
+                disableSearch
+              />
+            </FieldLabel>
+          )}
         </div>
       </div>
     </div>
