@@ -5,36 +5,36 @@ import {
   Coordinate,
   useCardAnalyticsCallback,
 } from "@yext/search-ui-react";
-import { Background } from "./atoms/background.tsx";
+import { Background } from "../atoms/background.tsx";
 import {
   backgroundColors,
   ThemeColor,
   HeadingLevel,
   ThemeOptions,
-} from "../utils/themeConfigOptions.ts";
-import { Body, BodyProps } from "./atoms/body.tsx";
-import { CTA, CTAVariant } from "./atoms/cta.tsx";
-import { Heading } from "./atoms/heading.tsx";
-import { Image } from "./atoms/image.tsx";
-import { msg, pt } from "../utils/i18n/platform.ts";
-import { PhoneAtom } from "./atoms/phone.tsx";
-import { useTemplateProps } from "../hooks/useDocument.tsx";
-import { resolveComponentData } from "../utils/resolveComponentData.tsx";
-import { HoursStatusAtom } from "./atoms/hoursStatus.tsx";
-import { HoursTableAtom } from "./atoms/hoursTable.tsx";
-import { type BasicSelectorField } from "../fields/BasicSelectorField.tsx";
+} from "../../utils/themeConfigOptions.ts";
+import { Body, BodyProps } from "../atoms/body.tsx";
+import { CTA, CTAVariant } from "../atoms/cta.tsx";
+import { Heading } from "../atoms/heading.tsx";
+import { Image } from "../atoms/image.tsx";
+import { msg, pt } from "../../utils/i18n/platform.ts";
+import { PhoneAtom } from "../atoms/phone.tsx";
+import { useTemplateProps } from "../../hooks/useDocument.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { HoursStatusAtom } from "../atoms/hoursStatus.tsx";
+import { HoursTableAtom } from "../atoms/hoursTable.tsx";
+import { type BasicSelectorField } from "../../fields/BasicSelectorField.tsx";
 import type {
   YextCustomFieldRenderProps,
   YextObjectField,
-} from "../fields/fields.ts";
+} from "../../fields/fields.ts";
 import {
   buildLocatorDisplayOptions,
   type ImageField,
-} from "../fields/ImageField.tsx";
-import { ConstantValueModeToggler } from "../fields/EntityFieldSelectorField.tsx";
-import { type EmbeddedStringOption } from "../editor/EmbeddedFieldStringInput.tsx";
-import { TranslatableString } from "../types/types.ts";
-import { TranslatableAssetImage } from "../types/images.ts";
+} from "../../fields/ImageField.tsx";
+import { ConstantValueModeToggler } from "../../fields/EntityFieldSelectorField.tsx";
+import { type EmbeddedStringOption } from "../../editor/EmbeddedFieldStringInput.tsx";
+import { TranslatableString } from "../../types/types.ts";
+import { TranslatableAssetImage } from "../../types/images.ts";
 import {
   Address,
   AddressType,
@@ -45,39 +45,39 @@ import {
 import {
   HoursTableProps,
   HoursTableStyleFields,
-} from "./contentBlocks/HoursTable.tsx";
-import { getImageUrl } from "./contentBlocks/image/Image.tsx";
+} from "../contentBlocks/HoursTable.tsx";
+import { getImageUrl } from "../contentBlocks/image/Image.tsx";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "./atoms/accordion.js";
+} from "../atoms/accordion.js";
 import {
   FaAngleRight,
   FaMapMarkerAlt,
   FaRegClock,
   FaRegEnvelope,
 } from "react-icons/fa";
-import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
-import { FieldTypeData } from "../internal/types/templateMetadata.ts";
+import { useTemplateMetadata } from "../../internal/hooks/useMessageReceivers.ts";
+import { FieldTypeData } from "../../internal/types/templateMetadata.ts";
 import {
   formatDistance,
   fromMeters,
   getPreferredDistanceUnit,
-} from "../utils/i18n/distance.ts";
+} from "../../utils/i18n/distance.ts";
 import {
   DEFAULT_ENTITY_TYPE,
   LocatorEntityType,
-} from "../utils/locatorEntityTypes.ts";
-import { resolveLocatorResultUrl } from "../utils/urls/resolveLocatorResultUrl.ts";
+} from "../../utils/locatorEntityTypes.ts";
+import { resolveLocatorResultUrl } from "../../utils/urls/resolveLocatorResultUrl.ts";
 import {
   getBackgroundColorClasses,
   getBackgroundColorStyle,
   getTextColorClass,
   getTextColorStyle,
-} from "../utils/colors.ts";
-import { themeManagerCn } from "../utils/cn.ts";
+} from "../../utils/colors.ts";
+import { themeManagerCn } from "../../utils/cn.ts";
 
 export interface LocatorResultCardProps {
   /** The entity type this result card applies to. */

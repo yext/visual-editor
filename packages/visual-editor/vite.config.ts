@@ -15,7 +15,13 @@ export default defineConfig(() => ({
       "@yext/visual-editor": path.resolve(__dirname, "src"),
     },
   },
+  optimizeDeps: {
+    esbuildOptions: {
+      target: "es2022",
+    },
+  },
   build: {
+    target: "es2022",
     cssCodeSplit: true,
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),
