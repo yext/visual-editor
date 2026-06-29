@@ -5,22 +5,22 @@ import {
   ComponentTest,
   logSuppressedWcagViolations,
   transformTests,
-} from "./testing/componentTests.setup.ts";
+} from "../testing/componentTests.setup.ts";
 import {
   act,
   render as reactRender,
   screen,
   waitFor,
 } from "@testing-library/react";
-import { injectTranslations } from "../utils/i18n/components.ts";
-import { migrate } from "../utils/migrate.ts";
-import { migrationRegistry } from "./migrations/migrationRegistry.ts";
-import { VisualEditorProvider } from "../utils/VisualEditorProvider.tsx";
+import { injectTranslations } from "../../utils/i18n/components.ts";
+import { migrate } from "../../utils/migrate.ts";
+import { migrationRegistry } from "../migrations/migrationRegistry.ts";
+import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { LocatorComponent } from "./Locator.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
-import { backgroundColors } from "../utils/themeConfigOptions.ts";
-import { MainContent } from "./structure/MainContent.tsx";
+import { backgroundColors } from "../../utils/themeConfigOptions.ts";
+import { MainContent } from "../structure/MainContent.tsx";
 
 vi.mock("@yext/search-ui-react", async () => {
   const actual = await vi.importActual<typeof import("@yext/search-ui-react")>(
