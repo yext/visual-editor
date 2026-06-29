@@ -1,18 +1,21 @@
 import { describe, it, expect } from "vitest";
 import {
   getContrastingColor,
+  getDefaultForegroundColor,
   hexToRGB,
   luminanceFromRGB,
   isColorContrastWcagCompliant,
   convertComputedStyleColorToHex,
   getBackgroundColorClasses,
   getBackgroundColorStyle,
+  getSurfaceColorStyle,
   getThemeColorCssValue,
   getThemeColorHexValue,
   getTextColorClass,
   getTextColorStyle,
   isCustomThemeColorToken,
   isDarkColor,
+  normalizeThemeColorToken,
 } from "./colors.ts";
 
 describe("getContrastingColor", () => {
@@ -266,6 +269,15 @@ describe("getThemeColorCssValue", () => {
   it("returns undefined for empty values", () => {
     expect(getThemeColorCssValue(undefined)).toBeUndefined();
   });
+
+  it("accepts ThemeColor values directly", () => {
+    expect(
+      getThemeColorCssValue({
+        selectedColor: "palette-primary",
+        contrastingColor: "palette-primary-contrast",
+      })
+    ).toBe("var(--colors-palette-primary)");
+  });
 });
 
 describe("getThemeColorHexValue", () => {
@@ -310,6 +322,105 @@ describe("getThemeColorHexValue", () => {
     expect(
       getThemeColorHexValue("palette-primary", { __: { theme: "{}" } })
     ).toBeUndefined();
+  });
+
+  it("accepts ThemeColor values directly", () => {
+    expect(
+      getThemeColorHexValue(
+        {
+          selectedColor: "palette-primary",
+          contrastingColor: "palette-primary-contrast",
+        },
+        streamDocument
+      )
+    ).toBe("#341A1F");
+  });
+});
+
+describe("normalizeThemeColorToken", () => {
+  it("treats default as unset", () => {
+    expect(normalizeThemeColorToken("default")).toBeUndefined();
+    expect(
+      normalizeThemeColorToken({
+        selectedColor: "default",
+        contrastingColor: "black",
+      })
+    ).toBeUndefined();
+  });
+});
+
+describe("getDefaultForegroundColor", () => {
+  const streamDocument = {
+    __: {
+      theme: JSON.stringify({
+        "--colors-palette-primary": "#111111",
+        "--colors-palette-secondary": "#F5F5F5",
+        "--colors-palette-tertiary": "#888888",
+      }),
+    },
+  };
+
+  it("returns white for dark surfaces", () => {
+    expect(
+      getDefaultForegroundColor(
+        {
+          selectedColor: "palette-primary",
+          contrastingColor: "palette-primary-contrast",
+        },
+        streamDocument
+      )
+    ).toStrictEqual({
+      selectedColor: "white",
+      contrastingColor: "black",
+    });
+  });
+
+  it("returns black for light surfaces", () => {
+    expect(
+      getDefaultForegroundColor(
+        {
+          selectedColor: "palette-secondary",
+          contrastingColor: "palette-secondary-contrast",
+        },
+        streamDocument
+      )
+    ).toStrictEqual({
+      selectedColor: "black",
+      contrastingColor: "white",
+    });
+  });
+
+  it("uses the same contrast decision for mid-tone surfaces", () => {
+    expect(
+      getDefaultForegroundColor(
+        {
+          selectedColor: "palette-tertiary",
+          contrastingColor: "palette-tertiary-contrast",
+        },
+        streamDocument
+      )
+    ).toStrictEqual({
+      selectedColor: "black",
+      contrastingColor: "white",
+    });
+  });
+});
+
+describe("getSurfaceColorStyle", () => {
+  it("returns inline surface styles with a dynamic default foreground", () => {
+    expect(
+      getSurfaceColorStyle({
+        selectedColor: "[#F5F5F5]",
+        contrastingColor: "black",
+      })
+    ).toStrictEqual({
+      backgroundColor: "#F5F5F5",
+      color: "black",
+    });
+  });
+
+  it("returns undefined when the surface color is unset", () => {
+    expect(getSurfaceColorStyle(undefined)).toBeUndefined();
   });
 });
 

@@ -16,6 +16,7 @@ import {
 } from "./Image.tsx";
 import { EmptyImageState } from "./EmptyImageState.tsx";
 import { YextComponentConfig } from "../../../fields/fields.ts";
+import { aspectRatioOptions } from "../../../utils/themeConfigOptions.ts";
 
 export interface HeroImageProps extends ImageWrapperProps {
   /** @internal from the parent Hero Section Component */
@@ -88,15 +89,7 @@ export const HeroImage: YextComponentConfig<HeroImageProps> = {
       "styles.objectFields.width.visible",
       true
     );
-    const filteredAspectRatioOptions = (
-      ImageWrapperFields.styles as {
-        objectFields: {
-          aspectRatio: {
-            options: { label: string; value: number }[];
-          };
-        };
-      }
-    ).objectFields.aspectRatio.options.filter(
+    const filteredAspectRatioOptions = aspectRatioOptions.filter(
       (option) => !["4:1", "3:1", "2:1", "9:16"].includes(option.label)
     );
 
