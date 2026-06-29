@@ -25,7 +25,7 @@ const renderCTA = (
 };
 
 describe("CTA default contrast", () => {
-  it("uses black for secondary CTAs on light backgrounds", () => {
+  it("uses palette-primary-dark for secondary CTAs on light backgrounds", () => {
     renderCTA(
       <CTA
         actionType="button"
@@ -40,10 +40,14 @@ describe("CTA default contrast", () => {
       }
     );
 
-    expect(screen.getByRole("button", { name: "Learn more" })).toHaveStyle({
-      color: "black",
-      borderColor: "black",
-    });
+    const button = screen.getByRole("button", { name: "Learn more" });
+
+    expect(button.style.color).toBe(
+      "hsl(from var(--colors-palette-primary) h s 20)"
+    );
+    expect(button.style.borderColor).toBe(
+      "hsl(from var(--colors-palette-primary) h s 20)"
+    );
   });
 
   it("uses white for secondary CTAs on dark backgrounds", () => {
@@ -67,7 +71,7 @@ describe("CTA default contrast", () => {
     });
   });
 
-  it("uses black for link CTAs on light backgrounds", () => {
+  it("uses palette-primary-dark for link CTAs on light backgrounds", () => {
     renderCTA(
       <CTA
         actionType="button"
@@ -82,9 +86,9 @@ describe("CTA default contrast", () => {
       }
     );
 
-    expect(screen.getByRole("button", { name: "Read more" })).toHaveStyle({
-      color: "black",
-    });
+    expect(screen.getByRole("button", { name: "Read more" }).style.color).toBe(
+      "hsl(from var(--colors-palette-primary) h s 20)"
+    );
   });
 
   it("preserves explicit CTA colors", () => {

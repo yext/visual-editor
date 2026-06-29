@@ -375,7 +375,7 @@ describe("getDefaultForegroundColor", () => {
     });
   });
 
-  it("returns black for light surfaces", () => {
+  it("returns palette-primary-dark for light surfaces", () => {
     expect(
       getDefaultForegroundColor(
         {
@@ -385,7 +385,7 @@ describe("getDefaultForegroundColor", () => {
         streamDocument
       )
     ).toStrictEqual({
-      selectedColor: "black",
+      selectedColor: "palette-primary-dark",
       contrastingColor: "white",
     });
   });
@@ -400,7 +400,7 @@ describe("getDefaultForegroundColor", () => {
         streamDocument
       )
     ).toStrictEqual({
-      selectedColor: "black",
+      selectedColor: "palette-primary-dark",
       contrastingColor: "white",
     });
   });
@@ -415,7 +415,7 @@ describe("getSurfaceColorStyle", () => {
       })
     ).toStrictEqual({
       backgroundColor: "#F5F5F5",
-      color: "black",
+      color: "hsl(from var(--colors-palette-primary) h s 20)",
     });
   });
 
