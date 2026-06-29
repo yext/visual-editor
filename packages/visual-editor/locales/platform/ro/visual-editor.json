@@ -54,7 +54,7 @@
   "comingSoon": "În curând",
   "componentErrorBoundary": {
     "error": "Eroare",
-    "message": "Nu se poate reda această secțiune. Încercați să vă actualizați biblioteca de componente."
+    "message": "Nu se poate reda această secțiune cu configurația curentă. Vă rugăm să ștergeți această secțiune, să o adăugați din nou și să o reconfigurați."
   },
   "components": {
     "aboutSection": "Secțiunea Despre",
@@ -186,6 +186,7 @@
     "browText": "Textul sprâncenelor",
     "businessLogo": "Logo -ul de afaceri",
     "buttons": "Butoane",
+    "buttonStyles": "Stiluri de butoane",
     "buttonText": "Text buton",
     "cardTitleColor": "Culoarea titlului cardului",
     "cardVariant": "Varianta card",
@@ -280,6 +281,7 @@
     "linkLabel": "Etichetă de link",
     "links": "Link -uri",
     "linksTooltip": "Linkurile se vor restrânge automat dacă fereastra de vizualizare este prea îngustă",
+    "linkStyles": "Stiluri de link",
     "linkTarget": "Link țintă",
     "linkType": "Tip de legătură",
     "listLength": "Lungimea listei",

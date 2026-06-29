@@ -1,4 +1,10 @@
 export {
+  ComprehensiveCTAFieldOverride,
+  type ComprehensiveCTAField,
+  type ComprehensiveCTAValue,
+} from "./ComprehensiveCTAField.tsx";
+
+export {
   StyledTextFieldOverride,
   type StyledTextField,
   type StyledTextValue,

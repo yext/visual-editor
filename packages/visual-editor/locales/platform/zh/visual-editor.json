@@ -54,7 +54,7 @@
   "comingSoon": "即将推出",
   "componentErrorBoundary": {
     "error": "错误",
-    "message": "无法渲染此部分。尝试更新您的组件库。"
+    "message": "无法使用当前配置渲染此​​部分。请删除此部分，重新​​添加并重新配置。"
   },
   "components": {
     "aboutSection": "关于部分",
@@ -186,6 +186,7 @@
     "browText": "眉毛文字",
     "businessLogo": "业务徽标",
     "buttons": "按钮",
+    "buttonStyles": "按钮样式",
     "buttonText": "按钮文字",
     "cardTitleColor": "卡片标题颜色",
     "cardVariant": "卡片变体",
@@ -280,6 +281,7 @@
     "linkLabel": "链接标签",
     "links": "链接",
     "linksTooltip": "如果视口太窄，链接将自动折叠",
+    "linkStyles": "链接样式",
     "linkTarget": "链接目标",
     "linkType": "链接类型",
     "listLength": "列表长度",

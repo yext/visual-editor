@@ -54,7 +54,7 @@
   "comingSoon": "Netrukus",
   "componentErrorBoundary": {
     "error": "Klaida",
-    "message": "Nepavyko pateikti šios skilties. Pabandykite atnaujinti komponentų biblioteką."
+    "message": "Neįmanoma pateikti šios sekcijos naudojant dabartinę konfigūraciją. Ištrinkite šį skyrių, pridėkite jį iš naujo ir iš naujo sukonfigūruokite."
   },
   "components": {
     "aboutSection": "Apie skyrių",
@@ -186,6 +186,7 @@
     "browText": "Antakių tekstas",
     "businessLogo": "Verslo logotipas",
     "buttons": "Mygtukai",
+    "buttonStyles": "Mygtukų stiliai",
     "buttonText": "Mygtuko tekstas",
     "cardTitleColor": "Kortelės pavadinimo spalva",
     "cardVariant": "Kortelės variantas",
@@ -280,6 +281,7 @@
     "linkLabel": "Nuorodos etiketė",
     "links": "Nuorodos",
     "linksTooltip": "Jei peržiūros sritis per siaura, nuorodos bus automatiškai sutrauktos",
+    "linkStyles": "Nuorodų stiliai",
     "linkTarget": "Nuoroda Tikslas",
     "linkType": "Nuorodos tipas",
     "listLength": "Sąrašo ilgis",

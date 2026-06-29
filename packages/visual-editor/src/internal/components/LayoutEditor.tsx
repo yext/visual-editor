@@ -38,6 +38,7 @@ type LayoutEditorProps = {
   themeData: ThemeData;
   themeConfig: ThemeConfig | undefined;
   localDev: boolean;
+  showLocalDevOverrideButtons: boolean;
   metadata?: Metadata;
   streamDocument: StreamDocument;
 };
@@ -50,6 +51,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     themeData,
     themeConfig,
     localDev,
+    showLocalDevOverrideButtons,
     metadata,
     streamDocument,
   } = props;
@@ -102,12 +104,17 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
   };
 
   /**
-   * Apply the themes from Content
+   * Apply the published theme
    */
   useEffect(() => {
     if (!themeConfig) {
       return;
     }
+
+    const histories = puckInitialHistory?.histories;
+    const historyIndex =
+      puckInitialHistory?.index ?? (histories?.length ?? 1) - 1;
+    const previewLayoutData = histories?.[historyIndex]?.state?.data;
 
     // use theme from localStorage when in dev mode
     if (templateMetadata.isDevMode) {
@@ -126,8 +133,8 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
         updateThemeInEditor(
           localThemeData,
           themeConfig,
-          false,
-          templateMetadata.customFonts
+          templateMetadata.customFonts,
+          previewLayoutData
         );
         return;
       }
@@ -137,11 +144,11 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       updateThemeInEditor(
         themeData as ThemeData,
         themeConfig,
-        false,
-        templateMetadata.customFonts
+        templateMetadata.customFonts,
+        previewLayoutData
       );
     }
-  }, [themeData, themeConfig, templateMetadata]);
+  }, [themeData, themeConfig, templateMetadata, puckInitialHistory]);
 
   /**
    * Determines the initialHistory to send to Puck. It is based on a combination
@@ -204,9 +211,9 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
         }
       }
 
-      // Otherwise start fresh from Content
+      // Otherwise start fresh from published layout data
       devLogger.log(
-        "Layout Dev Mode - No localStorage. Using layout data from Content"
+        "Layout Dev Mode - No localStorage. Using published layout data"
       );
       if (layoutData) {
         setPuckInitialHistory({
@@ -219,12 +226,12 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       return;
     }
 
-    // Nothing in save_state table, start fresh from Content
+    // Nothing in save_state table, start fresh from published layout data
     if (!layoutSaveState) {
       clearVisualConfigLocalStorage();
 
       devLogger.log(
-        "Layout Prod Mode - No saveState. Using layout data from Content"
+        "Layout Prod Mode - No saveState. Using published layout data"
       );
       if (layoutData) {
         setPuckInitialHistory({
@@ -318,6 +325,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       sendDevSaveStateData={sendDevLayoutSaveStateData}
       buildVisualConfigLocalStorageKey={buildVisualConfigLocalStorageKey}
       localDev={localDev}
+      showLocalDevOverrideButtons={showLocalDevOverrideButtons}
       metadata={metadata}
     />
   ) : (

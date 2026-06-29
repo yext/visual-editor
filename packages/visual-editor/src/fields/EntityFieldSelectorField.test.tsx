@@ -882,7 +882,6 @@ describe("EntityFieldSelectorField", () => {
     expect(screen.getByText("Directory Children Fields")).toBeDefined();
     expect(screen.queryByText("Location Fields")).toBeNull();
   });
-
   it("clears stale repeated mappings when switching between linked sources", () => {
     const { onChange } = renderRepeatedEntityField({
       value: {

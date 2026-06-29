@@ -10,7 +10,6 @@ import {
   mapStyleField,
 } from "../contentBlocks/MapboxStaticMap.tsx";
 import { PuckComponent } from "@puckeditor/core";
-import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export interface StaticMapStyles {
@@ -107,16 +106,11 @@ export const StaticMapSection: YextComponentConfig<StaticMapSectionProps> = {
     },
   },
   render: (props) => (
-    <ComponentErrorBoundary
+    <VisibilityWrapper
+      liveVisibility={props.liveVisibility}
       isEditing={props.puck.isEditing}
-      resetKeys={[props]}
     >
-      <VisibilityWrapper
-        liveVisibility={props.liveVisibility}
-        isEditing={props.puck.isEditing}
-      >
-        <StaticMapSectionWrapper {...props} />
-      </VisibilityWrapper>
-    </ComponentErrorBoundary>
+      <StaticMapSectionWrapper {...props} />
+    </VisibilityWrapper>
   ),
 };

@@ -1,6 +1,7 @@
 import { FontRegistry } from "../../utils/fonts/visualEditorFonts.ts";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import DOMPurify from "dompurify";
+import type { LocalDevOptions } from "../../editor/types.ts";
 
 export type HeadDeployStatus = "RUNNING" | "INACTIVE" | "FAILED" | "ACTIVE";
 
@@ -114,16 +115,35 @@ const isLocatorLocalDevDocument = (streamDocument?: StreamDocument) => {
 };
 
 export function generateTemplateMetadata(
-  streamDocument?: StreamDocument
+  streamDocument?: StreamDocument,
+  localDevOptions?: LocalDevOptions
 ): TemplateMetadata {
   const cleanString = DOMPurify.sanitize(window.location.href).split("?")[0];
   const isLocatorDocument = isLocatorLocalDevDocument(streamDocument);
+  const templateId =
+    localDevOptions?.templateId ?? streamDocument?.__?.name ?? "dev";
+  const locale = localDevOptions?.locale ?? "en";
+  const entityId = localDevOptions?.entityId
+    ? hashCode(String(localDevOptions.entityId))
+    : hashCode(cleanString);
+  const layoutScopeKey =
+    localDevOptions?.layoutScopeKey ??
+    JSON.stringify({
+      templateId,
+      entityId: localDevOptions?.entityId ?? cleanString,
+      locale,
+    });
+  const themeScopeKey = localDevOptions?.themeScopeKey;
+  const locales = localDevOptions?.locales?.length
+    ? localDevOptions.locales
+    : ["en", "es", "fr"];
 
   return {
     siteId: 1337,
-    templateId: streamDocument?.__?.name ?? "dev",
-    entityId: hashCode(cleanString),
-    layoutId: hashCode(cleanString),
+    templateId,
+    entityId,
+    themeEntityId: themeScopeKey ? hashCode(themeScopeKey) : undefined,
+    layoutId: hashCode(layoutScopeKey),
     assignment: "ALL",
     isDevMode: true,
     isxYextDebug: true,
@@ -132,8 +152,8 @@ export function generateTemplateMetadata(
     entityCount: 0,
     totalEntityCount: 0,
     entityTypeDisplayName: isLocatorDocument ? "Locator" : "Entity",
-    platformLocale: "en",
-    locales: ["en", "es", "fr"],
+    platformLocale: locale,
+    locales,
     layoutTaskApprovals: false,
     headDeployStatus: "ACTIVE",
     locatorDisplayFields: isLocatorDocument

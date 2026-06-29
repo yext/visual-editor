@@ -11,6 +11,7 @@ import {
   useReceiveMessage,
 } from "../../../internal/hooks/useMessage.ts";
 import { type ImagePayload } from "../../../fields/ImageField.tsx";
+import { isLocalDev } from "../../../utils/isLocalDev.ts";
 
 let pendingEmptyImageSession:
   | { messageId: string; apply: (payload: ImagePayload) => void }
@@ -63,7 +64,7 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
 
   const handleImageSelection = React.useCallback(() => {
     if (!hasParentData && constantValueEnabled && isEditing) {
-      if (window.location.href.includes("http://localhost:5173")) {
+      if (isLocalDev()) {
         const userInput = prompt("Enter Image URL:");
         if (!userInput) {
           return;

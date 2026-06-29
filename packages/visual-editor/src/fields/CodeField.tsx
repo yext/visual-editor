@@ -6,7 +6,7 @@ import {
   useSendMessageToParent,
 } from "../internal/hooks/useMessage.ts";
 import { pt, type MsgString } from "../utils/i18n/platform.ts";
-import { isFakeStarterLocalDev } from "../utils/isFakeStarterLocalDev.ts";
+import { isLocalDev } from "../utils/isLocalDev.ts";
 
 let pendingCodeSession:
   | { messageId: string; apply: (payload: any) => void }
@@ -79,7 +79,7 @@ export const CodeFieldOverride = ({
     });
 
     /** Handles local development testing outside of storm */
-    if (isFakeStarterLocalDev()) {
+    if (isLocalDev()) {
       const userInput = prompt("Enter Code:");
       onChange(userInput ?? "");
       if (pendingCodeSession?.messageId === messageId) {

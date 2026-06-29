@@ -24,7 +24,6 @@ import { CompactHero } from "./heroVariants/CompactHero.js";
 import { SpotlightHero } from "./heroVariants/SpotlightHero.js";
 import { ImmersiveHero } from "./heroVariants/ImmersiveHero.js";
 import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders.ts";
-import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 import {
   toPuckFields,
   YextComponentConfig,
@@ -683,21 +682,16 @@ export const HeroSection: YextComponentConfig<HeroSectionProps> = {
     }
 
     return (
-      <ComponentErrorBoundary
-        isEditing={props.puck.isEditing}
-        resetKeys={[props]}
+      <AnalyticsScopeProvider
+        name={`${props.analytics?.scope ?? "heroSection"}${getAnalyticsScopeHash(props.id)}`}
       >
-        <AnalyticsScopeProvider
-          name={`${props.analytics?.scope ?? "heroSection"}${getAnalyticsScopeHash(props.id)}`}
+        <VisibilityWrapper
+          liveVisibility={!!props.liveVisibility}
+          isEditing={props.puck.isEditing}
         >
-          <VisibilityWrapper
-            liveVisibility={!!props.liveVisibility}
-            isEditing={props.puck.isEditing}
-          >
-            {HeroVariant}
-          </VisibilityWrapper>
-        </AnalyticsScopeProvider>
-      </ComponentErrorBoundary>
+          {HeroVariant}
+        </VisibilityWrapper>
+      </AnalyticsScopeProvider>
     );
   },
 };

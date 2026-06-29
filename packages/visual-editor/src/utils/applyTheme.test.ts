@@ -1,7 +1,19 @@
 import { describe, it, expect } from "vitest";
-import { applyTheme } from "./applyTheme.ts";
+import {
+  applyTheme,
+  THEME_STYLE_TAG_ID,
+  updateThemeInEditor,
+} from "./applyTheme.ts";
 import { ThemeConfig } from "./themeResolver.ts";
 import { StreamDocument } from "./types/StreamDocument.ts";
+
+const createPreviewIframe = () => {
+  document.body.replaceChildren();
+  const iframe = document.createElement("iframe");
+  iframe.id = "preview-frame";
+  document.body.appendChild(iframe);
+  return iframe;
+};
 
 describe("buildCssOverridesStyle", () => {
   it("should generate correct CSS with one override in c_theme", () => {
@@ -16,7 +28,7 @@ describe("buildCssOverridesStyle", () => {
     // Should include Google Font links and the CSS style tag
     expect(result).toContain("fonts.googleapis.com");
     expect(result).toContain(
-      '<style id="visual-editor-theme" type="text/css">.components{'
+      '<style id="visual-editor-theme" type="text/css">:root{'
     );
     expect(result).toContain("--colors-palette-text:red !important;");
     expect(result).toContain(
@@ -58,7 +70,7 @@ describe("buildCssOverridesStyle", () => {
       '<link href="./y-fonts/yextcustom.css" rel="stylesheet">'
     );
     expect(result).toContain(
-      '<style id="visual-editor-theme" type="text/css">.components{'
+      '<style id="visual-editor-theme" type="text/css">:root{'
     );
     expect(result).toContain("--colors-palette-text:black !important;");
     expect(result).toContain(
@@ -76,7 +88,7 @@ describe("buildCssOverridesStyle", () => {
 
     expect(result).toContain("fonts.googleapis.com");
     expect(result).toContain(
-      '<style id="visual-editor-theme" type="text/css">.components{' +
+      '<style id="visual-editor-theme" type="text/css">:root{' +
         "--colors-palette-text:black !important;" +
         "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
         "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
@@ -113,7 +125,7 @@ describe("buildCssOverridesStyle", () => {
         '<link href="https://fonts.googleapis.com/css2?family=Adamina:wght@400&display=swap" rel="stylesheet">' +
         '<style type="text/css">@font-face {\n  font-family: "Adamina Fallback";\n  src: local(\'Georgia\');\n  ' +
         "ascent-override: 100.1884%;\n  descent-override: 27.1032%;\n  size-adjust: 106.9985%;\n  font-weight: 400;\n  font-style: regular;\n}</style>" +
-        '<style id="visual-editor-theme" type="text/css">.components{' +
+        '<style id="visual-editor-theme" type="text/css">:root{' +
         "--colors-palette-text:black !important;" +
         "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
         "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
@@ -122,6 +134,103 @@ describe("buildCssOverridesStyle", () => {
         "--fontFamily-button-fontFamily:'Adamina', 'Adamina Fallback', serif !important;" +
         "--fontFamily-h2-fontFamily:'Yext Custom', 'Yext Custom Fallback', serif !important" +
         "}</style>"
+    );
+  });
+
+  it("should load Google fonts referenced by layout fontFamily fields", () => {
+    const streamDocument: StreamDocument = {
+      __: {
+        layout: JSON.stringify({
+          root: { props: {} },
+          content: [
+            {
+              type: "Text",
+              props: {
+                typography: {
+                  fontFamily: "'Adamina', 'Adamina Fallback', serif",
+                },
+              },
+            },
+          ],
+          zones: {},
+        }),
+      },
+    };
+
+    const result = applyTheme(streamDocument, "./", themeConfig);
+
+    expect(result).toContain(
+      '<link href="https://fonts.googleapis.com/css2?family=Adamina:wght@400&display=swap" rel="stylesheet">'
+    );
+    expect(result).not.toContain("family=Open+Sans");
+  });
+
+  it("should union theme and layout custom font assets", () => {
+    const streamDocument: StreamDocument = {
+      __: {
+        theme: JSON.stringify({
+          "--fontFamily-h2-fontFamily":
+            "'Yext Custom', 'Yext Custom Fallback', serif",
+          __customFontAssets: {
+            stylesheetPaths: ["y-fonts/theme-font.css"],
+            preloads: ["/y-fonts/theme-font-bold.woff2"],
+          },
+        }),
+        layout: JSON.stringify({
+          root: {
+            props: {
+              __customFontAssets: {
+                stylesheetPaths: ["y-fonts/layout-font.css"],
+                preloads: ["/y-fonts/layout-font-regular.woff2"],
+              },
+            },
+          },
+          content: [],
+          zones: {},
+        }),
+      },
+    };
+
+    const result = applyTheme(streamDocument, "./", themeConfig);
+
+    expect(result).toContain(
+      '<link href="./y-fonts/theme-font.css" rel="stylesheet">'
+    );
+    expect(result).toContain(
+      '<link href="./y-fonts/layout-font.css" rel="stylesheet">'
+    );
+    expect(result).toContain(
+      '<link rel="preload" href="/y-fonts/theme-font-bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">'
+    );
+    expect(result).toContain(
+      '<link rel="preload" href="/y-fonts/layout-font-regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">'
+    );
+  });
+
+  it("should load theme default fonts when theme data is missing", () => {
+    const result = applyTheme(
+      {
+        siteId: 123,
+      } as StreamDocument,
+      "./",
+      {
+        body: {
+          label: "Body",
+          styles: {
+            fontFamily: {
+              label: "Font",
+              plugin: "fontFamily",
+              type: "select",
+              options: [],
+              default: "'Adamina', serif",
+            },
+          },
+        },
+      }
+    );
+
+    expect(result).toContain(
+      '<link href="https://fonts.googleapis.com/css2?family=Adamina:wght@400&display=swap" rel="stylesheet">'
     );
   });
 
@@ -214,7 +323,7 @@ describe("buildCssOverridesStyle", () => {
     // Should include Google Font links and the CSS style tag
     expect(result).toContain("fonts.googleapis.com");
     expect(result).toContain(
-      '<style id="visual-editor-theme" type="text/css">.components{'
+      '<style id="visual-editor-theme" type="text/css">:root{'
     );
     expect(result).toContain("--colors-palette-text:black !important;");
     expect(result).toContain(
@@ -259,7 +368,7 @@ describe("buildCssOverridesStyle", () => {
     // Should include Google Font links and the CSS style tag
     expect(result).toContain("fonts.googleapis.com");
     expect(result).toContain(
-      '<style id="visual-editor-theme" type="text/css">.components{'
+      '<style id="visual-editor-theme" type="text/css">:root{'
     );
     expect(result).toContain("--colors-palette-primary:#7ED321 !important");
     expect(result).toContain(
@@ -268,6 +377,97 @@ describe("buildCssOverridesStyle", () => {
     expect(result).toContain(
       "--colors-palette-secondary-contrast:#FFFFFF !important"
     );
+  });
+
+  it("creates the theme style tag when updating the editor without one", async () => {
+    document.getElementById(THEME_STYLE_TAG_ID)?.remove();
+
+    await updateThemeInEditor(
+      {
+        "--colors-palette-primary": "#CF0A2C",
+      },
+      themeConfig
+    );
+
+    const styleTag = document.getElementById(THEME_STYLE_TAG_ID);
+    expect(styleTag).not.toBeNull();
+    expect(styleTag?.textContent).toContain(":root{");
+    expect(styleTag?.textContent).toContain(
+      "--colors-palette-primary:#CF0A2C !important"
+    );
+  });
+
+  it("loads layout Google fonts when updating the editor preview", async () => {
+    const iframe = createPreviewIframe();
+
+    await updateThemeInEditor(
+      {
+        "--colors-palette-primary": "#CF0A2C",
+      },
+      themeConfig,
+      {},
+      {
+        root: { props: {} },
+        content: [
+          {
+            type: "Text",
+            props: {
+              typography: {
+                fontFamily: "'Adamina', 'Adamina Fallback', serif",
+              },
+            },
+          },
+        ],
+        zones: {},
+      }
+    );
+
+    expect(
+      document.head.querySelector('link[href*="family=Adamina"]')
+    ).not.toBeNull();
+    expect(
+      iframe.contentDocument?.head.querySelector('link[href*="family=Adamina"]')
+    ).not.toBeNull();
+  });
+
+  it("loads custom font stylesheets in the editor from theme data", async () => {
+    const iframe = createPreviewIframe();
+
+    await updateThemeInEditor(
+      {
+        "--fontFamily-body-fontFamily":
+          "'Chillax Variable', 'Chillax Variable Fallback', sans-serif",
+      },
+      themeConfig,
+      {
+        "Chillax Variable": {
+          fallback: "sans-serif",
+          italics: false,
+          facePath: "y-fonts/chillaxvariable.css",
+          minWeight: 200,
+          maxWeight: 700,
+          variants: [
+            {
+              style: "normal",
+              filePath: "y-fonts/chillaxvariable-bold.woff2",
+              minWeight: 200,
+              maxWeight: 700,
+            },
+          ],
+        },
+      }
+    );
+
+    expect(
+      document.head
+        .querySelector('link[href*="chillaxvariable.css"]')
+        ?.getAttribute("href")
+    ).toBe("/y-fonts/chillaxvariable.css");
+    expect(
+      iframe.contentDocument?.head
+        .querySelector('link[href*="chillaxvariable.css"]')
+        ?.getAttribute("href")
+    ).toBe("/y-fonts/chillaxvariable.css");
   });
 });
 

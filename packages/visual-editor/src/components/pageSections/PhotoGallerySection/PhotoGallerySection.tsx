@@ -13,7 +13,6 @@ import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 import { AssetImageType } from "../../../types/images.ts";
 import { PhotoGalleryWrapperProps } from "./PhotoGalleryWrapper.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
-import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import {
   isMappedEntityFieldSelected,
@@ -252,21 +251,16 @@ export const PhotoGallerySection: YextComponentConfig<PhotoGallerySectionProps> 
       );
     },
     render: (props) => (
-      <ComponentErrorBoundary
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
         isEditing={props.puck.isEditing}
-        resetKeys={[props]}
       >
-        <VisibilityWrapper
-          liveVisibility={props.liveVisibility}
-          isEditing={props.puck.isEditing}
-        >
-          {props.conditionalRender?.isMappedContentEmpty &&
-          !props.puck.isEditing ? (
-            <></>
-          ) : (
-            <PhotoGallerySectionComponent {...props} />
-          )}
-        </VisibilityWrapper>
-      </ComponentErrorBoundary>
+        {props.conditionalRender?.isMappedContentEmpty &&
+        !props.puck.isEditing ? (
+          <></>
+        ) : (
+          <PhotoGallerySectionComponent {...props} />
+        )}
+      </VisibilityWrapper>
     ),
   };

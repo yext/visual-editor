@@ -54,7 +54,7 @@
   "comingSoon": "Varsti",
   "componentErrorBoundary": {
     "error": "Viga",
-    "message": "Seda jaotist ei saa renderdada. Proovige oma komponentide teeki värskendada."
+    "message": "Seda jaotist ei saa praeguse konfiguratsiooniga renderdada. Kustutage see jaotis, lisage see uuesti ja seadistage uuesti."
   },
   "components": {
     "aboutSection": "Sektsiooni kohta",
@@ -186,6 +186,7 @@
     "browText": "Kulmu tekst",
     "businessLogo": "Ärilogo",
     "buttons": "Nupud",
+    "buttonStyles": "Nuppude stiilid",
     "buttonText": "Nupu tekst",
     "cardTitleColor": "Kaardi pealkirja värv",
     "cardVariant": "Kaardi variant",
@@ -280,6 +281,7 @@
     "linkLabel": "Lingi silt",
     "links": "Lingid",
     "linksTooltip": "Lingid ahenevad automaatselt, kui vaateava on liiga kitsas",
+    "linkStyles": "Linkide stiilid",
     "linkTarget": "Lingi sihtmärk",
     "linkType": "Lingi tüüp",
     "listLength": "Nimekirja pikkus",

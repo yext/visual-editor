@@ -54,7 +54,7 @@
   "comingSoon": "Kommer snart",
   "componentErrorBoundary": {
     "error": "Feil",
-    "message": "Kan ikke gjengi denne delen. Prøv å oppdatere komponentbiblioteket."
+    "message": "Kan ikke gjengi denne delen med gjeldende konfigurasjon. Vennligst slett denne delen, legg den til på nytt og konfigurer den på nytt."
   },
   "components": {
     "aboutSection": "Om seksjon",
@@ -186,6 +186,7 @@
     "browText": "Bryntekst",
     "businessLogo": "Forretningslogo",
     "buttons": "Knapper",
+    "buttonStyles": "Knappestiler",
     "buttonText": "Knappetekst",
     "cardTitleColor": "Korttittelfarge",
     "cardVariant": "Kortvariant",
@@ -280,6 +281,7 @@
     "linkLabel": "Koblingsetikett",
     "links": "Lenker",
     "linksTooltip": "Lenker vil automatisk kollapse hvis visningsporten er for smal",
+    "linkStyles": "Lenkestiler",
     "linkTarget": "Linkmål",
     "linkType": "Koblingstype",
     "listLength": "Listelengde",

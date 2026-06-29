@@ -25,13 +25,10 @@ import {
   createDefaultThemeConfig,
   defaultThemeConfig,
 } from "../components/DefaultThemeConfig.ts";
-import {
-  defaultFonts,
-  loadFontsIntoDOM,
-} from "../utils/fonts/visualEditorFonts.ts";
 import { migrate } from "../utils/migrate.ts";
 import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";
+import type { LocalDevOptions } from "./types.ts";
 
 const devLogger = new DevLogger();
 
@@ -64,6 +61,7 @@ export type EditorProps = {
   themeConfig?: ThemeConfig;
   // localDev is used for running VE outside of the platform
   localDev?: boolean;
+  localDevOptions?: LocalDevOptions;
   // forceThemeMode is used with localDev to load the theme editor
   forceThemeMode?: boolean;
   metadata?: Metadata; // passed into puck's global metadata
@@ -74,6 +72,7 @@ export const Editor = ({
   componentRegistry,
   themeConfig,
   localDev,
+  localDevOptions,
   forceThemeMode,
   metadata,
 }: EditorProps) => {
@@ -93,7 +92,12 @@ export const Editor = ({
     layoutDataFetched,
     themeData,
     themeDataFetched,
-  } = useCommonMessageReceivers(componentRegistry, !!localDev, document);
+  } = useCommonMessageReceivers(
+    componentRegistry,
+    !!localDev,
+    document,
+    localDevOptions
+  );
 
   const { pushPageSets, sendError } = useCommonMessageSenders();
 
@@ -115,18 +119,6 @@ export const Editor = ({
       }
     }
   }, []);
-
-  // Loads all Google and custom fonts in the theme editor for the font dropdown
-  useEffect(() => {
-    if (typeof window !== "undefined" && templateMetadata?.isThemeMode) {
-      loadFontsIntoDOM(
-        window.document,
-        defaultFonts,
-        templateMetadata?.customFonts ?? {},
-        "visual-editor-default-fonts"
-      );
-    }
-  }, [templateMetadata?.customFonts, templateMetadata?.isThemeMode]);
 
   useEffect(() => {
     // templateMetadata.isDevMode indicates in-platform dev mode
@@ -205,6 +197,8 @@ export const Editor = ({
   const migratedData = !isLoading
     ? migrate(layoutData!, migrationRegistry, puckConfig, document)
     : undefined;
+  const showLocalDevOverrideButtons =
+    localDevOptions?.showOverrideButtons ?? true;
 
   return (
     <ErrorProvider>
@@ -219,6 +213,7 @@ export const Editor = ({
                 themeData={themeData!}
                 themeConfig={finalThemeConfig}
                 localDev={!!localDev}
+                showLocalDevOverrideButtons={showLocalDevOverrideButtons}
                 metadata={{ ...metadata, streamDocument: document }}
               />
             ) : (
@@ -229,6 +224,7 @@ export const Editor = ({
                 themeData={themeData!}
                 themeConfig={finalThemeConfig}
                 localDev={!!localDev}
+                showLocalDevOverrideButtons={showLocalDevOverrideButtons}
                 metadata={{ ...metadata, streamDocument: document }}
                 streamDocument={document}
               />

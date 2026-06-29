@@ -38,6 +38,8 @@ import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 import { clonePuckResolveData } from "../utils/clonePuckResolveData.ts";
 import { YextPuckFieldOverrides } from "../../fields/fieldOverrides.ts";
+import { wrapComponentConfigWithErrorBoundary } from "../utils/wrapConfigWithComponentErrorBoundary.tsx";
+import { updateLayoutWithCustomFontAssets } from "../utils/customFontAssets.ts";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -89,6 +91,7 @@ type InternalLayoutEditorProps = {
   sendDevSaveStateData: (data: any) => void;
   buildVisualConfigLocalStorageKey: () => string;
   localDev: boolean;
+  showLocalDevOverrideButtons: boolean;
   metadata?: Metadata;
 };
 
@@ -105,12 +108,25 @@ export const InternalLayoutEditor = ({
   sendDevSaveStateData,
   buildVisualConfigLocalStorageKey,
   localDev,
+  showLocalDevOverrideButtons,
   metadata,
 }: InternalLayoutEditorProps) => {
   const historyIndex = useRef<number>(0);
   const { i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
   const { errorCount, errorSources, errorDetails } = useErrorContext();
+  const withCustomFontAssets = React.useCallback(
+    (data: Data | undefined): Record<string, any> => {
+      if (!data) {
+        return {};
+      }
+      return updateLayoutWithCustomFontAssets({
+        layoutData: data,
+        customFonts: templateMetadata.customFonts,
+      });
+    },
+    [templateMetadata.customFonts]
+  );
 
   /**
    * When the Puck history changes save it to localStorage and send a message
@@ -145,12 +161,14 @@ export const InternalLayoutEditor = ({
           return;
         }
 
+        const dataToSave = withCustomFontAssets(current.state.data);
+
         if (layoutSaveState?.hash !== current.id) {
           if (templateMetadata.isDevMode && !templateMetadata.devOverride) {
             devLogger.logFunc("sendDevSaveStateData");
             sendDevSaveStateData({
               payload: {
-                devSaveStateData: JSON.stringify(current.state.data),
+                devSaveStateData: JSON.stringify(dataToSave),
               },
             });
           } else {
@@ -159,7 +177,7 @@ export const InternalLayoutEditor = ({
               payload: {
                 hash: current.id,
                 history: JSON.stringify({
-                  data: current.state.data,
+                  data: dataToSave,
                   ui: current.state.ui,
                 }),
               },
@@ -173,6 +191,7 @@ export const InternalLayoutEditor = ({
       buildVisualConfigLocalStorageKey,
       layoutSaveState,
       saveLayoutSaveState,
+      withCustomFontAssets,
     ]
   );
 
@@ -183,14 +202,14 @@ export const InternalLayoutEditor = ({
 
   const handlePublishLayout = async (data: Data) => {
     publishLayout({
-      payload: { layoutData: JSON.stringify(data) },
+      payload: { layoutData: JSON.stringify(withCustomFontAssets(data)) },
     });
   };
 
   const handleSendLayoutForApproval = async (data: Data, comment: string) => {
     sendLayoutForApproval({
       payload: {
-        layoutData: JSON.stringify(data),
+        layoutData: JSON.stringify(withCustomFontAssets(data)),
         comment: comment,
       },
     });
@@ -201,7 +220,7 @@ export const InternalLayoutEditor = ({
     Object.entries(puckConfig.components).forEach(
       ([componentKey, component]) => {
         translatedComponents[componentKey] = {
-          ...component,
+          ...wrapComponentConfigWithErrorBoundary(component),
           label: pt(component.label ?? ""),
         };
       }
@@ -406,6 +425,7 @@ export const InternalLayoutEditor = ({
               onPublishLayout={handlePublishLayout}
               onSendLayoutForApproval={handleSendLayoutForApproval}
               localDev={localDev}
+              showLocalDevOverrideButtons={showLocalDevOverrideButtons}
               hasErrors={errorCount > 0}
               errorSources={errorSources}
               errorDetails={errorDetails}

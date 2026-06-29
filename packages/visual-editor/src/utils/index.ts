@@ -41,9 +41,11 @@ export {
   VisualEditorComponentsContentPath,
   VisualEditorThemeClassSafelist,
 } from "./themeConfigOptions.ts";
+export { isDarkColor } from "./colors.ts";
 export { type ThemeConfig, themeResolver, deepMerge } from "./themeResolver.ts";
 export { type StreamDocument } from "./types/StreamDocument.ts";
 export {
+  mergeMeta,
   resolveUrlTemplate,
   resolveUrlTemplateOfChild,
 } from "./urls/resolveUrlTemplate.ts";

@@ -54,7 +54,7 @@
   "comingSoon": "Binnenkort beschikbaar",
   "componentErrorBoundary": {
     "error": "Fout",
-    "message": "Kan deze sectie niet weergeven. Probeer uw componentenbibliotheek bij te werken."
+    "message": "Kan deze sectie niet weergeven met de huidige configuratie. Verwijder deze sectie, voeg deze opnieuw toe en configureer deze opnieuw."
   },
   "components": {
     "aboutSection": "Over Sectie",
@@ -186,6 +186,7 @@
     "browText": "Wenkbrauwtekst",
     "businessLogo": "Bedrijfslogo",
     "buttons": "Knoppen",
+    "buttonStyles": "Knopstijlen",
     "buttonText": "Knoptekst",
     "cardTitleColor": "Kleur kaarttitel",
     "cardVariant": "Kaartvariant",
@@ -280,6 +281,7 @@
     "linkLabel": "Linklabel",
     "links": "Links",
     "linksTooltip": "Links worden automatisch samengevouwen als de viewport te smal is",
+    "linkStyles": "Linkstijlen",
     "linkTarget": "Doel koppelen",
     "linkType": "Linktype",
     "listLength": "Maak een lijst van lengte",

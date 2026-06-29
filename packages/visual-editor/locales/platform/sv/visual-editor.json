@@ -54,7 +54,7 @@
   "comingSoon": "Kommer snart",
   "componentErrorBoundary": {
     "error": "Fel",
-    "message": "Det går inte att återge detta avsnitt. Testa att uppdatera ditt komponentbibliotek."
+    "message": "Det går inte att återge detta avsnitt med den aktuella konfigurationen. Ta bort det här avsnittet, lägg till det igen och konfigurera det igen."
   },
   "components": {
     "aboutSection": "Om avsnitt",
@@ -186,6 +186,7 @@
     "browText": "Brow Text",
     "businessLogo": "Affärslogotyp",
     "buttons": "Knappar",
+    "buttonStyles": "Knappstilar",
     "buttonText": "Knapptext",
     "cardTitleColor": "Kortets titelfärg",
     "cardVariant": "Kortvariant",
@@ -280,6 +281,7 @@
     "linkLabel": "Länketikett",
     "links": "Länkar",
     "linksTooltip": "Länkar kommer automatiskt att kollapsa om visningsporten är för smal",
+    "linkStyles": "Länkstilar",
     "linkTarget": "Länkmål",
     "linkType": "Länktyp",
     "listLength": "Listlängd",

@@ -54,7 +54,7 @@
   "comingSoon": "Em breve",
   "componentErrorBoundary": {
     "error": "Erro",
-    "message": "Não é possível renderizar esta seção. Tente atualizar sua biblioteca de componentes."
+    "message": "Não é possível renderizar esta seção com a configuração atual. Exclua esta seção, adicione-a novamente e reconfigure-a."
   },
   "components": {
     "aboutSection": "Sobre a seção",
@@ -186,6 +186,7 @@
     "browText": "Texto da sobrancelha",
     "businessLogo": "Logotipo de negócios",
     "buttons": "Botões",
+    "buttonStyles": "Estilos de botão",
     "buttonText": "Texto do botão",
     "cardTitleColor": "Cor do título do cartão",
     "cardVariant": "Variante de cartão",
@@ -280,6 +281,7 @@
     "linkLabel": "Etiqueta do link",
     "links": "Links",
     "linksTooltip": "Os links serão recolhidos automaticamente se a janela de visualização for muito estreita",
+    "linkStyles": "Estilos de link",
     "linkTarget": "Alvo do link",
     "linkType": "Tipo de link",
     "listLength": "Comprimento da lista",

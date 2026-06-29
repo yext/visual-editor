@@ -7,7 +7,6 @@ import {
   directoryConfig,
   Editor,
   locatorConfig,
-  mainConfig,
   usePlatformBridgeDocument,
   usePlatformBridgeEntityFields,
   VisualEditorProvider,
@@ -24,25 +23,26 @@ import { type Config } from "@puckeditor/core";
 import tailwindConfig from "../../tailwind.config";
 
 const componentRegistry: Record<string, Config<any>> = {
-  main: mainConfig,
   directory: directoryConfig,
   locator: locatorConfig,
 };
 
-// Editor is available at /edit
+const editPath = "__YEXT_VISUAL_EDITOR_PATH__";
+
+// Editor path is injected at generation time based on the available templates.
 export const getPath: GetPath<TemplateProps> = () => {
-  return "edit";
+  return editPath;
 };
 
 export const config: TemplateConfig = {
-  name: "edit",
+  name: "__YEXT_VISUAL_EDITOR_TEMPLATE_NAME__",
 };
 
 export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
   document,
 }): HeadConfig => {
   return {
-    title: "Editor",
+    title: "__YEXT_VISUAL_EDITOR_TEMPLATE_NAME__",
     other: fullStorySnippet + applyTheme(document, "./", defaultThemeConfig),
   };
 };

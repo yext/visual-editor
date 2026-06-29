@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   buildCustomFontAssets,
   buildFontPreloadTags,
+  updateLayoutWithCustomFontAssets,
 } from "./customFontAssets.ts";
 import { ThemeConfig } from "../../utils/themeResolver.ts";
 import { FontRegistry } from "../../utils/fonts/visualEditorFonts.ts";
@@ -497,5 +498,42 @@ describe("buildFontPreloadTags", () => {
     expect(buildFontPreloadTags(["/y-fonts/alpha-regular.bin"], "./")).toEqual(
       '<link rel="preload" href="/y-fonts/alpha-regular.bin" as="font" crossorigin="anonymous">\n'
     );
+  });
+});
+
+describe("layout custom font assets", () => {
+  it("stores layout custom font assets on root props", () => {
+    const layoutData = updateLayoutWithCustomFontAssets({
+      layoutData: {
+        root: { props: {} },
+        content: [
+          {
+            type: "Text",
+            props: {
+              typography: {
+                fontFamily: "'Alpha', 'Alpha Fallback', sans-serif",
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      customFonts: {
+        Alpha: {
+          italics: false,
+          weights: [400],
+          fallback: "sans-serif",
+          facePath: "y-fonts/alpha.css",
+          variants: [],
+        },
+      },
+    });
+
+    expect(
+      (layoutData.root.props as Record<string, unknown>).__customFontAssets
+    ).toEqual({
+      stylesheetPaths: ["y-fonts/alpha.css"],
+      preloads: [],
+    });
   });
 });

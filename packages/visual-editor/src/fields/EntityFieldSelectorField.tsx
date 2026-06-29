@@ -450,7 +450,6 @@ export const ConstantValueInput = <T extends Record<string, any>>({
         sourceField: resolvedSourceField,
       } as YextFieldDefinition<any>)
     : constantFieldConfig;
-
   const fieldEditor = (
     <YextAutoField
       onChange={(newConstantValue, uiState) =>

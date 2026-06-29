@@ -19,7 +19,6 @@ import {
   AboutSectionDetailsColumnProps,
   defaultAboutSectionProps,
 } from "./AboutSectionDetailsColumn.tsx";
-import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 const placeholderText = {
@@ -312,17 +311,12 @@ export const AboutSection: YextComponentConfig<AboutSectionProps> = {
     return data;
   },
   render: (props) => (
-    <ComponentErrorBoundary
+    <VisibilityWrapper
+      liveVisibility={props.liveVisibility}
       isEditing={props.puck.isEditing}
-      resetKeys={[props]}
+      iconSize="md"
     >
-      <VisibilityWrapper
-        liveVisibility={props.liveVisibility}
-        isEditing={props.puck.isEditing}
-        iconSize="md"
-      >
-        <AboutComponent {...props} />
-      </VisibilityWrapper>
-    </ComponentErrorBoundary>
+      <AboutComponent {...props} />
+    </VisibilityWrapper>
   ),
 };

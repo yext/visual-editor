@@ -54,7 +54,7 @@
   "comingSoon": "Už čoskoro",
   "componentErrorBoundary": {
     "error": "Chyba",
-    "message": "Túto sekciu nie je možné vykresliť. Skúste aktualizovať knižnicu komponentov."
+    "message": "Túto sekciu nie je možné vykresliť s aktuálnou konfiguráciou. Odstráňte túto sekciu, znova ju pridajte a znova nakonfigurujte."
   },
   "components": {
     "aboutSection": "O sekcii",
@@ -186,6 +186,7 @@
     "browText": "Text na obočie",
     "businessLogo": "Obchodné logo",
     "buttons": "Gombíky",
+    "buttonStyles": "Štýly tlačidiel",
     "buttonText": "Text tlačidla",
     "cardTitleColor": "Farba názvu karty",
     "cardVariant": "Variant karty",
@@ -280,6 +281,7 @@
     "linkLabel": "Označenie odkazu",
     "links": "Odkazy",
     "linksTooltip": "Ak je výrez príliš úzky, prepojenia sa automaticky zbalia",
+    "linkStyles": "Štýly odkazov",
     "linkTarget": "Cieľ odkazu",
     "linkType": "Typ odkazu",
     "listLength": "Dĺžka zoznamu",

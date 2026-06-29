@@ -11,18 +11,16 @@ import {
   TagType,
   TransformProps,
 } from "@yext/pages";
-import { Render, resolveAllData } from "@puckeditor/core";
+import { Config, resolveAllData } from "@puckeditor/core";
 import {
   applyTheme,
   VisualEditorProvider,
+  VisualEditorRender,
   getPageMetadata,
   applyAnalytics,
   applyHeaderScript,
   applyCertifiedFacts,
-  migrate,
-  migrationRegistry,
   defaultThemeConfig,
-  mainConfig,
   getSchema,
   injectTranslations,
   getCanonicalUrl,
@@ -30,6 +28,8 @@ import {
   resolveUrlTemplate,
 } from "@yext/visual-editor";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
+
+const baseConfig: Config = {};
 
 export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
   data: TemplateRenderProps
@@ -106,15 +106,13 @@ export const getPath: GetPath<TemplateProps> = ({
 export const transformProps: TransformProps<TemplateProps> = async (props) => {
   const { document } = props;
 
-  const migratedData = migrate(
+  const resolvedPuckData = await resolveAllData(
     JSON.parse(document.__.layout),
-    migrationRegistry,
-    mainConfig,
-    document
+    baseConfig,
+    {
+      streamDocument: document,
+    }
   );
-  const resolvedPuckData = await resolveAllData(migratedData, mainConfig, {
-    streamDocument: document,
-  });
   document.__.layout = JSON.stringify(resolvedPuckData);
 
   const translations = await injectTranslations(document);
@@ -122,7 +120,7 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
   return { ...props, document, translations };
 };
 
-const Location: Template<TemplateRenderProps> = (props) => {
+const Base: Template<TemplateRenderProps> = (props) => {
   const { document } = props;
 
   const layoutString = document.__.layout;
@@ -153,8 +151,8 @@ const Location: Template<TemplateRenderProps> = (props) => {
     >
       <VisualEditorProvider templateProps={props}>
         <GTMBody>
-          <Render
-            config={mainConfig}
+          <VisualEditorRender
+            config={baseConfig}
             data={data}
             metadata={{ streamDocument: document }}
           />
@@ -164,4 +162,4 @@ const Location: Template<TemplateRenderProps> = (props) => {
   );
 };
 
-export default Location;
+export default Base;

@@ -40,7 +40,6 @@ describe("EmbeddedFieldStringInput", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
-
   it("includes linked entity fields in the embedded field selector", () => {
     render(
       <TemplatePropsContext.Provider value={{ document: {} }}>

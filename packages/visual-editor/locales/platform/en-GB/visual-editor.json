@@ -54,7 +54,7 @@
   "comingSoon": "Coming Soon",
   "componentErrorBoundary": {
     "error": "Error",
-    "message": "Can't render this section. Try updating your component library."
+    "message": "Cannot render this section with the current configuration. Please delete this section, re-add it, and re-configure it."
   },
   "components": {
     "aboutSection": "About Section",
@@ -186,6 +186,7 @@
     "browText": "Brow Text",
     "businessLogo": "Business Logo",
     "buttons": "Buttons",
+    "buttonStyles": "Button Styles",
     "buttonText": "Button Text",
     "cardTitleColor": "Card Title Color",
     "cardVariant": "Card Variant",
@@ -280,6 +281,7 @@
     "linkLabel": "Link Label",
     "links": "Links",
     "linksTooltip": "Links will automatically collapse if the viewport is too narrow",
+    "linkStyles": "Link Styles",
     "linkTarget": "Link Target",
     "linkType": "Link Type",
     "listLength": "List Length",

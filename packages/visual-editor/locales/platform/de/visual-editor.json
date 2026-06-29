@@ -54,7 +54,7 @@
   "comingSoon": "Demnächst erhältlich",
   "componentErrorBoundary": {
     "error": "Fehler",
-    "message": "Dieses Modul kann nicht gerendert werden. Versuchen Sie, Ihre Komponentenbibliothek zu aktualisieren."
+    "message": "Dieser Abschnitt kann mit der aktuellen Konfiguration nicht gerendert werden. Bitte löschen Sie diesen Abschnitt, fügen Sie ihn erneut hinzu und konfigurieren Sie ihn neu."
   },
   "components": {
     "aboutSection": "Über uns- Modul",
@@ -186,6 +186,7 @@
     "browText": "Stirntext",
     "businessLogo": "Geschäftslogo",
     "buttons": "Buttons",
+    "buttonStyles": "Schaltflächenstile",
     "buttonText": "Schaltflächentext",
     "cardTitleColor": "Farbe des Kartentitels",
     "cardVariant": "Karten-Variante",
@@ -280,6 +281,7 @@
     "linkLabel": "Link-Label",
     "links": "Links",
     "linksTooltip": "Links werden automatisch eingeklappt, wenn das Viewport zu schmal ist",
+    "linkStyles": "Link-Stile",
     "linkTarget": "Link-Ziel",
     "linkType": "Link-Typ",
     "listLength": "Listenlänge",

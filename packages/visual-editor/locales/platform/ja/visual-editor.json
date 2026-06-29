@@ -54,7 +54,7 @@
   "comingSoon": "近日公開",
   "componentErrorBoundary": {
     "error": "エラー",
-    "message": "このセクションをレンダリングできません。コンポーネント ライブラリを更新してみてください。"
+    "message": "現在の構成ではこのセクションをレンダリングできません。このセクションを削除し、再度追加し、再設定してください。"
   },
   "components": {
     "aboutSection": "概要セクション",
@@ -186,6 +186,7 @@
     "browText": "眉テキスト",
     "businessLogo": "ビジネスロゴ",
     "buttons": "ボタン",
+    "buttonStyles": "ボタンのスタイル",
     "buttonText": "ボタンのテキスト",
     "cardTitleColor": "カードタイトルの色",
     "cardVariant": "カードのバリエーション",
@@ -280,6 +281,7 @@
     "linkLabel": "リンクラベル",
     "links": "リンク",
     "linksTooltip": "ビューポートが狭すぎる場合、リンクは自動的に折りたたまれます",
+    "linkStyles": "リンクスタイル",
     "linkTarget": "リンクターゲット",
     "linkType": "リンクタイプ",
     "listLength": "リストの長さ",

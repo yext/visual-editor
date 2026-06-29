@@ -54,7 +54,7 @@
   "comingSoon": "Drīzumā",
   "componentErrorBoundary": {
     "error": "Kļūda",
-    "message": "Nevar atveidot šo sadaļu. Mēģiniet atjaunināt savu komponentu bibliotēku."
+    "message": "Nevar atveidot šo sadaļu ar pašreizējo konfigurāciju. Lūdzu, izdzēsiet šo sadaļu, pievienojiet to atkārtoti un no jauna konfigurējiet."
   },
   "components": {
     "aboutSection": "Par sadaļu",
@@ -186,6 +186,7 @@
     "browText": "Uzacu teksts",
     "businessLogo": "Biznesa logotips",
     "buttons": "Pogas",
+    "buttonStyles": "Pogu stili",
     "buttonText": "Pogas teksts",
     "cardTitleColor": "Kartes nosaukuma krāsa",
     "cardVariant": "Kartes variants",
@@ -280,6 +281,7 @@
     "linkLabel": "Saites etiķete",
     "links": "Saites",
     "linksTooltip": "Ja skata logs ir pārāk šaurs, saites tiks automātiski sakļautas",
+    "linkStyles": "Saišu stili",
     "linkTarget": "Saites mērķis",
     "linkType": "Saites tips",
     "listLength": "Saraksta garums",

@@ -22,7 +22,6 @@ import { PageSection } from "../atoms/pageSection.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders.ts";
-import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export interface ProfessionalHeroStyles {
@@ -758,20 +757,15 @@ export const ProfessionalHeroSection: YextComponentConfig<ProfessionalHeroSectio
       };
     },
     render: (props) => (
-      <ComponentErrorBoundary
-        isEditing={props.puck.isEditing}
-        resetKeys={[props]}
+      <AnalyticsScopeProvider
+        name={`${props.analytics?.scope ?? "professionalHeroSection"}${getAnalyticsScopeHash(props.id)}`}
       >
-        <AnalyticsScopeProvider
-          name={`${props.analytics?.scope ?? "professionalHeroSection"}${getAnalyticsScopeHash(props.id)}`}
+        <VisibilityWrapper
+          liveVisibility={!!props.liveVisibility}
+          isEditing={props.puck.isEditing}
         >
-          <VisibilityWrapper
-            liveVisibility={!!props.liveVisibility}
-            isEditing={props.puck.isEditing}
-          >
-            <ProfessionalHero {...props} />
-          </VisibilityWrapper>
-        </AnalyticsScopeProvider>
-      </ComponentErrorBoundary>
+          <ProfessionalHero {...props} />
+        </VisibilityWrapper>
+      </AnalyticsScopeProvider>
     ),
   };

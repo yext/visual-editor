@@ -54,7 +54,7 @@
   "comingSoon": "Dolazi uskoro",
   "componentErrorBoundary": {
     "error": "Greška",
-    "message": "Nije moguće prikazati ovaj odjeljak. Pokušajte ažurirati biblioteku komponenti."
+    "message": "Nije moguće prikazati ovaj odjeljak s trenutnom konfiguracijom. Molimo izbrišite ovaj odjeljak, ponovno ga dodajte i ponovno ga konfigurirajte."
   },
   "components": {
     "aboutSection": "O odjeljku",
@@ -186,6 +186,7 @@
     "browText": "Tekst obrva",
     "businessLogo": "Poslovni logotip",
     "buttons": "Gumbi",
+    "buttonStyles": "Stilovi gumba",
     "buttonText": "Tekst gumba",
     "cardTitleColor": "Boja naslova kartice",
     "cardVariant": "Varijanta kartice",
@@ -280,6 +281,7 @@
     "linkLabel": "Oznaka veze",
     "links": "Veze",
     "linksTooltip": "Veze će se automatski skupiti ako je okvir za prikaz preuzak",
+    "linkStyles": "Stilovi veza",
     "linkTarget": "Odredište",
     "linkType": "Vrsta veze",
     "listLength": "Dužina popisa",

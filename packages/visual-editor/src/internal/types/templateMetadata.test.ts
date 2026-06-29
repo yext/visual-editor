@@ -35,4 +35,18 @@ describe("generateTemplateMetadata", () => {
       "type.image"
     );
   });
+
+  it("uses themeScopeKey for a shared local-dev theme entity", () => {
+    const directoryMetadata = generateTemplateMetadata(undefined, {
+      templateId: "directory",
+      themeScopeKey: "local-editor",
+    });
+    const locatorMetadata = generateTemplateMetadata(undefined, {
+      templateId: "locator",
+      themeScopeKey: "local-editor",
+    });
+
+    expect(directoryMetadata.themeEntityId).toBeDefined();
+    expect(directoryMetadata.themeEntityId).toBe(locatorMetadata.themeEntityId);
+  });
 });
