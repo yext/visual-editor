@@ -1,4 +1,5 @@
 import type { YextSchemaField } from "../../types/entityFields.ts";
+import { isRichText } from "../../utils/plainText.ts";
 import type { LocalEditorStreamDefinition } from "./types.ts";
 import { isPlainObject } from "./utils.ts";
 
@@ -203,7 +204,7 @@ const shouldSkipField = (fieldName: string): boolean => {
 const inferStructuredObjectType = (
   value: Record<string, unknown>
 ): string | undefined => {
-  if (isRichTextValue(value)) {
+  if (isRichText(value)) {
     return "type.rich_text_v2";
   }
   if (isImageValue(value)) {
@@ -213,32 +214,6 @@ const inferStructuredObjectType = (
     return "type.cta";
   }
   return undefined;
-};
-
-const isRichTextValue = (value: Record<string, unknown>): boolean => {
-  if ("html" in value && typeof value.html === "string") {
-    return true;
-  }
-
-  if (!("json" in value)) {
-    return false;
-  }
-
-  const { json } = value;
-  if (isPlainObject(json)) {
-    return isPlainObject(json.root);
-  }
-
-  if (typeof json !== "string") {
-    return false;
-  }
-
-  try {
-    const parsedJson = JSON.parse(json);
-    return isPlainObject(parsedJson) && isPlainObject(parsedJson.root);
-  } catch {
-    return false;
-  }
 };
 
 const isImageValue = (value: Record<string, unknown>): boolean => {
