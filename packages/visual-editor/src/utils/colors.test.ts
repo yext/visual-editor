@@ -355,6 +355,7 @@ describe("getDefaultForegroundColor", () => {
       theme: JSON.stringify({
         "--colors-palette-primary": "#111111",
         "--colors-palette-secondary": "#F5F5F5",
+        "--colors-palette-tertiary": "#888888",
       }),
     },
   };
@@ -380,6 +381,21 @@ describe("getDefaultForegroundColor", () => {
         {
           selectedColor: "palette-secondary",
           contrastingColor: "palette-secondary-contrast",
+        },
+        streamDocument
+      )
+    ).toStrictEqual({
+      selectedColor: "black",
+      contrastingColor: "white",
+    });
+  });
+
+  it("uses the same contrast decision for mid-tone surfaces", () => {
+    expect(
+      getDefaultForegroundColor(
+        {
+          selectedColor: "palette-tertiary",
+          contrastingColor: "palette-tertiary-contrast",
         },
         streamDocument
       )

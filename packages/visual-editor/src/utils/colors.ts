@@ -287,6 +287,13 @@ const getColorLuminance = (
   return rgb ? luminanceFromRGB(rgb) : undefined;
 };
 
+const prefersWhiteForeground = (luminance: number): boolean => {
+  const whiteContrast = (1 + 0.05) / (luminance + 0.05);
+  const blackContrast = (luminance + 0.05) / 0.05;
+
+  return whiteContrast >= blackContrast;
+};
+
 const rgbToHsl = (rgb: number[]) => {
   const [r, g, b] = rgb.map((value) => value / 255);
   const max = Math.max(r, g, b);
@@ -388,7 +395,6 @@ const getDerivedPaletteHexColor = (
   const baseColorHex = normalizeHexColor(
     getThemeValue(`--colors-${baseColorToken}`, streamDocument)
   );
-  console.log("base color hex is", baseColorHex);
   const baseColorRgb = baseColorHex ? hexToRGB(baseColorHex) : undefined;
 
   if (!baseColorRgb) {
@@ -447,17 +453,17 @@ export const getThemeColorHexValue = (
 export const getDefaultForegroundColor = (
   surfaceColor?: ThemeColor | string,
   streamDocument?: StreamDocument | Record<string, any>
-): ThemeColor => {
+): ThemeColor | undefined => {
   const normalizedSurfaceColor = normalizeThemeColorToken(surfaceColor);
   if (!normalizedSurfaceColor) {
-    return { selectedColor: "black", contrastingColor: "white" };
+    return undefined;
   }
 
   const luminance = getColorLuminance(surfaceColor, streamDocument);
   if (luminance !== undefined) {
-    return luminance >= 0.5
-      ? { selectedColor: "black", contrastingColor: "white" }
-      : { selectedColor: "white", contrastingColor: "black" };
+    return prefersWhiteForeground(luminance)
+      ? { selectedColor: "white", contrastingColor: "black" }
+      : { selectedColor: "black", contrastingColor: "white" };
   }
 
   if (surfaceColor !== null && typeof surfaceColor === "object") {
@@ -513,10 +519,7 @@ export const isDarkColor = (
       : undefined;
 
     if (selectedLuminance !== undefined) {
-      const whiteContrast = (1 + 0.05) / (selectedLuminance + 0.05);
-      const blackContrast = (selectedLuminance + 0.05) / 0.05;
-
-      return whiteContrast >= blackContrast;
+      return prefersWhiteForeground(selectedLuminance);
     }
   }
 
