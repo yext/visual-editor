@@ -326,7 +326,9 @@ const LocatorInternal = ({
     }
   };
 
-  const searchLoading = useSearchState((state) => state.searchStatus.isLoading);
+  const searchLoading: boolean | undefined = useSearchState(
+    (state) => state.searchStatus.isLoading
+  );
   const [searchState, setSearchState] =
     React.useState<SearchState>("not started");
 
@@ -711,7 +713,11 @@ const LocatorInternal = ({
 
     prevIsMobile.current = isMobile;
 
-    if (!switchedToMobile || searchLoading || (currentOffset ?? 0) === 0) {
+    if (
+      !switchedToMobile ||
+      searchLoading !== false ||
+      (currentOffset ?? 0) === 0
+    ) {
       return;
     }
 
