@@ -67,8 +67,16 @@ export function TranslatableRichTextField<
           : valueForCurrentLocale;
 
         if (shouldUseStandaloneLocalPrompt()) {
-          const userInput = prompt("Enter Rich Text (HTML):");
-          handleNewValue({ json: "", html: userInput ?? "" }, locale);
+          const userInput = prompt(
+            "Enter Rich Text (HTML):",
+            typeof valueForCurrentLocale === "object" &&
+              "html" in valueForCurrentLocale
+              ? valueForCurrentLocale?.html
+              : undefined
+          );
+          if (userInput !== null) {
+            handleNewValue({ json: "", html: userInput ?? "" }, locale);
+          }
           if (pendingRichTextSession?.messageId === messageId) {
             pendingRichTextSession = undefined;
           }
