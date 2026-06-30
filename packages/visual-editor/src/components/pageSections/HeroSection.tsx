@@ -1,5 +1,9 @@
 import { DefaultComponentProps, Fields, setDeep, Slot } from "@puckeditor/core";
-import { AnalyticsScopeProvider, ImageType } from "@yext/pages-components";
+import {
+  AnalyticsScopeProvider,
+  ComplexImageType,
+  ImageType,
+} from "@yext/pages-components";
 import {
   backgroundColors,
   ThemeColor,
@@ -32,7 +36,7 @@ import {
 
 export interface HeroData {
   backgroundImage: YextEntityField<
-    ImageType | AssetImageType | TranslatableAssetImage
+    ImageType | ComplexImageType | AssetImageType | TranslatableAssetImage
   >;
 }
 
