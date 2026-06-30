@@ -69,7 +69,10 @@ export function TranslatableRichTextField<
         if (shouldUseStandaloneLocalPrompt()) {
           const userInput = prompt(
             "Enter Rich Text (HTML):",
-            valueForCurrentLocale.html
+            typeof valueForCurrentLocale === "object" &&
+              "html" in valueForCurrentLocale
+              ? valueForCurrentLocale?.html
+              : undefined
           );
           if (userInput !== null) {
             handleNewValue({ json: "", html: userInput ?? "" }, locale);
