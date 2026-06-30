@@ -590,15 +590,13 @@ const updateTemplateManifest = (
 
   for (const templateName of templateNames) {
     const { defaultLayoutPath } = getTemplatePaths(rootDir, templateName);
-    const hasDefaultLayoutFile = fs.existsSync(defaultLayoutPath);
-    const serializedDefaultLayoutData = JSON.stringify(
-      hasDefaultLayoutFile
-        ? readJsonFile<unknown>(
-            defaultLayoutPath,
-            `default layout JSON for template "${templateName}"`
-          )
-        : DEFAULT_LAYOUT
-    );
+    const defaultLayoutData = fs.existsSync(defaultLayoutPath)
+      ? readJsonFile<unknown>(
+          defaultLayoutPath,
+          `default layout JSON for template "${templateName}"`
+        )
+      : DEFAULT_LAYOUT;
+    const serializedDefaultLayoutData = JSON.stringify(defaultLayoutData);
     const existingEntry = manifest.templates.find(
       (template) => template.name === templateName
     );
@@ -615,10 +613,7 @@ const updateTemplateManifest = (
       continue;
     }
 
-    if (
-      hasDefaultLayoutFile &&
-      existingEntry.defaultLayoutData !== serializedDefaultLayoutData
-    ) {
+    if (existingEntry.defaultLayoutData !== serializedDefaultLayoutData) {
       existingEntry.defaultLayoutData = serializedDefaultLayoutData;
       updated = true;
     }
