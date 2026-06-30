@@ -183,6 +183,7 @@ export const yextVisualEditorPlugin = (
       generateRegistryTemplateFiles({
         rootDir: process.cwd(),
         generatedBaseTemplateSource: baseTemplate,
+        trackGeneratedFileForCleanup: generatedFileCleanup.track,
       });
 
       if (!isBuildMode && localEditorOptions?.enabled) {
