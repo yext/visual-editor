@@ -23,10 +23,14 @@ export const ImmersivePromo: PuckComponent<PromoVariantProps> = (props) => {
     locale
   );
 
-  const localizedImage =
+  const localizedImage:
+    | { url: string; width: number; height: number }
+    | undefined =
     resolvedBackgroundImage && isLocalizedAssetImage(resolvedBackgroundImage)
       ? resolveLocalizedAssetImage(resolvedBackgroundImage, locale)
-      : resolvedBackgroundImage;
+      : resolvedBackgroundImage && "image" in resolvedBackgroundImage
+        ? resolvedBackgroundImage.image
+        : resolvedBackgroundImage;
 
   return (
     <div

@@ -24,7 +24,11 @@ import {
   TranslatableAssetImage,
   AssetImageType,
 } from "../../../types/images.ts";
-import { AnalyticsScopeProvider, ImageType } from "@yext/pages-components";
+import {
+  AnalyticsScopeProvider,
+  ComplexImageType,
+  ImageType,
+} from "@yext/pages-components";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
 import { updateFields } from "../HeroSection.tsx";
 import { ClassicPromo } from "./ClassicPromo.tsx";
@@ -58,7 +62,7 @@ export interface PromoData {
    * @defaultValue Placeholder image.
    */
   backgroundImage: YextEntityField<
-    ImageType | AssetImageType | TranslatableAssetImage
+    ImageType | ComplexImageType | AssetImageType | TranslatableAssetImage
   >;
 }
 
