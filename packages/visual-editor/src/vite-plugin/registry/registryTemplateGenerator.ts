@@ -148,9 +148,11 @@ export const DEFAULT_LAYOUT = {
 export const generateRegistryTemplateFiles = ({
   rootDir,
   generatedBaseTemplateSource,
+  trackGeneratedFileForCleanup,
 }: {
   rootDir: string;
   generatedBaseTemplateSource: string;
+  trackGeneratedFileForCleanup?: (filePath: string) => void;
 }): void => {
   const collectedTemplates = collectGeneratedTemplates(rootDir);
 
@@ -171,7 +173,8 @@ export const generateRegistryTemplateFiles = ({
     rootDir,
     generatedBaseTemplateSource,
     collectedTemplates,
-    effectiveTemplateNames.usesFallbackMain
+    effectiveTemplateNames.usesFallbackMain,
+    trackGeneratedFileForCleanup
   );
 
   // 4) Update `<starter>/.template-manifest.json`.
@@ -302,7 +305,8 @@ const syncGeneratedRegistryFiles = (
   rootDir: string,
   generatedBaseTemplateSource: string,
   collectedTemplates: CollectedTemplate[],
-  useFallbackMain: boolean
+  useFallbackMain: boolean,
+  trackGeneratedFileForCleanup?: (filePath: string) => void
 ): void => {
   const activeTemplateNames = new Set(
     collectedTemplates.map(({ templateName }) => templateName)
@@ -323,6 +327,7 @@ const syncGeneratedRegistryFiles = (
     );
     fs.ensureDirSync(path.dirname(templatePaths.configPath));
     writeFileIfChanged(templatePaths.configPath, configSource);
+    trackGeneratedFileForCleanup?.(templatePaths.configPath);
 
     // 3) Materialize `<starter>/src/templates/<template>.tsx` from the internal base template.
     const configImportPath = toPosixPath(
@@ -347,13 +352,15 @@ const syncGeneratedRegistryFiles = (
       templatePaths.templatePath
     );
     writeFileIfChanged(templatePaths.templatePath, templateSource);
+    trackGeneratedFileForCleanup?.(templatePaths.templatePath);
   }
 
   syncFallbackMainTemplate(
     rootDir,
     generatedBaseTemplateSource,
     activeTemplateNames,
-    useFallbackMain
+    useFallbackMain,
+    trackGeneratedFileForCleanup
   );
 
   pruneStaleGeneratedTemplateFiles(rootDir, activeTemplateNames);
@@ -744,7 +751,8 @@ const syncFallbackMainTemplate = (
   rootDir: string,
   generatedBaseTemplateSource: string,
   activeTemplateNames: Set<string>,
-  useFallbackMain: boolean
+  useFallbackMain: boolean,
+  trackGeneratedFileForCleanup?: (filePath: string) => void
 ): void => {
   const fallbackMainTemplatePath = path.join(
     rootDir,
@@ -769,6 +777,7 @@ const syncFallbackMainTemplate = (
       "mainConfig"
     )
   );
+  trackGeneratedFileForCleanup?.(fallbackMainTemplatePath);
 };
 
 /**
