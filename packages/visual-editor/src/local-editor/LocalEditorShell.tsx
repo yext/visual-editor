@@ -154,7 +154,7 @@ export const LocalEditorShell = ({
     selectedTemplateDefaults,
     selectedTemplateId,
   ]);
-  const document = React.useMemo(() => {
+  const streamDocument = React.useMemo(() => {
     const baseDocument = documentResponse?.document;
     if (!baseDocument) {
       return baseDocument;
@@ -409,15 +409,15 @@ export const LocalEditorShell = ({
               Loading document…
             </div>
           )}
-          {document && documentResponse && selectedTemplateId && (
+          {streamDocument && documentResponse && selectedTemplateId && (
             <VisualEditorProvider
-              templateProps={{ document }}
+              templateProps={{ document: streamDocument }}
               entityFields={documentResponse.entityFields}
               tailwindConfig={tailwindConfig}
             >
               <Editor
                 key={editorKey}
-                document={document}
+                document={streamDocument}
                 componentRegistry={componentRegistry}
                 themeConfig={themeConfig}
                 localDev={true}
@@ -434,7 +434,7 @@ export const LocalEditorShell = ({
 
 const ToggleButton = (props: {
   children: React.ReactNode;
-  onClick: () => any;
+  onClick: () => void;
 }) => {
   const { children, onClick } = props;
   return (
