@@ -222,7 +222,7 @@ describe("LocalEditorShell", () => {
     renderShell();
 
     fireEvent.click(
-      screen.getByRole("button", { name: "Show Nearby Locations" })
+      screen.getByRole("button", { name: "Add Nearby Locations Key" })
     );
 
     expect(promptSpy).toHaveBeenCalledWith("Yext API Key", undefined);
