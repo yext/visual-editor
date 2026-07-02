@@ -14,6 +14,37 @@ import type { LocalEditorShellProps } from "./types.ts";
 import { useLocalEditorDocument } from "./useLocalEditorDocument.ts";
 import { useLocalEditorManifest } from "./useLocalEditorManifest.ts";
 
+const TEST_REVIEWS_AGG = [
+  {
+    publisher: "FIRSTPARTY",
+    averageRating: 4.8,
+    reviewCount: 3,
+    topReviews: [
+      {
+        authorName: "Jordan Lee",
+        rating: 5,
+        reviewDate: "2026-06-12",
+        content:
+          "Fast service, friendly staff, and the food was fresh. This is my go-to lunch spot.",
+      },
+      {
+        authorName: "Maya Patel",
+        rating: 5,
+        reviewDate: "2026-05-28",
+        content:
+          "Ordering was easy and everything was ready right on time. The team was great.",
+      },
+      {
+        authorName: "Chris Morgan",
+        rating: 4,
+        reviewDate: "2026-05-03",
+        content:
+          "Good food and quick pickup. The location was clean and the staff was helpful.",
+      },
+    ],
+  },
+];
+
 export const LocalEditorShell = ({
   apiBasePath,
   routePath,
@@ -24,6 +55,8 @@ export const LocalEditorShell = ({
   const [locationSearch, setLocationSearch] = React.useState(() => {
     return typeof window === "undefined" ? "" : window.location.search;
   });
+  const [mapboxKey, setMapboxKey] = React.useState<string>();
+  const [nearbyLocationsKey, setNearbyLocationsKey] = React.useState<string>();
   const { isManifestLoading, manifest, manifestError } =
     useLocalEditorManifest(apiBasePath);
 
@@ -45,6 +78,7 @@ export const LocalEditorShell = ({
   const searchParams = React.useMemo(() => {
     return new URLSearchParams(locationSearch);
   }, [locationSearch]);
+  const showReviewsData = searchParams.get("reviews") !== "0";
 
   const {
     supportedTemplateIds,
@@ -120,6 +154,88 @@ export const LocalEditorShell = ({
     selectedTemplateDefaults,
     selectedTemplateId,
   ]);
+  const document = React.useMemo(() => {
+    const baseDocument = documentResponse?.document;
+    if (!baseDocument) {
+      return baseDocument;
+    }
+
+    let nextDocument = baseDocument;
+
+    if (showReviewsData) {
+      if (!("ref_reviewsAgg" in nextDocument)) {
+        nextDocument = {
+          ...nextDocument,
+          ref_reviewsAgg: TEST_REVIEWS_AGG,
+        };
+      }
+    } else if ("ref_reviewsAgg" in nextDocument) {
+      const { ref_reviewsAgg: _refReviewsAgg, ...documentWithoutReviews } =
+        nextDocument;
+      nextDocument = documentWithoutReviews;
+    }
+
+    if (typeof mapboxKey === "string") {
+      const currentEnv =
+        "_env" in nextDocument &&
+        nextDocument._env &&
+        typeof nextDocument._env === "object"
+          ? (nextDocument._env as Record<string, unknown>)
+          : undefined;
+
+      if (currentEnv?.YEXT_MAPBOX_API_KEY !== mapboxKey) {
+        nextDocument = {
+          ...nextDocument,
+          _env: {
+            ...currentEnv,
+            YEXT_MAPBOX_API_KEY: mapboxKey,
+          },
+        };
+      }
+    }
+
+    if (typeof nearbyLocationsKey === "string") {
+      const currentEnv =
+        "_env" in nextDocument &&
+        nextDocument._env &&
+        typeof nextDocument._env === "object"
+          ? (nextDocument._env as Record<string, unknown>)
+          : undefined;
+
+      // Uses nearby locations from https://www.yext.com/s/4174974/yextsites/155048/editor#pageSetId=locations
+      nextDocument = {
+        ...nextDocument,
+        businessId: "4174974",
+        __: {
+          isPrimaryLocale: true,
+        },
+        _env: {
+          ...currentEnv,
+          YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: nearbyLocationsKey,
+        },
+        _pageset: JSON.stringify({
+          config: {
+            contentEndpointId: "locationsContent",
+            urlTemplate: {
+              primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+            },
+          },
+        }),
+        yextDisplayCoordinate: {
+          latitude: 38.895546,
+          longitude: -77.069915,
+        },
+        _yext: { contentDeliveryAPIDomain: "https://cdn.yextapis.com" },
+      };
+    }
+
+    return nextDocument;
+  }, [
+    documentResponse?.document,
+    mapboxKey,
+    nearbyLocationsKey,
+    showReviewsData,
+  ]);
 
   return (
     <div
@@ -145,16 +261,58 @@ export const LocalEditorShell = ({
             Switch templates, entities, and locales against local snapshot data.
           </p>
         </div>
-        <code
+        <div
           style={{
-            background: "#111",
-            color: "#fff",
-            padding: "6px 10px",
-            borderRadius: "999px",
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            flexWrap: "wrap",
+            justifyContent: "flex-end",
           }}
         >
-          {routePath}
-        </code>
+          <ToggleButton
+            onClick={() => {
+              const promptResult = window.prompt("Enter Mapbox key", mapboxKey);
+              if (typeof promptResult === "string") {
+                setMapboxKey(promptResult);
+              }
+            }}
+          >
+            {mapboxKey ? "Update Mapbox Key" : "Add Mapbox Key"}
+          </ToggleButton>
+          <ToggleButton
+            onClick={() => {
+              const promptResult = window.prompt(
+                "Yext API Key",
+                nearbyLocationsKey
+              );
+              if (typeof promptResult === "string") {
+                setNearbyLocationsKey(promptResult);
+              }
+            }}
+          >
+            {nearbyLocationsKey
+              ? "Update Nearby Locations Key"
+              : "Add Nearby Locations Key"}
+          </ToggleButton>
+          <ToggleButton
+            onClick={() => {
+              updateSearchParam("reviews", showReviewsData ? "0" : "1");
+            }}
+          >
+            {showReviewsData ? "Hide Reviews Data" : "Show Reviews Data"}
+          </ToggleButton>
+          <code
+            style={{
+              background: "#111",
+              color: "#fff",
+              padding: "6px 10px",
+              borderRadius: "999px",
+            }}
+          >
+            {routePath}
+          </code>
+        </div>
       </div>
 
       <LocalEditorControls
@@ -251,15 +409,15 @@ export const LocalEditorShell = ({
               Loading document…
             </div>
           )}
-          {documentResponse?.document && selectedTemplateId && (
+          {document && documentResponse && selectedTemplateId && (
             <VisualEditorProvider
-              templateProps={{ document: documentResponse.document }}
+              templateProps={{ document }}
               entityFields={documentResponse.entityFields}
               tailwindConfig={tailwindConfig}
             >
               <Editor
                 key={editorKey}
-                document={documentResponse.document}
+                document={document}
                 componentRegistry={componentRegistry}
                 themeConfig={themeConfig}
                 localDev={true}
@@ -271,5 +429,35 @@ export const LocalEditorShell = ({
         </div>
       )}
     </div>
+  );
+};
+
+const ToggleButton = (props: {
+  children: React.ReactNode;
+  onClick: () => any;
+}) => {
+  const { children, onClick } = props;
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      style={{
+        appearance: "none",
+        background: "#f4ede0",
+        color: "#4f4637",
+        border: "1px solid #d8ccb8",
+        borderRadius: "999px",
+        cursor: "pointer",
+        font: "inherit",
+        fontWeight: 600,
+        minHeight: "34px",
+        padding: "6px 12px",
+        boxShadow: "0 1px 2px rgba(29, 29, 31, 0.08)",
+        transition:
+          "background 160ms ease, color 160ms ease, border-color 160ms ease",
+      }}
+    >
+      {children}
+    </button>
   );
 };
