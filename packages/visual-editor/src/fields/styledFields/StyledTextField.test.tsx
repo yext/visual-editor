@@ -12,6 +12,7 @@ import { type TemplateMetadata } from "../../internal/types/templateMetadata.ts"
 import { YextAutoField } from "../YextAutoField.tsx";
 import {
   type StyledTextField,
+  type StyledTextFieldValue,
   type StyledTextValue,
 } from "./StyledTextField.tsx";
 
@@ -69,6 +70,34 @@ const renderField = (value: StyledTextValue = styledTextValue()) => {
       <YextAutoField
         field={field}
         id="styled-text"
+        onChange={onChange}
+        value={value}
+      />
+    </TemplateMetadataContext.Provider>
+  );
+
+  return { onChange };
+};
+
+const renderFieldWithColor = (
+  value: StyledTextFieldValue = {
+    text: styledTextValue(),
+    color: {
+      selectedColor: "palette-primary",
+      contrastingColor: "palette-primary-contrast",
+    },
+  }
+) => {
+  const onChange = vi.fn();
+
+  render(
+    <TemplateMetadataContext.Provider value={templateMetadata}>
+      <YextAutoField
+        field={{
+          ...field,
+          includeColor: true,
+        }}
+        id="styled-text-with-color"
         onChange={onChange}
         value={value}
       />
@@ -198,5 +227,12 @@ describe("StyledTextField", () => {
       });
     });
     expect(onChange).toHaveBeenCalledTimes(1);
+  });
+
+  it("renders font color in the same field group when enabled", () => {
+    renderFieldWithColor();
+
+    expect(screen.getByText("Font Color")).toBeDefined();
+    expect(screen.getByText("Recommended Color")).toBeDefined();
   });
 });

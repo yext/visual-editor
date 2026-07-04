@@ -1,5 +1,5 @@
-import { getDistance } from "geolib";
 import { StreamDocument } from "../../../utils/types/StreamDocument.ts";
+import { getCoordinateDistanceInMeters } from "../../../utils/i18n/distance.ts";
 import {
   NearbyLocationDoc,
   NearbyLocationsResponse,
@@ -158,7 +158,7 @@ export const fetchNearbyLocations = async ({
       const coordinate = getDocCoordinate(doc);
       return {
         doc,
-        distance: coordinate ? getDistance(origin, coordinate) : Infinity,
+        distance: getCoordinateDistanceInMeters(origin, coordinate) ?? Infinity,
       };
     })
     .sort((a, b) => {
