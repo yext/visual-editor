@@ -233,6 +233,83 @@ describe("StyledTextField", () => {
     renderFieldWithColor();
 
     expect(screen.getByText("Font Color")).toBeDefined();
-    expect(screen.getByText("Recommended Color")).toBeDefined();
+    expect(screen.getAllByRole("combobox").at(-1)?.textContent).toContain(
+      "Color 1"
+    );
+  });
+
+  it("returns the grouped value shape when typography changes and color is enabled", () => {
+    const initialValue: StyledTextFieldValue = {
+      text: styledTextValue({
+        fontFamily: "'Weights Only', 'Weights Only Fallback', sans-serif",
+        fontSize: "24px",
+        fontWeight: "700",
+        fontStyle: "italic",
+        textTransform: "uppercase",
+      }),
+      color: {
+        selectedColor: "palette-primary",
+        contrastingColor: "palette-primary-contrast",
+      },
+    };
+    const { onChange } = renderFieldWithColor(initialValue);
+
+    fireEvent.click(screen.getByText("2XL (24px)"));
+    fireEvent.click(screen.getByText("3XL (32px)"));
+
+    expect(onChange).toHaveBeenCalledWith({
+      text: {
+        ...initialValue.text,
+        fontSize: "32px",
+      },
+      color: initialValue.color,
+    });
+  });
+
+  it("canonicalizes typography-only values into grouped values when color is enabled", () => {
+    const initialValue = styledTextValue({
+      fontFamily: "'Weights Only', 'Weights Only Fallback', sans-serif",
+      fontSize: "24px",
+    });
+    const { onChange } = renderFieldWithColor(initialValue);
+
+    fireEvent.click(screen.getByText("2XL (24px)"));
+    fireEvent.click(screen.getByText("3XL (32px)"));
+
+    expect(onChange).toHaveBeenCalledWith({
+      text: {
+        ...initialValue,
+        fontSize: "32px",
+      },
+    });
+  });
+
+  it("preserves existing text styles when the color changes", () => {
+    const initialValue: StyledTextFieldValue = {
+      text: styledTextValue({
+        fontFamily: "'Weights Only', 'Weights Only Fallback', sans-serif",
+        fontSize: "24px",
+        fontWeight: "700",
+        fontStyle: "italic",
+        textTransform: "uppercase",
+      }),
+      color: {
+        selectedColor: "palette-primary",
+        contrastingColor: "palette-primary-contrast",
+      },
+    };
+    const { onChange } = renderFieldWithColor(initialValue);
+
+    const colorCombobox = screen.getAllByRole("combobox").at(-1)!;
+    fireEvent.click(colorCombobox);
+    fireEvent.click(screen.getByText("Color 2"));
+
+    expect(onChange).toHaveBeenCalledWith({
+      text: initialValue.text,
+      color: {
+        selectedColor: "palette-secondary",
+        contrastingColor: "palette-secondary-contrast",
+      },
+    });
   });
 });

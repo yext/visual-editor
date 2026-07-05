@@ -17,30 +17,15 @@ import {
 } from "../../types/types.ts";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { ThemeOptions } from "../../utils/themeConfigOptions.ts";
 import {
-  ThemeOptions,
-  type ThemeColor,
-} from "../../utils/themeConfigOptions.ts";
-import { themeManagerCn } from "../../utils/cn.ts";
-import {
-  getStyledTextStyle,
+  renderStyledRichText,
   StyledTextElement,
-  styledTextAlignClassName,
+  type StyledTextFontOptions,
+  getStyledTextStyle,
   type StyledTextAlignment,
   type StyledTextTag,
 } from "./styledText.tsx";
-
-type StyledTextFontOptions = {
-  text: StyledTextValue;
-  color?: ThemeColor;
-};
-
-export type StyledTextParentStyles = {
-  className?: string;
-  alignment?: StyledTextAlignment;
-  fontOptions?: Partial<StyledTextFontOptions>;
-  tag?: StyledTextTag;
-};
 
 type StyledTextConfigProps<TText> = {
   data: {
@@ -49,11 +34,6 @@ type StyledTextConfigProps<TText> = {
   alignment?: StyledTextAlignment;
   fontOptions: StyledTextFontOptions;
   tag?: StyledTextTag;
-  parentData?: {
-    field: string;
-    text?: string | TText;
-  };
-  parentStyles?: StyledTextParentStyles;
 };
 
 export type StyledPlainTextProps = StyledTextConfigProps<TranslatableString>;
@@ -135,7 +115,7 @@ const buildFields = <TText,>({
     };
   }
 
-  if (tagOptions?.length) {
+  if (kind === "plain" && tagOptions?.length) {
     fields.tag = {
       label: tagLabelOverride ?? msg("fields.tag", "Tag"),
       type: "select",
@@ -159,15 +139,6 @@ const getDefaultTag = (
   return tagOptions.includes("span") ? "span" : tagOptions[0];
 };
 
-const getEffectiveFontOptions = (
-  fontOptions: StyledTextFontOptions,
-  parentStyles?: StyledTextParentStyles
-): StyledTextFontOptions => ({
-  ...fontOptions,
-  ...parentStyles?.fontOptions,
-  text: parentStyles?.fontOptions?.text ?? fontOptions.text,
-});
-
 const StyledTextConfigComponent = <
   TText extends TranslatableString | TranslatableRichText,
 >(
@@ -179,18 +150,11 @@ const StyledTextConfigComponent = <
     };
   }
 ) => {
-  const { data, alignment, fontOptions, puck, kind, parentData, parentStyles } =
-    props;
+  const { data, alignment, fontOptions, puck, kind } = props;
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
   const background = useBackground();
-  const sourceData = parentData?.text ?? data.text;
-  const resolvedAlignment = parentStyles?.alignment ?? alignment;
-  const resolvedTag = parentStyles?.tag ?? props.tag;
-  const effectiveFontOptions = getEffectiveFontOptions(
-    fontOptions,
-    parentStyles
-  );
+  const sourceData = data.text;
 
   if (kind === "plain") {
     const resolvedText =
@@ -201,15 +165,14 @@ const StyledTextConfigComponent = <
     return resolvedText ? (
       <EntityField
         displayName={pt("text", "Text")}
-        fieldId={parentData ? parentData.field : data.text.field}
-        constantValueEnabled={!parentData && data.text.constantValueEnabled}
+        fieldId={data.text.field}
+        constantValueEnabled={data.text.constantValueEnabled}
       >
         <StyledTextElement
-          as={resolvedTag}
-          align={resolvedAlignment}
-          color={effectiveFontOptions.color}
-          className={parentStyles?.className}
-          style={getStyledTextStyle(effectiveFontOptions.text)}
+          as={props.tag}
+          align={alignment}
+          color={fontOptions.color}
+          style={getStyledTextStyle(fontOptions.text)}
         >
           {resolvedText}
         </StyledTextElement>
@@ -221,18 +184,9 @@ const StyledTextConfigComponent = <
     );
   }
 
-  const resolvedClassName = themeManagerCn(
-    parentStyles?.className,
-    resolvedAlignment && styledTextAlignClassName[resolvedAlignment]
-  );
   const resolvedData = sourceData
     ? resolveComponentData(sourceData, i18n.language, streamDocument, {
         isDarkBackground: background?.isDarkColor,
-        className: resolvedClassName,
-        richTextStyleOverrides: {
-          ...effectiveFontOptions.text,
-          color: effectiveFontOptions.color,
-        },
       })
     : undefined;
 
@@ -240,22 +194,15 @@ const StyledTextConfigComponent = <
     typeof resolvedData === "string" ? (
     <EntityField
       displayName={pt("body", "Body")}
-      fieldId={parentData ? parentData.field : data.text.field}
-      constantValueEnabled={!parentData && data.text.constantValueEnabled}
+      fieldId={data.text.field}
+      constantValueEnabled={data.text.constantValueEnabled}
     >
-      {typeof resolvedData === "string" ? (
-        <StyledTextElement
-          as={resolvedTag ?? "div"}
-          align={resolvedAlignment}
-          color={effectiveFontOptions.color}
-          className={parentStyles?.className}
-          style={getStyledTextStyle(effectiveFontOptions.text)}
-        >
-          {resolvedData}
-        </StyledTextElement>
-      ) : (
-        resolvedData
-      )}
+      {renderStyledRichText({
+        content: resolvedData,
+        align: alignment,
+        color: fontOptions.color,
+        text: fontOptions.text,
+      })}
     </EntityField>
   ) : puck.isEditing ? (
     <div className="h-[60px] min-w-[100px]" />
@@ -324,9 +271,6 @@ export function createStyledTextConfig(
         text: defaultStyledTextValue,
       },
       ...(options.includeAlignment ? { alignment: "left" as const } : {}),
-      ...(options.tagOptions?.length
-        ? { tag: getDefaultTag(options.tagOptions) }
-        : {}),
     },
     render: (props: StyledRichTextProps & { puck: { isEditing: boolean } }) => (
       <StyledRichText {...props} />

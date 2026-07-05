@@ -3,7 +3,11 @@ import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { BackgroundProvider } from "../../hooks/useBackground.tsx";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
-import { createStyledTextConfig } from "./createStyledTextConfig.tsx";
+import {
+  createStyledTextConfig,
+  type StyledPlainTextProps,
+  type StyledRichTextProps,
+} from "./createStyledTextConfig.tsx";
 import { StyledPlainText, StyledRichText } from "./createStyledTextConfig.tsx";
 import { getStyledTextStyle } from "./styledText.tsx";
 
@@ -55,44 +59,28 @@ describe("Styled text content blocks", () => {
       </VisualEditorProvider>
     );
 
-  it("renders styled plain text using inherited styles", () => {
+  it("renders owned plain text with typography, alignment, and tag settings", () => {
     renderWithProviders(
       <StyledPlainText
         {...{
           data: {
             text: {
-              field: "",
-              constantValue: { defaultValue: "Ignored" },
+              field: "c_heading",
+              constantValue: { defaultValue: "Shared title" },
               constantValueEnabled: true,
             },
           },
           fontOptions: {
             text: {
-              fontFamily: "default",
-              fontSize: "default",
-              fontWeight: "default",
-              fontStyle: "default",
-              textTransform: "default",
+              fontFamily: "Georgia, serif",
+              fontSize: "18px",
+              fontWeight: "700",
+              fontStyle: "italic",
+              textTransform: "uppercase",
             },
           },
-          parentData: {
-            field: "c_title",
-            text: { defaultValue: "Shared title" },
-          },
-          parentStyles: {
-            className: "shared-class",
-            alignment: "center",
-            fontOptions: {
-              text: {
-                fontFamily: "Georgia, serif",
-                fontSize: "18px",
-                fontWeight: "700",
-                fontStyle: "italic",
-                textTransform: "uppercase",
-              },
-            },
-            tag: "h3",
-          },
+          alignment: "center",
+          tag: "h3",
           puck: { isEditing: false },
         }}
       />
@@ -100,7 +88,6 @@ describe("Styled text content blocks", () => {
 
     const text = screen.getByText("Shared title");
     expect(text.tagName).toBe("H3");
-    expect(text.className).toContain("shared-class");
     expect(text.className).toContain("text-center");
     expect(text).toHaveStyle({
       fontFamily: "Georgia, serif",
@@ -111,18 +98,22 @@ describe("Styled text content blocks", () => {
     });
   });
 
-  it("renders styled rich text through the shared rich text renderer", () => {
-    const { container } = renderWithProviders(
-      <StyledRichText
+  it("renders owned plain text with palette color and tag settings", () => {
+    renderWithProviders(
+      <StyledPlainText
         {...{
           data: {
             text: {
               field: "",
-              constantValue: { defaultValue: "Ignored" },
+              constantValue: { defaultValue: "Hero Heading" },
               constantValueEnabled: true,
             },
           },
           fontOptions: {
+            color: {
+              selectedColor: "palette-secondary",
+              contrastingColor: "palette-secondary-contrast",
+            },
             text: {
               fontFamily: "default",
               fontSize: "default",
@@ -131,26 +122,41 @@ describe("Styled text content blocks", () => {
               textTransform: "default",
             },
           },
-          parentData: {
-            field: "c_description",
+          alignment: "right",
+          tag: "h2",
+          puck: { isEditing: false },
+        }}
+      />
+    );
+
+    const text = screen.getByText("Hero Heading");
+    expect(text.tagName).toBe("H2");
+    expect(text.className).toContain("text-right");
+    expect(text.className).toContain("text-palette-secondary");
+  });
+
+  it("renders owned plain text with custom color", () => {
+    renderWithProviders(
+      <StyledPlainText
+        {...{
+          data: {
             text: {
-              defaultValue: { html: "<p>Hello <strong>world</strong></p>" },
+              field: "",
+              constantValue: { defaultValue: "Geomodifier" },
+              constantValueEnabled: true,
             },
           },
-          parentStyles: {
-            className: "shared-rich-text",
-            fontOptions: {
-              color: {
-                selectedColor: "[#123456]",
-                contrastingColor: "white",
-              },
-              text: {
-                fontFamily: "'Weights Only', sans-serif",
-                fontSize: "20px",
-                fontWeight: "700",
-                fontStyle: "italic",
-                textTransform: "uppercase",
-              },
+          fontOptions: {
+            color: {
+              selectedColor: "[#123456]",
+              contrastingColor: "white",
+            },
+            text: {
+              fontFamily: "default",
+              fontSize: "default",
+              fontWeight: "default",
+              fontStyle: "default",
+              textTransform: "default",
             },
           },
           puck: { isEditing: false },
@@ -158,11 +164,43 @@ describe("Styled text content blocks", () => {
       />
     );
 
-    const outerWrapper = container.querySelector(
-      ".shared-rich-text"
-    ) as HTMLElement;
+    expect(screen.getByText("Geomodifier")).toHaveStyle({
+      color: "rgb(18, 52, 86)",
+    });
+  });
+
+  it("renders owned rich text through the shared rich text renderer", () => {
+    const { container } = renderWithProviders(
+      <StyledRichText
+        {...{
+          data: {
+            text: {
+              field: "c_description",
+              constantValue: {
+                defaultValue: { html: "<p>Hello <strong>world</strong></p>" },
+              },
+              constantValueEnabled: true,
+            },
+          },
+          fontOptions: {
+            color: {
+              selectedColor: "[#123456]",
+              contrastingColor: "white",
+            },
+            text: {
+              fontFamily: "'Weights Only', sans-serif",
+              fontSize: "20px",
+              fontWeight: "700",
+              fontStyle: "italic",
+              textTransform: "uppercase",
+            },
+          },
+          puck: { isEditing: false },
+        }}
+      />
+    );
+
     const wrapper = container.querySelector(".rtf-wrapper") as HTMLElement;
-    expect(outerWrapper).toBeTruthy();
     expect(wrapper).toBeTruthy();
     expect(wrapper.style.color).toBe("rgb(18, 52, 86)");
     expect(wrapper.style.getPropertyValue("--fontFamily-body-fontFamily")).toBe(
@@ -170,6 +208,137 @@ describe("Styled text content blocks", () => {
     );
     expect(wrapper.style.getPropertyValue("--fontSize-body-fontSize")).toBe(
       "20px"
+    );
+  });
+
+  it("renders owned rich text with palette color and alignment", () => {
+    const { container } = renderWithProviders(
+      <StyledRichText
+        {...{
+          data: {
+            text: {
+              field: "",
+              constantValue: {
+                defaultValue: {
+                  html: "<p>Hero description</p>",
+                },
+              },
+              constantValueEnabled: true,
+            },
+          },
+          fontOptions: {
+            color: {
+              selectedColor: "palette-secondary",
+              contrastingColor: "palette-secondary-contrast",
+            },
+            text: {
+              fontFamily: "default",
+              fontSize: "default",
+              fontWeight: "default",
+              fontStyle: "default",
+              textTransform: "default",
+            },
+          },
+          alignment: "center",
+          puck: { isEditing: false },
+        }}
+      />
+    );
+
+    const wrapper = container.querySelector(".rtf-wrapper") as HTMLElement;
+    expect(wrapper.className).toContain("text-center");
+    expect(wrapper.className).toContain("text-palette-secondary");
+  });
+
+  it("renders repeated plain text by reusing shared style props with local data", () => {
+    const sharedTitleProps = {
+      fontOptions: {
+        color: {
+          selectedColor: "[#123456]",
+          contrastingColor: "white",
+        },
+        text: {
+          fontFamily: "Georgia, serif",
+          fontSize: "19px",
+          fontWeight: "700",
+          fontStyle: "italic",
+          textTransform: "uppercase",
+        },
+      },
+      alignment: "right" as const,
+      tag: "h3" as const,
+      puck: { isEditing: false },
+    } satisfies Omit<StyledPlainTextProps, "data"> & {
+      puck: { isEditing: boolean };
+    };
+
+    renderWithProviders(
+      <StyledPlainText
+        {...sharedTitleProps}
+        data={{
+          text: {
+            field: "cards.0.title",
+            constantValue: { defaultValue: "Repeated title" },
+            constantValueEnabled: true,
+          },
+        }}
+      />
+    );
+
+    const text = screen.getByText("Repeated title");
+    expect(text.tagName).toBe("H3");
+    expect(text.className).toContain("text-right");
+    expect(text).toHaveStyle({
+      color: "rgb(18, 52, 86)",
+      fontFamily: "Georgia, serif",
+      fontSize: "19px",
+      fontWeight: "700",
+      fontStyle: "italic",
+      textTransform: "uppercase",
+    });
+  });
+
+  it("renders repeated rich text by reusing shared style props with local data", () => {
+    const sharedBodyProps = {
+      fontOptions: {
+        text: {
+          fontFamily: "Georgia, serif",
+          fontSize: "19px",
+          fontWeight: "700",
+          fontStyle: "italic",
+          textTransform: "uppercase",
+        },
+      },
+      alignment: "right" as const,
+      puck: { isEditing: false },
+    } satisfies Omit<StyledRichTextProps, "data"> & {
+      puck: { isEditing: boolean };
+    };
+
+    const { container } = renderWithProviders(
+      <StyledRichText
+        {...sharedBodyProps}
+        data={{
+          text: {
+            field: "cards.0.description",
+            constantValue: {
+              defaultValue: {
+                html: "<p>Repeated body copy</p>",
+              },
+            },
+            constantValueEnabled: true,
+          },
+        }}
+      />
+    );
+
+    const wrapper = container.querySelector(".rtf-wrapper") as HTMLElement;
+    expect(wrapper.className).toContain("text-right");
+    expect(wrapper.style.getPropertyValue("--fontFamily-body-fontFamily")).toBe(
+      "Georgia, serif"
+    );
+    expect(wrapper.style.getPropertyValue("--fontSize-body-fontSize")).toBe(
+      "19px"
     );
   });
 
@@ -182,14 +351,14 @@ describe("Styled text content blocks", () => {
     const fields = config.fields!;
 
     expect(Object.keys(fields)).toEqual(["data", "fontOptions"]);
-    expect(fields.data.label).toBe("Text");
-    expect(fields.fontOptions.label).toBe("Font Options");
+    expect(String(fields.data.label)).toContain("Text");
+    expect(String(fields.fontOptions.label)).toContain("Font Options");
     expect(fields.data.objectFields.text.filter?.types).toEqual([
       "type.string",
     ]);
     expect(fields.fontOptions.type).toBe("styledText");
     expect(fields.fontOptions.includeColor).toBe(true);
-    expect(fields.fontOptions.colorLabel).toBe("Font Color");
+    expect(String(fields.fontOptions.colorLabel)).toContain("Font Color");
   });
 
   it("creates a plain-text config with Alignment and Tag", () => {
@@ -203,12 +372,12 @@ describe("Styled text content blocks", () => {
 
     expect(Object.keys(fields)).toEqual([
       "data",
-      "alignment",
       "fontOptions",
+      "alignment",
       "tag",
     ]);
-    expect(fields.alignment?.label).toBe("Alignment");
-    expect(fields.tag?.label).toBe("Tag");
+    expect(String(fields.alignment?.label)).toContain("Alignment");
+    expect(String(fields.tag?.label)).toContain("Tag");
     expect(config.defaultProps).toMatchObject({
       alignment: "left",
       tag: "span",
@@ -252,5 +421,32 @@ describe("Styled text content blocks", () => {
 
     expect(noTagConfig.fields!.tag).toBeUndefined();
     expect(emptyTagConfig.fields!.tag).toBeUndefined();
+  });
+
+  it("allows config style props to be reused while each instance owns its data", () => {
+    const sharedConfig = createStyledTextConfig({
+      kind: "plain",
+      label: "Card Title",
+      includeColor: true,
+      includeAlignment: true,
+      tagOptions: ["h3", "div"],
+    });
+    const sharedDefaultProps =
+      sharedConfig.defaultProps as StyledPlainTextProps;
+
+    renderWithProviders(
+      <StyledPlainText
+        {...sharedDefaultProps}
+        data={{
+          text: {
+            field: "cards.1.title",
+            constantValue: { defaultValue: "Card title" },
+            constantValueEnabled: true,
+          },
+        }}
+      />
+    );
+
+    expect(screen.getByText("Card title").tagName).toBe("H3");
   });
 });

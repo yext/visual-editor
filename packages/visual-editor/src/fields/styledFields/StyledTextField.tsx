@@ -33,6 +33,16 @@ const isStyledTextGroupValue = (
 ): value is { text: StyledTextValue; color?: ThemeColor } =>
   typeof value === "object" && value !== null && "text" in value;
 
+const getGroupedStyledTextValue = (
+  value: StyledTextFieldValue | undefined,
+  text: StyledTextValue
+): { text: StyledTextValue; color?: ThemeColor } => ({
+  text,
+  ...(isStyledTextGroupValue(value) && value.color
+    ? { color: value.color }
+    : {}),
+});
+
 export const StyledTextFieldOverride = ({
   field,
   value,
@@ -44,6 +54,11 @@ export const StyledTextFieldOverride = ({
   };
 
   const handleTextChange = (nextValue: BaseTextStyles) => {
+    if (field.includeColor) {
+      onChange(getGroupedStyledTextValue(value, nextValue));
+      return;
+    }
+
     if (isStyledTextGroupValue(value)) {
       onChange({
         ...value,
@@ -83,7 +98,7 @@ export const StyledTextFieldOverride = ({
               value={isStyledTextGroupValue(value) ? value.color : undefined}
               onChange={(nextValue) =>
                 onChange({
-                  text: currentTextValue,
+                  ...getGroupedStyledTextValue(value, currentTextValue),
                   color: nextValue as ThemeColor | undefined,
                 })
               }

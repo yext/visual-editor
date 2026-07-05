@@ -24,16 +24,9 @@ export {
   createStyledTextConfig,
   StyledPlainText,
   StyledRichText,
-  type StyledTextParentStyles,
-} from "./createStyledTextConfig.tsx";
-export {
-  StyledPlainTextConfig,
   type StyledPlainTextProps,
-} from "./StyledPlainText.tsx";
-export {
-  StyledRichTextConfig,
   type StyledRichTextProps,
-} from "./StyledRichText.tsx";
+} from "./createStyledTextConfig.tsx";
 export { TextList, type TextListProps } from "./TextList.tsx";
 export { Text, type TextProps } from "./Text.tsx";
 export { Timestamp, type TimestampProps } from "./Timestamp.tsx";
