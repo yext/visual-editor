@@ -44,6 +44,7 @@ export {
 export {
   getDefaultForegroundColor,
   getSurfaceColorStyle,
+  getSurfaceStyle,
   getThemeColorCssValue,
   getThemeColorHexValue,
   isDarkColor,

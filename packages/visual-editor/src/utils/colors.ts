@@ -614,6 +614,50 @@ export const getSurfaceColorStyle = (
 };
 
 /**
+ * Resolves a surface style object with a background color and contrasting text
+ * color for section and card containers.
+ */
+export const getSurfaceStyle = ({
+  background,
+  streamDocument,
+  fallbackBackgroundColor,
+  fallbackTextColor,
+}: {
+  background?: ThemeColor | string;
+  streamDocument?: StreamDocument | Record<string, any>;
+  fallbackBackgroundColor?: string;
+  fallbackTextColor?: string;
+}): { backgroundColor?: string; color?: string } | undefined => {
+  const surfaceStyle = getSurfaceColorStyle(background, streamDocument);
+
+  if (surfaceStyle?.backgroundColor || surfaceStyle?.color) {
+    return {
+      ...(surfaceStyle.backgroundColor
+        ? { backgroundColor: surfaceStyle.backgroundColor }
+        : fallbackBackgroundColor
+          ? { backgroundColor: fallbackBackgroundColor }
+          : {}),
+      ...(surfaceStyle.color
+        ? { color: surfaceStyle.color }
+        : fallbackTextColor
+          ? { color: fallbackTextColor }
+          : {}),
+    };
+  }
+
+  if (!fallbackBackgroundColor && !fallbackTextColor) {
+    return undefined;
+  }
+
+  return {
+    ...(fallbackBackgroundColor
+      ? { backgroundColor: fallbackBackgroundColor }
+      : {}),
+    ...(fallbackTextColor ? { color: fallbackTextColor } : {}),
+  };
+};
+
+/**
  * Resolves ThemeColor class for text contexts.
  * @param color a ThemeColor object
  * @returns the selected text color class, if present.
