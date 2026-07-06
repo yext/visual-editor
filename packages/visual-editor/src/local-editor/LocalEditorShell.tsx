@@ -14,6 +14,44 @@ import type { LocalEditorShellProps } from "./types.ts";
 import { useLocalEditorDocument } from "./useLocalEditorDocument.ts";
 import { useLocalEditorManifest } from "./useLocalEditorManifest.ts";
 
+const TEST_REVIEWS_AGG = [
+  {
+    publisher: "FIRSTPARTY",
+    averageRating: 4.1,
+    reviewCount: 4,
+    topReviews: [
+      {
+        authorName: "Jordan Lee",
+        rating: 5,
+        reviewDate: "2026-06-12",
+        content:
+          "Fast service, friendly staff, and the food was fresh. This is my go-to lunch spot.",
+      },
+      {
+        authorName: "Maya Patel",
+        rating: 3.5,
+        reviewDate: "2026-05-28",
+        content:
+          "Ordering was easy and everything was ready right on time. The team was great.",
+      },
+      {
+        authorName: "Chris Morgan",
+        rating: 4,
+        reviewDate: "2026-05-03",
+        content:
+          "We stumbled upon this place by accident, and it turned out to be a fantastic find. The atmosphere was incredibly warm and welcoming, making us feel right at home. We ordered a mix of dishes, and everything was fresh, flavorful, and beautifully presented. Service was prompt, and the staff was genuinely attentive without being intrusive. Highly recommend checking it out!",
+      },
+      {
+        authorName: "Alex Geoffrey",
+        rating: 4,
+        reviewDate: "2025-11-11",
+        content:
+          "Great food, fast service, and a cozy atmosphere. Will definitely come back!",
+      },
+    ],
+  },
+];
+
 export const LocalEditorShell = ({
   apiBasePath,
   routePath,
@@ -24,6 +62,8 @@ export const LocalEditorShell = ({
   const [locationSearch, setLocationSearch] = React.useState(() => {
     return typeof window === "undefined" ? "" : window.location.search;
   });
+  const [mapboxKey, setMapboxKey] = React.useState<string>();
+  const [nearbyLocationsKey, setNearbyLocationsKey] = React.useState<string>();
   const { isManifestLoading, manifest, manifestError } =
     useLocalEditorManifest(apiBasePath);
 
@@ -45,6 +85,7 @@ export const LocalEditorShell = ({
   const searchParams = React.useMemo(() => {
     return new URLSearchParams(locationSearch);
   }, [locationSearch]);
+  const showReviewsData = searchParams.get("reviews") !== "0";
 
   const {
     supportedTemplateIds,
@@ -121,6 +162,96 @@ export const LocalEditorShell = ({
     selectedTemplateId,
   ]);
 
+  // Inject reviews, mapbox, and/or nearby locations testing data into the streamDocument, if enabled
+  const streamDocument = React.useMemo(() => {
+    const baseDocument = documentResponse?.document;
+    if (!baseDocument) {
+      return baseDocument;
+    }
+
+    let nextDocument = baseDocument;
+
+    // If reviews are enabled and reviews are on the document, show those reviews
+    // If reviews are enabled and reviews are not on the document, show fake reviews for testing
+    // If reviews are disabled, remove all reviews from the document
+    if (showReviewsData) {
+      if (!("ref_reviewsAgg" in nextDocument)) {
+        nextDocument = {
+          ...nextDocument,
+          ref_reviewsAgg: TEST_REVIEWS_AGG,
+        };
+      }
+    } else if ("ref_reviewsAgg" in nextDocument) {
+      const { ref_reviewsAgg: _refReviewsAgg, ...documentWithoutReviews } =
+        nextDocument;
+      nextDocument = documentWithoutReviews;
+    }
+
+    // If a mapbox key is provided, add it to the document
+    if (typeof mapboxKey === "string") {
+      const currentEnv =
+        "_env" in nextDocument &&
+        nextDocument._env &&
+        typeof nextDocument._env === "object"
+          ? (nextDocument._env as Record<string, unknown>)
+          : undefined;
+
+      if (currentEnv?.YEXT_MAPBOX_API_KEY !== mapboxKey) {
+        nextDocument = {
+          ...nextDocument,
+          _env: {
+            ...currentEnv,
+            YEXT_MAPBOX_API_KEY: mapboxKey,
+          },
+        };
+      }
+    }
+
+    // If a nearby locations key is provided, set up the corresponding configuration
+    // Uses nearby locations from https://www.yext.com/s/4174974/yextsites/155048/editor#pageSetId=locations
+    // The key must be for the content endpoint from that site
+    if (typeof nearbyLocationsKey === "string") {
+      const currentEnv =
+        "_env" in nextDocument &&
+        nextDocument._env &&
+        typeof nextDocument._env === "object"
+          ? (nextDocument._env as Record<string, unknown>)
+          : undefined;
+
+      nextDocument = {
+        ...nextDocument,
+        businessId: "4174974",
+        __: {
+          isPrimaryLocale: true,
+        },
+        _env: {
+          ...currentEnv,
+          YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: nearbyLocationsKey,
+        },
+        _pageset: JSON.stringify({
+          config: {
+            contentEndpointId: "locationsContent",
+            urlTemplate: {
+              primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+            },
+          },
+        }),
+        yextDisplayCoordinate: {
+          latitude: 38.895546,
+          longitude: -77.069915,
+        },
+        _yext: { contentDeliveryAPIDomain: "https://cdn.yextapis.com" },
+      };
+    }
+
+    return nextDocument;
+  }, [
+    documentResponse?.document,
+    mapboxKey,
+    nearbyLocationsKey,
+    showReviewsData,
+  ]);
+
   return (
     <div
       style={{
@@ -145,16 +276,58 @@ export const LocalEditorShell = ({
             Switch templates, entities, and locales against local snapshot data.
           </p>
         </div>
-        <code
+        <div
           style={{
-            background: "#111",
-            color: "#fff",
-            padding: "6px 10px",
-            borderRadius: "999px",
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            flexWrap: "wrap",
+            justifyContent: "flex-end",
           }}
         >
-          {routePath}
-        </code>
+          <EditorShellButton
+            onClick={() => {
+              const promptResult = window.prompt("Enter Mapbox key", mapboxKey);
+              if (typeof promptResult === "string") {
+                setMapboxKey(promptResult);
+              }
+            }}
+          >
+            {mapboxKey ? "Update Mapbox Key" : "Add Mapbox Key"}
+          </EditorShellButton>
+          <EditorShellButton
+            onClick={() => {
+              const promptResult = window.prompt(
+                "Yext API Key",
+                nearbyLocationsKey
+              );
+              if (typeof promptResult === "string") {
+                setNearbyLocationsKey(promptResult);
+              }
+            }}
+          >
+            {nearbyLocationsKey
+              ? "Update Nearby Locations Key"
+              : "Add Nearby Locations Key"}
+          </EditorShellButton>
+          <EditorShellButton
+            onClick={() => {
+              updateSearchParam("reviews", showReviewsData ? "0" : "1");
+            }}
+          >
+            {showReviewsData ? "Hide Reviews Data" : "Show Reviews Data"}
+          </EditorShellButton>
+          <code
+            style={{
+              background: "#111",
+              color: "#fff",
+              padding: "6px 10px",
+              borderRadius: "999px",
+            }}
+          >
+            {routePath}
+          </code>
+        </div>
       </div>
 
       <LocalEditorControls
@@ -251,15 +424,15 @@ export const LocalEditorShell = ({
               Loading document…
             </div>
           )}
-          {documentResponse?.document && selectedTemplateId && (
+          {streamDocument && documentResponse && selectedTemplateId && (
             <VisualEditorProvider
-              templateProps={{ document: documentResponse.document }}
+              templateProps={{ document: streamDocument }}
               entityFields={documentResponse.entityFields}
               tailwindConfig={tailwindConfig}
             >
               <Editor
                 key={editorKey}
-                document={documentResponse.document}
+                document={streamDocument}
                 componentRegistry={componentRegistry}
                 themeConfig={themeConfig}
                 localDev={true}
@@ -271,5 +444,35 @@ export const LocalEditorShell = ({
         </div>
       )}
     </div>
+  );
+};
+
+const EditorShellButton = (props: {
+  children: React.ReactNode;
+  onClick: () => void;
+}) => {
+  const { children, onClick } = props;
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      style={{
+        appearance: "none",
+        background: "#f4ede0",
+        color: "#4f4637",
+        border: "1px solid #d8ccb8",
+        borderRadius: "999px",
+        cursor: "pointer",
+        font: "inherit",
+        fontWeight: 600,
+        minHeight: "34px",
+        padding: "6px 12px",
+        boxShadow: "0 1px 2px rgba(29, 29, 31, 0.08)",
+        transition:
+          "background 160ms ease, color 160ms ease, border-color 160ms ease",
+      }}
+    >
+      {children}
+    </button>
   );
 };
