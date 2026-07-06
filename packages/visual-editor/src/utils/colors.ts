@@ -596,64 +596,41 @@ export const getBackgroundColorStyle = (
  */
 export const getSurfaceColorStyle = (
   surfaceColor?: ThemeColor | string,
-  streamDocument?: StreamDocument | Record<string, any>
+  streamDocument?: StreamDocument | Record<string, any>,
+  options?: {
+    fallbackBackgroundColor?: string;
+    fallbackTextColor?: string;
+  }
 ): { backgroundColor?: string; color?: string } | undefined => {
   const backgroundColor = getThemeColorCssValue(surfaceColor);
   const foregroundColor = getThemeColorCssValue(
     getDefaultForegroundColor(surfaceColor, streamDocument)
   );
 
-  if (!backgroundColor && !foregroundColor) {
-    return undefined;
-  }
-
-  return {
-    ...(backgroundColor ? { backgroundColor } : {}),
-    ...(foregroundColor ? { color: foregroundColor } : {}),
-  };
-};
-
-/**
- * Resolves a surface style object with a background color and contrasting text
- * color for section and card containers.
- */
-export const getSurfaceStyle = ({
-  background,
-  streamDocument,
-  fallbackBackgroundColor,
-  fallbackTextColor,
-}: {
-  background?: ThemeColor | string;
-  streamDocument?: StreamDocument | Record<string, any>;
-  fallbackBackgroundColor?: string;
-  fallbackTextColor?: string;
-}): { backgroundColor?: string; color?: string } | undefined => {
-  const surfaceStyle = getSurfaceColorStyle(background, streamDocument);
-
-  if (surfaceStyle?.backgroundColor || surfaceStyle?.color) {
+  if (backgroundColor || foregroundColor) {
     return {
-      ...(surfaceStyle.backgroundColor
-        ? { backgroundColor: surfaceStyle.backgroundColor }
-        : fallbackBackgroundColor
-          ? { backgroundColor: fallbackBackgroundColor }
+      ...(backgroundColor
+        ? { backgroundColor }
+        : options?.fallbackBackgroundColor
+          ? { backgroundColor: options.fallbackBackgroundColor }
           : {}),
-      ...(surfaceStyle.color
-        ? { color: surfaceStyle.color }
-        : fallbackTextColor
-          ? { color: fallbackTextColor }
+      ...(foregroundColor
+        ? { color: foregroundColor }
+        : options?.fallbackTextColor
+          ? { color: options.fallbackTextColor }
           : {}),
     };
   }
 
-  if (!fallbackBackgroundColor && !fallbackTextColor) {
+  if (!options?.fallbackBackgroundColor && !options?.fallbackTextColor) {
     return undefined;
   }
 
   return {
-    ...(fallbackBackgroundColor
-      ? { backgroundColor: fallbackBackgroundColor }
+    ...(options?.fallbackBackgroundColor
+      ? { backgroundColor: options.fallbackBackgroundColor }
       : {}),
-    ...(fallbackTextColor ? { color: fallbackTextColor } : {}),
+    ...(options?.fallbackTextColor ? { color: options.fallbackTextColor } : {}),
   };
 };
 

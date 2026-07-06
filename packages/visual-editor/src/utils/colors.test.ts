@@ -9,7 +9,6 @@ import {
   getBackgroundColorClasses,
   getBackgroundColorStyle,
   getSurfaceColorStyle,
-  getSurfaceStyle,
   getThemeColorCssValue,
   getThemeColorHexValue,
   getTextColorClass,
@@ -423,27 +422,10 @@ describe("getSurfaceColorStyle", () => {
   it("returns undefined when the surface color is unset", () => {
     expect(getSurfaceColorStyle(undefined)).toBeUndefined();
   });
-});
-
-describe("getSurfaceStyle", () => {
-  it("returns shared surface background and contrast colors", () => {
-    expect(
-      getSurfaceStyle({
-        background: {
-          selectedColor: "[#F5F5F5]",
-          contrastingColor: "black",
-        },
-      })
-    ).toStrictEqual({
-      backgroundColor: "#F5F5F5",
-      color: "black",
-    });
-  });
 
   it("uses fallback colors when provided and the surface is unset", () => {
     expect(
-      getSurfaceStyle({
-        background: undefined,
+      getSurfaceColorStyle(undefined, undefined, {
         fallbackBackgroundColor: "var(--colors-palette-tertiary)",
         fallbackTextColor: "var(--colors-palette-tertiary-contrast)",
       })
@@ -455,22 +437,21 @@ describe("getSurfaceStyle", () => {
 
   it("prefers resolved surface values over fallback colors", () => {
     expect(
-      getSurfaceStyle({
-        background: {
+      getSurfaceColorStyle(
+        {
           selectedColor: "[#111111]",
           contrastingColor: "white",
         },
-        fallbackBackgroundColor: "pink",
-        fallbackTextColor: "green",
-      })
+        undefined,
+        {
+          fallbackBackgroundColor: "pink",
+          fallbackTextColor: "green",
+        }
+      )
     ).toStrictEqual({
       backgroundColor: "#111111",
       color: "white",
     });
-  });
-
-  it("returns undefined when nothing resolves and no fallbacks are provided", () => {
-    expect(getSurfaceStyle({ background: undefined })).toBeUndefined();
   });
 });
 
