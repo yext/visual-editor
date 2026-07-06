@@ -154,6 +154,8 @@ export const LocalEditorShell = ({
     selectedTemplateDefaults,
     selectedTemplateId,
   ]);
+
+  // Inject reviews, mapbox, and/or nearby locations testing data into the streamDocument, if enabled
   const streamDocument = React.useMemo(() => {
     const baseDocument = documentResponse?.document;
     if (!baseDocument) {
@@ -162,6 +164,9 @@ export const LocalEditorShell = ({
 
     let nextDocument = baseDocument;
 
+    // If reviews are enabled and reviews are on the document, show those reviews
+    // If reviews are enabled and reviews are not on the document, show fake reviews for testing
+    // If reviews are disabled, remove all reviews from the document
     if (showReviewsData) {
       if (!("ref_reviewsAgg" in nextDocument)) {
         nextDocument = {
@@ -175,6 +180,7 @@ export const LocalEditorShell = ({
       nextDocument = documentWithoutReviews;
     }
 
+    // If a mapbox key is provided, add it to the document
     if (typeof mapboxKey === "string") {
       const currentEnv =
         "_env" in nextDocument &&
@@ -194,6 +200,9 @@ export const LocalEditorShell = ({
       }
     }
 
+    // If a nearby locations key is provided, set up the corresponding configuration
+    // Uses nearby locations from https://www.yext.com/s/4174974/yextsites/155048/editor#pageSetId=locations
+    // The key must be for the content endpoint from that site
     if (typeof nearbyLocationsKey === "string") {
       const currentEnv =
         "_env" in nextDocument &&
@@ -202,7 +211,6 @@ export const LocalEditorShell = ({
           ? (nextDocument._env as Record<string, unknown>)
           : undefined;
 
-      // Uses nearby locations from https://www.yext.com/s/4174974/yextsites/155048/editor#pageSetId=locations
       nextDocument = {
         ...nextDocument,
         businessId: "4174974",
