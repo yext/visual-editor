@@ -17,8 +17,8 @@ import { useLocalEditorManifest } from "./useLocalEditorManifest.ts";
 const TEST_REVIEWS_AGG = [
   {
     publisher: "FIRSTPARTY",
-    averageRating: 4.8,
-    reviewCount: 3,
+    averageRating: 4.1,
+    reviewCount: 4,
     topReviews: [
       {
         authorName: "Jordan Lee",
@@ -29,7 +29,7 @@ const TEST_REVIEWS_AGG = [
       },
       {
         authorName: "Maya Patel",
-        rating: 5,
+        rating: 3.5,
         reviewDate: "2026-05-28",
         content:
           "Ordering was easy and everything was ready right on time. The team was great.",
@@ -39,7 +39,14 @@ const TEST_REVIEWS_AGG = [
         rating: 4,
         reviewDate: "2026-05-03",
         content:
-          "Good food and quick pickup. The location was clean and the staff was helpful.",
+          "We stumbled upon this place by accident, and it turned out to be a fantastic find. The atmosphere was incredibly warm and welcoming, making us feel right at home. We ordered a mix of dishes, and everything was fresh, flavorful, and beautifully presented. Service was prompt, and the staff was genuinely attentive without being intrusive. Highly recommend checking it out!",
+      },
+      {
+        authorName: "Alex Geoffrey",
+        rating: 4,
+        reviewDate: "2025-11-11",
+        content:
+          "Great food, fast service, and a cozy atmosphere. Will definitely come back!",
       },
     ],
   },
@@ -278,7 +285,7 @@ export const LocalEditorShell = ({
             justifyContent: "flex-end",
           }}
         >
-          <ToggleButton
+          <EditorShellButton
             onClick={() => {
               const promptResult = window.prompt("Enter Mapbox key", mapboxKey);
               if (typeof promptResult === "string") {
@@ -287,8 +294,8 @@ export const LocalEditorShell = ({
             }}
           >
             {mapboxKey ? "Update Mapbox Key" : "Add Mapbox Key"}
-          </ToggleButton>
-          <ToggleButton
+          </EditorShellButton>
+          <EditorShellButton
             onClick={() => {
               const promptResult = window.prompt(
                 "Yext API Key",
@@ -302,14 +309,14 @@ export const LocalEditorShell = ({
             {nearbyLocationsKey
               ? "Update Nearby Locations Key"
               : "Add Nearby Locations Key"}
-          </ToggleButton>
-          <ToggleButton
+          </EditorShellButton>
+          <EditorShellButton
             onClick={() => {
               updateSearchParam("reviews", showReviewsData ? "0" : "1");
             }}
           >
             {showReviewsData ? "Hide Reviews Data" : "Show Reviews Data"}
-          </ToggleButton>
+          </EditorShellButton>
           <code
             style={{
               background: "#111",
@@ -440,7 +447,7 @@ export const LocalEditorShell = ({
   );
 };
 
-const ToggleButton = (props: {
+const EditorShellButton = (props: {
   children: React.ReactNode;
   onClick: () => void;
 }) => {
