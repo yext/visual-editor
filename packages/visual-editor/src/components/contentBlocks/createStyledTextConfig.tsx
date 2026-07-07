@@ -132,9 +132,6 @@ export const StyledTextComponent = <
 >(
   props: StyledTextConfigProps<TText> & {
     kind: CreateStyledTextConfigOptions["kind"];
-    puck?: {
-      isEditing: boolean;
-    };
   }
 ) => {
   const { data, alignment, fontOptions, kind } = props;
@@ -227,9 +224,9 @@ export function createStyledTextConfig(
           ? { tag: getDefaultTag(options.tagOptions) }
           : {}),
       },
-      render: (
-        props: StyledPlainTextProps & { puck: { isEditing: boolean } }
-      ) => <StyledTextComponent {...props} kind="plain" />,
+      render: ({ puck: _, ...props }) => (
+        <StyledTextComponent {...props} kind="plain" />
+      ),
     };
   }
 
@@ -251,7 +248,7 @@ export function createStyledTextConfig(
       },
       ...(options.includeAlignment ? { alignment: "left" as const } : {}),
     },
-    render: (props: StyledRichTextProps & { puck: { isEditing: boolean } }) => (
+    render: ({ puck: _, ...props }) => (
       <StyledTextComponent {...props} kind="richText" />
     ),
   };

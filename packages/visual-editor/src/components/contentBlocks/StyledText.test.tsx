@@ -82,7 +82,6 @@ describe("Styled text content blocks", () => {
           alignment: "center",
           tag: "h3",
           kind: "plain",
-          puck: { isEditing: false },
         }}
       />
     );
@@ -124,7 +123,6 @@ describe("Styled text content blocks", () => {
           alignment: "right",
           tag: "h2",
           kind: "plain",
-          puck: { isEditing: false },
         }}
       />
     );
@@ -160,7 +158,6 @@ describe("Styled text content blocks", () => {
             },
           },
           kind: "plain",
-          puck: { isEditing: false },
         }}
       />
     );
@@ -195,7 +192,6 @@ describe("Styled text content blocks", () => {
             },
           },
           kind: "richText",
-          puck: { isEditing: false },
         }}
       />
     );
@@ -243,7 +239,6 @@ describe("Styled text content blocks", () => {
           },
           alignment: "center",
           kind: "richText",
-          puck: { isEditing: false },
         }}
       />
     );
@@ -312,10 +307,7 @@ describe("Styled text content blocks", () => {
       },
       alignment: "right" as const,
       tag: "h3" as const,
-      puck: { isEditing: false },
-    } satisfies Omit<StyledPlainTextProps, "data"> & {
-      puck: { isEditing: boolean };
-    };
+    } satisfies Omit<StyledPlainTextProps, "data">;
 
     renderWithProviders(
       <StyledTextComponent
@@ -354,10 +346,7 @@ describe("Styled text content blocks", () => {
         },
       },
       alignment: "right" as const,
-      puck: { isEditing: false },
-    } satisfies Omit<StyledRichTextProps, "data"> & {
-      puck: { isEditing: boolean };
-    };
+    } satisfies Omit<StyledRichTextProps, "data">;
 
     const { container } = renderWithProviders(
       <StyledTextComponent
