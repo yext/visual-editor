@@ -1,3 +1,20 @@
+#### 1.3.4 (2026-07-07)
+
+##### Chores
+
+- split locator up into smaller files ([#1238](https://github.com/yext/visual-editor/pull/1238)) ([cafaf4d9](https://github.com/yext/visual-editor/commit/cafaf4d9d4431df5c74a037a5483bf914702c224))
+- update esbuild ([#1240](https://github.com/yext/visual-editor/pull/1240)) ([dfe66fb2](https://github.com/yext/visual-editor/commit/dfe66fb2c60deae78d0edbe871270d9f4672131f))
+
+##### New Features
+
+- add showIncludeCaretField option to StyledLinkField ([#1245](https://github.com/yext/visual-editor/pull/1245)) ([9181469b](https://github.com/yext/visual-editor/commit/9181469bccde619e0e927b983a62cd4d7d242261))
+
+##### Bug Fixes
+
+- favicons tags ([#1258](https://github.com/yext/visual-editor/pull/1258)) ([f7d31e3b](https://github.com/yext/visual-editor/commit/f7d31e3b47c0302bd83552d7bde7fbb9a4224345))
+- complex images in hero/promo background image ([#1253](https://github.com/yext/visual-editor/pull/1253)) ([e1204dcb](https://github.com/yext/visual-editor/commit/e1204dcb94b5cc663a6cee6cdbb4b19cbd24b6c4))
+- locator mobile test ([#1251](https://github.com/yext/visual-editor/pull/1251)) ([f23f7ee6](https://github.com/yext/visual-editor/commit/f23f7ee67d199f257d0a4c83cb0ce3e2c2e8ea63))
+
 #### 1.3.3 (2026-06-12)
 
 ##### New Features
