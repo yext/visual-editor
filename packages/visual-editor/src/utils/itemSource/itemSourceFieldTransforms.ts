@@ -128,6 +128,11 @@ const MAPPING_CONSTANT_VALUE_TYPES: EntityFieldTypes[] = [
 ];
 
 const MAPPING_CONSTANT_VALUE_LIST_TYPES: EntityFieldTypes[] = ["type.string"];
+const ITEM_SOURCE_TYPE_COMPATIBILITY: Partial<
+  Record<EntityFieldTypes, EntityFieldTypes[]>
+> = {
+  "type.cta": ["type.string", "type.rich_text_v2"],
+};
 
 function shouldEnableMappingConstantValue(
   field: EntityFieldSelectorField<any>
@@ -197,7 +202,14 @@ function getNestedItemSourceTypes(
   field: YextFieldDefinition<any>
 ): EntityFieldTypes[][] {
   if (isEntityFieldDefinition(field)) {
-    return field.filter.types?.length ? [field.filter.types] : [];
+    return field.filter.types?.length
+      ? [
+          field.filter.types.flatMap((entityFieldType) => [
+            entityFieldType,
+            ...(ITEM_SOURCE_TYPE_COMPATIBILITY[entityFieldType] ?? []),
+          ]),
+        ]
+      : [];
   }
 
   if (field.type === "object" && "objectFields" in field) {

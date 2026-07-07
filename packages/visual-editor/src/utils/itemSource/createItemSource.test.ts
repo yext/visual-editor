@@ -75,6 +75,25 @@ describe("createItemSource", () => {
     });
   });
 
+  it("treats text and rich text as compatible CTA source requirements", () => {
+    const ctaSource = createItemSource({
+      label: "Articles",
+      mappingFields: {
+        cta: {
+          type: "entityField",
+          label: "CTA",
+          filter: { types: ["type.cta"] },
+        },
+      },
+    });
+
+    expect(ctaSource.field).toMatchObject({
+      filter: {
+        itemSourceTypes: [["type.cta", "type.string", "type.rich_text_v2"]],
+      },
+    });
+  });
+
   it("uses the first default value as the add-item template and seeds manual items", () => {
     const customizedSource = createItemSource<ArticleItemProps>({
       label: "Articles",

@@ -72,6 +72,26 @@ describe("createSlottedItemSource", () => {
     });
   });
 
+  it("treats text and rich text as compatible CTA source requirements", () => {
+    const ctaSource = createSlottedItemSource({
+      label: "Featured Items",
+      itemLabel: "Featured Item",
+      mappingFields: {
+        cta: {
+          type: "entityField",
+          label: "CTA",
+          filter: { types: ["type.cta"] },
+        },
+      },
+    });
+
+    expect(ctaSource.field).toMatchObject({
+      filter: {
+        itemSourceTypes: [["type.cta", "type.string", "type.rich_text_v2"]],
+      },
+    });
+  });
+
   it("resolves linked slot mappings against the current mapped item", () => {
     const resolved = featuredItemsSource.resolveItems(
       {
