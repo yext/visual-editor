@@ -44,13 +44,6 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
     charset: "UTF-8",
     viewport: "width=device-width, initial-scale=1",
     tags: [
-      {
-        type: "link" as TagType,
-        attributes: {
-          rel: "icon",
-          type: "image/x-icon",
-        },
-      },
       ...(data.document.siteDomain
         ? [
             {
@@ -79,7 +72,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
               type: "link" as TagType,
               attributes: {
                 rel: "icon",
-                type: "image/x-icon",
+                type: "image/png",
                 href: faviconUrl,
               },
             },
