@@ -22,8 +22,7 @@ export { Phone, type PhoneProps } from "./Phone.tsx";
 export { PhoneList, type PhoneListProps } from "./PhoneList.tsx";
 export {
   createStyledTextConfig,
-  StyledPlainText,
-  StyledRichText,
+  StyledTextComponent,
   type StyledPlainTextProps,
   type StyledRichTextProps,
 } from "./createStyledTextConfig.tsx";

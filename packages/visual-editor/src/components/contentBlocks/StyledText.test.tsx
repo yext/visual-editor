@@ -7,8 +7,8 @@ import {
   createStyledTextConfig,
   type StyledPlainTextProps,
   type StyledRichTextProps,
+  StyledTextComponent,
 } from "./createStyledTextConfig.tsx";
-import { StyledPlainText, StyledRichText } from "./createStyledTextConfig.tsx";
 import { getStyledTextStyle, renderStyledRichText } from "./styledText.tsx";
 
 describe("styledText", () => {
@@ -61,7 +61,7 @@ describe("Styled text content blocks", () => {
 
   it("renders owned plain text with typography, alignment, and tag settings", () => {
     renderWithProviders(
-      <StyledPlainText
+      <StyledTextComponent
         {...{
           data: {
             text: {
@@ -81,6 +81,7 @@ describe("Styled text content blocks", () => {
           },
           alignment: "center",
           tag: "h3",
+          kind: "plain",
           puck: { isEditing: false },
         }}
       />
@@ -98,7 +99,7 @@ describe("Styled text content blocks", () => {
 
   it("renders owned plain text with palette color and tag settings", () => {
     renderWithProviders(
-      <StyledPlainText
+      <StyledTextComponent
         {...{
           data: {
             text: {
@@ -122,6 +123,7 @@ describe("Styled text content blocks", () => {
           },
           alignment: "right",
           tag: "h2",
+          kind: "plain",
           puck: { isEditing: false },
         }}
       />
@@ -135,7 +137,7 @@ describe("Styled text content blocks", () => {
 
   it("renders owned plain text with custom color", () => {
     renderWithProviders(
-      <StyledPlainText
+      <StyledTextComponent
         {...{
           data: {
             text: {
@@ -157,6 +159,7 @@ describe("Styled text content blocks", () => {
               textTransform: "default",
             },
           },
+          kind: "plain",
           puck: { isEditing: false },
         }}
       />
@@ -167,7 +170,7 @@ describe("Styled text content blocks", () => {
 
   it("renders owned rich text through the shared rich text renderer", () => {
     const { container } = renderWithProviders(
-      <StyledRichText
+      <StyledTextComponent
         {...{
           data: {
             text: {
@@ -191,6 +194,7 @@ describe("Styled text content blocks", () => {
               textTransform: "uppercase",
             },
           },
+          kind: "richText",
           puck: { isEditing: false },
         }}
       />
@@ -211,7 +215,7 @@ describe("Styled text content blocks", () => {
 
   it("renders owned rich text with palette color and alignment", () => {
     const { container } = renderWithProviders(
-      <StyledRichText
+      <StyledTextComponent
         {...{
           data: {
             text: {
@@ -238,6 +242,7 @@ describe("Styled text content blocks", () => {
             },
           },
           alignment: "center",
+          kind: "richText",
           puck: { isEditing: false },
         }}
       />
@@ -313,8 +318,9 @@ describe("Styled text content blocks", () => {
     };
 
     renderWithProviders(
-      <StyledPlainText
+      <StyledTextComponent
         {...sharedTitleProps}
+        kind="plain"
         data={{
           text: {
             field: "cards.0.title",
@@ -354,8 +360,9 @@ describe("Styled text content blocks", () => {
     };
 
     const { container } = renderWithProviders(
-      <StyledRichText
+      <StyledTextComponent
         {...sharedBodyProps}
+        kind="richText"
         data={{
           text: {
             field: "cards.0.description",
@@ -475,8 +482,9 @@ describe("Styled text content blocks", () => {
       sharedConfig.defaultProps as StyledPlainTextProps;
 
     renderWithProviders(
-      <StyledPlainText
+      <StyledTextComponent
         {...sharedDefaultProps}
+        kind="plain"
         data={{
           text: {
             field: "cards.1.title",

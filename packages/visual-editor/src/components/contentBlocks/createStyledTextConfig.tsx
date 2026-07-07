@@ -1,9 +1,7 @@
 import * as React from "react";
-import type { ComponentData, DefaultComponentProps } from "@puckeditor/core";
 import { useTranslation } from "react-i18next";
 import { type YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
-import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import {
   type YextComponentConfig,
   type YextFields,
@@ -38,11 +36,6 @@ type StyledTextConfigProps<TText> = {
 
 export type StyledPlainTextProps = StyledTextConfigProps<TranslatableString>;
 export type StyledRichTextProps = StyledTextConfigProps<TranslatableRichText>;
-type StyledTextViewProps<TText> = StyledTextConfigProps<TText> & {
-  puck?: {
-    isEditing: boolean;
-  };
-};
 
 type CreateStyledTextConfigOptions = {
   kind: "plain" | "richText";
@@ -56,11 +49,6 @@ type CreateStyledTextConfigOptions = {
   alignmentLabelOverride?: string;
   tagLabelOverride?: string;
 };
-
-type ResolveFieldsData<Props extends DefaultComponentProps> = Omit<
-  ComponentData<Props, string, Record<string, DefaultComponentProps>>,
-  "type"
->;
 
 const defaultStyledTextValue: StyledTextValue = {
   fontFamily: "default",
@@ -139,18 +127,17 @@ const getDefaultTag = (
   return tagOptions.includes("span") ? "span" : tagOptions[0];
 };
 
-const StyledTextConfigComponent = <
+export const StyledTextComponent = <
   TText extends TranslatableString | TranslatableRichText,
 >(
   props: StyledTextConfigProps<TText> & {
     kind: CreateStyledTextConfigOptions["kind"];
-  } & {
-    puck: {
+    puck?: {
       isEditing: boolean;
     };
   }
 ) => {
-  const { data, alignment, fontOptions, puck, kind } = props;
+  const { data, alignment, fontOptions, kind } = props;
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
   const background = useBackground();
@@ -177,8 +164,6 @@ const StyledTextConfigComponent = <
           {resolvedText}
         </StyledTextElement>
       </EntityField>
-    ) : puck.isEditing ? (
-      <div className="h-[30px] min-w-[100px]" />
     ) : (
       <></>
     );
@@ -204,8 +189,6 @@ const StyledTextConfigComponent = <
         text: fontOptions.text,
       })}
     </EntityField>
-  ) : puck.isEditing ? (
-    <div className="h-[60px] min-w-[100px]" />
   ) : (
     <></>
   );
@@ -228,8 +211,6 @@ export function createStyledTextConfig(
     return {
       label: options.label,
       fields,
-      resolveFields: (data: ResolveFieldsData<StyledPlainTextProps>) =>
-        resolveDataFromParent(fields, data),
       defaultProps: {
         data: {
           text: {
@@ -248,7 +229,7 @@ export function createStyledTextConfig(
       },
       render: (
         props: StyledPlainTextProps & { puck: { isEditing: boolean } }
-      ) => <StyledPlainText {...props} />,
+      ) => <StyledTextComponent {...props} kind="plain" />,
     };
   }
 
@@ -257,8 +238,6 @@ export function createStyledTextConfig(
   return {
     label: options.label,
     fields,
-    resolveFields: (data: ResolveFieldsData<StyledRichTextProps>) =>
-      resolveDataFromParent(fields, data),
     defaultProps: {
       data: {
         text: {
@@ -273,27 +252,7 @@ export function createStyledTextConfig(
       ...(options.includeAlignment ? { alignment: "left" as const } : {}),
     },
     render: (props: StyledRichTextProps & { puck: { isEditing: boolean } }) => (
-      <StyledRichText {...props} />
+      <StyledTextComponent {...props} kind="richText" />
     ),
   };
 }
-
-export const StyledPlainText = (
-  props: StyledTextViewProps<TranslatableString>
-) => (
-  <StyledTextConfigComponent
-    {...props}
-    puck={props.puck ?? { isEditing: false }}
-    kind="plain"
-  />
-);
-
-export const StyledRichText = (
-  props: StyledTextViewProps<TranslatableRichText>
-) => (
-  <StyledTextConfigComponent
-    {...props}
-    puck={props.puck ?? { isEditing: false }}
-    kind="richText"
-  />
-);
