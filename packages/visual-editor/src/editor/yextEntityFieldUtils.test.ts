@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { productCardsSource } from "../components/pageSections/ProductSection/ProductCardsWrapper.tsx";
+import { type EntityFieldSelectorField } from "../fields/EntityFieldSelectorField.tsx";
 import {
   getEntityFieldDisplayName,
   getFieldsForSelector,
@@ -202,7 +203,7 @@ describe("getFieldsForSelector", () => {
             "Product Reference > Primary Photo",
         },
       },
-      productCardsSource.field.filter
+      (productCardsSource.field as EntityFieldSelectorField).filter
     );
 
     expect(fields).toEqual(
