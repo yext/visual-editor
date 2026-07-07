@@ -12,7 +12,6 @@ import { type TemplateMetadata } from "../../internal/types/templateMetadata.ts"
 import { YextAutoField } from "../YextAutoField.tsx";
 import {
   type StyledTextField,
-  type StyledTextFieldValue,
   type StyledTextValue,
 } from "./StyledTextField.tsx";
 
@@ -80,7 +79,7 @@ const renderField = (value: StyledTextValue = styledTextValue()) => {
 };
 
 const renderFieldWithColor = (
-  value: StyledTextFieldValue = {
+  value: StyledTextValue = {
     color: {
       selectedColor: "palette-primary",
       contrastingColor: "palette-primary-contrast",
@@ -238,8 +237,8 @@ describe("StyledTextField", () => {
     );
   });
 
-  it("returns the grouped value shape when typography changes and color is enabled", () => {
-    const initialValue: StyledTextFieldValue = {
+  it("preserves the flat value shape when typography changes and color is enabled", () => {
+    const initialValue: StyledTextValue = {
       color: {
         selectedColor: "palette-primary",
         contrastingColor: "palette-primary-contrast",
@@ -280,7 +279,7 @@ describe("StyledTextField", () => {
   });
 
   it("preserves existing text styles when the color changes", () => {
-    const initialValue: StyledTextFieldValue = {
+    const initialValue: StyledTextValue = {
       color: {
         selectedColor: "palette-primary",
         contrastingColor: "palette-primary-contrast",

@@ -13,7 +13,6 @@ import {
 export type StyledTextValue = BaseTextStyles & {
   color?: ThemeColor;
 };
-export type StyledTextFieldValue = StyledTextValue;
 
 export type StyledTextField = BaseField & {
   type: "styledText";
@@ -23,8 +22,12 @@ export type StyledTextField = BaseField & {
   colorLabel?: string | MsgString;
 };
 
-type StyledTextFieldProps = FieldProps<StyledTextField, StyledTextFieldValue>;
+type StyledTextFieldProps = FieldProps<StyledTextField, StyledTextValue>;
 
+/**
+ * Renders the shared typography controls used by styled text fields and
+ * optionally exposes a color selector in the same field group.
+ */
 export const StyledTextFieldOverride = ({
   field,
   value,

@@ -20,8 +20,6 @@ export type StyledTextTag =
 
 export type StyledTextAlignment = "left" | "center" | "right";
 
-export type StyledTextFontOptions = StyledTextValue;
-
 /**
  * Resolves the editor's StyledTextValue into CSS properties that can be applied
  * to plain text or forwarded into richer shared renderers.
@@ -94,6 +92,10 @@ const getStyledTextRenderProps = ({
   },
 });
 
+/**
+ * Applies shared alignment, color, and typography styling to resolved rich text
+ * output without changing the content source.
+ */
 export const renderStyledRichText = ({
   content,
   align,

@@ -19,7 +19,6 @@ import { ThemeOptions } from "../../utils/themeConfigOptions.ts";
 import {
   renderStyledRichText,
   StyledTextElement,
-  type StyledTextFontOptions,
   getStyledTextStyle,
   type StyledTextAlignment,
   type StyledTextTag,
@@ -30,7 +29,7 @@ type StyledTextConfigProps<TText> = {
     text: YextEntityField<TText>;
   };
   alignment?: StyledTextAlignment;
-  fontOptions: StyledTextFontOptions;
+  fontOptions: StyledTextValue;
   tag?: StyledTextTag;
 };
 
@@ -58,6 +57,9 @@ const defaultStyledTextValue: StyledTextValue = {
   textTransform: "default",
 };
 
+/**
+ * Builds the editor field definitions for a styled text component.
+ */
 const buildFields = <TText,>({
   kind,
   includeColor,
@@ -141,10 +143,11 @@ export const StyledTextComponent = <
   const sourceData = data.text;
 
   if (kind === "plain") {
-    const resolvedText =
-      typeof sourceData === "string"
-        ? sourceData
-        : resolveComponentData(sourceData, i18n.language, streamDocument);
+    const resolvedText = resolveComponentData(
+      sourceData,
+      i18n.language,
+      streamDocument
+    );
 
     return resolvedText ? (
       <EntityField
@@ -196,59 +199,63 @@ export function createStyledTextConfig(
 export function createStyledTextConfig(
   options: CreateStyledTextConfigOptions & { kind: "richText" }
 ): YextComponentConfig<StyledRichTextProps>;
+/**
+ * Creates a styled text component config for plain or rich text content.
+ *
+ * Operation overview:
+ * 1. Build the shared field definitions for the selected text kind.
+ * 2. Derive the default props shared by all styled text configs.
+ * 3. Add plain-text-only defaults such as the semantic tag when requested.
+ * 4. Return a config whose renderer fixes the text kind at render time.
+ */
 export function createStyledTextConfig(
   options: CreateStyledTextConfigOptions
 ):
   | YextComponentConfig<StyledPlainTextProps>
   | YextComponentConfig<StyledRichTextProps> {
-  if (options.kind === "plain") {
-    const fields = buildFields<TranslatableString>(options);
+  const defaultProps: Pick<
+    StyledPlainTextProps,
+    "data" | "fontOptions" | "alignment"
+  > = {
+    data: {
+      text: {
+        field: "",
+        constantValue: { defaultValue: "Text" },
+        constantValueEnabled: true,
+      },
+    },
+    fontOptions: defaultStyledTextValue,
+    ...(options.includeAlignment ? { alignment: "left" as const } : {}),
+  };
 
+  if (options.kind === "richText") {
     return {
       label: options.label,
-      fields,
-      defaultProps: {
-        data: {
-          text: {
-            field: "",
-            constantValue: { defaultValue: "Text" },
-            constantValueEnabled: true,
-          },
-        },
-        fontOptions: defaultStyledTextValue,
-        ...(options.includeAlignment ? { alignment: "left" as const } : {}),
-        ...(options.tagOptions?.length
-          ? { tag: getDefaultTag(options.tagOptions) }
-          : {}),
-      },
+      fields: buildFields<TranslatableRichText>(options),
+      defaultProps,
       render: (
-        props: StyledPlainTextProps & { puck: { isEditing: boolean } }
+        props: StyledRichTextProps & { puck: { isEditing: boolean } }
       ) => {
         const { puck: _, ...styledTextProps } = props;
-        return <StyledTextComponent {...styledTextProps} kind="plain" />;
+        return <StyledTextComponent {...styledTextProps} kind="richText" />;
       },
     };
   }
 
-  const fields = buildFields<TranslatableRichText>(options);
-
   return {
     label: options.label,
-    fields,
+    fields: buildFields<TranslatableString>(options),
     defaultProps: {
-      data: {
-        text: {
-          field: "",
-          constantValue: { defaultValue: "Text" },
-          constantValueEnabled: true,
-        },
-      },
-      fontOptions: defaultStyledTextValue,
-      ...(options.includeAlignment ? { alignment: "left" as const } : {}),
+      ...defaultProps,
+      ...(options.tagOptions?.length
+        ? { tag: getDefaultTag(options.tagOptions) }
+        : {}),
     },
-    render: (props: StyledRichTextProps & { puck: { isEditing: boolean } }) => {
+    render: (
+      props: StyledPlainTextProps & { puck: { isEditing: boolean } }
+    ) => {
       const { puck: _, ...styledTextProps } = props;
-      return <StyledTextComponent {...styledTextProps} kind="richText" />;
+      return <StyledTextComponent {...styledTextProps} kind="plain" />;
     },
   };
 }

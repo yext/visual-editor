@@ -33,8 +33,12 @@ const getRichTextColorStyle = (
 };
 
 /**
- * Builds the CSS variable payload used by rich text renderers so typography and
- * color overrides stay consistent across plain HTML and resolved React output.
+ * Builds the CSS variable payload used by rich text renderers.
+ *
+ * Operation overview:
+ * 1. Normalize the optional typography overrides by dropping `"default"` values.
+ * 2. Resolve the optional text color into a concrete CSS color declaration.
+ * 3. Mirror each typography override onto the rich-text CSS variable contract.
  */
 export const getRichTextStyle = ({
   color,

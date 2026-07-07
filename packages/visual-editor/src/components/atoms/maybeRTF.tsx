@@ -16,6 +16,11 @@ export interface MaybeRTFProps extends Record<string, any> {
   richTextStyleOverrides?: RichTextStyleOverrides;
 }
 
+/**
+ * Renders plain strings through the shared `Body` component and rich text HTML
+ * through the standard `rtf-wrapper` container while applying shared rich-text
+ * typography and color overrides.
+ */
 export const MaybeRTF = ({
   data,
   bodyVariant = "base",
