@@ -3,6 +3,14 @@ import type { BaseTextStyles } from "../fields/styledFields/baseText.tsx";
 import { getThemeColorCssValue, normalizeThemeColorToken } from "./colors.ts";
 import type { ThemeColor } from "./themeConfigOptions.ts";
 
+const RICH_TEXT_TYPOGRAPHY_VARIABLES = {
+  fontFamily: "--fontFamily-body-fontFamily",
+  fontSize: "--fontSize-body-fontSize",
+  fontWeight: "--fontWeight-body-fontWeight",
+  fontStyle: "--fontStyle-body-fontStyle",
+  textTransform: "--textTransform-body-textTransform",
+} satisfies Record<keyof BaseTextStyles, string>;
+
 const resolveTextStyleValue = (value?: string): string | undefined =>
   value && value !== "default" ? value : undefined;
 
@@ -47,12 +55,6 @@ export const getRichTextStyle = ({
   color?: ThemeColor | string;
   typography?: Partial<BaseTextStyles>;
 }): CSSProperties | undefined => {
-  const fontFamily = resolveTextStyleValue(typography?.fontFamily);
-  const fontSize = resolveTextStyleValue(typography?.fontSize);
-  const fontWeight = resolveTextStyleValue(typography?.fontWeight);
-  const fontStyle = resolveTextStyleValue(typography?.fontStyle);
-  const textTransform = resolveTextStyleValue(typography?.textTransform);
-
   const richTextStyle: CSSProperties & {
     "--fontFamily-body-fontFamily"?: string;
     "--fontSize-body-fontSize"?: string;
@@ -63,26 +65,17 @@ export const getRichTextStyle = ({
     ...getRichTextColorStyle(color),
   };
 
-  if (fontFamily) {
-    richTextStyle.fontFamily = fontFamily;
-    richTextStyle["--fontFamily-body-fontFamily"] = fontFamily;
-  }
-  if (fontSize) {
-    richTextStyle.fontSize = fontSize;
-    richTextStyle["--fontSize-body-fontSize"] = fontSize;
-  }
-  if (fontWeight) {
-    richTextStyle.fontWeight = fontWeight;
-    richTextStyle["--fontWeight-body-fontWeight"] = fontWeight;
-  }
-  if (fontStyle) {
-    richTextStyle.fontStyle = fontStyle as CSSProperties["fontStyle"];
-    richTextStyle["--fontStyle-body-fontStyle"] = fontStyle;
-  }
-  if (textTransform) {
-    richTextStyle.textTransform =
-      textTransform as CSSProperties["textTransform"];
-    richTextStyle["--textTransform-body-textTransform"] = textTransform;
+  for (const [property, cssVariable] of Object.entries(
+    RICH_TEXT_TYPOGRAPHY_VARIABLES
+  ) as [keyof BaseTextStyles, string][]) {
+    const resolvedValue = resolveTextStyleValue(typography?.[property]);
+    if (!resolvedValue) {
+      continue;
+    }
+
+    richTextStyle[property] = resolvedValue as never;
+    richTextStyle[cssVariable as keyof typeof richTextStyle] =
+      resolvedValue as never;
   }
 
   return Object.keys(richTextStyle).length > 0 ? richTextStyle : undefined;

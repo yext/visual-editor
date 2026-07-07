@@ -37,17 +37,25 @@ export type StyledPlainTextProps = StyledTextConfigProps<TranslatableString>;
 export type StyledRichTextProps = StyledTextConfigProps<TranslatableRichText>;
 
 type CreateStyledTextConfigOptions = {
-  kind: "plain" | "richText";
   label: string;
   includeColor?: boolean;
   includeAlignment?: boolean;
-  tagOptions?: StyledTextTag[];
   textLabelOverride?: string;
   fontOptionsLabelOverride?: string;
   colorLabelOverride?: string;
   alignmentLabelOverride?: string;
-  tagLabelOverride?: string;
-};
+} & (
+  | {
+      kind: "plain";
+      tagOptions?: StyledTextTag[];
+      tagLabelOverride?: string;
+    }
+  | {
+      kind: "richText";
+      tagOptions?: never;
+      tagLabelOverride?: never;
+    }
+);
 
 const defaultStyledTextValue: StyledTextValue = {
   fontFamily: "default",
