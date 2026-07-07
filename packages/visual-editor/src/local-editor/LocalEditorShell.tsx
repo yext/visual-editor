@@ -14,6 +14,11 @@ import type { LocalEditorShellProps } from "./types.ts";
 import { useLocalEditorDocument } from "./useLocalEditorDocument.ts";
 import { useLocalEditorManifest } from "./useLocalEditorManifest.ts";
 
+const LOCAL_EDITOR_MAPBOX_KEY_STORAGE_KEY =
+  "visual-editor.local-editor.mapbox-key";
+const LOCAL_EDITOR_NEARBY_LOCATIONS_KEY_STORAGE_KEY =
+  "visual-editor.local-editor.nearby-locations-key";
+
 const TEST_REVIEWS_AGG = [
   {
     publisher: "FIRSTPARTY",
@@ -62,8 +67,14 @@ export const LocalEditorShell = ({
   const [locationSearch, setLocationSearch] = React.useState(() => {
     return typeof window === "undefined" ? "" : window.location.search;
   });
-  const [mapboxKey, setMapboxKey] = React.useState<string>();
-  const [nearbyLocationsKey, setNearbyLocationsKey] = React.useState<string>();
+  const [mapboxKey, setMapboxKey] = React.useState<string | undefined>(() => {
+    return readLocalStorageValue(LOCAL_EDITOR_MAPBOX_KEY_STORAGE_KEY);
+  });
+  const [nearbyLocationsKey, setNearbyLocationsKey] = React.useState<
+    string | undefined
+  >(() => {
+    return readLocalStorageValue(LOCAL_EDITOR_NEARBY_LOCATIONS_KEY_STORAGE_KEY);
+  });
   const { isManifestLoading, manifest, manifestError } =
     useLocalEditorManifest(apiBasePath);
 
@@ -252,6 +263,32 @@ export const LocalEditorShell = ({
     showReviewsData,
   ]);
 
+  const handleApiKeyUpdate = React.useCallback(
+    (
+      promptText: string,
+      currentValue: string | undefined,
+      storageKey: string,
+      setApiKey: React.Dispatch<string | undefined>
+    ) => {
+      const nextValue = window.prompt(promptText, currentValue);
+
+      if (nextValue === null) {
+        return;
+      }
+
+      const trimmedValue = nextValue.trim();
+      if (!trimmedValue) {
+        window.localStorage.removeItem(storageKey);
+        setApiKey(undefined);
+        return;
+      }
+
+      window.localStorage.setItem(storageKey, trimmedValue);
+      setApiKey(trimmedValue);
+    },
+    [mapboxKey, nearbyLocationsKey]
+  );
+
   return (
     <div
       style={{
@@ -287,23 +324,24 @@ export const LocalEditorShell = ({
         >
           <EditorShellButton
             onClick={() => {
-              const promptResult = window.prompt("Enter Mapbox key", mapboxKey);
-              if (typeof promptResult === "string") {
-                setMapboxKey(promptResult);
-              }
+              handleApiKeyUpdate(
+                "Enter Mapbox key",
+                mapboxKey,
+                LOCAL_EDITOR_MAPBOX_KEY_STORAGE_KEY,
+                setMapboxKey
+              );
             }}
           >
             {mapboxKey ? "Update Mapbox Key" : "Add Mapbox Key"}
           </EditorShellButton>
           <EditorShellButton
             onClick={() => {
-              const promptResult = window.prompt(
+              handleApiKeyUpdate(
                 "Yext API Key",
-                nearbyLocationsKey
+                nearbyLocationsKey,
+                LOCAL_EDITOR_NEARBY_LOCATIONS_KEY_STORAGE_KEY,
+                setNearbyLocationsKey
               );
-              if (typeof promptResult === "string") {
-                setNearbyLocationsKey(promptResult);
-              }
             }}
           >
             {nearbyLocationsKey
@@ -445,6 +483,15 @@ export const LocalEditorShell = ({
       )}
     </div>
   );
+};
+
+const readLocalStorageValue = (storageKey: string): string | undefined => {
+  if (typeof window === "undefined") {
+    return undefined;
+  }
+
+  const storedValue = window.localStorage.getItem(storageKey);
+  return storedValue?.trim() ? storedValue : undefined;
 };
 
 const EditorShellButton = (props: {
