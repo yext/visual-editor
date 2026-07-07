@@ -606,31 +606,19 @@ export const getSurfaceColorStyle = (
   const foregroundColor = getThemeColorCssValue(
     getDefaultForegroundColor(surfaceColor, streamDocument)
   );
+  const resolvedBackgroundColor =
+    backgroundColor ?? options?.fallbackBackgroundColor;
+  const resolvedTextColor = foregroundColor ?? options?.fallbackTextColor;
 
-  if (backgroundColor || foregroundColor) {
-    return {
-      ...(backgroundColor
-        ? { backgroundColor }
-        : options?.fallbackBackgroundColor
-          ? { backgroundColor: options.fallbackBackgroundColor }
-          : {}),
-      ...(foregroundColor
-        ? { color: foregroundColor }
-        : options?.fallbackTextColor
-          ? { color: options.fallbackTextColor }
-          : {}),
-    };
-  }
-
-  if (!options?.fallbackBackgroundColor && !options?.fallbackTextColor) {
+  if (!resolvedBackgroundColor && !resolvedTextColor) {
     return undefined;
   }
 
   return {
-    ...(options?.fallbackBackgroundColor
-      ? { backgroundColor: options.fallbackBackgroundColor }
+    ...(resolvedBackgroundColor
+      ? { backgroundColor: resolvedBackgroundColor }
       : {}),
-    ...(options?.fallbackTextColor ? { color: options.fallbackTextColor } : {}),
+    ...(resolvedTextColor ? { color: resolvedTextColor } : {}),
   };
 };
 

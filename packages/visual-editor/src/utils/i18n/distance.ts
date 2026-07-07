@@ -61,7 +61,9 @@ const toCoordinate = (
 ): GeoCoordinate | undefined => {
   if (
     typeof coordinate?.latitude !== "number" ||
-    typeof coordinate?.longitude !== "number"
+    !Number.isFinite(coordinate.latitude) ||
+    typeof coordinate?.longitude !== "number" ||
+    !Number.isFinite(coordinate.longitude)
   ) {
     return undefined;
   }

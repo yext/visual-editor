@@ -9,7 +9,7 @@ import {
   type StyledRichTextProps,
 } from "./createStyledTextConfig.tsx";
 import { StyledPlainText, StyledRichText } from "./createStyledTextConfig.tsx";
-import { getStyledTextStyle } from "./styledText.tsx";
+import { getStyledTextStyle, renderStyledRichText } from "./styledText.tsx";
 
 describe("styledText", () => {
   it("omits default typography values", () => {
@@ -248,6 +248,46 @@ describe("Styled text content blocks", () => {
     const wrapper = container.querySelector(".rtf-wrapper") as HTMLElement;
     expect(wrapper.className).toContain("text-center");
     expect(wrapper.className).toContain("text-palette-secondary");
+  });
+
+  it("applies cloned rich-text typography styles to the wrapper element", () => {
+    const { container } = renderWithProviders(
+      <>
+        {renderStyledRichText({
+          content: (
+            <div className="rtf-wrapper">
+              <div className="rtf-inner">Wrapped rich text</div>
+            </div>
+          ),
+          align: "center",
+          color: {
+            selectedColor: "[#123456]",
+            contrastingColor: "white",
+          },
+          text: {
+            fontFamily: "'Weights Only', sans-serif",
+            fontSize: "20px",
+            fontWeight: "700",
+            fontStyle: "italic",
+            textTransform: "uppercase",
+          },
+        })}
+      </>
+    );
+
+    const wrapper = container.querySelector(".rtf-wrapper") as HTMLElement;
+    const inner = container.querySelector(".rtf-inner") as HTMLElement;
+    expect(wrapper.className).toContain("text-center");
+    expect(wrapper.style.color).toBe("rgb(18, 52, 86)");
+    expect(wrapper.style.getPropertyValue("--fontFamily-body-fontFamily")).toBe(
+      "'Weights Only', sans-serif"
+    );
+    expect(wrapper.style.getPropertyValue("--fontSize-body-fontSize")).toBe(
+      "20px"
+    );
+    expect(inner.style.getPropertyValue("--fontFamily-body-fontFamily")).toBe(
+      ""
+    );
   });
 
   it("renders repeated plain text by reusing shared style props with local data", () => {

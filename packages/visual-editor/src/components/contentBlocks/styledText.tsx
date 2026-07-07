@@ -173,15 +173,8 @@ export const renderStyledRichText = ({
 
   const innerContent = React.isValidElement(content.props.children)
     ? React.cloneElement(content.props.children, {
-        className: themeManagerCn(
-          content.props.children.props.className,
-          getTextColorClass(color),
-          renderProps.className
-        ),
-        style: {
-          ...content.props.children.props.style,
-          ...richTextStyle,
-        },
+        className: themeManagerCn(content.props.children.props.className),
+        style: content.props.children.props.style,
       })
     : content.props.children;
 
@@ -189,7 +182,7 @@ export const renderStyledRichText = ({
     className: themeManagerCn(content.props.className, renderProps.className),
     style: {
       ...content.props.style,
-      ...getTextColorStyle(color),
+      ...richTextStyle,
     },
     children: innerContent,
   });

@@ -56,6 +56,21 @@ describe("distance conversions", () => {
     ).toBeUndefined();
   });
 
+  it("returns undefined when a coordinate contains non-finite numbers", () => {
+    expect(
+      getCoordinateDistanceInMeters(
+        { latitude: 0, longitude: 0 },
+        { latitude: Number.NaN, longitude: 0 }
+      )
+    ).toBeUndefined();
+    expect(
+      getCoordinateDistanceInMeters(
+        { latitude: 0, longitude: 0 },
+        { latitude: 0, longitude: Number.POSITIVE_INFINITY }
+      )
+    ).toBeUndefined();
+  });
+
   it("resolves the locale-specific selection using the locale's unit", () => {
     expect(resolveDistanceUnit("locale", "en")).toBe("mile");
     expect(resolveDistanceUnit("locale", "de")).toBe("kilometer");
