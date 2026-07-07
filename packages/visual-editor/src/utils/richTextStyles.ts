@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import type { BaseTextStyles } from "../fields/styledFields/baseText.tsx";
-import { getThemeColorCssValue, normalizeThemeColorToken } from "./colors.ts";
+import { getResolvedTextColorStyle } from "./colors.ts";
 import type { ThemeColor } from "./themeConfigOptions.ts";
 
 const RICH_TEXT_TYPOGRAPHY_VARIABLES = {
@@ -13,32 +13,6 @@ const RICH_TEXT_TYPOGRAPHY_VARIABLES = {
 
 const resolveTextStyleValue = (value?: string): string | undefined =>
   value && value !== "default" ? value : undefined;
-
-const isResolvedCssColor = (color?: string): boolean =>
-  !!color &&
-  (color.startsWith("#") ||
-    color.startsWith("var(") ||
-    color.startsWith("rgb(") ||
-    color.startsWith("rgba(") ||
-    color.startsWith("hsl(") ||
-    color === "transparent" ||
-    color === "inherit");
-
-const getRichTextColorStyle = (
-  color?: ThemeColor | string
-): CSSProperties | undefined => {
-  if (typeof color === "string" && isResolvedCssColor(color)) {
-    return { color };
-  }
-
-  const normalizedColor = normalizeThemeColorToken(color);
-  if (!normalizedColor) {
-    return undefined;
-  }
-
-  const resolvedColor = getThemeColorCssValue(normalizedColor);
-  return resolvedColor ? { color: resolvedColor } : undefined;
-};
 
 /**
  * Builds the CSS variable payload used by rich text renderers.
@@ -62,7 +36,7 @@ export const getRichTextStyle = ({
     "--fontStyle-body-fontStyle"?: string;
     "--textTransform-body-textTransform"?: string;
   } = {
-    ...getRichTextColorStyle(color),
+    ...getResolvedTextColorStyle(color),
   };
 
   for (const [property, cssVariable] of Object.entries(

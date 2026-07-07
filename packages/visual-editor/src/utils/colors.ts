@@ -239,6 +239,35 @@ export const normalizeThemeColorToken = (
 };
 
 /**
+ * Detects whether a color string is already a concrete CSS color value and
+ * does not need theme-token resolution.
+ */
+const isResolvedCssColor = (color?: string): boolean =>
+  !!color &&
+  (color.startsWith("#") ||
+    color.startsWith("var(") ||
+    color.startsWith("rgb(") ||
+    color.startsWith("rgba(") ||
+    color.startsWith("hsl(") ||
+    color === "transparent" ||
+    color === "inherit");
+
+/**
+ * Resolves either a concrete CSS color or a ThemeColor token into an inline
+ * text color style payload.
+ */
+export const getResolvedTextColorStyle = (
+  color?: ThemeColor | string
+): { color?: string } | undefined => {
+  if (typeof color === "string" && isResolvedCssColor(color)) {
+    return { color };
+  }
+
+  const resolvedColor = getThemeColorCssValue(color);
+  return resolvedColor ? { color: resolvedColor } : undefined;
+};
+
+/**
  * Normalizes a color string into an uppercase hex value when possible.
  * Supports the literal tokens `white` and `black`, 3/6-digit hex, and
  * 8-digit hex values where the alpha channel is dropped for contrast checks.
