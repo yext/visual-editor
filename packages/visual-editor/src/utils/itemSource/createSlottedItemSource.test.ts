@@ -87,7 +87,7 @@ describe("createSlottedItemSource", () => {
 
     expect(ctaSource.field).toMatchObject({
       filter: {
-        itemSourceTypes: [["type.cta", "type.string", "type.rich_text_v2"]],
+        itemSourceTypes: [["type.cta", "type.string"]],
       },
     });
   });

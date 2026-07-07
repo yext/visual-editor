@@ -131,7 +131,7 @@ const MAPPING_CONSTANT_VALUE_LIST_TYPES: EntityFieldTypes[] = ["type.string"];
 const ITEM_SOURCE_TYPE_COMPATIBILITY: Partial<
   Record<EntityFieldTypes, EntityFieldTypes[]>
 > = {
-  "type.cta": ["type.string", "type.rich_text_v2"],
+  "type.cta": ["type.string"],
 };
 
 function shouldEnableMappingConstantValue(
