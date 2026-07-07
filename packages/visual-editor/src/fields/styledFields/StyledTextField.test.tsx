@@ -81,11 +81,11 @@ const renderField = (value: StyledTextValue = styledTextValue()) => {
 
 const renderFieldWithColor = (
   value: StyledTextFieldValue = {
-    text: styledTextValue(),
     color: {
       selectedColor: "palette-primary",
       contrastingColor: "palette-primary-contrast",
     },
+    ...styledTextValue(),
   }
 ) => {
   const onChange = vi.fn();
@@ -240,17 +240,17 @@ describe("StyledTextField", () => {
 
   it("returns the grouped value shape when typography changes and color is enabled", () => {
     const initialValue: StyledTextFieldValue = {
-      text: styledTextValue({
+      color: {
+        selectedColor: "palette-primary",
+        contrastingColor: "palette-primary-contrast",
+      },
+      ...styledTextValue({
         fontFamily: "'Weights Only', 'Weights Only Fallback', sans-serif",
         fontSize: "24px",
         fontWeight: "700",
         fontStyle: "italic",
         textTransform: "uppercase",
       }),
-      color: {
-        selectedColor: "palette-primary",
-        contrastingColor: "palette-primary-contrast",
-      },
     };
     const { onChange } = renderFieldWithColor(initialValue);
 
@@ -258,15 +258,12 @@ describe("StyledTextField", () => {
     fireEvent.click(screen.getByText("3XL (32px)"));
 
     expect(onChange).toHaveBeenCalledWith({
-      text: {
-        ...initialValue.text,
-        fontSize: "32px",
-      },
-      color: initialValue.color,
+      ...initialValue,
+      fontSize: "32px",
     });
   });
 
-  it("canonicalizes typography-only values into grouped values when color is enabled", () => {
+  it("preserves the plain value shape when color is enabled without a selected color", () => {
     const initialValue = styledTextValue({
       fontFamily: "'Weights Only', 'Weights Only Fallback', sans-serif",
       fontSize: "24px",
@@ -277,26 +274,24 @@ describe("StyledTextField", () => {
     fireEvent.click(screen.getByText("3XL (32px)"));
 
     expect(onChange).toHaveBeenCalledWith({
-      text: {
-        ...initialValue,
-        fontSize: "32px",
-      },
+      ...initialValue,
+      fontSize: "32px",
     });
   });
 
   it("preserves existing text styles when the color changes", () => {
     const initialValue: StyledTextFieldValue = {
-      text: styledTextValue({
+      color: {
+        selectedColor: "palette-primary",
+        contrastingColor: "palette-primary-contrast",
+      },
+      ...styledTextValue({
         fontFamily: "'Weights Only', 'Weights Only Fallback', sans-serif",
         fontSize: "24px",
         fontWeight: "700",
         fontStyle: "italic",
         textTransform: "uppercase",
       }),
-      color: {
-        selectedColor: "palette-primary",
-        contrastingColor: "palette-primary-contrast",
-      },
     };
     const { onChange } = renderFieldWithColor(initialValue);
 
@@ -305,7 +300,7 @@ describe("StyledTextField", () => {
     fireEvent.click(screen.getByText("Color 2"));
 
     expect(onChange).toHaveBeenCalledWith({
-      text: initialValue.text,
+      ...initialValue,
       color: {
         selectedColor: "palette-secondary",
         contrastingColor: "palette-secondary-contrast",

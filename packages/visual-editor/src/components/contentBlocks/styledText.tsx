@@ -20,10 +20,7 @@ export type StyledTextTag =
 
 export type StyledTextAlignment = "left" | "center" | "right";
 
-export type StyledTextFontOptions = {
-  text: StyledTextValue;
-  color?: ThemeColor;
-};
+export type StyledTextFontOptions = StyledTextValue;
 
 /**
  * Resolves the editor's StyledTextValue into CSS properties that can be applied
@@ -101,26 +98,27 @@ export const renderStyledRichText = ({
   content,
   align,
   className,
-  color,
   text,
 }: {
   content: React.ReactNode;
   align?: StyledTextAlignment;
   className?: string;
-  color?: ThemeColor;
   text?: StyledTextValue;
 }): React.ReactNode => {
   const renderProps = getStyledTextRenderProps({
     align,
     className,
-    color,
+    color: text?.color,
     text,
   });
   const richTextClassName = themeManagerCn(
-    getTextColorClass(color),
+    getTextColorClass(text?.color),
     renderProps.className
   );
-  const richTextStyle = getRichTextStyle({ color, typography: text });
+  const richTextStyle = getRichTextStyle({
+    color: text?.color,
+    typography: text,
+  });
 
   if (typeof content === "string") {
     if (/<[a-z][\s\S]*>/i.test(content)) {
@@ -128,10 +126,7 @@ export const renderStyledRichText = ({
         <MaybeRTF
           className={richTextClassName}
           data={{ html: content }}
-          richTextStyleOverrides={{
-            ...text,
-            ...(color ? { color } : {}),
-          }}
+          richTextStyleOverrides={text}
           style={richTextStyle}
         />
       );
@@ -141,7 +136,7 @@ export const renderStyledRichText = ({
       <StyledTextElement
         as="div"
         align={align}
-        color={color}
+        color={text?.color}
         className={className}
         style={getStyledTextStyle(text)}
       >
@@ -162,7 +157,6 @@ export const renderStyledRichText = ({
         richTextStyleOverrides={{
           ...content.props.richTextStyleOverrides,
           ...text,
-          ...(color ? { color } : {}),
         }}
         style={{
           ...content.props.style,

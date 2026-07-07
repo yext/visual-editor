@@ -156,7 +156,7 @@ export const StyledTextComponent = <
           as={props.tag}
           align={alignment}
           color={fontOptions.color}
-          style={getStyledTextStyle(fontOptions.text)}
+          style={getStyledTextStyle(fontOptions)}
         >
           {resolvedText}
         </StyledTextElement>
@@ -182,8 +182,7 @@ export const StyledTextComponent = <
       {renderStyledRichText({
         content: resolvedData,
         align: alignment,
-        color: fontOptions.color,
-        text: fontOptions.text,
+        text: fontOptions,
       })}
     </EntityField>
   ) : (
@@ -216,17 +215,18 @@ export function createStyledTextConfig(
             constantValueEnabled: true,
           },
         },
-        fontOptions: {
-          text: defaultStyledTextValue,
-        },
+        fontOptions: defaultStyledTextValue,
         ...(options.includeAlignment ? { alignment: "left" as const } : {}),
         ...(options.tagOptions?.length
           ? { tag: getDefaultTag(options.tagOptions) }
           : {}),
       },
-      render: ({ puck: _, ...props }) => (
-        <StyledTextComponent {...props} kind="plain" />
-      ),
+      render: (
+        props: StyledPlainTextProps & { puck: { isEditing: boolean } }
+      ) => {
+        const { puck: _, ...styledTextProps } = props;
+        return <StyledTextComponent {...styledTextProps} kind="plain" />;
+      },
     };
   }
 
@@ -243,13 +243,12 @@ export function createStyledTextConfig(
           constantValueEnabled: true,
         },
       },
-      fontOptions: {
-        text: defaultStyledTextValue,
-      },
+      fontOptions: defaultStyledTextValue,
       ...(options.includeAlignment ? { alignment: "left" as const } : {}),
     },
-    render: ({ puck: _, ...props }) => (
-      <StyledTextComponent {...props} kind="richText" />
-    ),
+    render: (props: StyledRichTextProps & { puck: { isEditing: boolean } }) => {
+      const { puck: _, ...styledTextProps } = props;
+      return <StyledTextComponent {...styledTextProps} kind="richText" />;
+    },
   };
 }

@@ -10,13 +10,10 @@ import {
   useTypographyOptions,
 } from "./baseText.tsx";
 
-export type StyledTextValue = BaseTextStyles;
-export type StyledTextFieldValue =
-  | StyledTextValue
-  | {
-      text: StyledTextValue;
-      color?: ThemeColor;
-    };
+export type StyledTextValue = BaseTextStyles & {
+  color?: ThemeColor;
+};
+export type StyledTextFieldValue = StyledTextValue;
 
 export type StyledTextField = BaseField & {
   type: "styledText";
@@ -28,46 +25,21 @@ export type StyledTextField = BaseField & {
 
 type StyledTextFieldProps = FieldProps<StyledTextField, StyledTextFieldValue>;
 
-const isStyledTextGroupValue = (
-  value: StyledTextFieldValue | undefined
-): value is { text: StyledTextValue; color?: ThemeColor } =>
-  typeof value === "object" && value !== null && "text" in value;
-
-const getGroupedStyledTextValue = (
-  value: StyledTextFieldValue | undefined,
-  text: StyledTextValue
-): { text: StyledTextValue; color?: ThemeColor } => ({
-  text,
-  ...(isStyledTextGroupValue(value) && value.color
-    ? { color: value.color }
-    : {}),
-});
-
 export const StyledTextFieldOverride = ({
   field,
   value,
   onChange,
 }: StyledTextFieldProps) => {
-  const currentTextValue: BaseTextStyles = {
+  const currentTextValue: StyledTextValue = {
     ...defaultBaseTextStyles,
-    ...(isStyledTextGroupValue(value) ? value.text : value),
+    ...value,
   };
 
   const handleTextChange = (nextValue: BaseTextStyles) => {
-    if (field.includeColor) {
-      onChange(getGroupedStyledTextValue(value, nextValue));
-      return;
-    }
-
-    if (isStyledTextGroupValue(value)) {
-      onChange({
-        ...value,
-        text: nextValue,
-      });
-      return;
-    }
-
-    onChange(nextValue);
+    onChange({
+      ...nextValue,
+      ...(value?.color ? { color: value.color } : {}),
+    });
   };
 
   const typographyOptions = useTypographyOptions(
@@ -95,10 +67,10 @@ export const StyledTextFieldOverride = ({
                 label: field.colorLabel ?? pt("fields.fontColor", "Font Color"),
                 options: "SITE_COLOR",
               }}
-              value={isStyledTextGroupValue(value) ? value.color : undefined}
+              value={value?.color}
               onChange={(nextValue) =>
                 onChange({
-                  ...getGroupedStyledTextValue(value, currentTextValue),
+                  ...currentTextValue,
                   color: nextValue as ThemeColor | undefined,
                 })
               }
