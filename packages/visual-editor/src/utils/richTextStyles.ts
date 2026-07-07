@@ -29,15 +29,7 @@ export const getRichTextStyle = ({
   color?: ThemeColor | string;
   typography?: Partial<BaseTextStyles>;
 }): CSSProperties | undefined => {
-  const richTextStyle: CSSProperties & {
-    "--fontFamily-body-fontFamily"?: string;
-    "--fontSize-body-fontSize"?: string;
-    "--fontWeight-body-fontWeight"?: string;
-    "--fontStyle-body-fontStyle"?: string;
-    "--textTransform-body-textTransform"?: string;
-  } = {
-    ...getResolvedTextColorStyle(color),
-  };
+  const richTextTypographyStyle: Record<string, string> = {};
 
   for (const [property, cssVariable] of Object.entries(
     RICH_TEXT_TYPOGRAPHY_VARIABLES
@@ -47,10 +39,14 @@ export const getRichTextStyle = ({
       continue;
     }
 
-    richTextStyle[property] = resolvedValue as never;
-    richTextStyle[cssVariable as keyof typeof richTextStyle] =
-      resolvedValue as never;
+    richTextTypographyStyle[property] = resolvedValue;
+    richTextTypographyStyle[cssVariable] = resolvedValue;
   }
+
+  const richTextStyle = {
+    ...getResolvedTextColorStyle(color),
+    ...richTextTypographyStyle,
+  };
 
   return Object.keys(richTextStyle).length > 0 ? richTextStyle : undefined;
 };
