@@ -89,13 +89,11 @@ describe("Styled text content blocks", () => {
     const text = screen.getByText("Shared title");
     expect(text.tagName).toBe("H3");
     expect(text.className).toContain("text-center");
-    expect(text).toHaveStyle({
-      fontFamily: "Georgia, serif",
-      fontSize: "18px",
-      fontWeight: "700",
-      fontStyle: "italic",
-      textTransform: "uppercase",
-    });
+    expect(text.style.fontFamily).toBe("Georgia, serif");
+    expect(text.style.fontSize).toBe("18px");
+    expect(text.style.fontWeight).toBe("700");
+    expect(text.style.fontStyle).toBe("italic");
+    expect(text.style.textTransform).toBe("uppercase");
   });
 
   it("renders owned plain text with palette color and tag settings", () => {
@@ -164,9 +162,7 @@ describe("Styled text content blocks", () => {
       />
     );
 
-    expect(screen.getByText("Geomodifier")).toHaveStyle({
-      color: "rgb(18, 52, 86)",
-    });
+    expect(screen.getByText("Geomodifier").style.color).toBe("rgb(18, 52, 86)");
   });
 
   it("renders owned rich text through the shared rich text renderer", () => {
@@ -200,7 +196,9 @@ describe("Styled text content blocks", () => {
       />
     );
 
-    const wrapper = container.querySelector(".rtf-wrapper") as HTMLElement;
+    const wrapper = container.querySelector(
+      ".rtf-theme.components"
+    ) as HTMLElement;
     expect(wrapper).toBeTruthy();
     expect(wrapper.style.color).toBe("rgb(18, 52, 86)");
     expect(wrapper.style.getPropertyValue("--fontFamily-body-fontFamily")).toBe(
@@ -245,7 +243,9 @@ describe("Styled text content blocks", () => {
       />
     );
 
-    const wrapper = container.querySelector(".rtf-wrapper") as HTMLElement;
+    const wrapper = container.querySelector(
+      ".rtf-theme.components"
+    ) as HTMLElement;
     expect(wrapper.className).toContain("text-center");
     expect(wrapper.className).toContain("text-palette-secondary");
   });
@@ -328,14 +328,12 @@ describe("Styled text content blocks", () => {
     const text = screen.getByText("Repeated title");
     expect(text.tagName).toBe("H3");
     expect(text.className).toContain("text-right");
-    expect(text).toHaveStyle({
-      color: "rgb(18, 52, 86)",
-      fontFamily: "Georgia, serif",
-      fontSize: "19px",
-      fontWeight: "700",
-      fontStyle: "italic",
-      textTransform: "uppercase",
-    });
+    expect(text.style.color).toBe("rgb(18, 52, 86)");
+    expect(text.style.fontFamily).toBe("Georgia, serif");
+    expect(text.style.fontSize).toBe("19px");
+    expect(text.style.fontWeight).toBe("700");
+    expect(text.style.fontStyle).toBe("italic");
+    expect(text.style.textTransform).toBe("uppercase");
   });
 
   it("renders repeated rich text by reusing shared style props with local data", () => {
@@ -372,7 +370,9 @@ describe("Styled text content blocks", () => {
       />
     );
 
-    const wrapper = container.querySelector(".rtf-wrapper") as HTMLElement;
+    const wrapper = container.querySelector(
+      ".rtf-theme.components"
+    ) as HTMLElement;
     expect(wrapper.className).toContain("text-right");
     expect(wrapper.style.getPropertyValue("--fontFamily-body-fontFamily")).toBe(
       "Georgia, serif"

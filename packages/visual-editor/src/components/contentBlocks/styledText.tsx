@@ -1,7 +1,9 @@
 import * as React from "react";
+import { MaybeRTF } from "../atoms/maybeRTF.tsx";
 import { type StyledTextValue } from "../../fields/styledFields/StyledTextField.tsx";
 import { getTextColorClass, getTextColorStyle } from "../../utils/colors.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
+import { getRichTextStyle } from "../../utils/richTextStyles.ts";
 import { type ThemeColor } from "../../utils/themeConfigOptions.ts";
 
 export type StyledTextTag =
@@ -95,43 +97,6 @@ const getStyledTextRenderProps = ({
   },
 });
 
-const getStyledRichTextStyle = ({
-  color,
-  text,
-}: {
-  color?: ThemeColor;
-  text?: StyledTextValue;
-}): React.CSSProperties => {
-  const richTextStyle: React.CSSProperties & {
-    "--fontFamily-body-fontFamily"?: string;
-    "--fontSize-body-fontSize"?: string;
-    "--fontWeight-body-fontWeight"?: string;
-    "--fontStyle-body-fontStyle"?: string;
-    "--textTransform-body-textTransform"?: string;
-  } = {
-    ...getTextColorStyle(color),
-    ...getStyledTextStyle(text),
-  };
-
-  if (text && text.fontFamily !== "default") {
-    richTextStyle["--fontFamily-body-fontFamily"] = text.fontFamily;
-  }
-  if (text && text.fontSize !== "default") {
-    richTextStyle["--fontSize-body-fontSize"] = text.fontSize;
-  }
-  if (text && text.fontWeight !== "default") {
-    richTextStyle["--fontWeight-body-fontWeight"] = text.fontWeight;
-  }
-  if (text && text.fontStyle !== "default") {
-    richTextStyle["--fontStyle-body-fontStyle"] = text.fontStyle;
-  }
-  if (text && text.textTransform !== "default") {
-    richTextStyle["--textTransform-body-textTransform"] = text.textTransform;
-  }
-
-  return richTextStyle;
-};
-
 export const renderStyledRichText = ({
   content,
   align,
@@ -151,9 +116,27 @@ export const renderStyledRichText = ({
     color,
     text,
   });
-  const richTextStyle = getStyledRichTextStyle({ color, text });
+  const richTextClassName = themeManagerCn(
+    getTextColorClass(color),
+    renderProps.className
+  );
+  const richTextStyle = getRichTextStyle({ color, typography: text });
 
   if (typeof content === "string") {
+    if (/<[a-z][\s\S]*>/i.test(content)) {
+      return (
+        <MaybeRTF
+          className={richTextClassName}
+          data={{ html: content }}
+          richTextStyleOverrides={{
+            ...text,
+            ...(color ? { color } : {}),
+          }}
+          style={richTextStyle}
+        />
+      );
+    }
+
     return (
       <StyledTextElement
         as="div"
@@ -171,6 +154,43 @@ export const renderStyledRichText = ({
     return content;
   }
 
+  if (content.type === MaybeRTF) {
+    return (
+      <MaybeRTF
+        {...content.props}
+        className={themeManagerCn(content.props.className, richTextClassName)}
+        richTextStyleOverrides={{
+          ...content.props.richTextStyleOverrides,
+          ...text,
+          ...(color ? { color } : {}),
+        }}
+        style={{
+          ...content.props.style,
+          ...richTextStyle,
+        }}
+      />
+    );
+  }
+
+  if (
+    React.isValidElement(content.props.children) &&
+    typeof content.props.children.props.className === "string" &&
+    content.props.children.props.className.includes("rtf-wrapper")
+  ) {
+    return React.cloneElement(content, {
+      children: React.cloneElement(content.props.children, {
+        className: themeManagerCn(
+          content.props.children.props.className,
+          richTextClassName
+        ),
+        style: {
+          ...content.props.children.props.style,
+          ...richTextStyle,
+        },
+      }),
+    });
+  }
+
   const innerContent = React.isValidElement(content.props.children)
     ? React.cloneElement(content.props.children, {
         className: themeManagerCn(content.props.children.props.className),
@@ -179,7 +199,7 @@ export const renderStyledRichText = ({
     : content.props.children;
 
   return React.cloneElement(content, {
-    className: themeManagerCn(content.props.className, renderProps.className),
+    className: themeManagerCn(content.props.className, richTextClassName),
     style: {
       ...content.props.style,
       ...richTextStyle,
