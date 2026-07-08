@@ -422,6 +422,37 @@ describe("getSurfaceColorStyle", () => {
   it("returns undefined when the surface color is unset", () => {
     expect(getSurfaceColorStyle(undefined)).toBeUndefined();
   });
+
+  it("uses fallback colors when provided and the surface is unset", () => {
+    expect(
+      getSurfaceColorStyle(undefined, undefined, {
+        fallbackBackgroundColor: "var(--colors-palette-tertiary)",
+        fallbackTextColor: "var(--colors-palette-tertiary-contrast)",
+      })
+    ).toStrictEqual({
+      backgroundColor: "var(--colors-palette-tertiary)",
+      color: "var(--colors-palette-tertiary-contrast)",
+    });
+  });
+
+  it("prefers resolved surface values over fallback colors", () => {
+    expect(
+      getSurfaceColorStyle(
+        {
+          selectedColor: "[#111111]",
+          contrastingColor: "white",
+        },
+        undefined,
+        {
+          fallbackBackgroundColor: "pink",
+          fallbackTextColor: "green",
+        }
+      )
+    ).toStrictEqual({
+      backgroundColor: "#111111",
+      color: "white",
+    });
+  });
 });
 
 describe("isDarkColor", () => {

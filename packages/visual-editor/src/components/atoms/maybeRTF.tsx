@@ -1,10 +1,7 @@
 import { Body, BodyProps } from "./body.tsx";
 import { RichText } from "../../types/types.ts";
 import type { BaseTextStyles } from "../../fields/styledFields/baseText.tsx";
-import {
-  getThemeColorCssValue,
-  normalizeThemeColorToken,
-} from "../../utils/colors.ts";
+import { getRichTextStyle } from "../../utils/richTextStyles.ts";
 import { type ThemeColor } from "../../utils/themeConfigOptions.ts";
 import "./maybeRTF.css";
 
@@ -19,81 +16,11 @@ export interface MaybeRTFProps extends Record<string, any> {
   richTextStyleOverrides?: RichTextStyleOverrides;
 }
 
-const resolveTextStyleValue = (value?: string) =>
-  value && value !== "default" ? value : undefined;
-
-const getTextStyles = (
-  typography?: Partial<BaseTextStyles>
-): React.CSSProperties | undefined => {
-  if (!typography) {
-    return undefined;
-  }
-
-  const styles: React.CSSProperties & {
-    "--fontFamily-body-fontFamily"?: string;
-    "--fontSize-body-fontSize"?: string;
-    "--fontWeight-body-fontWeight"?: string;
-    "--fontStyle-body-fontStyle"?: string;
-    "--textTransform-body-textTransform"?: string;
-  } = {};
-
-  const fontFamily = resolveTextStyleValue(typography.fontFamily);
-  const fontSize = resolveTextStyleValue(typography.fontSize);
-  const fontWeight = resolveTextStyleValue(typography.fontWeight);
-  const fontStyle = resolveTextStyleValue(typography.fontStyle);
-  const textTransform = resolveTextStyleValue(typography.textTransform);
-
-  if (fontFamily) {
-    styles.fontFamily = fontFamily;
-    styles["--fontFamily-body-fontFamily"] = fontFamily;
-  }
-  if (fontSize) {
-    styles.fontSize = fontSize;
-    styles["--fontSize-body-fontSize"] = fontSize;
-  }
-  if (fontWeight) {
-    styles.fontWeight = fontWeight;
-    styles["--fontWeight-body-fontWeight"] = fontWeight;
-  }
-  if (fontStyle) {
-    styles.fontStyle = fontStyle as React.CSSProperties["fontStyle"];
-    styles["--fontStyle-body-fontStyle"] = fontStyle;
-  }
-  if (textTransform) {
-    styles.textTransform =
-      textTransform as React.CSSProperties["textTransform"];
-    styles["--textTransform-body-textTransform"] = textTransform;
-  }
-
-  return Object.keys(styles).length ? styles : undefined;
-};
-
-const isResolvedCssColor = (color?: string): boolean =>
-  !!color &&
-  (color.startsWith("#") ||
-    color.startsWith("var(") ||
-    color.startsWith("rgb(") ||
-    color.startsWith("rgba(") ||
-    color.startsWith("hsl(") ||
-    color === "transparent" ||
-    color === "inherit");
-
-const getRichTextColorStyle = (
-  color?: ThemeColor | string
-): React.CSSProperties | undefined => {
-  if (typeof color === "string" && isResolvedCssColor(color)) {
-    return { color };
-  }
-
-  const normalizedColor = normalizeThemeColorToken(color);
-  if (!normalizedColor) {
-    return undefined;
-  }
-
-  const resolvedColor = getThemeColorCssValue(normalizedColor);
-  return resolvedColor ? { color: resolvedColor } : undefined;
-};
-
+/**
+ * Renders plain strings through the shared `Body` component and rich text HTML
+ * through the standard `rtf-wrapper` container while applying shared rich-text
+ * typography and color overrides.
+ */
 export const MaybeRTF = ({
   data,
   bodyVariant = "base",
@@ -102,11 +29,11 @@ export const MaybeRTF = ({
   className,
   ...props
 }: MaybeRTFProps) => {
-  const typographyStyles = getTextStyles(richTextStyleOverrides);
-  const colorStyles = getRichTextColorStyle(richTextStyleOverrides?.color);
   const mergedStyle = {
-    ...typographyStyles,
-    ...colorStyles,
+    ...getRichTextStyle({
+      color: richTextStyleOverrides?.color,
+      typography: richTextStyleOverrides,
+    }),
     ...style,
   };
 

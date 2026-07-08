@@ -78,6 +78,34 @@ const renderField = (value: StyledTextValue = styledTextValue()) => {
   return { onChange };
 };
 
+const renderFieldWithColor = (
+  value: StyledTextValue = {
+    color: {
+      selectedColor: "palette-primary",
+      contrastingColor: "palette-primary-contrast",
+    },
+    ...styledTextValue(),
+  }
+) => {
+  const onChange = vi.fn();
+
+  render(
+    <TemplateMetadataContext.Provider value={templateMetadata}>
+      <YextAutoField
+        field={{
+          ...field,
+          includeColor: true,
+        }}
+        id="styled-text-with-color"
+        onChange={onChange}
+        value={value}
+      />
+    </TemplateMetadataContext.Provider>
+  );
+
+  return { onChange };
+};
+
 describe("StyledTextField", () => {
   it("renders through YextAutoField as a registered field type", () => {
     renderField(
@@ -198,5 +226,84 @@ describe("StyledTextField", () => {
       });
     });
     expect(onChange).toHaveBeenCalledTimes(1);
+  });
+
+  it("renders font color in the same field group when enabled", () => {
+    renderFieldWithColor();
+
+    expect(screen.getByText("Font Color")).toBeDefined();
+    expect(screen.getAllByRole("combobox").at(-1)?.textContent).toContain(
+      "Color 1"
+    );
+  });
+
+  it("preserves the flat value shape when typography changes and color is enabled", () => {
+    const initialValue: StyledTextValue = {
+      color: {
+        selectedColor: "palette-primary",
+        contrastingColor: "palette-primary-contrast",
+      },
+      ...styledTextValue({
+        fontFamily: "'Weights Only', 'Weights Only Fallback', sans-serif",
+        fontSize: "24px",
+        fontWeight: "700",
+        fontStyle: "italic",
+        textTransform: "uppercase",
+      }),
+    };
+    const { onChange } = renderFieldWithColor(initialValue);
+
+    fireEvent.click(screen.getByText("2XL (24px)"));
+    fireEvent.click(screen.getByText("3XL (32px)"));
+
+    expect(onChange).toHaveBeenCalledWith({
+      ...initialValue,
+      fontSize: "32px",
+    });
+  });
+
+  it("preserves the plain value shape when color is enabled without a selected color", () => {
+    const initialValue = styledTextValue({
+      fontFamily: "'Weights Only', 'Weights Only Fallback', sans-serif",
+      fontSize: "24px",
+    });
+    const { onChange } = renderFieldWithColor(initialValue);
+
+    fireEvent.click(screen.getByText("2XL (24px)"));
+    fireEvent.click(screen.getByText("3XL (32px)"));
+
+    expect(onChange).toHaveBeenCalledWith({
+      ...initialValue,
+      fontSize: "32px",
+    });
+  });
+
+  it("preserves existing text styles when the color changes", () => {
+    const initialValue: StyledTextValue = {
+      color: {
+        selectedColor: "palette-primary",
+        contrastingColor: "palette-primary-contrast",
+      },
+      ...styledTextValue({
+        fontFamily: "'Weights Only', 'Weights Only Fallback', sans-serif",
+        fontSize: "24px",
+        fontWeight: "700",
+        fontStyle: "italic",
+        textTransform: "uppercase",
+      }),
+    };
+    const { onChange } = renderFieldWithColor(initialValue);
+
+    const colorCombobox = screen.getAllByRole("combobox").at(-1)!;
+    fireEvent.click(colorCombobox);
+    fireEvent.click(screen.getByText("Color 2"));
+
+    expect(onChange).toHaveBeenCalledWith({
+      ...initialValue,
+      color: {
+        selectedColor: "palette-secondary",
+        contrastingColor: "palette-secondary-contrast",
+      },
+    });
   });
 });

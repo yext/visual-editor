@@ -20,6 +20,12 @@ export {
 } from "./MapboxStaticMap.tsx";
 export { Phone, type PhoneProps } from "./Phone.tsx";
 export { PhoneList, type PhoneListProps } from "./PhoneList.tsx";
+export {
+  createStyledTextConfig,
+  StyledTextComponent,
+  type StyledPlainTextProps,
+  type StyledRichTextProps,
+} from "./createStyledTextConfig.tsx";
 export { TextList, type TextListProps } from "./TextList.tsx";
 export { Text, type TextProps } from "./Text.tsx";
 export { Timestamp, type TimestampProps } from "./Timestamp.tsx";
