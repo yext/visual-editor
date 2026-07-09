@@ -48,7 +48,6 @@
   "closesAtTime": "Stänger kl. {{time}}",
   "closesAtTimeWeek": "Stänger kl. {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "close": "Stäng färgväljaren",
     "open": "Öppna färgväljaren"
   },
   "comingSoon": "Kommer snart",

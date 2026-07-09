@@ -48,7 +48,6 @@
   "closesAtTime": "Suljetaan {{time}}",
   "closesAtTimeWeek": "Suljetaan klo {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "close": "Sulje värivalitsin",
     "open": "Avaa värivalitsin"
   },
   "comingSoon": "Tulossa pian",

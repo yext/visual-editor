@@ -48,7 +48,6 @@
   "closesAtTime": "Zatvára sa o {{time}}",
   "closesAtTimeWeek": "Zatvára sa o {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "close": "Zavrieť výber farieb",
     "open": "Otvorte výber farieb"
   },
   "comingSoon": "Už čoskoro",

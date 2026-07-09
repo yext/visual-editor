@@ -48,7 +48,6 @@
   "closesAtTime": "Uždaroma {{time}}",
   "closesAtTimeWeek": "Uždaroma {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "close": "Uždarykite spalvų parinkiklį",
     "open": "Atidarykite spalvų rinkiklį"
   },
   "comingSoon": "Netrukus",

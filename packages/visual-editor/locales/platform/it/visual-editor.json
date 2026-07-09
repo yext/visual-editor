@@ -48,7 +48,6 @@
   "closesAtTime": "Chiude alle {{time}}",
   "closesAtTimeWeek": "Chiude alle {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "close": "Chiudi il selettore colori",
     "open": "Apri il selettore colori"
   },
   "comingSoon": "Prossimamente",

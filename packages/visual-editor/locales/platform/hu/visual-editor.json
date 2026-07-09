@@ -48,7 +48,6 @@
   "closesAtTime": "Zárás: {{time}}",
   "closesAtTimeWeek": "Zárás: {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "close": "Zárja be a színválasztót",
     "open": "Nyissa meg a színválasztót"
   },
   "comingSoon": "Hamarosan",

@@ -48,7 +48,6 @@
   "closesAtTime": "于 {{time}} 关闭",
   "closesAtTimeWeek": "于 {{time}} {{dayOfWeek}} 关闭",
   "colorPicker": {
-    "close": "关闭颜色选择器",
     "open": "打开颜色选择器"
   },
   "comingSoon": "即将推出",

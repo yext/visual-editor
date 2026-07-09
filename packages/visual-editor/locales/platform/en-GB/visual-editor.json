@@ -48,7 +48,6 @@
   "closesAtTime": "Closes at {{time}}",
   "closesAtTimeWeek": "Closes at {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "close": "Close color picker",
     "open": "Open color picker"
   },
   "comingSoon": "Coming Soon",

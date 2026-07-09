@@ -48,7 +48,6 @@
   "closesAtTime": "Sluit om {{time}}",
   "closesAtTimeWeek": "Sluit om {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "close": "Sluit de kleurkiezer",
     "open": "Kleurkiezer openen"
   },
   "comingSoon": "Binnenkort beschikbaar",
