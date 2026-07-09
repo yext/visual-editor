@@ -45,8 +45,12 @@ The workflow sends a `dev-release-created` event to the `YextSolutions/pages-vis
   "pr_title": "Feature: Add new component",
   "pr_url": "https://github.com/yext/visual-editor/pull/123",
   "author": "username",
-  "package_url": "https://pkg.pr.new/yext/visual-editor@123"
+  "package_url": "https://pkg.pr.new/yext/visual-editor@123",
+  "shared_package_versions": {
+    "@puckeditor/core": "0.21.2",
+    "@yext/search-ui-react": "^3.0.1"
+  }
 }
 ```
 
-The starter repository can listen for this event and automatically update its dependencies to use the new dev release for testing.
+The starter repository can listen for this event and automatically update its dependencies to use the new dev release for testing, while also aligning versions for any package names shared by both repositories.
