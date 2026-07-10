@@ -48,7 +48,6 @@
   "closesAtTime": "Zatvara se u {{time}}",
   "closesAtTimeWeek": "Zatvara se u {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "close": "Zatvori birač boja",
     "open": "Otvori birač boja"
   },
   "comingSoon": "Dolazi uskoro",

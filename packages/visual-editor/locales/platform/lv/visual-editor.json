@@ -48,7 +48,6 @@
   "closesAtTime": "Tiek slēgts plkst. {{time}}",
   "closesAtTimeWeek": "Tiek slēgts plkst. {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "close": "Aizvērt krāsu atlasītāju",
     "open": "Atveriet krāsu atlasītāju"
   },
   "comingSoon": "Drīzumā",

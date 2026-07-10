@@ -48,7 +48,6 @@
   "closesAtTime": "{{time}}に閉まります",
   "closesAtTimeWeek": "{{time}} {{dayOfWeek}} に閉店",
   "colorPicker": {
-    "close": "カラーピッカーを閉じる",
     "open": "カラーピッカーを開く"
   },
   "comingSoon": "近日公開",

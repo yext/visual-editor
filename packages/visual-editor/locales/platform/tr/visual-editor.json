@@ -48,7 +48,6 @@
   "closesAtTime": "{{time}} itibarıyla kapanıyor",
   "closesAtTimeWeek": "{{time}} {{dayOfWeek}} itibarıyla kapanıyor",
   "colorPicker": {
-    "close": "Renk seçiciyi kapat",
     "open": "Renk seçiciyi aç"
   },
   "comingSoon": "Yakında gelecek",

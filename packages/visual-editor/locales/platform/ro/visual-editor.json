@@ -48,7 +48,6 @@
   "closesAtTime": "Se închide la {{time}}",
   "closesAtTimeWeek": "Se închide la {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "close": "Închideți selectorul de culori",
     "open": "Deschideți selectorul de culori"
   },
   "comingSoon": "În curând",

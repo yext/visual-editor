@@ -48,7 +48,6 @@
   "closesAtTime": "Stenger kl. {{time}}",
   "closesAtTimeWeek": "Stenger kl. {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "close": "Lukk fargevelgeren",
     "open": "Åpne fargevelgeren"
   },
   "comingSoon": "Kommer snart",
