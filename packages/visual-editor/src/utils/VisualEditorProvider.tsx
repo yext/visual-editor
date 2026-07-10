@@ -31,12 +31,12 @@ type EditorProps = {
 type VisualEditorProviderProps<T> = UniversalProps<T> &
   AllOrNothing<EditorProps>;
 
-type CustomCodeAnalyticsRequest = Parameters<
+type AnalyticsTrackProps = Parameters<
   NonNullable<ReturnType<typeof useAnalytics>>["track"]
 >[0];
 
 type YextCustomCodeAnalytics = {
-  track: (request: CustomCodeAnalyticsRequest) => void;
+  track: (request: AnalyticsTrackProps) => void;
 };
 
 declare global {
