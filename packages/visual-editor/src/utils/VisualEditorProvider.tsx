@@ -57,6 +57,7 @@ const VisualEditorProvider = <T extends Record<string, any>>({
   children,
 }: VisualEditorProviderProps<T>) => {
   const pagesAnalytics = useAnalytics();
+
   // Use useMemo to prevent creating a new QueryClient on every render
   // QueryClient maintains internal caches, so creating new instances unnecessarily
   // could lead to memory accumulation
