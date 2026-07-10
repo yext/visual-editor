@@ -1,6 +1,6 @@
 import React from "react";
 import { CodeXml } from "lucide-react";
-import { AnalyticsScopeProvider, useAnalytics } from "@yext/pages-components";
+import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
@@ -8,77 +8,6 @@ import { WithId, WithPuckProps } from "@puckeditor/core";
 import { resolveEmbeddedFieldsInString } from "../../utils/resolveYextEntityField.ts";
 import { processHandlebarsTemplate } from "./customCodeHandlebars.ts";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
-
-type AnalyticsTrackProps = Parameters<
-  NonNullable<ReturnType<typeof useAnalytics>>["track"]
->[0];
-
-type CustomCodeAnalyticsData = Record<string, unknown> & {
-  action?: AnalyticsTrackProps["action"];
-};
-
-/** The default analytics action used when Custom Code scripts do not provide one. */
-const DEFAULT_CUSTOM_CODE_ANALYTICS_ACTION: AnalyticsTrackProps["action"] =
-  "C_CUSTOM";
-
-type CustomCodeAnalyticsBridge = {
-  track: (eventName: string, data?: CustomCodeAnalyticsData) => void;
-};
-
-type YextCustomCodeAnalytics = {
-  register: (
-    componentId: string,
-    analyticsBridge: CustomCodeAnalyticsBridge
-  ) => void;
-  unregister: (componentId: string) => void;
-  track: (
-    componentId: string,
-    eventName: string,
-    data?: CustomCodeAnalyticsData
-  ) => void;
-};
-
-declare global {
-  interface Window {
-    YextCustomCodeAnalytics?: YextCustomCodeAnalytics;
-  }
-}
-
-/**
- * Creates or returns the shared browser analytics bridge used by CustomCodeSection scripts.
- * Each CustomCodeSection registers its scoped analytics instance by componentId so multiple
- * custom code components can coexist without overwriting each other's analytics handlers.
- */
-const getYextCustomCodeAnalytics = (): YextCustomCodeAnalytics => {
-  if (window.YextCustomCodeAnalytics) {
-    return window.YextCustomCodeAnalytics;
-  }
-
-  const scopes: Record<string, CustomCodeAnalyticsBridge> = {};
-
-  window.YextCustomCodeAnalytics = {
-    register(componentId, analyticsBridge) {
-      scopes[componentId] = analyticsBridge;
-    },
-    unregister(componentId) {
-      delete scopes[componentId];
-    },
-    track(componentId, eventName, data) {
-      const scope = scopes[componentId];
-
-      if (!scope) {
-        console.warn(
-          `No Custom Code analytics scope found for componentId: ${componentId}`
-        );
-        return;
-      }
-
-      scope.track(eventName, data);
-    },
-  };
-
-  return window.YextCustomCodeAnalytics;
-};
 
 export interface CustomCodeSectionProps {
   /**
@@ -160,72 +89,7 @@ const EmptyCustomCodeSection = () => {
   );
 };
 
-/**
- * Registers the current component's scoped analytics bridge before executing user JavaScript.
- * This ensures injected scripts can call `yextAnalytics.track(...)` immediately while still
- * using the AnalyticsScopeProvider context for this CustomCodeSection instance.
- */
-const CustomCodeAnalyticsBridgeAndScriptRunner = ({
-  componentId,
-  containerRef,
-  processedJavascript,
-  scriptTagId,
-}: {
-  componentId: string;
-  containerRef: React.RefObject<HTMLDivElement>;
-  processedJavascript: string;
-  scriptTagId: string;
-}) => {
-  const analytics = useAnalytics();
-
-  React.useEffect(() => {
-    if (!containerRef.current || !processedJavascript) {
-      return;
-    }
-
-    const customCodeAnalytics = getYextCustomCodeAnalytics();
-    customCodeAnalytics.register(componentId, {
-      track: (eventName, data) => {
-        analytics?.track({
-          ...data,
-          action: data?.action ?? DEFAULT_CUSTOM_CODE_ANALYTICS_ACTION,
-          eventName,
-        });
-      },
-    });
-
-    const prevScript = containerRef.current.querySelector(`#${scriptTagId}`);
-    if (prevScript) {
-      prevScript.remove();
-    }
-
-    const script = document.createElement("script");
-    script.id = scriptTagId;
-    script.type = "text/javascript";
-    // Wrap user code in a block so each component gets a local yextAnalytics helper without leaking a global.
-    script.text = `
-{
-  const yextAnalytics = {
-    track: (eventName, data) =>
-      window.YextCustomCodeAnalytics.track(${JSON.stringify(componentId)}, eventName, data),
-  };
-
-${processedJavascript}
-}
-`;
-    containerRef.current.appendChild(script);
-
-    return () => {
-      script.remove();
-      customCodeAnalytics.unregister(componentId);
-    };
-  }, [analytics, componentId, processedJavascript, scriptTagId]);
-
-  return null;
-};
-
 const CustomCodeSectionWrapper = ({
-  id,
   html,
   css,
   javascript,
@@ -245,6 +109,25 @@ const CustomCodeSectionWrapper = ({
     locale
   );
 
+  React.useEffect(() => {
+    if (!containerRef.current) {
+      return;
+    }
+
+    const prevScript = containerRef.current.querySelector(`#${scriptTagId}`);
+    if (prevScript) {
+      prevScript.remove();
+    }
+
+    if (processedJavascript) {
+      const script = document.createElement("script");
+      script.id = scriptTagId;
+      script.type = "text/javascript";
+      script.text = processedJavascript;
+      containerRef.current.appendChild(script);
+    }
+  }, [processedJavascript]);
+
   if (!processedHtml) {
     return puck.isEditing ? <EmptyCustomCodeSection /> : null;
   }
@@ -255,12 +138,6 @@ const CustomCodeSectionWrapper = ({
       <div
         ref={containerRef}
         dangerouslySetInnerHTML={{ __html: processedHtml }}
-      />
-      <CustomCodeAnalyticsBridgeAndScriptRunner
-        componentId={id}
-        containerRef={containerRef}
-        processedJavascript={processedJavascript}
-        scriptTagId={scriptTagId}
       />
     </div>
   );
