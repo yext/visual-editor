@@ -81,6 +81,26 @@ export type EntityFieldSelectorField<
 
 type EntityFieldSelectorFieldProps = FieldProps<EntityFieldSelectorField>;
 
+const ITEM_SOURCE_PARENT_FIELD_TOOLTIP_TITLE = pt(
+  "itemSourceParentFieldTooltip",
+  "List elements must be able to satisfy the mapping requirements:"
+);
+
+/**
+ * Returns the unique child-field type requirements for one repeated source.
+ */
+const getItemSourceTooltipRequirements = (
+  itemSourceTypes: EntityFieldTypes[][] | undefined
+): string[] => {
+  if (!itemSourceTypes?.length) {
+    return [];
+  }
+
+  return [...new Set(itemSourceTypes.flat())].map((fieldType) =>
+    fieldType.startsWith("type.") ? fieldType.slice(5) : fieldType
+  );
+};
+
 const clearEntityFieldBindings = (value: unknown): unknown => {
   if (
     value &&
@@ -224,6 +244,9 @@ const RepeatedEntityFieldSelector = ({
         }
         disableConstantValue={field.disableConstantValueToggle}
         label={translatedLabel}
+        infoTooltipRequirements={getItemSourceTooltipRequirements(
+          field.filter.itemSourceTypes
+        )}
       />
       {constantValueEnabled ? (
         <div className="ve-pt-3">
@@ -350,6 +373,7 @@ export const ConstantValueModeToggler = ({
   disableConstantValue,
   label,
   showLocale,
+  infoTooltipRequirements,
 }: {
   fieldTypeFilter: EntityFieldTypes[];
   constantValueEnabled: boolean;
@@ -357,6 +381,7 @@ export const ConstantValueModeToggler = ({
   disableConstantValue?: boolean;
   label: string;
   showLocale?: boolean;
+  infoTooltipRequirements?: string[];
 }) => {
   const constantValueInputSupported =
     !disableConstantValue &&
@@ -371,7 +396,7 @@ export const ConstantValueModeToggler = ({
   return (
     <div className="ve-w-full ve-flex ve-gap-3">
       {constantValueInputSupported && (
-        <TooltipProvider>
+        <TooltipProvider delayDuration={0}>
           <Tooltip>
             <TooltipTrigger asChild>
               <div className="ve-flex ve-flex-row ve-self-center">
@@ -394,14 +419,43 @@ export const ConstantValueModeToggler = ({
           </Tooltip>
         </TooltipProvider>
       )}
-      <p
-        className="ve-self-center ve-text-sm ve-font-semibold"
-        style={{ color: "var(--puck-color-grey-04)" }}
-      >
-        {showLocale && constantValueEnabled
-          ? `${pt(label)} (${locale})`
-          : `${pt(label)}`}
-      </p>
+      <div className="ve-flex ve-items-center ve-gap-2">
+        <p
+          className="ve-self-center ve-text-sm ve-font-semibold"
+          style={{ color: "var(--puck-color-grey-04)" }}
+        >
+          {showLocale && constantValueEnabled
+            ? `${pt(label)} (${locale})`
+            : `${pt(label)}`}
+        </p>
+        {!!infoTooltipRequirements?.length && !constantValueEnabled && (
+          <TooltipProvider delayDuration={0}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  aria-label={pt(
+                    "parentFieldRequirements",
+                    "Parent field requirements"
+                  )}
+                  className="ve-flex ve-h-4 ve-w-4 ve-items-center ve-justify-center ve-rounded-full ve-border ve-border-gray-400 ve-text-[10px] ve-font-semibold ve-text-gray-500 hover:ve-border-gray-500 hover:ve-text-gray-700"
+                >
+                  I
+                </button>
+              </TooltipTrigger>
+              <TooltipContent className="ve-max-w-[260px] ve-text-left">
+                <p>{ITEM_SOURCE_PARENT_FIELD_TOOLTIP_TITLE}</p>
+                <ul className="ve-mt-2 ve-list-disc ve-pl-4">
+                  {infoTooltipRequirements.map((requirement) => (
+                    <li key={requirement}>{requirement}</li>
+                  ))}
+                </ul>
+                <TooltipArrow fill="ve-bg-popover" />
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
+      </div>
     </div>
   );
 };

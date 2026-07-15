@@ -557,6 +557,113 @@ describe("EntityFieldSelectorField", () => {
     expect(screen.getByRole("button", { name: "Delete" })).toBeDefined();
   });
 
+  it("shows parent field requirements for item sources", () => {
+    renderRepeatedEntityField({
+      field: {
+        type: "entityField",
+        label: "Articles",
+        filter: {
+          itemSourceTypes: [
+            ["type.rich_text_v2"],
+            ["type.string"],
+            ["type.cta"],
+            ["type.image"],
+          ],
+        },
+        repeated: {
+          defaultItemValue: {
+            title: {
+              field: "",
+              constantValueEnabled: true,
+              constantValue: { defaultValue: "" },
+            },
+          },
+          defaultMappings: {
+            title: {
+              field: "",
+              constantValueEnabled: false,
+              constantValue: { defaultValue: "" },
+            },
+          },
+          manualItemFields: {
+            title: {
+              type: "entityField",
+              label: "Title",
+              filter: { types: ["type.string"] },
+            },
+          },
+          mappingFields: {
+            title: {
+              type: "entityField",
+              label: "Title",
+              filter: { types: ["type.string"] },
+            },
+          },
+        },
+      },
+      value: {
+        field: "c_articles",
+        constantValueEnabled: false,
+        constantValue: [],
+        mappings: {
+          title: {
+            field: "name",
+            constantValueEnabled: false,
+            constantValue: { defaultValue: "" },
+          },
+        },
+      },
+    });
+
+    const parentFieldRequirementsButton = screen.getByRole("button", {
+      name: "Parent field requirements",
+    });
+
+    fireEvent.focus(parentFieldRequirementsButton);
+
+    const tooltip = screen.getByRole("tooltip");
+
+    expect(tooltip).toBeDefined();
+    expect(
+      within(tooltip).getByText(
+        "List fields must have children that satisfy the mapping requirements:"
+      )
+    ).toBeDefined();
+    expect(within(tooltip).getByText("rich_text_v2")).toBeDefined();
+    expect(within(tooltip).getByText("string")).toBeDefined();
+    expect(within(tooltip).getByText("cta")).toBeDefined();
+    expect(within(tooltip).getByText("image")).toBeDefined();
+  });
+
+  it("hides parent field requirements in constant value mode", () => {
+    renderRepeatedEntityField({
+      value: {
+        field: "",
+        constantValueEnabled: true,
+        constantValue: [
+          {
+            title: {
+              field: "",
+              constantValueEnabled: true,
+              constantValue: { defaultValue: "" },
+            },
+          },
+        ],
+        mappings: {
+          title: {
+            field: "name",
+            constantValueEnabled: false,
+            constantValue: { defaultValue: "" },
+          },
+        },
+      },
+    });
+
+    expect(
+      screen.queryByRole("button", { name: "Parent field requirements" })
+    ).toBeNull();
+  });
+
   it("renders repeated card controls for slot-backed manual mode", () => {
     renderRepeatedEntityField({
       field: {
