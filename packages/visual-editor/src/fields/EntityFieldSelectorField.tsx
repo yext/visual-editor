@@ -81,11 +81,6 @@ export type EntityFieldSelectorField<
 
 type EntityFieldSelectorFieldProps = FieldProps<EntityFieldSelectorField>;
 
-const ITEM_SOURCE_PARENT_FIELD_TOOLTIP_TITLE = pt(
-  "itemSourceParentFieldTooltip",
-  "List elements must be able to satisfy the mapping requirements:"
-);
-
 /**
  * Returns the unique child-field type requirements for one repeated source.
  */
@@ -245,7 +240,7 @@ const RepeatedEntityFieldSelector = ({
         disableConstantValue={field.disableConstantValueToggle}
         label={translatedLabel}
         infoTooltipRequirements={getItemSourceTooltipRequirements(
-          field.filter.itemSourceTypes
+          field.filter?.itemSourceTypes
         )}
       />
       {constantValueEnabled ? (
@@ -392,6 +387,10 @@ export const ConstantValueModeToggler = ({
     );
   const { i18n } = useTranslation();
   const locale = i18n.language;
+  const itemSourceParentFieldTooltipTitle = pt(
+    "itemSourceParentFieldTooltip",
+    "List elements must be able to satisfy the mapping requirements:"
+  );
 
   return (
     <div className="ve-w-full ve-flex ve-gap-3">
@@ -444,7 +443,7 @@ export const ConstantValueModeToggler = ({
                 </button>
               </TooltipTrigger>
               <TooltipContent className="ve-max-w-[260px] ve-text-left">
-                <p>{ITEM_SOURCE_PARENT_FIELD_TOOLTIP_TITLE}</p>
+                <p>{itemSourceParentFieldTooltipTitle}</p>
                 <ul className="ve-mt-2 ve-list-disc ve-pl-4">
                   {infoTooltipRequirements.map((requirement) => (
                     <li key={requirement}>{requirement}</li>
