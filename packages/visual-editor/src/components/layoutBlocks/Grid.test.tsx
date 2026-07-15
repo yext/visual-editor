@@ -2213,10 +2213,6 @@ const tests: ComponentTest[] = [
                     },
                     normalizeLink: false,
                     variant: "secondary",
-                    color: {
-                      selectedColor: "[#4A2A2A]",
-                      contrastingColor: "white",
-                    },
                   },
                 ],
                 id: "CTAGroup-custom-colors-dark-background",
