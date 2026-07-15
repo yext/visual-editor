@@ -14,9 +14,6 @@ import { presetImageIcons } from "../../utils/presetImageIcons.tsx";
 import {
   getDefaultForegroundColor,
   getThemeColorCssValue,
-  getThemeColorHexValue,
-  hexToRGB,
-  isColorContrastWcagCompliant,
   normalizeThemeColorToken,
 } from "../../utils/colors.ts";
 
@@ -270,38 +267,11 @@ export const CTA = (props: CTAProps) => {
     showCaret,
     background,
   } = resolvedProps;
-  const isDarkBackground = background?.isDarkColor;
   const hasExplicitColor = !!normalizeThemeColorToken(color);
   const defaultSurfaceForeground = React.useMemo(
     () => getDefaultForegroundColor(background, streamDocument),
     [background, streamDocument]
   );
-  const resolvedCtaColorHex = React.useMemo(
-    () => getThemeColorHexValue(color?.selectedColor, streamDocument),
-    [color?.selectedColor, streamDocument]
-  );
-  const resolvedBackgroundColorHex = React.useMemo(
-    () => getThemeColorHexValue(background?.selectedColor, streamDocument),
-    [background?.selectedColor, streamDocument]
-  );
-  const resolvedCtaColorRgb = resolvedCtaColorHex
-    ? hexToRGB(resolvedCtaColorHex)
-    : undefined;
-  const resolvedBackgroundColorRgb = resolvedBackgroundColorHex
-    ? hexToRGB(resolvedBackgroundColorHex)
-    : undefined;
-  const shouldUseConfiguredSecondaryColor =
-    hasExplicitColor &&
-    !!resolvedCtaColorHex &&
-    (!isDarkBackground ||
-      (!!resolvedCtaColorRgb &&
-        !!resolvedBackgroundColorRgb &&
-        isColorContrastWcagCompliant(
-          resolvedCtaColorRgb,
-          resolvedBackgroundColorRgb,
-          12,
-          400
-        )));
   const dynamicStyle: React.CSSProperties = (() => {
     const bg = getThemeColorCssValue(color?.selectedColor);
     const textColor = getThemeColorCssValue(color?.contrastingColor);
@@ -318,11 +288,7 @@ export const CTA = (props: CTAProps) => {
       };
     }
 
-    if (
-      hasExplicitColor &&
-      variant === "secondary" &&
-      (shouldUseConfiguredSecondaryColor || !isDarkBackground)
-    ) {
+    if (hasExplicitColor && variant === "secondary") {
       return {
         borderColor: border,
         color: border,

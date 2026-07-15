@@ -40,10 +40,9 @@ describe("CTA default contrast", () => {
       }
     );
 
-    expect(screen.getByRole("button", { name: "Learn more" })).toHaveStyle({
-      color: "black",
-      borderColor: "black",
-    });
+    const button = screen.getByRole("button", { name: "Learn more" });
+    expect(button.style.color).toBe("black");
+    expect(button.style.borderColor).toBe("black");
   });
 
   it("uses white for secondary CTAs on dark backgrounds", () => {
@@ -61,10 +60,9 @@ describe("CTA default contrast", () => {
       }
     );
 
-    expect(screen.getByRole("button", { name: "Learn more" })).toHaveStyle({
-      color: "white",
-      borderColor: "white",
-    });
+    const button = screen.getByRole("button", { name: "Learn more" });
+    expect(button.style.color).toBe("white");
+    expect(button.style.borderColor).toBe("white");
   });
 
   it("uses black for link CTAs on light backgrounds", () => {
@@ -82,9 +80,8 @@ describe("CTA default contrast", () => {
       }
     );
 
-    expect(screen.getByRole("button", { name: "Read more" })).toHaveStyle({
-      color: "black",
-    });
+    const button = screen.getByRole("button", { name: "Read more" });
+    expect(button.style.color).toBe("black");
   });
 
   it("preserves explicit CTA colors", () => {
@@ -106,10 +103,33 @@ describe("CTA default contrast", () => {
       }
     );
 
-    expect(screen.getByRole("button", { name: "Contact us" })).toHaveStyle({
-      color: "rgb(255, 255, 255)",
-      borderColor: "rgb(255, 255, 255)",
-    });
+    const button = screen.getByRole("button", { name: "Contact us" });
+    expect(button.style.color).toBe("rgb(255, 255, 255)");
+    expect(button.style.borderColor).toBe("rgb(255, 255, 255)");
+  });
+
+  it("preserves explicit dark secondary CTA colors on dark backgrounds", () => {
+    renderCTA(
+      <CTA
+        actionType="button"
+        label="View menu"
+        variant="secondary"
+        ariaLabel="View menu"
+        color={{
+          selectedColor: "[#333333]",
+          contrastingColor: "white",
+        }}
+      />,
+      {
+        selectedColor: "[#111111]",
+        contrastingColor: "white",
+        isDarkColor: true,
+      }
+    );
+
+    const button = screen.getByRole("button", { name: "View menu" });
+    expect(button.style.color).toBe("rgb(51, 51, 51)");
+    expect(button.style.borderColor).toBe("rgb(51, 51, 51)");
   });
 
   it("keeps default primary CTA runtime styling unchanged when no explicit color is set", () => {
