@@ -5,7 +5,11 @@ import { StreamDocument } from "../types/StreamDocument.ts";
 const baseDocument: StreamDocument = {
   name: "123 Test Rd",
   dm_directoryParents_123_locations: [
-    { name: "Directory Root", slug: "index.html" },
+    {
+      name: "Directory Root",
+      slug: "index.html",
+      meta: { entityType: { id: "dm_root" } },
+    },
     { name: "US", slug: "us" },
     { name: "TS", slug: "ts" },
     { name: "Testville", slug: "testville" },
@@ -44,7 +48,7 @@ const matrixCases = [
     locale: "en",
     includeLocalePrefixForPrimaryLocale: true,
     expected: [
-      { name: "Directory Root", slug: "en/locations/index.html" },
+      { name: "Directory Root", slug: "en/locations" },
       { name: "US", slug: "en/locations/us" },
       { name: "TS", slug: "en/locations/ts" },
       { name: "Testville", slug: "en/locations/testville" },
@@ -56,7 +60,7 @@ const matrixCases = [
     locale: "en",
     includeLocalePrefixForPrimaryLocale: false,
     expected: [
-      { name: "Directory Root", slug: "locations/index.html" },
+      { name: "Directory Root", slug: "locations" },
       { name: "US", slug: "locations/us" },
       { name: "TS", slug: "locations/ts" },
       { name: "Testville", slug: "locations/testville" },
@@ -68,7 +72,7 @@ const matrixCases = [
     locale: "es",
     includeLocalePrefixForPrimaryLocale: true,
     expected: [
-      { name: "Directory Root", slug: "es/locations/index.html" },
+      { name: "Directory Root", slug: "es/locations" },
       { name: "US", slug: "es/locations/us" },
       { name: "TS", slug: "es/locations/ts" },
       { name: "Testville", slug: "es/locations/testville" },
@@ -80,7 +84,7 @@ const matrixCases = [
     locale: "es",
     includeLocalePrefixForPrimaryLocale: false,
     expected: [
-      { name: "Directory Root", slug: "es/locations/index.html" },
+      { name: "Directory Root", slug: "es/locations" },
       { name: "US", slug: "es/locations/us" },
       { name: "TS", slug: "es/locations/ts" },
       { name: "Testville", slug: "es/locations/testville" },
