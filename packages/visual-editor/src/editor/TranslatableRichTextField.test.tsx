@@ -2,7 +2,10 @@ import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
-import { TranslatableRichTextField } from "./TranslatableRichTextField.tsx";
+import {
+  getDefaultRTF,
+  TranslatableRichTextField,
+} from "./TranslatableRichTextField.tsx";
 import { RepeatedSourceFieldContext } from "../fields/repeatedSourceFieldContext.ts";
 import { msg } from "../utils/i18n/platform.ts";
 
@@ -72,5 +75,29 @@ describe("TranslatableRichTextField", () => {
         sourceField: "c_eventsSection.events",
       },
     });
+  });
+
+  it("creates valid rich text for multiline content", () => {
+    const value = getDefaultRTF(
+      'First <paragraph>\nwith "quotes"\n\nSecond & final'
+    );
+
+    expect(JSON.parse(value.json!)).toMatchObject({
+      root: {
+        children: [
+          {
+            children: [
+              { text: "First <paragraph>" },
+              { type: "linebreak" },
+              { text: 'with "quotes"' },
+            ],
+          },
+          { children: [{ text: "Second & final" }] },
+        ],
+      },
+    });
+    expect(value.html).toBe(
+      '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>First &lt;paragraph&gt;<br/>with &quot;quotes&quot;</span></p><p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Second &amp; final</span></p>'
+    );
   });
 });

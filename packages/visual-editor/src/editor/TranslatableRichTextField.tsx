@@ -110,18 +110,63 @@ export type GetDefaultRTFOptions = {
   isBold?: boolean;
 };
 
-/** Returns a simple RTF-format p tag wrapper for text  */
+/**
+ * Returns Lexical rich text and matching HTML for text, preserving paragraphs
+ * and line breaks from multiline input.
+ */
 export const getDefaultRTF = (
   text: string,
   options?: GetDefaultRTFOptions
 ): RichText => {
   const isBold = options?.isBold ?? false;
-  const format = isBold ? 1 : 0;
   const fontWeight = isBold ? "700 !important" : "400";
   const tag = isBold ? "strong" : "span";
+  const paragraphs = text.split(/\r?\n(?:\r?\n)+/);
 
   return {
-    json: `{"root":{"children":[{"children":[{"detail":0,"format":${format},"mode":"normal","style":"","text":"${text}","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}`,
-    html: `<p dir="ltr" style="font-size: 14.67px; font-weight: ${fontWeight}; line-height: 18.67px; margin: 0; padding: 3px 2px 3px 2px; position: relative;"><${tag}>${text}</${tag}></p>`,
+    json: JSON.stringify({
+      root: {
+        children: paragraphs.map((paragraph) => ({
+          children: paragraph.split(/\r?\n/).flatMap((line, index) => [
+            ...(index > 0 ? [{ type: "linebreak", version: 1 }] : []),
+            {
+              detail: 0,
+              format: isBold ? 1 : 0,
+              mode: "normal",
+              style: "",
+              text: line,
+              type: "text",
+              version: 1,
+            },
+          ]),
+          direction: "ltr",
+          format: "",
+          indent: 0,
+          type: "paragraph",
+          version: 1,
+        })),
+        direction: "ltr",
+        format: "",
+        indent: 0,
+        type: "root",
+        version: 1,
+      },
+    }),
+    html: paragraphs
+      .map(
+        (paragraph) =>
+          `<p dir="ltr" style="font-size: 14.67px; font-weight: ${fontWeight}; line-height: 18.67px; margin: 0; padding: 3px 2px 3px 2px; position: relative;"><${tag}>${paragraph
+            .split(/\r?\n/)
+            .map((line) =>
+              line
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;")
+            )
+            .join("<br/>")}</${tag}></p>`
+      )
+      .join(""),
   };
 };
