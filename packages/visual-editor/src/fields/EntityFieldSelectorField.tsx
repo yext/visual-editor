@@ -20,6 +20,7 @@ import { KnowledgeGraphIcon } from "../editor/KnowledgeGraphIcon.tsx";
 import { Switch } from "../internal/puck/ui/switch.tsx";
 import { pt, type MsgString } from "../utils/i18n/platform.ts";
 import { useTranslation } from "react-i18next";
+import { FaInfoCircle } from "react-icons/fa";
 import {
   getFieldsForSelector,
   getEntityFieldScopeDisplayName,
@@ -437,9 +438,9 @@ export const ConstantValueModeToggler = ({
                     "parentFieldRequirements",
                     "Parent field requirements"
                   )}
-                  className="ve-flex ve-h-4 ve-w-4 ve-items-center ve-justify-center ve-rounded-full ve-border ve-border-gray-400 ve-text-[10px] ve-font-semibold ve-text-gray-500 hover:ve-border-gray-500 hover:ve-text-gray-700"
+                  className="ve-flex ve-h-4 ve-w-4 ve-items-center ve-justify-center ve-text-gray-500 hover:ve-text-gray-700"
                 >
-                  I
+                  <FaInfoCircle className="ve-h-4 ve-w-4" />
                 </button>
               </TooltipTrigger>
               <TooltipContent className="ve-max-w-[260px] ve-text-left">
