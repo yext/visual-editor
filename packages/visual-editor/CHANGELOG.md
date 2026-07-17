@@ -1,3 +1,9 @@
+#### 1.4.1 (2026-07-17)
+
+##### Bug Fixes
+
+- pin npm version used in publish ([#1270](https://github.com/yext/visual-editor/pull/1270)) ([8cba4f7a](https://github.com/yext/visual-editor/commit/8cba4f7a2ed55c8e558b63dc54eb70e9b9473caf))
+
 #### 1.4.0 (2026-07-17)
 
 ##### Chores
