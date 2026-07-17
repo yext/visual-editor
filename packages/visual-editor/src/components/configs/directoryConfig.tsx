@@ -1,5 +1,10 @@
 import { Config, DropZone } from "@puckeditor/core";
 import {
+  AdvancedCoreInfoCategory,
+  AdvancedCoreInfoCategoryComponents,
+  type AdvancedCoreInfoCategoryProps,
+} from "../categories/AdvancedCoreInfoCategory.tsx";
+import {
   DeprecatedCategory,
   DeprecatedCategoryComponents,
   type DeprecatedCategoryProps,
@@ -27,6 +32,7 @@ import { rootAllowedComponents } from "./rootAllowedComponents.ts";
 
 export interface DirectoryConfigProps
   extends DirectoryCategoryProps,
+    AdvancedCoreInfoCategoryProps,
     SlotsCategoryProps,
     DeprecatedCategoryProps,
     OtherCategoryProps {
@@ -36,6 +42,7 @@ export interface DirectoryConfigProps
 
 const components: Config<DirectoryConfigProps>["components"] = {
   ...DirectoryCategoryComponents,
+  ...AdvancedCoreInfoCategoryComponents,
   ...SlotsCategoryComponents,
   ...DeprecatedCategoryComponents,
   ...OtherCategoryComponents,
@@ -50,6 +57,10 @@ export const directoryConfig: Config<DirectoryConfigProps> = {
     pageSections: {
       title: pt("categories.standardSections", "Standard Sections"),
       components: [...DirectoryCategory, "BannerSection"],
+    },
+    coreInformation: {
+      title: pt("categories.coreInformation", "Core Information"),
+      components: AdvancedCoreInfoCategory,
     },
     slots: {
       components: SlotsCategory,
