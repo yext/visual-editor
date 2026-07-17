@@ -1,3 +1,21 @@
+#### 1.4.0 (2026-07-17)
+
+##### Chores
+
+- upgrade puck to 0.22.2 ([#1269](https://github.com/yext/visual-editor/pull/1269)) ([9fa34d26](https://github.com/yext/visual-editor/commit/9fa34d26157d9cc8574b2cdb10171f7ccdb60cac))
+
+##### New Features
+
+- use breadcrumbPrefix as slug for DM Root entities ([#1268](https://github.com/yext/visual-editor/pull/1268)) ([83be9ed9](https://github.com/yext/visual-editor/commit/83be9ed9b758e3e27ebdcd74e8bb4639dc5e724a))
+- support multiline strings in getDefaultRTF ([#1267](https://github.com/yext/visual-editor/pull/1267)) ([fb9da3c7](https://github.com/yext/visual-editor/commit/fb9da3c7eb18598a53c0b6b20c5dc01ce1724fe6))
+- add tooltip to itemSource for mapping requirements ([#1266](https://github.com/yext/visual-editor/pull/1266)) ([f60905ad](https://github.com/yext/visual-editor/commit/f60905ad24812368a0f246bdf8e16cae3287c193))
+- support analytics for custom code section ([#1262](https://github.com/yext/visual-editor/pull/1262)) ([2f068279](https://github.com/yext/visual-editor/commit/2f068279242b6f75447bd11998bed9bb0a34e64f))
+
+##### Bug Fixes
+
+- render correct font on Default font label ([#1264](https://github.com/yext/visual-editor/pull/1264)) ([a46fa45b](https://github.com/yext/visual-editor/commit/a46fa45bd5e058023707070a5feaae163892bdc6))
+- use Radix popover for ColorSelector ([#1263](https://github.com/yext/visual-editor/pull/1263)) ([8eca4e9b](https://github.com/yext/visual-editor/commit/8eca4e9b180503fc6bfaabbb05e99e4b2de284c2))
+
 #### 1.3.4 (2026-07-07)
 
 ##### Chores
