@@ -47,9 +47,15 @@ export const resolveBreadcrumbsFromPathInfo = (
       continue;
     }
 
-    const normalizedSlug = normalizedPrefix
-      ? `${normalizedPrefix}/${directoryLevelSlug}`
-      : directoryLevelSlug;
+    const isRootDirectory = parent.meta?.entityType?.id === "dm_root";
+
+    // The breadcrumb prefix already represents the root directory, so avoid
+    // appending the root's own slug to it.
+    let normalizedSlug = normalizedPrefix || directoryLevelSlug;
+    if (normalizedPrefix && !isRootDirectory) {
+      normalizedSlug = `${normalizedPrefix}/${directoryLevelSlug}`;
+    }
+
     const slug = includeLocalePrefix
       ? `${normalizeSlug(locale)}/${normalizedSlug}`
       : normalizedSlug;
