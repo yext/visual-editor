@@ -21,6 +21,10 @@ import {
 } from "../categories/OtherCategory.tsx";
 import { BannerSection, BannerSectionProps } from "../pageSections/Banner.tsx";
 import {
+  PromoSection,
+  PromoSectionProps,
+} from "../pageSections/PromoSection/PromoSection.tsx";
+import {
   SlotsCategory,
   SlotsCategoryComponents,
   SlotsCategoryProps,
@@ -38,6 +42,7 @@ export interface DirectoryConfigProps
     OtherCategoryProps {
   BannerSection: BannerSectionProps;
   MainContent: MainContentProps;
+  PromoSection: PromoSectionProps;
 }
 
 const components: Config<DirectoryConfigProps>["components"] = {
@@ -48,6 +53,7 @@ const components: Config<DirectoryConfigProps>["components"] = {
   ...OtherCategoryComponents,
   BannerSection,
   MainContent,
+  PromoSection,
 };
 
 // The config used for all levels of directory pages
@@ -56,7 +62,7 @@ export const directoryConfig: Config<DirectoryConfigProps> = {
   categories: {
     pageSections: {
       title: pt("categories.standardSections", "Standard Sections"),
-      components: [...DirectoryCategory, "BannerSection"],
+      components: [...DirectoryCategory, "BannerSection", "PromoSection"],
     },
     coreInformation: {
       title: pt("categories.coreInformation", "Core Information"),
