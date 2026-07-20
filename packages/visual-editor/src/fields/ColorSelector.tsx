@@ -112,7 +112,7 @@ const colorPickerStyles = (color: Color) => {
     } as React.CSSProperties,
     popover: {
       position: "absolute",
-      zIndex: "2",
+      zIndex: "5",
     } as React.CSSProperties,
     cover: {
       position: "fixed",
