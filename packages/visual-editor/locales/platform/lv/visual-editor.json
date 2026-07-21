@@ -48,7 +48,6 @@
   "closesAtTime": "Tiek slēgts plkst. {{time}}",
   "closesAtTimeWeek": "Tiek slēgts plkst. {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "close": "Aizvērt krāsu atlasītāju",
     "open": "Atveriet krāsu atlasītāju"
   },
   "comingSoon": "Drīzumā",
@@ -563,6 +562,7 @@
   "inheritedDataMsg": "Dati tiek mantoti no vecāku sadaļas.",
   "insight": "Ieskats",
   "item": "Vienums",
+  "itemSourceParentFieldTooltip": "Saraksta elementiem jāatbilst kartēšanas prasībām:",
   "kilometer_zero": "kilometri",
   "kilometer_one": "kilometrs",
   "kilometer_other": "kilometri",
@@ -616,6 +616,7 @@
   "outline": "Kontūra",
   "page": "Lappuse",
   "pages": "Lappuses",
+  "parentFieldRequirements": "Vecāku lauka prasības",
   "pasteLayout": "Ielīmēt izkārtojumu",
   "phone": "Telefons",
   "photo": "Fotoattēls",

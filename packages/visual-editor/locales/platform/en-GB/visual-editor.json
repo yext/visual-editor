@@ -48,7 +48,6 @@
   "closesAtTime": "Closes at {{time}}",
   "closesAtTimeWeek": "Closes at {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "close": "Close color picker",
     "open": "Open color picker"
   },
   "comingSoon": "Coming Soon",
@@ -563,6 +562,7 @@
   "inheritedDataMsg": "Data is inherited from the parent section.",
   "insight": "Insight",
   "item": "Item",
+  "itemSourceParentFieldTooltip": "List elements must be able to satisfy the mapping requirements:",
   "kilometer_zero": "kilometres",
   "kilometer_one": "kilometre",
   "kilometer_other": "kilometres",
@@ -613,6 +613,7 @@
   "outline": "Outline",
   "page": "Page",
   "pages": "Pages",
+  "parentFieldRequirements": "Parent field requirements",
   "pasteLayout": "Paste Layout",
   "phone": "Phone",
   "photo": "Photo",

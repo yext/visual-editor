@@ -48,7 +48,6 @@
   "closesAtTime": "Zárás: {{time}}",
   "closesAtTimeWeek": "Zárás: {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "close": "Zárja be a színválasztót",
     "open": "Nyissa meg a színválasztót"
   },
   "comingSoon": "Hamarosan",
@@ -563,6 +562,7 @@
   "inheritedDataMsg": "Az adatok a szülő szakaszból származnak.",
   "insight": "Betekintés",
   "item": "Tétel",
+  "itemSourceParentFieldTooltip": "A listaelemeknek meg kell felelniük a leképezési követelményeknek:",
   "kilometer_zero": "kilométer",
   "kilometer_one": "kilométer",
   "kilometer_other": "kilométer",
@@ -613,6 +613,7 @@
   "outline": "Vázlat",
   "page": "Oldal",
   "pages": "Oldalak",
+  "parentFieldRequirements": "Szülőmezőre vonatkozó követelmények",
   "pasteLayout": "Elrendezés beillesztése",
   "phone": "Telefon",
   "photo": "Fénykép",

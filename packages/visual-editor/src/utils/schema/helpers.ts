@@ -2,7 +2,8 @@ import { StreamDocument } from "../types/StreamDocument.ts";
 
 /**
  * isValidDirectoryParents returns true if the array from dm_directoryParents
- * matches this type: Array<{ slug: string; name: string }>
+ * matches this type: Array<{ slug: string; name: string }>. Directory parents
+ * may also include metadata about their entity type.
  */
 const isValidDirectoryParents = (value: any[]): boolean => {
   return (
@@ -22,7 +23,11 @@ const isValidDirectoryParents = (value: any[]): boolean => {
  */
 export const getDirectoryParents = (
   streamDocument: StreamDocument
-): Array<{ slug: string; name: string }> => {
+): Array<{
+  slug: string;
+  name: string;
+  meta?: { entityType?: { id?: string } };
+}> => {
   for (const key in streamDocument) {
     if (
       key.startsWith("dm_directoryParents_") &&

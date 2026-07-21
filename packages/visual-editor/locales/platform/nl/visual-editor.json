@@ -48,7 +48,6 @@
   "closesAtTime": "Sluit om {{time}}",
   "closesAtTimeWeek": "Sluit om {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "close": "Sluit de kleurkiezer",
     "open": "Kleurkiezer openen"
   },
   "comingSoon": "Binnenkort beschikbaar",
@@ -563,6 +562,7 @@
   "inheritedDataMsg": "Gegevens worden overgenomen van de bovenliggende sectie.",
   "insight": "Inzicht",
   "item": "Item",
+  "itemSourceParentFieldTooltip": "Lijstelementen moeten aan de mappingvereisten kunnen voldoen:",
   "kilometer_zero": "kilometer",
   "kilometer_one": "kilometer",
   "kilometer_other": "kilometers",
@@ -613,6 +613,7 @@
   "outline": "Schetsen",
   "page": "Pagina",
   "pages": "Pagina's",
+  "parentFieldRequirements": "Vereisten voor bovenliggende velden",
   "pasteLayout": "Lay-out plakken",
   "phone": "Telefoon",
   "photo": "Foto",

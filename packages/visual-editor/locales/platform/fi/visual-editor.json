@@ -48,7 +48,6 @@
   "closesAtTime": "Suljetaan {{time}}",
   "closesAtTimeWeek": "Suljetaan klo {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "close": "Sulje värivalitsin",
     "open": "Avaa värivalitsin"
   },
   "comingSoon": "Tulossa pian",
@@ -563,6 +562,7 @@
   "inheritedDataMsg": "Tiedot peritään yläosasta.",
   "insight": "Oivallus",
   "item": "Tuote",
+  "itemSourceParentFieldTooltip": "Luettelon elementtien on täytettävä kartoitusvaatimukset:",
   "kilometer_zero": "kilometri",
   "kilometer_one": "kilometri",
   "kilometer_other": "kilometriä",
@@ -613,6 +613,7 @@
   "outline": "Hahmotella",
   "page": "Sivu",
   "pages": "Sivut",
+  "parentFieldRequirements": "Vanhemman kentän vaatimukset",
   "pasteLayout": "Liitä asettelu",
   "phone": "Puhelin",
   "photo": "Kuva",

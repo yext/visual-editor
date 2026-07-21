@@ -48,7 +48,6 @@
   "closesAtTime": "Uždaroma {{time}}",
   "closesAtTimeWeek": "Uždaroma {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "close": "Uždarykite spalvų parinkiklį",
     "open": "Atidarykite spalvų rinkiklį"
   },
   "comingSoon": "Netrukus",
@@ -563,6 +562,7 @@
   "inheritedDataMsg": "Duomenys paveldimi iš pirminės sekcijos.",
   "insight": "Įžvalga",
   "item": "Prekė",
+  "itemSourceParentFieldTooltip": "Sąrašo elementai turi atitikti atvaizdavimo reikalavimus:",
   "kilometer_zero": "kilometrų",
   "kilometer_one": "kilometras",
   "kilometer_few": "kilometrų",
@@ -623,6 +623,7 @@
   "outline": "Kontūras",
   "page": "Puslapis",
   "pages": "Puslapiai",
+  "parentFieldRequirements": "Tėvų lauko reikalavimai",
   "pasteLayout": "Įklijuoti išdėstymą",
   "phone": "Telefonas",
   "photo": "Nuotrauka",

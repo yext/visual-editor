@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { CustomField, FieldLabel } from "@puckeditor/core";
 import { Color, ColorResult, SketchPicker } from "react-color";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../internal/puck/ui/Popover.tsx";
 import { pt } from "../utils/i18n/platform.ts";
 
 type RenderProps = Parameters<CustomField<any>["render"]>[0];
@@ -51,44 +56,26 @@ export const ColorPickerInput = ({
 
   const fieldStyles = colorPickerStyles(draftColor);
   return (
-    <div className="ve-relative">
-      <button
-        type="button"
-        aria-label={ariaLabel}
-        style={fieldStyles.swatch}
-        onClick={() => {
-          if (isOpen) {
-            setIsOpen(false);
-            return;
-          }
-
-          setIsOpen(true);
-        }}
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <PopoverTrigger asChild>
+        <button type="button" aria-label={ariaLabel} style={fieldStyles.swatch}>
+          <div style={fieldStyles.color} />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent
+        align="start"
+        side="bottom"
+        sideOffset={8}
+        className="ve-w-auto ve-border-0 ve-bg-transparent ve-p-0 ve-shadow-none"
       >
-        <div style={fieldStyles.color} />
-      </button>
-      {isOpen && (
-        <div
-          style={fieldStyles.popover}
-          onClick={(event) => event.stopPropagation()}
-          onPointerDown={(event) => event.stopPropagation()}
-          onPointerUp={(event) => event.stopPropagation()}
-        >
-          <button
-            type="button"
-            aria-label={pt("colorPicker.close", "Close color picker")}
-            style={fieldStyles.cover}
-            onClick={() => setIsOpen(false)}
-          />
-          <SketchPicker
-            disableAlpha={true}
-            color={draftColor}
-            onChange={handlePickerChange}
-            onChangeComplete={handlePickerChangeComplete}
-          />
-        </div>
-      )}
-    </div>
+        <SketchPicker
+          disableAlpha={true}
+          color={draftColor}
+          onChange={handlePickerChange}
+          onChangeComplete={handlePickerChangeComplete}
+        />
+      </PopoverContent>
+    </Popover>
   );
 };
 

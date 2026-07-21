@@ -48,7 +48,6 @@
   "closesAtTime": "於 {{time}} 關閉",
   "closesAtTimeWeek": "於 {{time}} {{dayOfWeek}} 關閉",
   "colorPicker": {
-    "close": "關閉顏色選擇器",
     "open": "打開顏色選擇器"
   },
   "comingSoon": "即將推出",
@@ -563,6 +562,7 @@
   "inheritedDataMsg": "數據是從父節繼承的。",
   "insight": "洞察力",
   "item": "物品",
+  "itemSourceParentFieldTooltip": "列表元素必須能夠滿足映射要求：",
   "kilometer_zero": "公里",
   "kilometer_one": "公里",
   "kilometer_other": "公里",
@@ -613,6 +613,7 @@
   "outline": "大綱",
   "page": "頁",
   "pages": "頁面",
+  "parentFieldRequirements": "家長欄位要求",
   "pasteLayout": "粘貼佈局",
   "phone": "電話",
   "photo": "照片",

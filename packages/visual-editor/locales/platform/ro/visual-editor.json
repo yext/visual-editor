@@ -48,7 +48,6 @@
   "closesAtTime": "Se închide la {{time}}",
   "closesAtTimeWeek": "Se închide la {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "close": "Închideți selectorul de culori",
     "open": "Deschideți selectorul de culori"
   },
   "comingSoon": "În curând",
@@ -563,6 +562,7 @@
   "inheritedDataMsg": "Datele sunt moștenite din secțiunea părinte.",
   "insight": "Perspectivă",
   "item": "Articol",
+  "itemSourceParentFieldTooltip": "Elementele listei trebuie să fie capabile să satisfacă cerințele de mapare:",
   "kilometer_zero": "kilometru",
   "kilometer_one": "kilometru",
   "kilometer_few": "kilometri",
@@ -618,6 +618,7 @@
   "outline": "Contur",
   "page": "Pagină",
   "pages": "Pagini",
+  "parentFieldRequirements": "Cerințele câmpului părinte",
   "pasteLayout": "Lipiți aspectul",
   "phone": "Telefon",
   "photo": "Fotografie",

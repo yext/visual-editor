@@ -48,7 +48,6 @@
   "closesAtTime": "Lukker kl. {{time}}",
   "closesAtTimeWeek": "Lukker kl. {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "close": "Luk farvevælgeren",
     "open": "Åbn farvevælgeren"
   },
   "comingSoon": "Kommer snart",
@@ -563,6 +562,7 @@
   "inheritedDataMsg": "Data er arvet fra overordnede sektion.",
   "insight": "Indsigt",
   "item": "Punkt",
+  "itemSourceParentFieldTooltip": "Listeelementer skal kunne opfylde kortlægningskravene:",
   "kilometer_zero": "kilometer",
   "kilometer_one": "kilometer",
   "kilometer_other": "kilometer",
@@ -613,6 +613,7 @@
   "outline": "Oversigt",
   "page": "Side",
   "pages": "Sider",
+  "parentFieldRequirements": "Forældres feltkrav",
   "pasteLayout": "Indsæt layout",
   "phone": "Telefon",
   "photo": "Foto",

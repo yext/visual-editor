@@ -48,7 +48,6 @@
   "closesAtTime": "{{time}} itibarıyla kapanıyor",
   "closesAtTimeWeek": "{{time}} {{dayOfWeek}} itibarıyla kapanıyor",
   "colorPicker": {
-    "close": "Renk seçiciyi kapat",
     "open": "Renk seçiciyi aç"
   },
   "comingSoon": "Yakında gelecek",
@@ -563,6 +562,7 @@
   "inheritedDataMsg": "Veriler üst bölümden devralınır.",
   "insight": "İç yüzü",
   "item": "Öğe",
+  "itemSourceParentFieldTooltip": "Liste öğeleri eşleme gereksinimlerini karşılayabilmelidir:",
   "kilometer_zero": "kilometre",
   "kilometer_one": "kilometre",
   "kilometer_other": "kilometre",
@@ -613,6 +613,7 @@
   "outline": "Taslak",
   "page": "Sayfa",
   "pages": "Sayfa",
+  "parentFieldRequirements": "Ana alan gereksinimleri",
   "pasteLayout": "Düzeni Yapıştır",
   "phone": "Telefon",
   "photo": "Fotoğraf",

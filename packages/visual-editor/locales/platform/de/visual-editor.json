@@ -48,7 +48,6 @@
   "closesAtTime": "Schließt um {{time}} Uhr",
   "closesAtTimeWeek": "Schließt am {{dayOfWeek}} um {{time}} Uhr",
   "colorPicker": {
-    "close": "Farbauswahl schließen",
     "open": "Farbauswahl öffnen"
   },
   "comingSoon": "Demnächst erhältlich",
@@ -563,6 +562,7 @@
   "inheritedDataMsg": "Daten werden vom übergeordneten Modul übernommen.",
   "insight": "Insight",
   "item": "Artikel",
+  "itemSourceParentFieldTooltip": "Listenelemente müssen die Mapping-Anforderungen erfüllen können:",
   "kilometer_zero": "Kilometer",
   "kilometer_one": "Kilometer",
   "kilometer_other": "Kilometer",
@@ -613,6 +613,7 @@
   "outline": "Outline",
   "page": "Seite",
   "pages": "Seiten",
+  "parentFieldRequirements": "Anforderungen an übergeordnete Felder",
   "pasteLayout": "Layout einfügen",
   "phone": "Telefon",
   "photo": "Foto",

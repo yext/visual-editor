@@ -48,7 +48,6 @@
   "closesAtTime": "Fecha às {{time}}",
   "closesAtTimeWeek": "Fecha às {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "close": "Fechar seletor de cores",
     "open": "Abrir seletor de cores"
   },
   "comingSoon": "Em breve",
@@ -563,6 +562,7 @@
   "inheritedDataMsg": "Os dados são herdados da seção pai.",
   "insight": "Entendimento",
   "item": "Item",
+  "itemSourceParentFieldTooltip": "Os elementos da lista devem ser capazes de satisfazer os requisitos de mapeamento:",
   "kilometer_zero": "quilômetro",
   "kilometer_one": "quilômetro",
   "kilometer_many": "quilômetros",
@@ -618,6 +618,7 @@
   "outline": "Contorno",
   "page": "Página",
   "pages": "Páginas",
+  "parentFieldRequirements": "Requisitos do campo pai",
   "pasteLayout": "Colar layout",
   "phone": "Telefone",
   "photo": "Foto",

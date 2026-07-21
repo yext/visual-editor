@@ -48,7 +48,6 @@
   "closesAtTime": "Zatvara se u {{time}}",
   "closesAtTimeWeek": "Zatvara se u {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "close": "Zatvori birač boja",
     "open": "Otvori birač boja"
   },
   "comingSoon": "Dolazi uskoro",
@@ -563,6 +562,7 @@
   "inheritedDataMsg": "Podaci se nasljeđuju iz nadređenog odjeljka.",
   "insight": "Uvid",
   "item": "Artikal",
+  "itemSourceParentFieldTooltip": "Elementi popisa moraju moći zadovoljiti zahtjeve mapiranja:",
   "kilometer_zero": "kilometar",
   "kilometer_one": "kilometar",
   "kilometer_few": "kilometra",
@@ -618,6 +618,7 @@
   "outline": "Obris",
   "page": "Stranica",
   "pages": "Stranice",
+  "parentFieldRequirements": "Zahtjevi za roditeljsko polje",
   "pasteLayout": "Zalijepi izgled",
   "phone": "Telefon",
   "photo": "Fotografija",
