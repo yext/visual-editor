@@ -10,11 +10,14 @@ import {
 } from "../../../utils/fonts/visualEditorFonts.ts";
 import { useTemplateMetadata } from "../../hooks/useMessageReceivers.ts";
 
+const getPreviewFontFamily = (fontFamily: string): string | undefined =>
+  fontFamily === "default" ? undefined : fontFamily;
+
 type FontSelectorProps = {
   label: string;
   options: StyleSelectOption[];
   value: string;
-  onChange: (value: any) => void;
+  onChange: (value: string) => void;
 };
 
 export const FontSelector = ({
@@ -71,13 +74,14 @@ export const FontSelector = ({
   const selectedFontLabel =
     options.find((option) => option.value === value)?.label ??
     pt("fonts.choose", "Choose a font");
+  const selectedPreviewFontFamily = getPreviewFontFamily(value);
 
   return (
     <FieldLabel label={label} el="div" className="ve-relative">
       <button
         onClick={toggleDropdown}
         className="font-select"
-        style={{ fontFamily: value }}
+        style={{ fontFamily: selectedPreviewFontFamily }}
       >
         {selectedFontLabel}
       </button>
@@ -105,7 +109,7 @@ export const FontSelector = ({
                   handleFontChange(option.value);
                 }}
                 style={{
-                  fontFamily: option.value,
+                  fontFamily: getPreviewFontFamily(option.value),
                   backgroundColor:
                     option.value === value ? "var(--puck-color-grey-09)" : "",
                 }}

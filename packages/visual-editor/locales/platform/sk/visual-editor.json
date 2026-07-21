@@ -48,7 +48,6 @@
   "closesAtTime": "Zatvára sa o {{time}}",
   "closesAtTimeWeek": "Zatvára sa o {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "close": "Zavrieť výber farieb",
     "open": "Otvorte výber farieb"
   },
   "comingSoon": "Už čoskoro",
@@ -563,6 +562,7 @@
   "inheritedDataMsg": "Údaje sa dedia z nadradenej sekcie.",
   "insight": "Nahliadnutie",
   "item": "Položka",
+  "itemSourceParentFieldTooltip": "Prvky zoznamu musia spĺňať požiadavky na mapovanie:",
   "kilometer_zero": "kilometer",
   "kilometer_one": "kilometer",
   "kilometer_few": "kilometre",
@@ -623,6 +623,7 @@
   "outline": "Obrys",
   "page": "Strana",
   "pages": "Stránky",
+  "parentFieldRequirements": "Požiadavky nadradeného poľa",
   "pasteLayout": "Prilepiť rozloženie",
   "phone": "Telefón",
   "photo": "Foto",

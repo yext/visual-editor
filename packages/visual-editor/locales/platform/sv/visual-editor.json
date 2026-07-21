@@ -48,7 +48,6 @@
   "closesAtTime": "Stänger kl. {{time}}",
   "closesAtTimeWeek": "Stänger kl. {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "close": "Stäng färgväljaren",
     "open": "Öppna färgväljaren"
   },
   "comingSoon": "Kommer snart",
@@ -563,6 +562,7 @@
   "inheritedDataMsg": "Data ärvs från den överordnade sektionen.",
   "insight": "Insikt",
   "item": "Punkt",
+  "itemSourceParentFieldTooltip": "Listelement måste kunna uppfylla mappningskraven:",
   "kilometer_zero": "kilometer",
   "kilometer_one": "kilometer",
   "kilometer_other": "kilometer",
@@ -613,6 +613,7 @@
   "outline": "Skissera",
   "page": "Sida",
   "pages": "Sidor",
+  "parentFieldRequirements": "Förälders fältkrav",
   "pasteLayout": "Klistra in layout",
   "phone": "Telefon",
   "photo": "Bild",

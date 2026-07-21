@@ -48,7 +48,6 @@
   "closesAtTime": "Zamyka się o {{time}}",
   "closesAtTimeWeek": "Zamyka się o {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "close": "Zamknij selektor kolorów",
     "open": "Otwórz selektor kolorów"
   },
   "comingSoon": "Już wkrótce",
@@ -563,6 +562,7 @@
   "inheritedDataMsg": "Dane są dziedziczone z sekcji nadrzędnej.",
   "insight": "Wgląd",
   "item": "Przedmiot",
+  "itemSourceParentFieldTooltip": "Elementy listy muszą spełniać wymagania mapowania:",
   "kilometer_zero": "kilometr",
   "kilometer_one": "kilometr",
   "kilometer_few": "kilometry",
@@ -623,6 +623,7 @@
   "outline": "Zarys",
   "page": "Strona",
   "pages": "Strony",
+  "parentFieldRequirements": "Wymagania pola nadrzędnego",
   "pasteLayout": "Wklej układ",
   "phone": "Telefon",
   "photo": "Zdjęcie",

@@ -48,7 +48,6 @@
   "closesAtTime": "Zavírá v {{time}}",
   "closesAtTimeWeek": "Zavírá v {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "close": "Zavřete výběr barvy",
     "open": "Otevřete výběr barvy"
   },
   "comingSoon": "Již brzy",
@@ -563,6 +562,7 @@
   "inheritedDataMsg": "Data jsou zděděna z nadřazené části.",
   "insight": "Vhled",
   "item": "Položka",
+  "itemSourceParentFieldTooltip": "Prvky seznamu musí být schopny splnit požadavky na mapování:",
   "kilometer_zero": "kilometr",
   "kilometer_one": "kilometr",
   "kilometer_few": "kilometry",
@@ -623,6 +623,7 @@
   "outline": "Obrys",
   "page": "Strana",
   "pages": "Stránky",
+  "parentFieldRequirements": "Požadavky nadřazeného pole",
   "pasteLayout": "Vložit rozložení",
   "phone": "Telefon",
   "photo": "Fotografie",

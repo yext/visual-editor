@@ -1,4 +1,5 @@
 import React from "react";
+import { useAnalytics } from "@yext/pages-components";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { EntityFieldsContext } from "../hooks/useEntityFields.tsx";
 import { TailwindConfig } from "./themeResolver.ts";
@@ -30,12 +31,33 @@ type EditorProps = {
 type VisualEditorProviderProps<T> = UniversalProps<T> &
   AllOrNothing<EditorProps>;
 
+type AnalyticsTrackProps = Parameters<
+  NonNullable<ReturnType<typeof useAnalytics>>["track"]
+>[0];
+
+type YextCustomCodeAnalytics = {
+  track: (request: AnalyticsTrackProps) => void;
+};
+
+declare global {
+  interface Window {
+    YextCustomCodeAnalytics?: YextCustomCodeAnalytics;
+  }
+}
+
+// Use layout effect in the browser so the analytics global exists before CustomCodeSection runs injected scripts
+// Fall back during SSR to avoid useLayoutEffect warnings.
+const useBrowserLayoutEffect =
+  typeof window === "undefined" ? React.useEffect : React.useLayoutEffect;
+
 const VisualEditorProvider = <T extends Record<string, any>>({
   templateProps,
   entityFields,
   tailwindConfig,
   children,
 }: VisualEditorProviderProps<T>) => {
+  const pagesAnalytics = useAnalytics();
+
   // Use useMemo to prevent creating a new QueryClient on every render
   // QueryClient maintains internal caches, so creating new instances unnecessarily
   // could lead to memory accumulation
@@ -54,6 +76,18 @@ const VisualEditorProvider = <T extends Record<string, any>>({
       normalizedTemplateProps.document.locale
     );
   }
+
+  useBrowserLayoutEffect(() => {
+    window.YextCustomCodeAnalytics = {
+      track: (request) => {
+        pagesAnalytics?.track(request);
+      },
+    };
+
+    return () => {
+      delete window.YextCustomCodeAnalytics;
+    };
+  }, [pagesAnalytics]);
 
   return (
     <ErrorProvider>

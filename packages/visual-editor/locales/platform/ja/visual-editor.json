@@ -48,7 +48,6 @@
   "closesAtTime": "{{time}}に閉まります",
   "closesAtTimeWeek": "{{time}} {{dayOfWeek}} に閉店",
   "colorPicker": {
-    "close": "カラーピッカーを閉じる",
     "open": "カラーピッカーを開く"
   },
   "comingSoon": "近日公開",
@@ -563,6 +562,7 @@
   "inheritedDataMsg": "データは親セクションから継承されます。",
   "insight": "洞察力",
   "item": "アイテム",
+  "itemSourceParentFieldTooltip": "リスト要素は、次のマッピング要件を満たすことができる必要があります。",
   "kilometer_zero": "キロメートル",
   "kilometer_one": "キロメートル",
   "kilometer_other": "キロメートル",
@@ -613,6 +613,7 @@
   "outline": "概要",
   "page": "ページ",
   "pages": "ページ",
+  "parentFieldRequirements": "親フィールドの要件",
   "pasteLayout": "レイアウトの貼り付け",
   "phone": "電話",
   "photo": "写真",

@@ -48,7 +48,6 @@
   "closesAtTime": "Suletakse {{time}}",
   "closesAtTimeWeek": "Suletakse kell {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "close": "Sulgege värvivalija",
     "open": "Ava värvivalija"
   },
   "comingSoon": "Varsti",
@@ -563,6 +562,7 @@
   "inheritedDataMsg": "Andmed päritakse emasektsioonist.",
   "insight": "Ülevaade",
   "item": "Üksus",
+  "itemSourceParentFieldTooltip": "Loendi elemendid peavad vastama kaardistamise nõuetele:",
   "kilometer_zero": "kilomeetrit",
   "kilometer_one": "kilomeeter",
   "kilometer_other": "kilomeetrit",
@@ -613,6 +613,7 @@
   "outline": "Kontuur",
   "page": "Leht",
   "pages": "Lehed",
+  "parentFieldRequirements": "Vanemavälja nõuded",
   "pasteLayout": "Kleebi paigutus",
   "phone": "Telefon",
   "photo": "Foto",
