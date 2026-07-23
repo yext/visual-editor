@@ -86,6 +86,10 @@ export const resolveEmbeddedFieldsInString = (
       return "";
     }
 
+    if (typeof resolvedValue === "number") {
+      return resolvedValue.toString();
+    }
+
     // If the resolved value is an object, stringify it.
     if (typeof resolvedValue === "object") {
       return JSON.stringify(resolvedValue);

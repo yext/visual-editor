@@ -1,5 +1,6 @@
 import { assert, describe, it } from "vitest";
 import {
+  resolveEmbeddedFieldsInString,
   resolveField,
   resolveYextEntityField,
 } from "./resolveYextEntityField.ts";
@@ -347,5 +348,43 @@ describe("resolveYextEntityField with embedded fields", () => {
         },
       }
     );
+  });
+});
+
+describe("numeric embedded field resolution", () => {
+  it("resolves root numeric primitives as unformatted text", () => {
+    const resolved = resolveEmbeddedFieldsInString(
+      "[[zero]] [[negative]] [[integer]] [[decimal]]",
+      {
+        zero: 0,
+        negative: -12,
+        integer: 42,
+        decimal: 19.95,
+      }
+    );
+
+    assert.equal(resolved, "0 -12 42 19.95");
+  });
+
+  it("resolves a decimal through the first linked entity", () => {
+    const resolved = resolveEmbeddedFieldsInString(
+      "[[c_linkedProducts.price.value]]",
+      {
+        c_linkedProducts: [
+          {
+            price: {
+              value: 19.95,
+            },
+          },
+          {
+            price: {
+              value: 29.95,
+            },
+          },
+        ],
+      }
+    );
+
+    assert.equal(resolved, "19.95");
   });
 });
