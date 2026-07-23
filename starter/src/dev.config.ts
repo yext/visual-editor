@@ -581,13 +581,18 @@ export const devTemplateStream = {
                   fields: [
                     {
                       name: "currencyCode",
-                      displayName: "Currency Code",
                       definition: {
                         name: "currencyCode",
-                        typeName: "type.option",
+                        typeRegistryId: "type.option",
                         type: {
                           stringType: "STRING_TYPE_OPTION",
                         },
+                        options: [
+                          {
+                            textValue: "USD",
+                            displayName: "USD-United States Dollar",
+                          },
+                        ],
                       },
                     },
                     {
@@ -12984,13 +12989,18 @@ export const devLinkedEntitySchemas = {
           fields: [
             {
               name: "currencyCode",
-              displayName: "Currency Code",
               definition: {
                 name: "currencyCode",
-                typeName: "type.option",
+                typeRegistryId: "type.option",
                 type: {
                   stringType: "STRING_TYPE_OPTION",
                 },
+                options: [
+                  {
+                    textValue: "USD",
+                    displayName: "USD-United States Dollar",
+                  },
+                ],
               },
             },
             {
