@@ -1,5 +1,8 @@
 import React from "react";
-import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
+import {
+  type EntityFieldTypes,
+  type RenderEntityFieldFilter,
+} from "../internal/utils/getFilteredEntityFields.ts";
 import {
   getEntityFieldScopeDisplayName,
   getScopedEntityFieldDisplayName,
@@ -38,6 +41,31 @@ import { warnOnMultiValueLinkedEntityTraversal } from "../utils/linkedEntityWarn
 export type EmbeddedStringOption = {
   label: string;
   value: string;
+};
+
+const NUMERIC_EMBEDDED_FIELD_TYPES: EntityFieldTypes[] = [
+  "type.decimal",
+  "type.float",
+  "type.integer",
+];
+
+/**
+ * Numeric fields are valid in embedded text because their values are converted
+ * to strings. Avoid passings numbers directly to components expecting strings.
+ */
+const getEmbeddedStringFilter = <T extends Record<string, any>>(
+  filter: RenderEntityFieldFilter<T>
+): RenderEntityFieldFilter<T> => {
+  if (!filter.types?.includes("type.string")) {
+    return filter;
+  }
+
+  return {
+    ...filter,
+    types: Array.from(
+      new Set([...filter.types, ...NUMERIC_EMBEDDED_FIELD_TYPES])
+    ),
+  };
 };
 
 /**
@@ -115,7 +143,7 @@ export const EmbeddedFieldStringInputFromEntity = <
   const entityFieldOptions = React.useMemo(() => {
     const filteredEntityFields = getFieldsForSelector(
       entityFields,
-      filter,
+      getEmbeddedStringFilter(filter),
       streamDocument,
       sourceField || undefined
     );

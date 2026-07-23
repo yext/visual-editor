@@ -361,3 +361,125 @@ describe("EmbeddedFieldStringInput", () => {
     expect(toast.warning).not.toHaveBeenCalled();
   });
 });
+
+describe("numeric embedded entity fields", () => {
+  it("offers root and linked numeric fields and inserts a linked decimal path", () => {
+    render(
+      <TemplatePropsContext.Provider
+        value={{
+          document: {
+            yearEstablished: 2006,
+            rating: 4.5,
+            c_linkedProducts: [
+              {
+                price: {
+                  value: 19.95,
+                },
+              },
+            ],
+          },
+        }}
+      >
+        <TemplateMetadataContext.Provider value={generateTemplateMetadata()}>
+          <EntityFieldsContext.Provider
+            value={{
+              fields: [
+                {
+                  name: "yearEstablished",
+                  displayName: "Year Established",
+                  definition: {
+                    name: "yearEstablished",
+                    typeRegistryId: "type.integer",
+                    type: {
+                      numberType: "NUMBER_TYPE_INT",
+                    },
+                  },
+                },
+                {
+                  name: "rating",
+                  displayName: "Rating",
+                  definition: {
+                    name: "rating",
+                    typeRegistryId: "type.float",
+                    type: {
+                      numberType: "NUMBER_TYPE_FLOAT",
+                    },
+                  },
+                },
+                {
+                  name: "c_linkedProducts",
+                  displayName: "Linked Products",
+                  definition: {
+                    name: "c_linkedProducts",
+                    typeRegistryId: "type.entity_reference",
+                    type: {
+                      documentType: "DOCUMENT_TYPE_ENTITY",
+                    },
+                    isList: true,
+                  },
+                  children: {
+                    fields: [
+                      {
+                        name: "price",
+                        displayName: "Price",
+                        definition: {
+                          name: "price",
+                          typeRegistryId: "type.price",
+                          type: {
+                            objectType: "OBJECT_TYPE_DEFAULT",
+                          },
+                        },
+                        children: {
+                          fields: [
+                            {
+                              name: "value",
+                              displayName: "Value",
+                              definition: {
+                                name: "value",
+                                typeRegistryId: "type.decimal",
+                                type: {
+                                  stringType: "STRING_TYPE_DECIMAL",
+                                },
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+              displayNames: {
+                yearEstablished: "Year Established",
+                rating: "Rating",
+                c_linkedProducts: "Linked Products",
+                "c_linkedProducts.price": "Linked Products > Price",
+                "c_linkedProducts.price.value":
+                  "Linked Products > Price > Value",
+              },
+            }}
+          >
+            <EmbeddedFieldStringInputFromEntity
+              filter={{ types: ["type.string"] }}
+              onChange={() => undefined}
+              showFieldSelector={true}
+              value=""
+            />
+          </EntityFieldsContext.Provider>
+        </TemplateMetadataContext.Provider>
+      </TemplatePropsContext.Provider>
+    );
+
+    fireEvent.click(screen.getByLabelText("Add entity field"));
+
+    expect(screen.getByText("Year Established")).toBeDefined();
+    expect(screen.getByText("Rating")).toBeDefined();
+    expect(screen.getByText("Linked Products > Price > Value")).toBeDefined();
+
+    fireEvent.click(screen.getByText("Linked Products > Price > Value"));
+
+    expect(
+      screen.getByDisplayValue("[[c_linkedProducts.price.value]]")
+    ).toBeDefined();
+  });
+});
