@@ -38,6 +38,9 @@ export type RenderEntityFieldFilter<T extends Record<string, any>> =
 
 export type EntityFieldTypes =
   | "type.string"
+  | "type.decimal"
+  | "type.float"
+  | "type.integer"
   | "type.image"
   | "type.hours"
   | "type.address"

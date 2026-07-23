@@ -47,6 +47,7 @@
     "region": "VA"
   },
   "businessId": 1000146856,
+  "c_locationNumber": "1234",
   "c_linkedLocation": [
     {
       "address": {
@@ -55,6 +56,10 @@
         "line1": "1600 East Nasa Parkway",
         "postalCode": "77058",
         "region": "TX"
+      },
+      "c_deliveryFee": {
+        "currencyCode": "USD",
+        "value": "9.99"
       }
     },
     {
@@ -64,6 +69,50 @@
         "line1": "400 Broad Street",
         "postalCode": "98109",
         "region": "WA"
+      }
+    }
+  ],
+  "c_linkedProduct": [
+    {
+      "title": "Out of this Galaxy Burger",
+      "description": {
+        "html": "<p>A double smash burger with melted cheese and fresh toppings.</p>"
+      },
+      "image": {
+        "url": "https://placehold.co/600x400?text=Burger",
+        "alternateText": "Out of this Galaxy Burger",
+        "width": 600,
+        "height": 400
+      },
+      "price": {
+        "value": "12.99",
+        "currencyCode": "USD"
+      },
+      "cta": {
+        "label": "Order Now",
+        "linkType": "URL",
+        "link": "https://example.com/order/out-of-this-galaxy-burger"
+      }
+    },
+    {
+      "title": "Cosmic Fries",
+      "description": {
+        "html": "<p>The perfect addition to your meal.</p>"
+      },
+      "image": {
+        "url": "https://placehold.co/600x400?text=Fries",
+        "alternateText": "Cosmic Fries",
+        "width": 600,
+        "height": 400
+      },
+      "price": {
+        "value": "3.39",
+        "currencyCode": "USD"
+      },
+      "cta": {
+        "label": "View Menu",
+        "linkType": "URL",
+        "link": "https://example.com/menu/cosmic-fries"
       }
     }
   ],

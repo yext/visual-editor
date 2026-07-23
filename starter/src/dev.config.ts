@@ -468,6 +468,18 @@ export const devTemplateStream = {
           fullObject: true,
         },
         {
+          name: "c_linkedLocation",
+          fullObject: true,
+        },
+        {
+          name: "c_linkedProduct",
+          fullObject: true,
+        },
+        {
+          name: "c_locationNumber",
+          fullObject: true,
+        },
+        {
           name: "meta",
           children: {
             fields: [
@@ -494,6 +506,290 @@ export const devTemplateStream = {
     },
     schema: {
       fields: [
+        {
+          name: "c_linkedLocation",
+          displayName: "Linked Location",
+          definition: {
+            name: "c_linkedLocation",
+            typeRegistryId: "type.entity_reference",
+            type: {
+              documentType: "DOCUMENT_TYPE_ENTITY",
+            },
+            isList: true,
+          },
+          children: {
+            fields: [
+              {
+                name: "address",
+                displayName: "Address",
+                definition: {
+                  name: "address",
+                  typeName: "type.address",
+                  type: {
+                    typeName: "type.address",
+                  },
+                },
+                children: {
+                  fields: [
+                    {
+                      name: "city",
+                      displayName: "City",
+                      definition: {
+                        name: "city",
+                        typeName: "type.string",
+                        type: {
+                          typeName: "type.string",
+                        },
+                      },
+                    },
+                    {
+                      name: "region",
+                      displayName: "Region",
+                      definition: {
+                        name: "region",
+                        typeName: "type.string",
+                        type: {
+                          typeName: "type.string",
+                        },
+                      },
+                    },
+                    {
+                      name: "postalCode",
+                      displayName: "Postal Code",
+                      definition: {
+                        name: "postalCode",
+                        typeName: "type.string",
+                        type: {
+                          typeName: "type.string",
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                name: "c_deliveryFee",
+                displayName: "Delivery Fee",
+                definition: {
+                  name: "c_deliveryFee",
+                  typeRegistryId: "type.price",
+                  type: {
+                    objectType: "OBJECT_TYPE_DEFAULT",
+                  },
+                },
+                children: {
+                  fields: [
+                    {
+                      name: "currencyCode",
+                      definition: {
+                        name: "currencyCode",
+                        typeRegistryId: "type.option",
+                        type: {
+                          stringType: "STRING_TYPE_OPTION",
+                        },
+                        options: [
+                          {
+                            textValue: "USD",
+                            displayName: "USD-United States Dollar",
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      name: "value",
+                      displayName: "Value",
+                      definition: {
+                        name: "value",
+                        typeName: "type.decimal",
+                        type: {
+                          stringType: "STRING_TYPE_DECIMAL",
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+        {
+          name: "c_linkedProduct",
+          displayName: "Linked Product",
+          definition: {
+            name: "c_linkedProduct",
+            typeRegistryId: "type.entity_reference",
+            type: { documentType: "DOCUMENT_TYPE_ENTITY" },
+            isList: true,
+          },
+          children: {
+            fields: [
+              {
+                name: "title",
+                displayName: "Title",
+                definition: {
+                  name: "title",
+                  typeRegistryId: "type.string",
+                  type: { stringType: "STRING_TYPE_DEFAULT" },
+                },
+              },
+              {
+                name: "description",
+                displayName: "Description",
+                definition: {
+                  name: "description",
+                  typeRegistryId: "type.rich_text_v2",
+                  type: { objectType: "OBJECT_TYPE_RICH_TEXT" },
+                },
+                children: {
+                  fields: [
+                    {
+                      name: "html",
+                      definition: {
+                        name: "html",
+                        type: { stringType: "STRING_TYPE_HTML" },
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                name: "image",
+                displayName: "Image",
+                definition: {
+                  name: "image",
+                  typeRegistryId: "type.image",
+                  type: { objectType: "OBJECT_TYPE_IMAGE" },
+                },
+                children: {
+                  fields: [
+                    {
+                      name: "url",
+                      definition: {
+                        name: "url",
+                        type: { stringType: "STRING_TYPE_URL" },
+                      },
+                    },
+                    {
+                      name: "alternateText",
+                      definition: {
+                        name: "alternateText",
+                        type: { stringType: "STRING_TYPE_MULTILINE" },
+                      },
+                    },
+                    {
+                      name: "width",
+                      definition: {
+                        name: "width",
+                        type: { numberType: "NUMBER_TYPE_INT" },
+                      },
+                    },
+                    {
+                      name: "height",
+                      definition: {
+                        name: "height",
+                        type: { numberType: "NUMBER_TYPE_INT" },
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                name: "price",
+                displayName: "Price",
+                definition: {
+                  name: "price",
+                  typeRegistryId: "type.price",
+                  type: { objectType: "OBJECT_TYPE_DEFAULT" },
+                },
+                children: {
+                  fields: [
+                    {
+                      name: "currencyCode",
+                      definition: {
+                        name: "currencyCode",
+                        typeRegistryId: "type.option",
+                        type: {
+                          stringType: "STRING_TYPE_OPTION",
+                        },
+                        options: [
+                          {
+                            textValue: "USD",
+                            displayName: "USD-United States Dollar",
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      name: "value",
+                      definition: {
+                        name: "value",
+                        typeRegistryId: "type.decimal",
+                        type: {
+                          stringType: "STRING_TYPE_DECIMAL",
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                name: "cta",
+                displayName: "CTA",
+                definition: {
+                  name: "cta",
+                  typeRegistryId: "type.cta",
+                  type: { objectType: "OBJECT_TYPE_DEFAULT" },
+                },
+                children: {
+                  fields: [
+                    {
+                      name: "label",
+                      definition: {
+                        name: "label",
+                        typeRegistryId: "type.string",
+                        type: { stringType: "STRING_TYPE_DEFAULT" },
+                      },
+                    },
+                    {
+                      name: "linkType",
+                      definition: {
+                        name: "linkType",
+                        typeRegistryId: "type.option",
+                        type: { stringType: "STRING_TYPE_OPTION" },
+                        options: [
+                          { textValue: "OTHER", displayName: "Other" },
+                          { textValue: "URL", displayName: "URL" },
+                          { textValue: "PHONE", displayName: "Phone" },
+                          { textValue: "EMAIL", displayName: "Email" },
+                        ],
+                      },
+                    },
+                    {
+                      name: "link",
+                      definition: {
+                        name: "link",
+                        typeRegistryId: "type.string",
+                        type: { stringType: "STRING_TYPE_DEFAULT" },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+        {
+          name: "c_locationNumber",
+          definition: {
+            name: "c_locationNumber",
+            registryId: "location.custom.4259018.locationnumber.0",
+            typeRegistryId: "type.decimal",
+            type: {
+              stringType: "STRING_TYPE_DECIMAL",
+            },
+          },
+          displayName: "locationNumber",
+        },
         {
           name: "c_exampleEvents",
           definition: {
@@ -11557,6 +11853,39 @@ export const devTemplateStream = {
     "c_deliveryPromo.image": "Delivery Promo \u003e Image",
     "c_deliveryPromo.title": "Delivery Promo \u003e Title",
     c_faqSection: "FAQ Section",
+    c_linkedLocation: "Linked Location",
+    "c_linkedLocation.address": "Linked Location \u003e Address",
+    "c_linkedLocation.address.city":
+      "Linked Location \u003e Address \u003e City",
+    "c_linkedLocation.address.region":
+      "Linked Location \u003e Address \u003e Region",
+    "c_linkedLocation.address.postalCode":
+      "Linked Location \u003e Address \u003e Postal Code",
+    "c_linkedLocation.c_deliveryFee": "Linked Location \u003e Delivery Fee",
+    "c_linkedLocation.c_deliveryFee.currencyCode":
+      "Linked Location \u003e Delivery Fee \u003e Currency Code",
+    "c_linkedLocation.c_deliveryFee.value":
+      "Linked Location \u003e Delivery Fee \u003e Value",
+    c_linkedProduct: "Linked Product",
+    "c_linkedProduct.title": "Linked Product \u003e Title",
+    "c_linkedProduct.description": "Linked Product \u003e Description",
+    "c_linkedProduct.description.html":
+      "Linked Product \u003e Description \u003e HTML",
+    "c_linkedProduct.image": "Linked Product \u003e Image",
+    "c_linkedProduct.image.url": "Linked Product \u003e Image \u003e URL",
+    "c_linkedProduct.image.alternateText":
+      "Linked Product \u003e Image \u003e Alternate Text",
+    "c_linkedProduct.image.width": "Linked Product \u003e Image \u003e Width",
+    "c_linkedProduct.image.height": "Linked Product \u003e Image \u003e Height",
+    "c_linkedProduct.price": "Linked Product \u003e Price",
+    "c_linkedProduct.price.value": "Linked Product \u003e Price \u003e Value",
+    "c_linkedProduct.price.currencyCode":
+      "Linked Product \u003e Price \u003e Currency Code",
+    "c_linkedProduct.cta": "Linked Product \u003e CTA",
+    "c_linkedProduct.cta.label": "Linked Product \u003e CTA \u003e Label",
+    "c_linkedProduct.cta.linkType":
+      "Linked Product \u003e CTA \u003e Link Type",
+    "c_linkedProduct.cta.link": "Linked Product \u003e CTA \u003e Link",
     "c_faqSection.linkedFAQs": "FAQ Section \u003e Linked FAQs",
     "c_faqSection.sectionTitle": "FAQ Section \u003e Section Title",
     c_hero: "Hero",
@@ -11570,6 +11899,7 @@ export const devTemplateStream = {
     c_productSection: "Product Section",
     "c_productSection.linkedProducts": "Product Section \u003e linkedProducts",
     "c_productSection.sectionTitle": "Product Section \u003e Section Title",
+    c_locationNumber: "Location Number",
     cityCoordinate: "City Lat/Long",
     "cityCoordinate.latitude": "City Lat/Long \u003e Latitude",
     "cityCoordinate.longitude": "City Lat/Long \u003e Longitude",
@@ -12526,6 +12856,205 @@ export const devLinkedEntitySchemas = {
                 type: {
                   typeName: "type.string",
                 },
+              },
+            },
+          ],
+        },
+      },
+      {
+        name: "c_deliveryFee",
+        definition: {
+          name: "c_deliveryFee",
+          registryId: "location.custom.4259018.deliveryfee.0",
+          typeRegistryId: "type.price",
+          type: {
+            objectType: "OBJECT_TYPE_DEFAULT",
+          },
+        },
+        children: {
+          fields: [
+            {
+              name: "currencyCode",
+              definition: {
+                name: "currencyCode",
+                typeRegistryId: "type.option",
+                type: {
+                  stringType: "STRING_TYPE_OPTION",
+                },
+                options: [
+                  {
+                    textValue: "USD",
+                    displayName: "USD-United States Dollar",
+                  },
+                ],
+              },
+            },
+            {
+              name: "value",
+              definition: {
+                name: "value",
+                typeRegistryId: "type.decimal",
+                type: {
+                  stringType: "STRING_TYPE_DECIMAL",
+                },
+              },
+            },
+          ],
+        },
+      },
+    ],
+  },
+  c_linkedProduct: {
+    displayName: "Linked Product",
+    fields: [
+      {
+        name: "title",
+        displayName: "Title",
+        definition: {
+          name: "title",
+          typeName: "type.string",
+          type: { typeName: "type.string" },
+        },
+      },
+      {
+        name: "description",
+        displayName: "Description",
+        definition: {
+          name: "description",
+          typeName: "type.rich_text_v2",
+          type: { typeName: "type.rich_text_v2" },
+        },
+        children: {
+          fields: [
+            {
+              name: "html",
+              definition: {
+                name: "html",
+                type: { stringType: "STRING_TYPE_HTML" },
+              },
+            },
+          ],
+        },
+      },
+      {
+        name: "image",
+        displayName: "Image",
+        definition: {
+          name: "image",
+          typeName: "type.image",
+          type: { typeName: "type.image" },
+        },
+        children: {
+          fields: [
+            {
+              name: "url",
+              definition: {
+                name: "url",
+                type: { stringType: "STRING_TYPE_URL" },
+              },
+            },
+            {
+              name: "alternateText",
+              definition: {
+                name: "alternateText",
+                type: { stringType: "STRING_TYPE_MULTILINE" },
+              },
+            },
+            {
+              name: "width",
+              definition: {
+                name: "width",
+                type: { numberType: "NUMBER_TYPE_INT" },
+              },
+            },
+            {
+              name: "height",
+              definition: {
+                name: "height",
+                type: { numberType: "NUMBER_TYPE_INT" },
+              },
+            },
+          ],
+        },
+      },
+      {
+        name: "price",
+        displayName: "Price",
+        definition: {
+          name: "price",
+          typeName: "type.price",
+          type: { typeName: "type.price" },
+        },
+        children: {
+          fields: [
+            {
+              name: "currencyCode",
+              definition: {
+                name: "currencyCode",
+                typeRegistryId: "type.option",
+                type: {
+                  stringType: "STRING_TYPE_OPTION",
+                },
+                options: [
+                  {
+                    textValue: "USD",
+                    displayName: "USD-United States Dollar",
+                  },
+                ],
+              },
+            },
+            {
+              name: "value",
+              displayName: "Value",
+              definition: {
+                name: "value",
+                typeName: "type.decimal",
+                type: {
+                  stringType: "STRING_TYPE_DECIMAL",
+                },
+              },
+            },
+          ],
+        },
+      },
+      {
+        name: "cta",
+        displayName: "CTA",
+        definition: {
+          name: "cta",
+          typeName: "type.cta",
+          type: { typeName: "type.cta" },
+        },
+        children: {
+          fields: [
+            {
+              name: "label",
+              definition: {
+                name: "label",
+                typeRegistryId: "type.string",
+                type: { stringType: "STRING_TYPE_DEFAULT" },
+              },
+            },
+            {
+              name: "linkType",
+              definition: {
+                name: "linkType",
+                typeRegistryId: "type.option",
+                type: { stringType: "STRING_TYPE_OPTION" },
+                options: [
+                  { textValue: "OTHER", displayName: "Other" },
+                  { textValue: "URL", displayName: "URL" },
+                  { textValue: "PHONE", displayName: "Phone" },
+                  { textValue: "EMAIL", displayName: "Email" },
+                ],
+              },
+            },
+            {
+              name: "link",
+              definition: {
+                name: "link",
+                typeRegistryId: "type.string",
+                type: { stringType: "STRING_TYPE_DEFAULT" },
               },
             },
           ],

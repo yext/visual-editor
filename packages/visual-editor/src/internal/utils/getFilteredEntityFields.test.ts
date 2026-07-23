@@ -1679,3 +1679,70 @@ const mockEntityFields: YextSchemaField[] = [
 const mockStreamFields: StreamFields = {
   fields: mockEntityFields,
 };
+
+const numericStreamFields: StreamFields = {
+  fields: [
+    {
+      name: "name",
+      definition: {
+        name: "name",
+        typeRegistryId: "type.string",
+        type: {
+          stringType: "STRING_TYPE_DEFAULT",
+        },
+      },
+    },
+    {
+      name: "price",
+      definition: {
+        name: "price",
+        typeRegistryId: "type.decimal",
+        type: {
+          stringType: "STRING_TYPE_DECIMAL",
+        },
+      },
+    },
+    {
+      name: "rating",
+      definition: {
+        name: "rating",
+        typeRegistryId: "type.float",
+        type: {
+          numberType: "NUMBER_TYPE_FLOAT",
+        },
+      },
+    },
+    {
+      name: "yearEstablished",
+      definition: {
+        name: "yearEstablished",
+        typeRegistryId: "type.integer",
+        type: {
+          numberType: "NUMBER_TYPE_INT",
+        },
+      },
+    },
+  ],
+};
+
+describe("numeric entity field filtering", () => {
+  test("recognizes decimal, float, and integer schema types", () => {
+    const fields = getFilteredEntityFields(numericStreamFields, {
+      types: ["type.decimal", "type.float", "type.integer"],
+    });
+
+    expect(fields.map((field) => field.name)).toEqual([
+      "price",
+      "rating",
+      "yearEstablished",
+    ]);
+  });
+
+  test("keeps generic string filters string-only", () => {
+    const fields = getFilteredEntityFields(numericStreamFields, {
+      types: ["type.string"],
+    });
+
+    expect(fields.map((field) => field.name)).toEqual(["name"]);
+  });
+});
