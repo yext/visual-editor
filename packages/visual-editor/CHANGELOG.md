@@ -1,3 +1,13 @@
+#### 1.4.2 (2026-07-23)
+
+##### New Features
+
+- numeric embedded fields ([#1275](https://github.com/yext/visual-editor/pull/1275)) ([53622bfc](https://github.com/yext/visual-editor/commit/53622bfc95b3cddd0ad492c27083407d35ac37b5))
+
+##### Bug Fixes
+
+- editor header padding ([#1274](https://github.com/yext/visual-editor/pull/1274)) ([94230677](https://github.com/yext/visual-editor/commit/94230677c4f3f32e2b302e5eefaf7e60bb82ad82))
+
 #### 1.4.1 (2026-07-17)
 
 ##### Bug Fixes
