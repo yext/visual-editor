@@ -4,6 +4,12 @@ import React from "react";
 import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
 import { VisualEditorRender } from "../editor/VisualEditorRender.tsx";
 import type { LocalDevOptions } from "../editor/types.ts";
+import { getVisualConfigLocalStorageKey } from "../internal/hooks/layout/useLocalStorage.ts";
+import { getThemeLocalStorageKey } from "../internal/hooks/theme/useLocalStorage.ts";
+import {
+  generateTemplateMetadata,
+  type TemplateMetadata,
+} from "../internal/types/templateMetadata.ts";
 import type { ThemeData } from "../internal/types/themeData.ts";
 import { updateThemeInEditor } from "../utils/applyTheme.ts";
 import { migrate } from "../utils/migrate.ts";
@@ -84,6 +90,7 @@ export const LocalEditorPreview = ({
       try {
         const { layoutData, themeData } = readLocalEditorPreviewData({
           defaultLayoutData,
+          document,
           localDevOptions,
         });
         const streamDocument = document as StreamDocument;
@@ -225,17 +232,23 @@ const PreviewStatus = ({ title, body }: { title: string; body?: string }) => {
 
 const readLocalEditorPreviewData = ({
   defaultLayoutData,
+  document,
   localDevOptions,
 }: {
   defaultLayoutData?: unknown;
+  document: Record<string, unknown>;
   localDevOptions: LocalDevOptions;
 }): PreviewData => {
+  const templateMetadata = generateTemplateMetadata(
+    document as StreamDocument,
+    localDevOptions
+  );
   const storedLayoutData = readLatestStoredData<
     { state?: { data?: Data } },
     Data
-  >(buildLayoutStorageKey(localDevOptions), (history) => history.state?.data);
+  >(buildLayoutStorageKey(templateMetadata), (history) => history.state?.data);
   const storedThemeData = readLatestStoredData<{ data?: ThemeData }, ThemeData>(
-    buildThemeStorageKey(localDevOptions),
+    buildThemeStorageKey(templateMetadata),
     (history) => history.data
   );
 
@@ -300,36 +313,26 @@ const cloneLayoutData = (layoutData: Data): Data => {
   return JSON.parse(JSON.stringify(layoutData)) as Data;
 };
 
-const buildLayoutStorageKey = (
-  localDevOptions: LocalDevOptions
-): string | undefined => {
-  if (!localDevOptions.templateId || !localDevOptions.layoutScopeKey) {
-    return undefined;
-  }
-
-  return `devTEMPLATE_${localDevOptions.templateId}LAYOUT_${hashCode(
-    localDevOptions.layoutScopeKey
-  )}`;
+const buildLayoutStorageKey = (templateMetadata: TemplateMetadata): string => {
+  return getVisualConfigLocalStorageKey(
+    templateMetadata.isDevMode && !templateMetadata.devOverride,
+    false,
+    templateMetadata.templateId,
+    templateMetadata.layoutId,
+    templateMetadata.entityId
+  );
 };
 
 const buildThemeStorageKey = (
-  localDevOptions: LocalDevOptions
+  templateMetadata: TemplateMetadata
 ): string | undefined => {
-  if (!localDevOptions.themeScopeKey) {
+  if (!templateMetadata.themeEntityId) {
     return undefined;
   }
 
-  return `devSITE_1337THEME_${hashCode(localDevOptions.themeScopeKey)}`;
-};
-
-const hashCode = (value: string): number => {
-  let hash = 0;
-
-  for (let index = 0; index < value.length; index += 1) {
-    const characterCode = value.charCodeAt(index);
-    hash = (hash << 5) - hash + characterCode;
-    hash |= 0;
-  }
-
-  return Math.abs(hash);
+  return getThemeLocalStorageKey(
+    templateMetadata.isDevMode,
+    templateMetadata.siteId,
+    templateMetadata.themeEntityId
+  );
 };
