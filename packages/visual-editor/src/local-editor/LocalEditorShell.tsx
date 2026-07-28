@@ -1,5 +1,7 @@
+import type { Config } from "@puckeditor/core";
 import React from "react";
 import { Editor } from "../editor/Editor.tsx";
+import type { LocalDevOptions } from "../editor/types.ts";
 import { VisualEditorProvider } from "../utils/VisualEditorProvider.tsx";
 import { LocalEditorControls } from "./LocalEditorControls.tsx";
 import { LocalEditorNotice } from "./LocalEditorNotice.tsx";
@@ -10,7 +12,11 @@ import {
   syncSelectionToUrl,
   updateSearchParam,
 } from "./selection.ts";
-import type { LocalEditorShellProps } from "./types.ts";
+import type {
+  LocalEditorDocumentResponse,
+  LocalEditorShellProps,
+} from "./types.ts";
+import { LocalEditorPreview } from "./LocalEditorPreview.tsx";
 import { useLocalEditorDocument } from "./useLocalEditorDocument.ts";
 import { useLocalEditorManifest } from "./useLocalEditorManifest.ts";
 
@@ -18,6 +24,8 @@ const LOCAL_EDITOR_MAPBOX_KEY_STORAGE_KEY =
   "visual-editor.local-editor.mapbox-key";
 const LOCAL_EDITOR_NEARBY_LOCATIONS_KEY_STORAGE_KEY =
   "visual-editor.local-editor.nearby-locations-key";
+const LOCAL_EDITOR_PREVIEW_OPEN_STORAGE_KEY =
+  "visual-editor.local-editor.preview-open";
 
 const TEST_REVIEWS_AGG = [
   {
@@ -64,17 +72,21 @@ export const LocalEditorShell = ({
   tailwindConfig,
   themeConfig,
 }: LocalEditorShellProps) => {
+  const [previewContext, setPreviewContext] = React.useState<{
+    config: Config;
+    defaultLayoutData?: unknown;
+    document: Record<string, unknown>;
+    entityFields: LocalEditorDocumentResponse["entityFields"];
+    localDevOptions: LocalDevOptions;
+  } | null>(null);
+  const [shouldOpenPreview, setShouldOpenPreview] = React.useState(false);
   const [locationSearch, setLocationSearch] = React.useState(() => {
     return typeof window === "undefined" ? "" : window.location.search;
   });
-  const [mapboxKey, setMapboxKey] = React.useState<string | undefined>(() => {
-    return readLocalStorageValue(LOCAL_EDITOR_MAPBOX_KEY_STORAGE_KEY);
-  });
+  const [mapboxKey, setMapboxKey] = React.useState<string | undefined>();
   const [nearbyLocationsKey, setNearbyLocationsKey] = React.useState<
     string | undefined
-  >(() => {
-    return readLocalStorageValue(LOCAL_EDITOR_NEARBY_LOCATIONS_KEY_STORAGE_KEY);
-  });
+  >();
   const { isManifestLoading, manifest, manifestError } =
     useLocalEditorManifest(apiBasePath);
 
@@ -91,6 +103,14 @@ export const LocalEditorShell = ({
     return () => {
       window.removeEventListener("popstate", handlePopState);
     };
+  }, []);
+
+  React.useEffect(() => {
+    setShouldOpenPreview(readPreviewOpenState());
+    setMapboxKey(readLocalStorageValue(LOCAL_EDITOR_MAPBOX_KEY_STORAGE_KEY));
+    setNearbyLocationsKey(
+      readLocalStorageValue(LOCAL_EDITOR_NEARBY_LOCATIONS_KEY_STORAGE_KEY)
+    );
   }, []);
 
   const searchParams = React.useMemo(() => {
@@ -172,6 +192,7 @@ export const LocalEditorShell = ({
     selectedTemplateDefaults,
     selectedTemplateId,
   ]);
+  const activeConfig = componentRegistry[selectedTemplateId];
 
   // Inject reviews, mapbox, and/or nearby locations testing data into the streamDocument, if enabled
   const streamDocument = React.useMemo(() => {
@@ -288,6 +309,68 @@ export const LocalEditorShell = ({
     },
     [mapboxKey, nearbyLocationsKey]
   );
+  const canOpenPreview =
+    !isDocumentLoading &&
+    !!activeConfig &&
+    !!streamDocument &&
+    !!documentResponse &&
+    !!editorLocalDevOptions;
+
+  const openPreview = React.useCallback(() => {
+    if (
+      !canOpenPreview ||
+      !activeConfig ||
+      !streamDocument ||
+      !documentResponse ||
+      !editorLocalDevOptions
+    ) {
+      return;
+    }
+
+    writePreviewOpenState(true);
+    setShouldOpenPreview(true);
+    setPreviewContext({
+      config: activeConfig,
+      defaultLayoutData: selectedTemplateDefaults?.defaultLayoutData,
+      document: streamDocument,
+      entityFields: documentResponse.entityFields,
+      localDevOptions: editorLocalDevOptions,
+    });
+  }, [
+    activeConfig,
+    canOpenPreview,
+    documentResponse,
+    editorLocalDevOptions,
+    selectedTemplateDefaults?.defaultLayoutData,
+    streamDocument,
+  ]);
+
+  React.useEffect(() => {
+    if (shouldOpenPreview && !previewContext) {
+      openPreview();
+    }
+  }, [openPreview, previewContext, shouldOpenPreview]);
+
+  const closePreview = React.useCallback(() => {
+    writePreviewOpenState(false);
+    setShouldOpenPreview(false);
+    setPreviewContext(null);
+  }, []);
+
+  if (previewContext) {
+    return (
+      <LocalEditorPreview
+        config={previewContext.config}
+        defaultLayoutData={previewContext.defaultLayoutData}
+        document={previewContext.document}
+        entityFields={previewContext.entityFields}
+        localDevOptions={previewContext.localDevOptions}
+        onClose={closePreview}
+        tailwindConfig={tailwindConfig}
+        themeConfig={themeConfig}
+      />
+    );
+  }
 
   return (
     <div
@@ -355,16 +438,27 @@ export const LocalEditorShell = ({
           >
             {showReviewsData ? "Hide Reviews Data" : "Show Reviews Data"}
           </EditorShellButton>
-          <code
+          <button
+            type="button"
+            disabled={!canOpenPreview}
+            onClick={openPreview}
             style={{
+              appearance: "none",
               background: "#111",
-              color: "#fff",
-              padding: "6px 10px",
+              border: "1px solid #111",
               borderRadius: "999px",
+              color: "#fff",
+              cursor: canOpenPreview ? "pointer" : "not-allowed",
+              font: "inherit",
+              fontWeight: 600,
+              minHeight: "34px",
+              opacity: canOpenPreview ? 1 : 0.55,
+              padding: "6px 12px",
             }}
+            title={routePath}
           >
-            {routePath}
-          </code>
+            Open Preview
+          </button>
         </div>
       </div>
 
@@ -492,6 +586,37 @@ const readLocalStorageValue = (storageKey: string): string | undefined => {
 
   const storedValue = window.localStorage.getItem(storageKey);
   return storedValue?.trim() ? storedValue : undefined;
+};
+
+const readPreviewOpenState = (): boolean => {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  try {
+    return (
+      window.sessionStorage.getItem(LOCAL_EDITOR_PREVIEW_OPEN_STORAGE_KEY) ===
+      "1"
+    );
+  } catch {
+    return false;
+  }
+};
+
+const writePreviewOpenState = (isOpen: boolean) => {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  try {
+    if (isOpen) {
+      window.sessionStorage.setItem(LOCAL_EDITOR_PREVIEW_OPEN_STORAGE_KEY, "1");
+    } else {
+      window.sessionStorage.removeItem(LOCAL_EDITOR_PREVIEW_OPEN_STORAGE_KEY);
+    }
+  } catch {
+    // Preview state persistence is best-effort in restricted browser contexts.
+  }
 };
 
 const EditorShellButton = (props: {
