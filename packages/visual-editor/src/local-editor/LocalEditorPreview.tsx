@@ -21,7 +21,7 @@ import type { LocalEditorDocumentResponse } from "./types.ts";
 type LocalEditorPreviewProps = {
   config: Config;
   defaultLayoutData?: unknown;
-  document: Record<string, unknown>;
+  streamDocument: StreamDocument;
   entityFields: LocalEditorDocumentResponse["entityFields"];
   localDevOptions: LocalDevOptions;
   onClose: () => void;
@@ -47,7 +47,7 @@ const EMPTY_LAYOUT_DATA: Data = {
 export const LocalEditorPreview = ({
   config,
   defaultLayoutData,
-  document,
+  streamDocument,
   entityFields,
   localDevOptions,
   onClose,
@@ -90,10 +90,9 @@ export const LocalEditorPreview = ({
       try {
         const { layoutData, themeData } = readLocalEditorPreviewData({
           defaultLayoutData,
-          document,
+          streamDocument,
           localDevOptions,
         });
-        const streamDocument = document as StreamDocument;
         const migratedLayoutData = migrate(
           cloneLayoutData(layoutData),
           migrationRegistry,
@@ -232,15 +231,15 @@ const PreviewStatus = ({ title, body }: { title: string; body?: string }) => {
 
 const readLocalEditorPreviewData = ({
   defaultLayoutData,
-  document,
+  streamDocument,
   localDevOptions,
 }: {
   defaultLayoutData?: unknown;
-  document: Record<string, unknown>;
+  streamDocument: StreamDocument;
   localDevOptions: LocalDevOptions;
 }): PreviewData => {
   const templateMetadata = generateTemplateMetadata(
-    document as StreamDocument,
+    streamDocument,
     localDevOptions
   );
   const storedLayoutData = readLatestStoredData<

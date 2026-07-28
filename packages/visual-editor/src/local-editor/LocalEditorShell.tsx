@@ -19,6 +19,7 @@ import type {
 import { LocalEditorPreview } from "./LocalEditorPreview.tsx";
 import { useLocalEditorDocument } from "./useLocalEditorDocument.ts";
 import { useLocalEditorManifest } from "./useLocalEditorManifest.ts";
+import { StreamDocument } from "../utils/types/StreamDocument.ts";
 
 const LOCAL_EDITOR_MAPBOX_KEY_STORAGE_KEY =
   "visual-editor.local-editor.mapbox-key";
@@ -75,7 +76,7 @@ export const LocalEditorShell = ({
   const [previewContext, setPreviewContext] = React.useState<{
     config: Config;
     defaultLayoutData?: unknown;
-    document: Record<string, unknown>;
+    streamDocument: StreamDocument;
     entityFields: LocalEditorDocumentResponse["entityFields"];
     localDevOptions: LocalDevOptions;
   } | null>(null);
@@ -332,7 +333,7 @@ export const LocalEditorShell = ({
     setPreviewContext({
       config: activeConfig,
       defaultLayoutData: selectedTemplateDefaults?.defaultLayoutData,
-      document: streamDocument,
+      streamDocument,
       entityFields: documentResponse.entityFields,
       localDevOptions: editorLocalDevOptions,
     });
@@ -362,7 +363,7 @@ export const LocalEditorShell = ({
       <LocalEditorPreview
         config={previewContext.config}
         defaultLayoutData={previewContext.defaultLayoutData}
-        document={previewContext.document}
+        streamDocument={previewContext.streamDocument}
         entityFields={previewContext.entityFields}
         localDevOptions={previewContext.localDevOptions}
         onClose={closePreview}
