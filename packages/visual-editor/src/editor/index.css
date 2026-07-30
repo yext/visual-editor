@@ -9,6 +9,17 @@
     Inter, "SF Pro", "Helvetica Neue", Helvetica, sans-serif !important;
 }
 
+.entity-field-tooltip-label {
+  font-family: var(--puck-font-family) !important;
+  font-size: 0.75rem !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  letter-spacing: normal !important;
+  line-height: 1rem !important;
+  text-decoration: none !important;
+  text-transform: none !important;
+}
+
 /* Custom styling for entity field selection in the Puck sidebar. */
 .entityField {
   margin-top: 5px;
