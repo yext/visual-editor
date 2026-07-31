@@ -95,7 +95,7 @@ export const defaultDirectoryCardSlotData = (
         linkOverride: createDefaultLinkOverrideFieldValue(),
         showAddress: true,
         showHoursStatus: true,
-        showPhoneNumbers: true,
+        showPhoneNumber: true,
       },
       styles: {
         backgroundColor:
@@ -242,7 +242,7 @@ export type DirectoryCardProps = {
     linkOverride: DirectoryCardLinkOverrideFieldValue;
     showAddress: boolean;
     showHoursStatus: boolean;
-    showPhoneNumbers: boolean;
+    showPhoneNumber: boolean;
   };
 
   /** Styling for all the cards. */
@@ -441,7 +441,7 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
         {data.showHoursStatus && resolvedChild?.hours && (
           <slots.HoursSlot style={{ height: "auto" }} />
         )}
-        {data.showPhoneNumbers && resolvedChild?.mainPhone && (
+        {data.showPhoneNumber && resolvedChild?.mainPhone && (
           <slots.PhoneSlot style={{ height: "auto" }} />
         )}
         {data.showAddress && resolvedChild?.address && (
@@ -493,7 +493,7 @@ export const DirectoryCard: YextComponentConfig<DirectoryCardProps> = {
       linkOverride: createDefaultLinkOverrideFieldValue(),
       showAddress: true,
       showHoursStatus: true,
-      showPhoneNumbers: true,
+      showPhoneNumber: true,
     },
     styles: {
       backgroundColor: backgroundColors.background1.value,

@@ -197,9 +197,9 @@ const directoryCardsSource = createSlottedItemSource<
       label: msg("fields.showHoursStatus", "Show Hours Status"),
       options: ThemeOptions.SHOW_HIDE,
     },
-    showPhoneNumbers: {
+    showPhoneNumber: {
       type: "radio",
-      label: msg("fields.showPhoneNumber", "Show Phone Number"),
+      label: msg("fields.showPhone", "Show Phone"),
       options: ThemeOptions.SHOW_HIDE,
     },
   },
@@ -229,7 +229,7 @@ const getNormalizedDirectoryGridData = (
     },
     showAddress: value?.mappings?.showAddress ?? true,
     showHoursStatus: value?.mappings?.showHoursStatus ?? true,
-    showPhoneNumbers: value?.mappings?.showPhoneNumbers ?? true,
+    showPhoneNumber: value?.mappings?.showPhoneNumber ?? true,
   },
 });
 
@@ -451,7 +451,7 @@ export const DirectoryGrid: YextComponentConfig<DirectoryGridProps> = {
             linkOverride: normalizedData.mappings?.linkOverride,
             showAddress: normalizedData.mappings?.showAddress,
             showHoursStatus: normalizedData.mappings?.showHoursStatus,
-            showPhoneNumbers: normalizedData.mappings?.showPhoneNumbers,
+            showPhoneNumber: normalizedData.mappings?.showPhoneNumber,
           },
           slots: {
             ...cardSlots,

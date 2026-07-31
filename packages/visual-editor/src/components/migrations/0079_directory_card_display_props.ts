@@ -25,7 +25,7 @@ const addDirectoryCardDisplayProps = (
     },
     showAddress: props.data?.showAddress ?? true,
     showHoursStatus: props.data?.showHoursStatus ?? true,
-    showPhoneNumbers: props.data?.showPhoneNumbers ?? true,
+    showPhoneNumber: props.data?.showPhoneNumber ?? true,
   },
 });
 
@@ -44,7 +44,7 @@ export const directoryCardDisplayProps: Migration = {
           },
           showAddress: props.data?.mappings?.showAddress ?? true,
           showHoursStatus: props.data?.mappings?.showHoursStatus ?? true,
-          showPhoneNumbers: props.data?.mappings?.showPhoneNumbers ?? true,
+          showPhoneNumber: props.data?.mappings?.showPhoneNumber ?? true,
         },
       },
     }),
