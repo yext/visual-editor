@@ -62,7 +62,7 @@ export type DirectoryGridProps = {
   };
 };
 
-const DirectoryFieldTooltip = ({ content }: { content: string }) => {
+const DirectoryFieldTooltip = () => {
   const templateMetadata = useTemplateMetadata();
   return (
     <TooltipProvider delayDuration={0}>
@@ -76,7 +76,13 @@ const DirectoryFieldTooltip = ({ content }: { content: string }) => {
           </button>
         </TooltipTrigger>
         <TooltipContent className="ve-max-w-[260px] ve-text-left">
-          {pt(content, { entityType: templateMetadata.entityTypeDisplayName })}
+          {pt(
+            "linkOverrideDirectoryTooltip",
+            "Use a custom URL path for each card's title link. If the value is empty, the generated directory URL will be used.",
+            {
+              entityType: templateMetadata.entityTypeDisplayName,
+            }
+          )}
           <TooltipArrow fill="ve-bg-popover" />
         </TooltipContent>
       </Tooltip>
@@ -99,17 +105,7 @@ const linkOverrideField: YextFieldDefinition<
     const label = pt("fields.overrideLink", "Override Link");
 
     return (
-      <FieldLabel
-        label={label}
-        icon={
-          <DirectoryFieldTooltip
-            content={msg(
-              "linkOverrideDirectoryTooltip",
-              "Use a custom URL path for each card's title link. If the value is empty, the generated directory URL will be used."
-            )}
-          />
-        }
-      >
+      <FieldLabel label={label} icon={<DirectoryFieldTooltip />}>
         <div className="ve-flex ve-flex-col ve-gap-3">
           <YextAutoField
             field={{

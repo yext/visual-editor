@@ -427,7 +427,7 @@
       "width": "Lăţime",
       "yes": "Da"
     },
-    "overrideLink": "Ignorați legătura",
+    "overrideLink": "Înlocuiți linkul",
     "pageHeading": "Titlul paginii",
     "phone": "Telefon",
     "phoneFormat": "Format telefonic",
@@ -569,7 +569,7 @@
   "link": "legătură",
   "linkedEntityFields": "Câmpurile de entitate conectate",
   "linkedEntityMultiValueWarning": "{{linkedField}} conține mai multe entități legate. Folosind primul pentru {{resolvedField}}.",
-  "linkOverrideDirectoryTooltip": "Utilizați o cale URL personalizată pentru linkul de titlu al fiecărui card. Dacă valoarea este goală, va fi utilizată URL-ul directorului generat.",
+  "linkOverrideDirectoryTooltip": "Utilizați o cale URL personalizată pentru linkul de titlu al fiecărui card. Dacă valoarea este goală, va fi utilizat URL-ul directorului generat.",
   "linkTypes": {
     "clickToWebsite": "Faceți clic pe site -ul web",
     "drivingDirections": "Direcții de conducere",

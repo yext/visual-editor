@@ -33,7 +33,6 @@ import {
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 import { YextEntityField } from "../../editor/yextEntityFieldUtils.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
-import { useTranslation } from "react-i18next";
 import { normalizeSlug } from "../../utils/slugifier.ts";
 
 const defaultCardTitle: YextEntityField<TranslatableString> = {
@@ -272,7 +271,6 @@ export type DirectoryCardProps = {
 const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
   const { data, styles, slots, parentData, index, puck } = props;
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
-  const { i18n } = useTranslation();
   const directoryChildrenFromContext = useDirectoryChildren();
   const sortedDirectoryChildren = React.useMemo(
     () =>
@@ -309,7 +307,11 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
   );
 
   const linkOverrideValue = data.linkOverride.enabled
-    ? resolveComponentData(data.linkOverride, i18n.language, resolvedChild)
+    ? resolveComponentData(
+        data.linkOverride,
+        streamDocument.locale || "en",
+        childDocumentContext.document
+      )
     : "";
   const resolvedLinkOverride =
     typeof linkOverrideValue === "string"
