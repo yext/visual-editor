@@ -62,13 +62,7 @@ export type DirectoryGridProps = {
   };
 };
 
-const DirectoryFieldTooltip = ({
-  content,
-  label,
-}: {
-  content: string;
-  label: string;
-}) => {
+const DirectoryFieldTooltip = ({ content }: { content: string }) => {
   const templateMetadata = useTemplateMetadata();
   return (
     <TooltipProvider delayDuration={0}>
@@ -76,11 +70,6 @@ const DirectoryFieldTooltip = ({
         <TooltipTrigger asChild>
           <button
             type="button"
-            aria-label={pt(
-              "fieldInformationWithName",
-              "{{field}} information",
-              { field: label }
-            )}
             className="ve-flex ve-h-4 ve-w-4 ve-items-center ve-justify-center ve-text-gray-500 hover:ve-text-gray-700"
           >
             <FaInfoCircle className="ve-h-4 ve-w-4" />
@@ -118,7 +107,6 @@ const linkOverrideField: YextFieldDefinition<
               "linkOverrideDirectoryTooltip",
               "Use a custom URL path for each card's title link. If the value is empty, the generated directory URL will be used."
             )}
-            label={label}
           />
         }
       >
