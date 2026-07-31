@@ -14,6 +14,7 @@ import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { getThemeColorCssValue } from "../../../utils/colors.ts";
 import {
   AssetImageType,
+  ImageFillType,
   TranslatableAssetImage,
 } from "../../../types/images.ts";
 import { PuckComponent } from "@puckeditor/core";
@@ -60,13 +61,13 @@ export interface PhotoGalleryWrapperProps {
   };
   styles: {
     /** Styling options for the gallery images, such as aspect ratio. */
-    image: ImageStylingProps;
+    image: Omit<ImageStylingProps, "imageFillType">;
 
     /**
      * Determines whether carousel images should fill or fit within the frame.
      * @defaultValue "fill"
      */
-    imageFillType?: "fill" | "fit";
+    imageFillType?: ImageFillType;
 
     /** Accent color used for carousel arrows and slide indicators. */
     accentColor?: ThemeColor;
@@ -84,6 +85,12 @@ export interface PhotoGalleryWrapperProps {
     variant: "gallery" | "carousel";
   };
 }
+
+const photoGalleryImageStylingFields = {
+  imageConstrain: ImageStylingFields.imageConstrain,
+  width: ImageStylingFields.width,
+  aspectRatio: ImageStylingFields.aspectRatio,
+};
 
 const photoGalleryWrapperFields: YextFields<PhotoGalleryWrapperProps> = {
   data: {
@@ -107,7 +114,7 @@ const photoGalleryWrapperFields: YextFields<PhotoGalleryWrapperProps> = {
       image: {
         type: "object",
         label: msg("fields.image", "Image"),
-        objectFields: ImageStylingFields,
+        objectFields: photoGalleryImageStylingFields,
       },
       imageFillType: {
         type: "basicSelector",
@@ -244,7 +251,7 @@ const DesktopImageItem = ({
         constrainToParent && "w-full h-auto object-contain max-w-full"
       )}
       sizes={sizes}
-      style={{ objectFit: imageFillType === "fit" ? "contain" : "cover" }}
+      imageFillType={imageFillType}
     />
   );
 
@@ -288,7 +295,7 @@ const MobileImageItem = ({
         aspectRatio={imageData.aspectRatio}
         className="w-full h-auto object-contain"
         sizes={`100vw`}
-        style={{ objectFit: imageFillType === "fit" ? "contain" : "cover" }}
+        imageFillType={imageFillType}
       />
     </div>
   );
