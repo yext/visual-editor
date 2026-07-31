@@ -167,6 +167,7 @@
   "failedToPasteLayoutInvalidData": "Det gick inte att klistra in: Ogiltig layoutdata.",
   "failedToPasteLayoutPermissionDenied": "Det gick inte att klistra in: Urklippsåtkomst är blockerad. Aktivera inklistringsbehörigheter och försök igen.",
   "faq": "Vanliga frågor",
+  "fieldInformationWithName": "{{field}} information",
   "fields": {
     "accentColor": "Accentfärg",
     "actionType": "Åtgärdstyp",
@@ -277,6 +278,7 @@
     "linkColor": "Länkfärg",
     "linkedInLink": "LinkedIn -länk",
     "linkLabel": "Länketikett",
+    "linkPath": "Länkväg",
     "links": "Länkar",
     "linksTooltip": "Länkar kommer automatiskt att kollapsa om visningsporten är för smal",
     "linkTarget": "Länkmål",
@@ -426,6 +428,7 @@
       "width": "Bredd",
       "yes": "Ja"
     },
+    "overrideLink": "Åsidosätt länk",
     "pageHeading": "Sidrubrik",
     "phone": "Telefon",
     "phoneFormat": "Telefonformat",
@@ -460,6 +463,7 @@
     "sections": "Avsnitt",
     "services": "Tjänster",
     "showAddress": "Visa adress",
+    "showAddresses": "Visa adresser",
     "showAll": "Visa alla",
     "showAverageReview": "Visa genomsnittlig recension",
     "showBrow": "Visa ögonbrynstext",
@@ -490,6 +494,7 @@
     "showMedia": "Visa media",
     "showName": "Visa namn",
     "showPhone": "Visa telefon",
+    "showPhoneNumbers": "Visa telefonnummer",
     "showPrice": "Visa pris",
     "showPrimaryCTA": "Visa primär CTA",
     "showProfessionalTitle": "Visa yrkestitel",
@@ -565,6 +570,7 @@
   "link": "länk",
   "linkedEntityFields": "Länkade enhetsfält",
   "linkedEntityMultiValueWarning": "{{linkedField}} innehåller flera länkade enheter. Använder den första för {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Använd en anpassad webbadresssökväg för varje korts titellänk. Om värdet är tomt kommer den genererade katalogadressen att användas.",
   "linkTypes": {
     "clickToWebsite": "Klicka på webbplatsen",
     "drivingDirections": "Vägbeskrivning",

@@ -37,6 +37,7 @@ export const YextEntityFieldSelector = <
     disableConstantValueToggle: props.disableConstantValueToggle,
     disallowTranslation: props.disallowTranslation,
     sourceFieldPath: props.sourceFieldPath,
+    hideRequirementsTooltip: props.hideRequirementsTooltip,
   };
 
   return field as unknown as Field<YextEntityField<TValue, TMappings>>;

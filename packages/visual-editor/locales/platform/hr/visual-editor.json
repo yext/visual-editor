@@ -167,6 +167,7 @@
   "failedToPasteLayoutInvalidData": "Nije uspjelo lijepljenje: nevažeći podaci o izgledu.",
   "failedToPasteLayoutPermissionDenied": "Lijepljenje nije uspjelo: pristup međuspremniku je blokiran. Omogućite dopuštenja za lijepljenje i pokušajte ponovno.",
   "faq": "FAQ",
+  "fieldInformationWithName": "{{field}} informacije",
   "fields": {
     "accentColor": "Boja akcenta",
     "actionType": "Vrsta akcije",
@@ -277,6 +278,7 @@
     "linkColor": "Boja veze",
     "linkedInLink": "LinkedIn veza",
     "linkLabel": "Oznaka veze",
+    "linkPath": "Put veze",
     "links": "Veze",
     "linksTooltip": "Veze će se automatski skupiti ako je okvir za prikaz preuzak",
     "linkTarget": "Odredište",
@@ -426,6 +428,7 @@
       "width": "Širina",
       "yes": "Da"
     },
+    "overrideLink": "Poništi vezu",
     "pageHeading": "Naslov stranice",
     "phone": "Telefon",
     "phoneFormat": "Format telefona",
@@ -460,6 +463,7 @@
     "sections": "Sekcije",
     "services": "Usluge",
     "showAddress": "Prikaži adresu",
+    "showAddresses": "Prikaži adrese",
     "showAll": "Prikaži sve",
     "showAverageReview": "Pokažite prosječni pregled",
     "showBrow": "Prikaži tekst obrva",
@@ -490,6 +494,7 @@
     "showMedia": "Prikaži medije",
     "showName": "Prikaži naziv",
     "showPhone": "Prikaži telefon",
+    "showPhoneNumbers": "Prikaži telefonske brojeve",
     "showPrice": "Prikaži cijenu",
     "showPrimaryCTA": "Pokažite primarni CTA",
     "showProfessionalTitle": "Prikaži profesionalni naslov",
@@ -566,6 +571,7 @@
   "link": "link",
   "linkedEntityFields": "Polja povezanih entiteta",
   "linkedEntityMultiValueWarning": "{{linkedField}} sadrži više povezanih entiteta. Korištenje prvog za {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Upotrijebite prilagođeni URL put za naslovnu vezu svake kartice. Ako je vrijednost prazna, koristit će se generirani URL imenika.",
   "linkTypes": {
     "clickToWebsite": "Kliknite na web mjesto",
     "drivingDirections": "Upute za vožnju",

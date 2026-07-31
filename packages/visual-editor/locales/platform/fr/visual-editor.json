@@ -167,6 +167,7 @@
   "failedToPasteLayoutInvalidData": "Échec du collage : données de mise en page non valides.",
   "failedToPasteLayoutPermissionDenied": "Échec du collage : l'accès au Presse-papiers est bloqué. Activez les autorisations de collage et réessayez.",
   "faq": "FAQ",
+  "fieldInformationWithName": "Informations {{field}}",
   "fields": {
     "accentColor": "Couleur d'accentuation",
     "actionType": "Type d'action",
@@ -277,6 +278,7 @@
     "linkColor": "Couleur du lien",
     "linkedInLink": "Lien linkedin",
     "linkLabel": "Libellé du lien",
+    "linkPath": "Chemin du lien",
     "links": "Links",
     "linksTooltip": "Les liens s'effondreront automatiquement si la fenêtre d'affichage est trop étroite",
     "linkTarget": "Cible du lien",
@@ -426,6 +428,7 @@
       "width": "Largeur",
       "yes": "Oui"
     },
+    "overrideLink": "Remplacer le lien",
     "pageHeading": "En-tête de page",
     "phone": "Téléphone",
     "phoneFormat": "Format de téléphone",
@@ -460,6 +463,7 @@
     "sections": "Sections",
     "services": "Services",
     "showAddress": "Afficher l'adresse",
+    "showAddresses": "Afficher les adresses",
     "showAll": "Afficher tout",
     "showAverageReview": "Afficher une revue moyenne",
     "showBrow": "Afficher le texte du front",
@@ -490,6 +494,7 @@
     "showMedia": "Afficher les médias",
     "showName": "Afficher le nom",
     "showPhone": "Afficher le téléphone",
+    "showPhoneNumbers": "Afficher les numéros de téléphone",
     "showPrice": "Afficher le prix",
     "showPrimaryCTA": "Afficher le CTA primaire",
     "showProfessionalTitle": "Afficher le titre professionnel",
@@ -566,6 +571,7 @@
   "link": "lien",
   "linkedEntityFields": "Champs d'entité liée",
   "linkedEntityMultiValueWarning": "{{linkedField}} contient plusieurs entités liées. Utilisation du premier pour {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Utilisez un chemin d'URL personnalisé pour le lien de titre de chaque carte. Si la valeur est vide, l'URL du répertoire généré sera utilisée.",
   "linkTypes": {
     "clickToWebsite": "Cliquez sur le site Web",
     "drivingDirections": "Itinéraires",

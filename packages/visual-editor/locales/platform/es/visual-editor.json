@@ -167,6 +167,7 @@
   "failedToPasteLayoutInvalidData": "No se pudo pegar: datos de diseño no válidos.",
   "failedToPasteLayoutPermissionDenied": "No se pudo pegar: el acceso al portapapeles está bloqueado. Habilite los permisos para pegar y vuelva a intentarlo.",
   "faq": "Preguntas frecuentes",
+  "fieldInformationWithName": "{{field}} información",
   "fields": {
     "accentColor": "Color de acento",
     "actionType": "Tipo de acción",
@@ -277,6 +278,7 @@
     "linkColor": "Color del enlace",
     "linkedInLink": "LinkedIn Link",
     "linkLabel": "Etiqueta de enlace",
+    "linkPath": "Ruta de enlace",
     "links": "Campo de golf",
     "linksTooltip": "Los enlaces se colapsarán automáticamente si la ventana gráfica es demasiado estrecha",
     "linkTarget": "Destino del enlace",
@@ -426,6 +428,7 @@
       "width": "Ancho",
       "yes": "Sí"
     },
+    "overrideLink": "Anular enlace",
     "pageHeading": "Encabezado de página",
     "phone": "Teléfono",
     "phoneFormat": "Formato de teléfono",
@@ -460,6 +463,7 @@
     "sections": "Secciones",
     "services": "Servicios",
     "showAddress": "Mostrar dirección",
+    "showAddresses": "Mostrar direcciones",
     "showAll": "Mostrar todo",
     "showAverageReview": "Mostrar revisión promedio",
     "showBrow": "Mostrar texto de ceja",
@@ -490,6 +494,7 @@
     "showMedia": "Mostrar medios",
     "showName": "Mostrar nombre",
     "showPhone": "Mostrar teléfono",
+    "showPhoneNumbers": "Mostrar números de teléfono",
     "showPrice": "Mostrar precio",
     "showPrimaryCTA": "Mostrar CTA primario",
     "showProfessionalTitle": "Mostrar título profesional",
@@ -566,6 +571,7 @@
   "link": "enlace",
   "linkedEntityFields": "Campos de entidad vinculados",
   "linkedEntityMultiValueWarning": "{{linkedField}} contiene varias entidades vinculadas. Usando el primero para {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Utilice una ruta URL personalizada para el enlace del título de cada tarjeta. Si el valor está vacío, se utilizará la URL del directorio generado.",
   "linkTypes": {
     "clickToWebsite": "Haga clic en el sitio web",
     "drivingDirections": "Instrucciones de conducción",

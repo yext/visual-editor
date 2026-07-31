@@ -167,6 +167,7 @@
   "failedToPasteLayoutInvalidData": "Kleepimine ebaõnnestus: küljenduse andmed on kehtetud.",
   "failedToPasteLayoutPermissionDenied": "Kleepimine ebaõnnestus: juurdepääs lõikelauale on blokeeritud. Lubage kleepimisload ja proovige uuesti.",
   "faq": "KKK",
+  "fieldInformationWithName": "{{field}} teave",
   "fields": {
     "accentColor": "Aktsentvärv",
     "actionType": "Toimingu tüüp",
@@ -277,6 +278,7 @@
     "linkColor": "Lingi värv",
     "linkedInLink": "LinkedIn Link",
     "linkLabel": "Lingi silt",
+    "linkPath": "Lingi tee",
     "links": "Lingid",
     "linksTooltip": "Lingid ahenevad automaatselt, kui vaateava on liiga kitsas",
     "linkTarget": "Lingi sihtmärk",
@@ -426,6 +428,7 @@
       "width": "Laius",
       "yes": "Jah"
     },
+    "overrideLink": "Alista link",
     "pageHeading": "Lehekülje pealkiri",
     "phone": "Telefon",
     "phoneFormat": "Telefonivorming",
@@ -460,6 +463,7 @@
     "sections": "Sektsioonid",
     "services": "Teenused",
     "showAddress": "Näita aadressi",
+    "showAddresses": "Näita aadresse",
     "showAll": "Kuva kõik",
     "showAverageReview": "Näita keskmist arvustust",
     "showBrow": "Näita kulmuteksti",
@@ -490,6 +494,7 @@
     "showMedia": "Näita meediat",
     "showName": "Näita nime",
     "showPhone": "Näita telefoni",
+    "showPhoneNumbers": "Näita telefoninumbreid",
     "showPrice": "Näita hinda",
     "showPrimaryCTA": "Näita esmast CTA -d",
     "showProfessionalTitle": "Kuva ametinimetus",
@@ -565,6 +570,7 @@
   "link": "link",
   "linkedEntityFields": "Lingitud olemiväljad",
   "linkedEntityMultiValueWarning": "{{linkedField}} sisaldab mitut lingitud olemit. Kasutades esimest {{resolvedField}} jaoks.",
+  "linkOverrideDirectoryTooltip": "Kasutage iga kaardi pealkirja lingi jaoks kohandatud URL-i teed. Kui väärtus on tühi, kasutatakse loodud kataloogi URL-i.",
   "linkTypes": {
     "clickToWebsite": "Klõpsake veebisaidil",
     "drivingDirections": "Juhtimissuunad",

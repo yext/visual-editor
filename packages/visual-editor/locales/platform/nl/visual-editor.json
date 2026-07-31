@@ -167,6 +167,7 @@
   "failedToPasteLayoutInvalidData": "Kan niet plakken: ongeldige lay-outgegevens.",
   "failedToPasteLayoutPermissionDenied": "Kan niet plakken: toegang tot het klembord is geblokkeerd. Schakel plakmachtigingen in en probeer het opnieuw.",
   "faq": "FAQ",
+  "fieldInformationWithName": "{{field}} informatie",
   "fields": {
     "accentColor": "Accentkleur",
     "actionType": "Actietype",
@@ -277,6 +278,7 @@
     "linkColor": "Linkkleur",
     "linkedInLink": "LinkedIn -link",
     "linkLabel": "Linklabel",
+    "linkPath": "Linkpad",
     "links": "Links",
     "linksTooltip": "Links worden automatisch samengevouwen als de viewport te smal is",
     "linkTarget": "Doel koppelen",
@@ -426,6 +428,7 @@
       "width": "Breedte",
       "yes": "Ja"
     },
+    "overrideLink": "Link overschrijven",
     "pageHeading": "Paginakop",
     "phone": "Telefoon",
     "phoneFormat": "Telefoonformaat",
@@ -460,6 +463,7 @@
     "sections": "Secties",
     "services": "Diensten",
     "showAddress": "Toon adres",
+    "showAddresses": "Adressen weergeven",
     "showAll": "Toon alles",
     "showAverageReview": "Toon gemiddelde beoordeling",
     "showBrow": "Toon wenkbrauwtekst",
@@ -490,6 +494,7 @@
     "showMedia": "Media tonen",
     "showName": "Naam weergeven",
     "showPhone": "Toon telefoon",
+    "showPhoneNumbers": "Toon telefoonnummers",
     "showPrice": "Toon prijs",
     "showPrimaryCTA": "Toon primaire CTA",
     "showProfessionalTitle": "Toon professionele titel",
@@ -565,6 +570,7 @@
   "link": "link",
   "linkedEntityFields": "Gekoppelde entiteitsvelden",
   "linkedEntityMultiValueWarning": "{{linkedField}} bevat meerdere gekoppelde entiteiten. Gebruik de eerste voor {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Gebruik een aangepast URL-pad voor de titellink van elke kaart. Als de waarde leeg is, wordt de gegenereerde map-URL gebruikt.",
   "linkTypes": {
     "clickToWebsite": "Klik op de website",
     "drivingDirections": "Routebeschrijving",

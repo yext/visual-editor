@@ -167,6 +167,7 @@
   "failedToPasteLayoutInvalidData": "Impossibile incollare: dati di layout non validi.",
   "failedToPasteLayoutPermissionDenied": "Impossibile incollare: l'accesso agli appunti è bloccato. Abilita le autorizzazioni per incollare e riprova.",
   "faq": "FAQ",
+  "fieldInformationWithName": "{{field}} informazioni",
   "fields": {
     "accentColor": "Colore accento",
     "actionType": "Tipo di azione",
@@ -277,6 +278,7 @@
     "linkColor": "Colore collegamento",
     "linkedInLink": "LinkedIn Link",
     "linkLabel": "Etichetta di collegamento",
+    "linkPath": "Percorso di collegamento",
     "links": "Link",
     "linksTooltip": "I collegamenti verranno compressi automaticamente se la finestra è troppo stretta",
     "linkTarget": "Obiettivo del collegamento",
@@ -426,6 +428,7 @@
       "width": "Larghezza",
       "yes": "SÌ"
     },
+    "overrideLink": "Sostituisci collegamento",
     "pageHeading": "Intestazione della pagina",
     "phone": "Telefono",
     "phoneFormat": "Formato del telefono",
@@ -460,6 +463,7 @@
     "sections": "Sezioni",
     "services": "Servizi",
     "showAddress": "Mostra indirizzo",
+    "showAddresses": "Mostra indirizzi",
     "showAll": "Mostra tutto",
     "showAverageReview": "Mostra una revisione media",
     "showBrow": "Mostra testo sulla fronte",
@@ -490,6 +494,7 @@
     "showMedia": "Mostra contenuti multimediali",
     "showName": "Mostra nome",
     "showPhone": "Mostra telefono",
+    "showPhoneNumbers": "Mostra numeri di telefono",
     "showPrice": "Mostra prezzo",
     "showPrimaryCTA": "Mostra CTA primario",
     "showProfessionalTitle": "Mostra titolo professionale",
@@ -566,6 +571,7 @@
   "link": "collegamento",
   "linkedEntityFields": "Campi di entità collegate",
   "linkedEntityMultiValueWarning": "{{linkedField}} contiene più entità collegate. Utilizzando il primo per {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Utilizza un percorso URL personalizzato per il collegamento del titolo di ciascuna scheda. Se il valore è vuoto, verrà utilizzato l'URL della directory generata.",
   "linkTypes": {
     "clickToWebsite": "Fai clic sul sito Web",
     "drivingDirections": "Indicazioni stradali",

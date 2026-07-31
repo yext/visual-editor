@@ -167,6 +167,7 @@
   "failedToPasteLayoutInvalidData": "Vložení se nezdařilo: Neplatná data rozvržení.",
   "failedToPasteLayoutPermissionDenied": "Vložení se nezdařilo: Přístup do schránky je zablokován. Povolte oprávnění pro vkládání a zkuste to znovu.",
   "faq": "FAQ",
+  "fieldInformationWithName": "{{field}} informace",
   "fields": {
     "accentColor": "Barva zvýraznění",
     "actionType": "Typ akce",
@@ -277,6 +278,7 @@
     "linkColor": "Barva odkazu",
     "linkedInLink": "LinkedIn Link",
     "linkLabel": "Štítek odkazu",
+    "linkPath": "Cesta odkazu",
     "links": "Odkazy",
     "linksTooltip": "Pokud je výřez příliš úzký, odkazy se automaticky sbalí",
     "linkTarget": "Cíl odkazu",
@@ -426,6 +428,7 @@
       "width": "Šířka",
       "yes": "Ano"
     },
+    "overrideLink": "Přepsat odkaz",
     "pageHeading": "Záhlaví stránky",
     "phone": "Telefon",
     "phoneFormat": "Formát telefonu",
@@ -460,6 +463,7 @@
     "sections": "Sekce",
     "services": "Služby",
     "showAddress": "Zobrazit adresu",
+    "showAddresses": "Zobrazit adresy",
     "showAll": "Zobrazit vše",
     "showAverageReview": "Zobrazit průměrnou recenzi",
     "showBrow": "Zobrazit text obočí",
@@ -490,6 +494,7 @@
     "showMedia": "Zobrazit média",
     "showName": "Zobrazit jméno",
     "showPhone": "Zobrazit telefon",
+    "showPhoneNumbers": "Zobrazit telefonní čísla",
     "showPrice": "Zobrazit cenu",
     "showPrimaryCTA": "Zobrazit primární CTA",
     "showProfessionalTitle": "Zobrazit profesionální titul",
@@ -567,6 +572,7 @@
   "link": "odkaz",
   "linkedEntityFields": "Pole propojených entit",
   "linkedEntityMultiValueWarning": "{{linkedField}} obsahuje několik propojených entit. Používá se první pro {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Pro odkaz na název každé karty použijte vlastní cestu URL. Pokud je hodnota prázdná, použije se vygenerovaná adresa URL adresáře.",
   "linkTypes": {
     "clickToWebsite": "Klikněte na web",
     "drivingDirections": "Směry jízdy",

@@ -167,6 +167,7 @@
   "failedToPasteLayoutInvalidData": "Nie udało się wkleić: nieprawidłowe dane układu.",
   "failedToPasteLayoutPermissionDenied": "Nie udało się wkleić: dostęp do schowka jest zablokowany. Włącz uprawnienia do wklejania i spróbuj ponownie.",
   "faq": "FAQ",
+  "fieldInformationWithName": "{{field}} informacja",
   "fields": {
     "accentColor": "Kolor akcentujący",
     "actionType": "Typ akcji",
@@ -277,6 +278,7 @@
     "linkColor": "Kolor łącza",
     "linkedInLink": "Link LinkedIn",
     "linkLabel": "Etykieta łącza",
+    "linkPath": "Ścieżka łącza",
     "links": "Spinki do mankietów",
     "linksTooltip": "Łącza zostaną automatycznie zwinięte, jeśli rzutnia jest zbyt wąska",
     "linkTarget": "Cel łącza",
@@ -426,6 +428,7 @@
       "width": "Szerokość",
       "yes": "Tak"
     },
+    "overrideLink": "Zastąp łącze",
     "pageHeading": "Nagłówek strony",
     "phone": "Telefon",
     "phoneFormat": "Format telefonu",
@@ -460,6 +463,7 @@
     "sections": "Sekcje",
     "services": "Usługi",
     "showAddress": "Pokaż adres",
+    "showAddresses": "Pokaż adresy",
     "showAll": "Pokaż wszystko",
     "showAverageReview": "Pokaż średnią recenzję",
     "showBrow": "Pokaż nadtytuł",
@@ -490,6 +494,7 @@
     "showMedia": "Pokaż multimedia",
     "showName": "Pokaż nazwę",
     "showPhone": "Pokaż telefon",
+    "showPhoneNumbers": "Pokaż numery telefonów",
     "showPrice": "Pokaż cenę",
     "showPrimaryCTA": "Pokaż podstawowy CTA",
     "showProfessionalTitle": "Pokaż tytuł zawodowy",
@@ -567,6 +572,7 @@
   "link": "Link",
   "linkedEntityFields": "Pola encji połączonych",
   "linkedEntityMultiValueWarning": "{{linkedField}} zawiera wiele połączonych jednostek. Używanie pierwszego dla {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Użyj niestandardowej ścieżki URL dla linku tytułowego każdej karty. Jeśli wartość jest pusta, zostanie użyty wygenerowany adres URL katalogu.",
   "linkTypes": {
     "clickToWebsite": "Kliknij na stronę internetową",
     "drivingDirections": "Kierunki jazdy",

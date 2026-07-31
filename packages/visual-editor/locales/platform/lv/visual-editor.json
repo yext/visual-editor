@@ -167,6 +167,7 @@
   "failedToPasteLayoutInvalidData": "Neizdevās ielīmēt: nederīgi izkārtojuma dati.",
   "failedToPasteLayoutPermissionDenied": "Neizdevās ielīmēt: piekļuve starpliktuvei ir bloķēta. Iespējojiet ielīmēšanas atļaujas un mēģiniet vēlreiz.",
   "faq": "FAQ",
+  "fieldInformationWithName": "{{field}} informāciju",
   "fields": {
     "accentColor": "Akcenta krāsa",
     "actionType": "Darbības veids",
@@ -277,6 +278,7 @@
     "linkColor": "Saites krāsa",
     "linkedInLink": "LinkedIn saite",
     "linkLabel": "Saites etiķete",
+    "linkPath": "Saites ceļš",
     "links": "Saites",
     "linksTooltip": "Ja skata logs ir pārāk šaurs, saites tiks automātiski sakļautas",
     "linkTarget": "Saites mērķis",
@@ -426,6 +428,7 @@
       "width": "Platums",
       "yes": "Jā"
     },
+    "overrideLink": "Ignorēt saiti",
     "pageHeading": "Lapas virsraksts",
     "phone": "Tālrunis",
     "phoneFormat": "Tālruņa formāts",
@@ -460,6 +463,7 @@
     "sections": "Sadaļas",
     "services": "Pakalpojumi",
     "showAddress": "Rādīt adresi",
+    "showAddresses": "Rādīt adreses",
     "showAll": "Rādīt visu",
     "showAverageReview": "Rādīt vidējo pārskatu",
     "showBrow": "Rādīt uzacu tekstu",
@@ -490,6 +494,7 @@
     "showMedia": "Rādīt multividi",
     "showName": "Rādīt nosaukumu",
     "showPhone": "Rādīt tālruni",
+    "showPhoneNumbers": "Rādīt tālruņu numurus",
     "showPrice": "Rādīt cenu",
     "showPrimaryCTA": "Rādīt primāro CTA",
     "showProfessionalTitle": "Rādīt profesionālo titulu",
@@ -565,6 +570,7 @@
   "link": "saite",
   "linkedEntityFields": "Saistītie entītiju lauki",
   "linkedEntityMultiValueWarning": "{{linkedField}} satur vairākas saistītas entītijas. Izmantojot pirmo {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Katras kartītes virsraksta saitei izmantojiet pielāgotu URL ceļu. Ja vērtība ir tukša, tiks izmantots ģenerētais direktorija URL.",
   "linkTypes": {
     "clickToWebsite": "Noklikšķiniet uz vietni",
     "drivingDirections": "Braukšanas norādījumi",

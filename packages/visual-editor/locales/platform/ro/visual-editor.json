@@ -167,6 +167,7 @@
   "failedToPasteLayoutInvalidData": "Lipirea eșuată: date de aspect nevalide.",
   "failedToPasteLayoutPermissionDenied": "Lipirea eșuată: accesul la Clipboard este blocat. Activați permisiunile de inserare și încercați din nou.",
   "faq": "FAQ",
+  "fieldInformationWithName": "{{field}} informații",
   "fields": {
     "accentColor": "Culoare de accent",
     "actionType": "Tip de acțiune",
@@ -277,6 +278,7 @@
     "linkColor": "Culoare link",
     "linkedInLink": "LinkedIn Link",
     "linkLabel": "Etichetă de link",
+    "linkPath": "Calea legăturii",
     "links": "Link -uri",
     "linksTooltip": "Linkurile se vor restrânge automat dacă fereastra de vizualizare este prea îngustă",
     "linkTarget": "Link țintă",
@@ -426,6 +428,7 @@
       "width": "Lăţime",
       "yes": "Da"
     },
+    "overrideLink": "Ignorați legătura",
     "pageHeading": "Titlul paginii",
     "phone": "Telefon",
     "phoneFormat": "Format telefonic",
@@ -460,6 +463,7 @@
     "sections": "Secțiuni",
     "services": "Servicii",
     "showAddress": "Arată adresa",
+    "showAddresses": "Afișați adrese",
     "showAll": "Arată toate",
     "showAverageReview": "Afișați recenzia medie",
     "showBrow": "Afișează textul sprâncenelor",
@@ -490,6 +494,7 @@
     "showMedia": "Afișează Media",
     "showName": "Afișează numele",
     "showPhone": "Arată telefon",
+    "showPhoneNumbers": "Afișați numerele de telefon",
     "showPrice": "Arată preț",
     "showPrimaryCTA": "Arată CTA primară",
     "showProfessionalTitle": "Afișați titlul profesional",
@@ -566,6 +571,7 @@
   "link": "legătură",
   "linkedEntityFields": "Câmpurile de entitate conectate",
   "linkedEntityMultiValueWarning": "{{linkedField}} conține mai multe entități legate. Folosind primul pentru {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Utilizați o cale URL personalizată pentru linkul de titlu al fiecărui card. Dacă valoarea este goală, va fi utilizată URL-ul directorului generat.",
   "linkTypes": {
     "clickToWebsite": "Faceți clic pe site -ul web",
     "drivingDirections": "Direcții de conducere",

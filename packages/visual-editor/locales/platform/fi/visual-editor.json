@@ -167,6 +167,7 @@
   "failedToPasteLayoutInvalidData": "Liitäminen epäonnistui: Virheelliset asettelutiedot.",
   "failedToPasteLayoutPermissionDenied": "Liitäminen epäonnistui: Leikepöydän käyttö on estetty. Ota liittämisoikeudet käyttöön ja yritä uudelleen.",
   "faq": "Faq",
+  "fieldInformationWithName": "{{field}} tiedot",
   "fields": {
     "accentColor": "Aksenttiväri",
     "actionType": "Toimintotyyppi",
@@ -277,6 +278,7 @@
     "linkColor": "Linkin väri",
     "linkedInLink": "LinkedIn -linkki",
     "linkLabel": "Linkin etiketti",
+    "linkPath": "Linkkipolku",
     "links": "Linkit",
     "linksTooltip": "Linkit kutistuvat automaattisesti, jos näkymä on liian kapea",
     "linkTarget": "Linkki kohde",
@@ -426,6 +428,7 @@
       "width": "Leveys",
       "yes": "Kyllä"
     },
+    "overrideLink": "Ohita linkki",
     "pageHeading": "Sivun otsikko",
     "phone": "Puhelin",
     "phoneFormat": "Puhelinmuoto",
@@ -460,6 +463,7 @@
     "sections": "Osat",
     "services": "Palvelut",
     "showAddress": "Näytä osoite",
+    "showAddresses": "Näytä osoitteet",
     "showAll": "Näytä kaikki",
     "showAverageReview": "Näytä keskimääräinen arvostelu",
     "showBrow": "Näytä ylätunniste",
@@ -490,6 +494,7 @@
     "showMedia": "Näytä media",
     "showName": "Näytä nimi",
     "showPhone": "Näytä puhelin",
+    "showPhoneNumbers": "Näytä puhelinnumerot",
     "showPrice": "Näytä hinta",
     "showPrimaryCTA": "Näytä ensisijainen CTA",
     "showProfessionalTitle": "Näytä ammattinimike",
@@ -565,6 +570,7 @@
   "link": "linkki",
   "linkedEntityFields": "Linkitetyt entiteettikentät",
   "linkedEntityMultiValueWarning": "{{linkedField}} sisältää useita linkitettyjä kokonaisuuksia. Ensimmäistä käytetään mallille {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Käytä muokattua URL-osoitepolkua kunkin kortin otsikkolinkille. Jos arvo on tyhjä, käytetään luotua hakemiston URL-osoitetta.",
   "linkTypes": {
     "clickToWebsite": "Napsauta verkkosivustoa",
     "drivingDirections": "Ajo -ohjeet",

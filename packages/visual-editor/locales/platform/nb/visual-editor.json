@@ -167,6 +167,7 @@
   "failedToPasteLayoutInvalidData": "Kunne ikke lime inn: Ugyldige layoutdata.",
   "failedToPasteLayoutPermissionDenied": "Kunne ikke lime inn: Utklippstavletilgang er blokkert. Aktiver lim inn tillatelser og prøv igjen.",
   "faq": "FAQ",
+  "fieldInformationWithName": "{{field}} informasjon",
   "fields": {
     "accentColor": "Aksentfarge",
     "actionType": "Handlingstype",
@@ -277,6 +278,7 @@
     "linkColor": "Link farge",
     "linkedInLink": "LinkedIn Link",
     "linkLabel": "Koblingsetikett",
+    "linkPath": "Koblingssti",
     "links": "Lenker",
     "linksTooltip": "Lenker vil automatisk kollapse hvis visningsporten er for smal",
     "linkTarget": "Linkmål",
@@ -426,6 +428,7 @@
       "width": "Bredde",
       "yes": "Ja"
     },
+    "overrideLink": "Overstyr kobling",
     "pageHeading": "Sideoverskrift",
     "phone": "Telefon",
     "phoneFormat": "Telefonformat",
@@ -460,6 +463,7 @@
     "sections": "Seksjoner",
     "services": "Tjenester",
     "showAddress": "Vis adresse",
+    "showAddresses": "Vis adresser",
     "showAll": "Vis alle",
     "showAverageReview": "Vis gjennomsnittlig gjennomgang",
     "showBrow": "Vis overtekst",
@@ -490,6 +494,7 @@
     "showMedia": "Vis media",
     "showName": "Vis navn",
     "showPhone": "Vis telefon",
+    "showPhoneNumbers": "Vis telefonnumre",
     "showPrice": "Vis pris",
     "showPrimaryCTA": "Vis primær CTA",
     "showProfessionalTitle": "Vis profesjonell tittel",
@@ -565,6 +570,7 @@
   "link": "lenke",
   "linkedEntityFields": "Koblede enhetsfelt",
   "linkedEntityMultiValueWarning": "{{linkedField}} inneholder flere koblede enheter. Bruker den første for {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Bruk en egendefinert URL-bane for hvert korts tittelkobling. Hvis verdien er tom, vil den genererte katalog-URLen bli brukt.",
   "linkTypes": {
     "clickToWebsite": "Klikk til nettstedet",
     "drivingDirections": "Veibeskrivelse",
