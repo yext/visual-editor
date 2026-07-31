@@ -41,6 +41,7 @@ import {
 } from "../../../contexts/ErrorContext.tsx";
 import { getPublishErrorMessage } from "../../../utils/publishErrors.ts";
 import { getPublishTooltipMessageFromHeadDeployStatus } from "../../utils/getPublishTooltipMessageFromHeadDeployStatus.ts";
+import { EntityFieldsToggle } from "../ui/EntityFieldsToggle.tsx";
 
 const usePuck = createUsePuck();
 const devLogger = new DevLogger();
@@ -227,16 +228,12 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
           >
             {pt("pasteLayout", "Paste Layout")}
           </Button>
-
-          {/* TODO: re-enable EntityFieldsToggle */}
-          {/*
           <Separator
             orientation="vertical"
             decorative
             className="ve-mx-4 ve-h-7 ve-w-px ve-bg-gray-300 ve-my-auto"
           />
-          <EntityFieldsToggle /> 
-          */}
+          <EntityFieldsToggle />
           {localDev && showLocalDevOverrideButtons && (
             <LocalDevOverrideButtons />
           )}

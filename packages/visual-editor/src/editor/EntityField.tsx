@@ -84,7 +84,7 @@ export const EntityField = React.forwardRef<HTMLDivElement, EntityFieldProps>(
               zoomWithViewport
               className={!constantValueEnabled ? "ve-bg-primary" : ""}
             >
-              <p>{tooltipContent}</p>
+              <p className="entity-field-tooltip-label">{tooltipContent}</p>
               <TooltipArrow
                 fill="bg-popover"
                 className={!constantValueEnabled ? "ve-fill-primary" : ""}
