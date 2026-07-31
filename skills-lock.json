@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "puck": {
+      "source": "puckeditor/skills",
+      "sourceType": "github",
+      "skillPath": "skills/puck/SKILL.md",
+      "computedHash": "c41bf408111ac2bcd7c44b7203e1c3b68e8c4bfb8d38fd4add6582f496ec645d"
+    }
+  }
+}
