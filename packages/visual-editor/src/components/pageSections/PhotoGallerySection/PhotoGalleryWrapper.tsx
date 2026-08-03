@@ -86,12 +86,6 @@ export interface PhotoGalleryWrapperProps {
   };
 }
 
-const photoGalleryImageStylingFields = {
-  imageConstrain: ImageStylingFields.imageConstrain,
-  width: ImageStylingFields.width,
-  aspectRatio: ImageStylingFields.aspectRatio,
-};
-
 const photoGalleryWrapperFields: YextFields<PhotoGalleryWrapperProps> = {
   data: {
     type: "object",
@@ -114,7 +108,11 @@ const photoGalleryWrapperFields: YextFields<PhotoGalleryWrapperProps> = {
       image: {
         type: "object",
         label: msg("fields.image", "Image"),
-        objectFields: photoGalleryImageStylingFields,
+        objectFields: {
+          imageConstrain: ImageStylingFields.imageConstrain,
+          width: ImageStylingFields.width,
+          aspectRatio: ImageStylingFields.aspectRatio,
+        },
       },
       imageFillType: {
         type: "basicSelector",

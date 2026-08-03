@@ -1,6 +1,7 @@
 import { ImageType } from "@yext/pages-components";
 import { TranslatableString } from "./types.ts";
 
+/** Describes the possible image fill types. */
 export type ImageFillType = "fill" | "fit";
 
 /** Describes an image's aspect ratio. */

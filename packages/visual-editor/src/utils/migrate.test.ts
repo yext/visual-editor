@@ -8,9 +8,6 @@ import { normalizeFooterLogoImageMigration } from "../components/migrations/0075
 import { slotMappedCardsMigration } from "../components/migrations/0076_slot_mapped_cards.ts";
 import { removeMapboxApiKeyPropsMigration } from "../components/migrations/0078_remove_mapbox_api_key_props.ts";
 import { imageFillTypeMigration } from "../components/migrations/0079_image_fill_type.ts";
-import { ProductCard } from "../components/pageSections/ProductSection/ProductCard.tsx";
-import { ImageWrapper } from "../components/contentBlocks/image/Image.tsx";
-import { HeroImage } from "../components/contentBlocks/image/HeroImage.tsx";
 
 describe("migrate", () => {
   it("successfully applies a migration", async () => {
@@ -249,7 +246,7 @@ describe("migrate", () => {
         zones: {},
       },
       [imageFillTypeMigration],
-      { components: { HeroImage, ImageWrapper, ProductCard } },
+      imageFillTypeMigrationConfig,
       {}
     );
 
@@ -1683,6 +1680,27 @@ export const migrationRegistry: MigrationRegistry = [
   alreadyAppliedMigration,
   migration,
 ];
+
+const imageFillTypeMigrationConfig = {
+  components: {
+    ProductCard: {
+      fields: {
+        slots: {
+          type: "object",
+          objectFields: {
+            ImageSlot: { type: "slot" },
+          },
+        },
+      },
+    },
+    ImageWrapper: {
+      fields: {},
+    },
+    HeroImage: {
+      fields: {},
+    },
+  },
+} as any;
 
 const footerLogoSlotMigrationConfig = {
   components: {
