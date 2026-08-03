@@ -152,6 +152,9 @@
     "warning": "此操作將消除您的本地更改。它不能撤消。"
   },
   "distance": "距離",
+  "distanceFromSearch": "來自搜尋",
+  "distanceFromSearchLocation": "來自 {{searchLocation}}",
+  "distanceFromYou": "來自你",
   "emptyStateFieldEmpty": "{{entityType}} 的映射字段為空",
   "emptyStateSectionHidden": "此 {{entityType}} 的部分已隱藏",
   "enableCookies": "啟用 Cookie",
@@ -302,6 +305,7 @@
       "aspectRatio": "縱橫比",
       "base_text size": "基礎",
       "bold": "大膽",
+      "bothDistances": "兩個距離",
       "bottom_direction": "底部",
       "button": "按鈕",
       "carousel": "輪播",

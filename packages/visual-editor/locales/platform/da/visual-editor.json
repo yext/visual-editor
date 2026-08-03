@@ -152,6 +152,9 @@
     "warning": "Denne handling fjerner dine lokale ændringer. Det kan ikke fortrydes."
   },
   "distance": "Afstand",
+  "distanceFromSearch": "fra søgning",
+  "distanceFromSearchLocation": "fra {{searchLocation}}",
+  "distanceFromYou": "fra dig",
   "emptyStateFieldEmpty": "Det tilknyttede felt for {{entityType}} er tomt",
   "emptyStateSectionHidden": "Sektion skjult for denne {{entityType}}",
   "enableCookies": "Aktiver cookies",
@@ -302,6 +305,7 @@
       "aspectRatio": "Aspektforhold",
       "base_text size": "Basis",
       "bold": "Dristig",
+      "bothDistances": "Begge afstande",
       "bottom_direction": "Nederst",
       "button": "Knap",
       "carousel": "Karrusel",

@@ -152,6 +152,9 @@
     "warning": "Tato akce odstraní vaše místní změny. Nelze to vrátit."
   },
   "distance": "Vzdálenost",
+  "distanceFromSearch": "z vyhledávání",
+  "distanceFromSearchLocation": "od {{searchLocation}}",
+  "distanceFromYou": "od vás",
   "emptyStateFieldEmpty": "Mapované pole {{entityType}} je prázdné",
   "emptyStateSectionHidden": "Sekce skrytá pro tuto {{entityType}}",
   "enableCookies": "Povolit soubory cookie",
@@ -302,6 +305,7 @@
       "aspectRatio": "Poměr stran",
       "base_text size": "Báze",
       "bold": "Tučné",
+      "bothDistances": "Obě Vzdálenosti",
       "bottom_direction": "Dole",
       "button": "Tlačítko",
       "carousel": "Kolotoč",

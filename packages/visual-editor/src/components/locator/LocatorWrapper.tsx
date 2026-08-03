@@ -433,10 +433,16 @@ const LocatorInternal = ({
           resultCardProps={resultCardProps}
           isSelected={result.result.index === selectedResultIndex}
           distanceDisplay={distanceDisplay}
+          searchLocationName={filterDisplayName}
         />
       );
     },
-    [distanceDisplay, getResultCardProps, selectedResultIndex]
+    [
+      distanceDisplay,
+      filterDisplayName,
+      getResultCardProps,
+      selectedResultIndex,
+    ]
   );
 
   const [userLocationRetrieved, setUserLocationRetrieved] =
@@ -854,7 +860,7 @@ const LocatorInternal = ({
   }, [showFilterModal]);
 
   return (
-    <div className="components flex h-screen w-screen mx-auto">
+    <div className="components flex h-screen w-full mx-auto">
       {/* Left Section: FilterSearch + Results. Full width for small screens */}
       <div
         className="relative h-screen w-full md:w-2/5 lg:w-[40rem] flex flex-col md:min-w-[24rem]"

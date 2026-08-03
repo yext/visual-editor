@@ -263,6 +263,7 @@ export interface LocatorResultCardProps {
 export type DistanceDisplayOption =
   | "distanceFromUser"
   | "distanceFromSearch"
+  | "bothDistances"
   | "hidden";
 
 export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
@@ -833,11 +834,13 @@ export const LocatorResultCard = React.memo(
     result,
     resultCardProps: props,
     distanceDisplay = "distanceFromUser",
+    searchLocationName,
     isSelected,
   }: {
     result: CardProps<Location>["result"];
     resultCardProps: LocatorResultCardProps;
     distanceDisplay?: DistanceDisplayOption;
+    searchLocationName?: string;
     isSelected?: boolean;
   }): React.JSX.Element => {
     const { t, i18n } = useTranslation();
@@ -860,6 +863,47 @@ export const LocatorResultCard = React.memo(
       typeof distance === "number"
         ? `${formatDistance(fromMeters(distance, unit), i18n.language)} ${unitLabel}`
         : undefined;
+    const searchDistance =
+      typeof result.distanceFromFilter === "number"
+        ? `${formatDistance(
+            fromMeters(result.distanceFromFilter, unit),
+            i18n.language
+          )} ${unitLabel}`
+        : undefined;
+    const userDistance =
+      typeof result.distance === "number"
+        ? `${formatDistance(fromMeters(result.distance, unit), i18n.language)} ${unitLabel}`
+        : undefined;
+    const displayDistanceContent =
+      distanceDisplay === "bothDistances" ? (
+        <>
+          {searchDistance && (
+            <span>
+              <span className="font-bold">{searchDistance}</span>{" "}
+              <span>
+                {searchLocationName
+                  ? t("distanceFromSearchLocation", {
+                      searchLocation: searchLocationName,
+                      defaultValue: "from {{searchLocation}}",
+                    })
+                  : t("distanceFromSearch", "from search")}
+              </span>
+            </span>
+          )}
+          {userDistance && (
+            <span>
+              <span className="font-bold">{userDistance}</span>{" "}
+              <span>{t("distanceFromYou", "from you")}</span>
+            </span>
+          )}
+        </>
+      ) : (
+        displayDistance
+      );
+    const showDistance =
+      distanceDisplay === "bothDistances"
+        ? searchDistance !== undefined || userDistance !== undefined
+        : displayDistance !== undefined;
 
     const handleGetDirectionsClick = useCardAnalyticsCallback(
       result,
@@ -900,34 +944,37 @@ export const LocatorResultCard = React.memo(
         className="container flex flex-row border-b border-gray-300 p-4 md:p-6 lg:p-8 gap-4"
         style={isSelected ? { backgroundColor: "#F9F9F9" } : undefined}
       >
-        <Background
-          background={
-            props?.primaryHeading?.color ?? backgroundColors.background6.value
-          }
-          className="flex-shrink-0 w-6 h-6 rounded-full font-bold hidden md:flex items-center justify-center text-body-sm-fontSize"
-        >
-          {result.index}
-        </Background>
         <div className="flex flex-wrap gap-4 w-full">
           <div className="w-full flex flex-col gap-4">
             {/** Heading section */}
             <div className="flex flex-row justify-between items-start gap-6">
               <div className="flex flex-row items-start gap-6 flex-1 min-w-0">
                 <ImageSection image={props.image} location={location} />
-                <HeadingTextSection
-                  primaryHeading={props.primaryHeading}
-                  secondaryHeading={props.secondaryHeading}
-                  tertiaryHeading={props.tertiaryHeading}
-                  location={location}
-                />
+                <div className="flex flex-row items-center gap-4 min-w-0">
+                  <Background
+                    background={
+                      props?.primaryHeading?.color ??
+                      backgroundColors.background6.value
+                    }
+                    className="flex-shrink-0 w-6 h-6 rounded-full font-bold hidden md:flex items-center justify-center text-body-sm-fontSize"
+                  >
+                    {result.index}
+                  </Background>
+                  <HeadingTextSection
+                    primaryHeading={props.primaryHeading}
+                    secondaryHeading={props.secondaryHeading}
+                    tertiaryHeading={props.tertiaryHeading}
+                    location={location}
+                  />
+                </div>
               </div>
-              {displayDistance && (
+              {showDistance && (
                 <div
                   className={
-                    "font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize rounded-full hidden lg:flex min-w-fit"
+                    "font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize rounded-full hidden lg:flex flex-col items-end text-right min-w-fit"
                   }
                 >
-                  {displayDistance}
+                  {displayDistanceContent}
                 </div>
               )}
             </div>
@@ -1007,13 +1054,14 @@ export const LocatorResultCard = React.memo(
               </div>
             </div>
           </div>
-          {displayDistance && (
+          {showDistance && (
             <div
               className={`
-              font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize rounded-full flex lg:hidden px-2 py-1 w-fit
+              font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize flex flex-col items-start text-left lg:hidden py-1 w-fit max-w-full break-words
+              ${distanceDisplay === "bothDistances" ? "rounded-md px-3" : "rounded-full px-2"}
               ${getBackgroundColorClasses(backgroundColors.background2.value)}`}
             >
-              {displayDistance}
+              {displayDistanceContent}
             </div>
           )}
           {/** CTA section */}

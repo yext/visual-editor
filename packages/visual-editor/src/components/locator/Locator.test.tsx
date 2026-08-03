@@ -17,6 +17,10 @@ import { migrate } from "../../utils/migrate.ts";
 import { migrationRegistry } from "../migrations/migrationRegistry.ts";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { LocatorComponent } from "./Locator.tsx";
+import {
+  DEFAULT_LOCATOR_RESULT_CARD_PROPS,
+  LocatorResultCard,
+} from "./LocatorResultCard.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 import { backgroundColors } from "../../utils/themeConfigOptions.ts";
@@ -29,6 +33,7 @@ vi.mock("@yext/search-ui-react", async () => {
 
   return {
     ...actual,
+    useCardAnalyticsCallback: vi.fn(() => vi.fn()),
     getUserLocation: vi
       .fn()
       .mockRejectedValue(
@@ -1424,6 +1429,128 @@ describe("Locator", async () => {
         ).toMatchScreenshot({ customThreshold: screenshotThreshold });
         const results = await axe(container);
         logSuppressedWcagViolations(results);
+      }
+    }
+  );
+
+  it.each([
+    {
+      distanceDisplay: "bothDistances" as const,
+      searchLocationName: "Arlington, VA",
+      expectedText: ["2.0 mi", "from Arlington, VA", "1.0 mi", "from you"],
+      unexpectedText: "from search",
+      expectedDistanceContent: "2.0 mi from Arlington, VA1.0 mi from you",
+    },
+    {
+      distanceDisplay: "bothDistances" as const,
+      searchLocationName: undefined,
+      expectedText: ["2.0 mi", "from search", "1.0 mi", "from you"],
+      unexpectedText: "from Arlington, VA",
+      expectedDistanceContent: "2.0 mifrom search1.0 mifrom you",
+    },
+    {
+      distanceDisplay: "distanceFromUser" as const,
+      searchLocationName: "Arlington, VA",
+      expectedText: ["1.0 mi"],
+      unexpectedText: "from Arlington, VA",
+      expectedDistanceContent: undefined,
+    },
+    {
+      distanceDisplay: "distanceFromSearch" as const,
+      searchLocationName: "Arlington, VA",
+      expectedText: ["2.0 mi"],
+      unexpectedText: "from Arlington, VA",
+      expectedDistanceContent: undefined,
+    },
+    {
+      distanceDisplay: "hidden" as const,
+      searchLocationName: "Arlington, VA",
+      expectedText: [],
+      unexpectedText: "1.0 mi",
+      expectedDistanceContent: undefined,
+    },
+  ])(
+    "shows the required distance content when display mode is $distanceDisplay",
+    async ({
+      distanceDisplay,
+      searchLocationName,
+      expectedText,
+      unexpectedText,
+      expectedDistanceContent,
+    }) => {
+      const streamDocument = {
+        locale: "en",
+        _pageset: JSON.stringify({
+          typeConfig: { locatorConfig: { entityTypeScope: [{}] } },
+        }),
+      };
+      const translations = await injectTranslations(streamDocument as any);
+      reactRender(
+        <VisualEditorProvider
+          templateProps={{ document: streamDocument, translations }}
+        >
+          <LocatorResultCard
+            result={
+              {
+                entityType: "location",
+                index: 1,
+                rawData: {
+                  address: {
+                    city: "Arlington",
+                    countryCode: "US",
+                    line1: "1 Main St",
+                    postalCode: "22209",
+                    region: "VA",
+                  },
+                  id: "distance-test-location",
+                  name: "Distance Test Location",
+                  timezone: "America/New_York",
+                },
+                distance: 1609,
+                distanceFromFilter: 3218,
+              } as React.ComponentProps<typeof LocatorResultCard>["result"]
+            }
+            resultCardProps={{
+              ...DEFAULT_LOCATOR_RESULT_CARD_PROPS,
+              primaryCTA: {
+                ...DEFAULT_LOCATOR_RESULT_CARD_PROPS.primaryCTA,
+                link: "#",
+                liveVisibility: false,
+              },
+            }}
+            distanceDisplay={distanceDisplay}
+            searchLocationName={searchLocationName}
+          />
+        </VisualEditorProvider>
+      );
+
+      expectedText.forEach((text) => {
+        expect(screen.getAllByText(text)).toHaveLength(2);
+      });
+      expect(screen.queryByText(unexpectedText)).toBeNull();
+      if (expectedDistanceContent) {
+        const [desktopDistanceLabel, mobileDistanceLabel] = screen.getAllByText(
+          expectedText[1]
+        );
+        const desktopDistanceContainer =
+          desktopDistanceLabel.parentElement?.parentElement;
+        const mobileDistanceContainer =
+          mobileDistanceLabel.parentElement?.parentElement;
+
+        expect(desktopDistanceContainer?.textContent).toBe(
+          expectedDistanceContent
+        );
+        expect(desktopDistanceContainer).toHaveClass("items-end", "text-right");
+        expect(mobileDistanceContainer?.textContent).toBe(
+          expectedDistanceContent
+        );
+        expect(mobileDistanceContainer).toHaveClass(
+          "items-start",
+          "text-left",
+          "max-w-full",
+          "rounded-md",
+          "px-3"
+        );
       }
     }
   );

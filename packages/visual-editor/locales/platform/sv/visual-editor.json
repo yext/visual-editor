@@ -152,6 +152,9 @@
     "warning": "Denna åtgärd kommer att ta bort dina lokala förändringar. Det kan inte ångras."
   },
   "distance": "Avstånd",
+  "distanceFromSearch": "från sökning",
+  "distanceFromSearchLocation": "från {{searchLocation}}",
+  "distanceFromYou": "från dig",
   "emptyStateFieldEmpty": "Det mappade fältet för {{entityType}} är tomt",
   "emptyStateSectionHidden": "Avsnittet är dolt för denna {{entityType}}",
   "enableCookies": "Aktivera cookies",
@@ -302,6 +305,7 @@
       "aspectRatio": "Bildförhållande",
       "base_text size": "Bas",
       "bold": "Djärv",
+      "bothDistances": "Båda avstånden",
       "bottom_direction": "Nederst",
       "button": "Knapp",
       "carousel": "Karusell",

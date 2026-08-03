@@ -152,6 +152,9 @@
     "warning": "Ta akcja usunie twoje lokalne zmiany. Nie można go cofnąć."
   },
   "distance": "Dystans",
+  "distanceFromSearch": "z wyszukiwania",
+  "distanceFromSearchLocation": "od {{searchLocation}}",
+  "distanceFromYou": "od ciebie",
   "emptyStateFieldEmpty": "Mapowane pole elementu {{entityType}} jest puste",
   "emptyStateSectionHidden": "Sekcja ukryta dla tego elementu {{entityType}}",
   "enableCookies": "Włącz pliki cookie",
@@ -302,6 +305,7 @@
       "aspectRatio": "Współczynnik kształtu",
       "base_text size": "Baza",
       "bold": "Pogrubiony",
+      "bothDistances": "Obydwa dystanse",
       "bottom_direction": "Dół",
       "button": "Przycisk",
       "carousel": "Karuzela",

@@ -152,6 +152,9 @@
     "warning": "Diese Aktion wird Ihre lokalen Änderungen entfernen. Dies kann nicht rückgängig gemacht werden."
   },
   "distance": "Distanz",
+  "distanceFromSearch": "aus der Suche",
+  "distanceFromSearchLocation": "von {{searchLocation}}",
+  "distanceFromYou": "von Dir",
   "emptyStateFieldEmpty": "Das zugeordnete Feld von {{entityType}} ist leer",
   "emptyStateSectionHidden": "Modul für diesen {{entityType}} ausgeblendet",
   "enableCookies": "Cookies aktivieren",
@@ -302,6 +305,7 @@
       "aspectRatio": "Seitenverhältnis",
       "base_text size": "Base",
       "bold": "Deutlich",
+      "bothDistances": "Beide Entfernungen",
       "bottom_direction": "Unten",
       "button": "Taste",
       "carousel": "Karussell",

@@ -152,6 +152,9 @@
     "warning": "Denne handlingen vil fjerne dine lokale endringer. Det kan ikke angre."
   },
   "distance": "Avstand",
+  "distanceFromSearch": "fra søk",
+  "distanceFromSearchLocation": "fra {{searchLocation}}",
+  "distanceFromYou": "fra deg",
   "emptyStateFieldEmpty": "Det kartlagte feltet til {{entityType}} er tomt",
   "emptyStateSectionHidden": "Seksjon skjult for denne {{entityType}}",
   "enableCookies": "Aktiver informasjonskapsler",
@@ -302,6 +305,7 @@
       "aspectRatio": "Aspektforhold",
       "base_text size": "Base",
       "bold": "Fet",
+      "bothDistances": "Begge avstander",
       "bottom_direction": "Nederst",
       "button": "Knapp",
       "carousel": "Karusell",
