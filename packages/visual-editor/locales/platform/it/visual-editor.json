@@ -152,9 +152,9 @@
     "warning": "Questa azione rimuoverà le modifiche locali. Non può essere annullato."
   },
   "distance": "Distanza",
-  "distanceFromSearch": "dalla ricerca",
-  "distanceFromSearchLocation": "da {{searchLocation}}",
-  "distanceFromYou": "da te",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> dalla ricerca",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> da {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> da te",
   "emptyStateFieldEmpty": "Il campo mappato di {{entityType}} è vuoto",
   "emptyStateSectionHidden": "Sezione nascosta per questo {{entityType}}",
   "enableCookies": "Abilita i cookie",

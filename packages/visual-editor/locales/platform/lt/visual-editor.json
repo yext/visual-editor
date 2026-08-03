@@ -152,9 +152,9 @@
     "warning": "Šis veiksmas pašalins jūsų vietinius pakeitimus. To negalima panaikinti."
   },
   "distance": "Atstumas",
-  "distanceFromSearch": "iš paieškos",
-  "distanceFromSearchLocation": "nuo {{searchLocation}}",
-  "distanceFromYou": "nuo tavęs",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> iš paieškos",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> nuo {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> nuo jūsų",
   "emptyStateFieldEmpty": "{{entityType}} susietas laukas tuščias",
   "emptyStateSectionHidden": "Šio {{entityType}} skyrius paslėptas",
   "enableCookies": "Įgalinti slapukus",

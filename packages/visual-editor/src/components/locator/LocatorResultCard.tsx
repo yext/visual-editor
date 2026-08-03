@@ -1,5 +1,5 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import {
   CardProps,
   Coordinate,
@@ -878,23 +878,42 @@ export const LocatorResultCard = React.memo(
       distanceDisplay === "bothDistances" ? (
         <>
           {searchDistance && (
-            <span>
-              <span className="font-bold">{searchDistance}</span>{" "}
-              <span>
-                {searchLocationName
-                  ? t("distanceFromSearchLocation", {
-                      searchLocation: searchLocationName,
-                      defaultValue: "from {{searchLocation}}",
-                    })
-                  : t("distanceFromSearch", "from search")}
-              </span>
-            </span>
+            <Body variant="sm">
+              {searchLocationName ? (
+                <Trans
+                  i18nKey="distanceLineFromSearchLocation"
+                  values={{
+                    distance: searchDistance,
+                    searchLocation: searchLocationName,
+                  }}
+                  components={{
+                    strong: <strong style={{ fontWeight: "bolder" }} />,
+                  }}
+                  defaults="<strong>{{distance}}</strong> from {{searchLocation}}"
+                />
+              ) : (
+                <Trans
+                  i18nKey="distanceLineFromSearch"
+                  values={{ distance: searchDistance }}
+                  components={{
+                    strong: <strong style={{ fontWeight: "bolder" }} />,
+                  }}
+                  defaults="<strong>{{distance}}</strong> from search"
+                />
+              )}
+            </Body>
           )}
           {userDistance && (
-            <span>
-              <span className="font-bold">{userDistance}</span>{" "}
-              <span>{t("distanceFromYou", "from you")}</span>
-            </span>
+            <Body variant="sm">
+              <Trans
+                i18nKey="distanceLineFromYou"
+                values={{ distance: userDistance }}
+                components={{
+                  strong: <strong style={{ fontWeight: "bolder" }} />,
+                }}
+                defaults="<strong>{{distance}}</strong> from you"
+              />
+            </Body>
           )}
         </>
       ) : (
@@ -979,85 +998,89 @@ export const LocatorResultCard = React.memo(
               )}
             </div>
 
-            <HoursSection
-              location={location}
-              result={result}
-              hoursProps={props.hours}
-              showIcons={props.icons}
-              accentColor={resolvedAccentBackgroundColor}
-            />
+            <div className="flex flex-col gap-4 md:pl-10">
+              <HoursSection
+                location={location}
+                result={result}
+                hoursProps={props.hours}
+                showIcons={props.icons}
+                accentColor={resolvedAccentBackgroundColor}
+              />
 
-            {/** Core Info section */}
-            <div className="flex flex-col lg:flex-row gap-4">
-              {/** Contact Section */}
-              <div className="flex flex-col gap-4 lg:w-[280px]">
-                {location.address && props.address.liveVisibility && (
-                  <div className="flex flex-row items-start gap-2">
-                    {props.icons && (
-                      <CardIcon backgroundColor={resolvedAccentBackgroundColor}>
-                        <FaMapMarkerAlt className="w-4 h-4" />
-                      </CardIcon>
-                    )}
-                    <div className="flex flex-col gap-1 w-full">
-                      <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize gap-4">
-                        <Address
-                          address={location.address}
-                          showRegion={props.address.showRegion}
-                          showCountry={props.address.showCountry}
-                        />
+              {/** Core Info section */}
+              <div className="flex flex-col lg:flex-row gap-4">
+                {/** Contact Section */}
+                <div className="flex flex-col gap-4 lg:w-[280px]">
+                  {location.address && props.address.liveVisibility && (
+                    <div className="flex flex-row items-start gap-2">
+                      {props.icons && (
+                        <CardIcon
+                          backgroundColor={resolvedAccentBackgroundColor}
+                        >
+                          <FaMapMarkerAlt className="w-4 h-4" />
+                        </CardIcon>
+                      )}
+                      <div className="flex flex-col gap-1 w-full">
+                        <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize gap-4">
+                          <Address
+                            address={location.address}
+                            showRegion={props.address.showRegion}
+                            showCountry={props.address.showCountry}
+                          />
+                        </div>
+                        {getDirectionsLink &&
+                          props.address.showGetDirectionsLink && (
+                            <a
+                              href={getDirectionsLink}
+                              onClick={handleGetDirectionsClick}
+                              aria-label={t("getDirectionsForLocation", {
+                                address: location.address.line1,
+                                defaultValue: "Get Directions for {{address}}",
+                              })}
+                              className={themeManagerCn(
+                                "components h-fit items-center w-fit underline gap-2 decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing flex font-bold",
+                                getTextColorClass(resolvedAccentLinkColor)
+                              )}
+                              style={getTextColorStyle(resolvedAccentLinkColor)}
+                            >
+                              {t("getDirections", "Get Directions")}
+                              <FaAngleRight size={"12px"} />
+                            </a>
+                          )}
                       </div>
-                      {getDirectionsLink &&
-                        props.address.showGetDirectionsLink && (
-                          <a
-                            href={getDirectionsLink}
-                            onClick={handleGetDirectionsClick}
-                            aria-label={t("getDirectionsForLocation", {
-                              address: location.address.line1,
-                              defaultValue: "Get Directions for {{address}}",
-                            })}
-                            className={themeManagerCn(
-                              "components h-fit items-center w-fit underline gap-2 decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing flex font-bold",
-                              getTextColorClass(resolvedAccentLinkColor)
-                            )}
-                            style={getTextColorStyle(resolvedAccentLinkColor)}
-                          >
-                            {t("getDirections", "Get Directions")}
-                            <FaAngleRight size={"12px"} />
-                          </a>
-                        )}
                     </div>
-                  </div>
-                )}
-                <PhoneSection
-                  phone={props.phone}
-                  handlePhoneNumberClick={handlePhoneNumberClick}
-                  location={location}
-                  icons={props.icons}
-                  backgroundColor={resolvedAccentBackgroundColor}
-                  linkColor={resolvedAccentLinkColor}
-                />
-                <EmailSection
-                  email={props.email}
-                  location={location}
-                  icons={props.icons}
-                  index={result.index}
-                  iconBackgroundColor={resolvedAccentBackgroundColor}
-                  linkColor={resolvedAccentLinkColor}
-                />
-              </div>
-              {/** Secondary Info Section */}
-              <div className="flex flex-col gap-4 lg:w-[240px]">
-                <ServicesSection
-                  services={props.services}
-                  location={location}
-                />
+                  )}
+                  <PhoneSection
+                    phone={props.phone}
+                    handlePhoneNumberClick={handlePhoneNumberClick}
+                    location={location}
+                    icons={props.icons}
+                    backgroundColor={resolvedAccentBackgroundColor}
+                    linkColor={resolvedAccentLinkColor}
+                  />
+                  <EmailSection
+                    email={props.email}
+                    location={location}
+                    icons={props.icons}
+                    index={result.index}
+                    iconBackgroundColor={resolvedAccentBackgroundColor}
+                    linkColor={resolvedAccentLinkColor}
+                  />
+                </div>
+                {/** Secondary Info Section */}
+                <div className="flex flex-col gap-4 lg:w-[240px]">
+                  <ServicesSection
+                    services={props.services}
+                    location={location}
+                  />
+                </div>
               </div>
             </div>
           </div>
           {showDistance && (
             <div
               className={`
-              font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize flex flex-col items-start text-left lg:hidden py-1 w-fit max-w-full break-words
+              font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize flex flex-col items-start text-left lg:hidden md:ml-10 py-1 w-fit max-w-full break-words
               ${distanceDisplay === "bothDistances" ? "rounded-md px-3" : "rounded-full px-2"}
               ${getBackgroundColorClasses(backgroundColors.background2.value)}`}
             >
@@ -1065,7 +1088,7 @@ export const LocatorResultCard = React.memo(
             </div>
           )}
           {/** CTA section */}
-          <div className="flex flex-col lg:flex-row gap-2 lg:gap-4 w-full items-center md:items-stretch lg:items-center">
+          <div className="flex flex-col lg:flex-row gap-2 lg:gap-4 w-full md:pl-10 items-center md:items-stretch lg:items-center">
             <PrimaryCTA
               primaryCTA={props.primaryCTA}
               primaryHeading={props.primaryHeading}

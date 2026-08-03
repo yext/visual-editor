@@ -152,9 +152,9 @@
     "warning": "Táto akcia odstráni vaše miestne zmeny. Nedá sa to vrátiť späť."
   },
   "distance": "Vzdialenosť",
-  "distanceFromSearch": "z vyhľadávania",
-  "distanceFromSearchLocation": "od {{searchLocation}}",
-  "distanceFromYou": "od vás",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> z vyhľadávania",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> od {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> od vás",
   "emptyStateFieldEmpty": "Mapované pole {{entityType}} je prázdne",
   "emptyStateSectionHidden": "Sekcia skrytá pre túto {{entityType}}",
   "enableCookies": "Povoliť súbory cookie",

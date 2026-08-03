@@ -152,9 +152,9 @@
     "warning": "Deze actie zal uw lokale wijzigingen verwijderen. Het kan niet ongedaan worden gemaakt."
   },
   "distance": "Afstand",
-  "distanceFromSearch": "uit zoeken",
-  "distanceFromSearchLocation": "vanaf {{searchLocation}}",
-  "distanceFromYou": "van jou",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> uit zoekopdracht",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> van {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> van jou",
   "emptyStateFieldEmpty": "Het toegewezen veld van {{entityType}} is leeg",
   "emptyStateSectionHidden": "Sectie verborgen voor deze {{entityType}}",
   "enableCookies": "Cookies inschakelen",

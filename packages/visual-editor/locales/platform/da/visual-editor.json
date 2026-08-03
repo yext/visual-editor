@@ -152,9 +152,9 @@
     "warning": "Denne handling fjerner dine lokale ændringer. Det kan ikke fortrydes."
   },
   "distance": "Afstand",
-  "distanceFromSearch": "fra søgning",
-  "distanceFromSearchLocation": "fra {{searchLocation}}",
-  "distanceFromYou": "fra dig",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> fra søgning",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> fra {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> fra dig",
   "emptyStateFieldEmpty": "Det tilknyttede felt for {{entityType}} er tomt",
   "emptyStateSectionHidden": "Sektion skjult for denne {{entityType}}",
   "enableCookies": "Aktiver cookies",

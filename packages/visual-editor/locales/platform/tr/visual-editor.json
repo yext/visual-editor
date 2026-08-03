@@ -152,9 +152,9 @@
     "warning": "Bu eylem yerel değişikliklerinizi kaldıracaktır. Geri alınamaz."
   },
   "distance": "Mesafe",
-  "distanceFromSearch": "aramadan",
-  "distanceFromSearchLocation": "{{searchLocation}}'dan",
-  "distanceFromYou": "senden",
+  "distanceLineFromSearch": "Aramadan <strong>{{distance}}</strong>",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong>, {{searchLocation}}'den",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> sizden",
   "emptyStateFieldEmpty": "{{entityType}}'ın eşlenen alanı boş",
   "emptyStateSectionHidden": "Bu {{entityType}} için bölüm gizlendi",
   "enableCookies": "Çerezleri Etkinleştir",

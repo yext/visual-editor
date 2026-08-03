@@ -152,9 +152,9 @@
     "warning": "Cette action supprimera vos modifications locales. Il ne peut pas être défait."
   },
   "distance": "Distance",
-  "distanceFromSearch": "de la recherche",
-  "distanceFromSearchLocation": "à partir de {{searchLocation}}",
-  "distanceFromYou": "de toi",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> à partir de la recherche",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> de {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> de votre part",
   "emptyStateFieldEmpty": "Le champ mappé de {{entityType}} est vide",
   "emptyStateSectionHidden": "Section masquée pour ce {{entityType}}",
   "enableCookies": "Activer les cookies",

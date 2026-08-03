@@ -152,9 +152,9 @@
     "warning": "Această acțiune vă va elimina modificările locale. Nu poate fi anulat."
   },
   "distance": "Distanţă",
-  "distanceFromSearch": "din căutare",
-  "distanceFromSearchLocation": "din {{searchLocation}}",
-  "distanceFromYou": "de la tine",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> din căutare",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> din {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> de la tine",
   "emptyStateFieldEmpty": "Câmpul mapat al lui {{entityType}} este gol",
   "emptyStateSectionHidden": "Secțiune ascunsă pentru acest {{entityType}}",
   "enableCookies": "Activați cookie-urile",

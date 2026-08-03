@@ -152,9 +152,9 @@
     "warning": "Ez a művelet eltávolítja a helyi változtatásokat. Nem lehet visszavonni."
   },
   "distance": "Távolság",
-  "distanceFromSearch": "keresésből",
-  "distanceFromSearchLocation": "{{searchLocation}}",
-  "distanceFromYou": "tőled",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> a keresésből",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> od {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong>",
   "emptyStateFieldEmpty": "A(z) {{entityType}} leképezett mezője üres",
   "emptyStateSectionHidden": "A szakasz elrejtve ehhez a(z) {{entityType}}",
   "enableCookies": "Cookie-k engedélyezése",

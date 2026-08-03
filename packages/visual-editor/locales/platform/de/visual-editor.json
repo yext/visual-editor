@@ -152,9 +152,9 @@
     "warning": "Diese Aktion wird Ihre lokalen Änderungen entfernen. Dies kann nicht rückgängig gemacht werden."
   },
   "distance": "Distanz",
-  "distanceFromSearch": "aus der Suche",
-  "distanceFromSearchLocation": "von {{searchLocation}}",
-  "distanceFromYou": "von Dir",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> aus der Suche",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> von {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> von Ihnen",
   "emptyStateFieldEmpty": "Das zugeordnete Feld von {{entityType}} ist leer",
   "emptyStateSectionHidden": "Modul für diesen {{entityType}} ausgeblendet",
   "enableCookies": "Cookies aktivieren",

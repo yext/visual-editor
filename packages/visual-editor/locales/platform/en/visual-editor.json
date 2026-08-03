@@ -152,9 +152,9 @@
     "warning": "This action will remove your local changes. It cannot be undone."
   },
   "distance": "Distance",
-  "distanceFromSearch": "from search",
-  "distanceFromSearchLocation": "from {{searchLocation}}",
-  "distanceFromYou": "from you",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> from search",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> from {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> from you",
   "emptyStateFieldEmpty": "{{entityType}}'s mapped field is empty",
   "emptyStateSectionHidden": "Section hidden for this {{entityType}}",
   "enableCookies": "Enable Cookies",

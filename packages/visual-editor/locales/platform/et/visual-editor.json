@@ -152,9 +152,9 @@
     "warning": "See toiming eemaldab teie kohalikud muudatused. Seda ei saa teha."
   },
   "distance": "Kaugus",
-  "distanceFromSearch": "otsingust",
-  "distanceFromSearchLocation": "alates {{searchLocation}}",
-  "distanceFromYou": "sinult",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> otsingust",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> alates {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> teilt",
   "emptyStateFieldEmpty": "{{entityType}} kaardistatud väli on tühi",
   "emptyStateSectionHidden": "Selle {{entityType}} jaoks peidetud jaotis",
   "enableCookies": "Luba küpsised",
