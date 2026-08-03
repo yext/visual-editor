@@ -212,7 +212,7 @@ export const yextVisualEditorPlugin = (
           return;
         }
 
-        void handleLocalEditorRequest(request.url, response)
+        void handleLocalEditorRequest(request, response)
           .then((handled) => {
             if (!handled) {
               next();

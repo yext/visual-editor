@@ -15,6 +15,7 @@ import {
   blocksPlugin,
   outlinePlugin,
 } from "@puckeditor/core";
+import "@puckeditor/plugin-ai/styles.css";
 import React, { useRef, useCallback } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityTooltipsProvider } from "../../editor/EntityField.tsx";
@@ -40,11 +41,15 @@ import { clonePuckResolveData } from "../utils/clonePuckResolveData.ts";
 import { YextPuckFieldOverrides } from "../../fields/fieldOverrides.ts";
 import { wrapComponentConfigWithErrorBoundary } from "../utils/wrapConfigWithComponentErrorBoundary.tsx";
 import { updateLayoutWithCustomFontAssets } from "../utils/customFontAssets.ts";
+import { preparePuckAiRequest } from "../ai/prepareRequest.ts";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
 const blocks = blocksPlugin();
 const outline = outlinePlugin();
+type PuckPlugin = NonNullable<
+  React.ComponentProps<typeof Puck>["plugins"]
+>[number];
 
 // Advanced Settings link configuration
 const createAdvancedSettingsLink = () => ({
@@ -115,6 +120,7 @@ export const InternalLayoutEditor = ({
   const { i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
   const { errorCount, errorSources, errorDetails } = useErrorContext();
+  const [aiPlugin, setAiPlugin] = React.useState<PuckPlugin>();
   const withCustomFontAssets = React.useCallback(
     (data: Data | undefined): Record<string, any> => {
       if (!data) {
@@ -127,6 +133,34 @@ export const InternalLayoutEditor = ({
     },
     [templateMetadata.customFonts]
   );
+
+  React.useEffect(() => {
+    if (!templateMetadata.aiPageGeneration) {
+      setAiPlugin(undefined);
+      return;
+    }
+
+    let isMounted = true;
+
+    import("@puckeditor/plugin-ai").then(({ createAiPlugin }) => {
+      if (!isMounted) {
+        return;
+      }
+
+      setAiPlugin(
+        createAiPlugin({
+          host: "/api/puck/chat",
+          prepareRequest: preparePuckAiRequest,
+          defaultMode: "assembly",
+          designMode: false,
+        })
+      );
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [templateMetadata.aiPageGeneration]);
 
   /**
    * When the Puck history changes save it to localStorage and send a message
@@ -414,7 +448,11 @@ export const InternalLayoutEditor = ({
         config={translatedPuckConfigWithRootFields}
         data={{}} // we use puckInitialHistory instead
         initialHistory={puckInitialHistory}
-        plugins={[{ ...blocks, label: pt("sections", "Sections") }, outline]}
+        plugins={[
+          { ...blocks, label: pt("sections", "Sections") },
+          outline,
+          ...(aiPlugin ? [aiPlugin] : []),
+        ]}
         overrides={{
           fields: fieldsOverride,
           header: () => (

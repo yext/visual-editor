@@ -40,6 +40,7 @@ export const usePlatformTranslation = () => {
 };
 
 export type MsgString = string & { __brand: "i18nPlatform" };
+type PlatformTOptions = Omit<TOptions, "context"> & { context?: string };
 
 /**
  * msg marks strings for translation in config JSON such
@@ -50,7 +51,7 @@ export type MsgString = string & { __brand: "i18nPlatform" };
 export const msg = (
   key: string,
   defaultValue: string,
-  options?: TOptions
+  options?: PlatformTOptions
 ): MsgString => {
   return JSON.stringify({ key, defaultValue, options }) as MsgString;
 };
@@ -62,8 +63,8 @@ export const msg = (
  */
 export const pt = (
   keyOrEncodedValue: string | MsgString,
-  optionsOrDefault?: string | TOptions,
-  options?: TOptions
+  optionsOrDefault?: string | PlatformTOptions,
+  options?: PlatformTOptions
 ): string => {
   const t = i18nPlatformInstance.t;
 

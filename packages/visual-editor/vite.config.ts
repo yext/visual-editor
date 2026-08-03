@@ -25,6 +25,7 @@ export default defineConfig(() => ({
     cssCodeSplit: true,
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),
+      fileName: "visual-editor",
       name: "visual-editor",
       formats: ["es"] as LibraryFormats[], // typescript is unhappy without this forced type definition
     },
@@ -42,6 +43,12 @@ export default defineConfig(() => ({
         "@yext/search-ui-react",
       ],
       output: {
+        entryFileNames: (chunkInfo) =>
+          chunkInfo.name === "editor" ? "visual-editor.js" : "[name].js",
+        assetFileNames: (assetInfo) =>
+          assetInfo.name === "index.css"
+            ? "editor.css"
+            : (assetInfo.name ?? "[name][extname]"),
         globals: {
           react: "React",
           "react-dom": "ReactDOM",

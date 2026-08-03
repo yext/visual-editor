@@ -58,7 +58,9 @@
   },
   "dependencies": {
     "@mapbox/maki": "^8.2.0",
+    "@puckeditor/cloud-client": "^0.8.2",
     "@puckeditor/core": "0.22.2",
+    "@puckeditor/plugin-ai": "^0.8.2",
     "@radix-ui/react-accordion": "^1.2.3",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.13",
