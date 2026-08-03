@@ -27,7 +27,7 @@
   "coreInfoSection": "Seção de informações principais",
   "customSearchArea": "Área de pesquisa personalizada",
   "distance": "Distância",
-  "distanceLineFromSearch": "<strong>{{distance}}</strong> da pesquisa",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> do local pesquisado",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> de {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> de você",
   "enableCookies": "Habilitar Cookies",

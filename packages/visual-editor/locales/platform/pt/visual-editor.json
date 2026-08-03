@@ -152,7 +152,7 @@
     "warning": "Esta ação removerá suas alterações locais. Não pode ser desfeito."
   },
   "distance": "Distância",
-  "distanceLineFromSearch": "<strong>{{distance}}</strong> da pesquisa",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> do local pesquisado",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> de {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> de você",
   "emptyStateFieldEmpty": "O campo mapeado de {{entityType}} está vazio",
