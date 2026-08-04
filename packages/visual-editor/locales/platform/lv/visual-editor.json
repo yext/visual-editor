@@ -152,6 +152,9 @@
     "warning": "Šī darbība noņems jūsu vietējās izmaiņas. To nevar atsaukt."
   },
   "distance": "Attālums",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> no meklēšanas",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> no {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> no jums",
   "emptyStateFieldEmpty": "{{entityType}} kartētais lauks ir tukšs",
   "emptyStateSectionHidden": "Sadaļa paslēpta šim {{entityType}}",
   "enableCookies": "Iespējot sīkfailus",
@@ -303,6 +306,7 @@
       "aspectRatio": "Malu attiecība",
       "base_text size": "Bāze",
       "bold": "Treknrakstā",
+      "bothDistances": "Abi attālumi",
       "bottom_direction": "Apakšējā",
       "button": "Poga",
       "carousel": "Karuselis",

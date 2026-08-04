@@ -152,6 +152,9 @@
     "warning": "Ez a művelet eltávolítja a helyi változtatásokat. Nem lehet visszavonni."
   },
   "distance": "Távolság",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> a keresésből",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> od {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong>",
   "emptyStateFieldEmpty": "A(z) {{entityType}} leképezett mezője üres",
   "emptyStateSectionHidden": "A szakasz elrejtve ehhez a(z) {{entityType}}",
   "enableCookies": "Cookie-k engedélyezése",
@@ -303,6 +306,7 @@
       "aspectRatio": "Oldal arány",
       "base_text size": "Alap",
       "bold": "Merész",
+      "bothDistances": "Mindkét távolság",
       "bottom_direction": "Alul",
       "button": "Gomb",
       "carousel": "Körhinta",

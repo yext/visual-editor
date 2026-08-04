@@ -152,6 +152,9 @@
     "warning": "Această acțiune vă va elimina modificările locale. Nu poate fi anulat."
   },
   "distance": "Distanţă",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> din căutare",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> din {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> de la tine",
   "emptyStateFieldEmpty": "Câmpul mapat al lui {{entityType}} este gol",
   "emptyStateSectionHidden": "Secțiune ascunsă pentru acest {{entityType}}",
   "enableCookies": "Activați cookie-urile",
@@ -303,6 +306,7 @@
       "aspectRatio": "Raport de aspect",
       "base_text size": "Bază",
       "bold": "Îndrăzneţ",
+      "bothDistances": "Ambele distante",
       "bottom_direction": "Fund",
       "button": "Buton",
       "carousel": "Carusel",

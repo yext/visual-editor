@@ -152,6 +152,9 @@
     "warning": "Ova će radnja ukloniti vaše lokalne promjene. Ne može se poništiti."
   },
   "distance": "Udaljenost",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> iz pretraživanja",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> od {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> od vas",
   "emptyStateFieldEmpty": "Mapirano polje {{entityType}} je prazno",
   "emptyStateSectionHidden": "Odjeljak skriven za ovaj {{entityType}}",
   "enableCookies": "Omogući kolačiće",
@@ -303,6 +306,7 @@
       "aspectRatio": "Omjer slike",
       "base_text size": "Baza",
       "bold": "Podebljano",
+      "bothDistances": "Obje udaljenosti",
       "bottom_direction": "Dno",
       "button": "Gumb",
       "carousel": "Karusel",

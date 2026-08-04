@@ -12,6 +12,7 @@ import {
   isLocalizedAssetImage,
   resolveLocalizedAssetImage,
   TranslatableAssetImage,
+  ImageFillType,
 } from "../../types/images.ts";
 import { TranslatableString } from "../../types/types.ts";
 import { useTranslation } from "react-i18next";
@@ -22,6 +23,7 @@ export interface ImageProps {
   image: ImageType | ComplexImageType | TranslatableAssetImage;
   aspectRatio?: number;
   width?: number;
+  imageFillType?: ImageFillType;
   className?: string;
   /** sizes attribute of the underlying img tag */
   sizes?: string;
@@ -59,6 +61,7 @@ export const Image: React.FC<ImageProps> = ({
   image: rawImage,
   aspectRatio,
   width,
+  imageFillType,
   className,
   sizes,
   loading = "lazy",
@@ -90,6 +93,10 @@ export const Image: React.FC<ImageProps> = ({
     : `overflow-hidden w-full`; // Use w-full when no width specified
 
   const altText = getImageAltText(image, i18n.language, streamDocument);
+  const imageStyle: React.CSSProperties = {
+    objectFit: imageFillType === "fit" ? "contain" : "cover",
+    ...style,
+  };
 
   return (
     <div
@@ -104,7 +111,7 @@ export const Image: React.FC<ImageProps> = ({
           className="object-cover w-full h-full"
           imgOverrides={{ sizes }}
           loading={loading}
-          style={style}
+          style={imageStyle}
         />
       ) : !!width && !!calculatedHeight ? (
         <ImageComponent
@@ -115,7 +122,7 @@ export const Image: React.FC<ImageProps> = ({
           className="object-cover"
           imgOverrides={{ sizes }}
           loading={loading}
-          style={style}
+          style={imageStyle}
         />
       ) : (
         <img
@@ -123,7 +130,7 @@ export const Image: React.FC<ImageProps> = ({
           alt={altText}
           className="object-cover w-full h-full"
           loading={loading}
-          style={style}
+          style={imageStyle}
         />
       )}
     </div>

@@ -152,6 +152,9 @@
     "warning": "Tämä toiminto poistaa paikalliset muutokset. Sitä ei voida peruuttaa."
   },
   "distance": "Etäisyys",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> hausta",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> alkaen {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> sinulta",
   "emptyStateFieldEmpty": "Kohteen {{entityType}} kartoitettu kenttä on tyhjä",
   "emptyStateSectionHidden": "Osio piilotettu tälle {{entityType}}",
   "enableCookies": "Ota evästeet käyttöön",
@@ -303,6 +306,7 @@
       "aspectRatio": "Kuvasuhde",
       "base_text size": "Pohja",
       "bold": "Lihavoitu",
+      "bothDistances": "Molemmat etäisyydet",
       "bottom_direction": "Pohja",
       "button": "Painike",
       "carousel": "Karuselli",

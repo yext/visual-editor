@@ -152,6 +152,9 @@
     "warning": "Bu eylem yerel değişikliklerinizi kaldıracaktır. Geri alınamaz."
   },
   "distance": "Mesafe",
+  "distanceLineFromSearch": "Aramadan <strong>{{distance}}</strong>",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong>, {{searchLocation}}'den",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> sizden",
   "emptyStateFieldEmpty": "{{entityType}}'ın eşlenen alanı boş",
   "emptyStateSectionHidden": "Bu {{entityType}} için bölüm gizlendi",
   "enableCookies": "Çerezleri Etkinleştir",
@@ -303,6 +306,7 @@
       "aspectRatio": "En boy oranı",
       "base_text size": "Temel",
       "bold": "Gözü pek",
+      "bothDistances": "Her İki Mesafe",
       "bottom_direction": "Alt",
       "button": "Düğme",
       "carousel": "Atlıkarınca",

@@ -152,6 +152,9 @@
     "warning": "此操作将消除您的本地更改。它不能撤消。"
   },
   "distance": "距离",
+  "distanceLineFromSearch": "来自搜索的 <strong>{{distance}}</strong>",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> 来自 {{searchLocation}}",
+  "distanceLineFromYou": "来自您的 <strong>{{distance}}</strong>",
   "emptyStateFieldEmpty": "{{entityType}} 的映射字段为空",
   "emptyStateSectionHidden": "此 {{entityType}} 的部分已隐藏",
   "enableCookies": "启用 Cookie",
@@ -303,6 +306,7 @@
       "aspectRatio": "纵横比",
       "base_text size": "基础",
       "bold": "大胆",
+      "bothDistances": "两个距离",
       "bottom_direction": "底部",
       "button": "按钮",
       "carousel": "轮播",
