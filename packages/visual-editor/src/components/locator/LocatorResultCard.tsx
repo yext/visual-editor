@@ -1,5 +1,5 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import {
   CardProps,
   Coordinate,
@@ -263,6 +263,7 @@ export interface LocatorResultCardProps {
 export type DistanceDisplayOption =
   | "distanceFromUser"
   | "distanceFromSearch"
+  | "bothDistances"
   | "hidden";
 
 export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
@@ -833,11 +834,13 @@ export const LocatorResultCard = React.memo(
     result,
     resultCardProps: props,
     distanceDisplay = "distanceFromUser",
+    searchLocationName,
     isSelected,
   }: {
     result: CardProps<Location>["result"];
     resultCardProps: LocatorResultCardProps;
     distanceDisplay?: DistanceDisplayOption;
+    searchLocationName?: string;
     isSelected?: boolean;
   }): React.JSX.Element => {
     const { t, i18n } = useTranslation();
@@ -860,6 +863,66 @@ export const LocatorResultCard = React.memo(
       typeof distance === "number"
         ? `${formatDistance(fromMeters(distance, unit), i18n.language)} ${unitLabel}`
         : undefined;
+    const searchDistance =
+      typeof result.distanceFromFilter === "number"
+        ? `${formatDistance(
+            fromMeters(result.distanceFromFilter, unit),
+            i18n.language
+          )} ${unitLabel}`
+        : undefined;
+    const userDistance =
+      typeof result.distance === "number"
+        ? `${formatDistance(fromMeters(result.distance, unit), i18n.language)} ${unitLabel}`
+        : undefined;
+    const displayDistanceContent =
+      distanceDisplay === "bothDistances" ? (
+        <>
+          {searchDistance && (
+            <Body variant="sm">
+              {searchLocationName ? (
+                <Trans
+                  i18nKey="distanceLineFromSearchLocation"
+                  values={{
+                    distance: searchDistance,
+                    searchLocation: searchLocationName,
+                  }}
+                  components={{
+                    strong: <strong style={{ fontWeight: "bolder" }} />,
+                  }}
+                  defaults="<strong>{{distance}}</strong> from {{searchLocation}}"
+                />
+              ) : (
+                <Trans
+                  i18nKey="distanceLineFromSearch"
+                  values={{ distance: searchDistance }}
+                  components={{
+                    strong: <strong style={{ fontWeight: "bolder" }} />,
+                  }}
+                  defaults="<strong>{{distance}}</strong> from search"
+                />
+              )}
+            </Body>
+          )}
+          {userDistance && (
+            <Body variant="sm">
+              <Trans
+                i18nKey="distanceLineFromYou"
+                values={{ distance: userDistance }}
+                components={{
+                  strong: <strong style={{ fontWeight: "bolder" }} />,
+                }}
+                defaults="<strong>{{distance}}</strong> from you"
+              />
+            </Body>
+          )}
+        </>
+      ) : (
+        displayDistance
+      );
+    const showDistance =
+      distanceDisplay === "bothDistances"
+        ? searchDistance !== undefined || userDistance !== undefined
+        : displayDistance !== undefined;
 
     const handleGetDirectionsClick = useCardAnalyticsCallback(
       result,
@@ -900,124 +963,132 @@ export const LocatorResultCard = React.memo(
         className="container flex flex-row border-b border-gray-300 p-4 md:p-6 lg:p-8 gap-4"
         style={isSelected ? { backgroundColor: "#F9F9F9" } : undefined}
       >
-        <Background
-          background={
-            props?.primaryHeading?.color ?? backgroundColors.background6.value
-          }
-          className="flex-shrink-0 w-6 h-6 rounded-full font-bold hidden md:flex items-center justify-center text-body-sm-fontSize"
-        >
-          {result.index}
-        </Background>
         <div className="flex flex-wrap gap-4 w-full">
           <div className="w-full flex flex-col gap-4">
             {/** Heading section */}
             <div className="flex flex-row justify-between items-start gap-6">
               <div className="flex flex-row items-start gap-6 flex-1 min-w-0">
                 <ImageSection image={props.image} location={location} />
-                <HeadingTextSection
-                  primaryHeading={props.primaryHeading}
-                  secondaryHeading={props.secondaryHeading}
-                  tertiaryHeading={props.tertiaryHeading}
-                  location={location}
-                />
+                <div className="flex flex-row items-center gap-4 min-w-0">
+                  <Background
+                    background={
+                      props?.primaryHeading?.color ??
+                      backgroundColors.background6.value
+                    }
+                    className="flex-shrink-0 w-6 h-6 rounded-full font-bold hidden md:flex items-center justify-center text-body-sm-fontSize"
+                  >
+                    {result.index}
+                  </Background>
+                  <HeadingTextSection
+                    primaryHeading={props.primaryHeading}
+                    secondaryHeading={props.secondaryHeading}
+                    tertiaryHeading={props.tertiaryHeading}
+                    location={location}
+                  />
+                </div>
               </div>
-              {displayDistance && (
+              {showDistance && (
                 <div
                   className={
-                    "font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize rounded-full hidden lg:flex min-w-fit"
+                    "font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize rounded-full hidden lg:flex flex-col items-end text-right min-w-fit"
                   }
                 >
-                  {displayDistance}
+                  {displayDistanceContent}
                 </div>
               )}
             </div>
 
-            <HoursSection
-              location={location}
-              result={result}
-              hoursProps={props.hours}
-              showIcons={props.icons}
-              accentColor={resolvedAccentBackgroundColor}
-            />
+            <div className="flex flex-col gap-4 md:pl-10">
+              <HoursSection
+                location={location}
+                result={result}
+                hoursProps={props.hours}
+                showIcons={props.icons}
+                accentColor={resolvedAccentBackgroundColor}
+              />
 
-            {/** Core Info section */}
-            <div className="flex flex-col lg:flex-row gap-4">
-              {/** Contact Section */}
-              <div className="flex flex-col gap-4 lg:w-[280px]">
-                {location.address && props.address.liveVisibility && (
-                  <div className="flex flex-row items-start gap-2">
-                    {props.icons && (
-                      <CardIcon backgroundColor={resolvedAccentBackgroundColor}>
-                        <FaMapMarkerAlt className="w-4 h-4" />
-                      </CardIcon>
-                    )}
-                    <div className="flex flex-col gap-1 w-full">
-                      <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize gap-4">
-                        <Address
-                          address={location.address}
-                          showRegion={props.address.showRegion}
-                          showCountry={props.address.showCountry}
-                        />
+              {/** Core Info section */}
+              <div className="flex flex-col lg:flex-row gap-4">
+                {/** Contact Section */}
+                <div className="flex flex-col gap-4 lg:w-[280px]">
+                  {location.address && props.address.liveVisibility && (
+                    <div className="flex flex-row items-start gap-2">
+                      {props.icons && (
+                        <CardIcon
+                          backgroundColor={resolvedAccentBackgroundColor}
+                        >
+                          <FaMapMarkerAlt className="w-4 h-4" />
+                        </CardIcon>
+                      )}
+                      <div className="flex flex-col gap-1 w-full">
+                        <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize gap-4">
+                          <Address
+                            address={location.address}
+                            showRegion={props.address.showRegion}
+                            showCountry={props.address.showCountry}
+                          />
+                        </div>
+                        {getDirectionsLink &&
+                          props.address.showGetDirectionsLink && (
+                            <a
+                              href={getDirectionsLink}
+                              onClick={handleGetDirectionsClick}
+                              aria-label={t("getDirectionsForLocation", {
+                                address: location.address.line1,
+                                defaultValue: "Get Directions for {{address}}",
+                              })}
+                              className={themeManagerCn(
+                                "components h-fit items-center w-fit underline gap-2 decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing flex font-bold",
+                                getTextColorClass(resolvedAccentLinkColor)
+                              )}
+                              style={getTextColorStyle(resolvedAccentLinkColor)}
+                            >
+                              {t("getDirections", "Get Directions")}
+                              <FaAngleRight size={"12px"} />
+                            </a>
+                          )}
                       </div>
-                      {getDirectionsLink &&
-                        props.address.showGetDirectionsLink && (
-                          <a
-                            href={getDirectionsLink}
-                            onClick={handleGetDirectionsClick}
-                            aria-label={t("getDirectionsForLocation", {
-                              address: location.address.line1,
-                              defaultValue: "Get Directions for {{address}}",
-                            })}
-                            className={themeManagerCn(
-                              "components h-fit items-center w-fit underline gap-2 decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing flex font-bold",
-                              getTextColorClass(resolvedAccentLinkColor)
-                            )}
-                            style={getTextColorStyle(resolvedAccentLinkColor)}
-                          >
-                            {t("getDirections", "Get Directions")}
-                            <FaAngleRight size={"12px"} />
-                          </a>
-                        )}
                     </div>
-                  </div>
-                )}
-                <PhoneSection
-                  phone={props.phone}
-                  handlePhoneNumberClick={handlePhoneNumberClick}
-                  location={location}
-                  icons={props.icons}
-                  backgroundColor={resolvedAccentBackgroundColor}
-                  linkColor={resolvedAccentLinkColor}
-                />
-                <EmailSection
-                  email={props.email}
-                  location={location}
-                  icons={props.icons}
-                  index={result.index}
-                  iconBackgroundColor={resolvedAccentBackgroundColor}
-                  linkColor={resolvedAccentLinkColor}
-                />
-              </div>
-              {/** Secondary Info Section */}
-              <div className="flex flex-col gap-4 lg:w-[240px]">
-                <ServicesSection
-                  services={props.services}
-                  location={location}
-                />
+                  )}
+                  <PhoneSection
+                    phone={props.phone}
+                    handlePhoneNumberClick={handlePhoneNumberClick}
+                    location={location}
+                    icons={props.icons}
+                    backgroundColor={resolvedAccentBackgroundColor}
+                    linkColor={resolvedAccentLinkColor}
+                  />
+                  <EmailSection
+                    email={props.email}
+                    location={location}
+                    icons={props.icons}
+                    index={result.index}
+                    iconBackgroundColor={resolvedAccentBackgroundColor}
+                    linkColor={resolvedAccentLinkColor}
+                  />
+                </div>
+                {/** Secondary Info Section */}
+                <div className="flex flex-col gap-4 lg:w-[240px]">
+                  <ServicesSection
+                    services={props.services}
+                    location={location}
+                  />
+                </div>
               </div>
             </div>
           </div>
-          {displayDistance && (
+          {showDistance && (
             <div
               className={`
-              font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize rounded-full flex lg:hidden px-2 py-1 w-fit
+              font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize flex flex-col items-start text-left lg:hidden md:ml-10 py-1 w-fit max-w-full break-words
+              ${distanceDisplay === "bothDistances" ? "rounded-md px-3" : "rounded-full px-2"}
               ${getBackgroundColorClasses(backgroundColors.background2.value)}`}
             >
-              {displayDistance}
+              {displayDistanceContent}
             </div>
           )}
           {/** CTA section */}
-          <div className="flex flex-col lg:flex-row gap-2 lg:gap-4 w-full items-center md:items-stretch lg:items-center">
+          <div className="flex flex-col lg:flex-row gap-2 lg:gap-4 w-full md:pl-10 items-center md:items-stretch lg:items-center">
             <PrimaryCTA
               primaryCTA={props.primaryCTA}
               primaryHeading={props.primaryHeading}

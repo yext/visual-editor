@@ -152,6 +152,9 @@
     "warning": "See toiming eemaldab teie kohalikud muudatused. Seda ei saa teha."
   },
   "distance": "Kaugus",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> otsingust",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> alates {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> teilt",
   "emptyStateFieldEmpty": "{{entityType}} kaardistatud väli on tühi",
   "emptyStateSectionHidden": "Selle {{entityType}} jaoks peidetud jaotis",
   "enableCookies": "Luba küpsised",
@@ -302,6 +305,7 @@
       "aspectRatio": "Kuvasuhe",
       "base_text size": "Alus",
       "bold": "Paks",
+      "bothDistances": "Mõlemad vahemaad",
       "bottom_direction": "Alumine",
       "button": "Nupp",
       "carousel": "Karussell",

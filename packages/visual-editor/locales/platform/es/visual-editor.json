@@ -152,6 +152,9 @@
     "warning": "Esta acción eliminará sus cambios locales. No se puede deshacer."
   },
   "distance": "Distancia",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> de la búsqueda",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> de {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> de ti",
   "emptyStateFieldEmpty": "El campo asignado de {{entityType}} está vacío",
   "emptyStateSectionHidden": "Sección oculta para este {{entityType}}",
   "enableCookies": "Habilitar cookies",
@@ -302,6 +305,7 @@
       "aspectRatio": "Relación de aspecto",
       "base_text size": "Base",
       "bold": "Atrevido",
+      "bothDistances": "Ambas distancias",
       "bottom_direction": "Abajo",
       "button": "Botón",
       "carousel": "Carrusel",

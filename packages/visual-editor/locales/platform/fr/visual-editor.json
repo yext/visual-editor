@@ -152,6 +152,9 @@
     "warning": "Cette action supprimera vos modifications locales. Il ne peut pas être défait."
   },
   "distance": "Distance",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> à partir de la recherche",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> de {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> de votre part",
   "emptyStateFieldEmpty": "Le champ mappé de {{entityType}} est vide",
   "emptyStateSectionHidden": "Section masquée pour ce {{entityType}}",
   "enableCookies": "Activer les cookies",
@@ -302,6 +305,7 @@
       "aspectRatio": "Rapport d'aspect",
       "base_text size": "Base",
       "bold": "Gras",
+      "bothDistances": "Les deux distances",
       "bottom_direction": "Bas",
       "button": "Bouton",
       "carousel": "Carrousel",

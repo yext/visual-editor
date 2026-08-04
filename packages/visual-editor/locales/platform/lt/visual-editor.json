@@ -152,6 +152,9 @@
     "warning": "Šis veiksmas pašalins jūsų vietinius pakeitimus. To negalima panaikinti."
   },
   "distance": "Atstumas",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> iš paieškos",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> nuo {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> nuo jūsų",
   "emptyStateFieldEmpty": "{{entityType}} susietas laukas tuščias",
   "emptyStateSectionHidden": "Šio {{entityType}} skyrius paslėptas",
   "enableCookies": "Įgalinti slapukus",
@@ -302,6 +305,7 @@
       "aspectRatio": "Kraštinių santykis",
       "base_text size": "Bazė",
       "bold": "Paryškintas",
+      "bothDistances": "Abu atstumai",
       "bottom_direction": "Apačia",
       "button": "Mygtukas",
       "carousel": "Karuselė",
