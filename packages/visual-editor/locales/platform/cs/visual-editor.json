@@ -280,6 +280,7 @@
     "linkColor": "Barva odkazu",
     "linkedInLink": "LinkedIn Link",
     "linkLabel": "Štítek odkazu",
+    "linkPath": "Cesta odkazu",
     "links": "Odkazy",
     "linksTooltip": "Pokud je výřez příliš úzký, odkazy se automaticky sbalí",
     "linkTarget": "Cíl odkazu",
@@ -430,6 +431,7 @@
       "width": "Šířka",
       "yes": "Ano"
     },
+    "overrideLink": "Přepište odkaz",
     "pageHeading": "Záhlaví stránky",
     "phone": "Telefon",
     "phoneFormat": "Formát telefonu",
@@ -571,6 +573,7 @@
   "link": "odkaz",
   "linkedEntityFields": "Pole propojených entit",
   "linkedEntityMultiValueWarning": "{{linkedField}} obsahuje několik propojených entit. Používá se první pro {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Pro odkaz na název každé karty použijte vlastní cestu URL. Pokud je hodnota prázdná, použije se vygenerovaná adresa URL adresáře.",
   "linkTypes": {
     "clickToWebsite": "Klikněte na web",
     "drivingDirections": "Směry jízdy",

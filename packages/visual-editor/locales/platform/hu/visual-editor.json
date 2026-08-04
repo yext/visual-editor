@@ -280,6 +280,7 @@
     "linkColor": "Link színe",
     "linkedInLink": "LinkedIn Link",
     "linkLabel": "Link címke",
+    "linkPath": "Link útvonal",
     "links": "Linkek",
     "linksTooltip": "A hivatkozások automatikusan összecsukódnak, ha a nézetablak túl keskeny",
     "linkTarget": "cél",
@@ -430,6 +431,7 @@
       "width": "Szélesség",
       "yes": "Igen"
     },
+    "overrideLink": "Hivatkozás felülbírálása",
     "pageHeading": "Oldalfejléc",
     "phone": "Telefon",
     "phoneFormat": "Telefonformátum",
@@ -569,6 +571,7 @@
   "link": "link",
   "linkedEntityFields": "Kapcsolt entitásmezők",
   "linkedEntityMultiValueWarning": "A {{linkedField}} több összekapcsolt entitást tartalmaz. Az első használata a következőhöz: {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Használjon egyéni URL-útvonalat minden egyes kártya címlinkjéhez. Ha az érték üres, akkor a generált címtár URL-je kerül felhasználásra.",
   "linkTypes": {
     "clickToWebsite": "Kattintson a weboldalra",
     "drivingDirections": "Vezetési útmutatások",

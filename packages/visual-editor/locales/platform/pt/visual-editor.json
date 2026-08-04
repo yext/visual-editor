@@ -280,6 +280,7 @@
     "linkColor": "Cor do link",
     "linkedInLink": "Link LinkedIn",
     "linkLabel": "Etiqueta do link",
+    "linkPath": "Caminho do link",
     "links": "Links",
     "linksTooltip": "Os links serão recolhidos automaticamente se a janela de visualização for muito estreita",
     "linkTarget": "Alvo do link",
@@ -430,6 +431,7 @@
       "width": "Largura",
       "yes": "Sim"
     },
+    "overrideLink": "Substituir link",
     "pageHeading": "Título da página",
     "phone": "Telefone",
     "phoneFormat": "Formato de telefone",
@@ -570,6 +572,7 @@
   "link": "link",
   "linkedEntityFields": "Campos de entidade vinculada",
   "linkedEntityMultiValueWarning": "{{linkedField}} contém várias entidades vinculadas. Usando o primeiro para {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Use um caminho de URL personalizado para o link do título de cada cartão. Se o valor estiver vazio, a URL do diretório gerada será usada.",
   "linkTypes": {
     "clickToWebsite": "Clique no site",
     "drivingDirections": "Direções de direção",

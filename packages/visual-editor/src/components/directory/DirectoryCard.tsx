@@ -32,12 +32,34 @@ import {
 } from "./directoryChildReference.tsx";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 import { YextEntityField } from "../../editor/yextEntityFieldUtils.ts";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { normalizeSlug } from "../../utils/slugifier.ts";
 
 const defaultCardTitle: YextEntityField<TranslatableString> = {
   field: "name",
   constantValue: { defaultValue: "[[name]]" },
   constantValueEnabled: false,
 };
+
+// DirectoryCardLinkOverrideField is a yes/no toggle
+// that displays an entity field selector when set to yes.
+export type DirectoryCardLinkOverrideFieldValue =
+  YextEntityField<TranslatableString> & {
+    enabled: boolean;
+    normalizeLink: boolean;
+  };
+
+export const createDefaultLinkOverrideFieldValue =
+  (): DirectoryCardLinkOverrideFieldValue => ({
+    enabled: false,
+    normalizeLink: false,
+    field: "",
+    constantValue: {
+      defaultValue: "",
+      hasLocalizedValue: "true",
+    },
+    constantValueEnabled: false,
+  });
 
 const isHeadingTextField = (
   value: unknown
@@ -70,6 +92,10 @@ export const defaultDirectoryCardSlotData = (
       index,
       data: {
         cardTitle: defaultCardTitle,
+        linkOverride: createDefaultLinkOverrideFieldValue(),
+        showAddress: true,
+        showHoursStatus: true,
+        showPhoneNumber: true,
       },
       styles: {
         backgroundColor:
@@ -213,6 +239,10 @@ export type DirectoryCardProps = {
 
   data: {
     cardTitle: YextEntityField<TranslatableString>;
+    linkOverride: DirectoryCardLinkOverrideFieldValue;
+    showAddress: boolean;
+    showHoursStatus: boolean;
+    showPhoneNumber: boolean;
   };
 
   /** Styling for all the cards. */
@@ -239,7 +269,7 @@ export type DirectoryCardProps = {
 };
 
 const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
-  const { styles, slots, parentData, index, puck } = props;
+  const { data, styles, slots, parentData, index, puck } = props;
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
   const directoryChildrenFromContext = useDirectoryChildren();
   const sortedDirectoryChildren = React.useMemo(
@@ -276,13 +306,32 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
     [resolvedChild, relativePrefixToRoot, streamDocument]
   );
 
-  const resolvedUrl = resolvedChild
-    ? resolveUrlTemplateOfChild(
-        resolvedChild,
-        streamDocument,
-        relativePrefixToRoot
+  const linkOverrideValue = data.linkOverride.enabled
+    ? resolveComponentData(
+        data.linkOverride,
+        streamDocument.locale || "en",
+        childDocumentContext.document
       )
-    : undefined;
+    : "";
+  const resolvedLinkOverride =
+    typeof linkOverrideValue === "string"
+      ? data.linkOverride.normalizeLink
+        ? normalizeSlug(linkOverrideValue)
+        : linkOverrideValue
+      : "";
+
+  // If there is a value for link override, it should be used.
+  // Otherwise, construct the url based on the entity page's url template.
+  let resolvedUrl: undefined | string;
+  if (resolvedLinkOverride) {
+    resolvedUrl = resolvedLinkOverride;
+  } else if (resolvedChild) {
+    resolvedUrl = resolveUrlTemplateOfChild(
+      resolvedChild,
+      streamDocument,
+      relativePrefixToRoot
+    );
+  }
 
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
     cardStyles: DirectoryCardProps["styles"];
@@ -389,11 +438,13 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
             <slots.HeadingSlot style={{ height: "auto" }} />
           </MaybeLink>
         </div>
-        {resolvedChild?.hours && <slots.HoursSlot style={{ height: "auto" }} />}
-        {resolvedChild?.mainPhone && (
+        {data.showHoursStatus && resolvedChild?.hours && (
+          <slots.HoursSlot style={{ height: "auto" }} />
+        )}
+        {data.showPhoneNumber && resolvedChild?.mainPhone && (
           <slots.PhoneSlot style={{ height: "auto" }} />
         )}
-        {resolvedChild?.address && (
+        {data.showAddress && resolvedChild?.address && (
           <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
             <slots.AddressSlot style={{ height: "auto" }} />
           </div>
@@ -404,21 +455,11 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
 };
 
 const directoryCardFields: YextFields<DirectoryCardProps> = {
+  // The data fields are configured by directoryCardsSource.mappingFields in DirectoryWrapper.tsx.
   data: {
-    label: msg("fields.data", "Data"),
-    type: "object",
+    type: "custom",
     visible: false,
-    objectFields: {
-      cardTitle: {
-        type: "translatableString",
-        label: msg("fields.title", "Title"),
-        filter: {
-          types: ["type.string"],
-        },
-        sourceField: "dm_directoryChildren",
-        showApplyAllOption: true,
-      },
-    },
+    render: () => <></>,
   },
   styles: {
     type: "object",
@@ -449,6 +490,10 @@ export const DirectoryCard: YextComponentConfig<DirectoryCardProps> = {
   defaultProps: {
     data: {
       cardTitle: defaultCardTitle,
+      linkOverride: createDefaultLinkOverrideFieldValue(),
+      showAddress: true,
+      showHoursStatus: true,
+      showPhoneNumber: true,
     },
     styles: {
       backgroundColor: backgroundColors.background1.value,

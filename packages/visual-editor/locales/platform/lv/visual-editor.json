@@ -280,6 +280,7 @@
     "linkColor": "Saites krāsa",
     "linkedInLink": "LinkedIn saite",
     "linkLabel": "Saites etiķete",
+    "linkPath": "Saites ceļš",
     "links": "Saites",
     "linksTooltip": "Ja skata logs ir pārāk šaurs, saites tiks automātiski sakļautas",
     "linkTarget": "Saites mērķis",
@@ -430,6 +431,7 @@
       "width": "Platums",
       "yes": "Jā"
     },
+    "overrideLink": "Pārrakstīt saiti",
     "pageHeading": "Lapas virsraksts",
     "phone": "Tālrunis",
     "phoneFormat": "Tālruņa formāts",
@@ -569,6 +571,7 @@
   "link": "saite",
   "linkedEntityFields": "Saistītie entītiju lauki",
   "linkedEntityMultiValueWarning": "{{linkedField}} satur vairākas saistītas entītijas. Izmantojot pirmo {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Katras kartītes virsraksta saitei izmantojiet pielāgotu URL ceļu. Ja vērtība ir tukša, tiks izmantots ģenerētais direktorija URL.",
   "linkTypes": {
     "clickToWebsite": "Noklikšķiniet uz vietni",
     "drivingDirections": "Braukšanas norādījumi",

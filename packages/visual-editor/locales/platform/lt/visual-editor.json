@@ -280,6 +280,7 @@
     "linkColor": "Nuorodos spalva",
     "linkedInLink": "„LinkedIn“ nuoroda",
     "linkLabel": "Nuorodos etiketė",
+    "linkPath": "Nuorodos kelias",
     "links": "Nuorodos",
     "linksTooltip": "Jei peržiūros sritis per siaura, nuorodos bus automatiškai sutrauktos",
     "linkTarget": "Nuoroda Tikslas",
@@ -430,6 +431,7 @@
       "width": "Plotis",
       "yes": "Taip"
     },
+    "overrideLink": "Perrašyti nuorodą",
     "pageHeading": "Puslapio antraštė",
     "phone": "Telefonas",
     "phoneFormat": "Telefono formatas",
@@ -571,6 +573,7 @@
   "link": "nuoroda",
   "linkedEntityFields": "Susieti esybių laukai",
   "linkedEntityMultiValueWarning": "{{linkedField}} yra keli susieti objektai. Naudojamas pirmasis, skirtas {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Naudokite tinkintą URL kelią kiekvienos kortelės pavadinimo nuorodai. Jei reikšmė tuščia, bus naudojamas sugeneruotas katalogo URL.",
   "linkTypes": {
     "clickToWebsite": "Spustelėkite svetainę",
     "drivingDirections": "Važiavimo kryptys",

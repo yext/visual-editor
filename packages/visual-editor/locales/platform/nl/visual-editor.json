@@ -280,6 +280,7 @@
     "linkColor": "Linkkleur",
     "linkedInLink": "LinkedIn -link",
     "linkLabel": "Linklabel",
+    "linkPath": "Linkpad",
     "links": "Links",
     "linksTooltip": "Links worden automatisch samengevouwen als de viewport te smal is",
     "linkTarget": "Doel koppelen",
@@ -430,6 +431,7 @@
       "width": "Breedte",
       "yes": "Ja"
     },
+    "overrideLink": "Link overschrijven",
     "pageHeading": "Paginakop",
     "phone": "Telefoon",
     "phoneFormat": "Telefoonformaat",
@@ -569,6 +571,7 @@
   "link": "link",
   "linkedEntityFields": "Gekoppelde entiteitsvelden",
   "linkedEntityMultiValueWarning": "{{linkedField}} bevat meerdere gekoppelde entiteiten. Gebruik de eerste voor {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Gebruik een aangepast URL-pad voor de titellink van elke kaart. Als de waarde leeg is, wordt de gegenereerde map-URL gebruikt.",
   "linkTypes": {
     "clickToWebsite": "Klik op de website",
     "drivingDirections": "Routebeschrijving",

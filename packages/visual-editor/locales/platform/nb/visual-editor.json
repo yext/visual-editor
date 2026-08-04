@@ -280,6 +280,7 @@
     "linkColor": "Link farge",
     "linkedInLink": "LinkedIn Link",
     "linkLabel": "Koblingsetikett",
+    "linkPath": "Koblingssti",
     "links": "Lenker",
     "linksTooltip": "Lenker vil automatisk kollapse hvis visningsporten er for smal",
     "linkTarget": "Linkmål",
@@ -430,6 +431,7 @@
       "width": "Bredde",
       "yes": "Ja"
     },
+    "overrideLink": "Overstyr kobling",
     "pageHeading": "Sideoverskrift",
     "phone": "Telefon",
     "phoneFormat": "Telefonformat",
@@ -569,6 +571,7 @@
   "link": "lenke",
   "linkedEntityFields": "Koblede enhetsfelt",
   "linkedEntityMultiValueWarning": "{{linkedField}} inneholder flere koblede enheter. Bruker den første for {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Bruk en egendefinert URL-bane for hvert korts tittelkobling. Hvis verdien er tom, vil den genererte katalog-URLen bli brukt.",
   "linkTypes": {
     "clickToWebsite": "Klikk til nettstedet",
     "drivingDirections": "Veibeskrivelse",

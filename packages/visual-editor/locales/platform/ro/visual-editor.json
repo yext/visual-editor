@@ -280,6 +280,7 @@
     "linkColor": "Culoare link",
     "linkedInLink": "LinkedIn Link",
     "linkLabel": "Etichetă de link",
+    "linkPath": "Calea legăturii",
     "links": "Link -uri",
     "linksTooltip": "Linkurile se vor restrânge automat dacă fereastra de vizualizare este prea îngustă",
     "linkTarget": "Link țintă",
@@ -430,6 +431,7 @@
       "width": "Lăţime",
       "yes": "Da"
     },
+    "overrideLink": "Înlocuiți linkul",
     "pageHeading": "Titlul paginii",
     "phone": "Telefon",
     "phoneFormat": "Format telefonic",
@@ -570,6 +572,7 @@
   "link": "legătură",
   "linkedEntityFields": "Câmpurile de entitate conectate",
   "linkedEntityMultiValueWarning": "{{linkedField}} conține mai multe entități legate. Folosind primul pentru {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Utilizați o cale URL personalizată pentru linkul de titlu al fiecărui card. Dacă valoarea este goală, va fi utilizat URL-ul directorului generat.",
   "linkTypes": {
     "clickToWebsite": "Faceți clic pe site -ul web",
     "drivingDirections": "Direcții de conducere",

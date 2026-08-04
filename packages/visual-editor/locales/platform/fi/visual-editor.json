@@ -280,6 +280,7 @@
     "linkColor": "Linkin väri",
     "linkedInLink": "LinkedIn -linkki",
     "linkLabel": "Linkin etiketti",
+    "linkPath": "Linkkipolku",
     "links": "Linkit",
     "linksTooltip": "Linkit kutistuvat automaattisesti, jos näkymä on liian kapea",
     "linkTarget": "Linkki kohde",
@@ -430,6 +431,7 @@
       "width": "Leveys",
       "yes": "Kyllä"
     },
+    "overrideLink": "Ohita linkki",
     "pageHeading": "Sivun otsikko",
     "phone": "Puhelin",
     "phoneFormat": "Puhelinmuoto",
@@ -569,6 +571,7 @@
   "link": "linkki",
   "linkedEntityFields": "Linkitetyt entiteettikentät",
   "linkedEntityMultiValueWarning": "{{linkedField}} sisältää useita linkitettyjä kokonaisuuksia. Ensimmäistä käytetään mallille {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Käytä muokattua URL-osoitepolkua kunkin kortin otsikkolinkille. Jos arvo on tyhjä, käytetään luotua hakemiston URL-osoitetta.",
   "linkTypes": {
     "clickToWebsite": "Napsauta verkkosivustoa",
     "drivingDirections": "Ajo -ohjeet",

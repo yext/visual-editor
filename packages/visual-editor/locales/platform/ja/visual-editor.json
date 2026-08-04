@@ -280,6 +280,7 @@
     "linkColor": "リンクの色",
     "linkedInLink": "LinkedInリンク",
     "linkLabel": "リンクラベル",
+    "linkPath": "リンクパス",
     "links": "リンク",
     "linksTooltip": "ビューポートが狭すぎる場合、リンクは自動的に折りたたまれます",
     "linkTarget": "リンクターゲット",
@@ -430,6 +431,7 @@
       "width": "幅",
       "yes": "はい"
     },
+    "overrideLink": "オーバーライドリンク",
     "pageHeading": "ページ見出し",
     "phone": "電話",
     "phoneFormat": "電話形式",
@@ -569,6 +571,7 @@
   "link": "リンク",
   "linkedEntityFields": "リンクされたエンティティフィールド",
   "linkedEntityMultiValueWarning": "{{linkedField}} には、複数のリンクされたエンティティが含まれています。最初のものを {{resolvedField}} に使用します。",
+  "linkOverrideDirectoryTooltip": "各カードのタイトル リンクにはカスタム URL パスを使用します。値が空の場合は、生成されたディレクトリ URL が使用されます。",
   "linkTypes": {
     "clickToWebsite": "Webサイトをクリックしてください",
     "drivingDirections": "運転方向",

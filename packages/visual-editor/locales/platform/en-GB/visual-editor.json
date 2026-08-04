@@ -280,6 +280,7 @@
     "linkColor": "Link Color",
     "linkedInLink": "LinkedIn Link",
     "linkLabel": "Link Label",
+    "linkPath": "Link Path",
     "links": "Links",
     "linksTooltip": "Links will automatically collapse if the viewport is too narrow",
     "linkTarget": "Link Target",
@@ -430,6 +431,7 @@
       "width": "Width",
       "yes": "Yes"
     },
+    "overrideLink": "Override Link",
     "pageHeading": "Page Heading",
     "phone": "Phone",
     "phoneFormat": "Phone Format",
@@ -569,6 +571,7 @@
   "link": "link",
   "linkedEntityFields": "Linked Entity Fields",
   "linkedEntityMultiValueWarning": "{{linkedField}} contains multiple linked entities. Using the first one for {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Use a custom URL path for each card's title link. If the value is empty, the generated directory URL will be used.",
   "linkTypes": {
     "clickToWebsite": "Click to Website",
     "drivingDirections": "Driving Directions",

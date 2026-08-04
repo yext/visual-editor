@@ -280,6 +280,7 @@
     "linkColor": "Lingi värv",
     "linkedInLink": "LinkedIn Link",
     "linkLabel": "Lingi silt",
+    "linkPath": "Lingi tee",
     "links": "Lingid",
     "linksTooltip": "Lingid ahenevad automaatselt, kui vaateava on liiga kitsas",
     "linkTarget": "Lingi sihtmärk",
@@ -430,6 +431,7 @@
       "width": "Laius",
       "yes": "Jah"
     },
+    "overrideLink": "Alista link",
     "pageHeading": "Lehekülje pealkiri",
     "phone": "Telefon",
     "phoneFormat": "Telefonivorming",
@@ -569,6 +571,7 @@
   "link": "link",
   "linkedEntityFields": "Lingitud olemiväljad",
   "linkedEntityMultiValueWarning": "{{linkedField}} sisaldab mitut lingitud olemit. Kasutades esimest {{resolvedField}} jaoks.",
+  "linkOverrideDirectoryTooltip": "Kasutage iga kaardi pealkirja lingi jaoks kohandatud URL-i teed. Kui väärtus on tühi, kasutatakse loodud kataloogi URL-i.",
   "linkTypes": {
     "clickToWebsite": "Klõpsake veebisaidil",
     "drivingDirections": "Juhtimissuunad",

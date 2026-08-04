@@ -280,6 +280,7 @@
     "linkColor": "連結顏色",
     "linkedInLink": "LinkedIn鏈接",
     "linkLabel": "鏈接標籤",
+    "linkPath": "連結路徑",
     "links": "鏈接",
     "linksTooltip": "如果視口太窄，鏈接將自動折疊",
     "linkTarget": "鏈接目標",
@@ -430,6 +431,7 @@
       "width": "寬度",
       "yes": "是的"
     },
+    "overrideLink": "覆蓋連結",
     "pageHeading": "頁面標題",
     "phone": "電話",
     "phoneFormat": "電話格式",
@@ -569,6 +571,7 @@
   "link": "鏈接",
   "linkedEntityFields": "連結實體字段",
   "linkedEntityMultiValueWarning": "{{linkedField}} 包含多個連結實體。將第一個用於 {{resolvedField}}。",
+  "linkOverrideDirectoryTooltip": "對每張卡片的標題連結使用自訂 URL 路徑。如果該值為空，則將使用產生的目錄 URL。",
   "linkTypes": {
     "clickToWebsite": "單擊網站",
     "drivingDirections": "行駛方向",

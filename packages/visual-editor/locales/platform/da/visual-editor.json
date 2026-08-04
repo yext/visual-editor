@@ -280,6 +280,7 @@
     "linkColor": "Link farve",
     "linkedInLink": "LinkedIn -link",
     "linkLabel": "Link-etiket",
+    "linkPath": "Link sti",
     "links": "Links",
     "linksTooltip": "Links vil automatisk kollapse, hvis visningsporten er for smal",
     "linkTarget": "Linkmål",
@@ -430,6 +431,7 @@
       "width": "Bredde",
       "yes": "Ja"
     },
+    "overrideLink": "Tilsidesæt link",
     "pageHeading": "Sideoverskrift",
     "phone": "Telefon",
     "phoneFormat": "Telefonformat",
@@ -569,6 +571,7 @@
   "link": "forbindelse",
   "linkedEntityFields": "Tilknyttede enhedsfelter",
   "linkedEntityMultiValueWarning": "{{linkedField}} indeholder flere sammenkædede enheder. Brug af den første til {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Brug en tilpasset URL-sti til hvert korts titellink. Hvis værdien er tom, vil den genererede mappe-URL blive brugt.",
   "linkTypes": {
     "clickToWebsite": "Klik på webstedet",
     "drivingDirections": "Kørselsvejledning",

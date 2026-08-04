@@ -280,6 +280,7 @@
     "linkColor": "Bağlantı Rengi",
     "linkedInLink": "LinkedIn Link",
     "linkLabel": "Bağlantı Etiketi",
+    "linkPath": "Bağlantı Yolu",
     "links": "Bağlar",
     "linksTooltip": "Görünüm çok darsa bağlantılar otomatik olarak daraltılır",
     "linkTarget": "Bağlantı Hedefi",
@@ -430,6 +431,7 @@
       "width": "Genişlik",
       "yes": "Evet"
     },
+    "overrideLink": "Bağlantıyı Geçersiz Kıl",
     "pageHeading": "Sayfa Başlığı",
     "phone": "Telefon",
     "phoneFormat": "Telefon formatı",
@@ -569,6 +571,7 @@
   "link": "bağlantı",
   "linkedEntityFields": "Bağlantılı Varlık Alanları",
   "linkedEntityMultiValueWarning": "{{linkedField}} birden fazla bağlantılı varlık içerir. {{resolvedField}} için ilkini kullanma.",
+  "linkOverrideDirectoryTooltip": "Her kartın başlık bağlantısı için özel bir URL yolu kullanın. Değer boşsa oluşturulan dizin URL'si kullanılacaktır.",
   "linkTypes": {
     "clickToWebsite": "Web sitesine tıklayın",
     "drivingDirections": "Yol Tarifi",

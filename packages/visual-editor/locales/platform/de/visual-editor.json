@@ -280,6 +280,7 @@
     "linkColor": "Link-Farbe",
     "linkedInLink": "LinkedIn-Link",
     "linkLabel": "Link-Label",
+    "linkPath": "Linkpfad",
     "links": "Links",
     "linksTooltip": "Links werden automatisch eingeklappt, wenn das Viewport zu schmal ist",
     "linkTarget": "Link-Ziel",
@@ -430,6 +431,7 @@
       "width": "Breite",
       "yes": "Ja"
     },
+    "overrideLink": "Link überschreiben",
     "pageHeading": "Seitenüberschrift",
     "phone": "Telefon",
     "phoneFormat": "Telefonformat",
@@ -569,6 +571,7 @@
   "link": "Link",
   "linkedEntityFields": "Verknüpfte Entitätsfelder",
   "linkedEntityMultiValueWarning": "{{linkedField}} enthält mehrere verknüpfte Entitäten. Verwenden des ersten für {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Verwenden Sie einen benutzerdefinierten URL-Pfad für den Titellink jeder Karte. Wenn der Wert leer ist, wird die generierte Verzeichnis-URL verwendet.",
   "linkTypes": {
     "clickToWebsite": "Klick zur Website",
     "drivingDirections": "Routenplaner",

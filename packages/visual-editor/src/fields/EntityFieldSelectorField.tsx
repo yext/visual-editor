@@ -73,10 +73,19 @@ export type EntityFieldSelectorField<
   visible?: boolean;
   filter: MappedSourceFieldFilter<T>;
   constantValueFilter?: RenderEntityFieldFilter<T>;
+  /** Hides the Knowledge Graph/static-content toggle when enabled. */
   disableConstantValueToggle?: boolean;
+  /** Whether the field can be translated or not. */
   disallowTranslation?: boolean;
+  /** Shows the "Apply to all locales" control for translatable static values. */
+  showApplyAllOption?: boolean;
+  /** A dotted path to the linked source field on the active Puck item. Used for directories. */
   sourceFieldPath?: string;
+  /** Uses this linked source field and hides the repeated-source selector. Used for directories. */
   fixedRepeatedField?: string;
+  /** Hides the parent-field requirements tooltip for repeated sources. */
+  hideRequirementsTooltip?: boolean;
+  /** Configures repeated linked-item and manual-item editing. */
   repeated?: RepeatedEntityFieldMetadata<any>;
 };
 
@@ -240,9 +249,11 @@ const RepeatedEntityFieldSelector = ({
         }
         disableConstantValue={field.disableConstantValueToggle}
         label={translatedLabel}
-        infoTooltipRequirements={getItemSourceTooltipRequirements(
-          field.filter?.itemSourceTypes
-        )}
+        infoTooltipRequirements={
+          field.hideRequirementsTooltip
+            ? undefined
+            : getItemSourceTooltipRequirements(field.filter?.itemSourceTypes)
+        }
       />
       {constantValueEnabled ? (
         <div className="ve-pt-3">
@@ -344,6 +355,7 @@ export const EntityFieldSelectorFieldOverride = ({
           value={value}
           filter={constantValueFilter}
           disallowTranslation={field.disallowTranslation}
+          showApplyAllOption={field.showApplyAllOption}
           sourceField={field.filter.subdocumentField}
           sourceFieldPath={field.sourceFieldPath}
         />
@@ -466,6 +478,7 @@ type InputProps<T extends Record<string, any>> = {
   value: any;
   className?: string;
   disallowTranslation?: boolean;
+  showApplyAllOption?: boolean;
   label?: string;
   sourceFieldPath?: string;
   sourceField?: string;
@@ -476,6 +489,7 @@ export const ConstantValueInput = <T extends Record<string, any>>({
   onChange,
   value,
   disallowTranslation,
+  showApplyAllOption,
   sourceField,
 }: InputProps<T>) => {
   const constantFieldConfig = returnConstantFieldConfig(
@@ -498,12 +512,13 @@ export const ConstantValueInput = <T extends Record<string, any>>({
       : undefined) ??
     sourceField ??
     sourceFieldFromContext;
-  const scopedConstantField = resolvedSourceField
-    ? ({
-        ...constantFieldConfig,
-        sourceField: resolvedSourceField,
-      } as YextFieldDefinition<any>)
-    : constantFieldConfig;
+  const scopedConstantField = {
+    ...constantFieldConfig,
+    ...(resolvedSourceField ? { sourceField: resolvedSourceField } : {}),
+    ...(constantFieldConfig.type === "translatableString"
+      ? { showApplyAllOption }
+      : {}),
+  } as YextFieldDefinition<any>;
 
   const fieldEditor = (
     <YextAutoField

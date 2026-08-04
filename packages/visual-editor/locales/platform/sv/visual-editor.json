@@ -280,6 +280,7 @@
     "linkColor": "Länkfärg",
     "linkedInLink": "LinkedIn -länk",
     "linkLabel": "Länketikett",
+    "linkPath": "Länkväg",
     "links": "Länkar",
     "linksTooltip": "Länkar kommer automatiskt att kollapsa om visningsporten är för smal",
     "linkTarget": "Länkmål",
@@ -430,6 +431,7 @@
       "width": "Bredd",
       "yes": "Ja"
     },
+    "overrideLink": "Åsidosätt länk",
     "pageHeading": "Sidrubrik",
     "phone": "Telefon",
     "phoneFormat": "Telefonformat",
@@ -569,6 +571,7 @@
   "link": "länk",
   "linkedEntityFields": "Länkade enhetsfält",
   "linkedEntityMultiValueWarning": "{{linkedField}} innehåller flera länkade enheter. Använder den första för {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Använd en anpassad webbadresssökväg för varje korts titellänk. Om värdet är tomt kommer den genererade katalogadressen att användas.",
   "linkTypes": {
     "clickToWebsite": "Klicka på webbplatsen",
     "drivingDirections": "Vägbeskrivning",

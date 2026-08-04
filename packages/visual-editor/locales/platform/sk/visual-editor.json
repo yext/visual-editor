@@ -280,6 +280,7 @@
     "linkColor": "Farba odkazu",
     "linkedInLink": "LinkedIn link",
     "linkLabel": "Označenie odkazu",
+    "linkPath": "Cesta odkazu",
     "links": "Odkazy",
     "linksTooltip": "Ak je výrez príliš úzky, prepojenia sa automaticky zbalia",
     "linkTarget": "Cieľ odkazu",
@@ -430,6 +431,7 @@
       "width": "Šírka",
       "yes": "Áno"
     },
+    "overrideLink": "Prepísať odkaz",
     "pageHeading": "Záhlavie stránky",
     "phone": "Telefón",
     "phoneFormat": "Formát telefónu",
@@ -571,6 +573,7 @@
   "link": "prepojiť",
   "linkedEntityFields": "Polia prepojených entít",
   "linkedEntityMultiValueWarning": "{{linkedField}} obsahuje viacero prepojených entít. Používa sa prvý pre {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Pre odkaz na názov každej karty použite vlastnú cestu URL. Ak je hodnota prázdna, použije sa vygenerovaná adresa URL adresára.",
   "linkTypes": {
     "clickToWebsite": "Kliknite na webovú stránku",
     "drivingDirections": "Riadenie",
