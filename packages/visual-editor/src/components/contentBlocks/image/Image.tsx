@@ -202,6 +202,7 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
           <Image
             image={resolvedImage}
             aspectRatio={styles.aspectRatio}
+            imageFillType={styles.imageFillType}
             width={
               hideWidthProp ||
               (showImageConstrain && styles.imageConstrain === "fill")
@@ -234,6 +235,7 @@ export const imageDefaultProps = {
   },
   styles: {
     aspectRatio: 1.78,
+    imageFillType: "fill" as const,
     width: 640,
   },
   allowWidthProp: true,

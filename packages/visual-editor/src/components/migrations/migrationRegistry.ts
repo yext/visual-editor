@@ -77,6 +77,7 @@ import { normalizeFooterLogoImageMigration } from "./0075_normalize_footer_logo_
 import { slotMappedCardsMigration } from "./0076_slot_mapped_cards.ts";
 import { directoryCardTitleField } from "./0077_directory_card_title_field.ts";
 import { removeMapboxApiKeyPropsMigration } from "./0078_remove_mapbox_api_key_props.ts";
+import { imageFillTypeMigration } from "./0079_image_fill_type.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -162,4 +163,5 @@ export const migrationRegistry: MigrationRegistry = [
   slotMappedCardsMigration,
   directoryCardTitleField,
   removeMapboxApiKeyPropsMigration,
+  imageFillTypeMigration,
 ];

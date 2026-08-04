@@ -1,4 +1,5 @@
 import { YextFields } from "../../../fields/fields.ts";
+import { ImageFillType } from "../../../types/images.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
 
 /** Props for displaying an image */
@@ -7,6 +8,7 @@ export interface ImageStylingProps {
   aspectRatio: number;
   width?: number;
   imageConstrain?: "fill" | "fixed";
+  imageFillType?: ImageFillType;
 }
 
 export const ImageStylingFields: YextFields<ImageStylingProps> = {
@@ -24,6 +26,14 @@ export const ImageStylingFields: YextFields<ImageStylingProps> = {
       },
     ],
     visible: false,
+  },
+  imageFillType: {
+    type: "basicSelector",
+    label: msg("fields.imageFillType", "Image Fill Type"),
+    options: [
+      { label: msg("fields.options.fill", "Fill"), value: "fill" },
+      { label: msg("fields.options.fit", "Fit"), value: "fit" },
+    ],
   },
   width: {
     type: "number",

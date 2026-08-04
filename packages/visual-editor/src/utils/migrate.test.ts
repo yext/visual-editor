@@ -7,6 +7,7 @@ import { mainContentWrapperMigration } from "../components/migrations/0073_main_
 import { normalizeFooterLogoImageMigration } from "../components/migrations/0075_normalize_footer_logo_image.ts";
 import { slotMappedCardsMigration } from "../components/migrations/0076_slot_mapped_cards.ts";
 import { removeMapboxApiKeyPropsMigration } from "../components/migrations/0078_remove_mapbox_api_key_props.ts";
+import { imageFillTypeMigration } from "../components/migrations/0079_image_fill_type.ts";
 
 describe("migrate", () => {
   it("successfully applies a migration", async () => {
@@ -203,6 +204,89 @@ describe("migrate", () => {
       ],
       zones: {},
     });
+  });
+
+  it("adds default fill behavior to reusable images", () => {
+    const migratedData = migrate(
+      {
+        root: { props: { version: 0 } },
+        content: [
+          {
+            type: "ImageWrapper",
+            props: {
+              id: "image",
+              styles: { aspectRatio: 1.78, width: 640 },
+            },
+          },
+          {
+            type: "HeroImage",
+            props: {
+              id: "hero-image",
+              styles: { aspectRatio: 1, imageFillType: "fit" },
+            },
+          },
+          {
+            type: "ProductCard",
+            props: {
+              id: "product-card",
+              slots: {
+                ImageSlot: [
+                  {
+                    type: "ImageWrapper",
+                    props: {
+                      id: "nested-image",
+                      styles: { aspectRatio: 1 },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [imageFillTypeMigration],
+      imageFillTypeMigrationConfig,
+      {}
+    );
+
+    expect(migratedData.content).toEqual([
+      {
+        type: "ImageWrapper",
+        props: {
+          id: "image",
+          styles: {
+            aspectRatio: 1.78,
+            width: 640,
+            imageFillType: "fill",
+          },
+        },
+      },
+      {
+        type: "HeroImage",
+        props: {
+          id: "hero-image",
+          styles: { aspectRatio: 1, imageFillType: "fit" },
+        },
+      },
+      {
+        type: "ProductCard",
+        props: {
+          id: "product-card",
+          slots: {
+            ImageSlot: [
+              {
+                type: "ImageWrapper",
+                props: {
+                  id: "nested-image",
+                  styles: { aspectRatio: 1, imageFillType: "fill" },
+                },
+              },
+            ],
+          },
+        },
+      },
+    ]);
   });
 
   it("wraps all top-level body components in MainContent when there is no page chrome", async () => {
@@ -1596,6 +1680,27 @@ export const migrationRegistry: MigrationRegistry = [
   alreadyAppliedMigration,
   migration,
 ];
+
+const imageFillTypeMigrationConfig = {
+  components: {
+    ProductCard: {
+      fields: {
+        slots: {
+          type: "object",
+          objectFields: {
+            ImageSlot: { type: "slot" },
+          },
+        },
+      },
+    },
+    ImageWrapper: {
+      fields: {},
+    },
+    HeroImage: {
+      fields: {},
+    },
+  },
+} as any;
 
 const footerLogoSlotMigrationConfig = {
   components: {
