@@ -38,6 +38,7 @@ import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 import { clonePuckResolveData } from "../utils/clonePuckResolveData.ts";
 import { YextPuckFieldOverrides } from "../../fields/fieldOverrides.ts";
+import { createPuckFieldTransforms } from "../utils/puckFieldTransforms.ts";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -111,6 +112,10 @@ export const InternalLayoutEditor = ({
   const { i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
   const { errorCount, errorSources, errorDetails } = useErrorContext();
+  const fieldTransforms = React.useMemo(
+    () => createPuckFieldTransforms(i18n.language, streamDocument),
+    [i18n.language, streamDocument]
+  );
 
   /**
    * When the Puck history changes save it to localStorage and send a message
@@ -395,6 +400,7 @@ export const InternalLayoutEditor = ({
         config={translatedPuckConfigWithRootFields}
         data={{}} // we use puckInitialHistory instead
         initialHistory={puckInitialHistory}
+        fieldTransforms={fieldTransforms}
         plugins={[{ ...blocks, label: pt("sections", "Sections") }, outline]}
         overrides={{
           fields: fieldsOverride,

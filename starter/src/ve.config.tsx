@@ -5,16 +5,17 @@ import {
   DirectoryCategory,
   DirectoryCategoryComponents,
   DirectoryCategoryProps,
-  LocatorConfigProps,
   MainConfigProps,
   locatorConfig,
   mainConfig,
+  MiniHero,
 } from "@yext/visual-editor";
 
 interface DevProps extends MainConfigProps, DirectoryCategoryProps {}
 
 const components: Config<DevProps>["components"] = {
   ...mainConfig.components,
+  MiniHero,
   ...DirectoryCategoryComponents,
 };
 
