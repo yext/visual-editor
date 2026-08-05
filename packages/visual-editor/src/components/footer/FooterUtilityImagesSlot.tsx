@@ -1,7 +1,7 @@
 import * as React from "react";
 import { PuckComponent } from "@puckeditor/core";
 import { cva } from "class-variance-authority";
-import { AssetImageType } from "../../types/images.ts";
+import { AssetImageType, ImageFillType } from "../../types/images.ts";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { MaybeLink } from "../atoms/maybeLink.tsx";
 import { Image } from "../atoms/image.tsx";
@@ -18,6 +18,7 @@ export interface FooterUtilityImagesSlotProps {
   styles: {
     width?: number;
     aspectRatio?: number;
+    imageFillType?: ImageFillType;
   };
   /** @internal */
   desktopContentAlignment?: "left" | "center" | "right";
@@ -101,6 +102,7 @@ const FooterUtilityImagesSlotInternal: PuckComponent<
           <Image
             image={item.image}
             aspectRatio={aspectRatio}
+            imageFillType={styles.imageFillType}
             width={width}
             className="object-contain"
           />
@@ -174,6 +176,7 @@ export const FooterUtilityImagesSlot: YextComponentConfig<FooterUtilityImagesSlo
         type: "object",
         label: msg("fields.styles", "Styles"),
         objectFields: {
+          imageFillType: ImageStylingFields.imageFillType,
           width: ImageStylingFields.width,
           aspectRatio: ImageStylingFields.aspectRatio,
         },
@@ -184,6 +187,7 @@ export const FooterUtilityImagesSlot: YextComponentConfig<FooterUtilityImagesSlo
         utilityImages: [],
       },
       styles: {
+        imageFillType: "fill",
         width: 60,
         aspectRatio: 1,
       },
