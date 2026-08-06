@@ -1,4 +1,5 @@
 import {
+  type EntityFieldTypes,
   getFilteredEntityFields,
   getCompatibleEntityFieldTypes,
   RenderEntityFieldFilter,
@@ -315,9 +316,11 @@ const getScopedFieldsForSelector = (
  * Returns the schema fields that should appear in an entity field selector.
  *
  * 1. Scope to a selected source item when `sourceField` is provided.
- * 2. For item-source and mapped-source pickers, restrict roots to fields that
- *    can satisfy the required descendant type sets. `itemSourceTypes` takes
- *    precedence over `mappedSourceTypes` when both are present.
+ * 2. For item-source pickers, restrict roots to fields whose descendants can
+ *    satisfy at least one configured type group. For mapped-source pickers,
+ *    restrict roots to fields whose descendants can satisfy every configured
+ *    type group. `itemSourceTypes` takes precedence over `mappedSourceTypes`
+ *    when both are present.
  * 3. Filter incompatible resolved values out when a stream document is
  *    available.
  * 4. Fall back to normal entity-field filtering for standard field selectors.
@@ -347,7 +350,10 @@ export const getFieldsForSelector = (
       }
     );
 
-    return requiredDescendantTypes.every((requiredTypes) =>
+    // One descendant match is enough for item-source selection, while mapped
+    // sources still require every configured type group to match somewhere in
+    // the selected root's descendants.
+    const matchesRequiredTypes = (requiredTypes: EntityFieldTypes[]): boolean =>
       availableFields.some(
         (availableField) =>
           getFilteredEntityFields(
@@ -357,8 +363,11 @@ export const getFieldsForSelector = (
               types: requiredTypes.flatMap(getCompatibleEntityFieldTypes),
             }
           ).length > 0
-      )
-    );
+      );
+
+    return filter.itemSourceTypes?.length
+      ? requiredDescendantTypes.some(matchesRequiredTypes)
+      : requiredDescendantTypes.every(matchesRequiredTypes);
   };
 
   if (filter.itemSourceTypes?.length) {
