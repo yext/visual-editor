@@ -1,9 +1,7 @@
 import * as React from "react";
 import { PuckComponent } from "@puckeditor/core";
-import { LinkType } from "@yext/pages-components";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { PageSection } from "../atoms/pageSection.tsx";
-import { CTA } from "../atoms/cta.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import {
   backgroundColors,
@@ -15,12 +13,7 @@ import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 type MiniHeroResolvedProps = {
   data: {
     text: string;
-    cta?: {
-      ctaType?: "textAndLink" | "getDirections" | "presetImage";
-      label: string;
-      link?: string;
-      linkType?: LinkType;
-    };
+    cta?: React.ReactNode;
   };
   styles: {
     backgroundColor?: ThemeColor;
@@ -82,17 +75,7 @@ const MiniHeroComponent: PuckComponent<MiniHeroResolvedProps> = ({
       className="flex flex-col items-start gap-4"
     >
       <p className="text-3xl font-bold">{data.text}</p>
-      {data.cta ? (
-        <CTA
-          actionType="link"
-          ctaType={data.cta.ctaType}
-          label={data.cta.label}
-          link={data.cta.link}
-          linkType={data.cta.linkType}
-          normalizeLink={true}
-          setPadding={true}
-        />
-      ) : null}
+      {data.cta}
     </PageSection>
   );
 };

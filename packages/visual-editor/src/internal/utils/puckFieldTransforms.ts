@@ -1,4 +1,6 @@
 import { type FieldTransforms } from "@puckeditor/core";
+import React from "react";
+import { CTA } from "../../components/atoms/cta.tsx";
 import { type YextCTAField } from "../../fields/CTASelectorField.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { getCTAType } from "./ctaFieldUtils.ts";
@@ -57,11 +59,14 @@ export const createPuckFieldTransforms = (
         return undefined;
       }
 
-      return {
+      return React.createElement(CTA, {
+        actionType: "link",
         ctaType: resolvedCtaType,
         label,
         link,
         linkType: cta.linkType ?? "URL",
-      };
+        normalizeLink: true,
+        setPadding: true,
+      });
     },
   }) as unknown as FieldTransforms;
