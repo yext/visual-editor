@@ -29,6 +29,7 @@ export interface FooterLogoSlotProps {
   styles: {
     width?: number;
     aspectRatio?: number;
+    /** @defaultValue fill */
     imageFillType?: ImageFillType;
   };
 }

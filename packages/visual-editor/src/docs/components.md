@@ -373,10 +373,12 @@ The background color for the entire footer section.
 
 #### Other Props
 
-| Prop     | Type                                                                                                                          | Description | Default |
-| :------- | :---------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
-| `data`   | `{ image: YextEntityField<ImageType \| ComplexImageType \| AssetImageType \| TranslatableAssetImage>; linkTarget?: string; }` |             |         |
-| `styles` | `{ width?: number; aspectRatio?: number; imageFillType?: ImageFillType; }`                                                    |             |         |
+| Prop                   | Type                                                                                                                          | Description | Default |
+| :--------------------- | :---------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`                 | `{ image: YextEntityField<ImageType \| ComplexImageType \| AssetImageType \| TranslatableAssetImage>; linkTarget?: string; }` |             |         |
+| `styles.width`         | `number`                                                                                                                      |             |         |
+| `styles.aspectRatio`   | `number`                                                                                                                      |             |         |
+| `styles.imageFillType` | `ImageFillType`                                                                                                               |             | `fill`  |
 
 ---
 
@@ -399,10 +401,12 @@ The background color for the entire footer section.
 
 #### Other Props
 
-| Prop     | Type                                                                       | Description | Default |
-| :------- | :------------------------------------------------------------------------- | :---------- | :------ |
-| `data`   | `{ utilityImages: { image: AssetImageType; linkTarget?: string; }[]; }`    |             |         |
-| `styles` | `{ width?: number; aspectRatio?: number; imageFillType?: ImageFillType; }` |             |         |
+| Prop                   | Type                                                                    | Description | Default |
+| :--------------------- | :---------------------------------------------------------------------- | :---------- | :------ |
+| `data`                 | `{ utilityImages: { image: AssetImageType; linkTarget?: string; }[]; }` |             |         |
+| `styles.width`         | `number`                                                                |             |         |
+| `styles.aspectRatio`   | `number`                                                                |             |         |
+| `styles.imageFillType` | `ImageFillType`                                                         |             | `fill`  |
 
 ---
 

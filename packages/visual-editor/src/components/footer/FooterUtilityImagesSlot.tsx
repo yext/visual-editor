@@ -18,6 +18,7 @@ export interface FooterUtilityImagesSlotProps {
   styles: {
     width?: number;
     aspectRatio?: number;
+    /** @defaultValue fill */
     imageFillType?: ImageFillType;
   };
   /** @internal */
