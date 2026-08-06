@@ -7,7 +7,6 @@ import {
 import { StreamFields, YextSchemaField } from "../types/entityFields.ts";
 import { resolveField } from "../utils/resolveYextEntityField.ts";
 import { type StreamDocument } from "../utils/types/StreamDocument.ts";
-import { getTopLevelLinkedEntitySourceFields } from "../utils/linkedEntityFieldUtils.ts";
 import {
   getListSourceRootFields,
   type MappedSourceFieldFilter,
@@ -206,16 +205,6 @@ export const getEntityFieldScopeDisplayName = (
   return displayName?.split(DISPLAY_NAME_SEPARATOR).at(-1);
 };
 
-/**
- * Returns whether a resolved mapped-source root is compatible with linked-item
- * source selection: undefined, null, arrays, and object values are all valid.
- */
-const isMappedListSourceValue = (value: unknown): boolean =>
-  value === undefined ||
-  value === null ||
-  Array.isArray(value) ||
-  (!!value && typeof value === "object");
-
 const hasListSourceValueInDocument = (
   streamDocument: StreamDocument,
   fieldName: string
@@ -317,10 +306,7 @@ const getScopedFieldsForSelector = (
  *
  * 1. Scope to a selected source item when `sourceField` is provided.
  * 2. For item-source pickers, restrict roots to fields whose descendants can
- *    satisfy at least one configured type group. For mapped-source pickers,
- *    restrict roots to fields whose descendants can satisfy every configured
- *    type group. `itemSourceTypes` takes precedence over `mappedSourceTypes`
- *    when both are present.
+ *    satisfy at least one configured type group.
  * 3. Filter incompatible resolved values out when a stream document is
  *    available.
  * 4. Fall back to normal entity-field filtering for standard field selectors.
@@ -335,8 +321,7 @@ export const getFieldsForSelector = (
     return getScopedFieldsForSelector(entityFields, sourceField, filter);
   }
 
-  const requiredDescendantTypes =
-    filter.itemSourceTypes ?? filter.mappedSourceTypes;
+  const requiredDescendantTypes = filter.itemSourceTypes;
 
   const hasRequiredDescendants = (field: YextSchemaField): boolean => {
     if (!requiredDescendantTypes?.length) {
@@ -350,9 +335,7 @@ export const getFieldsForSelector = (
       }
     );
 
-    // One descendant match is enough for item-source selection, while mapped
-    // sources still require every configured type group to match somewhere in
-    // the selected root's descendants.
+    // One descendant match is enough for item-source selection.
     const matchesRequiredTypes = (requiredTypes: EntityFieldTypes[]): boolean =>
       availableFields.some(
         (availableField) =>
@@ -365,9 +348,7 @@ export const getFieldsForSelector = (
           ).length > 0
       );
 
-    return filter.itemSourceTypes?.length
-      ? requiredDescendantTypes.some(matchesRequiredTypes)
-      : requiredDescendantTypes.every(matchesRequiredTypes);
+    return requiredDescendantTypes.some(matchesRequiredTypes);
   };
 
   if (filter.itemSourceTypes?.length) {
@@ -389,46 +370,6 @@ export const getFieldsForSelector = (
           )
       )
     );
-  }
-
-  if (filter.mappedSourceTypes?.length) {
-    const validLinkedEntityRootFields = getTopLevelLinkedEntitySourceFields(
-      entityFields
-    )
-      .map((field) => ({
-        ...field,
-        displayName:
-          getEntityFieldDisplayName(field.name, entityFields) ??
-          field.displayName ??
-          field.name,
-      }))
-      .filter(hasRequiredDescendants)
-      .filter((field) =>
-        !streamDocument
-          ? true
-          : isMappedListSourceValue(
-              resolveField<unknown>(streamDocument, field.name).value
-            )
-      );
-    const validListRootFields = getListSourceRootFields(entityFields)
-      .map((field) => ({
-        ...field,
-        displayName:
-          getEntityFieldDisplayName(field.name, entityFields) ??
-          field.displayName ??
-          field.name,
-      }))
-      .filter(hasRequiredDescendants)
-      .filter((field) =>
-        !streamDocument
-          ? true
-          : hasListSourceValueInDocument(streamDocument, field.name)
-      );
-
-    return sortFields([
-      ...dedupeFieldsByName(validLinkedEntityRootFields),
-      ...dedupeFieldsByName(validListRootFields),
-    ]);
   }
 
   let filteredEntityFields = getFilteredEntityFields(entityFields, filter);
