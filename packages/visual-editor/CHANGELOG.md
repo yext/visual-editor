@@ -1,8 +1,13 @@
-#### 1.4.4 (2026-08-06)
+#### 1.4.4 (2026-08-07)
 
 ##### New Features
 
 - add image styling props for expanded header and footer images ([#1282](https://github.com/yext/visual-editor/pull/1282)) ([763b8ea9](https://github.com/yext/visual-editor/commit/763b8ea90fb7bbd0081ecafa4ab616dcf16d5e96))
+
+##### Other Changes
+
+- v1.4.4" ([2e1d39d6](https://github.com/yext/visual-editor/commit/2e1d39d6f076176400b558000cbfcc278ad51806))
+- v1.4.4 ([da53dd17](https://github.com/yext/visual-editor/commit/da53dd1794c340271f3b8dc3b5f95de7cacb5d21))
 
 #### 1.4.3 (2026-08-04)
 
