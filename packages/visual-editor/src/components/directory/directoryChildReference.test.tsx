@@ -3,6 +3,8 @@ import { describe, expect, it } from "vitest";
 import { Config, resolveAllData } from "@puckeditor/core";
 import { Directory } from "./Directory.tsx";
 import { SlotsCategoryComponents } from "../categories/SlotsCategory.tsx";
+import { defaultDirectoryCardSlotData } from "./DirectoryCard.tsx";
+import { backgroundColors } from "../../utils/themeConfigOptions.ts";
 
 const cityDocument = {
   locale: "en",
@@ -113,9 +115,11 @@ describe("directoryChildReference", () => {
       childRef: { childIndex: 0 },
     });
     expect(firstCard?.props?.parentData?.profile).toBeUndefined();
-    expect(firstCard?.props?.data).toEqual({
-      cardTitle: "Galaxy Grill Ballston",
-    });
+    expect(firstCard?.props?.data).toEqual(
+      expect.objectContaining({
+        cardTitle: "Galaxy Grill Ballston",
+      })
+    );
     expect(firstCard?.props?.field).toBe("name");
     expect(firstCard?.props?.slots?.HeadingSlot?.[0]?.type).toBe(
       "HeadingTextSlot"
@@ -144,5 +148,79 @@ describe("directoryChildReference", () => {
     expect(
       firstCard?.props?.slots?.HoursSlot?.[0]?.props?.data?.hours?.field
     ).toBe("hours");
+  });
+
+  it("preserves slot styles when directory cards are re-resolved", async () => {
+    const puckConfig: Config = {
+      components: { Directory, ...SlotsCategoryComponents },
+      root: {
+        render: () => React.createElement(React.Fragment),
+      },
+    };
+    const seededCard = defaultDirectoryCardSlotData("DirectoryCard-seeded", 0);
+    seededCard.props.slots.HeadingSlot[0]!.props.styles.color =
+      backgroundColors.color1.value;
+    seededCard.props.slots.AddressSlot[0]!.props.styles.color =
+      backgroundColors.color2.value;
+    seededCard.props.slots.PhoneSlot[0]!.props.styles.color =
+      backgroundColors.color3.value;
+    seededCard.props.slots.HoursSlot[0]!.props.styles.timeFormat = "24h";
+    seededCard.props.slots.HoursSlot[0]!.props.styles.bodyVariant = "sm";
+
+    const resolvedData = await resolveAllData(
+      {
+        root: {
+          props: {},
+        },
+        content: [
+          {
+            type: "Directory",
+            props: {
+              ...directoryProps,
+              slots: {
+                ...directoryProps.slots,
+                DirectoryGrid: [
+                  {
+                    type: "DirectoryGrid",
+                    props: {
+                      slots: {
+                        CardSlot: [seededCard],
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      puckConfig,
+      {
+        streamDocument: cityDocument,
+      }
+    );
+
+    const cards =
+      resolvedData.content[0]?.props?.slots?.DirectoryGrid?.[0]?.props?.slots
+        ?.CardSlot ?? [];
+
+    expect(cards).toHaveLength(2);
+    for (const card of cards) {
+      expect(
+        card?.props?.slots?.HeadingSlot?.[0]?.props?.styles?.color
+      ).toEqual(backgroundColors.color1.value);
+      expect(
+        card?.props?.slots?.AddressSlot?.[0]?.props?.styles?.color
+      ).toEqual(backgroundColors.color2.value);
+      expect(card?.props?.slots?.PhoneSlot?.[0]?.props?.styles?.color).toEqual(
+        backgroundColors.color3.value
+      );
+      expect(
+        card?.props?.slots?.HoursSlot?.[0]?.props?.styles?.timeFormat
+      ).toBe("24h");
+      expect(
+        card?.props?.slots?.HoursSlot?.[0]?.props?.styles?.bodyVariant
+      ).toBe("sm");
+    }
   });
 });
