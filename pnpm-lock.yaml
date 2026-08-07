@@ -7,6 +7,7 @@ settings:
 overrides:
   happy-dom: 20.8.8
   esbuild: 0.28.1
+  js-yaml: 4.3.0
 
 importers:
   .:
@@ -7839,10 +7840,10 @@ packages:
         integrity: sha512-mxa9E9ITFOt0ban3j6L5MpjwegGz6lBQmM1IJkWeBZGcMxto50+eWdjC/52xDbS2vy0k7vIMK0Fe2wfL9OQSpQ==,
       }
 
-  js-yaml@4.1.0:
+  js-yaml@4.3.0:
     resolution:
       {
-        integrity: sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==,
+        integrity: sha512-1td788aAnnZ5qs7V2QIRl1owjtYpbKt749Y3xauqQgwIIGF/xXWz1wMTEBx5O3LK3lXLVuqXPdPxj2BoFHaW9Q==,
       }
     hasBin: true
 
@@ -16029,7 +16030,7 @@ snapshots:
     dependencies:
       env-paths: 2.2.1
       import-fresh: 3.3.1
-      js-yaml: 4.1.0
+      js-yaml: 4.3.0
       parse-json: 5.2.0
     optionalDependencies:
       typescript: 5.9.2
@@ -17108,7 +17109,7 @@ snapshots:
 
   js-tokens@9.0.1: {}
 
-  js-yaml@4.1.0:
+  js-yaml@4.3.0:
     dependencies:
       argparse: 2.0.1
 

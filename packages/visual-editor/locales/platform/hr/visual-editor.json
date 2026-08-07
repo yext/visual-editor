@@ -152,6 +152,9 @@
     "warning": "Ova će radnja ukloniti vaše lokalne promjene. Ne može se poništiti."
   },
   "distance": "Udaljenost",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> iz pretraživanja",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> od {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> od vas",
   "emptyStateFieldEmpty": "Mapirano polje {{entityType}} je prazno",
   "emptyStateSectionHidden": "Odjeljak skriven za ovaj {{entityType}}",
   "enableCookies": "Omogući kolačiće",
@@ -280,6 +283,7 @@
     "linkColor": "Boja veze",
     "linkedInLink": "LinkedIn veza",
     "linkLabel": "Oznaka veze",
+    "linkPath": "Put veze",
     "links": "Veze",
     "linksTooltip": "Veze će se automatski skupiti ako je okvir za prikaz preuzak",
     "linkStyles": "Stilovi veza",
@@ -306,6 +310,7 @@
       "aspectRatio": "Omjer slike",
       "base_text size": "Baza",
       "bold": "Podebljano",
+      "bothDistances": "Obje udaljenosti",
       "bottom_direction": "Dno",
       "button": "Gumb",
       "carousel": "Karusel",
@@ -430,6 +435,7 @@
       "width": "Širina",
       "yes": "Da"
     },
+    "overrideLink": "Nadjačaj vezu",
     "pageHeading": "Naslov stranice",
     "phone": "Telefon",
     "phoneFormat": "Format telefona",
@@ -571,6 +577,7 @@
   "link": "link",
   "linkedEntityFields": "Polja povezanih entiteta",
   "linkedEntityMultiValueWarning": "{{linkedField}} sadrži više povezanih entiteta. Korištenje prvog za {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Upotrijebite prilagođeni URL put za naslovnu vezu svake kartice. Ako je vrijednost prazna, koristit će se generirani URL imenika.",
   "linkTypes": {
     "clickToWebsite": "Kliknite na web mjesto",
     "drivingDirections": "Upute za vožnju",

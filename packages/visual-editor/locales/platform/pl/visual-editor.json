@@ -152,6 +152,9 @@
     "warning": "Ta akcja usunie twoje lokalne zmiany. Nie można go cofnąć."
   },
   "distance": "Dystans",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> z wyszukiwania",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> od {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> od Ciebie",
   "emptyStateFieldEmpty": "Mapowane pole elementu {{entityType}} jest puste",
   "emptyStateSectionHidden": "Sekcja ukryta dla tego elementu {{entityType}}",
   "enableCookies": "Włącz pliki cookie",
@@ -280,6 +283,7 @@
     "linkColor": "Kolor łącza",
     "linkedInLink": "Link LinkedIn",
     "linkLabel": "Etykieta łącza",
+    "linkPath": "Ścieżka łącza",
     "links": "Spinki do mankietów",
     "linksTooltip": "Łącza zostaną automatycznie zwinięte, jeśli rzutnia jest zbyt wąska",
     "linkStyles": "Style łączy",
@@ -306,6 +310,7 @@
       "aspectRatio": "Współczynnik kształtu",
       "base_text size": "Baza",
       "bold": "Pogrubiony",
+      "bothDistances": "Obydwa dystanse",
       "bottom_direction": "Dół",
       "button": "Przycisk",
       "carousel": "Karuzela",
@@ -430,6 +435,7 @@
       "width": "Szerokość",
       "yes": "Tak"
     },
+    "overrideLink": "Zastąp łącze",
     "pageHeading": "Nagłówek strony",
     "phone": "Telefon",
     "phoneFormat": "Format telefonu",
@@ -572,6 +578,7 @@
   "link": "Link",
   "linkedEntityFields": "Pola encji połączonych",
   "linkedEntityMultiValueWarning": "{{linkedField}} zawiera wiele połączonych jednostek. Używanie pierwszego dla {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Użyj niestandardowej ścieżki URL dla linku tytułowego każdej karty. Jeśli wartość jest pusta, zostanie użyty wygenerowany adres URL katalogu.",
   "linkTypes": {
     "clickToWebsite": "Kliknij na stronę internetową",
     "drivingDirections": "Kierunki jazdy",

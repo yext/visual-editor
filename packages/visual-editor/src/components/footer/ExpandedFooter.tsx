@@ -462,6 +462,7 @@ export const ExpandedFooter: YextComponentConfig<ExpandedFooterProps> = {
               },
             },
             styles: {
+              imageFillType: "fill",
               width: 100,
               aspectRatio: 1,
             },
@@ -492,6 +493,7 @@ export const ExpandedFooter: YextComponentConfig<ExpandedFooterProps> = {
               utilityImages: [],
             },
             styles: {
+              imageFillType: "fill",
               width: 0,
               aspectRatio: 1,
             },

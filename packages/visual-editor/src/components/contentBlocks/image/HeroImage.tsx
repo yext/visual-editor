@@ -67,6 +67,7 @@ const HeroImageComponent: PuckComponent<HeroImageProps> = (props) => {
       <Image
         image={resolvedImage}
         aspectRatio={styles.aspectRatio}
+        imageFillType={styles.imageFillType}
         width={variant === "classic" ? styles.width : undefined}
         className={className || "max-w-full rounded-image-borderRadius w-full"}
         sizes={imgSizesHelper({

@@ -152,6 +152,9 @@
     "warning": "See toiming eemaldab teie kohalikud muudatused. Seda ei saa teha."
   },
   "distance": "Kaugus",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> otsingust",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> alates {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> teilt",
   "emptyStateFieldEmpty": "{{entityType}} kaardistatud väli on tühi",
   "emptyStateSectionHidden": "Selle {{entityType}} jaoks peidetud jaotis",
   "enableCookies": "Luba küpsised",
@@ -280,6 +283,7 @@
     "linkColor": "Lingi värv",
     "linkedInLink": "LinkedIn Link",
     "linkLabel": "Lingi silt",
+    "linkPath": "Lingi tee",
     "links": "Lingid",
     "linksTooltip": "Lingid ahenevad automaatselt, kui vaateava on liiga kitsas",
     "linkStyles": "Linkide stiilid",
@@ -306,6 +310,7 @@
       "aspectRatio": "Kuvasuhe",
       "base_text size": "Alus",
       "bold": "Paks",
+      "bothDistances": "Mõlemad vahemaad",
       "bottom_direction": "Alumine",
       "button": "Nupp",
       "carousel": "Karussell",
@@ -430,6 +435,7 @@
       "width": "Laius",
       "yes": "Jah"
     },
+    "overrideLink": "Alista link",
     "pageHeading": "Lehekülje pealkiri",
     "phone": "Telefon",
     "phoneFormat": "Telefonivorming",
@@ -570,6 +576,7 @@
   "link": "link",
   "linkedEntityFields": "Lingitud olemiväljad",
   "linkedEntityMultiValueWarning": "{{linkedField}} sisaldab mitut lingitud olemit. Kasutades esimest {{resolvedField}} jaoks.",
+  "linkOverrideDirectoryTooltip": "Kasutage iga kaardi pealkirja lingi jaoks kohandatud URL-i teed. Kui väärtus on tühi, kasutatakse loodud kataloogi URL-i.",
   "linkTypes": {
     "clickToWebsite": "Klõpsake veebisaidil",
     "drivingDirections": "Juhtimissuunad",

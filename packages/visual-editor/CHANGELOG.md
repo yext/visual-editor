@@ -1,3 +1,30 @@
+# <<<<<<< HEAD
+
+#### 1.4.4 (2026-08-07)
+
+##### New Features
+
+- add image styling props for expanded header and footer images ([#1282](https://github.com/yext/visual-editor/pull/1282)) ([763b8ea9](https://github.com/yext/visual-editor/commit/763b8ea90fb7bbd0081ecafa4ab616dcf16d5e96))
+
+##### Other Changes
+
+- v1.4.4" ([2e1d39d6](https://github.com/yext/visual-editor/commit/2e1d39d6f076176400b558000cbfcc278ad51806))
+- v1.4.4 ([da53dd17](https://github.com/yext/visual-editor/commit/da53dd1794c340271f3b8dc3b5f95de7cacb5d21))
+
+#### 1.4.3 (2026-08-04)
+
+##### Chores
+
+- set js-yaml override to avoid vulnerability ([#1277](https://github.com/yext/visual-editor/pull/1277)) ([a6c28b52](https://github.com/yext/visual-editor/commit/a6c28b524360d215cdd2f8c3f251221d0ec7d37b))
+
+##### New Features
+
+- override links in directory cards ([#1279](https://github.com/yext/visual-editor/pull/1279)) ([a7d9aaa7](https://github.com/yext/visual-editor/commit/a7d9aaa7f6705129efa093af096ec258d10922bb))
+- add image fill prop ([#1280](https://github.com/yext/visual-editor/pull/1280)) ([8a182870](https://github.com/yext/visual-editor/commit/8a182870e3abe1c043ddef1936489932e41b886d))
+- add option to show both distances in locator cards ([#1281](https://github.com/yext/visual-editor/pull/1281)) ([5de21ea8](https://github.com/yext/visual-editor/commit/5de21ea856ea4390894c808dae11a4eaa420db48))
+
+> > > > > > > main
+
 #### 1.4.2 (2026-07-23)
 
 ##### New Features

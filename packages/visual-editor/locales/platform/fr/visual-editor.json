@@ -152,6 +152,9 @@
     "warning": "Cette action supprimera vos modifications locales. Il ne peut pas être défait."
   },
   "distance": "Distance",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> à partir de la recherche",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> de {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> de votre part",
   "emptyStateFieldEmpty": "Le champ mappé de {{entityType}} est vide",
   "emptyStateSectionHidden": "Section masquée pour ce {{entityType}}",
   "enableCookies": "Activer les cookies",
@@ -280,6 +283,7 @@
     "linkColor": "Couleur du lien",
     "linkedInLink": "Lien linkedin",
     "linkLabel": "Libellé du lien",
+    "linkPath": "Chemin du lien",
     "links": "Links",
     "linksTooltip": "Les liens s'effondreront automatiquement si la fenêtre d'affichage est trop étroite",
     "linkStyles": "Styles de liens",
@@ -306,6 +310,7 @@
       "aspectRatio": "Rapport d'aspect",
       "base_text size": "Base",
       "bold": "Gras",
+      "bothDistances": "Les deux distances",
       "bottom_direction": "Bas",
       "button": "Bouton",
       "carousel": "Carrousel",
@@ -430,6 +435,7 @@
       "width": "Largeur",
       "yes": "Oui"
     },
+    "overrideLink": "Remplacer le lien",
     "pageHeading": "En-tête de page",
     "phone": "Téléphone",
     "phoneFormat": "Format de téléphone",
@@ -571,6 +577,7 @@
   "link": "lien",
   "linkedEntityFields": "Champs d'entité liée",
   "linkedEntityMultiValueWarning": "{{linkedField}} contient plusieurs entités liées. Utilisation du premier pour {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Utilisez un chemin d'URL personnalisé pour le lien de titre de chaque carte. Si la valeur est vide, l'URL du répertoire généré sera utilisée.",
   "linkTypes": {
     "clickToWebsite": "Cliquez sur le site Web",
     "drivingDirections": "Itinéraires",
