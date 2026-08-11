@@ -29,6 +29,7 @@ vi.mock("@yext/search-ui-react", async () => {
 
   return {
     ...actual,
+    useCardAnalyticsCallback: vi.fn(() => vi.fn()),
     getUserLocation: vi
       .fn()
       .mockRejectedValue(
@@ -466,7 +467,7 @@ const tests: ComponentTest[] = [
           pinColor: backgroundColors.background6.value,
         },
       ],
-      distanceDisplay: "distanceFromSearch",
+      distanceDisplay: "bothDistances",
       filters: {
         openNowButton: true,
         showDistanceOptions: true,

@@ -152,6 +152,9 @@
     "warning": "Denne handlingen vil fjerne dine lokale endringer. Det kan ikke angre."
   },
   "distance": "Avstand",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> fra søk",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> fra {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> fra deg",
   "emptyStateFieldEmpty": "Det kartlagte feltet til {{entityType}} er tomt",
   "emptyStateSectionHidden": "Seksjon skjult for denne {{entityType}}",
   "enableCookies": "Aktiver informasjonskapsler",
@@ -280,6 +283,7 @@
     "linkColor": "Link farge",
     "linkedInLink": "LinkedIn Link",
     "linkLabel": "Koblingsetikett",
+    "linkPath": "Koblingssti",
     "links": "Lenker",
     "linksTooltip": "Lenker vil automatisk kollapse hvis visningsporten er for smal",
     "linkStyles": "Lenkestiler",
@@ -306,6 +310,7 @@
       "aspectRatio": "Aspektforhold",
       "base_text size": "Base",
       "bold": "Fet",
+      "bothDistances": "Begge avstander",
       "bottom_direction": "Nederst",
       "button": "Knapp",
       "carousel": "Karusell",
@@ -430,6 +435,7 @@
       "width": "Bredde",
       "yes": "Ja"
     },
+    "overrideLink": "Overstyr kobling",
     "pageHeading": "Sideoverskrift",
     "phone": "Telefon",
     "phoneFormat": "Telefonformat",
@@ -570,6 +576,7 @@
   "link": "lenke",
   "linkedEntityFields": "Koblede enhetsfelt",
   "linkedEntityMultiValueWarning": "{{linkedField}} inneholder flere koblede enheter. Bruker den første for {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Bruk en egendefinert URL-bane for hvert korts tittelkobling. Hvis verdien er tom, vil den genererte katalog-URLen bli brukt.",
   "linkTypes": {
     "clickToWebsite": "Klikk til nettstedet",
     "drivingDirections": "Veibeskrivelse",

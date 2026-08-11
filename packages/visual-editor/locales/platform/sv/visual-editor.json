@@ -152,6 +152,9 @@
     "warning": "Denna åtgärd kommer att ta bort dina lokala förändringar. Det kan inte ångras."
   },
   "distance": "Avstånd",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> från sökning",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> från {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> från dig",
   "emptyStateFieldEmpty": "Det mappade fältet för {{entityType}} är tomt",
   "emptyStateSectionHidden": "Avsnittet är dolt för denna {{entityType}}",
   "enableCookies": "Aktivera cookies",
@@ -280,6 +283,7 @@
     "linkColor": "Länkfärg",
     "linkedInLink": "LinkedIn -länk",
     "linkLabel": "Länketikett",
+    "linkPath": "Länkväg",
     "links": "Länkar",
     "linksTooltip": "Länkar kommer automatiskt att kollapsa om visningsporten är för smal",
     "linkStyles": "Länkstilar",
@@ -306,6 +310,7 @@
       "aspectRatio": "Bildförhållande",
       "base_text size": "Bas",
       "bold": "Djärv",
+      "bothDistances": "Båda avstånden",
       "bottom_direction": "Nederst",
       "button": "Knapp",
       "carousel": "Karusell",
@@ -430,6 +435,7 @@
       "width": "Bredd",
       "yes": "Ja"
     },
+    "overrideLink": "Åsidosätt länk",
     "pageHeading": "Sidrubrik",
     "phone": "Telefon",
     "phoneFormat": "Telefonformat",
@@ -570,6 +576,7 @@
   "link": "länk",
   "linkedEntityFields": "Länkade enhetsfält",
   "linkedEntityMultiValueWarning": "{{linkedField}} innehåller flera länkade enheter. Använder den första för {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Använd en anpassad webbadresssökväg för varje korts titellänk. Om värdet är tomt kommer den genererade katalogadressen att användas.",
   "linkTypes": {
     "clickToWebsite": "Klicka på webbplatsen",
     "drivingDirections": "Vägbeskrivning",

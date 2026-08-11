@@ -2,6 +2,7 @@ import * as React from "react";
 import { PuckComponent } from "@puckeditor/core";
 import {
   AssetImageType,
+  ImageFillType,
   isLocalizedAssetImage,
   resolveLocalizedAssetImage,
   TranslatableAssetImage,
@@ -28,6 +29,8 @@ export interface FooterLogoSlotProps {
   styles: {
     width?: number;
     aspectRatio?: number;
+    /** @defaultValue fill */
+    imageFillType?: ImageFillType;
   };
 }
 
@@ -65,6 +68,7 @@ const FooterLogoSlotInternal: PuckComponent<FooterLogoSlotProps> = (props) => {
     <Image
       image={simplifiedImage}
       aspectRatio={aspectRatio}
+      imageFillType={styles.imageFillType}
       width={width}
       className="object-contain"
     />
@@ -115,6 +119,7 @@ export const FooterLogoSlot: YextComponentConfig<FooterLogoSlotProps> = {
       type: "object",
       label: msg("fields.styles", "Styles"),
       objectFields: {
+        imageFillType: ImageStylingFields.imageFillType,
         width: ImageStylingFields.width,
         aspectRatio: ImageStylingFields.aspectRatio,
       },
@@ -135,6 +140,7 @@ export const FooterLogoSlot: YextComponentConfig<FooterLogoSlotProps> = {
       },
     },
     styles: {
+      imageFillType: "fill",
       width: 0,
       aspectRatio: 1,
     },

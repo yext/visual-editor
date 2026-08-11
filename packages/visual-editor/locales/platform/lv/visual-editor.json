@@ -152,6 +152,9 @@
     "warning": "Šī darbība noņems jūsu vietējās izmaiņas. To nevar atsaukt."
   },
   "distance": "Attālums",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> no meklēšanas",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> no {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> no jums",
   "emptyStateFieldEmpty": "{{entityType}} kartētais lauks ir tukšs",
   "emptyStateSectionHidden": "Sadaļa paslēpta šim {{entityType}}",
   "enableCookies": "Iespējot sīkfailus",
@@ -280,6 +283,7 @@
     "linkColor": "Saites krāsa",
     "linkedInLink": "LinkedIn saite",
     "linkLabel": "Saites etiķete",
+    "linkPath": "Saites ceļš",
     "links": "Saites",
     "linksTooltip": "Ja skata logs ir pārāk šaurs, saites tiks automātiski sakļautas",
     "linkStyles": "Saišu stili",
@@ -306,6 +310,7 @@
       "aspectRatio": "Malu attiecība",
       "base_text size": "Bāze",
       "bold": "Treknrakstā",
+      "bothDistances": "Abi attālumi",
       "bottom_direction": "Apakšējā",
       "button": "Poga",
       "carousel": "Karuselis",
@@ -430,6 +435,7 @@
       "width": "Platums",
       "yes": "Jā"
     },
+    "overrideLink": "Pārrakstīt saiti",
     "pageHeading": "Lapas virsraksts",
     "phone": "Tālrunis",
     "phoneFormat": "Tālruņa formāts",
@@ -570,6 +576,7 @@
   "link": "saite",
   "linkedEntityFields": "Saistītie entītiju lauki",
   "linkedEntityMultiValueWarning": "{{linkedField}} satur vairākas saistītas entītijas. Izmantojot pirmo {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Katras kartītes virsraksta saitei izmantojiet pielāgotu URL ceļu. Ja vērtība ir tukša, tiks izmantots ģenerētais direktorija URL.",
   "linkTypes": {
     "clickToWebsite": "Noklikšķiniet uz vietni",
     "drivingDirections": "Braukšanas norādījumi",

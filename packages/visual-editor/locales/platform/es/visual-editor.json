@@ -152,6 +152,9 @@
     "warning": "Esta acción eliminará sus cambios locales. No se puede deshacer."
   },
   "distance": "Distancia",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> de la búsqueda",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> de {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> de ti",
   "emptyStateFieldEmpty": "El campo asignado de {{entityType}} está vacío",
   "emptyStateSectionHidden": "Sección oculta para este {{entityType}}",
   "enableCookies": "Habilitar cookies",
@@ -280,6 +283,7 @@
     "linkColor": "Color del enlace",
     "linkedInLink": "LinkedIn Link",
     "linkLabel": "Etiqueta de enlace",
+    "linkPath": "Ruta de enlace",
     "links": "Campo de golf",
     "linksTooltip": "Los enlaces se colapsarán automáticamente si la ventana gráfica es demasiado estrecha",
     "linkStyles": "Estilos de enlace",
@@ -306,6 +310,7 @@
       "aspectRatio": "Relación de aspecto",
       "base_text size": "Base",
       "bold": "Atrevido",
+      "bothDistances": "Ambas distancias",
       "bottom_direction": "Abajo",
       "button": "Botón",
       "carousel": "Carrusel",
@@ -430,6 +435,7 @@
       "width": "Ancho",
       "yes": "Sí"
     },
+    "overrideLink": "Anular enlace",
     "pageHeading": "Encabezado de página",
     "phone": "Teléfono",
     "phoneFormat": "Formato de teléfono",
@@ -571,6 +577,7 @@
   "link": "enlace",
   "linkedEntityFields": "Campos de entidad vinculados",
   "linkedEntityMultiValueWarning": "{{linkedField}} contiene varias entidades vinculadas. Usando el primero para {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Utilice una ruta URL personalizada para el enlace del título de cada tarjeta. Si el valor está vacío, se utilizará la URL del directorio generado.",
   "linkTypes": {
     "clickToWebsite": "Haga clic en el sitio web",
     "drivingDirections": "Instrucciones de conducción",

@@ -152,6 +152,9 @@
     "warning": "此操作将消除您的本地更改。它不能撤消。"
   },
   "distance": "距离",
+  "distanceLineFromSearch": "来自搜索的 <strong>{{distance}}</strong>",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> 来自 {{searchLocation}}",
+  "distanceLineFromYou": "来自您的 <strong>{{distance}}</strong>",
   "emptyStateFieldEmpty": "{{entityType}} 的映射字段为空",
   "emptyStateSectionHidden": "此 {{entityType}} 的部分已隐藏",
   "enableCookies": "启用 Cookie",
@@ -280,6 +283,7 @@
     "linkColor": "链接颜色",
     "linkedInLink": "LinkedIn链接",
     "linkLabel": "链接标签",
+    "linkPath": "链接路径",
     "links": "链接",
     "linksTooltip": "如果视口太窄，链接将自动折叠",
     "linkStyles": "链接样式",
@@ -306,6 +310,7 @@
       "aspectRatio": "纵横比",
       "base_text size": "基础",
       "bold": "大胆",
+      "bothDistances": "两个距离",
       "bottom_direction": "底部",
       "button": "按钮",
       "carousel": "轮播",
@@ -430,6 +435,7 @@
       "width": "宽度",
       "yes": "是的"
     },
+    "overrideLink": "覆盖链接",
     "pageHeading": "页面标题",
     "phone": "电话",
     "phoneFormat": "电话格式",
@@ -570,6 +576,7 @@
   "link": "关联",
   "linkedEntityFields": "链接实体字段",
   "linkedEntityMultiValueWarning": "{{linkedField}} 包含多个链接实体。将第一个用于 {{resolvedField}}。",
+  "linkOverrideDirectoryTooltip": "对每张卡片的标题链接使用自定义 URL 路径。如果该值为空，则将使用生成的目录 URL。",
   "linkTypes": {
     "clickToWebsite": "单击网站",
     "drivingDirections": "行驶方向",
