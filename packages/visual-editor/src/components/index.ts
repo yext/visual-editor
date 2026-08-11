@@ -25,4 +25,5 @@ export {
   defaultThemeConfig,
   createDefaultThemeConfig,
 } from "./DefaultThemeConfig.ts";
+export { MainContent } from "./structure/MainContent.tsx";
 export { GTMBody } from "./GTMBody.tsx";

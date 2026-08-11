@@ -1,9 +1,18 @@
 import { defineConfig, LibraryFormats } from "vite";
+import { builtinModules } from "node:module";
 import path from "node:path";
+
+const nodeBuiltins = new Set(
+  builtinModules.flatMap((moduleName) => {
+    return moduleName.startsWith("node:")
+      ? [moduleName, moduleName.slice(5)]
+      : [moduleName, `node:${moduleName}`];
+  })
+);
 
 export default defineConfig(() => ({
   build: {
-    emptyOutDir: true,
+    emptyOutDir: false,
     outDir: "dist/plugin",
     lib: {
       entry: {
@@ -15,7 +24,12 @@ export default defineConfig(() => ({
     target: "node18",
     tsconfig: path.resolve(__dirname, "tsconfig.plugin.json"),
     rollupOptions: {
-      external: ["node:path", "fs-extra"],
+      external: (source) => {
+        return (
+          nodeBuiltins.has(source) ||
+          ["fs-extra", "typescript"].includes(source)
+        );
+      },
     },
   },
 }));

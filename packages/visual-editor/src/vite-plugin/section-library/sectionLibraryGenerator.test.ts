@@ -1,0 +1,249 @@
+import os from "node:os";
+import path from "node:path";
+import fs from "fs-extra";
+import { afterEach, describe, expect, it } from "vitest";
+import {
+  cleanupGeneratedSectionLibraryFiles,
+  generateSectionLibraryFiles,
+} from "./sectionLibraryGenerator.ts";
+
+const tempRoots: string[] = [];
+
+afterEach(() => {
+  for (const rootDir of tempRoots.splice(0)) {
+    fs.removeSync(rootDir);
+  }
+});
+
+describe("generateSectionLibraryFiles", () => {
+  it("maps the Entity layout to the Platform main template", () => {
+    const rootDir = createLibrary();
+
+    const result = generateSectionLibraryFiles(rootDir);
+
+    expect(result.generatedFiles).toHaveLength(5);
+    expect(
+      fs.readFileSync(
+        path.join(rootDir, "src", "library", ".generated", "libraryConfig.tsx"),
+        "utf8"
+      )
+    ).toContain("label: section.config.displayName");
+    const config = fs.readFileSync(
+      path.join(rootDir, "src", "library", ".generated", "libraryConfig.tsx"),
+      "utf8"
+    );
+    expect(config).toContain('components: ["MainContent"]');
+    expect(config).not.toContain("mainConfig");
+    expect(config).not.toContain("directoryConfig");
+    expect(config).not.toContain("locatorConfig");
+    expect(config).not.toContain("Object.groupBy");
+    expect(
+      fs.readFileSync(
+        path.join(rootDir, "src", "templates", "main.tsx"),
+        "utf8"
+      )
+    ).toContain('const layoutId = "location"');
+    expect(
+      fs.readFileSync(
+        path.join(rootDir, "src", "templates", "edit-location.tsx"),
+        "utf8"
+      )
+    ).toContain('const editorPath = "edit/location"');
+    expect(
+      fs.readFileSync(
+        path.join(rootDir, "src", "templates", "edit.tsx"),
+        "utf8"
+      )
+    ).toContain('const editorName = "edit"');
+    expect(
+      fs.readJsonSync(path.join(rootDir, ".template-manifest.json"))
+    ).toEqual({
+      templates: [
+        expect.objectContaining({
+          name: "main",
+          defaultLayoutData: expect.any(String),
+        }),
+        expect.objectContaining({
+          name: "location",
+          defaultLayoutData: expect.any(String),
+        }),
+      ],
+    });
+    expect(
+      JSON.parse(
+        fs.readJsonSync(path.join(rootDir, ".template-manifest.json"))
+          .templates[0].defaultLayoutData
+      )
+    ).toEqual(
+      expect.objectContaining({
+        root: expect.objectContaining({
+          props: expect.objectContaining({ version: 73 }),
+        }),
+      })
+    );
+    expect(result.manifestSource).toContain('"templateId": "location"');
+    expect(result.manifestSource).toContain('"editorPath": "edit/location"');
+  });
+
+  it("removes only generated files", () => {
+    const rootDir = createLibrary();
+    const { generatedFiles } = generateSectionLibraryFiles(rootDir);
+    const handWrittenTemplate = path.join(
+      rootDir,
+      "src",
+      "templates",
+      "robots.tsx"
+    );
+    fs.writeFileSync(handWrittenTemplate, "export default null;");
+
+    cleanupGeneratedSectionLibraryFiles(generatedFiles);
+
+    expect(fs.existsSync(handWrittenTemplate)).toBe(true);
+    expect(fs.existsSync(generatedFiles[0])).toBe(false);
+    expect(fs.existsSync(path.join(rootDir, ".template-manifest.json"))).toBe(
+      true
+    );
+  });
+
+  it.each([
+    {
+      name: "missing config",
+      update: (rootDir: string): void => {
+        fs.writeFileSync(
+          path.join(rootDir, "src", "library", "sections", "Hero.tsx"),
+          "export const Hero = {};"
+        );
+      },
+      error: /must named-export config/,
+    },
+    {
+      name: "missing component export",
+      update: (rootDir: string): void => {
+        fs.writeFileSync(
+          path.join(rootDir, "src", "library", "sections", "Hero.tsx"),
+          'export const config = { displayName: "Hero", description: "Hero", pageSetTypes: ["ENTITY"] };'
+        );
+      },
+      error: /must named-export Hero/,
+    },
+    {
+      name: "untyped config",
+      update: (rootDir: string): void => {
+        fs.writeFileSync(
+          path.join(rootDir, "src", "library", "sections", "Hero.tsx"),
+          'export const Hero = {};\nexport const config = { displayName: "Hero", description: "Hero", pageSetTypes: ["ENTITY"] };'
+        );
+      },
+      error: /must use the SectionConfig type/,
+    },
+    {
+      name: "invalid library metadata",
+      update: (rootDir: string): void => {
+        fs.writeJsonSync(path.join(rootDir, "src", "library", "library.json"), {
+          schemaVersion: 2,
+          id: "library",
+          displayName: "Library",
+          description: "A test library.",
+        });
+      },
+      error: /must set schemaVersion to 1/,
+    },
+    {
+      name: "nested sections",
+      update: (rootDir: string): void => {
+        fs.ensureDirSync(
+          path.join(rootDir, "src", "library", "sections", "nested")
+        );
+      },
+      error: /Section directories are not supported/,
+    },
+    {
+      name: "non Entity layout",
+      update: (rootDir: string): void => {
+        fs.writeJsonSync(
+          path.join(
+            rootDir,
+            "src",
+            "library",
+            "layouts",
+            "location",
+            "metadata.json"
+          ),
+          {
+            id: "location",
+            displayName: "Location",
+            previewImageUrl: "",
+            pageSetType: "DIRECTORY",
+          }
+        );
+      },
+      error: /must set pageSetType to ENTITY/,
+    },
+    {
+      name: "missing layout section",
+      update: (rootDir: string): void => {
+        fs.writeJsonSync(
+          path.join(
+            rootDir,
+            "src",
+            "library",
+            "layouts",
+            "location",
+            "defaultLayout.json"
+          ),
+          {
+            root: { props: {} },
+            content: [{ type: "Missing", props: {} }],
+            zones: {},
+          }
+        );
+      },
+      error: /references missing section Missing/,
+    },
+  ])("rejects $name", ({ update, error }) => {
+    const rootDir = createLibrary();
+    update(rootDir);
+
+    expect(() => generateSectionLibraryFiles(rootDir)).toThrow(error);
+  });
+});
+
+const createLibrary = (): string => {
+  const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "section-library-"));
+  tempRoots.push(rootDir);
+  const libraryDirectory = path.join(rootDir, "src", "library");
+  fs.ensureDirSync(path.join(libraryDirectory, "sections"));
+  fs.ensureDirSync(path.join(libraryDirectory, "layouts", "location"));
+  fs.writeJsonSync(path.join(libraryDirectory, "library.json"), {
+    schemaVersion: 1,
+    id: "library",
+    displayName: "Library",
+    description: "A test library.",
+  });
+  fs.writeFileSync(
+    path.join(libraryDirectory, "sections", "Hero.tsx"),
+    [
+      'import type { SectionConfig } from "@yext/visual-editor";',
+      "export const Hero = {};",
+      'export const config: SectionConfig = { displayName: "Hero", description: "A hero.", pageSetTypes: ["ENTITY"], category: "Content" };',
+    ].join("\n")
+  );
+  fs.writeJsonSync(
+    path.join(libraryDirectory, "layouts", "location", "metadata.json"),
+    {
+      id: "location",
+      displayName: "Location",
+      previewImageUrl: "",
+      pageSetType: "ENTITY",
+    }
+  );
+  fs.writeJsonSync(
+    path.join(libraryDirectory, "layouts", "location", "defaultLayout.json"),
+    {
+      root: { props: { version: 73 } },
+      content: [{ type: "Hero", props: {} }],
+      zones: {},
+    }
+  );
+  return rootDir;
+};
