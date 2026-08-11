@@ -77,6 +77,10 @@ export const defaultDirectoryCardSlotData = (
 ) => {
   const existingHeadingText =
     existingSlots?.HeadingSlot?.[0]?.props?.data?.text;
+  const existingHeadingStyles = existingSlots?.HeadingSlot?.[0]?.props?.styles;
+  const existingAddressStyles = existingSlots?.AddressSlot?.[0]?.props?.styles;
+  const existingPhoneStyles = existingSlots?.PhoneSlot?.[0]?.props?.styles;
+  const existingHoursStyles = existingSlots?.HoursSlot?.[0]?.props?.styles;
   const headingTextField = isHeadingTextField(existingHeadingText)
     ? existingHeadingText
     : {
@@ -112,11 +116,9 @@ export const defaultDirectoryCardSlotData = (
                 text: headingTextField,
               },
               styles: {
-                level:
-                  existingSlots?.HeadingSlot?.[0]?.props?.styles?.level ?? 3,
-                align:
-                  existingSlots?.HeadingSlot?.[0]?.props?.styles?.align ??
-                  "left",
+                ...existingHeadingStyles,
+                level: existingHeadingStyles?.level ?? 3,
+                align: existingHeadingStyles?.align ?? "left",
               },
             } satisfies HeadingTextProps,
           },
@@ -138,18 +140,12 @@ export const defaultDirectoryCardSlotData = (
                 },
               },
               styles: {
-                showRegion:
-                  existingSlots?.AddressSlot?.[0]?.props?.styles?.showRegion ??
-                  true,
-                showCountry:
-                  existingSlots?.AddressSlot?.[0]?.props?.styles?.showCountry ??
-                  true,
+                ...existingAddressStyles,
+                showRegion: existingAddressStyles?.showRegion ?? true,
+                showCountry: existingAddressStyles?.showCountry ?? true,
                 showGetDirectionsLink:
-                  existingSlots?.AddressSlot?.[0]?.props?.styles
-                    ?.showGetDirectionsLink ?? false,
-                ctaVariant:
-                  existingSlots?.AddressSlot?.[0]?.props?.styles?.ctaVariant ??
-                  "link",
+                  existingAddressStyles?.showGetDirectionsLink ?? false,
+                ctaVariant: existingAddressStyles?.ctaVariant ?? "link",
               },
               parentData: {
                 field: "profile.address",
@@ -174,15 +170,11 @@ export const defaultDirectoryCardSlotData = (
                 },
               },
               styles: {
-                phoneFormat:
-                  existingSlots?.PhoneSlot?.[0]?.props?.styles?.phoneFormat ??
-                  "domestic",
+                ...existingPhoneStyles,
+                phoneFormat: existingPhoneStyles?.phoneFormat ?? "domestic",
                 includePhoneHyperlink:
-                  existingSlots?.PhoneSlot?.[0]?.props?.styles
-                    ?.includePhoneHyperlink ?? true,
-                includeIcon:
-                  existingSlots?.PhoneSlot?.[0]?.props?.styles?.includeIcon ??
-                  false,
+                  existingPhoneStyles?.includePhoneHyperlink ?? true,
+                includeIcon: existingPhoneStyles?.includeIcon ?? false,
               },
               parentData: {
                 field: "profile.mainPhone",
@@ -202,17 +194,13 @@ export const defaultDirectoryCardSlotData = (
                 },
               },
               styles: {
-                dayOfWeekFormat:
-                  existingSlots?.HoursSlot?.[0]?.props?.styles
-                    ?.dayOfWeekFormat ?? "long",
-                showDayNames:
-                  existingSlots?.HoursSlot?.[0]?.props?.styles?.showDayNames ??
-                  true,
+                ...existingHoursStyles,
+                dayOfWeekFormat: existingHoursStyles?.dayOfWeekFormat ?? "long",
+                showDayNames: existingHoursStyles?.showDayNames ?? true,
                 showCurrentStatus:
-                  existingSlots?.HoursSlot?.[0]?.props?.styles
-                    ?.showCurrentStatus ?? true,
+                  existingHoursStyles?.showCurrentStatus ?? true,
                 className:
-                  existingSlots?.HoursSlot?.[0]?.props?.styles?.className ??
+                  existingHoursStyles?.className ??
                   "mb-2 font-semibold font-body-fontFamily text-body-fontSize h-full",
               },
               parentData: {
