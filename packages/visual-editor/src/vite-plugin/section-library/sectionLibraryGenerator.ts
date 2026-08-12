@@ -86,7 +86,7 @@ type GeneratedSectionLibrary = {
  * Section Library. It returns no files when the starter has no library.json.
  *
  * 1. Read and validate the library, section, and layout source under `src/library`.
- * 2. Generate a Puck config and Pages render and editor templates for the layout.
+ * 2. Generate a Puck config along with Pages render and editor templates for the layout.
  * 3. Write legacy Platform template metadata and return the Section Library artifact manifest.
  */
 export const generateSectionLibraryFiles = (
