@@ -182,18 +182,9 @@ export const yextVisualEditorPlugin = (
       }
     },
     buildEnd() {
-      if (isBuildMode && !options.sectionLibrary) {
+      if (isBuildMode) {
         cleanupFiles();
       }
-    },
-    // Pages reads generated Section Library templates after buildEnd.
-    closeBundle: {
-      order: "post",
-      handler() {
-        if (isBuildMode && options.sectionLibrary) {
-          cleanupFiles();
-        }
-      },
     },
   };
 };
