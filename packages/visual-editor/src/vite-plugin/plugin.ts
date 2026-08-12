@@ -141,8 +141,10 @@ export const yextVisualEditorPlugin = (
     filesToCleanup.forEach((filePath) => {
       fs.rmSync(filePath, { force: true });
     });
-    cleanupGeneratedSectionLibraryFiles(sectionLibraryFiles);
-    sectionLibraryFiles = [];
+    if (options.sectionLibrary) {
+      cleanupGeneratedSectionLibraryFiles(sectionLibraryFiles);
+      sectionLibraryFiles = [];
+    }
   };
 
   // cleanup on interruption (ctrl + C)
@@ -171,7 +173,7 @@ export const yextVisualEditorPlugin = (
       generateFiles();
     },
     generateBundle() {
-      if (isBuildMode && sectionLibraryManifest) {
+      if (isBuildMode && options.sectionLibrary && sectionLibraryManifest) {
         this.emitFile({
           type: "asset",
           fileName: "assets/section-library-manifest.json",
@@ -184,6 +186,7 @@ export const yextVisualEditorPlugin = (
         cleanupFiles();
       }
     },
+    // Pages reads generated Section Library templates after buildEnd.
     closeBundle: {
       order: "post",
       handler() {

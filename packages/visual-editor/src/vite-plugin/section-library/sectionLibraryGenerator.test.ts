@@ -78,6 +78,12 @@ describe("generateSectionLibraryFiles", () => {
     );
     expect(result.manifestSource).toContain('"templateId": "location"');
     expect(result.manifestSource).toContain('"editorPath": "edit/location"');
+    expect(result.manifestSource).toContain(
+      '"vertical": [\n        "retail"\n      ]'
+    );
+    expect(result.manifestSource).toContain(
+      '"purpose": [\n        "store"\n      ]'
+    );
   });
 
   it("does not remove a handwritten template", () => {
@@ -121,6 +127,25 @@ describe("generateSectionLibraryFiles", () => {
     expect(
       fs.existsSync(path.join(rootDir, "src", "templates", "main.tsx"))
     ).toBe(false);
+  });
+
+  it("reads JSX sections", () => {
+    const rootDir = createLibrary();
+    const sectionsDirectory = path.join(rootDir, "src", "library", "sections");
+    fs.removeSync(path.join(sectionsDirectory, "Hero.tsx"));
+    fs.writeFileSync(
+      path.join(sectionsDirectory, "Hero.jsx"),
+      'export const Hero = () => <section />;\nexport const config = { displayName: "Hero", description: "A hero.", pageSetTypes: ["ENTITY"] };'
+    );
+
+    generateSectionLibraryFiles(rootDir);
+
+    expect(
+      fs.readFileSync(
+        path.join(rootDir, "src", "library", ".generated", "libraryConfig.tsx"),
+        "utf8"
+      )
+    ).toContain('from "../sections/Hero"');
   });
 
   it.each([
@@ -252,6 +277,8 @@ const createLibrary = (): string => {
       id: "location",
       displayName: "Location",
       previewImageUrl: "",
+      vertical: ["retail"],
+      purpose: ["store"],
       pageSetType: "ENTITY",
     }
   );

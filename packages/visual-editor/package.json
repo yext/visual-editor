@@ -91,6 +91,7 @@
     "react-international-phone": "^4.6.0",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.4.0",
+    "ts-morph": "22.0.0",
     "typescript": "^5.5.4"
   },
   "engines": {

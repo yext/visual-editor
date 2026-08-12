@@ -204,6 +204,9 @@ importers:
       tailwind-merge:
         specifier: ^2.4.0
         version: 2.6.0
+      ts-morph:
+        specifier: 22.0.0
+        version: 22.0.0
       typescript:
         specifier: ^5.5.4
         version: 5.9.2
