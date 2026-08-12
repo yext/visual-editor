@@ -32,7 +32,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build:components": "tsc && vite build",
-    "build:plugin": "tsc -p tsconfig.plugin.json --emitDeclarationOnly && vite build --config vite.config.plugin.ts",
+    "build:plugin": "rm -rf dist/plugin && tsc -p tsconfig.plugin.json --emitDeclarationOnly && vite build --config vite.config.plugin.ts",
     "build": "pnpm run build:components && pnpm run build:plugin",
     "test": "pnpm run test:editor && pnpm run test:components",
     "test:editor": "vitest run --exclude './src/components/**/*.test.tsx' --browser.enabled false",

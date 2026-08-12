@@ -27,7 +27,10 @@ export default defineConfig(() => ({
       external: (source) => {
         return (
           nodeBuiltins.has(source) ||
-          ["fs-extra", "typescript"].includes(source)
+          ["fs-extra", "typescript"].some(
+            (packageName) =>
+              source === packageName || source.startsWith(`${packageName}/`)
+          )
         );
       },
     },

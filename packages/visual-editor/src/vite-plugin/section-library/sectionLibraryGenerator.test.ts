@@ -22,16 +22,11 @@ describe("generateSectionLibraryFiles", () => {
     const result = generateSectionLibraryFiles(rootDir);
 
     expect(result.generatedFiles).toHaveLength(5);
-    expect(
-      fs.readFileSync(
-        path.join(rootDir, "src", "library", ".generated", "libraryConfig.tsx"),
-        "utf8"
-      )
-    ).toContain("label: section.config.displayName");
     const config = fs.readFileSync(
       path.join(rootDir, "src", "library", ".generated", "libraryConfig.tsx"),
       "utf8"
     );
+    expect(config).toContain("label: section.config.displayName");
     expect(config).toContain('components: ["MainContent"]');
     expect(config).not.toContain("mainConfig");
     expect(config).not.toContain("directoryConfig");
@@ -85,24 +80,47 @@ describe("generateSectionLibraryFiles", () => {
     expect(result.manifestSource).toContain('"editorPath": "edit/location"');
   });
 
-  it("removes only generated files", () => {
+  it("does not remove a handwritten template", () => {
     const rootDir = createLibrary();
-    const { generatedFiles } = generateSectionLibraryFiles(rootDir);
-    const handWrittenTemplate = path.join(
+    const handwrittenMainPath = path.join(
       rootDir,
       "src",
       "templates",
-      "robots.tsx"
+      "main.tsx"
     );
-    fs.writeFileSync(handWrittenTemplate, "export default null;");
+    fs.ensureDirSync(path.dirname(handwrittenMainPath));
+    fs.writeFileSync(handwrittenMainPath, "export default null;");
 
+    const { generatedFiles } = generateSectionLibraryFiles(rootDir);
     cleanupGeneratedSectionLibraryFiles(generatedFiles);
 
-    expect(fs.existsSync(handWrittenTemplate)).toBe(true);
-    expect(fs.existsSync(generatedFiles[0])).toBe(false);
+    expect(fs.readFileSync(handwrittenMainPath, "utf8")).toBe(
+      "export default null;"
+    );
+    expect(generatedFiles).toHaveLength(4);
+    for (const filePath of generatedFiles) {
+      expect(fs.existsSync(filePath)).toBe(false);
+    }
     expect(fs.existsSync(path.join(rootDir, ".template-manifest.json"))).toBe(
       true
     );
+  });
+
+  it("does not generate files without library metadata", () => {
+    const rootDir = createLibrary();
+    fs.removeSync(path.join(rootDir, "src", "library", "library.json"));
+
+    expect(generateSectionLibraryFiles(rootDir)).toEqual({
+      generatedFiles: [],
+    });
+    expect(
+      fs.existsSync(
+        path.join(rootDir, "src", "library", ".generated", "libraryConfig.tsx")
+      )
+    ).toBe(false);
+    expect(
+      fs.existsSync(path.join(rootDir, "src", "templates", "main.tsx"))
+    ).toBe(false);
   });
 
   it.each([

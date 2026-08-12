@@ -1,7 +1,8 @@
-/** Metadata that describes a user-selectable Section Library section. */
+export type PageSetType = "ENTITY" | "DIRECTORY" | "LOCATOR";
+
 export type SectionConfig = {
   displayName: string;
   description: string;
-  pageSetTypes: "ENTITY"[];
+  pageSetTypes: PageSetType[];
   category?: string;
 };
