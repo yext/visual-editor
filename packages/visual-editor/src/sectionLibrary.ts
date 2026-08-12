@@ -1,4 +1,10 @@
-export type PageSetType = "ENTITY" | "DIRECTORY" | "LOCATOR";
+export const supportedPageSetTypes = [
+  "ENTITY",
+  "DIRECTORY",
+  "LOCATOR",
+] as const;
+
+export type PageSetType = (typeof supportedPageSetTypes)[number];
 
 export type SectionConfig = {
   id: string;

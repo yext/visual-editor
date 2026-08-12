@@ -302,6 +302,34 @@ describe("generateSectionLibraryFiles", () => {
       error: /must define a valid id/,
     },
     {
+      name: "non-string page set type",
+      update: (rootDir: string): void => {
+        fs.writeFileSync(
+          path.join(rootDir, "src", "library", "sections", "Hero.tsx"),
+          [
+            'import type { SectionConfig } from "@yext/visual-editor";',
+            "export const Hero = {};",
+            'export const config: SectionConfig = { id: "hero", displayName: "Hero", description: "Hero", pageSetTypes: [1] };',
+          ].join("\n")
+        );
+      },
+      error: /must contain only ENTITY, DIRECTORY, or LOCATOR/,
+    },
+    {
+      name: "unsupported page set type",
+      update: (rootDir: string): void => {
+        fs.writeFileSync(
+          path.join(rootDir, "src", "library", "sections", "Hero.tsx"),
+          [
+            'import type { SectionConfig } from "@yext/visual-editor";',
+            "export const Hero = {};",
+            'export const config: SectionConfig = { id: "hero", displayName: "Hero", description: "Hero", pageSetTypes: ["ALL"] };',
+          ].join("\n")
+        );
+      },
+      error: /must contain only ENTITY, DIRECTORY, or LOCATOR/,
+    },
+    {
       name: "duplicate section ID",
       update: (rootDir: string): void => {
         fs.writeFileSync(
