@@ -1,17 +1,16 @@
 import fs from "fs-extra";
-import { Project, SyntaxKind } from "ts-morph";
+import { Node, Project, SyntaxKind } from "ts-morph";
+import type { PageSetType } from "../../sectionLibrary.ts";
 
 export type SectionFrontmatter = {
-  hasSectionConfigType: boolean;
-  isConfigObject: boolean;
   id?: string | null;
   displayName?: string | null;
   description?: string | null;
   category?: string | null;
-  pageSetTypes?: string[];
+  pageSetTypes?: PageSetType[];
 };
 
-const project = new Project();
+const project = new Project({ compilerOptions: { allowJs: true } });
 
 /** Reads the static SectionConfig metadata from one section source file. */
 export const readSectionFrontmatter = (
@@ -24,26 +23,33 @@ export const readSectionFrontmatter = (
     { overwrite: true }
   );
   try {
-    const component =
-      sourceFile.getFunction(componentName) ??
-      sourceFile.getVariableDeclaration(componentName);
-    if (!component?.isExported()) {
-      throw new Error(`${sourcePath} must named-export ${componentName}`);
+    const exportedDeclarations = sourceFile.getExportedDeclarations();
+    const component = exportedDeclarations.get(componentName)?.find((value) => {
+      return (
+        Node.isFunctionDeclaration(value) || Node.isVariableDeclaration(value)
+      );
+    });
+    if (!component) {
+      throw new Error(`${sourcePath} must export '${componentName}'`);
     }
 
-    const config = sourceFile.getVariableDeclaration("config");
-    if (!config?.isExported()) {
-      throw new Error(`${sourcePath} must named-export config`);
+    const config = exportedDeclarations
+      .get("config")
+      ?.find(Node.isVariableDeclaration);
+    if (!config) {
+      throw new Error(`${sourcePath} must export 'config'`);
+    }
+    if (
+      sourcePath.endsWith(".tsx") &&
+      config.getTypeNode()?.getText() !== "SectionConfig"
+    ) {
+      throw new Error(`${sourcePath} config must use the SectionConfig type`);
     }
     const object = config
       .getInitializer()
       ?.asKind(SyntaxKind.ObjectLiteralExpression);
     if (!object) {
-      return {
-        hasSectionConfigType:
-          config.getTypeNode()?.getText() === "SectionConfig",
-        isConfigObject: false,
-      };
+      throw new Error(`${sourcePath} config must be an object literal`);
     }
 
     const getString = (name: string): string | null | undefined => {
@@ -67,14 +73,12 @@ export const readSectionFrontmatter = (
       });
 
     return {
-      hasSectionConfigType: config.getTypeNode()?.getText() === "SectionConfig",
-      isConfigObject: true,
       id: getString("id"),
       displayName: getString("displayName"),
       description: getString("description"),
       category: getString("category"),
       ...(pageSetTypes?.every((pageSetType) => pageSetType !== undefined)
-        ? { pageSetTypes: pageSetTypes as string[] }
+        ? { pageSetTypes: pageSetTypes as PageSetType[] }
         : {}),
     };
   } finally {

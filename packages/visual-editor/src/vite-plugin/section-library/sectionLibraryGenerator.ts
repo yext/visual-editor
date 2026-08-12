@@ -242,21 +242,7 @@ function validateSection(
   section: Section,
   sourcePath: string
 ): asserts section is ValidatedSection {
-  const {
-    category,
-    description,
-    displayName,
-    hasSectionConfigType,
-    id,
-    isConfigObject,
-    pageSetTypes,
-  } = section;
-  if (sourcePath.endsWith(".tsx") && !hasSectionConfigType) {
-    throw new Error(`${sourcePath} config must use the SectionConfig type`);
-  }
-  if (!isConfigObject) {
-    throw new Error(`${sourcePath} config must be an object literal`);
-  }
+  const { category, description, displayName, id, pageSetTypes } = section;
   if (!id || !isSafeId(id)) {
     throw new Error(`${sourcePath} config must define a valid id`);
   }

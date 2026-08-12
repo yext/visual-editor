@@ -182,6 +182,28 @@ describe("generateSectionLibraryFiles", () => {
     ).toContain('from "../sections/Hero"');
   });
 
+  it("reads indirect component and config exports", () => {
+    const rootDir = createLibrary();
+    fs.writeFileSync(
+      path.join(rootDir, "src", "library", "sections", "Hero.tsx"),
+      [
+        'import type { SectionConfig } from "@yext/visual-editor";',
+        "const HeroComponent = () => <section />;",
+        'const heroConfig: SectionConfig = { id: "hero", displayName: "Hero", description: "A hero.", pageSetTypes: ["ENTITY"] };',
+        "export { HeroComponent as Hero, heroConfig as config };",
+      ].join("\n")
+    );
+
+    generateSectionLibraryFiles(rootDir);
+
+    expect(
+      fs.readFileSync(
+        path.join(rootDir, "src", "library", ".generated", "libraryConfig.tsx"),
+        "utf8"
+      )
+    ).toContain("import { Hero as Section0");
+  });
+
   it("uses the config ID after a section file is renamed", () => {
     const rootDir = createLibrary();
     const sectionsDirectory = path.join(rootDir, "src", "library", "sections");
@@ -215,7 +237,7 @@ describe("generateSectionLibraryFiles", () => {
           "export const Hero = {};"
         );
       },
-      error: /must named-export config/,
+      error: /must export 'config'/,
     },
     {
       name: "missing component export",
@@ -225,7 +247,7 @@ describe("generateSectionLibraryFiles", () => {
           'export const config = { displayName: "Hero", description: "Hero", pageSetTypes: ["ENTITY"] };'
         );
       },
-      error: /must named-export Hero/,
+      error: /must export 'Hero'/,
     },
     {
       name: "untyped config",
