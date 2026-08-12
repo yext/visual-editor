@@ -330,6 +330,11 @@ const readLayout = (libraryDirectory: string): Layout => {
   if (!isSafeId(metadata.id)) {
     throw new Error(`Layout ID is not valid: ${metadata.id}`);
   }
+  if (metadata.id === "edit") {
+    throw new Error(
+      `${metadataPath} cannot use edit because it is reserved for the generated editor template`
+    );
+  }
   return {
     metadata,
     defaultLayout: readJson(

@@ -131,6 +131,38 @@ describe("generateSectionLibraryFiles", () => {
     ).toBe(false);
   });
 
+  it("rejects the layout ID reserved for the editor template", () => {
+    const rootDir = createLibrary();
+    fs.writeJsonSync(
+      path.join(
+        rootDir,
+        "src",
+        "library",
+        "layouts",
+        "location",
+        "metadata.json"
+      ),
+      {
+        id: "edit",
+        displayName: "Edit",
+        previewImageUrl: "",
+        pageSetType: "ENTITY",
+      }
+    );
+
+    expect(() => generateSectionLibraryFiles(rootDir)).toThrow(
+      /edit because it is reserved for the generated editor template/
+    );
+    expect(
+      fs.existsSync(
+        path.join(rootDir, "src", "library", ".generated", "libraryConfig.tsx")
+      )
+    ).toBe(false);
+    expect(
+      fs.existsSync(path.join(rootDir, "src", "templates", "edit.tsx"))
+    ).toBe(false);
+  });
+
   it("reads JSX sections", () => {
     const rootDir = createLibrary();
     const sectionsDirectory = path.join(rootDir, "src", "library", "sections");
