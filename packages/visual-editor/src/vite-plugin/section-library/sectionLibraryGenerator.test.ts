@@ -27,6 +27,8 @@ describe("generateSectionLibraryFiles", () => {
       "utf8"
     );
     expect(config).toContain("label: section.config.displayName");
+    expect(config).toContain('id: "hero"');
+    expect(config).toContain("import { Hero as Section0");
     expect(config).toContain('components: ["MainContent"]');
     expect(config).not.toContain("mainConfig");
     expect(config).not.toContain("directoryConfig");
@@ -135,7 +137,7 @@ describe("generateSectionLibraryFiles", () => {
     fs.removeSync(path.join(sectionsDirectory, "Hero.tsx"));
     fs.writeFileSync(
       path.join(sectionsDirectory, "Hero.jsx"),
-      'export const Hero = () => <section />;\nexport const config = { displayName: "Hero", description: "A hero.", pageSetTypes: ["ENTITY"] };'
+      'export const Hero = () => <section />;\nexport const config = { id: "hero", displayName: "Hero", description: "A hero.", pageSetTypes: ["ENTITY"] };'
     );
 
     generateSectionLibraryFiles(rootDir);
@@ -146,6 +148,30 @@ describe("generateSectionLibraryFiles", () => {
         "utf8"
       )
     ).toContain('from "../sections/Hero"');
+  });
+
+  it("uses the config ID after a section file is renamed", () => {
+    const rootDir = createLibrary();
+    const sectionsDirectory = path.join(rootDir, "src", "library", "sections");
+    fs.removeSync(path.join(sectionsDirectory, "Hero.tsx"));
+    fs.writeFileSync(
+      path.join(sectionsDirectory, "NewHero.tsx"),
+      [
+        'import type { SectionConfig } from "@yext/visual-editor";',
+        "export const NewHero = {};",
+        'export const config: SectionConfig = { id: "hero", displayName: "Hero", description: "A hero.", pageSetTypes: ["ENTITY"] };',
+      ].join("\n")
+    );
+
+    generateSectionLibraryFiles(rootDir);
+
+    const config = fs.readFileSync(
+      path.join(rootDir, "src", "library", ".generated", "libraryConfig.tsx"),
+      "utf8"
+    );
+    expect(config).toContain('from "../sections/NewHero"');
+    expect(config).toContain("import { NewHero as Section0");
+    expect(config).toContain('id: "hero"');
   });
 
   it.each([
@@ -178,6 +204,62 @@ describe("generateSectionLibraryFiles", () => {
         );
       },
       error: /must use the SectionConfig type/,
+    },
+    {
+      name: "missing section ID",
+      update: (rootDir: string): void => {
+        fs.writeFileSync(
+          path.join(rootDir, "src", "library", "sections", "Hero.tsx"),
+          [
+            'import type { SectionConfig } from "@yext/visual-editor";',
+            "export const Hero = {};",
+            'export const config: SectionConfig = { displayName: "Hero", description: "Hero", pageSetTypes: ["ENTITY"] };',
+          ].join("\n")
+        );
+      },
+      error: /must define a valid id/,
+    },
+    {
+      name: "empty section ID",
+      update: (rootDir: string): void => {
+        fs.writeFileSync(
+          path.join(rootDir, "src", "library", "sections", "Hero.tsx"),
+          [
+            'import type { SectionConfig } from "@yext/visual-editor";',
+            "export const Hero = {};",
+            'export const config: SectionConfig = { id: "", displayName: "Hero", description: "Hero", pageSetTypes: ["ENTITY"] };',
+          ].join("\n")
+        );
+      },
+      error: /must define a valid id/,
+    },
+    {
+      name: "unsafe section ID",
+      update: (rootDir: string): void => {
+        fs.writeFileSync(
+          path.join(rootDir, "src", "library", "sections", "Hero.tsx"),
+          [
+            'import type { SectionConfig } from "@yext/visual-editor";',
+            "export const Hero = {};",
+            'export const config: SectionConfig = { id: "invalid id", displayName: "Hero", description: "Hero", pageSetTypes: ["ENTITY"] };',
+          ].join("\n")
+        );
+      },
+      error: /must define a valid id/,
+    },
+    {
+      name: "duplicate section ID",
+      update: (rootDir: string): void => {
+        fs.writeFileSync(
+          path.join(rootDir, "src", "library", "sections", "SecondHero.tsx"),
+          [
+            'import type { SectionConfig } from "@yext/visual-editor";',
+            "export const SecondHero = {};",
+            'export const config: SectionConfig = { id: "hero", displayName: "Second Hero", description: "Another hero.", pageSetTypes: ["ENTITY"] };',
+          ].join("\n")
+        );
+      },
+      error: /Section ID is not unique: hero/,
     },
     {
       name: "invalid library metadata",
@@ -268,7 +350,7 @@ const createLibrary = (): string => {
     [
       'import type { SectionConfig } from "@yext/visual-editor";',
       "export const Hero = {};",
-      'export const config: SectionConfig = { displayName: "Hero", description: "A hero.", pageSetTypes: ["ENTITY"], category: "Content" };',
+      'export const config: SectionConfig = { id: "hero", displayName: "Hero", description: "A hero.", pageSetTypes: ["ENTITY"], category: "Content" };',
     ].join("\n")
   );
   fs.writeJsonSync(
@@ -286,7 +368,7 @@ const createLibrary = (): string => {
     path.join(libraryDirectory, "layouts", "location", "defaultLayout.json"),
     {
       root: { props: { version: 73 } },
-      content: [{ type: "Hero", props: {} }],
+      content: [{ type: "hero", props: {} }],
       zones: {},
     }
   );

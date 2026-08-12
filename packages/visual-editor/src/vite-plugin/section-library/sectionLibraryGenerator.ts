@@ -45,7 +45,8 @@ type LayoutMetadata =
 /**
  * A Section Library section and its static config metadata.
  *
- * `id` is the file name used in layouts and generated imports.
+ * `id` is the stable config ID used in layouts and generated Puck configs.
+ * `componentName` is the file stem used for the required component export.
  * `displayName` is the name shown to the user in the editor.
  * `description` is used by AI agents when generating layouts using existing components.
  * `category` is the sidebar group for the section. When it is omitted, the
@@ -53,11 +54,12 @@ type LayoutMetadata =
  * `sourcePath` is the path used in generated imports.
  */
 type Section = SectionFrontmatter & {
-  id: string;
+  componentName: string;
   sourcePath: string;
 };
 
 type ValidatedSection = Section & {
+  id: string;
   displayName: string;
   description: string;
   category?: string;
@@ -185,8 +187,7 @@ const readSections = (
     return [];
   }
 
-  const sectionIds = new Set<string>();
-  return fs
+  const sections = fs
     .readdirSync(sectionsDirectory, { withFileTypes: true })
     .sort((left, right) =>
       left.name < right.name ? -1 : left.name > right.name ? 1 : 0
@@ -201,23 +202,36 @@ const readSections = (
         throw new Error(`Sections must be .tsx or .jsx files: ${sourcePath}`);
       }
 
-      const id = path.basename(entry.name, extension);
-      if (!isSafeId(id) || sectionIds.has(id)) {
-        throw new Error(`Section ID is not unique or valid: ${id}`);
+      const componentName = path.basename(entry.name, extension);
+      if (!isSafeId(componentName)) {
+        throw new Error(
+          `Section component name is not valid: ${componentName}`
+        );
       }
-      sectionIds.add(id);
-      return readSection(sourcePath, path.relative(rootDir, sourcePath), id);
+      return readSection(
+        sourcePath,
+        path.relative(rootDir, sourcePath),
+        componentName
+      );
     });
+  const sectionIds = new Set<string>();
+  for (const section of sections) {
+    if (sectionIds.has(section.id)) {
+      throw new Error(`Section ID is not unique: ${section.id}`);
+    }
+    sectionIds.add(section.id);
+  }
+  return sections;
 };
 
 const readSection = (
   sourcePath: string,
   relativePath: string,
-  id: string
+  componentName: string
 ): ValidatedSection => {
   const section: Section = {
-    id,
-    ...readSectionFrontmatter(sourcePath, id),
+    ...readSectionFrontmatter(sourcePath, componentName),
+    componentName,
     sourcePath: relativePath,
   };
   validateSection(section, sourcePath);
@@ -233,6 +247,7 @@ function validateSection(
     description,
     displayName,
     hasSectionConfigType,
+    id,
     isConfigObject,
     pageSetTypes,
   } = section;
@@ -241,6 +256,9 @@ function validateSection(
   }
   if (!isConfigObject) {
     throw new Error(`${sourcePath} config must be an object literal`);
+  }
+  if (!id || !isSafeId(id)) {
+    throw new Error(`${sourcePath} config must define a valid id`);
   }
   if (
     !pageSetTypes ||
@@ -323,7 +341,7 @@ const readLayout = (libraryDirectory: string): Layout => {
 
 const validateLayoutReferences = (
   layout: Layout,
-  sections: Section[]
+  sections: ValidatedSection[]
 ): void => {
   const sectionIds = new Set(sections.map((section) => section.id));
   for (const componentId of collectComponentIds(layout.defaultLayout)) {
@@ -436,7 +454,7 @@ const buildConfigSource = (
     const specifier = importPath.startsWith(".")
       ? importPath
       : `./${importPath}`;
-    return `import { ${section.id} as Section${index}, config as sectionConfig${index} } from ${JSON.stringify(specifier)};`;
+    return `import { ${section.componentName} as Section${index}, config as sectionConfig${index} } from ${JSON.stringify(specifier)};`;
   });
   const entries = sections.map((section, index) => {
     return `  { id: ${JSON.stringify(section.id)}, component: Section${index}, config: sectionConfig${index} },`;

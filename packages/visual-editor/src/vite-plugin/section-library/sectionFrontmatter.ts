@@ -4,6 +4,7 @@ import { Project, SyntaxKind } from "ts-morph";
 export type SectionFrontmatter = {
   hasSectionConfigType: boolean;
   isConfigObject: boolean;
+  id?: string | null;
   displayName?: string | null;
   description?: string | null;
   category?: string | null;
@@ -15,7 +16,7 @@ const project = new Project();
 /** Reads the static SectionConfig metadata from one section source file. */
 export const readSectionFrontmatter = (
   sourcePath: string,
-  id: string
+  componentName: string
 ): SectionFrontmatter => {
   const sourceFile = project.createSourceFile(
     sourcePath,
@@ -24,9 +25,10 @@ export const readSectionFrontmatter = (
   );
   try {
     const component =
-      sourceFile.getFunction(id) ?? sourceFile.getVariableDeclaration(id);
+      sourceFile.getFunction(componentName) ??
+      sourceFile.getVariableDeclaration(componentName);
     if (!component?.isExported()) {
-      throw new Error(`${sourcePath} must named-export ${id}`);
+      throw new Error(`${sourcePath} must named-export ${componentName}`);
     }
 
     const config = sourceFile.getVariableDeclaration("config");
@@ -67,6 +69,7 @@ export const readSectionFrontmatter = (
     return {
       hasSectionConfigType: config.getTypeNode()?.getText() === "SectionConfig",
       isConfigObject: true,
+      id: getString("id"),
       displayName: getString("displayName"),
       description: getString("description"),
       category: getString("category"),
