@@ -9,7 +9,7 @@ import {
 const project = new Project({ compilerOptions: { allowJs: true } });
 
 /** Reads the static SectionConfig metadata from one section source file. */
-export const readSectionFrontmatter = (
+export const extractSectionConfigFrontmatter = (
   sourcePath: string,
   componentName: string
 ): SectionConfig => {
