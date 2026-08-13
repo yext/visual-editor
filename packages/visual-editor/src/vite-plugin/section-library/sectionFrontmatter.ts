@@ -3,15 +3,8 @@ import { Node, Project, SyntaxKind } from "ts-morph";
 import {
   supportedPageSetTypes,
   type PageSetType,
+  type SectionConfig,
 } from "../../sectionLibrary.ts";
-
-export type SectionFrontmatter = {
-  id?: string | null;
-  displayName?: string | null;
-  description?: string | null;
-  category?: string | null;
-  pageSetTypes?: PageSetType[];
-};
 
 const project = new Project({ compilerOptions: { allowJs: true } });
 
@@ -19,7 +12,7 @@ const project = new Project({ compilerOptions: { allowJs: true } });
 export const readSectionFrontmatter = (
   sourcePath: string,
   componentName: string
-): SectionFrontmatter => {
+): SectionConfig => {
   const sourceFile = project.createSourceFile(
     sourcePath,
     fs.readFileSync(sourcePath, "utf8"),
@@ -92,13 +85,41 @@ export const readSectionFrontmatter = (
         `${sourcePath} config.pageSetTypes must be an array of page set types`
       );
     }
+    if (!pageSetTypes || pageSetTypes.length === 0) {
+      throw new Error(
+        `${sourcePath} config.pageSetTypes must be a non-empty array of page set types`
+      );
+    }
+
+    const id = getString("id");
+    if (!id) {
+      throw new Error(`${sourcePath} config must define a valid id`);
+    }
+    const displayName = getString("displayName");
+    if (!displayName) {
+      throw new Error(
+        `${sourcePath} config must define a non-empty displayName`
+      );
+    }
+    const description = getString("description");
+    if (!description) {
+      throw new Error(
+        `${sourcePath} config must define a non-empty description`
+      );
+    }
+    const category = getString("category");
+    if (category !== undefined && !category) {
+      throw new Error(
+        `${sourcePath} config category must be a non-empty string`
+      );
+    }
 
     return {
-      id: getString("id"),
-      displayName: getString("displayName"),
-      description: getString("description"),
-      category: getString("category"),
-      ...(pageSetTypes ? { pageSetTypes } : {}),
+      id,
+      displayName,
+      description,
+      pageSetTypes,
+      ...(category === undefined ? {} : { category }),
     };
   } finally {
     sourceFile.forget();

@@ -153,6 +153,9 @@ importers:
       dompurify:
         specifier: ^3.2.3
         version: 3.2.6
+      fs-extra:
+        specifier: ^11.2.0
+        version: 11.3.1
       geolib:
         specifier: ^3.3.4
         version: 3.3.4
@@ -280,9 +283,6 @@ importers:
       axe-core:
         specifier: ^4.10.3
         version: 4.10.3
-      fs-extra:
-        specifier: ^11.2.0
-        version: 11.3.1
       generate-license-file:
         specifier: ^3.5.0
         version: 3.8.1(typescript@5.9.2)

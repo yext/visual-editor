@@ -34,12 +34,16 @@ describe("generateSectionLibraryFiles", () => {
     expect(config).not.toContain("directoryConfig");
     expect(config).not.toContain("locatorConfig");
     expect(config).not.toContain("Object.groupBy");
-    expect(
-      fs.readFileSync(
-        path.join(rootDir, "src", "templates", "main.tsx"),
-        "utf8"
-      )
-    ).toContain('const layoutId = "location"');
+    const mainTemplate = fs.readFileSync(
+      path.join(rootDir, "src", "templates", "main.tsx"),
+      "utf8"
+    );
+    const locationTemplate = fs.readFileSync(
+      path.join(rootDir, "src", "templates", "location.tsx"),
+      "utf8"
+    );
+    expect(mainTemplate).toContain('const layoutId = "location"');
+    expect(mainTemplate).toBe(locationTemplate);
     expect(
       fs.readFileSync(
         path.join(rootDir, "src", "templates", "edit-location.tsx"),
@@ -81,10 +85,10 @@ describe("generateSectionLibraryFiles", () => {
     expect(result.manifestSource).toContain('"templateId": "location"');
     expect(result.manifestSource).toContain('"editorPath": "edit/location"');
     expect(result.manifestSource).toContain(
-      '"vertical": [\n        "retail"\n      ]'
+      '"vertical": [\n        "RETAIL"\n      ]'
     );
     expect(result.manifestSource).toContain(
-      '"purpose": [\n        "store"\n      ]'
+      '"purpose": [\n        "LOCATION"\n      ]'
     );
   });
 
@@ -356,6 +360,29 @@ describe("generateSectionLibraryFiles", () => {
       error: /must set schemaVersion to 1/,
     },
     {
+      name: "unsupported layout vertical",
+      update: (rootDir: string): void => {
+        fs.writeJsonSync(
+          path.join(
+            rootDir,
+            "src",
+            "library",
+            "layouts",
+            "location",
+            "metadata.json"
+          ),
+          {
+            id: "location",
+            displayName: "Location",
+            previewImageUrl: "",
+            vertical: ["UNKNOWN"],
+            pageSetType: "ENTITY",
+          }
+        );
+      },
+      error: /vertical as a list of supported values/,
+    },
+    {
       name: "nested sections",
       update: (rootDir: string): void => {
         fs.ensureDirSync(
@@ -441,8 +468,8 @@ const createLibrary = (): string => {
       id: "location",
       displayName: "Location",
       previewImageUrl: "",
-      vertical: ["retail"],
-      purpose: ["store"],
+      vertical: ["RETAIL"],
+      purpose: ["LOCATION"],
       pageSetType: "ENTITY",
     }
   );
