@@ -7,6 +7,14 @@ import directoryTemplate from "./templates/directory.tsx?raw";
 import locatorTemplate from "./templates/locator.tsx?raw";
 import { ComponentField, ComponentFields } from "../types/fields.ts";
 import { defaultLayoutData } from "./defaultLayoutData.ts";
+import {
+  cleanupGeneratedSectionLibraryFiles,
+  generateSectionLibraryFiles,
+} from "./section-library/sectionLibraryGenerator.ts";
+
+export type VisualEditorPluginOptions = {
+  sectionLibrary?: boolean;
+};
 
 type TemplateManifestEntry = {
   name: string;
@@ -82,9 +90,13 @@ const virtualFiles: VirtualFile[] = [
   },
 ];
 
-export const yextVisualEditorPlugin = (): Plugin => {
+export const yextVisualEditorPlugin = (
+  options: VisualEditorPluginOptions = {}
+): Plugin => {
   let isBuildMode = false;
   const filesToCleanup: string[] = [];
+  let sectionLibraryFiles: string[] = [];
+  let sectionLibraryManifest: string | undefined;
 
   /**
    * generateFiles generates the template files and .temlpate-manifest.json file
@@ -129,6 +141,10 @@ export const yextVisualEditorPlugin = (): Plugin => {
     filesToCleanup.forEach((filePath) => {
       fs.rmSync(filePath, { force: true });
     });
+    if (options.sectionLibrary) {
+      cleanupGeneratedSectionLibraryFiles(sectionLibraryFiles);
+      sectionLibraryFiles = [];
+    }
   };
 
   // cleanup on interruption (ctrl + C)
@@ -148,7 +164,22 @@ export const yextVisualEditorPlugin = (): Plugin => {
       isBuildMode = command === "build";
     },
     buildStart() {
+      if (options.sectionLibrary) {
+        const generatedLibrary = generateSectionLibraryFiles(process.cwd());
+        sectionLibraryFiles = generatedLibrary.generatedFiles;
+        sectionLibraryManifest = generatedLibrary.manifestSource;
+        return;
+      }
       generateFiles();
+    },
+    generateBundle() {
+      if (isBuildMode && options.sectionLibrary && sectionLibraryManifest) {
+        this.emitFile({
+          type: "asset",
+          fileName: "assets/section-library-manifest.json",
+          source: sectionLibraryManifest,
+        });
+      }
     },
     buildEnd() {
       if (isBuildMode) {

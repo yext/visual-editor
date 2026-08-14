@@ -22,6 +22,7 @@
       "default": "./dist/visual-editor.js"
     },
     "./plugin": {
+      "types": "./dist/plugin/vite-plugin/index.d.ts",
       "import": "./dist/plugin/plugin.js",
       "default": "./dist/plugin/plugin.js"
     },
@@ -31,7 +32,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build:components": "tsc && vite build",
-    "build:plugin": "vite build --config vite.config.plugin.ts",
+    "build:plugin": "rm -rf dist/plugin && tsc -p tsconfig.plugin.json --emitDeclarationOnly && vite build --config vite.config.plugin.ts",
     "build": "pnpm run build:components && pnpm run build:plugin",
     "test": "pnpm run test:editor && pnpm run test:components",
     "test:editor": "vitest run --exclude './src/components/**/*.test.tsx' --browser.enabled false",
@@ -76,6 +77,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "dompurify": "^3.2.3",
+    "fs-extra": "^11.2.0",
     "handlebars": "^4.7.9",
     "geolib": "^3.3.4",
     "i18next": "^25.8.4",
@@ -89,7 +91,9 @@
     "react-i18next": "^15.5.2",
     "react-international-phone": "^4.6.0",
     "sonner": "^1.5.0",
-    "tailwind-merge": "^2.4.0"
+    "tailwind-merge": "^2.4.0",
+    "ts-morph": "22.0.0",
+    "typescript": "^5.5.4"
   },
   "engines": {
     "node": "^20.6.0 || ^22 || ^24"
@@ -123,7 +127,6 @@
     "autoprefixer": "^10.4.2",
     "awesome-phonenumber": "^7.5.0",
     "axe-core": "^4.10.3",
-    "fs-extra": "^11.2.0",
     "generate-license-file": "^3.5.0",
     "husky": "^9.1.4",
     "i18next-cli": "^1.42.0",
@@ -138,7 +141,6 @@
     "tailwindcss": "^3.4.6",
     "tsup": "8.3.5",
     "tsx": "^4.22.4",
-    "typescript": "^5.5.4",
     "uuid": "11.0.3",
     "vite": "^5.4.21",
     "vitepress": "^1.6.3",
