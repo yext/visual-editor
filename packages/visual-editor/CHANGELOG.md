@@ -11,7 +11,7 @@
 ##### Other Changes
 
 - v1.4.4 ([0fc5faed](https://github.com/yext/visual-editor/commit/0fc5faedd261209ab7862c283f9da7c6b38da9b7))
-- v1.4.4" ([2e1d39d6](https://github.com/yext/visual-editor/commit/2e1d39d6f076176400b558000cbfcc278ad51806))
+- v1.4.4 ([2e1d39d6](https://github.com/yext/visual-editor/commit/2e1d39d6f076176400b558000cbfcc278ad51806))
 
 #### 1.4.4 (2026-08-07)
 
