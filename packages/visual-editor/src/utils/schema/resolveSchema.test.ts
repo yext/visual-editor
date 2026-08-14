@@ -10,6 +10,7 @@ describe("resolveSchemaString", () => {
       country: "USA",
     },
     items: ["item1", "item2"],
+    articles: [{ name: "First" }, { name: "Second" }],
   };
 
   it("resolves embedded string fields in a string", () => {
@@ -33,6 +34,20 @@ describe("resolveSchemaString", () => {
     assert.deepEqual(
       resolveSchemaString(document, `address:"[[address]]"`),
       `address:"{\\"city\\":\\"New York\\",\\"country\\":\\"USA\\"}"`
+    );
+  });
+
+  it("resolves indexed embedded fields", () => {
+    assert.equal(
+      resolveSchemaString(document, `[[articles[1].name]]`),
+      "Second"
+    );
+  });
+
+  it("leaves unsupported bracket expressions unchanged", () => {
+    assert.equal(
+      resolveSchemaString(document, `[[articles[-1].name]]`),
+      `[[articles[-1].name]]`
     );
   });
 });
