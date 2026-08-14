@@ -84,23 +84,33 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
   };
 };
 
-export const getPath: GetPath<TemplateProps> = ({ document }) => {
-  try {
-    return resolveUrlTemplate(document, "");
-  } catch {
-    return layoutId;
-  }
+export const getPath: GetPath<TemplateProps> = ({
+  document,
+  relativePrefixToRoot,
+}) => {
+  return resolveUrlTemplate(document, relativePrefixToRoot);
 };
 
 export const transformProps: TransformProps<TemplateProps> = async (props) => {
   const layout = props.document.__?.layout;
-  if (layout) {
-    props.document.__.layout = JSON.stringify(
-      await resolveAllData(JSON.parse(layout), sectionLibraryConfig, {
-        streamDocument: props.document,
-      })
+  if (!layout) {
+    throw new Error(
+      `Section Library layout ${layoutId} is missing layout data`
     );
   }
+  let data: Record<string, unknown>;
+  try {
+    data = JSON.parse(layout);
+  } catch {
+    throw new Error(
+      `Section Library layout ${layoutId} has invalid layout data`
+    );
+  }
+  props.document.__.layout = JSON.stringify(
+    await resolveAllData(data, sectionLibraryConfig, {
+      streamDocument: props.document,
+    })
+  );
   return {
     ...props,
     document: props.document,
@@ -109,11 +119,19 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
 };
 
 const SectionLibraryLayout: Template<TemplateRenderProps> = (props) => {
-  let data = {};
+  const layout = props.document.__?.layout;
+  if (!layout) {
+    throw new Error(
+      `Section Library layout ${layoutId} is missing layout data`
+    );
+  }
+  let data: Record<string, unknown>;
   try {
-    data = JSON.parse(props.document.__?.layout ?? "{}");
+    data = JSON.parse(layout);
   } catch {
-    // Render an empty page when Platform has no layout.
+    throw new Error(
+      `Section Library layout ${layoutId} has invalid layout data`
+    );
   }
   return (
     <AnalyticsProvider

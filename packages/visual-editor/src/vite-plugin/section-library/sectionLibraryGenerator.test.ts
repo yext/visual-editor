@@ -92,6 +92,27 @@ describe("generateSectionLibraryFiles", () => {
     );
   });
 
+  it("generates render templates that resolve URLs and require valid layout data", () => {
+    const rootDir = createLibrary();
+
+    generateSectionLibraryFiles(rootDir);
+
+    const renderTemplate = fs.readFileSync(
+      path.join(rootDir, "src", "templates", "location.tsx"),
+      "utf8"
+    );
+    expect(renderTemplate).toContain(
+      "return resolveUrlTemplate(document, relativePrefixToRoot);"
+    );
+    expect(renderTemplate).not.toContain("return layoutId;");
+    expect(renderTemplate).toContain(
+      "Section Library layout ${layoutId} is missing layout data"
+    );
+    expect(renderTemplate).toContain(
+      "Section Library layout ${layoutId} has invalid layout data"
+    );
+  });
+
   it("does not remove a handwritten template", () => {
     const rootDir = createLibrary();
     const handwrittenMainPath = path.join(
