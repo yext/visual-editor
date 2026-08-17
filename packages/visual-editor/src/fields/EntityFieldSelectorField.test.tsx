@@ -658,7 +658,7 @@ describe("EntityFieldSelectorField", () => {
     expect(tooltip).toBeDefined();
     expect(
       within(tooltip).getByText(
-        "List elements must be able to satisfy the mapping requirements:"
+        "List elements should be able to satisfy the mapping requirements:"
       )
     ).toBeDefined();
     expect(within(tooltip).getByText("rich_text_v2")).toBeDefined();
