@@ -152,6 +152,9 @@
     "warning": "Tato akce odstraní vaše místní změny. Nelze to vrátit."
   },
   "distance": "Vzdálenost",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> z vyhledávání",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> od {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> od vás",
   "emptyStateFieldEmpty": "Mapované pole {{entityType}} je prázdné",
   "emptyStateSectionHidden": "Sekce skrytá pro tuto {{entityType}}",
   "enableCookies": "Povolit soubory cookie",
@@ -280,6 +283,7 @@
     "linkColor": "Barva odkazu",
     "linkedInLink": "LinkedIn Link",
     "linkLabel": "Štítek odkazu",
+    "linkPath": "Cesta odkazu",
     "links": "Odkazy",
     "linksTooltip": "Pokud je výřez příliš úzký, odkazy se automaticky sbalí",
     "linkStyles": "Styly odkazů",
@@ -306,6 +310,7 @@
       "aspectRatio": "Poměr stran",
       "base_text size": "Báze",
       "bold": "Tučné",
+      "bothDistances": "Obě vzdálenosti",
       "bottom_direction": "Dole",
       "button": "Tlačítko",
       "carousel": "Kolotoč",
@@ -430,6 +435,7 @@
       "width": "Šířka",
       "yes": "Ano"
     },
+    "overrideLink": "Přepište odkaz",
     "pageHeading": "Záhlaví stránky",
     "phone": "Telefon",
     "phoneFormat": "Formát telefonu",
@@ -572,6 +578,7 @@
   "link": "odkaz",
   "linkedEntityFields": "Pole propojených entit",
   "linkedEntityMultiValueWarning": "{{linkedField}} obsahuje několik propojených entit. Používá se první pro {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Pro odkaz na název každé karty použijte vlastní cestu URL. Pokud je hodnota prázdná, použije se vygenerovaná adresa URL adresáře.",
   "linkTypes": {
     "clickToWebsite": "Klikněte na web",
     "drivingDirections": "Směry jízdy",

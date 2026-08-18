@@ -42,6 +42,7 @@ import { YextPuckFieldOverrides } from "../../fields/fieldOverrides.ts";
 import { wrapComponentConfigWithErrorBoundary } from "../utils/wrapConfigWithComponentErrorBoundary.tsx";
 import { updateLayoutWithCustomFontAssets } from "../utils/customFontAssets.ts";
 import { preparePuckAiRequest } from "../ai/prepareRequest.ts";
+import { createPuckFieldTransforms } from "../utils/puckFieldTransforms.ts";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -121,6 +122,10 @@ export const InternalLayoutEditor = ({
   const streamDocument = useDocument();
   const { errorCount, errorSources, errorDetails } = useErrorContext();
   const [aiPlugin, setAiPlugin] = React.useState<PuckPlugin>();
+  const fieldTransforms = React.useMemo(
+    () => createPuckFieldTransforms(i18n.language, streamDocument),
+    [i18n.language, streamDocument]
+  );
   const withCustomFontAssets = React.useCallback(
     (data: Data | undefined): Record<string, any> => {
       if (!data) {
@@ -448,6 +453,7 @@ export const InternalLayoutEditor = ({
         config={translatedPuckConfigWithRootFields}
         data={{}} // we use puckInitialHistory instead
         initialHistory={puckInitialHistory}
+        fieldTransforms={fieldTransforms}
         plugins={[
           { ...blocks, label: pt("sections", "Sections") },
           outline,

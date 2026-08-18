@@ -84,15 +84,17 @@ const renderEntityField = ({
     constantValueEnabled: false,
   },
   entityFields = defaultEntityFields,
+  document = {},
 }: {
   field?: EntityFieldSelectorField;
   value?: Record<string, any>;
   entityFields?: StreamFields | null;
+  document?: Record<string, any>;
 } = {}) => {
   const onChange = vi.fn();
 
   render(
-    <TemplatePropsContext.Provider value={{ document: {} }}>
+    <TemplatePropsContext.Provider value={{ document }}>
       <TemplateMetadataContext.Provider
         value={{
           ...generateTemplateMetadata(),
@@ -317,6 +319,36 @@ describe("EntityFieldSelectorField", () => {
       },
       undefined
     );
+  });
+
+  it("shows Apply to all locales for configured string constants", () => {
+    renderEntityField({
+      field: {
+        type: "entityField",
+        label: "Link Path",
+        filter: { types: ["type.string"] },
+        showApplyAllOption: true,
+      },
+      value: {
+        field: "",
+        constantValueEnabled: true,
+        constantValue: {
+          en: "locations",
+          hasLocalizedValue: "true",
+        },
+      },
+      document: {
+        _pageset: JSON.stringify({
+          scope: {
+            locales: ["en", "fr"],
+          },
+        }),
+      },
+    });
+
+    expect(
+      screen.getByRole("button", { name: "Apply to all locales" })
+    ).toBeDefined();
   });
 
   it("renders the entity field selector path", () => {
@@ -633,6 +665,35 @@ describe("EntityFieldSelectorField", () => {
     expect(within(tooltip).getByText("string")).toBeDefined();
     expect(within(tooltip).getByText("cta")).toBeDefined();
     expect(within(tooltip).getByText("image")).toBeDefined();
+  });
+
+  it("hides parent field requirements when configured", () => {
+    renderRepeatedEntityField({
+      field: {
+        type: "entityField",
+        label: "Directory Children",
+        filter: {
+          itemSourceTypes: [["type.string"]],
+        },
+        hideRequirementsTooltip: true,
+        repeated: {
+          defaultItemValue: {},
+          defaultMappings: {},
+          manualItemFields: {},
+          mappingFields: {},
+        },
+      },
+      value: {
+        field: "c_articles",
+        constantValueEnabled: false,
+        constantValue: [],
+        mappings: {},
+      },
+    });
+
+    expect(
+      screen.queryByRole("button", { name: "Parent field requirements" })
+    ).toBeNull();
   });
 
   it("hides parent field requirements in constant value mode", () => {

@@ -64,6 +64,7 @@ import {
   ProfessionalHeroSection,
   ProfessionalHeroSectionProps,
 } from "../pageSections/ProfessionalHeroSection.tsx";
+import { MiniHero, MiniHeroAuthoredProps } from "../pageSections/MiniHero.tsx";
 
 export interface PageSectionCategoryProps {
   AboutSection: AboutSectionProps;
@@ -74,6 +75,7 @@ export interface PageSectionCategoryProps {
   FAQSection: FAQSectionProps;
   HeroSection: HeroSectionProps;
   InsightSection: InsightSectionProps;
+  MiniHero: MiniHeroAuthoredProps;
   NearbyLocationsSection: NearbyLocationsSectionProps;
   PhotoGallerySection: PhotoGallerySectionProps;
   ProductSection: ProductSectionProps;
@@ -95,6 +97,7 @@ export const PageSectionCategoryComponents = {
   FAQSection,
   HeroSection,
   InsightSection,
+  MiniHero,
   NearbyLocationsSection,
   PhotoGallerySection,
   ProductSection,

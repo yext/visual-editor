@@ -152,6 +152,9 @@
     "warning": "Diese Aktion wird Ihre lokalen Änderungen entfernen. Dies kann nicht rückgängig gemacht werden."
   },
   "distance": "Distanz",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> aus der Suche",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> von {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> von Ihnen",
   "emptyStateFieldEmpty": "Das zugeordnete Feld von {{entityType}} ist leer",
   "emptyStateSectionHidden": "Modul für diesen {{entityType}} ausgeblendet",
   "enableCookies": "Cookies aktivieren",
@@ -280,6 +283,7 @@
     "linkColor": "Link-Farbe",
     "linkedInLink": "LinkedIn-Link",
     "linkLabel": "Link-Label",
+    "linkPath": "Linkpfad",
     "links": "Links",
     "linksTooltip": "Links werden automatisch eingeklappt, wenn das Viewport zu schmal ist",
     "linkStyles": "Link-Stile",
@@ -306,6 +310,7 @@
       "aspectRatio": "Seitenverhältnis",
       "base_text size": "Base",
       "bold": "Deutlich",
+      "bothDistances": "Beide Entfernungen",
       "bottom_direction": "Unten",
       "button": "Taste",
       "carousel": "Karussell",
@@ -430,6 +435,7 @@
       "width": "Breite",
       "yes": "Ja"
     },
+    "overrideLink": "Link überschreiben",
     "pageHeading": "Seitenüberschrift",
     "phone": "Telefon",
     "phoneFormat": "Telefonformat",
@@ -570,6 +576,7 @@
   "link": "Link",
   "linkedEntityFields": "Verknüpfte Entitätsfelder",
   "linkedEntityMultiValueWarning": "{{linkedField}} enthält mehrere verknüpfte Entitäten. Verwenden des ersten für {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Verwenden Sie einen benutzerdefinierten URL-Pfad für den Titellink jeder Karte. Wenn der Wert leer ist, wird die generierte Verzeichnis-URL verwendet.",
   "linkTypes": {
     "clickToWebsite": "Klick zur Website",
     "drivingDirections": "Routenplaner",

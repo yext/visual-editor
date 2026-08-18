@@ -40,12 +40,21 @@ const toFetchRequest = (
   const url = new URL(`http://localhost/api/puck/${endpoint}`);
 
   for (const entry of Object.entries(request.queryParams)) {
-    url.searchParams.set(entry[0], entry[1]);
+    const value = entry[1];
+    url.searchParams.set(
+      entry[0],
+      Array.isArray(value) ? (value[0] ?? "") : value,
+    );
   }
 
   const headers = new Headers();
   for (const entry of Object.entries(request.headers)) {
-    for (const value of entry[1]) {
+    const headerValues = entry[1];
+    if (!Array.isArray(headerValues)) {
+      continue;
+    }
+
+    for (const value of headerValues) {
       headers.append(entry[0], value);
     }
   }

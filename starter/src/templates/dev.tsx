@@ -1,5 +1,5 @@
 import React from "react";
-import { Data } from "@puckeditor/core";
+import { type Config, Data } from "@puckeditor/core";
 import * as lzstring from "lz-string";
 import { MantineProvider } from "@mantine/core";
 import {
@@ -29,7 +29,7 @@ import "@yext/visual-editor/editor.css";
 import "@mantine/core/styles.css";
 import { componentRegistry } from "../ve.config";
 import tailwindConfig from "../../tailwind.config";
-import { devLinkedEntitySchemas, devTemplateStream } from "../dev.config";
+import { devTemplateStream } from "../dev.config";
 import { disableHmrForStackBlitz } from "../utils";
 
 const EMPTY_PUCK_DATA: Data = {
@@ -282,21 +282,19 @@ const Dev: Template<TemplateRenderProps> = (props) => {
           <VisualEditorProvider
             templateProps={props}
             entityFields={{ fields: entityFields, displayNames: displayNames }}
-            linkedEntitySchemas={devLinkedEntitySchemas}
             tailwindConfig={tailwindConfig}
           >
             {isPreviewMode ? (
               <VisualEditorRender
-                config={puckConfig}
+                config={puckConfig as Config}
                 data={currentPuckData}
                 metadata={{ streamDocument: document }}
               />
             ) : (
               <Editor
                 document={document}
-                componentRegistry={componentRegistry}
+                componentRegistry={componentRegistry as Record<string, Config>}
                 themeConfig={defaultThemeConfig}
-                linkedEntitySchemas={devLinkedEntitySchemas}
                 localDev={true}
                 forceThemeMode={themeMode}
               />

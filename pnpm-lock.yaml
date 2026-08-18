@@ -88,14 +88,14 @@ importers:
         specifier: ^8.2.0
         version: 8.2.0
       "@puckeditor/cloud-client":
-        specifier: ^0.8.2
-        version: 0.8.2
+        specifier: 0.9.0-canary.d8bdabee
+        version: 0.9.0-canary.d8bdabee
       "@puckeditor/core":
-        specifier: 0.22.2
-        version: 0.22.2(@floating-ui/dom@1.7.4)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.6.0(react@18.3.1))
+        specifier: 0.24.0-canary.c1ec9773
+        version: 0.24.0-canary.c1ec9773(@floating-ui/dom@1.7.4)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.6.0(react@18.3.1))
       "@puckeditor/plugin-ai":
-        specifier: ^0.8.2
-        version: 0.8.2(@puckeditor/core@0.22.2(@floating-ui/dom@1.7.4)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.6.0(react@18.3.1)))(@types/react@18.3.24)(react@18.3.1)(zod@3.25.76)
+        specifier: 0.9.0-canary.d8bdabee
+        version: 0.9.0-canary.d8bdabee(@puckeditor/core@0.24.0-canary.c1ec9773(@floating-ui/dom@1.7.4)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.6.0(react@18.3.1)))(@types/react@18.3.24)(react@18.3.1)(zod@3.25.76)
       "@radix-ui/react-accordion":
         specifier: ^1.2.3
         version: 1.2.12(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -359,8 +359,8 @@ importers:
         specifier: ^7.10.1
         version: 7.17.8(react@18.3.1)
       "@puckeditor/core":
-        specifier: 0.22.2
-        version: 0.22.2(@floating-ui/dom@1.7.4)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.6.0(react@18.3.1))
+        specifier: 0.24.0-canary.c1ec9773
+        version: 0.24.0-canary.c1ec9773(@floating-ui/dom@1.7.4)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.6.0(react@18.3.1))
       "@radix-ui/react-accordion":
         specifier: ^1.2.0
         version: 1.2.12(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -2103,25 +2103,25 @@ packages:
         integrity: sha512-etWpENXm469RHMWIZGblgWrapbIGcRcbccEGGaLkFez3PjlI3XkBrUtSiNFsIfV/DN16PxMOxbWAZUIaLFyJDg==,
       }
 
-  "@puckeditor/cloud-client@0.8.2":
+  "@puckeditor/cloud-client@0.9.0-canary.d8bdabee":
     resolution:
       {
-        integrity: sha512-AtJxciFsSeZk9Os1EmvG30OCX4im4NV5szmxoZwpzRuK1OIucwDcsZA3tlJdxbB9/GmMkgWmAODcDGl9dWteYQ==,
+        integrity: sha512-bx/ACqfjS1ImfRHD+3cRXNA4wrOFRv9Z3OWL82uhCMNIJs6HTkr7ZpD2QuGwY9CdWxtExf3iKYMeAJXKnCejdw==,
       }
 
-  "@puckeditor/core@0.22.2":
+  "@puckeditor/core@0.24.0-canary.c1ec9773":
     resolution:
       {
-        integrity: sha512-pFflZGoCGkULZtXo2JGReGxizAmJnPnjm1sUE0yCNQUMBfzPId8Oj2mmy5Mthw4DPFCjjXLeWjEvfgnoYgnjqQ==,
+        integrity: sha512-OHeZTwpIpGqcktpRZWpJpRmmPTUZxc7L6Dslrdzmg6TuB6IseekkuAfl9OIr0Hwy56J64QDh489lDyEwEWvQ/A==,
       }
     engines: { node: ">=20.0.0" }
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
 
-  "@puckeditor/plugin-ai@0.8.2":
+  "@puckeditor/plugin-ai@0.9.0-canary.d8bdabee":
     resolution:
       {
-        integrity: sha512-nbf4l3YqeGNKbmnY+1Kih5svXOsyjM0UQelEQk67oBfOv83djjPh8lmXJMFMvqWC0WZqPbr9IIZTN60uJBRX3A==,
+        integrity: sha512-pcbP/d8zmVlEgBvdX/DDFS+a4mToM/Xp8+YMXZ0PcU7Iw9W6WQytHYwCCP1P0PVhTrR1pxMraS+M1esuNtNTNw==,
       }
     peerDependencies:
       "@puckeditor/core": ^0
@@ -13681,9 +13681,9 @@ snapshots:
 
   "@preact/signals-core@1.12.0": {}
 
-  "@puckeditor/cloud-client@0.8.2": {}
+  "@puckeditor/cloud-client@0.9.0-canary.d8bdabee": {}
 
-  "@puckeditor/core@0.22.2(@floating-ui/dom@1.7.4)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.6.0(react@18.3.1))":
+  "@puckeditor/core@0.24.0-canary.c1ec9773(@floating-ui/dom@1.7.4)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.6.0(react@18.3.1))":
     dependencies:
       "@dnd-kit/abstract": 0.4.0
       "@dnd-kit/dom": 0.4.0
@@ -13691,7 +13691,7 @@ snapshots:
       "@dnd-kit/helpers": 0.4.0
       "@dnd-kit/react": 0.4.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       "@dnd-kit/state": 0.4.0
-      "@radix-ui/react-popover": 1.1.15(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      "@radix-ui/react-popover": 1.1.20(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       "@tanstack/react-virtual": 3.13.12(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       "@tiptap/core": 3.17.1(@tiptap/pm@3.17.1)
       "@tiptap/extension-blockquote": 3.17.1(@tiptap/core@3.17.1(@tiptap/pm@3.17.1))
@@ -13732,9 +13732,9 @@ snapshots:
       - use-sync-external-store
       - utf-8-validate
 
-  "@puckeditor/plugin-ai@0.8.2(@puckeditor/core@0.22.2(@floating-ui/dom@1.7.4)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.6.0(react@18.3.1)))(@types/react@18.3.24)(react@18.3.1)(zod@3.25.76)":
+  "@puckeditor/plugin-ai@0.9.0-canary.d8bdabee(@puckeditor/core@0.24.0-canary.c1ec9773(@floating-ui/dom@1.7.4)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.6.0(react@18.3.1)))(@types/react@18.3.24)(react@18.3.1)(zod@3.25.76)":
     dependencies:
-      "@puckeditor/core": 0.22.2(@floating-ui/dom@1.7.4)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.6.0(react@18.3.1))
+      "@puckeditor/core": 0.24.0-canary.c1ec9773(@floating-ui/dom@1.7.4)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.6.0(react@18.3.1))
       ai: 6.0.240(zod@3.25.76)
       domhandler: 6.0.1
       domutils: 4.0.2

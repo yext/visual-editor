@@ -28,6 +28,15 @@ import type { VideoField } from "./VideoField.tsx";
 import { YextAutoField } from "./YextAutoField.tsx";
 import { adaptYextFieldMap } from "./yextFieldAdapter.ts";
 
+export type TestEntityField = Omit<EntityFieldSelectorField<any>, "type"> & {
+  type: "testEntityField";
+  output?: "plainText";
+};
+
+export type TestCTAField = Omit<CTASelectorField, "type"> & {
+  type: "testCTA";
+};
+
 export type YextPuckFields = {
   basicSelector: BasicSelectorField;
   ctaSelector: CTASelectorField;
@@ -44,6 +53,8 @@ export type YextPuckFields = {
   styledLink: StyledLinkField;
   styledPageSection: StyledPageSectionField;
   styledText: StyledTextField;
+  testCTA: TestCTAField;
+  testEntityField: TestEntityField;
   translatableString: TranslatableStringField;
   video: VideoField;
 };

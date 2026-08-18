@@ -9284,6 +9284,18 @@ export const devTemplateStream = {
           children: {
             fields: [
               {
+                name: "c_externalPageUrl",
+                definition: {
+                  name: "c_externalPageUrl",
+                  registryId: "location.custom.1000152098.external_page_url.0",
+                  typeRegistryId: "type.string",
+                  type: {
+                    stringType: "STRING_TYPE_URL",
+                  },
+                },
+                displayName: "External Page URL",
+              },
+              {
                 name: "mainPhone",
                 definition: {
                   name: "mainPhone",
@@ -11852,6 +11864,7 @@ export const devTemplateStream = {
     "c_deliveryPromo.description": "Delivery Promo \u003e Description",
     "c_deliveryPromo.image": "Delivery Promo \u003e Image",
     "c_deliveryPromo.title": "Delivery Promo \u003e Title",
+    c_externalPageUrl: "External Page URL",
     c_faqSection: "FAQ Section",
     c_linkedLocation: "Linked Location",
     "c_linkedLocation.address": "Linked Location \u003e Address",

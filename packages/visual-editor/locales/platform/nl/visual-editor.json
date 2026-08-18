@@ -152,6 +152,9 @@
     "warning": "Deze actie zal uw lokale wijzigingen verwijderen. Het kan niet ongedaan worden gemaakt."
   },
   "distance": "Afstand",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> uit zoekopdracht",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> van {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> van jou",
   "emptyStateFieldEmpty": "Het toegewezen veld van {{entityType}} is leeg",
   "emptyStateSectionHidden": "Sectie verborgen voor deze {{entityType}}",
   "enableCookies": "Cookies inschakelen",
@@ -280,6 +283,7 @@
     "linkColor": "Linkkleur",
     "linkedInLink": "LinkedIn -link",
     "linkLabel": "Linklabel",
+    "linkPath": "Linkpad",
     "links": "Links",
     "linksTooltip": "Links worden automatisch samengevouwen als de viewport te smal is",
     "linkStyles": "Linkstijlen",
@@ -306,6 +310,7 @@
       "aspectRatio": "Beeldverhouding",
       "base_text size": "Basis",
       "bold": "Vetgedrukt",
+      "bothDistances": "Beide afstanden",
       "bottom_direction": "Onder",
       "button": "Knop",
       "carousel": "Carrousel",
@@ -430,6 +435,7 @@
       "width": "Breedte",
       "yes": "Ja"
     },
+    "overrideLink": "Link overschrijven",
     "pageHeading": "Paginakop",
     "phone": "Telefoon",
     "phoneFormat": "Telefoonformaat",
@@ -570,6 +576,7 @@
   "link": "link",
   "linkedEntityFields": "Gekoppelde entiteitsvelden",
   "linkedEntityMultiValueWarning": "{{linkedField}} bevat meerdere gekoppelde entiteiten. Gebruik de eerste voor {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Gebruik een aangepast URL-pad voor de titellink van elke kaart. Als de waarde leeg is, wordt de gegenereerde map-URL gebruikt.",
   "linkTypes": {
     "clickToWebsite": "Klik op de website",
     "drivingDirections": "Routebeschrijving",

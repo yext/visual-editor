@@ -152,6 +152,9 @@
     "warning": "Šis veiksmas pašalins jūsų vietinius pakeitimus. To negalima panaikinti."
   },
   "distance": "Atstumas",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> iš paieškos",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> nuo {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> nuo jūsų",
   "emptyStateFieldEmpty": "{{entityType}} susietas laukas tuščias",
   "emptyStateSectionHidden": "Šio {{entityType}} skyrius paslėptas",
   "enableCookies": "Įgalinti slapukus",
@@ -280,6 +283,7 @@
     "linkColor": "Nuorodos spalva",
     "linkedInLink": "„LinkedIn“ nuoroda",
     "linkLabel": "Nuorodos etiketė",
+    "linkPath": "Nuorodos kelias",
     "links": "Nuorodos",
     "linksTooltip": "Jei peržiūros sritis per siaura, nuorodos bus automatiškai sutrauktos",
     "linkStyles": "Nuorodų stiliai",
@@ -306,6 +310,7 @@
       "aspectRatio": "Kraštinių santykis",
       "base_text size": "Bazė",
       "bold": "Paryškintas",
+      "bothDistances": "Abu atstumai",
       "bottom_direction": "Apačia",
       "button": "Mygtukas",
       "carousel": "Karuselė",
@@ -430,6 +435,7 @@
       "width": "Plotis",
       "yes": "Taip"
     },
+    "overrideLink": "Perrašyti nuorodą",
     "pageHeading": "Puslapio antraštė",
     "phone": "Telefonas",
     "phoneFormat": "Telefono formatas",
@@ -572,6 +578,7 @@
   "link": "nuoroda",
   "linkedEntityFields": "Susieti esybių laukai",
   "linkedEntityMultiValueWarning": "{{linkedField}} yra keli susieti objektai. Naudojamas pirmasis, skirtas {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Naudokite tinkintą URL kelią kiekvienos kortelės pavadinimo nuorodai. Jei reikšmė tuščia, bus naudojamas sugeneruotas katalogo URL.",
   "linkTypes": {
     "clickToWebsite": "Spustelėkite svetainę",
     "drivingDirections": "Važiavimo kryptys",

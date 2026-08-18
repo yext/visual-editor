@@ -315,7 +315,8 @@ export const installLocatorLocalDevMocks = () => {
           originalOwnGetCurrentPositionDescriptor,
         );
       } else {
-        delete geolocation.getCurrentPosition;
+        delete (geolocation as { getCurrentPosition?: unknown })
+          .getCurrentPosition;
       }
     }
 

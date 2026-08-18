@@ -10,7 +10,8 @@
     "module": "esnext",
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
-    "types": ["vite/client"]
+    "allowImportingTsExtensions": true,
+    "types": ["vite/client", "node"]
   },
   "include": ["src", "global.d.ts"],
   "exclude": ["../node_modules", "node_modules"]

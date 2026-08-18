@@ -40,6 +40,7 @@ export {
 } from "./InsightSection/InsightSection.tsx";
 export { InsightCardsWrapper } from "./InsightSection/InsightCardsWrapper.tsx";
 export { InsightCard } from "./InsightSection/InsightCard.tsx";
+export { MiniHero, type MiniHeroAuthoredProps } from "./MiniHero.tsx";
 export {
   NearbyLocationsSection,
   type NearbyLocationsSectionProps,

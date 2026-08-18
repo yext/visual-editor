@@ -391,6 +391,10 @@ const locatorFields: YextFields<LocatorProps> = {
         value: "distanceFromSearch",
       },
       {
+        label: msg("fields.options.bothDistances", "Both Distances"),
+        value: "bothDistances",
+      },
+      {
         label: msg("fields.options.hidden", "Hidden"),
         value: "hidden",
       },

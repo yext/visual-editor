@@ -152,6 +152,9 @@
     "warning": "Táto akcia odstráni vaše miestne zmeny. Nedá sa to vrátiť späť."
   },
   "distance": "Vzdialenosť",
+  "distanceLineFromSearch": "<strong>{{distance}}</strong> z vyhľadávania",
+  "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> od {{searchLocation}}",
+  "distanceLineFromYou": "<strong>{{distance}}</strong> od vás",
   "emptyStateFieldEmpty": "Mapované pole {{entityType}} je prázdne",
   "emptyStateSectionHidden": "Sekcia skrytá pre túto {{entityType}}",
   "enableCookies": "Povoliť súbory cookie",
@@ -280,6 +283,7 @@
     "linkColor": "Farba odkazu",
     "linkedInLink": "LinkedIn link",
     "linkLabel": "Označenie odkazu",
+    "linkPath": "Cesta odkazu",
     "links": "Odkazy",
     "linksTooltip": "Ak je výrez príliš úzky, prepojenia sa automaticky zbalia",
     "linkStyles": "Štýly odkazov",
@@ -306,6 +310,7 @@
       "aspectRatio": "Miera strán",
       "base_text size": "Základňa",
       "bold": "Tučné",
+      "bothDistances": "Obe vzdialenosti",
       "bottom_direction": "Dole",
       "button": "Tlačidlo",
       "carousel": "Kolotoč",
@@ -430,6 +435,7 @@
       "width": "Šírka",
       "yes": "Áno"
     },
+    "overrideLink": "Prepísať odkaz",
     "pageHeading": "Záhlavie stránky",
     "phone": "Telefón",
     "phoneFormat": "Formát telefónu",
@@ -572,6 +578,7 @@
   "link": "prepojiť",
   "linkedEntityFields": "Polia prepojených entít",
   "linkedEntityMultiValueWarning": "{{linkedField}} obsahuje viacero prepojených entít. Používa sa prvý pre {{resolvedField}}.",
+  "linkOverrideDirectoryTooltip": "Pre odkaz na názov každej karty použite vlastnú cestu URL. Ak je hodnota prázdna, použije sa vygenerovaná adresa URL adresára.",
   "linkTypes": {
     "clickToWebsite": "Kliknite na webovú stránku",
     "drivingDirections": "Riadenie",
