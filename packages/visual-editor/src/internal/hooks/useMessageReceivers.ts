@@ -15,6 +15,11 @@ import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 
 const devLogger = new DevLogger();
 
+export type ComponentRegistry = Record<
+  string,
+  Config<any> | (() => Promise<Config<any>>)
+>;
+
 const createEmptyLocalDevLayout: Data = {
   root: {},
   content: [],
@@ -53,7 +58,7 @@ export const getLocalDevLayoutData = (
 };
 
 export const useCommonMessageReceivers = (
-  componentRegistry: Record<string, Config<any>>,
+  componentRegistry: ComponentRegistry,
   localDev: boolean,
   streamDocument: StreamDocument
 ) => {
@@ -82,12 +87,18 @@ export const useCommonMessageReceivers = (
       const devMetadata = generateTemplateMetadata(streamDocument);
       setTemplateMetadata(devMetadata);
 
-      const puckConfig = componentRegistry[devMetadata.templateId];
-      if (!puckConfig) {
+      const registeredConfig = componentRegistry[devMetadata.templateId];
+      if (!registeredConfig) {
         throw new Error(
           `Could not find config for template: templateId=${devMetadata.templateId}`
         );
       }
+      if (typeof registeredConfig === "function") {
+        throw new Error(
+          `Cannot load config asynchronously in local development: templateId=${devMetadata.templateId}`
+        );
+      }
+      const puckConfig = registeredConfig;
       setPuckConfig(puckConfig);
 
       setLayoutData(getLocalDevLayoutData(puckConfig, streamDocument));
@@ -118,21 +129,29 @@ export const useCommonMessageReceivers = (
     };
   }
 
-  useReceiveMessage("getTemplateMetadata", TARGET_ORIGINS, (send, payload) => {
-    const puckConfig = componentRegistry[payload.templateId];
-    if (!puckConfig) {
-      throw new Error(
-        `Could not find config for template: templateId=${payload.templateId}`
-      );
+  useReceiveMessage(
+    "getTemplateMetadata",
+    TARGET_ORIGINS,
+    async (send, payload) => {
+      const registeredConfig = componentRegistry[payload.templateId];
+      if (!registeredConfig) {
+        throw new Error(
+          `Could not find config for template: templateId=${payload.templateId}`
+        );
+      }
+      const puckConfig =
+        typeof registeredConfig === "function"
+          ? await registeredConfig()
+          : registeredConfig;
+      setPuckConfig(puckConfig);
+      const templateMetadata = payload as TemplateMetadata;
+      setTemplateMetadata(payload as TemplateMetadata);
+      devLogger.enable(templateMetadata.isxYextDebug);
+      devLogger.logData("TEMPLATE_METADATA", templateMetadata);
+      devLogger.logData("PUCK_CONFIG", puckConfig);
+      send({ status: "success", payload: { message: "payload received" } });
     }
-    setPuckConfig(puckConfig);
-    const templateMetadata = payload as TemplateMetadata;
-    setTemplateMetadata(payload as TemplateMetadata);
-    devLogger.enable(templateMetadata.isxYextDebug);
-    devLogger.logData("TEMPLATE_METADATA", templateMetadata);
-    devLogger.logData("PUCK_CONFIG", puckConfig);
-    send({ status: "success", payload: { message: "payload received" } });
-  });
+  );
 
   useReceiveMessage("getLayoutData", TARGET_ORIGINS, (send, payload) => {
     const data = JSON.parse(payload.layoutData) as Data;

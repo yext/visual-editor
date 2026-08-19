@@ -27,13 +27,26 @@
       "default": "./dist/plugin/plugin.js"
     },
     "./style.css": "./dist/style.css",
-    "./editor.css": "./dist/editor.css"
+    "./editor.css": "./dist/visual-editor.css",
+    "./section-library-support": {
+      "types": "./dist/sectionLibrarySupport.d.ts",
+      "import": "./dist/section-library-support.js",
+      "default": "./dist/section-library-support.js"
+    }
   },
   "types": "dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "section-library-support": [
+        "dist/sectionLibrarySupport.d.ts"
+      ]
+    }
+  },
   "scripts": {
     "build:components": "tsc && vite build",
     "build:plugin": "rm -rf dist/plugin && tsc -p tsconfig.plugin.json --emitDeclarationOnly && vite build --config vite.config.plugin.ts",
     "build": "pnpm run build:components && pnpm run build:plugin",
+    "export-section-library-directory-locator": "tsx scripts/exportDirectoryLocatorSectionLibrary.ts",
     "test": "pnpm run test:editor && pnpm run test:components",
     "test:editor": "vitest run --exclude './src/components/**/*.test.tsx' --browser.enabled false",
     "test:components": "vitest run ./src/components/**",

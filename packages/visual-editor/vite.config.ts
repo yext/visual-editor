@@ -2,7 +2,7 @@ import react from "@vitejs/plugin-react";
 import { LibraryFormats, defineConfig } from "vite";
 import path from "node:path";
 import type { Plugin } from "vite";
-import { exec } from "node:child_process";
+import { execFileSync } from "node:child_process";
 import { compareScreenshot } from "./src/components/testing/compareScreenshot.ts";
 
 export default defineConfig(() => ({
@@ -40,13 +40,18 @@ export default defineConfig(() => ({
         "@yext/search-ui-react",
       ],
       output: {
+        entryFileNames: "[name].js",
         globals: {
           react: "React",
           "react-dom": "ReactDOM",
         },
       },
       input: {
-        editor: path.resolve(__dirname, "src/index.ts"),
+        "visual-editor": path.resolve(__dirname, "src/index.ts"),
+        "section-library-support": path.resolve(
+          __dirname,
+          "src/sectionLibrarySupport.ts"
+        ),
         style: path.resolve(__dirname, "src/components/styles.css"),
       },
     },
@@ -81,16 +86,20 @@ export default defineConfig(() => ({
 /** A custom plugin to generate TS types using tsup */
 const dts = (): Plugin => ({
   name: "dts",
-  buildEnd: (error) => {
-    if (error) {
-      return;
-    }
-
-    exec("tsup src/index.ts --format esm --dts-only", (err) => {
-      if (err) {
-        throw new Error("Failed to generate declaration files");
-      }
-    });
+  closeBundle: () => {
+    execFileSync(
+      "pnpm",
+      [
+        "exec",
+        "tsup",
+        "src/index.ts",
+        "src/sectionLibrarySupport.ts",
+        "--format",
+        "esm",
+        "--dts-only",
+      ],
+      { stdio: "inherit" }
+    );
   },
 });
 

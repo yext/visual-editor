@@ -27,7 +27,8 @@ import {
   resolveUrlTemplate,
   VisualEditorProvider,
 } from "@yext/visual-editor";
-import { sectionLibraryConfig } from "../library/.generated/libraryConfig";
+import { sectionLibraryConfig } from "__SECTION_LIBRARY_CONFIG_PATH__";
+/* SECTION_LIBRARY_MAPBOX_IMPORT */
 
 const layoutId = "__SECTION_LIBRARY_LAYOUT_ID__";
 
@@ -134,21 +135,24 @@ const SectionLibraryLayout: Template<TemplateRenderProps> = (props) => {
     );
   }
   return (
-    <AnalyticsProvider
-      apiKey={props.document?._env?.YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY}
-      templateData={props}
-      currency="USD"
-    >
-      <VisualEditorProvider templateProps={props}>
-        <GTMBody>
-          <Render
-            config={sectionLibraryConfig}
-            data={data}
-            metadata={{ streamDocument: props.document }}
-          />
-        </GTMBody>
-      </VisualEditorProvider>
-    </AnalyticsProvider>
+    <>
+      {/* SECTION_LIBRARY_MAPBOX_ASSETS */}
+      <AnalyticsProvider
+        apiKey={props.document?._env?.YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY}
+        templateData={props}
+        currency="USD"
+      >
+        <VisualEditorProvider templateProps={props}>
+          <GTMBody>
+            <Render
+              config={sectionLibraryConfig}
+              data={data}
+              metadata={{ streamDocument: props.document }}
+            />
+          </GTMBody>
+        </VisualEditorProvider>
+      </AnalyticsProvider>
+    </>
   );
 };
 
