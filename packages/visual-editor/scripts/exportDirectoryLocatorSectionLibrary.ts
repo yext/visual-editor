@@ -490,16 +490,16 @@ const collectComponentList = (value: unknown): string[] => {
   });
 };
 
-const parseOptions = (arguments_: string[]): Options => {
-  const targetIndex = arguments_.indexOf("--target");
-  const libraryIdIndex = arguments_.indexOf("--library-id");
+const parseOptions = (args: string[]): Options => {
+  const targetIndex = args.indexOf("--target");
+  const libraryIdIndex = args.indexOf("--library-id");
   if (targetIndex === -1 || libraryIdIndex === -1) {
     throw new Error(
       "Usage: exportDirectoryLocatorSectionLibrary --target <starter path> --library-id <library id> [--overwrite]"
     );
   }
-  const targetDirectory = arguments_[targetIndex + 1];
-  const libraryId = arguments_[libraryIdIndex + 1];
+  const targetDirectory = args[targetIndex + 1];
+  const libraryId = args[libraryIdIndex + 1];
   if (!targetDirectory || !libraryId) {
     throw new Error(
       "Usage: exportDirectoryLocatorSectionLibrary --target <starter path> --library-id <library id> [--overwrite]"
@@ -508,7 +508,7 @@ const parseOptions = (arguments_: string[]): Options => {
   return {
     targetDirectory: path.resolve(targetDirectory),
     libraryId,
-    overwrite: arguments_.includes("--overwrite"),
+    overwrite: args.includes("--overwrite"),
   };
 };
 
