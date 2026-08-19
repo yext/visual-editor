@@ -53,24 +53,34 @@ type Options = {
 };
 
 /**
- * Seeds or refreshes the copied Directory and Locator source in one Section
- * Library starter. This is a manual maintainer tool, not a Vite build hook or
- * a repository-creation tool. Run it once to seed the canonical starter, then
- * commit the output. New repositories inherit the copied source from that
- * starter.
+ * Exports the Directory and Locator sections to a starter repository
+ * configured with the new Section Library structure.
  *
- * Run this command from `packages/visual-editor`:
+ * Run the following from `packages/visual-editor`:
  *
- * `pnpm run export-section-library-directory-locator -- --target <starter-path> --library-id <library-id>`
+ * ```
+ * pnpm run export-section-library-directory-locator -- \
+ *   --target <starter-path> \
+ *   --library-id <library-id>
+ * ```
  *
- * Use `--overwrite` only for a reviewed refresh of an existing library. It
- * replaces the copied `shared` source and Directory and Locator default
- * layouts. It does not update other repositories or forks automatically.
+ * `--target` is the starter repository root.
+ * `--library-id` is the prefix for the generated layout IDs.
+ * For example, `--library-id my-library` creates
+ * `my-library-directory` and `my-library-locator`.
  *
- * 1. Copy the supported Directory and Locator visual source closure.
- * 2. Rewrite Visual Editor internal imports to the public support entry point.
- * 3. Write the visible sections, component registry, layouts, and source
- *    version record.
+ * By default, the command stops if the target already has shared source or a
+ * Directory or Locator section. Use `--overwrite` only after you review the
+ * new output. This option replaces the shared source and the Directory and
+ * Locator sections and layouts.
+ *
+ * The export process has these steps:
+ *
+ * 1. Copy the Directory and Locator source and its supported local imports.
+ * 2. Replace other Visual Editor imports with the public section library
+ *    support entry point.
+ * 3. Write the public sections, internal component registry, default layouts,
+ *    and Visual Editor source version.
  */
 export const exportDirectoryLocatorSectionLibrary = (
   options: Options
@@ -102,14 +112,6 @@ export const exportDirectoryLocatorSectionLibrary = (
 
   if (options.overwrite) {
     fs.removeSync(sharedDirectory);
-    [
-      "BannerSection.tsx",
-      "CustomCodeSection.tsx",
-      "ExpandedFooter.tsx",
-      "ExpandedHeader.tsx",
-    ].forEach((fileName) => {
-      fs.removeSync(path.join(sectionsDirectory, fileName));
-    });
   }
   fs.ensureDirSync(sectionsDirectory);
   const copiedSourcePaths = new Set<string>();
@@ -126,7 +128,7 @@ export const exportDirectoryLocatorSectionLibrary = (
       component.type !== "ExpandedHeader" && component.type !== "ExpandedFooter"
   );
   writeSections(sectionsDirectory);
-  writeSectionRegistry(sharedDirectory, directoryLayout);
+  writeComponentRegistry(sharedDirectory, directoryLayout);
   writeLayouts(libraryDirectory, options.libraryId, directoryLayout);
   writeSourceVersion(sharedDirectory);
 };
@@ -235,16 +237,10 @@ const isCopiedSource = (sourcePath: string): boolean => {
   return (
     [
       "components/contentBlocks/",
-      "components/customCode/",
       "components/directory/",
-      "components/footer/",
-      "components/header/",
       "components/locator/",
     ].some((directory) => relativePath.startsWith(directory)) ||
-    [
-      "components/pageSections/Banner.tsx",
-      "components/pageSections/Breadcrumbs.tsx",
-    ].includes(relativePath)
+    relativePath === "components/pageSections/Breadcrumbs.tsx"
   );
 };
 
@@ -300,11 +296,20 @@ const writeSections = (sectionsDirectory: string): void => {
   );
 };
 
-const writeSectionRegistry = (
+/**
+ * Writes the hidden component registry and root configurations for the
+ * exported Directory and Locator layouts.
+ *
+ * 1. Find the hidden component IDs stored in the Directory default layout.
+ * 2. Map each ID to its copied Puck config.
+ * 3. Write the component registry and both layout root configurations.
+ */
+const writeComponentRegistry = (
   sharedDirectory: string,
   directoryLayout: Record<string, any>
 ): void => {
   const componentIds = collectComponentIds(directoryLayout).filter(
+    // Directory is a visible section. Its config comes from sections/Directory.tsx.
     (id) => id !== "Directory"
   );
   const unsupportedId = componentIds.find((id) => !sharedComponentSources[id]);

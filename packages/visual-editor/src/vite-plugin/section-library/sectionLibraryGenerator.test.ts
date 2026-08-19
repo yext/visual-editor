@@ -464,7 +464,7 @@ describe("generateSectionLibraryFiles", () => {
       error: /must contain only ENTITY, DIRECTORY, or LOCATOR/,
     },
     {
-      name: "duplicate component ID",
+      name: "duplicate section ID",
       update: (rootDir: string): void => {
         fs.writeFileSync(
           path.join(rootDir, "src", "library", "sections", "SecondHero.tsx"),
@@ -475,7 +475,7 @@ describe("generateSectionLibraryFiles", () => {
           ].join("\n")
         );
       },
-      error: /Component ID is not unique: hero/,
+      error: /Section ID is not unique: hero/,
     },
     {
       name: "invalid library metadata",

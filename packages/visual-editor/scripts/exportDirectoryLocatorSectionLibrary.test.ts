@@ -108,10 +108,6 @@ describe("exportDirectoryLocatorSectionLibrary", () => {
       )
     ).toMatchObject({ pageSetType: "LOCATOR" });
 
-    fs.writeFileSync(
-      path.join(libraryDirectory, "sections", "BannerSection.tsx"),
-      "legacy generated section"
-    );
     exportDirectoryLocatorSectionLibrary({
       targetDirectory,
       libraryId: "test-library",
@@ -119,10 +115,5 @@ describe("exportDirectoryLocatorSectionLibrary", () => {
     });
 
     expect(fs.readFileSync(registryPath, "utf8")).toBe(registry);
-    expect(
-      fs.existsSync(
-        path.join(libraryDirectory, "sections", "BannerSection.tsx")
-      )
-    ).toBe(false);
   });
 });

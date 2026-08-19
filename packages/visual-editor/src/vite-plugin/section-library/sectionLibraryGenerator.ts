@@ -345,14 +345,23 @@ const validateComponentIds = (
   sharedComponents: SharedComponent[]
 ): void => {
   const componentIds = new Set<string>();
-  for (const component of [...sections, ...sharedComponents]) {
-    if (!isSafeId(component.id)) {
-      throw new Error(`Component ID is not valid: ${component.id}`);
+  for (const [componentTypeName, components] of [
+    ["Section", sections],
+    ["Component", sharedComponents],
+  ] as const) {
+    for (const component of components) {
+      if (!isSafeId(component.id)) {
+        throw new Error(
+          `${componentTypeName} ID is not valid: ${component.id}`
+        );
+      }
+      if (componentIds.has(component.id)) {
+        throw new Error(
+          `${componentTypeName} ID is not unique: ${component.id}`
+        );
+      }
+      componentIds.add(component.id);
     }
-    if (componentIds.has(component.id)) {
-      throw new Error(`Component ID is not unique: ${component.id}`);
-    }
-    componentIds.add(component.id);
   }
 };
 
