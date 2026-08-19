@@ -93,6 +93,7 @@ const virtualFiles: VirtualFile[] = [
 export const yextVisualEditorPlugin = (
   options: VisualEditorPluginOptions = {}
 ): Plugin => {
+  let isBuildMode = false;
   const filesToCleanup: string[] = [];
   let sectionLibraryFiles: string[] = [];
   let sectionLibraryManifest: string | undefined;
@@ -157,10 +158,11 @@ export const yextVisualEditorPlugin = (
     process.nextTick(() => process.exit(0));
   });
 
-  process.once("exit", cleanupFiles);
-
   return {
     name: "vite-plugin-yext-visual-editor",
+    config(_, { command }) {
+      isBuildMode = command === "build";
+    },
     buildStart() {
       if (options.sectionLibrary) {
         const generatedLibrary = generateSectionLibraryFiles(process.cwd());
@@ -170,19 +172,19 @@ export const yextVisualEditorPlugin = (
       }
       generateFiles();
     },
-    closeBundle() {
+    generateBundle() {
       if (options.sectionLibrary && sectionLibraryManifest) {
-        fs.outputFileSync(
-          path.join(
-            process.cwd(),
-            "dist",
-            "assets",
-            "section-library-manifest.json"
-          ),
-          sectionLibraryManifest
-        );
+        this.emitFile({
+          type: "asset",
+          fileName: "assets/section-library-manifest.json",
+          source: sectionLibraryManifest,
+        });
       }
-      cleanupFiles();
+    },
+    buildEnd() {
+      if (isBuildMode) {
+        cleanupFiles();
+      }
     },
   };
 };

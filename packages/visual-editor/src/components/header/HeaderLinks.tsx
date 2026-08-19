@@ -17,6 +17,7 @@ import {
   useHeaderLinksDisplayMode,
 } from "./ExpandedHeaderMenuContext.tsx";
 import { ThemeColor, ThemeOptions } from "../../utils/themeConfigOptions.ts";
+import { BodyProps } from "../atoms/body.tsx";
 import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
 import {
   toPuckFields,
@@ -41,7 +42,7 @@ export type HeaderLinksProps = {
     /**
      * The variant of the header links
      */
-    variant?: "xs" | "sm" | "base" | "lg" | null;
+    variant?: BodyProps["variant"];
 
     /**
      * The color of the header links

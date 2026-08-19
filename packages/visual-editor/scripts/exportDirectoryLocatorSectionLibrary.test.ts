@@ -34,26 +34,10 @@ describe("exportDirectoryLocatorSectionLibrary", () => {
       path.join(libraryDirectory, "sections", "Locator.tsx"),
       "utf8"
     );
-    const bannerSection = fs.readFileSync(
-      path.join(libraryDirectory, "sections", "BannerSection.tsx"),
-      "utf8"
-    );
-    const headerSection = fs.readFileSync(
-      path.join(libraryDirectory, "sections", "ExpandedHeader.tsx"),
-      "utf8"
-    );
-    const footerSection = fs.readFileSync(
-      path.join(libraryDirectory, "sections", "ExpandedFooter.tsx"),
-      "utf8"
-    );
-    const customCodeSection = fs.readFileSync(
-      path.join(libraryDirectory, "sections", "CustomCodeSection.tsx"),
-      "utf8"
-    );
     const registryPath = path.join(
       libraryDirectory,
       "shared",
-      "sectionRegistry.ts"
+      "componentRegistry.ts"
     );
     const registry = fs.readFileSync(registryPath, "utf8");
 
@@ -62,17 +46,30 @@ describe("exportDirectoryLocatorSectionLibrary", () => {
     expect(directorySection).toContain('category: "Standard Sections"');
     expect(locatorSection).toContain('id: "Locator"');
     expect(locatorSection).toContain('pageSetTypes: ["LOCATOR"]');
-    expect(bannerSection).toContain('category: "Standard Sections"');
-    expect(headerSection).toContain('category: "Other"');
-    expect(footerSection).toContain('category: "Other"');
-    expect(customCodeSection).toContain('category: "Other"');
-    expect(registry).not.toContain('"directory-header"');
-    expect(registry).not.toContain('"locator-header"');
+    expect(
+      fs.existsSync(
+        path.join(libraryDirectory, "sections", "BannerSection.tsx")
+      )
+    ).toBe(false);
+    expect(
+      fs.existsSync(
+        path.join(libraryDirectory, "sections", "ExpandedHeader.tsx")
+      )
+    ).toBe(false);
+    expect(
+      fs.existsSync(
+        path.join(libraryDirectory, "sections", "ExpandedFooter.tsx")
+      )
+    ).toBe(false);
+    expect(
+      fs.existsSync(
+        path.join(libraryDirectory, "sections", "CustomCodeSection.tsx")
+      )
+    ).toBe(false);
     expect(registry).toContain("sharedRootAllowedComponentIds");
     expect(registry).toContain("sharedRootPageSetTypes");
-    expect(registry).toContain('"ExpandedHeader"');
-    expect(registry).toContain('"ExpandedFooter"');
-    expect(registry).toContain('"CustomCodeSection"');
+    expect(registry).toContain('DIRECTORY: ["MainContent"]');
+    expect(registry).toContain('LOCATOR: ["MainContent"]');
     expect(
       fs
         .readJsonSync(
@@ -84,7 +81,7 @@ describe("exportDirectoryLocatorSectionLibrary", () => {
           )
         )
         .content.map(({ type }: { type: string }) => type)
-    ).toEqual(expect.arrayContaining(["ExpandedHeader", "ExpandedFooter"]));
+    ).toEqual(["MainContent"]);
     expect(
       fs.readJsonSync(
         path.join(libraryDirectory, "shared", "sourceVersion.json")
@@ -111,6 +108,10 @@ describe("exportDirectoryLocatorSectionLibrary", () => {
       )
     ).toMatchObject({ pageSetType: "LOCATOR" });
 
+    fs.writeFileSync(
+      path.join(libraryDirectory, "sections", "BannerSection.tsx"),
+      "legacy generated section"
+    );
     exportDirectoryLocatorSectionLibrary({
       targetDirectory,
       libraryId: "test-library",
@@ -118,5 +119,10 @@ describe("exportDirectoryLocatorSectionLibrary", () => {
     });
 
     expect(fs.readFileSync(registryPath, "utf8")).toBe(registry);
+    expect(
+      fs.existsSync(
+        path.join(libraryDirectory, "sections", "BannerSection.tsx")
+      )
+    ).toBe(false);
   });
 });

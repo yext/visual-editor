@@ -1,8 +1,4 @@
-/**
- * Stable runtime support for editable Directory and Locator Section Library
- * source. Section Libraries must import this entry point instead of internal
- * Visual Editor paths.
- */
+// Public API for code copied into a Section Library.
 export {
   Background,
   type BackgroundProps,
@@ -82,16 +78,7 @@ export {
   EntityTooltipsProvider,
   useEntityTooltips,
 } from "./editor/EntityField.tsx";
-export {
-  filterMaxWidths,
-  getMaxWidthOptions,
-} from "./editor/MaxWidthSelector.tsx";
 export { resolveDataFromParent } from "./editor/ParentData.tsx";
-export {
-  getDefaultRTF,
-  TranslatableRichTextField,
-  type GetDefaultRTFOptions,
-} from "./editor/TranslatableRichTextField.tsx";
 export {
   YextEntityFieldSelector,
   type RenderYextEntityFieldSelectorProps,
@@ -133,7 +120,6 @@ export {
   useTemplateProps,
 } from "./hooks/useDocument.tsx";
 export { gatherSlotStyles, useGetCardSlots } from "./hooks/useGetCardSlots.tsx";
-export { useOverflow } from "./hooks/useOverflow.ts";
 export { usePreviewWindow } from "./hooks/usePreviewWindow.ts";
 export {
   getViewport,
@@ -141,7 +127,6 @@ export {
   VIEWPORT_BREAKPOINTS,
 } from "./hooks/useViewport.ts";
 export { pt, msg } from "./utils/i18n/platform.ts";
-export { i18nComponentsInstance } from "./utils/i18n/index.ts";
 export {
   formatDistance,
   fromMeters,
@@ -176,10 +161,7 @@ export {
 } from "./utils/resolveComponentData.tsx";
 export {
   findField,
-  resolveEmbeddedFieldsInString,
-  resolveEmbeddedFieldsRecursively,
   resolveField,
-  resolveYextEntityField,
   type FieldResolution,
 } from "./utils/resolveYextEntityField.ts";
 export {
@@ -228,14 +210,10 @@ export {
 } from "./types/images.ts";
 export { type AssetVideo } from "./types/videos.ts";
 export {
-  type EnhancedTranslatableCTA,
   type PresetImageType,
-  type TranslatableCTA,
   type TranslatableString,
-  type TranslatableRichText,
 } from "./types/types.ts";
 export { getCTAType } from "./internal/utils/ctaFieldUtils.ts";
-export { linkTypeOptions } from "./internal/puck/constant-value-fields/CallToAction.tsx";
 export {
   TARGET_ORIGINS,
   useReceiveMessage,

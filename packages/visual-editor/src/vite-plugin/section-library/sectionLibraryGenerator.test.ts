@@ -43,7 +43,7 @@ describe("generateSectionLibraryFiles", () => {
     expect(config).not.toContain("directoryConfig");
     expect(config).not.toContain("locatorConfig");
     expect(config).not.toContain("Object.groupBy");
-    expect(config).not.toContain("../shared/sectionRegistry");
+    expect(config).not.toContain("../shared/componentRegistry");
     const directoryConfig = fs.readFileSync(
       path.join(
         rootDir,
@@ -55,7 +55,7 @@ describe("generateSectionLibraryFiles", () => {
       "utf8"
     );
     expect(directoryConfig).toContain('id: "Directory"');
-    expect(directoryConfig).toContain("sharedSections.filter");
+    expect(directoryConfig).toContain("sharedComponents.filter");
     expect(directoryConfig).not.toContain('id: "Locator"');
     const locatorConfig = fs.readFileSync(
       path.join(
@@ -68,7 +68,7 @@ describe("generateSectionLibraryFiles", () => {
       "utf8"
     );
     expect(locatorConfig).toContain('id: "Locator"');
-    expect(locatorConfig).toContain("sharedSections.filter");
+    expect(locatorConfig).toContain("sharedComponents.filter");
     expect(locatorConfig).not.toContain('id: "Directory"');
     const mainTemplate = fs.readFileSync(
       path.join(rootDir, "src", "templates", "main.tsx"),
@@ -464,7 +464,7 @@ describe("generateSectionLibraryFiles", () => {
       error: /must contain only ENTITY, DIRECTORY, or LOCATOR/,
     },
     {
-      name: "duplicate section ID",
+      name: "duplicate component ID",
       update: (rootDir: string): void => {
         fs.writeFileSync(
           path.join(rootDir, "src", "library", "sections", "SecondHero.tsx"),
@@ -475,7 +475,7 @@ describe("generateSectionLibraryFiles", () => {
           ].join("\n")
         );
       },
-      error: /Section ID is not unique: hero/,
+      error: /Component ID is not unique: hero/,
     },
     {
       name: "invalid library metadata",
@@ -665,13 +665,13 @@ const createLibrary = (): string => {
     ].join("\n")
   );
   fs.writeFileSync(
-    path.join(libraryDirectory, "shared", "sectionRegistry.ts"),
+    path.join(libraryDirectory, "shared", "componentRegistry.ts"),
     [
-      "export const sharedSections = [",
+      "export const sharedComponentMetadata = [",
       '  { id: "directory-header", pageSetTypes: ["DIRECTORY"] },',
       '  { id: "locator-helper", pageSetTypes: ["LOCATOR"] },',
       "];",
-      "export const sharedComponents = {};",
+      "export const sharedComponentConfigs = {};",
       "export const sharedRootConfigs = {};",
       "export const sharedRootAllowedComponentIds = {};",
       'export const sharedRootPageSetTypes = ["DIRECTORY", "LOCATOR"] as const;',

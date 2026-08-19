@@ -302,12 +302,8 @@ export const DirectoryList = ({
                 <Body
                   style={{
                     textTransform: shouldTitleCase
-                      ? ("capitalize" as NonNullable<
-                          React.ComponentProps<typeof Body>["style"]
-                        >["textTransform"])
-                      : ("var(--textTransform-link-textTransform)" as NonNullable<
-                          React.ComponentProps<typeof Body>["style"]
-                        >["textTransform"]),
+                      ? ("capitalize" as React.CSSProperties["textTransform"])
+                      : ("var(--textTransform-link-textTransform)" as React.CSSProperties["textTransform"]),
                   }}
                 >
                   {label}

@@ -26,41 +26,9 @@ const sharedComponentSources: Record<
     path: "components/pageSections/Breadcrumbs.tsx",
     exportName: "BreadcrumbsSection",
   },
-  CopyrightMessageSlot: {
-    path: "components/footer/CopyrightMessageSlot.tsx",
-    exportName: "CopyrightMessageSlot",
-  },
-  CTASlot: {
-    path: "components/contentBlocks/CtaWrapper.tsx",
-    exportName: "CTAWrapper",
-  },
   DirectoryGrid: {
     path: "components/directory/DirectoryWrapper.tsx",
     exportName: "DirectoryGrid",
-  },
-  FooterExpandedLinksWrapper: {
-    path: "components/footer/FooterExpandedLinksWrapper.tsx",
-    exportName: "FooterExpandedLinksWrapper",
-  },
-  FooterLinksSlot: {
-    path: "components/footer/FooterLinksSlot.tsx",
-    exportName: "FooterLinksSlot",
-  },
-  FooterLogoSlot: {
-    path: "components/footer/FooterLogoSlot.tsx",
-    exportName: "FooterLogoSlot",
-  },
-  FooterSocialLinksSlot: {
-    path: "components/footer/FooterSocialLinksSlot.tsx",
-    exportName: "FooterSocialLinksSlot",
-  },
-  FooterUtilityImagesSlot: {
-    path: "components/footer/FooterUtilityImagesSlot.tsx",
-    exportName: "FooterUtilityImagesSlot",
-  },
-  HeaderLinks: {
-    path: "components/header/HeaderLinks.tsx",
-    exportName: "HeaderLinks",
   },
   HeadingTextSlot: {
     path: "components/contentBlocks/HeadingText.tsx",
@@ -70,28 +38,11 @@ const sharedComponentSources: Record<
     path: "components/contentBlocks/image/Image.tsx",
     exportName: "ImageWrapper",
   },
-  PrimaryHeaderSlot: {
-    path: "components/header/PrimaryHeaderSlot.tsx",
-    exportName: "PrimaryHeaderSlot",
-  },
-  SecondaryFooterSlot: {
-    path: "components/footer/SecondaryFooterSlot.tsx",
-    exportName: "SecondaryFooterSlot",
-  },
-  SecondaryHeaderSlot: {
-    path: "components/header/SecondaryHeaderSlot.tsx",
-    exportName: "SecondaryHeaderSlot",
-  },
 };
 
 const copiedSourceRoots = [
   "components/directory/Directory.tsx",
   "components/locator/Locator.tsx",
-  "components/footer/ExpandedFooter.tsx",
-  "components/header/ExpandedHeader.tsx",
-  "components/pageSections/Banner.tsx",
-  "components/customCode/CustomCodeSection.tsx",
-  "components/pageSections/Breadcrumbs.tsx",
   ...Object.values(sharedComponentSources).map((source) => source.path),
 ];
 
@@ -102,10 +53,24 @@ type Options = {
 };
 
 /**
- * Exports the editable Directory and Locator source closure into one Section
- * Library. It copies supported visual code, rewrites Visual Editor internal
- * imports, writes default Directory and Locator layouts, and records the
- * source version.
+ * Seeds or refreshes the copied Directory and Locator source in one Section
+ * Library starter. This is a manual maintainer tool, not a Vite build hook or
+ * a repository-creation tool. Run it once to seed the canonical starter, then
+ * commit the output. New repositories inherit the copied source from that
+ * starter.
+ *
+ * Run this command from `packages/visual-editor`:
+ *
+ * `pnpm run export-section-library-directory-locator -- --target <starter-path> --library-id <library-id>`
+ *
+ * Use `--overwrite` only for a reviewed refresh of an existing library. It
+ * replaces the copied `shared` source and Directory and Locator default
+ * layouts. It does not update other repositories or forks automatically.
+ *
+ * 1. Copy the supported Directory and Locator visual source closure.
+ * 2. Rewrite Visual Editor internal imports to the public support entry point.
+ * 3. Write the visible sections, component registry, layouts, and source
+ *    version record.
  */
 export const exportDirectoryLocatorSectionLibrary = (
   options: Options
@@ -137,6 +102,14 @@ export const exportDirectoryLocatorSectionLibrary = (
 
   if (options.overwrite) {
     fs.removeSync(sharedDirectory);
+    [
+      "BannerSection.tsx",
+      "CustomCodeSection.tsx",
+      "ExpandedFooter.tsx",
+      "ExpandedHeader.tsx",
+    ].forEach((fileName) => {
+      fs.removeSync(path.join(sectionsDirectory, fileName));
+    });
   }
   fs.ensureDirSync(sectionsDirectory);
   const copiedSourcePaths = new Set<string>();
@@ -147,9 +120,14 @@ export const exportDirectoryLocatorSectionLibrary = (
       copiedSourcePaths
     );
   }
+  const directoryLayout = readDefaultLayout(defaultLayoutData.directory);
+  directoryLayout.content = directoryLayout.content.filter(
+    (component: { type?: unknown }) =>
+      component.type !== "ExpandedHeader" && component.type !== "ExpandedFooter"
+  );
   writeSections(sectionsDirectory);
-  writeSectionRegistry(sharedDirectory);
-  writeLayouts(libraryDirectory, options.libraryId);
+  writeSectionRegistry(sharedDirectory, directoryLayout);
+  writeLayouts(libraryDirectory, options.libraryId, directoryLayout);
   writeSourceVersion(sharedDirectory);
 };
 
@@ -290,42 +268,6 @@ const writeSections = (sectionsDirectory: string): void => {
       pageSetTypes: '["LOCATOR"]',
       category: "Standard Sections",
     },
-    {
-      fileName: "BannerSection",
-      sourceExportName: "BannerSection",
-      importPath: "../shared/components/pageSections/Banner",
-      displayName: "Banner",
-      description: "Displays a full-width banner.",
-      pageSetTypes: '["DIRECTORY", "LOCATOR"]',
-      category: "Standard Sections",
-    },
-    {
-      fileName: "ExpandedHeader",
-      sourceExportName: "ExpandedHeader",
-      importPath: "../shared/components/header/ExpandedHeader",
-      displayName: "Expanded Header",
-      description: "Displays the site header.",
-      pageSetTypes: '["DIRECTORY", "LOCATOR"]',
-      category: "Other",
-    },
-    {
-      fileName: "ExpandedFooter",
-      sourceExportName: "ExpandedFooter",
-      importPath: "../shared/components/footer/ExpandedFooter",
-      displayName: "Expanded Footer",
-      description: "Displays the site footer.",
-      pageSetTypes: '["DIRECTORY", "LOCATOR"]',
-      category: "Other",
-    },
-    {
-      fileName: "CustomCodeSection",
-      sourceExportName: "CustomCodeSection",
-      importPath: "../shared/components/customCode/CustomCodeSection",
-      displayName: "Custom Code Section",
-      description: "Adds custom HTML, CSS, and JavaScript.",
-      pageSetTypes: '["DIRECTORY", "LOCATOR"]',
-      category: "Other",
-    },
   ].forEach(
     ({
       fileName,
@@ -358,17 +300,12 @@ const writeSections = (sectionsDirectory: string): void => {
   );
 };
 
-const writeSectionRegistry = (sharedDirectory: string): void => {
-  const directoryLayout = readDefaultLayout(defaultLayoutData.directory);
+const writeSectionRegistry = (
+  sharedDirectory: string,
+  directoryLayout: Record<string, any>
+): void => {
   const componentIds = collectComponentIds(directoryLayout).filter(
-    (id) =>
-      ![
-        "Directory",
-        "ExpandedHeader",
-        "ExpandedFooter",
-        "BannerSection",
-        "CustomCodeSection",
-      ].includes(id)
+    (id) => id !== "Directory"
   );
   const unsupportedId = componentIds.find((id) => !sharedComponentSources[id]);
   if (unsupportedId) {
@@ -388,17 +325,19 @@ const writeSectionRegistry = (sharedDirectory: string): void => {
     return `  { id: ${JSON.stringify(id)}, pageSetTypes: ["DIRECTORY"] },`;
   });
   fs.writeFileSync(
-    path.join(sharedDirectory, "sectionRegistry.ts"),
+    path.join(sharedDirectory, "componentRegistry.ts"),
     [
       'import type { Config } from "@puckeditor/core";',
       ...imports,
       'import { directoryRootConfig, locatorRootConfig } from "./roots";',
       "",
-      "export const sharedSections = [",
+      "/** Hidden internal Puck components referenced by saved Directory layout data. */",
+      "export const sharedComponentMetadata = [",
       ...metadata,
       "] as const;",
       "",
-      'export const sharedComponents: Record<string, Config["components"][string]> = {',
+      "/** Puck configs for the hidden internal components. */",
+      'export const sharedComponentConfigs: Record<string, Config["components"][string]> = {',
       ...entries,
       "};",
       "",
@@ -410,8 +349,8 @@ const writeSectionRegistry = (sharedDirectory: string): void => {
       'export const sharedRootPageSetTypes = ["DIRECTORY", "LOCATOR"] as const;',
       "",
       "export const sharedRootAllowedComponentIds: Partial<Record<string, string[]>> = {",
-      '  DIRECTORY: ["MainContent", "ExpandedHeader", "ExpandedFooter", "CustomCodeSection"],',
-      '  LOCATOR: ["MainContent", "ExpandedHeader", "ExpandedFooter", "CustomCodeSection"],',
+      '  DIRECTORY: ["MainContent"],',
+      '  LOCATOR: ["MainContent"],',
       "};",
       "",
     ].join("\n")
@@ -440,9 +379,12 @@ const writeSectionRegistry = (sharedDirectory: string): void => {
   );
 };
 
-const writeLayouts = (libraryDirectory: string, libraryId: string): void => {
+const writeLayouts = (
+  libraryDirectory: string,
+  libraryId: string,
+  directoryLayout: Record<string, any>
+): void => {
   const locatorLayout = readDefaultLayout(defaultLayoutData.locator);
-  const directoryLayout = readDefaultLayout(defaultLayoutData.directory);
   writeLayout(
     libraryDirectory,
     `${libraryId}-directory`,

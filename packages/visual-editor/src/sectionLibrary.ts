@@ -1,5 +1,3 @@
-import type { ComponentConfig } from "@puckeditor/core";
-
 export const supportedPageSetTypes = [
   "ENTITY",
   "DIRECTORY",
@@ -14,7 +12,6 @@ export type SectionConfig = {
   description: string;
   pageSetTypes: PageSetType[];
   category?: string;
-  fields?: ComponentConfig["fields"];
 };
 
 export type LibraryMetadata = {

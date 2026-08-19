@@ -2,10 +2,11 @@
 import { DropZone, type Config } from "@puckeditor/core";
 import { MainContent, type SectionConfig } from "@yext/visual-editor";
 /* SECTION_LIBRARY_IMPORTS */
-/* SECTION_LIBRARY_SHARED_REGISTRY */
+/* SECTION_LIBRARY_SHARED_COMPONENT_REGISTRY */
 
 const pageSetType = __SECTION_LIBRARY_PAGE_SET_TYPE__;
-const hasSharedRegistry = __SECTION_LIBRARY_HAS_SHARED_REGISTRY__;
+const hasSharedComponentRegistry =
+  __SECTION_LIBRARY_HAS_SHARED_COMPONENT_REGISTRY__;
 
 const sections: {
   id: string;
@@ -26,9 +27,9 @@ const sectionsByCategory = sections.reduce<Record<string, typeof sections>>(
   {}
 );
 
-const sharedSectionsForPageSetType = hasSharedRegistry
-  ? sharedSections.filter((section) =>
-      section.pageSetTypes.includes(pageSetType)
+const sharedComponentsForPageSetType = hasSharedComponentRegistry
+  ? sharedComponents.filter((component) =>
+      component.pageSetTypes.includes(pageSetType)
     )
   : [];
 
@@ -49,9 +50,9 @@ const components = {
     ])
   ),
   ...Object.fromEntries(
-    sharedSectionsForPageSetType.map((section) => [
-      section.id,
-      sharedComponents[section.id],
+    sharedComponentsForPageSetType.map((component) => [
+      component.id,
+      sharedComponentConfigs[component.id],
     ])
   ),
 };
@@ -69,10 +70,10 @@ const defaultRoot: NonNullable<Config["root"]> = {
   ),
 };
 
-const sharedRootConfig = hasSharedRegistry
+const sharedRootConfig = hasSharedComponentRegistry
   ? sharedRootConfigs[pageSetType]
   : undefined;
-const rootAllowedComponentIds = hasSharedRegistry
+const rootAllowedComponentIds = hasSharedComponentRegistry
   ? sharedRootAllowedComponentIds[pageSetType]
   : undefined;
 
