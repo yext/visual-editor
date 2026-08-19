@@ -34,6 +34,7 @@ export const YextPuckFieldOverrides = {
   styledText: StyledTextFieldOverride,
   testCTA: CTASelectorFieldOverride,
   testEntityField: EntityFieldSelectorFieldOverride,
+  testImage: EntityFieldSelectorFieldOverride,
   translatableString: TranslatableStringFieldOverride,
   video: VideoFieldOverride,
 };

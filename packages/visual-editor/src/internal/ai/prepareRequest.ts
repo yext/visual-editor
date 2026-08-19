@@ -125,6 +125,15 @@ const imageFieldSchema = {
   ],
 };
 
+const testImageFieldSchema = {
+  type: "object",
+  properties: {
+    field: { type: "string" },
+    constantValueEnabled: { type: "boolean" },
+    constantValue: imageFieldSchema,
+  },
+};
+
 const videoFieldSchema = {
   type: "object",
   properties: {
@@ -162,6 +171,10 @@ const prepareField = (field: Record<string, any>): Record<string, any> => {
     return mergeAiConfig(annotatedField, { schema: entityFieldSchema });
   }
 
+  if (field.type === "testEntityField") {
+    return mergeAiConfig(annotatedField, { schema: entityFieldSchema });
+  }
+
   if (field.type === "basicSelector") {
     return mergeAiConfig(annotatedField, { schema: basicSelectorFieldSchema });
   }
@@ -176,8 +189,16 @@ const prepareField = (field: Record<string, any>): Record<string, any> => {
     return mergeAiConfig(annotatedField, { schema: ctaSelectorFieldSchema });
   }
 
+  if (field.type === "testCTA") {
+    return mergeAiConfig(annotatedField, { schema: ctaSelectorFieldSchema });
+  }
+
   if (field.type === "image") {
     return mergeAiConfig(annotatedField, { schema: imageFieldSchema });
+  }
+
+  if (field.type === "testImage") {
+    return mergeAiConfig(annotatedField, { schema: testImageFieldSchema });
   }
 
   if (field.type === "video") {

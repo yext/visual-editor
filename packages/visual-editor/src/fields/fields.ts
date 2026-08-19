@@ -33,6 +33,10 @@ export type TestEntityField = Omit<EntityFieldSelectorField<any>, "type"> & {
   output?: "plainText";
 };
 
+export type TestImageField = Omit<EntityFieldSelectorField<any>, "type"> & {
+  type: "testImage";
+};
+
 export type TestCTAField = Omit<CTASelectorField, "type"> & {
   type: "testCTA";
 };
@@ -55,6 +59,7 @@ export type YextPuckFields = {
   styledText: StyledTextField;
   testCTA: TestCTAField;
   testEntityField: TestEntityField;
+  testImage: TestImageField;
   translatableString: TranslatableStringField;
   video: VideoField;
 };
