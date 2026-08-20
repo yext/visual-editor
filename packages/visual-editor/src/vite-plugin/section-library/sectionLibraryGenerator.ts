@@ -533,8 +533,8 @@ const buildConfigSource = (
     .replace(
       "/* SECTION_LIBRARY_SHARED_COMPONENT_REGISTRY */",
       hasSharedComponentRegistry
-        ? 'import { sharedComponentConfigs, sharedComponents, sharedRootAllowedComponentIds, sharedRootConfigs } from "../shared/componentRegistry";'
-        : 'const sharedComponents: { id: string; pageSetTypes: string[] }[] = [];\nconst sharedComponentConfigs: Config["components"] = {};\nconst sharedRootAllowedComponentIds: Partial<Record<string, string[]>> = {};\nconst sharedRootConfigs: Partial<Record<string, NonNullable<Config["root"]>>> = {};'
+        ? 'import { sharedComponentConfigs, sharedComponentMetadata, sharedRootAllowedComponentIds, sharedRootConfigs } from "../shared/componentRegistry";'
+        : 'const sharedComponentMetadata: { id: string; pageSetTypes: string[] }[] = [];\nconst sharedComponentConfigs: Config["components"] = {};\nconst sharedRootAllowedComponentIds: Partial<Record<string, string[]>> = {};\nconst sharedRootConfigs: Partial<Record<string, NonNullable<Config["root"]>>> = {};'
     )
     .replace(
       "__SECTION_LIBRARY_PAGE_SET_TYPE__",

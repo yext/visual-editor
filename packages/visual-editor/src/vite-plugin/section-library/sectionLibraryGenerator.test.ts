@@ -55,7 +55,7 @@ describe("generateSectionLibraryFiles", () => {
       "utf8"
     );
     expect(directoryConfig).toContain('id: "Directory"');
-    expect(directoryConfig).toContain("sharedComponents.filter");
+    expect(directoryConfig).toContain("sharedComponentMetadata.filter");
     expect(directoryConfig).not.toContain('id: "Locator"');
     const locatorConfig = fs.readFileSync(
       path.join(
@@ -68,7 +68,7 @@ describe("generateSectionLibraryFiles", () => {
       "utf8"
     );
     expect(locatorConfig).toContain('id: "Locator"');
-    expect(locatorConfig).toContain("sharedComponents.filter");
+    expect(locatorConfig).toContain("sharedComponentMetadata.filter");
     expect(locatorConfig).not.toContain('id: "Directory"');
     const mainTemplate = fs.readFileSync(
       path.join(rootDir, "src", "templates", "main.tsx"),

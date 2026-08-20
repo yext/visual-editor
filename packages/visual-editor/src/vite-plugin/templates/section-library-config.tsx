@@ -28,7 +28,7 @@ const sectionsByCategory = sections.reduce<Record<string, typeof sections>>(
 );
 
 const sharedComponentsForPageSetType = hasSharedComponentRegistry
-  ? sharedComponents.filter((component) =>
+  ? sharedComponentMetadata.filter((component) =>
       component.pageSetTypes.includes(pageSetType)
     )
   : [];
