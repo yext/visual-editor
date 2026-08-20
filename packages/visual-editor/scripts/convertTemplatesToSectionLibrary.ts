@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
+import ts from "typescript";
 import {
   purposes,
   verticals,
@@ -23,6 +24,7 @@ const RESERVED_LAYOUT_IDS = new Set(["main", "directory", "locator", "edit"]);
 type JsonRecord = Record<string, any>;
 
 type LegacyComponent = {
+  displayName: string;
   id: string;
   content: string;
 };
@@ -199,7 +201,11 @@ const readLegacyTemplate = (
       }
       const content = fs.readFileSync(sourcePath, "utf8");
       validateComponentSource(content, sourcePath, id, componentsDirectory);
-      return { id, content };
+      return {
+        id,
+        content,
+        displayName: readComponentLabel(content, sourcePath),
+      };
     })
     .sort((left, right) => left.id.localeCompare(right.id));
   if (components.length === 0) {
@@ -217,6 +223,54 @@ const readLegacyTemplate = (
   }
   validateDefaultLayout(defaultLayout, defaultLayoutPath, "Legacy");
   return { templateId, directory, metadata, defaultLayout, components };
+};
+
+/** Reads the static label from a legacy component configuration. */
+const readComponentLabel = (content: string, sourcePath: string): string => {
+  const sourceFile = ts.createSourceFile(
+    sourcePath,
+    content,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TSX
+  );
+  const declarations = sourceFile.statements.flatMap((statement) =>
+    ts.isVariableStatement(statement) &&
+    (statement.declarationList.flags & ts.NodeFlags.Const) !== 0
+      ? statement.declarationList.declarations.filter(
+          (declaration) =>
+            ts.isTypeReferenceNode(declaration.type) &&
+            declaration.type.typeName.getText(sourceFile) ===
+              "YextComponentConfig"
+        )
+      : []
+  );
+  if (declarations.length !== 1) {
+    throw new Error(
+      `Component must define one const with type YextComponentConfig: ${sourcePath}`
+    );
+  }
+  const initializer = declarations[0].initializer;
+  if (!initializer || !ts.isObjectLiteralExpression(initializer)) {
+    throw new Error(
+      `YextComponentConfig must use an object literal initializer: ${sourcePath}`
+    );
+  }
+  const label = initializer.properties.find(
+    (property): property is ts.PropertyAssignment =>
+      ts.isPropertyAssignment(property) &&
+      property.name.getText(sourceFile) === "label"
+  );
+  if (
+    !label ||
+    !ts.isStringLiteral(label.initializer) ||
+    !label.initializer.text.trim()
+  ) {
+    throw new Error(
+      `YextComponentConfig label must be a non-empty string: ${sourcePath}`
+    );
+  }
+  return label.initializer.text;
 };
 
 const validateComponentSource = (
@@ -700,20 +754,13 @@ const buildSectionSource = (component: CopiedComponent): string => {
     "",
     "export const config: SectionConfig = {",
     `  id: ${JSON.stringify(component.id)},`,
-    `  displayName: ${JSON.stringify(humanizeIdentifier(component.id))},`,
-    `  description: ${JSON.stringify(`Editable section copied from the legacy ${component.templateId} template.`)},`,
+    `  displayName: ${JSON.stringify(component.displayName)},`,
+    // The description should default to the display name until a human updates it manually.
+    `  description: ${JSON.stringify(component.displayName)},`,
     '  pageSetTypes: ["ENTITY"],',
     "};",
     "",
   ].join("\n");
-};
-
-const humanizeIdentifier = (value: string): string => {
-  const displayName = value
-    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
-    .replace(/[-_]+/g, " ")
-    .trim();
-  return `${displayName.slice(0, 1).toUpperCase()}${displayName.slice(1)}`;
 };
 
 const deleteLegacyTemplates = (
