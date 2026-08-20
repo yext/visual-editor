@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   testEntityFieldAiSchema,
+  testRichTextFieldAiDescription,
   testRichTextFieldAiSchema,
 } from "./fieldTypes.ts";
 import { preparePuckAiConfig } from "./prepareRequest.ts";
@@ -67,6 +68,7 @@ describe("preparePuckAiConfig", () => {
       exclude: true,
     });
     expect(config?.components.MiniHero.fields.body.ai).toEqual({
+      instructions: testRichTextFieldAiDescription,
       schema: testRichTextFieldAiSchema,
     });
   });

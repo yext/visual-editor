@@ -1,12 +1,7 @@
 import * as React from "react";
 import { PuckComponent } from "@puckeditor/core";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
-import { PageSection } from "../atoms/pageSection.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
-import {
-  backgroundColors,
-  ThemeColor,
-} from "../../utils/themeConfigOptions.ts";
 import { type YextCTAField } from "../../fields/CTASelectorField.tsx";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 import { type ComplexImageType, type ImageType } from "@yext/pages-components";
@@ -15,197 +10,101 @@ import { type TranslatableRichText } from "../../types/types.ts";
 import { type ImageStylingProps } from "../contentBlocks/image/styling.ts";
 
 type MiniHeroResolvedProps = {
-  data: {
-    eyebrow?: string;
-    title: string;
-    description?: React.ReactNode;
-    image?: React.ReactNode;
-    primaryCta?: React.ReactNode;
-    secondaryCta?: React.ReactNode;
-  };
-  styles: {
-    backgroundColor?: ThemeColor;
-    desktopImagePosition: "left" | "right";
-    mobileContentAlignment: "left" | "center";
-  };
+  title: string;
+  description?: React.ReactNode;
+  image?: React.ReactNode;
+  primarycta?: React.ReactNode;
+  secondarycta?: React.ReactNode;
 };
 
 export type MiniHeroAuthoredProps = {
-  data: {
-    eyebrow?: YextEntityField<string>;
-    title: YextEntityField<string>;
-    description?: YextEntityField<TranslatableRichText>;
-    image?: YextEntityField<
-      ImageType | ComplexImageType | TranslatableAssetImage
-    > &
-      Partial<
-        Pick<ImageStylingProps, "aspectRatio" | "imageFillType" | "width">
-      >;
-    primaryCta?: YextCTAField;
-    secondaryCta?: YextCTAField;
-  };
-  styles: {
-    backgroundColor?: ThemeColor;
-    desktopImagePosition: "left" | "right";
-    mobileContentAlignment: "left" | "center";
-  };
+  title: YextEntityField<string>;
+  description?: YextEntityField<TranslatableRichText>;
+  image?: YextEntityField<
+    ImageType | ComplexImageType | TranslatableAssetImage
+  > &
+    Partial<Pick<ImageStylingProps, "aspectRatio" | "imageFillType" | "width">>;
+  primarycta?: YextCTAField;
+  secondarycta?: YextCTAField;
 };
 
 const miniHeroFields: YextFields<MiniHeroAuthoredProps> = {
-  data: {
-    type: "object",
-    label: msg("fields.data", "Data"),
-    objectFields: {
-      eyebrow: {
-        type: "testEntityField",
-        label: msg("fields.eyebrow", "Eyebrow"),
-        filter: { types: ["type.string"] },
-        output: "plainText",
-      },
-      title: {
-        type: "testEntityField",
-        label: msg("fields.title", "Title"),
-        filter: { types: ["type.string"] },
-        output: "plainText",
-      },
-      description: {
-        type: "testRichText",
-        label: msg("fields.description", "Description"),
-        filter: { types: ["type.string", "type.rich_text_v2"] },
-      },
-      image: {
-        type: "testImage",
-        label: msg("fields.image", "Image"),
-        filter: { types: ["type.image"] },
-      },
-      primaryCta: {
-        type: "testCTA",
-        label: msg("fields.primaryCTA", "Primary CTA"),
-      },
-      secondaryCta: {
-        type: "testCTA",
-        label: msg("fields.secondaryCTA", "Secondary CTA"),
-      },
-    },
+  title: {
+    type: "testEntityField",
+    label: msg("fields.title", "Title"),
+    filter: { types: ["type.string"] },
+    output: "plainText",
   },
-  styles: {
-    type: "object",
-    label: msg("fields.styles", "Styles"),
-    objectFields: {
-      backgroundColor: {
-        type: "basicSelector",
-        label: msg("fields.backgroundColor", "Background Color"),
-        options: "BACKGROUND_COLOR",
-      },
-      desktopImagePosition: {
-        type: "radio",
-        label: msg("fields.desktopImagePosition", "Desktop Image Position"),
-        options: [
-          {
-            label: msg("fields.options.left", "Left", {
-              context: "direction",
-            }),
-            value: "left",
-          },
-          {
-            label: msg("fields.options.right", "Right", {
-              context: "direction",
-            }),
-            value: "right",
-          },
-        ],
-      },
-      mobileContentAlignment: {
-        type: "radio",
-        label: msg("fields.mobileContentAlignment", "Mobile Content Alignment"),
-        options: [
-          {
-            label: msg("fields.options.left", "Left", {
-              context: "direction",
-            }),
-            value: "left",
-          },
-          {
-            label: msg("fields.options.center", "Center", {
-              context: "direction",
-            }),
-            value: "center",
-          },
-        ],
-      },
-    },
+  description: {
+    type: "testRichText",
+    label: msg("fields.description", "Description"),
+    filter: { types: ["type.string", "type.rich_text_v2"] },
+  },
+  image: {
+    type: "testImage",
+    label: msg("fields.image", "Image"),
+    filter: { types: ["type.image"] },
+  },
+  primarycta: {
+    type: "testCTA",
+    label: msg("fields.primaryCTA", "Primary CTA"),
+  },
+  secondarycta: {
+    type: "testCTA",
+    label: msg("fields.secondaryCTA", "Secondary CTA"),
   },
 };
 
 const MiniHeroComponent: PuckComponent<MiniHeroResolvedProps> = ({
-  data,
-  styles,
+  title,
+  description,
+  image,
+  primarycta,
+  secondarycta,
 }) => {
-  if (!data.title?.trim()) {
+  if (!title?.trim()) {
     return <></>;
   }
 
-  const isImageLeft = styles.desktopImagePosition === "left";
-  const isCentered = styles.mobileContentAlignment === "center";
-
   return (
-    <PageSection
-      background={styles.backgroundColor}
-      verticalPadding="default"
-      className="overflow-hidden"
-    >
+    <section className="bg-[linear-gradient(135deg,_#f7f0e6_0%,_#fffdf9_100%)] px-6 py-12 text-[#1e2521] sm:px-8 md:px-10 md:py-16 lg:px-16 lg:py-24">
       <div
         className={[
-          "grid items-center gap-8 md:gap-12",
-          data.image ? "md:grid-cols-2" : "max-w-3xl",
+          "mx-auto grid max-w-[1280px] items-center gap-6 md:gap-12",
+          image
+            ? "md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]"
+            : "max-w-[720px]",
         ].join(" ")}
       >
-        {data.image && (
-          <div
-            className={[
-              "overflow-hidden rounded-image-borderRadius border border-slate-200/70 bg-white shadow-sm",
-              isImageLeft ? "md:order-1" : "md:order-2",
-            ].join(" ")}
-          >
-            {data.image}
+        {image && (
+          <div className="flex items-center justify-center overflow-hidden rounded-[1.5rem] border border-[rgba(30,37,33,0.12)] bg-[#e9dfd1] shadow-[0_20px_40px_rgba(30,37,33,0.08)]">
+            <div className="flex min-h-[240px] w-full items-center justify-center md:min-h-[320px]">
+              {image}
+            </div>
           </div>
         )}
-        <div
-          className={[
-            "flex flex-col gap-5",
-            isCentered ? "items-center text-center" : "items-start text-left",
-            data.image ? (isImageLeft ? "md:order-2" : "md:order-1") : "",
-          ].join(" ")}
-        >
-          {data.eyebrow?.trim() && (
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-600">
-              {data.eyebrow}
-            </p>
+        <div className="mx-auto flex max-w-[720px] flex-col items-start gap-5">
+          <h1 className="m-0 font-[Georgia,'Times_New_Roman',serif] text-[clamp(2.75rem,6vw,5.25rem)] leading-[0.95] tracking-[-0.06em]">
+            {title}
+          </h1>
+          {description && (
+            <div className="max-w-[40rem] text-[1.05rem] leading-[1.6] text-[#55615b] [&_p]:m-0">
+              {description}
+            </div>
           )}
-          <div className="flex flex-col gap-4">
-            <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-slate-950 md:text-5xl">
-              {data.title}
-            </h1>
-            {data.description && (
-              <div className="max-w-2xl text-base leading-7 text-slate-600 md:text-lg">
-                {data.description}
-              </div>
-            )}
-          </div>
-          {(data.primaryCta || data.secondaryCta) && (
-            <div
-              className={[
-                "flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:flex-wrap",
-                isCentered ? "items-center justify-center" : "items-start",
-              ].join(" ")}
-            >
-              {data.primaryCta}
-              {data.secondaryCta}
+          {(primarycta || secondarycta) && (
+            <div className="flex flex-wrap gap-3">
+              {primarycta && (
+                <div className="inline-flex items-center">{primarycta}</div>
+              )}
+              {secondarycta && (
+                <div className="inline-flex items-center">{secondarycta}</div>
+              )}
             </div>
           )}
         </div>
       </div>
-    </PageSection>
+    </section>
   );
 };
 
@@ -213,67 +112,64 @@ export const MiniHero: YextComponentConfig<MiniHeroAuthoredProps> = {
   label: msg("components.miniHero", "Mini Hero"),
   ai: {
     instructions:
-      'Follow this authored shape exactly for Yext-aware generated components: content lives in transform-backed `testEntityField`, `testRichText`, `testImage`, and `testCTA` fields so render-time field transforms can resolve mapped Yext data, embedded fields like [[name]], rich text, and CTAs. Treat each CTA and each image as one complete field object such as `primaryCta`, `secondaryCta`, `image`, `imageOne`, or `imageTwo`, rather than splitting them across nested sub-properties like `cta.label`, `cta.link`, `image.src`, or `image.alt`. Do not use slots. Do not create helper components for CTAs. Every generated custom field must be fully authored in props, not just annotated in HTML. If you generate a `testCTA` annotation, also generate a full CTA prop object with `field`, `constantValueEnabled`, `selectedType`, and `constantValue`. If you generate a `testImage` annotation, also generate a full image prop object with `field`, `constantValueEnabled`, `constantValue`, and any image presentation props such as `aspectRatio`, `imageFillType`, and `width`. Copy this shape: { "data": { "eyebrow": testEntityField, "title": testEntityField, "description": testRichText, "image": testImage, "primaryCta": testCTA, "secondaryCta": testCTA } }. Copy this props pattern: { "primaryCta": { "field": "", "constantValueEnabled": true, "selectedType": "textAndLink", "constantValue": { "ctaType": "textAndLink", "label": "Primary Action", "link": "/", "linkType": "URL" } }, "image": { "field": "", "constantValueEnabled": true, "constantValue": { "url": "https://placehold.co/960x720", "alternateText": "Hero image" }, "aspectRatio": 1.78, "imageFillType": "fill", "width": 640 } }. Copy this markup pattern: `<p data-puck-field-eyebrow=\'{ "type": "testEntityField" }\'>Featured</p><h1 data-puck-field-title=\'{ "type": "testEntityField" }\'>Hero title</h1><div data-puck-field-description=\'{ "type": "testRichText" }\'><p>Body copy</p></div><a href="#" data-puck-field-primaryCta=\'{ "type": "testCTA" }\'>Primary Action</a><a href="#" data-puck-field-secondaryCta=\'{ "type": "testCTA" }\'>Secondary Action</a><div data-puck-field-image=\'{ "type": "testImage" }\'></div>`.',
+      "Reference the Generated Mini Hero pattern: component-owned transform-backed fields, complete defaultProps values, and empty HTML field targets.",
   },
   fields: miniHeroFields,
   defaultProps: {
-    data: {
-      eyebrow: {
-        field: "",
-        constantValue: "Featured",
-        constantValueEnabled: true,
-      },
-      title: {
-        field: "name",
-        constantValue: "Mini Hero Title",
-        constantValueEnabled: false,
-      },
-      description: {
-        field: "",
-        constantValue:
-          "A transform-backed hero demo that behaves like an AI-generated component while still supporting Yext field bindings.",
-        constantValueEnabled: true,
-      },
-      image: {
-        field: "",
-        constantValue: {
-          url: "https://placehold.co/960x720",
-          height: 720,
-          width: 960,
-          alternateText: "Mini Hero placeholder image",
+    title: {
+      field: "name",
+      constantValue: "",
+      constantValueEnabled: false,
+    },
+    description: {
+      field: "",
+      constantValue: {
+        en: {
+          json: "",
+          html: "<p>Discover what makes <b>[[name]]</b> worth the trip.</p>",
         },
-        aspectRatio: 1.78,
-        imageFillType: "fill",
-        width: 640,
-        constantValueEnabled: true,
+        hasLocalizedValue: "true",
       },
-      primaryCta: {
-        field: "",
-        constantValue: {
-          ctaType: "textAndLink",
-          label: "Primary Action",
-          link: "/",
-          linkType: "URL",
-        },
-        constantValueEnabled: true,
-        selectedType: "textAndLink",
+      constantValueEnabled: true,
+    },
+    image: {
+      field: "",
+      constantValueEnabled: true,
+      constantValue: {
+        url: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
+        alternateText: "",
       },
-      secondaryCta: {
-        field: "",
-        constantValue: {
-          ctaType: "textAndLink",
-          label: "Secondary Action",
-          link: "/about",
-          linkType: "URL",
+      aspectRatio: 1.78,
+      imageFillType: "fill",
+      width: 640,
+    },
+    primarycta: {
+      field: "",
+      constantValueEnabled: true,
+      selectedType: "textAndLink",
+      constantValue: {
+        ctaType: "textAndLink",
+        label: {
+          en: "Book Now",
+          hasLocalizedValue: "true",
         },
-        constantValueEnabled: true,
-        selectedType: "textAndLink",
+        link: "/book",
+        linkType: "URL",
       },
     },
-    styles: {
-      backgroundColor: backgroundColors.background1.value,
-      desktopImagePosition: "right",
-      mobileContentAlignment: "left",
+    secondarycta: {
+      field: "",
+      constantValueEnabled: true,
+      selectedType: "textAndLink",
+      constantValue: {
+        ctaType: "textAndLink",
+        label: {
+          en: "Learn More",
+          hasLocalizedValue: "true",
+        },
+        link: "/learn-more",
+        linkType: "URL",
+      },
     },
   } as unknown as MiniHeroAuthoredProps,
   render: MiniHeroComponent as unknown as PuckComponent<MiniHeroAuthoredProps>,

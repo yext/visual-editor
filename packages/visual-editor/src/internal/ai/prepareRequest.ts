@@ -90,7 +90,13 @@ const mergeAiConfig = (
 ) => {
   return {
     ...field,
-    ai: { ...field.ai, ...ai },
+    ai: {
+      ...field.ai,
+      ...ai,
+      ...(field.ai?.instructions
+        ? { instructions: field.ai.instructions }
+        : {}),
+    },
   };
 };
 
