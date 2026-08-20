@@ -24,6 +24,7 @@ import type { StyledPageSectionField } from "./styledFields/StyledPageSection.ts
 import type { StyledTextField } from "./styledFields/StyledTextField.tsx";
 import type { TranslatableStringField } from "./TranslatableStringField.tsx";
 import type { VideoField } from "./VideoField.tsx";
+import type { ComprehensiveCTAField } from "./styledFields/ComprehensiveCTAField.tsx";
 import { YextAutoField } from "./YextAutoField.tsx";
 import { adaptYextFieldMap } from "./yextFieldAdapter.ts";
 
@@ -31,6 +32,7 @@ export type YextPuckFields = {
   basicSelector: BasicSelectorField;
   ctaSelector: CTASelectorField;
   code: CodeField;
+  comprehensiveCTA: ComprehensiveCTAField;
   dateTimeSelector: DateTimeSelectorField;
   entityField: EntityFieldSelectorField;
   multiSelector: MultiSelectorField;

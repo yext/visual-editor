@@ -9,6 +9,7 @@ import {
   getBackgroundColorStyle,
   getThemeColorCssValue,
   getThemeColorHexValue,
+  isDarkColor,
   getTextColorClass,
   getTextColorStyle,
   isCustomThemeColorToken,
@@ -309,5 +310,16 @@ describe("getThemeColorHexValue", () => {
     expect(
       getThemeColorHexValue("palette-primary", { __: { theme: "{}" } })
     ).toBeUndefined();
+  });
+});
+
+describe("isDarkColor", () => {
+  it("uses explicit contrast before resolving a theme token", () => {
+    expect(
+      isDarkColor({
+        selectedColor: "palette-tertiary",
+        contrastingColor: "white",
+      })
+    ).toBe(true);
   });
 });
