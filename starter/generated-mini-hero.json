@@ -2,8 +2,8 @@
   "components": {
     "GeneratedMiniHero": {
       "label": "Generated Mini Hero",
-      "html": "<section class=\"generated-mini-hero\"><div class=\"generated-mini-hero__media\"><div class=\"generated-mini-hero__image\" data-puck-field-image='{ \"type\": \"testImage\" }'></div></div><div class=\"generated-mini-hero__content\"><h1 class=\"generated-mini-hero__title\" data-puck-field-title='{ \"type\": \"testEntityField\" }'>Welcome to [[name]]</h1><div class=\"generated-mini-hero__description\" data-puck-field-description='{ \"type\": \"testRichText\" }'><p>Discover what makes this location worth the trip.</p></div><div class=\"generated-mini-hero__cta\" data-puck-field-primarycta='{ \"type\": \"testCTA\" }'></div></div></section>",
-      "styles": ".generated-mini-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(1.5rem, 5vw, 4rem); align-items: center; padding: clamp(3rem, 8vw, 6rem) clamp(1.5rem, 5vw, 4rem); background: linear-gradient(135deg, #f7f0e6 0%, #fffdf9 100%); color: #1e2521; } .generated-mini-hero__media { display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 1.5rem; border: 1px solid rgba(30, 37, 33, 0.12); background: #e9dfd1; box-shadow: 0 20px 40px rgba(30, 37, 33, 0.08); } .generated-mini-hero__image { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 320px; } .generated-mini-hero__image > div { margin: 0 auto; } .generated-mini-hero__content { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.25rem; align-items: flex-start; } .generated-mini-hero__title { margin: 0; font-family: Georgia, \"Times New Roman\", serif; font-size: clamp(2.75rem, 6vw, 5.25rem); line-height: 0.95; letter-spacing: -0.06em; } .generated-mini-hero__description { max-width: 40rem; color: #55615b; font-size: 1.05rem; line-height: 1.6; } .generated-mini-hero__description p { margin: 0; } .generated-mini-hero__cta { display: inline-flex; align-items: center; } @media (max-width: 820px) { .generated-mini-hero { grid-template-columns: 1fr; } .generated-mini-hero__image { min-height: 240px; } }",
+      "html": "<section class=\"generated-mini-hero\"><div class=\"generated-mini-hero__media\"><div class=\"generated-mini-hero__image\" data-puck-field-image='{ \"type\": \"testImage\" }'></div></div><div class=\"generated-mini-hero__content\"><h1 class=\"generated-mini-hero__title\" data-puck-field-title='{ \"type\": \"testEntityField\" }'></h1><div class=\"generated-mini-hero__description\" data-puck-field-description='{ \"type\": \"testRichText\" }'></div><div class=\"generated-mini-hero__ctas\"><div class=\"generated-mini-hero__cta\" data-puck-field-primarycta='{ \"type\": \"testCTA\" }'></div><div class=\"generated-mini-hero__cta\" data-puck-field-secondarycta='{ \"type\": \"testCTA\" }'></div></div></div></section>",
+      "styles": ".generated-mini-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(1.5rem, 5vw, 4rem); align-items: center; padding: clamp(3rem, 8vw, 6rem) clamp(1.5rem, 5vw, 4rem); background: linear-gradient(135deg, #f7f0e6 0%, #fffdf9 100%); color: #1e2521; } .generated-mini-hero__media { display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 1.5rem; border: 1px solid rgba(30, 37, 33, 0.12); background: #e9dfd1; box-shadow: 0 20px 40px rgba(30, 37, 33, 0.08); } .generated-mini-hero__image { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 320px; } .generated-mini-hero__image > div { margin: 0 auto; } .generated-mini-hero__content { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.25rem; align-items: flex-start; } .generated-mini-hero__title { margin: 0; font-family: Georgia, \"Times New Roman\", serif; font-size: clamp(2.75rem, 6vw, 5.25rem); line-height: 0.95; letter-spacing: -0.06em; } .generated-mini-hero__description { max-width: 40rem; color: #55615b; font-size: 1.05rem; line-height: 1.6; } .generated-mini-hero__description p { margin: 0; } .generated-mini-hero__ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; } .generated-mini-hero__cta { display: inline-flex; align-items: center; } @media (max-width: 820px) { .generated-mini-hero { grid-template-columns: 1fr; } .generated-mini-hero__image { min-height: 240px; } }",
       "fields": {
         "title": {
           "type": "testEntityField",
@@ -30,6 +30,10 @@
         "primarycta": {
           "type": "testCTA",
           "label": "Primary CTA"
+        },
+        "secondarycta": {
+          "type": "testCTA",
+          "label": "Secondary CTA"
         }
       },
       "defaultProps": {
@@ -54,7 +58,7 @@
           "constantValueEnabled": true,
           "constantValue": {
             "url": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
-            "alternateText": "Scenic location"
+            "alternateText": ""
           },
           "aspectRatio": 1.78,
           "imageFillType": "fill",
@@ -67,10 +71,24 @@
           "constantValue": {
             "ctaType": "textAndLink",
             "label": {
-              "en": "Book now",
+              "en": "Book Now",
               "hasLocalizedValue": "true"
             },
             "link": "/book",
+            "linkType": "URL"
+          }
+        },
+        "secondarycta": {
+          "field": "",
+          "constantValueEnabled": true,
+          "selectedType": "textAndLink",
+          "constantValue": {
+            "ctaType": "textAndLink",
+            "label": {
+              "en": "Learn More",
+              "hasLocalizedValue": "true"
+            },
+            "link": "/learn-more",
             "linkType": "URL"
           }
         }

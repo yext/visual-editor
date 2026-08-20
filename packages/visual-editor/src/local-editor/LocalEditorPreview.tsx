@@ -93,15 +93,21 @@ export const LocalEditorPreview = ({
           streamDocument,
           localDevOptions,
         });
-        const migratedLayoutData = migrate(
-          cloneLayoutData(layoutData),
-          migrationRegistry,
+        const layoutDataWithDynamicComponents = cloneLayoutData(layoutData);
+        const { withDynamicConfig } = await import("@puckeditor/plugin-ai");
+        const dynamicConfig = withDynamicConfig(
           config,
+          layoutDataWithDynamicComponents
+        );
+        const migratedLayoutData = migrate(
+          layoutDataWithDynamicComponents,
+          migrationRegistry,
+          dynamicConfig,
           streamDocument
         );
         const resolvedLayoutData = await resolveAllData(
           migratedLayoutData,
-          config,
+          withDynamicConfig(config, migratedLayoutData),
           { streamDocument }
         );
 
@@ -194,14 +200,14 @@ export const LocalEditorPreview = ({
         <PreviewStatus title="Loading preview…" />
       ) : (
         <VisualEditorProvider
-          templateProps={{ document }}
+          templateProps={{ document: streamDocument }}
           entityFields={entityFields}
           tailwindConfig={tailwindConfig}
         >
           <VisualEditorRender
             config={config}
             data={previewState.data}
-            metadata={{ streamDocument: document }}
+            metadata={{ streamDocument }}
           />
         </VisualEditorProvider>
       )}

@@ -98,15 +98,20 @@ export const getPath: GetPath<TemplateProps> = ({
 export const transformProps: TransformProps<TemplateProps> = async (props) => {
   const { document } = props;
 
+  const { withDynamicConfig } = await import("@puckeditor/plugin-ai");
+  const layoutData = JSON.parse(document.__.layout);
+  const dynamicConfig = withDynamicConfig(directoryConfig, layoutData);
   const migratedData = migrate(
-    JSON.parse(document.__.layout),
+    layoutData,
     migrationRegistry,
-    directoryConfig,
+    dynamicConfig,
     document
   );
-  const resolvedPuckData = await resolveAllData(migratedData, directoryConfig, {
-    streamDocument: document,
-  });
+  const resolvedPuckData = await resolveAllData(
+    migratedData,
+    withDynamicConfig(directoryConfig, migratedData),
+    { streamDocument: document }
+  );
   document.__.layout = JSON.stringify(resolvedPuckData);
   const translations = await injectTranslations(document);
 
