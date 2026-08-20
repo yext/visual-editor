@@ -173,7 +173,7 @@ export const yextVisualEditorPlugin = (
       generateFiles();
     },
     generateBundle() {
-      if (isBuildMode && options.sectionLibrary && sectionLibraryManifest) {
+      if (options.sectionLibrary && sectionLibraryManifest) {
         this.emitFile({
           type: "asset",
           fileName: "assets/section-library-manifest.json",

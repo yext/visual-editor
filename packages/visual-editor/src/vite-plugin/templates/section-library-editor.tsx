@@ -18,10 +18,13 @@ import {
   VisualEditorProvider,
 } from "@yext/visual-editor";
 import tailwindConfig from "../../tailwind.config";
-import { sectionLibraryConfig } from "../library/.generated/libraryConfig";
+/* SECTION_LIBRARY_CONFIG_IMPORTS */
 
 const editorPath = "__SECTION_LIBRARY_EDITOR_PATH__";
 const editorName = "__SECTION_LIBRARY_EDITOR_NAME__";
+const componentRegistry = {
+  /* SECTION_LIBRARY_COMPONENT_REGISTRY */
+};
 
 export const getPath: GetPath<TemplateProps> = () => editorPath;
 export const config: TemplateConfig = { name: editorName };
@@ -43,7 +46,7 @@ const Edit = (): JSX.Element => {
     >
       <Editor
         document={document}
-        componentRegistry={{ main: sectionLibraryConfig }}
+        componentRegistry={componentRegistry}
         themeConfig={defaultThemeConfig}
       />
     </VisualEditorProvider>

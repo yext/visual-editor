@@ -3,13 +3,13 @@ import React, { ErrorInfo, useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { LoadingScreen } from "../internal/puck/components/LoadingScreen.tsx";
 import { Toaster } from "../internal/puck/ui/Toaster.tsx";
-import { type Config } from "@puckeditor/core";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
 import { DevLogger } from "../utils/devLogger.ts";
 import { ThemeConfig } from "../utils/themeResolver.ts";
 import { useQuickFindShortcut } from "../internal/hooks/useQuickFindShortcut.ts";
 import {
   useCommonMessageReceivers,
+  type ComponentRegistry,
   TemplateMetadataContext,
 } from "../internal/hooks/useMessageReceivers.ts";
 import { LayoutEditor } from "../internal/components/LayoutEditor.tsx";
@@ -60,7 +60,7 @@ declare module "@puckeditor/core" {
 
 export type EditorProps = {
   document: any;
-  componentRegistry: Record<string, Config<any>>;
+  componentRegistry: ComponentRegistry;
   themeConfig?: ThemeConfig;
   // localDev is used for running VE outside of the platform
   localDev?: boolean;
