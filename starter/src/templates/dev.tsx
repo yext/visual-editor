@@ -59,7 +59,7 @@ const getVisualConfigLocalStorageKeyForDev = (): string | null => {
     return null;
   }
 
-  const templateId = "dev";
+  const templateId = "dev-location";
   const locale = "en";
   const editorUrl = new URL(window.location.href);
   editorUrl.searchParams.delete("preview");
@@ -202,7 +202,7 @@ const Dev: Template<TemplateRenderProps> = (props) => {
   const [currentPuckData, setCurrentPuckData] =
     React.useState<Data>(EMPTY_PUCK_DATA);
   const { document } = props;
-  const puckConfig = componentRegistry.dev;
+  const puckConfig = componentRegistry["dev-location"];
   const entityFields = devTemplateStream.stream.schema
     .fields as unknown as YextSchemaField[];
   const displayNames = devTemplateStream.apiNamesToDisplayNames as Record<

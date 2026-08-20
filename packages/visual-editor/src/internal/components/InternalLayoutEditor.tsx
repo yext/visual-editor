@@ -140,11 +140,6 @@ export const InternalLayoutEditor = ({
   );
 
   React.useEffect(() => {
-    if (!templateMetadata.aiPageGeneration) {
-      setAiPlugin(undefined);
-      return;
-    }
-
     let isMounted = true;
 
     import("@puckeditor/plugin-ai").then(({ createAiPlugin }) => {
@@ -165,7 +160,7 @@ export const InternalLayoutEditor = ({
     return () => {
       isMounted = false;
     };
-  }, [templateMetadata.aiPageGeneration]);
+  }, []);
 
   /**
    * When the Puck history changes save it to localStorage and send a message

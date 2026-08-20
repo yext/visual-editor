@@ -358,225 +358,225 @@ export const LocalEditorShell = ({
     setPreviewContext(null);
   }, []);
 
-  if (previewContext) {
-    return (
-      <LocalEditorPreview
-        config={previewContext.config}
-        defaultLayoutData={previewContext.defaultLayoutData}
-        streamDocument={previewContext.streamDocument}
-        entityFields={previewContext.entityFields}
-        localDevOptions={previewContext.localDevOptions}
-        onClose={closePreview}
-        tailwindConfig={tailwindConfig}
-        themeConfig={themeConfig}
-      />
-    );
-  }
-
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "linear-gradient(180deg, #f7f4ec 0%, #ffffff 100%)",
-        color: "#1d1d1f",
-        padding: "24px",
-      }}
-    >
+    <>
       <div
         style={{
-          display: "flex",
-          justifyContent: "space-between",
-          gap: "16px",
-          alignItems: "flex-start",
-          marginBottom: "16px",
+          minHeight: "100vh",
+          background: "linear-gradient(180deg, #f7f4ec 0%, #ffffff 100%)",
+          color: "#1d1d1f",
+          padding: "24px",
         }}
       >
-        <div>
-          <h1 style={{ margin: 0, fontSize: "28px" }}>Local Editor</h1>
-          <p style={{ margin: "8px 0 0", color: "#555" }}>
-            Switch templates, entities, and locales against local snapshot data.
-          </p>
-        </div>
         <div
           style={{
             display: "flex",
-            alignItems: "center",
-            gap: "10px",
-            flexWrap: "wrap",
-            justifyContent: "flex-end",
+            justifyContent: "space-between",
+            gap: "16px",
+            alignItems: "flex-start",
+            marginBottom: "16px",
           }}
         >
-          <EditorShellButton
-            onClick={() => {
-              handleApiKeyUpdate(
-                "Enter Mapbox key",
-                mapboxKey,
-                LOCAL_EDITOR_MAPBOX_KEY_STORAGE_KEY,
-                setMapboxKey
-              );
-            }}
-          >
-            {mapboxKey ? "Update Mapbox Key" : "Add Mapbox Key"}
-          </EditorShellButton>
-          <EditorShellButton
-            onClick={() => {
-              handleApiKeyUpdate(
-                "Yext API Key",
-                nearbyLocationsKey,
-                LOCAL_EDITOR_NEARBY_LOCATIONS_KEY_STORAGE_KEY,
-                setNearbyLocationsKey
-              );
-            }}
-          >
-            {nearbyLocationsKey
-              ? "Update Nearby Locations Key"
-              : "Add Nearby Locations Key"}
-          </EditorShellButton>
-          <EditorShellButton
-            onClick={() => {
-              updateSearchParam("reviews", showReviewsData ? "0" : "1");
-            }}
-          >
-            {showReviewsData ? "Hide Reviews Data" : "Show Reviews Data"}
-          </EditorShellButton>
-          <button
-            type="button"
-            disabled={!canOpenPreview}
-            onClick={openPreview}
+          <div>
+            <h1 style={{ margin: 0, fontSize: "28px" }}>Local Editor</h1>
+            <p style={{ margin: "8px 0 0", color: "#555" }}>
+              Switch templates, entities, and locales against local snapshot
+              data.
+            </p>
+          </div>
+          <div
             style={{
-              appearance: "none",
-              background: "#111",
-              border: "1px solid #111",
-              borderRadius: "999px",
-              color: "#fff",
-              cursor: canOpenPreview ? "pointer" : "not-allowed",
-              font: "inherit",
-              fontWeight: 600,
-              minHeight: "34px",
-              opacity: canOpenPreview ? 1 : 0.55,
-              padding: "6px 12px",
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              flexWrap: "wrap",
+              justifyContent: "flex-end",
             }}
-            title={routePath}
           >
-            Open Preview
-          </button>
+            <EditorShellButton
+              onClick={() => {
+                handleApiKeyUpdate(
+                  "Enter Mapbox key",
+                  mapboxKey,
+                  LOCAL_EDITOR_MAPBOX_KEY_STORAGE_KEY,
+                  setMapboxKey
+                );
+              }}
+            >
+              {mapboxKey ? "Update Mapbox Key" : "Add Mapbox Key"}
+            </EditorShellButton>
+            <EditorShellButton
+              onClick={() => {
+                handleApiKeyUpdate(
+                  "Yext API Key",
+                  nearbyLocationsKey,
+                  LOCAL_EDITOR_NEARBY_LOCATIONS_KEY_STORAGE_KEY,
+                  setNearbyLocationsKey
+                );
+              }}
+            >
+              {nearbyLocationsKey
+                ? "Update Nearby Locations Key"
+                : "Add Nearby Locations Key"}
+            </EditorShellButton>
+            <EditorShellButton
+              onClick={() => {
+                updateSearchParam("reviews", showReviewsData ? "0" : "1");
+              }}
+            >
+              {showReviewsData ? "Hide Reviews Data" : "Show Reviews Data"}
+            </EditorShellButton>
+            <button
+              type="button"
+              disabled={!canOpenPreview}
+              onClick={openPreview}
+              style={{
+                appearance: "none",
+                background: "#111",
+                border: "1px solid #111",
+                borderRadius: "999px",
+                color: "#fff",
+                cursor: canOpenPreview ? "pointer" : "not-allowed",
+                font: "inherit",
+                fontWeight: 600,
+                minHeight: "34px",
+                opacity: canOpenPreview ? 1 : 0.55,
+                padding: "6px 12px",
+              }}
+              title={routePath}
+            >
+              Open Preview
+            </button>
+          </div>
         </div>
-      </div>
 
-      <LocalEditorControls
-        activeEntities={activeEntities}
-        activeTemplateOptions={activeTemplateOptions}
-        controlsDisabled={controlsDisabled}
-        selectedEntityId={selectedEntity?.entityId}
-        selectedLocale={selectedLocale}
-        selectedMode={selectedMode}
-        selectedTemplateId={selectedTemplateId}
-        onEntityChange={(entityId) => {
-          updateSearchParam("entityId", entityId);
-        }}
-        onLocaleChange={(locale) => {
-          updateSearchParam("locale", locale);
-        }}
-        onModeChange={(mode) => {
-          updateSearchParam("mode", mode);
-        }}
-        onTemplateChange={(templateId) => {
-          updateSearchParam("templateId", templateId);
-        }}
-      />
-
-      {manifestError && (
-        <LocalEditorNotice
-          title="Manifest Error"
-          body={manifestError}
-          tone="error"
+        <LocalEditorControls
+          activeEntities={activeEntities}
+          activeTemplateOptions={activeTemplateOptions}
+          controlsDisabled={controlsDisabled}
+          selectedEntityId={selectedEntity?.entityId}
+          selectedLocale={selectedLocale}
+          selectedMode={selectedMode}
+          selectedTemplateId={selectedTemplateId}
+          onEntityChange={(entityId) => {
+            updateSearchParam("entityId", entityId);
+          }}
+          onLocaleChange={(locale) => {
+            updateSearchParam("locale", locale);
+          }}
+          onModeChange={(mode) => {
+            updateSearchParam("mode", mode);
+          }}
+          onTemplateChange={(templateId) => {
+            updateSearchParam("templateId", templateId);
+          }}
         />
-      )}
 
-      {diagnostics.map((diagnostic) => (
-        <LocalEditorNotice
-          key={diagnostic}
-          title="Setup Required"
-          body={diagnostic}
-          tone="warning"
-        />
-      ))}
-
-      {!isManifestLoading &&
-        !manifestError &&
-        activeTemplateOptions.length === 0 && (
+        {manifestError && (
           <LocalEditorNotice
-            title="No Supported Templates"
-            body="The local editor could not find any generated Visual Editor templates that match the available component registry."
+            title="Manifest Error"
+            body={manifestError}
+            tone="error"
+          />
+        )}
+
+        {diagnostics.map((diagnostic) => (
+          <LocalEditorNotice
+            key={diagnostic}
+            title="Setup Required"
+            body={diagnostic}
+            tone="warning"
+          />
+        ))}
+
+        {!isManifestLoading &&
+          !manifestError &&
+          activeTemplateOptions.length === 0 && (
+            <LocalEditorNotice
+              title="No Supported Templates"
+              body="The local editor could not find any generated Visual Editor templates that match the available component registry."
+              tone="warning"
+            />
+          )}
+
+        {!isManifestLoading && !manifestError && !hasAnyEntities && (
+          <LocalEditorNotice
+            title="No Snapshot Data"
+            body={`No snapshot entities were found. Generate local data in ${manifest?.localDataPath ?? "localData"} and configure ${manifest?.streamConfigPath ?? "stream.config.ts"}.`}
             tone="warning"
           />
         )}
 
-      {!isManifestLoading && !manifestError && !hasAnyEntities && (
-        <LocalEditorNotice
-          title="No Snapshot Data"
-          body={`No snapshot entities were found. Generate local data in ${manifest?.localDataPath ?? "localData"} and configure ${manifest?.streamConfigPath ?? "stream.config.ts"}.`}
-          tone="warning"
+        {documentError && (
+          <LocalEditorNotice
+            title="Document Error"
+            body={documentError}
+            tone="error"
+          />
+        )}
+
+        {shouldRenderEditorFrame && (
+          <div
+            style={{
+              position: "relative",
+              background: "#fff",
+              borderRadius: "16px",
+              border: "1px solid #e7dfd1",
+              overflow: "hidden",
+              minHeight: "720px",
+            }}
+          >
+            {isDocumentLoading && (
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  background: "rgba(255, 255, 255, 0.72)",
+                  backdropFilter: "blur(2px)",
+                  zIndex: 1,
+                  fontWeight: 600,
+                  color: "#5f5b52",
+                }}
+              >
+                Loading document…
+              </div>
+            )}
+            {streamDocument && documentResponse && selectedTemplateId && (
+              <VisualEditorProvider
+                templateProps={{ document: streamDocument }}
+                entityFields={documentResponse.entityFields}
+                tailwindConfig={tailwindConfig}
+              >
+                <Editor
+                  key={editorKey}
+                  document={streamDocument}
+                  componentRegistry={componentRegistry}
+                  themeConfig={themeConfig}
+                  localDev={true}
+                  localDevOptions={editorLocalDevOptions}
+                  forceThemeMode={selectedMode === "theme"}
+                />
+              </VisualEditorProvider>
+            )}
+          </div>
+        )}
+      </div>
+      {previewContext && (
+        <LocalEditorPreview
+          config={previewContext.config}
+          defaultLayoutData={previewContext.defaultLayoutData}
+          streamDocument={previewContext.streamDocument}
+          entityFields={previewContext.entityFields}
+          localDevOptions={previewContext.localDevOptions}
+          onClose={closePreview}
+          tailwindConfig={tailwindConfig}
+          themeConfig={themeConfig}
         />
       )}
-
-      {documentError && (
-        <LocalEditorNotice
-          title="Document Error"
-          body={documentError}
-          tone="error"
-        />
-      )}
-
-      {shouldRenderEditorFrame && (
-        <div
-          style={{
-            position: "relative",
-            background: "#fff",
-            borderRadius: "16px",
-            border: "1px solid #e7dfd1",
-            overflow: "hidden",
-            minHeight: "720px",
-          }}
-        >
-          {isDocumentLoading && (
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                background: "rgba(255, 255, 255, 0.72)",
-                backdropFilter: "blur(2px)",
-                zIndex: 1,
-                fontWeight: 600,
-                color: "#5f5b52",
-              }}
-            >
-              Loading document…
-            </div>
-          )}
-          {streamDocument && documentResponse && selectedTemplateId && (
-            <VisualEditorProvider
-              templateProps={{ document: streamDocument }}
-              entityFields={documentResponse.entityFields}
-              tailwindConfig={tailwindConfig}
-            >
-              <Editor
-                key={editorKey}
-                document={streamDocument}
-                componentRegistry={componentRegistry}
-                themeConfig={themeConfig}
-                localDev={true}
-                localDevOptions={editorLocalDevOptions}
-                forceThemeMode={selectedMode === "theme"}
-              />
-            </VisualEditorProvider>
-          )}
-        </div>
-      )}
-    </div>
+    </>
   );
 };
 

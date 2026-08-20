@@ -25,7 +25,6 @@ export type TemplateMetadata = {
   locatorDisplayFields?: Record<string, FieldTypeData>;
   customFonts?: FontRegistry;
   headDeployStatus: HeadDeployStatus;
-  aiPageGeneration?: boolean;
 };
 
 export type FieldTypeData = {
@@ -157,7 +156,6 @@ export function generateTemplateMetadata(
     locales,
     layoutTaskApprovals: false,
     headDeployStatus: "ACTIVE",
-    aiPageGeneration: !!import.meta.env.VITE_ENABLE_AI_PAGE_GENERATION,
     locatorDisplayFields: isLocatorDocument
       ? locatorLocalDevDisplayFields
       : defaultLocatorDisplayFields,
