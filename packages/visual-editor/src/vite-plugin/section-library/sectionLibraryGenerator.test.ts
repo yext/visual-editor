@@ -21,7 +21,7 @@ describe("generateSectionLibraryFiles", () => {
 
     const result = generateSectionLibraryFiles(rootDir);
 
-    expect(result.generatedFiles).toHaveLength(7);
+    expect(result.generatedFiles).toHaveLength(10);
     const config = fs.readFileSync(
       path.join(
         rootDir,
@@ -82,9 +82,46 @@ describe("generateSectionLibraryFiles", () => {
     expect(
       fs.existsSync(path.join(rootDir, "src", "templates", "location.tsx"))
     ).toBe(false);
-    expect(
-      fs.existsSync(path.join(rootDir, "src", "templates", "edit-location.tsx"))
-    ).toBe(false);
+    const locationEditorTemplate = fs.readFileSync(
+      path.join(rootDir, "src", "templates", "edit-location.tsx"),
+      "utf8"
+    );
+    expect(locationEditorTemplate).toContain(
+      'const editorPath = "edit/location"'
+    );
+    expect(locationEditorTemplate).toContain(
+      '"location": () => import("../library/.generated/libraryConfig-location")'
+    );
+    expect(locationEditorTemplate).not.toContain("directory-layout");
+    expect(locationEditorTemplate).not.toContain("locator-layout");
+    const directoryEditorTemplate = fs.readFileSync(
+      path.join(rootDir, "src", "templates", "edit-directory-layout.tsx"),
+      "utf8"
+    );
+    expect(directoryEditorTemplate).toContain(
+      'const editorPath = "edit/directory-layout"'
+    );
+    expect(directoryEditorTemplate).toContain(
+      '"directory-layout": () => import("../library/.generated/libraryConfig-directory-layout")'
+    );
+    expect(directoryEditorTemplate).not.toContain("libraryConfig-location");
+    expect(directoryEditorTemplate).not.toContain(
+      "libraryConfig-locator-layout"
+    );
+    const locatorEditorTemplate = fs.readFileSync(
+      path.join(rootDir, "src", "templates", "edit-locator-layout.tsx"),
+      "utf8"
+    );
+    expect(locatorEditorTemplate).toContain(
+      'const editorPath = "edit/locator-layout"'
+    );
+    expect(locatorEditorTemplate).toContain(
+      '"locator-layout": () => import("../library/.generated/libraryConfig-locator-layout")'
+    );
+    expect(locatorEditorTemplate).not.toContain("libraryConfig-location");
+    expect(locatorEditorTemplate).not.toContain(
+      "libraryConfig-directory-layout"
+    );
     const legacyEditorTemplate = fs.readFileSync(
       path.join(rootDir, "src", "templates", "edit.tsx"),
       "utf8"
@@ -133,7 +170,13 @@ describe("generateSectionLibraryFiles", () => {
     expect(result.manifestSource).toContain('"templateId": "main"');
     expect(result.manifestSource).toContain('"templateId": "directory"');
     expect(result.manifestSource).toContain('"templateId": "locator"');
-    expect(result.manifestSource).toContain('"editorPath": "edit"');
+    expect(result.manifestSource).toContain('"editorPath": "edit/location"');
+    expect(result.manifestSource).toContain(
+      '"editorPath": "edit/directory-layout"'
+    );
+    expect(result.manifestSource).toContain(
+      '"editorPath": "edit/locator-layout"'
+    );
     expect(result.manifestSource).toContain(
       '"vertical": [\n        "RETAIL"\n      ]'
     );
@@ -195,7 +238,7 @@ describe("generateSectionLibraryFiles", () => {
     expect(fs.readFileSync(handwrittenMainPath, "utf8")).toBe(
       "export default null;"
     );
-    expect(generatedFiles).toHaveLength(6);
+    expect(generatedFiles).toHaveLength(9);
     for (const filePath of generatedFiles) {
       expect(fs.existsSync(filePath)).toBe(false);
     }
@@ -209,6 +252,10 @@ describe("generateSectionLibraryFiles", () => {
 
     generateSectionLibraryFiles(rootDir);
     const { generatedFiles } = generateSectionLibraryFiles(rootDir);
+    fs.writeFileSync(
+      path.join(rootDir, "src", "templates", "edit-location.client.tsx"),
+      ""
+    );
     cleanupGeneratedSectionLibraryFiles(generatedFiles);
 
     expect(
@@ -216,6 +263,14 @@ describe("generateSectionLibraryFiles", () => {
     ).toBe(false);
     expect(
       fs.existsSync(path.join(rootDir, "src", "templates", "main.client.tsx"))
+    ).toBe(false);
+    expect(
+      fs.existsSync(path.join(rootDir, "src", "templates", "edit-location.tsx"))
+    ).toBe(false);
+    expect(
+      fs.existsSync(
+        path.join(rootDir, "src", "templates", "edit-location.client.tsx")
+      )
     ).toBe(false);
   });
 
