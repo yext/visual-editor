@@ -69,6 +69,34 @@ You should then be able to test your changes leveraging the Visual Editor dev mo
 This will automatically run all the unit tests in the library, it's recommended to run this
 after making changes.
 
+### Convert legacy templates
+
+Use this engineering tool when you convert one or more legacy templates in a
+starter repository to a Section Library. Run it from `packages/visual-editor`.
+
+```sh
+pnpm run convert-templates-to-section-library -- \
+  --target <starter-path>
+```
+
+The default is a dry run. It validates the target starter and reports the
+planned library, layouts, and duplicate component IDs. Add `--apply` to replace
+the target `src/library` directory. Add `--delete-source` with `--apply` to
+remove converted `src/registry/<template-id>` directories after replacement.
+
+```sh
+pnpm run convert-templates-to-section-library -- \
+  --target <starter-path> --apply --delete-source
+```
+
+The target starter must already contain the base Directory and Locator Section
+Library source. The converter creates one Entity layout per legacy template. It
+keeps the first source for each component ID in sorted template order and
+reports all duplicate IDs.
+
+The current Section Library generator supports one Entity layout. The converted
+library cannot build until multi-Entity support is available.
+
 `pnpm run autofix`
 This will run eslint and prettier for you to ensure your code is up to quality standard. It's
 recommended to run this after making changes.
