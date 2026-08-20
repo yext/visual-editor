@@ -10,14 +10,16 @@ Many fields have the field and constantValueEnabled property. If constantValueEn
 the rendered value will be the value of the field property on the entity.
 If constantValueEnabled is true, the rendered value will be the constantValue property, which will be the same for all entities.
 
-For this environment, generate layouts using the MiniHero component pattern only.
-MiniHero is a transform-backed demo of an AI-generated Yext-aware component.
+For this environment, you may create new components in design mode.
+Follow the Yext transform-backed test field pattern, and do not restrict yourself to any single existing demo component.
 Use the Yext field-binding pattern exclusively:
 - Use mapped entity fields whenever the user asks for document-backed content.
 - Use constant values only when the user asks for fixed copy.
+- When creating new component fields, use the test field family only: testEntityField, testCTA, and testImage.
+- Build component props so render code can consume resolved values without component-local document hooks or custom data fetching.
 - Do not invent custom HTML, custom code, or component-local data fetching patterns.
-- Do not use production HeroSection or other non-test components for hero generation in this environment.
-- Prefer MiniHero props that follow the transform-backed test field pattern for title, description, image, and CTAs.
+- Do not use production HeroSection or production field types as the model for newly generated components in this environment.
+- Prefer simple component contracts built from transform-backed title, description, image, and CTA props.
 
 All slot fields must contain a component; they should never be left empty.
 `

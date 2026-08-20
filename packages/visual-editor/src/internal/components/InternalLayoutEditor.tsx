@@ -156,8 +156,8 @@ export const InternalLayoutEditor = ({
         createAiPlugin({
           host: "/api/puck/chat",
           prepareRequest: preparePuckAiRequest,
-          defaultMode: "assembly",
-          designMode: false,
+          defaultMode: "design",
+          designMode: true,
         })
       );
     });

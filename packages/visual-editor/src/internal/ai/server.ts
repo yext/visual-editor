@@ -1,4 +1,9 @@
+import packageJson from "../../../package.json" with { type: "json" };
+import { preparePuckAiConfig } from "./prepareRequest.ts";
 import { puckAiSystemContext } from "./systemPrompt.ts";
+
+const puckCloudClientVersion =
+  packageJson.dependencies["@puckeditor/cloud-client"];
 
 /**
  * Accepts the request from the editor and forwards it to Puck Cloud using the
@@ -24,7 +29,10 @@ export const handlePuckAiRequest = async (
     return Response.json({ error: "Invalid request body" }, { status: 400 });
   }
 
-  const chatParams = { ...body };
+  const chatParams: Record<string, unknown> = {
+    ...body,
+    config: preparePuckAiConfig(body.config as Record<string, any> | undefined),
+  };
   const systemPrompt = chatParams.systemPrompt;
   delete chatParams.systemPrompt;
   const mode = chatParams.mode === "design" ? "design" : "assembly";
@@ -53,7 +61,7 @@ export const handlePuckAiRequest = async (
       "content-type": "application/json",
       "x-api-key": apiKey,
       "puck-api-version": request.headers.get("puck-api-version") ?? "v2",
-      "x-puck-cloud-client-version": "0.8.2",
+      "x-puck-cloud-client-version": puckCloudClientVersion,
       ...(request.headers.get("x-puck-plugin-ai-version")
         ? {
             "x-puck-plugin-ai-version":
@@ -65,6 +73,9 @@ export const handlePuckAiRequest = async (
       ...chatParams,
       messages,
       tools: {},
+      designMode: {
+        allowed: true,
+      },
       context:
         typeof systemPrompt === "string" ? systemPrompt : puckAiSystemContext,
       byok: {

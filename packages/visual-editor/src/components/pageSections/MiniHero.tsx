@@ -251,12 +251,8 @@ export const MiniHero: YextComponentConfig<MiniHeroAuthoredProps> = {
         field: "",
         constantValue: {
           ctaType: "textAndLink",
-          label: {
-            defaultValue: "Primary Action",
-          },
-          link: {
-            defaultValue: "/",
-          },
+          label: "Primary Action",
+          link: "/",
           linkType: "URL",
         },
         constantValueEnabled: true,
@@ -266,12 +262,8 @@ export const MiniHero: YextComponentConfig<MiniHeroAuthoredProps> = {
         field: "",
         constantValue: {
           ctaType: "textAndLink",
-          label: {
-            defaultValue: "Secondary Action",
-          },
-          link: {
-            defaultValue: "/about",
-          },
+          label: "Secondary Action",
+          link: "/about",
           linkType: "URL",
         },
         constantValueEnabled: true,

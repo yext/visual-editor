@@ -50,12 +50,15 @@ const toFetchRequest = (
   const headers = new Headers();
   for (const entry of Object.entries(request.headers)) {
     const headerValues = entry[1];
-    if (!Array.isArray(headerValues)) {
+    if (typeof headerValues === "string") {
+      headers.set(entry[0], headerValues);
       continue;
     }
 
-    for (const value of headerValues) {
-      headers.append(entry[0], value);
+    if (Array.isArray(headerValues)) {
+      for (const value of headerValues) {
+        headers.append(entry[0], value);
+      }
     }
   }
 

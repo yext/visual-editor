@@ -28,19 +28,7 @@ const basicSelectorFieldSchema = {
 };
 
 const translatableStringFieldSchema = {
-  anyOf: [
-    { type: "string" },
-    {
-      type: "object",
-      properties: {
-        hasLocalizedValue: { type: "string" },
-        defaultValue: { type: "string" },
-        en: { type: "string" },
-        es: { type: "string" },
-        fr: { type: "string" },
-      },
-    },
-  ],
+  type: "string",
 };
 
 const ctaSelectorFieldSchema = {
@@ -48,81 +36,22 @@ const ctaSelectorFieldSchema = {
   properties: {
     field: { type: "string" },
     constantValueEnabled: { type: "boolean" },
-    selectedType: {
-      enum: ["textAndLink", "getDirections", "presetImage"],
-    },
+    selectedType: { type: "string" },
     constantValue: {
-      anyOf: [
-        { type: "string" },
-        {
-          type: "object",
-          properties: {
-            ctaType: {
-              enum: ["textAndLink", "getDirections", "presetImage"],
-            },
-            label: translatableStringFieldSchema,
-            link: translatableStringFieldSchema,
-          },
-        },
-      ],
+      type: "object",
+      properties: {},
     },
   },
 };
 
 const imageFieldSchema = {
-  anyOf: [
-    {
-      type: "object",
-      properties: {
-        url: { type: "string" },
-        height: { type: "number" },
-        width: { type: "number" },
-        alternateText: translatableStringFieldSchema,
-      },
-    },
-    {
-      type: "object",
-      properties: {
-        hasLocalizedValue: { type: "string" },
-        defaultValue: {
-          type: "object",
-          properties: {
-            url: { type: "string" },
-            height: { type: "number" },
-            width: { type: "number" },
-            alternateText: translatableStringFieldSchema,
-          },
-        },
-        en: {
-          type: "object",
-          properties: {
-            url: { type: "string" },
-            height: { type: "number" },
-            width: { type: "number" },
-            alternateText: translatableStringFieldSchema,
-          },
-        },
-        es: {
-          type: "object",
-          properties: {
-            url: { type: "string" },
-            height: { type: "number" },
-            width: { type: "number" },
-            alternateText: translatableStringFieldSchema,
-          },
-        },
-        fr: {
-          type: "object",
-          properties: {
-            url: { type: "string" },
-            height: { type: "number" },
-            width: { type: "number" },
-            alternateText: translatableStringFieldSchema,
-          },
-        },
-      },
-    },
-  ],
+  type: "object",
+  properties: {
+    url: { type: "string" },
+    height: { type: "number" },
+    width: { type: "number" },
+    alternateText: translatableStringFieldSchema,
+  },
 };
 
 const testImageFieldSchema = {
@@ -209,85 +138,81 @@ const prepareField = (field: Record<string, any>): Record<string, any> => {
     return mergeAiConfig(annotatedField, { exclude: true });
   }
 
+  if (field.type === "code") {
+    return mergeAiConfig(annotatedField, { exclude: true });
+  }
+
   if (field.type === "object" && field.objectFields) {
-    annotatedField.objectFields = Object.fromEntries(
-      Object.entries(field.objectFields).map(
-        ([nestedFieldName, nestedField]) => {
-          return [
-            nestedFieldName,
-            prepareField(nestedField as Record<string, any>),
-          ];
-        }
-      )
-    );
+    const objectFields: Record<string, any> = {};
+
+    for (const entry of Object.entries(field.objectFields)) {
+      const nestedFieldName = entry[0];
+      const nestedField = entry[1];
+      objectFields[nestedFieldName] = prepareField(
+        nestedField as Record<string, any>
+      );
+    }
+
+    annotatedField.objectFields = objectFields;
   }
 
   if (field.type === "array" && field.arrayFields) {
-    annotatedField.arrayFields = Object.fromEntries(
-      Object.entries(field.arrayFields).map(
-        ([nestedFieldName, nestedField]) => {
-          return [
-            nestedFieldName,
-            prepareField(nestedField as Record<string, any>),
-          ];
-        }
-      )
-    );
+    const arrayFields: Record<string, any> = {};
+
+    for (const entry of Object.entries(field.arrayFields)) {
+      const nestedFieldName = entry[0];
+      const nestedField = entry[1];
+      arrayFields[nestedFieldName] = prepareField(
+        nestedField as Record<string, any>
+      );
+    }
+
+    annotatedField.arrayFields = arrayFields;
   }
 
   return annotatedField;
 };
 
-const prepareConfig = (
+export const preparePuckAiConfig = (
   config: Record<string, any> | undefined
 ): Record<string, any> | undefined => {
   if (!config?.components) {
     return config;
   }
 
-  const components = Object.fromEntries(
-    Object.entries(config.components)
-      .filter(([componentName]) => enabledAiComponentSet.has(componentName))
-      .map(([componentName, componentConfig]) => {
-        const typedComponentConfig = componentConfig as Record<string, any>;
-        const fields = typedComponentConfig.fields
-          ? Object.fromEntries(
-              Object.entries(typedComponentConfig.fields).map(
-                ([fieldName, field]) => [
-                  fieldName,
-                  prepareField(field as Record<string, any>),
-                ]
-              )
-            )
-          : typedComponentConfig.fields;
+  const components: Record<string, any> = {};
 
-        return [
-          componentName,
-          {
-            ...typedComponentConfig,
-            ...(fields ? { fields } : {}),
-          },
-        ];
-      })
-  );
+  for (const entry of Object.entries(config.components)) {
+    const componentName = entry[0];
+    const componentConfig = entry[1];
 
-  const root = config.root
-    ? {
-        ...config.root,
-        fields: config.root.fields
-          ? Object.fromEntries(
-              Object.entries(config.root.fields).map(([fieldName, field]) => {
-                return [fieldName, prepareField(field as Record<string, any>)];
-              })
-            )
-          : config.root.fields,
+    if (!enabledAiComponentSet.has(componentName)) {
+      continue;
+    }
+
+    const typedComponentConfig = componentConfig as Record<string, any>;
+    let fields = typedComponentConfig.fields;
+
+    if (typedComponentConfig.fields) {
+      fields = {};
+
+      for (const fieldEntry of Object.entries(typedComponentConfig.fields)) {
+        const fieldName = fieldEntry[0];
+        const field = fieldEntry[1];
+        fields[fieldName] = prepareField(field as Record<string, any>);
       }
-    : config.root;
+    }
+
+    components[componentName] = {
+      ...typedComponentConfig,
+      ...(fields ? { fields } : {}),
+    };
+  }
 
   return {
     ...config,
     components,
-    root,
+    root: undefined,
   };
 };
 
@@ -307,7 +232,7 @@ export const preparePuckAiRequest = async <
     body: {
       ...opts.body,
       systemPrompt: puckAiSystemContext,
-      config: prepareConfig(opts.body?.config),
+      config: preparePuckAiConfig(opts.body?.config),
     },
   };
 };
