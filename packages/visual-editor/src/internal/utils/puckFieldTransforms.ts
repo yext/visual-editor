@@ -2,6 +2,7 @@ import { type FieldTransforms } from "@puckeditor/core";
 import { type ComplexImageType, type ImageType } from "@yext/pages-components";
 import React from "react";
 import { CTA } from "../../components/atoms/cta.tsx";
+import { Image } from "../../components/atoms/image.tsx";
 import { type YextCTAField } from "../../fields/CTASelectorField.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { getCTAType } from "./ctaFieldUtils.ts";
@@ -15,9 +16,11 @@ import {
 } from "../../types/images.ts";
 
 type TestImageValue =
-  | ImageType
-  | ComplexImageType
-  | TranslatableAssetImage
+  | (YextEntityField<ImageType | ComplexImageType | TranslatableAssetImage> & {
+      aspectRatio?: number;
+      width?: number;
+      imageFillType?: "fill" | "fit";
+    })
   | undefined;
 
 /**
@@ -43,9 +46,17 @@ export const createPuckFieldTransforms = (
       resolveComponentData(value, locale, streamDocument, {
         output: field.output ?? "plainText",
       }),
-    testImage: ({ value }: { value: YextEntityField<TestImageValue> }) => {
-      const resolvedImage = resolveComponentData<TestImageValue>(
-        value,
+    testRichText: ({ value }: { value: YextEntityField<unknown> }) =>
+      resolveComponentData(value, locale, streamDocument),
+    testImage: ({ value }: { value: TestImageValue }) => {
+      const resolvedImage = resolveComponentData<
+        ImageType | ComplexImageType | TranslatableAssetImage | undefined
+      >(
+        {
+          field: value?.field ?? "",
+          constantValue: value?.constantValue,
+          constantValueEnabled: value?.constantValueEnabled ?? true,
+        },
         locale,
         streamDocument
       );
@@ -61,30 +72,14 @@ export const createPuckFieldTransforms = (
         return undefined;
       }
 
-      const src =
-        "image" in localizedImage
-          ? localizedImage.image?.url
-          : localizedImage.url;
-      if (!src) {
-        return undefined;
-      }
-
-      const rawAlt =
-        "image" in localizedImage
-          ? localizedImage.image?.alternateText
-          : localizedImage.alternateText;
-
-      return {
-        src,
-        alt:
-          typeof rawAlt === "string"
-            ? rawAlt
-            : rawAlt
-              ? resolveComponentData(rawAlt, locale, streamDocument)
-              : undefined,
-        width: "image" in localizedImage ? undefined : localizedImage.width,
-        height: "image" in localizedImage ? undefined : localizedImage.height,
-      };
+      return React.createElement(Image, {
+        image: localizedImage,
+        aspectRatio: value?.aspectRatio,
+        imageFillType: value?.imageFillType,
+        width: value?.width,
+        className: "max-w-full rounded-image-borderRadius w-full",
+        streamDocumentOverride: streamDocument,
+      });
     },
     testCTA: ({ value }: { value: YextCTAField }) => {
       const cta = resolveComponentData<EnhancedTranslatableCTA>(

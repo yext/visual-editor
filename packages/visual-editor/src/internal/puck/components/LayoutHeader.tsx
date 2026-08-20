@@ -326,6 +326,108 @@ export const LocalDevOverrideButtons = () => {
   const getPuck = useGetPuck();
   const streamDocument = useDocument();
 
+  const upsertDynamicConfig = (
+    transform: (components: Record<string, any>) => Record<string, any>
+  ) => {
+    const { appState, dispatch } = getPuck();
+    const existingRootProps =
+      typeof appState.data.root?.props === "object" && appState.data.root.props
+        ? (appState.data.root.props as Record<string, any>)
+        : {};
+    const existingDynamicConfig =
+      typeof existingRootProps._dynamicConfig === "object" &&
+      existingRootProps._dynamicConfig
+        ? existingRootProps._dynamicConfig
+        : {};
+    const existingDynamicComponents =
+      typeof existingDynamicConfig.components === "object" &&
+      existingDynamicConfig.components
+        ? existingDynamicConfig.components
+        : {};
+
+    const nextData = {
+      ...appState.data,
+      root: {
+        ...appState.data.root,
+        props: {
+          ...existingRootProps,
+          _dynamicConfig: {
+            ...existingDynamicConfig,
+            components: transform(existingDynamicComponents),
+          },
+        },
+      },
+    } as Data & {
+      root: {
+        props: Record<string, any>;
+      };
+    };
+
+    dispatch({
+      type: "setData",
+      data: nextData,
+    });
+  };
+
+  const copyGeneratedComponentFixture = async () => {
+    try {
+      const { appState } = getPuck();
+      const dynamicConfig =
+        typeof appState.data.root?.props === "object" &&
+        appState.data.root?.props &&
+        "_dynamicConfig" in appState.data.root.props
+          ? (appState.data.root.props as Record<string, any>)._dynamicConfig
+          : {};
+
+      await navigator.clipboard.writeText(
+        JSON.stringify(dynamicConfig, null, 2)
+      );
+    } catch {
+      alert(pt("failedToCopyDynamicConfig", "Failed to copy dynamic config."));
+    }
+  };
+
+  const pasteGeneratedComponents = async () => {
+    try {
+      const rawClipboardText = await navigator.clipboard.readText();
+      const pastedDynamicConfig = JSON.parse(rawClipboardText);
+
+      if (
+        !pastedDynamicConfig ||
+        typeof pastedDynamicConfig !== "object" ||
+        !pastedDynamicConfig.components ||
+        typeof pastedDynamicConfig.components !== "object"
+      ) {
+        alert(
+          pt(
+            "failedToPasteDynamicConfigInvalidData",
+            "Failed to paste: Invalid dynamic config."
+          )
+        );
+        return;
+      }
+
+      upsertDynamicConfig((existingDynamicComponents) => ({
+        ...existingDynamicComponents,
+        ...pastedDynamicConfig.components,
+      }));
+    } catch (err) {
+      if (err instanceof DOMException && err.name === "NotAllowedError") {
+        alert(
+          pt(
+            "failedToPasteDynamicConfigPermissionDenied",
+            "Failed to paste: Clipboard access is blocked. Enable paste permissions and try again."
+          )
+        );
+        return;
+      }
+
+      alert(
+        pt("failedToPasteDynamicConfig", "Failed to paste dynamic config.")
+      );
+    }
+  };
+
   return (
     <>
       <Button
@@ -383,6 +485,20 @@ export const LocalDevOverrideButtons = () => {
         className="ve-ml-4"
       >
         Set Platform Locale
+      </Button>
+      <Button
+        onClick={copyGeneratedComponentFixture}
+        variant="outline"
+        className="ve-ml-4"
+      >
+        Copy Dynamic Config
+      </Button>
+      <Button
+        onClick={pasteGeneratedComponents}
+        variant="outline"
+        className="ve-ml-4"
+      >
+        Paste Dynamic Config
       </Button>
     </>
   );

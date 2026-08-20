@@ -11,18 +11,15 @@ import { type YextCTAField } from "../../fields/CTASelectorField.tsx";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 import { type ComplexImageType, type ImageType } from "@yext/pages-components";
 import { type TranslatableAssetImage } from "../../types/images.ts";
+import { type TranslatableRichText } from "../../types/types.ts";
+import { type ImageStylingProps } from "../contentBlocks/image/styling.ts";
 
 type MiniHeroResolvedProps = {
   data: {
     eyebrow?: string;
     title: string;
-    description?: string;
-    image?: {
-      src: string;
-      alt?: string;
-      width?: number;
-      height?: number;
-    };
+    description?: React.ReactNode;
+    image?: React.ReactNode;
     primaryCta?: React.ReactNode;
     secondaryCta?: React.ReactNode;
   };
@@ -37,10 +34,13 @@ export type MiniHeroAuthoredProps = {
   data: {
     eyebrow?: YextEntityField<string>;
     title: YextEntityField<string>;
-    description?: YextEntityField<string>;
+    description?: YextEntityField<TranslatableRichText>;
     image?: YextEntityField<
       ImageType | ComplexImageType | TranslatableAssetImage
-    >;
+    > &
+      Partial<
+        Pick<ImageStylingProps, "aspectRatio" | "imageFillType" | "width">
+      >;
     primaryCta?: YextCTAField;
     secondaryCta?: YextCTAField;
   };
@@ -69,10 +69,9 @@ const miniHeroFields: YextFields<MiniHeroAuthoredProps> = {
         output: "plainText",
       },
       description: {
-        type: "testEntityField",
+        type: "testRichText",
         label: msg("fields.description", "Description"),
-        filter: { types: ["type.string"] },
-        output: "plainText",
+        filter: { types: ["type.string", "type.rich_text_v2"] },
       },
       image: {
         type: "testImage",
@@ -168,13 +167,7 @@ const MiniHeroComponent: PuckComponent<MiniHeroResolvedProps> = ({
               isImageLeft ? "md:order-1" : "md:order-2",
             ].join(" ")}
           >
-            <img
-              src={data.image.src}
-              alt={data.image.alt ?? ""}
-              width={data.image.width}
-              height={data.image.height}
-              className="h-full max-h-[420px] w-full object-cover"
-            />
+            {data.image}
           </div>
         )}
         <div
@@ -193,10 +186,10 @@ const MiniHeroComponent: PuckComponent<MiniHeroResolvedProps> = ({
             <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-slate-950 md:text-5xl">
               {data.title}
             </h1>
-            {data.description?.trim() && (
-              <p className="max-w-2xl text-base leading-7 text-slate-600 md:text-lg">
+            {data.description && (
+              <div className="max-w-2xl text-base leading-7 text-slate-600 md:text-lg">
                 {data.description}
-              </p>
+              </div>
             )}
           </div>
           {(data.primaryCta || data.secondaryCta) && (
@@ -218,6 +211,10 @@ const MiniHeroComponent: PuckComponent<MiniHeroResolvedProps> = ({
 
 export const MiniHero: YextComponentConfig<MiniHeroAuthoredProps> = {
   label: msg("components.miniHero", "Mini Hero"),
+  ai: {
+    instructions:
+      'Follow this authored shape exactly for Yext-aware generated components: content lives in transform-backed `testEntityField`, `testRichText`, `testImage`, and `testCTA` fields so render-time field transforms can resolve mapped Yext data, embedded fields like [[name]], rich text, and CTAs. Treat each CTA and each image as one complete field object such as `primaryCta`, `secondaryCta`, `image`, `imageOne`, or `imageTwo`, rather than splitting them across nested sub-properties like `cta.label`, `cta.link`, `image.src`, or `image.alt`. Do not use slots. Do not create helper components for CTAs. Every generated custom field must be fully authored in props, not just annotated in HTML. If you generate a `testCTA` annotation, also generate a full CTA prop object with `field`, `constantValueEnabled`, `selectedType`, and `constantValue`. If you generate a `testImage` annotation, also generate a full image prop object with `field`, `constantValueEnabled`, `constantValue`, and any image presentation props such as `aspectRatio`, `imageFillType`, and `width`. Copy this shape: { "data": { "eyebrow": testEntityField, "title": testEntityField, "description": testRichText, "image": testImage, "primaryCta": testCTA, "secondaryCta": testCTA } }. Copy this props pattern: { "primaryCta": { "field": "", "constantValueEnabled": true, "selectedType": "textAndLink", "constantValue": { "ctaType": "textAndLink", "label": "Primary Action", "link": "/", "linkType": "URL" } }, "image": { "field": "", "constantValueEnabled": true, "constantValue": { "url": "https://placehold.co/960x720", "alternateText": "Hero image" }, "aspectRatio": 1.78, "imageFillType": "fill", "width": 640 } }. Copy this markup pattern: `<p data-puck-field-eyebrow=\'{ "type": "testEntityField" }\'>Featured</p><h1 data-puck-field-title=\'{ "type": "testEntityField" }\'>Hero title</h1><div data-puck-field-description=\'{ "type": "testRichText" }\'><p>Body copy</p></div><a href="#" data-puck-field-primaryCta=\'{ "type": "testCTA" }\'>Primary Action</a><a href="#" data-puck-field-secondaryCta=\'{ "type": "testCTA" }\'>Secondary Action</a><div data-puck-field-image=\'{ "type": "testImage" }\'></div>`.',
+  },
   fields: miniHeroFields,
   defaultProps: {
     data: {
@@ -245,6 +242,9 @@ export const MiniHero: YextComponentConfig<MiniHeroAuthoredProps> = {
           width: 960,
           alternateText: "Mini Hero placeholder image",
         },
+        aspectRatio: 1.78,
+        imageFillType: "fill",
+        width: 640,
         constantValueEnabled: true,
       },
       primaryCta: {

@@ -1,6 +1,10 @@
 import packageJson from "../../../package.json" with { type: "json" };
+import { yextAiFieldTypes } from "./fieldTypes.ts";
 import { preparePuckAiConfig } from "./prepareRequest.ts";
-import { puckAiSystemContext } from "./systemPrompt.ts";
+import {
+  puckAiDesignModeInstructions,
+  puckAiSystemContext,
+} from "./systemPrompt.ts";
 
 const puckCloudClientVersion =
   packageJson.dependencies["@puckeditor/cloud-client"];
@@ -12,13 +16,22 @@ const puckCloudClientVersion =
 export const handlePuckAiRequest = async (
   request: Request
 ): Promise<Response> => {
-  if (request.method !== "POST") {
-    return Response.json({ error: "Not found" }, { status: 404 });
-  }
-
   const apiKey = process.env.PUCK_API_KEY;
   if (!apiKey) {
     return Response.json({ error: "Missing PUCK_API_KEY" }, { status: 500 });
+  }
+
+  const requestUrl = new URL(request.url);
+  if (requestUrl.pathname === "/api/puck/chat/tool") {
+    return forwardPuckAiToolRequest(request, apiKey);
+  }
+
+  if (requestUrl.pathname !== "/api/puck/chat") {
+    return Response.json({ error: "Not found" }, { status: 404 });
+  }
+
+  if (request.method !== "POST") {
+    return Response.json({ error: "Not found" }, { status: 404 });
   }
 
   let body: Record<string, unknown>;
@@ -72,9 +85,11 @@ export const handlePuckAiRequest = async (
     body: JSON.stringify({
       ...chatParams,
       messages,
+      fieldTypes: yextAiFieldTypes,
       tools: {},
       designMode: {
         allowed: true,
+        instructions: puckAiDesignModeInstructions,
       },
       context:
         typeof systemPrompt === "string" ? systemPrompt : puckAiSystemContext,
@@ -83,5 +98,36 @@ export const handlePuckAiRequest = async (
           mode === "design" ? "openai/gpt-5.6-luna" : "openai/gpt-5.4-mini",
       },
     }),
+  });
+};
+
+const forwardPuckAiToolRequest = async (
+  request: Request,
+  apiKey: string
+): Promise<Response> => {
+  if (request.method !== "POST") {
+    return Response.json({ error: "Not found" }, { status: 404 });
+  }
+
+  let body: Record<string, unknown>;
+
+  try {
+    body = (await request.json()) as Record<string, unknown>;
+  } catch {
+    return Response.json({ error: "Invalid request body" }, { status: 400 });
+  }
+
+  const response = await fetch("https://cloud.puckeditor.com/api/tool", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "x-api-key": apiKey,
+    },
+    body: JSON.stringify(body),
+  });
+
+  return new Response(response.body, {
+    status: response.status,
+    headers: { "content-type": "application/json" },
   });
 };

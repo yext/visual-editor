@@ -75,7 +75,10 @@ const isLocalEditorDocumentRequest = (requestUrl: URL): boolean => {
 };
 
 const isPuckAiRequest = (requestUrl: URL): boolean => {
-  return requestUrl.pathname === "/api/puck/chat";
+  return (
+    requestUrl.pathname === "/api/puck/chat" ||
+    requestUrl.pathname === "/api/puck/chat/tool"
+  );
 };
 
 const sendLocalEditorManifestResponse = async (

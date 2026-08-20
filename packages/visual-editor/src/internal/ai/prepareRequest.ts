@@ -1,4 +1,14 @@
 import { enabledAiComponentSet } from "./enabledComponents.ts";
+import {
+  testCTAFieldAiDescription,
+  testCTAFieldAiSchema,
+  testEntityFieldAiDescription,
+  testEntityFieldAiSchema,
+  testImageFieldAiDescription,
+  testImageFieldAiSchema,
+  testRichTextFieldAiDescription,
+  testRichTextFieldAiSchema,
+} from "./fieldTypes.ts";
 import { puckAiSystemContext } from "./systemPrompt.ts";
 
 const entityFieldSchema = {
@@ -54,15 +64,6 @@ const imageFieldSchema = {
   },
 };
 
-const testImageFieldSchema = {
-  type: "object",
-  properties: {
-    field: { type: "string" },
-    constantValueEnabled: { type: "boolean" },
-    constantValue: imageFieldSchema,
-  },
-};
-
 const videoFieldSchema = {
   type: "object",
   properties: {
@@ -101,7 +102,10 @@ const prepareField = (field: Record<string, any>): Record<string, any> => {
   }
 
   if (field.type === "testEntityField") {
-    return mergeAiConfig(annotatedField, { schema: entityFieldSchema });
+    return mergeAiConfig(annotatedField, {
+      schema: testEntityFieldAiSchema,
+      instructions: testEntityFieldAiDescription,
+    });
   }
 
   if (field.type === "basicSelector") {
@@ -119,7 +123,10 @@ const prepareField = (field: Record<string, any>): Record<string, any> => {
   }
 
   if (field.type === "testCTA") {
-    return mergeAiConfig(annotatedField, { schema: ctaSelectorFieldSchema });
+    return mergeAiConfig(annotatedField, {
+      schema: testCTAFieldAiSchema,
+      instructions: testCTAFieldAiDescription,
+    });
   }
 
   if (field.type === "image") {
@@ -127,7 +134,17 @@ const prepareField = (field: Record<string, any>): Record<string, any> => {
   }
 
   if (field.type === "testImage") {
-    return mergeAiConfig(annotatedField, { schema: testImageFieldSchema });
+    return mergeAiConfig(annotatedField, {
+      schema: testImageFieldAiSchema,
+      instructions: testImageFieldAiDescription,
+    });
+  }
+
+  if (field.type === "testRichText") {
+    return mergeAiConfig(annotatedField, {
+      schema: testRichTextFieldAiSchema,
+      instructions: testRichTextFieldAiDescription,
+    });
   }
 
   if (field.type === "video") {
