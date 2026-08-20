@@ -94,9 +94,6 @@ Library source. The converter creates one Entity layout per legacy template. It
 keeps the first source for each component ID in sorted template order and
 reports all duplicate IDs.
 
-The current Section Library generator supports one Entity layout. The converted
-library cannot build until multi-Entity support is available.
-
 `pnpm run autofix`
 This will run eslint and prettier for you to ensure your code is up to quality standard. It's
 recommended to run this after making changes.

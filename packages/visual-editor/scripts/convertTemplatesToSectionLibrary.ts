@@ -10,6 +10,7 @@ import {
   type LibraryMetadata,
   type PageSetType,
 } from "../src/sectionLibrary.ts";
+import { exportDirectoryLocatorSectionLibrary } from "./exportDirectoryLocatorSectionLibrary.ts";
 
 const SAFE_ID = /^[A-Za-z0-9][A-Za-z0-9_-]*$/;
 const VERTICALS = new Set(verticals);
@@ -46,6 +47,11 @@ type BaseLibrary = {
   directory: BaseLayout;
   locator: BaseLayout;
   layouts: BaseLayout[];
+};
+
+type PreparedBaseLibrary = {
+  directory: string;
+  temporaryDirectory?: string;
 };
 
 type CopiedComponent = LegacyComponent & { templateId: string };
@@ -91,7 +97,8 @@ type CommandOptions =
  * changing files. `--delete-source` requires `--apply` and removes converted
  * `src/registry` template directories after the new library is in place.
  *
- * 1. Read and validate the base library and every legacy template.
+ * 1. Export missing Directory and Locator source, then validate the base
+ *    library and every legacy template.
  * 2. Build one Entity layout per template and one section per component ID.
  * 3. Replace the library only after the staged copy is complete.
  */
@@ -108,20 +115,118 @@ export const convertTemplatesToSectionLibrary = ({
   const rootDirectory = path.resolve(targetDirectory);
   const libraryDirectory = path.join(rootDirectory, "src", "library");
   const templates = readLegacyTemplates(rootDirectory);
-  const baseLibrary = readBaseLibrary(libraryDirectory);
-  const conversion = buildConversion(templates, baseLibrary);
+  const preparedBaseLibrary = prepareBaseLibrary(rootDirectory, templates[0]);
+  try {
+    const baseLibrary = readBaseLibrary(preparedBaseLibrary.directory);
+    const conversion = buildConversion(templates, baseLibrary);
 
-  writeReport({ apply, conversion, deleteSource, write });
-  if (!apply) {
-    return;
+    if (preparedBaseLibrary.temporaryDirectory) {
+      write(
+        "Directory and Locator source will be added to the converted library."
+      );
+    }
+    writeReport({ apply, conversion, deleteSource, write });
+    if (!apply) {
+      return;
+    }
+
+    replaceLibrary(libraryDirectory, preparedBaseLibrary.directory, conversion);
+    if (deleteSource) {
+      deleteLegacyTemplates(templates, write);
+    }
+    write(
+      "The current Section Library generator supports one Entity layout. This conversion is ready for future multi-Entity support, but it cannot build yet."
+    );
+  } finally {
+    if (preparedBaseLibrary.temporaryDirectory) {
+      fs.rmSync(preparedBaseLibrary.temporaryDirectory, {
+        recursive: true,
+        force: true,
+      });
+    }
+  }
+};
+
+/**
+ * Returns the existing base library, or creates a temporary Directory and
+ * Locator base that the conversion can validate and apply atomically.
+ */
+const prepareBaseLibrary = (
+  rootDirectory: string,
+  firstTemplate: LegacyTemplate
+): PreparedBaseLibrary => {
+  const libraryDirectory = path.join(rootDirectory, "src", "library");
+  if (hasDirectoryLocatorBase(libraryDirectory)) {
+    return { directory: libraryDirectory };
   }
 
-  replaceLibrary(libraryDirectory, conversion);
-  if (deleteSource) {
-    deleteLegacyTemplates(templates, write);
+  const temporaryDirectory = fs.mkdtempSync(
+    path.join(rootDirectory, "src", ".section-library-base-")
+  );
+  const temporaryLibraryDirectory = path.join(
+    temporaryDirectory,
+    "src",
+    "library"
+  );
+  if (fs.existsSync(libraryDirectory)) {
+    fs.cpSync(libraryDirectory, temporaryLibraryDirectory, {
+      recursive: true,
+    });
   }
-  write(
-    "The current Section Library generator supports one Entity layout. This conversion is ready for future multi-Entity support, but it cannot build yet."
+  exportDirectoryLocatorSectionLibrary({
+    targetDirectory: temporaryDirectory,
+    libraryId: firstTemplate.templateId,
+    overwrite: fs.existsSync(path.join(temporaryLibraryDirectory, "shared")),
+  });
+  if (!fs.existsSync(path.join(temporaryLibraryDirectory, "library.json"))) {
+    fs.writeFileSync(
+      path.join(temporaryLibraryDirectory, "library.json"),
+      formatJson(buildLibraryMetadata(firstTemplate))
+    );
+  }
+  return {
+    directory: temporaryLibraryDirectory,
+    temporaryDirectory,
+  };
+};
+
+const hasDirectoryLocatorBase = (libraryDirectory: string): boolean => {
+  const sectionsDirectory = path.join(libraryDirectory, "sections");
+  if (
+    !fs.existsSync(
+      path.join(libraryDirectory, "shared", "componentRegistry.ts")
+    ) ||
+    !fs.existsSync(path.join(sectionsDirectory, "Directory.tsx")) ||
+    !fs.existsSync(path.join(sectionsDirectory, "Locator.tsx"))
+  ) {
+    return false;
+  }
+  const layoutsDirectory = path.join(libraryDirectory, "layouts");
+  if (!fs.existsSync(layoutsDirectory)) {
+    return false;
+  }
+  const pageSetTypes = fs
+    .readdirSync(layoutsDirectory, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .flatMap((entry) => {
+      try {
+        const metadata = readJson(
+          path.join(layoutsDirectory, entry.name, "metadata.json"),
+          `layout metadata for ${entry.name}`
+        );
+        return isRecord(metadata) &&
+          (metadata.pageSetType === "DIRECTORY" ||
+            metadata.pageSetType === "LOCATOR")
+          ? [metadata.pageSetType]
+          : [];
+      } catch {
+        return [];
+      }
+    });
+  return (
+    pageSetTypes.filter((pageSetType) => pageSetType === "DIRECTORY").length ===
+      1 &&
+    pageSetTypes.filter((pageSetType) => pageSetType === "LOCATOR").length === 1
   );
 };
 
@@ -239,6 +344,7 @@ const readComponentLabel = (content: string, sourcePath: string): string => {
     (statement.declarationList.flags & ts.NodeFlags.Const) !== 0
       ? statement.declarationList.declarations.filter(
           (declaration) =>
+            declaration.type &&
             ts.isTypeReferenceNode(declaration.type) &&
             declaration.type.typeName.getText(sourceFile) ===
               "YextComponentConfig"
@@ -623,6 +729,7 @@ const validateLayoutReferences = (
 
 const replaceLibrary = (
   libraryDirectory: string,
+  baseLibraryDirectory: string,
   conversion: Conversion
 ): void => {
   const parentDirectory = path.dirname(libraryDirectory);
@@ -633,17 +740,24 @@ const replaceLibrary = (
     parentDirectory,
     `.section-library-backup-${process.pid}-${Date.now()}`
   );
+  const hasExistingLibrary = fs.existsSync(libraryDirectory);
   try {
-    fs.cpSync(libraryDirectory, stagedDirectory, { recursive: true });
+    fs.cpSync(baseLibraryDirectory, stagedDirectory, { recursive: true });
     writeConvertedLibrary(stagedDirectory, conversion);
-    fs.renameSync(libraryDirectory, backupDirectory);
+    if (hasExistingLibrary) {
+      fs.renameSync(libraryDirectory, backupDirectory);
+    }
     try {
       fs.renameSync(stagedDirectory, libraryDirectory);
     } catch (error) {
-      fs.renameSync(backupDirectory, libraryDirectory);
+      if (hasExistingLibrary) {
+        fs.renameSync(backupDirectory, libraryDirectory);
+      }
       throw error;
     }
-    fs.rmSync(backupDirectory, { recursive: true, force: true });
+    if (hasExistingLibrary) {
+      fs.rmSync(backupDirectory, { recursive: true, force: true });
+    }
   } catch (error) {
     fs.rmSync(stagedDirectory, { recursive: true, force: true });
     if (fs.existsSync(backupDirectory) && !fs.existsSync(libraryDirectory)) {
