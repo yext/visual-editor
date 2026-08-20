@@ -61,3 +61,8 @@ export type LayoutMetadata =
   | EntityLayoutMetadata
   | DirectoryLayoutMetadata
   | LocatorLayoutMetadata;
+
+export type SectionLibraryLayout = {
+  metadata: LayoutMetadata;
+  defaultLayout: Record<string, any>;
+};

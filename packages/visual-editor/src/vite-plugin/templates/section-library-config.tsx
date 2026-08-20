@@ -1,6 +1,10 @@
 /* SECTION_LIBRARY_GENERATED_FILE */
 import { DropZone, type Config } from "@puckeditor/core";
-import { MainContent, type SectionConfig } from "@yext/visual-editor";
+import {
+  MainContent,
+  toPuckFields,
+  type SectionConfig,
+} from "@yext/visual-editor";
 /* SECTION_LIBRARY_IMPORTS */
 /* SECTION_LIBRARY_SHARED_COMPONENT_REGISTRY */
 
@@ -40,6 +44,9 @@ const components = {
       section.id,
       {
         ...(typeof section.component === "function" ? {} : section.component),
+        ...(typeof section.component === "function" || !section.component.fields
+          ? {}
+          : { fields: toPuckFields(section.component.fields) }),
         ...section.config,
         render:
           typeof section.component === "function"
@@ -52,7 +59,14 @@ const components = {
   ...Object.fromEntries(
     sharedComponentsForPageSetType.map((component) => [
       component.id,
-      sharedComponentConfigs[component.id],
+      {
+        ...sharedComponentConfigs[component.id],
+        ...(sharedComponentConfigs[component.id]?.fields
+          ? {
+              fields: toPuckFields(sharedComponentConfigs[component.id].fields),
+            }
+          : {}),
+      },
     ])
   ),
 };

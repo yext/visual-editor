@@ -122,7 +122,7 @@ export type YextFieldMap<
 export const toPuckFields = <
   Props extends DefaultComponentProps = DefaultComponentProps,
 >(
-  fields: YextFields<Props> | YextFieldMap<Props>
+  fields: Fields<Props, any>
 ): Fields<Props> =>
   adaptYextFieldMap(
     fields as Record<string, YextFieldDefinition<any>>,

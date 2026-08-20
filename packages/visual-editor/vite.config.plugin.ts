@@ -27,7 +27,7 @@ export default defineConfig(() => ({
       external: (source) => {
         return (
           nodeBuiltins.has(source) ||
-          ["fs-extra", "ts-morph", "typescript"].some(
+          ["fs-extra", "ts-morph", "tsx", "typescript"].some(
             (packageName) =>
               source === packageName || source.startsWith(`${packageName}/`)
           )

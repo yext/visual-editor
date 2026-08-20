@@ -40,7 +40,7 @@ export const useThemeLocalStorage = (
   };
 };
 
-function getThemeLocalStorageKey(
+export function getThemeLocalStorageKey(
   isDevMode: boolean,
   siteId: number,
   themeId?: number

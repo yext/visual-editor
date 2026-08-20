@@ -33,6 +33,7 @@ describe("generateSectionLibraryFiles", () => {
       "utf8"
     );
     expect(config).toContain("label: section.config.displayName");
+    expect(config).toContain("toPuckFields");
     expect(config).toContain('typeof section.component === "function"');
     expect(config).toContain(": section.component.render");
     expect(config).toContain("...section.config");
@@ -224,6 +225,7 @@ describe("generateSectionLibraryFiles", () => {
 
     expect(generateSectionLibraryFiles(rootDir)).toEqual({
       generatedFiles: [],
+      layouts: [],
     });
     expect(
       fs.existsSync(
@@ -622,6 +624,25 @@ describe("generateSectionLibraryFiles", () => {
     update(rootDir);
 
     expect(() => generateSectionLibraryFiles(rootDir)).toThrow(error);
+  });
+
+  it("does not rewrite unchanged generated files", () => {
+    const rootDir = createLibrary();
+    const { generatedFiles } = generateSectionLibraryFiles(rootDir);
+    const generatedPaths = [
+      ...generatedFiles,
+      path.join(rootDir, ".template-manifest.json"),
+    ];
+    const modifiedTime = new Date("2000-01-01T00:00:00.000Z");
+
+    generatedPaths.forEach((generatedPath) => {
+      fs.utimesSync(generatedPath, modifiedTime, modifiedTime);
+    });
+    generateSectionLibraryFiles(rootDir);
+
+    generatedPaths.forEach((generatedPath) => {
+      expect(fs.statSync(generatedPath).mtime).toEqual(modifiedTime);
+    });
   });
 });
 

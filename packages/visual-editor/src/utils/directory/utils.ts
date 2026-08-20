@@ -1,7 +1,13 @@
 // isDirectoryGrid indicates whether the children should appear in
 // DirectoryGrid or DirectoryList dependent on the dm_directoryChildren type.
-export const isDirectoryGrid = (children: string | any[]): boolean => {
-  return children.length > 0 && "address" in children[0];
+export const isDirectoryGrid = (children: unknown): boolean => {
+  return (
+    Array.isArray(children) &&
+    children.length > 0 &&
+    typeof children[0] === "object" &&
+    children[0] !== null &&
+    "address" in children[0]
+  );
 };
 
 // sortAlphabetically takes in an array of objects and sorts them alphabetically.

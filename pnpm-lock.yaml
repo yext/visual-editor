@@ -210,6 +210,9 @@ importers:
       ts-morph:
         specifier: 22.0.0
         version: 22.0.0
+      tsx:
+        specifier: ^4.22.4
+        version: 4.22.4
       typescript:
         specifier: ^5.5.4
         version: 5.9.2
@@ -322,9 +325,6 @@ importers:
       tsup:
         specifier: 8.3.5
         version: 8.3.5(@microsoft/api-extractor@7.58.9(@types/node@20.19.43))(@swc/core@1.15.11(@swc/helpers@0.5.17))(jiti@2.6.1)(postcss@8.5.6)(tsx@4.22.4)(typescript@5.9.2)(yaml@2.8.2)
-      tsx:
-        specifier: ^4.22.4
-        version: 4.22.4
       uuid:
         specifier: 11.0.3
         version: 11.0.3
