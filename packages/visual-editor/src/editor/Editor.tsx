@@ -32,6 +32,7 @@ import {
 import { migrate } from "../utils/migrate.ts";
 import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";
+import type { LocalDevOptions } from "./types.ts";
 
 const devLogger = new DevLogger();
 
@@ -64,6 +65,7 @@ export type EditorProps = {
   themeConfig?: ThemeConfig;
   // localDev is used for running VE outside of the platform
   localDev?: boolean;
+  localDevOptions?: LocalDevOptions;
   // forceThemeMode is used with localDev to load the theme editor
   forceThemeMode?: boolean;
   metadata?: Metadata; // passed into puck's global metadata
@@ -74,6 +76,7 @@ export const Editor = ({
   componentRegistry,
   themeConfig,
   localDev,
+  localDevOptions,
   forceThemeMode,
   metadata,
 }: EditorProps) => {
@@ -93,7 +96,12 @@ export const Editor = ({
     layoutDataFetched,
     themeData,
     themeDataFetched,
-  } = useCommonMessageReceivers(componentRegistry, !!localDev, document);
+  } = useCommonMessageReceivers(
+    componentRegistry,
+    !!localDev,
+    document,
+    localDevOptions
+  );
 
   const { pushPageSets, sendError } = useCommonMessageSenders();
 

@@ -44,7 +44,7 @@ export const useLayoutLocalStorage = (
   };
 };
 
-function getVisualConfigLocalStorageKey(
+export function getVisualConfigLocalStorageKey(
   isDevMode: boolean,
   scopeToEntityId: boolean,
   templateId: string,

@@ -196,6 +196,19 @@ const updateFontLinksInDocument = (
   }
 };
 
+const getOrCreateThemeStyleTag = (document: Document): HTMLStyleElement => {
+  const existingStyleTag = document.getElementById(THEME_STYLE_TAG_ID);
+  if (existingStyleTag instanceof HTMLStyleElement) {
+    return existingStyleTag;
+  }
+
+  const styleTag = document.createElement("style");
+  styleTag.id = THEME_STYLE_TAG_ID;
+  styleTag.type = "text/css";
+  document.head.appendChild(styleTag);
+  return styleTag;
+};
+
 // Used to avoid creating multiple observers in updateThemeInEditor
 let pendingObserver: MutationObserver | null = null;
 
@@ -215,43 +228,50 @@ export const updateThemeInEditor = async (
   );
 
   const newThemeTag = internalApplyTheme(newTheme, themeConfig);
-  const editorStyleTag = window.document.getElementById(THEME_STYLE_TAG_ID);
-  if (editorStyleTag) {
-    editorStyleTag.innerText = newThemeTag;
-  }
+  getOrCreateThemeStyleTag(window.document).textContent = newThemeTag;
 
-  // In the theme editor, all fonts are already loaded
-  // In the layout editor, we need to load the in-use fonts after the Puck iframe has loaded
+  // The theme editor loads its parent fonts separately.
   if (!isThemeMode) {
     updateFontLinksInDocument(
       window.document,
       googleFontsToLoad,
       inUseCustomFonts
     );
-
-    const observer = new MutationObserver(() => {
-      const iframe = document.getElementById(
-        PUCK_PREVIEW_IFRAME_ID
-      ) as HTMLIFrameElement;
-      const pagePreviewStyleTag =
-        iframe?.contentDocument?.getElementById(THEME_STYLE_TAG_ID);
-      if (pagePreviewStyleTag) {
-        observer.disconnect();
-        pendingObserver = null;
-
-        pagePreviewStyleTag.innerText = newThemeTag;
-        updateFontLinksInDocument(
-          iframe.contentDocument!,
-          googleFontsToLoad,
-          inUseCustomFonts
-        );
-      }
-    });
-
-    pendingObserver = observer;
-    observer.observe(document, {
-      childList: true,
-      subtree: true,
-    });
   }
+
+  const syncIframeTheme = () => {
+    const iframe = document.getElementById(
+      PUCK_PREVIEW_IFRAME_ID
+    ) as HTMLIFrameElement;
+    const iframeDocument = iframe?.contentDocument;
+    if (!iframeDocument) {
+      return false;
+    }
+
+    getOrCreateThemeStyleTag(iframeDocument).textContent = newThemeTag;
+    updateFontLinksInDocument(
+      iframeDocument,
+      googleFontsToLoad,
+      inUseCustomFonts
+    );
+    return true;
+  };
+
+  if (syncIframeTheme()) {
+    pendingObserver = null;
+    return;
+  }
+
+  const observer = new MutationObserver(() => {
+    if (syncIframeTheme()) {
+      observer.disconnect();
+      pendingObserver = null;
+    }
+  });
+
+  pendingObserver = observer;
+  observer.observe(document, {
+    childList: true,
+    subtree: true,
+  });
 };

@@ -12,6 +12,7 @@ import { ThemeData } from "../types/themeData.ts";
 import { migrate } from "../../utils/migrate.ts";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
+import type { LocalDevOptions } from "../../editor/types.ts";
 
 const devLogger = new DevLogger();
 
@@ -28,8 +29,17 @@ const createEmptyLocalDevLayout: Data = {
 
 export const getLocalDevLayoutData = (
   puckConfig: Config,
-  streamDocument: StreamDocument
+  streamDocument: StreamDocument,
+  initialLayoutData?: Record<string, unknown>
 ) => {
+  if (initialLayoutData) {
+    return migrate(
+      initialLayoutData as Data,
+      migrationRegistry,
+      puckConfig,
+      streamDocument
+    );
+  }
   const layout = streamDocument.__?.layout;
   if (!layout) {
     return migrate(
@@ -60,7 +70,8 @@ export const getLocalDevLayoutData = (
 export const useCommonMessageReceivers = (
   componentRegistry: ComponentRegistry,
   localDev: boolean,
-  streamDocument: StreamDocument
+  streamDocument: StreamDocument,
+  localDevOptions?: LocalDevOptions
 ) => {
   const { iFrameLoaded } = useCommonMessageSenders();
 
@@ -84,7 +95,10 @@ export const useCommonMessageReceivers = (
   // in localDev mode, return default data and mark all data as fetched
   useEffect(() => {
     if (localDev) {
-      const devMetadata = generateTemplateMetadata(streamDocument);
+      const devMetadata = generateTemplateMetadata(
+        streamDocument,
+        localDevOptions
+      );
       setTemplateMetadata(devMetadata);
 
       const registeredConfig = componentRegistry[devMetadata.templateId];
@@ -101,13 +115,21 @@ export const useCommonMessageReceivers = (
       const puckConfig = registeredConfig;
       setPuckConfig(puckConfig);
 
-      setLayoutData(getLocalDevLayoutData(puckConfig, streamDocument));
+      setLayoutData(
+        getLocalDevLayoutData(
+          puckConfig,
+          streamDocument,
+          localDevOptions?.initialLayoutData
+        )
+      );
       setLayoutDataFetched(true);
       setThemeData({});
       setThemeDataFetched(true);
     }
   }, [
+    componentRegistry,
     localDev,
+    localDevOptions,
     setTemplateMetadata,
     setPuckConfig,
     setLayoutData,

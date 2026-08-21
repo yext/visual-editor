@@ -12,6 +12,14 @@ export { getPageMetadata } from "./getPageMetadata.ts";
 export { normalizeLink } from "./normalizeLink.ts";
 export { formatCurrency } from "./productPrice.ts";
 export {
+  getDefaultForegroundColor,
+  getSurfaceColorStyle,
+  getThemeColorCssValue,
+  getThemeColorHexValue,
+  isDarkColor,
+  normalizeThemeColorToken,
+} from "./colors.ts";
+export {
   migrate,
   type Migration,
   type MigrationAction,
@@ -44,6 +52,7 @@ export {
 export { type ThemeConfig, themeResolver, deepMerge } from "./themeResolver.ts";
 export { type StreamDocument } from "./types/StreamDocument.ts";
 export {
+  mergeMeta,
   resolveUrlTemplate,
   resolveUrlTemplateOfChild,
 } from "./urls/resolveUrlTemplate.ts";
