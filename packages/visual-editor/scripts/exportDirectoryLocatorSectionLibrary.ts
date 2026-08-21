@@ -22,6 +22,10 @@ const sharedComponentSources: Record<
   string,
   { path: string; exportName: string }
 > = {
+  AddressSlot: {
+    path: "components/contentBlocks/Address.tsx",
+    exportName: "Address",
+  },
   BreadcrumbsSlot: {
     path: "components/pageSections/Breadcrumbs.tsx",
     exportName: "BreadcrumbsSection",
@@ -30,13 +34,25 @@ const sharedComponentSources: Record<
     path: "components/directory/DirectoryWrapper.tsx",
     exportName: "DirectoryGrid",
   },
+  DirectoryCard: {
+    path: "components/directory/DirectoryCard.tsx",
+    exportName: "DirectoryCard",
+  },
   HeadingTextSlot: {
     path: "components/contentBlocks/HeadingText.tsx",
     exportName: "HeadingText",
   },
+  HoursStatusSlot: {
+    path: "components/contentBlocks/HoursStatus.tsx",
+    exportName: "HoursStatus",
+  },
   ImageSlot: {
     path: "components/contentBlocks/image/Image.tsx",
     exportName: "ImageWrapper",
+  },
+  PhoneSlot: {
+    path: "components/contentBlocks/Phone.tsx",
+    exportName: "Phone",
   },
 };
 
@@ -44,6 +60,15 @@ const copiedSourceRoots = [
   "components/directory/Directory.tsx",
   "components/locator/Locator.tsx",
   ...Object.values(sharedComponentSources).map((source) => source.path),
+];
+
+// DirectoryGrid creates DirectoryCard instances dynamically. Their nested
+// slots are likewise absent from the default layout data used for discovery.
+const alwaysRegisteredSharedComponentIds = [
+  "DirectoryCard",
+  "AddressSlot",
+  "HoursStatusSlot",
+  "PhoneSlot",
 ];
 
 type Options = {
@@ -308,7 +333,10 @@ const writeComponentRegistry = (
   sharedDirectory: string,
   directoryLayout: Record<string, any>
 ): void => {
-  const componentIds = collectComponentIds(directoryLayout).filter(
+  const componentIds = [
+    ...collectComponentIds(directoryLayout),
+    ...alwaysRegisteredSharedComponentIds,
+  ].filter(
     // Directory is a visible section. Its config comes from sections/Directory.tsx.
     (id) => id !== "Directory"
   );

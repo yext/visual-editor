@@ -109,6 +109,15 @@ export const getLocalEditorDocument = async (
   }
 
   let streamDocument = readLocalEditorDocument(selectedDocumentEntry);
+  if (Object.keys(context.env).length > 0) {
+    streamDocument = {
+      ...streamDocument,
+      _env: {
+        ...readDocumentEnvironment(streamDocument),
+        ...context.env,
+      },
+    };
+  }
   // Read all of the layout documents to find fields that may be missing in
   // any single entity, but keep going if a sibling snapshot is malformed.
   const layoutDocuments = context.documents
@@ -227,11 +236,23 @@ const getLocalEditorContext = async (
       entityId: resolvedConfig.defaults.entityId,
       locale: resolvedConfig.defaults.locale,
     },
+    env: resolvedConfig.env,
     layoutDefaults,
     layoutStreams,
     entitiesByLayout,
     documents,
   };
+};
+
+const readDocumentEnvironment = (
+  streamDocument: Record<string, unknown>
+): Record<string, unknown> => {
+  const environment = streamDocument._env;
+  return environment &&
+    typeof environment === "object" &&
+    !Array.isArray(environment)
+    ? (environment as Record<string, unknown>)
+    : {};
 };
 
 /**

@@ -68,6 +68,12 @@ describe("exportDirectoryLocatorSectionLibrary", () => {
     ).toBe(false);
     expect(registry).toContain("sharedRootAllowedComponentIds");
     expect(registry).toContain("sharedRootPageSetTypes");
+    ["DirectoryCard", "AddressSlot", "HoursStatusSlot", "PhoneSlot"].forEach(
+      (componentId) => {
+        expect(registry).toContain(`id: "${componentId}"`);
+        expect(registry).toContain(`"${componentId}": SharedComponent`);
+      }
+    );
     expect(registry).toContain('DIRECTORY: ["MainContent"]');
     expect(registry).toContain('LOCATOR: ["MainContent"]');
     expect(

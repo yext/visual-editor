@@ -113,7 +113,7 @@ describe("getLocalEditorDocument", () => {
     fs.writeJsonSync(path.join(rootDir, "package.json"), { type: "module" });
     fs.writeFileSync(
       path.join(rootDir, "stream.config.ts"),
-      'export default { pageSetTypes: { ENTITY: { stream: { $id: "entity", fields: ["id", "name"] } } } };\n'
+      'export default { env: { YEXT_CLOUD_REGION: "US", YEXT_SEARCH_API_KEY: "" }, pageSetTypes: { ENTITY: { stream: { $id: "entity", fields: ["id", "name"] } } } };\n'
     );
     fs.outputJsonSync(path.join(rootDir, "localData", "mapping.json"), {
       "local-editor-data-entity-layout": ["entity.json"],
@@ -122,6 +122,7 @@ describe("getLocalEditorDocument", () => {
       id: "location-1",
       locale: "en",
       name: "Example Location",
+      _env: { YEXT_CLOUD_REGION: "EU", EXISTING_VALUE: "preserved" },
     });
     const layouts: SectionLibraryLayout[] = [
       {
@@ -144,6 +145,13 @@ describe("getLocalEditorDocument", () => {
     );
 
     expect(response.diagnostics).toEqual([]);
-    expect(response.document).toMatchObject({ id: "location-1" });
+    expect(response.document).toMatchObject({
+      id: "location-1",
+      _env: {
+        YEXT_CLOUD_REGION: "US",
+        YEXT_SEARCH_API_KEY: "",
+        EXISTING_VALUE: "preserved",
+      },
+    });
   });
 });

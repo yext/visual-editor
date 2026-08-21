@@ -66,6 +66,12 @@ const config = {
   defaults: {
     locale: "en",
   },
+  env: {
+    YEXT_CLOUD_REGION: "US",
+    YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
+    YEXT_ENVIRONMENT: "PROD",
+    YEXT_SEARCH_API_KEY: "",
+  },
   pageSetTypes: {
     ENTITY: {
       stream: {

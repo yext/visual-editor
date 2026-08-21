@@ -43,6 +43,8 @@ export type LocalEditorLayoutConfig = {
 
 export type LocalEditorConfig = {
   defaults?: LocalEditorDefaults;
+  /** Environment values injected into every local-editor stream document. */
+  env?: Record<string, string>;
   pageSetTypes?: Partial<Record<PageSetType, LocalEditorLayoutConfig>>;
   layouts?: Record<string, LocalEditorLayoutConfig>;
 };
@@ -104,6 +106,7 @@ export type LocalEditorContext = {
   localDataPath: string;
   layouts: string[];
   defaults: LocalEditorDefaults;
+  env: Record<string, string>;
   layoutDefaults: Record<string, LocalEditorLayoutDefaults>;
   layoutStreams: Record<string, LocalEditorStreamDefinition | undefined>;
   entitiesByLayout: Record<string, LocalEditorEntityOption[]>;
@@ -112,5 +115,6 @@ export type LocalEditorContext = {
 
 export type ResolvedLocalEditorConfig = {
   defaults: LocalEditorDefaults;
+  env: Record<string, string>;
   layouts: ResolvedLocalEditorLayoutConfig[];
 };

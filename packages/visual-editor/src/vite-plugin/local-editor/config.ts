@@ -131,6 +131,7 @@ export const resolveLocalEditorConfigs = (
       entityId: streamConfig.defaults?.entityId,
       locale: streamConfig.defaults?.locale,
     },
+    env: streamConfig.env ?? {},
     layouts,
   };
 };
