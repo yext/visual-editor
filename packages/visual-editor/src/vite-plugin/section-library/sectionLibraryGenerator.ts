@@ -60,8 +60,15 @@ type GeneratedSectionLibrary = {
  * 3. Generate current Platform aliases and return the Section Library artifact manifest.
  */
 export const generateSectionLibraryFiles = (
-  rootDir: string
+  rootDir: string,
+  sectionLibraryRevisionId?: string
 ): GeneratedSectionLibrary => {
+  if (!sectionLibraryRevisionId?.trim()) {
+    throw new Error(
+      "Section Library builds require SECTION_LIBRARY_REVISION_ID"
+    );
+  }
+
   const library = readSectionLibrary(rootDir);
   if (!library) {
     return { generatedFiles: [], layouts: [] };
@@ -129,7 +136,7 @@ export const generateSectionLibraryFiles = (
         filePath,
         buildEditorTemplateSource(
           [[layout.metadata.id, layout]],
-          `edit/${layout.metadata.id}`,
+          `edit/${layout.metadata.id}/${encodeURIComponent(sectionLibraryRevisionId)}`,
           `edit-${layout.metadata.id}`
         )
       )
@@ -157,7 +164,7 @@ export const generateSectionLibraryFiles = (
             layout.metadata.pageSetType === "ENTITY"
               ? "main"
               : layout.metadata.pageSetType.toLowerCase(),
-          editorPath: `edit/${layout.metadata.id}`,
+          editorPath: `edit/${layout.metadata.id}/${encodeURIComponent(sectionLibraryRevisionId)}`,
           defaultLayout: layout.defaultLayout,
         })),
       },
@@ -591,8 +598,8 @@ const buildRenderTemplateSource = (layout: Layout): string => {
 
 const buildEditorTemplateSource = (
   entries: [string, Layout][],
-  editorPath = "edit",
-  editorName = "edit"
+  editorPath: string = "edit",
+  editorName: string = "edit"
 ): string => {
   const registry = entries
     .map(([name, entry]) => {
