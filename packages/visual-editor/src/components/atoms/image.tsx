@@ -97,6 +97,9 @@ export const Image: React.FC<ImageProps> = ({
     objectFit: imageFillType === "fit" ? "contain" : "cover",
     ...style,
   };
+  const imageTransformations = {
+    fit: imageFillType === "fit" ? ("contain" as const) : ("cover" as const),
+  };
 
   return (
     <div
@@ -110,6 +113,7 @@ export const Image: React.FC<ImageProps> = ({
           aspectRatio={aspectRatio}
           className="object-cover w-full h-full"
           imgOverrides={{ sizes }}
+          imageTransformations={imageTransformations}
           loading={loading}
           style={imageStyle}
         />
@@ -121,6 +125,7 @@ export const Image: React.FC<ImageProps> = ({
           height={calculatedHeight}
           className="object-cover"
           imgOverrides={{ sizes }}
+          imageTransformations={imageTransformations}
           loading={loading}
           style={imageStyle}
         />

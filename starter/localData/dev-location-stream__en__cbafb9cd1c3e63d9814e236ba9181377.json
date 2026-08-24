@@ -36,6 +36,128 @@
       "dm_addressRegionDisplayName": "Virginia"
     }
   ],
+  "dm_directoryChildren": [
+    {
+      "__": {
+        "entityPageSetUrlTemplates": "{\"primary\":\"[[address.region]]/[[address.city]]/[[address.line1]]\"}"
+      },
+      "address": {
+        "city": "Arlington",
+        "countryCode": "US",
+        "line1": "1101 Wilson Blvd",
+        "postalCode": "22209",
+        "region": "VA"
+      },
+      "hours": {
+        "friday": { "openIntervals": [{ "end": "21:00", "start": "10:00" }] },
+        "monday": { "openIntervals": [{ "end": "20:00", "start": "10:00" }] },
+        "saturday": { "openIntervals": [{ "end": "22:00", "start": "11:00" }] },
+        "sunday": { "openIntervals": [{ "end": "18:00", "start": "11:00" }] },
+        "thursday": { "openIntervals": [{ "end": "21:00", "start": "10:00" }] },
+        "tuesday": { "openIntervals": [{ "end": "20:00", "start": "10:00" }] },
+        "wednesday": { "openIntervals": [{ "end": "20:00", "start": "10:00" }] }
+      },
+      "mainPhone": "+12025551010",
+      "meta": {
+        "entityType": { "id": "location", "uid": 12345 },
+        "locale": "en"
+      },
+      "name": "Galaxy Grill Rosslyn",
+      "timezone": "America/New_York",
+      "slug": "va/arlington/1101-wilson-blvd",
+      "geomodifier": "2nd Floor"
+    },
+    {
+      "__": {
+        "entityPageSetUrlTemplates": "{\"primary\":\"[[address.region]]/[[address.city]]/[[address.line1]]\"}"
+      },
+      "address": {
+        "city": "Arlington",
+        "countryCode": "US",
+        "line1": "2101 Wilson Blvd",
+        "line2": "Suite 101",
+        "postalCode": "22209",
+        "region": "VA"
+      },
+      "hours": {
+        "friday": { "openIntervals": [{ "end": "19:00", "start": "08:00" }] },
+        "monday": { "openIntervals": [{ "end": "19:00", "start": "08:00" }] },
+        "saturday": { "openIntervals": [{ "end": "17:00", "start": "09:00" }] },
+        "sunday": { "openIntervals": [] },
+        "thursday": { "openIntervals": [{ "end": "19:00", "start": "08:00" }] },
+        "tuesday": { "openIntervals": [{ "end": "19:00", "start": "08:00" }] },
+        "wednesday": { "openIntervals": [{ "end": "19:00", "start": "08:00" }] }
+      },
+      "mainPhone": "+12025551011",
+      "meta": {
+        "entityType": { "id": "location", "uid": 12346 },
+        "locale": "en"
+      },
+      "name": "Galaxy Grill Ballston",
+      "timezone": "America/New_York",
+      "slug": "va/arlington/2101-wilson-blvd"
+    },
+    {
+      "__": {
+        "entityPageSetUrlTemplates": "{\"primary\":\"[[address.region]]/[[address.city]]/[[address.line1]]\"}"
+      },
+      "address": {
+        "city": "Arlington",
+        "countryCode": "US",
+        "line1": "3101 Wilson Blvd",
+        "postalCode": "22209",
+        "region": "VA"
+      },
+      "hours": {
+        "friday": { "openIntervals": [{ "end": "23:00", "start": "12:00" }] },
+        "monday": { "openIntervals": [{ "end": "21:00", "start": "12:00" }] },
+        "saturday": { "openIntervals": [{ "end": "23:00", "start": "12:00" }] },
+        "sunday": { "openIntervals": [{ "end": "20:00", "start": "12:00" }] },
+        "thursday": { "openIntervals": [{ "end": "22:00", "start": "12:00" }] },
+        "tuesday": { "openIntervals": [{ "end": "21:00", "start": "12:00" }] },
+        "wednesday": { "openIntervals": [{ "end": "21:00", "start": "12:00" }] }
+      },
+      "mainPhone": "+12025551012",
+      "meta": {
+        "entityType": { "id": "location", "uid": 12347 },
+        "locale": "en"
+      },
+      "name": "Galaxy Grill Clarendon",
+      "timezone": "America/New_York",
+      "slug": "va/arlington/3101-wilson-blvd",
+      "geomodifier": "Rooftop"
+    },
+    {
+      "__": {
+        "entityPageSetUrlTemplates": "{\"primary\":\"[[address.region]]/[[address.city]]/[[address.line1]]\"}"
+      },
+      "address": {
+        "city": "Arlington",
+        "countryCode": "US",
+        "line1": "4101 Wilson Blvd",
+        "line2": "Suite 101",
+        "postalCode": "22209",
+        "region": "VA"
+      },
+      "hours": {
+        "friday": { "openIntervals": [{ "end": "18:00", "start": "07:00" }] },
+        "monday": { "openIntervals": [{ "end": "18:00", "start": "07:00" }] },
+        "saturday": { "openIntervals": [{ "end": "15:00", "start": "08:00" }] },
+        "sunday": { "openIntervals": [] },
+        "thursday": { "openIntervals": [{ "end": "18:00", "start": "07:00" }] },
+        "tuesday": { "openIntervals": [{ "end": "18:00", "start": "07:00" }] },
+        "wednesday": { "openIntervals": [{ "end": "18:00", "start": "07:00" }] }
+      },
+      "mainPhone": "+12025551013",
+      "meta": {
+        "entityType": { "id": "location", "uid": 12348 },
+        "locale": "en"
+      },
+      "name": "Galaxy Grill Pentagon City",
+      "timezone": "America/New_York",
+      "slug": "va/arlington/4101-wilson-blvd"
+    }
+  ],
   "additionalHoursText": "Closed on Christmas.",
   "address": {
     "city": "Arlington",
