@@ -1,24 +1,54 @@
 import { Body, BodyProps } from "./body.tsx";
 import { RichText } from "../../types/types.ts";
+import type { BaseTextStyles } from "../../fields/styledFields/baseText.tsx";
+import { getRichTextStyle } from "../../utils/richTextStyles.ts";
+import { type ThemeColor } from "../../utils/themeConfigOptions.ts";
 import "./maybeRTF.css";
+
+export type RichTextStyleOverrides = Partial<BaseTextStyles> & {
+  color?: ThemeColor | string;
+};
 
 export interface MaybeRTFProps extends Record<string, any> {
   data: RichText | string | undefined;
   bodyVariant?: BodyProps["variant"];
+  /** Override the theme's styling */
+  richTextStyleOverrides?: RichTextStyleOverrides;
 }
 
+/**
+ * Renders plain strings through the shared `Body` component and rich text HTML
+ * through the standard `rtf-wrapper` container while applying shared rich-text
+ * typography and color overrides.
+ */
 export const MaybeRTF = ({
   data,
   bodyVariant = "base",
+  richTextStyleOverrides,
+  style,
+  className,
   ...props
 }: MaybeRTFProps) => {
+  const mergedStyle = {
+    ...getRichTextStyle({
+      color: richTextStyleOverrides?.color,
+      typography: richTextStyleOverrides,
+    }),
+    ...style,
+  };
+
   if (!data) {
     return <></>;
   }
 
   if (typeof data === "string") {
     return (
-      <Body {...props} variant={bodyVariant}>
+      <Body
+        {...props}
+        className={className}
+        style={mergedStyle}
+        variant={bodyVariant}
+      >
         {data}
       </Body>
     );
@@ -29,8 +59,9 @@ export const MaybeRTF = ({
       return (
         <div
           {...props}
+          style={mergedStyle}
           dangerouslySetInnerHTML={{ __html: data.html }}
-          className={`rtf-theme rtf-wrapper ${bodyVariant !== "base" ? `rtf-body-${bodyVariant}` : ""}`}
+          className={`rtf-theme rtf-wrapper ${bodyVariant !== "base" ? `rtf-body-${bodyVariant}` : ""} ${className ?? ""}`.trim()}
         />
       );
     }
