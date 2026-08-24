@@ -70,27 +70,28 @@ type ComprehensiveCTAFieldProps = FieldProps<
   ComprehensiveCTAValue
 >;
 
-const defaultStyledButtonValue: StyledButtonValue = {
+export const defaultButtonStyleValue: StyledButtonValue = {
   ...defaultBaseTextStyles,
   borderRadius: "default",
   letterSpacing: "default",
 };
 
-const defaultStyledLinkValue: StyledLinkValue = {
+export const defaultLinkStyleValue: StyledLinkValue = {
   ...defaultBaseTextStyles,
   letterSpacing: "default",
   includeCaret: "default",
 };
 
-const defaultComprehensiveCTAValue: ComprehensiveCTAValue = {
+export const defaultComprehensiveCTAValue: ComprehensiveCTAValue = {
   data: {
     actionType: "link",
     cta: {
       field: "",
+      constantValueEnabled: true,
       constantValue: {
         ctaType: "textAndLink",
-        label: "Call to Action",
-        link: "#",
+        label: { defaultValue: "Call to Action" },
+        link: { defaultValue: "#" },
         linkType: "URL",
       },
       selectedType: "textAndLink",
@@ -105,36 +106,48 @@ const defaultComprehensiveCTAValue: ComprehensiveCTAValue = {
   styles: {
     variant: "primary",
     presetImage: "app-store",
-    button: defaultStyledButtonValue,
-    link: defaultStyledLinkValue,
+    button: defaultButtonStyleValue,
+    link: defaultLinkStyleValue,
   },
 };
+
+export const normalizeComprehensiveCTAValue = (
+  value?: Partial<ComprehensiveCTAValue>
+): ComprehensiveCTAValue => ({
+  ...defaultComprehensiveCTAValue,
+  ...value,
+  data: {
+    ...defaultComprehensiveCTAValue.data,
+    ...value?.data,
+    cta: {
+      ...defaultComprehensiveCTAValue.data.cta,
+      ...value?.data?.cta,
+      constantValue: {
+        ...defaultComprehensiveCTAValue.data.cta.constantValue,
+        ...value?.data?.cta?.constantValue,
+      },
+    },
+  },
+  styles: {
+    ...defaultComprehensiveCTAValue.styles,
+    ...value?.styles,
+    button: {
+      ...defaultButtonStyleValue,
+      ...value?.styles?.button,
+    },
+    link: {
+      ...defaultLinkStyleValue,
+      ...value?.styles?.link,
+    },
+  },
+});
 
 export const ComprehensiveCTAFieldOverride = ({
   field,
   value,
   onChange,
 }: ComprehensiveCTAFieldProps) => {
-  const currentValue: ComprehensiveCTAValue = {
-    ...defaultComprehensiveCTAValue,
-    ...value,
-    data: {
-      ...defaultComprehensiveCTAValue.data,
-      ...value?.data,
-    },
-    styles: {
-      ...defaultComprehensiveCTAValue.styles,
-      ...value?.styles,
-      button: {
-        ...defaultStyledButtonValue,
-        ...value?.styles?.button,
-      },
-      link: {
-        ...defaultStyledLinkValue,
-        ...value?.styles?.link,
-      },
-    },
-  };
+  const currentValue = normalizeComprehensiveCTAValue(value);
 
   const actionType = currentValue.data.actionType;
   const ctaType = getCTAType(currentValue.data.cta).ctaType;

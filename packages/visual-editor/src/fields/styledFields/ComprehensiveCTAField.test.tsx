@@ -33,6 +33,10 @@ import { YextAutoField } from "../YextAutoField.tsx";
 import {
   type ComprehensiveCTAField,
   type ComprehensiveCTAValue,
+  defaultButtonStyleValue,
+  defaultComprehensiveCTAValue,
+  defaultLinkStyleValue,
+  normalizeComprehensiveCTAValue,
 } from "./ComprehensiveCTAField.tsx";
 import { type StyledButtonValue } from "./StyledButtonField.tsx";
 import { type StyledLinkValue } from "./StyledLinkField.tsx";
@@ -164,6 +168,40 @@ const renderField = (
 };
 
 describe("ComprehensiveCTAField", () => {
+  it("deeply normalizes partial CTA values with the shared defaults", () => {
+    const partialValue = {
+      data: {
+        cta: {
+          constantValue: {
+            label: { defaultValue: "Learn More" },
+          },
+        },
+      },
+      styles: {
+        button: { borderRadius: "4px" },
+        link: { includeCaret: "none" },
+      },
+    } as unknown as Partial<ComprehensiveCTAValue>;
+
+    const normalizedValue = normalizeComprehensiveCTAValue(partialValue);
+
+    expect(normalizedValue.data.cta).toEqual({
+      ...defaultComprehensiveCTAValue.data.cta,
+      constantValue: {
+        ...defaultComprehensiveCTAValue.data.cta.constantValue,
+        label: { defaultValue: "Learn More" },
+      },
+    });
+    expect(normalizedValue.styles.button).toEqual({
+      ...defaultButtonStyleValue,
+      borderRadius: "4px",
+    });
+    expect(normalizedValue.styles.link).toEqual({
+      ...defaultLinkStyleValue,
+      includeCaret: "none",
+    });
+  });
+
   it("renders through YextAutoField as a registered field type", () => {
     renderField();
 

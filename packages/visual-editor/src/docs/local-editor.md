@@ -36,7 +36,7 @@ production builds.
 By default, a basic location entity stream is used to pull data for ENTITY page set types.
 This can be configured in the `stream.config.ts` to use other entity types and to include other fields (including custom fields ).
 
-##### Alternative layouts
+#### Alternative layouts
 
 A layout in `layouts` can override its type's stream and defaults. This allows testing a section library with multiple
 layouts and page sets configurations.

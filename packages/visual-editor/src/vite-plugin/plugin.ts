@@ -184,16 +184,18 @@ export const yextVisualEditorPlugin = (
     cleanupFiles();
   };
 
-  // cleanup on interruption (ctrl + C)
-  process.on("SIGINT", () => {
-    cleanupGeneratedArtifacts();
-    process.nextTick(() => process.exit(0));
-  });
+  if (options.localEditor?.enabled) {
+    // cleanup on interruption (ctrl + C)
+    process.once("SIGINT", () => {
+      cleanupGeneratedArtifacts();
+      process.nextTick(() => process.exit(130));
+    });
 
-  process.on("SIGTERM", () => {
-    cleanupGeneratedArtifacts();
-    process.nextTick(() => process.exit(0));
-  });
+    process.once("SIGTERM", () => {
+      cleanupGeneratedArtifacts();
+      process.nextTick(() => process.exit(143));
+    });
+  }
 
   return {
     name: "vite-plugin-yext-visual-editor",

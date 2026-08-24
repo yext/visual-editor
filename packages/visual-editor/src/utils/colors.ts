@@ -506,6 +506,18 @@ export const getDefaultForegroundColor = (
     if (surfaceColor.contrastingColor === "white") {
       return { selectedColor: "white", contrastingColor: "black" };
     }
+
+    if (surfaceColor.contrastingColor) {
+      return {
+        selectedColor: surfaceColor.contrastingColor,
+        contrastingColor: isDarkColor(
+          surfaceColor.contrastingColor,
+          streamDocument
+        )
+          ? "white"
+          : "black",
+      };
+    }
   }
 
   return isDarkColor(surfaceColor, streamDocument)

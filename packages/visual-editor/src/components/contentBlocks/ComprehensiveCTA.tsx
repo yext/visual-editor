@@ -5,14 +5,18 @@ import { themeManagerCn } from "../../utils/cn.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { getCTAType } from "../../internal/utils/ctaFieldUtils.ts";
-import { type ComprehensiveCTAValue } from "../../fields/styledFields/ComprehensiveCTAField.tsx";
+import {
+  type ComprehensiveCTAValue,
+  defaultButtonStyleValue,
+  defaultLinkStyleValue,
+  normalizeComprehensiveCTAValue,
+} from "../../fields/styledFields/ComprehensiveCTAField.tsx";
 import {
   FOOD_DELIVERY_SERVICES,
   type EnhancedTranslatableCTA,
 } from "../../types/types.ts";
 import { type StyledButtonValue } from "../../fields/styledFields/StyledButtonField.tsx";
 import { type StyledLinkValue } from "../../fields/styledFields/StyledLinkField.tsx";
-import { defaultBaseTextStyles } from "../../fields/styledFields/baseText.tsx";
 
 export type ComprehensiveCTARenderProps = {
   value?: Partial<ComprehensiveCTAValue>;
@@ -25,78 +29,6 @@ export type ComprehensiveCTARenderProps = {
   alwaysHideCaret?: boolean;
   onClick?: CTAProps["onClick"];
 };
-
-const defaultButtonStyleValue: StyledButtonValue = {
-  ...defaultBaseTextStyles,
-  borderRadius: "default",
-  letterSpacing: "default",
-};
-
-const defaultLinkStyleValue: StyledLinkValue = {
-  ...defaultBaseTextStyles,
-  letterSpacing: "default",
-  includeCaret: "default",
-};
-
-const defaultComprehensiveCTAValue: ComprehensiveCTAValue = {
-  data: {
-    actionType: "link",
-    cta: {
-      field: "",
-      constantValueEnabled: true,
-      constantValue: {
-        ctaType: "textAndLink",
-        label: { defaultValue: "Call to Action" },
-        link: { defaultValue: "#" },
-        linkType: "URL",
-      },
-      selectedType: "textAndLink",
-    },
-    openInNewTab: false,
-    buttonText: { defaultValue: "Button" },
-    customId: "",
-    customClass: "",
-    dataAttributes: [],
-    ariaLabel: { defaultValue: "Button" },
-  },
-  styles: {
-    variant: "primary",
-    presetImage: "app-store",
-    button: defaultButtonStyleValue,
-    link: defaultLinkStyleValue,
-  },
-};
-
-const normalizeComprehensiveCTAValue = (
-  value?: Partial<ComprehensiveCTAValue>
-): ComprehensiveCTAValue => ({
-  ...defaultComprehensiveCTAValue,
-  ...value,
-  data: {
-    ...defaultComprehensiveCTAValue.data,
-    ...value?.data,
-    cta: {
-      ...defaultComprehensiveCTAValue.data.cta,
-      ...value?.data?.cta,
-      constantValue: {
-        ...defaultComprehensiveCTAValue.data.cta.constantValue,
-        ...value?.data?.cta?.constantValue,
-      },
-    },
-  },
-  styles: {
-    ...defaultComprehensiveCTAValue.styles,
-    ...value?.styles,
-    button: {
-      ...defaultButtonStyleValue,
-      ...value?.styles?.button,
-    },
-    link: {
-      ...defaultLinkStyleValue,
-      ...value?.styles?.link,
-    },
-  },
-});
 
 const resolveTextStyleValue = (value: string | undefined) =>
   value && value !== "default" ? value : undefined;

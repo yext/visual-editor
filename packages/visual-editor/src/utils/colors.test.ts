@@ -7,6 +7,7 @@ import {
   convertComputedStyleColorToHex,
   getBackgroundColorClasses,
   getBackgroundColorStyle,
+  getDefaultForegroundColor,
   getThemeColorCssValue,
   getThemeColorHexValue,
   isDarkColor,
@@ -321,5 +322,68 @@ describe("isDarkColor", () => {
         contrastingColor: "white",
       })
     ).toBe(true);
+  });
+});
+
+describe("getDefaultForegroundColor", () => {
+  const streamDocument = {
+    __: {
+      theme: JSON.stringify({
+        "--colors-palette-primary-contrast": "#FFFFFF",
+        "--colors-palette-secondary-contrast": "#000000",
+      }),
+    },
+  };
+
+  it("preserves a light configured contrast token", () => {
+    expect(
+      getDefaultForegroundColor(
+        {
+          selectedColor: "palette-primary",
+          contrastingColor: "palette-primary-contrast",
+        },
+        streamDocument
+      )
+    ).toStrictEqual({
+      selectedColor: "palette-primary-contrast",
+      contrastingColor: "black",
+    });
+  });
+
+  it("preserves a dark configured contrast token", () => {
+    expect(
+      getDefaultForegroundColor(
+        {
+          selectedColor: "palette-secondary",
+          contrastingColor: "palette-secondary-contrast",
+        },
+        streamDocument
+      )
+    ).toStrictEqual({
+      selectedColor: "palette-secondary-contrast",
+      contrastingColor: "white",
+    });
+  });
+
+  it("retains literal contrast handling", () => {
+    expect(
+      getDefaultForegroundColor({
+        selectedColor: "palette-primary",
+        contrastingColor: "black",
+      })
+    ).toStrictEqual({ selectedColor: "black", contrastingColor: "white" });
+    expect(
+      getDefaultForegroundColor({
+        selectedColor: "palette-primary",
+        contrastingColor: "white",
+      })
+    ).toStrictEqual({ selectedColor: "white", contrastingColor: "black" });
+  });
+
+  it("falls back to the surface darkness without a configured contrast", () => {
+    expect(getDefaultForegroundColor("palette-primary")).toStrictEqual({
+      selectedColor: "white",
+      contrastingColor: "black",
+    });
   });
 });
