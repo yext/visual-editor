@@ -1,6 +1,10 @@
 /* SECTION_LIBRARY_GENERATED_FILE */
 import { DropZone, type Config } from "@puckeditor/core";
-import { MainContent, type SectionConfig } from "@yext/visual-editor";
+import {
+  CustomCodeSection,
+  MainContent,
+  type SectionConfig,
+} from "@yext/visual-editor";
 /* SECTION_LIBRARY_IMPORTS */
 /* SECTION_LIBRARY_SHARED_COMPONENT_REGISTRY */
 
@@ -34,6 +38,7 @@ const sharedComponentsForPageSetType = hasSharedComponentRegistry
   : [];
 
 const components = {
+  CustomCodeSection,
   MainContent,
   ...Object.fromEntries(
     sections.map((section) => [
@@ -85,7 +90,7 @@ export const sectionLibraryConfig: Config = {
       visible: false,
       components: ["MainContent"],
     },
-    other: { title: "Other", visible: false, components: [] },
+    other: { title: "Other", components: ["CustomCodeSection"] },
     ...Object.fromEntries(
       Object.entries(sectionsByCategory).map(([title, grouped]) => [
         `section:${title}`,

@@ -51,6 +51,10 @@ describe("convertTemplatesToSectionLibrary", () => {
         "};",
       ].join("\n")
     );
+    fs.writeFileSync(
+      path.join(componentsDirectory, "CustomCodeSection.tsx"),
+      'export { CustomCodeSection } from "@yext/visual-editor";\n'
+    );
 
     expect(() =>
       convertTemplatesToSectionLibrary({

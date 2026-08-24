@@ -41,7 +41,11 @@ describe("generateSectionLibraryFiles", () => {
     expect(config).toContain("...section.config");
     expect(config).toContain('id: "hero"');
     expect(config).toContain("import { Hero as Section0");
+    expect(config).toContain("CustomCodeSection");
     expect(config).toContain('components: ["MainContent"]');
+    expect(config).toContain(
+      'other: { title: "Other", components: ["CustomCodeSection"] }'
+    );
     expect(config).not.toContain("mainConfig");
     expect(config).not.toContain("directoryConfig");
     expect(config).not.toContain("locatorConfig");
