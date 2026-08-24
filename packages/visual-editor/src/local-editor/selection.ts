@@ -149,7 +149,6 @@ export const buildEditorLocalDevOptions = ({
     initialLayoutData: selectedLayoutDefaults?.defaultLayoutData as
       | Record<string, unknown>
       | undefined,
-    showOverrideButtons: false,
   };
 };
 

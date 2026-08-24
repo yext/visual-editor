@@ -72,6 +72,7 @@ export const createLocalEditorArtifactsManager = ({
     rootDir = process.cwd()
   ): void => {
     const activeTemplatePaths = new Set<string>();
+    const layoutIdByTemplatePath = new Map<string, string>();
     for (const layout of layouts) {
       if (
         layout.metadata.pageSetType !== "ENTITY" &&
@@ -83,6 +84,14 @@ export const createLocalEditorArtifactsManager = ({
         rootDir,
         buildLocalEditorDataTemplatePath(layout.metadata.id)
       );
+      const existingLayoutId = layoutIdByTemplatePath.get(templatePath);
+      if (existingLayoutId) {
+        console.warn(
+          `Local Editor layouts "${existingLayoutId}" and "${layout.metadata.id}" generate the same data template at ${path.relative(rootDir, templatePath)}. The later layout will overwrite the earlier layout's template.`
+        );
+      } else {
+        layoutIdByTemplatePath.set(templatePath, layout.metadata.id);
+      }
       const streamConfigPath = path
         .relative(
           path.dirname(templatePath),

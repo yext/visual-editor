@@ -1,5 +1,10 @@
-import { describe, it, expect } from "vitest";
-import { applyTheme } from "./applyTheme.ts";
+import { afterEach, describe, it, expect, vi } from "vitest";
+import {
+  applyTheme,
+  PUCK_PREVIEW_IFRAME_ID,
+  THEME_STYLE_TAG_ID,
+  updateThemeInEditor,
+} from "./applyTheme.ts";
 import { ThemeConfig } from "./themeResolver.ts";
 import { StreamDocument } from "./types/StreamDocument.ts";
 
@@ -268,6 +273,58 @@ describe("buildCssOverridesStyle", () => {
     expect(result).toContain(
       "--colors-palette-secondary-contrast:#FFFFFF !important"
     );
+  });
+});
+
+describe("updateThemeInEditor", () => {
+  afterEach(() => {
+    document.getElementById(PUCK_PREVIEW_IFRAME_ID)?.remove();
+    document.getElementById(THEME_STYLE_TAG_ID)?.remove();
+    document
+      .querySelectorAll(
+        'link[href*="fonts.googleapis.com"]:not([data-visual-editor-font="true"]), link[href*="y-fonts"]:not([data-visual-editor-font="true"])'
+      )
+      .forEach((link) => link.remove());
+  });
+
+  it("updates the existing iframe theme style tag without duplicating it", async () => {
+    const iframe = document.createElement("iframe");
+    iframe.id = PUCK_PREVIEW_IFRAME_ID;
+    document.body.appendChild(iframe);
+
+    const iframeStyleTag = iframe.contentDocument!.createElement("style");
+    iframeStyleTag.id = THEME_STYLE_TAG_ID;
+    iframe.contentDocument!.head.appendChild(iframeStyleTag);
+
+    await updateThemeInEditor({}, themeConfig, false);
+
+    expect(
+      iframe.contentDocument!.querySelectorAll(`#${THEME_STYLE_TAG_ID}`)
+    ).toHaveLength(1);
+    expect(iframeStyleTag.textContent).toContain("--colors-palette-text");
+  });
+
+  it("waits for the real iframe theme style tag", async () => {
+    const iframe = document.createElement("iframe");
+    iframe.id = PUCK_PREVIEW_IFRAME_ID;
+    document.body.appendChild(iframe);
+
+    await updateThemeInEditor({}, themeConfig, false);
+
+    expect(
+      iframe.contentDocument!.getElementById(THEME_STYLE_TAG_ID)
+    ).toBeNull();
+
+    const iframeStyleTag = iframe.contentDocument!.createElement("style");
+    iframeStyleTag.id = THEME_STYLE_TAG_ID;
+    iframe.contentDocument!.head.appendChild(iframeStyleTag);
+    const mutationTarget = document.createElement("div");
+    document.body.appendChild(mutationTarget);
+
+    await vi.waitFor(() => {
+      expect(iframeStyleTag.textContent).toContain("--colors-palette-text");
+    });
+    mutationTarget.remove();
   });
 });
 

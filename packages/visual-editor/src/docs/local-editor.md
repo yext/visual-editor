@@ -89,7 +89,10 @@ const config = {
         // select the correct directory entities:
         // set the correct directory level by entity type id in entityTypes
         // set the correct directory scope by using savedFilterIds (in platform, go to KG -> Configuration -> Saved Filters)
-        filter: { entityTypes: ["dm_city"], savedFilterIds: ["dm_x-y_address_city"] }
+        filter: {
+          entityTypes: ["dm_city"],
+          savedFilterIds: ["dm_x-y_address_city"],
+        },
         // select the fields to include in the stream (will vary by directory level)
         fields: [
           "id",
@@ -112,7 +115,6 @@ const config = {
           "dm_directoryParents_x_y_z.name",
           "dm_directoryParents_x_y_z.slug",
           "dm_directoryParents_x_y_z.meta.entityType.id",
-
         ],
         localization: { locales: ["en"] },
       },

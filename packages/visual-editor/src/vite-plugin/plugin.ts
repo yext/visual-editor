@@ -106,6 +106,7 @@ export const yextVisualEditorPlugin = (
   options: VisualEditorPluginOptions = {}
 ): Plugin => {
   let isBuildMode = false;
+  let initializedForServe = false;
   const filesToCleanup: string[] = [];
   let sectionLibraryFiles: string[] = [];
   let sectionLibraryManifest: string | undefined;
@@ -208,21 +209,26 @@ export const yextVisualEditorPlugin = (
       ) {
         generateSectionLibrary();
         await syncLocalEditorArtifacts();
+        initializedForServe = true;
       }
     },
     async buildStart() {
       if (options.localEditor?.enabled && !options.sectionLibrary) {
         throw new Error("localEditor requires sectionLibrary: true");
       }
-      if (options.sectionLibrary) {
+      if (options.sectionLibrary && !initializedForServe) {
         generateSectionLibrary();
-      } else {
+      } else if (!options.sectionLibrary) {
         generateFiles();
       }
 
-      if (!isBuildMode && options.localEditor?.enabled) {
+      if (
+        !isBuildMode &&
+        options.localEditor?.enabled &&
+        !initializedForServe
+      ) {
         await syncLocalEditorArtifacts();
-      } else {
+      } else if (!initializedForServe) {
         localEditorArtifacts.cleanupGeneratedLocalEditorArtifacts();
       }
     },

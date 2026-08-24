@@ -244,11 +244,13 @@ export const updateThemeInEditor = async (
       PUCK_PREVIEW_IFRAME_ID
     ) as HTMLIFrameElement;
     const iframeDocument = iframe?.contentDocument;
-    if (!iframeDocument) {
+    const pagePreviewStyleTag =
+      iframeDocument?.getElementById(THEME_STYLE_TAG_ID);
+    if (!iframeDocument || !pagePreviewStyleTag) {
       return false;
     }
 
-    getOrCreateThemeStyleTag(iframeDocument).textContent = newThemeTag;
+    pagePreviewStyleTag.textContent = newThemeTag;
     updateFontLinksInDocument(
       iframeDocument,
       googleFontsToLoad,
