@@ -24,7 +24,39 @@ Start Pages development, then open `/local-editor`. The selector uses real
 Section Library layout IDs. It does not use the temporary Platform aliases
 `main`, `directory`, or `locator`.
 
-## Configure streams
+The plug-in creates a temporary `local-editor-data-<layout-id>.tsx` template
+for each Entity and Directory layout. Pages uses these templates to create
+local snapshots. The plug-in removes them when development stops and before
+production builds.
+
+## Test Data
+
+### ENTITY Page Sets
+
+By default, a basic location entity stream is used to pull data for ENTITY page set types.
+This can be configured in the `stream.config.ts` to use other entity types and to include other fields (including custom fields ).
+
+##### Alternative layouts
+
+A layout in `layouts` can override its type's stream and defaults. This allows testing a section library with multiple
+layouts and page sets configurations.
+
+For each layout, Local Editor starts with `defaults`, then applies the matching
+`pageSetTypes` value, then applies `layouts[layoutId]`. A later value replaces
+an earlier value.
+
+### DIRECTORY Page Sets
+
+By default, fake data is used for directory page sets. The number of directory children can be configured in the local-editor UI.
+To use real data, add a `DIRECTORY` entry `stream.config.ts` and configure the filter and fields to match the directory (see example below).
+
+### LOCATOR Page Sets
+
+By default, fake data is used for locator page sets. A mapbox api key can be provided in the local-editor UI for the locator map.
+To use real data, fill out the env variables in the `stream.config.ts` based on the real locator. Additionally, provide
+the nearby locations key and mapbox key in the local-editor UI.
+
+## Configure Streams
 
 Create `stream.config.ts` at the starter root.
 
@@ -45,16 +77,43 @@ const config = {
   pageSetTypes: {
     ENTITY: {
       stream: {
-        $id: "local-editor-entity-stream",
-        filter: { entityTypes: ["location"] },
-        fields: ["id", "name", "slug"],
+        $id: "local-editor-restaurant-stream",
+        filter: { entityTypes: ["restaurant"] },
+        fields: ["id", "name", "slug", "c_order_now"],
         localization: { locales: ["en"] },
       },
     },
     DIRECTORY: {
       stream: {
         $id: "local-editor-directory-stream",
-        fields: ["id", "name", "slug", "dm_directoryChildren"],
+        // select the correct directory entities:
+        // set the correct directory level by entity type id in entityTypes
+        // set the correct directory scope by using savedFilterIds (in platform, go to KG -> Configuration -> Saved Filters)
+        filter: { entityTypes: ["dm_city"], savedFilterIds: ["dm_x-y_address_city"] }
+        // select the fields to include in the stream (will vary by directory level)
+        fields: [
+          "id",
+          "name",
+          "slug",
+          "dm_directoryChildren.address",
+          "dm_directoryChildren.geomodifier",
+          "dm_directoryChildren.hours",
+          "dm_directoryChildren.id",
+          "dm_directoryChildren.mainPhone",
+          "dm_directoryChildren.name",
+          "dm_directoryChildren.slug",
+          "dm_directoryChildren.timezone",
+          "dm_addressCountryDisplayName",
+          "dm_addressRegionDisplayName",
+          // The directory parents field name varies based on site/branch/page group
+          "dm_directoryParents_x_y_z.dm_addressCountryDisplayName",
+          "dm_directoryParents_x_y_z.dm_addressRegionDisplayName",
+          "dm_directoryParents_x_y_z.id",
+          "dm_directoryParents_x_y_z.name",
+          "dm_directoryParents_x_y_z.slug",
+          "dm_directoryParents_x_y_z.meta.entityType.id",
+
+        ],
         localization: { locales: ["en"] },
       },
     },
@@ -74,37 +133,5 @@ const config = {
 export default config;
 ```
 
-`pageSetTypes.ENTITY` and `pageSetTypes.DIRECTORY` supply a stream for every
-matching layout. A layout in `layouts` can override its type's stream and
-defaults. This lets a new layout work without a new config entry in the common
-case.
-
-For each layout, Local Editor starts with `defaults`, then applies the matching
-`pageSetTypes` value, then applies `layouts[layoutId]`. A later value replaces
-an earlier value.
-
-Generate snapshot data after you change an Entity or Directory stream
-configuration.
-
-```sh
-yext pages generate-test-data
-```
-
-The plug-in creates a temporary `local-editor-data-<layout-id>.tsx` template
-for each Entity and Directory layout. Pages uses these templates to create
-local snapshots. The plug-in removes them when development stops and before
-production builds.
-
-Directory layouts without a configured stream use built-in root, country,
-region, and city documents; only these fixture-backed layouts show the control
-for setting the directory child count.
-Fixture-mode Locator layouts use a built-in document and local mock Search
-results, filters, pagination, analytics, and geolocation. Map tiles can need a
-Mapbox key. Fixtures and mock data exist only in Local Editor. They are not in
-production artifacts.
-
-Set both `YEXT_SEARCH_API_KEY` and `YEXT_SEARCH_EXPERIENCE_KEY` to use real
-Locator Search data. If either value is blank, Local Editor uses the fixture
-data above instead. Use the Local Editor controls to supply the Mapbox and Yext
-analytics keys; the Mapbox value is used for both normal and editor-iframe map
-rendering.
+You must run `yext pages generate-test-data` or restart your development server after
+updating `stream.config.ts`.
