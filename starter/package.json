@@ -7,7 +7,6 @@
   "type": "module",
   "scripts": {
     "dev": "cd .. && pnpm build && cd ./starter && pages dev --local --no-prod-url --noInit",
-    "dev:ai": "pnpm run dev",
     "dev:stackblitz": "pages dev --local --no-prod-url --noInit",
     "prod": "pages prod",
     "build": "pages build",

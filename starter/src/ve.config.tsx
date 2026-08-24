@@ -31,7 +31,7 @@ export const devConfig: Config<DevProps> = {
 };
 
 // TODO: Use mainConfig directly for dev-location once directory templates are supported
-export const componentRegistry: Record<string, Config> = {
-  "dev-location": devConfig as unknown as Config,
-  "dev-locator": locatorConfig as unknown as Config,
+export const componentRegistry: Record<string, Config<any>> = {
+  "dev-location": devConfig,
+  "dev-locator": locatorConfig,
 };

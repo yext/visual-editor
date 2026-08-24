@@ -1,5 +1,5 @@
 import React from "react";
-import { type Config, Data } from "@puckeditor/core";
+import { Data } from "@puckeditor/core";
 import * as lzstring from "lz-string";
 import { MantineProvider } from "@mantine/core";
 import {
@@ -286,14 +286,14 @@ const Dev: Template<TemplateRenderProps> = (props) => {
           >
             {isPreviewMode ? (
               <VisualEditorRender
-                config={puckConfig as Config}
+                config={puckConfig}
                 data={currentPuckData}
                 metadata={{ streamDocument: document }}
               />
             ) : (
               <Editor
                 document={document}
-                componentRegistry={componentRegistry as Record<string, Config>}
+                componentRegistry={componentRegistry}
                 themeConfig={defaultThemeConfig}
                 localDev={true}
                 forceThemeMode={themeMode}
