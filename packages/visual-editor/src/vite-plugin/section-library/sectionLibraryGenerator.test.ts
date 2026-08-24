@@ -19,9 +19,12 @@ describe("generateSectionLibraryFiles", () => {
   it("maps all layouts to current Platform templates", () => {
     const rootDir = createLibrary();
 
-    const result = generateSectionLibraryFiles(rootDir);
+    const result = generateSectionLibraryFiles(
+      rootDir,
+      "123e4567-e89b-12d3-a456-426614174000"
+    );
 
-    expect(result.generatedFiles).toHaveLength(7);
+    expect(result.generatedFiles).toHaveLength(10);
     const config = fs.readFileSync(
       path.join(
         rootDir,
@@ -81,9 +84,46 @@ describe("generateSectionLibraryFiles", () => {
     expect(
       fs.existsSync(path.join(rootDir, "src", "templates", "location.tsx"))
     ).toBe(false);
-    expect(
-      fs.existsSync(path.join(rootDir, "src", "templates", "edit-location.tsx"))
-    ).toBe(false);
+    const locationEditorTemplate = fs.readFileSync(
+      path.join(rootDir, "src", "templates", "edit-location.tsx"),
+      "utf8"
+    );
+    expect(locationEditorTemplate).toContain(
+      'const editorPath = "edit/location/123e4567-e89b-12d3-a456-426614174000"'
+    );
+    expect(locationEditorTemplate).toContain(
+      '"location": () => import("../library/.generated/libraryConfig-location")'
+    );
+    expect(locationEditorTemplate).not.toContain("directory-layout");
+    expect(locationEditorTemplate).not.toContain("locator-layout");
+    const directoryEditorTemplate = fs.readFileSync(
+      path.join(rootDir, "src", "templates", "edit-directory-layout.tsx"),
+      "utf8"
+    );
+    expect(directoryEditorTemplate).toContain(
+      'const editorPath = "edit/directory-layout/123e4567-e89b-12d3-a456-426614174000"'
+    );
+    expect(directoryEditorTemplate).toContain(
+      '"directory-layout": () => import("../library/.generated/libraryConfig-directory-layout")'
+    );
+    expect(directoryEditorTemplate).not.toContain("libraryConfig-location");
+    expect(directoryEditorTemplate).not.toContain(
+      "libraryConfig-locator-layout"
+    );
+    const locatorEditorTemplate = fs.readFileSync(
+      path.join(rootDir, "src", "templates", "edit-locator-layout.tsx"),
+      "utf8"
+    );
+    expect(locatorEditorTemplate).toContain(
+      'const editorPath = "edit/locator-layout/123e4567-e89b-12d3-a456-426614174000"'
+    );
+    expect(locatorEditorTemplate).toContain(
+      '"locator-layout": () => import("../library/.generated/libraryConfig-locator-layout")'
+    );
+    expect(locatorEditorTemplate).not.toContain("libraryConfig-location");
+    expect(locatorEditorTemplate).not.toContain(
+      "libraryConfig-directory-layout"
+    );
     const legacyEditorTemplate = fs.readFileSync(
       path.join(rootDir, "src", "templates", "edit.tsx"),
       "utf8"
@@ -132,7 +172,15 @@ describe("generateSectionLibraryFiles", () => {
     expect(result.manifestSource).toContain('"templateId": "main"');
     expect(result.manifestSource).toContain('"templateId": "directory"');
     expect(result.manifestSource).toContain('"templateId": "locator"');
-    expect(result.manifestSource).toContain('"editorPath": "edit"');
+    expect(result.manifestSource).toContain(
+      '"editorPath": "edit/location/123e4567-e89b-12d3-a456-426614174000"'
+    );
+    expect(result.manifestSource).toContain(
+      '"editorPath": "edit/directory-layout/123e4567-e89b-12d3-a456-426614174000"'
+    );
+    expect(result.manifestSource).toContain(
+      '"editorPath": "edit/locator-layout/123e4567-e89b-12d3-a456-426614174000"'
+    );
     expect(result.manifestSource).toContain(
       '"vertical": [\n        "RETAIL"\n      ]'
     );
@@ -147,7 +195,10 @@ describe("generateSectionLibraryFiles", () => {
       templates: [{ name: "main" }],
     });
 
-    generateSectionLibraryFiles(rootDir);
+    generateSectionLibraryFiles(
+      rootDir,
+      "123e4567-e89b-12d3-a456-426614174000"
+    );
 
     expect(
       fs
@@ -159,7 +210,10 @@ describe("generateSectionLibraryFiles", () => {
   it("generates render templates that resolve URLs and require valid layout data", () => {
     const rootDir = createLibrary();
 
-    generateSectionLibraryFiles(rootDir);
+    generateSectionLibraryFiles(
+      rootDir,
+      "123e4567-e89b-12d3-a456-426614174000"
+    );
 
     const renderTemplate = fs.readFileSync(
       path.join(rootDir, "src", "templates", "main.tsx"),
@@ -188,13 +242,16 @@ describe("generateSectionLibraryFiles", () => {
     fs.ensureDirSync(path.dirname(handwrittenMainPath));
     fs.writeFileSync(handwrittenMainPath, "export default null;");
 
-    const { generatedFiles } = generateSectionLibraryFiles(rootDir);
+    const { generatedFiles } = generateSectionLibraryFiles(
+      rootDir,
+      "123e4567-e89b-12d3-a456-426614174000"
+    );
     cleanupGeneratedSectionLibraryFiles(generatedFiles);
 
     expect(fs.readFileSync(handwrittenMainPath, "utf8")).toBe(
       "export default null;"
     );
-    expect(generatedFiles).toHaveLength(6);
+    expect(generatedFiles).toHaveLength(9);
     for (const filePath of generatedFiles) {
       expect(fs.existsSync(filePath)).toBe(false);
     }
@@ -206,8 +263,18 @@ describe("generateSectionLibraryFiles", () => {
   it("replaces and removes generated templates from an earlier run", () => {
     const rootDir = createLibrary();
 
-    generateSectionLibraryFiles(rootDir);
-    const { generatedFiles } = generateSectionLibraryFiles(rootDir);
+    generateSectionLibraryFiles(
+      rootDir,
+      "123e4567-e89b-12d3-a456-426614174000"
+    );
+    const { generatedFiles } = generateSectionLibraryFiles(
+      rootDir,
+      "123e4567-e89b-12d3-a456-426614174000"
+    );
+    fs.writeFileSync(
+      path.join(rootDir, "src", "templates", "edit-location.client.tsx"),
+      ""
+    );
     cleanupGeneratedSectionLibraryFiles(generatedFiles);
 
     expect(
@@ -216,13 +283,26 @@ describe("generateSectionLibraryFiles", () => {
     expect(
       fs.existsSync(path.join(rootDir, "src", "templates", "main.client.tsx"))
     ).toBe(false);
+    expect(
+      fs.existsSync(path.join(rootDir, "src", "templates", "edit-location.tsx"))
+    ).toBe(false);
+    expect(
+      fs.existsSync(
+        path.join(rootDir, "src", "templates", "edit-location.client.tsx")
+      )
+    ).toBe(false);
   });
 
   it("does not generate files without library metadata", () => {
     const rootDir = createLibrary();
     fs.removeSync(path.join(rootDir, "src", "library", "library.json"));
 
-    expect(generateSectionLibraryFiles(rootDir)).toEqual({
+    expect(
+      generateSectionLibraryFiles(
+        rootDir,
+        "123e4567-e89b-12d3-a456-426614174000"
+      )
+    ).toEqual({
       generatedFiles: [],
     });
     expect(
@@ -260,9 +340,12 @@ describe("generateSectionLibraryFiles", () => {
       }
     );
 
-    expect(() => generateSectionLibraryFiles(rootDir)).toThrow(
-      /edit because it is reserved for a generated template/
-    );
+    expect(() =>
+      generateSectionLibraryFiles(
+        rootDir,
+        "123e4567-e89b-12d3-a456-426614174000"
+      )
+    ).toThrow(/edit because it is reserved for a generated template/);
     expect(
       fs.existsSync(
         path.join(
@@ -288,7 +371,10 @@ describe("generateSectionLibraryFiles", () => {
       'export const Hero = () => <section />;\nexport const config = { id: "hero", displayName: "Hero", description: "A hero.", pageSetTypes: ["ENTITY"] };'
     );
 
-    generateSectionLibraryFiles(rootDir);
+    generateSectionLibraryFiles(
+      rootDir,
+      "123e4567-e89b-12d3-a456-426614174000"
+    );
 
     expect(
       fs.readFileSync(
@@ -316,7 +402,10 @@ describe("generateSectionLibraryFiles", () => {
       ].join("\n")
     );
 
-    generateSectionLibraryFiles(rootDir);
+    generateSectionLibraryFiles(
+      rootDir,
+      "123e4567-e89b-12d3-a456-426614174000"
+    );
 
     expect(
       fs.readFileSync(
@@ -345,7 +434,10 @@ describe("generateSectionLibraryFiles", () => {
       ].join("\n")
     );
 
-    generateSectionLibraryFiles(rootDir);
+    generateSectionLibraryFiles(
+      rootDir,
+      "123e4567-e89b-12d3-a456-426614174000"
+    );
 
     const config = fs.readFileSync(
       path.join(
@@ -621,7 +713,18 @@ describe("generateSectionLibraryFiles", () => {
     const rootDir = createLibrary();
     update(rootDir);
 
-    expect(() => generateSectionLibraryFiles(rootDir)).toThrow(error);
+    expect(() =>
+      generateSectionLibraryFiles(
+        rootDir,
+        "123e4567-e89b-12d3-a456-426614174000"
+      )
+    ).toThrow(error);
+  });
+
+  it("requires a Section Library revision ID", () => {
+    expect(() => generateSectionLibraryFiles(createLibrary())).toThrow(
+      "Section Library builds require SECTION_LIBRARY_REVISION_ID"
+    );
   });
 });
 
