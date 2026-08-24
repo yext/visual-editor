@@ -165,7 +165,10 @@ export const yextVisualEditorPlugin = (
     },
     buildStart() {
       if (options.sectionLibrary) {
-        const generatedLibrary = generateSectionLibraryFiles(process.cwd());
+        const generatedLibrary = generateSectionLibraryFiles(
+          process.cwd(),
+          process.env.SECTION_LIBRARY_REVISION_ID
+        );
         sectionLibraryFiles = generatedLibrary.generatedFiles;
         sectionLibraryManifest = generatedLibrary.manifestSource;
         return;

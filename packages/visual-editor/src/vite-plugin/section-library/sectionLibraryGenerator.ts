@@ -61,8 +61,15 @@ type GeneratedSectionLibrary = {
  * 3. Generate current Platform aliases and return the Section Library artifact manifest.
  */
 export const generateSectionLibraryFiles = (
-  rootDir: string
+  rootDir: string,
+  sectionLibraryRevisionId?: string
 ): GeneratedSectionLibrary => {
+  if (!sectionLibraryRevisionId?.trim()) {
+    throw new Error(
+      "Section Library builds require SECTION_LIBRARY_REVISION_ID"
+    );
+  }
+
   const library = readSectionLibrary(rootDir);
   if (!library) {
     return { generatedFiles: [] };
@@ -118,6 +125,26 @@ export const generateSectionLibraryFiles = (
       return writeGeneratedFile(filePath, aliasSources[index]);
     })
   );
+  generatedFiles.push(
+    ...library.layouts.flatMap((layout) => {
+      const filePath = path.join(
+        rootDir,
+        "src",
+        "templates",
+        `edit-${layout.metadata.id}.tsx`
+      );
+      return writeGeneratedFile(
+        filePath,
+        buildEditorTemplateSource(
+          [[layout.metadata.id, layout]],
+          `edit/${encodeURIComponent(sectionLibraryRevisionId)}/${layout.metadata.id}`,
+          `edit-${layout.metadata.id}`
+        )
+      )
+        ? [filePath]
+        : [];
+    })
+  );
   writeLegacyTemplateManifest(
     rootDir,
     entityLayout,
@@ -137,7 +164,7 @@ export const generateSectionLibraryFiles = (
             layout.metadata.pageSetType === "ENTITY"
               ? "main"
               : layout.metadata.pageSetType.toLowerCase(),
-          editorPath: "edit",
+          editorPath: `edit/${encodeURIComponent(sectionLibraryRevisionId)}/${layout.metadata.id}`,
           defaultLayout: layout.defaultLayout,
         })),
       },
@@ -567,7 +594,11 @@ const buildRenderTemplateSource = (layout: Layout): string => {
     .replace("{/* SECTION_LIBRARY_MAPBOX_ASSETS */}", mapboxAssets);
 };
 
-const buildEditorTemplateSource = (entries: [string, Layout][]): string => {
+const buildEditorTemplateSource = (
+  entries: [string, Layout][],
+  editorPath: string = "edit",
+  editorName: string = "edit"
+): string => {
   const registry = entries
     .map(([name, entry]) => {
       const configPath = `../library/.generated/libraryConfig-${entry.metadata.id}`;
@@ -578,8 +609,8 @@ const buildEditorTemplateSource = (entries: [string, Layout][]): string => {
     .replace("/* SECTION_LIBRARY_GENERATED_FILE */", GENERATED_FILE_PREFIX)
     .replace("/* SECTION_LIBRARY_CONFIG_IMPORTS */", "")
     .replace("/* SECTION_LIBRARY_COMPONENT_REGISTRY */", registry)
-    .replace('"__SECTION_LIBRARY_EDITOR_PATH__"', '"edit"')
-    .replace('"__SECTION_LIBRARY_EDITOR_NAME__"', '"edit"');
+    .replace('"__SECTION_LIBRARY_EDITOR_PATH__"', JSON.stringify(editorPath))
+    .replace('"__SECTION_LIBRARY_EDITOR_NAME__"', JSON.stringify(editorName));
 };
 
 const writeGeneratedFile = (filePath: string, source: string): boolean => {
