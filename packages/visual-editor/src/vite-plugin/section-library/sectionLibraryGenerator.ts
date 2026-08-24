@@ -137,7 +137,7 @@ export const generateSectionLibraryFiles = (
         filePath,
         buildEditorTemplateSource(
           [[layout.metadata.id, layout]],
-          `edit/${encodeURIComponent(sectionLibraryRevisionId)}/${layout.metadata.id}`,
+          `edit/${layout.metadata.id}/${encodeURIComponent(sectionLibraryRevisionId)}`,
           `edit-${layout.metadata.id}`
         )
       )
@@ -164,7 +164,7 @@ export const generateSectionLibraryFiles = (
             layout.metadata.pageSetType === "ENTITY"
               ? "main"
               : layout.metadata.pageSetType.toLowerCase(),
-          editorPath: `edit/${encodeURIComponent(sectionLibraryRevisionId)}/${layout.metadata.id}`,
+          editorPath: `edit/${layout.metadata.id}/${encodeURIComponent(sectionLibraryRevisionId)}`,
           defaultLayout: layout.defaultLayout,
         })),
       },

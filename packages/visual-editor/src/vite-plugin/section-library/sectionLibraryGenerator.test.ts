@@ -89,7 +89,7 @@ describe("generateSectionLibraryFiles", () => {
       "utf8"
     );
     expect(locationEditorTemplate).toContain(
-      'const editorPath = "edit/123e4567-e89b-12d3-a456-426614174000/location"'
+      'const editorPath = "edit/location/123e4567-e89b-12d3-a456-426614174000"'
     );
     expect(locationEditorTemplate).toContain(
       '"location": () => import("../library/.generated/libraryConfig-location")'
@@ -101,7 +101,7 @@ describe("generateSectionLibraryFiles", () => {
       "utf8"
     );
     expect(directoryEditorTemplate).toContain(
-      'const editorPath = "edit/123e4567-e89b-12d3-a456-426614174000/directory-layout"'
+      'const editorPath = "edit/directory-layout/123e4567-e89b-12d3-a456-426614174000"'
     );
     expect(directoryEditorTemplate).toContain(
       '"directory-layout": () => import("../library/.generated/libraryConfig-directory-layout")'
@@ -115,7 +115,7 @@ describe("generateSectionLibraryFiles", () => {
       "utf8"
     );
     expect(locatorEditorTemplate).toContain(
-      'const editorPath = "edit/123e4567-e89b-12d3-a456-426614174000/locator-layout"'
+      'const editorPath = "edit/locator-layout/123e4567-e89b-12d3-a456-426614174000"'
     );
     expect(locatorEditorTemplate).toContain(
       '"locator-layout": () => import("../library/.generated/libraryConfig-locator-layout")'
@@ -173,13 +173,13 @@ describe("generateSectionLibraryFiles", () => {
     expect(result.manifestSource).toContain('"templateId": "directory"');
     expect(result.manifestSource).toContain('"templateId": "locator"');
     expect(result.manifestSource).toContain(
-      '"editorPath": "edit/123e4567-e89b-12d3-a456-426614174000/location"'
+      '"editorPath": "edit/location/123e4567-e89b-12d3-a456-426614174000"'
     );
     expect(result.manifestSource).toContain(
-      '"editorPath": "edit/123e4567-e89b-12d3-a456-426614174000/directory-layout"'
+      '"editorPath": "edit/directory-layout/123e4567-e89b-12d3-a456-426614174000"'
     );
     expect(result.manifestSource).toContain(
-      '"editorPath": "edit/123e4567-e89b-12d3-a456-426614174000/locator-layout"'
+      '"editorPath": "edit/locator-layout/123e4567-e89b-12d3-a456-426614174000"'
     );
     expect(result.manifestSource).toContain(
       '"vertical": [\n        "RETAIL"\n      ]'
