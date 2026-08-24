@@ -20,6 +20,26 @@ const RESERVED_COMPONENT_IDS = new Set([
   ...REQUIRED_BASE_SECTIONS,
   "MainContent",
 ]);
+const BUILT_IN_SECTION_SOURCES = new Map([
+  [
+    "CustomCodeSection",
+    [
+      'import { CustomCodeSection as VisualEditorCustomCodeSection } from "@yext/visual-editor";',
+      'import type { SectionConfig } from "@yext/visual-editor";',
+      "",
+      "export const CustomCodeSection = VisualEditorCustomCodeSection;",
+      "",
+      "export const config: SectionConfig = {",
+      '  id: "CustomCodeSection",',
+      '  displayName: "Custom Code",',
+      '  description: "Add custom HTML, CSS, and JavaScript.",',
+      '  category: "Other",',
+      '  pageSetTypes: ["ENTITY"],',
+      "};",
+      "",
+    ].join("\n"),
+  ],
+]);
 const RESERVED_LAYOUT_IDS = new Set(["main", "directory", "locator", "edit"]);
 
 type JsonRecord = Record<string, any>;
@@ -36,6 +56,7 @@ type LegacyTemplate = {
   metadata: JsonRecord;
   defaultLayout: JsonRecord;
   components: LegacyComponent[];
+  builtInSectionIds: string[];
 };
 
 type BaseLayout = {
@@ -58,6 +79,7 @@ type CopiedComponent = LegacyComponent & { templateId: string };
 
 type Conversion = {
   baseLibrary: BaseLibrary;
+  builtInSectionIds: Set<string>;
   components: Map<string, CopiedComponent>;
   directoryLayoutId: string;
   duplicates: {
@@ -298,6 +320,10 @@ const readLegacyTemplate = (
   }
   const components = entries
     .filter((entry) => entry.isFile() && path.extname(entry.name) === ".tsx")
+    .filter(
+      (entry) =>
+        !BUILT_IN_SECTION_SOURCES.has(path.basename(entry.name, ".tsx"))
+    )
     .map((entry) => {
       const sourcePath = path.join(componentsDirectory, entry.name);
       const id = path.basename(entry.name, ".tsx");
@@ -313,7 +339,12 @@ const readLegacyTemplate = (
       };
     })
     .sort((left, right) => left.id.localeCompare(right.id));
-  if (components.length === 0) {
+  if (
+    components.length === 0 &&
+    !entries.some(
+      (entry) => entry.isFile() && path.extname(entry.name) === ".tsx"
+    )
+  ) {
     throw new Error(
       `Legacy template has no .tsx components: ${componentsDirectory}`
     );
@@ -327,7 +358,18 @@ const readLegacyTemplate = (
     );
   }
   validateDefaultLayout(defaultLayout, defaultLayoutPath, "Legacy");
-  return { templateId, directory, metadata, defaultLayout, components };
+  const builtInSectionIds = entries
+    .filter((entry) => entry.isFile() && path.extname(entry.name) === ".tsx")
+    .map((entry) => path.basename(entry.name, ".tsx"))
+    .filter((id) => BUILT_IN_SECTION_SOURCES.has(id));
+  return {
+    templateId,
+    directory,
+    metadata,
+    defaultLayout,
+    components,
+    builtInSectionIds,
+  };
 };
 
 /** Reads the static label from a legacy component configuration. */
@@ -480,8 +522,7 @@ const readBaseLibrary = (libraryDirectory: string): BaseLibrary => {
     !SAFE_ID.test(libraryMetadata.id) ||
     typeof libraryMetadata.displayName !== "string" ||
     !libraryMetadata.displayName.trim() ||
-    typeof libraryMetadata.description !== "string" ||
-    !libraryMetadata.description.trim()
+    typeof libraryMetadata.description !== "string"
   ) {
     throw new Error(
       `Base library metadata is not valid: ${libraryMetadataPath}`
@@ -551,6 +592,9 @@ const buildConversion = (
 ): Conversion => {
   const firstTemplate = templates[0];
   const components = new Map<string, CopiedComponent>();
+  const builtInSectionIds = new Set(
+    templates.flatMap((template) => template.builtInSectionIds)
+  );
   const duplicates: Conversion["duplicates"] = [];
   for (const template of templates) {
     for (const component of template.components) {
@@ -575,7 +619,7 @@ const buildConversion = (
       });
     }
   }
-  const componentIds = new Set(components.keys());
+  const componentIds = new Set([...components.keys(), ...builtInSectionIds]);
   const directoryLayoutId = `${firstTemplate.templateId}-directory`;
   const locatorLayoutId = `${firstTemplate.templateId}-locator`;
   if (
@@ -591,13 +635,14 @@ const buildConversion = (
   }
   for (const template of templates) {
     validateLayoutReferences(
-      template.defaultLayout,
+      template.defaultLayout.content,
       componentIds,
       path.join(template.directory, "defaultLayout.json")
     );
   }
   return {
     baseLibrary,
+    builtInSectionIds,
     components,
     directoryLayoutId,
     duplicates,
@@ -621,7 +666,7 @@ const buildLibraryMetadata = (template: LegacyTemplate): LibraryMetadata => {
       typeof template.metadata.description === "string" &&
       template.metadata.description.trim()
         ? template.metadata.description
-        : `Sections and layouts converted from ${displayName}.`,
+        : "",
   };
 };
 
@@ -648,11 +693,11 @@ const buildEntityLayoutMetadata = (
       metadataPath,
       "displayName"
     ),
-    previewImageUrl: requireString(
-      template.metadata.previewImageUrl,
-      metadataPath,
-      "previewImageUrl"
-    ),
+    previewImageUrl:
+      typeof template.metadata.previewImageUrl === "string" &&
+      template.metadata.previewImageUrl.trim()
+        ? template.metadata.previewImageUrl
+        : "",
     ...(vertical.length > 0 ? { vertical } : {}),
     ...(purpose.length > 0 ? { purpose } : {}),
     pageSetType: "ENTITY",
@@ -830,6 +875,13 @@ const writeConvertedLibrary = (
       buildSectionSource(component)
     );
   }
+  for (const id of conversion.builtInSectionIds) {
+    const source = BUILT_IN_SECTION_SOURCES.get(id);
+    if (source === undefined) {
+      throw new Error(`Missing built-in Section Library source for ${id}`);
+    }
+    fs.writeFileSync(path.join(sectionsDirectory, `${id}.tsx`), source);
+  }
 };
 
 const renameBaseLayout = (
@@ -910,7 +962,10 @@ const writeReport = ({
     `  Entity layouts: ${conversion.templates.map((template) => template.templateId).join(", ")}`
   );
   write(
-    `  shared sections: ${Array.from(conversion.components.keys()).join(", ")}`
+    `  shared sections: ${[
+      ...conversion.components.keys(),
+      ...conversion.builtInSectionIds,
+    ].join(", ")}`
   );
   for (const duplicate of conversion.duplicates) {
     write(
