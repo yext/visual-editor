@@ -1,4 +1,5 @@
 import { getLocalEditorDocument, getLocalEditorManifest } from "./data.ts";
+import { MAX_LOCAL_EDITOR_DIRECTORY_CHILD_COUNT } from "./fixtureData.ts";
 import { LOCAL_EDITOR_API_BASE_PATH } from "./generatedFiles.ts";
 import type { SectionLibraryLayout } from "../../sectionLibrary.ts";
 import type {
@@ -84,7 +85,19 @@ const sendLocalEditorDocumentResponse = async (
     layouts,
     requestUrl.searchParams.get("layoutId") ?? undefined,
     requestUrl.searchParams.get("entityId") ?? undefined,
-    requestUrl.searchParams.get("locale") ?? undefined
+    requestUrl.searchParams.get("locale") ?? undefined,
+    parseDirectoryChildCount(requestUrl.searchParams.get("directoryChildCount"))
   );
   sendJsonResponse(response, payload);
+};
+
+const parseDirectoryChildCount = (value: string | null): number | undefined => {
+  if (!value || !/^\d+$/.test(value)) {
+    return undefined;
+  }
+  const count = Number(value);
+  return Number.isSafeInteger(count) &&
+    count <= MAX_LOCAL_EDITOR_DIRECTORY_CHILD_COUNT
+    ? count
+    : undefined;
 };

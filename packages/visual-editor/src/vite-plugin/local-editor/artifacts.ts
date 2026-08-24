@@ -24,7 +24,7 @@ type CreateLocalEditorArtifactsManagerOptions = {
  * Creates and removes the generated Local Editor Pages templates.
  *
  * 1. Write the Local Editor shell with one config import for each layout.
- * 2. Write data templates for Entity layouts.
+ * 2. Write data templates for Entity and Directory layouts.
  * 3. Remove only files that this feature generated.
  */
 export const createLocalEditorArtifactsManager = ({
@@ -73,7 +73,10 @@ export const createLocalEditorArtifactsManager = ({
   ): void => {
     const activeTemplatePaths = new Set<string>();
     for (const layout of layouts) {
-      if (layout.metadata.pageSetType !== "ENTITY") {
+      if (
+        layout.metadata.pageSetType !== "ENTITY" &&
+        layout.metadata.pageSetType !== "DIRECTORY"
+      ) {
         continue;
       }
       const templatePath = path.join(

@@ -112,16 +112,21 @@ export const buildLocalEditorDocumentRequestPath = ({
   layoutId,
   entityId,
   locale,
+  directoryChildCount,
 }: {
   apiBasePath: string;
   layoutId: string;
   entityId?: string;
   locale: string;
+  directoryChildCount?: number;
 }): string | null => {
   if (!layoutId || !entityId || !locale) {
     return null;
   }
   const params = new URLSearchParams({ layoutId, entityId, locale });
+  if (directoryChildCount !== undefined) {
+    params.set("directoryChildCount", String(directoryChildCount));
+  }
   return `${apiBasePath}/document?${params.toString()}`;
 };
 

@@ -41,7 +41,8 @@ describe("readResolvedLayoutConfigs", () => {
     );
     expect(
       config.layouts.map((layoutConfig) => layoutConfig.stream?.$id)
-    ).toEqual(["entity", "entity", undefined]);
+    ).toEqual(["entity", "entity", "directory"]);
+    expect(config.layouts[2]?.dataSource).toBe("stream");
   });
 
   it("uses a layout override before its page set defaults", () => {

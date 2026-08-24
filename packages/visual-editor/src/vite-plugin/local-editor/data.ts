@@ -38,6 +38,8 @@ export const getLocalEditorManifest = async (
 
   return {
     layouts: context.layouts,
+    pageSetTypeByLayout: context.pageSetTypeByLayout,
+    dataSourceByLayout: context.dataSourceByLayout,
     entitiesByLayout: context.entitiesByLayout,
     layoutDefaults: context.layoutDefaults,
     defaults: {
@@ -62,11 +64,16 @@ export const getLocalEditorDocument = async (
   libraryLayouts: SectionLibraryLayout[],
   layoutId?: string,
   entityId?: string,
-  locale?: string
+  locale?: string,
+  directoryChildCount?: number
 ): Promise<LocalEditorDocumentResponse> => {
   // The document endpoint follows the same fallback order as the manifest so a
   // partially specified request still resolves to a deterministic snapshot.
-  const context = await getLocalEditorContext(rootDir, libraryLayouts);
+  const context = await getLocalEditorContext(
+    rootDir,
+    libraryLayouts,
+    directoryChildCount
+  );
   const selectedLayoutId =
     layoutId ?? context.defaults.layoutId ?? context.layouts[0];
   const entityOptions = selectedLayoutId
@@ -182,7 +189,8 @@ export const getLocalEditorDocument = async (
  */
 const getLocalEditorContext = async (
   rootDir: string,
-  libraryLayouts: SectionLibraryLayout[]
+  libraryLayouts: SectionLibraryLayout[],
+  directoryChildCount = 4
 ): Promise<LocalEditorContext> => {
   // Build one cached view of local-editor state so manifest and document
   // responses share the same layout/default/snapshot interpretation.
@@ -201,7 +209,8 @@ const getLocalEditorContext = async (
   const documents = readLocalEditorDocuments(
     localDataPath,
     layoutConfigs,
-    diagnostics
+    diagnostics,
+    directoryChildCount
   );
   const entitiesByLayout = buildEntitiesByLayout(layouts, documents);
   const layoutDefaults = Object.fromEntries(
@@ -239,6 +248,16 @@ const getLocalEditorContext = async (
     env: resolvedConfig.env,
     layoutDefaults,
     layoutStreams,
+    pageSetTypeByLayout: Object.fromEntries(
+      layoutConfigs.map((layoutConfig) => {
+        return [layoutConfig.layoutId, layoutConfig.pageSetType];
+      })
+    ),
+    dataSourceByLayout: Object.fromEntries(
+      layoutConfigs.map((layoutConfig) => {
+        return [layoutConfig.layoutId, layoutConfig.dataSource];
+      })
+    ),
     entitiesByLayout,
     documents,
   };
@@ -266,21 +285,23 @@ const readDocumentEnvironment = (
 const readLocalEditorDocuments = (
   localDataPath: string,
   layoutConfigs: ResolvedLocalEditorLayoutConfig[],
-  diagnostics: string[]
+  diagnostics: string[],
+  directoryChildCount: number
 ): LocalEditorDocumentIndexEntry[] => {
-  const fixtureDocuments = createLocalEditorFixtureDocuments(layoutConfigs).map(
-    ({ layoutId, document }) => ({
-      layoutId,
-      entityId: getDocumentEntityId(document, "fixture.json"),
-      displayName:
-        typeof document.name === "string" && document.name.length > 0
-          ? document.name
-          : getDocumentEntityId(document, "fixture.json"),
-      locale: getDocumentLocale(document, "fixture.json"),
-      fileName: "built-in fixture",
-      document,
-    })
-  );
+  const fixtureDocuments = createLocalEditorFixtureDocuments(
+    layoutConfigs,
+    directoryChildCount
+  ).map(({ layoutId, document }) => ({
+    layoutId,
+    entityId: getDocumentEntityId(document, "fixture.json"),
+    displayName:
+      typeof document.name === "string" && document.name.length > 0
+        ? document.name
+        : getDocumentEntityId(document, "fixture.json"),
+    locale: getDocumentLocale(document, "fixture.json"),
+    fileName: "built-in fixture",
+    document,
+  }));
   const streamLayoutConfigs = layoutConfigs.filter((layoutConfig) => {
     return layoutConfig.dataSource === "stream";
   });

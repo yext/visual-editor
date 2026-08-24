@@ -57,13 +57,48 @@ describe("getLocalEditorDocument", () => {
     expect(response.diagnostics).toEqual([]);
     expect(response.document).toMatchObject({
       meta: { entityType: { id: "dm_city" } },
-      dm_directoryChildren: [
-        {
-          name: "Example Location",
-          address: { city: "Arlington" },
-        },
-      ],
     });
+    const directoryChildren = response.document?.dm_directoryChildren;
+    expect(Array.isArray(directoryChildren)).toBe(true);
+    if (!Array.isArray(directoryChildren)) {
+      throw new Error("Expected Directory fixture children.");
+    }
+    expect(directoryChildren[0]).toMatchObject({
+      name: "Example Location 1",
+      address: { city: "Arlington" },
+    });
+    expect(directoryChildren).toHaveLength(4);
+  });
+
+  it("limits Directory fixtures to 100 children", async () => {
+    const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "local-editor-"));
+    rootDirs.push(rootDir);
+    fs.writeJsonSync(path.join(rootDir, "package.json"), { type: "module" });
+    fs.writeFileSync(
+      path.join(rootDir, "stream.config.ts"),
+      "export default {};\n"
+    );
+    const layouts: SectionLibraryLayout[] = [
+      {
+        metadata: {
+          id: "directory-layout",
+          displayName: "Directory",
+          pageSetType: "DIRECTORY",
+        },
+        defaultLayout: {},
+      },
+    ];
+
+    const response = await getLocalEditorDocument(
+      rootDir,
+      layouts,
+      "directory-layout",
+      "fixture-directory-city",
+      "en",
+      101
+    );
+
+    expect(response.document?.dm_directoryChildren).toHaveLength(100);
   });
 
   it("returns a Locator fixture without a stream or snapshot", async () => {

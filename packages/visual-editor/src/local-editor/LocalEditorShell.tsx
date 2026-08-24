@@ -21,11 +21,14 @@ import { installLocalEditorLocatorMocks } from "./locatorMocks.ts";
 import { useLocalEditorDocument } from "./useLocalEditorDocument.ts";
 import { useLocalEditorManifest } from "./useLocalEditorManifest.ts";
 import { StreamDocument } from "../utils/types/StreamDocument.ts";
+import { MAX_LOCAL_EDITOR_DIRECTORY_CHILD_COUNT } from "../vite-plugin/local-editor/fixtureData.ts";
 
 const LOCAL_EDITOR_MAPBOX_KEY_STORAGE_KEY =
   "visual-editor.local-editor.mapbox-key";
 const LOCAL_EDITOR_NEARBY_LOCATIONS_KEY_STORAGE_KEY =
   "visual-editor.local-editor.nearby-locations-key";
+const LOCAL_EDITOR_DIRECTORY_CHILD_COUNT_STORAGE_KEY =
+  "visual-editor.local-editor.directory-child-count";
 const LOCAL_EDITOR_PREVIEW_OPEN_STORAGE_KEY =
   "visual-editor.local-editor.preview-open";
 
@@ -89,6 +92,7 @@ export const LocalEditorShell = ({
   const [nearbyLocationsKey, setNearbyLocationsKey] = React.useState<
     string | undefined
   >();
+  const [directoryChildCount, setDirectoryChildCount] = React.useState(4);
   const { isManifestLoading, manifest, manifestError } =
     useLocalEditorManifest(apiBasePath);
 
@@ -112,6 +116,11 @@ export const LocalEditorShell = ({
     setMapboxKey(readLocalStorageValue(LOCAL_EDITOR_MAPBOX_KEY_STORAGE_KEY));
     setNearbyLocationsKey(
       readLocalStorageValue(LOCAL_EDITOR_NEARBY_LOCATIONS_KEY_STORAGE_KEY)
+    );
+    setDirectoryChildCount(
+      readDirectoryChildCount(
+        readLocalStorageValue(LOCAL_EDITOR_DIRECTORY_CHILD_COUNT_STORAGE_KEY)
+      )
     );
   }, []);
 
@@ -147,13 +156,27 @@ export const LocalEditorShell = ({
   ]);
 
   const documentRequestPath = React.useMemo(() => {
+    const usesDirectoryFixtures =
+      manifest?.pageSetTypeByLayout[selectedLayoutId] === "DIRECTORY" &&
+      manifest.dataSourceByLayout[selectedLayoutId] === "fixture";
     return buildLocalEditorDocumentRequestPath({
       apiBasePath,
       layoutId: selectedLayoutId,
       entityId: selectedEntity?.entityId,
       locale: selectedLocale,
+      directoryChildCount: usesDirectoryFixtures
+        ? directoryChildCount
+        : undefined,
     });
-  }, [apiBasePath, selectedEntity?.entityId, selectedLocale, selectedLayoutId]);
+  }, [
+    apiBasePath,
+    directoryChildCount,
+    manifest?.dataSourceByLayout,
+    manifest?.pageSetTypeByLayout,
+    selectedEntity?.entityId,
+    selectedLocale,
+    selectedLayoutId,
+  ]);
   const { documentError, documentResponse, isDocumentLoading } =
     useLocalEditorDocument(documentRequestPath);
 
@@ -315,6 +338,31 @@ export const LocalEditorShell = ({
     },
     [mapboxKey, nearbyLocationsKey]
   );
+  const handleDirectoryChildCountUpdate = React.useCallback(() => {
+    const nextValue = window.prompt(
+      "Enter number of dummy directory children",
+      String(directoryChildCount)
+    );
+    if (nextValue === null) {
+      return;
+    }
+    const nextCount = Number(nextValue.trim());
+    if (
+      !Number.isSafeInteger(nextCount) ||
+      nextCount < 0 ||
+      nextCount > MAX_LOCAL_EDITOR_DIRECTORY_CHILD_COUNT
+    ) {
+      window.alert(
+        `Enter a whole number between 0 and ${MAX_LOCAL_EDITOR_DIRECTORY_CHILD_COUNT}.`
+      );
+      return;
+    }
+    window.localStorage.setItem(
+      LOCAL_EDITOR_DIRECTORY_CHILD_COUNT_STORAGE_KEY,
+      String(nextCount)
+    );
+    setDirectoryChildCount(nextCount);
+  }, [directoryChildCount]);
   const canOpenPreview =
     !isDocumentLoading &&
     !!activeConfig &&
@@ -411,6 +459,12 @@ export const LocalEditorShell = ({
             justifyContent: "flex-end",
           }}
         >
+          {manifest?.pageSetTypeByLayout[selectedLayoutId] === "DIRECTORY" &&
+            manifest.dataSourceByLayout[selectedLayoutId] === "fixture" && (
+              <EditorShellButton onClick={handleDirectoryChildCountUpdate}>
+                Set Directory Child Count
+              </EditorShellButton>
+            )}
           <EditorShellButton
             onClick={() => {
               handleApiKeyUpdate(
@@ -592,6 +646,18 @@ const readLocalStorageValue = (storageKey: string): string | undefined => {
 
   const storedValue = window.localStorage.getItem(storageKey);
   return storedValue?.trim() ? storedValue : undefined;
+};
+
+const readDirectoryChildCount = (value: string | undefined): number => {
+  if (!value) {
+    return 4;
+  }
+  const count = Number(value);
+  return Number.isSafeInteger(count) &&
+    count >= 0 &&
+    count <= MAX_LOCAL_EDITOR_DIRECTORY_CHILD_COUNT
+    ? count
+    : 4;
 };
 
 const readPreviewOpenState = (): boolean => {

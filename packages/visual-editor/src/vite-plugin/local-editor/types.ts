@@ -83,6 +83,8 @@ export type LocalEditorEntityOption = {
 
 export type LocalEditorManifestResponse = {
   layouts: string[];
+  pageSetTypeByLayout: Record<string, PageSetType>;
+  dataSourceByLayout: Record<string, "stream" | "fixture">;
   entitiesByLayout: Record<string, LocalEditorEntityOption[]>;
   layoutDefaults: Record<string, LocalEditorLayoutDefaults>;
   defaults: LocalEditorDefaults;
@@ -109,6 +111,8 @@ export type LocalEditorContext = {
   env: Record<string, string>;
   layoutDefaults: Record<string, LocalEditorLayoutDefaults>;
   layoutStreams: Record<string, LocalEditorStreamDefinition | undefined>;
+  pageSetTypeByLayout: Record<string, PageSetType>;
+  dataSourceByLayout: Record<string, "stream" | "fixture">;
   entitiesByLayout: Record<string, LocalEditorEntityOption[]>;
   documents: LocalEditorDocumentIndexEntry[];
 };

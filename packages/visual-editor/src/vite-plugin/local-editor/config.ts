@@ -101,7 +101,9 @@ export const resolveLocalEditorConfigs = (
     const layoutConfig = streamConfig.layouts?.[layoutId];
     const stream = layoutConfig?.stream ?? pageSetTypeConfig?.stream;
     const dataSource: "stream" | "fixture" =
-      pageSetType === "ENTITY" ? "stream" : "fixture";
+      pageSetType === "ENTITY" || (pageSetType === "DIRECTORY" && stream)
+        ? "stream"
+        : "fixture";
     if (dataSource === "stream" && !stream) {
       return [];
     }

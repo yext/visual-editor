@@ -5,6 +5,16 @@ import { buildLocalEditorSelection } from "./selection.ts";
 it("selects the first fixture entity when the selected layout changes", () => {
   const manifest = {
     layouts: ["entity", "directory", "locator"],
+    pageSetTypeByLayout: {
+      entity: "ENTITY" as const,
+      directory: "DIRECTORY" as const,
+      locator: "LOCATOR" as const,
+    },
+    dataSourceByLayout: {
+      entity: "stream" as const,
+      directory: "fixture" as const,
+      locator: "fixture" as const,
+    },
     entitiesByLayout: {
       entity: [
         { entityId: "location", displayName: "Location", locales: ["en"] },

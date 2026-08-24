@@ -14,7 +14,7 @@ afterEach(() => {
 });
 
 describe("createLocalEditorArtifactsManager", () => {
-  it("creates a real-layout config registry and data templates for Entity layouts", () => {
+  it("creates a real-layout config registry and data templates for Entity and Directory layouts", () => {
     const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "local-editor-"));
     rootDirs.push(rootDir);
     const artifacts = createLocalEditorArtifactsManager({
@@ -84,7 +84,7 @@ describe("createLocalEditorArtifactsManager", () => {
           "local-editor-data-directory-layout.tsx"
         )
       )
-    ).toBe(false);
+    ).toBe(true);
   });
 
   it("does not overwrite a hand-authored local editor template", () => {
@@ -104,7 +104,7 @@ describe("createLocalEditorArtifactsManager", () => {
     );
   });
 
-  it("removes stale Directory and Locator data templates", () => {
+  it("removes stale Locator data templates", () => {
     const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "local-editor-"));
     rootDirs.push(rootDir);
     const artifacts = createLocalEditorArtifactsManager({
@@ -117,7 +117,7 @@ describe("createLocalEditorArtifactsManager", () => {
       rootDir,
       "src",
       "templates",
-      "local-editor-data-directory.tsx"
+      "local-editor-data-locator.tsx"
     );
     fs.outputFileSync(
       staleTemplatePath,
@@ -128,9 +128,9 @@ describe("createLocalEditorArtifactsManager", () => {
       [
         {
           metadata: {
-            id: "directory",
-            displayName: "Directory",
-            pageSetType: "DIRECTORY",
+            id: "locator",
+            displayName: "Locator",
+            pageSetType: "LOCATOR",
           },
           defaultLayout: {},
         },

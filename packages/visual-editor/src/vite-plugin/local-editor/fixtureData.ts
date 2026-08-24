@@ -4,6 +4,7 @@ type FixtureDocument = Record<string, unknown>;
 
 const locale = "en";
 const directoryManagerId = "local-editor-locations";
+export const MAX_LOCAL_EDITOR_DIRECTORY_CHILD_COUNT = 100;
 
 const directoryParent = (name: string, slug: string): FixtureDocument => ({
   name,
@@ -67,14 +68,19 @@ const directoryDocument = (
  * get documents from `yext pages generate-test-data`.
  */
 export const createLocalEditorFixtureDocuments = (
-  layouts: ResolvedLocalEditorLayoutConfig[]
+  layouts: ResolvedLocalEditorLayoutConfig[],
+  directoryChildCount = 4
 ): Array<{ layoutId: string; document: FixtureDocument }> => {
+  const boundedDirectoryChildCount = Math.min(
+    directoryChildCount,
+    MAX_LOCAL_EDITOR_DIRECTORY_CHILD_COUNT
+  );
   return layouts.flatMap((layout) => {
     if (layout.dataSource !== "fixture") {
       return [];
     }
     return layout.pageSetType === "DIRECTORY"
-      ? createDirectoryFixtures(layout.layoutId)
+      ? createDirectoryFixtures(layout.layoutId, boundedDirectoryChildCount)
       : [
           {
             layoutId: layout.layoutId,
@@ -85,18 +91,19 @@ export const createLocalEditorFixtureDocuments = (
 };
 
 const createDirectoryFixtures = (
-  layoutId: string
+  layoutId: string,
+  directoryChildCount: number
 ): Array<{ layoutId: string; document: FixtureDocument }> => {
   const country = directoryChild(
     "fixture-directory-country",
-    "United States",
+    "US",
     "us",
     "dm_country",
     { dm_addressCountryDisplayName: "United States" }
   );
   const region = directoryChild(
     "fixture-directory-region",
-    "Virginia",
+    "VA",
     "us/va",
     "dm_region",
     {
@@ -134,19 +141,36 @@ const createDirectoryFixtures = (
       timezone: "America/New_York",
     }
   );
+  const children = (
+    child: FixtureDocument,
+    displayNameField:
+      | "dm_addressCountryDisplayName"
+      | "dm_addressRegionDisplayName"
+      | "name"
+  ) => {
+    return Array.from({ length: directoryChildCount }, (_, index) => {
+      const suffix = String(index + 1);
+      return {
+        ...child,
+        id: `${String(child.id)}-${suffix}`,
+        slug: `${String(child.slug)}-${suffix}`,
+        [displayNameField]: `${String(child[displayNameField])} ${suffix}`,
+      };
+    });
+  };
   const root = directoryDocument(
     "fixture-directory-root",
     "Locations Directory",
     "index.html",
     "dm_root",
-    [country]
+    children(country, "dm_addressCountryDisplayName")
   );
   const countryDocument = directoryDocument(
     String(country.id),
     "US",
     "us",
     "dm_country",
-    [region],
+    children(region, "dm_addressRegionDisplayName"),
     [directoryParent("Locations Directory", "index.html")],
     { dm_addressCountryDisplayName: "United States" }
   );
@@ -155,7 +179,7 @@ const createDirectoryFixtures = (
     "VA",
     "us/va",
     "dm_region",
-    [city],
+    children(city, "name"),
     [
       directoryParent("Locations Directory", "index.html"),
       directoryParent("US", "us"),
@@ -170,7 +194,7 @@ const createDirectoryFixtures = (
     "Arlington",
     "us/va/arlington",
     "dm_city",
-    [location],
+    children(location, "name"),
     [
       directoryParent("Locations Directory", "index.html"),
       directoryParent("US", "us"),
