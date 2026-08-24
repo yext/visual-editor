@@ -40,6 +40,7 @@ const toFetchRequest = (
       }
     }
   }
+  headers.delete("content-length");
 
   return new Request(url, {
     method: request.method,

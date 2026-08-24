@@ -64,7 +64,11 @@ import {
   ProfessionalHeroSection,
   ProfessionalHeroSectionProps,
 } from "../pageSections/ProfessionalHeroSection.tsx";
-import { MiniHero, MiniHeroAuthoredProps } from "../pageSections/MiniHero.tsx";
+import {
+  TestBanner,
+  TestBannerAuthoredProps,
+} from "../pageSections/TestBanner.tsx";
+import { TestHero, TestHeroAuthoredProps } from "../pageSections/TestHero.tsx";
 
 export interface PageSectionCategoryProps {
   AboutSection: AboutSectionProps;
@@ -75,7 +79,6 @@ export interface PageSectionCategoryProps {
   FAQSection: FAQSectionProps;
   HeroSection: HeroSectionProps;
   InsightSection: InsightSectionProps;
-  MiniHero: MiniHeroAuthoredProps;
   NearbyLocationsSection: NearbyLocationsSectionProps;
   PhotoGallerySection: PhotoGallerySectionProps;
   ProductSection: ProductSectionProps;
@@ -84,6 +87,8 @@ export interface PageSectionCategoryProps {
   ReviewsSection: ReviewsSectionProps;
   StaticMapSection: StaticMapSectionProps;
   TeamSection: TeamSectionProps;
+  TestBanner: TestBannerAuthoredProps;
+  TestHero: TestHeroAuthoredProps;
   TestimonialSection: TestimonialSectionProps;
   VideoSection: VideoSectionProps;
 }
@@ -97,7 +102,6 @@ export const PageSectionCategoryComponents = {
   FAQSection,
   HeroSection,
   InsightSection,
-  MiniHero,
   NearbyLocationsSection,
   PhotoGallerySection,
   ProductSection,
@@ -106,6 +110,8 @@ export const PageSectionCategoryComponents = {
   ReviewsSection,
   StaticMapSection,
   TeamSection,
+  TestBanner,
+  TestHero,
   TestimonialSection,
   VideoSection,
 };

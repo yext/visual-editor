@@ -1,4 +1,5 @@
 import path from "node:path";
+import type { IncomingMessage } from "node:http";
 import fs from "fs-extra";
 import { Plugin } from "vite";
 import baseTemplate from "./templates/base.tsx?raw";
@@ -22,6 +23,7 @@ import {
   handleLocalEditorRequest,
   sendJsonResponse,
 } from "./local-editor/server.ts";
+import type { JsonResponseWriter } from "./local-editor/server.ts";
 import type { LocalEditorOptions } from "./local-editor/types.ts";
 import { writeFileIfChanged } from "./generated/writeFileIfChanged.ts";
 
@@ -166,6 +168,7 @@ export const yextVisualEditorPlugin = (
   });
   return {
     name: "vite-plugin-yext-visual-editor",
+    enforce: "pre",
     config(_, { command }) {
       isBuildMode = command === "build";
       isServeMode = command === "serve";
@@ -206,27 +209,34 @@ export const yextVisualEditorPlugin = (
         localEditorArtifacts.cleanupServeArtifacts(cleanupFiles);
       });
 
-      server.middlewares.use((request, response, next) => {
-        if (!request.url) {
-          next();
-          return;
-        }
+      server.middlewares.stack.unshift({
+        route: "",
+        handle: (
+          request: IncomingMessage,
+          response: JsonResponseWriter,
+          next: (error?: unknown) => void
+        ) => {
+          if (!request.url) {
+            next();
+            return;
+          }
 
-        void handleLocalEditorRequest(request, response)
-          .then((handled) => {
-            if (!handled) {
-              next();
-            }
-          })
-          .catch((error) => {
-            sendJsonResponse(
-              response,
-              {
-                error: error instanceof Error ? error.message : String(error),
-              },
-              500
-            );
-          });
+          void handleLocalEditorRequest(request, response)
+            .then((handled) => {
+              if (!handled) {
+                next();
+              }
+            })
+            .catch((error) => {
+              sendJsonResponse(
+                response,
+                {
+                  error: error instanceof Error ? error.message : String(error),
+                },
+                500
+              );
+            });
+        },
       });
     },
     buildEnd() {

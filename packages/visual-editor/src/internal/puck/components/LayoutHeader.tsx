@@ -5,7 +5,7 @@ import {
   useGetPuck,
   type History,
 } from "@puckeditor/core";
-import { RotateCcw, RotateCw } from "lucide-react";
+import { Info, RotateCcw, RotateCw } from "lucide-react";
 import { useEffect } from "react";
 import { Separator } from "@radix-ui/react-separator";
 import { Button } from "../ui/button.tsx";
@@ -42,6 +42,11 @@ import {
 import { getPublishErrorMessage } from "../../../utils/publishErrors.ts";
 import { getPublishTooltipMessageFromHeadDeployStatus } from "../../utils/getPublishTooltipMessageFromHeadDeployStatus.ts";
 import { EntityFieldsToggle } from "../ui/EntityFieldsToggle.tsx";
+import { validateDynamicConfig } from "../../ai/validateDynamicConfig.ts";
+import {
+  normalizeDynamicConfig,
+  normalizeDynamicData,
+} from "../../ai/normalizeDynamicConfig.ts";
 
 const usePuck = createUsePuck();
 const devLogger = new DevLogger();
@@ -50,6 +55,7 @@ type LayoutHeaderProps = {
   templateMetadata: TemplateMetadata;
   onClearLocalChanges: () => void;
   onHistoryChange: (histories: History[], index: number) => void;
+  puckApiRef: React.MutableRefObject<ReturnType<typeof useGetPuck> | undefined>;
   onPublishLayout: (data: Data) => Promise<void>;
   onSendLayoutForApproval: (data: Data, comment: string) => void;
   localDev: boolean;
@@ -64,6 +70,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
     templateMetadata,
     onClearLocalChanges,
     onHistoryChange,
+    puckApiRef,
     onPublishLayout,
     onSendLayoutForApproval,
     localDev,
@@ -73,13 +80,17 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
     errorDetails,
   } = props;
   const streamDocument = useDocument();
+  const getPuck = useGetPuck();
+
+  React.useEffect(() => {
+    puckApiRef.current = getPuck;
+  }, [getPuck, puckApiRef]);
 
   const [approvalModalOpen, setApprovalModalOpen] =
     React.useState<boolean>(false);
   const [clearLocalChangesModalOpen, setClearLocalChangesModalOpen] =
     React.useState<boolean>(false);
   const { i18n } = usePlatformTranslation();
-  const getPuck = useGetPuck();
   const histories = usePuck((s) => s.history.histories);
   const index = usePuck((s) => s.history.index);
   const hasFuture = usePuck((s) => s.history.hasFuture);
@@ -201,6 +212,24 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
     }
   };
 
+  const normalizeCurrentDynamicConfig = () => {
+    const puckApi = getPuck();
+    const normalized = normalizeDynamicData(
+      puckApi.appState.data,
+      puckApi.config
+    );
+
+    if (!normalized.changed) {
+      return;
+    }
+
+    puckApi.dispatch({
+      type: "setData",
+      recordHistory: true,
+      data: normalized.data,
+    });
+  };
+
   const pasteDynamicConfig = async () => {
     try {
       const rawClipboardText = await navigator.clipboard.readText();
@@ -221,9 +250,17 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
         return;
       }
 
+      const normalized = normalizeDynamicConfig(pastedDynamicConfig);
+      const validationErrors = validateDynamicConfig(normalized.dynamicConfig);
+      if (validationErrors.length > 0) {
+        alert(validationErrors.join("\n"));
+        return;
+      }
+
       upsertDynamicConfig((existingDynamicComponents) => ({
         ...existingDynamicComponents,
-        ...pastedDynamicConfig.components,
+        ...(normalized.dynamicConfig as { components: Record<string, any> })
+          .components,
       }));
     } catch (err) {
       if (err instanceof DOMException && err.name === "NotAllowedError") {
@@ -333,26 +370,59 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
           >
             {pt("pasteLayout", "Paste Layout")}
           </Button>
-          {showDynamicConfigButtons && (
-            <>
-              <Button
-                variant="outline"
-                onClick={copyDynamicConfig}
-                className="mr-2"
-              >
-                {pt("copyDynamicConfig", "Copy Dynamic Config")}
-              </Button>
-              <Button variant="outline" onClick={pasteDynamicConfig}>
-                {pt("pasteDynamicConfig", "Paste Dynamic Config")}
-              </Button>
-            </>
-          )}
           <Separator
             orientation="vertical"
             decorative
             className="ve-mx-4 ve-h-7 ve-w-px ve-bg-gray-300 ve-my-auto"
           />
           <EntityFieldsToggle />
+          {showDynamicConfigButtons && (
+            <>
+              <TooltipProvider delayDuration={0}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      aria-label={pt(
+                        "dynamicConfigLocalOnly",
+                        "Dynamic config buttons are only shown in local editor"
+                      )}
+                      className="ve-ml-3 ve-flex ve-h-5 ve-w-5 ve-items-center ve-justify-center ve-rounded-full ve-text-gray-500 hover:ve-text-gray-700"
+                    >
+                      <Info className="ve-h-4 ve-w-4" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {pt(
+                      "dynamicConfigLocalOnly",
+                      "Dynamic config buttons are only shown in local editor"
+                    )}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              <Button
+                variant="outline"
+                onClick={copyDynamicConfig}
+                className="ve-ml-2 ve-border-red-500 ve-text-red-600 hover:ve-bg-red-50 hover:ve-text-red-700"
+              >
+                {pt("copyDynamicConfig", "Copy Dynamic Config")}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={pasteDynamicConfig}
+                className="ve-ml-2 ve-border-red-500 ve-text-red-600 hover:ve-bg-red-50 hover:ve-text-red-700"
+              >
+                {pt("pasteDynamicConfig", "Paste Dynamic Config")}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={normalizeCurrentDynamicConfig}
+                className="ve-ml-2 ve-border-red-500 ve-text-red-600 hover:ve-bg-red-50 hover:ve-text-red-700"
+              >
+                {pt("normalizeDynamicConfig", "Normalize Dynamic Config")}
+              </Button>
+            </>
+          )}
           {localDev && showLocalDevOverrideButtons && (
             <LocalDevOverrideButtons />
           )}

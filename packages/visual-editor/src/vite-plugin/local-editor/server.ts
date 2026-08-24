@@ -159,13 +159,15 @@ const createFetchRequest = async (
     body:
       request.method === "GET" || request.method === "HEAD"
         ? undefined
-        : (((await readRequestBody(request)) ?? null) as BodyInit | null),
+        : "body" in request && request.body
+          ? JSON.stringify(request.body)
+          : await readRequestBody(request),
   });
 };
 
 const readRequestBody = async (
   request: IncomingMessage
-): Promise<Buffer | undefined> => {
+): Promise<string | undefined> => {
   if (request.method === "GET" || request.method === "HEAD") {
     return undefined;
   }
@@ -175,5 +177,5 @@ const readRequestBody = async (
     chunks.push(typeof chunk === "string" ? Buffer.from(chunk) : chunk);
   }
 
-  return chunks.length > 0 ? Buffer.concat(chunks) : undefined;
+  return chunks.length > 0 ? Buffer.concat(chunks).toString("utf8") : undefined;
 };

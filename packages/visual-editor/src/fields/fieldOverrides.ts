@@ -8,6 +8,8 @@ import { ComprehensiveCTAFieldOverride } from "./styledFields/ComprehensiveCTAFi
 import { MultiSelectorFieldOverride } from "./MultiSelectorField.tsx";
 import { OptionalNumberFieldOverride } from "./OptionalNumberField.tsx";
 import { ImageFieldOverride } from "./ImageField.tsx";
+import { TestEntityFieldOverride } from "./TestEntityField.tsx";
+import { TestCTAFieldOverride } from "./TestCTAField.tsx";
 import { TestImageFieldOverride } from "./TestImageField.tsx";
 import { StyledButtonFieldOverride } from "./styledFields/StyledButtonField.tsx";
 import { StyledImageFieldOverride } from "./styledFields/StyledImageField.tsx";
@@ -33,10 +35,10 @@ export const YextPuckFieldOverrides = {
   styledLink: StyledLinkFieldOverride,
   styledPageSection: StyledPageSectionFieldOverride,
   styledText: StyledTextFieldOverride,
-  testCTA: CTASelectorFieldOverride,
-  testEntityField: EntityFieldSelectorFieldOverride,
+  testCTA: TestCTAFieldOverride,
+  testEntityField: TestEntityFieldOverride,
   testImage: TestImageFieldOverride,
-  testRichText: EntityFieldSelectorFieldOverride,
+  testRichText: TestEntityFieldOverride,
   translatableString: TranslatableStringFieldOverride,
   video: VideoFieldOverride,
 };

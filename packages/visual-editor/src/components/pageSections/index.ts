@@ -40,7 +40,6 @@ export {
 } from "./InsightSection/InsightSection.tsx";
 export { InsightCardsWrapper } from "./InsightSection/InsightCardsWrapper.tsx";
 export { InsightCard } from "./InsightSection/InsightCard.tsx";
-export { MiniHero, type MiniHeroAuthoredProps } from "./MiniHero.tsx";
 export {
   NearbyLocationsSection,
   type NearbyLocationsSectionProps,
@@ -86,6 +85,8 @@ export {
   TestimonialSection,
   type TestimonialSectionProps,
 } from "./TestimonialSection/TestimonialSection.tsx";
+export { TestBanner, type TestBannerAuthoredProps } from "./TestBanner.tsx";
+export { TestHero, type TestHeroAuthoredProps } from "./TestHero.tsx";
 export { VideoSection, type VideoSectionProps } from "./VideoSection.tsx";
 export {
   ProfessionalHeroSection,

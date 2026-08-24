@@ -11,6 +11,7 @@ import { ImageFieldOverride } from "./ImageField.tsx";
 import { YextAutoField } from "./YextAutoField.tsx";
 import { ImageStylingFields } from "../components/contentBlocks/image/styling.ts";
 import { type TranslatableAssetImage } from "../types/images.ts";
+import { type RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
 
 type TestImageValue = YextEntityField<
   ImageType | ComplexImageType | TranslatableAssetImage
@@ -48,11 +49,23 @@ export const TestImageFieldOverride = ({
 }: TestImageFieldOverrideProps) => {
   const currentValue = value as TestImageValue | undefined;
   const constantValueEnabled = currentValue?.constantValueEnabled ?? true;
+  const filter: RenderEntityFieldFilter<Record<string, any>> =
+    field.filter &&
+    typeof field.filter === "object" &&
+    !Array.isArray(field.filter) &&
+    Array.isArray(field.filter.types)
+      ? field.filter
+      : { types: ["type.image"] };
+  if (!field.filter) {
+    console.error(
+      "[VisualEditor] Invalid testImage field config. An image filter is required."
+    );
+  }
 
   return (
     <>
       <ConstantValueModeToggler
-        fieldTypeFilter={field.filter.types ?? []}
+        fieldTypeFilter={filter.types ?? []}
         constantValueEnabled={constantValueEnabled}
         toggleConstantValueEnabled={(nextConstantValueEnabled) =>
           onChange({
@@ -61,16 +74,15 @@ export const TestImageFieldOverride = ({
             field: nextConstantValueEnabled ? "" : (currentValue?.field ?? ""),
           })
         }
-        disableConstantValue={field.disableConstantValueToggle}
-        label={field.label ?? ""}
-        infoTooltipRequirements={field.hideRequirementsTooltip ? [] : undefined}
+        label={typeof field.label === "string" ? field.label : ""}
+        infoTooltipRequirements={undefined}
       />
       {constantValueEnabled ? (
         <FieldLabel label="" el="div">
           <ImageFieldOverride
             field={{
               type: "image",
-              label: field.label,
+              label: typeof field.label === "string" ? field.label : "",
             }}
             onChange={(constantValue) =>
               onChange({
@@ -87,8 +99,8 @@ export const TestImageFieldOverride = ({
         </FieldLabel>
       ) : (
         <EntityFieldInput
-          filter={field.filter}
-          label={field.label}
+          filter={filter}
+          label={typeof field.label === "string" ? field.label : ""}
           onChange={(nextValue, uiState) =>
             onChange(
               {
@@ -99,7 +111,6 @@ export const TestImageFieldOverride = ({
               uiState
             )
           }
-          sourceFieldPath={field.sourceFieldPath}
           value={currentValue}
         />
       )}

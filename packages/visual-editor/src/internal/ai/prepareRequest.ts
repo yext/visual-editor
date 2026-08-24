@@ -1,4 +1,8 @@
-import { enabledAiComponentSet } from "./enabledComponents.ts";
+import type { Config } from "@puckeditor/core";
+import {
+  aiReferenceComponents,
+  enabledAiComponentSet,
+} from "./enabledComponents.ts";
 import {
   testCTAFieldAiDescription,
   testCTAFieldAiSchema,
@@ -8,8 +12,15 @@ import {
   testImageFieldAiSchema,
   testRichTextFieldAiDescription,
   testRichTextFieldAiSchema,
+  yextAiFieldTypes,
 } from "./fieldTypes.ts";
-import { puckAiSystemContext } from "./systemPrompt.ts";
+import {
+  puckAiDesignModeInstructions,
+  puckAiSystemContext,
+} from "./systemPrompt.ts";
+
+const LOCAL_EDITOR_PUCK_AI_KEY_STORAGE_KEY =
+  "visual-editor.local-editor.puck-api-key";
 
 const entityFieldSchema = {
   type: "object",
@@ -204,8 +215,16 @@ export const preparePuckAiConfig = (
   }
 
   const components: Record<string, any> = {};
+  const componentsForAi = { ...config.components };
 
-  for (const entry of Object.entries(config.components)) {
+  for (const componentName of Object.keys(aiReferenceComponents) as Array<
+    keyof typeof aiReferenceComponents
+  >) {
+    componentsForAi[componentName] =
+      config.components[componentName] ?? aiReferenceComponents[componentName];
+  }
+
+  for (const entry of Object.entries(componentsForAi)) {
     const componentName = entry[0];
     const componentConfig = entry[1];
 
@@ -242,20 +261,44 @@ export const preparePuckAiConfig = (
 /** Transform the chat request before sending it to the backend. */
 export const preparePuckAiRequest = async <
   T extends {
+    headers?: HeadersInit;
     body?: {
-      config?: Record<string, any>;
+      config?: Config;
       systemPrompt?: string;
+      [key: string]: any;
     };
   },
 >(
   opts: T
 ): Promise<T> => {
+  const headers = Object.fromEntries(new Headers(opts.headers).entries());
+  const puckAiKey =
+    typeof window === "undefined"
+      ? undefined
+      : window.localStorage.getItem(LOCAL_EDITOR_PUCK_AI_KEY_STORAGE_KEY);
+
+  if (puckAiKey) {
+    headers["x-puck-api-key"] = puckAiKey;
+  }
+
   return {
     ...opts,
+    headers,
     body: {
       ...opts.body,
-      systemPrompt: puckAiSystemContext,
-      config: preparePuckAiConfig(opts.body?.config),
+      config: preparePuckAiConfig(opts.body?.config) as Config | undefined,
+      context: puckAiSystemContext,
+      fieldTypes: yextAiFieldTypes,
+      designMode: {
+        allowed: true,
+        instructions: puckAiDesignModeInstructions,
+      },
+      byok: {
+        model:
+          opts.body?.mode === "design"
+            ? "openai/gpt-5.6-luna"
+            : "openai/gpt-5.4-mini",
+      },
     },
-  };
+  } as T;
 };

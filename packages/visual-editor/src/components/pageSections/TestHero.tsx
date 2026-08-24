@@ -9,7 +9,7 @@ import { type TranslatableAssetImage } from "../../types/images.ts";
 import { type TranslatableRichText } from "../../types/types.ts";
 import { type ImageStylingProps } from "../contentBlocks/image/styling.ts";
 
-type MiniHeroResolvedProps = {
+type TestHeroResolvedProps = {
   title: string;
   description?: React.ReactNode;
   image?: React.ReactNode;
@@ -17,7 +17,7 @@ type MiniHeroResolvedProps = {
   secondarycta?: React.ReactNode;
 };
 
-export type MiniHeroAuthoredProps = {
+export type TestHeroAuthoredProps = {
   title: YextEntityField<string>;
   description?: YextEntityField<TranslatableRichText>;
   image?: YextEntityField<
@@ -28,7 +28,7 @@ export type MiniHeroAuthoredProps = {
   secondarycta?: YextCTAField;
 };
 
-const miniHeroFields: YextFields<MiniHeroAuthoredProps> = {
+const testHeroFields: YextFields<TestHeroAuthoredProps> = {
   title: {
     type: "testEntityField",
     label: msg("fields.title", "Title"),
@@ -55,7 +55,7 @@ const miniHeroFields: YextFields<MiniHeroAuthoredProps> = {
   },
 };
 
-const MiniHeroComponent: PuckComponent<MiniHeroResolvedProps> = ({
+const TestHeroComponent: PuckComponent<TestHeroResolvedProps> = ({
   title,
   description,
   image,
@@ -108,13 +108,9 @@ const MiniHeroComponent: PuckComponent<MiniHeroResolvedProps> = ({
   );
 };
 
-export const MiniHero: YextComponentConfig<MiniHeroAuthoredProps> = {
-  label: msg("components.miniHero", "Mini Hero"),
-  ai: {
-    instructions:
-      "Reference the Generated Mini Hero pattern: component-owned transform-backed fields, complete defaultProps values, and empty HTML field targets.",
-  },
-  fields: miniHeroFields,
+export const TestHero: YextComponentConfig<TestHeroAuthoredProps> = {
+  label: msg("components.testHero", "Test Hero"),
+  fields: testHeroFields,
   defaultProps: {
     title: {
       field: "name",
@@ -171,6 +167,6 @@ export const MiniHero: YextComponentConfig<MiniHeroAuthoredProps> = {
         linkType: "URL",
       },
     },
-  } as unknown as MiniHeroAuthoredProps,
-  render: MiniHeroComponent as unknown as PuckComponent<MiniHeroAuthoredProps>,
+  } as unknown as TestHeroAuthoredProps,
+  render: TestHeroComponent as unknown as PuckComponent<TestHeroAuthoredProps>,
 };

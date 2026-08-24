@@ -25,6 +25,8 @@ const LOCAL_EDITOR_MAPBOX_KEY_STORAGE_KEY =
   "visual-editor.local-editor.mapbox-key";
 const LOCAL_EDITOR_NEARBY_LOCATIONS_KEY_STORAGE_KEY =
   "visual-editor.local-editor.nearby-locations-key";
+const LOCAL_EDITOR_PUCK_AI_KEY_STORAGE_KEY =
+  "visual-editor.local-editor.puck-api-key";
 const LOCAL_EDITOR_PREVIEW_OPEN_STORAGE_KEY =
   "visual-editor.local-editor.preview-open";
 
@@ -88,6 +90,7 @@ export const LocalEditorShell = ({
   const [nearbyLocationsKey, setNearbyLocationsKey] = React.useState<
     string | undefined
   >();
+  const [puckAiKey, setPuckAiKey] = React.useState<string | undefined>();
   const { isManifestLoading, manifest, manifestError } =
     useLocalEditorManifest(apiBasePath);
 
@@ -112,6 +115,7 @@ export const LocalEditorShell = ({
     setNearbyLocationsKey(
       readLocalStorageValue(LOCAL_EDITOR_NEARBY_LOCATIONS_KEY_STORAGE_KEY)
     );
+    setPuckAiKey(readLocalStorageValue(LOCAL_EDITOR_PUCK_AI_KEY_STORAGE_KEY));
   }, []);
 
   const searchParams = React.useMemo(() => {
@@ -418,6 +422,18 @@ export const LocalEditorShell = ({
               {nearbyLocationsKey
                 ? "Update Nearby Locations Key"
                 : "Add Nearby Locations Key"}
+            </EditorShellButton>
+            <EditorShellButton
+              onClick={() => {
+                handleApiKeyUpdate(
+                  "Enter Puck API Key",
+                  puckAiKey,
+                  LOCAL_EDITOR_PUCK_AI_KEY_STORAGE_KEY,
+                  setPuckAiKey
+                );
+              }}
+            >
+              Add Puck API Key
             </EditorShellButton>
             <EditorShellButton
               onClick={() => {

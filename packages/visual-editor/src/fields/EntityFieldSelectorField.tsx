@@ -317,7 +317,16 @@ export const EntityFieldSelectorFieldOverride = ({
   }
 
   const translatedLabel = field.label ? pt(field.label) : "";
-  const constantValueFilter = field.constantValueFilter ?? field.filter;
+  const filter =
+    field.filter && typeof field.filter === "object"
+      ? field.filter
+      : { types: [] };
+  if (!field.filter) {
+    console.error(
+      `[VisualEditor] Invalid ${field.type} field config. A filter is required.`
+    );
+  }
+  const constantValueFilter = field.constantValueFilter ?? filter;
   const constantValueEnabled =
     !field.disableConstantValueToggle && !!value?.constantValueEnabled;
   const allowsListValues = !!constantValueFilter.includeListsOnly;
@@ -356,7 +365,7 @@ export const EntityFieldSelectorFieldOverride = ({
           filter={constantValueFilter}
           disallowTranslation={field.disallowTranslation}
           showApplyAllOption={field.showApplyAllOption}
-          sourceField={field.filter.subdocumentField}
+          sourceField={filter.subdocumentField}
           sourceFieldPath={field.sourceFieldPath}
         />
       )}
@@ -365,8 +374,8 @@ export const EntityFieldSelectorFieldOverride = ({
           className="ve-pt-3"
           onChange={onChange}
           value={value}
-          filter={field.filter}
-          sourceField={field.filter.subdocumentField}
+          filter={filter}
+          sourceField={filter.subdocumentField}
           sourceFieldPath={field.sourceFieldPath}
         />
       )}
