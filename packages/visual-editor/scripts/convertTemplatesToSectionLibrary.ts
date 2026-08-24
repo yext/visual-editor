@@ -591,7 +591,12 @@ const buildConversion = (
   }
   for (const template of templates) {
     validateLayoutReferences(
-      template.defaultLayout,
+      template.defaultLayout.content,
+      componentIds,
+      path.join(template.directory, "defaultLayout.json")
+    );
+    validateLayoutReferences(
+      template.defaultLayout.zones,
       componentIds,
       path.join(template.directory, "defaultLayout.json")
     );
@@ -931,8 +936,8 @@ const requireString = (
   sourcePath: string,
   property: string
 ): string => {
-  if (typeof value !== "string" || !value.trim()) {
-    throw new Error(`${sourcePath} must define a non-empty ${property}`);
+  if (typeof value !== "string") {
+    throw new Error(`${sourcePath} must define a string ${property}`);
   }
   return value;
 };
