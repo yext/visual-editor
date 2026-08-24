@@ -8,7 +8,8 @@ outline: deep
 Local Editor lets you edit Section Library layouts in development. Entity
 layouts use local Pages snapshots. Directory layouts use snapshots when a
 Directory stream is configured, otherwise built-in fixture data. Locator
-layouts use built-in fixture data. It requires `sectionLibrary: true`.
+layouts use built-in fixture data by default, or real Search data when
+configured. It requires `sectionLibrary: true`.
 
 ## Enable Local Editor
 
@@ -33,6 +34,13 @@ import type { LocalEditorConfig } from "@yext/visual-editor/plugin";
 const config = {
   defaults: {
     locale: "en",
+  },
+  env: {
+    YEXT_CLOUD_REGION: "US",
+    YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
+    YEXT_ENVIRONMENT: "PROD",
+    YEXT_SEARCH_API_KEY: "",
+    YEXT_SEARCH_EXPERIENCE_KEY: "",
   },
   pageSetTypes: {
     ENTITY: {
@@ -90,7 +98,13 @@ production builds.
 Directory layouts without a configured stream use built-in root, country,
 region, and city documents; only these fixture-backed layouts show the control
 for setting the directory child count.
-Locator layouts use a built-in document and local mock Search results, filters,
-pagination, analytics, and geolocation. Map tiles can need a Mapbox key.
-Fixtures and mock data exist only in Local Editor. They are not in production
-artifacts.
+Fixture-mode Locator layouts use a built-in document and local mock Search
+results, filters, pagination, analytics, and geolocation. Map tiles can need a
+Mapbox key. Fixtures and mock data exist only in Local Editor. They are not in
+production artifacts.
+
+Set both `YEXT_SEARCH_API_KEY` and `YEXT_SEARCH_EXPERIENCE_KEY` to use real
+Locator Search data. If either value is blank, Local Editor uses the fixture
+data above instead. Use the Local Editor controls to supply the Mapbox and Yext
+analytics keys; the Mapbox value is used for both normal and editor-iframe map
+rendering.

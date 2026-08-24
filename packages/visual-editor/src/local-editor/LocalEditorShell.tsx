@@ -211,6 +211,12 @@ export const LocalEditorShell = ({
     selectedLayoutId,
   ]);
   const activeConfig = componentRegistry[selectedLayoutId];
+  const isLocatorDocument =
+    (
+      documentResponse?.document?.meta as
+        | { entityType?: { id?: string } }
+        | undefined
+    )?.entityType?.id === "locator";
 
   // Inject reviews, mapbox, and/or nearby locations testing data into the streamDocument, if enabled
   const streamDocument = React.useMemo(() => {
@@ -237,7 +243,7 @@ export const LocalEditorShell = ({
       nextDocument = documentWithoutReviews;
     }
 
-    // If a mapbox key is provided, add it to the document
+    // If a Mapbox key is provided, use it for both normal and iframe rendering.
     if (typeof mapboxKey === "string") {
       const currentEnv =
         "_env" in nextDocument &&
@@ -246,18 +252,22 @@ export const LocalEditorShell = ({
           ? (nextDocument._env as Record<string, unknown>)
           : undefined;
 
-      if (currentEnv?.YEXT_MAPBOX_API_KEY !== mapboxKey) {
+      if (
+        currentEnv?.YEXT_MAPBOX_API_KEY !== mapboxKey ||
+        currentEnv?.YEXT_EDIT_LAYOUT_MODE_MAPBOX_API_KEY !== mapboxKey
+      ) {
         nextDocument = {
           ...nextDocument,
           _env: {
             ...currentEnv,
+            YEXT_EDIT_LAYOUT_MODE_MAPBOX_API_KEY: mapboxKey,
             YEXT_MAPBOX_API_KEY: mapboxKey,
           },
         };
       }
     }
 
-    // If a nearby locations key is provided, set up the corresponding configuration
+    // If a nearby locations key is provided, set up the corresponding configuration.
     // Uses nearby locations from https://www.yext.com/s/4174974/yextsites/155048/editor#pageSetId=locations
     // The key must be for the content endpoint from that site
     if (typeof nearbyLocationsKey === "string") {
@@ -268,50 +278,61 @@ export const LocalEditorShell = ({
           ? (nextDocument._env as Record<string, unknown>)
           : undefined;
 
-      nextDocument = {
-        ...nextDocument,
-        businessId: "4174974",
-        __: {
-          isPrimaryLocale: true,
-        },
-        _env: {
-          ...currentEnv,
-          YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: nearbyLocationsKey,
-        },
-        _pageset: JSON.stringify({
-          config: {
-            contentEndpointId: "locationsContent",
-            urlTemplate: {
-              primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
-            },
+      if (isLocatorDocument) {
+        nextDocument = {
+          ...nextDocument,
+          _env: {
+            ...currentEnv,
+            YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: nearbyLocationsKey,
           },
-        }),
-        yextDisplayCoordinate: {
-          latitude: 38.895546,
-          longitude: -77.069915,
-        },
-        _yext: { contentDeliveryAPIDomain: "https://cdn.yextapis.com" },
-      };
+        };
+      } else {
+        nextDocument = {
+          ...nextDocument,
+          businessId: "4174974",
+          __: {
+            isPrimaryLocale: true,
+          },
+          _env: {
+            ...currentEnv,
+            YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: nearbyLocationsKey,
+          },
+          _pageset: JSON.stringify({
+            config: {
+              contentEndpointId: "locationsContent",
+              urlTemplate: {
+                primary:
+                  "[[address.region]]/[[address.city]]/[[address.line1]]",
+              },
+            },
+          }),
+          yextDisplayCoordinate: {
+            latitude: 38.895546,
+            longitude: -77.069915,
+          },
+          _yext: { contentDeliveryAPIDomain: "https://cdn.yextapis.com" },
+        };
+      }
     }
 
     return nextDocument;
   }, [
     documentResponse?.document,
+    isLocatorDocument,
     mapboxKey,
     nearbyLocationsKey,
     showReviewsData,
   ]);
 
-  const isLocatorDocument =
-    (streamDocument?.meta as { entityType?: { id?: string } } | undefined)
-      ?.entityType?.id === "locator";
-
   React.useEffect(() => {
-    if (!isLocatorDocument) {
+    if (
+      !isLocatorDocument ||
+      documentResponse?.locatorDataSource !== "fixture"
+    ) {
       return;
     }
     return installLocalEditorLocatorMocks();
-  }, [isLocatorDocument, streamDocument]);
+  }, [documentResponse?.locatorDataSource, isLocatorDocument, streamDocument]);
 
   const handleApiKeyUpdate = React.useCallback(
     (

@@ -125,6 +125,21 @@ export const getLocalEditorDocument = async (
       },
     };
   }
+  const isLocator =
+    libraryLayouts.find((layout) => {
+      return layout.metadata.id === selectedDocumentEntry.layoutId;
+    })?.metadata.pageSetType === "LOCATOR";
+  const locatorDataSource = isLocator
+    ? getLocatorDataSource(context.env)
+    : undefined;
+  if (locatorDataSource === "fixture") {
+    streamDocument = withFixtureLocatorEnvironment(streamDocument);
+  } else if (locatorDataSource === "real") {
+    streamDocument = withLocatorExperienceKey(
+      streamDocument,
+      context.env.YEXT_SEARCH_EXPERIENCE_KEY
+    );
+  }
   // Read all of the layout documents to find fields that may be missing in
   // any single entity, but keep going if a sibling snapshot is malformed.
   const layoutDocuments = context.documents
@@ -174,9 +189,71 @@ export const getLocalEditorDocument = async (
 
   return {
     document: streamDocument,
+    locatorDataSource,
     entityFields,
     diagnostics: context.diagnostics,
   };
+};
+
+const getLocatorDataSource = (
+  environment: Record<string, string>
+): "fixture" | "real" => {
+  return environment.YEXT_SEARCH_API_KEY?.trim() &&
+    environment.YEXT_SEARCH_EXPERIENCE_KEY?.trim()
+    ? "real"
+    : "fixture";
+};
+
+const withFixtureLocatorEnvironment = (
+  streamDocument: Record<string, unknown>
+): Record<string, unknown> => {
+  const environment = readDocumentEnvironment(streamDocument);
+  return {
+    ...streamDocument,
+    _env: {
+      ...environment,
+      YEXT_EDIT_LAYOUT_MODE_MAPBOX_API_KEY:
+        environment.YEXT_EDIT_LAYOUT_MODE_MAPBOX_API_KEY ||
+        "local-editor-fixture-key",
+      YEXT_MAPBOX_API_KEY:
+        environment.YEXT_MAPBOX_API_KEY || "local-editor-fixture-key",
+      YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY:
+        environment.YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY ||
+        "local-editor-fixture-key",
+      YEXT_SEARCH_API_KEY:
+        environment.YEXT_SEARCH_API_KEY || "local-editor-fixture-key",
+    },
+  };
+};
+
+const withLocatorExperienceKey = (
+  streamDocument: Record<string, unknown>,
+  experienceKey: string | undefined
+): Record<string, unknown> => {
+  if (!experienceKey) {
+    return streamDocument;
+  }
+
+  try {
+    const pageSet = JSON.parse(String(streamDocument._pageset)) as {
+      typeConfig?: { locatorConfig?: Record<string, unknown> };
+    };
+    return {
+      ...streamDocument,
+      _pageset: JSON.stringify({
+        ...pageSet,
+        typeConfig: {
+          ...pageSet.typeConfig,
+          locatorConfig: {
+            ...pageSet.typeConfig?.locatorConfig,
+            experienceKey,
+          },
+        },
+      }),
+    };
+  } catch {
+    return streamDocument;
+  }
 };
 
 /**

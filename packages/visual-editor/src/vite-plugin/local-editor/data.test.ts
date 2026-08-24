@@ -129,17 +129,58 @@ describe("getLocalEditorDocument", () => {
         locales: ["en"],
       },
     ]);
-    expect(
-      (
-        await getLocalEditorDocument(
-          rootDir,
-          layouts,
-          "locator-layout",
-          "fixture-locator-locator-layout",
-          "en"
-        )
-      ).document
-    ).toMatchObject({ meta: { entityType: { id: "locator" } } });
+    const response = await getLocalEditorDocument(
+      rootDir,
+      layouts,
+      "locator-layout",
+      "fixture-locator-locator-layout",
+      "en"
+    );
+    expect(response.locatorDataSource).toBe("fixture");
+    expect(response.document).toMatchObject({
+      meta: { entityType: { id: "locator" } },
+      _env: {
+        YEXT_MAPBOX_API_KEY: "local-editor-fixture-key",
+        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: "local-editor-fixture-key",
+        YEXT_SEARCH_API_KEY: "local-editor-fixture-key",
+      },
+    });
+  });
+
+  it("uses real Locator Search when configured", async () => {
+    const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "local-editor-"));
+    rootDirs.push(rootDir);
+    fs.writeJsonSync(path.join(rootDir, "package.json"), { type: "module" });
+    fs.writeFileSync(
+      path.join(rootDir, "stream.config.ts"),
+      'export default { env: { YEXT_SEARCH_API_KEY: "search-key", YEXT_SEARCH_EXPERIENCE_KEY: "experience-key" } };\n'
+    );
+    const layouts: SectionLibraryLayout[] = [
+      {
+        metadata: {
+          id: "locator-layout",
+          displayName: "Locator",
+          pageSetType: "LOCATOR",
+        },
+        defaultLayout: {},
+      },
+    ];
+
+    const response = await getLocalEditorDocument(
+      rootDir,
+      layouts,
+      "locator-layout",
+      "fixture-locator-locator-layout",
+      "en"
+    );
+
+    expect(response.locatorDataSource).toBe("real");
+    expect(response.document?._env).toMatchObject({
+      YEXT_SEARCH_API_KEY: "search-key",
+    });
+    expect(JSON.parse(String(response.document?._pageset))).toMatchObject({
+      typeConfig: { locatorConfig: { experienceKey: "experience-key" } },
+    });
   });
 
   it("uses generated snapshots for Entity layouts", async () => {

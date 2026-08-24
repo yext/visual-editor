@@ -95,6 +95,8 @@ export type LocalEditorManifestResponse = {
 
 export type LocalEditorDocumentResponse = {
   document: Record<string, unknown> | null;
+  /** Whether a Locator document uses built-in fixture data or real Search. */
+  locatorDataSource?: "fixture" | "real";
   entityFields: {
     fields: YextSchemaField[];
     displayNames: Record<string, string>;
