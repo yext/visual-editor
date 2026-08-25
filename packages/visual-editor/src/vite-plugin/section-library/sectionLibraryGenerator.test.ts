@@ -36,6 +36,7 @@ describe("generateSectionLibraryFiles", () => {
       "utf8"
     );
     expect(config).toContain("label: section.config.displayName");
+    expect(config).toContain("toPuckFields");
     expect(config).toContain('typeof section.component === "function"');
     expect(config).toContain(": section.component.render");
     expect(config).toContain("...section.config");
@@ -308,6 +309,7 @@ describe("generateSectionLibraryFiles", () => {
       )
     ).toEqual({
       generatedFiles: [],
+      layouts: [],
     });
     expect(
       fs.existsSync(
@@ -729,6 +731,31 @@ describe("generateSectionLibraryFiles", () => {
     expect(() => generateSectionLibraryFiles(createLibrary())).toThrow(
       "Section Library builds require SECTION_LIBRARY_REVISION_ID"
     );
+  });
+
+  it("does not rewrite unchanged generated files", () => {
+    const rootDir = createLibrary();
+    const { generatedFiles } = generateSectionLibraryFiles(
+      rootDir,
+      "123e4567-e89b-12d3-a456-426614174000"
+    );
+    const generatedPaths = [
+      ...generatedFiles,
+      path.join(rootDir, ".template-manifest.json"),
+    ];
+    const modifiedTime = new Date("2000-01-01T00:00:00.000Z");
+
+    generatedPaths.forEach((generatedPath) => {
+      fs.utimesSync(generatedPath, modifiedTime, modifiedTime);
+    });
+    generateSectionLibraryFiles(
+      rootDir,
+      "123e4567-e89b-12d3-a456-426614174000"
+    );
+
+    generatedPaths.forEach((generatedPath) => {
+      expect(fs.statSync(generatedPath).mtime).toEqual(modifiedTime);
+    });
   });
 });
 

@@ -14,11 +14,13 @@ import { StyledPageSectionFieldOverride } from "./styledFields/StyledPageSection
 import { StyledTextFieldOverride } from "./styledFields/StyledTextField.tsx";
 import { TranslatableStringFieldOverride } from "./TranslatableStringField.tsx";
 import { VideoFieldOverride } from "./VideoField.tsx";
+import { ComprehensiveCTAFieldOverride } from "./styledFields/ComprehensiveCTAField.tsx";
 
 export const YextPuckFieldOverrides = {
   basicSelector: BasicSelectorFieldOverride,
   ctaSelector: CTASelectorFieldOverride,
   code: CodeFieldOverride,
+  comprehensiveCTA: ComprehensiveCTAFieldOverride,
   dateTimeSelector: DateTimeSelectorFieldOverride,
   entityField: EntityFieldSelectorFieldOverride,
   multiSelector: MultiSelectorFieldOverride,

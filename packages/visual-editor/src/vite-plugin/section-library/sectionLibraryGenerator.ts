@@ -9,6 +9,7 @@ import {
   type LayoutMetadata,
   type LibraryMetadata,
   type PageSetType,
+  type SectionLibraryLayout,
   type SectionConfig,
 } from "../../sectionLibrary.ts";
 import { extractSectionConfigFrontmatter } from "./sectionFrontmatter.ts";
@@ -31,10 +32,7 @@ type Section = SectionConfig & {
 };
 
 /** A Section Library layout and its metadata. */
-type Layout<TMetadata extends LayoutMetadata = LayoutMetadata> = {
-  metadata: TMetadata;
-  defaultLayout: Record<string, any>;
-};
+type Layout = SectionLibraryLayout;
 
 /** The complete validated Section Library source. */
 type SectionLibrary = {
@@ -49,6 +47,7 @@ type SectionLibrary = {
 type GeneratedSectionLibrary = {
   generatedFiles: string[];
   manifestSource?: string;
+  layouts: Layout[];
 };
 
 /**
@@ -72,7 +71,7 @@ export const generateSectionLibraryFiles = (
 
   const library = readSectionLibrary(rootDir);
   if (!library) {
-    return { generatedFiles: [] };
+    return { generatedFiles: [], layouts: [] };
   }
 
   const generatedDirectory = path.join(rootDir, "src", "library", ".generated");
@@ -154,6 +153,7 @@ export const generateSectionLibraryFiles = (
 
   return {
     generatedFiles,
+    layouts: library.layouts,
     manifestSource: `${JSON.stringify(
       {
         schemaVersion: 1,
@@ -477,41 +477,43 @@ const writeLegacyTemplateManifest = (
   locatorLayout: Layout
 ): void => {
   const manifestPath = path.join(rootDir, ".template-manifest.json");
-  fs.writeFileSync(
-    manifestPath,
-    JSON.stringify(
-      {
-        templates: [
-          {
-            name: "main",
-            description:
-              "Use this template to generate pages for each of your Locations.",
-            exampleSiteUrl: "",
-            layoutRequired: true,
-            defaultLayoutData: JSON.stringify(entityLayout.defaultLayout),
-          },
-          {
-            name: "directory",
-            description:
-              "Use this template to generate pages for each of your Directory entities.",
-            exampleSiteUrl: "",
-            layoutRequired: true,
-            defaultLayoutData: JSON.stringify(directoryLayout.defaultLayout),
-          },
-          {
-            name: "locator",
-            description:
-              "Use this template to generate pages for your Locators.",
-            exampleSiteUrl: "",
-            layoutRequired: true,
-            defaultLayoutData: JSON.stringify(locatorLayout.defaultLayout),
-          },
-        ],
-      },
-      null,
-      2
-    )
+  const source = JSON.stringify(
+    {
+      templates: [
+        {
+          name: "main",
+          description:
+            "Use this template to generate pages for each of your Locations.",
+          exampleSiteUrl: "",
+          layoutRequired: true,
+          defaultLayoutData: JSON.stringify(entityLayout.defaultLayout),
+        },
+        {
+          name: "directory",
+          description:
+            "Use this template to generate pages for each of your Directory entities.",
+          exampleSiteUrl: "",
+          layoutRequired: true,
+          defaultLayoutData: JSON.stringify(directoryLayout.defaultLayout),
+        },
+        {
+          name: "locator",
+          description: "Use this template to generate pages for your Locators.",
+          exampleSiteUrl: "",
+          layoutRequired: true,
+          defaultLayoutData: JSON.stringify(locatorLayout.defaultLayout),
+        },
+      ],
+    },
+    null,
+    2
   );
+  if (
+    !fs.existsSync(manifestPath) ||
+    fs.readFileSync(manifestPath, "utf8") !== source
+  ) {
+    fs.writeFileSync(manifestPath, source);
+  }
 };
 
 const buildConfigSource = (
@@ -616,8 +618,12 @@ const buildEditorTemplateSource = (
 const writeGeneratedFile = (filePath: string, source: string): boolean => {
   fs.ensureDirSync(path.dirname(filePath));
   if (fs.existsSync(filePath)) {
-    if (!fs.readFileSync(filePath, "utf8").startsWith(GENERATED_FILE_PREFIX)) {
+    const existingSource = fs.readFileSync(filePath, "utf8");
+    if (!existingSource.startsWith(GENERATED_FILE_PREFIX)) {
       return false;
+    }
+    if (existingSource === source) {
+      return true;
     }
   }
   fs.writeFileSync(filePath, source);

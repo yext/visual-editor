@@ -11,9 +11,21 @@ import {
   cleanupGeneratedSectionLibraryFiles,
   generateSectionLibraryFiles,
 } from "./section-library/sectionLibraryGenerator.ts";
+import localEditorTemplate from "./templates/local-editor.tsx?raw";
+import localEditorDataTemplate from "./templates/local-editor-data.tsx?raw";
+import { createLocalEditorArtifactsManager } from "./local-editor/artifacts.ts";
+import { readResolvedLayoutConfigs } from "./local-editor/config.ts";
+import { ensureLocalEditorStreamConfig } from "./local-editor/generatedFiles.ts";
+import {
+  handleLocalEditorRequest,
+  sendJsonResponse,
+} from "./local-editor/server.ts";
+import type { LocalEditorOptions } from "./local-editor/types.ts";
+import type { SectionLibraryLayout } from "../sectionLibrary.ts";
 
 export type VisualEditorPluginOptions = {
   sectionLibrary?: boolean;
+  localEditor?: LocalEditorOptions;
 };
 
 type TemplateManifestEntry = {
@@ -94,9 +106,32 @@ export const yextVisualEditorPlugin = (
   options: VisualEditorPluginOptions = {}
 ): Plugin => {
   let isBuildMode = false;
+  let initializedForServe = false;
   const filesToCleanup: string[] = [];
   let sectionLibraryFiles: string[] = [];
   let sectionLibraryManifest: string | undefined;
+  let sectionLibraryLayouts: SectionLibraryLayout[] = [];
+  const localEditorArtifacts = createLocalEditorArtifactsManager({
+    localEditorTemplateSource: localEditorTemplate,
+    localEditorDataTemplateSource: localEditorDataTemplate,
+  });
+
+  const generateSectionLibrary = (): void => {
+    const generatedLibrary = generateSectionLibraryFiles(
+      process.cwd(),
+      process.env.SECTION_LIBRARY_REVISION_ID
+    );
+    sectionLibraryFiles = generatedLibrary.generatedFiles;
+    sectionLibraryManifest = generatedLibrary.manifestSource;
+    sectionLibraryLayouts = generatedLibrary.layouts;
+  };
+
+  const syncLocalEditorArtifacts = async (): Promise<void> => {
+    ensureLocalEditorStreamConfig(process.cwd());
+    await readResolvedLayoutConfigs(process.cwd(), sectionLibraryLayouts, []);
+    localEditorArtifacts.syncLocalEditorDataTemplates(sectionLibraryLayouts);
+    localEditorArtifacts.syncLocalEditorTemplate(sectionLibraryLayouts);
+  };
 
   /**
    * generateFiles generates the template files and .temlpate-manifest.json file
@@ -147,33 +182,60 @@ export const yextVisualEditorPlugin = (
     }
   };
 
-  // cleanup on interruption (ctrl + C)
-  process.on("SIGINT", () => {
+  const cleanupGeneratedArtifacts = (): void => {
+    localEditorArtifacts.cleanupGeneratedLocalEditorArtifacts();
     cleanupFiles();
-    process.nextTick(() => process.exit(0));
-  });
+  };
 
-  process.on("SIGTERM", () => {
-    cleanupFiles();
-    process.nextTick(() => process.exit(0));
-  });
+  if (options.localEditor?.enabled) {
+    // cleanup on interruption (ctrl + C)
+    process.once("SIGINT", () => {
+      cleanupGeneratedArtifacts();
+      process.nextTick(() => process.exit(130));
+    });
+
+    process.once("SIGTERM", () => {
+      cleanupGeneratedArtifacts();
+      process.nextTick(() => process.exit(143));
+    });
+  }
 
   return {
     name: "vite-plugin-yext-visual-editor",
-    config(_, { command }) {
+    async config(_, { command }) {
       isBuildMode = command === "build";
-    },
-    buildStart() {
-      if (options.sectionLibrary) {
-        const generatedLibrary = generateSectionLibraryFiles(
-          process.cwd(),
-          process.env.SECTION_LIBRARY_REVISION_ID
-        );
-        sectionLibraryFiles = generatedLibrary.generatedFiles;
-        sectionLibraryManifest = generatedLibrary.manifestSource;
-        return;
+
+      // Pages scans template files immediately after it creates the Vite
+      // server. Generate these files here so the scan includes local-editor.
+      if (
+        command === "serve" &&
+        options.sectionLibrary &&
+        options.localEditor?.enabled
+      ) {
+        generateSectionLibrary();
+        await syncLocalEditorArtifacts();
+        initializedForServe = true;
       }
-      generateFiles();
+    },
+    async buildStart() {
+      if (options.localEditor?.enabled && !options.sectionLibrary) {
+        throw new Error("localEditor requires sectionLibrary: true");
+      }
+      if (options.sectionLibrary && !initializedForServe) {
+        generateSectionLibrary();
+      } else if (!options.sectionLibrary) {
+        generateFiles();
+      }
+
+      if (
+        !isBuildMode &&
+        options.localEditor?.enabled &&
+        !initializedForServe
+      ) {
+        await syncLocalEditorArtifacts();
+      } else if (!initializedForServe) {
+        localEditorArtifacts.cleanupGeneratedLocalEditorArtifacts();
+      }
     },
     generateBundle() {
       if (options.sectionLibrary && sectionLibraryManifest) {
@@ -184,9 +246,42 @@ export const yextVisualEditorPlugin = (
         });
       }
     },
+    configureServer(server) {
+      if (!options.localEditor?.enabled) {
+        return;
+      }
+
+      server.httpServer?.once("close", () => {
+        cleanupGeneratedArtifacts();
+      });
+
+      server.middlewares.use((request, response, next) => {
+        if (!request.url) {
+          next();
+          return;
+        }
+        void handleLocalEditorRequest(
+          request.url,
+          response,
+          sectionLibraryLayouts
+        )
+          .then((handled) => {
+            if (!handled) {
+              next();
+            }
+          })
+          .catch((error: unknown) => {
+            sendJsonResponse(
+              response,
+              { error: error instanceof Error ? error.message : String(error) },
+              500
+            );
+          });
+      });
+    },
     buildEnd() {
       if (isBuildMode) {
-        cleanupFiles();
+        cleanupGeneratedArtifacts();
       }
     },
   };

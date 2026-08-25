@@ -186,21 +186,25 @@ export const getContrastingColor = (
  * literal white/black, and bracketed custom colors.
  */
 export const getThemeColorCssValue = (
-  colorToken?: string
+  colorToken?: ThemeColor | string
 ): string | undefined => {
-  if (!colorToken) {
+  const normalizedColorToken = normalizeThemeColorToken(colorToken);
+  if (!normalizedColorToken) {
     return undefined;
   }
 
-  if (colorToken === "white" || colorToken === "black") {
-    return colorToken;
+  if (normalizedColorToken === "white" || normalizedColorToken === "black") {
+    return normalizedColorToken;
   }
 
-  if (colorToken.startsWith("[") && colorToken.endsWith("]")) {
-    return colorToken.slice(1, -1);
+  if (
+    normalizedColorToken.startsWith("[") &&
+    normalizedColorToken.endsWith("]")
+  ) {
+    return normalizedColorToken.slice(1, -1);
   }
 
-  const paletteMatch = colorToken.match(
+  const paletteMatch = normalizedColorToken.match(
     /^palette-(primary|secondary|tertiary|quaternary)-(light|dark)$/
   );
   if (paletteMatch) {
@@ -209,11 +213,46 @@ export const getThemeColorCssValue = (
     return `hsl(from var(--colors-palette-${palette}) h s ${lightness})`;
   }
 
-  return `var(--colors-${colorToken})`;
+  return `var(--colors-${normalizedColorToken})`;
 };
 
 export const isCustomThemeColorToken = (colorToken?: string): boolean => {
   return !!colorToken && colorToken.startsWith("[") && colorToken.endsWith("]");
+};
+
+export const normalizeThemeColorToken = (
+  color?: ThemeColor | string
+): string | undefined => {
+  if (!color) {
+    return undefined;
+  }
+
+  if (typeof color === "string") {
+    return color === "default" ? undefined : color;
+  }
+
+  return color.selectedColor === "default" ? undefined : color.selectedColor;
+};
+
+const isResolvedCssColor = (color?: string): boolean =>
+  !!color &&
+  (color.startsWith("#") ||
+    color.startsWith("var(") ||
+    color.startsWith("rgb(") ||
+    color.startsWith("rgba(") ||
+    color.startsWith("hsl(") ||
+    color === "transparent" ||
+    color === "inherit");
+
+export const getResolvedTextColorStyle = (
+  color?: ThemeColor | string
+): { color?: string } | undefined => {
+  if (typeof color === "string" && isResolvedCssColor(color)) {
+    return { color };
+  }
+
+  const resolvedColor = getThemeColorCssValue(color);
+  return resolvedColor ? { color: resolvedColor } : undefined;
 };
 
 /**
@@ -367,23 +406,27 @@ const getDerivedPaletteHexColor = (
  * Resolves a ThemeColor token to a concrete hex color value in both browser and SSR contexts.
  */
 export const getThemeColorHexValue = (
-  colorToken?: string,
+  colorToken?: ThemeColor | string,
   streamDocument?: StreamDocument | Record<string, any>
 ): string | undefined => {
-  if (!colorToken) {
+  const normalizedColorToken = normalizeThemeColorToken(colorToken);
+  if (!normalizedColorToken) {
     return undefined;
   }
 
-  if (colorToken.startsWith("[") && colorToken.endsWith("]")) {
-    return normalizeHexColor(colorToken.slice(1, -1));
+  if (
+    normalizedColorToken.startsWith("[") &&
+    normalizedColorToken.endsWith("]")
+  ) {
+    return normalizeHexColor(normalizedColorToken.slice(1, -1));
   }
 
-  const directHex = normalizeHexColor(colorToken);
+  const directHex = normalizeHexColor(normalizedColorToken);
   if (directHex) {
     return directHex;
   }
 
-  const derivedPaletteMatch = colorToken.match(
+  const derivedPaletteMatch = normalizedColorToken.match(
     /^palette-(primary|secondary|tertiary|quaternary)-(light|dark)$/
   );
   if (derivedPaletteMatch) {
@@ -396,8 +439,119 @@ export const getThemeColorHexValue = (
   }
 
   return normalizeHexColor(
-    getThemeValue(`--colors-${colorToken}`, streamDocument)
+    getThemeValue(`--colors-${normalizedColorToken}`, streamDocument)
   );
+};
+
+/** Returns true when the color needs a white foreground for readable text. */
+export const isDarkColor = (
+  color?: ThemeColor | string,
+  streamDocument?: StreamDocument | Record<string, any>
+): boolean => {
+  if (color !== null && typeof color === "object") {
+    if (color.isDarkColor !== undefined) {
+      return color.isDarkColor;
+    }
+
+    if (color.contrastingColor === "white") {
+      return true;
+    }
+
+    if (color.contrastingColor === "black") {
+      return false;
+    }
+  }
+
+  const normalizedColorToken = normalizeThemeColorToken(color);
+  if (!normalizedColorToken) {
+    return false;
+  }
+
+  const colorHex = getThemeColorHexValue(normalizedColorToken, streamDocument);
+  const rgb = colorHex ? hexToRGB(colorHex) : undefined;
+  const luminance = rgb ? luminanceFromRGB(rgb) : undefined;
+  if (luminance !== undefined) {
+    return 1.05 / (luminance + 0.05) >= (luminance + 0.05) / 0.05;
+  }
+
+  const contrastColor = getThemeValue(
+    `--colors-${normalizedColorToken}-contrast`,
+    streamDocument
+  );
+  if (contrastColor) {
+    return contrastColor.toUpperCase() === "#FFFFFF";
+  }
+
+  return (
+    normalizedColorToken === "palette-primary" ||
+    normalizedColorToken === "palette-secondary" ||
+    normalizedColorToken === "palette-quaternary"
+  );
+};
+
+/** Returns a readable foreground color for a themed surface. */
+export const getDefaultForegroundColor = (
+  surfaceColor?: ThemeColor | string,
+  streamDocument?: StreamDocument | Record<string, any>
+): ThemeColor | undefined => {
+  if (!normalizeThemeColorToken(surfaceColor)) {
+    return undefined;
+  }
+
+  if (surfaceColor !== null && typeof surfaceColor === "object") {
+    if (surfaceColor.contrastingColor === "black") {
+      return { selectedColor: "black", contrastingColor: "white" };
+    }
+
+    if (surfaceColor.contrastingColor === "white") {
+      return { selectedColor: "white", contrastingColor: "black" };
+    }
+
+    if (surfaceColor.contrastingColor) {
+      return {
+        selectedColor: surfaceColor.contrastingColor,
+        contrastingColor: isDarkColor(
+          surfaceColor.contrastingColor,
+          streamDocument
+        )
+          ? "white"
+          : "black",
+      };
+    }
+  }
+
+  return isDarkColor(surfaceColor, streamDocument)
+    ? { selectedColor: "white", contrastingColor: "black" }
+    : { selectedColor: "black", contrastingColor: "white" };
+};
+
+/** Returns inline background and foreground colors for a themed surface. */
+export const getSurfaceColorStyle = (
+  surfaceColor?: ThemeColor | string,
+  streamDocument?: StreamDocument | Record<string, any>,
+  options?: {
+    fallbackBackgroundColor?: string;
+    fallbackTextColor?: string;
+  }
+): { backgroundColor?: string; color?: string } | undefined => {
+  const backgroundColor = getThemeColorCssValue(surfaceColor);
+  const foregroundColor = getThemeColorCssValue(
+    getDefaultForegroundColor(surfaceColor, streamDocument)
+  );
+  const resolvedBackgroundColor =
+    backgroundColor ?? options?.fallbackBackgroundColor;
+  const resolvedTextColor = foregroundColor ?? options?.fallbackTextColor;
+
+  if (!resolvedBackgroundColor && !resolvedTextColor) {
+    return undefined;
+  }
+
+  return {
+    ...(resolvedBackgroundColor
+      ? { backgroundColor: resolvedBackgroundColor }
+      : {}),
+    ...(resolvedTextColor ? { color: resolvedTextColor } : {}),
+  };
 };
 
 /**

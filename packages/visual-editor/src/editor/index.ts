@@ -1,4 +1,9 @@
 export { type Metadata, Editor } from "./Editor.tsx";
+export {
+  VisualEditorRender,
+  type VisualEditorRenderProps,
+} from "./VisualEditorRender.tsx";
+export { type LocalDevOptions } from "./types.ts";
 export { EntityField } from "./EntityField.tsx";
 export {
   YextEntityFieldSelector,
