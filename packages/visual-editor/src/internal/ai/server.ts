@@ -5,7 +5,7 @@ const puckCloudClientVersion =
 const puckPluginAiVersion = packageJson.dependencies["@puckeditor/plugin-ai"];
 
 /**
- * Proxies the complete Puck AI request prepared by the editor to Puck Cloud.
+ * Proxies the complete Puck AI request prepared by the editor to the Puck canary.
  */
 export const handlePuckAiRequest = async (
   request: Request
@@ -29,12 +29,15 @@ export const handlePuckAiRequest = async (
     "x-puck-plugin-ai-version": puckPluginAiVersion,
   });
 
-  return fetch(`https://cloud.puckeditor.com/api/${endpoint}`, {
-    method: request.method,
-    headers,
-    body:
-      request.method === "GET" || request.method === "HEAD"
-        ? undefined
-        : await request.text(),
-  });
+  return fetch(
+    `https://puck-platform-ntuupuqgd-puck-9db9778b.vercel.app/api/${endpoint}`,
+    {
+      method: request.method,
+      headers,
+      body:
+        request.method === "GET" || request.method === "HEAD"
+          ? undefined
+          : await request.text(),
+    }
+  );
 };

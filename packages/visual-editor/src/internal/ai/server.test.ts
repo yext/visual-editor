@@ -35,7 +35,7 @@ describe("handlePuckAiRequest", () => {
     );
 
     expect(fetchMock.mock.calls[0]?.[0]).toBe(
-      "https://cloud.puckeditor.com/api/chat"
+      "https://puck-platform-ntuupuqgd-puck-9db9778b.vercel.app/api/chat"
     );
     const options = fetchMock.mock.calls[0]?.[1];
     expect(options?.method).toBe("POST");
@@ -90,7 +90,7 @@ describe("handlePuckAiRequest", () => {
     );
 
     expect(fetchMock.mock.calls[0]?.[0]).toBe(
-      "https://cloud.puckeditor.com/api/chat/tool"
+      "https://puck-platform-ntuupuqgd-puck-9db9778b.vercel.app/api/chat/tool"
     );
     expect(fetchMock.mock.calls[0]?.[1]?.body).toBe(body);
   });
