@@ -7,7 +7,6 @@ import prompts from "prompts";
 import { deploy } from "./deploy.ts";
 import type { DeployConfig } from "./config.ts";
 
-vi.mock("node:child_process", () => ({ execFileSync: vi.fn() }));
 vi.mock("prompts");
 
 const config: DeployConfig = {
@@ -18,11 +17,41 @@ const config: DeployConfig = {
   partition: "US",
   apiHost: "https://sbx-api.yextapis.com",
 };
+const successfulResponse = JSON.stringify({
+  meta: { errors: [] },
+  response: {},
+});
 
 let rootDir: string;
+let sourceCommitHash: string;
 
 beforeEach(() => {
   rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "deploy-templates-test-"));
+  execFileSync("git", ["init", "--quiet", rootDir]);
+  execFileSync("git", [
+    "-C",
+    rootDir,
+    "remote",
+    "add",
+    "origin",
+    "git@github.com:yext/visual-editor.git",
+  ]);
+  execFileSync("git", [
+    "-C",
+    rootDir,
+    "-c",
+    "user.name=Test",
+    "-c",
+    "user.email=test@example.com",
+    "commit",
+    "--allow-empty",
+    "--quiet",
+    "-m",
+    "test",
+  ]);
+  sourceCommitHash = execFileSync("git", ["-C", rootDir, "rev-parse", "HEAD"], {
+    encoding: "utf8",
+  }).trim();
   fs.mkdirSync(path.join(rootDir, "src", "registry"), { recursive: true });
   fs.writeFileSync(
     path.join(rootDir, "src", "registry", "library.json"),
@@ -32,9 +61,6 @@ beforeEach(() => {
       description: "Test",
     })
   );
-  vi.mocked(execFileSync)
-    .mockReturnValueOnce("git@github.com:yext/visual-editor.git\n")
-    .mockReturnValueOnce("0123456789abcdef\n");
   vi.spyOn(process, "cwd").mockReturnValue(rootDir);
 });
 
@@ -43,52 +69,38 @@ afterEach(() => {
   fs.rmSync(rootDir, { recursive: true, force: true });
 });
 
-describe("createRevision", () => {
+describe("deploy", () => {
   it("creates a section library revision with Git source metadata", async () => {
     const fetchMock = vi
       .fn()
-      .mockResolvedValueOnce(new Response(null, { status: 200 }))
-      .mockResolvedValueOnce(new Response(null, { status: 201 }));
+      .mockResolvedValueOnce(new Response(successfulResponse, { status: 200 }))
+      .mockResolvedValueOnce(new Response(successfulResponse, { status: 201 }));
     vi.stubGlobal("fetch", fetchMock);
 
     await deploy(config);
 
-    expect(execFileSync).toHaveBeenNthCalledWith(
-      1,
-      "git",
-      ["remote", "get-url", "origin"],
-      { encoding: "utf8" }
-    );
-    expect(execFileSync).toHaveBeenNthCalledWith(
-      2,
-      "git",
-      ["rev-parse", "HEAD"],
-      { encoding: "utf8" }
-    );
     expect(fetchMock).toHaveBeenNthCalledWith(
       1,
       new URL(
         "https://sbx-api.yextapis.com/v2/accounts/me/sectionLibraries/library%2F123?v=20260819&api_key=api-key"
       ),
-      { method: "GET" }
+      expect.any(Request)
     );
     expect(fetchMock).toHaveBeenNthCalledWith(
       2,
       new URL(
         "https://sbx-api.yextapis.com/v2/accounts/me/sectionLibraries/library%2F123/revisions?v=20260819&api_key=api-key"
       ),
-      {
-        method: "POST",
-        headers: expect.any(Headers),
-        body: JSON.stringify({
-          sourceGitOrigin: "git@github.com:yext/visual-editor.git",
-          sourceCommitHash: "0123456789abcdef",
-        }),
-      }
+      expect.any(Request)
     );
-    const request = fetchMock.mock.calls[1][1] as RequestInit;
-    expect(new Headers(request.headers).get("content-type")).toBe(
-      "application/json"
+    const request = fetchMock.mock.calls[1][1] as Request;
+    expect(request.method).toBe("POST");
+    expect(request.headers.get("content-type")).toBe("application/json");
+    expect(await request.text()).toBe(
+      JSON.stringify({
+        sourceGitOrigin: "git@github.com:yext/visual-editor.git",
+        sourceCommitHash,
+      })
     );
   });
 
@@ -107,7 +119,9 @@ describe("createRevision", () => {
       "fetch",
       vi
         .fn()
-        .mockResolvedValueOnce(new Response(null, { status: 200 }))
+        .mockResolvedValueOnce(
+          new Response(successfulResponse, { status: 200 })
+        )
         .mockResolvedValueOnce(
           new Response(
             JSON.stringify({
@@ -127,9 +141,7 @@ describe("createRevision", () => {
         )
     );
 
-    await expect(deploy(config)).rejects.toThrow(
-      /Failed to upload current commit as a Section Library Revision/
-    );
+    await expect(deploy(config)).rejects.toThrow("Invalid request");
     expect(error).not.toHaveBeenCalled();
   });
 
@@ -138,7 +150,9 @@ describe("createRevision", () => {
       "fetch",
       vi
         .fn()
-        .mockResolvedValueOnce(new Response(null, { status: 200 }))
+        .mockResolvedValueOnce(
+          new Response(successfulResponse, { status: 200 })
+        )
         .mockResolvedValueOnce(
           new Response(
             JSON.stringify({
@@ -217,7 +231,7 @@ describe("createRevision", () => {
     );
   });
 
-  it("prints the API response body in verbose mode", async () => {
+  it("prints parsed API errors in verbose mode", async () => {
     const error = vi.spyOn(console, "error").mockImplementation(() => {});
     const responseBody = JSON.stringify({
       meta: {
@@ -235,23 +249,25 @@ describe("createRevision", () => {
       "fetch",
       vi
         .fn()
-        .mockResolvedValueOnce(new Response(null, { status: 200 }))
+        .mockResolvedValueOnce(
+          new Response(successfulResponse, { status: 200 })
+        )
         .mockResolvedValueOnce(new Response(responseBody, { status: 400 }))
     );
 
-    await expect(deploy(config, true)).rejects.toThrow(
-      /Failed to upload current commit as a Section Library Revision/
+    await expect(deploy(config, true)).rejects.toThrow("Invalid request");
+    expect(error).toHaveBeenCalledWith(
+      '[debug] API Errors: [{"code":100000,"type":"BAD_REQUEST","message":"Invalid request","name":"invalidRequest"}]'
     );
-    expect(error).toHaveBeenCalledWith(`[debug] ${responseBody}`);
   });
 
   it("creates a missing section library after confirmation", async () => {
     vi.mocked(prompts).mockResolvedValueOnce({ value: true });
     const fetchMock = vi
       .fn()
-      .mockResolvedValueOnce(new Response(null, { status: 404 }))
-      .mockResolvedValueOnce(new Response(null, { status: 201 }))
-      .mockResolvedValueOnce(new Response(null, { status: 201 }));
+      .mockResolvedValueOnce(new Response(successfulResponse, { status: 404 }))
+      .mockResolvedValueOnce(new Response(successfulResponse, { status: 201 }))
+      .mockResolvedValueOnce(new Response(successfulResponse, { status: 201 }));
     vi.stubGlobal("fetch", fetchMock);
 
     await deploy(config);
@@ -261,10 +277,12 @@ describe("createRevision", () => {
       new URL(
         "https://sbx-api.yextapis.com/v2/accounts/me/sectionLibraries?sectionLibraryId=library%2F123&v=20260819&api_key=api-key"
       ),
-      expect.objectContaining({
-        method: "POST",
-        body: JSON.stringify({ displayName: "Library", description: "Test" }),
-      })
+      expect.any(Request)
+    );
+    const request = fetchMock.mock.calls[1][1] as Request;
+    expect(request.method).toBe("POST");
+    expect(await request.text()).toBe(
+      JSON.stringify({ displayName: "Library", description: "Test" })
     );
   });
 });

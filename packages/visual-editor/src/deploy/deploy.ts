@@ -7,16 +7,17 @@ import {
   createSectionLibrary,
   createSectionLibraryRevision,
   getSectionLibrary,
-  type SectionLibrary,
+  SectionLibrary,
   SectionLibraryRevision,
-} from "./sectionlibraryapi.ts";
+} from "./sectionLibraryApi.ts";
 import type { DeployConfig } from "./config.ts";
 
 export async function deploy(
   config: DeployConfig,
   verbose: boolean = false
 ): Promise<SectionLibraryRevision | undefined> {
-  const library = readLibrary(process.cwd());
+  const rootDir = process.cwd();
+  const library = readLibrary(rootDir);
   const apiLibrary = await getSectionLibrary(config, library.id, verbose);
   if (apiLibrary.status === 404) {
     const { value } = await prompts(
@@ -42,8 +43,8 @@ export async function deploy(
     config,
     library.id,
     {
-      sourceGitOrigin: git("remote", "get-url", config.origin),
-      sourceCommitHash: git("rev-parse", "HEAD"),
+      sourceGitOrigin: git(rootDir, "remote", "get-url", config.origin),
+      sourceCommitHash: git(rootDir, "rev-parse", "HEAD"),
     },
     verbose
   );
@@ -82,9 +83,9 @@ function readLibrary(rootDir: string): SectionLibrary {
   };
 }
 
-function git(...args: string[]): string {
+function git(rootDir: string, ...args: string[]): string {
   try {
-    return execFileSync("git", args, { encoding: "utf8" }).trim();
+    return execFileSync("git", args, { cwd: rootDir, encoding: "utf8" }).trim();
   } catch {
     throw new Error(`Could not run "git ${args.join(" ")}".`);
   }

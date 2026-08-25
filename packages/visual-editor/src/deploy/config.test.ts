@@ -9,11 +9,28 @@ import { defaultPromptOpts } from "./prompt.ts";
 import { readYextrc } from "./yextrc.ts";
 
 vi.mock("prompts");
-vi.mock("node:child_process", () => ({ execFileSync: vi.fn() }));
 const mockPrompts = vi.mocked(prompts);
 
 function tmpDir(): string {
-  return fs.mkdtempSync(path.join(os.tmpdir(), "yextrc-test-"));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "yextrc-test-"));
+  execFileSync("git", ["init", "--quiet", dir]);
+  execFileSync("git", [
+    "-C",
+    dir,
+    "remote",
+    "add",
+    "origin",
+    "git@github.com:yext/visual-editor.git",
+  ]);
+  execFileSync("git", [
+    "-C",
+    dir,
+    "remote",
+    "add",
+    "upstream",
+    "git@github.com:yext/visual-editor-upstream.git",
+  ]);
+  return dir;
 }
 
 function seedYextrc(dir: string, contents: string): void {
@@ -30,14 +47,6 @@ beforeEach(() => {
   delete process.env.YEXT_API_KEY;
   process.env.YEXT_ORIGIN = "origin";
   mockPrompts.mockResolvedValue({ value: false });
-  vi.mocked(execFileSync).mockImplementation((_file, args) => {
-    if (args?.[1] === "get-url") {
-      return args[2] === "origin"
-        ? "git@github.com:yext/visual-editor.git\n"
-        : "git@github.com:yext/visual-editor-upstream.git\n";
-    }
-    return "origin\nupstream\n";
-  });
 });
 
 describe("resolveConfig", () => {

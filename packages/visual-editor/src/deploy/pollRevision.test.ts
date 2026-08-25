@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { pollRevision } from "./pollRevision.ts";
-import { getSectionLibraryRevision } from "./sectionlibraryapi.ts";
+import { getSectionLibraryRevision } from "./sectionLibraryApi.ts";
 import type { DeployConfig } from "./config.ts";
 import ora from "ora";
 

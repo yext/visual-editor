@@ -1,6 +1,6 @@
 import ora from "ora";
 import type { DeployConfig } from "./config.ts";
-import { getSectionLibraryRevision } from "./sectionlibraryapi.ts";
+import { getSectionLibraryRevision } from "./sectionLibraryApi.ts";
 
 const BUILD_SUCCESS_STATUS = "STATUS_BUILD_SUCCEEDED";
 const BUILD_PROCESSING_STATUS = "STATUS_BUILD_PROCESSING";
