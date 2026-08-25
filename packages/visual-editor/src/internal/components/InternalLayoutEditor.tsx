@@ -42,8 +42,6 @@ import { YextPuckFieldOverrides } from "../../fields/fieldOverrides.ts";
 import { wrapComponentConfigWithErrorBoundary } from "../utils/wrapConfigWithComponentErrorBoundary.tsx";
 import { updateLayoutWithCustomFontAssets } from "../utils/customFontAssets.ts";
 import { preparePuckAiRequest } from "../ai/prepareRequest.ts";
-import { normalizeDynamicData } from "../ai/normalizeDynamicConfig.ts";
-import { validateDynamicComponent } from "../ai/validateDynamicConfig.ts";
 import { createPuckFieldTransforms } from "../utils/puckFieldTransforms.ts";
 
 const devLogger = new DevLogger();
@@ -156,91 +154,6 @@ export const InternalLayoutEditor = ({
           prepareRequest: preparePuckAiRequest,
           defaultMode: "design",
           designMode: true,
-          chat: {
-            onFinish: () => {
-              requestAnimationFrame(() => {
-                const puckApi = puckApiRef.current?.();
-                if (!puckApi) {
-                  return;
-                }
-
-                const normalized = normalizeDynamicData(
-                  puckApi.appState.data,
-                  puckApi.config
-                );
-                const normalizedComponents = (
-                  normalized.data.root?.props as {
-                    _dynamicConfig?: {
-                      components?: Record<string, unknown>;
-                    };
-                  }
-                )?._dynamicConfig?.components;
-                if (!normalizedComponents) {
-                  return;
-                }
-
-                const invalidComponents = Object.entries(normalizedComponents)
-                  .map(
-                    ([componentName, component]) =>
-                      [
-                        componentName,
-                        validateDynamicComponent(componentName, component),
-                      ] as const
-                  )
-                  .filter(([, errors]) => errors.length > 0);
-                if (!normalized.changed && invalidComponents.length === 0) {
-                  return;
-                }
-
-                const invalidComponentNames = new Set(
-                  invalidComponents.map(([componentName]) => componentName)
-                );
-                if (invalidComponents.length > 0) {
-                  console.error(
-                    "[VisualEditor] Removing invalid generated components:",
-                    invalidComponents
-                  );
-                }
-
-                const filteredData =
-                  invalidComponentNames.size === 0
-                    ? normalized.data
-                    : walkTree(normalized.data, puckApi.config, (content) =>
-                        content.filter(
-                          (component) =>
-                            !invalidComponentNames.has(component.type)
-                        )
-                      );
-
-                puckApi.dispatch({
-                  type: "setData",
-                  recordHistory: true,
-                  data: {
-                    ...filteredData,
-                    root: {
-                      ...filteredData.root,
-                      props: {
-                        ...filteredData.root.props,
-                        _dynamicConfig: {
-                          ...(
-                            normalized.data.root?.props as {
-                              _dynamicConfig?: Record<string, unknown>;
-                            }
-                          )?._dynamicConfig,
-                          components: Object.fromEntries(
-                            Object.entries(normalizedComponents).filter(
-                              ([componentName]) =>
-                                !invalidComponentNames.has(componentName)
-                            )
-                          ),
-                        },
-                      },
-                    },
-                  } as Data,
-                });
-              });
-            },
-          },
         })
       );
     });

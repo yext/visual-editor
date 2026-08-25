@@ -17,19 +17,11 @@ const supportedFieldTypes = new Set([
   "testCTA",
 ]);
 
-const dynamicComponentRevisionPattern =
-  /\s*\/\* visual-editor-dynamic-revision: \d+ \*\//g;
-
 const getFieldLabel = (fieldName: string): string => {
-  if (fieldName === "primarycta") {
-    return "Primary CTA";
-  }
-  if (fieldName === "secondarycta") {
-    return "Secondary CTA";
-  }
-
   return fieldName
     .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/([A-Za-z])(\d)/g, "$1 $2")
+    .replace(/(\d)([A-Za-z])/g, "$1 $2")
     .replace(/^./, (value) => value.toUpperCase());
 };
 
@@ -72,7 +64,6 @@ const getDefaultProps = (
     };
   }
 
-  const isPrimary = fieldName === "primarycta";
   return {
     field: "",
     constantValueEnabled: true,
@@ -80,10 +71,10 @@ const getDefaultProps = (
     constantValue: {
       ctaType: "textAndLink",
       label: {
-        en: isPrimary ? "Book Now" : "Learn More",
+        en: "Learn More",
         hasLocalizedValue: "true",
       },
-      link: isPrimary ? "/book" : "/learn-more",
+      link: "/learn-more",
       linkType: "URL",
     },
   };
@@ -176,7 +167,6 @@ export const normalizeDynamicConfig = (
     return { dynamicConfig, changed: false };
   }
 
-  const revision = Date.now();
   let changed = false;
   const components = Object.fromEntries(
     Object.entries(dynamicConfig.components).map(
@@ -254,24 +244,14 @@ export const normalizeDynamicConfig = (
           }
         }
 
-        if (!componentChanged) {
-          componentChanged = typeof registration.styles === "string";
-        }
-
-        changed = true;
+        changed ||= componentChanged;
         const { streaming: _streaming, ...settledRegistration } = registration;
         return [
           componentName,
           {
             ...settledRegistration,
             html: normalizedHtml,
-            styles:
-              typeof registration.styles === "string"
-                ? registration.styles.replace(
-                    dynamicComponentRevisionPattern,
-                    ""
-                  ) + `\n/* visual-editor-dynamic-revision: ${revision} */`
-                : registration.styles,
+            styles: registration.styles,
             fields,
             defaultProps,
           },

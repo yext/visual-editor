@@ -1,5 +1,5 @@
 import React from "react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
   normalizeDynamicConfig,
   normalizeDynamicData,
@@ -7,12 +7,7 @@ import {
 import { validateDynamicConfig } from "./validateDynamicConfig.ts";
 
 describe("normalizeDynamicConfig", () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   it("converts design-mode annotations into transform-backed authored props", () => {
-    vi.spyOn(Date, "now").mockReturnValue(123);
     const normalized = normalizeDynamicConfig({
       components: {
         MyHero: {
@@ -33,9 +28,7 @@ describe("normalizeDynamicConfig", () => {
 
     expect(normalized.changed).toBe(true);
     expect(component.streaming).toBeUndefined();
-    expect(component.styles).toContain(
-      "/* visual-editor-dynamic-revision: 123 */"
-    );
+    expect(component.styles).toBe(".hero {}");
     expect(component.html).not.toContain("Make room for good company");
     expect(component.html).not.toContain("Thoughtful spaces.");
     expect(component.fields).toMatchObject({
@@ -57,7 +50,7 @@ describe("normalizeDynamicConfig", () => {
       "images.unsplash.com"
     );
     expect(component.defaultProps.primarycta.constantValue.label.en).toBe(
-      "Book Now"
+      "Learn More"
     );
     expect(validateDynamicConfig(normalized.dynamicConfig)).toEqual([]);
   });
@@ -103,6 +96,45 @@ describe("normalizeDynamicConfig", () => {
         },
       }
     );
+  });
+
+  it("uses generic defaults for repeated CTA fields", () => {
+    const normalized = normalizeDynamicConfig({
+      components: {
+        Cards: {
+          label: "Cards",
+          html: `<section><div data-puck-field-card1cta='{ "type": "testCTA" }'></div><div data-puck-field-card2cta='{ "type": "testCTA" }'></div></section>`,
+          styles: ".cards {}",
+        },
+      },
+    }) as {
+      dynamicConfig: { components: Record<string, Record<string, any>> };
+    };
+
+    expect(normalized.dynamicConfig.components.Cards.defaultProps).toEqual({
+      card1cta: {
+        field: "",
+        constantValueEnabled: true,
+        selectedType: "textAndLink",
+        constantValue: {
+          ctaType: "textAndLink",
+          label: { en: "Learn More", hasLocalizedValue: "true" },
+          link: "/learn-more",
+          linkType: "URL",
+        },
+      },
+      card2cta: {
+        field: "",
+        constantValueEnabled: true,
+        selectedType: "textAndLink",
+        constantValue: {
+          ctaType: "textAndLink",
+          label: { en: "Learn More", hasLocalizedValue: "true" },
+          link: "/learn-more",
+          linkType: "URL",
+        },
+      },
+    });
   });
 
   it("repairs stale generated component instances without replacing authored values", () => {

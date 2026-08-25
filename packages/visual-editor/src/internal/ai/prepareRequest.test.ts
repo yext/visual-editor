@@ -13,18 +13,14 @@ import {
 } from "./systemPrompt.ts";
 
 describe("preparePuckAiConfig", () => {
-  it("provides a complete neutral custom-field component contract", () => {
-    expect(puckAiSystemContext).toContain('"fields"');
-    expect(puckAiSystemContext).toContain('"defaultProps"');
-    expect(puckAiSystemContext).toContain("data-puck-field-title=");
-    expect(puckAiSystemContext).toContain("data-puck-field-description=");
-    expect(puckAiSystemContext).toContain("data-puck-field-image=");
-    expect(puckAiSystemContext).toContain("data-puck-field-primarycta=");
-    expect(puckAiSystemContext).toContain('\\"type\\": \\"testEntityField\\"');
-    expect(puckAiSystemContext).toContain('\\"type\\": \\"testRichText\\"');
-    expect(puckAiSystemContext).toContain('\\"type\\": \\"testImage\\"');
-    expect(puckAiSystemContext).toContain('\\"type\\": \\"testCTA\\"');
-    expect(puckAiSystemContext).toContain("Create the new self-contained");
+  it("provides a generic custom-field component contract", () => {
+    expect(puckAiSystemContext).toContain("fields");
+    expect(puckAiSystemContext).toContain("defaultProps");
+    expect(puckAiSystemContext).toContain("Repeated static UI is supported.");
+    expect(puckAiSystemContext).toContain("card1Title");
+    expect(puckAiSystemContext).toContain(
+      "Do not use slots or child components"
+    );
     expect(puckAiSystemContext).not.toContain("MiniHero");
     expect(puckAiDesignModeInstructions).not.toContain("MiniHero");
   });

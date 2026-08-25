@@ -101,4 +101,38 @@ describe("validateDynamicConfig", () => {
       "ExampleHero title must have a non-empty default value."
     );
   });
+
+  it("accepts a self-contained component with repeated card fields", () => {
+    const cardFields = ["1", "2", "3"].flatMap((cardNumber) => [
+      [`card${cardNumber}Title`, "testEntityField"],
+      [`card${cardNumber}Image`, "testImage"],
+      [`card${cardNumber}Content`, "testRichText"],
+      [`card${cardNumber}Cta`, "testCTA"],
+    ]);
+
+    expect(
+      validateDynamicComponent("MyCards", {
+        label: "My Cards",
+        html: `<section>${cardFields
+          .map(
+            ([fieldName, fieldType]) =>
+              `<div data-puck-field-${fieldName}='{ "type": "${fieldType}" }'></div>`
+          )
+          .join("")}</section>`,
+        styles: ".cards {}",
+        fields: Object.fromEntries(
+          cardFields.map(([fieldName, fieldType]) => [
+            fieldName,
+            { type: fieldType },
+          ])
+        ),
+        defaultProps: Object.fromEntries(
+          cardFields.map(([fieldName]) => [
+            fieldName,
+            { field: "name", constantValue: "", constantValueEnabled: false },
+          ])
+        ),
+      })
+    ).toEqual([]);
+  });
 });
