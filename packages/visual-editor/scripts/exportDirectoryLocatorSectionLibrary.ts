@@ -382,8 +382,8 @@ const writeComponentRegistry = (
       'export const sharedRootPageSetTypes = ["DIRECTORY", "LOCATOR"] as const;',
       "",
       "export const sharedRootAllowedComponentIds: Partial<Record<string, string[]>> = {",
-      '  DIRECTORY: ["MainContent"],',
-      '  LOCATOR: ["MainContent"],',
+      '  DIRECTORY: ["MainContent", "CustomCodeSection"],',
+      '  LOCATOR: ["MainContent", "CustomCodeSection"],',
       "};",
       "",
     ].join("\n")

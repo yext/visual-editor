@@ -298,19 +298,28 @@ const readLegacyTemplate = (
   }
   const components = entries
     .filter((entry) => entry.isFile() && path.extname(entry.name) === ".tsx")
-    .map((entry) => {
+    .flatMap((entry) => {
       const sourcePath = path.join(componentsDirectory, entry.name);
       const id = path.basename(entry.name, ".tsx");
       if (!SAFE_ID.test(id)) {
         throw new Error(`Component ID is not valid: ${id}`);
       }
       const content = fs.readFileSync(sourcePath, "utf8");
+      if (
+        id === "CustomCodeSection" &&
+        content.trim() ===
+          'export { CustomCodeSection } from "@yext/visual-editor";'
+      ) {
+        return [];
+      }
       validateComponentSource(content, sourcePath, id, componentsDirectory);
-      return {
-        id,
-        content,
-        displayName: readComponentLabel(content, sourcePath),
-      };
+      return [
+        {
+          id,
+          content,
+          displayName: readComponentLabel(content, sourcePath),
+        },
+      ];
     })
     .sort((left, right) => left.id.localeCompare(right.id));
   if (components.length === 0) {
@@ -591,7 +600,12 @@ const buildConversion = (
   }
   for (const template of templates) {
     validateLayoutReferences(
-      template.defaultLayout,
+      template.defaultLayout.content,
+      componentIds,
+      path.join(template.directory, "defaultLayout.json")
+    );
+    validateLayoutReferences(
+      template.defaultLayout.zones,
       componentIds,
       path.join(template.directory, "defaultLayout.json")
     );
@@ -931,8 +945,8 @@ const requireString = (
   sourcePath: string,
   property: string
 ): string => {
-  if (typeof value !== "string" || !value.trim()) {
-    throw new Error(`${sourcePath} must define a non-empty ${property}`);
+  if (typeof value !== "string") {
+    throw new Error(`${sourcePath} must define a string ${property}`);
   }
   return value;
 };
