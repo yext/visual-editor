@@ -68,8 +68,10 @@ describe("exportDirectoryLocatorSectionLibrary", () => {
     ).toBe(false);
     expect(registry).toContain("sharedRootAllowedComponentIds");
     expect(registry).toContain("sharedRootPageSetTypes");
-    expect(registry).toContain('DIRECTORY: ["MainContent"]');
-    expect(registry).toContain('LOCATOR: ["MainContent"]');
+    expect(registry).toContain(
+      'DIRECTORY: ["MainContent", "CustomCodeSection"]'
+    );
+    expect(registry).toContain('LOCATOR: ["MainContent", "CustomCodeSection"]');
     expect(
       fs
         .readJsonSync(
