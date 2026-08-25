@@ -4,7 +4,7 @@ import { getSectionLibraryRevision } from "./sectionLibraryApi.ts";
 import type { DeployConfig } from "./config.ts";
 import ora from "ora";
 
-vi.mock("./sectionlibraryapi.ts", () => ({
+vi.mock("./sectionLibraryApi.ts", () => ({
   getSectionLibraryRevision: vi.fn(),
 }));
 
