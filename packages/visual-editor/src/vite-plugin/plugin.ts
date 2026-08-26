@@ -21,7 +21,7 @@ import {
   sendJsonResponse,
 } from "./local-editor/server.ts";
 import type { LocalEditorOptions } from "./local-editor/types.ts";
-import type { SectionLibraryLayout } from "../sectionLibrary.ts";
+import type { SectionLibraryLayout } from "../types/sectionLibrary.ts";
 
 export type VisualEditorPluginOptions = {
   sectionLibrary?: boolean;

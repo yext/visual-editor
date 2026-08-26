@@ -9,7 +9,7 @@ import {
   type EntityLayoutMetadata,
   type LibraryMetadata,
   type PageSetType,
-} from "../src/sectionLibrary.ts";
+} from "../src/types/sectionLibrary.ts";
 import { exportDirectoryLocatorSectionLibrary } from "./exportDirectoryLocatorSectionLibrary.ts";
 
 const SAFE_ID = /^[A-Za-z0-9][A-Za-z0-9_-]*$/;

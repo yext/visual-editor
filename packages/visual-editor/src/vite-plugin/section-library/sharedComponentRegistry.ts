@@ -9,32 +9,10 @@ import {
 import {
   supportedPageSetTypes,
   type PageSetType,
-} from "../../sectionLibrary.ts";
+  type SharedHiddenPuckComponentRegistry,
+} from "../../types/sectionLibrary.ts";
 
 const project = new Project({ compilerOptions: { allowJs: true } });
-
-/** A hidden internal Puck component that can appear in saved slot layout data. */
-export type SharedComponent = {
-  /** Stable Puck component ID stored in the layout data. */
-  id: string;
-
-  /** Page-set types that can render this hidden internal component. */
-  pageSetTypes: PageSetType[];
-};
-
-/**
- * Static metadata from a Section Library shared registry.
- *
- * The generator uses this metadata to validate saved component IDs, register
- * their Puck configs, and omit them from editor add-component menus.
- */
-export type SharedComponentRegistry = {
-  /** Hidden internal components that can appear in saved layout data. */
-  components: SharedComponent[];
-
-  /** Page-set types that need the shared root config, even without components. */
-  rootPageSetTypes: PageSetType[];
-};
 
 /**
  * Reads the optional `shared/componentRegistry.ts` Section Library contract.
@@ -52,7 +30,7 @@ export type SharedComponentRegistry = {
  */
 export const readSharedComponentRegistry = (
   sourcePath: string
-): SharedComponentRegistry | undefined => {
+): SharedHiddenPuckComponentRegistry | undefined => {
   if (!fs.existsSync(sourcePath)) {
     return undefined;
   }
