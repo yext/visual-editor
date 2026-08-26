@@ -2,7 +2,7 @@
   "name": "visual-editor",
   "version": "0.0.1",
   "description": "A monorepo containing all packages used by Yext Visual Editor",
-  "author": "sumo@yext.com",
+  "author": "sprumo@yext.com",
   "license": "BSD-3-Clause",
   "private": true,
   "type": "module",

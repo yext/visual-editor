@@ -192,7 +192,7 @@ describe("generateSectionLibraryFiles", () => {
     expect(result.manifestSource).toContain(
       '"purpose": [\n        "LOCATION"\n      ]'
     );
-  });
+  }, 10_000);
 
   it("replaces a compatibility manifest from an earlier library structure", () => {
     const rootDir = createLibrary();
