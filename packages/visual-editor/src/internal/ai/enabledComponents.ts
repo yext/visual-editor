@@ -8,11 +8,24 @@ export const aiReferenceComponents = {
   TestHero: {
     label: "Test Hero",
     fields: {
-      title: { type: "testEntityField" },
-      description: { type: "testRichText" },
-      image: { type: "testImage" },
-      primarycta: { type: "testCTA" },
-      secondarycta: { type: "testCTA" },
+      title: {
+        type: "testEntityField",
+        label: "Title",
+        filter: { types: ["type.string"] },
+        output: "plainText",
+      },
+      description: {
+        type: "testRichText",
+        label: "Description",
+        filter: { types: ["type.string", "type.rich_text_v2"] },
+      },
+      image: {
+        type: "testImage",
+        label: "Image",
+        filter: { types: ["type.image"] },
+      },
+      primarycta: { type: "testCTA", label: "Primary CTA" },
+      secondarycta: { type: "testCTA", label: "Secondary CTA" },
     },
     defaultProps: {
       title: {
@@ -60,9 +73,18 @@ export const aiReferenceComponents = {
   TestBanner: {
     label: "Test Banner",
     fields: {
-      title: { type: "testEntityField" },
-      description: { type: "testRichText" },
-      primarycta: { type: "testCTA" },
+      title: {
+        type: "testEntityField",
+        label: "Title",
+        filter: { types: ["type.string"] },
+        output: "plainText",
+      },
+      description: {
+        type: "testRichText",
+        label: "Description",
+        filter: { types: ["type.string", "type.rich_text_v2"] },
+      },
+      primarycta: { type: "testCTA", label: "Primary CTA" },
     },
     defaultProps: {
       title: {

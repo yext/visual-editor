@@ -9,7 +9,6 @@ type DynamicComponent = {
   label?: unknown;
   html?: unknown;
   styles?: unknown;
-  streaming?: unknown;
   fields?: unknown;
   defaultProps?: unknown;
 };
@@ -134,9 +133,6 @@ export const validateDynamicComponent = (
   if (typeof registration.styles !== "string") {
     errors.push(`${componentName} must have a styles string.`);
   }
-  if (registration.streaming === true) {
-    errors.push(`${componentName} must not be registered while streaming.`);
-  }
   if (!isRecord(registration.fields)) {
     errors.push(`${componentName} must define fields.`);
   }
@@ -186,6 +182,40 @@ export const validateDynamicComponent = (
     errors.push(`${componentName} has an invalid field annotation.`);
   }
 
+  const annotatedContentPattern =
+    /<([A-Za-z][\w-]*)\b([^>]*?)data-puck-field-([A-Za-z][\w-]*)\s*=\s*(['"])[\s\S]*?\4([^>]*)>([\s\S]*?)<\/\1>/g;
+  for (const match of registration.html.matchAll(annotatedContentPattern)) {
+    const [, , attributesBefore, fieldName, , attributesAfter, innerHtml] =
+      match;
+    if (innerHtml.trim()) {
+      errors.push(`${componentName} ${fieldName} HTML target must be empty.`);
+    }
+    if (
+      /\s(?:src|href|alt|aria-label|title)\s*=/i.test(
+        attributesBefore + attributesAfter
+      )
+    ) {
+      errors.push(
+        `${componentName} ${fieldName} HTML target must not contain authored content attributes.`
+      );
+    }
+  }
+
+  const htmlWithoutFieldTargets = registration.html
+    .replace(annotatedContentPattern, "")
+    .replace(
+      /<[A-Za-z][\w-]*\b[^>]*data-puck-field-[A-Za-z][\w-]*\s*=\s*(['"])[\s\S]*?\1[^>]*\/?\s*>/g,
+      ""
+    );
+  if (
+    htmlWithoutFieldTargets
+      .replace(/<!--[\s\S]*?-->|<[^>]*>/g, "")
+      .replace(/&nbsp;/g, " ")
+      .trim()
+  ) {
+    errors.push(`${componentName} HTML must not contain unbound content.`);
+  }
+
   if (isRecord(registration.fields) && isRecord(registration.defaultProps)) {
     for (const [fieldName, annotationType] of annotationTypes) {
       const field = registration.fields[fieldName];
@@ -200,6 +230,10 @@ export const validateDynamicComponent = (
       } else if (field.type !== annotationType) {
         errors.push(
           `${componentName} ${fieldName} does not match its HTML field type.`
+        );
+      } else if (typeof field.label !== "string" || !field.label.trim()) {
+        errors.push(
+          `${componentName} ${fieldName} must have a non-empty label.`
         );
       }
       const defaultProps = registration.defaultProps[fieldName];

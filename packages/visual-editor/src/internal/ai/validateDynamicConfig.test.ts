@@ -50,20 +50,16 @@ describe("validateDynamicConfig", () => {
     ).toEqual([]);
   });
 
-  it("rejects an incomplete streamed registration with field metadata in HTML", () => {
+  it("rejects an incomplete registration with field metadata in HTML", () => {
     const errors = validateDynamicComponent("SuperHero", {
       ...validComponent,
       html: `<section><h1 data-puck-field-title='{ "type": "testEntityField", "label": "Title" }'></h1>`,
-      streaming: true,
       fields: undefined,
       defaultProps: undefined,
     });
 
     expect(errors).toContain(
       "SuperHero HTML must have one balanced root element."
-    );
-    expect(errors).toContain(
-      "SuperHero must not be registered while streaming."
     );
     expect(errors).toContain("SuperHero must define fields.");
     expect(errors).toContain("SuperHero must define defaultProps.");
@@ -102,6 +98,26 @@ describe("validateDynamicConfig", () => {
     );
   });
 
+  it("rejects unbound HTML content and unlabeled fields", () => {
+    const errors = validateDynamicComponent("ExampleHero", {
+      ...validComponent,
+      html: `<section>Welcome<h1 data-puck-field-title='{ "type": "testEntityField" }'>Hello</h1><a data-puck-field-primarycta='{ "type": "testCTA" }' href="/book">Book now</a></section>`,
+      fields: {
+        ...validComponent.fields,
+        title: { type: "testEntityField" },
+      },
+    });
+
+    expect(errors).toContain(
+      "ExampleHero HTML must not contain unbound content."
+    );
+    expect(errors).toContain("ExampleHero title HTML target must be empty.");
+    expect(errors).toContain(
+      "ExampleHero primarycta HTML target must not contain authored content attributes."
+    );
+    expect(errors).toContain("ExampleHero title must have a non-empty label.");
+  });
+
   it("accepts a self-contained component with repeated card fields", () => {
     const cardFields = ["1", "2", "3"].flatMap((cardNumber) => [
       [`card${cardNumber}Title`, "testEntityField"],
@@ -123,7 +139,7 @@ describe("validateDynamicConfig", () => {
         fields: Object.fromEntries(
           cardFields.map(([fieldName, fieldType]) => [
             fieldName,
-            { type: fieldType },
+            { type: fieldType, label: String(fieldName) },
           ])
         ),
         defaultProps: Object.fromEntries(

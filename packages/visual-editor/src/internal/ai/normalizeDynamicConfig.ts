@@ -19,16 +19,18 @@ const supportedFieldTypes = new Set([
 
 const getFieldLabel = (fieldName: string): string => {
   return fieldName
+    .replace(/[-_]+/g, " ")
     .replace(/([a-z])([A-Z])/g, "$1 $2")
     .replace(/([A-Za-z])(\d)/g, "$1 $2")
     .replace(/(\d)([A-Za-z])/g, "$1 $2")
-    .replace(/^./, (value) => value.toUpperCase());
+    .replace(/\b\w/g, (value) => value.toUpperCase());
 };
 
 const getDefaultProps = (
   fieldName: string,
   fieldType: string,
-  value: string
+  value: string,
+  attributes = ""
 ): Record<string, unknown> => {
   if (fieldType === "testEntityField") {
     return {
@@ -55,8 +57,12 @@ const getDefaultProps = (
       field: "",
       constantValueEnabled: true,
       constantValue: {
-        url: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
-        alternateText: getFieldLabel(fieldName),
+        url:
+          /\bsrc\s*=\s*(["'])([\s\S]*?)\1/i.exec(attributes)?.[2] ??
+          "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
+        alternateText:
+          /\balt\s*=\s*(["'])([\s\S]*?)\1/i.exec(attributes)?.[2] ??
+          getFieldLabel(fieldName),
       },
       aspectRatio: 1.78,
       imageFillType: "fill",
@@ -71,10 +77,16 @@ const getDefaultProps = (
     constantValue: {
       ctaType: "textAndLink",
       label: {
-        en: "Learn More",
+        en:
+          value
+            .replace(/<[^>]*>/g, " ")
+            .replace(/\s+/g, " ")
+            .trim() || "Learn More",
         hasLocalizedValue: "true",
       },
-      link: "/learn-more",
+      link:
+        /\bhref\s*=\s*(["'])([\s\S]*?)\1/i.exec(attributes)?.[2] ??
+        "/learn-more",
       linkType: "URL",
     },
   };
@@ -155,6 +167,13 @@ const getFieldDefinition = (
   return { type: fieldType, label };
 };
 
+/** Removes authored values from an annotation after moving them into defaultProps. */
+const removeUnboundContentAttributes = (attributes: string): string => {
+  return attributes
+    .replace(/\s(?:src|href|alt|aria-label|title)\s*=\s*(["'])[^]*?\1/gi, "")
+    .replace(/\s*\/\s*$/, "");
+};
+
 /**
  * Converts Puck design-mode annotations into the transform-backed authored
  * values that Yext custom fields require. Puck supplies only annotation types
@@ -209,15 +228,29 @@ export const normalizeDynamicConfig = (
               continue;
             }
 
-            if (!fields[fieldName]) {
-              fields[fieldName] = getFieldDefinition(fieldName, shape.type);
+            const fieldDefinition = getFieldDefinition(fieldName, shape.type);
+            const existingField = fields[fieldName];
+            if (!isRecord(existingField)) {
+              fields[fieldName] = fieldDefinition;
               componentChanged = true;
+            } else {
+              const missingFieldMetadata = Object.keys(fieldDefinition).some(
+                (key) => !(key in existingField)
+              );
+              if (missingFieldMetadata) {
+                fields[fieldName] = {
+                  ...fieldDefinition,
+                  ...existingField,
+                };
+                componentChanged = true;
+              }
             }
             if (!hasMeaningfulDefault(defaultProps[fieldName], shape.type)) {
               defaultProps[fieldName] = getDefaultProps(
                 fieldName,
                 shape.type,
-                innerHtml
+                innerHtml,
+                attributesBefore + attributesAfter
               );
               componentChanged = true;
             }
@@ -225,20 +258,83 @@ export const normalizeDynamicConfig = (
               normalizedHtml = normalizedHtml.replace(
                 fieldMarkup,
                 "<" +
-                  tagName +
-                  attributesBefore +
+                  (shape.type === "testCTA" ? "div" : tagName) +
+                  removeUnboundContentAttributes(attributesBefore) +
                   "data-puck-field-" +
                   fieldName +
                   "='" +
                   rawShape +
                   "'" +
-                  attributesAfter +
+                  removeUnboundContentAttributes(attributesAfter) +
                   "></" +
-                  tagName +
+                  (shape.type === "testCTA" ? "div" : tagName) +
                   ">"
               );
               componentChanged = true;
             }
+          } catch {
+            continue;
+          }
+        }
+
+        const imageFieldPattern =
+          /<img\b([^>]*?)data-puck-field-([A-Za-z][\w-]*)\s*=\s*'({[\s\S]*?})'([^>]*)\/?\s*>/g;
+        while ((match = imageFieldPattern.exec(html)) !== null) {
+          const [
+            fieldMarkup,
+            attributesBefore,
+            fieldName,
+            rawShape,
+            attributesAfter,
+          ] = match;
+          try {
+            const shape = JSON.parse(rawShape);
+            if (
+              !isRecord(shape) ||
+              shape.type !== "testImage" ||
+              !supportedFieldTypes.has(shape.type)
+            ) {
+              continue;
+            }
+
+            const fieldDefinition = getFieldDefinition(fieldName, shape.type);
+            const existingField = fields[fieldName];
+            if (!isRecord(existingField)) {
+              fields[fieldName] = fieldDefinition;
+              componentChanged = true;
+            } else if (
+              Object.keys(fieldDefinition).some(
+                (key) => !(key in existingField)
+              )
+            ) {
+              fields[fieldName] = {
+                ...fieldDefinition,
+                ...existingField,
+              };
+              componentChanged = true;
+            }
+            if (!hasMeaningfulDefault(defaultProps[fieldName], shape.type)) {
+              defaultProps[fieldName] = getDefaultProps(
+                fieldName,
+                shape.type,
+                "",
+                attributesBefore + attributesAfter
+              );
+              componentChanged = true;
+            }
+            normalizedHtml = normalizedHtml.replace(
+              fieldMarkup,
+              "<div" +
+                removeUnboundContentAttributes(attributesBefore) +
+                "data-puck-field-" +
+                fieldName +
+                "='" +
+                rawShape +
+                "'" +
+                removeUnboundContentAttributes(attributesAfter) +
+                "></div>"
+            );
+            componentChanged = true;
           } catch {
             continue;
           }

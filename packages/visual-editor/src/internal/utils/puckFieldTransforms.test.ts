@@ -17,4 +17,27 @@ describe("createPuckFieldTransforms", () => {
     expect(transforms.testCTA({ value: {} })).toBeUndefined();
     expect(error).toHaveBeenCalledTimes(4);
   });
+
+  it("does not render an incomplete localized CTA label", () => {
+    const transforms = createPuckFieldTransforms("en", {}) as Record<
+      string,
+      (params: { value: unknown; field?: unknown }) => unknown
+    >;
+
+    expect(
+      transforms.testCTA({
+        value: {
+          field: "",
+          constantValueEnabled: true,
+          selectedType: "textAndLink",
+          constantValue: {
+            ctaType: "textAndLink",
+            label: { en: "Learn More" },
+            link: "/learn-more",
+            linkType: "URL",
+          },
+        },
+      })
+    ).toBeUndefined();
+  });
 });

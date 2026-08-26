@@ -137,6 +137,40 @@ describe("normalizeDynamicConfig", () => {
     });
   });
 
+  it("repairs omitted field metadata and image values from generated markup", () => {
+    const normalized = normalizeDynamicConfig({
+      components: {
+        Cards: {
+          label: "Cards",
+          html: `<section><img class="card-image" src="https://example.com/one.jpg" alt="First card" data-puck-field-card-one-image='{ "type": "testImage" }' /></section>`,
+          styles: ".cards {}",
+          fields: { "card-one-image": { type: "testImage" } },
+          defaultProps: { "card-one-image": {} },
+        },
+      },
+    }) as {
+      dynamicConfig: { components: Record<string, Record<string, any>> };
+    };
+
+    expect(normalized.dynamicConfig.components.Cards.fields).toEqual({
+      "card-one-image": {
+        type: "testImage",
+        label: "Card One Image",
+        filter: { types: ["type.image"] },
+      },
+    });
+    expect(
+      normalized.dynamicConfig.components.Cards.defaultProps["card-one-image"]
+        .constantValue
+    ).toEqual({
+      url: "https://example.com/one.jpg",
+      alternateText: "First card",
+    });
+    expect(normalized.dynamicConfig.components.Cards.html).toBe(
+      `<section><div class="card-image" data-puck-field-card-one-image='{ "type": "testImage" }'></div></section>`
+    );
+  });
+
   it("repairs stale generated component instances without replacing authored values", () => {
     const normalized = normalizeDynamicData(
       {

@@ -189,12 +189,18 @@ export const createPuckFieldTransforms = (
           return undefined;
         }
 
-        const label =
-          resolveComponentData(cta.label, locale, streamDocument) ?? "";
-        const link =
+        const resolvedLabel = resolveComponentData(
+          cta.label,
+          locale,
+          streamDocument
+        );
+        const label = typeof resolvedLabel === "string" ? resolvedLabel : "";
+        const resolvedLink =
           resolvedCtaType === "getDirections"
             ? undefined
             : resolveComponentData(cta.link, locale, streamDocument);
+        const link =
+          typeof resolvedLink === "string" ? resolvedLink : undefined;
 
         if (!label && resolvedCtaType !== "presetImage") {
           return undefined;
