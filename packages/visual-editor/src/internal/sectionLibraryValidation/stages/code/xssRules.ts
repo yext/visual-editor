@@ -40,10 +40,15 @@ export const xssRules: XssRule[] = [
         return;
       }
       const left = node.getLeft();
+      const propertyName = Node.isPropertyAccessExpression(left)
+        ? left.getName()
+        : Node.isElementAccessExpression(left)
+          ? getLiteralString(left.getArgumentExpression())
+          : undefined;
       return assignmentOperators.has(node.getOperatorToken().getKind()) &&
-        Node.isPropertyAccessExpression(left) &&
-        ["innerHTML", "outerHTML"].includes(left.getName())
-        ? `Assignment to ${left.getName()} is not permitted.`
+        propertyName !== undefined &&
+        ["innerHTML", "outerHTML"].includes(propertyName)
+        ? `Assignment to ${propertyName} is not permitted.`
         : undefined;
     },
   },
@@ -89,12 +94,16 @@ export const xssRules: XssRule[] = [
   },
   {
     name: "xss/function-constructor",
-    evaluate: (node) =>
-      Node.isNewExpression(node) &&
-      Node.isIdentifier(node.getExpression()) &&
-      node.getExpression().getText() === "Function"
-        ? "new Function() is not permitted."
-        : undefined,
+    evaluate: (node) => {
+      if (!Node.isNewExpression(node) && !Node.isCallExpression(node)) {
+        return;
+      }
+      const expression = node.getExpression();
+      return Node.isIdentifier(expression) &&
+        expression.getText() === "Function"
+        ? "Function constructor calls are not permitted."
+        : undefined;
+    },
   },
   {
     name: "xss/string-timer",

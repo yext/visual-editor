@@ -6,6 +6,7 @@ import { createTempRoot } from "../../testUtils.ts";
 import {
   evaluateDeniedPackages,
   evaluateForNodeBuiltins,
+  evaluateUnsupportedPackageImports,
 } from "./importRules.ts";
 import { extractImportReferences, validateCode } from "./validateCode.ts";
 
@@ -88,6 +89,23 @@ describe("evaluateDeniedPackages", () => {
   });
 });
 
+describe("evaluateUnsupportedPackageImports", () => {
+  it("rejects a runtime package import alias", () => {
+    expect(
+      evaluateUnsupportedPackageImports(reference("#server"))
+    ).toMatchObject([{ rule: "imports/unsupported-package-import" }]);
+  });
+
+  it.each(["./local", "/absolute"])(
+    "preserves local classification for %s",
+    (moduleSpecifier) => {
+      expect(
+        evaluateUnsupportedPackageImports(reference(moduleSpecifier))
+      ).toEqual([]);
+    }
+  );
+});
+
 describe("validateCode", () => {
   it("returns no issues when the library directory is missing", () => {
     expect(validateCode(createTempRoot())).toEqual([]);
@@ -110,6 +128,17 @@ describe("validateCode", () => {
 
   it.each([
     ["innerHTML assignment", "node.innerHTML = html;", "xss/html-assignment"],
+    ["outerHTML assignment", "node.outerHTML = html;", "xss/html-assignment"],
+    [
+      "innerHTML element assignment",
+      "node['innerHTML'] = html;",
+      "xss/html-assignment",
+    ],
+    [
+      "outerHTML element assignment",
+      "node[`outerHTML`] = html;",
+      "xss/html-assignment",
+    ],
     [
       "insertAdjacentHTML",
       "node.insertAdjacentHTML('beforeend', html);",
@@ -118,6 +147,7 @@ describe("validateCode", () => {
     ["document.write", "document.write(html);", "xss/document-write"],
     ["eval", "eval(code);", "xss/eval"],
     ["Function constructor", "new Function(code);", "xss/function-constructor"],
+    ["Function call", "Function(code);", "xss/function-constructor"],
     ["string timer", "setTimeout('run()', 1);", "xss/string-timer"],
     [
       "dangerouslySetInnerHTML",

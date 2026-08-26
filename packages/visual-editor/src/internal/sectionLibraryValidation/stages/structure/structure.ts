@@ -22,8 +22,7 @@ const reservedLayoutIds = new Set([
   "locator", // must be the name of the locator layout
   "edit", // reserved for the editor static page
 ]);
-// TODO: Match API-specific resource-ID and length behavior when it is finalized.
-const safeIdPattern = /^[A-Za-z0-9_-]+$/;
+export const safeSectionLibraryIdPattern = /^[A-Za-z0-9_-]+$/;
 type ParsedLayout = SectionLibraryLayout & { defaultLayoutPath: string };
 
 /** validateSectionLibraryStructure validates that repo structure is correct for Section Libraries. */
@@ -132,7 +131,7 @@ const readSections = (
     }
 
     const componentName = path.basename(entry.name, extension);
-    if (!safeIdPattern.test(componentName)) {
+    if (!safeSectionLibraryIdPattern.test(componentName)) {
       addIssue(
         sourcePath,
         "sections/component-name",
@@ -148,7 +147,7 @@ const readSections = (
         sourcePath: path.relative(rootDir, sourcePath),
       };
 
-      if (!safeIdPattern.test(section.id)) {
+      if (!safeSectionLibraryIdPattern.test(section.id)) {
         addIssue(sourcePath, "sections/id", "config must define a valid id");
       } else {
         sections.push(section);
@@ -278,7 +277,7 @@ const readLayout = (
     } else {
       throw new Error("must set a supported pageSetType");
     }
-    if (!safeIdPattern.test(metadata.id)) {
+    if (!safeSectionLibraryIdPattern.test(metadata.id)) {
       throw new Error(`Layout ID is not valid: ${metadata.id}`);
     }
 
@@ -315,7 +314,7 @@ const validateComponentIds = (
             )
           : path.join(libraryDirectory, "shared", "componentRegistry.ts");
 
-      if (!safeIdPattern.test(component.id)) {
+      if (!safeSectionLibraryIdPattern.test(component.id)) {
         addIssue(
           filePath,
           "components/id",

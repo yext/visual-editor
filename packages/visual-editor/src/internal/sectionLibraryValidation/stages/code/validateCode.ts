@@ -4,6 +4,7 @@ import { Node, Project, type SourceFile, SyntaxKind } from "ts-morph";
 import {
   evaluateDeniedPackages,
   evaluateForNodeBuiltins,
+  evaluateUnsupportedPackageImports,
   type ImportReference,
   type ImportSyntaxKind,
 } from "./importRules.ts";
@@ -34,6 +35,7 @@ export const validateCode = (rootDir: string): ValidationIssue[] => {
     const references = extractImportReferences(sourceFile, filePath);
     return [
       ...references.flatMap((reference) => [
+        ...evaluateUnsupportedPackageImports(reference),
         ...evaluateForNodeBuiltins(reference),
         ...evaluateDeniedPackages(reference),
       ]),

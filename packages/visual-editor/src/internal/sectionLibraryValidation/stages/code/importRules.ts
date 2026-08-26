@@ -48,6 +48,7 @@ export type ImportReference = {
 
 type ClassifiedImport =
   | { kind: "local" }
+  | { kind: "unsupported-package-import" }
   | { kind: "node"; moduleName: string }
   | { kind: "package"; packageName: string };
 
@@ -58,12 +59,11 @@ const nodeBuiltins = new Set(
 );
 
 const classifyImport = (moduleSpecifier: string): ClassifiedImport => {
-  if (
-    moduleSpecifier.startsWith(".") ||
-    moduleSpecifier.startsWith("/") ||
-    moduleSpecifier.startsWith("#")
-  ) {
+  if (moduleSpecifier.startsWith(".") || moduleSpecifier.startsWith("/")) {
     return { kind: "local" };
+  }
+  if (moduleSpecifier.startsWith("#")) {
+    return { kind: "unsupported-package-import" };
   }
   const withoutNodePrefix = moduleSpecifier.startsWith("node:")
     ? moduleSpecifier.slice(5)
@@ -113,6 +113,26 @@ export const evaluateForNodeBuiltins = (
         ),
       ]
     : [];
+};
+
+export const evaluateUnsupportedPackageImports = (
+  reference: ImportReference
+): ValidationIssue[] => {
+  if (
+    reference.isTypeOnly ||
+    classifyImport(reference.moduleSpecifier).kind !==
+      "unsupported-package-import"
+  ) {
+    return [];
+  }
+
+  return [
+    createIssue(
+      reference,
+      "imports/unsupported-package-import",
+      `Package import alias '${reference.moduleSpecifier}' cannot be resolved by Section Library validation.`
+    ),
+  ];
 };
 
 export const evaluateDeniedPackages = (

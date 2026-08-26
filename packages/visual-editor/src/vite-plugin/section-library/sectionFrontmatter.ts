@@ -5,9 +5,9 @@ import {
   type PageSetType,
   type SectionConfig,
 } from "../../types/sectionLibrary.ts";
+import { safeSectionLibraryIdPattern } from "../../internal/sectionLibraryValidation/stages/structure/structure.ts";
 
 const project = new Project({ compilerOptions: { allowJs: true } });
-const safeIdPattern = /^[A-Za-z0-9_-]+$/;
 
 /** Reads the static SectionConfig metadata from one section source file. */
 export const extractSectionConfigFrontmatter = (
@@ -61,7 +61,7 @@ export const extractSectionConfigFrontmatter = (
     };
 
     const id = getString("id");
-    if (!id || !safeIdPattern.test(id)) {
+    if (!id || !safeSectionLibraryIdPattern.test(id)) {
       throw new Error(`${sourcePath} config must define a valid id`);
     }
 
