@@ -8,6 +8,7 @@ import { normalizeFooterLogoImageMigration } from "../components/migrations/0075
 import { slotMappedCardsMigration } from "../components/migrations/0076_slot_mapped_cards.ts";
 import { removeMapboxApiKeyPropsMigration } from "../components/migrations/0078_remove_mapbox_api_key_props.ts";
 import { imageFillTypeMigration } from "../components/migrations/0079_image_fill_type.ts";
+import { heroPhoneSlotMigration } from "../components/migrations/0082_hero_phone_slot.ts";
 
 describe("migrate", () => {
   it("successfully applies a migration", async () => {
@@ -1646,6 +1647,54 @@ describe("migrate", () => {
         phoneNumber: { field: "phoneNumber" },
         email: { field: "email" },
         cta: { field: "cta" },
+      },
+    });
+  });
+
+  it("adds the phone slot to existing Hero Sections", () => {
+    const migratedData = migrate(
+      {
+        root: { props: { version: 0 } },
+        content: [
+          {
+            type: "HeroSection",
+            props: {
+              id: "HeroSection-test",
+              styles: {},
+              slots: {},
+            },
+          },
+        ],
+        zones: {},
+      },
+      [heroPhoneSlotMigration],
+      { components: {} },
+      {}
+    );
+
+    expect(migratedData.content[0]?.props).toMatchObject({
+      styles: { showPhone: false },
+      slots: {
+        PhoneSlot: [
+          {
+            type: "PhoneNumbersSlot",
+            props: {
+              id: "HeroSection-test-PhoneSlot",
+              data: {
+                phoneNumbers: [
+                  {
+                    number: { field: "mainPhone", constantValue: "" },
+                    label: { defaultValue: "Phone" },
+                  },
+                ],
+              },
+              styles: {
+                phoneFormat: "domestic",
+                includePhoneHyperlink: true,
+              },
+            },
+          },
+        ],
       },
     });
   });
