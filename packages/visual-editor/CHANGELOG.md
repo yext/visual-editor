@@ -1,3 +1,10 @@
+#### 1.4.6 (2026-08-26)
+
+##### New Features
+
+- add phone number to hero section ([#1298](https://github.com/yext/visual-editor/pull/1298)) ([5254dfcb](https://github.com/yext/visual-editor/commit/5254dfcb35f1e31b1cd492e69cba21ec6c8a2bf9))
+- allow indexing of lists in embedded fields ([#1288](https://github.com/yext/visual-editor/pull/1288)) ([480c2149](https://github.com/yext/visual-editor/commit/480c2149d178f2712e4f5bd60410130d992cd67d))
+
 #### 1.4.5 (2026-08-13)
 
 ##### Chores
