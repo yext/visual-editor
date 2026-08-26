@@ -455,6 +455,7 @@ This object contains properties for customizing the component's appearance.
 | `styles.showGeomodifier`          | `boolean`                                              | Whether to show the geomodifier.                                                                                                               | `true`               |
 | `styles.showHoursStatus`          | `boolean`                                              | Whether to show the hours status.                                                                                                              | `true`               |
 | `styles.showImage`                | `boolean`                                              | Whether to show the hero image (classic and compact variant).                                                                                  | `true`               |
+| `styles.showPhone`                | `boolean`                                              | Whether to show the phone number.                                                                                                              | `true`               |
 | `styles.showPrimaryCTA`           | `boolean`                                              | Whether to show the primary CTA.                                                                                                               | `true`               |
 | `styles.showSecondaryCTA`         | `boolean`                                              | Whether to show the secondary CTA.                                                                                                             | `true`               |
 | `styles.variant`                  | `"classic" \| "immersive" \| "spotlight" \| "compact"` | The visual variant for the hero section.                                                                                                       | `classic`            |
@@ -463,10 +464,10 @@ This object contains properties for customizing the component's appearance.
 
 If 'true', the component is visible on the live page; if 'false', it's hidden.
 
-| Prop             | Type                                                                                                                                       | Description                                                                    | Default |
-| :--------------- | :----------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------- | :------ |
-| `liveVisibility` | `boolean`                                                                                                                                  | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
-| `slots`          | `{ BusinessNameSlot: Slot; GeomodifierSlot: Slot; HoursStatusSlot: Slot; ImageSlot: Slot; PrimaryCTASlot: Slot; SecondaryCTASlot: Slot; }` |                                                                                |         |
+| Prop             | Type                                                                                                                                                        | Description                                                                    | Default |
+| :--------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------- | :------ |
+| `liveVisibility` | `boolean`                                                                                                                                                   | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| `slots`          | `{ BusinessNameSlot: Slot; GeomodifierSlot: Slot; PhoneSlot: Slot; HoursStatusSlot: Slot; ImageSlot: Slot; PrimaryCTASlot: Slot; SecondaryCTASlot: Slot; }` |                                                                                |         |
 
 ---
 
