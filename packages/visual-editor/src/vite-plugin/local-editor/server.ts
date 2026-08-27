@@ -1,7 +1,7 @@
 import { getLocalEditorDocument, getLocalEditorManifest } from "./data.ts";
 import { MAX_LOCAL_EDITOR_DIRECTORY_CHILD_COUNT } from "./fixtureData.ts";
 import { LOCAL_EDITOR_API_BASE_PATH } from "./generatedFiles.ts";
-import type { SectionLibraryLayout } from "../../sectionLibrary.ts";
+import type { SectionLibraryLayout } from "../../types/sectionLibrary.ts";
 import type {
   LocalEditorDocumentResponse,
   LocalEditorManifestResponse,

@@ -1,6 +1,6 @@
 import path from "node:path";
 import fs from "fs-extra";
-import type { SectionLibraryLayout } from "../../sectionLibrary.ts";
+import type { SectionLibraryLayout } from "../../types/sectionLibrary.ts";
 import {
   buildLocalEditorDataTemplatePath,
   buildLocalEditorDataTemplateSource,

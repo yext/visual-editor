@@ -2,7 +2,7 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import fs from "fs-extra";
 import { tsImport } from "tsx/esm/api";
-import type { SectionLibraryLayout } from "../../sectionLibrary.ts";
+import type { SectionLibraryLayout } from "../../types/sectionLibrary.ts";
 import { buildLocalEditorDataTemplateName } from "./generatedFiles.ts";
 import type { LocalEditorConfig, ResolvedLocalEditorConfig } from "./types.ts";
 import { toErrorMessage } from "./utils.ts";

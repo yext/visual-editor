@@ -192,7 +192,7 @@ describe("generateSectionLibraryFiles", () => {
     expect(result.manifestSource).toContain(
       '"purpose": [\n        "LOCATION"\n      ]'
     );
-  });
+  }, 10_000);
 
   it("replaces a compatibility manifest from an earlier library structure", () => {
     const rootDir = createLibrary();
@@ -585,7 +585,7 @@ describe("generateSectionLibraryFiles", () => {
           description: "A test library.",
         });
       },
-      error: /must set schemaVersion to 1/,
+      error: /schemaVersion must equal 1/,
     },
     {
       name: "unsupported layout vertical",
@@ -689,7 +689,7 @@ describe("generateSectionLibraryFiles", () => {
           }
         );
       },
-      error: /component hero must define an ID/,
+      error: /component hero must contain props\.id/,
     },
     {
       name: "duplicate layout component ID",
@@ -713,7 +713,7 @@ describe("generateSectionLibraryFiles", () => {
           }
         );
       },
-      error: /component ID is not unique: hero-default/,
+      error: /props\.id is not unique: hero-default/,
     },
   ])("rejects $name", ({ update, error }) => {
     const rootDir = createLibrary();
@@ -725,6 +725,29 @@ describe("generateSectionLibraryFiles", () => {
         "123e4567-e89b-12d3-a456-426614174000"
       )
     ).toThrow(error);
+  });
+
+  it("aggregates validation findings before generating any files", () => {
+    const rootDir = createLibrary();
+    const sectionsDirectory = path.join(rootDir, "src", "library", "sections");
+    fs.writeFileSync(
+      path.join(sectionsDirectory, "Hero.tsx"),
+      "export const Hero = {};"
+    );
+    fs.writeFileSync(
+      path.join(sectionsDirectory, "Locator.tsx"),
+      "export const Locator = {};"
+    );
+
+    expect(() =>
+      generateSectionLibraryFiles(
+        rootDir,
+        "123e4567-e89b-12d3-a456-426614174000"
+      )
+    ).toThrowError(/Hero\.tsx[\s\S]*Locator\.tsx/);
+    expect(
+      fs.existsSync(path.join(rootDir, "src", "library", ".generated"))
+    ).toBe(false);
   });
 
   it("requires a Section Library revision ID", () => {

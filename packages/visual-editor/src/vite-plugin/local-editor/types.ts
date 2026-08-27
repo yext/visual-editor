@@ -1,5 +1,5 @@
 import type { YextSchemaField } from "../../types/entityFields.ts";
-import type { PageSetType } from "../../sectionLibrary.ts";
+import type { PageSetType } from "../../types/sectionLibrary.ts";
 
 export type LocalEditorOptions = {
   enabled?: boolean;

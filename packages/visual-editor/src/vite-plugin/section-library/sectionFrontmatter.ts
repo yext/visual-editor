@@ -4,7 +4,8 @@ import {
   supportedPageSetTypes,
   type PageSetType,
   type SectionConfig,
-} from "../../sectionLibrary.ts";
+} from "../../types/sectionLibrary.ts";
+import { safeSectionLibraryIdPattern } from "../../internal/sectionLibraryValidation/stages/structure/structure.ts";
 
 const project = new Project({ compilerOptions: { allowJs: true } });
 
@@ -58,6 +59,12 @@ export const extractSectionConfigFrontmatter = (
       }
       return value.asKind(SyntaxKind.StringLiteral)?.getLiteralValue() ?? null;
     };
+
+    const id = getString("id");
+    if (!id || !safeSectionLibraryIdPattern.test(id)) {
+      throw new Error(`${sourcePath} config must define a valid id`);
+    }
+
     const pageSetTypesProperty = object.getProperty("pageSetTypes");
     const pageSetTypes = pageSetTypesProperty
       ? pageSetTypesProperty
@@ -91,10 +98,6 @@ export const extractSectionConfigFrontmatter = (
       );
     }
 
-    const id = getString("id");
-    if (!id) {
-      throw new Error(`${sourcePath} config must define a valid id`);
-    }
     const displayName = getString("displayName");
     if (!displayName) {
       throw new Error(

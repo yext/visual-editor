@@ -1,6 +1,6 @@
 import path from "node:path";
 import fs from "fs-extra";
-import type { PageSetType } from "../../sectionLibrary.ts";
+import type { PageSetType } from "../../types/sectionLibrary.ts";
 
 export const DEFAULT_LOCAL_EDITOR_ROUTE = "/local-editor";
 export const DEFAULT_LOCAL_EDITOR_STREAM_CONFIG_PATH = "stream.config.ts";

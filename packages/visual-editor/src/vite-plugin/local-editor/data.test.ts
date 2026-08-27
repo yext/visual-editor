@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import fs from "fs-extra";
 import { afterEach, describe, expect, it } from "vitest";
-import type { SectionLibraryLayout } from "../../sectionLibrary.ts";
+import type { SectionLibraryLayout } from "../../types/sectionLibrary.ts";
 import { getLocalEditorDocument, getLocalEditorManifest } from "./data.ts";
 
 const rootDirs: string[] = [];
