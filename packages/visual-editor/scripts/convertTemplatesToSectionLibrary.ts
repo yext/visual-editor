@@ -146,9 +146,6 @@ export const convertTemplatesToSectionLibrary = ({
     if (deleteSource) {
       deleteLegacyTemplates(templates, write);
     }
-    write(
-      "The current Section Library generator supports one Entity layout. This conversion is ready for future multi-Entity support, but it cannot build yet."
-    );
   } finally {
     if (preparedBaseLibrary.temporaryDirectory) {
       fs.rmSync(preparedBaseLibrary.temporaryDirectory, {

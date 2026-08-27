@@ -15,7 +15,7 @@ afterEach(() => {
 });
 
 describe("createLocalEditorArtifactsManager", () => {
-  it("creates a real-layout config registry and data templates for Entity and Directory layouts", () => {
+  it("creates config and data templates for multiple Entity layouts", () => {
     const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "local-editor-"));
     rootDirs.push(rootDir);
     const artifacts = createLocalEditorArtifactsManager({
@@ -36,6 +36,15 @@ describe("createLocalEditorArtifactsManager", () => {
         metadata: {
           id: "location-layout",
           displayName: "Location",
+          pageSetType: "ENTITY",
+          previewImageUrl: "",
+        },
+        defaultLayout: {},
+      },
+      {
+        metadata: {
+          id: "alternate-location-layout",
+          displayName: "Alternate Location",
           pageSetType: "ENTITY",
           previewImageUrl: "",
         },
@@ -65,7 +74,13 @@ describe("createLocalEditorArtifactsManager", () => {
         path.join(rootDir, "src", "templates", "local-editor.tsx"),
         "utf8"
       )
-    ).toContain('"directory-layout": LayoutConfig1');
+    ).toContain('"directory-layout": LayoutConfig2');
+    expect(
+      fs.readFileSync(
+        path.join(rootDir, "src", "templates", "local-editor.tsx"),
+        "utf8"
+      )
+    ).toContain('"alternate-location-layout": LayoutConfig1');
     expect(
       fs.existsSync(
         path.join(
@@ -73,6 +88,16 @@ describe("createLocalEditorArtifactsManager", () => {
           "src",
           "templates",
           "local-editor-data-location-layout.tsx"
+        )
+      )
+    ).toBe(true);
+    expect(
+      fs.existsSync(
+        path.join(
+          rootDir,
+          "src",
+          "templates",
+          "local-editor-data-alternate-location-layout.tsx"
         )
       )
     ).toBe(true);

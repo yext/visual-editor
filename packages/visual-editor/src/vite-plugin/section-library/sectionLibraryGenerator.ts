@@ -83,12 +83,27 @@ export const generateSectionLibraryFiles = (
       : [];
   });
 
-  const layoutsByPageSetType = new Map(
-    structure.layouts.map((layout) => [layout.metadata.pageSetType, layout])
+  const entityLayouts = structure.layouts.filter(
+    (layout) => layout.metadata.pageSetType === "ENTITY"
   );
-  const entityLayout = layoutsByPageSetType.get("ENTITY")!;
-  const directoryLayout = layoutsByPageSetType.get("DIRECTORY")!;
-  const locatorLayout = layoutsByPageSetType.get("LOCATOR")!;
+  // The legacy aliases and manifest can expose only one Entity default. The
+  // layouts are sorted by type and ID, so this compatibility choice is stable.
+  const entityLayout = entityLayouts[0]!;
+  const directoryLayout = structure.layouts.find(
+    (layout) => layout.metadata.pageSetType === "DIRECTORY"
+  )!;
+  const locatorLayout = structure.layouts.find(
+    (layout) => layout.metadata.pageSetType === "LOCATOR"
+  )!;
+  const legacyEditorEntries: [string, Layout][] = [
+    ["main", entityLayout],
+    ["directory", directoryLayout],
+    ["locator", locatorLayout],
+    ...structure.layouts.map((layout): [string, Layout] => [
+      layout.metadata.id,
+      layout,
+    ]),
+  ];
   const aliasPaths = [
     path.join(rootDir, "src", "templates", "main.tsx"),
     path.join(rootDir, "src", "templates", "directory.tsx"),
@@ -99,14 +114,7 @@ export const generateSectionLibraryFiles = (
     buildRenderTemplateSource(entityLayout),
     buildRenderTemplateSource(directoryLayout),
     buildRenderTemplateSource(locatorLayout),
-    buildEditorTemplateSource([
-      ["main", entityLayout],
-      [entityLayout.metadata.id, entityLayout],
-      ["directory", directoryLayout],
-      [directoryLayout.metadata.id, directoryLayout],
-      ["locator", locatorLayout],
-      [locatorLayout.metadata.id, locatorLayout],
-    ]),
+    buildEditorTemplateSource(legacyEditorEntries),
   ];
   generatedFiles.push(
     ...aliasPaths.filter((filePath, index) => {

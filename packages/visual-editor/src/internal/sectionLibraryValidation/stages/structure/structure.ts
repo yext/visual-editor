@@ -189,26 +189,58 @@ const readLayouts = (
     );
     return layout ? [layout] : [];
   });
-  const pageSetTypes = new Set(
-    layouts.map((layout) => layout.metadata.pageSetType)
-  );
+  if (layouts.length === layoutDirectories.length) {
+    const layoutIds = new Set<string>();
+    for (const layout of layouts) {
+      if (layoutIds.has(layout.metadata.id)) {
+        addIssue(
+          layoutsDirectory,
+          "layouts/duplicate-id",
+          `Layout ID is not unique: ${layout.metadata.id}`
+        );
+      }
+      layoutIds.add(layout.metadata.id);
+    }
 
-  if (
-    layoutDirectories.length !== 3 ||
-    (layouts.length === layoutDirectories.length &&
-      (pageSetTypes.size !== 3 ||
-        !["ENTITY", "DIRECTORY", "LOCATOR"].every((type) =>
-          pageSetTypes.has(type as PageSetType)
-        )))
-  ) {
-    addIssue(
-      layoutsDirectory,
-      "layouts/cardinality",
-      "Section Library build mode requires one ENTITY, one DIRECTORY, and one LOCATOR layout."
-    );
+    const layoutCountByPageSetType = new Map<PageSetType, number>();
+    for (const layout of layouts) {
+      const pageSetType = layout.metadata.pageSetType;
+      layoutCountByPageSetType.set(
+        pageSetType,
+        (layoutCountByPageSetType.get(pageSetType) ?? 0) + 1
+      );
+    }
+    if ((layoutCountByPageSetType.get("ENTITY") ?? 0) === 0) {
+      addIssue(
+        layoutsDirectory,
+        "layouts/cardinality",
+        "Section Library build mode requires at least one ENTITY layout."
+      );
+    }
+    if (
+      layoutCountByPageSetType.get("DIRECTORY") !== 1 ||
+      layoutCountByPageSetType.get("LOCATOR") !== 1
+    ) {
+      addIssue(
+        layoutsDirectory,
+        "layouts/cardinality",
+        "Section Library build mode requires exactly one DIRECTORY and one LOCATOR layout."
+      );
+    }
   }
-  return layouts;
+  return layouts.sort(compareLayouts);
 };
+
+const pageSetTypeOrder: Record<PageSetType, number> = {
+  ENTITY: 0,
+  DIRECTORY: 1,
+  LOCATOR: 2,
+};
+
+const compareLayouts = (left: ParsedLayout, right: ParsedLayout): number =>
+  pageSetTypeOrder[left.metadata.pageSetType] -
+    pageSetTypeOrder[right.metadata.pageSetType] ||
+  left.metadata.id.localeCompare(right.metadata.id);
 
 const readLayout = (
   layoutDirectory: string,

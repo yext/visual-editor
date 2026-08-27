@@ -194,6 +194,96 @@ describe("generateSectionLibraryFiles", () => {
     );
   }, 10_000);
 
+  it("maps multiple Entity layouts to the shared main template", () => {
+    const rootDir = createLibrary();
+    addEntityLayout(rootDir, "alpha-location", 42);
+
+    const result = generateSectionLibraryFiles(
+      rootDir,
+      "123e4567-e89b-12d3-a456-426614174000"
+    );
+
+    expect(result.layouts.map((layout) => layout.metadata.id)).toEqual([
+      "alpha-location",
+      "location",
+      "directory-layout",
+      "locator-layout",
+    ]);
+    expect(result.generatedFiles).toHaveLength(12);
+    expect(
+      fs.existsSync(
+        path.join(
+          rootDir,
+          "src",
+          "library",
+          ".generated",
+          "libraryConfig-alpha-location.tsx"
+        )
+      )
+    ).toBe(true);
+    const mainTemplate = fs.readFileSync(
+      path.join(rootDir, "src", "templates", "main.tsx"),
+      "utf8"
+    );
+    expect(mainTemplate).toContain('const layoutId = "alpha-location"');
+    const legacyEditorTemplate = fs.readFileSync(
+      path.join(rootDir, "src", "templates", "edit.tsx"),
+      "utf8"
+    );
+    expect(legacyEditorTemplate).toContain(
+      '"alpha-location": () => import("../library/.generated/libraryConfig-alpha-location")'
+    );
+    expect(legacyEditorTemplate).toContain(
+      '"location": () => import("../library/.generated/libraryConfig-location")'
+    );
+    const alphaEditorTemplate = fs.readFileSync(
+      path.join(rootDir, "src", "templates", "edit-alpha-location.tsx"),
+      "utf8"
+    );
+    expect(alphaEditorTemplate).toContain(
+      'const editorPath = "edit/alpha-location/123e4567-e89b-12d3-a456-426614174000"'
+    );
+
+    const manifest = JSON.parse(result.manifestSource!);
+    expect(
+      manifest.layouts
+        .filter(
+          (layout: { pageSetType: string }) => layout.pageSetType === "ENTITY"
+        )
+        .map(
+          (layout: {
+            id: string;
+            templateId: string;
+            editorPath: string;
+            defaultLayout: { root: { props: { version: number } } };
+          }) => ({
+            id: layout.id,
+            templateId: layout.templateId,
+            editorPath: layout.editorPath,
+            version: layout.defaultLayout.root.props.version,
+          })
+        )
+    ).toEqual([
+      {
+        id: "alpha-location",
+        templateId: "main",
+        editorPath: "edit/alpha-location/123e4567-e89b-12d3-a456-426614174000",
+        version: 42,
+      },
+      {
+        id: "location",
+        templateId: "main",
+        editorPath: "edit/location/123e4567-e89b-12d3-a456-426614174000",
+        version: 73,
+      },
+    ]);
+    const legacyMainDefault = JSON.parse(
+      fs.readJsonSync(path.join(rootDir, ".template-manifest.json"))
+        .templates[0].defaultLayoutData
+    );
+    expect(legacyMainDefault.root.props.version).toBe(42);
+  });
+
   it("replaces a compatibility manifest from an earlier library structure", () => {
     const rootDir = createLibrary();
     fs.writeJsonSync(path.join(rootDir, ".template-manifest.json"), {
@@ -639,7 +729,50 @@ describe("generateSectionLibraryFiles", () => {
           }
         );
       },
-      error: /requires one ENTITY, one DIRECTORY, and one LOCATOR layout/,
+      error: /requires at least one ENTITY layout/,
+    },
+    {
+      name: "multiple Directory layouts",
+      update: (rootDir: string): void => {
+        copyLayout(rootDir, "directory-layout", "second-directory", {
+          id: "second-directory",
+          displayName: "Second Directory",
+          pageSetType: "DIRECTORY",
+        });
+      },
+      error: /requires exactly one DIRECTORY and one LOCATOR layout/,
+    },
+    {
+      name: "multiple Locator layouts",
+      update: (rootDir: string): void => {
+        copyLayout(rootDir, "locator-layout", "second-locator", {
+          id: "second-locator",
+          displayName: "Second Locator",
+          pageSetType: "LOCATOR",
+        });
+      },
+      error: /requires exactly one DIRECTORY and one LOCATOR layout/,
+    },
+    {
+      name: "duplicate layout ID",
+      update: (rootDir: string): void => {
+        fs.writeJsonSync(
+          path.join(
+            rootDir,
+            "src",
+            "library",
+            "layouts",
+            "directory-layout",
+            "metadata.json"
+          ),
+          {
+            id: "location",
+            displayName: "Directory",
+            pageSetType: "DIRECTORY",
+          }
+        );
+      },
+      error: /Layout ID is not unique: location/,
     },
     {
       name: "missing layout section",
@@ -924,4 +1057,42 @@ const createLibrary = (): string => {
     }
   );
   return rootDir;
+};
+
+const addEntityLayout = (
+  rootDir: string,
+  layoutId: string,
+  version: number
+): void => {
+  const layoutDirectory = path.join(
+    rootDir,
+    "src",
+    "library",
+    "layouts",
+    layoutId
+  );
+  fs.ensureDirSync(layoutDirectory);
+  fs.writeJsonSync(path.join(layoutDirectory, "metadata.json"), {
+    id: layoutId,
+    displayName: layoutId,
+    previewImageUrl: "",
+    pageSetType: "ENTITY",
+  });
+  fs.writeJsonSync(path.join(layoutDirectory, "defaultLayout.json"), {
+    root: { props: { version } },
+    content: [{ type: "hero", props: { id: `${layoutId}-hero-default` } }],
+    zones: {},
+  });
+};
+
+const copyLayout = (
+  rootDir: string,
+  sourceLayoutId: string,
+  targetLayoutId: string,
+  metadata: Record<string, unknown>
+): void => {
+  const layoutsDirectory = path.join(rootDir, "src", "library", "layouts");
+  const targetDirectory = path.join(layoutsDirectory, targetLayoutId);
+  fs.copySync(path.join(layoutsDirectory, sourceLayoutId), targetDirectory);
+  fs.writeJsonSync(path.join(targetDirectory, "metadata.json"), metadata);
 };

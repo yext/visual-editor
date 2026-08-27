@@ -88,6 +88,34 @@ describe("validateSectionLibraryStructure", () => {
     expectRules(rootDir, "layouts/cardinality");
   });
 
+  it("allows multiple Entity layouts and sorts layouts by type and ID", () => {
+    const rootDir = createValidLibrary();
+    fs.copySync(
+      layoutPath(rootDir, "entity-layout"),
+      layoutPath(rootDir, "alternate-entity")
+    );
+    fs.writeJsonSync(
+      layoutFilePath(rootDir, "alternate-entity", "metadata.json"),
+      {
+        ...entityMetadata,
+        id: "alternate-entity",
+        displayName: "Alternate Entity",
+      }
+    );
+
+    const result = validateSectionLibraryStructure(rootDir);
+
+    expect(result.issues).toEqual([]);
+    expect(
+      result.structure?.layouts.map((layout) => layout.metadata.id)
+    ).toEqual([
+      "alternate-entity",
+      "entity-layout",
+      "directory-layout",
+      "locator-layout",
+    ]);
+  });
+
   it("reports a missing layout JSON file", () => {
     const rootDir = createValidLibrary();
     fs.removeSync(layoutFilePath(rootDir, "entity-layout", "metadata.json"));
@@ -295,8 +323,8 @@ describe("validateSectionLibraryStructure", () => {
       sharedComponents: [{ id: "directory-header" }],
       sharedRootPageSetTypes: ["DIRECTORY", "LOCATOR"],
       layouts: [
-        { metadata: { pageSetType: "DIRECTORY" } },
         { metadata: { pageSetType: "ENTITY" } },
+        { metadata: { pageSetType: "DIRECTORY" } },
         { metadata: { pageSetType: "LOCATOR" } },
       ],
     });
