@@ -3,7 +3,7 @@ import { resolveConfig } from "../deploy/config.ts";
 import { deploy } from "../deploy/deploy.ts";
 import { pollRevision } from "../deploy/pollRevision.ts";
 
-const USAGE = `yextve — manage Yext Visual Editor Section Libraries
+const USAGE = `yextve — manage Yext Pages for Marketers Section Libraries
 
 Usage:
   yextve deploy
