@@ -1,7 +1,6 @@
 import { builtinModules } from "node:module";
 import type { ValidationIssue } from "../../types.ts";
 
-// TODO: Review this deny list
 const deniedPackages = new Set([
   "child-process-promise",
   "cross-spawn",
