@@ -56,8 +56,20 @@ type PreparedBaseLibrary = {
 
 type CopiedComponent = LegacyComponent & { templateId: string };
 
+type TemplateHeaderFooterSelection = {
+  kind: "header" | "footer";
+  matches: string[];
+  component?: JsonRecord & { type: string };
+};
+
+type TemplateHeaderFooter = {
+  header: TemplateHeaderFooterSelection;
+  footer: TemplateHeaderFooterSelection;
+};
+
 type Conversion = {
   baseLibrary: BaseLibrary;
+  templateHeaderFooter: TemplateHeaderFooter;
   components: Map<string, CopiedComponent>;
   directoryLayoutId: string;
   duplicates: {
@@ -559,6 +571,10 @@ const buildConversion = (
   baseLibrary: BaseLibrary
 ): Conversion => {
   const firstTemplate = templates[0];
+  const templateHeaderFooter: TemplateHeaderFooter = {
+    header: selectTemplateHeaderFooter(firstTemplate, "header"),
+    footer: selectTemplateHeaderFooter(firstTemplate, "footer"),
+  };
   const components = new Map<string, CopiedComponent>();
   const duplicates: Conversion["duplicates"] = [];
   for (const template of templates) {
@@ -612,12 +628,32 @@ const buildConversion = (
   }
   return {
     baseLibrary,
+    templateHeaderFooter,
     components,
     directoryLayoutId,
     duplicates,
     libraryMetadata: buildLibraryMetadata(firstTemplate),
     locatorLayoutId,
     templates,
+  };
+};
+
+// Finds the existing header or footer by looking at the default layout
+// and finding a "type" that includes "header" or "footer"
+const selectTemplateHeaderFooter = (
+  template: LegacyTemplate,
+  kind: "header" | "footer"
+): TemplateHeaderFooterSelection => {
+  const matches = template.defaultLayout.content.filter(
+    (component: unknown): component is JsonRecord & { type: string } =>
+      isRecord(component) &&
+      typeof component.type === "string" &&
+      component.type.toLowerCase().includes(kind)
+  );
+  return {
+    kind,
+    matches: matches.map((component: any) => component.type),
+    ...(matches.length === 1 ? { component: matches[0] } : {}),
   };
 };
 
@@ -805,12 +841,14 @@ const writeConvertedLibrary = (
   renameBaseLayout(
     libraryDirectory,
     conversion.baseLibrary.directory,
-    conversion.directoryLayoutId
+    conversion.directoryLayoutId,
+    conversion.templateHeaderFooter
   );
   renameBaseLayout(
     libraryDirectory,
     conversion.baseLibrary.locator,
-    conversion.locatorLayoutId
+    conversion.locatorLayoutId,
+    conversion.templateHeaderFooter
   );
   for (const template of conversion.templates) {
     const layoutDirectory = path.join(layoutsDirectory, template.templateId);
@@ -841,7 +879,7 @@ const writeConvertedLibrary = (
   for (const component of conversion.components.values()) {
     fs.writeFileSync(
       path.join(sectionsDirectory, `${component.id}.tsx`),
-      buildSectionSource(component)
+      buildSectionSource(component, conversion.templateHeaderFooter)
     );
   }
 };
@@ -849,7 +887,8 @@ const writeConvertedLibrary = (
 const renameBaseLayout = (
   libraryDirectory: string,
   layout: BaseLayout,
-  layoutId: string
+  layoutId: string,
+  templateHeaderFooter: TemplateHeaderFooter
 ): void => {
   const layoutsDirectory = path.join(libraryDirectory, "layouts");
   const currentDirectory = path.join(
@@ -872,9 +911,37 @@ const renameBaseLayout = (
     path.join(nextDirectory, "metadata.json"),
     formatJson({ ...metadata, id: layoutId })
   );
+  const defaultLayoutPath = path.join(nextDirectory, "defaultLayout.json");
+  const defaultLayout = readJson(
+    defaultLayoutPath,
+    `default layout for ${layoutId}`
+  );
+  validateDefaultLayout(defaultLayout, defaultLayoutPath, "Base");
+  fs.writeFileSync(
+    defaultLayoutPath,
+    formatJson({
+      ...defaultLayout,
+      content: [
+        ...(templateHeaderFooter.header.component
+          ? [templateHeaderFooter.header.component]
+          : []),
+        ...defaultLayout.content,
+        ...(templateHeaderFooter.footer.component
+          ? [templateHeaderFooter.footer.component]
+          : []),
+      ],
+    })
+  );
 };
 
-const buildSectionSource = (component: CopiedComponent): string => {
+const buildSectionSource = (
+  component: CopiedComponent,
+  templateHeaderFooter: TemplateHeaderFooter
+): string => {
+  const supportsAllPageSetTypes = Object.values(templateHeaderFooter).some(
+    (selection) => selection.component?.type === component.id
+  );
+
   return [
     'import type { SectionConfig } from "@yext/visual-editor";',
     "",
@@ -885,7 +952,7 @@ const buildSectionSource = (component: CopiedComponent): string => {
     `  displayName: ${JSON.stringify(component.displayName)},`,
     // The description should default to the display name until a human updates it manually.
     `  description: ${JSON.stringify(component.displayName)},`,
-    '  pageSetTypes: ["ENTITY"],',
+    `  pageSetTypes: ${supportsAllPageSetTypes ? '["ENTITY", "DIRECTORY", "LOCATOR"]' : '["ENTITY"]'},`,
     "};",
     "",
   ].join("\n");
@@ -931,13 +998,34 @@ const writeReport = ({
       `  duplicate section ${duplicate.componentId}: kept ${duplicate.keptTemplateId}, ignored ${duplicate.ignoredTemplateId}${duplicate.differs ? " (source differs)" : ""}`
     );
   }
-  write(`  Directory layout: ${conversion.directoryLayoutId}`);
-  write(`  Locator layout: ${conversion.locatorLayoutId}`);
+  const headerFooterUsage = Object.values(conversion.templateHeaderFooter)
+    .map((selection) => selection.component?.type ?? `no ${selection.kind}`)
+    .join(" and ");
+  write(
+    `  Directory layout: ${conversion.directoryLayoutId} (using ${headerFooterUsage})`
+  );
+  write(
+    `  Locator layout: ${conversion.locatorLayoutId} (using ${headerFooterUsage})`
+  );
   write(
     deleteSource
       ? "  legacy source: remove after conversion"
       : "  legacy source: keep"
   );
+  for (const selection of Object.values(conversion.templateHeaderFooter)) {
+    if (selection.component) {
+      continue;
+    }
+    if (selection.matches.length === 0) {
+      write(
+        `  Warning: ${selection.kind} will not be copied because ${conversion.templates[0].templateId} has no top-level type containing ${selection.kind}`
+      );
+    } else {
+      write(
+        `  Warning: ${selection.kind} will not be copied because ${conversion.templates[0].templateId} has multiple top-level matches: ${selection.matches.join(", ")}`
+      );
+    }
+  }
 };
 
 const requireString = (
