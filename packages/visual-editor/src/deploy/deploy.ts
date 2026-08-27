@@ -57,7 +57,7 @@ export async function deploy(
 }
 
 function readLibrary(rootDir: string): SectionLibrary {
-  const filePath = path.join(rootDir, "src", "registry", "library.json");
+  const filePath = path.join(rootDir, "src", "library", "library.json");
   let library: unknown;
   try {
     library = JSON.parse(fs.readFileSync(filePath, "utf8"));

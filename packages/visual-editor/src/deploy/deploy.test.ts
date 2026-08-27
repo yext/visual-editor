@@ -52,9 +52,9 @@ beforeEach(() => {
   sourceCommitHash = execFileSync("git", ["-C", rootDir, "rev-parse", "HEAD"], {
     encoding: "utf8",
   }).trim();
-  fs.mkdirSync(path.join(rootDir, "src", "registry"), { recursive: true });
+  fs.mkdirSync(path.join(rootDir, "src", "library"), { recursive: true });
   fs.writeFileSync(
-    path.join(rootDir, "src", "registry", "library.json"),
+    path.join(rootDir, "src", "library", "library.json"),
     JSON.stringify({
       id: "library/123",
       displayName: "Library",
@@ -106,7 +106,7 @@ describe("deploy", () => {
 
   it("fails when library.json has no ID", async () => {
     fs.writeFileSync(
-      path.join(rootDir, "src", "registry", "library.json"),
+      path.join(rootDir, "src", "library", "library.json"),
       "{}"
     );
 
