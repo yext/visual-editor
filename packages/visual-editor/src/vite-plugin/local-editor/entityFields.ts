@@ -217,17 +217,26 @@ const inferStructuredObjectType = (
 };
 
 const isImageValue = (value: Record<string, unknown>): boolean => {
-  const nestedImage = value.image;
-  if (isPlainObject(nestedImage) && isImageValue(nestedImage)) {
-    return true;
-  }
+  return isDirectImageValue(value) || isComplexImageValue(value);
+};
 
+const isDirectImageValue = (value: Record<string, unknown>): boolean => {
   return (
     typeof value.url === "string" &&
     (typeof value.alternateText === "string" ||
       typeof value.width === "number" ||
       typeof value.height === "number")
   );
+};
+
+const isComplexImageValue = (value: Record<string, unknown>): boolean => {
+  const valueKeys = Object.keys(value);
+  if (valueKeys.length !== 1 || valueKeys[0] !== "image") {
+    return false;
+  }
+
+  const nestedImage = value.image;
+  return isPlainObject(nestedImage) && isDirectImageValue(nestedImage);
 };
 
 const isCtaValue = (value: Record<string, unknown>): boolean => {
