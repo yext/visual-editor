@@ -1,10 +1,10 @@
 import { defineConfig } from "tsup";
 
-// Builds the `yextve` CLI to dist/bin/cli.js. Node builtins stay external and
+// Builds the `yextve` CLI to dist/cli/yextve.js. Node builtins stay external and
 // everything else is bundled, so the CLI's dependencies (prompts, yaml, etc.)
 // can remain devDependencies rather than runtime deps of the published package.
 export default defineConfig({
-  entry: { "bin/cli": "src/bin/cli.ts" },
+  entry: { "cli/yextve": "src/cli/yextve.ts" },
   format: ["esm"],
   target: "node20",
   // The shebang makes the output directly executable. Some bundled CJS deps

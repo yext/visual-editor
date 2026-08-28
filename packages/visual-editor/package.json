@@ -48,7 +48,7 @@
   "scripts": {
     "build:components": "tsc && vite build",
     "build:plugin": "rm -rf dist/plugin && tsc -p tsconfig.plugin.json --emitDeclarationOnly && vite build --config vite.config.plugin.ts",
-    "build:cli": "tsup src/cli/yextve.ts --format esm --platform node --target node20 --out-dir dist/cli",
+    "build:cli": "tsup --config tsup.config.ts",
     "build": "pnpm run build:components && pnpm run build:plugin && pnpm run build:cli",
     "export-section-library-directory-locator": "tsx scripts/exportDirectoryLocatorSectionLibrary.ts",
     "convert-templates-to-section-library": "tsx scripts/convertTemplatesToSectionLibrary.ts",
@@ -96,7 +96,6 @@
     "cmdk": "^1.1.1",
     "dompurify": "^3.2.3",
     "fs-extra": "^11.2.0",
-    "handlebars": "^4.7.9",
     "geolib": "^3.3.4",
     "handlebars": "^4.7.9",
     "i18next": "^25.8.4",
