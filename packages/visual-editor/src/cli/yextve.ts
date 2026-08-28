@@ -1,84 +1,86 @@
-#!/usr/bin/env node
 import fs from "node:fs";
+import { parseArgs } from "node:util";
 import { fileURLToPath } from "node:url";
 import packageJson from "../../package.json" with { type: "json" };
-import { runValidateCommand } from "./commands/validate.ts";
+import { deployCmd } from "./commands/deploy.ts";
+import { validateCmd } from "./commands/validate.ts";
+import {
+  type CliIo,
+  type CommandParseArgsConfig,
+  type ParsedCommandArgs,
+  type RuntimeParseArgsConfig,
+  type YextveCommand,
+} from "./command.ts";
 
 const usage = `Usage:
-  yextve validate [--skip-api-check] [--skip-repo-structure-check] [--skip-code-check]
-  yextve --help
-  yextve --version
+  yextve <command> [options]
 
-Validate the Section Library in the current working directory.
+Commands:
+  deploy                           Upload a Section Library revision.
+  validate                         Validate a Section Library.
 
 Options:
-  --skip-api-check                 Skip library.json metadata validation.
-  --skip-repo-structure-check      Skip repository structure validation.
-  --skip-code-check                Skip import and code-safety validation.
-  --help                           Show this help.
+  -h, --help                       Show this help.
   --version                        Show the package version.
 
-Examples:
-  npx --package=@yext/visual-editor@latest yextve validate
+Run "yextve <command> --help" for command-specific options.
 `;
 
-type CliIo = {
-  stdout: Pick<NodeJS.WriteStream, "write" | "isTTY">;
-  stderr: Pick<NodeJS.WriteStream, "write">;
+const commands: Record<string, YextveCommand<CommandParseArgsConfig>> = {
+  deploy: deployCmd,
+  validate: validateCmd,
 };
 
-export const runCli = (
+export const runCli = async (
   args: string[],
   io: CliIo = { stdout: process.stdout, stderr: process.stderr },
   rootDir: string = process.cwd()
-): number => {
+): Promise<number> => {
+  // handle help
+  if (args.length === 1 && ["-h", "--help"].includes(args[0])) {
+    io.stdout.write(usage);
+    return 0;
+  }
+
+  // handle version
+  if (args.length === 1 && args[0] === "--version") {
+    io.stdout.write(`${packageJson.version}\n`);
+    return 0;
+  }
+
+  const commandName = args[0];
+
+  // print usage and return error status if invlaid command provided
+  if (!commandName || !Object.hasOwn(commands, commandName)) {
+    io.stderr.write(usage);
+    return 2;
+  }
+
+  const command = commands[commandName];
+
+  // parse args
+  let parsedArgs: ParsedCommandArgs<CommandParseArgsConfig>;
   try {
-    // handle help
-    if (args.length === 1 && args[0] === "--help") {
-      io.stdout.write(usage);
-      return 0;
-    }
-
-    // handle invalid help calls
-    if (args.slice(1).includes("--help")) {
-      if (args.length === 2) {
-        io.stdout.write(usage);
-        return 0;
-      }
-      io.stderr.write(usage);
-      return 2;
-    }
-
-    // handle version
-    if (args.length === 1 && args[0] === "--version") {
-      io.stdout.write(`${packageJson.version}\n`);
-      return 0;
-    }
-
-    // handle invalid args
-    if (args[0] !== "validate") {
-      io.stderr.write(usage);
-      return 2;
-    }
-
-    // run command
-    return runValidateCommand(args.slice(1), io, rootDir);
+    const config: RuntimeParseArgsConfig<CommandParseArgsConfig> = {
+      ...command.parseArgsConfig,
+      args: args.slice(1),
+    };
+    parsedArgs = parseArgs(config);
   } catch (error) {
-    if (
-      error instanceof TypeError &&
-      (error as TypeError & { code?: string }).code?.startsWith(
-        "ERR_PARSE_ARGS"
-      )
-    ) {
-      io.stderr.write(`${error.message}\n\n${usage}`);
-      return 2;
-    }
-
     io.stderr.write(
-      `Validation could not be completed: ${error instanceof Error ? error.message : String(error)}\n`
+      `${error instanceof Error ? error.message : String(error)}\n\n${command.usage}`
     );
     return 2;
   }
+
+  // show command specific help
+  if ("help" in parsedArgs.values && parsedArgs.values.help) {
+    io.stdout.write(command.usage);
+    return 0;
+  }
+
+  // run command
+  return command.run(parsedArgs.values, parsedArgs.positionals, io, rootDir);
 };
 
 if (
@@ -86,5 +88,5 @@ if (
   fs.realpathSync(process.argv[1]) ===
     fs.realpathSync(fileURLToPath(import.meta.url))
 ) {
-  process.exitCode = runCli(process.argv.slice(2));
+  process.exitCode = await runCli(process.argv.slice(2));
 }
