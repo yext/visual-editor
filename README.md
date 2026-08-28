@@ -33,7 +33,7 @@ This library provides components necessary to set up a Pages repository that can
 npx yextve deploy
 ```
 
-Run the command from the dependent repository's root. That repository must include `src/registry/library.json`:
+Run the command from the dependent repository's root. That repository must include `src/library/library.json`:
 
 ```json
 {

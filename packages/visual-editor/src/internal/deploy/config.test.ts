@@ -137,6 +137,38 @@ describe("resolveConfig", () => {
     expect(config.accountId).toBe("9");
   });
 
+  it.each([
+    ["production", "production", "https://api.yextapis.com"],
+    ["prod", "production", "https://api.yextapis.com"],
+    ["sandbox", "sandbox", "https://sbx-api.yextapis.com"],
+    ["sbx", "sandbox", "https://sbx-api.yextapis.com"],
+    ["qa", "qa", "https://qa-api.yextapis.com"],
+    ["dev", "dev", "https://dev.yext.com"],
+  ])(
+    "uses CLI universe %s as %s",
+    async (universe, expectedUniverse, apiHost) => {
+      process.env.YEXT_ACCOUNT_ID = "9";
+      process.env.YEXT_API_KEY = "envkey";
+      mockPrompts.mockResolvedValueOnce({ value: true });
+      const dir = tmpDir();
+
+      const config = await resolveConfig(dir, universe);
+
+      expect(config.universe).toBe(expectedUniverse);
+      expect(config.apiHost).toBe(apiHost);
+      expect(readYextrc(dir).universe).toBe(expectedUniverse);
+    }
+  );
+
+  it("rejects universe from both the CLI and environment", async () => {
+    process.env.YEXT_UNIVERSE = "production";
+
+    await expect(resolveConfig(tmpDir(), "sbx")).rejects.toThrow(
+      "Universe cannot be provided through both --universe and YEXT_UNIVERSE."
+    );
+    expect(mockPrompts).not.toHaveBeenCalled();
+  });
+
   it("re-prompts (auto-filled) and updates .yextrc when the user chooses new values", async () => {
     const dir = tmpDir();
     seedYextrc(dir, FULL_YEXTRC);

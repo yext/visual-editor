@@ -35,9 +35,12 @@ describe("yextve", () => {
   it("prints command-specific help", async () => {
     const deployHelp = await invoke(["deploy", "--help"]);
     expect(deployHelp.exitCode).toBe(0);
-    expect(deployHelp.stdout).toContain("yextve deploy [--verbose]");
+    expect(deployHelp.stdout).toContain(
+      "yextve deploy [-u <universe>] [--verbose]"
+    );
     expect(deployHelp.stdout).toContain("YEXT_ACCOUNT_ID / accountId");
     expect(deployHelp.stdout).not.toContain("--skip-api-check");
+    expect(deployHelp.stdout).not.toMatch(/\b(?:dev|qa)\b/);
 
     const validateHelp = await invoke(["validate", "--help"]);
     expect(validateHelp.exitCode).toBe(0);
@@ -85,6 +88,17 @@ describe("yextve", () => {
       [config, "revision/1", true],
     ]);
   });
+
+  it.each(["-u", "--universe"])(
+    "passes the universe from %s to deploy configuration",
+    async (option) => {
+      const rootDir = createTempRoot();
+      const result = await invoke(["deploy", option, "sbx"], rootDir);
+
+      expect(result.exitCode).toBe(0);
+      expect(resolveConfig).toHaveBeenCalledWith(rootDir, "sbx");
+    }
+  );
 
   it("reports deploy errors", async () => {
     resolveConfig.mockRejectedValueOnce(new Error("deploy failed"));

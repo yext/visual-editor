@@ -5,7 +5,8 @@ import { readYextrc, updateYextrc, type Yextrc } from "./yextrc.ts";
 
 // Resolves the auth/config the deploy command needs: account ID, universe, API
 // key, and Git remote. Non-interactive sources take precedence: env var >
-// `.yextrc` (YEXT_ACCOUNT_ID, YEXT_UNIVERSE, YEXT_API_KEY, YEXT_ORIGIN).
+// `.yextrc` (YEXT_ACCOUNT_ID, YEXT_UNIVERSE, YEXT_API_KEY, YEXT_ORIGIN). The
+// CLI universe flag and YEXT_UNIVERSE are mutually exclusive.
 //
 // Interactive behavior:
 //  - When `.yextrc` already provides a complete config, the resolved values are
@@ -60,23 +61,40 @@ const UNIVERSE_CHOICES = ["production", "sandbox"];
 // recognized universe with no host for the account's partition is "unsupported".
 const VALID_UNIVERSES = ["production", "sandbox", "qa", "dev"];
 
+const UNIVERSE_ALIASES: Record<string, string> = {
+  prod: "production",
+  sbx: "sandbox",
+};
+
 /**
  * Resolve and validate the deploy config from environment variables,
  * `.yextrc`, and interactive prompts. Throws an actionable error when a value
  * is invalid or a required prompt is cancelled.
  */
 export async function resolveConfig(
-  rootDir: string = process.cwd()
+  rootDir: string = process.cwd(),
+  universeOverride?: string
 ): Promise<DeployConfig> {
+  if (
+    universeOverride !== undefined &&
+    process.env.YEXT_UNIVERSE !== undefined
+  ) {
+    throw new Error(
+      "Universe cannot be provided through both --universe and YEXT_UNIVERSE."
+    );
+  }
+
   const yextrc = readYextrc(rootDir);
   const yextrcHasData = Boolean(
     yextrc.accountId || yextrc.universe || yextrc.apiKey || yextrc.origin
   );
 
   // Non-interactive resolution (may leave fields undefined).
+  const universe =
+    universeOverride ?? process.env.YEXT_UNIVERSE ?? yextrc.universe;
   const base: Yextrc = {
     accountId: process.env.YEXT_ACCOUNT_ID ?? yextrc.accountId,
-    universe: process.env.YEXT_UNIVERSE ?? yextrc.universe,
+    universe: universe === undefined ? undefined : normalizeUniverse(universe),
     apiKey: process.env.YEXT_API_KEY ?? yextrc.apiKey,
     origin: process.env.YEXT_ORIGIN ?? yextrc.origin,
   };
@@ -112,7 +130,12 @@ export async function resolveConfig(
     promptAll = useNew;
   }
 
-  const values = await promptConfig(rootDir, base, promptAll);
+  const values = await promptConfig(
+    rootDir,
+    base,
+    promptAll,
+    universeOverride !== undefined
+  );
   if (promptAll) {
     showFields(values);
   }
@@ -128,7 +151,8 @@ export async function resolveConfig(
 async function promptConfig(
   rootDir: string,
   base: Yextrc,
-  promptAll: boolean
+  promptAll: boolean,
+  hasUniverseOverride: boolean
 ): Promise<Required<Yextrc>> {
   let accountId = base.accountId as string;
   if (promptAll || !base.accountId) {
@@ -142,7 +166,10 @@ async function promptConfig(
   }
 
   let universe = base.universe as string;
-  if (!base.universe || (promptAll && !process.env.YEXT_UNIVERSE)) {
+  if (
+    !base.universe ||
+    (promptAll && !hasUniverseOverride && !process.env.YEXT_UNIVERSE)
+  ) {
     const initialUniverse = promptAll ? base.universe : undefined;
     universe = await promptUniverse(initialUniverse);
   }
@@ -191,6 +218,10 @@ function resolveEnvConfig(
     );
   }
   return { partition, envConfig };
+}
+
+function normalizeUniverse(universe: string): string {
+  return UNIVERSE_ALIASES[universe] ?? universe;
 }
 
 function newConfig(values: Required<Yextrc>): DeployConfig {
