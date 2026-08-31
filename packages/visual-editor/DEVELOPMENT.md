@@ -72,7 +72,7 @@ after making changes.
 ### Convert legacy templates
 
 Use this engineering tool when you convert one or more legacy templates in a
-starter repository to a Section Library. Run it from the starter repository.
+starter repository to a Section Library. Run it from the section library repository.
 
 ```sh
 npx --package=@yext/visual-editor@latest yextve convert-template
