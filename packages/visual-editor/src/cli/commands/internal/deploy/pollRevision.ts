@@ -36,7 +36,9 @@ export async function pollRevision(
       `Section Library Revision build succeeded after ${formatElapsed(elapsedSeconds)}.`
     );
   } else {
-    spinner.fail(`Section Library Revision failed with status ${lastStatus}.`);
+    const message = `Section Library Revision failed with status ${lastStatus}.`;
+    spinner.fail(message);
+    throw new Error(message);
   }
 }
 
