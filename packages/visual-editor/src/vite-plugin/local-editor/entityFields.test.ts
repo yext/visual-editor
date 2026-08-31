@@ -69,6 +69,72 @@ describe("inferEntityFields", () => {
     );
   });
 
+  it("does not classify an object containing an image field as type.image", () => {
+    const inferred = inferEntityFields(
+      {
+        c_aboutSection: {
+          title: "About",
+          description: {
+            html: "<p>Description</p>",
+          },
+          image: {
+            url: "https://example.com/about.jpg",
+            width: 1200,
+            height: 800,
+          },
+          cta: {
+            label: "Learn more",
+            link: "/about",
+            linkType: "URL",
+          },
+        },
+      },
+      {
+        fields: [
+          "c_aboutSection.title",
+          "c_aboutSection.description.html",
+          "c_aboutSection.image",
+          "c_aboutSection.cta",
+        ],
+      }
+    );
+
+    const aboutSection = inferred.fields.find(
+      (field) => field.name === "c_aboutSection"
+    );
+
+    expect(aboutSection?.definition.typeRegistryId).toBe("type.object");
+    expect(aboutSection?.children?.fields).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          name: "description",
+          displayName: "About Section > Description",
+          definition: expect.objectContaining({
+            typeRegistryId: "type.rich_text_v2",
+          }),
+        }),
+        expect.objectContaining({
+          name: "image",
+          definition: expect.objectContaining({
+            typeRegistryId: "type.image",
+          }),
+        }),
+        expect.objectContaining({
+          name: "cta",
+          definition: expect.objectContaining({
+            typeRegistryId: "type.cta",
+          }),
+        }),
+        expect.objectContaining({
+          name: "title",
+          definition: expect.objectContaining({
+            typeRegistryId: "type.string",
+          }),
+        }),
+      ])
+    );
+  });
+
   it("does not classify unrelated json-shaped objects as rich text", () => {
     const inferred = inferEntityFields({
       analyticsPayload: {
