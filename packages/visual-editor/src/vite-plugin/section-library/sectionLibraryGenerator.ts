@@ -35,7 +35,7 @@ type GeneratedSectionLibrary = {
  *
  * 1. Read and validate the library, section, shared-registry, and layout source.
  * 2. Generate one Puck config, Pages render template, and editor template per layout.
- * 3. Generate current Platform aliases and return the Section Library artifact manifest.
+ * 3. Write build metadata and return the Section Library artifact manifest.
  */
 export const generateSectionLibraryFiles = (
   rootDir: string,
@@ -83,34 +83,17 @@ export const generateSectionLibraryFiles = (
       : [];
   });
 
-  const layoutsByPageSetType = new Map(
-    structure.layouts.map((layout) => [layout.metadata.pageSetType, layout])
-  );
-  const entityLayout = layoutsByPageSetType.get("ENTITY")!;
-  const directoryLayout = layoutsByPageSetType.get("DIRECTORY")!;
-  const locatorLayout = layoutsByPageSetType.get("LOCATOR")!;
-  const aliasPaths = [
-    path.join(rootDir, "src", "templates", "main.tsx"),
-    path.join(rootDir, "src", "templates", "directory.tsx"),
-    path.join(rootDir, "src", "templates", "locator.tsx"),
-    path.join(rootDir, "src", "templates", "edit.tsx"),
-  ];
-  const aliasSources = [
-    buildRenderTemplateSource(entityLayout),
-    buildRenderTemplateSource(directoryLayout),
-    buildRenderTemplateSource(locatorLayout),
-    buildEditorTemplateSource([
-      ["main", entityLayout],
-      [entityLayout.metadata.id, entityLayout],
-      ["directory", directoryLayout],
-      [directoryLayout.metadata.id, directoryLayout],
-      ["locator", locatorLayout],
-      [locatorLayout.metadata.id, locatorLayout],
-    ]),
-  ];
   generatedFiles.push(
-    ...aliasPaths.filter((filePath, index) => {
-      return writeGeneratedFile(filePath, aliasSources[index]);
+    ...structure.layouts.flatMap((layout) => {
+      const filePath = path.join(
+        rootDir,
+        "src",
+        "templates",
+        `${layout.metadata.id}.tsx`
+      );
+      return writeGeneratedFile(filePath, buildRenderTemplateSource(layout))
+        ? [filePath]
+        : [];
     })
   );
   generatedFiles.push(
@@ -133,12 +116,7 @@ export const generateSectionLibraryFiles = (
         : [];
     })
   );
-  writeLegacyTemplateManifest(
-    rootDir,
-    entityLayout,
-    directoryLayout,
-    locatorLayout
-  );
+  writeTemplateManifest(rootDir, structure.layouts);
 
   return {
     generatedFiles,
@@ -149,10 +127,7 @@ export const generateSectionLibraryFiles = (
         library: metadata,
         layouts: structure.layouts.map((layout) => ({
           ...layout.metadata,
-          templateId:
-            layout.metadata.pageSetType === "ENTITY"
-              ? "main"
-              : layout.metadata.pageSetType.toLowerCase(),
+          templateId: layout.metadata.id,
           editorPath: `edit/${layout.metadata.id}/${encodeURIComponent(sectionLibraryRevisionId)}`,
           defaultLayout: layout.defaultLayout,
         })),
@@ -175,43 +150,20 @@ export const cleanupGeneratedSectionLibraryFiles = (
 };
 
 /**
- * Writes the temporary Platform compatibility entries. Remove these entries
- * when Platform reads section-library-manifest.json for page set creation.
+ * Marks generated layout render templates as in-platform templates so the
+ * Pages build does not also expose them as features in features.json.
  */
-const writeLegacyTemplateManifest = (
-  rootDir: string,
-  entityLayout: Layout,
-  directoryLayout: Layout,
-  locatorLayout: Layout
-): void => {
+const writeTemplateManifest = (rootDir: string, layouts: Layout[]): void => {
   const manifestPath = path.join(rootDir, ".template-manifest.json");
   const source = JSON.stringify(
     {
-      templates: [
-        {
-          name: "main",
-          description:
-            "Use this template to generate pages for each of your Locations.",
-          exampleSiteUrl: "",
-          layoutRequired: true,
-          defaultLayoutData: JSON.stringify(entityLayout.defaultLayout),
-        },
-        {
-          name: "directory",
-          description:
-            "Use this template to generate pages for each of your Directory entities.",
-          exampleSiteUrl: "",
-          layoutRequired: true,
-          defaultLayoutData: JSON.stringify(directoryLayout.defaultLayout),
-        },
-        {
-          name: "locator",
-          description: "Use this template to generate pages for your Locators.",
-          exampleSiteUrl: "",
-          layoutRequired: true,
-          defaultLayoutData: JSON.stringify(locatorLayout.defaultLayout),
-        },
-      ],
+      templates: layouts.map((layout) => ({
+        name: layout.metadata.id,
+        description: layout.metadata.displayName,
+        exampleSiteUrl: "",
+        layoutRequired: true,
+        defaultLayoutData: JSON.stringify(layout.defaultLayout),
+      })),
     },
     null,
     2
