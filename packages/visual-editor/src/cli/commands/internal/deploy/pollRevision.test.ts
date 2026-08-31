@@ -39,10 +39,12 @@ describe("pollRevision", () => {
       .mockResolvedValueOnce({
         name: "revision-name",
         status: "STATUS_BUILD_PROCESSING",
+        uid: "revision-uid",
       })
       .mockResolvedValueOnce({
         name: "revision-name",
         status: "STATUS_BUILD_SUCCEEDED",
+        uid: "revision-uid",
       });
 
     const polling = pollRevision(config, "revision-name", false);
@@ -52,6 +54,9 @@ describe("pollRevision", () => {
     expect(getSectionLibraryRevision).toHaveBeenCalledTimes(2);
     expect(ora).toHaveBeenCalledWith(
       "Waiting for Section Library Revision build..."
+    );
+    expect(vi.mocked(ora).mock.results[0].value.succeed).toHaveBeenCalledWith(
+      "Section Library Revision revision-uid build succeeded after 2s."
     );
   });
 

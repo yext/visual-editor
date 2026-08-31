@@ -1,6 +1,9 @@
 import ora from "ora";
 import type { DeployConfig } from "./config.ts";
-import { getSectionLibraryRevision } from "./sectionLibraryApi.ts";
+import {
+  getSectionLibraryRevision,
+  type SectionLibraryRevision,
+} from "./sectionLibraryApi.ts";
 
 const BUILD_SUCCESS_STATUS = "STATUS_BUILD_SUCCEEDED";
 const BUILD_PROCESSING_STATUS = "STATUS_BUILD_PROCESSING";
@@ -12,16 +15,21 @@ export async function pollRevision(
   verbose: boolean
 ): Promise<void> {
   let lastStatus = BUILD_PROCESSING_STATUS;
+  let revision: SectionLibraryRevision | undefined;
   const startedAt = Date.now();
   const spinner = ora(REVISION_POLLING_TEXT).start();
   try {
     while (lastStatus === BUILD_PROCESSING_STATUS) {
-      lastStatus = (
-        await getSectionLibraryRevision(config, revisionName, verbose, true)
-      ).status;
+      revision = await getSectionLibraryRevision(
+        config,
+        revisionName,
+        verbose,
+        true
+      );
+      lastStatus = revision.status;
 
       const elapsedSeconds = Math.floor((Date.now() - startedAt) / 1000);
-      spinner.text = `${REVISION_POLLING_TEXT} ${formatElapsed(elapsedSeconds)} elapsed`;
+      spinner.text = `${REVISION_POLLING_TEXT} ${formatElapsed(elapsedSeconds)} elapsed (expected build time: 5-10 minutes)`;
 
       await new Promise((resolve) => setTimeout(resolve, 1000));
     }
@@ -30,10 +38,10 @@ export async function pollRevision(
     throw error;
   }
 
-  if (lastStatus === BUILD_SUCCESS_STATUS) {
+  if (revision?.status === BUILD_SUCCESS_STATUS) {
     const elapsedSeconds = Math.floor((Date.now() - startedAt) / 1000);
     spinner.succeed(
-      `Section Library Revision build succeeded after ${formatElapsed(elapsedSeconds)}.`
+      `Section Library Revision ${revision.uid} build succeeded after ${formatElapsed(elapsedSeconds)}.`
     );
   } else {
     const message = `Section Library Revision failed with status ${lastStatus}.`;
