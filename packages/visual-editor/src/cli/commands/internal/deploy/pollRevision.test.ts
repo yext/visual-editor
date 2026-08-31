@@ -65,6 +65,7 @@ describe("pollRevision", () => {
     vi.mocked(getSectionLibraryRevision).mockResolvedValueOnce({
       name: "revision-name",
       status: "STATUS_BUILD_FAILED",
+      uid: "test-uid",
     });
 
     const polling = pollRevision(config, "revision-name", false);
