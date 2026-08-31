@@ -8,6 +8,7 @@ import {
   type SectionLibraryLayout,
   type SharedHiddenPuckComponent,
 } from "../../../../types/sectionLibrary.ts";
+import { buildLocalEditorDataTemplateName } from "../../../../vite-plugin/local-editor/generatedFiles.ts";
 import { extractSectionConfigFrontmatter } from "../../../../vite-plugin/section-library/sectionFrontmatter.ts";
 import { readSharedComponentRegistry } from "../../../../vite-plugin/section-library/sharedComponentRegistry.ts";
 import type {
@@ -17,10 +18,11 @@ import type {
 } from "../../types.ts";
 
 const reservedLayoutIds = new Set([
-  "main", // reserved for backwards compatibility
-  "directory", // must be the name of the directory layout
-  "locator", // must be the name of the locator layout
-  "edit", // reserved for the editor static page
+  "main", // legacy Entity template ID
+  "directory", // legacy Directory template ID
+  "locator", // legacy Locator template ID
+  "edit", // legacy editor template ID
+  "local-editor", // generated Local Editor template ID
 ]);
 export const safeSectionLibraryIdPattern = /^[A-Za-z0-9_-]+$/;
 type ParsedLayout = SectionLibraryLayout & { defaultLayoutPath: string };
@@ -191,15 +193,36 @@ const readLayouts = (
   });
   if (layouts.length === layoutDirectories.length) {
     const layoutIds = new Set<string>();
+    const layoutIdByLocalEditorDataTemplateName = new Map<string, string>();
     for (const layout of layouts) {
-      if (layoutIds.has(layout.metadata.id)) {
+      const layoutId = layout.metadata.id;
+      if (layoutIds.has(layoutId)) {
         addIssue(
           layoutsDirectory,
           "layouts/duplicate-id",
-          `Layout ID is not unique: ${layout.metadata.id}`
+          `Layout ID is not unique: ${layoutId}`
         );
       }
-      layoutIds.add(layout.metadata.id);
+      layoutIds.add(layoutId);
+
+      if (
+        layout.metadata.pageSetType !== "ENTITY" &&
+        layout.metadata.pageSetType !== "DIRECTORY"
+      ) {
+        continue;
+      }
+      const templateName = buildLocalEditorDataTemplateName(layoutId);
+      const existingLayoutId =
+        layoutIdByLocalEditorDataTemplateName.get(templateName);
+      if (existingLayoutId && existingLayoutId !== layoutId) {
+        addIssue(
+          layoutsDirectory,
+          "layouts/local-editor-template-collision",
+          `Layout IDs ${existingLayoutId} and ${layoutId} generate the same Local Editor id: ${templateName}`
+        );
+      } else {
+        layoutIdByLocalEditorDataTemplateName.set(templateName, layoutId);
+      }
     }
 
     const layoutCountByPageSetType = new Map<PageSetType, number>();
@@ -313,9 +336,13 @@ const readLayout = (
       throw new Error(`Layout ID is not valid: ${metadata.id}`);
     }
 
-    if (reservedLayoutIds.has(metadata.id)) {
+    if (
+      reservedLayoutIds.has(metadata.id) ||
+      metadata.id.startsWith("edit-") ||
+      metadata.id.startsWith("local-editor")
+    ) {
       throw new Error(
-        `cannot use ${metadata.id} because it is reserved for a generated template`
+        `cannot use ${metadata.id} because it is reserved for a generated id`
       );
     }
 

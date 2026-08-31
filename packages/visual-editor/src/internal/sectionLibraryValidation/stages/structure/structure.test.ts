@@ -185,7 +185,7 @@ describe("validateSectionLibraryStructure", () => {
     expectRules(rootDir, "layouts/metadata");
   });
 
-  it("reports a reserved layout id", () => {
+  it("reports a reserved legacy layout id", () => {
     const rootDir = createValidLibrary();
     writeLayoutMetadata(rootDir, "directory-layout", {
       id: "directory",
@@ -194,6 +194,50 @@ describe("validateSectionLibraryStructure", () => {
     });
 
     expectRules(rootDir, "layouts/metadata");
+  });
+
+  it.each(["edit-entity", "local-editor", "local-editor-data-entity"])(
+    "reports layout id %s as reserved for generated ids",
+    (layoutId) => {
+      const rootDir = createValidLibrary();
+      writeLayoutMetadata(rootDir, "entity-layout", {
+        ...entityMetadata,
+        id: layoutId,
+      });
+
+      const issues = validateSectionLibraryStructure(rootDir).issues;
+
+      expect(issues).toEqual([
+        expect.objectContaining({
+          rule: "layouts/metadata",
+          message: expect.stringContaining(
+            `${layoutId} because it is reserved for a generated id`
+          ),
+        }),
+      ]);
+    }
+  );
+
+  it("reports Local Editor data template name collisions", () => {
+    const rootDir = createValidLibrary();
+    fs.copySync(
+      layoutPath(rootDir, "entity-layout"),
+      layoutPath(rootDir, "entity_layout")
+    );
+    writeLayoutMetadata(rootDir, "entity_layout", {
+      ...entityMetadata,
+      id: "entity_layout",
+    });
+
+    const issues = validateSectionLibraryStructure(rootDir).issues;
+
+    expect(issues).toEqual([
+      expect.objectContaining({
+        rule: "layouts/local-editor-template-collision",
+        message:
+          "Layout IDs entity_layout and entity-layout generate the same Local Editor id: local-editor-data-entity-layout",
+      }),
+    ]);
   });
 
   it("reports an invalid shared component registry", () => {
