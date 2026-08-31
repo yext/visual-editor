@@ -183,16 +183,17 @@ describe("getLocalEditorDocument", () => {
     });
   });
 
-  it("uses generated snapshots for Entity layouts", async () => {
+  it("keeps generated snapshots and defaults isolated by Entity layout", async () => {
     const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "local-editor-"));
     rootDirs.push(rootDir);
     fs.writeJsonSync(path.join(rootDir, "package.json"), { type: "module" });
     fs.writeFileSync(
       path.join(rootDir, "stream.config.ts"),
-      'export default { env: { YEXT_CLOUD_REGION: "US", YEXT_SEARCH_API_KEY: "" }, pageSetTypes: { ENTITY: { stream: { $id: "entity", fields: ["id", "name"] } } } };\n'
+      'export default { defaults: { layoutId: "alternate-entity-layout" }, env: { YEXT_CLOUD_REGION: "US", YEXT_SEARCH_API_KEY: "" }, pageSetTypes: { ENTITY: { stream: { $id: "entity", fields: ["id", "name"] } } }, layouts: { "alternate-entity-layout": { defaults: { entityId: "location-2" }, stream: { $id: "alternate-entity", fields: ["id", "name", "description"] } } } };\n'
     );
     fs.outputJsonSync(path.join(rootDir, "localData", "mapping.json"), {
       "local-editor-data-entity-layout": ["entity.json"],
+      "local-editor-data-alternate-entity-layout": ["alternate-entity.json"],
     });
     fs.outputJsonSync(path.join(rootDir, "localData", "entity.json"), {
       id: "location-1",
@@ -200,6 +201,15 @@ describe("getLocalEditorDocument", () => {
       name: "Example Location",
       _env: { YEXT_CLOUD_REGION: "EU", EXISTING_VALUE: "preserved" },
     });
+    fs.outputJsonSync(
+      path.join(rootDir, "localData", "alternate-entity.json"),
+      {
+        id: "location-2",
+        locale: "en",
+        name: "Alternate Location",
+        description: "Alternate layout snapshot",
+      }
+    );
     const layouts: SectionLibraryLayout[] = [
       {
         metadata: {
@@ -208,26 +218,68 @@ describe("getLocalEditorDocument", () => {
           pageSetType: "ENTITY",
           previewImageUrl: "",
         },
-        defaultLayout: {},
+        defaultLayout: { root: { props: { version: 1 } } },
+      },
+      {
+        metadata: {
+          id: "alternate-entity-layout",
+          displayName: "Alternate Entity",
+          pageSetType: "ENTITY",
+          previewImageUrl: "",
+        },
+        defaultLayout: { root: { props: { version: 2 } } },
       },
     ];
 
-    const response = await getLocalEditorDocument(
+    const manifest = await getLocalEditorManifest(rootDir, layouts);
+    expect(manifest.layouts).toEqual([
+      "entity-layout",
+      "alternate-entity-layout",
+    ]);
+    expect(manifest.defaults).toMatchObject({
+      layoutId: "alternate-entity-layout",
+      entityId: "location-2",
+    });
+    expect(manifest.layoutDefaults).toMatchObject({
+      "entity-layout": {
+        defaultLayoutData: { root: { props: { version: 1 } } },
+      },
+      "alternate-entity-layout": {
+        entityId: "location-2",
+        defaultLayoutData: { root: { props: { version: 2 } } },
+      },
+    });
+
+    const entityResponse = await getLocalEditorDocument(
       rootDir,
       layouts,
       "entity-layout",
       "location-1",
       "en"
     );
+    const alternateResponse = await getLocalEditorDocument(
+      rootDir,
+      layouts,
+      "alternate-entity-layout",
+      "location-2",
+      "en"
+    );
 
-    expect(response.diagnostics).toEqual([]);
-    expect(response.document).toMatchObject({
+    expect(entityResponse.diagnostics).toEqual([]);
+    expect(entityResponse.document).toMatchObject({
       id: "location-1",
+      name: "Example Location",
       _env: {
         YEXT_CLOUD_REGION: "US",
         YEXT_SEARCH_API_KEY: "",
         EXISTING_VALUE: "preserved",
       },
+    });
+    expect(alternateResponse.diagnostics).toEqual([]);
+    expect(alternateResponse.document).toMatchObject({
+      id: "location-2",
+      name: "Alternate Location",
+      description: "Alternate layout snapshot",
     });
   });
 });

@@ -8,6 +8,7 @@ import {
   type SectionLibraryLayout,
   type SharedHiddenPuckComponent,
 } from "../../../../types/sectionLibrary.ts";
+import { buildLocalEditorDataTemplateName } from "../../../../vite-plugin/local-editor/generatedFiles.ts";
 import { extractSectionConfigFrontmatter } from "../../../../vite-plugin/section-library/sectionFrontmatter.ts";
 import { readSharedComponentRegistry } from "../../../../vite-plugin/section-library/sharedComponentRegistry.ts";
 import type {
@@ -17,10 +18,11 @@ import type {
 } from "../../types.ts";
 
 const reservedLayoutIds = new Set([
-  "main", // reserved for backwards compatibility
-  "directory", // must be the name of the directory layout
-  "locator", // must be the name of the locator layout
-  "edit", // reserved for the editor static page
+  "main", // legacy Entity template ID
+  "directory", // legacy Directory template ID
+  "locator", // legacy Locator template ID
+  "edit", // legacy editor template ID
+  "local-editor", // generated Local Editor template ID
 ]);
 export const safeSectionLibraryIdPattern = /^[A-Za-z0-9_-]+$/;
 type ParsedLayout = SectionLibraryLayout & { defaultLayoutPath: string };
@@ -182,6 +184,7 @@ const readLayouts = (
     .readdirSync(layoutsDirectory, { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
     .sort((left, right) => left.name.localeCompare(right.name));
+
   const layouts = layoutDirectories.flatMap((entry) => {
     const layout = readLayout(
       path.join(layoutsDirectory, entry.name),
@@ -189,26 +192,88 @@ const readLayouts = (
     );
     return layout ? [layout] : [];
   });
-  const pageSetTypes = new Set(
-    layouts.map((layout) => layout.metadata.pageSetType)
-  );
 
-  if (
-    layoutDirectories.length !== 3 ||
-    (layouts.length === layoutDirectories.length &&
-      (pageSetTypes.size !== 3 ||
-        !["ENTITY", "DIRECTORY", "LOCATOR"].every((type) =>
-          pageSetTypes.has(type as PageSetType)
-        )))
-  ) {
-    addIssue(
-      layoutsDirectory,
-      "layouts/cardinality",
-      "Section Library build mode requires one ENTITY, one DIRECTORY, and one LOCATOR layout."
-    );
+  if (layouts.length === layoutDirectories.length) {
+    const layoutIds = new Set<string>();
+    const layoutIdByLocalEditorDataTemplateName = new Map<string, string>();
+
+    for (const layout of layouts) {
+      const layoutId = layout.metadata.id;
+
+      if (layoutIds.has(layoutId)) {
+        addIssue(
+          layoutsDirectory,
+          "layouts/duplicate-id",
+          `Layout ID is not unique: ${layoutId}`
+        );
+      } else {
+        layoutIds.add(layoutId);
+      }
+
+      if (
+        layout.metadata.pageSetType !== "ENTITY" &&
+        layout.metadata.pageSetType !== "DIRECTORY"
+      ) {
+        continue;
+      }
+
+      const templateName = buildLocalEditorDataTemplateName(layoutId);
+      const existingLayoutId =
+        layoutIdByLocalEditorDataTemplateName.get(templateName);
+
+      if (existingLayoutId && existingLayoutId !== layoutId) {
+        addIssue(
+          layoutsDirectory,
+          "layouts/local-editor-template-collision",
+          `Layout IDs ${existingLayoutId} and ${layoutId} generate the same Local Editor id: ${templateName}`
+        );
+      } else {
+        layoutIdByLocalEditorDataTemplateName.set(templateName, layoutId);
+      }
+    }
+
+    const layoutCountByPageSetType = new Map<PageSetType, number>();
+
+    for (const layout of layouts) {
+      const pageSetType = layout.metadata.pageSetType;
+      layoutCountByPageSetType.set(
+        pageSetType,
+        (layoutCountByPageSetType.get(pageSetType) ?? 0) + 1
+      );
+    }
+
+    if ((layoutCountByPageSetType.get("ENTITY") ?? 0) === 0) {
+      addIssue(
+        layoutsDirectory,
+        "layouts/cardinality",
+        "Section Library build mode requires at least one ENTITY layout."
+      );
+    }
+
+    if (
+      layoutCountByPageSetType.get("DIRECTORY") !== 1 ||
+      layoutCountByPageSetType.get("LOCATOR") !== 1
+    ) {
+      addIssue(
+        layoutsDirectory,
+        "layouts/cardinality",
+        "Section Library build mode requires exactly one DIRECTORY and one LOCATOR layout."
+      );
+    }
   }
-  return layouts;
+  return layouts.sort(compareLayouts);
 };
+
+const pageSetTypeOrder: Record<PageSetType, number> = {
+  ENTITY: 0,
+  DIRECTORY: 1,
+  LOCATOR: 2,
+};
+
+const compareLayouts = (left: ParsedLayout, right: ParsedLayout): number =>
+  pageSetTypeOrder[left.metadata.pageSetType] -
+    pageSetTypeOrder[right.metadata.pageSetType] ||
+  left.metadata.id.localeCompare(right.metadata.id);
 
 const readLayout = (
   layoutDirectory: string,
@@ -281,9 +346,13 @@ const readLayout = (
       throw new Error(`Layout ID is not valid: ${metadata.id}`);
     }
 
-    if (reservedLayoutIds.has(metadata.id)) {
+    if (
+      reservedLayoutIds.has(metadata.id) ||
+      metadata.id.startsWith("edit-") ||
+      metadata.id.startsWith("local-editor")
+    ) {
       throw new Error(
-        `cannot use ${metadata.id} because it is reserved for a generated template`
+        `cannot use ${metadata.id} because it is reserved for a generated id`
       );
     }
 
