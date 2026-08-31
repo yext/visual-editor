@@ -5,15 +5,29 @@ import { createTempRoot } from "../internal/sectionLibraryValidation/testUtils.t
 import { runCli } from "./yextve.ts";
 import packageJson from "../../package.json" with { type: "json" };
 
-const { resolveConfig, deploy, pollRevision } = vi.hoisted(() => ({
+const {
+  convertTemplatesToSectionLibrary,
+  deploy,
+  exportDirectoryLocatorSectionLibrary,
+  pollRevision,
+  resolveConfig,
+} = vi.hoisted(() => ({
+  convertTemplatesToSectionLibrary: vi.fn(),
   resolveConfig: vi.fn(),
   deploy: vi.fn(),
+  exportDirectoryLocatorSectionLibrary: vi.fn(),
   pollRevision: vi.fn(),
 }));
 
-vi.mock("../internal/deploy/config.ts", () => ({ resolveConfig }));
-vi.mock("../internal/deploy/deploy.ts", () => ({ deploy }));
-vi.mock("../internal/deploy/pollRevision.ts", () => ({ pollRevision }));
+vi.mock("./commands/internal/exportDirectoryLocatorSectionLibrary.ts", () => ({
+  exportDirectoryLocatorSectionLibrary,
+}));
+vi.mock("./commands/internal/convertTemplatesToSectionLibrary.ts", () => ({
+  convertTemplatesToSectionLibrary,
+}));
+vi.mock("./commands/internal/deploy/config.ts", () => ({ resolveConfig }));
+vi.mock("./commands/internal/deploy/deploy.ts", () => ({ deploy }));
+vi.mock("./commands/internal/deploy/pollRevision.ts", () => ({ pollRevision }));
 
 describe("yextve", () => {
   beforeEach(() => {
@@ -25,6 +39,8 @@ describe("yextve", () => {
   it("prints help", async () => {
     const help = await invoke(["--help"]);
     expect(help.exitCode).toBe(0);
+    expect(help.stdout).toContain("add-directory-locator");
+    expect(help.stdout).toContain("convert-template");
     expect(help.stdout).toContain("deploy");
     expect(help.stdout).toContain("validate");
     expect(help.stdout).toContain("--version");
@@ -47,6 +63,19 @@ describe("yextve", () => {
     expect(validateHelp.stdout).toContain("yextve validate [--skip-api-check]");
     expect(validateHelp.stdout).toContain("--skip-repo-structure-check");
     expect(validateHelp.stdout).not.toContain("YEXT_ACCOUNT_ID");
+
+    const convertHelp = await invoke(["convert-template", "--help"]);
+    expect(convertHelp.exitCode).toBe(0);
+    expect(convertHelp.stdout).toContain(
+      "yextve convert-template [--apply] [--delete-source]"
+    );
+
+    const addHelp = await invoke(["add-directory-locator", "--help"]);
+    expect(addHelp.exitCode).toBe(0);
+    expect(addHelp.stdout).toContain(
+      "yextve add-directory-locator [--overwrite]"
+    );
+    expect(addHelp.stdout).not.toContain("--library-id");
   });
 
   it("prints version", async () => {
@@ -63,6 +92,8 @@ describe("yextve", () => {
     { args: ["unknown"] },
     { args: ["validate", "project-path"] },
     { args: ["validate", "--unknown"] },
+    { args: ["convert-template", "project-path"] },
+    { args: ["add-directory-locator", "--unknown"] },
   ])("returns usage exit 2 for invalid arguments: $args", async ({ args }) => {
     const result = await invoke(args);
     expect(result.exitCode).toBe(2);
@@ -111,6 +142,70 @@ describe("yextve", () => {
     });
   });
 
+  it("converts templates in the current directory", async () => {
+    const rootDir = createTempRoot();
+    convertTemplatesToSectionLibrary.mockImplementationOnce(
+      ({ write }: { write: (message: string) => void }) => write("Dry run")
+    );
+
+    const result = await invoke(
+      ["convert-template", "--apply", "--delete-source"],
+      rootDir
+    );
+
+    expect(result).toEqual({
+      exitCode: 0,
+      stdout: "Dry run\n",
+      stderr: "",
+    });
+    expect(convertTemplatesToSectionLibrary).toHaveBeenCalledWith({
+      apply: true,
+      deleteSource: true,
+      targetDirectory: rootDir,
+      write: expect.any(Function),
+    });
+  });
+
+  it("reports template conversion errors", async () => {
+    convertTemplatesToSectionLibrary.mockImplementationOnce(() => {
+      throw new Error("--delete-source requires --apply");
+    });
+
+    const result = await invoke(["convert-template", "--delete-source"]);
+
+    expect(result).toMatchObject({
+      exitCode: 1,
+      stderr: "error: --delete-source requires --apply\n",
+    });
+  });
+
+  it("adds Directory and Locator using the library metadata ID", async () => {
+    const rootDir = createTempRoot();
+    writeLibraryMetadata(rootDir, "my-library");
+
+    const result = await invoke(
+      ["add-directory-locator", "--overwrite"],
+      rootDir
+    );
+
+    expect(result.exitCode).toBe(0);
+    expect(exportDirectoryLocatorSectionLibrary).toHaveBeenCalledWith({
+      targetDirectory: rootDir,
+      libraryId: "my-library",
+      overwrite: true,
+    });
+  });
+
+  it("does not add Directory and Locator without valid library metadata", async () => {
+    const rootDir = createTempRoot();
+
+    const result = await invoke(["add-directory-locator"], rootDir);
+
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("Invalid library metadata");
+    expect(exportDirectoryLocatorSectionLibrary).not.toHaveBeenCalled();
+  });
+
   it("renders all skipped stages and succeeds", async () => {
     const result = await invoke([
       "validate",
@@ -140,6 +235,15 @@ describe("yextve", () => {
     expect(result.stdout).toContain("Code checks: failed");
   });
 });
+
+const writeLibraryMetadata = (rootDir: string, id: string): void => {
+  fs.outputJsonSync(path.join(rootDir, "src", "library", "library.json"), {
+    schemaVersion: 1,
+    id,
+    displayName: "Library",
+    description: "Description",
+  });
+};
 
 // invoke calls the cli and records stdout and stderr
 const invoke = async (args: string[], rootDir: string = createTempRoot()) => {

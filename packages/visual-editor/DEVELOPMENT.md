@@ -72,27 +72,40 @@ after making changes.
 ### Convert legacy templates
 
 Use this engineering tool when you convert one or more legacy templates in a
-starter repository to a Section Library. Run it from `packages/visual-editor`.
+starter repository to a Section Library. Run it from the starter repository.
 
 ```sh
-pnpm run convert-templates-to-section-library -- \
-  --target <starter-path>
+npx --package=@yext/visual-editor@latest yextve convert-template
 ```
 
-The default is a dry run. It validates the target starter and reports the
+The default is a dry run. It validates the starter and reports the
 planned library, layouts, and duplicate component IDs. Add `--apply` to replace
-the target `src/library` directory. Add `--delete-source` with `--apply` to
+the `src/library` directory. Add `--delete-source` with `--apply` to
 remove converted `src/registry/<template-id>` directories after replacement.
 
 ```sh
-pnpm run convert-templates-to-section-library -- \
-  --target <starter-path> --apply --delete-source
+npx --package=@yext/visual-editor@latest yextve convert-template \
+  --apply --delete-source
 ```
 
-The target starter must already contain the base Directory and Locator Section
-Library source. The converter creates one Entity layout per legacy template. It
-keeps the first source for each component ID in sorted template order and
-reports all duplicate IDs.
+If the starter does not contain the base Directory and Locator source, the
+converter adds it to the converted Section Library. The converter creates one
+Entity layout per legacy template, keeps the first source for each component ID
+in sorted template order, and reports all duplicate IDs.
+
+### Add Directory and Locator
+
+Run this command from a Section Library repository to add editable Directory
+and Locator sections and layouts. The layout ID prefix comes from
+`src/library/library.json`.
+
+```sh
+npx --package=@yext/visual-editor@latest yextve add-directory-locator
+```
+
+The command stops before overwriting existing shared, Directory, or Locator
+source. Pass `--overwrite` to replace those files after reviewing the generated
+output.
 
 `pnpm run autofix`
 This will run eslint and prettier for you to ensure your code is up to quality standard. It's
