@@ -184,6 +184,7 @@ const readLayouts = (
     .readdirSync(layoutsDirectory, { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
     .sort((left, right) => left.name.localeCompare(right.name));
+
   const layouts = layoutDirectories.flatMap((entry) => {
     const layout = readLayout(
       path.join(layoutsDirectory, entry.name),
@@ -191,19 +192,23 @@ const readLayouts = (
     );
     return layout ? [layout] : [];
   });
+
   if (layouts.length === layoutDirectories.length) {
     const layoutIds = new Set<string>();
     const layoutIdByLocalEditorDataTemplateName = new Map<string, string>();
+
     for (const layout of layouts) {
       const layoutId = layout.metadata.id;
+
       if (layoutIds.has(layoutId)) {
         addIssue(
           layoutsDirectory,
           "layouts/duplicate-id",
           `Layout ID is not unique: ${layoutId}`
         );
+      } else {
+        layoutIds.add(layoutId);
       }
-      layoutIds.add(layoutId);
 
       if (
         layout.metadata.pageSetType !== "ENTITY" &&
@@ -211,9 +216,11 @@ const readLayouts = (
       ) {
         continue;
       }
+
       const templateName = buildLocalEditorDataTemplateName(layoutId);
       const existingLayoutId =
         layoutIdByLocalEditorDataTemplateName.get(templateName);
+
       if (existingLayoutId && existingLayoutId !== layoutId) {
         addIssue(
           layoutsDirectory,
@@ -226,6 +233,7 @@ const readLayouts = (
     }
 
     const layoutCountByPageSetType = new Map<PageSetType, number>();
+
     for (const layout of layouts) {
       const pageSetType = layout.metadata.pageSetType;
       layoutCountByPageSetType.set(
@@ -233,6 +241,7 @@ const readLayouts = (
         (layoutCountByPageSetType.get(pageSetType) ?? 0) + 1
       );
     }
+
     if ((layoutCountByPageSetType.get("ENTITY") ?? 0) === 0) {
       addIssue(
         layoutsDirectory,
@@ -240,6 +249,7 @@ const readLayouts = (
         "Section Library build mode requires at least one ENTITY layout."
       );
     }
+
     if (
       layoutCountByPageSetType.get("DIRECTORY") !== 1 ||
       layoutCountByPageSetType.get("LOCATOR") !== 1
