@@ -2,7 +2,7 @@ import * as React from "react";
 import { PuckComponent, setDeep } from "@puckeditor/core";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
-import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { resolveLocalizedFooterSection } from "../../utils/resolveLocalizedFooterSection.ts";
 import { TranslatableString, TranslatableCTA } from "../../types/types.ts";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { CTA } from "../atoms/cta.tsx";
@@ -41,52 +41,48 @@ const FooterExpandedLinkSectionSlotInternal: PuckComponent<
   const background = useBackground();
   const isDarkBackground = background?.isDarkColor ?? false;
 
-  const label = resolveComponentData(data.label, i18n.language, streamDocument);
-  const links = data.links;
+  const { label, links } = resolveLocalizedFooterSection(
+    data,
+    i18n.language,
+    streamDocument
+  );
 
   const defaultColor: ThemeColor = isDarkBackground
     ? { selectedColor: "white", contrastingColor: "black" }
     : { selectedColor: "palette-primary-dark", contrastingColor: "white" };
   const resolvedColor = styles?.color ?? defaultColor;
 
+  if (links.length === 0 && !puck.isEditing) {
+    return <></>;
+  }
+
   return (
     <div className="flex flex-col gap-6">
-      <Body className="break-words" color={resolvedColor}>
-        {label}
-      </Body>
+      {label.trim() !== "" && (
+        <Body className="break-words" color={resolvedColor}>
+          {label}
+        </Body>
+      )}
       <div className="flex flex-col gap-4">
-        {links && links.length > 0
-          ? links.map((linkData, index) => {
-              const linkLabel = resolveComponentData(
-                linkData.label,
-                i18n.language,
-                streamDocument
-              );
-              const link = resolveComponentData(
-                linkData.link,
-                i18n.language,
-                streamDocument
-              );
-
-              return (
-                <CTA
-                  openInNewTab={linkData.openInNewTab}
-                  key={index}
-                  variant="headerFooterMainLink"
-                  eventName={`cta.expandedFooter.${index}-Link-${index + 1}`}
-                  label={linkLabel}
-                  linkType={linkData.linkType}
-                  link={link}
-                  normalizeLink={
-                    isNonNormalizableLinkType(linkData.linkType)
-                      ? false
-                      : (linkData.normalizeLink ?? true)
-                  }
-                  className="justify-center md:justify-start block break-words whitespace-normal"
-                  color={resolvedColor}
-                />
-              );
-            })
+        {links.length > 0
+          ? links.map((linkData, index) => (
+              <CTA
+                openInNewTab={linkData.openInNewTab}
+                key={index}
+                variant="headerFooterMainLink"
+                eventName={`cta.expandedFooter.${index}-Link-${index + 1}`}
+                label={linkData.label}
+                linkType={linkData.linkType}
+                link={linkData.link}
+                normalizeLink={
+                  isNonNormalizableLinkType(linkData.linkType)
+                    ? false
+                    : (linkData.normalizeLink ?? true)
+                }
+                className="justify-center md:justify-start block break-words whitespace-normal"
+                color={resolvedColor}
+              />
+            ))
           : puck.isEditing && <div className="h-6 min-w-[100px]" />}
       </div>
     </div>
