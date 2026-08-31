@@ -14,6 +14,7 @@ export interface SectionLibrary {
 export interface SectionLibraryRevision {
   name: string;
   status: string;
+  uid: string;
 }
 
 interface RevisionSource {
