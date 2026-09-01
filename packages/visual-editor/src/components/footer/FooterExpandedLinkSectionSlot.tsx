@@ -139,7 +139,7 @@ const footerExpandedLinkSectionSlotFields: YextFields<FooterExpandedLinkSectionS
             },
             link: {
               label: msg("fields.link", "Link"),
-              type: "text",
+              type: "translatableString",
             },
             normalizeLink: {
               label: msg("fields.normalizeLink", "Normalize Link"),
