@@ -56,24 +56,43 @@ vi.mock("@yext/search-headless-react", async () => {
   };
 });
 
-vi.mock("@yext/search-ui-react", () => ({
-  AppliedFilters: () => null,
-  Facets: ({ children }: React.PropsWithChildren) => <div>{children}</div>,
-  StandardFacet: ({ fieldId, label }: { fieldId: string; label?: string }) => (
-    <div
-      data-testid={`facet-${fieldId}`}
-      data-label={label}
-      data-type="standard"
-    />
-  ),
-  NumericalFacet: ({ fieldId, label }: { fieldId: string; label?: string }) => (
-    <div
-      data-testid={`facet-${fieldId}`}
-      data-label={label}
-      data-type="numerical"
-    />
-  ),
-}));
+vi.mock("@yext/search-ui-react", async () => {
+  const actual = await vi.importActual<typeof import("@yext/search-ui-react")>(
+    "@yext/search-ui-react"
+  );
+
+  return {
+    ...actual,
+    AppliedFilters: () => null,
+    Facets: ({ children }: React.PropsWithChildren) => <div>{children}</div>,
+    StandardFacet: ({
+      fieldId,
+      label,
+    }: {
+      fieldId: string;
+      label?: string;
+    }) => (
+      <div
+        data-testid={`facet-${fieldId}`}
+        data-label={label}
+        data-type="standard"
+      />
+    ),
+    NumericalFacet: ({
+      fieldId,
+      label,
+    }: {
+      fieldId: string;
+      label?: string;
+    }) => (
+      <div
+        data-testid={`facet-${fieldId}`}
+        data-label={label}
+        data-type="numerical"
+      />
+    ),
+  };
+});
 
 const renderFilterModal = (
   keywordsDisplayName?: React.ComponentProps<
