@@ -26,6 +26,8 @@ const config: DeployConfig = {
   partition: "US",
   apiHost: "https://sbx-api.yextapis.com",
 };
+const revisionId = "019c9cb5-0bc5-76cd-848c-25657b850a8f";
+const revisionName = `accounts/123/sectionLibraries/test-library/revisions/${revisionId}`;
 
 afterEach(() => {
   vi.clearAllMocks();
@@ -37,17 +39,15 @@ describe("pollRevision", () => {
     vi.useFakeTimers();
     vi.mocked(getSectionLibraryRevision)
       .mockResolvedValueOnce({
-        name: "revision-name",
+        name: revisionName,
         status: "STATUS_BUILD_PROCESSING",
-        uid: "revision-uid",
       })
       .mockResolvedValueOnce({
-        name: "revision-name",
+        name: revisionName,
         status: "STATUS_BUILD_SUCCEEDED",
-        uid: "revision-uid",
       });
 
-    const polling = pollRevision(config, "revision-name", false);
+    const polling = pollRevision(config, revisionName, false);
     await vi.advanceTimersByTimeAsync(2000);
     await polling;
 
@@ -56,28 +56,27 @@ describe("pollRevision", () => {
       "Waiting for Section Library Revision build..."
     );
     expect(vi.mocked(ora).mock.results[0].value.succeed).toHaveBeenCalledWith(
-      "Section Library Revision revision-uid build succeeded after 2s."
+      `Section Library Revision ${revisionId} build succeeded after 2s.`
     );
   });
 
   it("rejects when the build reaches an unsuccessful terminal status", async () => {
     vi.useFakeTimers();
     vi.mocked(getSectionLibraryRevision).mockResolvedValueOnce({
-      name: "revision-name",
-      status: "STATUS_BUILD_FAILED",
-      uid: "test-uid",
+      name: revisionName,
+      status: "STATUS_BUILD_FAILURE",
     });
 
-    const polling = pollRevision(config, "revision-name", false);
+    const polling = pollRevision(config, revisionName, false);
     const rejection = expect(polling).rejects.toThrow(
-      "Section Library Revision failed with status STATUS_BUILD_FAILED."
+      "Section Library Revision failed with status STATUS_BUILD_FAILURE."
     );
     await vi.advanceTimersByTimeAsync(1000);
     await rejection;
 
     const spinner = vi.mocked(ora).mock.results[0]?.value;
     expect(spinner.fail).toHaveBeenCalledWith(
-      "Section Library Revision failed with status STATUS_BUILD_FAILED."
+      "Section Library Revision failed with status STATUS_BUILD_FAILURE."
     );
   });
 });
