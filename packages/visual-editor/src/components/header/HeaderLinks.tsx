@@ -20,6 +20,10 @@ import { ThemeColor, ThemeOptions } from "../../utils/themeConfigOptions.ts";
 import { BodyProps } from "../atoms/body.tsx";
 import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
 import {
+  type ResolvedCTA,
+  resolveLocalizedCtas,
+} from "../../utils/resolveLocalizedCtas.ts";
+import {
   toPuckFields,
   YextComponentConfig,
   type YextArrayField,
@@ -214,15 +218,19 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
         : t("secondaryHeaderLinks", "Secondary Header Links");
 
   const validLinks = React.useMemo(
-    () => data.links?.filter((item) => !!item?.link) || [],
-    [data.links]
+    () => resolveLocalizedCtas(data.links, i18n.language, streamDocument),
+    [data.links, i18n.language, streamDocument]
   );
   const validAlwaysCollapsedLinks = React.useMemo(
     () =>
       isSecondary
         ? []
-        : data.collapsedLinks?.filter((item) => !!item?.link) || [],
-    [isSecondary, data.collapsedLinks]
+        : resolveLocalizedCtas(
+            data.collapsedLinks,
+            i18n.language,
+            streamDocument
+          ),
+    [isSecondary, data.collapsedLinks, i18n.language, streamDocument]
   );
 
   // Derive styles based on display mode and styles props.
@@ -276,7 +284,7 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
     }
   }, [menuContext, displayMode, isSecondary, validAlwaysCollapsedLinks.length]);
 
-  const renderLink = (item: TranslatableCTA, index: number) => (
+  const renderLink = (item: ResolvedCTA, index: number) => (
     <CTA
       variant={
         !isSecondary ? "headerFooterMainLink" : "headerFooterSecondaryLink"
@@ -284,9 +292,9 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
       color={styles?.color}
       openInNewTab={item.openInNewTab}
       eventName={`cta.${type.toLowerCase()}.${index}`}
-      label={resolveComponentData(item.label, i18n.language, streamDocument)}
+      label={item.label}
       linkType={item.linkType}
-      link={resolveComponentData(item.link, i18n.language, streamDocument)}
+      link={item.link}
       normalizeLink={
         isNonNormalizableLinkType(item.linkType)
           ? false
