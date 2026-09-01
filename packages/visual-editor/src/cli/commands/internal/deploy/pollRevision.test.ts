@@ -28,7 +28,7 @@ const config: DeployConfig = {
 };
 
 afterEach(() => {
-  vi.restoreAllMocks();
+  vi.clearAllMocks();
   vi.useRealTimers();
 });
 
@@ -57,6 +57,27 @@ describe("pollRevision", () => {
     );
     expect(vi.mocked(ora).mock.results[0].value.succeed).toHaveBeenCalledWith(
       "Section Library Revision revision-uid build succeeded after 2s."
+    );
+  });
+
+  it("rejects when the build reaches an unsuccessful terminal status", async () => {
+    vi.useFakeTimers();
+    vi.mocked(getSectionLibraryRevision).mockResolvedValueOnce({
+      name: "revision-name",
+      status: "STATUS_BUILD_FAILED",
+      uid: "test-uid",
+    });
+
+    const polling = pollRevision(config, "revision-name", false);
+    const rejection = expect(polling).rejects.toThrow(
+      "Section Library Revision failed with status STATUS_BUILD_FAILED."
+    );
+    await vi.advanceTimersByTimeAsync(1000);
+    await rejection;
+
+    const spinner = vi.mocked(ora).mock.results[0]?.value;
+    expect(spinner.fail).toHaveBeenCalledWith(
+      "Section Library Revision failed with status STATUS_BUILD_FAILED."
     );
   });
 });

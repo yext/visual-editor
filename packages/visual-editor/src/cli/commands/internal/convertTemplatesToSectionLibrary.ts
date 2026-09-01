@@ -1,7 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
-import { fileURLToPath } from "node:url";
 import ts from "typescript";
 import {
   purposes,
@@ -9,7 +8,7 @@ import {
   type EntityLayoutMetadata,
   type LibraryMetadata,
   type PageSetType,
-} from "../src/types/sectionLibrary.ts";
+} from "../../../types/sectionLibrary.ts";
 import { exportDirectoryLocatorSectionLibrary } from "./exportDirectoryLocatorSectionLibrary.ts";
 
 const SAFE_ID = /^[A-Za-z0-9][A-Za-z0-9_-]*$/;
@@ -90,24 +89,8 @@ type ConvertOptions = {
   write?: (message: string) => void;
 };
 
-type CommandOptions =
-  | { help: true }
-  | (Omit<ConvertOptions, "write"> & { help: false });
-
 /**
  * Converts all legacy registry templates into one Section Library.
- *
- * Run the following from `packages/visual-editor`:
- *
- * ```
- * pnpm run convert-templates-to-section-library -- \
- *   --target <starter-path> [--apply] [--delete-source]
- * ```
- *
- * `--target` is the starter repository root. Without `--apply`, the command
- * validates the source templates and reports the planned conversion without
- * changing files. `--delete-source` requires `--apply` and removes converted
- * `src/registry` template directories after the new library is in place.
  *
  * 1. Export missing Directory and Locator source, then validate the base
  *    library and every legacy template.
@@ -1054,72 +1037,3 @@ const isRecord = (value: unknown): value is JsonRecord =>
 
 const getErrorMessage = (error: unknown): string =>
   error instanceof Error ? error.message : String(error);
-
-const parseOptions = (args: string[]): CommandOptions => {
-  if (args.includes("--help") || args.includes("-h")) {
-    return { help: true };
-  }
-  const targetIndex = args.indexOf("--target");
-  const targetDirectory = args[targetIndex + 1];
-  if (targetIndex === -1 || !targetDirectory) {
-    throw new Error(
-      "Usage: convertTemplatesToSectionLibrary --target <starter path> [--apply] [--delete-source]"
-    );
-  }
-
-  let apply = false;
-  let deleteSource = false;
-  for (let index = 0; index < args.length; index += 1) {
-    const argument = args[index];
-    switch (argument) {
-      case "--":
-        break;
-      case "--target":
-        index += 1;
-        break;
-      case "--apply":
-        apply = true;
-        break;
-      case "--delete-source":
-        deleteSource = true;
-        break;
-      default:
-        throw new Error(`Unknown argument: ${argument}`);
-    }
-  }
-  return {
-    help: false,
-    apply,
-    deleteSource,
-    targetDirectory: path.resolve(targetDirectory),
-  };
-};
-
-const printHelp = (): void => {
-  console.log(`Usage: pnpm run convert-templates-to-section-library -- --target <starter path> [--apply] [--delete-source]
-
-Converts every src/registry/<template-id> directory in the target starter into Entity layouts in one Section Library.
-Without --apply, the script reports the conversion without changing files.
---delete-source removes converted legacy templates after a successful apply.`);
-};
-
-const main = (): void => {
-  try {
-    const options = parseOptions(process.argv.slice(2));
-    if (options.help) {
-      printHelp();
-      return;
-    }
-    convertTemplatesToSectionLibrary(options);
-  } catch (error) {
-    console.error(`Conversion failed: ${getErrorMessage(error)}`);
-    process.exitCode = 1;
-  }
-};
-
-if (
-  process.argv[1] &&
-  path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
-) {
-  main();
-}

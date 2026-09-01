@@ -54,5 +54,12 @@ export function updateYextrc(rootDir: string, updates: Yextrc): void {
       merged[key] = value;
     }
   }
-  fs.writeFileSync(filePath, stringify(merged), "utf8");
+  const containsApiKey = typeof merged.apiKey === "string";
+  fs.writeFileSync(filePath, stringify(merged), {
+    encoding: "utf8",
+    mode: containsApiKey ? 0o600 : undefined,
+  });
+  if (containsApiKey) {
+    fs.chmodSync(filePath, 0o600);
+  }
 }

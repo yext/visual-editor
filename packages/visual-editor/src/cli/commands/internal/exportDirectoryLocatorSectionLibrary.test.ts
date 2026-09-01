@@ -13,6 +13,40 @@ afterEach(() => {
 });
 
 describe("exportDirectoryLocatorSectionLibrary", () => {
+  it.each(["test-library-directory", "test-library-locator"])(
+    "refuses to overwrite the existing %s layout without --overwrite",
+    (layoutId) => {
+      const targetDirectory = fs.mkdtempSync(
+        path.join(os.tmpdir(), "directory-locator-library-")
+      );
+      temporaryDirectories.push(targetDirectory);
+      const layoutDirectory = path.join(
+        targetDirectory,
+        "src",
+        "library",
+        "layouts",
+        layoutId
+      );
+      fs.ensureDirSync(layoutDirectory);
+      const metadataPath = path.join(layoutDirectory, "metadata.json");
+      fs.writeFileSync(metadataPath, "existing metadata");
+
+      expect(() =>
+        exportDirectoryLocatorSectionLibrary({
+          targetDirectory,
+          libraryId: "test-library",
+          overwrite: false,
+        })
+      ).toThrow(
+        `Refusing to overwrite existing layout at ${layoutDirectory}. Pass --overwrite to override.`
+      );
+      expect(fs.readFileSync(metadataPath, "utf8")).toBe("existing metadata");
+      expect(
+        fs.existsSync(path.join(targetDirectory, "src", "library", "shared"))
+      ).toBe(false);
+    }
+  );
+
   it("exports deterministic editable Directory and Locator source", () => {
     const targetDirectory = fs.mkdtempSync(
       path.join(os.tmpdir(), "directory-locator-library-")

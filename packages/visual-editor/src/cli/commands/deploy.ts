@@ -1,6 +1,6 @@
-import { resolveConfig } from "../../internal/deploy/config.ts";
-import { deploy } from "../../internal/deploy/deploy.ts";
-import { pollRevision } from "../../internal/deploy/pollRevision.ts";
+import { resolveConfig } from "./internal/deploy/config.ts";
+import { deploy } from "./internal/deploy/deploy.ts";
+import { pollRevision } from "./internal/deploy/pollRevision.ts";
 import { defineYextveCommand } from "../command.ts";
 
 const usage = `Usage:

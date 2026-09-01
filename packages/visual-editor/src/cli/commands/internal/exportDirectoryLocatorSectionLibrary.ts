@@ -2,21 +2,16 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import fs from "fs-extra";
 import { Project } from "ts-morph";
-import { defaultLayoutData } from "../src/vite-plugin/defaultLayoutData.ts";
+import packageJson from "../../../../package.json" with { type: "json" };
+import { defaultLayoutData } from "../../../vite-plugin/defaultLayoutData.ts";
 
-const sourceRoot = path.resolve(
-  path.dirname(fileURLToPath(import.meta.url)),
-  "..",
-  "src"
-);
 const supportEntryPoint = "@yext/visual-editor/section-library-support";
-const supportProject = new Project();
-const supportSourceFile = supportProject.addSourceFileAtPath(
-  path.join(sourceRoot, "sectionLibrarySupport.ts")
-);
-const supportExports = new Set(
-  supportSourceFile.getExportedDeclarations().keys()
-);
+
+type ExportContext = {
+  sourceRoot: string;
+  supportProject: Project;
+  supportExports: Set<string>;
+};
 
 const sharedComponentSources: Record<
   string,
@@ -80,20 +75,6 @@ type Options = {
 /**
  * Exports the Directory and Locator sections to a starter repository
  * configured with the new Section Library structure.
- *
- * Run the following from `packages/visual-editor`:
- *
- * ```
- * pnpm run export-section-library-directory-locator -- \
- *   --target <starter-path> \
- *   --library-id <library-id>
- * ```
- *
- * `--target` is the starter repository root.
- * `--library-id` is the prefix for the generated layout IDs.
- * For example, `--library-id my-library` creates
- * `my-library-directory` and `my-library-locator`.
- *
  * By default, the command stops if the target already has shared source or a
  * Directory or Locator section. Use `--overwrite` only after you review the
  * new output. This option replaces the shared source and the Directory and
@@ -110,12 +91,14 @@ type Options = {
 export const exportDirectoryLocatorSectionLibrary = (
   options: Options
 ): void => {
+  const context = createExportContext();
   const libraryDirectory = path.join(options.targetDirectory, "src", "library");
   const sharedDirectory = path.join(libraryDirectory, "shared");
   const sectionsDirectory = path.join(libraryDirectory, "sections");
+  const layoutsDirectory = path.join(libraryDirectory, "layouts");
   if (!options.overwrite && fs.existsSync(sharedDirectory)) {
     throw new Error(
-      `Refusing to overwrite existing shared source at ${sharedDirectory}`
+      `Refusing to overwrite existing shared source at ${sharedDirectory}. Pass --overwrite to override.`
     );
   }
   if (
@@ -123,7 +106,7 @@ export const exportDirectoryLocatorSectionLibrary = (
     fs.existsSync(path.join(sectionsDirectory, "Directory.tsx"))
   ) {
     throw new Error(
-      `Refusing to overwrite existing Directory section at ${sectionsDirectory}`
+      `Refusing to overwrite existing Directory section at ${sectionsDirectory}. Pass --overwrite to override.`
     );
   }
   if (
@@ -131,8 +114,19 @@ export const exportDirectoryLocatorSectionLibrary = (
     fs.existsSync(path.join(sectionsDirectory, "Locator.tsx"))
   ) {
     throw new Error(
-      `Refusing to overwrite existing Locator section at ${sectionsDirectory}`
+      `Refusing to overwrite existing Locator section at ${sectionsDirectory}. Pass --overwrite to override.`
     );
+  }
+  for (const layoutId of [
+    `${options.libraryId}-directory`,
+    `${options.libraryId}-locator`,
+  ]) {
+    const layoutDirectory = path.join(layoutsDirectory, layoutId);
+    if (!options.overwrite && fs.existsSync(layoutDirectory)) {
+      throw new Error(
+        `Refusing to overwrite existing layout at ${layoutDirectory}. Pass --overwrite to override.`
+      );
+    }
   }
 
   if (options.overwrite) {
@@ -142,7 +136,8 @@ export const exportDirectoryLocatorSectionLibrary = (
   const copiedSourcePaths = new Set<string>();
   for (const sourcePath of copiedSourceRoots) {
     copySourceClosure(
-      path.join(sourceRoot, sourcePath),
+      context,
+      path.join(context.sourceRoot, sourcePath),
       sharedDirectory,
       copiedSourcePaths
     );
@@ -158,7 +153,31 @@ export const exportDirectoryLocatorSectionLibrary = (
   writeSourceVersion(sharedDirectory);
 };
 
+const createExportContext = (): ExportContext => {
+  const moduleDirectory = path.dirname(fileURLToPath(import.meta.url));
+  const sourceRoot = [
+    path.join(moduleDirectory, "assets", "directory-locator-source"),
+    path.resolve(moduleDirectory, "..", "..", ".."),
+  ].find((candidate) =>
+    fs.existsSync(path.join(candidate, "sectionLibrarySupport.ts"))
+  );
+  if (!sourceRoot) {
+    throw new Error("Could not locate the Directory and Locator source assets");
+  }
+
+  const supportProject = new Project();
+  const supportSourceFile = supportProject.addSourceFileAtPath(
+    path.join(sourceRoot, "sectionLibrarySupport.ts")
+  );
+  return {
+    sourceRoot,
+    supportProject,
+    supportExports: new Set(supportSourceFile.getExportedDeclarations().keys()),
+  };
+};
+
 const copySourceClosure = (
+  context: ExportContext,
   sourcePath: string,
   sharedDirectory: string,
   copiedSourcePaths: Set<string>
@@ -167,7 +186,7 @@ const copySourceClosure = (
     return;
   }
   copiedSourcePaths.add(sourcePath);
-  const relativePath = path.relative(sourceRoot, sourcePath);
+  const relativePath = path.relative(context.sourceRoot, sourcePath);
   const destinationPath = path.join(sharedDirectory, relativePath);
   fs.ensureDirSync(path.dirname(destinationPath));
   if (!/\.(ts|tsx|js|jsx)$/.test(sourcePath)) {
@@ -185,33 +204,59 @@ const copySourceClosure = (
             `Unsupported side-effect import ${specifier} from ${sourcePath}`
           );
         }
-        copySourceClosure(importedPath, sharedDirectory, copiedSourcePaths);
+        copySourceClosure(
+          context,
+          importedPath,
+          sharedDirectory,
+          copiedSourcePaths
+        );
         return `${prefix}${specifier}${suffix}`;
       }
     )
     .replace(
       /(from\s+["'])(\.[^"']+)(["'])/g,
       (match, prefix: string, specifier: string, suffix: string) => {
-        const importedPath = resolveSourceImport(sourcePath, specifier);
-        if (isCopiedSource(importedPath)) {
-          copySourceClosure(importedPath, sharedDirectory, copiedSourcePaths);
+        const unresolvedPath = path.resolve(
+          path.dirname(sourcePath),
+          specifier
+        );
+        if (isCopiedSource(context, unresolvedPath)) {
+          const importedPath = resolveSourceImport(sourcePath, specifier);
+          copySourceClosure(
+            context,
+            importedPath,
+            sharedDirectory,
+            copiedSourcePaths
+          );
           return `${prefix}${specifier.replace(/\.(ts|tsx|js|jsx)$/, "")}${suffix}`;
         }
-        if (path.extname(importedPath) === ".css") {
-          copySourceClosure(importedPath, sharedDirectory, copiedSourcePaths);
+        if (path.extname(unresolvedPath) === ".css") {
+          const importedPath = resolveSourceImport(sourcePath, specifier);
+          copySourceClosure(
+            context,
+            importedPath,
+            sharedDirectory,
+            copiedSourcePaths
+          );
           return match;
         }
         return `${prefix}@yext/visual-editor/section-library-support${suffix}`;
       }
     );
-  validateSupportImports(sourcePath, rewritten);
+  validateSupportImports(context, sourcePath, rewritten);
   fs.writeFileSync(destinationPath, rewritten);
 };
 
-const validateSupportImports = (sourcePath: string, source: string): void => {
-  const sourceFile = supportProject.createSourceFile(sourcePath, source, {
-    overwrite: true,
-  });
+const validateSupportImports = (
+  context: ExportContext,
+  sourcePath: string,
+  source: string
+): void => {
+  const sourceFile = context.supportProject.createSourceFile(
+    sourcePath,
+    source,
+    { overwrite: true }
+  );
   try {
     for (const declaration of sourceFile.getImportDeclarations()) {
       if (declaration.getModuleSpecifierValue() !== supportEntryPoint) {
@@ -222,7 +267,7 @@ const validateSupportImports = (sourcePath: string, source: string): void => {
         declaration.getNamespaceImport() ||
         declaration
           .getNamedImports()
-          .some((imported) => !supportExports.has(imported.getName()))
+          .some((imported) => !context.supportExports.has(imported.getName()))
       ) {
         throw new Error(
           `Unsupported Visual Editor import in ${sourcePath}. Add a stable export to ${supportEntryPoint} before exporting this source.`
@@ -257,15 +302,19 @@ const resolveSourceImport = (sourcePath: string, specifier: string): string => {
   return resolvedPath;
 };
 
-const isCopiedSource = (sourcePath: string): boolean => {
-  const relativePath = path.relative(sourceRoot, sourcePath);
+const isCopiedSource = (
+  context: ExportContext,
+  sourcePath: string
+): boolean => {
+  const relativePath = path.relative(context.sourceRoot, sourcePath);
   return (
     [
       "components/contentBlocks/",
       "components/directory/",
       "components/locator/",
     ].some((directory) => relativePath.startsWith(directory)) ||
-    relativePath === "components/pageSections/Breadcrumbs.tsx"
+    relativePath.replace(/\.(ts|tsx|js|jsx)$/, "") ===
+      "components/pageSections/Breadcrumbs"
   );
 };
 
@@ -461,9 +510,6 @@ const writeLayout = (
 };
 
 const writeSourceVersion = (sharedDirectory: string): void => {
-  const packageJson = fs.readJsonSync(
-    path.join(sourceRoot, "..", "package.json")
-  ) as { version: string };
   fs.writeJsonSync(
     path.join(sharedDirectory, "sourceVersion.json"),
     {
@@ -517,29 +563,3 @@ const collectComponentList = (value: unknown): string[] => {
     ];
   });
 };
-
-const parseOptions = (args: string[]): Options => {
-  const targetIndex = args.indexOf("--target");
-  const libraryIdIndex = args.indexOf("--library-id");
-  if (targetIndex === -1 || libraryIdIndex === -1) {
-    throw new Error(
-      "Usage: exportDirectoryLocatorSectionLibrary --target <starter path> --library-id <library id> [--overwrite]"
-    );
-  }
-  const targetDirectory = args[targetIndex + 1];
-  const libraryId = args[libraryIdIndex + 1];
-  if (!targetDirectory || !libraryId) {
-    throw new Error(
-      "Usage: exportDirectoryLocatorSectionLibrary --target <starter path> --library-id <library id> [--overwrite]"
-    );
-  }
-  return {
-    targetDirectory: path.resolve(targetDirectory),
-    libraryId,
-    overwrite: args.includes("--overwrite"),
-  };
-};
-
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  exportDirectoryLocatorSectionLibrary(parseOptions(process.argv.slice(2)));
-}

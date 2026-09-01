@@ -2,6 +2,8 @@ import fs from "node:fs";
 import { parseArgs } from "node:util";
 import { fileURLToPath } from "node:url";
 import packageJson from "../../package.json" with { type: "json" };
+import { addDirectoryLocatorCmd } from "./commands/addDirectoryLocator.ts";
+import { convertTemplateCmd } from "./commands/convertTemplate.ts";
 import { deployCmd } from "./commands/deploy.ts";
 import { validateCmd } from "./commands/validate.ts";
 import {
@@ -16,6 +18,8 @@ const usage = `Usage:
   yextve <command> [options]
 
 Commands:
+  add-directory-locator            Add Directory and Locator to a Section Library.
+  convert-template                 Convert legacy templates to a Section Library.
   deploy                           Upload a Section Library revision.
   validate                         Validate a Section Library.
 
@@ -27,6 +31,8 @@ Run "yextve <command> --help" for command-specific options.
 `;
 
 const commands: Record<string, YextveCommand<CommandParseArgsConfig>> = {
+  "add-directory-locator": addDirectoryLocatorCmd,
+  "convert-template": convertTemplateCmd,
   deploy: deployCmd,
   validate: validateCmd,
 };
