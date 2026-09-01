@@ -1,3 +1,13 @@
+#### 1.4.7 (2026-09-01)
+
+##### New Features
+
+- add keyword display name to locator ([#1306](https://github.com/yext/visual-editor/pull/1306)) ([819af72a](https://github.com/yext/visual-editor/commit/819af72ae9405795ba87665ed0463cb3e89e912d))
+
+##### Bug Fixes
+
+- spacing for blank links in header and footer ([#1302](https://github.com/yext/visual-editor/pull/1302)) ([b04cfd5f](https://github.com/yext/visual-editor/commit/b04cfd5fb4265f25f324d05ee8eeabdee2bae20a))
+
 #### 1.4.6 (2026-08-26)
 
 ##### New Features
