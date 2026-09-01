@@ -13,9 +13,16 @@ export interface SectionLibrary {
 
 export interface SectionLibraryRevision {
   name: string;
-  status: string;
-  uid: string;
+  status: SectionLibraryRevisionStatus;
 }
+
+type SectionLibraryRevisionStatus =
+  | "STATUS_UNSPECIFIED"
+  | "STATUS_BUILD_PROCESSING"
+  | "STATUS_BUILD_SUCCEEDED"
+  | "STATUS_BUILD_SYSTEM_ERROR"
+  | "STATUS_BUILD_FAILURE"
+  | "STATUS_BUILD_TIMED_OUT";
 
 interface RevisionSource {
   sourceGitOrigin: string;

@@ -6,6 +6,7 @@ import { execFileSync } from "node:child_process";
 import prompts from "prompts";
 import { deploy } from "./deploy.ts";
 import type { DeployConfig } from "./config.ts";
+import type { SectionLibraryRevision } from "./sectionLibraryApi.ts";
 
 vi.mock("prompts");
 
@@ -17,10 +18,20 @@ const config: DeployConfig = {
   partition: "US",
   apiHost: "https://sbx-api.yextapis.com",
 };
-const successfulResponse = JSON.stringify({
-  meta: { errors: [] },
-  response: {},
-});
+const sectionLibrary = {
+  name: "accounts/123/sectionLibraries/library-123",
+  uid: "019c9cb4-a7ad-7312-a603-9a828ac7c103",
+  displayName: "Library",
+  description: "Test",
+};
+const sectionLibraryRevision = {
+  name: `${sectionLibrary.name}/revisions/019c9cb5-0bc5-76cd-848c-25657b850a8f`,
+  status: "STATUS_BUILD_PROCESSING",
+} satisfies SectionLibraryRevision;
+
+function successfulResponse(response: object): string {
+  return JSON.stringify({ meta: { errors: [] }, response });
+}
 
 let rootDir: string;
 let sourceCommitHash: string;
@@ -73,11 +84,19 @@ describe("deploy", () => {
   it("creates a section library revision with Git source metadata", async () => {
     const fetchMock = vi
       .fn()
-      .mockResolvedValueOnce(new Response(successfulResponse, { status: 200 }))
-      .mockResolvedValueOnce(new Response(successfulResponse, { status: 201 }));
+      .mockResolvedValueOnce(
+        new Response(successfulResponse(sectionLibrary), { status: 200 })
+      )
+      .mockResolvedValueOnce(
+        new Response(successfulResponse(sectionLibraryRevision), {
+          status: 201,
+        })
+      );
     vi.stubGlobal("fetch", fetchMock);
 
-    await deploy(config);
+    const revision = await deploy(config);
+
+    expect(revision).toEqual(sectionLibraryRevision);
 
     expect(fetchMock).toHaveBeenNthCalledWith(
       1,
@@ -120,7 +139,7 @@ describe("deploy", () => {
       vi
         .fn()
         .mockResolvedValueOnce(
-          new Response(successfulResponse, { status: 200 })
+          new Response(successfulResponse(sectionLibrary), { status: 200 })
         )
         .mockResolvedValueOnce(
           new Response(
@@ -151,7 +170,7 @@ describe("deploy", () => {
       vi
         .fn()
         .mockResolvedValueOnce(
-          new Response(successfulResponse, { status: 200 })
+          new Response(successfulResponse(sectionLibrary), { status: 200 })
         )
         .mockResolvedValueOnce(
           new Response(
@@ -250,7 +269,7 @@ describe("deploy", () => {
       vi
         .fn()
         .mockResolvedValueOnce(
-          new Response(successfulResponse, { status: 200 })
+          new Response(successfulResponse(sectionLibrary), { status: 200 })
         )
         .mockResolvedValueOnce(new Response(responseBody, { status: 400 }))
     );
@@ -265,9 +284,17 @@ describe("deploy", () => {
     vi.mocked(prompts).mockResolvedValueOnce({ value: true });
     const fetchMock = vi
       .fn()
-      .mockResolvedValueOnce(new Response(successfulResponse, { status: 404 }))
-      .mockResolvedValueOnce(new Response(successfulResponse, { status: 201 }))
-      .mockResolvedValueOnce(new Response(successfulResponse, { status: 201 }));
+      .mockResolvedValueOnce(
+        new Response(successfulResponse({}), { status: 404 })
+      )
+      .mockResolvedValueOnce(
+        new Response(successfulResponse(sectionLibrary), { status: 201 })
+      )
+      .mockResolvedValueOnce(
+        new Response(successfulResponse(sectionLibraryRevision), {
+          status: 201,
+        })
+      );
     vi.stubGlobal("fetch", fetchMock);
 
     await deploy(config);
