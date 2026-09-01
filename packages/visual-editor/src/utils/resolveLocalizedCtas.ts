@@ -1,6 +1,10 @@
 import { type TranslatableCTA } from "../types/types.ts";
 import { resolveComponentData } from "./resolveComponentData.tsx";
 
+/**
+ * A {@link TranslatableCTA} whose label and link have been localized by
+ * {@link resolveLocalizedCtas}.
+ */
 export type ResolvedCTA = Omit<TranslatableCTA, "label" | "link"> & {
   label: string;
   link: string;
