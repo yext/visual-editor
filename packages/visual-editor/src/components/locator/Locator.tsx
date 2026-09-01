@@ -22,7 +22,7 @@ import {
   YextFields,
 } from "../../fields/fields.ts";
 import { ImageStylingFields } from "../contentBlocks/image/styling.ts";
-import { getFacetFieldOptions } from "./Filters.tsx";
+import { getFacetFieldOptions, KEYWORDS_FIELD } from "./Filters.tsx";
 import {
   DEFAULT_LOCATOR_RESULT_CARD_PROPS,
   DistanceDisplayOption,
@@ -92,8 +92,10 @@ export interface LocatorProps {
     showDistanceOptions: boolean;
     /** Accent color for filter button and icons. */
     accentColor?: ThemeColor;
-    /** Which fields are facetable in the search experience */
+    /** Which fields are facetable in the search experience. */
     facetFields?: MultiSelectorValue<string>;
+    /** The optional display name for the Keywords facet. */
+    keywordsDisplayName?: TranslatableString;
   };
 
   /**
@@ -326,6 +328,12 @@ const locatorFields: YextFields<LocatorProps> = {
           "Select a field"
         ),
       } as any, // TODO(SUMO-8378): remove 'as any' when puck fixes objectFields typing
+      keywordsDisplayName: {
+        type: "translatableString",
+        label: msg("fields.keywordsDisplayName", "Keywords Display Name"),
+        showFieldSelector: false,
+        visible: false,
+      },
     },
   },
   mapStartingLocation: {
@@ -411,7 +419,7 @@ export const LocatorComponent: YextComponentConfig<LocatorProps> = {
    * Locks array lengths for `locationStyles` and `resultCard` to the current
    * locator entity types so each entity type has exactly one entry.
    */
-  resolveFields: (_data, params) => {
+  resolveFields: (data, params) => {
     const entityDocument = params.metadata?.streamDocument;
     const entityTypeSourceMap = entityDocument
       ? getLocatorEntityTypeSourceMap(entityDocument)
@@ -434,6 +442,13 @@ export const LocatorComponent: YextComponentConfig<LocatorProps> = {
     );
     updatedFields = setDeep(updatedFields, "resultCard.min", entityTypeCount);
     updatedFields = setDeep(updatedFields, "resultCard.max", entityTypeCount);
+    updatedFields = setDeep(
+      updatedFields,
+      "filters.objectFields.keywordsDisplayName.visible",
+      data.props.filters?.facetFields?.selections.some(
+        (selection) => selection.value === KEYWORDS_FIELD
+      ) ?? false
+    );
 
     return toPuckFields<LocatorProps>(updatedFields);
   },
