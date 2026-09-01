@@ -5,7 +5,7 @@ import { TranslatableString, TranslatableCTA } from "../../types/types.ts";
 import { i18nComponentsInstance } from "../../utils/i18n/components.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { getDisplayValue } from "../../utils/resolveComponentData.tsx";
-import { resolveLocalizedFooterSection } from "../../utils/resolveLocalizedFooterSection.ts";
+import { resolveLocalizedFooterLinkSection } from "./resolveLocalizedFooterLinkSection.ts";
 import { CTA } from "../atoms/cta.tsx";
 import { useBackground } from "../../hooks/useBackground.tsx";
 import { Body } from "../atoms/body.tsx";
@@ -252,7 +252,7 @@ const FooterExpandedLinksWrapperInternal: PuckComponent<
   const isDarkBackground = background?.isDarkColor ?? false;
 
   const resolvedSections = (data.sections || []).map((section) =>
-    resolveLocalizedFooterSection(section, i18n.language, streamDocument)
+    resolveLocalizedFooterLinkSection(section, i18n.language, streamDocument)
   );
   const sections = puck.isEditing
     ? resolvedSections

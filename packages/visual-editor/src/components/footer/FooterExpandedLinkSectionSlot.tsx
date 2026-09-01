@@ -2,7 +2,7 @@ import * as React from "react";
 import { PuckComponent, setDeep } from "@puckeditor/core";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
-import { resolveLocalizedFooterSection } from "../../utils/resolveLocalizedFooterSection.ts";
+import { resolveLocalizedFooterLinkSection } from "./resolveLocalizedFooterLinkSection.ts";
 import { TranslatableString, TranslatableCTA } from "../../types/types.ts";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { CTA } from "../atoms/cta.tsx";
@@ -41,7 +41,7 @@ const FooterExpandedLinkSectionSlotInternal: PuckComponent<
   const background = useBackground();
   const isDarkBackground = background?.isDarkColor ?? false;
 
-  const { label, links } = resolveLocalizedFooterSection(
+  const { label, links } = resolveLocalizedFooterLinkSection(
     data,
     i18n.language,
     streamDocument

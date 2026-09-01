@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { resolveLocalizedFooterSection } from "./resolveLocalizedFooterSection.ts";
+import { resolveLocalizedFooterLinkSection } from "./resolveLocalizedFooterLinkSection.ts";
 
-describe("resolveLocalizedFooterSection", () => {
+describe("resolveLocalizedFooterLinkSection", () => {
   it("resolves the section label and removes links that are blank in the active locale", () => {
     const section = {
       label: { defaultValue: "Resources", fr: "Ressources" },
@@ -19,7 +19,7 @@ describe("resolveLocalizedFooterSection", () => {
       ],
     };
 
-    expect(resolveLocalizedFooterSection(section, "fr")).toEqual({
+    expect(resolveLocalizedFooterLinkSection(section, "fr")).toEqual({
       label: "Ressources",
       links: [
         {
@@ -43,7 +43,7 @@ describe("resolveLocalizedFooterSection", () => {
       ],
     };
 
-    expect(resolveLocalizedFooterSection(section, "fr")).toMatchObject({
+    expect(resolveLocalizedFooterLinkSection(section, "fr")).toMatchObject({
       label: "",
       links: [{ label: "À propos", link: "/fr/about" }],
     });
@@ -59,7 +59,7 @@ describe("resolveLocalizedFooterSection", () => {
       links: [],
     };
 
-    expect(resolveLocalizedFooterSection(section, "fr")).toEqual({
+    expect(resolveLocalizedFooterLinkSection(section, "fr")).toEqual({
       label: "Ressources",
       links: [],
     });
