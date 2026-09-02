@@ -425,7 +425,6 @@ describe("generateSectionLibraryFiles", () => {
       {
         id: "edit",
         displayName: "Edit",
-        previewImageUrl: "",
         pageSetType: "ENTITY",
       }
     );
@@ -675,7 +674,6 @@ describe("generateSectionLibraryFiles", () => {
           {
             id: "location",
             displayName: "Location",
-            previewImageUrl: "",
             vertical: ["UNKNOWN"],
             pageSetType: "ENTITY",
           }
@@ -707,7 +705,6 @@ describe("generateSectionLibraryFiles", () => {
           {
             id: "location",
             displayName: "Location",
-            previewImageUrl: "",
             pageSetType: "DIRECTORY",
           }
         );
@@ -978,7 +975,6 @@ const createLibrary = (): string => {
     {
       id: "location",
       displayName: "Location",
-      previewImageUrl: "",
       vertical: ["RETAIL"],
       purpose: ["LOCATION"],
       pageSetType: "ENTITY",
@@ -1081,7 +1077,6 @@ const addEntityLayout = (
   fs.writeJsonSync(path.join(layoutDirectory, "metadata.json"), {
     id: layoutId,
     displayName: layoutId,
-    previewImageUrl: "",
     pageSetType: "ENTITY",
   });
   fs.writeJsonSync(path.join(layoutDirectory, "defaultLayout.json"), {

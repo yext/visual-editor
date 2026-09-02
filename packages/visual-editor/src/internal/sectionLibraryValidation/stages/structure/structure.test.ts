@@ -211,6 +211,23 @@ describe("validateSectionLibraryStructure", () => {
     expectRules(rootDir, "layouts/metadata");
   });
 
+  it("ignores a legacy previewImageUrl metadata property", () => {
+    const rootDir = createValidLibrary();
+    writeLayoutMetadata(rootDir, "entity-layout", {
+      ...entityMetadata,
+      previewImageUrl: "https://example.com/entity.png",
+    });
+
+    const result = validateSectionLibraryStructure(rootDir);
+
+    expect(result.issues).toEqual([]);
+    expect(
+      result.structure?.layouts.find(
+        (layout) => layout.metadata.id === "entity-layout"
+      )?.metadata
+    ).not.toHaveProperty("previewImageUrl");
+  });
+
   it("reports an invalid layout id", () => {
     const rootDir = createValidLibrary();
     writeLayoutMetadata(rootDir, "directory-layout", {
@@ -420,7 +437,6 @@ const validSectionSource = [
 const entityMetadata = {
   id: "entity-layout",
   displayName: "Entity",
-  previewImageUrl: "https://example.com/entity.png",
   vertical: ["RETAIL"],
   purpose: ["LOCATION"],
   pageSetType: "ENTITY",

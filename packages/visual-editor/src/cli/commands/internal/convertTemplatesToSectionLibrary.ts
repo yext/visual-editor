@@ -678,11 +678,6 @@ const buildEntityLayoutMetadata = (
       metadataPath,
       "displayName"
     ),
-    previewImageUrl: requireString(
-      template.metadata.previewImageUrl,
-      metadataPath,
-      "previewImageUrl"
-    ),
     ...(vertical.length > 0 ? { vertical } : {}),
     ...(purpose.length > 0 ? { purpose } : {}),
     pageSetType: "ENTITY",

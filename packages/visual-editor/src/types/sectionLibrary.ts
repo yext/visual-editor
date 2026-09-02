@@ -83,8 +83,6 @@ export type EntityLayoutMetadata = {
   id: string;
   /** The user-facing display name of the layout. */
   displayName: string;
-  /** The URL of an image to display in the Section Library Gallery. */
-  previewImageUrl: string;
   /** The entity categories/industries recommended for use with this layout. */
   vertical?: Vertical[];
   /** Whether this layout is intended as the primary location landing page, as an alternate citation page, or both.  */

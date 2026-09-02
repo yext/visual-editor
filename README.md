@@ -45,7 +45,7 @@ Run the command from the dependent repository's root. That repository must inclu
 
 The command reads the selected Git remote URL and the current commit hash, creates the Section Library if it does not already exist (after confirmation), then creates a revision. It waits for the revision build to finish and displays its elapsed time.
 
-Each layout may include one optional preview image directly in its layout directory. Name the file `preview.png`, `preview.jpg`, `preview.jpeg`, or `preview.webp`; it must be 20 MiB or smaller. During deployment, the image from the selected Git commit is uploaded to mktgcdn and its hosted URL takes precedence over `previewImageUrl` from that layout's `metadata.json`. The committed metadata file is not modified. If no local image exists, the existing metadata URL is preserved. An invalid image or failed upload causes the deployment to fail.
+Each layout may include one optional preview image directly in its layout directory. Name the file `preview.png`, `preview.jpg`, `preview.jpeg`, or `preview.webp`; it must be 20 MiB or smaller. During deployment, the image from the selected Git commit is uploaded to mktgcdn and used as that layout's preview image. Once a layout's preview image is set, it can be overwritten by a new image. If no image is present, that layout's former preview image is used.
 
 Before deploying, create a Yext API App in the Yext platform Developer Console and grant it Section Library API write access and have the API key on hand.
 

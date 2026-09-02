@@ -329,11 +329,6 @@ const readLayout = (
           metadataPath,
           "displayName"
         ),
-        previewImageUrl: requireString(
-          metadataValue.previewImageUrl,
-          metadataPath,
-          "previewImageUrl"
-        ),
         ...(vertical === undefined ? {} : { vertical }),
         ...(purpose === undefined ? {} : { purpose }),
         pageSetType,

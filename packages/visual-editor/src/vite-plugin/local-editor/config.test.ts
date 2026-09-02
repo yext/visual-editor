@@ -13,7 +13,6 @@ const layout = (
           id,
           displayName: id,
           pageSetType,
-          previewImageUrl: "",
         }
       : { id, displayName: id, pageSetType },
   defaultLayout: {},
