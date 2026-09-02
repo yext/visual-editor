@@ -281,7 +281,7 @@ const footerLinksSlotFields: YextFields<FooterLinksSlotProps> = {
           },
           link: {
             label: msg("fields.link", "Link"),
-            type: "text",
+            type: "translatableString",
           },
           normalizeLink: {
             label: msg("fields.normalizeLink", "Normalize Link"),
