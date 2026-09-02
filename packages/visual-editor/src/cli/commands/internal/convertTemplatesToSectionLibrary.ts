@@ -306,11 +306,16 @@ const readLegacyTemplate = (
       ) {
         return [];
       }
-      validateComponentSource(content, sourcePath, id, componentsDirectory);
+      const exportedName = validateComponentSource(
+        content,
+        sourcePath,
+        [id, componentName],
+        componentsDirectory
+      );
       return [
         {
           id,
-          content,
+          content: renameComponentIdentifiers(content, exportedName, id),
           displayName: readComponentLabel(content, sourcePath),
         },
       ];
@@ -335,8 +340,7 @@ const readLegacyTemplate = (
   return { templateId, directory, metadata, defaultLayout, components };
 };
 
-const removeYextPrefix = (id: string): string =>
-  id.startsWith("yext-") ? id.slice("yext-".length) : id;
+const removeYextPrefix = (id: string): string => id.replace(/^yext-?/i, "");
 
 const normalizeLayoutComponentIds = (value: unknown): unknown => {
   if (Array.isArray(value)) {
@@ -354,6 +358,41 @@ const normalizeLayoutComponentIds = (value: unknown): unknown => {
         : normalizeLayoutComponentIds(child),
     ])
   );
+};
+
+const renameComponentIdentifiers = (
+  content: string,
+  currentName: string,
+  nextName: string
+): string => {
+  if (currentName === nextName) {
+    return content;
+  }
+  const sourceFile = ts.createSourceFile(
+    "component.tsx",
+    content,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TSX
+  );
+  const identifierRanges: { start: number; end: number }[] = [];
+  const visit = (node: ts.Node): void => {
+    if (ts.isIdentifier(node) && node.text === currentName) {
+      identifierRanges.push({
+        start: node.getStart(sourceFile),
+        end: node.end,
+      });
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sourceFile);
+  return identifierRanges
+    .sort((left, right) => right.start - left.start)
+    .reduce(
+      (renamedContent, range) =>
+        `${renamedContent.slice(0, range.start)}${nextName}${renamedContent.slice(range.end)}`,
+      content
+    );
 };
 
 /** Reads the static label from a legacy component configuration. */
@@ -408,28 +447,31 @@ const readComponentLabel = (content: string, sourcePath: string): string => {
 const validateComponentSource = (
   content: string,
   sourcePath: string,
-  componentId: string,
+  componentNames: string[],
   componentsDirectory: string
-): void => {
-  const directNamedExport = new RegExp(
-    `export\\s+(?:async\\s+)?(?:const|function|class)\\s+${componentId}\\b`
-  );
-  const namedExport =
-    directNamedExport.test(content) ||
-    Array.from(content.matchAll(/export\s*\{([^}]*)\}/g)).some((match) =>
-      match[1].split(",").some((entry) => {
-        const exportName = entry
-          .trim()
-          .replace(/^type\s+/, "")
-          .split(/\s+as\s+/)
-          .at(-1)
-          ?.trim();
-        return exportName === componentId;
-      })
+): string => {
+  const exportedName = componentNames.find((componentName) => {
+    const directNamedExport = new RegExp(
+      `export\\s+(?:async\\s+)?(?:const|function|class)\\s+${componentName}\\b`
     );
-  if (!namedExport) {
+    return (
+      directNamedExport.test(content) ||
+      Array.from(content.matchAll(/export\s*\{([^}]*)\}/g)).some((match) =>
+        match[1].split(",").some((entry) => {
+          const exportName = entry
+            .trim()
+            .replace(/^type\s+/, "")
+            .split(/\s+as\s+/)
+            .at(-1)
+            ?.trim();
+          return exportName === componentName;
+        })
+      )
+    );
+  });
+  if (!exportedName) {
     throw new Error(
-      `Component ${componentId} must have a named export in ${sourcePath}`
+      `Component ${componentNames.at(-1)} must have a named export in ${sourcePath}`
     );
   }
   const exportsConfig =
@@ -449,7 +491,7 @@ const validateComponentSource = (
     exportsConfig
   ) {
     throw new Error(
-      `Component ${componentId} already defines config: ${sourcePath}`
+      `Component ${componentNames.at(-1)} already defines config: ${sourcePath}`
     );
   }
   for (const match of content.matchAll(
@@ -474,6 +516,7 @@ const validateComponentSource = (
       );
     }
   }
+  return exportedName;
 };
 
 const readBaseLibrary = (libraryDirectory: string): BaseLibrary => {

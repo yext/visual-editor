@@ -25,7 +25,10 @@ describe("convertTemplatesToSectionLibrary", () => {
         {
           type: "MainContent",
           props: {
-            content: [{ type: "yext-Hero", props: {} }],
+            content: [
+              { type: "yext-Hero", props: {} },
+              { type: "YextBanner", props: {} },
+            ],
           },
         },
       ],
@@ -37,6 +40,18 @@ describe("convertTemplatesToSectionLibrary", () => {
         "",
         "export const Hero: YextComponentConfig = {",
         '  label: "Hero",',
+        "  render: () => null,",
+        "};",
+        "",
+      ].join("\n")
+    );
+    fs.outputFileSync(
+      path.join(templateDirectory, "components", "YextBanner.tsx"),
+      [
+        'import type { YextComponentConfig } from "@yext/visual-editor";',
+        "",
+        "export const YextBanner: YextComponentConfig = {",
+        '  label: "Banner",',
         "  render: () => null,",
         "};",
         "",
@@ -60,18 +75,32 @@ describe("convertTemplatesToSectionLibrary", () => {
       description: "A converted template.",
     });
     expect(
-      fs.readJsonSync(
-        path.join(
-          libraryDirectory,
-          "layouts",
-          "my-template",
-          "defaultLayout.json"
+      fs
+        .readJsonSync(
+          path.join(
+            libraryDirectory,
+            "layouts",
+            "my-template",
+            "defaultLayout.json"
+          )
         )
-      ).content[0].props.content[0].type
-    ).toBe("Hero");
+        .content[0].props.content.map(({ type }: { type: string }) => type)
+    ).toEqual(["Hero", "Banner"]);
     expect(
       fs.existsSync(path.join(libraryDirectory, "sections", "Hero.tsx"))
     ).toBe(true);
+    expect(
+      fs.readFileSync(
+        path.join(libraryDirectory, "sections", "Banner.tsx"),
+        "utf8"
+      )
+    ).toContain("export const Banner: YextComponentConfig");
+    expect(
+      fs.readFileSync(
+        path.join(libraryDirectory, "sections", "Banner.tsx"),
+        "utf8"
+      )
+    ).not.toContain("YextBanner");
     expect(
       fs.existsSync(path.join(libraryDirectory, "sections", "yext-Hero.tsx"))
     ).toBe(false);
