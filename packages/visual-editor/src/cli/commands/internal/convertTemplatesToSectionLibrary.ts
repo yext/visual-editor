@@ -812,7 +812,7 @@ const buildLibraryMetadata = (template: LegacyTemplate): LibraryMetadata => {
 
 const buildEntityLayoutMetadata = (
   template: LegacyTemplate
-): EntityLayoutMetadata => {
+): Omit<EntityLayoutMetadata, "previewImageUrl"> => {
   const metadataPath = path.join(template.directory, "template.json");
   const vertical = readMetadataList(
     template.metadata.verticals,
@@ -832,11 +832,6 @@ const buildEntityLayoutMetadata = (
       template.metadata.displayName,
       metadataPath,
       "displayName"
-    ),
-    previewImageUrl: requireString(
-      template.metadata.previewImageUrl,
-      metadataPath,
-      "previewImageUrl"
     ),
     ...(vertical.length > 0 ? { vertical } : {}),
     ...(purpose.length > 0 ? { purpose } : {}),

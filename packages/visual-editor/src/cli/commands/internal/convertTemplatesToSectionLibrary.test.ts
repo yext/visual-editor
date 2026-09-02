@@ -16,7 +16,6 @@ describe("convertTemplatesToSectionLibrary", () => {
     fs.outputJsonSync(path.join(templateDirectory, "template.json"), {
       displayName: "My Template",
       description: "A converted template.",
-      previewImageUrl: "https://example.com/preview.png",
     });
     fs.outputJsonSync(path.join(templateDirectory, "defaultLayout.json"), {
       root: {},
@@ -82,6 +81,15 @@ describe("convertTemplatesToSectionLibrary", () => {
       id: "my-template",
       displayName: "My Template",
       description: "A converted template.",
+    });
+    expect(
+      fs.readJsonSync(
+        path.join(libraryDirectory, "layouts", "my-template", "metadata.json")
+      )
+    ).toEqual({
+      id: "my-template",
+      displayName: "My Template",
+      pageSetType: "ENTITY",
     });
     expect(
       fs
