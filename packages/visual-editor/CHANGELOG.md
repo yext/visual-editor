@@ -1,3 +1,9 @@
+#### 1.4.8 (2026-09-02)
+
+##### Bug Fixes
+
+- update footer links to be translatableString ([#1309](https://github.com/yext/visual-editor/pull/1309)) ([bed2adec](https://github.com/yext/visual-editor/commit/bed2adecbe042352709b7673ffb6866e3546aa7b))
+
 #### 1.4.7 (2026-09-01)
 
 ##### New Features
