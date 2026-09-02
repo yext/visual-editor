@@ -306,7 +306,7 @@ const readLegacyTemplate = (
       ) {
         return [];
       }
-      const exportedName = validateComponentSource(
+      validateComponentSource(
         content,
         sourcePath,
         [id, componentName],
@@ -315,7 +315,7 @@ const readLegacyTemplate = (
       return [
         {
           id,
-          content: renameComponentIdentifiers(content, exportedName, id),
+          content: renameComponentIdentifiers(content),
           displayName: readComponentLabel(content, sourcePath),
         },
       ];
@@ -355,31 +355,32 @@ const normalizeLayoutComponentIds = (value: unknown): unknown => {
       key,
       key === "type" && isComponent && typeof child === "string"
         ? removeYextPrefix(child)
-        : normalizeLayoutComponentIds(child),
+        : key === "props" && isComponent && isRecord(child)
+          ? Object.fromEntries(
+              Object.entries(child).map(([propKey, propValue]) => [
+                propKey,
+                propKey === "id" && typeof propValue === "string"
+                  ? removeYextPrefix(propValue)
+                  : normalizeLayoutComponentIds(propValue),
+              ])
+            )
+          : normalizeLayoutComponentIds(child),
     ])
   );
 };
 
 /**
- * Renames component identifiers in source code without changing strings or comments.
+ * Removes Yext prefixes from local identifiers in component source code.
  *
- * Legacy component files can use a name such as `YextHero`, while the Section
- * Library uses the normalized name `Hero`. The converter parses the source
- * and changes matching TypeScript identifiers in declarations and references.
+ * The converter renames declarations and references for local variables,
+ * functions, types, and components. It also removes the prefix from a
+ * hardcoded `AnalyticsScopeProvider` `name` value. Other strings, comments,
+ * and names imported from external packages remain unchanged.
  *
  * @param content The legacy component source.
- * @param currentName The component name used by the legacy source.
- * @param nextName The normalized component name.
- * @returns The source with matching identifiers renamed.
+ * @returns The source with local Yext-prefixed identifiers normalized.
  */
-const renameComponentIdentifiers = (
-  content: string,
-  currentName: string,
-  nextName: string
-): string => {
-  if (currentName === nextName) {
-    return content;
-  }
+const renameComponentIdentifiers = (content: string): string => {
   const sourceFile = ts.createSourceFile(
     "component.tsx",
     content,
@@ -387,13 +388,94 @@ const renameComponentIdentifiers = (
     true,
     ts.ScriptKind.TSX
   );
-  const identifierRanges: { start: number; end: number }[] = [];
+  const externalImportNames = new Set<string>();
+  for (const statement of sourceFile.statements) {
+    if (
+      !ts.isImportDeclaration(statement) ||
+      !ts.isStringLiteral(statement.moduleSpecifier) ||
+      statement.moduleSpecifier.text.startsWith(".")
+    ) {
+      continue;
+    }
+    if (statement.importClause?.name) {
+      externalImportNames.add(statement.importClause.name.text);
+    }
+    const namedBindings = statement.importClause?.namedBindings;
+    if (namedBindings && ts.isNamespaceImport(namedBindings)) {
+      externalImportNames.add(namedBindings.name.text);
+    } else if (namedBindings && ts.isNamedImports(namedBindings)) {
+      for (const element of namedBindings.elements) {
+        externalImportNames.add(element.name.text);
+        if (element.propertyName) {
+          externalImportNames.add(element.propertyName.text);
+        }
+      }
+    }
+  }
+  const identifierRanges: {
+    start: number;
+    end: number;
+    nextName: string;
+  }[] = [];
   const visit = (node: ts.Node): void => {
-    if (ts.isIdentifier(node) && node.text === currentName) {
-      identifierRanges.push({
-        start: node.getStart(sourceFile),
-        end: node.end,
-      });
+    if (ts.isJsxAttribute(node) && node.name.getText(sourceFile) === "name") {
+      const openingElement = node.parent.parent;
+      if (
+        (ts.isJsxOpeningElement(openingElement) ||
+          ts.isJsxSelfClosingElement(openingElement)) &&
+        openingElement.tagName.getText(sourceFile) === "AnalyticsScopeProvider"
+      ) {
+        const initializer = node.initializer;
+        const expression =
+          initializer && ts.isJsxExpression(initializer)
+            ? initializer.expression
+            : initializer;
+        if (
+          expression &&
+          (ts.isStringLiteral(expression) ||
+            ts.isNoSubstitutionTemplateLiteral(expression))
+        ) {
+          const nextName = removeYextPrefix(expression.text);
+          if (nextName !== expression.text) {
+            identifierRanges.push({
+              start: expression.getStart(sourceFile) + 1,
+              end: expression.end - 1,
+              nextName,
+            });
+          }
+        } else if (expression && ts.isTemplateExpression(expression)) {
+          const nextName = removeYextPrefix(expression.head.text);
+          if (nextName !== expression.head.text) {
+            const start = expression.head.getStart(sourceFile) + 1;
+            identifierRanges.push({
+              start,
+              end: start + expression.head.text.length,
+              nextName,
+            });
+          }
+        }
+      }
+    }
+    if (ts.isIdentifier(node) && !externalImportNames.has(node.text)) {
+      const parent = node.parent;
+      const isPropertyName =
+        (ts.isPropertyAccessExpression(parent) && parent.name === node) ||
+        (ts.isQualifiedName(parent) && parent.right === node) ||
+        (ts.isPropertyAssignment(parent) && parent.name === node) ||
+        (ts.isMethodDeclaration(parent) && parent.name === node) ||
+        (ts.isMethodSignature(parent) && parent.name === node) ||
+        (ts.isPropertyDeclaration(parent) && parent.name === node) ||
+        (ts.isPropertySignature(parent) && parent.name === node);
+      if (!isPropertyName) {
+        const nextName = removeYextPrefix(node.text);
+        if (nextName !== node.text) {
+          identifierRanges.push({
+            start: node.getStart(sourceFile),
+            end: node.end,
+            nextName,
+          });
+        }
+      }
     }
     ts.forEachChild(node, visit);
   };
@@ -402,7 +484,7 @@ const renameComponentIdentifiers = (
     .sort((left, right) => right.start - left.start)
     .reduce(
       (renamedContent, range) =>
-        `${renamedContent.slice(0, range.start)}${nextName}${renamedContent.slice(range.end)}`,
+        `${renamedContent.slice(0, range.start)}${range.nextName}${renamedContent.slice(range.end)}`,
       content
     );
 };
@@ -457,7 +539,7 @@ const readComponentLabel = (content: string, sourcePath: string): string => {
 };
 
 /**
- * Validates a legacy component source file and returns its exported component name.
+ * Validates a legacy component source file.
  *
  * The source must export one of the provided names, must not define its own
  * SectionConfig, and must keep relative imports inside the components directory.
@@ -468,7 +550,6 @@ const readComponentLabel = (content: string, sourcePath: string): string => {
  * @param sourcePath The source path used in validation errors.
  * @param componentNames The normalized and legacy names accepted for the export.
  * @param componentsDirectory The directory that relative imports must not leave.
- * @returns The component name found in the source export.
  * @throws If the source does not meet the legacy component requirements.
  */
 const validateComponentSource = (
@@ -476,8 +557,8 @@ const validateComponentSource = (
   sourcePath: string,
   componentNames: string[],
   componentsDirectory: string
-): string => {
-  const exportedName = componentNames.find((componentName) => {
+): void => {
+  const hasNamedExport = componentNames.some((componentName) => {
     const directNamedExport = new RegExp(
       `export\\s+(?:async\\s+)?(?:const|function|class)\\s+${componentName}\\b`
     );
@@ -496,7 +577,7 @@ const validateComponentSource = (
       )
     );
   });
-  if (!exportedName) {
+  if (!hasNamedExport) {
     throw new Error(
       `Component ${componentNames.at(-1)} must have a named export in ${sourcePath}`
     );
@@ -543,7 +624,6 @@ const validateComponentSource = (
       );
     }
   }
-  return exportedName;
 };
 
 const readBaseLibrary = (libraryDirectory: string): BaseLibrary => {
