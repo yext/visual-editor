@@ -110,7 +110,7 @@ export const convertTemplatesToSectionLibrary = ({
   const rootDirectory = path.resolve(targetDirectory);
   const libraryDirectory = path.join(rootDirectory, "src", "library");
   const templates = readLegacyTemplates(rootDirectory);
-  const preparedBaseLibrary = prepareBaseLibrary(rootDirectory, templates[0]);
+  const preparedBaseLibrary = prepareBaseLibrary(rootDirectory);
   try {
     const baseLibrary = readBaseLibrary(preparedBaseLibrary.directory);
     const conversion = buildConversion(templates, baseLibrary);
@@ -143,10 +143,7 @@ export const convertTemplatesToSectionLibrary = ({
  * Returns the existing base library, or creates a temporary Directory and
  * Locator base that the conversion can validate and apply atomically.
  */
-const prepareBaseLibrary = (
-  rootDirectory: string,
-  firstTemplate: LegacyTemplate
-): PreparedBaseLibrary => {
+const prepareBaseLibrary = (rootDirectory: string): PreparedBaseLibrary => {
   const libraryDirectory = path.join(rootDirectory, "src", "library");
   if (hasDirectoryLocatorBase(libraryDirectory)) {
     return { directory: libraryDirectory };
@@ -167,15 +164,8 @@ const prepareBaseLibrary = (
   }
   exportDirectoryLocatorSectionLibrary({
     targetDirectory: temporaryDirectory,
-    libraryId: firstTemplate.templateId,
     overwrite: fs.existsSync(path.join(temporaryLibraryDirectory, "shared")),
   });
-  if (!fs.existsSync(path.join(temporaryLibraryDirectory, "library.json"))) {
-    fs.writeFileSync(
-      path.join(temporaryLibraryDirectory, "library.json"),
-      formatJson(buildLibraryMetadata(firstTemplate))
-    );
-  }
   return {
     directory: temporaryLibraryDirectory,
     temporaryDirectory,
@@ -235,17 +225,28 @@ const readLegacyTemplates = (rootDirectory: string): LegacyTemplate[] => {
   if (templateDirectories.length === 0) {
     throw new Error(`No legacy templates found in ${registryDirectory}`);
   }
-  return templateDirectories.map((templateId) => {
-    if (!SAFE_ID.test(templateId)) {
-      throw new Error(`Template ID is not valid: ${templateId}`);
+  const normalizedTemplateIds = new Set<string>();
+  return templateDirectories.map((templateDirectory) => {
+    if (!SAFE_ID.test(templateDirectory)) {
+      throw new Error(`Template ID is not valid: ${templateDirectory}`);
     }
+    const templateId = removeYextPrefix(templateDirectory);
+    if (!SAFE_ID.test(templateId)) {
+      throw new Error(`Template ID is not valid: ${templateDirectory}`);
+    }
+    if (normalizedTemplateIds.has(templateId)) {
+      throw new Error(
+        `Template IDs collide after removing the yext- prefix: ${templateId}`
+      );
+    }
+    normalizedTemplateIds.add(templateId);
     if (RESERVED_LAYOUT_IDS.has(templateId)) {
       throw new Error(
         `Template ID is reserved for a generated template alias: ${templateId}`
       );
     }
     return readLegacyTemplate(
-      path.join(registryDirectory, templateId),
+      path.join(registryDirectory, templateDirectory),
       templateId
     );
   });
@@ -292,9 +293,10 @@ const readLegacyTemplate = (
     .filter((entry) => entry.isFile() && path.extname(entry.name) === ".tsx")
     .flatMap((entry) => {
       const sourcePath = path.join(componentsDirectory, entry.name);
-      const id = path.basename(entry.name, ".tsx");
+      const componentName = path.basename(entry.name, ".tsx");
+      const id = removeYextPrefix(componentName);
       if (!SAFE_ID.test(id)) {
-        throw new Error(`Component ID is not valid: ${id}`);
+        throw new Error(`Component ID is not valid: ${componentName}`);
       }
       const content = fs.readFileSync(sourcePath, "utf8");
       if (
@@ -321,7 +323,9 @@ const readLegacyTemplate = (
   }
 
   const metadata = readJson(metadataPath, "legacy template metadata");
-  const defaultLayout = readJson(defaultLayoutPath, "legacy default layout");
+  const defaultLayout = normalizeLayoutComponentIds(
+    readJson(defaultLayoutPath, "legacy default layout")
+  );
   if (!isRecord(metadata)) {
     throw new Error(
       `Legacy template metadata must be an object: ${metadataPath}`
@@ -329,6 +333,27 @@ const readLegacyTemplate = (
   }
   validateDefaultLayout(defaultLayout, defaultLayoutPath, "Legacy");
   return { templateId, directory, metadata, defaultLayout, components };
+};
+
+const removeYextPrefix = (id: string): string =>
+  id.startsWith("yext-") ? id.slice("yext-".length) : id;
+
+const normalizeLayoutComponentIds = (value: unknown): unknown => {
+  if (Array.isArray(value)) {
+    return value.map(normalizeLayoutComponentIds);
+  }
+  if (!isRecord(value)) {
+    return value;
+  }
+  const isComponent = typeof value.type === "string" && isRecord(value.props);
+  return Object.fromEntries(
+    Object.entries(value).map(([key, child]) => [
+      key,
+      key === "type" && isComponent && typeof child === "string"
+        ? removeYextPrefix(child)
+        : normalizeLayoutComponentIds(child),
+    ])
+  );
 };
 
 /** Reads the static label from a legacy component configuration. */
@@ -460,7 +485,6 @@ const readBaseLibrary = (libraryDirectory: string): BaseLibrary => {
     "componentRegistry.ts"
   );
   for (const requiredPath of [
-    path.join(libraryDirectory, "library.json"),
     layoutsDirectory,
     sectionsDirectory,
     sharedRegistryPath,
@@ -468,25 +492,6 @@ const readBaseLibrary = (libraryDirectory: string): BaseLibrary => {
     if (!fs.existsSync(requiredPath)) {
       throw new Error(`Base Section Library is missing ${requiredPath}`);
     }
-  }
-  const libraryMetadataPath = path.join(libraryDirectory, "library.json");
-  const libraryMetadata = readJson(
-    libraryMetadataPath,
-    "base library metadata"
-  );
-  if (
-    !isRecord(libraryMetadata) ||
-    libraryMetadata.schemaVersion !== 1 ||
-    typeof libraryMetadata.id !== "string" ||
-    !SAFE_ID.test(libraryMetadata.id) ||
-    typeof libraryMetadata.displayName !== "string" ||
-    !libraryMetadata.displayName.trim() ||
-    typeof libraryMetadata.description !== "string" ||
-    !libraryMetadata.description.trim()
-  ) {
-    throw new Error(
-      `Base library metadata is not valid: ${libraryMetadataPath}`
-    );
   }
   const layouts = fs
     .readdirSync(layoutsDirectory, { withFileTypes: true })
@@ -651,7 +656,7 @@ const buildLibraryMetadata = (template: LegacyTemplate): LibraryMetadata => {
       typeof template.metadata.description === "string" &&
       template.metadata.description.trim()
         ? template.metadata.description
-        : `Sections and layouts converted from ${displayName}.`,
+        : "",
   };
 };
 

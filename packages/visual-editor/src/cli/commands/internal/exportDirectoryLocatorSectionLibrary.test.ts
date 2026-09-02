@@ -13,7 +13,7 @@ afterEach(() => {
 });
 
 describe("exportDirectoryLocatorSectionLibrary", () => {
-  it.each(["test-library-directory", "test-library-locator"])(
+  it.each(["directory", "locator"])(
     "refuses to overwrite the existing %s layout without --overwrite",
     (layoutId) => {
       const targetDirectory = fs.mkdtempSync(
@@ -34,7 +34,6 @@ describe("exportDirectoryLocatorSectionLibrary", () => {
       expect(() =>
         exportDirectoryLocatorSectionLibrary({
           targetDirectory,
-          libraryId: "test-library",
           overwrite: false,
         })
       ).toThrow(
@@ -55,7 +54,6 @@ describe("exportDirectoryLocatorSectionLibrary", () => {
 
     exportDirectoryLocatorSectionLibrary({
       targetDirectory,
-      libraryId: "test-library",
       overwrite: false,
     });
 
@@ -118,7 +116,7 @@ describe("exportDirectoryLocatorSectionLibrary", () => {
           path.join(
             libraryDirectory,
             "layouts",
-            "test-library-directory",
+            "directory",
             "defaultLayout.json"
           )
         )
@@ -131,31 +129,56 @@ describe("exportDirectoryLocatorSectionLibrary", () => {
     ).toMatchObject({ visualEditorVersion: expect.any(String) });
     expect(
       fs.readJsonSync(
-        path.join(
-          libraryDirectory,
-          "layouts",
-          "test-library-directory",
-          "metadata.json"
-        )
+        path.join(libraryDirectory, "layouts", "directory", "metadata.json")
       )
     ).toMatchObject({ pageSetType: "DIRECTORY" });
     expect(
       fs.readJsonSync(
-        path.join(
-          libraryDirectory,
-          "layouts",
-          "test-library-locator",
-          "metadata.json"
-        )
+        path.join(libraryDirectory, "layouts", "locator", "metadata.json")
       )
     ).toMatchObject({ pageSetType: "LOCATOR" });
 
     exportDirectoryLocatorSectionLibrary({
       targetDirectory,
-      libraryId: "test-library",
       overwrite: true,
     });
 
     expect(fs.readFileSync(registryPath, "utf8")).toBe(registry);
+  });
+
+  it("uses the existing library ID for layout names", () => {
+    const targetDirectory = fs.mkdtempSync(
+      path.join(os.tmpdir(), "directory-locator-library-")
+    );
+    temporaryDirectories.push(targetDirectory);
+    fs.outputJsonSync(
+      path.join(targetDirectory, "src", "library", "library.json"),
+      {
+        schemaVersion: 1,
+        id: "test-library",
+        displayName: "Test Library",
+        description: "A test library.",
+      }
+    );
+
+    exportDirectoryLocatorSectionLibrary({
+      targetDirectory,
+      overwrite: false,
+    });
+
+    const layoutsDirectory = path.join(
+      targetDirectory,
+      "src",
+      "library",
+      "layouts"
+    );
+    expect(
+      fs.existsSync(path.join(layoutsDirectory, "test-library-directory"))
+    ).toBe(true);
+    expect(
+      fs.existsSync(path.join(layoutsDirectory, "test-library-locator"))
+    ).toBe(true);
+    expect(fs.existsSync(path.join(layoutsDirectory, "directory"))).toBe(false);
+    expect(fs.existsSync(path.join(layoutsDirectory, "locator"))).toBe(false);
   });
 });

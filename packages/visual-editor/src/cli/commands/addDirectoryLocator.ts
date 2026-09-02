@@ -1,4 +1,3 @@
-import { validateLibraryMetadata } from "../../internal/sectionLibraryValidation/stages/metadata/libraryMetadata.ts";
 import { exportDirectoryLocatorSectionLibrary } from "./internal/exportDirectoryLocatorSectionLibrary.ts";
 import { defineYextveCommand } from "../command.ts";
 
@@ -6,7 +5,8 @@ const usage = `Usage:
   yextve add-directory-locator [--overwrite]
 
 Add editable Directory and Locator sections and layouts to this Section Library.
-Layout IDs are prefixed with the id from src/library/library.json.
+If library.json exists, its ID prefixes the generated layout IDs. Otherwise,
+the generated layout IDs are directory and locator.
 
 Options:
   --overwrite                      Replace existing shared, Directory, and Locator source.
@@ -25,17 +25,8 @@ export const addDirectoryLocatorCmd = defineYextveCommand({
   },
   run: (values, _positionals, io, rootDir) => {
     try {
-      const metadataResult = validateLibraryMetadata(rootDir);
-      if (!metadataResult.metadata) {
-        const details = metadataResult.issues
-          .map((issue) => `${issue.filePath}: ${issue.message}`)
-          .join("\n");
-        throw new Error(`Invalid library metadata:\n${details}`);
-      }
-
       exportDirectoryLocatorSectionLibrary({
         targetDirectory: rootDir,
-        libraryId: metadataResult.metadata.id,
         overwrite: values.overwrite ?? false,
       });
       return 0;
