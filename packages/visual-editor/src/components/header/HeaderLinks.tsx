@@ -68,7 +68,7 @@ export type HeaderLinksProps = {
 const defaultLink: TranslatableCTA = {
   linkType: "URL",
   label: { defaultValue: "Header Link" },
-  link: "#",
+  link: { defaultValue: "#" },
   normalizeLink: true,
   openInNewTab: false,
 };
