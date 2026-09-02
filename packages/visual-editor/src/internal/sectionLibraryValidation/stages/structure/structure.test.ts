@@ -383,7 +383,6 @@ const validSectionSource = [
 const entityMetadata = {
   id: "entity-layout",
   displayName: "Entity",
-  previewImageUrl: "https://example.com/entity.png",
   vertical: ["RETAIL"],
   purpose: ["LOCATION"],
   pageSetType: "ENTITY",

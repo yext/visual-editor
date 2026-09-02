@@ -812,7 +812,7 @@ const buildLibraryMetadata = (template: LegacyTemplate): LibraryMetadata => {
 
 const buildEntityLayoutMetadata = (
   template: LegacyTemplate
-): Omit<EntityLayoutMetadata, "previewImageUrl"> => {
+): EntityLayoutMetadata => {
   const metadataPath = path.join(template.directory, "template.json");
   const vertical = readMetadataList(
     template.metadata.verticals,
