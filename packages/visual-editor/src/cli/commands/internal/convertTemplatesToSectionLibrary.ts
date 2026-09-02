@@ -360,6 +360,18 @@ const normalizeLayoutComponentIds = (value: unknown): unknown => {
   );
 };
 
+/**
+ * Renames component identifiers in source code without changing strings or comments.
+ *
+ * Legacy component files can use a name such as `YextHero`, while the Section
+ * Library uses the normalized name `Hero`. The converter parses the source
+ * and changes matching TypeScript identifiers in declarations and references.
+ *
+ * @param content The legacy component source.
+ * @param currentName The component name used by the legacy source.
+ * @param nextName The normalized component name.
+ * @returns The source with matching identifiers renamed.
+ */
 const renameComponentIdentifiers = (
   content: string,
   currentName: string,
@@ -444,6 +456,21 @@ const readComponentLabel = (content: string, sourcePath: string): string => {
   return label.initializer.text;
 };
 
+/**
+ * Validates a legacy component source file and returns its exported component name.
+ *
+ * The source must export one of the provided names, must not define its own
+ * SectionConfig, and must keep relative imports inside the components directory.
+ * The converter provides both the normalized name and the legacy name because
+ * either name can be present in the source export.
+ *
+ * @param content The legacy component source.
+ * @param sourcePath The source path used in validation errors.
+ * @param componentNames The normalized and legacy names accepted for the export.
+ * @param componentsDirectory The directory that relative imports must not leave.
+ * @returns The component name found in the source export.
+ * @throws If the source does not meet the legacy component requirements.
+ */
 const validateComponentSource = (
   content: string,
   sourcePath: string,
