@@ -16,7 +16,6 @@ describe("convertTemplatesToSectionLibrary", () => {
     fs.outputJsonSync(path.join(templateDirectory, "template.json"), {
       displayName: "My Template",
       description: "A converted template.",
-      previewImageUrl: "https://example.com/preview.png",
     });
     fs.outputJsonSync(path.join(templateDirectory, "defaultLayout.json"), {
       root: {},
@@ -26,8 +25,8 @@ describe("convertTemplatesToSectionLibrary", () => {
           type: "MainContent",
           props: {
             content: [
-              { type: "yext-Hero", props: {} },
-              { type: "YextBanner", props: {} },
+              { type: "yext-Hero", props: { id: "YextHero" } },
+              { type: "YextBanner", props: { id: "yext-banner" } },
             ],
           },
         },
@@ -49,10 +48,19 @@ describe("convertTemplatesToSectionLibrary", () => {
       path.join(templateDirectory, "components", "YextBanner.tsx"),
       [
         'import type { YextComponentConfig } from "@yext/visual-editor";',
+        'import { YextExternal } from "@example/components";',
+        'import { AnalyticsScopeProvider } from "@yext/pages-components";',
         "",
-        "export const YextBanner: YextComponentConfig = {",
+        "type YextBannerProps = { title: string };",
+        "const YextBadge = () => <span />;",
+        "",
+        "export const YextBanner: YextComponentConfig<YextBannerProps> = {",
         '  label: "Banner",',
-        "  render: () => null,",
+        "  render: () => (",
+        "    <AnalyticsScopeProvider name={`YextBannerScope${YextExternal}`}>",
+        "      <YextBadge />",
+        "    </AnalyticsScopeProvider>",
+        "  ),",
         "};",
         "",
       ].join("\n")
@@ -75,6 +83,15 @@ describe("convertTemplatesToSectionLibrary", () => {
       description: "A converted template.",
     });
     expect(
+      fs.readJsonSync(
+        path.join(libraryDirectory, "layouts", "my-template", "metadata.json")
+      )
+    ).toEqual({
+      id: "my-template",
+      displayName: "My Template",
+      pageSetType: "ENTITY",
+    });
+    expect(
       fs
         .readJsonSync(
           path.join(
@@ -87,20 +104,36 @@ describe("convertTemplatesToSectionLibrary", () => {
         .content[0].props.content.map(({ type }: { type: string }) => type)
     ).toEqual(["Hero", "Banner"]);
     expect(
+      fs
+        .readJsonSync(
+          path.join(
+            libraryDirectory,
+            "layouts",
+            "my-template",
+            "defaultLayout.json"
+          )
+        )
+        .content[0].props.content.map(
+          ({ props }: { props: { id: string } }) => props.id
+        )
+    ).toEqual(["Hero", "banner"]);
+    expect(
       fs.existsSync(path.join(libraryDirectory, "sections", "Hero.tsx"))
     ).toBe(true);
-    expect(
-      fs.readFileSync(
-        path.join(libraryDirectory, "sections", "Banner.tsx"),
-        "utf8"
-      )
-    ).toContain("export const Banner: YextComponentConfig");
-    expect(
-      fs.readFileSync(
-        path.join(libraryDirectory, "sections", "Banner.tsx"),
-        "utf8"
-      )
-    ).not.toContain("YextBanner");
+    const bannerSource = fs.readFileSync(
+      path.join(libraryDirectory, "sections", "Banner.tsx"),
+      "utf8"
+    );
+    expect(bannerSource).toContain(
+      "export const Banner: YextComponentConfig<BannerProps>"
+    );
+    expect(bannerSource).toContain("type BannerProps");
+    expect(bannerSource).toContain("const Badge = () => <span />;");
+    expect(bannerSource).toContain("YextExternal");
+    expect(bannerSource).toContain(
+      "<AnalyticsScopeProvider name={`BannerScope${YextExternal}`}>"
+    );
+    expect(bannerSource).not.toContain("YextBanner");
     expect(
       fs.existsSync(path.join(libraryDirectory, "sections", "yext-Hero.tsx"))
     ).toBe(false);
