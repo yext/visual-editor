@@ -1,4 +1,4 @@
-import { Body, BodyProps } from "./body.tsx";
+import { Body, BodyProps } from "../atoms/body.tsx";
 import { RichText } from "../../types/types.ts";
 import type { BaseTextStyles } from "../../fields/styledFields/baseText.tsx";
 import { getRichTextStyle } from "../../utils/richTextStyles.ts";

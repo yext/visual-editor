@@ -126,7 +126,9 @@ export {
   useWindowWidth,
   VIEWPORT_BREAKPOINTS,
 } from "./hooks/useViewport.ts";
-export { pt, msg } from "./utils/i18n/platform.ts";
+export { Button as EditorButton } from "./internal/puck/ui/button.tsx";
+export { linkTypeOptions } from "./internal/puck/constant-value-fields/CallToAction.tsx";
+export { pt, msg, type MsgString } from "./utils/i18n/platform.ts";
 export {
   formatDistance,
   fromMeters,
@@ -151,6 +153,7 @@ export {
   type LocatorEntityType,
 } from "./utils/locatorEntityTypes.ts";
 export { DEFAULT_ENTITY_TYPE } from "./utils/locatorEntityTypes.ts";
+export { getRandomPlaceholderImageObject } from "./utils/imagePlaceholders.ts";
 export {
   isNonNormalizableLinkType,
   normalizeLink,
@@ -182,12 +185,17 @@ export {
   getTextColorClass,
   getTextColorStyle,
   getThemeColorCssValue,
+  isColorContrastWcagCompliant,
+  hexToRGB,
 } from "./utils/colors.ts";
 export { getValueFromQueryString } from "./utils/urlQueryString.tsx";
 export { normalizeSlug } from "./utils/slugifier.ts";
 export { deepMerge } from "./utils/themeResolver.ts";
 export { bindSlots } from "./utils/cardSlots/bindSlots.ts";
+export { type SlotMappedCardWrapperType } from "./utils/cardSlots/cardWrapperHelpers.ts";
+export { forwardHeadingLevel } from "./utils/cardSlots/forwardHeadingLevel.ts";
 export { syncLinkedSlotMappedCards } from "./utils/cardSlots/slotMappedCards.ts";
+export { syncParentStyles } from "./utils/cardSlots/syncParentStyles.ts";
 export { createSlottedItemSource } from "./utils/itemSource/createSlottedItemSource.ts";
 export { resolveBreadcrumbs } from "./utils/urls/resolveBreadcrumbs.ts";
 export { resolveDirectoryListChildren } from "./utils/urls/resolveDirectoryListChildren.ts";
@@ -212,6 +220,7 @@ export { type AssetVideo } from "./types/videos.ts";
 export {
   type PresetImageType,
   type TranslatableString,
+  FOOD_DELIVERY_SERVICES,
 } from "./types/types.ts";
 export { getCTAType } from "./internal/utils/ctaFieldUtils.ts";
 export {
@@ -231,3 +240,4 @@ export {
 export { ComponentErrorBoundary } from "./internal/components/ComponentErrorBoundary.tsx";
 export { isVisualEditorTestEnv } from "./components/testing/utils.ts";
 export { fetchLocalesToPathsForEntity } from "./utils/api/fetchLocalesToPathsForEntity.ts";
+export { presetImageIcons } from "./utils/presetImageIcons.tsx";

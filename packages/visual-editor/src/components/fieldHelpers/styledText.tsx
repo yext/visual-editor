@@ -1,5 +1,5 @@
 import * as React from "react";
-import { MaybeRTF } from "../atoms/maybeRTF.tsx";
+import { MaybeRTF } from "./maybeRTF.tsx";
 import { type StyledTextValue } from "../../fields/styledFields/StyledTextField.tsx";
 import { getTextColorClass, getTextColorStyle } from "../../utils/colors.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
