@@ -123,6 +123,20 @@ describe("validateSectionLibraryStructure", () => {
     expectRules(rootDir, "json/missing");
   });
 
+  it("ignores layout preview images", () => {
+    const rootDir = createValidLibrary();
+    fs.outputFileSync(
+      layoutFilePath(rootDir, "entity-layout", "preview.jpg"),
+      "image"
+    );
+    fs.outputFileSync(
+      layoutFilePath(rootDir, "entity-layout", "preview.png"),
+      "image"
+    );
+
+    expect(validateSectionLibraryStructure(rootDir).issues).toEqual([]);
+  });
+
   it("reports malformed layout JSON", () => {
     const rootDir = createValidLibrary();
     fs.outputFileSync(
@@ -172,6 +186,23 @@ describe("validateSectionLibraryStructure", () => {
     });
 
     expectRules(rootDir, "layouts/metadata");
+  });
+
+  it("ignores a legacy previewImageUrl metadata property", () => {
+    const rootDir = createValidLibrary();
+    writeLayoutMetadata(rootDir, "entity-layout", {
+      ...entityMetadata,
+      previewImageUrl: "https://example.com/entity.png",
+    });
+
+    const result = validateSectionLibraryStructure(rootDir);
+
+    expect(result.issues).toEqual([]);
+    expect(
+      result.structure?.layouts.find(
+        (layout) => layout.metadata.id === "entity-layout"
+      )?.metadata
+    ).not.toHaveProperty("previewImageUrl");
   });
 
   it("reports an invalid layout id", () => {

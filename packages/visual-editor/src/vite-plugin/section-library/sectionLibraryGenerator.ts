@@ -8,10 +8,9 @@ import {
   type SectionLibraryLayout,
   type SharedHiddenPuckComponent,
 } from "../../types/sectionLibrary.ts";
-import {
-  createValidationContext,
-  validateSectionLibrary,
-} from "../../internal/sectionLibraryValidation/validateSectionLibrary.ts";
+import { validateLibraryMetadata } from "../../internal/sectionLibraryValidation/stages/api/libraryMetadata.ts";
+import { validateSectionLibraryStructure } from "../../internal/sectionLibraryValidation/stages/structure/structure.ts";
+import { sortValidationIssues } from "../../internal/sectionLibraryValidation/validateSectionLibrary.ts";
 import { SectionLibraryValidationError } from "../../internal/sectionLibraryValidation/validationError.ts";
 import type { ResolvedSection } from "../../internal/sectionLibraryValidation/types.ts";
 
@@ -50,18 +49,22 @@ export const generateSectionLibraryFiles = (
   if (!fs.existsSync(path.join(rootDir, "src", "library", "library.json"))) {
     return { generatedFiles: [], layouts: [] };
   }
-  const result = validateSectionLibrary(
-    createValidationContext(rootDir, { skippedStages: ["code"] })
-  );
-  if (result.issues.length > 0) {
-    throw new SectionLibraryValidationError(result.issues);
+  const metadataResult = validateLibraryMetadata(rootDir);
+  const structureResult = validateSectionLibraryStructure(rootDir);
+  const issues = sortValidationIssues([
+    ...metadataResult.issues,
+    ...structureResult.issues,
+  ]);
+  if (issues.length > 0) {
+    throw new SectionLibraryValidationError(issues);
   }
-  if (!result.metadata || !result.structure) {
+  if (!metadataResult.metadata || !structureResult.structure) {
     throw new Error(
       "Section Library metadata and structure validation did not run."
     );
   }
-  const { metadata, structure } = result;
+  const metadata = metadataResult.metadata;
+  const structure = structureResult.structure;
 
   const generatedDirectory = path.join(rootDir, "src", "library", ".generated");
   const generatedFiles = structure.layouts.flatMap((layout) => {

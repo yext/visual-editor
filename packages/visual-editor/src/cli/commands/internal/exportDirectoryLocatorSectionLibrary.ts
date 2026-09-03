@@ -3,7 +3,7 @@ import { fileURLToPath } from "node:url";
 import fs from "fs-extra";
 import { Project } from "ts-morph";
 import packageJson from "../../../../package.json" with { type: "json" };
-import { validateLibraryMetadata } from "../../../internal/sectionLibraryValidation/stages/metadata/libraryMetadata.ts";
+import { validateLibraryMetadata } from "../../../internal/sectionLibraryValidation/stages/api/libraryMetadata.ts";
 import { defaultLayoutData } from "../../../vite-plugin/defaultLayoutData.ts";
 
 const supportEntryPoint = "@yext/visual-editor/section-library-support";

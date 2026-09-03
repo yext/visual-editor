@@ -6,7 +6,7 @@ import type {
 } from "../internal/sectionLibraryValidation/types.ts";
 
 const stages: { stage: ValidationStage; label: string }[] = [
-  { stage: "api", label: "Library metadata" },
+  { stage: "api", label: "API checks" },
   { stage: "structure", label: "Repository structure" },
   { stage: "code", label: "Code checks" },
 ];

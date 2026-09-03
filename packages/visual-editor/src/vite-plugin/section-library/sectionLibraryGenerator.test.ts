@@ -425,7 +425,6 @@ describe("generateSectionLibraryFiles", () => {
       {
         id: "edit",
         displayName: "Edit",
-        previewImageUrl: "",
         pageSetType: "ENTITY",
       }
     );
@@ -675,7 +674,6 @@ describe("generateSectionLibraryFiles", () => {
           {
             id: "location",
             displayName: "Location",
-            previewImageUrl: "",
             vertical: ["UNKNOWN"],
             pageSetType: "ENTITY",
           }
@@ -707,7 +705,6 @@ describe("generateSectionLibraryFiles", () => {
           {
             id: "location",
             displayName: "Location",
-            previewImageUrl: "",
             pageSetType: "DIRECTORY",
           }
         );
@@ -889,6 +886,33 @@ describe("generateSectionLibraryFiles", () => {
     ).toBe(false);
   });
 
+  it("ignores API-only preview image validation", () => {
+    const rootDir = createLibrary();
+    const layoutsDirectory = path.join(rootDir, "src", "library", "layouts");
+    fs.outputFileSync(
+      path.join(layoutsDirectory, "location", "preview.jpg"),
+      "image"
+    );
+    fs.outputFileSync(
+      path.join(layoutsDirectory, "location", "preview.png"),
+      "image"
+    );
+    const oversizedPreviewPath = path.join(
+      layoutsDirectory,
+      "directory-layout",
+      "preview.webp"
+    );
+    fs.ensureFileSync(oversizedPreviewPath);
+    fs.truncateSync(oversizedPreviewPath, 20 * 1024 * 1024 + 1);
+
+    expect(() =>
+      generateSectionLibraryFiles(
+        rootDir,
+        "123e4567-e89b-12d3-a456-426614174000"
+      )
+    ).not.toThrow();
+  });
+
   it("requires a Section Library revision ID", () => {
     expect(() => generateSectionLibraryFiles(createLibrary())).toThrow(
       "Section Library builds require SECTION_LIBRARY_REVISION_ID"
@@ -978,7 +1002,6 @@ const createLibrary = (): string => {
     {
       id: "location",
       displayName: "Location",
-      previewImageUrl: "",
       vertical: ["RETAIL"],
       purpose: ["LOCATION"],
       pageSetType: "ENTITY",
@@ -1081,7 +1104,6 @@ const addEntityLayout = (
   fs.writeJsonSync(path.join(layoutDirectory, "metadata.json"), {
     id: layoutId,
     displayName: layoutId,
-    previewImageUrl: "",
     pageSetType: "ENTITY",
   });
   fs.writeJsonSync(path.join(layoutDirectory, "defaultLayout.json"), {

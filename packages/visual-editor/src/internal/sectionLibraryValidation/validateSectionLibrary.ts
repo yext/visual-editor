@@ -1,5 +1,5 @@
+import { validateApi } from "./stages/api/api.ts";
 import { validateCode } from "./stages/code/validateCode.ts";
-import { validateLibraryMetadata } from "./stages/metadata/libraryMetadata.ts";
 import { validateSectionLibraryStructure } from "./stages/structure/structure.ts";
 import type {
   ValidationContext,
@@ -31,9 +31,9 @@ export const createValidationContext = (
 export const validateSectionLibrary = (
   context: ValidationContext
 ): ValidationResult => {
-  const metadataResult = context.skippedStages.has("api")
+  const apiResult = context.skippedStages.has("api")
     ? { issues: [], metadata: undefined }
-    : validateLibraryMetadata(context.rootDir);
+    : validateApi(context.rootDir);
 
   const structureResult = context.skippedStages.has("structure")
     ? { issues: [], structure: undefined }
@@ -44,7 +44,7 @@ export const validateSectionLibrary = (
     : validateCode(context.rootDir);
 
   const issues = sortValidationIssues([
-    ...metadataResult.issues,
+    ...apiResult.issues,
     ...structureResult.issues,
     ...codeIssues,
   ]);
@@ -52,7 +52,7 @@ export const validateSectionLibrary = (
   return {
     context,
     issues,
-    metadata: metadataResult.metadata,
+    metadata: apiResult.metadata,
     structure: structureResult.structure,
   };
 };
