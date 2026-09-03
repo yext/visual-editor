@@ -1,5 +1,5 @@
 @import "pure-react-carousel/dist/react-carousel.es.css";
 @import "@yext/pages-components/style.css";
 @import "./atoms/hours.css";
-@import "./atoms/maybeRTF.css";
+@import "./fieldHelpers/maybeRTF.css";
 @import "./atoms/fontStyle.css";
