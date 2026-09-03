@@ -179,9 +179,8 @@ describe("yextve", () => {
     });
   });
 
-  it("adds Directory and Locator using the library metadata ID", async () => {
+  it("adds Directory and Locator without library metadata", async () => {
     const rootDir = createTempRoot();
-    writeLibraryMetadata(rootDir, "my-library");
 
     const result = await invoke(
       ["add-directory-locator", "--overwrite"],
@@ -191,19 +190,8 @@ describe("yextve", () => {
     expect(result.exitCode).toBe(0);
     expect(exportDirectoryLocatorSectionLibrary).toHaveBeenCalledWith({
       targetDirectory: rootDir,
-      libraryId: "my-library",
       overwrite: true,
     });
-  });
-
-  it("does not add Directory and Locator without valid library metadata", async () => {
-    const rootDir = createTempRoot();
-
-    const result = await invoke(["add-directory-locator"], rootDir);
-
-    expect(result.exitCode).toBe(1);
-    expect(result.stderr).toContain("Invalid library metadata");
-    expect(exportDirectoryLocatorSectionLibrary).not.toHaveBeenCalled();
   });
 
   it("renders all skipped stages and succeeds", async () => {
@@ -235,15 +223,6 @@ describe("yextve", () => {
     expect(result.stdout).toContain("Code checks: failed");
   });
 });
-
-const writeLibraryMetadata = (rootDir: string, id: string): void => {
-  fs.outputJsonSync(path.join(rootDir, "src", "library", "library.json"), {
-    schemaVersion: 1,
-    id,
-    displayName: "Library",
-    description: "Description",
-  });
-};
 
 // invoke calls the cli and records stdout and stderr
 const invoke = async (args: string[], rootDir: string = createTempRoot()) => {

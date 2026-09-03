@@ -40,8 +40,9 @@ export async function pollRevision(
 
   if (revision?.status === BUILD_SUCCESS_STATUS) {
     const elapsedSeconds = Math.floor((Date.now() - startedAt) / 1000);
+    const revisionId = revision.name.split("/").pop();
     spinner.succeed(
-      `Section Library Revision ${revision.uid} build succeeded after ${formatElapsed(elapsedSeconds)}.`
+      `Section Library Revision ${revisionId} build succeeded after ${formatElapsed(elapsedSeconds)}.`
     );
   } else {
     const message = `Section Library Revision failed with status ${lastStatus}.`;

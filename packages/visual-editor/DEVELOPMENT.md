@@ -96,8 +96,9 @@ in sorted template order, and reports all duplicate IDs.
 ### Add Directory and Locator
 
 Run this command from a Section Library repository to add editable Directory
-and Locator sections and layouts. The layout ID prefix comes from
-`src/library/library.json`.
+and Locator sections and layouts. If `src/library/library.json` exists, its ID
+prefixes the generated layout IDs. Otherwise, the IDs are `directory` and
+`locator`.
 
 ```sh
 npx --package=@yext/visual-editor@latest yextve add-directory-locator

@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import fs from "fs-extra";
 import { Project } from "ts-morph";
 import packageJson from "../../../../package.json" with { type: "json" };
+import { validateLibraryMetadata } from "../../../internal/sectionLibraryValidation/stages/metadata/libraryMetadata.ts";
 import { defaultLayoutData } from "../../../vite-plugin/defaultLayoutData.ts";
 
 const supportEntryPoint = "@yext/visual-editor/section-library-support";
@@ -68,7 +69,6 @@ const alwaysRegisteredSharedComponentIds = [
 
 type Options = {
   targetDirectory: string;
-  libraryId: string;
   overwrite: boolean;
 };
 
@@ -96,6 +96,21 @@ export const exportDirectoryLocatorSectionLibrary = (
   const sharedDirectory = path.join(libraryDirectory, "shared");
   const sectionsDirectory = path.join(libraryDirectory, "sections");
   const layoutsDirectory = path.join(libraryDirectory, "layouts");
+  const libraryMetadataPath = path.join(libraryDirectory, "library.json");
+  const metadataResult = fs.existsSync(libraryMetadataPath)
+    ? validateLibraryMetadata(options.targetDirectory)
+    : undefined;
+  if (metadataResult && !metadataResult.metadata) {
+    const details = metadataResult.issues
+      .map((issue) => `${issue.filePath}: ${issue.message}`)
+      .join("\n");
+    throw new Error(`Invalid library metadata:\n${details}`);
+  }
+  const libraryId = metadataResult?.metadata?.id;
+  const layoutIds = {
+    directory: libraryId ? `${libraryId}-directory` : "directory",
+    locator: libraryId ? `${libraryId}-locator` : "locator",
+  };
   if (!options.overwrite && fs.existsSync(sharedDirectory)) {
     throw new Error(
       `Refusing to overwrite existing shared source at ${sharedDirectory}. Pass --overwrite to override.`
@@ -117,10 +132,7 @@ export const exportDirectoryLocatorSectionLibrary = (
       `Refusing to overwrite existing Locator section at ${sectionsDirectory}. Pass --overwrite to override.`
     );
   }
-  for (const layoutId of [
-    `${options.libraryId}-directory`,
-    `${options.libraryId}-locator`,
-  ]) {
+  for (const layoutId of Object.values(layoutIds)) {
     const layoutDirectory = path.join(layoutsDirectory, layoutId);
     if (!options.overwrite && fs.existsSync(layoutDirectory)) {
       throw new Error(
@@ -149,7 +161,7 @@ export const exportDirectoryLocatorSectionLibrary = (
   );
   writeSections(sectionsDirectory);
   writeComponentRegistry(sharedDirectory, directoryLayout);
-  writeLayouts(libraryDirectory, options.libraryId, directoryLayout);
+  writeLayouts(libraryDirectory, directoryLayout, layoutIds);
   writeSourceVersion(sharedDirectory);
 };
 
@@ -463,15 +475,15 @@ const writeComponentRegistry = (
 
 const writeLayouts = (
   libraryDirectory: string,
-  libraryId: string,
-  directoryLayout: Record<string, any>
+  directoryLayout: Record<string, any>,
+  layoutIds: { directory: string; locator: string }
 ): void => {
   const locatorLayout = readDefaultLayout(defaultLayoutData.locator);
   writeLayout(
     libraryDirectory,
-    `${libraryId}-directory`,
+    layoutIds.directory,
     {
-      id: `${libraryId}-directory`,
+      id: layoutIds.directory,
       displayName: "Directory",
       pageSetType: "DIRECTORY",
     },
@@ -479,9 +491,9 @@ const writeLayouts = (
   );
   writeLayout(
     libraryDirectory,
-    `${libraryId}-locator`,
+    layoutIds.locator,
     {
-      id: `${libraryId}-locator`,
+      id: layoutIds.locator,
       displayName: "Locator",
       pageSetType: "LOCATOR",
     },

@@ -110,7 +110,7 @@ export const convertTemplatesToSectionLibrary = ({
   const rootDirectory = path.resolve(targetDirectory);
   const libraryDirectory = path.join(rootDirectory, "src", "library");
   const templates = readLegacyTemplates(rootDirectory);
-  const preparedBaseLibrary = prepareBaseLibrary(rootDirectory, templates[0]);
+  const preparedBaseLibrary = prepareBaseLibrary(rootDirectory);
   try {
     const baseLibrary = readBaseLibrary(preparedBaseLibrary.directory);
     const conversion = buildConversion(templates, baseLibrary);
@@ -143,10 +143,7 @@ export const convertTemplatesToSectionLibrary = ({
  * Returns the existing base library, or creates a temporary Directory and
  * Locator base that the conversion can validate and apply atomically.
  */
-const prepareBaseLibrary = (
-  rootDirectory: string,
-  firstTemplate: LegacyTemplate
-): PreparedBaseLibrary => {
+const prepareBaseLibrary = (rootDirectory: string): PreparedBaseLibrary => {
   const libraryDirectory = path.join(rootDirectory, "src", "library");
   if (hasDirectoryLocatorBase(libraryDirectory)) {
     return { directory: libraryDirectory };
@@ -167,15 +164,8 @@ const prepareBaseLibrary = (
   }
   exportDirectoryLocatorSectionLibrary({
     targetDirectory: temporaryDirectory,
-    libraryId: firstTemplate.templateId,
     overwrite: fs.existsSync(path.join(temporaryLibraryDirectory, "shared")),
   });
-  if (!fs.existsSync(path.join(temporaryLibraryDirectory, "library.json"))) {
-    fs.writeFileSync(
-      path.join(temporaryLibraryDirectory, "library.json"),
-      formatJson(buildLibraryMetadata(firstTemplate))
-    );
-  }
   return {
     directory: temporaryLibraryDirectory,
     temporaryDirectory,
@@ -235,17 +225,28 @@ const readLegacyTemplates = (rootDirectory: string): LegacyTemplate[] => {
   if (templateDirectories.length === 0) {
     throw new Error(`No legacy templates found in ${registryDirectory}`);
   }
-  return templateDirectories.map((templateId) => {
-    if (!SAFE_ID.test(templateId)) {
-      throw new Error(`Template ID is not valid: ${templateId}`);
+  const normalizedTemplateIds = new Set<string>();
+  return templateDirectories.map((templateDirectory) => {
+    if (!SAFE_ID.test(templateDirectory)) {
+      throw new Error(`Template ID is not valid: ${templateDirectory}`);
     }
+    const templateId = removeYextPrefix(templateDirectory);
+    if (!SAFE_ID.test(templateId)) {
+      throw new Error(`Template ID is not valid: ${templateDirectory}`);
+    }
+    if (normalizedTemplateIds.has(templateId)) {
+      throw new Error(
+        `Template IDs collide after removing the yext- prefix: ${templateId}`
+      );
+    }
+    normalizedTemplateIds.add(templateId);
     if (RESERVED_LAYOUT_IDS.has(templateId)) {
       throw new Error(
         `Template ID is reserved for a generated template alias: ${templateId}`
       );
     }
     return readLegacyTemplate(
-      path.join(registryDirectory, templateId),
+      path.join(registryDirectory, templateDirectory),
       templateId
     );
   });
@@ -292,9 +293,10 @@ const readLegacyTemplate = (
     .filter((entry) => entry.isFile() && path.extname(entry.name) === ".tsx")
     .flatMap((entry) => {
       const sourcePath = path.join(componentsDirectory, entry.name);
-      const id = path.basename(entry.name, ".tsx");
+      const componentName = path.basename(entry.name, ".tsx");
+      const id = removeYextPrefix(componentName);
       if (!SAFE_ID.test(id)) {
-        throw new Error(`Component ID is not valid: ${id}`);
+        throw new Error(`Component ID is not valid: ${componentName}`);
       }
       const content = fs.readFileSync(sourcePath, "utf8");
       if (
@@ -304,11 +306,16 @@ const readLegacyTemplate = (
       ) {
         return [];
       }
-      validateComponentSource(content, sourcePath, id, componentsDirectory);
+      validateComponentSource(
+        content,
+        sourcePath,
+        [id, componentName],
+        componentsDirectory
+      );
       return [
         {
           id,
-          content,
+          content: renameComponentIdentifiers(content),
           displayName: readComponentLabel(content, sourcePath),
         },
       ];
@@ -321,7 +328,9 @@ const readLegacyTemplate = (
   }
 
   const metadata = readJson(metadataPath, "legacy template metadata");
-  const defaultLayout = readJson(defaultLayoutPath, "legacy default layout");
+  const defaultLayout = normalizeLayoutComponentIds(
+    readJson(defaultLayoutPath, "legacy default layout")
+  );
   if (!isRecord(metadata)) {
     throw new Error(
       `Legacy template metadata must be an object: ${metadataPath}`
@@ -329,6 +338,155 @@ const readLegacyTemplate = (
   }
   validateDefaultLayout(defaultLayout, defaultLayoutPath, "Legacy");
   return { templateId, directory, metadata, defaultLayout, components };
+};
+
+const removeYextPrefix = (id: string): string => id.replace(/^yext-?/i, "");
+
+const normalizeLayoutComponentIds = (value: unknown): unknown => {
+  if (Array.isArray(value)) {
+    return value.map(normalizeLayoutComponentIds);
+  }
+  if (!isRecord(value)) {
+    return value;
+  }
+  const isComponent = typeof value.type === "string" && isRecord(value.props);
+  return Object.fromEntries(
+    Object.entries(value).map(([key, child]) => [
+      key,
+      key === "type" && isComponent && typeof child === "string"
+        ? removeYextPrefix(child)
+        : key === "props" && isComponent && isRecord(child)
+          ? Object.fromEntries(
+              Object.entries(child).map(([propKey, propValue]) => [
+                propKey,
+                propKey === "id" && typeof propValue === "string"
+                  ? removeYextPrefix(propValue)
+                  : normalizeLayoutComponentIds(propValue),
+              ])
+            )
+          : normalizeLayoutComponentIds(child),
+    ])
+  );
+};
+
+/**
+ * Removes Yext prefixes from local identifiers in component source code.
+ *
+ * The converter renames declarations and references for local variables,
+ * functions, types, and components. It also removes the prefix from a
+ * hardcoded `AnalyticsScopeProvider` `name` value. Other strings, comments,
+ * and names imported from external packages remain unchanged.
+ *
+ * @param content The legacy component source.
+ * @returns The source with local Yext-prefixed identifiers normalized.
+ */
+const renameComponentIdentifiers = (content: string): string => {
+  const sourceFile = ts.createSourceFile(
+    "component.tsx",
+    content,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TSX
+  );
+  const externalImportNames = new Set<string>();
+  for (const statement of sourceFile.statements) {
+    if (
+      !ts.isImportDeclaration(statement) ||
+      !ts.isStringLiteral(statement.moduleSpecifier) ||
+      statement.moduleSpecifier.text.startsWith(".")
+    ) {
+      continue;
+    }
+    if (statement.importClause?.name) {
+      externalImportNames.add(statement.importClause.name.text);
+    }
+    const namedBindings = statement.importClause?.namedBindings;
+    if (namedBindings && ts.isNamespaceImport(namedBindings)) {
+      externalImportNames.add(namedBindings.name.text);
+    } else if (namedBindings && ts.isNamedImports(namedBindings)) {
+      for (const element of namedBindings.elements) {
+        externalImportNames.add(element.name.text);
+        if (element.propertyName) {
+          externalImportNames.add(element.propertyName.text);
+        }
+      }
+    }
+  }
+  const identifierRanges: {
+    start: number;
+    end: number;
+    nextName: string;
+  }[] = [];
+  const visit = (node: ts.Node): void => {
+    if (ts.isJsxAttribute(node) && node.name.getText(sourceFile) === "name") {
+      const openingElement = node.parent.parent;
+      if (
+        (ts.isJsxOpeningElement(openingElement) ||
+          ts.isJsxSelfClosingElement(openingElement)) &&
+        openingElement.tagName.getText(sourceFile) === "AnalyticsScopeProvider"
+      ) {
+        const initializer = node.initializer;
+        const expression =
+          initializer && ts.isJsxExpression(initializer)
+            ? initializer.expression
+            : initializer;
+        if (
+          expression &&
+          (ts.isStringLiteral(expression) ||
+            ts.isNoSubstitutionTemplateLiteral(expression))
+        ) {
+          const nextName = removeYextPrefix(expression.text);
+          if (nextName !== expression.text) {
+            identifierRanges.push({
+              start: expression.getStart(sourceFile) + 1,
+              end: expression.end - 1,
+              nextName,
+            });
+          }
+        } else if (expression && ts.isTemplateExpression(expression)) {
+          const nextName = removeYextPrefix(expression.head.text);
+          if (nextName !== expression.head.text) {
+            const start = expression.head.getStart(sourceFile) + 1;
+            identifierRanges.push({
+              start,
+              end: start + expression.head.text.length,
+              nextName,
+            });
+          }
+        }
+      }
+    }
+    if (ts.isIdentifier(node) && !externalImportNames.has(node.text)) {
+      const parent = node.parent;
+      const isPropertyName =
+        (ts.isPropertyAccessExpression(parent) && parent.name === node) ||
+        (ts.isQualifiedName(parent) && parent.right === node) ||
+        (ts.isPropertyAssignment(parent) && parent.name === node) ||
+        (ts.isMethodDeclaration(parent) && parent.name === node) ||
+        (ts.isMethodSignature(parent) && parent.name === node) ||
+        (ts.isPropertyDeclaration(parent) && parent.name === node) ||
+        (ts.isPropertySignature(parent) && parent.name === node);
+      if (!isPropertyName) {
+        const nextName = removeYextPrefix(node.text);
+        if (nextName !== node.text) {
+          identifierRanges.push({
+            start: node.getStart(sourceFile),
+            end: node.end,
+            nextName,
+          });
+        }
+      }
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sourceFile);
+  return identifierRanges
+    .sort((left, right) => right.start - left.start)
+    .reduce(
+      (renamedContent, range) =>
+        `${renamedContent.slice(0, range.start)}${range.nextName}${renamedContent.slice(range.end)}`,
+      content
+    );
 };
 
 /** Reads the static label from a legacy component configuration. */
@@ -380,31 +538,48 @@ const readComponentLabel = (content: string, sourcePath: string): string => {
   return label.initializer.text;
 };
 
+/**
+ * Validates a legacy component source file.
+ *
+ * The source must export one of the provided names, must not define its own
+ * SectionConfig, and must keep relative imports inside the components directory.
+ * The converter provides both the normalized name and the legacy name because
+ * either name can be present in the source export.
+ *
+ * @param content The legacy component source.
+ * @param sourcePath The source path used in validation errors.
+ * @param componentNames The normalized and legacy names accepted for the export.
+ * @param componentsDirectory The directory that relative imports must not leave.
+ * @throws If the source does not meet the legacy component requirements.
+ */
 const validateComponentSource = (
   content: string,
   sourcePath: string,
-  componentId: string,
+  componentNames: string[],
   componentsDirectory: string
 ): void => {
-  const directNamedExport = new RegExp(
-    `export\\s+(?:async\\s+)?(?:const|function|class)\\s+${componentId}\\b`
-  );
-  const namedExport =
-    directNamedExport.test(content) ||
-    Array.from(content.matchAll(/export\s*\{([^}]*)\}/g)).some((match) =>
-      match[1].split(",").some((entry) => {
-        const exportName = entry
-          .trim()
-          .replace(/^type\s+/, "")
-          .split(/\s+as\s+/)
-          .at(-1)
-          ?.trim();
-        return exportName === componentId;
-      })
+  const hasNamedExport = componentNames.some((componentName) => {
+    const directNamedExport = new RegExp(
+      `export\\s+(?:async\\s+)?(?:const|function|class)\\s+${componentName}\\b`
     );
-  if (!namedExport) {
+    return (
+      directNamedExport.test(content) ||
+      Array.from(content.matchAll(/export\s*\{([^}]*)\}/g)).some((match) =>
+        match[1].split(",").some((entry) => {
+          const exportName = entry
+            .trim()
+            .replace(/^type\s+/, "")
+            .split(/\s+as\s+/)
+            .at(-1)
+            ?.trim();
+          return exportName === componentName;
+        })
+      )
+    );
+  });
+  if (!hasNamedExport) {
     throw new Error(
-      `Component ${componentId} must have a named export in ${sourcePath}`
+      `Component ${componentNames.at(-1)} must have a named export in ${sourcePath}`
     );
   }
   const exportsConfig =
@@ -424,7 +599,7 @@ const validateComponentSource = (
     exportsConfig
   ) {
     throw new Error(
-      `Component ${componentId} already defines config: ${sourcePath}`
+      `Component ${componentNames.at(-1)} already defines config: ${sourcePath}`
     );
   }
   for (const match of content.matchAll(
@@ -460,7 +635,6 @@ const readBaseLibrary = (libraryDirectory: string): BaseLibrary => {
     "componentRegistry.ts"
   );
   for (const requiredPath of [
-    path.join(libraryDirectory, "library.json"),
     layoutsDirectory,
     sectionsDirectory,
     sharedRegistryPath,
@@ -468,25 +642,6 @@ const readBaseLibrary = (libraryDirectory: string): BaseLibrary => {
     if (!fs.existsSync(requiredPath)) {
       throw new Error(`Base Section Library is missing ${requiredPath}`);
     }
-  }
-  const libraryMetadataPath = path.join(libraryDirectory, "library.json");
-  const libraryMetadata = readJson(
-    libraryMetadataPath,
-    "base library metadata"
-  );
-  if (
-    !isRecord(libraryMetadata) ||
-    libraryMetadata.schemaVersion !== 1 ||
-    typeof libraryMetadata.id !== "string" ||
-    !SAFE_ID.test(libraryMetadata.id) ||
-    typeof libraryMetadata.displayName !== "string" ||
-    !libraryMetadata.displayName.trim() ||
-    typeof libraryMetadata.description !== "string" ||
-    !libraryMetadata.description.trim()
-  ) {
-    throw new Error(
-      `Base library metadata is not valid: ${libraryMetadataPath}`
-    );
   }
   const layouts = fs
     .readdirSync(layoutsDirectory, { withFileTypes: true })
@@ -651,7 +806,7 @@ const buildLibraryMetadata = (template: LegacyTemplate): LibraryMetadata => {
       typeof template.metadata.description === "string" &&
       template.metadata.description.trim()
         ? template.metadata.description
-        : `Sections and layouts converted from ${displayName}.`,
+        : "",
   };
 };
 
