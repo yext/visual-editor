@@ -21,7 +21,7 @@ export {
 export {
   CustomCodeSection,
   type CustomCodeSectionProps,
-} from "./fieldHelpers/customCode/CustomCodeSection.tsx";
+} from "./customCode/CustomCodeSection.tsx";
 export {
   defaultThemeConfig,
   createDefaultThemeConfig,
