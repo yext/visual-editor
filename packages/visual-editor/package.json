@@ -1,7 +1,7 @@
 {
   "name": "@yext/visual-editor",
   "description": "Component library for Yext Pages Visual Editor",
-  "version": "1.4.4",
+  "version": "1.4.8",
   "author": "sprumo@yext.com",
   "repository": {
     "type": "git",
