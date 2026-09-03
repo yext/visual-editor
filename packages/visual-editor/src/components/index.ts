@@ -6,6 +6,7 @@ export * from "./pageSections/index.ts";
 export * from "./migrations/index.ts";
 export * from "./header/index.ts";
 export * from "./footer/index.ts";
+export * from "./fieldHelpers/index.ts";
 export {
   Directory,
   type DirectoryProps,

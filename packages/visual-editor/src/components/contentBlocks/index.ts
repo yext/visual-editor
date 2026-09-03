@@ -1,15 +1,5 @@
 export { Address, type AddressProps } from "./Address.tsx";
 export { BodyText, type BodyTextProps } from "./BodyText.tsx";
-export {
-  ComprehensiveCTA,
-  type ComprehensiveCTARenderProps as ComprehensiveCTAProps,
-} from "./ComprehensiveCTA.tsx";
-export {
-  createStyledTextConfig,
-  StyledTextComponent,
-  type StyledPlainTextProps,
-  type StyledRichTextProps,
-} from "./createStyledTextConfig.tsx";
 export { CTAGroup, type CTAGroupProps } from "./CTAGroup.tsx";
 export { CTAWrapper, type CTAWrapperProps } from "./CtaWrapper.tsx";
 export { Emails, type EmailsProps } from "./Emails.tsx";
