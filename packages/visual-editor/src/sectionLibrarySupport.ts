@@ -185,6 +185,8 @@ export {
   getTextColorClass,
   getTextColorStyle,
   getThemeColorCssValue,
+  isColorContrastWcagCompliant,
+  hexToRGB,
 } from "./utils/colors.ts";
 export { getValueFromQueryString } from "./utils/urlQueryString.tsx";
 export { normalizeSlug } from "./utils/slugifier.ts";
@@ -218,6 +220,7 @@ export { type AssetVideo } from "./types/videos.ts";
 export {
   type PresetImageType,
   type TranslatableString,
+  FOOD_DELIVERY_SERVICES,
 } from "./types/types.ts";
 export { getCTAType } from "./internal/utils/ctaFieldUtils.ts";
 export {
@@ -237,3 +240,4 @@ export {
 export { ComponentErrorBoundary } from "./internal/components/ComponentErrorBoundary.tsx";
 export { isVisualEditorTestEnv } from "./components/testing/utils.ts";
 export { fetchLocalesToPathsForEntity } from "./utils/api/fetchLocalesToPathsForEntity.ts";
+export { presetImageIcons } from "./utils/presetImageIcons.tsx";

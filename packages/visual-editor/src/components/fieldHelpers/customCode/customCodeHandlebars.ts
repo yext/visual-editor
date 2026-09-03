@@ -1,6 +1,6 @@
 import Handlebars from "handlebars";
-import { StreamDocument } from "../../utils/types/StreamDocument.ts";
-import { normalizeSlug } from "../../utils/slugifier.ts";
+import { StreamDocument } from "../../../utils/types/StreamDocument.ts";
+import { normalizeSlug } from "../../../utils/slugifier.ts";
 
 let customCodeHandlebarsHelpersRegistered = false;
 

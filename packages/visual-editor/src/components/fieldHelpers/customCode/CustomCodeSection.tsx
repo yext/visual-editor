@@ -1,13 +1,13 @@
 import React from "react";
 import { CodeXml } from "lucide-react";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
-import { msg, pt } from "../../utils/i18n/platform.ts";
-import { useDocument } from "../../hooks/useDocument.tsx";
+import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
+import { msg, pt } from "../../../utils/i18n/platform.ts";
+import { useDocument } from "../../../hooks/useDocument.tsx";
 import { WithId, WithPuckProps } from "@puckeditor/core";
-import { resolveEmbeddedFieldsInString } from "../../utils/resolveYextEntityField.ts";
+import { resolveEmbeddedFieldsInString } from "../../../utils/resolveYextEntityField.ts";
 import { processHandlebarsTemplate } from "./customCodeHandlebars.ts";
-import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
+import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 export interface CustomCodeSectionProps {
   /**

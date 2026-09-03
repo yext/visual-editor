@@ -3,15 +3,15 @@ import {
   axe,
   ComponentTest,
   transformTests,
-} from "../testing/componentTests.setup.ts";
+} from "../../testing/componentTests.setup.ts";
 import { render as reactRender, waitFor } from "@testing-library/react";
 import { CustomCodeSection } from "./CustomCodeSection.tsx";
-import { migrate } from "../../utils/migrate.ts";
-import { migrationRegistry } from "../migrations/migrationRegistry.ts";
-import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
+import { migrate } from "../../../utils/migrate.ts";
+import { migrationRegistry } from "../../migrations/migrationRegistry.ts";
+import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
 import { Render, Config } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
-import { MainContent } from "../structure/MainContent.tsx";
+import { MainContent } from "../../structure/MainContent.tsx";
 
 const tests: ComponentTest[] = [
   {
