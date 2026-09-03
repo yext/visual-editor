@@ -191,6 +191,47 @@ describe("generateSectionLibraryFiles", () => {
     );
   }, 10_000);
 
+  it("combines category names case-insensitively", () => {
+    const rootDir = createLibrary();
+    const sectionsDirectory = path.join(rootDir, "src", "library", "sections");
+    fs.writeFileSync(
+      path.join(sectionsDirectory, "Header.tsx"),
+      [
+        'import type { SectionConfig } from "@yext/visual-editor";',
+        "export const Header = {};",
+        'export const config: SectionConfig = { id: "Header", displayName: "Header", description: "A header.", pageSetTypes: ["ENTITY"], category: "other" };',
+      ].join("\n")
+    );
+    fs.writeFileSync(
+      path.join(sectionsDirectory, "Footer.tsx"),
+      [
+        'import type { SectionConfig } from "@yext/visual-editor";',
+        "export const Footer = {};",
+        'export const config: SectionConfig = { id: "Footer", displayName: "Footer", description: "A footer.", pageSetTypes: ["ENTITY"], category: "Other" };',
+      ].join("\n")
+    );
+
+    generateSectionLibraryFiles(
+      rootDir,
+      "123e4567-e89b-12d3-a456-426614174000"
+    );
+
+    const config = fs.readFileSync(
+      path.join(
+        rootDir,
+        "src",
+        "library",
+        ".generated",
+        "libraryConfig-location.tsx"
+      ),
+      "utf8"
+    );
+    expect(config).toContain(
+      'other: { title: "Other", components: ["CustomCodeSection","Footer","Header"] }'
+    );
+    expect(config).not.toContain('"section:other"');
+  });
+
   it("generates a render template for every Entity layout", () => {
     const rootDir = createLibrary();
     addEntityLayout(rootDir, "alpha-location", 42);
