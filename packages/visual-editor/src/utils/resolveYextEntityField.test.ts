@@ -130,6 +130,54 @@ describe("resolveYextEntityField", () => {
   });
 });
 
+describe("resolveField with bracket indexes", () => {
+  const document = {
+    groups: [
+      {
+        name: "First Group",
+        items: [{ name: "First Item" }, { name: "Second Item" }],
+      },
+      {
+        name: "Second Group",
+        items: [{ name: "Third Item" }, { name: "Fourth Item" }],
+      },
+    ],
+    values: ["first", "second"],
+    profile: { name: "Yext" },
+  };
+
+  it.each([
+    ["resolves index zero", "groups[0].name", "First Group"],
+    ["resolves a nonzero index", "groups[1].name", "Second Group"],
+    ["resolves nested indexes", "groups[1].items[1].name", "Fourth Item"],
+    ["resolves a terminal indexed value", "values[1]", "second"],
+    [
+      "returns undefined for an out-of-range index",
+      "groups[2].name",
+      undefined,
+    ],
+    [
+      "returns undefined when indexing a non-array",
+      "profile[0].name",
+      undefined,
+    ],
+  ])("%s", (_name, fieldName, expectedValue) => {
+    assert.equal(resolveField(document, fieldName).value, expectedValue);
+  });
+
+  it("preserves implicit first-item traversal", () => {
+    assert.equal(resolveField(document, "groups.name").value, "First Group");
+  });
+
+  it("does not report implicit traversal for an explicitly indexed list", () => {
+    assert.deepEqual(resolveField(document, "groups[1].name"), {
+      value: "Second Group",
+      traversedMultiValueReference: false,
+      multiValueReferenceField: undefined,
+    });
+  });
+});
+
 describe("resolveYextEntityField with embedded fields", () => {
   const document = {
     name: "Yext",
@@ -386,5 +434,27 @@ describe("numeric embedded field resolution", () => {
     );
 
     assert.equal(resolved, "19.95");
+  });
+});
+
+describe("indexed embedded field resolution", () => {
+  it("resolves zero and nonzero list indexes", () => {
+    const resolved = resolveEmbeddedFieldsInString(
+      "[[articles[0].name]] and [[articles[2].name]]",
+      {
+        articles: [{ name: "First" }, { name: "Second" }, { name: "Third" }],
+      }
+    );
+
+    assert.equal(resolved, "First and Third");
+  });
+
+  it("replaces an out-of-range indexed field with an empty string", () => {
+    assert.equal(
+      resolveEmbeddedFieldsInString("Value: [[values[2]]]", {
+        values: ["first"],
+      }),
+      "Value: "
+    );
   });
 });

@@ -1,3 +1,41 @@
+#### 1.4.8 (2026-09-02)
+
+##### Bug Fixes
+
+- update footer links to be translatableString ([#1309](https://github.com/yext/visual-editor/pull/1309)) ([bed2adec](https://github.com/yext/visual-editor/commit/bed2adecbe042352709b7673ffb6866e3546aa7b))
+
+#### 1.4.7 (2026-09-01)
+
+##### New Features
+
+- add keyword display name to locator ([#1306](https://github.com/yext/visual-editor/pull/1306)) ([819af72a](https://github.com/yext/visual-editor/commit/819af72ae9405795ba87665ed0463cb3e89e912d))
+
+##### Bug Fixes
+
+- spacing for blank links in header and footer ([#1302](https://github.com/yext/visual-editor/pull/1302)) ([b04cfd5f](https://github.com/yext/visual-editor/commit/b04cfd5fb4265f25f324d05ee8eeabdee2bae20a))
+
+#### 1.4.6 (2026-08-26)
+
+##### New Features
+
+- add phone number to hero section ([#1298](https://github.com/yext/visual-editor/pull/1298)) ([5254dfcb](https://github.com/yext/visual-editor/commit/5254dfcb35f1e31b1cd492e69cba21ec6c8a2bf9))
+- allow indexing of lists in embedded fields ([#1288](https://github.com/yext/visual-editor/pull/1288)) ([480c2149](https://github.com/yext/visual-editor/commit/480c2149d178f2712e4f5bd60410130d992cd67d))
+
+#### 1.4.5 (2026-08-13)
+
+##### Chores
+
+- update js-yaml version ([#1286](https://github.com/yext/visual-editor/pull/1286)) ([46c322fd](https://github.com/yext/visual-editor/commit/46c322fd11ec5fef319d4bf63a75be1556e4adfa))
+
+##### Bug Fixes
+
+- preserve directory card data ([#1284](https://github.com/yext/visual-editor/pull/1284)) ([7f3bd989](https://github.com/yext/visual-editor/commit/7f3bd989d8e735265c2066c761b1e7a8319c66cf))
+
+##### Other Changes
+
+- v1.4.4 ([0fc5faed](https://github.com/yext/visual-editor/commit/0fc5faedd261209ab7862c283f9da7c6b38da9b7))
+- v1.4.4" ([2e1d39d6](https://github.com/yext/visual-editor/commit/2e1d39d6f076176400b558000cbfcc278ad51806))
+
 #### 1.4.4 (2026-08-07)
 
 ##### New Features

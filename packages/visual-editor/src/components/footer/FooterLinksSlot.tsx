@@ -3,7 +3,7 @@ import { PuckComponent, setDeep } from "@puckeditor/core";
 import { cva } from "class-variance-authority";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
-import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { resolveLocalizedCtas } from "../../utils/resolveLocalizedCtas.ts";
 import { CTA } from "../atoms/cta.tsx";
 import { TranslatableCTA } from "../../types/types.ts";
 import { i18nComponentsInstance } from "../../utils/i18n/components.ts";
@@ -167,29 +167,22 @@ const FooterLinksSlotInternal: PuckComponent<FooterLinksSlotProps> = (
   } = props;
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
+  const resolvedLinks = resolveLocalizedCtas(
+    data.links,
+    i18n.language,
+    streamDocument
+  );
 
-  if (!data.links || data.links.length === 0) {
+  if (resolvedLinks.length === 0) {
     return puck.isEditing ? <div className="h-10 min-w-[100px]" /> : <></>;
   }
 
-  const links = data.links.map((linkData, index) => {
-    const label = resolveComponentData(
-      linkData.label,
-      i18n.language,
-      streamDocument
-    );
-
-    const link = resolveComponentData(
-      linkData.link,
-      i18n.language,
-      streamDocument
-    );
-
+  const links = resolvedLinks.map((linkData, index) => {
     return (
       <CTA
         key={index}
-        link={link}
-        label={label}
+        link={linkData.link}
+        label={linkData.label}
         linkType={linkData.linkType}
         variant={
           variant === "primary"
@@ -288,7 +281,7 @@ const footerLinksSlotFields: YextFields<FooterLinksSlotProps> = {
           },
           link: {
             label: msg("fields.link", "Link"),
-            type: "text",
+            type: "translatableString",
           },
           normalizeLink: {
             label: msg("fields.normalizeLink", "Normalize Link"),

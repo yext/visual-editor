@@ -276,6 +276,7 @@
     "javascript": "JavaScript",
     "justifyContent": "Inhalt ausrichten",
     "key": "Schlüssel",
+    "keywordsDisplayName": "Anzeigename der Schlüsselwörter",
     "label": "Bezeichnung",
     "latitude": "Breitengrad",
     "limit": "Limit",
