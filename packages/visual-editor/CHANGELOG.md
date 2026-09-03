@@ -31,11 +31,6 @@
 
 - preserve directory card data ([#1284](https://github.com/yext/visual-editor/pull/1284)) ([7f3bd989](https://github.com/yext/visual-editor/commit/7f3bd989d8e735265c2066c761b1e7a8319c66cf))
 
-##### Other Changes
-
-- v1.4.4 ([0fc5faed](https://github.com/yext/visual-editor/commit/0fc5faedd261209ab7862c283f9da7c6b38da9b7))
-- v1.4.4" ([2e1d39d6](https://github.com/yext/visual-editor/commit/2e1d39d6f076176400b558000cbfcc278ad51806))
-
 #### 1.4.4 (2026-08-07)
 
 ##### New Features
@@ -44,7 +39,7 @@
 
 ##### Other Changes
 
-- v1.4.4" ([2e1d39d6](https://github.com/yext/visual-editor/commit/2e1d39d6f076176400b558000cbfcc278ad51806))
+- v1.4.4 ([2e1d39d6](https://github.com/yext/visual-editor/commit/2e1d39d6f076176400b558000cbfcc278ad51806))
 - v1.4.4 ([da53dd17](https://github.com/yext/visual-editor/commit/da53dd1794c340271f3b8dc3b5f95de7cacb5d21))
 
 #### 1.4.3 (2026-08-04)
