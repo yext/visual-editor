@@ -218,7 +218,7 @@ describe("yextve", () => {
     const result = await invoke(["validate", "--yextCI"], rootDir);
 
     expect(result.exitCode).toBe(1);
-    expect(result.stdout).toContain("Library metadata: skipped");
+    expect(result.stdout).toContain("API checks: skipped");
     expect(result.stdout).toContain("Repository structure: failed");
     expect(result.stdout).toContain("Code checks: failed");
   });

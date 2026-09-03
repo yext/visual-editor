@@ -12,7 +12,7 @@ const usage = `Usage:
 Validate the Section Library in the current working directory.
 
 Options:
-  --skip-api-check                 Skip library.json metadata validation.
+  --skip-api-check                 Skip API file validation.
   --skip-repo-structure-check      Skip repository structure validation.
   --skip-code-check                Skip import and code-safety validation.
   -h, --help                       Show this help.

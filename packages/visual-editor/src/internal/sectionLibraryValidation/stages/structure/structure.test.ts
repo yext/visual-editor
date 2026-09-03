@@ -123,17 +123,7 @@ describe("validateSectionLibraryStructure", () => {
     expectRules(rootDir, "json/missing");
   });
 
-  it("accepts one supported layout preview image", () => {
-    const rootDir = createValidLibrary();
-    fs.outputFileSync(
-      layoutFilePath(rootDir, "entity-layout", "preview.webp"),
-      "image"
-    );
-
-    expect(validateSectionLibraryStructure(rootDir).issues).toEqual([]);
-  });
-
-  it("reports multiple layout preview images", () => {
+  it("ignores layout preview images", () => {
     const rootDir = createValidLibrary();
     fs.outputFileSync(
       layoutFilePath(rootDir, "entity-layout", "preview.jpg"),
@@ -144,20 +134,7 @@ describe("validateSectionLibraryStructure", () => {
       "image"
     );
 
-    expectRules(rootDir, "layouts/preview-image");
-  });
-
-  it("reports an oversized layout preview image", () => {
-    const rootDir = createValidLibrary();
-    const previewImagePath = layoutFilePath(
-      rootDir,
-      "entity-layout",
-      "preview.png"
-    );
-    fs.ensureFileSync(previewImagePath);
-    fs.truncateSync(previewImagePath, 20 * 1024 * 1024 + 1);
-
-    expectRules(rootDir, "layouts/preview-image");
+    expect(validateSectionLibraryStructure(rootDir).issues).toEqual([]);
   });
 
   it("reports malformed layout JSON", () => {

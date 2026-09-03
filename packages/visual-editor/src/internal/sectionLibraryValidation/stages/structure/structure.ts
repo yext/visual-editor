@@ -24,13 +24,6 @@ const reservedLayoutIds = new Set([
   "edit", // legacy editor template ID
   "local-editor", // generated Local Editor template ID
 ]);
-const previewImageFilenames = new Set([
-  "preview.png",
-  "preview.jpg",
-  "preview.jpeg",
-  "preview.webp",
-]);
-const maxPreviewImageSizeBytes = 20 * 1024 * 1024;
 export const safeSectionLibraryIdPattern = /^[A-Za-z0-9_-]+$/;
 type ParsedLayout = SectionLibraryLayout & { defaultLayoutPath: string };
 
@@ -286,8 +279,6 @@ const readLayout = (
   layoutDirectory: string,
   addIssue: AddIssue
 ): ParsedLayout | undefined => {
-  validatePreviewImage(layoutDirectory, addIssue);
-
   const metadataPath = path.join(layoutDirectory, "metadata.json");
   const defaultLayoutPath = path.join(layoutDirectory, "defaultLayout.json");
   const metadataValue = readJsonObject(
@@ -363,37 +354,6 @@ const readLayout = (
     return { metadata, defaultLayout, defaultLayoutPath };
   } catch (error) {
     addIssue(metadataPath, "layouts/metadata", errorMessage(error));
-  }
-};
-
-const validatePreviewImage = (
-  layoutDirectory: string,
-  addIssue: AddIssue
-): void => {
-  const previewImagePaths = fs
-    .readdirSync(layoutDirectory, { withFileTypes: true })
-    .filter((entry) => entry.isFile() && previewImageFilenames.has(entry.name))
-    .map((entry) => path.join(layoutDirectory, entry.name));
-
-  if (previewImagePaths.length > 1) {
-    addIssue(
-      layoutDirectory,
-      "layouts/preview-image",
-      "A layout may contain only one preview image."
-    );
-    return;
-  }
-
-  const previewImagePath = previewImagePaths[0];
-  if (
-    previewImagePath &&
-    fs.statSync(previewImagePath).size > maxPreviewImageSizeBytes
-  ) {
-    addIssue(
-      previewImagePath,
-      "layouts/preview-image",
-      "Layout preview images must be 20 MiB or smaller."
-    );
   }
 };
 

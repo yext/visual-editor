@@ -36,7 +36,30 @@ describe("validateSectionLibrary", () => {
   });
 
   it("skips API validation in Yext CI", () => {
-    const context = createValidationContext(createTempRoot(), {
+    const rootDir = createTempRoot();
+    fs.outputFileSync(
+      path.join(
+        rootDir,
+        "src",
+        "library",
+        "layouts",
+        "entity-layout",
+        "preview.jpg"
+      ),
+      "image"
+    );
+    fs.outputFileSync(
+      path.join(
+        rootDir,
+        "src",
+        "library",
+        "layouts",
+        "entity-layout",
+        "preview.png"
+      ),
+      "image"
+    );
+    const context = createValidationContext(rootDir, {
       yextCI: true,
       skippedStages: ["structure", "code"],
     });
