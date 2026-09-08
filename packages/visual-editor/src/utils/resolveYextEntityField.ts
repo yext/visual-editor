@@ -1,7 +1,8 @@
 import { type YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
 import { type StreamDocument } from "./types/StreamDocument.ts";
 
-export const embeddedFieldRegex = /\[\[([a-zA-Z0-9._]+)\]\]/g;
+export const embeddedFieldRegex =
+  /\[\[((?:[a-zA-Z0-9_]+(?:\[\d+\])*)(?:\.[a-zA-Z0-9_]+(?:\[\d+\])*)*)\]\]/g;
 
 export type FieldResolution<T> = {
   value: T | undefined;
@@ -225,10 +226,41 @@ export const resolveField = <T>(
   let traversedMultiValueReference = false;
   let multiValueReferenceField: string | undefined;
   try {
-    const levels: string[] = fieldName.split(".");
+    const levels: (string | number)[] = [];
+    for (const fieldSegment of fieldName.split(".")) {
+      const segmentMatch = fieldSegment.match(/^([^[\]]+)((?:\[\d+\])*)$/);
+      if (!segmentMatch) {
+        return {
+          value: undefined,
+          traversedMultiValueReference,
+          multiValueReferenceField,
+        };
+      }
+
+      levels.push(segmentMatch[1]);
+      for (const indexMatch of segmentMatch[2].matchAll(/\[(\d+)\]/g)) {
+        levels.push(Number(indexMatch[1]));
+      }
+    }
+
     let current: unknown = streamDocument;
     let currentPath = "";
     for (let i = 0; i < levels.length; i++) {
+      const level = levels[i];
+      if (typeof level === "number") {
+        if (!Array.isArray(current) || current[level] === undefined) {
+          return {
+            value: undefined,
+            traversedMultiValueReference,
+            multiValueReferenceField,
+          };
+        }
+
+        currentPath = `${currentPath}[${level}]`;
+        current = current[level];
+        continue;
+      }
+
       if (Array.isArray(current)) {
         if (current.length === 0) {
           return {
@@ -255,7 +287,7 @@ export const resolveField = <T>(
       }
 
       const currentRecord = current as Record<string, unknown>;
-      if (currentRecord[levels[i]] === undefined) {
+      if (currentRecord[level] === undefined) {
         return {
           value: undefined,
           traversedMultiValueReference,
@@ -263,8 +295,8 @@ export const resolveField = <T>(
         };
       }
 
-      currentPath = currentPath ? `${currentPath}.${levels[i]}` : levels[i];
-      current = currentRecord[levels[i]];
+      currentPath = currentPath ? `${currentPath}.${level}` : level;
+      current = currentRecord[level];
     }
 
     return {

@@ -9,11 +9,11 @@ import {
   ThemeColor,
 } from "../../utils/themeConfigOptions.ts";
 import { CTAWrapperProps } from "../contentBlocks/CtaWrapper.tsx";
-import { TranslatableCTA } from "../../types/types.ts";
 import { ImageWrapperProps } from "../contentBlocks/image/Image.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import { PageSection, PageSectionProps } from "../atoms/pageSection.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { resolveLocalizedCtas } from "../../utils/resolveLocalizedCtas.ts";
 import { useOverflow } from "../../hooks/useOverflow.ts";
 import { usePreviewWindow } from "../../hooks/usePreviewWindow.ts";
 import { getViewport } from "../../hooks/useViewport.ts";
@@ -515,18 +515,28 @@ export const PrimaryHeaderSlot: YextComponentConfig<PrimaryHeaderSlotProps> = {
       !!secondaryCTA?.label &&
       !!secondaryCTA?.link;
 
-    const showNavContent: boolean =
+    const primaryLinksData = data.props.slots.LinksSlot?.[0]?.props.data;
+    const hasPrimaryLinks =
+      resolveLocalizedCtas(primaryLinksData?.links, locale, streamDocument)
+        .length > 0 ||
+      resolveLocalizedCtas(
+        primaryLinksData?.collapsedLinks,
+        locale,
+        streamDocument
+      ).length > 0;
+
+    const secondaryHeader = data.props.parentValues?.SecondaryHeaderSlot?.[0];
+    const secondaryLinks =
+      secondaryHeader?.props.slots.LinksSlot?.[0]?.props.data.links;
+    const hasSecondaryLinks =
+      !!secondaryHeader?.props.data.show &&
+      resolveLocalizedCtas(secondaryLinks, locale, streamDocument).length > 0;
+
+    const showNavContent =
       showPrimaryCTA ||
       showSecondaryCTA ||
-      !!data.props.slots.LinksSlot?.[0]?.props.data.links?.some(
-        (l: TranslatableCTA) => l.label && l.link
-      ) ||
-      !!(
-        data.props.parentValues?.SecondaryHeaderSlot?.[0]?.props.data.show &&
-        data.props.parentValues?.SecondaryHeaderSlot?.[0]?.props.data.links?.some(
-          (l: TranslatableCTA) => l.label && l.link
-        )
-      );
+      hasPrimaryLinks ||
+      hasSecondaryLinks;
 
     return {
       ...data,

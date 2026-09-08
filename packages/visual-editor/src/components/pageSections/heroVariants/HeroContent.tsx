@@ -32,10 +32,13 @@ export const HeroContent: PuckComponent<HeroVariantProps> = ({
 
   const showHours =
     styles.showHoursStatus && (conditionalRender?.hours || puck.isEditing);
+  const showPhone =
+    styles.showPhone && (conditionalRender?.phone || puck.isEditing);
 
   const showHeader =
     styles.showBusinessName ||
     styles.showGeomodifier ||
+    showPhone ||
     showHours ||
     (styles.showAverageReview && reviewCount > 0);
 
@@ -57,6 +60,9 @@ export const HeroContent: PuckComponent<HeroVariantProps> = ({
               <slots.GeomodifierSlot style={{ height: "auto" }} allow={[]} />
             )}
           </section>
+          {showPhone && (
+            <slots.PhoneSlot style={{ height: "auto" }} allow={[]} />
+          )}
           {showHours && (
             <slots.HoursStatusSlot style={{ height: "auto" }} allow={[]} />
           )}

@@ -4,10 +4,8 @@ import { msg, pt } from "../../utils/i18n/platform.ts";
 import { TranslatableString, TranslatableCTA } from "../../types/types.ts";
 import { i18nComponentsInstance } from "../../utils/i18n/components.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
-import {
-  getDisplayValue,
-  resolveComponentData,
-} from "../../utils/resolveComponentData.tsx";
+import { getDisplayValue } from "../../utils/resolveComponentData.tsx";
+import { resolveLocalizedFooterLinkSection } from "./resolveLocalizedFooterLinkSection.ts";
 import { CTA } from "../atoms/cta.tsx";
 import { useBackground } from "../../hooks/useBackground.tsx";
 import { Body } from "../atoms/body.tsx";
@@ -69,7 +67,7 @@ const footerExpandedLinksWrapperFields: YextFields<FooterExpandedLinksWrapperPro
                 },
                 link: {
                   label: msg("fields.link", "Link"),
-                  type: "text",
+                  type: "translatableString",
                 },
                 normalizeLink: {
                   label: msg("fields.normalizeLink", "Normalize Link"),
@@ -246,13 +244,19 @@ const FooterExpandedLinksWrapperInternal: PuckComponent<
     styles,
     desktopContentAlignment = "left",
     mobileContentAlignment = "left",
+    puck,
   } = props;
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
   const background = useBackground();
   const isDarkBackground = background?.isDarkColor ?? false;
 
-  const sections = data.sections || [];
+  const resolvedSections = (data.sections || []).map((section) =>
+    resolveLocalizedFooterLinkSection(section, i18n.language, streamDocument)
+  );
+  const sections = puck.isEditing
+    ? resolvedSections
+    : resolvedSections.filter((section) => section.links.length > 0);
   const defaultLabelColor = isDarkBackground
     ? ({ selectedColor: "white", contrastingColor: "black" } as ThemeColor)
     : ({ selectedColor: "black", contrastingColor: "white" } as ThemeColor);
@@ -286,13 +290,6 @@ const FooterExpandedLinksWrapperInternal: PuckComponent<
         }
       >
         {sections.map((section, sectionIndex) => {
-          const label = resolveComponentData(
-            section.label,
-            i18n.language,
-            streamDocument
-          );
-          const links = section.links || [];
-
           return (
             <div
               key={sectionIndex}
@@ -301,49 +298,40 @@ const FooterExpandedLinksWrapperInternal: PuckComponent<
                 mobileContentAlignment,
               })}
             >
-              <Body
-                className="break-words font-link-fontWeight font-body-fontFamily font-body-fontWeight"
-                color={resolvedLabelColor}
-              >
-                {label}
-              </Body>
+              {section.label.trim() !== "" && (
+                <Body
+                  className="break-words font-link-fontWeight font-body-fontFamily font-body-fontWeight"
+                  color={resolvedLabelColor}
+                >
+                  {section.label}
+                </Body>
+              )}
               <div className="flex flex-col gap-4">
-                {links.map((linkData, linkIndex) => {
-                  const linkLabel = resolveComponentData(
-                    linkData.label,
-                    i18n.language,
-                    streamDocument
-                  );
-                  const link = resolveComponentData(
-                    linkData.link,
-                    i18n.language,
-                    streamDocument
-                  );
-
-                  return (
-                    <CTA
-                      openInNewTab={linkData.openInNewTab}
-                      key={linkIndex}
-                      variant="headerFooterMainLink"
-                      eventName={`cta.expandedFooter.${sectionIndex}-Link-${linkIndex + 1}`}
-                      label={linkLabel}
-                      linkType={linkData.linkType}
-                      link={link}
-                      normalizeLink={
-                        isNonNormalizableLinkType(linkData.linkType)
-                          ? false
-                          : (linkData.normalizeLink ?? true)
-                      }
-                      className={themeManagerCn(
-                        expandedLinkJustification({
-                          desktopContentAlignment,
-                          mobileContentAlignment,
-                        })
-                      )}
-                      color={resolvedLinkColor}
-                    />
-                  );
-                })}
+                {section.links.length > 0
+                  ? section.links.map((linkData, linkIndex) => (
+                      <CTA
+                        openInNewTab={linkData.openInNewTab}
+                        key={linkIndex}
+                        variant="headerFooterMainLink"
+                        eventName={`cta.expandedFooter.${sectionIndex}-Link-${linkIndex + 1}`}
+                        label={linkData.label}
+                        linkType={linkData.linkType}
+                        link={linkData.link}
+                        normalizeLink={
+                          isNonNormalizableLinkType(linkData.linkType)
+                            ? false
+                            : (linkData.normalizeLink ?? true)
+                        }
+                        className={themeManagerCn(
+                          expandedLinkJustification({
+                            desktopContentAlignment,
+                            mobileContentAlignment,
+                          })
+                        )}
+                        color={resolvedLinkColor}
+                      />
+                    ))
+                  : puck.isEditing && <div className="h-6 min-w-[100px]" />}
               </div>
             </div>
           );

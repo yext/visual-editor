@@ -80,6 +80,7 @@ import { removeMapboxApiKeyPropsMigration } from "./0078_remove_mapbox_api_key_p
 import { imageFillTypeMigration } from "./0079_image_fill_type.ts";
 import { directoryCardDisplayProps } from "./0080_directory_card_display_props.ts";
 import { headerFooterImageFillTypeMigration } from "./0081_header_footer_image_fill_type.ts";
+import { heroPhoneSlotMigration } from "./0082_hero_phone_slot.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -168,4 +169,5 @@ export const migrationRegistry: MigrationRegistry = [
   imageFillTypeMigration,
   directoryCardDisplayProps,
   headerFooterImageFillTypeMigration,
+  heroPhoneSlotMigration,
 ];

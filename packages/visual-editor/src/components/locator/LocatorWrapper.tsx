@@ -130,7 +130,13 @@ export const LocatorWrapper = (props: WithPuckProps<LocatorProps>) => {
 const LocatorInternal = ({
   mapStyle,
   locationStyles,
-  filters: { openNowButton, showDistanceOptions, accentColor, facetFields },
+  filters: {
+    openNowButton,
+    showDistanceOptions,
+    accentColor,
+    facetFields,
+    keywordsDisplayName,
+  },
   mapStartingLocation,
   resultCard: resultCardConfigs,
   distanceDisplay,
@@ -987,6 +993,7 @@ const LocatorInternal = ({
             handleClearFiltersClick={handleClearFiltersClick}
             accentColorCssValue={filterAccentColorCssVariable}
             closeButtonRef={filterModalCloseButtonRef}
+            keywordsDisplayName={keywordsDisplayName}
           />
         </div>
       </div>
