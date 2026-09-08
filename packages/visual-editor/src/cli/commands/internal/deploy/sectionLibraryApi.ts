@@ -14,6 +14,9 @@ export interface SectionLibrary {
 export interface SectionLibraryRevision {
   name: string;
   status: SectionLibraryRevisionStatus;
+  sourceCommitHash?: string;
+  sourceGitOrigin?: string;
+  createTime?: string;
 }
 
 type SectionLibraryRevisionStatus =
@@ -28,6 +31,21 @@ interface RevisionSource {
   sourceGitOrigin: string;
   sourceCommitHash: string;
 }
+
+interface SectionLibraryResource {
+  name: string;
+  displayName?: string;
+  description?: string;
+}
+
+interface SectionLibraryRevisionsPage {
+  sectionLibraryRevisions?: SectionLibraryRevision[];
+  nextPageToken?: string;
+}
+
+type SectionLibraryApiResponse = Omit<YextApiResponse, "response"> & {
+  response: SectionLibraryResource;
+};
 
 const ERROR_MESSAGE_OVERRIDES = new Map<number, string>([
   [
@@ -83,11 +101,70 @@ export async function createSectionLibraryRevision(
   return result.response as SectionLibraryRevision;
 }
 
+export async function updateSectionLibrary(
+  config: DeployConfig,
+  libraryId: string,
+  library: SectionLibrary,
+  verbose: boolean
+): Promise<void> {
+  const result = await yextApiRequest(
+    "Updating Section Library...",
+    "PATCH",
+    `accounts/me/sectionLibraries/${encodeURIComponent(libraryId)}`,
+    config,
+    verbose,
+    { displayName: library.displayName, description: library.description }
+  );
+
+  if (!result.ok) {
+    throw sectionLibraryApiError(
+      result.errors,
+      "Failed to update Section Library."
+    );
+  }
+}
+
+export async function listSectionLibraryRevisions(
+  config: DeployConfig,
+  libraryId: string,
+  verbose: boolean
+): Promise<SectionLibraryRevision[]> {
+  const revisions: SectionLibraryRevision[] = [];
+  let pageToken: string | undefined;
+
+  do {
+    const queryParams = new URLSearchParams({ pageSize: "100" });
+    if (pageToken) {
+      queryParams.set("pageToken", pageToken);
+    }
+    const result = await yextApiRequest(
+      "Fetching Section Library Revisions...",
+      "GET",
+      `accounts/me/sectionLibraries/${encodeURIComponent(libraryId)}/revisions?${queryParams}`,
+      config,
+      verbose
+    );
+
+    if (!result.ok) {
+      throw sectionLibraryApiError(
+        result.errors,
+        "Failed to list Section Library Revisions."
+      );
+    }
+
+    const response = result.response as SectionLibraryRevisionsPage;
+    revisions.push(...(response.sectionLibraryRevisions ?? []));
+    pageToken = response.nextPageToken;
+  } while (pageToken);
+
+  return revisions;
+}
+
 export async function getSectionLibrary(
   config: DeployConfig,
   libraryId: string,
   verbose: boolean
-): Promise<YextApiResponse> {
+): Promise<SectionLibraryApiResponse> {
   const result = await yextApiRequest(
     "Fetching Section Library...",
     "GET",
@@ -103,7 +180,7 @@ export async function getSectionLibrary(
     );
   }
 
-  return result;
+  return result as SectionLibraryApiResponse;
 }
 
 export async function getSectionLibraryRevision(

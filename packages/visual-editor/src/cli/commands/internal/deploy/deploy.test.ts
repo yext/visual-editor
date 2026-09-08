@@ -37,6 +37,9 @@ let rootDir: string;
 let sourceCommitHash: string;
 
 beforeEach(() => {
+  vi.mocked(prompts).mockReset();
+  vi.spyOn(console, "log").mockImplementation(() => {});
+  vi.spyOn(console, "warn").mockImplementation(() => {});
   rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "deploy-templates-test-"));
   execFileSync("git", ["init", "--quiet", rootDir]);
   execFileSync("git", [
@@ -47,22 +50,6 @@ beforeEach(() => {
     "origin",
     "git@github.com:yext/visual-editor.git",
   ]);
-  execFileSync("git", [
-    "-C",
-    rootDir,
-    "-c",
-    "user.name=Test",
-    "-c",
-    "user.email=test@example.com",
-    "commit",
-    "--allow-empty",
-    "--quiet",
-    "-m",
-    "test",
-  ]);
-  sourceCommitHash = execFileSync("git", ["-C", rootDir, "rev-parse", "HEAD"], {
-    encoding: "utf8",
-  }).trim();
   fs.mkdirSync(path.join(rootDir, "src", "library"), { recursive: true });
   fs.writeFileSync(
     path.join(rootDir, "src", "library", "library.json"),
@@ -72,11 +59,30 @@ beforeEach(() => {
       description: "Test",
     })
   );
+  fs.writeFileSync(path.join(rootDir, "tracked.txt"), "original");
+  fs.writeFileSync(path.join(rootDir, ".gitignore"), "ignored.txt\n");
+  execFileSync("git", ["-C", rootDir, "add", "."]);
+  execFileSync("git", [
+    "-C",
+    rootDir,
+    "-c",
+    "user.name=Test",
+    "-c",
+    "user.email=test@example.com",
+    "commit",
+    "--quiet",
+    "-m",
+    "test",
+  ]);
+  sourceCommitHash = execFileSync("git", ["-C", rootDir, "rev-parse", "HEAD"], {
+    encoding: "utf8",
+  }).trim();
   vi.spyOn(process, "cwd").mockReturnValue(rootDir);
 });
 
 afterEach(() => {
   vi.restoreAllMocks();
+  vi.unstubAllGlobals();
   fs.rmSync(rootDir, { recursive: true, force: true });
 });
 
@@ -86,6 +92,11 @@ describe("deploy", () => {
       .fn()
       .mockResolvedValueOnce(
         new Response(successfulResponse(sectionLibrary), { status: 200 })
+      )
+      .mockResolvedValueOnce(
+        new Response(successfulResponse({ sectionLibraryRevisions: [] }), {
+          status: 200,
+        })
       )
       .mockResolvedValueOnce(
         new Response(successfulResponse(sectionLibraryRevision), {
@@ -106,13 +117,13 @@ describe("deploy", () => {
       expect.any(Request)
     );
     expect(fetchMock).toHaveBeenNthCalledWith(
-      2,
+      3,
       new URL(
         "https://sbx-api.yextapis.com/v2/accounts/me/sectionLibraries/library%2F123/revisions?v=20260819&api_key=api-key"
       ),
       expect.any(Request)
     );
-    const request = fetchMock.mock.calls[1][1] as Request;
+    const request = fetchMock.mock.calls[2][1] as Request;
     expect(request.method).toBe("POST");
     expect(request.headers.get("content-type")).toBe("application/json");
     expect(await request.text()).toBe(
@@ -140,6 +151,11 @@ describe("deploy", () => {
         .fn()
         .mockResolvedValueOnce(
           new Response(successfulResponse(sectionLibrary), { status: 200 })
+        )
+        .mockResolvedValueOnce(
+          new Response(successfulResponse({ sectionLibraryRevisions: [] }), {
+            status: 200,
+          })
         )
         .mockResolvedValueOnce(
           new Response(
@@ -171,6 +187,11 @@ describe("deploy", () => {
         .fn()
         .mockResolvedValueOnce(
           new Response(successfulResponse(sectionLibrary), { status: 200 })
+        )
+        .mockResolvedValueOnce(
+          new Response(successfulResponse({ sectionLibraryRevisions: [] }), {
+            status: 200,
+          })
         )
         .mockResolvedValueOnce(
           new Response(
@@ -271,6 +292,11 @@ describe("deploy", () => {
         .mockResolvedValueOnce(
           new Response(successfulResponse(sectionLibrary), { status: 200 })
         )
+        .mockResolvedValueOnce(
+          new Response(successfulResponse({ sectionLibraryRevisions: [] }), {
+            status: 200,
+          })
+        )
         .mockResolvedValueOnce(new Response(responseBody, { status: 400 }))
     );
 
@@ -310,6 +336,368 @@ describe("deploy", () => {
     expect(request.method).toBe("POST");
     expect(await request.text()).toBe(
       JSON.stringify({ displayName: "Library", description: "Test" })
+    );
+    expect(vi.mocked(prompts)).toHaveBeenCalledWith(
+      expect.objectContaining({ initial: 0 }),
+      expect.anything()
+    );
+  });
+
+  it.each([
+    {
+      name: "staged",
+      prepare: () => {
+        fs.writeFileSync(path.join(rootDir, "tracked.txt"), "staged");
+        execFileSync("git", ["-C", rootDir, "add", "tracked.txt"]);
+      },
+      status: "M  tracked.txt",
+    },
+    {
+      name: "unstaged",
+      prepare: () => {
+        fs.writeFileSync(path.join(rootDir, "tracked.txt"), "unstaged");
+      },
+      status: "M tracked.txt",
+    },
+    {
+      name: "untracked",
+      prepare: () => {
+        fs.writeFileSync(path.join(rootDir, "new.txt"), "untracked");
+      },
+      status: "?? new.txt",
+    },
+  ])(
+    "blocks non-interactive deployment with $name changes",
+    async (testCase) => {
+      testCase.prepare();
+      const fetchMock = vi.fn();
+      vi.stubGlobal("fetch", fetchMock);
+
+      await expect(
+        deploy(config, false, { isInteractive: false })
+      ).rejects.toThrow(/--allow-dirty/);
+
+      expect(console.warn).toHaveBeenCalledWith(
+        expect.stringContaining(testCase.status)
+      );
+      expect(fetchMock).not.toHaveBeenCalled();
+    }
+  );
+
+  it("ignores files excluded by Git", async () => {
+    fs.writeFileSync(path.join(rootDir, "ignored.txt"), "ignored");
+    vi.stubGlobal(
+      "fetch",
+      vi
+        .fn()
+        .mockResolvedValueOnce(
+          new Response(successfulResponse(sectionLibrary), { status: 200 })
+        )
+        .mockResolvedValueOnce(
+          new Response(successfulResponse({ sectionLibraryRevisions: [] }), {
+            status: 200,
+          })
+        )
+        .mockResolvedValueOnce(
+          new Response(successfulResponse(sectionLibraryRevision), {
+            status: 201,
+          })
+        )
+    );
+
+    await deploy(config, false, { isInteractive: false });
+
+    expect(console.warn).not.toHaveBeenCalled();
+  });
+
+  it("cancels a dirty deployment when confirmation is declined", async () => {
+    fs.writeFileSync(path.join(rootDir, "new.txt"), "untracked");
+    vi.mocked(prompts).mockResolvedValueOnce({ value: false });
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+
+    const revision = await deploy(config, false, { isInteractive: true });
+
+    expect(revision).toBeUndefined();
+    expect(console.log).toHaveBeenCalledWith(
+      "Deployment cancelled; no revision was created."
+    );
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(vi.mocked(prompts)).toHaveBeenCalledWith(
+      expect.objectContaining({ initial: 1 }),
+      expect.anything()
+    );
+  });
+
+  it("warns and deploys a dirty tree with an override", async () => {
+    fs.writeFileSync(path.join(rootDir, "new.txt"), "untracked");
+    vi.stubGlobal(
+      "fetch",
+      vi
+        .fn()
+        .mockResolvedValueOnce(
+          new Response(successfulResponse(sectionLibrary), { status: 200 })
+        )
+        .mockResolvedValueOnce(
+          new Response(successfulResponse({ sectionLibraryRevisions: [] }), {
+            status: 200,
+          })
+        )
+        .mockResolvedValueOnce(
+          new Response(successfulResponse(sectionLibraryRevision), {
+            status: 201,
+          })
+        )
+    );
+
+    await deploy(config, false, {
+      allowDirty: true,
+      isInteractive: false,
+    });
+
+    expect(console.warn).toHaveBeenCalledWith(
+      expect.stringContaining("?? new.txt")
+    );
+    expect(console.warn).toHaveBeenCalledWith(
+      "Proceeding because --allow-dirty was provided."
+    );
+    expect(prompts).not.toHaveBeenCalled();
+  });
+
+  it("blocks a duplicate commit in non-interactive mode", async () => {
+    const duplicateRevision = {
+      ...sectionLibraryRevision,
+      sourceCommitHash,
+      createTime: "2026-09-01T12:00:00Z",
+    };
+    vi.stubGlobal(
+      "fetch",
+      vi
+        .fn()
+        .mockResolvedValueOnce(
+          new Response(successfulResponse(sectionLibrary), { status: 200 })
+        )
+        .mockResolvedValueOnce(
+          new Response(
+            successfulResponse({
+              sectionLibraryRevisions: [duplicateRevision],
+            }),
+            { status: 200 }
+          )
+        )
+    );
+
+    await expect(
+      deploy(config, false, { isInteractive: false })
+    ).rejects.toThrow(/--allow-duplicate/);
+
+    expect(console.warn).toHaveBeenCalledWith(
+      expect.stringContaining(duplicateRevision.name)
+    );
+    expect(console.warn).toHaveBeenCalledWith(
+      expect.stringContaining(duplicateRevision.status)
+    );
+  });
+
+  it("lists every revision page before identifying a duplicate", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(successfulResponse(sectionLibrary), { status: 200 })
+      )
+      .mockResolvedValueOnce(
+        new Response(
+          successfulResponse({
+            sectionLibraryRevisions: [],
+            nextPageToken: "next page",
+          }),
+          { status: 200 }
+        )
+      )
+      .mockResolvedValueOnce(
+        new Response(
+          successfulResponse({
+            sectionLibraryRevisions: [
+              { ...sectionLibraryRevision, sourceCommitHash },
+            ],
+          }),
+          { status: 200 }
+        )
+      );
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(
+      deploy(config, false, { isInteractive: false })
+    ).rejects.toThrow(/--allow-duplicate/);
+
+    expect(fetchMock).toHaveBeenNthCalledWith(
+      3,
+      new URL(
+        "https://sbx-api.yextapis.com/v2/accounts/me/sectionLibraries/library%2F123/revisions?pageSize=100&pageToken=next+page&v=20260819&api_key=api-key"
+      ),
+      expect.any(Request)
+    );
+  });
+
+  it("warns with the newest match and deploys a duplicate with an override", async () => {
+    const olderRevision = {
+      ...sectionLibraryRevision,
+      name: `${sectionLibrary.name}/revisions/older`,
+      sourceCommitHash,
+      createTime: "2026-09-01T12:00:00Z",
+    };
+    const newerRevision = {
+      ...sectionLibraryRevision,
+      name: `${sectionLibrary.name}/revisions/newer`,
+      sourceCommitHash,
+      createTime: "2026-09-02T12:00:00Z",
+    };
+    vi.stubGlobal(
+      "fetch",
+      vi
+        .fn()
+        .mockResolvedValueOnce(
+          new Response(successfulResponse(sectionLibrary), { status: 200 })
+        )
+        .mockResolvedValueOnce(
+          new Response(
+            successfulResponse({
+              sectionLibraryRevisions: [newerRevision, olderRevision],
+            }),
+            { status: 200 }
+          )
+        )
+        .mockResolvedValueOnce(
+          new Response(successfulResponse(sectionLibraryRevision), {
+            status: 201,
+          })
+        )
+    );
+
+    await deploy(config, false, {
+      allowDuplicate: true,
+      isInteractive: false,
+    });
+
+    expect(console.warn).toHaveBeenCalledWith(
+      expect.stringContaining("2 revisions")
+    );
+    expect(console.warn).toHaveBeenCalledWith(
+      expect.stringContaining(newerRevision.name)
+    );
+    expect(console.warn).toHaveBeenCalledWith(
+      "Proceeding because --allow-duplicate was provided."
+    );
+    expect(prompts).not.toHaveBeenCalled();
+  });
+
+  it("cancels a duplicate deployment when confirmation is declined", async () => {
+    vi.mocked(prompts).mockResolvedValueOnce({ value: false });
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(successfulResponse(sectionLibrary), { status: 200 })
+      )
+      .mockResolvedValueOnce(
+        new Response(
+          successfulResponse({
+            sectionLibraryRevisions: [
+              { ...sectionLibraryRevision, sourceCommitHash },
+            ],
+          }),
+          { status: 200 }
+        )
+      );
+    vi.stubGlobal("fetch", fetchMock);
+    const revision = await deploy(config, false, { isInteractive: true });
+
+    expect(revision).toBeUndefined();
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(console.log).toHaveBeenCalledWith(
+      "Deployment cancelled; no revision was created."
+    );
+  });
+
+  it("confirms dirty and duplicate conditions separately before updating metadata", async () => {
+    fs.writeFileSync(path.join(rootDir, "new.txt"), "untracked");
+    vi.mocked(prompts)
+      .mockResolvedValueOnce({ value: true })
+      .mockResolvedValueOnce({ value: false });
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(
+          successfulResponse({
+            ...sectionLibrary,
+            displayName: "Old Library",
+          }),
+          { status: 200 }
+        )
+      )
+      .mockResolvedValueOnce(
+        new Response(
+          successfulResponse({
+            sectionLibraryRevisions: [
+              { ...sectionLibraryRevision, sourceCommitHash },
+            ],
+          }),
+          { status: 200 }
+        )
+      );
+    vi.stubGlobal("fetch", fetchMock);
+    const revision = await deploy(config, false, { isInteractive: true });
+
+    expect(revision).toBeUndefined();
+    expect(prompts).toHaveBeenCalledTimes(2);
+    expect(console.warn).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining("working tree")
+    );
+    expect(console.warn).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining("already been uploaded")
+    );
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("updates both metadata fields before creating the revision", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(
+          successfulResponse({
+            ...sectionLibrary,
+            displayName: "Old Library",
+          }),
+          { status: 200 }
+        )
+      )
+      .mockResolvedValueOnce(
+        new Response(successfulResponse({ sectionLibraryRevisions: [] }), {
+          status: 200,
+        })
+      )
+      .mockResolvedValueOnce(
+        new Response(successfulResponse(sectionLibrary), { status: 200 })
+      )
+      .mockResolvedValueOnce(
+        new Response(successfulResponse(sectionLibraryRevision), {
+          status: 201,
+        })
+      );
+    vi.stubGlobal("fetch", fetchMock);
+    await deploy(config, false, { isInteractive: false });
+
+    const updateRequest = fetchMock.mock.calls[2][1] as Request;
+    expect(updateRequest.method).toBe("PATCH");
+    expect(await updateRequest.text()).toBe(
+      JSON.stringify({ displayName: "Library", description: "Test" })
+    );
+    expect(console.log).toHaveBeenCalledWith(
+      'Updated metadata for Section Library "library/123".'
+    );
+    expect(console.log).toHaveBeenCalledWith(
+      `Uploaded commit ${sourceCommitHash} to a revision for Section Library "library/123".`
     );
   });
 });
