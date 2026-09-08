@@ -23,15 +23,6 @@ const sections: {
   /* SECTION_LIBRARY_ENTRIES */
 ];
 
-const sectionsByCategory = sections.reduce<Record<string, typeof sections>>(
-  (categories, section) => {
-    const title = section.config.category ?? "Sections";
-    (categories[title] ??= []).push(section);
-    return categories;
-  },
-  {}
-);
-
 const sharedComponentsForPageSetType = hasSharedComponentRegistry
   ? sharedComponentMetadata.filter((component) =>
       component.pageSetTypes.includes(pageSetType)
@@ -101,13 +92,7 @@ export const sectionLibraryConfig: Config = {
       visible: false,
       components: ["MainContent"],
     },
-    other: { title: "Other", components: ["CustomCodeSection"] },
-    ...Object.fromEntries(
-      Object.entries(sectionsByCategory).map(([title, grouped]) => [
-        `section:${title}`,
-        { title, components: grouped.map((section) => section.id) },
-      ])
-    ),
+    /* SECTION_LIBRARY_CATEGORIES */
   },
   root: sharedRootConfig
     ? {

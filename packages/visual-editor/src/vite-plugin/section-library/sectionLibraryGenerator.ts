@@ -214,6 +214,7 @@ const buildConfigSource = (
   const entries = supportedSections.map((section, index) => {
     return `  { id: ${JSON.stringify(section.id)}, component: Section${index}, config: sectionConfig${index} },`;
   });
+  const categories = buildCategorySource(supportedSections);
   const hasSharedComponentRegistry =
     sharedComponents.some((component) => {
       return component.pageSetTypes.includes(layout.metadata.pageSetType);
@@ -222,6 +223,7 @@ const buildConfigSource = (
     .replace("/* SECTION_LIBRARY_GENERATED_FILE */", GENERATED_FILE_PREFIX)
     .replace("/* SECTION_LIBRARY_IMPORTS */", imports.join("\n"))
     .replace("/* SECTION_LIBRARY_ENTRIES */", entries.join("\n"))
+    .replace("/* SECTION_LIBRARY_CATEGORIES */", categories)
     .replace(
       "/* SECTION_LIBRARY_SHARED_COMPONENT_REGISTRY */",
       hasSharedComponentRegistry
@@ -236,6 +238,38 @@ const buildConfigSource = (
       "__SECTION_LIBRARY_HAS_SHARED_COMPONENT_REGISTRY__",
       hasSharedComponentRegistry ? "true" : "false"
     );
+};
+
+const buildCategorySource = (sections: ResolvedSection[]): string => {
+  const categories = new Map<string, { title: string; componentIds: string[] }>(
+    [["other", { title: "Other", componentIds: ["CustomCodeSection"] }]]
+  );
+
+  for (const section of sections) {
+    const title = section.category ?? "Sections";
+    const normalizedTitle = title.toLowerCase();
+    const category = categories.get(normalizedTitle);
+    if (category) {
+      category.componentIds.push(section.id);
+    } else {
+      categories.set(normalizedTitle, {
+        title,
+        componentIds: [section.id],
+      });
+    }
+  }
+
+  return [...categories.entries()]
+    .map(([normalizedTitle, category]) => {
+      const categoryId =
+        normalizedTitle === "other"
+          ? normalizedTitle
+          : `section:${category.title}`;
+      const propertyName =
+        categoryId === "other" ? categoryId : JSON.stringify(categoryId);
+      return `    ${propertyName}: { title: ${JSON.stringify(category.title)}, components: ${JSON.stringify(category.componentIds)} },`;
+    })
+    .join("\n");
 };
 
 const buildRenderTemplateSource = (layout: Layout): string => {
