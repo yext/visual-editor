@@ -16,7 +16,7 @@ import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 import { ImgSizesByBreakpoint } from "../../atoms/image.tsx";
 import { themeManagerCn } from "../../../utils/cn.ts";
 import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
-import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
+import { i18nPageInstance } from "../../../utils/i18n/page.ts";
 import { PuckComponent, setDeep, Slot, WithId } from "@puckeditor/core";
 import {
   useCardContext,
@@ -468,7 +468,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
   fields: ProductCardFields,
   inline: true,
   resolveData: (data, params) => {
-    const locale = i18nComponentsInstance.language || "en";
+    const locale = i18nPageInstance.language || "en";
     const field = data.props.field ?? "";
     const isLinkedMode = Boolean(field);
     const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as

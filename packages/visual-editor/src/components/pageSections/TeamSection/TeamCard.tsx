@@ -13,7 +13,7 @@ import { CTAWrapperProps } from "../../contentBlocks/CtaWrapper.tsx";
 import { deepMerge } from "../../../utils/themeResolver.ts";
 import { ImgSizesByBreakpoint } from "../../atoms/image.tsx";
 import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
-import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
+import { i18nPageInstance } from "../../../utils/i18n/page.ts";
 import { EmailsProps } from "../../contentBlocks/Emails.tsx";
 import { PhoneListProps } from "../../contentBlocks/PhoneList.tsx";
 import {
@@ -509,7 +509,7 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
             resolveYextEntityField(
               params.metadata.streamDocument,
               nameSlotProps.data.text,
-              i18nComponentsInstance.language || "en"
+              i18nPageInstance.language || "en"
             )
     );
     const showTitle = Boolean(
@@ -519,7 +519,7 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
             resolveYextEntityField(
               params.metadata.streamDocument,
               titleSlotProps.data.text,
-              i18nComponentsInstance.language || "en"
+              i18nPageInstance.language || "en"
             )
     );
     const showPhone = Boolean(
@@ -617,7 +617,7 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
       name &&
       resolveComponentData(
         name,
-        i18nComponentsInstance.language || "en",
+        i18nPageInstance.language || "en",
         params.metadata.streamDocument,
         {
           output: "plainText",

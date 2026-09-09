@@ -96,7 +96,6 @@
     "fs-extra": "^11.2.0",
     "geolib": "^3.3.4",
     "handlebars": "^4.7.9",
-    "i18next": "^25.8.4",
     "lucide-react": "^0.414.0",
     "lz-string": "1.5.0",
     "next-themes": "^0.3.0",
@@ -106,7 +105,6 @@
     "react-collapsed": "^4.1.2",
     "react-color": "^2.19.3",
     "react-error-boundary": "^5.0.0",
-    "react-i18next": "^15.5.2",
     "react-international-phone": "^4.6.0",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.4.0",
@@ -172,6 +170,8 @@
     "@yext/search-ui-react": "^3.0.1",
     "mapbox-gl": "^3.20.0",
     "react": "^17.0.2 || ^18.2.0",
-    "react-dom": "^17.0.2 || ^18.2.0"
+    "react-dom": "^17.0.2 || ^18.2.0",
+    "react-i18next": "^15.5.2",
+    "i18next": "^25.8.4"
   }
 }

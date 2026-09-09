@@ -15,7 +15,7 @@ import { TimestampProps } from "../../contentBlocks/Timestamp.tsx";
 import { deepMerge } from "../../../utils/themeResolver.ts";
 import { ImgSizesByBreakpoint } from "../../atoms/image.tsx";
 import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
-import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
+import { i18nPageInstance } from "../../../utils/i18n/page.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 import {
@@ -463,7 +463,7 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
         ? resolveYextEntityField(
             params.metadata.streamDocument,
             imageSlotProps.data.image,
-            i18nComponentsInstance.language || "en"
+            i18nPageInstance.language || "en"
           )
         : undefined;
 
@@ -471,8 +471,7 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
       (resolvedImage as any)?.url ||
         (resolvedImage as any)?.image?.url ||
         ((resolvedImage as any)?.hasLocalizedValue &&
-          (resolvedImage as any)?.[i18nComponentsInstance.language || "en"]
-            ?.url)
+          (resolvedImage as any)?.[i18nPageInstance.language || "en"]?.url)
     );
     const showDescription = Boolean(
       isLinkedMode
@@ -481,7 +480,7 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
             resolveYextEntityField(
               params.metadata.streamDocument,
               descriptionSlotProps.data.text,
-              i18nComponentsInstance.language || "en"
+              i18nPageInstance.language || "en"
             )
     );
     const showTitle = Boolean(
@@ -491,7 +490,7 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
             resolveYextEntityField(
               params.metadata.streamDocument,
               titleSlotProps.data.text,
-              i18nComponentsInstance.language || "en"
+              i18nPageInstance.language || "en"
             )
     );
     const showDateTime = Boolean(
@@ -501,7 +500,7 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
             resolveYextEntityField(
               params.metadata.streamDocument,
               dateTimeSlotProps.data.date,
-              i18nComponentsInstance.language || "en"
+              i18nPageInstance.language || "en"
             )?.trim()
     );
     const showCTA = Boolean(
@@ -510,7 +509,7 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
         : ctaSlotProps &&
             resolveComponentData(
               ctaSlotProps.data.entityField,
-              i18nComponentsInstance.language || "en",
+              i18nPageInstance.language || "en",
               params.metadata.streamDocument
             )?.label
     );
@@ -568,7 +567,7 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
       title &&
       resolveComponentData(
         title,
-        i18nComponentsInstance.language || "en",
+        i18nPageInstance.language || "en",
         params.metadata.streamDocument,
         { output: "plainText" }
       );

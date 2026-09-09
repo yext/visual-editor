@@ -25,15 +25,26 @@ export const renderValidationResult = (
     }
 
     const issues = result.issues.filter((issue) => issue.category === stage);
+    const errors = issues.filter((issue) => issue.severity !== "warning");
+    const warnings = issues.filter((issue) => issue.severity === "warning");
 
-    if (issues.length === 0) {
-      lines.push(`${label}: ${colors.green("passed")}`);
+    if (errors.length === 0) {
+      lines.push(
+        `${label}: ${colors.green(
+          warnings.length === 0
+            ? "passed"
+            : `passed (${warnings.length} ${warnings.length === 1 ? "warning" : "warnings"})`
+        )}`
+      );
+      lines.push(
+        ...warnings.map((issue) => `  ${formatValidationIssue(issue)}`)
+      );
       continue;
     }
 
     lines.push(
       `${label}: ${colors.red(
-        `failed (${issues.length} ${issues.length === 1 ? "error" : "errors"})`
+        `failed (${errors.length} ${errors.length === 1 ? "error" : "errors"})`
       )}`
     );
 
@@ -41,11 +52,19 @@ export const renderValidationResult = (
   }
 
   lines.push("");
+  const errorCount = result.issues.filter(
+    (issue) => issue.severity !== "warning"
+  ).length;
+  const warningCount = result.issues.length - errorCount;
   lines.push(
-    result.issues.length === 0
-      ? colors.green("Validation passed. 0 errors.")
+    errorCount === 0
+      ? colors.green(
+          warningCount === 0
+            ? "Validation passed. 0 errors."
+            : `Validation passed. 0 errors, ${warningCount} ${warningCount === 1 ? "warning" : "warnings"}.`
+        )
       : colors.red(
-          `Validation failed. ${result.issues.length} ${result.issues.length === 1 ? "error" : "errors"}.`
+          `Validation failed. ${errorCount} ${errorCount === 1 ? "error" : "errors"}${warningCount === 0 ? "." : `, ${warningCount} ${warningCount === 1 ? "warning" : "warnings"}.`}`
         )
   );
   return `${lines.join("\n")}\n`;

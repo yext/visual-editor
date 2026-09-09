@@ -1,34 +1,31 @@
-const supportedRegionalLocales = ["en-GB", "zh-TW"];
+import {
+  normalizeTranslationLocale,
+  type TranslationDictionary,
+} from "./translationResources.ts";
 
 /**
  * Dynamically imports the translation file for the given locale.
  */
 export const getTranslations = async (
   locale: string,
-  instance: "platform" | "components",
+  resourceKind: "platform" | "page",
   isRetry = false
-): Promise<Record<string, string>> => {
+): Promise<TranslationDictionary> => {
   if (!locale) {
     return {};
   }
 
-  let strippedLocale = locale;
-  if (!supportedRegionalLocales.includes(locale)) {
-    strippedLocale = locale.split("-")[0];
-  }
-  if (locale.includes("zh-Hant")) {
-    strippedLocale = "zh-TW";
-  }
+  const strippedLocale = normalizeTranslationLocale(locale);
 
   try {
     const module = await import(
-      `../../../locales/${instance}/${strippedLocale}/visual-editor.json`
+      `../../../locales/${resourceKind}/${strippedLocale}/visual-editor.json`
     );
-    return module.default;
+    return module.default as TranslationDictionary;
   } catch (e) {
     if (isRetry || strippedLocale === "en") {
       console.error(
-        `Error loading ${instance} translations for locale`,
+        `Error loading ${resourceKind} translations for locale`,
         locale,
         e,
         "No fallback available."
@@ -36,11 +33,11 @@ export const getTranslations = async (
       return {};
     }
     console.error(
-      `Error loading ${instance} translations for locale`,
+      `Error loading ${resourceKind} translations for locale`,
       locale,
       e,
       "Falling back to en."
     );
-    return getTranslations("en", instance, true);
+    return getTranslations("en", resourceKind, true);
   }
 };

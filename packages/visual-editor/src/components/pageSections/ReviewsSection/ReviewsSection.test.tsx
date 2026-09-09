@@ -12,7 +12,7 @@ import { migrationRegistry } from "../../migrations/migrationRegistry.ts";
 import { ReviewsSection } from "./ReviewsSection.tsx";
 import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
 import { SlotsCategoryComponents } from "../../categories/SlotsCategory.tsx";
-import { injectTranslations } from "../../../utils/i18n/components.ts";
+import { injectTranslations } from "../../../utils/i18n/page.ts";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 import { MainContent } from "../../structure/MainContent.tsx";

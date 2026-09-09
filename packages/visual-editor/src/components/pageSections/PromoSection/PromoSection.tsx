@@ -16,7 +16,7 @@ import { CTAWrapperProps } from "../../contentBlocks/CtaWrapper.tsx";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 import { ImageWrapperProps } from "../../contentBlocks/image/Image.tsx";
 import { VideoProps } from "../../contentBlocks/Video.tsx";
-import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
+import { i18nPageInstance } from "../../../utils/i18n/page.ts";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 import { themeManagerCn } from "../../../utils/cn.ts";
 import { useDocument } from "../../../hooks/useDocument.tsx";
@@ -572,7 +572,7 @@ export const PromoSection: YextComponentConfig<PromoSectionProps> = {
     const resolvedPromo = resolveYextEntityField(
       params.metadata.streamDocument,
       data.props.data.promo,
-      i18nComponentsInstance.language || "en"
+      i18nPageInstance.language || "en"
     );
 
     if (!resolvedPromo || !("title" in resolvedPromo)) {
