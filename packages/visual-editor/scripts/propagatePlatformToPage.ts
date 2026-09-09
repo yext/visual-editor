@@ -10,21 +10,21 @@ import {
 } from "../src/utils/i18n/jsonUtils.ts";
 
 /**
- * Synchronizes components locale files from platform locale files.
+ * Synchronizes page locale files from platform locale files.
  *
  * Rules:
- * - components key membership is authoritative per locale (fallback: components/en).
+ * - page key membership is authoritative per locale (fallback: page/en).
  * - For each locale, matching keys are copied from platform/<locale>.
  * - Locale-specific plural variants in platform are included when their plural
- *   family is already shared in components (e.g. *_few, *_many).
- * - Extra keys are dropped from components locales.
+ *   family is already shared in page (e.g. *_few, *_many).
+ * - Extra keys are dropped from page locales.
  * - Output is sorted and written deterministically.
  */
 const NAMESPACE = "visual-editor.json";
 const ROOT = path.resolve(process.cwd(), "locales");
 const PLATFORM_DIR = path.join(ROOT, "platform");
-const COMPONENTS_DIR = path.join(ROOT, "components");
-const COMPONENTS_EN_PATH = path.join(COMPONENTS_DIR, "en", NAMESPACE);
+const PAGE_DIR = path.join(ROOT, "page");
+const PAGE_EN_PATH = path.join(PAGE_DIR, "en", NAMESPACE);
 const PLURAL_FORMS = new Set(["zero", "one", "two", "few", "many", "other"]);
 
 const getPluralBase = (key: string): string | null => {
@@ -47,13 +47,13 @@ const getPluralBase = (key: string): string | null => {
  * with platform locale-specific forms.
  */
 const buildAllowedKeys = (
-  componentsEnFlat: FlatTranslations,
-  componentsLocaleFlat: FlatTranslations,
+  pageEnFlat: FlatTranslations,
+  pageLocaleFlat: FlatTranslations,
   platformFlat: FlatTranslations
 ): Set<string> => {
   const allowed = new Set<string>([
-    ...Object.keys(componentsEnFlat),
-    ...Object.keys(componentsLocaleFlat),
+    ...Object.keys(pageEnFlat),
+    ...Object.keys(pageLocaleFlat),
   ]);
 
   const sharedPluralFamilies = new Set<string>();
@@ -79,56 +79,56 @@ const buildAllowedKeys = (
 };
 
 /**
- * Syncs a single components locale file from the corresponding platform locale.
+ * Syncs a single page locale file from the corresponding platform locale.
  */
 const propagateLocale = async (
   locale: string,
-  componentsEnFlat: FlatTranslations
+  pageEnFlat: FlatTranslations
 ): Promise<void> => {
   const platformPath = path.join(PLATFORM_DIR, locale, NAMESPACE);
-  const componentsPath = path.join(COMPONENTS_DIR, locale, NAMESPACE);
+  const pagePath = path.join(PAGE_DIR, locale, NAMESPACE);
 
   const platformFlat = flatten(await loadJsonSafe(platformPath));
-  const existingComponentsFlat = flatten(await loadJsonSafe(componentsPath));
+  const existingPageFlat = flatten(await loadJsonSafe(pagePath));
   const allowedKeys = buildAllowedKeys(
-    componentsEnFlat,
-    existingComponentsFlat,
+    pageEnFlat,
+    existingPageFlat,
     platformFlat
   );
-  const nextComponentsFlat: FlatTranslations = {};
+  const nextPageFlat: FlatTranslations = {};
 
   for (const key of allowedKeys) {
     if (platformFlat[key] !== undefined) {
-      nextComponentsFlat[key] = platformFlat[key];
+      nextPageFlat[key] = platformFlat[key];
     } else {
-      nextComponentsFlat[key] = existingComponentsFlat[key] ?? "";
+      nextPageFlat[key] = existingPageFlat[key] ?? "";
       console.warn(
-        `[${locale}] Missing key "${key}" in platform. Preserving existing components value.`
+        `[${locale}] Missing key "${key}" in platform. Preserving existing page value.`
       );
     }
   }
 
-  const sorted = sortObject(unflatten(nextComponentsFlat));
-  await saveJson(componentsPath, sorted);
-  console.log(`Synced components locale from platform: ${locale}`);
+  const sorted = sortObject(unflatten(nextPageFlat));
+  await saveJson(pagePath, sorted);
+  console.log(`Synced page locale from platform: ${locale}`);
 };
 
 /**
  * Script entrypoint:
- * - loads components/en keys
- * - propagates each platform locale into components
+ * - loads page/en keys
+ * - propagates each platform locale into page
  */
 const run = async (): Promise<void> => {
-  const componentsEn = flatten(await loadJsonSafe(COMPONENTS_EN_PATH));
-  if (Object.keys(componentsEn).length === 0) {
+  const pageEn = flatten(await loadJsonSafe(PAGE_EN_PATH));
+  if (Object.keys(pageEn).length === 0) {
     throw new Error(
-      `No keys found in ${COMPONENTS_EN_PATH}. Run extraction before propagation.`
+      `No keys found in ${PAGE_EN_PATH}. Run extraction before propagation.`
     );
   }
 
   const locales = await getSubdirectoryNames(PLATFORM_DIR);
   for (const locale of locales) {
-    await propagateLocale(locale, componentsEn);
+    await propagateLocale(locale, pageEn);
   }
 };
 
