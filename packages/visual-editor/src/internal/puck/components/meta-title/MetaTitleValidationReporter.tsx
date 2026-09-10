@@ -23,8 +23,7 @@ export const MetaTitleValidationReporter = () => {
   const locales = getPageSetLocales(streamDocument);
   const titleField = (appState.data.root?.props?.title ??
     appState.data.root?.title) as
-    | YextEntityField<TranslatableString>
-    | undefined;
+    YextEntityField<TranslatableString> | undefined;
   const missingLocales = getMetaTitleMissingLocales(titleField, locales);
 
   const hasError = missingLocales.length > 0;

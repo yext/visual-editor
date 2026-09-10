@@ -16,12 +16,9 @@ const hasSharedComponentRegistry =
 const sections: {
   id: string;
   component:
-    | Config["components"][string]["render"]
-    | Config["components"][string];
+    Config["components"][string]["render"] | Config["components"][string];
   config: SectionConfig;
-}[] = [
-  /* SECTION_LIBRARY_ENTRIES */
-];
+}[] = [/* SECTION_LIBRARY_ENTRIES */];
 
 const sharedComponentsForPageSetType = hasSharedComponentRegistry
   ? sharedComponentMetadata.filter((component) =>

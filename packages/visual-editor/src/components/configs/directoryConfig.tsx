@@ -26,7 +26,8 @@ import { MainContent, MainContentProps } from "../structure/MainContent.tsx";
 import { rootAllowedComponents } from "./rootAllowedComponents.ts";
 
 export interface DirectoryConfigProps
-  extends DirectoryCategoryProps,
+  extends
+    DirectoryCategoryProps,
     SlotsCategoryProps,
     DeprecatedCategoryProps,
     OtherCategoryProps {

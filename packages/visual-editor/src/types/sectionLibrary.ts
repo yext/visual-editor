@@ -109,9 +109,7 @@ export type LocatorLayoutMetadata = {
 };
 
 export type LayoutMetadata =
-  | EntityLayoutMetadata
-  | DirectoryLayoutMetadata
-  | LocatorLayoutMetadata;
+  EntityLayoutMetadata | DirectoryLayoutMetadata | LocatorLayoutMetadata;
 
 /**
  * A Section Library Layout is a starting point for a page set.

@@ -25,11 +25,9 @@ export const useVisualEditorTranslations = <T extends Record<string, any>>({
     [templateProps]
   );
   const locale = normalizedTemplateProps?.document?.locale as
-    | string
-    | undefined;
+    string | undefined;
   const translations = normalizedTemplateProps?.translations as
-    | TranslationDictionary
-    | undefined;
+    TranslationDictionary | undefined;
   const [loadedResource, setLoadedResource] = React.useState<{
     locale: string;
     loader?: TranslationLoader;

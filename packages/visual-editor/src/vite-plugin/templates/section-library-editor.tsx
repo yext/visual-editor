@@ -23,9 +23,7 @@ import { translationLoaders } from "../library/.generated/i18n";
 
 const editorPath = "__SECTION_LIBRARY_EDITOR_PATH__";
 const editorName = "__SECTION_LIBRARY_EDITOR_NAME__";
-const componentRegistry = {
-  /* SECTION_LIBRARY_COMPONENT_REGISTRY */
-};
+const componentRegistry = {/* SECTION_LIBRARY_COMPONENT_REGISTRY */};
 
 export const getPath: GetPath<TemplateProps> = () => editorPath;
 export const config: TemplateConfig = { name: editorName };

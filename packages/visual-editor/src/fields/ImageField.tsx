@@ -36,8 +36,7 @@ export type ImagePayload = {
 };
 
 let pendingImageSession:
-  | { messageId: string; apply: (payload: ImagePayload) => void }
-  | undefined;
+  { messageId: string; apply: (payload: ImagePayload) => void } | undefined;
 
 export type ImageField = BaseField & {
   type: "image";

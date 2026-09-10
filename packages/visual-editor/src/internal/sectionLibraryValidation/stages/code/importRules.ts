@@ -31,10 +31,7 @@ const deniedPackages = new Set([
 ]);
 
 export type ImportSyntaxKind =
-  | "import"
-  | "export"
-  | "require"
-  | "dynamic-import";
+  "import" | "export" | "require" | "dynamic-import";
 
 export type ImportReference = {
   moduleSpecifier: string;

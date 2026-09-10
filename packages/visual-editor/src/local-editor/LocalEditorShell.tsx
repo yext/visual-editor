@@ -215,8 +215,7 @@ export const LocalEditorShell = ({
   const isLocatorDocument =
     (
       documentResponse?.document?.meta as
-        | { entityType?: { id?: string } }
-        | undefined
+        { entityType?: { id?: string } } | undefined
     )?.entityType?.id === "locator";
 
   // Inject reviews, mapbox, and/or nearby locations testing data into the streamDocument, if enabled

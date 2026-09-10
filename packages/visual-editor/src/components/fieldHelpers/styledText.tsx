@@ -7,16 +7,7 @@ import { getRichTextStyle } from "../../utils/richTextStyles.ts";
 import { type ThemeColor } from "../../utils/themeConfigOptions.ts";
 
 export type StyledTextTag =
-  | "div"
-  | "h1"
-  | "h2"
-  | "h3"
-  | "h4"
-  | "h5"
-  | "h6"
-  | "p"
-  | "span"
-  | "strong";
+  "div" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span" | "strong";
 
 export type StyledTextAlignment = "left" | "center" | "right";
 

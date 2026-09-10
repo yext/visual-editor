@@ -7,8 +7,7 @@ import type { TailwindConfig } from "./themeResolver.ts";
 import { VisualEditorProviderCore } from "./VisualEditorProviderCore.tsx";
 
 type AllOrNothing<T extends Record<string, any>> =
-  | T
-  | Partial<Record<keyof T, never>>;
+  T | Partial<Record<keyof T, never>>;
 
 type VisualEditorProviderProps<T> = {
   templateProps: T;

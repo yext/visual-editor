@@ -25,8 +25,7 @@ type VideoPayload = {
 type VideoFieldProps = FieldProps<VideoField, AssetVideo | undefined>;
 
 let pendingVideoSession:
-  | { messageId: string; apply: (payload: VideoPayload) => void }
-  | undefined;
+  { messageId: string; apply: (payload: VideoPayload) => void } | undefined;
 
 export const VideoFieldOverride = ({
   field,

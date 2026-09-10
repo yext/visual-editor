@@ -12,8 +12,7 @@ import {
 } from "./generatedFiles.ts";
 
 let cachedStreamConfig:
-  | { filePath: string; config: LocalEditorConfig }
-  | undefined;
+  { filePath: string; config: LocalEditorConfig } | undefined;
 
 /**
  * Loads the Local Editor stream settings for the Section Library layouts.
