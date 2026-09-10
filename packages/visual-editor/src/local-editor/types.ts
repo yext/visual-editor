@@ -1,5 +1,6 @@
 import type { Config } from "@puckeditor/core";
 import type { TailwindConfig, ThemeConfig } from "../utils/themeResolver.ts";
+import type { MigrationRegistry } from "../utils/migrate.ts";
 import type {
   LocalEditorDocumentResponse,
   LocalEditorEntityOption,
@@ -20,6 +21,7 @@ export type LocalEditorShellProps = {
   componentRegistry: Record<string, Config<any>>;
   tailwindConfig: TailwindConfig;
   themeConfig?: ThemeConfig;
+  sectionLibraryMigrationRegistry?: MigrationRegistry;
 };
 
 export type LocalEditorMode = "layout" | "theme";

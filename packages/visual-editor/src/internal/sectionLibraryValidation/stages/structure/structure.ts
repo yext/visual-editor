@@ -11,11 +11,16 @@ import {
 import { buildLocalEditorDataTemplateName } from "../../../../vite-plugin/local-editor/generatedFiles.ts";
 import { extractSectionConfigFrontmatter } from "../../../../vite-plugin/section-library/sectionFrontmatter.ts";
 import { readSharedComponentRegistry } from "../../../../vite-plugin/section-library/sharedComponentRegistry.ts";
+import {
+  MigrationRegistryValidationError,
+  readMigrationRegistryIds,
+} from "../../../../vite-plugin/section-library/migrationRegistry.ts";
 import type {
   ResolvedSection,
   ResolvedSectionLibraryStructure,
   ValidationIssue,
 } from "../../types.ts";
+import { migrationRegistry } from "../../../../components/migrations/migrationRegistry.ts";
 
 const reservedLayoutIds = new Set([
   "main", // legacy Entity template ID
@@ -47,6 +52,23 @@ export const validateSectionLibraryStructure = (
   };
 
   const sections = readSections(rootDir, libraryDirectory, addIssue);
+  const migrationRegistryPath = path.join(
+    libraryDirectory,
+    "migrations",
+    "registry.ts"
+  );
+  let migrationIds: string[] = [];
+  try {
+    migrationIds = readMigrationRegistryIds(migrationRegistryPath) ?? [];
+  } catch (error) {
+    addIssue(
+      migrationRegistryPath,
+      error instanceof MigrationRegistryValidationError
+        ? error.rule
+        : "migrations/invalid",
+      errorMessage(error)
+    );
+  }
   const registryPath = path.join(
     libraryDirectory,
     "shared",
@@ -80,6 +102,7 @@ export const validateSectionLibraryStructure = (
   validateComponentIds(sections, sharedComponents, libraryDirectory, addIssue);
   for (const layout of parsedLayouts) {
     validateLayoutReferences(layout, sections, sharedComponents, addIssue);
+    validateLayoutMigrationCursors(layout, migrationIds, addIssue);
   }
 
   if (issues.length > 0) {
@@ -92,8 +115,44 @@ export const validateSectionLibraryStructure = (
       sharedComponents,
       sharedRootPageSetTypes,
       layouts,
+      migrationIds,
     },
   };
+};
+
+/** validateLayoutMigrationCursors ensures the defaultLayout.json files are set to the latest migration ids */
+const validateLayoutMigrationCursors = (
+  layout: ParsedLayout,
+  migrationIds: string[],
+  addIssue: AddIssue
+): void => {
+  const root = layout.defaultLayout.root as
+    { props?: Record<string, unknown> } | undefined;
+  const props = root?.props;
+  if (props?.lastBuiltInMigrationId !== migrationRegistry.at(-1)?.id) {
+    addIssue(
+      layout.defaultLayoutPath,
+      "layouts/built-in-migration-cursor",
+      `defaultLayout root.props.lastBuiltInMigrationId must equal ${migrationRegistry.at(-1)?.id}`
+    );
+  }
+
+  const latestRepoMigrationId = migrationIds.at(-1);
+  if (latestRepoMigrationId === undefined) {
+    if (props?.lastSectionLibraryMigrationId !== undefined) {
+      addIssue(
+        layout.defaultLayoutPath,
+        "layouts/section-library-migration-cursor",
+        "defaultLayout root.props.lastSectionLibraryMigrationId must be absent when the repo migration registry is empty"
+      );
+    }
+  } else if (props?.lastSectionLibraryMigrationId !== latestRepoMigrationId) {
+    addIssue(
+      layout.defaultLayoutPath,
+      "layouts/section-library-migration-cursor",
+      `defaultLayout root.props.lastSectionLibraryMigrationId must equal ${latestRepoMigrationId}`
+    );
+  }
 };
 
 const readSections = (

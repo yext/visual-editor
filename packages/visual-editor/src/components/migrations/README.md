@@ -78,7 +78,23 @@ See https://puckeditor.com/docs/api-reference/functions/transform-props
 }
 ```
 
-In `migrationRegistry.ts`, import your migration and append it to the array. Migrations are run in order.
+In `migrationRegistry.ts`, import your migration and append a keyed entry to the
+array. IDs are readable, non-empty strings and must remain unique. Migrations
+run in array order, so existing IDs and ordering are append-only.
+
+```ts
+export const migrationRegistry: MigrationRegistry = [
+  { id: "0082-hero-phone-slot", migration: heroPhoneSlotMigration },
+];
+```
+
+Section Libraries may define a repo-wide registry at
+`src/library/migrations/registry.ts` using the same keyed shape. Built-in
+migrations always run before this registry. Every source `defaultLayout.json`
+records `root.props.lastBuiltInMigrationId` and, when the repo registry is
+non-empty, `root.props.lastSectionLibraryMigrationId` at their latest IDs.
+Legacy numeric `root.props.version` values remain readable and are converted to
+the built-in cursor the next time the layout is migrated.
 
 ## How do I test a migration?
 

@@ -162,7 +162,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
       <div className="header-left">
         <UIButtonsToggle showLeft={false} />
       </div>
-      {localDev && <LocalDevOverrideButtons />}
+      {localDev && <LocalDevOverrideButtons showSetLayoutData={false} />}
       <div className="header-center"></div>
       <div className="actions">
         <Button

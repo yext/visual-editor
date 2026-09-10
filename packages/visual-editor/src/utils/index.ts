@@ -24,6 +24,7 @@ export {
   type Migration,
   type MigrationAction,
   type MigrationRegistry,
+  type MigrationRegistryEntry,
 } from "./migrate.ts";
 export { resolveComponentData } from "./resolveComponentData.tsx";
 export { resolveYextEntityField } from "./resolveYextEntityField.ts";

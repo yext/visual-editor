@@ -404,6 +404,97 @@ describe("validateSectionLibraryStructure", () => {
       ],
     });
   });
+
+  it("reports duplicate repo migration IDs", () => {
+    const rootDir = createValidLibrary();
+    fs.outputFileSync(
+      path.join(rootDir, "src", "library", "migrations", "registry.ts"),
+      [
+        "const migration = {};",
+        "export const migrationRegistry = [",
+        '  { id: "duplicate", migration },',
+        '  { id: "duplicate", migration },',
+        "];",
+      ].join("\n")
+    );
+
+    expectRules(rootDir, "migrations/duplicate-id");
+  });
+
+  it("reports a missing built-in migration cursor", () => {
+    const rootDir = createValidLibrary();
+    fs.outputJsonSync(
+      layoutFilePath(rootDir, "entity-layout", "defaultLayout.json"),
+      { root: { props: {} }, content: [], zones: {} }
+    );
+
+    expectRules(rootDir, "layouts/built-in-migration-cursor");
+  });
+
+  it("reports an empty repo migration ID", () => {
+    const rootDir = createValidLibrary();
+    writeMigrationRegistry(rootDir, ['{ id: "", migration }']);
+
+    expectRules(rootDir, "migrations/id");
+  });
+
+  it("reports a missing migrationRegistry export", () => {
+    const rootDir = createValidLibrary();
+    fs.outputFileSync(
+      migrationRegistryPath(rootDir),
+      "export const otherRegistry = [];"
+    );
+
+    expectRules(rootDir, "migrations/export");
+  });
+
+  it("reports missing repo cursors when repo migrations exist", () => {
+    const rootDir = createValidLibrary();
+    writeMigrationRegistry(rootDir, ['{ id: "repo-1", migration }']);
+
+    expectRules(rootDir, "layouts/section-library-migration-cursor");
+  });
+
+  it("reports an unexpected repo cursor for an absent registry", () => {
+    const rootDir = createValidLibrary();
+    const defaultLayoutPath = layoutFilePath(
+      rootDir,
+      "entity-layout",
+      "defaultLayout.json"
+    );
+    const layout = fs.readJsonSync(defaultLayoutPath);
+    layout.root.props.lastSectionLibraryMigrationId = "unexpected";
+    fs.writeJsonSync(defaultLayoutPath, layout);
+
+    expectRules(rootDir, "layouts/section-library-migration-cursor");
+  });
+
+  it("accepts default layouts at the latest repo migration cursor", () => {
+    const rootDir = createValidLibrary();
+    writeMigrationRegistry(rootDir, [
+      '{ id: "repo-1", migration }',
+      '{ id: "repo-2", migration }',
+    ]);
+    for (const layoutName of [
+      "entity-layout",
+      "directory-layout",
+      "locator-layout",
+    ]) {
+      const defaultLayoutPath = layoutFilePath(
+        rootDir,
+        layoutName,
+        "defaultLayout.json"
+      );
+      const layout = fs.readJsonSync(defaultLayoutPath);
+      layout.root.props.lastSectionLibraryMigrationId = "repo-2";
+      fs.writeJsonSync(defaultLayoutPath, layout);
+    }
+
+    const result = validateSectionLibraryStructure(rootDir);
+
+    expect(result.issues).toEqual([]);
+    expect(result.structure?.migrationIds).toEqual(["repo-1", "repo-2"]);
+  });
 });
 
 const validSectionSource = [
@@ -468,9 +559,19 @@ const writeDefaultLayout = (
   directoryName: string,
   layout: unknown
 ): void => {
+  const data = layout as Record<string, any>;
   fs.outputJsonSync(
     layoutFilePath(rootDir, directoryName, "defaultLayout.json"),
-    layout
+    {
+      ...data,
+      root: {
+        ...data.root,
+        props: {
+          ...data.root?.props,
+          lastBuiltInMigrationId: "0082-hero-phone-slot",
+        },
+      },
+    }
   );
 };
 
@@ -522,3 +623,16 @@ const layoutFilePath = (
 
 const registryPath = (rootDir: string): string =>
   path.join(rootDir, "src", "library", "shared", "componentRegistry.ts");
+
+const migrationRegistryPath = (rootDir: string): string =>
+  path.join(rootDir, "src", "library", "migrations", "registry.ts");
+
+const writeMigrationRegistry = (rootDir: string, entries: string[]): void => {
+  fs.outputFileSync(
+    migrationRegistryPath(rootDir),
+    [
+      "const migration = {};",
+      `export const migrationRegistry = [${entries.join(",")}];`,
+    ].join("\n")
+  );
+};

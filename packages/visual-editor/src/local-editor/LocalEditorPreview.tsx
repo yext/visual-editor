@@ -12,7 +12,7 @@ import {
 } from "../internal/types/templateMetadata.ts";
 import type { ThemeData } from "../internal/types/themeData.ts";
 import { updateThemeInEditor } from "../utils/applyTheme.ts";
-import { migrate } from "../utils/migrate.ts";
+import { migrate, type MigrationRegistry } from "../utils/migrate.ts";
 import type { TailwindConfig, ThemeConfig } from "../utils/themeResolver.ts";
 import type { StreamDocument } from "../utils/types/StreamDocument.ts";
 import { VisualEditorProvider } from "../utils/VisualEditorProvider.tsx";
@@ -27,6 +27,7 @@ type LocalEditorPreviewProps = {
   onClose: () => void;
   tailwindConfig: TailwindConfig;
   themeConfig?: ThemeConfig;
+  sectionLibraryMigrationRegistry?: MigrationRegistry;
 };
 
 type PreviewState = {
@@ -53,6 +54,7 @@ export const LocalEditorPreview = ({
   onClose,
   tailwindConfig,
   themeConfig,
+  sectionLibraryMigrationRegistry,
 }: LocalEditorPreviewProps) => {
   const [previewState, setPreviewState] = React.useState<PreviewState | null>(
     null
@@ -97,7 +99,8 @@ export const LocalEditorPreview = ({
           cloneLayoutData(layoutData),
           migrationRegistry,
           config,
-          streamDocument
+          streamDocument,
+          sectionLibraryMigrationRegistry
         );
         const resolvedLayoutData = await resolveAllData(
           migratedLayoutData,
@@ -131,7 +134,14 @@ export const LocalEditorPreview = ({
     return () => {
       isCurrent = false;
     };
-  }, [config, defaultLayoutData, localDevOptions, streamDocument, themeConfig]);
+  }, [
+    config,
+    defaultLayoutData,
+    localDevOptions,
+    sectionLibraryMigrationRegistry,
+    streamDocument,
+    themeConfig,
+  ]);
 
   return (
     <div

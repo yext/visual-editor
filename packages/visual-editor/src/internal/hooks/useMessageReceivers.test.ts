@@ -81,4 +81,34 @@ describe("getLocalDevLayoutData", () => {
     });
     expect(warnSpy).toHaveBeenCalledOnce();
   });
+
+  it("applies section-library migrations to initial local editor data", () => {
+    const data = getLocalDevLayoutData(
+      locatorConfig,
+      {},
+      {
+        root: { props: { lastBuiltInMigrationId: "0082-hero-phone-slot" } },
+        content: [],
+        zones: {},
+      },
+      [
+        {
+          id: "repo-root-update",
+          migration: {
+            root: {
+              propTransformation: (props: Record<string, any>) => ({
+                ...props,
+                migrated: true,
+              }),
+            },
+          },
+        },
+      ]
+    );
+
+    expect(data.root.props).toMatchObject({
+      migrated: true,
+      lastSectionLibraryMigrationId: "repo-root-update",
+    });
+  });
 });

@@ -13,18 +13,18 @@ import {
   applyTheme,
   defaultThemeConfig,
   Editor,
+  type MigrationRegistry,
   usePlatformBridgeDocument,
   usePlatformBridgeEntityFields,
   VisualEditorProvider,
 } from "@yext/visual-editor";
 import tailwindConfig from "../../tailwind.config";
 /* SECTION_LIBRARY_CONFIG_IMPORTS */
+/* SECTION_LIBRARY_MIGRATION_REGISTRY */
 
 const editorPath = "__SECTION_LIBRARY_EDITOR_PATH__";
 const editorName = "__SECTION_LIBRARY_EDITOR_NAME__";
-const componentRegistry = {
-  /* SECTION_LIBRARY_COMPONENT_REGISTRY */
-};
+const componentRegistry = {/* SECTION_LIBRARY_COMPONENT_REGISTRY */};
 
 export const getPath: GetPath<TemplateProps> = () => editorPath;
 export const config: TemplateConfig = { name: editorName };
@@ -48,6 +48,7 @@ const Edit = (): JSX.Element => {
         document={document}
         componentRegistry={componentRegistry}
         themeConfig={defaultThemeConfig}
+        sectionLibraryMigrationRegistry={sectionLibraryMigrationRegistry}
       />
     </VisualEditorProvider>
   );

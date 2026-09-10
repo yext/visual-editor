@@ -76,6 +76,7 @@ export const LocalEditorShell = ({
   componentRegistry,
   tailwindConfig,
   themeConfig,
+  sectionLibraryMigrationRegistry,
 }: LocalEditorShellProps) => {
   const [previewContext, setPreviewContext] = React.useState<{
     config: Config;
@@ -214,8 +215,7 @@ export const LocalEditorShell = ({
   const isLocatorDocument =
     (
       documentResponse?.document?.meta as
-        | { entityType?: { id?: string } }
-        | undefined
+        { entityType?: { id?: string } } | undefined
     )?.entityType?.id === "locator";
 
   // Inject reviews, mapbox, and/or nearby locations testing data into the streamDocument, if enabled
@@ -443,6 +443,7 @@ export const LocalEditorShell = ({
         onClose={closePreview}
         tailwindConfig={tailwindConfig}
         themeConfig={themeConfig}
+        sectionLibraryMigrationRegistry={sectionLibraryMigrationRegistry}
       />
     );
   }
@@ -651,6 +652,9 @@ export const LocalEditorShell = ({
                 localDev={true}
                 localDevOptions={editorLocalDevOptions}
                 forceThemeMode={selectedMode === "theme"}
+                sectionLibraryMigrationRegistry={
+                  sectionLibraryMigrationRegistry
+                }
               />
             </VisualEditorProvider>
           )}

@@ -38,6 +38,7 @@ import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 import { clonePuckResolveData } from "../utils/clonePuckResolveData.ts";
 import { YextPuckFieldOverrides } from "../../fields/fieldOverrides.ts";
+import type { MigrationRegistry } from "../../utils/migrate.ts";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -90,6 +91,7 @@ type InternalLayoutEditorProps = {
   buildVisualConfigLocalStorageKey: () => string;
   localDev: boolean;
   metadata?: Metadata;
+  sectionLibraryMigrationRegistry?: MigrationRegistry;
 };
 
 // Render Puck editor
@@ -106,6 +108,7 @@ export const InternalLayoutEditor = ({
   buildVisualConfigLocalStorageKey,
   localDev,
   metadata,
+  sectionLibraryMigrationRegistry,
 }: InternalLayoutEditorProps) => {
   const historyIndex = useRef<number>(0);
   const { i18n } = usePlatformTranslation();
@@ -409,6 +412,7 @@ export const InternalLayoutEditor = ({
               hasErrors={errorCount > 0}
               errorSources={errorSources}
               errorDetails={errorDetails}
+              sectionLibraryMigrationRegistry={sectionLibraryMigrationRegistry}
             />
           ),
           iframe: loadMapboxIntoIframe,
