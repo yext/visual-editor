@@ -1,42 +1,16 @@
-import i18next, { TOptions } from "i18next";
-import { initReactI18next, useTranslation } from "react-i18next";
-import { getTranslations } from "./getTranslations.ts";
+import { TOptions } from "i18next";
+import { useTranslation } from "react-i18next";
+import {
+  i18nPlatformInstance,
+  VISUAL_EDITOR_NAMESPACE,
+} from "./i18nInstances.ts";
 
-const NAMESPACE = "visual-editor";
-
-export const i18nPlatformInstance = i18next.createInstance();
-
-i18nPlatformInstance.use(initReactI18next).init({
-  lng: "en",
-  fallbackLng: "en",
-  ns: [NAMESPACE],
-  defaultNS: NAMESPACE,
-  interpolation: { escapeValue: false },
-  nsSeparator: false,
-  resources: {},
-});
-
-/**
- * Loads translations into the i18n instance for the given locale.
- */
-export const loadPlatformTranslations = async (locale: string) => {
-  if (i18nPlatformInstance.hasResourceBundle(locale, NAMESPACE)) {
-    return;
-  }
-
-  const translationsToInject = await getTranslations(locale, "platform");
-
-  if (translationsToInject && Object.keys(translationsToInject).length > 0) {
-    i18nPlatformInstance.addResourceBundle(
-      locale,
-      NAMESPACE,
-      translationsToInject
-    );
-  }
-};
+export { i18nPlatformInstance } from "./i18nInstances.ts";
 
 export const usePlatformTranslation = () => {
-  return useTranslation(NAMESPACE, { i18n: i18nPlatformInstance });
+  return useTranslation(VISUAL_EDITOR_NAMESPACE, {
+    i18n: i18nPlatformInstance,
+  });
 };
 
 export type MsgString = string & { __brand: "i18nPlatform" };

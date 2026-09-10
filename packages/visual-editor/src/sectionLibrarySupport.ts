@@ -238,6 +238,8 @@ export {
   TooltipTrigger,
 } from "./internal/puck/ui/Tooltip.tsx";
 export { ComponentErrorBoundary } from "./internal/components/ComponentErrorBoundary.tsx";
+export { SectionLibraryVisualEditorProvider } from "./utils/SectionLibraryVisualEditorProvider.tsx";
+export { loadTranslationDictionary } from "./utils/i18n/translationResources.ts";
 export { isVisualEditorTestEnv } from "./components/testing/utils.ts";
 export { fetchLocalesToPathsForEntity } from "./utils/api/fetchLocalesToPathsForEntity.ts";
 export { presetImageIcons } from "./utils/presetImageIcons.tsx";

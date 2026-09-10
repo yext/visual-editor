@@ -11,7 +11,7 @@ import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 import { BodyTextProps } from "../../contentBlocks/BodyText.tsx";
 import { deepMerge } from "../../../utils/themeResolver.ts";
 import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
-import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
+import { i18nPageInstance } from "../../../utils/i18n/page.ts";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 import { TimestampProps } from "../../contentBlocks/Timestamp.tsx";
 import {
@@ -349,7 +349,7 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
       contributorName &&
       resolveComponentData(
         contributorName,
-        i18nComponentsInstance.language || "en",
+        i18nPageInstance.language || "en",
         params.metadata.streamDocument,
         {
           output: "plainText",
@@ -361,7 +361,7 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
         ? resolveYextEntityField(
             params.metadata.streamDocument,
             descriptionSlotProps.data.text,
-            i18nComponentsInstance.language || "en"
+            i18nPageInstance.language || "en"
           )
         : undefined;
     const resolvedContributorName = isLinkedMode
@@ -370,7 +370,7 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
         ? resolveYextEntityField(
             params.metadata.streamDocument,
             contributorNameSlotProps.data.text,
-            i18nComponentsInstance.language || "en"
+            i18nPageInstance.language || "en"
           )
         : undefined;
     const resolvedContributionDate = isLinkedMode
@@ -379,7 +379,7 @@ export const TestimonialCard: YextComponentConfig<TestimonialCardProps> = {
         ? resolveYextEntityField(
             params.metadata.streamDocument,
             contributionDateSlotProps.data.date,
-            i18nComponentsInstance.language || "en"
+            i18nPageInstance.language || "en"
           )
         : undefined;
 

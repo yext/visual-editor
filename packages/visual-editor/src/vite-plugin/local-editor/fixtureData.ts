@@ -144,9 +144,7 @@ const createDirectoryFixtures = (
   const children = (
     child: FixtureDocument,
     displayNameField:
-      | "dm_addressCountryDisplayName"
-      | "dm_addressRegionDisplayName"
-      | "name"
+      "dm_addressCountryDisplayName" | "dm_addressRegionDisplayName" | "name"
   ) => {
     return Array.from({ length: directoryChildCount }, (_, index) => {
       const suffix = String(index + 1);

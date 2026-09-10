@@ -23,11 +23,14 @@ import {
   getPageMetadata,
   getSchema,
   GTMBody,
-  injectTranslations,
   resolveUrlTemplate,
-  VisualEditorProvider,
 } from "@yext/visual-editor";
+import {
+  loadTranslationDictionary,
+  SectionLibraryVisualEditorProvider,
+} from "@yext/visual-editor/section-library-support";
 import { sectionLibraryConfig } from "__SECTION_LIBRARY_CONFIG_PATH__";
+import { translationLoaders } from "../library/.generated/i18n";
 /* SECTION_LIBRARY_MAPBOX_IMPORT */
 
 const layoutId = "__SECTION_LIBRARY_LAYOUT_ID__";
@@ -115,7 +118,12 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
   return {
     ...props,
     document: props.document,
-    translations: await injectTranslations(props.document),
+    translations: props.document.locale
+      ? await loadTranslationDictionary(
+          props.document.locale,
+          translationLoaders.page
+        )
+      : {},
   };
 };
 
@@ -142,7 +150,10 @@ const SectionLibraryLayout: Template<TemplateRenderProps> = (props) => {
         templateData={props}
         currency="USD"
       >
-        <VisualEditorProvider templateProps={props}>
+        <SectionLibraryVisualEditorProvider
+          templateProps={props}
+          translationLoaders={translationLoaders}
+        >
           <GTMBody>
             <Render
               config={sectionLibraryConfig}
@@ -150,7 +161,7 @@ const SectionLibraryLayout: Template<TemplateRenderProps> = (props) => {
               metadata={{ streamDocument: props.document }}
             />
           </GTMBody>
-        </VisualEditorProvider>
+        </SectionLibraryVisualEditorProvider>
       </AnalyticsProvider>
     </>
   );

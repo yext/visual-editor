@@ -9,8 +9,7 @@ import { pt, type MsgString } from "../utils/i18n/platform.ts";
 import { isFakeStarterLocalDev } from "../utils/isFakeStarterLocalDev.ts";
 
 let pendingCodeSession:
-  | { messageId: string; apply: (payload: any) => void }
-  | undefined;
+  { messageId: string; apply: (payload: any) => void } | undefined;
 
 export type CodeLanguageOptions =
   | "html"

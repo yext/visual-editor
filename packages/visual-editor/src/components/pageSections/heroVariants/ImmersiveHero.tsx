@@ -24,8 +24,7 @@ export const ImmersiveHero: PuckComponent<HeroVariantProps> = (props) => {
   );
 
   const localizedImage:
-    | { url: string; width: number; height: number }
-    | undefined =
+    { url: string; width: number; height: number } | undefined =
     resolvedBackgroundImage && isLocalizedAssetImage(resolvedBackgroundImage)
       ? resolveLocalizedAssetImage(resolvedBackgroundImage, locale)
       : resolvedBackgroundImage && "image" in resolvedBackgroundImage

@@ -13,6 +13,7 @@ import {
 import { type Config } from "@puckeditor/core";
 import { defaultThemeConfig, LocalEditorShell } from "@yext/visual-editor";
 import tailwindConfig from "../../tailwind.config";
+import { translationLoaders } from "../library/.generated/i18n";
 /* LOCAL_EDITOR_CONFIG_IMPORTS */
 
 const DEFAULT_LOCAL_EDITOR_ROUTE = "/local-editor";
@@ -54,6 +55,7 @@ const LocalEditor: Template<TemplateRenderProps> = () => {
       componentRegistry={componentRegistry}
       tailwindConfig={tailwindConfig}
       themeConfig={defaultThemeConfig}
+      translationLoaders={translationLoaders}
     />
   );
 };

@@ -15,7 +15,7 @@ import { TimestampProps } from "../../contentBlocks/Timestamp.tsx";
 import { deepMerge } from "../../../utils/themeResolver.ts";
 import { ImgSizesByBreakpoint } from "../../atoms/image.tsx";
 import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
-import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
+import { i18nPageInstance } from "../../../utils/i18n/page.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 import {
@@ -444,18 +444,15 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
     const field = data.props.field ?? "";
     const isLinkedMode = Boolean(field);
     const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as
-      | WithId<ImageWrapperProps>
-      | undefined;
+      WithId<ImageWrapperProps> | undefined;
     const titleSlotProps = data.props.slots.TitleSlot?.[0]?.props as
-      | WithId<HeadingTextProps>
-      | undefined;
+      WithId<HeadingTextProps> | undefined;
     const dateTimeSlotProps = data.props.slots.DateTimeSlot?.[0]
       ?.props as WithId<TimestampProps | undefined>;
     const descriptionSlotProps = data.props.slots.DescriptionSlot?.[0]
       ?.props as WithId<BodyTextProps | undefined>;
     const ctaSlotProps = data.props.slots.CTASlot?.[0]?.props as
-      | WithId<CTAWrapperProps>
-      | undefined;
+      WithId<CTAWrapperProps> | undefined;
 
     const resolvedImage = isLinkedMode
       ? data.props.image
@@ -463,16 +460,15 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
         ? resolveYextEntityField(
             params.metadata.streamDocument,
             imageSlotProps.data.image,
-            i18nComponentsInstance.language || "en"
+            i18nPageInstance.language || "en"
           )
         : undefined;
 
     const showImage = Boolean(
       (resolvedImage as any)?.url ||
-        (resolvedImage as any)?.image?.url ||
-        ((resolvedImage as any)?.hasLocalizedValue &&
-          (resolvedImage as any)?.[i18nComponentsInstance.language || "en"]
-            ?.url)
+      (resolvedImage as any)?.image?.url ||
+      ((resolvedImage as any)?.hasLocalizedValue &&
+        (resolvedImage as any)?.[i18nPageInstance.language || "en"]?.url)
     );
     const showDescription = Boolean(
       isLinkedMode
@@ -481,7 +477,7 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
             resolveYextEntityField(
               params.metadata.streamDocument,
               descriptionSlotProps.data.text,
-              i18nComponentsInstance.language || "en"
+              i18nPageInstance.language || "en"
             )
     );
     const showTitle = Boolean(
@@ -491,7 +487,7 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
             resolveYextEntityField(
               params.metadata.streamDocument,
               titleSlotProps.data.text,
-              i18nComponentsInstance.language || "en"
+              i18nPageInstance.language || "en"
             )
     );
     const showDateTime = Boolean(
@@ -501,7 +497,7 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
             resolveYextEntityField(
               params.metadata.streamDocument,
               dateTimeSlotProps.data.date,
-              i18nComponentsInstance.language || "en"
+              i18nPageInstance.language || "en"
             )?.trim()
     );
     const showCTA = Boolean(
@@ -510,7 +506,7 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
         : ctaSlotProps &&
             resolveComponentData(
               ctaSlotProps.data.entityField,
-              i18nComponentsInstance.language || "en",
+              i18nPageInstance.language || "en",
               params.metadata.streamDocument
             )?.label
     );
@@ -568,7 +564,7 @@ export const EventCard: YextComponentConfig<EventCardProps> = {
       title &&
       resolveComponentData(
         title,
-        i18nComponentsInstance.language || "en",
+        i18nPageInstance.language || "en",
         params.metadata.streamDocument,
         { output: "plainText" }
       );

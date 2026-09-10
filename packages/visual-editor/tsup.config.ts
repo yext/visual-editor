@@ -28,6 +28,11 @@ export default defineConfig({
 // bundle the source code for directory and locator so they can be copied into section libraries
 async function copyDirectoryLocatorSourceAssets(): Promise<void> {
   const sourceDirectory = path.join(packageDirectory, "src");
+  const localeDirectory = path.join(packageDirectory, "dist", "locales");
+  await fs.rm(localeDirectory, { recursive: true, force: true });
+  await fs.cp(path.join(packageDirectory, "locales"), localeDirectory, {
+    recursive: true,
+  });
   const assetDirectory = path.join(
     packageDirectory,
     "dist",

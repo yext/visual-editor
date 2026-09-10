@@ -15,8 +15,9 @@ import { updateThemeInEditor } from "../utils/applyTheme.ts";
 import { migrate } from "../utils/migrate.ts";
 import type { TailwindConfig, ThemeConfig } from "../utils/themeResolver.ts";
 import type { StreamDocument } from "../utils/types/StreamDocument.ts";
-import { VisualEditorProvider } from "../utils/VisualEditorProvider.tsx";
+import { SectionLibraryVisualEditorProvider } from "../utils/SectionLibraryVisualEditorProvider.tsx";
 import type { LocalEditorDocumentResponse } from "./types.ts";
+import type { SectionLibraryTranslationLoaders } from "../utils/i18n/translationResources.ts";
 
 type LocalEditorPreviewProps = {
   config: Config;
@@ -27,6 +28,7 @@ type LocalEditorPreviewProps = {
   onClose: () => void;
   tailwindConfig: TailwindConfig;
   themeConfig?: ThemeConfig;
+  translationLoaders?: SectionLibraryTranslationLoaders;
 };
 
 type PreviewState = {
@@ -53,6 +55,7 @@ export const LocalEditorPreview = ({
   onClose,
   tailwindConfig,
   themeConfig,
+  translationLoaders,
 }: LocalEditorPreviewProps) => {
   const [previewState, setPreviewState] = React.useState<PreviewState | null>(
     null
@@ -188,17 +191,18 @@ export const LocalEditorPreview = ({
       ) : !previewState ? (
         <PreviewStatus title="Loading preview…" />
       ) : (
-        <VisualEditorProvider
+        <SectionLibraryVisualEditorProvider
           templateProps={{ document: streamDocument }}
           entityFields={entityFields}
           tailwindConfig={tailwindConfig}
+          translationLoaders={translationLoaders}
         >
           <VisualEditorRender
             config={config}
             data={previewState.data}
             metadata={{ streamDocument }}
           />
-        </VisualEditorProvider>
+        </SectionLibraryVisualEditorProvider>
       )}
     </div>
   );

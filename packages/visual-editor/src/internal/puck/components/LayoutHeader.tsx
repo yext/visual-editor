@@ -25,15 +25,10 @@ import "../../../editor/index.css";
 import { migrate } from "../../../utils/migrate.ts";
 import { migrationRegistry } from "../../../components/migrations/migrationRegistry.ts";
 import {
-  i18nComponentsInstance,
-  loadComponentTranslations,
-} from "../../../utils/i18n/components.ts";
-import {
+  i18nPageInstance,
   i18nPlatformInstance,
-  usePlatformTranslation,
-  pt,
-  loadPlatformTranslations,
-} from "../../../utils/i18n/platform.ts";
+} from "../../../utils/i18n/i18nInstances.ts";
+import { usePlatformTranslation, pt } from "../../../utils/i18n/platform.ts";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { DevLogger } from "../../../utils/devLogger.ts";
 import {
@@ -42,6 +37,7 @@ import {
 } from "../../../contexts/ErrorContext.tsx";
 import { getPublishErrorMessage } from "../../../utils/publishErrors.ts";
 import { getPublishTooltipMessageFromHeadDeployStatus } from "../../utils/getPublishTooltipMessageFromHeadDeployStatus.ts";
+import { useTranslationRuntime } from "../../../utils/i18n/TranslationRuntimeContext.tsx";
 
 const usePuck = createUsePuck();
 const devLogger = new DevLogger();
@@ -321,6 +317,8 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
 export const LocalDevOverrideButtons = () => {
   const getPuck = useGetPuck();
   const streamDocument = useDocument();
+  const { loadPlatformTranslations, loadPageTranslations } =
+    useTranslationRuntime();
 
   return (
     <>
@@ -360,20 +358,20 @@ export const LocalDevOverrideButtons = () => {
       </Button>
       <Button
         onClick={async () => {
-          const locale = prompt("Enter components locale:") || "en";
-          await loadComponentTranslations(locale);
-          i18nComponentsInstance.changeLanguage(locale);
+          const locale = prompt("Enter page locale:") || "en";
+          await loadPageTranslations(locale);
+          await i18nPageInstance.changeLanguage(locale);
         }}
         variant="outline"
         className="ve-ml-4"
       >
-        Set Components Locale
+        Set Page Locale
       </Button>
       <Button
         onClick={async () => {
           const locale = prompt("Enter platform locale:") || "en";
           await loadPlatformTranslations(locale);
-          i18nPlatformInstance.changeLanguage(locale);
+          await i18nPlatformInstance.changeLanguage(locale);
         }}
         variant="outline"
         className="ve-ml-4"

@@ -290,8 +290,7 @@ export const AboutSection: YextComponentConfig<AboutSectionProps> = {
   resolveData: (data) => {
     const sectionHeadingLevel = (
       data.props.slots.SectionHeadingSlot?.[0]?.props as
-        | WithId<HeadingTextProps>
-        | undefined
+        WithId<HeadingTextProps> | undefined
     )?.styles?.level;
 
     if (

@@ -15,16 +15,15 @@ import {
   Editor,
   usePlatformBridgeDocument,
   usePlatformBridgeEntityFields,
-  VisualEditorProvider,
 } from "@yext/visual-editor";
+import { SectionLibraryVisualEditorProvider } from "@yext/visual-editor/section-library-support";
 import tailwindConfig from "../../tailwind.config";
+import { translationLoaders } from "../library/.generated/i18n";
 /* SECTION_LIBRARY_CONFIG_IMPORTS */
 
 const editorPath = "__SECTION_LIBRARY_EDITOR_PATH__";
 const editorName = "__SECTION_LIBRARY_EDITOR_NAME__";
-const componentRegistry = {
-  /* SECTION_LIBRARY_COMPONENT_REGISTRY */
-};
+const componentRegistry = {/* SECTION_LIBRARY_COMPONENT_REGISTRY */};
 
 export const getPath: GetPath<TemplateProps> = () => editorPath;
 export const config: TemplateConfig = { name: editorName };
@@ -39,17 +38,18 @@ const Edit = (): JSX.Element => {
   const document = usePlatformBridgeDocument();
   const entityFields = usePlatformBridgeEntityFields();
   return (
-    <VisualEditorProvider
+    <SectionLibraryVisualEditorProvider
       templateProps={{ document }}
       entityFields={entityFields}
       tailwindConfig={tailwindConfig}
+      translationLoaders={translationLoaders}
     >
       <Editor
         document={document}
         componentRegistry={componentRegistry}
         themeConfig={defaultThemeConfig}
       />
-    </VisualEditorProvider>
+    </SectionLibraryVisualEditorProvider>
   );
 };
 

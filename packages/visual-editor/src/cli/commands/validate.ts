@@ -1,5 +1,6 @@
 import {
   createValidationContext,
+  hasValidationErrors,
   validateSectionLibrary,
 } from "../../internal/sectionLibraryValidation/validateSectionLibrary.ts";
 import type { ValidationStage } from "../../internal/sectionLibraryValidation/types.ts";
@@ -58,7 +59,7 @@ export const validateCmd = defineYextveCommand({
         renderValidationResult(result, !!io.stdout.isTTY && !context.yextCI)
       );
 
-      return result.issues.length === 0 ? 0 : 1;
+      return hasValidationErrors(result) ? 1 : 0;
     } catch (error) {
       io.stderr.write(
         `Validation could not be completed: ${error instanceof Error ? error.message : String(error)}\n`

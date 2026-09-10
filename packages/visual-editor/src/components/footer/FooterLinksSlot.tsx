@@ -6,7 +6,7 @@ import { useDocument } from "../../hooks/useDocument.tsx";
 import { resolveLocalizedCtas } from "../../utils/resolveLocalizedCtas.ts";
 import { CTA } from "../atoms/cta.tsx";
 import { TranslatableCTA } from "../../types/types.ts";
-import { i18nComponentsInstance } from "../../utils/i18n/components.ts";
+import { i18nPageInstance } from "../../utils/i18n/page.ts";
 import { useTranslation } from "react-i18next";
 import { defaultLink, defaultLinks } from "./ExpandedFooter.tsx";
 import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
@@ -302,7 +302,7 @@ const footerLinksSlotFields: YextFields<FooterLinksSlotProps> = {
         },
         defaultItemProps: defaultLink,
         getItemSummary: (item: any, index?: number) => {
-          const locale = i18nComponentsInstance.language || "en";
+          const locale = i18nPageInstance.language || "en";
           const label =
             typeof item.label === "string" ? item.label : item.label?.[locale];
           return label || pt("link", "Link") + " " + ((index ?? 0) + 1);

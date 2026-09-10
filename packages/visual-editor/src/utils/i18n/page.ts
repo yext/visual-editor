@@ -1,22 +1,10 @@
-import i18next from "i18next";
-import { initReactI18next } from "react-i18next";
 import { getTranslations } from "./getTranslations.ts";
 import { StreamDocument } from "../types/StreamDocument.ts";
 import { normalizeLocalesInObject } from "../normalizeLocale.ts";
+import type { TranslationDictionary } from "./translationResources.ts";
+import { i18nPageInstance, VISUAL_EDITOR_NAMESPACE } from "./i18nInstances.ts";
 
-const NAMESPACE = "visual-editor";
-
-export const i18nComponentsInstance = i18next.createInstance();
-
-i18nComponentsInstance.use(initReactI18next).init({
-  lng: "en",
-  fallbackLng: "en",
-  ns: [NAMESPACE],
-  defaultNS: NAMESPACE,
-  interpolation: { escapeValue: false },
-  partialBundledLanguages: true,
-  resources: {},
-});
+export { i18nPageInstance } from "./i18nInstances.ts";
 
 export interface TemplateProps {
   document?: {
@@ -32,7 +20,7 @@ export interface TemplateProps {
  */
 export const injectTranslations = async (
   streamDocument: StreamDocument
-): Promise<Record<string, string> | Record<string, any>> => {
+): Promise<TranslationDictionary> => {
   if (!streamDocument?.locale) {
     return {};
   }
@@ -40,32 +28,37 @@ export const injectTranslations = async (
   return (
     (await getTranslations(
       normalizeLocalesInObject(streamDocument).locale,
-      "components"
+      "page"
     )) || {}
   );
 };
 
 /**
- * Loads translations into the i18n instance for the given locale. If
+ * Loads Visual Editor translations into the i18n instance for the given locale. If
  * translations are provided they will be used directly, otherwise they
  * will be dynamically imported.
  */
-export const loadComponentTranslations = async (
+export const loadVEPageTranslations = async (
   locale: string,
-  translations?: Record<string, string>
+  translations?: TranslationDictionary
 ) => {
-  if (i18nComponentsInstance.hasResourceBundle(locale, NAMESPACE)) {
+  if (
+    i18nPageInstance.hasResourceBundle(locale, VISUAL_EDITOR_NAMESPACE) &&
+    !translations
+  ) {
     return;
   }
 
   const translationsToInject =
-    translations || (await getTranslations(locale, "components"));
+    translations || (await getTranslations(locale, "page"));
 
   if (translationsToInject && Object.keys(translationsToInject).length > 0) {
-    i18nComponentsInstance.addResourceBundle(
+    i18nPageInstance.addResourceBundle(
       locale,
-      NAMESPACE,
-      translationsToInject
+      VISUAL_EDITOR_NAMESPACE,
+      translationsToInject,
+      true,
+      true
     );
   }
 };

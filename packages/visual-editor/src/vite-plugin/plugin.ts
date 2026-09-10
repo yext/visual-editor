@@ -111,6 +111,7 @@ export const yextVisualEditorPlugin = (
   let sectionLibraryFiles: string[] = [];
   let sectionLibraryManifest: string | undefined;
   let sectionLibraryLayouts: SectionLibraryLayout[] = [];
+  let sectionLibraryGenerated = false;
   const localEditorArtifacts = createLocalEditorArtifactsManager({
     localEditorTemplateSource: localEditorTemplate,
     localEditorDataTemplateSource: localEditorDataTemplate,
@@ -124,6 +125,7 @@ export const yextVisualEditorPlugin = (
     sectionLibraryFiles = generatedLibrary.generatedFiles;
     sectionLibraryManifest = generatedLibrary.manifestSource;
     sectionLibraryLayouts = generatedLibrary.layouts;
+    sectionLibraryGenerated = generatedLibrary.manifestSource !== undefined;
   };
 
   const syncLocalEditorArtifacts = async (): Promise<void> => {
@@ -213,7 +215,11 @@ export const yextVisualEditorPlugin = (
         options.localEditor?.enabled
       ) {
         generateSectionLibrary();
-        await syncLocalEditorArtifacts();
+        if (sectionLibraryGenerated) {
+          await syncLocalEditorArtifacts();
+        } else {
+          localEditorArtifacts.cleanupGeneratedLocalEditorArtifacts();
+        }
         initializedForServe = true;
       }
     },
@@ -230,7 +236,8 @@ export const yextVisualEditorPlugin = (
       if (
         !isBuildMode &&
         options.localEditor?.enabled &&
-        !initializedForServe
+        !initializedForServe &&
+        sectionLibraryGenerated
       ) {
         await syncLocalEditorArtifacts();
       } else if (!initializedForServe) {

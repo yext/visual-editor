@@ -4,6 +4,7 @@ import fs from "fs-extra";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { SectionLibraryLayout } from "../../types/sectionLibrary.ts";
 import { createLocalEditorArtifactsManager } from "./artifacts.ts";
+import localEditorTemplate from "../templates/local-editor.tsx?raw";
 
 const rootDirs: string[] = [];
 
@@ -15,6 +16,13 @@ afterEach(() => {
 });
 
 describe("createLocalEditorArtifactsManager", () => {
+  it("passes repo translation loaders to the local editor runtime", () => {
+    expect(localEditorTemplate).toContain('from "../library/.generated/i18n"');
+    expect(localEditorTemplate).toContain(
+      "translationLoaders={translationLoaders}"
+    );
+  });
+
   it("creates config and data templates for multiple Entity layouts", () => {
     const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "local-editor-"));
     rootDirs.push(rootDir);
