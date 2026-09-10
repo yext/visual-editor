@@ -89,7 +89,7 @@ describe("convertTemplatesToSectionLibrary", () => {
     ).toEqual({
       id: "my-template",
       displayName: "My Template",
-      pageSetType: "ENTITY",
+      pageGroupType: "ENTITY",
     });
     expect(
       fs

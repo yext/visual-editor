@@ -21,6 +21,9 @@ const RESERVED_COMPONENT_IDS = new Set([
 ]);
 const RESERVED_LAYOUT_IDS = new Set(["main", "directory", "locator", "edit"]);
 
+const isPageSetType = (value: unknown): value is PageSetType =>
+  value === "ENTITY" || value === "DIRECTORY" || value === "LOCATOR";
+
 type JsonRecord = Record<string, any>;
 
 type LegacyComponent = {
@@ -197,9 +200,9 @@ const hasDirectoryLocatorBase = (libraryDirectory: string): boolean => {
           `layout metadata for ${entry.name}`
         );
         return isRecord(metadata) &&
-          (metadata.pageSetType === "DIRECTORY" ||
-            metadata.pageSetType === "LOCATOR")
-          ? [metadata.pageSetType]
+          (metadata.pageGroupType === "DIRECTORY" ||
+            metadata.pageGroupType === "LOCATOR")
+          ? [metadata.pageGroupType]
           : [];
       } catch {
         return [];
@@ -655,7 +658,7 @@ const readBaseLibrary = (libraryDirectory: string): BaseLibrary => {
       );
       if (
         !isRecord(metadata) ||
-        !["ENTITY", "DIRECTORY", "LOCATOR"].includes(metadata.pageSetType) ||
+        !isPageSetType(metadata.pageGroupType) ||
         typeof metadata.id !== "string" ||
         metadata.id !== entry.name ||
         !SAFE_ID.test(metadata.id)
@@ -668,7 +671,11 @@ const readBaseLibrary = (libraryDirectory: string): BaseLibrary => {
         `base default layout for ${entry.name}`
       );
       validateDefaultLayout(defaultLayout, defaultLayoutPath, "Base");
-      return { directory, metadata } as BaseLayout;
+      const { pageGroupType, ...metadataProperties } = metadata;
+      return {
+        directory,
+        metadata: { ...metadataProperties, pageSetType: pageGroupType },
+      } as BaseLayout;
     });
   const directoryLayouts = layouts.filter(
     (layout) => layout.metadata.pageSetType === "DIRECTORY"
@@ -839,6 +846,11 @@ const buildEntityLayoutMetadata = (
   };
 };
 
+const formatLayoutMetadata = (metadata: EntityLayoutMetadata): string => {
+  const { pageSetType, ...metadataProperties } = metadata;
+  return formatJson({ ...metadataProperties, pageGroupType: pageSetType });
+};
+
 const readMetadataList = <T extends string>(
   value: unknown,
   allowedValues: Set<T>,
@@ -985,7 +997,7 @@ const writeConvertedLibrary = (
     fs.mkdirSync(layoutDirectory, { recursive: true });
     fs.writeFileSync(
       path.join(layoutDirectory, "metadata.json"),
-      formatJson(buildEntityLayoutMetadata(template))
+      formatLayoutMetadata(buildEntityLayoutMetadata(template))
     );
     fs.writeFileSync(
       path.join(layoutDirectory, "defaultLayout.json"),

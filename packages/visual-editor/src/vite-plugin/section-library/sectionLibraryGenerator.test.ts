@@ -466,7 +466,7 @@ describe("generateSectionLibraryFiles", () => {
       {
         id: "edit",
         displayName: "Edit",
-        pageSetType: "ENTITY",
+        pageGroupType: "ENTITY",
       }
     );
 
@@ -716,7 +716,7 @@ describe("generateSectionLibraryFiles", () => {
             id: "location",
             displayName: "Location",
             vertical: ["UNKNOWN"],
-            pageSetType: "ENTITY",
+            pageGroupType: "ENTITY",
           }
         );
       },
@@ -746,7 +746,7 @@ describe("generateSectionLibraryFiles", () => {
           {
             id: "location",
             displayName: "Location",
-            pageSetType: "DIRECTORY",
+            pageGroupType: "DIRECTORY",
           }
         );
       },
@@ -758,7 +758,7 @@ describe("generateSectionLibraryFiles", () => {
         copyLayout(rootDir, "directory-layout", "second-directory", {
           id: "second-directory",
           displayName: "Second Directory",
-          pageSetType: "DIRECTORY",
+          pageGroupType: "DIRECTORY",
         });
       },
       error: /requires exactly one DIRECTORY and one LOCATOR layout/,
@@ -769,7 +769,7 @@ describe("generateSectionLibraryFiles", () => {
         copyLayout(rootDir, "locator-layout", "second-locator", {
           id: "second-locator",
           displayName: "Second Locator",
-          pageSetType: "LOCATOR",
+          pageGroupType: "LOCATOR",
         });
       },
       error: /requires exactly one DIRECTORY and one LOCATOR layout/,
@@ -789,7 +789,7 @@ describe("generateSectionLibraryFiles", () => {
           {
             id: "location",
             displayName: "Directory",
-            pageSetType: "DIRECTORY",
+            pageGroupType: "DIRECTORY",
           }
         );
       },
@@ -1045,7 +1045,7 @@ const createLibrary = (): string => {
       displayName: "Location",
       vertical: ["RETAIL"],
       purpose: ["LOCATION"],
-      pageSetType: "ENTITY",
+      pageGroupType: "ENTITY",
     }
   );
   fs.writeJsonSync(
@@ -1061,7 +1061,7 @@ const createLibrary = (): string => {
     {
       id: "directory-layout",
       displayName: "Directory",
-      pageSetType: "DIRECTORY",
+      pageGroupType: "DIRECTORY",
     }
   );
   fs.writeJsonSync(
@@ -1096,7 +1096,7 @@ const createLibrary = (): string => {
     {
       id: "locator-layout",
       displayName: "Locator",
-      pageSetType: "LOCATOR",
+      pageGroupType: "LOCATOR",
     }
   );
   fs.writeJsonSync(
@@ -1145,7 +1145,7 @@ const addEntityLayout = (
   fs.writeJsonSync(path.join(layoutDirectory, "metadata.json"), {
     id: layoutId,
     displayName: layoutId,
-    pageSetType: "ENTITY",
+    pageGroupType: "ENTITY",
   });
   fs.writeJsonSync(path.join(layoutDirectory, "defaultLayout.json"), {
     root: { props: { version } },

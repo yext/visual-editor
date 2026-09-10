@@ -131,12 +131,12 @@ describe("exportDirectoryLocatorSectionLibrary", () => {
       fs.readJsonSync(
         path.join(libraryDirectory, "layouts", "directory", "metadata.json")
       )
-    ).toMatchObject({ pageSetType: "DIRECTORY" });
+    ).toMatchObject({ pageGroupType: "DIRECTORY" });
     expect(
       fs.readJsonSync(
         path.join(libraryDirectory, "layouts", "locator", "metadata.json")
       )
-    ).toMatchObject({ pageSetType: "LOCATOR" });
+    ).toMatchObject({ pageGroupType: "LOCATOR" });
 
     exportDirectoryLocatorSectionLibrary({
       targetDirectory,

@@ -297,7 +297,7 @@ const readLayout = (
   }
 
   try {
-    const pageSetType = metadataValue.pageSetType;
+    const pageSetType = metadataValue.pageGroupType;
     let metadata: LayoutMetadata;
     if (pageSetType === "ENTITY") {
       const vertical = getOptionalStringListProperty(
@@ -335,7 +335,7 @@ const readLayout = (
         pageSetType,
       };
     } else {
-      throw new Error("must set a supported pageSetType");
+      throw new Error("must set a supported pageGroupType");
     }
     if (!safeSectionLibraryIdPattern.test(metadata.id)) {
       throw new Error(`Layout ID is not valid: ${metadata.id}`);

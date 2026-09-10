@@ -485,7 +485,7 @@ const writeLayouts = (
     {
       id: layoutIds.directory,
       displayName: "Directory",
-      pageSetType: "DIRECTORY",
+      pageGroupType: "DIRECTORY",
     },
     directoryLayout
   );
@@ -495,7 +495,7 @@ const writeLayouts = (
     {
       id: layoutIds.locator,
       displayName: "Locator",
-      pageSetType: "LOCATOR",
+      pageGroupType: "LOCATOR",
     },
     locatorLayout
   );

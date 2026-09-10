@@ -162,7 +162,7 @@ describe("validateSectionLibraryStructure", () => {
     writeLayoutMetadata(rootDir, "entity-layout", {
       id: "entity-layout",
       displayName: "Entity",
-      pageSetType: "UNKNOWN",
+      pageGroupType: "UNKNOWN",
     });
 
     expectRules(rootDir, "layouts/metadata");
@@ -172,7 +172,7 @@ describe("validateSectionLibraryStructure", () => {
     const rootDir = createValidLibrary();
     writeLayoutMetadata(rootDir, "directory-layout", {
       id: "directory-layout",
-      pageSetType: "DIRECTORY",
+      pageGroupType: "DIRECTORY",
     });
 
     expectRules(rootDir, "layouts/metadata");
@@ -210,7 +210,7 @@ describe("validateSectionLibraryStructure", () => {
     writeLayoutMetadata(rootDir, "directory-layout", {
       id: "bad id",
       displayName: "Directory",
-      pageSetType: "DIRECTORY",
+      pageGroupType: "DIRECTORY",
     });
 
     expectRules(rootDir, "layouts/metadata");
@@ -221,7 +221,7 @@ describe("validateSectionLibraryStructure", () => {
     writeLayoutMetadata(rootDir, "directory-layout", {
       id: "directory",
       displayName: "Directory",
-      pageSetType: "DIRECTORY",
+      pageGroupType: "DIRECTORY",
     });
 
     expectRules(rootDir, "layouts/metadata");
@@ -416,7 +416,7 @@ const entityMetadata = {
   displayName: "Entity",
   vertical: ["RETAIL"],
   purpose: ["LOCATION"],
-  pageSetType: "ENTITY",
+  pageGroupType: "ENTITY",
 };
 
 const createValidLibrary = (): string => {
@@ -426,12 +426,12 @@ const createValidLibrary = (): string => {
   writeLayout(rootDir, "directory-layout", {
     id: "directory-layout",
     displayName: "Directory",
-    pageSetType: "DIRECTORY",
+    pageGroupType: "DIRECTORY",
   });
   writeLayout(rootDir, "locator-layout", {
     id: "locator-layout",
     displayName: "Locator",
-    pageSetType: "LOCATOR",
+    pageGroupType: "LOCATOR",
   });
   writeRegistry(rootDir, [
     { id: "directory-header", pageSetTypes: ["DIRECTORY"] },
