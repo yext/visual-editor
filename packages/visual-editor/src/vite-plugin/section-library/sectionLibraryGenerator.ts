@@ -176,6 +176,7 @@ export const generateSectionLibraryFiles = (
   };
 };
 
+/** Builds entrypoint for lazy loaders that import generated translation resources. */
 const buildTranslationLoadersSource = (
   generatedPath: string,
   resources: SectionLibraryTranslationResources
@@ -211,6 +212,7 @@ const buildTranslationLoadersSource = (
   ].join("\n");
 };
 
+/** Merges built-in translations with repository overrides for every locale. */
 const generateMergedTranslationResources = (
   rootDir: string,
   generatedDirectory: string,

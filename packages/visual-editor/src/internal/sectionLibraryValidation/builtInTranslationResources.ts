@@ -8,18 +8,38 @@ export const readBuiltInTranslations = (
   resourceKind: "platform" | "page",
   locale: string
 ): TranslationDictionary | undefined => {
-  const moduleDirectory = path.dirname(fileURLToPath(import.meta.url));
-  for (let depth = 0; depth <= 5; depth++) {
-    const localePath = path.join(
-      moduleDirectory,
-      ...Array(depth).fill(".."),
-      "locales",
-      resourceKind,
-      locale,
-      "visual-editor.json"
+  const currentModuleDirectory = path.dirname(fileURLToPath(import.meta.url));
+
+  let localeDirectory: string;
+  if (
+    currentModuleDirectory.endsWith(
+      path.join("src", "internal", "sectionLibraryValidation")
+    )
+  ) {
+    // Running directly in visual-editor repo
+    localeDirectory = path.resolve(
+      currentModuleDirectory,
+      "..",
+      "..",
+      "..",
+      "locales"
     );
-    if (fs.existsSync(localePath)) {
-      return JSON.parse(fs.readFileSync(localePath, "utf8"));
-    }
+  } else if (path.basename(path.dirname(currentModuleDirectory)) === "dist") {
+    // Running in bundled CLI and Vite plugin under dist/cli and dist/plugin.
+    localeDirectory = path.resolve(currentModuleDirectory, "..", "locales");
+  } else {
+    throw new Error(
+      `Cannot determine the built-in translation location from ${currentModuleDirectory}`
+    );
+  }
+
+  const localePath = path.join(
+    localeDirectory,
+    resourceKind,
+    locale,
+    "visual-editor.json"
+  );
+  if (fs.existsSync(localePath)) {
+    return JSON.parse(fs.readFileSync(localePath, "utf8"));
   }
 };

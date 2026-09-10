@@ -30,15 +30,21 @@ export const renderValidationResult = (
 
     if (errors.length === 0) {
       lines.push(
-        `${label}: ${colors.green(
+        `${label}: ${
           warnings.length === 0
-            ? "passed"
-            : `passed (${warnings.length} ${warnings.length === 1 ? "warning" : "warnings"})`
-        )}`
+            ? colors.green("passed")
+            : colors.yellow(
+                `passed (${warnings.length} ${warnings.length === 1 ? "warning" : "warnings"})`
+              )
+        }`
       );
+
       lines.push(
-        ...warnings.map((issue) => `  ${formatValidationIssue(issue)}`)
+        ...warnings.map((issue) =>
+          colors.yellow(`  ${formatValidationIssue(issue)}`)
+        )
       );
+
       continue;
     }
 
@@ -58,11 +64,11 @@ export const renderValidationResult = (
   const warningCount = result.issues.length - errorCount;
   lines.push(
     errorCount === 0
-      ? colors.green(
-          warningCount === 0
-            ? "Validation passed. 0 errors."
-            : `Validation passed. 0 errors, ${warningCount} ${warningCount === 1 ? "warning" : "warnings"}.`
-        )
+      ? warningCount === 0
+        ? colors.green("Validation passed. 0 errors.")
+        : colors.yellow(
+            `Validation passed. 0 errors, ${warningCount} ${warningCount === 1 ? "warning" : "warnings"}.`
+          )
       : colors.red(
           `Validation failed. ${errorCount} ${errorCount === 1 ? "error" : "errors"}${warningCount === 0 ? "." : `, ${warningCount} ${warningCount === 1 ? "warning" : "warnings"}.`}`
         )
