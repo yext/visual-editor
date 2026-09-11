@@ -1,6 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "i18n-test-library",
-  "displayName": "i18n Test Library",
-  "locales": ["en", "fr", "pl"]
-}
