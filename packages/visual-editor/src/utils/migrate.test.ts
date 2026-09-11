@@ -41,24 +41,56 @@ describe("migrate", () => {
     });
   });
 
-  it("returns component changes made by a keyed registry", () => {
+  it("removes an unavailable component nested in a slot after built-in migrations", () => {
     const migratedData = migrate(
       {
         root: { props: {} },
-        content: [{ type: "Old", props: { id: "old" } }],
+        content: [
+          {
+            type: "MainContent",
+            props: {
+              id: "main-content",
+              content: [
+                { type: "Existing", props: { id: "existing", value: 1 } },
+                { type: "Removed", props: { id: "removed" } },
+              ],
+            },
+          },
+        ],
         zones: {},
       },
       [
         {
-          id: "rename-old",
-          migration: { Old: { action: "renamed", newName: "New" } },
+          id: "update-existing",
+          migration: {
+            Existing: {
+              action: "updated",
+              propTransformation: (props) => ({
+                ...props,
+                value: props.value + 1,
+              }),
+            },
+          },
         },
       ],
-      { components: {} },
-      {}
+      {
+        components: {
+          MainContent: { fields: { content: { type: "slot" } } },
+          Existing: { fields: {} },
+        },
+      } as any,
+      {},
+      [
+        {
+          id: "remove-component",
+          migration: { Removed: { action: "removed" } },
+        },
+      ]
     );
 
-    expect(migratedData.content[0].type).toBe("New");
+    expect(migratedData.content[0].props.content).toEqual([
+      { type: "Existing", props: { id: "existing", value: 2 } },
+    ]);
   });
 
   it("applies only entries after each known cursor", () => {
@@ -1827,7 +1859,6 @@ const migration: Migration = {
   CoreInfoSection: {
     action: "removed",
   },
-  BannerSection: { action: "renamed", newName: "ThinBannerSection" },
   HeroSection: {
     action: "updated",
     propTransformation: ({
@@ -1841,12 +1872,7 @@ const migration: Migration = {
   },
 };
 
-const alreadyAppliedMigration: Migration = {
-  HeroSection: {
-    action: "renamed",
-    newName: "RenamedSection",
-  },
-};
+const alreadyAppliedMigration: Migration = {};
 
 export const migrationRegistry: MigrationRegistry = keyedRegistry(
   alreadyAppliedMigration,
@@ -2043,7 +2069,7 @@ const exampleDataAfter = {
   },
   content: [
     {
-      type: "ThinBannerSection",
+      type: "BannerSection",
       props: {
         text: {
           field: "",

@@ -483,14 +483,18 @@ describe("validateSectionLibraryStructure", () => {
     expectRules(rootDir, "migrations/duplicate-id");
   });
 
-  it("reports a missing built-in migration cursor", () => {
+  it("accepts a default layout behind the built-in migrations", () => {
     const rootDir = createValidLibrary();
     fs.outputJsonSync(
       layoutFilePath(rootDir, "entity-layout", "defaultLayout.json"),
-      { root: { props: {} }, content: [], zones: {} }
+      {
+        root: { props: { lastBuiltInMigrationId: "older-migration" } },
+        content: [],
+        zones: {},
+      }
     );
 
-    expectRules(rootDir, "layouts/built-in-migration-cursor");
+    expect(validateSectionLibraryStructure(rootDir).issues).toEqual([]);
   });
 
   it("reports an empty repo migration ID", () => {

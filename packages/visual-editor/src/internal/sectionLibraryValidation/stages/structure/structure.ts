@@ -26,7 +26,6 @@ import type {
   SectionLibraryTranslationResources,
   ValidationIssue,
 } from "../../types.ts";
-import { migrationRegistry } from "../../../../components/migrations/migrationRegistry.ts";
 import { readBuiltInTranslations } from "../../builtInTranslationResources.ts";
 
 const reservedLayoutIds = new Set([
@@ -134,7 +133,7 @@ export const validateSectionLibraryStructure = (
   };
 };
 
-/** validateLayoutMigrationCursors ensures the defaultLayout.json files are set to the latest migration ids */
+/** Ensures defaultLayout.json files match the repo's migration registry. */
 const validateLayoutMigrationCursors = (
   layout: ParsedLayout,
   migrationIds: string[],
@@ -143,14 +142,6 @@ const validateLayoutMigrationCursors = (
   const root = layout.defaultLayout.root as
     { props?: Record<string, unknown> } | undefined;
   const props = root?.props;
-  if (props?.lastBuiltInMigrationId !== migrationRegistry.at(-1)?.id) {
-    addIssue(
-      layout.defaultLayoutPath,
-      "layouts/built-in-migration-cursor",
-      `defaultLayout root.props.lastBuiltInMigrationId must equal ${migrationRegistry.at(-1)?.id}`
-    );
-  }
-
   const latestRepoMigrationId = migrationIds.at(-1);
   if (latestRepoMigrationId === undefined) {
     if (props?.lastSectionLibraryMigrationId !== undefined) {

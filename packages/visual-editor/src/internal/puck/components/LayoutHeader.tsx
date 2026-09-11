@@ -218,6 +218,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
                   return;
                 }
 
+                console.error("Failed to paste layout:", err);
                 alert(pt("failedToPasteLayout", "Failed to paste layout."));
                 return;
               }

@@ -15,10 +15,6 @@ export type MigrationAction =
       action: "removed";
     }
   | {
-      action: "renamed";
-      newName: string;
-    }
-  | {
       action: "updated";
       propTransformation: (
         oldProps: { id: string } & Record<string, any>,
@@ -99,11 +95,16 @@ export const migrate = (
     data.root.props = {};
   }
 
+  const migrationConfig = withRemovedComponentConfigs(config, [
+    migrationRegistry,
+    sectionLibraryMigrationRegistry,
+  ]);
+
   data = applyRegistry(
     data,
     migrationRegistry,
     "lastBuiltInMigrationId",
-    config,
+    migrationConfig,
     streamDocument,
     legacyVersion
   );
@@ -116,11 +117,46 @@ export const migrate = (
     data,
     sectionLibraryMigrationRegistry,
     "lastSectionLibraryMigrationId",
-    config,
+    migrationConfig,
     streamDocument
   );
 
   return data;
+};
+
+const withRemovedComponentConfigs = (
+  config: Config,
+  registries: MigrationRegistry[]
+): Config => {
+  const removedComponentNames = new Set<string>();
+  registries.forEach((registry) => {
+    registry.forEach(({ migration }) => {
+      Object.entries(migration).forEach(([componentName, migrationAction]) => {
+        if (
+          componentName !== "*" &&
+          "action" in migrationAction &&
+          migrationAction.action === "removed"
+        ) {
+          removedComponentNames.add(componentName);
+        }
+      });
+    });
+  });
+
+  const missingComponentNames = [...removedComponentNames].filter(
+    (componentName) => !config.components[componentName]
+  );
+  if (missingComponentNames.length === 0) {
+    return config;
+  }
+
+  const components = { ...config.components };
+  missingComponentNames.forEach((componentName) => {
+    // walkTree requires every slot child to have a config before its callback
+    // can remove the child. This placeholder is used only during migration.
+    components[componentName] = {} as Config["components"][string];
+  });
+  return { ...config, components };
 };
 
 const applyRegistry = (
@@ -179,19 +215,6 @@ const applyRegistry = (
               );
             }
             return content.filter((c) => c.type !== componentName);
-          case "renamed":
-            if (appliesToAllComponents) {
-              throw new Error(
-                "Cannot apply rename migration to all components."
-              );
-            }
-            return content.map((c) => {
-              return {
-                ...c,
-                type:
-                  c.type === componentName ? migrationAction.newName : c.type,
-              };
-            });
           case "updated":
             return content.map((c) => {
               if (!appliesToAllComponents && c.type !== componentName) {
