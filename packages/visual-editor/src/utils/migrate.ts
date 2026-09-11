@@ -111,6 +111,7 @@ export const migrate = (
   return data;
 };
 
+/** Create an empty component config for any removed components so the config can pass validation in `walkTree`. */
 const withRemovedComponentConfigs = (
   config: Config,
   registries: MigrationRegistry[]

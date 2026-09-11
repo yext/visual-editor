@@ -179,7 +179,7 @@ describe("generateSectionLibraryFiles", () => {
       expect.objectContaining({
         root: expect.objectContaining({
           props: expect.objectContaining({
-            version: 82,
+            version: 73,
           }),
         }),
       })
@@ -337,7 +337,7 @@ describe("generateSectionLibraryFiles", () => {
 
   it("generates a render template for every Entity layout", () => {
     const rootDir = createLibrary();
-    addEntityLayout(rootDir, "alpha-location");
+    addEntityLayout(rootDir, "alpha-location", 42);
 
     const result = generateSectionLibraryFiles(
       rootDir,
@@ -406,20 +406,20 @@ describe("generateSectionLibraryFiles", () => {
         id: "alpha-location",
         templateId: "alpha-location",
         editorPath: "edit/alpha-location/123e4567-e89b-12d3-a456-426614174000",
-        version: 82,
+        version: 42,
       },
       {
         id: "location",
         templateId: "location",
         editorPath: "edit/location/123e4567-e89b-12d3-a456-426614174000",
-        version: 82,
+        version: 73,
       },
     ]);
     const alphaDefault = JSON.parse(
       fs.readJsonSync(path.join(rootDir, ".template-manifest.json"))
         .templates[0].defaultLayoutData
     );
-    expect(alphaDefault.root.props.version).toBe(82);
+    expect(alphaDefault.root.props.version).toBe(42);
   });
 
   it("replaces a template manifest from an earlier compatibility structure", () => {
@@ -943,14 +943,14 @@ describe("generateSectionLibraryFiles", () => {
     {
       name: "layout ID reserved for an editor template",
       update: (rootDir: string): void => {
-        addEntityLayout(rootDir, "edit-location");
+        addEntityLayout(rootDir, "edit-location", 42);
       },
       error: /edit-location because it is reserved for a generated id/,
     },
     {
       name: "layout ID reserved for a Local Editor template prefix",
       update: (rootDir: string): void => {
-        addEntityLayout(rootDir, "local-editor-data-location");
+        addEntityLayout(rootDir, "local-editor-data-location", 42);
       },
       error:
         /local-editor-data-location because it is reserved for a generated id/,
@@ -958,7 +958,7 @@ describe("generateSectionLibraryFiles", () => {
     {
       name: "Local Editor data template name collision",
       update: (rootDir: string): void => {
-        addEntityLayout(rootDir, "location_");
+        addEntityLayout(rootDir, "location_", 42);
       },
       error:
         /Layout IDs location and location_ generate the same Local Editor id: local-editor-data-location/,
@@ -1196,7 +1196,7 @@ const createLibrary = (): string => {
   fs.writeJsonSync(
     path.join(libraryDirectory, "layouts", "location", "defaultLayout.json"),
     {
-      root: { props: { version: 82 } },
+      root: { props: { version: 73 } },
       content: [{ type: "hero", props: { id: "hero-default" } }],
       zones: {},
     }
@@ -1217,7 +1217,7 @@ const createLibrary = (): string => {
       "defaultLayout.json"
     ),
     {
-      root: { props: { version: 82 } },
+      root: { props: {} },
       content: [
         {
           type: "directory-header",
@@ -1252,7 +1252,7 @@ const createLibrary = (): string => {
       "defaultLayout.json"
     ),
     {
-      root: { props: { version: 82 } },
+      root: { props: {} },
       content: [
         {
           type: "MainContent",
@@ -1274,7 +1274,11 @@ const createLibrary = (): string => {
   return rootDir;
 };
 
-const addEntityLayout = (rootDir: string, layoutId: string): void => {
+const addEntityLayout = (
+  rootDir: string,
+  layoutId: string,
+  version: number
+): void => {
   const layoutDirectory = path.join(
     rootDir,
     "src",
@@ -1289,7 +1293,7 @@ const addEntityLayout = (rootDir: string, layoutId: string): void => {
     pageSetType: "ENTITY",
   });
   fs.writeJsonSync(path.join(layoutDirectory, "defaultLayout.json"), {
-    root: { props: { version: 82 } },
+    root: { props: { version } },
     content: [{ type: "hero", props: { id: `${layoutId}-hero-default` } }],
     zones: {},
   });
