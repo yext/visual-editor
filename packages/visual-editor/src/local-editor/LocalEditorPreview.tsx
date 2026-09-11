@@ -99,10 +99,10 @@ export const LocalEditorPreview = ({
           localDevOptions,
         });
         const migratedLayoutData = migrate(
-          cloneLayoutData(layoutData),
-          migrationRegistry,
           config,
+          cloneLayoutData(layoutData),
           streamDocument,
+          migrationRegistry,
           sectionLibraryMigrationRegistry
         );
         const resolvedLayoutData = await resolveAllData(

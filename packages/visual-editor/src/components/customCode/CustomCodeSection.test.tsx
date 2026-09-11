@@ -169,6 +169,7 @@ describe("CustomCodeSection", async () => {
       viewport: { width, height, name: viewportName },
     }) => {
       const data = migrate(
+        puckConfig,
         {
           root: {
             props: {
@@ -182,9 +183,8 @@ describe("CustomCodeSection", async () => {
             },
           ],
         },
-        migrationRegistry,
-        puckConfig,
-        document
+        document,
+        migrationRegistry
       );
 
       const { container } = reactRender(

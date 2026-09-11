@@ -330,6 +330,7 @@ describe("ReviewsSection", async () => {
       viewport: { width, height, name: viewportName },
     }) => {
       let data = migrate(
+        puckConfig,
         {
           root: {
             props: {
@@ -343,9 +344,8 @@ describe("ReviewsSection", async () => {
             },
           ],
         },
-        migrationRegistry,
-        puckConfig,
-        document
+        document,
+        migrationRegistry
       );
 
       data = await resolveAllData(data, puckConfig, {

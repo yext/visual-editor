@@ -160,7 +160,8 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
                 navigator.clipboard.writeText(
                   JSON.stringify(appState.data, null, 2)
                 );
-              } catch {
+              } catch (err) {
+                console.error("Failed to copy layout:", err);
                 alert(pt("failedToCopyLayout", "Failed to copy layout."));
               }
             }}
@@ -192,10 +193,10 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
                 }
 
                 const migratedPastedData = migrate(
-                  pastedData,
-                  migrationRegistry,
                   config,
+                  pastedData,
                   streamDocument,
+                  migrationRegistry,
                   sectionLibraryMigrationRegistry
                 );
 
@@ -358,10 +359,10 @@ export const LocalDevOverrideButtons = ({
               data = JSON.parse(prompt("Enter layout data:") ?? "{}");
             } finally {
               const migratedData = migrate(
-                data,
-                migrationRegistry,
                 config,
+                data,
                 streamDocument,
+                migrationRegistry,
                 sectionLibraryMigrationRegistry
               );
               setHistories([...histories, { state: { data: migratedData } }]);

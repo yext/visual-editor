@@ -115,10 +115,10 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
     );
   }
   const migratedData = migrate(
-    data,
-    migrationRegistry,
     sectionLibraryConfig,
+    data,
     props.document,
+    migrationRegistry,
     sectionLibraryMigrationRegistry
   );
   props.document.__.layout = JSON.stringify(

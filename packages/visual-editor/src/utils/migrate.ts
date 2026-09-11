@@ -74,10 +74,10 @@ interface RootProps extends DefaultRootProps {
 type PuckData = Data<DefaultComponentProps, RootProps>;
 
 export const migrate = (
-  data: PuckData,
-  migrationRegistry: MigrationRegistry = commonMigrationRegistry,
   config: Config,
+  data: PuckData,
   streamDocument: StreamDocument,
+  migrationRegistry: MigrationRegistry = commonMigrationRegistry,
   sectionLibraryMigrationRegistry: MigrationRegistry = []
 ): Data => {
   // Work on a clone so a thrown migration cannot partially mutate persisted

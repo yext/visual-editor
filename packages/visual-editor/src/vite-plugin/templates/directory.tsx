@@ -98,10 +98,10 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
   const { document } = props;
 
   const migratedData = migrate(
-    JSON.parse(document.__.layout),
-    migrationRegistry,
     directoryConfig,
-    document
+    JSON.parse(document.__.layout),
+    document,
+    migrationRegistry
   );
   const resolvedPuckData = await resolveAllData(migratedData, directoryConfig, {
     streamDocument: document,

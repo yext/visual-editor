@@ -2113,6 +2113,7 @@ describe("HeroSection", async () => {
       viewport: { width, height, name: viewportName },
     }) => {
       const data = migrate(
+        puckConfig,
         {
           root: {
             props: {
@@ -2126,9 +2127,8 @@ describe("HeroSection", async () => {
             },
           ],
         },
-        migrationRegistry,
-        puckConfig,
-        document
+        document,
+        migrationRegistry
       );
 
       const updatedData = await resolveAllData(data, puckConfig, {

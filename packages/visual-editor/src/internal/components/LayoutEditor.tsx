@@ -89,10 +89,10 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
   const migrateLayoutData = useCallback(
     (data: Data): Data =>
       migrate(
-        data,
-        migrationRegistry,
         puckConfig,
+        data,
         streamDocument,
+        migrationRegistry,
         sectionLibraryMigrationRegistry
       ),
     [puckConfig, sectionLibraryMigrationRegistry, streamDocument]

@@ -322,10 +322,10 @@ describe("ThemeTest", async () => {
       viewport: { width, height, name: viewportName },
     }) => {
       const migratedData = migrate(
-        data,
-        migrationRegistry,
         puckConfig,
-        document
+        data,
+        document,
+        migrationRegistry
       );
 
       const { container } = reactRender(

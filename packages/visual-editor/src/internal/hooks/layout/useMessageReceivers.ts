@@ -44,10 +44,10 @@ export const useLayoutMessageReceivers = (
       const migratedHistory = {
         ...history,
         data: migrate(
-          history.data,
-          migrationRegistry,
           puckConfig,
+          history.data,
           streamDocument,
+          migrationRegistry,
           sectionLibraryMigrationRegistry
         ),
       };

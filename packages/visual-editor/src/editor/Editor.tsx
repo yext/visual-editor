@@ -214,10 +214,10 @@ export const Editor = ({
   }
   const migratedData = !isLoading
     ? migrate(
-        layoutData!,
-        migrationRegistry,
         puckConfig,
+        layoutData!,
         document,
+        migrationRegistry,
         sectionLibraryMigrationRegistry
       )
     : undefined;

@@ -35,20 +35,20 @@ export const getLocalDevLayoutData = (
 ) => {
   if (initialLayoutData) {
     return migrate(
-      initialLayoutData as Data,
-      migrationRegistry,
       puckConfig,
+      initialLayoutData as Data,
       streamDocument,
+      migrationRegistry,
       sectionLibraryMigrationRegistry
     );
   }
   const layout = streamDocument.__?.layout;
   if (!layout) {
     return migrate(
-      createEmptyLocalDevLayout,
-      migrationRegistry,
       puckConfig,
+      createEmptyLocalDevLayout,
       streamDocument,
+      migrationRegistry,
       sectionLibraryMigrationRegistry
     );
   }
@@ -56,10 +56,10 @@ export const getLocalDevLayoutData = (
   try {
     const parsedLayout = JSON.parse(layout) as Data;
     return migrate(
-      parsedLayout,
-      migrationRegistry,
       puckConfig,
+      parsedLayout,
       streamDocument,
+      migrationRegistry,
       sectionLibraryMigrationRegistry
     );
   } catch (error) {
@@ -68,10 +68,10 @@ export const getLocalDevLayoutData = (
       error
     );
     return migrate(
-      createEmptyLocalDevLayout,
-      migrationRegistry,
       puckConfig,
+      createEmptyLocalDevLayout,
       streamDocument,
+      migrationRegistry,
       sectionLibraryMigrationRegistry
     );
   }
