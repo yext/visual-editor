@@ -48,7 +48,7 @@ export type ResolvedSectionLibraryStructure = {
   sharedComponents: SharedHiddenPuckComponent[];
   sharedRootPageSetTypes: PageSetType[];
   layouts: SectionLibraryLayout[];
-  migrationIds: string[];
+  migrationCount: number;
   translationResources: SectionLibraryTranslationResources;
 };
 

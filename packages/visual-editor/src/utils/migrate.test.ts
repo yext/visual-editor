@@ -9,11 +9,7 @@ import { slotMappedCardsMigration } from "../components/migrations/0076_slot_map
 import { removeMapboxApiKeyPropsMigration } from "../components/migrations/0078_remove_mapbox_api_key_props.ts";
 import { imageFillTypeMigration } from "../components/migrations/0079_image_fill_type.ts";
 
-const keyedRegistry = (...migrations: Migration[]): MigrationRegistry =>
-  migrations.map((migration, index) => ({
-    id: `test-migration-${index + 1}`,
-    migration,
-  }));
+const registry = (...migrations: Migration[]): MigrationRegistry => migrations;
 
 const appendStep = (step: string): Migration => ({
   root: {
@@ -28,16 +24,16 @@ describe("migrate", () => {
   it("runs built-in migrations before section-library migrations", () => {
     const migratedData = migrate(
       { root: { props: {} }, content: [], zones: {} },
-      [{ id: "built-in", migration: appendStep("built-in") }],
+      [appendStep("built-in")],
       { components: {} },
       {},
-      [{ id: "repo", migration: appendStep("repo") }]
+      [appendStep("repo")]
     );
 
     expect(migratedData.root.props).toEqual({
       steps: ["built-in", "repo"],
-      lastBuiltInMigrationId: "built-in",
-      lastSectionLibraryMigrationId: "repo",
+      version: 1,
+      sectionLibraryMigrationVersion: 1,
     });
   });
 
@@ -61,15 +57,12 @@ describe("migrate", () => {
       },
       [
         {
-          id: "update-existing",
-          migration: {
-            Existing: {
-              action: "updated",
-              propTransformation: (props) => ({
-                ...props,
-                value: props.value + 1,
-              }),
-            },
+          Existing: {
+            action: "updated",
+            propTransformation: (props) => ({
+              ...props,
+              value: props.value + 1,
+            }),
           },
         },
       ],
@@ -82,8 +75,7 @@ describe("migrate", () => {
       {},
       [
         {
-          id: "remove-component",
-          migration: { Removed: { action: "removed" } },
+          Removed: { action: "removed" },
         },
       ]
     );
@@ -93,84 +85,75 @@ describe("migrate", () => {
     ]);
   });
 
-  it("applies only entries after each known cursor", () => {
+  it("applies only entries after each stored version", () => {
     const migratedData = migrate(
       {
         root: {
           props: {
-            lastBuiltInMigrationId: "built-in-1",
-            lastSectionLibraryMigrationId: "repo-1",
+            version: 1,
+            sectionLibraryMigrationVersion: 1,
           },
         },
         content: [],
         zones: {},
       },
-      [
-        { id: "built-in-1", migration: appendStep("old built-in") },
-        { id: "built-in-2", migration: appendStep("new built-in") },
-      ],
+      [appendStep("old built-in"), appendStep("new built-in")],
       { components: {} },
       {},
-      [
-        { id: "repo-1", migration: appendStep("old repo") },
-        { id: "repo-2", migration: appendStep("new repo") },
-      ]
+      [appendStep("old repo"), appendStep("new repo")]
     );
 
     expect(migratedData.root.props).toEqual({
       steps: ["new built-in", "new repo"],
-      lastBuiltInMigrationId: "built-in-2",
-      lastSectionLibraryMigrationId: "repo-2",
+      version: 2,
+      sectionLibraryMigrationVersion: 2,
     });
   });
 
-  it("preserves an unknown cursor without blocking the other registry", () => {
+  it("preserves a future version without blocking the other registry", () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
 
     const migratedData = migrate(
       {
-        root: { props: { lastBuiltInMigrationId: "missing" } },
+        root: { props: { version: 2 } },
         content: [],
         zones: {},
       },
-      [{ id: "built-in", migration: appendStep("built-in") }],
+      [appendStep("built-in")],
       { components: {} },
       {},
-      [{ id: "repo", migration: appendStep("repo") }]
+      [appendStep("repo")]
     );
 
     expect(migratedData.root.props).toEqual({
       steps: ["repo"],
-      lastBuiltInMigrationId: "missing",
-      lastSectionLibraryMigrationId: "repo",
+      version: 2,
+      sectionLibraryMigrationVersion: 1,
     });
     expect(warn).toHaveBeenCalledOnce();
     warn.mockRestore();
   });
 
-  it("converts a legacy numeric version and runs repo migrations from the beginning", () => {
+  it("uses the existing built-in version and runs repo migrations from the beginning", () => {
     const migratedData = migrate(
       { root: { props: { version: 1 } }, content: [], zones: {} },
-      [
-        { id: "built-in-1", migration: appendStep("old built-in") },
-        { id: "built-in-2", migration: appendStep("new built-in") },
-      ],
+      [appendStep("old built-in"), appendStep("new built-in")],
       { components: {} },
       {},
-      [{ id: "repo-1", migration: appendStep("repo") }]
+      [appendStep("repo")]
     );
 
     expect(migratedData.root.props).toEqual({
       steps: ["new built-in", "repo"],
-      lastBuiltInMigrationId: "built-in-2",
-      lastSectionLibraryMigrationId: "repo-1",
+      version: 2,
+      sectionLibraryMigrationVersion: 1,
     });
   });
 
-  it("leaves the repo cursor absent when its registry is empty", () => {
+  it("preserves the repo version when its registry is empty", () => {
     const migratedData = migrate(
       {
-        root: { props: { lastSectionLibraryMigrationId: "stale" } },
+        root: { props: { sectionLibraryMigrationVersion: 1 } },
         content: [],
         zones: {},
       },
@@ -179,7 +162,9 @@ describe("migrate", () => {
       {}
     );
 
-    expect(migratedData.root.props).toEqual({});
+    expect(migratedData.root.props).toEqual({
+      sectionLibraryMigrationVersion: 1,
+    });
   });
 
   it("does not mutate input or run later migrations after an error", () => {
@@ -190,22 +175,16 @@ describe("migrate", () => {
       migrate(
         input,
         [
-          { id: "first", migration: appendStep("first") },
+          appendStep("first"),
           {
-            id: "failing",
-            migration: {
-              root: {
-                propTransformation: () => {
-                  throw new Error("migration failed");
-                },
+            root: {
+              propTransformation: () => {
+                throw new Error("migration failed");
               },
             },
           },
           {
-            id: "later",
-            migration: {
-              root: { propTransformation: laterMigration },
-            },
+            root: { propTransformation: laterMigration },
           },
         ],
         { components: {} },
@@ -231,7 +210,7 @@ describe("migrate", () => {
   it("successfully applies root migration", async () => {
     const migratedData = migrate(
       exampleRootDataBefore,
-      keyedRegistry(addIdToSchema),
+      registry(addIdToSchema),
       {
         components: {},
       },
@@ -256,7 +235,7 @@ describe("migrate", () => {
         ],
         zones: {},
       },
-      keyedRegistry(mainContentWrapperMigration),
+      registry(mainContentWrapperMigration),
       {
         components: {},
       },
@@ -266,7 +245,7 @@ describe("migrate", () => {
     expect(migratedData).toEqual({
       root: {
         props: {
-          lastBuiltInMigrationId: "test-migration-1",
+          version: 1,
         },
       },
       content: [
@@ -295,7 +274,7 @@ describe("migrate", () => {
         content: [{ type: "Locator", props: { id: "locator" } }],
         zones: {},
       },
-      keyedRegistry(mainContentWrapperMigration),
+      registry(mainContentWrapperMigration),
       {
         components: {},
       },
@@ -305,7 +284,7 @@ describe("migrate", () => {
     expect(migratedData).toEqual({
       root: {
         props: {
-          lastBuiltInMigrationId: "test-migration-1",
+          version: 1,
         },
       },
       content: [
@@ -365,7 +344,7 @@ describe("migrate", () => {
         ],
         zones: {},
       },
-      keyedRegistry(removeMapboxApiKeyPropsMigration),
+      registry(removeMapboxApiKeyPropsMigration),
       {
         components: {},
       },
@@ -375,7 +354,7 @@ describe("migrate", () => {
     expect(migratedData).toEqual({
       root: {
         props: {
-          lastBuiltInMigrationId: "test-migration-1",
+          version: 1,
         },
       },
       content: [
@@ -451,7 +430,7 @@ describe("migrate", () => {
         ],
         zones: {},
       },
-      keyedRegistry(imageFillTypeMigration),
+      registry(imageFillTypeMigration),
       imageFillTypeMigrationConfig,
       {}
     );
@@ -509,7 +488,7 @@ describe("migrate", () => {
         ],
         zones: {},
       },
-      keyedRegistry(mainContentWrapperMigration),
+      registry(mainContentWrapperMigration),
       {
         components: {},
       },
@@ -519,7 +498,7 @@ describe("migrate", () => {
     expect(migratedData).toEqual({
       root: {
         props: {
-          lastBuiltInMigrationId: "test-migration-1",
+          version: 1,
         },
       },
       content: [
@@ -553,7 +532,7 @@ describe("migrate", () => {
         ],
         zones: {},
       },
-      keyedRegistry(mainContentWrapperMigration),
+      registry(mainContentWrapperMigration),
       {
         components: {},
       },
@@ -563,7 +542,7 @@ describe("migrate", () => {
     expect(migratedData).toEqual({
       root: {
         props: {
-          lastBuiltInMigrationId: "test-migration-1",
+          version: 1,
         },
       },
       content: [
@@ -599,7 +578,7 @@ describe("migrate", () => {
         ],
         zones: {},
       },
-      keyedRegistry(mainContentWrapperMigration),
+      registry(mainContentWrapperMigration),
       {
         components: {},
       },
@@ -609,7 +588,7 @@ describe("migrate", () => {
     expect(migratedData).toEqual({
       root: {
         props: {
-          lastBuiltInMigrationId: "test-migration-1",
+          version: 1,
         },
       },
       content: [
@@ -631,7 +610,7 @@ describe("migrate", () => {
   it("successfully applies migration based on document data", async () => {
     const migratedData = migrate(
       exampleBasicDataBefore,
-      keyedRegistry({
+      registry({
         BasicSection: {
           action: "updated",
           propTransformation: (props, document) => {
@@ -719,7 +698,7 @@ describe("migrate", () => {
         ],
         zones: {},
       },
-      keyedRegistry(themeColorPropertyKeyMigration),
+      registry(themeColorPropertyKeyMigration),
       {
         components: {},
       },
@@ -729,7 +708,7 @@ describe("migrate", () => {
     expect(migratedData).toEqual({
       root: {
         props: {
-          lastBuiltInMigrationId: "test-migration-1",
+          version: 1,
         },
       },
       content: [
@@ -814,7 +793,7 @@ describe("migrate", () => {
     } as any;
     const migratedData = migrate(
       data,
-      keyedRegistry(updateSchemaIdAnchorFormat),
+      registry(updateSchemaIdAnchorFormat),
       {
         components: {},
       },
@@ -847,7 +826,7 @@ describe("migrate", () => {
     } as any;
     const migratedData = migrate(
       data,
-      keyedRegistry(updateSchemaIdAnchorFormat),
+      registry(updateSchemaIdAnchorFormat),
       {
         components: {},
       },
@@ -906,7 +885,7 @@ describe("migrate", () => {
         ],
         zones: {},
       },
-      keyedRegistry(normalizeFooterLogoImageMigration),
+      registry(normalizeFooterLogoImageMigration),
       footerLogoSlotMigrationConfig,
       {}
     );
@@ -914,7 +893,7 @@ describe("migrate", () => {
     expect(migratedData).toEqual({
       root: {
         props: {
-          lastBuiltInMigrationId: "test-migration-1",
+          version: 1,
         },
       },
       content: [
@@ -1001,7 +980,7 @@ describe("migrate", () => {
         ],
         zones: {},
       },
-      keyedRegistry(normalizeFooterLogoImageMigration),
+      registry(normalizeFooterLogoImageMigration),
       footerLogoSlotMigrationConfig,
       {}
     );
@@ -1009,7 +988,7 @@ describe("migrate", () => {
     expect(migratedData).toEqual({
       root: {
         props: {
-          lastBuiltInMigrationId: "test-migration-1",
+          version: 1,
         },
       },
       content: [
@@ -1086,7 +1065,7 @@ describe("migrate", () => {
         ],
         zones: {},
       },
-      keyedRegistry(normalizeFooterLogoImageMigration),
+      registry(normalizeFooterLogoImageMigration),
       footerLogoSlotMigrationConfig,
       {}
     );
@@ -1094,7 +1073,7 @@ describe("migrate", () => {
     expect(migratedData).toEqual({
       root: {
         props: {
-          lastBuiltInMigrationId: "test-migration-1",
+          version: 1,
         },
       },
       content: [
@@ -1168,7 +1147,7 @@ describe("migrate", () => {
         ],
         zones: {},
       },
-      keyedRegistry(slotMappedCardsMigration),
+      registry(slotMappedCardsMigration),
       {
         components: {},
       },
@@ -1242,7 +1221,7 @@ describe("migrate", () => {
         ],
         zones: {},
       },
-      keyedRegistry(slotMappedCardsMigration),
+      registry(slotMappedCardsMigration),
       {
         components: {},
       },
@@ -1281,7 +1260,7 @@ describe("migrate", () => {
         ],
         zones: {},
       },
-      keyedRegistry(slotMappedCardsMigration),
+      registry(slotMappedCardsMigration),
       {
         components: {},
       },
@@ -1345,7 +1324,7 @@ describe("migrate", () => {
         ],
         zones: {},
       },
-      keyedRegistry(slotMappedCardsMigration),
+      registry(slotMappedCardsMigration),
       {
         components: {},
       },
@@ -1412,7 +1391,7 @@ describe("migrate", () => {
         ],
         zones: {},
       },
-      keyedRegistry(slotMappedCardsMigration),
+      registry(slotMappedCardsMigration),
       {
         components: {},
       },
@@ -1468,7 +1447,7 @@ describe("migrate", () => {
         ],
         zones: {},
       },
-      keyedRegistry(slotMappedCardsMigration),
+      registry(slotMappedCardsMigration),
       { components: {} },
       {}
     );
@@ -1514,7 +1493,7 @@ describe("migrate", () => {
         ],
         zones: {},
       },
-      keyedRegistry(slotMappedCardsMigration),
+      registry(slotMappedCardsMigration),
       { components: {} },
       {}
     );
@@ -1564,7 +1543,7 @@ describe("migrate", () => {
         ],
         zones: {},
       },
-      keyedRegistry(slotMappedCardsMigration),
+      registry(slotMappedCardsMigration),
       { components: {} },
       {}
     );
@@ -1634,7 +1613,7 @@ describe("migrate", () => {
           ],
           zones: {},
         },
-        keyedRegistry(slotMappedCardsMigration),
+        registry(slotMappedCardsMigration),
         { components: {} },
         {}
       );
@@ -1688,7 +1667,7 @@ describe("migrate", () => {
         ],
         zones: {},
       },
-      keyedRegistry(slotMappedCardsMigration),
+      registry(slotMappedCardsMigration),
       { components: {} },
       {}
     );
@@ -1765,7 +1744,7 @@ describe("migrate", () => {
             ],
             zones: {},
           },
-          keyedRegistry(slotMappedCardsMigration),
+          registry(slotMappedCardsMigration),
           { components: {} },
           {}
         );
@@ -1799,7 +1778,7 @@ describe("migrate", () => {
         ],
         zones: {},
       },
-      keyedRegistry(slotMappedCardsMigration),
+      registry(slotMappedCardsMigration),
       { components: {} },
       {}
     );
@@ -1836,7 +1815,7 @@ describe("migrate", () => {
         ],
         zones: {},
       },
-      keyedRegistry(slotMappedCardsMigration),
+      registry(slotMappedCardsMigration),
       { components: {} },
       {}
     );
@@ -1874,7 +1853,7 @@ const migration: Migration = {
 
 const alreadyAppliedMigration: Migration = {};
 
-export const migrationRegistry: MigrationRegistry = keyedRegistry(
+export const migrationRegistry: MigrationRegistry = registry(
   alreadyAppliedMigration,
   migration
 );
@@ -2064,7 +2043,7 @@ const exampleDataBefore = {
 const exampleDataAfter = {
   root: {
     props: {
-      lastBuiltInMigrationId: "test-migration-2",
+      version: 2,
     },
   },
   content: [
@@ -2155,7 +2134,7 @@ const exampleRootDataBefore = {
 const exampleRootDataAfter = {
   root: {
     props: {
-      lastBuiltInMigrationId: "test-migration-1",
+      version: 1,
       schemaMarkup:
         '{"@context":"https://schema.org","@type":"LocalBusiness","name":"[[name]]","address":{"@type":"PostalAddress","streetAddress":"[[address.line1]]","addressLocality":"[[address.city]]","addressRegion":"[[address.region]]","postalCode":"[[address.postalCode]]","addressCountry":"[[address.countryCode]]"},"openingHours":"[[hours]]","image":"[[photoGallery]]","description":"[[description]]","telephone":"[[mainPhone]]","paymentAccepted":"[[paymentOptions]]","hasOfferCatalog":"[[services]]","@id":"[[siteDomain]]/[[path]]"}',
     },
@@ -2185,7 +2164,7 @@ const exampleDocument = {
 const exampleBasicDataAfter = {
   root: {
     props: {
-      lastBuiltInMigrationId: "test-migration-1",
+      version: 1,
     },
   },
   zones: {},

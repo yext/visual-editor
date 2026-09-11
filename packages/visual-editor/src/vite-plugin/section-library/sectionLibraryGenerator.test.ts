@@ -179,7 +179,7 @@ describe("generateSectionLibraryFiles", () => {
       expect.objectContaining({
         root: expect.objectContaining({
           props: expect.objectContaining({
-            lastBuiltInMigrationId: "0082-hero-phone-slot",
+            version: 82,
           }),
         }),
       })
@@ -392,14 +392,13 @@ describe("generateSectionLibraryFiles", () => {
             templateId: string;
             editorPath: string;
             defaultLayout: {
-              root: { props: { lastBuiltInMigrationId: string } };
+              root: { props: { version: number } };
             };
           }) => ({
             id: layout.id,
             templateId: layout.templateId,
             editorPath: layout.editorPath,
-            lastBuiltInMigrationId:
-              layout.defaultLayout.root.props.lastBuiltInMigrationId,
+            version: layout.defaultLayout.root.props.version,
           })
         )
     ).toEqual([
@@ -407,22 +406,20 @@ describe("generateSectionLibraryFiles", () => {
         id: "alpha-location",
         templateId: "alpha-location",
         editorPath: "edit/alpha-location/123e4567-e89b-12d3-a456-426614174000",
-        lastBuiltInMigrationId: "0082-hero-phone-slot",
+        version: 82,
       },
       {
         id: "location",
         templateId: "location",
         editorPath: "edit/location/123e4567-e89b-12d3-a456-426614174000",
-        lastBuiltInMigrationId: "0082-hero-phone-slot",
+        version: 82,
       },
     ]);
     const alphaDefault = JSON.parse(
       fs.readJsonSync(path.join(rootDir, ".template-manifest.json"))
         .templates[0].defaultLayoutData
     );
-    expect(alphaDefault.root.props.lastBuiltInMigrationId).toBe(
-      "0082-hero-phone-slot"
-    );
+    expect(alphaDefault.root.props.version).toBe(82);
   });
 
   it("replaces a template manifest from an earlier compatibility structure", () => {
@@ -1199,7 +1196,7 @@ const createLibrary = (): string => {
   fs.writeJsonSync(
     path.join(libraryDirectory, "layouts", "location", "defaultLayout.json"),
     {
-      root: { props: { lastBuiltInMigrationId: "0082-hero-phone-slot" } },
+      root: { props: { version: 82 } },
       content: [{ type: "hero", props: { id: "hero-default" } }],
       zones: {},
     }
@@ -1220,7 +1217,7 @@ const createLibrary = (): string => {
       "defaultLayout.json"
     ),
     {
-      root: { props: { lastBuiltInMigrationId: "0082-hero-phone-slot" } },
+      root: { props: { version: 82 } },
       content: [
         {
           type: "directory-header",
@@ -1255,7 +1252,7 @@ const createLibrary = (): string => {
       "defaultLayout.json"
     ),
     {
-      root: { props: { lastBuiltInMigrationId: "0082-hero-phone-slot" } },
+      root: { props: { version: 82 } },
       content: [
         {
           type: "MainContent",
@@ -1292,7 +1289,7 @@ const addEntityLayout = (rootDir: string, layoutId: string): void => {
     pageSetType: "ENTITY",
   });
   fs.writeJsonSync(path.join(layoutDirectory, "defaultLayout.json"), {
-    root: { props: { lastBuiltInMigrationId: "0082-hero-phone-slot" } },
+    root: { props: { version: 82 } },
     content: [{ type: "hero", props: { id: `${layoutId}-hero-default` } }],
     zones: {},
   });

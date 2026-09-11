@@ -12,10 +12,10 @@ export class MigrationRegistryValidationError extends Error {
   }
 }
 
-/** Validates the section library's migration registry. */
-export const readMigrationRegistryIds = (
+/** Validates the section library's migration registry and returns its length. */
+export const readMigrationRegistryLength = (
   sourcePath: string
-): string[] | undefined => {
+): number | undefined => {
   if (!fs.existsSync(sourcePath)) {
     return undefined;
   }
@@ -51,42 +51,7 @@ export const readMigrationRegistryIds = (
       );
     }
 
-    const ids = array.getElements().map((element, index) => {
-      const entry = element.asKind(SyntaxKind.ObjectLiteralExpression);
-      if (!entry) {
-        throw new MigrationRegistryValidationError(
-          "migrations/shape",
-          `${sourcePath} migrationRegistry[${index}] must be an object literal`
-        );
-      }
-      const id = entry
-        .getProperty("id")
-        ?.asKind(SyntaxKind.PropertyAssignment)
-        ?.getInitializer()
-        ?.asKind(SyntaxKind.StringLiteral)
-        ?.getLiteralValue();
-      if (!id?.trim()) {
-        throw new MigrationRegistryValidationError(
-          "migrations/id",
-          `${sourcePath} migrationRegistry[${index}].id must be a non-empty string literal`
-        );
-      }
-      if (!entry.getProperty("migration")) {
-        throw new MigrationRegistryValidationError(
-          "migrations/shape",
-          `${sourcePath} migrationRegistry[${index}] must define migration`
-        );
-      }
-      return id;
-    });
-
-    if (new Set(ids).size !== ids.length) {
-      throw new MigrationRegistryValidationError(
-        "migrations/duplicate-id",
-        `${sourcePath} migration IDs must be unique`
-      );
-    }
-    return ids;
+    return array.getElements().length;
   } finally {
     sourceFile.forget();
   }

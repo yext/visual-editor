@@ -1,7 +1,7 @@
 const mainDefaultLayout = {
   root: {
     props: {
-      lastBuiltInMigrationId: "0073-main-content-wrapper",
+      version: 73,
       title: {
         field: "name",
         constantValue: "",
@@ -4416,7 +4416,7 @@ const mainDefaultLayout = {
 const directoryDefaultLayout = {
   root: {
     props: {
-      lastBuiltInMigrationId: "0076-slot-mapped-cards",
+      version: 76,
       title: {
         field: "",
         constantValue: { defaultValue: "PLACEHOLDER" },
@@ -5215,7 +5215,7 @@ const directoryDefaultLayout = {
 const locatorDefaultLayout = {
   root: {
     props: {
-      lastBuiltInMigrationId: "0073-main-content-wrapper",
+      version: 73,
       title: {
         field: "",
         constantValue: { defaultValue: "Find Locations" },

@@ -18,7 +18,7 @@ import { extractSectionConfigFrontmatter } from "../../../../vite-plugin/section
 import { readSharedComponentRegistry } from "../../../../vite-plugin/section-library/sharedComponentRegistry.ts";
 import {
   MigrationRegistryValidationError,
-  readMigrationRegistryIds,
+  readMigrationRegistryLength,
 } from "../../../../vite-plugin/section-library/migrationRegistry.ts";
 import type {
   ResolvedSection,
@@ -64,9 +64,9 @@ export const validateSectionLibraryStructure = (
     "migrations",
     "registry.ts"
   );
-  let migrationIds: string[] = [];
+  let migrationCount = 0;
   try {
-    migrationIds = readMigrationRegistryIds(migrationRegistryPath) ?? [];
+    migrationCount = readMigrationRegistryLength(migrationRegistryPath) ?? 0;
   } catch (error) {
     addIssue(
       migrationRegistryPath,
@@ -114,7 +114,7 @@ export const validateSectionLibraryStructure = (
   validateComponentIds(sections, sharedComponents, libraryDirectory, addIssue);
   for (const layout of parsedLayouts) {
     validateLayoutReferences(layout, sections, sharedComponents, addIssue);
-    validateLayoutMigrationCursors(layout, migrationIds, addIssue);
+    validateLayoutMigrationVersion(layout, migrationCount, addIssue);
   }
 
   if (issues.some((issue) => issue.severity !== "warning")) {
@@ -127,35 +127,34 @@ export const validateSectionLibraryStructure = (
       sharedComponents,
       sharedRootPageSetTypes,
       layouts,
-      migrationIds,
+      migrationCount,
       translationResources,
     },
   };
 };
 
 /** Ensures defaultLayout.json files match the repo's migration registry. */
-const validateLayoutMigrationCursors = (
+const validateLayoutMigrationVersion = (
   layout: ParsedLayout,
-  migrationIds: string[],
+  migrationCount: number,
   addIssue: AddIssue
 ): void => {
   const root = layout.defaultLayout.root as
     { props?: Record<string, unknown> } | undefined;
   const props = root?.props;
-  const latestRepoMigrationId = migrationIds.at(-1);
-  if (latestRepoMigrationId === undefined) {
-    if (props?.lastSectionLibraryMigrationId !== undefined) {
+  if (migrationCount === 0) {
+    if (props?.sectionLibraryMigrationVersion !== undefined) {
       addIssue(
         layout.defaultLayoutPath,
-        "layouts/section-library-migration-cursor",
-        "defaultLayout root.props.lastSectionLibraryMigrationId must be absent when the repo migration registry is empty"
+        "layouts/section-library-migration-version",
+        "defaultLayout root.props.sectionLibraryMigrationVersion must be absent when the repo migration registry is empty"
       );
     }
-  } else if (props?.lastSectionLibraryMigrationId !== latestRepoMigrationId) {
+  } else if (props?.sectionLibraryMigrationVersion !== migrationCount) {
     addIssue(
       layout.defaultLayoutPath,
-      "layouts/section-library-migration-cursor",
-      `defaultLayout root.props.lastSectionLibraryMigrationId must equal ${latestRepoMigrationId}`
+      "layouts/section-library-migration-version",
+      `defaultLayout root.props.sectionLibraryMigrationVersion must equal ${migrationCount}`
     );
   }
 };

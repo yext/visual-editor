@@ -42,12 +42,7 @@ export type Migration =
       root: RootMigrationAction;
     };
 
-export type MigrationRegistryEntry = {
-  id: string;
-  migration: Migration;
-};
-
-export type MigrationRegistry = MigrationRegistryEntry[];
+export type MigrationRegistry = Migration[];
 
 const isContentMigration = (
   migrationAction: unknown
@@ -72,8 +67,7 @@ const isRootMigration = (
 interface RootProps extends DefaultRootProps {
   props?: {
     version?: number;
-    lastBuiltInMigrationId?: string;
-    lastSectionLibraryMigrationId?: string;
+    sectionLibraryMigrationVersion?: number;
   };
 }
 
@@ -86,8 +80,6 @@ export const migrate = (
   streamDocument: StreamDocument,
   sectionLibraryMigrationRegistry: MigrationRegistry = []
 ): Data => {
-  const legacyVersion = data.root?.props?.version;
-
   // Work on a clone so a thrown migration cannot partially mutate persisted
   // layout data owned by the caller.
   data = migratePuck(clonePuckResolveData(data)) as PuckData;
@@ -103,20 +95,15 @@ export const migrate = (
   data = applyRegistry(
     data,
     migrationRegistry,
-    "lastBuiltInMigrationId",
+    "version",
     migrationConfig,
-    streamDocument,
-    legacyVersion
+    streamDocument
   );
-
-  if (legacyVersion !== undefined) {
-    delete data.root.props!.version;
-  }
 
   data = applyRegistry(
     data,
     sectionLibraryMigrationRegistry,
-    "lastSectionLibraryMigrationId",
+    "sectionLibraryMigrationVersion",
     migrationConfig,
     streamDocument
   );
@@ -130,7 +117,7 @@ const withRemovedComponentConfigs = (
 ): Config => {
   const removedComponentNames = new Set<string>();
   registries.forEach((registry) => {
-    registry.forEach(({ migration }) => {
+    registry.forEach((migration) => {
       Object.entries(migration).forEach(([componentName, migrationAction]) => {
         if (
           componentName !== "*" &&
@@ -162,32 +149,29 @@ const withRemovedComponentConfigs = (
 const applyRegistry = (
   data: PuckData,
   registry: MigrationRegistry,
-  cursorKey: "lastBuiltInMigrationId" | "lastSectionLibraryMigrationId",
+  versionKey: "version" | "sectionLibraryMigrationVersion",
   config: Config,
-  streamDocument: StreamDocument,
-  legacyVersion?: number
+  streamDocument: StreamDocument
 ): PuckData => {
   if (registry.length === 0) {
-    delete data.root.props?.[cursorKey];
     return data;
   }
 
-  const cursor = data.root.props?.[cursorKey];
-  let startIndex = 0;
-  if (cursor !== undefined) {
-    const cursorIndex = registry.findIndex((entry) => entry.id === cursor);
-    if (cursorIndex === -1) {
-      console.warn(
-        `Unknown ${cursorKey} value ${JSON.stringify(cursor)}; skipping migrations.`
-      );
-      return data;
-    }
-    startIndex = cursorIndex + 1;
-  } else if (legacyVersion !== undefined) {
-    startIndex = legacyVersion;
+  const version = data.root.props?.[versionKey] ?? 0;
+  if (!Number.isSafeInteger(version) || version < 0) {
+    console.warn(
+      `Invalid ${versionKey} value ${JSON.stringify(version)}; skipping migrations.`
+    );
+    return data;
+  }
+  if (version > registry.length) {
+    console.warn(
+      `${versionKey} value ${version} is newer than the current migration registry; skipping migrations.`
+    );
+    return data;
   }
 
-  registry.slice(startIndex).forEach(({ migration }) => {
+  registry.slice(version).forEach((migration) => {
     Object.entries(migration).forEach(([componentName, migrationAction]) => {
       if (componentName === "content" && isContentMigration(migrationAction)) {
         data.content = migrationAction.transformation(data.content);
@@ -233,6 +217,6 @@ const applyRegistry = (
     });
   });
 
-  data.root.props![cursorKey] = registry.at(-1)!.id;
+  data.root.props![versionKey] = registry.length;
   return data;
 };

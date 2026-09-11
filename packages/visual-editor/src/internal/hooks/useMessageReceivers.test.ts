@@ -87,20 +87,17 @@ describe("getLocalDevLayoutData", () => {
       locatorConfig,
       {},
       {
-        root: { props: { lastBuiltInMigrationId: "0082-hero-phone-slot" } },
+        root: { props: { version: 82 } },
         content: [],
         zones: {},
       },
       [
         {
-          id: "repo-root-update",
-          migration: {
-            root: {
-              propTransformation: (props: Record<string, any>) => ({
-                ...props,
-                migrated: true,
-              }),
-            },
+          root: {
+            propTransformation: (props: Record<string, any>) => ({
+              ...props,
+              migrated: true,
+            }),
           },
         },
       ]
@@ -108,7 +105,7 @@ describe("getLocalDevLayoutData", () => {
 
     expect(data.root.props).toMatchObject({
       migrated: true,
-      lastSectionLibraryMigrationId: "repo-root-update",
+      sectionLibraryMigrationVersion: 1,
     });
   });
 });

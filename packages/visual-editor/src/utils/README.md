@@ -769,12 +769,10 @@ in a future version to handle slots.
 built-in migrations specified in `components/migrations/migrationRegistry.ts`, followed by any
 Section Library migrations supplied by the consuming repository.
 
-The layout records the ID of the last applied migration from each registry in
-`data.root.props.lastBuiltInMigrationId` and
-`data.root.props.lastSectionLibraryMigrationId`. Migration registry entries have stable, unique
-IDs and are append-only. Legacy layouts that use the numeric `data.root.props.version` field remain
-supported; `migrate` uses that value as the built-in migration index and replaces it with the
-built-in migration ID cursor.
+The layout records the number of applied built-in migrations in `data.root.props.version` and the
+number of applied repository migrations in `data.root.props.sectionLibraryMigrationVersion`.
+Migration registries and their existing entries are append-only. Each number is used as the index
+at which to resume its corresponding registry.
 
 Migrations should be specified as a map of ComponentName to MigrationAction.
 The ComponentName is the name of a component as provided to Puck Config in the `components` object

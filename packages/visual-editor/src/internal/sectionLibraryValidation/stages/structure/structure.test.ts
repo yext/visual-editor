@@ -467,41 +467,18 @@ describe("validateSectionLibraryStructure", () => {
     });
   });
 
-  it("reports duplicate repo migration IDs", () => {
-    const rootDir = createValidLibrary();
-    fs.outputFileSync(
-      path.join(rootDir, "src", "library", "migrations", "registry.ts"),
-      [
-        "const migration = {};",
-        "export const migrationRegistry = [",
-        '  { id: "duplicate", migration },',
-        '  { id: "duplicate", migration },',
-        "];",
-      ].join("\n")
-    );
-
-    expectRules(rootDir, "migrations/duplicate-id");
-  });
-
   it("accepts a default layout behind the built-in migrations", () => {
     const rootDir = createValidLibrary();
     fs.outputJsonSync(
       layoutFilePath(rootDir, "entity-layout", "defaultLayout.json"),
       {
-        root: { props: { lastBuiltInMigrationId: "older-migration" } },
+        root: { props: { version: 1 } },
         content: [],
         zones: {},
       }
     );
 
     expect(validateSectionLibraryStructure(rootDir).issues).toEqual([]);
-  });
-
-  it("reports an empty repo migration ID", () => {
-    const rootDir = createValidLibrary();
-    writeMigrationRegistry(rootDir, ['{ id: "", migration }']);
-
-    expectRules(rootDir, "migrations/id");
   });
 
   it("reports a missing migrationRegistry export", () => {
@@ -514,14 +491,14 @@ describe("validateSectionLibraryStructure", () => {
     expectRules(rootDir, "migrations/export");
   });
 
-  it("reports missing repo cursors when repo migrations exist", () => {
+  it("reports missing repo versions when repo migrations exist", () => {
     const rootDir = createValidLibrary();
-    writeMigrationRegistry(rootDir, ['{ id: "repo-1", migration }']);
+    writeMigrationRegistry(rootDir, ["migration"]);
 
-    expectRules(rootDir, "layouts/section-library-migration-cursor");
+    expectRules(rootDir, "layouts/section-library-migration-version");
   });
 
-  it("reports an unexpected repo cursor for an absent registry", () => {
+  it("reports an unexpected repo version for an absent registry", () => {
     const rootDir = createValidLibrary();
     const defaultLayoutPath = layoutFilePath(
       rootDir,
@@ -529,18 +506,15 @@ describe("validateSectionLibraryStructure", () => {
       "defaultLayout.json"
     );
     const layout = fs.readJsonSync(defaultLayoutPath);
-    layout.root.props.lastSectionLibraryMigrationId = "unexpected";
+    layout.root.props.sectionLibraryMigrationVersion = 1;
     fs.writeJsonSync(defaultLayoutPath, layout);
 
-    expectRules(rootDir, "layouts/section-library-migration-cursor");
+    expectRules(rootDir, "layouts/section-library-migration-version");
   });
 
-  it("accepts default layouts at the latest repo migration cursor", () => {
+  it("accepts default layouts at the latest repo migration version", () => {
     const rootDir = createValidLibrary();
-    writeMigrationRegistry(rootDir, [
-      '{ id: "repo-1", migration }',
-      '{ id: "repo-2", migration }',
-    ]);
+    writeMigrationRegistry(rootDir, ["migration", "migration"]);
     for (const layoutName of [
       "entity-layout",
       "directory-layout",
@@ -552,14 +526,14 @@ describe("validateSectionLibraryStructure", () => {
         "defaultLayout.json"
       );
       const layout = fs.readJsonSync(defaultLayoutPath);
-      layout.root.props.lastSectionLibraryMigrationId = "repo-2";
+      layout.root.props.sectionLibraryMigrationVersion = 2;
       fs.writeJsonSync(defaultLayoutPath, layout);
     }
 
     const result = validateSectionLibraryStructure(rootDir);
 
     expect(result.issues).toEqual([]);
-    expect(result.structure?.migrationIds).toEqual(["repo-1", "repo-2"]);
+    expect(result.structure?.migrationCount).toBe(2);
   });
 });
 
@@ -634,7 +608,7 @@ const writeDefaultLayout = (
         ...data.root,
         props: {
           ...data.root?.props,
-          lastBuiltInMigrationId: "0082-hero-phone-slot",
+          version: 82,
         },
       },
     }
