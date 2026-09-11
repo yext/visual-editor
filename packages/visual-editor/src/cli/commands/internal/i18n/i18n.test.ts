@@ -10,10 +10,13 @@ import {
   repairInterpolationValue,
 } from "./interpolation.ts";
 import {
+  flattenTranslations,
   loadFlatTranslations,
   saveTranslations,
   translationPath,
   type FlatTranslations,
+  type TranslationObject,
+  unflattenTranslations,
 } from "./json.ts";
 import { expandKeysForLocale, findSourceValue } from "./plurals.ts";
 import { propagatePlatformToPage } from "./propagate.ts";
@@ -137,6 +140,15 @@ describe("i18n preparation", () => {
     ]);
   });
 
+  it("requires the configured locales to include the English source locale", async () => {
+    const rootDir = createRoot();
+    writeLibraryMetadata(rootDir, ["en-US", "fr"]);
+
+    await expect(loadLibraryLocales(rootDir)).rejects.toThrow(
+      'must include "en" as the source locale'
+    );
+  });
+
   it.each([
     { locales: undefined, expected: "must be a string array" },
     { locales: "en", expected: "must be a string array" },
@@ -184,6 +196,31 @@ describe("i18n preparation", () => {
     await expect(
       findMissingPlatformTranslations(rootDir, ["en"])
     ).rejects.toThrow(`Malformed JSON in ${filePath}`);
+  });
+
+  it("preserves prototype-like keys without traversing object prototypes", async () => {
+    const rootDir = createRoot();
+    const filePath = translationPath(rootDir, "platform", "en");
+    const source = JSON.parse(
+      '{"__proto__":"Prototype","constructor":{"prototype":{"label":"Constructor"}}}'
+    ) as TranslationObject;
+
+    const flat = flattenTranslations(source);
+    expect(Object.getPrototypeOf(flat)).toBeNull();
+    expect(flat).toHaveProperty("__proto__", "Prototype");
+
+    const nested = unflattenTranslations(flat);
+    const constructorTranslations = nested["constructor"] as TranslationObject;
+    const prototypeTranslations = constructorTranslations[
+      "prototype"
+    ] as TranslationObject;
+    expect(Object.getPrototypeOf(nested)).toBeNull();
+    expect(Object.getPrototypeOf(constructorTranslations)).toBeNull();
+    expect(Object.getPrototypeOf(prototypeTranslations)).toBeNull();
+    expect(Object.prototype).not.toHaveProperty("label");
+
+    await saveTranslations(filePath, flat);
+    expect(fs.readJsonSync(filePath)).toEqual(source);
   });
 });
 

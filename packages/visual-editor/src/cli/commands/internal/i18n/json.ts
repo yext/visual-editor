@@ -6,6 +6,12 @@ export interface TranslationObject {
   [key: string]: string | TranslationObject;
 }
 
+const createFlatTranslations = (): FlatTranslations =>
+  Object.create(null) as FlatTranslations;
+
+const createTranslationObject = (): TranslationObject =>
+  Object.create(null) as TranslationObject;
+
 const validateObject = (
   value: unknown,
   filePath: string
@@ -60,7 +66,7 @@ export const flattenTranslations = (
   value: TranslationObject,
   prefix = ""
 ): FlatTranslations => {
-  const result: FlatTranslations = {};
+  const result = createFlatTranslations();
   for (const [key, child] of Object.entries(value)) {
     const fullKey = prefix ? `${prefix}.${key}` : key;
     if (typeof child === "string") {
@@ -82,7 +88,7 @@ export const loadFlatTranslations = async (
 export const unflattenTranslations = (
   translations: FlatTranslations
 ): TranslationObject => {
-  const result: TranslationObject = {};
+  const result = createTranslationObject();
   for (const key of Object.keys(translations).sort()) {
     const segments = key.split(".");
     let cursor = result;
@@ -92,7 +98,7 @@ export const unflattenTranslations = (
       } else {
         const child = cursor[segment];
         if (!child || typeof child === "string") {
-          cursor[segment] = {};
+          cursor[segment] = createTranslationObject();
         }
         cursor = cursor[segment] as TranslationObject;
       }

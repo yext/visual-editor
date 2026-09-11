@@ -53,6 +53,11 @@ export const loadLibraryLocales = async (
       `Invalid locale ${JSON.stringify(invalidLocale)} in ${filePath}. Use canonical locale formatting such as "en-GB".`
     );
   }
+  if (!locales.includes("en")) {
+    throw new Error(
+      `The "locales" key in ${filePath} must include "en" as the source locale.`
+    );
+  }
   return locales;
 };
 
