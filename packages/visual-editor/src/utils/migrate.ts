@@ -183,10 +183,23 @@ const applyRegistry = (
         if (!data.root.props) {
           data.root.props = {};
         }
-        data.root.props = migrationAction.propTransformation(
-          data.root.props,
+        const previousRootProps = data.root.props;
+        const transformedRootProps = migrationAction.propTransformation(
+          previousRootProps,
           streamDocument
         );
+        data.root.props = {
+          ...transformedRootProps,
+          ...(previousRootProps.version === undefined
+            ? {}
+            : { version: previousRootProps.version }),
+          ...(previousRootProps.sectionLibraryMigrationVersion === undefined
+            ? {}
+            : {
+                sectionLibraryMigrationVersion:
+                  previousRootProps.sectionLibraryMigrationVersion,
+              }),
+        };
         return;
       }
 

@@ -50,6 +50,12 @@ export const readMigrationRegistryLength = (
         `${sourcePath} migrationRegistry must be an array literal`
       );
     }
+    if (array.getElements().some(Node.isSpreadElement)) {
+      throw new MigrationRegistryValidationError(
+        "migrations/shape",
+        `${sourcePath} migrationRegistry must not contain spread elements`
+      );
+    }
 
     return array.getElements().length;
   } finally {

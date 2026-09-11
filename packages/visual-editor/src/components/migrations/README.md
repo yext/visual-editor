@@ -35,7 +35,7 @@ The component name should be the name the component is registered as in
 Component names stored in layout data must remain stable; migrations do not
 support renaming components.
 
-There are two [`MigrationActions`](https://github.com/yext/visual-editor/blob/1210ee5bae73bff1456563b57506ff163fa59cb6/packages/visual-editor/src/utils/migrate.ts#L11):
+There are two [`MigrationActions`](https://github.com/yext/visual-editor/blob/main/packages/visual-editor/src/utils/migrate.ts#L11):
 
 ### Removed
 
@@ -51,6 +51,10 @@ Removes a component from all layouts.
 
 Transforms the existing props to the new set of props.
 See https://puckeditor.com/docs/api-reference/functions/transform-props
+
+Use `"*"` as the component name to apply an updated migration to every
+component, including components nested in slots. Wildcard migrations cannot
+use the `removed` action.
 
 ```ts
 {

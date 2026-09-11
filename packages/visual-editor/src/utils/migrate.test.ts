@@ -85,6 +85,58 @@ describe("migrate", () => {
     ]);
   });
 
+  it("updates all components when a built-in migration uses the wildcard name", () => {
+    const migratedData = migrate(
+      {
+        root: { props: {} },
+        content: [
+          {
+            type: "Parent",
+            props: {
+              id: "parent",
+              content: [{ type: "Child", props: { id: "child", value: 1 } }],
+            },
+          },
+          { type: "Sibling", props: { id: "sibling" } },
+        ],
+        zones: {},
+      },
+      [
+        {
+          "*": {
+            action: "updated",
+            propTransformation: (props) => ({ ...props, migrated: true }),
+          },
+        },
+      ],
+      {
+        components: {
+          Parent: { fields: { content: { type: "slot" } } },
+          Child: { fields: {} },
+          Sibling: { fields: {} },
+        },
+      } as any,
+      {}
+    );
+
+    expect(migratedData.content).toEqual([
+      {
+        type: "Parent",
+        props: {
+          id: "parent",
+          migrated: true,
+          content: [
+            {
+              type: "Child",
+              props: { id: "child", value: 1, migrated: true },
+            },
+          ],
+        },
+      },
+      { type: "Sibling", props: { id: "sibling", migrated: true } },
+    ]);
+  });
+
   it("applies only entries after each stored version", () => {
     const migratedData = migrate(
       {
@@ -107,6 +159,59 @@ describe("migrate", () => {
       steps: ["new built-in", "new repo"],
       version: 2,
       sectionLibraryMigrationVersion: 2,
+    });
+  });
+
+  it("preserves the repo version through built-in root migrations", () => {
+    const repoMigration = vi.fn((props: Record<string, any>) => props);
+
+    const migratedData = migrate(
+      {
+        root: { props: { sectionLibraryMigrationVersion: 1 } },
+        content: [],
+        zones: {},
+      },
+      [{ root: { propTransformation: () => ({}) } }],
+      { components: {} },
+      {},
+      [{ root: { propTransformation: repoMigration } }]
+    );
+
+    expect(repoMigration).not.toHaveBeenCalled();
+    expect(migratedData.root.props).toEqual({
+      version: 1,
+      sectionLibraryMigrationVersion: 1,
+    });
+  });
+
+  it("preserves the built-in version through repo root migrations", () => {
+    const builtInMigration = vi.fn(() => ({}));
+    const repoMigration = vi.fn(() => ({}));
+    const builtInRegistry = [
+      { root: { propTransformation: builtInMigration } },
+    ];
+    const repoRegistry = [{ root: { propTransformation: repoMigration } }];
+
+    const migratedData = migrate(
+      { root: { props: {} }, content: [], zones: {} },
+      builtInRegistry,
+      { components: {} },
+      {},
+      repoRegistry
+    );
+    const migratedAgain = migrate(
+      migratedData,
+      builtInRegistry,
+      { components: {} },
+      {},
+      repoRegistry
+    );
+
+    expect(builtInMigration).toHaveBeenCalledOnce();
+    expect(repoMigration).toHaveBeenCalledOnce();
+    expect(migratedAgain.root.props).toEqual({
+      version: 1,
+      sectionLibraryMigrationVersion: 1,
     });
   });
 

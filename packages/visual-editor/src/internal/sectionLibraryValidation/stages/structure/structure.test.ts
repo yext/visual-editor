@@ -491,6 +491,16 @@ describe("validateSectionLibraryStructure", () => {
     expectRules(rootDir, "migrations/export");
   });
 
+  it("reports spread elements in the migration registry", () => {
+    const rootDir = createValidLibrary();
+    fs.outputFileSync(
+      migrationRegistryPath(rootDir),
+      "const migrations = [{}, {}]; export const migrationRegistry = [...migrations];"
+    );
+
+    expectRules(rootDir, "migrations/shape");
+  });
+
   it("reports missing repo versions when repo migrations exist", () => {
     const rootDir = createValidLibrary();
     writeMigrationRegistry(rootDir, ["migration"]);
