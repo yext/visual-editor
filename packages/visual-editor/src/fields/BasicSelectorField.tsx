@@ -19,9 +19,7 @@ import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 type ThemeOptionKey = keyof typeof ThemeOptions;
 
 export type BasicSelectorOptions =
-  | ComboboxOption[]
-  | (() => ComboboxOption[])
-  | ThemeOptionKey;
+  ComboboxOption[] | (() => ComboboxOption[]) | ThemeOptionKey;
 
 /**
   Example usage:
@@ -78,8 +76,7 @@ type BasicSelectorFieldWithGroups = BasicSelectorFieldBase & {
 };
 
 export type BasicSelectorField =
-  | BasicSelectorFieldWithOptions
-  | BasicSelectorFieldWithGroups;
+  BasicSelectorFieldWithOptions | BasicSelectorFieldWithGroups;
 
 type BasicSelectorFieldProps = FieldProps<BasicSelectorField>;
 

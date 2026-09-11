@@ -2,7 +2,7 @@ import type { Config } from "@puckeditor/core";
 import React from "react";
 import { Editor } from "../editor/Editor.tsx";
 import type { LocalDevOptions } from "../editor/types.ts";
-import { VisualEditorProvider } from "../utils/VisualEditorProvider.tsx";
+import { SectionLibraryVisualEditorProvider } from "../utils/SectionLibraryVisualEditorProvider.tsx";
 import { LocalEditorControls } from "./LocalEditorControls.tsx";
 import { LocalEditorNotice } from "./LocalEditorNotice.tsx";
 import {
@@ -77,6 +77,7 @@ export const LocalEditorShell = ({
   tailwindConfig,
   themeConfig,
   sectionLibraryMigrationRegistry,
+  translationLoaders,
 }: LocalEditorShellProps) => {
   const [previewContext, setPreviewContext] = React.useState<{
     config: Config;
@@ -444,6 +445,7 @@ export const LocalEditorShell = ({
         tailwindConfig={tailwindConfig}
         themeConfig={themeConfig}
         sectionLibraryMigrationRegistry={sectionLibraryMigrationRegistry}
+        translationLoaders={translationLoaders}
       />
     );
   }
@@ -639,10 +641,11 @@ export const LocalEditorShell = ({
             </div>
           )}
           {streamDocument && documentResponse && selectedLayoutId && (
-            <VisualEditorProvider
+            <SectionLibraryVisualEditorProvider
               templateProps={{ document: streamDocument }}
               entityFields={documentResponse.entityFields}
               tailwindConfig={tailwindConfig}
+              translationLoaders={translationLoaders}
             >
               <Editor
                 key={editorKey}
@@ -656,7 +659,7 @@ export const LocalEditorShell = ({
                   sectionLibraryMigrationRegistry
                 }
               />
-            </VisualEditorProvider>
+            </SectionLibraryVisualEditorProvider>
           )}
         </div>
       )}

@@ -71,5 +71,9 @@ export const sortValidationIssues = (
     );
   });
 
+export const hasValidationErrors = (
+  result: Pick<ValidationResult, "issues">
+): boolean => result.issues.some((issue) => issue.severity !== "warning");
+
 const compareStrings = (left: string, right: string): number =>
   left === right ? 0 : left < right ? -1 : 1;

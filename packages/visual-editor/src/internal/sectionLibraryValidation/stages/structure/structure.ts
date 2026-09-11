@@ -8,6 +8,11 @@ import {
   type SectionLibraryLayout,
   type SharedHiddenPuckComponent,
 } from "../../../../types/sectionLibrary.ts";
+import { locales } from "../../../../utils/i18n/locales.ts";
+import {
+  mergeTranslationDictionaries,
+  type TranslationDictionary,
+} from "../../../../utils/i18n/translationResources.ts";
 import { buildLocalEditorDataTemplateName } from "../../../../vite-plugin/local-editor/generatedFiles.ts";
 import { extractSectionConfigFrontmatter } from "../../../../vite-plugin/section-library/sectionFrontmatter.ts";
 import { readSharedComponentRegistry } from "../../../../vite-plugin/section-library/sharedComponentRegistry.ts";
@@ -18,9 +23,11 @@ import {
 import type {
   ResolvedSection,
   ResolvedSectionLibraryStructure,
+  SectionLibraryTranslationResources,
   ValidationIssue,
 } from "../../types.ts";
 import { migrationRegistry } from "../../../../components/migrations/migrationRegistry.ts";
+import { readBuiltInTranslations } from "../../builtInTranslationResources.ts";
 
 const reservedLayoutIds = new Set([
   "main", // legacy Entity template ID
@@ -42,9 +49,10 @@ export const validateSectionLibraryStructure = (
   const libraryDirectory = path.join(rootDir, "src", "library");
 
   const issues: ValidationIssue[] = [];
-  const addIssue = (filePath: string, rule: string, message: string): void => {
+  const addIssue: AddIssue = (filePath, rule, message, severity) => {
     issues.push({
       category: "structure",
+      ...(severity ? { severity } : {}),
       filePath: path.relative(rootDir, filePath) || ".",
       message: cleanMessage(message, rootDir),
       rule,
@@ -69,6 +77,11 @@ export const validateSectionLibraryStructure = (
       errorMessage(error)
     );
   }
+  const translationResources = readTranslationResources(
+    rootDir,
+    libraryDirectory,
+    addIssue
+  );
   const registryPath = path.join(
     libraryDirectory,
     "shared",
@@ -105,7 +118,7 @@ export const validateSectionLibraryStructure = (
     validateLayoutMigrationCursors(layout, migrationIds, addIssue);
   }
 
-  if (issues.length > 0) {
+  if (issues.some((issue) => issue.severity !== "warning")) {
     return { issues };
   }
   return {
@@ -116,6 +129,7 @@ export const validateSectionLibraryStructure = (
       sharedRootPageSetTypes,
       layouts,
       migrationIds,
+      translationResources,
     },
   };
 };
@@ -153,6 +167,129 @@ const validateLayoutMigrationCursors = (
       `defaultLayout root.props.lastSectionLibraryMigrationId must equal ${latestRepoMigrationId}`
     );
   }
+};
+
+const translationResourceKinds = ["platform", "page"] as const;
+
+const readTranslationResources = (
+  rootDir: string,
+  libraryDirectory: string,
+  addIssue: AddIssue
+): SectionLibraryTranslationResources => {
+  const resources: SectionLibraryTranslationResources = {
+    platform: {},
+    page: {},
+  };
+  const i18nDirectory = path.join(libraryDirectory, "i18n");
+  if (!fs.existsSync(i18nDirectory)) {
+    return resources;
+  }
+
+  const entries = fs
+    .readdirSync(i18nDirectory, { withFileTypes: true })
+    .filter((entry) => entry.name !== ".gitkeep")
+    .sort((left, right) => left.name.localeCompare(right.name));
+  for (const entry of entries) {
+    const resourceKind = entry.name;
+    const resourceKindPath = path.join(i18nDirectory, resourceKind);
+    if (
+      !entry.isDirectory() ||
+      !translationResourceKinds.includes(
+        resourceKind as (typeof translationResourceKinds)[number]
+      )
+    ) {
+      addIssue(
+        resourceKindPath,
+        "i18n/kind",
+        "Translation resources must be under platform or page."
+      );
+      continue;
+    }
+    readTranslationResourceKind(
+      rootDir,
+      resourceKindPath,
+      resourceKind as (typeof translationResourceKinds)[number],
+      resources,
+      addIssue
+    );
+  }
+  return resources;
+};
+
+const readTranslationResourceKind = (
+  rootDir: string,
+  resourceKindPath: string,
+  resourceKind: (typeof translationResourceKinds)[number],
+  resources: SectionLibraryTranslationResources,
+  addIssue: AddIssue
+): void => {
+  for (const entry of fs
+    .readdirSync(resourceKindPath, { withFileTypes: true })
+    .filter((entry) => entry.name !== ".gitkeep")
+    .sort((left, right) => left.name.localeCompare(right.name))) {
+    const filePath = path.join(resourceKindPath, entry.name);
+    const locale = path.basename(entry.name, path.extname(entry.name));
+    if (
+      !entry.isFile() ||
+      path.extname(entry.name) !== ".json" ||
+      !locales.includes(locale)
+    ) {
+      addIssue(
+        filePath,
+        "i18n/locale",
+        `Translation filename must be a supported locale followed by .json: ${entry.name}`
+      );
+      continue;
+    }
+
+    let value: unknown;
+    try {
+      value = JSON.parse(fs.readFileSync(filePath, "utf8"));
+    } catch (error) {
+      addIssue(
+        filePath,
+        "i18n/json",
+        `Could not parse translation JSON: ${errorMessage(error)}`
+      );
+      continue;
+    }
+    if (!isTranslationDictionary(value)) {
+      addIssue(
+        filePath,
+        "i18n/shape",
+        "Translation JSON must be an object containing only nested objects and string values."
+      );
+      continue;
+    }
+
+    resources[resourceKind][locale] = path
+      .relative(rootDir, filePath)
+      .split(path.sep)
+      .join("/");
+    const builtIn = readBuiltInTranslations(resourceKind, locale);
+    if (builtIn) {
+      mergeTranslationDictionaries(builtIn, value, (collision) => {
+        addIssue(
+          filePath,
+          "i18n/shape-collision",
+          `Translation shape collision for ${resourceKind} locale ${locale} at ${collision.path}: built-in ${collision.builtInType}, repo ${collision.repoType}. The repo value will be used.`,
+          "warning"
+        );
+      });
+    }
+  }
+};
+
+const isTranslationDictionary = (
+  value: unknown
+): value is TranslationDictionary => {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return false;
+  }
+  return Object.values(value).every(
+    (nestedValue) =>
+      typeof nestedValue === "string" || isTranslationDictionary(nestedValue)
+  );
 };
 
 const readSections = (
@@ -622,4 +759,9 @@ const errorMessage = (error: unknown): string =>
 const cleanMessage = (message: string, rootDir: string): string =>
   message.split(`${rootDir}${path.sep}`).join("");
 
-type AddIssue = (filePath: string, rule: string, message: string) => void;
+type AddIssue = (
+  filePath: string,
+  rule: string,
+  message: string,
+  severity?: "warning"
+) => void;

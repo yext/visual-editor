@@ -16,10 +16,7 @@ import { LayoutEditor } from "../internal/components/LayoutEditor.tsx";
 import { ThemeEditor } from "../internal/components/ThemeEditor.tsx";
 import { useCommonMessageSenders } from "../internal/hooks/useMessageSenders.ts";
 import { useProgress } from "../internal/hooks/useProgress.ts";
-import {
-  i18nPlatformInstance,
-  loadPlatformTranslations,
-} from "../utils/i18n/platform.ts";
+import { i18nPlatformInstance } from "../utils/i18n/i18nInstances.ts";
 import { StreamDocument } from "../utils/types/StreamDocument.ts";
 import {
   createDefaultThemeConfig,
@@ -33,6 +30,7 @@ import { migrate, type MigrationRegistry } from "../utils/migrate.ts";
 import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";
 import type { LocalDevOptions } from "./types.ts";
+import { useTranslationRuntime } from "../utils/i18n/TranslationRuntimeContext.tsx";
 
 const devLogger = new DevLogger();
 
@@ -82,6 +80,7 @@ export const Editor = ({
   metadata,
   sectionLibraryMigrationRegistry,
 }: EditorProps) => {
+  const { loadPlatformTranslations } = useTranslationRuntime();
   if (document) {
     devLogger.logData("DOCUMENT", document);
   }
@@ -192,7 +191,7 @@ export const Editor = ({
     return () => {
       isCurrent = false;
     };
-  }, [templateMetadata?.platformLocale]);
+  }, [loadPlatformTranslations, templateMetadata?.platformLocale]);
 
   const { isLoading, progress } = useProgress({
     maxProgress: 60,

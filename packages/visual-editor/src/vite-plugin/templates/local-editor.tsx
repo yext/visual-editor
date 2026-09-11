@@ -17,6 +17,7 @@ import {
   type MigrationRegistry,
 } from "@yext/visual-editor";
 import tailwindConfig from "../../tailwind.config";
+import { translationLoaders } from "../library/.generated/i18n";
 /* LOCAL_EDITOR_CONFIG_IMPORTS */
 /* LOCAL_EDITOR_MIGRATION_REGISTRY */
 
@@ -60,6 +61,7 @@ const LocalEditor: Template<TemplateRenderProps> = () => {
       tailwindConfig={tailwindConfig}
       themeConfig={defaultThemeConfig}
       sectionLibraryMigrationRegistry={sectionLibraryMigrationRegistry}
+      translationLoaders={translationLoaders}
     />
   );
 };

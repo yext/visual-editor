@@ -2,7 +2,7 @@ import * as React from "react";
 import { PuckComponent, setDeep } from "@puckeditor/core";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { TranslatableString, TranslatableCTA } from "../../types/types.ts";
-import { i18nComponentsInstance } from "../../utils/i18n/components.ts";
+import { i18nPageInstance } from "../../utils/i18n/page.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { getDisplayValue } from "../../utils/resolveComponentData.tsx";
 import { resolveLocalizedFooterLinkSection } from "./resolveLocalizedFooterLinkSection.ts";
@@ -97,7 +97,7 @@ const footerExpandedLinksWrapperFields: YextFields<FooterExpandedLinksWrapperPro
               },
               defaultItemProps: defaultLink,
               getItemSummary: (item: TranslatableCTA, index?: number) => {
-                const locale = i18nComponentsInstance.language || "en";
+                const locale = i18nPageInstance.language || "en";
                 const label = getDisplayValue(item.label, locale);
                 return label || pt("link", "Link") + " " + ((index ?? 0) + 1);
               },
@@ -108,7 +108,7 @@ const footerExpandedLinksWrapperFields: YextFields<FooterExpandedLinksWrapperPro
             item: FooterExpandedLinksWrapperProps["data"]["sections"][number],
             index?: number
           ) => {
-            const locale = i18nComponentsInstance.language || "en";
+            const locale = i18nPageInstance.language || "en";
             const label = getDisplayValue(item.label, locale);
             return label || pt("section", "Section") + " " + ((index ?? 0) + 1);
           },

@@ -302,8 +302,7 @@ const normalizeDirectoryCards = (cards: unknown) => {
     Object.values(normalizedCard.props.slots).forEach((slotArray) => {
       slotArray.forEach((slotChild) => {
         const slotChildProps = slotChild.props as
-          | { parentData?: unknown }
-          | undefined;
+          { parentData?: unknown } | undefined;
 
         if (!slotChildProps || !("parentData" in slotChildProps)) {
           return;

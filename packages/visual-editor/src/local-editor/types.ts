@@ -7,6 +7,7 @@ import type {
   LocalEditorManifestResponse,
   LocalEditorLayoutDefaults,
 } from "../vite-plugin/local-editor/types.ts";
+import type { SectionLibraryTranslationLoaders } from "../utils/i18n/translationResources.ts";
 
 export type {
   LocalEditorDocumentResponse,
@@ -22,6 +23,7 @@ export type LocalEditorShellProps = {
   tailwindConfig: TailwindConfig;
   themeConfig?: ThemeConfig;
   sectionLibraryMigrationRegistry?: MigrationRegistry;
+  translationLoaders?: SectionLibraryTranslationLoaders;
 };
 
 export type LocalEditorMode = "layout" | "theme";

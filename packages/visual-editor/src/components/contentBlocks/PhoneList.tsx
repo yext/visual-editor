@@ -1,6 +1,6 @@
 import { backgroundColors } from "../../utils/themeConfigOptions.ts";
 import { EntityField } from "../../editor/EntityField.tsx";
-import { i18nComponentsInstance } from "../../utils/i18n/components.ts";
+import { i18nPageInstance } from "../../utils/i18n/page.ts";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { PhoneAtom } from "../atoms/phone.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
@@ -46,7 +46,7 @@ export const phoneListFields: YextFields<PhoneListProps> = {
         arrayFields: PhoneDataFields,
         defaultItemProps: defaultPhoneDataProps,
         getItemSummary: (item: PhoneProps["data"]) => {
-          const locale = i18nComponentsInstance.language;
+          const locale = i18nPageInstance.language;
           const resolvedValue = resolveComponentData(item.label, locale);
 
           if (resolvedValue) {

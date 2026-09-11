@@ -7,7 +7,7 @@ import { TranslatableString, TranslatableCTA } from "../../types/types.ts";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { CTA } from "../atoms/cta.tsx";
 import { Body } from "../atoms/body.tsx";
-import { i18nComponentsInstance } from "../../utils/i18n/components.ts";
+import { i18nPageInstance } from "../../utils/i18n/page.ts";
 import { useBackground } from "../../hooks/useBackground.tsx";
 import { useTranslation } from "react-i18next";
 import { defaultLink, defaultLinks } from "./ExpandedFooter.tsx";
@@ -160,7 +160,7 @@ const footerExpandedLinkSectionSlotFields: YextFields<FooterExpandedLinkSectionS
           },
           defaultItemProps: defaultLink,
           getItemSummary: (item: any, index?: number) => {
-            const locale = i18nComponentsInstance.language || "en";
+            const locale = i18nPageInstance.language || "en";
             const label =
               typeof item.label === "string"
                 ? item.label

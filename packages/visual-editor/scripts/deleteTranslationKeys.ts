@@ -164,7 +164,7 @@ async function deleteTranslationKeys() {
   console.log("Working...\n");
 
   const baseDirs = [
-    path.join("locales", "components"),
+    path.join("locales", "page"),
     path.join("locales", "platform"),
   ];
 

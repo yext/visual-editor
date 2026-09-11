@@ -6,7 +6,7 @@ import { EntityField } from "../../../editor/EntityField.tsx";
 import { FooterSocialLinksSlotProps } from "../../footer/FooterSocialLinksSlot.tsx";
 import { Heading } from "../../atoms/heading.tsx";
 import { HeadingLevel } from "../../../utils/themeConfigOptions.ts";
-import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
+import { i18nPageInstance } from "../../../utils/i18n/page.ts";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
@@ -328,7 +328,7 @@ const aboutSectionDetailsColumnFields: YextFields<AboutSectionDetailsColumnProps
         },
       },
       getItemSummary: (item: DetailSection, i?: number) => {
-        const locale = i18nComponentsInstance.language;
+        const locale = i18nPageInstance.language;
         return (
           resolveComponentData(item.header, locale) ||
           pt("section", "Section") + " " + ((i ?? 0) + 1)

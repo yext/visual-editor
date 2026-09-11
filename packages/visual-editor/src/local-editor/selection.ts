@@ -147,8 +147,7 @@ export const buildEditorLocalDevOptions = ({
     layoutScopeKey: `${selectedLayoutId}:${selectedLocale}`,
     themeScopeKey: "local-editor",
     initialLayoutData: selectedLayoutDefaults?.defaultLayoutData as
-      | Record<string, unknown>
-      | undefined,
+      Record<string, unknown> | undefined,
   };
 };
 

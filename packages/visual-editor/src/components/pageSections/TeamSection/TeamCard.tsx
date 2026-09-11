@@ -13,7 +13,7 @@ import { CTAWrapperProps } from "../../contentBlocks/CtaWrapper.tsx";
 import { deepMerge } from "../../../utils/themeResolver.ts";
 import { ImgSizesByBreakpoint } from "../../atoms/image.tsx";
 import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
-import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
+import { i18nPageInstance } from "../../../utils/i18n/page.ts";
 import { EmailsProps } from "../../contentBlocks/Emails.tsx";
 import { PhoneListProps } from "../../contentBlocks/PhoneList.tsx";
 import {
@@ -461,23 +461,17 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
     const isLinkedMode = Boolean(field);
 
     const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as
-      | WithId<ImageWrapperProps>
-      | undefined;
+      WithId<ImageWrapperProps> | undefined;
     const nameSlotProps = data.props.slots.NameSlot?.[0]?.props as
-      | WithId<HeadingTextProps>
-      | undefined;
+      WithId<HeadingTextProps> | undefined;
     const titleSlotProps = data.props.slots.TitleSlot?.[0]?.props as
-      | WithId<TextProps>
-      | undefined;
+      WithId<TextProps> | undefined;
     const phoneSlotProps = data.props.slots.PhoneSlot?.[0]?.props as
-      | WithId<any>
-      | undefined;
+      WithId<any> | undefined;
     const emailSlotProps = data.props.slots.EmailSlot?.[0]?.props as
-      | WithId<any>
-      | undefined;
+      WithId<any> | undefined;
     const ctaSlotProps = data.props.slots.CTASlot?.[0]?.props as
-      | WithId<CTAWrapperProps>
-      | undefined;
+      WithId<CTAWrapperProps> | undefined;
 
     const showImage = Boolean(
       isLinkedMode
@@ -509,7 +503,7 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
             resolveYextEntityField(
               params.metadata.streamDocument,
               nameSlotProps.data.text,
-              i18nComponentsInstance.language || "en"
+              i18nPageInstance.language || "en"
             )
     );
     const showTitle = Boolean(
@@ -519,7 +513,7 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
             resolveYextEntityField(
               params.metadata.streamDocument,
               titleSlotProps.data.text,
-              i18nComponentsInstance.language || "en"
+              i18nPageInstance.language || "en"
             )
     );
     const showPhone = Boolean(
@@ -617,7 +611,7 @@ export const TeamCard: YextComponentConfig<TeamCardProps> = {
       name &&
       resolveComponentData(
         name,
-        i18nComponentsInstance.language || "en",
+        i18nPageInstance.language || "en",
         params.metadata.streamDocument,
         {
           output: "plainText",

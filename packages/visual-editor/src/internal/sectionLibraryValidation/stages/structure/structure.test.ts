@@ -74,6 +74,68 @@ describe("validateSectionLibraryStructure", () => {
 
     expect(validateSectionLibraryStructure(rootDir).issues).toEqual([]);
   });
+
+  it("discovers valid platform and page translation resources", () => {
+    const rootDir = createValidLibrary();
+    writeTranslation(rootDir, "platform", "en", {
+      editor: "Custom editor",
+    });
+    writeTranslation(rootDir, "page", "fr", {
+      hero: { title: "Titre" },
+    });
+
+    const result = validateSectionLibraryStructure(rootDir);
+
+    expect(result.issues).toEqual([]);
+    expect(result.structure?.translationResources).toEqual({
+      platform: {
+        en: "src/library/i18n/platform/en.json",
+      },
+      page: {
+        fr: "src/library/i18n/page/fr.json",
+      },
+    });
+  });
+
+  it.each([
+    ["unsupported locale", "platform", "en-US.json", {}, "i18n/locale"],
+    ["unsupported resource kind", "other", "en.json", {}, "i18n/kind"],
+    ["invalid root", "page", "en.json", [], "i18n/shape"],
+    ["invalid nested value", "page", "en.json", { count: 2 }, "i18n/shape"],
+  ])("reports an %s", (_name, resourceKind, fileName, value, rule) => {
+    const rootDir = createValidLibrary();
+    fs.outputJsonSync(
+      path.join(rootDir, "src", "library", "i18n", resourceKind, fileName),
+      value
+    );
+
+    expectRules(rootDir, rule);
+  });
+
+  it("reports malformed translation JSON", () => {
+    const rootDir = createValidLibrary();
+    fs.outputFileSync(translationPath(rootDir, "platform", "en"), "{");
+
+    expectRules(rootDir, "i18n/json");
+  });
+
+  it("warns when a repo translation changes a built-in value shape", () => {
+    const rootDir = createValidLibrary();
+    writeTranslation(rootDir, "platform", "en", { actions: "Custom actions" });
+
+    const result = validateSectionLibraryStructure(rootDir);
+
+    expect(result.structure).toBeDefined();
+    expect(result.issues).toContainEqual({
+      category: "structure",
+      severity: "warning",
+      filePath: "src/library/i18n/platform/en.json",
+      message:
+        "Translation shape collision for platform locale en at actions: built-in object, repo string. The repo value will be used.",
+      rule: "i18n/shape-collision",
+    });
+  });
+
   it("reports a missing layouts directory", () => {
     const rootDir = createValidLibrary();
     fs.removeSync(layoutsPath(rootDir));
@@ -635,4 +697,20 @@ const writeMigrationRegistry = (rootDir: string, entries: string[]): void => {
       `export const migrationRegistry = [${entries.join(",")}];`,
     ].join("\n")
   );
+};
+
+const translationPath = (
+  rootDir: string,
+  resourceKind: string,
+  locale: string
+): string =>
+  path.join(rootDir, "src", "library", "i18n", resourceKind, `${locale}.json`);
+
+const writeTranslation = (
+  rootDir: string,
+  resourceKind: string,
+  locale: string,
+  value: unknown
+): void => {
+  fs.outputJsonSync(translationPath(rootDir, resourceKind, locale), value);
 };

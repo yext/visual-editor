@@ -1,7 +1,7 @@
 import os from "node:os";
 import path from "node:path";
 import fs from "fs-extra";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   cleanupGeneratedSectionLibraryFiles,
   generateSectionLibraryFiles,
@@ -24,7 +24,7 @@ describe("generateSectionLibraryFiles", () => {
       "123e4567-e89b-12d3-a456-426614174000"
     );
 
-    expect(result.generatedFiles).toHaveLength(9);
+    expect(result.generatedFiles).toHaveLength(60);
     const config = fs.readFileSync(
       path.join(
         rootDir,
@@ -89,6 +89,8 @@ describe("generateSectionLibraryFiles", () => {
     expect(locationTemplate).toContain(
       "const sectionLibraryMigrationRegistry: MigrationRegistry = [];"
     );
+    expect(locationTemplate).toContain("loadTranslationDictionary(");
+    expect(locationTemplate).toContain("<SectionLibraryVisualEditorProvider");
     const directoryTemplate = fs.readFileSync(
       path.join(rootDir, "src", "templates", "directory-layout.tsx"),
       "utf8"
@@ -114,6 +116,9 @@ describe("generateSectionLibraryFiles", () => {
     );
     expect(locationEditorTemplate).not.toContain("directory-layout");
     expect(locationEditorTemplate).not.toContain("locator-layout");
+    expect(locationEditorTemplate).toContain(
+      "translationLoaders={translationLoaders}"
+    );
     const directoryEditorTemplate = fs.readFileSync(
       path.join(rootDir, "src", "templates", "edit-directory-layout.tsx"),
       "utf8"
@@ -199,6 +204,96 @@ describe("generateSectionLibraryFiles", () => {
     );
   }, 10_000);
 
+  it("generates complete lazy translation resources for every locale", () => {
+    const rootDir = createLibrary();
+    fs.outputJsonSync(
+      path.join(rootDir, "src", "library", "i18n", "platform", "en.json"),
+      { customEditorLabel: "Custom editor" }
+    );
+    fs.outputJsonSync(
+      path.join(rootDir, "src", "library", "i18n", "page", "fr.json"),
+      { customPageLabel: "Page personnalisée" }
+    );
+
+    generateSectionLibraryFiles(
+      rootDir,
+      "123e4567-e89b-12d3-a456-426614174000"
+    );
+
+    const loaderSource = fs.readFileSync(
+      path.join(rootDir, "src", "library", ".generated", "i18n.ts"),
+      "utf8"
+    );
+    expect(loaderSource).toContain(
+      '"en": () => import("./i18n/platform/en.ts")'
+    );
+    expect(loaderSource).toContain('"fr": () => import("./i18n/page/fr.ts")');
+    expect(loaderSource).not.toMatch(/^import .*\.json/m);
+    expect(loaderSource.match(/import\(/g)).toHaveLength(50);
+
+    const mergedPlatform = fs.readFileSync(
+      path.join(
+        rootDir,
+        "src",
+        "library",
+        ".generated",
+        "i18n",
+        "platform",
+        "en.ts"
+      ),
+      "utf8"
+    );
+    expect(mergedPlatform).toContain('"copyToClipboard": "Copy to Clipboard"');
+    expect(mergedPlatform).toContain('"customEditorLabel": "Custom editor"');
+    const serializedPlatform = mergedPlatform.match(
+      /const translations = ([\s\S]+);\nexport default translations;/
+    )?.[1];
+    expect(serializedPlatform).toBeDefined();
+    const platformDictionary = JSON.parse(serializedPlatform!);
+    expect(Object.keys(platformDictionary)).toEqual(
+      Object.keys(platformDictionary).sort()
+    );
+    expect(Object.keys(platformDictionary.actions)).toEqual(
+      Object.keys(platformDictionary.actions).sort()
+    );
+    const mergedPageTranslations = fs.readFileSync(
+      path.join(
+        rootDir,
+        "src",
+        "library",
+        ".generated",
+        "i18n",
+        "page",
+        "fr.ts"
+      ),
+      "utf8"
+    );
+    expect(mergedPageTranslations).toContain(
+      '"customPageLabel": "Page personnalisée"'
+    );
+  });
+
+  it("warns for shape collisions and still generates the library", () => {
+    const rootDir = createLibrary();
+    fs.outputJsonSync(
+      path.join(rootDir, "src", "library", "i18n", "platform", "en.json"),
+      { actions: "Custom actions" }
+    );
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+    expect(() =>
+      generateSectionLibraryFiles(
+        rootDir,
+        "123e4567-e89b-12d3-a456-426614174000"
+      )
+    ).not.toThrow();
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining(
+        "platform locale en at actions: built-in object, repo string"
+      )
+    );
+  });
+
   it("combines category names case-insensitively", () => {
     const rootDir = createLibrary();
     const sectionsDirectory = path.join(rootDir, "src", "library", "sections");
@@ -255,7 +350,7 @@ describe("generateSectionLibraryFiles", () => {
       "directory-layout",
       "locator-layout",
     ]);
-    expect(result.generatedFiles).toHaveLength(12);
+    expect(result.generatedFiles).toHaveLength(63);
     expect(
       fs.existsSync(
         path.join(
@@ -429,10 +524,13 @@ describe("generateSectionLibraryFiles", () => {
     expect(fs.readFileSync(handwrittenMainPath, "utf8")).toBe(
       "export default null;"
     );
-    expect(generatedFiles).toHaveLength(9);
+    expect(generatedFiles).toHaveLength(60);
     for (const filePath of generatedFiles) {
       expect(fs.existsSync(filePath)).toBe(false);
     }
+    expect(
+      fs.existsSync(path.join(rootDir, "src", "library", ".generated", "i18n"))
+    ).toBe(false);
     expect(fs.existsSync(path.join(rootDir, ".template-manifest.json"))).toBe(
       true
     );

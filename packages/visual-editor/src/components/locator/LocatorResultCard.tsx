@@ -261,10 +261,7 @@ export interface LocatorResultCardProps {
 }
 
 export type DistanceDisplayOption =
-  | "distanceFromUser"
-  | "distanceFromSearch"
-  | "bothDistances"
-  | "hidden";
+  "distanceFromUser" | "distanceFromSearch" | "bothDistances" | "hidden";
 
 export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
   entityType: DEFAULT_ENTITY_TYPE,

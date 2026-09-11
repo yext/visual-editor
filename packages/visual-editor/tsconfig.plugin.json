@@ -3,6 +3,6 @@
   "compilerOptions": {
     "outDir": "dist/plugin"
   },
-  "include": ["src/vite-plugin/index.ts"],
+  "include": ["src/vite-plugin/index.ts", "src/vite-env.d.ts"],
   "exclude": ["node_modules"]
 }

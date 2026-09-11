@@ -64,13 +64,13 @@
     "docs:build": "vitepress build .",
     "docs:preview": "vitepress preview .",
     "i18n:extract:platform": "i18next-cli extract --config i18next-cli.platform.config.ts --quiet",
-    "i18n:extract:components": "i18next-cli extract --config i18next-cli.components.config.ts --quiet",
+    "i18n:extract:page": "i18next-cli extract --config i18next-cli.page.config.ts --quiet",
     "i18n:translate:platform": "pnpm exec tsx scripts/generateTranslations.ts --type platform",
     "i18n:translate:platform:dry": "pnpm exec tsx scripts/generateTranslations.ts --type platform --dry-run",
-    "i18n:propagate:components": "pnpm exec tsx scripts/propagatePlatformToComponents.ts",
+    "i18n:propagate:page": "pnpm exec tsx scripts/propagatePlatformToPage.ts",
     "i18n:check:interpolation": "pnpm exec tsx scripts/checkInterpolationVariables.ts",
-    "i18n:lint": "i18next-cli lint --config i18next-cli.platform.config.ts --quiet && i18next-cli lint --config i18next-cli.components.config.ts --quiet && pnpm run i18n:check:interpolation",
-    "i18n:update": "pnpm run i18n:extract:platform && pnpm run i18n:extract:components && pnpm run i18n:translate:platform && pnpm run i18n:propagate:components && pnpm run i18n:lint"
+    "i18n:lint": "i18next-cli lint --config i18next-cli.platform.config.ts --quiet && i18next-cli lint --config i18next-cli.page.config.ts --quiet && pnpm run i18n:check:interpolation",
+    "i18n:update": "pnpm run i18n:extract:platform && pnpm run i18n:extract:page && pnpm run i18n:translate:platform && pnpm run i18n:propagate:page && pnpm run i18n:lint"
   },
   "dependencies": {
     "@mapbox/maki": "^8.2.0",
@@ -96,7 +96,6 @@
     "fs-extra": "^11.2.0",
     "geolib": "^3.3.4",
     "handlebars": "^4.7.9",
-    "i18next": "^25.8.4",
     "lucide-react": "^0.414.0",
     "lz-string": "1.5.0",
     "next-themes": "^0.3.0",
@@ -106,7 +105,6 @@
     "react-collapsed": "^4.1.2",
     "react-color": "^2.19.3",
     "react-error-boundary": "^5.0.0",
-    "react-i18next": "^15.5.2",
     "react-international-phone": "^4.6.0",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.4.0",
@@ -149,7 +147,7 @@
     "axe-core": "^4.10.3",
     "generate-license-file": "^3.5.0",
     "husky": "^9.1.4",
-    "i18next-cli": "^1.42.0",
+    "i18next-cli": "^1.73.2",
     "jest-axe": "^10.0.0",
     "jsdom": "^24.1.1",
     "lint-staged": "^15.2.7",
@@ -160,10 +158,10 @@
     "prompts": "^2.4.2",
     "react-icons": "^5.2.1",
     "tailwindcss": "^3.4.6",
-    "tsup": "8.3.5",
+    "tsup": "^8.5.1",
     "vite": "^5.4.21",
     "vitepress": "^1.6.3",
-    "vitest": "^3.2.4",
+    "vitest": "^3.2.7",
     "yaml": "^2.8.2"
   },
   "peerDependencies": {
@@ -172,6 +170,8 @@
     "@yext/search-ui-react": "^3.0.1",
     "mapbox-gl": "^3.20.0",
     "react": "^17.0.2 || ^18.2.0",
-    "react-dom": "^17.0.2 || ^18.2.0"
+    "react-dom": "^17.0.2 || ^18.2.0",
+    "react-i18next": "^17.0.13",
+    "i18next": "^26.4.2"
   }
 }

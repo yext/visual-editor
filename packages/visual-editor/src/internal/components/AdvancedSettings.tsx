@@ -13,8 +13,7 @@ import { isFakeStarterLocalDev } from "../../utils/isFakeStarterLocalDev.ts";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 let pendingSchemaMarkupSession:
-  | { messageId: string; apply: (payload: any) => void }
-  | undefined;
+  { messageId: string; apply: (payload: any) => void } | undefined;
 
 export interface AdvancedSettingsProps {
   /**

@@ -16,7 +16,7 @@ import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 import { ImgSizesByBreakpoint } from "../../atoms/image.tsx";
 import { themeManagerCn } from "../../../utils/cn.ts";
 import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
-import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
+import { i18nPageInstance } from "../../../utils/i18n/page.ts";
 import { PuckComponent, setDeep, Slot, WithId } from "@puckeditor/core";
 import {
   useCardContext,
@@ -468,7 +468,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
   fields: ProductCardFields,
   inline: true,
   resolveData: (data, params) => {
-    const locale = i18nComponentsInstance.language || "en";
+    const locale = i18nPageInstance.language || "en";
     const field = data.props.field ?? "";
     const isLinkedMode = Boolean(field);
     const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as
@@ -477,11 +477,9 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
         })
       | undefined;
     const priceSlotProps = data.props.slots.PriceSlot?.[0]?.props as
-      | WithId<TextProps>
-      | undefined;
+      WithId<TextProps> | undefined;
     const priceEntityField = priceSlotProps?.data.text as
-      | YextEntityField<ProductStruct["price"]>
-      | undefined;
+      YextEntityField<ProductStruct["price"]> | undefined;
     const entityPrice = isLinkedMode
       ? data.props.price
       : priceEntityField
@@ -527,8 +525,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
     const showPrice = Boolean(resolvedPrice);
 
     const browSlotProps = data.props.slots.BrowSlot?.[0]?.props as
-      | WithId<TextProps>
-      | undefined;
+      WithId<TextProps> | undefined;
     const resolvedBrow = isLinkedMode
       ? data.props.category
       : browSlotProps
@@ -555,8 +552,7 @@ export const ProductCard: YextComponentConfig<ProductCardProps> = {
     const showDescription = Boolean(resolvedDescription);
 
     const ctaSlotProps = data.props.slots.CTASlot?.[0]?.props as
-      | WithId<CTAWrapperProps>
-      | undefined;
+      WithId<CTAWrapperProps> | undefined;
     const resolvedCTA = isLinkedMode
       ? data.props.cta
       : ctaSlotProps

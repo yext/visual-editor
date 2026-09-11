@@ -12,11 +12,21 @@ export type ValidationStage = "api" | "structure" | "code";
 /** A problem found while validating a Section Library. */
 export type ValidationIssue = {
   category: ValidationStage;
+  severity?: "warning";
   filePath: string;
   line?: number;
   column?: number;
   message: string;
   rule: string;
+};
+
+/**
+ * The Section Library-defined translations.
+ * Merged with visual-editor translations, with section library values taking precedence.
+ */
+export type SectionLibraryTranslationResources = {
+  platform: Record<string, string>;
+  page: Record<string, string>;
 };
 
 /** The configuration for a Section Library validation run. */
@@ -39,6 +49,7 @@ export type ResolvedSectionLibraryStructure = {
   sharedRootPageSetTypes: PageSetType[];
   layouts: SectionLibraryLayout[];
   migrationIds: string[];
+  translationResources: SectionLibraryTranslationResources;
 };
 
 /** The result of a Section Library validation run. */
