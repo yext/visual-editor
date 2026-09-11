@@ -166,6 +166,9 @@ importers:
       i18next:
         specifier: ^26.4.2
         version: 26.4.2(typescript@5.9.3)
+      i18next-cli:
+        specifier: ^1.73.2
+        version: 1.73.2(@swc/helpers@0.5.23)(@types/node@20.19.43)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)
       lucide-react:
         specifier: ^0.414.0
         version: 0.414.0(react@18.3.1)
@@ -302,9 +305,6 @@ importers:
       husky:
         specifier: ^9.1.4
         version: 9.1.7
-      i18next-cli:
-        specifier: ^1.73.2
-        version: 1.73.2(@swc/helpers@0.5.23)(@types/node@20.19.43)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)
       jest-axe:
         specifier: ^10.0.0
         version: 10.0.0

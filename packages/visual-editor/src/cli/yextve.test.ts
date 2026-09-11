@@ -9,7 +9,9 @@ const {
   convertTemplatesToSectionLibrary,
   deploy,
   exportDirectoryLocatorSectionLibrary,
+  finalizeI18n,
   pollRevision,
+  prepareI18n,
   resolveConfig,
 } = vi.hoisted(() => ({
   convertTemplatesToSectionLibrary: vi.fn(),
@@ -17,6 +19,8 @@ const {
   deploy: vi.fn(),
   exportDirectoryLocatorSectionLibrary: vi.fn(),
   pollRevision: vi.fn(),
+  prepareI18n: vi.fn(),
+  finalizeI18n: vi.fn(),
 }));
 
 vi.mock("./commands/internal/exportDirectoryLocatorSectionLibrary.ts", () => ({
@@ -28,6 +32,10 @@ vi.mock("./commands/internal/convertTemplatesToSectionLibrary.ts", () => ({
 vi.mock("./commands/internal/deploy/config.ts", () => ({ resolveConfig }));
 vi.mock("./commands/internal/deploy/deploy.ts", () => ({ deploy }));
 vi.mock("./commands/internal/deploy/pollRevision.ts", () => ({ pollRevision }));
+vi.mock("./commands/internal/i18n/i18n.ts", () => ({
+  prepareI18n,
+  finalizeI18n,
+}));
 
 describe("yextve", () => {
   beforeEach(() => {
@@ -42,6 +50,7 @@ describe("yextve", () => {
     expect(help.stdout).toContain("add-directory-locator");
     expect(help.stdout).toContain("convert-template");
     expect(help.stdout).toContain("deploy");
+    expect(help.stdout).toContain("i18n");
     expect(help.stdout).toContain("validate");
     expect(help.stdout).toContain("--version");
     expect(help.stdout).not.toContain("--verbose");
@@ -76,6 +85,11 @@ describe("yextve", () => {
       "yextve add-directory-locator [--overwrite]"
     );
     expect(addHelp.stdout).not.toContain("--library-id");
+
+    const i18nHelp = await invoke(["i18n", "--help"]);
+    expect(i18nHelp.exitCode).toBe(0);
+    expect(i18nHelp.stdout).toContain("yextve i18n prepare");
+    expect(i18nHelp.stdout).toContain("yextve i18n finalize");
   });
 
   it("prints version", async () => {
@@ -94,6 +108,10 @@ describe("yextve", () => {
     { args: ["validate", "--unknown"] },
     { args: ["convert-template", "project-path"] },
     { args: ["add-directory-locator", "--unknown"] },
+    { args: ["i18n"] },
+    { args: ["i18n", "unknown"] },
+    { args: ["i18n", "prepare", "extra"] },
+    { args: ["i18n", "prepare", "--unknown"] },
   ])("returns usage exit 2 for invalid arguments: $args", async ({ args }) => {
     const result = await invoke(args);
     expect(result.exitCode).toBe(2);
@@ -191,6 +209,27 @@ describe("yextve", () => {
     expect(exportDirectoryLocatorSectionLibrary).toHaveBeenCalledWith({
       targetDirectory: rootDir,
       overwrite: true,
+    });
+  });
+
+  it.each(["prepare", "finalize"])(
+    "runs the i18n %s workflow in the current directory",
+    async (subcommand) => {
+      const rootDir = createTempRoot();
+      const result = await invoke(["i18n", subcommand], rootDir);
+
+      expect(result.exitCode).toBe(0);
+      const workflow = subcommand === "prepare" ? prepareI18n : finalizeI18n;
+      expect(workflow).toHaveBeenCalledWith(rootDir, expect.any(Object));
+    }
+  );
+
+  it("maps i18n workflow failures to exit code 1", async () => {
+    prepareI18n.mockRejectedValueOnce(new Error("extraction failed"));
+
+    expect(await invoke(["i18n", "prepare"])).toMatchObject({
+      exitCode: 1,
+      stderr: "error: extraction failed\n",
     });
   });
 

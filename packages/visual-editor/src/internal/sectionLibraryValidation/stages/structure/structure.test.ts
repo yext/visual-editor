@@ -97,8 +97,22 @@ describe("validateSectionLibraryStructure", () => {
     });
   });
 
+  it("accepts canonical translation locales outside the built-in locale set", () => {
+    const rootDir = createValidLibrary();
+    writeTranslation(rootDir, "platform", "en-US", {
+      editor: "Custom editor",
+    });
+
+    const result = validateSectionLibraryStructure(rootDir);
+
+    expect(result.issues).toEqual([]);
+    expect(result.structure?.translationResources.platform).toEqual({
+      "en-US": "src/library/i18n/platform/en-US.json",
+    });
+  });
+
   it.each([
-    ["unsupported locale", "platform", "en-US.json", {}, "i18n/locale"],
+    ["invalid locale", "platform", "en_us.json", {}, "i18n/locale"],
     ["unsupported resource kind", "other", "en.json", {}, "i18n/kind"],
     ["invalid root", "page", "en.json", [], "i18n/shape"],
     ["invalid nested value", "page", "en.json", { count: 2 }, "i18n/shape"],
