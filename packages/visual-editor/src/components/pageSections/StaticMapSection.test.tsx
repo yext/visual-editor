@@ -96,6 +96,7 @@ describe("StaticMapSection", async () => {
     "$viewport.name $name",
     async ({ document, props, interactions, version }) => {
       const data = migrate(
+        puckConfig,
         {
           root: {
             props: {
@@ -109,9 +110,8 @@ describe("StaticMapSection", async () => {
             },
           ],
         },
-        migrationRegistry,
-        puckConfig,
-        document
+        document,
+        migrationRegistry
       );
 
       const { container } = reactRender(
@@ -133,6 +133,7 @@ describe("StaticMapSection", async () => {
 
   it("migrates version 77 by removing the legacy data prop", async () => {
     const data = migrate(
+      puckConfig,
       {
         root: {
           props: {
@@ -159,15 +160,14 @@ describe("StaticMapSection", async () => {
           },
         ],
       },
-      migrationRegistry,
-      puckConfig,
       {
         _env: { YEXT_MAPBOX_API_KEY: "fixture-static-map-api-key" },
         yextDisplayCoordinate: {
           latitude: 38.895546,
           longitude: -77.069915,
         },
-      }
+      },
+      migrationRegistry
     );
 
     expect(data.content[0]).toEqual({

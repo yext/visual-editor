@@ -13,6 +13,7 @@ import {
   applyTheme,
   defaultThemeConfig,
   Editor,
+  type MigrationRegistry,
   usePlatformBridgeDocument,
   usePlatformBridgeEntityFields,
 } from "@yext/visual-editor";
@@ -20,6 +21,7 @@ import { SectionLibraryVisualEditorProvider } from "@yext/visual-editor/section-
 import tailwindConfig from "../../tailwind.config";
 import { translationLoaders } from "../library/.generated/i18n";
 /* SECTION_LIBRARY_CONFIG_IMPORTS */
+/* SECTION_LIBRARY_MIGRATION_REGISTRY */
 
 const editorPath = "__SECTION_LIBRARY_EDITOR_PATH__";
 const editorName = "__SECTION_LIBRARY_EDITOR_NAME__";
@@ -48,6 +50,7 @@ const Edit = (): JSX.Element => {
         document={document}
         componentRegistry={componentRegistry}
         themeConfig={defaultThemeConfig}
+        sectionLibraryMigrationRegistry={sectionLibraryMigrationRegistry}
       />
     </SectionLibraryVisualEditorProvider>
   );

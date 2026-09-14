@@ -22,7 +22,7 @@ import { LayoutApprovalModal } from "../../components/modals/LayoutApprovalModal
 import { TemplateMetadata } from "../../types/templateMetadata.ts";
 import "../ui/puck.css";
 import "../../../editor/index.css";
-import { migrate } from "../../../utils/migrate.ts";
+import { migrate, type MigrationRegistry } from "../../../utils/migrate.ts";
 import { migrationRegistry } from "../../../components/migrations/migrationRegistry.ts";
 import {
   i18nPageInstance,
@@ -52,6 +52,7 @@ type LayoutHeaderProps = {
   hasErrors: boolean;
   errorSources: ErrorSource[];
   errorDetails: Partial<Record<ErrorSource, ErrorDetail>>;
+  sectionLibraryMigrationRegistry?: MigrationRegistry;
 };
 
 export const LayoutHeader = (props: LayoutHeaderProps) => {
@@ -65,6 +66,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
     hasErrors,
     errorSources,
     errorDetails,
+    sectionLibraryMigrationRegistry,
   } = props;
   const streamDocument = useDocument();
 
@@ -158,7 +160,8 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
                 navigator.clipboard.writeText(
                   JSON.stringify(appState.data, null, 2)
                 );
-              } catch {
+              } catch (err) {
+                console.error("Failed to copy layout:", err);
                 alert(pt("failedToCopyLayout", "Failed to copy layout."));
               }
             }}
@@ -190,10 +193,11 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
                 }
 
                 const migratedPastedData = migrate(
-                  pastedData,
-                  migrationRegistry,
                   config,
-                  streamDocument
+                  pastedData,
+                  streamDocument,
+                  migrationRegistry,
+                  sectionLibraryMigrationRegistry
                 );
 
                 devLogger.logData("PASTED_DATA", migratedPastedData);
@@ -215,6 +219,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
                   return;
                 }
 
+                console.error("Failed to paste layout:", err);
                 alert(pt("failedToPasteLayout", "Failed to paste layout."));
                 return;
               }
@@ -228,7 +233,11 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
             className="ve-mx-4 ve-h-7 ve-w-px ve-bg-gray-300 ve-my-auto"
           />
           <EntityFieldsToggle />
-          {localDev && <LocalDevOverrideButtons />}
+          {localDev && (
+            <LocalDevOverrideButtons
+              sectionLibraryMigrationRegistry={sectionLibraryMigrationRegistry}
+            />
+          )}
         </div>
         <div className="header-center"></div>
         <div className="actions">
@@ -314,7 +323,13 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
   );
 };
 
-export const LocalDevOverrideButtons = () => {
+export const LocalDevOverrideButtons = ({
+  sectionLibraryMigrationRegistry,
+  showSetLayoutData = true,
+}: {
+  sectionLibraryMigrationRegistry?: MigrationRegistry;
+  showSetLayoutData?: boolean;
+} = {}) => {
   const getPuck = useGetPuck();
   const streamDocument = useDocument();
   const { loadPlatformTranslations, loadPageTranslations } =
@@ -332,30 +347,33 @@ export const LocalDevOverrideButtons = () => {
       >
         Log Layout Data
       </Button>
-      <Button
-        onClick={() => {
-          const {
-            history: { setHistories, histories },
-            config,
-          } = getPuck();
-          let data = { root: {}, content: [] };
-          try {
-            data = JSON.parse(prompt("Enter layout data:") ?? "{}");
-          } finally {
-            const migratedData = migrate(
-              data,
-              migrationRegistry,
+      {showSetLayoutData && (
+        <Button
+          onClick={() => {
+            const {
+              history: { setHistories, histories },
               config,
-              streamDocument
-            );
-            setHistories([...histories, { state: { data: migratedData } }]);
-          }
-        }}
-        variant="outline"
-        className="ve-ml-4"
-      >
-        Set Layout Data
-      </Button>
+            } = getPuck();
+            let data = { root: {}, content: [] };
+            try {
+              data = JSON.parse(prompt("Enter layout data:") ?? "{}");
+            } finally {
+              const migratedData = migrate(
+                config,
+                data,
+                streamDocument,
+                migrationRegistry,
+                sectionLibraryMigrationRegistry
+              );
+              setHistories([...histories, { state: { data: migratedData } }]);
+            }
+          }}
+          variant="outline"
+          className="ve-ml-4"
+        >
+          Set Layout Data
+        </Button>
+      )}
       <Button
         onClick={async () => {
           const locale = prompt("Enter page locale:") || "en";

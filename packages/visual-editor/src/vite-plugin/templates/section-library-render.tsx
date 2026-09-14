@@ -1,7 +1,7 @@
 /* SECTION_LIBRARY_GENERATED_FILE */
 import "@yext/visual-editor/style.css";
 import "../index.css";
-import { Render, resolveAllData } from "@puckeditor/core";
+import { type Data, Render, resolveAllData } from "@puckeditor/core";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
 import {
   type GetHeadConfig,
@@ -23,6 +23,9 @@ import {
   getPageMetadata,
   getSchema,
   GTMBody,
+  migrate,
+  migrationRegistry,
+  type MigrationRegistry,
   resolveUrlTemplate,
 } from "@yext/visual-editor";
 import {
@@ -32,6 +35,7 @@ import {
 import { sectionLibraryConfig } from "__SECTION_LIBRARY_CONFIG_PATH__";
 import { translationLoaders } from "../library/.generated/i18n";
 /* SECTION_LIBRARY_MAPBOX_IMPORT */
+/* SECTION_LIBRARY_MIGRATION_REGISTRY */
 
 const layoutId = "__SECTION_LIBRARY_LAYOUT_ID__";
 
@@ -102,7 +106,7 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
       `Section Library layout ${layoutId} is missing layout data`
     );
   }
-  let data: Record<string, unknown>;
+  let data: Data;
   try {
     data = JSON.parse(layout);
   } catch {
@@ -110,8 +114,15 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
       `Section Library layout ${layoutId} has invalid layout data`
     );
   }
+  const migratedData = migrate(
+    sectionLibraryConfig,
+    data,
+    props.document,
+    migrationRegistry,
+    sectionLibraryMigrationRegistry
+  );
   props.document.__.layout = JSON.stringify(
-    await resolveAllData(data, sectionLibraryConfig, {
+    await resolveAllData(migratedData, sectionLibraryConfig, {
       streamDocument: props.document,
     })
   );
@@ -134,7 +145,7 @@ const SectionLibraryLayout: Template<TemplateRenderProps> = (props) => {
       `Section Library layout ${layoutId} is missing layout data`
     );
   }
-  let data: Record<string, unknown>;
+  let data: Data;
   try {
     data = JSON.parse(layout);
   } catch {

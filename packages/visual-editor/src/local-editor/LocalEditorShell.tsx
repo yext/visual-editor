@@ -76,6 +76,7 @@ export const LocalEditorShell = ({
   componentRegistry,
   tailwindConfig,
   themeConfig,
+  sectionLibraryMigrationRegistry,
   translationLoaders,
 }: LocalEditorShellProps) => {
   const [previewContext, setPreviewContext] = React.useState<{
@@ -443,6 +444,7 @@ export const LocalEditorShell = ({
         onClose={closePreview}
         tailwindConfig={tailwindConfig}
         themeConfig={themeConfig}
+        sectionLibraryMigrationRegistry={sectionLibraryMigrationRegistry}
         translationLoaders={translationLoaders}
       />
     );
@@ -653,6 +655,9 @@ export const LocalEditorShell = ({
                 localDev={true}
                 localDevOptions={editorLocalDevOptions}
                 forceThemeMode={selectedMode === "theme"}
+                sectionLibraryMigrationRegistry={
+                  sectionLibraryMigrationRegistry
+                }
               />
             </SectionLibraryVisualEditorProvider>
           )}

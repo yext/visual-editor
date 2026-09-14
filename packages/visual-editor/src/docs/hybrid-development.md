@@ -110,7 +110,8 @@ const Location: Template<TemplateRenderProps> = (props) => {
             data={migrate(
               JSON.parse(document.__.layout),
               migrationRegistry,
-              mainConfig
+              mainConfig,
+              document
             )}
           />
         </GTMBody>
@@ -260,7 +261,8 @@ const Location: Template<TemplateRenderProps> = (props) => {
           data={migrate(
             JSON.parse(document.__.layout),
             migrationRegistry,
-            filteredConfig
+            filteredConfig,
+            document
           )}
           metadata={customMetadata} // added here
         />

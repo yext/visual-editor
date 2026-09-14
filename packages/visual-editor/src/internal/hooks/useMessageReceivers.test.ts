@@ -81,4 +81,31 @@ describe("getLocalDevLayoutData", () => {
     });
     expect(warnSpy).toHaveBeenCalledOnce();
   });
+
+  it("applies section-library migrations to initial local editor data", () => {
+    const data = getLocalDevLayoutData(
+      locatorConfig,
+      {},
+      {
+        root: { props: { version: 82 } },
+        content: [],
+        zones: {},
+      },
+      [
+        {
+          root: {
+            propTransformation: (props: Record<string, any>) => ({
+              ...props,
+              migrated: true,
+            }),
+          },
+        },
+      ]
+    );
+
+    expect(data.root.props).toMatchObject({
+      migrated: true,
+      sectionLibraryMigrationVersion: 1,
+    });
+  });
 });

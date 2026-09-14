@@ -11,10 +11,15 @@ import {
   HeadConfig,
 } from "@yext/pages";
 import { type Config } from "@puckeditor/core";
-import { defaultThemeConfig, LocalEditorShell } from "@yext/visual-editor";
+import {
+  defaultThemeConfig,
+  LocalEditorShell,
+  type MigrationRegistry,
+} from "@yext/visual-editor";
 import tailwindConfig from "../../tailwind.config";
 import { translationLoaders } from "../library/.generated/i18n";
 /* LOCAL_EDITOR_CONFIG_IMPORTS */
+/* LOCAL_EDITOR_MIGRATION_REGISTRY */
 
 const DEFAULT_LOCAL_EDITOR_ROUTE = "/local-editor";
 const localEditorStylesheetHrefs: string[] = __LOCAL_EDITOR_STYLESHEET_HREFS__;
@@ -55,6 +60,7 @@ const LocalEditor: Template<TemplateRenderProps> = () => {
       componentRegistry={componentRegistry}
       tailwindConfig={tailwindConfig}
       themeConfig={defaultThemeConfig}
+      sectionLibraryMigrationRegistry={sectionLibraryMigrationRegistry}
       translationLoaders={translationLoaders}
     />
   );

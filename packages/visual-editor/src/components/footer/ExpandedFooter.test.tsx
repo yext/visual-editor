@@ -2476,6 +2476,7 @@ describe("ExpandedFooter", async () => {
       viewport: { width, height, name: viewportName },
     }) => {
       const data = migrate(
+        puckConfig,
         {
           root: {
             props: {
@@ -2489,9 +2490,8 @@ describe("ExpandedFooter", async () => {
             },
           ],
         },
-        migrationRegistry,
-        puckConfig,
-        document
+        document,
+        migrationRegistry
       );
 
       const { container } = reactRender(

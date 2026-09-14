@@ -26,7 +26,7 @@ import {
   defaultFonts,
   loadFontsIntoDOM,
 } from "../utils/fonts/visualEditorFonts.ts";
-import { migrate } from "../utils/migrate.ts";
+import { migrate, type MigrationRegistry } from "../utils/migrate.ts";
 import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";
 import type { LocalDevOptions } from "./types.ts";
@@ -67,6 +67,7 @@ export type EditorProps = {
   // forceThemeMode is used with localDev to load the theme editor
   forceThemeMode?: boolean;
   metadata?: Metadata; // passed into puck's global metadata
+  sectionLibraryMigrationRegistry?: MigrationRegistry;
 };
 
 export const Editor = ({
@@ -77,6 +78,7 @@ export const Editor = ({
   localDevOptions,
   forceThemeMode,
   metadata,
+  sectionLibraryMigrationRegistry,
 }: EditorProps) => {
   const { loadPlatformTranslations } = useTranslationRuntime();
   if (document) {
@@ -99,7 +101,8 @@ export const Editor = ({
     componentRegistry,
     !!localDev,
     document,
-    localDevOptions
+    localDevOptions,
+    sectionLibraryMigrationRegistry
   );
 
   const { pushPageSets, sendError } = useCommonMessageSenders();
@@ -210,7 +213,13 @@ export const Editor = ({
     finalThemeConfig = createDefaultThemeConfig(templateMetadata?.customFonts);
   }
   const migratedData = !isLoading
-    ? migrate(layoutData!, migrationRegistry, puckConfig, document)
+    ? migrate(
+        puckConfig,
+        layoutData!,
+        document,
+        migrationRegistry,
+        sectionLibraryMigrationRegistry
+      )
     : undefined;
 
   return (
@@ -238,6 +247,9 @@ export const Editor = ({
                 localDev={!!localDev}
                 metadata={{ ...metadata, streamDocument: document }}
                 streamDocument={document}
+                sectionLibraryMigrationRegistry={
+                  sectionLibraryMigrationRegistry
+                }
               />
             )
           ) : (

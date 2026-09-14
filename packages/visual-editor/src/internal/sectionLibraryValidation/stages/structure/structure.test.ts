@@ -466,6 +466,85 @@ describe("validateSectionLibraryStructure", () => {
       ],
     });
   });
+
+  it("accepts a default layout behind the built-in migrations", () => {
+    const rootDir = createValidLibrary();
+    fs.outputJsonSync(
+      layoutFilePath(rootDir, "entity-layout", "defaultLayout.json"),
+      {
+        root: { props: { version: 1 } },
+        content: [],
+        zones: {},
+      }
+    );
+
+    expect(validateSectionLibraryStructure(rootDir).issues).toEqual([]);
+  });
+
+  it("reports a missing migrationRegistry export", () => {
+    const rootDir = createValidLibrary();
+    fs.outputFileSync(
+      migrationRegistryPath(rootDir),
+      "export const otherRegistry = [];"
+    );
+
+    expectRules(rootDir, "migrations/export");
+  });
+
+  it("reports spread elements in the migration registry", () => {
+    const rootDir = createValidLibrary();
+    fs.outputFileSync(
+      migrationRegistryPath(rootDir),
+      "const migrations = [{}, {}]; export const migrationRegistry = [...migrations];"
+    );
+
+    expectRules(rootDir, "migrations/shape");
+  });
+
+  it("reports missing repo versions when repo migrations exist", () => {
+    const rootDir = createValidLibrary();
+    writeMigrationRegistry(rootDir, ["migration"]);
+
+    expectRules(rootDir, "layouts/section-library-migration-version");
+  });
+
+  it("reports an unexpected repo version for an absent registry", () => {
+    const rootDir = createValidLibrary();
+    const defaultLayoutPath = layoutFilePath(
+      rootDir,
+      "entity-layout",
+      "defaultLayout.json"
+    );
+    const layout = fs.readJsonSync(defaultLayoutPath);
+    layout.root.props.sectionLibraryMigrationVersion = 1;
+    fs.writeJsonSync(defaultLayoutPath, layout);
+
+    expectRules(rootDir, "layouts/section-library-migration-version");
+  });
+
+  it("accepts default layouts at the latest repo migration version", () => {
+    const rootDir = createValidLibrary();
+    writeMigrationRegistry(rootDir, ["migration", "migration"]);
+    for (const layoutName of [
+      "entity-layout",
+      "directory-layout",
+      "locator-layout",
+    ]) {
+      const defaultLayoutPath = layoutFilePath(
+        rootDir,
+        layoutName,
+        "defaultLayout.json"
+      );
+      const layout = fs.readJsonSync(defaultLayoutPath);
+      layout.root.props.sectionLibraryMigrationVersion = 2;
+      fs.writeJsonSync(defaultLayoutPath, layout);
+    }
+
+    const result = validateSectionLibraryStructure(rootDir);
+
+    expect(result.issues).toEqual([]);
+    expect(result.structure?.migrationCount).toBe(2);
+  });
 });
 
 const validSectionSource = [
@@ -530,9 +609,19 @@ const writeDefaultLayout = (
   directoryName: string,
   layout: unknown
 ): void => {
+  const data = layout as Record<string, any>;
   fs.outputJsonSync(
     layoutFilePath(rootDir, directoryName, "defaultLayout.json"),
-    layout
+    {
+      ...data,
+      root: {
+        ...data.root,
+        props: {
+          ...data.root?.props,
+          version: 82,
+        },
+      },
+    }
   );
 };
 
@@ -584,6 +673,19 @@ const layoutFilePath = (
 
 const registryPath = (rootDir: string): string =>
   path.join(rootDir, "src", "library", "shared", "componentRegistry.ts");
+
+const migrationRegistryPath = (rootDir: string): string =>
+  path.join(rootDir, "src", "library", "migrations", "registry.ts");
+
+const writeMigrationRegistry = (rootDir: string, entries: string[]): void => {
+  fs.outputFileSync(
+    migrationRegistryPath(rootDir),
+    [
+      "const migration = {};",
+      `export const migrationRegistry = [${entries.join(",")}];`,
+    ].join("\n")
+  );
+};
 
 const translationPath = (
   rootDir: string,

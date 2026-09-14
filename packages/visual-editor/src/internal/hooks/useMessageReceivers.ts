@@ -9,7 +9,7 @@ import { DevLogger } from "../../utils/devLogger.ts";
 import { Config, Data } from "@puckeditor/core";
 import { useCommonMessageSenders } from "./useMessageSenders.ts";
 import { ThemeData } from "../types/themeData.ts";
-import { migrate } from "../../utils/migrate.ts";
+import { migrate, type MigrationRegistry } from "../../utils/migrate.ts";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import type { LocalDevOptions } from "../../editor/types.ts";
@@ -30,39 +30,49 @@ const createEmptyLocalDevLayout: Data = {
 export const getLocalDevLayoutData = (
   puckConfig: Config,
   streamDocument: StreamDocument,
-  initialLayoutData?: Record<string, unknown>
+  initialLayoutData?: Record<string, unknown>,
+  sectionLibraryMigrationRegistry?: MigrationRegistry
 ) => {
   if (initialLayoutData) {
     return migrate(
-      initialLayoutData as Data,
-      migrationRegistry,
       puckConfig,
-      streamDocument
+      initialLayoutData as Data,
+      streamDocument,
+      migrationRegistry,
+      sectionLibraryMigrationRegistry
     );
   }
   const layout = streamDocument.__?.layout;
   if (!layout) {
     return migrate(
-      createEmptyLocalDevLayout,
-      migrationRegistry,
       puckConfig,
-      streamDocument
+      createEmptyLocalDevLayout,
+      streamDocument,
+      migrationRegistry,
+      sectionLibraryMigrationRegistry
     );
   }
 
   try {
     const parsedLayout = JSON.parse(layout) as Data;
-    return migrate(parsedLayout, migrationRegistry, puckConfig, streamDocument);
+    return migrate(
+      puckConfig,
+      parsedLayout,
+      streamDocument,
+      migrationRegistry,
+      sectionLibraryMigrationRegistry
+    );
   } catch (error) {
     console.warn(
       "Failed to parse local dev layout JSON. Falling back to empty layout.",
       error
     );
     return migrate(
-      createEmptyLocalDevLayout,
-      migrationRegistry,
       puckConfig,
-      streamDocument
+      createEmptyLocalDevLayout,
+      streamDocument,
+      migrationRegistry,
+      sectionLibraryMigrationRegistry
     );
   }
 };
@@ -71,7 +81,8 @@ export const useCommonMessageReceivers = (
   componentRegistry: ComponentRegistry,
   localDev: boolean,
   streamDocument: StreamDocument,
-  localDevOptions?: LocalDevOptions
+  localDevOptions?: LocalDevOptions,
+  sectionLibraryMigrationRegistry?: MigrationRegistry
 ) => {
   const { iFrameLoaded } = useCommonMessageSenders();
 
@@ -119,7 +130,8 @@ export const useCommonMessageReceivers = (
         getLocalDevLayoutData(
           puckConfig,
           streamDocument,
-          localDevOptions?.initialLayoutData
+          localDevOptions?.initialLayoutData,
+          sectionLibraryMigrationRegistry
         )
       );
       setLayoutDataFetched(true);
@@ -136,6 +148,7 @@ export const useCommonMessageReceivers = (
     setLayoutDataFetched,
     setThemeData,
     setThemeDataFetched,
+    sectionLibraryMigrationRegistry,
     streamDocument,
   ]);
 

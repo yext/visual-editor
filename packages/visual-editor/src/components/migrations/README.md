@@ -11,20 +11,15 @@ This data is run through `migrate` prior to being rendered so that any migration
 
 ## When do I need to add a migrations?
 
-1. A component is renamed.
-
-Without a migration, old usages of the component will disappear from the live page and the user will be
-required to add the component to the layout again.
-
-2. Component props are updated
+1. Component props are updated
 
 Without a migration, new props will not have any data and data contained in old props will not be used.
 
-3. Component fields are updated
+2. Component fields are updated
 
 If you update some fields, such as select, the new options may not match the old data.
 
-4. A component is removed (optional)
+3. A component is removed (optional)
 
 A removed component will automatically disappear from the live page as well as showing a "No Configuration for" message in the editor. Add a removed migration to handle this.
 
@@ -37,8 +32,10 @@ In that file, export an object of type `Migration`, which is object mapping comp
 `MigrationActions` (see [migrate.ts](https://github.com/yext/visual-editor/blob/main/packages/visual-editor/src/utils/migrate.ts)).
 The component name should be the name the component is registered as in
 `src/components/categories`.
+Component names stored in layout data must remain stable; migrations do not
+support renaming components.
 
-There are three [`MigrationActions`](https://github.com/yext/visual-editor/blob/1210ee5bae73bff1456563b57506ff163fa59cb6/packages/visual-editor/src/utils/migrate.ts#L11):
+There are two [`MigrationActions`](https://github.com/yext/visual-editor/blob/main/packages/visual-editor/src/utils/migrate.ts#L11):
 
 ### Removed
 
@@ -50,19 +47,14 @@ Removes a component from all layouts.
 }
 ```
 
-### Renamed
-
-Renames all existing usages of a component to `newName`.
-This name should be the name of the component as it is registered as in `src/components/categories`.
-
-```ts
-{ action: "renamed", newName: string }
-```
-
 ### Updated
 
 Transforms the existing props to the new set of props.
 See https://puckeditor.com/docs/api-reference/functions/transform-props
+
+Use `"*"` as the component name to apply an updated migration to every
+component, including components nested in slots. Wildcard migrations cannot
+use the `removed` action.
 
 ```ts
 {
@@ -78,7 +70,19 @@ See https://puckeditor.com/docs/api-reference/functions/transform-props
 }
 ```
 
-In `migrationRegistry.ts`, import your migration and append it to the array. Migrations are run in order.
+In `migrationRegistry.ts`, import your migration and append it to the array.
+Migrations run in array order, so existing entries and ordering are append-only.
+
+```ts
+export const migrationRegistry: MigrationRegistry = [heroPhoneSlotMigration];
+```
+
+Section Libraries may define a repo-wide registry at
+`src/library/migrations/registry.ts` using the same array shape. Built-in
+migrations always run before this registry. Every source `defaultLayout.json`
+may remain behind the latest built-in migration. When the repo registry is
+non-empty, `root.props.sectionLibraryMigrationVersion` must equal the number of
+entries in the repo registry so the repo remains consistent with itself.
 
 ## How do I test a migration?
 

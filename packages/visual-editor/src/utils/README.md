@@ -765,29 +765,26 @@ It is run when data is loaded into the editor (both published and save state). I
 run before using `<Render>` in a template. It does not currently handle dropzones but will be updated
 in a future version to handle slots.
 
-`migrate` first runs Puck's `migrate` function to handle Puck migrations and then applies
-the migrations specified in `components/migrations/migrationRegistry.ts`.
+`migrate` first runs Puck's `migrate` function to handle Puck migrations. It then applies the
+built-in migrations specified in `components/migrations/migrationRegistry.ts`, followed by any
+Section Library migrations supplied by the consuming repository.
 
-A version number is stored in `data.root.props.version` of the layout data. This corresponds to
-the index of the last applied migration from the `migrationRegistry`.
+The layout records the number of applied built-in migrations in `data.root.props.version` and the
+number of applied repository migrations in `data.root.props.sectionLibraryMigrationVersion`.
+Migration registries and their existing entries are append-only. Each number is used as the index
+at which to resume its corresponding registry.
 
 Migrations should be specified as a map of ComponentName to MigrationAction.
 The ComponentName is the name of a component as provided to Puck Config in the `components` object
 (see `components/_componentCategories.ts`).
 
-There are three type of MigrationActions:
+There are two types of MigrationActions:
 
 ```ts
 {
   ComponentName: {
     action: "removed"
     // This component will be removed from all layouts
-  },
-  ComponentName: {
-    action: "renamed"
-    newName: string;
-    // This component will be renamed in all layouts
-    // Updates Puck's "type" property in data
   },
   ComponentName: {
     action: "updated"

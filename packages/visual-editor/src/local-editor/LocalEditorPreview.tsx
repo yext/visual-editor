@@ -12,7 +12,7 @@ import {
 } from "../internal/types/templateMetadata.ts";
 import type { ThemeData } from "../internal/types/themeData.ts";
 import { updateThemeInEditor } from "../utils/applyTheme.ts";
-import { migrate } from "../utils/migrate.ts";
+import { migrate, type MigrationRegistry } from "../utils/migrate.ts";
 import type { TailwindConfig, ThemeConfig } from "../utils/themeResolver.ts";
 import type { StreamDocument } from "../utils/types/StreamDocument.ts";
 import { SectionLibraryVisualEditorProvider } from "../utils/SectionLibraryVisualEditorProvider.tsx";
@@ -28,6 +28,7 @@ type LocalEditorPreviewProps = {
   onClose: () => void;
   tailwindConfig: TailwindConfig;
   themeConfig?: ThemeConfig;
+  sectionLibraryMigrationRegistry?: MigrationRegistry;
   translationLoaders?: SectionLibraryTranslationLoaders;
 };
 
@@ -55,6 +56,7 @@ export const LocalEditorPreview = ({
   onClose,
   tailwindConfig,
   themeConfig,
+  sectionLibraryMigrationRegistry,
   translationLoaders,
 }: LocalEditorPreviewProps) => {
   const [previewState, setPreviewState] = React.useState<PreviewState | null>(
@@ -97,10 +99,11 @@ export const LocalEditorPreview = ({
           localDevOptions,
         });
         const migratedLayoutData = migrate(
-          cloneLayoutData(layoutData),
-          migrationRegistry,
           config,
-          streamDocument
+          cloneLayoutData(layoutData),
+          streamDocument,
+          migrationRegistry,
+          sectionLibraryMigrationRegistry
         );
         const resolvedLayoutData = await resolveAllData(
           migratedLayoutData,
@@ -134,7 +137,14 @@ export const LocalEditorPreview = ({
     return () => {
       isCurrent = false;
     };
-  }, [config, defaultLayoutData, localDevOptions, streamDocument, themeConfig]);
+  }, [
+    config,
+    defaultLayoutData,
+    localDevOptions,
+    sectionLibraryMigrationRegistry,
+    streamDocument,
+    themeConfig,
+  ]);
 
   return (
     <div

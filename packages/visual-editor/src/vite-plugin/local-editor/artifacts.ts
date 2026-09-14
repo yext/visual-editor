@@ -49,6 +49,10 @@ export const createLocalEditorArtifactsManager = ({
           JSON.stringify(readLocalEditorFontStylesheetHrefs(rootDir))
         )
         .replace(
+          "/* LOCAL_EDITOR_MIGRATION_REGISTRY */",
+          buildMigrationRegistrySource(rootDir)
+        )
+        .replace(
           "/* LOCAL_EDITOR_CONFIG_IMPORTS */",
           layouts
             .map((layout, index) => {
@@ -139,6 +143,13 @@ export const createLocalEditorArtifactsManager = ({
     syncLocalEditorTemplate,
   };
 };
+
+const buildMigrationRegistrySource = (rootDir: string): string =>
+  fs.existsSync(
+    path.join(rootDir, "src", "library", "migrations", "registry.ts")
+  )
+    ? 'import { migrationRegistry as repoMigrationRegistry } from "../library/migrations/registry";\nconst sectionLibraryMigrationRegistry: MigrationRegistry = repoMigrationRegistry;'
+    : "const sectionLibraryMigrationRegistry: MigrationRegistry = [];";
 
 const writeGeneratedTemplate = (templatePath: string, source: string): void => {
   fs.ensureDirSync(path.dirname(templatePath));

@@ -1329,10 +1329,10 @@ describe("Locator", async () => {
 
   it("flattens wrapped result card selector fields during migration", () => {
     const data = migrate(
-      wrappedSelectorValuesMigrationFixture.data as any,
-      migrationRegistry,
       puckConfig,
-      wrappedSelectorValuesMigrationFixture.document as any
+      wrappedSelectorValuesMigrationFixture.data as any,
+      wrappedSelectorValuesMigrationFixture.document as any,
+      migrationRegistry
     );
 
     const mainContent = data.content[0] as any;
@@ -1366,6 +1366,7 @@ describe("Locator", async () => {
       viewport: { width, height, name: viewportName },
     }) => {
       let data = migrate(
+        puckConfig,
         {
           root: {
             props: {
@@ -1379,9 +1380,8 @@ describe("Locator", async () => {
             },
           ],
         },
-        migrationRegistry,
-        puckConfig,
-        document
+        document,
+        migrationRegistry
       );
 
       data = await resolveAllData(data, puckConfig, {

@@ -16,6 +16,10 @@ import {
 import { buildLocalEditorDataTemplateName } from "../../../../vite-plugin/local-editor/generatedFiles.ts";
 import { extractSectionConfigFrontmatter } from "../../../../vite-plugin/section-library/sectionFrontmatter.ts";
 import { readSharedComponentRegistry } from "../../../../vite-plugin/section-library/sharedComponentRegistry.ts";
+import {
+  MigrationRegistryValidationError,
+  readMigrationRegistryLength,
+} from "../../../../vite-plugin/section-library/migrationRegistry.ts";
 import type {
   ResolvedSection,
   ResolvedSectionLibraryStructure,
@@ -55,6 +59,23 @@ export const validateSectionLibraryStructure = (
   };
 
   const sections = readSections(rootDir, libraryDirectory, addIssue);
+  const migrationRegistryPath = path.join(
+    libraryDirectory,
+    "migrations",
+    "registry.ts"
+  );
+  let migrationCount = 0;
+  try {
+    migrationCount = readMigrationRegistryLength(migrationRegistryPath) ?? 0;
+  } catch (error) {
+    addIssue(
+      migrationRegistryPath,
+      error instanceof MigrationRegistryValidationError
+        ? error.rule
+        : "migrations/invalid",
+      errorMessage(error)
+    );
+  }
   const translationResources = readTranslationResources(
     rootDir,
     libraryDirectory,
@@ -93,6 +114,7 @@ export const validateSectionLibraryStructure = (
   validateComponentIds(sections, sharedComponents, libraryDirectory, addIssue);
   for (const layout of parsedLayouts) {
     validateLayoutReferences(layout, sections, sharedComponents, addIssue);
+    validateLayoutMigrationVersion(layout, migrationCount, addIssue);
   }
 
   if (issues.some((issue) => issue.severity !== "warning")) {
@@ -105,9 +127,36 @@ export const validateSectionLibraryStructure = (
       sharedComponents,
       sharedRootPageSetTypes,
       layouts,
+      migrationCount,
       translationResources,
     },
   };
+};
+
+/** Ensures defaultLayout.json files match the repo's migration registry. */
+const validateLayoutMigrationVersion = (
+  layout: ParsedLayout,
+  migrationCount: number,
+  addIssue: AddIssue
+): void => {
+  const root = layout.defaultLayout.root as
+    { props?: Record<string, unknown> } | undefined;
+  const props = root?.props;
+  if (migrationCount === 0) {
+    if (props?.sectionLibraryMigrationVersion !== undefined) {
+      addIssue(
+        layout.defaultLayoutPath,
+        "layouts/section-library-migration-version",
+        "defaultLayout root.props.sectionLibraryMigrationVersion must be absent when the repo migration registry is empty"
+      );
+    }
+  } else if (props?.sectionLibraryMigrationVersion !== migrationCount) {
+    addIssue(
+      layout.defaultLayoutPath,
+      "layouts/section-library-migration-version",
+      `defaultLayout root.props.sectionLibraryMigrationVersion must equal ${migrationCount}`
+    );
+  }
 };
 
 const translationResourceKinds = ["platform", "page"] as const;

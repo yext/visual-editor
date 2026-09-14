@@ -80,6 +80,7 @@ export const generateSectionLibraryFiles = (
   }
   const metadata = metadataResult.metadata;
   const structure = structureResult.structure;
+  const migrationRegistrySource = buildMigrationRegistrySource(rootDir);
 
   const generatedDirectory = path.join(rootDir, "src", "library", ".generated");
   const generatedTranslations = generateMergedTranslationResources(
@@ -129,7 +130,10 @@ export const generateSectionLibraryFiles = (
         "templates",
         `${layout.metadata.id}.tsx`
       );
-      return writeGeneratedFile(filePath, buildRenderTemplateSource(layout))
+      return writeGeneratedFile(
+        filePath,
+        buildRenderTemplateSource(layout, migrationRegistrySource)
+      )
         ? [filePath]
         : [];
     })
@@ -147,7 +151,8 @@ export const generateSectionLibraryFiles = (
         buildEditorTemplateSource(
           [[layout.metadata.id, layout]],
           `edit/${layout.metadata.id}/${encodeURIComponent(sectionLibraryRevisionId)}`,
-          `edit-${layout.metadata.id}`
+          `edit-${layout.metadata.id}`,
+          migrationRegistrySource
         )
       )
         ? [filePath]
@@ -432,7 +437,10 @@ const buildCategorySource = (sections: ResolvedSection[]): string => {
     .join("\n");
 };
 
-const buildRenderTemplateSource = (layout: Layout): string => {
+const buildRenderTemplateSource = (
+  layout: Layout,
+  migrationRegistrySource: string
+): string => {
   const configPath = `../library/.generated/libraryConfig-${layout.metadata.id}`;
   const mapboxImport =
     layout.metadata.pageSetType === "LOCATOR"
@@ -450,13 +458,18 @@ const buildRenderTemplateSource = (layout: Layout): string => {
     )
     .replace('"__SECTION_LIBRARY_CONFIG_PATH__"', JSON.stringify(configPath))
     .replace("/* SECTION_LIBRARY_MAPBOX_IMPORT */", mapboxImport)
+    .replace(
+      "/* SECTION_LIBRARY_MIGRATION_REGISTRY */",
+      migrationRegistrySource
+    )
     .replace("{/* SECTION_LIBRARY_MAPBOX_ASSETS */}", mapboxAssets);
 };
 
 const buildEditorTemplateSource = (
   entries: [string, Layout][],
-  editorPath: string = "edit",
-  editorName: string = "edit"
+  editorPath: string,
+  editorName: string,
+  migrationRegistrySource: string
 ): string => {
   const registry = entries
     .map(([name, entry]) => {
@@ -467,9 +480,26 @@ const buildEditorTemplateSource = (
   return sectionLibraryEditorTemplate
     .replace("/* SECTION_LIBRARY_GENERATED_FILE */", GENERATED_FILE_PREFIX)
     .replace("/* SECTION_LIBRARY_CONFIG_IMPORTS */", "")
+    .replace(
+      "/* SECTION_LIBRARY_MIGRATION_REGISTRY */",
+      migrationRegistrySource
+    )
     .replace("/* SECTION_LIBRARY_COMPONENT_REGISTRY */", registry)
     .replace('"__SECTION_LIBRARY_EDITOR_PATH__"', JSON.stringify(editorPath))
     .replace('"__SECTION_LIBRARY_EDITOR_NAME__"', JSON.stringify(editorName));
+};
+
+const buildMigrationRegistrySource = (rootDir: string): string => {
+  const registryPath = path.join(
+    rootDir,
+    "src",
+    "library",
+    "migrations",
+    "registry.ts"
+  );
+  return fs.existsSync(registryPath)
+    ? 'import { migrationRegistry as repoMigrationRegistry } from "../library/migrations/registry";\nconst sectionLibraryMigrationRegistry: MigrationRegistry = repoMigrationRegistry;'
+    : "const sectionLibraryMigrationRegistry: MigrationRegistry = [];";
 };
 
 const writeGeneratedFile = (filePath: string, source: string): boolean => {
