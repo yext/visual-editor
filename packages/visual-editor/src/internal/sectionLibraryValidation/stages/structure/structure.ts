@@ -8,7 +8,6 @@ import {
   type SectionLibraryLayout,
   type SharedHiddenPuckComponent,
 } from "../../../../types/sectionLibrary.ts";
-import { locales } from "../../../../utils/i18n/locales.ts";
 import {
   mergeTranslationDictionaries,
   type TranslationDictionary,
@@ -161,6 +160,14 @@ const validateLayoutMigrationVersion = (
 
 const translationResourceKinds = ["platform", "page"] as const;
 
+const isCanonicalLocale = (locale: string): boolean => {
+  try {
+    return Intl.getCanonicalLocales(locale)[0] === locale;
+  } catch {
+    return false;
+  }
+};
+
 const readTranslationResources = (
   rootDir: string,
   libraryDirectory: string,
@@ -222,12 +229,12 @@ const readTranslationResourceKind = (
     if (
       !entry.isFile() ||
       path.extname(entry.name) !== ".json" ||
-      !locales.includes(locale)
+      !isCanonicalLocale(locale)
     ) {
       addIssue(
         filePath,
         "i18n/locale",
-        `Translation filename must be a supported locale followed by .json: ${entry.name}`
+        `Translation filename must be a canonical locale followed by .json: ${entry.name}`
       );
       continue;
     }

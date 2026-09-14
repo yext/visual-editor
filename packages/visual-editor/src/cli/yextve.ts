@@ -5,13 +5,14 @@ import packageJson from "../../package.json" with { type: "json" };
 import { addDirectoryLocatorCmd } from "./commands/addDirectoryLocator.ts";
 import { convertTemplateCmd } from "./commands/convertTemplate.ts";
 import { deployCmd } from "./commands/deploy.ts";
+import { i18nCmd } from "./commands/i18n.ts";
 import { validateCmd } from "./commands/validate.ts";
 import {
   type CliIo,
   type CommandParseArgsConfig,
   type ParsedCommandArgs,
   type RuntimeParseArgsConfig,
-  type YextveCommand,
+  type YextVECommand,
 } from "./command.ts";
 
 const usage = `Usage:
@@ -21,6 +22,7 @@ Commands:
   add-directory-locator            Add Directory and Locator to a Section Library.
   convert-template                 Convert legacy templates to a Section Library.
   deploy                           Upload a Section Library revision.
+  i18n                             Prepare or finalize Section Library translations.
   validate                         Validate a Section Library.
 
 Options:
@@ -30,10 +32,11 @@ Options:
 Run "yextve <command> --help" for command-specific options.
 `;
 
-const commands: Record<string, YextveCommand<CommandParseArgsConfig>> = {
+const commands: Record<string, YextVECommand<CommandParseArgsConfig>> = {
   "add-directory-locator": addDirectoryLocatorCmd,
   "convert-template": convertTemplateCmd,
   deploy: deployCmd,
+  i18n: i18nCmd,
   validate: validateCmd,
 };
 

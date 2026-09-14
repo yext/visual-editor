@@ -1,5 +1,5 @@
 import { exportDirectoryLocatorSectionLibrary } from "./internal/exportDirectoryLocatorSectionLibrary.ts";
-import { defineYextveCommand } from "../command.ts";
+import { defineYextVECommand } from "../command.ts";
 
 const usage = `Usage:
   yextve add-directory-locator [--overwrite]
@@ -13,7 +13,7 @@ Options:
   -h, --help                       Show this help.
 `;
 
-export const addDirectoryLocatorCmd = defineYextveCommand({
+export const addDirectoryLocatorCmd = defineYextVECommand({
   usage,
   parseArgsConfig: {
     strict: true,

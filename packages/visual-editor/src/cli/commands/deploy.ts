@@ -1,7 +1,7 @@
 import { resolveConfig } from "./internal/deploy/config.ts";
 import { deploy } from "./internal/deploy/deploy.ts";
 import { pollRevision } from "./internal/deploy/pollRevision.ts";
-import { defineYextveCommand } from "../command.ts";
+import { defineYextVECommand } from "../command.ts";
 
 const usage = `Usage:
   yextve deploy [-u <universe>] [--verbose] [--allow-dirty] [--allow-duplicate]
@@ -24,7 +24,7 @@ Configuration (env var > .yextrc > prompt; -u and YEXT_UNIVERSE conflict):
 .yextrc lives in the repo root; prompted values are saved back to it.
 `;
 
-export const deployCmd = defineYextveCommand({
+export const deployCmd = defineYextVECommand({
   usage,
   parseArgsConfig: {
     strict: true,
