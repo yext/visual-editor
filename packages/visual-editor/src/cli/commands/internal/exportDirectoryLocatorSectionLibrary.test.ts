@@ -76,8 +76,14 @@ describe("exportDirectoryLocatorSectionLibrary", () => {
     expect(directorySection).toContain('id: "Directory"');
     expect(directorySection).toContain('pageSetTypes: ["DIRECTORY"]');
     expect(directorySection).toContain('category: "Standard Sections"');
+    expect(directorySection).toContain(
+      'from "../shared/components/sections/directory/Directory"'
+    );
     expect(locatorSection).toContain('id: "Locator"');
     expect(locatorSection).toContain('pageSetTypes: ["LOCATOR"]');
+    expect(locatorSection).toContain(
+      'from "../shared/components/sections/locator/Locator"'
+    );
     expect(
       fs.existsSync(
         path.join(libraryDirectory, "sections", "BannerSection.tsx")

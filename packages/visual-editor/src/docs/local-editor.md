@@ -9,13 +9,12 @@ Local Editor lets you edit Section Library layouts in development. Entity
 layouts use local Pages snapshots. Directory layouts use snapshots when a
 Directory stream is configured, otherwise built-in fixture data. Locator
 layouts use built-in fixture data by default, or real Search data when
-configured. It requires `sectionLibrary: true`.
+configured.
 
 ## Enable Local Editor
 
 ```ts
 yextVisualEditorPlugin({
-  sectionLibrary: true,
   localEditor: { enabled: true },
 });
 ```

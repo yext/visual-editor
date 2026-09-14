@@ -44,8 +44,9 @@ async function copyDirectoryLocatorSourceAssets(): Promise<void> {
   await Promise.all(
     [
       "components/contentBlocks",
-      "components/directory",
-      "components/locator",
+      "components/sections/Breadcrumbs.tsx",
+      "components/sections/directory",
+      "components/sections/locator",
     ].map(async (relativePath) => {
       const destination = path.join(assetDirectory, relativePath);
       await fs.mkdir(path.dirname(destination), { recursive: true });
@@ -54,22 +55,8 @@ async function copyDirectoryLocatorSourceAssets(): Promise<void> {
       });
     })
   );
-  await fs.mkdir(path.join(assetDirectory, "components", "pageSections"), {
-    recursive: true,
-  });
-  await Promise.all([
-    fs.copyFile(
-      path.join(
-        sourceDirectory,
-        "components",
-        "pageSections",
-        "Breadcrumbs.tsx"
-      ),
-      path.join(assetDirectory, "components", "pageSections", "Breadcrumbs.tsx")
-    ),
-    fs.copyFile(
-      path.join(sourceDirectory, "sectionLibrarySupport.ts"),
-      path.join(assetDirectory, "sectionLibrarySupport.ts")
-    ),
-  ]);
+  await fs.copyFile(
+    path.join(sourceDirectory, "sectionLibrarySupport.ts"),
+    path.join(assetDirectory, "sectionLibrarySupport.ts")
+  );
 }

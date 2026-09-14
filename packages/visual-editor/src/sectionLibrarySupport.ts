@@ -67,7 +67,7 @@ export {
   type TimestampAtomProps,
 } from "./components/atoms/timestamp.tsx";
 export { VideoAtom, type VideoAtomProps } from "./components/atoms/video.tsx";
-export { MapPinIcon } from "./components/MapPinIcon.tsx";
+export { MapPinIcon } from "./components/sections/locator/MapPinIcon.tsx";
 export {
   EmbeddedFieldStringInputFromEntity,
   EmbeddedFieldStringInputFromOptions,

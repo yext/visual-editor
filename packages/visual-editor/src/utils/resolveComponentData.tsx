@@ -1,5 +1,5 @@
 import { BodyProps } from "../components/atoms/body.tsx";
-import { MaybeRTF } from "../components/fieldHelpers/maybeRTF.tsx";
+import { MaybeRTF } from "../components/helpers/maybeRTF.tsx";
 import {
   type RichText,
   type TranslatableRichText,

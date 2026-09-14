@@ -22,13 +22,6 @@ outline: deep
 
 ## Types of Page Groups
 
-### In-Platform VLE Page Groups
-
-In-Platform Page Groups can be created on the Page Groups page in the Yext platform.
-They use a pre-set stream with all entity fields that are not linked-entity fields included.
-Currently, all In-Platform Page Groups use the `main` template. There can be multiple
-page groups that use the same template.
-
 ### In-Repo VLE Page Groups
 
 In-Repo Page Groups are based on a [template](https://hitchhikers.yext.com/docs/pages/templates/)
@@ -42,18 +35,6 @@ You can also define static and entity pages in your repo that do not support vis
 If you add templates without following any steps below, these pages will behave like
 [normal PagesJS Pages](https://hitchhikers.yext.com/docs/pages/templates/).
 They will not appear on the Page Groups page.
-
-## In-Platform Page Groups Templates
-
-### Modifying the In-Platform Page Groups Template
-
-If you want to use a modified template for In-Platform Page Groups,
-create `main.tsx` template with no `TemplateConfig`.
-
-If you want to modify the list of components available for In-Platform Page Groups,
-see "Puck Configs" below. The default main config, default categories, and all components
-are exported to allow composability of configs. You may want to modify the default
-layout stored in the `.template-manifest.json` based on your component changes.
 
 ## Adding an In-Repo VLE Page Group
 

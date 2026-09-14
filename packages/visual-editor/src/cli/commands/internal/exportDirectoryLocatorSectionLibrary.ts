@@ -23,15 +23,15 @@ const sharedComponentSources: Record<
     exportName: "Address",
   },
   BreadcrumbsSlot: {
-    path: "components/pageSections/Breadcrumbs.tsx",
+    path: "components/sections/Breadcrumbs.tsx",
     exportName: "BreadcrumbsSection",
   },
   DirectoryGrid: {
-    path: "components/directory/DirectoryWrapper.tsx",
+    path: "components/sections/directory/DirectoryWrapper.tsx",
     exportName: "DirectoryGrid",
   },
   DirectoryCard: {
-    path: "components/directory/DirectoryCard.tsx",
+    path: "components/sections/directory/DirectoryCard.tsx",
     exportName: "DirectoryCard",
   },
   HeadingTextSlot: {
@@ -53,8 +53,8 @@ const sharedComponentSources: Record<
 };
 
 const copiedSourceRoots = [
-  "components/directory/Directory.tsx",
-  "components/locator/Locator.tsx",
+  "components/sections/directory/Directory.tsx",
+  "components/sections/locator/Locator.tsx",
   ...Object.values(sharedComponentSources).map((source) => source.path),
 ];
 
@@ -322,11 +322,11 @@ const isCopiedSource = (
   return (
     [
       "components/contentBlocks/",
-      "components/directory/",
-      "components/locator/",
+      "components/sections/directory/",
+      "components/sections/locator/",
     ].some((directory) => relativePath.startsWith(directory)) ||
     relativePath.replace(/\.(ts|tsx|js|jsx)$/, "") ===
-      "components/pageSections/Breadcrumbs"
+      "components/sections/Breadcrumbs"
   );
 };
 
@@ -335,7 +335,7 @@ const writeSections = (sectionsDirectory: string): void => {
     {
       fileName: "Directory",
       sourceExportName: "Directory",
-      importPath: "../shared/components/directory/Directory",
+      importPath: "../shared/components/sections/directory/Directory",
       displayName: "Directory",
       description: "Displays the directory page experience.",
       pageSetTypes: '["DIRECTORY"]',
@@ -344,7 +344,7 @@ const writeSections = (sectionsDirectory: string): void => {
     {
       fileName: "Locator",
       sourceExportName: "LocatorComponent",
-      importPath: "../shared/components/locator/Locator",
+      importPath: "../shared/components/sections/locator/Locator",
       displayName: "Locator",
       description: "Displays the locator page experience.",
       pageSetTypes: '["LOCATOR"]',

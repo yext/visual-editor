@@ -28,7 +28,7 @@ export default defineConfig({
     ignore: [
       "src/**/*.test.ts",
       "src/**/*.test.tsx",
-      "src/components/base/buttons/*.tsx",
+      "src/components/assets/presetImages/*.tsx",
       "src/components/contentBlocks/MapboxStaticMap.tsx",
       "src/internal/puck/components/LayoutHeader.tsx",
       "src/internal/components/modals/LayoutApprovalModal.tsx",
