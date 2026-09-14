@@ -1,4 +1,4 @@
-import { defineYextveCommand } from "../command.ts";
+import { defineYextVECommand } from "../command.ts";
 import { convertTemplatesToSectionLibrary } from "./internal/convertTemplatesToSectionLibrary.ts";
 
 const usage = `Usage:
@@ -12,7 +12,7 @@ Options:
   -h, --help                       Show this help.
 `;
 
-export const convertTemplateCmd = defineYextveCommand({
+export const convertTemplateCmd = defineYextVECommand({
   usage,
   parseArgsConfig: {
     strict: true,

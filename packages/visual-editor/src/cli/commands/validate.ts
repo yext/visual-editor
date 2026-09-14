@@ -4,7 +4,7 @@ import {
   validateSectionLibrary,
 } from "../../internal/sectionLibraryValidation/validateSectionLibrary.ts";
 import type { ValidationStage } from "../../internal/sectionLibraryValidation/types.ts";
-import { defineYextveCommand } from "../command.ts";
+import { defineYextVECommand } from "../command.ts";
 import { renderValidationResult } from "../output.ts";
 
 const usage = `Usage:
@@ -22,7 +22,7 @@ Example:
   npx --package=@yext/visual-editor@latest yextve validate
 `;
 
-export const validateCmd = defineYextveCommand({
+export const validateCmd = defineYextVECommand({
   usage,
   parseArgsConfig: {
     strict: true,

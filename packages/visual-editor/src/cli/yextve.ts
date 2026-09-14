@@ -12,7 +12,7 @@ import {
   type CommandParseArgsConfig,
   type ParsedCommandArgs,
   type RuntimeParseArgsConfig,
-  type YextveCommand,
+  type YextVECommand,
 } from "./command.ts";
 
 const usage = `Usage:
@@ -32,7 +32,7 @@ Options:
 Run "yextve <command> --help" for command-specific options.
 `;
 
-const commands: Record<string, YextveCommand<CommandParseArgsConfig>> = {
+const commands: Record<string, YextVECommand<CommandParseArgsConfig>> = {
   "add-directory-locator": addDirectoryLocatorCmd,
   "convert-template": convertTemplateCmd,
   deploy: deployCmd,

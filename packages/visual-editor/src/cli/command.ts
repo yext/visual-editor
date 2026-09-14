@@ -25,7 +25,7 @@ export type ParsedCommandArgs<T extends CommandParseArgsConfig> = ReturnType<
   typeof parseArgs<RuntimeParseArgsConfig<T>>
 >;
 
-export type YextveCommand<T extends CommandParseArgsConfig> = {
+export type YextVECommand<T extends CommandParseArgsConfig> = {
   parseArgsConfig: T;
   usage: string;
   run(
@@ -36,6 +36,6 @@ export type YextveCommand<T extends CommandParseArgsConfig> = {
   ): number | Promise<number>;
 };
 
-export const defineYextveCommand = <const T extends CommandParseArgsConfig>(
-  command: YextveCommand<T>
-): YextveCommand<T> => command;
+export const defineYextVECommand = <const T extends CommandParseArgsConfig>(
+  command: YextVECommand<T>
+): YextVECommand<T> => command;

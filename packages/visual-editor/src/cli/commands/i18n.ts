@@ -1,4 +1,4 @@
-import { defineYextveCommand } from "../command.ts";
+import { defineYextVECommand } from "../command.ts";
 import { finalizeI18n, prepareI18n } from "./internal/i18n/i18n.ts";
 
 export const i18nUsage = `Usage:
@@ -15,7 +15,7 @@ Options:
   -h, --help                       Show this help.
 `;
 
-export const i18nCmd = defineYextveCommand({
+export const i18nCmd = defineYextVECommand({
   usage: i18nUsage,
   parseArgsConfig: {
     strict: true,
