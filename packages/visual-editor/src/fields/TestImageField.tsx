@@ -12,6 +12,7 @@ import { YextAutoField } from "./YextAutoField.tsx";
 import { ImageStylingFields } from "../components/contentBlocks/image/styling.ts";
 import { type TranslatableAssetImage } from "../types/images.ts";
 import { type RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
+import { getFieldLabel } from "./getFieldLabel.ts";
 
 type TestImageValue = YextEntityField<
   ImageType | ComplexImageType | TranslatableAssetImage
@@ -25,7 +26,9 @@ export type TestImageField = Omit<EntityFieldSelectorField, "type"> & {
   type: "testImage";
 };
 
-type TestImageFieldOverrideProps = FieldProps<TestImageField>;
+type TestImageFieldOverrideProps = FieldProps<TestImageField> & {
+  name?: string;
+};
 
 const testImageStylesField = {
   type: "object",
@@ -44,11 +47,13 @@ const testImageStylesField = {
  */
 export const TestImageFieldOverride = ({
   field,
+  name,
   onChange,
   value,
 }: TestImageFieldOverrideProps) => {
   const currentValue = value as TestImageValue | undefined;
   const constantValueEnabled = currentValue?.constantValueEnabled ?? true;
+  const label = getFieldLabel(name ?? "", field.label);
   const filter: RenderEntityFieldFilter<Record<string, any>> =
     field.filter &&
     typeof field.filter === "object" &&
@@ -74,7 +79,7 @@ export const TestImageFieldOverride = ({
             field: nextConstantValueEnabled ? "" : (currentValue?.field ?? ""),
           })
         }
-        label={typeof field.label === "string" ? field.label : ""}
+        label={label}
         infoTooltipRequirements={undefined}
       />
       {constantValueEnabled ? (
@@ -82,7 +87,7 @@ export const TestImageFieldOverride = ({
           <ImageFieldOverride
             field={{
               type: "image",
-              label: typeof field.label === "string" ? field.label : "",
+              label,
             }}
             onChange={(constantValue) =>
               onChange({
@@ -100,7 +105,7 @@ export const TestImageFieldOverride = ({
       ) : (
         <EntityFieldInput
           filter={filter}
-          label={typeof field.label === "string" ? field.label : ""}
+          label={label}
           onChange={(nextValue, uiState) =>
             onChange(
               {

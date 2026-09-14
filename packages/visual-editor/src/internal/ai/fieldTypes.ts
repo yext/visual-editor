@@ -1,4 +1,5 @@
 import { type createAiPlugin } from "@puckeditor/plugin-ai";
+import { getFieldLabel } from "../../fields/getFieldLabel.ts";
 
 export const testEntityFieldAiDescription =
   "A Yext text binding for one complete prop.";
@@ -103,14 +104,6 @@ export const testRichTextFieldAiSchema = {
     },
   },
 };
-
-const getFieldLabel = (fieldName: string): string =>
-  fieldName
-    .replace(/[-_]+/g, " ")
-    .replace(/([a-z])([A-Z])/g, "$1 $2")
-    .replace(/([A-Za-z])(\d)/g, "$1 $2")
-    .replace(/(\d)([A-Za-z])/g, "$1 $2")
-    .replace(/\b\w/g, (value) => value.toUpperCase());
 
 /** Custom AI field types registered with Puck for Yext transform-backed fields. */
 export const yextAiFieldTypes = {

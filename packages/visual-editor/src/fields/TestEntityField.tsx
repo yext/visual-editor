@@ -4,11 +4,12 @@ import {
   type EntityFieldSelectorField,
 } from "./EntityFieldSelectorField.tsx";
 import { type TestEntityField, type TestRichTextField } from "./fields.ts";
+import { getFieldLabel } from "./getFieldLabel.ts";
 import { type MappedSourceFieldFilter } from "../utils/cardSlots/mappedSource.ts";
 
 type TestEntityFieldOverrideProps = FieldProps<
   TestEntityField | TestRichTextField
->;
+> & { name?: string };
 
 /**
  * Keeps generated test text fields selectable when Puck design mode omits the
@@ -16,6 +17,7 @@ type TestEntityFieldOverrideProps = FieldProps<
  */
 export const TestEntityFieldOverride = ({
   field,
+  name,
   ...props
 }: TestEntityFieldOverrideProps) => {
   const filter: MappedSourceFieldFilter<Record<string, any>> =
@@ -42,7 +44,7 @@ export const TestEntityFieldOverride = ({
       field={
         {
           type: "entityField",
-          label: typeof field.label === "string" ? field.label : "",
+          label: getFieldLabel(name ?? "", field.label),
           filter,
         } as EntityFieldSelectorField
       }
