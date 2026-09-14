@@ -28,7 +28,7 @@ describe("handlePuckAiRequest", () => {
         headers: {
           "content-type": "application/json",
           "x-puck-api-key": "test-api-key",
-          "x-puck-plugin-ai-version": "0.9.0-canary.d8bdabee",
+          "x-puck-plugin-ai-version": "0.9.0-canary.52479cfe",
         },
         body,
       })
@@ -45,8 +45,11 @@ describe("handlePuckAiRequest", () => {
     );
     expect(new Headers(options?.headers).get("x-api-key")).toBe("test-api-key");
     expect(new Headers(options?.headers).get("puck-api-version")).toBe("v2");
+    expect(
+      new Headers(options?.headers).get("x-puck-cloud-client-version")
+    ).toBe("0.9.0-canary.52479cfe");
     expect(new Headers(options?.headers).get("x-puck-plugin-ai-version")).toBe(
-      "0.9.0-canary.d8bdabee"
+      "0.9.0-canary.52479cfe"
     );
   });
 

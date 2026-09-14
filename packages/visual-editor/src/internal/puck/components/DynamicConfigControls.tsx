@@ -1,10 +1,7 @@
 import { Data, useGetPuck } from "@puckeditor/core";
 import { Info } from "lucide-react";
 import { validateDynamicConfig } from "../../ai/validateDynamicConfig.ts";
-import {
-  normalizeDynamicConfig,
-  normalizeDynamicData,
-} from "../../ai/normalizeDynamicConfig.ts";
+import { normalizePuckDynamicData } from "../../ai/normalizeDynamicConfig.ts";
 import { pt } from "../../../utils/i18n/platform.ts";
 import { Button } from "../ui/button.tsx";
 import {
@@ -92,21 +89,7 @@ export const DynamicConfigControls = ({
   };
 
   const normalizeCurrentDynamicConfig = () => {
-    const puckApi = getPuck();
-    const normalized = normalizeDynamicData(
-      puckApi.appState.data,
-      puckApi.config
-    );
-
-    if (!normalized.changed) {
-      return;
-    }
-
-    puckApi.dispatch({
-      type: "setData",
-      recordHistory: true,
-      data: normalized.data,
-    });
+    normalizePuckDynamicData(getPuck());
   };
 
   const pasteDynamicConfig = async () => {
@@ -129,8 +112,7 @@ export const DynamicConfigControls = ({
         return;
       }
 
-      const normalized = normalizeDynamicConfig(pastedDynamicConfig);
-      const validationErrors = validateDynamicConfig(normalized.dynamicConfig);
+      const validationErrors = validateDynamicConfig(pastedDynamicConfig);
       if (validationErrors.length > 0) {
         alert(validationErrors.join("\n"));
         return;
@@ -138,7 +120,7 @@ export const DynamicConfigControls = ({
 
       upsertDynamicConfig((existingDynamicComponents) => ({
         ...existingDynamicComponents,
-        ...(normalized.dynamicConfig as { components: Record<string, any> })
+        ...(pastedDynamicConfig as { components: Record<string, any> })
           .components,
       }));
     } catch (err) {

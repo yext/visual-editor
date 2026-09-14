@@ -1,8 +1,9 @@
 import React from "react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import {
   normalizeDynamicConfig,
   normalizeDynamicData,
+  normalizePuckDynamicData,
 } from "./normalizeDynamicConfig.ts";
 import { validateDynamicConfig } from "./validateDynamicConfig.ts";
 
@@ -171,6 +172,69 @@ describe("normalizeDynamicConfig", () => {
     );
   });
 
+  it("repairs malformed non-empty AI field values before selection", () => {
+    const normalized = normalizeDynamicConfig({
+      components: {
+        SuperHero: {
+          label: "SuperHero",
+          html: `<section><h1 data-puck-field-title='{ "type": "testEntityField", "constantValue": "Make room" }'>Make room</h1><div data-puck-field-description='{ "type": "testRichText", "constantValue": { "en": { "html": "<p>Thoughtful spaces.</p>" }, "hasLocalizedValue": "" } }'><p>Thoughtful spaces.</p></div><a href="/explore" data-puck-field-href="cta.link" data-puck-field-cta='{ "type": "testCTA", "constantValue": { "label": { "en": "Explore", "hasLocalizedValue": "" } } }'>Explore</a><img src="https://example.com/hero.jpg" alt="Hero" data-puck-field-src="image.src" data-puck-field-alt="image.alt" data-puck-field-image='{ "type": "testImage" }' /></section>`,
+          styles: ".super-hero {}",
+          fields: {
+            title: { type: "testEntityField" },
+            description: { type: "testRichText" },
+            cta: { type: "object", objectFields: { link: { type: "text" } } },
+            image: {
+              type: "object",
+              objectFields: {
+                src: { type: "text" },
+                alt: { type: "text" },
+              },
+            },
+          },
+          defaultProps: {
+            title: {
+              field: "title",
+              constantValueEnabled: true,
+              constantValue: "Make room",
+            },
+            description: {
+              field: "description",
+              constantValueEnabled: true,
+              constantValue: {
+                en: { html: "<p>Thoughtful spaces.</p>", json: "" },
+                hasLocalizedValue: "",
+              },
+            },
+            cta: { link: "/explore" },
+            image: { src: "https://example.com/hero.jpg", alt: "Hero" },
+          },
+        },
+      },
+    }) as {
+      dynamicConfig: { components: Record<string, Record<string, any>> };
+    };
+
+    const component = normalized.dynamicConfig.components.SuperHero;
+    expect(component.fields).toMatchObject({
+      title: { type: "testEntityField", output: "plainText" },
+      description: { type: "testRichText" },
+      cta: { type: "testCTA" },
+      image: { type: "testImage" },
+    });
+    expect(component.defaultProps.description.constantValue).toMatchObject({
+      en: { html: "<p>Thoughtful spaces.</p>" },
+      hasLocalizedValue: "true",
+    });
+    expect(component.defaultProps.cta.constantValue).toMatchObject({
+      ctaType: "textAndLink",
+      label: { en: "Explore", hasLocalizedValue: "true" },
+      link: "/explore",
+      linkType: "URL",
+    });
+    expect(component.html).not.toMatch(/data-puck-field-(?:href|src|alt)=/);
+    expect(validateDynamicConfig(normalized.dynamicConfig)).toEqual([]);
+  });
+
   it("repairs stale generated component instances without replacing authored values", () => {
     const normalized = normalizeDynamicData(
       {
@@ -225,5 +289,47 @@ describe("normalizeDynamicConfig", () => {
         },
       },
     ]);
+  });
+
+  it("removes generated components that remain invalid after normalization", () => {
+    const dispatch = vi.fn();
+    const validationErrors = normalizePuckDynamicData({
+      appState: {
+        data: {
+          root: {
+            props: {
+              _dynamicConfig: {
+                components: {
+                  InvalidHero: {
+                    label: "Invalid Hero",
+                    html: "<section>Unbound content</section>",
+                    styles: ".invalid-hero {}",
+                    fields: {},
+                    defaultProps: {},
+                  },
+                },
+              },
+            },
+          },
+          content: [{ type: "InvalidHero", props: { id: "invalid-hero" } }],
+          zones: {},
+        },
+      },
+      config: {
+        components: {
+          InvalidHero: { render: () => React.createElement("div") },
+        },
+      },
+      dispatch,
+    } as any);
+
+    expect(validationErrors).toContain(
+      "InvalidHero HTML must not contain unbound content."
+    );
+    expect(dispatch).toHaveBeenCalledOnce();
+    expect(dispatch.mock.calls[0][0].data.content).toEqual([]);
+    expect(
+      dispatch.mock.calls[0][0].data.root.props._dynamicConfig.components
+    ).toEqual({});
   });
 });

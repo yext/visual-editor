@@ -4,7 +4,6 @@ import {
   testEntityFieldAiSchema,
   testRichTextFieldAiDescription,
   testRichTextFieldAiSchema,
-  yextAiFieldTypes,
 } from "./fieldTypes.ts";
 import { preparePuckAiConfig, preparePuckAiRequest } from "./prepareRequest.ts";
 import {
@@ -166,13 +165,13 @@ describe("preparePuckAiConfig", () => {
         },
       },
       context: puckAiSystemContext,
-      fieldTypes: yextAiFieldTypes,
       designMode: {
         allowed: true,
         instructions: puckAiDesignModeInstructions,
       },
       byok: { model: "openai/gpt-5.6-luna" },
     });
+    expect(request.body).not.toHaveProperty("fieldTypes");
     window.localStorage.removeItem("visual-editor.local-editor.puck-api-key");
   });
 });

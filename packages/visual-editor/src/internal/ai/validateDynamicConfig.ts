@@ -82,10 +82,12 @@ const hasMeaningfulDefault = (value: unknown, fieldType: string): boolean => {
     );
   }
   if (fieldType === "testRichText") {
-    const localizedValue = isRecord(value.constantValue)
-      ? value.constantValue.en
+    const constantValue = isRecord(value.constantValue)
+      ? value.constantValue
       : undefined;
+    const localizedValue = constantValue?.en;
     return (
+      constantValue?.hasLocalizedValue === "true" &&
       isRecord(localizedValue) &&
       typeof localizedValue.html === "string" &&
       localizedValue.html.replace(/<[^>]*>/g, "").trim().length > 0
@@ -102,6 +104,10 @@ const hasMeaningfulDefault = (value: unknown, fieldType: string): boolean => {
   return (
     isRecord(value.constantValue) &&
     isRecord(value.constantValue.label) &&
+    value.constantValue.label.hasLocalizedValue === "true" &&
+    value.selectedType === "textAndLink" &&
+    value.constantValue.ctaType === "textAndLink" &&
+    value.constantValue.linkType === "URL" &&
     typeof value.constantValue.label.en === "string" &&
     value.constantValue.label.en.trim().length > 0
   );

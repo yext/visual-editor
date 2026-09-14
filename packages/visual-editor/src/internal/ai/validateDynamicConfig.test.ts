@@ -33,12 +33,24 @@ const validComponent = {
     primarycta: {
       field: "",
       constantValueEnabled: true,
-      constantValue: { label: { en: "Book Now" } },
+      selectedType: "textAndLink",
+      constantValue: {
+        ctaType: "textAndLink",
+        label: { en: "Book Now", hasLocalizedValue: "true" },
+        link: "/book",
+        linkType: "URL",
+      },
     },
     secondarycta: {
       field: "",
       constantValueEnabled: true,
-      constantValue: { label: { en: "Learn More" } },
+      selectedType: "textAndLink",
+      constantValue: {
+        ctaType: "textAndLink",
+        label: { en: "Learn More", hasLocalizedValue: "true" },
+        link: "/learn-more",
+        linkType: "URL",
+      },
     },
   },
 };
@@ -95,6 +107,33 @@ describe("validateDynamicConfig", () => {
 
     expect(errors).toContain(
       "ExampleHero title must have a non-empty default value."
+    );
+  });
+
+  it("rejects invalid localized and CTA discriminators", () => {
+    const errors = validateDynamicComponent("ExampleHero", {
+      ...validComponent,
+      defaultProps: {
+        ...validComponent.defaultProps,
+        description: {
+          ...validComponent.defaultProps.description,
+          constantValue: {
+            ...validComponent.defaultProps.description.constantValue,
+            hasLocalizedValue: "",
+          },
+        },
+        primarycta: {
+          ...validComponent.defaultProps.primarycta,
+          selectedType: "internal",
+        },
+      },
+    });
+
+    expect(errors).toContain(
+      "ExampleHero description must have a non-empty default value."
+    );
+    expect(errors).toContain(
+      "ExampleHero primarycta must have a non-empty default value."
     );
   });
 

@@ -12,7 +12,6 @@ import {
   testImageFieldAiSchema,
   testRichTextFieldAiDescription,
   testRichTextFieldAiSchema,
-  yextAiFieldTypes,
 } from "./fieldTypes.ts";
 import {
   puckAiDesignModeInstructions,
@@ -288,7 +287,6 @@ export const preparePuckAiRequest = async <
       ...opts.body,
       config: preparePuckAiConfig(opts.body?.config) as Config | undefined,
       context: puckAiSystemContext,
-      fieldTypes: yextAiFieldTypes,
       designMode: {
         allowed: true,
         instructions: puckAiDesignModeInstructions,

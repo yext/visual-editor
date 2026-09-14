@@ -1,3 +1,11 @@
+import {
+  type Config,
+  type Data,
+  type PuckApi,
+  walkTree,
+} from "@puckeditor/core";
+import { validateDynamicComponent } from "./validateDynamicConfig.ts";
+
 type DynamicComponent = {
   html?: unknown;
   styles?: unknown;
@@ -112,10 +120,12 @@ const hasMeaningfulDefault = (value: unknown, fieldType: string): boolean => {
     );
   }
   if (fieldType === "testRichText") {
-    const localizedValue = isRecord(value.constantValue)
-      ? value.constantValue.en
+    const constantValue = isRecord(value.constantValue)
+      ? value.constantValue
       : undefined;
+    const localizedValue = constantValue?.en;
     return (
+      constantValue?.hasLocalizedValue === "true" &&
       isRecord(localizedValue) &&
       typeof localizedValue.html === "string" &&
       localizedValue.html.replace(/<[^>]*>/g, "").trim().length > 0
@@ -132,6 +142,10 @@ const hasMeaningfulDefault = (value: unknown, fieldType: string): boolean => {
   return (
     isRecord(value.constantValue) &&
     isRecord(value.constantValue.label) &&
+    value.constantValue.label.hasLocalizedValue === "true" &&
+    value.selectedType === "textAndLink" &&
+    value.constantValue.ctaType === "textAndLink" &&
+    value.constantValue.linkType === "URL" &&
     typeof value.constantValue.label.en === "string" &&
     value.constantValue.label.en.trim().length > 0
   );
@@ -167,10 +181,11 @@ const getFieldDefinition = (
   return { type: fieldType, label };
 };
 
-/** Removes authored values from an annotation after moving them into defaultProps. */
+/** Removes authored values and secondary bindings after moving them into defaultProps. */
 const removeUnboundContentAttributes = (attributes: string): string => {
   return attributes
     .replace(/\s(?:src|href|alt|aria-label|title)\s*=\s*(["'])[^]*?\1/gi, "")
+    .replace(/\sdata-puck-field-[A-Za-z][\w-]*\s*=\s*(["'])[^]*?\1/gi, "")
     .replace(/\s*\/\s*$/, "");
 };
 
@@ -230,7 +245,7 @@ export const normalizeDynamicConfig = (
 
             const fieldDefinition = getFieldDefinition(fieldName, shape.type);
             const existingField = fields[fieldName];
-            if (!isRecord(existingField)) {
+            if (!isRecord(existingField) || existingField.type !== shape.type) {
               fields[fieldName] = fieldDefinition;
               componentChanged = true;
             } else {
@@ -255,6 +270,10 @@ export const normalizeDynamicConfig = (
               componentChanged = true;
             }
             if (innerHtml.trim()) {
+              const normalizedShape =
+                Object.keys(shape).length === 1
+                  ? rawShape
+                  : JSON.stringify({ type: shape.type });
               normalizedHtml = normalizedHtml.replace(
                 fieldMarkup,
                 "<" +
@@ -263,7 +282,7 @@ export const normalizeDynamicConfig = (
                   "data-puck-field-" +
                   fieldName +
                   "='" +
-                  rawShape +
+                  normalizedShape +
                   "'" +
                   removeUnboundContentAttributes(attributesAfter) +
                   "></" +
@@ -299,7 +318,7 @@ export const normalizeDynamicConfig = (
 
             const fieldDefinition = getFieldDefinition(fieldName, shape.type);
             const existingField = fields[fieldName];
-            if (!isRecord(existingField)) {
+            if (!isRecord(existingField) || existingField.type !== shape.type) {
               fields[fieldName] = fieldDefinition;
               componentChanged = true;
             } else if (
@@ -329,7 +348,9 @@ export const normalizeDynamicConfig = (
                 "data-puck-field-" +
                 fieldName +
                 "='" +
-                rawShape +
+                (Object.keys(shape).length === 1
+                  ? rawShape
+                  : JSON.stringify({ type: shape.type })) +
                 "'" +
                 removeUnboundContentAttributes(attributesAfter) +
                 "></div>"
@@ -444,4 +465,72 @@ export const normalizeDynamicData = (
     changed: true,
   };
 };
-import { type Config, type Data, walkTree } from "@puckeditor/core";
+
+/**
+ * Repairs generated registrations, removes any that remain invalid, and
+ * commits only data that is safe for Puck to expose in the editor.
+ */
+export const normalizePuckDynamicData = (puckApi: PuckApi): string[] => {
+  const normalized = normalizeDynamicData(
+    puckApi.appState.data,
+    puckApi.config
+  );
+  const rootProps: Record<string, unknown> = isRecord(
+    normalized.data.root?.props
+  )
+    ? (normalized.data.root.props as Record<string, unknown>)
+    : {};
+  const dynamicConfig = isRecord(rootProps._dynamicConfig)
+    ? rootProps._dynamicConfig
+    : {};
+  const components = isRecord(dynamicConfig.components)
+    ? dynamicConfig.components
+    : {};
+  const validationErrors: string[] = [];
+  const invalidComponentNames = new Set<string>();
+
+  Object.entries(components).forEach(([componentName, component]) => {
+    const componentErrors = validateDynamicComponent(componentName, component);
+    if (componentErrors.length > 0) {
+      invalidComponentNames.add(componentName);
+      validationErrors.push(...componentErrors);
+    }
+  });
+
+  if (!normalized.changed && invalidComponentNames.size === 0) {
+    return validationErrors;
+  }
+
+  const data =
+    invalidComponentNames.size === 0
+      ? normalized.data
+      : {
+          ...walkTree(normalized.data, puckApi.config, (content) =>
+            content.filter(
+              (component) => !invalidComponentNames.has(component.type)
+            )
+          ),
+          root: {
+            ...normalized.data.root,
+            props: {
+              ...rootProps,
+              _dynamicConfig: {
+                ...dynamicConfig,
+                components: Object.fromEntries(
+                  Object.entries(components).filter(
+                    ([componentName]) =>
+                      !invalidComponentNames.has(componentName)
+                  )
+                ),
+              },
+            },
+          },
+        };
+
+  puckApi.dispatch({
+    type: "setData",
+    recordHistory: true,
+    data: data as Data,
+  });
+  return validationErrors;
+};
