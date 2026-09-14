@@ -4,12 +4,13 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { DynamicConfigControls } from "./DynamicConfigControls.tsx";
 
 const dispatch = vi.fn();
+let currentDynamicConfig: unknown = { components: {} };
 const getPuck = () => ({
   appState: {
     data: {
       root: {
         props: {
-          _dynamicConfig: { components: {} },
+          _dynamicConfig: currentDynamicConfig,
         },
       },
     },
@@ -33,25 +34,18 @@ vi.mock("@puckeditor/core", async () => {
 describe("DynamicConfigControls", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    currentDynamicConfig = { components: {} };
   });
 
-  it("pastes a valid dynamic config without normalizing it", async () => {
+  it("pastes a dynamic config without validating or normalizing it", async () => {
     const pastedDynamicConfig = {
       components: {
         TestHero: {
           label: "Test Hero",
-          html: `<section><h1 data-puck-field-title='{ "type": "testEntityField" }'></h1></section>`,
+          html: "<section>Unbound content</section>",
           styles: ".test-hero {}",
-          fields: {
-            title: { type: "testEntityField", label: "Title" },
-          },
-          defaultProps: {
-            title: {
-              field: "",
-              constantValue: "Pasted title",
-              constantValueEnabled: true,
-            },
-          },
+          fields: {},
+          defaultProps: {},
         },
       },
     };
@@ -71,5 +65,57 @@ describe("DynamicConfigControls", () => {
     expect(dispatch.mock.calls[0][0].data.root.props._dynamicConfig).toEqual(
       pastedDynamicConfig
     );
+  });
+
+  it("copies validation errors without changing the dynamic config", async () => {
+    currentDynamicConfig = {
+      components: {
+        TestImage: {
+          label: "Test Image",
+          html: `<img data-puck-field-image='{ "type": "testImage" }'>`,
+          styles: "",
+          fields: { image: { type: "testImage", label: "Image" } },
+          defaultProps: {
+            image: {
+              field: "",
+              constantValueEnabled: true,
+              constantValue: { url: "https://example.com/image.jpg" },
+            },
+          },
+        },
+      },
+    };
+    const writeText = vi.fn(async () => {});
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { writeText },
+    });
+
+    render(<DynamicConfigControls localDev={true} />);
+    fireEvent.click(
+      screen.getByRole("button", { name: "Validate Dynamic Config" })
+    );
+
+    const validationError =
+      "TestImage image HTML target must be a non-void element with a closing tag.";
+    expect(screen.getByText(validationError)).toBeTruthy();
+    fireEvent.click(
+      screen.getByRole("button", { name: "Copy Validation Results" })
+    );
+
+    await waitFor(() =>
+      expect(writeText).toHaveBeenCalledWith(validationError)
+    );
+    expect(dispatch).not.toHaveBeenCalled();
+  });
+
+  it("reports when the dynamic config is valid", () => {
+    render(<DynamicConfigControls localDev={true} />);
+    fireEvent.click(
+      screen.getByRole("button", { name: "Validate Dynamic Config" })
+    );
+
+    expect(screen.getByText("Dynamic config is valid.")).toBeTruthy();
+    expect(dispatch).not.toHaveBeenCalled();
   });
 });

@@ -190,4 +190,17 @@ describe("validateDynamicConfig", () => {
       })
     ).toEqual([]);
   });
+
+  it("rejects image fields attached to void HTML elements", () => {
+    const errors = validateDynamicComponent("ExampleHero", {
+      ...validComponent,
+      html: `<section><img src="https://example.com/image.jpg" data-puck-field-image='{ "type": "testImage" }'></section>`,
+      fields: { image: validComponent.fields.image },
+      defaultProps: { image: validComponent.defaultProps.image },
+    });
+
+    expect(errors).toContain(
+      "ExampleHero image HTML target must be a non-void element with a closing tag."
+    );
+  });
 });

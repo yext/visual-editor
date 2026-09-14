@@ -190,9 +190,11 @@ export const validateDynamicComponent = (
 
   const annotatedContentPattern =
     /<([A-Za-z][\w-]*)\b([^>]*?)data-puck-field-([A-Za-z][\w-]*)\s*=\s*(['"])[\s\S]*?\4([^>]*)>([\s\S]*?)<\/\1>/g;
+  const fieldsWithValidTargets = new Set<string>();
   for (const match of registration.html.matchAll(annotatedContentPattern)) {
     const [, , attributesBefore, fieldName, , attributesAfter, innerHtml] =
       match;
+    fieldsWithValidTargets.add(fieldName);
     if (innerHtml.trim()) {
       errors.push(`${componentName} ${fieldName} HTML target must be empty.`);
     }
@@ -203,6 +205,14 @@ export const validateDynamicComponent = (
     ) {
       errors.push(
         `${componentName} ${fieldName} HTML target must not contain authored content attributes.`
+      );
+    }
+  }
+
+  for (const fieldName of annotationTypes.keys()) {
+    if (!fieldsWithValidTargets.has(fieldName)) {
+      errors.push(
+        `${componentName} ${fieldName} HTML target must be a non-void element with a closing tag.`
       );
     }
   }

@@ -7,72 +7,10 @@ export const testCTAFieldAiDescription =
   "A Yext CTA binding for one complete CTA prop.";
 
 export const testImageFieldAiDescription =
-  "A Yext image binding for one complete image prop.";
+  "Renders one complete Yext image component. Attach it to an empty non-void HTML element such as a div. Use only the direct image URL, dimensions, and alternate text allowed by the schema; do not add assetImage metadata. Never attach it to an img element or add hard-coded src, alt, width, or height attributes.";
 
 export const testRichTextFieldAiDescription =
   "A Yext rich text binding for one complete body-copy prop.";
-
-const imageDataAiSchema = {
-  type: "object",
-  properties: {
-    url: { type: "string" },
-    dimension: {
-      type: "object",
-      properties: {
-        width: { type: "number" },
-        height: { type: "number" },
-      },
-    },
-    exifMetadata: {
-      type: "object",
-      properties: {
-        rotate: { type: "number" },
-      },
-    },
-  },
-};
-
-const imageContentDataAiSchema = {
-  type: "object",
-  properties: {
-    name: { type: "string" },
-    transformedImage: imageDataAiSchema,
-    originalImage: imageDataAiSchema,
-    childImages: {
-      type: "array",
-      items: imageDataAiSchema,
-    },
-    transformations: {
-      type: "object",
-      properties: {
-        CROP: {
-          type: "object",
-          properties: {
-            left: { type: "number" },
-            top: { type: "number" },
-            height: { type: "number" },
-            width: { type: "number" },
-            aspectRatio: {
-              type: "object",
-              properties: {
-                horizontalFactor: { type: "number" },
-                verticalFactor: { type: "number" },
-              },
-            },
-          },
-        },
-        ROTATION: {
-          type: "object",
-          properties: {
-            degree: { type: "number" },
-          },
-        },
-      },
-    },
-    sourceUrl: { type: "string" },
-    altText: { type: "string" },
-  },
-};
 
 export const testEntityFieldAiSchema = {
   type: "object",
@@ -113,6 +51,7 @@ export const testCTAFieldAiSchema = {
 
 export const testImageFieldAiSchema = {
   type: "object",
+  additionalProperties: false,
   required: [
     "field",
     "constantValueEnabled",
@@ -126,13 +65,13 @@ export const testImageFieldAiSchema = {
     constantValueEnabled: { type: "boolean", enum: [true] },
     constantValue: {
       type: "object",
+      additionalProperties: false,
       required: ["url", "alternateText"],
       properties: {
         url: { type: "string" },
         height: { type: "number" },
         width: { type: "number" },
         alternateText: { type: "string" },
-        assetImage: imageContentDataAiSchema,
       },
     },
     aspectRatio: { type: "number" },

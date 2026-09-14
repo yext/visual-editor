@@ -291,9 +291,9 @@ describe("normalizeDynamicConfig", () => {
     ]);
   });
 
-  it("removes generated components that remain invalid after normalization", () => {
+  it("does not remove generated components that remain invalid after normalization", () => {
     const dispatch = vi.fn();
-    const validationErrors = normalizePuckDynamicData({
+    normalizePuckDynamicData({
       appState: {
         data: {
           root: {
@@ -323,13 +323,6 @@ describe("normalizeDynamicConfig", () => {
       dispatch,
     } as any);
 
-    expect(validationErrors).toContain(
-      "InvalidHero HTML must not contain unbound content."
-    );
-    expect(dispatch).toHaveBeenCalledOnce();
-    expect(dispatch.mock.calls[0][0].data.content).toEqual([]);
-    expect(
-      dispatch.mock.calls[0][0].data.root.props._dynamicConfig.components
-    ).toEqual({});
+    expect(dispatch).not.toHaveBeenCalled();
   });
 });

@@ -4,7 +4,6 @@ import {
   type PuckApi,
   walkTree,
 } from "@puckeditor/core";
-import { validateDynamicComponent } from "./validateDynamicConfig.ts";
 
 type DynamicComponent = {
   html?: unknown;
@@ -467,70 +466,21 @@ export const normalizeDynamicData = (
 };
 
 /**
- * Repairs generated registrations, removes any that remain invalid, and
- * commits only data that is safe for Puck to expose in the editor.
+ * Repairs generated registrations and component instances when explicitly
+ * requested without removing output that remains invalid.
  */
-export const normalizePuckDynamicData = (puckApi: PuckApi): string[] => {
+export const normalizePuckDynamicData = (puckApi: PuckApi): void => {
   const normalized = normalizeDynamicData(
     puckApi.appState.data,
     puckApi.config
   );
-  const rootProps: Record<string, unknown> = isRecord(
-    normalized.data.root?.props
-  )
-    ? (normalized.data.root.props as Record<string, unknown>)
-    : {};
-  const dynamicConfig = isRecord(rootProps._dynamicConfig)
-    ? rootProps._dynamicConfig
-    : {};
-  const components = isRecord(dynamicConfig.components)
-    ? dynamicConfig.components
-    : {};
-  const validationErrors: string[] = [];
-  const invalidComponentNames = new Set<string>();
-
-  Object.entries(components).forEach(([componentName, component]) => {
-    const componentErrors = validateDynamicComponent(componentName, component);
-    if (componentErrors.length > 0) {
-      invalidComponentNames.add(componentName);
-      validationErrors.push(...componentErrors);
-    }
-  });
-
-  if (!normalized.changed && invalidComponentNames.size === 0) {
-    return validationErrors;
+  if (!normalized.changed) {
+    return;
   }
-
-  const data =
-    invalidComponentNames.size === 0
-      ? normalized.data
-      : {
-          ...walkTree(normalized.data, puckApi.config, (content) =>
-            content.filter(
-              (component) => !invalidComponentNames.has(component.type)
-            )
-          ),
-          root: {
-            ...normalized.data.root,
-            props: {
-              ...rootProps,
-              _dynamicConfig: {
-                ...dynamicConfig,
-                components: Object.fromEntries(
-                  Object.entries(components).filter(
-                    ([componentName]) =>
-                      !invalidComponentNames.has(componentName)
-                  )
-                ),
-              },
-            },
-          },
-        };
 
   puckApi.dispatch({
     type: "setData",
     recordHistory: true,
-    data: data as Data,
+    data: normalized.data,
   });
-  return validationErrors;
 };

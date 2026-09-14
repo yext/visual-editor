@@ -32,7 +32,7 @@ describe("yextAiFieldTypes", () => {
       "A Yext CTA binding for one complete CTA prop."
     );
     expect(yextAiFieldTypes.testImage.description).toBe(
-      "A Yext image binding for one complete image prop."
+      "Renders one complete Yext image component. Attach it to an empty non-void HTML element such as a div. Use only the direct image URL, dimensions, and alternate text allowed by the schema; do not add assetImage metadata. Never attach it to an img element or add hard-coded src, alt, width, or height attributes."
     );
     expect(yextAiFieldTypes.testRichText.description).toBe(
       "A Yext rich text binding for one complete body-copy prop."
@@ -72,33 +72,34 @@ describe("yextAiFieldTypes", () => {
         },
       },
     });
-    expect(testImageFieldAiSchema).toMatchObject({
+    expect(testImageFieldAiSchema).toEqual({
       type: "object",
+      additionalProperties: false,
+      required: [
+        "field",
+        "constantValueEnabled",
+        "constantValue",
+        "aspectRatio",
+        "imageFillType",
+        "width",
+      ],
       properties: {
+        field: { type: "string" },
+        constantValueEnabled: { type: "boolean", enum: [true] },
         constantValue: {
+          type: "object",
+          additionalProperties: false,
+          required: ["url", "alternateText"],
           properties: {
             url: { type: "string" },
+            height: { type: "number" },
+            width: { type: "number" },
             alternateText: { type: "string" },
-            assetImage: {
-              properties: {
-                name: { type: "string" },
-                transformedImage: { properties: { url: { type: "string" } } },
-                originalImage: {
-                  properties: { dimension: { type: "object" } },
-                },
-                childImages: { type: "array" },
-                transformations: {
-                  properties: {
-                    CROP: { properties: { aspectRatio: { type: "object" } } },
-                    ROTATION: { properties: { degree: { type: "number" } } },
-                  },
-                },
-                sourceUrl: { type: "string" },
-                altText: { type: "string" },
-              },
-            },
           },
         },
+        aspectRatio: { type: "number" },
+        imageFillType: { type: "string", enum: ["fill", "fit"] },
+        width: { type: "number" },
       },
     });
     expect(testRichTextFieldAiSchema).toMatchObject({
