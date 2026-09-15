@@ -2,6 +2,7 @@ import { copyFileSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join, resolve, dirname, basename } from "node:path";
 import { defineConfig } from "vitepress";
 import matter from "gray-matter"; // Add gray-matter to parse frontmatter
+import { parse as parseYaml } from "yaml";
 
 // Type for sidebar items
 interface SidebarItem {
@@ -49,7 +50,7 @@ const getMarkdownFiles = (
 const getTitleFromFile = (filePath: string): string => {
   const fullPath = join(baseDir, filePath);
   const fileContent = readFileSync(fullPath, "utf-8");
-  const { data } = matter(fileContent);
+  const { data } = matter(fileContent, { engines: { yaml: parseYaml } });
   return data.title || filePath.split("/").pop()!.replace(".md", "");
 };
 
@@ -137,6 +138,11 @@ export default defineConfig({
     "docs/index.md": "index.md",
   },
   vite: {
+    esbuild: {
+      supported: {
+        destructuring: true,
+      },
+    },
     plugins: [copyArtifactsPlugin()],
   },
 });

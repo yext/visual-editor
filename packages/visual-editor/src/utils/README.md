@@ -303,10 +303,11 @@ Used as part of the [Head Config Interface](https://github.com/yext/pages/blob/m
 // exampleTemplate.tsx
 export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
   document,
+  relativePrefixToRoot,
 }): HeadConfig => {
   return {
     // -- additional HeadConfig options --
-    other: applyTheme(document, themeConfig),
+    other: applyTheme(document, relativePrefixToRoot, themeConfig),
   };
 };
 ```
@@ -339,7 +340,7 @@ Transforms a FontRegistry into a list of StyleSelectOptions.
 ```tsx
 const fonts: FontRegistry = {
   Georgia: {
-    allowItalics: true,
+    italics: true,
     minWeight: 400,
     maxWeight: 900,
     fallback: "serif",
@@ -390,7 +391,7 @@ export const themeConfig: ThemeConfig = {
         plugin: "fontWeight",
         options: () =>
           getFontWeightOptions({
-            cssVariable: "--fontFamily-heading1-fontFamily",
+            fontCssVariable: "--fontFamily-heading1-fontFamily",
           }),
         default: "700",
       },
@@ -446,7 +447,6 @@ import {
   Editor,
   usePlatformBridgeDocument,
   usePlatformBridgeEntityFields,
-  EntityFieldsProvider,
   VisualEditorProvider,
 } from "@yext/visual-editor";
 
@@ -513,13 +513,13 @@ In this example, class names will be merged in the following order of precedence
 
 ## normalizeSlug
 
-Check that the string is a valid slug.
-
-## validateSlug
-
 Normalizes the provided content by converting upper case to lower case, replacing white spaces, '?', and '#', with a "-",
 and stripping all other illegal characters.
 Allowed special characters: `( ) [ ] _ ~ : @ ; = / $ * - . &`
+
+## validateSlug
+
+Check that the string is a valid slug.
 
 ## defaultThemeTailwindExtensions
 
@@ -542,7 +542,7 @@ An object of the following shape containing the seven auto-generated background 
 {
   backgroundKey: {
     label: "Background Label",
-    value: "Background Tailwind Classes"
+    value: {selectedColor: "Tailwind class", contrastingColor: "Tailwind class"}
   }
 }
 ```
@@ -557,24 +557,6 @@ An object of the following shape containing the seven auto-generated background 
 | background6 | Background 6 | primary-dark     | white      |
 | background7 | Background 7 | secondary-dark   | white      |
 
-## darkBackgroundColors
-
-An object of the following shape containing the two auto-generated dark background styles.
-
-```js
-{
-  backgroundKey: {
-    label: "Background Label",
-    value: "Background Tailwind Classes"
-  }
-}
-```
-
-| Key         | Label        | Background Color | Text Color |
-| ----------- | ------------ | ---------------- | ---------- |
-| background6 | Background 6 | primary-dark     | white      |
-| background7 | Background 7 | secondary-dark   | white      |
-
 ## applyAnalytics
 
 Returns a Google Tag Manager script that uses the Google Tag Manager ID
@@ -585,12 +567,14 @@ set in the Theme Editor.
 ```tsx
 export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
   document,
+  relativePrefixToRoot,
 }): HeadConfig => {
   return {
     title: document.name,
-    other: [applyAnalytics(document), applyTheme(document, themeConfig)].join(
-      "\n"
-    ),
+    other: [
+      applyAnalytics(document),
+      applyTheme(document, relativePrefixToRoot, themeConfig),
+    ].join("\n"),
   };
 };
 ```
@@ -757,69 +741,3 @@ const myComponentFields: Fields<MyComponentProps> = {
     },
   },
 ```
-
-## migrate
-
-`migrate` transforms Puck layout data to handle updates to the Puck version and to `visual-editor` components.
-It is run when data is loaded into the editor (both published and save state). It should also be
-run before using `<Render>` in a template. It does not currently handle dropzones but will be updated
-in a future version to handle slots.
-
-`migrate` first runs Puck's `migrate` function to handle Puck migrations. It then applies the
-built-in migrations specified in `components/migrations/migrationRegistry.ts`, followed by any
-Section Library migrations supplied by the consuming repository.
-
-The layout records the number of applied built-in migrations in `data.root.props.version` and the
-number of applied repository migrations in `data.root.props.sectionLibraryMigrationVersion`.
-Migration registries and their existing entries are append-only. Each number is used as the index
-at which to resume its corresponding registry.
-
-Migrations should be specified as a map of ComponentName to MigrationAction.
-The ComponentName is the name of a component as provided to Puck Config in the `components` object
-(see `components/_componentCategories.ts`).
-
-There are two types of MigrationActions:
-
-```ts
-{
-  ComponentName: {
-    action: "removed"
-    // This component will be removed from all layouts
-  },
-  ComponentName: {
-    action: "updated"
-    propTransformation: (oldProps: Record<string, any>) => Record<string, any>;
-    // The Puck props of this component will be updated
-    // See Puck's transformProps documentation
-  }
-}
-```
-
-## withPropOverrides
-
-`withPropOverrides` lets you inject specific props into a component's `render` function. This is useful for customizing all instances of a component without making the value visible via fields in the Editor.
-
-### Example
-
-Given a component like this:
-
-```ts
-interface MockProps {
-  name: string;
-}
-
-const Mock: ComponentConfig<MockProps> = {
-  label: "Mock",
-  render: (props) => <>Hello {props.name}</>,
-};
-```
-
-You can inject `name` like this:
-
-```ts
-withPropOverrides(Mock, {
-  name: "World",
-});
-```
-
-and would end up with a component that shows "Hello World"

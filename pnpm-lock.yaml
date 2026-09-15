@@ -296,6 +296,9 @@ importers:
       generate-license-file:
         specifier: ^3.5.0
         version: 3.8.1(typescript@5.9.3)
+      gray-matter:
+        specifier: ^4.0.3
+        version: 4.0.3
       husky:
         specifier: ^9.1.4
         version: 9.1.7
@@ -4794,6 +4797,13 @@ packages:
         integrity: sha512-ZgEeZXj30q+I0EN+CbSSpIyPaJ5HVQD18Z1m+u1FXbAeT94mr1zw50q4q6jiiC447Nl/YTcIYSAftiGqetwXCA==,
       }
 
+  extend-shallow@2.0.1:
+    resolution:
+      {
+        integrity: sha512-zCnTtlxNoAiDc3gqY2aYAWFx7XWWiasuF2K8Me5WbN8otHKTUKBwjPtNpRs/rbUZm7KxWAaNj7P1a/p52GbVug==,
+      }
+    engines: { node: ">=0.10.0" }
+
   extend@3.0.2:
     resolution:
       {
@@ -5095,6 +5105,13 @@ packages:
       {
         integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==,
       }
+
+  gray-matter@4.0.3:
+    resolution:
+      {
+        integrity: sha512-5v6yZd4JK3eMI3FqqCouswVqwugaA9r4dNZB1wwcmrD02QkV5H0y7XBQW8QwQqEaZY1pM9aqORSORhJRdNK44Q==,
+      }
+    engines: { node: ">=6.0" }
 
   handlebars@4.7.9:
     resolution:
@@ -5468,6 +5485,13 @@ packages:
         integrity: sha512-RGdriMmQQvZ2aqaQq3awNA6dCGtKpiDFcOzrTWrDAT2MiWrKQVPmxLGHl7Y2nNu6led0kEyoX0enY0qXYsv9zw==,
       }
 
+  is-extendable@0.1.1:
+    resolution:
+      {
+        integrity: sha512-5BMULNob1vgFX6EjQw5izWDxrecWK9AM72rugNr0TFldMOi0fj6Jk+zeKIt0xGj4cEfQIJth4w3OKWOJ4f+AFw==,
+      }
+    engines: { node: ">=0.10.0" }
+
   is-extglob@2.1.1:
     resolution:
       {
@@ -5817,6 +5841,13 @@ packages:
       {
         integrity: sha512-S59eriX5u3/QhMNq3v/gm8Kd0w8OS6Tz2FS1NG4blv+z0MuQcBRJyFWjdovM0Rad4/P4aUPFtnkNjMjyMlMSYA==,
       }
+
+  kind-of@6.0.3:
+    resolution:
+      {
+        integrity: sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==,
+      }
+    engines: { node: ">=0.10.0" }
 
   kleur@3.0.3:
     resolution:
@@ -7602,6 +7633,13 @@ packages:
         integrity: sha512-RQPdCYTa8A68uM2jwxoY842xDhvx3E5LFL1LxvxCNMev4o5mLuokczhzjAgGwUZBAmOKZknArSxLKmXtIi2AxQ==,
       }
 
+  section-matter@1.0.0:
+    resolution:
+      {
+        integrity: sha512-vfD3pmTzGpufjScBh50YHKzEu2lxBWhVEHsNGoEXmCmn2hKGfeNLYMzCJpe8cD7gqX7TJluOVpBkAequ6dgMmA==,
+      }
+    engines: { node: ">=4" }
+
   semver@6.3.1:
     resolution:
       {
@@ -7912,6 +7950,13 @@ packages:
         integrity: sha512-yDPMNjp4WyfYBkHnjIRLfca1i6KMyGCtsVgoKe/z1+6vukgaENdgGBZt+ZmKPc4gavvEZ5OgHfHdrazhgNyG7w==,
       }
     engines: { node: ">=12" }
+
+  strip-bom-string@1.0.0:
+    resolution:
+      {
+        integrity: sha512-uCC2VHvQRYu+lMh4My/sFNmF2klFymLX1wHJeXnbEJERpV/ZsVuonzerjfrGpIGF7LBVa1O7i9kjiWvJiFck8g==,
+      }
+    engines: { node: ">=0.10.0" }
 
   strip-final-newline@3.0.0:
     resolution:
@@ -11771,6 +11816,10 @@ snapshots:
 
   exponential-backoff@3.1.3: {}
 
+  extend-shallow@2.0.1:
+    dependencies:
+      is-extendable: 0.1.1
+
   extend@3.0.2: {}
 
   fast-deep-equal@3.1.3: {}
@@ -11954,6 +12003,13 @@ snapshots:
   gopd@1.2.0: {}
 
   graceful-fs@4.2.11: {}
+
+  gray-matter@4.0.3:
+    dependencies:
+      js-yaml: 4.3.1
+      kind-of: 6.0.3
+      section-matter: 1.0.0
+      strip-bom-string: 1.0.0
 
   handlebars@4.7.9:
     dependencies:
@@ -12217,6 +12273,8 @@ snapshots:
 
   is-decimal@1.0.4: {}
 
+  is-extendable@0.1.1: {}
+
   is-extglob@2.1.1: {}
 
   is-fullwidth-code-point@3.0.0: {}
@@ -12406,6 +12464,8 @@ snapshots:
   just-diff-apply@5.5.0: {}
 
   just-diff@6.0.2: {}
+
+  kind-of@6.0.3: {}
 
   kleur@3.0.3: {}
 
@@ -13612,6 +13672,11 @@ snapshots:
 
   search-insights@2.17.3: {}
 
+  section-matter@1.0.0:
+    dependencies:
+      extend-shallow: 2.0.1
+      kind-of: 6.0.3
+
   semver@6.3.1: {}
 
   semver@7.7.4: {}
@@ -13779,6 +13844,8 @@ snapshots:
   strip-ansi@7.2.0:
     dependencies:
       ansi-regex: 6.3.0
+
+  strip-bom-string@1.0.0: {}
 
   strip-final-newline@3.0.0: {}
 

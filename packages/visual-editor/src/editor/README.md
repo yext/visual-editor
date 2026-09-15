@@ -7,60 +7,18 @@ outline: deep
 
 ## Editor
 
-Use this component to create an `edit.tsx` page in your Pages repository. This is the first step
-in making your repo compatible with the Visual Editor. See the [starter](https://github.com/YextSolutions/pages-visual-editor-starter) for more
-information.
+The editor component forms the iframed portion of the Visual Editor in Storm.
+It is automatically used in the edit pages created by the Section Library Vite plugin.
 
 ### Props
 
-| Name              | Type                                                                                      |
-| ----------------- | ----------------------------------------------------------------------------------------- |
-| document          | any (json data from [our hook](../hooks/README.md#usePlatformBridgeDocument))             |
-| componentRegistry | `Record<string, Config<any>>` from [@measuredco/puck](https://github.com/measuredco/puck) |
-| themeConfig?      | ThemeConfig                                                                               |
-| metadata?         | Metadata                                                                                  |
-
-### Usage
-
-```tsx
-import "@yext/visual-editor/style.css";
-import "../index.css";
-import tailwindConfig from "../../tailwind.config";
-
-// All the available components for locations
-const locationConfig: Config<LocationProps> = {
-  components: {...},
-  root: {...},
-};
-
-const componentRegistry : Record<string, Config<any>> = {
-  "location": locationConfig,
-};
-
-
-const Edit: () => JSX.Element = () => {
-  const entityDocument = usePlatformBridgeDocument();
-  const entityFields = usePlatformBridgeEntityFields();
-
-  return (
-    <VisualEditorProvider
-      templateProps={{
-        document: entityDocument
-      }}
-      entityFields={entityFields}
-      tailwindConfig={tailwindConfig}
-    >
-      <Editor
-        document={entityDocument}
-        componentRegistry={componentRegistry}
-        themeConfig={themeConfig}
-      />
-    </VisualEditorProvider>
-  );
-};
-```
-
-See the [starter](https://github.com/YextSolutions/pages-visual-editor-starter) for a more detailed look at the componentRegistry.
+| Name                             | Type                                                                                      |
+| -------------------------------- | ----------------------------------------------------------------------------------------- |
+| document                         | any (json data from [our hook](../hooks/README.md#usePlatformBridgeDocument))             |
+| componentRegistry                | `Record<string, Config<any>>` from [@measuredco/puck](https://github.com/measuredco/puck) |
+| themeConfig?                     | ThemeConfig                                                                               |
+| metadata?                        | Metadata                                                                                  |
+| sectionLibraryMigrationRegistry? | MigrationRegistry                                                                         |
 
 ## EntityField
 
@@ -89,8 +47,7 @@ import { EntityField } from "@yext/visual-editor";
 ## entityField Field Type
 
 Use the registered `entityField` field type to allow Visual Editor users to choose an entity field or a constant value that will populate data into a component.
-The user can choose an entity field from a dropdown or use a constant value. Regardless, the user should always
-enter a constant value as it will be used as a fallback value in the case that the entity is missing the selected entity field.
+The user can choose an entity field from a dropdown or use a constant value.
 `YextEntityFieldSelector(...)` remains available as a compatibility wrapper, but new configs should author `entityField` directly in `YextFields`.
 
 The constant value field currently has limited functionality with complex object entity types. When using complex
@@ -112,11 +69,10 @@ object types, ensure your render function handles undefined fields.
 
 ```tsx
 import {
-  EntityFieldType,
   resolveYextEntityField,
   useDocument,
-  YextComponentConfig
-  YextFields
+  YextComponentConfig,
+  YextFields,
 } from "@yext/visual-editor";
 import { MyFieldType, TemplateStream } from "../types/autogen";
 import { config } from "../templates/myTemplate";

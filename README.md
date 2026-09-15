@@ -2,32 +2,13 @@
 
 # visual-editor
 
-This library provides components necessary to set up a Pages repository that can interact with Visual Editor in the Yext platform.
-
-## Hooks
-
-| Hook                                                                                 |
-| ------------------------------------------------------------------------------------ |
-| [usePlatformBridgeDocument](./src/hooks/README.md#usePlatformBridgeDocument)         |
-| [usePlatformBridgeEntityFields](./src/hooks/README.md#usePlatformBridgeEntityFields) |
-
-## Components
-
-| Component                                                               |
-| ----------------------------------------------------------------------- |
-| [Editor](src/editor/README.md#editor)                                   |
-| [EntityField](src/editor/README.md#entityfield)                         |
-| [YextEntityFieldSelector](src/editor/README.md#YextEntityFieldSelector) |
-
-## Utils
-
-| Function                                                               |
-| ---------------------------------------------------------------------- |
-| [resolveYextEntityField](./src/utils/README.md#resolveYextEntityField) |
+This library provides components necessary to set up a Section Library Pages repository that can interact with Visual Editor in the Yext platform.
 
 ## CLI
 
 `@yext/visual-editor` includes the `yextve` CLI for creating a Section Library revision from the current Git commit. In a repository that uses Visual Editor, install the package and run its local CLI:
+
+### Deploy
 
 ```sh
 npx yextve deploy
@@ -63,3 +44,42 @@ Use `--verbose` (or `-v`) to print API request details and response data:
 ```sh
 npx yextve deploy --verbose
 ```
+
+### Convert legacy templates
+
+Use this engineering tool when you convert one or more legacy templates in a
+starter repository to a Section Library. Run it from the section library repository.
+
+```sh
+npx --package=@yext/visual-editor@latest yextve convert-template
+```
+
+The default is a dry run. It validates the starter and reports the
+planned library, layouts, and duplicate component IDs. Add `--apply` to replace
+the `src/library` directory. Add `--delete-source` with `--apply` to
+remove converted `src/registry/<template-id>` directories after replacement.
+
+```sh
+npx --package=@yext/visual-editor@latest yextve convert-template \
+  --apply --delete-source
+```
+
+If the starter does not contain the base Directory and Locator source, the
+converter adds it to the converted Section Library. The converter creates one
+Entity layout per legacy template, keeps the first source for each component ID
+in sorted template order, and reports all duplicate IDs.
+
+### Add Directory and Locator
+
+Run this command from a Section Library repository to add editable Directory
+and Locator sections and layouts. If `src/library/library.json` exists, its ID
+prefixes the generated layout IDs. Otherwise, the IDs are `directory` and
+`locator`.
+
+```sh
+npx --package=@yext/visual-editor@latest yextve add-directory-locator
+```
+
+The command stops before overwriting existing shared, Directory, or Locator
+source. Pass `--overwrite` to replace those files after reviewing the generated
+output.

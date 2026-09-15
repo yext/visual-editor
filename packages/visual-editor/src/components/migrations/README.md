@@ -30,8 +30,7 @@ the number increases sequentially and the rest of the name is a brief descriptio
 
 In that file, export an object of type `Migration`, which is object mapping component names to
 `MigrationActions` (see [migrate.ts](https://github.com/yext/visual-editor/blob/main/packages/visual-editor/src/utils/migrate.ts)).
-The component name should be the name the component is registered as in
-`src/components/categories`.
+The component name must be the name the component is registered as in the Puck config. `*` is also supported to target all components.
 Component names stored in layout data must remain stable; migrations do not
 support renaming components.
 
@@ -86,9 +85,10 @@ entries in the repo registry so the repo remains consistent with itself.
 
 ## How do I test a migration?
 
-In the local dev starter, create a layout with the existing components. Log the layout data
-and save it somewhere. Then, make your component updates. In the editor, set the layout data
-to your previously saved data. Confirm the old data is migrated to the new version successfully.
+Create a layout with the existing components either in the platform or the local-editor. Copy the layout data
+and save it. Then, make component and migration updates. In the editor, paste the previously saved layout data
+(You must paste the entire layout data, not individual components). Confirm the old data is migrated to the
+new version successfully.
 
 ### Adding Test Cases
 
@@ -104,5 +104,3 @@ updated unless making an intentional breaking change to existing component usage
 
 For the new version, two test cases should be added: one using all Entity Values
 possible for the component and another using all Constant Values.
-It is recommended to configure the component in the `localDev` editor, log
-the component data, and copy it into the test file.
