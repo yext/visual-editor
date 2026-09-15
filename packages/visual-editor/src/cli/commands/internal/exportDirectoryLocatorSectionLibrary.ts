@@ -155,10 +155,6 @@ export const exportDirectoryLocatorSectionLibrary = (
     );
   }
   const directoryLayout = readDefaultLayout(defaultLayoutData.directory);
-  directoryLayout.content = directoryLayout.content.filter(
-    (component: { type?: unknown }) =>
-      component.type !== "ExpandedHeader" && component.type !== "ExpandedFooter"
-  );
   writeSections(sectionsDirectory);
   writeComponentRegistry(sharedDirectory, directoryLayout);
   writeLayouts(libraryDirectory, directoryLayout, layoutIds);

@@ -91,16 +91,6 @@ describe("exportDirectoryLocatorSectionLibrary", () => {
     ).toBe(false);
     expect(
       fs.existsSync(
-        path.join(libraryDirectory, "sections", "ExpandedHeader.tsx")
-      )
-    ).toBe(false);
-    expect(
-      fs.existsSync(
-        path.join(libraryDirectory, "sections", "ExpandedFooter.tsx")
-      )
-    ).toBe(false);
-    expect(
-      fs.existsSync(
         path.join(libraryDirectory, "sections", "CustomCodeSection.tsx")
       )
     ).toBe(false);
