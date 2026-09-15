@@ -1,3 +1,10 @@
+#### 1.4.9 (2026-09-15)
+
+##### New Features
+
+- expose image link ([#1324](https://github.com/yext/visual-editor/pull/1324)) ([3d064cdc](https://github.com/yext/visual-editor/commit/3d064cdc4073a33d6347a4cabc421dbcf8c94ab6))
+- allow 6 columns in grid ([#1320](https://github.com/yext/visual-editor/pull/1320)) ([c87ad6e0](https://github.com/yext/visual-editor/commit/c87ad6e01369c8e33cef19b4bde3ee90eb834957))
+
 #### 1.4.8 (2026-09-02)
 
 ##### Bug Fixes
