@@ -153,6 +153,7 @@ const prepareField = (field: Record<string, any>): Record<string, any> => {
     return mergeAiConfig(annotatedField, {
       schema: testImageFieldAiSchema,
       instructions: testImageFieldAiDescription,
+      stream: false,
     });
   }
 

@@ -2,6 +2,8 @@ import { createElement } from "react";
 import { describe, expect, it } from "vitest";
 import {
   testEntityFieldAiSchema,
+  testImageFieldAiDescription,
+  testImageFieldAiSchema,
   testRichTextFieldAiDescription,
   testRichTextFieldAiSchema,
 } from "./fieldTypes.ts";
@@ -17,6 +19,9 @@ describe("preparePuckAiConfig", () => {
     expect(puckAiSystemContext).toContain("defaultProps");
     expect(puckAiSystemContext).toContain("Repeated static UI is supported.");
     expect(puckAiSystemContext).toContain("card1Title");
+    expect(puckAiSystemContext).toContain(
+      "Every testImage field definition must include ai: { stream: false }"
+    );
     expect(puckAiSystemContext).toContain(
       "Do not use slots or child components"
     );
@@ -101,6 +106,12 @@ describe("preparePuckAiConfig", () => {
             body: {
               type: "testRichText",
             },
+            image: {
+              type: "testImage",
+              ai: {
+                stream: true,
+              },
+            },
           },
         },
       },
@@ -119,6 +130,11 @@ describe("preparePuckAiConfig", () => {
     expect(config?.components.TestHero.fields.body.ai).toEqual({
       instructions: testRichTextFieldAiDescription,
       schema: testRichTextFieldAiSchema,
+    });
+    expect(config?.components.TestHero.fields.image.ai).toEqual({
+      stream: false,
+      instructions: testImageFieldAiDescription,
+      schema: testImageFieldAiSchema,
     });
   });
 
