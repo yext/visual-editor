@@ -7,7 +7,7 @@ outline: deep
 
 ## Simple React Component
 
-Starting by creating a React component as you normally would.
+Start by creating a React component as you normally would.
 
 1. Use upper camel case for the component filename.
 2. Name the React component with “Component” as the suffix, ie “FooComponent”
