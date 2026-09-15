@@ -1,6 +1,5 @@
 packages:
   - "packages/visual-editor"
-  - "starter"
 
 overrides:
   "happy-dom": "20.8.8"

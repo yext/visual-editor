@@ -8,7 +8,6 @@ import {
 import { Button } from "../internal/puck/ui/button.tsx";
 import { type AssetVideo } from "../types/videos.ts";
 import { pt, type MsgString } from "../utils/i18n/platform.ts";
-import { isFakeStarterLocalDev } from "../utils/isFakeStarterLocalDev.ts";
 
 export type VideoField = BaseField & {
   type: "video";
@@ -54,49 +53,25 @@ export const VideoFieldOverride = ({
     e.stopPropagation();
     e.preventDefault();
 
-    /** Handles local development testing outside of Storm */
-    if (isFakeStarterLocalDev()) {
-      const userInput = prompt("Enter Video URL:");
-      if (!userInput) {
-        return;
-      }
-      const url = new URL(userInput);
-      const searchParams = new URLSearchParams(url.search);
-      const videoId = searchParams.get("v") ?? "";
+    /** Instructs Storm to open the video asset selector drawer */
+    const messageId = `VideoAsset-${Date.now()}`;
+    pendingVideoSession = {
+      messageId,
+      apply: (videoPayload) => {
+        if (!videoPayload?.value) {
+          return;
+        }
 
-      onChange({
-        name: "Local asset",
-        id: "0",
-        video: {
-          url: userInput,
-          thumbnail: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
-          id: videoId,
-          title: "Local Video",
-          duration: "0:00",
-          embeddedUrl: `https://www.youtube.com/embed/${videoId}`,
-        },
-      });
-    } else {
-      /** Instructs Storm to open the video asset selector drawer */
-      const messageId = `VideoAsset-${Date.now()}`;
-      pendingVideoSession = {
-        messageId,
-        apply: (videoPayload) => {
-          if (!videoPayload?.value) {
-            return;
-          }
-
-          onChange(videoPayload.value);
-        },
-      };
-      openVideoAssetSelector({
-        payload: {
-          type: "VideoAsset",
-          value: value,
-          id: messageId,
-        },
-      });
-    }
+        onChange(videoPayload.value);
+      },
+    };
+    openVideoAssetSelector({
+      payload: {
+        type: "VideoAsset",
+        value: value,
+        id: messageId,
+      },
+    });
   };
 
   const handleDeleteVideo = (e: React.MouseEvent) => {

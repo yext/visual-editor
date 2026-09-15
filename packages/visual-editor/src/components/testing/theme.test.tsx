@@ -1,37 +1,70 @@
 import * as React from "react";
 import { describe, it, expect } from "vitest";
 import { page } from "@vitest/browser/context";
-import { render as reactRender, waitFor } from "@testing-library/react";
+import { render as reactRender } from "@testing-library/react";
 import {
   Render,
   Config,
   DefaultComponentProps,
   Data,
   DefaultRootProps,
+  resolveAllData,
 } from "@puckeditor/core";
 import { migrationRegistry } from "../migrations/migrationRegistry.ts";
-import { OtherCategoryComponents } from "../categories/OtherCategory.tsx";
-import { PageSectionCategoryComponents } from "../categories/PageSectionCategory.tsx";
-import { SlotsCategoryComponents } from "../categories/SlotsCategory.tsx";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { migrate } from "../../utils/migrate.ts";
 import { ThemeData } from "../../internal/types/themeData.ts";
-import { MainContent } from "../structure/MainContent.tsx";
+import { MainContent } from "../helpers/MainContent.tsx";
 import {
   testHours,
   testSetup,
   viewports,
 } from "../testing/componentTests.setup.ts";
+import { Directory } from "../sections/directory/Directory.tsx";
+import { SlotsCategoryComponents } from "./SlotComponents.tsx";
 
 const testDocument = {
   locale: "en",
   name: "name",
-  hours: testHours,
-  ref_reviewsAgg: [
+  dm_directoryChildren: [
     {
-      averageRating: 4.1,
-      publisher: "FIRSTPARTY",
-      reviewCount: 26,
+      address: {
+        city: "Arlington",
+        countryCode: "US",
+        line1: "1101 Wilson Blvd",
+        postalCode: "22209",
+        region: "VA",
+      },
+      hours: testHours,
+      id: "1101-wilson-blvd",
+      mainPhone: "+17577017560",
+      meta: {
+        entityType: {
+          id: "location",
+        },
+      },
+      name: "Galaxy Grill",
+      timezone: "America/New_York",
+    },
+    {
+      address: {
+        city: "Arlington",
+        countryCode: "US",
+        line1: "1735 North Lynn Street",
+        postalCode: "22209",
+        region: "VA",
+      },
+      geomodifier: "Rosslyn",
+      hours: testHours,
+      id: "1735-lynn",
+      mainPhone: "+18005551010",
+      meta: {
+        entityType: {
+          id: "location",
+        },
+      },
+      name: "Galaxy Grill 2",
+      timezone: "America/New_York",
     },
   ],
 };
@@ -50,10 +83,9 @@ type ThemeTest = {
 describe("ThemeTest", async () => {
   const puckConfig: Config = {
     components: {
-      ...PageSectionCategoryComponents,
-      ...SlotsCategoryComponents,
-      ...OtherCategoryComponents,
+      Directory,
       MainContent,
+      ...SlotsCategoryComponents,
     },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
@@ -67,204 +99,162 @@ describe("ThemeTest", async () => {
     document: testDocument,
     data: {
       root: {
-        props: { version: 53 },
+        props: {
+          version: 82,
+        },
       },
-      zones: {},
       content: [
         {
-          type: "HeroSection",
+          type: "MainContent",
           props: {
-            data: {
-              backgroundImage: {
-                field: "",
-                constantValue: {
-                  url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                  width: 640,
-                  height: 360,
+            content: [
+              {
+                type: "Directory",
+                props: {
+                  id: "Directory-d21d6943-0a81-4a8e-b76b-cecb5b157c14",
+                  slots: {
+                    TitleSlot: [
+                      {
+                        type: "HeadingTextSlot",
+                        props: {
+                          id: "HeadingTextSlot-1a871989-a34d-426c-b24a-a1888c1a46ea",
+                          data: {
+                            text: {
+                              field: "name",
+                              constantValue: {
+                                defaultValue: "",
+                              },
+                              constantValueEnabled: false,
+                            },
+                          },
+                          styles: {
+                            align: "center",
+                            level: 2,
+                          },
+                        },
+                      },
+                    ],
+                    SiteNameSlot: [
+                      {
+                        type: "HeadingTextSlot",
+                        props: {
+                          id: "HeadingTextSlot-9a120ff6-d494-4ec8-9ab8-e43017d77c03",
+                          data: {
+                            text: {
+                              field: "name",
+                              constantValue: {
+                                defaultValue: "",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            align: "center",
+                            level: 4,
+                          },
+                        },
+                      },
+                    ],
+                    DirectoryGrid: [
+                      {
+                        type: "DirectoryGrid",
+                        props: {
+                          id: "DirectoryGrid-dab8e202-600a-47da-b5c7-971df3f504fb",
+                          slots: {
+                            CardSlot: [],
+                          },
+                          styles: {
+                            backgroundColor: {
+                              selectedColor: "palette-quaternary-light",
+                              contrastingColor: "black",
+                            },
+                          },
+                          data: {
+                            field: "dm_directoryChildren",
+                            constantValueEnabled: false,
+                            constantValue: [],
+                            mappings: {
+                              cardTitle: {
+                                field: "name",
+                                constantValueEnabled: true,
+                                constantValue: {
+                                  defaultValue: "[[name]]",
+                                },
+                              },
+                              linkOverride: {
+                                enabled: false,
+                                normalizeLink: false,
+                                field: "",
+                                constantValue: {
+                                  defaultValue: "",
+                                  hasLocalizedValue: "true",
+                                },
+                                constantValueEnabled: false,
+                              },
+                              showAddress: true,
+                              showHoursStatus: true,
+                              showPhoneNumber: true,
+                            },
+                          },
+                          manualSlots: {
+                            CardSlot: [],
+                          },
+                        },
+                      },
+                    ],
+                    BreadcrumbsSlot: [
+                      {
+                        type: "BreadcrumbsSlot",
+                        props: {
+                          id: "BreadcrumbsSlot-13dba298-abd1-4f75-a7e9-b19779a4fc5b",
+                          data: {
+                            currentPage: {
+                              field: "name",
+                              constantValue: {
+                                defaultValue: "[[name]]",
+                              },
+                              constantValueEnabled: false,
+                            },
+                            directoryRoot: {
+                              defaultValue: "Directory Root",
+                            },
+                          },
+                          styles: {
+                            backgroundColor: {
+                              selectedColor: "white",
+                              contrastingColor: "black",
+                            },
+                            showCurrentPage: true,
+                          },
+                          analytics: {
+                            scope: "directory",
+                          },
+                          liveVisibility: true,
+                        },
+                      },
+                    ],
+                  },
+                  styles: {
+                    backgroundColor: {
+                      selectedColor: "palette-primary-dark",
+                      contrastingColor: "white",
+                    },
+                    listBackgroundColor: {
+                      selectedColor: "white",
+                      contrastingColor: "black",
+                    },
+                  },
+                  analytics: {
+                    scope: "directory",
+                  },
                 },
-                constantValueEnabled: true,
               },
-            },
-            styles: {
-              variant: "classic",
-              backgroundColor: {
-                bgColor: "bg-palette-secondary-light",
-                textColor: "text-black",
-              },
-              showAverageReview: true,
-              showImage: true,
-              imageHeight: 500,
-              desktopImagePosition: "right",
-              desktopContainerPosition: "left",
-              mobileContentAlignment: "left",
-              mobileImagePosition: "bottom",
-            },
-            slots: {
-              BusinessNameSlot: [
-                {
-                  type: "HeadingTextSlot",
-                  props: {
-                    id: "HeadingTextSlot-dc7db034-a46e-42b6-a23d-b6ce2a6bc598",
-                    data: {
-                      text: {
-                        constantValue: {
-                          en: "Business Name",
-                          hasLocalizedValue: "true",
-                        },
-                        constantValueEnabled: true,
-                        field: "",
-                      },
-                    },
-                    styles: {
-                      level: 3,
-                      align: "left",
-                      semanticLevelOverride: 2,
-                    },
-                  },
-                },
-              ],
-              GeomodifierSlot: [
-                {
-                  type: "HeadingTextSlot",
-                  props: {
-                    id: "HeadingTextSlot-6670f87c-0617-46bc-b22a-45ba5d0580fc",
-                    data: {
-                      text: {
-                        constantValue: {
-                          en: "Geomodifier",
-                          hasLocalizedValue: "true",
-                        },
-                        constantValueEnabled: true,
-                        field: "",
-                      },
-                    },
-                    styles: {
-                      level: 1,
-                      align: "left",
-                    },
-                  },
-                },
-              ],
-              HoursStatusSlot: [
-                {
-                  type: "HoursStatusSlot",
-                  props: {
-                    id: "HoursStatusSlot-8771605f-5fda-489f-b66a-fe2dd3a1d8f6",
-                    data: {
-                      hours: {
-                        field: "hours",
-                        constantValue: {},
-                      },
-                    },
-                    styles: {
-                      dayOfWeekFormat: "long",
-                      showDayNames: true,
-                      showCurrentStatus: true,
-                    },
-                  },
-                },
-              ],
-              ImageSlot: [
-                {
-                  type: "HeroImageSlot",
-                  props: {
-                    id: "HeroImageSlot-48daf6e6-0497-43c5-b76f-5fe28cce2485",
-                    data: {
-                      image: {
-                        field: "",
-                        constantValue: {
-                          url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                          width: 640,
-                          height: 360,
-                        },
-                        constantValueEnabled: true,
-                      },
-                    },
-                    styles: {
-                      aspectRatio: 1.78,
-                      width: 490,
-                    },
-                    variant: "classic",
-                    className:
-                      "mx-auto max-w-full md:max-w-[350px] lg:max-w-[calc(min(calc(100vw-1.5rem),var(--maxWidth-pageSection-contentWidth))-350px)] rounded-image-borderRadius",
-                  },
-                },
-              ],
-              PrimaryCTASlot: [
-                {
-                  type: "CTASlot",
-                  props: {
-                    id: "CTASlot-6d84e36d-832d-4215-ad21-b9f4b7b17535",
-                    data: {
-                      entityField: {
-                        field: "",
-                        constantValue: {
-                          label: {
-                            en: "Call To Action",
-                            hasLocalizedValue: "true",
-                          },
-                          link: {
-                            en: "#",
-                            hasLocalizedValue: "true",
-                          },
-                          linkType: "URL",
-                          ctaType: "textAndLink",
-                        },
-                      },
-                    },
-                    eventName: "primaryCta",
-                    styles: {
-                      variant: "primary",
-                      presetImage: "app-store",
-                    },
-                    parentStyles: {},
-                  },
-                },
-              ],
-              SecondaryCTASlot: [
-                {
-                  type: "CTASlot",
-                  props: {
-                    id: "CTASlot-38ccac87-b5c1-44a5-aee9-d81adc14eb95",
-                    data: {
-                      entityField: {
-                        field: "",
-                        constantValue: {
-                          label: {
-                            en: "Learn More",
-                            hasLocalizedValue: "true",
-                          },
-                          link: {
-                            en: "#",
-                            hasLocalizedValue: "true",
-                          },
-                          linkType: "URL",
-                          ctaType: "textAndLink",
-                        },
-                        selectedType: "textAndLink",
-                      },
-                    },
-                    styles: {
-                      variant: "link",
-                      presetImage: "app-store",
-                    },
-                    eventName: "secondaryCta",
-                    parentStyles: {},
-                  },
-                },
-              ],
-            },
-            analytics: {
-              scope: "heroSection",
-            },
-            liveVisibility: true,
-            id: "HeroSection-3231b368-0ecb-43eb-9f49-e1483545ef78",
-            conditionalRender: {
-              hours: true,
-            },
+            ],
+            id: "MainContent-76dbbc2c-0ca1-479c-ac6b-5e6b4bd82be7",
           },
         },
       ],
+      zones: {},
     },
     theme: {
       "--fontFamily-link-fontFamily":
@@ -328,18 +318,17 @@ describe("ThemeTest", async () => {
         migrationRegistry
       );
 
-      const { container } = reactRender(
+      const updatedData = await resolveAllData(migratedData, puckConfig, {
+        streamDocument: document,
+      });
+
+      reactRender(
         <VisualEditorProvider templateProps={{ document }}>
-          <Render config={puckConfig} data={migratedData} />
+          <Render config={puckConfig} data={updatedData} />
         </VisualEditorProvider>
       );
 
       await page.viewport(width, height);
-
-      const images = Array.from(container.querySelectorAll("img"));
-      await waitFor(() => {
-        expect(images.every((i) => i.complete)).toBe(true);
-      });
 
       await expect(`ThemeTest/[${viewportName}] ${name}`).toMatchScreenshot();
     }

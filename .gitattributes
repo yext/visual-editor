@@ -1,5 +1,3 @@
-starter/localData/** linguist-generated=true
-starter/src/dev.config.ts linguist-generated=true
 packages/visual-editor/locales/** linguist-generated=true
 packages/visual-editor/locales/components/en/visual-editor.json linguist-generated=false
 packages/visual-editor/locales/platform/en/visual-editor.json linguist-generated=false

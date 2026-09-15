@@ -1,30 +1,9 @@
 export * from "./atoms/index.ts";
-export * from "./categories/index.ts";
 export * from "./contentBlocks/index.ts";
-export * from "./configs/index.ts";
-export * from "./pageSections/index.ts";
+export * from "./sections/index.ts";
 export * from "./migrations/index.ts";
-export * from "./header/index.ts";
-export * from "./footer/index.ts";
-export * from "./fieldHelpers/index.ts";
+export * from "./helpers/index.ts";
 export {
-  Directory,
-  type DirectoryProps,
-  type DirectoryStyles,
-} from "./directory/Directory.tsx";
-export { LocatorComponent, type LocatorProps } from "./locator/Locator.tsx";
-export {
-  LocatorResultCard,
-  type Location,
-  type LocatorResultCardProps,
-} from "./locator/LocatorResultCard.tsx";
-export {
-  CustomCodeSection,
-  type CustomCodeSectionProps,
-} from "./customCode/CustomCodeSection.tsx";
-export {
-  defaultThemeConfig,
   createDefaultThemeConfig,
+  defaultThemeConfig,
 } from "./DefaultThemeConfig.ts";
-export { MainContent } from "./structure/MainContent.tsx";
-export { GTMBody } from "./GTMBody.tsx";

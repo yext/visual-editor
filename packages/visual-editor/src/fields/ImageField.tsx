@@ -25,7 +25,6 @@ import {
   TemplateMetadata,
 } from "../internal/types/templateMetadata.ts";
 import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
-import { isFakeStarterLocalDev } from "../utils/isFakeStarterLocalDev.ts";
 import { YextAutoField } from "./YextAutoField.tsx";
 import { type EmbeddedStringOption } from "../editor/EmbeddedFieldStringInput.tsx";
 
@@ -107,26 +106,6 @@ export const ImageFieldOverride = ({
   const handleSelectImage = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
-
-    /** Handles local development testing outside of Storm */
-    if (isFakeStarterLocalDev()) {
-      const userInput = prompt("Enter Image URL:");
-      if (!userInput) {
-        return;
-      }
-      onChange({
-        ...localizedContainer,
-        [locale]: {
-          alternateText: resolvedValue?.alternateText ?? "",
-          url: userInput,
-          height: 1,
-          width: 1,
-        },
-        hasLocalizedValue: "true",
-      } as TranslatableAssetImage);
-      pendingImageSession = undefined;
-      return;
-    }
 
     /** Instructs Storm to open the image asset selector drawer */
     const messageId = `ImageAsset-${Date.now()}`;
