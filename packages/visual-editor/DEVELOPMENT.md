@@ -4,43 +4,37 @@ This library uses [pnpm](https://pnpm.io/).
 
 ## Navigating the codebase
 
-### src
-
-This directory houses all the source code for visual-editor.
-
-#### components
-
-Find EntityField and Editor in this directory.
-EntityFieldProvider is used to wrap everything in InternalEditor, EntityField is exported - they live in the same file.
-Editor essentially handles getting all the data required for InternalEditor and renders
-InternalEditor once all the requisite data is loaded.
-
-#### hooks
-
-Find usePlatformBridgeDocument in this directory. This calls internal useMessage hooks to fetch data
-from the Yext platform.
-
-#### [utils](./src/utils/README.md)
-
-#### internal
-
-This directory houses all the code internal to the library. Find useMessage hooks, Puck-specific
-ui elements, types, helper functions, and the InternalEditor in this directory. The structure is
-largely the same as `src` with `components` housing InternalEditor, `hooks` housing the useMessage
-suite, `utils` housing a tailwind classname utility and local storage helper. Puck and types are
-named accordingly.
-
-### test
-
-This directory houses all the library's unit tests which are automatically run by GitHub when
-a PR is made. We highly recommend running the tests yourself as you develop code using `pnpm run 
-test`.
+- `locales`: Contains translations for hardcoded strings.
+- `cli`: A CLI bundled with `@yext/visual-editor` containing section library development helpers.
+- `components`: React helpers for Sections. Also contains the built-in migrations.
+- `editor`: Contains the functionality and entrypoints for the part of the Visual Editor that is iframed into Storm.
+- `fields`: Types, field definitions, and render helpers for many types of Puck fields supported by Visual Editor.
+- `internal`: Various utilities and components used by fields, editor, etc. but not publicly exported
+- `local-editor`: Supports the Section Library local development editor.
+- `utils`: Various utilities for use in Sections that are publicly exported.
+- `vite-plugin`: The Section Library build helper.
 
 ## Testing workflow
 
-This tool is meant to be used alongside a repository set up for Yext Pages, it is recommended to
-test any changes against a starter repository. One such starter is
-[yextsolutions/pages-visual-editor-starter](https://github.com/yextsolutions/pages-visual-editor-starter).
+### Automated tests
+
+#### `pnpm run test:editor`
+
+Runs all tests not under `src/components`. Recommended to run locally during development
+
+#### `pnpm run test:components`
+
+Runs all tests under `src/components` (the screenshot tests). You can run these locally, however it is expected
+that they will fail on the first run due to environment differences. Do not commit screenshot updates, Github
+Actions is the authoritative source.
+
+### Manual Testing
+
+This tool is meant to be used alongside a repository set up for Yext Pages Section Libraries, it is recommended to
+test any changes against a section library.
+
+- Section library starter: [yextsolutions/pages-visual-editor-starter](https://github.com/yextsolutions/pages-visual-editor-starter).
+- Yext-created section libraries: [yext-section-libraries](https://github.com/orgs/yext-section-libraries/repositories)
 
 By default, the starter repository references a non-local version of @yext/visual-editor.
 To point the starter at this local repository, first run `pnpm pack`, then update the starter's
@@ -63,56 +57,13 @@ npm i @yext/visual-editor --force
 npm run dev
 ```
 
-You should then be able to test your changes leveraging the Visual Editor dev mode.
+You should then be able to test your changes leveraging the Visual Editor local-editor.
 
-`pnpm run test`
-This will automatically run all the unit tests in the library, it's recommended to run this
-after making changes.
+## Other Notes
 
-### Convert legacy templates
+### Tailwind
 
-Use this engineering tool when you convert one or more legacy templates in a
-starter repository to a Section Library. Run it from the section library repository.
-
-```sh
-npx --package=@yext/visual-editor@latest yextve convert-template
-```
-
-The default is a dry run. It validates the starter and reports the
-planned library, layouts, and duplicate component IDs. Add `--apply` to replace
-the `src/library` directory. Add `--delete-source` with `--apply` to
-remove converted `src/registry/<template-id>` directories after replacement.
-
-```sh
-npx --package=@yext/visual-editor@latest yextve convert-template \
-  --apply --delete-source
-```
-
-If the starter does not contain the base Directory and Locator source, the
-converter adds it to the converted Section Library. The converter creates one
-Entity layout per legacy template, keeps the first source for each component ID
-in sorted template order, and reports all duplicate IDs.
-
-### Add Directory and Locator
-
-Run this command from a Section Library repository to add editable Directory
-and Locator sections and layouts. If `src/library/library.json` exists, its ID
-prefixes the generated layout IDs. Otherwise, the IDs are `directory` and
-`locator`.
-
-```sh
-npx --package=@yext/visual-editor@latest yextve add-directory-locator
-```
-
-The command stops before overwriting existing shared, Directory, or Locator
-source. Pass `--overwrite` to replace those files after reviewing the generated
-output.
-
-`pnpm run autofix`
-This will run eslint and prettier for you to ensure your code is up to quality standard. It's
-recommended to run this after making changes.
-
-### A note on Tailwind
+This repo uses Tailwind v3.
 
 This library uses a Tailwind prefix to isolate it's styling. See [docs](https://tailwindcss.com/docs/configuration#prefix).
 This means tailwind classes should be prefixed with "ve-" to work properly. Ex:
@@ -129,9 +80,7 @@ Everything the library exports can be found in `src/index.ts`. Each subdirectory
 hooks, and utils) have their own `index.ts` which lists out more verbose exports. You should
 follow this pattern when modifying exports. Do not publicly export anything from internal.
 
-### Automated jobs
-
-#### GitHub
+### GitHub Actions
 
 We have a number of automated GitHub actions that run when you make a PR including:
 
@@ -145,3 +94,7 @@ We have a number of automated GitHub actions that run when you make a PR includi
 ### Husky
 
 Husky provides a pre commit hook that runs code linting and formatting.
+
+`pnpm run autofix`
+This will run eslint and prettier for you to ensure your code is up to quality standard. It's
+recommended to run this after making changes.

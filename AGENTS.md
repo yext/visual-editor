@@ -14,7 +14,8 @@
 - For routine local tests, run `pnpm --dir packages/visual-editor run test:editor`.
 - Do not use root `pnpm run test` for normal local verification. It expands into the package `test` script, which includes component tests.
 - Do not use `pnpm run test:components` as a normal local step. It is part of the Playwright screenshot workflow and is not expected to work directly on a normal local machine.
-- Only use `pnpm --dir packages/visual-editor run test:components:local` when intentionally running screenshot/component tests with Docker.
+- Only use `pnpm --dir packages/visual-editor run test:components:local` when intentionally running screenshot/component tests with Docker. This is a slow-running command,
+  so confirm with the user before running.
 
 ## Mutating Commands
 
@@ -24,7 +25,7 @@
 ## Package Structure
 
 - `packages/visual-editor` is the primary package and the default place for library code changes.
-- `starter` is primarily a local consumer app for development and integration testing; only work there when the task specifically involves the starter or local validation.
+- `packages/visual-editor/src/cli/yextve.ts` is a cli tool bundled with the package for section library development.
 - Public exports should go through the package entrypoints such as `packages/visual-editor/src/index.ts` and related package `index.ts` files.
 - Do not export everything by default. Only add or keep public exports that are actually needed by consumers.
 - Do not publicly export modules from `packages/visual-editor/src/internal`. Keep the public API surface small and intentional.
