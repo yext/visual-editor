@@ -741,32 +741,3 @@ const myComponentFields: Fields<MyComponentProps> = {
     },
   },
 ```
-
-## withPropOverrides
-
-`withPropOverrides` lets you inject specific props into a component's `render` function. This is useful for customizing all instances of a component without making the value visible via fields in the Editor.
-
-### Example
-
-Given a component like this:
-
-```ts
-interface MockProps {
-  name: string;
-}
-
-const Mock: ComponentConfig<MockProps> = {
-  label: "Mock",
-  render: (props) => <>Hello {props.name}</>,
-};
-```
-
-You can inject `name` like this:
-
-```ts
-withPropOverrides(Mock, {
-  name: "World",
-});
-```
-
-and would end up with a component that shows "Hello World"
