@@ -246,9 +246,8 @@ export const ImageWrapper: YextComponentConfig<ImageWrapperProps> = {
   inline: true,
   fields: ImageWrapperFields,
   defaultProps: imageDefaultProps,
-  resolveFields: (data, params) => {
+  resolveFields: (data) => {
     let fields = resolveDataFromParent(ImageWrapperFields, data);
-    const parentType = params.parent?.type;
 
     if (
       data.props.hideWidthProp ||
@@ -264,10 +263,6 @@ export const ImageWrapper: YextComponentConfig<ImageWrapperProps> = {
       "styles.objectFields.imageConstrain.visible",
       !!data.props.showImageConstrain
     );
-
-    if (parentType !== "PrimaryHeaderSlot") {
-      return setDeep(fields, "data.objectFields.link.visible", false);
-    }
 
     return fields;
   },
