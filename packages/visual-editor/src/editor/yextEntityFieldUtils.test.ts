@@ -50,7 +50,7 @@ describe("getFieldsForSelector", () => {
     );
   });
 
-  it("allows string descendants to satisfy rich text item source requirements", () => {
+  it("allows item sources when any descendant type matches", () => {
     const fields = getFieldsForSelector(
       {
         fields: [
@@ -82,7 +82,7 @@ describe("getFieldsForSelector", () => {
         },
       },
       {
-        itemSourceTypes: [["type.rich_text_v2"]],
+        itemSourceTypes: [["type.image"], ["type.rich_text_v2"]],
       }
     );
 
@@ -95,7 +95,7 @@ describe("getFieldsForSelector", () => {
     );
   });
 
-  it("applies rich text compatibility to mapped source descendant checks", () => {
+  it("hides item sources when no descendant types match", () => {
     const fields = getFieldsForSelector(
       {
         fields: [
@@ -127,17 +127,11 @@ describe("getFieldsForSelector", () => {
         },
       },
       {
-        mappedSourceTypes: [["type.rich_text_v2"]],
+        itemSourceTypes: [["type.image"], ["type.cta"]],
       }
     );
 
-    expect(fields).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          name: "c_articles",
-        }),
-      ])
-    );
+    expect(fields).toEqual([]);
   });
 
   it("merges duplicate scoped fields when one has a display name and another has nested children", () => {
