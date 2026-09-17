@@ -10,7 +10,7 @@ const previewImageFilenames = new Set([
   "preview.jpeg",
   "preview.webp",
 ]);
-const maxPreviewImageSizeBytes = 20 * 1024 * 1024;
+const maxPreviewImageSizeBytes = 1024 * 1024;
 
 /** validateApi validates files that are only consumed by the Section Library API. */
 export const validateApi = (
@@ -50,7 +50,7 @@ export const validateApi = (
         issues.push({
           category: "api",
           filePath: path.relative(rootDir, previewImagePath),
-          message: "Layout preview images must be 20 MiB or smaller.",
+          message: "Layout preview images must be 1 MiB or smaller.",
           rule: "layouts/preview-image",
         });
       }

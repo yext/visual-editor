@@ -29,7 +29,7 @@ describe("validateApi", () => {
     const rootDir = createValidApiFiles();
     const imagePath = previewImagePath(rootDir, "preview.png");
     fs.ensureFileSync(imagePath);
-    fs.truncateSync(imagePath, 20 * 1024 * 1024 + 1);
+    fs.truncateSync(imagePath, 1024 * 1024 + 1);
 
     expect(validateApi(rootDir).issues).toEqual([
       expect.objectContaining({
