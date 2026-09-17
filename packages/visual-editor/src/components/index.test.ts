@@ -56,8 +56,8 @@ describe("OOTB color controls", () => {
     expectSiteColorField(
       (CTAWrapper.fields as any).styles.objectFields.textColor
     );
-    expectSiteColorField(
-      (CTAGroup.fields as any).buttons.arrayFields.textColor
+    expect((CTAGroup.fields as any).buttons.arrayFields.textColor.type).toBe(
+      "custom"
     );
     expectSiteColorField((GetDirections.fields as any).textColor);
     expectSiteColorField(

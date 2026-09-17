@@ -1,4 +1,4 @@
-import { PuckComponent, setDeep } from "@puckeditor/core";
+import { createUsePuck, PuckComponent, setDeep } from "@puckeditor/core";
 import { ThemeColor, ThemeOptions } from "../../utils/themeConfigOptions.ts";
 import { CTA } from "../atoms/cta.tsx";
 import { PresetImageType } from "../../types/types.ts";
@@ -13,8 +13,10 @@ import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
 import {
   toPuckFields,
   YextComponentConfig,
+  YextCustomFieldRenderProps,
   YextFields,
 } from "../../fields/fields.ts";
+import { YextAutoField } from "../../fields/YextAutoField.tsx";
 
 // TODO: re-enable CTA Group
 
@@ -51,6 +53,47 @@ export interface CTAGroupProps {
   buttons: BasicCTAProps[];
 }
 
+const usePuck = createUsePuck();
+
+const CTAGroupTextColorField = ({
+  name,
+  value,
+  onChange,
+  readOnly,
+}: YextCustomFieldRenderProps<ThemeColor | undefined>): JSX.Element | null => {
+  const button = usePuck((state) => {
+    const itemSelector = state.appState.ui.itemSelector;
+    const buttonIndex = /^buttons\[(\d+)\]\.textColor$/.exec(name)?.[1];
+    const buttons = itemSelector
+      ? state.getItemBySelector(itemSelector)?.props.buttons
+      : undefined;
+
+    return buttonIndex !== undefined && Array.isArray(buttons)
+      ? (buttons[Number(buttonIndex)] as BasicCTAProps)
+      : undefined;
+  });
+
+  if (
+    button?.variant !== "primary" ||
+    getCTAType(button.entityField).ctaType === "presetImage"
+  ) {
+    return null;
+  }
+
+  return (
+    <YextAutoField
+      field={{
+        type: "basicSelector",
+        label: msg("fields.textColor", "Text Color"),
+        options: "SITE_COLOR",
+      }}
+      value={value}
+      onChange={onChange}
+      readOnly={readOnly}
+    />
+  );
+};
+
 const ctaGroupFields: YextFields<CTAGroupProps> = {
   buttons: {
     type: "array",
@@ -86,9 +129,11 @@ const ctaGroupFields: YextFields<CTAGroupProps> = {
         options: "SITE_COLOR",
       },
       textColor: {
-        type: "basicSelector",
+        type: "custom",
         label: msg("fields.textColor", "Text Color"),
-        options: "SITE_COLOR",
+        render: (props: YextCustomFieldRenderProps<ThemeColor | undefined>) => (
+          <CTAGroupTextColorField {...props} />
+        ),
       },
     },
     getItemSummary: (_: BasicCTAProps, i?: number) =>
