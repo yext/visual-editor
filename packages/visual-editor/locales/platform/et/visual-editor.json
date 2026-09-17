@@ -275,6 +275,7 @@
     "key": "Võti",
     "keywordsDisplayName": "Märksõnad Kuvatav nimi",
     "label": "Silt",
+    "labelColor": "Sildi värv",
     "latitude": "Laius",
     "limit": "Piiranguid",
     "link": "Link",

@@ -275,6 +275,7 @@
     "key": "キー",
     "keywordsDisplayName": "キーワードの表示名",
     "label": "ラベル",
+    "labelColor": "ラベルの色",
     "latitude": "緯度",
     "limit": "制限",
     "link": "リンク",

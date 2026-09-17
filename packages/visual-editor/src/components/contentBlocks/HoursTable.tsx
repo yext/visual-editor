@@ -10,6 +10,8 @@ import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { Body } from "../atoms/body.tsx";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
+import { ThemeColor } from "../../utils/themeConfigOptions.ts";
+import { getTextColorClass, getTextColorStyle } from "../../utils/colors.ts";
 
 /** Props for the HoursTable component. */
 export interface HoursTableProps {
@@ -29,6 +31,8 @@ export interface HoursTableProps {
     showAdditionalHoursText: boolean;
     /** Alignment of the text in the hours table */
     alignment: "items-start" | "items-center";
+    /** The color of the hours text. */
+    textColor?: ThemeColor;
   };
 }
 
@@ -96,6 +100,11 @@ export const hoursTableFields: YextFields<HoursTableProps> = {
           },
         ],
       },
+      textColor: {
+        type: "basicSelector",
+        label: msg("fields.textColor", "Text Color"),
+        options: "SITE_COLOR",
+      },
     },
   },
 };
@@ -112,7 +121,10 @@ const VisualEditorHoursTable: PuckComponent<HoursTableProps> = (props) => {
   };
 
   return hours || comingSoon ? (
-    <div className={`flex flex-col ${styles.alignment}`}>
+    <div
+      className={`flex flex-col ${styles.alignment} ${getTextColorClass(styles.textColor) ?? ""}`}
+      style={getTextColorStyle(styles.textColor)}
+    >
       <EntityField
         displayName={pt("hours", "Hours")}
         fieldId="hours"

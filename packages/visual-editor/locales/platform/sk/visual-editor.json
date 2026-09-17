@@ -275,6 +275,7 @@
     "key": "kľúč",
     "keywordsDisplayName": "Zobrazovaný názov kľúčových slov",
     "label": "Štítok",
+    "labelColor": "Farba štítka",
     "latitude": "Šírka",
     "limit": "Obmedzenie",
     "link": "Prepojiť",

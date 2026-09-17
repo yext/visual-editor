@@ -66,6 +66,8 @@ export type NearbyLocationCardsWrapperProps = {
      * @defaultValue inherited from theme
      */
     color?: ThemeColor;
+    /** The color of card body text. */
+    textColor?: ThemeColor;
     /** Styling for the hours display on each card. */
     hours: {
       /** Whether to display the current status ("Open Now" or "Closed") */
@@ -165,6 +167,11 @@ const nearbyLocationCardsWrapperFields: YextFields<NearbyLocationCardsWrapperPro
         color: {
           type: "basicSelector",
           label: msg("fields.cardTitleColor", "Card Title Color"),
+          options: "SITE_COLOR",
+        },
+        textColor: {
+          type: "basicSelector",
+          label: msg("fields.textColor", "Text Color"),
           options: "SITE_COLOR",
         },
         hours: {

@@ -275,6 +275,7 @@
     "key": "Clé",
     "keywordsDisplayName": "Nom d'affichage des mots clés",
     "label": "Étiquette",
+    "labelColor": "Couleur de l'étiquette",
     "latitude": "Latitude",
     "limit": "Limite",
     "link": "Lien",

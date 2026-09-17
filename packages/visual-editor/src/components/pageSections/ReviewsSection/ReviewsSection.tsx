@@ -7,7 +7,11 @@ import {
   type ThemeColor,
   ThemeOptions,
 } from "../../../utils/themeConfigOptions.ts";
-import { getThemeColorCssValue } from "../../../utils/colors.ts";
+import {
+  getTextColorClass,
+  getTextColorStyle,
+  getThemeColorCssValue,
+} from "../../../utils/colors.ts";
 import { Body } from "../../atoms/body.tsx";
 import { Button } from "../../atoms/button.tsx";
 import { getAggregateRating, ReviewStars } from "../../atoms/reviewStars.tsx";
@@ -66,6 +70,9 @@ export interface ReviewsSectionProps {
      * Accent color used for show more/show less and pagination controls.
      */
     accentColor?: ThemeColor;
+
+    /** The color of review body text. */
+    textColor?: ThemeColor;
 
     /**
      * Whether to show the section heading.
@@ -147,6 +154,11 @@ const reviewsFields: YextFields<ReviewsSectionProps> = {
         label: msg("fields.accentColor", "Accent Color"),
         options: "SITE_COLOR",
       },
+      textColor: {
+        type: "basicSelector",
+        label: msg("fields.textColor", "Text Color"),
+        options: "SITE_COLOR",
+      },
       showSectionHeading: {
         label: msg("fields.showSectionHeading", "Show Section Heading"),
         type: "radio",
@@ -212,7 +224,8 @@ const ReviewsSectionInternal: PuckComponent<ReviewsSectionProps> = (props) => {
 
   return (
     <PageSection
-      className="flex flex-col gap-12"
+      className={`flex flex-col gap-12 ${getTextColorClass(styles?.textColor) ?? ""}`}
+      style={getTextColorStyle(styles?.textColor)}
       background={styles?.backgroundColor}
     >
       <div className="flex flex-col gap-3">

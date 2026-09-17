@@ -7,10 +7,14 @@ import { TranslatableString } from "../../types/types.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
+import { ThemeColor } from "../../utils/themeConfigOptions.ts";
+import { getTextColorClass, getTextColorStyle } from "../../utils/colors.ts";
 
 export interface TextListProps {
   list: YextEntityField<TranslatableString[]>;
   commaSeparated: boolean;
+  /** The color of the list text. */
+  textColor?: ThemeColor;
 }
 
 export const textListFields: YextFields<TextListProps> = {
@@ -30,11 +34,17 @@ export const textListFields: YextFields<TextListProps> = {
       { label: msg("fields.options.no", "No"), value: false },
     ],
   },
+  textColor: {
+    type: "basicSelector",
+    label: msg("fields.textColor", "Text Color"),
+    options: "SITE_COLOR",
+  },
 };
 
 const TextListComponent: PuckComponent<TextListProps> = ({
   list: textListField,
   commaSeparated,
+  textColor,
   puck,
 }) => {
   const { i18n } = useTranslation();
@@ -58,11 +68,12 @@ const TextListComponent: PuckComponent<TextListProps> = ({
     >
       {resolvedTextList && resolvedTextList.length > 0 ? (
         <ul
-          className={`components text-body-fontSize font-body-fontFamily font-body-fontWeight ${
+          className={`components text-body-fontSize font-body-fontFamily font-body-fontWeight ${getTextColorClass(textColor) ?? ""} ${
             commaSeparated
               ? "flex flex-row flex-wrap list-none"
               : "list-disc list-inside"
           }`}
+          style={getTextColorStyle(textColor)}
         >
           {resolvedTextList.map((text, index) => (
             <li

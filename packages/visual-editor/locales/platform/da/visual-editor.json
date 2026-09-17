@@ -275,6 +275,7 @@
     "key": "Nøgle",
     "keywordsDisplayName": "Søgeord Vist navn",
     "label": "Mærke",
+    "labelColor": "Mærkefarve",
     "latitude": "Breddegrad",
     "limit": "Begrænse",
     "link": "Forbindelse",
