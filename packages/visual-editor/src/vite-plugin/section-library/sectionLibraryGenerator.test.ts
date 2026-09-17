@@ -1089,7 +1089,7 @@ describe("generateSectionLibraryFiles", () => {
       "preview.webp"
     );
     fs.ensureFileSync(oversizedPreviewPath);
-    fs.truncateSync(oversizedPreviewPath, 20 * 1024 * 1024 + 1);
+    fs.truncateSync(oversizedPreviewPath, 1024 * 1024 + 1);
 
     expect(() =>
       generateSectionLibraryFiles(
