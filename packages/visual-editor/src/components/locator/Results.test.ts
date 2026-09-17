@@ -4,13 +4,20 @@ import { describe, expect, it, vi } from "vitest";
 import { DEFAULT_LOCATOR_RESULT_CARD_PROPS } from "./LocatorResultCard.tsx";
 import { ResultCardPropsField } from "./Results.tsx";
 
-vi.mock("../../hooks/useDocument.tsx", () => ({
+vi.mock("../../hooks/useDocument.tsx", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../../hooks/useDocument.tsx")>()),
   useDocument: () => ({}),
 }));
 
-vi.mock("../../internal/hooks/useMessageReceivers.ts", () => ({
-  useTemplateMetadata: () => ({ locatorDisplayFields: {} }),
-}));
+vi.mock(
+  "../../internal/hooks/useMessageReceivers.ts",
+  async (importOriginal) => ({
+    ...(await importOriginal<
+      typeof import("../../internal/hooks/useMessageReceivers.ts")
+    >()),
+    useTemplateMetadata: () => ({ locatorDisplayFields: {} }),
+  })
+);
 
 vi.mock("../../utils/locatorEntityTypes.ts", async (importOriginal) => ({
   ...(await importOriginal<

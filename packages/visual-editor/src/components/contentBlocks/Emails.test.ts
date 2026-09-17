@@ -3,7 +3,8 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { Emails, EmailsProps } from "./Emails.tsx";
 
-vi.mock("../../hooks/useDocument.tsx", () => ({
+vi.mock("../../hooks/useDocument.tsx", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../../hooks/useDocument.tsx")>()),
   useDocument: () => ({}),
 }));
 

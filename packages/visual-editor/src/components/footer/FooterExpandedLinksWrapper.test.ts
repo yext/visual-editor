@@ -6,11 +6,13 @@ import {
   FooterExpandedLinksWrapperProps,
 } from "./FooterExpandedLinksWrapper.tsx";
 
-vi.mock("../../hooks/useDocument.tsx", () => ({
+vi.mock("../../hooks/useDocument.tsx", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../../hooks/useDocument.tsx")>()),
   useDocument: () => ({}),
 }));
 
-vi.mock("../../hooks/useBackground.tsx", () => ({
+vi.mock("../../hooks/useBackground.tsx", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../../hooks/useBackground.tsx")>()),
   useBackground: () => ({ isDarkColor: false }),
 }));
 
