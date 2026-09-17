@@ -275,6 +275,7 @@
     "key": "Atslēga",
     "keywordsDisplayName": "Atslēgvārdi Parādāmais nosaukums",
     "label": "Etiķete",
+    "labelColor": "Etiķetes krāsa",
     "latitude": "Platums",
     "limit": "Ierobežot",
     "link": "Saite",

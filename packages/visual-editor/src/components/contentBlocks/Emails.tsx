@@ -20,6 +20,7 @@ import {
   YextComponentConfig,
   YextFields,
 } from "../../fields/fields.ts";
+import { getTextColorClass, getTextColorStyle } from "../../utils/colors.ts";
 
 export interface EmailsProps {
   data: {
@@ -31,6 +32,8 @@ export interface EmailsProps {
     showIcon?: boolean;
     /** The color applied to both the email icon background and the email link. */
     color?: ThemeColor;
+    /** The color of the email icon. */
+    iconColor?: ThemeColor;
   };
 
   /** @internal Event name to be used for click analytics */
@@ -82,6 +85,11 @@ export const EmailsFields: YextFields<EmailsProps> = {
         label: msg("fields.color", "Color"),
         options: "SITE_COLOR",
       },
+      iconColor: {
+        type: "basicSelector",
+        label: msg("fields.iconColor", "Icon Color"),
+        options: "SITE_COLOR",
+      },
     },
   },
 };
@@ -126,7 +134,10 @@ const EmailsComponent: PuckComponent<EmailsProps> = (props) => {
                 background={styles?.color ?? backgroundColors.background2.value}
                 className="h-10 w-10 shrink-0 flex justify-center rounded-full items-center"
               >
-                <FaRegEnvelope className="w-4 h-4" />
+                <FaRegEnvelope
+                  className={`w-4 h-4 ${getTextColorClass(styles?.iconColor) ?? ""}`}
+                  style={getTextColorStyle(styles?.iconColor)}
+                />
               </Background>
             )}
             <CTA

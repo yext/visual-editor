@@ -275,6 +275,7 @@
     "key": "Raktas",
     "keywordsDisplayName": "Raktiniai žodžiai Rodomas pavadinimas",
     "label": "Etiketė",
+    "labelColor": "Etiketės spalva",
     "latitude": "Platuma",
     "limit": "Limit",
     "link": "Nuoroda",

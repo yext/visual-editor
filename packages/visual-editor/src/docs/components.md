@@ -11,10 +11,10 @@ Props for the Address component
 
 #### Other Props
 
-| Prop     | Type                                                                                                                           | Description | Default |
-| :------- | :----------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
-| `data`   | `{ address: YextEntityField<AddressType>; }`                                                                                   |             |         |
-| `styles` | `{ showRegion?: boolean; showCountry?: boolean; showGetDirectionsLink: boolean; ctaVariant: CTAVariant; color?: ThemeColor; }` |             |         |
+| Prop     | Type                                                                                                                                                                              | Description | Default |
+| :------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ address: YextEntityField<AddressType>; }`                                                                                                                                      |             |         |
+| `styles` | `{ showRegion?: boolean; showCountry?: boolean; showGetDirectionsLink: boolean; ctaVariant: CTAVariant; color?: ThemeColor; textColor?: ThemeColor; ctaTextColor?: ThemeColor; }` |             |         |
 
 ---
 
@@ -99,9 +99,10 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 #### Other Props
 
-| Prop   | Type                            | Description | Default |
-| :----- | :------------------------------ | :---------- | :------ |
-| `data` | `{ text: TranslatableString; }` |             |         |
+| Prop        | Type                            | Description                      | Default |
+| :---------- | :------------------------------ | :------------------------------- | :------ |
+| `data`      | `{ text: TranslatableString; }` |                                  |         |
+| `textColor` | `ThemeColor`                    | The color of the copyright text. |         |
 
 ---
 
@@ -156,7 +157,7 @@ Additional CSS classes to apply to the CTA.
 | :---------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------ | :------ |
 | `className` | `string`                                                                                                                                                                                                                                                                     | Additional CSS classes to apply to the CTA. |         |
 | `data`      | `{ show?: boolean; actionType?: "link" \| "button"; normalizeLink: boolean; entityField: YextCTAField; buttonText?: TranslatableString; customId?: string; customClass?: string; dataAttributes?: Array<{ key: string; value: string; }>; ariaLabel?: TranslatableString; }` |                                             |         |
-| `styles`    | `{ variant: CTAVariant; presetImage?: PresetImageType; color?: ThemeColor; }`                                                                                                                                                                                                |                                             |         |
+| `styles`    | `{ variant: CTAVariant; presetImage?: PresetImageType; color?: ThemeColor; textColor?: ThemeColor; }`                                                                                                                                                                        |                                             |         |
 
 ---
 
@@ -207,10 +208,10 @@ This object contains properties for customizing the component's appearance.
 
 #### Other Props
 
-| Prop     | Type                                                               | Description | Default |
-| :------- | :----------------------------------------------------------------- | :---------- | :------ |
-| `data`   | `{ list: YextEntityField<string[]>; }`                             |             |         |
-| `styles` | `{ listLength?: number; showIcon?: boolean; color?: ThemeColor; }` |             |         |
+| Prop     | Type                                                                                       | Description | Default |
+| :------- | :----------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ list: YextEntityField<string[]>; }`                                                     |             |         |
+| `styles` | `{ listLength?: number; showIcon?: boolean; color?: ThemeColor; iconColor?: ThemeColor; }` |             |         |
 
 ---
 
@@ -477,10 +478,10 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 #### Other Props
 
-| Prop     | Type                                                                                                                                                                                   | Description | Default |
-| :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
-| `data`   | `{ hours: YextEntityField<HoursType>; }`                                                                                                                                               |             |         |
-| `styles` | `{ showCurrentStatus?: boolean; timeFormat?: "12h" \| "24h"; dayOfWeekFormat?: "short" \| "long"; showDayNames?: boolean; className?: string; bodyVariant?: "lg" \| "base" \| "sm"; }` |             |         |
+| Prop     | Type                                                                                                                                                                                                           | Description | Default |
+| :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ hours: YextEntityField<HoursType>; }`                                                                                                                                                                       |             |         |
+| `styles` | `{ showCurrentStatus?: boolean; timeFormat?: "12h" \| "24h"; dayOfWeekFormat?: "short" \| "long"; showDayNames?: boolean; className?: string; bodyVariant?: "lg" \| "base" \| "sm"; textColor?: ThemeColor; }` |             |         |
 
 ---
 
@@ -492,10 +493,10 @@ Props for the HoursTable component.
 
 #### Other Props
 
-| Prop     | Type                                                                                                                                                     | Description | Default |
-| :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
-| `data`   | `{ hours: YextEntityField<HoursType>; }`                                                                                                                 |             |         |
-| `styles` | `{ startOfWeek: keyof DayOfWeekNames \| "today"; collapseDays: boolean; showAdditionalHoursText: boolean; alignment: "items-start" \| "items-center"; }` |             |         |
+| Prop     | Type                                                                                                                                                                             | Description | Default |
+| :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ hours: YextEntityField<HoursType>; }`                                                                                                                                         |             |         |
+| `styles` | `{ startOfWeek: keyof DayOfWeekNames \| "today"; collapseDays: boolean; showAdditionalHoursText: boolean; alignment: "items-start" \| "items-center"; textColor?: ThemeColor; }` |             |         |
 
 ---
 
@@ -600,10 +601,10 @@ The props for the Phone component
 
 #### Other Props
 
-| Prop     | Type                                                                                                                         | Description | Default |
-| :------- | :--------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
-| `data`   | `{ number: YextEntityField<string>; label: TranslatableString; }`                                                            |             |         |
-| `styles` | `{ phoneFormat: "domestic" \| "international"; includePhoneHyperlink: boolean; includeIcon?: boolean; color?: ThemeColor; }` |             |         |
+| Prop     | Type                                                                                                                                                                          | Description | Default |
+| :------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ number: YextEntityField<string>; label: TranslatableString; }`                                                                                                             |             |         |
+| `styles` | `{ phoneFormat: "domestic" \| "international"; includePhoneHyperlink: boolean; includeIcon?: boolean; color?: ThemeColor; labelColor?: ThemeColor; iconColor?: ThemeColor; }` |             |         |
 
 ---
 
@@ -772,9 +773,9 @@ The Reviews Section displays customer reviews fetched dynamically from the Yext 
 
 This object contains properties for customizing the component's appearance.
 
-| Prop     | Type                                                                                       | Description                                                                 | Default |
-| :------- | :----------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
-| `styles` | `{ backgroundColor?: ThemeColor; accentColor?: ThemeColor; showSectionHeading: boolean; }` | This object contains properties for customizing the component's appearance. |         |
+| Prop     | Type                                                                                                               | Description                                                                 | Default |
+| :------- | :----------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: ThemeColor; accentColor?: ThemeColor; textColor?: ThemeColor; showSectionHeading: boolean; }` | This object contains properties for customizing the component's appearance. |         |
 
 #### Other Props
 
@@ -889,10 +890,11 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 #### Other Props
 
-| Prop             | Type                                    | Description | Default |
-| :--------------- | :-------------------------------------- | :---------- | :------ |
-| `commaSeparated` | `boolean`                               |             |         |
-| `list`           | `YextEntityField<TranslatableString[]>` |             |         |
+| Prop             | Type                                    | Description                 | Default |
+| :--------------- | :-------------------------------------- | :-------------------------- | :------ |
+| `commaSeparated` | `boolean`                               |                             |         |
+| `list`           | `YextEntityField<TranslatableString[]>` |                             |         |
+| `textColor`      | `ThemeColor`                            | The color of the list text. |         |
 
 ---
 

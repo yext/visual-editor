@@ -275,6 +275,7 @@
     "key": "钥匙",
     "keywordsDisplayName": "关键词显示名称",
     "label": "标签",
+    "labelColor": "标签颜色",
     "latitude": "纬度",
     "limit": "限制",
     "link": "关联",

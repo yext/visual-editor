@@ -275,6 +275,7 @@
     "key": "Nyckel",
     "keywordsDisplayName": "Sökord Visningsnamn",
     "label": "Märka",
+    "labelColor": "Etikettfärg",
     "latitude": "Latitud",
     "limit": "Begränsa",
     "link": "Länk",

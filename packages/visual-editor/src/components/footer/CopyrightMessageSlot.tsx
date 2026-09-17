@@ -8,11 +8,14 @@ import { TranslatableString } from "../../types/types.ts";
 import { Body } from "../atoms/body.tsx";
 import { useTranslation } from "react-i18next";
 import { YextComponentConfig } from "../../fields/fields.ts";
+import { ThemeColor } from "../../utils/themeConfigOptions.ts";
 
 export interface CopyrightMessageSlotProps {
   data: {
     text: TranslatableString;
   };
+  /** The color of the copyright text. */
+  textColor?: ThemeColor;
   /** @internal */
   desktopContentAlignment?: "left" | "center" | "right";
   /** @internal */
@@ -46,6 +49,7 @@ const CopyrightMessageSlotInternal: PuckComponent<CopyrightMessageSlotProps> = (
     puck,
     desktopContentAlignment = "left",
     mobileContentAlignment = "left",
+    textColor,
   } = props;
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
@@ -59,6 +63,7 @@ const CopyrightMessageSlotInternal: PuckComponent<CopyrightMessageSlotProps> = (
   return resolvedText ? (
     <Body
       variant="xs"
+      color={textColor}
       className={copyrightAlignment({
         desktopContentAlignment,
         mobileContentAlignment,
@@ -95,6 +100,11 @@ export const CopyrightMessageSlot: YextComponentConfig<CopyrightMessageSlotProps
             filter: { types: ["type.string"] },
           },
         },
+      },
+      textColor: {
+        type: "basicSelector",
+        label: msg("fields.textColor", "Text Color"),
+        options: "SITE_COLOR",
       },
     },
     defaultProps: defaultCopyrightMessageSlotProps,

@@ -275,6 +275,7 @@
     "key": "鍵",
     "keywordsDisplayName": "關鍵字顯示名稱",
     "label": "標籤",
+    "labelColor": "標籤顏色",
     "latitude": "緯度",
     "limit": "限制",
     "link": "鏈接",

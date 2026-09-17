@@ -46,6 +46,8 @@ export interface CTAWrapperProps {
     /** The image to use if the CTA is set to preset image */
     presetImage?: PresetImageType;
     color?: ThemeColor;
+    /** The text and icon color for the primary variant. */
+    textColor?: ThemeColor;
   };
 
   /** Additional CSS classes to apply to the CTA. */
@@ -165,6 +167,11 @@ const ctaWrapperFields: YextFields<CTAWrapperProps> = {
         label: msg("fields.color", "Color"),
         options: "SITE_COLOR",
       },
+      textColor: {
+        type: "basicSelector",
+        label: msg("fields.textColor", "Text Color"),
+        options: "SITE_COLOR",
+      },
     },
   },
 };
@@ -264,6 +271,7 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
       }
       eventName={eventName}
       color={styles.color}
+      textColor={styles.textColor}
       id={data.customId}
       ariaLabel={actionType === "button" ? resolvedAriaLabel : undefined}
       dataAttributes={dataAttributeProps}
@@ -350,6 +358,11 @@ export const CTAWrapper: YextComponentConfig<CTAWrapperProps> = {
     const showColor =
       isCtaVariantWithColor(ctaVariant) && effectiveCtaType !== "presetImage";
     setDeep(updatedFields, "styles.objectFields.color.visible", showColor);
+    setDeep(
+      updatedFields,
+      "styles.objectFields.textColor.visible",
+      ctaVariant === "primary" && effectiveCtaType !== "presetImage"
+    );
 
     if (data.props.parentData) {
       return updatedFields;

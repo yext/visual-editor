@@ -275,6 +275,7 @@
     "key": "Sleutel",
     "keywordsDisplayName": "Trefwoorden Weergavenaam",
     "label": "Label",
+    "labelColor": "Labelkleur",
     "latitude": "Breedte",
     "limit": "Beperken",
     "link": "Link",
