@@ -230,7 +230,7 @@ export interface LocatorResultCardProps {
     normalizeLink: boolean;
     /** The variant for the primary CTA */
     variant: CTAVariant;
-    /** The text and icon color for the primary variant. */
+    /** The text and icon color for the primary variant of the primary CTA. */
     textColor?: ThemeColor;
     /** Whether the primary CTA is visible in live mode */
     liveVisibility: boolean;
@@ -248,7 +248,7 @@ export interface LocatorResultCardProps {
     normalizeLink: boolean;
     /** The variant for the secondary CTA */
     variant: CTAVariant;
-    /** The text and icon color for the primary variant. */
+    /** The text and icon color for the primary variant of the secondary CTA. */
     textColor?: ThemeColor;
     /** Whether the secondary CTA is visible in live mode */
     liveVisibility: boolean;

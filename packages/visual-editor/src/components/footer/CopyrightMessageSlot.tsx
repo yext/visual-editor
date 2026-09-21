@@ -14,8 +14,10 @@ export interface CopyrightMessageSlotProps {
   data: {
     text: TranslatableString;
   };
-  /** The color of the copyright text. */
-  textColor?: ThemeColor;
+  styles?: {
+    /** The color of the copyright text. */
+    textColor?: ThemeColor;
+  };
   /** @internal */
   desktopContentAlignment?: "left" | "center" | "right";
   /** @internal */
@@ -49,7 +51,7 @@ const CopyrightMessageSlotInternal: PuckComponent<CopyrightMessageSlotProps> = (
     puck,
     desktopContentAlignment = "left",
     mobileContentAlignment = "left",
-    textColor,
+    styles,
   } = props;
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
@@ -63,7 +65,7 @@ const CopyrightMessageSlotInternal: PuckComponent<CopyrightMessageSlotProps> = (
   return resolvedText ? (
     <Body
       variant="xs"
-      color={textColor}
+      color={styles?.textColor}
       className={copyrightAlignment({
         desktopContentAlignment,
         mobileContentAlignment,
@@ -82,6 +84,7 @@ export const defaultCopyrightMessageSlotProps: CopyrightMessageSlotProps = {
   data: {
     text: { defaultValue: "" },
   },
+  styles: {},
   desktopContentAlignment: "left",
   mobileContentAlignment: "left",
 };
@@ -101,10 +104,16 @@ export const CopyrightMessageSlot: YextComponentConfig<CopyrightMessageSlotProps
           },
         },
       },
-      textColor: {
-        type: "basicSelector",
-        label: msg("fields.textColor", "Text Color"),
-        options: "SITE_COLOR",
+      styles: {
+        type: "object",
+        label: msg("fields.styles", "Styles"),
+        objectFields: {
+          textColor: {
+            type: "basicSelector",
+            label: msg("fields.textColor", "Text Color"),
+            options: "SITE_COLOR",
+          },
+        },
       },
     },
     defaultProps: defaultCopyrightMessageSlotProps,
