@@ -99,10 +99,10 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 #### Other Props
 
-| Prop        | Type                            | Description                      | Default |
-| :---------- | :------------------------------ | :------------------------------- | :------ |
-| `data`      | `{ text: TranslatableString; }` |                                  |         |
-| `textColor` | `ThemeColor`                    | The color of the copyright text. |         |
+| Prop     | Type                            | Description | Default |
+| :------- | :------------------------------ | :---------- | :------ |
+| `data`   | `{ text: TranslatableString; }` |             |         |
+| `styles` | `{ textColor?: ThemeColor; }`   |             |         |
 
 ---
 
@@ -890,11 +890,11 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 #### Other Props
 
-| Prop             | Type                                    | Description                 | Default |
-| :--------------- | :-------------------------------------- | :-------------------------- | :------ |
-| `commaSeparated` | `boolean`                               |                             |         |
-| `list`           | `YextEntityField<TranslatableString[]>` |                             |         |
-| `textColor`      | `ThemeColor`                            | The color of the list text. |         |
+| Prop             | Type                                    | Description | Default |
+| :--------------- | :-------------------------------------- | :---------- | :------ |
+| `commaSeparated` | `boolean`                               |             |         |
+| `list`           | `YextEntityField<TranslatableString[]>` |             |         |
+| `styles`         | `{ textColor?: ThemeColor; }`           |             |         |
 
 ---
 
