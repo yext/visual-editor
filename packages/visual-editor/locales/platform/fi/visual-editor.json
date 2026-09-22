@@ -155,6 +155,7 @@
   "distanceLineFromSearch": "<strong>{{distance}}</strong> hausta",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> alkaen {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> sinulta",
+  "email": "Sähköposti",
   "emptyStateFieldEmpty": "Kohteen {{entityType}} kartoitettu kenttä on tyhjä",
   "emptyStateSectionHidden": "Osio piilotettu tälle {{entityType}}",
   "enableCookies": "Ota evästeet käyttöön",

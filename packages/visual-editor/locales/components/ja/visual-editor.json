@@ -1,4 +1,5 @@
 {
+  "address": "住所",
   "aria": {
     "opensInNewTab": "{{label}} (新しいタブで開きます)"
   },
@@ -30,6 +31,7 @@
   "distanceLineFromSearch": "<strong>{{distance}}</strong> 検索から",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> ({{searchLocation}} から)",
   "distanceLineFromYou": "あなたからの<strong>{{distance}}</strong>",
+  "email": "電子メール",
   "enableCookies": "Cookieを有効にする",
   "expandedMenu": "拡張メニュー",
   "filter": "フィルター",

@@ -155,6 +155,7 @@
   "distanceLineFromSearch": "<strong>{{distance}}</strong> 検索から",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> ({{searchLocation}} から)",
   "distanceLineFromYou": "あなたからの<strong>{{distance}}</strong>",
+  "email": "電子メール",
   "emptyStateFieldEmpty": "{{entityType}} のマップされたフィールドが空です",
   "emptyStateSectionHidden": "この {{entityType}} に対して非表示のセクション",
   "enableCookies": "Cookieを有効にする",

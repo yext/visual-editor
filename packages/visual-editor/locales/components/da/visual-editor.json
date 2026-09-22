@@ -1,4 +1,5 @@
 {
+  "address": "Adresse",
   "aria": {
     "opensInNewTab": "{{label}} (åbner i en ny fane)"
   },
@@ -30,6 +31,7 @@
   "distanceLineFromSearch": "<strong>{{distance}}</strong> fra søgning",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> fra {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> fra dig",
+  "email": "E-mail",
   "enableCookies": "Aktiver cookies",
   "expandedMenu": "Udvidet menu",
   "filter": "Filter",

@@ -155,6 +155,7 @@
   "distanceLineFromSearch": "<strong>{{distance}}</strong> no meklēšanas",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> no {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> no jums",
+  "email": "E-pasts",
   "emptyStateFieldEmpty": "{{entityType}} kartētais lauks ir tukšs",
   "emptyStateSectionHidden": "Sadaļa paslēpta šim {{entityType}}",
   "enableCookies": "Iespējot sīkfailus",

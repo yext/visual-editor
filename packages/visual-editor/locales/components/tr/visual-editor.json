@@ -1,4 +1,5 @@
 {
+  "address": "Adres",
   "aria": {
     "opensInNewTab": "{{label}} (yeni bir sekmede açılır)"
   },
@@ -30,6 +31,7 @@
   "distanceLineFromSearch": "Aramadan <strong>{{distance}}</strong>",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong>, {{searchLocation}}'den",
   "distanceLineFromYou": "<strong>{{distance}}</strong> sizden",
+  "email": "E-posta",
   "enableCookies": "Çerezleri Etkinleştir",
   "expandedMenu": "Genişletilmiş menü",
   "filter": "Filtre",

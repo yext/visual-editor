@@ -155,6 +155,7 @@
   "distanceLineFromSearch": "<strong>{{distance}}</strong> otsingust",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> alates {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> teilt",
+  "email": "Meil",
   "emptyStateFieldEmpty": "{{entityType}} kaardistatud väli on tühi",
   "emptyStateSectionHidden": "Selle {{entityType}} jaoks peidetud jaotis",
   "enableCookies": "Luba küpsised",

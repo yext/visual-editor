@@ -1,4 +1,5 @@
 {
+  "address": "Adresas",
   "aria": {
     "opensInNewTab": "{{label}} (atidaroma naujame skirtuke)"
   },
@@ -30,6 +31,7 @@
   "distanceLineFromSearch": "<strong>{{distance}}</strong> iš paieškos",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> nuo {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> nuo jūsų",
+  "email": "El. paštas",
   "enableCookies": "Įgalinti slapukus",
   "expandedMenu": "Išplėstas meniu",
   "filter": "Filtruoti",

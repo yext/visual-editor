@@ -155,6 +155,7 @@
   "distanceLineFromSearch": "来自搜索的 <strong>{{distance}}</strong>",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> 来自 {{searchLocation}}",
   "distanceLineFromYou": "来自您的 <strong>{{distance}}</strong>",
+  "email": "电子邮件",
   "emptyStateFieldEmpty": "{{entityType}} 的映射字段为空",
   "emptyStateSectionHidden": "此 {{entityType}} 的部分已隐藏",
   "enableCookies": "启用 Cookie",

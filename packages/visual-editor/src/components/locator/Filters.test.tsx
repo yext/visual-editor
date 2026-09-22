@@ -1,5 +1,6 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import * as Dialog from "@radix-ui/react-dialog";
 import { describe, expect, it, vi } from "vitest";
 import { FilterModal } from "./Filters.tsx";
 
@@ -97,23 +98,26 @@ vi.mock("@yext/search-ui-react", async () => {
 const renderFilterModal = (
   keywordsDisplayName?: React.ComponentProps<
     typeof FilterModal
-  >["keywordsDisplayName"]
+  >["keywordsDisplayName"],
+  defaultOpen = true
 ) =>
   render(
-    <FilterModal
-      showFilterModal={true}
-      showOpenNowOption={false}
-      isOpenNowSelected={false}
-      showDistanceOptions={false}
-      selectedDistanceOption={null}
-      handleCloseModalClick={vi.fn()}
-      handleOpenNowClick={vi.fn()}
-      handleDistanceClick={vi.fn()}
-      handleClearFiltersClick={vi.fn()}
-      accentColorCssValue="#000"
-      closeButtonRef={React.createRef<HTMLButtonElement>()}
-      keywordsDisplayName={keywordsDisplayName}
-    />
+    <Dialog.Root defaultOpen={defaultOpen} modal>
+      <Dialog.Trigger asChild>
+        <button>Filter</button>
+      </Dialog.Trigger>
+      <FilterModal
+        showOpenNowOption={false}
+        isOpenNowSelected={false}
+        showDistanceOptions={false}
+        selectedDistanceOption={null}
+        handleOpenNowClick={vi.fn()}
+        handleDistanceClick={vi.fn()}
+        handleClearFiltersClick={vi.fn()}
+        accentColorCssValue="#000"
+        keywordsDisplayName={keywordsDisplayName}
+      />
+    </Dialog.Root>
   );
 
 describe("FilterModal", () => {
@@ -143,5 +147,38 @@ describe("FilterModal", () => {
     });
 
     expect(screen.getByTestId("facet-keywords").dataset.label).toBeUndefined();
+  });
+
+  it("moves, traps, and restores focus for the filter dialog", async () => {
+    renderFilterModal(undefined, false);
+
+    const filterButton = screen.getByRole("button", { name: "Filter" });
+    fireEvent.click(filterButton);
+
+    const dialog = screen.getByRole("dialog");
+    const title = screen.getByText("Refine Your Search");
+    const closeButton = screen.getByRole("button", { name: "Close" });
+    const clearAllButton = screen.getByRole("button", { name: "Clear All" });
+    expect(filterButton.getAttribute("aria-controls")).toBe(dialog.id);
+    expect(dialog.getAttribute("aria-labelledby")).toBe(title.id);
+    await waitFor(() => expect(closeButton).toHaveFocus());
+
+    fireEvent.keyDown(closeButton, { key: "Tab", shiftKey: true });
+    expect(clearAllButton).toHaveFocus();
+
+    fireEvent.keyDown(clearAllButton, { key: "Tab" });
+    expect(closeButton).toHaveFocus();
+
+    fireEvent.keyDown(closeButton, { key: "Escape" });
+    await waitFor(() => {
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+      expect(filterButton).toHaveFocus();
+    });
+
+    fireEvent.click(filterButton);
+    const reopenedCloseButton = screen.getByRole("button", { name: "Close" });
+    await waitFor(() => expect(reopenedCloseButton).toHaveFocus());
+    fireEvent.click(reopenedCloseButton);
+    await waitFor(() => expect(filterButton).toHaveFocus());
   });
 });

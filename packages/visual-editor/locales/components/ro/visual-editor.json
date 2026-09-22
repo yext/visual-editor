@@ -1,4 +1,5 @@
 {
+  "address": "Adresa",
   "aria": {
     "opensInNewTab": "{{label}} (se deschide într-o filă nouă)"
   },
@@ -30,6 +31,7 @@
   "distanceLineFromSearch": "<strong>{{distance}}</strong> din căutare",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> din {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> de la tine",
+  "email": "E-mail",
   "enableCookies": "Activați cookie-urile",
   "expandedMenu": "Meniu extins",
   "filter": "Filtra",

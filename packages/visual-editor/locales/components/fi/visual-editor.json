@@ -1,4 +1,5 @@
 {
+  "address": "Osoite",
   "aria": {
     "opensInNewTab": "{{label}} (avautuu uuteen välilehteen)"
   },
@@ -30,6 +31,7 @@
   "distanceLineFromSearch": "<strong>{{distance}}</strong> hausta",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> alkaen {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> sinulta",
+  "email": "Sähköposti",
   "enableCookies": "Ota evästeet käyttöön",
   "expandedMenu": "Laajennettu valikko",
   "filter": "Suodata",
