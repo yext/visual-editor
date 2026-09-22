@@ -28,6 +28,7 @@ export {
   type FAQSectionProps,
   type FAQStyles,
 } from "./FAQsSection/FAQsSection.tsx";
+export { FormSection, type FormSectionProps } from "./FormSection.tsx";
 export {
   HeroSection,
   type HeroSectionProps,
