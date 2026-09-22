@@ -29,6 +29,7 @@ type BasicCTAProps = {
   variant: CTAVariant;
   /** The image to use if the CTA is set to preset image */
   presetImage?: PresetImageType;
+  /** Sets the primary fill, secondary border and text, or link text color. */
   color?: ThemeColor;
   /** The text and icon color for the primary variant. */
   textColor?: ThemeColor;

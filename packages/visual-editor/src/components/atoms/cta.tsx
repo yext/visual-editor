@@ -51,6 +51,7 @@ export type CTAProps = {
     event: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement, MouseEvent>
   ) => void;
   disabled?: boolean;
+  /** Sets the primary fill, secondary border and text, or link text color. */
   color?: ThemeColor;
   /** Overrides the text and icon color for primary CTAs. */
   textColor?: ThemeColor;

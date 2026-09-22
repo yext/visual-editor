@@ -51,6 +51,7 @@ export interface AddressProps {
     /** The variant of the get directions button */
     ctaVariant: CTAVariant;
 
+    /** Sets the directions CTA fill, border, or link text color. */
     color?: ThemeColor;
 
     /** The color of the address text. */

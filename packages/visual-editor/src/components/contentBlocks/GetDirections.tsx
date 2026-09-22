@@ -9,6 +9,7 @@ import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export type GetDirectionsProps = {
   variant: CTAVariant;
+  /** Sets the primary fill, secondary border and text, or link text color. */
   color?: ThemeColor;
   /** The text and icon color for the primary variant. */
   textColor?: ThemeColor;
