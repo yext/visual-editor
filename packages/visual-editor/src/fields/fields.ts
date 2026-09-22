@@ -17,6 +17,7 @@ import type { CTASelectorField } from "./CTASelectorField.tsx";
 import type { MultiSelectorField } from "./MultiSelectorField.tsx";
 import type { OptionalNumberField } from "./OptionalNumberField.tsx";
 import type { ImageField } from "./ImageField.tsx";
+import type { TestImageField } from "./TestImageField.tsx";
 import type { StyledButtonField } from "./styledFields/StyledButtonField.tsx";
 import type { StyledImageField } from "./styledFields/StyledImageField.tsx";
 import type { StyledLinkField } from "./styledFields/StyledLinkField.tsx";
@@ -27,6 +28,19 @@ import type { VideoField } from "./VideoField.tsx";
 import type { ComprehensiveCTAField } from "./styledFields/ComprehensiveCTAField.tsx";
 import { YextAutoField } from "./YextAutoField.tsx";
 import { adaptYextFieldMap } from "./yextFieldAdapter.ts";
+
+export type TestEntityField = Omit<EntityFieldSelectorField<any>, "type"> & {
+  type: "testEntityField";
+  output?: "plainText";
+};
+
+export type TestRichTextField = Omit<EntityFieldSelectorField<any>, "type"> & {
+  type: "testRichText";
+};
+
+export type TestCTAField = Omit<CTASelectorField, "type"> & {
+  type: "testCTA";
+};
 
 export type YextPuckFields = {
   basicSelector: BasicSelectorField;
@@ -44,6 +58,10 @@ export type YextPuckFields = {
   styledLink: StyledLinkField;
   styledPageSection: StyledPageSectionField;
   styledText: StyledTextField;
+  testCTA: TestCTAField;
+  testEntityField: TestEntityField;
+  testImage: TestImageField;
+  testRichText: TestRichTextField;
   translatableString: TranslatableStringField;
   video: VideoField;
 };

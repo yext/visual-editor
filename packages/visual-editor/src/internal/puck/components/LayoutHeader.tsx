@@ -17,6 +17,7 @@ import {
 } from "../ui/Tooltip.tsx";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { EntityFieldsToggle } from "../ui/EntityFieldsToggle.tsx";
+import { DynamicConfigControls } from "./DynamicConfigControls.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
 import { LayoutApprovalModal } from "../../components/modals/LayoutApprovalModal.tsx";
 import { TemplateMetadata } from "../../types/templateMetadata.ts";
@@ -233,6 +234,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
             className="ve-mx-4 ve-h-7 ve-w-px ve-bg-gray-300 ve-my-auto"
           />
           <EntityFieldsToggle />
+          <DynamicConfigControls localDev={localDev} />
           {localDev && (
             <LocalDevOverrideButtons
               sectionLibraryMigrationRegistry={sectionLibraryMigrationRegistry}
