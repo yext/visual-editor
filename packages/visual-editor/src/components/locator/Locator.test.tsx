@@ -1398,6 +1398,7 @@ describe("Locator", async () => {
 
     const results = await axe(container);
     logSuppressedWcagViolations(results);
+    expect(results).toHaveNoViolations();
   });
 
   it("flattens wrapped result card selector fields during migration", () => {
