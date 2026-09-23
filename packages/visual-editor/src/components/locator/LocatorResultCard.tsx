@@ -149,6 +149,9 @@ export interface LocatorResultCardProps {
   /** The accent color used for icon backgrounds and contact/action links. */
   accentColor?: ThemeColor;
 
+  /** The color of result card body text. */
+  textColor?: ThemeColor;
+
   /** Settings for the hours block */
   hours: {
     /** The field from the data to use for the hours */
@@ -227,6 +230,8 @@ export interface LocatorResultCardProps {
     normalizeLink: boolean;
     /** The variant for the primary CTA */
     variant: CTAVariant;
+    /** The text and icon color for the primary variant of the primary CTA. */
+    textColor?: ThemeColor;
     /** Whether the primary CTA is visible in live mode */
     liveVisibility: boolean;
     /** Static URL to use for primary CTA when an entity page URL is not found */
@@ -243,6 +248,8 @@ export interface LocatorResultCardProps {
     normalizeLink: boolean;
     /** The variant for the secondary CTA */
     variant: CTAVariant;
+    /** The text and icon color for the primary variant of the secondary CTA. */
+    textColor?: ThemeColor;
     /** Whether the secondary CTA is visible in live mode */
     liveVisibility: boolean;
   };
@@ -565,6 +572,11 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
         label: msg("fields.accentColor", "Accent Color"),
         options: "SITE_COLOR",
       },
+      textColor: {
+        type: "basicSelector",
+        label: msg("fields.textColor", "Text Color"),
+        options: "SITE_COLOR",
+      },
       hours: {
         label: msg("fields.hours", "Hours"),
         type: "object",
@@ -712,6 +724,11 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
             type: "radio",
             options: ThemeOptions.CTA_VARIANT,
           },
+          textColor: {
+            type: "basicSelector",
+            label: msg("fields.textColor", "Text Color"),
+            options: "SITE_COLOR",
+          },
           liveVisibility: {
             label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
             type: "radio",
@@ -767,6 +784,11 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
             label: msg("fields.ctaVariant", "CTA Variant"),
             type: "radio",
             options: ThemeOptions.CTA_VARIANT,
+          },
+          textColor: {
+            type: "basicSelector",
+            label: msg("fields.textColor", "Text Color"),
+            options: "SITE_COLOR",
           },
           liveVisibility: {
             label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
@@ -960,8 +982,11 @@ export const LocatorResultCard = React.memo(
     return (
       <Background
         background={backgroundColors.background1.value}
-        className="container flex flex-row border-b border-gray-300 p-4 md:p-6 lg:p-8 gap-4"
-        style={isSelected ? { backgroundColor: "#F9F9F9" } : undefined}
+        className={`container flex flex-row border-b border-gray-300 p-4 md:p-6 lg:p-8 gap-4 ${getTextColorClass(props.textColor) ?? ""}`}
+        style={{
+          ...(isSelected ? { backgroundColor: "#F9F9F9" } : {}),
+          ...getTextColorStyle(props.textColor),
+        }}
       >
         <div className="flex flex-wrap gap-4 w-full">
           <div className="w-full flex flex-col gap-4">
@@ -1109,6 +1134,7 @@ export const LocatorResultCard = React.memo(
                   ) || t("callToAction", "Call to Action")
                 }
                 variant={props.secondaryCTA.variant}
+                textColor={props.secondaryCTA.textColor}
                 normalizeLink={props.secondaryCTA.normalizeLink}
                 onClick={handleSecondaryCTAClick}
                 className="basis-full sm:w-auto justify-center"
@@ -1177,6 +1203,7 @@ const PrimaryCTA = (props: {
           defaultValue: "Visit Page for {{name}}",
         })}
         variant={primaryCTA.variant}
+        textColor={primaryCTA.textColor}
         normalizeLink={primaryCTA.normalizeLink}
         onClick={handlePrimaryCtaClick}
         className="basis-full sm:w-auto justify-center"

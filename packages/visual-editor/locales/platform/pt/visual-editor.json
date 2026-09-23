@@ -275,6 +275,7 @@
     "key": "Chave",
     "keywordsDisplayName": "Nome de exibição de palavras-chave",
     "label": "Rótulo",
+    "labelColor": "Cor do rótulo",
     "latitude": "Latitude",
     "limit": "Limite",
     "link": "Link",

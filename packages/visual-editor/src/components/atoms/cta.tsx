@@ -51,7 +51,10 @@ export type CTAProps = {
     event: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement, MouseEvent>
   ) => void;
   disabled?: boolean;
+  /** Sets the primary fill, secondary border and text, or link text color. */
   color?: ThemeColor;
+  /** Overrides the text and icon color for primary CTAs. */
+  textColor?: ThemeColor;
   openInNewTab?: boolean;
   /**
    * When true and variant is "link", applies vertical padding (py-3) to the CTA.
@@ -241,6 +244,7 @@ export const CTA = (props: CTAProps) => {
     onClick,
     disabled = false,
     color,
+    textColor,
     openInNewTab = false,
     setPadding = false,
     actionType = "link",
@@ -296,13 +300,14 @@ export const CTA = (props: CTAProps) => {
         )));
   const dynamicStyle: React.CSSProperties = (() => {
     const bg = getThemeColorCssValue(color?.selectedColor);
-    const textColor = getThemeColorCssValue(color?.contrastingColor);
     const border = bg;
 
     if (variant === "primary") {
       return {
         backgroundColor: bg,
-        color: textColor,
+        color: getThemeColorCssValue(
+          textColor?.selectedColor ?? color?.contrastingColor
+        ),
         borderColor: border,
       };
     }

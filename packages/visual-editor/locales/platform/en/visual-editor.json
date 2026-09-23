@@ -275,6 +275,7 @@
     "key": "Key",
     "keywordsDisplayName": "Keywords Display Name",
     "label": "Label",
+    "labelColor": "Label Color",
     "latitude": "Latitude",
     "limit": "Limit",
     "link": "Link",

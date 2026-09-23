@@ -9,7 +9,10 @@ import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export type GetDirectionsProps = {
   variant: CTAVariant;
+  /** Sets the primary fill, secondary border and text, or link text color. */
   color?: ThemeColor;
+  /** The text and icon color for the primary variant. */
+  textColor?: ThemeColor;
 };
 
 const getDirectionsFields: YextFields<GetDirectionsProps> = {
@@ -23,9 +26,18 @@ const getDirectionsFields: YextFields<GetDirectionsProps> = {
     label: msg("fields.color", "Color"),
     options: "SITE_COLOR",
   },
+  textColor: {
+    type: "basicSelector",
+    label: msg("fields.textColor", "Text Color"),
+    options: "SITE_COLOR",
+  },
 };
 
-const GetDirectionsComponent = ({ variant, color }: GetDirectionsProps) => {
+const GetDirectionsComponent = ({
+  variant,
+  color,
+  textColor,
+}: GetDirectionsProps) => {
   const { t } = useTranslation();
 
   return (
@@ -39,6 +51,7 @@ const GetDirectionsComponent = ({ variant, color }: GetDirectionsProps) => {
       target="_blank"
       variant={variant}
       color={color}
+      textColor={textColor}
     />
   );
 };
@@ -54,6 +67,7 @@ export const GetDirections: YextComponentConfig<GetDirectionsProps> = {
     const ctaVariant = data.props.variant;
     const showColor = isCtaVariantWithColor(ctaVariant);
     setDeep(updatedFields, "color.visible", showColor);
+    setDeep(updatedFields, "textColor.visible", ctaVariant === "primary");
     return updatedFields;
   },
   render: (props) => <GetDirectionsComponent {...props} />,

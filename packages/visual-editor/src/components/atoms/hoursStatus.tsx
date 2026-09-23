@@ -19,6 +19,7 @@ export interface HoursStatusAtomProps {
   timezone?: string;
   boldCurrentStatus?: boolean;
   bodyVariant?: "lg" | "base" | "sm";
+  style?: React.CSSProperties;
 }
 
 export const HoursStatusAtom = React.memo(
@@ -33,6 +34,7 @@ export const HoursStatusAtom = React.memo(
     timezone,
     boldCurrentStatus = true,
     bodyVariant = "lg",
+    style,
   }: HoursStatusAtomProps): any => {
     const { t, i18n } = useTranslation();
 
@@ -115,7 +117,10 @@ export const HoursStatusAtom = React.memo(
           }
 
           return (
-            <div className={themeManagerCn("HoursStatus", classNameResolved)}>
+            <div
+              className={themeManagerCn("HoursStatus", classNameResolved)}
+              style={style}
+            >
               {(showCurrentStatus || isComingSoon) &&
                 hoursCurrentTemplateOverride(params, t, boldCurrentStatus)}
               {!isComingSoon &&

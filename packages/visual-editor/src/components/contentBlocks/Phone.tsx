@@ -32,6 +32,10 @@ export interface PhoneProps {
     includeIcon?: boolean;
     /** The color applied to both the phone icon background and the phone link. */
     color?: ThemeColor;
+    /** The color of the phone label. */
+    labelColor?: ThemeColor;
+    /** The color of the phone icon. */
+    iconColor?: ThemeColor;
   };
 
   /** @internal */
@@ -81,6 +85,16 @@ export const PhoneStyleFields: YextFields<PhoneProps["styles"]> = {
   color: {
     type: "basicSelector",
     label: msg("fields.color", "Color"),
+    options: "SITE_COLOR",
+  },
+  labelColor: {
+    type: "basicSelector",
+    label: msg("fields.labelColor", "Label Color"),
+    options: "SITE_COLOR",
+  },
+  iconColor: {
+    type: "basicSelector",
+    label: msg("fields.iconColor", "Icon Color"),
     options: "SITE_COLOR",
   },
 };
@@ -134,6 +148,8 @@ const PhoneComponent = ({ data, styles, parentData }: PhoneProps) => {
         includeHyperlink={styles.includePhoneHyperlink}
         includeIcon={styles.includeIcon ?? true}
         linkColor={styles.color}
+        labelColor={styles.labelColor}
+        iconColor={styles.iconColor}
       />
     </EntityField>
   );

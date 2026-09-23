@@ -275,6 +275,7 @@
     "key": "Schlüssel",
     "keywordsDisplayName": "Anzeigename der Schlüsselwörter",
     "label": "Bezeichnung",
+    "labelColor": "Bezeichnungsfarbe",
     "latitude": "Breitengrad",
     "limit": "Limit",
     "link": "Link",

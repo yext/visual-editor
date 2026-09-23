@@ -11,6 +11,7 @@ import {
   YextComponentConfig,
   YextFields,
 } from "../../fields/fields.ts";
+import { ThemeColor } from "../../utils/themeConfigOptions.ts";
 
 export type TimestampProps = {
   /** The start and end date to display */
@@ -26,6 +27,8 @@ export type TimestampProps = {
     includeTime: boolean;
     /** Whether to display an end date */
     includeRange: boolean;
+    /** The color of the timestamp text. */
+    textColor?: ThemeColor;
   };
 
   /**
@@ -78,6 +81,11 @@ const timestampFields: YextFields<TimestampProps> = {
           { label: msg("fields.options.yes", "Yes"), value: true },
         ],
       },
+      textColor: {
+        type: "basicSelector",
+        label: msg("fields.textColor", "Text Color"),
+        options: "SITE_COLOR",
+      },
     },
   },
 };
@@ -111,6 +119,7 @@ const TimestampComponent: PuckComponent<TimestampProps> = (props) => {
       option={option}
       locale={i18n.language}
       hideTimeZone
+      textColor={styles.textColor}
     />
   );
 };

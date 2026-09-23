@@ -275,6 +275,7 @@
     "key": "Nøkkel",
     "keywordsDisplayName": "Visningsnavn for søkeord",
     "label": "Merkelapp",
+    "labelColor": "Merkelappfarge",
     "latitude": "Breddegrad",
     "limit": "Begrense",
     "link": "Lenke",

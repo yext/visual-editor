@@ -14,6 +14,7 @@ import {
   resolveUrlTemplate,
 } from "../../../utils/urls/resolveUrlTemplate.ts";
 import { NearbyLocationDoc } from "./useNearbyLocations.ts";
+import { getTextColorClass, getTextColorStyle } from "../../../utils/colors.ts";
 
 /** A single card for the Nearby Locations Section */
 type NearbyLocationCardProps = {
@@ -58,7 +59,8 @@ export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
   return (
     <Background
       background={styles.backgroundColor}
-      className="flex flex-col flew-grow h-full rounded-lg overflow-hidden border p-6 sm:p-8"
+      className={`flex flex-col flew-grow h-full rounded-lg overflow-hidden border p-6 sm:p-8 ${getTextColorClass(styles.textColor) ?? ""}`}
+      style={getTextColorStyle(styles.textColor)}
       as="section"
     >
       <MaybeLink

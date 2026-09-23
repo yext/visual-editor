@@ -137,6 +137,8 @@ export const PhoneListComponent: PuckComponent<PhoneListProps> = (props) => {
                     includeHyperlink={styles.includePhoneHyperlink}
                     includeIcon={styles.includeIcon ?? true}
                     linkColor={styles.color}
+                    labelColor={styles.labelColor}
+                    iconColor={styles.iconColor}
                   />
                 </div>
               </div>
