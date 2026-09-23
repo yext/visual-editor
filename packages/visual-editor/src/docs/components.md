@@ -406,6 +406,22 @@ The background color for the entire footer section.
 
 ---
 
+## FormSection
+
+A contact or event form that sends visitor data to the site's Hearsay endpoint.
+
+### Props
+
+#### Other Props
+
+| Prop             | Type                                                                                                                                                                                                                                                                       | Description | Default |
+| :--------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`           | `{ heading: TranslatableString; description: TranslatableRichText; submitLabel: TranslatableString; formType: "HS_CONTACT" \| "HS_EVENT"; turnstileSiteKey: string; showPreferredContactMethod: boolean; defaultContactMethod: "PHONE" \| "EMAIL"; fields: FormField[]; }` |             |         |
+| `liveVisibility` | `boolean`                                                                                                                                                                                                                                                                  |             |         |
+| `styles`         | `{ backgroundColor?: ThemeColor; buttonVariant: "primary" \| "secondary" \| "link"; }`                                                                                                                                                                                     |             |         |
+
+---
+
 ## Header
 
 The Header component appears at the top of pages. It serves as the primary navigation and branding element, containing the site logo and optionally a language selector. See [Expanded Header](#expanded-header) for the newest header component. Available on Directory and Locator templates.
