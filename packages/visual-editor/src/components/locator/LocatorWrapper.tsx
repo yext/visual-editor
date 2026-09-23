@@ -829,7 +829,6 @@ const LocatorInternal = ({
   const filterAccentColorCssVariable =
     getThemeColorCssValue(accentColor?.selectedColor) ??
     "var(--colors-palette-primary-dark)";
-  const [showFilterModal, setShowFilterModal] = React.useState(false);
   const resolvedHeading =
     (pageHeading?.title &&
       resolveComponentData(pageHeading.title, i18n.language, streamDocument)) ||
@@ -853,11 +852,7 @@ const LocatorInternal = ({
 
   return (
     <div className="components flex h-screen w-full mx-auto">
-      <Dialog.Root
-        open={showFilterModal}
-        onOpenChange={setShowFilterModal}
-        modal
-      >
+      <Dialog.Root>
         {/* Left Section: FilterSearch + Results. Full width for small screens */}
         <div
           className="relative h-screen w-full md:w-2/5 lg:w-[40rem] flex flex-col md:min-w-[24rem]"
