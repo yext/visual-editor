@@ -155,6 +155,7 @@
   "distanceLineFromSearch": "<strong>{{distance}}</strong> z vyhledávání",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> od {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> od vás",
+  "email": "E-mail",
   "emptyStateFieldEmpty": "Mapované pole {{entityType}} je prázdné",
   "emptyStateSectionHidden": "Sekce skrytá pro tuto {{entityType}}",
   "enableCookies": "Povolit soubory cookie",

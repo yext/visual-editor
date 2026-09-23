@@ -1,4 +1,5 @@
 {
+  "address": "地址",
   "aria": {
     "opensInNewTab": "{{label}}（在新標籤頁中打開）"
   },
@@ -30,6 +31,7 @@
   "distanceLineFromSearch": "來自搜尋的 <strong>{{distance}}</strong>",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> 來自 {{searchLocation}}",
   "distanceLineFromYou": "來自您的 <strong>{{distance}}</strong>",
+  "email": "電子郵件",
   "enableCookies": "啟用 Cookie",
   "expandedMenu": "擴展菜單",
   "filter": "篩選",

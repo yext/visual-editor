@@ -155,6 +155,7 @@
   "distanceLineFromSearch": "<strong>{{distance}}</strong> från sökning",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> från {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> från dig",
+  "email": "E-post",
   "emptyStateFieldEmpty": "Det mappade fältet för {{entityType}} är tomt",
   "emptyStateSectionHidden": "Avsnittet är dolt för denna {{entityType}}",
   "enableCookies": "Aktivera cookies",

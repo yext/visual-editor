@@ -17,6 +17,10 @@ import { migrate } from "../../utils/migrate.ts";
 import { migrationRegistry } from "../migrations/migrationRegistry.ts";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { LocatorComponent } from "./Locator.tsx";
+import {
+  DEFAULT_LOCATOR_RESULT_CARD_PROPS,
+  LocatorResultCard,
+} from "./LocatorResultCard.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 import { backgroundColors } from "../../utils/themeConfigOptions.ts";
@@ -1326,6 +1330,76 @@ describe("Locator", async () => {
       },
     },
   };
+
+  it("provides accessible result card controls and icons", async () => {
+    const document = { locale: "en" };
+    const translations = await injectTranslations(document);
+    const fixtureResult = DEFAULT_LOCATOR_RESULTS[0];
+
+    const { container } = reactRender(
+      <VisualEditorProvider templateProps={{ document, translations }}>
+        <LocatorResultCard
+          result={
+            {
+              index: 1,
+              rawData: fixtureResult.data,
+              distance: fixtureResult.distance,
+              distanceFromFilter: fixtureResult.distanceFromFilter,
+            } as any
+          }
+          resultCardProps={{
+            ...DEFAULT_LOCATOR_RESULT_CARD_PROPS,
+            email: {
+              ...DEFAULT_LOCATOR_RESULT_CARD_PROPS.email,
+              liveVisibility: true,
+            },
+          }}
+        />
+      </VisualEditorProvider>
+    );
+
+    expect(screen.getByRole("img", { name: "Address" })).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: "Hours" })).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: "Email" })).toBeInTheDocument();
+
+    const directionsLink = screen.getByRole("link", {
+      name: "Get Directions for 1101 Wilson Blvd",
+    });
+    expect(directionsLink.querySelector("svg")).toHaveAttribute(
+      "aria-hidden",
+      "true"
+    );
+
+    const hoursButton = screen.getByRole("button", {
+      name: /Open Now|Closed/,
+    });
+    const hoursHeading = screen.getByRole("heading", {
+      level: 3,
+      name: /Open Now|Closed/,
+    });
+    expect(hoursHeading.children).toHaveLength(1);
+    expect(hoursHeading.firstElementChild).toBe(hoursButton);
+    expect(hoursButton).toHaveAttribute("aria-expanded", "false");
+
+    const panelId = hoursButton.getAttribute("aria-controls");
+    expect(panelId).toBeTruthy();
+    const hoursPanel = container.querySelector(`[id="${panelId}"]`);
+    expect(hoursPanel).toHaveAttribute("role", "region");
+    expect(hoursPanel).toHaveAttribute("aria-labelledby", hoursButton.id);
+    expect(hoursPanel).toHaveAttribute("hidden");
+
+    await act(async () => hoursButton.click());
+    expect(hoursButton).toHaveAttribute("aria-expanded", "true");
+    expect(hoursPanel).not.toHaveAttribute("hidden");
+
+    await act(async () => hoursButton.click());
+    expect(hoursButton).toHaveAttribute("aria-expanded", "false");
+    expect(hoursPanel).toHaveAttribute("hidden");
+
+    const results = await axe(container);
+    logSuppressedWcagViolations(results);
+    expect(results).toHaveNoViolations();
+  });
 
   it("flattens wrapped result card selector fields during migration", () => {
     const data = migrate(

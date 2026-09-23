@@ -155,6 +155,7 @@
   "distanceLineFromSearch": "Aramadan <strong>{{distance}}</strong>",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong>, {{searchLocation}}'den",
   "distanceLineFromYou": "<strong>{{distance}}</strong> sizden",
+  "email": "E-posta",
   "emptyStateFieldEmpty": "{{entityType}}'ın eşlenen alanı boş",
   "emptyStateSectionHidden": "Bu {{entityType}} için bölüm gizlendi",
   "enableCookies": "Çerezleri Etkinleştir",

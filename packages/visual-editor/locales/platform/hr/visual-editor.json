@@ -155,6 +155,7 @@
   "distanceLineFromSearch": "<strong>{{distance}}</strong> iz pretraživanja",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> od {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> od vas",
+  "email": "E-mail",
   "emptyStateFieldEmpty": "Mapirano polje {{entityType}} je prazno",
   "emptyStateSectionHidden": "Odjeljak skriven za ovaj {{entityType}}",
   "enableCookies": "Omogući kolačiće",

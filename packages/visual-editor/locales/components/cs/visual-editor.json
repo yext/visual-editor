@@ -1,4 +1,5 @@
 {
+  "address": "Adresa",
   "aria": {
     "opensInNewTab": "{{label}} (otevře se na nové kartě)"
   },
@@ -30,6 +31,7 @@
   "distanceLineFromSearch": "<strong>{{distance}}</strong> z vyhledávání",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> od {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> od vás",
+  "email": "E-mail",
   "enableCookies": "Povolit soubory cookie",
   "expandedMenu": "Rozšířené menu",
   "filter": "Filtr",

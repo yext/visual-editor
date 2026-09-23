@@ -155,6 +155,7 @@
   "distanceLineFromSearch": "<strong>{{distance}}</strong> fra søgning",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> fra {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> fra dig",
+  "email": "E-mail",
   "emptyStateFieldEmpty": "Det tilknyttede felt for {{entityType}} er tomt",
   "emptyStateSectionHidden": "Sektion skjult for denne {{entityType}}",
   "enableCookies": "Aktiver cookies",

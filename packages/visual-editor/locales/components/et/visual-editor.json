@@ -1,4 +1,5 @@
 {
+  "address": "Aadress",
   "aria": {
     "opensInNewTab": "{{label}} (avaneb uuel vahelehel)"
   },
@@ -30,6 +31,7 @@
   "distanceLineFromSearch": "<strong>{{distance}}</strong> otsingust",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> alates {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> teilt",
+  "email": "Meil",
   "enableCookies": "Luba küpsised",
   "expandedMenu": "Laiendatud menüü",
   "filter": "Filter",

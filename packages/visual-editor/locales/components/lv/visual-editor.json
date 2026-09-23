@@ -1,4 +1,5 @@
 {
+  "address": "Adrese",
   "aria": {
     "opensInNewTab": "{{label}} (tiek atvērta jaunā cilnē)"
   },
@@ -30,6 +31,7 @@
   "distanceLineFromSearch": "<strong>{{distance}}</strong> no meklēšanas",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> no {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> no jums",
+  "email": "E-pasts",
   "enableCookies": "Iespējot sīkfailus",
   "expandedMenu": "Paplašināta izvēlne",
   "filter": "Filtrs",

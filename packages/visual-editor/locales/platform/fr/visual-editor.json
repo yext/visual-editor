@@ -155,6 +155,7 @@
   "distanceLineFromSearch": "<strong>{{distance}}</strong> à partir de la recherche",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> de {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> de votre part",
+  "email": "E-mail",
   "emptyStateFieldEmpty": "Le champ mappé de {{entityType}} est vide",
   "emptyStateSectionHidden": "Section masquée pour ce {{entityType}}",
   "enableCookies": "Activer les cookies",

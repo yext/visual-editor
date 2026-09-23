@@ -11,6 +11,7 @@ import {
   useSearchState,
 } from "@yext/search-headless-react";
 import { useAnalytics } from "@yext/pages-components";
+import * as Dialog from "@radix-ui/react-dialog";
 import {
   AnalyticsProvider,
   AppliedFilters,
@@ -829,9 +830,6 @@ const LocatorInternal = ({
     getThemeColorCssValue(accentColor?.selectedColor) ??
     "var(--colors-palette-primary-dark)";
   const [showFilterModal, setShowFilterModal] = React.useState(false);
-  const filterToggleButtonRef = React.useRef<HTMLButtonElement>(null);
-  const filterModalCloseButtonRef = React.useRef<HTMLButtonElement>(null);
-  const hasOpenedFilterModalRef = React.useRef(false);
   const resolvedHeading =
     (pageHeading?.title &&
       resolveComponentData(pageHeading.title, i18n.language, streamDocument)) ||
@@ -853,150 +851,144 @@ const LocatorInternal = ({
     };
   }, []);
 
-  useEffect(() => {
-    if (showFilterModal) {
-      hasOpenedFilterModalRef.current = true;
-      filterModalCloseButtonRef.current?.focus();
-      return;
-    }
-
-    if (hasOpenedFilterModalRef.current) {
-      filterToggleButtonRef.current?.focus();
-    }
-  }, [showFilterModal]);
-
   return (
     <div className="components flex h-screen w-full mx-auto">
-      {/* Left Section: FilterSearch + Results. Full width for small screens */}
-      <div
-        className="relative h-screen w-full md:w-2/5 lg:w-[40rem] flex flex-col md:min-w-[24rem]"
-        id="locatorLeftDiv"
+      <Dialog.Root
+        open={showFilterModal}
+        onOpenChange={setShowFilterModal}
+        modal
       >
-        <div className="px-8 py-6 gap-4 flex flex-col">
-          <Heading level={1} color={pageHeading?.color}>
-            {resolvedHeading}
-          </Heading>
-          <FilterSearch
-            searchFields={[
-              {
-                fieldApiName: LOCATION_FIELD,
-                entityType: entityTypes[0] ?? DEFAULT_ENTITY_TYPE,
-              },
-            ]}
-            onSelect={handleFilterSelect}
-            placeholder={t("searchHere", "Search here...")}
-            ariaLabel={t("findALocation", "Find a Location")}
-            customCssClasses={{
-              filterSearchContainer: "font-body-fontFamily",
-              focusedOption: "bg-gray-200 hover:bg-gray-200 block",
-              option: "hover:bg-gray-100 px-4 py-3",
-              inputElement:
-                "rounded-md p-4 h-11 font-body-fontFamily font-body-fontWeight text-body-fontSize placeholder:text-gray-700",
-              currentLocationButton:
-                "h-7 w-7 font-body-fontFamily font-body-fontWeight text-body-fontSize text-palette-primary-dark",
-              label:
-                "font-body-fontFamily font-body-fontWeight text-body-fontSize text-palette-primary-dark",
-            }}
-            showCurrentLocationButton={userLocationRetrieved}
-            geolocationProps={{
-              radius:
-                preferredUnit === "mile"
-                  ? DEFAULT_RADIUS
-                  : toMiles(DEFAULT_RADIUS), // this component uses miles, not meters
-            }}
-          />
-        </div>
-        <div className="relative flex-1 flex flex-col min-h-0">
-          <div className="px-8 py-4 text-body-fontSize border-y border-gray-300 inline-block">
-            <div className="flex flex-row justify-between" id="levelWithModal">
-              <ResultsCountSummary
-                searchState={searchState}
-                resultCount={resultCount}
-                selectedDistanceOption={selectedDistanceOption}
-                filterDisplayName={filterDisplayName}
-              />
-              {hasFilterModalToggle && (
-                <button
-                  ref={filterToggleButtonRef}
-                  className="inline-flex justify-between items-center gap-2 bg-white font-bold font-body-fontFamily text-body-sm-fontSize"
-                  style={{ color: filterAccentColorCssVariable }}
-                  onClick={() => setShowFilterModal((prev) => !prev)}
-                  aria-haspopup="dialog"
-                  aria-expanded={showFilterModal}
-                  aria-controls="locator-filter-modal"
-                >
-                  {t("filter", "Filter")}
-                  <FaSlidersH />
-                </button>
-              )}
-            </div>
-            <div className="flex flex-row justify-between">
-              <AppliedFilters
-                hiddenFields={[LOCATION_FIELD, COUNTRY_CODE_FIELD]}
-                customCssClasses={{
-                  removableFilter:
-                    "text-md font-normal mt-2 mb-0 font-body-fontFamily",
-                  clearAllButton: "hidden",
-                  appliedFiltersContainer: "mt-0 mb-0",
-                }}
-              />
-            </div>
+        {/* Left Section: FilterSearch + Results. Full width for small screens */}
+        <div
+          className="relative h-screen w-full md:w-2/5 lg:w-[40rem] flex flex-col md:min-w-[24rem]"
+          id="locatorLeftDiv"
+        >
+          <div className="px-8 py-6 gap-4 flex flex-col">
+            <Heading level={1} color={pageHeading?.color}>
+              {resolvedHeading}
+            </Heading>
+            <FilterSearch
+              searchFields={[
+                {
+                  fieldApiName: LOCATION_FIELD,
+                  entityType: entityTypes[0] ?? DEFAULT_ENTITY_TYPE,
+                },
+              ]}
+              onSelect={handleFilterSelect}
+              placeholder={t("searchHere", "Search here...")}
+              ariaLabel={t("findALocation", "Find a Location")}
+              customCssClasses={{
+                filterSearchContainer: "font-body-fontFamily",
+                focusedOption: "bg-gray-200 hover:bg-gray-200 block",
+                option: "hover:bg-gray-100 px-4 py-3",
+                inputElement:
+                  "rounded-md p-4 h-11 font-body-fontFamily font-body-fontWeight text-body-fontSize placeholder:text-gray-700",
+                currentLocationButton:
+                  "h-7 w-7 font-body-fontFamily font-body-fontWeight text-body-fontSize text-palette-primary-dark",
+                label:
+                  "font-body-fontFamily font-body-fontWeight text-body-fontSize text-palette-primary-dark",
+              }}
+              showCurrentLocationButton={userLocationRetrieved}
+              geolocationProps={{
+                radius:
+                  preferredUnit === "mile"
+                    ? DEFAULT_RADIUS
+                    : toMiles(DEFAULT_RADIUS), // this component uses miles, not meters
+              }}
+            />
           </div>
-          {resultCount > 0 && (
-            <div
-              id="innerDiv"
-              className="md:flex-1 md:overflow-y-auto"
-              ref={resultsContainer}
-            >
-              {isMobile ? (
-                <MobileLocatorResultsSection
-                  CardComponent={CardComponent}
-                  results={mobileResults}
-                  hasMoreResults={canShowMoreMobileResults}
-                  handleShowMoreResults={() => {
-                    if (searchLoading || mobileResults.length >= resultCount) {
-                      return;
-                    }
-
-                    searchActions.setOffset(mobileResults.length);
-                    executeSearch(searchActions);
-                    setSearchState("loading");
+          <div className="relative flex-1 flex flex-col min-h-0">
+            <div className="px-8 py-4 text-body-fontSize border-y border-gray-300 inline-block">
+              <div
+                className="flex flex-row justify-between"
+                id="levelWithModal"
+              >
+                <ResultsCountSummary
+                  searchState={searchState}
+                  resultCount={resultCount}
+                  selectedDistanceOption={selectedDistanceOption}
+                  filterDisplayName={filterDisplayName}
+                />
+                {hasFilterModalToggle && (
+                  <Dialog.Trigger asChild>
+                    <button
+                      className="inline-flex justify-between items-center gap-2 bg-white font-bold font-body-fontFamily text-body-sm-fontSize"
+                      style={{ color: filterAccentColorCssVariable }}
+                    >
+                      {t("filter", "Filter")}
+                      <FaSlidersH />
+                    </button>
+                  </Dialog.Trigger>
+                )}
+              </div>
+              <div className="flex flex-row justify-between">
+                <AppliedFilters
+                  hiddenFields={[LOCATION_FIELD, COUNTRY_CODE_FIELD]}
+                  customCssClasses={{
+                    removableFilter:
+                      "text-md font-normal mt-2 mb-0 font-body-fontFamily",
+                    clearAllButton: "hidden",
+                    appliedFiltersContainer: "mt-0 mb-0",
                   }}
                 />
-              ) : (
-                <VerticalResults
-                  CardComponent={CardComponent}
-                  setResultsRef={setResultsRef}
+              </div>
+            </div>
+            {resultCount > 0 && (
+              <div
+                id="innerDiv"
+                className="md:flex-1 md:overflow-y-auto"
+                ref={resultsContainer}
+              >
+                {isMobile ? (
+                  <MobileLocatorResultsSection
+                    CardComponent={CardComponent}
+                    results={mobileResults}
+                    hasMoreResults={canShowMoreMobileResults}
+                    handleShowMoreResults={() => {
+                      if (
+                        searchLoading ||
+                        mobileResults.length >= resultCount
+                      ) {
+                        return;
+                      }
+
+                      searchActions.setOffset(mobileResults.length);
+                      executeSearch(searchActions);
+                      setSearchState("loading");
+                    }}
+                  />
+                ) : (
+                  <VerticalResults
+                    CardComponent={CardComponent}
+                    setResultsRef={setResultsRef}
+                  />
+                )}
+              </div>
+            )}
+            {!isMobile && resultCount > RESULTS_LIMIT && (
+              <div className="border-t border-gray-300 pt-4">
+                <Pagination
+                  customCssClasses={{
+                    selectedLabel:
+                      "bg-palette-primary text-palette-primary-contrast border-palette-primary",
+                  }}
                 />
-              )}
-            </div>
-          )}
-          {!isMobile && resultCount > RESULTS_LIMIT && (
-            <div className="border-t border-gray-300 pt-4">
-              <Pagination
-                customCssClasses={{
-                  selectedLabel:
-                    "bg-palette-primary text-palette-primary-contrast border-palette-primary",
-                }}
-              />
-            </div>
-          )}
-          <FilterModal
-            showFilterModal={showFilterModal}
-            showOpenNowOption={openNowButton}
-            isOpenNowSelected={isOpenNowSelected}
-            handleOpenNowClick={handleOpenNowClick}
-            showDistanceOptions={showDistanceOptions}
-            selectedDistanceOption={selectedDistanceOption}
-            handleDistanceClick={handleDistanceClick}
-            handleCloseModalClick={() => setShowFilterModal(false)}
-            handleClearFiltersClick={handleClearFiltersClick}
-            accentColorCssValue={filterAccentColorCssVariable}
-            closeButtonRef={filterModalCloseButtonRef}
-            keywordsDisplayName={keywordsDisplayName}
-          />
+              </div>
+            )}
+            <FilterModal
+              showOpenNowOption={openNowButton}
+              isOpenNowSelected={isOpenNowSelected}
+              handleOpenNowClick={handleOpenNowClick}
+              showDistanceOptions={showDistanceOptions}
+              selectedDistanceOption={selectedDistanceOption}
+              handleDistanceClick={handleDistanceClick}
+              handleClearFiltersClick={handleClearFiltersClick}
+              accentColorCssValue={filterAccentColorCssVariable}
+              keywordsDisplayName={keywordsDisplayName}
+            />
+          </div>
         </div>
-      </div>
+      </Dialog.Root>
 
       {/* Right Section: Map. Hidden for small screens */}
       <div id="locatorMapDiv" className="md:flex-1 md:flex hidden relative">

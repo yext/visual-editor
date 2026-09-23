@@ -155,6 +155,7 @@
   "distanceLineFromSearch": "<strong>{{distance}}</strong> din căutare",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> din {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> de la tine",
+  "email": "E-mail",
   "emptyStateFieldEmpty": "Câmpul mapat al lui {{entityType}} este gol",
   "emptyStateSectionHidden": "Secțiune ascunsă pentru acest {{entityType}}",
   "enableCookies": "Activați cookie-urile",
