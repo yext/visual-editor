@@ -1,3 +1,18 @@
+#### 1.4.10 (2026-09-24)
+
+##### Chores
+
+- minor nit fix ([#1329](https://github.com/yext/visual-editor/pull/1329)) ([8bf0bc76](https://github.com/yext/visual-editor/commit/8bf0bc76721a9cc799efc5e9c0becbceebeb44e5))
+
+##### New Features
+
+- expose text color fields ([#1326](https://github.com/yext/visual-editor/pull/1326)) ([6c963754](https://github.com/yext/visual-editor/commit/6c963754385568f7a0186e527a63688ef2f8a80d))
+
+##### Bug Fixes
+
+- content blocks must be used in Grids ([#1331](https://github.com/yext/visual-editor/pull/1331)) ([8f2bf27b](https://github.com/yext/visual-editor/commit/8f2bf27b69bb17a6bfadd92957476ffca46b2c62))
+- address Locator accessibility problems ([#1328](https://github.com/yext/visual-editor/pull/1328)) ([75a0b372](https://github.com/yext/visual-editor/commit/75a0b372511e21769974dc770c0629880a889853))
+
 #### 1.4.9 (2026-09-15)
 
 ##### New Features
