@@ -17,6 +17,7 @@ import {
 } from "../ui/Tooltip.tsx";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { EntityFieldsToggle } from "../ui/EntityFieldsToggle.tsx";
+import { DynamicConfigControls } from "./DynamicConfigControls.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
 import { LayoutApprovalModal } from "../../components/modals/LayoutApprovalModal.tsx";
 import { TemplateMetadata } from "../../types/templateMetadata.ts";
@@ -143,7 +144,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
           onSendLayoutForApproval(appState.data, comment);
         }}
       />
-      <header className="puck-header">
+      <header className="puck-header layout-header">
         <div className="header-left ve-items-center">
           <UIButtonsToggle showLeft={true} />
           <Separator
@@ -318,6 +319,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
             </TooltipProvider>
           )}
         </div>
+        <DynamicConfigControls localDev={localDev} />
       </header>
     </>
   );

@@ -14,6 +14,7 @@ import {
   resolveAllData,
   blocksPlugin,
   outlinePlugin,
+  type Plugin,
 } from "@puckeditor/core";
 import React, { useRef, useCallback } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
@@ -39,6 +40,9 @@ import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 import { clonePuckResolveData } from "../utils/clonePuckResolveData.ts";
 import { YextPuckFieldOverrides } from "../../fields/fieldOverrides.ts";
 import type { MigrationRegistry } from "../../utils/migrate.ts";
+import { preparePuckAiRequest } from "../ai/prepareRequest.ts";
+import { yextAiFieldTypes } from "../ai/fieldTypes.ts";
+import { createPuckFieldTransforms } from "../utils/puckFieldTransforms.ts";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -114,6 +118,32 @@ export const InternalLayoutEditor = ({
   const { i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
   const { errorCount, errorSources, errorDetails } = useErrorContext();
+  const [aiPlugin, setAiPlugin] = React.useState<Plugin>();
+  const fieldTransforms = React.useMemo(
+    () => createPuckFieldTransforms(i18n.language, streamDocument),
+    [i18n.language, streamDocument]
+  );
+
+  // Tailwind imports this package in Node, so load browser-only Puck AI after mount.
+  React.useEffect(() => {
+    let isMounted = true;
+    import("@puckeditor/plugin-ai").then(({ createAiPlugin }) => {
+      if (isMounted) {
+        setAiPlugin(
+          createAiPlugin({
+            host: "/api/puck/chat",
+            fieldTypes: yextAiFieldTypes,
+            prepareRequest: preparePuckAiRequest,
+            defaultMode: "design",
+            designMode: true,
+          })
+        );
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   /**
    * When the Puck history changes save it to localStorage and send a message
@@ -398,7 +428,12 @@ export const InternalLayoutEditor = ({
         config={translatedPuckConfigWithRootFields}
         data={{}} // we use puckInitialHistory instead
         initialHistory={puckInitialHistory}
-        plugins={[{ ...blocks, label: pt("sections", "Sections") }, outline]}
+        fieldTransforms={fieldTransforms}
+        plugins={[
+          { ...blocks, label: pt("sections", "Sections") },
+          outline,
+          ...(aiPlugin ? [aiPlugin] : []),
+        ]}
         overrides={{
           fields: fieldsOverride,
           header: () => (
