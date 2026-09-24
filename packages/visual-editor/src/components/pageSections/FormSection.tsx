@@ -701,8 +701,8 @@ const FormSectionComponent: PuckComponent<FormSectionProps> = ({
   );
 
   return (
-    <PageSection background={styles.backgroundColor} maxWidth="768px">
-      <div className="max-w-xl space-y-5">
+    <PageSection background={styles.backgroundColor}>
+      <div className="space-y-5">
         <Heading level={2}>
           {resolveComponentData(data.heading, locale, streamDocument)}
         </Heading>

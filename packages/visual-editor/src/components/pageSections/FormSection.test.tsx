@@ -551,4 +551,13 @@ describe("FormSection", () => {
         .custom_data.yext_wingspan_url
     ).toBe("https://spam.example");
   });
+
+  it("uses the theme page section width", () => {
+    const { container } = renderForm(getProps(), true);
+
+    expect(container.querySelector("section")?.className).toContain(
+      "max-w-pageSection-contentWidth"
+    );
+    expect(container.querySelector(".max-w-xl")).toBeNull();
+  });
 });
