@@ -567,6 +567,8 @@
     "firstName": "Etunimi",
     "formType": "Lomakkeen tyyppi",
     "heading": "Otsikko",
+    "hearsayContact": "Hearsay-yhteydenotto",
+    "hearsayEvent": "Hearsay-tapahtuma",
     "lastName": "Sukunimi",
     "message": "Viesti",
     "option": "Vaihtoehto",

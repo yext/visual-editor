@@ -567,6 +567,8 @@
     "firstName": "Förnamn",
     "formType": "Formtyp",
     "heading": "Rubrik",
+    "hearsayContact": "Hearsay-kontakt",
+    "hearsayEvent": "Hearsay-evenemang",
     "lastName": "Efternamn",
     "message": "Meddelande",
     "option": "Alternativ",

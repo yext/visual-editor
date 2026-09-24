@@ -567,6 +567,8 @@
     "firstName": "Nome di battesimo",
     "formType": "Tipo di modulo",
     "heading": "Intestazione",
+    "hearsayContact": "Contatto Hearsay",
+    "hearsayEvent": "Evento Hearsay",
     "lastName": "Cognome",
     "message": "Messaggio",
     "option": "Opzione",

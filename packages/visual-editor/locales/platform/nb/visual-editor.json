@@ -567,6 +567,8 @@
     "firstName": "Fornavn",
     "formType": "Skjematype",
     "heading": "Overskrift",
+    "hearsayContact": "Hearsay-kontakt",
+    "hearsayEvent": "Hearsay-arrangement",
     "lastName": "Etternavn",
     "message": "Beskjed",
     "option": "Alternativ",

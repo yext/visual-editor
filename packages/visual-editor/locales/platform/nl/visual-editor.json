@@ -567,6 +567,8 @@
     "firstName": "Voornaam",
     "formType": "Formuliertype",
     "heading": "Koptekst",
+    "hearsayContact": "Hearsay-contact",
+    "hearsayEvent": "Hearsay-evenement",
     "lastName": "Achternaam",
     "message": "Bericht",
     "option": "Optie",

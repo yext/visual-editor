@@ -567,6 +567,8 @@
     "firstName": "Vardas",
     "formType": "Formos tipas",
     "heading": "Antraštė",
+    "hearsayContact": "Hearsay kontaktas",
+    "hearsayEvent": "Hearsay renginys",
     "lastName": "Pavardė",
     "message": "Pranešimas",
     "option": "Parinktis",

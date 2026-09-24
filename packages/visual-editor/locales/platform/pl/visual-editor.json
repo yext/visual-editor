@@ -567,6 +567,8 @@
     "firstName": "Imię",
     "formType": "Typ formularza",
     "heading": "Nagłówek",
+    "hearsayContact": "Kontakt Hearsay",
+    "hearsayEvent": "Wydarzenie Hearsay",
     "lastName": "Nazwisko",
     "message": "Wiadomość",
     "option": "Opcja",

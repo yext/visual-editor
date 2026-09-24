@@ -567,6 +567,8 @@
     "firstName": "İlk adı",
     "formType": "Form Türü",
     "heading": "Başlık",
+    "hearsayContact": "Hearsay İletişim",
+    "hearsayEvent": "Hearsay Etkinliği",
     "lastName": "Soy isim",
     "message": "Mesaj",
     "option": "Seçenek",

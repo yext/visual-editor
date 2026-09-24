@@ -8,13 +8,17 @@ export default defineConfig({
     {
       name: "local-form-submission",
       configureServer(server) {
-        server.middlewares.use("/forms/submit", (request, response) => {
+        server.middlewares.use("/forms/submit", async (request, response) => {
           if (request.method !== "POST") {
             response.writeHead(405).end();
             return;
           }
           try {
-            const submission = request.body;
+            let body = "";
+            for await (const chunk of request) {
+              body += chunk;
+            }
+            const submission = JSON.parse(body);
             const data = submission.data;
             const valid =
               request.headers["content-type"]?.includes("application/json") &&

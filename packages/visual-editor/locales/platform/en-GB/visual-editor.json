@@ -567,6 +567,8 @@
     "firstName": "First Name",
     "formType": "Form Type",
     "heading": "Header",
+    "hearsayContact": "Hearsay Contact",
+    "hearsayEvent": "Hearsay Event",
     "lastName": "Last Name",
     "message": "Message",
     "option": "Option",

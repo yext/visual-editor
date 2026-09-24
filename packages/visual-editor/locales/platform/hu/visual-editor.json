@@ -567,6 +567,8 @@
     "firstName": "Keresztnév",
     "formType": "Űrlap típusa",
     "heading": "Fejléc",
+    "hearsayContact": "Hearsay kapcsolat",
+    "hearsayEvent": "Hearsay esemény",
     "lastName": "Vezetéknév",
     "message": "Üzenet",
     "option": "Opció",

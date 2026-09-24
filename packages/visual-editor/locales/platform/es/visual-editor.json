@@ -567,6 +567,8 @@
     "firstName": "Nombre de pila",
     "formType": "Tipo de formulario",
     "heading": "Encabezamiento",
+    "hearsayContact": "Contacto Hearsay",
+    "hearsayEvent": "Evento Hearsay",
     "lastName": "Apellido",
     "message": "Mensaje",
     "option": "Opción",

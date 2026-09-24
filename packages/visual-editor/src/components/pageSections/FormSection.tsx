@@ -149,8 +149,14 @@ const formSectionFields: YextFields<FormSectionProps> = {
         type: "radio",
         label: msg("form.formType", "Form Type"),
         options: [
-          { label: "Hearsay Contact", value: "HS_CONTACT" },
-          { label: "Hearsay Event", value: "HS_EVENT" },
+          {
+            label: msg("form.hearsayContact", "Hearsay Contact"),
+            value: "HS_CONTACT",
+          },
+          {
+            label: msg("form.hearsayEvent", "Hearsay Event"),
+            value: "HS_EVENT",
+          },
         ],
       },
       turnstileSiteKey: {
@@ -341,6 +347,7 @@ const FormSectionComponent: PuckComponent<FormSectionProps> = ({
           field.options.some((option) => !option.value.trim())
         : false
     ) ||
+    // The honeypot is hidden below, so visible custom fields cannot use its key.
     customKeys.some((key) => !key || key.toLowerCase().includes("wingspan")) ||
     new Set(customKeys).size !== customKeys.length ||
     [
@@ -442,9 +449,15 @@ const FormSectionComponent: PuckComponent<FormSectionProps> = ({
       !(contactMethod === "PHONE" ? phone : email) ||
       fields.some(
         (field, index) =>
-          field.type === "checkboxGroup" &&
           field.required &&
-          !values.getAll(`custom_${index}`).length
+          (field.type === "checkboxGroup"
+            ? !values.getAll(`custom_${index}`).length
+            : ["text", "message", "phone", "email"].includes(field.type) &&
+              !String(
+                values.get(
+                  field.type === "text" ? `custom_${index}` : field.type
+                ) ?? ""
+              ).trim())
       )
     ) {
       setStatus("error");
@@ -461,7 +474,9 @@ const FormSectionComponent: PuckComponent<FormSectionProps> = ({
         );
         turnstile.execute(turnstileContainerRef.current!);
       }).finally(() => clearTimeout(timeoutId));
-      const customData: Record<string, string | string[]> = {};
+      const customData: Record<string, string | string[]> = {
+        yext_wingspan_url: String(values.get("yext_wingspan_url") ?? ""),
+      };
       fields.forEach((field, index) => {
         if (
           !["text", "dropdown", "checkboxGroup"].includes(field.type) ||
@@ -498,9 +513,7 @@ const FormSectionComponent: PuckComponent<FormSectionProps> = ({
             contactMethod === "PHONE"
               ? { relate_opt_in: values.has("relate_opt_in") }
               : {}),
-            ...(Object.keys(customData).length
-              ? { custom_data: customData }
-              : {}),
+            custom_data: customData,
           },
         }),
       });
@@ -713,6 +726,14 @@ const FormSectionComponent: PuckComponent<FormSectionProps> = ({
         >
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {fields.map(renderField)}
+          </div>
+          <div className="sr-only" aria-hidden="true">
+            <input
+              name="yext_wingspan_url"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+            />
           </div>
           {!puck.isEditing && <div ref={turnstileContainerRef} />}
           {(invalidConfiguration ||

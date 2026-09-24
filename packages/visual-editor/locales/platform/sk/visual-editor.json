@@ -567,6 +567,8 @@
     "firstName": "Krstné meno",
     "formType": "Typ formulára",
     "heading": "Hlavička",
+    "hearsayContact": "Kontakt Hearsay",
+    "hearsayEvent": "Udalosť Hearsay",
     "lastName": "Priezvisko",
     "message": "Správa",
     "option": "Možnosť",

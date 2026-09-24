@@ -121,7 +121,10 @@ describe("FormSection", () => {
           preferred_contact_method: "PHONE",
           phone: "5555555555",
           relate_opt_in: true,
-          custom_data: { reason: ["home", "savings"] },
+          custom_data: {
+            yext_wingspan_url: "",
+            reason: ["home", "savings"],
+          },
         },
       }),
     });
@@ -176,7 +179,10 @@ describe("FormSection", () => {
       last_name: "Lovelace",
       preferred_contact_method: "EMAIL",
       email: "ada@example.com",
-      custom_data: { preferred_time: "morning" },
+      custom_data: {
+        yext_wingspan_url: "",
+        preferred_time: "morning",
+      },
     });
     expect(
       screen.queryByLabelText("I consent to receive text messages.")
@@ -201,7 +207,7 @@ describe("FormSection", () => {
     expect(execute).not.toHaveBeenCalled();
   });
 
-  it("rejects a honeypot custom key", () => {
+  it("rejects a visible honeypot custom key", () => {
     const props = getProps();
     props.data.turnstileSiteKey = "test-site-key";
     props.data.fields.push({
@@ -467,5 +473,82 @@ describe("FormSection", () => {
     } finally {
       vi.useRealTimers();
     }
+  });
+
+  it.each([
+    { type: "text" as const, label: "Goals", fieldLabel: "Goals *" },
+    { type: "message" as const, label: "Message", fieldLabel: "Message *" },
+  ])(
+    "when required $type contains only spaces, then submission stops",
+    async ({ type, label, fieldLabel }) => {
+      const props = getProps();
+      props.data.turnstileSiteKey = "test-site-key";
+      if (type === "text") {
+        props.data.fields.push({
+          type,
+          label,
+          key: "goals",
+          required: true,
+        });
+      } else {
+        props.data.fields.find((field) => field.type === "message")!.required =
+          true;
+      }
+      renderForm(props);
+      const button = screen.getByRole("button", { name: "Send Message" });
+      await waitFor(() =>
+        expect((button as HTMLButtonElement).disabled).toBe(false)
+      );
+
+      fireEvent.change(screen.getByLabelText(/First name/), {
+        target: { value: "Ada" },
+      });
+      fireEvent.change(screen.getByLabelText(/Last name/), {
+        target: { value: "Lovelace" },
+      });
+      fireEvent.change(screen.getByLabelText(/Phone \*/), {
+        target: { value: "5555555555" },
+      });
+      fireEvent.change(screen.getByLabelText(fieldLabel), {
+        target: { value: "   " },
+      });
+      fireEvent.click(button);
+
+      expect(execute).not.toHaveBeenCalled();
+      expect(fetch).not.toHaveBeenCalled();
+    }
+  );
+
+  it("sends the hidden honeypot value in custom data", async () => {
+    const props = getProps();
+    props.data.turnstileSiteKey = "test-site-key";
+    const { container } = renderForm(props);
+    const button = screen.getByRole("button", { name: "Send Message" });
+    await waitFor(() =>
+      expect((button as HTMLButtonElement).disabled).toBe(false)
+    );
+
+    fireEvent.change(screen.getByLabelText(/First name/), {
+      target: { value: "Ada" },
+    });
+    fireEvent.change(screen.getByLabelText(/Last name/), {
+      target: { value: "Lovelace" },
+    });
+    fireEvent.change(screen.getByLabelText(/Phone \*/), {
+      target: { value: "5555555555" },
+    });
+    fireEvent.change(
+      container.querySelector<HTMLInputElement>(
+        'input[name="yext_wingspan_url"]'
+      )!,
+      { target: { value: "https://spam.example" } }
+    );
+    fireEvent.click(button);
+
+    await waitFor(() => expect(fetch).toHaveBeenCalledTimes(1));
+    expect(
+      JSON.parse(vi.mocked(fetch).mock.calls[0][1]?.body as string).data
+        .custom_data.yext_wingspan_url
+    ).toBe("https://spam.example");
   });
 });

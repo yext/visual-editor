@@ -567,6 +567,8 @@
     "firstName": "Ime",
     "formType": "Vrsta obrasca",
     "heading": "Zaglavlje",
+    "hearsayContact": "Hearsay kontakt",
+    "hearsayEvent": "Hearsay događaj",
     "lastName": "Prezime",
     "message": "Poruka",
     "option": "Opcija",

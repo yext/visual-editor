@@ -567,6 +567,8 @@
     "firstName": "Vorname",
     "formType": "Formulartyp",
     "heading": "Kopfzeile",
+    "hearsayContact": "Hearsay Kontakt",
+    "hearsayEvent": "Hearsay Veranstaltung",
     "lastName": "Nachname",
     "message": "Nachricht",
     "option": "Option",
