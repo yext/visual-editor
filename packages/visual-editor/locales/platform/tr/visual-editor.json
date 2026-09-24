@@ -88,7 +88,7 @@
       "defaultAlt": "Yardımcı Resim {{number}}"
     },
     "footerUtilityImagesSlotLabel": "Yardımcı Görseller",
-    "form": "Biçim",
+    "form": "Form",
     "gallery": "Galeri",
     "getDirections": "Yol tarifi alın",
     "gridSection": "Izgara bölümü",
@@ -551,7 +551,7 @@
   "fontSize": "Yazı tipi boyutu",
   "form": {
     "buttonVariant": "Düğme Varyantı",
-    "configurationError": "Bu form hazır değil. Alanlarını ve Turnike site anahtarını kontrol edin.",
+    "configurationError": "Bu form hazır değil. Alanlarını ve Turnstile site anahtarını kontrol edin.",
     "customCheckboxGroup": "Özel Onay Kutusu Grubu",
     "customDropdown": "Özel Açılır Menü",
     "customFieldKey": "Özel Alan Anahtarı",
@@ -582,7 +582,7 @@
     "showPreferredContactMethod": "Tercih Edilen İletişim Yöntemini Göster",
     "submitLabel": "Birincil CTA Etiketi",
     "success": "Mesajınız gönderildi.",
-    "turnstileSiteKey": "Turnike Sitesi Anahtarı",
+    "turnstileSiteKey": "Turnstile site anahtarı",
     "verificationError": "Doğrulama yüklenemedi. Sayfayı yeniden yükleyip tekrar deneyin."
   },
   "friday": "Cuma",

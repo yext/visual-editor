@@ -551,7 +551,7 @@
   "fontSize": "Velikost písma",
   "form": {
     "buttonVariant": "Varianta tlačítka",
-    "configurationError": "Tento formulář není připraven. Zkontrolujte jeho pole a klíč webu turniketu.",
+    "configurationError": "Tento formulář není připraven. Zkontrolujte jeho pole a klíč webu Turnstile.",
     "customCheckboxGroup": "Vlastní skupina zaškrtávacích políček",
     "customDropdown": "Vlastní rozbalovací nabídka",
     "customFieldKey": "Vlastní klíč pole",
@@ -582,7 +582,7 @@
     "showPreferredContactMethod": "Zobrazit preferovaný způsob kontaktu",
     "submitLabel": "Primární štítek CTA",
     "success": "Vaše zpráva byla odeslána.",
-    "turnstileSiteKey": "Klíč k místu turniketu",
+    "turnstileSiteKey": "Klíč webu Turnstile",
     "verificationError": "Ověření se nepodařilo načíst. Znovu načtěte stránku a zkuste to znovu."
   },
   "friday": "pátek",

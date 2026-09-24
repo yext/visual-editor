@@ -64,6 +64,7 @@ type Turnstile = {
       callback: (token: string) => void;
       "error-callback": () => void;
       "expired-callback": () => void;
+      "timeout-callback": () => void;
     }
   ) => string;
   execute: (container: HTMLElement) => void;
@@ -385,6 +386,8 @@ const FormSectionComponent: PuckComponent<FormSectionProps> = ({
             tokenRequestRef.current?.reject(new Error("Turnstile failed")),
           "expired-callback": () =>
             tokenRequestRef.current?.reject(new Error("Turnstile expired")),
+          "timeout-callback": () =>
+            tokenRequestRef.current?.reject(new Error("Turnstile timed out")),
         });
         setTurnstileReady(true);
         setStatus("idle");
@@ -449,10 +452,15 @@ const FormSectionComponent: PuckComponent<FormSectionProps> = ({
     }
     setStatus("pending");
     try {
+      let timeoutId: ReturnType<typeof setTimeout>;
       const token = await new Promise<string>((resolve, reject) => {
         tokenRequestRef.current = { resolve, reject };
+        timeoutId = setTimeout(
+          () => reject(new Error("Turnstile timed out")),
+          120_000
+        );
         turnstile.execute(turnstileContainerRef.current!);
-      });
+      }).finally(() => clearTimeout(timeoutId));
       const customData: Record<string, string | string[]> = {};
       fields.forEach((field, index) => {
         if (
@@ -763,7 +771,7 @@ const FormSectionComponent: PuckComponent<FormSectionProps> = ({
 
 /** A contact or event form that sends visitor data to the site's Hearsay endpoint. */
 export const FormSection: YextComponentConfig<FormSectionProps> = {
-  label: msg("components.form", "Form"),
+  label: msg("components.form", "Form Section"),
   fields: formSectionFields,
   defaultProps: {
     data: {

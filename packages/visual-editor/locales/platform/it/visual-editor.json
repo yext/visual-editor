@@ -582,7 +582,7 @@
     "showPreferredContactMethod": "Mostra il metodo di contatto preferito",
     "submitLabel": "Etichetta CTA primaria",
     "success": "Il tuo messaggio è stato inviato.",
-    "turnstileSiteKey": "Chiave del sito del tornello",
+    "turnstileSiteKey": "Chiave del sito Turnstile",
     "verificationError": "Impossibile caricare la verifica. Ricarica la pagina e riprova."
   },
   "friday": "Venerdì",

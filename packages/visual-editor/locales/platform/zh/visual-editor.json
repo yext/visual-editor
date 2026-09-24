@@ -88,7 +88,7 @@
       "defaultAlt": "实用程序图像 {{number}}"
     },
     "footerUtilityImagesSlotLabel": "实用图像",
-    "form": "形式",
+    "form": "表单",
     "gallery": "画廊",
     "getDirections": "获取指示",
     "gridSection": "网格部分",
@@ -551,7 +551,7 @@
   "fontSize": "字体大小",
   "form": {
     "buttonVariant": "按钮变体",
-    "configurationError": "此表格尚未准备好。检查其字段和旋转门站点密钥。",
+    "configurationError": "此表单尚未准备好。请检查表单字段和 Turnstile 站点密钥。",
     "customCheckboxGroup": "自定义复选框组",
     "customDropdown": "自定义下拉菜单",
     "customFieldKey": "自定义字段键",
@@ -582,7 +582,7 @@
     "showPreferredContactMethod": "显示首选联系方式",
     "submitLabel": "主要 CTA 标签",
     "success": "您的消息已发送。",
-    "turnstileSiteKey": "旋转栅门站点密钥",
+    "turnstileSiteKey": "Turnstile 站点密钥",
     "verificationError": "验证无法加载。重新加载页面并重试。"
   },
   "friday": "星期五",

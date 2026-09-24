@@ -88,7 +88,7 @@
       "defaultAlt": "實用程序圖像 {{number}}"
     },
     "footerUtilityImagesSlotLabel": "實用圖像",
-    "form": "形式",
+    "form": "表單",
     "gallery": "畫廊",
     "getDirections": "獲取指示",
     "gridSection": "網格部分",
@@ -551,7 +551,7 @@
   "fontSize": "字體大小",
   "form": {
     "buttonVariant": "按鈕變體",
-    "configurationError": "此表格尚未準備好。檢查其欄位和旋轉門站點密鑰。",
+    "configurationError": "此表單尚未準備好。請檢查表單欄位和 Turnstile 網站金鑰。",
     "customCheckboxGroup": "自訂複選框組",
     "customDropdown": "自訂下拉式選單",
     "customFieldKey": "自訂欄位鍵",
@@ -582,7 +582,7 @@
     "showPreferredContactMethod": "顯示首選聯絡方式",
     "submitLabel": "主要 CTA 標籤",
     "success": "您的訊息已發送。",
-    "turnstileSiteKey": "旋轉柵門站點密鑰",
+    "turnstileSiteKey": "Turnstile 網站金鑰",
     "verificationError": "驗證無法載入。重新載入頁面並重試。"
   },
   "friday": "星期五",

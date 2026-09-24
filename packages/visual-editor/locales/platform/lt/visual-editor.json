@@ -551,7 +551,7 @@
   "fontSize": "Šrifto dydis",
   "form": {
     "buttonVariant": "Mygtukų variantas",
-    "configurationError": "Ši forma nėra paruošta. Patikrinkite jo laukus ir Turniketo svetainės raktą.",
+    "configurationError": "Ši forma nėra paruošta. Patikrinkite jos laukus ir Turnstile svetainės raktą.",
     "customCheckboxGroup": "Pasirinktinė žymimųjų laukelių grupė",
     "customDropdown": "Pasirinktinis išskleidžiamasis meniu",
     "customFieldKey": "Pasirinktinis lauko raktas",
@@ -582,7 +582,7 @@
     "showPreferredContactMethod": "Rodyti pageidaujamą kontaktinį metodą",
     "submitLabel": "Pirminė raginimo veikti etiketė",
     "success": "Jūsų žinutė išsiųsta.",
-    "turnstileSiteKey": "Turniketo vietos raktas",
+    "turnstileSiteKey": "Turnstile svetainės raktas",
     "verificationError": "Nepavyko įkelti patvirtinimo. Iš naujo įkelkite puslapį ir bandykite dar kartą."
   },
   "friday": "Penktadienis",

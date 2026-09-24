@@ -551,7 +551,7 @@
   "fontSize": "Fontstorlek",
   "form": {
     "buttonVariant": "Knappvariant",
-    "configurationError": "Det här formuläret är inte klart. Kontrollera dess fält och vändkorsets nyckel.",
+    "configurationError": "Det här formuläret är inte klart. Kontrollera dess fält och Turnstile-webbplatsnyckeln.",
     "customCheckboxGroup": "Anpassad kryssrutagrupp",
     "customDropdown": "Anpassad rullgardinsmeny",
     "customFieldKey": "Anpassad fältnyckel",
@@ -582,7 +582,7 @@
     "showPreferredContactMethod": "Visa önskad kontaktmetod",
     "submitLabel": "Primär CTA-etikett",
     "success": "Ditt meddelande har skickats.",
-    "turnstileSiteKey": "Vändkors platsnyckel",
+    "turnstileSiteKey": "Turnstile-webbplatsnyckel",
     "verificationError": "Verifieringen kunde inte laddas. Ladda om sidan och försök igen."
   },
   "friday": "Fredag",

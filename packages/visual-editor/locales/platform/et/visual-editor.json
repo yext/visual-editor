@@ -551,7 +551,7 @@
   "fontSize": "Fondi suurus",
   "form": {
     "buttonVariant": "Nupu variant",
-    "configurationError": "See vorm pole valmis. Kontrollige selle välju ja turnstile saidi võtit.",
+    "configurationError": "See vorm pole valmis. Kontrollige selle välju ja Turnstile'i saidivõtit.",
     "customCheckboxGroup": "Kohandatud märkeruutude rühm",
     "customDropdown": "Kohandatud rippmenüü",
     "customFieldKey": "Kohandatud väljavõti",
@@ -582,7 +582,7 @@
     "showPreferredContactMethod": "Näita eelistatud kontaktimeetodit",
     "submitLabel": "Esmane CTA silt",
     "success": "Teie sõnum on saadetud.",
-    "turnstileSiteKey": "Turnike saidi võti",
+    "turnstileSiteKey": "Turnstile'i saidivõti",
     "verificationError": "Kinnitust ei saanud laadida. Laadige leht uuesti ja proovige uuesti."
   },
   "friday": "Reede",

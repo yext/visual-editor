@@ -551,7 +551,7 @@
   "fontSize": "Skrifttypestørrelse",
   "form": {
     "buttonVariant": "Knap variant",
-    "configurationError": "Denne formular er ikke klar. Tjek dens felter og drejekorsets nøgle.",
+    "configurationError": "Denne formular er ikke klar. Tjek dens felter og Turnstile-webstedsnøglen.",
     "customCheckboxGroup": "Brugerdefineret afkrydsningsfeltgruppe",
     "customDropdown": "Brugerdefineret dropdown",
     "customFieldKey": "Brugerdefineret feltnøgle",
@@ -582,7 +582,7 @@
     "showPreferredContactMethod": "Vis foretrukken kontaktmetode",
     "submitLabel": "Primær CTA-mærke",
     "success": "Din besked blev sendt.",
-    "turnstileSiteKey": "Turnstile Site Key",
+    "turnstileSiteKey": "Turnstile-webstedsnøgle",
     "verificationError": "Bekræftelsen kunne ikke indlæses. Genindlæs siden, og prøv igen."
   },
   "friday": "fredag",

@@ -551,7 +551,7 @@
   "fontSize": "Rozmiar czcionki",
   "form": {
     "buttonVariant": "Wariant przycisku",
-    "configurationError": "Ten formularz nie jest gotowy. Sprawdź jego pola i klucz witryny kołowrotu.",
+    "configurationError": "Ten formularz nie jest gotowy. Sprawdź jego pola i klucz witryny Turnstile.",
     "customCheckboxGroup": "Niestandardowa grupa pól wyboru",
     "customDropdown": "Niestandardowe menu rozwijane",
     "customFieldKey": "Niestandardowy klucz pola",
@@ -566,7 +566,7 @@
     "fieldType": "Typ pola",
     "firstName": "Imię",
     "formType": "Typ formularza",
-    "heading": "Chodnikowiec",
+    "heading": "Nagłówek",
     "lastName": "Nazwisko",
     "message": "Wiadomość",
     "option": "Opcja",
@@ -582,7 +582,7 @@
     "showPreferredContactMethod": "Pokaż preferowaną metodę kontaktu",
     "submitLabel": "Podstawowa etykieta wezwania do działania",
     "success": "Twoja wiadomość została wysłana.",
-    "turnstileSiteKey": "Klucz do bramki obrotowej",
+    "turnstileSiteKey": "Klucz witryny Turnstile",
     "verificationError": "Nie udało się wczytać weryfikacji. Załaduj ponownie stronę i spróbuj ponownie."
   },
   "friday": "Piątek",

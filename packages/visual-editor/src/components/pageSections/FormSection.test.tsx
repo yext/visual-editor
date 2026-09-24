@@ -1,6 +1,12 @@
 import * as React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { FormSection, FormSectionProps } from "./FormSection.tsx";
 
@@ -26,7 +32,10 @@ const getProps = (): FormSectionProps =>
   structuredClone(FormSection.defaultProps as FormSectionProps);
 
 describe("FormSection", () => {
-  let turnstileOptions: { callback: (token: string) => void };
+  let turnstileOptions: {
+    callback: (token: string) => void;
+    "timeout-callback": () => void;
+  };
   let tokenNumber: number;
   const execute = vi.fn();
   const reset = vi.fn();
@@ -408,5 +417,55 @@ describe("FormSection", () => {
     });
     expect(onKeyDown).toHaveBeenCalledTimes(1);
     document.removeEventListener("keydown", onKeyDown);
+  });
+
+  it("when Turnstile does not return a token, then the form exits pending state", async () => {
+    const props = getProps();
+    props.data.turnstileSiteKey = "test-site-key";
+    execute.mockImplementation(() => {});
+    renderForm(props);
+    const button = screen.getByRole("button", {
+      name: "Send Message",
+    }) as HTMLButtonElement;
+    await waitFor(() => expect(button.disabled).toBe(false));
+
+    fireEvent.change(screen.getByLabelText(/First name/), {
+      target: { value: "Ada" },
+    });
+    fireEvent.change(screen.getByLabelText(/Last name/), {
+      target: { value: "Lovelace" },
+    });
+    fireEvent.change(screen.getByLabelText(/Phone \*/), {
+      target: { value: "5555555555" },
+    });
+    fireEvent.click(button);
+    turnstileOptions["timeout-callback"]();
+    await waitFor(() =>
+      expect(screen.getByRole("alert").textContent).toContain(
+        "could not be sent"
+      )
+    );
+    expect(button.disabled).toBe(false);
+    expect(reset).toHaveBeenCalledTimes(1);
+
+    vi.useFakeTimers();
+    try {
+      fireEvent.click(button);
+      expect(button.disabled).toBe(true);
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(120_000);
+      });
+      expect(screen.getByRole("alert").textContent).toContain(
+        "could not be sent"
+      );
+      expect(button.disabled).toBe(false);
+      expect(reset).toHaveBeenCalledTimes(2);
+      expect(fetch).not.toHaveBeenCalled();
+      expect(
+        (screen.getByLabelText(/First name/) as HTMLInputElement).value
+      ).toBe("Ada");
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

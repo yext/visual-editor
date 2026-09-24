@@ -551,7 +551,7 @@
   "fontSize": "Fonta lielums",
   "form": {
     "buttonVariant": "Pogas variants",
-    "configurationError": "Šī veidlapa nav gatava. Pārbaudiet tā laukus un turniketa vietnes atslēgu.",
+    "configurationError": "Šī veidlapa nav gatava. Pārbaudiet tās laukus un Turnstile vietnes atslēgu.",
     "customCheckboxGroup": "Pielāgota izvēles rūtiņu grupa",
     "customDropdown": "Pielāgota nolaižamā izvēlne",
     "customFieldKey": "Pielāgota lauka atslēga",
@@ -582,7 +582,7 @@
     "showPreferredContactMethod": "Rādīt vēlamo saziņas metodi",
     "submitLabel": "Primārā CTA etiķete",
     "success": "Jūsu ziņojums tika nosūtīts.",
-    "turnstileSiteKey": "Turniketa vietnes atslēga",
+    "turnstileSiteKey": "Turnstile vietnes atslēga",
     "verificationError": "Verifikācija nevarēja ielādēt. Atkārtoti ielādējiet lapu un mēģiniet vēlreiz."
   },
   "friday": "Piektdiena",

@@ -582,7 +582,7 @@
     "showPreferredContactMethod": "Afficher la méthode de contact préférée",
     "submitLabel": "Étiquette CTA principale",
     "success": "Votre message a été envoyé.",
-    "turnstileSiteKey": "Clé du site des tourniquets",
+    "turnstileSiteKey": "Clé de site Turnstile",
     "verificationError": "La vérification n'a pas pu se charger. Actualisez la page et réessayez."
   },
   "friday": "Vendredi",

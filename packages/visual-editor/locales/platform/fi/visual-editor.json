@@ -551,7 +551,7 @@
   "fontSize": "Fontin koko",
   "form": {
     "buttonVariant": "Painikevaihtoehto",
-    "configurationError": "Tämä lomake ei ole valmis. Check its fields and Turnstile site key.",
+    "configurationError": "Tämä lomake ei ole valmis. Tarkista sen kentät ja Turnstile-sivustoavain.",
     "customCheckboxGroup": "Mukautettu valintaruuturyhmä",
     "customDropdown": "Mukautettu pudotusvalikko",
     "customFieldKey": "Mukautettu kenttäavain",
@@ -582,7 +582,7 @@
     "showPreferredContactMethod": "",
     "submitLabel": "Ensisijainen toimintakehotustunniste",
     "success": "Viestisi lähetettiin.",
-    "turnstileSiteKey": "Käännösportin avain",
+    "turnstileSiteKey": "Turnstile-sivustoavain",
     "verificationError": "Vahvistusta ei voitu ladata. Lataa sivu uudelleen ja yritä uudelleen."
   },
   "friday": "perjantai",

@@ -88,7 +88,7 @@
       "defaultAlt": "Uslužna slika {{number}}"
     },
     "footerUtilityImagesSlotLabel": "Korisne slike",
-    "form": "Oblik",
+    "form": "Obrazac",
     "gallery": "Galerija",
     "getDirections": "Dobiti upute",
     "gridSection": "Rešetka",
@@ -551,7 +551,7 @@
   "fontSize": "Veličina fonta",
   "form": {
     "buttonVariant": "Varijanta gumba",
-    "configurationError": "Ovaj obrazac nije spreman. Provjerite njegova polja i ključ mjesta Turnstilea.",
+    "configurationError": "Ovaj obrazac nije spreman. Provjerite njegova polja i ključ web-mjesta Turnstile.",
     "customCheckboxGroup": "Prilagođena grupa potvrdnih okvira",
     "customDropdown": "Prilagođeni padajući izbornik",
     "customFieldKey": "Ključ prilagođenog polja",
@@ -582,7 +582,7 @@
     "showPreferredContactMethod": "Prikaži željeni način kontakta",
     "submitLabel": "Primarna CTA oznaka",
     "success": "Vaša poruka je poslana.",
-    "turnstileSiteKey": "Ključ mjesta okretne barijere",
+    "turnstileSiteKey": "Ključ web-mjesta Turnstile",
     "verificationError": "Potvrda se nije mogla učitati. Ponovno učitajte stranicu i pokušajte ponovno."
   },
   "friday": "petak",

@@ -88,7 +88,7 @@
       "defaultAlt": "Imagem utilitária {{number}}"
     },
     "footerUtilityImagesSlotLabel": "Imagens utilitárias",
-    "form": "Forma",
+    "form": "Formulário",
     "gallery": "Galeria",
     "getDirections": "Obtenha direções",
     "gridSection": "Seção da grade",
@@ -551,7 +551,7 @@
   "fontSize": "Tamanho da fonte",
   "form": {
     "buttonVariant": "Variante de botão",
-    "configurationError": "Este formulário não está pronto. Confira seus campos e chave do site da Catraca.",
+    "configurationError": "Este formulário não está pronto. Confira seus campos e a chave do site Turnstile.",
     "customCheckboxGroup": "Grupo de caixas de seleção personalizadas",
     "customDropdown": "Lista suspensa personalizada",
     "customFieldKey": "Chave de campo personalizada",
@@ -582,7 +582,7 @@
     "showPreferredContactMethod": "Mostrar método de contato preferido",
     "submitLabel": "Rótulo CTA primário",
     "success": "Sua mensagem foi enviada.",
-    "turnstileSiteKey": "Chave do site da catraca",
+    "turnstileSiteKey": "Chave do site Turnstile",
     "verificationError": "A verificação não pôde ser carregada. Atualize a página e tente novamente."
   },
   "friday": "Sexta-feira",

@@ -88,7 +88,7 @@
       "defaultAlt": "Utility-Bilder {{number}}"
     },
     "footerUtilityImagesSlotLabel": "Utility-Bilder",
-    "form": "Bilden",
+    "form": "Formular",
     "gallery": "Galerie",
     "getDirections": "Route planen",
     "gridSection": "Grid-Modul",
@@ -551,7 +551,7 @@
   "fontSize": "Schriftgröße",
   "form": {
     "buttonVariant": "Knopfvariante",
-    "configurationError": "Dieses Formular ist noch nicht fertig. Überprüfen Sie die Felder und den Drehkreuz-Standortschlüssel.",
+    "configurationError": "Dieses Formular ist noch nicht fertig. Überprüfen Sie die Felder und den Turnstile-Website-Schlüssel.",
     "customCheckboxGroup": "Benutzerdefinierte Kontrollkästchengruppe",
     "customDropdown": "Benutzerdefiniertes Dropdown",
     "customFieldKey": "Benutzerdefinierter Feldschlüssel",
@@ -582,7 +582,7 @@
     "showPreferredContactMethod": "Bevorzugte Kontaktmethode anzeigen",
     "submitLabel": "Primäres CTA-Label",
     "success": "Ihre Nachricht wurde gesendet.",
-    "turnstileSiteKey": "Drehkreuz-Standortschlüssel",
+    "turnstileSiteKey": "Turnstile-Website-Schlüssel",
     "verificationError": "Die Verifizierung konnte nicht geladen werden. Laden Sie die Seite neu und versuchen Sie es erneut."
   },
   "friday": "Freitag",

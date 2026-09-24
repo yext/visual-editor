@@ -551,7 +551,7 @@
   "fontSize": "Lettergrootte",
   "form": {
     "buttonVariant": "Knopvariant",
-    "configurationError": "Dit formulier is niet gereed. Controleer de velden en de locatiesleutel van het tourniquet.",
+    "configurationError": "Dit formulier is niet gereed. Controleer de velden en de Turnstile-sitesleutel.",
     "customCheckboxGroup": "Aangepaste selectievakjesgroep",
     "customDropdown": "Aangepaste vervolgkeuzelijst",
     "customFieldKey": "Aangepaste veldsleutel",
@@ -582,7 +582,7 @@
     "showPreferredContactMethod": "Toon voorkeurscontactmethode",
     "submitLabel": "Primair CTA-label",
     "success": "Je bericht is verzonden.",
-    "turnstileSiteKey": "Tourniquet-locatiesleutel",
+    "turnstileSiteKey": "Turnstile-sitesleutel",
     "verificationError": "Verificatie kan niet worden geladen. Laad de pagina opnieuw en probeer het opnieuw."
   },
   "friday": "Vrijdag",

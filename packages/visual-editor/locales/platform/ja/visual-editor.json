@@ -88,7 +88,7 @@
       "defaultAlt": "ユーティリティ イメージ {{number}}"
     },
     "footerUtilityImagesSlotLabel": "ユーティリティ画像",
-    "form": "形状",
+    "form": "フォーム",
     "gallery": "ギャラリー",
     "getDirections": "道順を取得します",
     "gridSection": "グリッドセクション",
@@ -551,7 +551,7 @@
   "fontSize": "フォントサイズ",
   "form": {
     "buttonVariant": "ボタンのバリエーション",
-    "configurationError": "このフォームは準備ができていません。そのフィールドとターンスタイル サイト キーを確認してください。",
+    "configurationError": "このフォームは準備ができていません。フィールドと Turnstile サイトキーを確認してください。",
     "customCheckboxGroup": "カスタムチェックボックスグループ",
     "customDropdown": "カスタムドロップダウン",
     "customFieldKey": "カスタムフィールドキー",
@@ -582,7 +582,7 @@
     "showPreferredContactMethod": "優先連絡方法を表示",
     "submitLabel": "プライマリ CTA ラベル",
     "success": "あなたのメッセージは送信されました。",
-    "turnstileSiteKey": "改札口サイトキー",
+    "turnstileSiteKey": "Turnstile サイトキー",
     "verificationError": "検証を読み込めませんでした。ページをリロードして、もう一度お試しください。"
   },
   "friday": "金曜日",

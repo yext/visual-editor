@@ -551,7 +551,7 @@
   "fontSize": "Fontstørrelse",
   "form": {
     "buttonVariant": "Knappvariant",
-    "configurationError": "Dette skjemaet er ikke klart. Sjekk feltene og nøkkelen til turnstile-stedet.",
+    "configurationError": "Dette skjemaet er ikke klart. Sjekk feltene og Turnstile-nettstedsnøkkelen.",
     "customCheckboxGroup": "Egendefinert avmerkingsboksgruppe",
     "customDropdown": "Tilpasset rullegardin",
     "customFieldKey": "Egendefinert feltnøkkel",
@@ -582,7 +582,7 @@
     "showPreferredContactMethod": "Vis foretrukket kontaktmetode",
     "submitLabel": "Primær CTA-etikett",
     "success": "Meldingen din ble sendt.",
-    "turnstileSiteKey": "Turnstile Site Key",
+    "turnstileSiteKey": "Turnstile-nettstedsnøkkel",
     "verificationError": "Bekreftelsen kunne ikke lastes inn. Last inn siden på nytt og prøv igjen."
   },
   "friday": "fredag",
