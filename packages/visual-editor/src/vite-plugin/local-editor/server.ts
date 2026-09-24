@@ -96,8 +96,14 @@ const sendPuckAiResponse = async (
     }
   }
 
+  // Pages dev parses JSON before Vite middleware receives the request.
+  const parsedBody = (request as IncomingMessage & { body?: unknown }).body;
   const chunks: Buffer[] = [];
-  if (request.method !== "GET" && request.method !== "HEAD") {
+  if (
+    parsedBody === undefined &&
+    request.method !== "GET" &&
+    request.method !== "HEAD"
+  ) {
     for await (const chunk of request) {
       chunks.push(typeof chunk === "string" ? Buffer.from(chunk) : chunk);
     }
@@ -108,7 +114,9 @@ const sendPuckAiResponse = async (
       method: request.method ?? "GET",
       headers,
       body:
-        chunks.length > 0 ? Buffer.concat(chunks).toString("utf8") : undefined,
+        parsedBody === undefined
+          ? Buffer.concat(chunks).toString("utf8") || undefined
+          : JSON.stringify(parsedBody),
     })
   );
   response.statusCode = fetchResponse.status;

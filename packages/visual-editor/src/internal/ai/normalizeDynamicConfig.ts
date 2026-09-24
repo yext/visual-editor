@@ -217,7 +217,7 @@ export const normalizeDynamicConfig = (
           ? { ...registration.defaultProps }
           : {};
         const fieldPattern =
-          /<([A-Za-z][\w-]*)\b([^>]*?)data-puck-field-([A-Za-z][\w-]*)\s*=\s*'({[\s\S]*?})'([^>]*)>([\s\S]*?)<\/\1>/g;
+          /<([A-Za-z][\w-]*)\b([^>]*?)data-puck-field-([A-Za-z][\w-]*)(?![\w-])(?:\s*=\s*'({[\s\S]*?})'|(?!\s*=))([^>]*)>([\s\S]*?)<\/\1>/g;
         let match: RegExpExecArray | null;
         let normalizedHtml = html;
         let componentChanged = registration.streaming === true;
@@ -233,7 +233,14 @@ export const normalizeDynamicConfig = (
             innerHtml,
           ] = match;
           try {
-            const shape = JSON.parse(rawShape);
+            const existingField = fields[fieldName];
+            const shape = rawShape
+              ? JSON.parse(rawShape)
+              : {
+                  type: isRecord(existingField)
+                    ? existingField.type
+                    : undefined,
+                };
             if (
               !isRecord(shape) ||
               typeof shape.type !== "string" ||
@@ -243,7 +250,6 @@ export const normalizeDynamicConfig = (
             }
 
             const fieldDefinition = getFieldDefinition(fieldName, shape.type);
-            const existingField = fields[fieldName];
             if (!isRecord(existingField) || existingField.type !== shape.type) {
               fields[fieldName] = fieldDefinition;
               componentChanged = true;
@@ -268,9 +274,9 @@ export const normalizeDynamicConfig = (
               );
               componentChanged = true;
             }
-            if (innerHtml.trim()) {
+            if (innerHtml.trim() || !rawShape) {
               const normalizedShape =
-                Object.keys(shape).length === 1
+                rawShape && Object.keys(shape).length === 1
                   ? rawShape
                   : JSON.stringify({ type: shape.type });
               normalizedHtml = normalizedHtml.replace(
@@ -296,7 +302,7 @@ export const normalizeDynamicConfig = (
         }
 
         const imageFieldPattern =
-          /<img\b([^>]*?)data-puck-field-([A-Za-z][\w-]*)\s*=\s*'({[\s\S]*?})'([^>]*)\/?\s*>/g;
+          /<img\b([^>]*?)data-puck-field-([A-Za-z][\w-]*)(?![\w-])(?:\s*=\s*'({[\s\S]*?})'|(?!\s*=))([^>]*)\/?\s*>/g;
         while ((match = imageFieldPattern.exec(html)) !== null) {
           const [
             fieldMarkup,
@@ -306,7 +312,14 @@ export const normalizeDynamicConfig = (
             attributesAfter,
           ] = match;
           try {
-            const shape = JSON.parse(rawShape);
+            const existingField = fields[fieldName];
+            const shape = rawShape
+              ? JSON.parse(rawShape)
+              : {
+                  type: isRecord(existingField)
+                    ? existingField.type
+                    : undefined,
+                };
             if (
               !isRecord(shape) ||
               shape.type !== "testImage" ||
@@ -316,7 +329,6 @@ export const normalizeDynamicConfig = (
             }
 
             const fieldDefinition = getFieldDefinition(fieldName, shape.type);
-            const existingField = fields[fieldName];
             if (!isRecord(existingField) || existingField.type !== shape.type) {
               fields[fieldName] = fieldDefinition;
               componentChanged = true;
@@ -347,7 +359,7 @@ export const normalizeDynamicConfig = (
                 "data-puck-field-" +
                 fieldName +
                 "='" +
-                (Object.keys(shape).length === 1
+                (rawShape && Object.keys(shape).length === 1
                   ? rawShape
                   : JSON.stringify({ type: shape.type })) +
                 "'" +

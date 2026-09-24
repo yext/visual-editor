@@ -198,56 +198,58 @@ export const DynamicConfigControls = ({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <TooltipProvider delayDuration={0}>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              type="button"
-              aria-label={pt(
+      <div className="dynamic-config-controls">
+        <TooltipProvider delayDuration={0}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                aria-label={pt(
+                  "dynamicConfigLocalOnly",
+                  "Dynamic config buttons are only shown in local editor"
+                )}
+                className="ve-flex ve-h-5 ve-w-5 ve-items-center ve-justify-center ve-rounded-full ve-text-gray-500 hover:ve-text-gray-700"
+              >
+                <Info className="ve-h-4 ve-w-4" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              {pt(
                 "dynamicConfigLocalOnly",
                 "Dynamic config buttons are only shown in local editor"
               )}
-              className="ve-ml-3 ve-flex ve-h-5 ve-w-5 ve-items-center ve-justify-center ve-rounded-full ve-text-gray-500 hover:ve-text-gray-700"
-            >
-              <Info className="ve-h-4 ve-w-4" />
-            </button>
-          </TooltipTrigger>
-          <TooltipContent>
-            {pt(
-              "dynamicConfigLocalOnly",
-              "Dynamic config buttons are only shown in local editor"
-            )}
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-      <Button
-        variant="outline"
-        onClick={copyDynamicConfig}
-        className="ve-ml-2 ve-border-red-500 ve-text-red-600 hover:ve-bg-red-50 hover:ve-text-red-700"
-      >
-        {pt("copyDynamicConfig", "Copy Dynamic Config")}
-      </Button>
-      <Button
-        variant="outline"
-        onClick={pasteDynamicConfig}
-        className="ve-ml-2 ve-border-red-500 ve-text-red-600 hover:ve-bg-red-50 hover:ve-text-red-700"
-      >
-        {pt("pasteDynamicConfig", "Paste Dynamic Config")}
-      </Button>
-      <Button
-        variant="outline"
-        onClick={normalizeCurrentDynamicConfig}
-        className="ve-ml-2 ve-border-red-500 ve-text-red-600 hover:ve-bg-red-50 hover:ve-text-red-700"
-      >
-        {pt("normalizeDynamicConfig", "Normalize Dynamic Config")}
-      </Button>
-      <Button
-        variant="outline"
-        onClick={validateCurrentDynamicConfig}
-        className="ve-ml-2 ve-border-red-500 ve-text-red-600 hover:ve-bg-red-50 hover:ve-text-red-700"
-      >
-        {pt("validateDynamicConfig", "Validate Dynamic Config")}
-      </Button>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <Button
+          variant="outline"
+          onClick={copyDynamicConfig}
+          className="ve-border-red-500 ve-text-red-600 hover:ve-bg-red-50 hover:ve-text-red-700"
+        >
+          {pt("copyDynamicConfig", "Copy Dynamic Config")}
+        </Button>
+        <Button
+          variant="outline"
+          onClick={pasteDynamicConfig}
+          className="ve-border-red-500 ve-text-red-600 hover:ve-bg-red-50 hover:ve-text-red-700"
+        >
+          {pt("pasteDynamicConfig", "Paste Dynamic Config")}
+        </Button>
+        <Button
+          variant="outline"
+          onClick={normalizeCurrentDynamicConfig}
+          className="ve-border-red-500 ve-text-red-600 hover:ve-bg-red-50 hover:ve-text-red-700"
+        >
+          {pt("normalizeDynamicConfig", "Normalize Dynamic Config")}
+        </Button>
+        <Button
+          variant="outline"
+          onClick={validateCurrentDynamicConfig}
+          className="ve-border-red-500 ve-text-red-600 hover:ve-bg-red-50 hover:ve-text-red-700"
+        >
+          {pt("validateDynamicConfig", "Validate Dynamic Config")}
+        </Button>
+      </div>
     </>
   );
 };

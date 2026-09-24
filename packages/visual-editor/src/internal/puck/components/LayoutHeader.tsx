@@ -144,7 +144,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
           onSendLayoutForApproval(appState.data, comment);
         }}
       />
-      <header className="puck-header">
+      <header className="puck-header layout-header">
         <div className="header-left ve-items-center">
           <UIButtonsToggle showLeft={true} />
           <Separator
@@ -234,7 +234,6 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
             className="ve-mx-4 ve-h-7 ve-w-px ve-bg-gray-300 ve-my-auto"
           />
           <EntityFieldsToggle />
-          <DynamicConfigControls localDev={localDev} />
           {localDev && (
             <LocalDevOverrideButtons
               sectionLibraryMigrationRegistry={sectionLibraryMigrationRegistry}
@@ -320,6 +319,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
             </TooltipProvider>
           )}
         </div>
+        <DynamicConfigControls localDev={localDev} />
       </header>
     </>
   );

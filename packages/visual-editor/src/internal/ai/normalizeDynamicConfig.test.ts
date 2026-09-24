@@ -325,4 +325,43 @@ describe("normalizeDynamicConfig", () => {
 
     expect(dispatch).not.toHaveBeenCalled();
   });
+
+  it("repairs generated bare field annotations and plain-text defaults", () => {
+    const normalized = normalizeDynamicConfig({
+      components: {
+        DoubleHero: {
+          label: "DoubleHero",
+          html: `<section><h2 data-puck-field-title>Two good ideas</h2><article><div data-puck-field-card-one-image></div><div data-puck-field-card-one-description><p>First idea.</p></div><div data-puck-field-card-one-cta></div></article></section>`,
+          styles: ".double-hero {}",
+          fields: {
+            title: { type: "testEntityField" },
+            "card-one-image": { type: "testImage" },
+            "card-one-description": { type: "testRichText" },
+            "card-one-cta": { type: "testCTA" },
+          },
+          defaultProps: {
+            title: "Two good ideas",
+            "card-one-description": "First idea.",
+          },
+        },
+      },
+    }) as {
+      dynamicConfig: { components: Record<string, Record<string, any>> };
+      changed: boolean;
+    };
+
+    expect(normalized.changed).toBe(true);
+    expect(normalized.dynamicConfig.components.DoubleHero.html).not.toContain(
+      "Two good ideas"
+    );
+    expect(
+      normalized.dynamicConfig.components.DoubleHero.defaultProps.title
+    ).toMatchObject({ constantValue: "Two good ideas" });
+    expect(
+      normalized.dynamicConfig.components.DoubleHero.defaultProps[
+        "card-one-description"
+      ].constantValue.en.html
+    ).toBe("<p>First idea.</p>");
+    expect(validateDynamicConfig(normalized.dynamicConfig)).toEqual([]);
+  });
 });

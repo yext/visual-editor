@@ -1,11 +1,8 @@
-import packageJson from "../../../package.json" with { type: "json" };
-
-const puckCloudClientVersion =
-  packageJson.dependencies["@puckeditor/cloud-client"];
-const puckPluginAiVersion = packageJson.dependencies["@puckeditor/plugin-ai"];
+import { puckHandler, type PuckCloudOptions } from "@puckeditor/cloud-client";
 
 /**
- * Proxies the complete Puck AI request prepared by the editor to the Puck canary.
+ * Routes Puck AI requests through the matching cloud client, preserving the
+ * editor's context and design mode options while it prepares the cloud request.
  */
 export const handlePuckAiRequest = async (
   request: Request
@@ -21,23 +18,18 @@ export const handlePuckAiRequest = async (
     return Response.json({ error: "Not found" }, { status: 404 });
   }
 
-  const headers = new Headers({
-    "content-type": "application/json",
-    "x-api-key": apiKey,
-    "puck-api-version": "v2",
-    "x-puck-cloud-client-version": puckCloudClientVersion,
-    "x-puck-plugin-ai-version": puckPluginAiVersion,
-  });
+  const body =
+    endpoint === "chat"
+      ? ((await request.clone().json()) as NonNullable<PuckCloudOptions["ai"]>)
+      : undefined;
 
-  return fetch(
-    `https://puck-platform-git-chris-design-mode-comple-a8d2ce-puck-9db9778b.vercel.app/api/${endpoint}`,
-    {
-      method: request.method,
-      headers,
-      body:
-        request.method === "GET" || request.method === "HEAD"
-          ? undefined
-          : await request.text(),
-    }
-  );
+  return puckHandler(request, {
+    apiKey,
+    host: "https://puck-platform-git-chris-design-mode-comple-a8d2ce-puck-9db9778b.vercel.app/api",
+    ai: body && {
+      context: body.context,
+      designMode: body.designMode,
+      fieldTypes: body.fieldTypes,
+    },
+  });
 };

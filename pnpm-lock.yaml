@@ -89,14 +89,14 @@ importers:
         specifier: ^8.2.0
         version: 8.2.0
       "@puckeditor/cloud-client":
-        specifier: 0.9.0-canary.bc43b29b
-        version: 0.9.0-canary.bc43b29b
+        specifier: 0.9.0-canary.d4a0bc62
+        version: 0.9.0-canary.d4a0bc62
       "@puckeditor/core":
         specifier: 0.24.0-canary.449f42df
         version: 0.24.0-canary.449f42df(@floating-ui/dom@1.8.0)(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.7.0(react@18.3.1))
       "@puckeditor/plugin-ai":
-        specifier: 0.9.0-canary.bc43b29b
-        version: 0.9.0-canary.bc43b29b(@puckeditor/core@0.24.0-canary.449f42df(@floating-ui/dom@1.8.0)(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.7.0(react@18.3.1)))(@types/react@18.3.31)(react@18.3.1)(zod@3.25.76)
+        specifier: 0.9.0-canary.d4a0bc62
+        version: 0.9.0-canary.d4a0bc62(@puckeditor/core@0.24.0-canary.449f42df(@floating-ui/dom@1.8.0)(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.7.0(react@18.3.1)))(@types/react@18.3.31)(react@18.3.1)(zod@3.25.76)
       "@radix-ui/react-accordion":
         specifier: ^1.2.3
         version: 1.2.20(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1779,10 +1779,10 @@ packages:
         integrity: sha512-HNB6HYeYKhQbJ1aKl+YRjrS4+QWHLKX6qKoUsfS/m0vqzsVaEBiZiaKbG/e+NKk2ch5ALQr/ihWaMHxiCuuWHA==,
       }
 
-  "@puckeditor/cloud-client@0.9.0-canary.bc43b29b":
+  "@puckeditor/cloud-client@0.9.0-canary.d4a0bc62":
     resolution:
       {
-        integrity: sha512-87X0FEyCMzy0p0cP/22e4gYQ1Cm9kb/Vjy4P3BuvYiZJjjHLY9vWHAD9cmJo/ii0FVGt5j/P3DE/i0Aoj41J3A==,
+        integrity: sha512-bK2MaALTHeuUPbxKFiqoDu41tHSSdU9oBgJPRr8XMYkCxCL9f1NmdutxCNp1fg/gZX4hQqqv6YOTTZeqhJwxlQ==,
       }
 
   "@puckeditor/core@0.24.0-canary.449f42df":
@@ -1794,10 +1794,10 @@ packages:
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
 
-  "@puckeditor/plugin-ai@0.9.0-canary.bc43b29b":
+  "@puckeditor/plugin-ai@0.9.0-canary.d4a0bc62":
     resolution:
       {
-        integrity: sha512-08NjlXdM+Vrmo4teMkor6q6GoVPJvf0uyZQybRKv+SRjhJ7iylyTGXqbSkA6luPKhjrhjdFFm0tPFdqZHB/QMQ==,
+        integrity: sha512-Ghdghopszrpe0Fyec+fG3gvXOV7GWFMIdZ2kLaJbyYf1dU42Lq5GTDIzCQW7pjJEk1knQg6ZcS9IFCfkRqgsTA==,
       }
     peerDependencies:
       "@puckeditor/core": ^0
@@ -10427,7 +10427,7 @@ snapshots:
 
   "@preact/signals-core@1.14.4": {}
 
-  "@puckeditor/cloud-client@0.9.0-canary.bc43b29b": {}
+  "@puckeditor/cloud-client@0.9.0-canary.d4a0bc62": {}
 
   "@puckeditor/core@0.24.0-canary.449f42df(@floating-ui/dom@1.8.0)(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.7.0(react@18.3.1))":
     dependencies:
@@ -10478,7 +10478,7 @@ snapshots:
       - use-sync-external-store
       - utf-8-validate
 
-  "@puckeditor/plugin-ai@0.9.0-canary.bc43b29b(@puckeditor/core@0.24.0-canary.449f42df(@floating-ui/dom@1.8.0)(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.7.0(react@18.3.1)))(@types/react@18.3.31)(react@18.3.1)(zod@3.25.76)":
+  "@puckeditor/plugin-ai@0.9.0-canary.d4a0bc62(@puckeditor/core@0.24.0-canary.449f42df(@floating-ui/dom@1.8.0)(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.7.0(react@18.3.1)))(@types/react@18.3.31)(react@18.3.1)(zod@3.25.76)":
     dependencies:
       "@puckeditor/core": 0.24.0-canary.449f42df(@floating-ui/dom@1.8.0)(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.7.0(react@18.3.1))
       ai: 6.0.288(zod@3.25.76)

@@ -107,6 +107,20 @@ export const ImageFieldOverride = ({
     e.stopPropagation();
     e.preventDefault();
 
+    if (window.location.hostname === "localhost") {
+      const url = window.prompt("Enter Image URL:");
+      if (!url) {
+        return;
+      }
+
+      onChange({
+        ...localizedContainer,
+        [locale]: { alternateText: "", url, height: 1, width: 1 },
+        hasLocalizedValue: "true",
+      } as TranslatableAssetImage);
+      return;
+    }
+
     /** Instructs Storm to open the image asset selector drawer */
     const messageId = `ImageAsset-${Date.now()}`;
     pendingImageSession = {

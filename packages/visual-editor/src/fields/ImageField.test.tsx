@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { YextAutoField } from "./YextAutoField.tsx";
@@ -127,5 +127,26 @@ describe("ImageField", () => {
       },
     });
     expect(screen.getByText("Alt Text (en)")).toBeDefined();
+  });
+
+  it("selects an image URL locally without opening the parent asset drawer", () => {
+    const prompt = vi
+      .spyOn(window, "prompt")
+      .mockReturnValue("https://example.com/image.jpg");
+    const { onChange } = renderImageField();
+
+    fireEvent.click(screen.getByRole("button", { name: "Choose Image" }));
+
+    expect(prompt).toHaveBeenCalledWith("Enter Image URL:");
+    expect(onChange).toHaveBeenCalledWith({
+      en: {
+        alternateText: "",
+        url: "https://example.com/image.jpg",
+        height: 1,
+        width: 1,
+      },
+      hasLocalizedValue: "true",
+    });
+    expect(sendToParentMock).not.toHaveBeenCalled();
   });
 });

@@ -41,6 +41,7 @@ import { clonePuckResolveData } from "../utils/clonePuckResolveData.ts";
 import { YextPuckFieldOverrides } from "../../fields/fieldOverrides.ts";
 import type { MigrationRegistry } from "../../utils/migrate.ts";
 import { preparePuckAiRequest } from "../ai/prepareRequest.ts";
+import { yextAiFieldTypes } from "../ai/fieldTypes.ts";
 import { createPuckFieldTransforms } from "../utils/puckFieldTransforms.ts";
 
 const devLogger = new DevLogger();
@@ -131,6 +132,7 @@ export const InternalLayoutEditor = ({
         setAiPlugin(
           createAiPlugin({
             host: "/api/puck/chat",
+            fieldTypes: yextAiFieldTypes,
             prepareRequest: preparePuckAiRequest,
             defaultMode: "design",
             designMode: true,
