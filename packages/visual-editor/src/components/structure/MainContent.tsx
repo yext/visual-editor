@@ -1,5 +1,6 @@
 import { PuckComponent, Slot } from "@puckeditor/core";
 import { YextComponentConfig } from "../../fields/fields.ts";
+import { AdvancedCoreInfoCategory } from "../categories/AdvancedCoreInfoCategory.tsx";
 
 export interface MainContentProps {
   content: Slot;
@@ -18,6 +19,9 @@ const MainContentComponent: PuckComponent<MainContentProps> = ({
     >
       <Content
         disallow={[
+          ...AdvancedCoreInfoCategory.filter(
+            (component) => component !== "Grid"
+          ),
           "ExpandedHeader",
           "ExpandedFooter",
           "Header",
