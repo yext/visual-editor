@@ -579,7 +579,7 @@
     "required": "Pakollinen",
     "selectOption": "Valitse vaihtoehto",
     "sending": "Lähetetään...",
-    "showPreferredContactMethod": "",
+    "showPreferredContactMethod": "Näytä ensisijainen yhteydenottotapa",
     "submitLabel": "Ensisijainen toimintakehotustunniste",
     "success": "Viestisi lähetettiin.",
     "turnstileSiteKey": "Turnstile-sivustoavain",
