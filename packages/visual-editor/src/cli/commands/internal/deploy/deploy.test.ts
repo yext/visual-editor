@@ -87,48 +87,7 @@ afterEach(() => {
 });
 
 describe("deploy", () => {
-  it.each([
-    ["4174974", "production"],
-    ["100004623", "production"],
-    ["3343916", "sandbox"],
-    ["4275038", "qa"],
-    ["1000163697", "dev"],
-  ])(
-    "uses the built-in library ID for account %s in %s",
-    async (accountId, universe) => {
-      const fetchMock = vi
-        .fn()
-        .mockResolvedValueOnce(
-          new Response(successfulResponse(sectionLibrary), { status: 200 })
-        )
-        .mockResolvedValueOnce(
-          new Response(successfulResponse({ sectionLibraryRevisions: [] }), {
-            status: 200,
-          })
-        )
-        .mockResolvedValueOnce(
-          new Response(successfulResponse(sectionLibraryRevision), {
-            status: 201,
-          })
-        );
-      vi.stubGlobal("fetch", fetchMock);
-
-      await deploy({ ...config, accountId, universe }, false, {
-        isInteractive: false,
-      });
-
-      expect(
-        fetchMock.mock.calls.map(([url]) => (url as URL).pathname)
-      ).toEqual([
-        "/v2/accounts/me/sectionLibraries/yext_library%2F123",
-        "/v2/accounts/me/sectionLibraries/yext_library%2F123/revisions",
-        "/v2/accounts/me/sectionLibraries/yext_library%2F123/revisions",
-      ]);
-      expect(prompts).not.toHaveBeenCalled();
-    }
-  );
-
-  it("does not prefix a library on the wrong universe for a built-in account", async () => {
+  it("uses the library.json ID unchanged for a built-in account", async () => {
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce(
@@ -146,18 +105,19 @@ describe("deploy", () => {
       );
     vi.stubGlobal("fetch", fetchMock);
 
-    await deploy(
-      { ...config, accountId: "4174974", universe: "sandbox" },
-      false,
-      { isInteractive: false }
-    );
+    await deploy({ ...config, accountId: "3343916" }, false, {
+      isInteractive: false,
+    });
 
-    expect((fetchMock.mock.calls[0][0] as URL).pathname).toBe(
-      "/v2/accounts/me/sectionLibraries/library%2F123"
-    );
+    expect(fetchMock.mock.calls.map(([url]) => (url as URL).pathname)).toEqual([
+      "/v2/accounts/me/sectionLibraries/library%2F123",
+      "/v2/accounts/me/sectionLibraries/library%2F123/revisions",
+      "/v2/accounts/me/sectionLibraries/library%2F123/revisions",
+    ]);
+    expect(prompts).not.toHaveBeenCalled();
   });
 
-  it("does not add a second prefix when the library ID already starts with yext_", async () => {
+  it("uses a yext_ ID from library.json unchanged", async () => {
     fs.writeFileSync(
       path.join(rootDir, "src", "library", "library.json"),
       JSON.stringify({
@@ -200,12 +160,14 @@ describe("deploy", () => {
       isInteractive: false,
     });
 
-    expect((fetchMock.mock.calls[0][0] as URL).pathname).toBe(
-      "/v2/accounts/me/sectionLibraries/yext_library%2F123"
-    );
+    expect(fetchMock.mock.calls.map(([url]) => (url as URL).pathname)).toEqual([
+      "/v2/accounts/me/sectionLibraries/yext_library%2F123",
+      "/v2/accounts/me/sectionLibraries/yext_library%2F123/revisions",
+      "/v2/accounts/me/sectionLibraries/yext_library%2F123/revisions",
+    ]);
   });
 
-  it("names the prefixed library in a non-interactive missing-library error", async () => {
+  it("names the library.json ID in a non-interactive missing-library error", async () => {
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce(
@@ -217,7 +179,7 @@ describe("deploy", () => {
       deploy({ ...config, accountId: "3343916" }, false, {
         isInteractive: false,
       })
-    ).rejects.toThrow(/Section library "yext_library\/123" does not exist/);
+    ).rejects.toThrow(/Section library "library\/123" does not exist/);
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(prompts).not.toHaveBeenCalled();
@@ -480,6 +442,7 @@ describe("deploy", () => {
                     type: "BAD_REQUEST",
                     message: `Rejected api-key`,
                     name: "invalidRequest",
+                    context: { apiKey: "api-key" },
                   },
                 ],
               },
