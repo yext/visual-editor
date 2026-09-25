@@ -38,6 +38,8 @@ const devLogger = new DevLogger();
 // For hybrid development use of existing components
 // see hybrid-development.md for more details
 export interface Metadata {
+  // The editor uses a test key and does not send preview forms to production.
+  formPreview?: { localDev: boolean };
   // The environment variable that stores the content endpoint ID
   contentEndpointIdEnvVar?: string;
   // The environment variable that stores the entity type

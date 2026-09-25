@@ -81,6 +81,11 @@ import { imageFillTypeMigration } from "./0079_image_fill_type.ts";
 import { directoryCardDisplayProps } from "./0080_directory_card_display_props.ts";
 import { headerFooterImageFillTypeMigration } from "./0081_header_footer_image_fill_type.ts";
 import { heroPhoneSlotMigration } from "./0082_hero_phone_slot.ts";
+import { formContactMethodTextColorMigration } from "./0083_form_contact_method_text_color.ts";
+import { formHeadingDescriptionEntityFieldsMigration } from "./0084_form_heading_description_entity_fields.ts";
+import { formPhoneOptInRichTextMigration } from "./0085_form_phone_opt_in_rich_text.ts";
+import { formServerTurnstileKeyMigration } from "./0086_form_server_turnstile_key.ts";
+import { formEntityLabelsAndStylesMigration } from "./0087_form_entity_labels_and_styles.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -170,4 +175,9 @@ export const migrationRegistry: MigrationRegistry = [
   directoryCardDisplayProps,
   headerFooterImageFillTypeMigration,
   heroPhoneSlotMigration,
+  formContactMethodTextColorMigration,
+  formHeadingDescriptionEntityFieldsMigration,
+  formPhoneOptInRichTextMigration,
+  formServerTurnstileKeyMigration,
+  formEntityLabelsAndStylesMigration,
 ];

@@ -16,6 +16,7 @@ import {
   EventSectionProps,
 } from "../pageSections/EventSection/EventSection.tsx";
 import { HeroSection, HeroSectionProps } from "../pageSections/HeroSection.tsx";
+import { FormSection, FormSectionProps } from "../pageSections/FormSection.tsx";
 import {
   InsightSection,
   InsightSectionProps,
@@ -72,6 +73,7 @@ export interface PageSectionCategoryProps {
   CoreInfoSection: CoreInfoSectionProps;
   EventSection: EventSectionProps;
   FAQSection: FAQSectionProps;
+  FormSection: FormSectionProps;
   HeroSection: HeroSectionProps;
   InsightSection: InsightSectionProps;
   NearbyLocationsSection: NearbyLocationsSectionProps;
@@ -93,6 +95,7 @@ export const PageSectionCategoryComponents = {
   CoreInfoSection,
   EventSection,
   FAQSection,
+  FormSection,
   HeroSection,
   InsightSection,
   NearbyLocationsSection,

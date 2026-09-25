@@ -8,6 +8,11 @@ import { normalizeFooterLogoImageMigration } from "../components/migrations/0075
 import { slotMappedCardsMigration } from "../components/migrations/0076_slot_mapped_cards.ts";
 import { removeMapboxApiKeyPropsMigration } from "../components/migrations/0078_remove_mapbox_api_key_props.ts";
 import { imageFillTypeMigration } from "../components/migrations/0079_image_fill_type.ts";
+import { formContactMethodTextColorMigration } from "../components/migrations/0083_form_contact_method_text_color.ts";
+import { formHeadingDescriptionEntityFieldsMigration } from "../components/migrations/0084_form_heading_description_entity_fields.ts";
+import { formPhoneOptInRichTextMigration } from "../components/migrations/0085_form_phone_opt_in_rich_text.ts";
+import { formServerTurnstileKeyMigration } from "../components/migrations/0086_form_server_turnstile_key.ts";
+import { formEntityLabelsAndStylesMigration } from "../components/migrations/0087_form_entity_labels_and_styles.ts";
 
 describe("migrate", () => {
   it("successfully applies a migration", async () => {
@@ -2000,3 +2005,182 @@ const exampleBasicDataAfter = {
     },
   ],
 };
+
+describe("form contact method text color migration", () => {
+  it("when an old Form section is migrated, then its label color stays on Default", () => {
+    const result = migrate(
+      {
+        root: { props: { version: 0 } },
+        content: [
+          {
+            type: "FormSection",
+            props: {
+              id: "form-1",
+              styles: { backgroundColor: { selectedColor: "white" } },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [formContactMethodTextColorMigration],
+      { components: {} },
+      {}
+    );
+
+    expect(result.content[0].props.styles).toEqual({
+      backgroundColor: { selectedColor: "white" },
+      preferredContactMethodTextColor: undefined,
+    });
+  });
+});
+
+describe("form heading and description migration", () => {
+  it("when a Form has saved text, then the new entity toggles keep it as static content", () => {
+    const result = migrate(
+      {
+        root: { props: { version: 0 } },
+        content: [
+          {
+            type: "FormSection",
+            props: {
+              id: "form-1",
+              data: {
+                heading: { defaultValue: "Contact us" },
+                description: { defaultValue: "Please contact us." },
+                formType: "HS_CONTACT",
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [formHeadingDescriptionEntityFieldsMigration],
+      { components: {} },
+      {}
+    );
+
+    expect(result.content[0].props.data).toEqual({
+      heading: {
+        field: "",
+        constantValue: { defaultValue: "Contact us" },
+        constantValueEnabled: true,
+      },
+      description: {
+        field: "",
+        constantValue: { defaultValue: "Please contact us." },
+        constantValueEnabled: true,
+      },
+      formType: "HS_CONTACT",
+    });
+  });
+});
+
+describe("form phone opt-in text migration", () => {
+  it("when an old Form has consent text, then the rich text field keeps it", () => {
+    const result = migrate(
+      {
+        root: { props: { version: 0 } },
+        content: [
+          {
+            type: "FormSection",
+            props: {
+              id: "form-1",
+              data: {
+                fields: [
+                  { type: "firstName", label: "First name" },
+                  {
+                    type: "phoneOptIn",
+                    label: { defaultValue: "I agree to receive texts." },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [formPhoneOptInRichTextMigration],
+      { components: {} },
+      {}
+    );
+
+    expect(result.content[0].props.data).toEqual({
+      fields: [
+        { type: "firstName", label: "First name" },
+        {
+          type: "phoneOptIn",
+          label: { defaultValue: "I agree to receive texts." },
+        },
+      ],
+      phoneOptInText: { defaultValue: "I agree to receive texts." },
+    });
+  });
+});
+
+describe("form server Turnstile key migration", () => {
+  it("when a Form has a saved site key, then the migration removes only that key", () => {
+    const result = migrate(
+      {
+        root: { props: { version: 0 } },
+        content: [
+          {
+            type: "FormSection",
+            props: {
+              id: "form-1",
+              data: { turnstileSiteKey: "old-key", formType: "HS_EVENT" },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [formServerTurnstileKeyMigration],
+      { components: {} },
+      {}
+    );
+
+    expect(result.content[0].props.data).toEqual({ formType: "HS_EVENT" });
+  });
+
+  it("when a Form has saved labels and styles, then the migration keeps their values", () => {
+    const result = migrate(
+      {
+        root: { props: { version: 0 } },
+        content: [
+          {
+            type: "FormSection",
+            props: {
+              id: "form-1",
+              data: {
+                phoneOptInText: { defaultValue: "I agree" },
+                submitLabel: { defaultValue: "Send" },
+              },
+              styles: {
+                buttonVariant: "secondary",
+                backgroundColor: { selectedColor: "white" },
+              },
+            },
+          },
+        ],
+        zones: {},
+      },
+      [formEntityLabelsAndStylesMigration],
+      { components: {} },
+      {}
+    );
+
+    expect(result.content[0].props).toMatchObject({
+      data: {
+        phoneOptInText: {
+          constantValue: { defaultValue: "I agree" },
+          constantValueEnabled: true,
+        },
+        submitLabel: {
+          constantValue: { defaultValue: "Send" },
+          constantValueEnabled: true,
+        },
+      },
+      styles: { backgroundColor: { selectedColor: "white" } },
+      ctaStyles: { buttonVariant: "secondary" },
+    });
+  });
+});

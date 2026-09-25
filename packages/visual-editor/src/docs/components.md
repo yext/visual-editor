@@ -407,6 +407,27 @@ The background color for the entire footer section.
 
 ---
 
+## FormSection
+
+Configure the Form editor fields, defaults, and live section.
+
+### Props
+
+Saved Form settings for content, appearance, and live-page visibility.
+
+#### Other Props
+
+Button variant and optional site colors for the submit CTA.
+
+| Prop             | Type                                                                                                                                                                                                                                                                                                                                                       | Description                                                 | Default |
+| :--------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------- | :------ |
+| `ctaStyles`      | `{ buttonVariant: "primary" \| "secondary" \| "link"; color?: ThemeColor; labelColor?: ThemeColor; }`                                                                                                                                                                                                                                                      | Button variant and optional site colors for the submit CTA. |         |
+| `data`           | `{ heading: YextEntityField<TranslatableString>; description: YextEntityField<TranslatableRichText>; phoneOptInText: YextEntityField<TranslatableRichText>; submitLabel: YextEntityField<TranslatableString>; formType: "HS_CONTACT" \| "HS_EVENT"; showPreferredContactMethod: boolean; defaultContactMethod: "PHONE" \| "EMAIL"; fields: FormField[]; }` | Text, Form type, and fields that the editor can change.     |         |
+| `liveVisibility` | `boolean`                                                                                                                                                                                                                                                                                                                                                  | Hide the section on the live page when this is false.       |         |
+| `styles`         | `{ backgroundColor?: ThemeColor; textColor?: ThemeColor; preferredContactMethodTextColor?: ThemeColor; }`                                                                                                                                                                                                                                                  | Colors for the section and the contact method label.        |         |
+
+---
+
 ## Header
 
 The Header component appears at the top of pages. It serves as the primary navigation and branding element, containing the site logo and optionally a language selector. See [Expanded Header](#expanded-header) for the newest header component. Available on Directory and Locator templates.
