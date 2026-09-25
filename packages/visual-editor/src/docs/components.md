@@ -409,18 +409,17 @@ The background color for the entire footer section.
 ## FormSection
 
 A contact or event form that sends visitor data to the site's Hearsay endpoint.
-The site supplies the Turnstile site key when it serves the page. Editors do not set this key.
-An interactive editor preview uses a test key and does not send the form. The local fake starter sends the form to its test endpoint.
 
 ### Props
 
 #### Other Props
 
-| Prop             | Type                                                                                                                                                                                                                                                                                                                     | Description | Default |
-| :--------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
-| `data`           | `{ heading: YextEntityField<TranslatableString>; description: YextEntityField<TranslatableRichText>; phoneOptInText: TranslatableRichText; submitLabel: TranslatableString; formType: "HS_CONTACT" \| "HS_EVENT"; showPreferredContactMethod: boolean; defaultContactMethod: "PHONE" \| "EMAIL"; fields: FormField[]; }` |             |         |
-| `liveVisibility` | `boolean`                                                                                                                                                                                                                                                                                                                |             |         |
-| `styles`         | `{ backgroundColor?: ThemeColor; buttonVariant: "primary" \| "secondary" \| "link"; preferredContactMethodTextColor?: ThemeColor; }`                                                                                                                                                                                     |             |         |
+| Prop             | Type                                                                                                                                                                                                                                                                                                                                                       | Description | Default |
+| :--------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `ctaStyles`      | `{ buttonVariant: "primary" \| "secondary" \| "link"; color?: ThemeColor; labelColor?: ThemeColor; }`                                                                                                                                                                                                                                                      |             |         |
+| `data`           | `{ heading: YextEntityField<TranslatableString>; description: YextEntityField<TranslatableRichText>; phoneOptInText: YextEntityField<TranslatableRichText>; submitLabel: YextEntityField<TranslatableString>; formType: "HS_CONTACT" \| "HS_EVENT"; showPreferredContactMethod: boolean; defaultContactMethod: "PHONE" \| "EMAIL"; fields: FormField[]; }` |             |         |
+| `liveVisibility` | `boolean`                                                                                                                                                                                                                                                                                                                                                  |             |         |
+| `styles`         | `{ backgroundColor?: ThemeColor; textColor?: ThemeColor; preferredContactMethodTextColor?: ThemeColor; }`                                                                                                                                                                                                                                                  |             |         |
 
 ---
 
