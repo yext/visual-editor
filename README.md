@@ -24,13 +24,15 @@ Run the command from the dependent repository's root. That repository must inclu
 }
 ```
 
-The command reads the selected Git remote URL and the current commit hash, creates the Section Library if it does not already exist (after confirmation), then creates a revision. It waits for the revision build to finish and displays its elapsed time.
+The command reads the selected Git remote URL and the current commit hash, then creates a revision. With terminal input, it offers to create a missing Section Library. Without terminal input, a missing Section Library is an error: create it before deploying. The command waits for the revision build to finish and returns success only when the build succeeds.
+
+For the built-in Section Library accounts, the API stores library IDs with a `yext_` prefix. When the configured account and universe match a built-in account, `deploy` adds that prefix to the ID from `library.json` if needed. For example, `bar-social-dining` is deployed as `yext_bar-social-dining` in sandbox account `3343916`.
 
 Each layout may include one optional preview image directly in its layout directory. Name the file `preview.png`, `preview.jpg`, `preview.jpeg`, or `preview.webp`; it must be 1 MiB or smaller. During deployment, the image from the selected Git commit is uploaded to mktgcdn and used as that layout's preview image. Once a layout's preview image is set, it can be overwritten by a new image. If no image is present, that layout's former preview image is used.
 
 Before deploying, create a Yext API App in the Yext platform Developer Console and grant it Section Library API write access and have the API key on hand.
 
-Configuration values resolve in this order: environment variable, `.yextrc` in the repository root, then an interactive prompt.
+Configuration values resolve in this order: `--universe` (for the universe only), environment variable, `.yextrc` in the repository root, then an interactive prompt. `--universe` and `YEXT_UNIVERSE` cannot be used together.
 
 | Environment variable | `.yextrc` field | Description                                       |
 | -------------------- | --------------- | ------------------------------------------------- |
@@ -38,6 +40,10 @@ Configuration values resolve in this order: environment variable, `.yextrc` in t
 | `YEXT_UNIVERSE`      | `universe`      | Yext environment (`production` or `sandbox`)      |
 | `YEXT_API_KEY`       | `apiKey`        | App API key with Section Library API write access |
 | `YEXT_ORIGIN`        | `origin`        | Git remote name                                   |
+
+When stdin is a TTY, `deploy` prompts for missing values, asks whether to use or replace a complete saved configuration, and offers to save prompted values in `.yextrc`. Without a TTY, all four values must be present and valid through the environment, `.yextrc`, or `--universe`. The command does not prompt or write `.yextrc` in that mode. For example, an orchestrator can set the four environment variables once and run `yextve deploy` with detached stdin in each pre-provisioned library repository.
+
+A dirty working tree requires `--allow-dirty`, and a commit that already has a revision requires `--allow-duplicate`, when stdin is not a TTY. Interactive deployments continue to ask for confirmation. Both modes wait for the submitted revision build to succeed or fail.
 
 Use `--verbose` (or `-v`) to print API request details and response data:
 

@@ -20,6 +20,15 @@ export interface DeployOptions {
   isInteractive?: boolean;
 }
 
+// These account/universe pairs store built-in libraries with a yext_ ID prefix.
+const BUILT_IN_ACCOUNT_UNIVERSES = new Map([
+  ["4174974", "production"],
+  ["100004623", "production"],
+  ["3343916", "sandbox"],
+  ["4275038", "qa"],
+  ["1000163697", "dev"],
+]);
+
 export async function deploy(
   config: DeployConfig,
   verbose: boolean = false,
@@ -28,6 +37,7 @@ export async function deploy(
   const rootDir = process.cwd();
   const isInteractive = options.isInteractive ?? Boolean(process.stdin.isTTY);
   const library = readLibrary(rootDir);
+  const libraryId = resolveSectionLibraryId(config, library.id);
   const sourceGitOrigin = git(rootDir, "remote", "get-url", config.origin);
   const sourceCommitHash = git(rootDir, "rev-parse", "HEAD");
   const gitStatus = git(rootDir, "status", "--short");
@@ -51,22 +61,27 @@ export async function deploy(
     }
   }
 
-  const apiLibrary = await getSectionLibrary(config, library.id, verbose);
+  const apiLibrary = await getSectionLibrary(config, libraryId, verbose);
   if (apiLibrary.status === 404) {
+    if (!isInteractive) {
+      throw new Error(
+        `Section library "${libraryId}" does not exist. Create it before running a non-interactive deploy.`
+      );
+    }
     if (
       !(await confirmChoice(
-        `Section library "${library.id}" does not exist. Create it?`,
+        `Section library "${libraryId}" does not exist. Create it?`,
         0
       ))
     ) {
-      console.log(`Section library "${library.id}" was not created.`);
+      console.log(`Section library "${libraryId}" was not created.`);
       return undefined;
     }
-    await createSectionLibrary(config, library.id, library, verbose);
+    await createSectionLibrary(config, libraryId, library, verbose);
   } else {
     const revisions = await listSectionLibraryRevisions(
       config,
-      library.id,
+      libraryId,
       verbose
     );
     const matchingRevisions = revisions.filter(
@@ -96,13 +111,13 @@ export async function deploy(
       apiLibrary.response.displayName !== library.displayName ||
       apiLibrary.response.description !== library.description
     ) {
-      await updateSectionLibrary(config, library.id, library, verbose);
-      console.log(`Updated metadata for Section Library "${library.id}".`);
+      await updateSectionLibrary(config, libraryId, library, verbose);
+      console.log(`Updated metadata for Section Library "${libraryId}".`);
     }
   }
   const revision = await createSectionLibraryRevision(
     config,
-    library.id,
+    libraryId,
     {
       sourceGitOrigin,
       sourceCommitHash,
@@ -111,10 +126,23 @@ export async function deploy(
   );
 
   console.log(
-    `Uploaded commit ${sourceCommitHash} to a revision for Section Library "${library.id}".`
+    `Uploaded commit ${sourceCommitHash} to a revision for Section Library "${libraryId}".`
   );
 
   return revision;
+}
+
+function resolveSectionLibraryId(
+  config: DeployConfig,
+  libraryId: string
+): string {
+  if (
+    BUILT_IN_ACCOUNT_UNIVERSES.get(config.accountId) !== config.universe ||
+    libraryId.startsWith("yext_")
+  ) {
+    return libraryId;
+  }
+  return `yext_${libraryId}`;
 }
 
 async function confirmChoice(

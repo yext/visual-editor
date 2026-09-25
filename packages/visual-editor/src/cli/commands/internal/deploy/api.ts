@@ -56,14 +56,32 @@ export async function yextApiRequest(
       ok: response.ok,
       status: response.status,
       response: responseJson.response,
-      errors: responseJson.meta.errors,
+      errors: responseJson.meta.errors.map((error) => ({
+        ...error,
+        message: error.message.replaceAll(config.apiKey, "[REDACTED]"),
+      })),
     };
 
-    finishLog(result);
+    finishLog(
+      verbose && result.response
+        ? {
+            ...result,
+            response: JSON.parse(
+              JSON.stringify(result.response).replaceAll(
+                config.apiKey,
+                "[REDACTED]"
+              )
+            ) as object,
+          }
+        : result
+    );
 
     return result;
   } catch (error) {
     finishLog();
+    if (error instanceof Error) {
+      throw new Error(error.message.replaceAll(config.apiKey, "[REDACTED]"));
+    }
     throw error;
   }
 }

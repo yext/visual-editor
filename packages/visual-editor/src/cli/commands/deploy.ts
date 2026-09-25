@@ -21,7 +21,9 @@ Configuration (env var > .yextrc > prompt; -u and YEXT_UNIVERSE conflict):
   YEXT_API_KEY    / apiKey         API key
   YEXT_ORIGIN     / origin         Git remote name
 
-.yextrc lives in the repo root; prompted values are saved back to it.
+.yextrc lives in the repo root. With terminal input, missing values are prompted
+and can be saved. Without terminal input, all values are required and .yextrc
+is never written. A missing Section Library fails; revision builds are awaited.
 `;
 
 export const deployCmd = defineYextVECommand({
@@ -40,12 +42,20 @@ export const deployCmd = defineYextVECommand({
   run: async (values, _positionals, io, rootDir) => {
     try {
       const verbose = values.verbose ?? false;
-      const config = await resolveConfig(rootDir, values.universe);
+      const isInteractive = Boolean(process.stdin.isTTY);
+      const config = await resolveConfig(
+        rootDir,
+        values.universe,
+        isInteractive
+      );
       const revision = await deploy(config, verbose, {
         allowDirty: values["allow-dirty"] ?? false,
         allowDuplicate: values["allow-duplicate"] ?? false,
-        isInteractive: Boolean(process.stdin.isTTY),
+        isInteractive,
       });
+      if (!revision && !isInteractive) {
+        throw new Error("No Section Library revision was created.");
+      }
       if (revision) {
         await pollRevision(config, revision.name, verbose);
       }

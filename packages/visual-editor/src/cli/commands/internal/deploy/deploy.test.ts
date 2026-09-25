@@ -87,6 +87,142 @@ afterEach(() => {
 });
 
 describe("deploy", () => {
+  it.each([
+    ["4174974", "production"],
+    ["100004623", "production"],
+    ["3343916", "sandbox"],
+    ["4275038", "qa"],
+    ["1000163697", "dev"],
+  ])(
+    "uses the built-in library ID for account %s in %s",
+    async (accountId, universe) => {
+      const fetchMock = vi
+        .fn()
+        .mockResolvedValueOnce(
+          new Response(successfulResponse(sectionLibrary), { status: 200 })
+        )
+        .mockResolvedValueOnce(
+          new Response(successfulResponse({ sectionLibraryRevisions: [] }), {
+            status: 200,
+          })
+        )
+        .mockResolvedValueOnce(
+          new Response(successfulResponse(sectionLibraryRevision), {
+            status: 201,
+          })
+        );
+      vi.stubGlobal("fetch", fetchMock);
+
+      await deploy({ ...config, accountId, universe }, false, {
+        isInteractive: false,
+      });
+
+      expect(
+        fetchMock.mock.calls.map(([url]) => (url as URL).pathname)
+      ).toEqual([
+        "/v2/accounts/me/sectionLibraries/yext_library%2F123",
+        "/v2/accounts/me/sectionLibraries/yext_library%2F123/revisions",
+        "/v2/accounts/me/sectionLibraries/yext_library%2F123/revisions",
+      ]);
+      expect(prompts).not.toHaveBeenCalled();
+    }
+  );
+
+  it("does not prefix a library on the wrong universe for a built-in account", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(successfulResponse(sectionLibrary), { status: 200 })
+      )
+      .mockResolvedValueOnce(
+        new Response(successfulResponse({ sectionLibraryRevisions: [] }), {
+          status: 200,
+        })
+      )
+      .mockResolvedValueOnce(
+        new Response(successfulResponse(sectionLibraryRevision), {
+          status: 201,
+        })
+      );
+    vi.stubGlobal("fetch", fetchMock);
+
+    await deploy(
+      { ...config, accountId: "4174974", universe: "sandbox" },
+      false,
+      { isInteractive: false }
+    );
+
+    expect((fetchMock.mock.calls[0][0] as URL).pathname).toBe(
+      "/v2/accounts/me/sectionLibraries/library%2F123"
+    );
+  });
+
+  it("does not add a second prefix when the library ID already starts with yext_", async () => {
+    fs.writeFileSync(
+      path.join(rootDir, "src", "library", "library.json"),
+      JSON.stringify({
+        id: "yext_library/123",
+        displayName: "Library",
+        description: "Test",
+      })
+    );
+    execFileSync("git", ["-C", rootDir, "add", "src/library/library.json"]);
+    execFileSync("git", [
+      "-C",
+      rootDir,
+      "-c",
+      "user.name=Test",
+      "-c",
+      "user.email=test@example.com",
+      "commit",
+      "--quiet",
+      "-m",
+      "prefix library ID",
+    ]);
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(successfulResponse(sectionLibrary), { status: 200 })
+      )
+      .mockResolvedValueOnce(
+        new Response(successfulResponse({ sectionLibraryRevisions: [] }), {
+          status: 200,
+        })
+      )
+      .mockResolvedValueOnce(
+        new Response(successfulResponse(sectionLibraryRevision), {
+          status: 201,
+        })
+      );
+    vi.stubGlobal("fetch", fetchMock);
+
+    await deploy({ ...config, accountId: "3343916" }, false, {
+      isInteractive: false,
+    });
+
+    expect((fetchMock.mock.calls[0][0] as URL).pathname).toBe(
+      "/v2/accounts/me/sectionLibraries/yext_library%2F123"
+    );
+  });
+
+  it("names the prefixed library in a non-interactive missing-library error", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(successfulResponse({}), { status: 404 })
+      );
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(
+      deploy({ ...config, accountId: "3343916" }, false, {
+        isInteractive: false,
+      })
+    ).rejects.toThrow(/Section library "yext_library\/123" does not exist/);
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(prompts).not.toHaveBeenCalled();
+  });
+
   it("creates a section library revision with Git source metadata", async () => {
     const fetchMock = vi
       .fn()
@@ -141,6 +277,20 @@ describe("deploy", () => {
     );
 
     await expect(deploy(config)).rejects.toThrow(/string "id"/);
+  });
+
+  it("names an invalid Git remote before making an API request", async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(
+      deploy({ ...config, origin: "missing" }, false, {
+        isInteractive: false,
+      })
+    ).rejects.toThrow('Could not run "git remote get-url missing".');
+
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(prompts).not.toHaveBeenCalled();
   });
 
   it("does not print the API response body without verbose mode", async () => {
@@ -306,6 +456,45 @@ describe("deploy", () => {
     );
   });
 
+  it("redacts the API key from verbose responses and API errors", async () => {
+    const errorLog = vi.spyOn(console, "error").mockImplementation(() => {});
+    vi.stubGlobal(
+      "fetch",
+      vi
+        .fn()
+        .mockResolvedValueOnce(
+          new Response(successfulResponse(sectionLibrary), { status: 200 })
+        )
+        .mockResolvedValueOnce(
+          new Response(successfulResponse({ sectionLibraryRevisions: [] }), {
+            status: 200,
+          })
+        )
+        .mockResolvedValueOnce(
+          new Response(
+            JSON.stringify({
+              meta: {
+                errors: [
+                  {
+                    code: 100000,
+                    type: "BAD_REQUEST",
+                    message: `Rejected api-key`,
+                    name: "invalidRequest",
+                  },
+                ],
+              },
+              response: { detail: "api-key" },
+            }),
+            { status: 400 }
+          )
+        )
+    );
+
+    await expect(deploy(config, true)).rejects.toThrow("Rejected [REDACTED]");
+    expect(JSON.stringify(errorLog.mock.calls)).not.toContain("api-key");
+    expect(JSON.stringify(errorLog.mock.calls)).toContain("[REDACTED]");
+  });
+
   it("creates a missing section library after confirmation", async () => {
     vi.mocked(prompts).mockResolvedValueOnce({ value: true });
     const fetchMock = vi
@@ -323,7 +512,7 @@ describe("deploy", () => {
       );
     vi.stubGlobal("fetch", fetchMock);
 
-    await deploy(config);
+    await deploy(config, false, { isInteractive: true });
 
     expect(fetchMock).toHaveBeenNthCalledWith(
       2,
@@ -341,6 +530,22 @@ describe("deploy", () => {
       expect.objectContaining({ initial: 0 }),
       expect.anything()
     );
+  });
+
+  it("fails without creating a missing section library when stdin is not interactive", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(successfulResponse({}), { status: 404 })
+      );
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(
+      deploy(config, false, { isInteractive: false })
+    ).rejects.toThrow(/Section library "library\/123" does not exist/);
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(prompts).not.toHaveBeenCalled();
   });
 
   it.each([
