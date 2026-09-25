@@ -53,6 +53,11 @@ export async function deploy(
 
   const apiLibrary = await getSectionLibrary(config, library.id, verbose);
   if (apiLibrary.status === 404) {
+    if (!isInteractive) {
+      throw new Error(
+        `Section library "${library.id}" does not exist. Create it before running a non-interactive deploy.`
+      );
+    }
     if (
       !(await confirmChoice(
         `Section library "${library.id}" does not exist. Create it?`,

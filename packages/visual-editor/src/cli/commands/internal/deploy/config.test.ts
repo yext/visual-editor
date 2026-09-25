@@ -50,6 +50,86 @@ beforeEach(() => {
 });
 
 describe("resolveConfig", () => {
+  describe("without terminal input", () => {
+    it("uses complete environment configuration without prompting or writing .yextrc", async () => {
+      process.env.YEXT_ACCOUNT_ID = "111";
+      process.env.YEXT_UNIVERSE = "sandbox";
+      process.env.YEXT_API_KEY = "env-secret";
+      const dir = tmpDir();
+
+      const config = await resolveConfig(dir, undefined, false);
+
+      expect(config).toMatchObject({
+        accountId: "111",
+        universe: "sandbox",
+        apiKey: "env-secret",
+        origin: "origin",
+      });
+      expect(mockPrompts).not.toHaveBeenCalled();
+      expect(fs.existsSync(path.join(dir, ".yextrc"))).toBe(false);
+    });
+
+    it("uses a complete saved configuration without replace or save prompts", async () => {
+      delete process.env.YEXT_ORIGIN;
+      const dir = tmpDir();
+      seedYextrc(dir, FULL_YEXTRC);
+      const before = fs.readFileSync(path.join(dir, ".yextrc"), "utf8");
+
+      const config = await resolveConfig(dir, undefined, false);
+
+      expect(config).toMatchObject({
+        accountId: "9",
+        universe: "sandbox",
+        apiKey: "filekey",
+        origin: "origin",
+      });
+      expect(mockPrompts).not.toHaveBeenCalled();
+      expect(fs.readFileSync(path.join(dir, ".yextrc"), "utf8")).toBe(before);
+    });
+
+    it.each([
+      ["YEXT_ACCOUNT_ID", "Account ID"],
+      ["YEXT_UNIVERSE", "Universe"],
+      ["YEXT_API_KEY", "API key"],
+      ["YEXT_ORIGIN", "Git remote name"],
+    ])("fails when %s is missing", async (envName, label) => {
+      process.env.YEXT_ACCOUNT_ID = "111";
+      process.env.YEXT_UNIVERSE = "sandbox";
+      process.env.YEXT_API_KEY = "secret";
+      process.env.YEXT_ORIGIN = "origin";
+      delete process.env[envName];
+      const dir = tmpDir();
+
+      await expect(resolveConfig(dir, undefined, false)).rejects.toThrow(
+        `${label} is required for non-interactive deploy.`
+      );
+      expect(mockPrompts).not.toHaveBeenCalled();
+      expect(fs.existsSync(path.join(dir, ".yextrc"))).toBe(false);
+    });
+
+    it("rejects invalid values without prompting", async () => {
+      process.env.YEXT_ACCOUNT_ID = "abc";
+      process.env.YEXT_UNIVERSE = "sandbox";
+      process.env.YEXT_API_KEY = "secret";
+
+      await expect(resolveConfig(tmpDir(), undefined, false)).rejects.toThrow(
+        /Invalid account ID/
+      );
+      expect(mockPrompts).not.toHaveBeenCalled();
+    });
+
+    it("preserves the CLI and environment universe conflict", async () => {
+      process.env.YEXT_UNIVERSE = "sandbox";
+
+      await expect(
+        resolveConfig(tmpDir(), "production", false)
+      ).rejects.toThrow(
+        "Universe cannot be provided through both --universe and YEXT_UNIVERSE."
+      );
+      expect(mockPrompts).not.toHaveBeenCalled();
+    });
+  });
+
   it("offers to save an environment-derived configuration", async () => {
     process.env.YEXT_ACCOUNT_ID = "111";
     process.env.YEXT_UNIVERSE = "sandbox";
