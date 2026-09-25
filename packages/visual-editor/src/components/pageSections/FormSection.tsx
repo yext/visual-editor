@@ -37,7 +37,9 @@ import {
   prepareSubmissionData,
 } from "./formSectionUtils.ts";
 
+/** Saved Form settings for content, appearance, and live-page visibility. */
 export interface FormSectionProps {
+  /** Text, Form type, and fields that the editor can change. */
   data: {
     heading: YextEntityField<TranslatableString>;
     description: YextEntityField<TranslatableRichText>;
@@ -48,19 +50,23 @@ export interface FormSectionProps {
     defaultContactMethod: "PHONE" | "EMAIL";
     fields: FormField[];
   };
+  /** Colors for the section and the contact method label. */
   styles: {
     backgroundColor?: ThemeColor;
     textColor?: ThemeColor;
     preferredContactMethodTextColor?: ThemeColor;
   };
+  /** Button variant and optional site colors for the submit CTA. */
   ctaStyles: {
     buttonVariant: "primary" | "secondary" | "link";
     color?: ThemeColor;
     labelColor?: ThemeColor;
   };
+  /** Hide the section on the live page when this is false. */
   liveVisibility: boolean;
 }
 
+/** Turnstile methods that this Form uses in its own document. */
 type Turnstile = {
   render: (
     container: HTMLElement,
@@ -79,6 +85,7 @@ type Turnstile = {
   remove: (widgetId: string) => void;
 };
 
+/** Callbacks for the token request in the current submit attempt. */
 type TokenRequest = {
   resolve: (token: string) => void;
   reject: (error: Error) => void;
@@ -93,9 +100,9 @@ declare global {
 const turnstileScriptPromises = new WeakMap<Document, Promise<Turnstile>>();
 const turnstileSiteKeyMarker = "<YEXT_TURNSTILE_SITE_KEY>";
 const turnstileTestSiteKey = "1x00000000000000000000AA";
-// This fixed markup must contain the raw marker for replacement when the page is served.
+/** Keep the raw marker in page HTML so the server can replace it with a site key. */
 const turnstileMarkup = `<div data-sitekey="${turnstileSiteKeyMarker}" data-execution="execute"></div>`;
-// Invalid or disabled site keys and unauthorized domains cannot be retried.
+/** These errors mean a new token request cannot fix the widget setup. */
 const turnstileConfigurationErrors = new Set([
   "110100",
   "110110",
@@ -106,7 +113,12 @@ const turnstileConfigurationErrors = new Set([
 const inputClassName =
   "w-full rounded-button-borderRadius border border-current/30 bg-transparent px-3 py-3 font-body-fontFamily text-body-fontSize placeholder:text-current/60 focus-visible:outline-2 focus-visible:outline-palette-primary";
 
-/** Load Turnstile once in the document that contains the form. */
+/**
+ * Load Turnstile in the document that contains the form, including a preview iframe.
+ * Share a pending load. If it fails, remove it from the cache so a later mount can retry.
+ * @param formDocument The document that will hold the Turnstile script.
+ * @returns The Turnstile API for that document.
+ */
 function loadTurnstile(formDocument: Document): Promise<Turnstile> {
   const formWindow = formDocument.defaultView;
   if (!formWindow) {
@@ -153,7 +165,11 @@ function loadTurnstile(formDocument: Document): Promise<Turnstile> {
   return promise;
 }
 
-/** Connect Turnstile results to the current token request. */
+/**
+ * Render the widget in execute mode so it does not issue a token on page load.
+ * Send widget results to the token request for the current submit attempt.
+ * @returns The widget ID that Turnstile uses for reset and removal.
+ */
 function renderTurnstile(
   turnstile: Turnstile,
   container: HTMLElement,
@@ -177,7 +193,11 @@ function renderTurnstile(
   });
 }
 
-/** Execute Turnstile and reject if it does not return a token in time. */
+/**
+ * Start verification when the visitor submits the Form.
+ * Reject after two minutes if Turnstile does not return a token.
+ * @returns A new token for this submit attempt.
+ */
 function requestTurnstileToken(
   turnstile: Turnstile,
   container: HTMLElement,
@@ -243,7 +263,11 @@ const ContactMethodField = ({
   </fieldset>
 );
 
-/** Render a text input, message box, or dropdown with its label. */
+/**
+ * Render one text input, message box, or dropdown with its label.
+ * Keep the label marker separate from the input's required rule. Show a red
+ * border only after the visitor changes the input and leaves it empty.
+ */
 const FormInputField = ({
   field,
   label,
@@ -361,7 +385,11 @@ const FormInputField = ({
   );
 };
 
-/** Render configured fields in their saved order with the correct required rules. */
+/**
+ * Render fields in their saved order and apply the Form's required rules.
+ * First and last name are always required. The selected phone or email input
+ * is required and gets a marker, even when its editor toggle is off.
+ */
 const FormFields = ({
   fields,
   contactMethod,
@@ -534,11 +562,12 @@ const FormFeedback = ({
 );
 
 /**
- * Show the Form section and submit entered values.
- * 1. Check the editor setup and render the configured fields.
- * 2. Load Turnstile for live forms and interactive previews.
- * 3. Get a fresh token and POST, or simulate the result in an editor preview.
- * 4. Show the result and keep values when the request fails.
+ * Show the Form section and handle each submit attempt.
+ * 1. Check the saved fields and load Turnstile for live and interactive views.
+ * 2. Render the fields, selected contact method, and site colors.
+ * 3. Check entered values and get a new Turnstile token on submit.
+ * 4. POST on live pages and in the local fake starter. Simulate other previews.
+ * 5. Clear values on success or keep them on failure, then show the result.
  */
 const FormSectionComponent: PuckComponent<FormSectionProps> = ({
   data,
@@ -648,6 +677,7 @@ const FormSectionComponent: PuckComponent<FormSectionProps> = ({
     isLocalFakeStarter,
   ]);
 
+  /** Check the form, get a fresh token, and send or simulate one submission. */
   const submit = async (
     event: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
@@ -848,6 +878,7 @@ const FormSectionComponent: PuckComponent<FormSectionProps> = ({
   );
 };
 
+/** Keep the editor groups in sidebar order, with CTA styles after Form Fields. */
 const formSectionFields: YextFields<FormSectionProps> = {
   styles: {
     type: "object",
@@ -1042,7 +1073,7 @@ const formSectionFields: YextFields<FormSectionProps> = {
   },
 };
 
-/** A contact or event form that sends visitor data to the site's Hearsay endpoint. */
+/** Configure the Form editor fields, defaults, and live section. */
 export const FormSection: YextComponentConfig<FormSectionProps> = {
   label: msg("components.form", "Form Section"),
   fields: formSectionFields,
