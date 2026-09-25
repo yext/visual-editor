@@ -1,7 +1,8 @@
 import * as React from "react";
-import { PuckComponent } from "@puckeditor/core";
+import { PuckComponent, setDeep } from "@puckeditor/core";
 import { useTranslation } from "react-i18next";
 import { useDocument } from "../../hooks/useDocument.tsx";
+import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import { TranslatableRichText, TranslatableString } from "../../types/types.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import {
@@ -10,46 +11,52 @@ import {
   ThemeOptions,
 } from "../../utils/themeConfigOptions.ts";
 import { msg, pt } from "../../utils/i18n/platform.ts";
-import { TranslatableRichTextField } from "../../editor/TranslatableRichTextField.tsx";
-import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
+import { getDefaultRTF } from "../../editor/TranslatableRichTextField.tsx";
+import { type YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { isFakeStarterLocalDev } from "../../utils/isFakeStarterLocalDev.ts";
+import { EntityField } from "../../editor/EntityField.tsx";
+import {
+  toPuckFields,
+  YextComponentConfig,
+  YextFields,
+} from "../../fields/fields.ts";
 import { PageSection } from "../atoms/pageSection.tsx";
+import {
+  getTextColorClass,
+  getTextColorStyle,
+  getThemeColorCssValue,
+} from "../../utils/colors.ts";
+import { themeManagerCn } from "../../utils/cn.ts";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
 import { Heading } from "../atoms/heading.tsx";
 import { Body } from "../atoms/body.tsx";
 import { Button } from "../atoms/button.tsx";
-
-type FormField = {
-  type:
-    | "preferredContactMethod"
-    | "firstName"
-    | "lastName"
-    | "phone"
-    | "email"
-    | "message"
-    | "phoneOptIn"
-    | "text"
-    | "dropdown"
-    | "checkboxGroup";
-  label: TranslatableString;
-  key?: string;
-  required?: boolean;
-  options?: { label: TranslatableString; value: string }[];
-};
+import {
+  type FormField,
+  hasInvalidConfiguration,
+  prepareSubmissionData,
+} from "./formSectionUtils.ts";
 
 export interface FormSectionProps {
   data: {
-    heading: TranslatableString;
-    description: TranslatableRichText;
-    submitLabel: TranslatableString;
+    heading: YextEntityField<TranslatableString>;
+    description: YextEntityField<TranslatableRichText>;
+    phoneOptInText: YextEntityField<TranslatableRichText>;
+    submitLabel: YextEntityField<TranslatableString>;
     formType: "HS_CONTACT" | "HS_EVENT";
-    turnstileSiteKey: string;
     showPreferredContactMethod: boolean;
     defaultContactMethod: "PHONE" | "EMAIL";
     fields: FormField[];
   };
   styles: {
     backgroundColor?: ThemeColor;
+    textColor?: ThemeColor;
+    preferredContactMethodTextColor?: ThemeColor;
+  };
+  ctaStyles: {
     buttonVariant: "primary" | "secondary" | "link";
+    color?: ThemeColor;
+    labelColor?: ThemeColor;
   };
   liveVisibility: boolean;
 }
@@ -62,7 +69,7 @@ type Turnstile = {
       appearance: "interaction-only";
       execution: "execute";
       callback: (token: string) => void;
-      "error-callback": () => void;
+      "error-callback": (errorCode: string) => void;
       "expired-callback": () => void;
       "timeout-callback": () => void;
     }
@@ -72,6 +79,11 @@ type Turnstile = {
   remove: (widgetId: string) => void;
 };
 
+type TokenRequest = {
+  resolve: (token: string) => void;
+  reject: (error: Error) => void;
+};
+
 declare global {
   interface Window {
     turnstile?: Turnstile;
@@ -79,6 +91,20 @@ declare global {
 }
 
 const turnstileScriptPromises = new WeakMap<Document, Promise<Turnstile>>();
+const turnstileSiteKeyMarker = "<YEXT_TURNSTILE_SITE_KEY>";
+const turnstileTestSiteKey = "1x00000000000000000000AA";
+// This fixed markup must contain the raw marker for replacement when the page is served.
+const turnstileMarkup = `<div data-sitekey="${turnstileSiteKeyMarker}" data-execution="execute"></div>`;
+// Invalid or disabled site keys and unauthorized domains cannot be retried.
+const turnstileConfigurationErrors = new Set([
+  "110100",
+  "110110",
+  "110200",
+  "400020",
+  "400070",
+]);
+const inputClassName =
+  "w-full rounded-button-borderRadius border border-current/30 bg-transparent px-3 py-3 font-body-fontFamily text-body-fontSize placeholder:text-current/60 focus-visible:outline-2 focus-visible:outline-palette-primary";
 
 /** Load Turnstile once in the document that contains the form. */
 function loadTurnstile(formDocument: Document): Promise<Turnstile> {
@@ -127,23 +153,749 @@ function loadTurnstile(formDocument: Document): Promise<Turnstile> {
   return promise;
 }
 
+/** Connect Turnstile results to the current token request. */
+function renderTurnstile(
+  turnstile: Turnstile,
+  container: HTMLElement,
+  siteKey: string,
+  tokenRequestRef: React.MutableRefObject<TokenRequest | undefined>,
+  onVerificationError: (errorCode: string) => void
+): string {
+  return turnstile.render(container, {
+    sitekey: siteKey,
+    appearance: "interaction-only",
+    execution: "execute",
+    callback: (token) => tokenRequestRef.current?.resolve(token),
+    "error-callback": (errorCode) => {
+      onVerificationError(errorCode);
+      tokenRequestRef.current?.reject(new Error("Turnstile failed"));
+    },
+    "expired-callback": () =>
+      tokenRequestRef.current?.reject(new Error("Turnstile expired")),
+    "timeout-callback": () =>
+      tokenRequestRef.current?.reject(new Error("Turnstile timed out")),
+  });
+}
+
+/** Execute Turnstile and reject if it does not return a token in time. */
+function requestTurnstileToken(
+  turnstile: Turnstile,
+  container: HTMLElement,
+  tokenRequestRef: React.MutableRefObject<TokenRequest | undefined>
+): Promise<string> {
+  let timeoutId: ReturnType<typeof setTimeout>;
+  return new Promise<string>((resolve, reject) => {
+    tokenRequestRef.current = { resolve, reject };
+    timeoutId = setTimeout(
+      () => reject(new Error("Turnstile timed out")),
+      120_000
+    );
+    turnstile.execute(container);
+  }).finally(() => clearTimeout(timeoutId));
+}
+
+/** Render the contact method choices as one form field. */
+const ContactMethodField = ({
+  label,
+  required,
+  contactMethod,
+  onContactMethodChange,
+  textColor,
+}: {
+  label: React.ReactNode;
+  required: boolean;
+  contactMethod: FormSectionProps["data"]["defaultContactMethod"];
+  onContactMethodChange: (method: "PHONE" | "EMAIL") => void;
+  textColor?: ThemeColor;
+}): React.ReactElement => (
+  <fieldset className="col-span-full mb-2">
+    <legend
+      className={themeManagerCn(
+        "mb-4 font-body-fontFamily font-body-fontWeight",
+        getTextColorClass(textColor)
+      )}
+      style={getTextColorStyle(textColor)}
+    >
+      {label}
+      {required ? " *" : ""}
+    </legend>
+    <div className="flex flex-col gap-2">
+      {(["PHONE", "EMAIL"] as const).map((method) => (
+        <label
+          key={method}
+          className="flex items-center gap-3 font-body-fontFamily text-body-fontSize"
+        >
+          <input
+            type="radio"
+            name="preferred_contact_method"
+            value={method}
+            checked={contactMethod === method}
+            onChange={() => onContactMethodChange(method)}
+            className="accent-palette-primary"
+          />
+          {pt(
+            method === "PHONE" ? "form.phone" : "form.email",
+            method === "PHONE" ? "Phone" : "Email"
+          )}
+        </label>
+      ))}
+    </div>
+  </fieldset>
+);
+
+/** Render a text input, message box, or dropdown with its label. */
+const FormInputField = ({
+  field,
+  label,
+  required,
+  showRequiredMarker,
+  name,
+  id,
+  locale,
+  streamDocument,
+}: {
+  field: FormField;
+  label: string;
+  required: boolean;
+  showRequiredMarker: boolean;
+  name: string;
+  id: string;
+  locale: string;
+  streamDocument: StreamDocument;
+}): React.ReactElement => {
+  const editedRef = React.useRef(false);
+  const [showMissingValue, setShowMissingValue] = React.useState(false);
+  const inputClass = themeManagerCn(
+    inputClassName,
+    showMissingValue && "border-red-600 focus-visible:outline-red-600"
+  );
+  const onChange = (): void => {
+    editedRef.current = true;
+    setShowMissingValue(false);
+  };
+  const onBlur = (
+    event: React.FocusEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ): void => {
+    if (editedRef.current) {
+      setShowMissingValue(required && !event.currentTarget.value.trim());
+    }
+  };
+
+  return (
+    <div
+      className={
+        field.type === "message" || field.type === "dropdown"
+          ? "col-span-full"
+          : "min-w-0"
+      }
+    >
+      <label
+        htmlFor={id}
+        className="mb-2 block font-body-fontFamily text-body-sm-fontSize"
+      >
+        {label}
+        {showRequiredMarker ? " *" : ""}
+      </label>
+      {field.type === "message" ? (
+        <textarea
+          id={id}
+          name={name}
+          placeholder={label}
+          required={required}
+          aria-invalid={showMissingValue || undefined}
+          onChange={onChange}
+          onBlur={onBlur}
+          rows={7}
+          className={inputClass}
+        />
+      ) : field.type === "dropdown" ? (
+        <select
+          id={id}
+          name={name}
+          required={required}
+          aria-invalid={showMissingValue || undefined}
+          onChange={onChange}
+          onBlur={onBlur}
+          defaultValue=""
+          className={inputClass}
+        >
+          <option value="">
+            {pt("form.selectOption", "Select an option")}
+          </option>
+          {field.options?.map((option, optionIndex) => (
+            <option key={optionIndex} value={option.value}>
+              {resolveComponentData(option.label, locale, streamDocument)}
+            </option>
+          ))}
+        </select>
+      ) : (
+        <input
+          id={id}
+          name={name}
+          placeholder={label}
+          required={required}
+          aria-invalid={showMissingValue || undefined}
+          onChange={onChange}
+          onBlur={onBlur}
+          type={
+            field.type === "email"
+              ? "email"
+              : field.type === "phone"
+                ? "tel"
+                : "text"
+          }
+          autoComplete={
+            {
+              firstName: "given-name",
+              lastName: "family-name",
+              phone: "tel",
+              email: "email",
+            }[field.type as "firstName" | "lastName" | "phone" | "email"]
+          }
+          className={inputClass}
+        />
+      )}
+    </div>
+  );
+};
+
+/** Render configured fields in their saved order with the correct required rules. */
+const FormFields = ({
+  fields,
+  contactMethod,
+  onContactMethodChange,
+  showPreferredContactMethod,
+  preferredContactMethodTextColor,
+  phoneOptInText,
+  locale,
+  streamDocument,
+}: {
+  fields: FormField[];
+  contactMethod: FormSectionProps["data"]["defaultContactMethod"];
+  onContactMethodChange: (method: "PHONE" | "EMAIL") => void;
+  showPreferredContactMethod: boolean;
+  preferredContactMethodTextColor?: ThemeColor;
+  phoneOptInText: YextEntityField<TranslatableRichText>;
+  locale: string;
+  streamDocument: StreamDocument;
+}): React.ReactElement => {
+  const formId = React.useId();
+  const renderField = (field: FormField, index: number): React.ReactNode => {
+    const label = resolveComponentData(field.label, locale, streamDocument);
+    const contactMethodRequiresField =
+      (field.type === "phone" && contactMethod === "PHONE") ||
+      (field.type === "email" && contactMethod === "EMAIL");
+    const required =
+      field.type === "firstName" ||
+      field.type === "lastName" ||
+      contactMethodRequiresField ||
+      Boolean(field.required);
+    const name =
+      {
+        firstName: "first_name",
+        lastName: "last_name",
+        phone: "phone",
+        email: "email",
+        message: "message",
+      }[
+        field.type as "firstName" | "lastName" | "phone" | "email" | "message"
+      ] ?? `custom_${index}`;
+    const id = `${formId}-${index}`;
+
+    if (field.type === "preferredContactMethod") {
+      return showPreferredContactMethod ? (
+        <ContactMethodField
+          key={index}
+          label={label}
+          required={Boolean(field.required)}
+          contactMethod={contactMethod}
+          onContactMethodChange={onContactMethodChange}
+          textColor={preferredContactMethodTextColor}
+        />
+      ) : null;
+    }
+    if (field.type === "phoneOptIn") {
+      return contactMethod === "PHONE" ? (
+        <div key={index} className="col-span-full">
+          <EntityField
+            displayName={pt("form.phoneOptIn", "Phone Opt-In")}
+            fieldId={phoneOptInText.field}
+            constantValueEnabled={phoneOptInText.constantValueEnabled}
+          >
+            <label className="flex items-start gap-3 font-body-fontFamily text-body-sm-fontSize">
+              <input
+                type="checkbox"
+                name="relate_opt_in"
+                required={field.required}
+                className="mt-1 accent-palette-primary"
+              />
+              <div>
+                {resolveComponentData(phoneOptInText, locale, streamDocument, {
+                  variant: "sm",
+                })}
+                {field.required ? " *" : ""}
+              </div>
+            </label>
+          </EntityField>
+        </div>
+      ) : null;
+    }
+    if (field.type === "checkboxGroup") {
+      return (
+        <fieldset key={index} className="col-span-full">
+          <legend className="mb-2 font-body-fontFamily text-body-fontSize">
+            {label}
+            {field.required ? " *" : ""}
+          </legend>
+          <div className="flex flex-col gap-2">
+            {field.options?.map((option, optionIndex) => (
+              <label
+                key={optionIndex}
+                className="flex items-center gap-3 font-body-fontFamily text-body-fontSize"
+              >
+                <input
+                  type="checkbox"
+                  name={name}
+                  value={option.value}
+                  className="accent-palette-primary"
+                />
+                {resolveComponentData(option.label, locale, streamDocument)}
+              </label>
+            ))}
+          </div>
+        </fieldset>
+      );
+    }
+    return (
+      <FormInputField
+        key={index}
+        field={field}
+        label={label}
+        required={required}
+        showRequiredMarker={
+          Boolean(field.required) || contactMethodRequiresField
+        }
+        name={name}
+        id={id}
+        locale={locale}
+        streamDocument={streamDocument}
+      />
+    );
+  };
+
+  return (
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      {fields.map(renderField)}
+    </div>
+  );
+};
+
+/** Show setup, success, and request errors next to the form. */
+const FormFeedback = ({
+  showConfigurationError,
+  status,
+  turnstileReady,
+  isPreviewSimulation,
+}: {
+  showConfigurationError: boolean;
+  status: "idle" | "pending" | "success" | "error";
+  turnstileReady: boolean;
+  isPreviewSimulation: boolean;
+}): React.ReactElement => (
+  <>
+    {showConfigurationError && (
+      <Body role="alert">
+        {pt(
+          "form.configurationError",
+          "This form is not ready. Check its fields."
+        )}
+      </Body>
+    )}
+    {status === "success" && (
+      <Body role="status">
+        {isPreviewSimulation
+          ? pt("form.previewSuccess", "Preview only. No message was sent.")
+          : pt("form.success", "Your message was sent.")}
+      </Body>
+    )}
+    {status === "error" && (
+      <Body role="alert">
+        {!turnstileReady
+          ? pt(
+              "form.verificationError",
+              "Verification could not load. Reload the page and try again."
+            )
+          : pt("form.error", "Your message could not be sent. Try again.")}
+      </Body>
+    )}
+  </>
+);
+
+/**
+ * Show the Form section and submit entered values.
+ * 1. Check the editor setup and render the configured fields.
+ * 2. Load Turnstile for live forms and interactive previews.
+ * 3. Get a fresh token and POST, or simulate the result in an editor preview.
+ * 4. Show the result and keep values when the request fails.
+ */
+const FormSectionComponent: PuckComponent<FormSectionProps> = ({
+  data,
+  styles,
+  ctaStyles,
+  puck,
+}) => {
+  const streamDocument = useDocument();
+  const { i18n } = useTranslation();
+  const locale = i18n.language;
+  const [contactMethod, setContactMethod] = React.useState(
+    data.defaultContactMethod
+  );
+  const [status, setStatus] = React.useState<
+    "idle" | "pending" | "success" | "error"
+  >("idle");
+  const [turnstileReady, setTurnstileReady] = React.useState(false);
+  const [verificationUnavailable, setVerificationUnavailable] =
+    React.useState(false);
+  const formRef = React.useRef<HTMLFormElement>(null);
+  const turnstileContainerRef = React.useRef<HTMLDivElement>(null);
+  const widgetIdRef = React.useRef<string>();
+  const tokenRequestRef = React.useRef<TokenRequest>();
+
+  const fields = data.fields ?? [];
+  const invalidConfiguration = hasInvalidConfiguration(data, streamDocument);
+  const isEditorPreview = Boolean(puck.metadata?.formPreview);
+  const isLocalFakeStarter =
+    Boolean(puck.metadata?.formPreview?.localDev) ||
+    (isFakeStarterLocalDev() &&
+      ["localhost", "127.0.0.1"].includes(window.location.hostname));
+
+  React.useEffect(() => {
+    setContactMethod(data.defaultContactMethod);
+  }, [data.defaultContactMethod]);
+
+  React.useEffect(() => {
+    if (
+      puck.isEditing ||
+      verificationUnavailable ||
+      invalidConfiguration ||
+      !turnstileContainerRef.current
+    ) {
+      return;
+    }
+    let active = true;
+    const formDocument = turnstileContainerRef.current.ownerDocument;
+    const widgetContainer = turnstileContainerRef.current
+      .firstElementChild as HTMLElement | null;
+    if (!widgetContainer) {
+      setVerificationUnavailable(true);
+      return;
+    }
+    if (isEditorPreview || isLocalFakeStarter) {
+      widgetContainer.dataset.sitekey = turnstileTestSiteKey;
+    }
+    const siteKey = widgetContainer.dataset.sitekey?.trim();
+    if (!siteKey || siteKey === turnstileSiteKeyMarker) {
+      setVerificationUnavailable(true);
+      return;
+    }
+    loadTurnstile(formDocument)
+      .then((turnstile) => {
+        if (!active) {
+          return;
+        }
+        setStatus("idle");
+        widgetIdRef.current = renderTurnstile(
+          turnstile,
+          widgetContainer,
+          siteKey,
+          tokenRequestRef,
+          (errorCode) => {
+            if (turnstileConfigurationErrors.has(errorCode)) {
+              setVerificationUnavailable(true);
+            } else if (!tokenRequestRef.current) {
+              setStatus("error");
+            }
+          }
+        );
+        if (!widgetIdRef.current) {
+          throw new Error("Turnstile did not render");
+        }
+        setTurnstileReady(true);
+      })
+      .catch((error: unknown) => {
+        if (active) {
+          console.error("Turnstile could not load or render", error);
+          setVerificationUnavailable(true);
+        }
+      });
+    return () => {
+      active = false;
+      tokenRequestRef.current?.reject(new Error("Form unmounted"));
+      tokenRequestRef.current = undefined;
+      if (widgetIdRef.current) {
+        formDocument.defaultView?.turnstile?.remove(widgetIdRef.current);
+        widgetIdRef.current = undefined;
+      }
+      setTurnstileReady(false);
+    };
+  }, [
+    invalidConfiguration,
+    puck.isEditing,
+    verificationUnavailable,
+    isEditorPreview,
+    isLocalFakeStarter,
+  ]);
+
+  const submit = async (
+    event: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
+    event.preventDefault();
+    const turnstile =
+      turnstileContainerRef.current?.ownerDocument.defaultView?.turnstile;
+    const widgetContainer = turnstileContainerRef.current
+      ?.firstElementChild as HTMLElement | null;
+    if (
+      puck.isEditing ||
+      status === "pending" ||
+      invalidConfiguration ||
+      !turnstileReady ||
+      !turnstile ||
+      !widgetIdRef.current ||
+      !widgetContainer
+    ) {
+      return;
+    }
+    const form = event.currentTarget;
+    if (!form.reportValidity()) {
+      return;
+    }
+    const submissionData = prepareSubmissionData(
+      new FormData(form),
+      fields,
+      contactMethod
+    );
+    if (!submissionData) {
+      setStatus("error");
+      return;
+    }
+    setStatus("pending");
+    try {
+      const token = await requestTurnstileToken(
+        turnstile,
+        widgetContainer,
+        tokenRequestRef
+      );
+      if (!isEditorPreview || isLocalFakeStarter) {
+        const response = await fetch("/forms/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            entity_id: String(streamDocument.id),
+            token,
+            type: data.formType,
+            data: submissionData,
+          }),
+        });
+        if (!response.ok) {
+          throw new Error("Form submission failed");
+        }
+      }
+      formRef.current?.reset();
+      setContactMethod(data.defaultContactMethod);
+      setStatus("success");
+    } catch {
+      setStatus("error");
+    } finally {
+      tokenRequestRef.current = undefined;
+      if (widgetIdRef.current) {
+        turnstile.reset(widgetIdRef.current);
+      }
+    }
+  };
+
+  const description = resolveComponentData(
+    data.description,
+    locale,
+    streamDocument,
+    { variant: "base" }
+  );
+  const isSubmitDisabled =
+    !puck.isEditing &&
+    (status === "pending" || invalidConfiguration || !turnstileReady);
+
+  if (verificationUnavailable) {
+    return <></>;
+  }
+
+  return (
+    <PageSection
+      background={styles.backgroundColor}
+      className={getTextColorClass(styles.textColor)}
+      style={getTextColorStyle(styles.textColor)}
+    >
+      <div className="space-y-5">
+        <EntityField
+          displayName={pt("form.heading", "Header")}
+          fieldId={data.heading.field}
+          constantValueEnabled={data.heading.constantValueEnabled}
+        >
+          <Heading level={2}>
+            {resolveComponentData(data.heading, locale, streamDocument)}
+          </Heading>
+        </EntityField>
+        <EntityField
+          displayName={pt("form.description", "Description")}
+          fieldId={data.description.field}
+          constantValueEnabled={data.description.constantValueEnabled}
+        >
+          <div className="space-y-3">
+            {typeof description === "string" ? (
+              <Body className="whitespace-pre-line">{description}</Body>
+            ) : (
+              description
+            )}
+          </div>
+        </EntityField>
+        <form
+          ref={formRef}
+          onSubmit={submit}
+          onKeyDown={(event: React.KeyboardEvent<HTMLFormElement>) => {
+            // Puck 0.22.2 misses Backspace and Delete inputs inside the preview iframe.
+            if (event.key === "Backspace" || event.key === "Delete") {
+              event.stopPropagation();
+            }
+          }}
+          className="space-y-6"
+        >
+          <FormFields
+            fields={fields}
+            contactMethod={contactMethod}
+            onContactMethodChange={setContactMethod}
+            showPreferredContactMethod={data.showPreferredContactMethod}
+            preferredContactMethodTextColor={
+              styles.preferredContactMethodTextColor
+            }
+            phoneOptInText={data.phoneOptInText}
+            locale={locale}
+            streamDocument={streamDocument}
+          />
+          <div className="sr-only" aria-hidden="true">
+            <input
+              name="yext_wingspan_url"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+            />
+          </div>
+          {!puck.isEditing && (
+            <div
+              ref={turnstileContainerRef}
+              suppressHydrationWarning
+              dangerouslySetInnerHTML={{ __html: turnstileMarkup }}
+            />
+          )}
+          <FormFeedback
+            showConfigurationError={invalidConfiguration}
+            status={status}
+            turnstileReady={turnstileReady}
+            isPreviewSimulation={isEditorPreview && !isLocalFakeStarter}
+          />
+          <div className="flex justify-center">
+            <EntityField
+              displayName={pt("form.ctaLabel", "CTA Label")}
+              fieldId={data.submitLabel.field}
+              constantValueEnabled={data.submitLabel.constantValueEnabled}
+            >
+              <Button
+                type="submit"
+                variant={ctaStyles.buttonVariant}
+                disabled={isSubmitDisabled}
+                style={{
+                  backgroundColor:
+                    ctaStyles.buttonVariant === "primary"
+                      ? getThemeColorCssValue(ctaStyles.color?.selectedColor)
+                      : undefined,
+                  borderColor:
+                    ctaStyles.buttonVariant !== "link"
+                      ? getThemeColorCssValue(ctaStyles.color?.selectedColor)
+                      : undefined,
+                  color: getThemeColorCssValue(
+                    ctaStyles.labelColor?.selectedColor ??
+                      (ctaStyles.buttonVariant === "primary"
+                        ? ctaStyles.color?.contrastingColor
+                        : ctaStyles.color?.selectedColor)
+                  ),
+                }}
+              >
+                {status === "pending"
+                  ? pt("form.sending", "Sending...")
+                  : resolveComponentData(
+                      data.submitLabel,
+                      locale,
+                      streamDocument
+                    )}
+              </Button>
+            </EntityField>
+          </div>
+          <p className="font-body-fontFamily text-body-sm-fontSize">
+            * {pt("form.required", "Required")}
+          </p>
+        </form>
+      </div>
+    </PageSection>
+  );
+};
+
 const formSectionFields: YextFields<FormSectionProps> = {
+  styles: {
+    type: "object",
+    label: msg("fields.styles", "Styles"),
+    objectFields: {
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
+      textColor: {
+        type: "basicSelector",
+        label: msg("fields.textColor", "Text Color"),
+        options: "SITE_COLOR",
+      },
+      preferredContactMethodTextColor: {
+        type: "basicSelector",
+        label: msg(
+          "form.preferredContactMethodTextColor",
+          "Preferred Contact Method Text Color"
+        ),
+        options: "SITE_COLOR",
+      },
+    },
+  },
   data: {
     type: "object",
     label: msg("fields.data", "Data"),
     objectFields: {
       heading: {
-        type: "translatableString",
+        type: "entityField",
         label: msg("form.heading", "Header"),
-        showFieldSelector: false,
+        filter: { types: ["type.string"] },
       },
-      description: TranslatableRichTextField(
-        msg("form.description", "Description")
-      ),
+      description: {
+        type: "entityField",
+        label: msg("form.description", "Description"),
+        filter: { types: ["type.string", "type.rich_text_v2"] },
+      },
+      phoneOptInText: {
+        type: "entityField",
+        label: msg("form.phoneOptIn", "Phone Opt-In"),
+        filter: { types: ["type.string", "type.rich_text_v2"] },
+      },
       submitLabel: {
-        type: "translatableString",
-        label: msg("form.submitLabel", "Primary CTA Label"),
-        showFieldSelector: false,
+        type: "entityField",
+        label: msg("form.ctaLabel", "CTA Label"),
+        filter: { types: ["type.string"] },
       },
       formType: {
         type: "radio",
@@ -158,10 +910,6 @@ const formSectionFields: YextFields<FormSectionProps> = {
             value: "HS_EVENT",
           },
         ],
-      },
-      turnstileSiteKey: {
-        type: "text",
-        label: msg("form.turnstileSiteKey", "Turnstile Site Key"),
       },
       showPreferredContactMethod: {
         type: "radio",
@@ -263,19 +1011,24 @@ const formSectionFields: YextFields<FormSectionProps> = {
       },
     },
   },
-  styles: {
+  ctaStyles: {
     type: "object",
-    label: msg("fields.styles", "Styles"),
+    label: msg("form.ctaStyles", "CTA Styles"),
     objectFields: {
-      backgroundColor: {
-        type: "basicSelector",
-        label: msg("fields.backgroundColor", "Background Color"),
-        options: "BACKGROUND_COLOR",
-      },
       buttonVariant: {
         type: "radio",
         label: msg("form.buttonVariant", "Button Variant"),
         options: ThemeOptions.CTA_VARIANT,
+      },
+      color: {
+        type: "basicSelector",
+        label: msg("form.ctaColor", "CTA Color"),
+        options: "SITE_COLOR",
+      },
+      labelColor: {
+        type: "basicSelector",
+        label: msg("form.ctaLabelColor", "CTA Label Color"),
+        options: "SITE_COLOR",
       },
     },
   },
@@ -289,541 +1042,85 @@ const formSectionFields: YextFields<FormSectionProps> = {
   },
 };
 
-const inputClassName =
-  "w-full rounded-button-borderRadius border border-current/30 bg-transparent px-3 py-3 font-body-fontFamily text-body-fontSize focus-visible:outline-2 focus-visible:outline-palette-primary";
-
-/**
- * Show the configured fields, verify the visitor, and submit to the fixed form path.
- * 1. Check that the editor configuration can supply the required API fields.
- * 2. Execute Turnstile only after the visitor submits a valid form.
- * 3. Send the API body, then show the result without losing data on an error.
- */
-const FormSectionComponent: PuckComponent<FormSectionProps> = ({
-  data,
-  styles,
-  puck,
-}) => {
-  const streamDocument = useDocument();
-  const { i18n } = useTranslation();
-  const locale = i18n.language;
-  const [contactMethod, setContactMethod] = React.useState(
-    data.defaultContactMethod
-  );
-  const [status, setStatus] = React.useState<
-    "idle" | "pending" | "success" | "error"
-  >("idle");
-  const [turnstileReady, setTurnstileReady] = React.useState(false);
-  const formRef = React.useRef<HTMLFormElement>(null);
-  const turnstileContainerRef = React.useRef<HTMLDivElement>(null);
-  const formId = React.useId();
-  const widgetIdRef = React.useRef<string>();
-  const tokenRequestRef = React.useRef<{
-    resolve: (token: string) => void;
-    reject: (error: Error) => void;
-  }>();
-
-  const fields = data.fields ?? [];
-  const configuredTypes = fields.map((field) => field.type);
-  const customKeys = fields
-    .filter((field) =>
-      ["text", "dropdown", "checkboxGroup"].includes(field.type)
-    )
-    .map((field) => field.key?.trim() ?? "");
-  const invalidConfiguration =
-    !streamDocument.id ||
-    !configuredTypes.includes("firstName") ||
-    !configuredTypes.includes("lastName") ||
-    (data.showPreferredContactMethod &&
-      !configuredTypes.includes("preferredContactMethod")) ||
-    !configuredTypes.includes(
-      data.defaultContactMethod === "PHONE" ? "phone" : "email"
-    ) ||
-    (data.showPreferredContactMethod &&
-      (!configuredTypes.includes("phone") ||
-        !configuredTypes.includes("email"))) ||
-    fields.some((field) =>
-      field.type === "dropdown" || field.type === "checkboxGroup"
-        ? !field.options?.length ||
-          field.options.some((option) => !option.value.trim())
-        : false
-    ) ||
-    // The honeypot is hidden below, so visible custom fields cannot use its key.
-    customKeys.some((key) => !key || key.toLowerCase().includes("wingspan")) ||
-    new Set(customKeys).size !== customKeys.length ||
-    [
-      "firstName",
-      "lastName",
-      "preferredContactMethod",
-      "phone",
-      "email",
-      "message",
-      "phoneOptIn",
-    ].some(
-      (type) =>
-        configuredTypes.filter((configuredType) => configuredType === type)
-          .length > 1
-    );
-
-  React.useEffect(() => {
-    setContactMethod(data.defaultContactMethod);
-  }, [data.defaultContactMethod]);
-
-  React.useEffect(() => {
-    if (
-      puck.isEditing ||
-      invalidConfiguration ||
-      !data.turnstileSiteKey ||
-      !turnstileContainerRef.current
-    ) {
-      return;
-    }
-    let active = true;
-    const formDocument = turnstileContainerRef.current.ownerDocument;
-    loadTurnstile(formDocument)
-      .then((turnstile) => {
-        if (!active || !turnstileContainerRef.current) {
-          return;
-        }
-        widgetIdRef.current = turnstile.render(turnstileContainerRef.current, {
-          sitekey: data.turnstileSiteKey,
-          appearance: "interaction-only",
-          execution: "execute",
-          callback: (token) => tokenRequestRef.current?.resolve(token),
-          "error-callback": () =>
-            tokenRequestRef.current?.reject(new Error("Turnstile failed")),
-          "expired-callback": () =>
-            tokenRequestRef.current?.reject(new Error("Turnstile expired")),
-          "timeout-callback": () =>
-            tokenRequestRef.current?.reject(new Error("Turnstile timed out")),
-        });
-        setTurnstileReady(true);
-        setStatus("idle");
-      })
-      .catch((error: unknown) => {
-        if (active) {
-          console.error("Turnstile could not load or render", error);
-          setStatus("error");
-        }
-      });
-    return () => {
-      active = false;
-      tokenRequestRef.current?.reject(new Error("Form unmounted"));
-      tokenRequestRef.current = undefined;
-      if (widgetIdRef.current) {
-        formDocument.defaultView?.turnstile?.remove(widgetIdRef.current);
-        widgetIdRef.current = undefined;
-      }
-      setTurnstileReady(false);
-    };
-  }, [data.turnstileSiteKey, invalidConfiguration, puck.isEditing]);
-
-  const submit = async (
-    event: React.FormEvent<HTMLFormElement>
-  ): Promise<void> => {
-    event.preventDefault();
-    const turnstile =
-      turnstileContainerRef.current?.ownerDocument.defaultView?.turnstile;
-    if (
-      puck.isEditing ||
-      status === "pending" ||
-      invalidConfiguration ||
-      !turnstileReady ||
-      !turnstile ||
-      !widgetIdRef.current ||
-      !turnstileContainerRef.current
-    ) {
-      return;
-    }
-    const form = event.currentTarget;
-    if (!form.reportValidity()) {
-      return;
-    }
-    const values = new FormData(form);
-    const firstName = String(values.get("first_name") ?? "").trim();
-    const lastName = String(values.get("last_name") ?? "").trim();
-    const phone = String(values.get("phone") ?? "").trim();
-    const email = String(values.get("email") ?? "").trim();
-    if (
-      !firstName ||
-      !lastName ||
-      !(contactMethod === "PHONE" ? phone : email) ||
-      fields.some(
-        (field, index) =>
-          field.required &&
-          (field.type === "checkboxGroup"
-            ? !values.getAll(`custom_${index}`).length
-            : ["text", "message", "phone", "email"].includes(field.type) &&
-              !String(
-                values.get(
-                  field.type === "text" ? `custom_${index}` : field.type
-                ) ?? ""
-              ).trim())
-      )
-    ) {
-      setStatus("error");
-      return;
-    }
-    setStatus("pending");
-    try {
-      let timeoutId: ReturnType<typeof setTimeout>;
-      const token = await new Promise<string>((resolve, reject) => {
-        tokenRequestRef.current = { resolve, reject };
-        timeoutId = setTimeout(
-          () => reject(new Error("Turnstile timed out")),
-          120_000
-        );
-        turnstile.execute(turnstileContainerRef.current!);
-      }).finally(() => clearTimeout(timeoutId));
-      const customData: Record<string, string | string[]> = {
-        yext_wingspan_url: String(values.get("yext_wingspan_url") ?? ""),
-      };
-      fields.forEach((field, index) => {
-        if (
-          !["text", "dropdown", "checkboxGroup"].includes(field.type) ||
-          !field.key
-        ) {
-          return;
-        }
-        const name = `custom_${index}`;
-        const value =
-          field.type === "checkboxGroup"
-            ? values.getAll(name).map(String)
-            : String(values.get(name) ?? "").trim();
-        if (Array.isArray(value) ? value.length : value) {
-          customData[field.key.trim()] = value;
-        }
-      });
-      const response = await fetch("/forms/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          entity_id: String(streamDocument.id),
-          token,
-          type: data.formType,
-          data: {
-            first_name: firstName,
-            last_name: lastName,
-            preferred_contact_method: contactMethod,
-            ...(phone ? { phone } : {}),
-            ...(email ? { email } : {}),
-            ...(values.get("message")
-              ? { message: String(values.get("message")).trim() }
-              : {}),
-            ...(configuredTypes.includes("phoneOptIn") &&
-            contactMethod === "PHONE"
-              ? { relate_opt_in: values.has("relate_opt_in") }
-              : {}),
-            custom_data: customData,
-          },
-        }),
-      });
-      if (!response.ok) {
-        throw new Error("Form submission failed");
-      }
-      formRef.current?.reset();
-      setContactMethod(data.defaultContactMethod);
-      setStatus("success");
-    } catch {
-      setStatus("error");
-    } finally {
-      tokenRequestRef.current = undefined;
-      if (widgetIdRef.current) {
-        turnstile.reset(widgetIdRef.current);
-      }
-    }
-  };
-
-  const renderField = (field: FormField, index: number): React.ReactNode => {
-    const label = resolveComponentData(field.label, locale, streamDocument);
-    const required =
-      field.type === "firstName" ||
-      field.type === "lastName" ||
-      (field.type === "phone" && contactMethod === "PHONE") ||
-      (field.type === "email" && contactMethod === "EMAIL") ||
-      Boolean(field.required);
-    const name =
-      {
-        firstName: "first_name",
-        lastName: "last_name",
-        phone: "phone",
-        email: "email",
-        message: "message",
-      }[
-        field.type as "firstName" | "lastName" | "phone" | "email" | "message"
-      ] ?? `custom_${index}`;
-    const id = `${formId}-${index}`;
-
-    if (field.type === "preferredContactMethod") {
-      return data.showPreferredContactMethod ? (
-        <fieldset key={index} className="col-span-full mb-2">
-          <legend className="mb-4 font-body-fontFamily font-body-fontWeight text-palette-primary-dark">
-            {label}
-          </legend>
-          <div className="flex flex-col gap-2">
-            {(["PHONE", "EMAIL"] as const).map((method) => (
-              <label
-                key={method}
-                className="flex items-center gap-3 font-body-fontFamily text-body-fontSize"
-              >
-                <input
-                  type="radio"
-                  name="preferred_contact_method"
-                  value={method}
-                  checked={contactMethod === method}
-                  onChange={() => setContactMethod(method)}
-                  className="accent-palette-primary"
-                />
-                {pt(
-                  method === "PHONE" ? "form.phone" : "form.email",
-                  method === "PHONE" ? "Phone" : "Email"
-                )}
-              </label>
-            ))}
-          </div>
-        </fieldset>
-      ) : null;
-    }
-    if (field.type === "phoneOptIn") {
-      return contactMethod === "PHONE" ? (
-        <label
-          key={index}
-          className="col-span-full flex items-start gap-3 font-body-fontFamily text-body-sm-fontSize"
-        >
-          <input
-            type="checkbox"
-            name="relate_opt_in"
-            required={field.required}
-            className="mt-1 accent-palette-primary"
-          />
-          {label}
-        </label>
-      ) : null;
-    }
-    if (field.type === "checkboxGroup") {
-      return (
-        <fieldset key={index} className="col-span-full">
-          <legend className="mb-2 font-body-fontFamily text-body-fontSize">
-            {label}
-            {required ? " *" : ""}
-          </legend>
-          <div className="flex flex-col gap-2">
-            {field.options?.map((option, optionIndex) => (
-              <label
-                key={optionIndex}
-                className="flex items-center gap-3 font-body-fontFamily text-body-fontSize"
-              >
-                <input
-                  type="checkbox"
-                  name={name}
-                  value={option.value}
-                  className="accent-palette-primary"
-                />
-                {resolveComponentData(option.label, locale, streamDocument)}
-              </label>
-            ))}
-          </div>
-        </fieldset>
-      );
-    }
-    return (
-      <div
-        key={index}
-        className={
-          field.type === "message" || field.type === "dropdown"
-            ? "col-span-full"
-            : "min-w-0"
-        }
-      >
-        <label
-          htmlFor={id}
-          className="mb-2 block font-body-fontFamily text-body-sm-fontSize"
-        >
-          {label}
-          {required ? " *" : ""}
-        </label>
-        {field.type === "message" ? (
-          <textarea
-            id={id}
-            name={name}
-            required={required}
-            rows={7}
-            className={inputClassName}
-          />
-        ) : field.type === "dropdown" ? (
-          <select
-            id={id}
-            name={name}
-            required={required}
-            defaultValue=""
-            className={inputClassName}
-          >
-            <option value="">
-              {pt("form.selectOption", "Select an option")}
-            </option>
-            {field.options?.map((option, optionIndex) => (
-              <option key={optionIndex} value={option.value}>
-                {resolveComponentData(option.label, locale, streamDocument)}
-              </option>
-            ))}
-          </select>
-        ) : (
-          <input
-            id={id}
-            name={name}
-            required={required}
-            type={
-              field.type === "email"
-                ? "email"
-                : field.type === "phone"
-                  ? "tel"
-                  : "text"
-            }
-            autoComplete={
-              {
-                firstName: "given-name",
-                lastName: "family-name",
-                phone: "tel",
-                email: "email",
-              }[field.type as "firstName" | "lastName" | "phone" | "email"]
-            }
-            className={inputClassName}
-          />
-        )}
-      </div>
-    );
-  };
-
-  const description = resolveComponentData(
-    data.description,
-    locale,
-    streamDocument,
-    { variant: "base" }
-  );
-
-  return (
-    <PageSection background={styles.backgroundColor}>
-      <div className="space-y-5">
-        <Heading level={2}>
-          {resolveComponentData(data.heading, locale, streamDocument)}
-        </Heading>
-        <div className="space-y-3">
-          {typeof description === "string" ? (
-            <Body className="whitespace-pre-line">{description}</Body>
-          ) : (
-            description
-          )}
-        </div>
-        <form
-          ref={formRef}
-          onSubmit={submit}
-          onKeyDown={(event: React.KeyboardEvent<HTMLFormElement>) => {
-            // Puck 0.22.2 misses text inputs inside the preview iframe.
-            if (event.key === "Backspace" || event.key === "Delete") {
-              event.stopPropagation();
-            }
-          }}
-          className="space-y-6"
-        >
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {fields.map(renderField)}
-          </div>
-          <div className="sr-only" aria-hidden="true">
-            <input
-              name="yext_wingspan_url"
-              type="text"
-              tabIndex={-1}
-              autoComplete="off"
-            />
-          </div>
-          {!puck.isEditing && <div ref={turnstileContainerRef} />}
-          {(invalidConfiguration ||
-            (!puck.isEditing && !data.turnstileSiteKey)) && (
-            <Body role="alert">
-              {pt(
-                "form.configurationError",
-                "This form is not ready. Check its fields and Turnstile site key."
-              )}
-            </Body>
-          )}
-          {status === "success" && (
-            <Body role="status">
-              {pt("form.success", "Your message was sent.")}
-            </Body>
-          )}
-          {status === "error" && (
-            <Body role="alert">
-              {!turnstileReady
-                ? pt(
-                    "form.verificationError",
-                    "Verification could not load. Reload the page and try again."
-                  )
-                : pt(
-                    "form.error",
-                    "Your message could not be sent. Try again."
-                  )}
-            </Body>
-          )}
-          <div className="flex justify-center">
-            <Button
-              type="submit"
-              variant={styles.buttonVariant}
-              disabled={
-                !puck.isEditing &&
-                (status === "pending" ||
-                  invalidConfiguration ||
-                  !data.turnstileSiteKey ||
-                  !turnstileReady)
-              }
-            >
-              {status === "pending"
-                ? pt("form.sending", "Sending...")
-                : resolveComponentData(
-                    data.submitLabel,
-                    locale,
-                    streamDocument
-                  )}
-            </Button>
-          </div>
-        </form>
-      </div>
-    </PageSection>
-  );
-};
-
 /** A contact or event form that sends visitor data to the site's Hearsay endpoint. */
 export const FormSection: YextComponentConfig<FormSectionProps> = {
   label: msg("components.form", "Form Section"),
   fields: formSectionFields,
+  // Puck uses one array field map for all rows, so this hides Options only
+  // when no row needs it.
+  resolveFields: (data) =>
+    setDeep(
+      toPuckFields(formSectionFields),
+      "data.objectFields.fields.arrayFields.options.visible",
+      data.props.data.fields?.some(
+        (field) => field.type === "dropdown" || field.type === "checkboxGroup"
+      ) ?? false
+    ),
   defaultProps: {
     data: {
-      heading: { defaultValue: "Contact us" },
-      description: {
-        defaultValue:
-          "Please fill in all the mandatory fields.\n\nTo protect your privacy, we ask that you not send any confidential information through this contact form.",
+      heading: {
+        field: "",
+        constantValue: { defaultValue: "Contact us" },
+        constantValueEnabled: true,
       },
-      submitLabel: { defaultValue: "Send Message" },
+      description: {
+        field: "",
+        constantValue: {
+          defaultValue:
+            "Please fill in all the mandatory fields.\n\nTo protect your privacy, we ask that you not send any confidential information through this contact form.",
+        },
+        constantValueEnabled: true,
+      },
+      phoneOptInText: {
+        field: "",
+        constantValue: {
+          defaultValue: getDefaultRTF("I consent to receive text messages."),
+        },
+        constantValueEnabled: true,
+      },
+      submitLabel: {
+        field: "",
+        constantValue: { defaultValue: "Send Message" },
+        constantValueEnabled: true,
+      },
       formType: "HS_CONTACT",
-      turnstileSiteKey: "",
       showPreferredContactMethod: true,
       defaultContactMethod: "PHONE",
       fields: [
         {
           type: "preferredContactMethod",
           label: { defaultValue: "Preferred Communication Method" },
+          required: true,
         },
-        { type: "firstName", label: { defaultValue: "First name" } },
-        { type: "lastName", label: { defaultValue: "Last name" } },
-        { type: "phone", label: { defaultValue: "Phone" } },
-        { type: "email", label: { defaultValue: "Email" } },
-        { type: "message", label: { defaultValue: "Message" } },
+        {
+          type: "firstName",
+          label: { defaultValue: "First name" },
+          required: true,
+        },
+        {
+          type: "lastName",
+          label: { defaultValue: "Last name" },
+          required: true,
+        },
+        { type: "phone", label: { defaultValue: "Phone" }, required: false },
+        { type: "email", label: { defaultValue: "Email" }, required: false },
+        {
+          type: "message",
+          label: { defaultValue: "Message" },
+          required: false,
+        },
         {
           type: "phoneOptIn",
           label: { defaultValue: "I consent to receive text messages." },
+          required: false,
         },
       ],
     },
     styles: {
       backgroundColor: backgroundColors.background1.value,
+      preferredContactMethodTextColor: undefined,
+    },
+    ctaStyles: {
       buttonVariant: "primary",
     },
     liveVisibility: true,

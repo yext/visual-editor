@@ -14,11 +14,14 @@ export default defineConfig({
             return;
           }
           try {
-            let body = "";
-            for await (const chunk of request) {
-              body += chunk;
+            let submission = request.body;
+            if (!submission) {
+              let body = "";
+              for await (const chunk of request) {
+                body += chunk;
+              }
+              submission = JSON.parse(body);
             }
-            const submission = JSON.parse(body);
             const data = submission.data;
             const valid =
               request.headers["content-type"]?.includes("application/json") &&

@@ -8,23 +8,12 @@ import {
   MainConfigProps,
   locatorConfig,
   mainConfig,
-  FormSection,
 } from "@yext/visual-editor";
 
 interface DevProps extends MainConfigProps, DirectoryCategoryProps {}
 
 const components: Config<DevProps>["components"] = {
   ...mainConfig.components,
-  FormSection: {
-    ...FormSection,
-    defaultProps: {
-      ...FormSection.defaultProps,
-      data: {
-        ...FormSection.defaultProps.data,
-        turnstileSiteKey: "1x00000000000000000000AA",
-      },
-    },
-  },
   ...DirectoryCategoryComponents,
 };
 
