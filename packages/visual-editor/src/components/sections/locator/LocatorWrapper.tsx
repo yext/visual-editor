@@ -45,7 +45,6 @@ import {
   createSearchHeadlessConfig,
 } from "../../../utils/searchHeadlessConfig.ts";
 import { getThemeColorCssValue } from "../../../utils/colors.ts";
-import { getValueFromQueryString } from "../../../utils/urlQueryString.tsx";
 import { Button } from "../../atoms/button.tsx";
 import { Body } from "../../atoms/body.tsx";
 import { Heading } from "../../atoms/heading.tsx";
@@ -89,6 +88,9 @@ import {
 } from "./Results.tsx";
 
 export const INITIAL_LOCATION_KEY = "initialLocation";
+const LOCATION_QUERY_KEY = "q";
+// Keep URL syncing behind one switch until it has an editor setting.
+const ENABLE_LOCATION_QUERY_PARAM = true;
 
 export const LocatorWrapper = (props: WithPuckProps<LocatorProps>) => {
   const streamDocument = useDocument();
@@ -177,12 +179,20 @@ const LocatorInternal = ({
   const searchResults = useSearchState(
     (state) => (state.vertical.results || []) as Result<Location>[]
   );
-  const queryParamString =
-    typeof window === "undefined" ? "" : window.location.search;
-  const initialLocationParam = getValueFromQueryString(
-    INITIAL_LOCATION_KEY,
-    queryParamString
-  );
+  // Manage browser forward/back button for location searches
+  const [urlNavigationVersion, setUrlNavigationVersion] = React.useState(0);
+  React.useEffect(() => {
+    if (!ENABLE_LOCATION_QUERY_PARAM) {
+      return;
+    }
+    const handlePopState = () =>
+      setUrlNavigationVersion((version) => version + 1);
+    const controller = new AbortController();
+    window.addEventListener("popstate", handlePopState, {
+      signal: controller.signal,
+    });
+    return () => controller.abort();
+  }, []);
 
   const iframe =
     typeof document === "undefined"
@@ -319,6 +329,14 @@ const LocatorInternal = ({
     searchActions.setStaticFilters([locationFilter, openNowFilter]);
     searchActions.executeVerticalQuery();
     setSearchState("loading");
+    if (ENABLE_LOCATION_QUERY_PARAM) {
+      const nextUrl = new URL(window.location.href);
+      nextUrl.searchParams.set(LOCATION_QUERY_KEY, newDisplayName);
+      nextUrl.searchParams.delete(INITIAL_LOCATION_KEY);
+      if (nextUrl.href !== window.location.href) {
+        window.history.pushState(window.history.state, "", nextUrl);
+      }
+    }
     if (
       nearFilterValue?.lat &&
       nearFilterValue?.lng &&
@@ -519,6 +537,11 @@ const LocatorInternal = ({
 
   React.useEffect(() => {
     let isCancelled = false;
+    const queryParams = new URLSearchParams(window.location.search);
+    const initialLocationParam =
+      ENABLE_LOCATION_QUERY_PARAM && queryParams.has(LOCATION_QUERY_KEY)
+        ? queryParams.get(LOCATION_QUERY_KEY)
+        : queryParams.get(INITIAL_LOCATION_KEY);
 
     const resolveLocationAndSearch = async () => {
       setIsInitialMapLocationResolved(false);
@@ -536,9 +559,16 @@ const LocatorInternal = ({
         radius
       );
       const doSearch = () => {
+        if (isCancelled) {
+          return;
+        }
         searchActions.setVerticalLimit(RESULTS_LIMIT);
         searchActions.setOffset(0);
-        searchActions.setStaticFilters([initialLocationFilter]);
+        searchActions.setStaticFilters(
+          urlNavigationVersion === 0
+            ? [initialLocationFilter]
+            : [initialLocationFilter, openNowFilter]
+        );
         searchActions.executeVerticalQuery();
         setSearchState("loading");
         if (
@@ -615,7 +645,8 @@ const LocatorInternal = ({
           });
       };
 
-      // 1. Check if a location could be determined from the initialLocation query parameter
+      // 1. Resolve the q or initialLocation parameter
+      //    q always takes precedence over initialLocation
       if (
         initialLocationParam &&
         (await foundStartingLocationFromQueryParam(initialLocationParam))
@@ -624,9 +655,16 @@ const LocatorInternal = ({
         return;
       }
 
+      if (isCancelled) {
+        return;
+      }
+
       try {
         // 2. Try to get user location via Geolocation API
         const location = await getUserLocation();
+        if (isCancelled) {
+          return;
+        }
         const lat = location.coords.latitude;
         const lng = location.coords.longitude;
         setUserLocationRetrieved(true);
@@ -678,7 +716,7 @@ const LocatorInternal = ({
     return () => {
       isCancelled = true;
     };
-  }, [initialLocationParam, initialMapCenter, searchActions]);
+  }, [urlNavigationVersion, initialMapCenter, searchActions]);
 
   const handleOpenNowClick = (selected: boolean) => {
     if (selected === isOpenNowSelected) {
