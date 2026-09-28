@@ -15,6 +15,7 @@
   "closesAtTime": "Suljetaan {{time}}",
   "closesAtTimeWeek": "Suljetaan klo {{time}} {{dayOfWeek}}",
   "comingSoon": "Tulossa pian",
+  "currentLocation": "Nykyinen sijainti",
   "customSearchArea": "Mukautettu hakualue",
   "distance": "Etäisyys",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> hausta",

@@ -15,6 +15,7 @@
   "closesAtTime": "Closes at {{time}}",
   "closesAtTimeWeek": "Closes at {{time}} {{dayOfWeek}}",
   "comingSoon": "Coming Soon",
+  "currentLocation": "Current Location",
   "customSearchArea": "Custom Search Area",
   "distance": "Distance",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> from search",

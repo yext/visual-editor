@@ -15,6 +15,7 @@
   "closesAtTime": "Suletakse {{time}}",
   "closesAtTimeWeek": "Suletakse kell {{time}} {{dayOfWeek}}",
   "comingSoon": "Varsti",
+  "currentLocation": "Praegune asukoht",
   "customSearchArea": "Kohandatud otsinguala",
   "distance": "Kaugus",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> otsingust",

@@ -15,6 +15,7 @@
   "closesAtTime": "Uždaroma {{time}}",
   "closesAtTimeWeek": "Uždaroma {{time}} {{dayOfWeek}}",
   "comingSoon": "Netrukus",
+  "currentLocation": "Dabartinė vieta",
   "customSearchArea": "Pasirinktinė paieškos sritis",
   "distance": "Atstumas",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> iš paieškos",

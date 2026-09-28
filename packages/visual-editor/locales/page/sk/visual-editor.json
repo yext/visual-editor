@@ -15,6 +15,7 @@
   "closesAtTime": "Zatvára sa o {{time}}",
   "closesAtTimeWeek": "Zatvára sa o {{time}} {{dayOfWeek}}",
   "comingSoon": "Už čoskoro",
+  "currentLocation": "Aktuálna poloha",
   "customSearchArea": "Oblasť vyhľadávania",
   "distance": "Vzdialenosť",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> z vyhľadávania",

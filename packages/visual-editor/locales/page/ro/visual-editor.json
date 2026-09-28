@@ -15,6 +15,7 @@
   "closesAtTime": "Se închide la {{time}}",
   "closesAtTimeWeek": "Se închide la {{time}} {{dayOfWeek}}",
   "comingSoon": "În curând",
+  "currentLocation": "Locația curentă",
   "customSearchArea": "Zona de căutare personalizată",
   "distance": "Distanţă",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> din căutare",

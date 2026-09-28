@@ -15,6 +15,7 @@
   "closesAtTime": "Zárás: {{time}}",
   "closesAtTimeWeek": "Zárás: {{time}} {{dayOfWeek}}",
   "comingSoon": "Hamarosan",
+  "currentLocation": "Jelenlegi hely",
   "customSearchArea": "Egyedi keresési terület",
   "distance": "Távolság",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> a keresésből",

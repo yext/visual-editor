@@ -15,6 +15,7 @@
   "closesAtTime": "{{time}}に閉まります",
   "closesAtTimeWeek": "{{time}} {{dayOfWeek}} に閉店",
   "comingSoon": "近日公開",
+  "currentLocation": "現在地",
   "customSearchArea": "カスタム検索領域",
   "distance": "距離",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> 検索から",
