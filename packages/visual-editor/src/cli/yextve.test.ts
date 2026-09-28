@@ -142,10 +142,11 @@ describe("yextve", () => {
     "passes the universe from %s to deploy configuration",
     async (option) => {
       const rootDir = createTempRoot();
+      deploy.mockResolvedValueOnce({ name: "revision/1" });
       const result = await invoke(["deploy", option, "sbx"], rootDir);
 
       expect(result.exitCode).toBe(0);
-      expect(resolveConfig).toHaveBeenCalledWith(rootDir, "sbx");
+      expect(resolveConfig).toHaveBeenCalledWith(rootDir, "sbx", false);
     }
   );
 
@@ -158,6 +159,68 @@ describe("yextve", () => {
       stdout: "",
       stderr: "error: deploy failed\n",
     });
+  });
+
+  it("passes one non-interactive mode through configuration and deployment", async () => {
+    const rootDir = createTempRoot();
+    deploy.mockResolvedValueOnce({ name: "revision/1" });
+
+    const result = await invoke(
+      ["deploy", "--allow-dirty", "--allow-duplicate"],
+      rootDir
+    );
+
+    expect(result.exitCode).toBe(0);
+    expect(resolveConfig).toHaveBeenCalledWith(rootDir, undefined, false);
+    expect(deploy).toHaveBeenCalledWith({}, false, {
+      allowDirty: true,
+      allowDuplicate: true,
+      isInteractive: false,
+    });
+    expect(pollRevision).toHaveBeenCalledWith({}, "revision/1", false);
+  });
+
+  it("preserves interactive command behavior with terminal input", async () => {
+    const stdin = process.stdin;
+    const originalDescriptor = Object.getOwnPropertyDescriptor(stdin, "isTTY");
+    Object.defineProperty(stdin, "isTTY", { configurable: true, value: true });
+    try {
+      const rootDir = createTempRoot();
+      const result = await invoke(["deploy"], rootDir);
+
+      expect(result.exitCode).toBe(0);
+      expect(resolveConfig).toHaveBeenCalledWith(rootDir, undefined, true);
+      expect(deploy).toHaveBeenCalledWith({}, false, {
+        allowDirty: false,
+        allowDuplicate: false,
+        isInteractive: true,
+      });
+      expect(pollRevision).not.toHaveBeenCalled();
+    } finally {
+      if (originalDescriptor) {
+        Object.defineProperty(stdin, "isTTY", originalDescriptor);
+      } else {
+        Reflect.deleteProperty(stdin, "isTTY");
+      }
+    }
+  });
+
+  it("does not report headless success when no revision was created", async () => {
+    const result = await invoke(["deploy"]);
+
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("No Section Library revision was created.");
+    expect(pollRevision).not.toHaveBeenCalled();
+  });
+
+  it("reports a failed revision build as an error", async () => {
+    deploy.mockResolvedValueOnce({ name: "revision/1" });
+    pollRevision.mockRejectedValueOnce(new Error("build failed"));
+
+    const result = await invoke(["deploy"]);
+
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("build failed");
   });
 
   it("converts templates in the current directory", async () => {

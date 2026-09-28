@@ -68,12 +68,13 @@ const UNIVERSE_ALIASES: Record<string, string> = {
 
 /**
  * Resolve and validate the deploy config from environment variables,
- * `.yextrc`, and interactive prompts. Throws an actionable error when a value
- * is invalid or a required prompt is cancelled.
+ * `.yextrc`, and interactive prompts. Headless resolution requires all values
+ * up front and never writes `.yextrc`.
  */
 export async function resolveConfig(
   rootDir: string = process.cwd(),
-  universeOverride?: string
+  universeOverride?: string,
+  isInteractive: boolean = true
 ): Promise<DeployConfig> {
   if (
     universeOverride !== undefined &&
@@ -101,6 +102,21 @@ export async function resolveConfig(
   const allPresent = Boolean(
     base.accountId && base.universe && base.apiKey && base.origin
   );
+
+  if (!isInteractive) {
+    const requiredFields: [keyof Yextrc, string][] = [
+      ["accountId", "Account ID"],
+      ["universe", "Universe"],
+      ["apiKey", "API key"],
+      ["origin", "Git remote name"],
+    ];
+    for (const [field, label] of requiredFields) {
+      if (!base[field]?.trim()) {
+        throw new Error(`${label} is required for non-interactive deploy.`);
+      }
+    }
+    return newConfig(base as Required<Yextrc>);
+  }
 
   let promptAll = false;
   if (yextrcHasData && allPresent) {

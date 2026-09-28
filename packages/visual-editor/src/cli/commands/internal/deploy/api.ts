@@ -56,14 +56,44 @@ export async function yextApiRequest(
       ok: response.ok,
       status: response.status,
       response: responseJson.response,
-      errors: responseJson.meta.errors,
+      errors: responseJson.meta.errors.map((error) =>
+        redactApiKey(error, config.apiKey)
+      ),
     };
 
-    finishLog(result);
+    finishLog(
+      verbose && result.response
+        ? {
+            ...result,
+            response: redactApiKey(result.response, config.apiKey),
+          }
+        : result
+    );
 
     return result;
   } catch (error) {
     finishLog();
+    if (error instanceof Error) {
+      throw new Error(error.message.replaceAll(config.apiKey, "[REDACTED]"));
+    }
     throw error;
   }
+}
+
+function redactApiKey<T>(value: T, apiKey: string): T {
+  if (typeof value === "string") {
+    return value.replaceAll(apiKey, "[REDACTED]") as T;
+  }
+  if (Array.isArray(value)) {
+    return value.map((item) => redactApiKey(item, apiKey)) as T;
+  }
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, item]) => [
+        key.replaceAll(apiKey, "[REDACTED]"),
+        redactApiKey(item, apiKey),
+      ])
+    ) as T;
+  }
+  return value;
 }
