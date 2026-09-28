@@ -250,7 +250,7 @@ const LocatorInternal = ({
   const [selectedDistanceOption, setSelectedDistanceOption] = React.useState<
     number | null
   >(null);
-  /** Radius of last location near filter returned by the filter search API */
+  /** Radius of the current location filter before a distance option is applied */
   const apiFilterRadius = React.useRef<number | null>(null);
 
   const handleDrag: OnDragHandler = (center, bounds) => {
@@ -298,6 +298,7 @@ const LocatorInternal = ({
           matcher: Matcher.Near,
         },
       };
+      apiFilterRadius.current = mapRadius;
       searchActions.setStaticFilters([locationFilter, openNowFilter]);
       searchActions.executeVerticalQuery();
       setSearchState("loading");
@@ -322,6 +323,7 @@ const LocatorInternal = ({
       radius,
       t("currentLocation", "Current Location")
     );
+    apiFilterRadius.current = radius;
     const nonLocationFilters = (searchFilters.static || []).filter(
       (staticFilter) =>
         staticFilter.filter.kind !== "fieldValue" ||
@@ -632,6 +634,7 @@ const LocatorInternal = ({
         ) {
           const filterValue = initialLocationFilter.filter
             .value as NearFilterValue;
+          apiFilterRadius.current = filterValue.radius;
           const nextCenterCoords: Coordinate = {
             longitude: filterValue.lng,
             latitude: filterValue.lat,
@@ -665,6 +668,9 @@ const LocatorInternal = ({
             },
           ])
           .then((response: FilterSearchResponse | undefined) => {
+            if (isCancelled) {
+              return false;
+            }
             const firstResult = response?.sections[0]?.results[0];
             const resultFilter = firstResult?.filter;
             if (!firstResult || !resultFilter) {
