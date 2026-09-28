@@ -410,6 +410,8 @@ The background color for the entire footer section.
 
 Configure the Form editor fields, defaults, and live section.
 
+![Preview of the FormSection component](../components/testing/screenshots/FormSection/%5Bdesktop%5D%20default%20form.png)
+
 ### Props
 
 Saved Form settings for content, appearance, and live-page visibility.
