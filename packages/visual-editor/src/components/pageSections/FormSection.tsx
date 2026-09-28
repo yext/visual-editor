@@ -397,6 +397,8 @@ const FormFields = ({
   showPreferredContactMethod,
   preferredContactMethodTextColor,
   phoneOptInText,
+  missingRequiredGroups,
+  onGroupSelection,
   locale,
   streamDocument,
 }: {
@@ -406,6 +408,8 @@ const FormFields = ({
   showPreferredContactMethod: boolean;
   preferredContactMethodTextColor?: ThemeColor;
   phoneOptInText: YextEntityField<TranslatableRichText>;
+  missingRequiredGroups: number[];
+  onGroupSelection: (index: number) => void;
   locale: string;
   streamDocument: StreamDocument;
 }): React.ReactElement => {
@@ -471,8 +475,26 @@ const FormFields = ({
       ) : null;
     }
     if (field.type === "checkboxGroup") {
+      const showMissingSelection = missingRequiredGroups.includes(index);
       return (
-        <fieldset key={index} className="col-span-full">
+        <fieldset
+          key={index}
+          className={themeManagerCn(
+            "col-span-full",
+            showMissingSelection && "rounded outline outline-2 outline-red-600"
+          )}
+          aria-invalid={showMissingSelection || undefined}
+          aria-describedby={showMissingSelection ? `${id}-error` : undefined}
+          onChange={(event) => {
+            if (
+              event.currentTarget.querySelector(
+                'input[type="checkbox"]:checked'
+              )
+            ) {
+              onGroupSelection(index);
+            }
+          }}
+        >
           <legend className="mb-2 font-body-fontFamily text-body-fontSize">
             {label}
             {field.required ? " *" : ""}
@@ -493,6 +515,11 @@ const FormFields = ({
               </label>
             ))}
           </div>
+          {showMissingSelection && (
+            <p id={`${id}-error`} role="alert" className="text-red-600">
+              {pt("form.selectAtLeastOne", "Select at least one option.")}
+            </p>
+          )}
         </fieldset>
       );
     }
@@ -587,6 +614,9 @@ const FormSectionComponent: PuckComponent<FormSectionProps> = ({
   const [turnstileReady, setTurnstileReady] = React.useState(false);
   const [verificationUnavailable, setVerificationUnavailable] =
     React.useState(false);
+  const [missingRequiredGroups, setMissingRequiredGroups] = React.useState<
+    number[]
+  >([]);
   const formRef = React.useRef<HTMLFormElement>(null);
   const turnstileContainerRef = React.useRef<HTMLDivElement>(null);
   const widgetIdRef = React.useRef<string>();
@@ -698,14 +728,19 @@ const FormSectionComponent: PuckComponent<FormSectionProps> = ({
       return;
     }
     const form = event.currentTarget;
-    if (!form.reportValidity()) {
+    const values = new FormData(form);
+    const missingGroups = fields.flatMap((field, index) =>
+      field.type === "checkboxGroup" &&
+      field.required &&
+      !values.getAll(`custom_${index}`).length
+        ? [index]
+        : []
+    );
+    setMissingRequiredGroups(missingGroups);
+    if (!form.reportValidity() || missingGroups.length) {
       return;
     }
-    const submissionData = prepareSubmissionData(
-      new FormData(form),
-      fields,
-      contactMethod
-    );
+    const submissionData = prepareSubmissionData(values, fields, contactMethod);
     if (!submissionData) {
       setStatus("error");
       return;
@@ -733,6 +768,7 @@ const FormSectionComponent: PuckComponent<FormSectionProps> = ({
         }
       }
       formRef.current?.reset();
+      setMissingRequiredGroups([]);
       setContactMethod(data.defaultContactMethod);
       setStatus("success");
     } catch {
@@ -808,6 +844,12 @@ const FormSectionComponent: PuckComponent<FormSectionProps> = ({
               styles.preferredContactMethodTextColor
             }
             phoneOptInText={data.phoneOptInText}
+            missingRequiredGroups={missingRequiredGroups}
+            onGroupSelection={(index) =>
+              setMissingRequiredGroups((current) =>
+                current.filter((missingIndex) => missingIndex !== index)
+              )
+            }
             locale={locale}
             streamDocument={streamDocument}
           />
@@ -878,32 +920,8 @@ const FormSectionComponent: PuckComponent<FormSectionProps> = ({
   );
 };
 
-/** Keep the editor groups in sidebar order, with CTA styles after Form Fields. */
+/** Keep the editor groups in sidebar order, with Data before Styles. */
 const formSectionFields: YextFields<FormSectionProps> = {
-  styles: {
-    type: "object",
-    label: msg("fields.styles", "Styles"),
-    objectFields: {
-      backgroundColor: {
-        type: "basicSelector",
-        label: msg("fields.backgroundColor", "Background Color"),
-        options: "BACKGROUND_COLOR",
-      },
-      textColor: {
-        type: "basicSelector",
-        label: msg("fields.textColor", "Text Color"),
-        options: "SITE_COLOR",
-      },
-      preferredContactMethodTextColor: {
-        type: "basicSelector",
-        label: msg(
-          "form.preferredContactMethodTextColor",
-          "Preferred Contact Method Text Color"
-        ),
-        options: "SITE_COLOR",
-      },
-    },
-  },
   data: {
     type: "object",
     label: msg("fields.data", "Data"),
@@ -1039,6 +1057,30 @@ const formSectionFields: YextFields<FormSectionProps> = {
             },
           },
         },
+      },
+    },
+  },
+  styles: {
+    type: "object",
+    label: msg("fields.styles", "Styles"),
+    objectFields: {
+      backgroundColor: {
+        type: "basicSelector",
+        label: msg("fields.backgroundColor", "Background Color"),
+        options: "BACKGROUND_COLOR",
+      },
+      textColor: {
+        type: "basicSelector",
+        label: msg("fields.textColor", "Text Color"),
+        options: "SITE_COLOR",
+      },
+      preferredContactMethodTextColor: {
+        type: "basicSelector",
+        label: msg(
+          "form.preferredContactMethodTextColor",
+          "Preferred Contact Method Text Color"
+        ),
+        options: "SITE_COLOR",
       },
     },
   },

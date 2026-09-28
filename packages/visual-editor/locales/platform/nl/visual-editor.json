@@ -585,6 +585,7 @@
     "preferredMethod": "Voorkeur contactmethode",
     "previewSuccess": "Alleen voorbeeld. Er is geen bericht verzonden.",
     "required": "Vereist",
+    "selectAtLeastOne": "Selecteer ten minste één optie.",
     "selectOption": "Selecteer een optie",
     "sending": "Verzenden...",
     "showPreferredContactMethod": "Toon voorkeurscontactmethode",

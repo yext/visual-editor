@@ -585,6 +585,7 @@
     "preferredMethod": "Metodo di contatto preferito",
     "previewSuccess": "Solo anteprima. Nessun messaggio è stato inviato.",
     "required": "Necessario",
+    "selectAtLeastOne": "Seleziona almeno un'opzione.",
     "selectOption": "Seleziona un'opzione",
     "sending": "Invio...",
     "showPreferredContactMethod": "Mostra il metodo di contatto preferito",

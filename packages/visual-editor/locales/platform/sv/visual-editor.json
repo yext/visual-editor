@@ -585,6 +585,7 @@
     "preferredMethod": "Föredragen kontaktmetod",
     "previewSuccess": "Endast förhandsgranskning. Inget meddelande skickades.",
     "required": "Nödvändig",
+    "selectAtLeastOne": "Välj minst ett alternativ.",
     "selectOption": "Välj ett alternativ",
     "sending": "Sändning...",
     "showPreferredContactMethod": "Visa önskad kontaktmetod",

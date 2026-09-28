@@ -585,6 +585,7 @@
     "preferredMethod": "Vēlamā saziņas metode",
     "previewSuccess": "Tikai priekšskatījums. Netika nosūtīta neviena ziņa.",
     "required": "Obligāti",
+    "selectAtLeastOne": "Atlasiet vismaz vienu opciju.",
     "selectOption": "Izvēlieties opciju",
     "sending": "Notiek sūtīšana...",
     "showPreferredContactMethod": "Rādīt vēlamo saziņas metodi",

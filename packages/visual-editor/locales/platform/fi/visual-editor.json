@@ -585,6 +585,7 @@
     "preferredMethod": "Suositeltu yhteydenottotapa",
     "previewSuccess": "Vain esikatselu. Viestiä ei lähetetty.",
     "required": "Pakollinen",
+    "selectAtLeastOne": "Valitse vähintään yksi vaihtoehto.",
     "selectOption": "Valitse vaihtoehto",
     "sending": "Lähetetään...",
     "showPreferredContactMethod": "Näytä ensisijainen yhteydenottotapa",

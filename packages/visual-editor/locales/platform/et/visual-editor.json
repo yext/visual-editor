@@ -585,6 +585,7 @@
     "preferredMethod": "Eelistatud kontaktiviis",
     "previewSuccess": "Ainult eelvaade. Sõnumit ei saadetud.",
     "required": "Nõutav",
+    "selectAtLeastOne": "Valige vähemalt üks valik.",
     "selectOption": "Valige suvand",
     "sending": "Saatmine...",
     "showPreferredContactMethod": "Näita eelistatud kontaktimeetodit",

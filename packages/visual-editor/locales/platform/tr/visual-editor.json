@@ -585,6 +585,7 @@
     "preferredMethod": "Tercih Edilen İletişim Yöntemi",
     "previewSuccess": "Yalnızca önizleme. Hiçbir mesaj gönderilmedi.",
     "required": "Gerekli",
+    "selectAtLeastOne": "En az bir seçeneği seçin.",
     "selectOption": "Bir seçenek seçin",
     "sending": "Gönderiliyor...",
     "showPreferredContactMethod": "Tercih Edilen İletişim Yöntemini Göster",

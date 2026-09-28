@@ -585,6 +585,7 @@
     "preferredMethod": "首選聯絡方式",
     "previewSuccess": "僅預覽。沒有發送訊息。",
     "required": "必需的",
+    "selectAtLeastOne": "至少選擇一個選項。",
     "selectOption": "選擇一個選項",
     "sending": "正在發送...",
     "showPreferredContactMethod": "顯示首選聯絡方式",

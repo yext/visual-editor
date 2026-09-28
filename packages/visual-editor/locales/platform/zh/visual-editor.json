@@ -585,6 +585,7 @@
     "preferredMethod": "首选联系方式",
     "previewSuccess": "仅预览。没有发送消息。",
     "required": "必需的",
+    "selectAtLeastOne": "至少选择一个选项。",
     "selectOption": "选择一个选项",
     "sending": "正在发送...",
     "showPreferredContactMethod": "显示首选联系方式",

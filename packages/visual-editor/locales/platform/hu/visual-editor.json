@@ -585,6 +585,7 @@
     "preferredMethod": "Előnyben részesített kapcsolatfelvételi mód",
     "previewSuccess": "Csak előnézet. Nem küldtek üzenetet.",
     "required": "Kívánt",
+    "selectAtLeastOne": "Válasszon legalább egy lehetőséget.",
     "selectOption": "Válasszon egy lehetőséget",
     "sending": "Küldés...",
     "showPreferredContactMethod": "Előnyben részesített kapcsolatfelvételi mód megjelenítése",

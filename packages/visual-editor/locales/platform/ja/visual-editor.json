@@ -585,6 +585,7 @@
     "preferredMethod": "推奨される連絡方法",
     "previewSuccess": "プレビューのみ。メッセージは送信されませんでした。",
     "required": "必須",
+    "selectAtLeastOne": "少なくとも 1 つのオプションを選択してください。",
     "selectOption": "オプションを選択してください",
     "sending": "送信中...",
     "showPreferredContactMethod": "優先連絡方法を表示",

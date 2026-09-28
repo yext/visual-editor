@@ -1104,8 +1104,8 @@ describe("FormSection", () => {
       "text-palette-secondary"
     );
     expect(Object.keys(FormSection.fields ?? {})).toEqual([
-      "styles",
       "data",
+      "styles",
       "ctaStyles",
       "liveVisibility",
     ]);
@@ -1127,5 +1127,50 @@ describe("FormSection", () => {
     expect(phone.labels?.[0]?.textContent).toBe("Phone");
     expect(email.required).toBe(true);
     expect(email.labels?.[0]?.textContent).toBe("Email *");
+  });
+
+  it("when a required checkbox group is empty, then it shows a field error before submission", async () => {
+    const props = getProps();
+    props.data.fields.push({
+      type: "checkboxGroup",
+      label: "Reasons",
+      key: "reasons",
+      required: true,
+      options: [{ label: "Buying a home", value: "home" }],
+    });
+    renderForm(props);
+    const button = screen.getByRole("button", { name: "Send Message" });
+    await waitFor(() =>
+      expect((button as HTMLButtonElement).disabled).toBe(false)
+    );
+    fireEvent.change(screen.getByLabelText(/First name/), {
+      target: { value: "Ada" },
+    });
+    fireEvent.change(screen.getByLabelText(/Last name/), {
+      target: { value: "Lovelace" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("Phone"), {
+      target: { value: "5555555555" },
+    });
+
+    fireEvent.click(button);
+
+    expect(screen.getByRole("alert").textContent).toBe(
+      "Select at least one option."
+    );
+    expect(
+      screen
+        .getByText("Reasons *")
+        .closest("fieldset")
+        ?.getAttribute("aria-invalid")
+    ).toBe("true");
+    expect(execute).not.toHaveBeenCalled();
+    expect(fetch).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByLabelText("Buying a home"));
+    expect(screen.queryByText("Select at least one option.")).toBeNull();
+    fireEvent.click(button);
+
+    await waitFor(() => expect(fetch).toHaveBeenCalledTimes(1));
   });
 });
