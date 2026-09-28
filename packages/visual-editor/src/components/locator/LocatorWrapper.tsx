@@ -873,7 +873,8 @@ const LocatorInternal = ({
               placeholder={t("searchHere", "Search here...")}
               ariaLabel={t("findALocation", "Find a Location")}
               customCssClasses={{
-                filterSearchContainer: "font-body-fontFamily",
+                filterSearchContainer:
+                  "font-body-fontFamily ve-locator-filter-search",
                 focusedOption: "bg-gray-200 hover:bg-gray-200 block",
                 option: "hover:bg-gray-100 px-4 py-3",
                 inputElement:
