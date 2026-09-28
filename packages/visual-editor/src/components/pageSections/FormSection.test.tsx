@@ -14,6 +14,10 @@ import { FormSection, FormSectionProps } from "./FormSection.tsx";
 import { backgroundColors } from "../../utils/themeConfigOptions.ts";
 import { type StreamDocument } from "../../utils/types/StreamDocument.ts";
 
+const isBrowserTest = Boolean(
+  (globalThis as { __vitest_browser__?: boolean }).__vitest_browser__
+);
+
 const renderForm = (
   props: FormSectionProps,
   isEditing = false,
@@ -66,6 +70,10 @@ describe("FormSection", () => {
   const remove = vi.fn();
 
   beforeEach(() => {
+    if (isBrowserTest) {
+      // Screenshot setup mocks the date; these behavior tests manage timers.
+      vi.useRealTimers();
+    }
     tokenNumber = 0;
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true }));
     window.turnstile = {
@@ -1174,3 +1182,22 @@ describe("FormSection", () => {
     await waitFor(() => expect(fetch).toHaveBeenCalledTimes(1));
   });
 });
+
+if (isBrowserTest) {
+  const { page } = await import("@vitest/browser/context");
+  const { viewports } = await import("../testing/componentTests.setup.ts");
+
+  describe("FormSection screenshots", () => {
+    it.each([viewports.desktop, viewports.tablet, viewports.mobile])(
+      "when the default form renders at $name width, then it matches the screenshot",
+      async ({ name, width, height }) => {
+        await page.viewport(width, height);
+        renderForm(getProps(), true);
+
+        await expect(`FormSection/[${name}] default form`).toMatchScreenshot({
+          customThreshold: 10,
+        });
+      }
+    );
+  });
+}
