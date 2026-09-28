@@ -5,7 +5,6 @@ import {
   DirectoryCategory,
   DirectoryCategoryComponents,
   DirectoryCategoryProps,
-  LocatorConfigProps,
   MainConfigProps,
   locatorConfig,
   mainConfig,
