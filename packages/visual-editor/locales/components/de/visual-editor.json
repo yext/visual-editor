@@ -26,6 +26,7 @@
     }
   },
   "coreInfoSection": "Basisinfo-Modul",
+  "currentLocation": "Aktueller Standort",
   "customSearchArea": "Benutzerdefinierter Suchbereich",
   "distance": "Distanz",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> aus der Suche",

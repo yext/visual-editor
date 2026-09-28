@@ -142,6 +142,7 @@
     "presetImage": "プリセット画像",
     "textAndLink": "テキストとリンク"
   },
+  "currentLocation": "現在地",
   "customSearchArea": "カスタム検索領域",
   "dataAttribute": "属性",
   "date": "日付",

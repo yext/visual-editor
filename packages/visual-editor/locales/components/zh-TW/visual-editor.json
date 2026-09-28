@@ -26,6 +26,7 @@
     }
   },
   "coreInfoSection": "核心信息部分",
+  "currentLocation": "目前位置",
   "customSearchArea": "自定義搜索區域",
   "distance": "距離",
   "distanceLineFromSearch": "來自搜尋的 <strong>{{distance}}</strong>",

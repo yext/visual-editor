@@ -26,6 +26,7 @@
     }
   },
   "coreInfoSection": "Secțiunea de informații de bază",
+  "currentLocation": "Locația curentă",
   "customSearchArea": "Zona de căutare personalizată",
   "distance": "Distanţă",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> din căutare",

@@ -46,7 +46,6 @@ import {
   createSearchHeadlessConfig,
 } from "../../utils/searchHeadlessConfig.ts";
 import { getThemeColorCssValue } from "../../utils/colors.ts";
-import { getValueFromQueryString } from "../../utils/urlQueryString.tsx";
 import { Button } from "../atoms/button.tsx";
 import { Body } from "../atoms/body.tsx";
 import { Heading } from "../atoms/heading.tsx";
@@ -90,6 +89,37 @@ import {
 } from "./Results.tsx";
 
 export const INITIAL_LOCATION_KEY = "initialLocation";
+const LOCATION_QUERY_KEY = "q";
+
+const formatCoordinateQuery = (lat: number, lng: number, radius: number) =>
+  `${lat},${lng},${radius}`;
+
+const parseCoordinateQuery = (query: string) => {
+  const parts = query.split(",");
+  if (parts.length !== 3 || parts.some((part) => part.trim() === "")) {
+    return;
+  }
+  const [lat, lng, radius] = parts.map(Number);
+  if (
+    !Number.isFinite(lat) ||
+    !Number.isFinite(lng) ||
+    !Number.isFinite(radius) ||
+    !areValidCoordinates(lat, lng) ||
+    radius <= 0
+  ) {
+    return;
+  }
+  return { lat, lng, radius };
+};
+
+const updateLocationQuery = (location: string) => {
+  const nextUrl = new URL(window.location.href);
+  nextUrl.searchParams.set(LOCATION_QUERY_KEY, location);
+  nextUrl.searchParams.delete(INITIAL_LOCATION_KEY);
+  if (nextUrl.href !== window.location.href) {
+    window.history.pushState(window.history.state, "", nextUrl);
+  }
+};
 
 export const LocatorWrapper = (props: WithPuckProps<LocatorProps>) => {
   const streamDocument = useDocument();
@@ -178,12 +208,24 @@ const LocatorInternal = ({
   const searchResults = useSearchState(
     (state) => (state.vertical.results || []) as Result<Location>[]
   );
-  const queryParamString =
-    typeof window === "undefined" ? "" : window.location.search;
-  const initialLocationParam = getValueFromQueryString(
-    INITIAL_LOCATION_KEY,
-    queryParamString
-  );
+  // Manage browser forward/back button for location searches
+  const [urlNavigationVersion, setUrlNavigationVersion] = React.useState(0);
+  const [showCurrentLocationButton, setShowCurrentLocationButton] =
+    React.useState(false);
+  React.useEffect(() => {
+    const handlePopState = () =>
+      setUrlNavigationVersion((version) => version + 1);
+    const controller = new AbortController();
+    window.addEventListener("popstate", handlePopState, {
+      signal: controller.signal,
+    });
+    return () => controller.abort();
+  }, []);
+  React.useEffect(() => {
+    if (new URLSearchParams(window.location.search).has(LOCATION_QUERY_KEY)) {
+      setShowCurrentLocationButton(true);
+    }
+  }, [urlNavigationVersion]);
 
   const iframe =
     typeof document === "undefined"
@@ -209,7 +251,7 @@ const LocatorInternal = ({
   const [selectedDistanceOption, setSelectedDistanceOption] = React.useState<
     number | null
   >(null);
-  /** Radius of last location near filter returned by the filter search API */
+  /** Radius of the current location filter before a distance option is applied */
   const apiFilterRadius = React.useRef<number | null>(null);
 
   const handleDrag: OnDragHandler = (center, bounds) => {
@@ -237,6 +279,7 @@ const LocatorInternal = ({
   );
 
   const searchActions = useSearchActions();
+  const searchFilters = useSearchState((state) => state.filters);
 
   const handleSearchAreaClick = () => {
     if (mapCenter && mapRadius) {
@@ -256,11 +299,45 @@ const LocatorInternal = ({
           matcher: Matcher.Near,
         },
       };
+      apiFilterRadius.current = mapRadius;
       searchActions.setStaticFilters([locationFilter, openNowFilter]);
       searchActions.executeVerticalQuery();
       setSearchState("loading");
       setShowSearchAreaButton(false);
+      updateLocationQuery(
+        formatCoordinateQuery(
+          mapCenter.latitude,
+          mapCenter.longitude,
+          mapRadius
+        )
+      );
+      setShowCurrentLocationButton(true);
     }
+  };
+
+  const handleCurrentLocationClick = (position: GeolocationPosition) => {
+    const { latitude, longitude, accuracy } = position.coords;
+    const radius = Math.max(accuracy, toMeters(DEFAULT_RADIUS, preferredUnit));
+    const locationFilter = buildNearLocationFilterFromCoords(
+      latitude,
+      longitude,
+      radius,
+      t("currentLocation", "Current Location")
+    );
+    apiFilterRadius.current = radius;
+    const nonLocationFilters = (searchFilters.static || []).filter(
+      (staticFilter) =>
+        staticFilter.filter.kind !== "fieldValue" ||
+        ![LOCATION_FIELD, "builtin.region", COUNTRY_CODE_FIELD].includes(
+          staticFilter.filter.fieldId
+        )
+    );
+    searchActions.setOffset(0);
+    searchActions.setStaticFilters([...nonLocationFilters, locationFilter]);
+    searchActions.executeVerticalQuery();
+    setSearchState("loading");
+    updateLocationQuery(formatCoordinateQuery(latitude, longitude, radius));
+    setShowCurrentLocationButton(true);
   };
 
   const selectedFacets: string[] = React.useMemo(
@@ -320,6 +397,8 @@ const LocatorInternal = ({
     searchActions.setStaticFilters([locationFilter, openNowFilter]);
     searchActions.executeVerticalQuery();
     setSearchState("loading");
+    updateLocationQuery(newDisplayName);
+    setShowCurrentLocationButton(true);
     if (
       nearFilterValue?.lat &&
       nearFilterValue?.lng &&
@@ -452,9 +531,6 @@ const LocatorInternal = ({
     ]
   );
 
-  const [userLocationRetrieved, setUserLocationRetrieved] =
-    React.useState<boolean>(false);
-
   const locationStylesConfig = React.useMemo(() => {
     const config: LocationStyleConfig = {};
     (locationStyles ?? []).forEach((locationStyle) => {
@@ -520,6 +596,10 @@ const LocatorInternal = ({
 
   React.useEffect(() => {
     let isCancelled = false;
+    const queryParams = new URLSearchParams(window.location.search);
+    const initialLocationParam = queryParams.has(LOCATION_QUERY_KEY)
+      ? queryParams.get(LOCATION_QUERY_KEY)
+      : queryParams.get(INITIAL_LOCATION_KEY);
 
     const resolveLocationAndSearch = async () => {
       setIsInitialMapLocationResolved(false);
@@ -537,9 +617,16 @@ const LocatorInternal = ({
         radius
       );
       const doSearch = () => {
+        if (isCancelled) {
+          return;
+        }
         searchActions.setVerticalLimit(RESULTS_LIMIT);
         searchActions.setOffset(0);
-        searchActions.setStaticFilters([initialLocationFilter]);
+        searchActions.setStaticFilters(
+          urlNavigationVersion === 0
+            ? [initialLocationFilter]
+            : [initialLocationFilter, openNowFilter]
+        );
         searchActions.executeVerticalQuery();
         setSearchState("loading");
         if (
@@ -548,6 +635,7 @@ const LocatorInternal = ({
         ) {
           const filterValue = initialLocationFilter.filter
             .value as NearFilterValue;
+          apiFilterRadius.current = filterValue.radius;
           const nextCenterCoords: Coordinate = {
             longitude: filterValue.lng,
             latitude: filterValue.lat,
@@ -581,6 +669,9 @@ const LocatorInternal = ({
             },
           ])
           .then((response: FilterSearchResponse | undefined) => {
+            if (isCancelled) {
+              return false;
+            }
             const firstResult = response?.sections[0]?.results[0];
             const resultFilter = firstResult?.filter;
             if (!firstResult || !resultFilter) {
@@ -616,7 +707,21 @@ const LocatorInternal = ({
           });
       };
 
-      // 1. Check if a location could be determined from the initialLocation query parameter
+      // 1. Resolve coordinates directly, or search for a named location.
+      //    q always takes precedence over initialLocation
+      const coordinates = initialLocationParam
+        ? parseCoordinateQuery(initialLocationParam)
+        : undefined;
+      if (coordinates) {
+        initialLocationFilter = buildNearLocationFilterFromCoords(
+          coordinates.lat,
+          coordinates.lng,
+          coordinates.radius,
+          t("customSearchArea", "Custom Search Area")
+        );
+        doSearch();
+        return;
+      }
       if (
         initialLocationParam &&
         (await foundStartingLocationFromQueryParam(initialLocationParam))
@@ -625,12 +730,19 @@ const LocatorInternal = ({
         return;
       }
 
+      if (isCancelled) {
+        return;
+      }
+
       try {
         // 2. Try to get user location via Geolocation API
         const location = await getUserLocation();
+        if (isCancelled) {
+          return;
+        }
         const lat = location.coords.latitude;
         const lng = location.coords.longitude;
-        setUserLocationRetrieved(true);
+        setShowCurrentLocationButton(true);
 
         // Try to reverse-geocode the coordinates to a human-readable place name using Mapbox
         let displayName: string | undefined;
@@ -679,7 +791,7 @@ const LocatorInternal = ({
     return () => {
       isCancelled = true;
     };
-  }, [initialLocationParam, initialMapCenter, searchActions]);
+  }, [urlNavigationVersion, initialMapCenter, searchActions]);
 
   const handleOpenNowClick = (selected: boolean) => {
     if (selected === isOpenNowSelected) {
@@ -701,7 +813,6 @@ const LocatorInternal = ({
     executeSearch(searchActions);
   };
 
-  const searchFilters = useSearchState((state) => state.filters);
   const currentOffset = useSearchState((state) => state.vertical.offset);
   const previousOffset = React.useRef<number | undefined>(undefined);
   const prevIsMobile = React.useRef(isMobile);
@@ -884,8 +995,9 @@ const LocatorInternal = ({
                 label:
                   "font-body-fontFamily font-body-fontWeight text-body-fontSize text-palette-primary-dark",
               }}
-              showCurrentLocationButton={userLocationRetrieved}
+              showCurrentLocationButton={showCurrentLocationButton}
               geolocationProps={{
+                handleClick: handleCurrentLocationClick,
                 radius:
                   preferredUnit === "mile"
                     ? DEFAULT_RADIUS

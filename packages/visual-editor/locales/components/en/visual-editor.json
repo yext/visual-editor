@@ -26,6 +26,7 @@
     }
   },
   "coreInfoSection": "Core Info Section",
+  "currentLocation": "Current Location",
   "customSearchArea": "Custom Search Area",
   "distance": "Distance",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> from search",

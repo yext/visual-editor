@@ -26,6 +26,7 @@
     }
   },
   "coreInfoSection": "Sezione Informazioni fondamentali",
+  "currentLocation": "Posizione attuale",
   "customSearchArea": "Area di ricerca personalizzata",
   "distance": "Distanza",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> dalla ricerca",
