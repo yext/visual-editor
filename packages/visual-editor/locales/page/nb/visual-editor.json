@@ -15,6 +15,7 @@
   "closesAtTime": "Stenger kl. {{time}}",
   "closesAtTimeWeek": "Stenger kl. {{time}} {{dayOfWeek}}",
   "comingSoon": "Kommer snart",
+  "currentLocation": "Nåværende plassering",
   "customSearchArea": "Tilpasset søkeområde",
   "distance": "Avstand",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> fra søk",

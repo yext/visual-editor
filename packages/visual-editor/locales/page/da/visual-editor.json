@@ -15,6 +15,7 @@
   "closesAtTime": "Lukker kl. {{time}}",
   "closesAtTimeWeek": "Lukker kl. {{time}} {{dayOfWeek}}",
   "comingSoon": "Kommer snart",
+  "currentLocation": "Nuværende placering",
   "customSearchArea": "Brugerdefineret søgeområde",
   "distance": "Afstand",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> fra søgning",

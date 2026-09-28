@@ -78,6 +78,7 @@
     "presetImage": "Vordefiniertes Bild",
     "textAndLink": "Text & Link"
   },
+  "currentLocation": "Aktueller Standort",
   "customSearchArea": "Benutzerdefinierter Suchbereich",
   "dataAttribute": "Attribut",
   "date": "Datum",

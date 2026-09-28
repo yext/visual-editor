@@ -15,6 +15,7 @@
   "closesAtTime": "{{time}} itibarıyla kapanıyor",
   "closesAtTimeWeek": "{{time}} {{dayOfWeek}} itibarıyla kapanıyor",
   "comingSoon": "Yakında gelecek",
+  "currentLocation": "Mevcut Konum",
   "customSearchArea": "Özel arama alanı",
   "distance": "Mesafe",
   "distanceLineFromSearch": "Aramadan <strong>{{distance}}</strong>",

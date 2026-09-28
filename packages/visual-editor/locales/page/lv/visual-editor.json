@@ -15,6 +15,7 @@
   "closesAtTime": "Tiek slēgts plkst. {{time}}",
   "closesAtTimeWeek": "Tiek slēgts plkst. {{time}} {{dayOfWeek}}",
   "comingSoon": "Drīzumā",
+  "currentLocation": "Pašreizējā atrašanās vieta",
   "customSearchArea": "Pielāgota meklēšanas zona",
   "distance": "Attālums",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> no meklēšanas",

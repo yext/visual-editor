@@ -15,6 +15,7 @@
   "closesAtTime": "Cierra a las {{time}}",
   "closesAtTimeWeek": "Cierra a las {{time}} {{dayOfWeek}}",
   "comingSoon": "Muy pronto",
+  "currentLocation": "Ubicación actual",
   "customSearchArea": "Área de búsqueda personalizada",
   "distance": "Distancia",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> de la búsqueda",
