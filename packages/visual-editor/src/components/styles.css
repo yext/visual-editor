@@ -3,3 +3,8 @@
 @import "./atoms/hours.css";
 @import "./atoms/maybeRTF.css";
 @import "./atoms/fontStyle.css";
+
+/* Keep locator announcements available to screen readers. */
+.ve-locator-filter-search .sr-only {
+  display: block;
+}
