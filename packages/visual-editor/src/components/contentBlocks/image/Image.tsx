@@ -192,7 +192,7 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
       fullHeight
       ref={puck.dragRef}
     >
-      <div className="w-full">
+      <div className={parentData ? "w-full" : ""}>
         <MaybeLink
           className="w-auto"
           eventName="logoLink"
