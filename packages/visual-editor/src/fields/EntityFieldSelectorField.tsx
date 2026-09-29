@@ -36,6 +36,7 @@ import { TemplateMetadataContext } from "../internal/hooks/useMessageReceivers.t
 import {
   type RepeatedEntityFieldMetadata,
   type RepeatedEntityFieldValue,
+  ITEM_SOURCE_SELF_FIELD,
 } from "../utils/itemSource/itemSourceTypes.ts";
 import {
   getConstantConfigFromType,
@@ -175,6 +176,7 @@ const RepeatedEntityFieldSelector = ({
   repeated: RepeatedEntityFieldMetadata<Record<string, unknown>>;
 }) => {
   const translatedLabel = field.label ? pt(field.label) : "";
+  const entityFields = useEntityFields();
   const constantValueEnabled = !!value?.constantValueEnabled;
   const baseValue: RepeatedEntityFieldValue<Record<string, unknown>> = {
     field: field.fixedRepeatedField || value?.field || "",
@@ -218,22 +220,51 @@ const RepeatedEntityFieldSelector = ({
           ? nextValue.field
           : "";
 
+      const changedSource = previousField !== nextField;
+      let mappings = nextValue.mappings;
       if (
-        !previousField ||
-        !nextField ||
-        previousField === nextField ||
-        !hasEntityFieldBindings(baseValue.mappings)
+        changedSource &&
+        previousField &&
+        nextField &&
+        hasEntityFieldBindings(baseValue.mappings)
       ) {
-        onChange(nextValue);
-        return;
+        mappings = clearEntityFieldBindings(
+          baseValue.mappings
+        ) as typeof mappings;
       }
 
-      onChange({
-        ...nextValue,
-        mappings: clearEntityFieldBindings(baseValue.mappings),
-      });
+      if (changedSource && nextField && repeated.directItemMappingKey) {
+        const selectedSource = getFieldsForSelector(
+          entityFields,
+          field.filter
+        ).find((source) => source.name === nextField);
+        const sourceType =
+          selectedSource?.definition.typeRegistryId ??
+          selectedSource?.definition.typeName;
+        if (
+          field.filter.directItemTypes?.includes(sourceType as EntityFieldTypes)
+        ) {
+          const mappingKey = repeated.directItemMappingKey;
+          mappings = {
+            ...mappings,
+            [mappingKey]: {
+              ...(mappings?.[mappingKey] as Record<string, unknown>),
+              field: ITEM_SOURCE_SELF_FIELD,
+              constantValueEnabled: false,
+            },
+          };
+        }
+      }
+
+      onChange({ ...nextValue, mappings });
     },
-    [baseValue, onChange]
+    [
+      baseValue,
+      entityFields,
+      field.filter,
+      onChange,
+      repeated.directItemMappingKey,
+    ]
   );
 
   return (
@@ -606,6 +637,9 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     const options = filteredEntityFields.map((field) => {
       return {
         label:
+          (field.name === ITEM_SOURCE_SELF_FIELD
+            ? field.displayName
+            : undefined) ??
           getScopedEntityFieldDisplayName(
             sourceField || undefined,
             field.name,

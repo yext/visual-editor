@@ -5,6 +5,9 @@ import {
   type YextFieldMap,
 } from "../../fields/fields.ts";
 import { type StreamDocument } from "../types/StreamDocument.ts";
+import { type EntityFieldTypes } from "../../internal/utils/getFilteredEntityFields.ts";
+
+export const ITEM_SOURCE_SELF_FIELD = "$item";
 
 /**
  * Public item-source types.
@@ -19,6 +22,11 @@ export type CreateItemSourceOptions<
   label: string;
   mappingFields: YextFieldMap<TItemProps>;
   defaultValues?: TItemProps[];
+  optionalMappingKeys?: (keyof TItemProps)[];
+  directItem?: {
+    types: EntityFieldTypes[];
+    mappingKey: Extract<keyof TItemProps, string>;
+  };
 };
 
 export type RepeatedEntityFieldValue<
@@ -32,6 +40,7 @@ export type RepeatedEntityFieldMetadata<
   manualItemFields: YextFieldMap<TItemProps>;
   defaultItemValue: TItemProps;
   defaultMappings: TItemProps;
+  directItemMappingKey?: Extract<keyof TItemProps, string>;
   manualItemSummary?: (item: unknown, index?: number) => string;
 };
 

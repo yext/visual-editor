@@ -3334,37 +3334,68 @@ const mainDefaultLayout = {
                           field: "",
                           constantValue: [
                             {
-                              assetImage: {
-                                url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
-                                width: 1000,
-                                height: 570,
-                                assetImage: {
-                                  name: "Placeholder",
+                              image: {
+                                field: "",
+                                constantValueEnabled: true,
+                                constantValue: {
+                                  url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
+                                  width: 1000,
+                                  height: 570,
+                                  assetImage: { name: "Placeholder" },
                                 },
+                              },
+                              link: {
+                                field: "",
+                                constantValueEnabled: true,
+                                constantValue: { defaultValue: "" },
                               },
                             },
                             {
-                              assetImage: {
-                                url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
-                                width: 1000,
-                                height: 570,
-                                assetImage: {
-                                  name: "Placeholder",
+                              image: {
+                                field: "",
+                                constantValueEnabled: true,
+                                constantValue: {
+                                  url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
+                                  width: 1000,
+                                  height: 570,
+                                  assetImage: { name: "Placeholder" },
                                 },
+                              },
+                              link: {
+                                field: "",
+                                constantValueEnabled: true,
+                                constantValue: { defaultValue: "" },
                               },
                             },
                             {
-                              assetImage: {
-                                url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
-                                width: 1000,
-                                height: 570,
-                                assetImage: {
-                                  name: "Placeholder",
+                              image: {
+                                field: "",
+                                constantValueEnabled: true,
+                                constantValue: {
+                                  url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
+                                  width: 1000,
+                                  height: 570,
+                                  assetImage: { name: "Placeholder" },
                                 },
+                              },
+                              link: {
+                                field: "",
+                                constantValueEnabled: true,
+                                constantValue: { defaultValue: "" },
                               },
                             },
                           ],
                           constantValueEnabled: true,
+                          mappings: {
+                            image: {
+                              field: "",
+                              constantValueEnabled: false,
+                            },
+                            link: {
+                              field: "",
+                              constantValueEnabled: false,
+                            },
+                          },
                         },
                       },
                       styles: {

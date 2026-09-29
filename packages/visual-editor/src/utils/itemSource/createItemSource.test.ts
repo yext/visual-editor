@@ -4,6 +4,7 @@ import {
   type TranslatableString,
 } from "../../types/types.ts";
 import { createItemSource } from "./index.ts";
+import { ITEM_SOURCE_SELF_FIELD } from "./itemSourceTypes.ts";
 
 type ArticleItemProps = {
   title: {
@@ -399,6 +400,120 @@ describe("createItemSource", () => {
         eyebrow: "Manual",
         secondaryTitle: "Root fallback",
       },
+    ]);
+  });
+
+  it("resolves direct image items and mapped object items with optional links", () => {
+    const gallerySource = createItemSource<{
+      image: {
+        field: string;
+        constantValueEnabled?: boolean;
+        constantValue: { url: string };
+      };
+      link: {
+        field: string;
+        constantValueEnabled?: boolean;
+        constantValue: string;
+      };
+    }>({
+      label: "Images",
+      mappingFields: {
+        image: {
+          type: "entityField",
+          filter: { types: ["type.image"] },
+        },
+        link: {
+          type: "entityField",
+          filter: { types: ["type.string"] },
+        },
+      },
+      optionalMappingKeys: ["link"],
+      directItem: { types: ["type.image"], mappingKey: "image" },
+    });
+
+    expect((gallerySource.field as any).filter).toEqual({
+      itemSourceTypes: [["type.image"]],
+      directItemTypes: ["type.image"],
+    });
+    expect(
+      (gallerySource.field as any).repeated.mappingFields.image.filter
+    ).toEqual({
+      types: ["type.image"],
+      directItemTypes: ["type.image"],
+    });
+
+    expect(
+      gallerySource.resolveItems(
+        {
+          field: "images",
+          constantValue: [],
+          constantValueEnabled: false,
+          mappings: {
+            image: {
+              field: ITEM_SOURCE_SELF_FIELD,
+              constantValue: { url: "" },
+              constantValueEnabled: false,
+            },
+            link: {
+              field: "clickthroughUrl",
+              constantValue: "",
+              constantValueEnabled: false,
+            },
+          },
+        },
+        {
+          locale: "en",
+          images: [
+            { url: "https://example.com/one.jpg" },
+            {
+              image: { url: "https://example.com/two.jpg" },
+              clickthroughUrl: "https://example.com/two",
+            },
+          ],
+        }
+      )
+    ).toEqual([
+      { image: { url: "https://example.com/one.jpg" }, link: undefined },
+      {
+        image: {
+          image: { url: "https://example.com/two.jpg" },
+          clickthroughUrl: "https://example.com/two",
+        },
+        link: "https://example.com/two",
+      },
+    ]);
+
+    expect(
+      gallerySource.resolveItems(
+        {
+          field: "products",
+          constantValue: [],
+          constantValueEnabled: false,
+          mappings: {
+            image: {
+              field: "cover",
+              constantValue: { url: "" },
+              constantValueEnabled: false,
+            },
+            link: {
+              field: "destination",
+              constantValue: "",
+              constantValueEnabled: false,
+            },
+          },
+        },
+        {
+          locale: "en",
+          products: [
+            {
+              cover: { url: "https://example.com/product.jpg" },
+              destination: "/product",
+            },
+          ],
+        }
+      )
+    ).toEqual([
+      { image: { url: "https://example.com/product.jpg" }, link: "/product" },
     ]);
   });
 });

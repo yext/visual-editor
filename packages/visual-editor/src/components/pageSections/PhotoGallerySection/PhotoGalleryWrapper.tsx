@@ -1,24 +1,18 @@
-import { ComplexImageType, ImageType } from "@yext/pages-components";
 import {
   ImageStylingFields,
   ImageStylingProps,
 } from "../../contentBlocks/image/styling.ts";
 import { EntityField } from "../../../editor/EntityField.tsx";
 import { Image } from "../../atoms/image.tsx";
+import { MaybeLink } from "../../atoms/maybeLink.tsx";
 import { themeManagerCn } from "../../../utils/cn.ts";
 import { useBackground } from "../../../hooks/useBackground.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
-import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
-import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { getThemeColorCssValue } from "../../../utils/colors.ts";
-import {
-  AssetImageType,
-  ImageFillType,
-  TranslatableAssetImage,
-} from "../../../types/images.ts";
+import { ImageFillType } from "../../../types/images.ts";
 import { PuckComponent } from "@puckeditor/core";
-import { PLACEHOLDER } from "./PhotoGallerySection.tsx";
+import { photoGallerySource } from "./photoGallerySource.ts";
 import React, { cloneElement } from "react";
 import { useTranslation } from "react-i18next";
 import { ThemeColor } from "../../../utils/themeConfigOptions.ts";
@@ -53,11 +47,7 @@ export interface PhotoGalleryWrapperProps {
      * The source of the image data, which can be linked to a Yext field or provided as a constant.
      * @defaultValue A list of 3 placeholder images.
      */
-    images: YextEntityField<
-      | ImageType[]
-      | ComplexImageType[]
-      | { assetImage: AssetImageType | TranslatableAssetImage }[]
-    >;
+    images: typeof photoGallerySource.value;
   };
   styles: {
     /** Styling options for the gallery images, such as aspect ratio. */
@@ -91,14 +81,7 @@ const photoGalleryWrapperFields: YextFields<PhotoGalleryWrapperProps> = {
     type: "object",
     label: msg("fields.data", "Data"),
     objectFields: {
-      images: {
-        type: "entityField",
-        label: msg("fields.images", "Images"),
-        filter: {
-          types: ["type.image"],
-          includeListsOnly: true,
-        },
-      },
+      images: photoGallerySource.field,
     },
   },
   styles: {
@@ -253,8 +236,21 @@ const DesktopImageItem = ({
     />
   );
 
+  const linkedImage =
+    imageData.href && !isEditing ? (
+      <MaybeLink
+        href={imageData.href}
+        alwaysHideCaret
+        eventName="photoGalleryImage"
+      >
+        {imageElement}
+      </MaybeLink>
+    ) : (
+      imageElement
+    );
+
   if (!constrainToParent) {
-    return imageElement;
+    return linkedImage;
   }
 
   return (
@@ -262,7 +258,7 @@ const DesktopImageItem = ({
       className="w-full max-w-full"
       style={{ maxWidth: `${imageData.width}px` }}
     >
-      {imageElement}
+      {linkedImage}
     </div>
   );
 };
@@ -280,6 +276,16 @@ const MobileImageItem = ({
     return <EmptyImage imageData={imageData} />;
   }
 
+  const imageElement = (
+    <Image
+      image={imageData.image}
+      aspectRatio={imageData.aspectRatio}
+      className="w-full h-auto object-contain"
+      sizes="100vw"
+      imageFillType={imageFillType}
+    />
+  );
+
   return (
     <div
       className="w-full max-w-full overflow-hidden"
@@ -288,13 +294,17 @@ const MobileImageItem = ({
         width: "100%",
       }}
     >
-      <Image
-        image={imageData.image}
-        aspectRatio={imageData.aspectRatio}
-        className="w-full h-auto object-contain"
-        sizes={`100vw`}
-        imageFillType={imageFillType}
-      />
+      {imageData.href && !isEditing ? (
+        <MaybeLink
+          href={imageData.href}
+          alwaysHideCaret
+          eventName="photoGalleryImage"
+        >
+          {imageElement}
+        </MaybeLink>
+      ) : (
+        imageElement
+      )}
     </div>
   );
 };
@@ -485,17 +495,7 @@ export const PhotoGalleryWrapper: YextComponentConfig<PhotoGalleryWrapperProps> 
     label: msg("components.gallery", "Gallery"),
     fields: photoGalleryWrapperFields,
     defaultProps: {
-      data: {
-        images: {
-          field: "",
-          constantValue: [
-            { assetImage: PLACEHOLDER },
-            { assetImage: PLACEHOLDER },
-            { assetImage: PLACEHOLDER },
-          ],
-          constantValueEnabled: true,
-        },
-      },
+      data: { images: photoGallerySource.defaultValue },
       styles: {
         image: {
           aspectRatio: 1.78,
@@ -535,18 +535,18 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
     styles.carouselImageCount
   );
 
-  const resolvedImages = resolveComponentData(
+  const resolvedItems = photoGallerySource.resolveItems(
     data.images,
-    locale,
     streamDocument
   );
   const { galleryImages, hasRenderableImages } = getPhotoGalleryImageData({
-    resolvedImages,
+    resolvedItems,
     locale,
     streamDocument,
     aspectRatio: styles.image?.aspectRatio,
     width: styles.image?.width,
     isEditing: Boolean(puck?.isEditing),
+    hasExplicitLinkMapping: !!data.images.mappings?.link?.field,
   });
 
   const hasAnyImages = isMappedEntityFieldSelected(data.images)

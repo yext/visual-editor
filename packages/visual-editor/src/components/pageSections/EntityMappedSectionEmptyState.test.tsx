@@ -131,6 +131,8 @@ const directSectionCases: DirectSectionCase[] = [
       const props = cloneValue(PhotoGallerySection.defaultProps!);
       props.slots.PhotoGalleryWrapper[0].props.data.images.field =
         "photoGallery";
+      props.slots.PhotoGalleryWrapper[0].props.data.images.mappings.image.field =
+        "$item";
       props.slots.PhotoGalleryWrapper[0].props.data.images.constantValueEnabled = false;
       props.slots.PhotoGalleryWrapper[0].props.data.images.constantValue = [];
       return props;

@@ -14,6 +14,7 @@ import {
   type RepeatedEntityFieldDefinition,
   type RepeatedEntityFieldValue,
   type ResolvedItemField,
+  ITEM_SOURCE_SELF_FIELD,
 } from "./itemSourceTypes.ts";
 import { resolveItemValue } from "./itemSourceResolution.ts";
 
@@ -29,12 +30,27 @@ export function createItemSource<TItemProps extends Record<string, unknown>>({
   label,
   mappingFields,
   defaultValues,
+  optionalMappingKeys = [],
+  directItem,
 }: CreateItemSourceOptions<TItemProps>): ItemSourceInstance<TItemProps> {
   const scopedMappingFields = Object.fromEntries(
-    Object.entries(mappingFields).map(([key, field]) => [
-      key,
-      getMappingItemField(field as YextFieldDefinition<any>),
-    ])
+    Object.entries(mappingFields).map(([key, field]) => {
+      const mappingField = getMappingItemField(
+        field as YextFieldDefinition<any>
+      );
+      return [
+        key,
+        key === directItem?.mappingKey && mappingField.type === "entityField"
+          ? {
+              ...mappingField,
+              filter: {
+                ...mappingField.filter,
+                directItemTypes: directItem.types,
+              },
+            }
+          : mappingField,
+      ];
+    })
   ) as YextFieldMap<TItemProps>;
   const manualItemFields = Object.fromEntries(
     Object.entries(scopedMappingFields).map(([key, field]) => [
@@ -60,13 +76,21 @@ export function createItemSource<TItemProps extends Record<string, unknown>>({
     type: "entityField",
     label,
     filter: {
-      itemSourceTypes: getItemSourceTypes(scopedMappingFields),
+      itemSourceTypes: getItemSourceTypes(
+        Object.fromEntries(
+          Object.entries(scopedMappingFields).filter(
+            ([key]) => !optionalMappingKeys.includes(key as keyof TItemProps)
+          )
+        ) as YextFieldMap<TItemProps>
+      ),
+      directItemTypes: directItem?.types,
     },
     repeated: {
       mappingFields: scopedMappingFields,
       manualItemFields,
       defaultItemValue,
       defaultMappings,
+      directItemMappingKey: directItem?.mappingKey,
     },
   } satisfies RepeatedEntityFieldDefinition<TItemProps>;
   const defaultValue: RepeatedEntityFieldValue<TItemProps> = {
@@ -123,12 +147,16 @@ export function createItemSource<TItemProps extends Record<string, unknown>>({
         Object.fromEntries(
           Object.entries(scopedMappingFields).map(([key, itemField]) => [
             key,
-            resolveItemValue(
-              itemField as YextFieldDefinition<any>,
-              value.mappings?.[key as keyof TItemProps],
-              streamDocument,
-              itemDocument
-            ),
+            value.mappings?.[key as keyof TItemProps] &&
+            (value.mappings[key as keyof TItemProps] as { field?: string })
+              .field === ITEM_SOURCE_SELF_FIELD
+              ? itemDocument
+              : resolveItemValue(
+                  itemField as YextFieldDefinition<any>,
+                  value.mappings?.[key as keyof TItemProps],
+                  streamDocument,
+                  itemDocument
+                ),
           ])
         )
       ) as ResolvedItemField<TItemProps>[];

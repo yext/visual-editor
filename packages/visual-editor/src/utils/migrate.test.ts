@@ -8,6 +8,7 @@ import { normalizeFooterLogoImageMigration } from "../components/migrations/0075
 import { slotMappedCardsMigration } from "../components/migrations/0076_slot_mapped_cards.ts";
 import { removeMapboxApiKeyPropsMigration } from "../components/migrations/0078_remove_mapbox_api_key_props.ts";
 import { imageFillTypeMigration } from "../components/migrations/0079_image_fill_type.ts";
+import { photoGalleryItemSource } from "../components/migrations/0083_photo_gallery_item_source.ts";
 
 describe("migrate", () => {
   it("successfully applies a migration", async () => {
@@ -1649,6 +1650,78 @@ describe("migrate", () => {
       },
     });
   });
+
+  it.each([
+    {
+      name: "manual images",
+      images: {
+        field: "",
+        constantValueEnabled: true,
+        constantValue: [
+          {
+            assetImage: {
+              url: "https://example.com/image.jpg",
+              width: 100,
+              height: 100,
+            },
+            clickthroughUrl: "/image",
+          },
+        ],
+      },
+      expectedImage: {
+        url: "https://example.com/image.jpg",
+        width: 100,
+        height: 100,
+      },
+      expectedLink: "/image",
+      expectedMapping: "",
+    },
+    {
+      name: "linked image list",
+      images: {
+        field: "photoGallery",
+        constantValueEnabled: false,
+        constantValue: [],
+      },
+      expectedImage: undefined,
+      expectedLink: undefined,
+      expectedMapping: "$item",
+    },
+  ])(
+    "migrates $name to gallery items",
+    ({ images, expectedImage, expectedLink, expectedMapping }) => {
+      const migratedData = migrate(
+        {
+          root: { props: { version: 0 } },
+          content: [
+            {
+              type: "PhotoGalleryWrapper",
+              props: {
+                id: "gallery",
+                data: { images },
+                styles: { image: { aspectRatio: 1.78 } },
+              },
+            },
+          ],
+          zones: {},
+        },
+        [photoGalleryItemSource],
+        { components: {} },
+        { locale: "en" }
+      );
+      const props = migratedData.content[0]?.props;
+
+      expect(props.styles).toEqual({ image: { aspectRatio: 1.78 } });
+      expect(props.data.images.field).toBe(images.field);
+      expect(props.data.images.mappings.image.field).toBe(expectedMapping);
+      expect(props.data.images.constantValue[0]?.image.constantValue).toEqual(
+        expectedImage
+      );
+      expect(props.data.images.constantValue[0]?.link.constantValue).toEqual(
+        expectedLink ? { defaultValue: expectedLink } : undefined
+      );
+    }
+  );
 });
 
 const migration: Migration = {
