@@ -157,7 +157,7 @@ const SectionLibraryLayout: Template<TemplateRenderProps> = (props) => {
     <>
       {/* SECTION_LIBRARY_MAPBOX_ASSETS */}
       <AnalyticsProvider
-        apiKey={props.document?._env?.YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY}
+        apiKey={props.document?._env?.YEXT_PUBLIC_ANALYTICS_API_KEY}
         templateData={props}
         currency="USD"
       >
