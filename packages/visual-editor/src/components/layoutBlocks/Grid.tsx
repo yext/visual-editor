@@ -1,5 +1,6 @@
 import * as React from "react";
 import { PuckComponent, Slot } from "@puckeditor/core";
+import { cva } from "class-variance-authority";
 import { themeManagerCn } from "../../utils/cn.ts";
 import {
   backgroundColors,
@@ -18,8 +19,21 @@ import {
   YextFields,
 } from "../../fields/fields.ts";
 
+const gridVariants = cva("grid w-full gap-8 sm:grid-cols-1", {
+  variants: {
+    columns: {
+      1: "md:grid-cols-1 lg:grid-cols-1",
+      2: "md:grid-cols-2 lg:grid-cols-2",
+      3: "md:grid-cols-2 lg:grid-cols-3",
+      4: "md:grid-cols-2 lg:grid-cols-4",
+      5: "md:grid-cols-2 lg:grid-cols-5",
+      6: "md:grid-cols-2 lg:grid-cols-6",
+    },
+  },
+});
+
 export interface GridProps extends layoutProps {
-  columns: number;
+  columns: 1 | 2 | 3 | 4 | 5 | 6;
   slots: { Column: Slot }[];
   liveVisibility: boolean;
   className?: string;
@@ -38,16 +52,7 @@ const GridSection = React.forwardRef<
 
   return (
     <PageSection background={backgroundColor} className={className}>
-      <div
-        className={
-          columns === 1
-            ? "grid w-full gap-8 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1"
-            : columns === 2
-              ? "grid w-full gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2"
-              : "grid w-full gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-        }
-        ref={ref}
-      >
+      <div className={gridVariants({ columns })} ref={ref}>
         {slots.slice(0, columns).map(({ Column }, idx) => (
           <Column
             key={idx}
@@ -74,11 +79,14 @@ GridSection.displayName = "GridSection";
 const gridSectionFields: YextFields<GridProps> = {
   columns: {
     label: msg("fields.columns", "Columns"),
-    type: "radio",
+    type: "select",
     options: [
       { label: msg("fields.options.one", "One"), value: 1 },
       { label: msg("fields.options.two", "Two"), value: 2 },
       { label: msg("fields.options.three", "Three"), value: 3 },
+      { label: msg("fields.options.four", "Four"), value: 4 },
+      { label: msg("fields.options.five", "Five"), value: 5 },
+      { label: msg("fields.options.six", "Six"), value: 6 },
     ],
   },
   slots: {
@@ -127,7 +135,7 @@ export const Grid: YextComponentConfig<GridProps> = {
   fields: gridSectionFields,
   defaultProps: {
     columns: 2,
-    slots: [{ Column: [] }, { Column: [] }, { Column: [] }],
+    slots: [{ Column: [] }, { Column: [] }],
     backgroundColor: backgroundColors.background1.value,
     liveVisibility: true,
     analytics: {
@@ -144,6 +152,32 @@ export const Grid: YextComponentConfig<GridProps> = {
     delete rest.align;
 
     return toPuckFields(rest);
+  },
+  resolveData: (data) => {
+    let slots = data.props.slots;
+
+    if (data.props.columns < data.props.slots.length) {
+      slots = data.props.slots.slice(0, data.props.columns);
+    }
+
+    if (data.props.columns > data.props.slots.length) {
+      slots = data.props.slots.concat(
+        Array.from(
+          { length: data.props.columns - data.props.slots.length },
+          () => {
+            return { Column: [] };
+          }
+        )
+      );
+    }
+
+    return {
+      ...data,
+      props: {
+        ...data.props,
+        slots,
+      },
+    };
   },
   render: (props) => (
     <AnalyticsScopeProvider
