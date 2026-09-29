@@ -1,3 +1,52 @@
+#### 2.0.0-beta.1 (2026-09-29)
+
+##### Chores
+
+- remove OOTB components and build ([#1321](https://github.com/yext/visual-editor/pull/1321)) ([df6dc146](https://github.com/yext/visual-editor/commit/df6dc14690e174c1abaada119d63b650c397f106))
+- merge changes from main ([#1313](https://github.com/yext/visual-editor/pull/1313)) ([a27a50a1](https://github.com/yext/visual-editor/commit/a27a50a152e1c8f8824ae40b857f5dd70d7c182d))
+- adjust section library exports ([#1312](https://github.com/yext/visual-editor/pull/1312)) ([d77bb832](https://github.com/yext/visual-editor/commit/d77bb832247f8abe17cf1d11c6b973a5378eb088))
+- convert section library scripts to cli commands ([#1305](https://github.com/yext/visual-editor/pull/1305)) ([f19c69df](https://github.com/yext/visual-editor/commit/f19c69df47142a7ec1056223b191f6e3df0354c5))
+- minor cli improvements ([#1304](https://github.com/yext/visual-editor/pull/1304)) ([fc559f42](https://github.com/yext/visual-editor/commit/fc559f426dd5fa4d002f2c59ca392764e4c79269))
+- fix bugs in template conversion script ([#1295](https://github.com/yext/visual-editor/pull/1295)) ([81b8d2a3](https://github.com/yext/visual-editor/commit/81b8d2a397b5fe763a3ba5971613dc33e97e4d8a))
+- fix bugs in template conversion script ([35f096aa](https://github.com/yext/visual-editor/commit/35f096aaaf7eb3e2f306dfc3f3ce976f736caaff))
+- update js-yaml version ([#1286](https://github.com/yext/visual-editor/pull/1286)) ([46c322fd](https://github.com/yext/visual-editor/commit/46c322fd11ec5fef319d4bf63a75be1556e4adfa))
+
+##### Documentation Changes
+
+- update for removal of OOTB components ([#1322](https://github.com/yext/visual-editor/pull/1322)) ([fe09d5e2](https://github.com/yext/visual-editor/commit/fe09d5e2892195be3fb3ca765509c1302ffb1865))
+
+##### New Features
+
+- add location param to locator url ([#1335](https://github.com/yext/visual-editor/pull/1335)) ([7561f687](https://github.com/yext/visual-editor/commit/7561f68755fc2ef2ccd7e5c7cf225f2e2b5cfd3b))
+- allow deploy to run non-interactively ([#1334](https://github.com/yext/visual-editor/pull/1334)) ([97ccf52d](https://github.com/yext/visual-editor/commit/97ccf52d9adf4e552fda7ada9acddd4688900c53))
+- allow 6 columns in grid ([#1320](https://github.com/yext/visual-editor/pull/1320)) ([5a9387c8](https://github.com/yext/visual-editor/commit/5a9387c81c189e968a05ed0645faf2b55d0713b3))
+- i18n cli scripts for section libraries ([#1319](https://github.com/yext/visual-editor/pull/1319)) ([d938519c](https://github.com/yext/visual-editor/commit/d938519c9c262cd157ab96fc28d61a24dba71b48))
+- support section library migrations ([#1318](https://github.com/yext/visual-editor/pull/1318)) ([cc85005c](https://github.com/yext/visual-editor/commit/cc85005c7c9789d032b246907a596118fa336251))
+- extend i18n for section libraries ([#1316](https://github.com/yext/visual-editor/pull/1316)) ([b96742cc](https://github.com/yext/visual-editor/commit/b96742cc79aa1875487e6a2eb87324e7b875e372))
+- qol improvements for deploy script ([#1315](https://github.com/yext/visual-editor/pull/1315)) ([984607ac](https://github.com/yext/visual-editor/commit/984607ac0a454b2238e6a834af9f2e06c593e839))
+- enable preview image upload for layouts ([#1308](https://github.com/yext/visual-editor/pull/1308)) ([29c81c2a](https://github.com/yext/visual-editor/commit/29c81c2a0b71e4002e11152af39523fbca1cb2c1))
+- allow multiple entity layouts in a section library ([#1303](https://github.com/yext/visual-editor/pull/1303)) ([e5d493f7](https://github.com/yext/visual-editor/commit/e5d493f7be3d27d05722bc3544570773645faea0))
+- add Section library deploy script ([#1293](https://github.com/yext/visual-editor/pull/1293)) ([431406ba](https://github.com/yext/visual-editor/commit/431406ba3f1ac63b0c0420a2523483b563b5a888))
+- include header/footer in directory/locator layouts in template conversion script ([#1299](https://github.com/yext/visual-editor/pull/1299)) ([6a9a3f76](https://github.com/yext/visual-editor/commit/6a9a3f767810f1b536ebca2bfb593f137cec49e7))
+- section library validate command ([#1297](https://github.com/yext/visual-editor/pull/1297)) ([e676f509](https://github.com/yext/visual-editor/commit/e676f509099a93c3f0869748319421e56a328c0d))
+- add local-editor and exports for templates ([#1292](https://github.com/yext/visual-editor/pull/1292)) ([44402b34](https://github.com/yext/visual-editor/commit/44402b34ac0e6eb4567097cc853128f4bd3c8f6f))
+- edit url uses SECTION_LIBRARY_REVISION_ID ([#1294](https://github.com/yext/visual-editor/pull/1294)) ([14b2e2a3](https://github.com/yext/visual-editor/commit/14b2e2a30330df364abe4a2a0a156df1f35d65d9))
+- edit url uses SECTION_LIBRARY_REVISION_ID ([76bbf82a](https://github.com/yext/visual-editor/commit/76bbf82adcc084b6c659706a28a574f7058d747f))
+- add template conversion script ([#1291](https://github.com/yext/visual-editor/pull/1291)) ([3b67c053](https://github.com/yext/visual-editor/commit/3b67c0530e3a1dcd762d4fa49e45e0972b8f0f3b))
+- add Directory and Locator to the Section Library starter ([#1290](https://github.com/yext/visual-editor/pull/1290)) ([87da57cb](https://github.com/yext/visual-editor/commit/87da57cb9171e42e450dbedee8c15fc1dc3d99b0))
+- support section library repo structure ([#1287](https://github.com/yext/visual-editor/pull/1287)) ([1a8e677a](https://github.com/yext/visual-editor/commit/1a8e677a7daac1f3cc10821ede815a86e689f983))
+
+##### Bug Fixes
+
+- reduce max preview image size to 1 mb ([#1325](https://github.com/yext/visual-editor/pull/1325)) ([2073a218](https://github.com/yext/visual-editor/commit/2073a21870bb07e7140e48291bc43d091fae4134))
+- dedupe categories ([#1314](https://github.com/yext/visual-editor/pull/1314)) ([0c3a2bc0](https://github.com/yext/visual-editor/commit/0c3a2bc017a6036cc0119ffd8933b725a2cfd962))
+- remove yext prefix from layout component ids and analytics names ([#1311](https://github.com/yext/visual-editor/pull/1311)) ([29ff7152](https://github.com/yext/visual-editor/commit/29ff7152db55b01108ae47dddbbea978138df515))
+- updates to directory/locator and template migration scripts ([#1310](https://github.com/yext/visual-editor/pull/1310)) ([6e6514f9](https://github.com/yext/visual-editor/commit/6e6514f9cb6c846b2df0e5e487b5f2523d36b425))
+- align api ([#1307](https://github.com/yext/visual-editor/pull/1307)) ([3aeccb39](https://github.com/yext/visual-editor/commit/3aeccb39d07dbd06e67ee7903cdf62b084a0b57b))
+- complex fields in local editor ([#1301](https://github.com/yext/visual-editor/pull/1301)) ([b505321e](https://github.com/yext/visual-editor/commit/b505321e3c1f14c182a5a2f660023e3dee318d26))
+- add ora dependency ([#1300](https://github.com/yext/visual-editor/pull/1300)) ([7696ca78](https://github.com/yext/visual-editor/commit/7696ca782b05fdbfe60bc264c2c9642deda27221))
+- preserve directory card data ([#1284](https://github.com/yext/visual-editor/pull/1284)) ([7f3bd989](https://github.com/yext/visual-editor/commit/7f3bd989d8e735265c2066c761b1e7a8319c66cf))
+
 #### 1.4.8 (2026-09-02)
 
 ##### Bug Fixes
