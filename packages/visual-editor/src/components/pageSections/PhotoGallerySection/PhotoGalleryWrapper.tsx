@@ -228,8 +228,8 @@ const DesktopImageItem = ({
       aspectRatio={imageData.aspectRatio}
       width={imageData.width}
       className={themeManagerCn(
-        "rounded-image-borderRadius",
-        constrainToParent && "w-full h-auto object-contain max-w-full"
+        "rounded-image-borderRadius max-w-full",
+        constrainToParent && "w-full h-auto object-contain"
       )}
       sizes={sizes}
       imageFillType={imageFillType}
@@ -240,6 +240,7 @@ const DesktopImageItem = ({
     imageData.href && !isEditing ? (
       <MaybeLink
         href={imageData.href}
+        className="block max-w-full"
         alwaysHideCaret
         eventName="photoGalleryImage"
       >
@@ -297,6 +298,7 @@ const MobileImageItem = ({
       {imageData.href && !isEditing ? (
         <MaybeLink
           href={imageData.href}
+          className="block w-full"
           alwaysHideCaret
           eventName="photoGalleryImage"
         >

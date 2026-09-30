@@ -26,7 +26,7 @@ export const photoGallerySource = createItemSource<{
     link: {
       type: "entityField",
       label: msg("fields.link", "Link"),
-      filter: { types: ["type.string", "type.cta"] },
+      filter: { types: ["type.cta"] },
       constantValueFilter: { types: ["type.string"] },
       disableConstantValueToggle: true,
     },

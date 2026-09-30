@@ -1201,7 +1201,7 @@ describe("EntityFieldSelectorField", () => {
     }
   );
 
-  it("when a brand has a CTA then the gallery link selector offers it", () => {
+  it("when a brand has a CTA then the gallery link selector offers the complete CTA", () => {
     renderRepeatedEntityField({
       field: photoGallerySource.field as EntityFieldSelectorField,
       value: {
@@ -1229,6 +1229,34 @@ describe("EntityFieldSelectorField", () => {
                   name: "cta",
                   displayName: "Brand CTA",
                   definition: { name: "cta", typeName: "type.cta", type: {} },
+                  children: {
+                    fields: [
+                      {
+                        name: "label",
+                        definition: {
+                          name: "label",
+                          typeName: "type.string",
+                          type: {},
+                        },
+                      },
+                      {
+                        name: "link",
+                        definition: {
+                          name: "link",
+                          typeName: "type.string",
+                          type: {},
+                        },
+                      },
+                      {
+                        name: "linkType",
+                        definition: {
+                          name: "linkType",
+                          typeName: "type.option",
+                          type: {},
+                        },
+                      },
+                    ],
+                  },
                 },
               ],
             },
@@ -1240,8 +1268,10 @@ describe("EntityFieldSelectorField", () => {
     fireEvent.click(screen.getAllByRole("combobox")[2]);
 
     expect(
-      within(screen.getByRole("listbox")).getByText("Brand CTA")
-    ).toBeDefined();
+      within(screen.getByRole("listbox"))
+        .getAllByRole("option")
+        .map((option) => option.textContent)
+    ).toEqual(["Select a Field", "Brand CTA"]);
   });
 
   it("when a manual gallery image uses an entity field then single images are available", () => {
