@@ -123,6 +123,7 @@ export const getPhotoGalleryImageData = ({
     const href =
       typeof resolvedLink === "string" &&
       resolvedLink.trim() &&
+      !/^javascript:/i.test(resolvedLink.trim()) &&
       (isNonNormalizableLinkType(linkType) ||
         LINK_REGEX_VALIDATION.test(resolvedLink.trim()))
         ? resolvedLink.trim()

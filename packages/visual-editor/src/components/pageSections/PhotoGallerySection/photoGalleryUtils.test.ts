@@ -312,4 +312,30 @@ describe("getPhotoGalleryImageData", () => {
       );
     }
   );
+
+  it.each(["EMAIL", "Email", "PHONE", "Phone"] as const)(
+    "when a %s CTA starts with javascript then its image has no link",
+    (linkType): void => {
+      for (const link of ["javascript:alert(1)", "  JaVaScRiPt:alert(1)  "]) {
+        const result = getPhotoGalleryImageData({
+          resolvedItems: [
+            {
+              image: {
+                url: "https://example.com/team.jpg",
+                width: 100,
+                height: 100,
+              },
+              link: { label: "Team", link, linkType },
+            },
+          ],
+          locale: "en",
+          isEditing: false,
+        });
+
+        expect(result.hasRenderableImages).toBe(true);
+        expect(result.galleryImages).toHaveLength(1);
+        expect(result.galleryImages[0]?.href).toBeUndefined();
+      }
+    }
+  );
 });
