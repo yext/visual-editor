@@ -21,6 +21,8 @@ export type YextCTAField = YextEntityField<EnhancedTranslatableCTA> & {
 
 export type CTASelectorField = BaseField & {
   type: "ctaSelector";
+  /** Resolve this content field before passing it to the component renderer. */
+  resolve?: boolean;
   label?: string | MsgString;
   visible?: boolean;
   disableConstantValueToggle?: boolean;

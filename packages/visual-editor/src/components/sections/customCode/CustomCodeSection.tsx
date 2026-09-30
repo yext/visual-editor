@@ -5,7 +5,6 @@ import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { WithId, WithPuckProps } from "@puckeditor/core";
-import { resolveEmbeddedFieldsInString } from "../../../utils/resolveYextEntityField.ts";
 import { processHandlebarsTemplate } from "./customCodeHandlebars.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
@@ -54,6 +53,7 @@ const customCodeSectionFields: YextFields<CustomCodeSectionProps> = {
     label: msg("fields.javascript", "JavaScript"),
     type: "code",
     codeLanguage: "javascript",
+    resolve: true,
   },
   liveVisibility: {
     label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
@@ -96,18 +96,12 @@ const CustomCodeSectionWrapper = ({
   puck,
 }: WithId<WithPuckProps<CustomCodeSectionProps>>) => {
   const streamDocument = useDocument();
-  const locale = streamDocument?.locale;
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const scriptIdRef = React.useRef<number>(Math.floor(Math.random() * 1e9));
   const scriptTagId = `custom-code-section-script-${scriptIdRef.current}`;
 
   const processedHtml = processHandlebarsTemplate(html, streamDocument);
-  const processedJavascript = resolveEmbeddedFieldsInString(
-    javascript,
-    streamDocument,
-    locale
-  );
 
   React.useEffect(() => {
     if (!containerRef.current) {
@@ -119,14 +113,14 @@ const CustomCodeSectionWrapper = ({
       prevScript.remove();
     }
 
-    if (processedJavascript) {
+    if (javascript) {
       const script = document.createElement("script");
       script.id = scriptTagId;
       script.type = "text/javascript";
-      script.text = processedJavascript;
+      script.text = javascript;
       containerRef.current.appendChild(script);
     }
-  }, [processedJavascript]);
+  }, [javascript]);
 
   if (!processedHtml) {
     return puck.isEditing ? <EmptyCustomCodeSection /> : null;

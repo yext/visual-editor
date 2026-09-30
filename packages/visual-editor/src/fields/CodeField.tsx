@@ -23,6 +23,8 @@ export type CodeLanguageOptions =
 
 export type CodeField = BaseField & {
   type: "code";
+  /** Resolve this content field before passing it to the component renderer. */
+  resolve?: boolean;
   label?: string | MsgString;
   visible?: boolean;
   codeLanguage: CodeLanguageOptions;

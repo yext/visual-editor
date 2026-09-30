@@ -16,6 +16,8 @@ import { resolveComponentData } from "../utils/resolveComponentData.tsx";
 
 export type TranslatableStringField = BaseField & {
   type: "translatableString";
+  /** Resolve this content field before passing it to the component renderer. */
+  resolve?: boolean;
   label?: string | MsgString;
   visible?: boolean;
   filter?: RenderEntityFieldFilter<any>;

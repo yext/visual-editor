@@ -17,6 +17,8 @@ export type CreateItemSourceOptions<
   TItemProps extends Record<string, unknown>,
 > = {
   label: string;
+  /** Supply plain item values to the renderer through field transforms. */
+  resolve?: boolean;
   mappingFields: YextFieldMap<TItemProps>;
   defaultValues?: TItemProps[];
 };

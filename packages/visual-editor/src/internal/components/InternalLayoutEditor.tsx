@@ -1,3 +1,4 @@
+import { createPuckFieldTransforms } from "../../fields/fieldTransforms.ts";
 import {
   Puck,
   Data,
@@ -113,6 +114,11 @@ export const InternalLayoutEditor = ({
   const historyIndex = useRef<number>(0);
   const { i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
+  const fieldTransforms = React.useMemo(
+    () =>
+      createPuckFieldTransforms(streamDocument.locale ?? "en", streamDocument),
+    [streamDocument]
+  );
   const { errorCount, errorSources, errorDetails } = useErrorContext();
 
   /**
@@ -395,6 +401,7 @@ export const InternalLayoutEditor = ({
   return (
     <EntityTooltipsProvider>
       <Puck
+        fieldTransforms={fieldTransforms}
         config={translatedPuckConfigWithRootFields}
         data={{}} // we use puckInitialHistory instead
         initialHistory={puckInitialHistory}

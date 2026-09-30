@@ -1,11 +1,9 @@
 import * as React from "react";
 import { PuckComponent } from "@puckeditor/core";
-import { useDocument } from "../../hooks/useDocument.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { Heading, HeadingProps } from "../atoms/heading.tsx";
 import { TranslatableString } from "../../types/types.ts";
-import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { pt, msg } from "../../utils/i18n/platform.ts";
 import {
   ThemeOptions,
@@ -13,7 +11,6 @@ import {
   ThemeColor,
 } from "../../utils/themeConfigOptions.ts";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
-import { useTranslation } from "react-i18next";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export type HeadingTextProps = {
@@ -40,10 +37,10 @@ export type HeadingTextProps = {
   };
 };
 
-const HeadingTextWrapper: PuckComponent<HeadingTextProps> = (props) => {
+const HeadingTextWrapper: PuckComponent<
+  Omit<HeadingTextProps, "data"> & { data: { text?: string } }
+> = (props) => {
   const { data, styles, puck, parentData } = props;
-  const streamDocument = useDocument();
-  const { i18n } = useTranslation();
 
   const justifyClass = styles?.align
     ? {
@@ -61,17 +58,11 @@ const HeadingTextWrapper: PuckComponent<HeadingTextProps> = (props) => {
       }[styles.align]
     : "text-left";
 
-  const resolvedHeadingText =
-    parentData?.text ??
-    resolveComponentData(data.text, i18n.language, streamDocument);
+  const resolvedHeadingText = parentData?.text ?? data.text;
 
   return resolvedHeadingText ? (
     <div className={`flex w-full ${justifyClass}`}>
-      <EntityField
-        displayName={pt("heading", "Heading") + " " + styles.level}
-        fieldId={parentData ? parentData.field : data.text.field}
-        constantValueEnabled={!parentData && data.text.constantValueEnabled}
-      >
+      <EntityField displayName={pt("heading", "Heading") + " " + styles.level}>
         <Heading
           level={styles.level}
           className={alignClass}
@@ -96,6 +87,7 @@ const headingTextFields: YextFields<HeadingTextProps> = {
     objectFields: {
       text: {
         type: "entityField",
+        resolve: true,
         label: msg("fields.text", "Text"),
         filter: {
           types: ["type.string"],
@@ -126,7 +118,10 @@ const headingTextFields: YextFields<HeadingTextProps> = {
   },
 };
 
-export const HeadingText: YextComponentConfig<HeadingTextProps> = {
+export const HeadingText: YextComponentConfig<
+  HeadingTextProps,
+  Parameters<typeof HeadingTextWrapper>[0]
+> = {
   label: msg("components.headingText", "Heading Text"),
   fields: headingTextFields,
   resolveFields: (data) => resolveDataFromParent(headingTextFields, data),

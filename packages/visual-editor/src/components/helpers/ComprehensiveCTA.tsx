@@ -1,15 +1,11 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
+import type { PuckComponent } from "@puckeditor/core";
 import { type CTAProps, CTA } from "../atoms/cta.tsx";
 import { themeManagerCn } from "../../utils/cn.ts";
-import { useDocument } from "../../hooks/useDocument.tsx";
-import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
-import { getCTAType } from "../../internal/utils/ctaFieldUtils.ts";
 import {
   type ComprehensiveCTAValue,
   defaultButtonStyleValue,
   defaultLinkStyleValue,
-  normalizeComprehensiveCTAValue,
 } from "../../fields/styledFields/ComprehensiveCTAField.tsx";
 import {
   FOOD_DELIVERY_SERVICES,
@@ -19,7 +15,23 @@ import { type StyledButtonValue } from "../../fields/styledFields/StyledButtonFi
 import { type StyledLinkValue } from "../../fields/styledFields/StyledLinkField.tsx";
 
 export type ComprehensiveCTARenderProps = {
-  value?: Partial<ComprehensiveCTAValue>;
+  value?: Omit<Partial<ComprehensiveCTAValue>, "data" | "sx"> & {
+    /** Puck maps CSS string intersections as objects; both types carry the same CSS values. */
+    sx?:
+      | React.CSSProperties
+      | Parameters<PuckComponent<{ sx: React.CSSProperties }>>[0]["sx"];
+    data?: Omit<
+      ComprehensiveCTAValue["data"],
+      "cta" | "buttonText" | "ariaLabel"
+    > & {
+      cta?: Omit<EnhancedTranslatableCTA, "label" | "link"> & {
+        label?: string;
+        link?: string;
+      };
+      buttonText?: string;
+      ariaLabel?: string;
+    };
+  };
   label?: React.ReactNode;
   ariaLabel?: string;
   className?: string;
@@ -34,26 +46,26 @@ const resolveTextStyleValue = (value: string | undefined) =>
   value && value !== "default" ? value : undefined;
 
 const getComprehensiveCTAStyle = (
-  value: ComprehensiveCTAValue
+  value: NonNullable<ComprehensiveCTARenderProps["value"]>
 ): React.CSSProperties | undefined => {
   const ctaType =
-    value.data.actionType === "button"
+    value.data?.actionType === "button"
       ? "textAndLink"
-      : getCTAType(value.data.cta).ctaType;
+      : value.data?.cta?.ctaType;
 
   if (ctaType === "presetImage") {
-    return value.sx;
+    return value.sx as React.CSSProperties | undefined;
   }
 
   const typographyStyles: StyledButtonValue | StyledLinkValue =
-    value.styles.variant === "link"
-      ? (value.styles.link ?? value.styles.button ?? defaultLinkStyleValue)
-      : (value.styles.button ?? defaultButtonStyleValue);
+    value.styles?.variant === "link"
+      ? (value.styles?.link ?? value.styles?.button ?? defaultLinkStyleValue)
+      : (value.styles?.button ?? defaultButtonStyleValue);
 
   const style: React.CSSProperties & {
     "--display-link-caret"?: string;
   } = {
-    ...value.sx,
+    ...(value.sx as React.CSSProperties),
   };
 
   const fontFamily = resolveTextStyleValue(typographyStyles.fontFamily);
@@ -123,6 +135,7 @@ const toDataAttributes = (
   );
 };
 
+/** Render transformed CTA content while retaining action, styling, and analytics behavior. */
 export const ComprehensiveCTA = ({
   value,
   label,
@@ -133,85 +146,53 @@ export const ComprehensiveCTA = ({
   target,
   alwaysHideCaret,
   onClick,
-}: ComprehensiveCTARenderProps) => {
-  const streamDocument = useDocument();
-  const { t, i18n } = useTranslation();
-  const locale = i18n.language;
-  const currentValue = normalizeComprehensiveCTAValue(value);
-
-  const actionType = currentValue.data.actionType;
-  const { ctaType } =
-    actionType === "link"
-      ? getCTAType(currentValue.data.cta)
-      : { ctaType: "textAndLink" as const };
-  const resolvedCta =
-    actionType === "link"
-      ? (resolveComponentData(currentValue.data.cta, locale, streamDocument) as
-          EnhancedTranslatableCTA | undefined)
-      : undefined;
-
-  const resolvedButtonLabel = currentValue.data.buttonText
-    ? resolveComponentData(currentValue.data.buttonText, locale, streamDocument)
-    : "";
-  const resolvedFieldAriaLabel = currentValue.data.ariaLabel
-    ? resolveComponentData(currentValue.data.ariaLabel, locale, streamDocument)
-    : "";
-
-  let resolvedLinkLabel =
-    resolvedCta &&
-    resolveComponentData(resolvedCta.label, locale, streamDocument);
-
-  if (
-    actionType === "link" &&
-    !currentValue.data.cta.constantValueEnabled &&
-    ctaType === "getDirections"
-  ) {
-    resolvedLinkLabel = t("getDirections", "Get Directions");
-  }
+}: ComprehensiveCTARenderProps): React.ReactElement | null => {
+  const actionType = value?.data?.actionType ?? "link";
+  const ctaType =
+    actionType === "button" ? "textAndLink" : value?.data?.cta?.ctaType;
+  const cta = value?.data?.cta;
 
   const effectiveLabel =
     label !== undefined
       ? label
       : actionType === "button"
-        ? resolvedButtonLabel
-        : resolvedLinkLabel;
+        ? value?.data?.buttonText
+        : cta?.label;
 
   const showCTA =
     label !== undefined
       ? label !== null && label !== false
       : actionType === "button"
-        ? Boolean(resolvedButtonLabel?.trim())
-        : Boolean(
-            resolvedCta && (ctaType === "presetImage" || resolvedLinkLabel)
-          );
+        ? Boolean(value?.data?.buttonText?.trim())
+        : Boolean(cta && (ctaType === "presetImage" || cta?.label));
 
   if (!showCTA) {
     return null;
   }
 
   const resolvedClassName = themeManagerCn(
-    currentValue.className,
+    value?.className,
     actionType === "link" &&
       ctaType === "presetImage" &&
-      currentValue.styles.presetImage &&
+      value?.styles?.presetImage &&
       (FOOD_DELIVERY_SERVICES as readonly string[]).includes(
-        currentValue.styles.presetImage
+        value?.styles?.presetImage
       )
       ? "!justify-start"
       : undefined,
-    actionType === "button" ? currentValue.data.customClass : undefined,
+    actionType === "button" ? value?.data?.customClass : undefined,
     className
   );
 
   const resolvedStyle = {
-    ...getComprehensiveCTAStyle(currentValue),
+    ...getComprehensiveCTAStyle(value ?? {}),
     ...style,
   };
 
   const resolvedAriaLabel =
     ariaLabel ??
     (actionType === "button"
-      ? resolvedFieldAriaLabel || undefined
+      ? value?.data?.ariaLabel || undefined
       : typeof effectiveLabel === "string"
         ? effectiveLabel
         : undefined);
@@ -222,36 +203,34 @@ export const ComprehensiveCTA = ({
       ariaLabel={resolvedAriaLabel}
       alwaysHideCaret={alwaysHideCaret}
       className={resolvedClassName}
-      color={currentValue.styles.color}
+      color={value?.styles?.color}
       ctaType={ctaType}
       dataAttributes={
         actionType === "button"
-          ? toDataAttributes(currentValue.data.dataAttributes)
+          ? toDataAttributes(value?.data?.dataAttributes)
           : undefined
       }
-      eventName={eventName ?? currentValue.eventName}
-      id={actionType === "button" ? currentValue.data.customId : undefined}
+      eventName={eventName ?? value?.eventName}
+      id={actionType === "button" ? value?.data?.customId : undefined}
       label={effectiveLabel}
       link={
-        actionType === "link" && ctaType !== "getDirections" && resolvedCta
-          ? resolveComponentData(resolvedCta.link, locale, streamDocument)
+        actionType === "link" && ctaType !== "getDirections" && cta
+          ? cta.link
           : undefined
       }
-      linkType={
-        actionType === "link" && resolvedCta ? resolvedCta.linkType : undefined
-      }
+      linkType={actionType === "link" && cta ? cta.linkType : undefined}
       normalizeLink={true}
       onClick={onClick}
       openInNewTab={
-        actionType === "link" ? currentValue.data.openInNewTab : undefined
+        actionType === "link" ? value?.data?.openInNewTab : undefined
       }
       presetImageType={
-        actionType === "link" ? currentValue.styles.presetImage : undefined
+        actionType === "link" ? value?.styles?.presetImage : undefined
       }
       setPadding={true}
       style={resolvedStyle}
       target={target}
-      variant={currentValue.styles.variant}
+      variant={value?.styles?.variant ?? "primary"}
     />
   );
 };

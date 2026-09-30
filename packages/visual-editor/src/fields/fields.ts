@@ -79,13 +79,15 @@ export type YextFieldDefinition<ValueType = any> =
 
 export type YextComponentConfig<
   Props extends DefaultComponentProps = DefaultComponentProps,
+  RenderProps extends DefaultComponentProps = Props,
 > = Omit<
   ComponentConfig<{
     props: Props;
     fields: YextPuckFields;
   }>,
-  "fields" | "resolveFields"
+  "fields" | "resolveFields" | "render"
 > & {
+  render: ComponentConfig<{ props: RenderProps }>["render"];
   fields?: YextFields<Props>;
   resolveFields?: ComponentConfig<{
     props: Props;
@@ -129,6 +131,7 @@ export const toPuckFields = <
     (yextField) => ({
       ...yextField,
       type: "custom",
+      yextFieldType: yextField.type,
       render: ({ field: _, ...props }) =>
         createElement(YextAutoField, {
           ...(props as any),

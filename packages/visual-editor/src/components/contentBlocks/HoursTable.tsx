@@ -1,10 +1,8 @@
-import { useTranslation } from "react-i18next";
 import { PuckComponent } from "@puckeditor/core";
 import { DayOfWeekNames, HoursType } from "@yext/pages-components";
 import "@yext/pages-components/style.css";
 import { EntityField } from "../../editor/EntityField.tsx";
 import { HoursTableAtom } from "../atoms/hoursTable.tsx";
-import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
@@ -36,6 +34,7 @@ export interface HoursTableProps {
 export const HoursTableDataField: YextFields<HoursTableProps["data"]>["hours"] =
   {
     type: "entityField",
+    resolve: true,
     label: msg("fields.hours", "Hours"),
     filter: {
       types: ["type.hours"],
@@ -100,12 +99,13 @@ export const hoursTableFields: YextFields<HoursTableProps> = {
   },
 };
 
-const VisualEditorHoursTable: PuckComponent<HoursTableProps> = (props) => {
+const VisualEditorHoursTable: PuckComponent<
+  Omit<HoursTableProps, "data"> & { data: { hours?: HoursType } }
+> = (props) => {
   const { data, styles, puck } = props;
-  const { i18n } = useTranslation();
   const streamDocument = useDocument();
   const comingSoon = !!streamDocument.comingSoon;
-  const hours = resolveComponentData(data.hours, i18n.language, streamDocument);
+  const hours = data.hours;
 
   const { additionalHoursText } = streamDocument as {
     additionalHoursText: string;
@@ -113,11 +113,7 @@ const VisualEditorHoursTable: PuckComponent<HoursTableProps> = (props) => {
 
   return hours || comingSoon ? (
     <div className={`flex flex-col ${styles.alignment}`}>
-      <EntityField
-        displayName={pt("hours", "Hours")}
-        fieldId="hours"
-        constantValueEnabled={data.hours.constantValueEnabled}
-      >
+      <EntityField displayName={pt("hours", "Hours")} fieldId="hours">
         <HoursTableAtom
           hours={hours ?? {}}
           comingSoon={comingSoon}
@@ -143,7 +139,10 @@ const VisualEditorHoursTable: PuckComponent<HoursTableProps> = (props) => {
   );
 };
 
-export const HoursTable: YextComponentConfig<HoursTableProps> = {
+export const HoursTable: YextComponentConfig<
+  HoursTableProps,
+  Parameters<typeof VisualEditorHoursTable>[0]
+> = {
   fields: hoursTableFields,
   defaultProps: {
     data: {

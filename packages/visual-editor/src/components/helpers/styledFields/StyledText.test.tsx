@@ -64,11 +64,7 @@ describe("Styled text content blocks", () => {
       <StyledTextComponent
         {...{
           data: {
-            text: {
-              field: "c_heading",
-              constantValue: { defaultValue: "Shared title" },
-              constantValueEnabled: true,
-            },
+            text: "Shared title",
           },
           fontOptions: {
             fontFamily: "Georgia, serif",
@@ -99,11 +95,7 @@ describe("Styled text content blocks", () => {
       <StyledTextComponent
         {...{
           data: {
-            text: {
-              field: "",
-              constantValue: { defaultValue: "Hero Heading" },
-              constantValueEnabled: true,
-            },
+            text: "Hero Heading",
           },
           fontOptions: {
             color: {
@@ -134,11 +126,7 @@ describe("Styled text content blocks", () => {
       <StyledTextComponent
         {...{
           data: {
-            text: {
-              field: "",
-              constantValue: { defaultValue: "Geomodifier" },
-              constantValueEnabled: true,
-            },
+            text: "Geomodifier",
           },
           fontOptions: {
             color: {
@@ -164,13 +152,7 @@ describe("Styled text content blocks", () => {
       <StyledTextComponent
         {...{
           data: {
-            text: {
-              field: "c_description",
-              constantValue: {
-                defaultValue: { html: "<p>Hello <strong>world</strong></p>" },
-              },
-              constantValueEnabled: true,
-            },
+            text: { html: "<p>Hello <strong>world</strong></p>" },
           },
           fontOptions: {
             color: {
@@ -207,13 +189,7 @@ describe("Styled text content blocks", () => {
         {...{
           data: {
             text: {
-              field: "",
-              constantValue: {
-                defaultValue: {
-                  html: "<p>Hero description</p>",
-                },
-              },
-              constantValueEnabled: true,
+              html: "<p>Hero description</p>",
             },
           },
           fontOptions: {
@@ -240,15 +216,11 @@ describe("Styled text content blocks", () => {
     expect(wrapper.className).toContain("text-palette-secondary");
   });
 
-  it("applies cloned rich-text typography styles to the wrapper element", () => {
+  it("applies rich-text typography styles to the wrapper element", () => {
     const { container } = renderWithProviders(
       <>
         {renderStyledRichText({
-          content: (
-            <div className="rtf-wrapper">
-              <div className="rtf-inner">Wrapped rich text</div>
-            </div>
-          ),
+          content: { html: '<div class="rtf-inner">Wrapped rich text</div>' },
           align: "center",
           text: {
             color: {
@@ -302,11 +274,7 @@ describe("Styled text content blocks", () => {
         {...sharedTitleProps}
         kind="plain"
         data={{
-          text: {
-            field: "cards.0.title",
-            constantValue: { defaultValue: "Repeated title" },
-            constantValueEnabled: true,
-          },
+          text: "Repeated title",
         }}
       />
     );
@@ -340,13 +308,7 @@ describe("Styled text content blocks", () => {
         kind="richText"
         data={{
           text: {
-            field: "cards.0.description",
-            constantValue: {
-              defaultValue: {
-                html: "<p>Repeated body copy</p>",
-              },
-            },
-            constantValueEnabled: true,
+            html: "<p>Repeated body copy</p>",
           },
         }}
       />
@@ -461,15 +423,40 @@ describe("Styled text content blocks", () => {
         {...sharedDefaultProps}
         kind="plain"
         data={{
-          text: {
-            field: "cards.1.title",
-            constantValue: { defaultValue: "Card title" },
-            constantValueEnabled: true,
-          },
+          text: "Card title",
         }}
       />
     );
 
     expect(screen.getByText("Card title").tagName).toBe("H3");
   });
+
+  it.each([
+    { content: "Literal [[name]]", expected: "Literal [[name]]" },
+    {
+      content: { html: "<p>Literal [[name]]</p>" },
+      expected: "Literal [[name]]",
+    },
+    { content: { html: "   " }, expected: "" },
+    { content: undefined, expected: "" },
+  ])(
+    "when resolved content is supplied directly then it renders without another interpolation pass",
+    ({ content, expected }) => {
+      const view = render(
+        <StyledTextComponent
+          kind="richText"
+          data={{ text: content }}
+          fontOptions={{
+            fontFamily: "default",
+            fontSize: "default",
+            fontWeight: "default",
+            fontStyle: "default",
+            textTransform: "default",
+          }}
+        />
+      );
+      expect(view.container.textContent).toBe(expected);
+      view.unmount();
+    }
+  );
 });
